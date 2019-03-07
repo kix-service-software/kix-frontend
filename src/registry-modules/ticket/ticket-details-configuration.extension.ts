@@ -1,18 +1,8 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    WidgetConfiguration,
-    ContextConfiguration,
-    ConfiguredWidget,
-    WidgetSize,
-    DataType,
-    TicketProperty,
-    ArticleProperty,
-    KIXObjectType
+    WidgetConfiguration, ContextConfiguration, ConfiguredWidget, WidgetSize, KIXObjectType
 } from '../../core/model/';
-import {
-    TableColumnConfiguration, TableConfiguration,
-    ToggleOptions, TableHeaderHeight, TableRowHeight
-} from '../../core/browser';
+import { TableConfiguration, TableHeaderHeight, TableRowHeight } from '../../core/browser';
 import { TicketDetailsContextConfiguration } from '../../core/browser/ticket';
 
 export class TicketDetailsModuleFactoryExtension implements IConfigurationExtension {
@@ -151,39 +141,12 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
 
         const articleListWidget =
             new ConfiguredWidget("20180921-article-list", new WidgetConfiguration(
-                "article-list-widget", "Artikelübersicht", [],
+                "table-widget", "Artikelübersicht", ['article-bulk-action', 'article-new-note-action'],
                 {
-                    generalActions: ['article-bulk-action', 'article-new-note-action'],
-                    tableConfiguration: new TableConfiguration(
-                        null, null, [
-                            new TableColumnConfiguration(
-                                ArticleProperty.NUMBER, true, false, false, true, 60, true, false, DataType.NUMBER
-                            ),
-                            new TableColumnConfiguration(
-                                ArticleProperty.ARTICLE_INFORMATION, false, true, false, false, 60
-                            ),
-                            new TableColumnConfiguration(ArticleProperty.SENDER_TYPE_ID, true, false, true, true, 120),
-                            new TableColumnConfiguration(ArticleProperty.FROM, true, false, true, true, 300),
-                            new TableColumnConfiguration(ArticleProperty.ARTICLE_TYPE_ID, false, true, false, true, 75),
-                            new TableColumnConfiguration(ArticleProperty.SUBJECT, true, false, true, true, 500),
-                            new TableColumnConfiguration(
-                                ArticleProperty.INCOMING_TIME, true, false, true, true, 125,
-                                true, false, DataType.DATE_TIME
-                            ),
-                            new TableColumnConfiguration(
-                                ArticleProperty.ATTACHMENT, true, true, false, false, 75, true, true),
-                        ], null, true,
-                        true, new ToggleOptions('ticket-article-details', 'article', [
-                            'article-print-action',
-                            'article-edit-action',
-                            'article-communication-action',
-                            'article-tag-action',
-                            'article-maximize-action'
-                        ], true),
-                        null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
-                    )
+                    objectType: KIXObjectType.ARTICLE,
+                    headerComponents: ['article-attachment-count']
                 },
-                false, true, WidgetSize.LARGE, null, false)
+                false, true, WidgetSize.LARGE, null, true)
             );
 
         const content = ['20180921-article-list'];

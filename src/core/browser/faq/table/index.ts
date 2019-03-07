@@ -1,6 +1,4 @@
-export { FAQTableLabelLayer } from './FAQTableLabelLayer';
-export { FAQTableContentLayer } from './FAQTableContentLayer';
-export { FAQTableFactory } from './FAQTableFactory';
+export { FAQArticleTableFactory } from './FAQArticleTableFactory';
 export { FAQArticleHistoryTableFactory } from './FAQArticleHistoryTableFactory';
-export { FAQArticleHistoryTableLabelLayer } from './FAQArticleHistoryTableLabelLayer';
-export { FAQArticleHistoryTableContentLayer } from './FAQArticleHistoryTableContentLayer';
+export { FAQArticleHistoryContentProvider } from './FAQArticleHistoryContentProvider';
+export { FAQArticleTableContentProvider } from './FAQArticleTableContentProvider';

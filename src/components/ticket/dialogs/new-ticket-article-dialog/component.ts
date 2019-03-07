@@ -1,5 +1,5 @@
-import { AbstractNewDialog, ContextService } from "../../../../core/browser";
-import { KIXObjectType, CreateTicketArticleOptions, TicketProperty } from "../../../../core/model";
+import { AbstractNewDialog, ContextService, BrowserUtil } from "../../../../core/browser";
+import { KIXObjectType, CreateTicketArticleOptions, TicketProperty, Ticket } from "../../../../core/model";
 import { ComponentState } from './ComponentState';
 import { TicketDetailsContext } from "../../../../core/browser/ticket";
 
@@ -32,7 +32,11 @@ class Component extends AbstractNewDialog {
     public async submit(): Promise<void> {
         await super.submit();
         const context = await ContextService.getInstance().getContext(TicketDetailsContext.CONTEXT_ID);
-        await context.getObject(KIXObjectType.TICKET, true, [TicketProperty.ARTICLES]);
+        const ticket = await context.getObject<Ticket>(KIXObjectType.TICKET, true, [TicketProperty.ARTICLES]);
+        const article = ticket.Articles.sort((a, b) => b.ArticleID - a.ArticleID)[0];
+        if (article.isUnsent()) {
+            BrowserUtil.openErrorOverlay(article.getUnsentError());
+        }
     }
 
 }

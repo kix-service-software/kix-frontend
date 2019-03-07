@@ -1,5 +1,5 @@
 import { Context } from "../../../model/components/context/Context";
-import { WidgetConfiguration, WidgetType, KIXObject } from "../../../model";
+import { WidgetConfiguration, WidgetType } from "../../../model";
 import { BulkDialogContextConfiguration } from "./BulkDialogContextConfiguration";
 
 export class BulkDialogContext extends Context<BulkDialogContextConfiguration> {

@@ -35,7 +35,8 @@ class Component {
             explorerBarToggled: () => { return; },
             sidebarToggled: () => { return; },
             objectListChanged: () => { return; },
-            filteredObjectListChanged: () => { return; }
+            filteredObjectListChanged: () => { return; },
+            scrollInformationChanged: () => { return; }
         });
     }
 

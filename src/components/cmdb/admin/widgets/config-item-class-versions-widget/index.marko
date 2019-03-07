@@ -1,8 +1,10 @@
-<widget instanceId=state.instanceId title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
+<widget
+    instanceId=state.instanceId
+    title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
     contentActions=state.actions>
     <@content>
         <if(state.table)>
-            <standard-table standardTable=state.table/>
+            <standard-table-NEW table=state.table/>
         </if>
     </@content>
 </widget>

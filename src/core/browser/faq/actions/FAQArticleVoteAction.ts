@@ -21,8 +21,8 @@ export class FAQArticleVoteAction extends AbstractAction {
                 'FAQ-Bewertung',
                 false,
                 [
-                    event.target.getBoundingClientRect().left + window.scrollX,
-                    event.target.getBoundingClientRect().top + window.scrollY
+                    event.target.getBoundingClientRect().left,
+                    event.target.getBoundingClientRect().top
                 ],
                 'faq-vote-action-overlay'
             );

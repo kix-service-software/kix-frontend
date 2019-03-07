@@ -7,6 +7,7 @@ import { ServiceRegistry, KIXObjectService } from "../../kix";
 import { SearchOperator } from "../../SearchOperator";
 import { CMDBService } from "../CMDBService";
 import { EventService } from "../../event";
+import { ApplicationEvent } from "../../application";
 
 export class CMDBContext extends Context<CMDBContextConfiguration> {
 
@@ -81,7 +82,7 @@ export class CMDBContext extends Context<CMDBContextConfiguration> {
         );
 
         const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish('APP_LOADING', {
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
                 loading: true, hint: `Lade Config Items ...`
             });
         }, 500);
@@ -93,11 +94,11 @@ export class CMDBContext extends Context<CMDBContextConfiguration> {
         window.clearTimeout(timeout);
 
         this.setObjectList(configItems);
-        EventService.getInstance().publish('APP_LOADING', { loading: false });
+        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
     }
 
     private async getDeploymentStateIds(): Promise<number[]> {
-        const service = ServiceRegistry.getInstance().getServiceInstance<CMDBService>(
+        const service = ServiceRegistry.getServiceInstance<CMDBService>(
             KIXObjectType.CONFIG_ITEM
         );
         const catalogItems = await service.getDeploymentStates();

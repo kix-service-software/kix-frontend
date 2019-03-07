@@ -1,0 +1,23 @@
+div.legend {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    align-items: center;
+    grid-row-gap: 1rem;
+    >div.legend-item {
+        height: 1.5rem;
+        width: 3rem;
+        display: inline-block;
+        &.yellow {
+            background-color: @tableCell-changed;
+        }
+        &.red {
+            background-color: @tableCell-deleted;
+        }
+        &.gray {
+            background-color: @secondary-3;
+        }
+        &.green {
+            background-color: @tableCell-new;
+        }
+    }
+}

@@ -1,10 +1,7 @@
 import { ContextService } from '../../../../core/browser/context';
 import { ComponentState } from './ComponentState';
-import {
-    ITableClickListener, ActionFactory, TableListenerConfiguration, StandardTableFactoryService,
-} from '../../../../core/browser';
-import { TicketHistory, KIXObjectType, Ticket, TicketHistoryProperty } from '../../../../core/model';
-import { EventService } from '../../../../core/browser/event';
+import { ActionFactory, TableFactoryService } from '../../../../core/browser';
+import { KIXObjectType, Ticket } from '../../../../core/model';
 import { TicketDetailsContext } from '../../../../core/browser/ticket';
 
 class Component {
@@ -30,6 +27,7 @@ class Component {
             filteredObjectListChanged: () => { return; },
             objectListChanged: () => { return; },
             sidebarToggled: () => { return; },
+            scrollInformationChanged: () => { return; },
             objectChanged: (ticketId: string, ticket: Ticket, type: KIXObjectType) => {
                 if (type === KIXObjectType.TICKET) {
                     this.initWidget(ticket);
@@ -41,58 +39,31 @@ class Component {
     }
 
     private async initWidget(ticket: Ticket): Promise<void> {
-        this.state.loading = true;
-        this.state.ticket = ticket;
-
-        if (this.state.ticket) {
-            this.setActions();
-            this.prepareTable();
+        if (ticket) {
+            this.setActions(ticket);
+            await this.prepareTable();
         }
-
-        setTimeout(() => {
-            this.state.loading = false;
-        }, 50);
     }
 
-    private setActions(): void {
-        if (this.state.widgetConfiguration && this.state.ticket) {
+    private setActions(ticket: Ticket): void {
+        if (this.state.widgetConfiguration && ticket) {
             this.state.actions = ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, [this.state.ticket]
+                this.state.widgetConfiguration.actions, [ticket]
             );
         }
     }
 
-    private prepareTable(): void {
-        const clickListener: ITableClickListener<TicketHistory> = {
-            rowClicked: this.navigateToArticle.bind(this)
-        };
-        const listenerConfiguration = new TableListenerConfiguration(clickListener);
-        const table = StandardTableFactoryService.getInstance().createStandardTable<TicketHistory>(
-            KIXObjectType.TICKET_HISTORY, null, null, listenerConfiguration
+    private async prepareTable(): Promise<void> {
+        const table = TableFactoryService.getInstance().createTable(
+            'ticket-history', KIXObjectType.TICKET_HISTORY, null, null, TicketDetailsContext.CONTEXT_ID
         );
-        if (table) {
-            table.layerConfiguration.contentLayer.setPreloadedObjects(this.state.ticket.History);
-            table.loadRows();
 
-            this.state.standardTable = table;
-            this.state.standardTable.setTableListener(() => {
-                this.state.filterCount = this.state.standardTable.getTableRows(true).length || 0;
-                (this as any).setStateDirty('filterCount');
-            });
-        }
-    }
-
-    private navigateToArticle(historyEntry: TicketHistory, columnId: string): void {
-        if (columnId === TicketHistoryProperty.ARTICLE_ID && historyEntry[columnId]) {
-            EventService.getInstance().publish('GotToTicketArticle', historyEntry[columnId]);
-        }
+        this.state.table = table;
     }
 
     public filter(filterValue: string): void {
-        this.state.filterValue = filterValue;
-        if (this.state.standardTable) {
-            this.state.standardTable.setFilterSettings(filterValue);
-        }
+        this.state.table.setFilter(filterValue);
+        this.state.table.filter();
     }
 
 }

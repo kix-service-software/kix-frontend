@@ -27,7 +27,8 @@ class Component extends AbstractMarkoComponent {
             sidebarToggled: () => { return; },
             objectChanged: this.moduleChanged.bind(this),
             objectListChanged: () => { return; },
-            filteredObjectListChanged: () => { return; }
+            filteredObjectListChanged: () => { return; },
+            scrollInformationChanged: () => { return; }
         });
     }
 

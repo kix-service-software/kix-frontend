@@ -5,10 +5,10 @@ import {
     KIXObjectSpecificCreateOptions, OverlayType, KIXObjectSpecificDeleteOptions,
     ComponentContent,
     KIXObjectCache,
-    Error
+    Error,
+    TableFilterCriteria
 } from "../../model";
 import { KIXObjectSocketListener } from "./KIXObjectSocketListener";
-import { TableColumn } from "../standard-table";
 import { FormService } from "../form";
 import { ServiceType } from "./ServiceType";
 import { IAutofillConfiguration } from "../components";
@@ -36,7 +36,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
         cache: boolean = true
     ): Promise<T[]> {
-        const service = ServiceRegistry.getInstance().getServiceInstance<KIXObjectService>(objectType);
+        const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
         let objects = [];
         if (service) {
             objects = await service.loadObjects(
@@ -132,7 +132,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     public static async createObjectByForm(
         objectType: KIXObjectType, formId: string, createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<string | number> {
-        const service = ServiceRegistry.getInstance().getServiceInstance<KIXObjectService>(objectType);
+        const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
         return await service.createObjectByForm(objectType, formId, createOptions);
     }
 
@@ -147,29 +147,30 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     }
 
     public static async updateObject(
-        objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
+        objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string,
+        updateCache: boolean = true
     ): Promise<string | number> {
-        const service = ServiceRegistry.getInstance().getServiceInstance<KIXObjectService>(objectType);
+        const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
 
-        KIXObjectCache.updateCache(objectType, objectId, ServiceMethod.UPDATE, parameter);
-
-        const updatedObjectId = await service.updateObject(objectType, parameter, objectId).catch((error: Error) => {
-            const content = new ComponentContent('list-with-title',
-                {
-                    title: `Fehler beim Aktualisieren (${objectType}):`,
-                    list: [`${error.Code}: ${error.Message}`]
-                }
-            );
-            OverlayService.getInstance().openOverlay(
-                OverlayType.WARNING, null, content, 'Fehler!', true
-            );
-            throw error;
-        });
+        const updatedObjectId = await service.updateObject(objectType, parameter, objectId, updateCache)
+            .catch((error: Error) => {
+                const content = new ComponentContent('list-with-title',
+                    {
+                        title: `Fehler beim Aktualisieren (${objectType}):`,
+                        list: [`${error.Code}: ${error.Message}`]
+                    }
+                );
+                OverlayService.getInstance().openOverlay(
+                    OverlayType.WARNING, null, content, 'Fehler!', true
+                );
+                throw error;
+            });
         return updatedObjectId;
     }
 
     public async updateObject(
-        objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
+        objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string,
+        updateCache: boolean = true
     ): Promise<string | number> {
         const updatedObjectId = await KIXObjectSocketListener.getInstance().updateObject(
             objectType, parameter, objectId
@@ -186,7 +187,9 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
             throw error;
         });
 
-        KIXObjectCache.updateCache(objectType, objectId, ServiceMethod.UPDATE);
+        if (updateCache) {
+            KIXObjectCache.updateCache(objectType, objectId, ServiceMethod.UPDATE, parameter);
+        }
 
         return updatedObjectId;
     }
@@ -194,7 +197,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     public static async updateObjectByForm(
         objectType: KIXObjectType, formId: string, objectId: number | string
     ): Promise<string | number> {
-        const service = ServiceRegistry.getInstance().getServiceInstance<KIXObjectService>(objectType);
+        const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
         return await service.updateObjectByForm(objectType, formId, objectId);
     }
 
@@ -214,7 +217,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     public static async deleteObject(
         objectType: KIXObjectType, objectIds: Array<number | string>, deleteOptions?: KIXObjectSpecificDeleteOptions
     ): Promise<Array<number | string>> {
-        const service = ServiceRegistry.getInstance().getServiceInstance<KIXObjectService>(objectType);
+        const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
         const errors: string[] = [];
         const failIds: Array<number | string> = [];
         for (const objectId of objectIds) {
@@ -244,7 +247,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         await KIXObjectSocketListener.getInstance().deleteObject(objectType, objectId, deleteOptions);
     }
 
-    private async prepareFormFields(formId: string, forUpdate: boolean = false): Promise<Array<[string, any]>> {
+    public async prepareFormFields(formId: string, forUpdate: boolean = false): Promise<Array<[string, any]>> {
         const parameter: Array<[string, any]> = [];
 
         const predefinedParameterValues = await this.preparePredefinedValues(forUpdate);
@@ -306,7 +309,14 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return [];
     }
 
-    public checkFilterValue(object: T, property: string, value: string | number): boolean {
+    public static checkFilterValue(
+        objectType: KIXObjectType, object: KIXObject, criteria: TableFilterCriteria
+    ): boolean {
+        const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
+        return service ? service.checkFilterValue(object, criteria) : true;
+    }
+
+    public checkFilterValue(object: T, criteria: TableFilterCriteria): boolean {
         return true;
     }
 
@@ -338,12 +348,12 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     }
 
     public static async getObjectUrl(object: KIXObject): Promise<string> {
-        const service = ServiceRegistry.getInstance().getServiceInstance<KIXObjectService>(object.KIXObjectType);
+        const service = ServiceRegistry.getServiceInstance<KIXObjectService>(object.KIXObjectType);
         return service ? service.getObjectUrl(object) : null;
     }
 
     public async getObjectUrl(object?: KIXObject, objectId?: string | number): Promise<string> {
-        return "";
+        return '';
     }
 
 }

@@ -36,7 +36,8 @@
                 "ts:ts-node/register",
                 "--require",
                 "source-map-support/register",
-                "${workspaceFolder}/tests/services/api/**/*.test.ts"
+                "tests/**/*.test.ts",
+                "tests/*.test.ts"
             ],
             "env": {
                 "NODE_ENV": "test",
@@ -48,6 +49,18 @@
             "cwd": "${workspaceFolder}",
             "protocol": "inspector",
             "console": "integratedTerminal"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Cucumber",
+            "program": "${workspaceFolder}/node_modules/cucumber/bin/cucumber-js",
+            "args": [
+                "dist/features/"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "preLaunchTask": "npm: build-cucumber"
         }
     ]
 }

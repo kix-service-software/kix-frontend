@@ -6,6 +6,7 @@ import { EventService } from '../../event';
 import { TicketDetailsContext } from '../context';
 import { LabelService } from '../../LabelService';
 import { BrowserUtil } from '../../BrowserUtil';
+import { ApplicationEvent } from '../../application';
 
 export class TicketLockAction extends AbstractAction<Ticket> {
 
@@ -31,10 +32,12 @@ export class TicketLockAction extends AbstractAction<Ticket> {
         if (this.currentLockId === 1) {
             newLockId = 2;
             EventService.getInstance().publish(
-                'APP_LOADING', { loading: true, hint: 'Ticket wird gesperrt ...' }
+                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Ticket wird gesperrt ...' }
             );
         } else {
-            EventService.getInstance().publish('APP_LOADING', { loading: true, hint: 'Ticket wird freigegeben ...' });
+            EventService.getInstance().publish(
+                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Ticket wird freigegeben ...' }
+            );
             successHint = 'Ticket wurde freigegeben.';
         }
 
@@ -45,7 +48,7 @@ export class TicketLockAction extends AbstractAction<Ticket> {
         setTimeout(async () => {
             const context = await ContextService.getInstance().getContext(TicketDetailsContext.CONTEXT_ID);
             await context.getObject(KIXObjectType.TICKET, true);
-            EventService.getInstance().publish('APP_LOADING', { loading: false });
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
             BrowserUtil.openSuccessOverlay(successHint);
         }, 500);
     }

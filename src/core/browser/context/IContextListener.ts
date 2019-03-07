@@ -14,4 +14,6 @@ export interface IContextListener {
 
     filteredObjectListChanged(objectList: KIXObject[]): void;
 
+    scrollInformationChanged(objectType: KIXObjectType, objectId: string | number): void;
+
 }

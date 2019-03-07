@@ -3,7 +3,7 @@ import { OverlayType, IWidgetContent, ObjectIcon, KIXObject } from "../model";
 export class OverlayService {
 
     private static INSTANCE: OverlayService;
-    private overlayIconListener: Map<string, any> = new Map();
+    private overlayListener: Map<string, any> = new Map();
 
     public static getInstance(): OverlayService {
         if (!OverlayService.INSTANCE) {
@@ -15,48 +15,48 @@ export class OverlayService {
 
     private constructor() { }
 
-    private overlayListener:
+    private overlayComponentListener:
         <T extends KIXObject<T>>(
             type: OverlayType, instanceId: string, content: IWidgetContent<T>, title: string,
-            closeButton: boolean, position: [number, number], iconId: string, large: boolean
+            closeButton: boolean, position: [number, number], listenerId: string, large: boolean
         ) => void;
 
-    public registerOverlayListener(
+    public registerOverlayComponentListener(
         listener:
             <T extends KIXObject<T>>(
                 type: OverlayType, instanceId: string, content: IWidgetContent<T>, title: string,
-                closeButton: boolean, position: [number, number], iconId: string, large: boolean
+                closeButton: boolean, position: [number, number], listenerId: string, large: boolean
             ) => void
     ): void {
-        this.overlayListener = listener;
+        this.overlayComponentListener = listener;
     }
 
-    public registerOverlayIconListener(iconId: string, listener: any): void {
-        this.overlayIconListener.set(iconId, listener);
+    public registerOverlayListener(listenerId: string, listener: any): void {
+        this.overlayListener.set(listenerId, listener);
     }
 
-    public unRegisterOverlayIconListener(iconId: string): void {
-        this.overlayIconListener.delete(iconId);
+    public unregisterOverlayListener(listenerId: string): void {
+        this.overlayListener.delete(listenerId);
     }
 
     public openOverlay<T extends KIXObject<T>>(
         type: OverlayType, instanceId: string, content: IWidgetContent<T>, title: string,
-        closeButton: boolean = false, position?: [number, number], iconId?: string, large?: boolean
+        closeButton: boolean = false, position?: [number, number], listenerId?: string, large?: boolean
     ): void {
-        if (this.overlayListener) {
-            this.overlayListener(type, instanceId, content, title, closeButton, position, iconId, large);
+        if (this.overlayComponentListener) {
+            this.overlayComponentListener(type, instanceId, content, title, closeButton, position, listenerId, large);
         }
     }
 
-    public overlayOpened(iconId: string): void {
-        const listener = this.overlayIconListener.get(iconId);
+    public overlayOpened(listenerId: string): void {
+        const listener = this.overlayListener.get(listenerId);
         if (listener) {
             listener.overlayOpened();
         }
     }
 
-    public overlayClosed(iconId: string): void {
-        const listener = this.overlayIconListener.get(iconId);
+    public overlayClosed(listenerId: string): void {
+        const listener = this.overlayListener.get(listenerId);
         if (listener) {
             listener.overlayClosed();
         }

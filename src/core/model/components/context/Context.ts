@@ -20,6 +20,8 @@ export abstract class Context<T extends ContextConfiguration = ContextConfigurat
     private objectList: KIXObject[] = [];
     private filteredObjectList: KIXObject[] = [];
 
+    private scrollInormation: [KIXObjectType, string | number] = null;
+
     public constructor(
         protected descriptor: ContextDescriptor,
         protected objectId: string | number = null,
@@ -109,6 +111,12 @@ export abstract class Context<T extends ContextConfiguration = ContextConfigurat
     public registerListener(listenerId: string, listener: IContextListener): void {
         if (listenerId) {
             this.listeners.set(listenerId, listener);
+        }
+    }
+
+    public unregisterListener(listenerId: string): void {
+        if (this.listeners.has(listenerId)) {
+            this.listeners.delete(listenerId);
         }
     }
 
@@ -229,6 +237,12 @@ export abstract class Context<T extends ContextConfiguration = ContextConfigurat
         kixObjectType: KIXObjectType = null, reload: boolean = false, changedProperties?: string[]
     ): Promise<O> {
         return undefined;
+    }
+
+    public provideScrollInformation(objectType: KIXObjectType, objectId: string | number): void {
+        this.scrollInormation = [objectType, objectId];
+
+        this.listeners.forEach((l) => l.scrollInformationChanged(this.scrollInormation[0], this.scrollInormation[1]));
     }
 
     public getBreadcrumbInformation(): BreadcrumbInformation {

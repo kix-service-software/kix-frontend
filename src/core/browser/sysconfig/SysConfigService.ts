@@ -1,5 +1,7 @@
 import { KIXObjectService } from "../kix";
-import { SysConfigItem, KIXObjectType } from "../../model";
+import {
+    SysConfigItem, KIXObjectType, KIXObject, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, KIXObjectCache
+} from "../../model";
 
 export class SysConfigService extends KIXObjectService<SysConfigItem> {
 
@@ -11,6 +13,32 @@ export class SysConfigService extends KIXObjectService<SysConfigItem> {
         }
 
         return SysConfigService.INSTANCE;
+    }
+
+    public async init(): Promise<void> {
+        await this.loadObjects(KIXObjectType.SYS_CONFIG_ITEM, null);
+    }
+
+    public async loadObjects<O extends KIXObject>(
+        kixObjectType: KIXObjectType, objectIds: Array<string | number>,
+        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
+        cache: boolean = true
+    ): Promise<O[]> {
+
+        if (kixObjectType === KIXObjectType.SYS_CONFIG_ITEM) {
+            if (!KIXObjectCache.hasObjectCache(kixObjectType)) {
+                const objects = await super.loadObjects(
+                    kixObjectType, null, loadingOptions, objectLoadingOptions, cache
+                );
+                objects.forEach((o) => KIXObjectCache.addObject(kixObjectType, o));
+            }
+
+            if (!objectIds) {
+                return KIXObjectCache.getObjectCache(kixObjectType);
+            }
+        }
+
+        return await super.loadObjects<O>(kixObjectType, objectIds, loadingOptions, objectLoadingOptions, cache);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {

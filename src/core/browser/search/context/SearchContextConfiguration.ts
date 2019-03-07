@@ -1,4 +1,5 @@
-import { ContextConfiguration, ConfiguredWidget } from "../../../model";
+import { ConfiguredWidget } from "../../../model";
+import { ContextConfiguration } from '../../../model/components/context/ContextConfiguration';
 
 export class SearchContextConfiguration extends ContextConfiguration {
 

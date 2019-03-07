@@ -1,4 +1,3 @@
-import { StandardTable } from '../../../../core/browser';
 import { WidgetComponentState, IAction, KIXObjectPropertyFilter } from '../../../../core/model';
 import { ChartConfiguration } from 'chart.js';
 

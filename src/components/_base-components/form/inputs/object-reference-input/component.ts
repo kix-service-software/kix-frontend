@@ -6,7 +6,7 @@ import {
 import { FormService } from "../../../../../core/browser/form";
 import { LabelService, KIXObjectService } from "../../../../../core/browser";
 
-class Component extends FormInputComponent<KIXObject, ComponentState> {
+class Component extends FormInputComponent<string | number, ComponentState> {
 
     private objects: KIXObject[];
 
@@ -30,17 +30,24 @@ class Component extends FormInputComponent<KIXObject, ComponentState> {
 
     public async setCurrentNode(): Promise<void> {
         if (this.state.defaultValue && this.state.defaultValue.value) {
-            const value = this.state.defaultValue.value;
-            if (this.state.nodes && this.state.nodes.length) {
-                const node = this.state.nodes.find((n) => n.id === value.ObjectId);
-                if (node) {
-                    this.state.currentNode = await this.createTreeNode(value);
-                }
-            }
+            const objectId = this.state.defaultValue.value;
 
-            if (this.state.autocomplete) {
-                this.state.currentNode = await this.createTreeNode(value);
-                this.state.nodes = [this.state.currentNode];
+            const objectOption = this.state.field.options.find((o) => o.option === ObjectReferenceOptions.OBJECT);
+            if (objectOption) {
+                const objects = await KIXObjectService.loadObjects(objectOption.value, [objectId]);
+                if (objects && objects.length) {
+                    if (this.state.nodes && this.state.nodes.length) {
+                        const node = this.state.nodes.find((n) => n.id === objectId);
+                        if (node) {
+                            this.state.currentNode = node;
+                        }
+                    }
+
+                    if (this.state.autocomplete) {
+                        this.state.currentNode = await this.createTreeNode(objects[0]);
+                        this.state.nodes = [this.state.currentNode];
+                    }
+                }
             }
 
             super.provideValue(this.state.currentNode.id);
@@ -49,10 +56,7 @@ class Component extends FormInputComponent<KIXObject, ComponentState> {
 
     public objectChanged(nodes: TreeNode[]): void {
         this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
-        const object = this.state.currentNode ? this.objects.find(
-            (cu) => cu.ObjectId === this.state.currentNode.id
-        ) : null;
-        super.provideValue(object);
+        super.provideValue(this.state.currentNode ? this.state.currentNode.id : null);
     }
 
     private async prepareNodes(): Promise<void> {

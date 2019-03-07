@@ -56,28 +56,30 @@ export abstract class KIXObjectService implements IKIXObjectService {
     protected prepareQuery(loadingOptions: KIXObjectLoadingOptions): any {
         let query = {};
 
-        if (loadingOptions.limit) {
-            query = { ...query, limit: loadingOptions.limit };
-        }
+        if (loadingOptions) {
+            if (loadingOptions.limit) {
+                query = { ...query, limit: loadingOptions.limit };
+            }
 
-        if (loadingOptions.properties && loadingOptions.properties.length) {
-            query = { ...query, fields: loadingOptions.properties.join(',') };
-        }
+            if (loadingOptions.properties && loadingOptions.properties.length) {
+                query = { ...query, fields: loadingOptions.properties.join(',') };
+            }
 
-        if (loadingOptions.sortOrder) {
-            query = { ...query, sort: loadingOptions.sortOrder };
-        }
+            if (loadingOptions.sortOrder) {
+                query = { ...query, sort: loadingOptions.sortOrder };
+            }
 
-        if (loadingOptions.includes) {
-            query = { ...query, include: loadingOptions.includes.join(',') };
-        }
+            if (loadingOptions.includes) {
+                query = { ...query, include: loadingOptions.includes.join(',') };
+            }
 
-        if (loadingOptions.expands) {
-            query = { ...query, expand: loadingOptions.expands.join(',') };
-        }
+            if (loadingOptions.expands) {
+                query = { ...query, expand: loadingOptions.expands.join(',') };
+            }
 
-        if (loadingOptions.query) {
-            loadingOptions.query.forEach((q) => query[q[0]] = q[1]);
+            if (loadingOptions.query) {
+                loadingOptions.query.forEach((q) => query[q[0]] = q[1]);
+            }
         }
 
         return query;
@@ -182,7 +184,7 @@ export abstract class KIXObjectService implements IKIXObjectService {
 
     protected async createIcons(token: string, icon: ObjectIcon): Promise<void> {
         if (icon) {
-            const iconService = KIXObjectServiceRegistry.getInstance().getServiceInstance(
+            const iconService = KIXObjectServiceRegistry.getServiceInstance(
                 KIXObjectType.OBJECT_ICON
             );
             if (iconService) {
@@ -203,7 +205,7 @@ export abstract class KIXObjectService implements IKIXObjectService {
 
     protected async updateIcon(token: string, icon: ObjectIcon): Promise<void> {
         if (icon) {
-            const iconService = KIXObjectServiceRegistry.getInstance().getServiceInstance(
+            const iconService = KIXObjectServiceRegistry.getServiceInstance(
                 KIXObjectType.OBJECT_ICON
             );
             const icons = await iconService.loadObjects<ObjectIcon>(

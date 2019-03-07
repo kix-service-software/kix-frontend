@@ -5,8 +5,6 @@ import { LabelService } from "../LabelService";
 
 export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> implements IKIXObjectFormService<T> {
 
-    protected formFieldValues: Map<string, FormFieldValue<any>> = new Map();
-
     public abstract isServiceFor(kixObjectType: KIXObjectType): boolean;
 
     public isServiceType(kixObjectServiceType: ServiceType): boolean {
@@ -14,14 +12,16 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
     }
 
     public async initValues(form: Form, kixObject?: T): Promise<Map<string, FormFieldValue<any>>> {
-        this.formFieldValues.clear();
+        const formFieldValues: Map<string, FormFieldValue<any>> = new Map();
         for (const g of form.groups) {
-            await this.prepareFormFieldValues(g.formFields, kixObject);
+            await this.prepareFormFieldValues(g.formFields, kixObject, formFieldValues);
         }
-        return this.formFieldValues;
+        return formFieldValues;
     }
 
-    public async prepareFormFieldValues(formFields: FormField[], kixObject?: T): Promise<void> {
+    protected async prepareFormFieldValues(
+        formFields: FormField[], kixObject: T, formFieldValues: Map<string, FormFieldValue<any>>
+    ): Promise<void> {
         for (const f of formFields) {
             let formFieldValue: FormFieldValue;
             if (kixObject || f.defaultValue) {
@@ -48,10 +48,10 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
             } else {
                 formFieldValue = new FormFieldValue(null);
             }
-            this.formFieldValues.set(f.instanceId, formFieldValue);
+            formFieldValues.set(f.instanceId, formFieldValue);
 
             if (f.children) {
-                this.prepareFormFieldValues(f.children, kixObject);
+                this.prepareFormFieldValues(f.children, kixObject, formFieldValues);
             }
         }
     }

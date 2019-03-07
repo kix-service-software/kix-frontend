@@ -93,6 +93,9 @@ export class ConfigItemFormFactory {
 
     private getFormField(ad: AttributeDefinition, parentInstanceId?: string): FormField {
         let formField: FormField;
+        if (typeof ad.CountDefault === 'undefined' || ad.CountDefault === null) {
+            ad.CountDefault = 1;
+        }
         if (ad.Input.Type === 'GeneralCatalog') {
             formField = this.getGeneralCatalogField(ad, parentInstanceId);
         } else if (ad.Input.Type === 'Text') {
@@ -135,7 +138,7 @@ export class ConfigItemFormFactory {
             [
                 new FormFieldOption('GC_CLASS', ad.Input['Class']),
                 new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.GENERAL_CATALOG)
-            ], null, null, parentInstanceId, ad.CountDefault ? ad.CountDefault : 1, ad.CountMax,
+            ], null, null, parentInstanceId, ad.CountDefault, ad.CountMax,
             ad.CountMin, ad.Input.MaxLength,
             ad.Input.RegEx, ad.Input.RegExErrorMessage
         );
@@ -145,7 +148,7 @@ export class ConfigItemFormFactory {
         return new FormField(ad.Name, ad.Key, null, ad.Input.Required, null,
             [
                 new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.TEXT)
-            ], null, null, parentInstanceId, ad.CountDefault ? ad.CountDefault : 1, ad.CountMax, ad.CountMin,
+            ], null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
             ad.Input.MaxLength, ad.Input.RegEx, ad.Input.RegExErrorMessage
         );
     }
@@ -154,7 +157,7 @@ export class ConfigItemFormFactory {
         return new FormField(ad.Name, ad.Key, 'text-area-input', ad.Input.Required, null,
             [
                 new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.TEXT_AREA)
-            ], null, null, parentInstanceId, ad.CountDefault ? ad.CountDefault : 1, ad.CountMax, ad.CountMin,
+            ], null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
             ad.Input.MaxLength, ad.Input.RegEx, ad.Input.RegExErrorMessage
         );
     }
@@ -166,7 +169,7 @@ export class ConfigItemFormFactory {
             [
                 new FormFieldOption(ObjectReferenceOptions.OBJECT, objectType),
                 new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.OBJECT_REFERENCE)
-            ], null, null, parentInstanceId, ad.CountDefault ? ad.CountDefault : 1, ad.CountMax, ad.CountMin,
+            ], null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
             ad.Input.MaxLength, ad.Input.RegEx, ad.Input.RegExErrorMessage
         );
     }
@@ -182,7 +185,7 @@ export class ConfigItemFormFactory {
             [
                 new FormFieldOption('CI_CLASS', classes),
                 new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.CI_REFERENCE)
-            ], null, null, parentInstanceId, ad.CountDefault ? ad.CountDefault : 1, ad.CountMax, ad.CountMin,
+            ], null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
             ad.Input.MaxLength, ad.Input.RegEx, ad.Input.RegExErrorMessage
         );
     }
@@ -192,7 +195,7 @@ export class ConfigItemFormFactory {
             [
                 new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.DATE),
             ],
-            null, null, parentInstanceId, ad.CountDefault ? ad.CountDefault : 1, ad.CountMax, ad.CountMin,
+            null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
             ad.Input.MaxLength,
             ad.Input.RegEx, ad.Input.RegExErrorMessage
         );
@@ -202,7 +205,7 @@ export class ConfigItemFormFactory {
         return new FormField(ad.Name, ad.Key, 'date-time-input', ad.Input.Required, null,
             [
                 new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.DATE_TIME)
-            ], null, null, parentInstanceId, ad.CountDefault ? ad.CountDefault : 1, ad.CountMax, ad.CountMin,
+            ], null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
             ad.Input.MaxLength, ad.Input.RegEx, ad.Input.RegExErrorMessage
         );
     }
@@ -213,7 +216,7 @@ export class ConfigItemFormFactory {
                 new FormFieldOption(
                     FormFieldOptions.INPUT_FIELD_TYPE, dummy ? InputFieldTypes.DUMMY : InputFieldTypes.TEXT
                 )
-            ], null, null, parentInstanceId, ad.CountDefault ? ad.CountDefault : 1, ad.CountMax, ad.CountMin,
+            ], null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
             ad.Input.MaxLength, ad.Input.RegEx, ad.Input.RegExErrorMessage
         );
     }
@@ -223,7 +226,7 @@ export class ConfigItemFormFactory {
             [
                 new FormFieldOption('MULTI_FILES', false),
                 new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.ATTACHMENT)
-            ], null, null, parentInstanceId, ad.CountDefault ? ad.CountDefault : 1, ad.CountMax, ad.CountMin,
+            ], null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
             ad.Input.MaxLength, ad.Input.RegEx, ad.Input.RegExErrorMessage
         );
     }

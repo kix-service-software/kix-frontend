@@ -36,10 +36,6 @@ class TreeComponent {
     public nodeHovered(node: TreeNode): void {
         (this as any).emit('nodeHovered', node);
     }
-
-    public getTreeDOMElement(): any {
-        return (this as any).getEl();
-    }
 }
 
 module.exports = TreeComponent;

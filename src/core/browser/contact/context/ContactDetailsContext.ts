@@ -9,6 +9,7 @@ import { CustomerContext } from "../../customer";
 import { KIXObjectService } from "../../kix";
 import { EventService } from "../../event";
 import { LabelService } from "../../LabelService";
+import { ApplicationEvent } from "../../application";
 
 export class ContactDetailsContext extends Context<ContactDetailsContextConfiguration> {
 
@@ -93,14 +94,27 @@ export class ContactDetailsContext extends Context<ContactDetailsContextConfigur
     }
 
     public async getObject<O extends KIXObject>(
-        kixObjectType: KIXObjectType = KIXObjectType.CONTACT, reload: boolean = false
+        objectType: KIXObjectType = KIXObjectType.CONTACT, reload: boolean = false
     ): Promise<O> {
         let object;
 
+        if (!objectType) {
+            objectType = KIXObjectType.CONTACT;
+        }
+
+        if (reload && objectType === KIXObjectType.CONTACT) {
+            KIXObjectCache.removeObject(KIXObjectType.CONTACT, Number(this.objectId));
+        }
+
         if (!KIXObjectCache.isObjectCached(KIXObjectType.CONTACT, this.objectId)) {
             object = await this.loadContact();
+            reload = true;
         } else {
             object = KIXObjectCache.getObject(KIXObjectType.CONTACT, this.objectId);
+        }
+
+        if (reload) {
+            this.listeners.forEach((l) => l.objectChanged(this.getObjectId(), object, KIXObjectType.CONTACT));
         }
 
         return object;
@@ -108,7 +122,9 @@ export class ContactDetailsContext extends Context<ContactDetailsContextConfigur
 
     private async loadContact(): Promise<Contact> {
         const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish('APP_LOADING', { loading: true, hint: 'Lade Ansprechpartner ...' });
+            EventService.getInstance().publish(
+                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Lade Ansprechpartner ...' }
+            );
         }, 500);
 
         const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, null, ['TicketStats', 'Tickets']);
@@ -125,10 +141,9 @@ export class ContactDetailsContext extends Context<ContactDetailsContextConfigur
         let contact;
         if (contacts && contacts.length) {
             contact = contacts[0];
-            this.listeners.forEach((l) => l.objectChanged(this.getObjectId(), contact, KIXObjectType.CONTACT));
         }
 
-        EventService.getInstance().publish('APP_LOADING', { loading: false });
+        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
         return contact;
     }
 

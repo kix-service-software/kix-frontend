@@ -1,11 +1,11 @@
 import { ComponentState } from "./ComponentState";
 import {
-    ContextService, ActionFactory, StandardTableFactoryService,
-    TableConfiguration, TableHeaderHeight, TableRowHeight, SearchOperator, WidgetService, LanguageUtil
+    ContextService, ActionFactory, SearchOperator, WidgetService, ServiceRegistry, TableFactoryService
 } from "../../../../core/browser";
 import { KIXObjectType, KIXObjectPropertyFilter, TableFilterCriteria, KIXObject } from "../../../../core/model";
 import { FAQArticleProperty, FAQCategory } from "../../../../core/model/kix/faq";
 import { FAQContext } from "../../../../core/browser/faq";
+import { TranslationService } from "../../../../core/browser/i18n/TranslationService";
 
 class Component {
 
@@ -25,7 +25,7 @@ class Component {
 
     public async onMount(): Promise<void> {
         this.additionalFilterCriteria = [];
-        const context = ContextService.getInstance().getActiveContext();
+        const context = await ContextService.getInstance().getContext<FAQContext>(FAQContext.CONTEXT_ID);
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         if (this.state.widgetConfiguration.contextDependent) {
@@ -34,23 +34,32 @@ class Component {
                 sidebarToggled: () => { return; },
                 objectChanged: () => { return; },
                 objectListChanged: this.contextObjectListChanged.bind(this),
-                filteredObjectListChanged: () => { return; }
+                filteredObjectListChanged: () => { return; },
+                scrollInformationChanged: () => { return; }
             });
         }
 
         await this.prepareFilter();
         this.prepareActions();
         await this.prepareTable();
-
-        this.state.loading = false;
     }
 
     public onDestroy(): void {
         WidgetService.getInstance().unregisterActions(this.state.instanceId);
     }
 
+    private async contextObjectListChanged(objectList: KIXObject[]): Promise<void> {
+        if (this.state.table) {
+            this.setTitle(objectList.length);
+            this.setActionsDirty();
+        }
+    }
+
     private async prepareFilter(): Promise<void> {
-        const languages = await LanguageUtil.getLanguages();
+        const translationService = ServiceRegistry.getServiceInstance<TranslationService>(
+            KIXObjectType.TRANSLATION
+        );
+        const languages = await translationService.getLanguages();
         this.state.predefinedTableFilter = languages.map(
             (l) => new KIXObjectPropertyFilter(
                 l[1], [new TableFilterCriteria(FAQArticleProperty.LANGUAGE, SearchOperator.EQUALS, l[0])]
@@ -68,35 +77,17 @@ class Component {
     }
 
     private async prepareTable(): Promise<void> {
-        const tableConfiguration = new TableConfiguration(
-            null, null, null, null, true, false, null, null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
+        const table = TableFactoryService.getInstance().createTable(
+            'faq-articles', KIXObjectType.FAQ_ARTICLE, null, null, FAQContext.CONTEXT_ID
         );
 
-        const table =
-            StandardTableFactoryService.getInstance().createStandardTable(
-                KIXObjectType.FAQ_ARTICLE, tableConfiguration, null, null, true
-            );
-
-        table.listenerConfiguration.selectionListener.addListener(this.setActionsDirty.bind(this));
-
-        WidgetService.getInstance().setActionData(this.state.instanceId, table);
-        table.layerConfiguration.contentLayer.setPreloadedObjects(null);
         this.state.table = table;
 
-        this.state.table.setTableListener(() => {
-            this.state.filterCount = this.state.table.getTableRows(true).length || 0;
-            (this as any).setStateDirty('filterCount');
-        });
-
-        const context = ContextService.getInstance().getActiveContext();
-        if (context.getDescriptor().contextId === FAQContext.CONTEXT_ID) {
-            this.setCategoryFilter((context as FAQContext).faqCategory);
-        }
+        const context = await ContextService.getInstance().getContext<FAQContext>(FAQContext.CONTEXT_ID);
+        this.setCategoryFilter(context.faqCategory);
         if (this.state.widgetConfiguration.contextDependent && context) {
             const objects = await context.getObjectList();
-            this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(objects);
             this.setTitle(objects.length);
-            await table.loadRows();
         }
     }
 
@@ -119,27 +110,10 @@ class Component {
 
             const name = this.predefinedFilter ? this.predefinedFilter.name : null;
             const predefinedCriteria = this.predefinedFilter ? this.predefinedFilter.criteria : [];
-            const newFilter = new KIXObjectPropertyFilter(
-                name, [...predefinedCriteria, ...this.additionalFilterCriteria]
-            );
+            const newFilter = [...predefinedCriteria, ...this.additionalFilterCriteria];
 
-            this.state.table.setFilterSettings(textFilterValue, newFilter);
-
-            const context = ContextService.getInstance().getActiveContext();
-            const rows = this.state.table.getTableRows(true);
-            context.setFilteredObjectList(rows.map((r) => r.object));
-        }
-    }
-
-    private async contextObjectListChanged(objectList: KIXObject[]): Promise<void> {
-        if (this.state.table) {
-            this.state.table.layerConfiguration.contentLayer.setPreloadedObjects(objectList);
-            this.setTitle(objectList.length);
-            await this.state.table.loadRows();
-
-            const context = ContextService.getInstance().getActiveContext();
-            const objects = await context.getObjectList();
-            context.setFilteredObjectList(objects);
+            this.state.table.setFilter(textFilterValue, newFilter);
+            this.state.table.filter();
         }
     }
 

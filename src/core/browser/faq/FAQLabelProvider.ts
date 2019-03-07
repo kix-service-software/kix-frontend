@@ -4,10 +4,10 @@ import {
 } from "../../model";
 import { ContextService } from "../context";
 import { FAQArticleProperty, FAQArticle, FAQCategory } from "../../model/kix/faq";
-import { LanguageUtil } from "../LanguageUtil";
-import { KIXObjectService } from "../kix";
+import { KIXObjectService, ServiceRegistry } from "../kix";
 import { BrowserUtil } from "../BrowserUtil";
 import { SearchProperty } from "../SearchProperty";
+import { TranslationService } from "../i18n/TranslationService";
 
 export class FAQLabelProvider implements ILabelProvider<FAQArticle> {
 
@@ -35,7 +35,7 @@ export class FAQLabelProvider implements ILabelProvider<FAQArticle> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public async getPropertyText(property: string, object?: KIXObject): Promise<string> {
+    public async getPropertyText(property: string): Promise<string> {
         let displayValue = property;
         switch (property) {
             case SearchProperty.FULLTEXT:
@@ -54,7 +54,7 @@ export class FAQLabelProvider implements ILabelProvider<FAQArticle> {
                 displayValue = 'Geändert am';
                 break;
             case FAQArticleProperty.CHANGED_BY:
-                displayValue = 'Letzter Bearbeiter';
+                displayValue = 'Geändert von';
                 break;
             case FAQArticleProperty.CREATED:
                 displayValue = 'Erstellt am';
@@ -118,6 +118,10 @@ export class FAQLabelProvider implements ILabelProvider<FAQArticle> {
         return displayValue;
     }
 
+    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
+        return;
+    }
+
     public async getDisplayText(faqArticle: FAQArticle, property: string): Promise<string> {
         let displayValue = faqArticle[property];
 
@@ -151,7 +155,10 @@ export class FAQLabelProvider implements ILabelProvider<FAQArticle> {
                 displayValue = valid ? valid.Name : faqArticle.ValidID;
                 break;
             case FAQArticleProperty.LANGUAGE:
-                displayValue = await LanguageUtil.getLanguageName(faqArticle.Language);
+                const translationService = ServiceRegistry.getServiceInstance<TranslationService>(
+                    KIXObjectType.TRANSLATION
+                );
+                displayValue = await translationService.getLanguageName(faqArticle.Language);
                 break;
             default:
                 displayValue = await this.getPropertyValueDisplayText(property, displayValue);

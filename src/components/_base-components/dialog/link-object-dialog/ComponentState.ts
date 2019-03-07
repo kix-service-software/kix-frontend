@@ -1,14 +1,13 @@
-import { StandardTable } from "../../../../core/browser";
 import { KIXObject, LinkTypeDescription, CreateLinkDescription, TreeNode, KIXObjectType } from "../../../../core/model";
+import { ITable } from "../../../../core/browser";
 
 export class ComponentState {
 
     public constructor(
         public linkableObjectNodes: TreeNode[] = [],
         public currentLinkableObjectNode: TreeNode = null,
-        public standardTable: StandardTable = null,
+        public table: ITable = null,
         public resultCount: number = 0,
-        public selectedObjects: KIXObject[] = [],
         public linkTypeNodes: TreeNode[] = [],
         public currentLinkTypeNode: TreeNode = null,
         public currentLinkTypeDescription: LinkTypeDescription = null,
@@ -17,6 +16,7 @@ export class ComponentState {
         public formId: string = null,
         public canSubmit: boolean = false,
         public tableId: string = null,
-        public filterCount: number = null
+        public filterCount: number = null,
+        public loading: boolean = true
     ) { }
 }

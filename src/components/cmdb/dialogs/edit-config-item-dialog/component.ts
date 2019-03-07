@@ -55,10 +55,10 @@ class Component {
                 } else {
                     DialogService.getInstance().setMainDialogLoading(true, 'Config Item wird aktualisiert');
                     const cmdbService
-                        = ServiceRegistry.getInstance().getServiceInstance<CMDBService>(KIXObjectType.CONFIG_ITEM);
+                        = ServiceRegistry.getServiceInstance<CMDBService>(KIXObjectType.CONFIG_ITEM);
                     const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
                     if (cmdbService && context) {
-                        const configItem = await context.getObject<ConfigItem>();
+                        const configItem = await context.getObject<ConfigItem>(KIXObjectType.CONFIG_ITEM, true);
                         const versionId = await cmdbService.createConfigItemVersion(
                             this.state.formId, Number(context.getObjectId())
                         );

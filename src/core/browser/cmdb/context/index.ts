@@ -8,3 +8,7 @@ export { ConfigItemSearchContextConfiguration } from './ConfigItemSearchContextC
 export { ConfigItemSearchContext } from './ConfigItemSearchContext';
 export { EditConfigItemDialogContext } from './EditConfigItemDialogContext';
 export { EditConfigItemDialogContextConfiguration } from './EditConfigItemDialogContextConfiguration';
+export { CompareConfigItemVersionDialogContext } from './CompareConfigItemVersionDialogContext';
+export {
+    CompareConfigItemVersionDialogContextConfiguration
+} from './CompareConfigItemVersionDialogContextConfiguration';

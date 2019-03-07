@@ -103,7 +103,7 @@ class Component {
         for (const cv of currentValues) {
             const existingValue = this.state.bulkValues.find((bv) => bv.bulkValue.id === cv.id);
             if (existingValue) {
-                existingValue.setOperationNode(null, cv.operator);
+                existingValue.setOperationNode(null, cv.operator as PropertyOperator);
                 existingValue.setCurrentValue(cv.value);
                 values.push(existingValue);
             } else {

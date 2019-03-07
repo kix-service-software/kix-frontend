@@ -81,23 +81,10 @@ export class CreateConfigItemVersionUtil {
                 switch (fieldType) {
                     case InputFieldTypes.TEXT:
                     case InputFieldTypes.TEXT_AREA:
-                        value = formValue.value;
-                        break;
                     case InputFieldTypes.GENERAL_CATALOG:
-                        value = formValue.value;
-                        break;
                     case InputFieldTypes.CI_REFERENCE:
-                        value = formValue.value;
-                        break;
                     case InputFieldTypes.OBJECT_REFERENCE:
-                        const objectoption = formField.options.find((o) => o.option === 'OBJECT');
-                        if (objectoption) {
-                            if (objectoption.value === KIXObjectType.CONTACT) {
-                                value = (formValue.value as Contact).ContactID;
-                            } else if (objectoption.value === KIXObjectType.CUSTOMER) {
-                                value = (formValue.value as Customer).CustomerID;
-                            }
-                        }
+                        value = formValue.value;
                         break;
                     case InputFieldTypes.DATE:
                         if (formValue.value !== '') {

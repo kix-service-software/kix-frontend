@@ -1,0 +1,23 @@
+<widget
+    instanceId=state.instanceId
+    title=state.title
+    actions=state.actions
+    icon=(state.widgetConfiguration && state.widgetConfiguration.icon ? state.widgetConfiguration.icon : "")>
+    <@headerFilter>
+        <filter
+            filterCount=state.filterCount
+            predefinedFilter=state.predefinedTableFilter
+            predefinedFilterPlaceholder="Alle Sprachen"
+            on-filter("filter")/>
+    </@headerFilter>
+    <@content>
+        <if(state.translation)>
+            <div.translation-language-container>
+                <object-property-label object=state.translation property="Pattern" labelProvider=component.labelProvider/>
+                <if(state.table)>
+                    <standard-table-NEW table=state.table/>
+                </if>
+            </div>
+        </if>
+    </@content>
+</widget>

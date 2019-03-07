@@ -1,0 +1,9 @@
+<span.filterable
+    class={
+        "filter-active": state.active || state.show
+    }
+    on-click("showFilter")
+    on-mouseenter("filterEntered")
+    on-mouseleave("filterLeaved")>
+    <span.kix-icon-filter/>
+</span>

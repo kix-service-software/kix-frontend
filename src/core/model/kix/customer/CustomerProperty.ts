@@ -12,7 +12,7 @@ export enum CustomerProperty {
 
     CUSTOMER_COMPANY_ZIP = 'CustomerCompanyZIP',
 
-    CUSTOMER_COMPANY_City = 'CustomerCompanyCity',
+    CUSTOMER_COMPANY_CITY = 'CustomerCompanyCity',
 
     CUSTOMER_COMPANY_STREET = 'CustomerCompanyStreet',
 
@@ -26,6 +26,8 @@ export enum CustomerProperty {
 
     ESCALATED_TICKETS_COUNT = 'ESCALATED_TICKETS_COUNT',
 
-    REMINDER_TICKETS_COUNT = 'REMINDER_TICKETS_COUNT'
+    REMINDER_TICKETS_COUNT = 'REMINDER_TICKETS_COUNT',
+
+    TICKET_STATS = 'TicketStats'
 
 }

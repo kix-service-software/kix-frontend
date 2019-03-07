@@ -1,3 +1,4 @@
+export * from './channel';
 export * from './contact';
 export * from './cmdb';
 export * from './dynamic-field';
@@ -10,6 +11,7 @@ export * from './ticket';
 export * from './user';
 export * from './customer';
 export * from './text-module';
+export * from './i18n';
 
 export { ClientRegistration } from './ClientRegistration';
 export { GeneralCatalogItem } from './GeneralCatalogItem';
@@ -27,3 +29,4 @@ export { StandardAttachment } from './StandardAttachment';
 export { ValidObject } from './ValidObject';
 export { ObjectData } from './ObjectData';
 export { AttachmentError } from './AttachmentError';
+export { SystemAddress } from './SystemAddress';

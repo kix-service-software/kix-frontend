@@ -1,6 +1,6 @@
 import {
-    AbstractMarkoComponent, StandardTableFactoryService, LabelService, ServiceRegistry,
-    FactoryService, ContextService, DialogService, ActionFactory, KIXObjectSearchService
+    AbstractMarkoComponent, LabelService, ServiceRegistry,
+    FactoryService, ContextService, DialogService, ActionFactory, KIXObjectSearchService, TableFactoryService
 } from '../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
@@ -8,12 +8,13 @@ import {
     NewCustomerDialogContext, CustomerSearchContext, CustomerSearchAction, CustomerCreateAction,
     CustomerEditAction, CustomerCreateContactAction, CustomerPrintAction, CustomerCreateCIAction,
     CustomerCreateTicketAction, CustomerService, CustomerTableFactory, CustomerSearchDefinition,
-    EditCustomerDialogContext, CustomerFormService
+    EditCustomerDialogContext, CustomerFormService, CustomerImportManager
 } from '../../../core/browser/customer';
 import {
     KIXObjectType, ContextDescriptor, ContextType, ContextMode, WidgetConfiguration,
     ConfiguredDialogWidget, WidgetSize, KIXObjectCache, CustomerCacheHandler
 } from '../../../core/model';
+import { ImportService } from '../../../core/browser/import';
 
 class Component extends AbstractMarkoComponent {
 
@@ -22,15 +23,17 @@ class Component extends AbstractMarkoComponent {
     }
 
     public async onMount(): Promise<void> {
-        ServiceRegistry.getInstance().registerServiceInstance(CustomerService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(CustomerFormService.getInstance());
+        ServiceRegistry.registerServiceInstance(CustomerService.getInstance());
+        ServiceRegistry.registerServiceInstance(CustomerFormService.getInstance());
 
-        StandardTableFactoryService.getInstance().registerFactory(new CustomerTableFactory());
+        TableFactoryService.getInstance().registerFactory(new CustomerTableFactory());
         LabelService.getInstance().registerLabelProvider(new CustomerLabelProvider());
         FactoryService.getInstance().registerFactory(KIXObjectType.CUSTOMER, CustomerBrowserFactory.getInstance());
         KIXObjectSearchService.getInstance().registerSearchDefinition(new CustomerSearchDefinition());
 
         KIXObjectCache.registerCacheHandler(new CustomerCacheHandler());
+
+        ImportService.getInstance().registerImportManager(new CustomerImportManager());
 
         this.registerContexts();
         this.registerDialogs();

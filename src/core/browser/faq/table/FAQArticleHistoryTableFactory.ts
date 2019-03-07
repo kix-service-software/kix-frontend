@@ -1,51 +1,45 @@
-import {
-    IStandardTableFactory, TableConfiguration, StandardTable, TableListenerConfiguration,
-    TableColumnConfiguration, AbstractTableLayer, TableLayerConfiguration, TableRowHeight, TableHeaderHeight
-} from "../../standard-table";
 import { KIXObjectType, DataType } from "../../../model";
-import { IdService } from "../../IdService";
-import { FAQArticle, FAQArticleHistoryProperty } from "../../../model/kix/faq";
-import { FAQArticleHistoryTableContentLayer } from "./FAQArticleHistoryTableContentLayer";
-import { FAQArticleHistoryTableLabelLayer } from "./FAQArticleHistoryTableLabelLayer";
+import { FAQArticleHistoryProperty } from "../../../model/kix/faq";
+import {
+    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
+    TableHeaderHeight, IColumnConfiguration
+} from "../../table";
+import { FAQArticleHistoryContentProvider } from "./FAQArticleHistoryContentProvider";
 
-export class FAQArticleHistoryTableFactory implements IStandardTableFactory<FAQArticle> {
+export class FAQArticleHistoryTableFactory implements ITableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.FAQ_ARTICLE_HISTORY;
 
     public createTable(
-        tableConfiguration?: TableConfiguration,
-        layerConfiguration?: TableLayerConfiguration,
-        listenerConfiguration?: TableListenerConfiguration,
-        defaultRouting?: boolean,
-        defaultToggle?: boolean
-    ): StandardTable<FAQArticle> {
+        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
+        contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean
+    ): ITable {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
-        layerConfiguration = this.setDefaultLayerConfiguration(layerConfiguration, tableConfiguration, defaultToggle);
-        listenerConfiguration = this.setDefaultListenerConfiguration(listenerConfiguration);
+        const table = new Table(tableKey, tableConfiguration);
 
-        return new StandardTable(
-            IdService.generateDateBasedId('faq-article-history-table'),
-            tableConfiguration, layerConfiguration, listenerConfiguration
-        );
+        table.setContentProvider(new FAQArticleHistoryContentProvider(table, null, null, contextId));
+        table.setColumnConfiguration(tableConfiguration.tableColumns);
+
+        return table;
     }
 
     private setDefaultTableConfiguration(
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new TableColumnConfiguration(FAQArticleHistoryProperty.NAME, true, false, true, true, 150),
-            new TableColumnConfiguration(FAQArticleHistoryProperty.CREATED_BY, true, false, true, true, 150),
-            new TableColumnConfiguration(
-                FAQArticleHistoryProperty.CREATED, true, false, true, true, 150, true, false, DataType.DATE_TIME
+            new DefaultColumnConfiguration(FAQArticleHistoryProperty.NAME, true, false, true, true, 200),
+            new DefaultColumnConfiguration(FAQArticleHistoryProperty.CREATED_BY, true, false, true, true, 300),
+            new DefaultColumnConfiguration(
+                FAQArticleHistoryProperty.CREATED, true, false, true, true, 150, true, false, false, DataType.DATE_TIME
             )
         ];
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration();
-            tableConfiguration.tableColumns = tableColumns;
-            tableConfiguration.rowHeight = TableRowHeight.SMALL;
-            tableConfiguration.headerHeight = TableHeaderHeight.SMALL;
+            tableConfiguration = new TableConfiguration(
+                KIXObjectType.FAQ_ARTICLE_HISTORY, null, null, tableColumns, null, null, null, null, null,
+                TableHeaderHeight.SMALL
+            );
         } else if (!tableConfiguration.tableColumns) {
             tableConfiguration.tableColumns = tableColumns;
         }
@@ -53,30 +47,9 @@ export class FAQArticleHistoryTableFactory implements IStandardTableFactory<FAQA
         return tableConfiguration;
     }
 
-    private setDefaultLayerConfiguration(
-        layerConfiguration: TableLayerConfiguration, tableConfiguration: TableConfiguration, defaultToggle?: boolean
-    ): TableLayerConfiguration {
-
-        if (!layerConfiguration) {
-            const contentLayer: AbstractTableLayer = new FAQArticleHistoryTableContentLayer(
-                [], tableConfiguration.filter, tableConfiguration.sortOrder, tableConfiguration.limit
-            );
-            const labelLayer = new FAQArticleHistoryTableLabelLayer();
-
-            layerConfiguration = new TableLayerConfiguration(contentLayer, labelLayer);
-        }
-
-        return layerConfiguration;
+    // TODO: implementieren
+    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
+        return;
     }
 
-    private setDefaultListenerConfiguration(
-        listenerConfiguration: TableListenerConfiguration
-    ): TableListenerConfiguration {
-
-        if (!listenerConfiguration) {
-            listenerConfiguration = new TableListenerConfiguration();
-        }
-
-        return listenerConfiguration;
-    }
 }

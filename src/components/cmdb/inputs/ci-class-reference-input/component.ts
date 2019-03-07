@@ -1,11 +1,12 @@
 import { ComponentState } from "./ComponentState";
 import {
-    FormInputComponent, TreeNode, ConfigItem
+    FormInputComponent, TreeNode, ConfigItem, KIXObjectType
 } from "../../../../core/model";
 import { FormService } from "../../../../core/browser/form";
 import { CMDBService } from "../../../../core/browser/cmdb";
+import { KIXObjectService } from "../../../../core/browser";
 
-class Component extends FormInputComponent<ConfigItem, ComponentState> {
+class Component extends FormInputComponent<number, ComponentState> {
 
     private configItems: ConfigItem[];
 
@@ -22,22 +23,28 @@ class Component extends FormInputComponent<ConfigItem, ComponentState> {
         this.state.searchCallback = this.searchConfigItems.bind(this);
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         this.state.autoCompleteConfiguration = formInstance.getAutoCompleteConfiguration();
-        this.setCurrentNode();
+        await this.setCurrentNode();
     }
 
-    public setCurrentNode(): void {
+    public async setCurrentNode(): Promise<void> {
         if (this.state.defaultValue && this.state.defaultValue.value) {
-            const configItem = this.state.defaultValue.value;
-            this.state.currentNode = this.createTreeNode(configItem);
-            this.state.nodes = [this.state.currentNode];
-            super.provideValue(configItem);
+            const configItemID = this.state.defaultValue.value;
+
+            const configItems = await KIXObjectService.loadObjects<ConfigItem>(
+                KIXObjectType.CONFIG_ITEM, [configItemID]
+            );
+            if (configItems && configItems.length) {
+                this.state.currentNode = this.createTreeNode(configItems[0]);
+                this.state.nodes = [this.state.currentNode];
+            }
+            super.provideValue(configItemID);
         }
     }
 
     public configItemChanged(nodes: TreeNode[]): void {
         this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
-        const configItem = this.state.currentNode ? this.state.currentNode.id : null;
-        super.provideValue(configItem);
+        const configItemID = this.state.currentNode ? this.state.currentNode.id : null;
+        super.provideValue(configItemID);
     }
 
     private async searchConfigItems(limit: number, searchValue: string): Promise<TreeNode[]> {

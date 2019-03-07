@@ -31,7 +31,7 @@ export class FAQService extends KIXObjectService {
 
     private constructor() {
         super();
-        KIXObjectServiceRegistry.getInstance().registerServiceInstance(this);
+        KIXObjectServiceRegistry.registerServiceInstance(this);
         KIXObjectCache.registerCacheHandler(new FAQCacheHandler());
     }
 

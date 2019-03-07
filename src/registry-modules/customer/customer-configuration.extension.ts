@@ -1,13 +1,9 @@
 import { IConfigurationExtension } from '../../core/extensions';
+import { CustomerContext, CustomerContextConfiguration } from '../../core/browser/customer';
 import {
-    CustomerContext, CustomerContextConfiguration
-} from '../../core/browser/customer';
-import {
-    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, CustomerProperty, WidgetSize, ContactProperty
+    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize, KIXObjectType
 } from '../../core/model';
-import {
-    TableColumnConfiguration, TableConfiguration, TableRowHeight, TableHeaderHeight
-} from '../../core/browser';
+import { TableConfiguration, TableRowHeight, TableHeaderHeight } from '../../core/browser';
 
 export class DashboardModuleFactoryExtension implements IConfigurationExtension {
 
@@ -18,26 +14,33 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
         const customerListWidget =
             new ConfiguredWidget('20180529102830', new WidgetConfiguration(
-                'customer-list-widget', 'Übersicht Kunden', [
+                'table-widget', 'Übersicht Kunden', [
                     'customer-search-action',
                     'customer-create-action',
+                    'import-action',
                     'csv-export-action'
-                ], new TableConfiguration(
-                    null, null, null, null, true, false, null, null, TableHeaderHeight.LARGE, TableRowHeight.SMALL
-                ),
-                false, true, WidgetSize.LARGE, 'kix-icon-man-house', true)
+                ], {
+                    objectType: KIXObjectType.CUSTOMER,
+                    tableConfiguration: new TableConfiguration(KIXObjectType.CUSTOMER,
+                        null, null, null, null, true
+                    )
+                },
+                false, true, WidgetSize.LARGE, 'kix-icon-man-house', false)
             );
 
         const contactListWidget =
             new ConfiguredWidget('20180529144530', new WidgetConfiguration(
-                'contact-list-widget', 'Übersicht Ansprechpartner', [
+                'table-widget', 'Übersicht Ansprechpartner', [
                     'contact-search-action',
                     'contact-create-action',
                     'csv-export-action'
-                ], new TableConfiguration(
-                    null, null, null, null, true, false, null, null, TableHeaderHeight.LARGE, TableRowHeight.SMALL
-                ),
-                false, true, WidgetSize.LARGE, 'kix-icon-man-bubble', true)
+                ], {
+                    objectType: KIXObjectType.CONTACT,
+                    tableConfiguration: new TableConfiguration(KIXObjectType.CONTACT,
+                        null, null, null, null, true
+                    )
+                },
+                false, true, WidgetSize.LARGE, 'kix-icon-man-bubble', false)
             );
 
         const content: string[] = ['20180529102830', '20180529144530'];

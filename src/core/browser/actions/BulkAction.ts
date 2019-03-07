@@ -1,13 +1,13 @@
 import { AbstractAction } from '../../model/components/action/AbstractAction';
-import { StandardTable } from '../standard-table';
 import { ContextMode, KIXObjectType, KIXObject } from '../../model';
 import { ContextService } from '../context';
 import { BulkDialogContext, BulkService } from '../bulk';
 import { EventService, IEventSubscriber } from '../event';
 import { IdService } from '../IdService';
-import { TableEvents, TableEventData, DialogEvents, DialogEventData } from '../components';
+import { DialogEvents, DialogEventData } from '../components';
+import { ITable } from '../table';
 
-export class BulkAction extends AbstractAction<StandardTable> implements IEventSubscriber {
+export class BulkAction extends AbstractAction<ITable> implements IEventSubscriber {
 
     public eventSubscriberId: string;
     public objectType: KIXObjectType;
@@ -19,25 +19,22 @@ export class BulkAction extends AbstractAction<StandardTable> implements IEventS
     }
 
     public canRun(): boolean {
-        let canRun: boolean = false;
-        if (this.data
-            && this.data instanceof StandardTable
-            && this.data.tableConfiguration.enableSelection
-            && this.data.listenerConfiguration.selectionListener
-        ) {
-            const selectedObjects = this.data.listenerConfiguration.selectionListener.getSelectedObjects();
-            canRun = selectedObjects && !!selectedObjects.length;
+        let canRun = false;
+        if (this.data) {
+            const rows = this.data.getSelectedRows();
+            canRun = rows && rows.length > 0;
         }
+
         return canRun;
     }
 
     public async run(event: any): Promise<void> {
         if (this.canRun()) {
-            const selectedObjects = this.data.listenerConfiguration.selectionListener.getSelectedObjects();
-
-            const objectType = selectedObjects[0].KIXObjectType;
-            if (BulkService.getInstance().hasBulkManager(objectType)) {
-                await this.openDialog(selectedObjects);
+            const rows = this.data.getSelectedRows();
+            const objects = rows.map((r) => r.getRowObject().getObject());
+            this.objectType = this.data.getObjectType();
+            if (BulkService.getInstance().hasBulkManager(this.objectType)) {
+                await this.openDialog(objects);
             } else {
                 super.run(event);
             }
@@ -48,8 +45,6 @@ export class BulkAction extends AbstractAction<StandardTable> implements IEventS
         const context = await ContextService.getInstance().getContext<BulkDialogContext>(
             BulkDialogContext.CONTEXT_ID
         );
-
-        this.objectType = selectedObjects[0].KIXObjectType;
 
         if (context) {
             context.setObjectList(selectedObjects);
@@ -68,13 +63,20 @@ export class BulkAction extends AbstractAction<StandardTable> implements IEventS
             EventService.getInstance().unsubscribe(DialogEvents.DIALOG_FINISHED, this);
 
             if (eventId === DialogEvents.DIALOG_FINISHED) {
-                this.data.listenerConfiguration.selectionListener.updateSelections([]);
+                this.data.selectNone();
             }
 
-            // FIXME: Tabellen-Refresh nicht mehr notwendig, wenn  Refresh durchs Backend getriggert wird
+            let selectedObjects: KIXObject[];
+            if (eventId === DialogEvents.DIALOG_CANCELED) {
+                selectedObjects = this.data.getSelectedRows().map((r) => r.getRowObject().getObject());
+            }
+
             const bulkManager = BulkService.getInstance().getBulkManager(this.objectType);
             if (bulkManager && bulkManager.getBulkRunState()) {
-                EventService.getInstance().publish(TableEvents.REFRESH, new TableEventData(this.data.tableId));
+                await this.data.reload();
+                if (selectedObjects && selectedObjects.length) {
+                    selectedObjects.forEach((o) => this.data.selectRowByObject(o));
+                }
             }
         }
     }

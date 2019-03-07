@@ -5,6 +5,7 @@ import { KIXObjectService } from '../../kix';
 import { EventService } from '../../event';
 import { TicketDetailsContext } from '../context';
 import { BrowserUtil } from '../../BrowserUtil';
+import { ApplicationEvent } from '../../application';
 
 export class TicketWatchAction extends AbstractAction<Ticket> {
 
@@ -36,7 +37,7 @@ export class TicketWatchAction extends AbstractAction<Ticket> {
     public async run(): Promise<void> {
         let successHint: string;
         if (this.isWatching) {
-            EventService.getInstance().publish('APP_LOADING', {
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
                 loading: true, hint: 'Entferne Ticketbeobachtung ...'
             });
 
@@ -48,7 +49,7 @@ export class TicketWatchAction extends AbstractAction<Ticket> {
             }
         } else {
             EventService.getInstance().publish(
-                'APP_LOADING', { loading: true, hint: 'Ticket wird beobachtet ...' }
+                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Ticket wird beobachtet ...' }
             );
 
             const watcherId = await KIXObjectService.createObject(
@@ -67,7 +68,7 @@ export class TicketWatchAction extends AbstractAction<Ticket> {
                 BrowserUtil.openSuccessOverlay(successHint);
             }
 
-            EventService.getInstance().publish('APP_LOADING', { loading: false });
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
 
         }, 1000);
     }

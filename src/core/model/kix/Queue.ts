@@ -30,6 +30,7 @@ export class Queue extends KIXObject<Queue> {
     public SolutionNotify: number;
     public CreateTime: string;
     public ChangeTime: string;
+    public Signature: string;
     public SubQueues: Queue[];
     public TicketStats: TicketStats;
     public Tickets: number[] | Ticket[];
@@ -57,6 +58,7 @@ export class Queue extends KIXObject<Queue> {
             this.FirstResponseNotify = queue.FirstResponseNotify;
             this.UpdateTime = queue.UpdateTime;
             this.UpdateNotify = queue.UpdateNotify;
+            this.Signature = queue.Signature;
             this.SolutionTime = queue.SolutionTime;
             this.SolutionNotify = queue.SolutionNotify;
             this.CreateTime = queue.CreateTime;

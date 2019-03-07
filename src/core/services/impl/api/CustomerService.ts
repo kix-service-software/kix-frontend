@@ -33,7 +33,7 @@ export class CustomerService extends KIXObjectService {
 
     private constructor() {
         super();
-        KIXObjectServiceRegistry.getInstance().registerServiceInstance(this);
+        KIXObjectServiceRegistry.registerServiceInstance(this);
         KIXObjectCache.registerCacheHandler(new CustomerCacheHandler());
     }
 
@@ -187,7 +187,7 @@ export class CustomerService extends KIXObjectService {
             this.getParameterValue(parameter, CustomerProperty.CUSTOMER_COMPANY_NAME),
             this.getParameterValue(parameter, CustomerProperty.CUSTOMER_COMPANY_STREET),
             this.getParameterValue(parameter, CustomerProperty.CUSTOMER_COMPANY_ZIP),
-            this.getParameterValue(parameter, CustomerProperty.CUSTOMER_COMPANY_City),
+            this.getParameterValue(parameter, CustomerProperty.CUSTOMER_COMPANY_CITY),
             this.getParameterValue(parameter, CustomerProperty.CUSTOMER_COMPANY_COUNTRY),
             this.getParameterValue(parameter, CustomerProperty.CUSTOMER_COMPANY_URL),
             this.getParameterValue(parameter, CustomerProperty.CUSTOMER_COMPANY_COMMENT),

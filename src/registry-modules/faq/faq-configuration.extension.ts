@@ -4,7 +4,7 @@ import {
     FormField, Form, FormContext, KIXObjectType
 } from '../../core/model';
 import { FAQContext, FAQContextConfiguration } from '../../core/browser/faq';
-import { SearchProperty } from '../../core/browser';
+import { SearchProperty, TableConfiguration } from '../../core/browser';
 import { FAQArticleProperty } from '../../core/model/kix/faq';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../core/services';
@@ -19,10 +19,8 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
 
         const articleListWidget =
             new ConfiguredWidget('20180727-faq-article-list-widget', new WidgetConfiguration(
-                'faq-article-list-widget', 'Übersicht FAQ', [
-                    'faq-article-create-action', 'csv-export-action'
-                ], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-faq', true)
+                'table-widget', 'Übersicht FAQ', ['faq-article-create-action', 'csv-export-action'],
+                { objectType: KIXObjectType.FAQ_ARTICLE }, false, false, WidgetSize.BOTH, 'kix-icon-faq', true)
             );
 
         const content = ['20180727-faq-article-list-widget'];

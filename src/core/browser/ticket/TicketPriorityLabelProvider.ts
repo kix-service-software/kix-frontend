@@ -11,7 +11,7 @@ export class TicketPriorityLabelProvider implements ILabelProvider<TicketPriorit
         return ticketPriority instanceof TicketPriority;
     }
 
-    public async getPropertyText(property: string, ticketPriority?: TicketPriority, short?: boolean): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean): Promise<string> {
         let displayValue = property;
         switch (property) {
             case SearchProperty.FULLTEXT:
@@ -38,13 +38,17 @@ export class TicketPriorityLabelProvider implements ILabelProvider<TicketPriorit
             case TicketPriorityProperty.VALID_ID:
                 displayValue = 'Gültigkeit';
                 break;
-            case 'ICON':
+            case TicketPriorityProperty.ID:
                 displayValue = 'Icon';
                 break;
             default:
                 displayValue = property;
         }
         return displayValue;
+    }
+
+    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
+        return;
     }
 
     public getDisplayText(ticketPriority: TicketPriority, property: string): Promise<string> {
@@ -70,13 +74,38 @@ export class TicketPriorityLabelProvider implements ILabelProvider<TicketPriorit
                     displayValue = valid.Name;
                 }
                 break;
+            case TicketPriorityProperty.ID:
+                displayValue = ticketPriority.Name;
+                break;
             default:
         }
         return displayValue;
     }
 
     public async getPropertyValueDisplayText(property: string, value: string | number): Promise<string> {
-        return value.toString();
+        let displayValue = value;
+        const objectData = ContextService.getInstance().getObjectData();
+        switch (property) {
+            case TicketPriorityProperty.VALID_ID:
+                const valid = objectData.validObjects.find((v) => v.ID.toString() === value.toString());
+                if (valid) {
+                    displayValue = valid.Name;
+                }
+                break;
+            case TicketPriorityProperty.CREATE_BY:
+            case TicketPriorityProperty.CHANGE_BY:
+                const user = objectData.users.find((u) => u.UserID.toString() === displayValue.toString());
+                if (user) {
+                    displayValue = user.UserFullname;
+                }
+                break;
+            case TicketPriorityProperty.CREATE_TIME:
+            case TicketPriorityProperty.CHANGE_TIME:
+                displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
+                break;
+            default:
+        }
+        return displayValue.toString();
     }
 
     public getDisplayTextClasses(ticketPriority: TicketPriority, property: string): string[] {
@@ -110,7 +139,7 @@ export class TicketPriorityLabelProvider implements ILabelProvider<TicketPriorit
     public async getIcons(
         ticketPriority: TicketPriority, property: string, value?: string | number
     ): Promise<Array<string | ObjectIcon>> {
-        if (property === 'ICON') {
+        if (property === TicketPriorityProperty.ID) {
             return [new ObjectIcon('Priority', ticketPriority.ID)];
         }
         return null;

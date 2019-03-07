@@ -7,6 +7,7 @@ import { Context } from '../../../model/components/context/Context';
 import { KIXObjectService } from "../../kix";
 import { SearchOperator } from "../../SearchOperator";
 import { EventService } from "../../event";
+import { ApplicationEvent } from "../../application";
 
 export class TicketContext extends Context<TicketContextConfiguration> {
 
@@ -67,7 +68,7 @@ export class TicketContext extends Context<TicketContextConfiguration> {
         }
 
         const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish('APP_LOADING', {
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
                 loading: true, hint: `Lade Tickets ...`
             });
         }, 500);
@@ -80,7 +81,7 @@ export class TicketContext extends Context<TicketContextConfiguration> {
 
         this.setObjectList(tickets);
 
-        EventService.getInstance().publish('APP_LOADING', { loading: false });
+        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
     }
 
     public async getObjectList(reload: boolean = false): Promise<KIXObject[]> {

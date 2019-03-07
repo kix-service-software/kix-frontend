@@ -15,8 +15,8 @@ class Component {
     private state: ComponentState;
     private contextListernerId: string;
 
-    private customerRoutingConfiguration: RoutingConfiguration;
-    private contactRoutingConfiguration: RoutingConfiguration;
+    public customerRoutingConfiguration: RoutingConfiguration;
+    public contactRoutingConfiguration: RoutingConfiguration;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -39,6 +39,7 @@ class Component {
             explorerBarToggled: () => { (this as any).setStateDirty('ticket'); },
             objectListChanged: () => { return; },
             filteredObjectListChanged: () => { return; },
+            scrollInformationChanged: () => { return; },
             objectChanged: async (ticketId: string, ticket: Ticket, type: KIXObjectType) => {
                 if (type === KIXObjectType.TICKET) {
                     this.initWidget(ticket);

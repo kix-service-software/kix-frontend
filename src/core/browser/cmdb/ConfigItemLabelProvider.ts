@@ -53,7 +53,7 @@ export class ConfigItemLabelProvider implements ILabelProvider<ConfigItem> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public async getPropertyText(property: string, object?: KIXObject, short?: boolean): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean): Promise<string> {
         let displayValue = property;
         switch (property) {
             case ConfigItemProperty.CLASS:
@@ -70,7 +70,7 @@ export class ConfigItemLabelProvider implements ILabelProvider<ConfigItem> {
                 displayValue = 'Geändert am';
                 break;
             case ConfigItemProperty.CHANGE_BY:
-                displayValue = 'Letzter Bearbeiter';
+                displayValue = 'Geändert von';
                 break;
             case ConfigItemProperty.CREATE_TIME:
                 displayValue = 'Erstellt am';
@@ -97,6 +97,20 @@ export class ConfigItemLabelProvider implements ILabelProvider<ConfigItem> {
                 displayValue = property;
         }
         return displayValue.toString();
+    }
+
+    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
+        let icon = property;
+        switch (property) {
+            case ConfigItemProperty.CUR_DEPL_STATE_ID:
+                icon = 'kix-icon-productive_active';
+                break;
+            case ConfigItemProperty.CUR_INCI_STATE_ID:
+                icon = 'kix-icon-service_active';
+                break;
+            default:
+        }
+        return icon;
     }
 
     public async getDisplayText(configItem: ConfigItem, property: string): Promise<string> {

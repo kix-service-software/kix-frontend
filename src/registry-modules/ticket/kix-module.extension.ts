@@ -20,8 +20,6 @@ class KIXModuleExtionsion implements IKIXModuleExtension {
         ['ticket-contact-info', 'ticket/ticket-contact-info'],
         ['ticket-customer-info', 'ticket/ticket-customer-info'],
         ['article-receiver-list', 'ticket/article-receiver-list'],
-        ['article-list-widget', 'ticket/widgets/article-list-widget'],
-        ['ticket-list-widget', 'ticket/widgets/ticket-list-widget'],
         ['ticket-info-widget', 'ticket/widgets/ticket-info-widget'],
         ['ticket-history-widget', 'ticket/widgets/ticket-history-widget'],
         ['ticket-description-widget', 'ticket/widgets/ticket-description-widget'],
@@ -41,6 +39,9 @@ class KIXModuleExtionsion implements IKIXModuleExtension {
         ['ticket-input-contact', 'ticket/dialogs/inputs/ticket-input-contact'],
         ['ticket-input-customer', 'ticket/dialogs/inputs/ticket-input-customer'],
         ['ticket-input-archive-search', 'ticket/dialogs/inputs/ticket-input-archive-search'],
+        ['channel-input', 'ticket/dialogs/inputs/channel-input'],
+        ['article-email-from-input', 'ticket/dialogs/inputs/article-email-from-input'],
+        ['article-email-recipient-input', 'ticket/dialogs/inputs/article-email-recipient-input'],
         ['ticket-admin-types', 'ticket/admin/ticket-admin-types'],
         ['ticket-type-details', 'ticket/admin/ticket-type-details'],
         ['ticket-type-info-widget', 'ticket/admin/widgets/ticket-type-info-widget'],
@@ -57,7 +58,10 @@ class KIXModuleExtionsion implements IKIXModuleExtension {
         ['ticket-priority-info-widget', 'ticket/admin/widgets/ticket-priority-info-widget'],
         ['new-ticket-priority-dialog', 'ticket/admin/dialogs/new-ticket-priority-dialog'],
         ['edit-ticket-priority-dialog', 'ticket/admin/dialogs/edit-ticket-priority-dialog'],
-        ['edit-ticket-state-dialog', 'ticket/admin/dialogs/edit-ticket-state-dialog']
+        ['edit-ticket-state-dialog', 'ticket/admin/dialogs/edit-ticket-state-dialog'],
+        ['go-to-article-cell', 'ticket/table/go-to-article-cell'],
+        ['article-attachment-cell', 'ticket/table/article-attachment-cell'],
+        ['article-attachment-count', 'ticket/article-attachment-count']
     ];
 
 }

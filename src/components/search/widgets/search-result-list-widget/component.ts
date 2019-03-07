@@ -3,16 +3,19 @@ import { KIXObjectPropertyFilter, KIXObject, KIXObjectType, } from '../../../../
 import { ContextService } from "../../../../core/browser/context";
 import {
     ActionFactory, KIXObjectSearchService, IKIXObjectSearchListener,
-    LabelService, StandardTableFactoryService, WidgetService,
+    LabelService, WidgetService,
     TableConfiguration, TableHeaderHeight, TableRowHeight, SearchResultCategory,
-    KIXObjectSearchCache, KIXObjectService, SearchProperty, TableEvents, TableEventData
+    KIXObjectSearchCache, KIXObjectService, SearchProperty, TableFactoryService, TableEvent, TableEventData
 } from '../../../../core/browser';
+import { SearchContext } from '../../../../core/browser/search/context';
 import { EventService, IEventSubscriber } from '../../../../core/browser/event';
 
-class Component implements IKIXObjectSearchListener, IEventSubscriber {
+class Component implements IKIXObjectSearchListener {
 
     public listenerId: string;
     public eventSubscriberId: string;
+
+    private tableSubscriber: IEventSubscriber;
 
     public state: ComponentState;
 
@@ -33,21 +36,21 @@ class Component implements IKIXObjectSearchListener, IEventSubscriber {
 
         KIXObjectSearchService.getInstance().registerListener(this);
         this.searchFinished();
-        EventService.getInstance().subscribe(TableEvents.REFRESH, this);
     }
 
     public onDestroy(): void {
         WidgetService.getInstance().unregisterActions(this.state.instanceId);
-        EventService.getInstance().unsubscribe(TableEvents.REFRESH, this);
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
     }
 
     public searchCleared(): void {
-        this.state.resultTable = null;
+        this.state.table = null;
         this.searchResultCategoryChanged(null);
     }
 
     public searchFinished<T extends KIXObject = KIXObject>(): void {
-        this.state.resultTable = null;
+        this.state.table = null;
 
         setTimeout(() => {
             const cache = KIXObjectSearchService.getInstance().getSearchCache();
@@ -67,23 +70,23 @@ class Component implements IKIXObjectSearchListener, IEventSubscriber {
     ): Promise<void> {
         if (objectType) {
             this.state.loading = true;
-            this.state.resultTable = null;
+            this.state.table = null;
 
             const isSearchMainObject = cache.objectType === objectType;
 
             let resultCount: number = 0;
-            let resultObjects: KIXObject[] = [];
 
             if (isSearchMainObject) {
                 resultCount = cache.result.length;
-                resultObjects = cache.result;
+                KIXObjectSearchService.getInstance().provideResult(null);
             } else {
                 const activeCategory = KIXObjectSearchService.getInstance().getActiveSearchResultExplorerCategory();
                 if (activeCategory) {
                     resultCount = activeCategory ? activeCategory.objectIds.length : 0;
-                    resultObjects = await KIXObjectService.loadObjects(
+                    const resultObjects = await KIXObjectService.loadObjects(
                         objectType, [...activeCategory.objectIds]
                     );
+                    KIXObjectSearchService.getInstance().provideResult(resultObjects);
                 }
             }
 
@@ -97,43 +100,48 @@ class Component implements IKIXObjectSearchListener, IEventSubscriber {
             }
 
             const tableConfiguration = new TableConfiguration(
-                null, null, null, null, true, null, null, null,
+                objectType, null, null, null, null, true, null, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.SMALL, emptyResultHint
             );
-            const table = StandardTableFactoryService.getInstance().createStandardTable(
-                objectType, tableConfiguration, null, null, true, true
+            const table = TableFactoryService.getInstance().createTable(
+                `search-result-list-${objectType}`, objectType, tableConfiguration,
+                null, SearchContext.CONTEXT_ID, true, true, true
             );
 
-            table.layerConfiguration.contentLayer.setPreloadedObjects(resultObjects);
 
-            if (isSearchMainObject) {
-                const parameter: Array<[string, any]> = [];
-                for (const c of cache.criteria) {
-                    if (c.property !== SearchProperty.FULLTEXT) {
-                        parameter.push([c.property, c.value]);
+
+            this.tableSubscriber = {
+                eventSubscriberId: 'search-result-table-listener',
+                eventPublished: async (data: TableEventData, eventId: string) => {
+                    if (data && data.tableId === table.getTableId()) {
+                        if (eventId === TableEvent.TABLE_INITIALIZED && isSearchMainObject) {
+                            const parameter: Array<[string, any]> = [];
+                            for (const c of cache.criteria) {
+                                if (c.property !== SearchProperty.FULLTEXT) {
+                                    parameter.push([c.property, c.value]);
+                                }
+                            }
+                            const searchDefinition = KIXObjectSearchService.getInstance().getSearchDefinition(
+                                objectType
+                            );
+                            const columns = await searchDefinition.getTableColumnConfiguration(parameter);
+                            table.addColumns(columns);
+                        }
+                        if (eventId === TableEvent.TABLE_READY) {
+                            this.state.filterCount = this.state.table.isFiltered()
+                                ? this.state.table.getRowCount()
+                                : null;
+                        }
                     }
                 }
-                const searchDefinition = KIXObjectSearchService.getInstance().getSearchDefinition(objectType);
-                const columns = await searchDefinition.getTableColumnConfiguration(parameter);
-                table.setColumns(columns);
-            }
+            };
 
-            await table.loadRows();
-
-            table.listenerConfiguration.selectionListener.addListener(this.setActionsDirty.bind(this));
+            EventService.getInstance().subscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
+            EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
 
             WidgetService.getInstance().setActionData(this.state.instanceId, table);
-
-            setTimeout(() => {
-                this.state.tableId = 'Search-Table-' + cache.objectType;
-                this.state.resultTable = table;
-
-                this.state.resultTable.setTableListener(() => {
-                    this.state.filterCount = this.state.resultTable.getTableRows(true).length || 0;
-                    (this as any).setStateDirty('filterCount');
-                });
-                this.state.loading = false;
-            }, 500);
+            this.state.table = table;
+            this.setActionsDirty();
         } else {
             this.state.resultIcon = null;
             this.state.resultTitle = 'Trefferliste';
@@ -153,8 +161,9 @@ class Component implements IKIXObjectSearchListener, IEventSubscriber {
     }
 
     public filter(textFilterValue?: string, filter?: KIXObjectPropertyFilter): void {
-        if (this.state.resultTable) {
-            this.state.resultTable.setFilterSettings(textFilterValue, filter);
+        if (this.state.table) {
+            this.state.table.setFilter(textFilterValue, filter ? filter.criteria : null);
+            this.state.table.filter();
         }
     }
 
@@ -162,34 +171,6 @@ class Component implements IKIXObjectSearchListener, IEventSubscriber {
         await this.initWidget(category ? category.objectType : null);
     }
 
-    public async eventPublished(data: TableEventData, eventId: string): Promise<void> {
-        if (data && data.tableId === this.state.resultTable.tableId && eventId === TableEvents.REFRESH) {
-            // FIXME: sollte über ein Table-Refresh möglich sein, direkt über Tabelle, nicht über einbindendes Widget
-            await this.refreshTable();
-        }
-    }
-
-    private async refreshTable(): Promise<void> {
-        const cache = KIXObjectSearchService.getInstance().getSearchCache();
-        const category = KIXObjectSearchService.getInstance().getActiveSearchResultExplorerCategory();
-        let objectIds = [];
-        if (cache.objectType === category.objectType) {
-            objectIds = cache.result.map((o) => o.ObjectId);
-        } else {
-            objectIds = category.objectIds;
-        }
-        if (objectIds && !!objectIds.length) {
-            const objects = await KIXObjectService.loadObjects(
-                category.objectType, objectIds, null, null, false
-            );
-
-            this.state.resultTable.layerConfiguration.contentLayer.setPreloadedObjects(objects);
-            await this.state.resultTable.loadRows(true);
-            const rows = this.state.resultTable.getTableRows(true);
-            this.state.resultTable.listenerConfiguration.selectionListener.updateSelections(rows);
-        }
-
-    }
 }
 
 module.exports = Component;
