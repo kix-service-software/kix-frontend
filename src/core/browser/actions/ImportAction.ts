@@ -13,16 +13,17 @@ export class ImportAction extends AbstractAction<ITable> {
         this.icon = "kix-icon-import";
     }
 
-    public async run(event: any): Promise<void> {
-        if (this.canRun()) {
-            this.objectType = this.data.getObjectType();
-            if (ImportService.getInstance().hasImportManager(this.objectType)) {
-                await this.openDialog();
-            } else {
-                super.run(event);
-            }
-        }
-    }
+    // FIXME: not needed in Alpha 4
+    // public async run(event: any): Promise<void> {
+    //     if (this.canRun()) {
+    //         this.objectType = this.data.getObjectType();
+    //         if (ImportService.getInstance().hasImportManager(this.objectType)) {
+    //             await this.openDialog();
+    //         } else {
+    //             super.run(event);
+    //         }
+    //     }
+    // }
 
     private async openDialog(): Promise<void> {
         const context = await ContextService.getInstance().getContext<ImportDialogContext>(
