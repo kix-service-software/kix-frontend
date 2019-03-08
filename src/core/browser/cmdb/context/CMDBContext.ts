@@ -52,12 +52,6 @@ export class CMDBContext extends Context<CMDBContextConfiguration> {
     public async setCIClass(ciClass: ConfigItemClass): Promise<void> {
         this.currentCIClass = ciClass;
         await this.loadConfigItems();
-        this.listeners.forEach(
-            (l) => l.objectChanged(
-                this.currentCIClass ? this.currentCIClass.ID : null,
-                this.currentCIClass,
-                KIXObjectType.CONFIG_ITEM_CLASS)
-        );
     }
 
     public async loadConfigItems(): Promise<void> {
