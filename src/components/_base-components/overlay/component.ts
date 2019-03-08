@@ -1,5 +1,5 @@
 import { ComponentState } from "./ComponentState";
-import { OverlayService, ActionFactory, WidgetService, BrowserUtil } from "../../../core/browser";
+import { OverlayService, ActionFactory, WidgetService } from "../../../core/browser";
 import {
     OverlayType, ComponentContent, WidgetType, KIXObject, ToastContent
 } from "../../../core/model";

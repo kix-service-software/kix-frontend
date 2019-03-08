@@ -50,7 +50,51 @@ export class BrowserUtil {
             };
             reader.readAsDataURL(file);
         });
+    }
 
+    public static readFileAsText(file: File, encoding: string = 'UTF-8'): Promise<string> {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+                const content = reader.result.toString();
+                resolve(content);
+            };
+            reader.readAsText(file, encoding);
+        });
+    }
+
+    public static parseCSV(csvString: string, textSeparator: string = '"', valueSeparator: string = ';'): string[][] {
+        const list = [];
+        let quote = false;
+
+        for (let row = 0, column = 0, character = 0; character < csvString.length; character++) {
+            const currentCharacter = csvString[character];
+            const nextCharacter = csvString[character + 1];
+            list[row] = list[row] || [];
+            list[row][column] = list[row][column] || '';
+
+            if (
+                currentCharacter.match(new RegExp(textSeparator))
+                && quote && nextCharacter.match(new RegExp(textSeparator))
+            ) {
+                list[row][column] += currentCharacter; ++character; continue;
+            }
+
+            if (currentCharacter.match(new RegExp(textSeparator))) { quote = !quote; continue; }
+
+            if (currentCharacter.match(new RegExp(valueSeparator)) && !quote) { ++column; continue; }
+
+            if (
+                currentCharacter === '\r' && nextCharacter === '\n' && !quote
+            ) { ++row; column = 0; ++character; continue; }
+
+            if (currentCharacter === '\n' && !quote) { ++row; column = 0; continue; }
+            if (currentCharacter === '\r' && !quote) { ++row; column = 0; continue; }
+
+            list[row][column] += currentCharacter;
+        }
+
+        return list;
     }
 
     public static calculateAverage(values: number[]): number {

@@ -35,9 +35,13 @@ class Component extends FormInputComponent<any, ComponentState> {
         document.addEventListener('dragenter', this.dragEnter.bind(this), false);
         document.addEventListener('dragleave', this.dragLeave.bind(this), false);
 
-        const option = this.state.field.options.find((o) => o.option === 'MULTI_FILES');
-        if (option) {
-            this.state.multiple = Boolean(option.value);
+        const optionMulti = this.state.field.options.find((o) => o.option === 'MULTI_FILES');
+        if (optionMulti) {
+            this.state.multiple = Boolean(optionMulti.value);
+        }
+        const optionMime = this.state.field.options.find((o) => o.option === 'MimeTypes');
+        if (optionMime && Array.isArray(optionMime.value) && !!optionMime.value) {
+            this.state.accept = optionMime.value.join(',');
         }
         this.setCurrentValue();
     }

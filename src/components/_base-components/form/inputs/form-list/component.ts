@@ -214,6 +214,7 @@ class Component {
         setTimeout(() => {
             this.setDropdownStyle();
             this.focusInput();
+            this.setCheckState();
         }, 50);
     }
 

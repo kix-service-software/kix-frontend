@@ -394,7 +394,7 @@ describe('Table Tests', () => {
         });
 
         it('Should remove two columns.', () => {
-            const removedColumns = table.removeColumns([columnId1, columnId2]);
+            const removedColumns = table.removeColumns([columnId1, columnId2]) as IColumn[];
             expect(removedColumns).exist;
             expect(removedColumns).is.an('array');
             expect(removedColumns.length).equals(2);

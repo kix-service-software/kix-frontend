@@ -1,40 +1,40 @@
-<th.table-head-cell title=state.title style=("width:" + component.size + "px")>
-    <if(!state.loading && component.column)>
+<th.table-head-cell title=state.title style=("width:" + state.size + "px")>
+    <if(!state.loading && state.column)>
         <div.table-head-cell-content
             style={
                         height: input.height
                     }
             class={
-                        "with-sortable": component.column.getColumnConfiguration().sortable,
+                        "with-sortable": state.column.getColumnConfiguration().sortable,
                         "filter-is-shown": state.filterIsShown,
                         "filter-hovered": state.filterHovered
                     }>
             <span.icons on-click("sort")>
-                <if(component.column.getColumnConfiguration().showColumnIcon && state.icon)>
+                <if(state.column.getColumnConfiguration().showColumnIcon && state.icon)>
                     <icon icon=state.icon showUnknown=false/>
                 </if>
             </span>
             <div on-click("sort")>
                 <span.column-tilte-text>
-                    <if(component.column.getColumnConfiguration().showColumnTitle)>${state.title}</if>
+                    <if(state.column.getColumnConfiguration().showColumnTitle)>${state.title}</if>
                 </span>
-                <if(component.column.getColumnConfiguration().sortable)>
+                <if(state.column.getColumnConfiguration().sortable)>
                     <span.sortable class={
                         sorted: state.isSorted,
-                        "with-text": component.column.getColumnConfiguration().showColumnTitle
+                        "with-text": state.column.getColumnConfiguration().showColumnTitle
                     }>
                         <span class=(state.sortOrderDown ? "kix-icon-sort-down" : "kix-icon-sort-up")/>
                     </span>
                 </if>
             </div>
-            <if(component.column.getColumnConfiguration().filterable)>
+            <if(state.column.getColumnConfiguration().filterable)>
                 <column-filter
-                    column=component.column
+                    column=state.column
                     on-changeFilterShownState("changeFilterShownState")
                     on-filterHovered("columnFilterHovered")/>
             </if>
         </div>
-        <if(component.column.getColumnConfiguration().resizable)>
+        <if(state.column.getColumnConfiguration().resizable)>
             <div.move-point on-mousedown("mousedown")/>
         </if>
     </if>

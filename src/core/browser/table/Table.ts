@@ -96,6 +96,7 @@ export class Table implements ITable {
     private async loadRowData(): Promise<void> {
         this.rows = [];
         this.filteredRows = null;
+
         if (this.contentProvider) {
             const data = await this.contentProvider.loadData();
             const rows = [];
@@ -204,29 +205,40 @@ export class Table implements ITable {
         return this.columns.find((r) => r.getColumnId() === columnId);
     }
 
-    public removeColumns(columnIds: string[]): IColumn[] {
+    public removeColumns(columnIds: string[]): IColumn[] | IColumnConfiguration[] {
         const removedColumns = [];
-        this.columns = this.columns.filter((c) => {
-            if (columnIds.some((id) => id === c.getColumnId())) {
-                removedColumns.push(c);
-                return false;
-            } else {
-                return true;
-            }
-        });
+        if (!this.initialized) {
+            this.columnConfiguration = this.columnConfiguration.filter((cc) => {
+                if (columnIds.some((id) => id === cc.property)) {
+                    removedColumns.push(cc);
+                    return false;
+                } else {
+                    return true;
+                }
+            });
+        } else {
+            this.columns = this.columns.filter((c) => {
+                if (columnIds.some((id) => id === c.getColumnId())) {
+                    removedColumns.push(c);
+                    return false;
+                } else {
+                    return true;
+                }
+            });
+            this.reload();
+        }
         return removedColumns;
-        // TODO: notify listener if !!removedColumns.length
     }
 
-    public addColumns(columns: IColumnConfiguration[]): void {
+    public addColumns(columnConfigs: IColumnConfiguration[]): void {
         if (!this.initialized) {
             if (!this.columnConfiguration) {
-                this.columnConfiguration = [...columns];
+                this.columnConfiguration = [...columnConfigs];
             } else {
-                this.columnConfiguration.push(...columns);
+                this.columnConfiguration.push(...columnConfigs);
             }
         } else {
-            columns.forEach((c) => {
+            columnConfigs.forEach((c) => {
                 if (!this.hasColumn(c.property)) {
                     this.createColumn(c);
                     this.updateRowValues();

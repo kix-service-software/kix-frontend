@@ -23,7 +23,9 @@ export class FilterUtil {
             case SearchOperator.EQUALS:
                 return value.toString().toLocaleLowerCase() === criteria.value.toString().toLocaleLowerCase();
             case SearchOperator.CONTAINS:
-                return value.toLocaleLowerCase().indexOf(criteria.value.toString().toLocaleLowerCase()) !== -1;
+                return value.toString().toLocaleLowerCase().indexOf(
+                    criteria.value.toString().toLocaleLowerCase()
+                ) !== -1;
             case SearchOperator.LESS_THAN:
                 return Number(value) < criteria.value;
             case SearchOperator.LESS_THAN_OR_EQUAL:

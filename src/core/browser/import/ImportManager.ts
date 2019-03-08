@@ -13,6 +13,8 @@ export abstract class ImportManager {
 
     protected listeners: Map<string, () => void> = new Map();
 
+    public abstract getObject(object: {}): KIXObject;
+
     public registerListener(listenerId: string, callback: () => void): void {
         this.listeners.set(listenerId, callback);
     }
@@ -43,6 +45,14 @@ export abstract class ImportManager {
 
     public async getRequiredProperties(): Promise<string[]> {
         return [];
+    }
+
+    public async getKnownProperties(): Promise<string[]> {
+        const requiredProperties = await this.getRequiredProperties();
+        return [
+            ...requiredProperties,
+            ...(await this.getProperties()).map((p) => p[0]).filter((p) => !requiredProperties.some((rp) => rp === p))
+        ];
     }
 
     public async getOperations(property: string): Promise<ImportPropertyOperator[]> {
@@ -104,7 +114,7 @@ export abstract class ImportManager {
     public getEditableValues(): ObjectPropertyValue[] {
         return [...this.importValues.filter(
             (bv) => bv.operator === ImportPropertyOperator.IGNORE
-                || bv.property !== null && bv.value !== null && bv.value !== undefined
+                || bv.property !== null
         )];
     }
 

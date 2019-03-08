@@ -87,7 +87,7 @@ export class FormService {
     }
 
     public deleteFormInstance(formId: string): void {
-        if (this.formInstances.has(formId)) {
+        if (formId && this.formInstances.has(formId)) {
             this.formInstances.delete(formId);
         }
     }

@@ -8,7 +8,8 @@ export class ComponentState extends FormInputComponentState<any> {
         public dragging: boolean = false,
         public minimized: boolean = false,
         public labels: Label[] = [],
-        public multiple: boolean = true
+        public multiple: boolean = true,
+        public accept: string = null,
     ) {
         super();
     }

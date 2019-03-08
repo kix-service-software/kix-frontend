@@ -9,44 +9,28 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
     public eventSubscriberId: string;
 
-    public column: IColumn;
     public size: number;
     private startOffset: number;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
-        this.column = input.column;
-        this.state.isSorted = this.column.getSortOrder() ? true : false;
+        this.state.column = input.column;
+        this.state.isSorted = this.state.column.getSortOrder() ? true : false;
         this.state.sortOrderDown = this.isSortOrderDown();
         this.setSize();
     }
 
-    public onInput(input: any): void {
-        this.column = input.column;
-        this.state.isSorted = this.column.getSortOrder() ? true : false;
+    public async onInput(input: any): Promise<void> {
+        this.state.column = input.column;
+        this.state.isSorted = this.state.column.getSortOrder() ? true : false;
+        await this.setIconAndTitle();
         this.setSize();
     }
 
     public async onMount(): Promise<void> {
-        if (this.column) {
-            const table = this.column.getTable();
-            const objectType = table ? table.getObjectType() : null;
-            if (objectType && this.column.getColumnConfiguration().showColumnIcon) {
-                this.state.icon = await LabelService.getInstance().getPropertyIcon(
-                    this.column.getColumnId(), objectType,
-                );
-            }
+        await this.setIconAndTitle();
 
-            if (this.column.getColumnConfiguration().defaultText) {
-                this.state.title = this.column.getColumnConfiguration().defaultText;
-            } else {
-                this.state.title = await LabelService.getInstance().getPropertyText(
-                    this.column.getColumnId(), objectType, true
-                );
-            }
-        }
-
-        this.eventSubscriberId = this.column.getTable().getTableId() + '-' + this.column.getColumnId();
+        this.eventSubscriberId = this.state.column.getTable().getTableId() + '-' + this.state.column.getColumnId();
         EventService.getInstance().subscribe(TableEvent.SORTED, this);
 
         document.addEventListener('mousemove', this.mousemove.bind(this));
@@ -61,12 +45,32 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         EventService.getInstance().unsubscribe(TableEvent.SORTED, this);
     }
 
+    private async setIconAndTitle(): Promise<void> {
+        if (this.state.column) {
+            const table = this.state.column.getTable();
+            const objectType = table ? table.getObjectType() : null;
+            if (objectType && this.state.column.getColumnConfiguration().showColumnIcon) {
+                this.state.icon = await LabelService.getInstance().getPropertyIcon(
+                    this.state.column.getColumnId(), objectType,
+                );
+            }
+
+            if (this.state.column.getColumnConfiguration().defaultText) {
+                this.state.title = this.state.column.getColumnConfiguration().defaultText;
+            } else {
+                this.state.title = await LabelService.getInstance().getPropertyText(
+                    this.state.column.getColumnId(), objectType, true
+                );
+            }
+        }
+    }
+
     public eventPublished(data: TableEventData, eventId: string, subscriberId?: string): void {
         if (eventId === TableEvent.SORTED
             && data
-            && data.tableId && data.tableId === this.column.getTable().getTableId()
+            && data.tableId && data.tableId === this.state.column.getTable().getTableId()
         ) {
-            if (data.columnId && data.columnId === this.column.getColumnId()) {
+            if (data.columnId && data.columnId === this.state.column.getColumnId()) {
                 this.state.isSorted = true;
             } else {
                 this.state.isSorted = false;
@@ -76,24 +80,25 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     private setSize(): void {
-        this.size = this.column ? this.column.getColumnConfiguration().size : 100;
+        this.size = this.state.column ? this.state.column.getColumnConfiguration().size : 100;
         const minWidth = this.getMinWidth();
         if (minWidth > this.size) {
             this.size = minWidth;
         }
+        this.state.size = this.size;
     }
 
     private isSortOrderDown(): boolean {
-        return this.column.getSortOrder() && this.column.getSortOrder() === SortOrder.DOWN;
+        return this.state.column.getSortOrder() && this.state.column.getSortOrder() === SortOrder.DOWN;
     }
 
     public sort(): void {
         if (!this.state.filterIsShown) {
-            if (this.column.getColumnConfiguration().sortable) {
+            if (this.state.column.getColumnConfiguration().sortable) {
                 if (this.isSortOrderDown()) {
-                    this.column.getTable().sort(this.column.getColumnId(), SortOrder.UP);
+                    this.state.column.getTable().sort(this.state.column.getColumnId(), SortOrder.UP);
                 } else {
-                    this.column.getTable().sort(this.column.getColumnId(), SortOrder.DOWN);
+                    this.state.column.getTable().sort(this.state.column.getColumnId(), SortOrder.DOWN);
                 }
             }
         }
@@ -129,10 +134,11 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             document.body.classList.remove('no-select');
             this.startOffset = undefined;
             this.state.resizeActive = false;
-            this.column.setSize(this.size);
+            this.state.column.setSize(this.size);
+            this.state.size = this.size;
             EventService.getInstance().publish(
                 TableEvent.COLUMN_RESIZED,
-                new TableEventData(this.column.getTable().getTableId(), null, this.column.getColumnId())
+                new TableEventData(this.state.column.getTable().getTableId(), null, this.state.column.getColumnId())
             );
         }
     }
@@ -151,7 +157,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             }
         }
 
-        const config = this.column.getColumnConfiguration();
+        const config = this.state.column.getColumnConfiguration();
         if (config.showColumnIcon || config.showColumnTitle) {
             if (config.filterable) {
                 minWidth += this.browserFontSize * 1.125;
