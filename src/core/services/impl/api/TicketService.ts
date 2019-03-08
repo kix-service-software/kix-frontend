@@ -287,7 +287,7 @@ export class TicketService extends KIXObjectService {
         const channelId = this.getParameterValue(parameter, ArticleProperty.CHANNEL_ID);
         const subject = this.getParameterValue(parameter, ArticleProperty.SUBJECT);
         let body = this.getParameterValue(parameter, ArticleProperty.BODY);
-        const customerVisible = this.getParameterValue(parameter, ArticleProperty.CUSTOMER_VISIBLE);
+        let customerVisible = this.getParameterValue(parameter, ArticleProperty.CUSTOMER_VISIBLE);
         let to = this.getParameterValue(parameter, ArticleProperty.TO);
         if (!to && contactId) {
             const contact = await ContactService.getInstance().getContact(token, contactId);
@@ -298,19 +298,20 @@ export class TicketService extends KIXObjectService {
         const cc = this.getParameterValue(parameter, ArticleProperty.CC);
         const bcc = this.getParameterValue(parameter, ArticleProperty.BCC);
 
-        if (queueId) {
-            const channels = await ChannelService.getInstance().getChannels(token);
-            const channel = channels.find((c) => c.ID === channelId);
-            if (channel && channel.Name === 'email') {
+        const channels = await ChannelService.getInstance().getChannels(token);
+        const channel = channels.find((c) => c.ID === channelId);
+        if (channel && channel.Name === 'email') {
+            if (queueId) {
                 const queues = await this.getQueues(token);
                 const queue = queues.find((q) => q.QueueID === queueId);
                 if (queue && queue.Signature) {
                     body += `\n<p>--</p>\n${queue.Signature}`;
                 }
             }
+            customerVisible = true;
         }
 
-        let createArticle;
+        let createArticle: CreateArticle;
         if (channelId && subject && body) {
             createArticle = new CreateArticle(
                 subject, body, 'text/html; charset=utf8', 'text/html', 'utf8',
