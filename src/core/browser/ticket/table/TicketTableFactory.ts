@@ -50,8 +50,12 @@ export class TicketTableFactory implements ITableFactory {
                 new DefaultColumnConfiguration(
                     TicketProperty.QUEUE_ID, true, false, true, false, 100, true, true, true
                 ),
-                new DefaultColumnConfiguration(TicketProperty.OWNER_ID, true, false, true, false, 150, true, true),
-                new DefaultColumnConfiguration(TicketProperty.CUSTOMER_ID, true, false, true, false, 150, true, true),
+                new DefaultColumnConfiguration(
+                    TicketProperty.OWNER_ID, true, false, true, false, 150, true, true, true
+                ),
+                new DefaultColumnConfiguration(
+                    TicketProperty.CUSTOMER_ID, true, false, true, false, 150, true, true, true
+                ),
                 new DefaultColumnConfiguration(
                     TicketProperty.CREATED, true, false, true, false, 125, true, true, false, DataType.DATE_TIME
                 )
@@ -75,9 +79,11 @@ export class TicketTableFactory implements ITableFactory {
                     TicketProperty.QUEUE_ID, true, false, true, false, 100, true, true, true
                 ),
                 new DefaultColumnConfiguration(
-                    TicketProperty.RESPONSIBLE_ID, true, false, true, false, 150, true, true
+                    TicketProperty.RESPONSIBLE_ID, true, false, true, false, 150, true, true, true
                 ),
-                new DefaultColumnConfiguration(TicketProperty.OWNER_ID, true, false, true, false, 150, true, true),
+                new DefaultColumnConfiguration(
+                    TicketProperty.OWNER_ID, true, false, true, false, 150, true, true, true
+                ),
                 new DefaultColumnConfiguration(TicketProperty.CUSTOMER_ID, true, false, true, false, 150, true, true),
                 new DefaultColumnConfiguration(
                     TicketProperty.CHANGED, true, false, true, false, 125, true, true, false, DataType.DATE_TIME
