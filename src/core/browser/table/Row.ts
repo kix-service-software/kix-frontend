@@ -110,7 +110,7 @@ export class Row<T = any> implements IRow<T> {
                     : false;
                 break;
             } else {
-                const match = await this.checkCells(c);
+                const match = await this.checkCellForCriteria(c);
                 if (!match) {
                     result = false;
                     break;
@@ -121,20 +121,13 @@ export class Row<T = any> implements IRow<T> {
         return result;
     }
 
-    private async checkCells(criteria: TableFilterCriteria): Promise<boolean> {
+    private async checkCellForCriteria(criteria: TableFilterCriteria): Promise<boolean> {
         const cell = this.getCell(criteria.property);
         const column = this.getTable().getColumn(criteria.property);
         if (cell && column) {
-            if (column.getColumnConfiguration().hasListFilter) {
-                const match = await cell.filter(null, [criteria]);
-                if (!match) {
-                    return false;
-                }
-            } else {
-                const match = await cell.filter(criteria.value.toString(), null);
-                if (!match) {
-                    return false;
-                }
+            const match = await cell.filter(null, [criteria]);
+            if (!match) {
+                return false;
             }
         } else {
             return false;
