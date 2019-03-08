@@ -81,7 +81,12 @@ export class Cell implements ICell {
             return false;
         }
 
-        const match = filterCriteria.every((c) => FilterUtil.checkTableFilterCriteria(c, this.tableValue.objectValue));
+        const displayValue = await this.getDisplayValue();
+        const match = filterCriteria.every(
+            (c) => FilterUtil.checkTableFilterCriteria(
+                c, c.useDisplayValue ? displayValue : this.tableValue.objectValue
+            )
+        );
 
         return match;
     }
