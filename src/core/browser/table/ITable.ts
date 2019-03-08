@@ -44,7 +44,7 @@ export interface ITable {
 
     getColumn(columnId: string): IColumn;
 
-    removeColumns(columnIds: string[]): IColumn[];
+    removeColumns(columnIds: string[]): IColumn[] | IColumnConfiguration[];
 
     addColumns(columns: IColumnConfiguration[]): void;
 

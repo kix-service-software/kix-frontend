@@ -2,7 +2,7 @@
     <@content>
         <div.import-container>
             <if(!state.loading)>
-                <main-form formId=state.formId key="input-configuration-form"/>
+                <main-form formId=state.importConfigFormId key="input-configuration-form"/>
                 <div.form.import-attributes-container>
                     <if(state.importManager)>
                         <widget instanceId="dynamic-form-field-group" title="Werte ersetzen" key="attributes">

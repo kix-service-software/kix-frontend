@@ -1,4 +1,4 @@
-import { KIXObjectType, InputFieldTypes, TreeNode, SortUtil, CustomerProperty } from "../../model";
+import { KIXObjectType, InputFieldTypes, TreeNode, SortUtil, CustomerProperty, Customer } from "../../model";
 import { LabelService } from "../LabelService";
 import { ObjectPropertyValue } from "../ObjectPropertyValue";
 import { ImportManager, ImportPropertyOperator } from "../import";
@@ -7,6 +7,10 @@ import { CustomerService } from "./CustomerService";
 export class CustomerImportManager extends ImportManager {
 
     public objectType: KIXObjectType = KIXObjectType.CUSTOMER;
+
+    public getObject(object: {}): Customer {
+        return new Customer(object as Customer);
+    }
 
     public reset(): void {
         super.reset();

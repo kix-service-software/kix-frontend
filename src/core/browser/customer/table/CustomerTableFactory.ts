@@ -73,19 +73,8 @@ export class CustomerTableFactory implements ITableFactory {
             case CustomerProperty.CUSTOMER_COMPANY_NAME:
                 config = new DefaultColumnConfiguration(property, true, false, true, false, 350, true, true);
                 break;
-            case CustomerProperty.CUSTOMER_COMPANY_COUNTRY:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true);
-                break;
-            case CustomerProperty.CUSTOMER_COMPANY_CITY:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true);
-                break;
-            case CustomerProperty.CUSTOMER_COMPANY_STREET:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true);
-                break;
-            case CustomerProperty.VALID_ID:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true);
-                break;
             default:
+                config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true);
         }
         return config;
     }
