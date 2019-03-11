@@ -1,5 +1,3 @@
-msgid ""
-msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
@@ -674,9 +672,6 @@ msgstr "zu ändernde Attribute:"
 
 msgid "Assigned Contacts "
 msgstr "Zugeordnete Kontakte"
-
-msgid "Assigned Customers"
-msgstr "Zugeordnete Kunden"
 
 msgid "to article"
 msgstr "zum Artikel"
