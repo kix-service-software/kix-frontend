@@ -10,7 +10,7 @@ Am Beispiel von LinkedObjectsEditAction.
 export class LinkedObjectsEditAction extends AbstractAction {
 
     public initAction(): void {
-        this.text = '--i18n--Edit';
+        this.text = 'Translatable#Edit';
         this.icon = 'kix-icon-edit';
     }
 

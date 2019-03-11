@@ -72,7 +72,7 @@ export class Extension implements IModuleFactoryExtension {
     public getDefaultConfiguration(): ContextConfiguration {
         // Content Widgets
         const ticketDetailsWidget = new ConfiguredWidget("faq-details-widget", new WidgetConfiguration(
-            "faq-details-widget", "--i18n--FAQ Details", [], null,
+            "faq-details-widget", "Translatable#FAQ Details", [], null,
             false, true, WidgetSize.BOTH, null, false
         ));
 

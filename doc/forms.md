@@ -15,11 +15,11 @@ public async createFormDefinitions(overwrite: boolean): Promise<void> {
     const existingForm = configurationService.getModuleConfiguration(formId, null);
     if (!existingForm || overwrite) {
         const fields: FormField[] = [];
-        fields.push(new FormField('--i18n--Title', FAQArticleProperty.TITLE, true, '--i18n--Title'));
+        fields.push(new FormField('Translatable#Title', FAQArticleProperty.TITLE, true, 'Translatable#Title'));
 
-        const group = new FormGroup('--i18n--FAQ Data', fields);
+        const group = new FormGroup('Translatable#FAQ Data', fields);
 
-        const form = new Form(formId, '--i18n--New', [group], KIXObjectType.FAQ_ARTICLE);
+        const form = new Form(formId, 'Translatable#New', [group], KIXObjectType.FAQ_ARTICLE);
         await configurationService.saveModuleConfiguration(form.id, null, form);
     }
     configurationService.registerForm([FormContext.NEW], KIXObjectType.FAQ_ARTICLE, formId);

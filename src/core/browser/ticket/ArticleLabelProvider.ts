@@ -97,7 +97,7 @@ export class ArticleLabelProvider implements ILabelProvider<Article> {
                 if (article.Attachments) {
                     const attachments = article.Attachments.filter((a) => a.Disposition !== 'inline');
                     if (attachments.length > 0) {
-                        displayValue = 'Translatable#(' + attachments.length + ')';
+                        displayValue = '(' + attachments.length + ')';
                     }
                 }
                 break;

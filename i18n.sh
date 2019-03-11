@@ -1,2 +1,2 @@
-find ./src/ -regex ".*\.\(ts\|marko\)" | xargs grep -Pohw "(?<=['\"])Translatable#.+?(?=['\"])" -0 | sort --unique | awk -F"#?" '{print "msgid \""$2"\"\nmsgstr \"\""}' > ./locale/templates.pot;
+find ./src/ -regex ".*\.\(ts\|marko\)" | xargs grep -Pohw "(?<=['\"])Translatable#.*?(?=['\"])" -0 | sort --unique | awk -F"#?" '{print "msgid \""$2"\"\nmsgstr \"\""}' > ./locale/templates.pot;
 sed -i -e 's/Translatable#//g' ./locale/templates.pot

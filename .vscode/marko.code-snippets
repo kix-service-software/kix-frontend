@@ -57,7 +57,7 @@
 		"scope": "marko,html",
 		"prefix": "translation (i18n) component",
 		"body": [
-			"<translation-string pattern='--i18n--${1:pattern}' placeholders=[${2}]/>",
+			"<translation-string pattern='Translatable#${1:pattern}' placeholders=[${2}]/>",
 		],
 		"description": "translation component"
 	},
@@ -65,7 +65,7 @@
 		"scope": "javascript,typescript,html",
 		"prefix": "translation service",
 		"body": [
-			"const ${1:text} = await TranslationService.translate('--i18n--${2:pattern}', [${3}]);",
+			"const ${1:text} = await TranslationService.translate('Translatable#${2:pattern}', [${3}]);",
 		],
 		"description": "translation component"
 	}
