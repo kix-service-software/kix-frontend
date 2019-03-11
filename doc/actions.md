@@ -10,8 +10,8 @@ Am Beispiel von LinkedObjectsEditAction.
 export class LinkedObjectsEditAction extends AbstractAction {
 
     public initAction(): void {
-        this.text = "Bearbeiten";
-        this.icon = "kix-icon-edit";
+        this.text = '--i18n--Edit';
+        this.icon = 'kix-icon-edit';
     }
 
     public run(): void {

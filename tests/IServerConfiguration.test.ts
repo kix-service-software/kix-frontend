@@ -62,4 +62,10 @@ describe('Server Configuration', () => {
         expect(serverConfiguration.USE_SSL).to.be.an('boolean');
         expect(serverConfiguration.USE_SSL).to.be.true;
     });
+
+    it('Should contain UPDATE_TRANSLATIONS as type of boolean.', () => {
+        expect(serverConfiguration.UPDATE_TRANSLATIONS).to.not.be.undefined;
+        expect(serverConfiguration.UPDATE_TRANSLATIONS).to.be.an('boolean');
+    });
+
 });

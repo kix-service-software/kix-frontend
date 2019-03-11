@@ -1,34 +1,46 @@
 <for(searchValue in state.searchValues | status-var=loop)>
     <div.form-search-value>
         <span>
-            <if(loop.getIndex() > 0)>Und:</if>
+            <if(loop.getIndex() > 0)>
+                <translation-string pattern="Translatable#AND"/>:
+            </if>
         </span>
-        <form-list nodes=state.propertyNodes selectedNodes=[searchValue.currentPropertyNode]
-            on-nodesChanged('propertyChanged', searchValue)/>
-        <form-list nodes=searchValue.operationNodes selectedNodes=[searchValue.currentOperationNode]
-            on-nodesChanged('operationChanged', searchValue)/>
+        <form-list
+            nodes=state.propertyNodes
+            selectedNodes=[searchValue.currentPropertyNode]
+            on-nodesChanged("propertyChanged", searchValue)/>
+        <form-list
+            nodes=searchValue.operationNodes
+            selectedNodes=[searchValue.currentOperationNode]
+            on-nodesChanged("operationChanged", searchValue)/>
         <div.search-value>
             <if(searchValue.currentPropertyNode && searchValue.currentOperationNode)>
                 <if(searchValue.isDropdown)>
-                    <form-list nodes=searchValue.nodes selectedNodes=searchValue.currentValueNodes
-                        on-nodesChanged('treeValueChanged', searchValue) multiselect=searchValue.isMultiselect
-                        autocomplete=searchValue.isAutocomplete searchCallback=searchValue.autoCompleteCallback/>
+                    <form-list
+                        nodes=searchValue.nodes
+                        selectedNodes=searchValue.currentValueNodes
+                        on-nodesChanged("treeValueChanged", searchValue)
+                        multiselect=searchValue.isMultiselect
+                        autocomplete=searchValue.isAutocomplete
+                        searchCallback=searchValue.autoCompleteCallback/>
                 </if>
                 <else-if(searchValue.isDate)>
-                    <input.input-style type="date" on-change('dateValueChanged', searchValue) value=searchValue.date/>
+                    <input.input-style type="date" on-change("dateValueChanged", searchValue) value=searchValue.date/>
                 </else-if>
                 <else-if(searchValue.isDateTime)>
-                    <input.input-style type="date" on-change('dateValueChanged', searchValue) value=searchValue.date/>
-                    <input.input-style type="time" on-change('timeValueChanged', searchValue) value=searchValue.time/>
+                    <input.input-style type="date" on-change("dateValueChanged", searchValue) value=searchValue.date/>
+                    <input.input-style type="time" on-change("timeValueChanged", searchValue) value=searchValue.time/>
                 </else-if>
                 <else>
-                    <input.input-style value=searchValue.currentValue type="text" on-keydown('textValueChanged', searchValue)/>
+                    <input.input-style value=searchValue.currentValue type="text" on-keydown("textValueChanged", searchValue)/>
                 </else>
             </if>
         </div>
-        <if(state.searchValues.length > 2 && loop.getIndex() !== (state.searchValues.length - 1))>
-            <button.form-control-button.button-without-text type="button" title="Suchparameter entfernen"
-                on-click('removeValue', searchValue)>
+        <if(state.searchValues.length > 2 && loop.getIndex() !== state.searchValues.length - 1)>
+            <button.form-control-button.button-without-text
+                type="button"
+                title="Remove Search Criteria"
+                on-click("removeValue", searchValue)>
                 <span.kix-icon-minus/>
             </button>
         </if>

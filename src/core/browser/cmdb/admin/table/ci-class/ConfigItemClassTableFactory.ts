@@ -31,7 +31,10 @@ export class ConfigItemClassTableFactory implements ITableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new DefaultColumnConfiguration(ConfigItemClassProperty.NAME, true, false, true, true, 200, true, true),
+            new DefaultColumnConfiguration(
+                ConfigItemClassProperty.NAME, true, false, true, true, 200, true, true, false,
+                DataType.STRING, true, null, null, false
+            ),
             new DefaultColumnConfiguration(ConfigItemClassProperty.ID, false, true, false, true, 41, false),
             new DefaultColumnConfiguration(
                 ConfigItemClassProperty.COMMENT, true, false, true, true, 350, true, true, false, DataType.STRING

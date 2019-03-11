@@ -4,6 +4,7 @@ import {
     TreeNode, ConfigItemClass, KIXObjectType, TreeNodeProperty, ObjectIcon, KIXObjectLoadingOptions
 } from '../../../../core/model';
 import { CMDBContext } from '../../../../core/browser/cmdb';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 export class Component {
 
@@ -26,7 +27,7 @@ export class Component {
         const ciClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
             KIXObjectType.CONFIG_ITEM_CLASS, null, loadingOptions, null, false
         );
-        this.state.nodes = this.prepareTreeNodes(ciClasses);
+        this.state.nodes = await this.prepareTreeNodes(ciClasses);
 
         if (context.currentCIClass) {
             this.setActiveNode(context.currentCIClass);
@@ -56,17 +57,20 @@ export class Component {
         return activeNode;
     }
 
-    private prepareTreeNodes(configItemClasses: ConfigItemClass[]): TreeNode[] {
-        return configItemClasses
-            ? configItemClasses.map((c) => {
+    private async prepareTreeNodes(configItemClasses: ConfigItemClass[]): Promise<TreeNode[]> {
+        const nodes = [];
+        if (configItemClasses) {
+            for (const c of configItemClasses) {
                 let count = '0';
                 if (c.ConfigItemStats) {
                     count = (c.ConfigItemStats.PreProductiveCount + c.ConfigItemStats.ProductiveCount).toString();
                 }
                 const properties = [new TreeNodeProperty(count, `Anzahl Config Items: ${count}`)];
-                return new TreeNode(c, c.Name, null, null, null, null, null, null, properties);
-            })
-            : [];
+                const name = await TranslationService.translate(c.Name, []);
+                nodes.push(new TreeNode(c, name, null, null, null, null, null, null, properties));
+            }
+        }
+        return nodes;
     }
 
     public async activeNodeChanged(node: TreeNode): Promise<void> {

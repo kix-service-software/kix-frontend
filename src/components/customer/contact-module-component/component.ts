@@ -1,6 +1,6 @@
 import {
     AbstractMarkoComponent, LabelService, ServiceRegistry,
-    FactoryService, ContextService, DialogService, ActionFactory, KIXObjectSearchService, TableFactoryService
+    FactoryService, ContextService, ActionFactory, KIXObjectSearchService, TableFactoryService
 } from '../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
@@ -13,6 +13,7 @@ import {
     ContactEditAction, ContactCreateCustomerAction, ContactPrintAction, ContactCreateTicketAction,
     ContactCreateCIAction, ContactSearchDefinition, EditContactDialogContext, ContactFormService
 } from '../../../core/browser/contact';
+import { DialogService } from '../../../core/browser/components/dialog';
 
 class Component extends AbstractMarkoComponent {
 
@@ -65,7 +66,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'new-contact-dialog',
             new WidgetConfiguration(
-                'new-contact-dialog', 'Neuer Ansprechpartner', [], {}, false, false, null, 'kix-icon-man-bubble-new'
+                'new-contact-dialog', 'Translatable#New Contact', [], {}, false, false, null, 'kix-icon-man-bubble-new'
             ),
             KIXObjectType.CONTACT,
             ContextMode.CREATE
@@ -74,7 +75,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'edit-contact-dialog',
             new WidgetConfiguration(
-                'edit-contact-dialog', 'Ansprechpartner Bearbeiten', [], {}, false, false, null, 'kix-icon-edit'
+                'edit-contact-dialog', 'Translatable#Edit Contact', [], {}, false, false, null, 'kix-icon-edit'
             ),
             KIXObjectType.CONTACT,
             ContextMode.EDIT
@@ -84,7 +85,7 @@ class Component extends AbstractMarkoComponent {
             'search-contact-dialog',
             new WidgetConfiguration(
                 'search-contact-dialog',
-                'Ansprechpartnersuche',
+                'Translatable#Contact Search',
                 [],
                 {},
                 false,

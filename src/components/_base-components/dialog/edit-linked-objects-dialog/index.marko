@@ -2,10 +2,12 @@
     <@content>
         <div.edit-linked-objects-dialog-container>
             <div.table-head>
-                <span>${"Vorhandene Verknüpfungen (" + state.linkObjectCount + ")"}</span>
+                <span>
+                    <translation-string pattern="Translatable#Existing Links ({0})" placeholders=[state.linkObjectCount]/>
+                </span>
                 <filter
                     predefinedFilter=state.predefinedTableFilter
-                    predefinedFilterPlaceholder="Alle Objekte"
+                    predefinedFilterPlaceholder="All Objects"
                     filterCount=state.filterCount
                     on-filter("filter")
                     key="edit-linked-objects-filter"/>
@@ -17,28 +19,24 @@
                 <loading-spinner/>
             </else>
             <div.dialog-button-container>
-                <button.form-blank-cancel-button
-                    type="button"
-                    on-click("markToDelete")
-                    title="Verknüpfung löschen"
-                    disabled=!state.canDelete>
+                <button.form-blank-cancel-button type="button" on-click("markToDelete") title="Delete Link" disabled=!state.canDelete>
                     <span.kix-icon-trash/>
-                    Verknüpfung löschen
+                    <translation-string pattern="Translatable#Delete Link"/>
                 </button>
-                <button.form-blank-button type="button" on-click("openAddLinkDialog") title="Verknüpfung zuordnen">
+                <button.form-blank-button type="button" on-click("openAddLinkDialog") title="Assign Link">
                     <span.kix-icon-new-link/>
-                    Verknüpfung zuordnen
+                    <translation-string pattern="Translatable#Assign Link"/>
                 </button>
             </div>
         </div>
         <div.dialog-button-container>
-            <button.cancel-button type="button" on-click("cancel") title="Abbrechen">
+            <button.cancel-button type="button" on-click("cancel") title="Cancel">
                 <span.kix-icon-close/>
-                Abbrechen
+                <translation-string pattern="Translatable#Cancel"/>
             </button>
-            <button.submit-button type="button" on-click("submit") title="Übernehmen" disabled=!state.canSubmit>
+            <button.submit-button type="button" on-click("submit") title="Submit" disabled=!state.canSubmit>
                 <span.kix-icon-check/>
-                Übernehmen
+                <translation-string pattern="Translatable#Submit"/>
             </button>
         </div>
     </@content>

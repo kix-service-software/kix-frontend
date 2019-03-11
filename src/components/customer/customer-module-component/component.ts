@@ -1,6 +1,6 @@
 import {
     AbstractMarkoComponent, LabelService, ServiceRegistry,
-    FactoryService, ContextService, DialogService, ActionFactory, KIXObjectSearchService, TableFactoryService
+    FactoryService, ContextService, ActionFactory, KIXObjectSearchService, TableFactoryService
 } from '../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
@@ -15,6 +15,7 @@ import {
     ConfiguredDialogWidget, WidgetSize, KIXObjectCache, CustomerCacheHandler
 } from '../../../core/model';
 import { ImportService } from '../../../core/browser/import';
+import { DialogService } from '../../../core/browser/components/dialog';
 
 class Component extends AbstractMarkoComponent {
 
@@ -76,7 +77,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'new-customer-dialog',
             new WidgetConfiguration(
-                'new-customer-dialog', 'Neuer Kunde', [], {}, false, false, null, 'kix-icon-man-house-new'
+                'new-customer-dialog', 'Translatable#New Customer', [], {}, false, false, null, 'kix-icon-man-house-new'
             ),
             KIXObjectType.CUSTOMER,
             ContextMode.CREATE
@@ -85,7 +86,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'edit-customer-dialog',
             new WidgetConfiguration(
-                'edit-customer-dialog', 'Kunde Bearbeiten', [], {}, false, false, null, 'kix-icon-edit'
+                'edit-customer-dialog', 'Translatable#Edit Customer', [], {}, false, false, null, 'kix-icon-edit'
             ),
             KIXObjectType.CUSTOMER,
             ContextMode.EDIT
@@ -94,7 +95,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'search-customer-dialog',
             new WidgetConfiguration(
-                'search-customer-dialog', 'Kundensuche', [], {},
+                'search-customer-dialog', 'Translatable#Customer Search', [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-search-man-house'
             ),
             KIXObjectType.CUSTOMER,

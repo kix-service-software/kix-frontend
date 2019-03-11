@@ -9,6 +9,7 @@ import { ActionFactory, IdService } from '../../../../core/browser';
 import { RoutingConfiguration } from '../../../../core/browser/router';
 import { ContactDetailsContext } from '../../../../core/browser/contact';
 import { CustomerDetailsContext } from '../../../../core/browser/customer';
+import { ObjectDataService } from '../../../../core/browser/ObjectDataService';
 
 class Component {
 
@@ -84,7 +85,7 @@ class Component {
     public getIncidentStateId(): number {
         const serviceId = this.state.ticket.ServiceID;
         let incidentStateId = 0;
-        const objectData = ContextService.getInstance().getObjectData();
+        const objectData = ObjectDataService.getInstance().getObjectData();
         if (objectData) {
             const service = objectData.services.find((s) => s.ServiceID === serviceId);
             if (service) {

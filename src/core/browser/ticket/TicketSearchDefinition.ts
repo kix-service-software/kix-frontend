@@ -148,8 +148,8 @@ export class TicketSearchDefinition extends SearchDefinition {
     }
 
     public async getSearchResultCategories(): Promise<SearchResultCategory> {
-        const contactCategory = new SearchResultCategory('Ansprechpartner', KIXObjectType.CONTACT);
-        const customerCategory = new SearchResultCategory('Kunden', KIXObjectType.CUSTOMER);
+        const contactCategory = new SearchResultCategory('Contacts', KIXObjectType.CONTACT);
+        const customerCategory = new SearchResultCategory('Customer', KIXObjectType.CUSTOMER);
         const ciCategory = new SearchResultCategory('Config Items', KIXObjectType.CONFIG_ITEM);
 
         return new SearchResultCategory(

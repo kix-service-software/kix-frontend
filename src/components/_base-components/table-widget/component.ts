@@ -5,6 +5,7 @@ import {
     ContextService, IdService, TableEvent, WidgetService, ActionFactory, TableFactoryService,
     TableEventData, ComponentsService
 } from '../../../core/browser';
+import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 class Component {
 
     public state: ComponentState;
@@ -31,6 +32,7 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+        this.state.filterPlaceHolder = await TranslationService.translate(this.state.filterPlaceHolder);
         this.additionalFilterCriteria = [];
         const context = ContextService.getInstance().getActiveContext(this.contextType);
         this.state.widgetConfiguration = context
@@ -39,16 +41,16 @@ class Component {
 
         if (this.state.widgetConfiguration) {
             this.state.icon = this.state.widgetConfiguration.icon;
-            this.prepareTitle();
+            await this.prepareTitle();
             this.state.predefinedTableFilter = this.state.widgetConfiguration ?
                 this.state.widgetConfiguration.predefinedTableFilters : [];
 
             this.subscriber = {
                 eventSubscriberId: IdService.generateDateBasedId(this.state.instanceId),
-                eventPublished: (data: TableEventData, eventId: string) => {
+                eventPublished: async (data: TableEventData, eventId: string) => {
                     if (data && data.tableId === this.state.table.getTableId()) {
                         if (eventId === TableEvent.TABLE_READY) {
-                            this.prepareTitle();
+                            await this.prepareTitle();
                             this.state.filterCount = this.state.table.isFiltered()
                                 ? this.state.table.getRowCount()
                                 : null;
@@ -99,9 +101,12 @@ class Component {
         }
     }
 
-    private prepareTitle(): void {
+    private async prepareTitle(): Promise<void> {
         if (this.configuredTitle) {
             let title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : "";
+
+            title = await TranslationService.translate(title);
+
             if (this.state.table) {
                 title = `${title} (${this.state.table.getRowCount(true)})`;
             }

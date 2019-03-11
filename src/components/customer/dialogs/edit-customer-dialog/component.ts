@@ -1,13 +1,12 @@
-import { ComponentState } from "./ComponentState";
+import { ComponentState } from './ComponentState';
 import {
-    DialogService, FormService, OverlayService, ServiceRegistry, KIXObjectService, ContextService, BrowserUtil
-} from "../../../../core/browser";
+    FormService, OverlayService, KIXObjectService, ContextService, BrowserUtil
+} from '../../../../core/browser';
 import {
-    OverlayType, StringContent, ComponentContent,
-    ValidationSeverity, ValidationResult, KIXObjectType, ContextMode, ToastContent, CustomerProperty, ContextType, Error
-} from "../../../../core/model";
-import { CustomerService, CustomerDetailsContext } from "../../../../core/browser/customer";
-import { RoutingService, RoutingConfiguration } from "../../../../core/browser/router";
+    OverlayType, ComponentContent, ValidationSeverity, ValidationResult, KIXObjectType, ContextType, Error
+} from '../../../../core/model';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
+import { DialogService } from '../../../../core/browser/components/dialog';
 
 class Component {
 
@@ -19,7 +18,7 @@ class Component {
 
     public async onMount(): Promise<void> {
         this.state.loading = true;
-        DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
+        DialogService.getInstance().setMainDialogHint('Translatable#All form fields marked by * are required fields.');
         this.state.loading = false;
     }
 
@@ -39,15 +38,17 @@ class Component {
         if (validationError) {
             this.showValidationError(result);
         } else {
-            DialogService.getInstance().setMainDialogLoading(true, "Kunde wird aktualisiert");
+            DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Kunde wird aktualisiert');
             const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
             if (context) {
                 await KIXObjectService.updateObjectByForm(
                     KIXObjectType.CUSTOMER, this.state.formId, context.getObjectId()
-                ).then((customerId) => {
+                ).then(async (customerId) => {
                     context.getObject(KIXObjectType.CUSTOMER, true);
                     DialogService.getInstance().setMainDialogLoading(false);
-                    BrowserUtil.openSuccessOverlay('Änderungen wurden gespeichert.');
+
+                    const toast = await TranslationService.translate('Translatable#Changes saved.');
+                    BrowserUtil.openSuccessOverlay(toast);
                     DialogService.getInstance().submitMainDialog();
                 }).catch((error: Error) => {
                     DialogService.getInstance().setMainDialogLoading();

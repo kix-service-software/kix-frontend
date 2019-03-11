@@ -1,7 +1,7 @@
-import { ComponentState } from "./ComponentState";
-import { ContextService, ActionFactory, TableFactoryService } from "../../../../core/browser";
-import { KIXObjectType, Customer, Contact } from "../../../../core/model";
-import { CustomerService } from "../../../../core/browser/customer";
+import { ComponentState } from './ComponentState';
+import { ContextService, ActionFactory, TableFactoryService } from '../../../../core/browser';
+import { KIXObjectType, Customer, Contact } from '../../../../core/model';
+import { CustomerService } from '../../../../core/browser/customer';
 
 class Component {
 

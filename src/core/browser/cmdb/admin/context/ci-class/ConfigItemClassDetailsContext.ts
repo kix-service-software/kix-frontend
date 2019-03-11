@@ -1,13 +1,13 @@
 import {
     Context, ConfiguredWidget, WidgetConfiguration, WidgetType, BreadcrumbInformation, KIXObject,
     KIXObjectType, KIXObjectCache, ConfigItemClass, KIXObjectLoadingOptions
-} from "../../../../../model";
-import { ConfigItemClassDetailsContextConfiguration } from "./ConfigItemClassDetailsContextConfiguration";
-import { AdminContext } from "../../../../admin";
-import { EventService } from "../../../../event";
-import { KIXObjectService } from "../../../../kix";
-import { LabelService } from "../../../../LabelService";
-import { ApplicationEvent } from "../../../../application";
+} from '../../../../../model';
+import { ConfigItemClassDetailsContextConfiguration } from './ConfigItemClassDetailsContextConfiguration';
+import { AdminContext } from '../../../../admin';
+import { EventService } from '../../../../event';
+import { KIXObjectService } from '../../../../kix';
+import { LabelService } from '../../../../LabelService';
+import { ApplicationEvent } from '../../../../application';
 
 export class ConfigItemClassDetailsContext extends Context<ConfigItemClassDetailsContextConfiguration> {
 

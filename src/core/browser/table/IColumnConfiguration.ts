@@ -15,5 +15,6 @@ export interface IColumnConfiguration {
     resizable: boolean;
     componentId: string;
     defaultText: string;
+    translatable: boolean;
 
 }

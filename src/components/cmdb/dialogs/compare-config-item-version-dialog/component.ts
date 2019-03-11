@@ -1,6 +1,7 @@
-import { DialogService, ContextService, ComponentsService, TableConfiguration } from "../../../../core/browser";
+import { ContextService, ComponentsService } from "../../../../core/browser";
 import { ComponentState } from "./ComponentState";
 import { CompareConfigItemVersionDialogContext } from "../../../../core/browser/cmdb";
+import { DialogService } from "../../../../core/browser/components/dialog";
 
 class Component {
 

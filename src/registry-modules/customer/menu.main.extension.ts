@@ -14,7 +14,7 @@ export class CustomerMainMenuExtension implements IMainMenuExtension {
 
     public icon: string = "kix-icon-customers";
 
-    public text: string = "Kunden";
+    public text: string = "Translatable#Customers";
 
 
 }

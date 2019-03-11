@@ -1,9 +1,9 @@
-import { ContextService, ActionFactory, WidgetService } from "../../../core/browser";
-import { FAQDetailsContext } from "../../../core/browser/faq";
+import { ContextService, ActionFactory, WidgetService } from '../../../core/browser';
+import { FAQDetailsContext } from '../../../core/browser/faq';
 import { ComponentState } from './ComponentState';
-import { KIXObjectType, AbstractAction, WidgetType } from "../../../core/model";
-import { FAQArticle } from "../../../core/model/kix/faq";
-import { ComponentsService } from "../../../core/browser/components";
+import { KIXObjectType, AbstractAction, WidgetType } from '../../../core/model';
+import { FAQArticle } from '../../../core/model/kix/faq';
+import { ComponentsService } from '../../../core/browser/components';
 
 class Component {
 

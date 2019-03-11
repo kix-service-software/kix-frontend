@@ -15,10 +15,9 @@ export class ModuleExtension implements IConfigurationExtension {
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
         const helpWidget = new ConfiguredWidget('20180919-help-widget', new WidgetConfiguration(
-            'help-widget', 'Hilfe', [], {
-                helpText: 'Eine <b>Erläuterung zu den Suchoperatoren</b> finden Sie hier: '
-                    + '<a href="faqarticles/2" target="_blank">'
-                    + 'Wie suche ich in KIX 18?</a>'
+            'help-widget', 'Translatable#Help', [], {
+                // tslint:disable-next-line:max-line-length
+                helpText: 'Translatable#The FAQ article <a href=\"faqarticles/2\" target=\"_blank\">How to search in KIX 18?</a> offers a detailed <b>explanation for the search operators<b>'
             }, false, false, WidgetSize.BOTH, 'kix-icon-query', false
         ));
         const sidebarWidgets = [helpWidget];
@@ -34,7 +33,7 @@ export class ModuleExtension implements IConfigurationExtension {
         if (!existingForm || overwrite) {
             const form = new SearchForm(
                 formId,
-                'Ticketsuche',
+                'Ticket Search',
                 KIXObjectType.TICKET,
                 FormContext.SEARCH,
                 null,

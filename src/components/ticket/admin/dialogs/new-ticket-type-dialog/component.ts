@@ -1,8 +1,8 @@
-import { AbstractNewDialog } from "../../../../../core/browser";
 import { KIXObjectType, ContextMode, TicketTypeProperty } from "../../../../../core/model";
 import { ComponentState } from "./ComponentState";
 import { TicketTypeDetailsContext } from "../../../../../core/browser/ticket";
 import { RoutingConfiguration } from "../../../../../core/browser/router";
+import { AbstractNewDialog } from "../../../../../core/browser/components/dialog";
 
 class Component extends AbstractNewDialog {
 

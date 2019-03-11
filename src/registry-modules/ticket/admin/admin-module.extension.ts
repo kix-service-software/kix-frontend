@@ -5,16 +5,18 @@ class Extension implements IAdminModuleExtension {
     public getAdminModules(): AdminModuleCategory[] {
         return [
             new AdminModuleCategory(
-                null, 'base-data', 'Stammdaten', null, [], [
+                null, 'base-data', 'Translatable#Core Data', null, [], [
                     new AdminModule(
-                        null, 'ticket-types', 'Typen', null, KIXObjectType.TICKET_TYPE, 'ticket-admin-types'
+                        null, 'ticket-types', 'Translatable#Types', null,
+                        KIXObjectType.TICKET_TYPE, 'ticket-admin-types'
                     ),
                     new AdminModule(
-                        null, 'ticket-priorities', 'Prioritäten', null,
+                        null, 'ticket-priorities', 'Translatable#Priorities', null,
                         KIXObjectType.TICKET_PRIORITY, 'ticket-admin-priorities'
                     ),
                     new AdminModule(
-                        null, 'ticket-states', 'Status', null, KIXObjectType.TICKET_STATE, 'ticket-admin-states'
+                        null, 'ticket-states', 'Translatable#States', null,
+                        KIXObjectType.TICKET_STATE, 'ticket-admin-states'
                     )
                 ])
         ];

@@ -1,13 +1,13 @@
-import { AbstractAction, Version, ContextMode, KIXObjectType } from "../../../model";
-import { ITable, Table } from "../../table";
-import { ContextService } from "../../context";
-import { CompareConfigItemVersionDialogContext } from "../context";
+import { AbstractAction, Version, ContextMode, KIXObjectType } from '../../../model';
+import { ITable, Table } from '../../table';
+import { ContextService } from '../../context';
+import { CompareConfigItemVersionDialogContext } from '../context';
 
 export class ConfigItemVersionCompareAction extends AbstractAction<ITable> {
 
     public initAction(): void {
-        this.text = "Vergleichen";
-        this.icon = "kix-icon-comparison-version";
+        this.text = 'Translatable#Compare';
+        this.icon = 'kix-icon-comparison-version';
     }
 
     public canRun(): boolean {

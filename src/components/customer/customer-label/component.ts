@@ -1,9 +1,9 @@
-import { ComponentState } from "./ComponentState";
-import { ContextService } from "../../../core/browser";
-import { CustomerDetailsContext } from "../../../core/browser/customer";
-import { RoutingConfiguration } from "../../../core/browser/router";
-import { KIXObjectType, ContextMode, CustomerProperty, ContactProperty, Customer, Contact } from "../../../core/model";
-import { ContactDetailsContext } from "../../../core/browser/contact";
+import { ComponentState } from './ComponentState';
+import { ContextService } from '../../../core/browser';
+import { CustomerDetailsContext } from '../../../core/browser/customer';
+import { RoutingConfiguration } from '../../../core/browser/router';
+import { KIXObjectType, ContextMode, CustomerProperty, ContactProperty, Customer, Contact } from '../../../core/model';
+import { ContactDetailsContext } from '../../../core/browser/contact';
 
 class Component {
 

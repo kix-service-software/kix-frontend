@@ -5,9 +5,9 @@ class Extension implements IAdminModuleExtension {
     public getAdminModules(): AdminModuleCategory[] {
         return [
             new AdminModuleCategory(
-                null, 'base-data', 'Stammdaten', null, [], [
+                null, 'base-data', 'Translatable#Core Data', null, [], [
                     new AdminModule(
-                        null, 'cmdb-classes', 'CMDB Klassen', null,
+                        null, 'cmdb-classes', 'Translatable#CMDB Classes', null,
                         KIXObjectType.CONFIG_ITEM_CLASS, 'cmdb-admin-ci-classes'
                     )
                 ])

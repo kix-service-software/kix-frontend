@@ -12,13 +12,13 @@ export class CreateSearchProfile extends RequestObject {
         categories: string[] = null
     ) {
         super();
-        this.applyProperty("Type", type);
-        this.applyProperty("Name", name);
-        this.applyProperty("UserLogin", userLogin);
-        this.applyProperty("UserType", userType);
-        this.applyProperty("SubscribedProfileID", subscribedProfileId);
-        this.applyProperty("Data", data);
-        this.applyProperty("Categories", categories);
+        this.applyProperty('Type', type);
+        this.applyProperty('Name', name);
+        this.applyProperty('UserLogin', userLogin);
+        this.applyProperty('UserType', userType);
+        this.applyProperty('SubscribedProfileID', subscribedProfileId);
+        this.applyProperty('Data', data);
+        this.applyProperty('Categories', categories);
     }
 
 }

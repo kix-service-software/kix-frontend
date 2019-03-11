@@ -30,10 +30,14 @@ export class TicketStateTableFactory implements ITableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new DefaultColumnConfiguration(TicketStateProperty.NAME, true, false, true, true, 200, true, true),
+            new DefaultColumnConfiguration(
+                TicketStateProperty.NAME, true, false, true, true, 200, true, true, false,
+                DataType.STRING, true, null, null, false
+            ),
             new DefaultColumnConfiguration(TicketStateProperty.ID, false, true, false, true, 41, false),
             new DefaultColumnConfiguration(
-                TicketStateProperty.TYPE_NAME, true, false, true, true, 150, true, true, true
+                TicketStateProperty.TYPE_NAME, true, false, true, true, 150, true, true, true,
+                DataType.STRING, true, null, null, false
             ),
             new DefaultColumnConfiguration(TicketStateProperty.COMMENT, true, false, true, true, 350, true, true),
             new DefaultColumnConfiguration(

@@ -3,7 +3,7 @@ import { AbstractAction } from '../../../../model/components/action/AbstractActi
 export class ArticleDeleteAction extends AbstractAction {
 
     public initAction(): void {
-        this.text = "Löschen";
+        this.text = 'Translatable#Delete';
         this.icon = "kix-icon-mail-trash";
     }
 

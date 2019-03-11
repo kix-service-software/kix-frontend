@@ -5,10 +5,9 @@ import {
 import {
     ContextConfiguration, FormField, TicketProperty, ArticleProperty,
     Form, KIXObjectType, FormContext, ConfiguredWidget, WidgetConfiguration,
-    FormFieldOption, FormFieldOptions, WidgetSize
+    FormFieldOption, WidgetSize
 } from '../../core/model';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
-import { AutocompleteFormFieldOption, AutocompleteOption } from '../../core/browser/components';
 import { ConfigurationService } from '../../core/services';
 
 export class EditTicketDialogModuleExtension implements IConfigurationExtension {
@@ -20,8 +19,8 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
 
         const customerInfoSidebar =
-            new ConfiguredWidget("20180524110915", new WidgetConfiguration(
-                "ticket-customer-info-widget", "Kunde", [], {
+            new ConfiguredWidget('20180524110915', new WidgetConfiguration(
+                'ticket-customer-info-widget', 'Translatable#Customer', [], {
                     groups: [
                         'Stammdaten', 'Adresse'
                     ]
@@ -29,8 +28,8 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
                 false, false, null, 'kix-icon-man-house', false)
             );
         const contactInfoSidebar =
-            new ConfiguredWidget("20180524110920", new WidgetConfiguration(
-                "ticket-contact-info-widget", "Ansprechpartner", [], {
+            new ConfiguredWidget('20180524110920', new WidgetConfiguration(
+                'ticket-contact-info-widget', 'Translatable#Contact', [], {
                     groups: [
                         'Stammdaten', 'Kommunikation'
                     ]
@@ -39,9 +38,9 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
             );
 
         const helpWidget = new ConfiguredWidget('20180919-help-widget', new WidgetConfiguration(
-            'help-widget', 'Textbausteine', [], {
+            'help-widget', 'Text Modules', [], {
                 // tslint:disable-next-line:max-line-length
-                helpText: '<b>-- KIX Professional Feature --</b><p>Um die in Ihrem System verfügbaren Textbausteine zu nutzen, geben Sie "::" (Doppelpunkt Doppelpunkt) ein. Wählen Sie anschließend im Kontextmenü den gewünschten Textbaustein aus. Sie können die Auswahl anhand der Schlüsselworte manuell einschränken, in dem sie weiteren Text eingeben.</p>'
+                helpText: 'Translatable#<b>-- KIX Professional Feature--</b><p>To use the text modules available in your system, enter „::“ (colon colon). Then choose the text modules you want to use in the context menu. You can narrow down the key word selection manually by entering more text.</p>'
             }, false, false, WidgetSize.BOTH, 'kix-icon-textblocks'
         ));
 
@@ -59,44 +58,44 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
         const existingFormEditTicket = configurationService.getModuleConfiguration(formIdEditTicket, null);
         if (!existingFormEditTicket) {
             const fields: FormField[] = [];
-            fields.push(new FormField("Titel", TicketProperty.TITLE, null, true, "Geben Sie einen Titel für das Ticket ein"));
+            fields.push(new FormField('Translatable#Title', TicketProperty.TITLE, null, true, 'Translatable#Insert a ticket title.'));
             fields.push(new FormField(
-                "Ansprechpartner", TicketProperty.CUSTOMER_USER_ID, 'ticket-input-contact', true, "Ein Ansprechpartner ist ein Kontakt oder eine Person, die eine Anfrage im Kontext eines Kunden stellt. Bei der Eingabe von mindestens 3 Zeichen wird Ihnen eine Vorschlagsliste mit bereits im System angelegten Ansprechpartner angezeigt. „***“ zeigt alle Einträge an."
+                'Translatable#Contact', TicketProperty.CUSTOMER_USER_ID, 'ticket-input-contact', true, 'Translatable#A contact is a person, filing a request for the customer. Enter at least 3 characters in order to get a suggestion list of already registered contacts. You may use „*“ as wildcard.'
             ));
-            fields.push(new FormField("Kunde", TicketProperty.CUSTOMER_ID, 'ticket-input-customer', true, "Kunden werden nach Auswahl eines Ansprechpartners automatisch zugewiesen."));
-            fields.push(new FormField("Typ", TicketProperty.TYPE_ID, 'ticket-input-type', true, "Der Ticket-Typ dient zur Klassifizierung von Anfragen."));
+            fields.push(new FormField('Translatable#Customer', TicketProperty.CUSTOMER_ID, 'ticket-input-customer', true, 'Translatable#Choose a contact, customers will be assigned automatically.'));
+            fields.push(new FormField('Translatable#Type', TicketProperty.TYPE_ID, 'ticket-input-type', true, 'Translatable#Ticket type is part of the classification of a ticket.'));
             fields.push(new FormField(
-                "Zuordnung zu Bereich / Queue", TicketProperty.QUEUE_ID, 'ticket-input-queue', true, "Eine Queue ist ein Ordnungselement für Anfragen, vergleichbar mit Ordnern im Dateisystem eines PCs."
+                'Translatable#Assign Team / Queue', TicketProperty.QUEUE_ID, 'ticket-input-queue', true, 'Translatable#A queue is a classification system for requests, comparable to folders in a file system.'
             ));
             fields.push(new FormField(
-                "Betroffener Service", TicketProperty.SERVICE_ID, 'ticket-input-service', false, "Ein Service definiert, welche Leistung im Geschäftsprozess für das Ticket angefragt wird."
+                'Translatable#Affected Service', TicketProperty.SERVICE_ID, 'ticket-input-service', false, 'Translatable#Service defines which content of the service catalog is being requested.'
             ));
-            fields.push(new FormField("SLA / Servicevertrag", TicketProperty.SLA_ID, 'ticket-input-sla', false, "Ein Servicevertrag (auch Service Level Agreement genannt) ist ein Vertrag zwischen einem Dienstleister und einem Kunden. Im Vertrag ist in der Regel festgehalten, in welchem Umfang die Dienstleistung und zu welcher Dienstgüte (Servicelevel) sie erbracht wird."));
+            fields.push(new FormField('Translatable#SLA / Service Level Agreement', TicketProperty.SLA_ID, 'ticket-input-sla', false, 'Translatable#SLA defines which target times are set for processing this ticket.'));
 
             fields.push(new FormField(
-                "Kommunikationskanal", ArticleProperty.CHANNEL_ID, 'channel-input', false, "Kommunikationskanal", [
+                'Translatable#Channel', ArticleProperty.CHANNEL_ID, 'channel-input', false, 'Translatable#Channel', [
                     new FormFieldOption('NO_CHANNEL', true),
                     new FormFieldOption('CHANNEL_ID', null)
                 ])
             );
 
             fields.push(new FormField(
-                "Bearbeiter", TicketProperty.OWNER_ID, 'ticket-input-owner', false, "Der Bearbeiter ist die Person, die für die Bearbeitung des Ticket zuständig sein soll."
+                'Translatable#Owner', TicketProperty.OWNER_ID, 'ticket-input-owner', false, 'Translatable#„Owner“ is the user to which the ticket is assigned for processing.'
             ));
             fields.push(new FormField(
-                "Verantwortlicher", TicketProperty.RESPONSIBLE_ID, 'ticket-input-owner', false, "Der Verantwortliche ist die Person, die dafür verantwortlich ist, dass das Ticket gelöst wird (kann mit Bearbeiter identisch sein)."
+                'Translatable#Responsible', TicketProperty.RESPONSIBLE_ID, 'ticket-input-owner', false, 'Translatable#Responsible is the person in charge for this tickets processing, e.g. Service Owner, Key Account Manager. It does not need to be identical with the assigned ticket owner.'
             ));
             fields.push(new FormField<number>(
-                "Priorität", TicketProperty.PRIORITY_ID, 'ticket-input-priority', true, "Prioritäten kennzeichnen farblich unterschiedliche Dringlichkeiten und können zur Kategorisierung von Tickets genutzt werden."
+                'Translatable#Priority', TicketProperty.PRIORITY_ID, 'ticket-input-priority', true, 'Translatable#Priorities are used to mark a Ticket‘s urgency with different colours, so you can  categorize Tickets.'
             ));
             fields.push(new FormField<PendingTimeFormValue>(
-                "Status", TicketProperty.STATE_ID, 'ticket-input-state', true, "Der Status definiert, in welchem Bearbeitungszustand sich ein Ticket befindet."
+                'Translatable#State', TicketProperty.STATE_ID, 'ticket-input-state', true, 'Translatable#Ticket status summarizes the tickets processing state.'
             ));
 
-            const group = new FormGroup('Ticketdaten', fields);
+            const group = new FormGroup('Translatable#Ticket Data', fields);
 
             const form = new Form(
-                formIdEditTicket, 'Ticket bearbeiten', [group],
+                formIdEditTicket, 'Translatable#Edit Ticket', [group],
                 KIXObjectType.TICKET, true, FormContext.EDIT);
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }

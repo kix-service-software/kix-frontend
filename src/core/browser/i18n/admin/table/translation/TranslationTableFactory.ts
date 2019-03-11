@@ -4,7 +4,9 @@ import {
     ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../../../table";
-import { KIXObjectType, TranslationProperty, ContextMode, KIXObjectLoadingOptions } from "../../../../../model";
+import {
+    KIXObjectType, TranslationProperty, ContextMode, KIXObjectLoadingOptions, DataType
+} from "../../../../../model";
 import { TranslationTableContentProvider } from "./TranslationTableContentProvider";
 
 
@@ -34,7 +36,10 @@ export class TranslationTableFactory implements ITableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new DefaultColumnConfiguration(TranslationProperty.PATTERN, true, false, true, true, 400, true, true),
+            new DefaultColumnConfiguration(
+                TranslationProperty.PATTERN, true, false, true, true, 400, true, true, false,
+                DataType.STRING, true, null, null, false
+            ),
             new DefaultColumnConfiguration(
                 TranslationProperty.LANGUAGES, true, false, true, true, 250, true, true, true, null, true,
                 'label-list-cell-content'

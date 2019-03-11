@@ -1,4 +1,4 @@
-import { ReleaseInfo } from "../../../core/model";
+import { ReleaseInfo } from '../../../core/model';
 
 export class ComponentState {
 

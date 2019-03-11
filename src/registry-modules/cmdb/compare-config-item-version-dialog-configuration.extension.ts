@@ -15,14 +15,14 @@ export class Extension implements IConfigurationExtension {
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
         const versionWidget =
             new ConfiguredWidget('20190213082400-compare-ci-version-widget', new WidgetConfiguration(
-                'table-widget', 'Gewählte Versionen', ['switch-column-order-action'],
+                'table-widget', 'Translatable#Selected Versions', ['switch-column-order-action'],
                 { objectType: KIXObjectType.CONFIG_ITEM_VERSION_COMPARE },
                 false, false, WidgetSize.LARGE, null, true
             ));
 
         const legendSidebar =
             new ConfiguredWidget('20190214082400-compare-ci-version-legend', new WidgetConfiguration(
-                'config-item-version-compare-legend', 'Legende', [], null,
+                'config-item-version-compare-legend', 'Translatable#Legend', [], null,
                 false, false, WidgetSize.BOTH, 'kix-icon-legend', false
             ));
         return new CompareConfigItemVersionDialogContextConfiguration(

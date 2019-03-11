@@ -5,6 +5,7 @@ import { ContextService } from '../context';
 import { ContextFactory } from '../context/ContextFactory';
 import { ClientStorageService } from '../ClientStorageService';
 import { ReleaseContext } from '../release';
+import { ObjectDataService } from '../ObjectDataService';
 
 export class RoutingService {
 
@@ -35,7 +36,7 @@ export class RoutingService {
     public async routeToInitialContext(): Promise<void> {
         const VISITED_KEY = 'kix-18-site-visited';
         const visitedOption = ClientStorageService.getOption(VISITED_KEY);
-        const objectData = ContextService.getInstance().getObjectData();
+        const objectData = ObjectDataService.getInstance().getObjectData();
         const buildNumber = objectData.releaseInfo.buildNumber;
         if (!visitedOption || visitedOption !== buildNumber.toString()) {
             await ContextService.getInstance().setContext(

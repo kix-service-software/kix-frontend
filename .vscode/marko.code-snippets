@@ -52,5 +52,21 @@
 			""
 		],
 		"description": "singleton pattern implementation"
+	},
+	"Translation (i18n) Component": {
+		"scope": "marko,html",
+		"prefix": "translation (i18n) component",
+		"body": [
+			"<translation-string pattern='--i18n--${1:pattern}' placeholders=[${2}]/>",
+		],
+		"description": "translation component"
+	},
+	"Translation Service": {
+		"scope": "javascript,typescript,html",
+		"prefix": "translation service",
+		"body": [
+			"const ${1:text} = await TranslationService.translate('--i18n--${2:pattern}', [${3}]);",
+		],
+		"description": "translation component"
 	}
 }

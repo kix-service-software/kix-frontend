@@ -1,6 +1,7 @@
 import { TableFilterCriteria } from "./components";
-import { SearchOperator, ContextService } from "../browser";
+import { SearchOperator } from "../browser";
 import { KIXObjectType, KIXObject } from "./kix";
+import { ObjectDataService } from "../browser/ObjectDataService";
 
 export class FilterUtil {
 
@@ -16,7 +17,7 @@ export class FilterUtil {
 
     public static checkTableFilterCriteria(criteria: TableFilterCriteria, value: any): boolean {
         if (criteria.value === KIXObjectType.CURRENT_USER) {
-            criteria.value = ContextService.getInstance().getObjectData().currentUser.UserID;
+            criteria.value = ObjectDataService.getInstance().getObjectData().currentUser.UserID;
         }
 
         switch (criteria.operator) {

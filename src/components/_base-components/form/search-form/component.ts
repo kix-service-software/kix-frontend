@@ -3,12 +3,14 @@ import {
 } from '../../../../core/model';
 import { FormService } from '../../../../core/browser/form';
 import {
-    WidgetService, DialogService, KIXObjectSearchService, IdService, TableConfiguration, TableHeaderHeight,
+    WidgetService, KIXObjectSearchService, IdService, TableConfiguration, TableHeaderHeight,
     TableRowHeight, BrowserUtil, ITable, TableFactoryService, TableEvent, SearchProperty, TableEventData
 } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import { SearchContext } from '../../../../core/browser/search/context';
 import { EventService, IEventSubscriber } from '../../../../core/browser/event';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
+import { DialogService } from '../../../../core/browser/components/dialog';
 
 class Component implements ISearchFormListener {
 
@@ -115,7 +117,8 @@ class Component implements ISearchFormListener {
     }
 
     public async search(): Promise<void> {
-        DialogService.getInstance().setMainDialogLoading(true, "Suche ...", true);
+        const hint = await TranslationService.translate('Translatable#Search ...');
+        DialogService.getInstance().setMainDialogLoading(true, hint, true);
 
         await KIXObjectSearchService.getInstance().executeSearch<KIXObject>(this.formId)
             .catch((error: Error) => {

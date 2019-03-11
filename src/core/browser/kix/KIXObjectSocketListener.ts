@@ -8,8 +8,8 @@ import {
 } from "../../model";
 import { ClientStorageService } from "../ClientStorageService";
 import { IdService } from "../IdService";
-import { ContextService } from "../context";
 import { FactoryService } from "./FactoryService";
+import { ObjectDataService } from "../ObjectDataService";
 
 export class KIXObjectSocketListener extends SocketListener {
 
@@ -22,7 +22,7 @@ export class KIXObjectSocketListener extends SocketListener {
             KIXObjectSocketListener.INSTANCE = new KIXObjectSocketListener();
         }
 
-        const objectData = ContextService.getInstance().getObjectData();
+        const objectData = ObjectDataService.getInstance().getObjectData();
         KIXObjectSocketListener.TIMEOUT = objectData && objectData.socketTimeout ? objectData.socketTimeout : 30000;
 
         return KIXObjectSocketListener.INSTANCE;

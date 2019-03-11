@@ -1,7 +1,7 @@
-import { ComponentsService } from "../../../../../core/browser/components";
-import { ComponentState } from "./ComponentState";
-import { FormService, IdService } from "../../../../../core/browser";
-import { FormField } from "../../../../../core/model";
+import { ComponentsService } from '../../../../../core/browser/components';
+import { ComponentState } from './ComponentState';
+import { FormService, IdService } from '../../../../../core/browser';
+import { FormField } from '../../../../../core/model';
 
 class Component {
 
@@ -67,14 +67,14 @@ class Component {
     }
 
     public getPaddingLeft(): string {
-        return (this.state.level * 2) + "rem";
+        return (this.state.level * 2) + 'rem';
     }
 
     public getPaddingRight(): string {
         if (this.state.level > 1) {
-            return "1.75rem";
+            return '1.75rem';
         } else {
-            return "0";
+            return '0';
         }
     }
 

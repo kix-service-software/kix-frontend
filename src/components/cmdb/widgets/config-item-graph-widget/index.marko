@@ -6,10 +6,12 @@
         <else>
             <div.config-item-graph-container>
                 <img.config-item-graph alt=state.widgetTitle src=("/static/img/config-item-graph/" + state.fakeGraph)/>
-                <div.hover-shield on-click('openImageDialog') title="Großansicht">
+                <div.hover-shield on-click("openImageDialog") title="Large View">
                     <div.hover-info>
                         <span.hover-icon.kix-icon-arrow-fullscreen/>
-                        <span.hover-hint.no-select>Großansicht</span>
+                        <span.hover-hint.no-select>
+                            <translation-string pattern="Translatable#Large View"/>
+                        </span>
                     </div>
                 </div>
             </div>

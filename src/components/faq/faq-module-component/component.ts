@@ -1,6 +1,6 @@
 import {
     AbstractMarkoComponent, FactoryService, LabelService, ServiceRegistry,
-    KIXObjectSearchService, ContextService, DialogService, ActionFactory, TableFactoryService
+    KIXObjectSearchService, ContextService, ActionFactory, TableFactoryService
 } from '../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
@@ -15,6 +15,7 @@ import {
     FAQArticleSearchDefinition, FAQArticleFormService, EditFAQArticleDialogContext
 } from '../../../core/browser/faq';
 import { FAQCacheHandler } from '../../../core/model/kix/faq';
+import { DialogService } from '../../../core/browser/components/dialog';
 
 class Component extends AbstractMarkoComponent {
 
@@ -86,7 +87,8 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'new-faq-article-dialog',
             new WidgetConfiguration(
-                'new-faq-article-dialog', 'Neue FAQ', [], {}, false, false, WidgetSize.BOTH, 'kix-icon-new-faq'
+                'new-faq-article-dialog', 'Translatable#New FAQ', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-new-faq'
             ),
             KIXObjectType.FAQ_ARTICLE,
             ContextMode.CREATE
@@ -95,7 +97,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'edit-faq-article-dialog',
             new WidgetConfiguration(
-                'edit-faq-article-dialog', 'FAQ Eintrag Bearbeiten', [], {}, false,
+                'edit-faq-article-dialog', 'Translatable#Edit FAQ Article', [], {}, false,
                 false, WidgetSize.BOTH, 'kix-icon-edit'
             ),
             KIXObjectType.FAQ_ARTICLE,
@@ -105,7 +107,8 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'search-faq-article-dialog',
             new WidgetConfiguration(
-                'search-faq-article-dialog', 'FAQ Suche', [], {}, false, false, WidgetSize.BOTH, 'kix-icon-search-faq'
+                'search-faq-article-dialog', 'Translatable#FAQ Search', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-search-faq'
             ),
             KIXObjectType.FAQ_ARTICLE,
             ContextMode.SEARCH

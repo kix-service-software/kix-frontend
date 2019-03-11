@@ -5,8 +5,8 @@ import { KIXObjectType, ContextMode } from '../../../model';
 export class ConfigItemCreateAction extends AbstractAction {
 
     public initAction(): void {
-        this.text = "Neues Config Item";
-        this.icon = "kix-icon-new-ci";
+        this.text = 'Translatable#New Config Item';
+        this.icon = 'kix-icon-new-ci';
     }
 
     public run(): void {

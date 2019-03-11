@@ -1,13 +1,16 @@
 import { ComponentState } from './ComponentState';
 import {
-    DialogService, FormService, ServiceRegistry, ServiceType, OverlayService, BrowserUtil, ContextService
+    FormService, ServiceRegistry, ServiceType, OverlayService, BrowserUtil, ContextService
 } from '../../../../core/browser';
 import {
     KIXObjectType, FormField, FormFieldValue, PersonalSetting, Form, FormContext,
     ValidationSeverity, OverlayType, ComponentContent, ValidationResult, Error
 } from '../../../../core/model';
 import { FormGroup } from '../../../../core/model/components/form/FormGroup';
-import { AgentService } from '../../../../core/browser/application';
+import { AgentService, ApplicationEvent } from '../../../../core/browser/application';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
+import { DialogService } from '../../../../core/browser/components/dialog';
+import { EventService } from '../../../../core/browser/event';
 
 
 class Component {
@@ -54,8 +57,9 @@ class Component {
             }
         });
 
+        const formName = await TranslationService.translate('Translatable#Personal Settings');
         return new Form(
-            'personal-settings', 'Persönliche Einstellungen',
+            'personal-settings', formName,
             formGroups, KIXObjectType.PERSONAL_SETTINGS, true, FormContext.EDIT,
             null, null, true
         );
@@ -67,7 +71,9 @@ class Component {
 
     public async submit(): Promise<void> {
         if (this.state.formId) {
-            DialogService.getInstance().setMainDialogLoading(false, 'Einstellungen werden gespeichert.');
+
+            const loadingHint = await TranslationService.translate('Translatable#Save Settings.');
+            DialogService.getInstance().setMainDialogLoading(false, loadingHint);
             setTimeout(async () => {
                 const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
                 const result = await formInstance.validateForm();
@@ -80,10 +86,13 @@ class Component {
                     );
                     if (service) {
                         await service.setPreferencesByForm(this.state.formId)
-                            .then(() => {
+                            .then(async () => {
                                 DialogService.getInstance().setMainDialogLoading(false);
-                                BrowserUtil.openSuccessOverlay('Änderungen wurden gespeichert.');
+
+                                const toast = await TranslationService.translate('Translatable#Changes saved.');
+                                BrowserUtil.openSuccessOverlay(toast);
                                 DialogService.getInstance().submitMainDialog();
+                                EventService.getInstance().publish(ApplicationEvent.REFRESH);
                             }).catch((error: Error) => {
                                 DialogService.getInstance().setMainDialogLoading(false);
                                 BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
@@ -94,17 +103,22 @@ class Component {
         }
     }
 
-    public showValidationError(result: ValidationResult[]): void {
+    public async showValidationError(result: ValidationResult[]): Promise<void> {
         const errorMessages = result.filter((r) => r.severity === ValidationSeverity.ERROR).map((r) => r.message);
+
+        const title = await TranslationService.translate('Translatable#Error on form validation:');
+
         const content = new ComponentContent('list-with-title',
             {
-                title: 'Fehler beim Validieren des Formulars:',
+                title,
                 list: errorMessages
             }
         );
 
+        const toastTitle = await TranslationService.translate('Translatable#Validation Error');
+
         OverlayService.getInstance().openOverlay(
-            OverlayType.WARNING, null, content, 'Validierungsfehler', true
+            OverlayType.WARNING, null, content, toastTitle, true
         );
     }
 }

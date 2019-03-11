@@ -1,4 +1,4 @@
-import { IFormInstance, KIXObjectType } from "../../../../core/model";
+import { IFormInstance, KIXObjectType } from '../../../../core/model';
 
 export class FormComponentState {
 

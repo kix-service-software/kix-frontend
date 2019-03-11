@@ -1,4 +1,4 @@
-import { ConfiguredWidget, ContextType } from "../../../core/model";
+import { ConfiguredWidget, ContextType } from '../../../core/model';
 
 export class ComponentState {
 

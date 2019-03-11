@@ -4,8 +4,8 @@ import {
 } from "../../model";
 import { SearchDefinition, SearchResultCategory } from "../kix";
 import { SearchOperator } from "../SearchOperator";
-import { ContextService } from "../context";
 import { SearchProperty } from "../SearchProperty";
+import { ObjectDataService } from "../ObjectDataService";
 
 export class ContactSearchDefinition extends SearchDefinition {
 
@@ -18,7 +18,7 @@ export class ContactSearchDefinition extends SearchDefinition {
     }
 
     public async getProperties(): Promise<Array<[string, string]>> {
-        const objectData = ContextService.getInstance().getObjectData();
+        const objectData = ObjectDataService.getInstance().getObjectData();
         if (objectData) {
             const result: Array<[string, string]> = [[SearchProperty.FULLTEXT, null]];
             objectData.contactAttributes.forEach((ca) => result.push([ca[0], null]));
@@ -78,11 +78,11 @@ export class ContactSearchDefinition extends SearchDefinition {
     }
 
     public async getSearchResultCategories(): Promise<SearchResultCategory> {
-        const customerCategory = new SearchResultCategory('Kunden', KIXObjectType.CUSTOMER);
+        const customerCategory = new SearchResultCategory('Customers', KIXObjectType.CUSTOMER);
         const ticketCategory = new SearchResultCategory('Tickets', KIXObjectType.TICKET);
 
         return new SearchResultCategory(
-            'Ansprechpartner', KIXObjectType.CONTACT, [customerCategory, ticketCategory]
+            'Contacts', KIXObjectType.CONTACT, [customerCategory, ticketCategory]
         );
     }
 
@@ -93,7 +93,7 @@ export class ContactSearchDefinition extends SearchDefinition {
             const value = criteria[fulltextCriteriaIndex].value;
             criteria.splice(fulltextCriteriaIndex, 1);
 
-            const objectData = ContextService.getInstance().getObjectData();
+            const objectData = ObjectDataService.getInstance().getObjectData();
             if (objectData) {
                 objectData.contactAttributes.forEach(
                     (ca) => criteria.push(new FilterCriteria(

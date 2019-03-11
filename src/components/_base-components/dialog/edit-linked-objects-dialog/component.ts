@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
 import {
-    DialogService, ContextService, LabelService, ServiceRegistry, SearchOperator,
+    ContextService, LabelService, ServiceRegistry, SearchOperator,
     IKIXObjectService, KIXObjectService, BrowserUtil, TableFactoryService, TableEvent, ValueState, TableEventData
 } from '../../../../core/browser';
 import {
@@ -10,6 +10,8 @@ import {
 } from '../../../../core/model';
 import { LinkUtil, EditLinkedObjectsDialogContext } from '../../../../core/browser/link';
 import { IEventSubscriber, EventService } from '../../../../core/browser/event';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
+import { DialogService } from '../../../../core/browser/components/dialog';
 
 class Component {
 
@@ -196,11 +198,12 @@ class Component {
         this.state.table.filter();
     }
 
-    public openAddLinkDialog(): void {
-        let dialogTitle = 'Objekt verknüpfen';
+    public async openAddLinkDialog(): Promise<void> {
+        let dialogTitle = await TranslationService.translate('Translatable#Linked Objects');
         const labelProvider = LabelService.getInstance().getLabelProviderForType(this.mainObject.KIXObjectType);
         if (labelProvider) {
-            dialogTitle = `${labelProvider.getObjectName()} verknüpfen`;
+            const objectName = await labelProvider.getObjectName();
+            dialogTitle = await TranslationService.translate('Translatable#link {0}', [objectName]);
         }
 
         const linkDescriptions = this.linkDescriptions.filter((ld) => !this.deleteLinkObjects
@@ -346,7 +349,7 @@ class Component {
 
     private async addLinks(): Promise<boolean> {
         const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(KIXObjectType.LINK_OBJECT);
-        DialogService.getInstance().setMainDialogLoading(true, "Verknüpfungen werden angelegt.");
+        DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Verknüpfungen werden angelegt.');
         let ok = true;
         for (const newLinkObject of this.newLinkObjects) {
             await service.createObject(
@@ -363,7 +366,7 @@ class Component {
     }
 
     private async deleteLinks(linkIdsToDelete: number[]): Promise<boolean> {
-        DialogService.getInstance().setMainDialogLoading(true, "Verknüpfungen werden entfernt.");
+        DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Verknüpfungen werden entfernt.');
         const failIds = await KIXObjectService.deleteObject(KIXObjectType.LINK_OBJECT, linkIdsToDelete);
         return !failIds || !!!failIds.length;
     }

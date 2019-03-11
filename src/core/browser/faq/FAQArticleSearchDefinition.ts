@@ -4,10 +4,10 @@ import {
 } from "../../model";
 import { SearchDefinition, SearchResultCategory } from "../kix";
 import { SearchOperator } from "../SearchOperator";
-import { ContextService } from "../context";
 import { FAQArticleProperty } from "../../model/kix/faq";
 import { ObjectDefinitionSearchAttribute } from "../../model/kix/object-definition";
 import { SearchProperty } from "../SearchProperty";
+import { ObjectDataService } from "../ObjectDataService";
 
 export class FAQArticleSearchDefinition extends SearchDefinition {
 
@@ -16,7 +16,7 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
     public constructor() {
         super(KIXObjectType.FAQ_ARTICLE);
 
-        const objectData = ContextService.getInstance().getObjectData();
+        const objectData = ObjectDataService.getInstance().getObjectData();
         if (objectData && objectData.objectDefinitions) {
             const faqDef = objectData.objectDefinitions.find((od) => od.Object === KIXObjectType.FAQ_ARTICLE);
             if (faqDef) {
@@ -135,7 +135,7 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
             const value = criteria[fulltextCriteriaIndex].value;
             criteria.splice(fulltextCriteriaIndex, 1);
 
-            const objectData = ContextService.getInstance().getObjectData();
+            const objectData = ObjectDataService.getInstance().getObjectData();
             if (objectData) {
                 const faqDefinition = objectData.objectDefinitions.find(
                     (od) => od.Object === KIXObjectType.FAQ_ARTICLE

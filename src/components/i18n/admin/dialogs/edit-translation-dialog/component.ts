@@ -1,12 +1,13 @@
 import {
-    OverlayService, FormService, AbstractMarkoComponent, KIXObjectService, ContextService, BrowserUtil, DialogService
-} from "../../../../../core/browser";
+    OverlayService, FormService, AbstractMarkoComponent, KIXObjectService, ContextService, BrowserUtil
+} from '../../../../../core/browser';
 import {
     ValidationSeverity, OverlayType, ComponentContent, ValidationResult, KIXObjectType, Error
-} from "../../../../../core/model";
-import { ComponentState } from "./ComponentState";
-import { TicketTypeDetailsContext } from "../../../../../core/browser/ticket";
-import { TranslationDetailsContext } from "../../../../../core/browser/i18n/admin/context";
+} from '../../../../../core/model';
+import { ComponentState } from './ComponentState';
+import { TranslationDetailsContext } from '../../../../../core/browser/i18n/admin/context';
+import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
+import { DialogService } from '../../../../../core/browser/components/dialog';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -15,7 +16,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
+        DialogService.getInstance().setMainDialogHint('Translatable#All form fields marked by * are required fields.');
     }
 
     public async onDestroy(): Promise<void> {
@@ -35,7 +36,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             if (validationError) {
                 this.showValidationError(result);
             } else {
-                DialogService.getInstance().setMainDialogLoading(true, "Übersetzung wird aktualisiert");
+                DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Übersetzung wird aktualisiert');
 
                 const context = await ContextService.getInstance().getContext<TranslationDetailsContext>(
                     TranslationDetailsContext.CONTEXT_ID
@@ -43,10 +44,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
                 await KIXObjectService.updateObjectByForm(
                     KIXObjectType.TRANSLATION, this.state.formId, context.getObjectId()
-                ).then((typeId) => {
+                ).then(async (typeId) => {
                     context.getObject(KIXObjectType.TRANSLATION, true);
                     DialogService.getInstance().setMainDialogLoading(false);
-                    BrowserUtil.openSuccessOverlay('Änderungen wurden gespeichert.');
+
+                    const toast = await TranslationService.translate('Translatable#Changes saved.');
+                    BrowserUtil.openSuccessOverlay(toast);
                     DialogService.getInstance().submitMainDialog();
                 }).catch((error: Error) => {
                     DialogService.getInstance().setMainDialogLoading(false);
@@ -60,13 +63,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const errorMessages = result.filter((r) => r.severity === ValidationSeverity.ERROR).map((r) => r.message);
         const content = new ComponentContent('list-with-title',
             {
-                title: 'Fehler beim Validieren des Formulars:',
+                title: 'Translatable#Fehler beim Validieren des Formulars:',
                 list: errorMessages
             }
         );
 
         OverlayService.getInstance().openOverlay(
-            OverlayType.WARNING, null, content, 'Validierungsfehler', true
+            OverlayType.WARNING, null, content, 'Translatable#Validierungsfehler', true
         );
     }
 

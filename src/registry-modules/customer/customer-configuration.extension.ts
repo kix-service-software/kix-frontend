@@ -3,7 +3,7 @@ import { CustomerContext, CustomerContextConfiguration } from '../../core/browse
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize, KIXObjectType
 } from '../../core/model';
-import { TableConfiguration, TableRowHeight, TableHeaderHeight } from '../../core/browser';
+import { TableConfiguration } from '../../core/browser';
 
 export class DashboardModuleFactoryExtension implements IConfigurationExtension {
 
@@ -14,7 +14,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
         const customerListWidget =
             new ConfiguredWidget('20180529102830', new WidgetConfiguration(
-                'table-widget', 'Übersicht Kunden', [
+                'table-widget', 'Translatable#Overview Customer Organizations', [
                     'customer-search-action',
                     'customer-create-action',
                     'import-action',
@@ -30,7 +30,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
 
         const contactListWidget =
             new ConfiguredWidget('20180529144530', new WidgetConfiguration(
-                'table-widget', 'Übersicht Ansprechpartner', [
+                'table-widget', 'Translatable#Overview Contacts', [
                     'contact-search-action',
                     'contact-create-action',
                     'csv-export-action'
@@ -48,7 +48,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
 
         const notesSidebar =
             new ConfiguredWidget('20181010-customer-notes', new WidgetConfiguration(
-                'notes-widget', 'Notizen', [], {},
+                'notes-widget', 'Translatable#Notes', [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-note', false)
             );
 

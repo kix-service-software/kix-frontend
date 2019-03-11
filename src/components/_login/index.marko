@@ -10,37 +10,43 @@
                     <div#kix-logo>
                         <img alt="kix-logo" src="static/img/kix-logo.png"/>
                     </div>
-                    <h1>Willkommen bei KIX</h1>
+                    <h1>
+                        <translation-string pattern="Translatable#Welcome to KIX"/>
+                    </h1>
                 </div>
                 <if(state.error || state.logout)>
                     <div class="dialog-message-area">
                         <if(state.error)>
                             <div class="message message-error">
                                 <span.kix-icon-warnsign/>
-                                Login fehlgeschlagen
+                                <translation-string pattern="Translatable#Login failed"/>
                             </div>
                         </if>
                         <else-if(state.logout)>
                             <div class="message message-success">
                                 <span.kix-icon-icircle/>
-                                Sie haben sich erfolgreich abgemeldet.
+                                <translation-string pattern="Translatable#You have successfully logged out."/>
                             </div>
                         </else-if>
                     </div>
                 </if>
-                <div class="dialog-content" on-keydown('keyDown')>
+                <div class="dialog-content" on-keydown("keyDown")>
                     <label>
-                        <span>Benutzername:</span>
+                        <span>
+                            <translation-string pattern="Translatable#User name"/>:
+                        </span>
                         <input.input-style type="text" name="username" tabindex="1" key="login-user-name"/>
                     </label>
                     <label>
-                        <span>Passwort:</span>
+                        <span>
+                            <translation-string pattern="Translatable#Password"/>:
+                        </span>
                         <input.input-style type="password" name="password" tabindex="2" key="login-user-password"/>
                     </label>
                     <div class="dialog-buttons">
-                        <button.special-button type="button" on-click('login') tabindex="3">
+                        <button.special-button type="button" on-click("login") tabindex="3">
                             <span.kix-icon-check/>
-                            Anmelden
+                            <translation-string pattern="Translatable#Login"/>
                         </button>
                     </div>
                 </div>

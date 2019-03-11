@@ -8,9 +8,9 @@ export class UpdateSearchProfile extends RequestObject {
         categories: string[] = null
     ) {
         super();
-        this.applyProperty("Name", name);
-        this.applyProperty("Data", data);
-        this.applyProperty("Categories", categories);
+        this.applyProperty('Name', name);
+        this.applyProperty('Data', data);
+        this.applyProperty('Categories', categories);
     }
 
 }

@@ -5,6 +5,7 @@ import {
 } from '../../../../core/browser';
 import { KIXObject, ContextMode, CacheState } from '../../../../core/model';
 import { Label } from '../../../../core/browser/components';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 class Component implements IKIXObjectSearchListener {
 
     public listenerId: string = 'search-criteria-widget';
@@ -45,10 +46,12 @@ class Component implements IKIXObjectSearchListener {
 
     public async searchFinished(): Promise<void> {
         const cache = KIXObjectSearchService.getInstance().getSearchCache();
+        const titleLabel = await TranslationService.translate('Translatable#Selected Search Criteria');
         if (cache) {
             const searchDefinition = KIXObjectSearchService.getInstance().getSearchDefinition(cache.objectType);
             const labelProvider = LabelService.getInstance().getLabelProviderForType(cache.objectType);
-            this.state.title = `Gewählte Suchkriterien: ${labelProvider.getObjectName(true)}`;
+            const objectName = await labelProvider.getObjectName(true);
+            this.state.title = `${titleLabel}: ${objectName}`;
             const displayCriteria: Array<[string, string, Label[]]> = [];
 
             const parameter = [];
@@ -89,13 +92,12 @@ class Component implements IKIXObjectSearchListener {
                     displayProperty = await labelProvider.getPropertyText(criteria.property);
                 }
 
-                displayCriteria.push([
-                    displayProperty, SearchOperatorUtil.getText(criteria.operator), labels
-                ]);
+                const label = await SearchOperatorUtil.getText(criteria.operator);
+                displayCriteria.push([displayProperty, label, labels]);
             }
             setTimeout(() => this.state.displayCriteria = displayCriteria, 100);
         } else {
-            this.state.title = "Gewählte Suchkriterien:";
+            this.state.title = `${titleLabel}:`;
         }
     }
 

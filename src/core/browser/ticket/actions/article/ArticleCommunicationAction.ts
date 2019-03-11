@@ -3,8 +3,8 @@ import { AbstractAction } from '../../../../model/components/action/AbstractActi
 export class ArticleCommunicationAction extends AbstractAction {
 
     public initAction(): void {
-        this.text = "Kommunikation";
-        this.icon = "kix-icon-mail-redirect";
+        this.text = 'Translatable#Communication';
+        this.icon = 'kix-icon-mail-redirect';
     }
 
 }

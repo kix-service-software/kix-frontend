@@ -10,7 +10,8 @@ export class ComponentState {
         public hasExplorer: boolean = false,
         public showSidebar: boolean = false,
         public loading: boolean = true,
-        public loadingHint: string = 'Lade KIX ...',
+        public loadingHint: string = 'Loading ...',
+        public reload: boolean = false,
         public initialized: boolean = false,
         public moduleTemplates: any[] = []
     ) { }

@@ -29,7 +29,7 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
     }
 
     public async onMount(): Promise<void> {
-        DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
+        DialogService.getInstance().setMainDialogHint('Translatable#All form fields marked by * are required fields.');
     }
 
     public async onDestroy(): Promise<void> {

@@ -10,7 +10,8 @@ export class ComponentState extends WidgetComponentState {
         public title: string = null,
         public icon: string | ObjectIcon = null,
         public filterCount: number = null,
-        public headerTitleComponents: string[] = []
+        public headerTitleComponents: string[] = [],
+        public filterPlaceHolder: string = 'Translatable#All Tickets'
     ) {
         super();
     }

@@ -1,10 +1,10 @@
-import { ComponentState } from "./ComponentState";
+import { ComponentState } from './ComponentState';
 import {
     FormInputComponent, TreeNode, ConfigItem, KIXObjectType
-} from "../../../../core/model";
-import { FormService } from "../../../../core/browser/form";
-import { CMDBService } from "../../../../core/browser/cmdb";
-import { KIXObjectService } from "../../../../core/browser";
+} from '../../../../core/model';
+import { FormService } from '../../../../core/browser/form';
+import { CMDBService } from '../../../../core/browser/cmdb';
+import { KIXObjectService } from '../../../../core/browser';
 
 class Component extends FormInputComponent<number, ComponentState> {
 

@@ -1,8 +1,8 @@
 import { ComponentState } from './ComponentState';
-import { DialogService } from '../../../../core/browser';
 import { TreeNode } from '../../../../core/model';
 import { DynamicFieldValue } from './DynamicFormFieldValue';
 import { ImportManager, ImportPropertyOperator } from '../../../../core/browser/import';
+import { DialogService } from '../../../../core/browser/components/dialog';
 
 class Component {
 

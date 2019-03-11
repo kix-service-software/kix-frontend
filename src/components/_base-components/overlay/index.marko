@@ -19,12 +19,14 @@
                         </div>
                     </if>
                     <else>
-                        <div>${state.content.getValue()}</div>
+                        <div>
+                            <translation-string pattern=state.content.getValue()/>
+                        </div>
                     </else>
                     <if(state.hasCloseButton)>
-                        <button.message-button type="button" on-click("closeOverlay") title="Fenster schließen">
+                        <button.message-button type="button" on-click("closeOverlay") title="Close window">
                             <span.kix-icon-check/>
-                            Fenster schließen
+                            <translation-string pattern="Translatable#Close window"/>
                         </button>
                     </if>
                     <if(component.canResize())>

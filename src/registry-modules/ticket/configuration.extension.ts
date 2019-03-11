@@ -20,7 +20,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
         const queueExplorer =
             new ConfiguredWidget('20180813-ticket-queue-explorer', new WidgetConfiguration(
-                'ticket-queue-explorer', 'Queues', [], {},
+                'ticket-queue-explorer', 'Translatable#Queues', [], {},
                 false, false, WidgetSize.SMALL, null
             ));
 
@@ -30,7 +30,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
         // sidebars
         const notesSidebar =
             new ConfiguredWidget('20180814-ticket-notes', new WidgetConfiguration(
-                'notes-widget', 'Notizen', [], {},
+                'notes-widget', 'Translatable#Notes', [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-note', false)
             );
 
@@ -39,24 +39,24 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
 
 
         const predefinedTicketFilter = [
-            new KIXObjectPropertyFilter('Bearbeiter', [
+            new KIXObjectPropertyFilter('Owner', [
                 new TableFilterCriteria(TicketProperty.OWNER_ID, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER)
             ]),
-            new KIXObjectPropertyFilter('Beobachtete Tickets', [
+            new KIXObjectPropertyFilter('Watched Tickets', [
                 new TableFilterCriteria(
                     TicketProperty.WATCHERS, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER, true
                 )
             ]),
-            new KIXObjectPropertyFilter('Eskalierte Tickets', [
+            new KIXObjectPropertyFilter('Escalated Tickets', [
                 new TableFilterCriteria(TicketProperty.ESCALATION_TIME, SearchOperator.LESS_THAN, 0)
             ]),
-            new KIXObjectPropertyFilter('Freie Tickets', [
+            new KIXObjectPropertyFilter('Unlocked Tickets', [
                 new TableFilterCriteria(TicketProperty.LOCK_ID, SearchOperator.EQUALS, 1)
             ]),
-            new KIXObjectPropertyFilter('Gesperrte Tickets', [
+            new KIXObjectPropertyFilter('Locked Tickets', [
                 new TableFilterCriteria(TicketProperty.LOCK_ID, SearchOperator.EQUALS, 2)
             ]),
-            new KIXObjectPropertyFilter('Verantwortliche Tickets', [
+            new KIXObjectPropertyFilter('Responsible Tickets', [
                 new TableFilterCriteria(
                     TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER
                 )
@@ -81,7 +81,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
             }
         });
         const chart1 = new ConfiguredWidget('20180814-1-ticket-chart-widget', new WidgetConfiguration(
-            'ticket-chart-widget', 'Übersicht Ticketprioritäten', [], chartConfig1,
+            'ticket-chart-widget', 'Translatable#Overview Ticket Priorities', [], chartConfig1,
             false, true, WidgetSize.SMALL, null, true)
         );
 
@@ -90,7 +90,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
             data: {
                 labels: ["new", "open", "pending", "escalated"],
                 datasets: [{
-                    label: "Ticketstatus",
+                    label: "Translatable#Ticket States",
                     data: [20, 50, 32, 8],
                     fill: true,
                     backgroundColor: [
@@ -121,7 +121,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
             }
         });
         const chart2 = new ConfiguredWidget('20180814-2-ticket-chart-widget', new WidgetConfiguration(
-            'ticket-chart-widget', 'Übersicht Ticketstatus', [], chartConfig2,
+            'ticket-chart-widget', 'Translatable#Overview Ticket States', [], chartConfig2,
             false, true, WidgetSize.SMALL, null, true)
         );
 
@@ -151,13 +151,13 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
             }
         } as any);
         const chart3 = new ConfiguredWidget('20180814-3-ticket-chart-widget', new WidgetConfiguration(
-            'ticket-chart-widget', 'Neue Tickets der letzten 7 Tage', [], chartConfig3,
+            'ticket-chart-widget', 'Translatable#New Tickets (recent 7 days)', [], chartConfig3,
             false, true, WidgetSize.SMALL, null, true)
         );
 
         const ticketListWidget =
             new ConfiguredWidget('20180814-ticket-list-widget', new WidgetConfiguration(
-                'table-widget', 'Übersicht Tickets', [
+                'table-widget', 'Translatable#Overview Tickets', [
                     'ticket-create-action', 'bulk-action', 'csv-export-action', 'ticket-search-action'
                 ],
                 {
@@ -192,24 +192,24 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
         if (!existingFormLinkWithTicket) {
 
             const fields: FormField[] = [];
-            fields.push(new FormField('Volltext', SearchProperty.FULLTEXT, null, false, 'Suche in folgenden Ticket-Feldern:  Ticketnummer, Titel / Betreff, Artikelinhalt, Von, An, CC'));
-            fields.push(new FormField('Ticketnummer', TicketProperty.TICKET_NUMBER, null, false, 'Geben Sie die Ticketnummer oder einen Teil der Ticketnummer ein (mindestens 1 Zeichen).'));
-            fields.push(new FormField('Titel', TicketProperty.TITLE, null, false, 'Geben Sie den Titel oder Teile eines Tickettitels ein.'));
-            fields.push(new FormField('Typ', TicketProperty.TYPE_ID, 'ticket-input-type', false, 'Suche nach Tickets des gewählten Typs.'));
-            fields.push(new FormField('Queue', TicketProperty.QUEUE_ID, 'ticket-input-queue', false, 'Suche nach Tickets in der gewählten Queue.'));
+            fields.push(new FormField('Translatable#Full Text', SearchProperty.FULLTEXT, null, false, 'Translatable#Searchable Ticket attributes: Ticketnumber, Subject, Article content, From, To, CC'));
+            fields.push(new FormField('Translatable#Ticket Number', TicketProperty.TICKET_NUMBER, null, false, 'Translatable#Insert the ticket number or a part of the number (min. 1 character).'));
+            fields.push(new FormField('Translatable#Title', TicketProperty.TITLE, null, false, 'Translatable#Insert the complete ticket title or a part of the title.'));
+            fields.push(new FormField('Translatable#Type', TicketProperty.TYPE_ID, 'ticket-input-type', false, 'Translatable#Search for tickets with selected type.'));
+            fields.push(new FormField('Translatable#Queue', TicketProperty.QUEUE_ID, 'ticket-input-queue', false, 'Translatable#Search for tickets with selected queue.'));
             fields.push(new FormField<number>(
-                'Priorität', TicketProperty.PRIORITY_ID, 'ticket-input-priority', false, 'Suche nach Tickets mit der gewählten Priorität.')
+                'Translatable#Priority', TicketProperty.PRIORITY_ID, 'ticket-input-priority', false, 'Translatable#Search for tickets with selected priority.')
             );
             fields.push(new FormField<number>(
-                'Status', TicketProperty.STATE_ID, 'ticket-input-state', false, 'Suche nach Tickets mit dem gewählten Status.')
+                'Translatable#State', TicketProperty.STATE_ID, 'ticket-input-state', false, 'Translatable#Search for tickets with selected state.')
             );
-            fields.push(new FormField('Service', TicketProperty.SERVICE_ID, 'ticket-input-service', false, 'Suche nach Tickets, die mit dem gewählten Service verknüpft sind.'));
-            fields.push(new FormField('SLA', TicketProperty.SLA_ID, 'ticket-input-sla', false, 'Suche nach Tickets, die mit dem gewählten SLA verknüpft sind.'));
+            fields.push(new FormField('Translatable#Service', TicketProperty.SERVICE_ID, 'ticket-input-service', false, 'Translatable#Search for tickets with the selected ticket.'));
+            fields.push(new FormField('Translatable#SLA', TicketProperty.SLA_ID, 'ticket-input-sla', false, 'Translatable#Search for tickets with selected SLA.'));
 
-            const attributeGroup = new FormGroup('Ticket-Attribute', fields);
+            const attributeGroup = new FormGroup('Translatable#Ticket Attributes', fields);
 
             const form = new Form(
-                formIdLinkWithTicket, 'Verknüpfen mit Ticket', [attributeGroup],
+                formIdLinkWithTicket, 'Translatable#Link to ticket', [attributeGroup],
                 KIXObjectType.TICKET, false, FormContext.LINK, null, true
             );
             await ConfigurationService.getInstance().saveModuleConfiguration(form.id, null, form);

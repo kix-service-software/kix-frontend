@@ -3,18 +3,23 @@
         <loading-spinner/>
     </if>
     <else>
-        <button.form-button type="button" title="Verknüpfung zuordnen" on-click('openDialog')>
-            <span.kix-icon-new-link/>Verknüpfung zuordnen
+        <button.form-button type="button" title="Verknüpfung zuordnen" on-click("openDialog")>
+            <span.kix-icon-new-link/>
+            <translation-string pattern="Translatable#Assign Link"/>
         </button>
-        <span.link-notice on-click('minimize') class={"has-text": !(!state.linkDescriptions.length)}>
+        <span.link-notice on-click("minimize") class={
+            "has-text": !!state.linkDescriptions.length
+        }>
             <if(!!state.linkDescriptions.length)>
                 <span>
-                    ${state.linkDescriptions.length} Verknüpfungen angelegt
+                    <translation-string pattern="Translatable#{0} Link created" placeholders=[state.linkDescriptions.length]/>
                     <span.kix-icon-check/>
                 </span>
             </if>
             <div.toggle>
-                <span.line class={minimized: state.minimized}/>
+                <span.line class={
+                    minimized: state.minimized
+                }/>
                 <if(state.minimized)>
                     <span.kix-icon-sort-down/>
                 </if>
@@ -27,7 +32,7 @@
             </div>
         </span>
         <if(!state.minimized)>
-            <label-list labels=state.labels on-removeLabel('removeLink')/>
+            <label-list labels=state.labels on-removeLabel("removeLink")/>
         </if>
     </else>
 </div>

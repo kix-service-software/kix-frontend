@@ -1,4 +1,4 @@
-import { FormInputComponentState, TreeNode } from "../../../../../core/model";
+import { FormInputComponentState, TreeNode } from '../../../../../core/model';
 
 export class CompontentState extends FormInputComponentState<string | number | string[] | number[]> {
 

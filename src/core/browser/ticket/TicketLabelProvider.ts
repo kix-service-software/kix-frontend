@@ -4,17 +4,20 @@ import {
     Customer, KIXObjectType, Contact, TicketPriority, TicketType,
     TicketState, Queue, SysConfigItem, SysConfigKey, Sla
 } from "../../model";
-import { ContextService } from "../context";
 import { KIXObjectService } from "../kix";
 import { SearchProperty } from "../SearchProperty";
+import { TranslationService } from "../i18n/TranslationService";
+import { ObjectDataService } from "../ObjectDataService";
 
 export class TicketLabelProvider implements ILabelProvider<Ticket> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.TICKET;
 
-    public async getPropertyValueDisplayText(property: string, value: string | number): Promise<string> {
+    public async getPropertyValueDisplayText(
+        property: string, value: string | number, translatable: boolean = true
+    ): Promise<string> {
         let displayValue = value;
-        const objectData = ContextService.getInstance().getObjectData();
+        const objectData = ObjectDataService.getInstance().getObjectData();
         if (objectData) {
             switch (property) {
                 case TicketProperty.QUEUE_ID:
@@ -53,7 +56,7 @@ export class TicketLabelProvider implements ILabelProvider<Ticket> {
                     displayValue = slas && slas.length ? slas[0].Name : value;
                     break;
                 case TicketProperty.LOCK_ID:
-                    displayValue = value === 1 ? 'freigegeben' : 'gesperrt';
+                    displayValue = value === 1 ? 'Translatable#unlocked' : 'Translatable#locked';
                     break;
                 case TicketProperty.OWNER_ID:
                 case TicketProperty.RESPONSIBLE_ID:
@@ -69,72 +72,75 @@ export class TicketLabelProvider implements ILabelProvider<Ticket> {
             }
         }
 
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
+        }
         return displayValue ? displayValue.toString() : '';
     }
 
-    public async getPropertyText(property: string, short?: boolean): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
             case SearchProperty.FULLTEXT:
-                displayValue = 'Volltext';
+                displayValue = 'Translatable#Full Text';
                 break;
             case TicketProperty.WATCHERS:
-                displayValue = 'Beobachter';
+                displayValue = 'Translatable#Observer';
                 break;
             case TicketProperty.UNSEEN:
-                displayValue = 'ungelesene Artikel';
+                displayValue = 'Translatable#Unread Articles';
                 break;
             case TicketProperty.TITLE:
-                displayValue = 'Titel';
+                displayValue = 'Translatable#Title';
                 break;
             case TicketProperty.CHANGED:
-                displayValue = 'Geändert am';
+                displayValue = 'Translatable#Changed at';
                 break;
             case TicketProperty.TIME_UNITS:
-                displayValue = 'Erfasste Zeit';
+                displayValue = 'Translatable#accounted time';
                 break;
             case TicketProperty.CREATED:
             case TicketProperty.CREATE_TIME:
-                displayValue = 'Erstellt am';
+                displayValue = 'Translatable#Created at';
                 break;
             case TicketProperty.LOCK_ID:
-                displayValue = 'Sperrstatus';
+                displayValue = 'Translatable#Lock State';
                 break;
             case TicketProperty.PRIORITY_ID:
-                displayValue = short ? 'Prio' : 'Priorität';
+                displayValue = short ? 'Translatable#Prio' : 'Translatable#Priority';
                 break;
             case TicketProperty.TYPE_ID:
-                displayValue = 'Typ';
+                displayValue = 'Translatable#Type';
                 break;
             case TicketProperty.QUEUE_ID:
-                displayValue = 'Queue';
+                displayValue = 'Translatable#Queue';
                 break;
             case TicketProperty.STATE_ID:
-                displayValue = 'Status';
+                displayValue = 'Translatable#State';
                 break;
             case TicketProperty.SERVICE_ID:
-                displayValue = 'Service';
+                displayValue = 'Translatable#Service';
                 break;
             case TicketProperty.SLA_ID:
-                displayValue = 'SLA';
+                displayValue = 'Translatable#SLA';
                 break;
             case TicketProperty.OWNER_ID:
-                displayValue = 'Bearbeiter';
+                displayValue = 'Translatable#Owner';
                 break;
             case TicketProperty.RESPONSIBLE_ID:
-                displayValue = 'Verantwortlicher';
+                displayValue = 'Translatable#Responsible';
                 break;
             case TicketProperty.CUSTOMER_ID:
-                displayValue = 'Kunde';
+                displayValue = 'Translatable#Customer';
                 break;
             case TicketProperty.CUSTOMER_USER_ID:
-                displayValue = 'Ansprechpartner';
+                displayValue = 'Translatable#Contact';
                 break;
             case TicketProperty.AGE:
-                displayValue = 'Alter';
+                displayValue = 'Translatable#Age';
                 break;
             case TicketProperty.PENDING_TIME:
-                displayValue = 'Warten bis';
+                displayValue = 'Translatable#pending until';
                 break;
             case TicketProperty.TICKET_NUMBER:
                 const hookConfig = await KIXObjectService.loadObjects<SysConfigItem>(
@@ -145,38 +151,43 @@ export class TicketLabelProvider implements ILabelProvider<Ticket> {
                 }
                 break;
             case TicketProperty.ESCALATION_TIME:
-                displayValue = 'Eskalationszeit';
+                displayValue = 'Translatable#Escalation time';
                 break;
             case TicketProperty.ESCALATION_RESPONSE_TIME:
-                displayValue = 'Reaktionszeit';
+                displayValue = 'Translatable#Response time';
                 break;
             case TicketProperty.ESCALATION_UPDATE_TIME:
-                displayValue = 'Aktualisierungszeit';
+                displayValue = 'Translatable#Update time';
                 break;
             case TicketProperty.ESCALATION_SOLUTIONS_TIME:
-                displayValue = 'Lösungszeit';
+                displayValue = 'Translatable#Solution time';
                 break;
             case TicketProperty.TICKET_FLAG:
-                displayValue = 'Ticket Flags';
+                displayValue = 'Translatable#Ticket Flags';
                 break;
             case TicketProperty.CLOSE_TIME:
-                displayValue = 'Schließzeit';
+                displayValue = 'Translatable#Closing time';
                 break;
             case TicketProperty.CHANGE_TIME:
-                displayValue = 'Änderungszeit';
+                displayValue = 'Translatable#Changed at';
                 break;
             case TicketProperty.LAST_CHANGE_TIME:
-                displayValue = 'Letzte Änderungszeit';
+                displayValue = 'Translatable#last changed time';
                 break;
             case 'UserID':
-                displayValue = 'Agent';
+                displayValue = 'Translatable#Agent';
                 break;
             case 'LinkedAs':
-                displayValue = 'Verknüpft als';
+                displayValue = 'Translatable#Linked as';
                 break;
             default:
                 displayValue = property;
         }
+
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
+        }
+
         return displayValue;
     }
 
@@ -184,10 +195,12 @@ export class TicketLabelProvider implements ILabelProvider<Ticket> {
         return;
     }
 
-    public async getDisplayText(ticket: Ticket, property: string): Promise<string> {
+    public async getDisplayText(
+        ticket: Ticket, property: string, defaultValue?: string, translatable: boolean = true
+    ): Promise<string> {
         let displayValue = ticket[property];
 
-        const objectData = ContextService.getInstance().getObjectData();
+        const objectData = ObjectDataService.getInstance().getObjectData();
 
         switch (property) {
             case TicketProperty.CREATED:
@@ -255,7 +268,7 @@ export class TicketLabelProvider implements ILabelProvider<Ticket> {
                 displayValue = DateTimeUtil.calculateAge(displayValue);
                 break;
             case TicketProperty.LOCK_ID:
-                displayValue = ticket.LockID === 1 ? 'freigegeben' : 'gesperrt';
+                displayValue = ticket.LockID === 1 ? 'Unlocked' : 'Locked';
                 break;
             case TicketProperty.ESCALATION_RESPONSE_TIME:
                 displayValue = DateTimeUtil.getLocalDateTimeString(ticket.EscalationResponseTime);
@@ -270,15 +283,19 @@ export class TicketLabelProvider implements ILabelProvider<Ticket> {
                 if (ticket.Watchers) {
                     const currentUser = objectData.currentUser;
                     displayValue = ticket.Watchers.some((w) => w.UserID === currentUser.UserID)
-                        ? 'beaobachtet'
+                        ? 'watched'
                         : '';
                 }
                 break;
             case TicketProperty.UNSEEN:
-                displayValue = ticket.Unseen ? 'ungelesene Artikel' : '';
+                displayValue = ticket.Unseen ? 'Unread Articles' : '';
                 break;
             default:
                 displayValue = await this.getPropertyValueDisplayText(property, displayValue);
+        }
+
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
         }
 
         return displayValue ? displayValue.toString() : '';
@@ -314,7 +331,9 @@ export class TicketLabelProvider implements ILabelProvider<Ticket> {
         return ticket instanceof Ticket;
     }
 
-    public async getObjectText(ticket: Ticket, id: boolean = true, title: boolean = true): Promise<string> {
+    public async getObjectText(
+        ticket: Ticket, id: boolean = true, title: boolean = true, translatable: boolean = true
+    ): Promise<string> {
         let returnString = '';
         if (ticket) {
             if (id) {
@@ -343,12 +362,13 @@ export class TicketLabelProvider implements ILabelProvider<Ticket> {
             }
 
         } else {
-            returnString = 'Ticket';
+            const ticketLabel = await TranslationService.translate('Translatable#Ticket');
+            returnString = ticketLabel;
         }
         return returnString;
     }
 
-    public getObjectAdditionalText(ticket: Ticket): string {
+    public getObjectAdditionalText(ticket: Ticket, translatable: boolean = true): string {
         return null;
     }
 
@@ -356,12 +376,18 @@ export class TicketLabelProvider implements ILabelProvider<Ticket> {
         return 'kix-icon-ticket';
     }
 
-    public getObjectTooltip(ticket: Ticket): string {
+    public getObjectTooltip(ticket: Ticket, translatable: boolean = true): string {
         return ticket.Title;
     }
 
-    public getObjectName(plural: boolean = false): string {
-        return plural ? "Tickets" : "Ticket";
+    public async getObjectName(plural: boolean = false, translatable: boolean = true): Promise<string> {
+        if (plural) {
+            const ticketsLabel = translatable ? await TranslationService.translate('Translatable#Tickets') : 'Tickets';
+            return ticketsLabel;
+        }
+
+        const ticketLabel = translatable ? await TranslationService.translate('Translatable#Ticket') : 'Ticket';
+        return ticketLabel;
     }
 
     public async getIcons(
@@ -403,7 +429,7 @@ export class TicketLabelProvider implements ILabelProvider<Ticket> {
                 break;
             case TicketProperty.WATCHERS:
                 if (ticket && ticket.Watchers) {
-                    const objectData = ContextService.getInstance().getObjectData();
+                    const objectData = ObjectDataService.getInstance().getObjectData();
                     const user = objectData.currentUser;
                     if (ticket.Watchers.some((w) => w.UserID === user.UserID)) {
                         icons.push('kix-icon-eye');

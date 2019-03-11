@@ -1,6 +1,5 @@
-import { KIXObject } from "../../../../core/model";
-import { BulkManager } from "../../../../core/browser/bulk";
-import { ITable } from "../../../../core/browser";
+import { BulkManager } from '../../../../core/browser/bulk';
+import { ITable } from '../../../../core/browser';
 
 export class ComponentState {
 
@@ -8,7 +7,7 @@ export class ComponentState {
         public objectCount: number = 0,
         public table: ITable = null,
         public bulkManager: BulkManager = null,
-        public tableTitle: string = 'Ausgewählte Objekte',
+        public tableTitle: string = '',
         public canRun: boolean = false,
         public run: boolean = false
     ) { }

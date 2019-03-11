@@ -1,7 +1,6 @@
-import { DialogService } from '../../../../core/browser/components';
 import { ComponentState } from './ComponentState';
-import { IImageDialogListener } from '../../../../core/browser';
 import { DisplayImageDescription } from '../../../../core/browser/components/DisplayImageDescription';
+import { IImageDialogListener, DialogService } from '../../../../core/browser/components/dialog';
 
 export class Component implements IImageDialogListener {
 

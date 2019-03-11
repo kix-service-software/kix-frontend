@@ -51,10 +51,10 @@ class Component extends FormInputComponent<string, ComponentState> {
 
     public getAutoCompleteOption(): string {
         if (this.state.inputType === InputFieldTypes.PASSWORD) {
-            return "new-password";
+            return 'new-password';
         }
 
-        return "nope";
+        return 'nope';
     }
 
     public async focusLost(event: any): Promise<void> {

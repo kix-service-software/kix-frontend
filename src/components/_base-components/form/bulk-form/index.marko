@@ -1,6 +1,6 @@
 <div.bulk-form>
     <if(state.bulkManager)>
-        <widget instanceId="bulk-form-group" title="Zu ändernde Attribute" key="attributes">
+        <widget instanceId="bulk-form-group" title="attributes to change:" key="attributes">
             <@content>
                 <div.bulk-value>
                     <bulk-value-container bulkManager=input.bulkManager key="bulk-value-container"/>
@@ -8,8 +8,9 @@
             </@content>
         </widget>
         <div.dialog-button-container>
-            <button.form-blank-cancel-button type="button" on-click("reset") title="Daten zurücksetzen">
-                <span.kix-icon-delete/>Daten zurücksetzen
+            <button.form-blank-cancel-button type="button" on-click("reset") title="Reset Data">
+                <span.kix-icon-delete/>
+                <translation-string pattern="Translatable#Reset data"/>
             </button>
         </div>
         <if(state.table)>
@@ -21,15 +22,18 @@
             </div>
         </if>
         <div.dialog-button-container>
-            <button.cancel-button type="button" on-click("cancel") title="Abbrechen">
-                <span.kix-icon-close/>Abbrechen
+            <button.cancel-button type="button" on-click("cancel") title="Cancel">
+                <span.kix-icon-close/>
+                <translation-string pattern="Translatable#Cancel"/>
             </button>
             <div.submit-buttons>
-                <button.submit-button type="button" on-click("submit") title="Dialog schließen" disabled=!state.run>
-                    <span.kix-icon-check/>Dialog schließen
+                <button.submit-button type="button" on-click("submit") title="Close Dialog" disabled=!state.run>
+                    <span.kix-icon-check/>
+                    <translation-string pattern="Translatable#Close Dialog"/>
                 </button>
-                <button.submit-button type="button" on-click("run") title="Jetzt ausführen" disabled=!state.canRun>
-                    <span.kix-icon-edit/>Jetzt ausführen
+                <button.submit-button type="button" on-click("run") title="Execute now!" disabled=!state.canRun>
+                    <span.kix-icon-edit/>
+                    <translation-string pattern="Translatable#Execute now!"/>
                 </button>
             </div>
         </div>

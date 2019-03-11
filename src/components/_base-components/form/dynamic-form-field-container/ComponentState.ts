@@ -1,4 +1,4 @@
-import { DynamicFieldValue } from "./DynamicFormFieldValue";
+import { DynamicFieldValue } from './DynamicFormFieldValue';
 
 export class ComponentState {
 

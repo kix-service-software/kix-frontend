@@ -1,4 +1,4 @@
-import { FormField } from "../../../../core/model";
+import { FormField } from '../../../../core/model';
 
 export class ComponentState {
 

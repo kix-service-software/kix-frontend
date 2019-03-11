@@ -1,11 +1,19 @@
 <div.ci-category-explorer>
-    <widget instanceId=state.instanceId minimizable=false minimized=false explorer=true
+    <widget
+        instanceId=state.instanceId
+        minimizable=false
+        minimized=false
+        explorer=true
         title=(state.widgetConfiguration ? state.widgetConfiguration.title : "CMDB Klassen")>
         <@content>
-            <filter on-filter('filter') key="ci-class-explorer-filter" showFilterCount=false/>
-            <span.show-all class={active: !state.activeNode} on-click('showAll')>alle anzeigen</span>
+            <filter on-filter("filter") key="ci-class-explorer-filter" showFilterCount=false/>
+            <span.show-all class={
+                active: !state.activeNode
+            } on-click("showAll")>
+                <translation-string pattern="Translatable#Show all"/>
+            </span>
             <if(state.nodes)>
-                <tree tree=state.nodes activeNode=state.activeNode filterValue=state.filterValue on-nodeClicked('activeNodeChanged')/>
+                <tree tree=state.nodes activeNode=state.activeNode filterValue=state.filterValue on-nodeClicked("activeNodeChanged")/>
             </if>
         </@content>
     </widget>

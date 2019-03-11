@@ -24,9 +24,10 @@ import forceSSl = require('express-force-ssl');
 import { ReleaseInfoUtil } from './ReleaseInfoUtil';
 import { CreateClientRegistration } from './core/api';
 import {
-    ConfigurationService, LoggingService, ClientRegistrationService
+    ConfigurationService, LoggingService, ClientRegistrationService, TranslationService
 } from './core/services';
 import { PluginService, MarkoService, SocketCommunicationService } from './services';
+import { SystemInfo } from './core/model';
 
 export class Server {
 
@@ -42,9 +43,9 @@ export class Server {
     public application: express.Application;
     private serverConfig: IServerConfiguration;
 
-    private constructor() {
+    public async initServer(): Promise<void> {
         this.serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-        this.initializeApplication();
+        await this.initializeApplication();
     }
 
     private async initializeApplication(): Promise<void> {
@@ -69,19 +70,24 @@ export class Server {
         }
 
         await this.registerStaticContent();
-        await this.createReleaseInfoConfig();
-
-        await this.initHttpServer();
+        const systemInfo = await this.createClientRegistration();
+        await this.createReleaseInformation(systemInfo);
 
         // tslint:disable-next-line:no-unused-expression
         new ServerRouter(this.application);
     }
 
-    private async createReleaseInfoConfig(): Promise<void> {
-        const releaseInfo = await ReleaseInfoUtil.getReleaseInfo();
+    private async createClientRegistration(): Promise<SystemInfo> {
+        let poDefinitions = [];
+
+        const updateTranslations = ConfigurationService.getInstance().getServerConfiguration().UPDATE_TRANSLATIONS;
+        if (updateTranslations) {
+            LoggingService.getInstance().info('Update translations ...');
+            poDefinitions = await TranslationService.getInstance().getPODefinitions();
+        }
 
         const createClientRegistration = new CreateClientRegistration(
-            Date.now().toString(), this.serverConfig.FRONTEND_URL, '12345'
+            Date.now().toString(), this.serverConfig.FRONTEND_URL, '12345', poDefinitions
         );
 
         const systemInfo = await ClientRegistrationService.getInstance().createClientRegistration(
@@ -91,11 +97,16 @@ export class Server {
             return null;
         });
 
+        return systemInfo;
+    }
+
+    private async createReleaseInformation(systemInfo: SystemInfo): Promise<void> {
+        const releaseInfo = await ReleaseInfoUtil.getReleaseInfo();
         releaseInfo.backendSystemInfo = systemInfo;
         ConfigurationService.getInstance().saveModuleConfiguration('release-info', null, releaseInfo);
     }
 
-    private async initHttpServer(): Promise<void> {
+    public async initHttpServer(): Promise<void> {
         const httpPort = this.serverConfig.HTTP_PORT || 3000;
         const httpServer = http.createServer(this.application).listen(httpPort, () => {
             LoggingService.getInstance().info("KIX (HTTP) running on *:" + httpPort);

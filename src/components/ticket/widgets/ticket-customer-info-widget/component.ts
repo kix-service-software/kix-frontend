@@ -1,7 +1,7 @@
-import { ContextService } from "../../../../core/browser/context";
-import { KIXObjectType, Customer, Context, WidgetConfiguration } from "../../../../core/model";
+import { ContextService } from '../../../../core/browser/context';
+import { KIXObjectType, Customer, Context, WidgetConfiguration } from '../../../../core/model';
 import { ComponentState } from './ComponentState';
-import { IdService } from "../../../../core/browser";
+import { IdService } from '../../../../core/browser';
 
 class Component {
 

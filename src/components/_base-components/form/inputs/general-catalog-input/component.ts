@@ -1,9 +1,10 @@
 import {
     FormInputComponent, TreeNode, KIXObjectType, KIXObjectLoadingOptions,
     FilterCriteria, FilterDataType, FilterType, GeneralCatalogItem, ObjectIcon
-} from "../../../../../core/model";
-import { CompontentState } from "./CompontentState";
-import { SearchOperator, KIXObjectService } from "../../../../../core/browser";
+} from '../../../../../core/model';
+import { CompontentState } from './CompontentState';
+import { SearchOperator, KIXObjectService } from '../../../../../core/browser';
+import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
 class Component extends FormInputComponent<GeneralCatalogItem, CompontentState> {
 
@@ -40,7 +41,8 @@ class Component extends FormInputComponent<GeneralCatalogItem, CompontentState> 
 
             this.state.loading = false;
         } else {
-            this.state.error = 'No gc class configured!';
+            const error = await TranslationService.translate('Translatable#No general catalog class configured!');
+            this.state.error = error;
         }
         this.setCurrentNode();
     }

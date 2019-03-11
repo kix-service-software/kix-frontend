@@ -1,10 +1,10 @@
-import { ComponentState } from "./ComponentState";
+import { ComponentState } from './ComponentState';
 import {
     FormInputComponent, KIXObjectType,
     TreeNode, KIXObjectLoadingOptions, KIXObject, ObjectReferenceOptions
-} from "../../../../../core/model";
-import { FormService } from "../../../../../core/browser/form";
-import { LabelService, KIXObjectService } from "../../../../../core/browser";
+} from '../../../../../core/model';
+import { FormService } from '../../../../../core/browser/form';
+import { LabelService, KIXObjectService } from '../../../../../core/browser';
 
 class Component extends FormInputComponent<string | number, ComponentState> {
 

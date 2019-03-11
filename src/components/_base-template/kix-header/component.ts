@@ -1,9 +1,9 @@
-import { ClientStorageService } from "../../../core/browser/ClientStorageService";
-import { ContextService, OverlayService } from "../../../core/browser";
-import { ContextMode, ComponentContent, ToastContent, OverlayType, KIXObjectType } from "../../../core/model";
-import { RoutingConfiguration } from "../../../core/browser/router";
-import { ReleaseContext } from "../../../core/browser/release";
-import { PersonalSettingsDialogContext } from "../../../core/browser";
+import { ClientStorageService } from '../../../core/browser/ClientStorageService';
+import { ContextService, OverlayService } from '../../../core/browser';
+import { ContextMode, ComponentContent, ToastContent, OverlayType, KIXObjectType } from '../../../core/model';
+import { RoutingConfiguration } from '../../../core/browser/router';
+import { ReleaseContext } from '../../../core/browser/release';
+import { PersonalSettingsDialogContext } from '../../../core/browser';
 
 class KIXHeaderComponent {
 

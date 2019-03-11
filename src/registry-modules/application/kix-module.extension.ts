@@ -42,6 +42,7 @@ class KIXModuleExtionsion implements IKIXModuleExtension {
         ['label-list-cell-content', '_base-components/standard-table-NEW/table-body/table-row/table-cell-NEW/label-list-cell-content'],
         ['multiline-cell', '_base-components/standard-table-NEW/table-body/table-row/table-cell-NEW/multiline-cell'],
         ['checkbox-input', '_base-components/form/inputs/checkbox-input'],
+        ['translation-string', '_base-components/translation-string'],
         ['import-dialog', '_base-components/dialog/import-dialog']
     ];
 

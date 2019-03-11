@@ -1,4 +1,4 @@
-import { IdService } from "../../../core/browser";
+import { IdService } from '../../../core/browser';
 
 export class ComponentState {
 

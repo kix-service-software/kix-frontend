@@ -3,8 +3,8 @@ import { AbstractAction } from '../../../../model/components/action/AbstractActi
 export class ArticleBulkAction extends AbstractAction {
 
     public initAction(): void {
-        this.text = "Sammelaktionen";
-        this.icon = "kix-icon-arrow-collect";
+        this.text = 'Translatable#Bulk Action';
+        this.icon = 'kix-icon-arrow-collect';
     }
 
 }

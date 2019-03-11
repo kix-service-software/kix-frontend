@@ -1,22 +1,33 @@
-<div.notes-container class={"note-editor-active": state.editorActive}>
-    <widget instanceId=input.instanceId minimizable=false
+<div.notes-container class={
+    "note-editor-active": state.editorActive
+}>
+    <widget
+        instanceId=input.instanceId
+        minimizable=false
         title=(state.widgetConfiguration ? state.widgetConfiguration.title : "Notizen")
         icon=(state.widgetConfiguration && state.widgetConfiguration.icon ? state.widgetConfiguration.icon : "kix-icon-note")>
         <@content>
             <if(state.value || state.editorActive)>
-                <editor value=state.value on-valueChanged('valueChanged') simple=true readOnly=(!state.editorActive)
+                <editor
+                    value=state.value
+                    on-valueChanged("valueChanged")
+                    simple=true
+                    readOnly=!state.editorActive
                     keyValue="notes-sidebar"/>
             </if>
             <else>
-                <div.empty-notes>Platz für Notizen</div>
+                <div.empty-notes>
+                    <<translation-string pattern="Translatable#add notes here"/>
+                </div>
             </else>
             <if(state.editorActive)>
                 <div.notes-editor-buttons>
-                    <button.form-button.button-without-text title="Abbrechen" on-click('cancelEditor')>
+                    <button.form-button.button-without-text title="Cancel" on-click("cancelEditor")>
                         <span.kix-icon-close/>
                     </button>
-                    <button.form-button title="Übernehmen" on-click('submitEditor')>
-                        <span.kix-icon-check/>Übernehmen
+                    <button.form-button title="Submit" on-click("submitEditor")>
+                        <span.kix-icon-check/>
+                        <translation-string pattern="Translatable#Submit"/>
                     </button>
                 </div>
             </if>

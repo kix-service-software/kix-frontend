@@ -39,7 +39,8 @@ export class Cell implements ICell {
         if (object) {
             value = await LabelService.getInstance().getPropertyValueDisplayText(
                 object, this.tableValue.property,
-                this.tableValue.objectValue ? this.tableValue.objectValue.toString() : null
+                this.tableValue.objectValue ? this.tableValue.objectValue.toString() : null,
+                this.getColumnConfiguration().translatable
             );
         } else {
             const objectType = this.getRow().getTable().getObjectType();
@@ -47,7 +48,8 @@ export class Cell implements ICell {
             if (labelProvider) {
                 value = await labelProvider.getPropertyValueDisplayText(
                     this.tableValue.property,
-                    this.tableValue.objectValue ? this.tableValue.objectValue.toString() : null
+                    this.tableValue.objectValue ? this.tableValue.objectValue.toString() : null,
+                    this.getColumnConfiguration().translatable
                 );
             }
         }

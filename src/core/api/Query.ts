@@ -1,9 +1,9 @@
 export enum Query {
 
-    LIMIT = "limit",
+    LIMIT = 'limit',
 
-    ORDER = "order",
+    ORDER = 'order',
 
-    CHANGED_AFTER = "changedafter"
+    CHANGED_AFTER = 'changedafter'
 
 }

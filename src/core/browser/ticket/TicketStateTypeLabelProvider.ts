@@ -1,6 +1,7 @@
 import { ILabelProvider } from "../ILabelProvider";
 import { KIXObjectType, ObjectIcon, TicketStateProperty, DateTimeUtil, TicketStateType } from "../../model";
 import { ContextService } from "../context";
+import { TranslationService } from "../i18n/TranslationService";
 
 export class TicketStateTypeLabelProvider implements ILabelProvider<TicketStateType> {
 
@@ -10,18 +11,23 @@ export class TicketStateTypeLabelProvider implements ILabelProvider<TicketStateT
         return ticketStateType instanceof TicketStateType;
     }
 
-    public async getPropertyText(property: string, short?: boolean): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
             case TicketStateProperty.NAME:
-                displayValue = 'Name';
+                displayValue = 'Translatable#Name';
                 break;
             case TicketStateProperty.ID:
-                displayValue = 'Icon';
+                displayValue = 'Translatable#Icon';
                 break;
             default:
                 displayValue = property;
         }
+
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
+        }
+
         return displayValue;
     }
 
@@ -29,7 +35,9 @@ export class TicketStateTypeLabelProvider implements ILabelProvider<TicketStateT
         return;
     }
 
-    public getDisplayText(ticketStateType: TicketStateType, property: string): Promise<string> {
+    public async getDisplayText(
+        ticketStateType: TicketStateType, property: string, value?: string, translatable: boolean = true
+    ): Promise<string> {
         let displayValue = ticketStateType[property];
 
         switch (property) {
@@ -38,6 +46,11 @@ export class TicketStateTypeLabelProvider implements ILabelProvider<TicketStateT
                 break;
             default:
         }
+
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
+        }
+
         return displayValue;
     }
 
@@ -65,8 +78,12 @@ export class TicketStateTypeLabelProvider implements ILabelProvider<TicketStateT
         return null;
     }
 
-    public getObjectName(plural?: boolean): string {
-        return plural ? 'Statustypen' : 'Statustyp';
+    public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
+        let displayValue = plural ? 'State Type' : 'State Types';
+        if (translatable) {
+            displayValue = await TranslationService.translate(displayValue);
+        }
+        return displayValue;
     }
 
     public getObjectTooltip(ticketStateType: TicketStateType): string {

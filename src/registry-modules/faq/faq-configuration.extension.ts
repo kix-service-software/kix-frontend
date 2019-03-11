@@ -56,18 +56,18 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
         const existingLinkForm = configurationService.getModuleConfiguration(linkFormId, null);
         if (!existingLinkForm) {
             const fields: FormField[] = [];
-            fields.push(new FormField("Volltext", SearchProperty.FULLTEXT, null, false, "Suche in folgenden  Feldern der FAQ-Artikel:  FAQ#,  Titel, Symptom, Ursache, Lösung, Kommentar, Geändert von, Erstellt von, Schlüsselworte, Sprache, Gültigkeit"));
-            fields.push(new FormField("FAQ#", FAQArticleProperty.NUMBER, null, false, "Suche nach FAQ-Artikeln mit dieser Nummer oder Teilen der Nummer (mindestens 1 Zeichen)."));
-            fields.push(new FormField("Titel", FAQArticleProperty.TITLE, null, false, "Suche nach FAQ-Artikeln mit diesem Titel oder Teilen des Titels (mindestens 1 Zeichen)."));
+            fields.push(new FormField("Translatable#Full Text", SearchProperty.FULLTEXT, null, false, "Translatable#Searchable FAQ attributes: FAQ#, Title, Symptom, Cause, Solution, Comment, Changed by, Created by, Keywords, Language, Validity"));
+            fields.push(new FormField("Translatable#FAQ#", FAQArticleProperty.NUMBER, null, false, "Translatable#Search for FAQ articles with the same title or part of the same title (min. 1 character)."));
+            fields.push(new FormField('Translatable#Title', FAQArticleProperty.TITLE, null, false, "Translatable#Search for FAQ articles with the same number or part of the same number (min. 1 character)."));
             fields.push(new FormField(
-                "Kategorie", FAQArticleProperty.CATEGORY_ID, 'faq-category-input', false, "Suche nach FAQ-Artikeln innerhalb der gewählten Kategorie.")
+                "Category", FAQArticleProperty.CATEGORY_ID, 'faq-category-input', false, "Translatable#Search for FAQ articles within the choosen category.")
             );
-            fields.push(new FormField("Gültigkeit", FAQArticleProperty.VALID_ID, 'valid-input', false, "Suche nach FAQ-Artikeln mit der gewählten Gültigkeit."));
+            fields.push(new FormField('validity', FAQArticleProperty.VALID_ID, 'valid-input', false, "Translatable#Search for FAQ articles within the choosen validity."));
 
-            const attributeGroup = new FormGroup('FAQ-Attribute', fields);
+            const attributeGroup = new FormGroup('Translatable#FAQ Attributes', fields);
 
             const form = new Form(
-                linkFormId, 'Verknüpfen mit FAQ', [attributeGroup],
+                linkFormId, 'Translatable#Link FAQ with', [attributeGroup],
                 KIXObjectType.FAQ_ARTICLE, false, FormContext.LINK, null, true
             );
             await configurationService.saveModuleConfiguration(form.id, null, form);

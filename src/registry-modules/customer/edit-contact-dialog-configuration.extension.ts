@@ -71,7 +71,7 @@ export class Extension implements IConfigurationExtension {
 
             groups = [...groups, lastGroup].filter((g) => g.formFields.length);
             const form = new Form(
-                formId, 'Ansprechpartner Bearbeiten', groups, KIXObjectType.CONTACT, true, FormContext.EDIT
+                formId, 'Edit Contact', groups, KIXObjectType.CONTACT, true, FormContext.EDIT
             );
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
@@ -83,49 +83,49 @@ export class Extension implements IConfigurationExtension {
         let hint = label;
         switch (attribute) {
             case ContactProperty.USER_FIRST_NAME:
-                hint = 'Geben Sie den Vornamen des Ansprechpartners ein.';
+                hint = 'Insert the contact‘s first name.';
                 break;
             case ContactProperty.USER_LAST_NAME:
-                hint = 'Geben Sie den Nachname des Ansprechpartners ein.';
+                hint = 'Insert the contact‘s last name.';
                 break;
             case ContactProperty.USER_LOGIN:
-                hint = 'Geben Sie den Login (Nutzername) des Ansprechpartners ein.';
+                hint = 'Insert the contact login (username).';
                 break;
             case ContactProperty.USER_PHONE:
-                hint = 'Geben Sie eine Telefonnummer für den Ansprechpartner ein.';
+                hint = 'Insert the phone number for the contact.';
                 break;
             case ContactProperty.USER_FAX:
-                hint = 'Geben Sie eine Faxnummer für den Ansprechpartner ein.';
+                hint = 'Insert the fax number for the contact.';
                 break;
             case ContactProperty.USER_EMAIL:
-                hint = 'Geben Sie eine gültige E-Mail-Adresse für den Ansprechpartner ein.';
+                hint = 'Insert the e-mail address for the contact.';
                 break;
             case ContactProperty.USER_STREET:
-                hint = 'Geben Sie die Straße der Ansprechpartner-Adresse ein.';
+                hint = 'Insert the street for the contact address.';
                 break;
             case ContactProperty.USER_ZIP:
-                hint = 'Geben Sie die Postleitzahl (PLZ) der Ansprechpartner-Adresse ein.';
+                hint = 'Insert the postcode for the cotact address.';
                 break;
             case ContactProperty.USER_CITY:
-                hint = 'Geben Sie den Ort der Ansprechpartner-Adresse ein.';
+                hint = 'Insert a city for the contact address.';
                 break;
             case ContactProperty.USER_TITLE:
-                hint = 'Geben Sie einen Titel für den Ansprechpartner ein.';
+                hint = 'Insert a title for the contact.';
                 break;
             case ContactProperty.USER_CUSTOMER_ID:
-                hint = 'Wählen Sie den Kunden, für welchen der Ansprechpartner zugeordnet sein soll. Bei der Eingabe von mindestens 3 Zeichen wird Ihnen eine Vorschlagsliste mit bereits im System angelegten Kunden angezeigt. „***“ zeigt alle Einträge an. (Suchfelder: „Kunden ID“ und „Kundenname“)';
+                hint = 'Select a customer to which this contact is assigned to. Enter at least 3 characters in order to get a suggestion list of available customers (searchin cusgtomer id and customer names). You may use „*“ as wildcard.';
                 break;
             case ContactProperty.USER_MOBILE:
-                hint = 'Geben Sie eine Mobilfunknummer für den Ansprechpartner ein.';
+                hint = 'Insert the mobile phone number for the contact.';
                 break;
             case ContactProperty.USER_COUNTRY:
-                hint = 'Geben Sie ein Land für die Ansprechpartner-Adresse ein.';
+                hint = 'Insert the country for the customer address.';
                 break;
             case ContactProperty.USER_COMMENT:
-                hint = 'Geben Sie zusätzliche Informationen zum Kunden an.';
+                hint = 'Insert additional information for this contact.';
                 break;
             case ContactProperty.VALID_ID:
-                hint = 'Legen Sie fest, ob der Ansprechpartner-Eintrag „gültig“, „temporär ungültig“ oder „ungültig“ ist.';
+                hint = 'Set the contact as „valid“, „invalid (temporarily)“, or „invalid“.';
                 break;
             default:
         }

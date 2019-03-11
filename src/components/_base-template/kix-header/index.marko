@@ -4,7 +4,7 @@
         <!-- Neues Objekt -->
         <button.special-button type="button" on-click("openDialog")>
             <span.kix-icon-plus-blank/>
-            Neu
+            <translation-string pattern="Translatable#New"/>
         </button>
         <div.header-separator/>
         <!-- Lesezeichen & Suchvorlagen -->
@@ -19,26 +19,26 @@
             <div.toolbar-group>
                 <div>
                     <div.action-icon>
-                        <span.kix-icon-gear.as-button title="Persönliche Einstellungen" on-click('showPersonalSettings')/>
+                        <span.kix-icon-gear.as-button title="Personal Settings" on-click("showPersonalSettings")/>
                     </div>
                 </div>
                 <div>
                     <div.action-icon>
-                        <span.kix-icon-exchange.as-button title="Wechsel Portalfrontend" on-click('showTemporaryComingSoon')/>
+                        <span.kix-icon-exchange.as-button title="Switch to customer portal." on-click("showTemporaryComingSoon")/>
                     </div>
                 </div>
                 <link-target routingConfiguration=component.getReleaseRoutingConfig()>
                     <@content>
                         <div>
                             <div.action-icon>
-                                <span.kix-icon-query.as-button title="Hilfe"/>
+                                <span.kix-icon-query.as-button title="Help"/>
                             </div>
                         </div>
                     </@content>
                 </link-target>
                 <div>
                     <div.action-icon>
-                        <a href="/auth?logout" on-click('logout')>
+                        <a href="/auth?logout" on-click("logout")>
                             <span.kix-icon-logout title="Logout"/>
                         </a>
                     </div>

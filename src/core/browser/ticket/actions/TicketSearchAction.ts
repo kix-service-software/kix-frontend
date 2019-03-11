@@ -5,8 +5,8 @@ import { KIXObjectType, ContextMode } from '../../../model';
 export class TicketSearchAction extends AbstractAction {
 
     public initAction(): void {
-        this.text = "Suche";
-        this.icon = "kix-icon-search";
+        this.text = 'Translatable#Search';
+        this.icon = 'kix-icon-search';
     }
 
     public run(): void {

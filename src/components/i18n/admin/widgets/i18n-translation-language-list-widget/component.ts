@@ -1,15 +1,15 @@
-import { ComponentState } from "./ComponentState";
-import { TranslationDetailsContext } from "../../../../../core/browser/i18n/admin/context";
-import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
+import { ComponentState } from './ComponentState';
+import { TranslationDetailsContext } from '../../../../../core/browser/i18n/admin/context';
+import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 import {
     KIXObjectPropertyFilter, TableFilterCriteria, KIXObjectType, TranslationLanguageProperty, Translation
-} from "../../../../../core/model";
+} from '../../../../../core/model';
 import {
     ContextService, ServiceRegistry, WidgetService, SearchOperator, ActionFactory,
     TableFactoryService, AbstractMarkoComponent, TableEvent, TableEventData
-} from "../../../../../core/browser";
-import { IEventSubscriber, EventService } from "../../../../../core/browser/event";
-import { TranslationLabelProvider } from "../../../../../core/browser/i18n";
+} from '../../../../../core/browser';
+import { IEventSubscriber, EventService } from '../../../../../core/browser/event';
+import { TranslationLabelProvider } from '../../../../../core/browser/i18n';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -61,7 +61,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private prepareTitle(): void {
-        const title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : "";
+        const title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : '';
         const count = this.state.table ? this.state.table.getRows(true).length : 0;
         this.state.title = `${title} (${count})`;
     }

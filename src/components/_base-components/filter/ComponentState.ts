@@ -1,4 +1,4 @@
-import { KIXObjectPropertyFilter, TreeNode, ObjectIcon } from "../../../core/model";
+import { KIXObjectPropertyFilter, TreeNode, ObjectIcon } from '../../../core/model';
 
 export class ComponentState {
 

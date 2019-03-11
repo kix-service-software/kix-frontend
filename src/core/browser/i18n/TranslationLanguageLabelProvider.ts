@@ -1,5 +1,6 @@
 import { ILabelProvider } from "../ILabelProvider";
 import { TranslationLanguage, KIXObjectType, ObjectIcon, TranslationLanguageProperty } from "../../model";
+import { TranslationService } from "./TranslationService";
 
 export class TranslationLanguageLabelProvider implements ILabelProvider<TranslationLanguage> {
 
@@ -9,18 +10,23 @@ export class TranslationLanguageLabelProvider implements ILabelProvider<Translat
         return language instanceof TranslationLanguage;
     }
 
-    public async getPropertyText(property: string, short?: boolean): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
             case TranslationLanguageProperty.LANGUAGE:
-                displayValue = 'Sprache';
+                displayValue = 'Translatable#Language';
                 break;
             case TranslationLanguageProperty.VALUE:
-                displayValue = 'Übersetzung';
+                displayValue = 'Translatable#Translation';
                 break;
             default:
                 displayValue = property;
         }
+
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
+        }
+
         return displayValue;
     }
 
@@ -28,7 +34,9 @@ export class TranslationLanguageLabelProvider implements ILabelProvider<Translat
         return;
     }
 
-    public getDisplayText(language: TranslationLanguage, property: string): Promise<string> {
+    public async getDisplayText(
+        language: TranslationLanguage, property: string, value?: string, translatable: boolean = true
+    ): Promise<string> {
         let displayValue = language[property];
 
         switch (property) {
@@ -39,6 +47,10 @@ export class TranslationLanguageLabelProvider implements ILabelProvider<Translat
                 displayValue = language.Value;
                 break;
             default:
+        }
+
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
         }
 
         return displayValue;
@@ -68,8 +80,12 @@ export class TranslationLanguageLabelProvider implements ILabelProvider<Translat
         return new ObjectIcon('TranslationLanguage', language.ObjectId);
     }
 
-    public getObjectName(plural?: boolean): string {
-        return plural ? 'Übersetzung' : 'Übersetzungen';
+    public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
+        let displayValue = plural ? 'Translations' : 'Translation';
+        if (translatable) {
+            displayValue = await TranslationService.translate(displayValue);
+        }
+        return displayValue;
     }
 
     public getObjectTooltip(language: TranslationLanguage): string {

@@ -1,8 +1,7 @@
 import {
-    AbstractMarkoComponent, ContextService, DialogService, ActionFactory, KIXObjectSearchService,
+    AbstractMarkoComponent, ContextService, ActionFactory, KIXObjectSearchService,
     LabelService, FactoryService, ServiceRegistry, TableFactoryService
 } from '../../../core/browser';
-import { BulkAction } from '../../../core/browser/actions';
 import { ComponentState } from './ComponentState';
 import {
     ContextDescriptor, KIXObjectType, ContextMode, ContextType,
@@ -25,6 +24,7 @@ import {
     CompareConfigItemVersionTableFactory,
     ConfigItemVersionCompareLabelProvider
 } from '../../../core/browser/cmdb';
+import { DialogService } from '../../../core/browser/components/dialog';
 
 class Component extends AbstractMarkoComponent {
 
@@ -140,7 +140,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'new-config-item-dialog',
             new WidgetConfiguration(
-                'new-config-item-dialog', 'Neues Config Item', [], {}, false, false, null, 'kix-icon-new-ci'
+                'new-config-item-dialog', 'Translatable#New Config Item', [], {}, false, false, null, 'kix-icon-new-ci'
             ),
             KIXObjectType.CONFIG_ITEM,
             ContextMode.CREATE
@@ -149,7 +149,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'edit-config-item-dialog',
             new WidgetConfiguration(
-                'edit-config-item-dialog', 'Config Item bearbeiten', [], {}, false, false, null, 'kix-icon-edit'
+                'edit-config-item-dialog', 'Translatable#Edit Config Item', [], {}, false, false, null, 'kix-icon-edit'
             ),
             KIXObjectType.CONFIG_ITEM,
             ContextMode.EDIT
@@ -158,7 +158,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'search-config-item-dialog',
             new WidgetConfiguration(
-                'search-config-item-dialog', 'Config Item Suche', [], {},
+                'search-config-item-dialog', 'Translatable#Config Item Search', [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-search-ci'
             ),
             KIXObjectType.CONFIG_ITEM,
@@ -168,7 +168,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'compare-config-item-version-dialog',
             new WidgetConfiguration(
-                'compare-config-item-version-dialog', 'Versionen vergleichen', [], {},
+                'compare-config-item-version-dialog', 'Translatable#Compare Versions', [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-comparison-version'
             ),
             KIXObjectType.CONFIG_ITEM_VERSION_COMPARE,
@@ -180,7 +180,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'new-config-item-class-dialog',
             new WidgetConfiguration(
-                'new-config-item-class-dialog', 'CMDB Klasse hinzufügen', [], {}, false, false, null,
+                'new-config-item-class-dialog', 'Translatable#Add CMDB Class', [], {}, false, false, null,
                 'kix-icon-new-gear'
             ),
             KIXObjectType.CONFIG_ITEM_CLASS,
@@ -190,7 +190,8 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'edit-config-item-class-dialog',
             new WidgetConfiguration(
-                'edit-config-item-class-dialog', 'CMDB Klasse bearbeiten', [], {}, false, false, null, 'kix-icon-gear'
+                'edit-config-item-class-dialog', 'Translatable#Edit CMDB Class', [], {},
+                false, false, null, 'kix-icon-gear'
             ),
             KIXObjectType.CONFIG_ITEM_CLASS,
             ContextMode.EDIT_ADMIN

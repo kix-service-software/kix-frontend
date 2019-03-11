@@ -12,6 +12,7 @@ import { SearchOperator } from "../SearchOperator";
 import { ObjectDefinitionSearchAttribute } from "../../model/kix/object-definition";
 import { BrowserUtil } from "../BrowserUtil";
 import { TranslationService } from "../i18n/TranslationService";
+import { ObjectDataService } from "../ObjectDataService";
 
 export class FAQService extends KIXObjectService {
 
@@ -73,7 +74,7 @@ export class FAQService extends KIXObjectService {
     public prepareFullTextFilter(searchValue: string): FilterCriteria[] {
         const filter: FilterCriteria[] = [];
 
-        const objectData = ContextService.getInstance().getObjectData();
+        const objectData = ObjectDataService.getInstance().getObjectData();
         if (objectData) {
             let faqSearchAttributes: ObjectDefinitionSearchAttribute[];
             const faqDefinition = objectData.objectDefinitions.find((od) => od.Object === KIXObjectType.FAQ_ARTICLE);
@@ -100,7 +101,7 @@ export class FAQService extends KIXObjectService {
     public async getTreeNodes(property: string): Promise<TreeNode[]> {
         let values: TreeNode[] = [];
 
-        const objectData = ContextService.getInstance().getObjectData();
+        const objectData = ObjectDataService.getInstance().getObjectData();
         if (objectData) {
             // TODO: im Moment nur für Suche, auch für Create umsetzen, ggf. mit Varible (isSearch) abfragen?
             let faqSearchAttributes: ObjectDefinitionSearchAttribute[];

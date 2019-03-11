@@ -1,5 +1,5 @@
-import { KIXObjectType, KIXObject } from "../../../../core/model";
-import { ITable } from "../../../../core/browser";
+import { KIXObjectType, KIXObject } from '../../../../core/model';
+import { ITable } from '../../../../core/browser';
 
 export class ComponentState {
 

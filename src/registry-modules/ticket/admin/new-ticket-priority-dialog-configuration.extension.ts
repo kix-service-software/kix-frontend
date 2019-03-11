@@ -31,25 +31,27 @@ export class Extension implements IConfigurationExtension {
         if (!existing) {
             const fields: FormField[] = [];
             fields.push(new FormField(
-                "Name", TicketPriorityProperty.NAME, null, true, "Geben Sie einen Namen für die Priorität ein."
+                'Translatable#Name', TicketPriorityProperty.NAME, null, true,
+                'Translatable#Insert a priority name.'
             ));
             fields.push(new FormField(
-                "Icon", 'ICON', 'icon-input', false,
-                "Wählen Sie ein Icon für die Priorität aus."
+                'Translatable#Icon', 'ICON', 'icon-input', false,
+                'Translatable#Select an icon for this priority.'
             ));
             fields.push(new FormField(
-                "Kommentar", TicketPriorityProperty.COMMENT, 'text-area-input', false,
-                "Geben Sie einen Kommentar für die Priorität ein.", null, null, null, null, null, null, null, 250
+                'Translatable#Comment', TicketPriorityProperty.COMMENT, 'text-area-input', false,
+                'Translatable#Insert a comment for the priority.',
+                null, null, null, null, null, null, null, 250
             ));
             fields.push(new FormField(
-                "Gültigkeit", TicketPriorityProperty.VALID_ID, 'valid-input', true,
-                "Legen Sie fest, ob die Priorität „gültig“, „ungültig“ oder „temporär ungültig“ ist.",
+                'Translatable#validity', TicketPriorityProperty.VALID_ID, 'valid-input', true,
+                'Translatable#Set the priority as „valid“, „invalid (temporarily)“, or „invalid“.',
                 null, new FormFieldValue(1)
             ));
 
-            const group = new FormGroup('Prioritätdaten', fields);
+            const group = new FormGroup('Translatable#Priority Data', fields);
 
-            const form = new Form(formId, 'Priorität hinzufügen', [group], KIXObjectType.TICKET_PRIORITY);
+            const form = new Form(formId, 'Translatable#Create Priority', [group], KIXObjectType.TICKET_PRIORITY);
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
         configurationService.registerForm([FormContext.NEW], KIXObjectType.TICKET_PRIORITY, formId);

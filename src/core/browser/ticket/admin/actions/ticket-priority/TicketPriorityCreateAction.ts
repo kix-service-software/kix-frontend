@@ -1,11 +1,11 @@
-import { AbstractAction, KIXObjectType, ContextMode } from "../../../../../model";
-import { ContextService } from "../../../../context";
+import { AbstractAction, KIXObjectType, ContextMode } from '../../../../../model';
+import { ContextService } from '../../../../context';
 
 export class TicketPriorityCreateAction extends AbstractAction {
 
     public initAction(): void {
-        this.text = "Neue Priorität";
-        this.icon = "kix-icon-new-gear";
+        this.text = 'Translatable#New Priority';
+        this.icon = 'kix-icon-new-gear';
     }
 
     public run(): void {

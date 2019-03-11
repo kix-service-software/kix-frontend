@@ -4,8 +4,8 @@ import {
     KIXObjectLoadingOptions, FilterDataType, FilterType
 } from "../../model";
 import { SearchOperator } from "../SearchOperator";
-import { ContextService } from "../context";
 import { SearchProperty } from "../SearchProperty";
+import { ObjectDataService } from "../ObjectDataService";
 
 export class CustomerSearchDefinition extends SearchDefinition {
 
@@ -14,7 +14,7 @@ export class CustomerSearchDefinition extends SearchDefinition {
     }
 
     public async getProperties(): Promise<Array<[string, string]>> {
-        const objectData = ContextService.getInstance().getObjectData();
+        const objectData = ObjectDataService.getInstance().getObjectData();
         if (objectData) {
             const result: Array<[string, string]> = [[SearchProperty.FULLTEXT, null]];
             objectData.customerAttributes.forEach((ca) => result.push([ca[0], null]));
@@ -71,7 +71,7 @@ export class CustomerSearchDefinition extends SearchDefinition {
     }
 
     public async getSearchResultCategories(): Promise<SearchResultCategory> {
-        const contactCategory = new SearchResultCategory('Ansprechpartner', KIXObjectType.CONTACT);
+        const contactCategory = new SearchResultCategory('Contacts', KIXObjectType.CONTACT);
         const ticketCategory = new SearchResultCategory('Tickets', KIXObjectType.TICKET);
 
         return new SearchResultCategory(
@@ -90,7 +90,7 @@ export class CustomerSearchDefinition extends SearchDefinition {
             const value = criteria[fulltextCriteriaIndex].value;
             criteria.splice(fulltextCriteriaIndex, 1);
 
-            const objectData = ContextService.getInstance().getObjectData();
+            const objectData = ObjectDataService.getInstance().getObjectData();
             if (objectData) {
                 objectData.customerAttributes.forEach(
                     (ca) => criteria.push(new FilterCriteria(

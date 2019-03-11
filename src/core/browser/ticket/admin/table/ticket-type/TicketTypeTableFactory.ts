@@ -29,7 +29,10 @@ export class TicketTypeTableFactory implements ITableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new DefaultColumnConfiguration(TicketTypeProperty.NAME, true, false, true, true, 200, true, true),
+            new DefaultColumnConfiguration(
+                TicketTypeProperty.NAME, true, false, true, true, 200, true, true, false,
+                DataType.STRING, true, null, null, false
+            ),
             new DefaultColumnConfiguration(TicketTypeProperty.ID, false, true, false, true, 41, false),
             new DefaultColumnConfiguration(TicketTypeProperty.VALID_ID, true, false, true, true, 150, true, true, true),
             new DefaultColumnConfiguration(

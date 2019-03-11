@@ -1,5 +1,5 @@
 <div.search-form on-keydown("keyDown")>
-    <widget instanceId="search-form-group" title="Attribute" key="attributes">
+    <widget instanceId="search-form-group" title="Attributes" key="attributes">
         <@content>
             <div.search-criteria>
                 <search-value-container formId=input.formId objectType=input.objectType/>
@@ -7,27 +7,33 @@
         </@content>
     </widget>
     <div.dialog-button-container>
-        <button.form-blank-cancel-button type="button" on-click("reset") title="Daten zurücksetzen">
-            <span.kix-icon-delete/>Daten zurücksetzen
+        <button.form-blank-cancel-button type="button" on-click("reset") title="Reset data">
+            <span.kix-icon-delete/>
+            <translation-string pattern="Translatable#Reset data"/>
         </button>
-        <button.form-blank-submit-button type="button" on-click("search") title="Suche starten" disabled=!state.canSearch>
-            <span.kix-icon-search/>Suche starten
+        <button.form-blank-submit-button type="button" on-click("search") title="Start search" disabled=!state.canSearch>
+            <span.kix-icon-search/>
+            <translation-string pattern="Translatable#Start search" placeholders=[]/>
         </button>
     </div>
     <if(state.table)>
         <div.result-table>
             <div.result-table-head>
-                <span>Treffervorschau (${state.resultCount})</span>
+                <span>
+                    <translation-string pattern="Translatable#Preview ({0})" placeholders=[state.resultCount]/>
+                </span>
             </div>
             <standard-table-NEW table=state.table/>
         </div>
     </if>
     <div.dialog-button-container>
-        <button.cancel-button type="button" on-click("cancel") title="Abbrechen">
-            <span.kix-icon-close/>Abbrechen
+        <button.cancel-button type="button" on-click("cancel") title="Cancel">
+            <span.kix-icon-close/>
+            <translation-string pattern="Translatable#Cancel"/>
         </button>
-        <button.submit-button type="button" on-click("submit") title="Detailierte Suchergebnisse" disabled=!state.resultCount>
-            <span.kix-icon-check/>Detailierte Suchergebnisse
+        <button.submit-button type="button" on-click("submit") title="Detailed search results" disabled=!state.resultCount>
+            <span.kix-icon-check/>
+            <translation-string pattern="Translatable#Detailed search results"/>
         </button>
     </div>
 </div>

@@ -4,6 +4,7 @@ import {
 } from '../../../core/model';
 import { BrowserUtil, KIXObjectService } from '../../../core/browser';
 import { PreparedData } from '../../../core/model/kix/cmdb/PreparedData';
+import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 
 class Component {
 
@@ -24,7 +25,7 @@ class Component {
 
     public async onMount(): Promise<void> {
         if (this.version && this.version.PreparedData) {
-            this.state.groups = this.prepareLabelValueGroups();
+            this.state.groups = await this.prepareLabelValueGroups();
         }
     }
 
@@ -40,25 +41,26 @@ class Component {
         }
     }
 
-    private prepareLabelValueGroups(data: PreparedData[] = this.version.PreparedData): LabelValueGroup[] {
+    private async prepareLabelValueGroups(
+        data: PreparedData[] = this.version.PreparedData
+    ): Promise<LabelValueGroup[]> {
         const groups = [];
-        data.forEach((attr) => {
-            let value = attr.DisplayValue;
+        for (const attr of data) {
+            let value = await TranslationService.translate(attr.DisplayValue);
             if (attr.Type === 'Date') {
                 value = DateTimeUtil.getLocalDateString(value);
             } else if (attr.Type === 'Attachment' && attr.Value) {
                 value = attr.Value.Filename;
             }
 
+            const subAttributes = (attr.Sub && attr.Sub.length ? await this.prepareLabelValueGroups(attr.Sub) : null);
+
+            const label = await TranslationService.translate(attr.Label);
             groups.push(new LabelValueGroup(
-                attr.Label,
-                value,
-                null,
-                null,
-                (attr.Sub && attr.Sub.length ? this.prepareLabelValueGroups(attr.Sub) : null),
+                label, value, null, null, subAttributes,
                 (attr.Type === 'Attachment' ? new ConfigItemAttachment(attr.Value) : null)
             ));
-        });
+        }
         return groups;
     }
 

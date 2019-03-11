@@ -47,8 +47,8 @@ class Component {
             scrollInformationChanged: () => { return; }
         });
 
-        window.addEventListener("resize", this.createChart.bind(this), false);
-        window.addEventListener("beforeprint", this.beforePrint.bind(this));
+        window.addEventListener('resize', this.createChart.bind(this), false);
+        window.addEventListener('beforeprint', this.beforePrint.bind(this));
 
         this.createChart();
     }
@@ -87,8 +87,8 @@ class Component {
             this.chart.destroy();
             this.chart = null;
         }
-        window.removeEventListener("resize", this.createChart.bind(this), false);
-        window.removeEventListener("beforeprint", this.beforePrint.bind(this));
+        window.removeEventListener('resize', this.createChart.bind(this), false);
+        window.removeEventListener('beforeprint', this.beforePrint.bind(this));
     }
 
 }

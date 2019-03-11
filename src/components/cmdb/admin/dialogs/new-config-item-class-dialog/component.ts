@@ -1,8 +1,8 @@
-import { ComponentState } from "./ComponentState";
-import { KIXObjectType, ContextMode, ConfigItemClassProperty } from "../../../../../core/model";
-import { RoutingConfiguration } from "../../../../../core/browser/router";
-import { ConfigItemClassDetailsContext } from "../../../../../core/browser/cmdb";
-import { AbstractNewDialog } from "../../../../../core/browser";
+import { ComponentState } from './ComponentState';
+import { KIXObjectType, ContextMode, ConfigItemClassProperty } from '../../../../../core/model';
+import { RoutingConfiguration } from '../../../../../core/browser/router';
+import { ConfigItemClassDetailsContext } from '../../../../../core/browser/cmdb';
+import { AbstractNewDialog } from '../../../../../core/browser/components/dialog';
 
 class Component extends AbstractNewDialog {
 

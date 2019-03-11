@@ -1,9 +1,10 @@
 import { ComponentState } from './ComponentState';
-import {
-    DialogService, IMainDialogListener, ContextService, DialogEvents, DialogEventData
-} from '../../../../core/browser';
+import { ContextService } from '../../../../core/browser';
 import { ConfiguredDialogWidget, ObjectIcon, ContextType } from '../../../../core/model';
 import { EventService } from '../../../../core/browser/event';
+import {
+    IMainDialogListener, DialogService, DialogEvents, DialogEventData
+} from '../../../../core/browser/components/dialog';
 
 export class MainDialogComponent implements IMainDialogListener {
 

@@ -1,17 +1,981 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-06 08:21+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
-"Language: de\n"
+"POT-Creation-Date: 2019-02-14 13:12+0200\n"
+"PO-Revision-Date: 2019-02-28 08:55+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 2.3.1\n"
+"X-Generator: Poedit 1.8.7.1\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: de\n"
 
-#. extracted from csv
-msgid "(aktuelle Version)"
+msgid "(Current version)"
+msgstr "(aktuelle Version)"
+
+msgid ""
+"<b>-- KIX Professional Feature--</b><p>To use the text modules available in "
+"your system, enter „::“ (colon colon). Then choose the text modules you want "
+"to use in the context menu. You can narrow down the key word selection "
+"manually by entering more text.</p>"
 msgstr ""
+"<b>-- KIX Professional Feature --</b><p>Um die in Ihrem System verfügbaren "
+"Textbausteine zu nutzen, geben Sie \"::\" (Doppelpunkt Doppelpunkt) ein. "
+"Wählen Sie anschließend im Kontextmenü den gewünschten Textbaustein aus. Sie "
+"können die Auswahl anhand der Schlüsselworte manuell einschränken, in dem "
+"sie weiteren Text eingeben.</p>"
+
+msgid "{0} File(s) added"
+msgstr "{0} Datei(en) angehangen"
+
+msgid "Logged in"
+msgstr "Angemeldet"
+
+msgid "A product by c.a.p.e. IT GmbH"
+msgstr "Ein Produkt der c.a.p.e. IT GmbH"
+
+msgid "{0} Link created"
+msgstr "{0} Verknüpfungen angelegt"
+
+msgid "(today)"
+msgstr "(heute)"
+
+msgid "1 very low"
+msgstr "1 sehr niedrig"
+
+msgid "2 low"
+msgstr "2 niedrig"
+
+msgid "3 normal"
+msgstr "3 normal"
+
+msgid "4 high"
+msgstr "4 hoch"
+
+msgid "5 very high"
+msgstr "5 sehr hoch"
+
+msgid "Cancel"
+msgstr "Abbrechen"
+
+msgid "Action"
+msgstr "Aktion"
+
+msgid "Update time"
+msgstr "Aktualisierungszeit"
+
+msgid "Current version"
+msgstr "Aktuelle Version"
+
+msgid "Current deployment state"
+msgstr "Aktueller Verwendungsstatus"
+
+msgid "Current incident state"
+msgstr "Aktueller Vorfallstatus"
+
+msgid "Show all"
+msgstr "Alle anzeigen"
+
+msgid "Link Objects"
+msgid "Objekte verknüpfen"
+
+msgid "All Objects"
+msgstr "Alle Objekte"
+
+msgid "Age"
+msgstr "Alter"
+
+msgid "To"
+msgstr "An"
+
+msgid "Changes saved."
+msgstr "Änderungen wurden gespeichert."
+
+msgid "Login"
+msgstr "Anmelden"
+
+msgid "Contact"
+msgstr "Kontakt"
+
+msgid "Edit Contact"
+msgstr "Ansprechparnter Bearbeiten"
+
+msgid "Number of Config Items"
+msgstr "Anzahl Config Items"
+
+msgid "Number of Config Items in critical incident state"
+msgstr "Anzahl Config Items mit kritischem Vorfallstatus"
+
+msgid "Number of versions"
+msgstr "Anzahl Versionen"
+
+msgid "Link Type"
+msgstr "Art der Verknüpfung"
+
+msgid "Article Id"
+msgstr "Artikel ID"
+
+msgid "Article Overview"
+msgstr "Artikelübersicht"
+
+msgid "Attributes"
+msgstr "Attribute"
+
+msgid "Bcc"
+msgstr "Bcc"
+
+msgid "watched"
+msgstr "beobachtet"
+
+msgid "Owner"
+msgstr "Bearbeiter"
+
+msgid "User"
+msgstr "Benutzer"
+
+msgid "User name"
+msgstr "Benutzername"
+
+msgid "Observer"
+msgstr "Beobachter"
+
+msgid "Watched Tickets"
+msgstr "Beobachtete Tickets"
+
+msgid "FAQ Article History"
+msgstr "FAQ Artikel Historie"
+
+msgid "Description & Comments"
+msgstr "Beschreibung & Anmerkungen"
+
+msgid "Subject"
+msgstr "Betreff"
+
+msgid "Affected Service"
+msgstr "Betroffener Service"
+
+msgid "Rating"
+msgstr "Bewertung"
+
+msgid "Label"
+msgstr "Beschriftung"
+
+msgid "select image file"
+msgstr "Bilddatei wählen"
+
+msgid "Images"
+msgstr "Bilder"
+
+msgid "Cc"
+msgstr "Cc"
+
+msgid "Edit CMDB Class"
+msgstr "Add CMDB Class"
+
+msgid "CMDB Class"
+msgstr "CMDB Klasse"
+
+msgid "CMDB Classes"
+msgstr "CMDB Klassen"
+
+msgid "CMDB Class permissions"
+msgstr "CMDB Klassen Berechtigungen"
+
+msgid "CMDB Class Definition"
+msgstr "CMDB Klassen Definition"
+
+msgid "CMDB Class Definitions"
+msgstr "CMDB Klassen Definitionen"
+
+msgid "CMDB Class information"
+msgstr "CMDB Klassen Informationen"
+
+msgid "CMDB Class versions"
+msgstr "CMDB Klassen Versionen"
+
+msgid "Coming Soon"
+msgstr "Coming Soon"
+
+msgid "Config Item"
+msgstr "Config Item"
+
+msgid "Config Items"
+msgstr "Config Items"
+
+msgid "Config Item Class"
+msgstr "Config Item Klasse"
+
+msgid "Select file"
+msgstr "Datei wählen"
+
+msgid "Error"
+msgstr "Fehler"
+
+msgid "Reset data"
+msgstr "Daten zurücksetzen"
+
+msgid "Detailed search results"
+msgstr "Detailierte Suchergebnisse"
+
+msgid "Print"
+msgstr "Drucken"
+
+msgid "Duplicate"
+msgstr "Duplizieren"
+
+msgid "E-Mail"
+msgstr "E-Mail"
+
+msgid "Recipient: To"
+msgstr "Empfänger: An"
+
+msgid "Recipient: Bcc"
+msgstr "Empfänger: Bcc"
+
+msgid "Recipient: Cc"
+msgstr "Empfänger: Cc"
+
+msgid "accounted time"
+msgstr "Erfasste Zeit"
+
+msgid "Reminder Tickets"
+msgstr "Erinnerungstickets"
+
+msgid "Created at"
+msgstr "Erstellt am"
+
+msgid "Created by"
+msgstr "Erstellt von"
+
+msgid "escalated"
+msgstr "Eskaliert"
+
+msgid "Escalation time"
+msgstr "Eskalationszeit"
+
+msgid "Escalated Tickets"
+msgstr "Eskalierte Tickets"
+
+msgid "external"
+msgstr "extern"
+
+msgid "FAQ Article"
+msgstr "FAQ Artikel"
+
+msgid "FAQ Information"
+msgstr "FAQ Informationen"
+
+msgid "Error while adding the image:"
+msgstr "Fehler beim Hinzufügen des Bildes:"
+
+msgid "Error while adding the attachement:"
+msgstr "Fehler beim Hinzufügen von Anlagen:"
+
+msgid "Error on form validation:"
+msgstr "Fehler beim Validieren des Formulars:"
+
+msgid "Close window"
+msgstr "Fenster schließen"
+
+msgid "expected time required:"
+msgstr "voraussichtlich benötigte Zeit:"
+
+msgid "Filter in list"
+msgstr "Filtern in Liste"
+
+msgid "Unlocked Tickets"
+msgstr "Freie Tickets"
+
+msgid "Unlocked"
+msgstr "Freigeben"
+
+msgid "Changed at"
+msgstr "Geändert am"
+
+msgid "Changed by"
+msgstr "Geändert von"
+
+msgid "read"
+msgstr "Gelesen"
+
+msgid "Visible in customer portal"
+msgstr "Sichtbar in Kundenportal"
+
+msgid "Approved"
+msgstr "Genehmigt"
+
+msgid "Locked"
+msgstr "Gesperrt"
+
+msgid "Locked Tickets"
+msgstr "Gesperrte Tickets"
+
+msgid "validity"
+msgstr "Gültigkeit"
+
+msgid "Category"
+msgstr "Kategorie"
+
+msgid "No contact available"
+msgstr "Kein Ansprechpartner verfügbar"
+
+msgid "No customer available"
+msgstr "Kein Kunde verfügbar"
+
+msgid "Class"
+msgstr "Klasse"
+
+msgid "Class Definition"
+msgstr "Klassendefinition"
+
+msgid "Comment"
+msgstr "Kommentar"
+
+msgid "Customer"
+msgstr "Kunde"
+
+msgid "Edit Customer"
+msgstr "Kunde bearbeiten"
+
+msgid "Customers"
+msgstr "Kunden"
+
+msgid "Customer ID"
+msgstr "Kunden ID"
+
+msgid "Customer Information"
+msgstr "Kundeninformationen"
+
+msgid "Country"
+msgstr "Land"
+
+msgid "last changed time"
+msgstr "Letzte Änderungszeit"
+
+msgid "Solution"
+msgstr "Lösung"
+
+msgid "Solution time"
+msgstr "Lösungszeit"
+
+msgid "My watched tickets"
+msgstr "Meine beobachteten Tickets"
+
+msgid "My watched tickets with new articles"
+msgstr "Meine beobachteten Tickets mit neuen Artikeln"
+
+msgid "My locked tickets"
+msgstr "Meine gesperrten Tickets"
+
+msgid "My locked tickets with new articles"
+msgstr "Meine gesperrten Tickets mit neuen Artikeln"
+
+msgid "Meine Tickets"
+msgstr "Meine Tickets"
+
+msgid "My tickets with new articles"
+msgstr "Meine Tickets mit neuen Artikeln"
+
+msgid "Missing required argument."
+msgstr "Fehlende Pflichtangabe."
+
+msgid "Cell Phone"
+msgstr "Mobil"
+
+msgid "next image"
+msgstr "Nächstes Bild"
+
+msgid "New"
+msgstr "Neu"
+
+msgid "Link Ticket with"
+msgstr "Ticket verknüpfen mit"
+
+msgid "Create Priorität"
+msgstr "Neue Priorität"
+
+msgid "New Contact"
+msgstr "Neuer Ansprechpartner"
+
+msgid "New Article"
+msgstr "Neuer Artikel"
+
+msgid "New Customer"
+msgstr "Neuer Kunde"
+
+msgid "new"
+msgstr "New"
+
+msgid "New Ticket"
+msgstr "Neues Ticket"
+
+msgid "New Tickets"
+msgstr "Neue Tickets"
+
+msgid "Note"
+msgstr "Notiz"
+
+msgid "Notes"
+msgstr "Notizen"
+
+msgid "Number"
+msgstr "Nummer"
+
+msgid "Object"
+msgstr "Objekt"
+
+msgid "Object Id"
+msgstr "Objekt ID"
+
+msgid "Open Tickets"
+msgstr "Offene Tickets"
+
+msgid "open"
+msgstr "offen"
+
+msgid "Password"
+msgstr "Passwort"
+
+msgid "pending"
+msgstr "Warten"
+
+msgid "Pending Tickets"
+msgstr "Tickets im Warten-Status"
+
+msgid "Priority"
+msgstr "Priorität"
+
+msgid "Edit Priority"
+msgstr "Priorität bearbeiten"
+
+msgid "public"
+msgstr "öffentlich"
+
+msgid "Queue"
+msgstr "Queue"
+
+msgid "Queues"
+msgstr "Queues"
+
+msgid "Response time"
+msgstr "Reaktionszeit"
+
+msgid "Release Informationen"
+msgstr "Release Informationen"
+
+msgid "Reminder Tickets"
+msgstr "Erinnerungstickets"
+
+msgid "Tags"
+msgstr "Schlagworte"
+
+msgid "Closing time"
+msgstr "Schließzeit"
+
+msgid "Quick search (Tickets)"
+msgstr "Schnellsuche (Tickets)"
+
+msgstr "Select all"
+msgstr "Alle auswählen"
+
+msgid "Visibility"
+msgstr "Sichtbarkeit"
+
+msgid "SLA / Service Level Agreement"
+msgstr "SLA / Servicevereinbarung"
+
+msgid "Save"
+msgstr "Speichern"
+
+msgid "Lock State"
+msgstr "Sperrstatus"
+
+msgid "Language"
+msgstr "Sprache"
+
+msgid "Core Data"
+msgstr "Stammdaten"
+
+msgid "Edit Core Data"
+msgstr "Stammdaten bearbeiten"
+
+msgid "Create Core Data"
+msgstr "Stammdaten hinzufügen"
+
+msgid "State"
+msgstr "Status"
+
+msgid "Edit State"
+msgstr "Status bearbeiten"
+
+msgid "Remove State"
+msgstr "Status entfernen"
+
+msgid "Create State"
+msgstr "Status hinzufügen"
+
+msgid "State Information"
+msgstr "Status Informationen"
+
+msgid "State Type"
+msgstr "Statustyp"
+
+msgid "State Types"
+msgstr "Statustypen"
+
+msgid "Search"
+msgstr "Suche"
+
+msgid "Search ..."
+msgstr "Suche ..."
+
+msgid "Start search"
+msgstr "Suche starten"
+
+msgid "Search Results"
+msgstr "Suchergebnisse"
+
+msgid "Phone"
+msgstr "Telefon"
+
+msgid "Edit Ticket"
+msgstr "Ticket bearbeiten"
+
+msgid "Title"
+msgstr "Title"
+
+msgid "ToDo / Processing required"
+msgstr "ToDo / Bearbeitung erforderlich"
+
+msgid "Hit List"
+msgstr "Trefferliste"
+
+msgid "Hit List ({0})"
+msgstr "Trefferliste ({0})"
+
+msgid "Preview ({0})"
+msgstr "Treffervorschau ({0})"
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "Edit Type"
+msgstr "Typ bearbeiten"
+
+msgid "Create Type"
+msgstr "Typ hinzufügen"
+
+msgid "Type Information"
+msgstr "Typ Informationen"
+
+msgid "Types"
+msgstr "Typen"
+
+msgid "Remove Types"
+msgstr "Typen entfernen"
+
+msgid "Submit"
+msgstr "Übernehmen"
+
+msgid "Overview Contacts"
+msgstr "Übersicht Ansprechpartner"
+
+msgid "Overview Config Items"
+msgstr "Übersicht Config Items"
+
+msgid "Overview Config Items Deployment State"
+msgstr "Übersicht Config Items Verwendungsstatus"
+
+msgid "Overview Customer Organizations"
+msgstr "Übersicht Kunden"
+
+msgid "Overview Ticket Priorities"
+msgstr "Übersicht Ticketprioritäten"
+
+msgid "Overview Tickets"
+msgstr "Übersicht Tickets"
+
+msgid "Overview Ticket States"
+msgstr "Übersicht Ticketstatus"
+
+msgid "unread"
+msgstr "ungelesen"
+
+msgid "Unread Articles"
+msgstr "Ungelesene Artikel"
+
+msgid "Cause"
+msgstr "Ursache"
+
+msgid "Responsible Tickets"
+msgstr "Verantwortliche Tickets"
+
+msgid "Responsible"
+msgstr "Verantwortlicher"
+
+msgid "Link to"
+msgstr "Verknüpfen mit"
+
+msgid "Link to ticket"
+msgstr "Verknüpfen mit Ticket"
+
+msgid "Linked as"
+msgstr "Verknüpft als"
+
+msgid "Linked Objects"
+msgstr "Verknüpfte Objekte"
+
+msgid "Linked Object"
+msgstr "Verknüpftes Objekt"
+
+msgid "Delete Link"
+msgstr "Verknüpfung löschen"
+
+msgid "Assign Link"
+msgstr "Verknüpfung zuordnen"
+
+msgid "Links"
+msgstr "Verknüpfungen"
+
+msgid "Link Graph"
+msgstr "Verknüpfungsgraph"
+
+msgid "Version"
+msgstr "Version"
+
+msgid "Version Details"
+msgstr "Versionsdetails"
+
+msgid "Deployment State"
+msgstr "Verwendungsstatus"
+
+msgid "Full Text"
+msgstr "Volltext"
+
+msgid "From"
+msgstr "Von"
+
+msgid "Incident State"
+msgstr "Vorfallstatus"
+
+msgid "Existing Links ({0})"
+msgstr "Vorhandene Verknüpfungen ({0})"
+
+msgid "Previous Image"
+msgstr "Vorheriges Bild"
+
+msgid "First Name"
+msgstr "Vorname"
+
+msgid "Warning"
+msgstr "Warnung"
+
+msgid "pending until"
+msgstr "Warten bis"
+
+msgid "attributes to change:"
+msgstr "zu ändernde Attribute:"
+
+msgid "Assigned Contacts "
+msgstr "Zugeordnete Kontakte"
+
+msgid "Assigned Customers"
+msgstr "Zugeordnete Kunden"
+
+msgid "to article"
+msgstr "zum Artikel"
+
+msgid "Assign Team / Queue"
+msgstr "Zuordnung zu Team / Queue"
+
+msgid "Assign Text Modules"
+msgstr "Zuordnung zu Textbausteinen"
+
+msgid "to version"
+msgstr "zur Version"
+
+msgid "back to"
+msgstr "zurück zu"
+
+msgid "Personal Settings"
+msgstr "Persönliche Einstellungen"
+
+msgid "Localisation"
+msgstr "Lokalisierung"
+
+msgid "Save Settings."
+msgstr "Einstellungen werden gespeichert."
+
+msgid "Edit ${objectName}"
+msgstr "${objectName} bearbeiten"
+
+msgid "Selected {0} ({1})"
+msgstr "Ausgewählte {0} ({1})"
+
+msgid "Execute now!"
+msgstr "Jetzt ausführen!"
+
+msgid "Execute now?"
+msgstr "Jetzt ausführen?"
+
+msgid ""
+"You will edit {0} attributes for {1} "
+"{2}. Execute now?"
+msgstr ""
+"Sie ändern {0} Attribute an {1} "
+"{2}. Jetzt starten?"
+
+msgid "edited"
+msgstr "bearbeitet"
+
+msgid "An error occurred."
+msgstr "Es ist ein Fehler aufgetreten."
+
+msgid "Changes cannot be saved. How do you want to proceed?"
+msgstr "Änderung kann nicht gespeichert werden. Wie möchten Sie weiter verfahren?"
+
+msgstr "Ignore"
+msgstr "Ignorieren"
+
+msgid "Zu ändernde Attribute"
+msgstr "zu ändernde Attribute:"
+
+msgid "Close Dialog"
+msgstr "Dialog schließen"
+
+msgid "Cancel Process"
+msgstr "Bearbeiten wird abgebrochen"
+
+msgid "Sure?"
+msgstr "Sicher?"
+
+msgid "Are you sure?"
+msgstr "Sind Sie sicher?"
+
+msgid "Internationalization"
+msgstr "Internationalisierung"
+
+msgid "Translation"
+msgstr "Übersetzung"
+
+msgid "Translations"
+msgstr "Übersetzungen"
+
+msgid "Languages"
+msgstr "Sprachen"
+
+msgid "All languages"
+msgstr "Alle Sprachen"
+
+msgid "Basestring"
+msgstr "Basiszeichenkette"
+
+msgid "not "
+msgstr "nicht"
+
+msgid "General Information"
+msgstr "Allgemeine Informationen"
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "Vendor"
+msgstr "Hersteller"
+
+msgid "Model"
+msgstr "Modell"
+
+msgid "Location"
+msgstr "Standort"
+
+msgid "Building"
+msgstr "Gebäude"
+
+msgid "Room"
+msgstr "Raum"
+
+msgid "Description"
+msgstr "Beschreibung"
+
+msgid "Note"
+msgstr "Notiz"
+
+msgid "Notes"
+msgstr "Notizen"
+
+msgid "Attachment"
+msgstr "Anhang"
+
+msgid "Attachments"
+msgstr "Anhänge"
+
+msgid "Owner Information"
+msgstr "Besitzer Informationen"
+
+msgid "Assigned Customer"
+msgstr "Zugeordneter Kunde"
+
+msgid "Assigned Owner"
+msgstr "Zugeordneter Besitzer"
+
+msgid "Network Information"
+msgstr "Netzwerk Informationen"
+
+msgid "Network Interface"
+msgstr "Netzwerkschnittstelle"
+
+msgid "IP over DHCP"
+msgstr "IP via DHCP"
+
+msgid "Yes"
+msgstr "Ja"
+
+msgid "No"
+msgstr "Nein"
+
+msgid "yes"
+msgstr "ja"
+
+msgid "no"
+msgstr "nein"
+
+msgid "IP Address"
+msgstr "IP Adresse"
+
+msgid "Please enter a valid IPv4 address in form 123.123.123.123."
+msgstr ""
+"Bitte geben Sie eine gültige IPv4 Adresse im Format 123.123.123.123 ein."
+
+msgid "Network"
+msgstr "Netzwerk"
+
+msgid "Hardware Information"
+msgstr "Hardware Informationen"
+
+msgid "Serial Number"
+msgstr "Seriennummer"
+
+msgid "Hard Disk"
+msgstr "Festplatte"
+
+msgid "Capacity"
+msgstr "Kapazität"
+
+msgid "Graphic Adapter"
+msgstr "Grafikkarte"
+
+msgid "Other Equipment"
+msgstr "Sonstige Ausstattung"
+
+msgid "Software Information"
+msgstr "Software Informationen"
+
+msgid "Operating System"
+msgstr "Betriebssystem"
+
+msgid "Installed Software"
+msgstr "Installierte Software"
+
+msgid "Warranty Information"
+msgstr "Garantie Informationen"
+
+msgid "Warranty Expiration Date"
+msgstr "Garantieende"
+
+msgid "First Usage Date"
+msgstr "Inbetriebnahme"
+
+msgid "Global Location Number"
+msgstr "Globale Lokationsnummer"
+
+msgid "Address Information"
+msgstr "Adressinformationen"
+
+msgid "Street"
+msgstr "Straße"
+
+msgid "Street 2"
+msgstr "Straße 2"
+
+msgid "City"
+msgstr "Stadt"
+
+msgid "ZIP"
+msgstr "PLZ"
+
+msgid "Region"
+msgstr "Region"
+
+msgid "Country"
+msgstr "Land"
+
+msgid "Contact Information"
+msgstr "Kontaktinformationen"
+
+msgid "Contact Role"
+msgstr "Kontaktrolle"
+
+msgid "Contacts"
+msgstr "Kontakte"
+
+msgid "Contact"
+msgstr "Kontakt"
+
+msgid "Parent Location"
+msgstr "Übergeordneter Standort"
+
+msgid "Room Type"
+msgstr "Raumtyp"
+
+msgid "Floor"
+msgstr "Geschoss"
+
+msgid "Please enter decimal numbers only."
+msgstr "Bitte geben Sie nur Dezimalzahlen ein."
+
+msgid "Room Label"
+msgstr "Raumbeschriftung"
+
+msgid "Network Address"
+msgstr "Netzwerkadresse"
+
+msgid "Subnet Mask"
+msgstr "Subnetzmaske"
+
+msgid "Product"
+msgstr "Produkt"
+
+msgid "License Information"
+msgstr "Lizenz Informationen"
+
+msgid "Licence Type"
+msgstr "Lizenztyp"
+
+msgid "License Key"
+msgstr "Lizenzschlüssel"
+
+msgid "Quantity"
+msgstr "Anzahl"
+
+msgid "Expiration Date"
+msgstr "Ablaufdatum"
+
+msgid "Basestring"
+msgstr "Basiszeichenkette"
+
+msgid "Basestrings"
+msgstr "Basiszeichenketten"
+
+msgid "base string"
+msgstr "Basiszeichenkette"
+
+msgid "base strings"
+msgstr "Basiszeichenketten"
+
+msgid "Channel"
+msgstr "Kanal"
+
+msgid "Channels"
+msgstr "Kanäle"

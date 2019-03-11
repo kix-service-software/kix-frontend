@@ -1,5 +1,5 @@
-import { TreeNode } from "../../../../../core/model";
-import { BulkValue } from "./BulkValue";
+import { TreeNode } from '../../../../../core/model';
+import { BulkValue } from './BulkValue';
 
 export class ComponentState {
 

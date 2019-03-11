@@ -1,8 +1,8 @@
-import { ComponentState } from "./ComponentState";
-import { ContextService, IContextServiceListener } from "../../core/browser";
-import { ContextType, Context, ContextConfiguration } from "../../core/model";
-import { ContextHistoryEntry } from "../../core/browser/context/ContextHistoryEntry";
-import { RoutingConfiguration, RoutingService } from "../../core/browser/router";
+import { ComponentState } from './ComponentState';
+import { ContextService, IContextServiceListener } from '../../core/browser';
+import { ContextType, Context, ContextConfiguration } from '../../core/model';
+import { ContextHistoryEntry } from '../../core/browser/context/ContextHistoryEntry';
+import { RoutingConfiguration, RoutingService } from '../../core/browser/router';
 
 class Component implements IContextServiceListener {
 
@@ -15,7 +15,7 @@ class Component implements IContextServiceListener {
     public onMount(): void {
         ContextService.getInstance().registerListener(this);
 
-        document.addEventListener("click", (event: any) => {
+        document.addEventListener('click', (event: any) => {
             if (!this.state.minimized) {
                 if (this.state.keepShow) {
                     this.state.keepShow = false;

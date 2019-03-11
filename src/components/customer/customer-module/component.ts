@@ -1,8 +1,8 @@
-import { ComponentState } from "./ComponentState";
-import { ContextService } from "../../../core/browser";
-import { CustomerContext } from "../../../core/browser/customer";
-import { ConfiguredWidget } from "../../../core/model";
-import { ComponentsService } from "../../../core/browser/components";
+import { ComponentState } from './ComponentState';
+import { ContextService } from '../../../core/browser';
+import { CustomerContext } from '../../../core/browser/customer';
+import { ConfiguredWidget } from '../../../core/model';
+import { ComponentsService } from '../../../core/browser/components';
 
 class Component {
 
