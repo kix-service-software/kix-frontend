@@ -9,7 +9,9 @@ export class ComponentState {
         public importConfigFormId: string = null,
         public importManager: ImportManager = null,
         public table: ITable = null,
-        public tableTitle: string = null
+        public tableTitle: string = null,
+        public canRun: boolean = false,
+        public run: boolean = false
     ) { }
 
 }

@@ -5,7 +5,7 @@
                 <main-form formId=state.importConfigFormId key="input-configuration-form"/>
                 <div.form.import-attributes-container>
                     <if(state.importManager)>
-                        <widget instanceId="dynamic-form-field-group" title="Werte ersetzen" key="attributes">
+                        <widget instanceId="dynamic-form-field-group" title="Translatable#Werte ersetzen" key="attributes">
                             <@content>
                                 <div.import-attributes>
                                     <dynamic-form-field-container manager=state.importManager/>
@@ -23,17 +23,20 @@
                     </div>
                 </if>
                 <div.dialog-button-container>
-                    <!-- <button.cancel-button type="button" on-click("cancel") title="Abbrechen">
-                    <span.kix-icon-close/>Abbrechen
-                </button>
-                <div.submit-buttons>
-                    <button.submit-button type="button" on-click("submit") title="Dialog schließen" disabled=!state.run>
-                        <span.kix-icon-check/>Dialog schließen
+                    <button.cancel-button type="button" on-click("cancel") title="Cancel">
+                        <span.kix-icon-close/>
+                        <translation-string pattern="Translatable#Cancel"/>
                     </button>
-                    <button.submit-button type="button" on-click("run") title="Import starten" disabled=!state.canRun>
-                        <span.kix-icon-edit/>Import starten
-                    </button>
-                </div> -->
+                    <div.submit-buttons>
+                        <button.submit-button type="button" on-click("submit") title="Close Dialog" disabled=!state.run>
+                            <span.kix-icon-check/>
+                            <translation-string pattern="Translatable#Close Dialog"/>
+                        </button>
+                        <button.submit-button type="button" on-click("run") title="Import starten" disabled=!state.canRun>
+                            <span.kix-icon-import/>
+                            <translation-string pattern="Translatable#Import starten"/>
+                        </button>
+                    </div>
                 </div>
             </if>
             <else>

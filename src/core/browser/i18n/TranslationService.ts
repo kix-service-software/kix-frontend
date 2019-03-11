@@ -96,7 +96,9 @@ export class TranslationService extends KIXObjectService<Translation> {
         return true;
     }
 
-    public static async translate(pattern: string, placeholderValues: Array<string | number> = []): Promise<string> {
+    public static async translate(
+        pattern: string = '', placeholderValues: Array<string | number> = []
+    ): Promise<string> {
         let translationValue = pattern;
 
         if (translationValue.startsWith('Translatable#')) {

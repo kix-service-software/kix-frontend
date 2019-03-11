@@ -8,10 +8,6 @@ export class CustomerImportManager extends ImportManager {
 
     public objectType: KIXObjectType = KIXObjectType.CUSTOMER;
 
-    public getObject(object: {}): Customer {
-        return new Customer(object as Customer);
-    }
-
     public reset(): void {
         super.reset();
         this.importValues.push(new ObjectPropertyValue(
@@ -19,8 +15,12 @@ export class CustomerImportManager extends ImportManager {
         );
     }
 
+    protected getSpecificObject(object: {}): Customer {
+        return new Customer(object as Customer);
+    }
+
     public async getInputType(property: string): Promise<InputFieldTypes> {
-        // TODO: CustomerDefinmition verwenden
+        // TODO: CustomerDefinition verwenden
         // const objectData = ContextService.getInstance().getObjectData();
         // const customerDefinition = objectData.objectDefinitions.find((od) => od.Object === this.objectType);
         switch (property) {
@@ -34,7 +34,7 @@ export class CustomerImportManager extends ImportManager {
     }
 
     public async getInputTypeOptions(property: string): Promise<Array<[string, string | number]>> {
-        // TODO: CustomerDefinmition verwenden
+        // TODO: CustomerDefinition verwenden
         // const objectData = ContextService.getInstance().getObjectData();
         // const customerDefinition = objectData.objectDefinitions.find((od) => od.Object === this.objectType);
         switch (property) {
@@ -49,7 +49,7 @@ export class CustomerImportManager extends ImportManager {
 
     public async getProperties(): Promise<Array<[string, string]>> {
         const properties: Array<[string, string]> = [];
-        // TODO: CustomerDefinmition verwenden
+        // TODO: CustomerDefinition verwenden
         // const objectData = ContextService.getInstance().getObjectData();
         // const customerDefinition = objectData.objectDefinitions.find((od) => od.Object === this.objectType);
         const labelProvider = LabelService.getInstance().getLabelProviderForType(this.objectType);
@@ -78,5 +78,9 @@ export class CustomerImportManager extends ImportManager {
 
     public async getTreeNodes(property: string): Promise<TreeNode[]> {
         return await CustomerService.getInstance().getTreeNodes(property);
+    }
+
+    public async getIdentifierText(customer: Customer): Promise<string> {
+        return `${customer.CustomerCompanyName} ${customer.CustomerID ? ' (' + customer.CustomerID + ')' : ''}`;
     }
 }

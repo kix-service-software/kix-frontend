@@ -225,7 +225,7 @@ export class Table implements ITable {
                     return true;
                 }
             });
-            this.reload();
+            this.reload(true, false);
         }
         return removedColumns;
     }
@@ -244,7 +244,7 @@ export class Table implements ITable {
                     this.updateRowValues();
                 }
             });
-            this.reload();
+            this.reload(true, false);
         }
     }
 
@@ -362,6 +362,17 @@ export class Table implements ITable {
         });
     }
 
+    // TODO: Test dafür erstellen!!
+    public setRowSelectionByObject(objects: any[]): void {
+        this.selectNone(true);
+        objects.forEach((o) => {
+            const row = this.getRowByObject(o);
+            if (row) {
+                row.select();
+            }
+        });
+    }
+
     public selectAll(withoutFilter: boolean = false): void {
         this.getRows(withoutFilter).forEach((r) => r.select());
     }
@@ -404,7 +415,7 @@ export class Table implements ITable {
         return selectionState;
     }
 
-    public async reload(keepSelection: boolean = false): Promise<void> {
+    public async reload(keepSelection: boolean = false, sort: boolean = true): Promise<void> {
         let selectedRows: IRow[] = [];
         if (keepSelection) {
             selectedRows = this.getSelectedRows(true);
@@ -419,7 +430,7 @@ export class Table implements ITable {
             );
         }
 
-        if (this.sortColumnId && this.sortOrder) {
+        if (sort && this.sortColumnId && this.sortOrder) {
             await this.sort(this.sortColumnId, this.sortOrder);
         }
 

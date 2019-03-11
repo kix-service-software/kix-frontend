@@ -134,7 +134,7 @@ class Component extends FormInputComponent<any, ComponentState> {
                 OverlayType.WARNING,
                 null,
                 content,
-                'Fehler!',
+                'Translatable#Error!',
                 true
             );
         }

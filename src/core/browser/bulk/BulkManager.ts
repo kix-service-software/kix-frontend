@@ -105,7 +105,7 @@ export abstract class BulkManager {
 
         const values = this.getEditableValues();
         values.forEach((v) => parameter.push([v.property, v.operator === PropertyOperator.CLEAR ? null : v.value]));
-        await KIXObjectService.updateObject(this.objectType, parameter, object.ObjectId, false);
+        await KIXObjectService.updateObject(this.objectType, parameter, object.ObjectId, false, false);
     }
 
     public getEditableValues(): ObjectPropertyValue[] {

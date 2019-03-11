@@ -44,7 +44,7 @@ export class Extension implements IConfigurationExtension {
                 null, null, null, null, null, null, null, 250
             ));
             fields.push(new FormField(
-                'Translatable#validity', TicketPriorityProperty.VALID_ID, 'valid-input', true,
+                'Translatable#Validity', TicketPriorityProperty.VALID_ID, 'valid-input', true,
                 'Translatable#Set the priority as „valid“, „invalid (temporarily)“, or „invalid“.',
                 null, new FormFieldValue(1)
             ));

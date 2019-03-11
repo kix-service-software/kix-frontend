@@ -1,8 +1,11 @@
 import {
-    KIXObjectType, InputFieldTypes, TreeNode, KIXObject
+    KIXObjectType, InputFieldTypes, TreeNode, KIXObject, Error
 } from "../../model";
 import { ObjectPropertyValue } from "../ObjectPropertyValue";
 import { ImportPropertyOperator } from "./ImportPropertyOperator";
+import { KIXObjectService } from "../kix";
+import { LabelService } from "../LabelService";
+import { IColumn } from "../table";
 
 export abstract class ImportManager {
 
@@ -10,10 +13,9 @@ export abstract class ImportManager {
     public objects: KIXObject[] = [];
 
     protected importValues: ObjectPropertyValue[] = [];
+    private importRun: boolean = false;
 
     protected listeners: Map<string, () => void> = new Map();
-
-    public abstract getObject(object: {}): KIXObject;
 
     public registerListener(listenerId: string, callback: () => void): void {
         this.listeners.set(listenerId, callback);
@@ -25,14 +27,30 @@ export abstract class ImportManager {
 
     public init(): void {
         this.reset();
+        this.importRun = false;
     }
 
     public reset(): void {
         this.importValues = [];
     }
 
+    public getObject(object: {}): KIXObject {
+        const specificObject = this.getSpecificObject(object);
+        specificObject['CSV_LINE'] = object['CSV_LINE'];
+        specificObject.equals = (tableObject: KIXObject) => {
+            return tableObject && tableObject['CSV_LINE'] === specificObject['CSV_LINE'];
+        };
+        return specificObject;
+    }
+
+    protected abstract getSpecificObject(object: {}): KIXObject;
+
     public getValues(): ObjectPropertyValue[] {
         return this.importValues;
+    }
+
+    public getImportRunState(): boolean {
+        return this.importRun;
     }
 
     public hasDefinedValues(): boolean {
@@ -118,4 +136,53 @@ export abstract class ImportManager {
         )];
     }
 
+    public async execute(object: KIXObject, columns: IColumn[]): Promise<void> {
+        this.importRun = true;
+
+        await this.checkObject(object).then(async () => {
+            const existingObject = await this.getExisting(object);
+            const parameter: Array<[string, any]> = await this.prepareParameter(object, columns);
+
+            if (existingObject) {
+                await KIXObjectService.updateObject(this.objectType, parameter, existingObject.ObjectId, false, false);
+            } else {
+                await KIXObjectService.createObject(this.objectType, parameter, null, false);
+            }
+        });
+    }
+
+    protected async checkObject(object: KIXObject): Promise<void> {
+        const requiredProperties = await this.getRequiredProperties();
+        for (const rp of requiredProperties) {
+            if (typeof object[rp] === 'undefined' || object[rp] === null || object[rp] === '') {
+                throw new Error(null, `Missing value for ${rp}`);
+            }
+        }
+        return;
+    }
+
+    protected async getExisting(object: KIXObject): Promise<KIXObject> {
+        const existingObjects = await KIXObjectService.loadObjects(
+            this.objectType, [object.ObjectId], null, null, null, true
+        );
+        return existingObjects && !!existingObjects.length ? existingObjects[0] : null;
+    }
+
+    protected async prepareParameter(object: KIXObject, columns: IColumn[]): Promise<Array<[string, any]>> {
+        const parameter: Array<[string, any]> = [];
+        const knownProperties = await this.getKnownProperties();
+        for (const prop in object) {
+            if (
+                prop && knownProperties.some((kp) => kp === prop)
+                && columns.some((c) => c.getColumnId() === prop)
+            ) {
+                parameter.push([prop, object[prop]]);
+            }
+        }
+        return parameter;
+    }
+
+    public async getIdentifierText(object: KIXObject): Promise<string> {
+        return await LabelService.getInstance().getText(object);
+    }
 }

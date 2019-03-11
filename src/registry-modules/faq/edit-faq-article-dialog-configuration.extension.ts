@@ -44,7 +44,7 @@ export class Extension implements IConfigurationExtension {
             fields.push(new FormField('Translatable#Solution', FAQArticleProperty.FIELD_3, 'rich-text-input', false, 'Translatable#Describe the solution for the symptons reasons as precisely as possible'));
             fields.push(new FormField('Translatable#Comment', FAQArticleProperty.FIELD_6, 'rich-text-input', false, 'Translatable#Insert additional information for this FAQ article.'));
             fields.push(new FormField(
-                'Translatable#validity', FAQArticleProperty.VALID_ID, 'valid-input', true, 'Translatable#Set the FAQ article as „valid“, „invalid (temporarily)“, or „invalid“.',
+                'Translatable#Validity', FAQArticleProperty.VALID_ID, 'valid-input', true, 'Translatable#Set the FAQ article as „valid“, „invalid (temporarily)“, or „invalid“.',
                 null, new FormFieldValue(1)
             ));
 

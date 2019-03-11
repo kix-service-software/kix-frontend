@@ -65,7 +65,7 @@ export class CustomerLabelProvider implements ILabelProvider<Customer> {
                 displayValue = 'Translatable#Customer ID';
                 break;
             case CustomerProperty.VALID_ID:
-                displayValue = 'Translatable#validity';
+                displayValue = 'Translatable#Validity';
                 break;
             case CustomerProperty.OPEN_TICKETS_COUNT:
                 displayValue = 'Translatable#Open Tickets';
