@@ -62,7 +62,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
             fields.push(new FormField(
                 "Category", FAQArticleProperty.CATEGORY_ID, 'faq-category-input', false, "Translatable#Search for FAQ articles within the choosen category.")
             );
-            fields.push(new FormField('validity', FAQArticleProperty.VALID_ID, 'valid-input', false, "Translatable#Search for FAQ articles within the choosen validity."));
+            fields.push(new FormField('Validity', FAQArticleProperty.VALID_ID, 'valid-input', false, "Translatable#Search for FAQ articles within the choosen validity."));
 
             const attributeGroup = new FormGroup('Translatable#FAQ Attributes', fields);
 

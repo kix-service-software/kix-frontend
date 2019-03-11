@@ -37,7 +37,7 @@ export class TicketPriorityLabelProvider implements ILabelProvider<TicketPriorit
                 displayValue = 'Translatable#Changed at';
                 break;
             case TicketPriorityProperty.VALID_ID:
-                displayValue = 'Translatable#validity';
+                displayValue = 'Translatable#Validity';
                 break;
             case TicketPriorityProperty.ID:
                 displayValue = 'Translatable#Icon';

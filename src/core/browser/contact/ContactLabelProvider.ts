@@ -93,7 +93,7 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
                 displayValue = 'Translatable#Password';
                 break;
             case ContactProperty.VALID_ID:
-                displayValue = 'Translatable#validity';
+                displayValue = 'Translatable#Validity';
                 break;
             case ContactProperty.OPEN_TICKETS_COUNT:
                 displayValue = 'Translatable#Open Tickets';

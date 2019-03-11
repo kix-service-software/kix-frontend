@@ -47,7 +47,7 @@ export class TextModuleLabelProvider implements ILabelProvider<TextModule> {
                 displayValue = 'Translatable#Changed at';
                 break;
             case TextModuleProperty.VALID_ID:
-                displayValue = 'Translatable#validity';
+                displayValue = 'Translatable#Validity';
                 break;
             default:
                 displayValue = property;

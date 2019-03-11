@@ -2,7 +2,7 @@ import { ComponentState } from './ComponentState';
 import {
     ContextService, LabelService, FormService, WidgetService, TableFactoryService,
     TableConfiguration, IColumnConfiguration, TableHeaderHeight, TableRowHeight,
-    TableEvent, TableEventData, BrowserUtil, OverlayService, DefaultColumnConfiguration
+    TableEvent, TableEventData, BrowserUtil, OverlayService, DefaultColumnConfiguration, ValueState
 } from '../../../../core/browser';
 import { EventService, IEventSubscriber } from '../../../../core/browser/event';
 import { TabContainerEvent, TabContainerEventData } from '../../../../core/browser/components';
@@ -10,11 +10,12 @@ import { ImportDialogContext, ImportService, ImportPropertyOperator } from '../.
 import {
     KIXObjectType, ContextMode, Form, FormContext, FormField, FormFieldOption,
     FormFieldOptionsForDefaultSelectInput, TreeNode, FormFieldValue, WidgetType,
-    KIXObject, OverlayType, ComponentContent, DataType, SortOrder
+    KIXObject, OverlayType, ComponentContent, DataType, Error, SortOrder
 } from '../../../../core/model';
 import { FormGroup } from '../../../../core/model/components/form/FormGroup';
 import { ImportConfigValue } from './ImportConfigValue';
 import { DialogService } from '../../../../core/browser/components/dialog';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component {
 
@@ -25,12 +26,20 @@ class Component {
     private importConfigs: Map<string, ImportConfigValue[]> = new Map();
     private csvObjects: any[];
     private csvProperties: string[];
-    private attributeFormProperties: string[];
+
+    private cancelImportProcess: boolean;
+    private errorObjects: KIXObject[];
+    private finishedObjects: KIXObject[];
+    private selectedObjects: KIXObject[];
 
     private propertiesFormTimeout;
+    private importFormTimeout;
 
     public onCreate(input: any): void {
         this.state = new ComponentState(input.instanceId);
+        this.errorObjects = [];
+        this.finishedObjects = [];
+        this.selectedObjects = [];
         WidgetService.getInstance().setWidgetType('dynamic-form-field-group', WidgetType.GROUP);
         this.importConfigs = new Map(
             [
@@ -44,17 +53,17 @@ class Component {
                 ],
                 [
                     'value_separator', [
-                        new ImportConfigValue('COMMA', ', (Komma)', ','),
-                        new ImportConfigValue('SEMICOLON', '; (Semikolon)', ';'),
-                        new ImportConfigValue('COLON', ': (Doppelpunkt)', ':'),
-                        new ImportConfigValue('DOT', '. (Punkt)', '.'),
-                        new ImportConfigValue('TAB', '-> (Tabulator)', '\\t')
+                        new ImportConfigValue('COMMA', 'Translatable#, (Komma)', ','),
+                        new ImportConfigValue('SEMICOLON', 'Translatable#; (Semikolon)', ';'),
+                        new ImportConfigValue('COLON', 'Translatable#: (Doppelpunkt)', ':'),
+                        new ImportConfigValue('DOT', 'Translatable#. (Punkt)', '.'),
+                        new ImportConfigValue('TAB', 'Translatable#-> (Tabulator)', '\\t')
                     ]
                 ],
                 [
                     'text_separator', [
-                        new ImportConfigValue('DOUBLE', '" (Doppeltes Hochkomma)', '"'),
-                        new ImportConfigValue('SINGLE', "' (Einfaches Hochkomma)", "'")
+                        new ImportConfigValue('DOUBLE', 'Translatable#" (Doppeltes Hochkomma)', '"'),
+                        new ImportConfigValue('SINGLE', "Translatable#' (Einfaches Hochkomma)", "'")
                     ]
                 ]
             ]
@@ -74,11 +83,11 @@ class Component {
             if (infos && !!infos.length && typeof infos[0] === 'string' && infos[0].length) {
                 this.objectType = infos[0] as KIXObjectType;
 
-                const labelProvider = LabelService.getInstance().getLabelProviderForType(this.objectType);
-                const objectName = await labelProvider.getObjectName(true);
+                const objectName = await LabelService.getInstance().getObjectName(this.objectType, true, false);
 
+                const tabTitle = await TranslationService.translate('Translatable#{0} importieren', [objectName]);
                 EventService.getInstance().publish(TabContainerEvent.CHANGE_TITLE, new TabContainerEventData(
-                    'import-dialog', `${objectName} importieren`
+                    'import-dialog', tabTitle
                 ));
 
                 const dialogs = DialogService.getInstance().getRegisteredDialogs(ContextMode.CREATE);
@@ -111,13 +120,21 @@ class Component {
             await FormService.getInstance().registerFormInstanceListener(this.state.importConfigFormId, {
                 formListenerId: this.formListenerId,
                 formValueChanged: async (formField: FormField, value: FormFieldValue<any>) => {
-                    await this.prepareTableDataByCSV();
+                    if (!this.importFormTimeout) {
+                        const loadingHint = await TranslationService.translate('Translatable#Datei wird eingelesen.');
+                        DialogService.getInstance().setMainDialogLoading(true, loadingHint);
+                        this.importFormTimeout = setTimeout(async () => {
+                            this.importFormTimeout = null;
+                            await this.prepareTableDataByCSV();
+                            DialogService.getInstance().setMainDialogLoading(false);
+                        }, 100);
+                    }
                 },
                 updateForm: () => { return; }
             });
         }
 
-        this.createTable();
+        await this.createTable();
         this.state.loading = false;
     }
 
@@ -197,6 +214,7 @@ class Component {
                 configuration, null, ImportDialogContext.CONTEXT_ID,
                 false, null, true
             );
+            table.sort('CSV_LINE', SortOrder.UP);
 
             this.prepareTitle();
 
@@ -205,22 +223,29 @@ class Component {
                 eventPublished: async (data: TableEventData, eventId: string) => {
                     if (data && this.state.table && data.tableId === this.state.table.getTableId()) {
                         if (eventId === TableEvent.TABLE_INITIALIZED || eventId === TableEvent.TABLE_READY) {
-                            if (!!!this.state.table.getSelectedRows().length) {
+                            if (!!!this.selectedObjects.length) {
                                 this.state.table.selectAll();
+                            } else {
+                                const selectedObjects = [...this.selectedObjects];
+                                this.state.table.setRowSelectionByObject(selectedObjects);
                             }
                         }
-                        // if (eventId === TableEvent.TABLE_READY
-                        //     && (!!this.errorObjects.length || !!this.finishedObjects.length)
-                        // ) {
-                        //     this.state.table.setRowObjectValueState(this.errorObjects, ValueState.HIGHLIGHT_ERROR);
-                        //     this.state.table.setRowObjectValueState(
-                        //         this.finishedObjects, ValueState.HIGHLIGHT_SUCCESS
-                        //     );
-                        // }
-                        // const rows = this.state.table.getSelectedRows();
-                        // const objects = rows.map((r) => r.getRowObject().getObject());
-                        // this.state.importManager.objects = objects;
-                        // this.state.canRun = this.state.bulkManager.hasDefinedValues() && !!objects.length;
+                        if (eventId === TableEvent.TABLE_READY) {
+                            this.state.table.setRowObjectValueState(this.errorObjects, ValueState.HIGHLIGHT_ERROR);
+                            this.state.table.setRowObjectValueState(
+                                this.finishedObjects, ValueState.HIGHLIGHT_SUCCESS
+                            );
+                        }
+
+                        const rows = this.state.table.getSelectedRows();
+                        const objects = rows.map((r) => r.getRowObject().getObject());
+
+                        if (eventId === TableEvent.ROW_SELECTION_CHANGED) {
+                            this.selectedObjects = objects;
+                        }
+
+                        this.state.importManager.objects = objects;
+                        this.state.canRun = !!objects.length;
                         this.prepareTitle();
                     }
                 }
@@ -239,7 +264,7 @@ class Component {
         let columns: IColumnConfiguration[] = [
             new DefaultColumnConfiguration(
                 'CSV_LINE', true, false, true, false, 60, true, true, false, DataType.NUMBER, false,
-                null, 'Zeilennr'
+                null, 'Translatable#Zeilennr'
             )
         ];
 
@@ -282,16 +307,21 @@ class Component {
         return columns;
     }
 
-    private prepareTitle(): void {
-        const objectName = LabelService.getInstance().getObjectName(this.objectType, true);
-        const objectCount = this.state.table ? this.state.table.getSelectedRows().length : 0;
-        this.state.tableTitle = `Translatable#Übersicht zu importierende ${objectName} (${objectCount})`;
+    private async prepareTitle(): Promise<void> {
+        const objectName = await LabelService.getInstance().getObjectName(this.objectType, true, false);
+        const objectCount = this.state.importManager.objects.length;
+        const tableTitle = await TranslationService.translate(
+            'Translatable#Übersicht zu importierende {0} ({1})', [objectName, objectCount]
+        );
+        this.state.tableTitle = tableTitle;
     }
 
     private async prepareTableDataByCSV(): Promise<void> {
+        this.errorObjects = [];
+        this.finishedObjects = [];
+        this.selectedObjects = [];
         const formInstance = await FormService.getInstance().getFormInstance(this.state.importConfigFormId);
         if (formInstance) {
-            DialogService.getInstance().setMainDialogLoading(true, "Datei wird eingelesen.");
             const source = await formInstance.getFormFieldValueByProperty('source');
             if (source && source.valid && source.value && Array.isArray(source.value) && !!source.value) {
                 const characterSet = await formInstance.getFormFieldValueByProperty('character_set');
@@ -312,7 +342,7 @@ class Component {
                     && textSeparator && textSeparator.valid;
 
                 if (!ok && !!!importString.length) {
-                    BrowserUtil.openErrorOverlay('Datei konnte nicht geladen werden. (File is empty!)');
+                    BrowserUtil.openErrorOverlay('Translatable#Datei konnte nicht geladen werden (file is empty).');
                 }
 
                 if (ok) {
@@ -334,7 +364,6 @@ class Component {
                     this.csvObjects = [];
                 }
             }
-            DialogService.getInstance().setMainDialogLoading(false);
             await this.setContextObjects();
         }
     }
@@ -368,10 +397,10 @@ class Component {
                 OverlayService.getInstance().openOverlay(
                     OverlayType.WARNING, null, new ComponentContent('list-with-title',
                         {
-                            title: 'Rows with too less values:',
+                            title: 'Translatable#Rows with too less values' + ':',
                             list: lineErrors.map((i) => `Row ${i}.`)
                         }
-                    ), 'Fehler!', true
+                    ), 'Translatable#Error!', true
                 );
             }
         } else {
@@ -405,16 +434,18 @@ class Component {
         });
         let ok: boolean = true;
         if (!properties || !!!properties.length || !!!confirmedProperties.length) {
-            BrowserUtil.openErrorOverlay('Datei konnte nicht geladen werden. (No known properties found!)');
+            BrowserUtil.openErrorOverlay(
+                'Translatable#Datei konnte nicht geladen werden (no known properties found).'
+            );
             ok = false;
         } else if (!!unknownProperties.length) {
             OverlayService.getInstance().openOverlay(
                 OverlayType.WARNING, null, new ComponentContent('list-with-title',
                     {
-                        title: 'Unknown properties (will be ignored):',
+                        title: 'Translatable#Unknown properties (will be ignored):',
                         list: unknownProperties
                     }
-                ), 'Fehler!', true
+                ), 'Translatable#Error!', true
             );
         }
         return ok;
@@ -450,10 +481,10 @@ class Component {
             OverlayService.getInstance().openOverlay(
                 OverlayType.WARNING, null, new ComponentContent('list-with-title',
                     {
-                        title: 'Datei konnte nicht geladen werden. (Missing required properties):',
+                        title: 'Translatable#Datei konnte nicht geladen werden (missing required properties):',
                         list: missingProperties
                     }
-                ), 'Fehler!', true
+                ), 'Translatable#Error!', true
             );
         }
         return !!!missingProperties.length;
@@ -464,11 +495,7 @@ class Component {
             ImportDialogContext.CONTEXT_ID
         );
         const objects = this.csvObjects && !!this.csvObjects
-            ? this.csvObjects.map((o) => {
-                const object = this.state.importManager.getObject(o);
-                object['CSV_LINE'] = o['CSV_LINE'];
-                return object;
-            }) : [];
+            ? this.csvObjects.map((o) => this.state.importManager.getObject(o)) : [];
         if (context) {
             if (objects.length) {
                 if (this.state.importManager.hasDefinedValues()) {
@@ -503,6 +530,131 @@ class Component {
 
     public cancel(): void {
         DialogService.getInstance().closeMainDialog();
+    }
+
+    public submit(): void {
+        if (this.state.run) {
+            DialogService.getInstance().closeMainDialog();
+        }
+    }
+
+    public async run(): Promise<void> {
+        this.cancelImportProcess = false;
+        const objectName = await LabelService.getInstance().getObjectName(
+            this.state.importManager.objectType, true, false
+        );
+
+        const objects = this.state.importManager.objects;
+
+        const question = await TranslationService.translate(
+            'Translatable#Sie importieren {0} {1}. Ausführen?', [objects.length, objectName]
+        );
+        BrowserUtil.openConfirmOverlay(
+            'Translatable#Jetzt ausführen?',
+            question,
+            this.runImportManager.bind(this)
+        );
+    }
+
+    private async runImportManager(): Promise<void> {
+        this.state.run = true;
+
+        const objectName = await LabelService.getInstance().getObjectName(
+            this.state.importManager.objectType, true, false
+        );
+        const objects = [...this.state.importManager.objects];
+        this.state.table.getRows().forEach((r) => r.setValueState(ValueState.NONE));
+        this.finishedObjects = [];
+        this.errorObjects = [];
+
+        await this.setDialogLoadingInfo();
+
+        const objectTimes: number[] = [];
+        const columns = this.state.table.getColumns();
+
+        for (const object of objects) {
+            const start = Date.now();
+            let end;
+
+
+            await this.state.importManager.execute(object, columns)
+                .then(() => {
+                    this.finishedObjects.push(object);
+                    this.state.table.selectRowByObject(object, false);
+                    this.state.table.setRowObjectValueState([object], ValueState.HIGHLIGHT_SUCCESS);
+                })
+                .catch(async (error) => {
+                    this.errorObjects.push(object);
+                    this.state.table.setRowObjectValueState([object], ValueState.HIGHLIGHT_ERROR);
+                    DialogService.getInstance().setMainDialogLoading(true, 'Translatable#An error occurred.');
+                    end = Date.now();
+                    await this.handleObjectEditError(object, error);
+                });
+
+            if (this.cancelImportProcess) {
+                break;
+            }
+
+            if (!end) {
+                end = Date.now();
+            }
+
+            objectTimes.push(end - start);
+            this.setDialogLoadingInfo(objectTimes);
+        }
+
+        if (!this.errorObjects.length) {
+            const succesText = await TranslationService.translate('Translatable#{0} wurden importiert', [objectName]);
+            BrowserUtil.openSuccessOverlay(succesText);
+        }
+
+        DialogService.getInstance().setMainDialogLoading(false);
+    }
+
+    private async setDialogLoadingInfo(times: number[] = []): Promise<void> {
+        const objectName = await LabelService.getInstance().getObjectName(
+            this.state.importManager.objectType, true, false
+        );
+        const average = BrowserUtil.calculateAverage(times);
+        const time = average * (
+            this.state.importManager.objects.length - this.finishedObjects.length - this.errorObjects.length
+        );
+        const loadingHint = await TranslationService.translate(
+            'Translatable#{0}/{1} {2} importiert',
+            [this.finishedObjects.length, this.state.importManager.objects.length, objectName]
+        );
+        DialogService.getInstance().setMainDialogLoading(
+            true, loadingHint, false, time, this.cancelImport.bind(this)
+        );
+    }
+
+    private cancelImport(): void {
+        this.cancelImportProcess = true;
+    }
+
+    private handleObjectEditError(object: KIXObject, error: Error): Promise<void> {
+        return new Promise(async (resolve, reject) => {
+            const objectName = await LabelService.getInstance().getObjectName(
+                this.state.importManager.objectType, false, false
+            );
+            const identifier = await this.state.importManager.getIdentifierText(object);
+            const confirmText = await TranslationService.translate(
+                // tslint:disable-next-line:max-line-length
+                'Translatable#Zeile {0} in der bereit gestellten Datei mit {1} {2}: kann nicht importiert werden{3}. Wie möchten Sie weiter verfahren?',
+                [object['CSV_LINE'], objectName, identifier, error ? '(' + error.Message + ')' : '']
+            );
+            BrowserUtil.openConfirmOverlay(
+                // tslint:disable-next-line:max-line-length
+                `${objectName}: ${this.finishedObjects.length + this.errorObjects.length}/${this.state.importManager.objects.length}`,
+                confirmText,
+                () => resolve(),
+                () => {
+                    this.cancelImportProcess = true;
+                    resolve();
+                },
+                ['Translatable#Ignore', 'Translatable#Cancel']
+            );
+        });
     }
 }
 

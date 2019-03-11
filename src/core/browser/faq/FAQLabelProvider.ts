@@ -107,7 +107,7 @@ export class FAQLabelProvider implements ILabelProvider<FAQArticle> {
                 displayValue = 'Translatable#Title';
                 break;
             case FAQArticleProperty.VALID_ID:
-                displayValue = 'Translatable#validity';
+                displayValue = 'Translatable#Validity';
                 break;
             case FAQArticleProperty.VISIBILITY:
                 displayValue = 'Translatable#Visibility';

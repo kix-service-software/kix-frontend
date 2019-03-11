@@ -101,7 +101,9 @@ class Component {
     }
 
     public showError(error: any): void {
-        OverlayService.getInstance().openOverlay(OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true);
+        OverlayService.getInstance().openOverlay(
+            OverlayType.WARNING, null, new StringContent(error), 'Translatable#Error!', true
+        );
     }
 
 }

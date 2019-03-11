@@ -34,7 +34,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         objectType: KIXObjectType, objectIds?: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions = new KIXObjectLoadingOptions(),
         objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
-        cache: boolean = true
+        cache: boolean = true, silent: boolean = false
     ): Promise<T[]> {
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
         let objects = [];
@@ -43,15 +43,17 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 objectType, objectIds ? [...objectIds] : null,
                 loadingOptions, objectLoadingOptions, cache
             ).catch((error: Error) => {
-                const content = new ComponentContent('list-with-title',
-                    {
-                        title: `Fehler beim Laden (${objectType}):`,
-                        list: [`${error.Code}: ${error.Message}`]
-                    }
-                );
-                OverlayService.getInstance().openOverlay(
-                    OverlayType.WARNING, null, content, '', true
-                );
+                if (!silent) {
+                    const content = new ComponentContent('list-with-title',
+                        {
+                            title: `Fehler beim Laden (${objectType}):`,
+                            list: [`${error.Code}: ${error.Message}`]
+                        }
+                    );
+                    OverlayService.getInstance().openOverlay(
+                        OverlayType.WARNING, null, content, '', true
+                    );
+                }
                 return [];
             });
         } else {
@@ -101,21 +103,26 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     }
 
     public static async createObject(
-        objectType: KIXObjectType, parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions
+        objectType: KIXObjectType, parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions,
+        catchError: boolean = true
     ): Promise<string | number> {
         KIXObjectCache.updateCache(objectType, null, ServiceMethod.CREATE, parameter, createOptions);
         const objectId = await KIXObjectSocketListener.getInstance().createObject(objectType, parameter, createOptions)
             .catch((error: Error) => {
-                const content = new ComponentContent('list-with-title',
-                    {
-                        title: `Fehler beim Erstellen (${objectType}):`,
-                        list: [`${error.Code}: ${error.Message}`]
-                    }
-                );
-                OverlayService.getInstance().openOverlay(
-                    OverlayType.WARNING, null, content, 'Fehler!', true
-                );
-                return null;
+                if (catchError) {
+                    const content = new ComponentContent('list-with-title',
+                        {
+                            title: `Fehler beim Erstellen (${objectType}):`,
+                            list: [`${error.Code}: ${error.Message}`]
+                        }
+                    );
+                    OverlayService.getInstance().openOverlay(
+                        OverlayType.WARNING, null, content, 'Translatable#Error!', true
+                    );
+                    return null;
+                } else {
+                    throw error;
+                }
             });
         return objectId;
     }
@@ -148,22 +155,26 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
     public static async updateObject(
         objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string,
-        updateCache: boolean = true
+        updateCache: boolean = true, catchError: boolean = true
     ): Promise<string | number> {
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
 
         const updatedObjectId = await service.updateObject(objectType, parameter, objectId, updateCache)
             .catch((error: Error) => {
-                const content = new ComponentContent('list-with-title',
-                    {
-                        title: `Fehler beim Aktualisieren (${objectType}):`,
-                        list: [`${error.Code}: ${error.Message}`]
-                    }
-                );
-                OverlayService.getInstance().openOverlay(
-                    OverlayType.WARNING, null, content, 'Fehler!', true
-                );
-                throw error;
+                if (catchError) {
+                    const content = new ComponentContent('list-with-title',
+                        {
+                            title: `Fehler beim Aktualisieren (${objectType}):`,
+                            list: [`${error.Code}: ${error.Message}`]
+                        }
+                    );
+                    OverlayService.getInstance().openOverlay(
+                        OverlayType.WARNING, null, content, 'Translatable#Error!', true
+                    );
+                    return null;
+                } else {
+                    throw error;
+                }
             });
         return updatedObjectId;
     }
@@ -174,18 +185,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     ): Promise<string | number> {
         const updatedObjectId = await KIXObjectSocketListener.getInstance().updateObject(
             objectType, parameter, objectId
-        ).catch((error: Error) => {
-            const content = new ComponentContent('list-with-title',
-                {
-                    title: `Fehler beim Aktualisieren (${objectType}):`,
-                    list: [`${error.Code}: ${error.Message}`]
-                }
-            );
-            OverlayService.getInstance().openOverlay(
-                OverlayType.WARNING, null, content, 'Fehler!', true
-            );
-            throw error;
-        });
+        );
 
         if (updateCache) {
             KIXObjectCache.updateCache(objectType, objectId, ServiceMethod.UPDATE, parameter);
@@ -235,7 +235,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 }
             );
             OverlayService.getInstance().openOverlay(
-                OverlayType.WARNING, null, content, 'Fehler!', true
+                OverlayType.WARNING, null, content, 'Translatable#Error!', true
             );
         }
         return failIds;

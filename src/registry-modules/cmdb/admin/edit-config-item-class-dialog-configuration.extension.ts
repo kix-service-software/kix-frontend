@@ -49,7 +49,7 @@ export class Extension implements IConfigurationExtension {
                 null, null, null, null, null, null, null, 250
             ));
             fields.push(new FormField(
-                'validity', ConfigItemClassProperty.VALID_ID, 'valid-input', true,
+                'Validity', ConfigItemClassProperty.VALID_ID, 'valid-input', true,
                 'Translatable#Set the cmdb class as „valid“, „invalid (temporarily)“, or „invalid“.',
                 null, new FormFieldValue(1)
             ));

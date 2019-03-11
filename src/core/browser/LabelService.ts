@@ -47,7 +47,7 @@ export class LabelService {
     }
 
     public async getObjectName(
-        objectType: KIXObjectType, plural: boolean = false, translatable: boolean = true
+        objectType: KIXObjectType, plural: boolean = false, translatable?: boolean
     ): Promise<string> {
         const labelProvider = this.getLabelProviderForType(objectType);
         if (labelProvider) {

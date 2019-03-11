@@ -64,7 +64,7 @@ export class ConfigItemClassLabelProvider implements ILabelProvider<ConfigItemCl
                 displayValue = 'Translatable#Comment';
                 break;
             case ConfigItemClassProperty.VALID_ID:
-                displayValue = 'Translatable#validity';
+                displayValue = 'Translatable#Validity';
                 break;
             case ConfigItemClassProperty.ID:
                 displayValue = 'Translatable#Icon';

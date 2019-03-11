@@ -157,6 +157,7 @@ class Component {
         for (const object of objects) {
 
             const start = Date.now();
+            let end;
             await this.state.bulkManager.execute(object)
                 .then(() => {
                     this.finishedObjects.push(object);
@@ -168,6 +169,7 @@ class Component {
                     this.state.table.setRowObjectValueState([object], ValueState.HIGHLIGHT_ERROR);
                     const errorText = await TranslationService.translate('Translatable#An error occurred.');
                     DialogService.getInstance().setMainDialogLoading(true, errorText);
+                    end = Date.now();
                     await this.handleObjectEditError(
                         object, (this.finishedObjects.length + this.errorObjects.length), objects.length
                     );
@@ -177,7 +179,9 @@ class Component {
                 break;
             }
 
-            const end = Date.now();
+            if (!end) {
+                end = Date.now();
+            }
 
             this.setLoadingInformation(objectTimes, start, end, this.finishedObjects.length, objects.length);
         }

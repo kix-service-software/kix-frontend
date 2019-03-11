@@ -54,7 +54,7 @@ FormInputRegistry.getInstance().registerFormInputComponent(new FormInputComponen
 ));
 
 FormInputRegistry.getInstance().registerFormInputComponent(new FormInputComponentDefinition(
-    FAQArticleProperty.VALID_ID, KIXObjectType.FAQ_ARTICLE, 'valid-input', 'validity'
+    FAQArticleProperty.VALID_ID, KIXObjectType.FAQ_ARTICLE, 'valid-input', 'Validity'
 ));
 ```
 

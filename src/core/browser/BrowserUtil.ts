@@ -4,7 +4,9 @@ import { OverlayType, StringContent, ComponentContent, ToastContent, ConfirmOver
 export class BrowserUtil {
 
     public static openErrorOverlay(error: string): void {
-        OverlayService.getInstance().openOverlay(OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true);
+        OverlayService.getInstance().openOverlay(
+            OverlayType.WARNING, null, new StringContent(error), 'Translatable#Error!', true
+        );
     }
 
     public static async openSuccessOverlay(message: string): Promise<void> {

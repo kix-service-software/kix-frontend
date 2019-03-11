@@ -21,7 +21,7 @@ class Component {
             this.state.predefinedFilterList = [];
         }
         this.state.predefinedFilterPlaceholder = typeof input.predefinedFilterPlaceholder !== 'undefined' ?
-            input.predefinedFilterPlaceholder : 'Alle Objekte';
+            input.predefinedFilterPlaceholder : 'Translatable#All Objects';
 
         const defaultPlaceholder = await TranslationService.translate('Translatable#Filter in list');
         this.state.placeholder = typeof input.placeholder !== 'undefined' ? input.placeholder : defaultPlaceholder;

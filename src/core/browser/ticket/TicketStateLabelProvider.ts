@@ -41,7 +41,7 @@ export class TicketStateLabelProvider implements ILabelProvider<TicketState> {
                 displayValue = 'Translatable#Changed at';
                 break;
             case TicketStateProperty.VALID_ID:
-                displayValue = 'Translatable#validity';
+                displayValue = 'Translatable#Validity';
                 break;
             case TicketStateProperty.ID:
                 displayValue = 'Translatable#Icon';

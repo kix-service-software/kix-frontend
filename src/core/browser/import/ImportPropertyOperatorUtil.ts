@@ -5,11 +5,11 @@ export class ImportPropertyOperatorUtil {
     public static getText(operator: ImportPropertyOperator): string {
         switch (operator) {
             case ImportPropertyOperator.REPLACE_EMPTY:
-                return 'Leerwert ersetzen';
+                return 'Translatable#Replace empty value';
             case ImportPropertyOperator.FORCE:
-                return 'Erzwingen';
+                return 'Translatable#Force';
             case ImportPropertyOperator.IGNORE:
-                return 'Ignorieren';
+                return 'Translatable#Ignore';
             default:
                 return operator;
         }

@@ -58,6 +58,8 @@ export interface ITable {
 
     setRowSelection(rowIds: string[]): void;
 
+    setRowSelectionByObject(objects: any[]): void;
+
     selectAll(withoutFilter?: boolean): void;
 
     selectNone(withoutFilter?: boolean): void;

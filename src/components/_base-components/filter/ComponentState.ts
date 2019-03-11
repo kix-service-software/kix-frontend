@@ -6,7 +6,7 @@ export class ComponentState {
         public textFilterValue: string = '',
         public predefinedFilter: KIXObjectPropertyFilter[] = [],
         public predefinedFilterList: TreeNode[] = [],
-        public predefinedFilterPlaceholder: string = 'Alle Objekte',
+        public predefinedFilterPlaceholder: string = 'Translatable#All Objects',
         public currentFilter: TreeNode = null,
         public icon: string | ObjectIcon = 'kix-icon-filter',
         public placeholder: string = 'Filtern in Liste',

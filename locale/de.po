@@ -312,7 +312,7 @@ msgstr "Gesperrt"
 msgid "Locked Tickets"
 msgstr "Gesperrte Tickets"
 
-msgid "validity"
+msgid "Validity"
 msgstr "Gültigkeit"
 
 msgid "Category"
@@ -699,8 +699,8 @@ msgstr "Lokalisierung"
 msgid "Save Settings."
 msgstr "Einstellungen werden gespeichert."
 
-msgid "Edit ${objectName}"
-msgstr "${objectName} bearbeiten"
+msgid "Edit {0}"
+msgstr "{0} bearbeiten"
 
 msgid "Selected {0} ({1})"
 msgstr "Ausgewählte {0} ({1})"
@@ -955,3 +955,9 @@ msgstr "Kanal"
 
 msgid "Channels"
 msgstr "Kanäle"
+
+msgid "Force"
+msgstr "Erzwingen"
+
+msgid "Replace empty value"
+msgstr "Leerwert ersetzen"
