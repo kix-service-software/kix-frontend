@@ -79,7 +79,7 @@ msgid "Show all"
 msgstr "Alle anzeigen"
 
 msgid "Link Objects"
-msgid "Objekte verknüpfen"
+msgstr "Objekte verknüpfen"
 
 msgid "All Objects"
 msgstr "Alle Objekte"
@@ -465,9 +465,6 @@ msgstr "Reaktionszeit"
 msgid "Release Informationen"
 msgstr "Release Informationen"
 
-msgid "Reminder Tickets"
-msgstr "Erinnerungstickets"
-
 msgid "Tags"
 msgstr "Schlagworte"
 
@@ -557,9 +554,6 @@ msgstr "Trefferliste ({0})"
 
 msgid "Preview ({0})"
 msgstr "Treffervorschau ({0})"
-
-msgid "Type"
-msgstr "Typ"
 
 msgid "Edit Type"
 msgstr "Typ bearbeiten"
@@ -740,7 +734,7 @@ msgstr "Ignore"
 msgstr "Ignorieren"
 
 msgid "Zu ändernde Attribute"
-msgstr "zu ändernde Attribute:"
+msgstr "zu ändernde Attribute"
 
 msgid "Close Dialog"
 msgstr "Dialog schließen"
@@ -908,9 +902,6 @@ msgstr "PLZ"
 msgid "Region"
 msgstr "Region"
 
-msgid "Country"
-msgstr "Land"
-
 msgid "Contact Information"
 msgstr "Kontaktinformationen"
 
@@ -919,9 +910,6 @@ msgstr "Kontaktrolle"
 
 msgid "Contacts"
 msgstr "Kontakte"
-
-msgid "Contact"
-msgstr "Kontakt"
 
 msgid "Parent Location"
 msgstr "Übergeordneter Standort"
@@ -961,9 +949,6 @@ msgstr "Anzahl"
 
 msgid "Expiration Date"
 msgstr "Ablaufdatum"
-
-msgid "Basestring"
-msgstr "Basiszeichenkette"
 
 msgid "Basestrings"
 msgstr "Basiszeichenketten"
