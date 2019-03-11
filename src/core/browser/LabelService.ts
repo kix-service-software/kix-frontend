@@ -28,34 +28,38 @@ export class LabelService {
         return null;
     }
 
-    public async getText<T extends KIXObject>(object: T, id?: boolean, title?: boolean): Promise<string> {
+    public async getText<T extends KIXObject>(
+        object: T, id?: boolean, title?: boolean, translatable: boolean = true
+    ): Promise<string> {
         const labelProvider = this.getLabelProvider(object);
         if (labelProvider) {
-            return await labelProvider.getObjectText(object, id, title);
+            return await labelProvider.getObjectText(object, id, title, translatable);
         }
         return null;
     }
 
-    public getAdditionalText<T extends KIXObject>(object: T): string {
+    public getAdditionalText<T extends KIXObject>(object: T, translatable: boolean = true): string {
         const labelProvider = this.getLabelProvider(object);
         if (labelProvider) {
-            return labelProvider.getObjectAdditionalText(object);
+            return labelProvider.getObjectAdditionalText(object, translatable);
         }
         return null;
     }
 
-    public async getObjectName(objectType: KIXObjectType, plural: boolean = false): Promise<string> {
+    public async getObjectName(
+        objectType: KIXObjectType, plural: boolean = false, translatable: boolean = true
+    ): Promise<string> {
         const labelProvider = this.getLabelProviderForType(objectType);
         if (labelProvider) {
-            return await labelProvider.getObjectName(plural);
+            return await labelProvider.getObjectName(plural, translatable);
         }
         return objectType;
     }
 
-    public getTooltip<T extends KIXObject>(object: T): string {
+    public getTooltip<T extends KIXObject>(object: T, translatable: boolean = true): string {
         const labelProvider = this.getLabelProvider(object);
         if (labelProvider) {
-            return labelProvider.getObjectTooltip(object);
+            return labelProvider.getObjectTooltip(object, translatable);
         }
         return null;
     }
@@ -65,7 +69,7 @@ export class LabelService {
     ): Promise<string> {
         const labelProvider = this.getLabelProviderForType(objectType);
         if (labelProvider) {
-            return await labelProvider.getPropertyText(property, short, true);
+            return await labelProvider.getPropertyText(property, short, translatable);
         }
         return null;
     }
@@ -89,8 +93,7 @@ export class LabelService {
     }
 
     public async getPropertyValueDisplayIcons<T extends KIXObject>(
-        object: T,
-        property: string
+        object: T, property: string
     ): Promise<Array<string | ObjectIcon>> {
         const labelProvider = this.getLabelProvider(object);
         if (labelProvider) {
