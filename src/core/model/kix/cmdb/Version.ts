@@ -30,7 +30,7 @@ export class Version extends KIXObject<Version> {
     public CreateBy: number;
     public Class: string;
     public CurInciStateType: string;
-    public Data: any = {};
+    public Data: any;
     public PreparedData: PreparedData[] = [];
     public isCurrentVersion: boolean = false;
     public countNumber: number;

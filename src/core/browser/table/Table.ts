@@ -310,7 +310,7 @@ export class Table implements ITable {
                 const rows: IRow[] = [];
                 if (filter[0] && filter[0] !== '') {
                     filter[1] = [
-                        new TableFilterCriteria(column.getColumnId(), SearchOperator.CONTAINS, filter[0])
+                        new TableFilterCriteria(column.getColumnId(), SearchOperator.CONTAINS, filter[0], false, true)
                     ];
                 }
                 for (const row of this.getRows()) {
@@ -418,6 +418,11 @@ export class Table implements ITable {
                 (o) => this.selectRowByObject(o)
             );
         }
+
+        if (this.sortColumnId && this.sortOrder) {
+            await this.sort(this.sortColumnId, this.sortOrder);
+        }
+
         EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
     }
 
