@@ -1,6 +1,7 @@
-import { ILabelProvider } from "..";
-import { TicketHistory, DateTimeUtil, ObjectIcon, KIXObjectType, KIXObject, TicketHistoryProperty } from "../../model";
-import { ContextService } from "../context";
+import { ILabelProvider } from '..';
+import { TicketHistory, DateTimeUtil, ObjectIcon, KIXObjectType, TicketHistoryProperty } from '../../model';
+import { TranslationService } from '../i18n/TranslationService';
+import { ObjectDataService } from '../ObjectDataService';
 
 export class TicketHistoryLabelProvider implements ILabelProvider<TicketHistory> {
 
@@ -10,42 +11,51 @@ export class TicketHistoryLabelProvider implements ILabelProvider<TicketHistory>
         return value.toString();
     }
 
-    public async getPropertyText(property: string): Promise<string> {
-        let text = property;
+    public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
+        let displayValue = property;
         switch (property) {
             case TicketHistoryProperty.HISTORY_TYPE:
-                text = 'Aktion';
+                displayValue = 'Translatable#Action';
                 break;
             case TicketHistoryProperty.NAME:
-                text = 'Kommentar';
+                displayValue = 'Translatable#Comment';
                 break;
             case TicketHistoryProperty.ARTICLE_ID:
-                text = 'Zum Artikel';
+                displayValue = 'Translatable#to Article';
                 break;
             case TicketHistoryProperty.CREATE_BY:
-                text = 'Benutzer';
+                displayValue = 'Translatable#User';
                 break;
             case TicketHistoryProperty.CREATE_TIME:
-                text = 'Erstellt am';
+                displayValue = 'Translatable#Created at';
                 break;
             default:
-                text = property;
+                displayValue = property;
         }
-        return text;
+
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
+        }
+
+        return displayValue;
     }
 
     public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
         return;
     }
 
-    public async getDisplayText(historyEntry: TicketHistory, property: string): Promise<string> {
+    public async getDisplayText(
+        historyEntry: TicketHistory, property: string, value?: string, translatable: boolean = true
+    ): Promise<string> {
         let displayValue = property.toString();
 
-        const objectData = ContextService.getInstance().getObjectData();
+        const objectData = ObjectDataService.getInstance().getObjectData();
 
         switch (property) {
             case TicketHistoryProperty.ARTICLE_ID:
-                displayValue = historyEntry[property] === 0 ? '' : 'Zum Artikel';
+                displayValue = historyEntry[property] === 0 ?
+                    ''
+                    : await TranslationService.translate('Translatable#to Article');
                 break;
             case TicketHistoryProperty.CREATE_BY:
                 const user = objectData.users.find((u) => u.UserID === historyEntry[property]);
@@ -58,6 +68,10 @@ export class TicketHistoryLabelProvider implements ILabelProvider<TicketHistory>
                 break;
             default:
                 displayValue = historyEntry[property];
+        }
+
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
         }
 
         return displayValue;
@@ -76,23 +90,28 @@ export class TicketHistoryLabelProvider implements ILabelProvider<TicketHistory>
     }
 
     public async getObjectText(object: TicketHistory): Promise<string> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public getObjectAdditionalText(object: TicketHistory): string {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public getObjectIcon(object: TicketHistory): string | ObjectIcon {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public getObjectTooltip(object: TicketHistory): string {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
-    public getObjectName(): string {
-        return "Ticket Historie";
+    public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
+        let displayValue = 'Translatable#Ticket History';
+        if (translatable) {
+            displayValue = await TranslationService.translate(displayValue);
+        }
+
+        return displayValue;
     }
 
     public async getIcons(object: TicketHistory, property: string): Promise<Array<string | ObjectIcon>> {

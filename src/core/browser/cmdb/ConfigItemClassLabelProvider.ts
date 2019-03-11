@@ -1,16 +1,19 @@
 import { ILabelProvider } from "..";
 import {
-    ObjectIcon, KIXObjectType, ConfigItemClass, KIXObject, ConfigItemClassProperty, DateTimeUtil
+    ObjectIcon, KIXObjectType, ConfigItemClass, ConfigItemClassProperty, DateTimeUtil
 } from "../../model";
-import { ContextService } from "../context";
+import { TranslationService } from "../i18n/TranslationService";
+import { ObjectDataService } from "../ObjectDataService";
 
 export class ConfigItemClassLabelProvider implements ILabelProvider<ConfigItemClass> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_CLASS;
 
-    public async getPropertyValueDisplayText(property: string, value: string | number | any = ''): Promise<string> {
+    public async getPropertyValueDisplayText(
+        property: string, value: string | number | any = '', translatable: boolean = true
+    ): Promise<string> {
         let displayValue = value;
-        const objectData = ContextService.getInstance().getObjectData();
+        const objectData = ObjectDataService.getInstance().getObjectData();
         switch (property) {
             case ConfigItemClassProperty.VALID_ID:
                 const valid = objectData.validObjects.find((v) => v.ID.toString() === value.toString());
@@ -31,39 +34,49 @@ export class ConfigItemClassLabelProvider implements ILabelProvider<ConfigItemCl
                 break;
             default:
         }
+
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
+        }
+
         return displayValue.toString();
     }
 
-    public async getPropertyText(property: string, short?: boolean): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
             case ConfigItemClassProperty.NAME:
-                displayValue = 'Name';
+                displayValue = 'Translatable#Name';
                 break;
             case ConfigItemClassProperty.CHANGE_TIME:
-                displayValue = 'Geändert am';
+                displayValue = 'Translatable#Changed at';
                 break;
             case ConfigItemClassProperty.CHANGE_BY:
-                displayValue = 'Geändert von';
+                displayValue = 'Translatable#Changed by';
                 break;
             case ConfigItemClassProperty.CREATE_TIME:
-                displayValue = 'Erstellt am';
+                displayValue = 'Translatable#Created at';
                 break;
             case ConfigItemClassProperty.CREATE_BY:
-                displayValue = 'Erstellt von';
+                displayValue = 'Translatable#Created by';
                 break;
             case ConfigItemClassProperty.COMMENT:
-                displayValue = 'Kommentar';
+                displayValue = 'Translatable#Comment';
                 break;
             case ConfigItemClassProperty.VALID_ID:
-                displayValue = 'Gültigkeit';
+                displayValue = 'Translatable#validity';
                 break;
             case ConfigItemClassProperty.ID:
-                displayValue = 'Icon';
+                displayValue = 'Translatable#Icon';
                 break;
             default:
                 displayValue = property;
         }
+
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
+        }
+
         return displayValue;
     }
 
@@ -71,10 +84,12 @@ export class ConfigItemClassLabelProvider implements ILabelProvider<ConfigItemCl
         return;
     }
 
-    public async getDisplayText(ciClass: ConfigItemClass, property: string): Promise<string> {
+    public async getDisplayText(
+        ciClass: ConfigItemClass, property: string, value?: string, translatable: boolean = true
+    ): Promise<string> {
         let displayValue = ciClass[property];
 
-        const objectData = ContextService.getInstance().getObjectData();
+        const objectData = ObjectDataService.getInstance().getObjectData();
 
         switch (property) {
             case ConfigItemClassProperty.CREATE_BY:
@@ -100,6 +115,11 @@ export class ConfigItemClassLabelProvider implements ILabelProvider<ConfigItemCl
             default:
                 displayValue = ciClass[property];
         }
+
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
+        }
+
         return displayValue;
     }
 
@@ -131,8 +151,12 @@ export class ConfigItemClassLabelProvider implements ILabelProvider<ConfigItemCl
         return ciClass.Name;
     }
 
-    public getObjectName(plural: boolean = false): string {
-        return plural ? "CMDB Klassen" : "CMDB Klasse";
+    public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
+        let displayValue = plural ? "Translatable#CMDB Classes" : "Translatable#CMDB Class";
+        if (translatable) {
+            displayValue = await TranslationService.translate(displayValue, []);
+        }
+        return displayValue;
     }
 
     public async getIcons(

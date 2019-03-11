@@ -1,11 +1,11 @@
-import { AbstractAction, KIXObjectType, ContextMode } from "../../../../../model";
-import { ContextService } from "../../../../context";
+import { AbstractAction, KIXObjectType, ContextMode } from '../../../../../model';
+import { ContextService } from '../../../../context';
 
 export class TicketStateCreateAction extends AbstractAction {
 
     public initAction(): void {
-        this.text = "Neuer Status";
-        this.icon = "kix-icon-new-gear";
+        this.text = 'Translatable#New State';
+        this.icon = 'kix-icon-new-gear';
     }
 
     public run(): void {

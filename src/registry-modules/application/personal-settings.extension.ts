@@ -5,11 +5,11 @@ class Extension implements IPersonalSettingsExtension {
     public getPersonalSettings(): PersonalSetting[] {
         return [
             new PersonalSetting(
-                'Lokalisierung',
+                'Translatable#Localisation',
                 'UserLanguage',
-                'Sprache',
+                'Language',
                 // tslint:disable-next-line:max-line-length
-                'Bitte wählen Sie die Sprache, in der Sie KIX benutzen wollen. Ist nichts gesetzt, versucht das System die Sprache automatisch zu wählen.',
+                'Translatable#Please select the language in which you want to use KIX. If not set, the system will try to choose the language automatically',
                 'language-input'
             )
         ];

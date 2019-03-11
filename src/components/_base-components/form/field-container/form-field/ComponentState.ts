@@ -1,4 +1,4 @@
-import { KIXObjectType, FormField } from "../../../../../core/model";
+import { KIXObjectType, FormField } from '../../../../../core/model';
 
 export class ComponentState {
 

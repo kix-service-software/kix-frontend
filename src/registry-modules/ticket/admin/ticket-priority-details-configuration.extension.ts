@@ -11,7 +11,7 @@ export class Extension implements IConfigurationExtension {
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
 
         const priorityDetailsWidget = new ConfiguredWidget('ticket-priority-details-widget', new WidgetConfiguration(
-            'ticket-priority-info-widget', 'Priorität Informationen', ['ticket-admin-priority-edit'], null,
+            'ticket-priority-info-widget', 'Priority Information', ['ticket-admin-priority-edit'], null,
             false, true, WidgetSize.BOTH, null, false
         ));
 

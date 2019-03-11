@@ -1,6 +1,6 @@
-import { ContextService } from "../../../../../core/browser/context";
-import { FormInputComponent, TreeNode } from "../../../../../core/model";
-import { CompontentState } from "./CompontentState";
+import { FormInputComponent, TreeNode } from '../../../../../core/model';
+import { CompontentState } from './CompontentState';
+import { ObjectDataService } from '../../../../../core/browser/ObjectDataService';
 
 class Component extends FormInputComponent<number, CompontentState> {
 
@@ -14,7 +14,7 @@ class Component extends FormInputComponent<number, CompontentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        const objectData = ContextService.getInstance().getObjectData();
+        const objectData = ObjectDataService.getInstance().getObjectData();
         if (objectData) {
             this.state.nodes = objectData.validObjects.map((vo) => new TreeNode(Number(vo.ID), vo.Name));
         }

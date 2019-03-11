@@ -11,7 +11,7 @@ import { ITable } from "../../../../table";
 export class TicketTypeTableDeleteAction extends AbstractAction<ITable> {
 
     public initAction(): void {
-        this.text = "Löschen";
+        this.text = 'Translatable#Delete';
         this.icon = "kix-icon-trash";
     }
 

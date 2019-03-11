@@ -15,20 +15,20 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
         const generalActions = ['customer-create-action'];
         const customerDetailsWidget = new ConfiguredWidget('customer-details-widget', new WidgetConfiguration(
-            'customer-details-widget', 'Kunden Details', generalActions, null,
+            'customer-details-widget', 'Translatable#Customer Details', generalActions, null,
             false, true, WidgetSize.LARGE, null, false
         ));
 
         const customerInfoLane =
             new ConfiguredWidget('customer-information-lane', new WidgetConfiguration(
-                'customer-info-widget', 'Kundeninformationen', [
+                'customer-info-widget', 'Translatable#Customer Information', [
                     'customer-edit-action', 'customer-print-action'
                 ], {},
                 false, true, WidgetSize.LARGE, null, false)
             );
 
         const assignedContactsLane = new ConfiguredWidget('customer-assigned-contacts-widget', new WidgetConfiguration(
-            'customer-assigned-contacts-widget', 'Zugeordnete Ansprechpartner', [
+            'customer-assigned-contacts-widget', 'Translatable#Assigned Contacts', [
                 'customer-edit-action', 'customer-print-action'
             ], new TableConfiguration(KIXObjectType.CONTACT,
                 null, null,
@@ -67,7 +67,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
         ));
 
         const assignedTicketsLane = new ConfiguredWidget('customer-assigned-tickets-widget', new WidgetConfiguration(
-            'customer-assigned-tickets-widget', 'Übersicht Tickets', [
+            'customer-assigned-tickets-widget', 'Translatable#Overview Tickets', [
                 'customer-create-ticket-action', 'customer-print-action'
             ], {},
             false, true, WidgetSize.LARGE, null, false
@@ -75,7 +75,8 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
 
         const openTicketsGroup =
             new ConfiguredWidget('customer-open-tickets-group', new WidgetConfiguration(
-                'customer-open-tickets-group', 'Offene Tickets', [], new TableConfiguration(KIXObjectType.TICKET,
+                'customer-open-tickets-group', 'Translatable#Open Tickets', [],
+                new TableConfiguration(KIXObjectType.TICKET,
                     null, null,
                     [
                         new DefaultColumnConfiguration(
@@ -109,7 +110,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
 
         const escalatedTicketsGroup =
             new ConfiguredWidget('customer-escalated-tickets-group', new WidgetConfiguration(
-                'customer-escalated-tickets-group', 'Eskalierte Tickets', [], new TableConfiguration(
+                'customer-escalated-tickets-group', 'Translatable#Escalated Tickets', [], new TableConfiguration(
                     KIXObjectType.TICKET,
                     null, null,
                     [
@@ -151,7 +152,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
 
         const reminderTicketsGroup =
             new ConfiguredWidget('customer-reminder-tickets-group', new WidgetConfiguration(
-                'customer-reminder-tickets-group', 'Erinnerungstickets', [], new TableConfiguration(
+                'customer-reminder-tickets-group', 'Translatable#Reminder Tickets', [], new TableConfiguration(
                     KIXObjectType.TICKET,
                     null, null,
                     [
@@ -187,7 +188,8 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
 
         const newTicketsGroup =
             new ConfiguredWidget('customer-new-tickets-group', new WidgetConfiguration(
-                'customer-new-tickets-group', 'Neue Tickets', [], new TableConfiguration(KIXObjectType.TICKET,
+                'customer-new-tickets-group', 'Translatable#New Tickets', [],
+                new TableConfiguration(KIXObjectType.TICKET,
                     null, null,
                     [
                         new DefaultColumnConfiguration(
@@ -219,7 +221,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
 
         const pendingTicketsGroup =
             new ConfiguredWidget('customer-pending-tickets-group', new WidgetConfiguration(
-                'customer-pending-tickets-group', 'Tickets in Wartestatus', [], new TableConfiguration(
+                'customer-pending-tickets-group', 'Translatable#Pending Tickets', [], new TableConfiguration(
                     KIXObjectType.TICKET,
                     null, null,
                     [

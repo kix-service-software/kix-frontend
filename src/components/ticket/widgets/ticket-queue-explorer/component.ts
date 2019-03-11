@@ -5,6 +5,7 @@ import {
     TicketProperty, FilterDataType, FilterType, KIXObjectType, KIXObjectLoadingOptions, KIXObjectCache
 } from '../../../../core/model';
 import { TicketContext } from '../../../../core/browser/ticket';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 export class Component {
 
@@ -47,7 +48,7 @@ export class Component {
             KIXObjectType.QUEUE_HIERARCHY, null, loadingOptions
         );
 
-        this.state.nodes = this.prepareTreeNodes(queuesHierarchy);
+        this.state.nodes = await this.prepareTreeNodes(queuesHierarchy);
         this.setActiveNode(context.queue);
     }
 
@@ -73,12 +74,18 @@ export class Component {
         return activeNode;
     }
 
-    private prepareTreeNodes(categories: Queue[]): TreeNode[] {
-        return categories
-            ? categories.map((q) => new TreeNode(
-                q, q.Name, null, null, this.prepareTreeNodes(q.SubQueues), null, null, null, this.getTicketStats(q))
-            )
-            : [];
+    private async prepareTreeNodes(categories: Queue[]): Promise<TreeNode[]> {
+        const nodes = [];
+        if (categories) {
+            for (const q of categories) {
+                const name = await TranslationService.translate(q.Name);
+                const subQueues = await this.prepareTreeNodes(q.SubQueues);
+                nodes.push(new TreeNode(
+                    q, name, null, null, subQueues, null, null, null, this.getTicketStats(q)
+                ));
+            }
+        }
+        return nodes;
     }
 
     private getTicketStats(queue: Queue): TreeNodeProperty[] {

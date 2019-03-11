@@ -1,6 +1,7 @@
 import { ComponentState } from './ComponentState';
 import { TreeUtil, TreeNode } from '../../../core/model';
 import { IdService } from '../../../core/browser/IdService';
+import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 
 class TreeComponent {
 
@@ -11,10 +12,14 @@ class TreeComponent {
         this.state.treeId = input.treeId ? input.treeId : 'tree-' + IdService.generateDateBasedId();
     }
 
-    public onInput(input: any): void {
+    public async onInput(input: any): Promise<void> {
+        for (const n of input.nodes) {
+            (n as TreeNode).label = await TranslationService.translate(n.label, []);
+        }
         this.state.nodes = input.nodes;
         this.state.filterValue = input.filterValue;
         TreeUtil.linkTreeNodes(this.state.nodes, this.state.filterValue);
+
         this.state.activeNodes = input.activeNodes;
         (this as any).setStateDirty('activeNodes');
         this.state.treeStyle = input.treeStyle;

@@ -10,11 +10,11 @@ export class UpdateSignature extends RequestObject {
         validId: number = null
     ) {
         super();
-        this.applyProperty("Name", name);
-        this.applyProperty("Text", text);
-        this.applyProperty("ContentType", contentType);
-        this.applyProperty("Comment", comment);
-        this.applyProperty("ValidID", validId);
+        this.applyProperty('Name', name);
+        this.applyProperty('Text', text);
+        this.applyProperty('ContentType', contentType);
+        this.applyProperty('Comment', comment);
+        this.applyProperty('ValidID', validId);
     }
 
 }

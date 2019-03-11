@@ -1,5 +1,5 @@
 import { ComponentState } from './ComponentState';
-import { ContextService, AbstractContextServiceListener } from "../../../core/browser/context/";
+import { ContextService, AbstractContextServiceListener } from '../../../core/browser/context/';
 import { Context, KIXObject, IActionListener } from '../../../core/model';
 import { IContextListener } from '../../../core/browser/context/IContextListener';
 import { IdService, WidgetService } from '../../../core/browser';
@@ -27,7 +27,7 @@ export class Component implements IActionListener {
     }
 
     public onMount(): void {
-        document.addEventListener("click", (event) => {
+        document.addEventListener('click', (event) => {
             if (this.state.keepShow) {
                 this.state.keepShow = false;
             } else {
@@ -45,7 +45,7 @@ export class Component implements IActionListener {
         ContextService.getInstance().registerListener(new ComponentContextServiceListener(this));
         this.contextListener = new ComponentContextListener(this);
 
-        window.addEventListener("resize", this.windowResizeThrottler.bind(this), false);
+        window.addEventListener('resize', this.windowResizeThrottler.bind(this), false);
     }
 
     public setContext(context: Context<any>): void {
@@ -77,8 +77,8 @@ export class Component implements IActionListener {
 
     private getBrowserFontsize(): number {
         const browserFontSizeSetting = window
-            .getComputedStyle(document.getElementsByTagName("body")[0], null)
-            .getPropertyValue("font-size");
+            .getComputedStyle(document.getElementsByTagName('body')[0], null)
+            .getPropertyValue('font-size');
         return Number(browserFontSizeSetting.replace('px', ''));
     }
 

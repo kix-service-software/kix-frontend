@@ -1,10 +1,18 @@
 <div.faq-category-explorer>
-    <widget instanceId=state.instanceId minimizable=false minimized=false explorer=true
+    <widget
+        instanceId=state.instanceId
+        minimizable=false
+        minimized=false
+        explorer=true
         title=(state.widgetConfiguration ? state.widgetConfiguration.title : "FAQ Kategorien")>
         <@content>
-            <span.show-all class={active: !state.activeNode} on-click('showAll')>alle anzeigen</span>
+            <span.show-all class={
+                active: !state.activeNode
+            } on-click("showAll")>
+                <translation-string pattern="Translatable#Show all"/>
+            </span>
             <if(state.nodes)>
-                <tree tree=state.nodes activeNode=state.activeNode on-nodeClicked('activeNodeChanged')/>
+                <tree tree=state.nodes activeNode=state.activeNode on-nodeClicked("activeNodeChanged")/>
             </if>
         </@content>
     </widget>

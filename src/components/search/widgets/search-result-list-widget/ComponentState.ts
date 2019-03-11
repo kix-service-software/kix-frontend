@@ -6,7 +6,7 @@ export class ComponentState {
     public constructor(
         public instanceId: string = '201800709-search-result-list-widget',
         public widgetConfiguration: WidgetConfiguration = null,
-        public resultTitle: string = "Trefferliste:",
+        public resultTitle: string = "Hit List:",
         public resultIcon: string | ObjectIcon = null,
         public table: ITable = null,
         public noSearch: boolean = true,

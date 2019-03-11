@@ -1,11 +1,11 @@
-import { ComponentState } from "./ComponentState";
+import { ComponentState } from './ComponentState';
 import {
     ContextService, ActionFactory, SearchOperator, WidgetService, ServiceRegistry, TableFactoryService
-} from "../../../../core/browser";
-import { KIXObjectType, KIXObjectPropertyFilter, TableFilterCriteria, KIXObject } from "../../../../core/model";
-import { FAQArticleProperty, FAQCategory } from "../../../../core/model/kix/faq";
-import { FAQContext } from "../../../../core/browser/faq";
-import { TranslationService } from "../../../../core/browser/i18n/TranslationService";
+} from '../../../../core/browser';
+import { KIXObjectType, KIXObjectPropertyFilter, TableFilterCriteria, KIXObject } from '../../../../core/model';
+import { FAQArticleProperty, FAQCategory } from '../../../../core/model/kix/faq';
+import { FAQContext } from '../../../../core/browser/faq';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component {
 
@@ -96,7 +96,7 @@ class Component {
     }
 
     private setTitle(count: number = 0): void {
-        let title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : "";
+        let title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : '';
         if (this.state.table) {
             title = `${title} (${count})`;
         }

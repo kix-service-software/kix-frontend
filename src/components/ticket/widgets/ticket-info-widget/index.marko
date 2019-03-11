@@ -1,29 +1,47 @@
-<widget instanceId=state.instanceId title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
+<widget
+    instanceId=state.instanceId
+    title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
     contentActions=state.actions>
     <@content>
         <if(state.ticket)>
             <div.ticket-information>
                 <div.information-list>
                     <div>
-                        <object-property-label object=state.ticket property="CustomerID" labelProvider=state.labelProvider
+                        <object-property-label
+                            object=state.ticket
+                            property="CustomerID"
+                            labelProvider=state.labelProvider
                             routingConfiguration=component.customerRoutingConfiguration
                             objectId=state.ticket.CustomerID>
                             <@info>
                                 <if(state.ticket.CustomerID)>
-                                    <overlay-icon content="ticket-customer-info" instanceId="customer-info-overlay"
-                                        data={customerId: state.ticket.CustomerID, groups: state.customerInfoGroups}/>
+                                    <overlay-icon
+                                        content="ticket-customer-info"
+                                        instanceId="customer-info-overlay"
+                                        data={
+                                                                                customerId: state.ticket.CustomerID,
+                                                                                groups: state.customerInfoGroups
+                                                                            }/>
                                 </if>
                             </@info>
                         </object-property-label>
                     </div>
                     <div>
-                        <object-property-label object=state.ticket property="CustomerUserID" labelProvider=state.labelProvider
+                        <object-property-label
+                            object=state.ticket
+                            property="CustomerUserID"
+                            labelProvider=state.labelProvider
                             routingConfiguration=component.contactRoutingConfiguration
                             objectId=state.ticket.CustomerUserID>
                             <@info>
                                 <if(state.ticket.CustomerUserID)>
-                                    <overlay-icon content="ticket-contact-info" instanceId="contact-info-overlay"
-                                        data={contactId: state.ticket.CustomerUserID, groups: state.contactInfoGroups}/>
+                                    <overlay-icon
+                                        content="ticket-contact-info"
+                                        instanceId="contact-info-overlay"
+                                        data={
+                                                                                contactId: state.ticket.CustomerUserID,
+                                                                                groups: state.contactInfoGroups
+                                                                            }/>
                                 </if>
                             </@info>
                         </object-property-label>
@@ -73,7 +91,9 @@
                     </if>
                 </div>
                 <div.ci-list-wrapper>
-                    <div>Relevante Config Items:</div>
+                    <div>
+                        <translation-string pattern="Translatable#Relevant Config Items"/>:
+                    </div>
                     <div.ci-list-container>
                         <relevant-config-item-list/>
                     </div>

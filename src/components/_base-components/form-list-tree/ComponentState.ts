@@ -1,5 +1,5 @@
-import { TreeNode } from "../../../core/model";
-import { IdService } from "../../../core/browser";
+import { TreeNode } from '../../../core/model';
+import { IdService } from '../../../core/browser';
 
 export class ComponentState {
 

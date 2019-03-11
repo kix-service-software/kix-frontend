@@ -4,6 +4,7 @@ import {
 import { ContactDetailsContext } from ".";
 import { ContextService } from "../context";
 import { KIXObjectService } from "../kix";
+import { ObjectDataService } from "../ObjectDataService";
 
 export class ContactService extends KIXObjectService<Contact> {
 
@@ -90,7 +91,7 @@ export class ContactService extends KIXObjectService<Contact> {
     public async getTreeNodes(property: string): Promise<TreeNode[]> {
         let values: TreeNode[] = [];
 
-        const objectData = ContextService.getInstance().getObjectData();
+        const objectData = ObjectDataService.getInstance().getObjectData();
         if (objectData) {
             switch (property) {
                 case ContactProperty.VALID_ID:

@@ -1,10 +1,11 @@
 import { ComponentState } from './ComponentState';
 import {
-    ContextService, ActionFactory, IdService, DialogService
+    ContextService, ActionFactory, IdService
 } from '../../../../core/browser';
 import {
     KIXObjectType, Context, ConfigItem
 } from '../../../../core/model';
+import { DialogService } from '../../../../core/browser/components/dialog';
 
 class Component {
 

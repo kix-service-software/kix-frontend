@@ -28,4 +28,6 @@ export interface IServerConfiguration {
 
     SOCKET_TIMEOUT: number;
 
+    UPDATE_TRANSLATIONS: boolean;
+
 }

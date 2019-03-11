@@ -41,7 +41,7 @@ export class MainMenuCommunicator extends KIXCommunicator {
         const extensions = await PluginService.getInstance().getExtensions<IMainMenuExtension>(KIXExtensions.MAIN_MENU);
 
         let configuration: MainMenuConfiguration = await ConfigurationService.getInstance().getComponentConfiguration(
-            "personal-settings", "main-menu", user.UserID
+            'personal-settings', 'main-menu', user.UserID
         );
 
         if (!configuration) {
@@ -74,7 +74,7 @@ export class MainMenuCommunicator extends KIXCommunicator {
         const configuration = new MainMenuConfiguration(primaryConfiguration, secondaryConfiguration);
 
         await ConfigurationService.getInstance().saveComponentConfiguration(
-            "personal-settings", "main-menu", userId, configuration);
+            'personal-settings', 'main-menu', userId, configuration);
 
         return configuration;
     }

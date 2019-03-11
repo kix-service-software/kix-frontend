@@ -5,8 +5,8 @@ import { KIXObjectType, ContextMode } from '../../../model';
 export class CustomerCreateTicketAction extends AbstractAction {
 
     public initAction(): void {
-        this.text = "Neues Ticket";
-        this.icon = "kix-icon-new-ticket";
+        this.text = 'Translatable#New Ticket';
+        this.icon = 'kix-icon-new-ticket';
     }
 
     public run(): void {

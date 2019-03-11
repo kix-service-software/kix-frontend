@@ -1,4 +1,4 @@
-import { FormService } from "../../../../../core/browser/form";
+import { FormService } from '../../../../../core/browser/form';
 import { ComponentState } from './ComponentState';
 
 class Component {

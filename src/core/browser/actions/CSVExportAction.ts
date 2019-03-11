@@ -5,7 +5,7 @@ import { ITable } from '../table';
 export class CSVExportAction extends AbstractAction<ITable> {
 
     public initAction(): void {
-        this.text = "CSV-Export";
+        this.text = "Translatable#CSV-Export";
         this.icon = "kix-icon-export";
     }
 

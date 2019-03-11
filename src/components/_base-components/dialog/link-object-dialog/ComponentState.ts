@@ -1,5 +1,5 @@
-import { KIXObject, LinkTypeDescription, CreateLinkDescription, TreeNode, KIXObjectType } from "../../../../core/model";
-import { ITable } from "../../../../core/browser";
+import { KIXObject, LinkTypeDescription, CreateLinkDescription, TreeNode, KIXObjectType } from '../../../../core/model';
+import { ITable } from '../../../../core/browser';
 
 export class ComponentState {
 

@@ -1,15 +1,19 @@
-import { ObjectIcon, Contact, ContactProperty, Customer, KIXObjectType, KIXObject } from "../../model";
-import { ILabelProvider, ContextService } from "..";
-import { KIXObjectService } from "../kix";
-import { SearchProperty } from "../SearchProperty";
+import { ObjectIcon, Contact, ContactProperty, Customer, KIXObjectType } from '../../model';
+import { ILabelProvider } from '..';
+import { KIXObjectService } from '../kix';
+import { SearchProperty } from '../SearchProperty';
+import { TranslationService } from '../i18n/TranslationService';
+import { ObjectDataService } from '../ObjectDataService';
 
 export class ContactLabelProvider implements ILabelProvider<Contact> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONTACT;
 
-    public async getPropertyValueDisplayText(property: string, value: string | number): Promise<string> {
+    public async getPropertyValueDisplayText(
+        property: string, value: string | number, translatable: boolean = true
+    ): Promise<string> {
         let displayValue = value;
-        const objectData = ContextService.getInstance().getObjectData();
+        const objectData = ObjectDataService.getInstance().getObjectData();
         if (objectData) {
             switch (property) {
                 case ContactProperty.VALID_ID:
@@ -19,6 +23,11 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
                 default:
             }
         }
+
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
+        }
+
         return displayValue ? displayValue.toString() : '';
     }
 
@@ -26,81 +35,86 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
         return object instanceof Contact;
     }
 
-    public async getPropertyText(property: string): Promise<string> {
+    public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
             case SearchProperty.FULLTEXT:
-                displayValue = 'Volltext';
+                displayValue = 'Translatable#Full Text';
                 break;
             case ContactProperty.ContactID:
-                displayValue = "ID";
+                displayValue = 'Translatable#ID';
                 break;
             case ContactProperty.USER_FIRST_NAME:
-                displayValue = "Vorname";
+                displayValue = 'Translatable#First Name';
                 break;
             case ContactProperty.USER_LAST_NAME:
-                displayValue = "Name";
+                displayValue = 'Translatable#Name';
                 break;
             case ContactProperty.USER_EMAIL:
-                displayValue = "E-Mail";
+                displayValue = 'Translatable#E-Mail';
                 break;
             case ContactProperty.USER_LOGIN:
-                displayValue = "Login";
+                displayValue = 'Translatable#Login';
                 break;
             case ContactProperty.USER_CUSTOMER_IDS:
-                displayValue = "Zugeordnete Kunden";
+                displayValue = 'Translatable#Assigned Customers';
                 break;
             case ContactProperty.USER_CUSTOMER_ID:
-                displayValue = "Kunden ID";
+                displayValue = 'Translatable#Customer ID';
                 break;
             case ContactProperty.USER_PHONE:
-                displayValue = "Telefon";
+                displayValue = 'Translatable#Phone';
                 break;
             case ContactProperty.USER_FAX:
-                displayValue = "Fax";
+                displayValue = 'Translatable#Fax';
                 break;
             case ContactProperty.USER_MOBILE:
-                displayValue = "Mobil";
+                displayValue = 'Translatable#Cell Phone';
                 break;
             case ContactProperty.USER_STREET:
-                displayValue = "Straße";
+                displayValue = 'Translatable#Street';
                 break;
             case ContactProperty.USER_CITY:
-                displayValue = "Stadt";
+                displayValue = 'Translatable#City';
                 break;
             case ContactProperty.USER_ZIP:
-                displayValue = "PLZ";
+                displayValue = 'Translatable#Zip';
                 break;
             case ContactProperty.USER_COUNTRY:
-                displayValue = "Land";
+                displayValue = 'Translatable#Country';
                 break;
             case ContactProperty.USER_TITLE:
-                displayValue = "Titel";
+                displayValue = 'Translatable#Title';
                 break;
             case ContactProperty.USER_COMMENT:
-                displayValue = "Kommentar";
+                displayValue = 'Translatable#Comment';
                 break;
             case ContactProperty.USER_PASSWORD:
-                displayValue = "Passwort";
+                displayValue = 'Translatable#Password';
                 break;
             case ContactProperty.VALID_ID:
-                displayValue = "Gültigkeit";
+                displayValue = 'Translatable#validity';
                 break;
             case ContactProperty.OPEN_TICKETS_COUNT:
-                displayValue = "Offene Tickets";
+                displayValue = 'Translatable#Open Tickets';
                 break;
             case ContactProperty.ESCALATED_TICKETS_COUNT:
-                displayValue = "Eskalierte Tickets";
+                displayValue = 'Translatable#Escalated Tickets';
                 break;
             case ContactProperty.REMINDER_TICKETS_COUNT:
-                displayValue = "Erinnerungstickets";
+                displayValue = 'Translatable#Reminder Tickets';
                 break;
             case ContactProperty.CREATE_NEW_TICKET:
-                displayValue = "";
+                displayValue = 'Translatable#New Ticket';
                 break;
             default:
                 displayValue = property;
         }
+
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
+        }
+
         return displayValue;
     }
 
@@ -111,10 +125,12 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
         return undefined;
     }
 
-    public async getDisplayText(contact: Contact, property: string): Promise<string> {
+    public async getDisplayText(
+        contact: Contact, property: string, defaultValue?: string, translatable: boolean = true
+    ): Promise<string> {
         let displayValue = contact[property];
 
-        const objectData = ContextService.getInstance().getObjectData();
+        const objectData = ObjectDataService.getInstance().getObjectData();
 
         switch (property) {
             case ContactProperty.VALID_ID:
@@ -141,7 +157,8 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
                 break;
             case ContactProperty.CREATE_NEW_TICKET:
                 if (contact.ValidID === 1) {
-                    displayValue = "Neues Ticket";
+                    const newTicketLabel = await TranslationService.translate('Translatable#New Ticket');
+                    displayValue = newTicketLabel;
                 }
                 break;
             case ContactProperty.OPEN_TICKETS_COUNT:
@@ -163,6 +180,10 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
                 displayValue = await this.getPropertyValueDisplayText(property, displayValue);
         }
 
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
+        }
+
         return displayValue ? displayValue.toString() : '';
     }
 
@@ -174,7 +195,9 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
         return [];
     }
 
-    public async getObjectText(contact: Contact, id: boolean = false, name: boolean = false): Promise<string> {
+    public async getObjectText(
+        contact: Contact, id: boolean = false, name: boolean = false, translatable: boolean = true
+    ): Promise<string> {
         let returnString = '';
         if (contact) {
             if (id) {
@@ -190,12 +213,13 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
                 returnString = contact.DisplayValue;
             }
         } else {
-            returnString = 'Ansprechpartner';
+            const contactLabel = await TranslationService.translate('Translatable#Contact');
+            returnString = contactLabel;
         }
         return returnString;
     }
 
-    public getObjectAdditionalText(object: Contact): string {
+    public getObjectAdditionalText(object: Contact, translatable: boolean = true): string {
         return '';
     }
 
@@ -207,8 +231,16 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
         return '';
     }
 
-    public getObjectName(): string {
-        return "Ansprechpartner";
+    public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
+        if (plural) {
+            const contactsLabel = translatable
+                ? await TranslationService.translate('Translatable#Contacts')
+                : 'Contacts';
+            return contactsLabel;
+        }
+
+        const contactLabel = translatable ? await TranslationService.translate('Translatable#Contact') : 'Contact';
+        return contactLabel;
     }
 
     public async getIcons(object: Contact, property: string): Promise<Array<string | ObjectIcon>> {

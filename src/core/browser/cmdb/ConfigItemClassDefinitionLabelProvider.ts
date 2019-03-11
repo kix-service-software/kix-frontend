@@ -3,7 +3,8 @@ import {
     ObjectIcon, KIXObjectType, ConfigItemClassDefinition, KIXObject, ConfigItemClassProperty, DateTimeUtil,
     ConfigItemClassDefinitionProperty
 } from "../../model";
-import { ContextService } from "../context";
+import { TranslationService } from "../i18n/TranslationService";
+import { ObjectDataService } from "../ObjectDataService";
 
 export class ConfigItemClassDefinitionLabelProvider implements ILabelProvider<ConfigItemClassDefinition> {
 
@@ -13,24 +14,29 @@ export class ConfigItemClassDefinitionLabelProvider implements ILabelProvider<Co
         return value;
     }
 
-    public async getPropertyText(property: string, short?: boolean): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
             case ConfigItemClassDefinitionProperty.VERSION:
-                displayValue = 'Version';
+                displayValue = 'Translatable#Version';
                 break;
             case ConfigItemClassProperty.CHANGE_BY:
-                displayValue = 'Geändert von';
+                displayValue = 'Translatable#Changed by';
                 break;
             case ConfigItemClassProperty.CREATE_TIME:
-                displayValue = 'Erstellt am';
+                displayValue = 'Translatable#Created at';
                 break;
             case ConfigItemClassProperty.CREATE_BY:
-                displayValue = 'Erstellt von';
+                displayValue = 'Translatable#Created by';
                 break;
             default:
                 displayValue = property;
         }
+
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
+        }
+
         return displayValue;
     }
 
@@ -38,10 +44,12 @@ export class ConfigItemClassDefinitionLabelProvider implements ILabelProvider<Co
         return;
     }
 
-    public async getDisplayText(ciClassDefinition: ConfigItemClassDefinition, property: string): Promise<string> {
+    public async getDisplayText(
+        ciClassDefinition: ConfigItemClassDefinition, property: string, value?: string, translatable: boolean = true
+    ): Promise<string> {
         let displayValue = ciClassDefinition[property];
 
-        const objectData = ContextService.getInstance().getObjectData();
+        const objectData = ObjectDataService.getInstance().getObjectData();
 
         switch (property) {
             case ConfigItemClassDefinitionProperty.CREATE_TIME:
@@ -56,6 +64,11 @@ export class ConfigItemClassDefinitionLabelProvider implements ILabelProvider<Co
             default:
                 displayValue = ciClassDefinition[property];
         }
+
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
+        }
+
         return displayValue;
     }
 
@@ -89,8 +102,18 @@ export class ConfigItemClassDefinitionLabelProvider implements ILabelProvider<Co
         return ciClassDefinition.Class;
     }
 
-    public getObjectName(plural: boolean = false): string {
-        return plural ? "CMDB Klassen Definitionen" : "CMDB Klasse Definition";
+    public async getObjectName(plural: boolean = false, translatable: boolean = true): Promise<string> {
+        if (plural) {
+            const definitionsLabel = translatable
+                ? await TranslationService.translate('Translatable#CMDB Class Definitions')
+                : 'CMDB Class Definitions';
+            return definitionsLabel;
+        }
+
+        const definitionLabel = translatable
+            ? await TranslationService.translate('Translatable#CMDB Class Definition')
+            : 'CMDB Class Definition';
+        return definitionLabel;
     }
 
     public async getIcons(

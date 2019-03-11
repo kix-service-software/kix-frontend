@@ -26,7 +26,7 @@ export abstract class KIXCommunicator implements ICommunicator {
 
             // start profiling
 
-            let object = "";
+            let object = '';
             if (data && data['objectType']) {
                 object = `(${data['objectType']})`;
             }

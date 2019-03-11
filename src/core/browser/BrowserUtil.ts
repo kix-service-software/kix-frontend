@@ -7,15 +7,15 @@ export class BrowserUtil {
         OverlayService.getInstance().openOverlay(OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true);
     }
 
-    public static openSuccessOverlay(message: string): void {
+    public static async openSuccessOverlay(message: string): Promise<void> {
         const content = new ComponentContent('toast', new ToastContent('kix-icon-check', message));
         OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
     }
 
     public static openConfirmOverlay(
-        title: string = 'Sicher?', confirmText: string = 'Sind Sie sicher?',
+        title: string = 'Sure?', confirmText: string = 'Are you sure?',
         confirmCallback: () => void = null, cancelCallback: () => void = null,
-        labels: [string, string] = ['Ja', 'Nein']
+        labels: [string, string] = ['Yes', 'No']
     ): void {
         const content = new ComponentContent(
             'confirm-overlay', new ConfirmOverlayContent(confirmText, confirmCallback, cancelCallback, labels)
@@ -36,7 +36,6 @@ export class BrowserUtil {
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-
         }
     }
 

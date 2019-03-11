@@ -4,7 +4,6 @@ import { ContextService } from '../../context';
 import { KIXObjectService } from '../../kix';
 import { EventService } from '../../event';
 import { TicketDetailsContext } from '../context';
-import { LabelService } from '../../LabelService';
 import { BrowserUtil } from '../../BrowserUtil';
 import { ApplicationEvent } from '../../application';
 
@@ -13,32 +12,32 @@ export class TicketLockAction extends AbstractAction<Ticket> {
     private currentLockId: number;
 
     public initAction(): void {
-        this.text = "Sperren";
-        this.icon = "kix-icon-lock-close";
+        this.text = 'Translatable#Lock';
+        this.icon = 'kix-icon-lock-close';
     }
 
     public setData(ticket: Ticket): void {
         this.data = ticket;
 
-        this.text = ticket.LockID === 1 ? 'Sperren' : 'Freigeben';
+        this.text = ticket.LockID === 1 ? 'Translatable#Lock' : 'Translatable#Unlock';
         this.icon = ticket.LockID === 1 ? 'kix-icon-lock-close' : 'kix-icon-lock-open';
         this.currentLockId = ticket.LockID;
     }
 
     public async run(): Promise<void> {
-        let successHint = 'Ticket wurde gesperrt.';
+        let successHint = 'Translatable#Ticket locked.';
 
         let newLockId = 1;
         if (this.currentLockId === 1) {
             newLockId = 2;
             EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Ticket wird gesperrt ...' }
+                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Lock Ticket ...' }
             );
         } else {
             EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Ticket wird freigegeben ...' }
+                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Unlock Ticket ...' }
             );
-            successHint = 'Ticket wurde freigegeben.';
+            successHint = 'Translatable#Ticket unlocked.';
         }
 
         await KIXObjectService.updateObject(

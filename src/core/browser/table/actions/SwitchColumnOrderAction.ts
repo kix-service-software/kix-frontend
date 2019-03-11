@@ -1,12 +1,12 @@
-import { AbstractAction } from "../../../model";
-import { ITable } from "../ITable";
-import { Table } from "../Table";
+import { AbstractAction } from '../../../model';
+import { ITable } from '../ITable';
+import { Table } from '../Table';
 
 export class SwitchColumnOrderAction extends AbstractAction<ITable> {
 
     public initAction(): void {
-        this.text = "Tauschen";
-        this.icon = "kix-icon-exchange";
+        this.text = 'Translatable#Switch';
+        this.icon = 'kix-icon-exchange';
     }
 
     public canRun(): boolean {

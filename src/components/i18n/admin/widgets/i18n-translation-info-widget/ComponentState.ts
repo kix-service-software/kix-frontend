@@ -1,5 +1,5 @@
-import { WidgetComponentState, AbstractAction, Translation } from "../../../../../core/model";
-import { TranslationLabelProvider } from "../../../../../core/browser/i18n";
+import { WidgetComponentState, AbstractAction, Translation } from '../../../../../core/model';
+import { TranslationLabelProvider } from '../../../../../core/browser/i18n';
 
 export class ComponentState extends WidgetComponentState<any> {
 

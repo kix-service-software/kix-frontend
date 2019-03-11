@@ -70,7 +70,7 @@ export class Extension implements IConfigurationExtension {
 
             groups = [...groups, lastGroup].filter((g) => g.formFields.length);
 
-            const form = new Form(formId, 'Kunde Bearbeiten', groups, KIXObjectType.CUSTOMER, true, FormContext.EDIT);
+            const form = new Form(formId, 'Edit Customer', groups, KIXObjectType.CUSTOMER, true, FormContext.EDIT);
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
         configurationService.registerForm([FormContext.EDIT], KIXObjectType.CUSTOMER, formId);
@@ -81,31 +81,31 @@ export class Extension implements IConfigurationExtension {
         let hint = label;
         switch (attribute) {
             case CustomerProperty.CUSTOMER_ID:
-                hint = 'Geben Sie einen eindeutigen Identifier (z.B. eine Kundennummer) für den Kunden ein.';
+                hint = 'Insert a unique identifier (e.g. a customer number) for the customer.';
                 break;
             case CustomerProperty.CUSTOMER_COMPANY_NAME:
-                hint = 'Geben Sie eine Bezeichnung für den Kunden ein.';
+                hint = 'Insert a name for the customer.';
                 break;
             case CustomerProperty.CUSTOMER_COMPANY_STREET:
-                hint = 'Geben Sie die Straße der Kundenadresse ein.';
+                hint = 'Insert the street for the customer address.';
                 break;
             case CustomerProperty.CUSTOMER_COMPANY_ZIP:
-                hint = 'Geben Sie die Postleitzahl (PLZ) der Kundenadresse ein.';
+                hint = 'Insert the postcode for the customer address.';
                 break;
             case CustomerProperty.CUSTOMER_COMPANY_CITY:
-                hint = 'Geben Sie den Ort für die Kundenadresse ein.';
+                hint = 'Insert a city for the customer address.';
                 break;
             case CustomerProperty.CUSTOMER_COMPANY_URL:
-                hint = 'Geben Sie die URL der Website des Kunden ein.';
+                hint = 'Insert the URL of the customer.';
                 break;
             case CustomerProperty.CUSTOMER_COMPANY_COUNTRY:
-                hint = 'Geben Sie das Land für die Kundenadresse ein.';
+                hint = 'Insert a country for the customer address.';
                 break;
             case CustomerProperty.CUSTOMER_COMPANY_COMMENT:
-                hint = 'Hinterlegen Sie hier zusätzliche Informationen zum Kunden.';
+                hint = 'Insert additional information about the customer.';
                 break;
             case CustomerProperty.VALID_ID:
-                hint = 'Legen Sie fest, ob der Kundeneintrag „gültig“, „temporär ungültig“ oder „ungültig“ ist.';
+                hint = 'Set the customer as „valid“, „invalid (temporarily)“, or „invalid“.';
                 break;
             default:
         }

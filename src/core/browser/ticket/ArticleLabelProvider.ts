@@ -1,6 +1,7 @@
-import { ILabelProvider } from "..";
-import { Article, ArticleProperty, DateTimeUtil, ObjectIcon, KIXObjectType, Channel } from "../../model";
-import { KIXObjectService } from "../kix";
+import { ILabelProvider } from '..';
+import { Article, ArticleProperty, DateTimeUtil, ObjectIcon, KIXObjectType, Channel } from '../../model';
+import { KIXObjectService } from '../kix';
+import { TranslationService } from '../i18n/TranslationService';
 
 export class ArticleLabelProvider implements ILabelProvider<Article> {
 
@@ -10,48 +11,53 @@ export class ArticleLabelProvider implements ILabelProvider<Article> {
         return value.toString();
     }
 
-    public async getPropertyText(property: string): Promise<string> {
+    public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
             case ArticleProperty.TO:
-                displayValue = 'An';
+                displayValue = 'Translatable#To';
                 break;
             case ArticleProperty.CC:
-                displayValue = 'Cc';
+                displayValue = 'Translatable#Cc';
                 break;
             case ArticleProperty.BCC:
-                displayValue = 'Bcc';
+                displayValue = 'Translatable#Bcc';
                 break;
             case ArticleProperty.ARTICLE_INFORMATION:
-                displayValue = 'Neu';
+                displayValue = 'Translatable#New';
                 break;
             case ArticleProperty.NUMBER:
-                displayValue = 'Nr.';
+                displayValue = 'Translatable#No.';
                 break;
             case ArticleProperty.CUSTOMER_VISIBLE:
-                displayValue = 'Sichtbar in Kundenportal';
+                displayValue = 'Translatable#Visible in customer portal';
                 break;
             case ArticleProperty.SENDER_TYPE_ID:
-                displayValue = 'Sender';
+                displayValue = 'Translatable#Sender';
                 break;
             case ArticleProperty.FROM:
-                displayValue = 'Von';
+                displayValue = 'Translatable#From';
                 break;
             case ArticleProperty.SUBJECT:
-                displayValue = 'Betreff';
+                displayValue = 'Translatable#Subject';
                 break;
             case ArticleProperty.INCOMING_TIME:
-                displayValue = 'Erstellt am';
+                displayValue = 'Translatable#Created at';
                 break;
             case ArticleProperty.ATTACHMENTS:
-                displayValue = 'Anlagen';
+                displayValue = 'Translatable#Attachments';
                 break;
             case ArticleProperty.CHANNEL_ID:
-                displayValue = 'Typ';
+                displayValue = 'Translatable#Channel';
                 break;
             default:
                 displayValue = property;
         }
+
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
+        }
+
         return displayValue;
     }
 
@@ -62,7 +68,9 @@ export class ArticleLabelProvider implements ILabelProvider<Article> {
         return;
     }
 
-    public async getDisplayText(article: Article, property: string, defaultValue?: string): Promise<string> {
+    public async getDisplayText(
+        article: Article, property: string, defaultValue?: string, translatable: boolean = true
+    ): Promise<string> {
         let displayValue;
         switch (property) {
             case ArticleProperty.FROM:
@@ -89,7 +97,7 @@ export class ArticleLabelProvider implements ILabelProvider<Article> {
                 if (article.Attachments) {
                     const attachments = article.Attachments.filter((a) => a.Disposition !== 'inline');
                     if (attachments.length > 0) {
-                        displayValue = '(' + attachments.length + ')';
+                        displayValue = 'Translatable#(' + attachments.length + ')';
                     }
                 }
                 break;
@@ -107,7 +115,7 @@ export class ArticleLabelProvider implements ILabelProvider<Article> {
                 break;
 
             case ArticleProperty.ARTICLE_INFORMATION:
-                displayValue = article.isUnread() ? 'ungelesen' : 'gelesen';
+                displayValue = article.isUnread() ? 'unread' : 'read';
                 break;
 
             case ArticleProperty.CHANNEL_ID:
@@ -116,20 +124,25 @@ export class ArticleLabelProvider implements ILabelProvider<Article> {
                     const channel = channels.find((c) => c.ID === article.ChannelID);
                     displayValue = channel ? channel.Name : article[property];
                     if (displayValue === 'email') {
-                        displayValue = 'E-Mail';
+                        displayValue = await TranslationService.translate('Translatable#E-Mail');
                     } else if (displayValue === 'note') {
-                        displayValue = 'Notiz';
+                        displayValue = await TranslationService.translate('Translatable#Note');
                     }
                 }
                 break;
 
             case ArticleProperty.CUSTOMER_VISIBLE:
-                displayValue = 'Sichtbar in Kundenportal';
+                displayValue = 'Translatable#Visible in customer portal';
                 break;
 
             default:
                 displayValue = defaultValue ? defaultValue : article[property];
         }
+
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
+        }
+
         return displayValue;
     }
 
@@ -158,7 +171,7 @@ export class ArticleLabelProvider implements ILabelProvider<Article> {
     }
 
     public getObjectAdditionalText(article: Article): string {
-        return "";
+        return '';
     }
 
     public getObjectIcon(article: Article): string | ObjectIcon {
@@ -169,8 +182,8 @@ export class ArticleLabelProvider implements ILabelProvider<Article> {
         return article.Subject;
     }
 
-    public getObjectName(): string {
-        return "Artikel";
+    public async getObjectName(): Promise<string> {
+        return await TranslationService.translate('Translatable#Article');
     }
 
     public async getIcons(article: Article, property: string): Promise<Array<string | ObjectIcon>> {

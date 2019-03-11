@@ -1,5 +1,5 @@
 import {
-    OverlayService, FormService, ContextService, KIXObjectService, BrowserUtil, DialogService
+    OverlayService, FormService, ContextService, KIXObjectService, BrowserUtil
 } from "../../../../core/browser";
 import {
     ValidationSeverity, OverlayType, ComponentContent, ValidationResult,
@@ -7,6 +7,8 @@ import {
 } from "../../../../core/model";
 import { ComponentState } from "./ComponentState";
 import { TicketDetailsContext } from "../../../../core/browser/ticket";
+import { TranslationService } from "../../../../core/browser/i18n/TranslationService";
+import { DialogService } from "../../../../core/browser/components/dialog";
 
 class Component {
 
@@ -17,7 +19,7 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
+        DialogService.getInstance().setMainDialogHint('Translatable#All form fields marked by * are required fields.');
     }
 
     public async cancel(): Promise<void> {
@@ -53,7 +55,8 @@ class Component {
                         if (article.isUnsent()) {
                             BrowserUtil.openErrorOverlay(article.getUnsentError());
                         } else {
-                            BrowserUtil.openSuccessOverlay('Änderungen wurden gespeichert.');
+                            const toast = await TranslationService.translate('Translatable#Changes saved.');
+                            BrowserUtil.openSuccessOverlay(toast);
                         }
                         DialogService.getInstance().submitMainDialog();
                     }).catch((error: Error) => {

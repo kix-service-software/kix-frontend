@@ -3,8 +3,8 @@ import { AbstractAction } from '../../../../model/components/action/AbstractActi
 export class ArticleCallIncomingAction extends AbstractAction {
 
     public initAction(): void {
-        this.text = "Anruf eingehend";
-        this.icon = "kix-icon-call-receive";
+        this.text = 'Translatable#Phone inbound';
+        this.icon = 'kix-icon-call-receive';
     }
 
 }

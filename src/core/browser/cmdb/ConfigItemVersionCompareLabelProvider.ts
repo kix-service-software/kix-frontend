@@ -1,39 +1,57 @@
-import { ILabelProvider } from "..";
-import { Version, ObjectIcon, KIXObjectType, VersionProperty } from "../../model";
-import { ContextService } from "../context";
+import { ILabelProvider } from '..';
+import { Version, ObjectIcon, KIXObjectType, VersionProperty } from '../../model';
+import { ContextService } from '../context';
+import { TranslationService } from '../i18n/TranslationService';
 
 export class ConfigItemVersionCompareLabelProvider implements ILabelProvider<Version> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_VERSION_COMPARE;
 
-    public async getPropertyValueDisplayText(property: string, value: string | number): Promise<string> {
-        return value ? value.toString() : '';
+    public async getPropertyValueDisplayText(
+        property: string, value: string | number, translatable: boolean = true
+    ): Promise<string> {
+        let displayValue = value ? value.toString() : '';
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
+        }
+        return displayValue;
     }
 
-    public async getPropertyText(property: string): Promise<string> {
-        let text = property;
+    public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
+        let displayValue = property;
         switch (property) {
             case 'CONFIG_ITEM_ATTRIBUTE':
-                text = 'Attribute';
+                displayValue = 'Translatable#Attributes';
                 break;
             default:
-                text = property;
+                displayValue = property;
         }
-        return text;
+
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
+        }
+
+        return displayValue;
     }
 
     public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
         return;
     }
 
-    public async getDisplayText(version: Version, property: string, value?: string | number): Promise<string> {
+    public async getDisplayText(
+        version: Version, property: string, value?: string, translatable: boolean = true
+    ): Promise<string> {
         let displayValue = property.toString();
 
         switch (property) {
             case 'CONFIG_ITEM_ATTRIBUTE':
-                displayValue = displayValue + ' from LP';
+                displayValue = displayValue;
                 break;
             default:
+        }
+
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
         }
 
         return displayValue;
@@ -52,23 +70,27 @@ export class ConfigItemVersionCompareLabelProvider implements ILabelProvider<Ver
     }
 
     public async getObjectText(object: Version): Promise<string> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public getObjectAdditionalText(object: Version): string {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public getObjectIcon(object: Version): string | ObjectIcon {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public getObjectTooltip(object: Version): string {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
-    public getObjectName(): string {
-        return "Config Item Version Compare";
+    public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
+        let displayValue = 'Translatable#Config Item Version Compare';
+        if (translatable) {
+            displayValue = await TranslationService.translate(displayValue, []);
+        }
+        return displayValue;
     }
 
     public async getIcons(object: Version, property: string): Promise<Array<string | ObjectIcon>> {

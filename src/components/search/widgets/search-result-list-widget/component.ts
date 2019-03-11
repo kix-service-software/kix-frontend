@@ -9,6 +9,7 @@ import {
 } from '../../../../core/browser';
 import { SearchContext } from '../../../../core/browser/search/context';
 import { EventService, IEventSubscriber } from '../../../../core/browser/event';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component implements IKIXObjectSearchListener {
 
@@ -92,11 +93,14 @@ class Component implements IKIXObjectSearchListener {
 
             const labelProvider = LabelService.getInstance().getLabelProviderForType(objectType);
             this.state.resultIcon = labelProvider.getObjectIcon();
-            this.state.resultTitle = `Trefferliste ${labelProvider.getObjectName(true)} (${resultCount})`;
+            const objectName = await labelProvider.getObjectName(true);
+
+            const titleLabel = await TranslationService.translate('Translatable#Hit List', []);
+            this.state.resultTitle = `${titleLabel} ${objectName} (${resultCount})`;
 
             let emptyResultHint;
             if (!cache) {
-                emptyResultHint = 'Keine Suche ausgeführt.';
+                emptyResultHint = 'Translatable#No search query.';
             }
 
             const tableConfiguration = new TableConfiguration(
@@ -144,7 +148,8 @@ class Component implements IKIXObjectSearchListener {
             this.setActionsDirty();
         } else {
             this.state.resultIcon = null;
-            this.state.resultTitle = 'Trefferliste';
+            const titleLabel = await TranslationService.translate('Translatable#Hit List', []);
+            this.state.resultTitle = titleLabel;
         }
     }
 

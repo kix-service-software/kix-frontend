@@ -7,7 +7,7 @@
                 readonly: state.readonly
             }
         key=("form-list-input-container-" + state.listId)
-        title=input.placeholder>
+        title=state.placeholder>
         <if(state.selectedNodes.length === 0)>
             <input.input-style
                 type="text"
@@ -16,7 +16,7 @@
                             }
                 readonly=state.readonly
                 disabled=state.readonly
-                placeholder=input.placeholder
+                placeholder=state.placeholder
                 on-click("toggleList", false)/>
         </if>
         <else>
@@ -38,7 +38,7 @@
         <div.form-input-control-list>
             <div.input-action-list>
                 <for(action in state.actions)>
-                    <label-item label=action.label removeLabels=false on-labelClicked("actionClicked", action)/>
+                    <label-item label=action.label removeLabels=false translatable=true on-labelClicked("actionClicked", action)/>
                 </for>
             </div>
             <span.form-list-button.kix-icon-sort-down on-click("listToggleButtonClicked")/>
@@ -77,11 +77,12 @@
                     <if(state.asMultiselect)>
                         <div.button-bar key="buttonbar">
                             <span on-click("selectAll")>
-                                <input.select-all-Checkbox type="checkbox" key="selectAllCheckbox"/>Alle auswählen
+                                <input.select-all-Checkbox type="checkbox" key="selectAllCheckbox"/>
+                                <translation-string pattern="Translatable#Select all"/>
                             </span>
                             <button.submit-button type="button" on-click("submit") title="Bestätigen">
                                 <span.kix-icon-check/>
-                                Bestätigen
+                                <translation-string pattern="Translatable#Submit"/>
                             </button>
                         </div>
                     </if>

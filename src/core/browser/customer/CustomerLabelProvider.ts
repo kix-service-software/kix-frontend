@@ -1,14 +1,18 @@
-import { Customer, CustomerProperty, ObjectIcon, KIXObjectType, KIXObject } from "../../model";
-import { ILabelProvider, ContextService } from "..";
-import { SearchProperty } from "../SearchProperty";
+import { Customer, CustomerProperty, ObjectIcon, KIXObjectType } from '../../model';
+import { ILabelProvider } from '..';
+import { SearchProperty } from '../SearchProperty';
+import { TranslationService } from '../i18n/TranslationService';
+import { ObjectDataService } from '../ObjectDataService';
 
 export class CustomerLabelProvider implements ILabelProvider<Customer> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CUSTOMER;
 
-    public async getPropertyValueDisplayText(property: string, value: string | number): Promise<string> {
+    public async getPropertyValueDisplayText(
+        property: string, value: string | number, translatable: boolean = true
+    ): Promise<string> {
         let displayValue = value;
-        const objectData = ContextService.getInstance().getObjectData();
+        const objectData = ObjectDataService.getInstance().getObjectData();
         if (objectData) {
             switch (property) {
                 case CustomerProperty.VALID_ID:
@@ -18,6 +22,11 @@ export class CustomerLabelProvider implements ILabelProvider<Customer> {
                 default:
             }
         }
+
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
+        }
+
         return displayValue ? displayValue.toString() : '';
     }
 
@@ -25,54 +34,59 @@ export class CustomerLabelProvider implements ILabelProvider<Customer> {
         return object instanceof Customer;
     }
 
-    public async getPropertyText(property: string): Promise<string> {
+    public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
             case SearchProperty.FULLTEXT:
-                displayValue = 'Volltext';
+                displayValue = 'Translatable#Full Text';
                 break;
             case CustomerProperty.CUSTOMER_COMPANY_CITY:
-                displayValue = "Stadt";
+                displayValue = 'Translatable#City';
                 break;
             case CustomerProperty.CUSTOMER_COMPANY_COMMENT:
-                displayValue = "Kommentar";
+                displayValue = 'Translatable#Comment';
                 break;
             case CustomerProperty.CUSTOMER_COMPANY_COUNTRY:
-                displayValue = "Land";
+                displayValue = 'Translatable#Country';
                 break;
             case CustomerProperty.CUSTOMER_COMPANY_NAME:
-                displayValue = "Name";
+                displayValue = 'Translatable#Name';
                 break;
             case CustomerProperty.CUSTOMER_COMPANY_STREET:
-                displayValue = "Straße";
+                displayValue = 'Translatable#Street';
                 break;
             case CustomerProperty.CUSTOMER_COMPANY_URL:
-                displayValue = "URL";
+                displayValue = 'Translatable#URL';
                 break;
             case CustomerProperty.CUSTOMER_COMPANY_ZIP:
-                displayValue = "PLZ";
+                displayValue = 'Translatable#PLZ';
                 break;
             case CustomerProperty.CUSTOMER_ID:
-                displayValue = "Kunden ID";
+                displayValue = 'Translatable#Customer ID';
                 break;
             case CustomerProperty.VALID_ID:
-                displayValue = "Gültigkeit";
+                displayValue = 'Translatable#validity';
                 break;
             case CustomerProperty.OPEN_TICKETS_COUNT:
-                displayValue = "Offene Tickets";
+                displayValue = 'Translatable#Open Tickets';
                 break;
             case CustomerProperty.ESCALATED_TICKETS_COUNT:
-                displayValue = "Eskalierte Tickets";
+                displayValue = 'Translatable#Escalated Tickets';
                 break;
             case CustomerProperty.REMINDER_TICKETS_COUNT:
-                displayValue = "Erinnerungstickets";
+                displayValue = 'Translatable#Reminder Tickets';
                 break;
             case 'customer-new-ticket':
-                displayValue = "";
+                displayValue = 'Translatable#New Ticket';
                 break;
             default:
                 displayValue = property;
         }
+
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
+        }
+
         return displayValue;
     }
 
@@ -80,12 +94,14 @@ export class CustomerLabelProvider implements ILabelProvider<Customer> {
         return;
     }
 
-    public async getDisplayText(customer: Customer, property: string): Promise<string> {
+    public async getDisplayText(
+        customer: Customer, property: string, defaultValue?: string, translatable: boolean = true
+    ): Promise<string> {
         let displayValue = customer[property];
 
         switch (property) {
             case CustomerProperty.VALID_ID:
-                const objectData = ContextService.getInstance().getObjectData();
+                const objectData = ObjectDataService.getInstance().getObjectData();
                 const valid = objectData.validObjects.find((v) => v.ID.toString() === customer[property].toString());
                 displayValue = valid ? valid.Name : customer[property].toString();
                 break;
@@ -102,6 +118,10 @@ export class CustomerLabelProvider implements ILabelProvider<Customer> {
                 displayValue = await this.getPropertyValueDisplayText(property, displayValue);
         }
 
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
+        }
+
         return displayValue ? displayValue.toString() : '';
     }
 
@@ -113,7 +133,9 @@ export class CustomerLabelProvider implements ILabelProvider<Customer> {
         return [];
     }
 
-    public async getObjectText(customer: Customer, id: boolean = false, name: boolean = false): Promise<string> {
+    public async getObjectText(
+        customer: Customer, id: boolean = false, name: boolean = false, translatable: boolean = true
+    ): Promise<string> {
         let returnString = '';
         if (customer) {
             if (id) {
@@ -126,12 +148,13 @@ export class CustomerLabelProvider implements ILabelProvider<Customer> {
                 returnString = customer.DisplayValue;
             }
         } else {
-            returnString = 'Kunde';
+            const customerLabel = await TranslationService.translate('Translatable#Customer');
+            returnString = customerLabel;
         }
         return returnString;
     }
 
-    public getObjectAdditionalText(object: Customer): string {
+    public getObjectAdditionalText(object: Customer, translatable: boolean = true): string {
         return '';
     }
 
@@ -139,12 +162,20 @@ export class CustomerLabelProvider implements ILabelProvider<Customer> {
         return 'kix-icon-man-house';
     }
 
-    public getObjectTooltip(object: Customer): string {
+    public getObjectTooltip(object: Customer, translatable: boolean = true): string {
         return '';
     }
 
-    public getObjectName(plural: boolean = false): string {
-        return plural ? "Kunden" : "Kunde";
+    public async getObjectName(plural: boolean = false, translatable: boolean = true): Promise<string> {
+        if (plural) {
+            const customersLabel = translatable
+                ? await TranslationService.translate('Translatable#Customers')
+                : 'Customers';
+            return customersLabel;
+        }
+
+        const customerLabel = translatable ? await TranslationService.translate('Translatable#Customer') : 'Customer';
+        return customerLabel;
     }
 
     public async getIcons(object: Customer, property: string): Promise<Array<string | ObjectIcon>> {

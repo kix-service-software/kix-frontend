@@ -3,6 +3,7 @@ import {
     TextModule, KIXObjectType, ObjectIcon, TextModuleProperty
 } from "../../model";
 import { SearchProperty } from "../SearchProperty";
+import { TranslationService } from "../i18n/TranslationService";
 
 export class TextModuleLabelProvider implements ILabelProvider<TextModule> {
 
@@ -12,45 +13,50 @@ export class TextModuleLabelProvider implements ILabelProvider<TextModule> {
         return textModule instanceof TextModule;
     }
 
-    public async getPropertyText(property: string, short?: boolean): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
             case SearchProperty.FULLTEXT:
-                displayValue = 'Volltext';
+                displayValue = 'Translatable#Full Text';
                 break;
             case TextModuleProperty.NAME:
-                displayValue = 'Name';
+                displayValue = 'Translatable#Name';
                 break;
             case TextModuleProperty.LANGUAGE:
-                displayValue = 'Sprache';
+                displayValue = 'Translatable#Language';
                 break;
             case TextModuleProperty.CATEGORY:
-                displayValue = 'Kategorie';
+                displayValue = 'Translatable#Catgeory';
                 break;
             case TextModuleProperty.KEYWORDS:
-                displayValue = 'Schlagworte';
+                displayValue = 'Translatable#Tags';
                 break;
             case TextModuleProperty.COMMENT:
-                displayValue = 'Kommentar';
+                displayValue = 'Translatable#Comment';
                 break;
             case TextModuleProperty.CREATED_BY:
-                displayValue = 'Erstellt von';
+                displayValue = 'Translatable#Created by';
                 break;
             case TextModuleProperty.CREATE_TIME:
-                displayValue = 'Erstellt am';
+                displayValue = 'Translatable#Created at';
                 break;
             case TextModuleProperty.CHANGE_BY:
-                displayValue = 'Geändert von';
+                displayValue = 'Translatable#Changed by';
                 break;
             case TextModuleProperty.CHANGE_TIME:
-                displayValue = 'Geändert am';
+                displayValue = 'Translatable#Changed at';
                 break;
             case TextModuleProperty.VALID_ID:
-                displayValue = 'Gültigkeit';
+                displayValue = 'Translatable#validity';
                 break;
             default:
                 displayValue = property;
         }
+
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
+        }
+
         return displayValue;
     }
 
@@ -74,8 +80,14 @@ export class TextModuleLabelProvider implements ILabelProvider<TextModule> {
         return [];
     }
 
-    public async getObjectText(textModule: TextModule, id?: boolean, title?: boolean): Promise<string> {
-        return 'Typ: ' + textModule.Name;
+    public async getObjectText(
+        textModule: TextModule, id?: boolean, title?: boolean, translatable: boolean = true
+    ): Promise<string> {
+        let displayValue = 'Translatable#Type';
+        if (translatable) {
+            displayValue = await TranslationService.translate(displayValue);
+        }
+        return `${displayValue}: ${textModule.Name}`;
     }
 
     public getObjectAdditionalText(textModule: TextModule): string {
@@ -86,8 +98,12 @@ export class TextModuleLabelProvider implements ILabelProvider<TextModule> {
         return null;
     }
 
-    public getObjectName(plural?: boolean): string {
-        return plural ? 'Textbausteine' : 'Textbaustein';
+    public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
+        let displayValue = plural ? 'Text Modules' : 'Text Module';
+        if (translatable) {
+            displayValue = await TranslationService.translate(displayValue);
+        }
+        return displayValue;
     }
 
     public getObjectTooltip(textModule: TextModule): string {

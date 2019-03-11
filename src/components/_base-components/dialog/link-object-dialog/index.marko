@@ -5,7 +5,9 @@
     <else>
         <div.linkable-objects-selection title="Verknüpfen mit">
             <div.linkable-objects-selection-label>
-                <span>Verknüpfen mit</span>
+                <span>
+                    <translation-string pattern="Translatable#Link to"/>
+                </span>
             </div>
             <form-list
                 nodes=state.linkableObjectNodes
@@ -25,7 +27,9 @@
         <div.linkable-objects-result>
             <if(state.currentLinkableObjectNode)>
                 <div.result-table-head>
-                    <span>Trefferliste (${state.resultCount})</span>
+                    <span>
+                        <translation-string pattern="Translatable#Hit List ({0})" placeholders=[state.resultCount]/>
+                    </span>
                     <filter filterCount=state.filterCount on-filter("filter")/>
                 </div>
                 <if(state.table)>
@@ -36,17 +40,19 @@
         <div.linkable-objects-submit>
             <div.linkable-objects-link-type-selection>
                 <div.linkable-objects-selection-label>
-                    <span>Art der Verknüpfung</span>
+                    <span>
+                        <translation-string pattern="Translatable#Link Type"/>
+                    </span>
                 </div>
                 <form-list
                     nodes=state.linkTypeNodes
                     on-nodesChanged("linkTypeChanged")
                     selectedNodes=[state.currentLinkTypeNode]
-                    placeholder="Art der Verknüpfung"/>
+                    placeholder="Link Type"/>
             </div>
             <button.submit-button disabled=!state.canSubmit on-click("submitClicked")>
                 <span.kix-icon-check/>
-                Übernehmen
+                <translation-string pattern="Translatable#Submit"/>
             </button>
         </div>
     </else>

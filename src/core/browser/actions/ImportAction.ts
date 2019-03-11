@@ -9,8 +9,8 @@ export class ImportAction extends AbstractAction<ITable> {
     public objectType: KIXObjectType;
 
     public initAction(): void {
-        this.text = "Import";
-        this.icon = "kix-icon-import";
+        this.text = 'Translatable#Import';
+        this.icon = 'kix-icon-import';
     }
 
     public async run(event: any): Promise<void> {

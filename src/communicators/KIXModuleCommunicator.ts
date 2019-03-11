@@ -1,13 +1,13 @@
-import { KIXCommunicator } from "./KIXCommunicator";
-import { Socket } from "socket.io";
-import { CommunicatorResponse, AppUtil } from "../core/common";
+import { KIXCommunicator } from './KIXCommunicator';
+import { Socket } from 'socket.io';
+import { CommunicatorResponse, AppUtil } from '../core/common';
 import {
     KIXModulesEvent, LoadKIXModulesRequest, LoadKIXModulesResponse,
     LoadFormConfigurationsRequest, LoadFormConfigurationsResponse
-} from "../core/model";
-import { KIXExtensions, IKIXModuleExtension } from "../core/extensions";
-import { PluginService } from "../services";
-import { ConfigurationService } from "../core/services";
+} from '../core/model';
+import { KIXExtensions, IKIXModuleExtension } from '../core/extensions';
+import { PluginService } from '../services';
+import { ConfigurationService } from '../core/services';
 
 export class KIXModuleCommunicator extends KIXCommunicator {
 

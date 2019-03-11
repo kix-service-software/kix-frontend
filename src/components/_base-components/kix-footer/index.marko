@@ -1,7 +1,9 @@
 <div.kix-footer>
     <div.left-text>${input.leftText}</div>
     <div>
-        ${state.kixProduct} ${state.kixVersion} ${state.buildNumber} | Angemeldet: ${state.currentUserLogin} | Ein Produkt der c.a.p.e. IT GmbH
+        ${state.kixProduct}${state.kixVersion}${state.buildNumber} | <<translation-string pattern="Translatable#Logged in"/>
+        ${state.currentUserLogin} |
+        <translation-string pattern="Translatable#A product by c.a.p.e. IT GmbH"/>
     </div>
     <div.right-text>${input.rightText}</div>
 </div>

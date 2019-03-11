@@ -1,6 +1,8 @@
-import { ComponentState } from "./ComponentState";
-import { CreateLinkDescription, FormInputComponent } from "../../../../../core/model";
-import { FormService, LabelService, IdService, DialogService, Label } from "../../../../../core/browser";
+import { ComponentState } from './ComponentState';
+import { CreateLinkDescription, FormInputComponent } from '../../../../../core/model';
+import { FormService, LabelService, IdService, Label } from '../../../../../core/browser';
+import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
+import { DialogService } from '../../../../../core/browser/components/dialog';
 
 class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescription[], ComponentState> {
 
@@ -20,10 +22,11 @@ class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescr
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         const objectType = formInstance.getObjectType();
 
-        let dialogTitle = 'Objekt verknüpfen';
+        let dialogTitle = await TranslationService.translate('Translatable#Link Objects');
         const labelProvider = LabelService.getInstance().getLabelProviderForType(objectType);
         if (labelProvider) {
-            dialogTitle = `${labelProvider.getObjectName()} verknüpfen`;
+            const objectName = await labelProvider.getObjectName();
+            dialogTitle = await TranslationService.translate('Translatable#link {0}', [objectName]);
         }
 
         const resultListenerId = 'result-listener-link-' + objectType + IdService.generateDateBasedId();

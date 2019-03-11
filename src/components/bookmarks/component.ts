@@ -1,6 +1,7 @@
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../core/browser';
 import { TreeNode, Bookmark } from '../../core/model';
+import { ObjectDataService } from '../../core/browser/ObjectDataService';
 
 class Component {
 
@@ -11,7 +12,7 @@ class Component {
     }
 
     public onMount(): void {
-        const objectData = ContextService.getInstance().getObjectData();
+        const objectData = ObjectDataService.getInstance().getObjectData();
         if (objectData) {
             this.state.bookmarks = objectData.bookmarks.map(
                 (b) => new TreeNode(b, b.title, b.icon)

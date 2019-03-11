@@ -1,8 +1,8 @@
-import { ContextService } from "../../../core/browser/context";
-import { NotesService } from "../../../core/browser/notes";
-import { NotesEditAction } from "./NotesEditAction";
+import { ContextService } from '../../../core/browser/context';
+import { NotesService } from '../../../core/browser/notes';
+import { NotesEditAction } from './NotesEditAction';
 import { ComponentState } from './ComponentState';
-import { WidgetService } from "../../../core/browser";
+import { WidgetService } from '../../../core/browser';
 
 export class Component {
 

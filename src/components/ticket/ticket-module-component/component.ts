@@ -1,8 +1,8 @@
-import { ComponentState } from "./ComponentState";
+import { ComponentState } from './ComponentState';
 import {
     AbstractMarkoComponent, ServiceRegistry, LabelService, FactoryService,
-    FormValidationService, ContextService, ActionFactory, DialogService, KIXObjectSearchService
-} from "../../../core/browser";
+    FormValidationService, ContextService, ActionFactory, KIXObjectSearchService
+} from '../../../core/browser';
 import {
     TicketService, TicketHistoryLabelProvider, ArticleLabelProvider, TicketLabelProvider, TicketTableFactory,
     TicketHistoryTableFactory, PendingTimeValidator, TicketBrowserFactory, ArticleBrowserFactory, TicketFormService,
@@ -25,17 +25,18 @@ import {
     TicketPriorityDuplicateAction, NewTicketPriorityDialogContext, NewTicketStateDialogContext,
     EditTicketPriorityDialogContext, TicketPriorityFormService, EditTicketStateDialogContext,
     TicketStateFormService, TicketBulkManager, TicketTableCSSHandler, ArticleTableCSSHandler, EmailRecipientValidator
-} from "../../../core/browser/ticket";
+} from '../../../core/browser/ticket';
 import {
     KIXObjectType, KIXObjectCache, TicketCacheHandler, ContextDescriptor, ContextMode, ContextType,
     ConfiguredDialogWidget, WidgetConfiguration, WidgetSize, TicketTypeCacheHandler, TicketStateCacheHandler,
     TicketPriorityCacheHandler
-} from "../../../core/model";
-import { BulkService } from "../../../core/browser/bulk";
-import { ArticleTableFactory } from "../../../core/browser/ticket/table/ArticleTableFactory";
-import { ChannelService } from "../../../core/browser/channel";
-import { TableFactoryService, TableCSSHandlerRegsitry } from "../../../core/browser/table";
-import { ChannelLabelProvider } from "../../../core/browser/channel/ChannelLabelProvider";
+} from '../../../core/model';
+import { BulkService } from '../../../core/browser/bulk';
+import { ArticleTableFactory } from '../../../core/browser/ticket/table/ArticleTableFactory';
+import { ChannelService } from '../../../core/browser/channel';
+import { TableFactoryService, TableCSSHandlerRegsitry } from '../../../core/browser/table';
+import { ChannelLabelProvider } from '../../../core/browser/channel/ChannelLabelProvider';
+import { DialogService } from '../../../core/browser/components/dialog';
 
 class Component extends AbstractMarkoComponent {
 
@@ -282,7 +283,8 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'new-ticket-dialog',
             new WidgetConfiguration(
-                'new-ticket-dialog', 'Neues Ticket', [], {}, false, false, WidgetSize.BOTH, 'kix-icon-new-ticket'
+                'new-ticket-dialog', 'Translatable#New Ticket', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-new-ticket'
             ),
             KIXObjectType.TICKET,
             ContextMode.CREATE
@@ -291,7 +293,8 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'search-ticket-dialog',
             new WidgetConfiguration(
-                'search-ticket-dialog', 'Ticketsuche', [], {}, false, false, WidgetSize.BOTH, 'kix-icon-search-ticket'
+                'search-ticket-dialog', 'Translatable#Ticket Search', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-search-ticket'
             ),
             KIXObjectType.TICKET,
             ContextMode.SEARCH
@@ -300,7 +303,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'edit-ticket-dialog',
             new WidgetConfiguration(
-                'edit-ticket-dialog', 'Ticket bearbeiten', [], {}, false, false, WidgetSize.BOTH, 'kix-icon-edit'
+                'edit-ticket-dialog', 'Translatable#Edit Ticket', [], {}, false, false, WidgetSize.BOTH, 'kix-icon-edit'
             ),
             KIXObjectType.TICKET,
             ContextMode.EDIT
@@ -309,7 +312,8 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'new-ticket-article-dialog',
             new WidgetConfiguration(
-                'new-ticket-article-dialog', 'Neuer Artikel', [], {}, false, false, WidgetSize.BOTH, 'kix-icon-new-note'
+                'new-ticket-article-dialog', 'Translatable#New Article', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-new-note'
             ),
             KIXObjectType.ARTICLE,
             ContextMode.CREATE_SUB
@@ -320,7 +324,8 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'new-ticket-type-dialog',
             new WidgetConfiguration(
-                'new-ticket-type-dialog', 'Typ hinzufügen', [], {}, false, false, WidgetSize.BOTH, 'kix-icon-new-gear'
+                'new-ticket-type-dialog', 'Translatable#Add Type', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-new-gear'
             ),
             KIXObjectType.TICKET_TYPE,
             ContextMode.CREATE_ADMIN
@@ -329,7 +334,8 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'edit-ticket-type-dialog',
             new WidgetConfiguration(
-                'edit-ticket-type-dialog', 'Typ bearbeiten', [], {}, false, false, WidgetSize.BOTH, 'kix-icon-gear'
+                'edit-ticket-type-dialog', 'Translatable#Edit Type', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-gear'
             ),
             KIXObjectType.TICKET_TYPE,
             ContextMode.EDIT_ADMIN
@@ -338,7 +344,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'new-ticket-priority-dialog',
             new WidgetConfiguration(
-                'new-ticket-priority-dialog', 'Priorität hinzufügen', [], {},
+                'new-ticket-priority-dialog', 'Translatable#Add Priority', [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-new-gear'
             ),
             KIXObjectType.TICKET_PRIORITY,
@@ -348,7 +354,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'edit-ticket-priority-dialog',
             new WidgetConfiguration(
-                'edit-ticket-priority-dialog', 'Priorität bearbeiten', [], {},
+                'edit-ticket-priority-dialog', 'Translatable#Eit Priority', [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-gear'
             ),
             KIXObjectType.TICKET_PRIORITY,
@@ -358,7 +364,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'new-ticket-state-dialog',
             new WidgetConfiguration(
-                'new-ticket-state-dialog', 'Status hinzufügen', [], {},
+                'new-ticket-state-dialog', 'Translatable#Add State', [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-new-gear'
             ),
             KIXObjectType.TICKET_STATE,
@@ -368,7 +374,8 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'edit-ticket-state-dialog',
             new WidgetConfiguration(
-                'edit-ticket-state-dialog', 'Status bearbeiten', [], {}, false, false, WidgetSize.BOTH, 'kix-icon-gear'
+                'edit-ticket-state-dialog', 'Translatable#Edit State', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-gear'
             ),
             KIXObjectType.TICKET_STATE,
             ContextMode.EDIT_ADMIN

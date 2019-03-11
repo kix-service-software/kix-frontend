@@ -14,7 +14,7 @@ export class Extension implements IConfigurationExtension {
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
         const notesSidebar =
             new ConfiguredWidget('20181126-admin-notes', new WidgetConfiguration(
-                'notes-widget', 'Notizen', [], {},
+                'notes-widget', 'Translatable#Notes', [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-note', false)
             );
 
@@ -25,7 +25,7 @@ export class Extension implements IConfigurationExtension {
 
         const adminModuleCategoriesExplorer =
             new ConfiguredWidget('20181127-admin-module-categories-explorer', new WidgetConfiguration(
-                'admin-modules-explorer', 'Verwaltung', [], categories,
+                'admin-modules-explorer', 'Translatable#Administration', [], categories,
                 false, false, WidgetSize.BOTH, null, false)
             );
 

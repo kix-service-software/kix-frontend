@@ -1,5 +1,6 @@
 import { ComponentState } from "./ComponentState";
-import { FormService, DialogService, AbstractMarkoComponent } from "../../../../core/browser";
+import { FormService, AbstractMarkoComponent } from "../../../../core/browser";
+import { DialogService } from "../../../../core/browser/components/dialog";
 
 class Component extends AbstractMarkoComponent {
 

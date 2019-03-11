@@ -1,31 +1,32 @@
-import { SearchOperator } from "./SearchOperator";
+import { SearchOperator } from './SearchOperator';
+import { TranslationService } from './i18n/TranslationService';
 
 export class SearchOperatorUtil {
 
-    public static getText(operator: SearchOperator): string {
+    public static async getText(operator: SearchOperator): Promise<string> {
         switch (operator) {
             case SearchOperator.CONTAINS:
-                return "Enthält";
+                return await TranslationService.translate('Translatable#contains');
             case SearchOperator.ENDS_WITH:
-                return "Endet mit";
+                return await TranslationService.translate('Translatable#ends with');
             case SearchOperator.EQUALS:
-                return "Ist gleich";
+                return await TranslationService.translate('Translatable#equals');
             case SearchOperator.GREATER_THAN:
-                return "Größer als";
+                return await TranslationService.translate('Translatable#greater than');
             case SearchOperator.GREATER_THAN_OR_EQUAL:
-                return "Größer gleich";
+                return await TranslationService.translate('Translatable#greater or equal');
             case SearchOperator.IN:
-                return "Enthalten in";
+                return await TranslationService.translate('Translatable#in');
             case SearchOperator.LESS_THAN:
-                return "Kleiner als";
+                return await TranslationService.translate('Translatable#less than');
             case SearchOperator.LESS_THAN_OR_EQUAL:
-                return "Kleiner gleich";
+                return await TranslationService.translate('Translatable#less or equal');
             case SearchOperator.LIKE:
-                return "Entspricht";
+                return await TranslationService.translate('Translatable#corresponds to');
             case SearchOperator.NOT_EQUALS:
-                return "Ungleich";
+                return await TranslationService.translate('Translatable#unequal');
             case SearchOperator.STARTS_WITH:
-                return "Beginnt mit";
+                return await TranslationService.translate('Translatable#starts with');
             default:
                 return operator;
         }

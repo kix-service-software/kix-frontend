@@ -1,8 +1,8 @@
 import {
     IdService, LabelService, KIXObjectService, ObjectPropertyValue, PropertyOperator
-} from "../../../../core/browser";
-import { TreeNode, InputFieldTypes, DateTimeUtil, TreeUtil } from "../../../../core/model";
-import { ImportManager, ImportPropertyOperator, ImportPropertyOperatorUtil } from "../../../../core/browser/import";
+} from '../../../../core/browser';
+import { TreeNode, InputFieldTypes, DateTimeUtil, TreeUtil } from '../../../../core/model';
+import { ImportManager, ImportPropertyOperator, ImportPropertyOperatorUtil } from '../../../../core/browser/import';
 
 export class DynamicFieldValue {
 

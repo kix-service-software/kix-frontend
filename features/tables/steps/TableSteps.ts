@@ -1,14 +1,14 @@
 // tslint:disable
-import { expect } from "chai";
-import { Given, When, Then } from "cucumber";
+import { expect } from 'chai';
+import { Given, When, Then } from 'cucumber';
 import { ITable, TableFactoryService } from '../../../src/core/browser/table';
-import { KIXObjectType } from "../../../src/core/model";
-import { FAQArticleTableFactory, FAQContext } from "../../../src/core/browser/faq";
-import { TicketTableFactory } from "../../../src/core/browser/ticket";
-import { ArticleTableFactory } from "../../../src/core/browser/ticket/table/ArticleTableFactory";
-import { CustomerTableFactory } from "../../../src/core/browser/customer";
-import { ContactTableFactory } from "../../../src/core/browser/contact";
-import { ConfigItemTableFactory } from "../../../src/core/browser/cmdb";
+import { KIXObjectType } from '../../../src/core/model';
+import { FAQArticleTableFactory, FAQContext } from '../../../src/core/browser/faq';
+import { TicketTableFactory } from '../../../src/core/browser/ticket';
+import { ArticleTableFactory } from '../../../src/core/browser/ticket/table/ArticleTableFactory';
+import { CustomerTableFactory } from '../../../src/core/browser/customer';
+import { ContactTableFactory } from '../../../src/core/browser/contact';
+import { ConfigItemTableFactory } from '../../../src/core/browser/cmdb';
 
 let table: ITable;
 TableFactoryService.getInstance().registerFactory(new FAQArticleTableFactory());

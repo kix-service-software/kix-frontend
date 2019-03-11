@@ -21,7 +21,8 @@ export class ComponentState {
         public searchCallback: (limit: number, searchValue: string) => Promise<TreeNode[]> = null,
         public asMultiselect: boolean = false,
         public removeNode: boolean = true,
-        public actions: FormInputAction[] = []
+        public actions: FormInputAction[] = [],
+        public placeholder: string = null
     ) { }
 
 }

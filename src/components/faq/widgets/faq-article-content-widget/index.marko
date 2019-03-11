@@ -1,25 +1,28 @@
-<widget instanceId=state.instanceId contextType="MAIN" title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
+<widget
+    instanceId=state.instanceId
+    contextType="MAIN"
+    title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
     actions=state.actions>
     <@content>
         <if(state.faqArticle && state.inlineContent)>
             <div.faq-article-content-container>
                 <div>
-                    <widget instanceId="faq-article-group" title="Symptom">
+                    <widget instanceId="faq-article-group" title="Translatable#Symptom">
                         <@content>
                             <editor readOnly=true value=state.faqArticle.Field1 inlineContent=state.inlineContent useReadonlyStyle=true/>
                         </@content>
                     </widget>
-                    <widget instanceId="faq-article-group" title="Ursache">
+                    <widget instanceId="faq-article-group" title="Translatable#Cause">
                         <@content>
                             <editor readOnly=true value=state.faqArticle.Field2 inlineContent=state.inlineContent useReadonlyStyle=true/>
                         </@content>
                     </widget>
-                    <widget instanceId="faq-article-group" title="Lösung">
+                    <widget instanceId="faq-article-group" title="Translatable#Solution">
                         <@content>
                             <editor readOnly=true value=state.faqArticle.Field3 inlineContent=state.inlineContent useReadonlyStyle=true/>
                         </@content>
                     </widget>
-                    <widget instanceId="faq-article-group" title="Kommentar">
+                    <widget instanceId="faq-article-group" title="Translatable#Comment">
                         <@content>
                             <editor readOnly=true value=state.faqArticle.Field6 inlineContent=state.inlineContent useReadonlyStyle=true/>
                         </@content>
@@ -27,7 +30,9 @@
                 </div>
                 <div>
                     <div.faq-rating title=component.getRatingTooltip()>
-                        <span.faq-rating-label>Bewertung:</span>
+                        <span.faq-rating-label>
+                            <translation-string pattern="Translatable#Rating"/>:
+                        </span>
                         <span.faq-rating-info>
                             <if(state.faqArticle.Votes.length)>
                                 <for(icon in component.stars)>
@@ -36,14 +41,16 @@
                                 (${component.rating})
                             </if>
                             <else>
-                                <b>Keine Bewertung abgegeben</b>
+                                <b><translation-string pattern="Translatable#No rating available."/></b>
                             </else>
                         </span>
                     </div>
                     <div.faq-attachments>
-                        <span>Anlagen:</span>
+                        <span>
+                            <translation-string pattern="Translatable#Attachments"/>:
+                        </span>
                         <for(attachment in state.attachments)>
-                            <file-entry attachment=attachment on-fileClicked('download', attachment)/>
+                            <file-entry attachment=attachment on-fileClicked("download", attachment)/>
                         </for>
                     </div>
                 </div>

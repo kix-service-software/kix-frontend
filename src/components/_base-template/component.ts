@@ -15,6 +15,7 @@ import { ApplicationEvent } from '../../core/browser/application';
 import { ConfigItemClassService } from '../../core/browser/cmdb';
 import { FAQService } from '../../core/browser/faq';
 import { SysConfigService } from '../../core/browser/sysconfig';
+import { ObjectDataService } from '../../core/browser/ObjectDataService';
 
 declare var io: any;
 
@@ -32,7 +33,7 @@ class Component {
 
     public async onMount(): Promise<void> {
         this.state.loading = true;
-        this.state.loadingHint = 'Lade KIX ...';
+        this.state.loadingHint = await TranslationService.translate('Loading ...');
 
         await this.checkAuthentication();
 
@@ -51,12 +52,11 @@ class Component {
             }
         });
 
-        ContextService.getInstance().setObjectData(this.state.objectData);
+        ObjectDataService.getInstance().setObjectData(this.state.objectData);
         await this.bootstrapServices();
 
         await ObjectIconService.getInstance().init();
-        // FIXME: nur temporär auskommentiert
-        // await TranslationService.getInstance().init();
+        await TranslationService.getInstance().init();
         await ConfigItemClassService.getInstance().init();
         await FAQService.getInstance().init();
         await SysConfigService.getInstance().init();
@@ -69,6 +69,22 @@ class Component {
                 if (eventId === ApplicationEvent.APP_LOADING) {
                     this.state.loading = data.loading;
                     this.state.loadingHint = data.hint;
+                }
+            }
+        });
+
+        EventService.getInstance().subscribe(ApplicationEvent.REFRESH, {
+            eventSubscriberId: 'BASE-TEMPLATE-REFRESH',
+            eventPublished: (data: any, eventId: string) => {
+                if (eventId === ApplicationEvent.REFRESH) {
+                    this.state.reload = true;
+
+                    setTimeout(() => {
+                        this.state.reload = false;
+                        setTimeout(() => {
+                            RoutingService.getInstance().routeToInitialContext();
+                        }, 500);
+                    }, 20);
                 }
             }
         });

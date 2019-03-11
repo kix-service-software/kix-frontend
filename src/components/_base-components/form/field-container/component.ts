@@ -1,6 +1,6 @@
-import { FormField } from "../../../../core/model";
+import { FormField } from '../../../../core/model';
 import { ComponentState } from './ComponentState';
-import { FormService, IdService } from "../../../../core/browser";
+import { FormService, IdService } from '../../../../core/browser';
 
 class FieldContainerComponent {
 

@@ -5,8 +5,8 @@ import { KIXObjectType, ContextMode } from '../../../model';
 export class CustomerCreateContactAction extends AbstractAction {
 
     public initAction(): void {
-        this.text = "Neuer Ansprechpartner";
-        this.icon = "kix-icon-man-bubble-new";
+        this.text = 'Translatable#New Contact';
+        this.icon = 'kix-icon-man-bubble-new';
     }
 
     public run(): void {

@@ -1,13 +1,11 @@
-import { KIXObjectFormService } from "../kix/KIXObjectFormService";
+import { KIXObjectFormService } from '../kix/KIXObjectFormService';
 import {
     Ticket, KIXObjectType, TicketProperty, Channel, FormField, ArticleProperty,
     FormFieldOptions, FormFieldOption, ContextType, ContextMode
-} from "../../model";
-import { PendingTimeFormValue } from "./form";
-import { ContactService } from "../contact";
-import { CustomerService } from "../customer";
-import { AutocompleteOption, AutocompleteFormFieldOption } from "../components";
-import { ContextService } from "../context";
+} from '../../model';
+import { PendingTimeFormValue } from './form';
+import { AutocompleteOption, AutocompleteFormFieldOption } from '../components';
+import { ContextService } from '../context';
 
 export class TicketFormService extends KIXObjectFormService<Ticket> {
 
@@ -52,52 +50,60 @@ export class TicketFormService extends KIXObjectFormService<Ticket> {
 
         if (channel.Name === 'note') {
             fields.push(new FormField(
-                "Sichtbar in Kundenportal", ArticleProperty.CUSTOMER_VISIBLE, 'checkbox-input',
-                false, "Sichtbar im Kundenportal"
+                'Translatable#Visible in customer portal', ArticleProperty.CUSTOMER_VISIBLE, 'checkbox-input',
+                false, 'Translatable#Visible in customer portal'
             ));
-            fields.push(new FormField("Betreff", ArticleProperty.SUBJECT, null, true, "Betreff"));
+            fields.push(new FormField('Translatable#Subject', ArticleProperty.SUBJECT,
+                null, true, 'Translatable#Subject'));
             fields.push(new FormField(
-                "Artikelinhalt", ArticleProperty.BODY, 'rich-text-input', true, "Beschreibung", [
+                'Translatable#Article Text', ArticleProperty.BODY, 'rich-text-input',
+                true, 'Translatable#Article Text', [
                     new FormFieldOption(FormFieldOptions.AUTO_COMPLETE, new AutocompleteFormFieldOption([
                         new AutocompleteOption(KIXObjectType.TEXT_MODULE, '::')
                     ]))
                 ])
             );
-            fields.push(new FormField("Anlagen", ArticleProperty.ATTACHMENTS, 'attachment-input', false, "Anlagen"));
-        } else if (channel.Name === "email") {
             fields.push(new FormField(
-                "Sichtbar in Kundenportal", ArticleProperty.CUSTOMER_VISIBLE, 'checkbox-input',
-                false, "Sichtbar im Kundenportal"
+                'Translatable#Attachments', ArticleProperty.ATTACHMENTS, 'attachment-input',
+                false, 'Translatable#Attachments'
+            ));
+        } else if (channel.Name === 'email') {
+            fields.push(new FormField(
+                'Translatable#Visible in customer portal', ArticleProperty.CUSTOMER_VISIBLE, 'checkbox-input',
+                false, 'Translatable#Visible in customer portal'
             ));
 
             fields.push(new FormField(
-                "Von", ArticleProperty.FROM, 'article-email-from-input', true, "Von"
+                'Translatable#From', ArticleProperty.FROM, 'article-email-from-input', true, 'Translatable#From'
             ));
 
             const context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
             if (context.getDescriptor().contextMode === ContextMode.CREATE) {
                 fields.push(new FormField(
-                    "Cc", ArticleProperty.CC, 'article-email-recipient-input', false, "Cc", [
+                    'Translatable#Cc', ArticleProperty.CC, 'article-email-recipient-input', false, 'Translatable#Cc', [
                         new FormFieldOption('ADDITIONAL_RECIPIENT_TYPES', [ArticleProperty.BCC])
                     ]
                 ));
             } else {
                 fields.push(new FormField(
-                    "An", ArticleProperty.TO, 'article-email-recipient-input', false, "An", [
+                    'Translatable#To', ArticleProperty.TO, 'article-email-recipient-input', false, 'Translatable#To', [
                         new FormFieldOption('ADDITIONAL_RECIPIENT_TYPES', [ArticleProperty.CC, ArticleProperty.BCC])
                     ]
                 ));
             }
 
             fields.push(new FormField(
-                "Betreff", ArticleProperty.SUBJECT, null, true, "Betreff"
+                'Translatable#Subject', ArticleProperty.SUBJECT, null, true, 'Translatable#Subject'
             ));
 
             fields.push(new FormField(
-                "Inhalt", ArticleProperty.BODY, 'rich-text-input', true, "Inhalt"
+                'Translatable#Article Text', ArticleProperty.BODY, 'rich-text-input', true, 'Translatable#Article Text'
             ));
 
-            fields.push(new FormField("Anlagen", ArticleProperty.ATTACHMENTS, 'attachment-input', false, "Anlagen"));
+            fields.push(new FormField(
+                'Translatable#Attachments', ArticleProperty.ATTACHMENTS, 'attachment-input',
+                false, 'Translatable#Attachments')
+            );
         }
 
 

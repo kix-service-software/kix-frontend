@@ -15,7 +15,7 @@ import {
 } from '../../../api';
 import {
     TranslationCacheHandler, Translation, TranslationLanguageLoadingOptions,
-    TranslationLanguage, TranslationProperty, TranslationLanguageProperty
+    TranslationLanguage, TranslationProperty, TranslationLanguageProperty, PODefinition
 } from '../../../model/kix/i18n';
 
 export class TranslationService extends KIXObjectService {
@@ -219,6 +219,26 @@ export class TranslationService extends KIXObjectService {
         }
 
         return languages;
+    }
+
+    public async getPODefinitions(): Promise<PODefinition[]> {
+        const localeFolder = './locale';
+        const fs = require('fs');
+
+        const poDefinitions: PODefinition[] = [];
+
+        const files: string[] = fs.readdirSync(localeFolder);
+        if (files) {
+            files
+                .filter((f) => f.endsWith('.po'))
+                .forEach((file: string) => {
+                    const content = fs.readFileSync(`${localeFolder}/${file}`, 'utf8');
+                    const base64 = new Buffer(content).toString('base64');
+                    poDefinitions.push(new PODefinition(base64, file.replace('.po', '')));
+                });
+        }
+
+        return poDefinitions;
     }
 
 }

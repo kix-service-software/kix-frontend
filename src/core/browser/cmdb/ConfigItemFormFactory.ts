@@ -37,7 +37,7 @@ export class ConfigItemFormFactory {
             ));
         }
         fields.push(new FormField(
-            'Name', VersionProperty.NAME, null, true, 'Geben Sie einen Namen für das Config Item ein.',
+            'Name', VersionProperty.NAME, null, true, 'Insert a name for the Config Item.',
             null, null, null, null, 1, 1, 1,
             null, null, null, false, false
         ));

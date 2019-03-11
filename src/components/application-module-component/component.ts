@@ -1,6 +1,6 @@
 import {
     AbstractMarkoComponent, ActionFactory, ServiceRegistry, ContextService,
-    LabelService, DialogService, FactoryService, TableFactoryService
+    LabelService, FactoryService, TableFactoryService
 } from '../../core/browser';
 import { ComponentState } from './ComponentState';
 import { SearchService } from '../../core/browser/search';
@@ -44,6 +44,7 @@ import { SearchContext } from '../../core/browser/search/context';
 import { SwitchColumnOrderAction } from '../../core/browser/table/actions';
 import { SystemAddressService } from '../../core/browser/system-address';
 import { ImportDialogContext } from '../../core/browser/import';
+import { DialogService } from '../../core/browser/components/dialog';
 
 class Component extends AbstractMarkoComponent {
 
@@ -184,7 +185,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'edit-linked-objects-dialog',
             new WidgetConfiguration(
-                'edit-linked-objects-dialog', 'Verknüpfungen bearbeiten', [], {}, false, false, null, 'kix-icon-link'
+                'edit-linked-objects-dialog', 'Translatable#Edit Links', [], {}, false, false, null, 'kix-icon-link'
             ),
             KIXObjectType.LINK,
             ContextMode.EDIT_LINKS
@@ -193,7 +194,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'personal-settings-dialog',
             new WidgetConfiguration(
-                'personal-settings-dialog', 'Persönliche Einstellungen bearbeiten',
+                'personal-settings-dialog', 'Translatable#Edit Personal Settings',
                 [], {}, false, false, null, 'kix-icon-edit'
             ),
             KIXObjectType.PERSONAL_SETTINGS,
@@ -203,7 +204,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'bulk-dialog',
             new WidgetConfiguration(
-                'bulk-dialog', 'Objekte bearbeiten', [], {}, false, false, null, 'kix-icon-edit'
+                'bulk-dialog', 'Translatable#Edit Objects', [], {}, false, false, null, 'kix-icon-edit'
             ),
             KIXObjectType.ANY,
             ContextMode.EDIT_BULK
@@ -212,7 +213,8 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'new-translation-dialog',
             new WidgetConfiguration(
-                'new-translation-dialog', 'Neue Übersetzung', [], {}, false, false, null, 'kix-icon-new-gear'
+                'new-translation-dialog', 'Translatable#New Translation', [], {},
+                false, false, null, 'kix-icon-new-gear'
             ),
             KIXObjectType.TRANSLATION,
             ContextMode.CREATE_ADMIN
@@ -221,7 +223,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'edit-translation-dialog',
             new WidgetConfiguration(
-                'edit-translation-dialog', 'Übersetzung bearbeiten', [], {}, false, false, null, 'kix-icon-gear'
+                'edit-translation-dialog', 'Translatable#Edit Translation', [], {}, false, false, null, 'kix-icon-gear'
             ),
             KIXObjectType.TRANSLATION,
             ContextMode.EDIT_ADMIN
@@ -230,7 +232,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'import-dialog',
             new WidgetConfiguration(
-                'import-dialog', 'Objekte importieren', [], {}, false, false, null, 'kix-icon-import'
+                'import-dialog', 'Translatable#Import Objects', [], {}, false, false, null, 'kix-icon-import'
             ),
             KIXObjectType.ANY,
             ContextMode.IMPORT

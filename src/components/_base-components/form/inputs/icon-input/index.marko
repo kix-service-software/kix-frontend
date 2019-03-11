@@ -1,6 +1,9 @@
-<div.icon-upload class={dragging: state.dragging} on-drop("drop")>
-    <button.form-button.icon-upload-button type="button" on-click("triggerFileUpload") title="Bilddatei wählen">
-        <span.kix-icon-attachement/>Bilddatei wählen
+<div.icon-upload class={
+    dragging: state.dragging
+} on-drop("drop")>
+    <button.form-button.icon-upload-button type="button" on-click("triggerFileUpload") title="select image file">
+        <span.kix-icon-attachement/>
+        <translation-string pattern="Translatable#select image file"/>
         <input.icon-upload-input type="file" key="iconUploadInput" on-change("setIcon")/>
     </button>
     <span.icon-preview>

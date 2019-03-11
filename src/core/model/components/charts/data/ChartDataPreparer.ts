@@ -2,7 +2,7 @@ import { ChartSettings } from '../ChartSettings';
 import { ChartComplexValue } from './ChartComplexValue';
 import { ChartDataRow } from './ChartDataRow';
 import { ChartSingleValue } from './ChartSingeValue';
-import { ContextService } from '../../../../browser/context';
+import { ObjectDataService } from '../../../../browser/ObjectDataService';
 
 /**
  * Class to prepare the chart data.
@@ -45,7 +45,7 @@ export class ChartDataPreparer {
                     }
                 });
 
-                const objectData = ContextService.getInstance().getObjectData();
+                const objectData = ObjectDataService.getInstance().getObjectData();
                 if (objectData) {
                     const attributeList = objectData[ticketAttributeMapping[settings.attributes[0]]] || [];
 

@@ -14,14 +14,14 @@ export class Extension implements IConfigurationExtension {
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
         // Content Widgets
         const faqDetailsWidget = new ConfiguredWidget("faq-details", new WidgetConfiguration(
-            "faq-details-widget", "FAQ Details", [], null,
+            "faq-details-widget", "Translatable#FAQ Details", [], null,
             false, true, WidgetSize.BOTH, null, false
         ));
 
         const faqInfoLaneTab =
             new ConfiguredWidget('faq-article-info-lane',
                 new WidgetConfiguration(
-                    'faq-article-info-widget', 'FAQ Informationen',
+                    'faq-article-info-widget', 'Translatable#FAQ Information',
                     ['faq-article-edit-action', 'faq-article-print-action'],
                     {}, false, true, WidgetSize.LARGE, null, false
                 )
@@ -29,7 +29,7 @@ export class Extension implements IConfigurationExtension {
         const faqLinkedObjectsLane =
             new ConfiguredWidget('faq-article-linked-objects-widget',
                 new WidgetConfiguration(
-                    'linked-objects-widget', 'Verknüpfte Objekte',
+                    'linked-objects-widget', 'Translatable#Linked Objects',
                     ['linked-objects-edit-action', 'faq-article-print-action'],
                     {
                         linkedObjectTypes: [
@@ -45,7 +45,7 @@ export class Extension implements IConfigurationExtension {
         const faqHistoryLane =
             new ConfiguredWidget('faq-article-history-widget',
                 new WidgetConfiguration(
-                    'faq-article-history-widget', 'Historie', ['faq-article-print-action'], {},
+                    'faq-article-history-widget', 'Translatable#History', ['faq-article-print-action'], {},
                     true, true, WidgetSize.LARGE, null, false
                 )
             );
@@ -53,7 +53,7 @@ export class Extension implements IConfigurationExtension {
         const faqArticleWidget =
             new ConfiguredWidget('20181017-faq-article-content-widget',
                 new WidgetConfiguration(
-                    'faq-article-content-widget', 'FAQ Artikel',
+                    'faq-article-content-widget', 'Translatable#FAQ Article',
                     ['faq-article-vote-action', 'faq-article-edit-action', 'faq-article-print-action'],
                     {},
                     false, true, WidgetSize.LARGE, null, false

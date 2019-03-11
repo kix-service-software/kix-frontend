@@ -1,13 +1,13 @@
-import { AbstractAction, OverlayType, ComponentContent } from "../../../model";
-import { EventService } from "../../event";
-import { FAQEvent } from "../FAQEvent";
-import { OverlayService } from "../../OverlayService";
+import { AbstractAction, OverlayType, ComponentContent } from '../../../model';
+import { EventService } from '../../event';
+import { FAQEvent } from '../FAQEvent';
+import { OverlayService } from '../../OverlayService';
 
 export class FAQArticleVoteAction extends AbstractAction {
 
     public initAction(): void {
-        this.text = "Bewerten";
-        this.icon = "kix-icon-star-fully";
+        this.text = 'Translatable#Rate';
+        this.icon = 'kix-icon-star-fully';
     }
 
     public run(event: any): void {

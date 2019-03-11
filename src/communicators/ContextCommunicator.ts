@@ -56,7 +56,7 @@ export class ContextCommunicator extends KIXCommunicator {
 
                 configuration = moduleDefaultConfiguration;
             } else {
-                throw new Error("No default configuration for context '" + data.contextId + "' given!");
+                throw new Error(`Translatable#No default configuration for context ${data.contextId} given!`);
 
             }
         }

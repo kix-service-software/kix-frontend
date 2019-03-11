@@ -1,12 +1,12 @@
 import { AbstractAction } from '../../../../model/components/action/AbstractAction';
-import { DialogService } from '../../../components';
 import { ContextMode, KIXObjectType } from '../../../../model';
+import { DialogService } from '../../../components/dialog';
 
 export class ArticleNewNoteAction extends AbstractAction {
 
     public initAction(): void {
-        this.text = "Neuer Artikel";
-        this.icon = "kix-icon-new-note";
+        this.text = 'Translatable#New Article';
+        this.icon = 'kix-icon-new-note';
     }
 
     public async run(): Promise<void> {

@@ -1,8 +1,8 @@
 // tslint:disable
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { KIXObjectType, ContextMode, ConfiguredDialogWidget, Context, ObjectIcon } from '../../src/core/model';
-import { DialogService, IMainDialogListener, IOverlayDialogListener } from '../../src/core/browser';
+import { KIXObjectType, ContextMode, ConfiguredDialogWidget, ObjectIcon } from '../../src/core/model';
+import { DialogService, IMainDialogListener, IOverlayDialogListener } from '../../src/core/browser/components/dialog';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

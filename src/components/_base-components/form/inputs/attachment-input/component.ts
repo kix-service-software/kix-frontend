@@ -1,10 +1,11 @@
-import { ComponentState } from "./ComponentState";
+import { ComponentState } from './ComponentState';
 import {
     ObjectIcon, AttachmentError, OverlayType, ComponentContent, FormInputComponent, Attachment
-} from "../../../../../core/model";
-import { AttachmentUtil } from "../../../../../core/browser";
-import { OverlayService } from "../../../../../core/browser/OverlayService";
-import { Label } from "../../../../../core/browser/components";
+} from '../../../../../core/model';
+import { AttachmentUtil } from '../../../../../core/browser';
+import { OverlayService } from '../../../../../core/browser/OverlayService';
+import { Label } from '../../../../../core/browser/components';
+import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
 class Component extends FormInputComponent<any, ComponentState> {
 
@@ -120,9 +121,11 @@ class Component extends FormInputComponent<any, ComponentState> {
 
         if (fileErrors.length) {
             const errorMessages = await AttachmentUtil.buildErrorMessages(fileErrors);
+            const title = await TranslationService.translate('Translatable#Error while adding the attachement:');
+
             const content = new ComponentContent('list-with-title',
                 {
-                    title: 'Fehler beim Hinzufügen von Anlagen:',
+                    title,
                     list: errorMessages
                 }
             );
@@ -178,9 +181,9 @@ class Component extends FormInputComponent<any, ComponentState> {
         const idx = mimeType.lastIndexOf('/');
         if (idx >= 0) {
             const extension = mimeType.substring(idx + 1, mimeType.length);
-            fileIcon = new ObjectIcon("Filetype", extension);
+            fileIcon = new ObjectIcon('Filetype', extension);
         } else if (mimeType) {
-            fileIcon = new ObjectIcon("Filetype", mimeType);
+            fileIcon = new ObjectIcon('Filetype', mimeType);
         }
         return fileIcon;
     }

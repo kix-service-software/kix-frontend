@@ -11,7 +11,7 @@ export class Extensions implements IMainMenuExtension {
 
     public icon: string = "kix-icon-home";
 
-    public text: string = "Home";
+    public text: string = "Translatable#Home";
 
 }
 

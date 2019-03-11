@@ -4,7 +4,7 @@ export enum ContactProperty {
 
     SourceID = 'SourceID',
 
-    DisplayValue = 'DisplayValue',
+    displayValue = 'Translatable#DisplayValue',
 
     USER_LOGIN = 'UserLogin',
 

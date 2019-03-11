@@ -4,8 +4,18 @@
             toggled: state.toggled
         }>
             <icon icon=input.label.icon showUnknown=input.label.showUnknownIcon/>
-            <span.label-text>${input.label.text}</span>
-            <span>${input.label.additionalText}</span>
+            <if(input.translatable)>
+                <span.label-text>
+                    <translation-string pattern=input.label.text/>
+                </span>
+                <span>
+                    <translation-string pattern=input.label.additionalText/>
+                </span>
+            </if>
+            <else>
+                <span.label-text>${input.label.text}</span>
+                <span>${input.label.additionalText}</span>
+            </else>
             <if(input.removeLabels)>
                 <span.kix-icon-close on-click("removeLabel")/>
             </if>

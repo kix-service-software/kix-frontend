@@ -1,6 +1,7 @@
-import { ComponentState } from "./ComponentState";
-import { TreeNode, AutoCompleteConfiguration } from "../../../../../core/model";
-import { SelectionState, FormInputAction } from "../../../../../core/browser";
+import { ComponentState } from './ComponentState';
+import { TreeNode, AutoCompleteConfiguration } from '../../../../../core/model';
+import { SelectionState, FormInputAction } from '../../../../../core/browser';
+import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
 class Component {
 
@@ -14,7 +15,7 @@ class Component {
         this.state = new ComponentState();
     }
 
-    public onInput(input: any): void {
+    public async onInput(input: any): Promise<void> {
         this.state.actions = typeof input.actions !== 'undefined' ? input.actions : [];
         this.state.readonly = typeof input.readonly !== 'undefined' ? input.readonly : false;
         this.state.invalid = typeof input.invalid !== 'undefined' ? input.invalid : false;
@@ -40,11 +41,13 @@ class Component {
         }
         this.state.removeNode = typeof input.removeNode !== 'undefined' ? input.removeNode : true;
 
+        this.state.placeholder = await TranslationService.translate(input.placeholder, []);
+
         this.setCheckState();
     }
 
     public onMount(): void {
-        document.addEventListener("click", (event) => {
+        document.addEventListener('click', (event) => {
             if (this.state.expanded) {
                 if (this.keepExpanded) {
                     this.keepExpanded = false;
@@ -58,7 +61,7 @@ class Component {
     }
 
     public onDestroy(): void {
-        document.removeEventListener("click", (event) => {
+        document.removeEventListener('click', (event) => {
             if (this.state.expanded) {
                 if (this.keepExpanded) {
                     this.keepExpanded = false;
@@ -219,7 +222,7 @@ class Component {
     }
 
     private setDropdownStyle(): void {
-        const valueList = (this as any).getEl("value-list-" + this.state.treeId);
+        const valueList = (this as any).getEl('value-list-' + this.state.treeId);
         let transformValue = 1;
         if (valueList) {
             const formListInputContainer = (this as any).getEl('form-list-input-container-' + this.state.listId);
@@ -235,9 +238,9 @@ class Component {
                 + formListInputContainer.getBoundingClientRect().height
                 + valueList.getBoundingClientRect().height;
 
-            const input = (this as any).getEl("form-list-input-" + this.state.listId);
+            const input = (this as any).getEl('form-list-input-' + this.state.listId);
             const list = (this as any).getEl(this.state.treeId);
-            const buttons = (this as any).getEl("buttonbar");
+            const buttons = (this as any).getEl('buttonbar');
 
             if (containerEnd < dropdownListEnd) {
                 transformValue
@@ -247,24 +250,24 @@ class Component {
                 this.state.treeStyle = { transform: `translate(0px, -${transformValue}px)` };
 
                 if (input) {
-                    input.style = "grid-row: 3";
+                    input.style = 'grid-row: 3';
                 }
                 if (list) {
-                    list.style = "grid-row: 1";
+                    list.style = 'grid-row: 1';
                 }
                 if (buttons) {
-                    buttons.style = "grid-row: 2";
+                    buttons.style = 'grid-row: 2';
                 }
             } else {
                 this.state.treeStyle = { top: (formListInputContainer.getBoundingClientRect().height - 1) + 'px' };
                 if (input) {
-                    input.style = "grid-row: 1";
+                    input.style = 'grid-row: 1';
                 }
                 if (list) {
-                    list.style = "grid-row: 2";
+                    list.style = 'grid-row: 2';
                 }
                 if (buttons) {
-                    buttons.style = "grid-row: 3";
+                    buttons.style = 'grid-row: 3';
                 }
             }
         }

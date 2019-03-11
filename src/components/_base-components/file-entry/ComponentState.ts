@@ -1,4 +1,4 @@
-import { ObjectIcon } from "../../../core/model";
+import { ObjectIcon } from '../../../core/model';
 
 export class ComponentState {
 

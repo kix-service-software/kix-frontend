@@ -1,5 +1,5 @@
-import { FormInputComponentState, Attachment } from "../../../../../core/model";
-import { Label } from "../../../../../core/browser/components";
+import { FormInputComponentState, Attachment } from '../../../../../core/model';
+import { Label } from '../../../../../core/browser/components';
 
 export class ComponentState extends FormInputComponentState<any> {
 

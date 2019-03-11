@@ -9,6 +9,7 @@ import { TicketParameterUtil } from './TicketParameterUtil';
 import { KIXObjectService } from '../kix';
 import { SearchProperty } from '../SearchProperty';
 import { LabelService } from '../LabelService';
+import { ObjectDataService } from '../ObjectDataService';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -103,7 +104,7 @@ export class TicketService extends KIXObjectService<Ticket> {
     public async getTreeNodes(property: string): Promise<TreeNode[]> {
         let values: TreeNode[] = [];
 
-        const objectData = ContextService.getInstance().getObjectData();
+        const objectData = ObjectDataService.getInstance().getObjectData();
 
         const labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.TICKET);
 
@@ -192,7 +193,7 @@ export class TicketService extends KIXObjectService<Ticket> {
         if (criteria.property === TicketProperty.WATCHERS && ticket.Watchers) {
             let value = criteria.value;
             if (criteria.value === KIXObjectType.CURRENT_USER) {
-                value = ContextService.getInstance().getObjectData().currentUser.UserID;
+                value = ObjectDataService.getInstance().getObjectData().currentUser.UserID;
             }
             return ticket.Watchers.some((w) => w.UserID === value);
         }

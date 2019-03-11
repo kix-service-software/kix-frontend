@@ -1,5 +1,5 @@
-import { ComponentState } from "./ComponentState";
-import { FormInputComponent } from "../../../../../core/model";
+import { ComponentState } from './ComponentState';
+import { FormInputComponent } from '../../../../../core/model';
 
 class Component extends FormInputComponent<any, ComponentState> {
 

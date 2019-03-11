@@ -13,21 +13,23 @@ export class Extension implements IConfigurationExtension {
 
         const ciClassDetailsWidget = new ConfiguredWidget(
             'config-item-class-details-widget', new WidgetConfiguration(
-                'config-item-class-info-widget', 'CMDB Klassen Informationen', ['cmdb-admin-ci-class-edit'], null,
+                'config-item-class-info-widget', 'Translatable#CMDB Class information',
+                ['cmdb-admin-ci-class-edit'], null,
                 false, true, WidgetSize.BOTH, null, false
             )
         );
 
         const ciClassPermissionsWidget = new ConfiguredWidget(
             'config-item-class-permissions-widget', new WidgetConfiguration(
-                'config-item-class-permissions-widget', 'CMDB Klassen Berechtigungen',
+                'config-item-class-permissions-widget', 'Translatable#CMDB Class permissions',
                 ['cmdb-admin-ci-class-edit'], null, true, true, WidgetSize.BOTH, null, false
             )
         );
 
         const ciClassVersionsWidget = new ConfiguredWidget(
             'config-item-class-versions-widget', new WidgetConfiguration(
-                'config-item-class-versions-widget', 'CMDB Klassen Versionen', ['cmdb-admin-ci-class-edit'], null,
+                'config-item-class-versions-widget', 'Translatable#CMDB Class versions',
+                ['cmdb-admin-ci-class-edit'], null,
                 false, true, WidgetSize.BOTH, null, false
             )
         );

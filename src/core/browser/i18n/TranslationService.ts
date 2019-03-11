@@ -1,10 +1,13 @@
-import { KIXObjectService } from "../kix";
+import { KIXObjectService } from "../kix/KIXObjectService";
 import {
     Translation, KIXObjectType, KIXObject, KIXObjectLoadingOptions,
     KIXObjectSpecificLoadingOptions, KIXObjectCache, SysConfigItem, SysConfigKey,
     TranslationProperty, TableFilterCriteria
 } from "../../model";
 import { SearchOperator } from "../SearchOperator";
+import { ClientStorageService } from "../ClientStorageService";
+import { ObjectDataService } from "../ObjectDataService";
+import { AgentService } from "../application";
 
 export class TranslationService extends KIXObjectService<Translation> {
 
@@ -91,6 +94,56 @@ export class TranslationService extends KIXObjectService<Translation> {
             }
         }
         return true;
+    }
+
+    public static async translate(pattern: string, placeholderValues: Array<string | number> = []): Promise<string> {
+        let translationValue = pattern;
+
+        if (translationValue.startsWith('Translatable#')) {
+            translationValue = translationValue.replace('Translatable#', '');
+        }
+
+        const debug = ClientStorageService.getOption('i18n-debug');
+
+        const translation = KIXObjectCache.getObjectCache<Translation>(
+            KIXObjectType.TRANSLATION
+        ).find((t) => t.Pattern === translationValue);
+
+        if (translation) {
+            const language = await this.getUserLanguage();
+            if (language) {
+                const translationLanguage = translation.Languages.find((l) => l.Language === language);
+                if (translationLanguage) {
+                    translationValue = translationLanguage.Value;
+                }
+            }
+        }
+
+        translationValue = this.format(translationValue, placeholderValues.map((p) => p.toString()));
+
+        if (debug) {
+            translationValue = 'TR-' + pattern;
+        }
+
+        return translationValue;
+    }
+
+    private static format(format: string, args: string[]): string {
+        return format.replace(/{(\d+)}/g, (match, number) => {
+            return args && typeof args[number] !== 'undefined'
+                ? args[number]
+                : '';
+        });
+    }
+
+    private static async getUserLanguage(): Promise<string> {
+        let language: string;
+        const currentUser = await AgentService.getInstance().getCurrentUser();
+        if (currentUser) {
+            const preference = currentUser.Preferences.find((p) => p.ID === 'UserLanguage');
+            language = preference ? preference.Value : null;
+        }
+        return language;
     }
 
 }

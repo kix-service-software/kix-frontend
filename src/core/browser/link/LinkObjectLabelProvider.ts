@@ -1,46 +1,58 @@
 import { ILabelProvider } from "..";
 import { ObjectIcon, KIXObjectType, LinkObject, LinkObjectProperty, KIXObject } from "../../model";
 import { LabelService } from "../LabelService";
+import { TranslationService } from "../i18n/TranslationService";
 
 export class LinkObjectLabelProvider implements ILabelProvider<LinkObject> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.LINK_OBJECT;
 
-    public async getPropertyValueDisplayText(property: string, value: string | number): Promise<string> {
+    public async getPropertyValueDisplayText(
+        property: string, value: string | number, translatable: boolean = true
+    ): Promise<string> {
         let displayValue;
 
         switch (property) {
             case LinkObjectProperty.LINKED_OBJECT_TYPE:
                 const labelProvider = LabelService.getInstance().getLabelProviderForType(value as KIXObjectType);
                 if (labelProvider) {
-                    displayValue = labelProvider.getObjectName(null);
+                    displayValue = await labelProvider.getObjectName(null);
                 }
                 break;
             default:
                 displayValue = value;
         }
 
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
+        }
+
         return displayValue ? displayValue.toString() : '';
     }
 
-    public async getPropertyText(property: string): Promise<string> {
+    public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
             case LinkObjectProperty.LINKED_OBJECT_TYPE:
-                displayValue = 'Objekt';
+                displayValue = 'Translatable#Object';
                 break;
             case LinkObjectProperty.LINKED_OBJECT_DISPLAY_ID:
-                displayValue = 'Objekt ID';
+                displayValue = 'Translatable#Object Id';
                 break;
             case LinkObjectProperty.TITLE:
-                displayValue = 'Bezeichnung';
+                displayValue = 'Translatable#Label';
                 break;
             case LinkObjectProperty.LINKED_AS:
-                displayValue = 'Verknüpft als';
+                displayValue = 'Translatable#Linked as';
                 break;
             default:
                 displayValue = property;
         }
+
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
+        }
+
         return displayValue;
     }
 
@@ -48,9 +60,16 @@ export class LinkObjectLabelProvider implements ILabelProvider<LinkObject> {
         return;
     }
 
-    public async getDisplayText(linkObject: LinkObject, property: string): Promise<string> {
-        const displayValue = typeof linkObject[property] !== 'undefined'
+    public async getDisplayText(
+        linkObject: LinkObject, property: string, value?: string, translatable: boolean = true
+    ): Promise<string> {
+        let displayValue = typeof linkObject[property] !== 'undefined'
             ? await this.getPropertyValueDisplayText(property, linkObject[property]) : property;
+
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
+        }
+
         return displayValue ? displayValue.toString() : '';
     }
 
@@ -82,8 +101,13 @@ export class LinkObjectLabelProvider implements ILabelProvider<LinkObject> {
         return linkObject.title;
     }
 
-    public getObjectName(plural: boolean = false): string {
-        return plural ? "Verknüpfte Objekte" : "Verknüpftes Objekt";
+    public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
+        let displayValue = plural ? "Linked Objects" : "Linked Object";
+        if (translatable) {
+            displayValue = await TranslationService.translate(displayValue);
+        }
+
+        return displayValue;
     }
 
     public async getIcons(object: LinkObject, property: string): Promise<Array<string | ObjectIcon>> {

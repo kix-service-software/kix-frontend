@@ -1,13 +1,13 @@
-import { ComponentState } from "./ComponentState";
+import { ComponentState } from './ComponentState';
 import {
     ContextService, ActionFactory, TableFactoryService, SearchOperator, KIXObjectService,
     TableEvent, ITable, TableEventData
-} from "../../../../core/browser";
+} from '../../../../core/browser';
 import {
     WidgetConfiguration, Customer, KIXObjectType, FilterCriteria, TicketProperty, FilterDataType,
     FilterType, StateType, TicketState, DateTimeUtil
-} from "../../../../core/model";
-import { IEventSubscriber, EventService } from "../../../../core/browser/event";
+} from '../../../../core/model';
+import { IEventSubscriber, EventService } from '../../../../core/browser/event';
 
 class Component {
 
@@ -384,7 +384,7 @@ class Component {
     public getTitle(): string {
         const title = this.state.widgetConfiguration
             ? this.state.widgetConfiguration.title
-            : "";
+            : '';
 
         return `${title} (${this.getTicketCount()})`;
     }

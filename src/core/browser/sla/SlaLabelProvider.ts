@@ -1,5 +1,6 @@
 import { ILabelProvider } from "../ILabelProvider";
 import { KIXObjectType, Sla, ObjectIcon } from "../../model";
+import { TranslationService } from "../i18n/TranslationService";
 
 export class SlaLabelProvider implements ILabelProvider<Sla> {
 
@@ -9,11 +10,15 @@ export class SlaLabelProvider implements ILabelProvider<Sla> {
         return sla instanceof Sla;
     }
 
-    public getPropertyText(property: string, short?: boolean): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue;
         switch (property) {
             default:
                 displayValue = property;
+        }
+
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
         }
 
         return displayValue;
@@ -51,7 +56,7 @@ export class SlaLabelProvider implements ILabelProvider<Sla> {
         return null;
     }
 
-    public getObjectName(plural?: boolean): string {
+    public async getObjectName(plural?: boolean): Promise<string> {
         return "SLA";
     }
 

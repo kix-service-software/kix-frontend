@@ -184,7 +184,7 @@ class EditorComponent {
                     const replaceString = `data:${contentItem.contentType};base64,${contentItem.content}`;
                     const contentIdLength = contentItem.contentId.length - 1;
                     const contentId = contentItem.contentId.substring(1, contentIdLength);
-                    const regexpString = new RegExp('cid:' + contentId, "g");
+                    const regexpString = new RegExp('cid:' + contentId, 'g');
                     newString = newString.replace(regexpString, replaceString);
                 }
             }

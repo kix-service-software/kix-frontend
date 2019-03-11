@@ -1,5 +1,5 @@
-import { ImportManager } from "../../../../core/browser/import";
-import { ITable } from "../../../../core/browser";
+import { ImportManager } from '../../../../core/browser/import';
+import { ITable } from '../../../../core/browser';
 
 export class ComponentState {
 

@@ -1,12 +1,14 @@
 import { WidgetType, KIXObject } from '../../../../core/model';
 import {
-    WidgetService, DialogService, TableHeaderHeight,
+    WidgetService, TableHeaderHeight,
     TableRowHeight, LabelService, TableConfiguration, BrowserUtil,
     KIXObjectService, TableFactoryService, TableEvent, ContextService, ValueState, ServiceMethod, TableEventData
 } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import { IEventSubscriber, EventService } from '../../../../core/browser/event';
 import { BulkDialogContext } from '../../../../core/browser/bulk';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
+import { DialogService } from '../../../../core/browser/components/dialog';
 
 class Component {
 
@@ -77,7 +79,7 @@ class Component {
 
                 this.tableSubscriber = {
                     eventSubscriberId: 'bulk-table-listener',
-                    eventPublished: (data: TableEventData, eventId: string) => {
+                    eventPublished: async (data: TableEventData, eventId: string) => {
                         if (data && data.tableId === table.getTableId()) {
                             if (eventId === TableEvent.TABLE_INITIALIZED) {
                                 table.selectAll();
@@ -94,7 +96,7 @@ class Component {
                             const objects = rows.map((r) => r.getRowObject().getObject());
                             this.state.bulkManager.objects = objects;
                             this.state.canRun = this.state.bulkManager.hasDefinedValues() && !!objects.length;
-                            this.prepareTitle();
+                            await this.prepareTitle();
                         }
                     }
                 };
@@ -108,22 +110,29 @@ class Component {
         }
     }
 
-    private prepareTitle(): void {
-        const objectName = LabelService.getInstance().getObjectName(this.state.bulkManager.objectType, true);
+    private async prepareTitle(): Promise<void> {
+        const objectName = await LabelService.getInstance().getObjectName(this.state.bulkManager.objectType, true);
         const objectCount = this.state.bulkManager.objects.length;
-        this.state.tableTitle = `Ausgewählte ${objectName} (${objectCount})`;
+        this.state.tableTitle = await TranslationService.translate(
+            'Selected {0} ({1})', [objectName, objectCount]
+        );
     }
 
-    public run(): void {
+    public async run(): Promise<void> {
         this.cancelBulkProcess = false;
-        const objectName = LabelService.getInstance().getObjectName(this.state.bulkManager.objectType, true);
+        const objectName = await LabelService.getInstance().getObjectName(this.state.bulkManager.objectType, true);
 
         const objects = this.state.bulkManager.objects;
         const editableValues = this.state.bulkManager.getEditableValues();
 
+        const title = await TranslationService.translate('Translatable#Execute now?');
+        const question = await TranslationService.translate(
+            'You will edit {0} attributes for {1} {2}. Execute now?',
+            [editableValues.length, objects.length, objectName]
+        );
         BrowserUtil.openConfirmOverlay(
-            'Jetzt ausführen?',
-            `Sie ändern ${editableValues.length} Attribute an ${objects.length} ${objectName}. Jetzt starten?`,
+            title,
+            question,
             this.runBulkManager.bind(this)
         );
     }
@@ -131,15 +140,16 @@ class Component {
     private async runBulkManager(): Promise<void> {
         this.state.run = true;
 
-        const objectName = LabelService.getInstance().getObjectName(this.state.bulkManager.objectType, true);
+        const objectName = await LabelService.getInstance().getObjectName(this.state.bulkManager.objectType, true);
         const objects = this.state.bulkManager.objects;
         this.state.table.getRows().forEach((r) => r.setValueState(ValueState.NONE));
         this.finishedObjects = [];
         this.errorObjects = [];
 
+        const editText = await TranslationService.translate('Translatable#edited');
         DialogService.getInstance().setMainDialogLoading(
-            true, `${this.finishedObjects.length}/${objects.length} ${objectName} bearbeitet`, false,
-            0, this.cancelBulk.bind(this)
+            true, `${this.finishedObjects.length}/${objects.length} ${objectName} ${editText}`,
+            false, 0, this.cancelBulk.bind(this)
         );
 
         const objectTimes: number[] = [];
@@ -156,7 +166,8 @@ class Component {
                 .catch(async (error) => {
                     this.errorObjects.push(object);
                     this.state.table.setRowObjectValueState([object], ValueState.HIGHLIGHT_ERROR);
-                    DialogService.getInstance().setMainDialogLoading(true, 'Es ist ein Fehler aufgetreten.');
+                    const errorText = await TranslationService.translate('Translatable#An error occurred.');
+                    DialogService.getInstance().setMainDialogLoading(true, errorText);
                     await this.handleObjectEditError(
                         object, (this.finishedObjects.length + this.errorObjects.length), objects.length
                     );
@@ -174,7 +185,8 @@ class Component {
         await this.updateTable();
 
         if (!this.errorObjects.length) {
-            BrowserUtil.openSuccessOverlay('Änderungen wurden gespeichert');
+            const toast = await TranslationService.translate('Translatable#Changes saved.');
+            BrowserUtil.openSuccessOverlay(toast);
         }
 
         DialogService.getInstance().setMainDialogLoading(false);
@@ -191,17 +203,17 @@ class Component {
         context.setObjectList(newObjects);
     }
 
-    private setLoadingInformation(
+    private async setLoadingInformation(
         objectTimes: number[], start: number, end: number, finishedCount: number, objectCount: number
-    ): void {
-        const objectName = LabelService.getInstance().getObjectName(this.state.bulkManager.objectType, true);
+    ): Promise<void> {
+        const objectName = await LabelService.getInstance().getObjectName(this.state.bulkManager.objectType, true);
         objectTimes.push(end - start);
         const average = BrowserUtil.calculateAverage(objectTimes);
         const time = average * (objectCount - finishedCount);
 
+        const editText = await TranslationService.translate('Translatable#edited');
         DialogService.getInstance().setMainDialogLoading(
-            true, `${finishedCount}/${objectCount} ${objectName} bearbeitet`, false,
-            time, this.cancelBulk.bind(this)
+            true, `${finishedCount}/${objectCount} ${objectName} ${editText}`, false, time, this.cancelBulk.bind(this)
         );
     }
 
@@ -211,19 +223,24 @@ class Component {
 
     private handleObjectEditError(object: KIXObject, finishedCount: number, objectCount: number): Promise<void> {
         return new Promise(async (resolve, reject) => {
-            const oName = LabelService.getInstance().getObjectName(this.state.bulkManager.objectType);
+            const oName = await LabelService.getInstance().getObjectName(this.state.bulkManager.objectType);
             const identifier = await LabelService.getInstance().getText(object);
-            // tslint:disable-next-line:max-line-length
-            const confirmText = `${oName} ${identifier}: Änderung kann nicht gespeichert werden. Wie möchten Sie weiter verfahren?`;
+
+            const confirmText = await TranslationService.translate(
+                'Changes cannot be saved. How do you want to proceed?'
+            );
+
+            const cancelButton = await TranslationService.translate('Translatable#Cancel');
+            const ignoreButton = await TranslationService.translate('Translatable#Ignore');
             BrowserUtil.openConfirmOverlay(
                 `${finishedCount}/${objectCount}`,
-                confirmText,
+                `${oName} ${identifier}: ` + confirmText,
                 () => resolve(),
                 () => {
                     this.cancelBulkProcess = true;
                     resolve();
                 },
-                ['Ignorieren', 'Abbrechen']
+                [ignoreButton, cancelButton]
             );
         });
     }

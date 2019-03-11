@@ -1,9 +1,9 @@
 import { ComponentState } from './ComponentState';
-import { AbstractNewDialog } from '../../../../core/browser';
 import { KIXObjectType, ContextMode } from '../../../../core/model';
 import { FAQDetailsContext } from '../../../../core/browser/faq';
 import { FAQArticleProperty } from '../../../../core/model/kix/faq';
 import { RoutingConfiguration } from '../../../../core/browser/router';
+import { AbstractNewDialog } from '../../../../core/browser/components/dialog';
 
 class Component extends AbstractNewDialog {
 

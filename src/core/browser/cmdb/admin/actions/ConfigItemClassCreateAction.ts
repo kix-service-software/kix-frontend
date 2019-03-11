@@ -1,11 +1,11 @@
-import { AbstractAction, KIXObjectType, ContextMode } from "../../../../model";
-import { ContextService } from "../../../context";
+import { AbstractAction, KIXObjectType, ContextMode } from '../../../../model';
+import { ContextService } from '../../../context';
 
 export class ConfigItemClassCreateAction extends AbstractAction {
 
     public initAction(): void {
-        this.text = "Neue CMDB Klasse";
-        this.icon = "kix-icon-new-gear";
+        this.text = 'Translatable#New CMDB Klasse';
+        this.icon = 'kix-icon-new-gear';
     }
 
     public run(): void {

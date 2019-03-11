@@ -1,5 +1,5 @@
-import { FormInputComponent, TreeNode, FormFieldOptionsForDefaultSelectInput } from "../../../../../core/model";
-import { CompontentState } from "./CompontentState";
+import { FormInputComponent, TreeNode, FormFieldOptionsForDefaultSelectInput } from '../../../../../core/model';
+import { CompontentState } from './CompontentState';
 
 class Component extends FormInputComponent<string | number | string[] | number[], CompontentState> {
 

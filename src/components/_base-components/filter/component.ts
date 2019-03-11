@@ -1,5 +1,6 @@
 import { ComponentState } from './ComponentState';
 import { KIXObjectPropertyFilter, TreeNode } from '../../../core/model';
+import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 
 class Component {
 
@@ -9,7 +10,7 @@ class Component {
         this.state = new ComponentState();
     }
 
-    public onInput(input: any): void {
+    public async onInput(input: any): Promise<void> {
         if (input.predefinedFilter) {
             this.state.predefinedFilter = input.predefinedFilter;
             this.state.predefinedFilterList = this.state.predefinedFilter.map(
@@ -20,9 +21,10 @@ class Component {
             this.state.predefinedFilterList = [];
         }
         this.state.predefinedFilterPlaceholder = typeof input.predefinedFilterPlaceholder !== 'undefined' ?
-            input.predefinedFilterPlaceholder : "Alle Objekte";
+            input.predefinedFilterPlaceholder : 'Alle Objekte';
 
-        this.state.placeholder = typeof input.placeholder !== 'undefined' ? input.placeholder : 'Filtern in Liste';
+        const defaultPlaceholder = await TranslationService.translate('Translatable#Filter in list');
+        this.state.placeholder = typeof input.placeholder !== 'undefined' ? input.placeholder : defaultPlaceholder;
 
         this.state.icon = typeof input.icon !== 'undefined' ? input.icon : 'kix-icon-filter';
         this.state.showFilterCount = typeof input.showFilterCount !== 'undefined' ? input.showFilterCount : true;

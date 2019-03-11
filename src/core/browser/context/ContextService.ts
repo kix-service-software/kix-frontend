@@ -1,5 +1,5 @@
 import {
-    Context, ContextConfiguration, ObjectData, WidgetConfiguration,
+    Context, ContextConfiguration, WidgetConfiguration,
     ContextType, KIXObjectType, ContextMode, ContextDescriptor
 } from '../../model';
 import { ContextSocketListener } from './ContextSocketListener';
@@ -8,7 +8,7 @@ import { ContextHistoryEntry } from './ContextHistoryEntry';
 import { ContextHistory } from './ContextHistory';
 import { RoutingService } from '../router';
 import { ContextFactory } from './ContextFactory';
-import { DialogService } from '../components';
+import { DialogService } from '../components/dialog/DialogService';
 
 export class ContextService {
 
@@ -26,7 +26,6 @@ export class ContextService {
     private activeMainContext: Context;
     private activeDialogContext: Context;
     private activeContextType: ContextType = ContextType.MAIN;
-    private objectData: ObjectData;
 
     public registerListener(listener: IContextServiceListener): void {
         this.serviceListener.push(listener);
@@ -129,14 +128,6 @@ export class ContextService {
         contextId: string = this.activeMainContext.getDescriptor().contextId
     ): Promise<void> {
         await ContextSocketListener.getInstance().saveWidgetConfiguration(instanceId, widgetConfiguration, contextId);
-    }
-
-    public setObjectData(objectData: ObjectData): void {
-        this.objectData = objectData;
-    }
-
-    public getObjectData(): ObjectData {
-        return this.objectData;
     }
 
 }

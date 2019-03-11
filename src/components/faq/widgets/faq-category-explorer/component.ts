@@ -5,6 +5,7 @@ import {
 } from '../../../../core/model';
 import { FAQCategory, FAQCategoryProperty } from '../../../../core/model/kix/faq';
 import { FAQContext } from '../../../../core/browser/faq';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 export class Component {
 
@@ -38,7 +39,7 @@ export class Component {
             KIXObjectType.FAQ_CATEGORY_HIERARCHY, null, loadingOptions
         );
 
-        this.state.nodes = this.prepareTreeNodes(faqCategories);
+        this.state.nodes = await this.prepareTreeNodes(faqCategories);
 
         this.setActiveNode(context.faqCategory);
     }
@@ -66,17 +67,23 @@ export class Component {
         return activeNode;
     }
 
-    private prepareTreeNodes(categories: FAQCategory[]): TreeNode[] {
-        return categories
-            ? categories.map((c) => new TreeNode(
-                c, this.getCategoryLabel(c), null, null, this.prepareTreeNodes(c.SubCategories))
-            )
-            : [];
+    private async prepareTreeNodes(categories: FAQCategory[]): Promise<TreeNode[]> {
+        const nodes = [];
+        if (categories) {
+            for (const c of categories) {
+                const label = await this.getCategoryLabel(c);
+                const children = await this.prepareTreeNodes(c.SubCategories);
+                nodes.push(new TreeNode(c, label, null, null, children));
+            }
+        }
+
+        return nodes;
     }
 
-    private getCategoryLabel(category: FAQCategory): string {
+    private async getCategoryLabel(category: FAQCategory): Promise<string> {
+        const name = await TranslationService.translate(category.Name, []);
         const count = this.countArticles(category);
-        return `${category.Name} (${count})`;
+        return `${name} (${count})`;
     }
 
     private countArticles(category: FAQCategory): number {

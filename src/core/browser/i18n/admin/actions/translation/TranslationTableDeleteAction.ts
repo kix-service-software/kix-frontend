@@ -1,18 +1,18 @@
 import {
     AbstractAction, ComponentContent, ConfirmOverlayContent,
     OverlayType, KIXObjectType, ToastContent
-} from "../../../../../model";
-import { OverlayService } from "../../../../OverlayService";
-import { EventService } from "../../../../event";
-import { KIXObjectService } from "../../../../kix";
-import { ApplicationEvent } from "../../../../application";
-import { ITable } from "../../../../table";
+} from '../../../../../model';
+import { OverlayService } from '../../../../OverlayService';
+import { EventService } from '../../../../event';
+import { KIXObjectService } from '../../../../kix';
+import { ApplicationEvent } from '../../../../application';
+import { ITable } from '../../../../table';
 
 export class TranslationTableDeleteAction extends AbstractAction<ITable> {
 
     public initAction(): void {
-        this.text = "Löschen";
-        this.icon = "kix-icon-trash";
+        this.text = 'Translatable#Delete';
+        this.icon = 'kix-icon-trash';
     }
 
     public canRun(): boolean {

@@ -1,11 +1,12 @@
 import { ComponentState } from './ComponentState';
 import {
-    ContextService, ActionFactory, IdService, DialogService, KIXObjectService
+    ContextService, ActionFactory, IdService, KIXObjectService
 } from '../../../../core/browser';
 import {
     KIXObjectType, Context, ConfigItem, ImagesLoadingOptions, ConfigItemImage
 } from '../../../../core/model';
 import { DisplayImageDescription } from '../../../../core/browser/components';
+import { DialogService } from '../../../../core/browser/components/dialog';
 
 class Component {
 

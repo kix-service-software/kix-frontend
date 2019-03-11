@@ -1,16 +1,18 @@
 import {
-    KIXObjectSearchService, DialogService, WidgetService, TableConfiguration, TableRowHeight,
+    KIXObjectSearchService, WidgetService, TableConfiguration, TableRowHeight,
     TableHeaderHeight, KIXObjectService, SearchOperator, BrowserUtil,
     TableFactoryService, ContextService, TableEvent, DefaultColumnConfiguration, ValueState, TableEventData
-} from "../../../../core/browser";
-import { FormService } from "../../../../core/browser/form";
+} from '../../../../core/browser';
+import { FormService } from '../../../../core/browser/form';
 import {
     FormContext, KIXObject, KIXObjectType, WidgetType, CreateLinkDescription, LinkTypeDescription,
     TreeNode, LinkType, KIXObjectLoadingOptions, FilterCriteria, FilterDataType, FilterType, DataType
-} from "../../../../core/model";
+} from '../../../../core/model';
 import { ComponentState } from './ComponentState';
-import { LinkUtil, LinkObjectDialogContext } from "../../../../core/browser/link";
-import { EventService, IEventSubscriber } from "../../../../core/browser/event";
+import { LinkUtil, LinkObjectDialogContext } from '../../../../core/browser/link';
+import { EventService, IEventSubscriber } from '../../../../core/browser/event';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
+import { DialogService } from '../../../../core/browser/components/dialog';
 
 class LinkDialogComponent {
 
@@ -239,7 +241,7 @@ class LinkDialogComponent {
         this.state.canSubmit = this.selectedObjects.length > 0 && this.state.currentLinkTypeDescription !== null;
     }
 
-    public submitClicked(): void {
+    public async submitClicked(): Promise<void> {
         if (this.state.canSubmit) {
             const newLinks = this.selectedObjects.map(
                 (so) => new CreateLinkDescription(so, { ...this.state.currentLinkTypeDescription })
@@ -251,7 +253,11 @@ class LinkDialogComponent {
                 this.resultListenerId,
                 [this.state.linkDescriptions, newLinks]
             );
-            BrowserUtil.openSuccessOverlay(`${newLinks.length} Verknüpfung(en) erfolgreich zugeordnet.`);
+
+            const toast = await TranslationService.translate(
+                '{0} Verknüpfung(en) erfolgreich zugeordnet.', [newLinks.length]
+            );
+            BrowserUtil.openSuccessOverlay(toast);
             this.setLinkedAsValues(newLinks);
             this.markNotSelectableRows();
             this.state.table.selectNone();

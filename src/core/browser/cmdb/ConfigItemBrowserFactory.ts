@@ -1,6 +1,6 @@
-import { ContextService } from '../context';
 import { IKIXObjectFactory } from '../kix';
 import { ConfigItem, ConfigItemFactory, Version, Link, ConfigItemImage, ConfigItemHistory } from '../../model';
+import { ObjectDataService } from '../ObjectDataService';
 
 export class ConfigItemBrowserFactory implements IKIXObjectFactory<ConfigItem> {
 
@@ -22,7 +22,7 @@ export class ConfigItemBrowserFactory implements IKIXObjectFactory<ConfigItem> {
     }
 
     private mapAdditionalData(configItem: ConfigItem): void {
-        const objectData = ContextService.getInstance().getObjectData();
+        const objectData = ObjectDataService.getInstance().getObjectData();
         if (objectData) {
             configItem.createdBy = objectData.users.find((u) => u.UserID === configItem.CreateBy);
             configItem.changedBy = objectData.users.find((u) => u.UserID === configItem.CreateBy);

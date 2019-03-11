@@ -1,8 +1,8 @@
-import { AbstractNewDialog } from "../../../../../core/browser";
-import { KIXObjectType, ContextMode, TranslationProperty } from "../../../../../core/model";
-import { ComponentState } from "./ComponentState";
-import { RoutingConfiguration } from "../../../../../core/browser/router";
-import { TranslationDetailsContext } from "../../../../../core/browser/i18n/admin/context";
+import { KIXObjectType, ContextMode, TranslationProperty } from '../../../../../core/model';
+import { ComponentState } from './ComponentState';
+import { RoutingConfiguration } from '../../../../../core/browser/router';
+import { TranslationDetailsContext } from '../../../../../core/browser/i18n/admin/context';
+import { AbstractNewDialog } from '../../../../../core/browser/components/dialog';
 
 class Component extends AbstractNewDialog {
 

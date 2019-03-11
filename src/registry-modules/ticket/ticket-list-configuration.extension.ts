@@ -18,7 +18,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
 
         const ticketListWidget =
             new ConfiguredWidget('20180927-ticket-list-widget', new WidgetConfiguration(
-                'table-widget', 'Tickets', [
+                'table-widget', 'Translatable#Tickets', [
                     'bulk-action', 'ticket-create-action', 'ticket-search-action', 'csv-export-action'
                 ],
                 {
@@ -40,7 +40,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
 
         const notesSidebar =
             new ConfiguredWidget('20181010-ticket-notes', new WidgetConfiguration(
-                'notes-widget', 'Notizen', [], {},
+                'notes-widget', 'Translatable#Notes', [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-note', false)
             );
 

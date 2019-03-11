@@ -29,7 +29,10 @@ export class TicketPriorityTableFactory implements ITableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new DefaultColumnConfiguration(TicketPriorityProperty.NAME, true, false, true, true, 200, true, true),
+            new DefaultColumnConfiguration(
+                TicketPriorityProperty.NAME, true, false, true, true, 200, true, true, false,
+                DataType.STRING, true, null, null, false
+            ),
             new DefaultColumnConfiguration(TicketPriorityProperty.ID, false, true, false, true, 41, false),
             new DefaultColumnConfiguration(TicketPriorityProperty.COMMENT, true, false, true, true, 350, true, true),
             new DefaultColumnConfiguration(

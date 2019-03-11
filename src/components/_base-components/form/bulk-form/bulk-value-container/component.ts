@@ -1,8 +1,9 @@
 import { ComponentState } from './ComponentState';
-import { DialogService, PropertyOperator } from '../../../../../core/browser';
+import { PropertyOperator } from '../../../../../core/browser';
 import { TreeNode } from '../../../../../core/model';
 import { BulkValue } from './BulkValue';
 import { BulkManager } from '../../../../../core/browser/bulk';
+import { DialogService } from '../../../../../core/browser/components/dialog';
 
 class Component {
 

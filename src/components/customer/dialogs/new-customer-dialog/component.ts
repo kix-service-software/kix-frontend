@@ -1,8 +1,8 @@
-import { ComponentState } from "./ComponentState";
-import { AbstractNewDialog } from "../../../../core/browser";
-import { KIXObjectType, ContextMode, CustomerProperty } from "../../../../core/model";
-import { CustomerDetailsContext } from "../../../../core/browser/customer";
-import { RoutingConfiguration } from "../../../../core/browser/router";
+import { ComponentState } from './ComponentState';
+import { KIXObjectType, ContextMode, CustomerProperty } from '../../../../core/model';
+import { CustomerDetailsContext } from '../../../../core/browser/customer';
+import { RoutingConfiguration } from '../../../../core/browser/router';
+import { AbstractNewDialog } from '../../../../core/browser/components/dialog';
 
 class NewCustomerDialogComponent extends AbstractNewDialog {
 

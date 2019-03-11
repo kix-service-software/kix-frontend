@@ -11,12 +11,12 @@ export class Extension implements IConfigurationExtension {
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
 
         const ticketTypesDetailsWidget = new ConfiguredWidget('ticket-type-details-widget', new WidgetConfiguration(
-            'ticket-type-info-widget', 'Typ Informationen', ['ticket-admin-type-edit'], null,
+            'ticket-type-info-widget', 'Type Information', ['ticket-admin-type-edit'], null,
             false, true, WidgetSize.BOTH, null, false
         ));
 
         const textmodulesWidget = new ConfiguredWidget('ticket-type-assigned-textmodules', new WidgetConfiguration(
-            'ticket-type-assigned-textmodules', 'Zuordnung zu Textbausteinen',
+            'ticket-type-assigned-textmodules', 'Assign Text Modules',
             ['ticket-admin-type-textmodules-edit'], null, false, true, WidgetSize.BOTH, null, false
         ));
 

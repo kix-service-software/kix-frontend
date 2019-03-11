@@ -1,11 +1,11 @@
 import {
     IdService, KIXObjectSearchService, SearchOperator, SearchOperatorUtil, SearchProperty, SearchDefinition
-} from "../../../../../core/browser";
+} from '../../../../../core/browser';
 import {
     TreeNode, FilterCriteria, FilterDataType,
     FilterType, KIXObjectType, InputFieldTypes, DateTimeUtil
-} from "../../../../../core/model";
-import { isArray } from "util";
+} from '../../../../../core/model';
+import { isArray } from 'util';
 
 export class FormSearchValue {
 
@@ -57,7 +57,11 @@ export class FormSearchValue {
                 );
             }
 
-            this.operationNodes = operations.map((o) => new TreeNode(o, SearchOperatorUtil.getText(o)));
+            this.operationNodes = [];
+            for (const o of operations) {
+                const label = await SearchOperatorUtil.getText(o);
+                this.operationNodes.push(new TreeNode(o, label));
+            }
             if (this.operationNodes && this.operationNodes.length) {
                 this.setOperationNode(this.operationNodes[0]);
             }

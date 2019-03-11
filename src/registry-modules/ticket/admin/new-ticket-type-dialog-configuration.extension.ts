@@ -29,25 +29,26 @@ export class Extension implements IConfigurationExtension {
         if (!existing) {
             const fields: FormField[] = [];
             fields.push(new FormField(
-                "Name", TicketTypeProperty.NAME, null, true, "Geben Sie einen Namen für den Typ ein."
+                'Translatable#Name', TicketTypeProperty.NAME, null, true,
+                'Translatable#Insert a type name.'
             ));
             fields.push(new FormField(
-                "Icon", 'ICON', 'icon-input', false,
-                "Wählen Sie ein Icon für den Status aus."
+                'Translatable#Icon', 'ICON', 'icon-input', false,
+                'Translatable#Select an icon for this type.'
             ));
             fields.push(new FormField(
-                "Kommentar", TicketTypeProperty.COMMENT, 'text-area-input', false,
-                "Geben Sie einen Kommentar für den Typ ein.", null, null, null, null, null, null, null, 250
+                'Translatable#Comment', TicketTypeProperty.COMMENT, 'text-area-input', false,
+                'Translatable#Insert a comment for the type.', null, null, null, null, null, null, null, 250
             ));
             fields.push(new FormField(
-                "Gültigkeit", TicketTypeProperty.VALID_ID, 'valid-input', true,
-                "Legen Sie fest, ob der Type „gültig“, „ungültig“ oder „temporär ungültig“ ist.",
+                'Translatable#validity', TicketTypeProperty.VALID_ID, 'valid-input', true,
+                'Translatable#Legen Sie fest, ob der Type „gültig“, „ungültig“ oder „temporär ungültig“ ist.',
                 null, new FormFieldValue(1)
             ));
 
-            const group = new FormGroup('Typdaten', fields);
+            const group = new FormGroup('Translatable#Type Data', fields);
 
-            const form = new Form(formId, 'Typ hinzufügen', [group], KIXObjectType.TICKET_TYPE);
+            const form = new Form(formId, 'Translatable#Create Type', [group], KIXObjectType.TICKET_TYPE);
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
         configurationService.registerForm([FormContext.NEW], KIXObjectType.TICKET_TYPE, formId);

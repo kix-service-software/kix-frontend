@@ -1,9 +1,9 @@
-import { ComponentState } from "./ComponentState";
-import { ContextService, ActionFactory, IdService } from "../../../../core/browser";
-import { KIXObjectType, Customer, ContextMode, Context } from "../../../../core/model";
-import { FAQArticle, FAQArticleProperty } from "../../../../core/model/kix/faq";
-import { FAQLabelProvider, FAQDetailsContext } from "../../../../core/browser/faq";
-import { Label } from "../../../../core/browser/components";
+import { ComponentState } from './ComponentState';
+import { ContextService, ActionFactory, IdService } from '../../../../core/browser';
+import { KIXObjectType, Customer, ContextMode, Context } from '../../../../core/model';
+import { FAQArticle, FAQArticleProperty } from '../../../../core/model/kix/faq';
+import { FAQLabelProvider, FAQDetailsContext } from '../../../../core/browser/faq';
+import { Label } from '../../../../core/browser/components';
 
 class Component {
 

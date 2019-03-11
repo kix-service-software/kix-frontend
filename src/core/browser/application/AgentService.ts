@@ -1,7 +1,7 @@
-import { AgentSocketListener } from "./AgentSocketListener";
-import { UserType } from "../../model/kix/user/UserType";
-import { PersonalSetting, KIXObjectType, Error, User, KIXObjectCache } from "../../model";
-import { KIXObjectService, ServiceMethod } from "../kix";
+import { AgentSocketListener } from './AgentSocketListener';
+import { UserType } from '../../model/kix/user/UserType';
+import { PersonalSetting, KIXObjectType, Error, User, KIXObjectCache } from '../../model';
+import { KIXObjectService, ServiceMethod } from '../kix';
 
 export class AgentService extends KIXObjectService {
 
@@ -16,7 +16,7 @@ export class AgentService extends KIXObjectService {
     }
 
     public getLinkObjectName(): string {
-        return "";
+        return '';
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {
@@ -40,9 +40,9 @@ export class AgentService extends KIXObjectService {
     }
 
     public async setPreferencesByForm(formId: string): Promise<void> {
-        KIXObjectCache.updateCache(KIXObjectType.CURRENT_USER, null, ServiceMethod.UPDATE);
         const parameter: Array<[string, any]> = await this.prepareFormFields(formId);
-        return await AgentSocketListener.getInstance().setPreferences(parameter);
+        await AgentSocketListener.getInstance().setPreferences(parameter);
+        KIXObjectCache.updateCache(KIXObjectType.CURRENT_USER, null, ServiceMethod.UPDATE);
     }
 
 }

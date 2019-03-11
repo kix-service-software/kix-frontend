@@ -1,6 +1,7 @@
 import { ComponentState } from './ComponentState';
 import { ObjectIcon, WidgetType } from '../../../../core/model';
-import { WidgetService, IOverlayDialogListener, DialogService, ComponentsService } from '../../../../core/browser';
+import { WidgetService, ComponentsService } from '../../../../core/browser';
+import { IOverlayDialogListener, DialogService } from '../../../../core/browser/components/dialog';
 
 export class OverlayDialogComponent implements IOverlayDialogListener {
 

@@ -1,7 +1,7 @@
-import { FormInputComponent, TreeNode, KIXObjectType } from "../../../../../core/model";
-import { CompontentState } from "./CompontentState";
-import { ServiceRegistry } from "../../../../../core/browser";
-import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
+import { FormInputComponent, TreeNode, KIXObjectType } from '../../../../../core/model';
+import { CompontentState } from './CompontentState';
+import { ServiceRegistry } from '../../../../../core/browser';
+import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
 class Component extends FormInputComponent<number, CompontentState> {
 

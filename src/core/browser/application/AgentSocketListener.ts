@@ -1,11 +1,11 @@
-import { SocketListener } from "../SocketListener";
+import { SocketListener } from '../SocketListener';
 import {
     UserType, AuthenticationResult, LoginRequest, GetCurrentUserRequest,
     User, SetPreferencesResponse, GetCurrentUserResponse, SetPreferencesRequest, PersonalSetting, AgentEvent
-} from "../../model/kix/user";
-import { ClientStorageService } from "../ClientStorageService";
-import { IdService } from "../IdService";
-import { Error } from "../../model";
+} from '../../model/kix/user';
+import { ClientStorageService } from '../ClientStorageService';
+import { IdService } from '../IdService';
+import { Error } from '../../model';
 
 export class AgentSocketListener extends SocketListener {
 
@@ -23,7 +23,7 @@ export class AgentSocketListener extends SocketListener {
 
     public constructor() {
         super();
-        this.authenticationSocket = this.createSocket("authentication", false);
+        this.authenticationSocket = this.createSocket('authentication', false);
     }
 
     public login(userName: string, password: string, userType: UserType): Promise<boolean> {
@@ -34,7 +34,7 @@ export class AgentSocketListener extends SocketListener {
             }, 30000);
 
             this.authenticationSocket.on(AgentEvent.AUTHORIZED, (result: AuthenticationResult) => {
-                document.cookie = "token=" + result.token;
+                document.cookie = 'token=' + result.token;
                 resolve(true);
             });
 

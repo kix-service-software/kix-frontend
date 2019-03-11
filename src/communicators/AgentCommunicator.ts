@@ -74,7 +74,6 @@ export class AgentCommunicator extends KIXCommunicator {
         const user = await UserService.getInstance().getUserByToken(data.token);
 
         if (user) {
-            KIXObjectCache.updateCache(KIXObjectType.CURRENT_USER, null, ServiceMethod.UPDATE);
             await UserService.getInstance().setPreferences(data.token, data.parameter, user.UserID)
                 .then(() => {
                     response = new CommunicatorResponse(
@@ -86,6 +85,7 @@ export class AgentCommunicator extends KIXCommunicator {
                         AgentEvent.SET_PREFERENCES_ERROR, error
                     );
                 });
+            KIXObjectCache.updateCache(KIXObjectType.CURRENT_USER, null, ServiceMethod.UPDATE);
             return response;
         }
     }

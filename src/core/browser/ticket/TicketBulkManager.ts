@@ -3,12 +3,12 @@ import {
     KIXObjectType, InputFieldTypes, TicketProperty, TreeNode, KIXObjectLoadingOptions,
     ObjectIcon, Contact, SortUtil
 } from "../../model";
-import { ContextService } from "../context";
 import { LabelService } from "../LabelService";
 import { ObjectDefinitionUtil, KIXObjectService } from "../kix";
 import { TicketService } from "./TicketService";
 import { ObjectPropertyValue } from "../ObjectPropertyValue";
 import { PropertyOperator } from "../PropertyOperator";
+import { ObjectDataService } from "../ObjectDataService";
 
 export class TicketBulkManager extends BulkManager {
 
@@ -44,7 +44,7 @@ export class TicketBulkManager extends BulkManager {
     }
 
     public async getInputType(property: string): Promise<InputFieldTypes> {
-        const objectData = ContextService.getInstance().getObjectData();
+        const objectData = ObjectDataService.getInstance().getObjectData();
         const ticketDefinition = objectData.objectDefinitions.find((od) => od.Object === this.objectType);
         if (ticketDefinition) {
             switch (property) {
@@ -73,7 +73,7 @@ export class TicketBulkManager extends BulkManager {
 
     public async getProperties(): Promise<Array<[string, string]>> {
         const properties: Array<[string, string]> = [];
-        const objectData = ContextService.getInstance().getObjectData();
+        const objectData = ObjectDataService.getInstance().getObjectData();
         const ticketDefinition = objectData.objectDefinitions.find((od) => od.Object === this.objectType);
         if (ticketDefinition) {
             const labelProvider = LabelService.getInstance().getLabelProviderForType(this.objectType);

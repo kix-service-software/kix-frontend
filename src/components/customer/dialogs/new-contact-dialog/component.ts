@@ -1,16 +1,16 @@
-import { ComponentState } from "./ComponentState";
-import { AbstractNewDialog } from "../../../../core/browser";
-import { ContextMode, KIXObjectType, ContactProperty } from "../../../../core/model";
-import { ContactDetailsContext } from "../../../../core/browser/contact";
-import { RoutingConfiguration } from "../../../../core/browser/router";
+import { ComponentState } from './ComponentState';
+import { ContextMode, KIXObjectType, ContactProperty } from '../../../../core/model';
+import { ContactDetailsContext } from '../../../../core/browser/contact';
+import { RoutingConfiguration } from '../../../../core/browser/router';
+import { AbstractNewDialog } from '../../../../core/browser/components/dialog';
 
 class Component extends AbstractNewDialog {
 
     public onCreate(): void {
         this.state = new ComponentState();
         super.init(
-            'Ansprechpartner wird angelegt',
-            'Ansprechpartner wurde erfolgreich angelegt.',
+            'Translatable#Ansprechpartner wird angelegt',
+            'Translatable#Ansprechpartner wurde erfolgreich angelegt.',
             KIXObjectType.CONTACT,
             new RoutingConfiguration(
                 null, ContactDetailsContext.CONTEXT_ID, KIXObjectType.CONTACT,

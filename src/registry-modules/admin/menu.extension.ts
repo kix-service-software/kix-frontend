@@ -27,7 +27,7 @@ export class Extension implements IMainMenuExtension {
 
     public icon: string = "kix-icon-admin";
 
-    public text: string = "Admin";
+    public text: string = "Translatable#Admin";
 
 
 

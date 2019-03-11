@@ -5,7 +5,7 @@ import {
     TableEvent, TableEventData, BrowserUtil, OverlayService, DefaultColumnConfiguration
 } from '../../../../core/browser';
 import { EventService, IEventSubscriber } from '../../../../core/browser/event';
-import { TabContainerEvent, DialogService, TabContainerEventData } from '../../../../core/browser/components';
+import { TabContainerEvent, TabContainerEventData } from '../../../../core/browser/components';
 import { ImportDialogContext, ImportService, ImportPropertyOperator } from '../../../../core/browser/import';
 import {
     KIXObjectType, ContextMode, Form, FormContext, FormField, FormFieldOption,
@@ -14,6 +14,7 @@ import {
 } from '../../../../core/model';
 import { FormGroup } from '../../../../core/model/components/form/FormGroup';
 import { ImportConfigValue } from './ImportConfigValue';
+import { DialogService } from '../../../../core/browser/components/dialog';
 
 class Component {
 
@@ -74,7 +75,7 @@ class Component {
                 this.objectType = infos[0] as KIXObjectType;
 
                 const labelProvider = LabelService.getInstance().getLabelProviderForType(this.objectType);
-                const objectName = labelProvider.getObjectName(true);
+                const objectName = await labelProvider.getObjectName(true);
 
                 EventService.getInstance().publish(TabContainerEvent.CHANGE_TITLE, new TabContainerEventData(
                     'import-dialog', `${objectName} importieren`
@@ -131,17 +132,17 @@ class Component {
     private async prepareImportConfigForm(): Promise<void> {
         const formGroup = new FormGroup('Import configurations', [
             new FormField(
-                'Quelle', 'source', 'attachment-input', true,
+                'Translatable#Source', 'source', 'attachment-input', true,
                 // tslint:disable-next-line:max-line-length
-                'CSV-Datei mit den zu importierenen Datensätzen. Ein Einfügen per Drag & Drop ist möglich. Bitte beachten Sie die maximale Dateigröße von 25 MB pro Datei.',
+                'Translatable#CSV-Datei mit den zu importierenen Datensätzen. Ein Einfügen per Drag & Drop ist möglich. Bitte beachten Sie die maximale Dateigröße von 25 MB pro Datei.',
                 [
                     new FormFieldOption('MimeTypes', ['text/csv']),
                     new FormFieldOption('MULTI_FILES', false)
                 ]
             ),
             new FormField(
-                'Zeichensatz', 'character_set', 'default-select-input', true,
-                'Wählen Sie den Zeichensatz der Quelle aus.',
+                'Translatable#Charset', 'character_set', 'default-select-input', true,
+                'Translatable#Wählen Sie den Zeichensatz der Quelle aus.',
                 [
                     new FormFieldOption(
                         FormFieldOptionsForDefaultSelectInput.NODES,
@@ -151,8 +152,8 @@ class Component {
                 new FormFieldValue('UTF-8')
             ),
             new FormField(
-                'Trennoptionen', 'value_separator', 'default-select-input', true,
-                'Wählen Sie die in der Quelle verwendeten Trennzeichen aus.',
+                'Translatable#Split Option', 'value_separator', 'default-select-input', true,
+                'Translatable#Wählen Sie die in der Quelle verwendeten Trennzeichen aus.',
                 [
                     new FormFieldOption(
                         FormFieldOptionsForDefaultSelectInput.NODES,
@@ -163,8 +164,8 @@ class Component {
                 new FormFieldValue('SEMICOLON')
             ),
             new FormField(
-                'Texttrenner', 'text_separator', 'default-select-input', true,
-                'Wählen Sie das in der Quelle verwendete Textbegrenzungszeichen aus.',
+                'Translatable#Text separator', 'text_separator', 'default-select-input', true,
+                'Translatable#Wählen Sie das in der Quelle verwendete Textbegrenzungszeichen aus.',
                 [
                     new FormFieldOption(
                         FormFieldOptionsForDefaultSelectInput.NODES,
@@ -284,7 +285,7 @@ class Component {
     private prepareTitle(): void {
         const objectName = LabelService.getInstance().getObjectName(this.objectType, true);
         const objectCount = this.state.table ? this.state.table.getSelectedRows().length : 0;
-        this.state.tableTitle = `Übersicht zu importierende ${objectName} (${objectCount})`;
+        this.state.tableTitle = `Translatable#Übersicht zu importierende ${objectName} (${objectCount})`;
     }
 
     private async prepareTableDataByCSV(): Promise<void> {

@@ -1,4 +1,4 @@
-import { AutoCompleteConfiguration, FormInputComponentState, TreeNode } from "../../../../../core/model";
+import { AutoCompleteConfiguration, FormInputComponentState, TreeNode } from '../../../../../core/model';
 
 export class ComponentState extends FormInputComponentState<string | number> {
 

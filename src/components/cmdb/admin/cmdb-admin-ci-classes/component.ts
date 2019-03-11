@@ -46,7 +46,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async prepareTitle(): Promise<void> {
         const context = await ContextService.getInstance().getContext<AdminContext>(AdminContext.CONTEXT_ID);
         const labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.CONFIG_ITEM_CLASS);
-        const className = labelProvider.getObjectName(true);
+        const className = await labelProvider.getObjectName(true);
         const count = this.state.table ? this.state.table.getRows(true).length : 0;
         this.state.title = `${context.categoryName}: ${className} (${count})`;
     }

@@ -15,11 +15,11 @@ public async createFormDefinitions(overwrite: boolean): Promise<void> {
     const existingForm = configurationService.getModuleConfiguration(formId, null);
     if (!existingForm || overwrite) {
         const fields: FormField[] = [];
-        fields.push(new FormField("Titel", FAQArticleProperty.TITLE, true, "Titel"));
+        fields.push(new FormField('--i18n--Title', FAQArticleProperty.TITLE, true, '--i18n--Title'));
 
-        const group = new FormGroup('FAQ Daten', fields);
+        const group = new FormGroup('--i18n--FAQ Data', fields);
 
-        const form = new Form(formId, 'Neue FAQ', [group], KIXObjectType.FAQ_ARTICLE);
+        const form = new Form(formId, '--i18n--New', [group], KIXObjectType.FAQ_ARTICLE);
         await configurationService.saveModuleConfiguration(form.id, null, form);
     }
     configurationService.registerForm([FormContext.NEW], KIXObjectType.FAQ_ARTICLE, formId);
@@ -54,7 +54,7 @@ FormInputRegistry.getInstance().registerFormInputComponent(new FormInputComponen
 ));
 
 FormInputRegistry.getInstance().registerFormInputComponent(new FormInputComponentDefinition(
-    FAQArticleProperty.VALID_ID, KIXObjectType.FAQ_ARTICLE, 'valid-input', 'Gültigkeit'
+    FAQArticleProperty.VALID_ID, KIXObjectType.FAQ_ARTICLE, 'valid-input', 'validity'
 ));
 ```
 

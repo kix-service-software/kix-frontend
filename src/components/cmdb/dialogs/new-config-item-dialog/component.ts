@@ -1,5 +1,5 @@
 import {
-    DialogService, OverlayService, FormService, ServiceRegistry, SearchOperator, KIXObjectService, BrowserUtil
+    OverlayService, FormService, ServiceRegistry, SearchOperator, KIXObjectService, BrowserUtil
 } from '../../../../core/browser';
 import {
     ComponentContent, OverlayType, StringContent, TreeNode, ValidationResult,
@@ -9,6 +9,7 @@ import {
 import { ComponentState } from './ComponentState';
 import { CMDBService, ConfigItemDetailsContext, ConfigItemFormFactory } from '../../../../core/browser/cmdb';
 import { RoutingService, RoutingConfiguration } from '../../../../core/browser/router';
+import { DialogService } from '../../../../core/browser/components/dialog';
 
 class Component {
 

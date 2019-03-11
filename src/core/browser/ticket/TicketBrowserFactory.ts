@@ -3,9 +3,9 @@ import {
     Link, ObjectData, TicketPriority, TicketType, TicketState, StateType,
     Queue, DynamicField, Sla, KIXObjectLoadingOptions
 } from '../../model';
-import { ContextService } from '../context';
 import { IKIXObjectFactory, KIXObjectService } from '../kix';
 import { ArticleBrowserFactory } from './ArticleBrowserFactory';
+import { ObjectDataService } from '../ObjectDataService';
 
 export class TicketBrowserFactory implements IKIXObjectFactory<Ticket> {
 
@@ -27,7 +27,7 @@ export class TicketBrowserFactory implements IKIXObjectFactory<Ticket> {
     }
 
     private async mapTicketData(ticket: Ticket): Promise<void> {
-        const objectData = ContextService.getInstance().getObjectData();
+        const objectData = ObjectDataService.getInstance().getObjectData();
         if (objectData) {
 
             ticket.owner = objectData.users.find((u) => u.UserID === ticket.OwnerID);

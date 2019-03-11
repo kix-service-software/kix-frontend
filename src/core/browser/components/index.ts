@@ -7,4 +7,3 @@ export { TabContainerEvent } from './TabContainerEvent';
 export { TabContainerEventData } from './TabContainerEventData';
 
 export * from './autocomplete';
-export * from './dialog';
