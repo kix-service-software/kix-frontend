@@ -474,7 +474,7 @@ msgstr "Schließzeit"
 msgid "Quick search (Tickets)"
 msgstr "Schnellsuche (Tickets)"
 
-msgstr "Select all"
+msgid "Select all"
 msgstr "Alle auswählen"
 
 msgid "Visibility"
@@ -730,7 +730,7 @@ msgstr "Es ist ein Fehler aufgetreten."
 msgid "Changes cannot be saved. How do you want to proceed?"
 msgstr "Änderung kann nicht gespeichert werden. Wie möchten Sie weiter verfahren?"
 
-msgstr "Ignore"
+msgid "Ignore"
 msgstr "Ignorieren"
 
 msgid "Zu ändernde Attribute"
@@ -792,12 +792,6 @@ msgstr "Raum"
 
 msgid "Description"
 msgstr "Beschreibung"
-
-msgid "Note"
-msgstr "Notiz"
-
-msgid "Notes"
-msgstr "Notizen"
 
 msgid "Attachment"
 msgstr "Anhang"
