@@ -9,7 +9,7 @@
     "test": "export http_proxy= && export https_proxy= && export NODE_ENV=test && mocha --reporter spec --compilers ts:ts-node/register --require source-map-support/register 'tests/**/*.test.ts'",
     "pub": "gulp && npm version patch && npm publish",
     "bundle": "rm -f kix-frontend.tar.gz && tar cvfz kix-frontend.tar.gz * --exclude-from=.bundleignore",
-    "i18n": "./i18n.sh"
+    "extract-translatables": "./extract-translatables.sh"
   },
   "repository": {
     "type": "git",
