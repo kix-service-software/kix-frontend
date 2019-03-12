@@ -70,7 +70,8 @@ export class TicketFormService extends KIXObjectFormService<Ticket> {
         } else if (channel.Name === 'email') {
             fields.push(new FormField(
                 'Translatable#Visible in customer portal', ArticleProperty.CUSTOMER_VISIBLE, 'checkbox-input',
-                false, 'Translatable#Visible in customer portal'
+                false, 'Translatable#Visible in customer portal',
+                null, null, null, null, null, null, null, null, null, null, null, null, true
             ));
 
             fields.push(new FormField(
