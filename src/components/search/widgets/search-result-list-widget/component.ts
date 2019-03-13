@@ -112,8 +112,6 @@ class Component implements IKIXObjectSearchListener {
                 null, SearchContext.CONTEXT_ID, true, true, true
             );
 
-
-
             this.tableSubscriber = {
                 eventSubscriberId: 'search-result-table-listener',
                 eventPublished: async (data: TableEventData, eventId: string) => {
@@ -140,11 +138,10 @@ class Component implements IKIXObjectSearchListener {
                 }
             };
 
-            EventService.getInstance().subscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
-            EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
-
             WidgetService.getInstance().setActionData(this.state.instanceId, table);
             this.state.table = table;
+            EventService.getInstance().subscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
+            EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
             this.setActionsDirty();
         } else {
             this.state.resultIcon = null;
