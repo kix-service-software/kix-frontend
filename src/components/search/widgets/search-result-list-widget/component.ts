@@ -115,7 +115,7 @@ class Component implements IKIXObjectSearchListener {
             this.tableSubscriber = {
                 eventSubscriberId: 'search-result-table-listener',
                 eventPublished: async (data: TableEventData, eventId: string) => {
-                    if (data && data.tableId === table.getTableId()) {
+                    if (data && this.state.table && data.tableId === this.state.table.getTableId()) {
                         if (eventId === TableEvent.TABLE_INITIALIZED && isSearchMainObject) {
                             const parameter: Array<[string, any]> = [];
                             for (const c of cache.criteria) {
