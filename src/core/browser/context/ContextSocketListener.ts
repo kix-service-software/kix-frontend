@@ -44,6 +44,12 @@ export class ContextSocketListener extends SocketListener {
             this.socket.emit(
                 ContextEvent.LOAD_CONTEXT_CONFIGURATION, new LoadContextConfigurationRequest(token, contextId)
             );
+
+            this.socket.on(ContextEvent.CONTEXT_CONFIGURATION_LOAD_ERROR, (error: string) => {
+                window.clearTimeout(timeout);
+                console.error(error);
+                reject(error);
+            });
         });
     }
 

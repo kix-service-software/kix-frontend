@@ -27,8 +27,7 @@
             "personal-settings-dialog-configuration": "../../dist/registry-modules/application/personal-settings-dialog-configuration.extension",
             "i18n-new-translation": "../../dist/registry-modules/admin/new-translation-dialog-configuration.extension",
             "i18n-edit-translation": "../../dist/registry-modules/admin/edit-translation-dialog-configuration.extension",
-            "i18n-translation-details-configuration": "../../dist/registry-modules/admin/i18n-translation-details.extension",
-            "import-dialog-configuration": "../../dist/registry-modules/application/import-dialog-configuration.extension"
+            "i18n-translation-details-configuration": "../../dist/registry-modules/admin/i18n-translation-details.extension"
         },
         "kix:modules": {
             "app-module": "../../dist/registry-modules/application/kix-module.extension",

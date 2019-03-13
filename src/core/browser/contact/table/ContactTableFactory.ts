@@ -35,39 +35,27 @@ export class ContactTableFactory implements ITableFactory {
         let tableColumns;
         if (short) {
             tableColumns = [
-                new DefaultColumnConfiguration(
-                    ContactProperty.USER_FIRST_NAME, true, false, true, false, 150, true, true
-                ),
-                new DefaultColumnConfiguration(
-                    ContactProperty.USER_LAST_NAME, true, false, true, false, 150, true, true
-                ),
-                new DefaultColumnConfiguration(ContactProperty.USER_EMAIL, true, false, true, false, 175, true, true),
-                new DefaultColumnConfiguration(ContactProperty.USER_LOGIN, true, false, true, false, 150, true, true),
-                new DefaultColumnConfiguration(
-                    ContactProperty.USER_CUSTOMER_ID, true, false, true, false, 150, true, true
-                ),
-                new DefaultColumnConfiguration(ContactProperty.USER_CITY, true, false, true, false, 130, true, true),
-                new DefaultColumnConfiguration(ContactProperty.USER_STREET, true, false, true, false, 150, true, true),
-                new DefaultColumnConfiguration(ContactProperty.VALID_ID, true, false, true, false, 130, true, true)
+                this.getDefaultColumnConfiguration(ContactProperty.USER_FIRST_NAME),
+                this.getDefaultColumnConfiguration(ContactProperty.USER_LAST_NAME),
+                this.getDefaultColumnConfiguration(ContactProperty.USER_EMAIL),
+                this.getDefaultColumnConfiguration(ContactProperty.USER_LOGIN),
+                this.getDefaultColumnConfiguration(ContactProperty.USER_CUSTOMER_ID),
+                this.getDefaultColumnConfiguration(ContactProperty.USER_CITY),
+                this.getDefaultColumnConfiguration(ContactProperty.USER_STREET),
+                this.getDefaultColumnConfiguration(ContactProperty.VALID_ID)
             ];
         } else {
             tableColumns = [
-                new DefaultColumnConfiguration(
-                    ContactProperty.USER_FIRST_NAME, true, false, true, false, 150, true, true
-                ),
-                new DefaultColumnConfiguration(
-                    ContactProperty.USER_LAST_NAME, true, false, true, false, 150, true, true
-                ),
-                new DefaultColumnConfiguration(ContactProperty.USER_EMAIL, true, false, true, false, 175, true, true),
-                new DefaultColumnConfiguration(ContactProperty.USER_LOGIN, true, false, true, false, 150, true, true),
-                new DefaultColumnConfiguration(
-                    ContactProperty.USER_CUSTOMER_ID, true, false, true, false, 150, true, true
-                ),
-                new DefaultColumnConfiguration(ContactProperty.USER_PHONE, true, false, true, false, 130, true, true),
-                new DefaultColumnConfiguration(ContactProperty.USER_COUNTRY, true, false, true, false, 130, true, true),
-                new DefaultColumnConfiguration(ContactProperty.USER_CITY, true, false, true, false, 130, true, true),
-                new DefaultColumnConfiguration(ContactProperty.USER_STREET, true, false, true, false, 150, true, true),
-                new DefaultColumnConfiguration(ContactProperty.VALID_ID, true, false, true, false, 130, true, true)
+                this.getDefaultColumnConfiguration(ContactProperty.USER_FIRST_NAME),
+                this.getDefaultColumnConfiguration(ContactProperty.USER_LAST_NAME),
+                this.getDefaultColumnConfiguration(ContactProperty.USER_EMAIL),
+                this.getDefaultColumnConfiguration(ContactProperty.USER_LOGIN),
+                this.getDefaultColumnConfiguration(ContactProperty.USER_CUSTOMER_ID),
+                this.getDefaultColumnConfiguration(ContactProperty.USER_PHONE),
+                this.getDefaultColumnConfiguration(ContactProperty.USER_COUNTRY),
+                this.getDefaultColumnConfiguration(ContactProperty.USER_CITY),
+                this.getDefaultColumnConfiguration(ContactProperty.USER_STREET),
+                this.getDefaultColumnConfiguration(ContactProperty.VALID_ID)
             ];
         }
 
@@ -96,7 +84,23 @@ export class ContactTableFactory implements ITableFactory {
 
     // TODO: implementieren
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
-        return;
+        let config;
+        switch (property) {
+            case ContactProperty.USER_EMAIL:
+                config = new DefaultColumnConfiguration(property, true, false, true, false, 175, true, true);
+                break;
+            case ContactProperty.USER_PHONE:
+            case ContactProperty.USER_COUNTRY:
+            case ContactProperty.USER_CITY:
+                config = new DefaultColumnConfiguration(property, true, false, true, false, 130, true, true);
+                break;
+            case ContactProperty.VALID_ID:
+                config = new DefaultColumnConfiguration(property, true, false, true, false, 130, true, true, true);
+                break;
+            default:
+                config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true);
+        }
+        return config;
     }
 
 }

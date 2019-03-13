@@ -47,12 +47,10 @@ class Component {
         await this.provideValue(value);
     }
 
-    public textValueChanged(value: DynamicFieldValue, event: any): void {
-        setTimeout(async () => {
-            const newValue = event.target.value;
-            value.setTextValue(newValue);
-            await this.provideValue(value);
-        }, 100);
+    public async textValueChanged(value: DynamicFieldValue, event: any): Promise<void> {
+        const newValue = event.target.value;
+        value.setTextValue(newValue);
+        await this.provideValue(value);
     }
 
     public async dateValueChanged(value: DynamicFieldValue, event: any): Promise<void> {
@@ -128,7 +126,7 @@ class Component {
     public getInputOptionValue(value: DynamicFieldValue, option: string): string | number {
         let returnValue: string | number = '';
         switch (option) {
-            case 'maxlength':
+            case 'maxLength':
                 const inputOption = value.inputOptions.find((io) => io[0] === option);
                 returnValue = inputOption && inputOption[1] && typeof inputOption[1] === 'number'
                     ? inputOption[1] : 200;

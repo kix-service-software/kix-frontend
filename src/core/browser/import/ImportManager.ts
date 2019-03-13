@@ -18,7 +18,15 @@ export abstract class ImportManager {
     protected listeners: Map<string, () => void> = new Map();
 
     public registerListener(listenerId: string, callback: () => void): void {
-        this.listeners.set(listenerId, callback);
+        if (listenerId) {
+            this.listeners.set(listenerId, callback);
+        }
+    }
+
+    public unregisterListener(listenerId: string): void {
+        if (listenerId) {
+            this.listeners.delete(listenerId);
+        }
     }
 
     protected notifyListeners(): void {

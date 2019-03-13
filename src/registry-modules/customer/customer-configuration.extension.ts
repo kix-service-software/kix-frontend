@@ -33,6 +33,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                 'table-widget', 'Translatable#Overview Contacts', [
                     'contact-search-action',
                     'contact-create-action',
+                    'import-action',
                     'csv-export-action'
                 ], {
                     objectType: KIXObjectType.CONTACT,

@@ -43,7 +43,6 @@ import { SearchResultPrintAction } from '../../core/browser/search/actions';
 import { SearchContext } from '../../core/browser/search/context';
 import { SwitchColumnOrderAction } from '../../core/browser/table/actions';
 import { SystemAddressService } from '../../core/browser/system-address';
-import { ImportDialogContext } from '../../core/browser/import';
 import { DialogService } from '../../core/browser/components/dialog';
 
 class Component extends AbstractMarkoComponent {
@@ -172,13 +171,6 @@ class Component extends AbstractMarkoComponent {
             false, 'i18n-translation-details', ['translations'], TranslationDetailsContext
         );
         ContextService.getInstance().registerContext(translationDetailsContext);
-
-        const importDialogContext = new ContextDescriptor(
-            ImportDialogContext.CONTEXT_ID, [KIXObjectType.ANY],
-            ContextType.DIALOG, ContextMode.IMPORT,
-            false, 'import-dialog', ['import'], ImportDialogContext
-        );
-        ContextService.getInstance().registerContext(importDialogContext);
     }
 
     private registerDialogs(): void {
@@ -227,15 +219,6 @@ class Component extends AbstractMarkoComponent {
             ),
             KIXObjectType.TRANSLATION,
             ContextMode.EDIT_ADMIN
-        ));
-
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'import-dialog',
-            new WidgetConfiguration(
-                'import-dialog', 'Translatable#Import Objects', [], {}, false, false, null, 'kix-icon-import'
-            ),
-            KIXObjectType.ANY,
-            ContextMode.IMPORT
         ));
     }
 

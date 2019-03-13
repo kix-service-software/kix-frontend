@@ -113,6 +113,12 @@ export class ContextService {
         return (await ContextFactory.getInstance().getContext(contextId, null, null, objectId) as T);
     }
 
+    public async getContextByTypeAndMode<T extends Context = Context>(
+        objectType: KIXObjectType, contextMode: ContextMode = ContextMode.DETAILS
+    ): Promise<T> {
+        return (await ContextFactory.getInstance().getContext(null, objectType, contextMode) as T);
+    }
+
     public getHistory(limit: number = 10): ContextHistoryEntry[] {
         return ContextHistory.getInstance().getHistory(limit, this.activeMainContext)
             .filter(

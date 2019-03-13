@@ -6,3 +6,6 @@ export { ContactSearchContextConfiguration } from './ContactSearchContextConfigu
 export { ContactSearchContext } from './ContactSearchContext';
 export { EditContactDialogContext } from './EditContactDialogContext';
 export { EditContactDialogContextConfiguration } from './EditContactDialogContextConfiguration';
+export { ContactImportDialogContext } from './ContactImportDialogContext';
+export { ContactImportDialogContextConfiguration } from './ContactImportDialogContextConfiguration';
+

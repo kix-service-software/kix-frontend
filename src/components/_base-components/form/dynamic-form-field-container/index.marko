@@ -53,16 +53,16 @@
                         rows=5
                         cols=25
                         value=dynamicValue.currentValue
-                        maxlength=component.getInputOptionValue(dynamicValue, "maxlength")
+                        maxlength=component.getInputOptionValue(dynamicValue, "maxLength")
                         disabled=(dynamicValue.readonly && !dynamicValue.changeable)
-                        on-keydown("textValueChanged", dynamicValue)/>
+                        on-input("textValueChanged", dynamicValue)/>
                 </else-if>
                 <else>
                     <input.input-style
                         value=dynamicValue.currentValue
                         type="text"
                         disabled=(dynamicValue.readonly && !dynamicValue.changeable)
-                        on-keydown("textValueChanged", dynamicValue)/>
+                        on-input("textValueChanged", dynamicValue)/>
                 </else>
             </if>
         </div>
@@ -73,7 +73,7 @@
         )>
             <button.form-control-button.button-without-text
                 type="button"
-                title="Parameter entfernen"
+                title="Translatable#Parameter entfernen"
                 on-click("removeValue", dynamicValue)>
                 <span.kix-icon-minus/>
             </button>

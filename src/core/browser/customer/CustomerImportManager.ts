@@ -40,7 +40,7 @@ export class CustomerImportManager extends ImportManager {
         switch (property) {
             case CustomerProperty.CUSTOMER_COMPANY_COMMENT:
                 return [
-                    ['maxlength', 250]
+                    ['maxLength', 250]
                 ];
             default:
                 return super.getInputTypeOptions(property);
@@ -78,9 +78,5 @@ export class CustomerImportManager extends ImportManager {
 
     public async getTreeNodes(property: string): Promise<TreeNode[]> {
         return await CustomerService.getInstance().getTreeNodes(property);
-    }
-
-    public async getIdentifierText(customer: Customer): Promise<string> {
-        return `${customer.CustomerCompanyName} ${customer.CustomerID ? ' (' + customer.CustomerID + ')' : ''}`;
     }
 }

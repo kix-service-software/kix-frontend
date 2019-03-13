@@ -6,11 +6,11 @@ import {
 } from '../../../../core/browser';
 import { EventService, IEventSubscriber } from '../../../../core/browser/event';
 import { TabContainerEvent, TabContainerEventData } from '../../../../core/browser/components';
-import { ImportDialogContext, ImportService, ImportPropertyOperator } from '../../../../core/browser/import';
+import { ImportService, ImportPropertyOperator } from '../../../../core/browser/import';
 import {
     KIXObjectType, ContextMode, Form, FormContext, FormField, FormFieldOption,
     FormFieldOptionsForDefaultSelectInput, TreeNode, FormFieldValue, WidgetType,
-    KIXObject, OverlayType, ComponentContent, DataType, Error, SortOrder
+    KIXObject, OverlayType, ComponentContent, DataType, Error, SortOrder, ContextType, Context
 } from '../../../../core/model';
 import { FormGroup } from '../../../../core/model/components/form/FormGroup';
 import { ImportConfigValue } from './ImportConfigValue';
@@ -20,12 +20,14 @@ import { TranslationService } from '../../../../core/browser/i18n/TranslationSer
 class Component {
 
     private state: ComponentState;
+    private importConfigs: Map<string, ImportConfigValue[]> = new Map();
+    private context: Context;
     private objectType: KIXObjectType;
     private tableSubscriber: IEventSubscriber;
     private formListenerId: string;
-    private importConfigs: Map<string, ImportConfigValue[]> = new Map();
     private csvObjects: any[];
     private csvProperties: string[];
+    private fileLoaded: boolean = false;
 
     private cancelImportProcess: boolean;
     private errorObjects: KIXObject[];
@@ -37,9 +39,6 @@ class Component {
 
     public onCreate(input: any): void {
         this.state = new ComponentState(input.instanceId);
-        this.errorObjects = [];
-        this.finishedObjects = [];
-        this.selectedObjects = [];
         WidgetService.getInstance().setWidgetType('dynamic-form-field-group', WidgetType.GROUP);
         this.importConfigs = new Map(
             [
@@ -70,33 +69,14 @@ class Component {
         );
     }
 
-    public onInput(input: any): void {
-        this.state.instanceId = input.instanceId;
-    }
+    public async onInput(input: any): Promise<void> {
+        this.reset(input ? input.instanceId : '');
 
-    public async onMount(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<ImportDialogContext>(
-            ImportDialogContext.CONTEXT_ID
-        );
-        if (context) {
-            const infos = await context.getAdditionalInformation();
-            if (infos && !!infos.length && typeof infos[0] === 'string' && infos[0].length) {
-                this.objectType = infos[0] as KIXObjectType;
-
-                const objectName = await LabelService.getInstance().getObjectName(this.objectType, true, false);
-
-                const tabTitle = await TranslationService.translate('Translatable#{0} importieren', [objectName]);
-                EventService.getInstance().publish(TabContainerEvent.CHANGE_TITLE, new TabContainerEventData(
-                    'import-dialog', tabTitle
-                ));
-
-                const dialogs = DialogService.getInstance().getRegisteredDialogs(ContextMode.CREATE);
-                const dialog = dialogs.find((d) => d.kixObjectType === this.objectType);
-                if (dialog) {
-                    EventService.getInstance().publish(TabContainerEvent.CHANGE_ICON, new TabContainerEventData(
-                        'import-dialog', null, dialog.configuration.icon
-                    ));
-                }
+        this.context = await ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+        if (this.context) {
+            const types = await this.context.getDescriptor().kixObjectTypes;
+            if (types && !!types.length && typeof types[0] === 'string' && types[0].length) {
+                this.objectType = types[0];
 
                 const importManager = ImportService.getInstance().getImportManager(this.objectType);
                 importManager.init();
@@ -104,38 +84,42 @@ class Component {
 
                 this.formListenerId = `import-form-listener-${this.objectType}`;
                 this.state.importManager.registerListener(this.formListenerId, () => {
-                    if (!this.propertiesFormTimeout) {
-                        this.propertiesFormTimeout = setTimeout(async () => {
-                            this.propertiesFormTimeout = null;
-                            await this.setTableColumns();
-                            await this.setContextObjects();
-                        }, 200);
+                    if (this.propertiesFormTimeout) {
+                        clearTimeout(this.propertiesFormTimeout);
                     }
+                    this.propertiesFormTimeout = setTimeout(async () => {
+                        this.propertiesFormTimeout = null;
+                        await this.setTableColumns();
+                        await this.setContextObjects();
+                    }, 200);
                 });
             }
         }
-        await this.prepareImportConfigForm();
+        this.prepareImportConfigForm();
 
         if (this.objectType) {
-            await FormService.getInstance().registerFormInstanceListener(this.state.importConfigFormId, {
+            FormService.getInstance().registerFormInstanceListener(this.state.importConfigFormId, {
                 formListenerId: this.formListenerId,
                 formValueChanged: async (formField: FormField, value: FormFieldValue<any>) => {
-                    if (!this.importFormTimeout) {
+                    if (this.importFormTimeout) {
+                        clearTimeout(this.importFormTimeout);
+                    } else {
                         const loadingHint = await TranslationService.translate('Translatable#Datei wird eingelesen.');
+                        this.fileLoaded = false;
                         DialogService.getInstance().setMainDialogLoading(true, loadingHint);
-                        this.importFormTimeout = setTimeout(async () => {
-                            this.importFormTimeout = null;
-                            await this.prepareTableDataByCSV();
-                            DialogService.getInstance().setMainDialogLoading(false);
-                        }, 100);
                     }
+                    this.importFormTimeout = setTimeout(async () => {
+                        this.importFormTimeout = null;
+                        await this.prepareTableDataByCSV();
+                        DialogService.getInstance().setMainDialogLoading(false);
+                    }, 100);
+
                 },
                 updateForm: () => { return; }
             });
         }
 
-        await this.createTable();
-        this.state.loading = false;
+        this.createTable();
     }
 
     public onDestroy(): void {
@@ -144,6 +128,30 @@ class Component {
         EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
         FormService.getInstance().removeFormInstanceListener(this.state.importConfigFormId, this.formListenerId);
         FormService.getInstance().deleteFormInstance(this.state.importConfigFormId);
+        if (this.state.importManager) {
+            this.state.importManager.unregisterListener(this.formListenerId);
+        }
+    }
+
+    private reset(instanceId: string): void {
+        EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
+        FormService.getInstance().deleteFormInstance(this.state.importConfigFormId);
+        FormService.getInstance().removeFormInstanceListener(this.state.importConfigFormId, this.formListenerId);
+        if (this.state.importManager) {
+            this.state.importManager.unregisterListener(this.formListenerId);
+        }
+        this.state = new ComponentState(instanceId);
+        this.csvObjects = [];
+        this.csvProperties = [];
+        this.cancelImportProcess = false;
+        this.errorObjects = [];
+        this.finishedObjects = [];
+        this.selectedObjects = [];
+        this.propertiesFormTimeout = null;
+        this.importFormTimeout = null;
+        this.fileLoaded = false;
     }
 
     private async prepareImportConfigForm(): Promise<void> {
@@ -203,7 +211,7 @@ class Component {
     }
 
     private async createTable(): Promise<void> {
-        if (this.state.importManager) {
+        if (this.state.importManager && this.context) {
 
             const configuration = new TableConfiguration(
                 this.objectType, null, null, await this.getColumnConfig(),
@@ -211,7 +219,7 @@ class Component {
             );
             const table = TableFactoryService.getInstance().createTable(
                 `import-dialog-list-${this.objectType}`, this.objectType,
-                configuration, null, ImportDialogContext.CONTEXT_ID,
+                configuration, null, this.context.getDescriptor().contextId,
                 false, null, true
             );
             table.sort('CSV_LINE', SortOrder.UP);
@@ -277,7 +285,7 @@ class Component {
             }
         });
 
-        if (this.csvProperties && !!this.csvProperties) {
+        if (this.csvProperties && !!this.csvProperties.length) {
             this.csvProperties.filter((p) => !columns.some((c) => c.property === p)).forEach((ip) => {
                 const config = TableFactoryService.getInstance().getDefaultColumnConfiguration(
                     this.objectType, ip
@@ -324,6 +332,7 @@ class Component {
         if (formInstance) {
             const source = await formInstance.getFormFieldValueByProperty('source');
             if (source && source.valid && source.value && Array.isArray(source.value) && !!source.value) {
+                this.fileLoaded = true;
                 const characterSet = await formInstance.getFormFieldValueByProperty('character_set');
                 const valueSeparator = await formInstance.getFormFieldValueByProperty<string[]>('value_separator');
                 const textSeparator = await formInstance.getFormFieldValueByProperty('text_separator');
@@ -372,7 +381,7 @@ class Component {
         this.csvObjects = [];
         this.csvProperties = [];
 
-        const csvProperties = list.shift();
+        const csvProperties = list && !!list.length ? list.shift() : [];
 
         let ok: boolean = true;
         if (await this.checkForKnownProperties(csvProperties)) {
@@ -453,9 +462,10 @@ class Component {
 
     private async setTableColumns(): Promise<boolean> {
         let ok: boolean = true;
-        if (await this.checkRequiredProperties()) {
+        if (!this.fileLoaded || await this.checkRequiredProperties()) {
             const knownProperties = await this.state.importManager.getKnownProperties();
-            this.csvProperties = this.csvProperties.filter((ip) => knownProperties.some((kn) => kn === ip));
+            this.csvProperties = this.csvProperties && this.csvProperties.length
+                ? this.csvProperties.filter((ip) => knownProperties.some((kn) => kn === ip)) : [];
             if (this.state.table) {
                 const newColumnConfigs = await this.getColumnConfig();
                 this.state.table.removeColumns(this.state.table.getColumns().map((c) => c.getColumnId()));
@@ -471,9 +481,10 @@ class Component {
 
     private async checkRequiredProperties(): Promise<boolean> {
         const requiredPropertys = await this.state.importManager.getRequiredProperties();
+        const adjustableProperties = await this.state.importManager.getProperties();
         const missingProperties: string[] = [];
-        requiredPropertys.forEach((rP) => {
-            if (!this.csvProperties.some((a) => rP === a)) {
+        requiredPropertys.filter((rp) => !adjustableProperties.some((ap) => ap[0] === rp)).forEach((rP) => {
+            if (!this.csvProperties || !!!this.csvProperties.length || !this.csvProperties.some((a) => rP === a)) {
                 missingProperties.push(rP);
             }
         });
@@ -491,12 +502,9 @@ class Component {
     }
 
     private async setContextObjects() {
-        const context = await ContextService.getInstance().getContext<ImportDialogContext>(
-            ImportDialogContext.CONTEXT_ID
-        );
         const objects = this.csvObjects && !!this.csvObjects
             ? this.csvObjects.map((o) => this.state.importManager.getObject(o)) : [];
-        if (context) {
+        if (this.context) {
             if (objects.length) {
                 if (this.state.importManager.hasDefinedValues()) {
                     const values = this.state.importManager.getEditableValues();
@@ -524,7 +532,7 @@ class Component {
                     });
                 }
             }
-            context.setObjectList(objects);
+            this.context.setObjectList(objects);
         }
     }
 
@@ -539,21 +547,23 @@ class Component {
     }
 
     public async run(): Promise<void> {
-        this.cancelImportProcess = false;
-        const objectName = await LabelService.getInstance().getObjectName(
-            this.state.importManager.objectType, true, false
-        );
+        if (this.state.canRun) {
+            this.cancelImportProcess = false;
+            const objectName = await LabelService.getInstance().getObjectName(
+                this.state.importManager.objectType, true, false
+            );
 
-        const objects = this.state.importManager.objects;
+            const objects = this.state.importManager.objects;
 
-        const question = await TranslationService.translate(
-            'Translatable#Sie importieren {0} {1}. Ausführen?', [objects.length, objectName]
-        );
-        BrowserUtil.openConfirmOverlay(
-            'Translatable#Jetzt ausführen?',
-            question,
-            this.runImportManager.bind(this)
-        );
+            const question = await TranslationService.translate(
+                'Translatable#Sie importieren {0} {1}. Ausführen?', [objects.length, objectName]
+            );
+            BrowserUtil.openConfirmOverlay(
+                'Translatable#Jetzt ausführen?',
+                question,
+                this.runImportManager.bind(this)
+            );
+        }
     }
 
     private async runImportManager(): Promise<void> {
@@ -575,7 +585,6 @@ class Component {
         for (const object of objects) {
             const start = Date.now();
             let end;
-
 
             await this.state.importManager.execute(object, columns)
                 .then(() => {
@@ -600,7 +609,7 @@ class Component {
             }
 
             objectTimes.push(end - start);
-            this.setDialogLoadingInfo(objectTimes);
+            await this.setDialogLoadingInfo(objectTimes);
         }
 
         if (!this.errorObjects.length) {
@@ -641,13 +650,13 @@ class Component {
             const confirmText = await TranslationService.translate(
                 // tslint:disable-next-line:max-line-length
                 'Translatable#Zeile {0} in der bereit gestellten Datei mit {1} {2}: kann nicht importiert werden{3}. Wie möchten Sie weiter verfahren?',
-                [object['CSV_LINE'], objectName, identifier, error ? '(' + error.Message + ')' : '']
+                [object['CSV_LINE'], objectName, identifier, error ? ' (' + error.Message + ')' : '']
             );
             BrowserUtil.openConfirmOverlay(
                 // tslint:disable-next-line:max-line-length
                 `${objectName}: ${this.finishedObjects.length + this.errorObjects.length}/${this.state.importManager.objects.length}`,
                 confirmText,
-                () => resolve(),
+                () => { resolve(); },
                 () => {
                     this.cancelImportProcess = true;
                     resolve();

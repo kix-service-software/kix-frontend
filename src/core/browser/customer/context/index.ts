@@ -8,3 +8,5 @@ export { CustomerSearchContext } from './CustomerSearchContext';
 export { CustomerSearchContextConfiguration } from './CustomerSearchContextConfiguration';
 export { EditCustomerDialogContext } from './EditCustomerDialogContext';
 export { EditCustomerDialogContextConfiguration } from './EditCustomerDialogContextConfiguration';
+export { CustomerImportDialogContext } from './CustomerImportDialogContext';
+export { CustomerImportDialogContextConfiguration } from './CustomerImportDialogContextConfiguration';

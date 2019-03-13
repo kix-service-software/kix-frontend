@@ -132,8 +132,6 @@ class Component {
                 }
             };
 
-            EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableEscalatedTicketsSubscriber);
-
             const table = TableFactoryService.getInstance().createTable(
                 'customer-assigned-tickets-escalated', KIXObjectType.TICKET,
                 this.state.escalatedTicketsConfig.settings, null, null, true
@@ -146,6 +144,7 @@ class Component {
             }
 
             this.state.escalatedTicketsTable = table;
+            EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableEscalatedTicketsSubscriber);
         }
     }
 
@@ -179,8 +178,6 @@ class Component {
                 }
             };
 
-            EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableReminderTicketsSubscriber);
-
             const table = TableFactoryService.getInstance().createTable(
                 'customer-assigned-tickets-reminder', KIXObjectType.TICKET,
                 this.state.reminderTicketsConfig.settings, null, null, true
@@ -193,6 +190,7 @@ class Component {
             }
 
             this.state.reminderTicketsTable = table;
+            EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableReminderTicketsSubscriber);
         }
     }
 
@@ -237,8 +235,6 @@ class Component {
                 }
             };
 
-            EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableNewTicketsSubscriber);
-
             const table = TableFactoryService.getInstance().createTable(
                 'customer-assigned-tickets-new', KIXObjectType.TICKET,
                 this.state.newTicketsConfig.settings, null, null, true
@@ -251,6 +247,7 @@ class Component {
             }
 
             this.state.newTicketsTable = table;
+            EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableNewTicketsSubscriber);
         }
     }
 
@@ -293,8 +290,6 @@ class Component {
                 }
             };
 
-            EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableOpenTicketsSubscriber);
-
             const table = TableFactoryService.getInstance().createTable(
                 'customer-assigned-tickets-open', KIXObjectType.TICKET,
                 this.state.openTicketsConfig.settings, null, null, true
@@ -307,6 +302,7 @@ class Component {
             }
 
             this.state.openTicketsTable = table;
+            EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableOpenTicketsSubscriber);
         }
     }
 
@@ -355,8 +351,6 @@ class Component {
                 }
             };
 
-            EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tablePendingTicketsSubscriber);
-
             const table = TableFactoryService.getInstance().createTable(
                 'customer-assigned-tickets-pending', KIXObjectType.TICKET,
                 this.state.pendingTicketsConfig.settings, null, null, true
@@ -369,6 +363,7 @@ class Component {
             }
 
             this.state.pendingTicketsTable = table;
+            EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tablePendingTicketsSubscriber);
         }
     }
 

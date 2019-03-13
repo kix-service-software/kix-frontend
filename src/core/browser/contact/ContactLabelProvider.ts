@@ -139,7 +139,7 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
                 break;
             case ContactProperty.USER_CUSTOMER_ID:
                 const mainCustomers = await KIXObjectService.loadObjects<Customer>(
-                    KIXObjectType.CUSTOMER, [contact.UserCustomerID]
+                    KIXObjectType.CUSTOMER, [contact.UserCustomerID], null, null, true, true
                 ).catch((error) => console.log(error));
                 displayValue = mainCustomers && mainCustomers.length
                     ? mainCustomers[0].CustomerCompanyName : contact.UserCustomerID;
@@ -210,7 +210,8 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
                 returnString = `${contact.UserFirstname} ${contact.UserLastname} (${contact.UserLogin})`;
             }
             if (!id && !name) {
-                returnString = contact.DisplayValue;
+                returnString = contact.DisplayValue
+                    ? contact.DisplayValue : `${contact.UserFirstname} ${contact.UserLastname} (${contact.UserLogin})`;
             }
         } else {
             const contactLabel = await TranslationService.translate('Translatable#Contact');

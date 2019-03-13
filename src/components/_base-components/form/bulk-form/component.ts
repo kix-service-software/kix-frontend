@@ -183,7 +183,7 @@ class Component {
                 end = Date.now();
             }
 
-            this.setLoadingInformation(objectTimes, start, end, this.finishedObjects.length, objects.length);
+            await this.setLoadingInformation(objectTimes, start, end, this.finishedObjects.length, objects.length);
         }
 
         await this.updateTable();

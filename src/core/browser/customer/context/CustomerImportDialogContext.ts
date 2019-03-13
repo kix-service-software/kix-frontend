@@ -1,10 +1,10 @@
 import { Context } from "../../../model/components/context/Context";
 import { WidgetConfiguration, WidgetType } from "../../../model";
-import { ImportDialogContextConfiguration } from "./ImportDialogContextConfiguration";
+import { CustomerImportDialogContextConfiguration } from "./CustomerImportDialogContextConfiguration";
 
-export class ImportDialogContext extends Context<ImportDialogContextConfiguration> {
+export class CustomerImportDialogContext extends Context<CustomerImportDialogContextConfiguration> {
 
-    public static CONTEXT_ID: string = 'import-dialog-context';
+    public static CONTEXT_ID: string = 'customer-import-dialog-context';
 
     protected getSpecificWidgetConfiguration<WS = any>(instanceId: string): WidgetConfiguration<WS> {
         return undefined;

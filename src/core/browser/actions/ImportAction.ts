@@ -2,7 +2,7 @@ import { AbstractAction } from '../../model/components/action/AbstractAction';
 import { ContextMode, KIXObjectType } from '../../model';
 import { ContextService } from '../context';
 import { ITable } from '../table';
-import { ImportDialogContext, ImportService } from '../import';
+import { ImportService } from '../import';
 import { IdService } from '../IdService';
 import { EventService } from '../event';
 import { DialogEvents, DialogEventData } from '../components/dialog';
@@ -30,16 +30,20 @@ export class ImportAction extends AbstractAction<ITable> {
     }
 
     private async openDialog(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<ImportDialogContext>(
-            ImportDialogContext.CONTEXT_ID
-        );
-        context.setAdditionalInformation([this.objectType]);
+        if (this.objectType) {
+            const context = await ContextService.getInstance().getContextByTypeAndMode(
+                this.objectType, ContextMode.IMPORT
+            );
+            if (context) {
+                context.setDialogSubscriberId(this.eventSubscriberId);
+                EventService.getInstance().subscribe(DialogEvents.DIALOG_CANCELED, this);
+                EventService.getInstance().subscribe(DialogEvents.DIALOG_FINISHED, this);
 
-        context.setDialogSubscriberId(this.eventSubscriberId);
-        EventService.getInstance().subscribe(DialogEvents.DIALOG_CANCELED, this);
-        EventService.getInstance().subscribe(DialogEvents.DIALOG_FINISHED, this);
-
-        ContextService.getInstance().setDialogContext(ImportDialogContext.CONTEXT_ID, null, ContextMode.IMPORT);
+                ContextService.getInstance().setDialogContext(
+                    context.getDescriptor().contextId, this.objectType, ContextMode.IMPORT, null, true
+                );
+            }
+        }
     }
 
     public async eventPublished(eventData: DialogEventData, eventId: string, subscriberId: string): Promise<void> {
