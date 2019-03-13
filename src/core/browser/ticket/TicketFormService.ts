@@ -1,13 +1,14 @@
 import { KIXObjectFormService } from "../kix/KIXObjectFormService";
 import {
     Ticket, KIXObjectType, TicketProperty, Channel, FormField, ArticleProperty,
-    FormFieldOptions, FormFieldOption, ContextType, ContextMode
+    FormFieldOptions, FormFieldOption, ContextType, ContextMode, FormContext, FormFieldValue
 } from "../../model";
 import { PendingTimeFormValue } from "./form";
 import { ContactService } from "../contact";
 import { CustomerService } from "../customer";
 import { AutocompleteOption, AutocompleteFormFieldOption } from "../components";
 import { ContextService } from "../context";
+import { FormService } from "../form";
 
 export class TicketFormService extends KIXObjectFormService<Ticket> {
 
@@ -47,13 +48,20 @@ export class TicketFormService extends KIXObjectFormService<Ticket> {
         return value;
     }
 
-    public getFormFieldsForChannel(channel: Channel): FormField[] {
+    public async getFormFieldsForChannel(channel: Channel, formId: string): Promise<FormField[]> {
         const fields: FormField[] = [];
+
+        const formInstance = await FormService.getInstance().getFormInstance(formId);
+
+        const customerVisibleReadonly = formInstance.getFormContext() === FormContext.NEW
+            && formInstance.getObjectType() !== KIXObjectType.ARTICLE;
+        const customerVisibleValue = new FormFieldValue(customerVisibleReadonly ? true : false, true);
 
         if (channel.Name === 'note') {
             fields.push(new FormField(
                 "Sichtbar in Kundenportal", ArticleProperty.CUSTOMER_VISIBLE, 'checkbox-input',
-                false, "Sichtbar im Kundenportal"
+                false, "Sichtbar im Kundenportal", null, customerVisibleValue,
+                null, null, null, null, null, null, null, null, null, null, customerVisibleReadonly
             ));
             fields.push(new FormField("Betreff", ArticleProperty.SUBJECT, null, true, "Betreff"));
             fields.push(new FormField(
@@ -67,8 +75,8 @@ export class TicketFormService extends KIXObjectFormService<Ticket> {
         } else if (channel.Name === "email") {
             fields.push(new FormField(
                 "Sichtbar in Kundenportal", ArticleProperty.CUSTOMER_VISIBLE, 'checkbox-input',
-                false, "Sichtbar im Kundenportal",
-                null, null, null, null, null, null, null, null, null, null, null, null, true
+                false, "Sichtbar im Kundenportal", null, customerVisibleValue,
+                null, null, null, null, null, null, null, null, null, null, customerVisibleReadonly
             ));
 
             fields.push(new FormField(
