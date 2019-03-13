@@ -96,7 +96,9 @@ class Component extends FormInputComponent<number, ComponentState> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
 
         if (this.state.currentChannel) {
-            const channelFields = formService.getFormFieldsForChannel(this.state.currentChannel);
+            const channelFields = await formService.getFormFieldsForChannel(
+                this.state.currentChannel, this.state.formId
+            );
             formInstance.addNewFormField(this.state.field, channelFields, true);
         } else {
             formInstance.addNewFormField(this.state.field, [], true);

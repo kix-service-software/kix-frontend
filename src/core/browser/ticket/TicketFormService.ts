@@ -1,11 +1,12 @@
 import { KIXObjectFormService } from '../kix/KIXObjectFormService';
 import {
     Ticket, KIXObjectType, TicketProperty, Channel, FormField, ArticleProperty,
-    FormFieldOptions, FormFieldOption, ContextType, ContextMode
+    FormFieldOptions, FormFieldOption, ContextType, ContextMode, FormContext, FormFieldValue
 } from '../../model';
 import { PendingTimeFormValue } from './form';
 import { AutocompleteOption, AutocompleteFormFieldOption } from '../components';
 import { ContextService } from '../context';
+import { FormService } from "../form";
 
 export class TicketFormService extends KIXObjectFormService<Ticket> {
 
@@ -45,13 +46,20 @@ export class TicketFormService extends KIXObjectFormService<Ticket> {
         return value;
     }
 
-    public getFormFieldsForChannel(channel: Channel): FormField[] {
+    public async getFormFieldsForChannel(channel: Channel, formId: string): Promise<FormField[]> {
         const fields: FormField[] = [];
+
+        const formInstance = await FormService.getInstance().getFormInstance(formId);
+
+        const customerVisibleReadonly = formInstance.getFormContext() === FormContext.NEW
+            && formInstance.getObjectType() !== KIXObjectType.ARTICLE;
+        const customerVisibleValue = new FormFieldValue(customerVisibleReadonly ? true : false, true);
 
         if (channel.Name === 'note') {
             fields.push(new FormField(
-                'Translatable#Visible in customer portal', ArticleProperty.CUSTOMER_VISIBLE, 'checkbox-input',
-                false, 'Translatable#Visible in customer portal'
+                "Translatable#Visible in customer portal", ArticleProperty.CUSTOMER_VISIBLE, 'checkbox-input',
+                false, "Translatable#Visible in customer portal", null, customerVisibleValue,
+                null, null, null, null, null, null, null, null, null, null, customerVisibleReadonly
             ));
             fields.push(new FormField('Translatable#Subject', ArticleProperty.SUBJECT,
                 null, true, 'Translatable#Subject'));
@@ -64,14 +72,9 @@ export class TicketFormService extends KIXObjectFormService<Ticket> {
                 ])
             );
             fields.push(new FormField(
-                'Translatable#Attachments', ArticleProperty.ATTACHMENTS, 'attachment-input',
-                false, 'Translatable#Attachments'
-            ));
-        } else if (channel.Name === 'email') {
-            fields.push(new FormField(
-                'Translatable#Visible in customer portal', ArticleProperty.CUSTOMER_VISIBLE, 'checkbox-input',
-                false, 'Translatable#Visible in customer portal',
-                null, null, null, null, null, null, null, null, null, null, null, null, true
+                "Translatable#Visible in customer portal", ArticleProperty.CUSTOMER_VISIBLE, 'checkbox-input',
+                false, "Translatable#Visible in customer portal", null, customerVisibleValue,
+                null, null, null, null, null, null, null, null, null, null, customerVisibleReadonly
             ));
 
             fields.push(new FormField(

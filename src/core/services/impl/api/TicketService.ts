@@ -287,7 +287,7 @@ export class TicketService extends KIXObjectService {
         const channelId = this.getParameterValue(parameter, ArticleProperty.CHANNEL_ID);
         const subject = this.getParameterValue(parameter, ArticleProperty.SUBJECT);
         let body = this.getParameterValue(parameter, ArticleProperty.BODY);
-        let customerVisible = this.getParameterValue(parameter, ArticleProperty.CUSTOMER_VISIBLE);
+        const customerVisible = this.getParameterValue(parameter, ArticleProperty.CUSTOMER_VISIBLE);
         let to = this.getParameterValue(parameter, ArticleProperty.TO);
         if (!to && contactId) {
             const contact = await ContactService.getInstance().getContact(token, contactId);
@@ -308,7 +308,6 @@ export class TicketService extends KIXObjectService {
                     body += `\n<p>--</p>\n${queue.Signature}`;
                 }
             }
-            customerVisible = true;
         }
 
         let createArticle: CreateArticle;
