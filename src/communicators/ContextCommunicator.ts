@@ -1,11 +1,11 @@
 import { KIXCommunicator } from './KIXCommunicator';
 import {
     SaveWidgetRequest, ContextEvent, LoadContextConfigurationRequest, LoadContextConfigurationResponse,
-    ContextConfiguration, SaveContextConfigurationRequest
+    ContextConfiguration, SaveContextConfigurationRequest, Error
 } from '../core/model';
 
 import { CommunicatorResponse } from '../core/common';
-import { ConfigurationService, UserService } from '../core/services';
+import { ConfigurationService, UserService, LoggingService } from '../core/services';
 import { PluginService } from '../services';
 
 export class ContextCommunicator extends KIXCommunicator {
@@ -47,24 +47,39 @@ export class ContextCommunicator extends KIXCommunicator {
 
         let configuration = await ConfigurationService.getInstance().getModuleConfiguration(data.contextId, userId);
 
+        let response;
         if (!configuration) {
             const configurationExtension = await PluginService.getInstance().getConfigurationExtension(data.contextId);
-            const moduleDefaultConfiguration = await configurationExtension.getDefaultConfiguration();
+            const moduleDefaultConfiguration = configurationExtension
+                ? await configurationExtension.getDefaultConfiguration() : null;
             if (moduleDefaultConfiguration) {
                 ConfigurationService.getInstance().saveModuleConfiguration(
                     data.contextId, userId, moduleDefaultConfiguration);
 
                 configuration = moduleDefaultConfiguration;
-            } else {
-                throw new Error(`Translatable#No default configuration for context ${data.contextId} given!`);
+                configuration.contextId = data.contextId;
 
+                response = new CommunicatorResponse(
+                    ContextEvent.CONTEXT_CONFIGURATION_LOADED,
+                    new LoadContextConfigurationResponse(configuration)
+                );
+            } else {
+                const errorMessage = `Translatable#No default configuration for context ${data.contextId} given!`;
+                LoggingService.getInstance().error(errorMessage);
+                response = new CommunicatorResponse(
+                    ContextEvent.CONTEXT_CONFIGURATION_LOADED, errorMessage
+                );
             }
+        } else {
+            configuration.contextId = data.contextId;
+
+            response = new CommunicatorResponse(
+                ContextEvent.CONTEXT_CONFIGURATION_LOADED,
+                new LoadContextConfigurationResponse(configuration)
+            );
         }
 
-        configuration.contextId = data.contextId;
-
-        const response = new LoadContextConfigurationResponse(configuration);
-        return new CommunicatorResponse(ContextEvent.CONTEXT_CONFIGURATION_LOADED, response);
+        return response;
     }
 
     private async saveContextConfiguration(data: SaveContextConfigurationRequest): Promise<CommunicatorResponse<void>> {

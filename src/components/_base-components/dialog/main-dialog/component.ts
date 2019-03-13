@@ -64,10 +64,10 @@ export class MainDialogComponent implements IMainDialogListener {
         }
     }
 
-    public tabChanged(tab: ConfiguredDialogWidget): void {
+    public async tabChanged(tab: ConfiguredDialogWidget): Promise<void> {
         if (tab) {
+            await ContextService.getInstance().setDialogContext(null, tab.kixObjectType, tab.contextMode);
             this.state.dialogId = tab.instanceId;
-            ContextService.getInstance().setDialogContext(null, tab.kixObjectType, tab.contextMode);
         }
     }
 

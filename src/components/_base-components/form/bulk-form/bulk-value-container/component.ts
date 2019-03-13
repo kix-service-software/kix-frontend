@@ -46,12 +46,10 @@ class Component {
         await this.provideBulkValue(bulkValue);
     }
 
-    public textValueChanged(bulkValue: BulkValue, event: any): void {
-        setTimeout(async () => {
-            const value = event.target.value;
-            bulkValue.setTextValue(value);
-            await this.provideBulkValue(bulkValue);
-        }, 100);
+    public async textValueChanged(bulkValue: BulkValue, event: any): Promise<void> {
+        const value = event.target.value;
+        bulkValue.setTextValue(value);
+        await this.provideBulkValue(bulkValue);
     }
 
     public async dateValueChanged(bulkValue: BulkValue, event: any): Promise<void> {

@@ -35,18 +35,12 @@ class Component extends FormInputComponent<string, ComponentState> {
         }
     }
 
-    private valueChanged(event: any): void {
+    public valueChanged(event: any): void {
         if (event) {
             this.state.currentValue = event.target && event.target.value !== '' ? event.target.value : null;
             (this as any).emit('valueChanged', this.state.currentValue);
             super.provideValue(this.state.currentValue);
         }
-    }
-
-    public keyDown(event: any): void {
-        setTimeout(() => {
-            this.valueChanged(event);
-        }, 100);
     }
 
     public getAutoCompleteOption(): string {

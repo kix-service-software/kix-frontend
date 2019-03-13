@@ -165,6 +165,8 @@ export class ContactService extends KIXObjectService {
         // FIXME: korrekte source verwenden
         const sourceID = this.sourcesCache[0].ID;
 
+        this.prepareCustomerIdsParameter(parameter);
+
         const createContact = new CreateContact(parameter);
         const response = await this.sendCreateRequest<CreateContactResponse, CreateContactRequest>(
             token, this.RESOURCE_URI, new CreateContactRequest(sourceID, createContact)
@@ -185,35 +187,10 @@ export class ContactService extends KIXObjectService {
     public async updateObject(
         token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
-        const customerUserId = this.getParameterValue(parameter, ContactProperty.USER_CUSTOMER_ID);
-        let customerUserIds = this.getParameterValue(parameter, ContactProperty.USER_CUSTOMER_IDS);
 
-        if (customerUserId) {
-            if (customerUserIds && !customerUserIds.some((id) => customerUserId)) {
-                customerUserIds.push(customerUserId);
-            } else {
-                customerUserIds = [customerUserId];
-            }
-        }
+        this.prepareCustomerIdsParameter(parameter);
 
-        const updateContact = new UpdateContact(
-            null,
-            this.getParameterValue(parameter, ContactProperty.USER_EMAIL),
-            this.getParameterValue(parameter, ContactProperty.USER_FIRST_NAME),
-            this.getParameterValue(parameter, ContactProperty.USER_LAST_NAME),
-            customerUserId,
-            customerUserIds,
-            this.getParameterValue(parameter, ContactProperty.USER_PHONE),
-            this.getParameterValue(parameter, ContactProperty.USER_COUNTRY),
-            this.getParameterValue(parameter, ContactProperty.USER_TITLE),
-            this.getParameterValue(parameter, ContactProperty.USER_FAX),
-            this.getParameterValue(parameter, ContactProperty.USER_MOBILE),
-            this.getParameterValue(parameter, ContactProperty.USER_COMMENT),
-            this.getParameterValue(parameter, ContactProperty.USER_STREET),
-            this.getParameterValue(parameter, ContactProperty.USER_CITY),
-            this.getParameterValue(parameter, ContactProperty.USER_ZIP),
-            this.getParameterValue(parameter, ContactProperty.VALID_ID)
-        );
+        const updateContact = new UpdateContact(parameter);
 
         const response = await this.sendUpdateRequest<UpdateContactResponse, UpdateContactRequest>(
             token, this.buildUri(this.RESOURCE_URI, objectId), new UpdateContactRequest(updateContact)
@@ -223,6 +200,26 @@ export class ContactService extends KIXObjectService {
         });
 
         return response.ContactID;
+    }
+
+    private prepareCustomerIdsParameter(parameter: Array<[string, any]>): void {
+        const customerIdParamIndex = parameter.findIndex((v) => v[0] === ContactProperty.USER_CUSTOMER_ID);
+        const customerIdsParamIndex = parameter.findIndex((v) => v[0] === ContactProperty.USER_CUSTOMER_IDS);
+
+        if (customerIdParamIndex !== -1 && parameter[customerIdParamIndex][1]) {
+            const customerId = parameter[customerIdParamIndex][1];
+            if (customerIdsParamIndex !== -1) {
+                if (Array.isArray(parameter[customerIdsParamIndex][1])) {
+                    if (!parameter[customerIdsParamIndex][1].some((id) => id === customerId)) {
+                        parameter[customerIdsParamIndex][1].push(customerId);
+                    }
+                } else {
+                    parameter[customerIdsParamIndex][1] = [customerId];
+                }
+            } else {
+                parameter.push([ContactProperty.USER_CUSTOMER_IDS, [customerId]]);
+            }
+        }
     }
 
     private buildSearchFilter(source: ContactSource, searchValue: string, query: any): void {

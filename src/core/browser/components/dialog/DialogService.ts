@@ -114,16 +114,18 @@ export class DialogService {
                 case ContextMode.IMPORT:
                     dialogTitle = await TranslationService.translate('Translatable#Import Data');
                     dialogIcon = dialogIcon || 'kix-icon-import';
-                    singleTab = true;
                     break;
                 default:
                     dialogTitle = 'Dialog';
             }
 
+            const dialogs = this.getRegisteredDialogs(contextMode, (singleTab ? kixObjectType : null));
+            const activeDialog = dialogs.find((d) => d.kixObjectType === kixObjectType);
             this.mainDialogListener.open(
                 dialogTitle,
-                this.getRegisteredDialogs(contextMode, (singleTab ? kixObjectType : null)),
-                dialogId, dialogIcon);
+                dialogs,
+                activeDialog ? activeDialog.instanceId : dialogId,
+                dialogIcon);
         }
     }
 

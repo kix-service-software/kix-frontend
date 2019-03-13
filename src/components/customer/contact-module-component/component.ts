@@ -11,9 +11,12 @@ import {
     ContactTableFactory, ContactLabelProvider, ContactService, ContactBrowserFactory, ContactDetailsContext,
     NewContactDialogContext, ContactSearchContext, ContactSearchAction, ContactCreateAction,
     ContactEditAction, ContactCreateCustomerAction, ContactPrintAction, ContactCreateTicketAction,
-    ContactCreateCIAction, ContactSearchDefinition, EditContactDialogContext, ContactFormService
+    ContactCreateCIAction, ContactSearchDefinition, EditContactDialogContext, ContactFormService,
+    ContactImportDialogContext
 } from '../../../core/browser/contact';
 import { DialogService } from '../../../core/browser/components/dialog';
+import { ImportService } from '../../../core/browser/import';
+import { ContactImportManager } from '../../../core/browser/contact/ContactImportManager';
 
 class Component extends AbstractMarkoComponent {
 
@@ -30,6 +33,8 @@ class Component extends AbstractMarkoComponent {
         FactoryService.getInstance().registerFactory(KIXObjectType.CONTACT, ContactBrowserFactory.getInstance());
         KIXObjectCache.registerCacheHandler(new ContactCacheHandler());
         KIXObjectSearchService.getInstance().registerSearchDefinition(new ContactSearchDefinition());
+
+        ImportService.getInstance().registerImportManager(new ContactImportManager());
 
         this.registerContexts();
         this.registerDialogs();
@@ -60,6 +65,13 @@ class Component extends AbstractMarkoComponent {
             false, 'search-contact-dialog', ['contacts'], ContactSearchContext
         );
         ContextService.getInstance().registerContext(searchContactContext);
+
+        const contactImportDialogContext = new ContextDescriptor(
+            ContactImportDialogContext.CONTEXT_ID, [KIXObjectType.CONTACT],
+            ContextType.DIALOG, ContextMode.IMPORT,
+            false, 'import-dialog', ['contacts'], ContactImportDialogContext
+        );
+        ContextService.getInstance().registerContext(contactImportDialogContext);
     }
 
     private registerDialogs(): void {
@@ -95,6 +107,15 @@ class Component extends AbstractMarkoComponent {
             ),
             KIXObjectType.CONTACT,
             ContextMode.SEARCH
+        ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'contact-import-dialog',
+            new WidgetConfiguration(
+                'import-dialog', 'Translatable#Import Contacts', [], {}, false, false, null, 'kix-icon-man-bubble-new'
+            ),
+            KIXObjectType.CONTACT,
+            ContextMode.IMPORT
         ));
     }
 

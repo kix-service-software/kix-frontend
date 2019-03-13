@@ -1,4 +1,3 @@
-import { ContactSource } from "./ContactSource";
 import { KIXObject } from "../KIXObject";
 import { KIXObjectType } from "..";
 import { Ticket, TicketStats } from "../ticket";

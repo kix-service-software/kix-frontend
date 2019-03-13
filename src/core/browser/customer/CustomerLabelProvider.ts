@@ -145,7 +145,8 @@ export class CustomerLabelProvider implements ILabelProvider<Customer> {
                 returnString = customer.CustomerCompanyName;
             }
             if (!id && !name) {
-                returnString = customer.DisplayValue;
+                returnString = customer.DisplayValue
+                    ? customer.DisplayValue : `${customer.CustomerCompanyName} (${customer.CustomerID})`;
             }
         } else {
             const customerLabel = await TranslationService.translate('Translatable#Customer');

@@ -1,14 +1,14 @@
 import { ContextConfiguration } from '../../../model/components/context/ContextConfiguration';
-import { ImportDialogContext } from './ImportDialogContext';
+import { CustomerImportDialogContext } from './CustomerImportDialogContext';
 import { ConfiguredWidget } from '../../../model';
 
-export class ImportDialogContextConfiguration extends ContextConfiguration {
+export class CustomerImportDialogContextConfiguration extends ContextConfiguration {
 
     public constructor(
         public sidebars: string[],
         public sidebarWidgets: ConfiguredWidget[],
     ) {
-        super(ImportDialogContext.CONTEXT_ID, [], sidebars, sidebarWidgets, [], []);
+        super(CustomerImportDialogContext.CONTEXT_ID, [], sidebars, sidebarWidgets, [], []);
     }
 
 }

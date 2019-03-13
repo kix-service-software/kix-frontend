@@ -123,7 +123,7 @@ export class TranslationService extends KIXObjectService<Translation> {
 
         translationValue = this.format(translationValue, placeholderValues.map((p) => p.toString()));
 
-        if (debug) {
+        if (debug && debug !== 'false' && debug !== '0') {
             translationValue = 'TR-' + pattern;
         }
 

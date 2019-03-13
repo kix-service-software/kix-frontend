@@ -1,18 +1,16 @@
 <widget instanceId=state.instanceId>
     <@content>
         <div.import-container>
-            <if(!state.loading)>
+            <if(state.importManager)>
                 <main-form formId=state.importConfigFormId key="input-configuration-form"/>
                 <div.form.import-attributes-container>
-                    <if(state.importManager)>
-                        <widget instanceId="dynamic-form-field-group" title="Translatable#Werte ersetzen" key="attributes">
-                            <@content>
-                                <div.import-attributes>
-                                    <dynamic-form-field-container manager=state.importManager/>
-                                </div>
-                            </@content>
-                        </widget>
-                    </if>
+                    <widget instanceId="dynamic-form-field-group" title="Translatable#Werte ersetzen" key="attributes">
+                        <@content>
+                            <div.import-attributes>
+                                <dynamic-form-field-container manager=state.importManager/>
+                            </div>
+                        </@content>
+                    </widget>
                 </div>
                 <if(state.table)>
                     <div.object-table>
@@ -39,9 +37,6 @@
                     </div>
                 </div>
             </if>
-            <else>
-                <loading-spinner/>
-            </else>
         </div>
     </@content>
 </widget>

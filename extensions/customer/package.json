@@ -10,7 +10,9 @@
             "new-contact-dialog-configuration": "../../dist/registry-modules/customer/new-contact-dialog-configuration.extension",
             "edit-contact-dialog-configuration": "../../dist/registry-modules/customer/edit-contact-dialog-configuration.extension",
             "search-contact-dialog-configuration": "../../dist/registry-modules/customer/search-contact-dialog-configuration.extension",
-            "search-customer-dialog-configuration": "../../dist/registry-modules/customer/search-customer-dialog-configuration.extension"
+            "search-customer-dialog-configuration": "../../dist/registry-modules/customer/search-customer-dialog-configuration.extension",
+            "customer-import-dialog-configuration": "../../dist/registry-modules/customer/customer-import-dialog-configuration.extension",
+            "contact-import-dialog-configuration": "../../dist/registry-modules/customer/contact-import-dialog-configuration.extension"
         },
         "kix:modules": {
             "contact-module": "../../dist/registry-modules/customer/kix-module-contact.extension",

@@ -8,7 +8,7 @@ import {
     NewCustomerDialogContext, CustomerSearchContext, CustomerSearchAction, CustomerCreateAction,
     CustomerEditAction, CustomerCreateContactAction, CustomerPrintAction, CustomerCreateCIAction,
     CustomerCreateTicketAction, CustomerService, CustomerTableFactory, CustomerSearchDefinition,
-    EditCustomerDialogContext, CustomerFormService, CustomerImportManager
+    EditCustomerDialogContext, CustomerFormService, CustomerImportManager, CustomerImportDialogContext
 } from '../../../core/browser/customer';
 import {
     KIXObjectType, ContextDescriptor, ContextType, ContextMode, WidgetConfiguration,
@@ -71,6 +71,12 @@ class Component extends AbstractMarkoComponent {
             false, 'search-customer-dialog', ['customers'], CustomerSearchContext
         );
         ContextService.getInstance().registerContext(searchContactContext);
+
+        const customerImportDialogContext = new ContextDescriptor(
+            CustomerImportDialogContext.CONTEXT_ID, [KIXObjectType.CUSTOMER], ContextType.DIALOG, ContextMode.IMPORT,
+            false, 'import-dialog', ['customers'], CustomerImportDialogContext
+        );
+        ContextService.getInstance().registerContext(customerImportDialogContext);
     }
 
     private registerDialogs(): void {
@@ -100,6 +106,15 @@ class Component extends AbstractMarkoComponent {
             ),
             KIXObjectType.CUSTOMER,
             ContextMode.SEARCH
+        ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'customer-import-dialog',
+            new WidgetConfiguration(
+                'import-dialog', 'Translatable#Import Customers', [], {}, false, false, null, 'kix-icon-man-house-new'
+            ),
+            KIXObjectType.CUSTOMER,
+            ContextMode.IMPORT
         ));
     }
 
