@@ -114,6 +114,7 @@ export class DialogService {
                 case ContextMode.IMPORT:
                     dialogTitle = await TranslationService.translate('Translatable#Import Data');
                     dialogIcon = dialogIcon || 'kix-icon-import';
+                    singleTab = true;
                     break;
                 default:
                     dialogTitle = 'Dialog';
