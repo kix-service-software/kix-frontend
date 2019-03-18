@@ -9,6 +9,7 @@ import { ArticleTableFactory } from '../../../src/core/browser/ticket/table/Arti
 import { CustomerTableFactory } from '../../../src/core/browser/customer';
 import { ContactTableFactory } from '../../../src/core/browser/contact';
 import { ConfigItemTableFactory } from '../../../src/core/browser/cmdb';
+import { RoleTableFactory } from '../../../src/core/browser/user';
 
 let table: ITable;
 TableFactoryService.getInstance().registerFactory(new FAQArticleTableFactory());
@@ -17,6 +18,7 @@ TableFactoryService.getInstance().registerFactory(new ArticleTableFactory());
 TableFactoryService.getInstance().registerFactory(new CustomerTableFactory());
 TableFactoryService.getInstance().registerFactory(new ContactTableFactory());
 TableFactoryService.getInstance().registerFactory(new ConfigItemTableFactory());
+TableFactoryService.getInstance().registerFactory(new RoleTableFactory());
 
 Given('Tabelle: {string}', async (objectType: KIXObjectType) => {
     table = TableFactoryService.getInstance().createTable(`test-table-${objectType}`, objectType);
@@ -50,7 +52,7 @@ Then('Die Spalte {string} muss filterbar sein: {int}', async (columnId: string, 
     expect(column.getColumnConfiguration().filterable).equals(Boolean(filterable));
 });
 
-Then('Die Spalte {string} muss {int} breit betragen', async (columnId: string, width: Number) => {
+Then('Die Spalte {string} muss {int} breit sein', async (columnId: string, width: Number) => {
     const column = table.getColumn(columnId);
     expect(column).exist;
     expect(column.getColumnConfiguration().size).equals(width);

@@ -12,7 +12,7 @@ Feature: Als Nutzer möchte ich eine korrekte Standardkonfiguration für eine Ta
         Given Tabelle: <objectType>
         Then Die Spalte <column> muss sortierbar sein: <sortable>
         Then Die Spalte <column> muss filterbar sein: <filterable>
-        Then Die Spalte <column> muss <width> breit betragen
+        Then Die Spalte <column> muss <width> breit sein
         Then Die Spalte <column> hat eine flexible Breite: <flexible>
         Then Die Spalte <column> zeigt Text an: <showText>
         Then Die Spalte <column> zeigt Icon an: <showIcon>
@@ -36,7 +36,7 @@ Feature: Als Nutzer möchte ich eine korrekte Standardkonfiguration für eine Ta
         Given Tabelle - Schmal: <objectType>
         Then Die Spalte <column> muss sortierbar sein: <sortable>
         Then Die Spalte <column> muss filterbar sein: <filterable>
-        Then Die Spalte <column> muss <width> breit betragen
+        Then Die Spalte <column> muss <width> breit sein
         Then Die Spalte <column> hat eine flexible Breite: <flexible>
         Then Die Spalte <column> zeigt Text an: <showText>
         Then Die Spalte <column> zeigt Icon an: <showIcon>

@@ -21,7 +21,6 @@ export { KIXObjectType } from './KIXObjectType';
 export { Lock } from './Lock';
 export { MailAccount } from './MailAccount';
 export { Queue } from './Queue';
-export { Role } from './Role';
 export { Salutation } from './Salutation';
 export { SearchProfile } from './SearchProfile';
 export { Signature } from './Signature';

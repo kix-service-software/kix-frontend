@@ -18,11 +18,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async onMount(): Promise<void> {
         const context = await ContextService.getInstance().getContext<AdminContext>(AdminContext.CONTEXT_ID);
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
-        let catgeories = this.state.widgetConfiguration.settings;
+        let categories = this.state.widgetConfiguration.settings;
 
-        if (catgeories) {
-            catgeories = catgeories.map((c) => new AdminModuleCategory(c));
-            this.state.nodes = await this.prepareCategoryTreeNodes(catgeories);
+        if (categories) {
+            categories = categories.map((c) => new AdminModuleCategory(c));
+            this.state.nodes = await this.prepareCategoryTreeNodes(categories);
         }
 
         this.setActiveNode(context.adminModule);
@@ -51,7 +51,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async prepareCategoryTreeNodes(categories: AdminModuleCategory[]): Promise<TreeNode[]> {
         const nodes = [];
         if (categories) {
-            for (const c of categories) {
+            for (const c of categories.sort((a, b) => a.id.localeCompare(b.id))) {
                 const categoryTreeNodes = await this.prepareCategoryTreeNodes(c.children);
                 const moduleTreeNodes = await this.prepareModuleTreeNodes(c.modules);
                 const name = await TranslationService.translate(c.name);
