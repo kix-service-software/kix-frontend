@@ -12,6 +12,7 @@
         "customer",
         "search",
         "faq",
-        "cmdb"
+        "cmdb",
+        "user"
     ]
 }

@@ -2,10 +2,9 @@ import {
     ContactService, CustomerService, ServiceService, SysConfigService, TicketService, FAQService,
     GeneralCatalogService, DynamicFieldService, LinkService, CMDBService, ObjectDefinitionService,
     TextModuleService, UserService, ValidObjectService, TicketTypeService, ObjectIconService,
-    TicketStateService, TicketPriorityService, ConfigItemClassService, TranslationService, ChannelService
+    TicketStateService, TicketPriorityService, ConfigItemClassService, TranslationService,
+    ChannelService, RoleService, SlaService, SystemAddressService
 } from "./impl";
-import { SlaService } from "./impl/api/SlaService";
-import { SystemAddressService } from "./impl/api/SystemAddressService";
 
 export class CoreServiceRegistry {
 
@@ -48,6 +47,7 @@ export class CoreServiceRegistry {
             cachePromises.push(TicketPriorityService.getInstance().initCache());
             cachePromises.push(TicketStateService.getInstance().initCache());
             cachePromises.push(UserService.getInstance().initCache());
+            cachePromises.push(RoleService.getInstance().initCache());
             cachePromises.push(ValidObjectService.getInstance().initCache());
             cachePromises.push(ObjectIconService.getInstance().initCache());
             cachePromises.push(SystemAddressService.getInstance().initCache());

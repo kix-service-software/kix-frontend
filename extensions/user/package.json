@@ -1,0 +1,11 @@
+{
+    "name": "kix-user",
+    "extensions": {
+        "kix:modules": {
+            "user-module": "../../dist/registry-modules/user/kix-module.extension"
+        },
+        "kix:admin-module": {
+            "user-admin": "../../dist/registry-modules/user/admin/admin-module.extension"
+        }
+    }
+}
