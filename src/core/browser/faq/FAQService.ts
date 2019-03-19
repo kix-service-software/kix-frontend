@@ -1,7 +1,7 @@
 import { KIXObjectService, ServiceRegistry } from "../kix";
 import {
     KIXObjectType, FilterCriteria, FilterDataType, FilterType, TreeNode, ObjectIcon, DataType,
-    KIXObject, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, KIXObjectCache
+    KIXObject
 } from "../../model";
 import { ContextService } from "../context";
 import { FAQDetailsContext } from "./context";
@@ -34,28 +34,6 @@ export class FAQService extends KIXObjectService {
     public async init(): Promise<void> {
         await this.loadObjects(KIXObjectType.FAQ_CATEGORY, null);
         await this.loadObjects(KIXObjectType.FAQ_CATEGORY_HIERARCHY, null);
-    }
-
-    public async loadObjects<O extends KIXObject>(
-        kixObjectType: KIXObjectType, objectIds: Array<string | number>,
-        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
-        cache: boolean = true
-    ): Promise<O[]> {
-
-        if (kixObjectType === KIXObjectType.FAQ_CATEGORY_HIERARCHY || kixObjectType === KIXObjectType.FAQ_CATEGORY) {
-            if (!KIXObjectCache.hasObjectCache(kixObjectType)) {
-                const objects = await super.loadObjects(
-                    kixObjectType, null, loadingOptions, objectLoadingOptions, cache
-                );
-                objects.forEach((o) => KIXObjectCache.addObject(kixObjectType, o));
-            }
-
-            if (!objectIds) {
-                return KIXObjectCache.getObjectCache(kixObjectType);
-            }
-        }
-
-        return await super.loadObjects<O>(kixObjectType, objectIds, loadingOptions, objectLoadingOptions, cache);
     }
 
     public isServiceFor(type: KIXObjectType) {

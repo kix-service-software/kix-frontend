@@ -4,12 +4,11 @@ import {
 } from '../../../api';
 import {
     TicketType, KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, KIXObjectCache, TicketTypeCacheHandler, ObjectIcon, Error
+    KIXObjectSpecificCreateOptions, ObjectIcon, Error
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
-import { ConfigurationService } from '../ConfigurationService';
 import { LoggingService } from '../LoggingService';
 
 export class TicketTypeService extends KIXObjectService {
@@ -25,7 +24,7 @@ export class TicketTypeService extends KIXObjectService {
 
     protected RESOURCE_URI: string = 'tickettypes';
 
-    public kixObjectType: KIXObjectType = KIXObjectType.TICKET_TYPE;
+    public objectType: KIXObjectType = KIXObjectType.TICKET_TYPE;
 
     private constructor() {
         super();
@@ -36,17 +35,8 @@ export class TicketTypeService extends KIXObjectService {
         return kixObjectType === KIXObjectType.TICKET_TYPE;
     }
 
-    public async initCache(): Promise<void> {
-        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-        const token = serverConfig.BACKEND_API_TOKEN;
-
-        KIXObjectCache.registerCacheHandler(new TicketTypeCacheHandler());
-
-        await this.getTicketTypes(token);
-    }
-
     public async loadObjects<T>(
-        token: string, objectType: KIXObjectType, objectIds: Array<number | string>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<T[]> {
 
@@ -64,13 +54,13 @@ export class TicketTypeService extends KIXObjectService {
     }
 
     public async createObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
         createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<number> {
         const createTicketType = new CreateTicketType(parameter);
 
         const response = await this.sendCreateRequest<CreateTicketTypeResponse, CreateTicketTypeRequest>(
-            token, this.RESOURCE_URI, new CreateTicketTypeRequest(createTicketType)
+            token, clientRequestId, this.RESOURCE_URI, new CreateTicketTypeRequest(createTicketType), this.objectType
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
@@ -80,19 +70,21 @@ export class TicketTypeService extends KIXObjectService {
         if (icon) {
             icon.Object = 'TicketType';
             icon.ObjectID = response.TypeID;
-            await this.createIcons(token, icon);
+            await this.createIcons(token, clientRequestId, icon);
         }
 
         return response.TypeID;
     }
 
     public async updateObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
+        token: string, clientRequestId: string, objectType: KIXObjectType,
+        parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
         const updateTicketType = new UpdateTicketType(parameter);
 
         const response = await this.sendUpdateRequest<UpdateTicketTypeResponse, UpdateTicketTypeRequest>(
-            token, this.buildUri(this.RESOURCE_URI, objectId), new UpdateTicketTypeRequest(updateTicketType)
+            token, clientRequestId, this.buildUri(this.RESOURCE_URI, objectId),
+            new UpdateTicketTypeRequest(updateTicketType), this.objectType
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
@@ -102,22 +94,17 @@ export class TicketTypeService extends KIXObjectService {
         if (icon) {
             icon.Object = 'TicketType';
             icon.ObjectID = response.TypeID;
-            await this.updateIcon(token, icon);
+            await this.updateIcon(token, clientRequestId, icon);
         }
 
         return response.TypeID;
     }
 
     public async getTicketTypes(token: string): Promise<TicketType[]> {
-        if (!KIXObjectCache.hasObjectCache(KIXObjectType.TICKET_TYPE)) {
-            const uri = this.buildUri(this.RESOURCE_URI);
-            const response = await this.getObjectByUri<TicketTypesResponse>(token, uri, {
-                sort: 'TicketType.Name'
-            });
-            response.TicketType
-                .map((t) => new TicketType(t))
-                .forEach((t) => KIXObjectCache.addObject(KIXObjectType.TICKET_TYPE, t));
-        }
-        return KIXObjectCache.getObjectCache(KIXObjectType.TICKET_TYPE);
+        const uri = this.buildUri(this.RESOURCE_URI);
+        const response = await this.getObjectByUri<TicketTypesResponse>(token, uri, {
+            sort: 'TicketType.Name'
+        });
+        return response.TicketType.map((t) => new TicketType(t));
     }
 }

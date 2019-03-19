@@ -1,5 +1,5 @@
 <ul.tree-list key=state.treeId style=state.treeStyle>
-    <for(node in state.tree)>
+    <for|node| of=state.tree>
         <if(node.visible)>
             <tree-node treeId=state.treeId node=node activeNode=state.activeNode filterValue=state.filterValue
                 treeParent=state.treeParent on-nodeToggled('nodeToggled') on-nodeClicked('nodeClicked')

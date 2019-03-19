@@ -4,7 +4,7 @@ import {
 } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
-    KIXObjectType, KIXObjectPropertyFilter, TranslationProperty, TableFilterCriteria, KIXObjectCache
+    KIXObjectType, KIXObjectPropertyFilter, TranslationProperty, TableFilterCriteria
 } from '../../../../core/model';
 import { AdminContext } from '../../../../core/browser/admin';
 import { EventService, IEventSubscriber } from '../../../../core/browser/event';
@@ -45,16 +45,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         await this.prepareTitle();
         await this.prepareTable();
-
-        KIXObjectCache.registerCacheListener({
-            cacheCleared: async (objectType: KIXObjectType) => {
-                if (objectType === KIXObjectType.TRANSLATION) {
-                    this.state.table.reload();
-                }
-            },
-            objectAdded: () => { return; },
-            objectRemoved: () => { return; }
-        });
     }
 
     public onDestroy(): void {

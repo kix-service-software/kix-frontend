@@ -2,7 +2,7 @@ import {
     SortOrder, KIXObjectType, KIXObject, FilterCriteria, FilterType,
     KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, CreateLinkDescription,
     KIXObjectSpecificCreateOptions, KIXObjectSpecificDeleteOptions, ObjectIcon, ObjectIconLoadingOptions,
-    KIXObjectCache, Error
+    Error
 } from '../../../model';
 import { Query, CreateLink, CreateLinkRequest } from '../../../api';
 import { IKIXObjectService } from '../../IKIXObjectService';
@@ -21,30 +21,28 @@ export abstract class KIXObjectService implements IKIXObjectService {
 
     protected httpService: HttpService = HttpService.getInstance();
 
-    public abstract isServiceFor(kixObjectType: KIXObjectType): boolean;
+    protected abstract objectType: KIXObjectType;
 
-    public initCache(): Promise<void> {
-        return;
-    }
+    public abstract isServiceFor(kixObjectType: KIXObjectType): boolean;
 
     public updateCache(objectId: string | number): void {
         return;
     }
 
     public async loadObjects<O>(
-        token: string, objectType: KIXObjectType, objectIds: Array<number | string>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<O[]> {
         return [];
     }
 
     public abstract async createObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, string]>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>,
         createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<string | number>;
 
     public abstract async updateObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, string]>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>,
         objectId: number | string, updateOptions?: KIXObjectSpecificCreateOptions
     ): Promise<string | number>;
 
@@ -104,7 +102,7 @@ export abstract class KIXObjectService implements IKIXObjectService {
             query[Query.CHANGED_AFTER] = changedAfter;
         }
 
-        return await this.httpService.get<R>(this.RESOURCE_URI, query, token);
+        return await this.httpService.get<R>(this.RESOURCE_URI, query, token, null, this.objectType);
     }
 
     protected getObject<R>(token: string, objectId: number | string, query?: any): Promise<R> {
@@ -117,19 +115,25 @@ export abstract class KIXObjectService implements IKIXObjectService {
             query = {};
         }
 
-        return await this.httpService.get<R>(uri, query, token);
+        return await this.httpService.get<R>(uri, query, token, null, this.objectType);
     }
 
-    protected async sendCreateRequest<R, C>(token: string, uri: string, content: C): Promise<R> {
-        return await this.httpService.post<R>(uri, content, token);
+    protected async sendCreateRequest<R, C>(
+        token: string, clientRequestId: string, uri: string, content: C, cacheKeyPrefix: string
+    ): Promise<R> {
+        return await this.httpService.post<R>(uri, content, token, clientRequestId, cacheKeyPrefix);
     }
 
-    protected async sendUpdateRequest<R, C>(token: string, uri: string, content: C): Promise<R> {
-        return await this.httpService.patch<R>(uri, content, token);
+    protected async sendUpdateRequest<R, C>(
+        token: string, clientRequestId: string, uri: string, content: C, cacheKeyPrefix: string
+    ): Promise<R> {
+        return await this.httpService.patch<R>(uri, content, token, clientRequestId, cacheKeyPrefix);
     }
 
-    protected async sendDeleteRequest<R>(token: string, uri: string): Promise<R> {
-        return await this.httpService.delete<R>(uri, token);
+    protected async sendDeleteRequest<R>(
+        token: string, clientRequestId: string, uri: string, cacheKeyPrefix: string
+    ): Promise<R> {
+        return await this.httpService.delete<R>(uri, token, clientRequestId, cacheKeyPrefix);
     }
 
     protected buildUri(...args): string {
@@ -137,18 +141,20 @@ export abstract class KIXObjectService implements IKIXObjectService {
     }
 
     public async deleteObject(
-        token: string, objectType: KIXObjectType, objectId: string | number,
-        deleteOptions: KIXObjectSpecificDeleteOptions
+        token: string, clientRequestId: string, objectType: KIXObjectType, objectId: string | number,
+        deleteOptions: KIXObjectSpecificDeleteOptions, cacheKeyPrefix: string
     ): Promise<void> {
-        return await this.sendDeleteRequest<void>(token, this.buildUri(this.RESOURCE_URI, objectId))
-            .catch((error: Error) => {
-                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                throw new Error(error.Code, error.Message);
-            });
+        return await this.sendDeleteRequest<void>(
+            token, clientRequestId, this.buildUri(this.RESOURCE_URI, objectId), cacheKeyPrefix
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
+        });
     }
 
     protected async createLinks(
-        token: string, objectId: number, linkDescriptions: Array<CreateLinkDescription<KIXObject>>
+        token: string, clientRequestId: string, objectId: number,
+        linkDescriptions: Array<CreateLinkDescription<KIXObject>>
     ): Promise<void> {
         if (linkDescriptions) {
             for (const ld of linkDescriptions) {
@@ -173,62 +179,61 @@ export abstract class KIXObjectService implements IKIXObjectService {
 
                 const link = new CreateLink(source, sourceKey, target, targetKey, ld.linkTypeDescription.linkType.Name);
 
-                await this.sendCreateRequest(token, 'links', new CreateLinkRequest(link))
-                    .catch((error: Error) => {
-                        LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                        throw new Error(error.Code, error.Message);
-                    });
+                await this.sendCreateRequest(
+                    token, clientRequestId, 'links', new CreateLinkRequest(link), KIXObjectType.LINK
+                ).catch((error: Error) => {
+                    LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                    throw new Error(error.Code, error.Message);
+                });
             }
         }
     }
 
-    protected async createIcons(token: string, icon: ObjectIcon): Promise<void> {
+    protected async createIcons(token: string, clientRequestId: string, icon: ObjectIcon): Promise<void> {
         if (icon) {
             const iconService = KIXObjectServiceRegistry.getServiceInstance(
                 KIXObjectType.OBJECT_ICON
             );
             if (iconService) {
-                await iconService.createObject(token, KIXObjectType.OBJECT_ICON, [
+                await iconService.createObject(token, clientRequestId, KIXObjectType.OBJECT_ICON, [
                     ['Object', icon.Object],
                     ['ObjectID', icon.ObjectID.toString()],
                     ['ContentType', icon.ContentType],
                     ['Content', icon.Content]
-                ]).catch((error: Error) => {
+                ], null, KIXObjectType.OBJECT_ICON
+                ).catch((error: Error) => {
                     LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
                     throw new Error(error.Code, error.Message);
                 });
-                // TODO: cache-Handling überarbeiten
-                KIXObjectCache.clearCache(KIXObjectType.OBJECT_ICON);
             }
         }
     }
 
-    protected async updateIcon(token: string, icon: ObjectIcon): Promise<void> {
+    protected async updateIcon(token: string, clientRequestId: string, icon: ObjectIcon): Promise<void> {
         if (icon) {
             const iconService = KIXObjectServiceRegistry.getServiceInstance(
                 KIXObjectType.OBJECT_ICON
             );
             const icons = await iconService.loadObjects<ObjectIcon>(
-                token, KIXObjectType.OBJECT_ICON, null, null, new ObjectIconLoadingOptions(icon.Object, icon.ObjectID)
+                token, clientRequestId, KIXObjectType.OBJECT_ICON, null, null,
+                new ObjectIconLoadingOptions(icon.Object, icon.ObjectID)
             );
             if (icons && icons.length) {
                 await iconService.updateObject(
-                    token,
+                    token, clientRequestId,
                     KIXObjectType.OBJECT_ICON, [
                         ['Object', icon.Object],
                         ['ObjectID', icon.ObjectID.toString()],
                         ['ContentType', icon.ContentType],
                         ['Content', icon.Content]
                     ],
-                    icons[0].ID
+                    icons[0].ID, null, KIXObjectType.OBJECT_ICON
                 ).catch((error: Error) => {
                     LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
                     throw new Error(error.Code, error.Message);
                 });
-                // TODO: cache-Handling überarbeiten
-                KIXObjectCache.clearCache(KIXObjectType.OBJECT_ICON);
             } else {
-                this.createIcons(token, icon);
+                this.createIcons(token, clientRequestId, icon);
             }
         }
     }

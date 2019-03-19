@@ -1,7 +1,7 @@
 import { KIXObjectService } from './KIXObjectService';
 import {
     Contact, ContactFactory, ContactSource, ContactSourceAttributeMapping,
-    ContactProperty, KIXObjectType, KIXObjectLoadingOptions, KIXObjectCache, ContactCacheHandler, Error
+    ContactProperty, KIXObjectType, KIXObjectLoadingOptions, Error
 } from "../../../model";
 import {
     ContactResponse, ContactsResponse, ContactSourcesResponse,
@@ -10,7 +10,6 @@ import {
 } from "../../../api";
 import { SearchOperator } from '../../../browser/SearchOperator';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
-import { ConfigurationService } from '../ConfigurationService';
 import { LoggingService } from '../LoggingService';
 
 export class ContactService extends KIXObjectService {
@@ -28,35 +27,20 @@ export class ContactService extends KIXObjectService {
 
     private sourcesCache: ContactSource[] = [];
 
-    public kixObjectType: KIXObjectType = KIXObjectType.CONTACT;
+    public objectType: KIXObjectType = KIXObjectType.CONTACT;
 
     private constructor() {
         super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
-        KIXObjectCache.registerCacheHandler(new ContactCacheHandler());
     }
 
     public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.CONTACT;
     }
 
-    public async initCache(): Promise<void> {
-        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-        const token = serverConfig.BACKEND_API_TOKEN;
-
-        await this.loadContactSources(token);
-
-        const response = await this.getObjects<ContactsResponse>(token, null, null, null, {
-            include: "TicketStats"
-        });
-
-        response.Contact
-            .map((c) => ContactFactory.create(c, this.sourcesCache.find((cs) => cs.ID === c.SourceID)))
-            .forEach((c) => KIXObjectCache.addObject(KIXObjectType.CONTACT, c));
-    }
-
     public async loadObjects<T>(
-        token: string, objectType: KIXObjectType, objectIds: string[], loadingOptions: KIXObjectLoadingOptions
+        token: string, clientRequestId: string, objectType: KIXObjectType,
+        objectIds: string[], loadingOptions: KIXObjectLoadingOptions
     ): Promise<T[]> {
         let contacts = [];
 
@@ -65,34 +49,25 @@ export class ContactService extends KIXObjectService {
         }
         const query = this.prepareQuery(loadingOptions);
 
-        if (objectIds) {
+        if (objectIds && objectIds.length) {
             objectIds = objectIds.filter(
                 (id) => id && typeof id !== 'undefined' && id.toString() !== '' && id !== null
             );
 
-            const idsToLoad = KIXObjectCache.getIdsToLoad(KIXObjectType.CONTACT, objectIds);
+            const uri = this.buildUri(this.RESOURCE_URI, objectIds.join(','));
+            const response = await this.getObjectByUri<ContactsResponse | ContactResponse>(token, uri, query);
 
-            if (idsToLoad.length) {
-                const uri = this.buildUri(this.RESOURCE_URI, idsToLoad.join(','));
-                const response = await this.getObjectByUri<ContactsResponse | ContactResponse>(token, uri, query);
-
-                if (idsToLoad.length === 1) {
-                    const res = response as ContactResponse;
-                    KIXObjectCache.addObject(
-                        KIXObjectType.CONTACT,
-                        ContactFactory.create(
-                            res.Contact, this.sourcesCache.find((cs) => cs.ID === res.Contact.SourceID)
-                        )
-                    );
-                } else {
-                    const res = response as ContactsResponse;
-                    res.Contact.map(
-                        (c) => ContactFactory.create(c, this.sourcesCache.find((cs) => cs.ID === c.SourceID))
-                    ).forEach((c) => KIXObjectCache.addObject(KIXObjectType.CONTACT, c));
-                }
+            if (objectIds.length === 1) {
+                const res = response as ContactResponse;
+                contacts = [ContactFactory.create(
+                    res.Contact, this.sourcesCache.find((cs) => cs.ID === res.Contact.SourceID)
+                )];
+            } else {
+                const res = response as ContactsResponse;
+                contacts = [...res.Contact.map(
+                    (c) => ContactFactory.create(c, this.sourcesCache.find((cs) => cs.ID === c.SourceID))
+                )];
             }
-
-            contacts = KIXObjectCache.getCachedObjects(KIXObjectType.CONTACT, objectIds);
         } else if (loadingOptions.searchValue) {
             for (let i = 0; i < this.sourcesCache.length; i++) {
                 const source = this.sourcesCache[i];
@@ -158,7 +133,7 @@ export class ContactService extends KIXObjectService {
 
 
     public async createObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>
+        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, any]>
     ): Promise<string> {
         await this.loadContactSources(token);
 
@@ -169,23 +144,19 @@ export class ContactService extends KIXObjectService {
 
         const createContact = new CreateContact(parameter);
         const response = await this.sendCreateRequest<CreateContactResponse, CreateContactRequest>(
-            token, this.RESOURCE_URI, new CreateContactRequest(sourceID, createContact)
+            token, clientRequestId, this.RESOURCE_URI, new CreateContactRequest(sourceID, createContact),
+            this.objectType
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
         });
 
-        const customerIdValue = parameter.find((v) => v[0] === ContactProperty.USER_CUSTOMER_ID);
-        if (customerIdValue) {
-            const customerService = KIXObjectServiceRegistry.getServiceInstance(KIXObjectType.CUSTOMER);
-            customerService.updateCache(customerIdValue[1]);
-        }
-
         return response.ContactID;
     }
 
     public async updateObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
+        token: string, clientRequestId: string, objectType: KIXObjectType,
+        parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
 
         this.prepareCustomerIdsParameter(parameter);
@@ -193,7 +164,8 @@ export class ContactService extends KIXObjectService {
         const updateContact = new UpdateContact(parameter);
 
         const response = await this.sendUpdateRequest<UpdateContactResponse, UpdateContactRequest>(
-            token, this.buildUri(this.RESOURCE_URI, objectId), new UpdateContactRequest(updateContact)
+            token, clientRequestId, this.buildUri(this.RESOURCE_URI, objectId), new UpdateContactRequest(updateContact),
+            this.objectType
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);

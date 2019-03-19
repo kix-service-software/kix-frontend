@@ -2,7 +2,7 @@ export enum KIXExtensions {
 
     ADMIN_MODULE = 'kix:admin-module',
 
-    COMMUNICATOR = 'kix:communicator',
+    SOCKET_NAMESPACE = 'kix:socket:namespace',
 
     MAIN_MENU = 'kix:menu:main',
 

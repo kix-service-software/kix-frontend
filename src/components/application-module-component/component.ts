@@ -6,8 +6,7 @@ import { ComponentState } from './ComponentState';
 import { SearchService } from '../../core/browser/search';
 import { CSVExportAction, BulkAction, ImportAction } from '../../core/browser/actions';
 import {
-    ContextDescriptor, KIXObjectType, ContextType, ContextMode, KIXObjectCache, LinkCacheHandler,
-    ConfiguredDialogWidget, WidgetConfiguration, TranslationCacheHandler
+    ContextDescriptor, KIXObjectType, ContextType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration
 } from '../../core/model';
 import {
     LinkService, LinkedObjectsEditAction, EditLinkedObjectsDialogContext, LinkObjectTableFactory,
@@ -32,9 +31,7 @@ import {
     TranslationCreateAction, TranslationImportAction, TranslationCSVExportAction, TranslationEditAction
 } from '../../core/browser/i18n/admin/actions';
 import { TranslationTableFactory, TranslationLanguageTableFactory } from '../../core/browser/i18n/admin/table';
-import { AgentService } from '../../core/browser/application';
 import { PersonalSettingsFormService } from '../../core/browser/settings/PersonalSettingsFormService';
-import { UserCacheHandler } from '../../core/model/kix/user/UserCacheHandler';
 import {
     NewTranslationDialogContext, TranslationDetailsContext, EditTranslationDialogContext
 } from '../../core/browser/i18n/admin/context';
@@ -44,6 +41,7 @@ import { SearchContext } from '../../core/browser/search/context';
 import { SwitchColumnOrderAction } from '../../core/browser/table/actions';
 import { SystemAddressService } from '../../core/browser/system-address';
 import { DialogService } from '../../core/browser/components/dialog';
+import { AgentService } from '../../core/browser/application/AgentService';
 
 class Component extends AbstractMarkoComponent {
 
@@ -66,10 +64,6 @@ class Component extends AbstractMarkoComponent {
         ServiceRegistry.registerServiceInstance(TranslationFormService.getInstance());
 
         ServiceRegistry.registerServiceInstance(PersonalSettingsFormService.getInstance());
-
-        KIXObjectCache.registerCacheHandler(new LinkCacheHandler());
-        KIXObjectCache.registerCacheHandler(new UserCacheHandler());
-        KIXObjectCache.registerCacheHandler(new TranslationCacheHandler());
 
         FactoryService.getInstance().registerFactory(
             KIXObjectType.GENERAL_CATALOG_ITEM, GeneralCatalogBrowserFactory.getInstance()

@@ -1,7 +1,7 @@
 <div.kix-toolbar>
-    <for(group in state.toolbarGroups)>
+    <for|group| of=state.toolbarGroups>
         <div.toolbar-group>
-            <for(action in group)>
+            <for|action| of=group>
                 <div title=action.title on-click('actionClicked', action)>
                     <div.action-icon>
                         <icon icon=action.icon showUnknown=true/>

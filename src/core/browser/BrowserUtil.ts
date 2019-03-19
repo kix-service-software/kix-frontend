@@ -25,6 +25,13 @@ export class BrowserUtil {
         OverlayService.getInstance().openOverlay(OverlayType.CONFIRM, null, content, title, false);
     }
 
+    public static openAppRefreshOverlay(): void {
+        const componentContent = new ComponentContent('refresh-app-toast', {});
+        OverlayService.getInstance().openOverlay(
+            OverlayType.HINT_TOAST, null, componentContent, 'Update', null, null, null, null, 15000
+        );
+    }
+
     public static startBrowserDownload(fileName: string, content: string, contentType: string): void {
         content = content.replace(/\r?\n|\r/, '\n');
 

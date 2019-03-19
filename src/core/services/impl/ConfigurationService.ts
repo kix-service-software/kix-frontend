@@ -51,10 +51,6 @@ export class ConfigurationService {
         this.preDefinedWidgetConfiguration = require(this.getConfigurationFilePath("pre-defined-widgets"));
     }
 
-    public initCache(): Promise<void> {
-        return;
-    }
-
     public getServerConfiguration(): IServerConfiguration {
         return this.serverConfiguration;
     }

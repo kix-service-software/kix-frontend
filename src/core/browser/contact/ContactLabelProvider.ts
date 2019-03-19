@@ -147,7 +147,7 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
             case ContactProperty.USER_CUSTOMER_IDS:
                 if (contact.UserCustomerIDs && contact.UserCustomerIDs.length) {
                     const customers = await KIXObjectService.loadObjects<Customer>(
-                        KIXObjectType.CUSTOMER, contact.UserCustomerIDs
+                        KIXObjectType.CUSTOMER, contact.UserCustomerIDs, null, null, true, true
                     ).catch((error) => console.log(error));
                     const customerNames = customers && customers.length
                         ? customers.map((c) => c.CustomerCompanyName)

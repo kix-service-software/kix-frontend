@@ -1,13 +1,10 @@
 import { KIXObjectService } from "../kix/KIXObjectService";
 import {
-    Translation, KIXObjectType, KIXObject, KIXObjectLoadingOptions,
-    KIXObjectSpecificLoadingOptions, KIXObjectCache, SysConfigItem, SysConfigKey,
-    TranslationProperty, TableFilterCriteria
+    Translation, KIXObjectType, SysConfigItem, SysConfigKey, TranslationProperty, TableFilterCriteria
 } from "../../model";
 import { SearchOperator } from "../SearchOperator";
 import { ClientStorageService } from "../ClientStorageService";
-import { ObjectDataService } from "../ObjectDataService";
-import { AgentService } from "../application";
+import { AgentService } from "../application/AgentService";
 
 export class TranslationService extends KIXObjectService<Translation> {
 
@@ -31,26 +28,6 @@ export class TranslationService extends KIXObjectService<Translation> {
 
     public async init(): Promise<void> {
         await this.loadObjects(KIXObjectType.TRANSLATION, null);
-    }
-
-    public async loadObjects<O extends KIXObject>(
-        objectType: KIXObjectType, objectIds: Array<string | number>,
-        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
-        cache: boolean = true
-    ): Promise<O[]> {
-
-        if (objectType === KIXObjectType.TRANSLATION) {
-            if (!KIXObjectCache.hasObjectCache(objectType)) {
-                const objects = await super.loadObjects(objectType, null, null, null, false);
-                objects.forEach((q) => KIXObjectCache.addObject(objectType, q));
-            }
-
-            if (!objectIds) {
-                return KIXObjectCache.getObjectCache(objectType);
-            }
-        }
-
-        return await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions, cache);
     }
 
     public async getLanguageName(lang: string): Promise<string> {
@@ -107,9 +84,9 @@ export class TranslationService extends KIXObjectService<Translation> {
 
         const debug = ClientStorageService.getOption('i18n-debug');
 
-        const translation = KIXObjectCache.getObjectCache<Translation>(
-            KIXObjectType.TRANSLATION
-        ).find((t) => t.Pattern === translationValue);
+        const translations = await KIXObjectService.loadObjects<Translation>(KIXObjectType.TRANSLATION);
+
+        const translation = translations.find((t) => t.Pattern === translationValue);
 
         if (translation) {
             const language = await this.getUserLanguage();

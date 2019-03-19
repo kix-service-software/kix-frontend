@@ -1,5 +1,5 @@
 import { ContextConfiguration, Context, KIXObjectType, ContextMode, ContextDescriptor } from "../../model";
-import { ContextSocketListener } from "./ContextSocketListener";
+import { ContextSocketClient } from "./ContextSocketClient";
 
 export class ContextFactory {
 
@@ -38,7 +38,7 @@ export class ContextFactory {
         if (!context) {
             context = await this.createContextInstance(contextId, kixObjectType, contextMode, objectId, loadConfig);
         } else if (reset) {
-            const configuration = await ContextSocketListener.getInstance()
+            const configuration = await ContextSocketClient.getInstance()
                 .loadContextConfiguration<ContextConfiguration>(context.getDescriptor().contextId);
             context.setConfiguration(configuration);
             context.reset();
@@ -99,7 +99,7 @@ export class ContextFactory {
         if (descriptor) {
             let configuration;
             if (loadConfig) {
-                configuration = await ContextSocketListener.getInstance()
+                configuration = await ContextSocketClient.getInstance()
                     .loadContextConfiguration<ContextConfiguration>(descriptor.contextId);
             }
             context = new descriptor.contextClass(descriptor, objectId, configuration);

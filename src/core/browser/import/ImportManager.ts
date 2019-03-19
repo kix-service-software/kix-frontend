@@ -152,7 +152,7 @@ export abstract class ImportManager {
             const parameter: Array<[string, any]> = await this.prepareParameter(object, columns);
 
             if (existingObject) {
-                await KIXObjectService.updateObject(this.objectType, parameter, existingObject.ObjectId, false, false);
+                await KIXObjectService.updateObject(this.objectType, parameter, existingObject.ObjectId, false);
             } else {
                 await KIXObjectService.createObject(this.objectType, parameter, null, false);
             }

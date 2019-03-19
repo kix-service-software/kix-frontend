@@ -1,16 +1,17 @@
-<li.tree-node class={active: component.isNodeActive()} id=state.nodeId key=state.nodeId>
+<li.tree-node class={
+    active: component.isNodeActive()
+} id=state.nodeId key=state.nodeId>
     <span.tree-icon>
         <if(component.hasChildren())>
-            <span id="tree-expand" class=(state.node.expanded ? "kix-icon-minus" : "kix-icon-plus-blank") on-click('toggleNode')/>
+            <span id="tree-expand" class=(state.node.expanded ? "kix-icon-minus" : "kix-icon-plus-blank") on-click("toggleNode")/>
         </if>
     </span>
-    <div.node-value on-mousemove('nodeHovered') on-click('nodeClicked') title=component.getLabel()>
+    <div.node-value on-mousemove("nodeHovered") on-click("nodeClicked") title=component.getLabel()>
         <icon icon=state.node.icon showUnknown=true/>
         <span.node-title class=(state.node.expanded ? "expanded" : "")>
-            ${state.node.label}
-            <if(state.node.properties)>
-                (<for(prop in state.node.properties | status-var=loop)>
-                    <if(loop.getIndex() != 0 )>|</if>
+            ${state.node.label}<if(state.node.properties)>
+                (<for|prop, index| of=state.node.properties>
+                    <if(index != 0)>|</if>
                     <span title=prop.title class=(prop.cssClass ? prop.cssClass : "")>${prop.value}</span>
                 </for>)
             </if>
@@ -21,11 +22,17 @@
     </div>
     <if(state.node.expanded)>
         <ul.form-list-tree>
-            <for(node in state.node.children)>
+            <for|node| of=state.node.children>
                 <if(node.visible)>
-                    <form-list-tree-node node=node filterValue=state.filterValue activeNodes=state.activeNodes treeParent=input.treeParent
-                        treeId=state.treeId on-nodeToggled('childNodeToggled') on-nodeClicked('childNodeClicked')
-                        on-nodeHovered('childNodeHovered')/>
+                    <form-list-tree-node
+                        node=node
+                        filterValue=state.filterValue
+                        activeNodes=state.activeNodes
+                        treeParent=input.treeParent
+                        treeId=state.treeId
+                        on-nodeToggled("childNodeToggled")
+                        on-nodeClicked("childNodeClicked")
+                        on-nodeHovered("childNodeHovered")/>
                 </if>
             </for>
         </ul>

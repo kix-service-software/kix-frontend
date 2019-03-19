@@ -28,7 +28,7 @@ export class Extension implements IConfigurationExtension {
         ]);
 
         const ciClasses = await configItemClassService.loadObjects<ConfigItemClass>(
-            token, KIXObjectType.CONFIG_ITEM_CLASS, null, options, null
+            token, null, KIXObjectType.CONFIG_ITEM_CLASS, null, options, null
         );
 
         for (const ciClass of ciClasses) {

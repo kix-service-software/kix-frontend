@@ -1,8 +1,8 @@
 <widget instanceId=state.instanceId contextType="MAIN" title=state.title contentActions=state.actions>
     <@content>
         <if(state.linkedObjectGroups.length)>
-            <for(group in state.linkedObjectGroups | status-var=loop)>
-                <widget instanceId="linked-object-group" key=("linked-object-group-" + loop.getIndex()) title=group[0]>
+            <for|group, index| of=state.linkedObjectGroups>
+                <widget instanceId="linked-object-group" key=("linked-object-group-" + index) title=group[0]>
                     <@content>
                         <standard-table-NEW table=group[1]/>
                     </@content>

@@ -22,10 +22,6 @@ export class MarkoService {
 
     private constructor() { }
 
-    public initCache(): Promise<void> {
-        return;
-    }
-
     public async registerMarkoDependencies(): Promise<void> {
         const modules: IKIXModuleExtension[] = await PluginService.getInstance().getExtensions<IKIXModuleExtension>(
             KIXExtensions.MODULES

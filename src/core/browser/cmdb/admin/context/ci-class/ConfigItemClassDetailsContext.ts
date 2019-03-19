@@ -1,6 +1,6 @@
 import {
     Context, ConfiguredWidget, WidgetConfiguration, WidgetType, BreadcrumbInformation, KIXObject,
-    KIXObjectType, KIXObjectCache, ConfigItemClass, KIXObjectLoadingOptions
+    KIXObjectType, ConfigItemClass, KIXObjectLoadingOptions
 } from '../../../../../model';
 import { ConfigItemClassDetailsContextConfiguration } from './ConfigItemClassDetailsContextConfiguration';
 import { AdminContext } from '../../../../admin';
@@ -98,28 +98,22 @@ export class ConfigItemClassDetailsContext extends Context<ConfigItemClassDetail
         objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_CLASS,
         reload: boolean = false, changedProperties: string[] = []
     ): Promise<O> {
-        let ciClass;
+        const object = await this.loadCIClass(changedProperties);
 
-        if (!objectType) {
-            objectType = KIXObjectType.CONFIG_ITEM_CLASS;
+        if (reload) {
+            this.listeners.forEach(
+                (l) => l.objectChanged(
+                    Number(this.objectId), object, KIXObjectType.CONFIG_ITEM_CLASS, changedProperties
+                )
+            );
         }
 
-        if (reload && objectType === KIXObjectType.CONFIG_ITEM_CLASS) {
-            KIXObjectCache.removeObject(KIXObjectType.CONFIG_ITEM_CLASS, Number(this.objectId));
-        }
-
-        if (!KIXObjectCache.isObjectCached(KIXObjectType.CONFIG_ITEM_CLASS, Number(this.objectId))) {
-            ciClass = await this.loadCIClass(changedProperties);
-        } else {
-            ciClass = KIXObjectCache.getObject(KIXObjectType.CONFIG_ITEM_CLASS, Number(this.objectId));
-        }
-
-        return ciClass;
+        return object as any;
     }
 
     private async loadCIClass(changedProperties: string[] = [], cache: boolean = true): Promise<ConfigItemClass> {
         EventService.getInstance().publish(
-            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Lade CMDB Klasse ...' }
+            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load Config Item Class ...' }
         );
 
         const ciClassId = Number(this.objectId);
@@ -139,9 +133,6 @@ export class ConfigItemClassDetailsContext extends Context<ConfigItemClassDetail
         if (ciClasses && ciClasses.length) {
             ciClass = ciClasses[0];
             this.objectId = ciClass.ID;
-            this.listeners.forEach((l) => l.objectChanged(
-                Number(this.objectId), ciClass, KIXObjectType.CONFIG_ITEM_CLASS, changedProperties
-            ));
         }
 
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });

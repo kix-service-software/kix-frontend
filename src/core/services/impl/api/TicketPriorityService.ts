@@ -4,7 +4,7 @@ import {
 } from '../../../api';
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, KIXObjectCache, TicketPriority, TicketPriorityCacheHandler, ObjectIcon, Error
+    KIXObjectSpecificCreateOptions, TicketPriority, ObjectIcon, Error
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
@@ -25,7 +25,7 @@ export class TicketPriorityService extends KIXObjectService {
 
     protected RESOURCE_URI: string = 'priorities';
 
-    public kixObjectType: KIXObjectType = KIXObjectType.TICKET_PRIORITY;
+    public objectType: KIXObjectType = KIXObjectType.TICKET_PRIORITY;
 
     private constructor() {
         super();
@@ -36,17 +36,8 @@ export class TicketPriorityService extends KIXObjectService {
         return kixObjectType === KIXObjectType.TICKET_PRIORITY;
     }
 
-    public async initCache(): Promise<void> {
-        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-        const token = serverConfig.BACKEND_API_TOKEN;
-
-        KIXObjectCache.registerCacheHandler(new TicketPriorityCacheHandler());
-
-        await this.getTicketPriorities(token);
-    }
-
     public async loadObjects<T>(
-        token: string, objectType: KIXObjectType, objectIds: Array<number | string>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<T[]> {
 
@@ -64,13 +55,14 @@ export class TicketPriorityService extends KIXObjectService {
     }
 
     public async createObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
         createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<number> {
         const createTicketPriority = new CreateTicketPriority(parameter);
 
         const response = await this.sendCreateRequest<CreateTicketPriorityResponse, CreateTicketPriorityRequest>(
-            token, this.RESOURCE_URI, new CreateTicketPriorityRequest(createTicketPriority)
+            token, clientRequestId, this.RESOURCE_URI, new CreateTicketPriorityRequest(createTicketPriority),
+            this.objectType
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
@@ -80,19 +72,21 @@ export class TicketPriorityService extends KIXObjectService {
         if (icon) {
             icon.Object = 'Priority';
             icon.ObjectID = response.PriorityID;
-            await this.createIcons(token, icon);
+            await this.createIcons(token, clientRequestId, icon);
         }
 
         return response.PriorityID;
     }
 
     public async updateObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
+        token: string, clientRequestId: string, objectType: KIXObjectType,
+        parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
         const updateTicketPriority = new UpdateTicketPriority(parameter);
 
         const response = await this.sendUpdateRequest<UpdateTicketPriorityResponse, UpdateTicketPriorityRequest>(
-            token, this.buildUri(this.RESOURCE_URI, objectId), new UpdateTicketPriorityRequest(updateTicketPriority)
+            token, clientRequestId, this.buildUri(this.RESOURCE_URI, objectId),
+            new UpdateTicketPriorityRequest(updateTicketPriority), this.objectType
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
@@ -101,20 +95,15 @@ export class TicketPriorityService extends KIXObjectService {
         if (icon) {
             icon.Object = 'Priority';
             icon.ObjectID = response.PriorityID;
-            await this.updateIcon(token, icon);
+            await this.updateIcon(token, clientRequestId, icon);
         }
 
         return response.PriorityID;
     }
 
     public async getTicketPriorities(token: string): Promise<TicketPriority[]> {
-        if (!KIXObjectCache.hasObjectCache(KIXObjectType.TICKET_PRIORITY)) {
-            const uri = this.buildUri(this.RESOURCE_URI);
-            const response = await this.getObjectByUri<TicketPrioritiesResponse>(token, uri);
-            response.Priority
-                .map((p) => new TicketPriority(p))
-                .forEach((p) => KIXObjectCache.addObject(KIXObjectType.TICKET_PRIORITY, p));
-        }
-        return KIXObjectCache.getObjectCache(KIXObjectType.TICKET_PRIORITY);
+        const uri = this.buildUri(this.RESOURCE_URI);
+        const response = await this.getObjectByUri<TicketPrioritiesResponse>(token, uri);
+        return response.Priority.map((p) => new TicketPriority(p));
     }
 }

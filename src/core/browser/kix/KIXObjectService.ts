@@ -1,20 +1,16 @@
 import { IKIXObjectService } from "./IKIXObjectService";
 import {
-    KIXObject, KIXObjectType, FilterCriteria, DataType, TreeNode,
+    KIXObject, KIXObjectType, FilterCriteria, TreeNode,
     KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions, OverlayType, KIXObjectSpecificDeleteOptions,
-    ComponentContent,
-    KIXObjectCache,
-    Error,
-    TableFilterCriteria
+    ComponentContent, Error, TableFilterCriteria
 } from "../../model";
-import { KIXObjectSocketListener } from "./KIXObjectSocketListener";
+import { KIXObjectSocketClient } from "./KIXObjectSocketClient";
 import { FormService } from "../form";
 import { ServiceType } from "./ServiceType";
 import { IAutofillConfiguration } from "../components";
 import { ServiceRegistry } from "./ServiceRegistry";
 import { OverlayService } from "../OverlayService";
-import { ServiceMethod } from "./ServiceMethod";
 
 export abstract class KIXObjectService<T extends KIXObject = KIXObject> implements IKIXObjectService<T> {
 
@@ -71,30 +67,19 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         let objects = [];
         if (cache) {
             if (objectIds) {
-                const ids = [...objectIds];
-                objects = [...KIXObjectCache.getCachedObjects(objectType, ids)];
-                const idsToLoad = KIXObjectCache.getIdsToLoad(objectType, ids);
-
-                if (idsToLoad.length) {
-                    const loadedObjects = await KIXObjectSocketListener.getInstance().loadObjects<T>(
-                        objectType, idsToLoad, loadingOptions, objectLoadingOptions
-                    );
-
-                    loadedObjects.forEach((o) => KIXObjectCache.addObject(objectType, o));
-                    objects = KIXObjectCache.getCachedObjects(objectType, ids);
-                }
-            } else {
-                if (KIXObjectCache.hasObjectCache(objectType)) {
-                    objects = KIXObjectCache.getObjectCache(objectType);
-                } else {
-                    objects = await KIXObjectSocketListener.getInstance().loadObjects<T>(
+                if (objectIds.length) {
+                    const loadedObjects = await KIXObjectSocketClient.getInstance().loadObjects<T>(
                         objectType, objectIds, loadingOptions, objectLoadingOptions
                     );
-                    objects.forEach((o) => KIXObjectCache.addObject(objectType, o));
+                    objects = loadedObjects;
                 }
+            } else {
+                objects = await KIXObjectSocketClient.getInstance().loadObjects<T>(
+                    objectType, objectIds, loadingOptions, objectLoadingOptions
+                );
             }
         } else {
-            objects = await KIXObjectSocketListener.getInstance().loadObjects<T>(
+            objects = await KIXObjectSocketClient.getInstance().loadObjects<T>(
                 objectType, objectIds, loadingOptions, objectLoadingOptions
             );
         }
@@ -104,62 +89,66 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
     public static async createObject(
         objectType: KIXObjectType, parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions,
-        catchError: boolean = true
+        catchError: boolean = true, cacheKeyPrefix: string = objectType
     ): Promise<string | number> {
-        KIXObjectCache.updateCache(objectType, null, ServiceMethod.CREATE, parameter, createOptions);
-        const objectId = await KIXObjectSocketListener.getInstance().createObject(objectType, parameter, createOptions)
-            .catch((error: Error) => {
-                if (catchError) {
-                    const content = new ComponentContent('list-with-title',
-                        {
-                            title: `Fehler beim Erstellen (${objectType}):`,
-                            list: [`${error.Code}: ${error.Message}`]
-                        }
-                    );
-                    OverlayService.getInstance().openOverlay(
-                        OverlayType.WARNING, null, content, 'Translatable#Error!', true
-                    );
-                    return null;
-                } else {
-                    throw error;
-                }
-            });
+        const objectId = await KIXObjectSocketClient.getInstance().createObject(
+            objectType, parameter, createOptions, cacheKeyPrefix
+        ).catch((error: Error) => {
+            if (catchError) {
+                const content = new ComponentContent('list-with-title',
+                    {
+                        title: `Fehler beim Erstellen (${objectType}):`,
+                        list: [`${error.Code}: ${error.Message}`]
+                    }
+                );
+                OverlayService.getInstance().openOverlay(
+                    OverlayType.WARNING, null, content, 'Translatable#Error!', true
+                );
+                return null;
+            } else {
+                throw error;
+            }
+        });
         return objectId;
     }
 
     public async createObject(
-        objectType: KIXObjectType, object: KIXObject, createOptions?: KIXObjectSpecificCreateOptions
+        objectType: KIXObjectType, object: KIXObject, createOptions?: KIXObjectSpecificCreateOptions,
+        cacheKeyPrefix: string = objectType
     ): Promise<string | number> {
         const parameter = this.prepareCreateParameter(object);
-        const objectId = await KIXObjectSocketListener.getInstance().createObject(objectType, parameter, createOptions);
-        KIXObjectCache.updateCache(objectType, objectId, ServiceMethod.CREATE, parameter, createOptions);
+        const objectId = await KIXObjectSocketClient.getInstance().createObject(
+            objectType, parameter, createOptions, cacheKeyPrefix
+        );
         return objectId;
     }
 
     public static async createObjectByForm(
-        objectType: KIXObjectType, formId: string, createOptions?: KIXObjectSpecificCreateOptions
+        objectType: KIXObjectType, formId: string, createOptions?: KIXObjectSpecificCreateOptions,
+        cacheKeyPrefix: string = objectType
     ): Promise<string | number> {
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
-        return await service.createObjectByForm(objectType, formId, createOptions);
+        return await service.createObjectByForm(objectType, formId, createOptions, cacheKeyPrefix);
     }
 
     public async createObjectByForm(
-        objectType: KIXObjectType, formId: string, createOptions?: KIXObjectSpecificCreateOptions
+        objectType: KIXObjectType, formId: string, createOptions?: KIXObjectSpecificCreateOptions,
+        cacheKeyPrefix: string = objectType
     ): Promise<string | number> {
         const parameter: Array<[string, any]> = await this.prepareFormFields(formId);
-        KIXObjectCache.updateCache(objectType, null, ServiceMethod.CREATE, parameter, createOptions);
-
-        const objectId = await KIXObjectSocketListener.getInstance().createObject(objectType, parameter, createOptions);
+        const objectId = await KIXObjectSocketClient.getInstance().createObject(
+            objectType, parameter, createOptions, cacheKeyPrefix
+        );
         return objectId;
     }
 
     public static async updateObject(
         objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string,
-        updateCache: boolean = true, catchError: boolean = true
+        catchError: boolean = true, cacheKeyPrefix: string = objectType
     ): Promise<string | number> {
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
 
-        const updatedObjectId = await service.updateObject(objectType, parameter, objectId, updateCache)
+        const updatedObjectId = await service.updateObject(objectType, parameter, objectId, cacheKeyPrefix)
             .catch((error: Error) => {
                 if (catchError) {
                     const content = new ComponentContent('list-with-title',
@@ -181,51 +170,46 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
     public async updateObject(
         objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string,
-        updateCache: boolean = true
+        cacheKeyPrefix: string = objectType
     ): Promise<string | number> {
-        const updatedObjectId = await KIXObjectSocketListener.getInstance().updateObject(
-            objectType, parameter, objectId
+        const updatedObjectId = await KIXObjectSocketClient.getInstance().updateObject(
+            objectType, parameter, objectId, null, cacheKeyPrefix
         );
-
-        if (updateCache) {
-            KIXObjectCache.updateCache(objectType, objectId, ServiceMethod.UPDATE, parameter);
-        }
 
         return updatedObjectId;
     }
 
     public static async updateObjectByForm(
-        objectType: KIXObjectType, formId: string, objectId: number | string
+        objectType: KIXObjectType, formId: string, objectId: number | string, cacheKeyPrefix: string = objectType
     ): Promise<string | number> {
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
-        return await service.updateObjectByForm(objectType, formId, objectId);
+        return await service.updateObjectByForm(objectType, formId, objectId, cacheKeyPrefix);
     }
 
     public async updateObjectByForm(
-        objectType: KIXObjectType, formId: string, objectId: number | string
+        objectType: KIXObjectType, formId: string, objectId: number | string, cacheKeyPrefix: string = objectType
     ): Promise<string | number> {
         const parameter: Array<[string, any]> = await this.prepareFormFields(formId, true);
 
-        KIXObjectCache.updateCache(objectType, objectId, ServiceMethod.UPDATE, parameter);
-
-        const updatedObjectId = await KIXObjectSocketListener.getInstance().updateObject(
-            objectType, parameter, objectId
+        const updatedObjectId = await KIXObjectSocketClient.getInstance().updateObject(
+            objectType, parameter, objectId, cacheKeyPrefix
         );
         return updatedObjectId;
     }
 
     public static async deleteObject(
-        objectType: KIXObjectType, objectIds: Array<number | string>, deleteOptions?: KIXObjectSpecificDeleteOptions
+        objectType: KIXObjectType, objectIds: Array<number | string>, deleteOptions?: KIXObjectSpecificDeleteOptions,
+        cacheKeyPrefix: string = objectType
     ): Promise<Array<number | string>> {
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
         const errors: string[] = [];
         const failIds: Array<number | string> = [];
         for (const objectId of objectIds) {
-            KIXObjectCache.updateCache(objectType, objectId, ServiceMethod.DELETE);
-            await service.deleteObject(objectType, objectId, deleteOptions).catch((error: Error) => {
-                errors.push(`${error.Code}: ${error.Message}`);
-                failIds.push(objectId);
-            });
+            await service.deleteObject(objectType, objectId, deleteOptions, cacheKeyPrefix)
+                .catch((error: Error) => {
+                    errors.push(`${error.Code}: ${error.Message}`);
+                    failIds.push(objectId);
+                });
         }
         if (!!errors.length) {
             const content = new ComponentContent('list-with-title',
@@ -242,9 +226,10 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     }
 
     public async deleteObject(
-        objectType: KIXObjectType, objectId: string | number, deleteOptions: KIXObjectSpecificDeleteOptions
+        objectType: KIXObjectType, objectId: string | number, deleteOptions: KIXObjectSpecificDeleteOptions,
+        cacheKeyPrefix: string = objectType
     ): Promise<void> {
-        await KIXObjectSocketListener.getInstance().deleteObject(objectType, objectId, deleteOptions);
+        await KIXObjectSocketClient.getInstance().deleteObject(objectType, objectId, deleteOptions, cacheKeyPrefix);
     }
 
     public async prepareFormFields(formId: string, forUpdate: boolean = false): Promise<Array<[string, any]>> {

@@ -2,7 +2,7 @@ import { ComponentState } from './ComponentState';
 import { ContextService, IdService, SearchOperator, KIXObjectService } from '../../../../core/browser';
 import {
     TreeNode, Queue, TreeNodeProperty, FilterCriteria,
-    TicketProperty, FilterDataType, FilterType, KIXObjectType, KIXObjectLoadingOptions, KIXObjectCache
+    TicketProperty, FilterDataType, FilterType, KIXObjectType, KIXObjectLoadingOptions
 } from '../../../../core/model';
 import { TicketContext } from '../../../../core/browser/ticket';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
@@ -26,16 +26,6 @@ export class Component {
         const context = await ContextService.getInstance().getContext<TicketContext>(TicketContext.CONTEXT_ID);
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
         await this.loadQueues(context);
-
-        KIXObjectCache.registerCacheListener({
-            objectAdded: () => { return; },
-            objectRemoved: () => { return; },
-            cacheCleared: (objectType: KIXObjectType) => {
-                if (objectType === KIXObjectType.QUEUE_HIERARCHY) {
-                    this.loadQueues(context);
-                }
-            }
-        });
     }
 
     private async loadQueues(context: TicketContext): Promise<void> {

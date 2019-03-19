@@ -1,8 +1,9 @@
-export { ICommunicator } from './ICommunicator';
+export { ISocketNamespace } from './ISocketNamespace';
 export { BaseTemplateInput } from './BaseTemplateInput';
 export { Environment } from './Environment';
 export { LogLevel } from './LogLevel';
 export { IServerConfiguration } from './IServerConfiguration';
-export { CommunicatorResponse } from './CommunicatorResponse';
+export { SocketResponse } from './SocketResponse';
 export { IService } from './IService';
 export { AppUtil } from './AppUtil';
+export { SocketErrorResponse } from './SocketErrorResponse';

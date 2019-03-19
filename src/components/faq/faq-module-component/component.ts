@@ -4,7 +4,7 @@ import {
 } from '../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
-    KIXObjectType, KIXObjectCache, ContextType, ContextMode, ContextDescriptor, ConfiguredDialogWidget,
+    KIXObjectType, ContextType, ContextMode, ContextDescriptor, ConfiguredDialogWidget,
     WidgetConfiguration, WidgetSize
 } from '../../../core/model';
 import {
@@ -14,7 +14,6 @@ import {
     FAQArticleCreateAction, FAQArticleBrowserFactory, FAQArticleAttachmentBrowserFactory,
     FAQArticleSearchDefinition, FAQArticleFormService, EditFAQArticleDialogContext
 } from '../../../core/browser/faq';
-import { FAQCacheHandler } from '../../../core/model/kix/faq';
 import { DialogService } from '../../../core/browser/components/dialog';
 
 class Component extends AbstractMarkoComponent {
@@ -39,8 +38,6 @@ class Component extends AbstractMarkoComponent {
 
         ServiceRegistry.registerServiceInstance(FAQService.getInstance());
         ServiceRegistry.registerServiceInstance(FAQArticleFormService.getInstance());
-
-        KIXObjectCache.registerCacheHandler(new FAQCacheHandler());
 
         KIXObjectSearchService.getInstance().registerSearchDefinition(new FAQArticleSearchDefinition());
 

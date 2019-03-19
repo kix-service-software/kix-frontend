@@ -1,6 +1,6 @@
 import { IKIXModuleExtension } from "../../core/extensions";
 
-class KIXModuleExtionsion implements IKIXModuleExtension {
+class Extension implements IKIXModuleExtension {
 
     public initComponentId: string = 'application-module-component';
 
@@ -17,6 +17,7 @@ class KIXModuleExtionsion implements IKIXModuleExtension {
         ['link-object-dialog', '_base-components/dialog/link-object-dialog'],
         ['edit-linked-objects-dialog', '_base-components/dialog/edit-linked-objects-dialog'],
         ['toast', '_base-components/overlay/toast'],
+        ['refresh-app-toast', '_base-components/overlay/refresh-app-toast'],
         ['confirm-overlay', '_base-components/overlay/confirm-overlay'],
         ['table-column-filter-overlay', '_base-components/overlay/table-column-filter-overlay'],
         ['default-text-input', '_base-components/form/inputs/default-text-input'],
@@ -50,5 +51,5 @@ class KIXModuleExtionsion implements IKIXModuleExtension {
 }
 
 module.exports = (data, host, options) => {
-    return new KIXModuleExtionsion();
+    return new Extension();
 };

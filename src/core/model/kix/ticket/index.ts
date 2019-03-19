@@ -27,10 +27,6 @@ export { TicketStats } from './TicketStats';
 export { CreateTicketArticleOptions } from './CreateTicketArticleOptions';
 export { CreateTicketWatcherOptions } from './CreateTicketWatcherOptions';
 export { DeleteTicketWatcherOptions } from './DeleteTicketWatcherOptions';
-export { TicketCacheHandler } from './TicketCacheHandler';
-export { TicketTypeCacheHandler } from './TicketTypeCacheHandler';
 export { TicketPriorityProperty } from './TicketPriorityProperty';
-export { TicketStateCacheHandler } from './TicketStateCacheHandler';
-export { TicketPriorityCacheHandler } from './TicketPriorityCacheHandler';
 
 export * from './socket';

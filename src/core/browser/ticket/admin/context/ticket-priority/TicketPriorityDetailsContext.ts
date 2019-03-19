@@ -1,6 +1,6 @@
 import {
     Context, ConfiguredWidget, WidgetConfiguration, WidgetType, BreadcrumbInformation, KIXObject,
-    KIXObjectType, KIXObjectCache, TicketPriority
+    KIXObjectType, TicketPriority
 } from "../../../../../model";
 import { TicketPriorityDetailsContextConfiguration } from "./TicketPriorityDetailsContextConfiguration";
 import { AdminContext } from "../../../../admin";
@@ -98,28 +98,20 @@ export class TicketPriorityDetailsContext extends Context<TicketPriorityDetailsC
         objectType: KIXObjectType = KIXObjectType.TICKET_PRIORITY,
         reload: boolean = false, changedProperties: string[] = []
     ): Promise<O> {
-        let ticketPriority;
+        const object = await this.loadTicketPriority(changedProperties) as any;
 
-        if (!objectType) {
-            objectType = KIXObjectType.TICKET_PRIORITY;
+        if (reload) {
+            this.listeners.forEach(
+                (l) => l.objectChanged(Number(this.objectId), object, KIXObjectType.TICKET_PRIORITY, changedProperties)
+            );
         }
 
-        if (reload && objectType === KIXObjectType.TICKET_PRIORITY) {
-            KIXObjectCache.removeObject(KIXObjectType.TICKET_PRIORITY, Number(this.objectId));
-        }
-
-        if (!KIXObjectCache.isObjectCached(KIXObjectType.TICKET_PRIORITY, Number(this.objectId))) {
-            ticketPriority = await this.loadTicketPriority(changedProperties);
-        } else {
-            ticketPriority = KIXObjectCache.getObject(KIXObjectType.TICKET_PRIORITY, Number(this.objectId));
-        }
-
-        return ticketPriority;
+        return object;
     }
 
     private async loadTicketPriority(changedProperties: string[] = [], cache: boolean = true): Promise<TicketPriority> {
         EventService.getInstance().publish(
-            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Lade Ticketpriorität ...' }
+            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load Ticket Priority ...' }
         );
 
         const ticketPriorityId = Number(this.objectId);
@@ -135,9 +127,6 @@ export class TicketPriorityDetailsContext extends Context<TicketPriorityDetailsC
         if (ticketPriorities && ticketPriorities.length) {
             ticketPriority = ticketPriorities[0];
             this.objectId = ticketPriority.ID;
-            this.listeners.forEach((l) => l.objectChanged(
-                Number(this.objectId), ticketPriority, KIXObjectType.TICKET_PRIORITY, changedProperties
-            ));
         }
 
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });

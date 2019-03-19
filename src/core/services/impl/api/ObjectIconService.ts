@@ -3,12 +3,10 @@ import {
     UpdateObjectIcon, UpdateObjectIconResponse, UpdateObjectIconRequest
 } from '../../../api';
 import {
-    ObjectIcon, KIXObjectType, KIXObjectCache, ObjectIconCacheHandler,
-    KIXObjectLoadingOptions, ObjectIconLoadingOptions, Error
+    ObjectIcon, KIXObjectType, KIXObjectLoadingOptions, ObjectIconLoadingOptions, Error
 } from '../../../model';
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
-import { ConfigurationService } from '../ConfigurationService';
 import { LoggingService } from '../LoggingService';
 
 export class ObjectIconService extends KIXObjectService {
@@ -24,7 +22,7 @@ export class ObjectIconService extends KIXObjectService {
 
     protected RESOURCE_URI: string = "objecticons";
 
-    public kixObjectType: KIXObjectType = KIXObjectType.OBJECT_ICON;
+    public objectType: KIXObjectType = KIXObjectType.OBJECT_ICON;
 
     private constructor() {
         super();
@@ -35,17 +33,8 @@ export class ObjectIconService extends KIXObjectService {
         return kixObjectType === KIXObjectType.OBJECT_ICON;
     }
 
-    public async initCache(): Promise<void> {
-        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-        const token = serverConfig.BACKEND_API_TOKEN;
-
-        KIXObjectCache.registerCacheHandler(new ObjectIconCacheHandler());
-
-        await this.getObjectIcons(token);
-    }
-
     public async loadObjects<T>(
-        token: string, objectType: KIXObjectType, objectIds: Array<number | string>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, iconLoadingOptions: ObjectIconLoadingOptions
     ): Promise<T[]> {
 
@@ -73,26 +62,22 @@ export class ObjectIconService extends KIXObjectService {
     }
 
     public async getObjectIcons(token: string): Promise<ObjectIcon[]> {
-        if (!KIXObjectCache.hasObjectCache(KIXObjectType.OBJECT_ICON)) {
-            const uri = this.buildUri(this.RESOURCE_URI);
-            const response = await this.getObjectByUri<ObjectIconsResponse>(token, uri);
-            response.ObjectIcon
-                .map((s) => new ObjectIcon(
-                    s.Object, s.ObjectID, s.ContentType, s.Content,
-                    s.ID, s.CreateBy, s.CreateTime, s.ChangeBy, s.ChangeTime
-                ))
-                .forEach((s) => KIXObjectCache.addObject(KIXObjectType.OBJECT_ICON, s));
-        }
-        return KIXObjectCache.getObjectCache(KIXObjectType.OBJECT_ICON);
+        const uri = this.buildUri(this.RESOURCE_URI);
+        const response = await this.getObjectByUri<ObjectIconsResponse>(token, uri);
+        return response.ObjectIcon
+            .map((s) => new ObjectIcon(
+                s.Object, s.ObjectID, s.ContentType, s.Content,
+                s.ID, s.CreateBy, s.CreateTime, s.ChangeBy, s.ChangeTime
+            ));
     }
 
     public async createObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, string]>
+        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>
     ): Promise<string | number> {
 
         const createObjectIcon = new CreateObjectIcon(parameter);
         const response = await this.sendCreateRequest<CreateObjectIconResponse, CreateObjectIconRequest>(
-            token, this.RESOURCE_URI, new CreateObjectIconRequest(createObjectIcon)
+            token, clientRequestId, this.RESOURCE_URI, new CreateObjectIconRequest(createObjectIcon), this.objectType
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
@@ -102,12 +87,14 @@ export class ObjectIconService extends KIXObjectService {
     }
 
     public async updateObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
+        token: string, clientRequestId: string, objectType: KIXObjectType,
+        parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
         const updateObjectIcon = new UpdateObjectIcon(parameter);
 
         const response = await this.sendUpdateRequest<UpdateObjectIconResponse, UpdateObjectIconRequest>(
-            token, this.buildUri(this.RESOURCE_URI, objectId), new UpdateObjectIconRequest(updateObjectIcon)
+            token, clientRequestId, this.buildUri(this.RESOURCE_URI, objectId),
+            new UpdateObjectIconRequest(updateObjectIcon), this.objectType
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);

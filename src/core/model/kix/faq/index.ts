@@ -9,4 +9,3 @@ export { FAQArticleFactory } from './FAQArticleFactory';
 export { FAQArticleAttachmentLoadingOptions } from './FAQArticleAttachmentLoadingOptions';
 export { CreateFAQVoteOptions } from './CreateFAQVoteOptions';
 export { FAQArticleHistoryProperty } from './FAQArticleHistoryProperty';
-export { FAQCacheHandler } from './FAQCacheHandler';

@@ -57,8 +57,8 @@
     </div>
     <if(component.isLaneWidget() && !state.minimized)>
         <ul.lane-content-actions key=("content-actions" + Math.random())>
-            <for(action in input.contentActions)>
-                <li>
+            <for|action| of=input.contentActions>
+                <li key=action.id>
                     <action action=action displayText=false/>
                 </li>
             </for>

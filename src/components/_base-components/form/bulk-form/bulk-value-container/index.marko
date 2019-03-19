@@ -1,4 +1,4 @@
-<for(bulkValue in state.bulkValues | status-var=loop)>
+<for|bulkValue, index| of=state.bulkValues>
     <div.form-bulk-value>
         <form-list
             nodes=bulkValue.propertyNodes

@@ -11,10 +11,11 @@ import {
 } from "../../../api";
 import { KIXObjectServiceRegistry } from "../../KIXObjectServiceRegistry";
 import { AppUtil } from "../../../common";
-import { setTimeout } from "timers";
 import { LoggingService } from "../LoggingService";
 
 export class ConfigItemClassService extends KIXObjectService {
+
+    protected objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_CLASS;
 
     private static INSTANCE: ConfigItemClassService;
 
@@ -38,7 +39,7 @@ export class ConfigItemClassService extends KIXObjectService {
     }
 
     public async loadObjects<T>(
-        token: string, objectType: KIXObjectType, objectIds: Array<number | string>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<T[]> {
         let objects = [];
@@ -99,13 +100,14 @@ export class ConfigItemClassService extends KIXObjectService {
     }
 
     public async createObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
         createOptions: KIXObjectSpecificCreateOptions
     ): Promise<string | number> {
         if (objectType === KIXObjectType.CONFIG_ITEM_CLASS) {
             const createConfigItemClass = new CreateConfigItemClass(parameter.filter((p) => p[0] !== 'ICON'));
             const response = await this.sendCreateRequest<CreateConfigItemClassResponse, CreateConfigItemClassRequest>(
-                token, this.RESOURCE_URI, new CreateConfigItemClassRequest(createConfigItemClass)
+                token, clientRequestId, this.RESOURCE_URI, new CreateConfigItemClassRequest(createConfigItemClass),
+                this.objectType
             ).catch((error: Error) => {
                 LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
                 throw new Error(error.Code, error.Message);
@@ -115,7 +117,7 @@ export class ConfigItemClassService extends KIXObjectService {
             if (icon) {
                 icon.Object = 'ConfigItemClass';
                 icon.ObjectID = response.ConfigItemClassID;
-                await this.createIcons(token, icon);
+                await this.createIcons(token, clientRequestId, icon);
             }
 
             await AppUtil.updateFormConfigurations(true);
@@ -125,7 +127,8 @@ export class ConfigItemClassService extends KIXObjectService {
     }
 
     public async updateObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
+        token: string, clientRequestId: string, objectType: KIXObjectType,
+        parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
         if (objectType === KIXObjectType.CONFIG_ITEM_CLASS) {
             const updateConfigItemClass = new UpdateConfigItemClass(
@@ -133,8 +136,8 @@ export class ConfigItemClassService extends KIXObjectService {
             );
 
             const response = await this.sendUpdateRequest<UpdateConfigItemClassResponse, UpdateConfigItemClassRequest>(
-                token, this.buildUri(this.RESOURCE_URI, objectId),
-                new UpdateConfigItemClassRequest(updateConfigItemClass)
+                token, clientRequestId, this.buildUri(this.RESOURCE_URI, objectId),
+                new UpdateConfigItemClassRequest(updateConfigItemClass), this.objectType
             ).catch((error) => {
                 throw error;
             });
@@ -143,17 +146,17 @@ export class ConfigItemClassService extends KIXObjectService {
             if (icon) {
                 icon.Object = 'ConfigItemClass';
                 icon.ObjectID = response.ConfigItemClassID;
-                await this.updateIcon(token, icon);
+                await this.updateIcon(token, clientRequestId, icon);
             }
 
             const definitionParameter = parameter.find((p) => p[0] === ConfigItemClassProperty.DEFINITION_STRING);
             if (definitionParameter) {
                 const uri = this.buildUri(this.RESOURCE_URI, objectId, 'definitions');
-                await this.sendCreateRequest(token, uri, {
+                await this.sendCreateRequest(token, clientRequestId, uri, {
                     ConfigItemClassDefinition: {
                         DefinitionString: definitionParameter[1]
                     }
-                }).catch((error: Error) => {
+                }, this.objectType).catch((error: Error) => {
                     if (error.StatusCode === 409) {
                         LoggingService.getInstance().warning(
                             `Could not create new definition of Config Item Class ${objectId}.`, error

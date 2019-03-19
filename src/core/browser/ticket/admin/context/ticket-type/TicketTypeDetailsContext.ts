@@ -1,6 +1,6 @@
 import {
     Context, ConfiguredWidget, WidgetConfiguration, WidgetType, BreadcrumbInformation, KIXObject,
-    KIXObjectType, KIXObjectCache, TicketType
+    KIXObjectType, TicketType
 } from "../../../../../model";
 import { TicketTypeDetailsContextConfiguration } from "./TicketTypeDetailsContextConfiguration";
 import { AdminContext } from "../../../../admin";
@@ -97,27 +97,21 @@ export class TicketTypeDetailsContext extends Context<TicketTypeDetailsContextCo
     public async getObject<O extends KIXObject>(
         objectType: KIXObjectType = KIXObjectType.TICKET_TYPE, reload: boolean = false, changedProperties: string[] = []
     ): Promise<O> {
-        let ticketType;
+        const object = await this.loadTicketType(changedProperties) as any;
 
-        if (!objectType) {
-            objectType = KIXObjectType.TICKET_TYPE;
+        if (reload) {
+            this.listeners.forEach(
+                (l) => l.objectChanged(Number(this.objectId), object, KIXObjectType.TICKET_TYPE, changedProperties)
+            );
         }
 
-        if (reload && objectType === KIXObjectType.TICKET_TYPE) {
-            KIXObjectCache.removeObject(KIXObjectType.TICKET_TYPE, Number(this.objectId));
-        }
-
-        if (!KIXObjectCache.isObjectCached(KIXObjectType.TICKET_TYPE, Number(this.objectId))) {
-            ticketType = await this.loadTicketType(changedProperties);
-        } else {
-            ticketType = KIXObjectCache.getObject(KIXObjectType.TICKET_TYPE, Number(this.objectId));
-        }
-
-        return ticketType;
+        return object;
     }
 
     private async loadTicketType(changedProperties: string[] = [], cache: boolean = true): Promise<TicketType> {
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: true, hint: 'Lade Tickettyp ...' });
+        EventService.getInstance().publish(
+            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load Ticket Type ...' }
+        );
 
         const ticketTypeId = Number(this.objectId);
 
@@ -132,9 +126,6 @@ export class TicketTypeDetailsContext extends Context<TicketTypeDetailsContextCo
         if (ticketTypes && ticketTypes.length) {
             ticketType = ticketTypes[0];
             this.objectId = ticketType.ID;
-            this.listeners.forEach(
-                (l) => l.objectChanged(Number(this.objectId), ticketType, KIXObjectType.TICKET_TYPE, changedProperties)
-            );
         }
 
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });

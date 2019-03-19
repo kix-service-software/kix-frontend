@@ -1,6 +1,6 @@
 <if(state.article)>
     <ul.attachment-list>
-        <for(attachment in state.attachments)>
+        <for|attachment| of=state.attachments>
             <li>
                 <ticket-article-attachment article=state.article attachment=attachment/>
             </li>

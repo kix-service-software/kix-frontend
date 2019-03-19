@@ -1,8 +1,7 @@
 import { KIXObjectService } from './KIXObjectService';
 import {
-    LinkType, KIXObjectType, CreateLinkObjectOptions,
-    KIXObjectSpecificCreateOptions, LinkObjectProperty, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectCache, LinkCacheHandler, Error
+    LinkType, KIXObjectType, CreateLinkObjectOptions, KIXObjectSpecificCreateOptions, LinkObjectProperty,
+    KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, Error
 } from '../../../model';
 import {
     CreateLink, CreateLinkResponse, CreateLinkRequest, LinkTypesResponse, LinkTypeResponse
@@ -22,12 +21,11 @@ export class LinkService extends KIXObjectService {
 
     protected RESOURCE_URI: string = "links";
 
-    public kixObjectType: KIXObjectType = KIXObjectType.LINK;
+    public objectType: KIXObjectType = KIXObjectType.LINK;
 
     private constructor() {
         super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
-        KIXObjectCache.registerCacheHandler(new LinkCacheHandler());
     }
     public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.LINK
@@ -36,7 +34,7 @@ export class LinkService extends KIXObjectService {
     }
 
     public async loadObjects<O>(
-        token: string, objectType: KIXObjectType, objectIds: Array<number | string>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<O[]> {
 
@@ -75,23 +73,23 @@ export class LinkService extends KIXObjectService {
         return result.map((lt) => new LinkType(lt));
     }
 
-    public async createLink(token: string, createLink: CreateLink): Promise<number> {
+    public async createLink(token: string, clientRequestId: string, createLink: CreateLink): Promise<number> {
         const response = await this.sendCreateRequest<CreateLinkResponse, CreateLinkRequest>(
-            token, this.RESOURCE_URI, new CreateLinkRequest(createLink)
+            token, clientRequestId, this.RESOURCE_URI, new CreateLinkRequest(createLink), this.objectType
         );
 
         return response.LinkID;
     }
 
     public async createObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, string]>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>,
         createOptions: KIXObjectSpecificCreateOptions
     ): Promise<string | number> {
         switch (objectType) {
             case KIXObjectType.LINK_OBJECT:
                 const options = (createOptions as CreateLinkObjectOptions);
                 return await this.createLinkFromLinkObject(
-                    token, parameter, options
+                    token, clientRequestId, parameter, options
                 );
             default:
                 throw new Error('', 'No create option for object type ' + objectType);
@@ -99,13 +97,14 @@ export class LinkService extends KIXObjectService {
     }
 
     public async updateObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
+        token: string, clientRequestId: string, objectType: KIXObjectType,
+        parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
         throw new Error('', "Method not implemented.");
     }
 
     private async createLinkFromLinkObject(
-        token: string, parameter: Array<[string, any]>, createOptions: CreateLinkObjectOptions
+        token: string, clientRequestId: string, parameter: Array<[string, any]>, createOptions: CreateLinkObjectOptions
     ): Promise<number> {
 
         const isSource = this.getParameterValue(parameter, LinkObjectProperty.IS_SOURCE);
@@ -122,15 +121,12 @@ export class LinkService extends KIXObjectService {
             linkType.Name
         );
 
-        KIXObjectCache.removeObject(createOptions.rootObject.KIXObjectType, createOptions.rootObject.ObjectId);
-        KIXObjectCache.removeObject(paramType, paramKey);
-
-        return await this.createLink(token, link);
+        return await this.createLink(token, clientRequestId, link);
     }
 
-    public async deleteLink(token: string, linkId: number): Promise<void> {
+    public async deleteLink(token: string, clientRequestId: string, linkId: number): Promise<void> {
         const uri = this.buildUri(this.RESOURCE_URI, linkId);
-        await this.sendDeleteRequest<void>(token, uri);
+        await this.sendDeleteRequest<void>(token, clientRequestId, uri, this.objectType);
     }
 
 }

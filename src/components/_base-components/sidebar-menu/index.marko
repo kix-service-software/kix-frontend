@@ -1,7 +1,10 @@
 <div.widget-bar>
-    <for(sidebar in state.sidebars)>
-        <div.bar-icon class=(component.isShown(sidebar) ? "select-active" : "") on-click('toggleSidebar', sidebar.instanceId)
-            title=sidebar.configuration.title key=("sidebarmenu-" + sidebar.instanceId)>
+    <for|sidebar| of=state.sidebars>
+        <div.bar-icon
+            class=(component.isShown(sidebar) ? "select-active" : "")
+            on-click("toggleSidebar", sidebar.instanceId)
+            title=sidebar.configuration.title
+            key=("sidebarmenu-" + sidebar.instanceId)>
             <span class=sidebar.configuration.icon/>
         </div>
     </for>

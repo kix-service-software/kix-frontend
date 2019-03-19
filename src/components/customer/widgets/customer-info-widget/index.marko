@@ -1,11 +1,13 @@
-<widget instanceId=state.instanceId title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
+<widget
+    instanceId=state.instanceId
+    title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
     contentActions=state.actions>
     <@content>
         <if(state.customer)>
             <div.customer-info-container>
-                <for(groupTuple in state.customer.getCustomerInfoData())>
+                <for|groupTuple| of=state.customer.getCustomerInfoData()>
                     <div.customer-group>
-                        <for(attributeTuple in groupTuple[1])>
+                        <for|attributeTuple| of=groupTuple[1]>
                             <object-property-label object=state.customer property=attributeTuple[0] labelProvider=state.labelProvider/>
                         </for>
                     </div>

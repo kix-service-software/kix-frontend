@@ -1,0 +1,16 @@
+<div.toast-content>
+    <div.toast-icon>
+        <icon icon="kix-icon-info"/>
+    </div>
+    <div.toast-text>
+        <b title=(input.title || "")><translation-string pattern=(input.title || "")/></b>
+        <p>
+            <translation-string pattern="Data has been updated."/>
+            <p>
+                <a on-click("refreshClicked")>
+                    <translation-string pattern="Refresh Page"/>
+                </a>
+            </p>
+        </p>
+    </div>
+</div>

@@ -12,7 +12,7 @@
                     <li key=component.getLaneKey()>
                         <tab-container tabWidgets=state.tabWidgets title="Ticketinformationen" showSidebar=false/>
                     </li>
-                    <for(lane in state.lanes)>
+                    <for|lane| of=state.lanes>
                         <li.lane key=component.getLaneKey()>
                             <${component.getWidgetTemplate(lane.instanceId)} ...{
                                 contextType: "MAIN",
@@ -25,7 +25,7 @@
             </@content>
         </widget>
         <div.ticket-content key="ticket-content">
-            <for(contentWidget in state.contentWidgets)>
+            <for|contentWidget| of=state.contentWidgets>
                 <${component.getWidgetTemplate(contentWidget.instanceId)} ...{
                     contextType: "MAIN",
                     instanceId: contentWidget.instanceId

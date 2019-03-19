@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
 import { ClientStorageService } from '../../core/browser/ClientStorageService';
-import { AgentService } from '../../core/browser/application';
+import { AgentService } from '../../core/browser/application/AgentService';
 
 class Component {
 

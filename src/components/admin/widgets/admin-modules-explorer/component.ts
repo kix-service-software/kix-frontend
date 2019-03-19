@@ -38,7 +38,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         let activeNode = nodes.find((n) => n.id.id === adminModule.id);
         if (!activeNode) {
             for (let index = 0; index < nodes.length; index++) {
-                activeNode = this.getActiveNode(adminModule, nodes[index].children);
+                if (nodes[index].children && nodes[index].children.length) {
+                    activeNode = this.getActiveNode(adminModule, nodes[index].children);
+                }
                 if (activeNode) {
                     nodes[index].expanded = true;
                     break;

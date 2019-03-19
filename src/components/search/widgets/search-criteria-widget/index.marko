@@ -2,7 +2,7 @@
     <@content>
         <div.search-criteria-widget>
             <div.search-criteria-list>
-                <for(criteria in state.displayCriteria)>
+                <for|criteria| of=state.displayCriteria>
                     <div.search-criteria-list-item>
                         <div.key title=(criteria[0] + " (" + criteria[1] + ")")>${criteria[0]} (${criteria[1]}):</div>
                         <label-list labels=criteria[2] removeLabels=false/>

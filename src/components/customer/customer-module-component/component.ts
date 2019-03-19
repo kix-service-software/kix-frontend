@@ -12,7 +12,7 @@ import {
 } from '../../../core/browser/customer';
 import {
     KIXObjectType, ContextDescriptor, ContextType, ContextMode, WidgetConfiguration,
-    ConfiguredDialogWidget, WidgetSize, KIXObjectCache, CustomerCacheHandler
+    ConfiguredDialogWidget, WidgetSize
 } from '../../../core/model';
 import { ImportService } from '../../../core/browser/import';
 import { DialogService } from '../../../core/browser/components/dialog';
@@ -31,8 +31,6 @@ class Component extends AbstractMarkoComponent {
         LabelService.getInstance().registerLabelProvider(new CustomerLabelProvider());
         FactoryService.getInstance().registerFactory(KIXObjectType.CUSTOMER, CustomerBrowserFactory.getInstance());
         KIXObjectSearchService.getInstance().registerSearchDefinition(new CustomerSearchDefinition());
-
-        KIXObjectCache.registerCacheHandler(new CustomerCacheHandler());
 
         ImportService.getInstance().registerImportManager(new CustomerImportManager());
 

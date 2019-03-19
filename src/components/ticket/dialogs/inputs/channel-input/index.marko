@@ -1,6 +1,6 @@
 <if(state.channels)>
     <div.channel-list>
-        <for(channel in state.channels)>
+        <for|channel| of=state.channels>
             <div.channel-item
                 on-click("channelClicked", channel)
                 title=component.getDisplayText(channel)

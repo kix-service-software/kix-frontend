@@ -85,10 +85,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    public getLaneKey(): string {
-        return IdService.generateDateBasedId('lane-');
-    }
-
     public getWidgetTemplate(instanceId: string): any {
         const context = ContextService.getInstance().getActiveContext();
         const config = context ? context.getWidgetConfiguration(instanceId) : undefined;

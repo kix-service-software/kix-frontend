@@ -15,7 +15,7 @@
     </div>
     <if(!state.minimized)>
         <ul.menu.back-to-list>
-            <for(entry in state.history)>
+            <for|entry| of=state.history>
                 <li title=entry.displayText onClick("navigate", entry)>
                     <link-target routingConfiguration=component.getRoutingConfiguration(entry) objectId=entry.objectId>
                         <@content>

@@ -18,9 +18,9 @@ export enum KIXObjectType {
 
     CONFIG_ITEM_VERSION = 'ConfigItemVersion',
 
-    CONFIG_ITEM_CLASS = 'ConfigItemClass',
+    CONFIG_ITEM_CLASS = 'Class',
 
-    CONFIG_ITEM_CLASS_DEFINITION = 'ConfigItemClassDefinition',
+    CONFIG_ITEM_CLASS_DEFINITION = 'Definition',
 
     CONFIG_ITEM_IMAGE = 'CONFIG_ITEM_IMAGE',
 
@@ -80,15 +80,15 @@ export enum KIXObjectType {
 
     TICKET = 'Ticket',
 
-    TICKET_HISTORY = 'TICKET_HISTORY',
+    TICKET_HISTORY = 'History',
 
-    TICKET_PRIORITY = 'TICKET_PRIORITY',
+    TICKET_PRIORITY = 'Priority',
 
-    TICKET_TYPE = 'TICKET_TYPE',
+    TICKET_TYPE = 'Type',
 
-    TICKET_STATE = 'TICKET_STATE',
+    TICKET_STATE = 'State',
 
-    TICKET_STATE_TYPE = 'TICKET_STATE_TYPE',
+    TICKET_STATE_TYPE = 'StateType',
 
     TRANSLATION = 'Translation',
 

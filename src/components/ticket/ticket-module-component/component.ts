@@ -27,9 +27,8 @@ import {
     TicketStateFormService, TicketBulkManager, TicketTableCSSHandler, ArticleTableCSSHandler, EmailRecipientValidator
 } from '../../../core/browser/ticket';
 import {
-    KIXObjectType, KIXObjectCache, TicketCacheHandler, ContextDescriptor, ContextMode, ContextType,
-    ConfiguredDialogWidget, WidgetConfiguration, WidgetSize, TicketTypeCacheHandler, TicketStateCacheHandler,
-    TicketPriorityCacheHandler
+    KIXObjectType, ContextDescriptor, ContextMode, ContextType,
+    ConfiguredDialogWidget, WidgetConfiguration, WidgetSize
 } from '../../../core/model';
 import { BulkService } from '../../../core/browser/bulk';
 import { ArticleTableFactory } from '../../../core/browser/ticket/table/ArticleTableFactory';
@@ -55,11 +54,6 @@ class Component extends AbstractMarkoComponent {
         ServiceRegistry.registerServiceInstance(TicketTypeFormService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketPriorityFormService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketStateFormService.getInstance());
-
-        KIXObjectCache.registerCacheHandler(new TicketCacheHandler());
-        KIXObjectCache.registerCacheHandler(new TicketTypeCacheHandler());
-        KIXObjectCache.registerCacheHandler(new TicketStateCacheHandler());
-        KIXObjectCache.registerCacheHandler(new TicketPriorityCacheHandler());
 
         KIXObjectSearchService.getInstance().registerSearchDefinition(new TicketSearchDefinition());
 

@@ -6,7 +6,7 @@ import {
 import {
     KIXObject, LinkObject, KIXObjectType, CreateLinkDescription, KIXObjectPropertyFilter, TableFilterCriteria,
     LinkObjectProperty, LinkTypeDescription, CreateLinkObjectOptions, LinkType, ContextType,
-    SortUtil, DataType, KIXObjectCache
+    SortUtil, DataType
 } from '../../../../core/model';
 import { LinkUtil, EditLinkedObjectsDialogContext } from '../../../../core/browser/link';
 import { IEventSubscriber, EventService } from '../../../../core/browser/event';
@@ -320,11 +320,8 @@ class Component {
                 this.newLinkObjects.splice(newLinkObjectIndex, 1);
             } else {
                 linkIdsToDelete.push(Number(dlo.ObjectId));
-                KIXObjectCache.removeObject(dlo.KIXObjectType, dlo.ObjectId);
             }
         });
-
-        KIXObjectCache.removeObject(this.mainObject.KIXObjectType, this.mainObject.ObjectId);
 
         let deleteLinksOK: boolean = true;
         if (!!linkIdsToDelete.length) {

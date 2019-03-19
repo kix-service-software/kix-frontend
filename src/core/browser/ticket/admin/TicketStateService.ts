@@ -1,8 +1,5 @@
 import { KIXObjectService } from "../../kix";
-import {
-    TicketState, KIXObjectType, KIXObject, KIXObjectLoadingOptions,
-    KIXObjectSpecificLoadingOptions, KIXObjectCache, TicketStateProperty, TicketStateType
-} from "../../../model";
+import { TicketState, KIXObjectType } from "../../../model";
 
 export class TicketStateService extends KIXObjectService<TicketState> {
 
@@ -23,28 +20,6 @@ export class TicketStateService extends KIXObjectService<TicketState> {
 
     public getLinkObjectName(): string {
         return 'TicketState';
-    }
-
-    public async loadObjects<O extends KIXObject>(
-        objectType: KIXObjectType, objectIds: Array<string | number>,
-        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
-        cache: boolean = true
-    ): Promise<O[]> {
-
-        if (objectType === KIXObjectType.TICKET_STATE
-            || objectType === KIXObjectType.TICKET_STATE_TYPE
-        ) {
-            if (!KIXObjectCache.hasObjectCache(objectType)) {
-                const objects = await super.loadObjects(objectType, null, null, null, false);
-                objects.forEach((s) => KIXObjectCache.addObject(objectType, s));
-            }
-
-            if (!objectIds) {
-                return KIXObjectCache.getObjectCache(objectType);
-            }
-        }
-
-        return await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions, cache);
     }
 
 }

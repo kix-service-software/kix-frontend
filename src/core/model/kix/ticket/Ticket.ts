@@ -1,9 +1,8 @@
-import { Article, StateType, TicketHistory, TicketPriority, TicketState, TicketType } from '.';
-import { Contact, Customer, Lock, Queue, Service, User, KIXObjectType } from '..';
+import { Article, TicketHistory } from '.';
+import { KIXObjectType } from '..';
 import { KIXObject } from '../KIXObject';
 import { Watcher } from './Watcher';
 import { DynamicField } from '../dynamic-field';
-import { Sla } from '../sla';
 import { SortUtil, SortOrder } from '../../sort';
 import { ArticleProperty } from './ArticleProperty';
 import { DataType } from '../../DataType';
@@ -122,20 +121,6 @@ export class Ticket extends KIXObject<Ticket> {
 
     public Unseen: number;
 
-    // UI Properties
-
-    public owner: User;
-    public priority: TicketPriority;
-    public queue: Queue;
-    public responsible: User;
-    public service: Service;
-    public sla: Sla;
-    public state: TicketState;
-    public stateType: StateType;
-    public type: TicketType;
-    public customer: Customer;
-    public contact: Contact;
-
     public constructor(ticket?: Ticket) {
         super();
         if (ticket) {
@@ -200,18 +185,6 @@ export class Ticket extends KIXObject<Ticket> {
             this.LinkTypeName = ticket.LinkTypeName;
             this.Watchers = ticket.Watchers;
             this.Unseen = Number(ticket.Unseen);
-
-            this.owner = ticket.owner;
-            this.priority = ticket.priority;
-            this.queue = ticket.queue;
-            this.responsible = ticket.responsible;
-            this.service = ticket.service;
-            this.sla = ticket.sla;
-            this.state = ticket.state;
-            this.stateType = ticket.stateType;
-            this.type = ticket.type;
-            this.customer = ticket.customer;
-            this.contact = ticket.contact;
 
             this.Articles = ticket.Articles;
             this.Links = ticket.Links;

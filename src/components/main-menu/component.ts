@@ -1,7 +1,7 @@
 import { MenuEntry, Context, ContextType, ContextMode } from '../../core/model';
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../core/browser/context/ContextService';
-import { MainMenuSocketListener } from './MainMenuSocketListener';
+import { MainMenuSocketClient } from './MainMenuSocketClient';
 import { IContextServiceListener } from '../../core/browser';
 import { RoutingConfiguration } from '../../core/browser/router';
 
@@ -21,7 +21,7 @@ class KIXMenuComponent implements IContextServiceListener {
     }
 
     private async loadEntries(): Promise<void> {
-        const entries = await MainMenuSocketListener.getInstance().loadMenuEntries();
+        const entries = await MainMenuSocketClient.getInstance().loadMenuEntries();
         if (entries) {
             this.state.primaryMenuEntries = entries[0];
             this.state.secondaryMenuEntries = entries[1];

@@ -7,10 +7,11 @@ import {
     ValidationSeverity, OverlayType, ComponentContent, ValidationResult, Error
 } from '../../../../core/model';
 import { FormGroup } from '../../../../core/model/components/form/FormGroup';
-import { AgentService, ApplicationEvent } from '../../../../core/browser/application';
+import { ApplicationEvent } from '../../../../core/browser/application';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 import { DialogService } from '../../../../core/browser/components/dialog';
 import { EventService } from '../../../../core/browser/event';
+import { AgentService } from '../../../../core/browser/application/AgentService';
 
 
 class Component {
@@ -37,7 +38,7 @@ class Component {
     private async prepareForm(): Promise<Form> {
         let personalSettings: PersonalSetting[] = [];
 
-        const service: AgentService = ServiceRegistry.getServiceInstance(
+        const service = ServiceRegistry.getServiceInstance<AgentService>(
             KIXObjectType.PERSONAL_SETTINGS, ServiceType.OBJECT
         );
         if (service) {
@@ -81,7 +82,7 @@ class Component {
                 if (validationError) {
                     this.showValidationError(result);
                 } else {
-                    const service: AgentService = ServiceRegistry.getServiceInstance(
+                    const service = ServiceRegistry.getServiceInstance<AgentService>(
                         KIXObjectType.PERSONAL_SETTINGS, ServiceType.OBJECT
                     );
                     if (service) {

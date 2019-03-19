@@ -1,5 +1,5 @@
 <ul.receiver-list-container>
-    <for(receiver in state.receiverList)>
+    <for|receiver| of=state.receiverList>
         <li title=receiver.email>${receiver.realName}</li>
     </for>
 </ul>

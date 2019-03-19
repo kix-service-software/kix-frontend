@@ -2,7 +2,7 @@ import { ContactDetailsContextConfiguration } from ".";
 import {
     ConfiguredWidget, Context, WidgetType,
     WidgetConfiguration, Contact, KIXObjectType, BreadcrumbInformation,
-    KIXObject, KIXObjectCache, KIXObjectLoadingOptions
+    KIXObject, KIXObjectLoadingOptions
 } from "../../../model";
 import { ContactService } from "../ContactService";
 import { CustomerContext } from "../../customer";
@@ -96,22 +96,7 @@ export class ContactDetailsContext extends Context<ContactDetailsContextConfigur
     public async getObject<O extends KIXObject>(
         objectType: KIXObjectType = KIXObjectType.CONTACT, reload: boolean = false
     ): Promise<O> {
-        let object;
-
-        if (!objectType) {
-            objectType = KIXObjectType.CONTACT;
-        }
-
-        if (reload && objectType === KIXObjectType.CONTACT) {
-            KIXObjectCache.removeObject(KIXObjectType.CONTACT, Number(this.objectId));
-        }
-
-        if (!KIXObjectCache.isObjectCached(KIXObjectType.CONTACT, this.objectId)) {
-            object = await this.loadContact();
-            reload = true;
-        } else {
-            object = KIXObjectCache.getObject(KIXObjectType.CONTACT, this.objectId);
-        }
+        const object = await this.loadContact() as any;
 
         if (reload) {
             this.listeners.forEach((l) => l.objectChanged(this.getObjectId(), object, KIXObjectType.CONTACT));
@@ -123,7 +108,7 @@ export class ContactDetailsContext extends Context<ContactDetailsContextConfigur
     private async loadContact(): Promise<Contact> {
         const timeout = window.setTimeout(() => {
             EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Lade Ansprechpartner ...' }
+                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load Contact ...' }
             );
         }, 500);
 
