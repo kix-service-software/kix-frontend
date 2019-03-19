@@ -1,6 +1,6 @@
 <div.wrapper>
     <if(state.initialized)>
-        <for(module in state.moduleTemplates)>
+        <for|module| of=state.moduleTemplates>
             <${module}/>
         </for>
         <if(!state.reload)>
@@ -37,7 +37,9 @@
         <div.app-loading-shield>
             <div.loading-info>
                 <loading-spinner/>
-                <span>${state.loadingHint}</span>
+                <span>
+                    <translation-string pattern=state.loadingHint/>
+                </span>
             </div>
         </div>
     </if>

@@ -2,8 +2,8 @@
     <ul.menu.main-menu class={
         "image-only": !state.showText
     }>
-        <for(menuEntry in state.primaryMenuEntries)>
-            <li class={
+        <for|menuEntry| of=state.primaryMenuEntries>
+            <li key=menuEntry.text class={
                 active: menuEntry.active
             }>
                 <link-target routingConfiguration=component.getRoutingConfiguration(menuEntry)>
@@ -30,8 +30,8 @@
     <ul.menu.user-menu class={
         "image-only": !state.showText
     }>
-        <for(menuEntry in state.secondaryMenuEntries)>
-            <li class={
+        <for|menuEntry| of=state.secondaryMenuEntries>
+            <li key=menuEntry.text class={
                 active: menuEntry.active
             }>
                 <link-target routingConfiguration=component.getRoutingConfiguration(menuEntry)>

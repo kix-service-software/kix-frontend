@@ -60,7 +60,8 @@ class OverlayComponent {
 
     private openOverlay<T extends KIXObject<T>>(
         type: OverlayType, widgetInstanceId: string, content: ComponentContent<T>, title: string,
-        closeButton: boolean, position: [number, number], newListenerId: string, large: boolean
+        closeButton: boolean, position: [number, number], newListenerId: string, large: boolean,
+        toastTimeoutMillis: number = 2000
     ): void {
         if (this.currentListenerId) {
             this.closeOverlay();
@@ -116,7 +117,7 @@ class OverlayComponent {
                     this.toastTimeout = setTimeout(() => {
                         this.closeOverlay();
                     }, 200);
-                }, 2000);
+                }, toastTimeoutMillis);
             }, 100);
         }
 

@@ -1,4 +1,4 @@
-import { KIXModulesSocketListener } from "./KIXModulesSocketListener";
+import { KIXModulesSocketClient } from "./KIXModulesSocketClient";
 import { IKIXModuleExtension } from "../../extensions";
 import { ComponentsService } from "../components";
 
@@ -18,7 +18,7 @@ export class KIXModulesService {
     private modules: IKIXModuleExtension[] = [];
 
     public async init(): Promise<void> {
-        this.modules = await KIXModulesSocketListener.getInstance().loadModules();
+        this.modules = await KIXModulesSocketClient.getInstance().loadModules();
 
         let tags = [];
         this.modules.forEach((m) => tags = [...tags, ...m.tags]);

@@ -17,7 +17,7 @@
                     <li>
                         <tab-container tabWidgets=state.tabWidgets title="Config Item Informationen" showSidebar=false/>
                     </li>
-                    <for(lane in state.lanes)>
+                    <for|lane| of=state.lanes>
                         <li.lane>
                             <${component.getWidgetTemplate(lane.instanceId)} ...{
                                 contextType: "MAIN",
@@ -29,7 +29,7 @@
             </@content>
         </widget>
         <div.ci-content>
-            <for(contentWidget in state.contentWidgets)>
+            <for|contentWidget| of=state.contentWidgets>
                 <${component.getWidgetTemplate(contentWidget.instanceId)} ...{
                     contextType: "MAIN",
                     instanceId: contentWidget.instanceId

@@ -1,4 +1,4 @@
-<for(dynamicValue in state.dynamicValues | status-var=loop)>
+<for|dynamicValue, index| of=state.dynamicValues>
     <div.dynamic-form-field-value>
         <form-list
             nodes=dynamicValue.propertyNodes
@@ -66,11 +66,7 @@
                 </else>
             </if>
         </div>
-        <if(
-            !dynamicValue.readonly &&
-            state.dynamicValues.length > 1 &&
-            loop.getIndex() !== state.dynamicValues.length - 1
-        )>
+        <if(!dynamicValue.readonly && state.dynamicValues.length > 1 && index !== state.dynamicValues.length - 1)>
             <button.form-control-button.button-without-text
                 type="button"
                 title="Translatable#Parameter entfernen"

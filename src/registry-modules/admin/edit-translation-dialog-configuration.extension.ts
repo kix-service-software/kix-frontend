@@ -62,7 +62,7 @@ export class Extension implements IConfigurationExtension {
 
         const service = KIXObjectServiceRegistry.getServiceInstance(KIXObjectType.SYS_CONFIG_ITEM);
         const languagesConfig = await service.loadObjects<SysConfigItem>(
-            token, KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.DEFAULT_USED_LANGUAGES], null, null
+            token, null, KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.DEFAULT_USED_LANGUAGES], null, null
         );
 
         const languages: Array<[string, string]> = [];

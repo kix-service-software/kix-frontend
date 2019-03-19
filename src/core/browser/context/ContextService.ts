@@ -1,14 +1,15 @@
 import {
     Context, ContextConfiguration, WidgetConfiguration,
-    ContextType, KIXObjectType, ContextMode, ContextDescriptor
+    ContextType, KIXObjectType, ContextMode, ContextDescriptor, ObjectUpdatedEventData
 } from '../../model';
-import { ContextSocketListener } from './ContextSocketListener';
+import { ContextSocketClient } from './ContextSocketClient';
 import { IContextServiceListener } from './IContextServiceListener';
 import { ContextHistoryEntry } from './ContextHistoryEntry';
 import { ContextHistory } from './ContextHistory';
 import { RoutingService } from '../router';
 import { ContextFactory } from './ContextFactory';
 import { DialogService } from '../components/dialog/DialogService';
+import { BrowserUtil } from '../BrowserUtil';
 
 export class ContextService {
 
@@ -133,7 +134,37 @@ export class ContextService {
         instanceId: string, widgetConfiguration: WidgetConfiguration<T>,
         contextId: string = this.activeMainContext.getDescriptor().contextId
     ): Promise<void> {
-        await ContextSocketListener.getInstance().saveWidgetConfiguration(instanceId, widgetConfiguration, contextId);
+        await ContextSocketClient.getInstance().saveWidgetConfiguration(instanceId, widgetConfiguration, contextId);
+    }
+
+    public async handleUpdateNotifications(events: ObjectUpdatedEventData[]): Promise<void> {
+        if (this.activeContextType === ContextType.MAIN) {
+            if (this.activeMainContext.getDescriptor().contextMode === ContextMode.DETAILS) {
+                const showRefreshNotification = events.some((e) => {
+                    const objectType = this.getObjectType(e.Namespace);
+                    const isObjectType = objectType === this.activeMainContext.getDescriptor().kixObjectTypes[0];
+                    const eventObjectId = e.ObjectID.split('::');
+                    const isObject = eventObjectId[0] === this.activeMainContext.getObjectId().toString();
+                    return isObjectType && isObject;
+                });
+
+                if (showRefreshNotification) {
+                    BrowserUtil.openAppRefreshOverlay();
+                }
+            }
+        }
+    }
+
+    private getObjectType(namespace: string): string {
+        const objects = namespace.split('.');
+        if (objects.length > 1) {
+            if (objects[0] === 'FAQ') {
+                return KIXObjectType.FAQ_ARTICLE;
+            } else if (objects[0] === 'CMDB') {
+                return objects[1];
+            }
+        }
+        return objects[0];
     }
 
 }

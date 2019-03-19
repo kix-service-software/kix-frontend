@@ -1,6 +1,6 @@
 import {
     Context, ConfiguredWidget, WidgetConfiguration, WidgetType, BreadcrumbInformation, KIXObject,
-    KIXObjectType, KIXObjectCache, Translation
+    KIXObjectType, Translation
 } from "../../../../../model";
 import { TranslationDetailsContextConfiguration } from "./TranslationDetailsContextConfiguration";
 import { AdminContext } from "../../../../admin";
@@ -97,28 +97,20 @@ export class TranslationDetailsContext extends Context<TranslationDetailsContext
     public async getObject<O extends KIXObject>(
         objectType: KIXObjectType = KIXObjectType.TRANSLATION, reload: boolean = false, changedProperties: string[] = []
     ): Promise<O> {
-        let translation;
+        const object = await this.loadTranslation() as any;
 
-        if (!objectType) {
-            objectType = KIXObjectType.TRANSLATION;
+        if (reload) {
+            this.listeners.forEach(
+                (l) => l.objectChanged(Number(this.objectId), object, KIXObjectType.TRANSLATION, changedProperties)
+            );
         }
 
-        if (reload && objectType === KIXObjectType.TRANSLATION) {
-            KIXObjectCache.removeObject(KIXObjectType.TRANSLATION, Number(this.objectId));
-        }
-
-        if (!KIXObjectCache.isObjectCached(KIXObjectType.TRANSLATION, Number(this.objectId))) {
-            translation = await this.loadTranslation();
-        } else {
-            translation = KIXObjectCache.getObject(KIXObjectType.TRANSLATION, Number(this.objectId));
-        }
-
-        return translation;
+        return object;
     }
 
     private async loadTranslation(): Promise<Translation> {
         EventService.getInstance().publish(
-            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Lade Übersetzung ...' }
+            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load Translation ...' }
         );
 
         const translations = await TranslationService.getInstance().loadObjects<Translation>(
@@ -126,12 +118,9 @@ export class TranslationDetailsContext extends Context<TranslationDetailsContext
         );
 
         const translation = translations && translations.length ? translations[0] : null;
-        this.listeners.forEach(
-            (l) => l.objectChanged(this.objectId, translation, KIXObjectType.TRANSLATION, [])
-        );
 
         EventService.getInstance().publish(
-            ApplicationEvent.APP_LOADING, { loading: false, hint: 'Lade Übersetzung ...' }
+            ApplicationEvent.APP_LOADING, { loading: false, hint: '' }
         );
         return translation;
     }

@@ -35,7 +35,7 @@
                         </span>
                         <span.faq-rating-info>
                             <if(state.faqArticle.Votes.length)>
-                                <for(icon in component.stars)>
+                                <for|icon| of=component.stars>
                                     <icon icon=icon/>
                                 </for>
                                 (${component.rating})
@@ -49,7 +49,7 @@
                         <span>
                             <translation-string pattern="Translatable#Attachments"/>:
                         </span>
-                        <for(attachment in state.attachments)>
+                        <for|attachment| of=state.attachments>
                             <file-entry attachment=attachment on-fileClicked("download", attachment)/>
                         </for>
                     </div>

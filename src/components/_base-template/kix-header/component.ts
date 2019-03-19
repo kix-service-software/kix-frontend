@@ -4,6 +4,9 @@ import { ContextMode, ComponentContent, ToastContent, OverlayType, KIXObjectType
 import { RoutingConfiguration } from '../../../core/browser/router';
 import { ReleaseContext } from '../../../core/browser/release';
 import { PersonalSettingsDialogContext } from '../../../core/browser';
+import { AuthenticationSocketClient } from '../../../core/browser/application/AuthenticationSocketClient';
+import { ApplicationEvent } from '../../../core/browser/application';
+import { EventService } from '../../../core/browser/event';
 
 class KIXHeaderComponent {
 
@@ -31,7 +34,11 @@ class KIXHeaderComponent {
         );
     }
 
-    public logout(): void {
+    public async logout(): Promise<void> {
+        EventService.getInstance().publish(
+            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Logout ...' }
+        );
+        await AuthenticationSocketClient.getInstance().logout();
         ClientStorageService.destroyToken();
     }
 

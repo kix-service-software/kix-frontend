@@ -1,15 +1,19 @@
 <div.label-value-groups-container>
     <if(state.groups && Array.isArray(state.groups) && !!state.groups.length)>
-        <for(group in state.groups | status-var=loop)>
-            <div.group key="label-value-group[]" style=component.getGroupStyle(loop.getIndex())
-                class={minimizable: (group.sub && Array.isArray(group.sub)) && (!(!group.sub.length))}
-                on-click('minimizeGroup', loop.getIndex())>
+        <for|group, index| of=state.groups>
+            <div.group
+                key="label-value-group[]"
+                style=component.getGroupStyle(index)
+                class={
+                                minimizable: group.sub && Array.isArray(group.sub) && !!group.sub.length
+                            }
+                on-click("minimizeGroup", index)>
                 <div.label title=group.label>
                     <span>${group.label}</span>
                 </div>
                 <if(group.value)>
                     <if(group.attachment)>
-                        <file-entry attachment=group.attachment on-fileClicked('fileClicked', loop.getIndex())/>
+                        <file-entry attachment=group.attachment on-fileClicked("fileClicked", index)/>
                     </if>
                     <else>
                         <div.value title=group.value>${group.value}</div>
@@ -17,8 +21,10 @@
                 </if>
                 <if(group.sub && Array.isArray(group.sub) && !!group.sub.length)>
                     <div.toggle>
-                        <div.line class={minimized: component.groupIsMinimized(loop.getIndex())}/>
-                        <if(component.groupIsMinimized(loop.getIndex()))>
+                        <div.line class={
+                            minimized: component.groupIsMinimized(index)
+                        }/>
+                        <if(component.groupIsMinimized(index))>
                             <span.kix-icon-sort-down.as-button/>
                         </if>
                         <else>
@@ -30,9 +36,9 @@
                     </div>
                 </if>
             </div>
-            <if(group.sub && Array.isArray(group.sub) && !!group.sub.length && !component.groupIsMinimized(loop.getIndex()))>
+            <if(group.sub && Array.isArray(group.sub) && !!group.sub.length && !component.groupIsMinimized(index))>
                 <div.sub>
-                    <label-value-group groups=group.sub level=(state.level + 1) on-fileClicked('fileClicked', null)/>
+                    <label-value-group groups=group.sub level=(state.level + 1) on-fileClicked("fileClicked", null)/>
                 </div>
             </if>
         </for>

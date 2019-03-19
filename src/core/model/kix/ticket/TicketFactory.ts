@@ -23,9 +23,6 @@ export class TicketFactory {
             ? ticket.History.map((th) => TicketHistoryFactory.create(th))
             : [];
 
-        newTicket.contact = contact || ticket.contact;
-        newTicket.customer = customer || ticket.customer;
-
         return newTicket;
     }
 

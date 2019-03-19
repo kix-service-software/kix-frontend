@@ -13,7 +13,7 @@ export { IdService } from './IdService';
 export { ILabelProvider } from './ILabelProvider';
 export { OverlayService } from './OverlayService';
 export { SearchOperator } from './SearchOperator';
-export { SocketListener } from './SocketListener';
+export { SocketClient } from './SocketClient';
 export { WidgetService } from './WidgetService';
 export { LabelService } from './LabelService';
 export { SearchOperatorUtil } from './SearchOperatorUtil';

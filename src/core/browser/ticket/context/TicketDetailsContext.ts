@@ -3,13 +3,14 @@ import { TicketDetailsContextConfiguration } from '..';
 import {
     ConfiguredWidget, WidgetConfiguration, WidgetType,
     Ticket, KIXObject, KIXObjectType, KIXObjectLoadingOptions, BreadcrumbInformation,
-    Article, ArticlesLoadingOptions, KIXObjectCache
+    Article, ArticlesLoadingOptions, ObjectUpdatedEventData
 } from '../../../model';
 import { TicketContext } from './TicketContext';
 import { KIXObjectService } from '../../kix';
 import { EventService } from '../../event';
 import { LabelService } from '../../LabelService';
 import { ApplicationEvent } from '../../application';
+import { BrowserUtil } from '../../BrowserUtil';
 
 export class TicketDetailsContext extends Context<TicketDetailsContextConfiguration> {
 
@@ -97,29 +98,22 @@ export class TicketDetailsContext extends Context<TicketDetailsContextConfigurat
     ): Promise<O> {
         let object;
 
-        let ticket;
+        let ticket: Ticket;
 
         if (!objectType) {
             objectType = KIXObjectType.TICKET;
         }
 
-        if (reload && objectType === KIXObjectType.TICKET) {
-            KIXObjectCache.removeObject(KIXObjectType.TICKET, Number(this.objectId));
-        }
-
-        if (!KIXObjectCache.isObjectCached(KIXObjectType.TICKET, Number(this.objectId))) {
-            ticket = await this.loadTicket(changedProperties);
-            reload = true;
-        } else {
-            ticket = KIXObjectCache.getObject(KIXObjectType.TICKET, Number(this.objectId));
-        }
+        ticket = await this.loadTicket(changedProperties);
 
         if (objectType === KIXObjectType.TICKET) {
             object = ticket;
         } else if (objectType === KIXObjectType.CUSTOMER && ticket) {
-            object = ticket.customer;
+            const customers = await KIXObjectService.loadObjects(KIXObjectType.CUSTOMER, [ticket.CustomerID]);
+            object = customers && customers.length ? customers[0] : null;
         } else if (objectType === KIXObjectType.CONTACT && ticket) {
-            object = ticket.contact;
+            const contacts = await KIXObjectService.loadObjects(KIXObjectType.CONTACT, [ticket.CustomerUserID]);
+            object = contacts && contacts.length ? contacts[0] : null;
         } else if (objectType === KIXObjectType.ARTICLE) {
             if (!ticket.Articles || !ticket.Articles.length) {
                 const articleLoadingOptions = new KIXObjectLoadingOptions(
@@ -151,7 +145,9 @@ export class TicketDetailsContext extends Context<TicketDetailsContextConfigurat
     }
 
     private async loadTicket(changedProperties: string[] = [], cache: boolean = true): Promise<Ticket> {
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: true, hint: 'Lade Ticket ...' });
+        EventService.getInstance().publish(
+            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load Ticket ...' }
+        );
 
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null, null, null,
@@ -160,6 +156,7 @@ export class TicketDetailsContext extends Context<TicketDetailsContextConfigurat
         );
 
         const ticketId = Number(this.objectId);
+        this.objectId = ticketId;
 
         const tickets = await KIXObjectService.loadObjects<Ticket>(
             KIXObjectType.TICKET, [ticketId], loadingOptions, null, cache
@@ -188,7 +185,7 @@ export class TicketDetailsContext extends Context<TicketDetailsContextConfigurat
             }
         }
 
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: 'Lade Ticket ...' });
+        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
 
         return ticket;
     }

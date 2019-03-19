@@ -19,12 +19,12 @@
                     </div>
                 </td>
             </if>
-            <for(column in component.getColumns() | status-var=loop)>
+            <for|column, index| of=component.getColumns()>
                 <table-cell-NEW
                     cell=component.getCell(column.getColumnId())
                     column=column
                     height=input.height
-                    level=(loop.getIndex() === 0 && input.level > 0 ? input.level : null)/>
+                    level=(index === 0 && input.level > 0 ? input.level : null)/>
             </for>
             <td.column-spacer/>
             <if(input.toggleEnabled)>
@@ -56,8 +56,9 @@
             columnLength=component.getFullColumnCount(input.selectionEnabled, input.toggleEnabled)/>
     </if>
     <if(state.children)>
-        <for(childRow in state.children)>
+        <for|childRow| of=state.children>
             <table-row
+                key=childRow.getRowId()
                 row=childRow
                 columnLength=input.columnLength
                 height=input.height

@@ -4,7 +4,7 @@ import {
 } from '../../../api';
 import {
     Role, KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, KIXObjectCache, ObjectIcon, Error
+    KIXObjectSpecificCreateOptions, ObjectIcon, Error
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
@@ -13,6 +13,8 @@ import { ConfigurationService } from '../ConfigurationService';
 import { LoggingService } from '../LoggingService';
 
 export class RoleService extends KIXObjectService {
+
+    protected objectType: KIXObjectType = KIXObjectType.ROLE;
 
     private static INSTANCE: RoleService;
 
@@ -44,7 +46,7 @@ export class RoleService extends KIXObjectService {
     }
 
     public async loadObjects<T>(
-        token: string, objectType: KIXObjectType, objectIds: Array<number | string>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<T[]> {
 
@@ -62,13 +64,13 @@ export class RoleService extends KIXObjectService {
     }
 
     public async createObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
         createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<number> {
         const createRole = new CreateRole(parameter);
 
         const response = await this.sendCreateRequest<CreateRoleResponse, CreateRoleRequest>(
-            token, this.RESOURCE_URI, new CreateRoleRequest(createRole)
+            token, clientRequestId, this.RESOURCE_URI, new CreateRoleRequest(createRole), this.objectType
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
@@ -78,19 +80,21 @@ export class RoleService extends KIXObjectService {
         if (icon) {
             icon.Object = 'Role';
             icon.ObjectID = response.RoleID;
-            await this.createIcons(token, icon);
+            await this.createIcons(token, clientRequestId, icon);
         }
 
         return response.RoleID;
     }
 
     public async updateObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
+        token: string, clientRequestId: string, objectType: KIXObjectType,
+        parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
         const updateRole = new UpdateRole(parameter);
 
         const response = await this.sendUpdateRequest<UpdateRoleResponse, UpdateRoleRequest>(
-            token, this.buildUri(this.RESOURCE_URI, objectId), new UpdateRoleRequest(updateRole)
+            token, clientRequestId, this.buildUri(this.RESOURCE_URI, objectId), new UpdateRoleRequest(updateRole),
+            this.objectType
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
@@ -100,22 +104,17 @@ export class RoleService extends KIXObjectService {
         if (icon) {
             icon.Object = 'Role';
             icon.ObjectID = response.RoleID;
-            await this.updateIcon(token, icon);
+            await this.updateIcon(token, clientRequestId, icon);
         }
 
         return response.RoleID;
     }
 
     public async getRoles(token: string): Promise<Role[]> {
-        if (!KIXObjectCache.hasObjectCache(KIXObjectType.ROLE)) {
-            const uri = this.buildUri(this.RESOURCE_URI);
-            const response = await this.getObjectByUri<RolesResponse>(token, uri, {
-                sort: 'Role.Name'
-            });
-            response.Role
-                .map((t) => new Role(t))
-                .forEach((t) => KIXObjectCache.addObject(KIXObjectType.ROLE, t));
-        }
-        return KIXObjectCache.getObjectCache(KIXObjectType.ROLE);
+        const uri = this.buildUri(this.RESOURCE_URI);
+        const response = await this.getObjectByUri<RolesResponse>(token, uri, {
+            sort: 'Role.Name'
+        });
+        return response.Role.map((t) => new Role(t));
     }
 }

@@ -1,7 +1,7 @@
 import { CustomerDetailsContextConfiguration } from '.';
 import {
     ConfiguredWidget, Context, WidgetType, WidgetConfiguration,
-    Customer, KIXObjectType, BreadcrumbInformation, KIXObject, KIXObjectLoadingOptions, KIXObjectCache
+    Customer, KIXObjectType, BreadcrumbInformation, KIXObject, KIXObjectLoadingOptions
 } from '../../../model';
 import { CustomerService } from '../CustomerService';
 import { CustomerContext } from './CustomerContext';
@@ -95,22 +95,7 @@ export class CustomerDetailsContext extends Context<CustomerDetailsContextConfig
     public async getObject<O extends KIXObject>(
         objectType: KIXObjectType = KIXObjectType.CUSTOMER, reload: boolean = false
     ): Promise<O> {
-        let object;
-
-        if (!objectType) {
-            objectType = KIXObjectType.CUSTOMER;
-        }
-
-        if (reload && objectType === KIXObjectType.CUSTOMER) {
-            KIXObjectCache.removeObject(KIXObjectType.CUSTOMER, this.objectId);
-        }
-
-        if (!KIXObjectCache.isObjectCached(KIXObjectType.CUSTOMER, this.objectId)) {
-            object = await this.loadCustomer();
-            reload = true;
-        } else {
-            object = KIXObjectCache.getObject(KIXObjectType.CUSTOMER, this.objectId);
-        }
+        const object = await this.loadCustomer() as any;
 
         if (reload) {
             this.listeners.forEach((l) => l.objectChanged(this.getObjectId(), object, KIXObjectType.CUSTOMER));
@@ -125,7 +110,9 @@ export class CustomerDetailsContext extends Context<CustomerDetailsContextConfig
         );
 
         const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: true, hint: 'Lade Kunde ...' });
+            EventService.getInstance().publish(
+                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load Customer ...' }
+            );
         }, 500);
 
         const customers = await KIXObjectService.loadObjects<Customer>(

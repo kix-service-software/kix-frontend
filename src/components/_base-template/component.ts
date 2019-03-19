@@ -1,21 +1,18 @@
 import { Context, ContextType, ContextDescriptor, KIXObjectType, ContextMode } from '../../core/model';
-import { ClientStorageService } from '../../core/browser/ClientStorageService';
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../core/browser/context';
 import { ComponentsService } from '../../core/browser/components';
-import { IdService, FormService } from '../../core/browser';
+import { IdService, FormService, ClientStorageService } from '../../core/browser';
 import { RoutingService } from '../../core/browser/router';
 import { HomeContext } from '../../core/browser/home';
 import { EventService } from '../../core/browser/event';
 import { ReleaseContext } from '../../core/browser/release';
 import { KIXModulesService } from '../../core/browser/modules';
-import { ObjectIconService } from '../../core/browser/icon';
 import { TranslationService } from '../../core/browser/i18n/TranslationService';
 import { ApplicationEvent } from '../../core/browser/application';
-import { ConfigItemClassService } from '../../core/browser/cmdb';
-import { FAQService } from '../../core/browser/faq';
-import { SysConfigService } from '../../core/browser/sysconfig';
 import { ObjectDataService } from '../../core/browser/ObjectDataService';
+import { AuthenticationSocketClient } from '../../core/browser/application/AuthenticationSocketClient';
+import { NotificationSocketClient } from '../../core/browser/notifications';
 
 declare var io: any;
 
@@ -37,6 +34,8 @@ class Component {
 
         await this.checkAuthentication();
 
+        NotificationSocketClient.getInstance();
+
         await KIXModulesService.getInstance().init();
 
         const modules = KIXModulesService.getInstance().getModules();
@@ -54,12 +53,6 @@ class Component {
 
         ObjectDataService.getInstance().setObjectData(this.state.objectData);
         await this.bootstrapServices();
-
-        await ObjectIconService.getInstance().init();
-        await TranslationService.getInstance().init();
-        await ConfigItemClassService.getInstance().init();
-        await FAQService.getInstance().init();
-        await SysConfigService.getInstance().init();
 
         this.setContext();
 
@@ -98,16 +91,9 @@ class Component {
     }
 
     private async checkAuthentication(): Promise<void> {
-        const token = ClientStorageService.getToken();
-        const socketUrl = ClientStorageService.getFrontendSocketUrl();
-
-        const configurationSocket = io.connect(socketUrl + "/kixmodules", {
-            query: "Token=" + token
-        });
-
-        configurationSocket.on('error', (error) => {
+        if (!AuthenticationSocketClient.getInstance().validateToken()) {
             window.location.replace('/auth');
-        });
+        }
     }
 
     private async bootstrapServices(): Promise<void> {

@@ -1,5 +1,5 @@
 <div.label-list>
-    <for(label in state.labels)>
+    <for|label| of=state.labels>
         <label-item label=label removeLabels=state.removeLabels on-removeLabel("removeLabel", label)/>
     </for>
 </div>

@@ -1,7 +1,7 @@
 import { KIXObjectService } from './KIXObjectService';
 import {
     Customer, CustomerFactory, CustomerSource, CustomerSourceAttributeMapping, CustomerProperty,
-    KIXObjectType, KIXObjectLoadingOptions, KIXObjectCache, CustomerCacheHandler, Error
+    KIXObjectType, KIXObjectLoadingOptions, Error
 } from '../../../model';
 import {
     CustomerResponse, CustomersResponse, CustomerSourcesResponse, CreateCustomer, CreateCustomerResponse,
@@ -9,7 +9,6 @@ import {
 } from '../../../api';
 import { SearchOperator } from '../../../browser';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
-import { ConfigurationService } from '../ConfigurationService';
 import { LoggingService } from '../LoggingService';
 
 export class CustomerService extends KIXObjectService {
@@ -27,32 +26,17 @@ export class CustomerService extends KIXObjectService {
 
     private sourcesCache: CustomerSource[] = [];
 
-    public kixObjectType: KIXObjectType = KIXObjectType.CUSTOMER;
+    public objectType: KIXObjectType = KIXObjectType.CUSTOMER;
 
     private customerCache: Customer[] = [];
 
     private constructor() {
         super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
-        KIXObjectCache.registerCacheHandler(new CustomerCacheHandler());
     }
 
     public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.CUSTOMER;
-    }
-
-    public async initCache(): Promise<void> {
-        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-        const token = serverConfig.BACKEND_API_TOKEN;
-
-        await this.loadCustomerSources(token);
-
-        const response = await this.getObjects<CustomersResponse>(token, null, null, null, {
-            include: "Contacts,Tickets,TicketStats"
-        });
-        response.Customer
-            .map((c) => CustomerFactory.create(c, this.sourcesCache.find((cs) => cs.ID === c.SourceID)))
-            .forEach((c) => KIXObjectCache.addObject(KIXObjectType.CUSTOMER, c));
     }
 
     public updateCache(customerId: string): void {
@@ -63,7 +47,8 @@ export class CustomerService extends KIXObjectService {
     }
 
     public async loadObjects<T>(
-        token: string, objectType: KIXObjectType, objectIds: string[], loadingOptions: KIXObjectLoadingOptions
+        token: string, clientRequestId: string, objectType: KIXObjectType,
+        objectIds: string[], loadingOptions: KIXObjectLoadingOptions
     ): Promise<T[]> {
         let customers = [];
 
@@ -75,34 +60,25 @@ export class CustomerService extends KIXObjectService {
             query.include = query.include + ",Contacts,Tickets,TicketStats";
         }
 
-        if (objectIds) {
+        if (objectIds && objectIds.length) {
             objectIds = objectIds.filter(
                 (id) => id && typeof id !== 'undefined' && id.toString() !== '' && id !== null
             );
 
-            const idsToLoad = KIXObjectCache.getIdsToLoad(KIXObjectType.CUSTOMER, objectIds);
+            const uri = this.buildUri(this.RESOURCE_URI, objectIds.join(','));
+            const response = await this.getObjectByUri<CustomersResponse | CustomerResponse>(token, uri, query);
 
-            if (idsToLoad.length) {
-                const uri = this.buildUri(this.RESOURCE_URI, idsToLoad.join(','));
-                const response = await this.getObjectByUri<CustomersResponse | CustomerResponse>(token, uri, query);
-
-                if (idsToLoad.length === 1) {
-                    const res = response as CustomerResponse;
-                    KIXObjectCache.addObject(
-                        KIXObjectType.CUSTOMER,
-                        CustomerFactory.create(
-                            res.Customer, this.sourcesCache.find((cs) => cs.ID === res.Customer.SourceID)
-                        )
-                    );
-                } else {
-                    const res = response as CustomersResponse;
-                    res.Customer.map(
-                        (c) => CustomerFactory.create(c, this.sourcesCache.find((cs) => cs.ID === c.SourceID))
-                    ).forEach((c) => KIXObjectCache.addObject(KIXObjectType.CUSTOMER, c));
-                }
+            if (objectIds.length === 1) {
+                const res = response as CustomerResponse;
+                customers = [CustomerFactory.create(
+                    res.Customer, this.sourcesCache.find((cs) => cs.ID === res.Customer.SourceID)
+                )];
+            } else {
+                const res = response as CustomersResponse;
+                customers = [...res.Customer.map(
+                    (c) => CustomerFactory.create(c, this.sourcesCache.find((cs) => cs.ID === c.SourceID))
+                )];
             }
-
-            customers = KIXObjectCache.getCachedObjects(KIXObjectType.CUSTOMER, objectIds);
         } else if (loadingOptions.searchValue) {
             for (let i = 0; i < this.sourcesCache.length; i++) {
                 const source = this.sourcesCache[i];
@@ -160,7 +136,7 @@ export class CustomerService extends KIXObjectService {
     }
 
     public async createObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>
+        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, any]>
     ): Promise<string> {
         await this.loadCustomerSources(token);
 
@@ -170,7 +146,8 @@ export class CustomerService extends KIXObjectService {
         const createCustomer = new CreateCustomer(parameter);
 
         const response = await this.sendCreateRequest<CreateCustomerResponse, CreateCustomerRequest>(
-            token, this.RESOURCE_URI, new CreateCustomerRequest(sourceID, createCustomer)
+            token, clientRequestId, this.RESOURCE_URI, new CreateCustomerRequest(sourceID, createCustomer),
+            this.objectType
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
@@ -180,7 +157,8 @@ export class CustomerService extends KIXObjectService {
     }
 
     public async updateObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
+        token: string, clientRequestId: string, objectType: KIXObjectType,
+        parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
         const updateCustomer = new UpdateCustomer(
             null,
@@ -195,7 +173,8 @@ export class CustomerService extends KIXObjectService {
         );
 
         const response = await this.sendUpdateRequest<UpdateCustomerResponse, UpdateCustomerRequest>(
-            token, this.buildUri(this.RESOURCE_URI, objectId), new UpdateCustomerRequest(updateCustomer)
+            token, clientRequestId, this.buildUri(this.RESOURCE_URI, objectId),
+            new UpdateCustomerRequest(updateCustomer), this.objectType
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);

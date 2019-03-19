@@ -1,6 +1,6 @@
 import {
     Context, ConfiguredWidget, WidgetConfiguration, WidgetType, BreadcrumbInformation, KIXObject,
-    KIXObjectType, KIXObjectCache, TicketState
+    KIXObjectType, TicketState
 } from "../../../../../model";
 import { TicketStateDetailsContextConfiguration } from "./TicketStateDetailsContextConfiguration";
 import { AdminContext } from "../../../../admin";
@@ -98,28 +98,20 @@ export class TicketStateDetailsContext extends Context<TicketStateDetailsContext
         objectType: KIXObjectType = KIXObjectType.TICKET_STATE, reload: boolean = false,
         changedProperties: string[] = []
     ): Promise<O> {
-        let ticketState;
+        const object = await this.loadTicketState(changedProperties) as any;
 
-        if (!objectType) {
-            objectType = KIXObjectType.TICKET_STATE;
+        if (reload) {
+            this.listeners.forEach(
+                (l) => l.objectChanged(Number(this.objectId), object, KIXObjectType.TICKET_STATE, changedProperties)
+            );
         }
 
-        if (reload && objectType === KIXObjectType.TICKET_STATE) {
-            KIXObjectCache.removeObject(KIXObjectType.TICKET_STATE, Number(this.objectId));
-        }
-
-        if (!KIXObjectCache.isObjectCached(KIXObjectType.TICKET_STATE, Number(this.objectId))) {
-            ticketState = await this.loadTicketState(changedProperties);
-        } else {
-            ticketState = KIXObjectCache.getObject(KIXObjectType.TICKET_STATE, Number(this.objectId));
-        }
-
-        return ticketState;
+        return object;
     }
 
     private async loadTicketState(changedProperties: string[] = [], cache: boolean = true): Promise<TicketState> {
         EventService.getInstance().publish(
-            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Lade Ticketstatus ...' }
+            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load Ticket State ...' }
         );
 
         const ticketStateId = Number(this.objectId);
@@ -135,11 +127,6 @@ export class TicketStateDetailsContext extends Context<TicketStateDetailsContext
         if (ticketStates && ticketStates.length) {
             ticketState = ticketStates[0];
             this.objectId = ticketState.ID;
-            this.listeners.forEach(
-                (l) => l.objectChanged(
-                    Number(this.objectId), ticketState, KIXObjectType.TICKET_STATE, changedProperties
-                )
-            );
         }
 
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });

@@ -1,13 +1,11 @@
 import {
     FAQCategory, FAQArticleProperty, FAQArticle, FAQArticleFactory,
-    Attachment, FAQArticleAttachmentLoadingOptions, CreateFAQVoteOptions, FAQCacheHandler
+    Attachment, FAQArticleAttachmentLoadingOptions, CreateFAQVoteOptions
 } from "../../../model/kix/faq";
 import { KIXObjectService } from "./KIXObjectService";
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions,
-    KIXObjectCache,
-    Error
+    KIXObjectSpecificCreateOptions, Error
 } from "../../../model";
 import {
     FAQCategoriesResponse, FAQCategoryResponse, FAQArticlesResponse, FAQArticleResponse, CreateFAQArticle,
@@ -19,6 +17,8 @@ import { KIXObjectServiceRegistry } from "../../KIXObjectServiceRegistry";
 import { LoggingService } from "../LoggingService";
 
 export class FAQService extends KIXObjectService {
+
+    protected objectType: KIXObjectType = KIXObjectType.FAQ_ARTICLE;
 
     private static INSTANCE: FAQService;
 
@@ -32,7 +32,6 @@ export class FAQService extends KIXObjectService {
     private constructor() {
         super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
-        KIXObjectCache.registerCacheHandler(new FAQCacheHandler());
     }
 
     public isServiceFor(type: KIXObjectType): boolean {
@@ -47,7 +46,7 @@ export class FAQService extends KIXObjectService {
     protected RESOURCE_URI: string = 'faq';
 
     public async loadObjects<T>(
-        token: string, objectType: KIXObjectType, objectIds: Array<number | string>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<T[]> {
         let objects = [];
@@ -140,14 +139,14 @@ export class FAQService extends KIXObjectService {
     }
 
     public createObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, string]>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>,
         createOptions: KIXObjectSpecificCreateOptions
     ): Promise<string | number> {
         switch (objectType) {
             case KIXObjectType.FAQ_ARTICLE:
-                return this.createFAQArticle(token, parameter);
+                return this.createFAQArticle(token, clientRequestId, parameter);
             case KIXObjectType.FAQ_VOTE:
-                return this.createFAQVote(token, parameter, (createOptions as CreateFAQVoteOptions));
+                return this.createFAQVote(token, clientRequestId, parameter, (createOptions as CreateFAQVoteOptions));
             default:
                 const error = 'No create option for object type ' + objectType;
                 throw error;
@@ -155,7 +154,8 @@ export class FAQService extends KIXObjectService {
     }
 
     public async updateObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number
+        token: string, clientRequestId: string, objectType: KIXObjectType,
+        parameter: Array<[string, any]>, objectId: number
     ): Promise<string | number> {
 
         const updateFAQArticle = new UpdateFAQArticle(
@@ -163,19 +163,24 @@ export class FAQService extends KIXObjectService {
         );
 
         const response = await this.sendUpdateRequest<UpdateFAQArticleResponse, UpdateFAQArticleRequest>(
-            token, this.buildUri(this.RESOURCE_URI, 'articles', objectId), new UpdateFAQArticleRequest(updateFAQArticle)
+            token, clientRequestId, this.buildUri(this.RESOURCE_URI, 'articles', objectId),
+            new UpdateFAQArticleRequest(updateFAQArticle), this.objectType
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
         });
 
         const attachments = parameter.find((p) => p[0] === FAQArticleProperty.ATTACHMENTS);
-        await this.updateAttachments(token, objectId, attachments && attachments.length ? attachments[1] : []);
+        await this.updateAttachments(
+            token, clientRequestId, objectId, attachments && attachments.length ? attachments[1] : []
+        );
 
         return response.FAQArticleID;
     }
 
-    private async updateAttachments(token: string, objectId: number, attachments: Attachment[]): Promise<void> {
+    private async updateAttachments(
+        token: string, clientRequestId: string, objectId: number, attachments: Attachment[]
+    ): Promise<void> {
         const uri = this.buildUri(this.RESOURCE_URI, 'articles', objectId, 'attachments');
 
         const attachmentsResponse = await this.getObjectByUri<FAQArticleAttachmentsResponse>(token, uri);
@@ -187,14 +192,14 @@ export class FAQService extends KIXObjectService {
 
         for (const attachment of deletableAttachments) {
             const attachmentUri = this.buildUri(this.RESOURCE_URI, 'articles', objectId, 'attachments', attachment.ID);
-            await this.sendDeleteRequest(token, attachmentUri);
+            await this.sendDeleteRequest(token, clientRequestId, attachmentUri, this.objectType);
         }
 
         const newAttachments = attachments ? attachments.filter((a) => !a.ID) : [];
         for (const attachment of newAttachments) {
             await this.sendCreateRequest<CreateFAQArticleAttachmentResponse, CreateFAQArticleAttachmentRequest>(
-                token, this.buildUri(this.RESOURCE_URI, 'articles', objectId, 'attachments'),
-                new CreateFAQArticleAttachmentRequest(attachment)
+                token, clientRequestId, this.buildUri(this.RESOURCE_URI, 'articles', objectId, 'attachments'),
+                new CreateFAQArticleAttachmentRequest(attachment), this.objectType
             ).catch((error: Error) => {
                 LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
                 throw new Error(error.Code, error.Message);
@@ -202,12 +207,14 @@ export class FAQService extends KIXObjectService {
         }
     }
 
-    private async createFAQArticle(token: string, parameter: Array<[string, any]>): Promise<number> {
+    private async createFAQArticle(
+        token: string, clientRequestId: string, parameter: Array<[string, any]>
+    ): Promise<number> {
         const createFAQArticle = new CreateFAQArticle(parameter.filter((p) => p[0] !== FAQArticleProperty.LINK));
 
         const uri = this.buildUri(this.RESOURCE_URI, 'articles');
         const response = await this.sendCreateRequest<CreateFAQArticleResponse, CreateFAQArticleRequest>(
-            token, uri, new CreateFAQArticleRequest(createFAQArticle)
+            token, clientRequestId, uri, new CreateFAQArticleRequest(createFAQArticle), this.objectType
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
@@ -215,18 +222,20 @@ export class FAQService extends KIXObjectService {
 
         const faqId = response.FAQArticleID;
 
-        await this.createLinks(token, faqId, this.getParameterValue(parameter, FAQArticleProperty.LINK));
+        await this.createLinks(
+            token, clientRequestId, faqId, this.getParameterValue(parameter, FAQArticleProperty.LINK)
+        );
 
         return faqId;
     }
 
     private async createFAQVote(
-        token: string, parameter: Array<[string, any]>, createOptions: CreateFAQVoteOptions
+        token: string, clientRequestId: string, parameter: Array<[string, any]>, createOptions: CreateFAQVoteOptions
     ): Promise<number> {
         const createFAQVote = new CreateFAQVote(parameter);
         const uri = this.buildUri(this.RESOURCE_URI, 'articles', createOptions.faqArticleId, 'votes');
         const response = await this.sendCreateRequest<CreateFAQVoteResponse, CreateFAQVoteRequest>(
-            token, uri, new CreateFAQVoteRequest(createFAQVote)
+            token, clientRequestId, uri, new CreateFAQVoteRequest(createFAQVote), this.objectType
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);

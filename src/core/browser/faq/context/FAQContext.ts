@@ -71,7 +71,7 @@ export class FAQContext extends Context<FAQContextConfiguration> {
 
         const timeout = window.setTimeout(() => {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: `Lade FAQ Artikel ...`
+                loading: true, hint: `Translatable#Load FAQ Articles ...`
             });
         }, 500);
 

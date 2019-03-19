@@ -10,7 +10,7 @@
         <span>-</span>
         <select.input-style.time-input required on-change('timeChanged') readonly=state.field.readonly
             disabled=state.field.readonly>
-            <for(time in state.times)>
+            <for|time| of=state.times>
                 <option selected=(state.selectedTime === time)>${time}</option>
             </for>
         </select>

@@ -16,7 +16,9 @@ class Component {
 
     public async onMount(): Promise<void> {
         const objectData = ObjectDataService.getInstance().getObjectData();
-        this.state.currentUserLogin = objectData.currentUser.UserLogin;
+        if (objectData && objectData.currentUser) {
+            this.state.currentUserLogin = objectData.currentUser.UserLogin;
+        }
 
         if (!this.state.releaseInfo) {
             this.state.releaseInfo = objectData.releaseInfo;
@@ -30,7 +32,8 @@ class Component {
     }
 
     private getBuildNumber(releaseInfo: ReleaseInfo): string {
-        return `(Build: ${releaseInfo.buildNumber.toString()}.${releaseInfo.backendSystemInfo.BuildNumber})`;
+        const backendBuildNumber = releaseInfo.backendSystemInfo ? releaseInfo.backendSystemInfo.BuildNumber : '';
+        return `(Build: ${releaseInfo.buildNumber.toString()}.${backendBuildNumber})`;
     }
 }
 

@@ -1,12 +1,12 @@
 import { UsersResponse, UserResponse, } from '../../../api';
 import {
     User, KIXObjectType, Error, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    UserPreference, PreferencesLoadingOptions, KIXObjectSpecificCreateOptions, KIXObjectCache
+    UserPreference, PreferencesLoadingOptions, KIXObjectSpecificCreateOptions
 } from '../../../model';
 import { KIXObjectService } from './KIXObjectService';
 import { UserPreferencesResponse, SetPreference, SetPreferenceResponse, SetPreferenceRequest } from '../../../api/user';
 import { LoggingService } from '../LoggingService';
-import { SetPreferenceOptions, UserCacheHandler } from '../../../model/kix/user';
+import { SetPreferenceOptions } from '../../../model/kix/user';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 
 export class UserService extends KIXObjectService {
@@ -23,14 +23,13 @@ export class UserService extends KIXObjectService {
     private constructor() {
         super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
-        KIXObjectCache.registerCacheHandler(new UserCacheHandler());
     }
 
     protected RESOURCE_URI: string = "users";
     private USER_RESOURCE_URI = "user";
     protected SUB_RESOURCE_URI: string = 'preferences';
 
-    public kixObjectType: KIXObjectType = KIXObjectType.USER;
+    public objectType: KIXObjectType = KIXObjectType.USER;
 
     public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.USER
@@ -38,7 +37,7 @@ export class UserService extends KIXObjectService {
     }
 
     public async loadObjects<T>(
-        token: string, objectType: KIXObjectType, objectIds: Array<number | string>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<T[]> {
 
@@ -80,21 +79,18 @@ export class UserService extends KIXObjectService {
     }
 
     public async getUserByToken(token: string, cache: boolean = true): Promise<User> {
-        if (!KIXObjectCache.hasObjectCache(KIXObjectType.CURRENT_USER) || !cache) {
-            const query = {
-                include: 'Tickets,Preferences'
-            };
+        const query = {
+            include: 'Tickets,Preferences'
+        };
 
-            const response = await this.httpService.get<UserResponse>(this.USER_RESOURCE_URI, query, token);
-
-            KIXObjectCache.addObject(KIXObjectType.CURRENT_USER, new User(response.User));
-        }
-
-        return KIXObjectCache.getObjectCache<User>(KIXObjectType.CURRENT_USER)[0];
+        const response = await this.httpService.get<UserResponse>(
+            this.USER_RESOURCE_URI, query, token, null
+        );
+        return new User(response.User);
     }
 
     public async createObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, string]>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>,
         createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<string | number> {
         if (objectType === KIXObjectType.USER) {
@@ -103,9 +99,9 @@ export class UserService extends KIXObjectService {
             const options = createOptions as SetPreferenceOptions;
             const createPreference = new SetPreference(parameter);
             const response = await this.sendCreateRequest<SetPreferenceResponse, SetPreferenceRequest>(
-                token,
+                token, clientRequestId,
                 this.buildUri(this.RESOURCE_URI, options.userId, this.SUB_RESOURCE_URI),
-                new SetPreferenceRequest(createPreference)
+                new SetPreferenceRequest(createPreference), objectType
             ).catch((error: Error) => {
                 LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
                 throw new Error(error.Code, error.Message);
@@ -115,7 +111,8 @@ export class UserService extends KIXObjectService {
     }
 
     public async updateObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string,
+        token: string, clientRequestId: string, objectType: KIXObjectType,
+        parameter: Array<[string, any]>, objectId: number | string,
         updateOptions?: KIXObjectSpecificCreateOptions
     ): Promise<string | number> {
         if (objectType === KIXObjectType.USER) {
@@ -124,9 +121,9 @@ export class UserService extends KIXObjectService {
             const options = updateOptions as SetPreferenceOptions;
             const updatePreference = new SetPreference(parameter);
             const response = await this.sendUpdateRequest<SetPreferenceResponse, SetPreferenceRequest>(
-                token,
+                token, clientRequestId,
                 this.buildUri(this.RESOURCE_URI, options.userId, this.SUB_RESOURCE_URI, objectId),
-                new SetPreferenceRequest(updatePreference)
+                new SetPreferenceRequest(updatePreference), objectType
             ).catch((error: Error) => {
                 LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
                 throw new Error(error.Code, error.Message);
@@ -135,13 +132,15 @@ export class UserService extends KIXObjectService {
         }
     }
 
-    public async setPreferences(token: string, parameter: Array<[string, any]>, userId: number): Promise<void> {
+    public async setPreferences(
+        token: string, clientRequestId: string, parameter: Array<[string, any]>, userId: number
+    ): Promise<void> {
         const currentPreferences = await this.getPreferences(token, null, new PreferencesLoadingOptions(userId));
         const errors: Error[] = [];
         for (const param of parameter) {
             if (currentPreferences.some((p) => p.ID === param[0])) {
                 await this.updateObject(
-                    token, KIXObjectType.USER_PREFERENCE,
+                    token, clientRequestId, KIXObjectType.USER_PREFERENCE,
                     [
                         ['Value', param[1]]
                     ],
@@ -152,7 +151,7 @@ export class UserService extends KIXObjectService {
                 });
             } else {
                 await this.createObject(
-                    token, KIXObjectType.USER_PREFERENCE,
+                    token, clientRequestId, KIXObjectType.USER_PREFERENCE,
                     [
                         ['ID', param[0]],
                         ['Value', param[1]]

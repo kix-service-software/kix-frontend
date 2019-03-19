@@ -4,7 +4,7 @@ import {
     FilterCriteria, FilterDataType, FilterType, KIXObjectPropertyFilter, TableFilterCriteria, KIXObjectType, SortOrder
 } from '../../core/model';
 import {
-    SearchOperator, ToggleOptions, TableHeaderHeight, TableRowHeight, TableConfiguration, DefaultColumnConfiguration
+    SearchOperator, ToggleOptions, TableConfiguration, DefaultColumnConfiguration
 } from '../../core/browser';
 import { HomeContextConfiguration, HomeContext } from '../../core/browser/home';
 import { TicketProperty } from '../../core/model/';

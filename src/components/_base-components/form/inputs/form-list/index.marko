@@ -21,7 +21,7 @@
         </if>
         <else>
             <div.selected-nodes key=("form-list-selected-nodes-" + state.listId) on-click("toggleList", false)>
-                <for(node in state.selectedNodes)>
+                <for|node| of=state.selectedNodes>
                     <div.selected-node title=node.label key=("form-list-selected-node-" + state.listId + "[]")>
                         <icon icon=node.icon showUnknown=true/>
                         <span.item-text>${node.label}</span>
@@ -37,7 +37,7 @@
         </else>
         <div.form-input-control-list>
             <div.input-action-list>
-                <for(action in state.actions)>
+                <for|action| of=state.actions>
                     <label-item label=action.label removeLabels=false translatable=true on-labelClicked("actionClicked", action)/>
                 </for>
             </div>
@@ -55,7 +55,7 @@
                 <if(state.asAutocomplete || state.nodes.length > 7)>
                     <input.input-style
                         type="text"
-                        placeholder=(state.asAutocomplete ? "Suchbegriff eingeben" : "Filtern in Liste")
+                        placeholder=(state.asAutocomplete ? "Suchbegriff eingeben" : "Filtern| of=Liste")
                         value=(state.asAutocomplete ? state.autocompleteSearchValue : state.filterValue)
                         key=("form-list-input-" + state.listId)
                         on-keydown("keyDown")

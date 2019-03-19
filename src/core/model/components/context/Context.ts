@@ -6,6 +6,7 @@ import { KIXObject, KIXObjectType } from '../..';
 import { ObjectIcon } from '../../kix';
 import { ContextDescriptor } from './ContextDescriptor';
 import { BreadcrumbInformation } from '../router';
+import { ObjectUpdatedEventData } from '../../ObjectUpdatedEventData';
 
 export abstract class Context<T extends ContextConfiguration = ContextConfiguration> {
 

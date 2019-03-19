@@ -1,7 +1,8 @@
-import { AgentSocketListener } from './AgentSocketListener';
+import { AgentSocketClient } from './AgentSocketClient';
 import { UserType } from '../../model/kix/user/UserType';
-import { PersonalSetting, KIXObjectType, Error, User, KIXObjectCache } from '../../model';
-import { KIXObjectService, ServiceMethod } from '../kix';
+import { PersonalSetting, KIXObjectType, User } from '../../model';
+import { KIXObjectService } from '../kix';
+import { AuthenticationSocketClient } from './AuthenticationSocketClient';
 
 export class AgentService extends KIXObjectService {
 
@@ -24,25 +25,21 @@ export class AgentService extends KIXObjectService {
     }
 
     public async login(userName: string, password: string, userType: UserType = UserType.AGENT): Promise<boolean> {
-        return await AgentSocketListener.getInstance().login(userName, password, userType);
+        return await AuthenticationSocketClient.getInstance().login(userName, password, userType);
     }
 
     public async getPersonalSettings(): Promise<PersonalSetting[]> {
-        return await AgentSocketListener.getInstance().getPersonalSettings();
+        return await AgentSocketClient.getInstance().getPersonalSettings();
     }
 
     public async getCurrentUser(cache: boolean = true): Promise<User> {
-        if (!KIXObjectCache.hasObjectCache(KIXObjectType.CURRENT_USER)) {
-            const currentUser = await AgentSocketListener.getInstance().getCurrentUser(cache);
-            KIXObjectCache.addObject(KIXObjectType.CURRENT_USER, currentUser);
-        }
-        return KIXObjectCache.getObjectCache<User>(KIXObjectType.CURRENT_USER)[0];
+        const currentUser = await AgentSocketClient.getInstance().getCurrentUser(cache);
+        return currentUser;
     }
 
     public async setPreferencesByForm(formId: string): Promise<void> {
         const parameter: Array<[string, any]> = await this.prepareFormFields(formId);
-        await AgentSocketListener.getInstance().setPreferences(parameter);
-        KIXObjectCache.updateCache(KIXObjectType.CURRENT_USER, null, ServiceMethod.UPDATE);
+        await AgentSocketClient.getInstance().setPreferences(parameter);
     }
 
 }

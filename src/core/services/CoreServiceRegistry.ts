@@ -3,8 +3,12 @@ import {
     GeneralCatalogService, DynamicFieldService, LinkService, CMDBService, ObjectDefinitionService,
     TextModuleService, UserService, ValidObjectService, TicketTypeService, ObjectIconService,
     TicketStateService, TicketPriorityService, ConfigItemClassService, TranslationService,
-    ChannelService, RoleService, SlaService, SystemAddressService
+    ChannelService
 } from "./impl";
+import { CacheService } from "../cache";
+import { SlaService } from "./impl/api/SlaService";
+import { SystemAddressService } from "./impl/api/SystemAddressService";
+import { RoleService } from "./impl/api/RoleService";
 
 export class CoreServiceRegistry {
 
@@ -25,34 +29,33 @@ export class CoreServiceRegistry {
     public static async registerCoreServices(): Promise<void> {
         const registry = CoreServiceRegistry.getInstance();
         if (!registry.initialized) {
-            const cachePromises: Array<Promise<any>> = [];
 
-            cachePromises.push(TranslationService.getInstance().initCache());
-            cachePromises.push(ChannelService.getInstance().initCache());
-            cachePromises.push(CMDBService.getInstance().initCache());
-            cachePromises.push(ConfigItemClassService.getInstance().initCache());
-            cachePromises.push(ContactService.getInstance().initCache());
-            cachePromises.push(CustomerService.getInstance().initCache());
-            cachePromises.push(DynamicFieldService.getInstance().initCache());
-            cachePromises.push(FAQService.getInstance().initCache());
-            cachePromises.push(GeneralCatalogService.getInstance().initCache());
-            cachePromises.push(LinkService.getInstance().initCache());
-            cachePromises.push(ObjectDefinitionService.getInstance().initCache());
-            cachePromises.push(ServiceService.getInstance().initCache());
-            cachePromises.push(SlaService.getInstance().initCache());
-            cachePromises.push(SysConfigService.getInstance().initCache());
-            cachePromises.push(TextModuleService.getInstance().initCache());
-            cachePromises.push(TicketService.getInstance().initCache());
-            cachePromises.push(TicketTypeService.getInstance().initCache());
-            cachePromises.push(TicketPriorityService.getInstance().initCache());
-            cachePromises.push(TicketStateService.getInstance().initCache());
-            cachePromises.push(UserService.getInstance().initCache());
-            cachePromises.push(RoleService.getInstance().initCache());
-            cachePromises.push(ValidObjectService.getInstance().initCache());
-            cachePromises.push(ObjectIconService.getInstance().initCache());
-            cachePromises.push(SystemAddressService.getInstance().initCache());
+            await CacheService.getInstance().init();
 
-            await Promise.all(cachePromises);
+            TranslationService.getInstance();
+            ChannelService.getInstance();
+            CMDBService.getInstance();
+            ConfigItemClassService.getInstance();
+            ContactService.getInstance();
+            CustomerService.getInstance();
+            DynamicFieldService.getInstance();
+            FAQService.getInstance();
+            GeneralCatalogService.getInstance();
+            LinkService.getInstance();
+            ObjectDefinitionService.getInstance();
+            ServiceService.getInstance();
+            SlaService.getInstance();
+            SysConfigService.getInstance();
+            TextModuleService.getInstance();
+            TicketService.getInstance();
+            TicketTypeService.getInstance();
+            TicketPriorityService.getInstance();
+            TicketStateService.getInstance();
+            UserService.getInstance();
+            ValidObjectService.getInstance();
+            ObjectIconService.getInstance();
+            SystemAddressService.getInstance();
+            RoleService.getInstance();
 
             registry.initialized = true;
         }

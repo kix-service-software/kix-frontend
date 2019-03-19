@@ -3,7 +3,7 @@ import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 import { ConfigurationService, SysConfigService } from '../../src/core/services';
 import { SysConfigItem, KIXObjectType } from '../../src/core/model';
-import { SysConfigItemsResponse } from '../../src/core/api';
+import { SysConfigItemResponse } from '../../src/core/api';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -36,7 +36,7 @@ describe('SysConfigIteme Service', () => {
         });
 
         it('Should return a sysConfigItem.', async () => {
-            const sysConfigItems = await SysConfigService.getInstance().loadObjects<SysConfigItem>('token', KIXObjectType.SYS_CONFIG_ITEM, [sysConfigKey], null, null);
+            const sysConfigItems = await SysConfigService.getInstance().loadObjects<SysConfigItem>('token', null, KIXObjectType.SYS_CONFIG_ITEM, [sysConfigKey], null, null);
             expect(sysConfigItems).exist;
             expect(sysConfigItems).an('array');
             expect(sysConfigItems.length).equals(1);
@@ -46,10 +46,10 @@ describe('SysConfigIteme Service', () => {
 
 });
 
-function buildSysConfigItemsResponse(id: string): SysConfigItemsResponse {
-    const response = new SysConfigItemsResponse();
+function buildSysConfigItemsResponse(id: string): SysConfigItemResponse {
+    const response = new SysConfigItemResponse();
     const item = new SysConfigItem();
     item.ID = id;
-    response.SysConfigItem = [item];
+    response.SysConfigItem = item;
     return response;
 }

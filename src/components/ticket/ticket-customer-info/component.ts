@@ -6,14 +6,19 @@ class CustomerInfoComponent {
 
     private state: ComponentState;
 
+    private customerId: string = null;
+    private groups: string[] = null;
+
     public onCreate(input: any): void {
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
-        this.state.customerId = input.customerId;
-        this.state.groups = input.groups;
-        this.loadCustomer();
+        if (this.customerId !== input.customerId) {
+            this.customerId = input.customerId;
+            this.groups = input.groups;
+            this.loadCustomer();
+        }
     }
 
     public onMount(): void {
@@ -24,21 +29,21 @@ class CustomerInfoComponent {
         this.state.error = null;
         this.state.customer = null;
 
-        if (this.state.customerId) {
-            const customers = await KIXObjectService.loadObjects<Customer>(
-                KIXObjectType.CUSTOMER, [this.state.customerId]
-            ).catch((error) => {
-                this.state.error = error;
-            });
+        if (this.customerId) {
+            const customers = await KIXObjectService.loadObjects<Customer>(KIXObjectType.CUSTOMER, [this.customerId])
+                .catch((error) => {
+                    this.state.error = error;
+                });
 
             if (customers && customers.length) {
-                this.state.customer = customers[0];
-                this.state.info = this.state.customer.getCustomerInfoData();
-                if (this.state.groups && this.state.groups.length) {
-                    this.state.info = this.state.info.filter(
-                        (g) => this.state.groups.some((group) => group === g[0])
+                let info = this.state.customer.getCustomerInfoData();
+                if (this.groups && this.groups.length) {
+                    info = this.state.info.filter(
+                        (g) => this.groups.some((group) => group === g[0])
                     );
                 }
+                this.state.customer = customers[0];
+                this.state.info = info;
             }
         }
     }

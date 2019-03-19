@@ -8,7 +8,6 @@ export { PersonalSetting } from './PersonalSetting';
 export { IPersonalSettingsExtension } from './IPersonalSettingsExtension';
 export { PreferencesLoadingOptions } from './PreferencesLoadingOptions';
 export { SetPreferenceOptions } from './SetPreferenceOptions';
-export { UserCacheHandler } from './UserCacheHandler';
 export { Role } from './Role';
 export { RoleProperty } from './RoleProperty';
 

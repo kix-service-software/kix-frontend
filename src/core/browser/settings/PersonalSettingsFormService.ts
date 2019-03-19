@@ -1,7 +1,6 @@
 import { KIXObjectFormService } from "../kix/KIXObjectFormService";
 import { KIXObjectType } from "../../model";
-import { ContextService } from "../context";
-import { AgentService } from "../application";
+import { AgentService } from "../application/AgentService";
 
 export class PersonalSettingsFormService extends KIXObjectFormService {
 

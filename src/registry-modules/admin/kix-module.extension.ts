@@ -1,6 +1,6 @@
 import { IKIXModuleExtension } from "../../core/extensions";
 
-class KIXModuleExtionsion implements IKIXModuleExtension {
+class KIXModuleExtension implements IKIXModuleExtension {
 
     public initComponentId: string = 'admin-module-component';
 
@@ -21,5 +21,5 @@ class KIXModuleExtionsion implements IKIXModuleExtension {
 }
 
 module.exports = (data, host, options) => {
-    return new KIXModuleExtionsion();
+    return new KIXModuleExtension();
 };

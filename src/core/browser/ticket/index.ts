@@ -9,7 +9,7 @@ export { TicketBrowserFactory } from './TicketBrowserFactory';
 export { TicketHistoryLabelProvider } from './TicketHistoryLabelProvider';
 export { TicketLabelProvider } from './TicketLabelProvider';
 export { TicketService } from './TicketService';
-export { TicketSocketListener } from './TicketSocketListener';
+export { TicketSocketClient } from './TicketSocketClient';
 export { TicketFormService } from './TicketFormService';
 export { ArticleBrowserFactory } from './ArticleBrowserFactory';
 export { TicketSearchDefinition } from './TicketSearchDefinition';

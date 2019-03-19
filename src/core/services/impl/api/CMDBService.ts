@@ -17,6 +17,8 @@ import { LoggingService } from "../LoggingService";
 
 export class CMDBService extends KIXObjectService {
 
+    protected objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM;
+
     private static INSTANCE: CMDBService;
 
     public static getInstance(): CMDBService {
@@ -50,14 +52,14 @@ export class CMDBService extends KIXObjectService {
         ]);
 
         const catalogItems = await this.loadObjects<GeneralCatalogItem>(
-            token, KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions, null
+            token, null, KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions, null
         );
 
         return catalogItems;
     }
 
     public async loadObjects<T>(
-        token: string, objectType: KIXObjectType, objectIds: Array<number | string>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<T[]> {
         let objects = [];
@@ -215,7 +217,7 @@ export class CMDBService extends KIXObjectService {
     }
 
     public async createObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, string]>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>,
         createOptions: KIXObjectSpecificCreateOptions
     ): Promise<string | number> {
         if (objectType === KIXObjectType.CONFIG_ITEM_VERSION) {
@@ -224,14 +226,15 @@ export class CMDBService extends KIXObjectService {
             const uri = this.buildUri(this.RESOURCE_URI, 'configitems', options.configItemId, this.SUB_RESOURCE_URI);
             const response
                 = await this.sendCreateRequest<CreateConfigItemVersionResponse, CreateConfigItemVersionRequest>(
-                    token, uri, new CreateConfigItemVersionRequest(createConfigItemVersion)
+                    token, clientRequestId, uri, new CreateConfigItemVersionRequest(createConfigItemVersion),
+                    this.objectType
                 );
             return response.VersionID;
         } else {
             const createConfigItem = new CreateConfigItem(parameter.filter((p) => p[0] !== ConfigItemProperty.LINKS));
             const uri = this.buildUri(this.RESOURCE_URI, 'configitems');
             const response = await this.sendCreateRequest<CreateConfigItemResponse, CreateConfigItemRequest>(
-                token, uri, new CreateConfigItemRequest(createConfigItem)
+                token, clientRequestId, uri, new CreateConfigItemRequest(createConfigItem), this.objectType
             ).catch((error: Error) => {
                 LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
                 throw new Error(error.Code, error.Message);
@@ -240,7 +243,7 @@ export class CMDBService extends KIXObjectService {
             const configItemId = response.ConfigItemID;
 
             await this.createLinks(
-                token, Number(configItemId),
+                token, clientRequestId, Number(configItemId),
                 this.getParameterValue(parameter, ConfigItemProperty.LINKS)
             );
 
@@ -249,7 +252,8 @@ export class CMDBService extends KIXObjectService {
     }
 
     public async updateObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
+        token: string, clientRequestId: string, objectType: KIXObjectType,
+        parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
         throw new Error('', "Method not implemented.");
     }

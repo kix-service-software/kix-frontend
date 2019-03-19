@@ -5,13 +5,11 @@ import {
 } from '../../../api';
 import {
     TicketState, KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, KIXObjectCache,
-    TicketStateCacheHandler, StateType, ObjectIcon, Error
+    KIXObjectSpecificCreateOptions, StateType, ObjectIcon, Error
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
-import { ConfigurationService } from '../ConfigurationService';
 import { LoggingService } from '../LoggingService';
 
 export class TicketStateService extends KIXObjectService {
@@ -27,7 +25,7 @@ export class TicketStateService extends KIXObjectService {
 
     protected RESOURCE_URI: string = 'ticketstates';
 
-    public kixObjectType: KIXObjectType = KIXObjectType.TICKET_STATE;
+    public objectType: KIXObjectType = KIXObjectType.TICKET_STATE;
 
     private constructor() {
         super();
@@ -39,18 +37,8 @@ export class TicketStateService extends KIXObjectService {
             || kixObjectType === KIXObjectType.TICKET_STATE_TYPE;
     }
 
-    public async initCache(): Promise<void> {
-        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-        const token = serverConfig.BACKEND_API_TOKEN;
-
-        KIXObjectCache.registerCacheHandler(new TicketStateCacheHandler());
-
-        await this.getTicketStates(token);
-        await this.getTicketStateTypes(token);
-    }
-
     public async loadObjects<T>(
-        token: string, objectType: KIXObjectType, objectIds: Array<number | string>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<T[]> {
 
@@ -75,13 +63,13 @@ export class TicketStateService extends KIXObjectService {
     }
 
     public async createObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
         createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<number> {
         const createTicketState = new CreateTicketState(parameter.filter((p) => p[0] !== 'ICON'));
 
         const response = await this.sendCreateRequest<CreateTicketStateResponse, CreateTicketStateRequest>(
-            token, this.RESOURCE_URI, new CreateTicketStateRequest(createTicketState)
+            token, clientRequestId, this.RESOURCE_URI, new CreateTicketStateRequest(createTicketState), this.objectType
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
@@ -91,19 +79,21 @@ export class TicketStateService extends KIXObjectService {
         if (icon) {
             icon.Object = 'TicketState';
             icon.ObjectID = response.TicketStateID;
-            await this.createIcons(token, icon);
+            await this.createIcons(token, clientRequestId, icon);
         }
 
         return response.TicketStateID;
     }
 
     public async updateObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
+        token: string, clientRequestId: string, objectType: KIXObjectType,
+        parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
         const updateTicketState = new UpdateTicketState(parameter);
 
         const response = await this.sendUpdateRequest<UpdateTicketStateResponse, UpdateTicketStateRequest>(
-            token, this.buildUri(this.RESOURCE_URI, objectId), new UpdateTicketStateRequest(updateTicketState)
+            token, clientRequestId, this.buildUri(this.RESOURCE_URI, objectId),
+            new UpdateTicketStateRequest(updateTicketState), this.objectType
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
@@ -113,35 +103,25 @@ export class TicketStateService extends KIXObjectService {
         if (icon) {
             icon.Object = 'TicketState';
             icon.ObjectID = response.TicketStateID;
-            await this.updateIcon(token, icon);
+            await this.updateIcon(token, clientRequestId, icon);
         }
 
         return response.TicketStateID;
     }
 
     public async getTicketStates(token: string): Promise<TicketState[]> {
-        if (!KIXObjectCache.hasObjectCache(KIXObjectType.TICKET_STATE)) {
-            const uri = this.buildUri(this.RESOURCE_URI);
-            const response = await this.getObjectByUri<TicketStatesResponse>(token, uri, {
-                sort: 'TicketState.Name'
-            });
-            response.TicketState
-                .map((s) => new TicketState(s))
-                .forEach((s) => KIXObjectCache.addObject(KIXObjectType.TICKET_STATE, s));
-        }
-        return KIXObjectCache.getObjectCache(KIXObjectType.TICKET_STATE);
+        const uri = this.buildUri(this.RESOURCE_URI);
+        const response = await this.getObjectByUri<TicketStatesResponse>(token, uri, {
+            sort: 'TicketState.Name'
+        });
+        return response.TicketState.map((s) => new TicketState(s));
     }
 
     public async getTicketStateTypes(token: string): Promise<StateType[]> {
-        if (!KIXObjectCache.hasObjectCache(KIXObjectType.TICKET_STATE_TYPE)) {
-            const uri = this.buildUri('statetypes');
-            const response = await this.getObjectByUri<TicketStateTypesResponse>(token, uri, {
-                sort: 'StateType.Name'
-            });
-            response.StateType
-                .map((st) => new StateType(st))
-                .forEach((st) => KIXObjectCache.addObject(KIXObjectType.TICKET_STATE_TYPE, st));
-        }
-        return KIXObjectCache.getObjectCache(KIXObjectType.TICKET_STATE_TYPE);
+        const uri = this.buildUri('statetypes');
+        const response = await this.getObjectByUri<TicketStateTypesResponse>(token, uri, {
+            sort: 'StateType.Name'
+        });
+        return response.StateType.map((st) => new StateType(st));
     }
 }

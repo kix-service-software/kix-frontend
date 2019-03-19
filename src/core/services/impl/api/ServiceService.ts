@@ -19,7 +19,7 @@ export class ServiceService extends KIXObjectService {
 
     protected RESOURCE_URI: string = "services";
 
-    public kixObjectType: KIXObjectType = KIXObjectType.SERVICE;
+    public objectType: KIXObjectType = KIXObjectType.SERVICE;
 
     public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.SERVICE;
@@ -48,13 +48,14 @@ export class ServiceService extends KIXObjectService {
     }
 
     public createObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, string]>
+        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>
     ): Promise<string | number> {
         throw new Error('', "Method not implemented.");
     }
 
     public async updateObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
+        token: string, clientRequestId: string, objectType: KIXObjectType,
+        parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
         throw new Error('', "Method not implemented.");
     }

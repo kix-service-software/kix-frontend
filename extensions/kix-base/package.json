@@ -1,8 +1,8 @@
 {
     "name": "kix-base",
     "extensions": {
-        "kix:communicator": {
-            "communicator-registry": "../../dist/communicators/CommunicatorRegistry.extension"
+        "kix:socket:namespace": {
+            "socket-namespace-registry": "../../dist/socket-namespaces/NamespaceRegistry.extension"
         },
         "kix:personal:settings": {
             "personal-settings": "../../dist/registry-modules/application/personal-settings.extension"

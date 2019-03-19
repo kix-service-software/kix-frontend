@@ -1,8 +1,10 @@
 export * from './application';
+export * from './authentication';
 export * from './contact';
 export * from './customer';
 export * from './kix';
 export * from './notes';
+export * from './notifications';
 export { SocketAuthenticationError } from './SocketAuthenticationError';
 export { SocketEvent } from './SocketEvent';
 export { ISocketRequest } from './ISocketRequest';

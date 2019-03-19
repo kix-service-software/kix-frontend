@@ -7,6 +7,7 @@ export class UpdateObjectRequest implements ISocketRequest {
     public constructor(
         public token: string,
         public requestId: string,
+        public clientRequestId: string,
         public objectType: KIXObjectType,
         public parameter: Array<[string, any]>,
         public objectId: number | string,

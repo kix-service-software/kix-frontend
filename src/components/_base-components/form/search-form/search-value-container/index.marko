@@ -1,7 +1,7 @@
-<for(searchValue in state.searchValues | status-var=loop)>
+<for|searchValue, index| of=state.searchValues>
     <div.form-search-value>
         <span>
-            <if(loop.getIndex() > 0)>
+            <if(index > 0)>
                 <translation-string pattern="Translatable#AND"/>:
             </if>
         </span>
@@ -36,7 +36,7 @@
                 </else>
             </if>
         </div>
-        <if(state.searchValues.length > 2 && loop.getIndex() !== state.searchValues.length - 1)>
+        <if(state.searchValues.length > 2 && index !== state.searchValues.length - 1)>
             <button.form-control-button.button-without-text
                 type="button"
                 title="Remove Search Criteria"

@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { SocketAuthenticationError, UserType, UserLogin } from '../../../model';
 import { LoginResponse, SessionResponse } from '../../../api';
 import { HttpService } from './HttpService';
+import { ConfigurationService } from '../ConfigurationService';
 
 export class AuthenticationService {
 
@@ -14,12 +15,26 @@ export class AuthenticationService {
         return AuthenticationService.INSTANCE;
     }
 
-    private constructor() { }
+    private frontendTokenCache: Map<string, string> = new Map();
 
-    private TOKEN_PREFIX: string = 'Token ';
+    private backendCallbackToken: string;
 
-    public initCache(): Promise<void> {
-        return;
+    private constructor(private tokenKey = 'kix18-webfrontend-token-key') {
+        const jwt = require('jsonwebtoken');
+        this.backendCallbackToken = jwt.sign({ name: 'backen-callback', created: Date.now() }, this.tokenKey);
+    }
+
+    public getBackendToken(token: string): string {
+        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+        if (serverConfig.BACKEND_API_TOKEN === token) {
+            return token;
+        }
+
+        return this.frontendTokenCache.get(token);
+    }
+
+    public getCallbackToken(): string {
+        return this.backendCallbackToken;
     }
 
     public async isAuthenticated(req: Request, res: Response, next: () => void): Promise<void> {
@@ -40,6 +55,21 @@ export class AuthenticationService {
         }
     }
 
+    public async isCallbackAuthenticated(req: Request, res: Response, next: () => void): Promise<void> {
+        if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Token') {
+            const token = req.headers.authorization.split(' ')[1];
+            if (token) {
+                if (token === this.backendCallbackToken) {
+                    next();
+                } else {
+                    res.status(401).send('Not authorized!');
+                }
+            }
+        } else {
+            res.status(403).send();
+        }
+    }
+
     public async isSocketAuthenticated(socket: SocketIO.Socket, next: (err?: any) => void): Promise<void> {
         if (socket.handshake.query) {
             const token = socket.handshake.query.Token;
@@ -53,27 +83,43 @@ export class AuthenticationService {
         }
     }
 
-    public async login(user: string, password: string, type: UserType): Promise<string> {
+    public async login(user: string, password: string, type: UserType, clientRequestId: string): Promise<string> {
         const userLogin = new UserLogin(user, password, type);
-        const response = await HttpService.getInstance().post<LoginResponse>('sessions', userLogin);
-        return response.Token;
+        const response = await HttpService.getInstance().post<LoginResponse>(
+            'sessions', userLogin, null, clientRequestId
+        );
+        const token = this.createToken(user, response.Token);
+        return token;
     }
 
     public async logout(token: string): Promise<boolean> {
-        const response = await HttpService.getInstance().delete<any>('sessions/' + token);
+        if (this.frontendTokenCache.has(token)) {
+            const backendToken = this.frontendTokenCache.get(token);
+            await HttpService.getInstance().delete('sessions/' + backendToken, null, null);
+            this.frontendTokenCache.delete(token);
+        }
         return true;
     }
 
-    private async validateToken(token): Promise<boolean> {
-        const response = await HttpService.getInstance().get<SessionResponse>('session', {}, token)
-            .catch((error) => {
+    public async validateToken(token: string): Promise<boolean> {
+        let valid = false;
+        if (this.frontendTokenCache.has(token)) {
+            const response = await HttpService.getInstance().get<SessionResponse>(
+                'session', {}, token, null, null, false
+            ).catch(() => {
+                this.frontendTokenCache.delete(token);
                 return { Session: null };
             });
 
-        if (response && response.Session) {
-            return true;
-        } else {
-            return false;
+            valid = response && response.Session;
         }
+        return valid;
+    }
+
+    private createToken(userLogin: string, backendToken: string): string {
+        const jwt = require('jsonwebtoken');
+        const token = jwt.sign({ userLogin, created: Date.now() }, this.tokenKey);
+        this.frontendTokenCache.set(token, backendToken);
+        return token;
     }
 }

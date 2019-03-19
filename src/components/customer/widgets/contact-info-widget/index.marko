@@ -1,11 +1,13 @@
-<widget instanceId=state.instanceId title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
+<widget
+    instanceId=state.instanceId
+    title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
     contentActions=state.actions>
     <@content>
         <if(state.contact)>
             <div.contact-info-container>
-                <for(groupTuple in state.contact.getContactInfoData())>
+                <for|groupTuple| of=state.contact.getContactInfoData()>
                     <div.contact-group>
-                        <for(attributeTuple in groupTuple[1])>
+                        <for|attributeTuple| of=groupTuple[1]>
                             <object-property-label object=state.contact property=attributeTuple[0] labelProvider=state.labelProvider/>
                         </for>
                     </div>

@@ -1,4 +1,5 @@
 import { LogLevel } from './LogLevel';
+import { MemcachedConfiguration } from '../cache';
 
 export interface IServerConfiguration {
 
@@ -11,6 +12,10 @@ export interface IServerConfiguration {
     PLUGIN_FOLDERS: string[];
 
     FRONTEND_URL: string;
+
+    NOTIFICATION_URL: string;
+
+    NOTIFICATION_INTERVAL: number;
 
     BACKEND_API_URL: string;
 
@@ -29,5 +34,11 @@ export interface IServerConfiguration {
     SOCKET_TIMEOUT: number;
 
     UPDATE_TRANSLATIONS: boolean;
+
+    USE_IN_MEMORY_CACHE: boolean;
+
+    USE_MEMCACHED: boolean;
+
+    MEMCACHED: MemcachedConfiguration;
 
 }

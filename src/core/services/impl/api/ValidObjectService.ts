@@ -19,7 +19,7 @@ export class ValidObjectService extends KIXObjectService {
 
     protected RESOURCE_URI: string = "valid";
 
-    public kixObjectType: KIXObjectType = KIXObjectType.VALID_OBJECT;
+    public objectType: KIXObjectType = KIXObjectType.VALID_OBJECT;
 
     public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.VALID_OBJECT;
@@ -44,13 +44,14 @@ export class ValidObjectService extends KIXObjectService {
     }
 
     public createObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, string]>
+        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>
     ): Promise<string | number> {
         throw new Error('', "Method not implemented.");
     }
 
     public async updateObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
+        token: string, clientRequestId: string, objectType: KIXObjectType,
+        parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
         throw new Error('', "Method not implemented.");
     }

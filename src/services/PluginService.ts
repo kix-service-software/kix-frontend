@@ -35,10 +35,6 @@ export class PluginService {
         this.pluginManager.scan();
     }
 
-    public initCache(): Promise<void> {
-        return;
-    }
-
     public async getExtensions<T>(extensionId: string): Promise<T[]> {
         return await new Promise<T[]>((resolve, reject) => {
             const config = { multi: true };

@@ -4,6 +4,7 @@ import {
     EditConfigItemDialogContext, EditConfigItemDialogContextConfiguration, ConfigItemFormFactory
 } from '../../core/browser/cmdb';
 import { ConfigurationService, KIXObjectServiceRegistry } from '../../core/services';
+import { ClientStorageService } from '../../core/browser';
 
 export class EditConfigItemDialogModuleExtension implements IConfigurationExtension {
 
@@ -28,7 +29,7 @@ export class EditConfigItemDialogModuleExtension implements IConfigurationExtens
         ]);
 
         const ciClasses = await configItemClassService.loadObjects<ConfigItemClass>(
-            token, KIXObjectType.CONFIG_ITEM_CLASS, null, options, null
+            token, null, KIXObjectType.CONFIG_ITEM_CLASS, null, options, null
         );
 
         for (const ciClass of ciClasses) {

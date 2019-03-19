@@ -16,8 +16,8 @@ export { KIXObjectSpecificDeleteOptions } from './KIXObjectSpecificDeleteOptions
 export { ReleaseInfo } from './ReleaseInfo';
 export { SystemInfo } from './SystemInfo';
 export { CacheState } from './CacheState';
-export { KIXObjectCache } from './KIXObjectCache';
-export { IKIXObjectCacheHandler } from './IKIXObjectCacheHandler';
 export { Error } from './Error';
-export { IKIXObjectCacheListener } from './IKIXObjectCacheListener';
 export { FilterUtil } from './FilterUtil';
+export { ICache } from './ICache';
+export { ObjectUpdatedEvent } from './ObjectUpdatedEvent';
+export { ObjectUpdatedEventData } from './ObjectUpdatedEventData';

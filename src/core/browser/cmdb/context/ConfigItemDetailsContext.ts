@@ -2,7 +2,7 @@ import { ConfigItemDetailsContextConfiguration } from "./ConfigItemDetailsContex
 import {
     Context, ConfigItem, KIXObjectType, WidgetConfiguration,
     WidgetType, BreadcrumbInformation, KIXObject, KIXObjectLoadingOptions,
-    ConfiguredWidget, VersionProperty, KIXObjectCache
+    ConfiguredWidget, VersionProperty
 } from "../../../model";
 import { KIXObjectService } from "../../kix";
 import { CMDBContext } from "./CMDBContext";
@@ -98,35 +98,18 @@ export class ConfigItemDetailsContext extends Context<ConfigItemDetailsContextCo
     public async getObject<O extends KIXObject>(
         objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM, reload: boolean = false
     ): Promise<O> {
-        let object;
-
-        if (!objectType) {
-            objectType = KIXObjectType.CONFIG_ITEM;
-        }
-
-        if (reload && objectType === KIXObjectType.CONFIG_ITEM) {
-            KIXObjectCache.removeObject(KIXObjectType.CONFIG_ITEM, Number(this.objectId));
-        }
-
-        if (!KIXObjectCache.isObjectCached(KIXObjectType.CONFIG_ITEM, Number(this.objectId))) {
-            object = await this.loadConfigItem();
-            reload = true;
-        } else {
-            object = KIXObjectCache.getObject(KIXObjectType.CONFIG_ITEM, Number(this.objectId));
-        }
-
+        const object = await this.loadConfigItem() as any;
         if (reload) {
             this.listeners.forEach(
                 (l) => l.objectChanged(Number(this.objectId), object, KIXObjectType.CONFIG_ITEM)
             );
         }
-
         return object;
     }
 
     private async loadConfigItem(): Promise<ConfigItem> {
         EventService.getInstance().publish(
-            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Lade Config Item ...' }
+            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load Config Item ...' }
         );
 
         const loadingOptions = new KIXObjectLoadingOptions(
@@ -153,7 +136,7 @@ export class ConfigItemDetailsContext extends Context<ConfigItemDetailsContextCo
         }
 
         EventService.getInstance().publish(
-            ApplicationEvent.APP_LOADING, { loading: false, hint: 'Lade Config Item ...' }
+            ApplicationEvent.APP_LOADING, { loading: false, hint: '' }
         );
         return configItem;
     }

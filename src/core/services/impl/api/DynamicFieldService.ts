@@ -18,7 +18,7 @@ export class DynamicFieldService extends KIXObjectService {
 
     protected RESOURCE_URI: string = "dynamicfields";
 
-    public kixObjectType: KIXObjectType = KIXObjectType.DYNAMIC_FIELD;
+    public objectType: KIXObjectType = KIXObjectType.DYNAMIC_FIELD;
 
     private constructor() {
         super();
@@ -30,7 +30,7 @@ export class DynamicFieldService extends KIXObjectService {
     }
 
     public async loadObjects<O>(
-        token: string, objectType: KIXObjectType, objectIds: Array<number | string>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<O[]> {
         let objects = [];
@@ -69,13 +69,14 @@ export class DynamicFieldService extends KIXObjectService {
     }
 
     public createObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, string]>
+        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>
     ): Promise<string | number> {
         throw new Error('', "Method not implemented.");
     }
 
     public async updateObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
+        token: string, clientRequestId: string, objectType: KIXObjectType,
+        parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
         throw new Error('', "Method not implemented.");
     }

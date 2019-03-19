@@ -5,7 +5,7 @@ import {
 import { ComponentState } from './ComponentState';
 import {
     ContextDescriptor, KIXObjectType, ContextMode, ContextType,
-    ConfiguredDialogWidget, WidgetConfiguration, WidgetSize, KIXObjectCache, ConfigItemClassCacheHandler
+    ConfiguredDialogWidget, WidgetConfiguration, WidgetSize
 } from '../../../core/model';
 import {
     CMDBContext, NewConfigItemDialogContext, ConfigItemDetailsContext, ConfigItemSearchContext,
@@ -37,8 +37,6 @@ class Component extends AbstractMarkoComponent {
         ServiceRegistry.registerServiceInstance(ConfigItemClassService.getInstance());
         ServiceRegistry.registerServiceInstance(ConfigItemFormService.getInstance());
         ServiceRegistry.registerServiceInstance(ConfigItemClassFormService.getInstance());
-
-        KIXObjectCache.registerCacheHandler(new ConfigItemClassCacheHandler());
 
         FactoryService.getInstance().registerFactory(
             KIXObjectType.CONFIG_ITEM, ConfigItemBrowserFactory.getInstance()

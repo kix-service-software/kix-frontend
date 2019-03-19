@@ -4,7 +4,7 @@ import chaiAsPromised = require('chai-as-promised');
 
 import { UserService, ConfigurationService } from '../../src/core/services'
 import { User, UserPreference, KIXObjectType, PreferencesLoadingOptions, SetPreferenceOptions, Error } from '../../src/core/model';
-import { UserResponse, UsersResponse, UserPreferencesResponse, SetPreferenceResponse } from '../../src/core/api';
+import { UsersResponse, UserPreferencesResponse, SetPreferenceResponse } from '../../src/core/api';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -49,29 +49,6 @@ describe('User Service', () => {
         });
     });
 
-    describe('Get user Information based on token.', () => {
-
-        before(() => {
-            const userResponse = new UserResponse();
-            const user = new User();
-            user.UserID = 123456;
-            user.Preferences = [];
-            userResponse.User = user;
-
-            nockScope
-                .matchHeader('Authorization', "Token abcdefg12345")
-                .get('/user')
-                .query({ include: "Tickets,Preferences" })
-                .reply(200, userResponse);
-        });
-
-        it('Should return a user with the id 123456 for the given token.', async () => {
-            const user: User = await UserService.getInstance().getUserByToken("abcdefg12345");
-            expect(user.UserID).equal(123456);
-        });
-
-    });
-
     describe('Get user preferences.', () => {
 
         const userId = 123456;
@@ -91,7 +68,7 @@ describe('User Service', () => {
 
         it('Should return a preference list with one preference.', async () => {
             const userPreferences: UserPreference[] = await UserService.getInstance().loadObjects<UserPreference>(
-                'someToken', KIXObjectType.USER_PREFERENCE, null, null, new PreferencesLoadingOptions(userId)
+                'someToken', null, KIXObjectType.USER_PREFERENCE, null, null, new PreferencesLoadingOptions(userId)
             );
             expect(userPreferences).exist;
             expect(userPreferences).an('array');
@@ -120,7 +97,7 @@ describe('User Service', () => {
 
             it('Should created a new language preference.', async () => {
                 const newLanguagePreferenceId: string | number = await UserService.getInstance().createObject(
-                    'someToken', KIXObjectType.USER_PREFERENCE,
+                    'someToken', null, KIXObjectType.USER_PREFERENCE,
                     [
                         ['ID', preferenceId],
                         ['Value', 'en']
@@ -145,7 +122,7 @@ describe('User Service', () => {
             it('Should not created a new language preference because of an error.', async () => {
                 let error: Error = null;
                 await UserService.getInstance().createObject(
-                    'someToken', KIXObjectType.USER_PREFERENCE,
+                    'someToken', null, KIXObjectType.USER_PREFERENCE,
                     [
                         ['ID', preferenceId],
                         ['Value', 'en']
@@ -170,7 +147,7 @@ describe('User Service', () => {
 
             it('Should update the language preference.', async () => {
                 const updatedLanguagePreferenceId: string | number = await UserService.getInstance().updateObject(
-                    'someToken', KIXObjectType.USER_PREFERENCE,
+                    'someToken', null, KIXObjectType.USER_PREFERENCE,
                     [
                         ['Value', 'de']
                     ],
@@ -194,7 +171,7 @@ describe('User Service', () => {
             it('Should not update the language preference because of an error.', async () => {
                 let error: Error = null;
                 await UserService.getInstance().updateObject(
-                    'someToken', KIXObjectType.USER_PREFERENCE,
+                    'someToken', null, KIXObjectType.USER_PREFERENCE,
                     [
                         ['Value', 'de']
                     ],
@@ -234,7 +211,7 @@ describe('User Service', () => {
             it('Should get no error.', async () => {
                 let error: boolean = false;
                 await UserService.getInstance().setPreferences(
-                    'someToken', [
+                    'someToken', null, [
                         [preferenceId, 'de'],
                         [anotherPreferenceId, 'en']
                     ],
@@ -272,7 +249,7 @@ describe('User Service', () => {
             it('Should get a "CREATE" error.', async () => {
                 let error: Error = null;
                 await UserService.getInstance().setPreferences(
-                    'someToken', [
+                    'someToken', null, [
                         [preferenceId, 'de'],
                         [anotherPreferenceId, 'en']
                     ],
@@ -312,7 +289,7 @@ describe('User Service', () => {
             it('Should get a "UPDATE" error.', async () => {
                 let error: Error = null;
                 await UserService.getInstance().setPreferences(
-                    'someToken', [
+                    'someToken', null, [
                         [preferenceId, 'de'],
                         [anotherPreferenceId, 'en']
                     ],
@@ -352,7 +329,7 @@ describe('User Service', () => {
             it('Should get a combined error.', async () => {
                 let error: Error = null;
                 await UserService.getInstance().setPreferences(
-                    'someToken', [
+                    'someToken', null, [
                         [preferenceId, 'de'],
                         [anotherPreferenceId, 'en']
                     ],

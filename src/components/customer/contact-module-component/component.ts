@@ -5,7 +5,7 @@ import {
 import { ComponentState } from './ComponentState';
 import {
     KIXObjectType, ContextDescriptor, ContextType, ContextMode, WidgetConfiguration,
-    ConfiguredDialogWidget, WidgetSize, KIXObjectCache, ContactCacheHandler
+    ConfiguredDialogWidget, WidgetSize
 } from '../../../core/model';
 import {
     ContactTableFactory, ContactLabelProvider, ContactService, ContactBrowserFactory, ContactDetailsContext,
@@ -31,7 +31,6 @@ class Component extends AbstractMarkoComponent {
         TableFactoryService.getInstance().registerFactory(new ContactTableFactory());
         LabelService.getInstance().registerLabelProvider(new ContactLabelProvider());
         FactoryService.getInstance().registerFactory(KIXObjectType.CONTACT, ContactBrowserFactory.getInstance());
-        KIXObjectCache.registerCacheHandler(new ContactCacheHandler());
         KIXObjectSearchService.getInstance().registerSearchDefinition(new ContactSearchDefinition());
 
         ImportService.getInstance().registerImportManager(new ContactImportManager());

@@ -5,6 +5,8 @@ import { ConfigurationService } from '../ConfigurationService';
 import { LoggingService } from '../LoggingService';
 import { ProfilingService } from '../ProfilingService';
 import { Error } from '../../../model';
+import { AuthenticationService } from './AuthenticationService';
+import { CacheService } from '../../../cache';
 
 export class HttpService {
 
@@ -30,15 +32,16 @@ export class HttpService {
         this.backendCertificate = fs.readFileSync(certPath);
     }
 
-    public initCache(): Promise<void> {
-        return;
-    }
+    private async executeRequest<T>(
+        resource: string, token: string, clientRequestId: string, options: any
+    ): Promise<T> {
+        const backendToken = AuthenticationService.getInstance().getBackendToken(token);
 
-    private async executeRequest<T>(resource: string, token: string, options: any): Promise<T> {
         // extend options
         options.uri = this.buildRequestUrl(resource);
         options.headers = {
-            Authorization: 'Token ' + token
+            'Authorization': 'Token ' + backendToken,
+            'KIX-Request-ID': clientRequestId
         };
         options.json = true;
         options.ca = this.backendCertificate;
@@ -72,48 +75,68 @@ export class HttpService {
         return response;
     }
 
-    public async get<T>(resource: string, queryParameters, token?: any): Promise<T> {
+    public async get<T>(
+        resource: string, queryParameters: any, token: any, clientRequestId: string,
+        cacheKeyPrefix: string = '', useCache: boolean = true
+    ): Promise<T> {
         const options = {
             method: 'GET',
             qs: queryParameters
         };
 
-        return this.executeRequest<T>(resource, token, options);
+        let response: T;
+        if (useCache) {
+            const cacheKey = this.buildCacheKey(resource, queryParameters, token);
+            if (await CacheService.getInstance().has(cacheKey, cacheKeyPrefix)) {
+                return await CacheService.getInstance().get(cacheKey, cacheKeyPrefix);
+            }
+
+            response = await this.executeRequest<T>(resource, token, clientRequestId, options);
+
+            await CacheService.getInstance().set(cacheKey, response, cacheKeyPrefix);
+        } else {
+            response = await this.executeRequest<T>(resource, token, clientRequestId, options);
+        }
+
+        return response;
     }
 
-    public async post<T>(resource: string, content: any, token?: any): Promise<T> {
+    public async post<T>(
+        resource: string, content: any, token: any, clientRequestId: string, cacheKeyPrefix: string = ''
+    ): Promise<T> {
         const options = {
             method: 'POST',
             body: content
         };
 
-        return this.executeRequest<T>(resource, token, options);
+        const response = this.executeRequest<T>(resource, token, clientRequestId, options);
+        await CacheService.getInstance().deleteKeys(cacheKeyPrefix);
+        return response;
     }
 
-    public async put<T>(resource: string, content: any, token?: any): Promise<T> {
-        const options = {
-            method: 'PUT',
-            body: content
-        };
-
-        return this.executeRequest<T>(resource, token, options);
-    }
-
-    public async patch<T>(resource: string, content: any, token?: any): Promise<T> {
+    public async patch<T>(
+        resource: string, content: any, token: any, clientRequestId: string, cacheKeyPrefix: string = ''
+    ): Promise<T> {
         const options = {
             method: 'PATCH',
             body: content
         };
 
-        return this.executeRequest<T>(resource, token, options);
+        const response = this.executeRequest<T>(resource, token, clientRequestId, options);
+        await CacheService.getInstance().deleteKeys(cacheKeyPrefix);
+        return response;
     }
 
-    public async delete<T>(resource: string, token?: any): Promise<T> {
+    public async delete<T>(
+        resource: string, token: any, clientRequestId: string, cacheKeyPrefix: string = ''
+    ): Promise<T> {
         const options = {
             method: 'DELETE',
         };
 
-        return this.executeRequest<T>(resource, token, options);
+        const response = this.executeRequest<T>(resource, token, clientRequestId, options);
+        await CacheService.getInstance().deleteKeys(cacheKeyPrefix);
+        return response;
     }
 
     private buildRequestUrl(resource: string): string {
@@ -123,6 +146,21 @@ export class HttpService {
     private createError(err: any): Error {
         LoggingService.getInstance().error(`(${err.statusCode}) ${err.error.Code}  ${err.error.Message}`);
         return new Error(err.error.Code, err.error.Message, err.statusCode);
+    }
+
+    private buildCacheKey(resource: string, query: any, token: string): string {
+        const ordered = {};
+
+        if (query) {
+            Object.keys(query).sort().forEach((k) => {
+                ordered[k] = query[k];
+            });
+        }
+
+        const queryString = JSON.stringify(ordered);
+        const key = `${token};${resource};${queryString}`;
+
+        return key;
     }
 
 }

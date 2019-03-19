@@ -8,6 +8,7 @@ export class LoadObjectsRequest implements ISocketRequest {
     public constructor(
         public token: string,
         public requestId: string,
+        public clientRequestId: string,
         public objectType: KIXObjectType,
         public objectIds: Array<string | number>,
         public loadingOptions: KIXObjectLoadingOptions = new KIXObjectLoadingOptions(),

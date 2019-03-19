@@ -1,14 +1,13 @@
 import { FAQDetailsContextConfiguration } from "./FAQDetailsContextConfiguration";
 import {
     Context, KIXObjectType, ConfiguredWidget, WidgetConfiguration,
-    WidgetType, BreadcrumbInformation, KIXObject, KIXObjectLoadingOptions, KIXObjectCache
+    WidgetType, BreadcrumbInformation, KIXObject, KIXObjectLoadingOptions
 } from "../../../model";
 import { FAQArticle } from "../../../model/kix/faq";
 import { FAQContext } from "./FAQContext";
 import { KIXObjectService } from "../../kix";
 import { EventService } from "../../event";
 import { LabelService } from "../../LabelService";
-import { ContextService } from "../../context";
 import { ApplicationEvent } from "../../application";
 
 export class FAQDetailsContext extends Context<FAQDetailsContextConfiguration> {
@@ -99,22 +98,7 @@ export class FAQDetailsContext extends Context<FAQDetailsContextConfiguration> {
     public async getObject<O extends KIXObject>(
         objectType: KIXObjectType = KIXObjectType.FAQ_ARTICLE, reload: boolean = false
     ): Promise<O> {
-        let object;
-
-        if (!objectType) {
-            objectType = KIXObjectType.FAQ_ARTICLE;
-        }
-
-        if (reload && objectType === KIXObjectType.FAQ_ARTICLE) {
-            KIXObjectCache.removeObject(KIXObjectType.FAQ_ARTICLE, Number(this.objectId));
-        }
-
-        if (!KIXObjectCache.isObjectCached(KIXObjectType.FAQ_ARTICLE, Number(this.objectId))) {
-            object = await this.loadFAQArticle();
-            reload = true;
-        } else {
-            object = KIXObjectCache.getObject(KIXObjectType.FAQ_ARTICLE, Number(this.objectId));
-        }
+        const object = await this.loadFAQArticle() as any;
 
         if (reload) {
             this.listeners.forEach(
@@ -127,7 +111,7 @@ export class FAQDetailsContext extends Context<FAQDetailsContextConfiguration> {
 
     private async loadFAQArticle(): Promise<FAQArticle> {
         EventService.getInstance().publish(
-            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Lade FAQ-Artikel ...' }
+            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load FAQ Article ...' }
         );
 
         const loadingOptions = new KIXObjectLoadingOptions(

@@ -1,7 +1,7 @@
 <if(state.customer)>
-    <for(groupTuple in state.info)>
-        <div.customer-attribute-group key=("ticket-customer-attribute-group-" + groupTuple[0])>
-            <for(attributeTuple in groupTuple[1])>
+    <for|groupTuple| of=state.info>
+        <div.customer-attribute-group>
+            <for|attributeTuple| of=groupTuple[1]>
                 <customer-label object=state.customer property=attributeTuple[0] labelProvider=state.labelProvider/>
             </for>
         </div>

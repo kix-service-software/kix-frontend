@@ -12,7 +12,7 @@
                     <li key=component.getLaneKey()>
                         <tab-container tabWidgets=state.tabWidgets title="Kundeninformationen"/>
                     </li>
-                    <for(lane in state.lanes)>
+                    <for|lane| of=state.lanes>
                         <li.lane key=component.getLaneKey()>
                             <${component.getWidgetTemplate(lane.instanceId)} ...{
                                 contextType: "MAIN",

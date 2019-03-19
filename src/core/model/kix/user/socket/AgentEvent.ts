@@ -1,11 +1,5 @@
 export enum AgentEvent {
 
-    LOGIN = "login",
-
-    AUTHORIZED = "authorized",
-
-    UNAUTHORIZED = "unauthorized",
-
     GET_PERSONAL_SETTINGS = "GET_PERSONAL_SETTINGS",
 
     GET_PERSONAL_SETTINGS_FINISHED = "GET_PERSONAL_SETTINGS_FINISHED",

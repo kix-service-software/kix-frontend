@@ -1,4 +1,3 @@
-export { TranslationCacheHandler } from './TranslationCacheHandler';
 export { Translation } from './Translation';
 export { TranslationProperty } from './TranslationProperty';
 export { TranslationLanguage } from './TranslationLanguage';

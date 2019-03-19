@@ -2,7 +2,7 @@
     <widget instanceId="tab-widget" title=state.title minimizable=state.minimizable contentActions=state.contentActions>
         <@headerContent>
             <ul.tab-list>
-                <for(tab in state.tabWidgets)>
+                <for|tab| of=state.tabWidgets>
                     <li
                         title=tab.configuration.title
                         class={

@@ -4,7 +4,7 @@ import {
 import { FormValidationService, RequiredFormFieldValidator } from ".";
 import { FormFactory } from "./FormFactory";
 import { MaxLengthFormFieldValidator, RegExFormFieldValidator } from "./validators";
-import { KIXModulesSocketListener } from "../modules/KIXModulesSocketListener";
+import { KIXModulesSocketClient } from "../modules/KIXModulesSocketClient";
 import { BrowserUtil } from "../BrowserUtil";
 
 export class FormService {
@@ -34,7 +34,7 @@ export class FormService {
     }
 
     public async loadFormConfigurations(): Promise<void> {
-        const formConfigurations = await KIXModulesSocketListener.getInstance().loadFormConfigurations();
+        const formConfigurations = await KIXModulesSocketClient.getInstance().loadFormConfigurations();
         this.forms = formConfigurations[0];
         this.formIDsWithContext = formConfigurations[1];
     }

@@ -41,10 +41,6 @@ export class LoggingService {
 
     }
 
-    public initCache(): Promise<void> {
-        return;
-    }
-
     @validate
     public error(@required message: string, meta?: any): void {
         if (this.checkLogLevel(LogLevel.ERROR) && this.kixLogger) {
@@ -141,8 +137,7 @@ export class LoggingService {
                                 timestamp, level, message, ...args
                             } = info;
 
-                            return `${timestamp} - ${level}: ${message} ` +
-                                `${Object.keys(args).length ? JSON.stringify(args, null, 2) : ''}`;
+                            return `${timestamp} - ${level}: ${message}`;
                         }),
                     )
                 }),

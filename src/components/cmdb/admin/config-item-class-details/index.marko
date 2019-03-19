@@ -9,11 +9,11 @@
         <widget instanceId=state.instanceId minimizable=true title=state.title contentActions=state.actions>
             <@content>
                 <ul.lane-list no-update>
-                    <li key=component.getLaneKey()>
+                    <li>
                         <tab-container tabWidgets=state.tabWidgets title="CMDB Klassen Informationen" showSidebar=false/>
                     </li>
-                    <for(lane in state.lanes)>
-                        <li.lane key=component.getLaneKey()>
+                    <for|lane| of=state.lanes>
+                        <li.lane key=lane.instanceId>
                             <${component.getWidgetTemplate(lane.instanceId)} ...{
                                 contextType: "MAIN",
                                 instanceId: lane.instanceId,
@@ -25,7 +25,7 @@
             </@content>
         </widget>
         <div.config-item-class-content key="config-item-class-content">
-            <for(contentWidget in state.contentWidgets)>
+            <for|contentWidget| of=state.contentWidgets>
                 <${component.getWidgetTemplate(contentWidget.instanceId)} ...{
                     contextType: "MAIN",
                     instanceId: contentWidget.instanceId

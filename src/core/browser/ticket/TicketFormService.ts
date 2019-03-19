@@ -71,6 +71,7 @@ export class TicketFormService extends KIXObjectFormService<Ticket> {
                     ]))
                 ])
             );
+        } else if (channel.Name === 'email') {
             fields.push(new FormField(
                 "Translatable#Visible in customer portal", ArticleProperty.CUSTOMER_VISIBLE, 'checkbox-input',
                 false, "Translatable#Visible in customer portal", null, customerVisibleValue,
@@ -109,7 +110,6 @@ export class TicketFormService extends KIXObjectFormService<Ticket> {
                 false, 'Translatable#Attachments')
             );
         }
-
 
         return fields;
     }

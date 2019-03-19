@@ -5,7 +5,7 @@
         </if>
         <else>
             <div.config-item-images-container>
-                <for(image in state.thumbnails)>
+                <for|image| of=state.thumbnails>
                     <div.image-container>
                         <div.image>
                             <img alt=image.title src=image.content/>

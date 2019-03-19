@@ -24,9 +24,9 @@ import forceSSl = require('express-force-ssl');
 import { ReleaseInfoUtil } from './ReleaseInfoUtil';
 import { CreateClientRegistration } from './core/api';
 import {
-    ConfigurationService, LoggingService, ClientRegistrationService, TranslationService
+    ConfigurationService, LoggingService, ClientRegistrationService, TranslationService, AuthenticationService
 } from './core/services';
-import { PluginService, MarkoService, SocketCommunicationService } from './services';
+import { PluginService, MarkoService, SocketService } from './services';
 import { SystemInfo } from './core/model';
 
 export class Server {
@@ -80,18 +80,22 @@ export class Server {
     private async createClientRegistration(): Promise<SystemInfo> {
         let poDefinitions = [];
 
-        const updateTranslations = ConfigurationService.getInstance().getServerConfiguration().UPDATE_TRANSLATIONS;
+        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+
+        const updateTranslations = serverConfig.UPDATE_TRANSLATIONS;
         if (updateTranslations) {
             LoggingService.getInstance().info('Update translations ...');
             poDefinitions = await TranslationService.getInstance().getPODefinitions();
         }
 
         const createClientRegistration = new CreateClientRegistration(
-            Date.now().toString(), this.serverConfig.FRONTEND_URL, '12345', poDefinitions
+            'kix18-web-frontend', this.serverConfig.NOTIFICATION_URL, this.serverConfig.NOTIFICATION_INTERVAL,
+            'Token ' + AuthenticationService.getInstance().getCallbackToken(),
+            poDefinitions
         );
 
         const systemInfo = await ClientRegistrationService.getInstance().createClientRegistration(
-            this.serverConfig.BACKEND_API_TOKEN, createClientRegistration
+            this.serverConfig.BACKEND_API_TOKEN, null, createClientRegistration
         ).catch((error) => {
             LoggingService.getInstance().error(error);
             return null;
@@ -123,13 +127,13 @@ export class Server {
 
             const httpsPort = this.serverConfig.HTTPS_PORT || 3001;
 
-            await SocketCommunicationService.getInstance().initialize(httpsServer);
+            await SocketService.getInstance().initialize(httpsServer);
 
             httpsServer.listen(httpsPort, () => {
                 LoggingService.getInstance().info("KIX (HTTPS) running on *:" + httpsPort);
             });
         } else {
-            await SocketCommunicationService.getInstance().initialize(httpServer);
+            await SocketService.getInstance().initialize(httpServer);
         }
     }
 

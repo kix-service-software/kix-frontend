@@ -2,7 +2,7 @@
     "with-toggle": component.toggleEnabled
 }>
     <if(state.rows && !!state.rows.length)>
-        <for(row in state.rows)>
+        <for|row| of=state.rows>
             <table-row
                 row=row
                 columnLength=component.getFullColumnLength()

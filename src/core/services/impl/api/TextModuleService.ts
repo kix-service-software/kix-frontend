@@ -18,7 +18,7 @@ export class TextModuleService extends KIXObjectService {
 
     protected RESOURCE_URI: string = 'textmodules';
 
-    public kixObjectType: KIXObjectType = KIXObjectType.TEXT_MODULE;
+    public objectType: KIXObjectType = KIXObjectType.TEXT_MODULE;
 
     private constructor() {
         super();
@@ -30,7 +30,7 @@ export class TextModuleService extends KIXObjectService {
     }
 
     public async loadObjects<T>(
-        token: string, objectType: KIXObjectType, objectIds: Array<number | string>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<T[]> {
         let objects = [];
@@ -82,13 +82,14 @@ export class TextModuleService extends KIXObjectService {
     }
 
     public createObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, string]>
+        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>
     ): Promise<string | number> {
         throw new Error('', "Method not implemented.");
     }
 
     public async updateObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
+        token: string, clientRequestId: string, objectType: KIXObjectType,
+        parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
         throw new Error('', "Method not implemented.");
     }

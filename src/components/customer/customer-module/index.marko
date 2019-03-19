@@ -1,5 +1,5 @@
 <div.dashboard.customer>
-    <for(kixWidget in state.contentWidgets)>
+    <for|kixWidget| of=state.contentWidgets>
         <${component.getTemplate(kixWidget)} ...{
             instanceId: kixWidget.instanceId
         }/>

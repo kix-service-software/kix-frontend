@@ -79,6 +79,7 @@ export class FAQArticleTableFactory implements ITableFactory {
             tableConfiguration.tableColumns = tableColumns;
             tableConfiguration.enableSelection = true;
             tableConfiguration.toggle = false;
+            tableConfiguration.displayLimit = null;
             defaultRouting = true;
         } else if (!tableConfiguration.tableColumns) {
             tableConfiguration.tableColumns = tableColumns;

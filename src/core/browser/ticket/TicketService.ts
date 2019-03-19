@@ -1,15 +1,16 @@
-import { TicketSocketListener, TicketDetailsContext } from '.';
+import { TicketDetailsContext } from '.';
 import { SearchOperator, ContextService } from '..';
 import {
     Attachment, KIXObjectType, Ticket, TicketProperty, FilterDataType, FilterCriteria, FilterType,
-    TreeNode, ObjectIcon, Queue, Service, KIXObjectLoadingOptions, TicketPriority, TicketType,
-    KIXObjectCache, TicketState, StateType, KIXObject, KIXObjectSpecificLoadingOptions, Sla, TableFilterCriteria
+    TreeNode, ObjectIcon, Queue, Service, TicketPriority, TicketType,
+    TicketState, StateType, KIXObject, Sla, TableFilterCriteria
 } from '../../model';
 import { TicketParameterUtil } from './TicketParameterUtil';
 import { KIXObjectService } from '../kix';
 import { SearchProperty } from '../SearchProperty';
 import { LabelService } from '../LabelService';
 import { ObjectDataService } from '../ObjectDataService';
+import { TicketSocketClient } from './TicketSocketClient';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -51,46 +52,21 @@ export class TicketService extends KIXObjectService<Ticket> {
     }
 
     public async loadArticleAttachment(ticketId: number, articleId: number, attachmentId: number): Promise<Attachment> {
-        const attachment = await TicketSocketListener.getInstance().loadArticleAttachment(
+        const attachment = await TicketSocketClient.getInstance().loadArticleAttachment(
             ticketId, articleId, attachmentId
         );
         return attachment;
     }
 
     public async loadArticleZipAttachment(ticketId: number, articleId: number): Promise<Attachment> {
-        const attachment = await TicketSocketListener.getInstance().loadArticleZipAttachment(
+        const attachment = await TicketSocketClient.getInstance().loadArticleZipAttachment(
             ticketId, articleId
         );
         return attachment;
     }
 
     public async setArticleSeenFlag(ticketId: number, articleId: number): Promise<void> {
-        await TicketSocketListener.getInstance().setArticleSeenFlag(ticketId, articleId);
-    }
-
-    public async loadObjects<O extends KIXObject>(
-        objectType: KIXObjectType, objectIds: Array<string | number>,
-        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
-        cache: boolean = true
-    ): Promise<O[]> {
-
-        if (objectType === KIXObjectType.QUEUE
-            || objectType === KIXObjectType.QUEUE_HIERARCHY
-            || objectType === KIXObjectType.TICKET_PRIORITY
-        ) {
-            if (!KIXObjectCache.hasObjectCache(objectType)) {
-                const objects = await super.loadObjects(
-                    objectType, null, loadingOptions, objectLoadingOptions, cache
-                );
-                objects.forEach((q) => KIXObjectCache.addObject(objectType, q));
-            }
-
-            if (!objectIds) {
-                return KIXObjectCache.getObjectCache(objectType);
-            }
-        }
-
-        return await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions, cache);
+        await TicketSocketClient.getInstance().setArticleSeenFlag(ticketId, articleId);
     }
 
     public prepareFullTextFilter(searchValue: string): FilterCriteria[] {

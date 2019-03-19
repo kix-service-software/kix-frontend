@@ -1,7 +1,9 @@
 <div.loading-shield>
     <div.loading-info>
         <loading-spinner/>
-        <span>${input.loadingHint}</span>
+        <span>
+            <translation-string pattern=input.loadingHint/>
+        </span>
         <if(state.time && !state.cancel)>
             <timer time=state.time/>
         </if>
