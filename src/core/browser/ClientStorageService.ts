@@ -1,3 +1,5 @@
+import md5 = require('md5');
+
 export class ClientStorageService {
 
     private static INSTANCE: ClientStorageService = null;
@@ -82,27 +84,9 @@ export class ClientStorageService {
 
     public static getClientRequestId(): string {
         if (!this.clientRequestId) {
-            this.clientRequestId = this.hashCode(window.navigator.userAgent + Date.now());
+            this.clientRequestId = md5(window.navigator.userAgent + Date.now());
         }
         return this.clientRequestId;
-    }
-
-    private static hashCode(value: string): string {
-        let hash = 0;
-        let i: number;
-        let chr: number;
-        let len: number;
-        if (value && value.length === 0) {
-            return hash.toString();
-        }
-
-        for (i = 0, len = value.length; i < len; i++) {
-            chr = value.charCodeAt(i);
-            hash = ((hash << 5) - hash) + chr;
-            hash |= 0; // Convert to 32bit integer
-        }
-
-        return hash.toString();
     }
 
 }

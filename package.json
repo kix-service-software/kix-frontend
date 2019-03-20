@@ -34,6 +34,7 @@
     "lasso-minify-css": "1.1.4",
     "marko": "4.15.6",
     "marko-loader": "1.3.3",
+    "md5": "2.2.1",
     "memcached": "2.2.2",
     "reflect-metadata": "0.1.13",
     "request": "2.88.0",

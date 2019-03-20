@@ -9,6 +9,7 @@
     "FRONTEND_URL": "https://localhost:3001",
     "NOTIFICATION_URL": "https://koios.office.cape-it.de:3001/notifications",
     "NOTIFICATION_INTERVAL": 5,
+    "NOTIFICATION_CLIENT_ID": "kix18-web-frontend",
     "BACKEND_API_URL": "http://dev-backend.kix18.docker.vm.devel.cape-it.de/api.pl/webservice/core:v1",
     "LOG_LEVEL": 3,
     "LOG_FILEDIR": "logs",
