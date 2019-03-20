@@ -7,6 +7,7 @@ import {
 } from '../../../../core/browser/ticket';
 import { KIXObjectType, TicketPriority, WidgetType } from '../../../../core/model';
 import { ComponentsService } from '../../../../core/browser/components';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -49,7 +50,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.ticketPriority = priority ? priority : await context.getObject<TicketPriority>().catch((error) => null);
 
         if (!this.ticketPriority) {
-            this.state.error = `Keine Priorität mit ID ${context.getObjectId()} verfügbar.`;
+            const error = await TranslationService.translate(
+                'Translatable#No priority available for ID {1}.', [context.getObjectId()]
+            );
+            this.state.error = error;
         } else {
             await this.prepareTitle();
         }

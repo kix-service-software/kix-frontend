@@ -9,7 +9,7 @@ class Component extends AbstractMarkoComponent {
     }
 
     public async onMount(): Promise<void> {
-        DialogService.getInstance().setMainDialogHint('Es werden nur aktuelle Versionen durchsucht.');
+        DialogService.getInstance().setMainDialogHint('Translatable#The search only includes current versions.');
     }
 
     public async cancel(): Promise<void> {

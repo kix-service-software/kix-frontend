@@ -25,9 +25,7 @@ export class Memcached implements ICache {
         const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
         if (serverConfig.MEMCACHED && process.env.NODE_ENV !== 'test') {
             const MemcachedInstance = require('memcached');
-            const config: MemcachedConfiguration = typeof serverConfig.MEMCACHED === 'string'
-                ? JSON.parse(serverConfig.MEMCACHED)
-                : serverConfig.MEMCACHED;
+            const config = serverConfig.MEMCACHED;
             this.memCached = new MemcachedInstance(config.Servers, config.Parameters);
         }
     }

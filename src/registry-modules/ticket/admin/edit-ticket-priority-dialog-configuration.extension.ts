@@ -49,7 +49,7 @@ export class Extension implements IConfigurationExtension {
                 null, new FormFieldValue(1)
             ));
 
-            const group = new FormGroup('Translatable#Prioritätdaten', fields);
+            const group = new FormGroup('Translatable#Priority Data', fields);
 
             const form = new Form(
                 formId, 'Translatable#Edit Priority', [group], KIXObjectType.TICKET_PRIORITY, true, FormContext.EDIT

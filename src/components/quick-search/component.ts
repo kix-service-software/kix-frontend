@@ -16,21 +16,21 @@ export class Component {
     public async search(textValue: string): Promise<void> {
         if (textValue && textValue !== '') {
             EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Suche Tickets ...' }
+                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Search Tickets ...' }
             );
 
             await KIXObjectSearchService.getInstance().executeFullTextSearch<Ticket>(
                 KIXObjectType.TICKET, textValue
             ).catch((error) => {
                 OverlayService.getInstance().openOverlay(
-                    OverlayType.WARNING, null, new StringContent(error), 'Fehler bei der Ticketsuche!', true
+                    OverlayType.WARNING, null, new StringContent(error), 'Translatable#Ticket search error!', true
                 );
             });
 
             ContextService.getInstance().setContext(SearchContext.CONTEXT_ID, null, null, null, null, true);
 
             EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, { loading: false, hint: 'Suche Tickets ...' }
+                ApplicationEvent.APP_LOADING, { loading: false, hint: '' }
             );
         }
     }

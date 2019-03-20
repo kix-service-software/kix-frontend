@@ -16,7 +16,7 @@ export class Extension implements IConfigurationExtension {
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
         const translationInfoLane =
             new ConfiguredWidget("i18n-translation-information-lane", new WidgetConfiguration(
-                "i18n-translation-info-widget", "Basestring Information", [], {},
+                "i18n-translation-info-widget", "Pattern Information", [], {},
                 false, true, WidgetSize.SMALL, null, false)
             );
 

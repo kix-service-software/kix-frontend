@@ -214,6 +214,10 @@ class Component {
         this.state.isLoading = false;
         this.autocompleteTimeout = null;
 
+        if (this.state.nodes.length === 0) {
+            this.prepareAutocompleteNotFoundText();
+        }
+
         setTimeout(() => {
             this.setDropdownStyle();
             this.focusInput();
@@ -273,10 +277,14 @@ class Component {
         }
     }
 
-    public getAutocompleteNotFoundText(): string {
-        const objectName = this.state.autoCompleteConfiguration.noResultsObjectName || 'Objekte';
-        return `Keine ${objectName} gefunden (mind. ${this.state.autoCompleteConfiguration.charCount} ` +
-            'Zeichen für die Suche eingeben).';
+    public async prepareAutocompleteNotFoundText(): Promise<void> {
+        const objectName = this.state.autoCompleteConfiguration.noResultsObjectName || 'Objects';
+        const message = await TranslationService.translate(
+            'Translatable#No {0} found (add at least {1} characters).',
+            [objectName, this.state.autoCompleteConfiguration.charCount]
+        );
+
+        this.state.autocompleteNotFoundText = message;
     }
 
     public clear(): void {

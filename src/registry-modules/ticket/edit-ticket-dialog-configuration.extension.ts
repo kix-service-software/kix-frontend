@@ -22,7 +22,7 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
             new ConfiguredWidget('20180524110915', new WidgetConfiguration(
                 'ticket-customer-info-widget', 'Translatable#Customer', [], {
                     groups: [
-                        'Stammdaten', 'Adresse'
+                        'Core Data', 'Adresse'
                     ]
                 },
                 false, false, null, 'kix-icon-man-house', false)
@@ -31,7 +31,7 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
             new ConfiguredWidget('20180524110920', new WidgetConfiguration(
                 'ticket-contact-info-widget', 'Translatable#Contact', [], {
                     groups: [
-                        'Stammdaten', 'Kommunikation'
+                        'Core Data', 'Kommunikation'
                     ]
                 },
                 false, false, null, 'kix-icon-man-bubble', false)

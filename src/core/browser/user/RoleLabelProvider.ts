@@ -137,7 +137,8 @@ export class RoleLabelProvider implements ILabelProvider<Role> {
     }
 
     public async getObjectText(role: Role, id?: boolean, title?: boolean): Promise<string> {
-        return 'Typ: ' + role.Name;
+        const objectName = await TranslationService.translate('Translatable#Role');
+        return `${objectName}: ${role.Name}`;
     }
 
     public getObjectAdditionalText(role: Role): string {

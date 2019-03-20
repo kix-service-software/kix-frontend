@@ -9,8 +9,8 @@ class Component extends AbstractNewDialog {
     public onCreate(): void {
         this.state = new ComponentState();
         super.init(
-            'Priorität wird angelegt',
-            'Priorität wurde erfolgreich angelegt.',
+            'Translatable#Create Priority',
+            'Translatable#Priority successfully created.',
             KIXObjectType.TICKET_PRIORITY,
             new RoutingConfiguration(
                 null, TicketPriorityDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_PRIORITY,

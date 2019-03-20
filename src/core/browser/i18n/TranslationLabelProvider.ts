@@ -16,7 +16,7 @@ export class TranslationLabelProvider implements ILabelProvider<Translation> {
 
         switch (property) {
             case TranslationProperty.PATTERN:
-                displayValue = 'Translatable#Basestring';
+                displayValue = 'Translatable#Pattern';
                 break;
             case TranslationProperty.LANGUAGES:
                 displayValue = 'Translatable#Languages';

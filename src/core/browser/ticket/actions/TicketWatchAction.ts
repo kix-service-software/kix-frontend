@@ -26,11 +26,11 @@ export class TicketWatchAction extends AbstractAction<Ticket> {
 
         if (ticket.Watchers && ticket.Watchers.some((w) => w.UserID === this.userId)) {
             this.isWatching = true;
-            this.text = 'Translatable#Beobachten Aus';
+            this.text = 'Translatable#Unwatch';
             this.icon = 'kix-icon-eye-off';
         } else {
             this.isWatching = false;
-            this.text = 'Translatable#Beobachten';
+            this.text = 'Translatable#Watch';
             this.icon = 'kix-icon-eye';
         }
     }

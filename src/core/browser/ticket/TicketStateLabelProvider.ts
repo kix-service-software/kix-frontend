@@ -144,7 +144,8 @@ export class TicketStateLabelProvider implements ILabelProvider<TicketState> {
     }
 
     public async getObjectText(ticketState: TicketState, id?: boolean, title?: boolean): Promise<string> {
-        return 'Status: ' + ticketState.Name;
+        const objectName = await TranslationService.translate('Translatable#State');
+        return `${objectName}: ${ticketState.Name}`;
     }
 
     public getObjectAdditionalText(ticketState: TicketState): string {
@@ -155,8 +156,12 @@ export class TicketStateLabelProvider implements ILabelProvider<TicketState> {
         return new ObjectIcon('TicketState', ticketState.ID);
     }
 
-    public async getObjectName(plural?: boolean): Promise<string> {
-        return TranslationService.translate('Translatable#State');
+    public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
+        let displayValue = plural ? 'Translatable#States' : 'Translatable#State';
+        if (translatable) {
+            displayValue = await TranslationService.translate(displayValue);
+        }
+        return displayValue;
     }
 
     public getObjectTooltip(ticketState: TicketState): string {

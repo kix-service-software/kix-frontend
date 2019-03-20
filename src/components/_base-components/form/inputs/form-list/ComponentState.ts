@@ -22,7 +22,8 @@ export class ComponentState {
         public asMultiselect: boolean = false,
         public removeNode: boolean = true,
         public actions: FormInputAction[] = [],
-        public placeholder: string = null
+        public placeholder: string = null,
+        public autocompleteNotFoundText: string = null
     ) { }
 
 }

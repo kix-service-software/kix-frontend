@@ -11,7 +11,7 @@ export class TicketPriorityCreateAction extends AbstractAction {
     public run(): void {
         ContextService.getInstance().setDialogContext(
             // TODO: Titel aus dem aktiven Admin-Modul ermitteln (Kategorie)
-            null, KIXObjectType.TICKET_PRIORITY, ContextMode.CREATE_ADMIN, null, true, 'Stammdaten hinzufügen'
+            null, KIXObjectType.TICKET_PRIORITY, ContextMode.CREATE_ADMIN, null, true, 'Add Core Data'
         );
     }
 

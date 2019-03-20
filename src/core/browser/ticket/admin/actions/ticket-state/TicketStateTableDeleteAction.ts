@@ -39,7 +39,7 @@ export class TicketStateTableDeleteAction extends AbstractAction<ITable> {
                 OverlayType.CONFIRM,
                 null,
                 content,
-                'Status entfernen',
+                'Translatable#Remove State',
                 false
             );
         }
@@ -49,7 +49,7 @@ export class TicketStateTableDeleteAction extends AbstractAction<ITable> {
         const selectedRows = this.data.getSelectedRows();
         if (selectedRows && !!selectedRows.length) {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Entferne Status ...'
+                loading: true, hint: 'Translatable#Remove State ...'
             });
             const failIds = await KIXObjectService.deleteObject(
                 KIXObjectType.TICKET_STATE, selectedRows.map((sR) => sR.getRowObject().getObject().ObjectId)
@@ -60,7 +60,7 @@ export class TicketStateTableDeleteAction extends AbstractAction<ITable> {
             if (!failIds || !!!failIds.length) {
                 const content = new ComponentContent(
                     'toast',
-                    new ToastContent('kix-icon-check', 'Status wurden entfernt.')
+                    new ToastContent('kix-icon-check', 'Translatable#State successfully removed.')
                 );
                 OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
             }

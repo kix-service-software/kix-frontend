@@ -36,7 +36,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             if (validationError) {
                 this.showValidationError(result);
             } else {
-                DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Priorität wird aktualisiert');
+                DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Update Priority');
 
                 const context = await ContextService.getInstance().getContext<TicketPriorityDetailsContext>(
                     TicketPriorityDetailsContext.CONTEXT_ID

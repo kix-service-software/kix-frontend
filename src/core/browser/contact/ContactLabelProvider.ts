@@ -78,7 +78,7 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
                 displayValue = 'Translatable#City';
                 break;
             case ContactProperty.USER_ZIP:
-                displayValue = 'Translatable#Zip';
+                displayValue = 'Translatable#ZIP';
                 break;
             case ContactProperty.USER_COUNTRY:
                 displayValue = 'Translatable#Country';

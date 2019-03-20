@@ -136,7 +136,8 @@ export class ConfigItemClassLabelProvider implements ILabelProvider<ConfigItemCl
     }
 
     public async getObjectText(ciClass: ConfigItemClass, id: boolean = true, name: boolean = true): Promise<string> {
-        return 'CMDB Klasse: ' + ciClass.Name;
+        const objectName = await TranslationService.translate('Translatable#CI Class');
+        return `${objectName}: ${ciClass.Name}`;
     }
 
     public getObjectAdditionalText(ciClass: ConfigItemClass): string {
@@ -152,7 +153,7 @@ export class ConfigItemClassLabelProvider implements ILabelProvider<ConfigItemCl
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
-        let displayValue = plural ? "Translatable#CMDB Classes" : "Translatable#CMDB Class";
+        let displayValue = plural ? "Translatable#CI Classes" : "Translatable#CI Class";
         if (translatable) {
             displayValue = await TranslationService.translate(displayValue, []);
         }

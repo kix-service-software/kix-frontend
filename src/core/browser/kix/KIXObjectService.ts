@@ -14,7 +14,7 @@ import { OverlayService } from "../OverlayService";
 
 export abstract class KIXObjectService<T extends KIXObject = KIXObject> implements IKIXObjectService<T> {
 
-    public abstract isServiceFor(kixObjectType: KIXObjectType);
+    public abstract isServiceFor(kixObjectType: KIXObjectType): boolean;
 
     public abstract getLinkObjectName(): string;
 
@@ -42,7 +42,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 if (!silent) {
                     const content = new ComponentContent('list-with-title',
                         {
-                            title: `Fehler beim Laden (${objectType}):`,
+                            title: `Error load object (${objectType}):`,
                             list: [`${error.Code}: ${error.Message}`]
                         }
                     );

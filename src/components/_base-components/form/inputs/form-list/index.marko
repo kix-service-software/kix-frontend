@@ -55,7 +55,7 @@
                 <if(state.asAutocomplete || state.nodes.length > 7)>
                     <input.input-style
                         type="text"
-                        placeholder=(state.asAutocomplete ? "Suchbegriff eingeben" : "Filtern in Liste")
+                        placeholder=(state.asAutocomplete ? "Suchbegriff eingeben" : "Translatable#Filter in list")
                         value=(state.asAutocomplete ? state.autocompleteSearchValue : state.filterValue)
                         key=("form-list-input-" + state.listId)
                         on-keydown("keyDown")
@@ -63,7 +63,7 @@
                 </if>
                 <if(state.asAutocomplete && state.nodes.length === 0)>
                     <div.form-list-autocomplete-no-results>
-                        <span>${component.getAutocompleteNotFoundText()}</span>
+                        <span>${state.autocompleteNotFoundText()}</span>
                     </div>
                 </if>
                 <else>
@@ -80,7 +80,7 @@
                                 <input.select-all-Checkbox type="checkbox" key="selectAllCheckbox"/>
                                 <translation-string pattern="Translatable#Select all"/>
                             </span>
-                            <button.submit-button type="button" on-click("submit") title="Bestätigen">
+                            <button.submit-button type="button" on-click("submit") title="Submit">
                                 <span.kix-icon-check/>
                                 <translation-string pattern="Translatable#Submit"/>
                             </button>

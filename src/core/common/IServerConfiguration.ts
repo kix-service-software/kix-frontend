@@ -41,6 +41,6 @@ export interface IServerConfiguration {
 
     USE_MEMCACHED: boolean;
 
-    MEMCACHED: MemcachedConfiguration | string;
+    MEMCACHED: MemcachedConfiguration;
 
 }

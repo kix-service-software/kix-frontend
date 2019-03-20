@@ -9,8 +9,8 @@ class Component extends AbstractNewDialog {
     public onCreate(): void {
         this.state = new ComponentState();
         super.init(
-            'Typ wird angelegt',
-            'Typ wurde erfolgreich angelegt.',
+            'Translatable#Create Type',
+            'Translatable#Type successfully created.',
             KIXObjectType.TICKET_TYPE,
             new RoutingConfiguration(
                 null, TicketTypeDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_TYPE,
