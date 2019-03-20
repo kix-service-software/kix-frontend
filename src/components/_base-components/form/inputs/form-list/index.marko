@@ -55,7 +55,7 @@
                 <if(state.asAutocomplete || state.nodes.length > 7)>
                     <input.input-style
                         type="text"
-                        placeholder=(state.asAutocomplete ? "Suchbegriff eingeben" : "Filtern| of=Liste")
+                        placeholder=(state.asAutocomplete ? "Suchbegriff eingeben" : "Filtern in Liste")
                         value=(state.asAutocomplete ? state.autocompleteSearchValue : state.filterValue)
                         key=("form-list-input-" + state.listId)
                         on-keydown("keyDown")
