@@ -55,6 +55,11 @@ export class TicketFormService extends KIXObjectFormService<Ticket> {
             && formInstance.getObjectType() !== KIXObjectType.ARTICLE;
         const customerVisibleValue = new FormFieldValue(customerVisibleReadonly ? true : false, true);
 
+        const articleLabelText =
+            formInstance.getFormContext() === FormContext.NEW && formInstance.getObjectType() === KIXObjectType.TICKET
+                ? 'Translatable#Ticket Description'
+                : 'Translatable#Article Text';
+
         if (channel.Name === 'note') {
             fields.push(new FormField(
                 "Translatable#Visible in customer portal", ArticleProperty.CUSTOMER_VISIBLE, 'checkbox-input',
@@ -64,8 +69,8 @@ export class TicketFormService extends KIXObjectFormService<Ticket> {
             fields.push(new FormField('Translatable#Subject', ArticleProperty.SUBJECT,
                 null, true, 'Translatable#Subject'));
             fields.push(new FormField(
-                'Translatable#Article Text', ArticleProperty.BODY, 'rich-text-input',
-                true, 'Translatable#Article Text', [
+                articleLabelText, ArticleProperty.BODY, 'rich-text-input',
+                true, articleLabelText, [
                     new FormFieldOption(FormFieldOptions.AUTO_COMPLETE, new AutocompleteFormFieldOption([
                         new AutocompleteOption(KIXObjectType.TEXT_MODULE, '::')
                     ]))
@@ -102,7 +107,7 @@ export class TicketFormService extends KIXObjectFormService<Ticket> {
             ));
 
             fields.push(new FormField(
-                'Translatable#Article Text', ArticleProperty.BODY, 'rich-text-input', true, 'Translatable#Article Text'
+                articleLabelText, ArticleProperty.BODY, 'rich-text-input', true, articleLabelText
             ));
 
             fields.push(new FormField(
