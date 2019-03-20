@@ -1,0 +1,1 @@
+export { PermissionLabelProvider } from './PermissionLabelProvider';

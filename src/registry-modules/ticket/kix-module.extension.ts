@@ -29,7 +29,6 @@ class Extension implements IKIXModuleExtension {
         ['ticket-dynamic-fields-container', 'ticket/ticket-dynamic-fields-container'],
         ['ticket-chart-widget', 'ticket/widgets/ticket-chart-widget'],
         ['ticket-queue-explorer', 'ticket/widgets/ticket-queue-explorer'],
-        ['ticket-input-owner', 'ticket/dialogs/inputs/ticket-input-owner'],
         ['ticket-input-type', 'ticket/dialogs/inputs/ticket-input-type'],
         ['ticket-input-priority', 'ticket/dialogs/inputs/ticket-input-priority'],
         ['ticket-input-state', 'ticket/dialogs/inputs/ticket-input-state'],

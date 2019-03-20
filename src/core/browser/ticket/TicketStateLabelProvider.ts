@@ -1,8 +1,9 @@
 import { ILabelProvider } from "../ILabelProvider";
-import { TicketState, KIXObjectType, ObjectIcon, TicketStateProperty, DateTimeUtil } from "../../model";
+import { TicketState, KIXObjectType, ObjectIcon, TicketStateProperty, DateTimeUtil, User } from "../../model";
 import { SearchProperty } from "../SearchProperty";
 import { TranslationService } from "../i18n/TranslationService";
 import { ObjectDataService } from "../ObjectDataService";
+import { KIXObjectService } from "../kix";
 
 export class TicketStateLabelProvider implements ILabelProvider<TicketState> {
 
@@ -66,33 +67,15 @@ export class TicketStateLabelProvider implements ILabelProvider<TicketState> {
     ): Promise<string> {
         let displayValue = ticketState[property];
 
-        const objectData = ObjectDataService.getInstance().getObjectData();
-
         switch (property) {
             case TicketStateProperty.TYPE_ID:
                 displayValue = ticketState.TypeName;
-                break;
-            case TicketStateProperty.CREATED_BY:
-            case TicketStateProperty.CHANGE_BY:
-                const user = objectData.users.find((u) => u.UserID === displayValue);
-                if (user) {
-                    displayValue = user.UserFullname;
-                }
-                break;
-            case TicketStateProperty.CREATE_TIME:
-            case TicketStateProperty.CHANGE_TIME:
-                displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
-                break;
-            case TicketStateProperty.VALID_ID:
-                const valid = objectData.validObjects.find((v) => v.ID === displayValue);
-                if (valid) {
-                    displayValue = valid.Name;
-                }
                 break;
             case TicketStateProperty.ID:
                 displayValue = ticketState.Name;
                 break;
             default:
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue);
         }
 
         if (translatable && displayValue) {
@@ -116,10 +99,10 @@ export class TicketStateLabelProvider implements ILabelProvider<TicketState> {
                 break;
             case TicketStateProperty.CREATED_BY:
             case TicketStateProperty.CHANGE_BY:
-                const user = objectData.users.find((u) => u.UserID.toString() === displayValue.toString());
-                if (user) {
-                    displayValue = user.UserFullname;
-                }
+                const users = await KIXObjectService.loadObjects<User>(
+                    KIXObjectType.USER, [value], null, null, true, true
+                ).catch((error) => [] as User[]);
+                displayValue = users && !!users.length ? users[0].UserFullname : value;
                 break;
             case TicketStateProperty.CREATE_TIME:
             case TicketStateProperty.CHANGE_TIME:

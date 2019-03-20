@@ -9,8 +9,8 @@ class Component extends AbstractNewDialog {
     public onCreate(): void {
         this.state = new ComponentState();
         super.init(
-            'Übersetzung wird angelegt',
-            'Übersetzung wurde erfolgreich angelegt.',
+            'Translatable#Create Translation',
+            'Translatable#Translation successfully created.',
             KIXObjectType.TRANSLATION,
             new RoutingConfiguration(
                 null, TranslationDetailsContext.CONTEXT_ID, KIXObjectType.TRANSLATION,

@@ -335,7 +335,7 @@ class Component {
 
         DialogService.getInstance().setMainDialogLoading(false);
         if (createLinksOK && deleteLinksOK) {
-            BrowserUtil.openSuccessOverlay('Verknüpfungen aktualisiert.');
+            BrowserUtil.openSuccessOverlay('Translatable#Links updated.');
             DialogService.getInstance().submitMainDialog();
             const activeContext = ContextService.getInstance().getActiveContext();
             if (activeContext) {
@@ -346,7 +346,7 @@ class Component {
 
     private async addLinks(): Promise<boolean> {
         const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(KIXObjectType.LINK_OBJECT);
-        DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Verknüpfungen werden angelegt.');
+        DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Create Links.');
         let ok = true;
         for (const newLinkObject of this.newLinkObjects) {
             await service.createObject(
@@ -354,7 +354,7 @@ class Component {
                 newLinkObject,
                 new CreateLinkObjectOptions(this.mainObject)
             ).catch((error) => {
-                BrowserUtil.openErrorOverlay('Verknüpfung nicht anlegbar (' + error + ')');
+                BrowserUtil.openErrorOverlay('Translatable#Can not create link (' + error + ')');
                 ok = false;
                 return;
             });
@@ -363,7 +363,7 @@ class Component {
     }
 
     private async deleteLinks(linkIdsToDelete: number[]): Promise<boolean> {
-        DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Verknüpfungen werden entfernt.');
+        DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Links will be removed.');
         const failIds = await KIXObjectService.deleteObject(KIXObjectType.LINK_OBJECT, linkIdsToDelete);
         return !failIds || !!!failIds.length;
     }

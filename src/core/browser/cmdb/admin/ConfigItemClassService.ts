@@ -29,10 +29,4 @@ export class ConfigItemClassService extends KIXObjectService<ConfigItemClass> {
         this.loadObjects(KIXObjectType.CONFIG_ITEM_CLASS, null);
     }
 
-    protected async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
-        const parameter: Array<[string, any]> = [];
-        parameter.push([property, value]);
-        return parameter;
-    }
-
 }

@@ -26,16 +26,6 @@ export class CustomerService extends KIXObjectService<Customer> {
         return "Person";
     }
 
-    protected async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
-        const parameter: Array<[string, any]> = [];
-
-        if (value) {
-            parameter.push([property, value]);
-        }
-
-        return parameter;
-    }
-
     public openCustomer(customerId: string, newTab: boolean = false): void {
         if (newTab) {
             const link = document.createElement("a");

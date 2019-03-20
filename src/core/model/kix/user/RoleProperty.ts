@@ -14,6 +14,10 @@ export enum RoleProperty {
 
     CHANGE_TIME = 'ChangeTime',
 
-    CHANGE_BY = 'ChangeBy'
+    CHANGE_BY = 'ChangeBy',
+
+    USERIDS = 'UserIDs',
+
+    PERMISSIONS = 'Permissions'
 
 }

@@ -24,8 +24,4 @@ export class SysConfigService extends KIXObjectService<SysConfigItem> {
     public getLinkObjectName(): string {
         return 'Sysconfig';
     }
-
-    protected async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
-        return [];
-    }
 }

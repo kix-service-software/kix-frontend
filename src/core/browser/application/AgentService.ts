@@ -4,7 +4,7 @@ import { PersonalSetting, KIXObjectType, User } from '../../model';
 import { KIXObjectService } from '../kix';
 import { AuthenticationSocketClient } from './AuthenticationSocketClient';
 
-export class AgentService extends KIXObjectService {
+export class AgentService extends KIXObjectService<User> {
 
     private static INSTANCE: AgentService = null;
 
@@ -17,11 +17,12 @@ export class AgentService extends KIXObjectService {
     }
 
     public getLinkObjectName(): string {
-        return '';
+        return 'User';
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {
-        return kixObjectType === KIXObjectType.PERSONAL_SETTINGS;
+        return kixObjectType === KIXObjectType.USER ||
+            kixObjectType === KIXObjectType.PERSONAL_SETTINGS;
     }
 
     public async login(userName: string, password: string, userType: UserType = UserType.AGENT): Promise<boolean> {
@@ -41,5 +42,4 @@ export class AgentService extends KIXObjectService {
         const parameter: Array<[string, any]> = await this.prepareFormFields(formId);
         await AgentSocketClient.getInstance().setPreferences(parameter);
     }
-
 }

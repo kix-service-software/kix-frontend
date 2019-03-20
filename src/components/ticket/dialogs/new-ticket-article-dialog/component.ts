@@ -9,8 +9,8 @@ class Component extends AbstractNewDialog {
     public onCreate(): void {
         this.state = new ComponentState();
         super.init(
-            'Artikel wird angelegt',
-            'Artikel wurde erfolgreich angelegt.',
+            'Translatable#Create Article',
+            'Translatable#Article successfully created.',
             KIXObjectType.ARTICLE,
             null
         );

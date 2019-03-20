@@ -1,6 +1,9 @@
 {
     "name": "kix-user",
     "extensions": {
+        "kix:configuration": {
+            "new-user-role-dialog-configuration": "../../dist/registry-modules/user/admin/new-user-role-dialog-configuration.extension"
+        },
         "kix:modules": {
             "user-module": "../../dist/registry-modules/user/kix-module.extension"
         },

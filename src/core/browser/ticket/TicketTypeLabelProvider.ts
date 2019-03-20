@@ -1,8 +1,9 @@
 import { ILabelProvider } from "../ILabelProvider";
-import { TicketType, KIXObjectType, ObjectIcon, TicketTypeProperty, DateTimeUtil } from "../../model";
+import { TicketType, KIXObjectType, ObjectIcon, TicketTypeProperty, DateTimeUtil, User } from "../../model";
 import { SearchProperty } from "../SearchProperty";
 import { TranslationService } from "../i18n/TranslationService";
 import { ObjectDataService } from "../ObjectDataService";
+import { KIXObjectService } from "../kix";
 
 export class TicketTypeLabelProvider implements ILabelProvider<TicketType> {
 
@@ -62,30 +63,12 @@ export class TicketTypeLabelProvider implements ILabelProvider<TicketType> {
     ): Promise<string> {
         let displayValue = ticketType[property];
 
-        const objectData = ObjectDataService.getInstance().getObjectData();
-
         switch (property) {
-            case TicketTypeProperty.CREATE_BY:
-            case TicketTypeProperty.CHANGE_BY:
-                const user = objectData.users.find((u) => u.UserID === displayValue);
-                if (user) {
-                    displayValue = user.UserFullname;
-                }
-                break;
-            case TicketTypeProperty.CREATE_TIME:
-            case TicketTypeProperty.CHANGE_TIME:
-                displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
-                break;
-            case TicketTypeProperty.VALID_ID:
-                const valid = objectData.validObjects.find((v) => v.ID === displayValue);
-                if (valid) {
-                    displayValue = valid.Name;
-                }
-                break;
             case TicketTypeProperty.ID:
                 displayValue = ticketType.Name;
                 break;
             default:
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue);
         }
 
         if (translatable && displayValue) {
@@ -109,10 +92,10 @@ export class TicketTypeLabelProvider implements ILabelProvider<TicketType> {
                 break;
             case TicketTypeProperty.CREATE_BY:
             case TicketTypeProperty.CHANGE_BY:
-                const user = objectData.users.find((u) => u.UserID.toString() === displayValue.toString());
-                if (user) {
-                    displayValue = user.UserFullname;
-                }
+                const users = await KIXObjectService.loadObjects<User>(
+                    KIXObjectType.USER, [value], null, null, true, true
+                ).catch((error) => [] as User[]);
+                displayValue = users && !!users.length ? users[0].UserFullname : value;
                 break;
             case TicketTypeProperty.CREATE_TIME:
             case TicketTypeProperty.CHANGE_TIME:

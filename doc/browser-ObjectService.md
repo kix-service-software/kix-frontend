@@ -36,10 +36,6 @@ export class FAQService extends KIXObjectService<FAQArticle> {
         return "FAQArticle";
     }
 
-    protected async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
-        // some code
-    }
-
 }
 ```
 

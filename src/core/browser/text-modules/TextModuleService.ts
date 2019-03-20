@@ -29,10 +29,6 @@ export class TextModuleService extends KIXObjectService {
         return 'TextModule';
     }
 
-    protected async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
-        return [];
-    }
-
     public getAutoFillConfiguration(textMatch: any, placeholder: string): IAutofillConfiguration {
         // tslint:disable:max-line-length
         const itemTemplate = `<li data-id="{id}" class="text-module-autofill-item"><div class="text-module-category">{Category}</div><div class="text-module-info"><span class="text-module-name">{Name}</span><span class="text-module-label">{Keywords}</span></div></li>`;

@@ -12,6 +12,7 @@ export * from './user';
 export * from './customer';
 export * from './text-module';
 export * from './i18n';
+export * from './permission';
 
 export { ClientRegistration } from './ClientRegistration';
 export { GeneralCatalogItem } from './GeneralCatalogItem';

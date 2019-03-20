@@ -55,7 +55,7 @@ class Component {
                 if (validationError) {
                     this.showValidationError(result);
                 } else {
-                    DialogService.getInstance().setMainDialogLoading(true, 'Config Item wird aktualisiert');
+                    DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Update Config Item');
                     const cmdbService = ServiceRegistry.getServiceInstance<CMDBService>(KIXObjectType.CONFIG_ITEM);
                     const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
                     if (cmdbService && context) {
@@ -74,7 +74,7 @@ class Component {
 
                             const hint = configItem.CurrentVersion
                                 && configItem.CurrentVersion.equals(updatedConfigItem.CurrentVersion)
-                                ? toast : 'Neue Version wurde erstellt';
+                                ? toast : 'Translatable#New Version created';
                             BrowserUtil.openSuccessOverlay(hint);
 
                             DialogService.getInstance().submitMainDialog();
@@ -89,13 +89,13 @@ class Component {
         const errorMessages = result.filter((r) => r.severity === ValidationSeverity.ERROR).map((r) => r.message);
         const content = new ComponentContent('list-with-title',
             {
-                title: 'Fehler beim Validieren des Formulars:',
+                title: 'Translatable#Fehler beim Validieren des Formulars:',
                 list: errorMessages
             }
         );
 
         OverlayService.getInstance().openOverlay(
-            OverlayType.WARNING, null, content, 'Validierungsfehler', true
+            OverlayType.WARNING, null, content, 'Translatable#Validation error', true
         );
     }
 

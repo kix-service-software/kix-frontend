@@ -38,12 +38,6 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
         return 'ConfigItem';
     }
 
-    protected async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
-        const parameter: Array<[string, any]> = [];
-        parameter.push([property, value]);
-        return parameter;
-    }
-
     public async createConfigItem(formId: string, classId: number): Promise<string | number> {
         const parameter = await CreateConfigItemUtil.createParameter(formId, classId);
         const configItemId = await KIXObjectService.createObject(KIXObjectType.CONFIG_ITEM, parameter);

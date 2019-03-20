@@ -8,7 +8,7 @@ export class ComponentState {
         public predefinedTableFilter: KIXObjectPropertyFilter[] = [],
         public actions: AbstractAction[] = [],
         public instanceId: string = '20181210151212-cmdb-ci-classes-list',
-        public title: string = 'Translatable#Core Data: CI Class',
+        public title: string = 'Core Data: CI Class',
         public filterCount: number = null
     ) { }
 

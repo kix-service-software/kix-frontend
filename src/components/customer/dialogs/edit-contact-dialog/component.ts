@@ -39,7 +39,7 @@ class Component {
         if (validationError) {
             this.showValidationError(result);
         } else {
-            DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Ansprechpartner wird aktualisiert');
+            DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Update Contact');
             const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
             if (context) {
                 await KIXObjectService.updateObjectByForm(
@@ -69,7 +69,7 @@ class Component {
         );
 
         OverlayService.getInstance().openOverlay(
-            OverlayType.WARNING, null, content, 'Translatable#Validierungsfehler', true
+            OverlayType.WARNING, null, content, 'Translatable#Validation error', true
         );
     }
 

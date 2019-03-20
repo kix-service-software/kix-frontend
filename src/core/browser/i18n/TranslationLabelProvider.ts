@@ -1,7 +1,7 @@
 import { ILabelProvider } from "../ILabelProvider";
-import { Translation, KIXObjectType, ObjectIcon, TranslationProperty, DateTimeUtil } from "../../model";
+import { Translation, KIXObjectType, ObjectIcon, TranslationProperty, DateTimeUtil, User } from "../../model";
 import { TranslationService } from "./TranslationService";
-import { ObjectDataService } from "../ObjectDataService";
+import { KIXObjectService } from "../kix";
 
 export class TranslationLabelProvider implements ILabelProvider<Translation> {
 
@@ -53,8 +53,6 @@ export class TranslationLabelProvider implements ILabelProvider<Translation> {
     ): Promise<string> {
         let displayValue = translation[property];
 
-        const objectData = ObjectDataService.getInstance().getObjectData();
-
         switch (property) {
             case TranslationProperty.PATTERN:
                 displayValue = translation.Pattern;
@@ -64,10 +62,10 @@ export class TranslationLabelProvider implements ILabelProvider<Translation> {
                 break;
             case TranslationProperty.CREATE_BY:
             case TranslationProperty.CHANGE_BY:
-                const user = objectData.users.find((u) => u.UserID === displayValue);
-                if (user) {
-                    displayValue = user.UserFullname;
-                }
+                const users = await KIXObjectService.loadObjects<User>(
+                    KIXObjectType.USER, [value], null, null, true, true
+                ).catch((error) => [] as User[]);
+                displayValue = users && !!users.length ? users[0].UserFullname : value;
                 break;
             case TranslationProperty.CREATE_TIME:
             case TranslationProperty.CHANGE_TIME:

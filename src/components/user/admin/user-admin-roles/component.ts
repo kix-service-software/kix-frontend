@@ -71,8 +71,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private prepareActions(): void {
         this.state.actions = ActionFactory.getInstance().generateActions(
             [
-                'user-admin-role-create', 'user-admin-role-table-delete',
-                'user-admin-role-import', 'csv-export-action'
+                'user-admin-role-create-action', 'user-admin-role-table-delete-action',
+                'import-action', 'csv-export-action'
             ], null
         );
 

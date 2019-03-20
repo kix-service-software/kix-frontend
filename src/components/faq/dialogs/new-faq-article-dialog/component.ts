@@ -10,8 +10,8 @@ class Component extends AbstractNewDialog {
     public onCreate(): void {
         this.state = new ComponentState();
         super.init(
-            'FAQ Artikel wird angelegt',
-            'FAQ Artikel wurde erfolgreich angelegt.',
+            'Translatable#Create FAQ Article',
+            'Translatable#FAQ Article successfully created.',
             KIXObjectType.FAQ_ARTICLE,
             new RoutingConfiguration(
                 null, FAQDetailsContext.CONTEXT_ID, KIXObjectType.FAQ_ARTICLE,

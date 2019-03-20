@@ -39,18 +39,18 @@ export class TicketWatchAction extends AbstractAction<Ticket> {
         let successHint: string;
         if (this.isWatching) {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Entferne Ticketbeobachtung ...'
+                loading: true, hint: 'Translatable#Unwatch Ticket ...'
             });
 
             const failIds = await KIXObjectService.deleteObject(
                 KIXObjectType.WATCHER, [this.data.TicketID], new DeleteTicketWatcherOptions(this.userId)
             );
             if (!failIds || !!!failIds.length) {
-                successHint = 'Translatable#Ticket wird nicht mehr beobachtet.';
+                successHint = 'Translatable#Ticket is no longer watched.';
             }
         } else {
             EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Ticket wird beobachtet ...' }
+                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Watch Ticket ...' }
             );
 
             const watcherId = await KIXObjectService.createObject(
@@ -58,7 +58,7 @@ export class TicketWatchAction extends AbstractAction<Ticket> {
                 new CreateTicketWatcherOptions(this.data.TicketID, this.userId)
             );
             if (watcherId) {
-                successHint = 'Translatable#Ticket wird beobachtet.';
+                successHint = 'Translatable#Ticket is being watched.';
             }
         }
 

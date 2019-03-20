@@ -27,12 +27,6 @@ export class LinkService extends KIXObjectService<Link> {
         return 'LinkObject';
     }
 
-    protected async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
-        const parameter: Array<[string, any]> = [];
-        parameter.push([property, value]);
-        return parameter;
-    }
-
     public async getObjectUrl(object?: KIXObject, objectId?: string | number): Promise<string> {
         if (object && object instanceof LinkObject) {
             const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(

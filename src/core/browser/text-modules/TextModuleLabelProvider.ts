@@ -81,13 +81,10 @@ export class TextModuleLabelProvider implements ILabelProvider<TextModule> {
     }
 
     public async getObjectText(
-        textModule: TextModule, id?: boolean, title?: boolean, translatable: boolean = true
+        textModule: TextModule, id?: boolean, title?: boolean, translatable?: boolean
     ): Promise<string> {
-        let displayValue = 'Translatable#Type';
-        if (translatable) {
-            displayValue = await TranslationService.translate(displayValue);
-        }
-        return `${displayValue}: ${textModule.Name}`;
+        const objectName = await this.getObjectName(false, translatable);
+        return `${objectName}: ${textModule.Name}`;
     }
 
     public getObjectAdditionalText(textModule: TextModule): string {

@@ -77,28 +77,28 @@ export class TranslationService extends KIXObjectService<Translation> {
         pattern: string = '', placeholderValues: Array<string | number> = []
     ): Promise<string> {
         let translationValue = pattern;
+        if (translationValue !== null) {
 
-        if (translationValue.startsWith('Translatable#')) {
-            translationValue = translationValue.replace('Translatable#', '');
-        }
+            if (translationValue.startsWith('Translatable#')) {
+                translationValue = translationValue.replace('Translatable#', '');
+            }
 
-        const debug = ClientStorageService.getOption('i18n-debug');
+            const translations = await KIXObjectService.loadObjects<Translation>(KIXObjectType.TRANSLATION);
+            const translation = translations.find((t) => t.Pattern === translationValue);
 
-        const translations = await KIXObjectService.loadObjects<Translation>(KIXObjectType.TRANSLATION);
-
-        const translation = translations.find((t) => t.Pattern === translationValue);
-
-        if (translation) {
-            const language = await this.getUserLanguage();
-            if (language) {
-                const translationLanguage = translation.Languages.find((l) => l.Language === language);
-                if (translationLanguage) {
-                    translationValue = translationLanguage.Value;
+            if (translation) {
+                const language = await this.getUserLanguage();
+                if (language) {
+                    const translationLanguage = translation.Languages.find((l) => l.Language === language);
+                    if (translationLanguage) {
+                        translationValue = translationLanguage.Value;
+                    }
                 }
             }
-        }
 
-        translationValue = this.format(translationValue, placeholderValues.map((p) => p.toString()));
+            translationValue = this.format(translationValue, placeholderValues.map((p) => p.toString()));
+        }
+        const debug = ClientStorageService.getOption('i18n-debug');
 
         if (debug && debug !== 'false' && debug !== '0') {
             translationValue = 'TR-' + pattern;

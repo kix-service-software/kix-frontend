@@ -1,8 +1,8 @@
 import { ILabelProvider } from '..';
-import { DateTimeUtil, ObjectIcon, KIXObjectType } from '../../model';
+import { DateTimeUtil, ObjectIcon, KIXObjectType, User } from '../../model';
 import { FAQArticleHistoryProperty, FAQHistory } from '../../model/kix/faq';
 import { TranslationService } from '../i18n/TranslationService';
-import { ObjectDataService } from '../ObjectDataService';
+import { KIXObjectService } from '../kix';
 
 export class FAQArticleHistoryLabelProvider implements ILabelProvider<FAQHistory> {
 
@@ -48,21 +48,20 @@ export class FAQArticleHistoryLabelProvider implements ILabelProvider<FAQHistory
     public async getDisplayText(
         history: FAQHistory, property: string, defaultValue?: string, translatable: boolean = true
     ): Promise<string> {
-        const value = history[property];
-        let displayValue = value;
-
-        const objectData = ObjectDataService.getInstance().getObjectData();
+        let displayValue = history[property];
 
         switch (property) {
             case FAQArticleHistoryProperty.CREATED_BY:
-                const user = objectData.users.find((u) => u.UserID === history.CreatedBy);
-                displayValue = user ? user.UserFullname : history.CreatedBy;
+                const users = await KIXObjectService.loadObjects<User>(
+                    KIXObjectType.USER, [displayValue], null, null, true, true
+                ).catch((error) => [] as User[]);
+                displayValue = users && !!users.length ? users[0].UserFullname : displayValue;
                 break;
             case FAQArticleHistoryProperty.CREATED:
-                displayValue = DateTimeUtil.getLocalDateTimeString(value);
+                displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
             default:
-                displayValue = String(value);
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue);
         }
 
         if (translatable && displayValue) {

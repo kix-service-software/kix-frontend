@@ -1,7 +1,11 @@
 import { ILabelProvider } from '..';
-import { ConfigItemHistory, DateTimeUtil, ObjectIcon, KIXObjectType, ConfigItemHistoryProperty } from '../../model';
+import {
+    ConfigItemHistory, DateTimeUtil, ObjectIcon, KIXObjectType,
+    ConfigItemHistoryProperty, User
+} from '../../model';
 import { TranslationService } from '../i18n/TranslationService';
 import { ObjectDataService } from '../ObjectDataService';
+import { KIXObjectService } from '../kix';
 
 export class ConfigItemHistoryLabelProvider implements ILabelProvider<ConfigItemHistory> {
 
@@ -47,19 +51,17 @@ export class ConfigItemHistoryLabelProvider implements ILabelProvider<ConfigItem
     public async getDisplayText(
         historyEntry: ConfigItemHistory, property: string, value?: string, translatable: boolean = true
     ): Promise<string> {
-        let displayValue = property.toString();
-
-        const objectData = ObjectDataService.getInstance().getObjectData();
+        let displayValue = historyEntry[property];
 
         switch (property) {
             case ConfigItemHistoryProperty.CREATE_BY:
-                const user = objectData.users.find((u) => u.UserID === historyEntry[property]);
-                if (user) {
-                    displayValue = user.UserFullname;
-                }
+                const users = await KIXObjectService.loadObjects<User>(
+                    KIXObjectType.USER, [displayValue], null, null, true, true
+                ).catch((error) => [] as User[]);
+                displayValue = users && !!users.length ? users[0].UserFullname : displayValue;
                 break;
             case ConfigItemHistoryProperty.CREATE_TIME:
-                displayValue = DateTimeUtil.getLocalDateTimeString(historyEntry[property]);
+                displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
             case ConfigItemHistoryProperty.VERSION_ID:
                 displayValue = historyEntry.VersionID
@@ -67,7 +69,7 @@ export class ConfigItemHistoryLabelProvider implements ILabelProvider<ConfigItem
                     : '';
                 break;
             default:
-                displayValue = historyEntry[property];
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue);
         }
 
         if (translatable && displayValue) {

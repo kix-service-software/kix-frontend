@@ -9,8 +9,8 @@ class Component extends AbstractNewDialog {
     public onCreate(): void {
         this.state = new ComponentState();
         super.init(
-            'Translatable#Ansprechpartner wird angelegt',
-            'Translatable#Ansprechpartner wurde erfolgreich angelegt.',
+            'Translatable#Create Contact',
+            'Translatable#Contact successfully created.',
             KIXObjectType.CONTACT,
             new RoutingConfiguration(
                 null, ContactDetailsContext.CONTEXT_ID, KIXObjectType.CONTACT,

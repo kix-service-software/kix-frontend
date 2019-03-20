@@ -1,9 +1,10 @@
 import { ILabelProvider } from '..';
 import {
-    ObjectIcon, KIXObjectType, ConfigItemClass, ConfigItemClassProperty, DateTimeUtil
-} from '../../model';
-import { TranslationService } from '../i18n/TranslationService';
-import { ObjectDataService } from '../ObjectDataService';
+    ObjectIcon, KIXObjectType, ConfigItemClass, ConfigItemClassProperty, DateTimeUtil, User
+} from "../../model";
+import { TranslationService } from "../i18n/TranslationService";
+import { ObjectDataService } from "../ObjectDataService";
+import { KIXObjectService } from "../kix";
 
 export class ConfigItemClassLabelProvider implements ILabelProvider<ConfigItemClass> {
 
@@ -23,10 +24,10 @@ export class ConfigItemClassLabelProvider implements ILabelProvider<ConfigItemCl
                 break;
             case ConfigItemClassProperty.CREATE_BY:
             case ConfigItemClassProperty.CHANGE_BY:
-                const user = objectData.users.find((u) => u.UserID.toString() === displayValue.toString());
-                if (user) {
-                    displayValue = user.UserFullname;
-                }
+                const users = await KIXObjectService.loadObjects<User>(
+                    KIXObjectType.USER, [value], null, null, true, true
+                ).catch((error) => [] as User[]);
+                displayValue = users && !!users.length ? users[0].UserFullname : value;
                 break;
             case ConfigItemClassProperty.CREATE_TIME:
             case ConfigItemClassProperty.CHANGE_TIME:
@@ -89,31 +90,12 @@ export class ConfigItemClassLabelProvider implements ILabelProvider<ConfigItemCl
     ): Promise<string> {
         let displayValue = ciClass[property];
 
-        const objectData = ObjectDataService.getInstance().getObjectData();
-
         switch (property) {
-            case ConfigItemClassProperty.CREATE_BY:
-            case ConfigItemClassProperty.CHANGE_BY:
-                const user = objectData.users.find((u) => u.UserID === displayValue);
-                if (user) {
-                    displayValue = user.UserFullname;
-                }
-                break;
-            case ConfigItemClassProperty.VALID_ID:
-                const valid = objectData.validObjects.find((v) => v.ID === displayValue);
-                if (valid) {
-                    displayValue = valid.Name;
-                }
-                break;
-            case ConfigItemClassProperty.CREATE_TIME:
-            case ConfigItemClassProperty.CHANGE_TIME:
-                displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
-                break;
             case ConfigItemClassProperty.ID:
                 displayValue = ciClass.Name;
                 break;
             default:
-                displayValue = ciClass[property];
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue);
         }
 
         if (translatable && displayValue) {
@@ -135,8 +117,10 @@ export class ConfigItemClassLabelProvider implements ILabelProvider<ConfigItemCl
         return ciClass instanceof ConfigItemClass;
     }
 
-    public async getObjectText(ciClass: ConfigItemClass, id: boolean = true, name: boolean = true): Promise<string> {
-        const objectName = await TranslationService.translate('Translatable#CI Class');
+    public async getObjectText(
+        ciClass: ConfigItemClass, id: boolean = true, name: boolean = true, translatable?: boolean
+    ): Promise<string> {
+        const objectName = await this.getObjectName(false, translatable);
         return `${objectName}: ${ciClass.Name}`;
     }
 

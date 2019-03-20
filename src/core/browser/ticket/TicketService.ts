@@ -3,7 +3,7 @@ import { SearchOperator, ContextService } from '..';
 import {
     Attachment, KIXObjectType, Ticket, TicketProperty, FilterDataType, FilterCriteria, FilterType,
     TreeNode, ObjectIcon, Queue, Service, TicketPriority, TicketType,
-    TicketState, StateType, KIXObject, Sla, TableFilterCriteria
+    TicketState, StateType, KIXObject, Sla, TableFilterCriteria, User
 } from '../../model';
 import { TicketParameterUtil } from './TicketParameterUtil';
 import { KIXObjectService } from '../kix';
@@ -126,7 +126,10 @@ export class TicketService extends KIXObjectService<Ticket> {
                 break;
             case TicketProperty.RESPONSIBLE_ID:
             case TicketProperty.OWNER_ID:
-                objectData.users.forEach((u) => values.push(new TreeNode(u.UserID, u.UserFullname, 'kix-icon-man')));
+                const users = await KIXObjectService.loadObjects<User>(
+                    KIXObjectType.USER, null, null, null, true, true
+                ).catch((error) => [] as User[]);
+                users.forEach((u) => values.push(new TreeNode(u.UserID, u.UserFullname, 'kix-icon-man')));
                 break;
             default:
         }

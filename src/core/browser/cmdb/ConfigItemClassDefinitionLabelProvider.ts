@@ -1,17 +1,18 @@
 import { ILabelProvider } from "..";
 import {
-    ObjectIcon, KIXObjectType, ConfigItemClassDefinition, KIXObject, ConfigItemClassProperty, DateTimeUtil,
-    ConfigItemClassDefinitionProperty
+    ObjectIcon, KIXObjectType, ConfigItemClassDefinition, ConfigItemClassProperty, DateTimeUtil,
+    ConfigItemClassDefinitionProperty, User
 } from "../../model";
 import { TranslationService } from "../i18n/TranslationService";
 import { ObjectDataService } from "../ObjectDataService";
+import { KIXObjectService } from "../kix";
 
 export class ConfigItemClassDefinitionLabelProvider implements ILabelProvider<ConfigItemClassDefinition> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION;
 
     public async getPropertyValueDisplayText(property: string, value: string | number | any = ''): Promise<string> {
-        return value;
+        return value.toString();
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
@@ -49,20 +50,18 @@ export class ConfigItemClassDefinitionLabelProvider implements ILabelProvider<Co
     ): Promise<string> {
         let displayValue = ciClassDefinition[property];
 
-        const objectData = ObjectDataService.getInstance().getObjectData();
-
         switch (property) {
             case ConfigItemClassDefinitionProperty.CREATE_TIME:
                 displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
             case ConfigItemClassDefinitionProperty.CREATE_BY:
-                const user = objectData.users.find((u) => u.UserID === displayValue);
-                if (user) {
-                    displayValue = user.UserFullname;
-                }
+                const users = await KIXObjectService.loadObjects<User>(
+                    KIXObjectType.USER, [displayValue], null, null, true, true
+                ).catch((error) => [] as User[]);
+                displayValue = users && !!users.length ? users[0].UserFullname : displayValue;
                 break;
             default:
-                displayValue = ciClassDefinition[property];
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue);
         }
 
         if (translatable && displayValue) {
@@ -85,9 +84,10 @@ export class ConfigItemClassDefinitionLabelProvider implements ILabelProvider<Co
     }
 
     public async getObjectText(
-        ciClassDefinition: ConfigItemClassDefinition, id: boolean = true, name: boolean = true
+        ciClassDefinition: ConfigItemClassDefinition, id: boolean = true, name: boolean = true,
+        translatable: boolean = true
     ): Promise<string> {
-        return ciClassDefinition.Class;
+        return translatable ? await TranslationService.translate(ciClassDefinition.Class) : ciClassDefinition.Class;
     }
 
     public getObjectAdditionalText(ciClassDefinition: ConfigItemClassDefinition): string {
