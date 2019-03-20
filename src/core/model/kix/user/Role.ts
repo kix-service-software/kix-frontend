@@ -1,5 +1,6 @@
 import { KIXObject } from "../KIXObject";
 import { KIXObjectType } from "../KIXObjectType";
+import { Permission } from "../permission";
 
 export class Role extends KIXObject<Role> {
 
@@ -23,6 +24,10 @@ export class Role extends KIXObject<Role> {
 
     public ChangeBy: number;
 
+    public UserIDs: number[];
+
+    public Permissions: Permission[];
+
     public constructor(role?: Role) {
         super();
         if (role) {
@@ -35,6 +40,8 @@ export class Role extends KIXObject<Role> {
             this.Name = role.Name;
             this.Comment = role.Comment;
             this.ValidID = role.ValidID;
+            this.UserIDs = role.UserIDs;
+            this.Permissions = role.Permissions;
         }
     }
 

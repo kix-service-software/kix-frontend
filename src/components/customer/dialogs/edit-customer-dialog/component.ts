@@ -38,7 +38,7 @@ class Component {
         if (validationError) {
             this.showValidationError(result);
         } else {
-            DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Kunde wird aktualisiert');
+            DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Update Customer');
             const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
             if (context) {
                 await KIXObjectService.updateObjectByForm(
@@ -62,13 +62,13 @@ class Component {
         const errorMessages = result.filter((r) => r.severity === ValidationSeverity.ERROR).map((r) => r.message);
         const content = new ComponentContent('list-with-title',
             {
-                title: 'Fehler beim Validieren des Formulars:',
+                title: 'Translatable#Fehler beim Validieren des Formulars:',
                 list: errorMessages
             }
         );
 
         OverlayService.getInstance().openOverlay(
-            OverlayType.WARNING, null, content, 'Validierungsfehler', true
+            OverlayType.WARNING, null, content, 'Translatable#Validation error', true
         );
     }
 }

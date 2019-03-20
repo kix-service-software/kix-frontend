@@ -9,8 +9,8 @@ class NewCustomerDialogComponent extends AbstractNewDialog {
     public onCreate(): void {
         this.state = new ComponentState();
         super.init(
-            'Kunde wird angelegt',
-            'Kunde wurde erfolgreich angelegt.',
+            'Translatable#Create Customer',
+            'Translatable#Customer successfully created.',
             KIXObjectType.CUSTOMER,
             new RoutingConfiguration(
                 null, CustomerDetailsContext.CONTEXT_ID, KIXObjectType.CUSTOMER,

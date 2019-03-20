@@ -4,7 +4,8 @@ import {
 } from '../../core/browser/ticket';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetSize, WidgetConfiguration, TicketProperty,
-    FormField, ArticleProperty, KIXObjectType, Form, FormContext, FormFieldValue
+    FormField, ArticleProperty, KIXObjectType, Form, FormContext, FormFieldValue, FormFieldOption,
+    ObjectReferenceOptions
 } from '../../core/model';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../core/services';
@@ -73,10 +74,18 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
                 'Translatable#Link Ticket with', TicketProperty.LINK, 'link-input', false, 'Translatable#Link this ticket item to an config item, an FAQ article or another ticket.')
             );
             fields.push(new FormField(
-                'Translatable#Owner', TicketProperty.OWNER_ID, 'ticket-input-owner', false, 'Translatable#„Owner“ is the user to which the ticket is assigned for processing.')
+                'Translatable#Owner', TicketProperty.OWNER_ID, 'object-reference-input', false, 'Translatable#Owner is the user to which the ticket is assigned for processing.', [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
+                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false)
+                ]
+            )
             );
             fields.push(new FormField(
-                'Translatable#Responsible', TicketProperty.RESPONSIBLE_ID, 'ticket-input-owner', false, 'Translatable#Responsible is the person in charge for this tickets processing, e.g. Service Owner, Key Account Manager. It does not need to be identical with the assigned ticket owner.')
+                'Translatable#Responsible', TicketProperty.RESPONSIBLE_ID, 'object-reference-input', false, 'Translatable#Responsible is the person in charge for this tickets processing, e.g. Service Owner, Key Account Manager. It does not need to be identical with the assigned ticket owner.', [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
+                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false)
+                ]
+            )
             );
             fields.push(new FormField<number>(
                 'Translatable#Priority', TicketProperty.PRIORITY_ID, 'ticket-input-priority',

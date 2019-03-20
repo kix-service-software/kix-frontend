@@ -36,7 +36,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             if (validationError) {
                 this.showValidationError(result);
             } else {
-                DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Übersetzung wird aktualisiert');
+                DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Update Translation');
 
                 const context = await ContextService.getInstance().getContext<TranslationDetailsContext>(
                     TranslationDetailsContext.CONTEXT_ID
@@ -69,7 +69,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         );
 
         OverlayService.getInstance().openOverlay(
-            OverlayType.WARNING, null, content, 'Translatable#Validierungsfehler', true
+            OverlayType.WARNING, null, content, 'Translatable#Validation error', true
         );
     }
 

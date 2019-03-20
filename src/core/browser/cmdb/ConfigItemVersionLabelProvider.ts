@@ -1,7 +1,7 @@
 import { ILabelProvider } from '..';
-import { Version, DateTimeUtil, ObjectIcon, KIXObjectType, VersionProperty } from '../../model';
+import { Version, DateTimeUtil, ObjectIcon, KIXObjectType, VersionProperty, User } from '../../model';
 import { TranslationService } from '../i18n/TranslationService';
-import { ObjectDataService } from '../ObjectDataService';
+import { KIXObjectService } from '../kix';
 
 export class ConfigItemVersionLabelProvider implements ILabelProvider<Version> {
 
@@ -12,20 +12,15 @@ export class ConfigItemVersionLabelProvider implements ILabelProvider<Version> {
     ): Promise<string> {
         let displayValue = value;
 
-        const objectData = ObjectDataService.getInstance().getObjectData();
         switch (property) {
             case VersionProperty.CREATE_BY:
-                const user = objectData.users.find(
-                    (u) => u.UserID.toString() === value.toString()
-                );
-                if (user) {
-                    displayValue = user.UserFullname;
-                }
+                const users = await KIXObjectService.loadObjects<User>(
+                    KIXObjectType.USER, [value], null, null, true, true
+                ).catch((error) => [] as User[]);
+                displayValue = users && !!users.length ? users[0].UserFullname : value;
                 break;
             case VersionProperty.CURRENT:
-                displayValue = value
-                    ? await TranslationService.translate('Translatable#(Current version)', [])
-                    : '';
+                displayValue = value ? 'Translatable#(Current version)' : '';
                 break;
             default:
         }
@@ -70,26 +65,18 @@ export class ConfigItemVersionLabelProvider implements ILabelProvider<Version> {
     public async getDisplayText(
         version: Version, property: string, value?: string | number, translatable: boolean = true
     ): Promise<string> {
-        let displayValue = property.toString();
-
-        const objectData = ObjectDataService.getInstance().getObjectData();
+        let displayValue = version[property];
 
         switch (property) {
-            case VersionProperty.CREATE_BY:
-                const user = objectData.users.find((u) => u.UserID === version[property]);
-                if (user) {
-                    displayValue = user.UserFullname;
-                }
-                break;
             case VersionProperty.CREATE_TIME:
-                displayValue = DateTimeUtil.getLocalDateTimeString(version[property]);
+                displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
             case VersionProperty.CURRENT:
                 displayValue = version.isCurrentVersion ? 'Translatable#(current version)' : '';
                 break;
             default:
                 displayValue = await this.getPropertyValueDisplayText(
-                    property, version[property] ? version[property] : value
+                    property, displayValue ? displayValue : value
                 );
         }
 

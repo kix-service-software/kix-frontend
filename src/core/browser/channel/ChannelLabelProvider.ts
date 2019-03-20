@@ -83,8 +83,10 @@ export class ChannelLabelProvider implements ILabelProvider<Channel> {
         return [];
     }
 
-    public async getObjectText(channel: Channel, id?: boolean, title?: boolean): Promise<string> {
-        return await TranslationService.translate('Translatable#Channel', []);
+    public async getObjectText(
+        channel: Channel, id?: boolean, title?: boolean, translatable: boolean = true
+    ): Promise<string> {
+        return translatable ? await TranslationService.translate('Translatable#Channel') : 'Channel';
     }
 
     public getObjectAdditionalText(channel: Channel): string {

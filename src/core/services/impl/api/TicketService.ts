@@ -117,16 +117,11 @@ export class TicketService extends KIXObjectService {
 
         let tickets: Ticket[] = [];
 
-        if (objectIds) {
+        if (objectIds && !!objectIds.length) {
             objectIds = objectIds.filter((id) => typeof id !== 'undefined' && id !== null && id.toString() !== '');
-            if (objectIds.length === 1) {
-                const response = await this.getObject<TicketResponse>(token, objectIds[0], query);
-                tickets = [TicketFactory.create(response.Ticket)];
-            } else if (objectIds.length > 0) {
-                const uri = this.buildUri(this.RESOURCE_URI, objectIds.join(','));
-                const response = await this.getObjectByUri<TicketsResponse>(token, uri, query);
-                tickets = response.Ticket;
-            }
+            const uri = this.buildUri(this.RESOURCE_URI, objectIds.join(','));
+            const response = await this.getObjectByUri<TicketsResponse>(token, uri, query);
+            tickets = response.Ticket;
         } else if (loadingOptions.filter) {
             await this.buildFilter(loadingOptions.filter, 'Ticket', token, query);
             const response = await this.getObjects<TicketsResponse>(token, loadingOptions.limit, null, null, query);

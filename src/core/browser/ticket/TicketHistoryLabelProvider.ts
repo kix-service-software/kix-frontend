@@ -1,7 +1,7 @@
 import { ILabelProvider } from '..';
-import { TicketHistory, DateTimeUtil, ObjectIcon, KIXObjectType, TicketHistoryProperty } from '../../model';
+import { TicketHistory, DateTimeUtil, ObjectIcon, KIXObjectType, TicketHistoryProperty, User } from '../../model';
 import { TranslationService } from '../i18n/TranslationService';
-import { ObjectDataService } from '../ObjectDataService';
+import { KIXObjectService } from '../kix';
 
 export class TicketHistoryLabelProvider implements ILabelProvider<TicketHistory> {
 
@@ -47,27 +47,25 @@ export class TicketHistoryLabelProvider implements ILabelProvider<TicketHistory>
     public async getDisplayText(
         historyEntry: TicketHistory, property: string, value?: string, translatable: boolean = true
     ): Promise<string> {
-        let displayValue = property.toString();
-
-        const objectData = ObjectDataService.getInstance().getObjectData();
+        let displayValue = historyEntry[property];
 
         switch (property) {
             case TicketHistoryProperty.ARTICLE_ID:
-                displayValue = historyEntry[property] === 0 ?
+                displayValue = displayValue === 0 ?
                     ''
                     : await TranslationService.translate('Translatable#to Article');
                 break;
             case TicketHistoryProperty.CREATE_BY:
-                const user = objectData.users.find((u) => u.UserID === historyEntry[property]);
-                if (user) {
-                    displayValue = user.UserFullname;
-                }
+                const users = await KIXObjectService.loadObjects<User>(
+                    KIXObjectType.USER, [displayValue], null, null, true, true
+                ).catch((error) => [] as User[]);
+                displayValue = users && !!users.length ? users[0].UserFullname : displayValue;
                 break;
             case TicketHistoryProperty.CREATE_TIME:
-                displayValue = DateTimeUtil.getLocalDateTimeString(historyEntry[property]);
+                displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
             default:
-                displayValue = historyEntry[property];
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue);
         }
 
         if (translatable && displayValue) {

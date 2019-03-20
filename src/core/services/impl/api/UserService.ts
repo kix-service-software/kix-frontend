@@ -6,7 +6,7 @@ import {
 import { KIXObjectService } from './KIXObjectService';
 import { UserPreferencesResponse, SetPreference, SetPreferenceResponse, SetPreferenceRequest } from '../../../api/user';
 import { LoggingService } from '../LoggingService';
-import { SetPreferenceOptions } from '../../../model/kix/user';
+import { SetPreferenceOptions, UserFactory } from '../../../model/kix/user';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 
 export class UserService extends KIXObjectService {
@@ -43,7 +43,7 @@ export class UserService extends KIXObjectService {
 
         let objects = [];
         if (objectType === KIXObjectType.USER) {
-            objects = await this.getUsers(token, objectIds.map((id) => Number(id)), loadingOptions);
+            objects = await this.getUsers(token, objectIds, loadingOptions);
         } else if (objectType === KIXObjectType.USER_PREFERENCE) {
             objects = await this.getPreferences(
                 token, loadingOptions, objectLoadingOptions as PreferencesLoadingOptions
@@ -55,12 +55,31 @@ export class UserService extends KIXObjectService {
 
     // FIXME: korrekt implementieren
     public async getUsers(
-        token: string, objectIds?: number[], loadingOptions?: KIXObjectLoadingOptions
+        token: string, objectIds?: Array<number | string>, loadingOptions?: KIXObjectLoadingOptions
     ): Promise<User[]> {
         const query = { fields: 'User.UserLogin,User.UserID,User.UserFullname' };
-        const uri = this.buildUri(this.RESOURCE_URI);
-        const response = await this.getObjectByUri<UsersResponse>(token, uri, query);
-        return response.User;
+        let users;
+
+        if (objectIds && !!objectIds.length) {
+            objectIds = objectIds.filter((id) => typeof id !== 'undefined' && id.toString() !== '' && id !== null)
+                .map((id) => Number(id));
+            const uri = this.buildUri(this.RESOURCE_URI, objectIds.join(','));
+            if (objectIds.length === 1) {
+                const response = await this.getObjectByUri<UserResponse>(token, uri, query);
+                users = [response.User];
+            } else {
+                const response = await this.getObjectByUri<UsersResponse>(token, uri, query);
+                users = response.User;
+            }
+        } else {
+            if (loadingOptions && loadingOptions.filter) {
+                await this.buildFilter(loadingOptions.filter, this.objectType, token, query);
+            }
+            const uri = this.buildUri(this.RESOURCE_URI);
+            const response = await this.getObjectByUri<UsersResponse>(token, uri, query);
+            users = response.User;
+        }
+        return users.map((user) => UserFactory.create(user));
     }
 
     private async getPreferences(

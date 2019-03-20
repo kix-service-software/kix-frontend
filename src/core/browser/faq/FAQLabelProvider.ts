@@ -217,7 +217,7 @@ export class FAQLabelProvider implements ILabelProvider<FAQArticle> {
             }
 
         } else {
-            returnString = 'FAQ-Article';
+            returnString = await TranslationService.translate('Translatable#FAQ Article');
         }
         return returnString;
     }

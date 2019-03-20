@@ -1,8 +1,9 @@
 import { ILabelProvider } from "../ILabelProvider";
-import { Role, KIXObjectType, ObjectIcon, RoleProperty, DateTimeUtil } from "../../model";
+import { Role, KIXObjectType, ObjectIcon, RoleProperty, DateTimeUtil, User } from "../../model";
 import { SearchProperty } from "../SearchProperty";
 import { TranslationService } from "../i18n/TranslationService";
 import { ObjectDataService } from "../ObjectDataService";
+import { KIXObjectService } from "../kix";
 
 export class RoleLabelProvider implements ILabelProvider<Role> {
 
@@ -62,30 +63,12 @@ export class RoleLabelProvider implements ILabelProvider<Role> {
     ): Promise<string> {
         let displayValue = role[property];
 
-        const objectData = ObjectDataService.getInstance().getObjectData();
-
         switch (property) {
-            case RoleProperty.CREATE_BY:
-            case RoleProperty.CHANGE_BY:
-                const user = objectData.users.find((u) => u.UserID === displayValue);
-                if (user) {
-                    displayValue = user.UserFullname;
-                }
-                break;
-            case RoleProperty.CREATE_TIME:
-            case RoleProperty.CHANGE_TIME:
-                displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
-                break;
-            case RoleProperty.VALID_ID:
-                const valid = objectData.validObjects.find((v) => v.ID === displayValue);
-                if (valid) {
-                    displayValue = valid.Name;
-                }
-                break;
             case RoleProperty.ID:
                 displayValue = role.Name;
                 break;
             default:
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue);
         }
 
         if (translatable && displayValue) {
@@ -109,10 +92,10 @@ export class RoleLabelProvider implements ILabelProvider<Role> {
                 break;
             case RoleProperty.CREATE_BY:
             case RoleProperty.CHANGE_BY:
-                const user = objectData.users.find((u) => u.UserID.toString() === displayValue.toString());
-                if (user) {
-                    displayValue = user.UserFullname;
-                }
+                const users = await KIXObjectService.loadObjects<User>(
+                    KIXObjectType.USER, [value], null, null, true, true
+                ).catch((error) => [] as User[]);
+                displayValue = users && !!users.length ? users[0].UserFullname : value;
                 break;
             case RoleProperty.CREATE_TIME:
             case RoleProperty.CHANGE_TIME:
@@ -136,8 +119,8 @@ export class RoleLabelProvider implements ILabelProvider<Role> {
         return [];
     }
 
-    public async getObjectText(role: Role, id?: boolean, title?: boolean): Promise<string> {
-        const objectName = await this.getObjectName();
+    public async getObjectText(role: Role, id?: boolean, title?: boolean, translatable?: boolean): Promise<string> {
+        const objectName = await this.getObjectName(false, translatable);
         return `${objectName}: ${role.Name}`;
     }
 

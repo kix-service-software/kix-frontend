@@ -7,6 +7,7 @@ import { ComponentsService } from '../../../../core/browser/components';
 import {
     ConfigItemClassDetailsContextConfiguration, ConfigItemClassDetailsContext
 } from '../../../../core/browser/cmdb';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -49,7 +50,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.ciClass = ciClass ? ciClass : await context.getObject<ConfigItemClass>().catch((error) => null);
 
         if (!this.ciClass) {
-            this.state.error = `Keine CMDB Klasse mit ID ${context.getObjectId()} verfügbar.`;
+            this.state.error = await TranslationService.translate(
+                'Translatable#No CI Class available for ID {0}.', [context.getObjectId()]
+            );
         } else {
             await this.prepareTitle();
         }

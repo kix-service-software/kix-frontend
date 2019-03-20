@@ -1,10 +1,5 @@
-import { KIXObjectService, ServiceRegistry } from "../kix";
-import { KIXObjectType, ContextDescriptor, ContextType, ContextMode } from "../../model";
-import { SearchContext } from "./context";
-import { ContextService } from "../context";
-import { ActionFactory } from "../ActionFactory";
-import { CSVExportAction, BulkAction } from "../actions";
-import { SearchResultPrintAction } from "./actions/SearchResultPrintAction";
+import { KIXObjectService } from "../kix";
+import { KIXObjectType } from "../../model";
 
 export class SearchService extends KIXObjectService<any> {
 
@@ -24,9 +19,4 @@ export class SearchService extends KIXObjectService<any> {
     public getLinkObjectName(): string {
         return null;
     }
-
-    protected prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
-        throw new Error("Method not implemented.");
-    }
-
 }

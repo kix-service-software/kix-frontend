@@ -162,7 +162,7 @@ class Component extends AbstractMarkoComponent {
         const newTicketTypeContext = new ContextDescriptor(
             NewTicketTypeDialogContext.CONTEXT_ID, [KIXObjectType.TICKET_TYPE],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-ticket-type-dialog', ['tickettypes'], NewTicketDialogContext
+            false, 'new-ticket-type-dialog', ['tickettypes'], NewTicketTypeDialogContext
         );
         ContextService.getInstance().registerContext(newTicketTypeContext);
 

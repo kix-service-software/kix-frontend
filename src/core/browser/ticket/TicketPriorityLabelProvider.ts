@@ -1,8 +1,9 @@
 import { ILabelProvider } from "../ILabelProvider";
-import { TicketPriority, KIXObjectType, ObjectIcon, TicketPriorityProperty, DateTimeUtil } from "../../model";
+import { TicketPriority, KIXObjectType, ObjectIcon, TicketPriorityProperty, DateTimeUtil, User } from "../../model";
 import { SearchProperty } from "../SearchProperty";
 import { TranslationService } from "../i18n/TranslationService";
 import { ObjectDataService } from "../ObjectDataService";
+import { KIXObjectService } from "../kix";
 
 export class TicketPriorityLabelProvider implements ILabelProvider<TicketPriority> {
 
@@ -62,30 +63,12 @@ export class TicketPriorityLabelProvider implements ILabelProvider<TicketPriorit
     ): Promise<string> {
         let displayValue = ticketPriority[property];
 
-        const objectData = ObjectDataService.getInstance().getObjectData();
-
         switch (property) {
-            case TicketPriorityProperty.CREATE_BY:
-            case TicketPriorityProperty.CHANGE_BY:
-                const user = objectData.users.find((u) => u.UserID === displayValue);
-                if (user) {
-                    displayValue = user.UserFullname;
-                }
-                break;
-            case TicketPriorityProperty.CREATE_TIME:
-            case TicketPriorityProperty.CHANGE_TIME:
-                displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
-                break;
-            case TicketPriorityProperty.VALID_ID:
-                const valid = objectData.validObjects.find((v) => v.ID === displayValue);
-                if (valid) {
-                    displayValue = valid.Name;
-                }
-                break;
             case TicketPriorityProperty.ID:
                 displayValue = ticketPriority.Name;
                 break;
             default:
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue);
         }
 
         if (translatable && displayValue) {
@@ -109,10 +92,10 @@ export class TicketPriorityLabelProvider implements ILabelProvider<TicketPriorit
                 break;
             case TicketPriorityProperty.CREATE_BY:
             case TicketPriorityProperty.CHANGE_BY:
-                const user = objectData.users.find((u) => u.UserID.toString() === displayValue.toString());
-                if (user) {
-                    displayValue = user.UserFullname;
-                }
+                const users = await KIXObjectService.loadObjects<User>(
+                    KIXObjectType.USER, [value], null, null, true, true
+                ).catch((error) => [] as User[]);
+                displayValue = users && !!users.length ? users[0].UserFullname : value;
                 break;
             case TicketPriorityProperty.CREATE_TIME:
             case TicketPriorityProperty.CHANGE_TIME:

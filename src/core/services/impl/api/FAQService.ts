@@ -91,7 +91,7 @@ export class FAQService extends KIXObjectService {
 
         let faqArticles: FAQArticle[] = [];
 
-        if (articleIds && articleIds.length) {
+        if (articleIds && !!articleIds.length) {
             articleIds = articleIds.filter((id) => typeof id !== 'undefined' && id.toString() !== '' && id !== null);
             const uri = this.buildUri(this.RESOURCE_URI, 'articles', articleIds.join(','));
             const response = await this.getObjectByUri<FAQArticlesResponse | FAQArticleResponse>(token, uri, query);

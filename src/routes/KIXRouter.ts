@@ -81,7 +81,6 @@ export abstract class KIXRouter implements IRouter {
     }
 
     protected async getObjectData(token: string): Promise<ObjectData> {
-        const users = await UserService.getInstance().getUsers(token);
         const currentUser = await UserService.getInstance().getUserByToken(token);
 
         const services = await ServiceService.getInstance().getServices(token);
@@ -103,7 +102,9 @@ export abstract class KIXRouter implements IRouter {
 
         // TODO: hier oder wo gebraucht aus den objectDefinitions ermitteln
         const faqVisibilities: Array<[string, string]> = [
-            ["internal", "intern"], ["external", "extern"], ["public", "öffentlich"]
+            ["internal", "Translatable#internal"],
+            ["external", "Translatable#external"],
+            ["public", "Translatable#public"]
         ];
 
         const objectDefinitions = await ObjectDefinitionService.getInstance().getObjectDefinitions(token);
@@ -117,7 +118,7 @@ export abstract class KIXRouter implements IRouter {
 
         const objectData = new ObjectData(
             services, servicesHierarchy,
-            users, currentUser,
+            currentUser,
             validObjects,
             contactAttributes, customerAttributes,
             faqVisibilities,

@@ -1,6 +1,6 @@
-import { KIXObjectService } from "../../../kix";
-import { KIXObjectType } from "../../../../model";
-import { Role } from "../../../../model/kix/user";
+import { KIXObjectService } from "../../kix";
+import { KIXObjectType } from "../../../model";
+import { Role } from "../../../model/kix/user";
 
 export class RoleService extends KIXObjectService<Role> {
 

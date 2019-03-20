@@ -69,7 +69,7 @@ export class TranslationLanguageLabelProvider implements ILabelProvider<Translat
     }
 
     public async getObjectText(language: TranslationLanguage, id?: boolean, title?: boolean): Promise<string> {
-        return 'TranslationLanguage';
+        return await TranslationService.translate('Translatable#TranslationLanguage');
     }
 
     public getObjectAdditionalText(language: TranslationLanguage): string {

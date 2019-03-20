@@ -104,5 +104,7 @@ export enum KIXObjectType {
 
     PERSONAL_SETTINGS = 'PERSONAL_SETTINGS',
 
-    IMPORT_OBJECT = 'IMPORT_OBJECT'
+    IMPORT_OBJECT = 'IMPORT_OBJECT',
+
+    PERMISSION = 'Permission'
 }

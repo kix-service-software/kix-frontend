@@ -5,7 +5,7 @@ import {
 import {
     ContextConfiguration, FormField, TicketProperty, ArticleProperty,
     Form, KIXObjectType, FormContext, ConfiguredWidget, WidgetConfiguration,
-    FormFieldOption, WidgetSize
+    FormFieldOption, WidgetSize, ObjectReferenceOptions
 } from '../../core/model';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../core/services';
@@ -80,16 +80,26 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
             );
 
             fields.push(new FormField(
-                'Translatable#Owner', TicketProperty.OWNER_ID, 'ticket-input-owner', false, 'Translatable#„Owner“ is the user to which the ticket is assigned for processing.'
+                'Translatable#Owner', TicketProperty.OWNER_ID, 'object-reference-input', false,
+                'Translatable#Owner is the user to which the ticket is assigned for processing.', [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
+                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false)
+                ]
             ));
             fields.push(new FormField(
-                'Translatable#Responsible', TicketProperty.RESPONSIBLE_ID, 'ticket-input-owner', false, 'Translatable#Responsible is the person in charge for this tickets processing, e.g. Service Owner, Key Account Manager. It does not need to be identical with the assigned ticket owner.'
+                'Translatable#Responsible', TicketProperty.RESPONSIBLE_ID, 'object-reference-input', false,
+                'Translatable#Responsible is the person in charge for this tickets processing, e.g. Service Owner, Key Account Manager. It does not need to be identical with the assigned ticket owner.', [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
+                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false)
+                ]
             ));
             fields.push(new FormField<number>(
-                'Translatable#Priority', TicketProperty.PRIORITY_ID, 'ticket-input-priority', true, 'Translatable#Priorities are used to mark a Ticket‘s urgency with different colours, so you can  categorize Tickets.'
+                'Translatable#Priority', TicketProperty.PRIORITY_ID, 'ticket-input-priority', true,
+                'Translatable#Priorities are used to mark a Ticket‘s urgency with different colours, so you can  categorize Tickets.'
             ));
             fields.push(new FormField<PendingTimeFormValue>(
-                'Translatable#State', TicketProperty.STATE_ID, 'ticket-input-state', true, 'Translatable#Ticket status summarizes the tickets processing state.'
+                'Translatable#State', TicketProperty.STATE_ID, 'ticket-input-state', true,
+                'Translatable#Ticket status summarizes the tickets processing state.'
             ));
 
             const group = new FormGroup('Translatable#Ticket Data', fields);

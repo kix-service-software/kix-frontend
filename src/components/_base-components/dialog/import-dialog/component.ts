@@ -104,7 +104,7 @@ class Component {
                     if (this.importFormTimeout) {
                         clearTimeout(this.importFormTimeout);
                     } else {
-                        const loadingHint = await TranslationService.translate('Translatable#Datei wird eingelesen.');
+                        const loadingHint = await TranslationService.translate('Translatable#Read file.');
                         this.fileLoaded = false;
                         DialogService.getInstance().setMainDialogLoading(true, loadingHint);
                     }
@@ -351,7 +351,7 @@ class Component {
                     && textSeparator && textSeparator.valid;
 
                 if (!ok && !!!importString.length) {
-                    BrowserUtil.openErrorOverlay('Translatable#Datei konnte nicht geladen werden (file is empty).');
+                    BrowserUtil.openErrorOverlay('Translatable#Can not use file (file is empty).');
                 }
 
                 if (ok) {
@@ -444,7 +444,7 @@ class Component {
         let ok: boolean = true;
         if (!properties || !!!properties.length || !!!confirmedProperties.length) {
             BrowserUtil.openErrorOverlay(
-                'Translatable#Datei konnte nicht geladen werden (no known properties found).'
+                'Translatable#Can not use file (no known properties found).'
             );
             ok = false;
         } else if (!!unknownProperties.length) {
@@ -492,7 +492,7 @@ class Component {
             OverlayService.getInstance().openOverlay(
                 OverlayType.WARNING, null, new ComponentContent('list-with-title',
                     {
-                        title: 'Translatable#Datei konnte nicht geladen werden (missing required properties):',
+                        title: 'Translatable#Can not use file (missing required properties):',
                         list: missingProperties
                     }
                 ), 'Translatable#Error!', true
@@ -613,7 +613,7 @@ class Component {
         }
 
         if (!this.errorObjects.length) {
-            const succesText = await TranslationService.translate('Translatable#{0} wurden importiert', [objectName]);
+            const succesText = await TranslationService.translate('Translatable#{0} imported', [objectName]);
             BrowserUtil.openSuccessOverlay(succesText);
         }
 
@@ -629,7 +629,7 @@ class Component {
             this.state.importManager.objects.length - this.finishedObjects.length - this.errorObjects.length
         );
         const loadingHint = await TranslationService.translate(
-            'Translatable#{0}/{1} {2} importiert',
+            'Translatable#{0}/{1} {2} imported',
             [this.finishedObjects.length, this.state.importManager.objects.length, objectName]
         );
         DialogService.getInstance().setMainDialogLoading(

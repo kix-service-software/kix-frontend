@@ -52,13 +52,13 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
                 } else {
                     DialogService.getInstance().setMainDialogLoading(true, this.loadingHint);
                     await KIXObjectService.createObjectByForm(this.objectType, this.state.formId, this.options)
-                        .then(async (ciClassId) => {
+                        .then(async (objectId) => {
                             await FormService.getInstance().loadFormConfigurations();
                             DialogService.getInstance().setMainDialogLoading(false);
                             BrowserUtil.openSuccessOverlay(this.successHint);
                             DialogService.getInstance().submitMainDialog();
                             if (this.routingConfiguration) {
-                                RoutingService.getInstance().routeToContext(this.routingConfiguration, ciClassId);
+                                RoutingService.getInstance().routeToContext(this.routingConfiguration, objectId);
                             }
                             resolve();
                         }).catch((error: Error) => {
