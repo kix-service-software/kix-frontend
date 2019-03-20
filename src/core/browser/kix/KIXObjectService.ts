@@ -97,7 +97,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         ).catch(async (error: Error) => {
             if (catchError) {
                 const errorTitle = await TranslationService.translate(
-                    'Translatable#Error while creating "{1}', [objectType]
+                    'Translatable#Error while creating {1}', [objectType]
                 );
                 const content = new ComponentContent('list-with-title',
                     {
