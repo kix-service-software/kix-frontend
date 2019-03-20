@@ -11,6 +11,7 @@ import { ServiceType } from "./ServiceType";
 import { IAutofillConfiguration } from "../components";
 import { ServiceRegistry } from "./ServiceRegistry";
 import { OverlayService } from "../OverlayService";
+import { TranslationService } from "../i18n/TranslationService";
 
 export abstract class KIXObjectService<T extends KIXObject = KIXObject> implements IKIXObjectService<T> {
 
@@ -93,11 +94,14 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     ): Promise<string | number> {
         const objectId = await KIXObjectSocketClient.getInstance().createObject(
             objectType, parameter, createOptions, cacheKeyPrefix
-        ).catch((error: Error) => {
+        ).catch(async (error: Error) => {
             if (catchError) {
+                const errorTitle = await TranslationService.translate(
+                    'Translatable#Error while creating "{1}', [objectType]
+                );
                 const content = new ComponentContent('list-with-title',
                     {
-                        title: `Fehler beim Erstellen (${objectType}):`,
+                        title: errorTitle,
                         list: [`${error.Code}: ${error.Message}`]
                     }
                 );
