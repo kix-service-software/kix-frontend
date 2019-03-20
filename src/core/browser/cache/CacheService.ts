@@ -1,5 +1,6 @@
 import { ObjectUpdatedEventData, KIXObjectType } from "../../model";
 import { ClientStorageService } from "../ClientStorageService";
+import md5 = require('md5');
 
 export class CacheService {
 
@@ -19,17 +20,17 @@ export class CacheService {
     private keyIndex: Map<string, string[]> = new Map();
 
     public async has(key: string, cacheKeyPrefix?: string): Promise<boolean> {
-        key = this.hashCode(key, cacheKeyPrefix);
+        key = md5(key, cacheKeyPrefix);
         return this.cache.has(key);
     }
 
     public async get(key: string, cacheKeyPrefix?: string): Promise<any> {
-        key = this.hashCode(key, cacheKeyPrefix);
+        key = md5(key, cacheKeyPrefix);
         return this.cache.get(key);
     }
 
     public async set(key: string, value: any, cacheKeyPrefix?: string): Promise<void> {
-        key = this.hashCode(key, cacheKeyPrefix);
+        key = md5(key, cacheKeyPrefix);
         this.cache.set(key, value);
         if (cacheKeyPrefix) {
             if (!this.keyIndex.has(cacheKeyPrefix)) {
@@ -107,29 +108,6 @@ export class CacheService {
         }
 
         return cacheKeyPrefixes;
-    }
-
-    private hashCode(value: string, cacheKeyPrefix?: string): string {
-        let prefix = '';
-        if (cacheKeyPrefix && cacheKeyPrefix.length) {
-            prefix = `${cacheKeyPrefix};`;
-        }
-
-        let hash = 0;
-        let i: number;
-        let chr: number;
-        let len: number;
-        if (value && value.length === 0) {
-            return `${prefix}${hash}`;
-        }
-
-        for (i = 0, len = value.length; i < len; i++) {
-            chr = value.charCodeAt(i);
-            hash = ((hash << 5) - hash) + chr;
-            hash |= 0; // Convert to 32bit integer
-        }
-
-        return `${prefix}${hash}`;
     }
 
 }

@@ -17,6 +17,8 @@ export interface IServerConfiguration {
 
     NOTIFICATION_INTERVAL: number;
 
+    NOTIFICATION_CLIENT_ID: string;
+
     BACKEND_API_URL: string;
 
     LOG_LEVEL: LogLevel;
@@ -39,6 +41,6 @@ export interface IServerConfiguration {
 
     USE_MEMCACHED: boolean;
 
-    MEMCACHED: MemcachedConfiguration;
+    MEMCACHED: MemcachedConfiguration | string;
 
 }

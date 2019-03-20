@@ -89,7 +89,9 @@ export class Server {
         }
 
         const createClientRegistration = new CreateClientRegistration(
-            'kix18-web-frontend', this.serverConfig.NOTIFICATION_URL, this.serverConfig.NOTIFICATION_INTERVAL,
+            this.serverConfig.NOTIFICATION_CLIENT_ID,
+            this.serverConfig.NOTIFICATION_URL,
+            this.serverConfig.NOTIFICATION_INTERVAL,
             'Token ' + AuthenticationService.getInstance().getCallbackToken(),
             poDefinitions
         );
