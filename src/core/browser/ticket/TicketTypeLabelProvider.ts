@@ -152,7 +152,7 @@ export class TicketTypeLabelProvider implements ILabelProvider<TicketType> {
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = plural ? 'Translatable#Types' : 'Translatable#Type';
         if (translatable) {
-            displayValue = await TranslationService.translate(displayValue);
+            displayValue = await TranslationService.translate('Translatable#' + displayValue);
         }
         return displayValue;
     }
