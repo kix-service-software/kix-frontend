@@ -157,11 +157,12 @@ export class TicketStateLabelProvider implements ILabelProvider<TicketState> {
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
-        let displayValue = plural ? 'States' : 'State';
         if (translatable) {
-            displayValue = await TranslationService.translate('Translatable#' + displayValue);
+            return await TranslationService.translate(
+                plural ? 'Translatable#States' : 'Translatable#State'
+            );
         }
-        return displayValue;
+        return plural ? 'States' : 'State';
     }
 
     public getObjectTooltip(ticketState: TicketState): string {

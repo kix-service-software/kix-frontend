@@ -153,11 +153,12 @@ export class ConfigItemClassLabelProvider implements ILabelProvider<ConfigItemCl
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
-        let displayValue = plural ? 'CI Classes' : 'CI Class';
         if (translatable) {
-            displayValue = await TranslationService.translate('Translatable#' + displayValue);
+            return await TranslationService.translate(
+                plural ? 'Translatable#CI Classes' : 'Translatable#CI Class'
+            );
         }
-        return displayValue;
+        return plural ? 'CI Classes' : 'CI Class';
     }
 
     public async getIcons(

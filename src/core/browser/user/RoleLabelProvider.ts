@@ -137,7 +137,7 @@ export class RoleLabelProvider implements ILabelProvider<Role> {
     }
 
     public async getObjectText(role: Role, id?: boolean, title?: boolean): Promise<string> {
-        const objectName = await TranslationService.translate('Translatable#Role');
+        const objectName = await this.getObjectName();
         return `${objectName}: ${role.Name}`;
     }
 
@@ -150,11 +150,12 @@ export class RoleLabelProvider implements ILabelProvider<Role> {
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
-        let displayValue = plural ? 'Translatable#Roles' : 'Translatable#Role';
         if (translatable) {
-            displayValue = await TranslationService.translate(displayValue);
+            return await TranslationService.translate(
+                plural ? 'Translatable#Roles' : 'Translatable#Role'
+            );
         }
-        return displayValue;
+        return plural ? 'Roles' : 'Role';
     }
 
     public getObjectTooltip(role: Role): string {
