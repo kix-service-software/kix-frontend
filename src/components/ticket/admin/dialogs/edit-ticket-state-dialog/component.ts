@@ -36,7 +36,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             if (validationError) {
                 this.showValidationError(result);
             } else {
-                DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Status wird aktualisiert');
+                DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Update State');
 
                 const context = await ContextService.getInstance().getContext<TicketStateDetailsContext>(
                     TicketStateDetailsContext.CONTEXT_ID
@@ -63,13 +63,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const errorMessages = result.filter((r) => r.severity === ValidationSeverity.ERROR).map((r) => r.message);
         const content = new ComponentContent('list-with-title',
             {
-                title: 'Fehler beim Validieren des Formulars:',
+                title: 'Translatable#Error on form validation:',
                 list: errorMessages
             }
         );
 
         OverlayService.getInstance().openOverlay(
-            OverlayType.WARNING, null, content, 'Validierungsfehler', true
+            OverlayType.WARNING, null, content, 'Translatable#Validation Error', true
         );
     }
 

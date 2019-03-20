@@ -13,7 +13,7 @@ export class Extension implements IConfigurationExtension {
 
         const ciClassDetailsWidget = new ConfiguredWidget(
             'config-item-class-details-widget', new WidgetConfiguration(
-                'config-item-class-info-widget', 'Translatable#CMDB Class information',
+                'config-item-class-info-widget', 'Translatable#CI Class information',
                 ['cmdb-admin-ci-class-edit'], null,
                 false, true, WidgetSize.BOTH, null, false
             )
@@ -21,14 +21,14 @@ export class Extension implements IConfigurationExtension {
 
         const ciClassPermissionsWidget = new ConfiguredWidget(
             'config-item-class-permissions-widget', new WidgetConfiguration(
-                'config-item-class-permissions-widget', 'Translatable#CMDB Class permissions',
+                'config-item-class-permissions-widget', 'Translatable#CI Class permissions',
                 ['cmdb-admin-ci-class-edit'], null, true, true, WidgetSize.BOTH, null, false
             )
         );
 
         const ciClassVersionsWidget = new ConfiguredWidget(
             'config-item-class-versions-widget', new WidgetConfiguration(
-                'config-item-class-versions-widget', 'Translatable#CMDB Class versions',
+                'config-item-class-versions-widget', 'Translatable#CI Class versions',
                 ['cmdb-admin-ci-class-edit'], null,
                 false, true, WidgetSize.BOTH, null, false
             )

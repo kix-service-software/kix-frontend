@@ -38,7 +38,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             if (validationError) {
                 this.showValidationError(result);
             } else {
-                DialogService.getInstance().setMainDialogLoading(true, 'CMDB Klasse wird aktualisiert');
+                DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Update CI Class');
 
                 const context = await ContextService.getInstance().getContext<ConfigItemClassDetailsContext>(
                     ConfigItemClassDetailsContext.CONTEXT_ID

@@ -105,14 +105,14 @@ export class ConfigItemClassDefinitionLabelProvider implements ILabelProvider<Co
     public async getObjectName(plural: boolean = false, translatable: boolean = true): Promise<string> {
         if (plural) {
             const definitionsLabel = translatable
-                ? await TranslationService.translate('Translatable#CMDB Class Definitions')
-                : 'CMDB Class Definitions';
+                ? await TranslationService.translate('Translatable#CI Class Definitions')
+                : 'CI Class Definitions';
             return definitionsLabel;
         }
 
         const definitionLabel = translatable
-            ? await TranslationService.translate('Translatable#CMDB Class Definition')
-            : 'CMDB Class Definition';
+            ? await TranslationService.translate('Translatable#CI Class Definition')
+            : 'CI Class Definition';
         return definitionLabel;
     }
 

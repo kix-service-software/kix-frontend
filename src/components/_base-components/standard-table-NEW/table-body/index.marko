@@ -14,7 +14,9 @@
     </if>
     <else>
         <tr.empty-row style=("height: " + component.getRowHeight())>
-            <td colspan=component.getFullColumnLength()>${component.getEmptyString()}</td>
+            <td colspan=component.getFullColumnLength()>
+                <translation-string pattern=component.getEmptyString()/>
+            </td>
         </tr>
     </else>
 </tbody>

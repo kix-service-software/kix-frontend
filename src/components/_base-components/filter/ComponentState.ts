@@ -9,7 +9,7 @@ export class ComponentState {
         public predefinedFilterPlaceholder: string = 'Translatable#All Objects',
         public currentFilter: TreeNode = null,
         public icon: string | ObjectIcon = 'kix-icon-filter',
-        public placeholder: string = 'Filtern in Liste',
+        public placeholder: string = 'Translatable#Filter in list',
         public filterCountString: string = null,
         public showFilterCount: boolean = true
     ) { }

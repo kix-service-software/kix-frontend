@@ -59,7 +59,7 @@ export class CustomerLabelProvider implements ILabelProvider<Customer> {
                 displayValue = 'Translatable#URL';
                 break;
             case CustomerProperty.CUSTOMER_COMPANY_ZIP:
-                displayValue = 'Translatable#PLZ';
+                displayValue = 'Translatable#ZIP';
                 break;
             case CustomerProperty.CUSTOMER_ID:
                 displayValue = 'Translatable#Customer ID';

@@ -7,7 +7,7 @@ class Extension implements IAdminModuleExtension {
             new AdminModuleCategory(
                 null, 'base-data', 'Translatable#Core Data', null, [], [
                     new AdminModule(
-                        null, 'cmdb-classes', 'Translatable#CMDB Classes', null,
+                        null, 'cmdb-classes', 'Translatable#CI Classes', null,
                         KIXObjectType.CONFIG_ITEM_CLASS, 'cmdb-admin-ci-classes'
                     )
                 ])

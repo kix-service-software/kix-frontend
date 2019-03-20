@@ -69,7 +69,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
             new ConfiguredWidget('20180116143215', new WidgetConfiguration(
                 'ticket-customer-info-widget', 'Translatable#Customer', [], {
                     groups: [
-                        'Stammdaten', 'Adresse'
+                        'Core Data', 'Adresse'
                     ]
                 },
                 false, false, WidgetSize.BOTH, 'kix-icon-man-house', false)
@@ -78,7 +78,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
             new ConfiguredWidget('20180116143216', new WidgetConfiguration(
                 'ticket-contact-info-widget', 'Translatable#Contact', [], {
                     groups: [
-                        'Stammdaten', 'Kommunikation'
+                        'Core Data', 'Kommunikation'
                     ]
                 },
                 false, false, WidgetSize.BOTH, 'kix-icon-man-bubble', false)
@@ -99,7 +99,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
             new ConfiguredWidget('customer-info-overlay', new WidgetConfiguration(
                 'ticket-customer-info', 'Translatable#Customer', [], {
                     groups: [
-                        'Stammdaten', 'Adresse'
+                        'Core Data', 'Adresse'
                     ]
                 },
                 false, false, WidgetSize.BOTH, 'kix-icon-man-house', false)
@@ -108,7 +108,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
             new ConfiguredWidget('contact-info-overlay', new WidgetConfiguration(
                 'ticket-contact-info', 'Translatable#Contact', [], {
                     groups: [
-                        'Stammdaten', 'Kommunikation'
+                        'Core Data', 'Kommunikation'
                     ]
                 },
                 false, false, WidgetSize.BOTH, 'kix-icon-man-bubble', false)

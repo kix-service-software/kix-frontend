@@ -11,7 +11,7 @@ export class SearchContext extends Context<SearchContextConfiguration> {
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {
-        return short ? 'Ergebnis Komplexsuche' : 'Komplexsuche';
+        return short ? 'Translatable#Results advanced search' : 'Translatable#Advanced Search';
     }
 
     protected getSpecificWidgetType(instanceId: string): WidgetType {

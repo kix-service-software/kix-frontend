@@ -18,7 +18,7 @@ class Component {
         const user = objectData.currentUser;
 
         const myTicketsNewArticles = await TranslationService.translate('Translatable#My tickets with new articles');
-        const myTickets = await TranslationService.translate('Translatable#Meine Tickets');
+        const myTickets = await TranslationService.translate('Translatable#My Tickets');
         const myWatchedTicketsNewArticles = await TranslationService.translate(
             'Translatable#My watched tickets with new articles'
         );

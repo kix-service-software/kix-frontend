@@ -9,8 +9,8 @@ class Component extends AbstractNewDialog {
     public onCreate(): void {
         this.state = new ComponentState();
         super.init(
-            'CMDB Klasse wird angelegt',
-            'CMDB Klasse wurde erfolgreich angelegt.',
+            'Translatable#Create CI Class',
+            'Translatable#CI Class successfully created.',
             KIXObjectType.CONFIG_ITEM_CLASS,
             new RoutingConfiguration(
                 null,

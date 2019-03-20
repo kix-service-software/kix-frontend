@@ -11,7 +11,7 @@ export class ConfigItemClassCreateAction extends AbstractAction {
     public run(): void {
         ContextService.getInstance().setDialogContext(
             // TODO: Titel aus dem aktiven Admin-Modul ermitteln (Kategorie)
-            null, KIXObjectType.CONFIG_ITEM_CLASS, ContextMode.CREATE_ADMIN, null, true, 'Stammdaten hinzufügen'
+            null, KIXObjectType.CONFIG_ITEM_CLASS, ContextMode.CREATE_ADMIN, null, true, 'Add Core Data'
         );
     }
 

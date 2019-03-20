@@ -50,13 +50,13 @@ export class Extension implements IConfigurationExtension {
             ));
             fields.push(new FormField(
                 'Translatable#Validity', ConfigItemClassProperty.VALID_ID, 'valid-input', true,
-                'Translatable#Set the cmdb class as „valid“, „invalid (temporarily)“, or „invalid“.',
+                'Translatable#Set the ci class as „valid“, „invalid (temporarily)“, or „invalid“.',
                 null, new FormFieldValue(1)
             ));
 
-            const group = new FormGroup('Translatable#CMDB Class Definition Data', fields);
+            const group = new FormGroup('Translatable#CI Class Definition Data', fields);
 
-            const form = new Form(formId, 'Translatable#Add CMDB Class', [group], KIXObjectType.CONFIG_ITEM_CLASS);
+            const form = new Form(formId, 'Translatable#Add CI Class', [group], KIXObjectType.CONFIG_ITEM_CLASS);
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
         configurationService.registerForm([FormContext.NEW], KIXObjectType.CONFIG_ITEM_CLASS, formId);

@@ -3,7 +3,7 @@
         <span>Keine Linktypen verfügbar.</span>
     </if>
     <else>
-        <div.linkable-objects-selection title="Verknüpfen mit">
+        <div.linkable-objects-selection title="Link to">
             <div.linkable-objects-selection-label>
                 <span>
                     <translation-string pattern="Translatable#Link to"/>
@@ -15,7 +15,7 @@
                 selectedNodes=[state.currentLinkableObjectNode]/>
         </div>
         <div.linkable-objects-form on-keydown("keyPressed")>
-            <widget instanceId="link-object-dialog-form-widget" title="Suche" key="link-object-form-widget">
+            <widget instanceId="link-object-dialog-form-widget" title="Translatable#Search" key="link-object-form-widget">
                 <@content>
                     <if(state.formId)>
                         <main-form formId=state.formId key="link-object-form-widget-form"/>

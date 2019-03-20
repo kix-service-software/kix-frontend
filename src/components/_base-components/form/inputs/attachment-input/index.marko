@@ -2,7 +2,7 @@
     dragging: state.dragging,
     invalid: state.invalid
 } on-drop("drop")>
-    <button.form-button.file-upload-button type="button" on-click("triggerFileUpload") title="Datei wählen">
+    <button.form-button.file-upload-button type="button" on-click("triggerFileUpload") title="Select file">
         <span.kix-icon-attachement/>
         <translation-string pattern="Translatable#Select file"/>
         <input.file-upload-input type="file" multiple=state.multiple key="fileUploadInput" on-change("setAttachments")/>

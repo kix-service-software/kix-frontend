@@ -1,5 +1,6 @@
 import { CustomerContextConfiguration } from ".";
 import { ConfiguredWidget, Context, WidgetType, WidgetConfiguration } from "../../../model";
+import { TranslationService } from "../../i18n/TranslationService";
 
 export class CustomerContext extends Context<CustomerContextConfiguration> {
 
@@ -10,7 +11,7 @@ export class CustomerContext extends Context<CustomerContextConfiguration> {
     }
 
     public async getDisplayText(): Promise<string> {
-        return 'Kunden Dashboard';
+        return await TranslationService.translate('Translatable#Customers Dashboard');
     }
 
     public getContent(show: boolean = false): ConfiguredWidget[] {

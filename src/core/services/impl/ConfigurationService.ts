@@ -164,7 +164,7 @@ export class ConfigurationService {
                         break;
                     }
                     case "object": {
-                        config[key] = Object(process.env[key].split(/\s+/));
+                        config[key] = JSON.parse(process.env[key]);
                         break;
                     }
                     default: {

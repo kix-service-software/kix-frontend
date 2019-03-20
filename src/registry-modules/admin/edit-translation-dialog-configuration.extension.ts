@@ -33,7 +33,7 @@ export class Extension implements IConfigurationExtension {
 
             fields.push(new FormField(
                 // tslint:disable-next-line:max-line-length
-                'Translatable#Basestring', TranslationProperty.PATTERN, 'text-area-input', true, 'Translatable#Please insert a base string for the translation.'
+                'Translatable#Pattern', TranslationProperty.PATTERN, 'text-area-input', true, 'Translatable#Please insert a base string for the translation.'
             ));
 
             const languages = await this.getLanguages();

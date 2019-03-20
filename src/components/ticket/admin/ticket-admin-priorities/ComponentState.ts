@@ -8,7 +8,7 @@ export class ComponentState {
         public predefinedTableFilter: KIXObjectPropertyFilter[] = [],
         public actions: AbstractAction[] = [],
         public instanceId: string = '20181207104825-ticket-priorities-list',
-        public title: string = 'Stammdaten: Prioritäten',
+        public title: string = 'Core Data: Priorities',
         public filterCount: number = null
     ) { }
 

@@ -1,5 +1,7 @@
 <div.kix-footer>
-    <div.left-text>${input.leftText}</div>
+    <div.left-text>
+        <translation-string pattern=input.leftText/>
+    </div>
     <div>
         <if(state.currentUserLogin)>
             ${state.kixProduct}${state.kixVersion}${state.buildNumber} |
@@ -8,5 +10,7 @@
         </if>
         <translation-string pattern="Translatable#A product by c.a.p.e. IT GmbH"/>
     </div>
-    <div.right-text>${input.rightText}</div>
+    <div.right-text>
+        <translation-string pattern=input.rightText/>
+    </div>
 </div>
