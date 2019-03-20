@@ -150,9 +150,9 @@ export class TicketPriorityLabelProvider implements ILabelProvider<TicketPriorit
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
-        let displayValue = plural ? 'Translatable#Priorities' : 'Translatable#Priority';
+        let displayValue = plural ? 'Priorities' : 'Priority';
         if (translatable) {
-            displayValue = await TranslationService.translate(displayValue);
+            displayValue = await TranslationService.translate('Translatable#' + displayValue);
         }
         return displayValue;
     }

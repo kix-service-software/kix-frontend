@@ -1,9 +1,9 @@
-import { ILabelProvider } from "..";
+import { ILabelProvider } from '..';
 import {
     ObjectIcon, KIXObjectType, ConfigItemClass, ConfigItemClassProperty, DateTimeUtil
-} from "../../model";
-import { TranslationService } from "../i18n/TranslationService";
-import { ObjectDataService } from "../ObjectDataService";
+} from '../../model';
+import { TranslationService } from '../i18n/TranslationService';
+import { ObjectDataService } from '../ObjectDataService';
 
 export class ConfigItemClassLabelProvider implements ILabelProvider<ConfigItemClass> {
 
@@ -153,9 +153,9 @@ export class ConfigItemClassLabelProvider implements ILabelProvider<ConfigItemCl
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
-        let displayValue = plural ? "Translatable#CI Classes" : "Translatable#CI Class";
+        let displayValue = plural ? 'CI Classes' : 'CI Class';
         if (translatable) {
-            displayValue = await TranslationService.translate(displayValue, []);
+            displayValue = await TranslationService.translate('Translatable#' + displayValue);
         }
         return displayValue;
     }

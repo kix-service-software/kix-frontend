@@ -232,9 +232,9 @@ export class ConfigItemLabelProvider implements ILabelProvider<ConfigItem> {
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
-        let displayValue = plural ? 'Translatable#Config Items' : 'Translatable#Config Item';
+        let displayValue = plural ? 'Config Items' : 'Config Item';
         if (translatable) {
-            displayValue = await TranslationService.translate(displayValue, []);
+            displayValue = await TranslationService.translate('Translatable#' + displayValue);
         }
         return displayValue;
     }
