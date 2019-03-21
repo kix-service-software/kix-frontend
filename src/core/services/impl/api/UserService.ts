@@ -90,20 +90,22 @@ export class UserService extends KIXObjectService {
         if (preferenceLoadingOptions.userId) {
 
             const uri = this.buildUri(this.RESOURCE_URI, preferenceLoadingOptions.userId, this.SUB_RESOURCE_URI);
-            const response = await this.getObjectByUri<UserPreferencesResponse>(token, uri, query);
+            const response = await this.getObjectByUri<UserPreferencesResponse>(
+                token, uri, query, KIXObjectType.PERSONAL_SETTINGS
+            );
 
             preferences = response.UserPreference.map((p) => new UserPreference(p));
         }
         return preferences;
     }
 
-    public async getUserByToken(token: string, cache: boolean = true): Promise<User> {
+    public async getUserByToken(token: string): Promise<User> {
         const query = {
             include: 'Tickets,Preferences'
         };
 
         const response = await this.httpService.get<UserResponse>(
-            this.USER_RESOURCE_URI, query, token, null
+            this.USER_RESOURCE_URI, query, token, null, KIXObjectType.USER
         );
         return new User(response.User);
     }
@@ -114,7 +116,7 @@ export class UserService extends KIXObjectService {
     ): Promise<string | number> {
         if (objectType === KIXObjectType.USER) {
             throw new Error('', "Method not implemented.");
-        } else if (KIXObjectType.USER_PREFERENCE) {
+        } else if (objectType === KIXObjectType.USER_PREFERENCE) {
             const options = createOptions as SetPreferenceOptions;
             const createPreference = new SetPreference(parameter);
             const response = await this.sendCreateRequest<SetPreferenceResponse, SetPreferenceRequest>(

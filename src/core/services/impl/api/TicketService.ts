@@ -467,7 +467,7 @@ export class TicketService extends KIXObjectService {
         let objectFilter = {};
         let objectSearch = {};
 
-        const user = await UserService.getInstance().getUserByToken(token, null);
+        const user = await UserService.getInstance().getUserByToken(token);
 
         const andFilter = filter.filter(
             (f) => f.filterType === FilterType.AND && f.property !== 'StateType'
