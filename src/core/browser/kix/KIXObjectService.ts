@@ -28,7 +28,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
     public static async loadObjects<T extends KIXObject>(
         objectType: KIXObjectType, objectIds?: Array<number | string>,
-        loadingOptions: KIXObjectLoadingOptions = new KIXObjectLoadingOptions(),
+        loadingOptions?: KIXObjectLoadingOptions,
         objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
         cache: boolean = true, silent: boolean = false
     ): Promise<T[]> {
@@ -36,8 +36,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         let objects = [];
         if (service) {
             objects = await service.loadObjects(
-                objectType, objectIds ? [...objectIds] : null,
-                loadingOptions, objectLoadingOptions, cache
+                objectType, objectIds ? [...objectIds] : null, loadingOptions, objectLoadingOptions
             ).catch((error: Error) => {
                 if (!silent) {
                     const content = new ComponentContent('list-with-title',
@@ -61,22 +60,15 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
     public async loadObjects<O extends KIXObject>(
         objectType: KIXObjectType, objectIds: Array<string | number>,
-        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
-        cache: boolean = true
+        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions
     ): Promise<O[]> {
         let objects = [];
-        if (cache) {
-            if (objectIds) {
-                if (objectIds.length) {
-                    const loadedObjects = await KIXObjectSocketClient.getInstance().loadObjects<T>(
-                        objectType, objectIds, loadingOptions, objectLoadingOptions
-                    );
-                    objects = loadedObjects;
-                }
-            } else {
-                objects = await KIXObjectSocketClient.getInstance().loadObjects<T>(
+        if (objectIds) {
+            if (objectIds.length) {
+                const loadedObjects = await KIXObjectSocketClient.getInstance().loadObjects<T>(
                     objectType, objectIds, loadingOptions, objectLoadingOptions
                 );
+                objects = loadedObjects;
             }
         } else {
             objects = await KIXObjectSocketClient.getInstance().loadObjects<T>(
