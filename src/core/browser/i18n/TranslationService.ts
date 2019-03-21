@@ -1,6 +1,7 @@
 import { KIXObjectService } from "../kix/KIXObjectService";
 import {
-    Translation, KIXObjectType, SysConfigItem, SysConfigKey, TranslationProperty, TableFilterCriteria
+    Translation, KIXObjectType, SysConfigItem, SysConfigKey, TranslationProperty,
+    TableFilterCriteria, KIXObjectLoadingOptions
 } from "../../model";
 import { SearchOperator } from "../SearchOperator";
 import { ClientStorageService } from "../ClientStorageService";
@@ -83,7 +84,14 @@ export class TranslationService extends KIXObjectService<Translation> {
                 translationValue = translationValue.replace('Translatable#', '');
             }
 
-            const translations = await KIXObjectService.loadObjects<Translation>(KIXObjectType.TRANSLATION);
+            const loadingOptions = new KIXObjectLoadingOptions(
+                null, null, null, null, null, [TranslationProperty.LANGUAGES]
+            );
+
+            const translations = await KIXObjectService.loadObjects<Translation>(
+                KIXObjectType.TRANSLATION, null, loadingOptions
+            );
+
             const translation = translations.find((t) => t.Pattern === translationValue);
 
             if (translation) {
