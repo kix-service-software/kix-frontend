@@ -46,7 +46,7 @@ class Component {
         this.setCheckState();
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
         document.addEventListener('click', (event) => {
             if (this.state.expanded) {
                 if (this.keepExpanded) {
@@ -57,6 +57,7 @@ class Component {
             }
         });
 
+        await this.prepareAutocompleteNotFoundText();
         this.setCheckState();
     }
 
