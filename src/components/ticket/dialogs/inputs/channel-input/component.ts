@@ -21,7 +21,8 @@ class Component extends FormInputComponent<number, ComponentState> {
     public async onMount(): Promise<void> {
         await super.onMount();
         this.labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.CHANNEL);
-        const channels = await KIXObjectService.loadObjects<Channel>(KIXObjectType.CHANNEL);
+        let channels = await KIXObjectService.loadObjects<Channel>(KIXObjectType.CHANNEL);
+        channels = channels.filter((c) => c.ValidID.toString() === "1");
 
         const channelsOption = this.state.field.options.find((o) => o.option === 'CHANNELS');
         if (channelsOption && channelsOption.value && isArray(channelsOption.value) && channelsOption.value.length) {
