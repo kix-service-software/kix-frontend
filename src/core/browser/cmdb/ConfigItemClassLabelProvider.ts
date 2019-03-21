@@ -95,6 +95,7 @@ export class ConfigItemClassLabelProvider implements ILabelProvider<ConfigItemCl
 
         switch (property) {
             case ConfigItemClassProperty.ID:
+            case 'ICON':
                 displayValue = ciClass.Name;
                 break;
             default:
@@ -155,6 +156,7 @@ export class ConfigItemClassLabelProvider implements ILabelProvider<ConfigItemCl
         if (ciClass) {
             switch (property) {
                 case ConfigItemClassProperty.ID:
+                case 'ICON':
                     icons.push(new ObjectIcon(KIXObjectType.CONFIG_ITEM_CLASS, ciClass.ID));
                     break;
                 default:

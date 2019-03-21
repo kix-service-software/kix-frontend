@@ -64,10 +64,11 @@ export class TicketTypeLabelProvider implements ILabelProvider<TicketType> {
     public async getDisplayText(
         ticketType: TicketType, property: string, value?: string, translatable: boolean = true
     ): Promise<string> {
-        let displayValue = ticketType[property];
+        let displayValue = ticketType[property] || '';
 
         switch (property) {
             case TicketTypeProperty.ID:
+            case 'ICON':
                 displayValue = ticketType.Name;
                 break;
             default:
@@ -151,7 +152,7 @@ export class TicketTypeLabelProvider implements ILabelProvider<TicketType> {
     public async getIcons(
         ticketType: TicketType, property: string, value?: string | number
     ): Promise<Array<string | ObjectIcon>> {
-        if (property === TicketTypeProperty.ID) {
+        if (property === TicketTypeProperty.ID || property === 'ICON') {
             return [new ObjectIcon('TicketType', ticketType.ID)];
         }
         return null;
