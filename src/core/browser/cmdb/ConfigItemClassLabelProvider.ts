@@ -70,6 +70,9 @@ export class ConfigItemClassLabelProvider implements ILabelProvider<ConfigItemCl
             case ConfigItemClassProperty.ID:
                 displayValue = 'Translatable#Icon';
                 break;
+            case 'ICON':
+                displayValue = 'Translatable#Icon';
+                break;
             default:
                 displayValue = property;
         }

@@ -43,6 +43,9 @@ export class TicketTypeLabelProvider implements ILabelProvider<TicketType> {
             case TicketTypeProperty.ID:
                 displayValue = 'Translatable#Icon';
                 break;
+            case 'ICON':
+                displayValue = 'Translatable#Icon';
+                break;
             default:
                 displayValue = property;
         }
