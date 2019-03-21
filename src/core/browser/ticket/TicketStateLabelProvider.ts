@@ -75,6 +75,7 @@ export class TicketStateLabelProvider implements ILabelProvider<TicketState> {
                 displayValue = ticketState.TypeName;
                 break;
             case TicketStateProperty.ID:
+            case 'ICON':
                 displayValue = ticketState.Name;
                 break;
             default:
@@ -158,7 +159,7 @@ export class TicketStateLabelProvider implements ILabelProvider<TicketState> {
     public async getIcons(
         ticketState: TicketState, property: string, value?: string | number
     ): Promise<Array<string | ObjectIcon>> {
-        if (property === TicketStateProperty.ID) {
+        if (property === TicketStateProperty.ID || property === 'ICON') {
             return [new ObjectIcon('TicketState', ticketState.ID)];
         }
         return null;

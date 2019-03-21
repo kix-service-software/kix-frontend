@@ -68,6 +68,7 @@ export class TicketPriorityLabelProvider implements ILabelProvider<TicketPriorit
 
         switch (property) {
             case TicketPriorityProperty.ID:
+            case 'ICON':
                 displayValue = ticketPriority.Name;
                 break;
             default:
@@ -151,7 +152,7 @@ export class TicketPriorityLabelProvider implements ILabelProvider<TicketPriorit
     public async getIcons(
         ticketPriority: TicketPriority, property: string, value?: string | number
     ): Promise<Array<string | ObjectIcon>> {
-        if (property === TicketPriorityProperty.ID) {
+        if (property === TicketPriorityProperty.ID || property === 'ICON') {
             return [new ObjectIcon('Priority', ticketPriority.ID)];
         }
         return null;
