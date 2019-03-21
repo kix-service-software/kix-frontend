@@ -1,8 +1,8 @@
 import {
     AgentEvent, Error, PersonalSetting, SetPreferencesRequest, SetPreferencesResponse,
-    GetCurrentUserRequest, User, GetCurrentUserResponse
+    GetCurrentUserRequest, User, GetCurrentUserResponse, ISocketRequest, PersonalSettingsResponse
 } from '../core/model';
-import { SocketResponse } from '../core/common';
+import { SocketResponse, SocketErrorResponse } from '../core/common';
 import { SocketNameSpace } from './SocketNameSpace';
 import { LoggingService, UserService } from '../core/services';
 import { PersonalSettingsService } from '../services';
@@ -32,14 +32,18 @@ export class AgentNamespace extends SocketNameSpace {
         this.registerEventHandler(client, AgentEvent.GET_CURRENT_USER, this.getCurrentUser.bind(this));
     }
 
-    private async getPersonalSettings(): Promise<SocketResponse<PersonalSetting[]>> {
+    private async getPersonalSettings(data: ISocketRequest): Promise<SocketResponse<PersonalSettingsResponse>> {
         let response;
         await PersonalSettingsService.getInstance().getPersonalSettings()
             .then((settings: PersonalSetting[]) => {
-                response = new SocketResponse(AgentEvent.GET_PERSONAL_SETTINGS_FINISHED, settings);
+                response = new SocketResponse(
+                    AgentEvent.GET_PERSONAL_SETTINGS_FINISHED, new PersonalSettingsResponse(data.requestId, settings)
+                );
             }).catch((error: Error) => {
                 LoggingService.getInstance().error(error.Code + ' - ' + error.Message);
-                response = new SocketResponse(AgentEvent.GET_PERSONAL_SETTINGS_ERROR, error);
+                response = new SocketResponse(
+                    AgentEvent.GET_PERSONAL_SETTINGS_ERROR, new SocketErrorResponse(data.requestId, error)
+                );
             });
         return response;
     }
@@ -67,7 +71,7 @@ export class AgentNamespace extends SocketNameSpace {
 
     private async getCurrentUser(data: GetCurrentUserRequest): Promise<SocketResponse<User>> {
         let response;
-        await UserService.getInstance().getUserByToken(data.token, data.cache)
+        await UserService.getInstance().getUserByToken(data.token)
             .then((currentUser: User) => {
                 response = new SocketResponse(
                     AgentEvent.GET_CURRENT_USER_FINISHED, new GetCurrentUserResponse(data.requestId, currentUser)

@@ -110,12 +110,14 @@ export abstract class KIXObjectService implements IKIXObjectService {
         return this.getObjectByUri(token, uri, query);
     }
 
-    protected async getObjectByUri<R>(token: string, uri: string, query?: any): Promise<R> {
+    protected async getObjectByUri<R>(
+        token: string, uri: string, query?: any, cacheKeyPrefix: string = this.objectType
+    ): Promise<R> {
         if (!query) {
             query = {};
         }
 
-        return await this.httpService.get<R>(uri, query, token, null, this.objectType);
+        return await this.httpService.get<R>(uri, query, token, null, cacheKeyPrefix);
     }
 
     protected async sendCreateRequest<R, C>(

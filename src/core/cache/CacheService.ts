@@ -33,7 +33,7 @@ export class CacheService {
     }
 
     public async has(key: string, cacheKeyPrefix?: string): Promise<boolean> {
-        key = md5(key, cacheKeyPrefix);
+        key = md5(key);
         if (process.env.NODE_ENV === 'test') {
             return false;
         } else if (this.useMemcached) {
@@ -46,7 +46,7 @@ export class CacheService {
     }
 
     public async get(key: string, cacheKeyPrefix?: string): Promise<any> {
-        key = md5(key, cacheKeyPrefix);
+        key = md5(key);
         if (this.useMemcached) {
             return await Memcached.getInstance().get(key);
         } else if (this.useInMemoryCache) {
@@ -56,7 +56,7 @@ export class CacheService {
     }
 
     public async set(key: string, value: any, cacheKeyPrefix?: string): Promise<void> {
-        key = md5(key, cacheKeyPrefix);
+        key = md5(key);
         if (this.useMemcached) {
             await Memcached.getInstance().set(key, cacheKeyPrefix, value);
         } else if (this.useInMemoryCache) {
@@ -112,6 +112,9 @@ export class CacheService {
             case KIXObjectType.CONFIG_ITEM_CLASS:
             case KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION:
                 cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM_CLASS);
+                break;
+            case KIXObjectType.USER_PREFERENCE:
+                cacheKeyPrefixes.push(KIXObjectType.USER);
                 break;
             default:
         }

@@ -20,17 +20,17 @@ export class CacheService {
     private keyIndex: Map<string, string[]> = new Map();
 
     public async has(key: string, cacheKeyPrefix?: string): Promise<boolean> {
-        key = md5(key, cacheKeyPrefix);
+        key = md5(key);
         return this.cache.has(key);
     }
 
     public async get(key: string, cacheKeyPrefix?: string): Promise<any> {
-        key = md5(key, cacheKeyPrefix);
+        key = md5(key);
         return this.cache.get(key);
     }
 
     public async set(key: string, value: any, cacheKeyPrefix?: string): Promise<void> {
-        key = md5(key, cacheKeyPrefix);
+        key = md5(key);
         this.cache.set(key, value);
         if (cacheKeyPrefix) {
             if (!this.keyIndex.has(cacheKeyPrefix)) {
@@ -106,6 +106,10 @@ export class CacheService {
             case KIXObjectType.CONFIG_ITEM_CLASS:
             case KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION:
                 cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM_CLASS);
+                break;
+            case KIXObjectType.PERSONAL_SETTINGS:
+            case KIXObjectType.USER_PREFERENCE:
+                cacheKeyPrefixes.push(KIXObjectType.CURRENT_USER);
                 break;
             default:
         }

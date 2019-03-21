@@ -279,13 +279,15 @@ class Component {
     }
 
     public async prepareAutocompleteNotFoundText(): Promise<void> {
-        const objectName = this.state.autoCompleteConfiguration.noResultsObjectName || 'Objects';
-        const message = await TranslationService.translate(
-            'Translatable#No {0} found (add at least {1} characters).',
-            [objectName, this.state.autoCompleteConfiguration.charCount]
-        );
+        if (this.state.autoCompleteConfiguration) {
+            const objectName = this.state.autoCompleteConfiguration.noResultsObjectName || 'Objects';
+            const message = await TranslationService.translate(
+                'Translatable#No {0} found (add at least {1} characters).',
+                [objectName, this.state.autoCompleteConfiguration.charCount]
+            );
 
-        this.state.autocompleteNotFoundText = message;
+            this.state.autocompleteNotFoundText = message;
+        }
     }
 
     public clear(): void {

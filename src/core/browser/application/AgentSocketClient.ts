@@ -5,12 +5,13 @@ import {
 } from '../../model/kix/user';
 import { ClientStorageService } from '../ClientStorageService';
 import { IdService } from '../IdService';
-import { Error, KIXObjectType } from '../../model';
+import { Error, KIXObjectType, PersonalSettingsResponse, ISocketRequest } from '../../model';
 import { CacheService } from '../cache';
+import { SocketErrorResponse } from '../../common';
 
 export class AgentSocketClient extends SocketClient {
 
-    private authenticationSocket: SocketIO.Server;
+    private agentSocket: SocketIO.Server;
 
     private static INSTANCE: AgentSocketClient = null;
 
@@ -24,10 +25,10 @@ export class AgentSocketClient extends SocketClient {
 
     public constructor() {
         super();
-        this.authenticationSocket = this.createSocket('agent');
+        this.agentSocket = this.createSocket('agent');
     }
 
-    public async getCurrentUser(cache: boolean = true): Promise<User> {
+    public async getCurrentUser(): Promise<User> {
         if (await CacheService.getInstance().has(KIXObjectType.CURRENT_USER, KIXObjectType.CURRENT_USER)) {
             return await CacheService.getInstance().get(KIXObjectType.CURRENT_USER, KIXObjectType.CURRENT_USER);
         }
@@ -36,17 +37,16 @@ export class AgentSocketClient extends SocketClient {
         const currentUserRequest = new GetCurrentUserRequest(
             ClientStorageService.getToken(),
             requestId,
-            ClientStorageService.getClientRequestId(),
-            cache
+            ClientStorageService.getClientRequestId()
         );
 
         return new Promise<User>((resolve, reject) => {
 
             const timeout = window.setTimeout(() => {
-                reject('Timeout: ' + AgentEvent.SET_PREFERENCES);
+                reject('Timeout: ' + AgentEvent.GET_CURRENT_USER);
             }, 30000);
 
-            this.authenticationSocket.on(
+            this.agentSocket.on(
                 AgentEvent.GET_CURRENT_USER_FINISHED, async (result: GetCurrentUserResponse) => {
                     if (result.requestId === requestId) {
                         window.clearTimeout(timeout);
@@ -57,43 +57,56 @@ export class AgentSocketClient extends SocketClient {
                     }
                 });
 
-            this.authenticationSocket.on(AgentEvent.GET_CURRENT_USER_ERROR, (error: Error) => {
+            this.agentSocket.on(AgentEvent.GET_CURRENT_USER_ERROR, (error: Error) => {
                 window.clearTimeout(timeout);
                 console.error('Socket Error: getCurrentUser');
                 console.error(error);
                 reject(error);
             });
 
-            this.authenticationSocket.emit(AgentEvent.GET_CURRENT_USER, currentUserRequest);
+            this.agentSocket.emit(AgentEvent.GET_CURRENT_USER, currentUserRequest);
         });
     }
 
     public async getPersonalSettings(): Promise<PersonalSetting[]> {
         return new Promise<PersonalSetting[]>((resolve, reject) => {
 
+            const token = ClientStorageService.getToken();
+            const requestId = IdService.generateDateBasedId();
+
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + AgentEvent.GET_PERSONAL_SETTINGS);
             }, 30000);
 
-            this.authenticationSocket.on(
-                AgentEvent.GET_PERSONAL_SETTINGS_FINISHED, (settings: PersonalSetting[]) => {
-                    window.clearTimeout(timeout);
-                    resolve(settings);
+            this.agentSocket.on(
+                AgentEvent.GET_PERSONAL_SETTINGS_FINISHED, (response: PersonalSettingsResponse) => {
+                    if (response.requestId === requestId) {
+                        window.clearTimeout(timeout);
+                        resolve(response.personalSettings);
+                    }
                 });
 
-            this.authenticationSocket.on(AgentEvent.GET_PERSONAL_SETTINGS_ERROR, (error: Error) => {
-                window.clearTimeout(timeout);
-                console.error('Socket Error: getPersonalSettings');
-                console.error(error);
-                resolve([]);
+            this.agentSocket.on(AgentEvent.GET_PERSONAL_SETTINGS_ERROR, (error: SocketErrorResponse) => {
+                if (error.requestId === requestId) {
+                    window.clearTimeout(timeout);
+                    console.error('Socket Error: getPersonalSettings');
+                    console.error(error);
+                    resolve([]);
+                }
             });
 
-            this.authenticationSocket.emit(AgentEvent.GET_PERSONAL_SETTINGS);
+            const request: ISocketRequest = {
+                requestId, token,
+                clientRequestId: ClientStorageService.getClientRequestId()
+            };
+
+            this.agentSocket.emit(AgentEvent.GET_PERSONAL_SETTINGS, request);
         });
     }
 
     public async setPreferences(parameter: Array<[string, any]>): Promise<any> {
         const requestId = IdService.generateDateBasedId();
+
         const preferencesRequest = new SetPreferencesRequest(
             ClientStorageService.getToken(),
             requestId,
@@ -107,22 +120,25 @@ export class AgentSocketClient extends SocketClient {
                 reject('Timeout: ' + AgentEvent.SET_PREFERENCES);
             }, 30000);
 
-            this.authenticationSocket.on(
-                AgentEvent.SET_PREFERENCES_FINISHED, (result: SetPreferencesResponse) => {
+            this.agentSocket.on(
+                AgentEvent.SET_PREFERENCES_FINISHED, async (result: SetPreferencesResponse) => {
                     if (result.requestId === requestId) {
+                        await CacheService.getInstance().deleteKeys(KIXObjectType.CURRENT_USER);
                         window.clearTimeout(timeout);
                         resolve(result);
                     }
                 });
 
-            this.authenticationSocket.on(AgentEvent.SET_PREFERENCES_ERROR, (error: Error) => {
-                window.clearTimeout(timeout);
-                console.error('Socket Error: setPreferences');
-                console.error(error);
-                reject(error);
+            this.agentSocket.on(AgentEvent.SET_PREFERENCES_ERROR, (error: SocketErrorResponse) => {
+                if (error.requestId === requestId) {
+                    window.clearTimeout(timeout);
+                    console.error('Socket Error: setPreferences');
+                    console.error(error);
+                    reject(error);
+                }
             });
 
-            this.authenticationSocket.emit(AgentEvent.SET_PREFERENCES, preferencesRequest);
+            this.agentSocket.emit(AgentEvent.SET_PREFERENCES, preferencesRequest);
         });
     }
 }
