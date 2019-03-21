@@ -117,7 +117,7 @@ export class FAQDetailsContext extends Context<FAQDetailsContextConfiguration> {
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null, null, null,
             ['Attachments', 'Votes', 'Links', 'History'],
-            ['Links']
+            ['Links', 'Votes']
         );
 
         const faqArticleId = Number(this.objectId);
@@ -128,7 +128,7 @@ export class FAQDetailsContext extends Context<FAQDetailsContextConfiguration> {
             return null;
         });
 
-        let faqArticle;
+        let faqArticle: FAQArticle;
         if (faqArticles && faqArticles.length) {
             faqArticle = faqArticles[0];
         }
