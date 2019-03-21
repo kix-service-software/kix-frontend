@@ -74,19 +74,6 @@ export class FAQService extends KIXObjectService {
         token: string, articleIds: Array<number | string>, loadingOptions: KIXObjectLoadingOptions
     ): Promise<FAQArticle[]> {
 
-        loadingOptions = loadingOptions || new KIXObjectLoadingOptions();
-        if (loadingOptions.includes && !!loadingOptions.includes.length) {
-            if (!loadingOptions.includes.some((i) => i === FAQArticleProperty.VOTES)) {
-                loadingOptions.includes = [...loadingOptions.includes, FAQArticleProperty.VOTES];
-            }
-            if (!loadingOptions.expands.some((i) => i === FAQArticleProperty.VOTES)) {
-                loadingOptions.expands = [...loadingOptions.expands, FAQArticleProperty.VOTES];
-            }
-        } else {
-            loadingOptions.includes = [FAQArticleProperty.VOTES];
-            loadingOptions.expands = [FAQArticleProperty.VOTES];
-        }
-
         const query = this.prepareQuery(loadingOptions);
 
         let faqArticles: FAQArticle[] = [];
