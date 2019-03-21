@@ -179,7 +179,7 @@ class LinkDialogComponent {
             );
             const table = TableFactoryService.getInstance().createTable(
                 `link-object-dialog-${objectType}`, objectType, tableConfiguration, null,
-                LinkObjectDialogContext.CONTEXT_ID, null, null, true
+                LinkObjectDialogContext.CONTEXT_ID, true, null, true
             );
             table.addColumns([
                 new DefaultColumnConfiguration(
