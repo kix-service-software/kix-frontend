@@ -43,6 +43,9 @@ export class TicketPriorityLabelProvider implements ILabelProvider<TicketPriorit
             case TicketPriorityProperty.ID:
                 displayValue = 'Translatable#Icon';
                 break;
+            case 'ICON':
+                displayValue = 'Translatable#Icon';
+                break;
             default:
                 displayValue = property;
         }
