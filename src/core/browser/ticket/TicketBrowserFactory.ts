@@ -1,9 +1,5 @@
-import {
-    Ticket, TicketFactory, KIXObjectType, Customer, Contact, TicketHistory,
-    Link, ObjectData, TicketPriority, TicketType, TicketState, StateType,
-    Queue, DynamicField, Sla, KIXObjectLoadingOptions
-} from '../../model';
-import { IKIXObjectFactory, KIXObjectService } from '../kix';
+import { Ticket, TicketHistory, Link, DynamicField } from '../../model';
+import { IKIXObjectFactory } from '../kix';
 import { ArticleBrowserFactory } from './ArticleBrowserFactory';
 import { ObjectDataService } from '../ObjectDataService';
 
@@ -21,7 +17,7 @@ export class TicketBrowserFactory implements IKIXObjectFactory<Ticket> {
     private constructor() { }
 
     public async create(ticket: Ticket): Promise<Ticket> {
-        const newTicket = TicketFactory.create(ticket);
+        const newTicket = new Ticket(ticket);
         await this.mapTicketData(newTicket);
         return newTicket;
     }

@@ -8,7 +8,6 @@ export { Attachment } from './Attachment';
 export { SenderType } from './SenderType';
 export { StateType } from './StateType';
 export { Ticket } from './Ticket';
-export { TicketFactory } from './TicketFactory';
 export { TicketHistory } from './TicketHistory';
 export { TicketHistoryFactory } from './TicketHistoryFactory';
 export { TicketHistoryProperty } from './TicketHistoryProperty';
@@ -22,11 +21,15 @@ export { Watcher } from './Watcher';
 export { TicketTypeProperty } from './TicketTypeProperty';
 export { TicketStateProperty } from './TicketStateProperty';
 
-export { ArticlesLoadingOptions } from './ArticlesLoadingOptions';
 export { TicketStats } from './TicketStats';
 export { CreateTicketArticleOptions } from './CreateTicketArticleOptions';
 export { CreateTicketWatcherOptions } from './CreateTicketWatcherOptions';
 export { DeleteTicketWatcherOptions } from './DeleteTicketWatcherOptions';
 export { TicketPriorityProperty } from './TicketPriorityProperty';
+
+export { TicketFactory } from './TicketFactory';
+export { QueueFactory } from './QueueFactory';
+export { SenderTypeFactory } from './SenderTypeFactory';
+export { LockFactory } from './LockFactory';
 
 export * from './socket';

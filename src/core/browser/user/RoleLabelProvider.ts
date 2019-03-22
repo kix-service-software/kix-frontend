@@ -108,7 +108,7 @@ export class RoleLabelProvider implements ILabelProvider<Role> {
             displayValue = await TranslationService.translate(displayValue.toString());
         }
 
-        return displayValue.toString();
+        return displayValue ? displayValue.toString() : '';
     }
 
     public getDisplayTextClasses(role: Role, property: string): string[] {

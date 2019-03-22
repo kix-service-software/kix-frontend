@@ -37,6 +37,15 @@ export class UserLabelProvider implements ILabelProvider<User> {
     public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
+            case UserProperty.USER_FIRSTNAME:
+                displayValue = 'Translatable#Firstname';
+                break;
+            case UserProperty.USER_LASTNAME:
+                displayValue = 'Translatable#Lastname';
+                break;
+            case UserProperty.USER_LOGIN:
+                displayValue = 'Translatable#Login';
+                break;
             case UserProperty.VALID_ID:
                 displayValue = 'Translatable#Validity';
                 break;

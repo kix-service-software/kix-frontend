@@ -1,0 +1,17 @@
+div.crud-value {
+    border: 1px solid @secondary-2;
+    border-radius: 3px;
+    color: @secondary-2;
+    width: 1.5rem;
+    text-align: center;
+    &.active {
+        background-color: @primary-0;
+        color: @secondary-6;
+        font-weight: bold;
+    }
+    &.deny {
+        &.active {
+            background-color: @tertiary-0;
+        }
+    }
+}

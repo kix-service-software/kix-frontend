@@ -1,14 +1,21 @@
 import { Ticket, ArticleFactory, TicketHistoryFactory } from ".";
-import { Customer, Contact, LinkFactory } from "..";
+import { LinkFactory } from "..";
 import { DynamicField } from "../dynamic-field";
+import { IObjectFactory } from "../IObjectFactory";
+import { KIXObjectType } from "../KIXObjectType";
+import { Article } from "./Article";
 
-export class TicketFactory {
+export class TicketFactory implements IObjectFactory<Ticket> {
 
-    public static create(ticket: Ticket, customer?: Customer, contact?: Contact): Ticket {
+    public isFactoryFor(objectType: KIXObjectType): boolean {
+        return objectType === KIXObjectType.TICKET;
+    }
+
+    public create(ticket: Ticket): Ticket {
         const newTicket = new Ticket(ticket);
 
         newTicket.Articles = ticket.Articles
-            ? ticket.Articles.map((a) => ArticleFactory.create(a))
+            ? ticket.Articles.map((a) => new Article(a))
             : [];
 
         newTicket.DynamicFields = ticket.DynamicFields

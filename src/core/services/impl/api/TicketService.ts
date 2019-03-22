@@ -1,16 +1,15 @@
 import {
-    ArticleAttachmentResponse, ArticleResponse, ArticlesResponse,
-    CreateArticle, CreateAttachment, CreateTicket, CreateTicketRequest, CreateTicketResponse, LocksResponse,
-    QueuesResponse, SenderTypesResponse, TicketResponse, TicketsResponse,
+    ArticleAttachmentResponse, CreateArticle, CreateAttachment, CreateTicket, CreateTicketRequest, CreateTicketResponse,
     CreateWatcherRequest, CreateWatcherResponse, CreateWatcher,
     UpdateTicket, UpdateTicketResponse, UpdateTicketRequest, CreateArticleResponse, CreateArticleRequest
 } from '../../../api';
 
 import {
-    Article, Attachment, ArticleProperty, FilterCriteria, Lock, Queue, SenderType, Ticket, TicketProperty,
+    Article, Attachment, ArticleProperty, FilterCriteria, Queue, TicketProperty,
     TicketFactory, KIXObjectType, FilterType, User, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    ArticlesLoadingOptions, KIXObjectSpecificCreateOptions, CreateTicketArticleOptions, CreateTicketWatcherOptions,
-    KIXObjectSpecificDeleteOptions, DeleteTicketWatcherOptions, Error
+    KIXObjectSpecificCreateOptions, CreateTicketArticleOptions, CreateTicketWatcherOptions,
+    KIXObjectSpecificDeleteOptions, DeleteTicketWatcherOptions, Error, QueueFactory,
+    SenderTypeFactory, ArticleFactory, LockFactory
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
@@ -42,7 +41,13 @@ export class TicketService extends KIXObjectService {
     public objectType: KIXObjectType = KIXObjectType.TICKET;
 
     private constructor() {
-        super();
+        super([
+            new TicketFactory(),
+            new QueueFactory(),
+            new SenderTypeFactory(),
+            new ArticleFactory(),
+            new LockFactory()
+        ]);
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -50,7 +55,6 @@ export class TicketService extends KIXObjectService {
         return kixObjectType === KIXObjectType.TICKET
             || kixObjectType === KIXObjectType.ARTICLE
             || kixObjectType === KIXObjectType.QUEUE
-            || kixObjectType === KIXObjectType.QUEUE_HIERARCHY
             || kixObjectType === KIXObjectType.SENDER_TYPE
             || kixObjectType === KIXObjectType.LOCK
             || kixObjectType === KIXObjectType.WATCHER;
@@ -62,81 +66,19 @@ export class TicketService extends KIXObjectService {
     ): Promise<T[]> {
 
         let objects = [];
-        if (objectType === KIXObjectType.ARTICLE && objectLoadingOptions) {
-            objects = await this.getArticles(token, loadingOptions, (objectLoadingOptions as ArticlesLoadingOptions));
-        } else if (objectType === KIXObjectType.TICKET) {
-            objects = await this.getTickets(token, objectIds, loadingOptions);
+        if (objectType === KIXObjectType.TICKET) {
+            objects = await super.load(
+                token, KIXObjectType.TICKET, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.TICKET
+            );
         } else if (objectType === KIXObjectType.QUEUE) {
-            const queues = await this.getQueues(token);
-            if (objectIds && objectIds.length) {
-                objects = queues.filter((t) => objectIds.some((oid) => oid === t.ObjectId));
-            } else {
-                objects = queues;
-            }
-        } else if (objectType === KIXObjectType.QUEUE_HIERARCHY) {
-            objects = await this.getQueuesHierarchy(token);
+            objects = await super.load(token, KIXObjectType.QUEUE, 'queues', loadingOptions, null, KIXObjectType.QUEUE);
         } else if (objectType === KIXObjectType.SENDER_TYPE) {
-            objects = await this.getSenderTypes(token);
+            objects = await super.load(token, KIXObjectType.SENDER_TYPE, 'sendertypes', null, null, 'SenderType');
         } else if (objectType === KIXObjectType.LOCK) {
-            objects = await this.getLocks(token);
+            objects = await super.load(token, KIXObjectType.LOCK, 'ticketlocks', null, null, 'Lock');
         }
 
         return objects;
-    }
-
-    public async getArticles(
-        token: string, loadingOptions: KIXObjectLoadingOptions, articleOptions: ArticlesLoadingOptions
-    ): Promise<Article[]> {
-        let articles = [];
-        let query = this.prepareQuery(loadingOptions);
-        if (articleOptions.ticketId) {
-            query = {
-                ...query,
-                sort: "Article.-CreateTime"
-            };
-
-            const uri = this.buildUri(this.RESOURCE_URI, articleOptions.ticketId, this.SUB_RESOURCE_URI);
-            const response = await this.getObjectByUri<ArticlesResponse>(token, uri, query);
-
-            articles = response.Article.map((a) => new Article(a));
-
-            if (articleOptions.latest) {
-                articles = [articles[0]];
-            } else if (articleOptions.first) {
-                articles.sort((a, b) => a.ArticleID - b.ArticleID);
-                articles = [articles[0]];
-            }
-        }
-
-        return articles;
-    }
-
-    private async getTickets(token: string, objectIds: Array<number | string>, loadingOptions: KIXObjectLoadingOptions
-    ): Promise<Ticket[]> {
-        const query = this.prepareQuery(loadingOptions);
-
-        let tickets: Ticket[] = [];
-
-        if (objectIds && !!objectIds.length) {
-            objectIds = objectIds.filter((id) => typeof id !== 'undefined' && id !== null && id.toString() !== '');
-            const uri = this.buildUri(this.RESOURCE_URI, objectIds.join(','));
-            if (objectIds.length === 1) {
-                const response = await this.getObjectByUri<TicketResponse>(token, uri, query);
-                tickets = [response.Ticket];
-            } else {
-                const response = await this.getObjectByUri<TicketsResponse>(token, uri, query);
-                tickets = response.Ticket;
-            }
-        } else if (loadingOptions.filter) {
-            await this.buildFilter(loadingOptions.filter, 'Ticket', token, query);
-            const response = await this.getObjects<TicketsResponse>(token, loadingOptions.limit, null, null, query);
-            tickets = response.Ticket;
-        } else {
-            const response = await this.getObjects<TicketsResponse>(token, loadingOptions.limit, null, null, query);
-            tickets = response.Ticket;
-        }
-
-        return tickets.map((t) => TicketFactory.create(t));
     }
 
     public async createObject(
@@ -183,7 +125,9 @@ export class TicketService extends KIXObjectService {
             const options = createOptions as CreateTicketArticleOptions;
 
             let queueId;
-            const tickets = await this.getTickets(token, [options.ticketId], null);
+            const tickets = await super.load(
+                token, KIXObjectType.TICKET, this.RESOURCE_URI, null, [options.ticketId], KIXObjectType.TICKET
+            );
             if (tickets && tickets.length) {
                 queueId = tickets[0].QueueID;
             }
@@ -290,7 +234,9 @@ export class TicketService extends KIXObjectService {
         const channel = channels.find((c) => c.ID === channelId);
         if (channel && channel.Name === 'email') {
             if (queueId) {
-                const queues = await this.getQueues(token);
+                const queues = await super.load<Queue>(
+                    token, KIXObjectType.QUEUE, 'queues', null, null, KIXObjectType.QUEUE
+                );
                 const queue = queues.find((q) => q.QueueID === queueId);
                 if (queue && queue.Signature) {
                     body += `\n<p>--</p>\n${queue.Signature}`;
@@ -317,17 +263,6 @@ export class TicketService extends KIXObjectService {
             attachments.forEach((a) => result.push(new CreateAttachment(a.Content, a.ContentType, a.Filename)));
         }
         return result;
-    }
-
-    public async loadArticle(token: string, ticketId: number, articleId: number): Promise<Article> {
-        const uri = this.buildUri(this.RESOURCE_URI, ticketId, RESOURCE_ARTICLES, articleId);
-        const query = {
-            include: 'Flags',
-            expand: 'Flags'
-        };
-        const response = await this.getObjectByUri<ArticleResponse>(token, uri, query);
-        response.Article.TicketID = ticketId;
-        return response.Article;
     }
 
     public async loadArticleAttachment(
@@ -359,14 +294,24 @@ export class TicketService extends KIXObjectService {
         token: string, clientRequestId: string, ticketId: number, articleId: number
     ): Promise<void> {
         const seenFlag = 'Seen';
-        const article = await this.loadArticle(token, ticketId, articleId);
+
+        const baseUri = this.buildUri(this.RESOURCE_URI, ticketId, this.SUB_RESOURCE_URI, articleId);
+        const loadingOptions = new KIXObjectLoadingOptions(
+            null, null, null, null, null, [ArticleProperty.FLAGS], [ArticleProperty.FLAGS]
+        );
+
+        const articles = await super.load<Article>(
+            token, KIXObjectType.ARTICLE, baseUri, loadingOptions, null, 'Article'
+        );
+
+        const article = articles && articles.length ? articles[0] : null;
 
         const ArticleFlag = {
             Name: seenFlag,
             Value: '1'
         };
 
-        if (this.articleHasFlag(article, seenFlag)) {
+        if (article && this.articleHasFlag(article, seenFlag)) {
             const uri = this.buildUri(this.RESOURCE_URI, ticketId, 'articles', articleId, 'flags', seenFlag);
             await this.sendUpdateRequest(token, clientRequestId, uri, { ArticleFlag }, this.objectType);
         } else {
@@ -375,64 +320,8 @@ export class TicketService extends KIXObjectService {
         }
     }
 
-    public async getTicketCountForContact(token: string, contactId: string, stateTypeIds: number[]): Promise<number> {
-        const query = {
-            filter: {
-                Ticket: {
-                    AND: [
-                        { Field: TicketProperty.CUSTOMER_USER_ID, Operator: SearchOperator.EQUALS, Value: contactId },
-                        { Field: TicketProperty.TYPE_ID, Operator: SearchOperator.IN, Value: stateTypeIds }
-                    ]
-                }
-            }
-        };
-
-        const response = await this.getObjects<TicketsResponse>(token, null, null, null, query);
-        return response.Ticket.length;
-    }
-
     private articleHasFlag(article: Article, flagName: string): boolean {
         return article.Flags && article.Flags.findIndex((f) => f.Name === flagName) !== -1;
-    }
-
-    // -----------------------------
-    // SenderTypes implementation
-    // -----------------------------
-
-    public async getSenderTypes(token: string): Promise<SenderType[]> {
-        const uri = this.buildUri('sendertypes');
-        const response = await this.getObjectByUri<SenderTypesResponse>(token, uri);
-        return response.SenderType.map((st) => new SenderType(st));
-    }
-
-    // -----------------------------
-    // Queues implementation
-    // -----------------------------
-
-    public async getQueues(token: string): Promise<Queue[]> {
-        const uri = this.buildUri('queues');
-        const response = await this.getObjectByUri<QueuesResponse>(token, uri);
-        return response.Queue.map((q) => new Queue(q));
-    }
-
-    public async getQueuesHierarchy(token: string): Promise<Queue[]> {
-        const uri = this.buildUri('queues');
-        const response = await this.getObjectByUri<QueuesResponse>(token, uri, {
-            include: 'SubQueues,TicketStats,Tickets',
-            expand: 'SubQueues',
-            filter: '{"Queue": {"AND": [{"Field": "ParentID", "Operator": "EQ", "Value": null}]}}'
-        });
-        return response.Queue.map((q) => new Queue(q));
-    }
-
-    // -----------------------------
-    // TicketLock implementation
-    // -----------------------------
-
-    public async getLocks(token: string): Promise<Lock[]> {
-        const uri = this.buildUri('ticketlocks');
-        const response = await this.getObjectByUri<LocksResponse>(token, uri);
-        return response.Lock.map((l) => new Lock(l));
     }
 
     // -----------------------------

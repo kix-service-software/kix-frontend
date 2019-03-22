@@ -4,7 +4,7 @@ import {
 } from '../../../api';
 import {
     Role, KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, ObjectIcon, Error
+    KIXObjectSpecificCreateOptions, ObjectIcon, Error, RoleFactory, KIXObject
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
@@ -30,7 +30,7 @@ export class RoleService extends KIXObjectService {
     public kixObjectType: KIXObjectType = KIXObjectType.ROLE;
 
     private constructor() {
-        super();
+        super([new RoleFactory()]);
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -45,22 +45,13 @@ export class RoleService extends KIXObjectService {
         await this.getRoles(token);
     }
 
-    public async loadObjects<T>(
+    public async loadObjects<T extends KIXObject = any>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<T[]> {
-
-        let objects = [];
-        if (objectType === KIXObjectType.ROLE) {
-            const roles = await this.getRoles(token);
-            if (objectIds && objectIds.length) {
-                objects = roles.filter((t) => objectIds.some((oid) => oid === t.ObjectId));
-            } else {
-                objects = roles;
-            }
-        }
-
-        return objects;
+        return await super.load(
+            token, this.objectType, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.ROLE
+        );
     }
 
     public async createObject(

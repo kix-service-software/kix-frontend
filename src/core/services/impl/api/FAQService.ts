@@ -78,14 +78,18 @@ export class FAQService extends KIXObjectService {
 
         let faqArticles: FAQArticle[] = [];
 
-        if (articleIds && !!articleIds.length) {
-            articleIds = articleIds.filter((id) => typeof id !== 'undefined' && id.toString() !== '' && id !== null);
-            const uri = this.buildUri(this.RESOURCE_URI, 'articles', articleIds.join(','));
-            const response = await this.getObjectByUri<FAQArticlesResponse | FAQArticleResponse>(token, uri, query);
-            if (articleIds.length === 1) {
-                faqArticles = [(response as FAQArticleResponse).FAQArticle];
-            } else {
-                faqArticles = (response as FAQArticlesResponse).FAQArticle;
+        if (articleIds) {
+            if (!!articleIds.length) {
+                articleIds = articleIds.filter(
+                    (id) => typeof id !== 'undefined' && id.toString() !== '' && id !== null
+                );
+                const uri = this.buildUri(this.RESOURCE_URI, 'articles', articleIds.join(','));
+                const response = await this.getObjectByUri<FAQArticlesResponse | FAQArticleResponse>(token, uri, query);
+                if (articleIds.length === 1) {
+                    faqArticles = [(response as FAQArticleResponse).FAQArticle];
+                } else {
+                    faqArticles = (response as FAQArticlesResponse).FAQArticle;
+                }
             }
         } else if (loadingOptions.filter) {
             await this.buildFilter(loadingOptions.filter, 'FAQArticle', token, query);

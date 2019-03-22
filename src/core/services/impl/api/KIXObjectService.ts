@@ -2,13 +2,15 @@ import {
     SortOrder, KIXObjectType, KIXObject, FilterCriteria, FilterType,
     KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, CreateLinkDescription,
     KIXObjectSpecificCreateOptions, KIXObjectSpecificDeleteOptions, ObjectIcon, ObjectIconLoadingOptions,
-    Error
+    Error,
+    IObjectFactory
 } from '../../../model';
 import { Query, CreateLink, CreateLinkRequest } from '../../../api';
 import { IKIXObjectService } from '../../IKIXObjectService';
 import { HttpService } from './HttpService';
 import { LoggingService } from '../LoggingService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
+import { ObjectFactoryService } from '../../ObjectFactoryService';
 
 /**
  * Generic abstract class for all ObjectServices.
@@ -17,23 +19,58 @@ import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
  *
  * The class provides generic methods to make get, update, create and delete requests against the REST-API.
  */
-export abstract class KIXObjectService implements IKIXObjectService {
+export abstract class KIXObjectService<T extends KIXObject = any> implements IKIXObjectService {
 
     protected httpService: HttpService = HttpService.getInstance();
 
     protected abstract objectType: KIXObjectType;
 
-    public abstract isServiceFor(kixObjectType: KIXObjectType): boolean;
-
-    public updateCache(objectId: string | number): void {
-        return;
+    public constructor(factories: IObjectFactory[] = []) {
+        factories.forEach((f) => ObjectFactoryService.registerFactory(f));
     }
 
-    public async loadObjects<O>(
+    public abstract isServiceFor(kixObjectType: KIXObjectType): boolean;
+
+    public async loadObjects<O extends KIXObject = any>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<O[]> {
-        return [];
+        throw new Error('-1', 'Method loadObjects not implemented');
+    }
+
+    protected async load<O extends KIXObject = any>(
+        token: string, objectType: KIXObjectType, baseUri: string, loadingOptions: KIXObjectLoadingOptions,
+        objectIds: Array<number | string>, responseProperty: string
+    ): Promise<O[]> {
+        const query = this.prepareQuery(loadingOptions);
+        if (loadingOptions && loadingOptions.filter && loadingOptions.filter.length) {
+            await this.buildFilter(loadingOptions.filter, responseProperty, token, query);
+        }
+
+        let objects: O[] = [];
+
+        const emptyResult = objectIds && objectIds.length === 0;
+        if (emptyResult) {
+            return objects;
+        }
+
+        objectIds = objectIds
+            ? objectIds.filter((id) => typeof id !== 'undefined' && id !== null && id.toString() !== '')
+            : [];
+
+        const uri = objectIds.length
+            ? this.buildUri(baseUri, objectIds.join(','))
+            : this.buildUri(baseUri);
+
+        const response = await this.getObjectByUri(token, uri, query);
+
+        const responseObject = response[responseProperty];
+
+        objects = Array.isArray(responseObject)
+            ? responseObject
+            : [responseObject];
+
+        return objects.map((o) => ObjectFactoryService.createObject(objectType, o));
     }
 
     public abstract async createObject(

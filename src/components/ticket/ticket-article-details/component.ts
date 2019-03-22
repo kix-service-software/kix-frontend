@@ -1,9 +1,5 @@
 import { TicketArticleDetailsComponentState } from './TicketArticleDetailsComponentState';
-import {
-    Article, Ticket, KIXObjectType, ContextMode,
-    KIXObjectLoadingOptions, ArticlesLoadingOptions
-} from '../../../core/model';
-import { ContextService, KIXObjectService } from '../../../core/browser';
+import { Article, Ticket } from '../../../core/model';
 
 export class TicketArticleDetailsComponent {
 
@@ -22,10 +18,7 @@ export class TicketArticleDetailsComponent {
             this.state.article = this.state.inputObject;
         } else if (this.state.inputObject instanceof Ticket) {
             const ticket = (this.state.inputObject as Ticket);
-            let articles = await KIXObjectService.loadObjects<Article>(
-                KIXObjectType.ARTICLE, null,
-                new KIXObjectLoadingOptions(), new ArticlesLoadingOptions(ticket.TicketID)
-            );
+            let articles = ticket.Articles;
 
             if (articles) {
                 articles = articles.sort((a, b) => b.IncomingTime - a.IncomingTime);

@@ -64,8 +64,6 @@ export enum KIXObjectType {
 
     QUEUE = 'Queue',
 
-    QUEUE_HIERARCHY = 'QUEUE_HIERARCHY',
-
     ROLE = 'Role',
 
     SERVICE = 'Service',

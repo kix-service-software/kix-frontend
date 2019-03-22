@@ -57,19 +57,21 @@ export class UserService extends KIXObjectService {
     public async getUsers(
         token: string, objectIds?: Array<number | string>, loadingOptions?: KIXObjectLoadingOptions
     ): Promise<User[]> {
-        const query = { fields: 'User.UserLogin,User.UserID,User.UserFullname' };
-        let users;
+        const query = this.prepareQuery(loadingOptions);
+        let users = [];
 
-        if (objectIds && !!objectIds.length) {
-            objectIds = objectIds.filter((id) => typeof id !== 'undefined' && id.toString() !== '' && id !== null)
-                .map((id) => Number(id));
-            const uri = this.buildUri(this.RESOURCE_URI, objectIds.join(','));
-            if (objectIds.length === 1) {
-                const response = await this.getObjectByUri<UserResponse>(token, uri, query);
-                users = [response.User];
-            } else {
-                const response = await this.getObjectByUri<UsersResponse>(token, uri, query);
-                users = response.User;
+        if (objectIds) {
+            if (!!objectIds.length) {
+                objectIds = objectIds.filter((id) => typeof id !== 'undefined' && id.toString() !== '' && id !== null)
+                    .map((id) => Number(id));
+                const uri = this.buildUri(this.RESOURCE_URI, objectIds.join(','));
+                if (objectIds.length === 1) {
+                    const response = await this.getObjectByUri<UserResponse>(token, uri, query);
+                    users = [response.User];
+                } else {
+                    const response = await this.getObjectByUri<UsersResponse>(token, uri, query);
+                    users = response.User;
+                }
             }
         } else {
             if (loadingOptions && loadingOptions.filter) {
