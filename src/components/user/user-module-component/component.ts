@@ -4,12 +4,13 @@ import {
 } from '../../../core/browser';
 import {
     RoleService, RoleTableFactory, RoleBrowserFactory, RoleLabelProvider, UserRoleCreateAction,
-    NewUserRoleDialogContext, UserRoleTableDeleteAction, UserLabelProvider, UserBrowserFactory
+    NewUserRoleDialogContext, UserRoleTableDeleteAction, UserLabelProvider, UserBrowserFactory,
+    UserRoleEditAction, RoleDetailsContext, UserTableFactory, RolePermissionsTableFactory, PermissionTableCSSHandler
 } from '../../../core/browser/user';
 import {
     KIXObjectType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration, WidgetSize, ContextDescriptor, ContextType
 } from '../../../core/model';
-import { TableFactoryService } from '../../../core/browser/table';
+import { TableFactoryService, TableCSSHandlerRegsitry } from '../../../core/browser/table';
 import { DialogService } from '../../../core/browser/components/dialog';
 
 class Component extends AbstractMarkoComponent {
@@ -25,6 +26,11 @@ class Component extends AbstractMarkoComponent {
         LabelService.getInstance().registerLabelProvider(new RoleLabelProvider());
 
         TableFactoryService.getInstance().registerFactory(new RoleTableFactory());
+        TableFactoryService.getInstance().registerFactory(new UserTableFactory());
+        TableFactoryService.getInstance().registerFactory(new RolePermissionsTableFactory());
+        TableCSSHandlerRegsitry.getInstance().registerCSSHandler(
+            KIXObjectType.PERMISSION, new PermissionTableCSSHandler()
+        );
 
         FactoryService.getInstance().registerFactory(KIXObjectType.USER, UserBrowserFactory.getInstance());
         FactoryService.getInstance().registerFactory(KIXObjectType.ROLE, RoleBrowserFactory.getInstance());
@@ -42,19 +48,18 @@ class Component extends AbstractMarkoComponent {
         );
         ContextService.getInstance().registerContext(newUserRoleContext);
 
-        // const roleDetailsContextDescriptor = new ContextDescriptor(
-        //     RoleDetailsContext.CONTEXT_ID, [KIXObjectType.ROLE],
-        //     ContextType.MAIN, ContextMode.DETAILS,
-        //     true, 'role-details', ['roles'], RoleDetailsContext
-        // );
-        // ContextService.getInstance().registerContext(roleDetailsContextDescriptor);
+        const roleDetailsContextDescriptor = new ContextDescriptor(
+            RoleDetailsContext.CONTEXT_ID, [KIXObjectType.ROLE],
+            ContextType.MAIN, ContextMode.DETAILS,
+            true, 'user-role-details', ['roles'], RoleDetailsContext
+        );
+        ContextService.getInstance().registerContext(roleDetailsContextDescriptor);
     }
 
     private registerAdminActions(): void {
-        ActionFactory.getInstance()
-            .registerAction('user-admin-role-create-action', UserRoleCreateAction);
-        ActionFactory.getInstance()
-            .registerAction('user-admin-role-table-delete-action', UserRoleTableDeleteAction);
+        ActionFactory.getInstance().registerAction('user-admin-role-create-action', UserRoleCreateAction);
+        ActionFactory.getInstance().registerAction('user-admin-role-edit-action', UserRoleEditAction);
+        ActionFactory.getInstance().registerAction('user-admin-role-table-delete-action', UserRoleTableDeleteAction);
     }
 
     private registerAdminDialogs(): void {

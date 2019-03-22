@@ -42,6 +42,7 @@ class Extension implements IKIXModuleExtension {
         // tslint:disable-next-line:max-line-length
         ['label-list-cell-content', '_base-components/standard-table-NEW/table-body/table-row/table-cell-NEW/label-list-cell-content'],
         ['multiline-cell', '_base-components/standard-table-NEW/table-body/table-row/table-cell-NEW/multiline-cell'],
+        ['crud-cell', '_base-components/standard-table-NEW/table-body/table-row/table-cell-NEW/crud-cell'],
         ['checkbox-input', '_base-components/form/inputs/checkbox-input'],
         ['translation-string', '_base-components/translation-string'],
         ['import-dialog', '_base-components/dialog/import-dialog']

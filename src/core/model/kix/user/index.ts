@@ -12,5 +12,6 @@ export { Role } from './Role';
 export { RoleProperty } from './RoleProperty';
 export { UserProperty } from './UserProperty';
 export { UserFactory } from './UserFactory';
+export { RoleFactory } from './RoleFactory';
 
 export * from './socket';

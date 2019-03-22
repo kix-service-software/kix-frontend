@@ -3,7 +3,7 @@ import { SearchOperator, ContextService } from '..';
 import {
     Attachment, KIXObjectType, Ticket, TicketProperty, FilterDataType, FilterCriteria, FilterType,
     TreeNode, ObjectIcon, Queue, Service, TicketPriority, TicketType,
-    TicketState, StateType, KIXObject, Sla, TableFilterCriteria, User
+    TicketState, StateType, KIXObject, Sla, TableFilterCriteria, User, KIXObjectLoadingOptions
 } from '../../model';
 import { TicketParameterUtil } from './TicketParameterUtil';
 import { KIXObjectService } from '../kix';
@@ -28,7 +28,6 @@ export class TicketService extends KIXObjectService<Ticket> {
         return kixObjectType === KIXObjectType.TICKET
             || kixObjectType === KIXObjectType.ARTICLE
             || kixObjectType === KIXObjectType.QUEUE
-            || kixObjectType === KIXObjectType.QUEUE_HIERARCHY
             || kixObjectType === KIXObjectType.ARTICLE_TYPE
             || kixObjectType === KIXObjectType.SENDER_TYPE
             || kixObjectType === KIXObjectType.LOCK
@@ -86,7 +85,7 @@ export class TicketService extends KIXObjectService<Ticket> {
 
         switch (property) {
             case TicketProperty.QUEUE_ID:
-                const queuesHierarchy = await KIXObjectService.loadObjects<Queue>(KIXObjectType.QUEUE_HIERARCHY);
+                const queuesHierarchy = await this.getQueuesHierarchy();
                 values = queuesHierarchy ? this.prepareQueueTree(queuesHierarchy) : [];
                 break;
             case TicketProperty.SERVICE_ID:
@@ -232,5 +231,14 @@ export class TicketService extends KIXObjectService<Ticket> {
         const id = object ? object.ObjectId : objectId;
         const context = await ContextService.getInstance().getContext(TicketDetailsContext.CONTEXT_ID);
         return context.getDescriptor().urlPaths[0] + '/' + id;
+    }
+
+    public async getQueuesHierarchy(): Promise<Queue[]> {
+        const loadingOptions = new KIXObjectLoadingOptions(null, [
+            new FilterCriteria('ParentID', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, null)
+        ], null, null, null, ['SubQueues', 'TicketStats', 'Tickets'], ['SubQueues']);
+        return await KIXObjectService.loadObjects<Queue>(
+            KIXObjectType.QUEUE, null, loadingOptions
+        );
     }
 }

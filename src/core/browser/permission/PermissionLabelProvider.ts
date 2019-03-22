@@ -40,6 +40,23 @@ export class PermissionLabelProvider implements ILabelProvider<Permission> {
                 break;
             case PermissionProperty.ID:
                 displayValue = 'Translatable#Icon';
+            case PermissionProperty.VALUE:
+                displayValue = 'Translatable#Permission';
+                break;
+            case PermissionProperty.CREATE:
+                displayValue = 'Translatable#Create';
+                break;
+            case PermissionProperty.READ:
+                displayValue = 'Translatable#Read';
+                break;
+            case PermissionProperty.UPDATE:
+                displayValue = 'Translatable#Update';
+                break;
+            case PermissionProperty.DELETE:
+                displayValue = 'Translatable#Delete';
+                break;
+            case PermissionProperty.DENY:
+                displayValue = 'Translatable#Deny';
                 break;
             default:
                 displayValue = property;
@@ -135,10 +152,12 @@ export class PermissionLabelProvider implements ILabelProvider<Permission> {
     }
 
     public async getIcons(
-        object: Permission, property: string, value?: string | number
+        object: Permission, property: string, value?: any
     ): Promise<Array<string | ObjectIcon>> {
         if (property === PermissionProperty.ID) {
             return [new ObjectIcon('Permission', object.ID)];
+        } else if (property === PermissionProperty.IS_REQUIRED) {
+            return value ? ['kix-icon-check'] : null;
         }
         return null;
     }

@@ -5,6 +5,7 @@ import {
 } from "../../../../table";
 import { KIXObjectType, RoleProperty, DataType, ContextMode } from "../../../../../model";
 import { RoleTableContentProvider } from "./RoleTableContentProvider";
+import { RoleDetailsContext } from "../../context";
 
 export class RoleTableFactory implements ITableFactory {
 
@@ -57,12 +58,12 @@ export class RoleTableFactory implements ITableFactory {
             tableConfiguration.tableColumns = tableColumns;
         }
 
-        // if (defaultRouting) {
-        //     tableConfiguration.routingConfiguration = new RoutingConfiguration(
-        //         null, RoleDetailsContext.CONTEXT_ID, KIXObjectType.ROLE,
-        //         ContextMode.DETAILS, RoleProperty.ID
-        //     );
-        // }
+        if (defaultRouting) {
+            tableConfiguration.routingConfiguration = new RoutingConfiguration(
+                null, RoleDetailsContext.CONTEXT_ID, KIXObjectType.ROLE,
+                ContextMode.DETAILS, RoleProperty.ID
+            );
+        }
 
         return tableConfiguration;
     }

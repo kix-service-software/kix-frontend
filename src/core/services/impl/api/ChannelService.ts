@@ -1,7 +1,7 @@
 import { ChannelsResponse } from '../../../api';
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, Error, Channel
+    KIXObjectSpecificCreateOptions, Error, Channel, ChannelFactory
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
@@ -23,7 +23,7 @@ export class ChannelService extends KIXObjectService {
     public objectType: KIXObjectType = KIXObjectType.CHANNEL;
 
     private constructor() {
-        super();
+        super([new ChannelFactory()]);
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 

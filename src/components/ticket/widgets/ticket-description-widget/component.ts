@@ -1,8 +1,8 @@
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../../../core/browser/context';
 import {
-    WidgetType, Ticket, KIXObjectType, Context, DynamicField, KIXObjectLoadingOptions,
-    FilterCriteria, FilterDataType, FilterType, ArticlesLoadingOptions, Article
+    WidgetType, Ticket, KIXObjectType, DynamicField, KIXObjectLoadingOptions,
+    FilterCriteria, FilterDataType, FilterType
 } from '../../../../core/model/';
 import { ActionFactory, WidgetService, KIXObjectService, SearchOperator } from '../../../../core/browser';
 import { TicketDetailsContext } from '../../../../core/browser/ticket';

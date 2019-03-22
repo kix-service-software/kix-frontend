@@ -1,0 +1,12 @@
+<div.role-assigned-permissions>
+    <widget
+        instanceId=state.instanceId
+        title=(state.widgetConfiguration ? state.widgetConfiguration.title : "Translatable#Permissions")
+        contentActions=state.actions>
+        <@content>
+            <if(state.table)>
+                <standard-table-NEW table=state.table/>
+            </if>
+        </@content>
+    </widget>
+</div>

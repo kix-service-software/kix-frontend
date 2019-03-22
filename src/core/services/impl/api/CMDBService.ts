@@ -100,20 +100,22 @@ export class CMDBService extends KIXObjectService {
 
         let configItems: ConfigItem[] = [];
 
-        if (configItemIds && configItemIds.length) {
-            configItemIds = configItemIds.filter(
-                (id) => typeof id !== 'undefined' && id.toString() !== '' && id !== null
-            );
+        if (configItemIds) {
+            if (!!configItemIds.length) {
+                configItemIds = configItemIds.filter(
+                    (id) => typeof id !== 'undefined' && id.toString() !== '' && id !== null
+                );
 
-            const uri = this.buildUri(this.RESOURCE_URI, subResource, configItemIds.join(','));
-            const response = await this.getObjectByUri<ConfigItemResponse | ConfigItemsResponse>(
-                token, uri, query
-            );
+                const uri = this.buildUri(this.RESOURCE_URI, subResource, configItemIds.join(','));
+                const response = await this.getObjectByUri<ConfigItemResponse | ConfigItemsResponse>(
+                    token, uri, query
+                );
 
-            if (configItemIds.length === 1) {
-                configItems = [(response as ConfigItemResponse).ConfigItem];
-            } else {
-                configItems = (response as ConfigItemsResponse).ConfigItem;
+                if (configItemIds.length === 1) {
+                    configItems = [(response as ConfigItemResponse).ConfigItem];
+                } else {
+                    configItems = (response as ConfigItemsResponse).ConfigItem;
+                }
             }
 
         } else if (loadingOptions.filter) {

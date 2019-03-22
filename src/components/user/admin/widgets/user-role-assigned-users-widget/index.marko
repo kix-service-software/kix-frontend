@@ -1,0 +1,12 @@
+<div.role-assigned-users>
+    <widget
+        instanceId=state.instanceId
+        title=(state.widgetConfiguration ? state.widgetConfiguration.title : "Translatable#Assigned Agents")
+        contentActions=state.actions>
+        <@content>
+            <if(state.table)>
+                <standard-table-NEW table=state.table/>
+            </if>
+        </@content>
+    </widget>
+</div>

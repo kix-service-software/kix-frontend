@@ -42,6 +42,7 @@ import { SwitchColumnOrderAction } from '../../core/browser/table/actions';
 import { SystemAddressService } from '../../core/browser/system-address';
 import { DialogService } from '../../core/browser/components/dialog';
 import { AgentService } from '../../core/browser/application/AgentService';
+import { PermissionLabelProvider } from '../../core/browser/permission';
 
 class Component extends AbstractMarkoComponent {
 
@@ -73,6 +74,7 @@ class Component extends AbstractMarkoComponent {
             KIXObjectType.OBJECT_ICON, ObjectIconBrowserFactory.getInstance()
         );
 
+        LabelService.getInstance().registerLabelProvider(new PermissionLabelProvider());
 
         FactoryService.getInstance().registerFactory(KIXObjectType.TEXT_MODULE, TextModuleBrowserFactory.getInstance());
         TableFactoryService.getInstance().registerFactory(new TextModulesTableFactory());

@@ -4,7 +4,7 @@ import {
     TreeNode, Queue, TreeNodeProperty, FilterCriteria,
     TicketProperty, FilterDataType, FilterType, KIXObjectType, KIXObjectLoadingOptions
 } from '../../../../core/model';
-import { TicketContext } from '../../../../core/browser/ticket';
+import { TicketContext, TicketService } from '../../../../core/browser/ticket';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 export class Component {
@@ -30,14 +30,7 @@ export class Component {
 
     private async loadQueues(context: TicketContext): Promise<void> {
         this.state.nodes = null;
-
-        const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, null, null, null, null, [['TicketStats.StateType', 'Open']]
-        );
-        const queuesHierarchy = await KIXObjectService.loadObjects<Queue>(
-            KIXObjectType.QUEUE_HIERARCHY, null, loadingOptions
-        );
-
+        const queuesHierarchy = await TicketService.getInstance().getQueuesHierarchy();
         this.state.nodes = await this.prepareTreeNodes(queuesHierarchy);
         this.setActiveNode(context.queue);
     }

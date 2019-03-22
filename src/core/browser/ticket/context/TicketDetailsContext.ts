@@ -3,14 +3,12 @@ import { TicketDetailsContextConfiguration } from '..';
 import {
     ConfiguredWidget, WidgetConfiguration, WidgetType,
     Ticket, KIXObject, KIXObjectType, KIXObjectLoadingOptions, BreadcrumbInformation,
-    Article, ArticlesLoadingOptions, ObjectUpdatedEventData
 } from '../../../model';
 import { TicketContext } from './TicketContext';
 import { KIXObjectService } from '../../kix';
 import { EventService } from '../../event';
 import { LabelService } from '../../LabelService';
 import { ApplicationEvent } from '../../application';
-import { BrowserUtil } from '../../BrowserUtil';
 
 export class TicketDetailsContext extends Context<TicketDetailsContextConfiguration> {
 
@@ -114,21 +112,6 @@ export class TicketDetailsContext extends Context<TicketDetailsContextConfigurat
         } else if (objectType === KIXObjectType.CONTACT && ticket) {
             const contacts = await KIXObjectService.loadObjects(KIXObjectType.CONTACT, [ticket.CustomerUserID]);
             object = contacts && contacts.length ? contacts[0] : null;
-        } else if (objectType === KIXObjectType.ARTICLE) {
-            if (!ticket.Articles || !ticket.Articles.length) {
-                const articleLoadingOptions = new KIXObjectLoadingOptions(
-                    null, null, null, null, null, ['Attachments'], ['Attachments']
-                );
-                const articleOptions = new ArticlesLoadingOptions(ticket.TicketID, false);
-                const articles = await KIXObjectService.loadObjects<Article>(
-                    KIXObjectType.ARTICLE, null, articleLoadingOptions, articleOptions, reload ? false : true
-                ).catch((error) => {
-                    console.error(error);
-                    return null;
-                });
-                ticket.Articles = articles;
-            }
-            object = ticket;
         }
 
         if (reload && objectType === KIXObjectType.TICKET) {

@@ -9,18 +9,17 @@ export class User extends KIXObject<User> {
 
     public KIXObjectType: KIXObjectType = KIXObjectType.USER;
 
-    public UserID?: number;
-    public UserLogin?: string;
-    public UserTitle?: string;
-    public UserFirstname?: string;
-    public UserLastname?: string;
-    public UserFullname?: string;
+    public UserID: number;
+    public UserLogin: string;
+    public UserTitle: string;
+    public UserFirstname: string;
+    public UserLastname: string;
+    public UserFullname: string;
 
-    // TODO: make a enumeration for valid types.
-    public ValidID?: number;
+    public ValidID: number;
 
-    public CreateTime?: string;
-    public ChangeTime?: string;
+    public CreateTime: string;
+    public ChangeTime: string;
 
     public Preferences: UserPreference[];
     public Tickets: Tickets;
@@ -40,6 +39,7 @@ export class User extends KIXObject<User> {
             this.ChangeTime = user.ChangeTime;
             this.Preferences = user.Preferences;
             this.Tickets = user.Tickets;
+            this.ValidID = user.ValidID;
 
             if (this.Tickets) {
                 this.Tickets.Owned = this.Tickets.Owned.map((t) => Number(t));

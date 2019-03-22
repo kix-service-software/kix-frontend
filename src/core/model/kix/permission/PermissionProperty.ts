@@ -18,6 +18,18 @@ export enum PermissionProperty {
 
     CHANGE_TIME = 'ChangeTime',
 
-    CHANGE_BY = 'ChangeBy'
+    CHANGE_BY = 'ChangeBy',
+
+    // CRUD Properties for UI
+
+    CREATE = 'CREATE',
+
+    READ = 'READ',
+
+    UPDATE = 'UPDATE',
+
+    DELETE = 'DELETE',
+
+    DENY = 'DENY'
 
 }

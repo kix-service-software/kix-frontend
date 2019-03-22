@@ -49,24 +49,26 @@ export class ContactService extends KIXObjectService {
         }
         const query = this.prepareQuery(loadingOptions);
 
-        if (objectIds && objectIds.length) {
-            objectIds = objectIds.filter(
-                (id) => id && typeof id !== 'undefined' && id.toString() !== '' && id !== null
-            );
+        if (objectIds) {
+            if (!!objectIds.length) {
+                objectIds = objectIds.filter(
+                    (id) => id && typeof id !== 'undefined' && id.toString() !== '' && id !== null
+                );
 
-            const uri = this.buildUri(this.RESOURCE_URI, objectIds.join(','));
-            const response = await this.getObjectByUri<ContactsResponse | ContactResponse>(token, uri, query);
+                const uri = this.buildUri(this.RESOURCE_URI, objectIds.join(','));
+                const response = await this.getObjectByUri<ContactsResponse | ContactResponse>(token, uri, query);
 
-            if (objectIds.length === 1) {
-                const res = response as ContactResponse;
-                contacts = [ContactFactory.create(
-                    res.Contact, this.sourcesCache.find((cs) => cs.ID === res.Contact.SourceID)
-                )];
-            } else {
-                const res = response as ContactsResponse;
-                contacts = [...res.Contact.map(
-                    (c) => ContactFactory.create(c, this.sourcesCache.find((cs) => cs.ID === c.SourceID))
-                )];
+                if (objectIds.length === 1) {
+                    const res = response as ContactResponse;
+                    contacts = [ContactFactory.create(
+                        res.Contact, this.sourcesCache.find((cs) => cs.ID === res.Contact.SourceID)
+                    )];
+                } else {
+                    const res = response as ContactsResponse;
+                    contacts = [...res.Contact.map(
+                        (c) => ContactFactory.create(c, this.sourcesCache.find((cs) => cs.ID === c.SourceID))
+                    )];
+                }
             }
         } else if (loadingOptions.searchValue) {
             for (let i = 0; i < this.sourcesCache.length; i++) {

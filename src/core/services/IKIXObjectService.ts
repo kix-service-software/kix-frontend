@@ -1,7 +1,8 @@
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions,
-    KIXObjectSpecificDeleteOptions
+    KIXObjectSpecificDeleteOptions,
+    KIXObject
 } from "../model";
 import { IService } from "../common";
 
@@ -9,7 +10,7 @@ export interface IKIXObjectService extends IService {
 
     isServiceFor(kixObjectType: KIXObjectType): boolean;
 
-    loadObjects<T>(
+    loadObjects<T extends KIXObject = any>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<T[]>;

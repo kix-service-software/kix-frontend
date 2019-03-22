@@ -60,24 +60,26 @@ export class CustomerService extends KIXObjectService {
             query.include = query.include + ",Contacts,Tickets,TicketStats";
         }
 
-        if (objectIds && objectIds.length) {
-            objectIds = objectIds.filter(
-                (id) => id && typeof id !== 'undefined' && id.toString() !== '' && id !== null
-            );
+        if (objectIds) {
+            if (!!objectIds.length) {
+                objectIds = objectIds.filter(
+                    (id) => id && typeof id !== 'undefined' && id.toString() !== '' && id !== null
+                );
 
-            const uri = this.buildUri(this.RESOURCE_URI, objectIds.join(','));
-            const response = await this.getObjectByUri<CustomersResponse | CustomerResponse>(token, uri, query);
+                const uri = this.buildUri(this.RESOURCE_URI, objectIds.join(','));
+                const response = await this.getObjectByUri<CustomersResponse | CustomerResponse>(token, uri, query);
 
-            if (objectIds.length === 1) {
-                const res = response as CustomerResponse;
-                customers = [CustomerFactory.create(
-                    res.Customer, this.sourcesCache.find((cs) => cs.ID === res.Customer.SourceID)
-                )];
-            } else {
-                const res = response as CustomersResponse;
-                customers = [...res.Customer.map(
-                    (c) => CustomerFactory.create(c, this.sourcesCache.find((cs) => cs.ID === c.SourceID))
-                )];
+                if (objectIds.length === 1) {
+                    const res = response as CustomerResponse;
+                    customers = [CustomerFactory.create(
+                        res.Customer, this.sourcesCache.find((cs) => cs.ID === res.Customer.SourceID)
+                    )];
+                } else {
+                    const res = response as CustomersResponse;
+                    customers = [...res.Customer.map(
+                        (c) => CustomerFactory.create(c, this.sourcesCache.find((cs) => cs.ID === c.SourceID))
+                    )];
+                }
             }
         } else if (loadingOptions.searchValue) {
             for (let i = 0; i < this.sourcesCache.length; i++) {
