@@ -76,6 +76,10 @@ export class TicketFormService extends KIXObjectFormService<Ticket> {
                     ]))
                 ])
             );
+            fields.push(new FormField(
+                'Translatable#Attachments', ArticleProperty.ATTACHMENTS, 'attachment-input',
+                false, 'Translatable#Attachments')
+            );
         } else if (channel.Name === 'email') {
             fields.push(new FormField(
                 "Translatable#Visible in customer portal", ArticleProperty.CUSTOMER_VISIBLE, 'checkbox-input',
