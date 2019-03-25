@@ -4,7 +4,7 @@ import chaiAsPromised = require('chai-as-promised');
 
 import { UserService, ConfigurationService } from '../../src/core/services'
 import { User, UserPreference, KIXObjectType, PreferencesLoadingOptions, SetPreferenceOptions, Error } from '../../src/core/model';
-import { UsersResponse, UserPreferencesResponse, SetPreferenceResponse } from '../../src/core/api';
+import { UsersResponse, SetPreferenceResponse } from '../../src/core/api';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -40,7 +40,9 @@ describe('User Service', () => {
             });
 
             it('Should return a list of users.', async () => {
-                const users: User[] = await UserService.getInstance().getUsers('');
+                const users: User[] = await UserService.getInstance().loadObjects<User>(
+                    'someToken', null, KIXObjectType.USER, null, null, null
+                );
                 expect(users).exist;
                 expect(users).an('array');
                 expect(users).not.empty;
@@ -54,12 +56,13 @@ describe('User Service', () => {
         const userId = 123456;
 
         before(() => {
-            const userPreferencesResponse = new UserPreferencesResponse();
             const preference = new UserPreference();
             preference.ID = 'UserLanguage';
             preference.UserID = userId;
             preference.Value = 'en';
-            userPreferencesResponse.UserPreference = [preference];
+            const userPreferencesResponse = {
+                UserPreference: [preference]
+            };
 
             nockScope
                 .get(resourcePath + '/' + userId + '/' + subResourcePath)
@@ -186,12 +189,13 @@ describe('User Service', () => {
 
         describe('Set two preferences (one create, one update) without error.', () => {
             before(() => {
-                const userPreferencesResponse = new UserPreferencesResponse();
                 const preference = new UserPreference();
                 preference.ID = anotherPreferenceId;
                 preference.UserID = userId;
                 preference.Value = 'en';
-                userPreferencesResponse.UserPreference = [preference];
+                const userPreferencesResponse = {
+                    UserPreference: [preference]
+                };
                 nockScope
                     .get(resourcePath + '/' + userId + '/' + subResourcePath)
                     .reply(200, userPreferencesResponse);
@@ -224,12 +228,13 @@ describe('User Service', () => {
         });
         describe('Set two preferences (one create, one update) with error for create.', () => {
             before(() => {
-                const userPreferencesResponse = new UserPreferencesResponse();
                 const preference = new UserPreference();
                 preference.ID = anotherPreferenceId;
                 preference.UserID = userId;
                 preference.Value = 'en';
-                userPreferencesResponse.UserPreference = [preference];
+                const userPreferencesResponse = {
+                    UserPreference: [preference]
+                };
                 nockScope
                     .get(resourcePath + '/' + userId + '/' + subResourcePath)
                     .reply(200, userPreferencesResponse);
@@ -264,12 +269,13 @@ describe('User Service', () => {
 
         describe('Set two preferences (one create, one update) with error for update.', () => {
             before(() => {
-                const userPreferencesResponse = new UserPreferencesResponse();
                 const preference = new UserPreference();
                 preference.ID = anotherPreferenceId;
                 preference.UserID = userId;
                 preference.Value = 'en';
-                userPreferencesResponse.UserPreference = [preference];
+                const userPreferencesResponse = {
+                    UserPreference: [preference]
+                };
                 nockScope
                     .get(resourcePath + '/' + userId + '/' + subResourcePath)
                     .reply(200, userPreferencesResponse);
@@ -304,12 +310,13 @@ describe('User Service', () => {
 
         describe('Set two preferences (one create, one update) with error for both.', () => {
             before(() => {
-                const userPreferencesResponse = new UserPreferencesResponse();
                 const preference = new UserPreference();
                 preference.ID = anotherPreferenceId;
                 preference.UserID = userId;
                 preference.Value = 'en';
-                userPreferencesResponse.UserPreference = [preference];
+                const userPreferencesResponse = {
+                    UserPreference: [preference]
+                };
                 nockScope
                     .get(resourcePath + '/' + userId + '/' + subResourcePath)
                     .reply(200, userPreferencesResponse);

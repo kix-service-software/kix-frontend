@@ -9,5 +9,4 @@ export enum CRUD {
     DELETE = 1 << 3,
 
     DENY = 1 << 4
-
 }

@@ -1,16 +1,16 @@
 import {
-    RolesResponse, CreateRole, CreateRoleResponse, CreateRoleRequest,
+    CreateRole, CreateRoleResponse, CreateRoleRequest,
     UpdateRole, UpdateRoleResponse, UpdateRoleRequest
 } from '../../../api';
 import {
-    Role, KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
+    KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions, ObjectIcon, Error, RoleFactory, KIXObject
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
-import { ConfigurationService } from '../ConfigurationService';
 import { LoggingService } from '../LoggingService';
+import { PermissionTypeFactory } from '../../../model/kix/permission';
 
 export class RoleService extends KIXObjectService {
 
@@ -26,32 +26,39 @@ export class RoleService extends KIXObjectService {
     }
 
     protected RESOURCE_URI: string = 'roles';
+    protected SUB_RESOURCE_URI: string = 'permissiontypes ';
 
     public kixObjectType: KIXObjectType = KIXObjectType.ROLE;
 
     private constructor() {
-        super([new RoleFactory()]);
+        super([new RoleFactory(), new PermissionTypeFactory()]);
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType): boolean {
-        return kixObjectType === KIXObjectType.ROLE;
-    }
-
-    public async initCache(): Promise<void> {
-        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-        const token = serverConfig.BACKEND_API_TOKEN;
-
-        await this.getRoles(token);
+        return kixObjectType === KIXObjectType.ROLE
+            || kixObjectType === KIXObjectType.PERMISSION
+            || kixObjectType === KIXObjectType.PERMISSION_TYPE;
     }
 
     public async loadObjects<T extends KIXObject = any>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<T[]> {
-        return await super.load(
-            token, this.objectType, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.ROLE
-        );
+
+        let objects = [];
+        if (objectType === KIXObjectType.ROLE) {
+            objects = await super.load(
+                token, this.objectType, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.ROLE
+            );
+        } else if (objectType === KIXObjectType.PERMISSION_TYPE) {
+            const uri = this.buildUri(this.RESOURCE_URI, this.SUB_RESOURCE_URI);
+            objects = await super.load(
+                token, KIXObjectType.PERMISSION_TYPE, uri, loadingOptions, objectIds, KIXObjectType.PERMISSION_TYPE
+            );
+        }
+
+        return objects;
     }
 
     public async createObject(
@@ -99,13 +106,5 @@ export class RoleService extends KIXObjectService {
         }
 
         return response.RoleID;
-    }
-
-    public async getRoles(token: string): Promise<Role[]> {
-        const uri = this.buildUri(this.RESOURCE_URI);
-        const response = await this.getObjectByUri<RolesResponse>(token, uri, {
-            sort: 'Role.Name'
-        });
-        return response.Role.map((t) => new Role(t));
     }
 }

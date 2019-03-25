@@ -5,13 +5,30 @@
             selectedNodes=[dynamicValue.currentPropertyNode]
             removeNode=false
             readonly=dynamicValue.readonly
+            placeholder=dynamicValue.propertiesPlaceholder
             on-nodesChanged("propertyChanged", dynamicValue)/>
-        <form-list
-            nodes=dynamicValue.operationNodes
-            selectedNodes=[dynamicValue.currentOperationNode]
-            removeNode=false
-            readonly=dynamicValue.readonly
-            on-nodesChanged("operationChanged", dynamicValue)/>
+        <if(dynamicValue.operationIsStringInput)>
+            <input.input-style
+                value=(dynamicValue.currentOperationNode ? dynamicValue.currentOperationNode.id : "")
+                type="text"
+                disabled=dynamicValue.readonly
+                readonly=dynamicValue.readonly
+                placeholder=dynamicValue.operationsPlaceholder
+                on-input("operationStringChanged", dynamicValue)/>
+        </if>
+        <else>
+            <form-list
+                nodes=dynamicValue.operationNodes
+                selectedNodes=[dynamicValue.currentOperationNode]
+                removeNode=false
+                readonly=dynamicValue.readonly
+                autocomplete=dynamicValue.opertationIsAutocompete
+                searchCallback=(dynamicValue.opertationIsAutocompete ? dynamicValue.operatorAutoCompleteData.searchCallback : null)
+                autoCompleteConfiguration=(dynamicValue.opertationIsAutocompete ? dynamicValue.operatorAutoCompleteData.configuration : null)
+                freeText=(dynamicValue.opertationIsAutocompete ? dynamicValue.operatorAutoCompleteData.isFreeText : null)
+                placeholder=dynamicValue.operationsPlaceholder
+                on-nodesChanged("operationChanged", dynamicValue)/>
+        </else>
         <div.value>
             <if(
                 dynamicValue.currentPropertyNode &&
@@ -56,6 +73,14 @@
                         maxlength=component.getInputOptionValue(dynamicValue, "maxLength")
                         disabled=(dynamicValue.readonly && !dynamicValue.changeable)
                         on-input("textValueChanged", dynamicValue)/>
+                </else-if>
+                <else-if(dynamicValue.isSpecificInput)>
+                    <${dynamicValue.specificInputType}
+                        propertyId=dynamicValue.currentPropertyNode.id
+                        operatorId=dynamicValue.currentOperationNode.id
+                        value=dynamicValue.currentValue
+                        disabled=(dynamicValue.readonly && !dynamicValue.changeable)
+                        on-change("specificValueChanged", dynamicValue)/>
                 </else-if>
                 <else>
                     <input.input-style

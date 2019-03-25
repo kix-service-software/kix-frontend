@@ -1,0 +1,14 @@
+<div.checkbox-groups>
+    <for|checkboxOption| of=state.checkboxOptions>
+        <div.checkbox-container>
+            <if(checkboxOption.show)>
+                <input
+                    title=state.titles.get(checkboxOption.id)
+                    type="checkbox"
+                    checked=checkboxOption.checked
+                    on-click("checkboxClicked", checkboxOption.id)/>
+            </if>
+        </div>
+    </for>
+    <!-- <input.permisson-comment/> -->
+</div>

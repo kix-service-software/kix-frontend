@@ -45,7 +45,9 @@ class Extension implements IKIXModuleExtension {
         ['crud-cell', '_base-components/standard-table-NEW/table-body/table-row/table-cell-NEW/crud-cell'],
         ['checkbox-input', '_base-components/form/inputs/checkbox-input'],
         ['translation-string', '_base-components/translation-string'],
-        ['import-dialog', '_base-components/dialog/import-dialog']
+        ['import-dialog', '_base-components/dialog/import-dialog'],
+        ['permissions-form-input', 'permission/admin/dialogs/inputs/permissions-form-input'],
+        ['permission-input', 'permission/admin/dialogs/inputs/permission-input']
     ];
 
 

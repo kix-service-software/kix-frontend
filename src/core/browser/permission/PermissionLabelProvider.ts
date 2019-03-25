@@ -1,5 +1,8 @@
 import { ILabelProvider } from "../ILabelProvider";
-import { Permission, KIXObjectType, PermissionProperty, ObjectIcon, User, DateTimeUtil } from "../../model";
+import {
+    Permission, KIXObjectType, PermissionProperty, ObjectIcon, User,
+    DateTimeUtil, PermissionType
+} from "../../model";
 import { TranslationService } from "../i18n/TranslationService";
 import { KIXObjectService } from "../kix";
 
@@ -106,6 +109,11 @@ export class PermissionLabelProvider implements ILabelProvider<Permission> {
             case PermissionProperty.CHANGE_TIME:
                 displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
+            case PermissionProperty.TYPE_ID:
+                const types = await KIXObjectService.loadObjects<PermissionType>(
+                    KIXObjectType.PERMISSION_TYPE, [value], null, null, true, true
+                ).catch((error) => [] as PermissionType[]);
+                displayValue = types && !!types.length ? types[0].Name : value;
             default:
         }
 

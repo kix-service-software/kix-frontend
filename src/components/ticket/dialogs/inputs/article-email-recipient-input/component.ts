@@ -19,7 +19,8 @@ class Component extends FormInputComponent<string, ComponentState> {
     public async onMount(): Promise<void> {
         await super.onMount();
         this.state.searchCallback = this.searchContacts.bind(this);
-        this.state.autoCompleteConfiguration = new AutoCompleteConfiguration(10, 2000, 3, 'Kontakte');
+        const objectName = await LabelService.getInstance().getObjectName(KIXObjectType.CONTACT, true, false);
+        this.state.autoCompleteConfiguration = new AutoCompleteConfiguration(10, 2000, 3, objectName);
 
         const additionalTypeOption = this.state.field.options.find((o) => o.option === 'ADDITIONAL_RECIPIENT_TYPES');
         const actions = [];

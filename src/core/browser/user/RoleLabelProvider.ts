@@ -79,7 +79,7 @@ export class RoleLabelProvider implements ILabelProvider<Role> {
     }
 
     public async getPropertyValueDisplayText(
-        property: string, value: string | number, translatable: boolean = true
+        property: string, value: string | number = '', translatable: boolean = true
     ): Promise<string> {
         let displayValue = value;
         const objectData = ObjectDataService.getInstance().getObjectData();

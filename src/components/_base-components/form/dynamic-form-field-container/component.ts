@@ -1,13 +1,13 @@
 import { ComponentState } from './ComponentState';
 import { TreeNode } from '../../../../core/model';
 import { DynamicFieldValue } from './DynamicFormFieldValue';
-import { ImportManager, ImportPropertyOperator } from '../../../../core/browser/import';
 import { DialogService } from '../../../../core/browser/components/dialog';
+import { IDynamicFormManager } from '../../../../core/browser';
 
 class Component {
 
     private state: ComponentState;
-    private manager: ImportManager;
+    private manager: IDynamicFormManager;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -42,6 +42,12 @@ class Component {
         await this.provideValue(value);
     }
 
+    public async operationStringChanged(value: DynamicFieldValue, event: any): Promise<void> {
+        const operationString = event.target.value;
+        value.setOperationNode(null, operationString);
+        await this.provideValue(value);
+    }
+
     public async treeValueChanged(value: DynamicFieldValue, nodes: TreeNode[]): Promise<void> {
         value.setTreeValues(nodes);
         await this.provideValue(value);
@@ -65,6 +71,12 @@ class Component {
         await this.provideValue(value);
     }
 
+    public async specificValueChanged(value: DynamicFieldValue, emittedValue: any): Promise<void> {
+        const newValue = emittedValue;
+        value.setSpecificValue(newValue);
+        await this.provideValue(value);
+    }
+
     public async provideValue(value: DynamicFieldValue): Promise<void> {
         await this.manager.setValue(value.getValue());
         await this.updateValues();
@@ -77,7 +89,7 @@ class Component {
         await this.updateValues();
     }
 
-    public async searchCleared(): Promise<void> {
+    public async resetValues(): Promise<void> {
         this.state.dynamicValues = [];
     }
 
@@ -96,6 +108,7 @@ class Component {
     private async updateValues(): Promise<void> {
         for (const bv of this.state.dynamicValues) {
             await bv.setPropertyNode(bv.currentPropertyNode, true);
+            await bv.setOperationNode(bv.currentOperationNode);
         }
 
         const values = [];
@@ -114,22 +127,23 @@ class Component {
         }
 
         this.state.dynamicValues = [...values];
-        this.addEmptyValue();
+        await this.addEmptyValue();
     }
 
     public showValueInput(value: DynamicFieldValue): boolean {
         const newValue = value.getValue();
         return newValue && newValue.property && newValue.operator
-            && newValue.operator !== ImportPropertyOperator.IGNORE;
+            && this.manager.showValueInput(newValue);
     }
 
     public getInputOptionValue(value: DynamicFieldValue, option: string): string | number {
-        let returnValue: string | number = '';
+        const inputOption = value.inputOptions.find((io) => io[0] === option);
+        let returnValue: string | number = inputOption && inputOption[1] ? inputOption[1] : null;
         switch (option) {
             case 'maxLength':
-                const inputOption = value.inputOptions.find((io) => io[0] === option);
-                returnValue = inputOption && inputOption[1] && typeof inputOption[1] === 'number'
-                    ? inputOption[1] : 200;
+                if (!returnValue || typeof returnValue === 'number') {
+                    returnValue = 200;
+                }
             default:
         }
         return returnValue;

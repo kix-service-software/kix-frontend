@@ -1,6 +1,6 @@
-import { IObjectFactory } from "../IObjectFactory";
+import { IObjectFactory } from "../../IObjectFactory";
 import { Role } from "./Role";
-import { KIXObjectType } from "../KIXObjectType";
+import { KIXObjectType } from "../../KIXObjectType";
 
 export class RoleFactory implements IObjectFactory<Role> {
 

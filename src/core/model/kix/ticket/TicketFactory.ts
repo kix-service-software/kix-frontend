@@ -1,4 +1,4 @@
-import { Ticket, ArticleFactory, TicketHistoryFactory } from ".";
+import { Ticket, TicketHistoryFactory } from ".";
 import { LinkFactory } from "..";
 import { DynamicField } from "../dynamic-field";
 import { IObjectFactory } from "../IObjectFactory";

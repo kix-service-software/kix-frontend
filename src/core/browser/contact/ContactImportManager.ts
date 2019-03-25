@@ -6,7 +6,6 @@ import { LabelService } from "../LabelService";
 import { ObjectPropertyValue } from "../ObjectPropertyValue";
 import { ImportManager, ImportPropertyOperator } from "../import";
 import { ContactService } from "./ContactService";
-import { IColumn } from "../table";
 import { KIXObjectService } from "../kix";
 
 export class ContactImportManager extends ImportManager {
@@ -41,7 +40,9 @@ export class ContactImportManager extends ImportManager {
         }
     }
 
-    public async getInputTypeOptions(property: string): Promise<Array<[string, string | number]>> {
+    public async getInputTypeOptions(
+        property: ContactProperty, operator: ImportPropertyOperator
+    ): Promise<Array<[string, any]>> {
         // TODO: ContactDefinition verwenden
         // const objectData = ContextService.getInstance().getObjectData();
         // const contactDefinition = objectData.objectDefinitions.find((od) => od.Object === this.objectType);
@@ -51,7 +52,7 @@ export class ContactImportManager extends ImportManager {
                     ['maxLength', 250]
                 ];
             default:
-                return super.getInputTypeOptions(property);
+                return super.getInputTypeOptions(property, operator);
         }
     }
 

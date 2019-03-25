@@ -46,7 +46,7 @@ export class Extension implements IConfigurationExtension {
 
             const permissionFields: FormField[] = [
                 new FormField(
-                    null, RoleProperty.PERMISSIONS, 'permissions-input', false, null
+                    null, RoleProperty.PERMISSIONS, 'permissions-form-input', false, null
                 )
             ];
             const permissionGroup = new FormGroup('Translatable#Permissions', permissionFields);
@@ -61,12 +61,12 @@ export class Extension implements IConfigurationExtension {
                     ]
                 )
             ];
-            const agentGroup = new FormGroup('Translatable#User Assignment', agentFields);
+            const agentGroup = new FormGroup('Translatable#Agent Assignment', agentFields);
 
             const form = new Form(
                 formId, 'Translatable#New Role', [
                     infoGroup,
-                    // permissionGroup,
+                    permissionGroup,
                     agentGroup
                 ], KIXObjectType.ROLE
             );

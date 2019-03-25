@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
 import { TreeNode, AutoCompleteConfiguration } from '../../../../../core/model';
-import { SelectionState, FormInputAction } from '../../../../../core/browser';
+import { FormInputAction } from '../../../../../core/browser';
 import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
 class Component {
@@ -280,7 +280,9 @@ class Component {
 
     public async prepareAutocompleteNotFoundText(): Promise<void> {
         if (this.state.autoCompleteConfiguration) {
-            const objectName = this.state.autoCompleteConfiguration.noResultsObjectName || 'Objects';
+            const objectName = await TranslationService.translate(
+                this.state.autoCompleteConfiguration.noResultsObjectName || 'Objects'
+            );
             const message = await TranslationService.translate(
                 'Translatable#No {0} found (add at least {1} characters).',
                 [objectName, this.state.autoCompleteConfiguration.charCount]
