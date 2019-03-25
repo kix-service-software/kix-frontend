@@ -20,8 +20,6 @@ export enum InputFieldTypes {
 
     TEXT = 'TEXT',
 
-    TEXT_AREA = 'TEXT_AREA',
-
-    CHECKBOX_GROUPS = 'CHECKBOX_GROUPS'
+    TEXT_AREA = 'TEXT_AREA'
 
 }

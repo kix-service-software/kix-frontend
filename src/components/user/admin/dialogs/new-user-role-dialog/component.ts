@@ -1,6 +1,8 @@
-import { KIXObjectType } from "../../../../../core/model";
+import { KIXObjectType, RoleProperty, ContextMode } from "../../../../../core/model";
 import { ComponentState } from "./ComponentState";
 import { AbstractNewDialog } from "../../../../../core/browser/components/dialog";
+import { RoutingConfiguration } from "../../../../../core/browser/router";
+import { RoleDetailsContext } from "../../../../../core/browser/user";
 
 class Component extends AbstractNewDialog {
 
@@ -9,7 +11,11 @@ class Component extends AbstractNewDialog {
         super.init(
             'Translatable#Create Role',
             'Translatable#Role successfully created.',
-            KIXObjectType.ROLE, null
+            KIXObjectType.ROLE,
+            new RoutingConfiguration(
+                null, RoleDetailsContext.CONTEXT_ID, KIXObjectType.ROLE,
+                ContextMode.DETAILS, RoleProperty.ID, true
+            )
         );
     }
 

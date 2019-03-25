@@ -1,10 +1,14 @@
-import { KIXObjectType, InputFieldTypes, TreeNode, SortUtil } from "../../../model";
+import {
+    KIXObjectType, InputFieldTypes, TreeNode, SortUtil,
+    PermissionType
+} from "../../../model";
 import { ObjectPropertyValue } from "../../ObjectPropertyValue";
-import { LabelService } from "../../LabelService";
+import { IDynamicFormManager, DynamicFormAutocompleteDefinition } from "../../form";
+import { KIXObjectService } from "../../kix";
 
-export class PermissionManager {
+export class PermissionManager implements IDynamicFormManager {
 
-    public objectType: KIXObjectType = KIXObjectType.PERMISSION;
+    public objectType: KIXObjectType = KIXObjectType.PERMISSION_TYPE;
 
     protected permissionValues: ObjectPropertyValue[] = [];
 
@@ -52,7 +56,7 @@ export class PermissionManager {
     }
 
     public async removeValue(importValue: ObjectPropertyValue): Promise<void> {
-        const index = this.permissionValues.findIndex((bv) => bv.property === importValue.property);
+        const index = this.permissionValues.findIndex((bv) => bv.id === importValue.id);
         if (index !== -1) {
             this.permissionValues.splice(index, 1);
         }
@@ -60,32 +64,43 @@ export class PermissionManager {
         this.notifyListeners();
     }
 
+    public showValueInput(value: ObjectPropertyValue): boolean {
+        return true;
+    }
+
     public getValues(): ObjectPropertyValue[] {
         return this.permissionValues;
     }
 
-    public async getInputType(property: string): Promise<InputFieldTypes> {
-        return InputFieldTypes.CHECKBOX_GROUPS;
+    public async getInputType(property: string): Promise<InputFieldTypes | string> {
+        return 'SPECIFIC';
     }
 
-    public async getInputTypeOptions(property: string): Promise<Array<[string, string | number]>> {
+    public getSpecificInput(): string {
+        return 'permission-input';
+    }
+
+    public async getInputTypeOptions(property: string, operator: string): Promise<Array<[string, any]>> {
         return [];
     }
 
     public async getProperties(): Promise<Array<[string, string]>> {
         const properties: Array<[string, string]> = [];
-        const labelProvider = LabelService.getInstance().getLabelProviderForType(this.objectType);
-        // TODO: Persmissiontypes holen
-        const attributes = [
-            'resource', 'object', 'queue -> ticket'
-        ];
-        for (const attribute of attributes) {
-            const label = await labelProvider.getPropertyText(attribute);
-            properties.push([attribute, label]);
+        const permissionTypes = await KIXObjectService.loadObjects<PermissionType>(this.objectType);
+        for (const permissionType of permissionTypes) {
+            properties.push([permissionType.ID.toString(), permissionType.Name]);
         }
 
         properties.sort((a1, a2) => SortUtil.compareString(a1[1], a2[1]));
         return properties;
+    }
+
+    public async getPropertiesPlaceholder(): Promise<string> {
+        return 'Translatable#Type';
+    }
+
+    public async propertiesAreUnique(): Promise<boolean> {
+        return false;
     }
 
     public async getTreeNodes(property: string): Promise<TreeNode[]> {
@@ -98,6 +113,26 @@ export class PermissionManager {
 
     public async getOperations(property: string): Promise<any[]> {
         return [];
+    }
+
+    public async getOperationsPlaceholder(): Promise<string> {
+        return 'Translatable#Path';
+    }
+
+    public async opertationIsAutocompete(property: string): Promise<boolean> {
+        return false;
+    }
+
+    public async operationIsStringInput(property: string): Promise<boolean> {
+        return true;
+    }
+
+    public async getAutoCompleteData(): Promise<DynamicFormAutocompleteDefinition> {
+        return null;
+    }
+
+    public getOperatorDisplayText(operator: string): string {
+        return operator;
     }
 
     public async searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]> {

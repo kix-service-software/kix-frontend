@@ -1,8 +1,10 @@
 import {
-    IdService, LabelService, KIXObjectService, ObjectPropertyValue, PropertyOperator
+    IdService, LabelService, KIXObjectService, ObjectPropertyValue, IDynamicFormManager,
+    DynamicFormAutocompleteDefinition,
+    ComponentsService
 } from '../../../../core/browser';
 import { TreeNode, InputFieldTypes, DateTimeUtil, TreeUtil } from '../../../../core/model';
-import { ImportManager, ImportPropertyOperator, ImportPropertyOperatorUtil } from '../../../../core/browser/import';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 export class DynamicFieldValue {
 
@@ -11,7 +13,15 @@ export class DynamicFieldValue {
     public isDateTime: boolean = false;
     public isAutocomplete: boolean = false;
     public isTextarea: boolean = false;
+    public isSpecificInput: boolean = false;
+    public specificInputType: string = null;
     public inputOptions: Array<[string, string | number]> = [];
+    public opertationIsAutocompete: boolean = false;
+    public operatorAutoCompleteData: DynamicFormAutocompleteDefinition = null;
+    public operationIsStringInput: boolean = false;
+
+    public propertiesPlaceholder: string = '';
+    public operationsPlaceholder: string = '';
 
     public nodes: TreeNode[] = [];
     public currentValueNodes: TreeNode[] = [];
@@ -23,7 +33,7 @@ export class DynamicFieldValue {
     public autoCompleteCallback: (limit: number, searchValue: string) => Promise<TreeNode[]>;
 
     public constructor(
-        public manager: ImportManager,
+        public manager: IDynamicFormManager,
         public value = new ObjectPropertyValue(null, null, null),
         public id: string = IdService.generateDateBasedId('dynamic-value-'),
         public removable: boolean = true,
@@ -47,7 +57,9 @@ export class DynamicFieldValue {
                 propertyNode = new TreeNode(this.value.property, label);
             }
             await this.setPropertyNode(propertyNode, true);
-            this.inputOptions = await this.manager.getInputTypeOptions(this.currentPropertyNode.id);
+            this.inputOptions = await this.manager.getInputTypeOptions(
+                this.currentPropertyNode.id, this.currentOperationNode.id
+            );
         }
 
         await this.createOperationNodes();
@@ -89,6 +101,14 @@ export class DynamicFieldValue {
 
             this.isTextarea = inputType === InputFieldTypes.TEXT_AREA;
 
+            this.isSpecificInput = inputType === 'SPECIFIC';
+            if (this.isSpecificInput) {
+                const specificInputType = this.manager.getSpecificInput();
+                if (specificInputType) {
+                    this.specificInputType = ComponentsService.getInstance().getComponentTemplate(specificInputType);
+                }
+            }
+
             await this.createOperationNodes();
             if (this.operationNodes && this.operationNodes.length) {
                 this.setOperationNode(this.operationNodes[0]);
@@ -97,17 +117,40 @@ export class DynamicFieldValue {
             if (this.isDropdown && !this.isAutocomplete) {
                 this.nodes = await this.manager.getTreeNodes(this.currentPropertyNode.id);
             }
+        } else {
+            this.operationIsStringInput = await this.manager.operationIsStringInput(null);
         }
 
-        this.createPropertyNodes();
+        await this.createPropertyNodes();
+        const propertiesPlaceholder = await this.manager.getPropertiesPlaceholder();
+        if (propertiesPlaceholder) {
+            this.propertiesPlaceholder = await TranslationService.translate(propertiesPlaceholder);
+        }
+        const operationsPlaceholder = await this.manager.getOperationsPlaceholder();
+        if (operationsPlaceholder) {
+            this.operationsPlaceholder = await TranslationService.translate(operationsPlaceholder);
+        }
     }
 
-    // TODO: ggf. generischen Operator verwenden
-    public setOperationNode(operationNode?: TreeNode, operator?: PropertyOperator | ImportPropertyOperator): void {
+    public setOperationNode(operationNode?: TreeNode, operator?: string): void {
         if (operationNode) {
             this.currentOperationNode = operationNode;
         } else if (operator) {
-            this.currentOperationNode = this.operationNodes.find((on) => on.id === operator);
+            let node = this.operationNodes.find((on) => on.id === operator);
+            if (
+                !node
+                && (
+                    (
+                        this.opertationIsAutocompete
+                        && this.operatorAutoCompleteData
+                        && this.operatorAutoCompleteData.isFreeText
+                    )
+                    || this.operationIsStringInput
+                )
+            ) {
+                node = new TreeNode(operator, operator);
+            }
+            this.currentOperationNode = node;
         }
     }
 
@@ -144,6 +187,10 @@ export class DynamicFieldValue {
         this.time = value;
     }
 
+    public setSpecificValue(value: any): void {
+        this.currentValue = value;
+    }
+
     public getValue(): ObjectPropertyValue {
         const property = this.currentPropertyNode
             ? this.currentPropertyNode.id
@@ -171,10 +218,11 @@ export class DynamicFieldValue {
 
     private async createPropertyNodes(): Promise<void> {
         const properties = await this.manager.getProperties();
+        const unique = await this.manager.propertiesAreUnique();
         if (properties) {
             const nodes = [];
             for (const p of properties) {
-                if (!this.manager.hasValueForProperty(p[0])) {
+                if (!unique || !this.manager.hasValueForProperty(p[0])) {
                     nodes.push(new TreeNode(p[0], p[1]));
                 }
             }
@@ -190,8 +238,12 @@ export class DynamicFieldValue {
         }
 
         const operations = await this.manager.getOperations(property);
-        // TODO: generisches Util?
-        this.operationNodes = operations.map((o) => new TreeNode(o, ImportPropertyOperatorUtil.getText(o)));
+        this.operationNodes = operations.map((o) => new TreeNode(o, this.manager.getOperatorDisplayText(o)));
+        this.opertationIsAutocompete = await this.manager.opertationIsAutocompete(property);
+        if (this.opertationIsAutocompete) {
+            this.operatorAutoCompleteData = await this.manager.getAutoCompleteData();
+        }
+        this.operationIsStringInput = await this.manager.operationIsStringInput(property);
     }
 
     public async doAutocompleteSearch(limit: number, searchValue: string): Promise<TreeNode[]> {

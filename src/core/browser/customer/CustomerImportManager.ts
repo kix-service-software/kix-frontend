@@ -33,7 +33,9 @@ export class CustomerImportManager extends ImportManager {
         }
     }
 
-    public async getInputTypeOptions(property: string): Promise<Array<[string, string | number]>> {
+    public async getInputTypeOptions(
+        property: CustomerProperty, operator: ImportPropertyOperator
+    ): Promise<Array<[string, any]>> {
         // TODO: CustomerDefinition verwenden
         // const objectData = ContextService.getInstance().getObjectData();
         // const customerDefinition = objectData.objectDefinitions.find((od) => od.Object === this.objectType);
@@ -43,7 +45,7 @@ export class CustomerImportManager extends ImportManager {
                     ['maxLength', 250]
                 ];
             default:
-                return super.getInputTypeOptions(property);
+                return super.getInputTypeOptions(property, operator);
         }
     }
 

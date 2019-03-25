@@ -6,8 +6,10 @@ import { ImportPropertyOperator } from "./ImportPropertyOperator";
 import { KIXObjectService } from "../kix";
 import { LabelService } from "../LabelService";
 import { IColumn } from "../table";
+import { IDynamicFormManager, DynamicFormAutocompleteDefinition } from "../form";
+import { ImportPropertyOperatorUtil } from "./ImportPropertyOperatorUtil";
 
-export abstract class ImportManager {
+export abstract class ImportManager implements IDynamicFormManager {
 
     public abstract objectType: KIXObjectType = KIXObjectType.ANY;
     public objects: KIXObject[] = [];
@@ -69,6 +71,14 @@ export abstract class ImportManager {
         return [];
     }
 
+    public async getPropertiesPlaceholder(): Promise<string> {
+        return '';
+    }
+
+    public async propertiesAreUnique(): Promise<boolean> {
+        return true;
+    }
+
     public async getRequiredProperties(): Promise<string[]> {
         return [];
     }
@@ -89,11 +99,37 @@ export abstract class ImportManager {
         ];
     }
 
+    public async getOperationsPlaceholder(): Promise<string> {
+        return '';
+    }
+
+    public async opertationIsAutocompete(property: string): Promise<boolean> {
+        return false;
+    }
+
+    public async operationIsStringInput(property: string): Promise<boolean> {
+        return false;
+    }
+
+    public async getAutoCompleteData(): Promise<DynamicFormAutocompleteDefinition> {
+        return;
+    }
+
+    public getOperatorDisplayText(operator: ImportPropertyOperator): string {
+        return ImportPropertyOperatorUtil.getText(operator);
+    }
+
     public async getInputType(property: string): Promise<InputFieldTypes> {
         return InputFieldTypes.TEXT;
     }
 
-    public async getInputTypeOptions(property: string): Promise<Array<[string, string | number]>> {
+    public getSpecificInput(): string {
+        return;
+    }
+
+    public async getInputTypeOptions(
+        property: string, operator: ImportPropertyOperator
+    ): Promise<Array<[string, any]>> {
         return [];
     }
 
@@ -116,7 +152,7 @@ export abstract class ImportManager {
     }
 
     public async removeValue(importValue: ObjectPropertyValue): Promise<void> {
-        const index = this.importValues.findIndex((bv) => bv.property === importValue.property);
+        const index = this.importValues.findIndex((bv) => bv.id === importValue.id);
         if (index !== -1) {
             this.importValues.splice(index, 1);
         }
@@ -127,6 +163,10 @@ export abstract class ImportManager {
 
     protected async checkProperties(): Promise<void> {
         return;
+    }
+
+    public showValueInput(value: ObjectPropertyValue): boolean {
+        return value.operator !== ImportPropertyOperator.IGNORE;
     }
 
     public async searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]> {

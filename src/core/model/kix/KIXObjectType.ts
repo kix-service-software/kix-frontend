@@ -94,7 +94,7 @@ export enum KIXObjectType {
 
     USER = 'User',
 
-    USER_PREFERENCE = 'USER_PREFERENCE',
+    USER_PREFERENCE = 'UserPreference',
 
     VALID_OBJECT = 'ValidObject',
 
@@ -104,5 +104,7 @@ export enum KIXObjectType {
 
     IMPORT_OBJECT = 'IMPORT_OBJECT',
 
-    PERMISSION = 'Permission'
+    PERMISSION = 'Permission',
+
+    PERMISSION_TYPE = 'PermissionType'
 }

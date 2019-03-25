@@ -1,6 +1,6 @@
-import { KIXObject } from "../KIXObject";
-import { KIXObjectType } from "../KIXObjectType";
-import { Permission } from "../permission";
+import { KIXObject } from "../../KIXObject";
+import { KIXObjectType } from "../../KIXObjectType";
+import { Permission } from "../../permission";
 
 export class Role extends KIXObject<Role> {
 

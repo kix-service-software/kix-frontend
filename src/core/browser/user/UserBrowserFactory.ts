@@ -1,4 +1,4 @@
-import { User, UserFactory } from "../../model";
+import { User } from "../../model";
 import { IKIXObjectFactory } from "../kix";
 
 export class UserBrowserFactory implements IKIXObjectFactory<User> {
@@ -15,7 +15,7 @@ export class UserBrowserFactory implements IKIXObjectFactory<User> {
     private constructor() { }
 
     public async create(user: User): Promise<User> {
-        const newUser = UserFactory.create(user);
+        const newUser = new User(user);
         return newUser;
     }
 

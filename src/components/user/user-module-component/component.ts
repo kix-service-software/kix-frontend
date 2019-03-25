@@ -13,6 +13,7 @@ import {
 } from '../../../core/model';
 import { TableFactoryService, TableCSSHandlerRegistry } from '../../../core/browser/table';
 import { DialogService } from '../../../core/browser/components/dialog';
+import { PermissionTypeBrowserFactory } from '../../../core/browser/permission';
 
 class Component extends AbstractMarkoComponent {
 
@@ -35,6 +36,9 @@ class Component extends AbstractMarkoComponent {
 
         FactoryService.getInstance().registerFactory(KIXObjectType.USER, UserBrowserFactory.getInstance());
         FactoryService.getInstance().registerFactory(KIXObjectType.ROLE, RoleBrowserFactory.getInstance());
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.PERMISSION_TYPE, PermissionTypeBrowserFactory.getInstance()
+        );
 
         this.registerAdminContexts();
         this.registerAdminActions();

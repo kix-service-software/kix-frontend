@@ -15,7 +15,9 @@ export class RoleService extends KIXObjectService<Role> {
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {
-        return kixObjectType === KIXObjectType.ROLE;
+        return kixObjectType === KIXObjectType.ROLE
+            || kixObjectType === KIXObjectType.PERMISSION
+            || kixObjectType === KIXObjectType.PERMISSION_TYPE;
     }
 
     public getLinkObjectName(): string {

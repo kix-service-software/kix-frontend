@@ -1,0 +1,14 @@
+.crud-description-container {
+    display: grid;
+    grid-template-columns: @dynmaic-value-columns;
+    align-items: center;
+    grid-column-gap: @dynamic-value-gap;
+    margin-bottom: @margin-small;
+    .crud-description {
+        grid-column: 3;
+        display: grid;
+        grid-auto-flow: column;
+        margin: 0 1rem 0 @margin-small;
+        grid-auto-columns: 1fr;
+    }
+}

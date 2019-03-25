@@ -42,7 +42,7 @@ export class FormService {
     public addform(form: Form): void {
         if (this.forms) {
             const formIndex = this.forms.findIndex((f) => f.id === form.id);
-            if (formIndex !== 1) {
+            if (formIndex !== -1) {
                 this.forms.splice(formIndex, 1, form);
             } else {
                 this.forms.push(form);
