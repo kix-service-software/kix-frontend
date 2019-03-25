@@ -1,7 +1,7 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../core/browser';
 import {
-    IColumn, ICell, TableEvent, TableEventData, TableCSSHandlerRegsitry
+    IColumn, ICell, TableEvent, TableEventData, TableCSSHandlerRegistry
 } from '../../../../../core/browser/table';
 import { IEventSubscriber, EventService } from '../../../../../core/browser/event';
 
@@ -152,7 +152,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
         if (object) {
             const objectType = this.state.row.getTable().getObjectType();
-            const cssHandler = TableCSSHandlerRegsitry.getCSSHandler(objectType);
+            const cssHandler = TableCSSHandlerRegistry.getCSSHandler(objectType);
             if (cssHandler) {
                 const classes = cssHandler.getRowCSSClasses(object);
                 classes.forEach((c) => stateClass.push(c));

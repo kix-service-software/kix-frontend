@@ -10,7 +10,7 @@ import {
 import {
     KIXObjectType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration, WidgetSize, ContextDescriptor, ContextType
 } from '../../../core/model';
-import { TableFactoryService, TableCSSHandlerRegsitry } from '../../../core/browser/table';
+import { TableFactoryService, TableCSSHandlerRegistry } from '../../../core/browser/table';
 import { DialogService } from '../../../core/browser/components/dialog';
 
 class Component extends AbstractMarkoComponent {
@@ -28,7 +28,7 @@ class Component extends AbstractMarkoComponent {
         TableFactoryService.getInstance().registerFactory(new RoleTableFactory());
         TableFactoryService.getInstance().registerFactory(new UserTableFactory());
         TableFactoryService.getInstance().registerFactory(new RolePermissionsTableFactory());
-        TableCSSHandlerRegsitry.getInstance().registerCSSHandler(
+        TableCSSHandlerRegistry.getInstance().registerCSSHandler(
             KIXObjectType.PERMISSION, new PermissionTableCSSHandler()
         );
 

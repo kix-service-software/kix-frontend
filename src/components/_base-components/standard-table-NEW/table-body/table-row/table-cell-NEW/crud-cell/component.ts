@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
-import { AbstractMarkoComponent, ICell } from '../../../../../../../core/browser';
-import { PermissionProperty, CRUD, Role, Permission } from '../../../../../../../core/model';
+import { AbstractMarkoComponent, ICell, LabelService } from '../../../../../../../core/browser';
+import { PermissionProperty, CRUD, Role, Permission, KIXObjectType } from '../../../../../../../core/model';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -8,13 +8,18 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state = new ComponentState();
     }
 
-    public onInput(input: any): void {
+    public async onInput(input: any): Promise<void> {
         const cell: ICell = input.cell;
         if (cell) {
             const property = cell.getProperty();
 
             const permission: Permission = cell.getRow().getRowObject().getObject();
             const value: number = permission.Value;
+
+            this.state.tooltip = await LabelService.getInstance().getPropertyText(
+                property, KIXObjectType.PERMISSION
+            );
+
             switch (property) {
                 case PermissionProperty.CREATE:
                     this.prepareState(value, CRUD.CREATE, 'C');
