@@ -91,4 +91,8 @@ export class TicketContext extends Context<TicketContextConfiguration> {
         return await super.getObjectList();
     }
 
+    public reset(): void {
+        this.queue = null;
+    }
+
 }

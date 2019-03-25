@@ -99,4 +99,8 @@ export class CMDBContext extends Context<CMDBContextConfiguration> {
         return catalogItems.map((c) => c.ItemID);
     }
 
+    public reset(): void {
+        this.currentCIClass = null;
+    }
+
 }

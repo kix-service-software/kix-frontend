@@ -41,7 +41,7 @@ export class ContextService {
         objectId?: string | number, reset?: boolean, history: boolean = false
     ): Promise<void> {
         const context = await ContextFactory.getInstance().getContext(
-            contextId, kixObjectType, contextMode, objectId, reset
+            contextId, kixObjectType, contextMode, objectId, (!history && reset)
         );
 
         if (context && context.getDescriptor().contextType === ContextType.MAIN) {
