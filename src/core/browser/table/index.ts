@@ -23,4 +23,4 @@ export { TableEventData } from './TableEventData';
 export { ValueState } from './ValueState';
 export { TableValue } from './TableValue';
 export { ITableCSSHandler } from './ITableCSSHandler';
-export { TableCSSHandlerRegsitry } from './TableCSSHandlerRegsitry';
+export { TableCSSHandlerRegistry } from './TableCSSHandlerRegistry';

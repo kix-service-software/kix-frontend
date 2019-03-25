@@ -1,15 +1,15 @@
 import { KIXObjectType, KIXObject } from "../../model";
 import { ITableCSSHandler } from "./ITableCSSHandler";
 
-export class TableCSSHandlerRegsitry {
+export class TableCSSHandlerRegistry {
 
-    private static INSTANCE: TableCSSHandlerRegsitry;
+    private static INSTANCE: TableCSSHandlerRegistry;
 
-    public static getInstance(): TableCSSHandlerRegsitry {
-        if (!TableCSSHandlerRegsitry.INSTANCE) {
-            TableCSSHandlerRegsitry.INSTANCE = new TableCSSHandlerRegsitry();
+    public static getInstance(): TableCSSHandlerRegistry {
+        if (!TableCSSHandlerRegistry.INSTANCE) {
+            TableCSSHandlerRegistry.INSTANCE = new TableCSSHandlerRegistry();
         }
-        return TableCSSHandlerRegsitry.INSTANCE;
+        return TableCSSHandlerRegistry.INSTANCE;
     }
 
     private constructor() { }
@@ -23,7 +23,7 @@ export class TableCSSHandlerRegsitry {
     }
 
     public static getCSSHandler<T extends KIXObject>(objectType: KIXObjectType): ITableCSSHandler<T> {
-        return TableCSSHandlerRegsitry.getInstance().handler.get(objectType);
+        return TableCSSHandlerRegistry.getInstance().handler.get(objectType);
     }
 
 }

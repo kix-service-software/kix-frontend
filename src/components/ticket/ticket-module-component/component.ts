@@ -33,7 +33,7 @@ import {
 import { BulkService } from '../../../core/browser/bulk';
 import { ArticleTableFactory } from '../../../core/browser/ticket/table/ArticleTableFactory';
 import { ChannelService } from '../../../core/browser/channel';
-import { TableFactoryService, TableCSSHandlerRegsitry } from '../../../core/browser/table';
+import { TableFactoryService, TableCSSHandlerRegistry } from '../../../core/browser/table';
 import { ChannelLabelProvider } from '../../../core/browser/channel/ChannelLabelProvider';
 import { DialogService } from '../../../core/browser/components/dialog';
 
@@ -73,8 +73,8 @@ class Component extends AbstractMarkoComponent {
         TableFactoryService.getInstance().registerFactory(new TicketPriorityTableFactory());
         TableFactoryService.getInstance().registerFactory(new TicketStateTableFactory());
 
-        TableCSSHandlerRegsitry.getInstance().registerCSSHandler(KIXObjectType.TICKET, new TicketTableCSSHandler());
-        TableCSSHandlerRegsitry.getInstance().registerCSSHandler(KIXObjectType.ARTICLE, new ArticleTableCSSHandler());
+        TableCSSHandlerRegistry.getInstance().registerCSSHandler(KIXObjectType.TICKET, new TicketTableCSSHandler());
+        TableCSSHandlerRegistry.getInstance().registerCSSHandler(KIXObjectType.ARTICLE, new ArticleTableCSSHandler());
 
         FormValidationService.getInstance().registerValidator(new PendingTimeValidator());
         FormValidationService.getInstance().registerValidator(new EmailRecipientValidator());

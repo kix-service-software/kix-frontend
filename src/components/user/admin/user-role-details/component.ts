@@ -5,6 +5,7 @@ import { ComponentState } from './ComponentState';
 import { KIXObjectType, Role, WidgetType } from '../../../../core/model';
 import { ComponentsService } from '../../../../core/browser/components';
 import { RoleDetailsContext, RoleDetailsContextConfiguration } from '../../../../core/browser/user';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -47,7 +48,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.role = role ? role : await context.getObject<Role>().catch((error) => null);
 
         if (!this.role) {
-            this.state.error = `No role with ID ${context.getObjectId()} available.`;
+            this.state.error = await TranslationService.translate(
+                'Translatable#No role with ID {1} available.', [context.getObjectId()]
+            );
         } else {
             await this.prepareTitle();
         }
