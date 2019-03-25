@@ -24,4 +24,12 @@ export enum UserProperty {
 
     PREFERENCES = 'Preferences',
 
+    USER_EMAIL = 'UserEmail',
+
+    USER_PHONE = 'UserPhone',
+
+    USER_MOBILE = 'UserMobile',
+
+    LAST_LOGIN = 'UserLastLogin'
+
 }

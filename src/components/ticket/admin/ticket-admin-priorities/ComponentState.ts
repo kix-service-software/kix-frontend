@@ -1,15 +1,20 @@
-import { KIXObjectPropertyFilter, AbstractAction } from "../../../../core/model";
-import { ITable } from "../../../../core/browser";
+import { IdService } from "../../../../core/browser";
+import {
+    WidgetConfiguration, KIXObjectType, SortOrder, TicketPriorityProperty, TableWidgetSettings
+} from "../../../../core/model";
 
 export class ComponentState {
 
     public constructor(
-        public table: ITable = null,
-        public predefinedTableFilter: KIXObjectPropertyFilter[] = [],
-        public actions: AbstractAction[] = [],
-        public instanceId: string = '20181207104825-ticket-priorities-list',
-        public title: string = 'Core Data: Priorities',
-        public filterCount: number = null
+        public instanceId: string = IdService.generateDateBasedId('ticket-priorities-list'),
+        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
+            'table-widget', 'Translatable#Core Data: Priorities',
+            [
+                'ticket-admin-priority-create', 'ticket-admin-priority-table-delete',
+                'ticket-admin-priority-import', 'csv-export-action'
+            ],
+            new TableWidgetSettings(KIXObjectType.TICKET_PRIORITY,
+                [TicketPriorityProperty.NAME, SortOrder.UP]), false, false, null, 'kix-icon-gear')
     ) { }
 
 }

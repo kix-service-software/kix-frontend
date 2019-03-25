@@ -1,5 +1,5 @@
 import { ILabelProvider } from "../ILabelProvider";
-import { User, KIXObjectType, UserProperty, ObjectIcon } from "../../model";
+import { User, KIXObjectType, UserProperty, ObjectIcon, DateTimeUtil } from "../../model";
 import { ObjectDataService } from "../ObjectDataService";
 import { TranslationService } from "../i18n/TranslationService";
 
@@ -49,6 +49,30 @@ export class UserLabelProvider implements ILabelProvider<User> {
             case UserProperty.VALID_ID:
                 displayValue = 'Translatable#Validity';
                 break;
+            case UserProperty.USER_EMAIL:
+                displayValue = 'Translatable#E-Mail';
+                break;
+            case UserProperty.USER_PHONE:
+                displayValue = 'Translatable#Phone';
+                break;
+            case UserProperty.USER_MOBILE:
+                displayValue = 'Translatable#Mobile';
+                break;
+            case UserProperty.LAST_LOGIN:
+                displayValue = 'Translatable#Last Login';
+                break;
+            case UserProperty.CREATE_BY:
+                displayValue = 'Translatable#Created by';
+                break;
+            case UserProperty.CREATE_TIME:
+                displayValue = 'Translatable#Created at';
+                break;
+            case UserProperty.CHANGE_BY:
+                displayValue = 'Translatable#Changed by';
+                break;
+            case UserProperty.CHANGE_TIME:
+                displayValue = 'Translatable#Changed at';
+                break;
             default:
                 displayValue = property;
         }
@@ -65,15 +89,27 @@ export class UserLabelProvider implements ILabelProvider<User> {
     }
 
     public async getDisplayText(
-        object: User, property: string, defaultValue?: string, translatable: boolean = true
+        user: User, property: string, defaultValue?: string, translatable: boolean = true
     ): Promise<string> {
-        let displayValue = object[property];
+        let displayValue = user[property];
 
         switch (property) {
             case UserProperty.VALID_ID:
                 const objectData = ObjectDataService.getInstance().getObjectData();
-                const valid = objectData.validObjects.find((v) => v.ID.toString() === object[property].toString());
-                displayValue = valid ? valid.Name : object[property].toString();
+                const valid = objectData.validObjects.find((v) => v.ID.toString() === user[property].toString());
+                displayValue = valid ? valid.Name : user[property].toString();
+                break;
+            case UserProperty.CREATE_TIME:
+            case UserProperty.CHANGE_TIME:
+                displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
+                break;
+            case UserProperty.LAST_LOGIN:
+                if (user.Preferences) {
+                    const lastLogin = user.Preferences.find((p) => p.ID === UserProperty.LAST_LOGIN);
+                    if (lastLogin) {
+                        displayValue = DateTimeUtil.getLocalDateTimeString(Number(lastLogin.Value) * 1000);
+                    }
+                }
                 break;
             default:
                 displayValue = await this.getPropertyValueDisplayText(property, displayValue);

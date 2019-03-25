@@ -1,15 +1,20 @@
-import { KIXObjectPropertyFilter, AbstractAction } from "../../../../core/model";
-import { ITable } from "../../../../core/browser";
+import { IdService } from "../../../../core/browser";
+import {
+    WidgetConfiguration, KIXObjectType, SortOrder, TableWidgetSettings, TicketStateProperty
+} from "../../../../core/model";
 
 export class ComponentState {
 
     public constructor(
-        public table: ITable = null,
-        public predefinedTableFilter: KIXObjectPropertyFilter[] = [],
-        public actions: AbstractAction[] = [],
-        public instanceId: string = '201812071000-ticket-states-list',
-        public title: string = 'Core Data: State',
-        public filterCount: number = null
+        public instanceId: string = IdService.generateDateBasedId('ticket-states-list'),
+        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
+            'table-widget', 'Translatable#Core Data: State',
+            [
+                'ticket-admin-state-create', 'ticket-admin-state-table-delete',
+                'ticket-admin-state-import', 'csv-export-action'
+            ],
+            new TableWidgetSettings(KIXObjectType.TICKET_STATE,
+                [TicketStateProperty.NAME, SortOrder.UP]), false, false, null, 'kix-icon-gear')
     ) { }
 
 }

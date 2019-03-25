@@ -1,9 +1,9 @@
 import {
     AbstractMarkoComponent, ActionFactory, ContextService, TableFactoryService,
-    TableConfiguration, TableHeaderHeight, TableRowHeight
+    TableConfiguration, TableHeaderHeight, TableRowHeight, DefaultColumnConfiguration
 } from '../../../../../core/browser';
 import { ComponentState } from './ComponentState';
-import { KIXObjectType, Role } from '../../../../../core/model';
+import { KIXObjectType, Role, UserProperty, DataType } from '../../../../../core/model';
 import { RoleDetailsContext } from '../../../../../core/browser/user';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
@@ -39,8 +39,22 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async initWidget(role: Role): Promise<void> {
+        const columns = [
+            new DefaultColumnConfiguration(
+                UserProperty.USER_LOGIN, true, false, true, false, 250, true, true, false,
+                DataType.STRING, true, null, null, false
+            ),
+            new DefaultColumnConfiguration(
+                UserProperty.USER_LASTNAME, true, false, true, false, 250, true, true, false,
+                DataType.STRING, true, null, null, false
+            ),
+            new DefaultColumnConfiguration(
+                UserProperty.USER_FIRSTNAME, true, false, true, false, 250, true, true, true
+            ),
+            new DefaultColumnConfiguration(UserProperty.VALID_ID, true, false, true, false, 100, true, true)
+        ];
         const tableConfiguration = new TableConfiguration(
-            KIXObjectType.USER, null, 32, null, null, false, false, null, null,
+            KIXObjectType.USER, null, 32, columns, null, false, false, null, null,
             TableHeaderHeight.SMALL, TableRowHeight.SMALL
         );
         const table = await TableFactoryService.getInstance().createTable(

@@ -9,6 +9,10 @@ class Extension implements IAdminModuleExtension {
                     new AdminModule(
                         null, 'roles', 'Translatable#Roles/Permissions', null,
                         KIXObjectType.ROLE, 'user-admin-roles'
+                    ),
+                    new AdminModule(
+                        null, 'users', 'Translatable#Agents', null,
+                        KIXObjectType.USER, 'user-admin-users'
                     )
                 ])
         ];

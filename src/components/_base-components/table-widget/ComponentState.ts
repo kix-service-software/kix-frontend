@@ -11,7 +11,7 @@ export class ComponentState extends WidgetComponentState {
         public icon: string | ObjectIcon = null,
         public filterCount: number = null,
         public headerTitleComponents: string[] = [],
-        public filterPlaceHolder: string = 'Translatable#All Tickets'
+        public filterPlaceHolder: string = 'Translatable#All Objects'
     ) {
         super();
     }
