@@ -15,6 +15,9 @@ export class User extends KIXObject<User> {
     public UserFirstname: string;
     public UserLastname: string;
     public UserFullname: string;
+    public UserEmail: string;
+    public UserPhone: string;
+    public UserMobile: string;
 
     public ValidID: number;
 
@@ -40,6 +43,9 @@ export class User extends KIXObject<User> {
             this.Preferences = user.Preferences;
             this.Tickets = user.Tickets;
             this.ValidID = user.ValidID;
+            this.UserEmail = user.UserEmail;
+            this.UserPhone = user.UserPhone;
+            this.UserMobile = user.UserMobile;
 
             if (this.Tickets) {
                 this.Tickets.Owned = this.Tickets.Owned.map((t) => Number(t));

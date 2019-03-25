@@ -1,5 +1,7 @@
 import { ComponentState } from './ComponentState';
-import { TableFilterCriteria, KIXObjectType, ContextType, KIXObjectPropertyFilter } from '../../../core/model';
+import {
+    TableFilterCriteria, KIXObjectType, ContextType, KIXObjectPropertyFilter, TableWidgetSettings
+} from '../../../core/model';
 import { IEventSubscriber, EventService } from '../../../core/browser/event';
 import {
     ContextService, IdService, TableEvent, WidgetService, ActionFactory, TableFactoryService,
@@ -20,6 +22,8 @@ class Component {
 
     private configuredTitle: boolean = true;
 
+    private useContext: boolean = true;
+
     public onCreate(): void {
         this.state = new ComponentState();
     }
@@ -27,17 +31,22 @@ class Component {
     public onInput(input: any): void {
         this.state.instanceId = input.instanceId;
         this.contextType = input.contextType;
-        this.configuredTitle = input.title === undefined;
+        this.configuredTitle = typeof input.title === 'undefined';
         this.state.title = input.title;
+        this.state.widgetConfiguration = input.widgetConfiguration;
+        this.useContext = typeof input.useContext !== 'undefined' ? input.useContext : true;
     }
 
     public async onMount(): Promise<void> {
         this.state.filterPlaceHolder = await TranslationService.translate(this.state.filterPlaceHolder);
         this.additionalFilterCriteria = [];
         const context = ContextService.getInstance().getActiveContext(this.contextType);
-        this.state.widgetConfiguration = context
-            ? context.getWidgetConfiguration(this.state.instanceId)
-            : undefined;
+
+        if (this.useContext) {
+            this.state.widgetConfiguration = context
+                ? context.getWidgetConfiguration(this.state.instanceId)
+                : undefined;
+        }
 
         if (this.state.widgetConfiguration) {
             this.state.icon = this.state.widgetConfiguration.icon;
@@ -95,7 +104,7 @@ class Component {
     }
 
     private async prepareHeader(): Promise<void> {
-        const settings = this.state.widgetConfiguration.settings;
+        const settings: TableWidgetSettings = this.state.widgetConfiguration.settings;
         if (settings && settings.headerComponents) {
             this.state.headerTitleComponents = settings.headerComponents;
         }
@@ -116,7 +125,7 @@ class Component {
 
 
     private async prepareTable(): Promise<void> {
-        const settings = this.state.widgetConfiguration.settings;
+        const settings: TableWidgetSettings = this.state.widgetConfiguration.settings;
         if (
             settings && settings.objectType || (settings.tableConfiguration && settings.tableConfiguration.objectType)
         ) {

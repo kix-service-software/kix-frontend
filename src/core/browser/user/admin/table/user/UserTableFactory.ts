@@ -3,7 +3,7 @@ import {
     ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../../../table";
-import { KIXObjectType, DataType, ContextMode, UserProperty } from "../../../../../model";
+import { KIXObjectType, DataType, ContextMode, UserProperty, KIXObjectLoadingOptions } from "../../../../../model";
 import { RoleDetailsContext } from "../../context";
 import { UserTableContentProvider } from "./UserTableContentProvider";
 
@@ -19,7 +19,13 @@ export class UserTableFactory implements ITableFactory {
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
         const table = new Table(tableKey, tableConfiguration);
 
-        table.setContentProvider(new UserTableContentProvider(table, objectIds, null, contextId));
+        table.setContentProvider(
+            new UserTableContentProvider(
+                table, objectIds,
+                new KIXObjectLoadingOptions(null, null, null, null, null, [UserProperty.PREFERENCES]),
+                contextId
+            )
+        );
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 
         return table;
@@ -38,9 +44,29 @@ export class UserTableFactory implements ITableFactory {
                 DataType.STRING, true, null, null, false
             ),
             new DefaultColumnConfiguration(
-                UserProperty.USER_FIRSTNAME, true, false, true, false, 250, true, true, true
+                UserProperty.USER_FIRSTNAME, true, false, true, false, 250, true, true
+            ),
+            new DefaultColumnConfiguration(
+                UserProperty.USER_EMAIL, true, false, true, false, 200, true, true
+            ),
+            new DefaultColumnConfiguration(
+                UserProperty.USER_PHONE, true, false, true, false, 200, true, true
+            ),
+            new DefaultColumnConfiguration(
+                UserProperty.USER_MOBILE, true, false, true, false, 200, true, true
+            ),
+            new DefaultColumnConfiguration(
+                UserProperty.LAST_LOGIN, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
             ),
             new DefaultColumnConfiguration(UserProperty.VALID_ID, true, false, true, false, 100, true, true),
+            new DefaultColumnConfiguration(
+                UserProperty.CREATE_TIME, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
+            ),
+            new DefaultColumnConfiguration(UserProperty.CREATE_BY, true, false, true, true, 150, true, true),
+            new DefaultColumnConfiguration(
+                UserProperty.CHANGE_TIME, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
+            ),
+            new DefaultColumnConfiguration(UserProperty.CHANGE_BY, true, false, true, false, 150, true, true)
         ];
 
         if (!tableConfiguration) {

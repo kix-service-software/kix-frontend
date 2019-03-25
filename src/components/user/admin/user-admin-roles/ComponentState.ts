@@ -1,15 +1,20 @@
-import { KIXObjectPropertyFilter, AbstractAction } from "../../../../core/model";
-import { ITable } from "../../../../core/browser";
+import { IdService } from "../../../../core/browser";
+import {
+    WidgetConfiguration, TableWidgetSettings, KIXObjectType, RoleProperty, SortOrder
+} from "../../../../core/model";
 
 export class ComponentState {
 
     public constructor(
-        public table: ITable = null,
-        public predefinedTableFilter: KIXObjectPropertyFilter[] = [],
-        public actions: AbstractAction[] = [],
-        public instanceId: string = '201903141358-roles-list',
-        public title: string = 'Translatable#User Management: Roles',
-        public filterCount: number = null
+        public instanceId: string = IdService.generateDateBasedId('user-admin-users'),
+        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
+            'table-widget', 'Translatable#User Management: Roles', [
+                'user-admin-role-create-action', 'user-admin-role-table-delete-action',
+                'import-action', 'csv-export-action'
+            ],
+            new TableWidgetSettings(KIXObjectType.ROLE, [RoleProperty.NAME, SortOrder.UP]), false, false, null,
+            'kix-icon-gear'
+        )
     ) { }
 
 }

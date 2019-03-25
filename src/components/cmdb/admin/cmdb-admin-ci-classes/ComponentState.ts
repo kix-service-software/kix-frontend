@@ -1,15 +1,19 @@
-import { KIXObjectPropertyFilter, AbstractAction } from "../../../../core/model";
-import { ITable } from "../../../../core/browser";
+import { IdService } from "../../../../core/browser";
+import {
+    WidgetConfiguration, KIXObjectType, SortOrder, ConfigItemClassProperty, TableWidgetSettings
+} from "../../../../core/model";
 
 export class ComponentState {
 
     public constructor(
-        public table: ITable = null,
-        public predefinedTableFilter: KIXObjectPropertyFilter[] = [],
-        public actions: AbstractAction[] = [],
-        public instanceId: string = '20181210151212-cmdb-ci-classes-list',
-        public title: string = 'Core Data: CI Class',
-        public filterCount: number = null
+        public instanceId: string = IdService.generateDateBasedId('cmdb-ci-classes-list'),
+        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
+            'table-widget', 'Translatable#Core Data: CI Class',
+            [
+                'cmdb-admin-ci-class-create', 'cmdb-admin-ci-class-import', 'csv-export-action'
+            ],
+            new TableWidgetSettings(KIXObjectType.CONFIG_ITEM_CLASS,
+                [ConfigItemClassProperty.NAME, SortOrder.UP]), false, false, null, 'kix-icon-gear')
     ) { }
 
 }

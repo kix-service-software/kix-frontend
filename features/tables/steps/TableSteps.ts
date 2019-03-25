@@ -9,7 +9,7 @@ import { ArticleTableFactory } from '../../../src/core/browser/ticket/table/Arti
 import { CustomerTableFactory } from '../../../src/core/browser/customer';
 import { ContactTableFactory } from '../../../src/core/browser/contact';
 import { ConfigItemTableFactory } from '../../../src/core/browser/cmdb';
-import { RoleTableFactory } from '../../../src/core/browser/user';
+import { RoleTableFactory, UserTableFactory } from '../../../src/core/browser/user';
 
 let table: ITable;
 TableFactoryService.getInstance().registerFactory(new FAQArticleTableFactory());
@@ -19,6 +19,7 @@ TableFactoryService.getInstance().registerFactory(new CustomerTableFactory());
 TableFactoryService.getInstance().registerFactory(new ContactTableFactory());
 TableFactoryService.getInstance().registerFactory(new ConfigItemTableFactory());
 TableFactoryService.getInstance().registerFactory(new RoleTableFactory());
+TableFactoryService.getInstance().registerFactory(new UserTableFactory());
 
 Given('Tabelle: {string}', async (objectType: KIXObjectType) => {
     table = TableFactoryService.getInstance().createTable(`test-table-${objectType}`, objectType);
