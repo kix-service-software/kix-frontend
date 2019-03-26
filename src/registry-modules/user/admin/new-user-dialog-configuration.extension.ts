@@ -34,11 +34,11 @@ export class Extension implements IConfigurationExtension {
                     'Translatable#Insert a title for the user.'
                 ),
                 new FormField(
-                    'Translatable#Firstname', UserProperty.USER_FIRSTNAME, null, true,
+                    'Translatable#First Name', UserProperty.USER_FIRSTNAME, null, true,
                     'Translatable#Insert the firstname of the user.'
                 ),
                 new FormField(
-                    'Translatable#Lastname', UserProperty.USER_LASTNAME, null, true,
+                    'Translatable#Last Name', UserProperty.USER_LASTNAME, null, true,
                     'Translatable#Insert the lastname of the user.'
                 ),
                 new FormField(
@@ -73,7 +73,7 @@ export class Extension implements IConfigurationExtension {
                     null, new FormFieldValue(1)
                 )
             ];
-            const infoGroup = new FormGroup('Translatable#User Information', infoFields);
+            const infoGroup = new FormGroup('Translatable#Agent Information', infoFields);
 
             const roleField = new FormField(
                 'Translatable#Roles', UserProperty.ROLEIDS, 'object-reference-input', false,
