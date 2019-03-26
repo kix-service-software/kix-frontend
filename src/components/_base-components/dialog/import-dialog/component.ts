@@ -161,7 +161,7 @@ class Component {
                 // tslint:disable-next-line:max-line-length
                 'Translatable#CSV-Datei mit den zu importierenen Datensätzen. Ein Einfügen per Drag & Drop ist möglich. Bitte beachten Sie die maximale Dateigröße von 25 MB pro Datei.',
                 [
-                    new FormFieldOption('MimeTypes', ['text/csv']),
+                    new FormFieldOption('MimeTypes', ['text/', '', 'application/vnd.ms-excel']),
                     new FormFieldOption('MULTI_FILES', false)
                 ]
             ),
