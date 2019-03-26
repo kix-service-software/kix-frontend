@@ -83,7 +83,7 @@ export class BrowserUtil {
 
             if (
                 currentCharacter.match(new RegExp(textSeparator))
-                && quote && nextCharacter.match(new RegExp(textSeparator))
+                && quote && nextCharacter && nextCharacter.match(new RegExp(textSeparator))
             ) {
                 list[row][column] += currentCharacter; ++character; continue;
             }
