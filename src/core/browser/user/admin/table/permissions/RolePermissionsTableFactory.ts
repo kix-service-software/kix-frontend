@@ -28,7 +28,7 @@ export class RolePermissionsTableFactory implements ITableFactory {
     ): TableConfiguration {
         const tableColumns = [
             new DefaultColumnConfiguration(
-                PermissionProperty.TYPE_ID, true, false, true, false, 250, true, true, false,
+                PermissionProperty.TYPE_ID, true, false, true, false, 150, true, true, true,
                 DataType.STRING, true, null, null, false
             ),
             new DefaultColumnConfiguration(

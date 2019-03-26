@@ -26,7 +26,7 @@ export class RoleService extends KIXObjectService {
     }
 
     protected RESOURCE_URI: string = 'roles';
-    protected SUB_RESOURCE_URI: string = 'permissiontypes ';
+    protected SUB_RESOURCE_URI: string = 'permissiontypes';
 
     public kixObjectType: KIXObjectType = KIXObjectType.ROLE;
 

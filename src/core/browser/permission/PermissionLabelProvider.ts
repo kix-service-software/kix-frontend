@@ -77,11 +77,20 @@ export class PermissionLabelProvider implements ILabelProvider<Permission> {
     }
 
     public async getDisplayText(
-        object: Permission, property: string, value?: string, translatable: boolean = true
+        permission: Permission, property: string, value?: string, translatable: boolean = true
     ): Promise<string> {
-        let displayValue = object[property];
+        let displayValue = permission[property];
 
         switch (property) {
+            case PermissionProperty.TYPE_ID:
+                const types = await KIXObjectService.loadObjects<PermissionType>(
+                    KIXObjectType.PERMISSION_TYPE, null, null, null, true, true
+                ).catch((error) => [] as PermissionType[]);
+                if (types && !!types.length) {
+                    const type = types.find((t) => t.ID === permission.TypeID);
+                    displayValue = type ? type.Name : permission.TypeID;
+                }
+                break;
             default:
                 displayValue = await this.getPropertyValueDisplayText(property, displayValue);
         }
@@ -111,9 +120,13 @@ export class PermissionLabelProvider implements ILabelProvider<Permission> {
                 break;
             case PermissionProperty.TYPE_ID:
                 const types = await KIXObjectService.loadObjects<PermissionType>(
-                    KIXObjectType.PERMISSION_TYPE, [value], null, null, true, true
+                    KIXObjectType.PERMISSION_TYPE, null, null, null, true, true
                 ).catch((error) => [] as PermissionType[]);
-                displayValue = types && !!types.length ? types[0].Name : value;
+                if (types && !!types.length) {
+                    const type = types.find((t) => t.ID === value);
+                    displayValue = type ? type.Name : value;
+                }
+                break;
             default:
         }
 
