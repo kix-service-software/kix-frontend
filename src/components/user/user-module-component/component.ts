@@ -6,10 +6,8 @@ import {
     RoleService, RoleTableFactory, RoleBrowserFactory, RoleLabelProvider, UserRoleCreateAction,
     NewUserRoleDialogContext, UserRoleTableDeleteAction, UserLabelProvider, UserBrowserFactory,
     UserRoleEditAction, RoleDetailsContext, UserTableFactory, RolePermissionsTableFactory, PermissionTableCSSHandler,
-    UserCreateAction,
-    NewUserDialogContext,
-    UserDetailsContext,
-    UserEditAction
+    UserCreateAction, NewUserDialogContext, EditUserRoleDialogContext,
+    UserRoleFormService, UserDetailsContext, UserEditAction
 } from '../../../core/browser/user';
 import {
     KIXObjectType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration, WidgetSize, ContextDescriptor, ContextType
@@ -29,6 +27,8 @@ class Component extends AbstractMarkoComponent {
 
         LabelService.getInstance().registerLabelProvider(new UserLabelProvider());
         LabelService.getInstance().registerLabelProvider(new RoleLabelProvider());
+
+        ServiceRegistry.registerServiceInstance(UserRoleFormService.getInstance());
 
         TableFactoryService.getInstance().registerFactory(new RoleTableFactory());
         TableFactoryService.getInstance().registerFactory(new UserTableFactory());
@@ -63,6 +63,13 @@ class Component extends AbstractMarkoComponent {
         );
         ContextService.getInstance().registerContext(roleDetailsContextDescriptor);
 
+        const editUserRoleContext = new ContextDescriptor(
+            EditUserRoleDialogContext.CONTEXT_ID, [KIXObjectType.ROLE],
+            ContextType.DIALOG, ContextMode.EDIT_ADMIN,
+            false, 'edit-user-role-dialog', ['roles'], EditUserRoleDialogContext
+        );
+        ContextService.getInstance().registerContext(editUserRoleContext);
+
         const newUserContext = new ContextDescriptor(
             NewUserDialogContext.CONTEXT_ID, [KIXObjectType.USER],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
@@ -95,6 +102,16 @@ class Component extends AbstractMarkoComponent {
             ),
             KIXObjectType.ROLE,
             ContextMode.CREATE_ADMIN
+        ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'edit-user-role-dialog',
+            new WidgetConfiguration(
+                'edit-user-role-dialog', 'Translatable#Edit Role', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-gear'
+            ),
+            KIXObjectType.ROLE,
+            ContextMode.EDIT_ADMIN
         ));
 
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(

@@ -22,10 +22,10 @@
                 selectedNodes=[dynamicValue.currentOperationNode]
                 removeNode=false
                 readonly=dynamicValue.readonly
-                autocomplete=dynamicValue.opertationIsAutocompete
-                searchCallback=(dynamicValue.opertationIsAutocompete ? dynamicValue.operatorAutoCompleteData.searchCallback : null)
-                autoCompleteConfiguration=(dynamicValue.opertationIsAutocompete ? dynamicValue.operatorAutoCompleteData.configuration : null)
-                freeText=(dynamicValue.opertationIsAutocompete ? dynamicValue.operatorAutoCompleteData.isFreeText : null)
+                autocomplete=dynamicValue.opertationIsAutocomplete
+                searchCallback=(dynamicValue.opertationIsAutocompete ? dynamicValue.operationAutoCompleteData.searchCallback : null)
+                autoCompleteConfiguration=(dynamicValue.opertationIsAutocompete ? dynamicValue.operationAutoCompleteData.configuration : null)
+                freeText=(dynamicValue.opertationIsAutocomplete ? dynamicValue.operationAutoCompleteData.isFreeText : null)
                 placeholder=dynamicValue.operationsPlaceholder
                 on-nodesChanged("operationChanged", dynamicValue)/>
         </else>
@@ -77,7 +77,7 @@
                 <else-if(dynamicValue.isSpecificInput)>
                     <${dynamicValue.specificInputType}
                         propertyId=dynamicValue.currentPropertyNode.id
-                        operatorId=dynamicValue.currentOperationNode.id
+                        operationId=dynamicValue.currentOperationNode.id
                         value=dynamicValue.currentValue
                         disabled=(dynamicValue.readonly && !dynamicValue.changeable)
                         on-change("specificValueChanged", dynamicValue)/>

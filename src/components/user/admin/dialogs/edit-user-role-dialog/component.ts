@@ -5,9 +5,9 @@ import {
     ValidationSeverity, OverlayType, ComponentContent, ValidationResult, KIXObjectType, Error
 } from '../../../../../core/model';
 import { ComponentState } from './ComponentState';
-import { ConfigItemClassDetailsContext } from '../../../../../core/browser/cmdb';
 import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 import { DialogService } from '../../../../../core/browser/components/dialog';
+import { RoleDetailsContext } from '../../../../../core/browser/user';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -16,9 +16,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        this.state.loading = true;
         DialogService.getInstance().setMainDialogHint('Translatable#All form fields marked by * are required fields.');
-        this.state.loading = false;
     }
 
     public async onDestroy(): Promise<void> {
@@ -38,17 +36,16 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             if (validationError) {
                 this.showValidationError(result);
             } else {
-                DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Update CI Class');
+                DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Update Role');
 
-                const context = await ContextService.getInstance().getContext<ConfigItemClassDetailsContext>(
-                    ConfigItemClassDetailsContext.CONTEXT_ID
+                const context = await ContextService.getInstance().getContext<RoleDetailsContext>(
+                    RoleDetailsContext.CONTEXT_ID
                 );
 
                 await KIXObjectService.updateObjectByForm(
-                    KIXObjectType.CONFIG_ITEM_CLASS, this.state.formId, context.getObjectId()
-                ).then(async (ciClassId) => {
-                    await FormService.getInstance().loadFormConfigurations();
-                    context.getObject(KIXObjectType.CONFIG_ITEM_CLASS, true);
+                    KIXObjectType.ROLE, this.state.formId, context.getObjectId()
+                ).then(async (roleId) => {
+                    context.getObject(KIXObjectType.ROLE, true);
                     DialogService.getInstance().setMainDialogLoading(false);
 
                     const toast = await TranslationService.translate('Translatable#Changes saved.');
@@ -61,6 +58,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
         }, 300);
     }
+
 
     public showValidationError(result: ValidationResult[]): void {
         const errorMessages = result.filter((r) => r.severity === ValidationSeverity.ERROR).map((r) => r.message);

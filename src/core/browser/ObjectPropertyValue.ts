@@ -7,7 +7,7 @@ export class ObjectPropertyValue {
 
     public constructor(
         public property: string,
-        public operator: PropertyOperator | ImportPropertyOperator,
+        public operator: PropertyOperator | ImportPropertyOperator | string,
         public value: string | number | string[] | number[] | KIXObject | any,
         public objectType: KIXObjectType = null,
         public readonly: boolean = false,

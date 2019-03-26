@@ -348,7 +348,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'edit-ticket-priority-dialog',
             new WidgetConfiguration(
-                'edit-ticket-priority-dialog', 'Translatable#Eit Priority', [], {},
+                'edit-ticket-priority-dialog', 'Translatable#Edit Priority', [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-gear'
             ),
             KIXObjectType.TICKET_PRIORITY,

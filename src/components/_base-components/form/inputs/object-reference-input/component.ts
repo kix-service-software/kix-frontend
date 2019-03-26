@@ -37,7 +37,7 @@ class Component extends FormInputComponent<string | number, ComponentState> {
             if (objectOption) {
                 const objects = await KIXObjectService.loadObjects(objectOption.value, objectIds);
                 if (objects && !!objects.length) {
-                    if (this.state.nodes && this.state.nodes.length) {
+                    if (this.state.nodes && !!this.state.nodes.length) {
                         const nodes = this.state.nodes.filter(
                             (n) => objectIds.some((oid) => n.id.toString() === oid.toString())
                         );
@@ -52,11 +52,12 @@ class Component extends FormInputComponent<string | number, ComponentState> {
                             nodes.push(await this.createTreeNode(object));
                         }
                         this.state.nodes = nodes;
+                        this.state.currentNodes = nodes;
                     }
                 }
             }
 
-            this.objectChanged(this.state.nodes);
+            this.objectChanged(this.state.currentNodes);
         }
     }
 

@@ -16,7 +16,7 @@ export class DynamicFieldValue {
     public isSpecificInput: boolean = false;
     public specificInputType: string = null;
     public inputOptions: Array<[string, string | number]> = [];
-    public opertationIsAutocompete: boolean = false;
+    public opertationIsAutocomplete: boolean = false;
     public operatorAutoCompleteData: DynamicFormAutocompleteDefinition = null;
     public operationIsStringInput: boolean = false;
 
@@ -57,9 +57,6 @@ export class DynamicFieldValue {
                 propertyNode = new TreeNode(this.value.property, label);
             }
             await this.setPropertyNode(propertyNode, true);
-            this.inputOptions = await this.manager.getInputTypeOptions(
-                this.currentPropertyNode.id, this.currentOperationNode.id
-            );
         }
 
         await this.createOperationNodes();
@@ -69,7 +66,16 @@ export class DynamicFieldValue {
                 operatorNode = this.operationNodes.find((on) => on.id === this.value.operator);
             }
             this.setOperationNode(operatorNode);
+        } else if (
+            (this.operationIsStringInput || this.opertationIsAutocomplete)
+            && this.value.operator
+        ) {
+            this.setOperationNode(null, this.value.operator);
         }
+        this.inputOptions = await this.manager.getInputTypeOptions(
+            this.currentPropertyNode ? this.currentPropertyNode.id : null,
+            this.currentOperationNode ? this.currentOperationNode.id : null
+        );
 
         await this.setCurrentValue(this.value.value);
         this.readonly = this.value.readonly;
@@ -141,7 +147,7 @@ export class DynamicFieldValue {
                 !node
                 && (
                     (
-                        this.opertationIsAutocompete
+                        this.opertationIsAutocomplete
                         && this.operatorAutoCompleteData
                         && this.operatorAutoCompleteData.isFreeText
                     )
@@ -239,8 +245,8 @@ export class DynamicFieldValue {
 
         const operations = await this.manager.getOperations(property);
         this.operationNodes = operations.map((o) => new TreeNode(o, this.manager.getOperatorDisplayText(o)));
-        this.opertationIsAutocompete = await this.manager.opertationIsAutocompete(property);
-        if (this.opertationIsAutocompete) {
+        this.opertationIsAutocomplete = await this.manager.opertationIsAutocompete(property);
+        if (this.opertationIsAutocomplete) {
             this.operatorAutoCompleteData = await this.manager.getAutoCompleteData();
         }
         this.operationIsStringInput = await this.manager.operationIsStringInput(property);
