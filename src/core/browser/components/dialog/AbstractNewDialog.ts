@@ -9,6 +9,8 @@ import { FormService } from "../../form";
 import { AbstractMarkoComponent } from "../../marko";
 import { BrowserUtil } from "../../BrowserUtil";
 import { RoutingConfiguration, RoutingService } from "../../router";
+import { ApplicationEvent } from "../../application";
+import { EventService } from "../../event";
 
 export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
 

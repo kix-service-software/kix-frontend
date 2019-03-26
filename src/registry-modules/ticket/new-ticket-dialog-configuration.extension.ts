@@ -78,15 +78,13 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
                     new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false)
                 ]
-            )
-            );
+            ));
             fields.push(new FormField(
                 'Translatable#Responsible', TicketProperty.RESPONSIBLE_ID, 'object-reference-input', false, 'Translatable#Responsible is the person in charge for this tickets processing, e.g. Service Owner, Key Account Manager. It does not need to be identical with the assigned ticket owner.', [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
                     new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false)
                 ]
-            )
-            );
+            ));
             fields.push(new FormField<number>(
                 'Translatable#Priority', TicketProperty.PRIORITY_ID, 'ticket-input-priority',
                 true, 'Translatable#Priorities are used to mark a Ticket‘s urgency with different colours, so you can  categorize Tickets.',

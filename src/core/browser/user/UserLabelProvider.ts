@@ -73,6 +73,12 @@ export class UserLabelProvider implements ILabelProvider<User> {
             case UserProperty.CHANGE_TIME:
                 displayValue = 'Translatable#Changed at';
                 break;
+            case UserProperty.USER_COMMENT:
+                displayValue = 'Translatable#Comment';
+                break;
+            case UserProperty.USER_LANGUAGE:
+                displayValue = 'Translatable#Language';
+                break;
             default:
                 displayValue = property;
         }
@@ -108,6 +114,14 @@ export class UserLabelProvider implements ILabelProvider<User> {
                     const lastLogin = user.Preferences.find((p) => p.ID === UserProperty.LAST_LOGIN);
                     if (lastLogin) {
                         displayValue = DateTimeUtil.getLocalDateTimeString(Number(lastLogin.Value) * 1000);
+                    }
+                }
+                break;
+            case UserProperty.USER_LANGUAGE:
+                if (user.Preferences) {
+                    const language = user.Preferences.find((p) => p.ID === UserProperty.USER_LANGUAGE);
+                    if (language) {
+                        displayValue = await TranslationService.getInstance().getLanguageName(language.Value);
                     }
                 }
                 break;

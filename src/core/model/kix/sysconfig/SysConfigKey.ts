@@ -20,6 +20,7 @@ export enum SysConfigKey {
 
     DEFAULT_LANGUAGE = 'DefaultLanguage',
 
-    MAX_ALLOWED_SIZE = 'FileUpload::MaxAllowedSize'
+    MAX_ALLOWED_SIZE = 'FileUpload::MaxAllowedSize',
+
 
 }

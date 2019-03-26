@@ -30,6 +30,14 @@ export enum UserProperty {
 
     USER_MOBILE = 'UserMobile',
 
-    LAST_LOGIN = 'UserLastLogin'
+    LAST_LOGIN = 'UserLastLogin',
+
+    USER_COMMENT = 'UserComment',
+
+    USER_PASSWORD = 'UserPassword',
+
+    ROLEIDS = 'RoleIDs',
+
+    USER_LANGUAGE = 'UserLanguage'
 
 }

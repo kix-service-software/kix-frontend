@@ -4,10 +4,14 @@ import {
     PreferencesLoadingOptions, KIXObjectSpecificCreateOptions
 } from '../../../model';
 import { KIXObjectService } from './KIXObjectService';
-import { SetPreference, SetPreferenceResponse, SetPreferenceRequest } from '../../../api/user';
+import {
+    SetPreference, SetPreferenceResponse, SetPreferenceRequest,
+    CreateUser, CreateUserRequest, CreateUserResponse
+} from '../../../api/user';
 import { LoggingService } from '../LoggingService';
-import { SetPreferenceOptions, UserFactory, UserPreferenceFactory, UserPreference } from '../../../model/kix/user';
+import { SetPreferenceOptions, UserFactory, UserPreference } from '../../../model/kix/user';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
+import { UserPreferenceFactory } from '../../../model/kix/user/UserPreferenceFactory';
 
 export class UserService extends KIXObjectService {
 
@@ -72,11 +76,20 @@ export class UserService extends KIXObjectService {
     }
 
     public async createObject(
-        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
         createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<string | number> {
         if (objectType === KIXObjectType.USER) {
-            throw new Error('', "Method not implemented.");
+            const createRole = new CreateUser(parameter);
+
+            const response = await this.sendCreateRequest<CreateUserResponse, CreateUserRequest>(
+                token, clientRequestId, this.RESOURCE_URI, new CreateUserRequest(createRole), this.objectType
+            ).catch((error: Error) => {
+                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                throw new Error(error.Code, error.Message);
+            });
+
+            return response.UserID;
         } else if (objectType === KIXObjectType.USER_PREFERENCE) {
             const options = createOptions as SetPreferenceOptions;
             const createPreference = new SetPreference(parameter);
