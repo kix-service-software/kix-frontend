@@ -89,7 +89,7 @@ export class Extension implements IConfigurationExtension {
                 'Translatable#Language', UserProperty.USER_LANGUAGE, 'language-input',
                 false, 'Translatable#Select a language for the user.', null
             );
-            const settingsGroup = new FormGroup('Translatable#Personal Settings', [languageField]);
+            const settingsGroup = new FormGroup('Translatable#Preferences', [languageField]);
 
             const form = new Form(
                 formId, 'Translatable#New Agent', [infoGroup, roleGroup, settingsGroup], KIXObjectType.ROLE
