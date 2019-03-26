@@ -15,7 +15,10 @@ class Extension implements IKIXModuleExtension {
         ['user-role-assigned-users-widget', 'user/admin/widgets/user-role-assigned-users-widget'],
         ['user-role-assigned-permissions-widget', 'user/admin/widgets/user-role-assigned-permissions-widget'],
         ['user-admin-users', 'user/admin/user-admin-users'],
-        ['new-user-dialog', 'user/admin/dialogs/new-user-dialog']
+        ['new-user-dialog', 'user/admin/dialogs/new-user-dialog'],
+        ['user-info-widget', 'user/admin/widgets/user-info-widget'],
+        ['user-personal-settings-widget', 'user/admin/widgets/user-personal-settings-widget'],
+        ['user-assigned-roles-widget', 'user/admin/widgets/user-assigned-roles-widget']
     ];
 
 }

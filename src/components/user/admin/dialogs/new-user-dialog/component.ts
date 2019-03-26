@@ -1,6 +1,8 @@
-import { KIXObjectType } from "../../../../../core/model";
+import { KIXObjectType, UserProperty, ContextMode } from "../../../../../core/model";
 import { ComponentState } from "./ComponentState";
 import { AbstractNewDialog } from "../../../../../core/browser/components/dialog";
+import { RoutingConfiguration } from "../../../../../core/browser/router";
+import { UserDetailsContext } from "../../../../../core/browser/user";
 
 class Component extends AbstractNewDialog {
 
@@ -9,7 +11,11 @@ class Component extends AbstractNewDialog {
         super.init(
             'Translatable#Create Agent',
             'Translatable#Agent successfully created.',
-            KIXObjectType.USER, null
+            KIXObjectType.USER,
+            new RoutingConfiguration(
+                null, UserDetailsContext.CONTEXT_ID, KIXObjectType.USER,
+                ContextMode.DETAILS, UserProperty.USER_ID, true
+            )
         );
     }
 

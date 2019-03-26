@@ -25,6 +25,7 @@ export class User extends KIXObject<User> {
     public ChangeTime: string;
 
     public Preferences: UserPreference[];
+    public RoleIDs: number[];
     public Tickets: Tickets;
 
     public constructor(user?: User) {
@@ -40,12 +41,13 @@ export class User extends KIXObject<User> {
             this.ValidID = user.ValidID;
             this.CreateTime = user.CreateTime;
             this.ChangeTime = user.ChangeTime;
-            this.Preferences = user.Preferences;
+            this.Preferences = user.Preferences ? user.Preferences.map((p) => new UserPreference(p)) : [];
             this.Tickets = user.Tickets;
             this.ValidID = user.ValidID;
             this.UserEmail = user.UserEmail;
             this.UserPhone = user.UserPhone;
             this.UserMobile = user.UserMobile;
+            this.RoleIDs = user.RoleIDs ? user.RoleIDs : [];
 
             if (this.Tickets) {
                 this.Tickets.Owned = this.Tickets.Owned.map((t) => Number(t));
@@ -55,7 +57,6 @@ export class User extends KIXObject<User> {
                 this.Tickets.Watched = this.Tickets.Watched.map((t) => Number(t));
                 this.Tickets.WatchedAndUnseen = this.Tickets.WatchedAndUnseen.map((t) => Number(t));
             }
-            this.Preferences = this.Preferences ? this.Preferences.map((p) => new UserPreference(p)) : [];
         }
     }
 

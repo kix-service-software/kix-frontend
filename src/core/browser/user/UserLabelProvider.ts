@@ -2,6 +2,7 @@ import { ILabelProvider } from "../ILabelProvider";
 import { User, KIXObjectType, UserProperty, ObjectIcon, DateTimeUtil } from "../../model";
 import { ObjectDataService } from "../ObjectDataService";
 import { TranslationService } from "../i18n/TranslationService";
+import { KIXObjectService } from "../kix";
 
 
 export class UserLabelProvider implements ILabelProvider<User> {
@@ -15,6 +16,13 @@ export class UserLabelProvider implements ILabelProvider<User> {
         const objectData = ObjectDataService.getInstance().getObjectData();
         if (objectData) {
             switch (property) {
+                case UserProperty.CREATE_BY:
+                case UserProperty.CHANGE_BY:
+                    const users = await KIXObjectService.loadObjects<User>(
+                        KIXObjectType.USER, [value], null, null, true, true
+                    ).catch((error) => [] as User[]);
+                    displayValue = users && !!users.length ? users[0].UserFullname : value;
+                    break;
                 case UserProperty.VALID_ID:
                     const valid = objectData.validObjects.find((v) => v.ID === value);
                     displayValue = valid ? valid.Name : value;
@@ -37,11 +45,14 @@ export class UserLabelProvider implements ILabelProvider<User> {
     public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
+            case UserProperty.USER_TITLE:
+                displayValue = 'Translatable#Title';
+                break;
             case UserProperty.USER_FIRSTNAME:
-                displayValue = 'Translatable#Firstname';
+                displayValue = 'Translatable#First Name';
                 break;
             case UserProperty.USER_LASTNAME:
-                displayValue = 'Translatable#Lastname';
+                displayValue = 'Translatable#Last Name';
                 break;
             case UserProperty.USER_LOGIN:
                 displayValue = 'Translatable#Login';
@@ -144,16 +155,10 @@ export class UserLabelProvider implements ILabelProvider<User> {
         return [];
     }
 
-    public async getObjectText(
-        object: User, id: boolean = false, name: boolean = false, translatable?: boolean
-    ): Promise<string> {
-        let returnString = '';
-        if (object) {
-            returnString = object.UserFullname;
-        } else {
-            returnString = await this.getObjectName(false, translatable);
-        }
-        return returnString;
+    public async getObjectText(user: User, id?: boolean, title?: boolean, translatable?: boolean): Promise<string> {
+        const objectName = await this.getObjectName(false, translatable);
+        const email = user.UserEmail ? `(${user.UserEmail})` : '';
+        return `${objectName}: ${user.UserFirstname} ${user.UserLastname} ${email}`;
     }
 
     public getObjectAdditionalText(object: User, translatable: boolean = true): string {
