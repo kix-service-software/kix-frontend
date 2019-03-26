@@ -3,9 +3,7 @@ import {
     LinkType, KIXObjectType, CreateLinkObjectOptions, KIXObjectSpecificCreateOptions, LinkObjectProperty,
     KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, Error
 } from '../../../model';
-import {
-    CreateLink, CreateLinkResponse, CreateLinkRequest, LinkTypesResponse, LinkTypeResponse
-} from '../../../api';
+import { CreateLink, CreateLinkResponse, CreateLinkRequest } from '../../../api';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 
 export class LinkService extends KIXObjectService {
@@ -41,36 +39,11 @@ export class LinkService extends KIXObjectService {
         let objects = [];
 
         if (objectType === KIXObjectType.LINK_TYPE) {
-            objects = await this.getLinkTypes(token, objectIds, loadingOptions);
+            const baseUri = this.buildUri(this.RESOURCE_URI, 'types');
+            objects = await super.load(token, KIXObjectType.LINK_TYPE, baseUri, loadingOptions, objectIds, 'LinkType');
         }
 
         return objects;
-    }
-
-    public async getLinkTypes(
-        token: string, linkTypeIds: Array<number | string>, loadingOptions: KIXObjectLoadingOptions
-    ): Promise<LinkType[]> {
-
-        const ids = linkTypeIds ? linkTypeIds.join(',') : null;
-        let uri = this.buildUri(this.RESOURCE_URI, 'types');
-        if (ids) {
-            uri = this.buildUri(this.RESOURCE_URI, 'types', ids);
-        }
-
-        const query = this.prepareQuery(loadingOptions);
-        if (loadingOptions.filter) {
-            await this.buildFilter(loadingOptions.filter, 'LinkType', token, query);
-        }
-
-        const response = await this.getObjectByUri<LinkTypeResponse | LinkTypesResponse>(token, uri, query);
-        let result = [];
-        if (linkTypeIds && linkTypeIds.length === 1) {
-            result = [(response as LinkTypeResponse).LinkType];
-        } else {
-            result = (response as LinkTypesResponse).LinkType;
-        }
-
-        return result.map((lt) => new LinkType(lt));
     }
 
     public async createLink(token: string, clientRequestId: string, createLink: CreateLink): Promise<number> {
