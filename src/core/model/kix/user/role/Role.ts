@@ -42,6 +42,8 @@ export class Role extends KIXObject<Role> {
             this.ValidID = role.ValidID;
             this.UserIDs = role.UserIDs;
             this.Permissions = role.Permissions;
+
+            this.Permissions = role.Permissions ? role.Permissions.map((p) => new Permission(p)) : [];
         }
     }
 
