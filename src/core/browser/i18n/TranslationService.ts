@@ -38,7 +38,11 @@ export class TranslationService extends KIXObjectService<Translation> {
 
         if (objectType === KIXObjectType.TRANSLATION) {
             if (!KIXObjectCache.hasObjectCache(objectType)) {
-                const objects = await super.loadObjects(objectType, null, null, null, false);
+                loadingOptions = new KIXObjectLoadingOptions(
+                    null, null, null, null, null, [TranslationProperty.LANGUAGES]
+                );
+
+                const objects = await super.loadObjects(objectType, null, loadingOptions, null, false);
                 objects.forEach((q) => KIXObjectCache.addObject(objectType, q));
             }
 
