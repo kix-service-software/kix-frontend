@@ -1,4 +1,10 @@
-<form-list placeholder=(state.field.required ? "Config Item zuordnen" : "") searchCallback=state.searchCallback
-    autoCompleteConfiguration=state.autoCompleteConfiguration on-focusLost('focusLost')
-    on-nodesChanged('configItemChanged') selectedNodes=[state.currentNode] invalid=state.invalid autocomplete=true
+<form-list
+    placeholder=(state.field.required ? "Translatable#Assign Config Item" : "")
+    searchCallback=state.searchCallback
+    autoCompleteConfiguration=state.autoCompleteConfiguration
+    on-focusLost("focusLost")
+    on-nodesChanged("configItemChanged")
+    selectedNodes=[state.currentNode]
+    invalid=state.invalid
+    autocomplete=true
     readonly=state.field.readonly/>

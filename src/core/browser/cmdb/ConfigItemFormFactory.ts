@@ -31,19 +31,19 @@ export class ConfigItemFormFactory {
 
         if (forEdit) {
             fields.push(new FormField(
-                'Config Item Klasse', VersionProperty.CLASS_ID, null, false, 'Klasse des Config Items. Nicht änderbar',
+                'Translatable#Config Item Class', VersionProperty.CLASS_ID, null, false, 'Translatable#config item class can not be changed.',
                 null, null, null, null, 1, 1, 1,
                 null, null, null, false, false, true
             ));
         }
         fields.push(new FormField(
-            'Name', VersionProperty.NAME, null, true, 'Insert a name for the Config Item.',
+            'Translatable#Name', VersionProperty.NAME, null, true, 'Translatable#Insert a name for the Config Item.',
             null, null, null, null, 1, 1, 1,
             null, null, null, false, false
         ));
         fields.push(new FormField(
-            'Verwendungsstatus', VersionProperty.DEPL_STATE_ID, 'general-catalog-input',
-            true, 'Wählen Sie einen Verwendungsstatus aus der Liste.',
+            'Translatable#Deployment State', VersionProperty.DEPL_STATE_ID, 'general-catalog-input',
+            true, 'Translatable#Select a deplyoment state.',
             [
                 new FormFieldOption('GC_CLASS', 'ITSM::ConfigItem::DeploymentState'),
                 new FormFieldOption('ICON', false)
@@ -51,8 +51,8 @@ export class ConfigItemFormFactory {
             null, null, null, 1, 1, 1, null, null, null, false, false
         ));
         fields.push(new FormField(
-            'Vorfallstatus', VersionProperty.INCI_STATE_ID, 'general-catalog-input',
-            true, 'Wählen Sie einen Vorfallstatus aus der Liste.',
+            'Translatable#Incident state', VersionProperty.INCI_STATE_ID, 'general-catalog-input',
+            true, 'Translatable#select a incident state.',
             [
                 new FormFieldOption('GC_CLASS', 'ITSM::Core::IncidentState'),
                 new FormFieldOption('ICON', true)
@@ -62,12 +62,12 @@ export class ConfigItemFormFactory {
 
         if (!forEdit) {
             fields.push(new FormField(
-                'Bilder', ConfigItemProperty.IMAGES, 'attachment-input', false, 'Möglichkeit der Anlage von Bilddateien für das Config Item. Erlaubte Dateiformate sind: *.png, *.jpg, *.gif, *.bmp.',
+                'Translatable#Images', ConfigItemProperty.IMAGES, 'attachment-input', false, 'Translatable#You may attach images to this config item. Possible file types are *.png, *.jpg, *.gif, *.bmp.',
                 [new FormFieldOption('MimeTypes', ['image/png', 'image/jpeg', 'image/gif', 'image/bmp'])],
                 null, null, null, 1, 1, 1, null, null, null, false, false
             ));
             fields.push(new FormField(
-                'CI Verknüpfen mit', ConfigItemProperty.LINKS, 'link-input', false, 'Verknüpfen Sie das Config Item mit einem Ticket, einem FAQ-Artikel oder einem anderen Config Item.',
+                'Translatable#CI link with', ConfigItemProperty.LINKS, 'link-input', false, 'Translatable#Link this config item to a ticket, an FAQ article or another config item.',
                 null, null, null, null, 1, 1, 1, null, null, null, false, false
             ));
         }
@@ -79,11 +79,11 @@ export class ConfigItemFormFactory {
             }
         }
 
-        const mainGroup = new FormGroup('Config Item Daten', fields);
+        const mainGroup = new FormGroup('Translatable#Config Item Data', fields);
 
         const form = new Form(
             formId,
-            forEdit ? 'Config Item bearbeiten' : 'Neues Config Item',
+            forEdit ? 'Translatable#Edit Config Item' : 'Translatable#New Config Item',
             [mainGroup], KIXObjectType.CONFIG_ITEM, true,
             forEdit ? FormContext.EDIT : null
         );
