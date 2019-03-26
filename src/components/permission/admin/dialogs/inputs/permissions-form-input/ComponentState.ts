@@ -4,7 +4,7 @@ import { PermissionManager } from "../../../../../../core/browser/user";
 export class ComponentState extends FormInputComponentState<any[]> {
 
     public constructor(
-        public permissionManager: PermissionManager = new PermissionManager(),
+        public permissionManager: PermissionManager = null,
         public createTitle: string = PermissionProperty.CREATE,
         public readTitle: string = PermissionProperty.READ,
         public updateTitle: string = PermissionProperty.UPDATE,

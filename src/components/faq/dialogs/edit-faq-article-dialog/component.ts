@@ -65,7 +65,7 @@ class Component {
         const errorMessages = result.filter((r) => r.severity === ValidationSeverity.ERROR).map((r) => r.message);
         const content = new ComponentContent('list-with-title',
             {
-                title: 'Translatable#Fehler beim Validieren des Formulars:',
+                title: 'Translatable#Error on form validation:',
                 list: errorMessages
             }
         );

@@ -1,8 +1,9 @@
 import { ComponentState } from "./ComponentState";
 import {
-    FormInputComponent, PermissionFormData, CreatePermissionDescription, CRUD, KIXObjectType
+    FormInputComponent, PermissionFormData, CreatePermissionDescription, CRUD, KIXObjectType, Permission
 } from "../../../../../../core/model";
-import { IdService, LabelService } from "../../../../../../core/browser";
+import { IdService, LabelService, ObjectPropertyValue, IDynamicFormManager } from "../../../../../../core/browser";
+import { PermissionManager } from "../../../../../../core/browser/user";
 
 class Component extends FormInputComponent<any[], ComponentState> {
 
@@ -21,8 +22,11 @@ class Component extends FormInputComponent<any[], ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        if (this.state.permissionManager) {
-            this.state.permissionManager.init();
+        const permissionManager = new PermissionManager();
+        if (permissionManager) {
+            permissionManager.init();
+            await this.setCurrentNode(permissionManager);
+            this.state.permissionManager = permissionManager;
             this.state.permissionManager.registerListener(this.formListenerId, () => {
                 if (this.permissionFormTimeout) {
                     clearTimeout(this.permissionFormTimeout);
@@ -32,7 +36,7 @@ class Component extends FormInputComponent<any[], ComponentState> {
                         const values = this.state.permissionManager.getEditableValues();
                         const permissionDescriptions: CreatePermissionDescription[] = [];
                         values.forEach((v) => {
-                            const crudValue = this.getCRUDValue(v.value);
+                            const crudValue = this.getPermissionValueFromCRUD(v.value);
                             if (v.property && v.operator) {
                                 permissionDescriptions.push(
                                     new CreatePermissionDescription(
@@ -58,6 +62,29 @@ class Component extends FormInputComponent<any[], ComponentState> {
         }
     }
 
+    public async setCurrentNode(permissionManager: IDynamicFormManager): Promise<void> {
+        const permissionDescriptions: CreatePermissionDescription[] = [];
+        if (this.state.defaultValue && this.state.defaultValue.value && Array.isArray(this.state.defaultValue.value)) {
+            this.state.defaultValue.value.forEach((permission: Permission) => {
+                permissionManager.setValue(
+                    new ObjectPropertyValue(
+                        permission.TypeID.toString(), permission.Target, this.getPermissionFormData(permission)
+                    )
+                );
+                permissionDescriptions.push(
+                    new CreatePermissionDescription(
+                        permission.TypeID,
+                        permission.Target,
+                        permission.IsRequired,
+                        permission.Value,
+                        permission.Comment
+                    )
+                );
+            });
+        }
+        super.provideValue(permissionDescriptions);
+    }
+
     private async prepareTitles(): Promise<void> {
         this.state.createTitle = await LabelService.getInstance().getPropertyText(
             this.state.createTitle, KIXObjectType.PERMISSION
@@ -79,13 +106,27 @@ class Component extends FormInputComponent<any[], ComponentState> {
         );
     }
 
-    private getCRUDValue(permissionData: PermissionFormData): number {
+    private getPermissionValueFromCRUD(permissionData: PermissionFormData): number {
         const value: number = permissionData ? (permissionData.CREATE ? CRUD.CREATE : 0)
             + (permissionData.READ ? CRUD.READ : 0)
             + (permissionData.UPDATE ? CRUD.UPDATE : 0)
             + (permissionData.DELETE ? CRUD.DELETE : 0)
             + (permissionData.DENY ? CRUD.DENY : 0) : 0;
         return value;
+    }
+
+    private getPermissionFormData(permission: Permission): PermissionFormData {
+        const permissionFormData = new PermissionFormData();
+        permissionFormData.IsRequired = permission.IsRequired === 1;
+        permissionFormData.comment = permission.Comment;
+        if (permission.Value) {
+            permissionFormData.CREATE = !!(permission.Value & CRUD.CREATE);
+            permissionFormData.READ = !!(permission.Value & CRUD.READ);
+            permissionFormData.UPDATE = !!(permission.Value & CRUD.UPDATE);
+            permissionFormData.DELETE = !!(permission.Value & CRUD.DELETE);
+            permissionFormData.DENY = !!(permission.Value & CRUD.DENY);
+        }
+        return permissionFormData;
     }
 }
 
