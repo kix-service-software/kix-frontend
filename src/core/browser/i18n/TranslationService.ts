@@ -59,6 +59,14 @@ export class TranslationService extends KIXObjectService<Translation> {
         return languages;
     }
 
+    public async getSystemDefaultLanguage(): Promise<string> {
+        const defaultLanguageConfig = await KIXObjectService.loadObjects<SysConfigItem>(
+            KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.DEFAULT_LANGUAGE]
+        );
+
+        return defaultLanguageConfig && defaultLanguageConfig.length ? defaultLanguageConfig[0].Data : null;
+    }
+
     public checkFilterValue(translation: Translation, criteria: TableFilterCriteria): boolean {
         if (translation) {
             switch (criteria.property) {

@@ -6,7 +6,8 @@ import {
     RoleService, RoleTableFactory, RoleBrowserFactory, RoleLabelProvider, UserRoleCreateAction,
     NewUserRoleDialogContext, UserRoleTableDeleteAction, UserLabelProvider, UserBrowserFactory,
     UserRoleEditAction, RoleDetailsContext, UserTableFactory, RolePermissionsTableFactory, PermissionTableCSSHandler,
-    UserCreateAction
+    UserCreateAction,
+    NewUserDialogContext
 } from '../../../core/browser/user';
 import {
     KIXObjectType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration, WidgetSize, ContextDescriptor, ContextType
@@ -59,6 +60,13 @@ class Component extends AbstractMarkoComponent {
             true, 'user-role-details', ['roles'], RoleDetailsContext
         );
         ContextService.getInstance().registerContext(roleDetailsContextDescriptor);
+
+        const newUserContext = new ContextDescriptor(
+            NewUserDialogContext.CONTEXT_ID, [KIXObjectType.USER],
+            ContextType.DIALOG, ContextMode.CREATE_ADMIN,
+            false, 'new-user-dialog', ['users'], NewUserDialogContext
+        );
+        ContextService.getInstance().registerContext(newUserContext);
     }
 
     private registerAdminActions(): void {
@@ -76,6 +84,16 @@ class Component extends AbstractMarkoComponent {
                 false, false, WidgetSize.BOTH, 'kix-icon-new-gear'
             ),
             KIXObjectType.ROLE,
+            ContextMode.CREATE_ADMIN
+        ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'new-user-dialog',
+            new WidgetConfiguration(
+                'new-user-dialog', 'Translatable#New Agent', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-new-gear'
+            ),
+            KIXObjectType.USER,
             ContextMode.CREATE_ADMIN
         ));
     }

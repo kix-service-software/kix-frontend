@@ -1,26 +1,21 @@
 import { RequestObject } from '../../RequestObject';
+import { UserProperty } from '../../../model';
 
 export class CreateUser extends RequestObject {
 
-    public UserLogin: string;
-    public UserFirstname: string;
-    public UserLastname: string;
-    public UserEmail: string;
-    public UserPassword: string;
-    public UserPhone: string;
-    public UserTitle: string;
-
-    public constructor(
-        login: string, firstName: string, lastName: string,
-        email: string, password: string, phone: string, title: string
-    ) {
+    public constructor(parameter: Array<[string, any]>) {
         super();
-        this.applyProperty('UserLogin', login);
-        this.applyProperty('UserFirstname', firstName);
-        this.applyProperty('UserLastname', lastName);
-        this.applyProperty('UserEmail', email);
-        this.applyProperty('UserPassword', password);
-        this.applyProperty('UserPhone', phone);
-        this.applyProperty('UserTitle', title);
+        parameter.forEach((p) => this.applyProperty(p[0], p[1]));
+        const userLanguage = parameter.find((p) => p[0] === UserProperty.USER_LANGUAGE);
+        if (userLanguage) {
+            const preferences = [
+                {
+                    ID: UserProperty.USER_LANGUAGE,
+                    Value: userLanguage
+                }
+            ];
+            this.applyProperty(UserProperty.PREFERENCES, preferences);
+        }
     }
+
 }
