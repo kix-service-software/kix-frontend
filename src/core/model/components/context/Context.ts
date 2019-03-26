@@ -121,6 +121,18 @@ export abstract class Context<T extends ContextConfiguration = ContextConfigurat
         }
     }
 
+    public getLanes(show: boolean = false): ConfiguredWidget[] {
+        return [];
+    }
+
+    public getLaneTabs(show: boolean = false): ConfiguredWidget[] {
+        return [];
+    }
+
+    public getContent(show: boolean = false): ConfiguredWidget[] {
+        return [];
+    }
+
     public getExplorer(show: boolean = false): ConfiguredWidget[] {
         let explorer = this.configuration.explorerWidgets;
 

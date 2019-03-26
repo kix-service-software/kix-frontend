@@ -1,12 +1,11 @@
 import { WidgetComponentState, AbstractAction, Role } from "../../../../../core/model";
-import { RoleLabelProvider } from "../../../../../core/browser/user";
+import { ITable } from "../../../../../core/browser";
 
 export class ComponentState extends WidgetComponentState<any> {
 
     public constructor(
-        public labelProvider: RoleLabelProvider = null,
         public actions: AbstractAction[] = [],
-        public role: Role = null
+        public table: ITable = null
     ) {
         super();
     }

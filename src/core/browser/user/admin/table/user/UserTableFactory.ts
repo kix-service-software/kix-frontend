@@ -4,7 +4,7 @@ import {
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../../../table";
 import { KIXObjectType, DataType, ContextMode, UserProperty, KIXObjectLoadingOptions } from "../../../../../model";
-import { RoleDetailsContext } from "../../context";
+import { RoleDetailsContext, UserDetailsContext } from "../../context";
 import { UserTableContentProvider } from "./UserTableContentProvider";
 
 export class UserTableFactory implements ITableFactory {
@@ -79,12 +79,12 @@ export class UserTableFactory implements ITableFactory {
             tableConfiguration.tableColumns = tableColumns;
         }
 
-        // if (defaultRouting) {
-        //     tableConfiguration.routingConfiguration = new RoutingConfiguration(
-        //         null, UserDetailsContext.CONTEXT_ID, KIXObjectType.USER,
-        //         ContextMode.DETAILS, UserProperty.USER_ID
-        //     );
-        // }
+        if (defaultRouting) {
+            tableConfiguration.routingConfiguration = new RoutingConfiguration(
+                null, UserDetailsContext.CONTEXT_ID, KIXObjectType.USER,
+                ContextMode.DETAILS, UserProperty.USER_ID
+            );
+        }
 
         return tableConfiguration;
     }

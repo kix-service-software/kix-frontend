@@ -1,12 +1,12 @@
 import { IConfigurationExtension } from '../../../core/extensions';
 import { ContextConfiguration, WidgetConfiguration, ConfiguredWidget, WidgetSize } from '../../../core/model';
 import { TicketPriorityDetailsContext } from '../../../core/browser/ticket';
-import { RoleDetailsContextConfiguration } from '../../../core/browser/user';
+import { RoleDetailsContextConfiguration, RoleDetailsContext } from '../../../core/browser/user';
 
 export class Extension implements IConfigurationExtension {
 
     public getModuleId(): string {
-        return 'user-role-details';
+        return RoleDetailsContext.CONTEXT_ID;
     }
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {

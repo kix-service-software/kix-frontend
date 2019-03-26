@@ -47,7 +47,8 @@ class Extension implements IKIXModuleExtension {
         ['translation-string', '_base-components/translation-string'],
         ['import-dialog', '_base-components/dialog/import-dialog'],
         ['permissions-form-input', 'permission/admin/dialogs/inputs/permissions-form-input'],
-        ['permission-input', 'permission/admin/dialogs/inputs/permission-input']
+        ['permission-input', 'permission/admin/dialogs/inputs/permission-input'],
+        ['object-details-page', '_base-components/object-details-page']
     ];
 
 

@@ -64,11 +64,11 @@ export class Extension implements IConfigurationExtension {
                     'Translatable#Insert a e-mail adress for the user.'
                 ),
                 new FormField(
-                    'Translatable#Comment', RoleProperty.COMMENT, 'text-area-input', false,
+                    'Translatable#Comment', UserProperty.USER_COMMENT, 'text-area-input', false,
                     'Translatable#Insert a comment for the user.', null, null, null, null, null, null, null, 250
                 ),
                 new FormField(
-                    'Translatable#Validity', RoleProperty.VALID_ID, 'valid-input', true,
+                    'Translatable#Validity', UserProperty.VALID_ID, 'valid-input', true,
                     "Translatable#Set the user as „valid“, „invalid (temporarily)“, or „invalid“.",
                     null, new FormFieldValue(1)
                 )

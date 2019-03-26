@@ -8,7 +8,9 @@ export abstract class ContextConfiguration {
         public sidebars: string[],
         public sidebarWidgets: ConfiguredWidget[],
         public explorerWidgets: ConfiguredWidget[],
-        public overlayWidgets: ConfiguredWidget[]
+        public overlayWidgets: ConfiguredWidget[],
+        public generalActions: string[] = [],
+        public actions: string[] = []
     ) { }
 
 }

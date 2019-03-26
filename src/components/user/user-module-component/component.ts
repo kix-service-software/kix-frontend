@@ -7,7 +7,9 @@ import {
     NewUserRoleDialogContext, UserRoleTableDeleteAction, UserLabelProvider, UserBrowserFactory,
     UserRoleEditAction, RoleDetailsContext, UserTableFactory, RolePermissionsTableFactory, PermissionTableCSSHandler,
     UserCreateAction,
-    NewUserDialogContext
+    NewUserDialogContext,
+    UserDetailsContext,
+    UserEditAction
 } from '../../../core/browser/user';
 import {
     KIXObjectType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration, WidgetSize, ContextDescriptor, ContextType
@@ -67,6 +69,13 @@ class Component extends AbstractMarkoComponent {
             false, 'new-user-dialog', ['users'], NewUserDialogContext
         );
         ContextService.getInstance().registerContext(newUserContext);
+
+        const userDetailsContextDescriptor = new ContextDescriptor(
+            UserDetailsContext.CONTEXT_ID, [KIXObjectType.USER],
+            ContextType.MAIN, ContextMode.DETAILS,
+            true, 'object-details-page', ['users'], UserDetailsContext
+        );
+        ContextService.getInstance().registerContext(userDetailsContextDescriptor);
     }
 
     private registerAdminActions(): void {
@@ -74,6 +83,7 @@ class Component extends AbstractMarkoComponent {
         ActionFactory.getInstance().registerAction('user-admin-role-edit-action', UserRoleEditAction);
         ActionFactory.getInstance().registerAction('user-admin-role-table-delete-action', UserRoleTableDeleteAction);
         ActionFactory.getInstance().registerAction('user-admin-user-create-action', UserCreateAction);
+        ActionFactory.getInstance().registerAction('user-admin-user-edit-action', UserEditAction);
     }
 
     private registerAdminDialogs(): void {

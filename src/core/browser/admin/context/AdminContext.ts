@@ -52,4 +52,9 @@ export class AdminContext extends Context<AdminContextConfiguration> {
         return widgetType;
     }
 
+    public reset(): void {
+        this.adminModule = null;
+        this.categoryName = null;
+    }
+
 }

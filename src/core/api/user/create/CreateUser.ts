@@ -11,7 +11,7 @@ export class CreateUser extends RequestObject {
             const preferences = [
                 {
                     ID: UserProperty.USER_LANGUAGE,
-                    Value: userLanguage
+                    Value: userLanguage[1]
                 }
             ];
             this.applyProperty(UserProperty.PREFERENCES, preferences);
