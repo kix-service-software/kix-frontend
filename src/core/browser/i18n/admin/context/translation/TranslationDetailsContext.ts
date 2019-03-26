@@ -1,6 +1,6 @@
 import {
     Context, ConfiguredWidget, WidgetConfiguration, WidgetType, BreadcrumbInformation, KIXObject,
-    KIXObjectType, KIXObjectCache, Translation
+    KIXObjectType, KIXObjectCache, Translation, KIXObjectLoadingOptions, TranslationProperty
 } from "../../../../../model";
 import { TranslationDetailsContextConfiguration } from "./TranslationDetailsContextConfiguration";
 import { AdminContext } from "../../../../admin";
@@ -121,8 +121,12 @@ export class TranslationDetailsContext extends Context<TranslationDetailsContext
             ApplicationEvent.APP_LOADING, { loading: true, hint: 'Lade Übersetzung ...' }
         );
 
+        const loadingOptions = new KIXObjectLoadingOptions(
+            null, null, null, null, null, [TranslationProperty.LANGUAGES]
+        );
+
         const translations = await TranslationService.getInstance().loadObjects<Translation>(
-            KIXObjectType.TRANSLATION, [this.objectId]
+            KIXObjectType.TRANSLATION, [this.objectId], loadingOptions
         );
 
         const translation = translations && translations.length ? translations[0] : null;
