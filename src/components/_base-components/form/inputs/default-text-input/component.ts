@@ -1,5 +1,6 @@
 import { ComponentState } from './ComponentState';
 import { FormInputComponent, InputFieldTypes, FormFieldOptions } from '../../../../../core/model';
+import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
 class Component extends FormInputComponent<string, ComponentState> {
 
@@ -9,7 +10,13 @@ class Component extends FormInputComponent<string, ComponentState> {
 
     public async onInput(input: any): Promise<void> {
         await super.onInput(input);
-        this.state.placeholder = typeof input.placeholder !== 'undefined' ? input.placeholder : this.state.field.label;
+
+        const placeholderText = this.state.field.placeholder
+            ? this.state.field.placeholder
+            : this.state.field.required ? this.state.field.label : '';
+
+        this.state.placeholder = await TranslationService.translate(placeholderText);
+
         this.state.currentValue = typeof input.currentValue !== 'undefined' ?
             input.currentValue : this.state.currentValue;
         if (this.state.field && this.state.field.options) {
