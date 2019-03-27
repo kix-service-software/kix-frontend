@@ -5,7 +5,8 @@ export class CreatePermissionDescription {
         public Target: string,
         public IsRequired: number,
         public Value: number,
-        public comment: string = ''
+        public comment: string = '',
+        public RoleID?: number
     ) { }
 
 }

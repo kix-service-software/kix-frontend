@@ -1,6 +1,7 @@
 import {
     CreateRole, CreateRoleResponse, CreateRoleRequest,
-    UpdateRole, UpdateRoleResponse, UpdateRoleRequest
+    UpdateRole, UpdateRoleResponse, UpdateRoleRequest,
+    CreatePermission, CreatePermissionResponse, CreatePermissionRequest
 } from '../../../api';
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
@@ -10,7 +11,7 @@ import {
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { LoggingService } from '../LoggingService';
-import { PermissionTypeFactory } from '../../../model/kix/permission';
+import { PermissionTypeFactory, CreatePermissionOptions } from '../../../model/kix/permission';
 
 export class RoleService extends KIXObjectService {
 
@@ -26,7 +27,8 @@ export class RoleService extends KIXObjectService {
     }
 
     protected RESOURCE_URI: string = 'roles';
-    protected SUB_RESOURCE_URI: string = 'permissiontypes';
+    protected SUB_RESOURCE_URI_PERMISSION: string = 'permissions';
+    protected SUB_RESOURCE_URI_PERMISSION_TYPE: string = 'permissiontypes';
 
     public kixObjectType: KIXObjectType = KIXObjectType.ROLE;
 
@@ -52,7 +54,7 @@ export class RoleService extends KIXObjectService {
                 token, this.objectType, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.ROLE
             );
         } else if (objectType === KIXObjectType.PERMISSION_TYPE) {
-            const uri = this.buildUri(this.RESOURCE_URI, this.SUB_RESOURCE_URI);
+            const uri = this.buildUri(this.RESOURCE_URI, this.SUB_RESOURCE_URI_PERMISSION_TYPE);
             objects = await super.load(
                 token, KIXObjectType.PERMISSION_TYPE, uri, loadingOptions, objectIds, KIXObjectType.PERMISSION_TYPE
             );
@@ -65,23 +67,31 @@ export class RoleService extends KIXObjectService {
         token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
         createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<number> {
-        const createRole = new CreateRole(parameter);
+        let responseId;
+        if (objectType === this.objectType) {
+            const createRole = new CreateRole(parameter);
 
-        const response = await this.sendCreateRequest<CreateRoleResponse, CreateRoleRequest>(
-            token, clientRequestId, this.RESOURCE_URI, new CreateRoleRequest(createRole), this.objectType
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+            const response = await this.sendCreateRequest<CreateRoleResponse, CreateRoleRequest>(
+                token, clientRequestId, this.RESOURCE_URI, new CreateRoleRequest(createRole), this.objectType
+            ).catch((error: Error) => {
+                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                throw new Error(error.Code, error.Message);
+            });
+            responseId = response.RoleID;
 
-        const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
-        if (icon) {
-            icon.Object = 'Role';
-            icon.ObjectID = response.RoleID;
-            await this.createIcons(token, clientRequestId, icon);
+            const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
+            if (icon) {
+                icon.Object = 'Role';
+                icon.ObjectID = responseId;
+                await this.createIcons(token, clientRequestId, icon);
+            }
+        } else if (objectType === KIXObjectType.PERMISSION) {
+            responseId = await this.createPermission(
+                token, clientRequestId, parameter, (createOptions as CreatePermissionOptions)
+            );
         }
 
-        return response.RoleID;
+        return responseId;
     }
 
     public async updateObject(
@@ -106,5 +116,27 @@ export class RoleService extends KIXObjectService {
         }
 
         return response.RoleID;
+    }
+
+    private async createPermission(
+        token: string, clientRequestId: string,
+        parameter: Array<[string, any]>,
+        createOptions?: CreatePermissionOptions
+    ): Promise<number> {
+        let responseId;
+        if (createOptions && createOptions.roleId) {
+            const createPermission = new CreatePermission(parameter);
+
+            const response = await this.sendCreateRequest<CreatePermissionResponse, CreatePermissionRequest>(
+                token, clientRequestId,
+                this.buildUri(this.RESOURCE_URI, createOptions.roleId, this.SUB_RESOURCE_URI_PERMISSION),
+                new CreatePermissionRequest(createPermission), KIXObjectType.PERMISSION
+            ).catch((error: Error) => {
+                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                throw new Error(error.Code, error.Message);
+            });
+            responseId = response.PermissionID;
+        }
+        return responseId;
     }
 }

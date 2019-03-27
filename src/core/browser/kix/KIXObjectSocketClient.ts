@@ -175,7 +175,7 @@ export class KIXObjectSocketClient extends SocketClient {
                     console.error(errorMessage);
                     console.error(error);
                     console.error(requestObject);
-                    reject(error);
+                    reject(error.error);
                 }
             });
 

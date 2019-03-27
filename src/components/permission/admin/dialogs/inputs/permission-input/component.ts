@@ -29,14 +29,10 @@ class Component extends AbstractMarkoComponent {
     }
 
     private async setCheckboxOptions(input: any): Promise<void> {
-        const permissionTypes = await KIXObjectService.loadObjects<PermissionType>(KIXObjectType.PERMISSION_TYPE);
-        const staticTypes = permissionTypes.filter((pt) => pt.Name === 'Resource' || pt.Name === 'Object');
+        const options = await this.getOptions(input);
         this.state.checkboxOptions = [
             new CheckboxOption(
-                PermissionProperty.IS_REQUIRED, false,
-                staticTypes && !!staticTypes.length && input.propertyId && staticTypes.some(
-                    (st) => st.ID.toString() === input.propertyId.toString()
-                ) ? false : true
+                PermissionProperty.IS_REQUIRED, false, options[0]
             ),
             new CheckboxOption(PermissionProperty.CREATE),
             new CheckboxOption(PermissionProperty.READ),
@@ -44,6 +40,35 @@ class Component extends AbstractMarkoComponent {
             new CheckboxOption(PermissionProperty.DELETE),
             new CheckboxOption(PermissionProperty.DENY),
         ];
+    }
+
+    private async getOptions(input: any): Promise<boolean[]> {
+        let showRequired: boolean = true;
+        let checkPermissionType: boolean = true;
+        if (input.options && !!input.options.length) {
+            const requiredOption = input.options.find(
+                (o) => o[0] === 'showRequired'
+            );
+            showRequired = requiredOption ? requiredOption[1] : true;
+            const permissionTypeOption = input.options.find(
+                (o) => o[0] === 'checkPermissionType'
+            );
+            checkPermissionType = permissionTypeOption ? permissionTypeOption[1] : true;
+        }
+        if (checkPermissionType) {
+            const permissionTypes = await KIXObjectService.loadObjects<PermissionType>(KIXObjectType.PERMISSION_TYPE);
+            const staticTypes = permissionTypes.filter((pt) => pt.Name === 'Resource' || pt.Name === 'Object');
+            // TODO: ändern in readonly statt show
+            if (
+                showRequired && staticTypes && !!staticTypes.length
+                && input.propertyId && staticTypes.some(
+                    (st) => st.ID.toString() === input.propertyId.toString()
+                )
+            ) {
+                showRequired = false;
+            }
+        }
+        return [showRequired];
     }
 
     private async prepareTitles(): Promise<void> {

@@ -1,5 +1,7 @@
 <for|dynamicValue, index| of=state.dynamicValues>
-    <div.dynamic-form-field-value>
+    <div.dynamic-form-field-value class={
+        "no-operation": dynamicValue.operationIsNone
+    }>
         <form-list
             nodes=dynamicValue.propertyNodes
             selectedNodes=[dynamicValue.currentPropertyNode]
@@ -7,32 +9,34 @@
             readonly=dynamicValue.readonly
             placeholder=dynamicValue.propertiesPlaceholder
             on-nodesChanged("propertyChanged", dynamicValue)/>
-        <if(dynamicValue.operationIsStringInput)>
-            <input.input-style
-                value=(dynamicValue.currentOperationNode ? dynamicValue.currentOperationNode.id : "")
-                type="text"
-                disabled=dynamicValue.readonly
-                readonly=dynamicValue.readonly
-                placeholder=dynamicValue.operationsPlaceholder
-                on-input("operationStringChanged", dynamicValue)/>
+        <if(!dynamicValue.operationIsNone)>
+            <if(dynamicValue.operationIsStringInput)>
+                <input.input-style
+                    value=(dynamicValue.currentOperationNode ? dynamicValue.currentOperationNode.id : "")
+                    type="text"
+                    disabled=dynamicValue.readonly
+                    readonly=dynamicValue.readonly
+                    placeholder=dynamicValue.operationsPlaceholder
+                    on-input("operationStringChanged", dynamicValue)/>
+            </if>
+            <else>
+                <form-list
+                    nodes=dynamicValue.operationNodes
+                    selectedNodes=[dynamicValue.currentOperationNode]
+                    removeNode=false
+                    readonly=dynamicValue.readonly
+                    autocomplete=dynamicValue.opertationIsAutocomplete
+                    searchCallback=(dynamicValue.opertationIsAutocompete ? dynamicValue.operationAutoCompleteData.searchCallback : null)
+                    autoCompleteConfiguration=(dynamicValue.opertationIsAutocompete ? dynamicValue.operationAutoCompleteData.configuration : null)
+                    freeText=(dynamicValue.opertationIsAutocomplete ? dynamicValue.operationAutoCompleteData.isFreeText : null)
+                    placeholder=dynamicValue.operationsPlaceholder
+                    on-nodesChanged("operationChanged", dynamicValue)/>
+            </else>
         </if>
-        <else>
-            <form-list
-                nodes=dynamicValue.operationNodes
-                selectedNodes=[dynamicValue.currentOperationNode]
-                removeNode=false
-                readonly=dynamicValue.readonly
-                autocomplete=dynamicValue.opertationIsAutocomplete
-                searchCallback=(dynamicValue.opertationIsAutocompete ? dynamicValue.operationAutoCompleteData.searchCallback : null)
-                autoCompleteConfiguration=(dynamicValue.opertationIsAutocompete ? dynamicValue.operationAutoCompleteData.configuration : null)
-                freeText=(dynamicValue.opertationIsAutocomplete ? dynamicValue.operationAutoCompleteData.isFreeText : null)
-                placeholder=dynamicValue.operationsPlaceholder
-                on-nodesChanged("operationChanged", dynamicValue)/>
-        </else>
         <div.value>
             <if(
                 dynamicValue.currentPropertyNode &&
-                dynamicValue.currentOperationNode &&
+                (dynamicValue.currentOperationNode || dynamicValue.operationIsNone) &&
                 component.showValueInput(dynamicValue)
             )>
                 <if(dynamicValue.isDropdown)>
@@ -76,10 +80,11 @@
                 </else-if>
                 <else-if(dynamicValue.isSpecificInput)>
                     <${dynamicValue.specificInputType}
-                        propertyId=dynamicValue.currentPropertyNode.id
-                        operationId=dynamicValue.currentOperationNode.id
+                        propertyId=(dynamicValue.currentPropertyNode ? dynamicValue.currentPropertyNode.id : null)
+                        operationId=(dynamicValue.currentOperationNode ? dynamicValue.currentOperationNode.id : null)
                         value=dynamicValue.currentValue
                         disabled=(dynamicValue.readonly && !dynamicValue.changeable)
+                        options=dynamicValue.inputOptions
                         on-change("specificValueChanged", dynamicValue)/>
                 </else-if>
                 <else>

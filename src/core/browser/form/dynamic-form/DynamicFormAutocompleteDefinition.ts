@@ -1,4 +1,4 @@
-import { AutoCompleteConfiguration, TreeNode } from "../../model";
+import { AutoCompleteConfiguration, TreeNode } from "../../../model";
 
 export class DynamicFormAutocompleteDefinition {
 

@@ -75,7 +75,7 @@ export class KIXObjectNamespace extends SocketNameSpace {
             }).catch((error) => {
                 LoggingService.getInstance().error(error);
                 response = new SocketResponse(
-                    KIXObjectEvent.CREATE_OBJECT_ERROR, error
+                    KIXObjectEvent.CREATE_OBJECT_ERROR, new SocketErrorResponse(data.requestId, error)
                 );
             });
 
@@ -103,7 +103,7 @@ export class KIXObjectNamespace extends SocketNameSpace {
             }).catch((error) => {
                 LoggingService.getInstance().error(error);
                 response = new SocketResponse(
-                    KIXObjectEvent.UPDATE_OBJECT_ERROR, error
+                    KIXObjectEvent.UPDATE_OBJECT_ERROR, new SocketErrorResponse(data.requestId, error)
                 );
             });
         } else {
@@ -129,7 +129,7 @@ export class KIXObjectNamespace extends SocketNameSpace {
             }).catch((error) => {
                 LoggingService.getInstance().error(error);
                 response = new SocketResponse(
-                    KIXObjectEvent.DELETE_OBJECT_ERROR, error
+                    KIXObjectEvent.DELETE_OBJECT_ERROR, new SocketErrorResponse(data.requestId, error)
                 );
             });
         } else {

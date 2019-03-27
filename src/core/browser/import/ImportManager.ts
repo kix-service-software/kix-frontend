@@ -1,47 +1,23 @@
-import {
-    KIXObjectType, InputFieldTypes, TreeNode, KIXObject, Error
-} from "../../model";
+import { InputFieldTypes, KIXObject, Error } from "../../model";
 import { ObjectPropertyValue } from "../ObjectPropertyValue";
 import { ImportPropertyOperator } from "./ImportPropertyOperator";
 import { KIXObjectService } from "../kix";
 import { LabelService } from "../LabelService";
 import { IColumn } from "../table";
-import { IDynamicFormManager, DynamicFormAutocompleteDefinition } from "../form";
+import { AbstractDynamicFormManager } from "../form";
 import { ImportPropertyOperatorUtil } from "./ImportPropertyOperatorUtil";
 
-export abstract class ImportManager implements IDynamicFormManager {
+export abstract class ImportManager extends AbstractDynamicFormManager {
 
-    public abstract objectType: KIXObjectType = KIXObjectType.ANY;
     public objects: KIXObject[] = [];
 
-    protected importValues: ObjectPropertyValue[] = [];
     private importRun: boolean = false;
 
-    protected listeners: Map<string, () => void> = new Map();
-
-    public registerListener(listenerId: string, callback: () => void): void {
-        if (listenerId) {
-            this.listeners.set(listenerId, callback);
-        }
-    }
-
-    public unregisterListener(listenerId: string): void {
-        if (listenerId) {
-            this.listeners.delete(listenerId);
-        }
-    }
-
-    protected notifyListeners(): void {
-        this.listeners.forEach((listener: () => void) => listener());
-    }
+    protected abstract getSpecificObject(object: {}): KIXObject;
 
     public init(): void {
         this.reset();
         this.importRun = false;
-    }
-
-    public reset(): void {
-        this.importValues = [];
     }
 
     public getObject(object: {}): KIXObject {
@@ -53,30 +29,8 @@ export abstract class ImportManager implements IDynamicFormManager {
         return specificObject;
     }
 
-    protected abstract getSpecificObject(object: {}): KIXObject;
-
-    public getValues(): ObjectPropertyValue[] {
-        return this.importValues;
-    }
-
     public getImportRunState(): boolean {
         return this.importRun;
-    }
-
-    public hasDefinedValues(): boolean {
-        return !!this.getEditableValues().length;
-    }
-
-    public async getProperties(): Promise<Array<[string, string]>> {
-        return [];
-    }
-
-    public async getPropertiesPlaceholder(): Promise<string> {
-        return '';
-    }
-
-    public async propertiesAreUnique(): Promise<boolean> {
-        return true;
     }
 
     public async getRequiredProperties(): Promise<string[]> {
@@ -99,22 +53,6 @@ export abstract class ImportManager implements IDynamicFormManager {
         ];
     }
 
-    public async getOperationsPlaceholder(): Promise<string> {
-        return '';
-    }
-
-    public async opertationIsAutocompete(property: string): Promise<boolean> {
-        return false;
-    }
-
-    public async operationIsStringInput(property: string): Promise<boolean> {
-        return false;
-    }
-
-    public async getAutoCompleteData(): Promise<DynamicFormAutocompleteDefinition> {
-        return;
-    }
-
     public getOperatorDisplayText(operator: ImportPropertyOperator): string {
         return ImportPropertyOperatorUtil.getText(operator);
     }
@@ -123,62 +61,12 @@ export abstract class ImportManager implements IDynamicFormManager {
         return InputFieldTypes.TEXT;
     }
 
-    public getSpecificInput(): string {
-        return;
-    }
-
-    public async getInputTypeOptions(
-        property: string, operator: ImportPropertyOperator
-    ): Promise<Array<[string, any]>> {
-        return [];
-    }
-
-    public hasValueForProperty(property: string): boolean {
-        return this.importValues.some((bv) => bv.property === property);
-    }
-
-    public async setValue(importValue: ObjectPropertyValue): Promise<void> {
-        const index = this.importValues.findIndex((bv) => bv.id === importValue.id);
-        if (index !== -1) {
-            this.importValues[index].property = importValue.property;
-            this.importValues[index].operator = importValue.operator;
-            this.importValues[index].value = importValue.value;
-        } else {
-            this.importValues.push(importValue);
-        }
-
-        await this.checkProperties();
-        this.notifyListeners();
-    }
-
-    public async removeValue(importValue: ObjectPropertyValue): Promise<void> {
-        const index = this.importValues.findIndex((bv) => bv.id === importValue.id);
-        if (index !== -1) {
-            this.importValues.splice(index, 1);
-        }
-
-        await this.checkProperties();
-        this.notifyListeners();
-    }
-
-    protected async checkProperties(): Promise<void> {
-        return;
-    }
-
     public showValueInput(value: ObjectPropertyValue): boolean {
-        return value.operator !== ImportPropertyOperator.IGNORE;
-    }
-
-    public async searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]> {
-        return [];
-    }
-
-    public async getTreeNodes(property: string): Promise<TreeNode[]> {
-        return [];
+        return value.operator && value.operator !== ImportPropertyOperator.IGNORE;
     }
 
     public getEditableValues(): ObjectPropertyValue[] {
-        return [...this.importValues.filter(
+        return [...this.values.filter(
             (bv) => bv.operator === ImportPropertyOperator.IGNORE
                 || bv.property !== null
         )];

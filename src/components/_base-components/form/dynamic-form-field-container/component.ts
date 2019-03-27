@@ -132,8 +132,7 @@ class Component {
 
     public showValueInput(value: DynamicFieldValue): boolean {
         const newValue = value.getValue();
-        return newValue && newValue.property && newValue.operator
-            && this.manager.showValueInput(newValue);
+        return newValue && this.manager.showValueInput(newValue);
     }
 
     public getInputOptionValue(value: DynamicFieldValue, option: string): string | number {

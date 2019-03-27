@@ -26,8 +26,8 @@ export class Extension implements IConfigurationExtension {
 
         const formId = 'edit-user-role-form';
         const existing = configurationService.getModuleConfiguration(formId, null);
-        if (!existing) {
-            const infoFields: FormField[] = [
+        if (!existing || overwrite) {
+            const infoGroup = new FormGroup('Translatable#Role Information', [
                 new FormField(
                     'Translatable#Name', RoleProperty.NAME, null, true,
                     'Translatable#Insert a role name.'
@@ -41,17 +41,15 @@ export class Extension implements IConfigurationExtension {
                     "Translatable#Set the role as „valid“, „invalid (temporarily)“, or „invalid“.",
                     null, new FormFieldValue(1)
                 )
-            ];
-            const infoGroup = new FormGroup('Translatable#Role Information', infoFields);
+            ]);
 
-            const permissionFields: FormField[] = [
+            const permissionGroup = new FormGroup('Translatable#Permissions', [
                 new FormField(
                     null, RoleProperty.PERMISSIONS, 'permissions-form-input', false, null
                 )
-            ];
-            const permissionGroup = new FormGroup('Translatable#Permissions', permissionFields);
+            ]);
 
-            const agentFields: FormField[] = [
+            const agentGroup = new FormGroup('Translatable#Agent Assignment', [
                 new FormField(
                     'Translatable#Agents', RoleProperty.USERIDS, 'object-reference-input', false,
                     'Translatable#Select which agents should be assigned to this role.', [
@@ -60,8 +58,7 @@ export class Extension implements IConfigurationExtension {
                         new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true)
                     ]
                 )
-            ];
-            const agentGroup = new FormGroup('Translatable#Agent Assignment', agentFields);
+            ]);
 
             const form = new Form(
                 formId, 'Translatable#Edit Role', [
