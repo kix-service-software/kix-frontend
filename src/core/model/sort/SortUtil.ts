@@ -7,47 +7,46 @@ export class SortUtil {
         objects: T[], property: string, dataType: DataType, sortOrder: SortOrder = SortOrder.UP
     ): T[] {
         if (objects && objects.length) {
-            objects.sort((a, b) => SortUtil.compareObjects(a, b, property, dataType));
-            if (sortOrder === SortOrder.UP) {
-                objects = objects.reverse();
-            }
+            objects.sort((a, b) => SortUtil.compareObjects(a, b, property, dataType, sortOrder));
         }
         return objects;
     }
 
-    public static compareObjects<T>(a: T, b: T, property: string, dataType: DataType): number {
+    public static compareObjects<T>(
+        a: T, b: T, property: string, dataType: DataType, sortOrder: SortOrder = SortOrder.UP
+    ): number {
         let sort = 0;
         switch (dataType) {
             case DataType.DATE:
             case DataType.DATE_TIME:
-                sort = SortUtil.compareDate(a[property], b[property]);
+                sort = SortUtil.compareDate(a[property], b[property], sortOrder);
                 break;
             case DataType.NUMBER:
-                sort = SortUtil.compareNumber(a[property], b[property]);
+                sort = SortUtil.compareNumber(a[property], b[property], sortOrder);
                 break;
             default:
-                sort = SortUtil.compareString(a[property], b[property]);
+                sort = SortUtil.compareString(a[property], b[property], sortOrder);
         }
         return sort;
     }
 
-    public static compareValues(a: any, b: any, dataType: DataType): number {
+    public static compareValues(a: any, b: any, dataType: DataType, sortOrder: SortOrder = SortOrder.UP): number {
         let sort = 0;
         switch (dataType) {
             case DataType.DATE:
             case DataType.DATE_TIME:
-                sort = SortUtil.compareDate(a, b);
+                sort = SortUtil.compareDate(a, b, sortOrder);
                 break;
             case DataType.NUMBER:
-                sort = SortUtil.compareNumber(a, b);
+                sort = SortUtil.compareNumber(a, b, sortOrder);
                 break;
             default:
-                sort = SortUtil.compareString(a, b);
+                sort = SortUtil.compareString(a, b, sortOrder);
         }
-        return sort;
+        return sortOrder === SortOrder.DOWN ? sort * (-1) : sort;
     }
 
-    public static compareString(a: string, b: string): number {
+    public static compareString(a: string, b: string, sortOrder: SortOrder = SortOrder.UP): number {
         let sort = 0;
         if (typeof a !== 'string') {
             sort = -1;
@@ -56,10 +55,10 @@ export class SortUtil {
         } else {
             sort = a.toString().localeCompare(b.toString(), [], { sensitivity: 'base' });
         }
-        return sort;
+        return sortOrder === SortOrder.DOWN ? sort * (-1) : sort;
     }
 
-    public static compareNumber(a: number, b: number): number {
+    public static compareNumber(a: number, b: number, sortOrder: SortOrder = SortOrder.UP): number {
         let sort = 0;
         if (typeof a !== 'number') {
             sort = -1;
@@ -68,10 +67,10 @@ export class SortUtil {
         } else {
             sort = a - b;
         }
-        return sort;
+        return sortOrder === SortOrder.DOWN ? sort * (-1) : sort;
     }
 
-    public static compareDate(a: string, b: string): number {
+    public static compareDate(a: string, b: string, sortOrder: SortOrder = SortOrder.UP): number {
         let sort = 0;
         if (a === undefined) {
             sort = -1;
@@ -82,7 +81,7 @@ export class SortUtil {
             const DateB: Date = new Date(b);
             sort = (DateA.getTime() - DateB.getTime());
         }
-        return sort;
+        return sortOrder === SortOrder.DOWN ? sort * (-1) : sort;
     }
 
 }
