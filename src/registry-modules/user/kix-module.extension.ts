@@ -17,6 +17,7 @@ class Extension implements IKIXModuleExtension {
         ['edit-user-role-dialog', 'user/admin/dialogs/edit-user-role-dialog'],
         ['user-admin-users', 'user/admin/user-admin-users'],
         ['new-user-dialog', 'user/admin/dialogs/new-user-dialog'],
+        ['edit-user-dialog', 'user/admin/dialogs/edit-user-dialog'],
         ['user-info-widget', 'user/admin/widgets/user-info-widget'],
         ['user-personal-settings-widget', 'user/admin/widgets/user-personal-settings-widget'],
         ['user-assigned-roles-widget', 'user/admin/widgets/user-assigned-roles-widget']

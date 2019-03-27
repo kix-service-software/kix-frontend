@@ -6,8 +6,8 @@ import {
     RoleService, RoleTableFactory, RoleBrowserFactory, RoleLabelProvider, UserRoleCreateAction,
     NewUserRoleDialogContext, UserRoleTableDeleteAction, UserLabelProvider, UserBrowserFactory,
     UserRoleEditAction, RoleDetailsContext, UserTableFactory, RolePermissionsTableFactory, PermissionTableCSSHandler,
-    UserCreateAction, NewUserDialogContext, EditUserRoleDialogContext,
-    UserRoleFormService, UserDetailsContext, UserEditAction
+    UserCreateAction, NewUserDialogContext, UserDetailsContext, UserEditAction, UserFormService, EditUserDialogContext,
+    EditUserRoleDialogContext, UserRoleFormService
 } from '../../../core/browser/user';
 import {
     KIXObjectType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration, WidgetSize, ContextDescriptor, ContextType
@@ -24,6 +24,7 @@ class Component extends AbstractMarkoComponent {
 
     public async onMount(): Promise<void> {
         ServiceRegistry.registerServiceInstance(RoleService.getInstance());
+        ServiceRegistry.registerServiceInstance(UserFormService.getInstance());
 
         LabelService.getInstance().registerLabelProvider(new UserLabelProvider());
         LabelService.getInstance().registerLabelProvider(new RoleLabelProvider());
@@ -83,6 +84,13 @@ class Component extends AbstractMarkoComponent {
             true, 'object-details-page', ['users'], UserDetailsContext
         );
         ContextService.getInstance().registerContext(userDetailsContextDescriptor);
+
+        const editUserContext = new ContextDescriptor(
+            EditUserDialogContext.CONTEXT_ID, [KIXObjectType.USER],
+            ContextType.DIALOG, ContextMode.EDIT_ADMIN,
+            false, 'edit-user-dialog', ['users'], EditUserDialogContext
+        );
+        ContextService.getInstance().registerContext(editUserContext);
     }
 
     private registerAdminActions(): void {
@@ -122,6 +130,16 @@ class Component extends AbstractMarkoComponent {
             ),
             KIXObjectType.USER,
             ContextMode.CREATE_ADMIN
+        ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'edit-user-dialog',
+            new WidgetConfiguration(
+                'edit-user-dialog', 'Translatable#Edit Agent', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-edit'
+            ),
+            KIXObjectType.USER,
+            ContextMode.EDIT_ADMIN
         ));
     }
 }
