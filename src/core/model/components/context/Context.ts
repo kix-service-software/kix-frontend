@@ -258,8 +258,9 @@ export abstract class Context<T extends ContextConfiguration = ContextConfigurat
         this.listeners.forEach((l) => l.scrollInformationChanged(this.scrollInormation[0], this.scrollInormation[1]));
     }
 
-    public getBreadcrumbInformation(): BreadcrumbInformation {
-        return new BreadcrumbInformation(this.getIcon(), []);
+    public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
+        const text = await this.getDisplayText();
+        return new BreadcrumbInformation(this.getIcon(), [], text);
     }
 
     public reset(): void {

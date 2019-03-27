@@ -8,6 +8,7 @@ import { AdminContext } from "../../../admin";
 import { EventService } from "../../../event";
 import { ApplicationEvent } from "../../../application";
 import { KIXObjectService } from "../../../kix";
+import { TranslationService } from "../../../i18n/TranslationService";
 
 
 export class RoleDetailsContext extends Context<RoleDetailsContextConfiguration> {
@@ -91,8 +92,10 @@ export class RoleDetailsContext extends Context<RoleDetailsContextConfiguration>
         return widgetType;
     }
 
-    public getBreadcrumbInformation(): BreadcrumbInformation {
-        return new BreadcrumbInformation(this.getIcon(), [AdminContext.CONTEXT_ID]);
+    public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
+        const objectName = await TranslationService.translate('Translatable#Role');
+        const object = await this.getObject<Role>();
+        return new BreadcrumbInformation(this.getIcon(), [AdminContext.CONTEXT_ID], `${objectName}: ${object.Name}`);
     }
 
     public async getObject<O extends KIXObject>(

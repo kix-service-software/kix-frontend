@@ -123,8 +123,10 @@ export class TicketDetailsContext extends Context<TicketDetailsContextConfigurat
         return object;
     }
 
-    public getBreadcrumbInformation(): BreadcrumbInformation {
-        return new BreadcrumbInformation(this.getIcon(), [TicketContext.CONTEXT_ID]);
+    public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
+        const object = await this.getObject<Ticket>();
+        const text = await LabelService.getInstance().getText(object);
+        return new BreadcrumbInformation(this.getIcon(), [TicketContext.CONTEXT_ID], text);
     }
 
     private async loadTicket(changedProperties: string[] = [], cache: boolean = true): Promise<Ticket> {

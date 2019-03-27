@@ -90,8 +90,10 @@ export class TranslationDetailsContext extends Context<TranslationDetailsContext
         return widgetType;
     }
 
-    public getBreadcrumbInformation(): BreadcrumbInformation {
-        return new BreadcrumbInformation(this.getIcon(), [AdminContext.CONTEXT_ID]);
+    public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
+        const objectName = await TranslationService.translate('Translatable#Translation:');
+        const state = await this.getObject<Translation>();
+        return new BreadcrumbInformation(this.getIcon(), [AdminContext.CONTEXT_ID], `${objectName}: ${state.Pattern}`);
     }
 
     public async getObject<O extends KIXObject>(

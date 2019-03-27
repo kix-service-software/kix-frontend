@@ -124,8 +124,7 @@ export class TicketTypeLabelProvider implements ILabelProvider<TicketType> {
     }
 
     public async getObjectText(ticketType: TicketType, id?: boolean, title?: boolean): Promise<string> {
-        const objectType = await TranslationService.translate('Translatable#Type');
-        return `${objectType}: ${ticketType.Name}`;
+        return ticketType.Name;
     }
 
     public getObjectAdditionalText(ticketType: TicketType): string {

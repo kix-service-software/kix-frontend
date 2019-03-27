@@ -91,8 +91,10 @@ export class ConfigItemDetailsContext extends Context<ConfigItemDetailsContextCo
         return widgetType;
     }
 
-    public getBreadcrumbInformation(): BreadcrumbInformation {
-        return new BreadcrumbInformation(this.getIcon(), [CMDBContext.CONTEXT_ID]);
+    public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
+        const object = await this.getObject<ConfigItem>();
+        const text = await LabelService.getInstance().getText(object);
+        return new BreadcrumbInformation(this.getIcon(), [CMDBContext.CONTEXT_ID], text);
     }
 
     public async getObject<O extends KIXObject>(

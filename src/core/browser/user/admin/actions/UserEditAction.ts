@@ -13,7 +13,7 @@ export class UserEditAction extends AbstractAction {
         await FormService.getInstance().getFormInstance<FormInstance>('edit-user-form', false);
         ContextService.getInstance().setDialogContext(
             // TODO: Titel aus dem aktiven Admin-Modul ermitteln (Kategorie)
-            null, KIXObjectType.USER, ContextMode.EDIT_ADMIN, null, true, 'Edit Agent'
+            null, KIXObjectType.USER, ContextMode.EDIT_ADMIN, null, true
         );
     }
 
