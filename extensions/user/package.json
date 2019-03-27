@@ -4,6 +4,7 @@
         "kix:configuration": {
             "new-user-role-dialog-configuration": "../../dist/registry-modules/user/admin/new-user-role-dialog-configuration.extension",
             "new-user-dialog-configuration": "../../dist/registry-modules/user/admin/new-user-dialog-configuration.extension",
+            "edit-user-dialog-configuration": "../../dist/registry-modules/user/admin/edit-user-dialog-configuration.extension",
             "edit-user-role-dialog-configuration": "../../dist/registry-modules/user/admin/edit-user-role-dialog-configuration.extension",
             "user-role-details-configuration": "../../dist/registry-modules/user/admin/user-role-details-configuration.extension",
             "user-details-configuration": "../../dist/registry-modules/user/admin/user-details-configuration.extension"

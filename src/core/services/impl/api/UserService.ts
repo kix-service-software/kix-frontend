@@ -6,10 +6,10 @@ import {
 import { KIXObjectService } from './KIXObjectService';
 import {
     SetPreference, SetPreferenceResponse, SetPreferenceRequest,
-    CreateUser, CreateUserRequest, CreateUserResponse
+    CreateUser, CreateUserRequest, CreateUserResponse, UpdateUser, UpdateUserRequest
 } from '../../../api/user';
 import { LoggingService } from '../LoggingService';
-import { SetPreferenceOptions, UserFactory, UserPreference } from '../../../model/kix/user';
+import { SetPreferenceOptions, UserFactory, UserPreference, UserProperty, Role } from '../../../model/kix/user';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { UserPreferenceFactory } from '../../../model/kix/user/UserPreferenceFactory';
 
@@ -111,7 +111,32 @@ export class UserService extends KIXObjectService {
         updateOptions?: KIXObjectSpecificCreateOptions
     ): Promise<string | number> {
         if (objectType === KIXObjectType.USER) {
-            throw new Error('', "Method not implemented.");
+            const userPassword = this.getParameterValue(parameter, UserProperty.USER_PASSWORD);
+            if (!userPassword || userPassword === '') {
+                parameter = parameter.filter((p) => p[0] !== UserProperty.USER_PASSWORD);
+            }
+
+            const updateParameter = parameter.filter(
+                (p) => p[0] !== UserProperty.USER_LANGUAGE
+                    && p[0] !== UserProperty.ROLEIDS
+                    && p[0] !== UserProperty.PREFERENCES
+            );
+
+            const userId = Number(objectId);
+
+            const updateUser = new UpdateUser(updateParameter);
+            const uri = this.buildUri(this.RESOURCE_URI, userId);
+            await this.sendUpdateRequest(
+                token, clientRequestId, uri, new UpdateUserRequest(updateUser), KIXObjectType.USER
+            );
+
+            const roleIds = this.getParameterValue(parameter, UserProperty.ROLEIDS);
+            await this.updateUserRoles(token, clientRequestId, roleIds, userId);
+
+            const userLanguage = parameter.find((p) => p[0] === UserProperty.USER_LANGUAGE);
+            if (userLanguage) {
+                await this.setPreferences(token, clientRequestId, [userLanguage], userId);
+            }
         } else if (KIXObjectType.USER_PREFERENCE) {
             const options = updateOptions as SetPreferenceOptions;
             const updatePreference = new SetPreference(parameter);
@@ -125,6 +150,32 @@ export class UserService extends KIXObjectService {
             });
             return response.UserPreferenceID;
         }
+    }
+
+    private async updateUserRoles(
+        token: string, clientReqeustId: string, roleIds: number[], userId: number
+    ): Promise<void> {
+        if (!roleIds) {
+            roleIds = [];
+        }
+
+        const baseUri = this.buildUri(this.RESOURCE_URI, userId, 'roleids');
+        const existingRoleIds = await this.load(token, null, baseUri, null, null, 'RoleID');
+
+        const rolesToDelete = existingRoleIds.filter((r) => !roleIds.some((rid) => rid === r));
+        const rolesToCreate = roleIds.filter((r) => !existingRoleIds.some((rid) => rid === r));
+
+        for (const roleId of rolesToDelete) {
+            const deleteUri = this.buildUri(baseUri, roleId);
+            await this.sendDeleteRequest(token, clientReqeustId, deleteUri, KIXObjectType.USER)
+                .catch((error) => LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error));
+        }
+
+        for (const roleId of rolesToCreate) {
+            await this.sendCreateRequest(token, clientReqeustId, baseUri, { RoleID: roleId }, KIXObjectType.USER)
+                .catch((error) => LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error));
+        }
+
     }
 
     public async setPreferences(

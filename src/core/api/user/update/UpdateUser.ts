@@ -2,20 +2,9 @@ import { RequestObject } from '../../RequestObject';
 
 export class UpdateUser extends RequestObject {
 
-    public constructor(
-        login: string, firstName: string, lastName: string,
-        email: string, password: string, phone: string, title: string, valid: number
-    ) {
+    public constructor(parameter: Array<[string, any]>) {
         super();
-
-        this.applyProperty('UserLogin', login);
-        this.applyProperty('UserFirstname', firstName);
-        this.applyProperty('UserLastname', lastName);
-        this.applyProperty('UserEmail', email);
-        this.applyProperty('UserPassword', password);
-        this.applyProperty('UserPhone', phone);
-        this.applyProperty('UserTitle', title);
-        this.applyProperty('ValidID', valid);
+        parameter.forEach((p) => this.applyProperty(p[0], p[1]));
     }
 
 }

@@ -18,6 +18,7 @@ export class User extends KIXObject<User> {
     public UserEmail: string;
     public UserPhone: string;
     public UserMobile: string;
+    public UserComment: string;
 
     public ValidID: number;
 
@@ -47,6 +48,7 @@ export class User extends KIXObject<User> {
             this.UserEmail = user.UserEmail;
             this.UserPhone = user.UserPhone;
             this.UserMobile = user.UserMobile;
+            this.UserComment = user.UserComment;
             this.RoleIDs = user.RoleIDs ? user.RoleIDs : [];
 
             if (this.Tickets) {
