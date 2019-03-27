@@ -10,7 +10,7 @@ export class CustomerImportManager extends ImportManager {
 
     public reset(): void {
         super.reset();
-        this.importValues.push(new ObjectPropertyValue(
+        this.values.push(new ObjectPropertyValue(
             CustomerProperty.VALID_ID, ImportPropertyOperator.REPLACE_EMPTY, 1)
         );
     }

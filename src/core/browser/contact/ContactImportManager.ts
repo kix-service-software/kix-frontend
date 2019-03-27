@@ -14,7 +14,7 @@ export class ContactImportManager extends ImportManager {
 
     public reset(): void {
         super.reset();
-        this.importValues.push(new ObjectPropertyValue(
+        this.values.push(new ObjectPropertyValue(
             ContactProperty.VALID_ID, ImportPropertyOperator.REPLACE_EMPTY, 1)
         );
     }

@@ -1,17 +1,26 @@
 @dynamic-value-gap: .5rem;
-@dynmaic-value-columns: 15rem 15rem minmax(10rem, auto) max-content;
+@dynamic-value-columns: 15rem 15rem minmax(10rem, auto) max-content;
+@dynamic-value-columns-no-operation: 15rem minmax(15rem, auto) max-content;
+
 .dynamic-form-field-value {
     display: grid;
-    grid-template-columns: @dynmaic-value-columns;
+    grid-template-columns: @dynamic-value-columns;
     align-items: center;
     grid-column-gap: @dynamic-value-gap;
     margin-bottom: @margin-small;
+
+    &.no-operation {
+        grid-template-columns: @dynamic-value-columns-no-operation;
+    }
+
     .value {
+
         >input[type="time"],
         >input[type="date"] {
             width: 50%;
         }
     }
+
     >.remove-value {
         cursor: pointer;
     }

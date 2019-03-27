@@ -1,6 +1,7 @@
-import { KIXObjectType, InputFieldTypes, TreeNode } from "../../model";
-import { ObjectPropertyValue } from "../ObjectPropertyValue";
+import { KIXObjectType, InputFieldTypes, TreeNode } from "../../../model";
+import { ObjectPropertyValue } from "../../ObjectPropertyValue";
 import { DynamicFormAutocompleteDefinition } from "./DynamicFormAutocompleteDefinition";
+import { DynamicFormOperationsType } from "./DynamicFormOperationsType";
 
 export interface IDynamicFormManager {
 
@@ -42,11 +43,9 @@ export interface IDynamicFormManager {
 
     getOperationsPlaceholder(): Promise<string>;
 
-    opertationIsAutocompete(property: string): Promise<boolean>;
+    getOpertationsType(property: string): Promise<DynamicFormOperationsType>;
 
-    operationIsStringInput(property: string): Promise<boolean>;
-
-    getAutoCompleteData(): Promise<DynamicFormAutocompleteDefinition>;
+    getOperationsAutoCompleteData(): Promise<DynamicFormAutocompleteDefinition>;
 
     getOperatorDisplayText(o: string): string;
 

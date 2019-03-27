@@ -2,6 +2,8 @@ export enum PermissionProperty {
 
     ID = 'ID',
 
+    RoleID = 'RoleID',
+
     TYPE_ID = 'TypeID',
 
     COMMENT = 'Comment',

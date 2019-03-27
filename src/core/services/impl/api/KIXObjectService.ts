@@ -3,7 +3,11 @@ import {
     KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, CreateLinkDescription,
     KIXObjectSpecificCreateOptions, KIXObjectSpecificDeleteOptions, ObjectIcon, ObjectIconLoadingOptions,
     Error,
-    IObjectFactory
+    IObjectFactory,
+    CreatePermissionDescription,
+    PermissionType,
+    PermissionProperty,
+    CreatePermissionOptions
 } from '../../../model';
 import { Query, CreateLink, CreateLinkRequest } from '../../../api';
 import { IKIXObjectService } from '../../IKIXObjectService';
@@ -11,6 +15,7 @@ import { HttpService } from './HttpService';
 import { LoggingService } from '../LoggingService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { ObjectFactoryService } from '../../ObjectFactoryService';
+import { RoleService } from './RoleService';
 
 /**
  * Generic abstract class for all ObjectServices.
@@ -273,6 +278,47 @@ export abstract class KIXObjectService<T extends KIXObject = any> implements IKI
                 });
             } else {
                 this.createIcons(token, clientRequestId, icon);
+            }
+        }
+    }
+
+    protected async createObjectPermissions(
+        token: string, clientRequestId: string,
+        permissions: CreatePermissionDescription[], resourcePath: string, objectId: string
+    ): Promise<void> {
+        if (permissions && !!permissions.length && resourcePath && objectId) {
+            const roleService = KIXObjectServiceRegistry.getServiceInstance<RoleService>(
+                KIXObjectType.ROLE
+            );
+            if (roleService) {
+                const permissionTypes = await roleService.loadObjects<PermissionType>(
+                    token, clientRequestId, KIXObjectType.PERMISSION_TYPE, null, null, null
+                );
+                const objectType = permissionTypes.find((pt) => pt.Name === 'Object');
+                if (objectType) {
+                    for (const permission of permissions) {
+                        const parameter: Array<[string, any]> = [
+                            [PermissionProperty.TYPE_ID, objectType.ID],
+                            [PermissionProperty.TARGET, `${resourcePath}/${objectId}`],
+                            [PermissionProperty.VALUE, permission.Value],
+                            [PermissionProperty.COMMENT, permission.comment]
+                        ];
+                        const roleId = permission.RoleID;
+                        if (roleId) {
+                            await roleService.createObject(
+                                token, clientRequestId, KIXObjectType.PERMISSION, parameter,
+                                new CreatePermissionOptions(roleId)
+                            ).catch((error: Error) => {
+                                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                                throw new Error(error.Code, error.Message);
+                            });
+                        }
+                    }
+                } else {
+                    const message = 'No permission type "Object" found!';
+                    LoggingService.getInstance().error(message);
+                    throw new Error('-1', message);
+                }
             }
         }
     }
