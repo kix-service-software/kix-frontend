@@ -147,6 +147,10 @@ class ComponentContextListener implements IContextListener {
     public filteredObjectListChanged(objectList: KIXObject[]): void {
         return;
     }
+
+    public scrollInformationChanged(): void {
+        return;
+    }
 }
 
 

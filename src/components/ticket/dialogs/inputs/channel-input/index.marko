@@ -1,0 +1,30 @@
+<if(state.channels)>
+    <div.channel-list>
+        <for(channel in state.channels)>
+            <div.channel-item
+                on-click("channelClicked", channel)
+                title=component.getDisplayText(channel)
+                class={
+                                active: component.isActive(channel)
+                            }>
+                <span.channel-icon>
+                    <icon icon=component.getIcon(channel)/>
+                </span>
+                <span.channel-text>${component.getDisplayText(channel)}</span>
+            </div>
+        </for>
+        <if(state.noChannel)>
+            <div.channel-item
+                on-click("channelClicked", null)
+                title="Kein Artikel"
+                class={
+                                active: component.isActive(null)
+                            }>
+                <span.channel-icon>
+                    <icon icon="kix-icon-unselect"/>
+                </span>
+                <span.channel-text>Kein Artikel</span>
+            </div>
+        </if>
+    </div>
+</if>

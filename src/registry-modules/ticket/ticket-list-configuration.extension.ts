@@ -1,6 +1,7 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    ConfiguredWidget, WidgetConfiguration, WidgetSize, FilterCriteria, FilterDataType, FilterType, ContextConfiguration
+    ConfiguredWidget, WidgetConfiguration, WidgetSize, FilterCriteria, FilterDataType,
+    FilterType, ContextConfiguration, KIXObjectType
 } from '../../core/model';
 import { TicketListContext, TicketListContextConfiguration } from '../../core/browser/ticket';
 import {
@@ -17,16 +18,20 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
 
         const ticketListWidget =
             new ConfiguredWidget('20180927-ticket-list-widget', new WidgetConfiguration(
-                'ticket-list-widget', 'Tickets', [
+                'table-widget', 'Tickets', [
                     'bulk-action', 'ticket-create-action', 'ticket-search-action', 'csv-export-action'
-                ], new TableConfiguration(
-                    2500, 25, null, [new FilterCriteria(
-                        'StateType', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'
-                    )],
-                    true, true,
-                    new ToggleOptions('ticket-article-details', 'article', [], true),
-                    null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
-                ),
+                ],
+                {
+                    objectType: KIXObjectType.TICKET,
+                    tableConfiguration: new TableConfiguration(KIXObjectType.TICKET,
+                        2500, 25, null, [new FilterCriteria(
+                            'StateType', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'
+                        )],
+                        true, true,
+                        new ToggleOptions('ticket-article-details', 'article', [], true),
+                        null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
+                    )
+                },
                 false, false, WidgetSize.LARGE, null, true, [])
             );
 

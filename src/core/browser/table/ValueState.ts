@@ -1,0 +1,23 @@
+export enum ValueState {
+
+    CHANGED = 1 << 0,
+
+    DELETED,
+
+    NEW,
+
+    NOT_EXISTING,
+
+    NONE,
+
+    NEW_MARKED,
+
+    HIGHLIGHT_ERROR,
+
+    HIGHLIGHT_REMOVED,
+
+    HIGHLIGHT_UNAVAILABLE,
+
+    HIGHLIGHT_SUCCESS
+
+}

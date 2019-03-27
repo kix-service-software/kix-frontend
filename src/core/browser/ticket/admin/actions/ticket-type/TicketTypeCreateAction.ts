@@ -5,7 +5,7 @@ export class TicketTypeCreateAction extends AbstractAction {
 
     public initAction(): void {
         this.text = "Neuer Typ";
-        this.icon = "kix-icon-gear";
+        this.icon = "kix-icon-new-gear";
     }
 
     public run(): void {

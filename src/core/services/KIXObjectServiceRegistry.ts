@@ -5,7 +5,7 @@ export class KIXObjectServiceRegistry {
 
     private static INSTANCE: KIXObjectServiceRegistry;
 
-    public static getInstance(): KIXObjectServiceRegistry {
+    private static getInstance(): KIXObjectServiceRegistry {
         if (!KIXObjectServiceRegistry.INSTANCE) {
             KIXObjectServiceRegistry.INSTANCE = new KIXObjectServiceRegistry();
         }
@@ -16,12 +16,14 @@ export class KIXObjectServiceRegistry {
 
     private services: IKIXObjectService[] = [];
 
-    public registerServiceInstance(service: IKIXObjectService): void {
-        this.services.push(service);
+    public static registerServiceInstance(service: IKIXObjectService): void {
+        const registry = KIXObjectServiceRegistry.getInstance();
+        registry.services.push(service);
     }
 
-    public getServiceInstance<T extends IKIXObjectService = IKIXObjectService>(kixObjectType: KIXObjectType): T {
-        return this.services.find((s) => s.isServiceFor(kixObjectType)) as T;
+    public static getServiceInstance<T extends IKIXObjectService = IKIXObjectService>(kixObjectType: KIXObjectType): T {
+        const registry = KIXObjectServiceRegistry.getInstance();
+        return registry.services.find((s) => s.isServiceFor(kixObjectType)) as T;
     }
 
 }

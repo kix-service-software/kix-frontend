@@ -35,6 +35,7 @@
                 display: grid;
                 grid-auto-flow: column;
                 grid-gap: @margin-small;
+                min-width: 5rem;
                 &.with-icon {
                     grid-template-columns: min-content;
                     >[class^="kix-icon-"],
@@ -220,6 +221,7 @@
         padding-left: @margin-default + 1rem;
         border-radius: @border-radius;
         box-shadow: @shadow-1;
+        grid-template-columns: 1fr 0fr; // TODO: temporary, should be changed for possible lane actions - consider different behavior for lane with tabs
         >.header-left {
             >[class^="kix-icon-"],
             >[class*=" kix-icon-"] {

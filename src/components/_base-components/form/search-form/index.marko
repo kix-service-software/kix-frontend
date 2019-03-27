@@ -1,4 +1,4 @@
-<div.search-form on-keydown('keyDown')>
+<div.search-form on-keydown("keyDown")>
     <widget instanceId="search-form-group" title="Attribute" key="attributes">
         <@content>
             <div.search-criteria>
@@ -10,7 +10,7 @@
         <button.form-blank-cancel-button type="button" on-click("reset") title="Daten zurücksetzen">
             <span.kix-icon-delete/>Daten zurücksetzen
         </button>
-        <button.form-blank-submit-button type="button" on-click("search") title="Suche starten" disabled=(!state.canSearch)>
+        <button.form-blank-submit-button type="button" on-click("search") title="Suche starten" disabled=!state.canSearch>
             <span.kix-icon-search/>Suche starten
         </button>
     </div>
@@ -19,15 +19,14 @@
             <div.result-table-head>
                 <span>Treffervorschau (${state.resultCount})</span>
             </div>
-            <standard-table standardTable=state.table/>
+            <standard-table-NEW table=state.table/>
         </div>
     </if>
     <div.dialog-button-container>
         <button.cancel-button type="button" on-click("cancel") title="Abbrechen">
             <span.kix-icon-close/>Abbrechen
         </button>
-        <button.submit-button type="button" on-click("submit") title="Detailierte Suchergebnisse"
-            disabled=(!state.resultCount)>
+        <button.submit-button type="button" on-click("submit") title="Detailierte Suchergebnisse" disabled=!state.resultCount>
             <span.kix-icon-check/>Detailierte Suchergebnisse
         </button>
     </div>

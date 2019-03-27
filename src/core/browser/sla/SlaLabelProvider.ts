@@ -9,14 +9,18 @@ export class SlaLabelProvider implements ILabelProvider<Sla> {
         return sla instanceof Sla;
     }
 
-    public getPropertyText(property: string, sla?: Sla, short?: boolean): Promise<string> {
+    public getPropertyText(property: string, short?: boolean): Promise<string> {
         let displayValue;
         switch (property) {
             default:
-                displayValue = sla[property];
+                displayValue = property;
         }
 
         return displayValue;
+    }
+
+    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
+        return;
     }
 
     public getDisplayText(sla: Sla, property: string): Promise<string> {

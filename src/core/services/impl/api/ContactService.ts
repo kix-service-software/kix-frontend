@@ -32,7 +32,7 @@ export class ContactService extends KIXObjectService {
 
     private constructor() {
         super();
-        KIXObjectServiceRegistry.getInstance().registerServiceInstance(this);
+        KIXObjectServiceRegistry.registerServiceInstance(this);
         KIXObjectCache.registerCacheHandler(new ContactCacheHandler());
     }
 
@@ -175,7 +175,7 @@ export class ContactService extends KIXObjectService {
 
         const customerIdValue = parameter.find((v) => v[0] === ContactProperty.USER_CUSTOMER_ID);
         if (customerIdValue) {
-            const customerService = KIXObjectServiceRegistry.getInstance().getServiceInstance(KIXObjectType.CUSTOMER);
+            const customerService = KIXObjectServiceRegistry.getServiceInstance(KIXObjectType.CUSTOMER);
             customerService.updateCache(customerIdValue[1]);
         }
 

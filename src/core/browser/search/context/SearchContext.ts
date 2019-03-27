@@ -1,6 +1,6 @@
-import { Context, WidgetType, WidgetConfiguration, ObjectIcon } from "../../../model";
+import { WidgetType, WidgetConfiguration, ObjectIcon } from "../../../model";
 import { SearchContextConfiguration } from "./SearchContextConfiguration";
-import { KIXObjectSearchService } from "../../kix";
+import { Context } from '../../../model/components/context/Context';
 
 export class SearchContext extends Context<SearchContextConfiguration> {
 
@@ -21,10 +21,6 @@ export class SearchContext extends Context<SearchContextConfiguration> {
     protected getSpecificWidgetConfiguration<WS = any>(instanceId: string): WidgetConfiguration<WS> {
         const widget = this.configuration.contentWidgets.find((cw) => cw.instanceId === instanceId);
         return widget ? widget.configuration : undefined;
-    }
-
-    public reset(): void {
-        KIXObjectSearchService.getInstance().clearSearchCache();
     }
 
 }

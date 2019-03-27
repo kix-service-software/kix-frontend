@@ -1,20 +1,10 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    WidgetConfiguration,
-    ConfiguredWidget,
-    WidgetSize,
-    DataType,
-    ContextConfiguration,
-    FilterCriteria,
-    FilterDataType,
-    FilterType,
-    KIXObjectPropertyFilter,
-    TableFilterCriteria
+    WidgetConfiguration, ConfiguredWidget, WidgetSize, DataType, ContextConfiguration,
+    FilterCriteria, FilterDataType, FilterType, KIXObjectPropertyFilter, TableFilterCriteria, KIXObjectType, SortOrder
 } from '../../core/model';
 import {
-    TableColumnConfiguration, SearchOperator, ToggleOptions, TableHeaderHeight,
-    TableRowHeight,
-    TableConfiguration
+    SearchOperator, ToggleOptions, TableHeaderHeight, TableRowHeight, TableConfiguration, DefaultColumnConfiguration
 } from '../../core/browser';
 import { HomeContextConfiguration, HomeContext } from '../../core/browser/home';
 import { TicketProperty } from '../../core/model/';
@@ -99,69 +89,88 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
 
         const predefinedToDoTableFilter = [
             new KIXObjectPropertyFilter('Verantwortliche Tickets', [
-                new TableFilterCriteria(TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS, 'CURRENT_USER')
+                new TableFilterCriteria(
+                    TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER
+                )
             ]),
             new KIXObjectPropertyFilter('Bearbeiter', [
-                new TableFilterCriteria(TicketProperty.OWNER_ID, SearchOperator.EQUALS, 'CURRENT_USER')
+                new TableFilterCriteria(TicketProperty.OWNER_ID, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER)
             ]),
             new KIXObjectPropertyFilter('Beobachtete Tickets', [
-                new TableFilterCriteria(TicketProperty.WATCHERS, SearchOperator.EQUALS, 'CURRENT_USER', true)
+                new TableFilterCriteria(
+                    TicketProperty.WATCHERS, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER, true
+                )
             ]),
         ];
         const todoTicketList = new ConfiguredWidget('20180612-to-do-widget', new WidgetConfiguration(
-            'ticket-list-widget', 'ToDo / Bearbeitung erforderlich', ['bulk-action', 'csv-export-action'],
-            new TableConfiguration(
-                500, null, null,
-                [
-                    new FilterCriteria(
-                        TicketProperty.OWNER_ID, SearchOperator.EQUALS,
-                        FilterDataType.STRING, FilterType.OR, 'CURRENT_USER'
-                    ),
-                    new FilterCriteria(
-                        TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS,
-                        FilterDataType.STRING, FilterType.OR, 'CURRENT_USER'
-                    ),
-                    new FilterCriteria(
-                        TicketProperty.LOCK_ID, SearchOperator.EQUALS,
-                        FilterDataType.NUMERIC, FilterType.OR, 2
-                    )
-                ],
-                true, true, new ToggleOptions('ticket-article-details', 'article', [], true),
-                'Ticket.Age:numeric',
-                TableHeaderHeight.LARGE,
-                TableRowHeight.SMALL
-            ),
+            'table-widget', 'ToDo / Bearbeitung erforderlich', ['bulk-action', 'csv-export-action'],
+            {
+                objectType: KIXObjectType.TICKET,
+                sort: [TicketProperty.AGE, SortOrder.UP],
+                tableConfiguration: new TableConfiguration(KIXObjectType.TICKET,
+                    500, null, null,
+                    [
+                        new FilterCriteria(
+                            TicketProperty.OWNER_ID, SearchOperator.EQUALS,
+                            FilterDataType.STRING, FilterType.OR, KIXObjectType.CURRENT_USER
+                        ),
+                        new FilterCriteria(
+                            TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS,
+                            FilterDataType.STRING, FilterType.OR, KIXObjectType.CURRENT_USER
+                        ),
+                        new FilterCriteria(
+                            TicketProperty.LOCK_ID, SearchOperator.EQUALS,
+                            FilterDataType.NUMERIC, FilterType.OR, 2
+                        )
+                    ],
+                    true, true, new ToggleOptions('ticket-article-details', 'article', [], true),
+                    'Ticket.Age:numeric'
+                )
+            },
             false, true, WidgetSize.LARGE, 'kix-icon-ticket', false, predefinedToDoTableFilter)
         );
 
         const newTicketsListWidget =
             new ConfiguredWidget('20180612-new-tickets-widget', new WidgetConfiguration(
-                'ticket-list-widget', 'Neue Tickets', ['bulk-action', 'csv-export-action'],
-                new TableConfiguration(
-                    500, null, [
-                        new TableColumnConfiguration(TicketProperty.PRIORITY_ID, false, true, false, true, 65),
-                        new TableColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, true, 135),
-                        new TableColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 463),
-                        new TableColumnConfiguration(TicketProperty.QUEUE_ID, true, false, true, true, 175),
-                        new TableColumnConfiguration(TicketProperty.CUSTOMER_ID, true, false, true, true, 225),
-                        new TableColumnConfiguration(
-                            TicketProperty.CREATED, true, false, true, true, 155, true, false, DataType.DATE_TIME
-                        ),
-                        new TableColumnConfiguration(
-                            TicketProperty.AGE, true, false, true, true, 75, true, false, DataType.DATE_TIME
-                        ),
-                    ],
-                    [
-                        new FilterCriteria(
-                            TicketProperty.STATE_ID, SearchOperator.EQUALS,
-                            FilterDataType.NUMERIC, FilterType.OR, 1
-                        )
-                    ],
-                    true, true, new ToggleOptions('ticket-article-details', 'article', [], true),
-                    'Ticket.-Age:numeric',
-                    TableHeaderHeight.LARGE,
-                    TableRowHeight.SMALL
-                ),
+                'table-widget', 'Neue Tickets', ['bulk-action', 'csv-export-action'],
+                {
+                    objectType: KIXObjectType.TICKET,
+                    sort: [TicketProperty.AGE, SortOrder.DOWN],
+                    tableConfiguration: new TableConfiguration(KIXObjectType.TICKET,
+                        500, null, [
+                            new DefaultColumnConfiguration(
+                                TicketProperty.PRIORITY_ID, false, true, true, false, 65, true, true, true
+                            ),
+                            new DefaultColumnConfiguration(
+                                TicketProperty.TICKET_NUMBER, true, false, true, true, 135, true, true
+                            ),
+                            new DefaultColumnConfiguration(
+                                TicketProperty.TITLE, true, false, true, true, 463, true, true
+                            ),
+                            new DefaultColumnConfiguration(
+                                TicketProperty.QUEUE_ID, true, false, true, true, 175, true, true, true
+                            ),
+                            new DefaultColumnConfiguration(
+                                TicketProperty.CUSTOMER_ID, true, false, true, true, 225, true, true
+                            ),
+                            new DefaultColumnConfiguration(
+                                TicketProperty.CREATED, true, false, true, true, 155,
+                                true, true, false, DataType.DATE_TIME
+                            ),
+                            new DefaultColumnConfiguration(
+                                TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.DATE_TIME
+                            ),
+                        ],
+                        [
+                            new FilterCriteria(
+                                TicketProperty.STATE_ID, SearchOperator.EQUALS,
+                                FilterDataType.NUMERIC, FilterType.OR, 1
+                            )
+                        ],
+                        true, true, new ToggleOptions('ticket-article-details', 'article', [], true),
+                        'Ticket.-Age:numeric'
+                    )
+                },
                 false, true, WidgetSize.LARGE, 'kix-icon-ticket', false)
             );
 

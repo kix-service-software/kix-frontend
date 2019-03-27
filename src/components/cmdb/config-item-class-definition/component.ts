@@ -4,17 +4,19 @@ import { ConfigItemClassDefinition } from '../../../core/model';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
+    private definition: ConfigItemClassDefinition;
+
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
-        const code = input.definition ? input.definition.DefinitionString : '';
-        this.state.definitionString = '<pre><code class="language-perl">' + code + '</code></pre>';
+        this.definition = input.definition;
+
     }
 
     public async onMount(): Promise<void> {
-        return;
+        this.state.definitionString = this.definition ? this.definition.DefinitionString : '';
     }
 
 }

@@ -1,15 +1,23 @@
 import { ComponentState } from "./ComponentState";
 import {
-    ContextService, ActionFactory, StandardTable, TableColumnConfiguration, StandardTableFactoryService
+    ContextService, ActionFactory, TableFactoryService, SearchOperator, KIXObjectService,
+    TableEvent, ITable, TableEventData
 } from "../../../../core/browser";
 import {
-    WidgetConfiguration, Customer, KIXObjectType, Ticket, TicketProperty
+    WidgetConfiguration, Customer, KIXObjectType, FilterCriteria, TicketProperty, FilterDataType,
+    FilterType, StateType, TicketState, DateTimeUtil
 } from "../../../../core/model";
-import { TicketService } from "../../../../core/browser/ticket";
+import { IEventSubscriber, EventService } from "../../../../core/browser/event";
 
 class Component {
 
     private state: ComponentState;
+
+    private tableEscalatedTicketsSubscriber: IEventSubscriber;
+    private tableReminderTicketsSubscriber: IEventSubscriber;
+    private tableNewTicketsSubscriber: IEventSubscriber;
+    private tableOpenTicketsSubscriber: IEventSubscriber;
+    private tablePendingTicketsSubscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -50,6 +58,7 @@ class Component {
             filteredObjectListChanged: () => { return; },
             objectListChanged: () => { return; },
             sidebarToggled: () => { return; },
+            scrollInformationChanged: () => { return; },
             objectChanged: (customerId: string, customer: Customer, type: KIXObjectType) => {
                 if (type === KIXObjectType.CUSTOMER) {
                     this.initWidget(customer);
@@ -62,11 +71,18 @@ class Component {
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
     }
 
+    public onDestroy(): void {
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableEscalatedTicketsSubscriber);
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableReminderTicketsSubscriber);
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableNewTicketsSubscriber);
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableOpenTicketsSubscriber);
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tablePendingTicketsSubscriber);
+    }
+
     private async initWidget(customer?: Customer): Promise<void> {
         this.state.customer = customer;
         this.setActions();
-        this.createTables();
-        this.loadTickets();
+        await this.createTables();
     }
 
     private setActions(): void {
@@ -77,184 +93,290 @@ class Component {
         }
     }
 
-    private createTables(): void {
+    private async createTables(): Promise<void> {
         if (this.state.customer) {
-            this.configureEscalatedTicketsTable();
-            this.configureReminderTicketsTable();
-            this.configureNewTicketsTable();
-            this.configureOpenTicketsTable();
-            this.configurePendingTicketsTable();
+            await this.configureEscalatedTicketsTable();
+            await this.configureReminderTicketsTable();
+            await this.configureNewTicketsTable();
+            await this.configureOpenTicketsTable();
+            await this.configurePendingTicketsTable();
         }
     }
 
-    private configureOpenTicketsTable(): void {
-        if (this.state.openTicketsConfig) {
-            this.state.openTicketsTable = StandardTableFactoryService.getInstance().createStandardTable<Ticket>(
-                KIXObjectType.TICKET, this.state.openTicketsConfig.settings, null, null, true
-            );
-            this.state.openTicketsTable.setTableListener(() => {
-                this.state.openFilterCount = this.state.openTicketsTable.getTableRows(true).length || 0;
-                (this as any).setStateDirty('openFilterCount');
-            });
-        }
-    }
-
-    private configureEscalatedTicketsTable(): void {
+    private async configureEscalatedTicketsTable(): Promise<void> {
         if (this.state.escalatedTicketsConfig) {
-            this.state.escalatedTicketsTable = StandardTableFactoryService.getInstance().createStandardTable<Ticket>(
-                KIXObjectType.TICKET, this.state.escalatedTicketsConfig.settings, null, null, true
+            const filter = [
+                new FilterCriteria(
+                    TicketProperty.CUSTOMER_ID, SearchOperator.EQUALS, FilterDataType.STRING,
+                    FilterType.AND, this.state.customer.CustomerID
+                ),
+                new FilterCriteria(
+                    TicketProperty.ESCALATION_TIME, SearchOperator.LESS_THAN, FilterDataType.NUMERIC, FilterType.AND, 0
+                )
+            ];
+
+            this.state.escalatedTicketsConfig.settings.filter = filter;
+
+            this.tableEscalatedTicketsSubscriber = {
+                eventSubscriberId: 'customer-escalated-tickets-table',
+                eventPublished: (data: TableEventData, eventId: string) => {
+                    if (
+                        eventId === TableEvent.TABLE_READY && data
+                        && data.tableId === this.state.escalatedTicketsTable.getTableId()
+                    ) {
+                        this.state.escalatedTicketsCount = this.state.escalatedTicketsTable.getRows().length;
+                        this.state.escalatedTicketsFilterCount = this.state.escalatedTicketsTable.isFiltered()
+                            ? this.state.escalatedTicketsTable.getRows().length
+                            : null;
+                    }
+                }
+            };
+
+            EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableEscalatedTicketsSubscriber);
+
+            const table = TableFactoryService.getInstance().createTable(
+                'customer-assigned-tickets-escalated', KIXObjectType.TICKET,
+                this.state.escalatedTicketsConfig.settings, null, null, true
             );
-            this.state.escalatedTicketsTable.setTableListener(() => {
-                this.state.escalatedFilterCount = this.state.escalatedTicketsTable.getTableRows(true).length || 0;
-                (this as any).setStateDirty('escalatedFilterCount');
-            });
+
+            await table.initialize();
+
+            if (table.getRows(true).length === 0) {
+                this.closeGroup('customer-escalated-tickets-group');
+            }
+
+            this.state.escalatedTicketsTable = table;
         }
     }
 
-    private configureReminderTicketsTable(): void {
+    private async configureReminderTicketsTable(): Promise<void> {
         if (this.state.reminderTicketsConfig) {
-            this.state.reminderTicketsTable = StandardTableFactoryService.getInstance().createStandardTable<Ticket>(
-                KIXObjectType.TICKET, this.state.reminderTicketsConfig.settings, null, null, true
+            const filter = [
+                new FilterCriteria(
+                    TicketProperty.CUSTOMER_ID, SearchOperator.EQUALS, FilterDataType.STRING,
+                    FilterType.AND, this.state.customer.CustomerID
+                ),
+                new FilterCriteria(
+                    TicketProperty.PENDING_TIME, SearchOperator.LESS_THAN, FilterDataType.DATETIME, FilterType.AND,
+                    DateTimeUtil.getKIXDateTimeString(new Date())
+                )
+            ];
+
+            this.state.reminderTicketsConfig.settings.filter = filter;
+
+            this.tableReminderTicketsSubscriber = {
+                eventSubscriberId: 'customer-reminder-tickets-table',
+                eventPublished: (data: TableEventData, eventId: string) => {
+                    if (
+                        eventId === TableEvent.TABLE_READY && data
+                        && data.tableId === this.state.reminderTicketsTable.getTableId()
+                    ) {
+                        this.state.reminderTicketsCount = this.state.reminderTicketsTable.getRows().length;
+                        this.state.reminderTicketsFilterCount = this.state.reminderTicketsTable.isFiltered()
+                            ? this.state.reminderTicketsTable.getRows().length
+                            : null;
+                    }
+                }
+            };
+
+            EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableReminderTicketsSubscriber);
+
+            const table = TableFactoryService.getInstance().createTable(
+                'customer-assigned-tickets-reminder', KIXObjectType.TICKET,
+                this.state.reminderTicketsConfig.settings, null, null, true
             );
-            this.state.reminderTicketsTable.setTableListener(() => {
-                this.state.reminderFilterCount = this.state.reminderTicketsTable.getTableRows(true).length || 0;
-                (this as any).setStateDirty('reminderFilterCount');
-            });
+
+            await table.initialize();
+
+            if (table.getRows(true).length === 0) {
+                this.closeGroup('customer-reminder-tickets-group');
+            }
+
+            this.state.reminderTicketsTable = table;
         }
     }
 
-    private configureNewTicketsTable(): void {
+    private async configureNewTicketsTable(): Promise<void> {
         if (this.state.newTicketsConfig) {
-            this.state.newTicketsTable = StandardTableFactoryService.getInstance().createStandardTable<Ticket>(
-                KIXObjectType.TICKET, this.state.newTicketsConfig.settings, null, null, true
+            const filter = [
+                new FilterCriteria(
+                    TicketProperty.CUSTOMER_ID, SearchOperator.EQUALS, FilterDataType.STRING,
+                    FilterType.AND, this.state.customer.CustomerID
+                )
+            ];
+
+            const stateTypes = await KIXObjectService.loadObjects<StateType>(
+                KIXObjectType.TICKET_STATE_TYPE, null
             );
-            this.state.newTicketsTable.setTableListener(() => {
-                this.state.newFilterCount = this.state.newTicketsTable.getTableRows(true).length || 0;
-                (this as any).setStateDirty('newFilterCount');
-            });
+
+            const states = await KIXObjectService.loadObjects<TicketState>(
+                KIXObjectType.TICKET_STATE, null
+            );
+
+            const newStateType = stateTypes.find((st) => st.Name === 'new');
+            const stateIds = states.filter((s) => s.TypeID === newStateType.ID).map((t) => t.ID);
+
+            filter.push(new FilterCriteria(
+                TicketProperty.STATE_ID, SearchOperator.IN, FilterDataType.NUMERIC, FilterType.AND, stateIds
+            ));
+
+            this.state.newTicketsConfig.settings.filter = filter;
+
+            this.tableNewTicketsSubscriber = {
+                eventSubscriberId: 'customer-new-tickets-group',
+                eventPublished: (data: TableEventData, eventId: string) => {
+                    if (
+                        eventId === TableEvent.TABLE_READY && data
+                        && data.tableId === this.state.newTicketsTable.getTableId()
+                    ) {
+                        this.state.newTicketsCount = this.state.newTicketsTable.getRows().length;
+                        this.state.newTicketsFilterCount = this.state.newTicketsTable.isFiltered()
+                            ? this.state.newTicketsTable.getRows().length
+                            : null;
+                    }
+                }
+            };
+
+            EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableNewTicketsSubscriber);
+
+            const table = TableFactoryService.getInstance().createTable(
+                'customer-assigned-tickets-new', KIXObjectType.TICKET,
+                this.state.newTicketsConfig.settings, null, null, true
+            );
+
+            await table.initialize();
+
+            if (table.getRows(true).length === 0) {
+                this.closeGroup('customer-new-tickets-group');
+            }
+
+            this.state.newTicketsTable = table;
         }
     }
 
-    private configurePendingTicketsTable(): void {
+    private async configureOpenTicketsTable(): Promise<void> {
+        if (this.state.openTicketsConfig) {
+            const filter = [new FilterCriteria(
+                TicketProperty.CUSTOMER_ID, SearchOperator.EQUALS, FilterDataType.STRING,
+                FilterType.AND, this.state.customer.CustomerID
+            )];
+
+            const stateTypes = await KIXObjectService.loadObjects<StateType>(
+                KIXObjectType.TICKET_STATE_TYPE, null
+            );
+
+            const states = await KIXObjectService.loadObjects<TicketState>(
+                KIXObjectType.TICKET_STATE, null
+            );
+
+            const openStateType = stateTypes.find((st) => st.Name === 'open');
+            const stateIds = states.filter((s) => s.TypeID === openStateType.ID).map((t) => t.ID);
+
+            filter.push(new FilterCriteria(
+                TicketProperty.STATE_ID, SearchOperator.IN, FilterDataType.NUMERIC, FilterType.AND, stateIds
+            ));
+
+            this.state.openTicketsConfig.settings.filter = filter;
+
+            this.tableOpenTicketsSubscriber = {
+                eventSubscriberId: 'customer-open-tickets-group',
+                eventPublished: (data: TableEventData, eventId: string) => {
+                    if (
+                        eventId === TableEvent.TABLE_READY && data
+                        && data.tableId === this.state.openTicketsTable.getTableId()
+                    ) {
+                        this.state.openTicketsCount = this.state.openTicketsTable.getRows().length;
+                        this.state.openTicketsFilterCount = this.state.openTicketsTable.isFiltered()
+                            ? this.state.openTicketsTable.getRows().length
+                            : null;
+                    }
+                }
+            };
+
+            EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableOpenTicketsSubscriber);
+
+            const table = TableFactoryService.getInstance().createTable(
+                'customer-assigned-tickets-open', KIXObjectType.TICKET,
+                this.state.openTicketsConfig.settings, null, null, true
+            );
+
+            await table.initialize();
+
+            if (table.getRows(true).length === 0) {
+                this.closeGroup('customer-open-tickets-group');
+            }
+
+            this.state.openTicketsTable = table;
+        }
+    }
+
+    private async configurePendingTicketsTable(): Promise<void> {
         if (this.state.pendingTicketsConfig) {
-            this.state.pendingTicketsTable = StandardTableFactoryService.getInstance().createStandardTable<Ticket>(
-                KIXObjectType.TICKET, this.state.pendingTicketsConfig.settings, null, null, true
+            const filter = [
+                new FilterCriteria(
+                    TicketProperty.CUSTOMER_ID, SearchOperator.EQUALS, FilterDataType.STRING,
+                    FilterType.AND, this.state.customer.CustomerID
+                )
+            ];
+
+            const stateTypes = await KIXObjectService.loadObjects<StateType>(
+                KIXObjectType.TICKET_STATE_TYPE, null
             );
-            this.state.pendingTicketsTable.setTableListener(() => {
-                this.state.pendingFilterCount = this.state.pendingTicketsTable.getTableRows(true).length || 0;
-                (this as any).setStateDirty('pendingFilterCount');
-            });
+
+            const states = await KIXObjectService.loadObjects<TicketState>(
+                KIXObjectType.TICKET_STATE, null
+            );
+
+            const pendingStateTypes = stateTypes.filter((st) => st.Name.indexOf('pending') !== -1);
+            let stateIds = [];
+            pendingStateTypes.forEach(
+                (pst) => stateIds = [
+                    ...stateIds,
+                    ...states.filter((s) => s.TypeID === pst.ID).map((t) => t.ID)]
+            );
+            filter.push(new FilterCriteria(
+                TicketProperty.STATE_ID, SearchOperator.IN, FilterDataType.NUMERIC, FilterType.AND, stateIds
+            ));
+
+            this.state.pendingTicketsConfig.settings.filter = filter;
+
+            this.tablePendingTicketsSubscriber = {
+                eventSubscriberId: 'customer-pending-tickets-group',
+                eventPublished: (data: TableEventData, eventId: string) => {
+                    if (
+                        eventId === TableEvent.TABLE_READY && data
+                        && data.tableId === this.state.pendingTicketsTable.getTableId()
+                    ) {
+                        this.state.pendingTicketsCount = this.state.pendingTicketsTable.getRows().length;
+                        this.state.pendingTicketsFilterCount = this.state.pendingTicketsTable.isFiltered()
+                            ? this.state.pendingTicketsTable.getRows().length
+                            : null;
+                    }
+                }
+            };
+
+            EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tablePendingTicketsSubscriber);
+
+            const table = TableFactoryService.getInstance().createTable(
+                'customer-assigned-tickets-pending', KIXObjectType.TICKET,
+                this.state.pendingTicketsConfig.settings, null, null, true
+            );
+
+            await table.initialize();
+
+            if (table.getRows(true).length === 0) {
+                this.closeGroup('customer-pending-tickets-group');
+            }
+
+            this.state.pendingTicketsTable = table;
         }
     }
 
-    private async loadTickets(): Promise<void> {
-        this.loadEscalatedTickets();
-        this.loadReminderTickets();
-        this.loadNewTickets();
-        this.loadOpenTickets();
-        this.loadPendingTickets();
-    }
-
-    private async loadEscalatedTickets(): Promise<void> {
-        this.state.loadEscalatedTickets = true;
-
-        const properties = this.state.escalatedTicketsConfig.settings.tableColumns
-            .map((tc: TableColumnConfiguration) => (tc.columnId as TicketProperty));
-
-        const tickets = await TicketService.getInstance().getEscalatedTickets(
-            this.state.customer.CustomerID, KIXObjectType.CUSTOMER, properties
-        );
-
-        this.state.escalatedTicketsTable.layerConfiguration.contentLayer.setPreloadedObjects(tickets);
-        this.state.escalatedTicketsTable.loadRows(true);
-        this.state.loadEscalatedTickets = false;
-        if (tickets && !!tickets.length) {
-            this.openGroup('customer-escalated-tickets-group');
-        }
-        this.state.escalatedTicketIds = tickets ? tickets.map((t) => t.TicketID) : [];
-    }
-
-    private async loadReminderTickets(): Promise<void> {
-        this.state.loadReminderTickets = true;
-
-        const properties = this.state.reminderTicketsConfig.settings.tableColumns
-            .map((tc: TableColumnConfiguration) => (tc.columnId as TicketProperty));
-
-        const tickets = await TicketService.getInstance().getReminderTickets(
-            this.state.customer.CustomerID, KIXObjectType.CUSTOMER, properties
-        );
-
-        this.state.reminderTicketsTable.layerConfiguration.contentLayer.setPreloadedObjects(tickets);
-        this.state.reminderTicketsTable.loadRows(true);
-        this.state.loadReminderTickets = false;
-        if (tickets && !!tickets.length) {
-            this.openGroup('customer-reminder-tickets-group');
-        }
-        this.state.reminderTicketIds = tickets ? tickets.map((t) => t.TicketID) : [];
-    }
-
-    private async loadNewTickets(): Promise<void> {
-        this.state.loadNewTickets = true;
-
-        const properties = this.state.newTicketsConfig.settings.tableColumns
-            .map((tc: TableColumnConfiguration) => (tc.columnId as TicketProperty));
-
-        const tickets = await TicketService.getInstance().getNewTickets(
-            this.state.customer.CustomerID, KIXObjectType.CUSTOMER, properties
-        );
-
-        this.state.newTicketsTable.layerConfiguration.contentLayer.setPreloadedObjects(tickets);
-        this.state.newTicketsTable.loadRows(true);
-        this.state.loadNewTickets = false;
-        if (tickets && !!tickets.length) {
-            this.openGroup('customer-new-tickets-group');
-        }
-        this.state.newTicketIds = tickets ? tickets.map((t) => t.TicketID) : [];
-    }
-
-    private async loadOpenTickets(): Promise<void> {
-        this.state.loadOpenTickets = true;
-
-        const properties = this.state.openTicketsConfig.settings.tableColumns
-            .map((tc: TableColumnConfiguration) => (tc.columnId as TicketProperty));
-
-        const tickets = await TicketService.getInstance().getOpenTickets(
-            this.state.customer.CustomerID, KIXObjectType.CUSTOMER, properties
-        );
-
-        this.state.openTicketsTable.layerConfiguration.contentLayer.setPreloadedObjects(tickets);
-        this.state.openTicketsTable.loadRows(true);
-        this.state.loadOpenTickets = false;
-        if (tickets && !!tickets.length) {
-            this.openGroup('customer-open-tickets-group');
-        }
-        this.state.openTicketIds = tickets ? tickets.map((t) => t.TicketID) : [];
-    }
-
-    private async loadPendingTickets(): Promise<void> {
-        this.state.loadPendingTickets = true;
-
-        const properties = this.state.pendingTicketsConfig.settings.tableColumns
-            .map((tc: TableColumnConfiguration) => (tc.columnId as TicketProperty));
-
-        const tickets = await TicketService.getInstance().getPendingTickets(
-            this.state.customer.CustomerID, KIXObjectType.CUSTOMER, properties
-        );
-
-        this.state.pendingTicketsTable.layerConfiguration.contentLayer.setPreloadedObjects(tickets);
-        this.state.pendingTicketsTable.loadRows(true);
-        this.state.loadPendingTickets = false;
-        if (tickets && !!tickets.length) {
-            this.openGroup('customer-pending-tickets-group');
-        }
-        this.state.pendingTicketIds = tickets ? tickets.map((t) => t.TicketID) : [];
-    }
-
-    private openGroup(componentKey: string): void {
+    private closeGroup(componentKey: string): void {
         if (componentKey) {
             const groupComponent = (this as any).getComponent(componentKey);
             if (groupComponent) {
-                groupComponent.setMinizedState();
+                groupComponent.setMinizedState(true);
             }
         }
     }
@@ -268,55 +390,38 @@ class Component {
     }
 
     private getTicketCount(): number {
-        const ticketIds: number[] = [];
+        const ids = [];
 
-        if (this.state.escalatedTicketIds && !!this.state.escalatedTicketIds.length) {
-            this.state.escalatedTicketIds.forEach((r) => {
-                if (!ticketIds.some((t) => t === r)) {
-                    ticketIds.push(r);
-                }
-            });
+        let allIds = [];
+        allIds = [...allIds, ...this.getTicketIds(this.state.escalatedTicketsTable)];
+        allIds = [...allIds, ...this.getTicketIds(this.state.reminderTicketsTable)];
+        allIds = [...allIds, ...this.getTicketIds(this.state.newTicketsTable)];
+        allIds = [...allIds, ...this.getTicketIds(this.state.openTicketsTable)];
+        allIds = [...allIds, ...this.getTicketIds(this.state.pendingTicketsTable)];
+
+        allIds.forEach((id) => {
+            if (!ids.some((existingId) => existingId === id)) {
+                ids.push(id);
+            }
+        });
+
+        return ids.length;
+    }
+
+    private getTicketIds(table: ITable): number[] {
+        if (table) {
+            return table.getRows(true)
+                .filter((r) => r.getRowObject() !== null && typeof r.getRowObject() !== 'undefined')
+                .map((r) => r.getRowObject().getObject().TicketID);
         }
+        return [];
 
-        if (this.state.newTicketIds && !!this.state.newTicketIds.length) {
-            this.state.newTicketIds.forEach((r) => {
-                if (!ticketIds.some((t) => t === r)) {
-                    ticketIds.push(r);
-                }
-            });
-        }
-
-        if (this.state.pendingTicketIds && !!this.state.pendingTicketIds.length) {
-            this.state.pendingTicketIds.forEach((r) => {
-                if (!ticketIds.some((t) => t === r)) {
-                    ticketIds.push(r);
-                }
-            });
-        }
-
-        if (this.state.reminderTicketIds && !!this.state.reminderTicketIds.length) {
-            this.state.reminderTicketIds.forEach((r) => {
-                if (!ticketIds.some((t) => t === r)) {
-                    ticketIds.push(r);
-                }
-            });
-        }
-
-        if (this.state.openTicketIds && !!this.state.openTicketIds.length) {
-            this.state.openTicketIds.forEach((r) => {
-                if (!ticketIds.some((t) => t === r)) {
-                    ticketIds.push(r);
-                }
-            });
-        }
-
-        return ticketIds.length;
     }
 
     public getEscalatedTicketsTitle(): string {
         return this.getTicketTableTitle(
             this.state.escalatedTicketsConfig,
-            this.state.escalatedTicketIds ? this.state.escalatedTicketIds.length : 0,
+            this.state.escalatedTicketsTable ? this.state.escalatedTicketsTable.getRows(true).length : 0,
             'Escalated Tickets'
         );
     }
@@ -324,7 +429,7 @@ class Component {
     public getReminderTicketsTitle(): string {
         return this.getTicketTableTitle(
             this.state.reminderTicketsConfig,
-            this.state.reminderTicketIds ? this.state.reminderTicketIds.length : 0,
+            this.state.reminderTicketsTable ? this.state.reminderTicketsTable.getRows(true).length : 0,
             'Reminder Tickets'
         );
     }
@@ -332,7 +437,7 @@ class Component {
     public getNewTicketsTitle(): string {
         return this.getTicketTableTitle(
             this.state.newTicketsConfig,
-            this.state.newTicketIds ? this.state.newTicketIds.length : 0,
+            this.state.newTicketsTable ? this.state.newTicketsTable.getRows(true).length : 0,
             'New Tickets'
         );
     }
@@ -340,7 +445,7 @@ class Component {
     public getOpenTicketsTitle(): string {
         return this.getTicketTableTitle(
             this.state.openTicketsConfig,
-            this.state.openTicketIds ? this.state.openTicketIds.length : 0,
+            this.state.openTicketsTable ? this.state.openTicketsTable.getRows(true).length : 0,
             'Reminder Tickets'
         );
     }
@@ -348,7 +453,7 @@ class Component {
     public getPendingTicketsTitle(): string {
         return this.getTicketTableTitle(
             this.state.pendingTicketsConfig,
-            this.state.pendingTicketIds ? this.state.pendingTicketIds.length : 0,
+            this.state.pendingTicketsTable ? this.state.pendingTicketsTable.getRows(true).length : 0,
             'Pending Tickets'
         );
 
@@ -388,8 +493,9 @@ class Component {
         this.filter(this.state.pendingTicketsTable, filterValue);
     }
 
-    private filter(table: StandardTable<Ticket>, filterValue: string) {
-        table.setFilterSettings(filterValue);
+    private filter(table: ITable, filterValue: string) {
+        table.setFilter(filterValue);
+        table.filter();
     }
 }
 

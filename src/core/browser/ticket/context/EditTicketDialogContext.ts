@@ -6,6 +6,7 @@ import {
 } from "../../../model";
 import { EditTicketDialogContextConfiguration } from "./EditTicketDialogContextConfiguration";
 import { FormService } from "../../form";
+import { KIXObjectService } from "../../kix";
 
 export class EditTicketDialogContext
     extends Context<EditTicketDialogContextConfiguration> implements IFormInstanceListener {
@@ -34,25 +35,39 @@ export class EditTicketDialogContext
         return;
     }
 
-    public formValueChanged(formField: FormField, value: FormFieldValue<any>, oldValue: any): void {
+    public async formValueChanged(formField: FormField, value: FormFieldValue<any>, oldValue: any): Promise<void> {
         if (formField.property === TicketProperty.CUSTOMER_ID) {
-            this.customer = value.value ? (value.value as Customer) : null;
-            this.listeners.forEach(
-                (l) => l.objectChanged(
-                    this.customer ? this.customer.CustomerID : null,
-                    this.customer,
-                    KIXObjectType.CUSTOMER
-                )
-            );
+            if (value && value.value) {
+                const customers = await KIXObjectService.loadObjects<Customer>(
+                    KIXObjectType.CUSTOMER, [value.value]
+                );
+                if (customers && customers.length) {
+                    this.customer = customers[0];
+                    this.listeners.forEach(
+                        (l) => l.objectChanged(
+                            this.customer ? this.customer.CustomerID : null,
+                            this.customer,
+                            KIXObjectType.CUSTOMER
+                        )
+                    );
+                }
+            }
         } else if (formField.property === TicketProperty.CUSTOMER_USER_ID) {
-            this.contact = value.value ? (value.value as Contact) : null;
-            this.listeners.forEach(
-                (l) => l.objectChanged(
-                    this.contact ? this.contact.ContactID : null,
-                    this.contact,
-                    KIXObjectType.CONTACT
-                )
-            );
+            if (value && value.value) {
+                const contacts = await KIXObjectService.loadObjects<Contact>(
+                    KIXObjectType.CONTACT, [value.value]
+                );
+                if (contacts && contacts.length) {
+                    this.contact = contacts[0];
+                    this.listeners.forEach(
+                        (l) => l.objectChanged(
+                            this.contact ? this.contact.ContactID : null,
+                            this.contact,
+                            KIXObjectType.CONTACT
+                        )
+                    );
+                }
+            }
         }
     }
 

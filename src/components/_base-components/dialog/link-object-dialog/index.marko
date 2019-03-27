@@ -1,5 +1,5 @@
 <div.linkable-objects-dialog>
-    <if(!state.linkableObjectNodes || !state.linkableObjectNodes.length)>
+    <if(state.loading || !state.linkableObjectNodes || !state.linkableObjectNodes.length)>
         <span>Keine Linktypen verfügbar.</span>
     </if>
     <else>
@@ -7,7 +7,9 @@
             <div.linkable-objects-selection-label>
                 <span>Verknüpfen mit</span>
             </div>
-            <form-list nodes=state.linkableObjectNodes on-nodesChanged('linkableObjectChanged')
+            <form-list
+                nodes=state.linkableObjectNodes
+                on-nodesChanged("linkableObjectChanged")
                 selectedNodes=[state.currentLinkableObjectNode]/>
         </div>
         <div.linkable-objects-form on-keydown("keyPressed")>
@@ -24,10 +26,10 @@
             <if(state.currentLinkableObjectNode)>
                 <div.result-table-head>
                     <span>Trefferliste (${state.resultCount})</span>
-                    <filter filterCount=state.filterCount on-filter('filter')/>
+                    <filter filterCount=state.filterCount on-filter("filter")/>
                 </div>
-                <if(state.standardTable)>
-                    <standard-table standardTable=state.standardTable key=state.tableId/>
+                <if(state.table)>
+                    <standard-table-NEW table=state.table key=state.tableId/>
                 </if>
             </if>
         </div>
@@ -36,10 +38,13 @@
                 <div.linkable-objects-selection-label>
                     <span>Art der Verknüpfung</span>
                 </div>
-                <form-list nodes=state.linkTypeNodes on-nodesChanged('linkTypeChanged') selectedNodes=[state.currentLinkTypeNode]
+                <form-list
+                    nodes=state.linkTypeNodes
+                    on-nodesChanged("linkTypeChanged")
+                    selectedNodes=[state.currentLinkTypeNode]
                     placeholder="Art der Verknüpfung"/>
             </div>
-            <button.submit-button disabled=(!state.canSubmit) on-click('submitClicked')>
+            <button.submit-button disabled=!state.canSubmit on-click("submitClicked")>
                 <span.kix-icon-check/>
                 Übernehmen
             </button>

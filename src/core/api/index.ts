@@ -1,5 +1,5 @@
-export * from './article-type';
 export * from './authentication';
+export * from './channel';
 export * from './client-registration';
 export * from './cmdb';
 export * from './contact';
@@ -21,10 +21,12 @@ export * from './signature';
 export * from './sla';
 export * from './standard-attachment';
 export * from './sysconfig';
+export * from './system-addresses';
 export * from './text-module';
 export * from './ticket';
 export * from './user';
 export * from './valid-object';
+export * from './i18n';
 
 export { Query } from './Query';
 export { RequestObject } from './RequestObject';

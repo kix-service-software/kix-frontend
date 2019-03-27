@@ -2,7 +2,11 @@
     <if(!state.loading && state.showSidebar)>
         <for(sidebar in state.sidebars)>
             <div.sidebar>
-                <include(component.getSidebarTemplate(sidebar.instanceId), { instanceId: sidebar.instanceId, minimizable: false, contextType: state.contextType })/>
+                <${component.getSidebarTemplate(sidebar.instanceId)} ...{
+                    instanceId: sidebar.instanceId,
+                    minimizable: false,
+                    contextType: state.contextType
+                }/>
             </div>
         </for>
     </if>

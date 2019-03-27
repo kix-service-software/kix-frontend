@@ -4,16 +4,16 @@
         >div.form-list-input-container {
             min-height: @header-inputs-height;
             height: @header-inputs-height;
-            &:not(.autocomplete) {
-                padding-right: @header-inputs-height - .25rem;
-            }
             >input {
                 height: @header-inputs-height;
             }
-            >span.form-list-button {
-                height: @header-inputs-height;
-                width: @header-inputs-height;
-                line-height: @header-inputs-height;
+            >.form-input-control-list {
+                grid-template-columns: max-content @header-inputs-height;
+                >span.form-list-button {
+                    height: @header-inputs-height;
+                    width: @header-inputs-height;
+                    line-height: @header-inputs-height;
+                }
             }
         }
         >ul.form-list-tree {

@@ -1,39 +1,30 @@
-import {
-    IStandardTableFactory, TableConfiguration, StandardTable, TableListenerConfiguration,
-    TableColumnConfiguration, AbstractTableLayer, TableLayerConfiguration, ToggleOptions, TableToggleLayer
-} from "../../standard-table";
-import { KIXObjectType, ContextMode, ConfigItem, ConfigItemProperty, DataType } from "../../../model";
-import { IdService } from "../../IdService";
+import { KIXObjectType, ContextMode, ConfigItemProperty, DataType } from "../../../model";
 import { RoutingConfiguration } from "../../router";
 import { ConfigItemDetailsContext } from "../context";
-import { ConfigItemTableContentLayer } from "./ConfigItemTableContentLayer";
-import { ConfigItemTableLabelLayer } from "./ConfigItemTableLabelLayer";
+import {
+    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
+    ToggleOptions, TableRowHeight, IColumnConfiguration
+} from "../../table";
+import { ConfigItemTableContentProvider } from "./ConfigItemTableContentProvider";
 
-export class ConfigItemTableFactory implements IStandardTableFactory<ConfigItem> {
+export class ConfigItemTableFactory implements ITableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM;
 
     public createTable(
-        tableConfiguration?: TableConfiguration,
-        layerConfiguration?: TableLayerConfiguration,
-        listenerConfiguration?: TableListenerConfiguration,
-        defaultRouting?: boolean,
-        defaultToggle?: boolean,
-        short?: boolean
-    ): StandardTable<ConfigItem> {
+        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
+        defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
+    ): ITable {
 
         tableConfiguration = this.setDefaultTableConfiguration(
             tableConfiguration, defaultRouting, defaultToggle, short
         );
-        layerConfiguration = this.setDefaultLayerConfiguration(layerConfiguration, tableConfiguration, defaultToggle);
-        listenerConfiguration = this.setDefaultListenerConfiguration(listenerConfiguration);
 
-        return new StandardTable(
-            IdService.generateDateBasedId('config-item-table'),
-            tableConfiguration,
-            layerConfiguration,
-            listenerConfiguration
-        );
+        const table = new Table(tableKey, tableConfiguration, contextId);
+        table.setContentProvider(new ConfigItemTableContentProvider(table, objectIds, null, contextId));
+        table.setColumnConfiguration(tableConfiguration.tableColumns);
+
+        return table;
     }
 
     private setDefaultTableConfiguration(
@@ -43,44 +34,53 @@ export class ConfigItemTableFactory implements IStandardTableFactory<ConfigItem>
 
         if (short) {
             tableColumns = [
-                new TableColumnConfiguration(ConfigItemProperty.NUMBER, true, false, true, true, 135),
-                new TableColumnConfiguration(ConfigItemProperty.NAME, true, false, true, true, 300),
-                new TableColumnConfiguration(
-                    ConfigItemProperty.CUR_DEPL_STATE_ID, false, true, true, true, 55,
-                    false, null, null, null, 'kix-icon-productive_active'
+                new DefaultColumnConfiguration(ConfigItemProperty.NUMBER, true, false, true, false, 135, true, true),
+                new DefaultColumnConfiguration(ConfigItemProperty.NAME, true, false, true, false, 300, true, true),
+                new DefaultColumnConfiguration(
+                    ConfigItemProperty.CUR_DEPL_STATE_ID, false, true, false, true, 55,
+                    true, true, true, DataType.STRING, false
                 ),
-                new TableColumnConfiguration(
-                    ConfigItemProperty.CUR_INCI_STATE_ID, false, true, true, true, 55,
-                    false, null, null, null, 'kix-icon-service_active'
+                new DefaultColumnConfiguration(
+                    ConfigItemProperty.CUR_INCI_STATE_ID, false, true, false, true, 55,
+                    true, true, true, DataType.STRING, false
                 ),
-                new TableColumnConfiguration(ConfigItemProperty.CLASS_ID, true, false, true, true, 200),
-                new TableColumnConfiguration(
-                    ConfigItemProperty.CHANGE_TIME, true, false, true, true, 125, true, false, DataType.DATE_TIME
-                )
+                new DefaultColumnConfiguration(
+                    ConfigItemProperty.CLASS_ID, true, false, true, false, 200, true, true, true
+                ),
+                new DefaultColumnConfiguration(
+                    ConfigItemProperty.CHANGE_TIME, true, false, true, false, 125, true, true, false, DataType.DATE_TIME
+                ),
+                new DefaultColumnConfiguration(ConfigItemProperty.CHANGE_BY, true, false, true, false, 150, true, true)
             ];
         } else {
             tableColumns = [
-                new TableColumnConfiguration(ConfigItemProperty.NUMBER, true, false, true, true, 135),
-                new TableColumnConfiguration(ConfigItemProperty.NAME, true, false, true, true, 300),
-                new TableColumnConfiguration(
-                    ConfigItemProperty.CUR_DEPL_STATE_ID, false, true, true, true, 55,
-                    false, null, null, null, 'kix-icon-productive_active'
+                new DefaultColumnConfiguration(ConfigItemProperty.NUMBER, true, false, true, false, 135, true, true),
+                new DefaultColumnConfiguration(ConfigItemProperty.NAME, true, false, true, false, 300, true, true),
+                new DefaultColumnConfiguration(
+                    ConfigItemProperty.CUR_DEPL_STATE_ID, false, true, false, true, 55,
+                    true, true, true, DataType.STRING, false
                 ),
-                new TableColumnConfiguration(
-                    ConfigItemProperty.CUR_INCI_STATE_ID, false, true, true, true, 55,
-                    false, null, null, null, 'kix-icon-service_active'
+                new DefaultColumnConfiguration(
+                    ConfigItemProperty.CUR_INCI_STATE_ID, false, true, false, true, 55,
+                    true, true, true, DataType.STRING, false
                 ),
-                new TableColumnConfiguration(ConfigItemProperty.CLASS_ID, true, false, true, true, 200),
-                new TableColumnConfiguration(
-                    ConfigItemProperty.CHANGE_TIME, true, false, true, true, 125, true, false, DataType.DATE_TIME
+                new DefaultColumnConfiguration(
+                    ConfigItemProperty.CLASS_ID, true, false, true, false, 200, true, true, true
                 ),
-                new TableColumnConfiguration(ConfigItemProperty.CHANGE_BY, true, false, true, true, 150)
+                new DefaultColumnConfiguration(
+                    ConfigItemProperty.CHANGE_TIME, true, false, true, false, 125, true, true, false, DataType.DATE_TIME
+                ),
+                new DefaultColumnConfiguration(ConfigItemProperty.CHANGE_BY, true, false, true, false, 150, true, true)
             ];
         }
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration();
-            tableConfiguration.tableColumns = tableColumns;
+            tableConfiguration = new TableConfiguration(
+                KIXObjectType.CONFIG_ITEM, null, null, tableColumns,
+                null, true, true, null, null, null, TableRowHeight.LARGE
+            );
+            defaultToggle = true;
+            defaultRouting = true;
         } else if (!tableConfiguration.tableColumns) {
             tableConfiguration.tableColumns = tableColumns;
         }
@@ -89,7 +89,7 @@ export class ConfigItemTableFactory implements IStandardTableFactory<ConfigItem>
             tableConfiguration.toggle = true;
             tableConfiguration.toggleOptions = new ToggleOptions('config-item-version-details', 'configItem', [
                 'config-item-version-maximize-action', 'config-item-print-action'
-            ], true);
+            ], false);
         }
 
         if (defaultRouting) {
@@ -99,40 +99,12 @@ export class ConfigItemTableFactory implements IStandardTableFactory<ConfigItem>
             );
         }
 
+        tableConfiguration.objectType = KIXObjectType.CONFIG_ITEM;
         return tableConfiguration;
     }
 
-    private setDefaultLayerConfiguration(
-        layerConfiguration: TableLayerConfiguration, tableConfiguration: TableConfiguration, defaultToggle?: boolean
-    ): TableLayerConfiguration {
-
-        if (!layerConfiguration) {
-            const contentLayer: AbstractTableLayer = new ConfigItemTableContentLayer(
-                [], tableConfiguration.filter, tableConfiguration.sortOrder, tableConfiguration.limit
-            );
-            const labelLayer = new ConfigItemTableLabelLayer();
-
-            layerConfiguration = new TableLayerConfiguration(contentLayer, labelLayer);
-        }
-
-        if (defaultToggle) {
-            const listener = {
-                rowToggled: () => { return; }
-            };
-            layerConfiguration.toggleLayer = new TableToggleLayer(listener, false);
-        }
-
-        return layerConfiguration;
-    }
-
-    private setDefaultListenerConfiguration(
-        listenerConfiguration: TableListenerConfiguration
-    ): TableListenerConfiguration {
-
-        if (!listenerConfiguration) {
-            listenerConfiguration = new TableListenerConfiguration();
-        }
-
-        return listenerConfiguration;
+    // TODO: implementieren
+    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
+        return;
     }
 }

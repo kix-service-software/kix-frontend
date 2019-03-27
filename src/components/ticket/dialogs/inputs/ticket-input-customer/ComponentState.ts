@@ -1,6 +1,6 @@
 import { FormInputComponentState, TreeNode, Customer } from "../../../../../core/model";
 
-export class ComponentState extends FormInputComponentState<Customer> {
+export class ComponentState extends FormInputComponentState<string> {
 
     public constructor(
         public nodes: TreeNode[] = [],

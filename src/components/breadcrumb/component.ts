@@ -47,7 +47,8 @@ class BreadcrumbComponent implements IContextServiceListener {
                 objectListChanged: () => { return; },
                 explorerBarToggled: () => { return; },
                 filteredObjectListChanged: () => { return; },
-                sidebarToggled: () => { return; }
+                sidebarToggled: () => { return; },
+                scrollInformationChanged: () => { return; }
             });
             this.state.loading = false;
         }

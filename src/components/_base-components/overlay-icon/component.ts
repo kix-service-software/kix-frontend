@@ -1,11 +1,11 @@
 import { OverlayType, ComponentContent, StringContent } from '../../../core/model';
 import { ComponentState } from './ComponentState';
-import { OverlayService, IdService } from '../../../core/browser';
+import { OverlayService, IdService, BrowserUtil } from '../../../core/browser';
 
 class Component {
 
     private state: ComponentState;
-    private iconId: string = null;
+    private listenerId: string = null;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -25,12 +25,12 @@ class Component {
     }
 
     public onMount(): void {
-        this.iconId = IdService.generateDateBasedId('icon-');
-        OverlayService.getInstance().registerOverlayIconListener(this.iconId, this);
+        this.listenerId = IdService.generateDateBasedId('icon-');
+        OverlayService.getInstance().registerOverlayListener(this.listenerId, this);
     }
 
     public onDestroy(): void {
-        OverlayService.getInstance().unRegisterOverlayIconListener(this.iconId);
+        OverlayService.getInstance().unregisterOverlayListener(this.listenerId);
     }
 
     public showOverlay(event: any) {
@@ -42,10 +42,10 @@ class Component {
                 this.state.title,
                 false,
                 [
-                    event.target.getBoundingClientRect().left + window.scrollX,
-                    event.target.getBoundingClientRect().top + window.scrollY
+                    event.target.getBoundingClientRect().left + BrowserUtil.getBrowserFontsize(),
+                    event.target.getBoundingClientRect().top
                 ],
-                this.iconId,
+                this.listenerId,
                 this.state.large
             );
         }

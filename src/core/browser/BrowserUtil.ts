@@ -25,12 +25,19 @@ export class BrowserUtil {
 
     public static startBrowserDownload(fileName: string, content: string, contentType: string): void {
         content = content.replace(/\r?\n|\r/, '\n');
-        const a = window.document.createElement('a');
-        a.href = 'data:' + contentType + ';base64,' + content;
-        a.download = fileName;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+
+        if (window.navigator.msSaveOrOpenBlob) {
+            const blob = this.b64toBlob(content, contentType);
+            window.navigator.msSaveBlob(blob, fileName);
+        } else {
+            const a = window.document.createElement('a');
+            a.href = 'data:' + contentType + ';base64,' + content;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+
+        }
     }
 
     public static readFile(file: File): Promise<string> {
@@ -55,9 +62,37 @@ export class BrowserUtil {
         return 0;
     }
 
+    public static getBrowserFontsize(): number {
+        const browserFontSizeSetting = getComputedStyle(document.getElementsByTagName("body")[0])
+            .getPropertyValue("font-size");
+        return Number(browserFontSizeSetting.replace('px', ''));
+    }
+
     private static round(value: number, step: number = 0.5): number {
         const inv = 1.0 / step;
         return Math.round(value * inv) / inv;
     }
+
+    private static b64toBlob(b64Data: string, contentType: string = '', sliceSize: number = 512): Blob {
+        const byteCharacters = atob(b64Data);
+        const byteArrays = [];
+
+        for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+            const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+            const byteNumbers = new Array(slice.length);
+            for (let i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+
+            const byteArray = new Uint8Array(byteNumbers);
+
+            byteArrays.push(byteArray);
+        }
+
+        const blob = new Blob(byteArrays, { type: contentType });
+        return blob;
+    }
+
 
 }

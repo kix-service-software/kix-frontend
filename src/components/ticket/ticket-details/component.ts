@@ -26,6 +26,7 @@ export class Component {
             filteredObjectListChanged: () => { return; },
             objectListChanged: () => { return; },
             sidebarToggled: () => { return; },
+            scrollInformationChanged: () => { return; },
             objectChanged: (ticketId: string, ticket: Ticket, type: KIXObjectType, changedProperties: string[]) => {
                 if (type === KIXObjectType.TICKET) {
                     const scrollToArticle = changedProperties

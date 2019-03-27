@@ -73,14 +73,13 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
             ));
             fields.push(new FormField("SLA / Servicevertrag", TicketProperty.SLA_ID, 'ticket-input-sla', false, "Ein Servicevertrag (auch Service Level Agreement genannt) ist ein Vertrag zwischen einem Dienstleister und einem Kunden. Im Vertrag ist in der Regel festgehalten, in welchem Umfang die Dienstleistung und zu welcher Dienstgüte (Servicelevel) sie erbracht wird."));
 
-            fields.push(new FormField("Artikelbetreff", ArticleProperty.SUBJECT, null, true, "Der Betreff ist das Thema der Anfrage und bildet nach der Ticketerstellung den Titel eines Tickets."));
-            fields.push(new FormField("Artikelinhalt", ArticleProperty.BODY, 'rich-text-input', true, "Die Beschreibung beinhaltet alle relevanten Infos zur Anfrage. Bitte beschreiben Sie Ihr Anliegen so genau wie möglich.", [
-                new FormFieldOption(FormFieldOptions.AUTO_COMPLETE, new AutocompleteFormFieldOption([
-                    new AutocompleteOption(KIXObjectType.TEXT_MODULE, '::')
-                ]))
-            ]));
+            fields.push(new FormField(
+                "Kommunikationskanal", ArticleProperty.CHANNEL_ID, 'channel-input', false, "Kommunikationskanal", [
+                    new FormFieldOption('NO_CHANNEL', true),
+                    new FormFieldOption('CHANNEL_ID', null)
+                ])
+            );
 
-            fields.push(new FormField("Anlage", ArticleProperty.ATTACHMENT, 'attachment-input', false, "Hier können Sie zusätzliche Dateien an das Ticket anhängen. Ein Einfügen per Drag & Drop ist möglich. Bitte beachten Sie die maximale Dateigröße von 25 MB pro Datei."));
             fields.push(new FormField(
                 "Bearbeiter", TicketProperty.OWNER_ID, 'ticket-input-owner', false, "Der Bearbeiter ist die Person, die für die Bearbeitung des Ticket zuständig sein soll."
             ));

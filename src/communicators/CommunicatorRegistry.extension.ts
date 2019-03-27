@@ -1,5 +1,5 @@
 import { ICommunicatorRegistryExtension } from '../core/extensions';
-import { AuthenticationCommunicator } from '.';
+import { AgentCommunicator } from '.';
 import { ContextCommunicator } from './ContextCommunicator';
 import { MainMenuCommunicator } from './MainMenuCommunicator';
 import { TicketCommunicator } from './TicketCommunicator';
@@ -11,7 +11,7 @@ export class CommunicatorRegistry implements ICommunicatorRegistryExtension {
 
     public getCommunicatorClasses(): any[] {
         return [
-            AuthenticationCommunicator.getInstance(),
+            AgentCommunicator.getInstance(),
             ContextCommunicator.getInstance(),
             KIXObjectCommunicator.getInstance(),
             MainMenuCommunicator.getInstance(),

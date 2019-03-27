@@ -2,7 +2,7 @@ import { IConfigurationExtension } from '../../core/extensions';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetSize, WidgetConfiguration
 } from '../../core/model';
-import { SearchContext, SearchContextConfiguration } from '../../core/browser/search';
+import { SearchContext, SearchContextConfiguration } from '../../core/browser/search/context';
 
 export class ModuleFactoryExtension implements IConfigurationExtension {
 

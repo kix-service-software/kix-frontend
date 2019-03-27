@@ -9,6 +9,7 @@ import { TicketContext } from './TicketContext';
 import { KIXObjectService } from '../../kix';
 import { EventService } from '../../event';
 import { LabelService } from '../../LabelService';
+import { ApplicationEvent } from '../../application';
 
 export class TicketDetailsContext extends Context<TicketDetailsContextConfiguration> {
 
@@ -108,6 +109,7 @@ export class TicketDetailsContext extends Context<TicketDetailsContextConfigurat
 
         if (!KIXObjectCache.isObjectCached(KIXObjectType.TICKET, Number(this.objectId))) {
             ticket = await this.loadTicket(changedProperties);
+            reload = true;
         } else {
             ticket = KIXObjectCache.getObject(KIXObjectType.TICKET, Number(this.objectId));
         }
@@ -135,6 +137,12 @@ export class TicketDetailsContext extends Context<TicketDetailsContextConfigurat
             object = ticket;
         }
 
+        if (reload && objectType === KIXObjectType.TICKET) {
+            this.listeners.forEach(
+                (l) => l.objectChanged(Number(this.objectId), ticket, KIXObjectType.TICKET, changedProperties)
+            );
+        }
+
         return object;
     }
 
@@ -143,12 +151,12 @@ export class TicketDetailsContext extends Context<TicketDetailsContextConfigurat
     }
 
     private async loadTicket(changedProperties: string[] = [], cache: boolean = true): Promise<Ticket> {
-        EventService.getInstance().publish('APP_LOADING', { loading: true, hint: 'Lade Ticket ...' });
+        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: true, hint: 'Lade Ticket ...' });
 
         const loadingOptions = new KIXObjectLoadingOptions(
-            ['Tickets.*'], null, null, null, null,
+            null, null, null, null, null,
             ['TimeUnits', 'DynamicFields', 'Links', 'Flags', 'History', 'Watchers', 'Articles', 'Attachments'],
-            ['Links', 'Flags', 'History', 'Articles', 'Attachments']
+            ['Links']
         );
 
         const ticketId = Number(this.objectId);
@@ -178,12 +186,9 @@ export class TicketDetailsContext extends Context<TicketDetailsContextConfigurat
                     KIXObjectType.CONTACT
                 ));
             }
-            this.listeners.forEach(
-                (l) => l.objectChanged(ticketId, ticket, KIXObjectType.TICKET, changedProperties)
-            );
         }
 
-        EventService.getInstance().publish('APP_LOADING', { loading: false, hint: 'Lade Ticket ...' });
+        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: 'Lade Ticket ...' });
 
         return ticket;
     }

@@ -54,7 +54,7 @@ class Component {
     }
 
     public getInputComponent(): any {
-        const componentId = this.state.field.inputComponent ? this.state.field.inputComponent : 'form-default-input';
+        const componentId = this.state.field.inputComponent ? this.state.field.inputComponent : 'default-text-input';
         return ComponentsService.getInstance().getComponentTemplate(componentId);
     }
 

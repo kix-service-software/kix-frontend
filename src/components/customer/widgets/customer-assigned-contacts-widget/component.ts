@@ -1,11 +1,10 @@
 import { ComponentState } from "./ComponentState";
 import {
-    ContextService, TableColumn, ITableConfigurationListener,
-    ActionFactory, TableListenerConfiguration, StandardTableFactoryService, KIXObjectService
+    ContextService, ActionFactory, TableFactoryService, TableEvent, DefaultColumnConfiguration
 } from "../../../../core/browser";
-import { KIXObjectType, Customer, Contact, ContextMode, KIXObjectLoadingOptions } from "../../../../core/model";
-import { ContactService } from "../../../../core/browser/contact";
+import { KIXObjectType, Customer, ContactProperty, DataType } from "../../../../core/model";
 import { CustomerDetailsContext } from "../../../../core/browser/customer";
+import { IEventSubscriber, EventService } from "../../../../core/browser/event";
 
 class Component {
 
@@ -34,6 +33,7 @@ class Component {
             filteredObjectListChanged: () => { return; },
             objectListChanged: () => { return; },
             sidebarToggled: () => { return; },
+            scrollInformationChanged: () => { return; },
             objectChanged: (contactId: string, customer: Customer, type: KIXObjectType) => {
                 if (type === KIXObjectType.CUSTOMER) {
                     this.initWidget(customer);
@@ -46,11 +46,11 @@ class Component {
 
     private async initWidget(customer: Customer): Promise<void> {
         this.state.customer = customer;
-        this.setTable();
-        this.setActions();
+        this.prepareTable();
+        this.prepareActions();
     }
 
-    private setActions(): void {
+    private prepareActions(): void {
         if (this.state.widgetConfiguration && this.state.customer) {
             this.state.actions = ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, [this.state.customer]
@@ -58,64 +58,20 @@ class Component {
         }
     }
 
-    private async setTable(): Promise<void> {
+    private async prepareTable(): Promise<void> {
         if (this.state.customer && this.state.widgetConfiguration) {
-            this.state.loading = true;
-            const configurationListener: ITableConfigurationListener = {
-                columnConfigurationChanged: this.columnConfigurationChanged.bind(this)
-            };
-            const listenerConfiguration = new TableListenerConfiguration(null, null, configurationListener);
 
-            this.state.contactTable = StandardTableFactoryService.getInstance().createStandardTable(
-                KIXObjectType.CONTACT, this.state.widgetConfiguration.settings,
-                null, listenerConfiguration, true
-            );
-
-            this.state.contactTable.setTableListener(() => {
-                this.state.filterCount = this.state.contactTable.getTableRows(true).length || 0;
-                (this as any).setStateDirty('filterCount');
-            });
-
-            const loadingOptions = new KIXObjectLoadingOptions(
-                null, null, null, null, null, ['TicketStats']
-            );
             const contactIds = this.state.customer.Contacts.map((c) => typeof c === 'string' ? c : c.ContactID);
-            const contacts = await KIXObjectService.loadObjects(
-                KIXObjectType.CONTACT, contactIds, loadingOptions, null, false
+            this.state.table = TableFactoryService.getInstance().createTable(
+                'customer-assigned-contacts', KIXObjectType.CONTACT,
+                this.state.widgetConfiguration.settings, contactIds, null, true
             );
-
-            this.state.contactTable.layerConfiguration.contentLayer.setPreloadedObjects(contacts);
-            this.state.title = "Zugeordnete Ansprechpartner "
-                + (contacts && !!contacts.length ? ` (${contacts.length})` : '');
-            this.state.contactTable.loadRows();
-
-            this.state.loading = false;
-        }
-    }
-
-    private columnConfigurationChanged(column: TableColumn): void {
-        const index =
-            this.state.widgetConfiguration.settings.tableColumns.findIndex((tc) => tc.columnId === column.id);
-
-        if (index >= 0) {
-            this.state.widgetConfiguration.settings.tableColumns[index].size = column.size;
-            ContextService.getInstance().saveWidgetConfiguration(
-                this.state.instanceId, this.state.widgetConfiguration
-            );
-        }
-    }
-
-    public tableRowClicked(contact: Contact, columnId: string): void {
-        if (columnId === 'contact-new-ticket' && contact.ValidID === 1) {
-            ContextService.getInstance().setDialogContext(null, KIXObjectType.TICKET, ContextMode.CREATE, null, true);
-        } else {
-            ContactService.getInstance().openContact(contact.ContactID, false);
         }
     }
 
     public filter(filterValue: string): void {
-        this.state.filterValue = filterValue;
-        this.state.contactTable.setFilterSettings(filterValue);
+        this.state.table.setFilter(filterValue);
+        this.state.table.filter();
     }
 }
 

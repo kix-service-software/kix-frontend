@@ -1,6 +1,6 @@
 import {
     ArticleFactory, Article, SenderType, KIXObjectType,
-    ArticleType, ArticleReceiver, ArticleProperty
+    ArticleReceiver, ArticleProperty
 } from '../../model';
 import { IKIXObjectFactory, KIXObjectService } from '../kix';
 
@@ -28,12 +28,7 @@ export class ArticleBrowserFactory implements IKIXObjectFactory<Article> {
             KIXObjectType.SENDER_TYPE, [article.SenderTypeID]
         ).catch((error) => []);
 
-        const articleTypes = await KIXObjectService.loadObjects<ArticleType>(
-            KIXObjectType.ARTICLE_TYPE, [article.ArticleTypeID]
-        ).catch((error) => []);
-
         article.senderType = senderTypes && senderTypes.length ? senderTypes[0] : null;
-        article.articleType = articleTypes && articleTypes.length ? articleTypes[0] : null;
 
         this.prepareReceiverLists(article);
         if (!article.bodyAttachment) {

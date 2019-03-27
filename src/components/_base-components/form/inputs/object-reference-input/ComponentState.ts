@@ -1,6 +1,6 @@
-import { AutoCompleteConfiguration, FormInputComponentState, TreeNode, KIXObject } from "../../../../../core/model";
+import { AutoCompleteConfiguration, FormInputComponentState, TreeNode } from "../../../../../core/model";
 
-export class ComponentState extends FormInputComponentState<KIXObject> {
+export class ComponentState extends FormInputComponentState<string | number> {
 
     public constructor(
         public autoCompleteConfiguration: AutoCompleteConfiguration = null,

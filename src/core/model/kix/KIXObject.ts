@@ -8,7 +8,7 @@ export abstract class KIXObject<T = any> {
     public abstract KIXObjectType: KIXObjectType;
 
     // TODO: ggf. wieder entfernen, aber notwendig für edit-linked-objects-dialog
-    public Links: Link[] = [];
+    public Links: Link[];
 
     public LinkTypeName: string;
 

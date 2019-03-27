@@ -1,6 +1,6 @@
 import { IMainMenuExtension } from '../../core/extensions';
-import { SearchContext } from '../../core/browser/search';
 import { TicketListContext } from '../../core/browser/ticket';
+import { SearchContext } from '../../core/browser/search/context';
 
 export class Extension implements IMainMenuExtension {
 

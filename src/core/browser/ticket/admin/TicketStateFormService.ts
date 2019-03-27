@@ -28,7 +28,7 @@ export class TicketStateFormService extends KIXObjectFormService<TicketState> {
                 case TicketStateProperty.TYPE_ID:
                     const stateTypes = await KIXObjectService.loadObjects(KIXObjectType.TICKET_STATE_TYPE, [value]);
                     if (stateTypes && stateTypes.length) {
-                        value = stateTypes[0];
+                        value = stateTypes[0].ObjectId;
                     }
                     break;
                 default:

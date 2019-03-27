@@ -1,0 +1,1 @@
+export { CompareConfigItemVersionTableFactory } from './CompareConfigItemVersionTableFactory';

@@ -1,8 +1,6 @@
-export { TicketTableLabelLayer } from './TicketTableLabelLayer';
-export { TicketTableContentLayer } from './TicketTableContentLayer';
-export { TicketTableClickListener } from './TicketTableClickListener';
 export { TicketTableFactory } from './TicketTableFactory';
+export { TicketHistoryTableFactory } from './TicketHistoryTableFactory';
+export { TicketTableCSSHandler } from './TicketTableCSSHandler';
+export { ArticleTableCSSHandler } from './ArticleTableCSSHandler';
 
-export * from './article';
-export * from './history';
-export * from './linked-objects';
+export * from './new';

@@ -19,11 +19,10 @@ class KIXHeaderComponent {
     }
 
     public showPersonalSettings(): void {
-        const content = new ComponentContent(
-            'toast',
-            new ToastContent('kix-icon-magicwand', 'Diese Funktionalität ist in Arbeit.', 'Coming Soon')
+        ContextService.getInstance().setDialogContext(
+            PersonalSettingsDialogContext.CONTEXT_ID, KIXObjectType.PERSONAL_SETTINGS,
+            ContextMode.PERSONAL_SETTINGS, null, true
         );
-        OverlayService.getInstance().openOverlay(OverlayType.HINT_TOAST, null, content, '');
     }
 
     public getReleaseRoutingConfig(): RoutingConfiguration {

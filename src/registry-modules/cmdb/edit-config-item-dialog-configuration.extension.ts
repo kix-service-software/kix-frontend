@@ -19,7 +19,7 @@ export class EditConfigItemDialogModuleExtension implements IConfigurationExtens
         const configurationService = ConfigurationService.getInstance();
         const token = configurationService.getServerConfiguration().BACKEND_API_TOKEN;
 
-        const configItemClassService = KIXObjectServiceRegistry.getInstance().getServiceInstance(
+        const configItemClassService = KIXObjectServiceRegistry.getServiceInstance(
             KIXObjectType.CONFIG_ITEM_CLASS
         );
 

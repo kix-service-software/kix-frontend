@@ -14,20 +14,15 @@ class ArticleAttachmentComponent {
     }
 
     public onInput(input: any): void {
-        this.state.article = input.article;
         this.state.attachment = input.attachment;
+        this.state.article = input.article;
 
         if (this.state.attachment) {
-            const fileName = this.state.attachment.Filename;
-            const idx = fileName.lastIndexOf('.');
-            if (idx >= 0) {
-                this.state.extension = fileName.substring(idx + 1, fileName.length);
-                this.state.icon = new ObjectIcon("Filetype", this.state.extension);
-            }
+            this.state.icon = new ObjectIcon("MIMEType", this.state.attachment.ContentType);
         }
     }
 
-    private async download(): Promise<void> {
+    public async download(): Promise<void> {
         if (!this.state.progress && this.state.article && this.state.attachment) {
             this.state.progress = true;
             const attachment = await this.loadArticleAttachment(this.state.attachment.ID);

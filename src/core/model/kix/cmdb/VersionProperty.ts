@@ -23,6 +23,7 @@ export enum VersionProperty {
     CURRENT = 'CURRENT',
     DATA = 'Data',
     PREPARED_DATA = 'PreparedData',
-    COUNT_NUMBER = 'COUNT_NUMBER'
+    COUNT_NUMBER = 'COUNT_NUMBER',
+    DEFINITION = 'Definition'
 
 }

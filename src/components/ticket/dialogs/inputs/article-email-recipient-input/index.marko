@@ -1,0 +1,12 @@
+<form-list
+    searchCallback=state.searchCallback
+    autoCompleteConfiguration=state.autoCompleteConfiguration
+    freeText=true
+    on-focusLost("focusLost")
+    on-nodesChanged("contactChanged")
+    selectedNodes=state.currentNodes
+    invalid=state.invalid
+    autocomplete=true
+    multiselect=true
+    readonly=state.field.readonly
+    actions=state.actions/>

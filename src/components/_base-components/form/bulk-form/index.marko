@@ -17,7 +17,7 @@
                 <div.object-table-head>
                     <span>${state.tableTitle}</span>
                 </div>
-                <standard-table standardTable=state.table/>
+                <standard-table-NEW table=state.table/>
             </div>
         </if>
         <div.dialog-button-container>
@@ -25,10 +25,10 @@
                 <span.kix-icon-close/>Abbrechen
             </button>
             <div.submit-buttons>
-                <button.submit-button type="button" on-click("submit") title="Dialog schließen" disabled=(!state.run)>
+                <button.submit-button type="button" on-click("submit") title="Dialog schließen" disabled=!state.run>
                     <span.kix-icon-check/>Dialog schließen
                 </button>
-                <button.submit-button type="button" on-click("run") title="Jetzt ausführen" disabled=(!state.canRun)>
+                <button.submit-button type="button" on-click("run") title="Jetzt ausführen" disabled=!state.canRun>
                     <span.kix-icon-edit/>Jetzt ausführen
                 </button>
             </div>

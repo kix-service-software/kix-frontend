@@ -26,6 +26,19 @@ public async createFormDefinitions(overwrite: boolean): Promise<void> {
 }
 ```
 
+- Hinweis: ein Formular kann auch nachträglich hinzugefügt werden (ist aber nicht der präferierte Weg!)
+
+```javascript
+FormService.getInstance().addform(
+    new Form(
+        this.formId,
+        'Neue FAQ',
+        formGroups, KIXObjectType.FAQ_ARTICLE, true,
+        FormContext.NEW
+    )
+);
+```
+
 ## Formular einbinden
 
 ```html
@@ -43,4 +56,19 @@ FormInputRegistry.getInstance().registerFormInputComponent(new FormInputComponen
 FormInputRegistry.getInstance().registerFormInputComponent(new FormInputComponentDefinition(
     FAQArticleProperty.VALID_ID, KIXObjectType.FAQ_ARTICLE, 'valid-input', 'Gültigkeit'
 ));
+```
+
+## FormService erstellen und registieren
+
+- ggf. muss die `GetValue`-Methode von `KIXObjectFormService` in diesem Service überschrieben werden
+```javascript
+export class FAQArticleFormService extends KIXObjectFormService<FAQArticle> {
+    ...
+}
+```
+
+### Formservice in der Modul-Komponente (`src/components/faq/faq-module-component`) registrieren
+
+```javascript
+ServiceRegistry.getInstance().registerServiceInstance(FAQArticleFormService.getInstance());
 ```

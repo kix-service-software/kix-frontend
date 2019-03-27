@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
 import { ClientStorageService } from '../../core/browser/ClientStorageService';
-import { AuthenticationService } from '../../core/browser/authentication';
+import { AgentService } from '../../core/browser/application';
 
 class Component {
 
@@ -46,7 +46,7 @@ class Component {
 
         if (userName && userName !== '' && password && password !== '') {
             this.state.error = false;
-            const login = await AuthenticationService.getInstance().login(userName, password);
+            const login = await AgentService.getInstance().login(userName, password);
             if (login) {
                 window.location.replace('/');
             } else {

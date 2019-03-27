@@ -26,7 +26,7 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
         return object instanceof Contact;
     }
 
-    public async getPropertyText(property: string, object?: KIXObject): Promise<string> {
+    public async getPropertyText(property: string): Promise<string> {
         let displayValue = property;
         switch (property) {
             case SearchProperty.FULLTEXT:
@@ -95,13 +95,20 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
             case ContactProperty.REMINDER_TICKETS_COUNT:
                 displayValue = "Erinnerungstickets";
                 break;
-            case 'contact-new-ticket':
+            case ContactProperty.CREATE_NEW_TICKET:
                 displayValue = "";
                 break;
             default:
                 displayValue = property;
         }
         return displayValue;
+    }
+
+    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
+        if (property === ContactProperty.CREATE_NEW_TICKET) {
+            return 'kix-icon-new-ticket';
+        }
+        return undefined;
     }
 
     public async getDisplayText(contact: Contact, property: string): Promise<string> {
@@ -132,7 +139,7 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
                     displayValue = customerNames.join(', ');
                 }
                 break;
-            case 'contact-new-ticket':
+            case ContactProperty.CREATE_NEW_TICKET:
                 if (contact.ValidID === 1) {
                     displayValue = "Neues Ticket";
                 }
@@ -205,7 +212,8 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
     }
 
     public async getIcons(object: Contact, property: string): Promise<Array<string | ObjectIcon>> {
-        return [];
+        const icons = [];
+        return icons;
     }
 
 }
