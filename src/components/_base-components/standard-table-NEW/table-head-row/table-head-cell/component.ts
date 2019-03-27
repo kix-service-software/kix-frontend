@@ -4,6 +4,7 @@ import {
 } from '../../../../../core/browser';
 import { SortOrder } from '../../../../../core/model';
 import { IEventSubscriber, EventService } from '../../../../../core/browser/event';
+import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
 class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
 
@@ -56,7 +57,9 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             }
 
             if (this.state.column.getColumnConfiguration().defaultText) {
-                this.state.title = this.state.column.getColumnConfiguration().defaultText;
+                this.state.title = await TranslationService.translate(
+                    this.state.column.getColumnConfiguration().defaultText
+                );
             } else {
                 this.state.title = await LabelService.getInstance().getPropertyText(
                     this.state.column.getColumnId(), objectType, true

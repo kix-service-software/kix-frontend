@@ -271,8 +271,8 @@ class Component {
         const requiredPropertys = await this.state.importManager.getRequiredProperties();
         let columns: IColumnConfiguration[] = [
             new DefaultColumnConfiguration(
-                'CSV_LINE', true, false, true, false, 60, true, true, false, DataType.NUMBER, false,
-                null, 'Translatable#Zeilennr'
+                'CSV_LINE', true, false, true, false, 150, true, true, false, DataType.NUMBER, false,
+                null, 'Translatable#Column Number'
             )
         ];
 
