@@ -203,9 +203,9 @@ export class Ticket extends KIXObject<Ticket> {
     public getFirstArticle(): Article {
         if (this.Articles && this.Articles.length) {
             const sortedArticles = SortUtil.sortObjects(
-                this.Articles, ArticleProperty.ARTICLE_ID, DataType.NUMBER, SortOrder.DOWN
+                this.Articles, ArticleProperty.ARTICLE_ID, DataType.NUMBER, SortOrder.UP
             );
-            return sortedArticles[sortedArticles.length - 1];
+            return sortedArticles[0];
         }
 
         return null;
