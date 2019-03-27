@@ -1,5 +1,5 @@
 import { ILabelProvider } from "..";
-import { ConfigItemHistory, DateTimeUtil, ObjectIcon, KIXObjectType, KIXObject } from "../../model";
+import { ConfigItemHistory, DateTimeUtil, ObjectIcon, KIXObjectType, ConfigItemHistoryProperty } from "../../model";
 import { ContextService } from "../context";
 
 export class ConfigItemHistoryLabelProvider implements ILabelProvider<ConfigItemHistory> {
@@ -10,22 +10,22 @@ export class ConfigItemHistoryLabelProvider implements ILabelProvider<ConfigItem
         return value.toString();
     }
 
-    public async getPropertyText(property: string, object?: KIXObject): Promise<string> {
+    public async getPropertyText(property: string): Promise<string> {
         let text = property;
         switch (property) {
-            case 'HistoryType':
+            case ConfigItemHistoryProperty.HISTORY_TYPE:
                 text = 'Aktion';
                 break;
-            case 'Comment':
+            case ConfigItemHistoryProperty.COMMENT:
                 text = 'Kommentar';
                 break;
-            case 'CreateBy':
+            case ConfigItemHistoryProperty.CREATE_BY:
                 text = 'Benutzer';
                 break;
-            case 'CreateTime':
+            case ConfigItemHistoryProperty.CREATE_TIME:
                 text = 'Erstellt am';
                 break;
-            case 'Content':
+            case ConfigItemHistoryProperty.VERSION_ID:
                 text = 'Zur Version';
                 break;
             default:
@@ -34,22 +34,26 @@ export class ConfigItemHistoryLabelProvider implements ILabelProvider<ConfigItem
         return text;
     }
 
+    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
+        return;
+    }
+
     public async getDisplayText(historyEntry: ConfigItemHistory, property: string): Promise<string> {
         let displayValue = property.toString();
 
         const objectData = ContextService.getInstance().getObjectData();
 
         switch (property) {
-            case 'CreateBy':
+            case ConfigItemHistoryProperty.CREATE_BY:
                 const user = objectData.users.find((u) => u.UserID === historyEntry[property]);
                 if (user) {
                     displayValue = user.UserFullname;
                 }
                 break;
-            case 'CreateTime':
+            case ConfigItemHistoryProperty.CREATE_TIME:
                 displayValue = DateTimeUtil.getLocalDateTimeString(historyEntry[property]);
                 break;
-            case 'Content':
+            case ConfigItemHistoryProperty.VERSION_ID:
                 displayValue = historyEntry.VersionID ? 'Zur Version' : '';
                 break;
             default:
@@ -93,7 +97,7 @@ export class ConfigItemHistoryLabelProvider implements ILabelProvider<ConfigItem
 
     public async getIcons(object: ConfigItemHistory, property: string): Promise<Array<string | ObjectIcon>> {
         const icons = [];
-        if (property === 'Content' && object.VersionID) {
+        if (property === ConfigItemHistoryProperty.VERSION_ID && object.VersionID) {
             icons.push('kix-icon-open-right');
         }
         return icons;

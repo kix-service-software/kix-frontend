@@ -63,7 +63,7 @@ export class Component implements IKIXObjectSearchListener {
         const searchCache = KIXObjectSearchService.getInstance().getSearchCache();
         if (searchCache && categories) {
             const objectService
-                = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(searchCache.objectType);
+                = ServiceRegistry.getServiceInstance<IKIXObjectService>(searchCache.objectType);
             if (objectService) {
                 nodes = categories.map((category: SearchResultCategory) => {
                     category.objectIds = objectService.determineDependendObjects(

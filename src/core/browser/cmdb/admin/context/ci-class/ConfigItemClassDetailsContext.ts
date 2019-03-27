@@ -7,6 +7,7 @@ import { AdminContext } from "../../../../admin";
 import { EventService } from "../../../../event";
 import { KIXObjectService } from "../../../../kix";
 import { LabelService } from "../../../../LabelService";
+import { ApplicationEvent } from "../../../../application";
 
 export class ConfigItemClassDetailsContext extends Context<ConfigItemClassDetailsContextConfiguration> {
 
@@ -117,7 +118,9 @@ export class ConfigItemClassDetailsContext extends Context<ConfigItemClassDetail
     }
 
     private async loadCIClass(changedProperties: string[] = [], cache: boolean = true): Promise<ConfigItemClass> {
-        EventService.getInstance().publish('APP_LOADING', { loading: true, hint: 'Lade CMDB Klasse ...' });
+        EventService.getInstance().publish(
+            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Lade CMDB Klasse ...' }
+        );
 
         const ciClassId = Number(this.objectId);
 
@@ -141,7 +144,7 @@ export class ConfigItemClassDetailsContext extends Context<ConfigItemClassDetail
             ));
         }
 
-        EventService.getInstance().publish('APP_LOADING', { loading: false, hint: '' });
+        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
 
         return ciClass;
     }

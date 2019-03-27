@@ -1,0 +1,82 @@
+<for(dynamicValue in state.dynamicValues | status-var=loop)>
+    <div.dynamic-form-field-value>
+        <form-list
+            nodes=dynamicValue.propertyNodes
+            selectedNodes=[dynamicValue.currentPropertyNode]
+            removeNode=false
+            readonly=dynamicValue.readonly
+            on-nodesChanged("propertyChanged", dynamicValue)/>
+        <form-list
+            nodes=dynamicValue.operationNodes
+            selectedNodes=[dynamicValue.currentOperationNode]
+            removeNode=false
+            readonly=dynamicValue.readonly
+            on-nodesChanged("operationChanged", dynamicValue)/>
+        <div.value>
+            <if(
+                dynamicValue.currentPropertyNode &&
+                dynamicValue.currentOperationNode &&
+                component.showValueInput(dynamicValue)
+            )>
+                <if(dynamicValue.isDropdown)>
+                    <form-list
+                        nodes=dynamicValue.nodes
+                        selectedNodes=dynamicValue.currentValueNodes
+                        removeNode=(!dynamicValue.readonly || dynamicValue.changeable)
+                        readonly=dynamicValue.readonly
+                        multiselect=dynamicValue.isMultiselect
+                        autocomplete=dynamicValue.isAutocomplete
+                        searchCallback=dynamicValue.autoCompleteCallback
+                        on-nodesChanged("treeValueChanged", dynamicValue)/>
+                </if>
+                <else-if(dynamicValue.isDate)>
+                    <input.input-style
+                        type="date"
+                        value=dynamicValue.date
+                        disabled=(dynamicValue.readonly && !dynamicValue.changeable)
+                        on-change("dateValueChanged", dynamicValue)/>
+                </else-if>
+                <else-if(dynamicValue.isDateTime)>
+                    <input.input-style
+                        type="date"
+                        value=dynamicValue.date
+                        disabled=(dynamicValue.readonly && !dynamicValue.changeable)
+                        on-change("dateValueChanged", dynamicValue)/>
+                    <input.input-style
+                        type="time"
+                        value=dynamicValue.time
+                        disabled=(dynamicValue.readonly && !dynamicValue.changeable)
+                        on-change("timeValueChanged", dynamicValue)/>
+                </else-if>
+                <else-if(dynamicValue.isTextarea)>
+                    <textarea.input-style
+                        rows=5
+                        cols=25
+                        value=dynamicValue.currentValue
+                        maxlength=component.getInputOptionValue(dynamicValue, "maxlength")
+                        disabled=(dynamicValue.readonly && !dynamicValue.changeable)
+                        on-keydown("textValueChanged", dynamicValue)/>
+                </else-if>
+                <else>
+                    <input.input-style
+                        value=dynamicValue.currentValue
+                        type="text"
+                        disabled=(dynamicValue.readonly && !dynamicValue.changeable)
+                        on-keydown("textValueChanged", dynamicValue)/>
+                </else>
+            </if>
+        </div>
+        <if(
+            !dynamicValue.readonly &&
+            state.dynamicValues.length > 1 &&
+            loop.getIndex() !== state.dynamicValues.length - 1
+        )>
+            <button.form-control-button.button-without-text
+                type="button"
+                title="Parameter entfernen"
+                on-click("removeValue", dynamicValue)>
+                <span.kix-icon-minus/>
+            </button>
+        </if>
+    </div>
+</for>

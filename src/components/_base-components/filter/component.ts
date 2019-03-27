@@ -46,7 +46,7 @@ class Component {
         }
     }
 
-    private filter(): void {
+    public filter(): void {
         const filter = this.state.currentFilter ? this.state.predefinedFilter[this.state.currentFilter.id] : null;
         (this as any).emit('filter', this.state.textFilterValue, filter);
     }
@@ -57,13 +57,7 @@ class Component {
     }
 
     private setFilterCount(filterCount: number = null) {
-        if (
-            (
-                (this.state.textFilterValue !== null && this.state.textFilterValue !== '')
-                || this.state.currentFilter !== null
-            )
-            && typeof filterCount === 'number'
-        ) {
+        if (typeof filterCount === 'number') {
             this.state.filterCountString = `(${filterCount})`;
         } else {
             this.state.filterCountString = '';

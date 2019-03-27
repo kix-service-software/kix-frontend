@@ -1,21 +1,25 @@
 import {
-    WidgetType, OverlayType, StringContent,
-    KIXObject, SearchFormInstance, FilterCriteria, ISearchFormListener, CacheState, Error
+    WidgetType, KIXObject, SearchFormInstance, FilterCriteria, ISearchFormListener, CacheState, Error, KIXObjectType
 } from '../../../../core/model';
 import { FormService } from '../../../../core/browser/form';
 import {
-    WidgetService, DialogService, KIXObjectSearchService, OverlayService, ServiceRegistry,
-    IdService, StandardTableFactoryService, TableConfiguration, TableHeaderHeight,
-    TableRowHeight, IKIXObjectService, StandardTable, SearchProperty, BrowserUtil
+    WidgetService, DialogService, KIXObjectSearchService, IdService, TableConfiguration, TableHeaderHeight,
+    TableRowHeight, BrowserUtil, ITable, TableFactoryService, TableEvent, SearchProperty, TableEventData
 } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
+import { SearchContext } from '../../../../core/browser/search/context';
+import { EventService, IEventSubscriber } from '../../../../core/browser/event';
 
 class Component implements ISearchFormListener {
 
     private state: ComponentState;
     private formId: string;
+    private objectType: KIXObjectType;
 
     public listenerId: string;
+
+    private subscriber: IEventSubscriber;
+    private table: ITable;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -25,7 +29,7 @@ class Component implements ISearchFormListener {
 
     public onInput(input: any) {
         this.formId = input.formId;
-        this.state.objectType = input.objectType;
+        this.objectType = input.objectType;
     }
 
     public async onMount(): Promise<void> {
@@ -38,16 +42,37 @@ class Component implements ISearchFormListener {
 
         if (KIXObjectSearchService.getInstance().getSearchCache()) {
             const cache = KIXObjectSearchService.getInstance().getSearchCache();
-            if (cache.status === CacheState.VALID && cache.objectType === this.state.objectType) {
-                await this.setSearchResult(cache.result);
+            if (cache.status === CacheState.VALID && cache.objectType === this.objectType) {
+                KIXObjectSearchService.getInstance().provideResult();
                 await this.setCanSearch();
             } else {
                 this.reset();
             }
         }
+
+        this.subscriber = {
+            eventSubscriberId: 'search-result-list',
+            eventPublished: async (data: TableEventData, eventId: string) => {
+                if (this.table) {
+                    if (data && data.tableId === this.table.getTableId()) {
+                        if (eventId === TableEvent.TABLE_READY) {
+                            this.state.resultCount = this.table.getRows().length;
+                        }
+
+                        if (eventId === TableEvent.TABLE_INITIALIZED) {
+                            await this.setAdditionalColumns();
+                        }
+                    }
+                }
+            }
+        };
+
+        EventService.getInstance().subscribe(TableEvent.TABLE_INITIALIZED, this.subscriber);
+        EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.subscriber);
     }
 
     public async onDestroy(): Promise<void> {
+        EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.subscriber);
         const formInstance = await FormService.getInstance().getFormInstance<SearchFormInstance>(this.formId);
         if (formInstance) {
             formInstance.removeSearchFormListener(this.listenerId);
@@ -61,7 +86,7 @@ class Component implements ISearchFormListener {
     public keyDown(event: any): void {
         if ((event.keyCode === 13 || event.key === 'Enter') && this.state.canSearch) {
             if (event.preventDefault) {
-                event.preventDefault(event);
+                event.preventDefault();
             }
             this.search();
         }
@@ -77,12 +102,12 @@ class Component implements ISearchFormListener {
             cache.status = CacheState.INVALID;
         }
 
+        KIXObjectSearchService.getInstance().provideResult([]);
+
         const formInstance = await FormService.getInstance().getFormInstance<SearchFormInstance>(this.formId);
         if (formInstance) {
             formInstance.reset();
         }
-
-        await this.setSearchResult([]);
     }
 
     public cancel(): void {
@@ -93,14 +118,29 @@ class Component implements ISearchFormListener {
         DialogService.getInstance().setMainDialogLoading(true, "Suche ...", true);
 
         await KIXObjectSearchService.getInstance().executeSearch<KIXObject>(this.formId)
-            .then((objects) => {
-                this.setSearchResult(objects);
-            })
             .catch((error: Error) => {
                 BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
             });
 
+        await this.setAdditionalColumns();
+
         DialogService.getInstance().setMainDialogLoading(false);
+    }
+
+    private async setAdditionalColumns(): Promise<void> {
+        const searchCache = KIXObjectSearchService.getInstance().getSearchCache();
+        const parameter: Array<[string, any]> = [];
+        if (searchCache && searchCache.status === CacheState.VALID && searchCache.objectType === this.objectType) {
+            for (const c of searchCache.criteria) {
+                if (c.property !== SearchProperty.FULLTEXT) {
+                    parameter.push([c.property, c.value]);
+                }
+            }
+        }
+
+        const searchDefinition = KIXObjectSearchService.getInstance().getSearchDefinition(this.objectType);
+        const columns = await searchDefinition.getTableColumnConfiguration(parameter);
+        this.state.table.addColumns(columns);
     }
 
     public submit(): void {
@@ -111,39 +151,6 @@ class Component implements ISearchFormListener {
 
     public removeValue(): void {
         return;
-    }
-
-    private async setSearchResult(objects: KIXObject[]): Promise<void> {
-        this.state.table = null;
-
-        const table = this.createTable();
-        table.layerConfiguration.contentLayer.setPreloadedObjects(objects);
-        table.tableConfiguration.routingConfiguration.externalLink = false;
-
-        const searchCache = KIXObjectSearchService.getInstance().getSearchCache();
-        const parameter: Array<[string, any]> = [];
-        if (searchCache
-            && searchCache.status === CacheState.VALID
-            && searchCache.objectType === this.state.objectType
-        ) {
-            for (const c of searchCache.criteria) {
-                if (c.property !== SearchProperty.FULLTEXT) {
-                    parameter.push([c.property, c.value]);
-                }
-            }
-        }
-
-        const searchDefinition = KIXObjectSearchService.getInstance().getSearchDefinition(this.state.objectType);
-
-        const columns = await searchDefinition.getTableColumnConfiguration(parameter);
-        table.setColumns(columns);
-
-        await table.loadRows();
-
-        setTimeout(() => {
-            this.state.resultCount = objects ? objects.length : 0;
-            this.state.table = table;
-        }, 100);
     }
 
     private async setCanSearch(): Promise<void> {
@@ -160,14 +167,19 @@ class Component implements ISearchFormListener {
         await this.setCanSearch();
     }
 
-    private createTable(): StandardTable {
+    private createTable(): ITable {
         const tableConfiguration = new TableConfiguration(
-            null, null, null, null, false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+            this.objectType, null, null, null, null, false, false, null, null,
+            TableHeaderHeight.SMALL, TableRowHeight.SMALL
         );
-        const table = StandardTableFactoryService.getInstance().createStandardTable(
-            this.state.objectType, tableConfiguration, null, null, true, null, true
+        this.table = TableFactoryService.getInstance().createTable(
+            `search-form-results-${this.objectType}`, this.objectType, tableConfiguration,
+            null, SearchContext.CONTEXT_ID, true, false, true
         );
-        return table;
+
+        KIXObjectSearchService.getInstance().provideResult();
+
+        return this.table;
     }
 }
 

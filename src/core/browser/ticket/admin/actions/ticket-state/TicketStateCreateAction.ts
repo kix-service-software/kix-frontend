@@ -5,7 +5,7 @@ export class TicketStateCreateAction extends AbstractAction {
 
     public initAction(): void {
         this.text = "Neuer Status";
-        this.icon = "kix-icon-gear";
+        this.icon = "kix-icon-new-gear";
     }
 
     public run(): void {

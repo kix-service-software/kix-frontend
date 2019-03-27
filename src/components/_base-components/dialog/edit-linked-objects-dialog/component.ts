@@ -1,18 +1,15 @@
 import { ComponentState } from './ComponentState';
 import {
-    DialogService, OverlayService,
-    ContextService, StandardTableFactoryService, ITableHighlightLayer,
-    TableHighlightLayer, LabelService, ServiceRegistry, SearchOperator,
-    ITablePreventSelectionLayer, TablePreventSelectionLayer, IKIXObjectService, KIXObjectService, BrowserUtil
+    DialogService, ContextService, LabelService, ServiceRegistry, SearchOperator,
+    IKIXObjectService, KIXObjectService, BrowserUtil, TableFactoryService, TableEvent, ValueState, TableEventData
 } from '../../../../core/browser';
 import {
-    ComponentContent, OverlayType, StringContent,
-    KIXObject, LinkObject, KIXObjectType,
-    CreateLinkDescription, KIXObjectPropertyFilter, TableFilterCriteria,
-    LinkObjectProperty, LinkTypeDescription, CreateLinkObjectOptions,
-    ToastContent, LinkType, ContextType, SortUtil, DataType, KIXObjectCache
+    KIXObject, LinkObject, KIXObjectType, CreateLinkDescription, KIXObjectPropertyFilter, TableFilterCriteria,
+    LinkObjectProperty, LinkTypeDescription, CreateLinkObjectOptions, LinkType, ContextType,
+    SortUtil, DataType, KIXObjectCache
 } from '../../../../core/model';
-import { LinkUtil } from '../../../../core/browser/link';
+import { LinkUtil, EditLinkedObjectsDialogContext } from '../../../../core/browser/link';
+import { IEventSubscriber, EventService } from '../../../../core/browser/event';
 
 class Component {
 
@@ -24,12 +21,9 @@ class Component {
     private selectedLinkObjects: LinkObject[] = [];
     private linkedObjects: KIXObject[] = [];
     private linkDescriptions: CreateLinkDescription[] = [];
-    private newObjectsHighlightLayer: ITableHighlightLayer;
-    private removeObjectsHighlightLayer: ITableHighlightLayer;
-    private preventSelectionLayer: ITablePreventSelectionLayer;
 
-    private textFilter: string;
-    private propertyFilter: KIXObjectPropertyFilter;
+    private tableSubscriber: IEventSubscriber;
+    private linkDialogListenerId: string;
 
     public onCreate(input: any): void {
         this.state = new ComponentState(input.instanceId);
@@ -55,9 +49,27 @@ class Component {
 
             await this.reviseLinkObjects();
             await this.setInitialLinkDescriptions();
+
+            const editLinksContext = await ContextService.getInstance().getContext<EditLinkedObjectsDialogContext>(
+                EditLinkedObjectsDialogContext.CONTEXT_ID
+            );
+            editLinksContext.setObjectList(this.availableLinkObjects);
+
             await this.prepareTable();
+
+            this.linkDialogListenerId = 'result-listener-link-' + this.mainObject.KIXObjectType + '-edit-links';
+            DialogService.getInstance()
+                .registerDialogResultListener<CreateLinkDescription[][]>(
+                    this.linkDialogListenerId, 'object-link', this.linksChanged.bind(this)
+                );
         }
         this.state.loading = false;
+    }
+
+    public onDestroy(): void {
+        EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
+
     }
 
     private async reviseLinkObjects(): Promise<void> {
@@ -122,7 +134,7 @@ class Component {
 
     private async setInitialLinkDescriptions(): Promise<void> {
 
-        const linkTypes = await KIXObjectService.loadObjects<LinkType>(KIXObjectType.LINK_TYPE)
+        const linkTypes = await KIXObjectService.loadObjects<LinkType>(KIXObjectType.LINK_TYPE, null, null, null, false)
             .catch((error) => [] as LinkType[]);
 
         this.availableLinkObjects.forEach((lo) => {
@@ -149,38 +161,29 @@ class Component {
     private async prepareTable(): Promise<void> {
         this.state.table = null;
 
-        const table = StandardTableFactoryService.getInstance().createStandardTable(
-            KIXObjectType.LINK_OBJECT
+        const table = TableFactoryService.getInstance().createTable(
+            'edit-linked-objects-dialog', KIXObjectType.LINK_OBJECT,
+            null, null, EditLinkedObjectsDialogContext.CONTEXT_ID
         );
 
-        this.newObjectsHighlightLayer = new TableHighlightLayer();
-        table.addAdditionalLayerOnTop(this.newObjectsHighlightLayer);
-        this.newObjectsHighlightLayer.setHighlightedObjects(this.newLinkObjects);
+        this.tableSubscriber = {
+            eventSubscriberId: 'edit-link-object-dialog',
+            eventPublished: (data: TableEventData, eventId: string) => {
+                if (data && data.tableId === table.getTableId()) {
+                    if (eventId === TableEvent.ROW_SELECTION_CHANGED) {
+                        this.objectSelectionChanged(table.getSelectedRows().map((r) => r.getRowObject().getObject()));
+                    }
+                    if (eventId === TableEvent.TABLE_READY) {
+                        this.state.table.setRowObjectValueState(this.newLinkObjects, ValueState.HIGHLIGHT_SUCCESS);
+                    }
+                }
+            }
+        };
 
-        this.removeObjectsHighlightLayer = new TableHighlightLayer('link-object-to-delete');
-        table.addAdditionalLayerOnTop(this.removeObjectsHighlightLayer);
-        this.removeObjectsHighlightLayer.setHighlightedObjects(this.deleteLinkObjects);
+        EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
+        EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
 
-        this.preventSelectionLayer = new TablePreventSelectionLayer();
-        table.addAdditionalLayerOnTop(this.preventSelectionLayer);
-        this.preventSelectionLayer.setPreventSelectionFilter([...this.deleteLinkObjects]);
-
-        table.layerConfiguration.contentLayer.setPreloadedObjects(this.availableLinkObjects);
-
-        table.setFilterSettings(this.textFilter, this.propertyFilter);
-
-        await table.loadRows(true);
-        table.listenerConfiguration.selectionListener.addListener(
-            this.objectSelectionChanged.bind(this)
-        );
-        table.setTableListener(() => {
-            this.state.filterCount = this.state.table.getTableRows(true).length || 0;
-            (this as any).setStateDirty('filterCount');
-        });
-
-        setTimeout(() => {
-            this.state.table = table;
-        }, 50);
+        this.state.table = table;
     }
 
     public objectSelectionChanged(newSelectedLinkObjects: LinkObject[]): void {
@@ -189,31 +192,8 @@ class Component {
     }
 
     public async filter(textFilterValue?: string, filter?: KIXObjectPropertyFilter): Promise<void> {
-        this.textFilter = textFilterValue;
-        this.propertyFilter = filter;
-        await this.state.table.setFilterSettings(textFilterValue, filter);
-    }
-
-    public async markToDelete(): Promise<void> {
-        this.selectedLinkObjects.forEach((slo) => {
-            const newLinkIndex = this.newLinkObjects.findIndex((nlo) => nlo.equals(slo));
-            if (newLinkIndex !== -1) {
-                this.newLinkObjects.splice(newLinkIndex, 1);
-                const index = this.availableLinkObjects.findIndex((alo) => alo.equals(slo));
-                if (index !== -1) {
-                    this.availableLinkObjects.splice(index, 1);
-                }
-            } else {
-                if (!this.deleteLinkObjects.some((dlo) => dlo.equals(slo))) {
-                    this.deleteLinkObjects.push(slo);
-                }
-            }
-        });
-
-        await this.prepareTable();
-
-        this.state.canDelete = false;
-        this.setCanSubmit();
+        this.state.table.setFilter(textFilterValue, filter ? filter.criteria : []);
+        this.state.table.filter();
     }
 
     public openAddLinkDialog(): void {
@@ -230,22 +210,17 @@ class Component {
             )
         );
 
-        const resultListenerId = 'result-listener-link-' + this.mainObject.KIXObjectType + '-edit-links';
         DialogService.getInstance().openOverlayDialog(
             'link-object-dialog',
             {
                 linkDescriptions,
                 objectType: this.mainObject.KIXObjectType,
-                resultListenerId,
+                resultListenerId: this.linkDialogListenerId,
                 rootObject: this.mainObject
             },
             dialogTitle,
             'kix-icon-new-link'
         );
-        DialogService.getInstance()
-            .registerDialogResultListener<CreateLinkDescription[][]>(
-                resultListenerId, 'object-link', this.linksChanged.bind(this)
-            );
     }
 
     private async linksChanged(result: CreateLinkDescription[][]): Promise<void> {
@@ -254,7 +229,7 @@ class Component {
         this.setCanSubmit();
     }
 
-    private async addNewLinks(newLinkDescriptions): Promise<void> {
+    private async addNewLinks(newLinkDescriptions: CreateLinkDescription[]): Promise<void> {
         if (newLinkDescriptions.length) {
             const newLinkObjects: LinkObject[] = [];
 
@@ -276,7 +251,11 @@ class Component {
             this.availableLinkObjects = [...this.availableLinkObjects, ...newLinkObjects];
             this.newLinkObjects = [...this.newLinkObjects, ...newLinkObjects];
 
-            await this.prepareTable();
+            const context = await ContextService.getInstance().getContext<EditLinkedObjectsDialogContext>(
+                EditLinkedObjectsDialogContext.CONTEXT_ID
+            );
+            context.setObjectList([...this.availableLinkObjects]);
+            context.getObjectList();
 
             this.state.linkObjectCount = this.availableLinkObjects.length;
 
@@ -286,6 +265,41 @@ class Component {
             }
         }
     }
+
+    public async markToDelete(): Promise<void> {
+        let deleteNewLinks: LinkObject[] = [];
+        this.selectedLinkObjects.forEach((slo) => {
+            const newLinkIndex = this.newLinkObjects.findIndex((nlo) => nlo.equals(slo));
+            if (newLinkIndex !== -1) {
+                this.newLinkObjects.splice(newLinkIndex, 1);
+                const index = this.availableLinkObjects.findIndex((alo) => alo.equals(slo));
+                if (index !== -1) {
+                    deleteNewLinks = [...deleteNewLinks, ...this.availableLinkObjects.splice(index, 1)];
+                }
+            } else {
+                if (!this.deleteLinkObjects.some((dlo) => dlo.equals(slo))) {
+                    this.deleteLinkObjects.push(slo);
+                }
+            }
+        });
+
+        if (!!deleteNewLinks.length) {
+            this.state.table.removeRows(
+                this.state.table.getRows().filter(
+                    (r) => deleteNewLinks.some(
+                        (dl) => dl.equals(r.getRowObject().getObject())
+                    )
+                ).map((r) => r.getRowId())
+            );
+        }
+
+        this.state.table.setRowsSelectableByObject(this.deleteLinkObjects, false);
+        this.state.table.setRowObjectValueState(this.deleteLinkObjects, ValueState.HIGHLIGHT_REMOVED);
+
+        this.state.canDelete = false;
+        this.setCanSubmit();
+    }
+
 
     public cancel(): void {
         DialogService.getInstance().closeMainDialog();
@@ -331,7 +345,7 @@ class Component {
     }
 
     private async addLinks(): Promise<boolean> {
-        const service = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(KIXObjectType.LINK_OBJECT);
+        const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(KIXObjectType.LINK_OBJECT);
         DialogService.getInstance().setMainDialogLoading(true, "Verknüpfungen werden angelegt.");
         let ok = true;
         for (const newLinkObject of this.newLinkObjects) {

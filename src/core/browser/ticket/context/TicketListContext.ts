@@ -5,6 +5,7 @@ import {
 import { TicketListContextConfiguration } from "./TicketListContextConfiguration";
 import { KIXObjectService } from "../../kix";
 import { EventService } from "../../event";
+import { ApplicationEvent } from "../../application";
 
 export class TicketListContext extends Context<TicketListContextConfiguration> {
 
@@ -28,7 +29,9 @@ export class TicketListContext extends Context<TicketListContextConfiguration> {
         const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, 1000, ['Watchers']);
 
         const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish('APP_LOADING', { loading: true, hint: 'Lade Tickets ...' });
+            EventService.getInstance().publish(
+                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Lade Tickets ...' }
+            );
         }, 500);
 
         const tickets = await KIXObjectService.loadObjects<Ticket>(
@@ -38,7 +41,7 @@ export class TicketListContext extends Context<TicketListContextConfiguration> {
         window.clearTimeout(timeout);
 
         this.setObjectList(tickets);
-        EventService.getInstance().publish('APP_LOADING', { loading: false });
+        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
     }
 
     public getContent(show: boolean = false): ConfiguredWidget[] {

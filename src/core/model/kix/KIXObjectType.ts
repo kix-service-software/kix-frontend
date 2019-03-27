@@ -6,6 +6,8 @@ export enum KIXObjectType {
 
     ARTICLE_TYPE = 'ARTICLE_TYPE',
 
+    CHANNEL = 'Channel',
+
     SENDER_TYPE = 'SENDER_TYPE',
 
     LOCK = 'LOCK',
@@ -26,7 +28,11 @@ export enum KIXObjectType {
 
     CONFIG_ITEM_ATTACHMENT = 'CONFIG_ITEM_ATTACHMENT',
 
+    CONFIG_ITEM_VERSION_COMPARE = 'CONFIG_ITEM_VERSION_COMPARE',
+
     CONTACT = 'Contact',
+
+    CURRENT_USER = 'CURRENT_USER',
 
     CUSTOMER = 'Customer',
 
@@ -66,6 +72,8 @@ export enum KIXObjectType {
 
     SYS_CONFIG_ITEM = 'SysConfigItem',
 
+    SYSTEM_ADDRESS = 'SystemAddress',
+
     TEXT_MODULE = "TextModule",
 
     TICKET = 'Ticket',
@@ -80,7 +88,13 @@ export enum KIXObjectType {
 
     TICKET_STATE_TYPE = 'TICKET_STATE_TYPE',
 
+    TRANSLATION = 'Translation',
+
+    TRANSLATION_LANGUAGE = 'TranslationLanguage',
+
     USER = 'User',
+
+    USER_PREFERENCE = 'USER_PREFERENCE',
 
     VALID_OBJECT = 'ValidObject',
 

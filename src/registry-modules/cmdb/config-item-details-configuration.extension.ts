@@ -6,8 +6,7 @@ import {
     DataType
 } from "../../core/model";
 import {
-    TableColumnConfiguration, TableConfiguration,
-    TableHeaderHeight, TableRowHeight
+    TableConfiguration, TableHeaderHeight, TableRowHeight, DefaultColumnConfiguration
 } from '../../core/browser';
 import { ConfigItemDetailsContextConfiguration, ConfigItemDetailsContext } from "../../core/browser/cmdb";
 
@@ -36,20 +35,7 @@ export class Extension implements IConfigurationExtension {
         const configItemHistoryLane =
             new ConfiguredWidget("config-item-history-widget", new WidgetConfiguration(
                 "config-item-history-widget", "Historie", ['config-item-print-action'],
-                new TableConfiguration(
-                    null, null, [
-                        new TableColumnConfiguration('HistoryType', true, false, true, true, 200),
-                        new TableColumnConfiguration('Comment', true, false, true, true, 550),
-                        new TableColumnConfiguration('CreateBy', true, false, true, true, 300),
-                        new TableColumnConfiguration(
-                            'CreateTime', true, false, true, true, 150, true, false, DataType.DATE_TIME
-                        ),
-                        new TableColumnConfiguration(
-                            'Content', true, true, false, false, 150, false, true
-                        )
-                    ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
-                ),
-                true, true, WidgetSize.BOTH, null, false)
+                null, true, true, WidgetSize.BOTH, null, false)
             );
 
         const configItemLinkedObjectsLane =
@@ -108,9 +94,9 @@ export class Extension implements IConfigurationExtension {
 
         const configItemVersionLane = new ConfiguredWidget('config-item-version-widget',
             new WidgetConfiguration(
-                'config-item-version-widget', "Versionsdetails",
+                'table-widget', "Versionsdetails",
                 ['config-item-version-compare-action', 'config-item-edit-action'],
-                null, false, true
+                { objectType: KIXObjectType.CONFIG_ITEM_VERSION }, false, true, WidgetSize.BOTH, null, true
             ));
 
         const content = ['config-item-version-widget'];

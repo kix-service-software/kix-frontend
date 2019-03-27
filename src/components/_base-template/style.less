@@ -58,18 +58,21 @@
     }
     .image-dialog-container {
         position: relative;
-        z-index: 300;
+        z-index: 400;
     }
     .main-dialog-container {
         position: relative;
-        z-index: 400;
+        z-index: 500;
     }
     .overlay-dialog-container {
         position: relative;
-        z-index: 500;
+        z-index: 600;
+    }
+    .overlay-shield {
+        z-index: 250;
     }
     .overlay {
-        z-index: 100;
+        z-index: 300;
     }
     .image-dialog-container~.overlay,
     .main-dialog-container~.overlay,
@@ -77,6 +80,6 @@
     .image-dialog-container~.overlay-shield,
     .main-dialog-container~.overlay-shield,
     .overlay-dialog-container~.overlay-shield {
-        z-index: 550;
+        z-index: 650;
     }
 }

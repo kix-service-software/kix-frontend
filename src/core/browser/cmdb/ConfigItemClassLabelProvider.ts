@@ -9,10 +9,32 @@ export class ConfigItemClassLabelProvider implements ILabelProvider<ConfigItemCl
     public kixObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_CLASS;
 
     public async getPropertyValueDisplayText(property: string, value: string | number | any = ''): Promise<string> {
-        return value;
+        let displayValue = value;
+        const objectData = ContextService.getInstance().getObjectData();
+        switch (property) {
+            case ConfigItemClassProperty.VALID_ID:
+                const valid = objectData.validObjects.find((v) => v.ID.toString() === value.toString());
+                if (valid) {
+                    displayValue = valid.Name;
+                }
+                break;
+            case ConfigItemClassProperty.CREATE_BY:
+            case ConfigItemClassProperty.CHANGE_BY:
+                const user = objectData.users.find((u) => u.UserID.toString() === displayValue.toString());
+                if (user) {
+                    displayValue = user.UserFullname;
+                }
+                break;
+            case ConfigItemClassProperty.CREATE_TIME:
+            case ConfigItemClassProperty.CHANGE_TIME:
+                displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
+                break;
+            default:
+        }
+        return displayValue.toString();
     }
 
-    public async getPropertyText(property: string, object?: KIXObject, short?: boolean): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean): Promise<string> {
         let displayValue = property;
         switch (property) {
             case ConfigItemClassProperty.NAME:
@@ -36,13 +58,17 @@ export class ConfigItemClassLabelProvider implements ILabelProvider<ConfigItemCl
             case ConfigItemClassProperty.VALID_ID:
                 displayValue = 'Gültigkeit';
                 break;
-            case 'ICON':
+            case ConfigItemClassProperty.ID:
                 displayValue = 'Icon';
                 break;
             default:
                 displayValue = property;
         }
         return displayValue;
+    }
+
+    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
+        return;
     }
 
     public async getDisplayText(ciClass: ConfigItemClass, property: string): Promise<string> {
@@ -68,7 +94,7 @@ export class ConfigItemClassLabelProvider implements ILabelProvider<ConfigItemCl
             case ConfigItemClassProperty.CHANGE_TIME:
                 displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
-            case 'ICON':
+            case ConfigItemClassProperty.ID:
                 displayValue = ciClass.Name;
                 break;
             default:
@@ -115,7 +141,7 @@ export class ConfigItemClassLabelProvider implements ILabelProvider<ConfigItemCl
         let icons = [];
         if (ciClass) {
             switch (property) {
-                case 'ICON':
+                case ConfigItemClassProperty.ID:
                     icons.push(new ObjectIcon(KIXObjectType.CONFIG_ITEM_CLASS, ciClass.ID));
                     break;
                 default:

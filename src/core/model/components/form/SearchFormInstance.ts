@@ -53,6 +53,10 @@ export class SearchFormInstance implements IFormInstance {
         return;
     }
 
+    public addNewFormField(parent: FormField<any>, newFields: Array<FormField<any>>, clearChildren?: boolean): void {
+        return;
+    }
+
     public provideFormFieldValue<T>(fieldId: string, value: T): void {
         return;
     }
@@ -64,6 +68,10 @@ export class SearchFormInstance implements IFormInstance {
         if (criteria) {
             return new FormFieldValue<any>(criteria.value, true);
         }
+    }
+
+    public async getFormFieldValueByProperty<T>(property: string): Promise<FormFieldValue<T>> {
+        return null;
     }
 
     public getCriteria(): FilterCriteria[] {

@@ -1,17 +1,18 @@
 import {
     AbstractMarkoComponent, ActionFactory, ServiceRegistry, ContextService,
-    StandardTableFactoryService, LabelService, DialogService, FactoryService
+    LabelService, DialogService, FactoryService, TableFactoryService
 } from '../../core/browser';
 import { ComponentState } from './ComponentState';
-import { SearchService, SearchResultPrintAction, SearchContext } from '../../core/browser/search';
-import { CSVExportAction, BulkAction } from '../../core/browser/actions';
+import { SearchService } from '../../core/browser/search';
+import { CSVExportAction, BulkAction, ImportAction } from '../../core/browser/actions';
 import {
     ContextDescriptor, KIXObjectType, ContextType, ContextMode, KIXObjectCache, LinkCacheHandler,
-    ConfiguredDialogWidget, WidgetConfiguration
+    ConfiguredDialogWidget, WidgetConfiguration, TranslationCacheHandler
 } from '../../core/model';
 import {
     LinkService, LinkedObjectsEditAction, EditLinkedObjectsDialogContext, LinkObjectTableFactory,
-    LinkObjectLabelProvider
+    LinkObjectLabelProvider,
+    LinkObjectDialogContext
 } from '../../core/browser/link';
 import { GeneralCatalogService, GeneralCatalogBrowserFactory } from '../../core/browser/general-catalog';
 import { DynamicFieldService } from '../../core/browser/dynamic-fields';
@@ -23,6 +24,26 @@ import { SlaService, SlaLabelProvider, SlaBrowserFactory } from '../../core/brow
 import { ObjectIconService, ObjectIconBrowserFactory } from '../../core/browser/icon';
 import { PersonalSettingsDialogContext } from '../../core/browser';
 import { BulkDialogContext } from '../../core/browser/bulk';
+import { TranslationService } from '../../core/browser/i18n/TranslationService';
+import {
+    TranslationLabelProvider, TranslationBrowserFactory, TranslationLanguageLabelProvider
+} from '../../core/browser/i18n';
+import {
+    TranslationCreateAction, TranslationImportAction, TranslationCSVExportAction, TranslationEditAction
+} from '../../core/browser/i18n/admin/actions';
+import { TranslationTableFactory, TranslationLanguageTableFactory } from '../../core/browser/i18n/admin/table';
+import { AgentService } from '../../core/browser/application';
+import { PersonalSettingsFormService } from '../../core/browser/settings/PersonalSettingsFormService';
+import { UserCacheHandler } from '../../core/model/kix/user/UserCacheHandler';
+import {
+    NewTranslationDialogContext, TranslationDetailsContext, EditTranslationDialogContext
+} from '../../core/browser/i18n/admin/context';
+import { TranslationFormService } from '../../core/browser/i18n/admin/TranslationFormService';
+import { SearchResultPrintAction } from '../../core/browser/search/actions';
+import { SearchContext } from '../../core/browser/search/context';
+import { SwitchColumnOrderAction } from '../../core/browser/table/actions';
+import { SystemAddressService } from '../../core/browser/system-address';
+import { ImportDialogContext } from '../../core/browser/import';
 
 class Component extends AbstractMarkoComponent {
 
@@ -31,39 +52,65 @@ class Component extends AbstractMarkoComponent {
     }
 
     public async onMount(): Promise<void> {
-        ServiceRegistry.getInstance().registerServiceInstance(SearchService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(LinkService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(GeneralCatalogService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(TextModuleService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(SysConfigService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(DynamicFieldService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(SlaService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(ObjectIconService.getInstance());
+        ServiceRegistry.registerServiceInstance(AgentService.getInstance());
+        ServiceRegistry.registerServiceInstance(SearchService.getInstance());
+        ServiceRegistry.registerServiceInstance(LinkService.getInstance());
+        ServiceRegistry.registerServiceInstance(GeneralCatalogService.getInstance());
+        ServiceRegistry.registerServiceInstance(TextModuleService.getInstance());
+        ServiceRegistry.registerServiceInstance(SysConfigService.getInstance());
+        ServiceRegistry.registerServiceInstance(SystemAddressService.getInstance());
+        ServiceRegistry.registerServiceInstance(DynamicFieldService.getInstance());
+        ServiceRegistry.registerServiceInstance(SlaService.getInstance());
+        ServiceRegistry.registerServiceInstance(ObjectIconService.getInstance());
+        ServiceRegistry.registerServiceInstance(TranslationService.getInstance());
+        ServiceRegistry.registerServiceInstance(TranslationFormService.getInstance());
+
+        ServiceRegistry.registerServiceInstance(PersonalSettingsFormService.getInstance());
 
         KIXObjectCache.registerCacheHandler(new LinkCacheHandler());
+        KIXObjectCache.registerCacheHandler(new UserCacheHandler());
+        KIXObjectCache.registerCacheHandler(new TranslationCacheHandler());
 
         FactoryService.getInstance().registerFactory(
             KIXObjectType.GENERAL_CATALOG_ITEM, GeneralCatalogBrowserFactory.getInstance()
         );
-        FactoryService.getInstance().registerFactory(KIXObjectType.TEXT_MODULE, TextModuleBrowserFactory.getInstance());
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.SLA, SlaBrowserFactory.getInstance()
-        );
+
         FactoryService.getInstance().registerFactory(
             KIXObjectType.OBJECT_ICON, ObjectIconBrowserFactory.getInstance()
         );
 
-        StandardTableFactoryService.getInstance().registerFactory(new LinkObjectTableFactory());
-        StandardTableFactoryService.getInstance().registerFactory(new TextModulesTableFactory());
 
-        LabelService.getInstance().registerLabelProvider(new SlaLabelProvider());
-        LabelService.getInstance().registerLabelProvider(new LinkObjectLabelProvider());
+        FactoryService.getInstance().registerFactory(KIXObjectType.TEXT_MODULE, TextModuleBrowserFactory.getInstance());
+        TableFactoryService.getInstance().registerFactory(new TextModulesTableFactory());
         LabelService.getInstance().registerLabelProvider(new TextModuleLabelProvider());
+
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.SLA, SlaBrowserFactory.getInstance()
+        );
+        LabelService.getInstance().registerLabelProvider(new SlaLabelProvider());
+
+        TableFactoryService.getInstance().registerFactory(new LinkObjectTableFactory());
+        LabelService.getInstance().registerLabelProvider(new LinkObjectLabelProvider());
+        ActionFactory.getInstance().registerAction('linked-objects-edit-action', LinkedObjectsEditAction);
+
+
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.TRANSLATION, TranslationBrowserFactory.getInstance()
+        );
+        TableFactoryService.getInstance().registerFactory(new TranslationTableFactory());
+        TableFactoryService.getInstance().registerFactory(new TranslationLanguageTableFactory());
+        LabelService.getInstance().registerLabelProvider(new TranslationLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new TranslationLanguageLabelProvider());
+        ActionFactory.getInstance().registerAction('i18n-admin-translation-create', TranslationCreateAction);
+        ActionFactory.getInstance().registerAction('i18n-admin-translation-edit', TranslationEditAction);
+        ActionFactory.getInstance().registerAction('i18n-admin-translation-import', TranslationImportAction);
+        ActionFactory.getInstance().registerAction('i18n-admin-translation-csv-export', TranslationCSVExportAction);
 
         ActionFactory.getInstance().registerAction('csv-export-action', CSVExportAction);
         ActionFactory.getInstance().registerAction('bulk-action', BulkAction);
         ActionFactory.getInstance().registerAction('search-result-print-action', SearchResultPrintAction);
-        ActionFactory.getInstance().registerAction('linked-objects-edit-action', LinkedObjectsEditAction);
+        ActionFactory.getInstance().registerAction('switch-column-order-action', SwitchColumnOrderAction);
+        ActionFactory.getInstance().registerAction('import-action', ImportAction);
 
         this.registerContexts();
         this.registerDialogs();
@@ -75,6 +122,13 @@ class Component extends AbstractMarkoComponent {
             false, 'search', ['search'], SearchContext
         );
         ContextService.getInstance().registerContext(searchContext);
+
+        const linkObjectDialogContext = new ContextDescriptor(
+            LinkObjectDialogContext.CONTEXT_ID, [KIXObjectType.LINK],
+            ContextType.DIALOG, ContextMode.CREATE,
+            false, 'link-objects-dialog', ['links'], LinkObjectDialogContext
+        );
+        ContextService.getInstance().registerContext(linkObjectDialogContext);
 
         const editLinkObjectDialogContext = new ContextDescriptor(
             EditLinkedObjectsDialogContext.CONTEXT_ID, [KIXObjectType.LINK],
@@ -96,6 +150,34 @@ class Component extends AbstractMarkoComponent {
             false, 'personal-settings-dialog', ['personal-settings'], PersonalSettingsDialogContext
         );
         ContextService.getInstance().registerContext(settingsDialogContext);
+
+        const newTranslationDialogContext = new ContextDescriptor(
+            NewTranslationDialogContext.CONTEXT_ID, [KIXObjectType.TRANSLATION],
+            ContextType.DIALOG, ContextMode.CREATE_ADMIN,
+            false, 'new-translation-dialog', ['translations'], NewTranslationDialogContext
+        );
+        ContextService.getInstance().registerContext(newTranslationDialogContext);
+
+        const editTranslationDialogContext = new ContextDescriptor(
+            EditTranslationDialogContext.CONTEXT_ID, [KIXObjectType.TRANSLATION],
+            ContextType.DIALOG, ContextMode.EDIT_ADMIN,
+            false, 'edit-translation-dialog', ['translations'], EditTranslationDialogContext
+        );
+        ContextService.getInstance().registerContext(editTranslationDialogContext);
+
+        const translationDetailsContext = new ContextDescriptor(
+            TranslationDetailsContext.CONTEXT_ID, [KIXObjectType.TRANSLATION],
+            ContextType.MAIN, ContextMode.DETAILS,
+            false, 'i18n-translation-details', ['translations'], TranslationDetailsContext
+        );
+        ContextService.getInstance().registerContext(translationDetailsContext);
+
+        const importDialogContext = new ContextDescriptor(
+            ImportDialogContext.CONTEXT_ID, [KIXObjectType.ANY],
+            ContextType.DIALOG, ContextMode.IMPORT,
+            false, 'import-dialog', ['import'], ImportDialogContext
+        );
+        ContextService.getInstance().registerContext(importDialogContext);
     }
 
     private registerDialogs(): void {
@@ -125,6 +207,33 @@ class Component extends AbstractMarkoComponent {
             ),
             KIXObjectType.ANY,
             ContextMode.EDIT_BULK
+        ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'new-translation-dialog',
+            new WidgetConfiguration(
+                'new-translation-dialog', 'Neue Übersetzung', [], {}, false, false, null, 'kix-icon-new-gear'
+            ),
+            KIXObjectType.TRANSLATION,
+            ContextMode.CREATE_ADMIN
+        ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'edit-translation-dialog',
+            new WidgetConfiguration(
+                'edit-translation-dialog', 'Übersetzung bearbeiten', [], {}, false, false, null, 'kix-icon-gear'
+            ),
+            KIXObjectType.TRANSLATION,
+            ContextMode.EDIT_ADMIN
+        ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'import-dialog',
+            new WidgetConfiguration(
+                'import-dialog', 'Objekte importieren', [], {}, false, false, null, 'kix-icon-import'
+            ),
+            KIXObjectType.ANY,
+            ContextMode.IMPORT
         ));
     }
 

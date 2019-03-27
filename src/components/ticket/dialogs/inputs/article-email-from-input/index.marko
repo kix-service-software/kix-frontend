@@ -1,0 +1,8 @@
+<form-list
+    nodes=state.nodes
+    selectedNodes=[state.currentNode]
+    placeholder=(state.field.required ? "Von" : "")
+    on-focusLost("focusLost")
+    on-nodesChanged("fromChanged")
+    invalid=state.invalid
+    multiselect=false/>

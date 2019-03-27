@@ -60,18 +60,28 @@ export class LabelService {
         return null;
     }
 
-    public async getPropertyText<T extends KIXObject>(property: string, object?: T): Promise<string> {
-        const labelProvider = this.getLabelProvider(object);
+    public async getPropertyText(property: string, objectType: KIXObjectType, short: boolean = false): Promise<string> {
+        const labelProvider = this.getLabelProviderForType(objectType);
         if (labelProvider) {
-            return await labelProvider.getPropertyText(property, object);
+            return await labelProvider.getPropertyText(property, short);
         }
         return null;
     }
 
-    public async getPropertyValueDisplayText<T extends KIXObject>(object: T, property: string): Promise<string> {
+    public async getPropertyIcon(property: string, objectType: KIXObjectType): Promise<string | ObjectIcon> {
+        const labelProvider = this.getLabelProviderForType(objectType);
+        if (labelProvider) {
+            return await labelProvider.getPropertyIcon(property);
+        }
+        return null;
+    }
+
+    public async getPropertyValueDisplayText<T extends KIXObject>(
+        object: T, property: string, defaultValue?: string
+    ): Promise<string> {
         const labelProvider = this.getLabelProvider(object);
         if (labelProvider) {
-            return await labelProvider.getDisplayText(object, property);
+            return await labelProvider.getDisplayText(object, property, defaultValue);
         }
         return null;
     }

@@ -18,12 +18,25 @@ export class DialogService {
 
     private dialogs: ConfiguredDialogWidget[] = [];
 
+    private constructor() { }
+
     public static getInstance(): DialogService {
         if (!DialogService.INSTANCE) {
             DialogService.INSTANCE = new DialogService();
         }
 
         return DialogService.INSTANCE;
+    }
+
+    public registerDialog(dialogWidget: ConfiguredDialogWidget): void {
+        this.dialogs.push(dialogWidget);
+    }
+
+    public unregisterDialog(instanceId: string): void {
+        const index = this.dialogs.findIndex((d) => d.instanceId === instanceId);
+        if (index !== -1) {
+            this.dialogs.splice(index, 1);
+        }
     }
 
     public registerMainDialogListener(listener: IMainDialogListener): void {
@@ -47,15 +60,15 @@ export class DialogService {
         singleTab: boolean = false
     ): Promise<void> {
         const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-        const contextIcon = context.getIcon();
-        const contextTitle = await context.getDisplayText();
+        const contextIcon = context ? context.getIcon() : null;
+        const contextTitle = context ? await context.getDisplayText() : '';
 
         let dialogTitle = title;
         if (this.mainDialogListener) {
             switch (contextMode) {
                 case ContextMode.CREATE:
                     dialogTitle = dialogTitle || 'Neues Objekt anlegen';
-                    dialogIcon = 'kix-icon-plus-blank';
+                    dialogIcon = dialogIcon || 'kix-icon-plus-blank';
                     break;
                 case ContextMode.CREATE_SUB:
                     dialogTitle = contextTitle || dialogTitle || 'Neues Objekt anlegen';
@@ -68,21 +81,21 @@ export class DialogService {
                     break;
                 case ContextMode.SEARCH:
                     dialogTitle = dialogTitle || 'Komplexsuche';
-                    dialogIcon = 'kix-icon-search';
+                    dialogIcon = dialogIcon || 'kix-icon-search';
                     break;
                 case ContextMode.EDIT:
                     dialogTitle = contextTitle || 'Objekt bearbeiten';
-                    dialogIcon = contextIcon;
+                    dialogIcon = dialogIcon || contextIcon;
                     singleTab = true;
                     break;
                 case ContextMode.EDIT_BULK:
                     dialogTitle = 'Sammelaktion';
-                    dialogIcon = 'kix-icon-arrow-collect';
+                    dialogIcon = dialogIcon || 'kix-icon-arrow-collect';
                     singleTab = true;
                     break;
                 case ContextMode.EDIT_LINKS:
                     dialogTitle = contextTitle || 'Verknüpfungen bearbeiten';
-                    dialogIcon = contextIcon;
+                    dialogIcon = dialogIcon || contextIcon;
                     singleTab = true;
                     break;
                 case ContextMode.EDIT_ADMIN:
@@ -93,6 +106,11 @@ export class DialogService {
                 case ContextMode.PERSONAL_SETTINGS:
                     dialogTitle = dialogTitle || 'Persönliche Einstellungen';
                     dialogIcon = dialogIcon || 'kix-icon-gear';
+                    singleTab = true;
+                    break;
+                case ContextMode.IMPORT:
+                    dialogTitle = 'Datenimport';
+                    dialogIcon = dialogIcon || 'kix-icon-import';
                     singleTab = true;
                     break;
                 default:
@@ -171,10 +189,6 @@ export class DialogService {
         }
     }
 
-    public registerDialog(dialogWidget: ConfiguredDialogWidget): void {
-        this.dialogs.push(dialogWidget);
-    }
-
     // FIXME: obsolet, DialogEvnets.DIALOG_CANCELED bzw. .DIALOG_FINISHED verwenden
     public registerDialogResultListener<T>(listenerId: string, component: string, listener: (result: T) => void): void {
         if (this.resultListeners.has(listenerId)) {
@@ -188,7 +202,7 @@ export class DialogService {
     private addListener<T>(dialogId: string, component: string, listener: (result: T) => void): void {
         const listeners = this.resultListeners.get(dialogId);
         const index = listeners.findIndex((l) => l[0] === component);
-        if (index === -1) {
+        if (index !== -1) {
             listeners.splice(index, 1);
         }
         listeners.push([component, listener]);

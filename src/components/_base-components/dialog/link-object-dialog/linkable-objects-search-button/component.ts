@@ -15,17 +15,17 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        if (formInstance) {
-            this.formListenerId = 'LinkableObjectsSearchButton';
-            await FormService.getInstance().registerFormInstanceListener(this.state.formId, {
-                formListenerId: this.formListenerId,
-                formValueChanged: () => {
+        this.formListenerId = 'LinkableObjectsSearchButton';
+        await FormService.getInstance().registerFormInstanceListener(this.state.formId, {
+            formListenerId: this.formListenerId,
+            formValueChanged: async () => {
+                const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+                if (formInstance) {
                     this.state.canSearch = formInstance.hasValues();
-                },
-                updateForm: () => { return; }
-            });
-        }
+                }
+            },
+            updateForm: () => { return; }
+        });
     }
 
     public async onDestroy(): Promise<void> {

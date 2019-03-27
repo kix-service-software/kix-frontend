@@ -8,6 +8,7 @@ import { KIXObjectService } from "../../kix";
 import { CMDBContext } from "./CMDBContext";
 import { EventService } from "../../event";
 import { LabelService } from "../../LabelService";
+import { ApplicationEvent } from "../../application";
 
 export class ConfigItemDetailsContext extends Context<ConfigItemDetailsContextConfiguration> {
 
@@ -99,26 +100,42 @@ export class ConfigItemDetailsContext extends Context<ConfigItemDetailsContextCo
     ): Promise<O> {
         let object;
 
+        if (!objectType) {
+            objectType = KIXObjectType.CONFIG_ITEM;
+        }
+
         if (reload && objectType === KIXObjectType.CONFIG_ITEM) {
             KIXObjectCache.removeObject(KIXObjectType.CONFIG_ITEM, Number(this.objectId));
         }
 
         if (!KIXObjectCache.isObjectCached(KIXObjectType.CONFIG_ITEM, Number(this.objectId))) {
             object = await this.loadConfigItem();
+            reload = true;
         } else {
             object = KIXObjectCache.getObject(KIXObjectType.CONFIG_ITEM, Number(this.objectId));
+        }
+
+        if (reload) {
+            this.listeners.forEach(
+                (l) => l.objectChanged(Number(this.objectId), object, KIXObjectType.CONFIG_ITEM)
+            );
         }
 
         return object;
     }
 
     private async loadConfigItem(): Promise<ConfigItem> {
-        EventService.getInstance().publish('APP_LOADING', { loading: true, hint: 'Lade Config Item ...' });
+        EventService.getInstance().publish(
+            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Lade Config Item ...' }
+        );
 
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null, null, null,
-            ['Versions', 'Links', 'History', VersionProperty.DATA, VersionProperty.PREPARED_DATA],
-            ['Versions', 'Links', 'History']
+            [
+                'Versions', 'Links', 'History', VersionProperty.DEFINITION,
+                VersionProperty.DATA, VersionProperty.PREPARED_DATA
+            ],
+            ['Links']
         );
 
         const itemId = Number(this.objectId);
@@ -133,12 +150,11 @@ export class ConfigItemDetailsContext extends Context<ConfigItemDetailsContextCo
         let configItem;
         if (configItems && configItems.length) {
             configItem = configItems[0];
-            this.listeners.forEach(
-                (l) => l.objectChanged(itemId, configItem, KIXObjectType.CONFIG_ITEM)
-            );
         }
 
-        EventService.getInstance().publish('APP_LOADING', { loading: false, hint: 'Lade Config Item ...' });
+        EventService.getInstance().publish(
+            ApplicationEvent.APP_LOADING, { loading: false, hint: 'Lade Config Item ...' }
+        );
         return configItem;
     }
 

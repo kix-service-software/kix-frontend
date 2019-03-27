@@ -1,0 +1,12 @@
+<if(state.hasListFilter)>
+    <form-list-tree nodes=state.nodes activeNodes=state.selectedNodes on-nodeClicked("nodeClicked")/>
+</if>
+<else>
+    <input.input-style
+        type="text"
+        placeholder="Filterwert eingeben"
+        value=component.filterText
+        on-change("textFilterValueChanged")
+        on-keydown("filterKeyDown")
+        key="column-filter-input"/>
+</else>

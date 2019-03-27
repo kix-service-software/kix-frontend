@@ -31,7 +31,7 @@ export class EventService {
     }
 
     public unsubscribe(eventId: string, subscriber: IEventSubscriber): void {
-        if (this.eventSubscribers.has(eventId)) {
+        if (subscriber && this.eventSubscribers.has(eventId)) {
             const subscriberIndex = this.eventSubscribers.get(eventId).findIndex(
                 (s) => s.eventSubscriberId === subscriber.eventSubscriberId
             );

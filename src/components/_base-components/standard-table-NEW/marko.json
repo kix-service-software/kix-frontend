@@ -1,0 +1,10 @@
+{
+    "taglibImports": [
+        "./table-body/marko.json",
+        "./table-head-row/marko.json"
+    ],
+    "tags-dir": [
+        "table-body",
+        "table-head-row"
+    ]
+}

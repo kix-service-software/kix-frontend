@@ -1,7 +1,7 @@
 import { ILabelProvider } from "..";
 import {
     Ticket, TicketProperty, DateTimeUtil, ObjectIcon,
-    Customer, KIXObjectType, Contact, KIXObject, TicketPriority, TicketType,
+    Customer, KIXObjectType, Contact, TicketPriority, TicketType,
     TicketState, Queue, SysConfigItem, SysConfigKey, Sla
 } from "../../model";
 import { ContextService } from "../context";
@@ -21,7 +21,7 @@ export class TicketLabelProvider implements ILabelProvider<Ticket> {
                     const queues = await KIXObjectService.loadObjects<Queue>(
                         KIXObjectType.QUEUE, [value]
                     ).catch((error) => [] as Queue[]);
-                    const queue = queues.find((q) => q.QueueID === value);
+                    const queue = queues.find((q) => q.QueueID.toString() === value.toString());
                     displayValue = queue ? queue.Name : value;
                     break;
                 case TicketProperty.STATE_ID:
@@ -43,7 +43,7 @@ export class TicketLabelProvider implements ILabelProvider<Ticket> {
                     displayValue = types && types.length ? types[0].Name : value;
                     break;
                 case TicketProperty.SERVICE_ID:
-                    const service = objectData.services.find((s) => s.ServiceID === value);
+                    const service = objectData.services.find((s) => s.ServiceID.toString() === value.toString());
                     displayValue = service ? service.Name : value;
                     break;
                 case TicketProperty.SLA_ID:
@@ -51,6 +51,18 @@ export class TicketLabelProvider implements ILabelProvider<Ticket> {
                         KIXObjectType.SLA, [value]
                     ).catch((error) => []);
                     displayValue = slas && slas.length ? slas[0].Name : value;
+                    break;
+                case TicketProperty.LOCK_ID:
+                    displayValue = value === 1 ? 'freigegeben' : 'gesperrt';
+                    break;
+                case TicketProperty.OWNER_ID:
+                case TicketProperty.RESPONSIBLE_ID:
+                    const user = objectData.users.find(
+                        (u) => u.UserID.toString() === value.toString()
+                    );
+                    if (user) {
+                        displayValue = user.UserFullname;
+                    }
                     break;
                 default:
                     displayValue = value;
@@ -60,7 +72,7 @@ export class TicketLabelProvider implements ILabelProvider<Ticket> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public async getPropertyText(property: string, object?: KIXObject, short?: boolean): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean): Promise<string> {
         let displayValue = property;
         switch (property) {
             case SearchProperty.FULLTEXT:
@@ -166,6 +178,10 @@ export class TicketLabelProvider implements ILabelProvider<Ticket> {
                 displayValue = property;
         }
         return displayValue;
+    }
+
+    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
+        return;
     }
 
     public async getDisplayText(ticket: Ticket, property: string): Promise<string> {

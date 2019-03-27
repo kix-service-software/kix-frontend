@@ -1,6 +1,6 @@
 import {
     AbstractMarkoComponent, ContextService, DialogService, ActionFactory, KIXObjectSearchService,
-    LabelService, StandardTableFactoryService, FactoryService, ServiceRegistry
+    LabelService, FactoryService, ServiceRegistry, TableFactoryService
 } from '../../../core/browser';
 import { BulkAction } from '../../../core/browser/actions';
 import { ComponentState } from './ComponentState';
@@ -19,7 +19,11 @@ import {
     ConfigItemClassDefinitionTableFactory, ConfigItemClassDefinitionLabelProvider, NewConfigItemClassDialogContext,
     ConfigItemClassService,
     EditConfigItemClassDialogContext,
-    ConfigItemClassFormService
+    ConfigItemClassFormService,
+    ConfigItemHistoryTableFactory,
+    CompareConfigItemVersionDialogContext,
+    CompareConfigItemVersionTableFactory,
+    ConfigItemVersionCompareLabelProvider
 } from '../../../core/browser/cmdb';
 
 class Component extends AbstractMarkoComponent {
@@ -29,10 +33,10 @@ class Component extends AbstractMarkoComponent {
     }
 
     public async onMount(): Promise<void> {
-        ServiceRegistry.getInstance().registerServiceInstance(CMDBService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(ConfigItemClassService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(ConfigItemFormService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(ConfigItemClassFormService.getInstance());
+        ServiceRegistry.registerServiceInstance(CMDBService.getInstance());
+        ServiceRegistry.registerServiceInstance(ConfigItemClassService.getInstance());
+        ServiceRegistry.registerServiceInstance(ConfigItemFormService.getInstance());
+        ServiceRegistry.registerServiceInstance(ConfigItemClassFormService.getInstance());
 
         KIXObjectCache.registerCacheHandler(new ConfigItemClassCacheHandler());
 
@@ -46,16 +50,19 @@ class Component extends AbstractMarkoComponent {
             KIXObjectType.CONFIG_ITEM_IMAGE, ConfigItemImageBrowserFactory.getInstance()
         );
 
-        StandardTableFactoryService.getInstance().registerFactory(new ConfigItemTableFactory());
-        StandardTableFactoryService.getInstance().registerFactory(new ConfigItemVersionTableFactory());
-        StandardTableFactoryService.getInstance().registerFactory(new ConfigItemClassTableFactory());
-        StandardTableFactoryService.getInstance().registerFactory(new ConfigItemClassDefinitionTableFactory());
+        TableFactoryService.getInstance().registerFactory(new ConfigItemTableFactory());
+        TableFactoryService.getInstance().registerFactory(new ConfigItemVersionTableFactory());
+        TableFactoryService.getInstance().registerFactory(new CompareConfigItemVersionTableFactory());
+        TableFactoryService.getInstance().registerFactory(new ConfigItemClassTableFactory());
+        TableFactoryService.getInstance().registerFactory(new ConfigItemClassDefinitionTableFactory());
+        TableFactoryService.getInstance().registerFactory(new ConfigItemHistoryTableFactory());
 
         LabelService.getInstance().registerLabelProvider(new ConfigItemLabelProvider());
         LabelService.getInstance().registerLabelProvider(new ConfigItemClassLabelProvider());
         LabelService.getInstance().registerLabelProvider(new ConfigItemHistoryLabelProvider());
         LabelService.getInstance().registerLabelProvider(new ConfigItemVersionLabelProvider());
         LabelService.getInstance().registerLabelProvider(new ConfigItemClassDefinitionLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new ConfigItemVersionCompareLabelProvider());
 
         KIXObjectSearchService.getInstance().registerSearchDefinition(new ConfigItemSearchDefinition());
 
@@ -97,6 +104,13 @@ class Component extends AbstractMarkoComponent {
             false, 'search-config-item-dialog', ['configitems'], ConfigItemSearchContext
         );
         ContextService.getInstance().registerContext(searchConfigItemContext);
+
+        const compareConfigItemContext = new ContextDescriptor(
+            CompareConfigItemVersionDialogContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM_VERSION_COMPARE],
+            ContextType.DIALOG, ContextMode.EDIT,
+            false, 'compare-config-item-version-dialog', ['configitems'], CompareConfigItemVersionDialogContext
+        );
+        ContextService.getInstance().registerContext(compareConfigItemContext);
     }
 
     private registerAdminContexts(): void {
@@ -150,13 +164,24 @@ class Component extends AbstractMarkoComponent {
             KIXObjectType.CONFIG_ITEM,
             ContextMode.SEARCH
         ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'compare-config-item-version-dialog',
+            new WidgetConfiguration(
+                'compare-config-item-version-dialog', 'Versionen vergleichen', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-comparison-version'
+            ),
+            KIXObjectType.CONFIG_ITEM_VERSION_COMPARE,
+            ContextMode.EDIT
+        ));
     }
 
     private registerAdminDialogs(): void {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'new-config-item-class-dialog',
             new WidgetConfiguration(
-                'new-config-item-class-dialog', 'CMDB Klasse hinzufügen', [], {}, false, false, null, 'kix-icon-gear'
+                'new-config-item-class-dialog', 'CMDB Klasse hinzufügen', [], {}, false, false, null,
+                'kix-icon-new-gear'
             ),
             KIXObjectType.CONFIG_ITEM_CLASS,
             ContextMode.CREATE_ADMIN
@@ -176,7 +201,6 @@ class Component extends AbstractMarkoComponent {
         ActionFactory.getInstance().registerAction(
             'config-item-version-maximize-action', ConfigItemVersionMaximizeAction
         );
-        ActionFactory.getInstance().registerAction('config-item-bulk-action', BulkAction);
         ActionFactory.getInstance().registerAction('config-item-create-action', ConfigItemCreateAction);
         ActionFactory.getInstance().registerAction('config-item-edit-action', ConfigItemEditAction);
         ActionFactory.getInstance().registerAction('config-item-print-action', ConfigItemPrintAction);

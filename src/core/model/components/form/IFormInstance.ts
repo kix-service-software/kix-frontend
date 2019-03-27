@@ -11,13 +11,15 @@ export interface IFormInstance {
 
     provideFormField(newFormField: FormField): Promise<void>;
 
-    removeFormField(formField: FormField, fields?: FormField[]): void;
+    removeFormField(formField: FormField, parent?: FormField): void;
 
     addFormField(formField: FormField, fields?: FormField[]): void;
 
     provideFormFieldValue<T>(formFieldInstanceId: string, value: T): void;
 
     getFormFieldValue<T>(formFieldInstanceId: string): FormFieldValue<T>;
+
+    getFormFieldValueByProperty<T>(property: string): Promise<FormFieldValue<T>>;
 
     getAllFormFieldValues(): Map<string, FormFieldValue<any>>;
 
@@ -42,5 +44,7 @@ export interface IFormInstance {
     getForm(): Form;
 
     validateField(field: FormField): Promise<ValidationResult>;
+
+    addNewFormField(parent: FormField, newFields: FormField[], clearChildren?: boolean): void;
 
 }

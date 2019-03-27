@@ -1,6 +1,6 @@
 import {
-    AbstractMarkoComponent, StandardTableFactoryService, LabelService, ServiceRegistry,
-    FactoryService, ContextService, DialogService, ActionFactory, KIXObjectSearchService
+    AbstractMarkoComponent, LabelService, ServiceRegistry,
+    FactoryService, ContextService, DialogService, ActionFactory, KIXObjectSearchService, TableFactoryService
 } from '../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
@@ -21,10 +21,10 @@ class Component extends AbstractMarkoComponent {
     }
 
     public async onMount(): Promise<void> {
-        ServiceRegistry.getInstance().registerServiceInstance(ContactService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(ContactFormService.getInstance());
+        ServiceRegistry.registerServiceInstance(ContactService.getInstance());
+        ServiceRegistry.registerServiceInstance(ContactFormService.getInstance());
 
-        StandardTableFactoryService.getInstance().registerFactory(new ContactTableFactory());
+        TableFactoryService.getInstance().registerFactory(new ContactTableFactory());
         LabelService.getInstance().registerLabelProvider(new ContactLabelProvider());
         FactoryService.getInstance().registerFactory(KIXObjectType.CONTACT, ContactBrowserFactory.getInstance());
         KIXObjectCache.registerCacheHandler(new ContactCacheHandler());

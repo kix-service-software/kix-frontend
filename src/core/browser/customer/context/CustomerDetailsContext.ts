@@ -8,6 +8,7 @@ import { CustomerContext } from './CustomerContext';
 import { KIXObjectService } from '../../kix';
 import { EventService } from '../../event';
 import { LabelService } from '../../LabelService';
+import { ApplicationEvent } from '../../application';
 
 export class CustomerDetailsContext extends Context<CustomerDetailsContextConfiguration> {
 
@@ -92,14 +93,27 @@ export class CustomerDetailsContext extends Context<CustomerDetailsContextConfig
     }
 
     public async getObject<O extends KIXObject>(
-        kixObjectType: KIXObjectType = KIXObjectType.CUSTOMER, reload: boolean = false
+        objectType: KIXObjectType = KIXObjectType.CUSTOMER, reload: boolean = false
     ): Promise<O> {
         let object;
 
+        if (!objectType) {
+            objectType = KIXObjectType.CUSTOMER;
+        }
+
+        if (reload && objectType === KIXObjectType.CUSTOMER) {
+            KIXObjectCache.removeObject(KIXObjectType.CUSTOMER, this.objectId);
+        }
+
         if (!KIXObjectCache.isObjectCached(KIXObjectType.CUSTOMER, this.objectId)) {
-            object = this.loadCustomer();
+            object = await this.loadCustomer();
+            reload = true;
         } else {
             object = KIXObjectCache.getObject(KIXObjectType.CUSTOMER, this.objectId);
+        }
+
+        if (reload) {
+            this.listeners.forEach((l) => l.objectChanged(this.getObjectId(), object, KIXObjectType.CUSTOMER));
         }
 
         return object;
@@ -111,7 +125,7 @@ export class CustomerDetailsContext extends Context<CustomerDetailsContextConfig
         );
 
         const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish('APP_LOADING', { loading: true, hint: 'Lade Kunde ...' });
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: true, hint: 'Lade Kunde ...' });
         }, 500);
 
         const customers = await KIXObjectService.loadObjects<Customer>(
@@ -126,10 +140,9 @@ export class CustomerDetailsContext extends Context<CustomerDetailsContextConfig
         let customer;
         if (customers && customers.length) {
             customer = customers[0];
-            this.listeners.forEach((l) => l.objectChanged(this.getObjectId(), customer, KIXObjectType.CUSTOMER));
         }
 
-        EventService.getInstance().publish('APP_LOADING', { loading: false });
+        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
 
         return customer;
     }

@@ -7,6 +7,7 @@ import { AdminContext } from "../../../../admin";
 import { EventService } from "../../../../event";
 import { KIXObjectService } from "../../../../kix";
 import { LabelService } from "../../../../LabelService";
+import { ApplicationEvent } from "../../../../application";
 
 export class TicketPriorityDetailsContext extends Context<TicketPriorityDetailsContextConfiguration> {
 
@@ -117,7 +118,9 @@ export class TicketPriorityDetailsContext extends Context<TicketPriorityDetailsC
     }
 
     private async loadTicketPriority(changedProperties: string[] = [], cache: boolean = true): Promise<TicketPriority> {
-        EventService.getInstance().publish('APP_LOADING', { loading: true, hint: 'Lade Ticketpriorität ...' });
+        EventService.getInstance().publish(
+            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Lade Ticketpriorität ...' }
+        );
 
         const ticketPriorityId = Number(this.objectId);
 
@@ -137,7 +140,7 @@ export class TicketPriorityDetailsContext extends Context<TicketPriorityDetailsC
             ));
         }
 
-        EventService.getInstance().publish('APP_LOADING', { loading: false, hint: '' });
+        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
 
         return ticketPriority;
     }

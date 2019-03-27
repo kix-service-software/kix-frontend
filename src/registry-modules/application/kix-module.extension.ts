@@ -18,7 +18,9 @@ class KIXModuleExtionsion implements IKIXModuleExtension {
         ['edit-linked-objects-dialog', '_base-components/dialog/edit-linked-objects-dialog'],
         ['toast', '_base-components/overlay/toast'],
         ['confirm-overlay', '_base-components/overlay/confirm-overlay'],
-        ['form-default-input', '_base-components/form/inputs/form-default-input'],
+        ['table-column-filter-overlay', '_base-components/overlay/table-column-filter-overlay'],
+        ['default-text-input', '_base-components/form/inputs/default-text-input'],
+        ['default-select-input', '_base-components/form/inputs/default-select-input'],
         ['form-list', '_base-components/form/inputs/form-list'],
         ['rich-text-input', '_base-components/form/inputs/rich-text-input'],
         ['valid-input', '_base-components/form/inputs/valid-input'],
@@ -34,7 +36,13 @@ class KIXModuleExtionsion implements IKIXModuleExtension {
         ['linked-objects-widget', 'widgets/linked-objects-widget'],
         ['help-widget', 'widgets/help-widget'],
         ['personal-settings-dialog', '_base-components/dialog/personal-settings-dialog'],
-        ['bulk-dialog', '_base-components/dialog/bulk-dialog']
+        ['bulk-dialog', '_base-components/dialog/bulk-dialog'],
+        ['table-widget', '_base-components/table-widget'],
+        // tslint:disable-next-line:max-line-length
+        ['label-list-cell-content', '_base-components/standard-table-NEW/table-body/table-row/table-cell-NEW/label-list-cell-content'],
+        ['multiline-cell', '_base-components/standard-table-NEW/table-body/table-row/table-cell-NEW/multiline-cell'],
+        ['checkbox-input', '_base-components/form/inputs/checkbox-input'],
+        ['import-dialog', '_base-components/dialog/import-dialog']
     ];
 
 

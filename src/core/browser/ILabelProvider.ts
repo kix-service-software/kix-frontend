@@ -6,9 +6,11 @@ export interface ILabelProvider<T> {
 
     isLabelProviderFor(object: T): boolean;
 
-    getPropertyText(property: string, object?: T, short?: boolean): Promise<string>;
+    getPropertyText(property: string, short?: boolean): Promise<string>;
 
-    getDisplayText(object: T, property: string): Promise<string>;
+    getPropertyIcon(property: string): Promise<string | ObjectIcon>;
+
+    getDisplayText(object: T, property: string, defaultValue?: string): Promise<string>;
 
     getPropertyValueDisplayText(property: string, value: string | number): Promise<string>;
 

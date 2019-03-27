@@ -2,7 +2,6 @@ import {
     KIXObjectType, KIXObject, SearchFormInstance,
     InputFieldTypes, TreeNode, KIXObjectLoadingOptions, FilterCriteria, FilterDataType, FilterType
 } from "../../../model";
-import { StandardTable } from "../../standard-table";
 import { SearchDefinition } from "./SearchDefinition";
 import { SearchOperator } from "../../SearchOperator";
 import { FormService } from "../../form";
@@ -12,6 +11,9 @@ import { SearchResultCategory } from "./SearchResultCategory";
 import { KIXObjectService } from "../KIXObjectService";
 import { ServiceRegistry } from "../ServiceRegistry";
 import { SearchProperty } from "../../SearchProperty";
+import { ITable } from "../../table";
+import { ContextService } from "../../context";
+import { SearchContext } from "../../search/context";
 
 export class KIXObjectSearchService {
 
@@ -29,7 +31,7 @@ export class KIXObjectSearchService {
 
     private searchCache: KIXObjectSearchCache<KIXObject>;
     private formSearches: Map<KIXObjectType, (formId: string) => Promise<any[]>> = new Map();
-    private formTableConfigs: Map<KIXObjectType, StandardTable<any>> = new Map();
+    private formTableConfigs: Map<KIXObjectType, ITable> = new Map();
     private searchDefinitions: SearchDefinition[] = [];
     private activeSearchResultExplorerCategory: SearchResultCategory = null;
 
@@ -47,8 +49,7 @@ export class KIXObjectSearchService {
     public registerFormSearch<T extends KIXObject>(
         objectType: KIXObjectType,
         search: (formId: string) => Promise<T[]>,
-        tableConfig?: StandardTable<T>
-    ): void {
+        tableConfig?: ITable): void {
         this.formSearches.set(objectType, search);
         if (tableConfig) {
             this.formTableConfigs.set(objectType, tableConfig);
@@ -65,12 +66,23 @@ export class KIXObjectSearchService {
         return id;
     }
 
-    public getFormResultTable<T extends KIXObject>(objectType: KIXObjectType): StandardTable<T> {
+    public getFormResultTable<T extends KIXObject>(objectType: KIXObjectType): ITable {
         let tableConfig;
         if (this.formTableConfigs.has(objectType)) {
             tableConfig = this.formTableConfigs.get(objectType);
         }
         return tableConfig;
+    }
+
+    public async provideResult(objects: KIXObject[] = null): Promise<void> {
+        const context = await ContextService.getInstance().getContext<SearchContext>(SearchContext.CONTEXT_ID);
+        if (context) {
+            if (objects) {
+                context.setObjectList(objects);
+            } else {
+                context.setObjectList(this.searchCache ? this.searchCache.result : []);
+            }
+        }
     }
 
     public async executeSearch<T extends KIXObject = KIXObject>(
@@ -90,6 +102,9 @@ export class KIXObjectSearchService {
 
                 objects = await this.doSearch(formInstance.getObjectType(), searchLoadingOptions);
                 this.searchCache = new KIXObjectSearchCache<T>(objectType, criteria, (objects as any));
+
+                this.provideResult();
+
                 this.listeners.forEach((l) => l.searchFinished());
             } else {
                 const formFieldValues = formInstance.getAllFormFieldValues();
@@ -205,7 +220,7 @@ export class KIXObjectSearchService {
     public async getTreeNodes(
         objectType: KIXObjectType, property: string, parameter: Array<[string, any]>
     ): Promise<TreeNode[]> {
-        const objectService = ServiceRegistry.getInstance().getServiceInstance<KIXObjectService>(objectType);
+        const objectService = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
         let nodes = await objectService.getTreeNodes(property);
         if (!nodes || !nodes.length) {
             const searchDefinition = this.getSearchDefinition(objectType);

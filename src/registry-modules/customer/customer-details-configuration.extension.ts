@@ -1,12 +1,10 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import { CustomerDetailsContextConfiguration, CustomerDetailsContext } from '../../core/browser/customer';
 import {
-    ContextConfiguration, ConfiguredWidget, WidgetConfiguration,
-    WidgetSize, ContactProperty, TicketProperty, DataType
+    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize, ContactProperty,
+    TicketProperty, DataType, KIXObjectType
 } from '../../core/model';
-import {
-    TableColumnConfiguration, TableConfiguration, TableHeaderHeight, TableRowHeight
-} from '../../core/browser';
+import { TableConfiguration, TableHeaderHeight, TableRowHeight, DefaultColumnConfiguration } from '../../core/browser';
 
 export class ModuleFactoryExtension implements IConfigurationExtension {
 
@@ -32,26 +30,36 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
         const assignedContactsLane = new ConfiguredWidget('customer-assigned-contacts-widget', new WidgetConfiguration(
             'customer-assigned-contacts-widget', 'Zugeordnete Ansprechpartner', [
                 'customer-edit-action', 'customer-print-action'
-            ], new TableConfiguration(
+            ], new TableConfiguration(KIXObjectType.CONTACT,
                 null, null,
                 [
-                    new TableColumnConfiguration(ContactProperty.USER_FIRST_NAME, true, false, true, true, 200),
-                    new TableColumnConfiguration(ContactProperty.USER_LAST_NAME, true, false, true, true, 200),
-                    new TableColumnConfiguration(ContactProperty.USER_EMAIL, true, false, true, true, 250),
-                    new TableColumnConfiguration(ContactProperty.USER_LOGIN, true, false, true, true, 200),
-                    new TableColumnConfiguration(
-                        ContactProperty.OPEN_TICKETS_COUNT, true, false, true, true, 150, true, null, DataType.NUMBER),
-                    new TableColumnConfiguration(
+                    new DefaultColumnConfiguration(
+                        ContactProperty.USER_FIRST_NAME, true, false, true, true, 200, true, true
+                    ),
+                    new DefaultColumnConfiguration(
+                        ContactProperty.USER_LAST_NAME, true, false, true, true, 200, true, true
+                    ),
+                    new DefaultColumnConfiguration(
+                        ContactProperty.USER_EMAIL, true, false, true, true, 250, true, true
+                    ),
+                    new DefaultColumnConfiguration(
+                        ContactProperty.USER_LOGIN, true, false, true, true, 200, true, true
+                    ),
+                    new DefaultColumnConfiguration(
+                        ContactProperty.OPEN_TICKETS_COUNT, true, false, true, true, 150,
+                        true, false, false, DataType.NUMBER
+                    ),
+                    new DefaultColumnConfiguration(
                         ContactProperty.ESCALATED_TICKETS_COUNT, true, false, true, true, 150,
-                        true, null, DataType.NUMBER
+                        true, false, false, DataType.NUMBER
                     ),
-                    new TableColumnConfiguration(
+                    new DefaultColumnConfiguration(
                         ContactProperty.REMINDER_TICKETS_COUNT, true, false, true, true, 150,
-                        true, null, DataType.NUMBER
+                        true, false, false, DataType.NUMBER
                     ),
-                    new TableColumnConfiguration(
-                        'contact-new-ticket', true, false, true, false, 150,
-                        true, null, null, null, 'kix-icon-new-ticket'
+                    new DefaultColumnConfiguration(
+                        ContactProperty.CREATE_NEW_TICKET, true, false, false, true, 150,
+                        false, false, false, DataType.STRING, false, 'create-new-ticket-cell'
                     )
                 ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             ),
@@ -67,123 +75,182 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
 
         const openTicketsGroup =
             new ConfiguredWidget('customer-open-tickets-group', new WidgetConfiguration(
-                'customer-open-tickets-group', 'Offene Tickets', [], new TableConfiguration(
+                'customer-open-tickets-group', 'Offene Tickets', [], new TableConfiguration(KIXObjectType.TICKET,
                     null, null,
                     [
-                        new TableColumnConfiguration(TicketProperty.PRIORITY_ID, false, true, true, true, 65),
-                        new TableColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, true, 135),
-                        new TableColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260),
-                        new TableColumnConfiguration(TicketProperty.STATE_ID, false, true, true, true, 80),
-                        new TableColumnConfiguration(TicketProperty.QUEUE_ID, true, false, true, true, 100),
-                        new TableColumnConfiguration(TicketProperty.CUSTOMER_USER_ID, true, false, true, true, 150),
-                        new TableColumnConfiguration(
-                            TicketProperty.CHANGED, true, false, true, true, 125, true, false, DataType.DATE_TIME
+                        new DefaultColumnConfiguration(
+                            TicketProperty.PRIORITY_ID, false, true, true, true, 65, true, true, true
                         ),
-                        new TableColumnConfiguration(
-                            TicketProperty.AGE, true, false, true, true, 75, true, false, DataType.DATE_TIME
+                        new DefaultColumnConfiguration(
+                            TicketProperty.TICKET_NUMBER, true, false, true, true, 135, true, true
+                        ),
+                        new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260, true, true),
+                        new DefaultColumnConfiguration(
+                            TicketProperty.STATE_ID, false, true, true, true, 80, true, true, true
+                        ),
+                        new DefaultColumnConfiguration(
+                            TicketProperty.QUEUE_ID, true, false, true, true, 100, true, true, true
+                        ),
+                        new DefaultColumnConfiguration(
+                            TicketProperty.CUSTOMER_USER_ID, true, false, true, true, 150, true, true
+                        ),
+                        new DefaultColumnConfiguration(
+                            TicketProperty.CHANGED, true, false, true, true, 125, true, true, false, DataType.DATE_TIME
+                        ),
+                        new DefaultColumnConfiguration(
+                            TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.DATE_TIME
                         )
-                    ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                    ], [
+
+                    ], null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
                 ),
-                true, true, WidgetSize.SMALL, null, false)
+                false, true, WidgetSize.SMALL, null, false)
             );
 
         const escalatedTicketsGroup =
             new ConfiguredWidget('customer-escalated-tickets-group', new WidgetConfiguration(
                 'customer-escalated-tickets-group', 'Eskalierte Tickets', [], new TableConfiguration(
+                    KIXObjectType.TICKET,
                     null, null,
                     [
-                        new TableColumnConfiguration(TicketProperty.PRIORITY_ID, false, true, true, true, 65),
-                        new TableColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, true, 135),
-                        new TableColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260),
-                        new TableColumnConfiguration(TicketProperty.STATE_ID, false, true, true, true, 80),
-                        new TableColumnConfiguration(TicketProperty.QUEUE_ID, true, false, true, true, 100),
-                        new TableColumnConfiguration(TicketProperty.CUSTOMER_USER_ID, true, false, true, true, 150),
-                        new TableColumnConfiguration(
-                            TicketProperty.ESCALATION_RESPONSE_TIME, true, false, true, true, 150
+                        new DefaultColumnConfiguration(
+                            TicketProperty.PRIORITY_ID, false, true, true, true, 65, true, true, true
                         ),
-                        new TableColumnConfiguration(
-                            TicketProperty.ESCALATION_UPDATE_TIME, true, false, true, true, 150
+                        new DefaultColumnConfiguration(
+                            TicketProperty.TICKET_NUMBER, true, false, true, true, 135, true, true
                         ),
-                        new TableColumnConfiguration(
-                            TicketProperty.ESCALATION_SOLUTIONS_TIME, true, false, true, true, 150
+                        new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260, true, true),
+                        new DefaultColumnConfiguration(
+                            TicketProperty.STATE_ID, false, true, true, true, 80, true, true, true
                         ),
-                        new TableColumnConfiguration(
-                            TicketProperty.CHANGED, true, false, true, true, 125, true, false, DataType.DATE_TIME
+                        new DefaultColumnConfiguration(
+                            TicketProperty.QUEUE_ID, true, false, true, true, 100, true, true, true
                         ),
-                        new TableColumnConfiguration(
-                            TicketProperty.AGE, true, false, true, true, 75, true, false, DataType.DATE_TIME
+                        new DefaultColumnConfiguration(
+                            TicketProperty.CUSTOMER_USER_ID, true, false, true, true, 150, true, true
+                        ),
+                        new DefaultColumnConfiguration(
+                            TicketProperty.ESCALATION_RESPONSE_TIME, true, false, true, true, 150, true, true
+                        ),
+                        new DefaultColumnConfiguration(
+                            TicketProperty.ESCALATION_UPDATE_TIME, true, false, true, true, 150, true, true
+                        ),
+                        new DefaultColumnConfiguration(
+                            TicketProperty.ESCALATION_SOLUTIONS_TIME, true, false, true, true, 150, true, true
+                        ),
+                        new DefaultColumnConfiguration(
+                            TicketProperty.CHANGED, true, false, true, true, 125, true, true, false, DataType.DATE_TIME
+                        ),
+                        new DefaultColumnConfiguration(
+                            TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.DATE_TIME
                         )
                     ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
                 ),
-                true, true, WidgetSize.SMALL, null, false)
+                false, true, WidgetSize.SMALL, null, false)
             );
 
         const reminderTicketsGroup =
             new ConfiguredWidget('customer-reminder-tickets-group', new WidgetConfiguration(
                 'customer-reminder-tickets-group', 'Erinnerungstickets', [], new TableConfiguration(
+                    KIXObjectType.TICKET,
                     null, null,
                     [
-                        new TableColumnConfiguration(TicketProperty.PRIORITY_ID, false, true, true, true, 65),
-                        new TableColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, true, 135),
-                        new TableColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260),
-                        new TableColumnConfiguration(TicketProperty.STATE_ID, false, true, true, true, 80),
-                        new TableColumnConfiguration(TicketProperty.QUEUE_ID, true, false, true, true, 100),
-                        new TableColumnConfiguration(TicketProperty.CUSTOMER_USER_ID, true, false, true, true, 150),
-                        new TableColumnConfiguration(TicketProperty.PENDING_TIME, true, false, true, true, 150),
-                        new TableColumnConfiguration(
-                            TicketProperty.CHANGED, true, false, true, true, 125, true, false, DataType.DATE_TIME
+                        new DefaultColumnConfiguration(
+                            TicketProperty.PRIORITY_ID, false, true, true, true, 65, true, true, true
                         ),
-                        new TableColumnConfiguration(
-                            TicketProperty.AGE, true, false, true, true, 75, true, false, DataType.DATE_TIME
+                        new DefaultColumnConfiguration(
+                            TicketProperty.TICKET_NUMBER, true, false, true, true, 135, true, true
+                        ),
+                        new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260, true, true),
+                        new DefaultColumnConfiguration(
+                            TicketProperty.STATE_ID, false, true, true, true, 80, true, true, true
+                        ),
+                        new DefaultColumnConfiguration(
+                            TicketProperty.QUEUE_ID, true, false, true, true, 100, true, true, true
+                        ),
+                        new DefaultColumnConfiguration(
+                            TicketProperty.CUSTOMER_USER_ID, true, false, true, true, 150, true, true
+                        ),
+                        new DefaultColumnConfiguration(
+                            TicketProperty.PENDING_TIME, true, false, true, true, 150, true, true
+                        ),
+                        new DefaultColumnConfiguration(
+                            TicketProperty.CHANGED, true, false, true, true, 125, true, true, false, DataType.DATE_TIME
+                        ),
+                        new DefaultColumnConfiguration(
+                            TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.DATE_TIME
                         )
                     ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
                 ),
-                true, true, WidgetSize.SMALL, null, false)
+                false, true, WidgetSize.SMALL, null, false)
             );
 
         const newTicketsGroup =
             new ConfiguredWidget('customer-new-tickets-group', new WidgetConfiguration(
-                'customer-new-tickets-group', 'Neue Tickets', [], new TableConfiguration(
+                'customer-new-tickets-group', 'Neue Tickets', [], new TableConfiguration(KIXObjectType.TICKET,
                     null, null,
                     [
-                        new TableColumnConfiguration(TicketProperty.PRIORITY_ID, false, true, true, true, 65),
-                        new TableColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, true, 135),
-                        new TableColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260),
-                        new TableColumnConfiguration(TicketProperty.STATE_ID, false, true, true, true, 80),
-                        new TableColumnConfiguration(TicketProperty.QUEUE_ID, true, false, true, true, 100),
-                        new TableColumnConfiguration(TicketProperty.CUSTOMER_USER_ID, true, false, true, true, 150),
-                        new TableColumnConfiguration(
-                            TicketProperty.CHANGED, true, false, true, true, 125, true, false, DataType.DATE_TIME
+                        new DefaultColumnConfiguration(
+                            TicketProperty.PRIORITY_ID, false, true, true, true, 65, true, true, true
                         ),
-                        new TableColumnConfiguration(
-                            TicketProperty.AGE, true, false, true, true, 75, true, false, DataType.DATE_TIME
+                        new DefaultColumnConfiguration(
+                            TicketProperty.TICKET_NUMBER, true, false, true, true, 135, true, true
+                        ),
+                        new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260, true, true),
+                        new DefaultColumnConfiguration(
+                            TicketProperty.STATE_ID, false, true, true, true, 80, true, true, true
+                        ),
+                        new DefaultColumnConfiguration(
+                            TicketProperty.QUEUE_ID, true, false, true, true, 100, true, true, true
+                        ),
+                        new DefaultColumnConfiguration(
+                            TicketProperty.CUSTOMER_USER_ID, true, false, true, true, 150, true, true
+                        ),
+                        new DefaultColumnConfiguration(
+                            TicketProperty.CHANGED, true, false, true, true, 125, true, true, false, DataType.DATE_TIME
+                        ),
+                        new DefaultColumnConfiguration(
+                            TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.DATE_TIME
                         )
                     ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
                 ),
-                true, true, WidgetSize.SMALL, null, false)
+                false, true, WidgetSize.SMALL, null, false)
             );
 
         const pendingTicketsGroup =
             new ConfiguredWidget('customer-pending-tickets-group', new WidgetConfiguration(
                 'customer-pending-tickets-group', 'Tickets in Wartestatus', [], new TableConfiguration(
+                    KIXObjectType.TICKET,
                     null, null,
                     [
-                        new TableColumnConfiguration(TicketProperty.PRIORITY_ID, false, true, true, true, 65),
-                        new TableColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, true, 135),
-                        new TableColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260),
-                        new TableColumnConfiguration(TicketProperty.STATE_ID, false, true, true, true, 80),
-                        new TableColumnConfiguration(TicketProperty.QUEUE_ID, true, false, true, true, 100),
-                        new TableColumnConfiguration(TicketProperty.CUSTOMER_USER_ID, true, false, true, true, 150),
-                        new TableColumnConfiguration(TicketProperty.PENDING_TIME, true, false, true, true, 150),
-                        new TableColumnConfiguration(
-                            TicketProperty.CHANGED, true, false, true, true, 125, true, false, DataType.DATE_TIME
+                        new DefaultColumnConfiguration(
+                            TicketProperty.PRIORITY_ID, false, true, true, true, 65, true, true, true
                         ),
-                        new TableColumnConfiguration(
-                            TicketProperty.AGE, true, false, true, true, 75, true, false, DataType.DATE_TIME
+                        new DefaultColumnConfiguration(
+                            TicketProperty.TICKET_NUMBER, true, false, true, true, 135, true, true
+                        ),
+                        new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260, true, true),
+                        new DefaultColumnConfiguration(
+                            TicketProperty.STATE_ID, false, true, true, true, 80, true, true, true
+                        ),
+                        new DefaultColumnConfiguration(
+                            TicketProperty.QUEUE_ID, true, false, true, true, 100, true, true, true
+                        ),
+                        new DefaultColumnConfiguration(
+                            TicketProperty.CUSTOMER_USER_ID, true, false, true, true, 150, true, true
+                        ),
+                        new DefaultColumnConfiguration(
+                            TicketProperty.PENDING_TIME, true, false, true, true, 150, true, true
+                        ),
+                        new DefaultColumnConfiguration(
+                            TicketProperty.CHANGED, true, false, true, true, 125, true, true, false, DataType.DATE_TIME
+                        ),
+                        new DefaultColumnConfiguration(
+                            TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.DATE_TIME
                         )
                     ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
                 ),
-                true, true, WidgetSize.SMALL, null, false)
+                false, true, WidgetSize.SMALL, null, false)
             );
 
         const lanes = ['customer-assigned-contacts-widget', 'customer-assigned-tickets-widget'];

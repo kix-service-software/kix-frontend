@@ -5,6 +5,21 @@
     grid-template-rows: @default-button-height max-content;
     grid-column-gap: @margin-default;
     align-items: center;
+    &.dragging {
+        border: 2px dotted @secondary-3;
+        border-radius: @border-radius;
+        padding: @margin-small;
+    }
+    &.invalid {
+        >.label-list {
+            border-color: @tertiary-0;
+        }
+        >button,
+        >button>span {
+            color: @tertiary-0;
+            border-color: @tertiary-0;
+        }
+    }
     >.file-upload-button {
         .file-upload-input {
             display: none;
@@ -45,10 +60,5 @@
     }
     >.label-list {
         grid-column: 1 / span 2;
-    }
-    &.dragging {
-        border: 2px dotted @secondary-3;
-        border-radius: @border-radius;
-        padding: @margin-small;
     }
 }

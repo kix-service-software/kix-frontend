@@ -14,7 +14,7 @@ export class UpdateCustomer extends RequestObject {
         this.applyProperty(CustomerProperty.CUSTOMER_COMPANY_NAME, customerCompanyName);
         this.applyProperty(CustomerProperty.CUSTOMER_COMPANY_STREET, customerCompanyStreet);
         this.applyProperty(CustomerProperty.CUSTOMER_COMPANY_ZIP, customerCompanyZip);
-        this.applyProperty(CustomerProperty.CUSTOMER_COMPANY_City, customerCompanyCity);
+        this.applyProperty(CustomerProperty.CUSTOMER_COMPANY_CITY, customerCompanyCity);
         this.applyProperty(CustomerProperty.CUSTOMER_COMPANY_COUNTRY, customerCompanyCountry);
         this.applyProperty(CustomerProperty.CUSTOMER_COMPANY_URL, customerCompanyUrl);
         this.applyProperty(CustomerProperty.CUSTOMER_COMPANY_COMMENT, customerCompanyComment);

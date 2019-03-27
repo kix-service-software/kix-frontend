@@ -1,6 +1,6 @@
 import {
-    AbstractMarkoComponent, FactoryService, StandardTableFactoryService, LabelService, ServiceRegistry,
-    KIXObjectSearchService, ContextService, DialogService, ActionFactory
+    AbstractMarkoComponent, FactoryService, LabelService, ServiceRegistry,
+    KIXObjectSearchService, ContextService, DialogService, ActionFactory, TableFactoryService
 } from '../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
@@ -8,7 +8,7 @@ import {
     WidgetConfiguration, WidgetSize
 } from '../../../core/model';
 import {
-    FAQTableFactory, FAQArticleHistoryTableFactory, FAQLabelProvider, FAQArticleHistoryLabelProvider,
+    FAQArticleTableFactory, FAQArticleHistoryTableFactory, FAQLabelProvider, FAQArticleHistoryLabelProvider,
     FAQService, FAQContext, FAQDetailsContext, NewFAQArticleDialogContext, FAQArticleSearchContext,
     FAQArticleVoteAction, FAQArticlePrintAction, FAQArticleEditAction, FAQArticleDeleteAction,
     FAQArticleCreateAction, FAQArticleBrowserFactory, FAQArticleAttachmentBrowserFactory,
@@ -30,14 +30,14 @@ class Component extends AbstractMarkoComponent {
             KIXObjectType.FAQ_ARTICLE_ATTACHMENT, FAQArticleAttachmentBrowserFactory.getInstance()
         );
 
-        StandardTableFactoryService.getInstance().registerFactory(new FAQTableFactory());
-        StandardTableFactoryService.getInstance().registerFactory(new FAQArticleHistoryTableFactory());
+        TableFactoryService.getInstance().registerFactory(new FAQArticleTableFactory());
+        TableFactoryService.getInstance().registerFactory(new FAQArticleHistoryTableFactory());
 
         LabelService.getInstance().registerLabelProvider(new FAQLabelProvider());
         LabelService.getInstance().registerLabelProvider(new FAQArticleHistoryLabelProvider());
 
-        ServiceRegistry.getInstance().registerServiceInstance(FAQService.getInstance());
-        ServiceRegistry.getInstance().registerServiceInstance(FAQArticleFormService.getInstance());
+        ServiceRegistry.registerServiceInstance(FAQService.getInstance());
+        ServiceRegistry.registerServiceInstance(FAQArticleFormService.getInstance());
 
         KIXObjectCache.registerCacheHandler(new FAQCacheHandler());
 

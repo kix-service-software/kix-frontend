@@ -1,5 +1,7 @@
 <div.dashboard.customer>
-    <for(widget in state.contentWidgets)>
-        <include(component.getTemplate(widget), { instanceId: widget.instanceId })/>
+    <for(kixWidget in state.contentWidgets)>
+        <${component.getTemplate(kixWidget)} ...{
+            instanceId: kixWidget.instanceId
+        }/>
     </for>
 </div>

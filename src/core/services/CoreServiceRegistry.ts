@@ -2,9 +2,10 @@ import {
     ContactService, CustomerService, ServiceService, SysConfigService, TicketService, FAQService,
     GeneralCatalogService, DynamicFieldService, LinkService, CMDBService, ObjectDefinitionService,
     TextModuleService, UserService, ValidObjectService, TicketTypeService, ObjectIconService,
-    TicketStateService, TicketPriorityService, ConfigItemClassService
+    TicketStateService, TicketPriorityService, ConfigItemClassService, TranslationService, ChannelService
 } from "./impl";
 import { SlaService } from "./impl/api/SlaService";
+import { SystemAddressService } from "./impl/api/SystemAddressService";
 
 export class CoreServiceRegistry {
 
@@ -12,7 +13,7 @@ export class CoreServiceRegistry {
 
     private constructor() { }
 
-    public static getInstance(): CoreServiceRegistry {
+    private static getInstance(): CoreServiceRegistry {
         if (!CoreServiceRegistry.INSTANCE) {
             CoreServiceRegistry.INSTANCE = new CoreServiceRegistry();
         }
@@ -22,10 +23,13 @@ export class CoreServiceRegistry {
 
     private initialized: boolean = false;
 
-    public async registerCoreServices(): Promise<void> {
-        if (!this.initialized) {
+    public static async registerCoreServices(): Promise<void> {
+        const registry = CoreServiceRegistry.getInstance();
+        if (!registry.initialized) {
             const cachePromises: Array<Promise<any>> = [];
 
+            cachePromises.push(TranslationService.getInstance().initCache());
+            cachePromises.push(ChannelService.getInstance().initCache());
             cachePromises.push(CMDBService.getInstance().initCache());
             cachePromises.push(ConfigItemClassService.getInstance().initCache());
             cachePromises.push(ContactService.getInstance().initCache());
@@ -46,10 +50,11 @@ export class CoreServiceRegistry {
             cachePromises.push(UserService.getInstance().initCache());
             cachePromises.push(ValidObjectService.getInstance().initCache());
             cachePromises.push(ObjectIconService.getInstance().initCache());
+            cachePromises.push(SystemAddressService.getInstance().initCache());
 
             await Promise.all(cachePromises);
 
-            this.initialized = true;
+            registry.initialized = true;
         }
     }
 

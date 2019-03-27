@@ -1,7 +1,5 @@
 import { ILabelProvider } from "..";
-import {
-    DateTimeUtil, ObjectIcon, KIXObjectType, KIXObject
-} from "../../model";
+import { DateTimeUtil, ObjectIcon, KIXObjectType } from "../../model";
 import { ContextService } from "../context";
 import { FAQArticleHistoryProperty, FAQHistory } from "../../model/kix/faq";
 
@@ -13,7 +11,7 @@ export class FAQArticleHistoryLabelProvider implements ILabelProvider<FAQHistory
         return value.toString();
     }
 
-    public async getPropertyText(property: string, object?: KIXObject): Promise<string> {
+    public async getPropertyText(property: string): Promise<string> {
         let displayValue = property;
         switch (property) {
             case FAQArticleHistoryProperty.ARTICLE_ID:
@@ -35,6 +33,10 @@ export class FAQArticleHistoryLabelProvider implements ILabelProvider<FAQHistory
                 displayValue = property;
         }
         return displayValue;
+    }
+
+    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
+        return;
     }
 
     public async getDisplayText(history: FAQHistory, property: string): Promise<string> {
@@ -87,7 +89,7 @@ export class FAQArticleHistoryLabelProvider implements ILabelProvider<FAQHistory
     }
 
     public getObjectName(plural: boolean = false): string {
-        return plural ? "FAQ" : "FAQs";
+        return "FAQ Artikel Historie";
     }
 
     public async getIcons(object: FAQHistory, property: string): Promise<Array<string | ObjectIcon>> {

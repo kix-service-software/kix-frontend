@@ -6,7 +6,7 @@
     border-radius: @border-radius;
     padding: 0 @margin-small;
     background-color: @secondary-6;
-    height: @default-input-height;
+    min-height: @default-input-height;
     width: 100%;
     color: @default-dark-font-color;
     input[type="text"]& {
@@ -27,9 +27,6 @@
         &::placeholder {
             color: @tertiary-0;
         }
-        &~.form-list-button {
-            color: @tertiary-0;
-        }
     }
     &.article-body {
         padding: 0;
@@ -47,17 +44,34 @@ textarea.input-style {
     position: relative;
     >.form-list-loading,
     >.form-list-autocomplete-no-results,
-    >.form-list-tree {
-        z-index: 1;
+    >.value-list {
+        z-index: 20;
         position: absolute;
-        top: @default-input-height;
         left: 0;
         right: 0;
-        border: 1px solid @secondary-2;
+        border: 1px solid darken(@secondary-3, 20%);
         background-color: @secondary-6;
-        min-height: @default-input-height;
         padding: .25rem;
         box-sizing: border-box;
+        border-bottom-left-radius: @border-radius;
+        border-bottom-right-radius: @border-radius;
+        display: grid;
+        >input {
+            margin-bottom: @margin-small;
+        }
+        >.form-list-tree {
+            max-height: 15rem;
+            overflow: auto;
+        }
+        .button-bar {
+            margin: 1rem @margin-small @margin-small @margin-small;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            .select-all-Checkbox {
+                margin-right: .5rem;
+            }
+        }
     }
     >.form-list-loading {
         >.loading-spinner {
@@ -65,57 +79,51 @@ textarea.input-style {
             height: 1.75rem;
         }
     }
-    >.form-list-tree {
-        max-height: 15rem;
-        overflow: auto;
-        border-radius: @border-radius;
-    }
     >div.form-list-input-container {
         min-height: 2rem;
         position: relative;
         padding: 0;
         overflow: hidden;
-        &:not(.autocomplete) {
-            padding-right: 1.75rem;
-            >input {
-                border-right: none;
-                margin: -1px;
-            }
-            >.form-list-button {
-                top: -1px;
-                right: -1px;
-                font-size: 1.25rem;
+        display: grid;
+        grid-template-columns: auto max-content;
+        &.readonly {
+            background-color: @secondary-4;
+            &:hover {
+                border-color: @secondary-3;
             }
         }
-        &.autocomplete {
-            >input {
-                border: none;
-            }
-        }
-        &:hover,
+        &:hover:not(.readonly),
         &.list-shown {
             border-color: darken(@secondary-3, 20%);
             >input.input-style:not(:disabled),
-            >input.input-style:not(:disabled)~.form-list-button,
-            >.selected-nodes~.form-list-button {
+            >input.input-style:not(:disabled)~.form-input-control-list>.form-list-button,
+            >.selected-nodes~.form-input-control-list>.form-list-button {
                 border-color: darken(@secondary-3, 20%);
             }
         }
-        >input.input-style:focus:not(:disabled)~.form-list-button {
+        &.invalid {
+            >.form-input-control-list>.form-list-button {
+                color: @tertiary-0;
+            }
+        }
+        >input.input-style:focus:not(:disabled)~.form-input-control-list>.form-list-button {
             border-color: darken(@secondary-3, 20%);
         }
-        >input.input-style:not(:disabled)~.form-list-button:hover,
-        >.selected-nodes~.form-list-button:hover {
+        &:not(.readonly)>input.input-style:not(:disabled)~.form-input-control-list>.form-list-button:hover,
+        &:not(.readonly)>.selected-nodes~.form-input-control-list>.form-list-button:hover {
             background-color: darken(@secondary-4, 10%);
             color: darken(@secondary-2, 10%);
             cursor: pointer;
         }
-        >input.invalid~.form-list-button {
+        >input.invalid~.form-input-control-list>.form-list-button {
             color: @tertiary-0;
             border-color: @tertiary-0;
         }
+        >input {
+            border: none;
+        }
         >.selected-nodes {
-            padding: .25rem .25rem 0 .25rem;
+            padding: .25rem 2.5rem 0 .25rem;
             display: flex;
             flex-wrap: wrap;
             margin-top: -1px;
@@ -150,19 +158,48 @@ textarea.input-style {
                 }
             }
         }
-        >.form-list-button {
-            background-color: @secondary-4;
-            color: @secondary-2;
-            width: @default-input-height;
-            height: @default-input-height;
-            line-height: @default-input-height;
-            text-align: center;
-            border-radius: @border-radius;
-            border: 1px solid @secondary-3;
-            box-sizing: border-box;
-            position: absolute;
-            right: 0;
-            top: 0;
+        >.form-input-control-list {
+            display: grid;
+            grid-template-columns: max-content @default-input-height;
+            grid-column-gap: @margin-small;
+            >.input-action-list {
+                display: grid;
+                grid-auto-flow: column;
+                align-items: center;
+                .label-item {
+                    padding: 0;
+                    border: 1px solid @secondary-2;
+                    color: @secondary-2;
+                    box-sizing: border-box;
+                    height: 1.5rem;
+                    font-weight: bold;
+                    cursor: pointer;
+                    &:hover {
+                        border-color: darken(@secondary-2, 10%);
+                        color: darken(@secondary-2, 10%);
+                    }
+                    &.toggled {
+                        border-color: @primary-1;
+                        color: @primary-1;
+                        &:hover {
+                            border-color: darken(@primary-1, 15%);
+                            color: darken(@primary-1, 15%);
+                        }
+                    }
+                }
+            }
+            >.form-list-button {
+                font-size: 1.25rem;
+                background-color: @secondary-4;
+                color: @secondary-2;
+                width: @default-input-height;
+                height: @default-input-height;
+                line-height: @default-input-height;
+                text-align: center;
+                border-radius: @border-radius;
+                border: 1px solid @secondary-3;
+                margin: -1px;
+            }
         }
     }
 }

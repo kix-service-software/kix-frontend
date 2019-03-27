@@ -1,39 +1,32 @@
-import {
-    IStandardTableFactory, TableConfiguration, TableLayerConfiguration,
-    TableListenerConfiguration, StandardTable, TableSortLayer, TableFilterLayer,
-    AbstractTableLayer, TableColumnConfiguration, TableHeaderHeight, TableRowHeight
-} from "../../standard-table";
-import { KIXObjectType, Contact, ContextMode, ContactProperty, KIXObject } from "../../../model";
-import { IdService } from "../../IdService";
-import { ContextService } from "../../context";
-import { ContactTableLabelLayer } from "./ContactTableLabelLayer";
-import { ContactTableContentLayer } from "./ContactTableContentLayer";
+import { KIXObjectType, ContextMode, ContactProperty, KIXObjectLoadingOptions } from "../../../model";
 import { RoutingConfiguration } from "../../router";
 import { ContactDetailsContext } from "../context";
+import {
+    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
+    TableHeaderHeight, TableRowHeight, IColumnConfiguration
+} from "../../table";
+import { ContactTableContentProvider } from "./ContactTableContentProvider";
 
-export class ContactTableFactory implements IStandardTableFactory {
+export class ContactTableFactory implements ITableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.CONTACT;
 
     public createTable(
-        tableConfiguration?: TableConfiguration,
-        layerConfiguration?: TableLayerConfiguration,
-        listenerConfiguration?: TableListenerConfiguration,
-        defaultRouting?: boolean,
-        defaultToggle?: boolean,
-        short?: boolean
-    ): StandardTable<Contact> {
+        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: string[], contextId?: string,
+        defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
+    ): ITable {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, short);
-        layerConfiguration = this.setDefaultLayerConfiguration(layerConfiguration, tableConfiguration);
-        listenerConfiguration = this.setDefaultListenerConfiguration(listenerConfiguration);
 
-        return new StandardTable(
-            IdService.generateDateBasedId('contact-table'),
-            tableConfiguration,
-            layerConfiguration,
-            listenerConfiguration
+        const loadingOptions = new KIXObjectLoadingOptions(
+            null, tableConfiguration.filter, tableConfiguration.sortOrder, null,
+            tableConfiguration.limit, ['TicketStats']
         );
+
+        const table = new Table(tableKey, tableConfiguration);
+        table.setContentProvider(new ContactTableContentProvider(table, objectIds, loadingOptions, contextId));
+        table.setColumnConfiguration(tableConfiguration.tableColumns);
+        return table;
     }
 
     private setDefaultTableConfiguration(
@@ -42,34 +35,50 @@ export class ContactTableFactory implements IStandardTableFactory {
         let tableColumns;
         if (short) {
             tableColumns = [
-                new TableColumnConfiguration(ContactProperty.USER_FIRST_NAME, true, false, true, true, 150),
-                new TableColumnConfiguration(ContactProperty.USER_LAST_NAME, true, false, true, true, 150),
-                new TableColumnConfiguration(ContactProperty.USER_EMAIL, true, false, true, true, 175),
-                new TableColumnConfiguration(ContactProperty.USER_LOGIN, true, false, true, true, 150),
-                new TableColumnConfiguration(ContactProperty.USER_CUSTOMER_ID, true, false, true, true, 150),
-                new TableColumnConfiguration(ContactProperty.USER_CITY, true, false, true, true, 130),
-                new TableColumnConfiguration(ContactProperty.USER_STREET, true, false, true, true, 150),
-                new TableColumnConfiguration(ContactProperty.VALID_ID, true, false, true, true, 130)
+                new DefaultColumnConfiguration(
+                    ContactProperty.USER_FIRST_NAME, true, false, true, false, 150, true, true
+                ),
+                new DefaultColumnConfiguration(
+                    ContactProperty.USER_LAST_NAME, true, false, true, false, 150, true, true
+                ),
+                new DefaultColumnConfiguration(ContactProperty.USER_EMAIL, true, false, true, false, 175, true, true),
+                new DefaultColumnConfiguration(ContactProperty.USER_LOGIN, true, false, true, false, 150, true, true),
+                new DefaultColumnConfiguration(
+                    ContactProperty.USER_CUSTOMER_ID, true, false, true, false, 150, true, true
+                ),
+                new DefaultColumnConfiguration(ContactProperty.USER_CITY, true, false, true, false, 130, true, true),
+                new DefaultColumnConfiguration(ContactProperty.USER_STREET, true, false, true, false, 150, true, true),
+                new DefaultColumnConfiguration(ContactProperty.VALID_ID, true, false, true, false, 130, true, true)
             ];
         } else {
             tableColumns = [
-                new TableColumnConfiguration(ContactProperty.USER_FIRST_NAME, true, false, true, true, 150),
-                new TableColumnConfiguration(ContactProperty.USER_LAST_NAME, true, false, true, true, 150),
-                new TableColumnConfiguration(ContactProperty.USER_EMAIL, true, false, true, true, 175),
-                new TableColumnConfiguration(ContactProperty.USER_LOGIN, true, false, true, true, 150),
-                new TableColumnConfiguration(ContactProperty.USER_CUSTOMER_ID, true, false, true, true, 150),
-                new TableColumnConfiguration(ContactProperty.USER_PHONE, true, false, true, true, 130),
-                new TableColumnConfiguration(ContactProperty.USER_COUNTRY, true, false, true, true, 130),
-                new TableColumnConfiguration(ContactProperty.USER_CITY, true, false, true, true, 130),
-                new TableColumnConfiguration(ContactProperty.USER_STREET, true, false, true, true, 150),
-                new TableColumnConfiguration(ContactProperty.VALID_ID, true, false, true, true, 130)
+                new DefaultColumnConfiguration(
+                    ContactProperty.USER_FIRST_NAME, true, false, true, false, 150, true, true
+                ),
+                new DefaultColumnConfiguration(
+                    ContactProperty.USER_LAST_NAME, true, false, true, false, 150, true, true
+                ),
+                new DefaultColumnConfiguration(ContactProperty.USER_EMAIL, true, false, true, false, 175, true, true),
+                new DefaultColumnConfiguration(ContactProperty.USER_LOGIN, true, false, true, false, 150, true, true),
+                new DefaultColumnConfiguration(
+                    ContactProperty.USER_CUSTOMER_ID, true, false, true, false, 150, true, true
+                ),
+                new DefaultColumnConfiguration(ContactProperty.USER_PHONE, true, false, true, false, 130, true, true),
+                new DefaultColumnConfiguration(ContactProperty.USER_COUNTRY, true, false, true, false, 130, true, true),
+                new DefaultColumnConfiguration(ContactProperty.USER_CITY, true, false, true, false, 130, true, true),
+                new DefaultColumnConfiguration(ContactProperty.USER_STREET, true, false, true, false, 150, true, true),
+                new DefaultColumnConfiguration(ContactProperty.VALID_ID, true, false, true, false, 130, true, true)
             ];
         }
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                null, 5, tableColumns, null, false, false, null, null, TableHeaderHeight.LARGE, TableRowHeight.SMALL
+                KIXObjectType.CONTACT, null, 5, tableColumns, null, false, false, null, null,
+                TableHeaderHeight.LARGE, TableRowHeight.SMALL
             );
+            tableConfiguration.enableSelection = true;
+            tableConfiguration.toggle = false;
+            defaultRouting = true;
         } else if (!tableConfiguration.tableColumns) {
             tableConfiguration.tableColumns = tableColumns;
         }
@@ -81,36 +90,13 @@ export class ContactTableFactory implements IStandardTableFactory {
             );
         }
 
+        tableConfiguration.objectType = KIXObjectType.CONTACT;
         return tableConfiguration;
     }
 
-    private setDefaultLayerConfiguration(
-        layerConfiguration: TableLayerConfiguration, tableConfiguration: TableConfiguration
-    ): TableLayerConfiguration {
-
-        if (!layerConfiguration) {
-            const contentLayer: AbstractTableLayer = new ContactTableContentLayer(
-                [], tableConfiguration.filter, tableConfiguration.sortOrder, tableConfiguration.limit
-            );
-            const labelLayer = new ContactTableLabelLayer();
-
-            layerConfiguration = new TableLayerConfiguration(contentLayer, labelLayer,
-                [new TableFilterLayer()], [new TableSortLayer()]
-            );
-        }
-
-        return layerConfiguration;
-    }
-
-    private setDefaultListenerConfiguration(
-        listenerConfiguration: TableListenerConfiguration
-    ): TableListenerConfiguration {
-
-        if (!listenerConfiguration) {
-            listenerConfiguration = new TableListenerConfiguration();
-        }
-
-        return listenerConfiguration;
+    // TODO: implementieren
+    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
+        return;
     }
 
 }

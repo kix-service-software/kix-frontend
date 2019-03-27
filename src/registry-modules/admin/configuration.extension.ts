@@ -1,9 +1,9 @@
-import { IConfigurationExtension, KIXExtensions } from '../../core/extensions';
+import { IConfigurationExtension } from '../../core/extensions';
 import {
-    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize, AdminModuleCategory, AdminModule,
+    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize
 } from '../../core/model';
 import { AdminContext, AdminContextConfiguration } from '../../core/browser/admin';
-import { PluginService, AdminModuleService } from '../../services';
+import { AdminModuleService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
 

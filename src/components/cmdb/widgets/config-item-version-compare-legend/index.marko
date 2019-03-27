@@ -1,0 +1,16 @@
+<widget instanceId=input.instanceId title="Legende" icon="kix-icon-legend">
+    <@content>
+        <if(state.show)>
+            <div.legend>
+                <div.legend-item.yellow/>
+                <span>Geändert</span>
+                <div.legend-item.red/>
+                <span>Gelöscht</span>
+                <div.legend-item.green/>
+                <span>Neu</span>
+                <div.legend-item.gray/>
+                <span>Nicht vorhanden (nicht mehr oder noch nicht)</span>
+            </div>
+        </if>
+    </@content>
+</widget>

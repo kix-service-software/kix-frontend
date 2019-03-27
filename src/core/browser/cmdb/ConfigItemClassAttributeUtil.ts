@@ -6,18 +6,8 @@ import { KIXObjectService } from "../kix";
 
 export class ConfigItemClassAttributeUtil {
 
-    private static INSTANCE: ConfigItemClassAttributeUtil;
 
-    public static getInstance(): ConfigItemClassAttributeUtil {
-        if (!ConfigItemClassAttributeUtil.INSTANCE) {
-            ConfigItemClassAttributeUtil.INSTANCE = new ConfigItemClassAttributeUtil();
-        }
-        return ConfigItemClassAttributeUtil.INSTANCE;
-    }
-
-    private constructor() { }
-
-    public async getMergedClassAttributeIds(classIds?: number | number[]): Promise<Array<[string, string]>> {
+    public static async getMergedClassAttributeIds(classIds?: number | number[]): Promise<Array<[string, string]>> {
         const attributes = await this.getAttributeDefinitions(classIds);
         const result: Array<[string, string]> = [];
         attributes.filter((a) => a.Input.Type !== 'Attachment' && a.Searchable)
@@ -25,7 +15,7 @@ export class ConfigItemClassAttributeUtil {
         return result;
     }
 
-    public async getAttributeType(property: string, classIds?: number | number[]): Promise<string> {
+    public static async getAttributeType(property: string, classIds?: number | number[]): Promise<string> {
         const ciClasses = await this.loadCIClasses(classIds);
         if (ciClasses && ciClasses.length) {
             const attribute = this.getAttribute(ciClasses[0].CurrentDefinition.Definition, property);
@@ -37,7 +27,7 @@ export class ConfigItemClassAttributeUtil {
         return DataType.STRING;
     }
 
-    public async getAttributePath(property: string, classIds?: number | number[]): Promise<string> {
+    public static async getAttributePath(property: string, classIds?: number | number[]): Promise<string> {
         const ciClasses = await this.loadCIClasses(classIds);
         if (ciClasses && ciClasses.length) {
             const path = this.getPath(ciClasses[0].CurrentDefinition.Definition, property);
@@ -47,16 +37,18 @@ export class ConfigItemClassAttributeUtil {
         return null;
     }
 
-    public async getAttributeDefinitions(classIds?: number | number[]): Promise<AttributeDefinition[]> {
+    public static async getAttributeDefinitions(classIds?: number | number[]): Promise<AttributeDefinition[]> {
         let attributes;
         const ciClasses = await this.loadCIClasses(classIds);
         if (ciClasses && ciClasses.length) {
-            attributes = ciClasses[0].CurrentDefinition.Definition.map((d) => new AttributeDefinition(d));
-            if (ciClasses.length > 1) {
-                for (let i = 1; i < ciClasses.length; i++) {
-                    const definition = ciClasses[i].CurrentDefinition;
-                    if (definition && definition.Definition) {
-                        this.compareTrees(attributes, definition.Definition);
+            if (ciClasses[0].CurrentDefinition) {
+                attributes = ciClasses[0].CurrentDefinition.Definition.map((d) => new AttributeDefinition(d));
+                if (ciClasses.length > 1) {
+                    for (let i = 1; i < ciClasses.length; i++) {
+                        const definition = ciClasses[i].CurrentDefinition;
+                        if (definition && definition.Definition) {
+                            this.compareTrees(attributes, definition.Definition);
+                        }
                     }
                 }
             }
@@ -65,7 +57,7 @@ export class ConfigItemClassAttributeUtil {
         return attributes ? this.getFlatAttributeList(attributes) : [];
     }
 
-    private getPath(attributes: AttributeDefinition[], key: string, parent: string = ''): string {
+    private static getPath(attributes: AttributeDefinition[], key: string, parent: string = ''): string {
         for (const attribute of attributes) {
             if (attribute.Key === key) {
                 return `${parent}.${attribute.Key}`;
@@ -81,7 +73,7 @@ export class ConfigItemClassAttributeUtil {
         return null;
     }
 
-    public async getAttributeInput(property: string, classIds?: number | number[]): Promise<InputDefinition> {
+    public static async getAttributeInput(property: string, classIds?: number | number[]): Promise<InputDefinition> {
         const ciClasses = await this.loadCIClasses(classIds);
         if (ciClasses && ciClasses.length) {
             const attribute = this.getAttribute(ciClasses[0].CurrentDefinition.Definition, property);
@@ -93,7 +85,7 @@ export class ConfigItemClassAttributeUtil {
         return undefined;
     }
 
-    private async loadCIClasses(classIds?: number | number[]): Promise<ConfigItemClass[]> {
+    private static async loadCIClasses(classIds?: number | number[]): Promise<ConfigItemClass[]> {
         let objectIds: number[];
         if (classIds) {
             if (Array.isArray(classIds)) {
@@ -113,7 +105,7 @@ export class ConfigItemClassAttributeUtil {
         return ciClasses;
     }
 
-    private getFlatAttributeList(tree: AttributeDefinition[]): AttributeDefinition[] {
+    private static getFlatAttributeList(tree: AttributeDefinition[]): AttributeDefinition[] {
         let attributes = tree.filter((t) => t.Input.Type !== 'Dummy');
         tree.forEach((a) => {
             if (a.Sub) {
@@ -123,13 +115,13 @@ export class ConfigItemClassAttributeUtil {
         return attributes;
     }
 
-    public compareTrees(
-        tree1: AttributeDefinition[], tree2: AttributeDefinition[]
+    public static compareTrees(
+        tree1: AttributeDefinition[], tree2: AttributeDefinition[], removeKeys: boolean = true
     ): void {
-        const keysToRemove: string[] = [];
+        const additionalDefinitions: AttributeDefinition[] = [];
         tree1.forEach((a1) => {
             if (a1.Input && a1.Input.Type === 'Attachment') {
-                keysToRemove.push(a1.Key);
+                additionalDefinitions.push(a1);
             } else {
                 const a2 = tree2.find((a) => {
                     if (a1.Key === a.Key && (a1.Input && a.Input) && a1.Input.Type === a.Input.Type) {
@@ -149,21 +141,27 @@ export class ConfigItemClassAttributeUtil {
                         this.compareTrees(a1.Sub, a2.Sub);
                     }
                 } else {
-                    keysToRemove.push(a1.Key);
+                    additionalDefinitions.push(a1);
                 }
             }
         });
 
-        keysToRemove.forEach((k) => {
-            const index = tree1.findIndex((a1) => a1.Key === k);
-            if (index !== -1) {
-                tree1.splice(index, 1);
-            }
-        });
+        if (removeKeys) {
+            additionalDefinitions.forEach((definition) => {
+                const index = tree1.findIndex((a1) => a1.Key === definition.Key);
+                if (index !== -1) {
+                    tree1.splice(index, 1);
+                }
+            });
+        } else {
+            additionalDefinitions.forEach((definition) => {
+                tree1.push(definition);
+            });
+        }
 
     }
 
-    private compareCIClassReferenceInputs(i1: InputDefinition, i2: InputDefinition): boolean {
+    private static compareCIClassReferenceInputs(i1: InputDefinition, i2: InputDefinition): boolean {
         const classReference1 = i1['ReferencedCIClassName'];
         const classReference2 = i2['ReferencedCIClassName'];
 
@@ -184,7 +182,7 @@ export class ConfigItemClassAttributeUtil {
         return false;
     }
 
-    public getAttribute(attributes: AttributeDefinition[], key: string): AttributeDefinition {
+    public static getAttribute(attributes: AttributeDefinition[], key: string): AttributeDefinition {
         for (const attribute of attributes) {
             if (attribute.Key === key) {
                 return attribute;

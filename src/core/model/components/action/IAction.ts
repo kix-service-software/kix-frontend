@@ -1,6 +1,3 @@
-import { KIXObject } from "../../kix";
-import { StandardTable } from "../../../browser";
-
 export interface IAction<T = any> {
 
     id: string;

@@ -1,36 +1,37 @@
-import {
-    IStandardTableFactory, TableConfiguration, StandardTable, TableListenerConfiguration,
-    TableColumnConfiguration, AbstractTableLayer, TableLayerConfiguration, ToggleOptions, TableToggleLayer
-} from "../../standard-table";
-import { KIXObjectType, Ticket, TicketProperty, ContextMode, DataType } from "../../../model";
-import { IdService } from "../../IdService";
-import { TicketTableLabelLayer } from "./TicketTableLabelLayer";
-import { TicketTableContentLayer } from "./TicketTableContentLayer";
+import { KIXObjectType, TicketProperty, ContextMode, DataType, KIXObjectLoadingOptions } from "../../../model";
 import { RoutingConfiguration } from "../../router";
 import { TicketDetailsContext } from "../context";
+import {
+    TableConfiguration, ITable, Table, DefaultColumnConfiguration, ToggleOptions, ITableFactory, IColumnConfiguration
+} from "../../table";
+import { TicketTableContentProvider } from "./new";
 
-export class TicketTableFactory implements IStandardTableFactory<Ticket> {
+export class TicketTableFactory implements ITableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.TICKET;
 
     public createTable(
-        tableConfiguration?: TableConfiguration,
-        layerConfiguration?: TableLayerConfiguration,
-        listenerConfiguration?: TableListenerConfiguration,
-        defaultRouting?: boolean,
-        defaultToggle?: boolean,
-        short?: boolean
-    ): StandardTable<Ticket> {
+        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
+        defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
+    ): ITable {
 
         tableConfiguration = this.setDefaultTableConfiguration(
             tableConfiguration, defaultRouting, defaultToggle, short
         );
-        layerConfiguration = this.setDefaultLayerConfiguration(layerConfiguration, tableConfiguration, defaultToggle);
-        listenerConfiguration = this.setDefaultListenerConfiguration(listenerConfiguration);
 
-        return new StandardTable(
-            IdService.generateDateBasedId('ticket-table'), tableConfiguration, layerConfiguration, listenerConfiguration
+        const loadingOptions = new KIXObjectLoadingOptions(
+            null, tableConfiguration.filter, tableConfiguration.sortOrder, null,
+            tableConfiguration.limit, [TicketProperty.WATCHERS]
         );
+
+        const table = new Table(tableKey, tableConfiguration, contextId);
+
+        const contentProvider = new TicketTableContentProvider(table, objectIds, loadingOptions, contextId);
+
+        table.setContentProvider(contentProvider);
+        table.setColumnConfiguration(tableConfiguration.tableColumns);
+
+        return table;
     }
 
     private setDefaultTableConfiguration(
@@ -40,42 +41,64 @@ export class TicketTableFactory implements IStandardTableFactory<Ticket> {
 
         if (short) {
             tableColumns = [
-                new TableColumnConfiguration(TicketProperty.PRIORITY_ID, false, true, false, true, 65),
-                new TableColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, true, 135),
-                new TableColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 160),
-                new TableColumnConfiguration(TicketProperty.STATE_ID, false, true, true, true, 80),
-                new TableColumnConfiguration(TicketProperty.QUEUE_ID, true, false, true, true, 100),
-                new TableColumnConfiguration(TicketProperty.OWNER_ID, true, false, true, true, 150),
-                new TableColumnConfiguration(TicketProperty.CUSTOMER_ID, true, false, true, true, 150),
-                new TableColumnConfiguration(
-                    TicketProperty.CREATED, true, false, true, true, 125, true, false, DataType.DATE_TIME
+                new DefaultColumnConfiguration(
+                    TicketProperty.PRIORITY_ID, false, true, true, false, 65, true, true, true, DataType.STRING, false
+                ),
+                new DefaultColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, false, 135, true, true),
+                new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, false, 160, true, true),
+                new DefaultColumnConfiguration(TicketProperty.STATE_ID, false, true, true, false, 80, true, true, true),
+                new DefaultColumnConfiguration(
+                    TicketProperty.QUEUE_ID, true, false, true, false, 100, true, true, true
+                ),
+                new DefaultColumnConfiguration(
+                    TicketProperty.OWNER_ID, true, false, true, false, 150, true, true, true
+                ),
+                new DefaultColumnConfiguration(
+                    TicketProperty.CUSTOMER_ID, true, false, true, false, 150, true, true, true
+                ),
+                new DefaultColumnConfiguration(
+                    TicketProperty.CREATED, true, false, true, false, 125, true, true, false, DataType.DATE_TIME
                 )
             ];
         } else {
             tableColumns = [
-                new TableColumnConfiguration(TicketProperty.PRIORITY_ID, false, true, false, true, 65),
-                new TableColumnConfiguration(TicketProperty.UNSEEN, false, true, false, true, 41, false),
-                new TableColumnConfiguration(TicketProperty.WATCHERS, false, true, false, true, 41, false),
-                new TableColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, true, 135),
-                new TableColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260),
-                new TableColumnConfiguration(TicketProperty.STATE_ID, false, true, true, true, 80),
-                new TableColumnConfiguration(TicketProperty.LOCK_ID, false, true, true, true, 41, false),
-                new TableColumnConfiguration(TicketProperty.QUEUE_ID, true, false, true, true, 100),
-                new TableColumnConfiguration(TicketProperty.RESPONSIBLE_ID, true, false, true, true, 150),
-                new TableColumnConfiguration(TicketProperty.OWNER_ID, true, false, true, true, 150),
-                new TableColumnConfiguration(TicketProperty.CUSTOMER_ID, true, false, true, true, 150),
-                new TableColumnConfiguration(
-                    TicketProperty.CHANGED, true, false, true, true, 125, true, false, DataType.DATE_TIME
+                new DefaultColumnConfiguration(
+                    TicketProperty.PRIORITY_ID, false, true, true, false, 65, true, true, true, DataType.STRING, false
                 ),
-                new TableColumnConfiguration(
-                    TicketProperty.AGE, true, false, true, true, 75, true, false, DataType.DATE_TIME
+                new DefaultColumnConfiguration(
+                    TicketProperty.UNSEEN, false, true, false, false, 41, true, false, false, DataType.STRING, false
+                ),
+                new DefaultColumnConfiguration(
+                    TicketProperty.WATCHERS, false, true, false, false, 41, true, false, false, DataType.STRING, false
+                ),
+                new DefaultColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, false, 135, true, true),
+                new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, false, 260, true, true),
+                new DefaultColumnConfiguration(TicketProperty.STATE_ID, false, true, true, false, 80, true, true, true),
+                new DefaultColumnConfiguration(TicketProperty.LOCK_ID, false, true, false, false, 41, true, true, true),
+                new DefaultColumnConfiguration(
+                    TicketProperty.QUEUE_ID, true, false, true, false, 100, true, true, true
+                ),
+                new DefaultColumnConfiguration(
+                    TicketProperty.RESPONSIBLE_ID, true, false, true, false, 150, true, true, true
+                ),
+                new DefaultColumnConfiguration(
+                    TicketProperty.OWNER_ID, true, false, true, false, 150, true, true, true
+                ),
+                new DefaultColumnConfiguration(TicketProperty.CUSTOMER_ID, true, false, true, false, 150, true, true),
+                new DefaultColumnConfiguration(
+                    TicketProperty.CHANGED, true, false, true, false, 125, true, true, false, DataType.DATE_TIME
+                ),
+                new DefaultColumnConfiguration(
+                    TicketProperty.AGE, true, false, true, false, 75, true, true, false, DataType.DATE_TIME
                 )
             ];
         }
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration();
+            tableConfiguration = new TableConfiguration(KIXObjectType.TICKET);
             tableConfiguration.tableColumns = tableColumns;
+            tableConfiguration.enableSelection = true;
+            defaultToggle = true;
         } else if (!tableConfiguration.tableColumns) {
             tableConfiguration.tableColumns = tableColumns;
         }
@@ -88,42 +111,16 @@ export class TicketTableFactory implements IStandardTableFactory<Ticket> {
         }
         if (defaultToggle) {
             tableConfiguration.toggle = true;
-            tableConfiguration.toggleOptions = new ToggleOptions('ticket-article-details', 'article', [], true);
+            tableConfiguration.toggleOptions = new ToggleOptions('ticket-article-details', 'article', [], false);
         }
 
+        tableConfiguration.objectType = KIXObjectType.TICKET;
         return tableConfiguration;
     }
 
-    private setDefaultLayerConfiguration(
-        layerConfiguration: TableLayerConfiguration, tableConfiguration: TableConfiguration, defaultToggle?: boolean
-    ): TableLayerConfiguration {
-
-        if (!layerConfiguration) {
-            const contentLayer: AbstractTableLayer = new TicketTableContentLayer(
-                [], tableConfiguration.filter, tableConfiguration.sortOrder, tableConfiguration.limit
-            );
-            const labelLayer = new TicketTableLabelLayer();
-
-            layerConfiguration = new TableLayerConfiguration(contentLayer, labelLayer);
-        }
-
-        if (defaultToggle) {
-            const listener = {
-                rowToggled: () => { return; }
-            };
-            layerConfiguration.toggleLayer = new TableToggleLayer(listener, false);
-        }
-        return layerConfiguration;
+    // TODO: implementieren
+    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
+        return;
     }
 
-    private setDefaultListenerConfiguration(
-        listenerConfiguration: TableListenerConfiguration
-    ): TableListenerConfiguration {
-
-        if (!listenerConfiguration) {
-            listenerConfiguration = new TableListenerConfiguration();
-        }
-
-        return listenerConfiguration;
-    }
 }

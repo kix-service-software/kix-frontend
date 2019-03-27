@@ -2,7 +2,7 @@ import { ComponentState } from './ComponentState';
 import { ContextService, LabelService } from '../../../../core/browser';
 import { BulkDialogContext, BulkService } from '../../../../core/browser/bulk';
 import { EventService } from '../../../../core/browser/event';
-import { TabContainerEvent } from '../../../../core/browser/components';
+import { TabContainerEvent, TabContainerEventData } from '../../../../core/browser/components';
 
 class Component {
 
@@ -20,7 +20,7 @@ class Component {
         const context = await ContextService.getInstance().getContext<BulkDialogContext>(BulkDialogContext.CONTEXT_ID);
         if (context) {
             const objects = await context.getObjectList();
-            if (objects && objects.length) {
+            if (objects && !!objects.length) {
                 const objectType = objects[0].KIXObjectType;
                 BulkService.getInstance().initBulkManager(objectType, objects);
                 const bulkManager = BulkService.getInstance().getBulkManager(objectType);
@@ -30,10 +30,9 @@ class Component {
                 const labelProvider = LabelService.getInstance().getLabelProviderForType(objectType);
                 const objectName = labelProvider.getObjectName(true);
 
-                EventService.getInstance().publish(TabContainerEvent.CHANGE_TITLE, {
-                    tabId: 'bulk-dialog',
-                    title: `${objectName} bearbeiten`
-                });
+                EventService.getInstance().publish(TabContainerEvent.CHANGE_TITLE, new TabContainerEventData(
+                    'bulk-dialog', `${objectName} bearbeiten`
+                ));
             }
         }
     }

@@ -1,8 +1,8 @@
 import { PendingTimeFormValue } from ".";
 import {
-    TicketProperty, ArticleProperty, Contact,
-    DateTimeUtil, Attachment, Customer, Ticket,
-    Lock, KIXObjectType, ArticleType, SenderType,
+    TicketProperty, ArticleProperty,
+    DateTimeUtil, Attachment, Ticket,
+    Lock, KIXObjectType, SenderType,
     KIXObjectLoadingOptions, FilterCriteria, FilterDataType, FilterType
 } from "../../model";
 import { ContextService } from "../context";
@@ -27,28 +27,18 @@ export class TicketParameterUtil {
                         parameter.push([TicketProperty.PENDING_TIME, pendingTime]);
                     }
                 }
-            } else if (property === TicketProperty.CUSTOMER_USER_ID) {
-                const contact = (value as Contact);
-                parameter.push([property, contact.ContactID]);
-                if (!forUpdate) {
-                    parameter.push([ArticleProperty.FROM, contact.UserEmail]);
-                }
-            } else if (property === TicketProperty.CUSTOMER_ID) {
-                const customer = (value as Customer);
-                parameter.push([property, customer.CustomerID]);
             } else if (property === TicketProperty.TITLE) {
                 parameter.push([TicketProperty.TITLE, value]);
                 if (!forUpdate) {
                     parameter.push([ArticleProperty.SUBJECT, value]);
                 }
             } else if (property === ArticleProperty.SUBJECT) {
+                parameter.push([TicketProperty.TITLE, value]);
                 parameter.push([ArticleProperty.SUBJECT, value]);
-            } else if (property === ArticleProperty.BODY) {
-                parameter.push([ArticleProperty.BODY, value]);
-            } else if (property === ArticleProperty.ATTACHMENT) {
+            } else if (property === ArticleProperty.ATTACHMENTS) {
                 if (value) {
                     const attachments = await TicketParameterUtil.prepareAttachments(value);
-                    parameter.push([ArticleProperty.ATTACHMENT, attachments]);
+                    parameter.push([ArticleProperty.ATTACHMENTS, attachments]);
                 }
             } else if (property === TicketProperty.OWNER_ID) {
                 parameter.push([property, value]);
@@ -79,7 +69,6 @@ export class TicketParameterUtil {
 
     public static async getPredefinedParameter(forUpdate: boolean = false): Promise<Array<[string, any]>> {
         const parameter: Array<[string, any]> = [];
-        const objectData = ContextService.getInstance().getObjectData();
 
         const loadingOptionsSenderType = new KIXObjectLoadingOptions(null, [
             new FilterCriteria('Name', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'agent')
@@ -88,20 +77,8 @@ export class TicketParameterUtil {
             KIXObjectType.SENDER_TYPE, null, loadingOptionsSenderType
         );
 
-        const loadingOptionsArticleType = new KIXObjectLoadingOptions(null, [
-            new FilterCriteria('Name', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'note-internal')
-        ]);
-        const articleTypes = await KIXObjectService.loadObjects<ArticleType>(
-            KIXObjectType.ARTICLE_TYPE, null, loadingOptionsArticleType
-        );
-
         if (forUpdate) {
-            parameter.push([ArticleProperty.ARTICLE_TYPE_ID, articleTypes[0].ID]);
             parameter.push([ArticleProperty.SENDER_TYPE_ID, senderTypes[0].ID]);
-
-            // TODO: richtigen Anzeigewert verwenden
-            parameter.push([ArticleProperty.FROM, objectData.currentUser.UserLogin]);
-
         }
 
         return parameter;

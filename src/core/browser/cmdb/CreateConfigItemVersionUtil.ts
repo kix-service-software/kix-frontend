@@ -1,7 +1,5 @@
 import {
-    VersionProperty, FormField,
-    FormFieldOptions, InputFieldTypes, KIXObjectType, Contact, Customer,
-    IFormInstance, DateTimeUtil, Attachment
+    VersionProperty, FormField, FormFieldOptions, InputFieldTypes, IFormInstance, DateTimeUtil, Attachment
 } from "../../model";
 import { FormService } from "../form";
 import { BrowserUtil } from "../BrowserUtil";
@@ -18,7 +16,7 @@ export class CreateConfigItemVersionUtil {
         let fields: FormField[] = [];
         form.groups.forEach((g) => fields = [...fields, ...g.formFields]);
 
-        const data: any = {};
+        let data = null;
         for (const formField of fields) {
             const property = formField.property;
             const formValue = formInstance.getFormFieldValue(formField.instanceId);
@@ -34,21 +32,25 @@ export class CreateConfigItemVersionUtil {
                     parameter.push([property, value]);
                     break;
                 default:
-                    // Try to add the field to the version data
-                    await CreateConfigItemVersionUtil.prepareData(data, formField, formInstance);
+                    data = await CreateConfigItemVersionUtil.prepareData(data, formField, formInstance);
             }
         }
 
-        parameter.push([VersionProperty.DATA, data]);
+        if (data) {
+            parameter.push([VersionProperty.DATA, data]);
+        }
 
         return parameter;
     }
 
     private static async prepareData(
         versionData: any, formField: FormField, formInstance: IFormInstance
-    ): Promise<void> {
+    ): Promise<any> {
         const data = await CreateConfigItemVersionUtil.perpareFormFieldData(formField, formInstance);
         if (data) {
+            if (!versionData) {
+                versionData = {};
+            }
             if (formField.countMax > 1) {
                 if (!versionData[formField.property]) {
                     versionData[formField.property] = [data];
@@ -59,6 +61,7 @@ export class CreateConfigItemVersionUtil {
                 versionData[formField.property] = data;
             }
         }
+        return versionData;
     }
 
     private static async perpareFormFieldData(
@@ -81,23 +84,10 @@ export class CreateConfigItemVersionUtil {
                 switch (fieldType) {
                     case InputFieldTypes.TEXT:
                     case InputFieldTypes.TEXT_AREA:
-                        value = formValue.value;
-                        break;
                     case InputFieldTypes.GENERAL_CATALOG:
-                        value = formValue.value;
-                        break;
                     case InputFieldTypes.CI_REFERENCE:
-                        value = formValue.value;
-                        break;
                     case InputFieldTypes.OBJECT_REFERENCE:
-                        const objectoption = formField.options.find((o) => o.option === 'OBJECT');
-                        if (objectoption) {
-                            if (objectoption.value === KIXObjectType.CONTACT) {
-                                value = (formValue.value as Contact).ContactID;
-                            } else if (objectoption.value === KIXObjectType.CUSTOMER) {
-                                value = (formValue.value as Customer).CustomerID;
-                            }
-                        }
+                        value = formValue.value;
                         break;
                     case InputFieldTypes.DATE:
                         if (formValue.value !== '') {

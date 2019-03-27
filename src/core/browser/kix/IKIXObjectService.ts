@@ -1,12 +1,10 @@
 import {
     KIXObject, KIXObjectType, FilterCriteria, TreeNode,
     KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, KIXObjectSpecificDeleteOptions
+    KIXObjectSpecificCreateOptions, KIXObjectSpecificDeleteOptions, TableFilterCriteria
 } from "../../model";
-import { TableColumn } from "../standard-table";
 import { IKIXService } from "./IKIXService";
 import { IAutofillConfiguration } from "../components";
-import { ServiceMethod } from "./ServiceMethod";
 
 export interface IKIXObjectService<T extends KIXObject = KIXObject> extends IKIXService {
 
@@ -30,7 +28,7 @@ export interface IKIXObjectService<T extends KIXObject = KIXObject> extends IKIX
 
     getTreeNodes(property: string): Promise<TreeNode[]>;
 
-    checkFilterValue(object: T, property: string, value: string | number): boolean;
+    checkFilterValue(object: T, criteria: TableFilterCriteria): boolean;
 
     determineDependendObjects(
         sourceObjects: T[], targetObjectType: KIXObjectType

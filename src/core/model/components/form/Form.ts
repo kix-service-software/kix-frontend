@@ -13,7 +13,8 @@ export class Form {
         public validation: boolean = true,
         public formContext: FormContext = FormContext.NEW,
         public autoCompleteConfiguration: AutoCompleteConfiguration = new AutoCompleteConfiguration(),
-        public singleFormGroupOpen: boolean = false
+        public singleFormGroupOpen: boolean = false,
+        public showSingleGroup: boolean = false
     ) { }
 
 }

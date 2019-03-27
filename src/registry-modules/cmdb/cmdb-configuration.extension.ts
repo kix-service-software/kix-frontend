@@ -1,11 +1,13 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
     ContextConfiguration, WidgetConfiguration, WidgetSize, ConfiguredWidget, ConfigItemProperty,
-    FormField, VersionProperty, FormFieldOption, FormContext, KIXObjectType, Form
+    FormField, VersionProperty, FormFieldOption, FormContext, KIXObjectType, Form,
+    KIXObjectPropertyFilter, TableFilterCriteria
 } from '../../core/model';
 import { CMDBContext, CMDBContextConfiguration, ConfigItemChartConfiguration } from '../../core/browser/cmdb';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
-import { ConfigurationService } from '../../core/services';
+import { ConfigurationService, CMDBService } from '../../core/services';
+import { SearchOperator, TableConfiguration, TableRowHeight } from '../../core/browser';
 
 export class Extension implements IConfigurationExtension {
 
@@ -122,11 +124,21 @@ export class Extension implements IConfigurationExtension {
             '20180903-cmdb-chart-1', '20180903-cmdb-chart-2', '20180903-cmdb-chart-3', '20180905-ci-list-widget'
         ];
 
+        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+        const deploymentStates = await CMDBService.getInstance().getDeploymentStates(serverConfig.BACKEND_API_TOKEN);
+        const filter: KIXObjectPropertyFilter[] = [];
+        deploymentStates.forEach(
+            (ds) => filter.push(new KIXObjectPropertyFilter(ds.Name, [
+                new TableFilterCriteria(
+                    ConfigItemProperty.CUR_DEPL_STATE_ID, SearchOperator.EQUALS, ds.ItemID
+                )
+            ])));
+
         const ciListWidget = new ConfiguredWidget('20180905-ci-list-widget', new WidgetConfiguration(
-            'config-item-list-widget', 'Übersicht Config Items', [
-                'config-item-bulk-action', 'ticket-create-action', 'config-item-create-action', 'csv-export-action'
-            ], {}, false, true,
-            WidgetSize.LARGE, 'kix-icon-ci', true
+            'table-widget', 'Übersicht Config Items', [
+                'bulk-action', 'ticket-create-action', 'config-item-create-action', 'csv-export-action'
+            ],
+            { objectType: KIXObjectType.CONFIG_ITEM }, false, false, WidgetSize.LARGE, 'kix-icon-ci', true, filter
         ));
 
         const contentWidgets = [chart1, chart2, chart3, ciListWidget];

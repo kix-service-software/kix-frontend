@@ -26,7 +26,7 @@ export class LinkService extends KIXObjectService {
 
     private constructor() {
         super();
-        KIXObjectServiceRegistry.getInstance().registerServiceInstance(this);
+        KIXObjectServiceRegistry.registerServiceInstance(this);
         KIXObjectCache.registerCacheHandler(new LinkCacheHandler());
     }
     public isServiceFor(kixObjectType: KIXObjectType): boolean {

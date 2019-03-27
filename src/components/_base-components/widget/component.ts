@@ -51,7 +51,7 @@ class WidgetComponent implements IEventSubscriber {
 
     public minimizeWidget(force: boolean = false, event: any): void {
         if (event && event.preventDefault) {
-            event.preventDefault(event);
+            event.preventDefault();
         }
 
         if (this.state.minimizable) {

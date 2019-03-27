@@ -1,7 +1,6 @@
 import { KIXObject } from '../KIXObject';
 import { ArticleFlag } from './ArticleFlag';
 import { ArticleReceiver } from './ArticleReceiver';
-import { ArticleType } from './ArticleType';
 import { Attachment } from './Attachment';
 import { SenderType } from './SenderType';
 import { KIXObjectType } from '..';
@@ -45,7 +44,9 @@ export class Article extends KIXObject<Article> {
 
     public SenderTypeID: number;
 
-    public ArticleTypeID: number;
+    public ChannelID: number;
+
+    public Channel: string;
 
     public ContentType: string;
 
@@ -61,9 +62,10 @@ export class Article extends KIXObject<Article> {
 
     public Flags: ArticleFlag[];
 
+    public CustomerVisible: boolean;
+
     // UI Properties
 
-    public articleType: ArticleType;
     public senderType: SenderType;
     public toList: ArticleReceiver[];
     public ccList: ArticleReceiver[];
@@ -91,7 +93,6 @@ export class Article extends KIXObject<Article> {
             this.InReplyTo = article.InReplyTo;
             this.References = article.References;
             this.SenderTypeID = article.SenderTypeID;
-            this.ArticleTypeID = article.ArticleTypeID;
             this.ContentType = article.ContentType;
             this.Charset = article.Charset;
             this.MimeType = article.MimeType;
@@ -99,6 +100,9 @@ export class Article extends KIXObject<Article> {
             this.DynamicFields = article.DynamicFields;
             this.Attachments = article.Attachments;
             this.Flags = article.Flags;
+            this.Channel = article.Channel;
+            this.ChannelID = article.ChannelID;
+            this.CustomerVisible = article.CustomerVisible;
 
             this.bodyAttachment = article.bodyAttachment;
         }
@@ -106,12 +110,24 @@ export class Article extends KIXObject<Article> {
 
     public isUnread(): boolean {
         if (this.Flags) {
-            const index = this.Flags.findIndex(
-                (af) => af.Name.toLocaleLowerCase() === 'seen' && af.Value === "1"
-            );
-            return index === -1;
+            return !this.Flags.some((af) => af.Name.toLocaleLowerCase() === 'seen' && af.Value === "1");
         }
         return false;
+    }
+
+    public isUnsent(): boolean {
+        if (this.Flags) {
+            return this.Flags.some((af) => af.Name.toLocaleLowerCase() === 'notsenterror');
+        }
+        return false;
+    }
+
+    public getUnsentError(): string {
+        const flag = this.Flags.find((af) => af.Name.toLocaleLowerCase() === 'notsenterror');
+        if (flag) {
+            return flag.Value;
+        }
+        return '';
     }
 
     public equals(article: Article): boolean {

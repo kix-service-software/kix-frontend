@@ -1,6 +1,6 @@
 import { FormField } from "../../../../core/model";
 import { ComponentState } from './ComponentState';
-import { FormService } from "../../../../core/browser";
+import { FormService, IdService } from "../../../../core/browser";
 
 class FieldContainerComponent {
 
@@ -15,6 +15,15 @@ class FieldContainerComponent {
         this.state.level = typeof input.level !== 'undefined' ? input.level : 0;
         this.state.fields = input.fields;
         this.formId = input.formId;
+    }
+
+    public async onMount(): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.formId);
+        formInstance.registerListener({
+            updateForm: () => (this as any).setStateDirty('fields'),
+            formValueChanged: () => { return; },
+            formListenerId: IdService.generateDateBasedId('form-field-container')
+        });
     }
 
     public canRemove(field: FormField): boolean {

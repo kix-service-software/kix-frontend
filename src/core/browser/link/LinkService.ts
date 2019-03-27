@@ -35,7 +35,7 @@ export class LinkService extends KIXObjectService<Link> {
 
     public async getObjectUrl(object?: KIXObject, objectId?: string | number): Promise<string> {
         if (object && object instanceof LinkObject) {
-            const service = ServiceRegistry.getInstance().getServiceInstance<IKIXObjectService>(
+            const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(
                 object.linkedObjectType
             );
             return service ? await service.getObjectUrl(null, object.linkedObjectKey) : null;

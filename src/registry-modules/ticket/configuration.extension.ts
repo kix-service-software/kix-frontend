@@ -40,10 +40,12 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
 
         const predefinedTicketFilter = [
             new KIXObjectPropertyFilter('Bearbeiter', [
-                new TableFilterCriteria(TicketProperty.OWNER_ID, SearchOperator.EQUALS, 'CURRENT_USER')
+                new TableFilterCriteria(TicketProperty.OWNER_ID, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER)
             ]),
             new KIXObjectPropertyFilter('Beobachtete Tickets', [
-                new TableFilterCriteria(TicketProperty.WATCHERS, SearchOperator.EQUALS, 'CURRENT_USER', true)
+                new TableFilterCriteria(
+                    TicketProperty.WATCHERS, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER, true
+                )
             ]),
             new KIXObjectPropertyFilter('Eskalierte Tickets', [
                 new TableFilterCriteria(TicketProperty.ESCALATION_TIME, SearchOperator.LESS_THAN, 0)
@@ -55,9 +57,10 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
                 new TableFilterCriteria(TicketProperty.LOCK_ID, SearchOperator.EQUALS, 2)
             ]),
             new KIXObjectPropertyFilter('Verantwortliche Tickets', [
-                new TableFilterCriteria(TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS, 'CURRENT_USER')
+                new TableFilterCriteria(
+                    TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER
+                )
             ]),
-
 
         ];
 
@@ -154,16 +157,20 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
 
         const ticketListWidget =
             new ConfiguredWidget('20180814-ticket-list-widget', new WidgetConfiguration(
-                'ticket-list-widget', 'Übersicht Tickets', [
+                'table-widget', 'Übersicht Tickets', [
                     'ticket-create-action', 'bulk-action', 'csv-export-action', 'ticket-search-action'
-                ], new TableConfiguration(
-                    1000, 25, null, [new FilterCriteria(
-                        'StateType', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'
-                    )],
-                    true, true,
-                    new ToggleOptions('ticket-article-details', 'article', [], true),
-                    null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
-                ),
+                ],
+                {
+                    objectType: KIXObjectType.TICKET,
+                    tableConfiguration: new TableConfiguration(KIXObjectType.TICKET,
+                        1000, 25, null, [new FilterCriteria(
+                            'StateType', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'
+                        )],
+                        true, true,
+                        new ToggleOptions('ticket-article-details', 'article', [], true),
+                        null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
+                    )
+                },
                 false, false, WidgetSize.LARGE, 'kix-icon-ticket', true, predefinedTicketFilter)
             );
 

@@ -6,7 +6,11 @@
 </else-if>
 <else>
     <div.details-container>
-        <widget instanceId=state.instanceId minimizable=true title=state.title actions=component.getActions()
+        <widget
+            instanceId=state.instanceId
+            minimizable=true
+            title=state.title
+            actions=component.getActions()
             contentActions=component.getConfigItemActions()>
             <@content>
                 <ul.lane-list no-update>
@@ -15,10 +19,10 @@
                     </li>
                     <for(lane in state.lanes)>
                         <li.lane>
-                            <include(component.getWidgetTemplate(lane.instanceId), { 
+                            <${component.getWidgetTemplate(lane.instanceId)} ...{
                                 contextType: "MAIN",
                                 instanceId: lane.instanceId
-                                })/>
+                            }/>
                         </li>
                     </for>
                 </ul>
@@ -26,10 +30,10 @@
         </widget>
         <div.ci-content>
             <for(contentWidget in state.contentWidgets)>
-                <include(component.getWidgetTemplate(contentWidget.instanceId), { 
+                <${component.getWidgetTemplate(contentWidget.instanceId)} ...{
                     contextType: "MAIN",
                     instanceId: contentWidget.instanceId
-                    })/>
+                }/>
             </for>
         </div>
     </div>

@@ -1,13 +1,11 @@
 .personal-settings-dialog-container {
     margin-left: 1rem;
-    >.dialog-button-container {
-        margin-left: 0;
-        grid-template-columns: max-content max-content;
-        justify-content: right;
-        padding-right: 0;
+    >form {
+        >div:last-child {
+            margin-bottom: 0;
+        }
     }
-    &+.dialog-button-container {
-        margin-left: 1rem;
+    >.dialog-button-container {
         padding-right: 0;
     }
 }

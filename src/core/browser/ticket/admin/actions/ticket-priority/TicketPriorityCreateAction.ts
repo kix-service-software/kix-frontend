@@ -5,7 +5,7 @@ export class TicketPriorityCreateAction extends AbstractAction {
 
     public initAction(): void {
         this.text = "Neue Priorität";
-        this.icon = "kix-icon-gear";
+        this.icon = "kix-icon-new-gear";
     }
 
     public run(): void {

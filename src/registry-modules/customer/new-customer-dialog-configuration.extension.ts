@@ -87,7 +87,7 @@ export class NewCustomerDialogModuleExtension implements IConfigurationExtension
             case CustomerProperty.CUSTOMER_COMPANY_ZIP:
                 hint = 'Geben Sie die Postleitzahl (PLZ) der Kundenadresse ein.';
                 break;
-            case CustomerProperty.CUSTOMER_COMPANY_City:
+            case CustomerProperty.CUSTOMER_COMPANY_CITY:
                 hint = 'Geben Sie den Ort für die Kundenadresse ein.';
                 break;
             case CustomerProperty.CUSTOMER_COMPANY_URL:

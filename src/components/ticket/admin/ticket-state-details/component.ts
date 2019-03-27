@@ -25,6 +25,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             filteredObjectListChanged: () => { return; },
             objectListChanged: () => { return; },
             sidebarToggled: () => { return; },
+            scrollInformationChanged: () => { return; },
             objectChanged: (
                 objectId: string, ticketState: TicketState, objectType: KIXObjectType, changedProperties: string[]
             ) => {

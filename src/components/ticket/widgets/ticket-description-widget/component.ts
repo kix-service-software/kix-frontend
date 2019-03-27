@@ -34,6 +34,7 @@ class Component {
             filteredObjectListChanged: () => { return; },
             objectListChanged: () => { return; },
             sidebarToggled: () => { return; },
+            scrollInformationChanged: () => { return; },
             objectChanged: (ticketId: string, ticket: Ticket, type: KIXObjectType) => {
                 if (type === KIXObjectType.TICKET) {
                     this.initWidget(ticket);

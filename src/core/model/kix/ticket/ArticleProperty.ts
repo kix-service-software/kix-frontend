@@ -32,7 +32,9 @@ export enum ArticleProperty {
 
     SENDER_TYPE_ID = 'SenderTypeID',
 
-    ARTICLE_TYPE_ID = 'ArticleTypeID',
+    CHANNEL = 'Channel',
+
+    CHANNEL_ID = 'ChannelID',
 
     CONTENT_TYPE = 'ContentType',
 
@@ -48,8 +50,10 @@ export enum ArticleProperty {
 
     NUMBER = 'Number',
 
-    ATTACHMENT = 'Attachment',
+    ATTACHMENTS = 'Attachments',
 
-    ARTICLE_TAG = 'ArticleTag'
+    ARTICLE_TAG = 'ArticleTag',
+
+    CUSTOMER_VISIBLE = 'CustomerVisible'
 
 }

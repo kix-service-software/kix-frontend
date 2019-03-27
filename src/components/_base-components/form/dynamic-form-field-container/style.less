@@ -1,0 +1,16 @@
+.dynamic-form-field-value {
+    display: grid;
+    grid-template-columns: 15rem 15rem minmax(10rem, auto) max-content;
+    align-items: center;
+    grid-column-gap: @bulk-value-gap;
+    margin-bottom: @margin-small;
+    .value {
+        >input[type="time"],
+        >input[type="date"] {
+            width: 50%;
+        }
+    }
+    >.remove-value {
+        cursor: pointer;
+    }
+}

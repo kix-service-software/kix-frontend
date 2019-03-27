@@ -1,5 +1,5 @@
 import { ContextService } from '../../../core/browser/context';
-import { ComponentsService, TabContainerEvent } from '../../../core/browser/components';
+import { ComponentsService, TabContainerEvent, TabContainerEventData } from '../../../core/browser/components';
 import { WidgetType, ConfiguredWidget } from '../../../core/model';
 import { ComponentState } from './ComponentState';
 import { WidgetService, ActionFactory, IdService } from '../../../core/browser';
@@ -26,6 +26,7 @@ class TabLaneComponent implements IEventSubscriber {
             (tab) => WidgetService.getInstance().setWidgetType(tab.instanceId, WidgetType.LANE_TAB)
         );
         EventService.getInstance().subscribe(TabContainerEvent.CHANGE_TITLE, this);
+        EventService.getInstance().subscribe(TabContainerEvent.CHANGE_ICON, this);
     }
 
     public async onMount(): Promise<void> {
@@ -48,6 +49,11 @@ class TabLaneComponent implements IEventSubscriber {
                 this.state.activeTab = tab;
             }
         }
+    }
+
+    public onDestroy(): void {
+        EventService.getInstance().unsubscribe(TabContainerEvent.CHANGE_TITLE, this);
+        EventService.getInstance().unsubscribe(TabContainerEvent.CHANGE_ICON, this);
     }
 
     public async tabClicked(tab: ConfiguredWidget): Promise<void> {
@@ -86,12 +92,19 @@ class TabLaneComponent implements IEventSubscriber {
         return this.state.activeTab && this.state.activeTab.instanceId === tabId;
     }
 
-    public eventPublished(data: any, eventId: string): void {
+    public eventPublished(data: TabContainerEventData, eventId: string): void {
         if (eventId === TabContainerEvent.CHANGE_TITLE) {
             const tab = this.state.tabWidgets.find((t) => t.instanceId === data.tabId);
             if (tab) {
                 tab.configuration.title = data.title;
-                (this as any).setStateDirty();
+                (this as any).setStateDirty('tabWidgets');
+            }
+        }
+        if (eventId === TabContainerEvent.CHANGE_ICON) {
+            const tab = this.state.tabWidgets.find((t) => t.instanceId === data.tabId);
+            if (tab) {
+                tab.configuration.icon = data.icon;
+                (this as any).setStateDirty('tabWidgets');
             }
         }
     }

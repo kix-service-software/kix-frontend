@@ -22,7 +22,7 @@ export class ProfilingService {
     private constructor() {
         const serverConfig: IServerConfiguration = ConfigurationService.getInstance().getServerConfiguration();
 
-        this.active = serverConfig.ENABLE_PROFILING || false;
+        this.active = serverConfig ? serverConfig.ENABLE_PROFILING || false : false;
 
         // deactivate in test mode
         if (ConfigurationService.getInstance().isTestMode()) {

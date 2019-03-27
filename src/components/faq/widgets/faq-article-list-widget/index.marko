@@ -1,19 +1,21 @@
-<widget instanceId=state.instanceId title=state.title actions=state.actions
+<widget
+    instanceId=state.instanceId
+    contextType="MAIN"
+    title=state.title
+    actions=state.actions
     icon=(state.widgetConfiguration && state.widgetConfiguration.icon ? state.widgetConfiguration.icon : "")>
     <@headerFilter>
-        <filter filterCount=state.filterCount predefinedFilter=state.predefinedTableFilter
-            predefinedFilterPlaceholder="Alle FAQ" on-filter('filter')/>
+        <filter
+            filterCount=state.filterCount
+            predefinedFilter=state.predefinedTableFilter
+            predefinedFilterPlaceholder="Alle FAQ"
+            on-filter("filter")/>
     </@headerFilter>
     <@content>
-        <if(state.loading)>
-            <loading-spinner/>
-        </if>
-        <else>
-            <div.faq-article-history-container>
-                <if(state.table)>
-                    <standard-table standardTable=state.table/>
-                </if>
-            </div>
-        </else>
+        <div.faq-article-history-container>
+            <if(state.table)>
+                <standard-table-NEW table=state.table/>
+            </if>
+        </div>
     </@content>
 </widget>

@@ -1,5 +1,5 @@
 import { ComponentState } from "./ComponentState";
-import { OverlayService, ActionFactory, WidgetService } from "../../../core/browser";
+import { OverlayService, ActionFactory, WidgetService, BrowserUtil } from "../../../core/browser";
 import {
     OverlayType, ComponentContent, WidgetType, KIXObject, ToastContent
 } from "../../../core/model";
@@ -10,17 +10,18 @@ class OverlayComponent {
 
     private state: ComponentState;
     private toastTimeout: any;
-    private overlayIconId: string;
+    private currentListenerId: string;
     private startMoveOffset: [number, number] = null;
     private startResizeOffset: [number, number] = null;
     private position: [number, number] = null;
+    private keepShow: boolean;
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
     public onMount(): void {
-        OverlayService.getInstance().registerOverlayListener(this.openOverlay.bind(this));
+        OverlayService.getInstance().registerOverlayComponentListener(this.openOverlay.bind(this));
 
         WidgetService.getInstance().setWidgetType(this.state.overlayInstanceId, WidgetType.OVERLAY);
 
@@ -29,6 +30,10 @@ class OverlayComponent {
         }, false);
         document.addEventListener('mousemove', this.mouseMove.bind(this));
         document.addEventListener('mouseup', this.mouseUp.bind(this));
+    }
+
+    public onUpdate(): void {
+        this.setOverlayPosition();
     }
 
     public onDestroy(): void {
@@ -41,8 +46,8 @@ class OverlayComponent {
 
     private closeOverlayEventHandler(event: any): void {
         if (this.state.show && !this.showShield() && event.button === 0) {
-            if (this.state.keepShow) {
-                this.state.keepShow = false;
+            if (this.keepShow) {
+                this.keepShow = false;
             } else {
                 this.closeOverlay();
             }
@@ -50,18 +55,14 @@ class OverlayComponent {
     }
 
     public overlayClicked(): void {
-        this.state.keepShow = true;
-    }
-
-    public onUpdate(): void {
-        this.setOverlayPosition();
+        this.keepShow = true;
     }
 
     private openOverlay<T extends KIXObject<T>>(
         type: OverlayType, widgetInstanceId: string, content: ComponentContent<T>, title: string,
-        closeButton: boolean, position: [number, number], iconId: string, large: boolean
+        closeButton: boolean, position: [number, number], newListenerId: string, large: boolean
     ): void {
-        if (this.overlayIconId) {
+        if (this.currentListenerId) {
             this.closeOverlay();
         }
         this.state.title = title;
@@ -70,13 +71,24 @@ class OverlayComponent {
         this.state.hasCloseButton = closeButton;
         this.state.type = type;
         this.position = position;
+
+        if (this.position && this.position[0]) {
+            this.position[0] += window.scrollX;
+        }
+        if (this.position && this.position[1]) {
+            this.position[1] += window.scrollY;
+        }
+
         this.state.overlayClass = this.getOverlayTypeClass(type, large);
-        this.overlayIconId = iconId;
+        this.currentListenerId = newListenerId;
 
         this.applyWidgetConfiguration(widgetInstanceId);
 
-        this.state.keepShow = true;
         this.state.show = true;
+        this.keepShow = true;
+        setTimeout(() => {
+            this.keepShow = false;
+        }, 100);
 
         if (this.isToast()) {
             if (type && type === OverlayType.SUCCESS_TOAST) {
@@ -108,12 +120,8 @@ class OverlayComponent {
             }, 100);
         }
 
-        if (this.overlayIconId) {
-            OverlayService.getInstance().overlayOpened(iconId);
-            if (this.position && !!this.position.length && typeof this.position[0] === 'number') {
-                // + default font-size (next to icon)
-                this.position[0] += this.getBrowserFontsize();
-            }
+        if (this.currentListenerId) {
+            OverlayService.getInstance().overlayOpened(this.currentListenerId);
         }
     }
 
@@ -137,9 +145,9 @@ class OverlayComponent {
         if (this.toastTimeout) {
             clearTimeout(this.toastTimeout);
         }
-        if (this.overlayIconId) {
-            OverlayService.getInstance().overlayClosed(this.overlayIconId);
-            this.overlayIconId = null;
+        if (this.currentListenerId) {
+            OverlayService.getInstance().overlayClosed(this.currentListenerId);
+            this.currentListenerId = null;
         }
         if (this.state.actions) {
             WidgetService.getInstance().unregisterActions(this.state.overlayInstanceId);
@@ -162,7 +170,7 @@ class OverlayComponent {
 
     private setLeftPosition(overlay: any = (this as any).getEl('overlay')): void {
         if (overlay) {
-            if (this.position && this.position[0]) {
+            if (this.position[0]) {
                 if (this.position[0] + overlay.offsetWidth > document.body.offsetWidth + window.scrollX) {
                     this.position[0] = document.body.offsetWidth + window.scrollX - overlay.offsetWidth - 15;
                 }
@@ -174,11 +182,18 @@ class OverlayComponent {
         }
     }
 
+    private topPositionTimeout = null;
     private setTopPosition(overlay: any = (this as any).getEl('overlay')): void {
         if (overlay) {
             // small timeout, because overlay class change takes effect with some delay (content could need more height)
-            setTimeout(() => {
-                if (this.position && this.position[1]) {
+            if (this.topPositionTimeout) {
+                clearTimeout(this.topPositionTimeout);
+            }
+            this.topPositionTimeout = setTimeout(() => {
+                if (!this.position || !!!this.position.length) {
+                    this.position = [null, null];
+                }
+                if (this.position[1]) {
                     if (this.position[1] + overlay.offsetHeight > document.body.offsetHeight + window.scrollY) {
                         this.position[1]
                             = document.body.offsetHeight + window.scrollY - overlay.offsetHeight - 15;
@@ -209,6 +224,8 @@ class OverlayComponent {
                 return 'toast-overlay';
             case OverlayType.CONTENT_OVERLAY:
                 return 'content-overlay' + (large ? ' large' : '');
+            case OverlayType.TABLE_COLUMN_FILTER:
+                return 'table-column-filter-overlay';
             default:
                 return '';
         }
@@ -244,7 +261,9 @@ class OverlayComponent {
     }
 
     public hasClosable(): boolean {
-        return !this.isToast() && this.state.type !== OverlayType.CONFIRM;
+        return !this.isToast()
+            && this.state.type !== OverlayType.CONFIRM
+            && this.state.type !== OverlayType.TABLE_COLUMN_FILTER;
     }
 
     public isToast(): boolean {
@@ -308,13 +327,6 @@ class OverlayComponent {
             this.startMoveOffset = null;
             document.body.classList.remove('no-select');
         }
-    }
-
-    private getBrowserFontsize(): number {
-        const browserFontSizeSetting = window
-            .getComputedStyle(document.getElementsByTagName("body")[0], null)
-            .getPropertyValue("font-size");
-        return Number(browserFontSizeSetting.replace('px', ''));
     }
 }
 
