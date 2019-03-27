@@ -131,8 +131,7 @@ export class TicketStateLabelProvider implements ILabelProvider<TicketState> {
     }
 
     public async getObjectText(ticketState: TicketState, id?: boolean, title?: boolean): Promise<string> {
-        const objectName = await TranslationService.translate('Translatable#State');
-        return `${objectName}: ${ticketState.Name}`;
+        return ticketState.Name;
     }
 
     public getObjectAdditionalText(ticketState: TicketState): string {

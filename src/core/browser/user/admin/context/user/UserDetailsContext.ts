@@ -8,6 +8,7 @@ import { AdminContext } from "../../../../admin";
 import { EventService } from "../../../../event";
 import { ApplicationEvent } from "../../../../application";
 import { KIXObjectService } from "../../../../kix";
+import { TranslationService } from "../../../../i18n/TranslationService";
 
 export class UserDetailsContext extends Context<UserDetailsContextConfiguration> {
 
@@ -90,8 +91,11 @@ export class UserDetailsContext extends Context<UserDetailsContextConfiguration>
         return widgetType;
     }
 
-    public getBreadcrumbInformation(): BreadcrumbInformation {
-        return new BreadcrumbInformation(this.getIcon(), [AdminContext.CONTEXT_ID]);
+    public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
+        const objectName = await TranslationService.translate('Translatable#Agent');
+        const object = await this.getObject<User>();
+        const text = await LabelService.getInstance().getText(object);
+        return new BreadcrumbInformation(this.getIcon(), [AdminContext.CONTEXT_ID], `${objectName}: ${text}`);
     }
 
     public async getObject<O extends KIXObject>(

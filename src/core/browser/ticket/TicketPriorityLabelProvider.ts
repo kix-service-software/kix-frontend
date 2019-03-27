@@ -124,8 +124,7 @@ export class TicketPriorityLabelProvider implements ILabelProvider<TicketPriorit
     }
 
     public async getObjectText(ticketPriority: TicketPriority, id?: boolean, title?: boolean): Promise<string> {
-        const objectName = await TranslationService.translate('Translatable#Priority');
-        return `${objectName}: ${ticketPriority.Name}`;
+        return ticketPriority.Name;
     }
 
     public getObjectAdditionalText(ticketPriority: TicketPriority): string {

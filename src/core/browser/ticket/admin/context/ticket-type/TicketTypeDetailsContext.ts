@@ -8,6 +8,7 @@ import { EventService } from "../../../../event";
 import { KIXObjectService } from "../../../../kix";
 import { LabelService } from "../../../../LabelService";
 import { ApplicationEvent } from "../../../../application";
+import { TranslationService } from "../../../../i18n/TranslationService";
 
 export class TicketTypeDetailsContext extends Context<TicketTypeDetailsContextConfiguration> {
 
@@ -90,8 +91,10 @@ export class TicketTypeDetailsContext extends Context<TicketTypeDetailsContextCo
         return widgetType;
     }
 
-    public getBreadcrumbInformation(): BreadcrumbInformation {
-        return new BreadcrumbInformation(this.getIcon(), [AdminContext.CONTEXT_ID]);
+    public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
+        const objectName = await TranslationService.translate('Translatable#Type');
+        const state = await this.getObject<TicketType>();
+        return new BreadcrumbInformation(this.getIcon(), [AdminContext.CONTEXT_ID], `${objectName}: ${state.Name}`);
     }
 
     public async getObject<O extends KIXObject>(

@@ -24,7 +24,7 @@ class BreadcrumbComponent implements IContextServiceListener {
             this.state.contexts = [];
             this.state.icon = null;
 
-            const breadcrumbInformation = newContext.getBreadcrumbInformation();
+            const breadcrumbInformation = await newContext.getBreadcrumbInformation();
             this.state.icon = breadcrumbInformation.icon;
             for (const contextId of breadcrumbInformation.contextIds) {
                 const context = await ContextService.getInstance().getContext(contextId);
@@ -32,8 +32,7 @@ class BreadcrumbComponent implements IContextServiceListener {
                 this.state.contexts.push([contextId, displayText]);
             }
 
-            const currentContextDisplayText = await newContext.getDisplayText(true);
-            this.state.contexts.push([newContextId, currentContextDisplayText]);
+            this.state.contexts.push([newContextId, breadcrumbInformation.currentText]);
 
             newContext.registerListener('kix-breadcrumb', {
                 objectChanged: async () => {

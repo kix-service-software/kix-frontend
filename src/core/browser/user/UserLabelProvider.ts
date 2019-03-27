@@ -156,9 +156,8 @@ export class UserLabelProvider implements ILabelProvider<User> {
     }
 
     public async getObjectText(user: User, id?: boolean, title?: boolean, translatable?: boolean): Promise<string> {
-        const objectName = await this.getObjectName(false, translatable);
         const email = user.UserEmail ? `(${user.UserEmail})` : '';
-        return `${objectName}: ${user.UserFirstname} ${user.UserLastname} ${email}`;
+        return `${user.UserFirstname} ${user.UserLastname} ${email}`;
     }
 
     public getObjectAdditionalText(object: User, translatable: boolean = true): string {

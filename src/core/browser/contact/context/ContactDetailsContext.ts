@@ -89,8 +89,10 @@ export class ContactDetailsContext extends Context<ContactDetailsContextConfigur
         return widgetType;
     }
 
-    public getBreadcrumbInformation(): BreadcrumbInformation {
-        return new BreadcrumbInformation('kix-icon-customers', [CustomerContext.CONTEXT_ID]);
+    public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
+        const object = await this.getObject<Contact>();
+        const text = await LabelService.getInstance().getText(object);
+        return new BreadcrumbInformation('kix-icon-customers', [CustomerContext.CONTEXT_ID], text);
     }
 
     public async getObject<O extends KIXObject>(

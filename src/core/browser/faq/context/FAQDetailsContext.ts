@@ -91,8 +91,10 @@ export class FAQDetailsContext extends Context<FAQDetailsContextConfiguration> {
         return widgetType;
     }
 
-    public getBreadcrumbInformation(): BreadcrumbInformation {
-        return new BreadcrumbInformation(this.getIcon(), [FAQContext.CONTEXT_ID]);
+    public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
+        const object = await this.getObject<FAQArticle>();
+        const text = await LabelService.getInstance().getText(object);
+        return new BreadcrumbInformation(this.getIcon(), [FAQContext.CONTEXT_ID], text);
     }
 
     public async getObject<O extends KIXObject>(

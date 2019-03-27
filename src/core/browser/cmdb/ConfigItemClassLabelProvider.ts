@@ -124,8 +124,7 @@ export class ConfigItemClassLabelProvider implements ILabelProvider<ConfigItemCl
     public async getObjectText(
         ciClass: ConfigItemClass, id: boolean = true, name: boolean = true, translatable?: boolean
     ): Promise<string> {
-        const objectName = await this.getObjectName(false, translatable);
-        return `${objectName}: ${ciClass.Name}`;
+        return ciClass.Name;
     }
 
     public getObjectAdditionalText(ciClass: ConfigItemClass): string {
