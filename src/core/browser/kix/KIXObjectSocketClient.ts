@@ -67,22 +67,22 @@ export class KIXObjectSocketClient extends SocketClient {
 
     private createRequestPromise<T extends KIXObject>(request: LoadObjectsRequest, cacheKey: string): Promise<T[]> {
         return new Promise<T[]>(async (resolve, reject) => {
-            const response = await this.sendRequest<LoadObjectsResponse<T>>(
+            await this.sendRequest<LoadObjectsResponse<T>>(
                 request,
                 KIXObjectEvent.LOAD_OBJECTS, KIXObjectEvent.LOAD_OBJECTS_FINISHED, KIXObjectEvent.LOAD_OBJECTS_ERROR
-            ).catch((error) => {
-                throw error;
+            ).then(async (response) => {
+                const objects = [];
+                for (const object of response.objects) {
+                    const factoryObject = await FactoryService.getInstance().create<T>(request.objectType, object);
+                    objects.push(factoryObject);
+                }
+
+                await CacheService.getInstance().set(cacheKey, objects, request.objectType);
+                this.requestPromises.delete(cacheKey);
+                resolve(objects);
+            }).catch((error) => {
+                reject(error);
             });
-
-            const objects = [];
-            for (const object of response.objects) {
-                const factoryObject = await FactoryService.getInstance().create<T>(request.objectType, object);
-                objects.push(factoryObject);
-            }
-
-            await CacheService.getInstance().set(cacheKey, objects, request.objectType);
-            this.requestPromises.delete(cacheKey);
-            resolve(objects);
         });
     }
 
