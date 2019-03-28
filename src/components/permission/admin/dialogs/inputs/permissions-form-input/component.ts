@@ -44,7 +44,9 @@ class Component extends FormInputComponent<any[], ComponentState> {
                                         v.operator,
                                         v.value && (v.value as PermissionFormData).IsRequired ? 1 : 0,
                                         crudValue,
-                                        v.value && (v.value as PermissionFormData).comment
+                                        v.value && (v.value as PermissionFormData).comment,
+                                        null,
+                                        typeof v.id !== 'undefined' && v.id !== null ? Number(v.id) : null
                                     )
                                 );
                             }
@@ -68,7 +70,8 @@ class Component extends FormInputComponent<any[], ComponentState> {
             this.state.defaultValue.value.forEach((permission: Permission) => {
                 permissionManager.setValue(
                     new ObjectPropertyValue(
-                        permission.TypeID.toString(), permission.Target, this.getPermissionFormData(permission)
+                        permission.TypeID.toString(), permission.Target, this.getPermissionFormData(permission),
+                        null, null, null, permission.ID.toString()
                     )
                 );
                 permissionDescriptions.push(
@@ -77,7 +80,9 @@ class Component extends FormInputComponent<any[], ComponentState> {
                         permission.Target,
                         permission.IsRequired,
                         permission.Value,
-                        permission.Comment
+                        permission.Comment,
+                        null,
+                        permission.ID
                     )
                 );
             });
