@@ -1,6 +1,6 @@
 import { RequestObject } from '../../RequestObject';
 
-export class CreatePermission extends RequestObject {
+export class PermissionRequestObject extends RequestObject {
 
     public constructor(parameter: Array<[string, any]>) {
         super();

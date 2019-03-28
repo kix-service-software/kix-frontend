@@ -120,7 +120,7 @@ export class RoleDetailsContext extends Context<RoleDetailsContextConfiguration>
         const roleId = Number(this.objectId);
 
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, null, null, [RoleProperty.USERIDS, RoleProperty.PERMISSIONS]
+            null, null, null, null, null, [RoleProperty.USER_IDS, RoleProperty.PERMISSIONS]
         );
 
         const roles = await KIXObjectService.loadObjects<Role>(

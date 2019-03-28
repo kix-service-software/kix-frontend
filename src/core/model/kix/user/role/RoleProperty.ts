@@ -16,7 +16,7 @@ export enum RoleProperty {
 
     CHANGE_BY = 'ChangeBy',
 
-    USERIDS = 'UserIDs',
+    USER_IDS = 'UserIDs',
 
     PERMISSIONS = 'Permissions'
 

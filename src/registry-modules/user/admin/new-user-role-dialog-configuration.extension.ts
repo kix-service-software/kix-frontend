@@ -51,7 +51,7 @@ export class Extension implements IConfigurationExtension {
 
             const agentGroup = new FormGroup('Translatable#Agent Assignment', [
                 new FormField(
-                    'Translatable#Agents', RoleProperty.USERIDS, 'object-reference-input', false,
+                    'Translatable#Agents', RoleProperty.USER_IDS, 'object-reference-input', false,
                     'Translatable#Select which agents should be assigned to this role.', [
                         new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
                         new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),

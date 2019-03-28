@@ -11,6 +11,8 @@ export class Permission extends KIXObject<Permission> {
 
     public TypeID: number;
 
+    public RoleID: number;
+
     public Comment: string;
 
     public Value: number;
@@ -37,6 +39,7 @@ export class Permission extends KIXObject<Permission> {
             this.ChangeBy = permission.ChangeBy;
             this.ChangeTime = permission.ChangeTime;
             this.TypeID = permission.TypeID;
+            this.RoleID = permission.RoleID;
             this.Comment = permission.Comment;
             this.Value = permission.Value;
             this.Target = permission.Target;
