@@ -69,11 +69,7 @@ class Component {
         );
     }
 
-    public onInput(input: any): void {
-        this.init(input);
-    }
-
-    private async init(input: any): Promise<void> {
+    public async onInput(input: any): Promise<any> {
         this.reset(input ? input.instanceId : '');
         this.state.translations = await TranslationService.createTranslationObject([
             "Translatable#Cancel", "Translatable#Replace Values",
@@ -114,12 +110,10 @@ class Component {
                     } else {
                         const loadingHint = await TranslationService.translate('Translatable#Read file.');
                         this.fileLoaded = false;
-                        DialogService.getInstance().setMainDialogLoading(true, loadingHint);
                     }
                     this.importFormTimeout = setTimeout(async () => {
                         this.importFormTimeout = null;
                         await this.prepareTableDataByCSV();
-                        DialogService.getInstance().setMainDialogLoading(false);
                     }, 100);
 
                 },
@@ -128,6 +122,8 @@ class Component {
         }
 
         this.createTable();
+
+        return input;
     }
 
     public onDestroy(): void {

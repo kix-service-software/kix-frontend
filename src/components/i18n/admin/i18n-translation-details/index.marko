@@ -11,7 +11,8 @@
                 <ul.lane-list no-update>
                     <li>
                         <tab-container
-                            tabWidgets=(state.tabWidgetstitle = state.translations["Translatable#Pattern Information"])
+                            tabWidgets=state.tabWidgets
+                            title=state.translations["Translatable#Pattern Information"]
                             showSidebar=false/>
                     </li>
                     <for|lane| of=state.lanes>

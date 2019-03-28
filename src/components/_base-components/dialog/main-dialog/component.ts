@@ -10,6 +10,11 @@ export class MainDialogComponent implements IMainDialogListener {
 
     private state: ComponentState;
 
+    private dialogId: string;
+    public dialogWidgets: ConfiguredDialogWidget[] = [];
+    public dialogTitle: string = null;
+    public dialogIcon: string | ObjectIcon = null;
+
     public onCreate(): void {
         this.state = new ComponentState();
     }
@@ -22,16 +27,12 @@ export class MainDialogComponent implements IMainDialogListener {
         dialogTitle: string, dialogs: ConfiguredDialogWidget[], dialogId?: string, dialogIcon?: string | ObjectIcon
     ): void {
         if (!this.state.show) {
-            this.state.isLoading = true;
-            this.state.dialogTitle = dialogTitle;
-            this.state.dialogIcon = dialogIcon;
-            this.state.dialogWidgets = dialogs;
-            this.state.show = true;
-            this.state.dialogId = dialogId;
+            this.dialogTitle = dialogTitle;
+            this.dialogIcon = dialogIcon;
+            this.dialogWidgets = dialogs || [];
+            this.dialogId = dialogId;
             document.body.style.overflow = 'hidden';
-            setTimeout(() => {
-                this.state.isLoading = false;
-            }, 100);
+            this.state.show = true;
         }
     }
 
@@ -42,7 +43,7 @@ export class MainDialogComponent implements IMainDialogListener {
         if (context) {
             EventService.getInstance().publish(
                 DialogEvents.DIALOG_CANCELED,
-                new DialogEventData(this.state.dialogId, data),
+                new DialogEventData(this.dialogId, data),
                 context.getDialogSubscriberId()
             );
         }
@@ -58,7 +59,7 @@ export class MainDialogComponent implements IMainDialogListener {
         if (context) {
             EventService.getInstance().publish(
                 DialogEvents.DIALOG_FINISHED,
-                new DialogEventData(this.state.dialogId, data),
+                new DialogEventData(this.dialogId, data),
                 context.getDialogSubscriberId()
             );
         }
@@ -67,12 +68,12 @@ export class MainDialogComponent implements IMainDialogListener {
     public async tabChanged(tab: ConfiguredDialogWidget): Promise<void> {
         if (tab) {
             await ContextService.getInstance().setDialogContext(null, tab.kixObjectType, tab.contextMode);
-            this.state.dialogId = tab.instanceId;
+            this.dialogId = tab.instanceId;
         }
     }
 
     public setTitle(title: string): void {
-        this.state.dialogTitle = title;
+        this.dialogTitle = title;
     }
 
     public setHint(hint: string): void {

@@ -15,7 +15,7 @@ class Component {
         this.state = new ComponentState();
     }
 
-    public async onInput(input: any): Promise<void> {
+    public onInput(input: any): void {
         this.state.actions = typeof input.actions !== 'undefined' ? input.actions : [];
         this.state.readonly = typeof input.readonly !== 'undefined' ? input.readonly : false;
         this.state.invalid = typeof input.invalid !== 'undefined' ? input.invalid : false;
@@ -41,12 +41,16 @@ class Component {
         }
         this.state.removeNode = typeof input.removeNode !== 'undefined' ? input.removeNode : true;
 
+        this.update(input);
+
+        this.setCheckState();
+    }
+
+    private async update(input: any): Promise<void> {
         this.state.placeholder = await TranslationService.translate(input.placeholder);
         this.state.autoCompletePlaceholder = this.state.asAutocomplete
             ? await TranslationService.translate('Translatable#Enter search value')
             : await TranslationService.translate('Translatable#Filter in list');
-
-        this.setCheckState();
     }
 
     public async onMount(): Promise<void> {

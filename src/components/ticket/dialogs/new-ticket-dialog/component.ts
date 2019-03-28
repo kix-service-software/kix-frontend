@@ -42,15 +42,16 @@ class Component extends AbstractNewDialog {
     }
 
     public async submit(): Promise<void> {
-        await super.submit();
-        const context = await ContextService.getInstance().getContext(TicketDetailsContext.CONTEXT_ID);
-        const ticket = await context.getObject<Ticket>(KIXObjectType.TICKET, true, [TicketProperty.ARTICLES]);
-        if (ticket) {
-            const article = ticket.Articles.sort((a, b) => b.ArticleID - a.ArticleID)[0];
-            if (article.isUnsent()) {
-                BrowserUtil.openErrorOverlay(article.getUnsentError());
+        await super.submit().then(async () => {
+            const context = await ContextService.getInstance().getContext(TicketDetailsContext.CONTEXT_ID);
+            const ticket = await context.getObject<Ticket>(KIXObjectType.TICKET, true, [TicketProperty.ARTICLES]);
+            if (ticket) {
+                const article = ticket.Articles.sort((a, b) => b.ArticleID - a.ArticleID)[0];
+                if (article.isUnsent()) {
+                    BrowserUtil.openErrorOverlay(article.getUnsentError());
+                }
             }
-        }
+        });
     }
 
 }

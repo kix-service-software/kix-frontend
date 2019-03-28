@@ -8,9 +8,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state = new ComponentState();
     }
 
-    public async onInput(input: any): Promise<void> {
+    public onInput(input: any): void {
         this.state.cancelCallback = input.cancelCallback;
         this.state.time = input.time;
+    }
+
+    public async update(): Promise<void> {
         this.state.translations = await TranslationService.createTranslationObject([
             "Translatable#Cancel", "Translatable#Save"
         ]);

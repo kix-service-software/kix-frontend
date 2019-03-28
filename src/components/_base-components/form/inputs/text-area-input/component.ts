@@ -8,15 +8,17 @@ class Component extends FormInputComponent<string, ComponentState> {
         this.state = new ComponentState();
     }
 
-    public async onInput(input: any): Promise<void> {
-        await super.onInput(input);
+    public onInput(input: any): void {
+        super.onInput(input);
+        this.update();
+    }
+
+    public async update(): Promise<void> {
         const placeholderText = this.state.field.placeholder
             ? this.state.field.placeholder
             : this.state.field.required ? this.state.field.label : '';
-        this.state.placeholder = await TranslationService.translate(placeholderText);
 
-        this.state.currentValue = typeof input.currentValue !== 'undefined' ?
-            input.currentValue : this.state.currentValue;
+        this.state.placeholder = await TranslationService.translate(placeholderText);
     }
 
     public async onMount(): Promise<void> {

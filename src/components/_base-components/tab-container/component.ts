@@ -12,11 +12,13 @@ class TabLaneComponent implements IEventSubscriber {
 
     private state: ComponentState;
 
+    private initialTabId: string;
+
     public onCreate(input: any): void {
         this.state = new ComponentState(input.tabWidgets);
 
         this.state.tabWidgets = input.tabWidgets ? input.tabWidgets : [];
-        this.state.tabId = input.tabId;
+        this.initialTabId = input.tabId;
         this.state.title = input.title;
         this.state.minimizable = typeof input.minimizable !== 'undefined' ? input.minimizable : true;
         this.state.contextType = input.contextType;
@@ -37,8 +39,8 @@ class TabLaneComponent implements IEventSubscriber {
                 this.state.tabWidgets.map((t) => t.configuration.title)
             );
 
-            if (this.state.tabId) {
-                await this.tabClicked(this.state.tabWidgets.find((tw) => tw.instanceId === this.state.tabId));
+            if (this.initialTabId) {
+                await this.tabClicked(this.state.tabWidgets.find((tw) => tw.instanceId === this.initialTabId));
             }
             if (!this.state.activeTab) {
                 await this.tabClicked(this.state.tabWidgets[0]);

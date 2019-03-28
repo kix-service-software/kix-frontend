@@ -10,7 +10,7 @@ class Component {
         this.state = new ComponentState();
     }
 
-    public async onInput(input: any): Promise<void> {
+    public onInput(input: any): void {
         if (input.predefinedFilter) {
             this.state.predefinedFilter = input.predefinedFilter;
             this.state.predefinedFilterList = this.state.predefinedFilter.map(
@@ -20,6 +20,15 @@ class Component {
             this.state.predefinedFilter = [];
             this.state.predefinedFilterList = [];
         }
+
+        this.state.icon = typeof input.icon !== 'undefined' ? input.icon : 'kix-icon-filter';
+        this.state.showFilterCount = typeof input.showFilterCount !== 'undefined' ? input.showFilterCount : true;
+        this.setFilterCount(input.filterCount);
+
+        this.update(input);
+    }
+
+    private async update(input: any): Promise<void> {
         this.state.predefinedFilterPlaceholder = typeof input.predefinedFilterPlaceholder !== 'undefined'
             ? await TranslationService.translate(input.predefinedFilterPlaceholder)
             : await TranslationService.translate('Translatable#All Objects');
@@ -28,10 +37,6 @@ class Component {
         this.state.placeholder = typeof input.placeholder !== 'undefined'
             ? await TranslationService.translate(input.placeholder)
             : defaultPlaceholder;
-
-        this.state.icon = typeof input.icon !== 'undefined' ? input.icon : 'kix-icon-filter';
-        this.state.showFilterCount = typeof input.showFilterCount !== 'undefined' ? input.showFilterCount : true;
-        this.setFilterCount(input.filterCount);
     }
 
     private textFilterValueChanged(event: any): void {

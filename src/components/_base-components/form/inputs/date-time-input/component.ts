@@ -8,12 +8,8 @@ class Component extends FormInputComponent<string | Date, ComponentState> {
         this.state = new ComponentState();
     }
 
-    public async onInput(input: any): Promise<void> {
-        await super.onInput(input);
-        const placeholderText = this.state.field.placeholder
-            ? this.state.field.placeholder
-            : this.state.field.required ? this.state.field.label : '';
-        this.state.placeholder = await TranslationService.translate(placeholderText);
+    public onInput(input: any): void {
+        super.onInput(input);
 
         this.state.currentValue = typeof input.currentValue !== 'undefined' ?
             input.currentValue : this.state.currentValue;
@@ -25,6 +21,14 @@ class Component extends FormInputComponent<string | Date, ComponentState> {
                 this.state.inputType = option.value.toString();
             }
         }
+        this.update();
+    }
+
+    private async update(): Promise<void> {
+        const placeholderText = this.state.field.placeholder
+            ? this.state.field.placeholder
+            : this.state.field.required ? this.state.field.label : '';
+        this.state.placeholder = await TranslationService.translate(placeholderText);
     }
 
     public async onMount(): Promise<void> {

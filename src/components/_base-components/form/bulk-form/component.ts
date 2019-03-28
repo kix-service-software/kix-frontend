@@ -28,17 +28,20 @@ class Component {
         WidgetService.getInstance().setWidgetType('bulk-form-group', WidgetType.GROUP);
     }
 
-    public async onInput(input: any): Promise<void> {
+    public onInput(input: any): void {
         this.state.bulkManager = input.bulkManager;
         this.state.bulkManager.registerListener('bulk-dialog-listener', () => {
             this.state.canRun = this.state.bulkManager.hasDefinedValues() && !!this.state.bulkManager.objects.length;
         });
 
+        this.createTable();
+        this.update();
+    }
+
+    public async update(): Promise<void> {
         this.state.translations = await TranslationService.createTranslationObject([
             "Translatable#Cancel", "Translatable#Reset Data", "Translatable#Close Dialog", "Translatable#Execute now!"
         ]);
-
-        this.createTable();
     }
 
     public onDestroy(): void {

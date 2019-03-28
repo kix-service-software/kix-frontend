@@ -7,8 +7,8 @@ class Component extends FormInputComponent<any, ComponentState> {
         this.state = new ComponentState();
     }
 
-    public async onInput(input: any): Promise<void> {
-        await super.onInput(input);
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 
     public async onMount(): Promise<void> {
