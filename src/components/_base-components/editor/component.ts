@@ -21,7 +21,11 @@ class EditorComponent {
         );
     }
 
-    public async onInput(input: any): Promise<void> {
+    public onInput(input: any): void {
+        this.update(input);
+    }
+
+    private async update(input: any): Promise<void> {
         this.useReadonlyStyle = typeof input.useReadonlyStyle ? input.useReadonlyStyle : false;
         if (await this.isEditorReady()) {
             if (input.addValue) {

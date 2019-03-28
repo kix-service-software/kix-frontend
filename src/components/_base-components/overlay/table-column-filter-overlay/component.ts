@@ -13,12 +13,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state = new ComponentState();
     }
 
-    public async onInput(input: any): Promise<void> {
+    public onInput(input: any): void {
         this.column = input.column;
         this.state.nodes = null;
         this.filterValues = null;
         this.filterText = null;
+        this.update();
+    }
 
+    private async update(): Promise<void> {
         this.state.placeholder = await TranslationService.translate('Translatable#insert filter value');
 
         if (this.column && this.column.getColumnConfiguration().hasListFilter) {

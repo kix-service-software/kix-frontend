@@ -8,9 +8,13 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         this.state = new CompontentState();
     }
 
-    public async onInput(input: any): Promise<void> {
-        await super.onInput(input);
+    public onInput(input: any): void {
+        super.onInput(input);
 
+        this.update();
+    }
+
+    private async update(): Promise<void> {
         const placeholderText = this.state.field.placeholder
             ? this.state.field.placeholder
             : this.state.field.required ? this.state.field.label : '';

@@ -16,14 +16,16 @@ class Component extends FormInputComponent<any[], ComponentState> {
         await this.prepareTitles();
     }
 
-    public async onInput(input: any): Promise<void> {
-        await super.onInput(input);
+    public onInput(input: any): void {
+        super.onInput(input);
         if (input.field && input.field.options && !!input.field.options.length) {
             const requiredOption: FormFieldOption = input.field.options.find(
                 (o: FormFieldOption) => o.option === 'REQUIRED'
             );
             this.state.showRequired = requiredOption ? requiredOption.value : false;
         }
+
+        return input;
     }
 
     public async onMount(): Promise<void> {

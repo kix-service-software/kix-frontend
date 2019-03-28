@@ -12,7 +12,11 @@ class TreeComponent {
         this.state.treeId = input.treeId ? input.treeId : 'tree-' + IdService.generateDateBasedId();
     }
 
-    public async onInput(input: any): Promise<void> {
+    public onInput(input: any): void {
+        this.update(input);
+    }
+
+    private async update(input: any): Promise<void> {
         for (const n of input.nodes) {
             (n as TreeNode).label = await TranslationService.translate(n.label, []);
         }

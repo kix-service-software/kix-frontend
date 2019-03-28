@@ -21,11 +21,13 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         this.setSize();
     }
 
-    public async onInput(input: any): Promise<void> {
+    public onInput(input: any): void {
         this.state.column = input.column;
         this.state.isSorted = this.state.column.getSortOrder() ? true : false;
-        await this.setIconAndTitle();
+        this.setIconAndTitle();
         this.setSize();
+
+        return input;
     }
 
     public async onMount(): Promise<void> {

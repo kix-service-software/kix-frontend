@@ -11,9 +11,9 @@ class Component extends AbstractMarkoComponent {
         this.state = new ComponentState();
     }
 
-    public async onInput(input: any): Promise<void> {
-        await this.setCheckboxOptions(input);
-        await this.prepareTitles();
+    public onInput(input: any): void {
+        this.setCheckboxOptions(input);
+        this.prepareTitles();
         if (input.value && typeof input.value !== 'undefined' && input.value instanceof PermissionFormData) {
             this.state.checkboxOptions.forEach((co) => {
                 if (typeof input.value[co.id] === 'boolean') {
@@ -22,6 +22,8 @@ class Component extends AbstractMarkoComponent {
             });
             (this as any).setStateDirty('checkboxOptions');
         }
+
+        return input;
     }
 
     public async onMount(): Promise<void> {

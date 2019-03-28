@@ -12,8 +12,8 @@ class Component extends FormInputComponent<GeneralCatalogItem, CompontentState> 
         this.state = new CompontentState();
     }
 
-    public async onInput(input: any): Promise<void> {
-        await super.onInput(input);
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 
     public async onMount(): Promise<void> {

@@ -173,8 +173,7 @@ export class KIXObjectSocketClient extends SocketClient {
                     window.clearTimeout(timeout);
                     const errorMessage = `Socket Error: Event - ${event}, Object - ${requestObject.objectType}`;
                     console.error(errorMessage);
-                    console.error(error);
-                    console.error(requestObject);
+                    console.error(error.error);
                     reject(error.error);
                 }
             });

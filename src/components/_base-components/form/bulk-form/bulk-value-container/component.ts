@@ -24,12 +24,10 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        DialogService.getInstance().setMainDialogLoading(true);
         this.state.translations = await TranslationService.createTranslationObject(
             ["Translatable#Parameter entfernen"]
         );
         await this.updateValues();
-        DialogService.getInstance().setMainDialogLoading(false);
     }
 
     public async propertyChanged(bulkValue: BulkValue, nodes: TreeNode[]): Promise<void> {

@@ -13,16 +13,20 @@ class Component {
         this.state = new ComponentState();
     }
 
-    public async onInput(input: any): Promise<void> {
+    public onInput(input: any): void {
         this.state.field = input.field;
-
-        this.state.translations = await TranslationService.createTranslationObject([this.state.field.label]);
 
         this.state.formId = input.formId;
         this.state.level = typeof input.level !== 'undefined' ? input.level : 0;
         if (this.state.level > 14) {
             this.state.level = 14;
         }
+
+        this.update();
+    }
+
+    private async update(): Promise<void> {
+        this.state.translations = await TranslationService.createTranslationObject([this.state.field.label]);
     }
 
     public async onMount(): Promise<void> {
