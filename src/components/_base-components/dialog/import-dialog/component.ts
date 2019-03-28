@@ -69,7 +69,11 @@ class Component {
         );
     }
 
-    public async onInput(input: any): Promise<void> {
+    public onInput(input: any): void {
+        this.init(input);
+    }
+
+    private async init(input: any): Promise<void> {
         this.reset(input ? input.instanceId : '');
         this.state.translations = await TranslationService.createTranslationObject([
             "Translatable#Cancel", "Translatable#Replace Values",

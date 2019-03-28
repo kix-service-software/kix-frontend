@@ -26,12 +26,9 @@ class Component {
         this.state.translations = await TranslationService.createTranslationObject([
             "Translatable#Remove parameter"
         ]);
-
-        DialogService.getInstance().setMainDialogLoading(true);
         if (this.manager) {
             await this.updateValues();
         }
-        DialogService.getInstance().setMainDialogLoading(false);
     }
 
     public async propertyChanged(value: DynamicFieldValue, nodes: TreeNode[]): Promise<void> {

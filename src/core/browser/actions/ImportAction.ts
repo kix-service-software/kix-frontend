@@ -29,6 +29,11 @@ export class ImportAction extends AbstractAction<ITable> {
         }
     }
 
+    public canRun(): boolean {
+        const type = this.data ? this.data.getObjectType() : null;
+        return typeof type !== 'undefined' && type !== null;
+    }
+
     private async openDialog(): Promise<void> {
         if (this.objectType) {
             const context = await ContextService.getInstance().getContextByTypeAndMode(
