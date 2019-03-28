@@ -10,14 +10,14 @@
                 </for>
             </div>
             <div.search-criteria-buttons>
-                <button.form-button type="button" on-click("openNewSearchDialog") title="New Search">
+                <button.form-button type="button" on-click("openNewSearchDialog")title=state.translations["Translatable#New Search"]>
                     <span.kix-icon-search/>
                     <translation-string pattern="Translatable#New Search"/>
                 </button>
                 <button.form-button
                     type="button"
                     on-click("openEditSearchDialog")
-                    title="Translatable#Edit Search"
+                    title=state.translations["Translatable#Edit Search"]
                     disabled=(state.displayCriteria.length === 0)>
                     <span.kix-icon-edit/>
                     <translation-string pattern="Translatable#Edit Search"/>

@@ -4,6 +4,7 @@ import { KIXObjectType, Ticket, OverlayType, StringContent } from '../../core/mo
 import { EventService } from '../../core/browser/event';
 import { ApplicationEvent } from '../../core/browser/application';
 import { SearchContext } from '../../core/browser/search/context';
+import { TranslationService } from '../../core/browser/i18n/TranslationService';
 
 export class Component {
 
@@ -11,6 +12,10 @@ export class Component {
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
+    }
+
+    public async onMount(): Promise<void> {
+        this.state.placeholder = await TranslationService.translate("Translatable#Quick search (Tickets)");
     }
 
     public async search(textValue: string): Promise<void> {

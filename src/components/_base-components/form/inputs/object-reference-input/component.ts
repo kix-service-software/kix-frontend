@@ -5,6 +5,7 @@ import {
 } from '../../../../../core/model';
 import { FormService } from '../../../../../core/browser/form';
 import { LabelService, KIXObjectService } from '../../../../../core/browser';
+import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
 class Component extends FormInputComponent<string | number, ComponentState> {
 
@@ -16,6 +17,11 @@ class Component extends FormInputComponent<string | number, ComponentState> {
 
     public async onInput(input: any): Promise<void> {
         await super.onInput(input);
+
+        const placeholderText = this.state.field.placeholder
+            ? this.state.field.placeholder
+            : this.state.field.required ? this.state.field.label : '';
+        this.state.placeholder = await TranslationService.translate(placeholderText);
     }
 
     public async onMount(): Promise<void> {

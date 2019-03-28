@@ -9,7 +9,7 @@ export class FAQArticleCreateAction extends AbstractAction {
         this.icon = 'kix-icon-new-faq';
     }
 
-    public run(): void {
+    public async run(event: any): Promise<void> {
         ContextService.getInstance().setDialogContext(null, KIXObjectType.FAQ_ARTICLE, ContextMode.CREATE, null, true);
     }
 

@@ -2,6 +2,7 @@ import { ComponentState } from './ComponentState';
 import { ContextService } from '../../core/browser';
 import { TreeNode, Bookmark } from '../../core/model';
 import { ObjectDataService } from '../../core/browser/ObjectDataService';
+import { TranslationService } from '../../core/browser/i18n/TranslationService';
 
 class Component {
 
@@ -11,8 +12,11 @@ class Component {
         this.state = new ComponentState();
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
         const objectData = ObjectDataService.getInstance().getObjectData();
+
+        this.state.placeholder = await TranslationService.translate('Translatable#Bookmarks');
+
         if (objectData) {
             this.state.bookmarks = objectData.bookmarks.map(
                 (b) => new TreeNode(b, b.title, b.icon)

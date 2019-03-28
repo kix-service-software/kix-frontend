@@ -23,6 +23,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const context = await ContextService.getInstance().getContext<TicketPriorityDetailsContext>(
             TicketPriorityDetailsContext.CONTEXT_ID
         );
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Priority Information"
+        ]);
+
         context.registerListener('ticket-priority-details-component', {
             explorerBarToggled: () => { return; },
             filteredObjectListChanged: () => { return; },

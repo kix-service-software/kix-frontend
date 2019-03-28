@@ -5,6 +5,7 @@ import { ContextService } from '../../../core/browser/context/';
 import { ActionFactory, WidgetService } from '../../../core/browser';
 import { IdService } from '../../../core/browser/IdService';
 import { ComponentsService } from '../../../core/browser/components';
+import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 
 export class Component {
 
@@ -20,6 +21,10 @@ export class Component {
         this.context = await ContextService.getInstance().getContext<TicketDetailsContext>(
             TicketDetailsContext.CONTEXT_ID
         );
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Ticket Information"
+        ]);
 
         this.context.registerListener('ticket-details-component', {
             explorerBarToggled: () => { return; },

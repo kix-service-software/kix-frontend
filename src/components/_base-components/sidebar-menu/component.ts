@@ -1,15 +1,16 @@
-import { SidebarMenuComponentState } from './SidebarMenuComponentState';
+import { ComponentState } from './SidebarMenuComponentState';
 import { ContextService } from '../../../core/browser/context';
 import { Context, ConfiguredWidget, ContextType } from '../../../core/model';
 import { IdService } from '../../../core/browser';
+import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 
 class SidebarMenuComponent {
 
-    private state: SidebarMenuComponentState;
+    private state: ComponentState;
     private contextListernerId: string;
 
     public onCreate(input: any): void {
-        this.state = new SidebarMenuComponentState();
+        this.state = new ComponentState();
         this.contextListernerId = IdService.generateDateBasedId('sidebar-menu-');
     }
 
@@ -45,9 +46,13 @@ class SidebarMenuComponent {
         this.setSidebarMenu(context);
     }
 
-    private setSidebarMenu(context: Context<any>): void {
+    private async setSidebarMenu(context: Context<any>): Promise<void> {
         if (context) {
             this.state.sidebars = Array.from(context ? (context.getSidebars() || []) : []);
+
+            this.state.translations = await TranslationService.createTranslationObject(
+                this.state.sidebars.map((s) => s.configuration.title)
+            );
         }
     }
 

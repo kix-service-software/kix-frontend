@@ -4,6 +4,7 @@ import { ComponentState } from './ComponentState';
 import { TicketDetailsContext, NewTicketDialogContext } from '../../../../core/browser/ticket';
 import { RoutingConfiguration } from '../../../../core/browser/router';
 import { AbstractNewDialog } from '../../../../core/browser/components/dialog';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component extends AbstractNewDialog {
 
@@ -22,6 +23,11 @@ class Component extends AbstractNewDialog {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Cancel", "Translatable#Save"
+        ]);
+
         const context = await ContextService.getInstance().getContext(NewTicketDialogContext.CONTEXT_ID);
         context.reset();
         this.state.loading = false;

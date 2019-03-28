@@ -16,7 +16,7 @@
         <if(state.noChannel)>
             <div.channel-item
                 on-click("channelClicked", null)
-                title="Kein Artikel"
+                title=state.translations["Translatable#No Article"]
                 class={
                                 active: component.isActive(null)
                             }>

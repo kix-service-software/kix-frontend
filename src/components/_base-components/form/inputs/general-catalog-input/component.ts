@@ -19,6 +19,11 @@ class Component extends FormInputComponent<GeneralCatalogItem, CompontentState> 
     public async onMount(): Promise<void> {
         await super.onMount();
 
+        const placeholderText = this.state.field.placeholder
+            ? this.state.field.placeholder
+            : this.state.field.required ? this.state.field.label : '';
+        this.state.placeholder = await TranslationService.translate(placeholderText);
+
         const classOption = this.state.field.options.find((o) => o.option === 'GC_CLASS');
         if (classOption) {
             const loadingOptions = new KIXObjectLoadingOptions(null, [new FilterCriteria(

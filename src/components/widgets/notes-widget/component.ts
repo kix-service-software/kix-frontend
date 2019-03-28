@@ -3,6 +3,7 @@ import { NotesService } from '../../../core/browser/notes';
 import { NotesEditAction } from './NotesEditAction';
 import { ComponentState } from './ComponentState';
 import { WidgetService } from '../../../core/browser';
+import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 
 export class Component {
 
@@ -18,6 +19,11 @@ export class Component {
     }
 
     public async onMount(): Promise<void> {
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Cancel", "Translatable#Submit"
+        ]);
+
         const context = ContextService.getInstance().getActiveContext(this.state.contextType);
         this.state.contextId = context.getDescriptor().contextId;
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;

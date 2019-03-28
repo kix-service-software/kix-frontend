@@ -9,7 +9,7 @@ export class TranslationCreateAction extends AbstractAction {
         this.icon = 'kix-icon-new-gear';
     }
 
-    public run(): void {
+    public async run(event: any): Promise<void> {
         ContextService.getInstance().setDialogContext(
             NewTranslationDialogContext.CONTEXT_ID, KIXObjectType.TRANSLATION,
             ContextMode.CREATE_ADMIN, null, true, 'Internationalisierung'

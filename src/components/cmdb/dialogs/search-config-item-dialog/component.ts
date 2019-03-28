@@ -2,7 +2,7 @@ import { ComponentState } from "./ComponentState";
 import { FormService, AbstractMarkoComponent } from "../../../../core/browser";
 import { DialogService } from "../../../../core/browser/components/dialog";
 
-class Component extends AbstractMarkoComponent {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onCreate(input: any): void {
         this.state = new ComponentState();

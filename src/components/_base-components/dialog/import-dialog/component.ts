@@ -71,6 +71,10 @@ class Component {
 
     public async onInput(input: any): Promise<void> {
         this.reset(input ? input.instanceId : '');
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Cancel", "Translatable#Replace Values",
+            "Translatable#Close Dialog", "Translatable#Start Import"
+        ]);
 
         this.context = await ContextService.getInstance().getActiveContext(ContextType.DIALOG);
         if (this.context) {

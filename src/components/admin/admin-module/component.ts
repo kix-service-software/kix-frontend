@@ -4,7 +4,7 @@ import { AdminContext } from '../../../core/browser/admin';
 import { KIXObject, KIXObjectType, AdminModule, ContextType } from '../../../core/model';
 import { ComponentsService } from '../../../core/browser/components';
 
-class Component extends AbstractMarkoComponent {
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onCreate(): void {
         this.state = new ComponentState();

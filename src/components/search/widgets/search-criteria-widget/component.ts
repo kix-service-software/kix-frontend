@@ -16,8 +16,11 @@ class Component implements IKIXObjectSearchListener {
         this.state = new ComponentState();
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
         KIXObjectSearchService.getInstance().registerListener(this);
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#New Search", "Translatable#Edit Search"
+        ]);
         this.searchFinished();
     }
 

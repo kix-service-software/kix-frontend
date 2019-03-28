@@ -99,7 +99,7 @@
         <if(!dynamicValue.readonly && state.dynamicValues.length > 1 && index !== state.dynamicValues.length - 1)>
             <button.form-control-button.button-without-text
                 type="button"
-                title="Translatable#Parameter entfernen"
+                title=state.translations["Translatable#Remove parameter"]
                 on-click("removeValue", dynamicValue)>
                 <span.kix-icon-minus/>
             </button>

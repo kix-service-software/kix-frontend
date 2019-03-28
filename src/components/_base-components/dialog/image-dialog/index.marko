@@ -9,7 +9,7 @@
                 </div>
             </div>
             <div.image-container>
-                <div.previous-image on-click("previosImage") title="vorheriges Bild">
+                <div.previous-image on-click("previosImage") title=state.translations["Translatable#Previous Image"]>
                     <span.kix-icon-circle-prior/>
                 </div>
                 <div.image>
@@ -17,7 +17,7 @@
                         <img alt=state.imageTitle src=state.image.content/>
                     </if>
                 </div>
-                <div.next-image on-click("nextImage") title="Next Image">
+                <div.next-image on-click("nextImage") title=state.translations["Translatable#Next Image"]>
                     <span.kix-icon-circle-next/>
                 </div>
             </div>

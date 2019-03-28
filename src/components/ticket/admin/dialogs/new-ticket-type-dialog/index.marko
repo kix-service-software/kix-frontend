@@ -5,12 +5,12 @@
                 <main-form formId=state.formId/>
             </if>
             <div.dialog-button-container>
-                <button.cancel-button type="button" on-click("cancel") title="Cancel">
+                <button.cancel-button type="button" on-click("cancel") title=state.translations["Translatable#Cancel"]>
                     <span.kix-icon-close/>
                     <translation-string pattern="Translatable#Cancel"/>
                 </button>
                 <if(state.formId)>
-                    <button.submit-button type="button" on-click("submit") title="Save">
+                    <button.submit-button type="button" on-click("submit") title=state.translations["Translatable#Save"]>
                         <span.kix-icon-check/>
                         <translation-string pattern="Translatable#Save"/>
                     </button>

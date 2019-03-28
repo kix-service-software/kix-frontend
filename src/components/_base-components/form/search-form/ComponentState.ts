@@ -1,12 +1,13 @@
-import { KIXObjectType, KIXObject } from '../../../../core/model';
-import { ITable } from '../../../../core/browser';
+import { ITable, AbstractComponentState } from '../../../../core/browser';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public resultCount: number = 0,
         public canSearch: boolean = false,
         public table: ITable = null
-    ) { }
+    ) {
+        super();
+    }
 
 }

@@ -5,6 +5,7 @@ import { ComponentState } from './ComponentState';
 import { TicketStateDetailsContext, TicketStateDetailsContextConfiguration } from '../../../../core/browser/ticket';
 import { KIXObjectType, TicketState, WidgetType } from '../../../../core/model';
 import { ComponentsService } from '../../../../core/browser/components';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -20,6 +21,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const context = await ContextService.getInstance().getContext<TicketStateDetailsContext>(
             TicketStateDetailsContext.CONTEXT_ID
         );
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#State Information"
+        ]);
+
         context.registerListener('ticket-state-details-component', {
             explorerBarToggled: () => { return; },
             filteredObjectListChanged: () => { return; },

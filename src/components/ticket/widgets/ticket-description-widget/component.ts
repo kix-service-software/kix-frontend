@@ -6,6 +6,7 @@ import {
 } from '../../../../core/model/';
 import { ActionFactory, WidgetService, KIXObjectService, SearchOperator } from '../../../../core/browser';
 import { TicketDetailsContext } from '../../../../core/browser/ticket';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component {
 
@@ -21,6 +22,11 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Description", "Translatable#Comment"
+        ]);
+
         const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
             TicketDetailsContext.CONTEXT_ID
         );

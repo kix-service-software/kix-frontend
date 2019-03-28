@@ -2,6 +2,7 @@ import { ContextService, ComponentsService } from "../../../../core/browser";
 import { ComponentState } from "./ComponentState";
 import { CompareConfigItemVersionDialogContext } from "../../../../core/browser/cmdb";
 import { DialogService } from "../../../../core/browser/components/dialog";
+import { TranslationService } from "../../../../core/browser/i18n/TranslationService";
 
 class Component {
 
@@ -14,6 +15,11 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Close window"
+        ]);
+
         this.context = await ContextService.getInstance().getContext<CompareConfigItemVersionDialogContext>(
             CompareConfigItemVersionDialogContext.CONTEXT_ID
         );

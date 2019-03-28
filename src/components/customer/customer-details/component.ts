@@ -5,6 +5,7 @@ import {
 } from "../../../core/browser";
 import { CustomerDetailsContext } from "../../../core/browser/customer";
 import { ComponentsService } from "../../../core/browser/components";
+import { TranslationService } from "../../../core/browser/i18n/TranslationService";
 
 class Component {
 
@@ -15,6 +16,10 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Customer Information"
+        ]);
+
         const context = (ContextService.getInstance().getActiveContext() as CustomerDetailsContext);
         context.registerListener('customer-details-component', {
             explorerBarToggled: () => { return; },

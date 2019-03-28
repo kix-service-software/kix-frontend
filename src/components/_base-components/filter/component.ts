@@ -20,11 +20,14 @@ class Component {
             this.state.predefinedFilter = [];
             this.state.predefinedFilterList = [];
         }
-        this.state.predefinedFilterPlaceholder = typeof input.predefinedFilterPlaceholder !== 'undefined' ?
-            input.predefinedFilterPlaceholder : 'Translatable#All Objects';
+        this.state.predefinedFilterPlaceholder = typeof input.predefinedFilterPlaceholder !== 'undefined'
+            ? await TranslationService.translate(input.predefinedFilterPlaceholder)
+            : await TranslationService.translate('Translatable#All Objects');
 
         const defaultPlaceholder = await TranslationService.translate('Translatable#Filter in list');
-        this.state.placeholder = typeof input.placeholder !== 'undefined' ? input.placeholder : defaultPlaceholder;
+        this.state.placeholder = typeof input.placeholder !== 'undefined'
+            ? await TranslationService.translate(input.placeholder)
+            : defaultPlaceholder;
 
         this.state.icon = typeof input.icon !== 'undefined' ? input.icon : 'kix-icon-filter';
         this.state.showFilterCount = typeof input.showFilterCount !== 'undefined' ? input.showFilterCount : true;

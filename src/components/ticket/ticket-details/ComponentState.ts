@@ -1,7 +1,8 @@
 import { ConfiguredWidget, Ticket, AbstractAction } from '../../../core/model';
 import { TicketDetailsContextConfiguration } from '../../../core/browser/ticket';
+import { AbstractComponentState } from '../../../core/browser';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public instanceId: string = '20180710-ticket-details',
@@ -17,6 +18,8 @@ export class ComponentState {
         public hasError: boolean = false,
         public error: any = null,
         public title: string = ''
-    ) { }
+    ) {
+        super();
+    }
 
 }

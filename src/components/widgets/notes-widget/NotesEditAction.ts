@@ -13,7 +13,7 @@ export class NotesEditAction extends AbstractAction {
         this.icon = "kix-icon-edit";
     }
 
-    public run(): void {
+    public async run(event: any): Promise<void> {
         this.component.setEditorActive();
     }
 }

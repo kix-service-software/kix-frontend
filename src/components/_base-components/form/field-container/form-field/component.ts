@@ -2,6 +2,7 @@ import { ComponentsService } from '../../../../../core/browser/components';
 import { ComponentState } from './ComponentState';
 import { FormService, IdService } from '../../../../../core/browser';
 import { FormField } from '../../../../../core/model';
+import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
 class Component {
 
@@ -12,8 +13,11 @@ class Component {
         this.state = new ComponentState();
     }
 
-    public onInput(input: any): void {
+    public async onInput(input: any): Promise<void> {
         this.state.field = input.field;
+
+        this.state.translations = await TranslationService.createTranslationObject([this.state.field.label]);
+
         this.state.formId = input.formId;
         this.state.level = typeof input.level !== 'undefined' ? input.level : 0;
         if (this.state.level > 14) {

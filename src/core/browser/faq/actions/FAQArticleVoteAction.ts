@@ -10,7 +10,7 @@ export class FAQArticleVoteAction extends AbstractAction {
         this.icon = 'kix-icon-star-fully';
     }
 
-    public run(event: any): void {
+    public async run(event: any): Promise<void> {
         if (this.data && Array.isArray(this.data) && this.data.length) {
             const faqArticle = this.data[0];
 

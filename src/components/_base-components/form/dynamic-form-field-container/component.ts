@@ -3,6 +3,7 @@ import { TreeNode } from '../../../../core/model';
 import { DynamicFieldValue } from './DynamicFormFieldValue';
 import { DialogService } from '../../../../core/browser/components/dialog';
 import { IDynamicFormManager } from '../../../../core/browser';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component {
 
@@ -22,6 +23,10 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Remove parameter"
+        ]);
+
         DialogService.getInstance().setMainDialogLoading(true);
         if (this.manager) {
             await this.updateValues();

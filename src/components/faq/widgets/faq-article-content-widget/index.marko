@@ -7,22 +7,22 @@
         <if(state.faqArticle && state.inlineContent)>
             <div.faq-article-content-container>
                 <div>
-                    <widget instanceId="faq-article-group" title="Translatable#Symptom">
+                    <widget instanceId="faq-article-group" title=state.translations["Translatable#Symptom"]>
                         <@content>
                             <editor readOnly=true value=state.faqArticle.Field1 inlineContent=state.inlineContent useReadonlyStyle=true/>
                         </@content>
                     </widget>
-                    <widget instanceId="faq-article-group" title="Translatable#Cause">
+                    <widget instanceId="faq-article-group" title=state.translations["Translatable#Cause"]>
                         <@content>
                             <editor readOnly=true value=state.faqArticle.Field2 inlineContent=state.inlineContent useReadonlyStyle=true/>
                         </@content>
                     </widget>
-                    <widget instanceId="faq-article-group" title="Translatable#Solution">
+                    <widget instanceId="faq-article-group" title=state.translations["Translatable#Solution"]>
                         <@content>
                             <editor readOnly=true value=state.faqArticle.Field3 inlineContent=state.inlineContent useReadonlyStyle=true/>
                         </@content>
                     </widget>
-                    <widget instanceId="faq-article-group" title="Translatable#Comment">
+                    <widget instanceId="faq-article-group" title=state.translations["Translatable#Comment"]>
                         <@content>
                             <editor readOnly=true value=state.faqArticle.Field6 inlineContent=state.inlineContent useReadonlyStyle=true/>
                         </@content>

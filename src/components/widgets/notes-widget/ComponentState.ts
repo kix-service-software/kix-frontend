@@ -1,6 +1,7 @@
 import { WidgetConfiguration, ContextType, AbstractAction } from '../../../core/model';
+import { AbstractComponentState } from '../../../core/browser';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public instanceId: string = null,
@@ -10,6 +11,8 @@ export class ComponentState {
         public actions: AbstractAction[] = [],
         public editorActive: boolean = false,
         public value: string = null
-    ) { }
+    ) {
+        super();
+    }
 
 }

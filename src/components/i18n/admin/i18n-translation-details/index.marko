@@ -10,7 +10,9 @@
             <@content>
                 <ul.lane-list no-update>
                     <li>
-                        <tab-container tabWidgets=state.tabWidgets title="Basiszeichenketten Informationen" showSidebar=false/>
+                        <tab-container
+                            tabWidgets=(state.tabWidgetstitle = state.translations["Translatable#Pattern Information"])
+                            showSidebar=false/>
                     </li>
                     <for|lane| of=state.lanes>
                         <li.lane key=lane.instanceId>

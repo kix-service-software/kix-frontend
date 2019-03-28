@@ -8,7 +8,7 @@ export class UserRoleEditAction extends AbstractAction {
         this.icon = 'kix-icon-edit';
     }
 
-    public run(): void {
+    public async run(event: any): Promise<void> {
         ContextService.getInstance().setDialogContext(
             // TODO: Titel aus dem aktiven Admin-Modul ermitteln (Kategorie)
             null, KIXObjectType.ROLE, ContextMode.EDIT_ADMIN, null, true, 'Translatable#User Management'

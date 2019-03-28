@@ -1,6 +1,7 @@
 import { ConfiguredWidget, ContextType, IAction } from "../../../core/model";
+import { AbstractComponentState } from "../../../core/browser";
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public tabWidgets: ConfiguredWidget[] = [],
@@ -12,6 +13,8 @@ export class ComponentState {
         public contextType: ContextType = null,
         public showSidebar: boolean = true,
         public contentActions: IAction[] = []
-    ) { }
+    ) {
+        super();
+    }
 
 }

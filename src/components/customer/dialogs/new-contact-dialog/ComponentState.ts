@@ -1,10 +1,12 @@
-import { KIXObjectType } from "../../../../core/model";
+import { AbstractComponentState } from "../../../../core/browser";
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public loading: boolean = false,
         public formId: string = 'new-contact-form'
-    ) { }
+    ) {
+        super();
+    }
 
 }

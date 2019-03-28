@@ -55,7 +55,7 @@
                 <if(state.asAutocomplete || state.nodes.length > 7)>
                     <input.input-style
                         type="text"
-                        placeholder=(state.asAutocomplete ? "Translatable#Enter search value" : "Translatable#Filter in list")
+                        placeholder=state.autoCompletePlaceholder
                         value=(state.asAutocomplete ? state.autocompleteSearchValue : state.filterValue)
                         key=("form-list-input-" + state.listId)
                         on-keydown("keyDown")
@@ -80,7 +80,7 @@
                                 <input.select-all-Checkbox type="checkbox" key="selectAllCheckbox"/>
                                 <translation-string pattern="Translatable#Select all"/>
                             </span>
-                            <button.submit-button type="button" on-click("submit") title="Submit">
+                            <button.submit-button type="button" on-click("submit")title=state.translations["Translatable#Submit"]>
                                 <span.kix-icon-check/>
                                 <translation-string pattern="Translatable#Submit"/>
                             </button>

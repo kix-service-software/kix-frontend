@@ -1,6 +1,7 @@
-import { AbstractMarkoComponent, IColumn, LabelService } from "../../../../core/browser";
+import { AbstractMarkoComponent, IColumn, LabelService } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
-import { TreeNode, KIXObjectType, ObjectIcon } from "../../../../core/model";
+import { TreeNode, KIXObjectType, ObjectIcon } from '../../../../core/model';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -17,6 +18,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.nodes = null;
         this.filterValues = null;
         this.filterText = null;
+
+        this.state.placeholder = await TranslationService.translate('Translatable#insert filter value');
 
         if (this.column && this.column.getColumnConfiguration().hasListFilter) {
             this.state.hasListFilter = true;

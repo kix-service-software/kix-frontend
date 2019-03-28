@@ -4,7 +4,7 @@
     <div.field-label class={
         "no-label": !state.field.label
     }>
-        <span.label-text title=state.field.label>
+        <span.label-text title=state.translations[state.field.label]>
             <if(state.field.required)>
                 <span.required-field>*</span>
             </if>
@@ -13,7 +13,7 @@
     </div>
     <div.field-icon>
         <if(state.field.hint)>
-            <overlay-icon isHint=true content=state.field.hint title=state.field.label/>
+            <overlay-icon isHint=true content=state.field.hint title=state.translations[state.field.label]/>
         </if>
     </div>
     <div.field-input style={

@@ -11,6 +11,11 @@ class Component extends FormInputComponent<string, CompontentState> {
 
     public async onInput(input: any): Promise<void> {
         await super.onInput(input);
+
+        const placeholderText = this.state.field.placeholder
+            ? this.state.field.placeholder
+            : this.state.field.required ? this.state.field.label : '';
+        this.state.placeholder = await TranslationService.translate(placeholderText);
     }
 
     public async onMount(): Promise<void> {

@@ -21,6 +21,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const context = await ContextService.getInstance().getContext<RoleDetailsContext>(
             RoleDetailsContext.CONTEXT_ID
         );
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Role Information"
+        ]);
+
         context.registerListener('user-role-details-component', {
             explorerBarToggled: () => { return; },
             filteredObjectListChanged: () => { return; },

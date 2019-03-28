@@ -19,7 +19,7 @@
                     <if(component.isInputDefined(input.icon))>
                         <icon icon=input.icon on-click("minimizeWidget", true) on-mousedown("headerMousedown", true)/>
                     </if>
-                    <h2 title=input.title on-click("minimizeWidget", true) on-mousedown("headerMousedown", true)>
+                    <h2 title=state.translations[input.title] on-click("minimizeWidget", true) on-mousedown("headerMousedown", true)>
                         <translation-string pattern=input.title/>
                     </h2>
                 </div>

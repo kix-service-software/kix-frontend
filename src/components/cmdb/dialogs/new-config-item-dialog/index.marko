@@ -2,7 +2,7 @@
     <widget instanceId="new-config-item-dialog">
         <@content>
             <div.form>
-                <div.form-field.config-item-class-selector title="Config Item Class">
+                <div.form-field.config-item-class-selector title=state.translations["Translatable#Config Item Class"]>
                     <div.field-label>
                         <span.label-text>
                             <translation-string pattern="Translatable#Config Item Class"/>
@@ -11,13 +11,13 @@
                     <div.field-icon>
                         <overlay-icon
                             isHint=true
-                            content="Bitte wählen Sie zunächst eine Config Item-Klasse aus der Liste. Anschließend wird das vollständige Eingabe-Formular geladen."
-                            title="Config Item Klasse"/>
+                            content="Translatable#Please select a config item class. The form will be completed then."
+                            title=state.translations["Translatable#Config Item Class"]/>
                     </div>
                     <div.field-input>
                         <form-list
                             nodes=state.classNodes
-                            placeholder="CI Klasse auswählen"
+                            placeholder=state.placeholder
                             selectedNodes=[state.currentClassNode]
                             on-nodesChanged("classChanged")
                             multiselect=false/>
@@ -30,11 +30,15 @@
                 </if>
             </div>
             <div.dialog-button-container>
-                <button.cancel-button type="button" on-click("cancel") title="Cancel">
+                <button.cancel-button type="button" on-click("cancel") title=state.translations["Translatable#Cancel"]>
                     <span.kix-icon-close/>
                     <translation-string pattern="Translatable#Cancel"/>
                 </button>
-                <button.submit-button disabled=!state.formId type="button" on-click("submit") title="Save">
+                <button.submit-button
+                    disabled=!state.formId
+                    type="button"
+                    on-click("submit")
+                    title=state.translations["Translatable#Save"]>
                     <span.kix-icon-check/>
                     <translation-string pattern="Translatable#Save"/>
                 </button>

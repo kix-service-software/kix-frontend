@@ -8,6 +8,7 @@ import {
 } from "../../../../core/model/kix/faq";
 import { InlineContent } from "../../../../core/browser/components";
 import { FAQDetailsContext } from "../../../../core/browser/faq";
+import { TranslationService } from "../../../../core/browser/i18n/TranslationService";
 
 class Component {
 
@@ -29,6 +30,11 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Symptom", "Translatable#Cause", "Translatable#Solution", "Translatable#Comment"
+        ]);
+
         WidgetService.getInstance().setWidgetType('faq-article-group', WidgetType.GROUP);
 
         const context = await ContextService.getInstance().getContext<FAQDetailsContext>(FAQDetailsContext.CONTEXT_ID);

@@ -24,6 +24,11 @@ class Component extends FormInputComponent<any, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Select file"
+        ]);
+
         this.files = [];
         this.attachments = [];
         this.dragCounter = 0;

@@ -5,6 +5,7 @@ import {
 } from '../../../../../core/browser';
 import { TicketFormService } from '../../../../../core/browser/ticket';
 import { isArray } from 'util';
+import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
 class Component extends FormInputComponent<number, ComponentState> {
 
@@ -20,6 +21,11 @@ class Component extends FormInputComponent<number, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#No Article"
+        ]);
+
         this.labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.CHANNEL);
         let channels = await KIXObjectService.loadObjects<Channel>(KIXObjectType.CHANNEL);
         channels = channels.filter((c) => c.ValidID.toString() === "1");

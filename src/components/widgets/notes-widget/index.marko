@@ -4,7 +4,7 @@
     <widget
         instanceId=input.instanceId
         minimizable=false
-        title=(state.widgetConfiguration ? state.widgetConfiguration.title : "Notizen")
+        title=(state.widgetConfiguration ? state.widgetConfiguration.title : "Translatable#Notes")
         icon=(state.widgetConfiguration && state.widgetConfiguration.icon ? state.widgetConfiguration.icon : "kix-icon-note")>
         <@content>
             <if(state.value || state.editorActive)>
@@ -22,10 +22,10 @@
             </else>
             <if(state.editorActive)>
                 <div.notes-editor-buttons>
-                    <button.form-button.button-without-text title="Cancel" on-click("cancelEditor")>
+                    <button.form-button.button-without-text title=state.translations["Translatable#Cancel"] on-click("cancelEditor")>
                         <span.kix-icon-close/>
                     </button>
-                    <button.form-button title="Submit" on-click("submitEditor")>
+                    <button.form-button title=state.translations["Translatable#Submit"] on-click("submitEditor")>
                         <span.kix-icon-check/>
                         <translation-string pattern="Translatable#Submit"/>
                     </button>

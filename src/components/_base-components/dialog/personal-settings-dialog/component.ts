@@ -23,6 +23,11 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+
+        this.state.translations = await TranslationService.createTranslationObject(
+            ["Translatable#Cancel", "Translatable#Save"]
+        );
+
         const form = await this.prepareForm();
         FormService.getInstance().addform(form);
         this.state.formId = form.id;

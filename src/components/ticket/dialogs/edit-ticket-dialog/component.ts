@@ -20,6 +20,10 @@ class Component {
 
     public async onMount(): Promise<void> {
         DialogService.getInstance().setMainDialogHint('Translatable#All form fields marked by * are required fields.');
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Cancel", "Translatable#Save"
+        ]);
     }
 
     public async cancel(): Promise<void> {

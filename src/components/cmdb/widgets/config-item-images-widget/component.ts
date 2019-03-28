@@ -7,6 +7,7 @@ import {
 } from '../../../../core/model';
 import { DisplayImageDescription } from '../../../../core/browser/components';
 import { DialogService } from '../../../../core/browser/components/dialog';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component {
 
@@ -24,6 +25,11 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Large View"
+        ]);
+
         const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 

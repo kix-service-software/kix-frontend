@@ -19,22 +19,32 @@
                 <loading-spinner/>
             </else>
             <div.dialog-button-container>
-                <button.form-blank-cancel-button type="button" on-click("markToDelete") title="Delete Link" disabled=!state.canDelete>
+                <button.form-blank-cancel-button
+                    type="button"
+                    on-click("markToDelete")
+                    title=state.translations["Translatable#Delete Link"]>
                     <span.kix-icon-trash/>
                     <translation-string pattern="Translatable#Delete Link"/>
                 </button>
-                <button.form-blank-button type="button" on-click("openAddLinkDialog") title="Assign Link">
+                <button.form-blank-button
+                    type="button"
+                    on-click("openAddLinkDialog")
+                    title=state.translations["Translatable#Assign Link"]>
                     <span.kix-icon-new-link/>
                     <translation-string pattern="Translatable#Assign Link"/>
                 </button>
             </div>
         </div>
         <div.dialog-button-container>
-            <button.cancel-button type="button" on-click("cancel") title="Cancel">
+            <button.cancel-button type="button" on-click("cancel") title=state.translations["Translatable#Cancel"]>
                 <span.kix-icon-close/>
                 <translation-string pattern="Translatable#Cancel"/>
             </button>
-            <button.submit-button type="button" on-click("submit") title="Submit" disabled=!state.canSubmit>
+            <button.submit-button
+                type="button"
+                on-click("submit")
+                title=state.translations["Translatable#Submit"]
+                disabled=!state.canSubmit>
                 <span.kix-icon-check/>
                 <translation-string pattern="Translatable#Submit"/>
             </button>

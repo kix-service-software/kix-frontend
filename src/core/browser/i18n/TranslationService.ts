@@ -141,4 +141,13 @@ export class TranslationService extends KIXObjectService<Translation> {
         return language;
     }
 
+    public static async createTranslationObject(patterns: string[]): Promise<any> {
+        const translationObject = {};
+        for (const pattern of patterns) {
+            const text = await TranslationService.translate(pattern);
+            translationObject[pattern] = text;
+        }
+        return translationObject;
+    }
+
 }
