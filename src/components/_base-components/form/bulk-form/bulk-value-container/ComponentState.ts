@@ -1,10 +1,12 @@
-import { TreeNode } from '../../../../../core/model';
 import { BulkValue } from './BulkValue';
+import { AbstractComponentState } from '../../../../../core/browser';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public bulkValues: BulkValue[] = []
-    ) { }
+    ) {
+        super();
+    }
 
 }

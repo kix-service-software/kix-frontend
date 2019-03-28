@@ -10,7 +10,10 @@
                 <div.additionalFieldControls>
                     <if(!field.asStructure)>
                         <if(component.canAdd(field))>
-                            <button.form-control-button.button-without-text type="button" title="Add" on-click("addField", field)>
+                            <button.form-control-button.button-without-text
+                                type="button"
+                                title=state.translations["Translatable#Add"]
+                                on-click("addField", field)>
                                 <span.kix-icon-plus-blank/>
                             </button>
                         </if>
@@ -18,7 +21,10 @@
                             <span/>
                         </else>
                         <if(component.canRemove(field))>
-                            <button.form-control-button.button-without-text type="button" title="delete" on-click("removeField", field)>
+                            <button.form-control-button.button-without-text
+                                type="button"
+                                title=state.translations["Translatable#Delete"]
+                                on-click("removeField", field)>
                                 <span.kix-icon-minus/>
                             </button>
                         </if>

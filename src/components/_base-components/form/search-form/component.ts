@@ -35,6 +35,12 @@ class Component implements ISearchFormListener {
     }
 
     public async onMount(): Promise<void> {
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Attributes", "Translatable#Reset data", "Translatable#Cancel",
+            "Translatable#Detailed search results", "Translatable#Start search"
+        ]);
+
         this.state.table = this.createTable();
 
         const formInstance = await FormService.getInstance().getFormInstance<SearchFormInstance>(this.formId);

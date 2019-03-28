@@ -10,7 +10,9 @@
             <@content>
                 <ul.lane-list no-update>
                     <li>
-                        <tab-container tabWidgets=state.tabWidgets title="Translatable#Priority Information" showSidebar=false/>
+                        <tab-container
+                            tabWidgets=(state.tabWidgetstitle = state.translations["Translatable#Priority Information"])
+                            showSidebar=false/>
                     </li>
                     <for|lane| of=state.lanes>
                         <li.lane key=lane.instanceId>

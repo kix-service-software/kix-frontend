@@ -16,6 +16,10 @@ class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescr
 
     public async onMount(): Promise<void> {
         await super.onMount();
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Assign Links"
+        ]);
     }
 
     public async openDialog(): Promise<void> {

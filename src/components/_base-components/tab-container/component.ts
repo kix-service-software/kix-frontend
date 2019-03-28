@@ -4,6 +4,7 @@ import { WidgetType, ConfiguredWidget } from '../../../core/model';
 import { ComponentState } from './ComponentState';
 import { WidgetService, ActionFactory, IdService } from '../../../core/browser';
 import { IEventSubscriber, EventService } from '../../../core/browser/event';
+import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 
 class TabLaneComponent implements IEventSubscriber {
 
@@ -31,6 +32,11 @@ class TabLaneComponent implements IEventSubscriber {
 
     public async onMount(): Promise<void> {
         if (this.state.tabWidgets.length) {
+
+            this.state.translations = await TranslationService.createTranslationObject(
+                this.state.tabWidgets.map((t) => t.configuration.title)
+            );
+
             if (this.state.tabId) {
                 await this.tabClicked(this.state.tabWidgets.find((tw) => tw.instanceId === this.state.tabId));
             }

@@ -41,12 +41,19 @@ class Component {
         }
         this.state.removeNode = typeof input.removeNode !== 'undefined' ? input.removeNode : true;
 
-        this.state.placeholder = await TranslationService.translate(input.placeholder, []);
+        this.state.placeholder = await TranslationService.translate(input.placeholder);
+        this.state.autoCompletePlaceholder = this.state.asAutocomplete
+            ? await TranslationService.translate('Translatable#Enter search value')
+            : await TranslationService.translate('Translatable#Filter in list');
 
         this.setCheckState();
     }
 
     public async onMount(): Promise<void> {
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Submit"
+        ]);
+
         document.addEventListener('click', (event) => {
             if (this.state.expanded) {
                 if (this.keepExpanded) {

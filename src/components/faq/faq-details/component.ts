@@ -4,6 +4,7 @@ import { ComponentState } from './ComponentState';
 import { KIXObjectType, AbstractAction, WidgetType } from '../../../core/model';
 import { FAQArticle } from '../../../core/model/kix/faq';
 import { ComponentsService } from '../../../core/browser/components';
+import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 
 class Component {
 
@@ -20,6 +21,10 @@ class Component {
     public async onMount(): Promise<void> {
         this.LANE_WIDGET_TYPE = WidgetType.LANE;
         WidgetService.getInstance().setWidgetType('faq-article-widget', WidgetType.LANE);
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#FAQ Information"
+        ]);
 
         this.context = await ContextService.getInstance().getContext<FAQDetailsContext>(FAQDetailsContext.CONTEXT_ID);
         this.context.registerListener('faq-details-component', {

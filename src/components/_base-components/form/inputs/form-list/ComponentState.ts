@@ -1,8 +1,8 @@
 import { TreeNode, AutoCompleteConfiguration } from '../../../../../core/model';
 import { IdService } from '../../../../../core/browser/IdService';
-import { FormInputAction } from '../../../../../core/browser';
+import { FormInputAction, AbstractComponentState } from '../../../../../core/browser';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public nodes: TreeNode[] = [],
@@ -23,7 +23,10 @@ export class ComponentState {
         public removeNode: boolean = true,
         public actions: FormInputAction[] = [],
         public placeholder: string = null,
-        public autocompleteNotFoundText: string = null
-    ) { }
+        public autocompleteNotFoundText: string = null,
+        public autoCompletePlaceholder: string = ''
+    ) {
+        super();
+    }
 
 }

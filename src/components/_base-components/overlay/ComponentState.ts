@@ -1,7 +1,7 @@
-import { ObjectIcon, IWidgetContent, OverlayType, AbstractAction, ComponentContent } from "../../../core/model";
-import { IdService } from "../../../core/browser";
+import { ObjectIcon, OverlayType, AbstractAction, ComponentContent } from "../../../core/model";
+import { IdService, AbstractComponentState } from "../../../core/browser";
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public type: OverlayType = null,
@@ -14,6 +14,8 @@ export class ComponentState {
         public overlayClass: string = null,
         public overlayInstanceId: string = 'overlay-widget',
         public overlayId: string = IdService.generateDateBasedId(),
-    ) { }
+    ) {
+        super();
+    }
 
 }

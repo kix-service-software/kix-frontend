@@ -7,8 +7,23 @@ import { PersonalSettingsDialogContext } from '../../../core/browser';
 import { AuthenticationSocketClient } from '../../../core/browser/application/AuthenticationSocketClient';
 import { ApplicationEvent } from '../../../core/browser/application';
 import { EventService } from '../../../core/browser/event';
+import { ComponentState } from './ComponentState';
+import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 
 class KIXHeaderComponent {
+
+    public state: ComponentState;
+
+    public onCreate(): void {
+        this.state = new ComponentState();
+    }
+
+    public async onMount(): Promise<void> {
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Personal Settings", "Translatable#Switch to customer portal.",
+            "Translatable#Help", "Translatable#Logout"
+        ]);
+    }
 
     public openDialog(): void {
         ContextService.getInstance().setDialogContext(null, null, ContextMode.CREATE, null, true);

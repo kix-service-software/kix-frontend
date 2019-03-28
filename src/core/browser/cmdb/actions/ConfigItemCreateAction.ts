@@ -9,7 +9,7 @@ export class ConfigItemCreateAction extends AbstractAction {
         this.icon = 'kix-icon-new-ci';
     }
 
-    public run(): void {
+    public async run(event: any): Promise<void> {
         ContextService.getInstance().setDialogContext(null, KIXObjectType.CONFIG_ITEM, ContextMode.CREATE, null, true);
     }
 

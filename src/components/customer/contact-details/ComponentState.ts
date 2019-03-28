@@ -1,7 +1,8 @@
 import { ConfiguredWidget, AbstractAction, Contact } from "../../../core/model";
 import { ContactDetailsContextConfiguration } from "../../../core/browser/contact";
+import { AbstractComponentState } from "../../../core/browser";
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public instanceId: string = '20180710-contact-details',
@@ -14,6 +15,8 @@ export class ComponentState {
         public configuration: ContactDetailsContextConfiguration = null,
         public error: any = null,
         public title: string = ''
-    ) { }
+    ) {
+        super();
+    }
 
 }

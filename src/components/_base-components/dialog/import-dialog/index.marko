@@ -4,7 +4,7 @@
             <if(state.importManager)>
                 <main-form formId=state.importConfigFormId key="input-configuration-form"/>
                 <div.form.import-attributes-container>
-                    <widget instanceId="dynamic-form-field-group" title="Translatable#Werte ersetzen" key="attributes">
+                    <widget instanceId="dynamic-form-field-group" title=state.translations["Translatable#Replace Values"] key="attributes">
                         <@content>
                             <div.import-attributes>
                                 <dynamic-form-field-container manager=state.importManager/>
@@ -21,18 +21,26 @@
                     </div>
                 </if>
                 <div.dialog-button-container>
-                    <button.cancel-button type="button" on-click("cancel") title="Cancel">
+                    <button.cancel-button type="button" on-click("cancel") title=state.translations["Translatable#Cancel"]>
                         <span.kix-icon-close/>
                         <translation-string pattern="Translatable#Cancel"/>
                     </button>
                     <div.submit-buttons>
-                        <button.submit-button type="button" on-click("submit") title="Close Dialog" disabled=!state.run>
+                        <button.submit-button
+                            type="button"
+                            on-click("submit")
+                            title=state.translations["Translatable#Close Dialog"]
+                            disabled=!state.run>
                             <span.kix-icon-check/>
                             <translation-string pattern="Translatable#Close Dialog"/>
                         </button>
-                        <button.submit-button type="button" on-click("run") title="Import starten" disabled=!state.canRun>
+                        <button.submit-button
+                            type="button"
+                            on-click("run")
+                            title=state.translations["Translatable#Start Import"]
+                            disabled=!state.canRun>
                             <span.kix-icon-import/>
-                            <translation-string pattern="Translatable#Import starten"/>
+                            <translation-string pattern="Translatable#Start Import"/>
                         </button>
                     </div>
                 </div>

@@ -4,7 +4,7 @@
             <ul.tab-list>
                 <for|tab| of=state.tabWidgets>
                     <li
-                        title=tab.configuration.title
+                        title=state.translations[tab.configuration.title]
                         class={
                                                 active: component.isActiveTab(tab.instanceId)
                                             }

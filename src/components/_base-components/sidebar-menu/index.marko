@@ -3,7 +3,7 @@
         <div.bar-icon
             class=(component.isShown(sidebar) ? "select-active" : "")
             on-click("toggleSidebar", sidebar.instanceId)
-            title=sidebar.configuration.title
+            title=state.translations[sidebar.configuration.title]
             key=("sidebarmenu-" + sidebar.instanceId)>
             <span class=sidebar.configuration.icon/>
         </div>

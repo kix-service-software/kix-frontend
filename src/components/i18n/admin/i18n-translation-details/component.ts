@@ -7,6 +7,7 @@ import { ComponentsService } from '../../../../core/browser/components';
 import {
     TranslationDetailsContext, TranslationDetailsContextConfiguration
 } from '../../../../core/browser/i18n/admin/context';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -22,6 +23,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const context = await ContextService.getInstance().getContext<TranslationDetailsContext>(
             TranslationDetailsContext.CONTEXT_ID
         );
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Pattern Information"
+        ]);
+
         context.registerListener('translation-details-component', {
             explorerBarToggled: () => { return; },
             filteredObjectListChanged: () => { return; },

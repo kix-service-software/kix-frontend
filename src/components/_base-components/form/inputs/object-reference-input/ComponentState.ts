@@ -9,7 +9,8 @@ export class ComponentState extends FormInputComponentState<string | number> {
         public searchCallback: (limit: number, searchValue: string) => Promise<TreeNode[]> = null,
         public currentNodes: TreeNode[] = [],
         public autocomplete: boolean = true,
-        public isMultiselect: boolean = false
+        public isMultiselect: boolean = false,
+        public placeholder: string = ''
     ) {
         super();
     }

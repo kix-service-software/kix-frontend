@@ -19,19 +19,23 @@
             <div.toolbar-group>
                 <div>
                     <div.action-icon>
-                        <span.kix-icon-gear.as-button title="Personal Settings" on-click("showPersonalSettings")/>
+                        <span.kix-icon-gear.as-button
+                            title=state.translations["Translatable#Personal Settings"]
+                            on-click("showPersonalSettings")/>
                     </div>
                 </div>
                 <div>
                     <div.action-icon>
-                        <span.kix-icon-exchange.as-button title="Switch to customer portal." on-click("showTemporaryComingSoon")/>
+                        <span.kix-icon-exchange.as-button
+                            title=state.translations["Translatable#Switch to customer portal."]
+                            on-click("showTemporaryComingSoon")/>
                     </div>
                 </div>
                 <link-target routingConfiguration=component.getReleaseRoutingConfig()>
                     <@content>
                         <div>
                             <div.action-icon>
-                                <span.kix-icon-query.as-button title="Help"/>
+                                <span.kix-icon-query.as-button title=state.translations["Translatable#Help"]/>
                             </div>
                         </div>
                     </@content>
@@ -39,7 +43,7 @@
                 <div>
                     <div.action-icon>
                         <a href="/auth?logout" on-click("logout")>
-                            <span.kix-icon-logout title="Logout"/>
+                            <span.kix-icon-logout title=state.translations["Translatable#Logout"]/>
                         </a>
                     </div>
                 </div>

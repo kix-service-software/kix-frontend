@@ -9,7 +9,7 @@ export class CustomerCreateAction extends AbstractAction {
         this.icon = 'kix-icon-man-house-new';
     }
 
-    public run(): void {
+    public async run(event: any): Promise<void> {
         ContextService.getInstance().setDialogContext(null, KIXObjectType.CUSTOMER, ContextMode.CREATE, null, true);
     }
 

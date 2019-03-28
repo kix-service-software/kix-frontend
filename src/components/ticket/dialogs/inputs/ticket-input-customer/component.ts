@@ -5,6 +5,7 @@ import {
 } from "../../../../../core/model";
 import { FormService } from "../../../../../core/browser/form";
 import { IdService, KIXObjectService } from "../../../../../core/browser";
+import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
 
 class Component extends FormInputComponent<string, ComponentState> {
 
@@ -17,6 +18,7 @@ class Component extends FormInputComponent<string, ComponentState> {
 
     public async onInput(input: any): Promise<void> {
         await super.onInput(input);
+        this.state.placeholder = await TranslationService.translate('Translatable#Please select a contact');
     }
 
     public async onMount(): Promise<void> {
@@ -69,16 +71,6 @@ class Component extends FormInputComponent<string, ComponentState> {
     public async onDestroy(): Promise<void> {
         await super.onDestroy();
         FormService.getInstance().removeFormInstanceListener(this.state.formId, this.formListenerId);
-    }
-
-    public getPlaceholder(): string {
-        let placeholder = (this.state.field.required ? this.state.field.label : "");
-
-        if (!this.state.hasContact) {
-            placeholder = "Bitte Ansprechpartner auswählen.";
-        }
-
-        return placeholder;
     }
 
     private async loadCustomers(customerIds: string[]): Promise<void> {

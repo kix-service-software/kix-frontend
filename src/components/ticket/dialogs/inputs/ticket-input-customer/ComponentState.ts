@@ -7,7 +7,8 @@ export class ComponentState extends FormInputComponentState<string> {
         public currentNode: TreeNode = null,
         public primaryCustomerId: string = null,
         public hasContact: boolean = false,
-        public loading: boolean = false
+        public loading: boolean = false,
+        public placeholder: string = ''
     ) {
         super();
     }

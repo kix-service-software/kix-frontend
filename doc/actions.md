@@ -14,7 +14,7 @@ export class LinkedObjectsEditAction extends AbstractAction {
         this.icon = 'kix-icon-edit';
     }
 
-    public run(): void {
+    public async run(event: any): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         ContextService.getInstance().setDialogContext(null, KIXObjectType.LINK, ContextMode.EDIT_LINKS);
     }

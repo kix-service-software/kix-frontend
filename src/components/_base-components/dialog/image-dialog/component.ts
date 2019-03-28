@@ -1,6 +1,7 @@
 import { ComponentState } from './ComponentState';
 import { DisplayImageDescription } from '../../../../core/browser/components/DisplayImageDescription';
 import { IImageDialogListener, DialogService } from '../../../../core/browser/components/dialog';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 export class Component implements IImageDialogListener {
 
@@ -11,8 +12,12 @@ export class Component implements IImageDialogListener {
         this.state = new ComponentState();
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
         DialogService.getInstance().registerImageDialogListener(this);
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Next Image", "Translatable#Previous Image"
+        ]);
     }
 
     public open(imageDescriptions: DisplayImageDescription[], showImageId?: string | number): void {

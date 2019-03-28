@@ -1,7 +1,7 @@
 import { KIXObjectPropertyFilter } from '../../../../core/model';
-import { ITable } from '../../../../core/browser';
+import { ITable, AbstractComponentState } from '../../../../core/browser';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public loading: boolean = false,
@@ -11,6 +11,8 @@ export class ComponentState {
         public canDelete: boolean = false,
         public canSubmit: boolean = false,
         public filterCount: number = null
-    ) { }
+    ) {
+        super();
+    }
 
 }

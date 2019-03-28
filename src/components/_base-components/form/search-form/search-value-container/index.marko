@@ -39,7 +39,7 @@
         <if(state.searchValues.length > 2 && index !== state.searchValues.length - 1)>
             <button.form-control-button.button-without-text
                 type="button"
-                title="Remove Search Criteria"
+                title=state.translations["Translatable#Remove Search Criteria"]
                 on-click("removeValue", searchValue)>
                 <span.kix-icon-minus/>
             </button>

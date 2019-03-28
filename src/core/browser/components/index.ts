@@ -5,5 +5,6 @@ export { IAutofillConfiguration } from './IAutofillConfiguration';
 export { InlineContent } from './InlineContent';
 export { TabContainerEvent } from './TabContainerEvent';
 export { TabContainerEventData } from './TabContainerEventData';
+export { AbstractComponentState } from './AbstractComponentState';
 
 export * from './autocomplete';

@@ -1,6 +1,7 @@
 import { IMarkoComponent } from "./IMarkoComponent";
+import { AbstractComponentState } from "../components";
 
-export abstract class AbstractMarkoComponent<CS = any, I = any> implements IMarkoComponent<CS, I> {
+export abstract class AbstractMarkoComponent<CS = AbstractComponentState, I = any> implements IMarkoComponent<CS, I> {
 
     public state: CS;
 

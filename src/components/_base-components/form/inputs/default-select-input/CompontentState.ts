@@ -5,7 +5,8 @@ export class CompontentState extends FormInputComponentState<string | number | s
     public constructor(
         public nodes: TreeNode[] = [],
         public selectedNodes: TreeNode[] = null,
-        public asMultiselect: boolean = false
+        public asMultiselect: boolean = false,
+        public placeholder: string = ''
     ) {
         super();
     }

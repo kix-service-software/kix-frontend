@@ -4,6 +4,7 @@ import { IdService } from '../../../core/browser/IdService';
 import { WidgetType } from '../../../core/model';
 import { WidgetService } from '../../../core/browser';
 import { IEventSubscriber, EventService } from '../../../core/browser/event';
+import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 
 class WidgetComponent implements IEventSubscriber {
 
@@ -12,6 +13,9 @@ class WidgetComponent implements IEventSubscriber {
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
+    }
+
+    public onInput(input: any): void {
         this.state.instanceId = input.instanceId ? input.instanceId : IdService.generateDateBasedId();
         this.state.explorer = input.explorer;
         this.state.minimizable = typeof input.minimizable !== 'undefined' ? input.minimizable : true;
@@ -21,9 +25,14 @@ class WidgetComponent implements IEventSubscriber {
         this.eventSubscriberId = typeof input.eventSubscriberPrefix !== 'undefined'
             ? input.eventSubscriberPrefix
             : 'GeneralWidget';
+        this.setTranslations([input.title]);
     }
 
-    public onMount(): void {
+    private async setTranslations(patterns: string[]): Promise<void> {
+        this.state.translations = await TranslationService.createTranslationObject(patterns);
+    }
+
+    public async onMount(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext(this.state.contextType);
 
         this.state.widgetType = WidgetService.getInstance().getWidgetType(this.state.instanceId, context);

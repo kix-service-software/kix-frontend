@@ -1,5 +1,6 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../core/browser';
+import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -7,9 +8,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state = new ComponentState();
     }
 
-    public onInput(input: any): void {
+    public async onInput(input: any): Promise<void> {
         this.state.cancelCallback = input.cancelCallback;
         this.state.time = input.time;
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Cancel", "Translatable#Save"
+        ]);
     }
 
     public cancel(): void {

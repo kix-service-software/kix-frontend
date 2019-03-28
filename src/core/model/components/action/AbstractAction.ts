@@ -2,6 +2,7 @@ import { IAction } from './IAction';
 import { OverlayService } from '../../../browser';
 import { ComponentContent } from '../widget';
 import { ToastContent, OverlayType } from '../overlay';
+import { TranslationService } from '../../../browser/i18n/TranslationService';
 
 export abstract class AbstractAction<T = any> implements IAction<T> {
 
@@ -19,10 +20,11 @@ export abstract class AbstractAction<T = any> implements IAction<T> {
         return true;
     }
 
-    public run(event: any): void {
+    public async run(event: any): Promise<void> {
+        const text = await TranslationService.translate('Translatable#We are working on this functionality.');
         const content = new ComponentContent(
             'toast',
-            new ToastContent('kix-icon-magicwand', 'Diese Funktionalität ist in Arbeit.', 'Coming Soon')
+            new ToastContent('kix-icon-magicwand', text, 'Coming Soon')
         );
         OverlayService.getInstance().openOverlay(OverlayType.HINT_TOAST, null, content, '');
     }

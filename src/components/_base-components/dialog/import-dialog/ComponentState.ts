@@ -1,8 +1,7 @@
 import { ImportManager } from '../../../../core/browser/import';
-import { ITable } from '../../../../core/browser';
-import { KIXObjectType } from '../../../../core/model';
+import { ITable, AbstractComponentState } from '../../../../core/browser';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public instanceId: string = null,
@@ -12,6 +11,8 @@ export class ComponentState {
         public tableTitle: string = null,
         public canRun: boolean = false,
         public run: boolean = false
-    ) { }
+    ) {
+        super();
+    }
 
 }

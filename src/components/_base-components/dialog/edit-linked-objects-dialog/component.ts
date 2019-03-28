@@ -40,6 +40,11 @@ class Component {
 
     public async onMount(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Cancel", "Translatable#Assign Link", "Translatable#Delete Link", "Translatable#Submit"
+        ]);
+
         if (context) {
             this.mainObject = await context.getObject();
 

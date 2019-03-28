@@ -9,7 +9,7 @@ export class ContactCreateAction extends AbstractAction {
         this.icon = 'kix-icon-man-bubble-new';
     }
 
-    public run(): void {
+    public async run(event: any): Promise<void> {
         ContextService.getInstance().setDialogContext(null, KIXObjectType.CONTACT, ContextMode.CREATE, null, true);
     }
 

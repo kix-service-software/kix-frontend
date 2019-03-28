@@ -3,7 +3,7 @@
         <span>Keine Linktypen verfügbar.</span>
     </if>
     <else>
-        <div.linkable-objects-selection title="Link to">
+        <div.linkable-objects-selection title=state.translations["Translatable#Link to"]>
             <div.linkable-objects-selection-label>
                 <span>
                     <translation-string pattern="Translatable#Link to"/>
@@ -15,7 +15,10 @@
                 selectedNodes=[state.currentLinkableObjectNode]/>
         </div>
         <div.linkable-objects-form on-keydown("keyPressed")>
-            <widget instanceId="link-object-dialog-form-widget" title="Translatable#Search" key="link-object-form-widget">
+            <widget
+                instanceId="link-object-dialog-form-widget"
+                title=state.translations["Translatable#Search"]
+                key="link-object-form-widget">
                 <@content>
                     <if(state.formId)>
                         <main-form formId=state.formId key="link-object-form-widget-form"/>
@@ -48,7 +51,7 @@
                     nodes=state.linkTypeNodes
                     on-nodesChanged("linkTypeChanged")
                     selectedNodes=[state.currentLinkTypeNode]
-                    placeholder="Link Type"/>
+                    placeholder="Translatable#Link Type"/>
             </div>
             <button.submit-button disabled=!state.canSubmit on-click("submitClicked")>
                 <span.kix-icon-check/>

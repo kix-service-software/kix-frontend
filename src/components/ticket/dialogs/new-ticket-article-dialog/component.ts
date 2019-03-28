@@ -3,6 +3,7 @@ import { KIXObjectType, CreateTicketArticleOptions, TicketProperty, Ticket } fro
 import { ComponentState } from './ComponentState';
 import { TicketDetailsContext } from '../../../../core/browser/ticket';
 import { AbstractNewDialog } from '../../../../core/browser/components/dialog';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component extends AbstractNewDialog {
 
@@ -18,6 +19,11 @@ class Component extends AbstractNewDialog {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+
+        (this.state as ComponentState).translations = await TranslationService.createTranslationObject([
+            "Translatable#Cancel", "Translatable#Save"
+        ]);
+
         const context = await ContextService.getInstance().getContext(TicketDetailsContext.CONTEXT_ID);
         this.options = new CreateTicketArticleOptions(Number(context.getObjectId()));
     }

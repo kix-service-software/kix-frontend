@@ -1,5 +1,6 @@
 import { FormService } from '../../../../../core/browser/form';
 import { ComponentState } from './ComponentState';
+import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
 class Component {
 
@@ -15,6 +16,9 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+
+        this.state.translations = await TranslationService.createTranslationObject(["Translatable#start search"]);
+
         this.formListenerId = 'LinkableObjectsSearchButton';
         await FormService.getInstance().registerFormInstanceListener(this.state.formId, {
             formListenerId: this.formListenerId,

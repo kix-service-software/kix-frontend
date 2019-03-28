@@ -28,11 +28,16 @@ class Component {
         WidgetService.getInstance().setWidgetType('bulk-form-group', WidgetType.GROUP);
     }
 
-    public onInput(input: any): void {
+    public async onInput(input: any): Promise<void> {
         this.state.bulkManager = input.bulkManager;
         this.state.bulkManager.registerListener('bulk-dialog-listener', () => {
             this.state.canRun = this.state.bulkManager.hasDefinedValues() && !!this.state.bulkManager.objects.length;
         });
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Cancel", "Translatable#Reset Data", "Translatable#Close Dialog", "Translatable#Execute now!"
+        ]);
+
         this.createTable();
     }
 

@@ -7,6 +7,7 @@ import {
 } from '../../../../../core/model';
 import { FormSearchValue } from './FormSearchValue';
 import { DialogService } from '../../../../../core/browser/components/dialog';
+import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
 class Component implements IKIXObjectSearchListener {
 
@@ -28,6 +29,10 @@ class Component implements IKIXObjectSearchListener {
     }
 
     public async onMount(): Promise<void> {
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Remove Search Criteria"
+        ]);
+
         DialogService.getInstance().setMainDialogLoading(true);
         KIXObjectSearchService.getInstance().registerListener(this);
 

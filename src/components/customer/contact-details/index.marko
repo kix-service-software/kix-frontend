@@ -10,7 +10,7 @@
             <@content>
                 <ul.lane-list no-update>
                     <li key=component.getLaneKey()>
-                        <tab-container tabWidgets=state.tabWidgets title="Ansprechpartnerinformationen"/>
+                        <tab-container tabWidgets=state.tabWidgets title=state.translations["Translatable#Contact Information"]/>
                     </li>
                     <for|lane| of=state.lanes>
                         <li.lane key=component.getLaneKey()>

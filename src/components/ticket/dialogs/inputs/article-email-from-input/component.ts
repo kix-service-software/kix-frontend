@@ -6,6 +6,7 @@ import {
 import { FormService, KIXObjectService, ContextService } from "../../../../../core/browser";
 import { TicketDetailsContext } from "../../../../../core/browser/ticket";
 import { ObjectDataService } from "../../../../../core/browser/ObjectDataService";
+import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
 
 class Component extends FormInputComponent<number, ComponentState> {
 
@@ -15,6 +16,12 @@ class Component extends FormInputComponent<number, ComponentState> {
 
     public async onInput(input: any): Promise<void> {
         await super.onInput(input);
+
+        const placeholderText = this.state.field.placeholder
+            ? this.state.field.placeholder
+            : this.state.field.required ? this.state.field.label : '';
+
+        this.state.placeholder = await TranslationService.translate(placeholderText);
     }
 
     public async onMount(): Promise<void> {

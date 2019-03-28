@@ -1,7 +1,8 @@
-import { IWidget, WidgetConfiguration } from '../..';
+import { WidgetConfiguration } from '../..';
 import { ContextType } from '../context';
+import { AbstractComponentState } from '../../../browser/components/AbstractComponentState';
 
-export abstract class WidgetComponentState<T = any> {
+export abstract class WidgetComponentState<T = any> extends AbstractComponentState {
 
     public constructor(
         public widgetConfiguration: WidgetConfiguration<T> = null,
@@ -13,6 +14,8 @@ export abstract class WidgetComponentState<T = any> {
         public minimized: boolean = false,
         public minimizable: boolean = true,
         public closable: boolean = false
-    ) { }
+    ) {
+        super();
+    }
 
 }

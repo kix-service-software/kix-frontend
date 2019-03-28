@@ -24,7 +24,7 @@ export class TranslationTableDeleteAction extends AbstractAction<ITable> {
         return canRun;
     }
 
-    public run(): void {
+    public async run(event: any): Promise<void> {
         if (this.canRun()) {
             const selectedRows = this.data.getSelectedRows();
             const content = new ComponentContent(

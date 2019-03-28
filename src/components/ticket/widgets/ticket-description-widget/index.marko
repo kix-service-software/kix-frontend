@@ -9,7 +9,7 @@
         <else>
             <div.description-container>
                 <if(state.ticket && state.firstArticle)>
-                    <widget instanceId="ticket-description-widget" title="Translatable#Description">
+                    <widget instanceId="ticket-description-widget" title=state.translations["Translatable#Description"]>
                         <@content>
                             <div.description-text-wrapper>
                                 <ticket-article-content article=state.firstArticle/>
@@ -22,7 +22,7 @@
                     </widget>
                     <widget
                         instanceId="ticket-description-notes"
-                        title="Translatable#Comment"
+                        title=state.translations["Translatable#Comment"]
                         key=("Widget-ticket-description-notes" + state.ticket.TicketID)>
                         <@content>
                             <div.ticket-notes>${state.ticketNotes}</div>

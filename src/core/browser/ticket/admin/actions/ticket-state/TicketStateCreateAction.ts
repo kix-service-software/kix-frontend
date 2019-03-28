@@ -8,7 +8,7 @@ export class TicketStateCreateAction extends AbstractAction {
         this.icon = 'kix-icon-new-gear';
     }
 
-    public run(): void {
+    public async run(event: any): Promise<void> {
         ContextService.getInstance().setDialogContext(
             // TODO: Titel aus dem aktiven Admin-Modul ermitteln (Kategorie)
             null, KIXObjectType.TICKET_STATE, ContextMode.CREATE_ADMIN, null, true, 'Translatable#Add Core Data'

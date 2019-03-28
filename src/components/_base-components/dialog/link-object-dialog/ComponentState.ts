@@ -17,6 +17,7 @@ export class ComponentState {
         public canSubmit: boolean = false,
         public tableId: string = null,
         public filterCount: number = null,
-        public loading: boolean = true
+        public loading: boolean = true,
+        public translations: any = {}
     ) { }
 }

@@ -43,6 +43,10 @@ class LinkDialogComponent {
     public async onMount(): Promise<void> {
         this.selectedObjects = [];
 
+        this.state.translations = await TranslationService.createTranslationObject(
+            ["Translatable#Link to", "Translatable#Search"]
+        );
+
         await this.setLinkableObjects();
         await this.setDefaultLinkableObject();
 

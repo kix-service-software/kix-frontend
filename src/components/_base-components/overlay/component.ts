@@ -5,6 +5,7 @@ import {
 } from "../../../core/model";
 import { ContextService } from "../../../core/browser/context";
 import { ComponentsService } from "../../../core/browser/components";
+import { TranslationService } from "../../../core/browser/i18n/TranslationService";
 
 class OverlayComponent {
 
@@ -20,7 +21,12 @@ class OverlayComponent {
         this.state = new ComponentState();
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Close window"
+        ]);
+
         OverlayService.getInstance().registerOverlayComponentListener(this.openOverlay.bind(this));
 
         WidgetService.getInstance().setWidgetType(this.state.overlayInstanceId, WidgetType.OVERLAY);

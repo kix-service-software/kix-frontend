@@ -4,6 +4,7 @@ import { TreeNode } from '../../../../../core/model';
 import { BulkValue } from './BulkValue';
 import { BulkManager } from '../../../../../core/browser/bulk';
 import { DialogService } from '../../../../../core/browser/components/dialog';
+import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
 class Component {
 
@@ -24,6 +25,9 @@ class Component {
 
     public async onMount(): Promise<void> {
         DialogService.getInstance().setMainDialogLoading(true);
+        this.state.translations = await TranslationService.createTranslationObject(
+            ["Translatable#Parameter entfernen"]
+        );
         await this.updateValues();
         DialogService.getInstance().setMainDialogLoading(false);
     }
