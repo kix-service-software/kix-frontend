@@ -65,7 +65,7 @@ export class ContactImportManager extends ImportManager {
         const attributes = [
             ContactProperty.USER_PASSWORD,
             ContactProperty.USER_CUSTOMER_ID,
-            // ContactProperty.USER_CUSTOMER_IDS, // TODO später
+            // ContactProperty.USER_CUSTOMER_IDS, // TODO: später
             ContactProperty.USER_FIRST_NAME,
             ContactProperty.USER_LAST_NAME,
             ContactProperty.USER_TITLE,
@@ -78,6 +78,7 @@ export class ContactImportManager extends ImportManager {
             ContactProperty.USER_CITY,
             ContactProperty.USER_ZIP,
             ContactProperty.USER_COUNTRY,
+            ContactProperty.USER_COMMENT,
             ContactProperty.VALID_ID
         ];
         for (const attribute of attributes) {

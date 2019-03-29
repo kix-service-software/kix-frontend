@@ -301,7 +301,7 @@ export abstract class KIXObjectService<T extends KIXObject = any> implements IKI
                             [PermissionProperty.TYPE_ID, objectType.ID],
                             [PermissionProperty.TARGET, `${resourcePath}/${objectId}`],
                             [PermissionProperty.VALUE, permission.Value],
-                            [PermissionProperty.COMMENT, permission.comment]
+                            [PermissionProperty.COMMENT, permission.Comment]
                         ];
                         const roleId = permission.RoleID;
                         if (roleId) {

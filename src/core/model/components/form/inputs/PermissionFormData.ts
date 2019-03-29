@@ -7,6 +7,6 @@ export class PermissionFormData {
         public DELETE: boolean = false,
         public DENY: boolean = false,
         public IsRequired: boolean = false,
-        public comment: string = ''
+        public Comment: string = ''
     ) { }
 }

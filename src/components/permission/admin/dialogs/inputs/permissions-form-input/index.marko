@@ -1,14 +1,16 @@
 <if(state.permissionManager)>
-    <div.crud-description-container>
-        <div.crud-description>
-            <span title=state.requiredTitle>
-                <translation-string pattern="Translatable#Required"/>
-            </span>
-            <span title=state.createTitle>C</span>
-            <span title=state.readTitle>R</span>
-            <span title=state.updateTitle>U</span>
-            <span title=state.deleteTitle>D</span>
-            <span title=state.denyTitle>DN</span>
+    <div.permission-form-container>
+        <div.permission-description-container>
+            <div.crud-description>
+                <span title=state.requiredTitle>
+                    <translation-string pattern="Translatable#Required"/>
+                </span>
+                <span title=state.createTitle>C</span>
+                <span title=state.readTitle>R</span>
+                <span title=state.updateTitle>U</span>
+                <span title=state.deleteTitle>D</span>
+                <span title=state.denyTitle>DN</span>
+            </div>
         </div>
     </div>
     <dynamic-form-field-container manager=state.permissionManager/>
