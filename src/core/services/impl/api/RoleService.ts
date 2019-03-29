@@ -200,7 +200,7 @@ export class RoleService extends KIXObjectService {
             [PermissionProperty.TYPE_ID, permissionDesc.TypeID],
             [PermissionProperty.TARGET, permissionDesc.Target],
             [PermissionProperty.VALUE, permissionDesc.Value],
-            [PermissionProperty.COMMENT, permissionDesc.comment],
+            [PermissionProperty.COMMENT, permissionDesc.Comment],
             [PermissionProperty.IS_REQUIRED, permissionDesc.IsRequired]
         ];
         return new CUPermissionRequest(new PermissionRequestObject(parameter));

@@ -51,7 +51,7 @@ class Component extends FormInputComponent<any[], ComponentState> {
                                         null, null,
                                         v.value && (v.value as PermissionFormData).IsRequired ? 1 : 0,
                                         crudValue,
-                                        v.value && (v.value as PermissionFormData).comment,
+                                        v.value && (v.value as PermissionFormData).Comment,
                                         Number(v.property)
                                     )
                                 );

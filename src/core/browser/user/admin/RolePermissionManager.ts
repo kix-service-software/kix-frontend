@@ -1,6 +1,7 @@
 import { KIXObjectType, InputFieldTypes, SortUtil, Role } from "../../../model";
 import { DynamicFormOperationsType, AbstractDynamicFormManager } from "../../form";
 import { KIXObjectService } from "../../kix";
+import { ObjectPropertyValue } from "../../ObjectPropertyValue";
 
 export class RolePermissionManager extends AbstractDynamicFormManager {
 
@@ -17,6 +18,10 @@ export class RolePermissionManager extends AbstractDynamicFormManager {
 
     public getSpecificInput(): string {
         return 'permission-input';
+    }
+
+    public showValueInput(value: ObjectPropertyValue): boolean {
+        return true;
     }
 
     public async getInputTypeOptions(property: string, operator: string): Promise<Array<[string, any]>> {

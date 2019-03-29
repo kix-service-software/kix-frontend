@@ -1,15 +1,23 @@
-<div.checkbox-groups>
-    <for|checkboxOption| of=state.checkboxOptions>
-        <div.checkbox-container>
-            <if(checkboxOption.show)>
-                <input
-                    title=state.titles.get(checkboxOption.id)
-                    type="checkbox"
-                    checked=checkboxOption.checked
-                    readonly=checkboxOption.readonly
-                    on-click("checkboxClicked", checkboxOption.id)/>
-            </if>
-        </div>
-    </for>
-    <!-- <input.permisson-comment/> -->
+<div.permission-input-container>
+    <div.crud-checkboxes>
+        <for|checkboxOption| of=state.checkboxOptions>
+            <div.checkbox-container>
+                <if(checkboxOption.show)>
+                    <input
+                        title=state.titles.get(checkboxOption.id)
+                        type="checkbox"
+                        checked=checkboxOption.checked
+                        readonly=checkboxOption.readonly
+                        disabled=checkboxOption.readonly
+                        on-click("checkboxClicked", checkboxOption.id)/>
+                </if>
+            </div>
+        </for>
+    </div>
+    <input.input-style.permisson-comment
+        type="text"
+        value=state.comment
+        placeholder=state.commentPlaceholder
+        maxlength=250
+        on-input("commentchanged")/>
 </div>

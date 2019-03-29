@@ -34,11 +34,7 @@
             </else>
         </if>
         <div.value>
-            <if(
-                dynamicValue.currentPropertyNode &&
-                (dynamicValue.currentOperationNode || dynamicValue.operationIsNone) &&
-                component.showValueInput(dynamicValue)
-            )>
+            <if(component.showValueInput(dynamicValue))>
                 <if(dynamicValue.isDropdown)>
                     <form-list
                         nodes=dynamicValue.nodes

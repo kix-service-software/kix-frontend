@@ -1,6 +1,13 @@
-.checkbox-groups {
+.permission-input-container {
     display: grid;
-    grid-auto-flow: column;
-    margin-left: @margin-small;
-    grid-auto-columns: 1fr;
+    grid-template-columns: minmax(10rem, 1fr) 1fr;
+    grid-gap: @margin-small;
+
+    .crud-checkboxes {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr 1fr 2fr;
+        grid-gap: @margin-small;
+        justify-items: center;
+        align-content: center;
+    }
 }

@@ -93,8 +93,10 @@ export class DynamicFieldValue {
 
         await this.createPropertyNodes();
         await this.createOperationNodes();
-        if (this.currentPropertyNode) {
-            const inputType = await this.manager.getInputType(this.currentPropertyNode.id);
+        if (this.manager.showValueInput(this.value)) {
+            const inputType = await this.manager.getInputType(
+                this.currentPropertyNode ? this.currentPropertyNode.id : null
+            );
 
             this.isDate = inputType === InputFieldTypes.DATE;
             this.isDateTime = inputType === InputFieldTypes.DATE_TIME;
@@ -120,7 +122,7 @@ export class DynamicFieldValue {
                 this.setOperationNode(this.operationNodes[0]);
             }
 
-            if (this.isDropdown && !this.isAutocomplete) {
+            if (this.currentPropertyNode && this.isDropdown && !this.isAutocomplete) {
                 this.nodes = await this.manager.getTreeNodes(this.currentPropertyNode.id);
             }
         }
@@ -138,7 +140,7 @@ export class DynamicFieldValue {
     public setOperationNode(operationNode?: TreeNode, operator?: string): void {
         if (operationNode) {
             this.currentOperationNode = operationNode;
-        } else if (operator) {
+        } else if (typeof operator !== 'undefined' && operator !== null) {
             let node = this.operationNodes.find((on) => on.id === operator);
             if (
                 !node

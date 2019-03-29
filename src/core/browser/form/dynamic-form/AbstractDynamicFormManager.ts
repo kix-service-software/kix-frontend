@@ -69,7 +69,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     }
 
     public showValueInput(value: ObjectPropertyValue): boolean {
-        return true;
+        return Boolean(value.property && value.operator);
     }
 
     public getValues(): ObjectPropertyValue[] {

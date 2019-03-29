@@ -44,7 +44,7 @@ class Component extends FormInputComponent<any[], ComponentState> {
                                         v.operator,
                                         v.value && (v.value as PermissionFormData).IsRequired ? 1 : 0,
                                         crudValue,
-                                        v.value && (v.value as PermissionFormData).comment,
+                                        v.value && (v.value as PermissionFormData).Comment,
                                         null,
                                         typeof v.id !== 'undefined' && v.id !== null ? Number(v.id) : null
                                     )
@@ -123,7 +123,7 @@ class Component extends FormInputComponent<any[], ComponentState> {
     private getPermissionFormData(permission: Permission): PermissionFormData {
         const permissionFormData = new PermissionFormData();
         permissionFormData.IsRequired = permission.IsRequired === 1;
-        permissionFormData.comment = permission.Comment;
+        permissionFormData.Comment = permission.Comment;
         if (permission.Value) {
             permissionFormData.CREATE = !!(permission.Value & CRUD.CREATE);
             permissionFormData.READ = !!(permission.Value & CRUD.READ);

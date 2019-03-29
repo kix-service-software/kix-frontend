@@ -62,7 +62,7 @@ export abstract class ImportManager extends AbstractDynamicFormManager {
     }
 
     public showValueInput(value: ObjectPropertyValue): boolean {
-        return value.operator && value.operator !== ImportPropertyOperator.IGNORE;
+        return value.property && value.operator && value.operator !== ImportPropertyOperator.IGNORE;
     }
 
     public getEditableValues(): ObjectPropertyValue[] {
