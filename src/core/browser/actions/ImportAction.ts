@@ -52,7 +52,7 @@ export class ImportAction extends AbstractAction<ITable> {
     }
 
     public async eventPublished(eventData: DialogEventData, eventId: string, subscriberId: string): Promise<void> {
-        if (eventData && eventData.dialogId === 'import-dialog' && subscriberId === this.eventSubscriberId) {
+        if (eventData && eventData.dialogId.match('import-dialog') && subscriberId === this.eventSubscriberId) {
             EventService.getInstance().unsubscribe(DialogEvents.DIALOG_CANCELED, this);
             EventService.getInstance().unsubscribe(DialogEvents.DIALOG_FINISHED, this);
 

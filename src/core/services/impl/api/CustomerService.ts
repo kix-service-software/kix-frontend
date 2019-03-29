@@ -162,17 +162,7 @@ export class CustomerService extends KIXObjectService {
         token: string, clientRequestId: string, objectType: KIXObjectType,
         parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
-        const updateCustomer = new UpdateCustomer(
-            null,
-            this.getParameterValue(parameter, CustomerProperty.CUSTOMER_COMPANY_NAME),
-            this.getParameterValue(parameter, CustomerProperty.CUSTOMER_COMPANY_STREET),
-            this.getParameterValue(parameter, CustomerProperty.CUSTOMER_COMPANY_ZIP),
-            this.getParameterValue(parameter, CustomerProperty.CUSTOMER_COMPANY_CITY),
-            this.getParameterValue(parameter, CustomerProperty.CUSTOMER_COMPANY_COUNTRY),
-            this.getParameterValue(parameter, CustomerProperty.CUSTOMER_COMPANY_URL),
-            this.getParameterValue(parameter, CustomerProperty.CUSTOMER_COMPANY_COMMENT),
-            this.getParameterValue(parameter, CustomerProperty.VALID_ID)
-        );
+        const updateCustomer = new UpdateCustomer(parameter);
 
         const response = await this.sendUpdateRequest<UpdateCustomerResponse, UpdateCustomerRequest>(
             token, clientRequestId, this.buildUri(this.RESOURCE_URI, objectId),
