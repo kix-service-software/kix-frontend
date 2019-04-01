@@ -26,7 +26,6 @@ class Extension implements IKIXModuleExtension {
         ['cmdb-admin-ci-classes', 'cmdb/admin/cmdb-admin-ci-classes'],
         ['config-item-class-details', 'cmdb/admin/config-item-class-details'],
         ['config-item-class-info-widget', 'cmdb/admin/widgets/config-item-class-info-widget'],
-        ['config-item-class-permissions-widget', 'cmdb/admin/widgets/config-item-class-permissions-widget'],
         ['config-item-class-versions-widget', 'cmdb/admin/widgets/config-item-class-versions-widget'],
         ['config-item-class-definition', 'cmdb/config-item-class-definition'],
         ['new-config-item-class-dialog', 'cmdb/admin/dialogs/new-config-item-class-dialog'],

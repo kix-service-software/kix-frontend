@@ -8,6 +8,7 @@ import {
     TableEventData, ComponentsService
 } from '../../../core/browser';
 import { TranslationService } from '../../../core/browser/i18n/TranslationService';
+import { ComponentInput } from './ComponentInput';
 class Component {
 
     public state: ComponentState;
@@ -28,13 +29,18 @@ class Component {
         this.state = new ComponentState();
     }
 
-    public onInput(input: any): void {
+    public onInput(input: ComponentInput): void {
         this.state.instanceId = input.instanceId;
         this.contextType = input.contextType;
         this.configuredTitle = typeof input.title === 'undefined';
-        this.state.title = input.title;
-        this.state.widgetConfiguration = input.widgetConfiguration;
+        if (!this.configuredTitle) {
+            this.state.title = input.title;
+        }
+
         this.useContext = typeof input.useContext !== 'undefined' ? input.useContext : true;
+        if (!this.useContext) {
+            this.state.widgetConfiguration = input.widgetConfiguration;
+        }
     }
 
     public async onMount(): Promise<void> {
@@ -49,8 +55,11 @@ class Component {
         }
 
         if (this.state.widgetConfiguration) {
+            const settings: TableWidgetSettings = this.state.widgetConfiguration.settings;
+            this.state.showFilter = typeof settings.showFilter !== 'undefined' ? settings.showFilter : true;
+
             this.state.icon = this.state.widgetConfiguration.icon;
-            await this.prepareTitle();
+
             this.state.predefinedTableFilter = this.state.widgetConfiguration ?
                 this.state.widgetConfiguration.predefinedTableFilters : [];
 
@@ -74,6 +83,7 @@ class Component {
 
             await this.prepareHeader();
             await this.prepareTable();
+            await this.prepareTitle();
             this.prepareActions();
 
             if (this.state.widgetConfiguration.contextDependent) {
@@ -116,10 +126,11 @@ class Component {
 
             title = await TranslationService.translate(title);
 
+            let count = 0;
             if (this.state.table) {
-                title = `${title} (${this.state.table.getRowCount(true)})`;
+                count = this.state.table.getRowCount(true);
             }
-            this.state.title = title;
+            this.state.title = `${title} (${count})`;
         }
     }
 

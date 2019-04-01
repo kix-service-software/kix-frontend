@@ -1,7 +1,7 @@
 import { ILabelProvider } from "../ILabelProvider";
 import {
     Permission, KIXObjectType, PermissionProperty, ObjectIcon, User,
-    DateTimeUtil, PermissionType
+    DateTimeUtil, PermissionType, Role
 } from "../../model";
 import { TranslationService } from "../i18n/TranslationService";
 import { KIXObjectService } from "../kix";
@@ -19,6 +19,9 @@ export class PermissionLabelProvider implements ILabelProvider<Permission> {
         switch (property) {
             case PermissionProperty.TYPE_ID:
                 displayValue = 'Translatable#Type';
+                break;
+            case PermissionProperty.RoleID:
+                displayValue = 'Translatable#Role';
                 break;
             case PermissionProperty.COMMENT:
                 displayValue = 'Translatable#Comment';
@@ -89,6 +92,14 @@ export class PermissionLabelProvider implements ILabelProvider<Permission> {
                 if (types && !!types.length) {
                     const type = types.find((t) => t.ID === permission.TypeID);
                     displayValue = type ? type.Name : permission.TypeID;
+                }
+                break;
+            case PermissionProperty.RoleID:
+                const roles = await KIXObjectService.loadObjects<Role>(
+                    KIXObjectType.ROLE, [permission.RoleID]
+                );
+                if (roles && roles.length) {
+                    displayValue = roles[0].Name;
                 }
                 break;
             default:

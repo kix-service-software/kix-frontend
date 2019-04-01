@@ -1,12 +1,9 @@
-# Widget
+#### Widget
 
-## Description
-This is the base component for a widget.
-
-## Tag
+##### Tag
 `<translation-string pattern="pattern" placeholders=[]/>`
 
-## Attributes
+##### Attributes
 
 | Attribute      |  Required  |          Type           |                                                                                                                    Value(s) |
 | -------------- | :--------: | :---------------------: | --------------------------------------------------------------------------------------------------------------------------: |
@@ -24,4 +21,4 @@ This is the base component for a widget.
 | explorer       | not needed |         boolean         |                       `true` or `false` (only used from the explorer bar to influence the minimize behavior of the widget.) |
 | isDialog       | not needed |         boolean         |                                         `true` or `false` (only used from the main dialog to add special style for dialogs) |
 
-## Examples
+##### Examples

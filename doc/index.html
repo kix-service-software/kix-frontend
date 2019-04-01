@@ -1,0 +1,547 @@
+<!DOCTYPE HTML><html><head><title>KIX 18 - Frontend documentation</title><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="generator" content="https://github.com/raml2html/raml2html 7.2.2"><link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"><script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script><script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script><script type="text/javascript">
+      $(document).ready(function () {
+  // add chapters to sidebar
+  $($('.chapter > h2').get().reverse()).each(function (i, chapter) {
+    $('#sidebar ul.nav-stacked').prepend('<li>' + chapter.innerHTML + '</li>');
+  });
+
+  // add response codes to tabs
+  $('h2.response-title > a').each(function (i, response) {
+    $(this).parent().siblings('.response-nav').append('<a class="badge response-code" href="#' + $(this).parent().attr('id') + '">' + response.innerHTML + '</a>');
+  });
+
+  // add toggle of schema and examples
+  $('.schemas.toggleable, .examples.toggleable').each(function (i, item) {
+    $(this).hide();
+    $(this).prev('p').append('<a class="badge toggle" href="#">' + ($(this).is(':visible') ? 'Hide' : 'Show') + '</a>');
+  });
+  $('.badge.toggle').click(function (e) {
+    e.preventDefault();
+    var $toggleElement = $(this).parents('p').next('.schemas.toggleable, .examples.toggleable');
+    $toggleElement.toggle();
+    $(this).html($toggleElement.is(':visible') ? 'Hide' : 'Show');
+  });
+
+  // add toggle of resource descriptions
+  $('.resource-description > h4').each(function (i, item) {
+    $(this).parent().hide();
+    $(this).closest('.panel').prepend('<a class="description-toggle toggle" href="#" title="Show or hide description">')
+    $(this).closest('.panel').children('a.description-toggle').append($(this).detach());
+  });
+  $('a.description-toggle').click(function (e) {
+    e.preventDefault();
+    var $toggleElement = $(this).parents('.panel').children('.resource-description');
+    $toggleElement.toggle();
+  });
+
+  //$('.page-header pre code, .top-resource-description pre code, .modal-body pre code').each(function(i, block) {
+  //  hljs.highlightBlock(block);
+  //});
+
+  $('.schemas code').each(function () {
+    if ($(this).html().startsWith('{')) {
+      $(this).jsonBrowse(JSON.parse($(this).html()), { collapsed: false, withQuotes: true });
+    }
+  });
+
+  $('.examples code').each(function () {
+    if ($(this).html().startsWith('{')) {
+      $(this).jsonHighlight(JSON.parse($(this).html()));
+    }
+  });
+
+  $('[data-toggle]').click(function () {
+    var selector = $(this).data('target') + ' pre code';
+    $(selector).each(function (i, block) {
+      hljs.highlightBlock(block);
+    });
+  });
+
+  // open modal on hashes like #_action_get
+  $(window).bind('hashchange', function (e) {
+    var anchor_id = document.location.hash.substr(1); //strip #
+    var element = $('#' + anchor_id);
+
+    // do we have such element + is it a modal?  --> show it
+    if (element.length && element.hasClass('modal')) {
+      element.modal('show');
+    }
+  });
+
+  // execute hashchange on first page load
+  $(window).trigger('hashchange');
+
+  // remove url fragment on modal hide
+  $('.modal').on('hidden.bs.modal', function () {
+    try {
+      if (history && history.replaceState) {
+        history.replaceState({}, '', '#');
+      }
+    } catch (e) { }
+  });
+});
+      /**
+ * jQuery json-viewer
+ * @author: Kevin Olson <acidjazz@gmail.com>
+ */
+(function($){
+
+    /**
+     * Check if arg is either an array with at least 1 element, or a dict with at least 1 key
+     * @return boolean
+     */
+    function isCollapsable(arg) {
+      return arg instanceof Object && Object.keys(arg).length > 0;
+    }
+  
+    /**
+     * Check if a string represents a valid url
+     * @return boolean
+     */
+    function isUrl(string) {
+       var regexp = /^(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+       return regexp.test(string);
+    }
+  
+    /**
+     * Transform a json object into html representation
+     * @return string
+     */
+    function json2html(json, options) {
+      html = '';
+      if (typeof json === 'string') {
+        // Escape tags
+        json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        if (isUrl(json))
+          html += '<a href="' + json + '" class="json-string">' + json + '</a>';
+        else
+          html += '<span class="json-string">"' + json + '"</span>';
+      }
+      else if (typeof json === 'number') {
+        html += '<span class="json-number">' + json + '</span>';
+      }
+      else if (typeof json === 'boolean') {
+        html += '<span class="json-boolean">' + json + '</span>';
+      }
+      else if (json === null) {
+        html += '<span class="json-null">null</span>';
+      }
+      else if (json instanceof Array) {
+        if (json.length > 0) {
+          html += '[<ol class="json-array">';
+          for (var i = 0; i < json.length; ++i) {
+            html += '<li>'
+            // Add toggle button if item is collapsable
+            if (!options.noToggle && isCollapsable(json[i])) {
+                html += '<a href class="json-toggle"></a>';
+            }
+            html += json2html(json[i], options);
+            // Add comma if item is not last
+            if (i < json.length - 1) {
+              html += ',';
+            }
+            html += '</li>';
+          }
+          html += '</ol>]';
+        }
+        else {
+          html += '[]';
+        }
+      }
+      else if (typeof json === 'object') {
+        var key_count = Object.keys(json).length;
+        if (key_count > 0) {
+          html += '{<ul class="json-dict">';
+          for (var key in json) {
+            if (json.hasOwnProperty(key)) {
+              html += '<li>';
+              var keyRepr = options.withQuotes ?
+                '<span class="json-attribute">"' + key + '"</span>' : key;
+              // Add toggle button if item is collapsable
+              if (!options.noToggle && isCollapsable(json[key])) {
+                html += '<a href class="json-toggle">' + keyRepr + '</a>';
+              }
+              else {
+                html += keyRepr;
+              }
+              html += ': ' + json2html(json[key], options);
+              // Add comma if item is not last
+              if (--key_count > 0)
+                html += ',';
+              html += '</li>';
+            }
+          }
+          html += '</ul>}';
+        }
+        else {
+          html += '{}';
+        }
+      }
+      return html;
+    }
+  
+    $.fn.jsonHighlight = function(json) {
+
+        // jQuery chaining
+        return this.each(function() {
+
+            // Transform to HTML
+            var html = json2html(json, { withQuotes: true, noToggle: true })
+
+            // Insert HTML in target DOM element
+            $(this).html(html);    
+        });
+    }
+
+    /**
+     * jQuery plugin method
+     * @param json: a javascript object
+     * @param options: an optional options hash
+     */
+    $.fn.jsonBrowse = function(json, options) {
+      options = options || {};
+  
+      // jQuery chaining
+      return this.each(function() {
+  
+        // Transform to HTML
+        var html = json2html(json, options)
+        if (isCollapsable(json))
+          html = '<a href></a>' + html;
+  
+        // Insert HTML in target DOM element
+        $(this).html(html);
+  
+        // Bind click on toggle buttons
+        $(this).off('click');
+        $(this).on('click', 'a.json-toggle', function() {
+          var target = $(this).toggleClass('collapsed').siblings('ul.json-dict, ol.json-array');
+          target.toggle();
+          if (target.is(':visible')) {
+            target.siblings('.json-placeholder').remove();
+          }
+          else {
+            var count = target.children('li').length;
+            var placeholder = count + (count > 1 ? ' items' : ' item');
+            target.after('<a href class="json-placeholder">' + placeholder + '</a>');
+          }
+          return false;
+        });
+  
+        // Simulate click on toggle button when placeholder is clicked
+        $(this).on('click', 'a.json-placeholder', function() {
+          $(this).siblings('a.json-toggle').click();
+          return false;
+        });
+  
+        if (options.collapsed == true) {
+          // Trigger click to collapse all nodes
+          $(this).find('a.json-toggle').click();
+        }
+      });
+    };
+  })(jQuery);
+  
+    </script><style>
+      h1 {
+  font-weight: bold;
+}
+h5 {
+  font-size: 16px;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+code {
+  color: #000;
+  background-color: #f0f0f0;
+}
+pre {
+  margin-left: 8px;
+  -webkit-box-shadow: 0px 0px 5px 0px rgba(150,150,150,0.75);
+  -moz-box-shadow: 0px 0px 5px 0px rgba(150,150,150,0.75);
+  box-shadow: 0px 0px 5px 0px rgba(150,150,150,0.75);
+  background-color: #fcfcfc;
+  border: 0px solid transparent;
+  border-radius: 4px;
+  padding: 15px;
+}
+pre.base-uri {
+  margin-left: 0px;
+}
+pre > code ul.json-dict {
+  margin-bottom: 0px;
+}
+table,
+.table
+.param-table {
+  border-collapse: collapse;  
+  border-color: #ddd;
+  border: 0;
+  width: 100%;
+  margin-bottom: 20px;
+  border: 1px solid #ddd !important;
+}
+table thead th,
+.table thead th,
+.param-table thead th {
+  background-color: #fafafa;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-bottom: 2px solid #ddd;
+}
+table tbody td,
+.table tbody td,
+.param-table tbody td {
+  vertical-align: top;
+  padding: 8px;
+  border: 1px solid #ddd;
+}
+.container {
+  width: 75%;
+}
+.hljs {
+  background: transparent;
+}
+.parent {
+  color: #999;
+}
+.list-group-item > .badge {
+  float: none;
+  margin-right: 6px;
+}
+.resource {
+  box-shadow: 2px 2px 2px rgba(0,0,0,.1);
+}
+.response {
+  margin-left: 20px;
+  margin-bottom: 40px;
+}
+.response-nav {
+  margin-bottom: 40px;
+}
+.response-nav .badge {
+  color: #000;
+  background-color: #d0d0d0;
+  margin-right: 10px;
+}
+.page-header {
+  padding-bottom: 0px;
+  border-bottom: none;
+}
+.chapter {
+  margin: 40px 0 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+.panel-title > .methods {
+  float: right;
+}
+.badge {
+  border-radius: 4px;
+  text-transform: uppercase;
+  width: 70px;
+  font-weight: normal;
+  color: #f3f3f6;
+  line-height: normal;
+}
+.badge_get {
+  background-color: #63a8e2;
+}
+.badge_post {
+  background-color: #6cbd7d;
+}
+.badge_put {
+  background-color: #22bac4;
+}
+.badge_delete {
+  background-color: #d26460;
+}
+.badge_patch {
+  background-color: #ccc444;
+}
+.list-group,
+.panel-group {
+  margin-bottom: 0;
+}
+.panel-group .panel+.panel-white {
+  margin-top: 0;
+}
+.panel-group .panel-white {
+  border-bottom: 1px solid #F5F5F5;
+  border-radius: 0;
+}
+.panel-white:last-child {
+  border-bottom-color: white;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.panel-white .panel-heading {
+  background: white;
+}
+.tab-pane ul {
+  padding-left: 2em;
+}
+.tab-pane h1 {
+  font-size: 1.3em;
+}
+.tab-pane h2 {
+  font-size: 1.2em;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #ddd;
+}
+.tab-pane h3 {
+  font-size: 1.1em;
+}
+.tab-content {
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  padding: 10px;
+}
+#sidebar {
+  margin-top: 30px;
+  padding-right: 5px;
+  padding-left: 5px;
+  overflow: auto;
+  height: 90%;
+  border-left: 1px solid #ddd;
+}
+.top-resource-description {
+  border-bottom: 1px solid #ddd;
+}
+.resource-description {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #fcfcfc;
+  padding: 10px 15px;
+}
+.resource-description p:last-child {
+  margin: 0;
+}
+.top-resource-description > h5:first-child,
+.resource-description > h5:first-child {
+  margin-top: 5px;
+}
+.list-group .badge {
+  float: left;
+}
+.method-description {
+  margin-left: 85px;
+}
+.method-description p:last-child {
+  margin: 0;
+}
+.list-group-item {
+  cursor: pointer;
+}
+.list-group-item:hover {
+  background-color: #f5f5f5;
+}
+pre code {
+  overflow: auto;
+  word-wrap: normal;
+  white-space: pre;
+}
+.items {
+  background: #f5f5f5;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 9.5px;
+  margin: 0 0 10px;
+  font-size: 13px;
+  line-height: 1.42857143;
+}
+.examples {
+  margin-left: 0.5em;
+}
+.schemas {
+  margin-left: 0.5em;
+}
+.resource-modal li > ul {
+  margin-bottom: 1em;
+}
+.modal-lg {
+  width: 70%;
+}
+.toggle {
+  margin-left: 20px;
+}
+.nav > li > a.nav-resource {
+  padding-left: 40px;
+}
+.uri {
+  font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+  font-size: 95%;
+}
+      /* Syntax highlighting for JSON objects */
+.json-body {
+    margin: 10px 20px;
+  }
+  
+  ul.json-dict, ol.json-array {
+    list-style-type: none;
+    margin: 0 0 0 1px;
+    border-left: 1px dotted #ccc;
+    padding-left: 2em;
+    font: 13px/18px monospace;
+    -webkit-font-smoothing: antialiased;
+  }
+  .json-string {
+    color: #811f3f;
+  }
+  .json-number {
+    color: #267f99;
+  }
+  .json-boolean {
+    color: #0000ff;
+  }
+  .json-literal {
+    color: #0000ff;
+  }
+  .json-null {
+    color: #000;
+  }
+  .json-attribute {
+    color: #0451a5;
+  }
+  /* Toggle button */
+  a.json-toggle {
+    position: relative;
+    color: inherit;
+    text-decoration: none;
+  }
+  a.json-toggle:focus {
+    outline: none;
+  }
+  a.json-toggle:before {
+    content: "\25B6"; /* left arrow */
+    transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    color: #d9d9d9;
+    position: absolute;
+    display: inline-block;
+    width: 1em;
+    font-size: 10px;
+    left: -1.5em;
+  }
+  a.json-toggle.collapsed:before {
+    content: "\25B6"; /* left arrow */
+    transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    font-size: 10px;
+  }
+  
+  /* Collapsable placeholder links */
+  a.json-placeholder {
+    color: #aaa;
+    padding: 0 1em;
+    text-decoration: none;
+  }
+  a.json-placeholder:hover {
+    text-decoration: underline;
+  }
+  
+    </style></head><body data-spy="scroll" data-target="#sidebar"><div class="container"><div class="row"><div class="col-md-9" role="main"><div class="page-header"><h1>KIX 18 - Frontend</h1><h2></h2><div class="chapter"><h2 id="architecture"><a href="#architecture">Architecture</a></h2><h3 id="intruduction">Intruduction</h3><p>The KIX18 frontend contains a application framework, web server (REST-API) and web application in once. The frontend server (based on <a href="https://nodejs.org">NodeJS</a>) provides a web server instance (<a href="https://expressjs.com/de/">express</a>) for http communication. Over the http default route (<code>http://&lt;fqdn&gt;:&lt;port&gt;/</code>) the web server delivers the basic web application. The web application itself is a single page application (<a href="https://en.wikipedia.org/wiki/Single-page_application">SPA</a>). For data requests and responses it uses sockets (<a href="https://socket.io/">Socket.io</a>) to communicate with the frontend server.</p><h3 id="layers">Layers</h3><p>As described in the introduction the KIX18 frontend is a bundle of different services and workers.</p><h4 id="frontend-server-express">Frontend Server - express</h4><h4 id="frontend-server-backend-api-connection">Frontend Server - Backend API connection</h4><h5 id="caching">Caching</h5><h4 id="frontend-server-socket-communication-namespaces">Frontend Server - Socket communication / namespaces</h4><h5 id="caching">Caching</h5></div></div><div class="chapter"><h2 id="resources"><a href="#resources">API</a></h2><div class="panel panel-default resource"><div class="panel-heading"><h3 id="extensions" class="panel-title">/extensions</h3></div><div class="panel-body"><div class="top-resource-description"><p>Description of extension points.</p></div><div class="panel-group"></div></div></div><div class="panel panel-default resource"><div class="panel-heading"><h3 id="socket_namespaces" class="panel-title">/socket namespaces</h3></div><div class="panel-body"><div class="top-resource-description"><p>Description of socket namespaces.</p></div><div class="panel-group"></div></div></div><div class="panel panel-default resource"><div class="panel-heading"><h3 id="components" class="panel-title">Components</h3></div><div class="panel-body"><div class="top-resource-description"><p>Base components for KIX18 user interface.</p></div><div class="panel-group"><div class="panel panel-white resource-modal"><div id="panel_components_widgets" class="panel"><div class="resource-description"><h4 id="widget">Widget</h4><h5 id="tag">Tag</h5><p><code>&lt;translation-string pattern="pattern" placeholders=[]/&gt;</code></p><h5 id="attributes">Attributes</h5><table class="table"><thead><tr><th>Attribute</th><th style="text-align:center">Required</th><th style="text-align:center">Type</th><th style="text-align:right">Value(s)</th></tr></thead><tbody><tr><td>instanceId</td><td style="text-align:center">yes</td><td style="text-align:center">String</td><td style="text-align:right">the unique identifier of the widget instance (used to load configuration and to determine the widget type from the context)</td></tr><tr><td>content</td><td style="text-align:center">optional</td><td style="text-align:center">component template</td><td style="text-align:right">A template which should be rendered in the widget content.</td></tr><tr><td>icon</td><td style="text-align:center">optional</td><td style="text-align:center">String or KIXObjectType</td><td style="text-align:right">The icon which is shown in the widget title (<code>kix-icon-ticket</code> or <code>new ObjectIcon(&#39;Priority&#39;, 3)</code>)</td></tr><tr><td>title</td><td style="text-align:center">optional</td><td style="text-align:center">String</td><td style="text-align:right">The title which is shown in the widget header.</td></tr><tr><td>headerContent</td><td style="text-align:center">optional</td><td style="text-align:center">component template</td><td style="text-align:right">A template which should be rendered in the widget header next to the title.</td></tr><tr><td>headerFilter</td><td style="text-align:center">optional</td><td style="text-align:center">component template</td><td style="text-align:right">A template which should be rendered in the widget header at the place of the filter.</td></tr><tr><td>minimizable</td><td style="text-align:center">optional</td><td style="text-align:center">boolean</td><td style="text-align:right"><code>true</code> or <code>false</code></td></tr><tr><td>closable</td><td style="text-align:center">optional</td><td style="text-align:center">boolean</td><td style="text-align:right"><code>true</code> or <code>false</code> (mainly used in overlays)</td></tr><tr><td>actions</td><td style="text-align:center">optional</td><td style="text-align:center">IAction[]</td><td style="text-align:right">A collection of actions which should be used in the widget header.</td></tr><tr><td>contentActions</td><td style="text-align:center">optional</td><td style="text-align:center">IAction[]</td><td style="text-align:right">A collection of actions which should be used in the content part of the widget (e.g. lane actions, ticket details actions)</td></tr><tr><td>contextType</td><td style="text-align:center">optional</td><td style="text-align:center">ContextType</td><td style="text-align:right">the of the context where the widget is used (<code>ContextType.MAIN</code> or <code>ContextType.DIALOG</code>)</td></tr><tr><td>explorer</td><td style="text-align:center">not needed</td><td style="text-align:center">boolean</td><td style="text-align:right"><code>true</code> or <code>false</code> (only used from the explorer bar to influence the minimize behavior of the widget.)</td></tr><tr><td>isDialog</td><td style="text-align:center">not needed</td><td style="text-align:center">boolean</td><td style="text-align:right"><code>true</code> or <code>false</code> (only used from the main dialog to add special style for dialogs)</td></tr></tbody></table><h5 id="examples">Examples</h5></div></div><div class="panel-heading"><h4 class="panel-title"><span class="methods"></span></h4></div></div><div class="panel panel-white resource-modal"><div id="panel_components_widgets_table_widget" class="panel"><div class="resource-description"><h4 id="table-widget">Table-Widget</h4><h5 id="description">Description</h5><p>This is the base component for a widget with a table in the content.</p><h5 id="tag">Tag</h5><p><code>&lt;table-widget/&gt;</code></p><h5 id="attributes">Attributes</h5><table class="table"><thead><tr><th>Attribute</th><th style="text-align:center">Required</th><th style="text-align:center">Type</th><th>Value(s)</th></tr></thead><tbody><tr><td>instanceId</td><td style="text-align:center">yes</td><td style="text-align:center">String</td><td>the unique identifier of the widget instance (used to load configuration and to determine the widget type from the context)</td></tr><tr><td>content</td><td style="text-align:center">optional</td><td style="text-align:center">component template</td><td>A template which should be rendered in the widget content.</td></tr><tr><td>icon</td><td style="text-align:center">optional</td><td style="text-align:center">String or KIXObjectType</td><td>The icon which is shown in the widget title (<code>kix-icon-ticket</code> or <code>new ObjectIcon(&#39;Priority&#39;, 3)</code>)</td></tr><tr><td>title</td><td style="text-align:center">optional</td><td style="text-align:center">String</td><td>The title which is shown in the widget header.</td></tr><tr><td>headerContent</td><td style="text-align:center">optional</td><td style="text-align:center">component template</td><td>A template which should be rendered in the widget header next to the title.</td></tr><tr><td>headerFilter</td><td style="text-align:center">optional</td><td style="text-align:center">component template</td><td>A template which should be rendered in the widget header at the place of the filter.</td></tr><tr><td>minimizable</td><td style="text-align:center">optional</td><td style="text-align:center">boolean</td><td><code>true</code> or <code>false</code></td></tr><tr><td>closable</td><td style="text-align:center">optional</td><td style="text-align:center">boolean</td><td><code>true</code> or <code>false</code> (mainly used in overlays)</td></tr><tr><td>actions</td><td style="text-align:center">optional</td><td style="text-align:center">IAction[]</td><td>A collection of actions which should be used in the widget header.</td></tr><tr><td>contentActions</td><td style="text-align:center">optional</td><td style="text-align:center">IAction[]</td><td>A collection of actions which should be used in the content part of the widget (e.g. lane actions, ticket details actions)</td></tr><tr><td>contextType</td><td style="text-align:center">optional</td><td style="text-align:center">ContextType</td><td>the of the context where the widget is used (<code>ContextType.MAIN</code> or <code>ContextType.DIALOG</code>)</td></tr><tr><td>explorer</td><td style="text-align:center">not needed</td><td style="text-align:center">boolean</td><td><code>true</code> or <code>false</code> (only used from the explorer bar to influence the minimize behavior of the widget.)</td></tr><tr><td>isDialog</td><td style="text-align:center">not needed</td><td style="text-align:center">boolean</td><td><code>true</code> or <code>false</code> (only used from the main dialog to add special style for dialogs)</td></tr></tbody></table></div></div><div class="panel-heading"><h4 class="panel-title"><span class="methods"></span></h4></div></div><div class="panel panel-white resource-modal"><div id="panel_components_widgets_help_widget" class="panel"><div class="resource-description"><h4 id="help-widget">Help Widget</h4><h5 id="description">Description</h5><h5 id="tag">Tag</h5><p><code>&lt;help-widget/&gt;</code></p><h5 id="attributes">Attributes</h5><table class="table"><thead><tr><th>Attribute</th><th style="text-align:center">Required</th><th style="text-align:center">Type</th><th>Value(s)</th></tr></thead><tbody><tr><td></td></tr></tbody></table></div></div><div class="panel-heading"><h4 class="panel-title"><span class="methods"></span></h4></div></div><div class="panel panel-white resource-modal"><div id="panel_components_widgets_link_objects_widgets" class="panel"><div class="resource-description"><h4 id="link-objects-widget">Link Objects Widget</h4><h5 id="description">Description</h5><h5 id="tag">Tag</h5><p><code>&lt;link-objects-widget/&gt;</code></p><h5 id="attributes">Attributes</h5><table class="table"><thead><tr><th>Attribute</th><th style="text-align:center">Required</th><th style="text-align:center">Type</th><th>Value(s)</th></tr></thead><tbody><tr><td></td></tr></tbody></table></div></div><div class="panel-heading"><h4 class="panel-title"><span class="methods"></span></h4></div></div><div class="panel panel-white resource-modal"><div id="panel_components_widgets_notes_widgets" class="panel"><div class="resource-description"><h4 id="notes-widget">Notes Widget</h4><h5 id="description">Description</h5><h5 id="tag">Tag</h5><p><code>&lt;notes-widget/&gt;</code></p><h5 id="attributes">Attributes</h5><table class="table"><thead><tr><th>Attribute</th><th style="text-align:center">Required</th><th style="text-align:center">Type</th><th>Value(s)</th></tr></thead><tbody><tr><td></td></tr></tbody></table></div></div><div class="panel-heading"><h4 class="panel-title"><span class="methods"></span></h4></div></div><div class="panel panel-white resource-modal"><div id="panel_components_action" class="panel"><div class="resource-description"><h4 id="action">Action</h4><h5 id="description">Description</h5><h5 id="tag">Tag</h5><p><code>&lt;action/&gt;</code></p><h5 id="attributes">Attributes</h5><table class="table"><thead><tr><th>Attribute</th><th style="text-align:center">Required</th><th style="text-align:center">Type</th><th>Value(s)</th></tr></thead><tbody><tr><td></td></tr></tbody></table></div></div><div class="panel-heading"><h4 class="panel-title"><span class="methods"></span></h4></div></div><div class="panel panel-white resource-modal"><div id="panel_components_action_list" class="panel"><div class="resource-description"><h4 id="action-list">Action List</h4><h5 id="description">Description</h5><h5 id="tag">Tag</h5><p><code>&lt;action-list/&gt;</code></p><h5 id="attributes">Attributes</h5><table class="table"><thead><tr><th>Attribute</th><th style="text-align:center">Required</th><th style="text-align:center">Type</th><th>Value(s)</th></tr></thead><tbody><tr><td></td></tr></tbody></table></div></div><div class="panel-heading"><h4 class="panel-title"><span class="methods"></span></h4></div></div><div class="panel panel-white resource-modal"><div id="panel_components_editor" class="panel"><div class="resource-description"><h4 id="editor">Editor</h4><h5 id="description">Description</h5><h5 id="tag">Tag</h5><p><code>&lt;editor/&gt;</code></p><h5 id="attributes">Attributes</h5><table class="table"><thead><tr><th>Attribute</th><th style="text-align:center">Required</th><th style="text-align:center">Type</th><th>Value(s)</th></tr></thead><tbody><tr><td></td></tr></tbody></table></div></div><div class="panel-heading"><h4 class="panel-title"><span class="methods"></span></h4></div></div><div class="panel panel-white resource-modal"><div id="panel_components_file_entry" class="panel"><div class="resource-description"><h4 id="file-entry">File Entry</h4><h5 id="description">Description</h5><h5 id="tag">Tag</h5><p><code>&lt;file-entry/&gt;</code></p><h5 id="attributes">Attributes</h5><table class="table"><thead><tr><th>Attribute</th><th style="text-align:center">Required</th><th style="text-align:center">Type</th><th>Value(s)</th></tr></thead><tbody><tr><td></td></tr></tbody></table></div></div><div class="panel-heading"><h4 class="panel-title"><span class="methods"></span></h4></div></div><div class="panel panel-white resource-modal"><div id="panel_components_filter" class="panel"><div class="resource-description"><h4 id="filter">Filter</h4><h5 id="description">Description</h5><h5 id="tag">Tag</h5><p><code>&lt;filter/&gt;</code></p><h5 id="attributes">Attributes</h5><table class="table"><thead><tr><th>Attribute</th><th style="text-align:center">Required</th><th style="text-align:center">Type</th><th>Value(s)</th></tr></thead><tbody><tr><td></td></tr></tbody></table></div></div><div class="panel-heading"><h4 class="panel-title"><span class="methods"></span></h4></div></div><div class="panel panel-white resource-modal"><div id="panel_components_main_form" class="panel"><div class="resource-description"><h4 id="main-form">Main Form</h4><h5 id="description">Description</h5><h5 id="tag">Tag</h5><p><code>&lt;editor/&gt;</code></p><h5 id="attributes">Attributes</h5><table class="table"><thead><tr><th>Attribute</th><th style="text-align:center">Required</th><th style="text-align:center">Type</th><th>Value(s)</th></tr></thead><tbody><tr><td></td></tr></tbody></table></div></div><div class="panel-heading"><h4 class="panel-title"><span class="methods"></span></h4></div></div><div class="panel panel-white resource-modal"><div id="panel_components_label_list" class="panel"><div class="resource-description"><h4 id="label-list">Label List</h4><h5 id="description">Description</h5><h5 id="tag">Tag</h5><p><code>&lt;editor/&gt;</code></p><h5 id="attributes">Attributes</h5><table class="table"><thead><tr><th>Attribute</th><th style="text-align:center">Required</th><th style="text-align:center">Type</th><th>Value(s)</th></tr></thead><tbody><tr><td></td></tr></tbody></table></div></div><div class="panel-heading"><h4 class="panel-title"><span class="methods"></span></h4></div></div><div class="panel panel-white resource-modal"><div id="panel_components_label_value_group" class="panel"><div class="resource-description"><h4 id="label-value-group">Label Value Group</h4><h5 id="description">Description</h5><h5 id="tag">Tag</h5><p><code>&lt;editor/&gt;</code></p><h5 id="attributes">Attributes</h5><table class="table"><thead><tr><th>Attribute</th><th style="text-align:center">Required</th><th style="text-align:center">Type</th><th>Value(s)</th></tr></thead><tbody><tr><td></td></tr></tbody></table></div></div><div class="panel-heading"><h4 class="panel-title"><span class="methods"></span></h4></div></div><div class="panel panel-white resource-modal"><div id="panel_components_link_target" class="panel"><div class="resource-description"><h4 id="link-target">Link Target</h4><h5 id="description">Description</h5><h5 id="tag">Tag</h5><p><code>&lt;editor/&gt;</code></p><h5 id="attributes">Attributes</h5><table class="table"><thead><tr><th>Attribute</th><th style="text-align:center">Required</th><th style="text-align:center">Type</th><th>Value(s)</th></tr></thead><tbody><tr><td></td></tr></tbody></table></div></div><div class="panel-heading"><h4 class="panel-title"><span class="methods"></span></h4></div></div><div class="panel panel-white resource-modal"><div id="panel_components_loading_shield" class="panel"><div class="resource-description"><h4 id="loading-shield">Loading Shield</h4><h5 id="description">Description</h5><h5 id="tag">Tag</h5><p><code>&lt;editor/&gt;</code></p><h5 id="attributes">Attributes</h5><table class="table"><thead><tr><th>Attribute</th><th style="text-align:center">Required</th><th style="text-align:center">Type</th><th>Value(s)</th></tr></thead><tbody><tr><td></td></tr></tbody></table></div></div><div class="panel-heading"><h4 class="panel-title"><span class="methods"></span></h4></div></div><div class="panel panel-white resource-modal"><div id="panel_components_loading_spinner" class="panel"><div class="resource-description"><h4 id="loading-spinner">Loading Spinner</h4><h5 id="description">Description</h5><h5 id="tag">Tag</h5><p><code>&lt;editor/&gt;</code></p><h5 id="attributes">Attributes</h5><table class="table"><thead><tr><th>Attribute</th><th style="text-align:center">Required</th><th style="text-align:center">Type</th><th>Value(s)</th></tr></thead><tbody><tr><td></td></tr></tbody></table></div></div><div class="panel-heading"><h4 class="panel-title"><span class="methods"></span></h4></div></div><div class="panel panel-white resource-modal"><div id="panel_components_object_details_page" class="panel"><div class="resource-description"><h4 id="object-details-page">Object Details Page</h4><h5 id="description">Description</h5><h5 id="tag">Tag</h5><p><code>&lt;editor/&gt;</code></p><h5 id="attributes">Attributes</h5><table class="table"><thead><tr><th>Attribute</th><th style="text-align:center">Required</th><th style="text-align:center">Type</th><th>Value(s)</th></tr></thead><tbody><tr><td></td></tr></tbody></table></div></div><div class="panel-heading"><h4 class="panel-title"><span class="methods"></span></h4></div></div><div class="panel panel-white resource-modal"><div id="panel_components_object_property_label" class="panel"><div class="resource-description"><h4 id="object-property-label">Object Property Label</h4><h5 id="description">Description</h5><h5 id="tag">Tag</h5><p><code>&lt;editor/&gt;</code></p><h5 id="attributes">Attributes</h5><table class="table"><thead><tr><th>Attribute</th><th style="text-align:center">Required</th><th style="text-align:center">Type</th><th>Value(s)</th></tr></thead><tbody><tr><td></td></tr></tbody></table></div></div><div class="panel-heading"><h4 class="panel-title"><span class="methods"></span></h4></div></div><div class="panel panel-white resource-modal"><div id="panel_components_router_outlet" class="panel"><div class="resource-description"><h4 id="router-outlet">Router Outlet</h4><h5 id="description">Description</h5><h5 id="tag">Tag</h5><p><code>&lt;editor/&gt;</code></p><h5 id="attributes">Attributes</h5><table class="table"><thead><tr><th>Attribute</th><th style="text-align:center">Required</th><th style="text-align:center">Type</th><th>Value(s)</th></tr></thead><tbody><tr><td></td></tr></tbody></table></div></div><div class="panel-heading"><h4 class="panel-title"><span class="methods"></span></h4></div></div><div class="panel panel-white resource-modal"><div id="panel_components_standard_table" class="panel"><div class="resource-description"><h4 id="standard-table">Standard Table</h4><h5 id="description">Description</h5><h5 id="tag">Tag</h5><p><code>&lt;editor/&gt;</code></p><h5 id="attributes">Attributes</h5><table class="table"><thead><tr><th>Attribute</th><th style="text-align:center">Required</th><th style="text-align:center">Type</th><th>Value(s)</th></tr></thead><tbody><tr><td></td></tr></tbody></table></div></div><div class="panel-heading"><h4 class="panel-title"><span class="methods"></span></h4></div></div><div class="panel panel-white resource-modal"><div id="panel_components_tab_container" class="panel"><div class="resource-description"><h4 id="tab-container">Tab Container</h4><h5 id="description">Description</h5><h5 id="tag">Tag</h5><p><code>&lt;editor/&gt;</code></p><h5 id="attributes">Attributes</h5><table class="table"><thead><tr><th>Attribute</th><th style="text-align:center">Required</th><th style="text-align:center">Type</th><th>Value(s)</th></tr></thead><tbody><tr><td></td></tr></tbody></table></div></div><div class="panel-heading"><h4 class="panel-title"><span class="methods"></span></h4></div></div><div class="panel panel-white resource-modal"><div id="panel_components_table_tree" class="panel"><div class="resource-description"><h4 id="table-tree">Table Tree</h4><h5 id="description">Description</h5><h5 id="tag">Tag</h5><p><code>&lt;editor/&gt;</code></p><h5 id="attributes">Attributes</h5><table class="table"><thead><tr><th>Attribute</th><th style="text-align:center">Required</th><th style="text-align:center">Type</th><th>Value(s)</th></tr></thead><tbody><tr><td></td></tr></tbody></table></div></div><div class="panel-heading"><h4 class="panel-title"><span class="methods"></span></h4></div></div><div class="panel panel-white resource-modal"><div id="panel_components_timer" class="panel"><div class="resource-description"><h4 id="timer">Timer</h4><h5 id="description">Description</h5><p>This component can be used to show a timer which decrease the given time</p><h5 id="tag">Tag</h5><p><code>&lt;timer time=[time in millis]/&gt;</code></p><h5 id="attributes">Attributes</h5><table class="table"><thead><tr><th>Attribute</th><th style="text-align:center">Required</th><th style="text-align:center">Type</th><th>Value(s)</th></tr></thead><tbody><tr><td>time</td><td style="text-align:center">true</td><td style="text-align:center">number</td><td>Milliseconds</td></tr></tbody></table></div></div><div class="panel-heading"><h4 class="panel-title"><span class="methods"></span></h4></div></div><div class="panel panel-white resource-modal"><div id="panel_components_translation_string" class="panel"><div class="resource-description"><h4 id="translation-string">Translation String</h4><h5 id="description">Description</h5><p>This component can be used to translate given patterns in marko templates.</p><h5 id="tag">Tag</h5><p><code>&lt;translation-string pattern="pattern" placeholders=[]/&gt;</code></p><h5 id="attributes">Attributes</h5><table class="table"><thead><tr><th>Attribute</th><th style="text-align:center">Required</th><th style="text-align:center">Type</th><th style="text-align:right">Value(s)</th></tr></thead><tbody><tr><td>pattern</td><td style="text-align:center">yes</td><td style="text-align:center">String</td><td style="text-align:right">the base pattern for translation</td></tr><tr><td>placeholders</td><td style="text-align:center">optional</td><td style="text-align:center">String[]</td><td style="text-align:right">variables for pattern placeholders</td></tr></tbody></table><h5 id="examples">Examples</h5><p><code>&lt;translation-string pattern="This is a text to translate"/&gt;</code></p><p><code>&lt;translation-string pattern="This is a {0} to {1}" placeholders=[&#39;text&#39;, &#39;translate&#39;]/&gt;</code></p></div></div><div class="panel-heading"><h4 class="panel-title"><span class="methods"></span></h4></div></div><div class="panel panel-white resource-modal"><div id="panel_components_tree" class="panel"><div class="resource-description"><h4 id="tree">Tree</h4><h5 id="description">Description</h5><h5 id="tag">Tag</h5><p><code>&lt;editor/&gt;</code></p><h5 id="attributes">Attributes</h5><table class="table"><thead><tr><th>Attribute</th><th style="text-align:center">Required</th><th style="text-align:center">Type</th><th>Value(s)</th></tr></thead><tbody><tr><td></td></tr></tbody></table></div></div><div class="panel-heading"><h4 class="panel-title"><span class="methods"></span></h4></div></div><div class="panel panel-white resource-modal"><div id="panel_components_widget_container" class="panel"><div class="resource-description"><h4 id="widget-container">Widget Container</h4><h5 id="description">Description</h5><h5 id="tag">Tag</h5><p><code>&lt;editor/&gt;</code></p><h5 id="attributes">Attributes</h5><table class="table"><thead><tr><th>Attribute</th><th style="text-align:center">Required</th><th style="text-align:center">Type</th><th>Value(s)</th></tr></thead><tbody><tr><td></td></tr></tbody></table></div></div><div class="panel-heading"><h4 class="panel-title"><span class="methods"></span></h4></div></div></div></div></div></div></div><div class="col-md-3"><div id="sidebar" class="hidden-print affix" role="complementary"><ul class="nav nav-pills nav-stacked"><li><a class="nav-resource" href="#extensions">/extensions</a></li><li><a class="nav-resource" href="#socket_namespaces">/socket namespaces</a></li><li><a class="nav-resource" href="#components">Components</a></li></ul></div></div></div></div></body></html>

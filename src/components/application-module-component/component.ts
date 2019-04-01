@@ -1,6 +1,6 @@
 import {
     AbstractMarkoComponent, ActionFactory, ServiceRegistry, ContextService,
-    LabelService, FactoryService, TableFactoryService
+    LabelService, FactoryService, TableFactoryService, TableCSSHandlerRegistry
 } from '../../core/browser';
 import { ComponentState } from './ComponentState';
 import { SearchService } from '../../core/browser/search';
@@ -43,6 +43,7 @@ import { SystemAddressService } from '../../core/browser/system-address';
 import { DialogService } from '../../core/browser/components/dialog';
 import { AgentService } from '../../core/browser/application/AgentService';
 import { PermissionLabelProvider } from '../../core/browser/permission';
+import { PermissionsTableFactory, PermissionTableCSSHandler } from '../../core/browser/application';
 
 class Component extends AbstractMarkoComponent {
 
@@ -101,6 +102,12 @@ class Component extends AbstractMarkoComponent {
         ActionFactory.getInstance().registerAction('i18n-admin-translation-edit', TranslationEditAction);
         ActionFactory.getInstance().registerAction('i18n-admin-translation-import', TranslationImportAction);
         ActionFactory.getInstance().registerAction('i18n-admin-translation-csv-export', TranslationCSVExportAction);
+
+        TableFactoryService.getInstance().registerFactory(new PermissionsTableFactory());
+        TableCSSHandlerRegistry.getInstance().registerCSSHandler(
+            KIXObjectType.PERMISSION, new PermissionTableCSSHandler()
+        );
+
 
         ActionFactory.getInstance().registerAction('csv-export-action', CSVExportAction);
         ActionFactory.getInstance().registerAction('bulk-action', BulkAction);

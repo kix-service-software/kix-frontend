@@ -38,7 +38,7 @@ class Extension implements IKIXModuleExtension {
         ['help-widget', 'widgets/help-widget'],
         ['personal-settings-dialog', '_base-components/dialog/personal-settings-dialog'],
         ['bulk-dialog', '_base-components/dialog/bulk-dialog'],
-        ['table-widget', '_base-components/table-widget'],
+        ['table-widget', 'widgets/table-widget'],
         // tslint:disable-next-line:max-line-length
         ['label-list-cell-content', '_base-components/standard-table-NEW/table-body/table-row/table-cell-NEW/label-list-cell-content'],
         ['multiline-cell', '_base-components/standard-table-NEW/table-body/table-row/table-cell-NEW/multiline-cell'],
