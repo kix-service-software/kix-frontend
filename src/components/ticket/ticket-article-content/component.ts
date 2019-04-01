@@ -16,6 +16,9 @@ class Component {
 
     public onInput(input: any): void {
         this.article = input.article;
+    }
+
+    public onMount(): void {
         this.prepareContent();
     }
 

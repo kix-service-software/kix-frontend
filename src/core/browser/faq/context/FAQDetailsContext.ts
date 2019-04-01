@@ -112,10 +112,6 @@ export class FAQDetailsContext extends Context<FAQDetailsContextConfiguration> {
     }
 
     private async loadFAQArticle(): Promise<FAQArticle> {
-        EventService.getInstance().publish(
-            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load FAQ Article ...' }
-        );
-
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null, null, null,
             ['Attachments', 'Votes', 'Links', 'History'],
@@ -123,12 +119,21 @@ export class FAQDetailsContext extends Context<FAQDetailsContextConfiguration> {
         );
 
         const faqArticleId = Number(this.objectId);
+
+        const timeout = window.setTimeout(() => {
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+                loading: true, hint: `Translatable#Load FAQ Article ...`
+            });
+        }, 500);
+
         const faqArticles = await KIXObjectService.loadObjects<FAQArticle>(
             KIXObjectType.FAQ_ARTICLE, [faqArticleId], loadingOptions, null, true
         ).catch((error) => {
             console.error(error);
             return null;
         });
+
+        window.clearTimeout(timeout);
 
         let faqArticle: FAQArticle;
         if (faqArticles && faqArticles.length) {

@@ -1,6 +1,6 @@
 import {
     KIXObjectEvent, LoadObjectsRequest, LoadObjectsResponse, CreateObjectRequest,
-    CreateObjectResponse, KIXObjectLoadingOptions, DeleteObjectRequest, DeleteObjectResponse,
+    CreateObjectResponse, DeleteObjectRequest, DeleteObjectResponse,
     UpdateObjectRequest, UpdateObjectResponse
 } from '../core/model';
 import { SocketNameSpace } from './SocketNameSpace';
@@ -55,7 +55,9 @@ export class KIXObjectNamespace extends SocketNameSpace {
         } else {
             const errorMessage = 'No API service registered for object type ' + data.objectType;
             LoggingService.getInstance().error(errorMessage);
-            response = new SocketResponse(KIXObjectEvent.LOAD_OBJECTS_ERROR, errorMessage);
+            response = new SocketResponse(
+                KIXObjectEvent.LOAD_OBJECTS_ERROR, new SocketErrorResponse(data.requestId, errorMessage)
+            );
         }
 
         return response;
@@ -82,7 +84,9 @@ export class KIXObjectNamespace extends SocketNameSpace {
         } else {
             const errorMessage = 'No API service registered for object type ' + data.objectType;
             LoggingService.getInstance().error(errorMessage);
-            response = new SocketResponse(KIXObjectEvent.CREATE_OBJECT_ERROR, errorMessage);
+            response = new SocketResponse(
+                KIXObjectEvent.CREATE_OBJECT_ERROR, new SocketErrorResponse(data.requestId, errorMessage)
+            );
         }
 
         return response;
@@ -109,7 +113,9 @@ export class KIXObjectNamespace extends SocketNameSpace {
         } else {
             const errorMessage = 'No API service registered for object type ' + data.objectType;
             LoggingService.getInstance().error(errorMessage);
-            response = new SocketResponse(KIXObjectEvent.UPDATE_OBJECT_ERROR, errorMessage);
+            response = new SocketResponse(
+                KIXObjectEvent.UPDATE_OBJECT_ERROR, new SocketErrorResponse(data.requestId, errorMessage)
+            );
         }
 
         return response;
@@ -135,7 +141,9 @@ export class KIXObjectNamespace extends SocketNameSpace {
         } else {
             const errorMessage = 'No API service registered for object type ' + data.objectType;
             LoggingService.getInstance().error(errorMessage);
-            response = new SocketResponse(KIXObjectEvent.DELETE_OBJECT_ERROR, errorMessage);
+            response = new SocketResponse(
+                KIXObjectEvent.DELETE_OBJECT_ERROR, new SocketErrorResponse(data.requestId, errorMessage)
+            );
         }
 
         return response;

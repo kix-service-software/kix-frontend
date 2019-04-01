@@ -1,17 +1,13 @@
 import { MenuEntry } from "..";
+import { ISocketResponse } from "../../../socket";
 
-export class MainMenuEntriesResponse {
+export class MainMenuEntriesResponse implements ISocketResponse {
 
-    public primaryMenuEntries: MenuEntry[];
-
-    public secondaryMenuEntries: MenuEntry[];
-
-    public showText: boolean;
-
-    public constructor(primaryMenuEntries: MenuEntry[], secondaryMenuEntries: MenuEntry[], showText: boolean) {
-        this.primaryMenuEntries = primaryMenuEntries;
-        this.secondaryMenuEntries = secondaryMenuEntries;
-        this.showText = showText;
-    }
+    public constructor(
+        public requestId: string,
+        public primaryMenuEntries: MenuEntry[],
+        public secondaryMenuEntries: MenuEntry[],
+        public showText: boolean
+    ) { }
 
 }

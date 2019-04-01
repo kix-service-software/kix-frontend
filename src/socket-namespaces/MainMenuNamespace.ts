@@ -54,7 +54,9 @@ export class MainMenuNamespace extends SocketNameSpace {
         const secondaryEntries =
             this.getMenuEntries(extensions, configuration.secondaryMenuEntryConfigurations);
 
-        const response = new MainMenuEntriesResponse(primaryEntries, secondaryEntries, configuration.showText);
+        const response = new MainMenuEntriesResponse(
+            data.requestId, primaryEntries, secondaryEntries, configuration.showText
+        );
         return new SocketResponse(MainMenuEvent.MENU_ENTRIES_LOADED, response);
     }
 

@@ -3,10 +3,12 @@ import {
     NotesEvent,
     LoadNotesResponse,
     LoadNotesRequest,
-    SaveNotesRequest
+    SaveNotesRequest,
+    ISocketResponse
 } from "../../model";
 import { ClientStorageService } from "../ClientStorageService";
 import { IdService } from "../IdService";
+import { SocketErrorResponse } from "../../common";
 
 export class NotesSocketClient extends SocketClient {
 
@@ -37,8 +39,8 @@ export class NotesSocketClient extends SocketClient {
             const requestId = IdService.generateDateBasedId('notes-');
 
             this.socket.on(NotesEvent.NOTES_LOADED, (result: LoadNotesResponse) => {
-                window.clearTimeout(timeout);
                 if (result.requestId === requestId) {
+                    window.clearTimeout(timeout);
                     resolve(result.notes);
                 }
             });
@@ -51,22 +53,30 @@ export class NotesSocketClient extends SocketClient {
 
     public saveNotes(contextId: string, notes: string): Promise<void> {
         return new Promise((resolve, reject) => {
+            const requestId = IdService.generateDateBasedId();
             const token = ClientStorageService.getToken();
-            const request = new SaveNotesRequest(token, contextId, notes);
+
+            const request = new SaveNotesRequest(
+                token, requestId, ClientStorageService.getClientRequestId(), contextId, notes
+            );
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + NotesEvent.SAVE_NOTES);
             }, 30000);
 
-            this.socket.on(NotesEvent.SAVE_NOTES_FINISHED, () => {
-                window.clearTimeout(timeout);
-                resolve();
+            this.socket.on(NotesEvent.SAVE_NOTES_FINISHED, (result: ISocketResponse) => {
+                if (result.requestId === requestId) {
+                    window.clearTimeout(timeout);
+                    resolve();
+                }
             });
 
-            this.socket.on(NotesEvent.SAVE_NOTES_ERROR, (error) => {
-                window.clearTimeout(timeout);
-                console.error(error);
-                reject(error);
+            this.socket.on(NotesEvent.SAVE_NOTES_ERROR, (error: SocketErrorResponse) => {
+                if (error.requestId === requestId) {
+                    window.clearTimeout(timeout);
+                    console.error(error.error);
+                    reject(error.error);
+                }
             });
 
             this.socket.emit(NotesEvent.SAVE_NOTES, request);

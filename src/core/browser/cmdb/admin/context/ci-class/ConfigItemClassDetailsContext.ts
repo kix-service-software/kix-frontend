@@ -115,15 +115,17 @@ export class ConfigItemClassDetailsContext extends Context<ConfigItemClassDetail
     }
 
     private async loadCIClass(changedProperties: string[] = [], cache: boolean = true): Promise<ConfigItemClass> {
-        EventService.getInstance().publish(
-            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load Config Item Class ...' }
-        );
-
         const ciClassId = Number(this.objectId);
 
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null, null, null, ['CurrentDefinition', 'Definitions']
         );
+
+        const timeout = window.setTimeout(() => {
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+                loading: true, hint: `Translatable#Load Config Item Class ...`
+            });
+        }, 500);
 
         const ciClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
             KIXObjectType.CONFIG_ITEM_CLASS, [ciClassId], loadingOptions, null, cache
@@ -131,6 +133,8 @@ export class ConfigItemClassDetailsContext extends Context<ConfigItemClassDetail
             console.error(error);
             return null;
         });
+
+        window.clearTimeout(timeout);
 
         let ciClass: ConfigItemClass;
         if (ciClasses && ciClasses.length) {

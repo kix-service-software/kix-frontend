@@ -119,12 +119,20 @@ export class TicketStateDetailsContext extends Context<TicketStateDetailsContext
 
         const ticketStateId = Number(this.objectId);
 
+        const timeout = window.setTimeout(() => {
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+                loading: true, hint: `Translatable#Load Ticket State ...`
+            });
+        }, 500);
+
         const ticketStates = await KIXObjectService.loadObjects<TicketState>(
             KIXObjectType.TICKET_STATE, [ticketStateId], null, null, cache
         ).catch((error) => {
             console.error(error);
             return null;
         });
+
+        window.clearInterval(timeout);
 
         let ticketState: TicketState;
         if (ticketStates && ticketStates.length) {

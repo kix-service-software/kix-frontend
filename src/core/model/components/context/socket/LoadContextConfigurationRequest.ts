@@ -1,13 +1,13 @@
-export class LoadContextConfigurationRequest {
+import { ISocketRequest } from "../../../socket";
 
-    public token: string;
+export class LoadContextConfigurationRequest implements ISocketRequest {
 
-    public contextId: string;
 
-    public constructor(token: string, contextId: string) {
-
-        this.token = token;
-        this.contextId = contextId;
-    }
+    public constructor(
+        public token: string,
+        public requestId: string,
+        public clientRequestId: string,
+        public contextId: string
+    ) { }
 
 }

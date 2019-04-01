@@ -112,11 +112,13 @@ export class TicketTypeDetailsContext extends Context<TicketTypeDetailsContextCo
     }
 
     private async loadTicketType(changedProperties: string[] = [], cache: boolean = true): Promise<TicketType> {
-        EventService.getInstance().publish(
-            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load Ticket Type ...' }
-        );
-
         const ticketTypeId = Number(this.objectId);
+
+        const timeout = window.setTimeout(() => {
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+                loading: true, hint: `Translatable#Load Ticket Type ...`
+            });
+        }, 500);
 
         const ticketTypes = await KIXObjectService.loadObjects<TicketType>(
             KIXObjectType.TICKET_TYPE, [ticketTypeId], null, null, cache
@@ -124,6 +126,8 @@ export class TicketTypeDetailsContext extends Context<TicketTypeDetailsContextCo
             console.error(error);
             return null;
         });
+
+        window.clearTimeout(timeout);
 
         let ticketType: TicketType;
         if (ticketTypes && ticketTypes.length) {

@@ -10,19 +10,19 @@
                                 "with-explorer": state.hasExplorer
                             }
                 style=("grid-template-columns: " + state.gridColumns)>
-                <main-menu no-update-body/>
-                <div.site-navigation no-update-body>
+                <main-menu no-update/>
+                <div.site-navigation no-update>
                     <back-to/>
                     <breadcrumb/>
                 </div>
-                <explorerbar contextType="MAIN" no-update-body/>
-                <div.content no-update-body>
+                <explorerbar contextType="MAIN" no-update/>
+                <div.content no-update>
                     <router-outlet id="base-router"/>
                 </div>
                 <if(state.showSidebar)>
-                    <sidebar contextType="MAIN" no-update-body/>
+                    <sidebar contextType="MAIN" no-update/>
                 </if>
-                <div.site-menu-wrapper no-update-body>
+                <div.site-menu-wrapper no-update>
                     <sidebar-menu contextType="MAIN"/>
                 </div>
             </div>

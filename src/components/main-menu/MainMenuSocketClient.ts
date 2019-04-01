@@ -2,7 +2,7 @@ import {
     SocketEvent, MainMenuEvent, MainMenuEntriesResponse, MainMenuEntriesRequest, MenuEntry
 } from '../../core/model';
 import { SocketClient } from '../../core/browser/SocketClient';
-import { ClientStorageService } from '../../core/browser';
+import { ClientStorageService, IdService } from '../../core/browser';
 
 export class MainMenuSocketClient extends SocketClient {
 
@@ -45,12 +45,20 @@ export class MainMenuSocketClient extends SocketClient {
                 reject('Timeout: ' + MainMenuEvent.LOAD_MENU_ENTRIES);
             }, 30000);
 
+            const token = ClientStorageService.getToken();
+            const requestId = IdService.generateDateBasedId();
+
             this.socket.emit(
-                MainMenuEvent.LOAD_MENU_ENTRIES, new MainMenuEntriesRequest(ClientStorageService.getToken())
+                MainMenuEvent.LOAD_MENU_ENTRIES, new MainMenuEntriesRequest(
+                    token, requestId, ClientStorageService.getToken()
+                )
             );
 
             this.socket.on(MainMenuEvent.MENU_ENTRIES_LOADED, (result: MainMenuEntriesResponse) => {
-                resolve([result.primaryMenuEntries, result.secondaryMenuEntries, result.showText]);
+                if (requestId === result.requestId) {
+                    window.clearTimeout(timeout);
+                    resolve([result.primaryMenuEntries, result.secondaryMenuEntries, result.showText]);
+                }
             });
         });
 

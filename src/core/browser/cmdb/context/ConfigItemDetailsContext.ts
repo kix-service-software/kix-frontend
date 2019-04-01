@@ -110,10 +110,6 @@ export class ConfigItemDetailsContext extends Context<ConfigItemDetailsContextCo
     }
 
     private async loadConfigItem(): Promise<ConfigItem> {
-        EventService.getInstance().publish(
-            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load Config Item ...' }
-        );
-
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null, null, null,
             [
@@ -125,6 +121,12 @@ export class ConfigItemDetailsContext extends Context<ConfigItemDetailsContextCo
 
         const itemId = Number(this.objectId);
 
+        const timeout = window.setTimeout(() => {
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+                loading: true, hint: `Translatable#Load Config Item ...`
+            });
+        }, 500);
+
         const configItems = await KIXObjectService.loadObjects<ConfigItem>(
             KIXObjectType.CONFIG_ITEM, [itemId], loadingOptions, null, true
         ).catch((error) => {
@@ -132,7 +134,9 @@ export class ConfigItemDetailsContext extends Context<ConfigItemDetailsContextCo
             return null;
         });
 
-        let configItem;
+        window.clearTimeout(timeout);
+
+        let configItem: ConfigItem;
         if (configItems && configItems.length) {
             configItem = configItems[0];
         }
