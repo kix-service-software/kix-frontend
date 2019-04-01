@@ -6,9 +6,12 @@ import {
     LoadContextConfigurationResponse,
     SaveContextConfigurationRequest,
     SaveWidgetRequest,
-    WidgetConfiguration
+    WidgetConfiguration,
+    ISocketResponse
 } from "../../model";
 import { ClientStorageService } from "../ClientStorageService";
+import { IdService } from "../IdService";
+import { SocketErrorResponse } from "../../common";
 
 export class ContextSocketClient extends SocketClient {
 
@@ -30,6 +33,7 @@ export class ContextSocketClient extends SocketClient {
     public loadContextConfiguration<T extends ContextConfiguration>(contextId: string): Promise<T> {
         return new Promise<T>((resolve, reject) => {
 
+            const requestId = IdService.generateDateBasedId();
             const token = ClientStorageService.getToken();
 
             const timeout = window.setTimeout(() => {
@@ -37,18 +41,24 @@ export class ContextSocketClient extends SocketClient {
             }, 30000);
 
             this.socket.on(ContextEvent.CONTEXT_CONFIGURATION_LOADED, (result: LoadContextConfigurationResponse<T>) => {
-                window.clearTimeout(timeout);
-                resolve(result.contextConfiguration);
+                if (result.requestId === requestId) {
+                    window.clearTimeout(timeout);
+                    resolve(result.contextConfiguration);
+                }
             });
 
             this.socket.emit(
-                ContextEvent.LOAD_CONTEXT_CONFIGURATION, new LoadContextConfigurationRequest(token, contextId)
+                ContextEvent.LOAD_CONTEXT_CONFIGURATION, new LoadContextConfigurationRequest(
+                    token, requestId, ClientStorageService.getClientRequestId(), contextId
+                )
             );
 
-            this.socket.on(ContextEvent.CONTEXT_CONFIGURATION_LOAD_ERROR, (error: string) => {
-                window.clearTimeout(timeout);
-                console.error(error);
-                reject(error);
+            this.socket.on(ContextEvent.CONTEXT_CONFIGURATION_LOAD_ERROR, (error: SocketErrorResponse) => {
+                if (error.requestId === requestId) {
+                    window.clearTimeout(timeout);
+                    console.error(error.error);
+                    reject(error.error);
+                }
             });
         });
     }
@@ -59,19 +69,24 @@ export class ContextSocketClient extends SocketClient {
 
         return new Promise<void>((resolve, reject) => {
 
+            const requestId = IdService.generateDateBasedId();
             const token = ClientStorageService.getToken();
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + ContextEvent.SAVE_WIDGET_CONFIGURATION);
             }, 30000);
 
-            this.socket.on(ContextEvent.WIDGET_CONFIGURATION_SAVED, () => {
-                window.clearTimeout(timeout);
-                resolve();
+            this.socket.on(ContextEvent.WIDGET_CONFIGURATION_SAVED, (result: ISocketResponse) => {
+                if (result.requestId === requestId) {
+                    window.clearTimeout(timeout);
+                    resolve();
+                }
             });
 
             const request = new SaveWidgetRequest(
                 token,
+                requestId,
+                ClientStorageService.getClientRequestId(),
                 contextId,
                 instanceId,
                 widgetConfiguration
@@ -86,6 +101,7 @@ export class ContextSocketClient extends SocketClient {
 
         return new Promise<void>((resolve, reject) => {
 
+            const requestId = IdService.generateDateBasedId();
             const token = ClientStorageService.getToken();
 
             const timeout = window.setTimeout(() => {
@@ -99,6 +115,8 @@ export class ContextSocketClient extends SocketClient {
 
             const request = new SaveContextConfigurationRequest(
                 token,
+                requestId,
+                ClientStorageService.getClientRequestId(),
                 contextId,
                 dashboardConfiguration
             );

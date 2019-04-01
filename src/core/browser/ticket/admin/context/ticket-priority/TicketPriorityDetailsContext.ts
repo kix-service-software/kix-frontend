@@ -113,11 +113,13 @@ export class TicketPriorityDetailsContext extends Context<TicketPriorityDetailsC
     }
 
     private async loadTicketPriority(changedProperties: string[] = [], cache: boolean = true): Promise<TicketPriority> {
-        EventService.getInstance().publish(
-            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load Ticket Priority ...' }
-        );
-
         const ticketPriorityId = Number(this.objectId);
+
+        const timeout = window.setTimeout(() => {
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+                loading: true, hint: `Translatable#Load Ticket Priority ...`
+            });
+        }, 500);
 
         const ticketPriorities = await KIXObjectService.loadObjects<TicketPriority>(
             KIXObjectType.TICKET_PRIORITY, [ticketPriorityId], null, null, cache
@@ -125,6 +127,8 @@ export class TicketPriorityDetailsContext extends Context<TicketPriorityDetailsC
             console.error(error);
             return null;
         });
+
+        window.clearTimeout(timeout);
 
         let ticketPriority: TicketPriority;
         if (ticketPriorities && ticketPriorities.length) {

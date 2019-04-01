@@ -115,9 +115,11 @@ export class TicketDetailsContext extends Context<TicketDetailsContextConfigurat
         }
 
         if (reload && objectType === KIXObjectType.TICKET) {
-            this.listeners.forEach(
-                (l) => l.objectChanged(Number(this.objectId), ticket, KIXObjectType.TICKET, changedProperties)
-            );
+            setTimeout(() => {
+                this.listeners.forEach(
+                    (l) => l.objectChanged(Number(this.objectId), ticket, KIXObjectType.TICKET, changedProperties)
+                );
+            }, 20);
         }
 
         return object;
@@ -130,10 +132,6 @@ export class TicketDetailsContext extends Context<TicketDetailsContextConfigurat
     }
 
     private async loadTicket(changedProperties: string[] = [], cache: boolean = true): Promise<Ticket> {
-        EventService.getInstance().publish(
-            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load Ticket ...' }
-        );
-
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null, null, null,
             ['TimeUnits', 'DynamicFields', 'Links', 'Flags', 'History', 'Watchers', 'Articles', 'Attachments'],
@@ -143,6 +141,12 @@ export class TicketDetailsContext extends Context<TicketDetailsContextConfigurat
         const ticketId = Number(this.objectId);
         this.objectId = ticketId;
 
+        const timeout = window.setTimeout(() => {
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+                loading: true, hint: `Translatable#Load Ticket ...`
+            });
+        }, 500);
+
         const tickets = await KIXObjectService.loadObjects<Ticket>(
             KIXObjectType.TICKET, [ticketId], loadingOptions, null, cache
         ).catch((error) => {
@@ -150,7 +154,9 @@ export class TicketDetailsContext extends Context<TicketDetailsContextConfigurat
             return null;
         });
 
-        let ticket;
+        window.clearTimeout(timeout);
+
+        let ticket: Ticket;
         if (tickets && tickets.length) {
             ticket = tickets[0];
             // TODO: in eigenen "Notification" Service auslagern
@@ -170,7 +176,7 @@ export class TicketDetailsContext extends Context<TicketDetailsContextConfigurat
             }
         }
 
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
+        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
 
         return ticket;
     }

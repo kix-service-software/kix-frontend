@@ -111,16 +111,21 @@ export class TranslationDetailsContext extends Context<TranslationDetailsContext
     }
 
     private async loadTranslation(): Promise<Translation> {
-        EventService.getInstance().publish(
-            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load Translation ...' }
-        );
-
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null, null, null, [TranslationProperty.LANGUAGES]
         );
+
+        const timeout = window.setTimeout(() => {
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+                loading: true, hint: `Translatable#Load Translation ...`
+            });
+        }, 500);
+
         const translations = await TranslationService.getInstance().loadObjects<Translation>(
             KIXObjectType.TRANSLATION, [this.objectId], loadingOptions
         );
+
+        window.clearTimeout(timeout);
 
         const translation = translations && translations.length ? translations[0] : null;
 

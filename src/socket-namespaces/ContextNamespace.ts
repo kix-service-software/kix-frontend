@@ -4,7 +4,7 @@ import {
     SaveContextConfigurationRequest
 } from '../core/model';
 
-import { SocketResponse } from '../core/common';
+import { SocketResponse, SocketErrorResponse } from '../core/common';
 import { ConfigurationService, UserService, LoggingService } from '../core/services';
 import { PluginService } from '../services';
 
@@ -41,7 +41,7 @@ export class ContextNamespace extends SocketNameSpace {
 
     protected async loadContextConfiguration(
         data: LoadContextConfigurationRequest
-    ): Promise<SocketResponse<LoadContextConfigurationResponse<any>>> {
+    ): Promise<SocketResponse<LoadContextConfigurationResponse<any> | SocketErrorResponse>> {
         const user = await UserService.getInstance().getUserByToken(data.token);
         const userId = user.UserID;
 
@@ -56,14 +56,18 @@ export class ContextNamespace extends SocketNameSpace {
 
                 configuration = moduleDefaultConfiguration;
             } else {
-                throw new Error(`Translatable#No default configuration for context ${data.contextId} given!`);
-
+                return new SocketResponse(ContextEvent.CONTEXT_CONFIGURATION_LOAD_ERROR,
+                    new SocketErrorResponse(
+                        data.requestId,
+                        new Error(`Translatable#No default configuration for context ${data.contextId} given!`)
+                    )
+                );
             }
         }
 
         configuration.contextId = data.contextId;
 
-        const response = new LoadContextConfigurationResponse(configuration);
+        const response = new LoadContextConfigurationResponse(data.requestId, configuration);
         return new SocketResponse(ContextEvent.CONTEXT_CONFIGURATION_LOADED, response);
 
     }
@@ -75,7 +79,7 @@ export class ContextNamespace extends SocketNameSpace {
         ConfigurationService.getInstance()
             .saveModuleConfiguration(data.contextId, userId, data.configuration);
 
-        return new SocketResponse(ContextEvent.CONTEXT_CONFIGURATION_SAVED);
+        return new SocketResponse(ContextEvent.CONTEXT_CONFIGURATION_SAVED, { requestId: data.requestId });
     }
 
     private async saveWidgetConfiguration(data: SaveWidgetRequest): Promise<SocketResponse<void>> {
@@ -103,7 +107,7 @@ export class ContextNamespace extends SocketNameSpace {
             ConfigurationService.getInstance().saveModuleConfiguration(
                 data.contextId, userId, moduleConfiguration
             );
-            return new SocketResponse(ContextEvent.WIDGET_CONFIGURATION_SAVED);
+            return new SocketResponse(ContextEvent.WIDGET_CONFIGURATION_SAVED, { requestId: data.requestId });
         }
 
         return null;

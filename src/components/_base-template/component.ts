@@ -1,8 +1,8 @@
-import { Context, ContextType, ContextDescriptor, KIXObjectType, ContextMode } from '../../core/model';
+import { Context, ContextType, ContextDescriptor, KIXObjectType, ContextMode, ObjectData } from '../../core/model';
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../core/browser/context';
 import { ComponentsService } from '../../core/browser/components';
-import { IdService, FormService, ClientStorageService } from '../../core/browser';
+import { IdService, FormService } from '../../core/browser';
 import { RoutingService } from '../../core/browser/router';
 import { HomeContext } from '../../core/browser/home';
 import { EventService } from '../../core/browser/event';
@@ -13,22 +13,27 @@ import { ApplicationEvent } from '../../core/browser/application';
 import { ObjectDataService } from '../../core/browser/ObjectDataService';
 import { AuthenticationSocketClient } from '../../core/browser/application/AuthenticationSocketClient';
 import { NotificationSocketClient } from '../../core/browser/notifications';
-
-declare var io: any;
+import { ComponentInput } from './ComponentInput';
 
 class Component {
 
     public state: ComponentState;
     private contextListernerId: string;
 
+    private objectData: ObjectData;
+
     public onCreate(input: any): void {
-        this.state = new ComponentState(
-            input.contextId, input.objectData, input.objectId
-        );
+        this.state = new ComponentState();
         this.contextListernerId = IdService.generateDateBasedId('base-template-');
     }
 
+    public onInput(input: ComponentInput): void {
+        this.objectData = input.objectData;
+    }
+
     public async onMount(): Promise<void> {
+        const start = Date.now();
+
         this.state.loading = true;
         this.state.loadingHint = await TranslationService.translate('Loading ...');
 
@@ -51,7 +56,7 @@ class Component {
             }
         });
 
-        ObjectDataService.getInstance().setObjectData(this.state.objectData);
+        ObjectDataService.getInstance().setObjectData(this.objectData);
         await this.bootstrapServices();
 
         this.setContext();
@@ -84,6 +89,10 @@ class Component {
 
         this.state.initialized = true;
         this.state.loading = false;
+
+        const end = Date.now();
+
+        console.debug(`mount base template: ${(end - start) / 1000} sec.`);
 
         setTimeout(() => {
             RoutingService.getInstance().routeToInitialContext();

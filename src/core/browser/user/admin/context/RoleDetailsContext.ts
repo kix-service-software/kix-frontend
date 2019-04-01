@@ -113,15 +113,17 @@ export class RoleDetailsContext extends Context<RoleDetailsContextConfiguration>
     }
 
     private async loadRole(changedProperties: string[] = [], cache: boolean = true): Promise<Role> {
-        EventService.getInstance().publish(
-            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load Role ...' }
-        );
-
         const roleId = Number(this.objectId);
 
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null, null, null, [RoleProperty.USER_IDS, RoleProperty.PERMISSIONS]
         );
+
+        const timeout = window.setTimeout(() => {
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+                loading: true, hint: `Translatable#Load Role ...`
+            });
+        }, 500);
 
         const roles = await KIXObjectService.loadObjects<Role>(
             KIXObjectType.ROLE, [roleId], loadingOptions, null, cache
@@ -129,6 +131,8 @@ export class RoleDetailsContext extends Context<RoleDetailsContextConfiguration>
             console.error(error);
             return null;
         });
+
+        window.clearTimeout(timeout);
 
         let role: Role;
         if (roles && roles.length) {

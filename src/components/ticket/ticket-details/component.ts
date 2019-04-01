@@ -50,6 +50,7 @@ export class Component {
     }
 
     private async initWidget(ticket?: Ticket, scrollToArticle: boolean = false): Promise<void> {
+        console.debug('Init Ticket Details');
         this.state.error = null;
         this.state.loading = true;
 

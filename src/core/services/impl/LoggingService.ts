@@ -43,46 +43,52 @@ export class LoggingService {
 
     @validate
     public error(@required message: string, meta?: any): void {
-        if (this.checkLogLevel(LogLevel.ERROR) && this.kixLogger) {
-
-            // get stack trace
-            const winstonMeta = { ...meta };
-            if (this.trace) {
-                winstonMeta.stackTrace = this.getStackTrace();
+        if (this.checkLogLevel(LogLevel.ERROR)) {
+            if (this.kixLogger) {
+                const winstonMeta = { ...meta };
+                if (this.trace) {
+                    winstonMeta.stackTrace = this.getStackTrace();
+                }
+                this.kixLogger.error(message, winstonMeta);
+            } else {
+                console.error(message);
             }
-            this.kixLogger.error(message, winstonMeta);
-        } else {
-            console.error(message);
         }
     }
 
     @validate
     public warning(@required message: string, meta?: any): void {
-        if (this.checkLogLevel(LogLevel.WARNING) && this.kixLogger) {
-            const winstonMeta = { ...meta };
-            this.kixLogger.warn(message, winstonMeta);
-        } else {
-            console.warn(message);
+        if (this.checkLogLevel(LogLevel.WARNING)) {
+            if (this.kixLogger) {
+                const winstonMeta = { ...meta };
+                this.kixLogger.warn(message, winstonMeta);
+            } else {
+                console.warn(message);
+            }
         }
     }
 
     @validate
     public info(@required message: string, meta?: any): void {
-        if (this.checkLogLevel(LogLevel.INFO) && this.kixLogger) {
-            const winstonMeta = { ...meta };
-            this.kixLogger.info(message, winstonMeta);
-        } else {
-            console.log(message);
+        if (this.checkLogLevel(LogLevel.INFO)) {
+            if (this.kixLogger) {
+                const winstonMeta = { ...meta };
+                this.kixLogger.info(message, winstonMeta);
+            } else {
+                console.log(message);
+            }
         }
     }
 
     @validate
     public debug(@required message: string, meta?: any): void {
-        if (this.checkLogLevel(LogLevel.DEBUG) && this.kixLogger) {
-            const winstonMeta = { ...meta };
-            this.kixLogger.debug(message, winstonMeta);
-        } else {
-            console.log(message);
+        if (this.checkLogLevel(LogLevel.DEBUG)) {
+            if (this.kixLogger) {
+                const winstonMeta = { ...meta };
+                this.kixLogger.debug(message, winstonMeta);
+            } else {
+                console.log(message);
+            }
         }
     }
 

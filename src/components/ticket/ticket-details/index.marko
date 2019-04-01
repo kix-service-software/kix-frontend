@@ -1,10 +1,7 @@
 <if(state.error)>
     <span.error>${state.error}</span>
 </if>
-<else-if(state.loading)>
-    <loading-spinner/>
-</else-if>
-<else>
+<else-if(!state.loading)>
     <div.details-container>
         <widget instanceId=state.instanceId minimizable=true title=state.title contentActions=component.getTicketActions()>
             <@content>
@@ -33,4 +30,4 @@
             </for>
         </div>
     </div>
-</else>
+</else-if>

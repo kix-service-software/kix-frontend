@@ -2,7 +2,7 @@ import { SocketNameSpace } from './SocketNameSpace';
 import {
     NotesEvent, LoadNotesRequest, LoadNotesResponse, SaveNotesRequest
 } from '../core/model';
-import { SocketResponse } from '../core/common';
+import { SocketResponse, SocketErrorResponse } from '../core/common';
 import { ConfigurationService, UserService } from '../core/services';
 
 export class NotesNamespace extends SocketNameSpace {
@@ -60,9 +60,11 @@ export class NotesNamespace extends SocketNameSpace {
         let response;
         await ConfigurationService.getInstance().saveModuleConfiguration('notes', userId, notesConfig)
             .then(() => {
-                response = new SocketResponse(NotesEvent.SAVE_NOTES_FINISHED);
+                response = new SocketResponse(NotesEvent.SAVE_NOTES_FINISHED, { requestId: data.requestId });
             }).catch((error) => {
-                response = new SocketResponse(NotesEvent.SAVE_NOTES_ERROR, error.message);
+                response = new SocketResponse(
+                    NotesEvent.SAVE_NOTES_ERROR, new SocketErrorResponse(data.requestId, error)
+                );
             });
 
         return response;

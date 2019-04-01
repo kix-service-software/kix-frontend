@@ -113,15 +113,17 @@ export class UserDetailsContext extends Context<UserDetailsContextConfiguration>
     }
 
     private async loadUser(changedProperties: string[] = [], cache: boolean = true): Promise<User> {
-        EventService.getInstance().publish(
-            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load User ...' }
-        );
-
         const userId = Number(this.objectId);
 
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null, null, null, [UserProperty.PREFERENCES, UserProperty.ROLEIDS]
         );
+
+        const timeout = window.setTimeout(() => {
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+                loading: true, hint: `Translatable#Load User ...`
+            });
+        }, 500);
 
         const users = await KIXObjectService.loadObjects<User>(
             KIXObjectType.USER, [userId], loadingOptions, null, cache
@@ -129,6 +131,8 @@ export class UserDetailsContext extends Context<UserDetailsContextConfiguration>
             console.error(error);
             return null;
         });
+
+        window.clearTimeout(timeout);
 
         let user: User;
         if (users && users.length) {

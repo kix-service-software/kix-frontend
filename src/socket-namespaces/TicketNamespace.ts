@@ -61,6 +61,6 @@ export class TicketNamespace extends SocketNameSpace {
         await TicketService.getInstance().setArticleSeenFlag(
             data.token, null, data.ticketId, data.articleId
         );
-        return new SocketResponse(TicketEvent.REMOVE_ARTICLE_SEEN_FLAG_DONE);
+        return new SocketResponse(TicketEvent.REMOVE_ARTICLE_SEEN_FLAG_DONE, { requestId: data.requestId });
     }
 }

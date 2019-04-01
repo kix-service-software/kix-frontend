@@ -7,6 +7,7 @@ import { SocketClient } from '../SocketClient';
 import { ClientStorageService } from '../ClientStorageService';
 import { IKIXModuleExtension } from '../../extensions';
 import { IdService } from '../IdService';
+import { SocketErrorResponse } from '../../common';
 
 export class KIXModulesSocketClient extends SocketClient {
 
@@ -42,9 +43,11 @@ export class KIXModulesSocketClient extends SocketClient {
                 }
             });
 
-            this.socket.on(KIXModulesEvent.LOAD_MODULES_ERROR, (error: any) => {
-                window.clearTimeout(timeout);
-                reject(error);
+            this.socket.on(KIXModulesEvent.LOAD_MODULES_ERROR, (error: SocketErrorResponse) => {
+                if (error.requestId === requestId) {
+                    window.clearTimeout(timeout);
+                    reject(error.error);
+                }
             });
 
             this.socket.emit(KIXModulesEvent.LOAD_MODULES, request);
@@ -72,9 +75,11 @@ export class KIXModulesSocketClient extends SocketClient {
                 }
             );
 
-            this.socket.on(KIXModulesEvent.LOAD_FORM_CONFIGURATIONS_ERROR, (error: any) => {
-                window.clearTimeout(timeout);
-                reject(error);
+            this.socket.on(KIXModulesEvent.LOAD_FORM_CONFIGURATIONS_ERROR, (error: SocketErrorResponse) => {
+                if (error.requestId === requestId) {
+                    window.clearTimeout(timeout);
+                    reject(error.error);
+                }
             });
 
             this.socket.emit(KIXModulesEvent.LOAD_FORM_CONFIGURATIONS, request);

@@ -1,5 +1,4 @@
 export { ISocketNamespace } from './ISocketNamespace';
-export { BaseTemplateInput } from './BaseTemplateInput';
 export { Environment } from './Environment';
 export { LogLevel } from './LogLevel';
 export { IServerConfiguration } from './IServerConfiguration';

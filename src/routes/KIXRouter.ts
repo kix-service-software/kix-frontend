@@ -1,7 +1,7 @@
 import { Request, Response, Router } from 'express';
 
 import { IRouter } from './IRouter';
-import { IServerConfiguration, BaseTemplateInput } from '../core/common';
+import { IServerConfiguration } from '../core/common';
 import {
     ProfilingService, ConfigurationService, UserService, ServiceService, ValidObjectService,
     ContactService, CustomerService, ObjectDefinitionService
@@ -49,7 +49,7 @@ export abstract class KIXRouter implements IRouter {
         res.marko(this.appTemplate, {
             themeCSS,
             specificCSS,
-            data: new BaseTemplateInput(contextId, objectData, objectId)
+            data: { objectData }
         });
 
         // stop profiling

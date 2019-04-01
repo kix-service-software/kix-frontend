@@ -15,6 +15,8 @@ export class AgentSocketClient extends SocketClient {
 
     private static INSTANCE: AgentSocketClient = null;
 
+    private currentUserRequestPromise: Promise<User> = null;
+
     public static getInstance(): AgentSocketClient {
         if (!AgentSocketClient.INSTANCE) {
             AgentSocketClient.INSTANCE = new AgentSocketClient();
@@ -33,6 +35,10 @@ export class AgentSocketClient extends SocketClient {
             return await CacheService.getInstance().get(KIXObjectType.CURRENT_USER, KIXObjectType.CURRENT_USER);
         }
 
+        if (this.currentUserRequestPromise) {
+            return await this.currentUserRequestPromise;
+        }
+
         const requestId = IdService.generateDateBasedId();
         const currentUserRequest = new GetCurrentUserRequest(
             ClientStorageService.getToken(),
@@ -40,7 +46,8 @@ export class AgentSocketClient extends SocketClient {
             ClientStorageService.getClientRequestId()
         );
 
-        return new Promise<User>((resolve, reject) => {
+
+        this.currentUserRequestPromise = new Promise<User>((resolve, reject) => {
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + AgentEvent.GET_CURRENT_USER);
@@ -66,6 +73,8 @@ export class AgentSocketClient extends SocketClient {
 
             this.agentSocket.emit(AgentEvent.GET_CURRENT_USER, currentUserRequest);
         });
+
+        return await this.currentUserRequestPromise;
     }
 
     public async getPersonalSettings(): Promise<PersonalSetting[]> {
