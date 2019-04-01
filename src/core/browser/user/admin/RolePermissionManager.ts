@@ -1,7 +1,11 @@
-import { KIXObjectType, InputFieldTypes, SortUtil, Role } from "../../../model";
+import {
+    KIXObjectType, InputFieldTypes, SortUtil, Role, KIXObjectLoadingOptions,
+    FilterCriteria, RoleProperty, FilterDataType, FilterType
+} from "../../../model";
 import { DynamicFormOperationsType, AbstractDynamicFormManager } from "../../form";
 import { KIXObjectService } from "../../kix";
 import { ObjectPropertyValue } from "../../ObjectPropertyValue";
+import { SearchOperator } from "../../SearchOperator";
 
 export class RolePermissionManager extends AbstractDynamicFormManager {
 
@@ -33,7 +37,13 @@ export class RolePermissionManager extends AbstractDynamicFormManager {
 
     public async getProperties(): Promise<Array<[string, string]>> {
         const properties: Array<[string, string]> = [];
-        const roles = await KIXObjectService.loadObjects<Role>(this.objectType);
+        const roles = await KIXObjectService.loadObjects<Role>(this.objectType, null, new KIXObjectLoadingOptions(
+            null, [
+                new FilterCriteria(
+                    RoleProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
+                )
+            ]
+        ));
         for (const role of roles) {
             properties.push([role.ID.toString(), role.Name]);
         }

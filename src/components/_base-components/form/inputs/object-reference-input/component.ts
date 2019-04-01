@@ -84,10 +84,15 @@ class Component extends FormInputComponent<string | number, ComponentState> {
 
     private async prepareNodes(): Promise<void> {
         const objectOption = this.state.field.options.find((o) => o.option === ObjectReferenceOptions.OBJECT);
+        const loadingOptions = this.state.field.options.find(
+            (o) => o.option === ObjectReferenceOptions.LOADINGOPTIONS
+        );
         if (objectOption) {
             this.setOptions();
             if (!this.state.autocomplete) {
-                this.objects = await KIXObjectService.loadObjects(objectOption.value);
+                this.objects = await KIXObjectService.loadObjects(
+                    objectOption.value, null, loadingOptions ? loadingOptions.value : null
+                );
                 for (const o of this.objects) {
                     const node = await this.createTreeNode(o);
                     this.state.nodes.push(node);

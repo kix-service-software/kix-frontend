@@ -51,7 +51,7 @@ export class DynamicFieldValue {
     }
 
     public async init(): Promise<void> {
-        await this.createPropertyNodes();
+        await this.createPropertyNodes(false);
         if (this.value.property) {
             let propertyNode = this.propertyNodes.find((pn) => pn.id === this.value.property);
             if (!propertyNode) {
@@ -96,6 +96,10 @@ export class DynamicFieldValue {
         if (this.manager.showValueInput(this.value)) {
             const inputType = await this.manager.getInputType(
                 this.currentPropertyNode ? this.currentPropertyNode.id : null
+            );
+            this.inputOptions = await this.manager.getInputTypeOptions(
+                this.currentPropertyNode ? this.currentPropertyNode.id : null,
+                this.currentOperationNode ? this.currentOperationNode.id : null
             );
 
             this.isDate = inputType === InputFieldTypes.DATE;
@@ -161,10 +165,6 @@ export class DynamicFieldValue {
 
     public async setCurrentValue(value: any): Promise<void> {
         this.currentValue = value;
-        this.inputOptions = await this.manager.getInputTypeOptions(
-            this.currentPropertyNode ? this.currentPropertyNode.id : null,
-            this.currentOperationNode ? this.currentOperationNode.id : null
-        );
         if (this.value.objectType && value) {
             const objects = await KIXObjectService.loadObjects(this.value.objectType, [value]);
             let label = value;
@@ -225,13 +225,13 @@ export class DynamicFieldValue {
         return this.value;
     }
 
-    private async createPropertyNodes(): Promise<void> {
+    private async createPropertyNodes(check: boolean = true): Promise<void> {
         const properties = await this.manager.getProperties();
         const unique = await this.manager.propertiesAreUnique();
         if (properties) {
             const nodes = [];
             for (const p of properties) {
-                if (!unique || !this.manager.hasValueForProperty(p[0])) {
+                if (!check || (!unique || !this.manager.hasValueForProperty(p[0]))) {
                     nodes.push(new TreeNode(p[0], p[1]));
                 }
             }

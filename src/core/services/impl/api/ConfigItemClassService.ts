@@ -127,7 +127,7 @@ export class ConfigItemClassService extends KIXObjectService {
                 parameter, 'OBJECT_PERMISSION'
             );
             if (response.ConfigItemClassID && objectPermisssions && !!objectPermisssions.length) {
-                super.createObjectPermissions(
+                super.setObjectPermissions(
                     token, clientRequestId,
                     objectPermisssions,
                     this.RESOURCE_URI, response.ConfigItemClassID
@@ -153,7 +153,10 @@ export class ConfigItemClassService extends KIXObjectService {
     ): Promise<string | number> {
         if (objectType === KIXObjectType.CONFIG_ITEM_CLASS) {
             const updateConfigItemClass = new UpdateConfigItemClass(
-                parameter.filter((p) => p[0] !== 'ICON' && p[0] !== ConfigItemClassProperty.DEFINITION_STRING)
+                parameter.filter(
+                    (p) => p[0] !== 'ICON' && p[0] !== ConfigItemClassProperty.DEFINITION_STRING
+                        && p[0] !== 'OBJECT_PERMISSION' && p[0] !== 'DEPENDENT_OBJECT_PERMISSION'
+                )
             );
 
             const response = await this.sendUpdateRequest<UpdateConfigItemClassResponse, UpdateConfigItemClassRequest>(
@@ -186,6 +189,24 @@ export class ConfigItemClassService extends KIXObjectService {
                         throw new Error(error.Code, error.Message);
                     }
                 });
+            }
+
+            const objectPermisssions: CreatePermissionDescription[] = this.getParameterValue(
+                parameter, 'OBJECT_PERMISSION'
+            );
+            if (response.ConfigItemClassID && objectPermisssions && !!objectPermisssions.length) {
+                super.setObjectPermissions(
+                    token, clientRequestId,
+                    objectPermisssions,
+                    this.RESOURCE_URI, response.ConfigItemClassID, true
+                );
+            }
+
+            const dependentObjectPermisssions: CreatePermissionDescription[] = this.getParameterValue(
+                parameter, 'DEPENDENT_OBJECT_PERMISSION'
+            );
+            if (response.ConfigItemClassID && dependentObjectPermisssions && !!dependentObjectPermisssions.length) {
+                // TODO: permission an role anfügen bzw. entfernen
             }
 
             await AppUtil.updateFormConfigurations(true);

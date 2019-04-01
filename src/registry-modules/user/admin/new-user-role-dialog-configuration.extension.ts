@@ -1,11 +1,13 @@
 import { IConfigurationExtension } from '../../../core/extensions';
 import {
     ConfiguredWidget, FormField, KIXObjectType, Form,
-    FormContext, FormFieldValue, RoleProperty, FormFieldOption, ObjectReferenceOptions
+    FormContext, FormFieldValue, RoleProperty, FormFieldOption, ObjectReferenceOptions, KIXObjectLoadingOptions,
+    FilterCriteria, UserProperty, FilterDataType, FilterType
 } from '../../../core/model';
 import { FormGroup } from '../../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../../core/services';
 import { NewUserRoleDialogContext, NewUserRoleDialogContextConfiguration } from '../../../core/browser/user';
+import { SearchOperator } from '../../../core/browser';
 
 export class Extension implements IConfigurationExtension {
 
@@ -55,7 +57,17 @@ export class Extension implements IConfigurationExtension {
                     'Translatable#Select which agents should be assigned to this role.', [
                         new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
                         new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
-                        new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true)
+                        new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
+                        new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                            new KIXObjectLoadingOptions(
+                                null, [
+                                    new FilterCriteria(
+                                        UserProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                        FilterType.AND, 1
+                                    )
+                                ]
+                            )
+                        )
                     ]
                 )
             ]);
