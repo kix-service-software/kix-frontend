@@ -5,12 +5,14 @@
         </for>
     </@header-content>
     <@headerFilter>
-        <filter
-            filterCount=state.filterCount
-            predefinedFilter=state.predefinedTableFilter
-            predefinedFilterPlaceholder=state.filterPlaceHolder
-            on-filter("filter")
-            key="table-widget-filter"/>
+        <if(state.showFilter)>
+            <filter
+                filterCount=state.filterCount
+                predefinedFilter=state.predefinedTableFilter
+                predefinedFilterPlaceholder=state.filterPlaceHolder
+                on-filter("filter")
+                key="table-widget-filter"/>
+        </if>
     </@headerFilter>
     <@content>
         <if(state.table)>

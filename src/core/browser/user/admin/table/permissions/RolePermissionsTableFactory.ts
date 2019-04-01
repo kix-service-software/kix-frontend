@@ -7,7 +7,7 @@ import { RolePermissionsTableContentProvider } from "./RolePermissionsTableConte
 
 export class RolePermissionsTableFactory implements ITableFactory {
 
-    public objectType: KIXObjectType = KIXObjectType.PERMISSION;
+    public objectType: KIXObjectType = KIXObjectType.ROLE_PERMISSION;
 
     public createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,

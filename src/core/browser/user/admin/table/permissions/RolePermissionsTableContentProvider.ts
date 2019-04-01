@@ -11,7 +11,7 @@ export class RolePermissionsTableContentProvider extends TableContentProvider<Pe
         loadingOptions: KIXObjectLoadingOptions,
         contextId?: string
     ) {
-        super(KIXObjectType.PERMISSION, table, objectIds, loadingOptions, contextId);
+        super(KIXObjectType.ROLE_PERMISSION, table, objectIds, loadingOptions, contextId);
     }
     public async loadData(): Promise<Array<IRowObject<Permission>>> {
         let role: Role;

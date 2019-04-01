@@ -1,5 +1,5 @@
-import { ITableCSSHandler, TableValue } from "../../../../table";
-import { Permission, CRUD } from "../../../../../model";
+import { Permission, CRUD } from "../../../../model";
+import { ITableCSSHandler, TableValue } from "../../../table";
 
 export class PermissionTableCSSHandler implements ITableCSSHandler<Permission> {
 

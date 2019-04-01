@@ -8,7 +8,8 @@ export class TableWidgetSettings {
         public objectType: KIXObjectType,
         public sort?: [string, SortOrder],
         public tableConfiguration?: TableConfiguration,
-        public headerComponents?: string[]
+        public headerComponents?: string[],
+        public showFilter: boolean = true
     ) { }
 
 }

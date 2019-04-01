@@ -40,12 +40,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async initWidget(role: Role): Promise<void> {
         const tableConfiguration = new TableConfiguration(
-            KIXObjectType.PERMISSION, null, 32, null, null, false, false, null, null,
+            KIXObjectType.ROLE_PERMISSION, null, 32, null, null, false, false, null, null,
             TableHeaderHeight.SMALL, TableRowHeight.SMALL
         );
 
         const table = await TableFactoryService.getInstance().createTable(
-            'user-role-assigned-permissions', KIXObjectType.PERMISSION, tableConfiguration,
+            'user-role-assigned-permissions', KIXObjectType.ROLE_PERMISSION, tableConfiguration,
             null, RoleDetailsContext.CONTEXT_ID
         );
 
