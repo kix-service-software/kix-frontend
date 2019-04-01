@@ -5,11 +5,23 @@
     grid-column-gap: @dynamic-value-gap;
     margin-bottom: @margin-small;
 
-    .role-permission {
+    .role-permission-description-container {
         grid-column: 2;
         display: grid;
-        grid-auto-flow: column;
-        margin: 0 1rem 0 @margin-small;
-        grid-auto-columns: 1fr;
+        grid-template-columns: minmax(10rem, 1fr) 1fr;
+        grid-gap: @margin-small;
+
+        .crud-description {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr 2fr;
+            grid-gap: @margin-small;
+            justify-items: center;
+
+            >span:first-child {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 100%;
+            }
+        }
     }
 }

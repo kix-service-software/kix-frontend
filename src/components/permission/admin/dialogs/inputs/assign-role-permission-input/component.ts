@@ -1,14 +1,20 @@
 import { ComponentState } from "./ComponentState";
 import {
-    FormInputComponent, PermissionFormData, CreatePermissionDescription, CRUD, KIXObjectType, FormFieldOption
+    FormInputComponent, PermissionFormData, CreatePermissionDescription,
+    CRUD, KIXObjectType, FormFieldOption, Permission, Role,
+    KIXObjectLoadingOptions, FilterCriteria, RoleProperty, FilterDataType, FilterType
 } from "../../../../../../core/model";
-import { IdService, LabelService, IDynamicFormManager } from "../../../../../../core/browser";
+import {
+    IdService, LabelService, ObjectPropertyValue,
+    KIXObjectService, SearchOperator
+} from "../../../../../../core/browser";
 import { RolePermissionManager } from "../../../../../../core/browser/user";
 
 class Component extends FormInputComponent<any[], ComponentState> {
 
     private formListenerId: string;
     private permissionFormTimeout: any;
+    private rolePermissionManager: RolePermissionManager;
 
     public async onCreate(): Promise<void> {
         this.state = new ComponentState();
@@ -19,10 +25,10 @@ class Component extends FormInputComponent<any[], ComponentState> {
     public onInput(input: any): void {
         super.onInput(input);
         if (input.field && input.field.options && !!input.field.options.length) {
-            const requiredOption: FormFieldOption = input.field.options.find(
-                (o: FormFieldOption) => o.option === 'REQUIRED'
+            const isDependentOption: FormFieldOption = input.field.options.find(
+                (o: FormFieldOption) => o.option === 'IS_DEPENDENT'
             );
-            this.state.showRequired = requiredOption ? requiredOption.value : false;
+            this.state.showRequired = isDependentOption ? isDependentOption.value : false;
         }
 
         return input;
@@ -30,19 +36,20 @@ class Component extends FormInputComponent<any[], ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        const rolePermissionManager = new RolePermissionManager();
-        if (rolePermissionManager) {
-            rolePermissionManager.init();
-            await this.setCurrentNode(rolePermissionManager);
-            this.state.rolePermissionManager = rolePermissionManager;
+        this.rolePermissionManager = new RolePermissionManager();
+        if (this.rolePermissionManager) {
+            this.rolePermissionManager.init();
+            this.rolePermissionManager.setIsDependentObjectPermission(this.state.showRequired);
+            await this.setCurrentNode();
+            this.state.rolePermissionManager = this.rolePermissionManager;
             this.state.rolePermissionManager.registerListener(this.formListenerId, () => {
                 if (this.permissionFormTimeout) {
                     clearTimeout(this.permissionFormTimeout);
                 }
                 this.permissionFormTimeout = setTimeout(async () => {
+                    const permissionDescriptions: CreatePermissionDescription[] = [];
                     if (this.state.rolePermissionManager.hasDefinedValues()) {
                         const values = this.state.rolePermissionManager.getEditableValues();
-                        const permissionDescriptions: CreatePermissionDescription[] = [];
                         values.forEach((v) => {
                             const crudValue = this.getPermissionValueFromCRUD(v.value);
                             if (v.property) {
@@ -52,13 +59,14 @@ class Component extends FormInputComponent<any[], ComponentState> {
                                         v.value && (v.value as PermissionFormData).IsRequired ? 1 : 0,
                                         crudValue,
                                         v.value && (v.value as PermissionFormData).Comment,
-                                        Number(v.property)
+                                        Number(v.property),
+                                        typeof v.id !== 'undefined' && v.id !== null ? Number(v.id) : null
                                     )
                                 );
                             }
                         });
-                        super.provideValue(permissionDescriptions);
                     }
+                    super.provideValue(permissionDescriptions);
                 }, 200);
             });
         }
@@ -70,11 +78,42 @@ class Component extends FormInputComponent<any[], ComponentState> {
         }
     }
 
-    public async setCurrentNode(permissionManager: IDynamicFormManager): Promise<void> {
+    public async setCurrentNode(): Promise<void> {
+        // TODO: get permissions of current object
+        const permissionDescriptions: CreatePermissionDescription[] = [];
         if (this.state.defaultValue && this.state.defaultValue.value && Array.isArray(this.state.defaultValue.value)) {
-            //
+            const roles = await KIXObjectService.loadObjects<Role>(KIXObjectType.ROLE, null,
+                new KIXObjectLoadingOptions(
+                    null, [
+                        new FilterCriteria(
+                            RoleProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
+                        )
+                    ]
+                )
+            );
+            this.state.defaultValue.value.filter(
+                (permission: Permission) => roles.some((r) => r.ID === permission.RoleID)
+            ).forEach((permission: Permission) => {
+                this.rolePermissionManager.setValue(
+                    new ObjectPropertyValue(
+                        permission.RoleID.toString(), null, this.getPermissionFormData(permission),
+                        null, null, null, permission.ID.toString()
+                    )
+                );
+                permissionDescriptions.push(
+                    new CreatePermissionDescription(
+                        permission.TypeID,
+                        permission.Target,
+                        permission.IsRequired,
+                        permission.Value,
+                        permission.Comment,
+                        permission.RoleID,
+                        permission.ID
+                    )
+                );
+            });
         }
-        // super.provideValue(null);
+        super.provideValue(permissionDescriptions);
     }
 
     private async prepareTitles(): Promise<void> {
@@ -105,6 +144,20 @@ class Component extends FormInputComponent<any[], ComponentState> {
             + (permissionData.DELETE ? CRUD.DELETE : 0)
             + (permissionData.DENY ? CRUD.DENY : 0) : 0;
         return value;
+    }
+
+    private getPermissionFormData(permission: Permission): PermissionFormData {
+        const permissionFormData = new PermissionFormData();
+        permissionFormData.IsRequired = permission.IsRequired === 1;
+        permissionFormData.Comment = permission.Comment;
+        if (permission.Value) {
+            permissionFormData.CREATE = !!(permission.Value & CRUD.CREATE);
+            permissionFormData.READ = !!(permission.Value & CRUD.READ);
+            permissionFormData.UPDATE = !!(permission.Value & CRUD.UPDATE);
+            permissionFormData.DELETE = !!(permission.Value & CRUD.DELETE);
+            permissionFormData.DENY = !!(permission.Value & CRUD.DENY);
+        }
+        return permissionFormData;
     }
 }
 

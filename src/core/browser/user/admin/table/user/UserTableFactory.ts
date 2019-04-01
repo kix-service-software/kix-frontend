@@ -58,7 +58,7 @@ export class UserTableFactory implements ITableFactory {
             new DefaultColumnConfiguration(
                 UserProperty.LAST_LOGIN, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
             ),
-            new DefaultColumnConfiguration(UserProperty.VALID_ID, true, false, true, false, 100, true, true),
+            new DefaultColumnConfiguration(UserProperty.VALID_ID, true, false, true, false, 100, true, true, true),
             new DefaultColumnConfiguration(
                 UserProperty.CREATE_TIME, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
             ),

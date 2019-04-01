@@ -4,6 +4,8 @@ export enum ObjectReferenceOptions {
 
     AUTOCOMPLETE = 'AUTOCOMPLETE',
 
-    MULTISELECT = 'MULTISELECT'
+    MULTISELECT = 'MULTISELECT',
+
+    LOADINGOPTIONS = 'LOADINGOPTIONS'
 
 }

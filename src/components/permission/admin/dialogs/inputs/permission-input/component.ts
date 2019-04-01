@@ -52,7 +52,7 @@ class Component extends AbstractMarkoComponent {
 
     private async getOptions(input: any): Promise<boolean[]> {
         let showRequired: boolean = true;
-        let requiredIsReadonly: boolean = true;
+        let requiredIsReadonly: boolean = false;
         let checkPermissionType: boolean = true;
         if (input.options && !!input.options.length) {
             const requiredOption = input.options.find(
@@ -68,12 +68,12 @@ class Component extends AbstractMarkoComponent {
             const permissionTypes = await KIXObjectService.loadObjects<PermissionType>(KIXObjectType.PERMISSION_TYPE);
             const staticTypes = permissionTypes.filter((pt) => pt.Name !== 'Resource' && pt.Name !== 'Object');
             if (
-                staticTypes && !!staticTypes.length
-                && input.propertyId && staticTypes.some(
+                !staticTypes || !!!staticTypes.length
+                || !input.propertyId || !staticTypes.some(
                     (st) => st.ID.toString() === input.propertyId.toString()
                 )
             ) {
-                requiredIsReadonly = false;
+                requiredIsReadonly = true;
             }
         }
         return [showRequired, requiredIsReadonly];

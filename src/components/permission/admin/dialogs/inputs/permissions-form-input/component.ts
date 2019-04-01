@@ -32,9 +32,9 @@ class Component extends FormInputComponent<any[], ComponentState> {
                     clearTimeout(this.permissionFormTimeout);
                 }
                 this.permissionFormTimeout = setTimeout(async () => {
+                    const permissionDescriptions: CreatePermissionDescription[] = [];
                     if (this.state.permissionManager.hasDefinedValues()) {
                         const values = this.state.permissionManager.getEditableValues();
-                        const permissionDescriptions: CreatePermissionDescription[] = [];
                         values.forEach((v) => {
                             const crudValue = this.getPermissionValueFromCRUD(v.value);
                             if (v.property && v.operator) {
@@ -51,8 +51,8 @@ class Component extends FormInputComponent<any[], ComponentState> {
                                 );
                             }
                         });
-                        super.provideValue(permissionDescriptions);
                     }
+                    super.provideValue(permissionDescriptions);
                 }, 200);
             });
         }
