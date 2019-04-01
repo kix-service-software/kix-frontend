@@ -5,10 +5,12 @@ import {
 import {
     ContextConfiguration, FormField, TicketProperty, ArticleProperty,
     Form, KIXObjectType, FormContext, ConfiguredWidget, WidgetConfiguration,
-    FormFieldOption, WidgetSize, ObjectReferenceOptions
+    FormFieldOption, WidgetSize, ObjectReferenceOptions, KIXObjectLoadingOptions,
+    FilterCriteria, UserProperty, FilterDataType, FilterType
 } from '../../core/model';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../core/services';
+import { SearchOperator } from '../../core/browser';
 
 export class EditTicketDialogModuleExtension implements IConfigurationExtension {
 
@@ -83,14 +85,34 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
                 'Translatable#Owner', TicketProperty.OWNER_ID, 'object-reference-input', false,
                 'Translatable#Owner is the user to which the ticket is assigned for processing.', [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
-                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false)
+                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            null, [
+                                new FilterCriteria(
+                                    UserProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                )
+                            ]
+                        )
+                    )
                 ]
             ));
             fields.push(new FormField(
                 'Translatable#Responsible', TicketProperty.RESPONSIBLE_ID, 'object-reference-input', false,
                 'Translatable#Responsible is the person in charge for this tickets processing, e.g. Service Owner, Key Account Manager. It does not need to be identical with the assigned ticket owner.', [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
-                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false)
+                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            null, [
+                                new FilterCriteria(
+                                    UserProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                )
+                            ]
+                        )
+                    )
                 ]
             ));
             fields.push(new FormField<number>(
