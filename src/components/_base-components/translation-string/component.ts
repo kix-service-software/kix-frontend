@@ -12,8 +12,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onInput(input: any): void {
-        this.pattern = input.pattern;
-        this.placeholders = input.placeholders;
+        if (this.pattern !== input.pattern) {
+            this.pattern = input.pattern;
+            this.placeholders = input.placeholders;
+            this.setText();
+        }
     }
 
     public async onMount(): Promise<void> {
