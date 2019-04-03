@@ -26,8 +26,6 @@ export class Role extends KIXObject<Role> {
 
     public UserIDs: number[];
 
-    public Permissions: Permission[];
-
     public constructor(role?: Role) {
         super();
         if (role) {

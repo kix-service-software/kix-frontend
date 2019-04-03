@@ -32,7 +32,7 @@ export class Extension implements IConfigurationExtension {
                     new TableConfiguration(KIXObjectType.PERMISSION, null, null, null, null, null, null, null, null,
                         TableHeaderHeight.SMALL, TableRowHeight.SMALL), null, false
                 ),
-                true, true, WidgetSize.BOTH, null, false
+                true, true, WidgetSize.BOTH, null, true
             )
         );
 
@@ -46,7 +46,7 @@ export class Extension implements IConfigurationExtension {
                     new TableConfiguration(KIXObjectType.PERMISSION, null, null, null, null, null, null, null, null,
                         TableHeaderHeight.SMALL, TableRowHeight.SMALL), null, false
                 ),
-                true, true, WidgetSize.BOTH, null, false
+                true, true, WidgetSize.BOTH, null, true
             )
         );
 
