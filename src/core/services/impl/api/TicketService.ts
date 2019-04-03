@@ -76,6 +76,11 @@ export class TicketService extends KIXObjectService {
             objects = await super.load(token, KIXObjectType.SENDER_TYPE, 'sendertypes', null, null, 'SenderType');
         } else if (objectType === KIXObjectType.LOCK) {
             objects = await super.load(token, KIXObjectType.LOCK, 'ticketlocks', null, null, 'Lock');
+        } else if (objectType === KIXObjectType.ARTICLE) {
+            if (objectIds && objectIds.length) {
+                const uri = this.buildUri(this.RESOURCE_URI, objectIds[0], this.SUB_RESOURCE_URI);
+                objects = await super.load(token, KIXObjectType.ARTICLE, uri, loadingOptions, null, 'Article');
+            }
         }
 
         return objects;
