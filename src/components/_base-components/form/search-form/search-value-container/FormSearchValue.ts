@@ -109,11 +109,31 @@ export class FormSearchValue {
         this.currentValueNodes = [];
         if (this.isDropdown) {
             if (isArray(value)) {
-                value.forEach((v) => this.currentValueNodes.push(this.nodes.find((n) => n.id === v)));
+                const valueNodes = [];
+                value.forEach((v) => {
+                    const node = this.getSelectedNode(v);
+                    if (node) {
+                        valueNodes.push(node);
+                    }
+                });
+                this.currentValueNodes = valueNodes;
             } else {
                 this.currentValueNodes = [this.nodes.find((n) => n.id === value)];
             }
         }
+    }
+
+    private getSelectedNode(value: any, nodes: TreeNode[] = this.nodes): TreeNode {
+        let valueNode = null;
+        for (const n of nodes) {
+            valueNode = n.id === value
+                ? n
+                : n.children ? this.getSelectedNode(value, n.children) : null;
+            if (valueNode) {
+                break;
+            }
+        }
+        return valueNode;
     }
 
     public setTreeValues(nodes: TreeNode[]): void {

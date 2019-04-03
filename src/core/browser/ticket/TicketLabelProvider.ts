@@ -24,7 +24,8 @@ export class TicketLabelProvider implements ILabelProvider<Ticket> {
                     const queues = await KIXObjectService.loadObjects<Queue>(
                         KIXObjectType.QUEUE, [value], null, null, true, true
                     ).catch((error) => [] as Queue[]);
-                    displayValue = queues && !!queues.length ? queues[0].Name : value;
+                    const queue = queues.find((q) => q.QueueID.toString() === value.toString());
+                    displayValue = queue ? queue.Name : value;
                     break;
                 case TicketProperty.STATE_ID:
                     const states = await KIXObjectService.loadObjects<TicketState>(

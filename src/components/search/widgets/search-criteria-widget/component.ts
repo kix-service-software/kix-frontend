@@ -71,7 +71,7 @@ class Component implements IKIXObjectSearchListener {
                 if (Array.isArray(criteria.value)) {
                     for (const v of criteria.value) {
                         const value = await searchDefinition.getDisplaySearchValue(
-                            criteria.property, parameter, criteria.value
+                            criteria.property, parameter, v
                         );
                         const icons = await labelProvider.getIcons(null, criteria.property, v);
                         labels.push(new Label(null, value, icons ? icons[0] : null, value, null, value, false));
