@@ -78,11 +78,11 @@ export class KIXObjectSocketClient extends SocketClient {
                 }
 
                 await CacheService.getInstance().set(cacheKey, objects, request.objectType);
-                this.requestPromises.delete(cacheKey);
                 resolve(objects);
             }).catch((error) => {
                 reject(error);
             });
+            this.requestPromises.delete(cacheKey);
         });
     }
 
