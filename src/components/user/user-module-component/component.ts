@@ -5,7 +5,7 @@ import {
 import {
     RoleService, RoleTableFactory, RoleBrowserFactory, RoleLabelProvider, UserRoleCreateAction,
     NewUserRoleDialogContext, UserRoleTableDeleteAction, UserLabelProvider, UserBrowserFactory,
-    UserRoleEditAction, RoleDetailsContext, UserTableFactory, RolePermissionsTableFactory,
+    UserRoleEditAction, RoleDetailsContext, UserTableFactory,
     UserCreateAction, NewUserDialogContext, UserDetailsContext, UserEditAction, UserFormService, EditUserDialogContext,
     EditUserRoleDialogContext, UserRoleFormService
 } from '../../../core/browser/user';
@@ -34,9 +34,8 @@ class Component extends AbstractMarkoComponent {
 
         TableFactoryService.getInstance().registerFactory(new RoleTableFactory());
         TableFactoryService.getInstance().registerFactory(new UserTableFactory());
-        TableFactoryService.getInstance().registerFactory(new RolePermissionsTableFactory());
         TableCSSHandlerRegistry.getInstance().registerCSSHandler(
-            KIXObjectType.ROLE_PERMISSION, new PermissionTableCSSHandler()
+            KIXObjectType.PERMISSION, new PermissionTableCSSHandler()
         );
 
         FactoryService.getInstance().registerFactory(KIXObjectType.USER, UserBrowserFactory.getInstance());

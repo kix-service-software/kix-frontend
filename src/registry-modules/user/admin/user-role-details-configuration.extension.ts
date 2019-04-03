@@ -1,7 +1,11 @@
 import { IConfigurationExtension } from '../../../core/extensions';
-import { ContextConfiguration, WidgetConfiguration, ConfiguredWidget, WidgetSize } from '../../../core/model';
+import {
+    ContextConfiguration, WidgetConfiguration, ConfiguredWidget, WidgetSize, TableWidgetSettings,
+    KIXObjectType, PermissionProperty, SortOrder, DataType
+} from '../../../core/model';
 import { TicketPriorityDetailsContext } from '../../../core/browser/ticket';
 import { RoleDetailsContextConfiguration, RoleDetailsContext } from '../../../core/browser/user';
+import { TableConfiguration, DefaultColumnConfiguration } from '../../../core/browser';
 
 export class Extension implements IConfigurationExtension {
 
@@ -17,7 +21,44 @@ export class Extension implements IConfigurationExtension {
 
         const assignedPermissionsWidget = new ConfiguredWidget('user-role-assigned-permissions-widget',
             new WidgetConfiguration(
-                'user-role-assigned-permissions-widget', 'Translatable#Permissions', [], null, true, true,
+                'table-widget', 'Translatable#Permissions', [],
+                new TableWidgetSettings(
+                    KIXObjectType.PERMISSION, [PermissionProperty.TYPE_ID, SortOrder.UP],
+                    new TableConfiguration(KIXObjectType.PERMISSION, null, null, [
+                        new DefaultColumnConfiguration(
+                            PermissionProperty.TYPE_ID, true, false, true, false, 150, true, true, true,
+                            DataType.STRING, true, null, null, false
+                        ),
+                        new DefaultColumnConfiguration(
+                            PermissionProperty.TARGET, true, false, true, false, 250, true, true, false,
+                            DataType.STRING, true, null, null, false
+                        ),
+                        new DefaultColumnConfiguration(
+                            PermissionProperty.IS_REQUIRED, false, true, true, false, 85, true, true, true
+                        ),
+                        new DefaultColumnConfiguration(
+                            PermissionProperty.CREATE, false, false, true, false, 85,
+                            false, true, true, null, null, 'crud-cell'
+                        ),
+                        new DefaultColumnConfiguration(
+                            PermissionProperty.READ, false, false, true, false, 85,
+                            false, true, true, null, null, 'crud-cell'
+                        ),
+                        new DefaultColumnConfiguration(
+                            PermissionProperty.UPDATE, false, false, true, false, 85,
+                            false, true, true, null, null, 'crud-cell'
+                        ),
+                        new DefaultColumnConfiguration(
+                            PermissionProperty.DELETE, false, false, true, false, 85,
+                            false, true, true, null, null, 'crud-cell'
+                        ),
+                        new DefaultColumnConfiguration(
+                            PermissionProperty.DENY, false, false, true, false, 85,
+                            false, true, true, null, null, 'crud-cell'
+                        )
+                    ])
+                ),
+                true, true, null, null, true
             ));
 
         const userRoleInfoWidget = new ConfiguredWidget('user-role-info-widget', new WidgetConfiguration(
