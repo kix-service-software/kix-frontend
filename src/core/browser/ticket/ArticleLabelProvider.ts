@@ -89,7 +89,7 @@ export class ArticleLabelProvider implements ILabelProvider<Article> {
                 break;
 
             case ArticleProperty.INCOMING_TIME:
-                displayValue = DateTimeUtil.getLocalDateTimeString(article[property] * 1000);
+                displayValue = await DateTimeUtil.getLocalDateTimeString(article[property] * 1000);
                 break;
 
             case ArticleProperty.ATTACHMENTS:

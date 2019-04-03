@@ -69,7 +69,7 @@ export class TranslationLabelProvider implements ILabelProvider<Translation> {
                 break;
             case TranslationProperty.CREATE_TIME:
             case TranslationProperty.CHANGE_TIME:
-                displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
+                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
             default:
         }

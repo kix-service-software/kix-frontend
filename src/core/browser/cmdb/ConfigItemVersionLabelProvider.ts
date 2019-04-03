@@ -69,7 +69,7 @@ export class ConfigItemVersionLabelProvider implements ILabelProvider<Version> {
 
         switch (property) {
             case VersionProperty.CREATE_TIME:
-                displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
+                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
             case VersionProperty.CURRENT:
                 displayValue = version.isCurrentVersion ? 'Translatable#(current version)' : '';

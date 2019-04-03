@@ -131,7 +131,7 @@ export class TranslationService extends KIXObjectService<Translation> {
         });
     }
 
-    private static async getUserLanguage(): Promise<string> {
+    public static async getUserLanguage(): Promise<string> {
         let language: string;
         const currentUser = await AgentService.getInstance().getCurrentUser();
         if (currentUser) {

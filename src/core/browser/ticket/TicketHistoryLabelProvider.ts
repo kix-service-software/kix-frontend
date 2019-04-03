@@ -62,7 +62,7 @@ export class TicketHistoryLabelProvider implements ILabelProvider<TicketHistory>
                 displayValue = users && !!users.length ? users[0].UserFullname : displayValue;
                 break;
             case TicketHistoryProperty.CREATE_TIME:
-                displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
+                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
             default:
                 displayValue = await this.getPropertyValueDisplayText(property, displayValue);

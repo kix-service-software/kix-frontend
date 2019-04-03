@@ -202,13 +202,13 @@ export class TicketLabelProvider implements ILabelProvider<Ticket> {
 
         switch (property) {
             case TicketProperty.CREATED:
-                displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
+                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
             case TicketProperty.PENDING_TIME:
-                displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
+                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
             case TicketProperty.CHANGED:
-                displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
+                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
             case TicketProperty.QUEUE_ID:
                 if (ticket.QueueID) {
@@ -295,13 +295,13 @@ export class TicketLabelProvider implements ILabelProvider<Ticket> {
                 displayValue = ticket.LockID === 1 ? 'Unlocked' : 'Locked';
                 break;
             case TicketProperty.ESCALATION_RESPONSE_TIME:
-                displayValue = DateTimeUtil.getLocalDateTimeString(ticket.EscalationResponseTime);
+                displayValue = await DateTimeUtil.getLocalDateTimeString(ticket.EscalationResponseTime);
                 break;
             case TicketProperty.ESCALATION_UPDATE_TIME:
-                displayValue = DateTimeUtil.getLocalDateTimeString(ticket.EscalationUpdateTime);
+                displayValue = await DateTimeUtil.getLocalDateTimeString(ticket.EscalationUpdateTime);
                 break;
             case TicketProperty.ESCALATION_SOLUTIONS_TIME:
-                displayValue = DateTimeUtil.getLocalDateTimeString(ticket.EscalationSolutionTime);
+                displayValue = await DateTimeUtil.getLocalDateTimeString(ticket.EscalationSolutionTime);
                 break;
             case TicketProperty.WATCHERS:
                 if (ticket.Watchers) {
