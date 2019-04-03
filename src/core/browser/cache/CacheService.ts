@@ -110,6 +110,9 @@ export class CacheService {
             case KIXObjectType.USER_PREFERENCE:
                 cacheKeyPrefixes.push(KIXObjectType.CURRENT_USER);
                 break;
+            case KIXObjectType.USER:
+                cacheKeyPrefixes.push(KIXObjectType.ROLE);
+                break;
             default:
         }
 
