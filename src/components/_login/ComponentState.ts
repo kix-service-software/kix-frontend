@@ -8,7 +8,8 @@ export class ComponentState {
         public error: boolean = false,
         public doLogin: boolean = false,
         public logout: boolean = false,
-        public releaseInfo: ReleaseInfo = null
+        public releaseInfo: ReleaseInfo = null,
+        public unsupportedBrowser: boolean = false
     ) { }
 
 }

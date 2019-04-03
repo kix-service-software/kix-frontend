@@ -1,6 +1,7 @@
 import { ComponentState } from './ComponentState';
 import { ClientStorageService } from '../../core/browser/ClientStorageService';
 import { AgentService } from '../../core/browser/application/AgentService';
+import * as Bowser from "bowser";
 
 class Component {
 
@@ -19,6 +20,7 @@ class Component {
         if (this.state.logout) {
             ClientStorageService.destroyToken();
         }
+        this.checkBrowser();
         this.state.loading = false;
         setTimeout(() => {
             const userElement = (this as any).getEl('login-user-name');
@@ -26,6 +28,16 @@ class Component {
                 userElement.focus();
             }
         }, 200);
+    }
+
+    private checkBrowser(): void {
+        const browser = Bowser.getParser(window.navigator.userAgent);
+        this.state.unsupportedBrowser = !browser.satisfies({
+            'chrome': '>60',
+            'chromium': '>60',
+            'firefox': '>60',
+            'microsoft edge': '>18' // EdgeHTML version --> belongs to Edge v44
+        });
     }
 
     private async login(event: any): Promise<void> {
