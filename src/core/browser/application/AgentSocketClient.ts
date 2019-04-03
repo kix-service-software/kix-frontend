@@ -132,7 +132,8 @@ export class AgentSocketClient extends SocketClient {
             this.agentSocket.on(
                 AgentEvent.SET_PREFERENCES_FINISHED, async (result: SetPreferencesResponse) => {
                     if (result.requestId === requestId) {
-                        await CacheService.getInstance().deleteKeys(KIXObjectType.CURRENT_USER);
+                        await CacheService.getInstance().deleteKeys(KIXObjectType.PERSONAL_SETTINGS);
+                        this.currentUserRequestPromise = null;
                         window.clearTimeout(timeout);
                         resolve(result);
                     }

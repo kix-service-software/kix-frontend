@@ -137,7 +137,7 @@ export class UserService extends KIXObjectService {
             if (userLanguage) {
                 await this.setPreferences(token, clientRequestId, [userLanguage], userId);
             }
-        } else if (KIXObjectType.USER_PREFERENCE) {
+        } else if (objectType === KIXObjectType.USER_PREFERENCE) {
             const options = updateOptions as SetPreferenceOptions;
             const updatePreference = new SetPreference(parameter);
             const response = await this.sendUpdateRequest<SetPreferenceResponse, SetPreferenceRequest>(
