@@ -61,7 +61,7 @@ export class ConfigItemHistoryLabelProvider implements ILabelProvider<ConfigItem
                 displayValue = users && !!users.length ? users[0].UserFullname : displayValue;
                 break;
             case ConfigItemHistoryProperty.CREATE_TIME:
-                displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
+                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
             case ConfigItemHistoryProperty.VERSION_ID:
                 displayValue = historyEntry.VersionID

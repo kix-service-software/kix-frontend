@@ -99,7 +99,7 @@ export class RoleLabelProvider implements ILabelProvider<Role> {
                 break;
             case RoleProperty.CREATE_TIME:
             case RoleProperty.CHANGE_TIME:
-                displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
+                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
             default:
         }

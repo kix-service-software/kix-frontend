@@ -18,7 +18,7 @@ export class ConfigItemLabelProvider implements ILabelProvider<ConfigItem> {
         switch (property) {
             case ConfigItemProperty.CREATE_TIME:
             case ConfigItemProperty.CHANGE_TIME:
-                displayValue = DateTimeUtil.getLocalDateTimeString(value);
+                displayValue = await DateTimeUtil.getLocalDateTimeString(value);
                 break;
             case ConfigItemProperty.CLASS_ID:
                 const ciClasses = await KIXObjectService.loadObjects<ConfigItemClass>(

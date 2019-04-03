@@ -110,7 +110,7 @@ export class TicketStateLabelProvider implements ILabelProvider<TicketState> {
                 break;
             case TicketStateProperty.CREATE_TIME:
             case TicketStateProperty.CHANGE_TIME:
-                displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
+                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
             default:
         }

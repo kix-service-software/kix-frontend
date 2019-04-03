@@ -31,7 +31,7 @@ export class ConfigItemClassLabelProvider implements ILabelProvider<ConfigItemCl
                 break;
             case ConfigItemClassProperty.CREATE_TIME:
             case ConfigItemClassProperty.CHANGE_TIME:
-                displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
+                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
             default:
         }

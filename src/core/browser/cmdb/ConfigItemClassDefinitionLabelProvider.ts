@@ -52,7 +52,7 @@ export class ConfigItemClassDefinitionLabelProvider implements ILabelProvider<Co
 
         switch (property) {
             case ConfigItemClassDefinitionProperty.CREATE_TIME:
-                displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
+                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
             case ConfigItemClassDefinitionProperty.CREATE_BY:
                 const users = await KIXObjectService.loadObjects<User>(

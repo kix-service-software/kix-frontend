@@ -118,13 +118,13 @@ export class UserLabelProvider implements ILabelProvider<User> {
                 break;
             case UserProperty.CREATE_TIME:
             case UserProperty.CHANGE_TIME:
-                displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
+                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
             case UserProperty.LAST_LOGIN:
                 if (user.Preferences) {
                     const lastLogin = user.Preferences.find((p) => p.ID === UserProperty.LAST_LOGIN);
                     if (lastLogin) {
-                        displayValue = DateTimeUtil.getLocalDateTimeString(Number(lastLogin.Value) * 1000);
+                        displayValue = await DateTimeUtil.getLocalDateTimeString(Number(lastLogin.Value) * 1000);
                     }
                 }
                 break;

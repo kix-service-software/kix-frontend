@@ -148,7 +148,7 @@ export class FAQLabelProvider implements ILabelProvider<FAQArticle> {
                 break;
             case FAQArticleProperty.CREATED:
             case FAQArticleProperty.CHANGED:
-                displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
+                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
             case FAQArticleProperty.VOTES:
                 displayValue = '';

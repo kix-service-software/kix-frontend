@@ -127,7 +127,7 @@ export class PermissionLabelProvider implements ILabelProvider<Permission> {
                 break;
             case PermissionProperty.CREATE_TIME:
             case PermissionProperty.CHANGE_TIME:
-                displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
+                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
             case PermissionProperty.TYPE_ID:
                 const types = await KIXObjectService.loadObjects<PermissionType>(

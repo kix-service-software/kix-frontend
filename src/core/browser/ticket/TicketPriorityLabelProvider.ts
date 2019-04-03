@@ -103,7 +103,7 @@ export class TicketPriorityLabelProvider implements ILabelProvider<TicketPriorit
                 break;
             case TicketPriorityProperty.CREATE_TIME:
             case TicketPriorityProperty.CHANGE_TIME:
-                displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
+                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
             default:
         }

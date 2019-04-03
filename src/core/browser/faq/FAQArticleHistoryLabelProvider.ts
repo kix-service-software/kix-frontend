@@ -58,7 +58,7 @@ export class FAQArticleHistoryLabelProvider implements ILabelProvider<FAQHistory
                 displayValue = users && !!users.length ? users[0].UserFullname : displayValue;
                 break;
             case FAQArticleHistoryProperty.CREATED:
-                displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
+                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
             default:
                 displayValue = await this.getPropertyValueDisplayText(property, displayValue);
