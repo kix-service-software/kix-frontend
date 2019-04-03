@@ -316,15 +316,9 @@ class Component {
         if (checkBox && tree) {
             const nodes = tree.getFilteredNodes() || [];
             if (checkBox.checked) {
-                nodes.forEach((n) => {
-                    if (!this.state.selectedNodes.some((sn) => sn.id === n.id)) {
-                        this.state.selectedNodes.push(n);
-                    }
-                });
+                this.selectNodes(nodes);
             } else {
-                this.state.selectedNodes = this.state.selectedNodes.filter(
-                    (sn) => !nodes.some((n) => n.id === sn.id)
-                );
+                this.state.selectedNodes = [];
             }
             setTimeout(() => {
                 this.setDropdownStyle();
@@ -333,6 +327,18 @@ class Component {
             }, 50);
             (this as any).emit('nodesChanged', this.state.selectedNodes);
         }
+    }
+
+    private selectNodes(nodes: TreeNode[]): void {
+        nodes.forEach((n) => {
+            if (!this.state.selectedNodes.some((sn) => sn.id === n.id)) {
+                this.state.selectedNodes.push(n);
+            }
+
+            if (n.children) {
+                this.selectNodes(n.children);
+            }
+        });
     }
 
     private setCheckState(): void {
