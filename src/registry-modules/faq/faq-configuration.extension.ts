@@ -1,10 +1,10 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize,
-    FormField, Form, FormContext, KIXObjectType
+    FormField, Form, FormContext, KIXObjectType, TableWidgetSettings
 } from '../../core/model';
 import { FAQContext, FAQContextConfiguration } from '../../core/browser/faq';
-import { SearchProperty, TableConfiguration } from '../../core/browser';
+import { SearchProperty, TableConfiguration, TableHeaderHeight, TableRowHeight } from '../../core/browser';
 import { FAQArticleProperty } from '../../core/model/kix/faq';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../core/services';
@@ -20,7 +20,14 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
         const articleListWidget =
             new ConfiguredWidget('20180727-faq-article-list-widget', new WidgetConfiguration(
                 'table-widget', 'Übersicht FAQ', ['faq-article-create-action', 'csv-export-action'],
-                { objectType: KIXObjectType.FAQ_ARTICLE }, false, false, WidgetSize.BOTH, 'kix-icon-faq', true)
+                new TableWidgetSettings(
+                    KIXObjectType.FAQ_ARTICLE, null,
+                    new TableConfiguration(
+                        KIXObjectType.FAQ_ARTICLE, null, 25, null, null, true, null, null, null,
+                        TableHeaderHeight.LARGE, TableRowHeight.LARGE
+                    )
+                ),
+                false, false, WidgetSize.BOTH, 'kix-icon-faq', true)
             );
 
         const content = ['20180727-faq-article-list-widget'];
