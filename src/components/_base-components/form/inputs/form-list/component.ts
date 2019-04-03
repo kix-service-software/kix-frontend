@@ -318,7 +318,7 @@ class Component {
             if (checkBox.checked) {
                 this.selectNodes(nodes);
             } else {
-                this.state.selectedNodes = [];
+                this.state.selectedNodes = this.state.selectedNodes.filter((sn) => !this.isNodeAviable(sn, nodes));
             }
             setTimeout(() => {
                 this.setDropdownStyle();
@@ -339,6 +339,22 @@ class Component {
                 this.selectNodes(n.children);
             }
         });
+    }
+
+    private isNodeAviable(node: TreeNode, nodes: TreeNode[]): boolean {
+        for (const n of nodes) {
+            if (n.id === node.id) {
+                return true;
+            }
+
+            if (n.children) {
+                const isAvailable = this.isNodeAviable(node, n.children);
+                if (isAvailable) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private setCheckState(): void {
