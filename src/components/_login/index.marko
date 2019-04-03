@@ -14,8 +14,14 @@
                         <translation-string pattern="Translatable#Welcome to KIX"/>
                     </h1>
                 </div>
-                <if(state.error || state.logout)>
+                <if(state.error || state.logout || state.unsupportedBrowser)>
                     <div class="dialog-message-area">
+                        <if(state.unsupportedBrowser)>
+                            <div class="message message-hint">
+                                <span.kix-icon-warnsign/>
+                                <translation-string pattern="Translatable#This browser is not supported. You may encounter malfunctions."/>
+                            </div>
+                        </if>
                         <if(state.error)>
                             <div class="message message-error">
                                 <span.kix-icon-warnsign/>

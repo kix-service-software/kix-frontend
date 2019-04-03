@@ -19,6 +19,7 @@
   "dependencies": {
     "@lasso/marko-taglib": "1.0.13",
     "body-parser": "1.18.3",
+    "bowser": "2.1.2",
     "compression": "1.7.3",
     "cookie-parser": "1.4.3",
     "csso": "3.5.1",
