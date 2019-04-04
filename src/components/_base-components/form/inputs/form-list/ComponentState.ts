@@ -24,7 +24,8 @@ export class ComponentState extends AbstractComponentState {
         public actions: FormInputAction[] = [],
         public placeholder: string = null,
         public autocompleteNotFoundText: string = null,
-        public autoCompletePlaceholder: string = ''
+        public autoCompletePlaceholder: string = '',
+        public disabled: boolean = false
     ) {
         super();
     }

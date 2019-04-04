@@ -12,7 +12,8 @@ export class ComponentState extends WidgetComponentState {
         public filterCount: number = null,
         public headerTitleComponents: string[] = [],
         public filterPlaceHolder: string = 'Translatable#All Objects',
-        public showFilter: boolean = true
+        public showFilter: boolean = true,
+        public isFiltering: boolean = false
     ) {
         super();
     }

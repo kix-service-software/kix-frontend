@@ -1,6 +1,7 @@
 import { ComponentState } from './ComponentState';
 import { KIXObjectPropertyFilter, TreeNode } from '../../../core/model';
 import { TranslationService } from '../../../core/browser/i18n/TranslationService';
+import { ComponentInput } from './ComponentInput';
 
 class Component {
 
@@ -10,7 +11,7 @@ class Component {
         this.state = new ComponentState();
     }
 
-    public onInput(input: any): void {
+    public onInput(input: ComponentInput): void {
         if (input.predefinedFilter) {
             this.state.predefinedFilter = input.predefinedFilter;
             this.state.predefinedFilterList = this.state.predefinedFilter.map(
@@ -20,6 +21,8 @@ class Component {
             this.state.predefinedFilter = [];
             this.state.predefinedFilterList = [];
         }
+
+        this.state.disabled = typeof input.disabled !== 'undefined' ? input.disabled : true;
 
         this.state.icon = typeof input.icon !== 'undefined' ? input.icon : 'kix-icon-filter';
         this.state.showFilterCount = typeof input.showFilterCount !== 'undefined' ? input.showFilterCount : true;
@@ -57,8 +60,10 @@ class Component {
     }
 
     public filter(): void {
-        const filter = this.state.currentFilter ? this.state.predefinedFilter[this.state.currentFilter.id] : null;
-        (this as any).emit('filter', this.state.textFilterValue, filter);
+        if (!this.state.disabled) {
+            const filter = this.state.currentFilter ? this.state.predefinedFilter[this.state.currentFilter.id] : null;
+            (this as any).emit('filter', this.state.textFilterValue, filter);
+        }
     }
 
     public reset(): void {

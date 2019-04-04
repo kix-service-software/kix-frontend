@@ -2,6 +2,7 @@ import { ComponentState } from './ComponentState';
 import { TreeNode, AutoCompleteConfiguration } from '../../../../../core/model';
 import { FormInputAction } from '../../../../../core/browser';
 import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
+import { ComponentInput } from './ComponentInput';
 
 class Component {
 
@@ -15,7 +16,8 @@ class Component {
         this.state = new ComponentState();
     }
 
-    public onInput(input: any): void {
+    public onInput(input: ComponentInput): void {
+        this.state.disabled = typeof input.disabled !== 'undefined' ? input.disabled : false;
         this.state.actions = typeof input.actions !== 'undefined' ? input.actions : [];
         this.state.readonly = typeof input.readonly !== 'undefined' ? input.readonly : false;
         this.state.invalid = typeof input.invalid !== 'undefined' ? input.invalid : false;
@@ -89,19 +91,21 @@ class Component {
     }
 
     private toggleList(close: boolean = true): void {
-        if (this.state.expanded && close) {
-            this.state.expanded = false;
-            this.state.filterValue = null;
-            this.state.autocompleteSearchValue = null;
-            if (this.state.asAutocomplete) {
-                this.state.nodes = [];
+        if (!this.state.disabled) {
+            if (this.state.expanded && close) {
+                this.state.expanded = false;
+                this.state.filterValue = null;
+                this.state.autocompleteSearchValue = null;
+                if (this.state.asAutocomplete) {
+                    this.state.nodes = [];
+                }
+            } else if (!this.state.readonly) {
+                this.state.expanded = true;
+                setTimeout(() => {
+                    this.setDropdownStyle();
+                    this.focusInput();
+                }, 100);
             }
-        } else if (!this.state.readonly) {
-            this.state.expanded = true;
-            setTimeout(() => {
-                this.setDropdownStyle();
-                this.focusInput();
-            }, 100);
         }
     }
 
