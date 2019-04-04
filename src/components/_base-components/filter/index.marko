@@ -2,6 +2,7 @@
     <if(state.predefinedFilterList && state.predefinedFilterList.length)>
         <span.predefined-filter>
             <form-list
+                disabled=state.disabled
                 nodes=state.predefinedFilterList
                 placeholder=state.predefinedFilterPlaceholder
                 on-nodesChanged("predefinedFilterChanged")
@@ -12,6 +13,7 @@
         type="text"
         placeholder=state.placeholder
         value=state.textFilterValue
+        disabled=state.disabled
         on-change("textFilterValueChanged")
         on-keydown("keyDown")/>
     <span.icon class=state.icon on-click("filter")>
