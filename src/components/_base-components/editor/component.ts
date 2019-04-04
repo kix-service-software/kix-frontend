@@ -1,6 +1,7 @@
 import { ComponentState } from './ComponentState';
 import { ServiceRegistry, IKIXObjectService, AttachmentUtil } from '../../../core/browser';
 import { AutocompleteFormFieldOption, InlineContent } from '../../../core/browser/components';
+import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 
 declare var CKEDITOR: any;
 
@@ -48,6 +49,10 @@ class EditorComponent {
         this.autoCompletePlugins = [];
 
         if (!this.instanceExists()) {
+            const userLanguage = await TranslationService.getUserLanguage();
+            if (userLanguage) {
+                this.state.config['language'] = userLanguage;
+            }
             if (this.state.inline) {
                 this.editor = CKEDITOR.inline(this.state.id, {
                     ...this.state.config
