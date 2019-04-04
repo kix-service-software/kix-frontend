@@ -64,7 +64,6 @@ export class ComponentState {
         this.config = {
             // TODO: add useful title
             // title: 'some useful title - maybe relevant for screen readers'
-            // TODO: language from user config?
             language: navigator.language || 'de',
             toolbar,
             resize_minWidth: 200,
