@@ -127,20 +127,22 @@ class EditorComponent {
         }
     }
 
-    public setAutocompleteConfiguration(autocompleteOption: AutocompleteFormFieldOption): void {
-        autocompleteOption.autocompleteObjects.forEach((ao) => {
-            const service = (ServiceRegistry.getServiceInstance(ao.objectType) as IKIXObjectService);
-            if (service) {
-                const config = service.getAutoFillConfiguration(CKEDITOR.plugins.textMatch, ao.placeholder);
-                if (config) {
-                    const plugin = new CKEDITOR.plugins.autocomplete(this.editor, config);
-                    plugin.getHtmlToInsert = function (item) {
-                        return this.outputTemplate ? this.outputTemplate.output(item) : item.name;
-                    };
-                    this.autoCompletePlugins.push(plugin);
+    public async setAutocompleteConfiguration(autocompleteOption: AutocompleteFormFieldOption): Promise<void> {
+        if (await this.isEditorReady()) {
+            autocompleteOption.autocompleteObjects.forEach((ao) => {
+                const service = (ServiceRegistry.getServiceInstance(ao.objectType) as IKIXObjectService);
+                if (service) {
+                    const config = service.getAutoFillConfiguration(CKEDITOR.plugins.textMatch, ao.placeholder);
+                    if (config) {
+                        const plugin = new CKEDITOR.plugins.autocomplete(this.editor, config);
+                        plugin.getHtmlToInsert = function (item) {
+                            return this.outputTemplate ? this.outputTemplate.output(item) : item.name;
+                        };
+                        this.autoCompletePlugins.push(plugin);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     // TODO: bessere Lösung finden (im Moment gibt es warnings im Log, ...->
