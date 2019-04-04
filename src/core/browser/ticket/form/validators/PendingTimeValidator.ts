@@ -22,11 +22,14 @@ export class PendingTimeValidator implements IFormFieldValidator {
                     const now = new Date();
                     if (now > stateValue.pendingDate) {
                         result = new ValidationResult(
-                            ValidationSeverity.ERROR, 'Warten bis Datum liegt nicht in der Zukunft.'
+                            ValidationSeverity.ERROR, 'Translatable#Pending date is not in the future.'
                         );
                     }
                 } else {
-                    result = new ValidationResult(ValidationSeverity.ERROR, 'Kein gültiges Datum angegeben.');
+                    result = new ValidationResult(
+                        ValidationSeverity.ERROR,
+                        'Translatable#Invalid date.'
+                    );
                 }
             }
         }

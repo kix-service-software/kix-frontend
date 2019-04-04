@@ -11,7 +11,9 @@
     <div.pending-state class={
         invalid: state.invalid
     }>
-        <span>*Warten bis:</span>
+        <span>
+            *<translation-string pattern="Translatable#Wait until"/>:
+        </span>
         <input.input-style.date-input
             type="date"
             pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"

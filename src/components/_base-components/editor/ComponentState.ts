@@ -61,7 +61,6 @@ export class ComponentState {
             ];
         }
 
-
         this.config = {
             // TODO: add useful title
             // title: 'some useful title - maybe relevant for screen readers'
