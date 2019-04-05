@@ -25,11 +25,11 @@ export class ConfigItemBrowserFactory implements IKIXObjectFactory<ConfigItem> {
 
     private async mapAdditionalData(configItem: ConfigItem): Promise<void> {
         const createUsers = await KIXObjectService.loadObjects<User>(
-            KIXObjectType.USER, [configItem.CreateBy], null, null, true, true
+            KIXObjectType.USER, [configItem.CreateBy], null, null, true
         ).catch((error) => [] as User[]);
         configItem.createdBy = createUsers && !!createUsers.length ? createUsers[0] : null;
         const changeUsers = await KIXObjectService.loadObjects<User>(
-            KIXObjectType.USER, [configItem.ChangeBy], null, null, true, true
+            KIXObjectType.USER, [configItem.ChangeBy], null, null, true
         ).catch((error) => [] as User[]);
         configItem.changedBy = changeUsers && !!changeUsers.length ? changeUsers[0] : null;
 

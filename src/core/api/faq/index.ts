@@ -1,7 +1,3 @@
-export { FAQCategoryResponse } from './FAQCategoryResponse';
-export { FAQCategoriesResponse } from './FAQCategoriesResponse';
-export { FAQArticlesResponse } from './FAQArticlesResponse';
-export { FAQArticleResponse } from './FAQArticleResponse';
 export { CreateFAQArticleResponse } from './CreateFAQArticleResponse';
 export { CreateFAQArticleRequest } from './CreateFAQArticleRequest';
 export { CreateFAQArticle } from './CreateFAQArticle';

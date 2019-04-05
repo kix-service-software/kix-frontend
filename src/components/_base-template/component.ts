@@ -116,9 +116,6 @@ class Component {
             false, 'release', ['release'], ReleaseContext
         );
         ContextService.getInstance().registerContext(releaseContext);
-
-        FormService.getInstance();
-        await FormService.getInstance().loadFormConfigurations();
     }
 
     private setContext(context: Context<any> = ContextService.getInstance().getActiveContext()): void {

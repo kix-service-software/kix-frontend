@@ -5,7 +5,7 @@ import {
 } from '../core/model';
 
 import { SocketResponse, SocketErrorResponse } from '../core/common';
-import { ConfigurationService, UserService, LoggingService } from '../core/services';
+import { ConfigurationService, UserService } from '../core/services';
 import { PluginService } from '../services';
 
 export class ContextNamespace extends SocketNameSpace {
@@ -72,14 +72,17 @@ export class ContextNamespace extends SocketNameSpace {
 
     }
 
-    private async saveContextConfiguration(data: SaveContextConfigurationRequest): Promise<SocketResponse<void>> {
-        const user = await UserService.getInstance().getUserByToken(data.token);
-        const userId = user && user.UserID;
+    private saveContextConfiguration(data: SaveContextConfigurationRequest): Promise<SocketResponse<void>> {
+        return new Promise<SocketResponse<void>>((resolve, reject) => {
+            UserService.getInstance().getUserByToken(data.token).then((user) => {
+                const userId = user && user.UserID;
 
-        ConfigurationService.getInstance()
-            .saveModuleConfiguration(data.contextId, userId, data.configuration);
+                ConfigurationService.getInstance()
+                    .saveModuleConfiguration(data.contextId, userId, data.configuration);
 
-        return new SocketResponse(ContextEvent.CONTEXT_CONFIGURATION_SAVED, { requestId: data.requestId });
+                resolve(new SocketResponse(ContextEvent.CONTEXT_CONFIGURATION_SAVED, { requestId: data.requestId }));
+            });
+        });
     }
 
     private async saveWidgetConfiguration(data: SaveWidgetRequest): Promise<SocketResponse<void>> {

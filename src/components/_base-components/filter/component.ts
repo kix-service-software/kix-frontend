@@ -22,7 +22,7 @@ class Component {
             this.state.predefinedFilterList = [];
         }
 
-        this.state.disabled = typeof input.disabled !== 'undefined' ? input.disabled : true;
+        this.state.disabled = typeof input.disabled !== 'undefined' ? input.disabled : false;
 
         this.state.icon = typeof input.icon !== 'undefined' ? input.icon : 'kix-icon-filter';
         this.state.showFilterCount = typeof input.showFilterCount !== 'undefined' ? input.showFilterCount : true;

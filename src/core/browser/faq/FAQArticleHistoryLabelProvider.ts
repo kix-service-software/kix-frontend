@@ -53,7 +53,7 @@ export class FAQArticleHistoryLabelProvider implements ILabelProvider<FAQHistory
         switch (property) {
             case FAQArticleHistoryProperty.CREATED_BY:
                 const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [displayValue], null, null, true, true
+                    KIXObjectType.USER, [displayValue], null, null, true
                 ).catch((error) => [] as User[]);
                 displayValue = users && !!users.length ? users[0].UserFullname : displayValue;
                 break;

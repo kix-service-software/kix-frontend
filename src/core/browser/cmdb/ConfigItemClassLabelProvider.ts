@@ -25,7 +25,7 @@ export class ConfigItemClassLabelProvider implements ILabelProvider<ConfigItemCl
             case ConfigItemClassProperty.CREATE_BY:
             case ConfigItemClassProperty.CHANGE_BY:
                 const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [value], null, null, true, true
+                    KIXObjectType.USER, [value], null, null, true
                 ).catch((error) => [] as User[]);
                 displayValue = users && !!users.length ? users[0].UserFullname : value;
                 break;

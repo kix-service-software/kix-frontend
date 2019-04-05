@@ -15,7 +15,7 @@ export class ConfigItemVersionLabelProvider implements ILabelProvider<Version> {
         switch (property) {
             case VersionProperty.CREATE_BY:
                 const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [value], null, null, true, true
+                    KIXObjectType.USER, [value], null, null, true
                 ).catch((error) => [] as User[]);
                 displayValue = users && !!users.length ? users[0].UserFullname : value;
                 break;

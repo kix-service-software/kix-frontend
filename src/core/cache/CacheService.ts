@@ -106,7 +106,7 @@ export class CacheService {
                 cacheKeyPrefixes.push(KIXObjectType.FAQ_ARTICLE);
                 break;
             case KIXObjectType.FAQ_ARTICLE:
-                cacheKeyPrefixes.push(KIXObjectType.FAQ_CATEGORY_HIERARCHY);
+                cacheKeyPrefixes.push(KIXObjectType.FAQ_CATEGORY);
                 break;
             case KIXObjectType.CONFIG_ITEM_CLASS:
             case KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION:

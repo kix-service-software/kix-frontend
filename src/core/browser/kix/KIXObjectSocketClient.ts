@@ -38,8 +38,8 @@ export class KIXObjectSocketClient extends SocketClient {
     private requestPromises: Map<string, Promise<any>> = new Map();
 
     public async loadObjects<T extends KIXObject>(
-        kixObjectType: KIXObjectType, objectIds: Array<string | number>,
-        loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
+        kixObjectType: KIXObjectType, objectIds: Array<string | number> = null,
+        loadingOptions: KIXObjectLoadingOptions = null, objectLoadingOptions: KIXObjectSpecificLoadingOptions = null
     ): Promise<T[]> {
         const token = ClientStorageService.getToken();
         const requestId = IdService.generateDateBasedId();
@@ -49,25 +49,25 @@ export class KIXObjectSocketClient extends SocketClient {
             kixObjectType, objectIds, loadingOptions, objectLoadingOptions
         );
 
-        const cacheKey = this.buildCacheKey({ token, kixObjectType, objectIds, loadingOptions, objectLoadingOptions });
+        const cacheKey = JSON.stringify({ kixObjectType, objectIds, loadingOptions, objectLoadingOptions });
 
         if (await CacheService.getInstance().has(cacheKey, kixObjectType)) {
-            return await CacheService.getInstance().get(cacheKey, kixObjectType);
+            return CacheService.getInstance().get(cacheKey, kixObjectType);
         }
 
         if (this.requestPromises.has(cacheKey)) {
-            return await this.requestPromises.get(cacheKey);
+            return this.requestPromises.get(cacheKey);
         }
 
         const requestPromise = this.createRequestPromise<T>(request, cacheKey);
         this.requestPromises.set(cacheKey, requestPromise);
 
-        return await requestPromise;
+        return requestPromise;
     }
 
     private createRequestPromise<T extends KIXObject>(request: LoadObjectsRequest, cacheKey: string): Promise<T[]> {
         return new Promise<T[]>(async (resolve, reject) => {
-            await this.sendRequest<LoadObjectsResponse<T>>(
+            this.sendRequest<LoadObjectsResponse<T>>(
                 request,
                 KIXObjectEvent.LOAD_OBJECTS, KIXObjectEvent.LOAD_OBJECTS_FINISHED, KIXObjectEvent.LOAD_OBJECTS_ERROR
             ).then(async (response) => {
@@ -78,11 +78,12 @@ export class KIXObjectSocketClient extends SocketClient {
                 }
 
                 await CacheService.getInstance().set(cacheKey, objects, request.objectType);
+                this.requestPromises.delete(cacheKey);
                 resolve(objects);
             }).catch((error) => {
+                this.requestPromises.delete(cacheKey);
                 reject(error);
             });
-            this.requestPromises.delete(cacheKey);
         });
     }
 
@@ -182,15 +183,4 @@ export class KIXObjectSocketClient extends SocketClient {
         });
     }
 
-    private buildCacheKey(request: any): string {
-        const ordered = {};
-
-        if (request) {
-            Object.keys(request).sort().forEach((k) => {
-                ordered[k] = request[k];
-            });
-        }
-
-        return JSON.stringify(ordered);
-    }
 }

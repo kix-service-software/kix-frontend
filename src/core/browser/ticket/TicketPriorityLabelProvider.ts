@@ -97,7 +97,7 @@ export class TicketPriorityLabelProvider implements ILabelProvider<TicketPriorit
             case TicketPriorityProperty.CREATE_BY:
             case TicketPriorityProperty.CHANGE_BY:
                 const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [value], null, null, true, true
+                    KIXObjectType.USER, [value], null, null, true
                 ).catch((error) => [] as User[]);
                 displayValue = users && !!users.length ? users[0].UserFullname : value;
                 break;

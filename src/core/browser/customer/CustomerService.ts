@@ -26,22 +26,6 @@ export class CustomerService extends KIXObjectService<Customer> {
         return "Person";
     }
 
-    public openCustomer(customerId: string, newTab: boolean = false): void {
-        if (newTab) {
-            const link = document.createElement("a");
-            link.href = '/customers/' + customerId;
-            link.target = '_blank';
-            const linkClickEvent = new MouseEvent('click', {
-                view: window,
-                bubbles: false,
-                cancelable: true
-            });
-            link.dispatchEvent(linkClickEvent);
-        } else {
-            ContextService.getInstance().setContext(null, KIXObjectType.CUSTOMER, ContextMode.DETAILS, customerId);
-        }
-    }
-
     public determineDependendObjects(customers: Customer[], targetObjectType: KIXObjectType): string[] | number[] {
         const ids = [];
 

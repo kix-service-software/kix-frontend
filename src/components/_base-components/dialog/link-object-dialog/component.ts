@@ -76,12 +76,13 @@ class LinkDialogComponent {
     private async setLinkableObjects(): Promise<void> {
         this.linkPartners = await LinkUtil.getPossibleLinkPartners(this.state.objectType);
 
-        this.linkPartners.forEach((lp) => {
-            const formId = FormService.getInstance().getFormIdByContext(FormContext.LINK, lp[1]);
+        for (const lp of this.linkPartners) {
+            const formId = await FormService.getInstance().getFormIdByContext(FormContext.LINK, lp[1]);
             if (formId) {
                 this.state.linkableObjectNodes.push(new TreeNode(formId, lp[0]));
             }
-        });
+        }
+
         if (this.state.linkableObjectNodes.length) {
             (this as any).setStateDirty('linkableObjectNodes');
         }

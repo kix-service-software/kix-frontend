@@ -57,7 +57,7 @@ export class TicketHistoryLabelProvider implements ILabelProvider<TicketHistory>
                 break;
             case TicketHistoryProperty.CREATE_BY:
                 const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [displayValue], null, null, true, true
+                    KIXObjectType.USER, [displayValue], null, null, true
                 ).catch((error) => [] as User[]);
                 displayValue = users && !!users.length ? users[0].UserFullname : displayValue;
                 break;

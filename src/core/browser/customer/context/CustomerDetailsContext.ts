@@ -22,10 +22,6 @@ export class CustomerDetailsContext extends Context<CustomerDetailsContextConfig
         return LabelService.getInstance().getText(await this.getObject<Customer>(), short, short);
     }
 
-    public navigateTo(objectId: string): void {
-        CustomerService.getInstance().openCustomer(objectId);
-    }
-
     public getLanes(show: boolean = false): ConfiguredWidget[] {
         let lanes = this.configuration.laneWidgets;
 

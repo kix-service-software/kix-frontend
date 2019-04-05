@@ -10,9 +10,9 @@ export class LoadObjectsRequest implements ISocketRequest {
         public requestId: string,
         public clientRequestId: string,
         public objectType: KIXObjectType,
-        public objectIds: Array<string | number>,
-        public loadingOptions: KIXObjectLoadingOptions = new KIXObjectLoadingOptions(),
-        public objectLoadingOptions?: KIXObjectSpecificLoadingOptions
+        public objectIds: Array<string | number> = null,
+        public loadingOptions: KIXObjectLoadingOptions = null,
+        public objectLoadingOptions: KIXObjectSpecificLoadingOptions = null
     ) { }
 
 }

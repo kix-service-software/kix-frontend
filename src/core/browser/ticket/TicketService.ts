@@ -3,7 +3,8 @@ import { SearchOperator, ContextService } from '..';
 import {
     Attachment, KIXObjectType, Ticket, TicketProperty, FilterDataType, FilterCriteria, FilterType,
     TreeNode, ObjectIcon, Queue, Service, TicketPriority, TicketType,
-    TicketState, StateType, KIXObject, Sla, TableFilterCriteria, User, KIXObjectLoadingOptions
+    TicketState, StateType, KIXObject, Sla, TableFilterCriteria, User, KIXObjectLoadingOptions,
+    KIXObjectSpecificLoadingOptions
 } from '../../model';
 import { TicketParameterUtil } from './TicketParameterUtil';
 import { KIXObjectService } from '../kix';
@@ -28,10 +29,33 @@ export class TicketService extends KIXObjectService<Ticket> {
         return kixObjectType === KIXObjectType.TICKET
             || kixObjectType === KIXObjectType.ARTICLE
             || kixObjectType === KIXObjectType.QUEUE
-            || kixObjectType === KIXObjectType.ARTICLE_TYPE
             || kixObjectType === KIXObjectType.SENDER_TYPE
             || kixObjectType === KIXObjectType.LOCK
             || kixObjectType === KIXObjectType.WATCHER;
+    }
+
+    public async loadObjects<O extends KIXObject>(
+        objectType: KIXObjectType, objectIds: Array<string | number>,
+        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions
+    ): Promise<O[]> {
+        let objects: O[];
+        let superLoad = false;
+        if (objectType === KIXObjectType.QUEUE) {
+            objects = await super.loadObjects<O>(KIXObjectType.QUEUE, null, loadingOptions);
+        } else if (objectType === KIXObjectType.SENDER_TYPE) {
+            objects = await super.loadObjects<O>(KIXObjectType.SENDER_TYPE, null, loadingOptions);
+        } else if (objectType === KIXObjectType.LOCK) {
+            objects = await super.loadObjects<O>(KIXObjectType.LOCK, null, loadingOptions);
+        } else {
+            superLoad = true;
+            objects = await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions);
+        }
+
+        if (objectIds && !superLoad) {
+            objects = objects.filter((c) => objectIds.some((oid) => c.ObjectId === oid));
+        }
+
+        return objects;
     }
 
     public getLinkObjectName(): string {
@@ -126,7 +150,7 @@ export class TicketService extends KIXObjectService<Ticket> {
             case TicketProperty.RESPONSIBLE_ID:
             case TicketProperty.OWNER_ID:
                 const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, null, null, null, true, true
+                    KIXObjectType.USER, null, null, null, true
                 ).catch((error) => [] as User[]);
                 users.forEach((u) => values.push(new TreeNode(u.UserID, u.UserFullname, 'kix-icon-man')));
                 break;

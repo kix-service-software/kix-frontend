@@ -43,16 +43,11 @@ export class AuthenticationService {
         if (!token) {
             res.redirect('/auth');
         } else {
-            const valid = await this.validateToken(token)
-                .catch((error) => {
-                    return false;
-                });
-
-            if (valid) {
-                next();
-            } else {
-                res.redirect('/auth');
-            }
+            this.validateToken(token).then((valid) => {
+                valid ? next() : res.redirect('/auth');
+            }).catch((error) => {
+                return false;
+            });
         }
     }
 
@@ -74,8 +69,11 @@ export class AuthenticationService {
     public async isSocketAuthenticated(socket: SocketIO.Socket, next: (err?: any) => void): Promise<void> {
         if (socket.handshake.query) {
             const token = socket.handshake.query.Token;
-            if (token && await this.validateToken(token)) {
-                next();
+            if (token) {
+                this.validateToken(token)
+                    .then((valid) => valid ? next() : next(new SocketAuthenticationError('Invalid Token!')))
+                    .catch(() => new SocketAuthenticationError('Error validating token!'));
+
             } else {
                 next(new SocketAuthenticationError('Invalid Token!'));
             }
@@ -103,18 +101,23 @@ export class AuthenticationService {
     }
 
     public async validateToken(token: string): Promise<boolean> {
-        let valid = false;
         if (this.frontendTokenCache.has(token)) {
-            const response = await HttpService.getInstance().get<SessionResponse>(
-                'session', {}, token, null, null, false
-            ).catch(() => {
-                this.frontendTokenCache.delete(token);
-                return { Session: null };
+            return new Promise<boolean>((resolve, reject) => {
+                HttpService.getInstance().get<SessionResponse>(
+                    'session', {}, token, null, null, false
+                ).then((response: SessionResponse) => {
+                    resolve(
+                        typeof response !== 'undefined' && response !== null &&
+                        typeof response.Session !== 'undefined' && response.Session !== null
+                    );
+                }).catch(() => {
+                    this.frontendTokenCache.delete(token);
+                    resolve(false);
+                });
             });
-
-            valid = response && response.Session;
+        } else {
+            return false;
         }
-        return valid;
     }
 
     private createToken(userLogin: string, backendToken: string): string {

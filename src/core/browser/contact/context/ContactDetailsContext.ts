@@ -23,10 +23,6 @@ export class ContactDetailsContext extends Context<ContactDetailsContextConfigur
         return LabelService.getInstance().getText(await this.getObject<Contact>(), short, short);
     }
 
-    public navigateTo(objectId: string): void {
-        ContactService.getInstance().openContact(objectId);
-    }
-
     public getLanes(show: boolean = false): ConfiguredWidget[] {
         let lanes = this.configuration.laneWidgets;
 

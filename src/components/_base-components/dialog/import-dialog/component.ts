@@ -211,7 +211,7 @@ class Component {
         );
         this.state.importConfigFormId = form.id;
 
-        FormService.getInstance().addform(form);
+        await FormService.getInstance().addform(form);
     }
 
     private async createTable(): Promise<void> {
