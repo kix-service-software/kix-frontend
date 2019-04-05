@@ -654,11 +654,22 @@ class Component {
             const confirmText = await TranslationService.translate(
                 // tslint:disable-next-line:max-line-length
                 'Translatable#Zeile {0} in der bereit gestellten Datei mit {1} {2}: kann nicht importiert werden{3}. Wie möchten Sie weiter verfahren?',
-                [object['CSV_LINE'], objectName, identifier, error ? ' (' + error.Message + ')' : '']
+                [
+                    object['CSV_LINE'],
+                    objectName,
+                    identifier,
+                    error ? ' (' + error.Message + ')' : ''
+                ]
             );
+
+            const finishCount = this.finishedObjects.length + this.errorObjects.length;
+            const totalCount = this.state.importManager.objects.length + this.finishedObjects.length;
+
+            const title = `${objectName}: ${finishCount}/${totalCount}`;
+
             BrowserUtil.openConfirmOverlay(
                 // tslint:disable-next-line:max-line-length
-                `${objectName}: ${this.finishedObjects.length + this.errorObjects.length}/${this.state.importManager.objects.length}`,
+                title,
                 confirmText,
                 () => { resolve(); },
                 () => {
