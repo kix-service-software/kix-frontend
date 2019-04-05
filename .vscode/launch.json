@@ -5,7 +5,7 @@
             "args": [],
             "cwd": "${workspaceFolder}",
             "env": {
-                "NODE_ENV": "production",
+                "NODE_ENV": "development",
                 "http_proxy": "",
                 "https_proxy": "",
                 "NODE_TLS_REJECT_UNAUTHORIZED": "0",
