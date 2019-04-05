@@ -38,37 +38,51 @@ export class AuthenticationNamespace extends SocketNameSpace {
     }
 
     private async login(data: LoginRequest): Promise<SocketResponse<AuthenticationResult>> {
-        let response: SocketResponse<AuthenticationResult>;
-        await AuthenticationService.getInstance()
-            .login(data.userName, data.password, data.userType, data.clientRequestId)
-            .then((token: string) => {
-                response = new SocketResponse(
-                    AuthenticationEvent.AUTHORIZED,
-                    new AuthenticationResult(token, data.requestId, '/'));
-            }).catch((error: Error) => {
-                const message = error.Code + ' - ' + error.Message;
-                LoggingService.getInstance().error(message);
-                response = new SocketResponse(
-                    AuthenticationEvent.UNAUTHORIZED, new AuthenticationResult(null, data.requestId, '/', message)
-                );
-            });
-        return response;
+        return new Promise<SocketResponse<AuthenticationResult>>((resolve, reject) => {
+            AuthenticationService.getInstance()
+                .login(data.userName, data.password, data.userType, data.clientRequestId)
+                .then((token: string) => {
+                    resolve(
+                        new SocketResponse(
+                            AuthenticationEvent.AUTHORIZED,
+                            new AuthenticationResult(token, data.requestId, '/')
+                        )
+                    );
+                }).catch((error: Error) => {
+                    const message = error.Code + ' - ' + error.Message;
+                    LoggingService.getInstance().error(message);
+                    resolve(
+                        new SocketResponse(
+                            AuthenticationEvent.UNAUTHORIZED,
+                            new AuthenticationResult(null, data.requestId, '/', message)
+                        ));
+                });
+        });
     }
 
     private async logout(data: ISocketRequest): Promise<SocketResponse<AuthenticationResult>> {
-        await AuthenticationService.getInstance().logout(data.token);
-        return new SocketResponse(
-            AuthenticationEvent.UNAUTHORIZED, new AuthenticationResult(null, data.requestId)
-        );
+        return new Promise<SocketResponse<AuthenticationResult>>((resolve, reject) => {
+            AuthenticationService.getInstance().logout(data.token).then(() => {
+                resolve(
+                    new SocketResponse(
+                        AuthenticationEvent.UNAUTHORIZED, new AuthenticationResult(null, data.requestId)
+                    )
+                );
+            });
+        });
     }
 
     private async validateToken(data: ISocketRequest): Promise<SocketResponse<AuthenticationResult>> {
-        const valid = await AuthenticationService.getInstance().validateToken(data.token);
-        let event = AuthenticationEvent.UNAUTHORIZED;
-        if (valid) {
-            event = AuthenticationEvent.AUTHORIZED;
-        }
-        return new SocketResponse(event, new AuthenticationResult(data.token, data.requestId));
+        return new Promise<SocketResponse<AuthenticationResult>>((resolve, reject) => {
+            AuthenticationService.getInstance().validateToken(data.token)
+                .then((valid) => {
+                    let event = AuthenticationEvent.UNAUTHORIZED;
+                    if (valid) {
+                        event = AuthenticationEvent.AUTHORIZED;
+                    }
+                    resolve(new SocketResponse(event, new AuthenticationResult(data.token, data.requestId)));
+                });
+        });
     }
 
 }

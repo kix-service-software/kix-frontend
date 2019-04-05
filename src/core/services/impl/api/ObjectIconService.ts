@@ -33,42 +33,49 @@ export class ObjectIconService extends KIXObjectService {
         return kixObjectType === KIXObjectType.OBJECT_ICON;
     }
 
-    public async loadObjects<T>(
+    public loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, iconLoadingOptions: ObjectIconLoadingOptions
     ): Promise<T[]> {
 
-        let objects = [];
-        if (objectType === KIXObjectType.OBJECT_ICON) {
-            const objectIcons = await this.getObjectIcons(token);
-            if (objectIds && objectIds.length) {
-                objects = objectIcons.filter((t) => objectIds.some((oid) => oid === t.ObjectId));
-            } else if (iconLoadingOptions) {
-                if (iconLoadingOptions.object && iconLoadingOptions.objectId) {
-                    const icon = objectIcons.find(
-                        (oi) => oi.Object === iconLoadingOptions.object
-                            && oi.ObjectID.toString() === iconLoadingOptions.objectId.toString()
-                    );
-                    if (icon) {
-                        objects = [icon];
+        return new Promise<T[]>((resolve, reject) => {
+            let objects = [];
+            if (objectType === KIXObjectType.OBJECT_ICON) {
+                this.getObjectIcons(token).then((objectIcons) => {
+                    if (objectIds && objectIds.length) {
+                        objects = objectIcons.filter((t) => objectIds.some((oid) => oid === t.ObjectId));
+                    } else if (iconLoadingOptions) {
+                        if (iconLoadingOptions.object && iconLoadingOptions.objectId) {
+                            const icon = objectIcons.find(
+                                (oi) => oi.Object === iconLoadingOptions.object
+                                    && oi.ObjectID.toString() === iconLoadingOptions.objectId.toString()
+                            );
+                            if (icon) {
+                                objects = [icon];
+                            }
+                        }
+                    } else {
+                        objects = objectIcons;
                     }
-                }
-            } else {
-                objects = objectIcons;
-            }
-        }
 
-        return objects;
+                    resolve(objects);
+                });
+            }
+        });
     }
 
-    public async getObjectIcons(token: string): Promise<ObjectIcon[]> {
-        const uri = this.buildUri(this.RESOURCE_URI);
-        const response = await this.getObjectByUri<ObjectIconsResponse>(token, uri);
-        return response.ObjectIcon
-            .map((s) => new ObjectIcon(
-                s.Object, s.ObjectID, s.ContentType, s.Content,
-                s.ID, s.CreateBy, s.CreateTime, s.ChangeBy, s.ChangeTime
-            ));
+    public getObjectIcons(token: string): Promise<ObjectIcon[]> {
+        return new Promise<ObjectIcon[]>((resolve, reject) => {
+            const uri = this.buildUri(this.RESOURCE_URI);
+            this.getObjectByUri<ObjectIconsResponse>(token, uri).then((response) => {
+                resolve(
+                    response.ObjectIcon.map((s) => new ObjectIcon(
+                        s.Object, s.ObjectID, s.ContentType, s.Content,
+                        s.ID, s.CreateBy, s.CreateTime, s.ChangeBy, s.ChangeTime
+                    ))
+                );
+            });
+        });
     }
 
     public async createObject(

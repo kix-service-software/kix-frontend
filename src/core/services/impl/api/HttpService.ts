@@ -23,6 +23,8 @@ export class HttpService {
     private apiURL: string;
     private backendCertificate: any;
 
+    private requestPromises: Map<string, Promise<any>> = new Map();
+
     private constructor() {
         const serverConfig: IServerConfiguration = ConfigurationService.getInstance().getServerConfiguration();
         this.apiURL = serverConfig.BACKEND_API_URL;
@@ -32,7 +34,7 @@ export class HttpService {
         this.backendCertificate = fs.readFileSync(certPath);
     }
 
-    private async executeRequest<T>(
+    private executeRequest<T>(
         resource: string, token: string, clientRequestId: string, options: any
     ): Promise<T> {
         const backendToken = AuthenticationService.getInstance().getBackendToken(token);
@@ -63,16 +65,16 @@ export class HttpService {
                 b: parameter
             });
 
-        const response = await this.request(options)
-            .catch((error) => {
-                LoggingService.getInstance().error('Error during HTTP ' + options.method + ' request.', error);
-                return Promise.reject(this.createError(error));
-            });
-
-        // stop profiling
-        ProfilingService.getInstance().stop(profileTaskId, response);
-
-        return response;
+        return new Promise((resolve, reject) => {
+            this.request(options)
+                .then((response) => {
+                    resolve(response);
+                    ProfilingService.getInstance().stop(profileTaskId, response);
+                }).catch((error) => {
+                    LoggingService.getInstance().error('Error during HTTP ' + options.method + ' request.', error);
+                    reject(this.createError(error));
+                });
+        });
     }
 
     public async get<T>(
@@ -84,21 +86,30 @@ export class HttpService {
             qs: queryParameters
         };
 
-        let response: T;
-        if (useCache) {
-            const cacheKey = this.buildCacheKey(resource, queryParameters, token);
-            if (await CacheService.getInstance().has(cacheKey, cacheKeyPrefix)) {
-                return await CacheService.getInstance().get(cacheKey, cacheKeyPrefix);
-            }
+        const cacheKey = this.buildCacheKey(resource, queryParameters, token);
 
-            response = await this.executeRequest<T>(resource, token, clientRequestId, options);
-
-            await CacheService.getInstance().set(cacheKey, response, cacheKeyPrefix);
-        } else {
-            response = await this.executeRequest<T>(resource, token, clientRequestId, options);
+        if (useCache && await CacheService.getInstance().has(cacheKey, cacheKeyPrefix)) {
+            return await CacheService.getInstance().get(cacheKey, cacheKeyPrefix);
         }
 
-        return response;
+        if (this.requestPromises.has(cacheKey)) {
+            return this.requestPromises.get(cacheKey);
+        }
+
+        const requestPromise = this.executeRequest<T>(resource, token, clientRequestId, options);
+
+        this.requestPromises.set(cacheKey, requestPromise);
+
+        requestPromise
+            .then((response) => {
+                if (useCache) {
+                    CacheService.getInstance().set(cacheKey, response, cacheKeyPrefix);
+                }
+                this.requestPromises.delete(cacheKey);
+            })
+            .catch(() => this.requestPromises.delete(cacheKey));
+
+        return requestPromise;
     }
 
     public async post<T>(

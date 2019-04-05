@@ -1,6 +1,5 @@
 import {
-    FAQCategory, FAQArticleProperty, FAQArticle, FAQArticleFactory,
-    Attachment, FAQArticleAttachmentLoadingOptions, CreateFAQVoteOptions
+    FAQArticleProperty, Attachment, FAQArticleAttachmentLoadingOptions, CreateFAQVoteOptions
 } from "../../../model/kix/faq";
 import { KIXObjectService } from "./KIXObjectService";
 import {
@@ -8,8 +7,7 @@ import {
     KIXObjectSpecificCreateOptions, Error
 } from "../../../model";
 import {
-    FAQCategoriesResponse, FAQCategoryResponse, FAQArticlesResponse, FAQArticleResponse, CreateFAQArticle,
-    CreateFAQArticleResponse, CreateFAQArticleRequest, FAQArticleAttachmentResponse, CreateFAQVote,
+    CreateFAQArticle, CreateFAQArticleResponse, CreateFAQArticleRequest, FAQArticleAttachmentResponse, CreateFAQVote,
     CreateFAQVoteResponse, CreateFAQVoteRequest, UpdateFAQArticle, UpdateFAQArticleResponse, UpdateFAQArticleRequest,
     CreateFAQArticleAttachmentResponse, CreateFAQArticleAttachmentRequest, FAQArticleAttachmentsResponse
 } from "../../../api/faq";
@@ -39,7 +37,6 @@ export class FAQService extends KIXObjectService {
             || type === KIXObjectType.FAQ_ARTICLE_ATTACHMENT
             || type === KIXObjectType.FAQ_ARTICLE_HISTORY
             || type === KIXObjectType.FAQ_CATEGORY
-            || type === KIXObjectType.FAQ_CATEGORY_HIERARCHY
             || type === KIXObjectType.FAQ_VOTE;
     }
 
@@ -53,11 +50,12 @@ export class FAQService extends KIXObjectService {
 
         switch (objectType) {
             case KIXObjectType.FAQ_ARTICLE:
-                objects = await this.getArticles(token, objectIds, loadingOptions);
+                const articlesUri = this.buildUri(this.RESOURCE_URI, 'articles');
+                objects = await super.load(token, objectType, articlesUri, loadingOptions, objectIds, 'FAQArticle');
                 break;
             case KIXObjectType.FAQ_CATEGORY:
-            case KIXObjectType.FAQ_CATEGORY_HIERARCHY:
-                objects = await this.getCategories(token, objectIds, loadingOptions);
+                const categoryUri = this.buildUri(this.RESOURCE_URI, 'categories');
+                objects = await super.load(token, objectType, categoryUri, loadingOptions, objectIds, 'FAQCategory');
                 break;
             case KIXObjectType.FAQ_ARTICLE_ATTACHMENT:
                 objects = await this.loadAttachment(
@@ -68,65 +66,6 @@ export class FAQService extends KIXObjectService {
         }
 
         return objects;
-    }
-
-    private async getArticles(
-        token: string, articleIds: Array<number | string>, loadingOptions: KIXObjectLoadingOptions
-    ): Promise<FAQArticle[]> {
-
-        const query = this.prepareQuery(loadingOptions);
-
-        let faqArticles: FAQArticle[] = [];
-
-        if (articleIds) {
-            if (!!articleIds.length) {
-                articleIds = articleIds.filter(
-                    (id) => typeof id !== 'undefined' && id.toString() !== '' && id !== null
-                );
-                const uri = this.buildUri(this.RESOURCE_URI, 'articles', articleIds.join(','));
-                const response = await this.getObjectByUri<FAQArticlesResponse | FAQArticleResponse>(token, uri, query);
-                if (articleIds.length === 1) {
-                    faqArticles = [(response as FAQArticleResponse).FAQArticle];
-                } else {
-                    faqArticles = (response as FAQArticlesResponse).FAQArticle;
-                }
-            }
-        } else if (loadingOptions.filter) {
-            await this.buildFilter(loadingOptions.filter, 'FAQArticle', token, query);
-            const uri = this.buildUri(this.RESOURCE_URI, 'articles');
-            const response = await this.getObjectByUri<FAQArticlesResponse>(token, uri, query);
-            faqArticles = response.FAQArticle;
-        } else {
-            const uri = this.buildUri(this.RESOURCE_URI, 'articles');
-            const response = await this.getObjectByUri<FAQArticlesResponse>(token, uri, query);
-            faqArticles = response.FAQArticle;
-        }
-
-        return faqArticles.map((faq) => FAQArticleFactory.create(faq));
-    }
-
-    private async getCategories(
-        token: string, categoryIds: Array<number | string>, loadingOptions: KIXObjectLoadingOptions
-    ): Promise<FAQCategory[]> {
-        const ids = categoryIds ? categoryIds.join(',') : null;
-        let uri = this.buildUri(this.RESOURCE_URI, 'categories');
-        if (ids) {
-            uri = this.buildUri(this.RESOURCE_URI, 'categories', ids);
-        }
-
-        const query = this.prepareQuery(loadingOptions);
-        if (loadingOptions.filter) {
-            await this.buildFilter(loadingOptions.filter, 'FAQCategory', token, query);
-        }
-
-        const response = await this.getObjectByUri<FAQCategoriesResponse | FAQCategoryResponse>(token, uri, query);
-        let result = [];
-        if (categoryIds && categoryIds.length === 1) {
-            result = [(response as FAQCategoryResponse).FAQCategory];
-        } else {
-            result = (response as FAQCategoriesResponse).FAQCategory;
-        }
-        return result.map((fc) => new FAQCategory(fc));
     }
 
     public createObject(

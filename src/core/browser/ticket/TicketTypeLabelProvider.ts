@@ -97,7 +97,7 @@ export class TicketTypeLabelProvider implements ILabelProvider<TicketType> {
             case TicketTypeProperty.CREATE_BY:
             case TicketTypeProperty.CHANGE_BY:
                 const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [value], null, null, true, true
+                    KIXObjectType.USER, [value], null, null, true
                 ).catch((error) => [] as User[]);
                 displayValue = users && !!users.length ? users[0].UserFullname : value;
                 break;

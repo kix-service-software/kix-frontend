@@ -24,23 +24,27 @@ export abstract class SocketNameSpace implements ISocketNamespace {
     protected registerEventHandler<RQ extends ISocketRequest, RS>(
         client: SocketIO.Socket, event: string, handler: (data: RQ) => Promise<SocketResponse<RS>>
     ): void {
-        client.on(event, async (data: RQ) => {
+        client.on(event, (data: RQ) => {
 
             // start profiling
 
-            let object = '';
-            if (data && data['objectType']) {
-                object = `(${data['objectType']})`;
+            const logData = {};
+            for (const key in data as any) {
+                if (key !== 'token') {
+                    logData[key] = data[key];
+                }
             }
 
-            const message = `${this.getNamespace()} / ${event} ${object}`;
+            const message = `${this.getNamespace()} / ${event} ${JSON.stringify(logData)}`;
             const profileTaskId = ProfilingService.getInstance().start('SocketIO', message, data);
 
-            const response: SocketResponse<RS> = await handler(data);
-            client.emit(response.event, response.data);
+            handler(data).then((response) => {
+                client.emit(response.event, response.data);
 
-            // stop profiling
-            ProfilingService.getInstance().stop(profileTaskId, response.data);
+                // stop profiling
+                ProfilingService.getInstance().stop(profileTaskId, response.data);
+            });
+
         });
     }
 }

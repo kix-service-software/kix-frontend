@@ -29,8 +29,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     public static async loadObjects<T extends KIXObject>(
         objectType: KIXObjectType, objectIds?: Array<number | string>,
         loadingOptions?: KIXObjectLoadingOptions,
-        objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
-        cache: boolean = true, silent: boolean = false
+        objectLoadingOptions?: KIXObjectSpecificLoadingOptions, silent: boolean = false
     ): Promise<T[]> {
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
         let objects = [];

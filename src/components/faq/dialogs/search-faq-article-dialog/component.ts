@@ -1,6 +1,7 @@
 import { ComponentState } from "./ComponentState";
 import { FormService } from "../../../../core/browser";
 import { DialogService } from "../../../../core/browser/components/dialog";
+import { FormContext, KIXObjectType } from "../../../../core/model";
 
 class Component {
 
@@ -8,6 +9,12 @@ class Component {
 
     public onCreate(): void {
         this.state = new ComponentState();
+    }
+
+    public async onMount(): Promise<void> {
+        this.state.formId = await FormService.getInstance().getFormIdByContext(
+            FormContext.SEARCH, KIXObjectType.FAQ_ARTICLE
+        );
     }
 
     public async cancel(): Promise<void> {

@@ -1,6 +1,7 @@
 import { ComponentState } from "./ComponentState";
 import { FormService, AbstractMarkoComponent } from "../../../../core/browser";
 import { DialogService } from "../../../../core/browser/components/dialog";
+import { KIXObjectType, FormContext } from "../../../../core/model";
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -9,6 +10,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        this.state.formId = await FormService.getInstance().getFormIdByContext(
+            FormContext.SEARCH, KIXObjectType.CONFIG_ITEM
+        );
         DialogService.getInstance().setMainDialogHint('Translatable#The search only includes current versions.');
     }
 

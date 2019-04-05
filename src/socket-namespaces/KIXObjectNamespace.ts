@@ -33,34 +33,41 @@ export class KIXObjectNamespace extends SocketNameSpace {
         this.registerEventHandler(client, KIXObjectEvent.DELETE_OBJECT, this.deleteObject.bind(this));
     }
 
-    private async loadObjects(data: LoadObjectsRequest): Promise<SocketResponse<LoadObjectsResponse<any>>> {
-        let response;
+    private loadObjects(data: LoadObjectsRequest): Promise<SocketResponse<LoadObjectsResponse<any>>> {
 
-        const service = KIXObjectServiceRegistry.getServiceInstance(data.objectType);
-        if (service) {
-            await service.loadObjects(
-                data.token, data.clientRequestId, data.objectType, data.objectIds,
-                data.loadingOptions, data.objectLoadingOptions
-            ).then((objects: any[]) => {
-                response = new SocketResponse(
-                    KIXObjectEvent.LOAD_OBJECTS_FINISHED, new LoadObjectsResponse(data.requestId, objects)
-                );
-            }).catch((error) => {
-                LoggingService.getInstance().error(`ERROR: ${data.objectType}: ${data.objectIds}`);
-                LoggingService.getInstance().error(JSON.stringify(error));
-                response = new SocketResponse(
-                    KIXObjectEvent.LOAD_OBJECTS_ERROR, new SocketErrorResponse(data.requestId, error)
-                );
-            });
-        } else {
-            const errorMessage = 'No API service registered for object type ' + data.objectType;
-            LoggingService.getInstance().error(errorMessage);
-            response = new SocketResponse(
-                KIXObjectEvent.LOAD_OBJECTS_ERROR, new SocketErrorResponse(data.requestId, errorMessage)
-            );
-        }
+        return new Promise<SocketResponse<LoadObjectsResponse<any>>>((resolve, reject) => {
+            const service = KIXObjectServiceRegistry.getServiceInstance(data.objectType);
+            if (service) {
 
-        return response;
+                service.loadObjects(
+                    data.token, data.clientRequestId, data.objectType, data.objectIds,
+                    data.loadingOptions, data.objectLoadingOptions
+                ).then((objects: any[]) => {
+                    resolve(
+                        new SocketResponse(
+                            KIXObjectEvent.LOAD_OBJECTS_FINISHED, new LoadObjectsResponse(data.requestId, objects)
+                        )
+                    );
+                }).catch((error) => {
+                    LoggingService.getInstance().error(`ERROR: ${data.objectType}: ${data.objectIds}`);
+                    LoggingService.getInstance().error(JSON.stringify(error));
+                    resolve(
+                        new SocketResponse(
+                            KIXObjectEvent.LOAD_OBJECTS_ERROR, new SocketErrorResponse(data.requestId, error)
+                        )
+                    );
+                });
+            } else {
+                const errorMessage = 'No API service registered for object type ' + data.objectType;
+                LoggingService.getInstance().error(errorMessage);
+                resolve(
+                    new SocketResponse(
+                        KIXObjectEvent.LOAD_OBJECTS_ERROR, new SocketErrorResponse(data.requestId, errorMessage)
+                    )
+                );
+            }
+        });
+
     }
 
     private async createObject(data: CreateObjectRequest): Promise<SocketResponse<CreateObjectResponse>> {

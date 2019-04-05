@@ -26,7 +26,7 @@ export class NewTicketDialogContext
     }
 
     public async initContext(): Promise<void> {
-        const formId = FormService.getInstance().getFormIdByContext(FormContext.NEW, KIXObjectType.TICKET);
+        const formId = await FormService.getInstance().getFormIdByContext(FormContext.NEW, KIXObjectType.TICKET);
         this.formListenerId = 'NewTicketDialogContext';
         await FormService.getInstance().registerFormInstanceListener(formId, this);
     }

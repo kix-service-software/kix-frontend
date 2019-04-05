@@ -24,11 +24,11 @@ export class FAQArticleBrowserFactory implements IKIXObjectFactory<FAQArticle> {
 
     private async mapUserData(faqArticle: FAQArticle): Promise<void> {
         const createUsers = await KIXObjectService.loadObjects<User>(
-            KIXObjectType.USER, [faqArticle.CreatedBy], null, null, true, true
+            KIXObjectType.USER, [faqArticle.CreatedBy], null, null, true
         ).catch((error) => [] as User[]);
         faqArticle.createdBy = createUsers && !!createUsers.length ? createUsers[0] : null;
         const changeUsers = await KIXObjectService.loadObjects<User>(
-            KIXObjectType.USER, [faqArticle.ChangedBy], null, null, true, true
+            KIXObjectType.USER, [faqArticle.ChangedBy], null, null, true
         ).catch((error) => [] as User[]);
         faqArticle.changedBy = changeUsers && !!changeUsers.length ? changeUsers[0] : null;
     }

@@ -12,7 +12,8 @@ export class TranslationEditAction extends AbstractAction {
     }
 
     public async run(): Promise<void> {
-        const form = { ...FormService.getInstance().getForm('edit-translation-form') };
+        const configuredForm = await FormService.getInstance().getForm('edit-translation-form');
+        const form = { ...configuredForm };
         if (form) {
             FormFactory.initForm(form);
             const context = await ContextService.getInstance().getContext<TranslationDetailsContext>(

@@ -46,8 +46,6 @@ export enum KIXObjectType {
 
     FAQ_CATEGORY = 'FAQ_CATEGORY',
 
-    FAQ_CATEGORY_HIERARCHY = 'FAQ_CATEGORY_HIERARCHY',
-
     FAQ_VOTE = 'FAQ_VOTE',
 
     GENERAL_CATALOG_ITEM = 'GeneralCatalogItem',

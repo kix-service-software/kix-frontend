@@ -93,7 +93,7 @@ export class RoleLabelProvider implements ILabelProvider<Role> {
             case RoleProperty.CREATE_BY:
             case RoleProperty.CHANGE_BY:
                 const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [value], null, null, true, true
+                    KIXObjectType.USER, [value], null, null, true
                 ).catch((error) => [] as User[]);
                 displayValue = users && !!users.length ? users[0].UserFullname : value;
                 break;

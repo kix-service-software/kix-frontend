@@ -35,31 +35,38 @@ export class KIXModuleNamespace extends SocketNameSpace {
             this.loadFormConfigurations.bind(this));
     }
 
-    private async loadModules(data: LoadKIXModulesRequest): Promise<SocketResponse<LoadKIXModulesResponse>> {
+    private loadModules(data: LoadKIXModulesRequest): Promise<SocketResponse<LoadKIXModulesResponse>> {
 
-        const modules = await PluginService.getInstance().getExtensions<IKIXModuleExtension>(KIXExtensions.MODULES);
+        return new Promise<SocketResponse<LoadKIXModulesResponse>>((resolve, reject) => {
+            PluginService.getInstance().getExtensions<IKIXModuleExtension>(KIXExtensions.MODULES)
+                .then((modules) => {
+                    const packageJson = require('../../package.json');
+                    const version = packageJson.version;
+                    const prePath = '/@kix/frontend$' + version + '/dist/components/';
 
-        const packageJson = require('../../package.json');
-        const version = packageJson.version;
-        const prePath = '/@kix/frontend$' + version + '/dist/components/';
+                    modules.forEach((m) => m.tags.forEach((t) => t[1] = prePath + t[1]));
 
-        modules.forEach((m) => m.tags.forEach((t) => t[1] = prePath + t[1]));
-
-        const response = new SocketResponse(
-            KIXModulesEvent.LOAD_MODULES_FINISHED, new LoadKIXModulesResponse(data.requestId, modules)
-        );
-
-        return response;
+                    resolve(
+                        new SocketResponse(
+                            KIXModulesEvent.LOAD_MODULES_FINISHED, new LoadKIXModulesResponse(data.requestId, modules)
+                        )
+                    );
+                });
+        });
     }
 
-    private async loadFormConfigurations(
+    private loadFormConfigurations(
         data: LoadFormConfigurationsRequest
     ): Promise<SocketResponse<LoadFormConfigurationsResponse>> {
-        await AppUtil.updateFormConfigurations();
-        const forms = ConfigurationService.getInstance().getRegisteredForms();
-        const formIdsWithContext = ConfigurationService.getInstance().getFormIDsWithContext();
-        const response = new LoadFormConfigurationsResponse(data.requestId, forms, formIdsWithContext);
-        return new SocketResponse(KIXModulesEvent.LOAD_FORM_CONFIGURATIONS_FINISHED, response);
+        return new Promise<SocketResponse<LoadFormConfigurationsResponse>>((resolve, reject) => {
+            AppUtil.updateFormConfigurations().then(() => {
+                const forms = ConfigurationService.getInstance().getRegisteredForms();
+                const formIdsWithContext = ConfigurationService.getInstance().getFormIDsWithContext();
+                const response = new LoadFormConfigurationsResponse(data.requestId, forms, formIdsWithContext);
+                resolve(new SocketResponse(KIXModulesEvent.LOAD_FORM_CONFIGURATIONS_FINISHED, response));
+            });
+        });
+
     }
 
 }

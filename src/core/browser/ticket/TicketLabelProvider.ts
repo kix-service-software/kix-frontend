@@ -22,26 +22,26 @@ export class TicketLabelProvider implements ILabelProvider<Ticket> {
             switch (property) {
                 case TicketProperty.QUEUE_ID:
                     const queues = await KIXObjectService.loadObjects<Queue>(
-                        KIXObjectType.QUEUE, [value], null, null, true, true
+                        KIXObjectType.QUEUE, [value], null, null, true
                     ).catch((error) => [] as Queue[]);
                     const queue = queues.find((q) => q.QueueID.toString() === value.toString());
                     displayValue = queue ? queue.Name : value;
                     break;
                 case TicketProperty.STATE_ID:
                     const states = await KIXObjectService.loadObjects<TicketState>(
-                        KIXObjectType.TICKET_STATE, [value], null, null, true, true
+                        KIXObjectType.TICKET_STATE, [value], null, null, true
                     ).catch((error) => []);
                     displayValue = states && !!states.length ? states[0].Name : value;
                     break;
                 case TicketProperty.PRIORITY_ID:
                     const priority = await KIXObjectService.loadObjects<TicketPriority>(
-                        KIXObjectType.TICKET_PRIORITY, [value], null, null, true, true
+                        KIXObjectType.TICKET_PRIORITY, [value], null, null, true
                     ).catch((error) => []);
                     displayValue = priority && !!priority.length ? priority[0].Name : value;
                     break;
                 case TicketProperty.TYPE_ID:
                     const types = await KIXObjectService.loadObjects<TicketType>(
-                        KIXObjectType.TICKET_TYPE, [value], null, null, true, true
+                        KIXObjectType.TICKET_TYPE, [value], null, null, true
                     ).catch((error) => []);
                     displayValue = types && !!types.length ? types[0].Name : value;
                     break;
@@ -51,7 +51,7 @@ export class TicketLabelProvider implements ILabelProvider<Ticket> {
                     break;
                 case TicketProperty.SLA_ID:
                     const slas = await KIXObjectService.loadObjects<Sla>(
-                        KIXObjectType.SLA, [value], null, null, true, true
+                        KIXObjectType.SLA, [value], null, null, true
                     ).catch((error) => []);
                     displayValue = slas && !!slas.length ? slas[0].Name : value;
                     break;
@@ -61,7 +61,7 @@ export class TicketLabelProvider implements ILabelProvider<Ticket> {
                 case TicketProperty.OWNER_ID:
                 case TicketProperty.RESPONSIBLE_ID:
                     const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [value], null, null, true, true
+                        KIXObjectType.USER, [value], null, null, true
                     ).catch((error) => [] as User[]);
                     displayValue = users && !!users.length ? users[0].UserFullname : value;
                     break;
@@ -142,7 +142,7 @@ export class TicketLabelProvider implements ILabelProvider<Ticket> {
                 break;
             case TicketProperty.TICKET_NUMBER:
                 const hookConfig = await KIXObjectService.loadObjects<SysConfigItem>(
-                    KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.TICKET_HOOK], null, null, true, true
+                    KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.TICKET_HOOK], null, null, true
                 ).catch((error) => []);
                 if (hookConfig && hookConfig.length) {
                     displayValue = hookConfig[0].Data;
@@ -213,7 +213,7 @@ export class TicketLabelProvider implements ILabelProvider<Ticket> {
             case TicketProperty.QUEUE_ID:
                 if (ticket.QueueID) {
                     const queues = await KIXObjectService.loadObjects<Queue>(
-                        KIXObjectType.QUEUE, [ticket.QueueID], null, null, true, true
+                        KIXObjectType.QUEUE, [ticket.QueueID], null, null, true
                     ).catch((error) => [] as Queue[]);
                     const queue = queues.find((q) => q.QueueID.toString() === ticket.QueueID.toString());
                     displayValue = queue ? queue.Name : ticket.QueueID;
@@ -222,7 +222,7 @@ export class TicketLabelProvider implements ILabelProvider<Ticket> {
             case TicketProperty.STATE_ID:
                 if (ticket.StateID) {
                     const states = await KIXObjectService.loadObjects<TicketState>(
-                        KIXObjectType.TICKET_STATE, [ticket.StateID], null, null, true, true
+                        KIXObjectType.TICKET_STATE, [ticket.StateID], null, null, true
                     ).catch((error) => []);
                     displayValue = states && states.length ? states[0].Name : ticket.StateID;
                 }
@@ -230,7 +230,7 @@ export class TicketLabelProvider implements ILabelProvider<Ticket> {
             case TicketProperty.PRIORITY_ID:
                 if (ticket.PriorityID) {
                     const priority = await KIXObjectService.loadObjects<TicketPriority>(
-                        KIXObjectType.TICKET_PRIORITY, [ticket.PriorityID], null, null, true, true
+                        KIXObjectType.TICKET_PRIORITY, [ticket.PriorityID], null, null, true
                     ).catch((error) => []);
                     displayValue = priority && priority.length ? priority[0].Name : ticket.PriorityID;
                 }
@@ -238,7 +238,7 @@ export class TicketLabelProvider implements ILabelProvider<Ticket> {
             case TicketProperty.TYPE_ID:
                 if (ticket.TypeID) {
                     const types = await KIXObjectService.loadObjects<TicketType>(
-                        KIXObjectType.TICKET_TYPE, [ticket.TypeID], null, null, true, true
+                        KIXObjectType.TICKET_TYPE, [ticket.TypeID], null, null, true
                     ).catch((error) => []);
                     displayValue = types && types.length ? types[0].Name : ticket.TypeID;
                 }
@@ -254,14 +254,14 @@ export class TicketLabelProvider implements ILabelProvider<Ticket> {
             case TicketProperty.SLA_ID:
                 if (ticket.SLAID) {
                     const slas = await KIXObjectService.loadObjects<Sla>(
-                        KIXObjectType.SLA, [ticket.SLAID], null, null, true, true
+                        KIXObjectType.SLA, [ticket.SLAID], null, null, true
                     ).catch((error) => []);
                     displayValue = slas && slas.length ? slas[0].Name : ticket.SLAID;
                 }
                 break;
             case 'UserID':
                 const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [displayValue], null, null, true, true
+                    KIXObjectType.USER, [displayValue], null, null, true
                 ).catch((error) => [] as User[]);
                 displayValue = users && !!users.length ? users[0].UserFullname : displayValue;
             case TicketProperty.CUSTOMER_ID:
@@ -269,7 +269,7 @@ export class TicketLabelProvider implements ILabelProvider<Ticket> {
                     let customers;
                     if (ticket.CustomerID) {
                         customers = await KIXObjectService.loadObjects<Customer>(
-                            KIXObjectType.CUSTOMER, [ticket.CustomerID], null, null, true, true
+                            KIXObjectType.CUSTOMER, [ticket.CustomerID], null, null, true
                         ).catch((error) => []);
                     }
                     displayValue = customers && customers.length
@@ -281,7 +281,7 @@ export class TicketLabelProvider implements ILabelProvider<Ticket> {
                 let contacts;
                 if (ticket.CustomerUserID) {
                     contacts = await KIXObjectService.loadObjects<Contact>(
-                        KIXObjectType.CONTACT, [ticket.CustomerUserID], null, null, true, true
+                        KIXObjectType.CONTACT, [ticket.CustomerUserID], null, null, true
                     ).catch((error) => []);
                 }
                 displayValue = contacts && contacts.length

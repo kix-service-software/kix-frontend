@@ -1,7 +1,9 @@
 import { KIXObjectService, ServiceRegistry } from "../kix";
 import {
     KIXObjectType, FilterCriteria, FilterDataType, FilterType, TreeNode, ObjectIcon, DataType,
-    KIXObject
+    KIXObject,
+    KIXObjectLoadingOptions,
+    KIXObjectSpecificLoadingOptions
 } from "../../model";
 import { ContextService } from "../context";
 import { FAQDetailsContext } from "./context";
@@ -31,22 +33,36 @@ export class FAQService extends KIXObjectService {
         super();
     }
 
-    public async init(): Promise<void> {
-        await this.loadObjects(KIXObjectType.FAQ_CATEGORY, null);
-        await this.loadObjects(KIXObjectType.FAQ_CATEGORY_HIERARCHY, null);
-    }
-
     public isServiceFor(type: KIXObjectType) {
         return type === KIXObjectType.FAQ_ARTICLE
             || type === KIXObjectType.FAQ_ARTICLE_ATTACHMENT
             || type === KIXObjectType.FAQ_ARTICLE_HISTORY
             || type === KIXObjectType.FAQ_CATEGORY
-            || type === KIXObjectType.FAQ_CATEGORY_HIERARCHY
             || type === KIXObjectType.FAQ_VOTE;
     }
 
     public getLinkObjectName(): string {
         return "FAQArticle";
+    }
+
+    public async loadObjects<O extends KIXObject>(
+        objectType: KIXObjectType, objectIds: Array<string | number>,
+        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions
+    ): Promise<O[]> {
+        let objects: O[];
+        let superLoad = false;
+        if (objectType === KIXObjectType.FAQ_CATEGORY) {
+            objects = await super.loadObjects<O>(KIXObjectType.FAQ_CATEGORY, null, loadingOptions);
+        } else {
+            superLoad = true;
+            objects = await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions);
+        }
+
+        if (objectIds && !superLoad) {
+            objects = objects.filter((c) => objectIds.some((oid) => c.ObjectId === oid));
+        }
+
+        return objects;
     }
 
     public prepareFullTextFilter(searchValue: string): FilterCriteria[] {

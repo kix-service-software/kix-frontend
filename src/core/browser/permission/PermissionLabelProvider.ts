@@ -87,7 +87,7 @@ export class PermissionLabelProvider implements ILabelProvider<Permission> {
         switch (property) {
             case PermissionProperty.TYPE_ID:
                 const types = await KIXObjectService.loadObjects<PermissionType>(
-                    KIXObjectType.PERMISSION_TYPE, null, null, null, true, true
+                    KIXObjectType.PERMISSION_TYPE, null, null, null, true
                 ).catch((error) => [] as PermissionType[]);
                 if (types && !!types.length) {
                     const type = types.find((t) => t.ID === permission.TypeID);
@@ -121,7 +121,7 @@ export class PermissionLabelProvider implements ILabelProvider<Permission> {
             case PermissionProperty.CREATE_BY:
             case PermissionProperty.CHANGE_BY:
                 const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [value], null, null, true, true
+                    KIXObjectType.USER, [value], null, null, true
                 ).catch((error) => [] as User[]);
                 displayValue = users && !!users.length ? users[0].UserFullname : value;
                 break;
@@ -131,7 +131,7 @@ export class PermissionLabelProvider implements ILabelProvider<Permission> {
                 break;
             case PermissionProperty.TYPE_ID:
                 const types = await KIXObjectService.loadObjects<PermissionType>(
-                    KIXObjectType.PERMISSION_TYPE, null, null, null, true, true
+                    KIXObjectType.PERMISSION_TYPE, null, null, null, true
                 ).catch((error) => [] as PermissionType[]);
                 if (types && !!types.length) {
                     const type = types.find((t) => t.ID === value);

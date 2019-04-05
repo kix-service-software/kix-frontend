@@ -46,22 +46,6 @@ export class ContactService extends KIXObjectService<Contact> {
         return parameter;
     }
 
-    public openContact(contactId: string, newTab: boolean = false): void {
-        if (newTab) {
-            const link = document.createElement("a");
-            link.href = '/contacts/' + contactId;
-            link.target = '_blank';
-            const linkClickEvent = new MouseEvent('click', {
-                view: window,
-                bubbles: false,
-                cancelable: true
-            });
-            link.dispatchEvent(linkClickEvent);
-        } else {
-            ContextService.getInstance().setContext(null, KIXObjectType.CONTACT, ContextMode.DETAILS, contactId);
-        }
-    }
-
     public determineDependendObjects(contacts: Contact[], targetObjectType: KIXObjectType): string[] | number[] {
         let ids = [];
 
