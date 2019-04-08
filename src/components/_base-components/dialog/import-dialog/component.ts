@@ -5,7 +5,6 @@ import {
     TableEvent, TableEventData, BrowserUtil, OverlayService, DefaultColumnConfiguration, ValueState
 } from '../../../../core/browser';
 import { EventService, IEventSubscriber } from '../../../../core/browser/event';
-import { TabContainerEvent, TabContainerEventData } from '../../../../core/browser/components';
 import { ImportService, ImportPropertyOperator } from '../../../../core/browser/import';
 import {
     KIXObjectType, ContextMode, Form, FormContext, FormField, FormFieldOption,
@@ -52,17 +51,17 @@ class Component {
                 ],
                 [
                     'value_separator', [
-                        new ImportConfigValue('COMMA', 'Translatable#, (Komma)', ','),
-                        new ImportConfigValue('SEMICOLON', 'Translatable#; (Semikolon)', ';'),
-                        new ImportConfigValue('COLON', 'Translatable#: (Doppelpunkt)', ':'),
-                        new ImportConfigValue('DOT', 'Translatable#. (Punkt)', '.'),
-                        new ImportConfigValue('TAB', 'Translatable#-> (Tabulator)', '\\t')
+                        new ImportConfigValue('COMMA', 'Translatable#, (comma)', ','),
+                        new ImportConfigValue('SEMICOLON', 'Translatable#; (semicolon)', ';'),
+                        new ImportConfigValue('COLON', 'Translatable#: (colon)', ':'),
+                        new ImportConfigValue('DOT', 'Translatable#. (dot)', '.'),
+                        new ImportConfigValue('TAB', 'Translatable#-> (tab)', '\\t')
                     ]
                 ],
                 [
                     'text_separator', [
-                        new ImportConfigValue('DOUBLE', 'Translatable#" (Doppeltes Hochkomma)', '"'),
-                        new ImportConfigValue('SINGLE', "Translatable#' (Einfaches Hochkomma)", "'")
+                        new ImportConfigValue('DOUBLE', 'Translatable#" (double quotes)', '"'),
+                        new ImportConfigValue('SINGLE', "Translatable#' (single quotes)", "'")
                     ]
                 ]
             ]
@@ -163,7 +162,7 @@ class Component {
             new FormField(
                 'Translatable#Source', 'source', 'attachment-input', true,
                 // tslint:disable-next-line:max-line-length
-                'Translatable#CSV-Datei mit den zu importierenen Datensätzen. Ein Einfügen per Drag & Drop ist möglich. Bitte beachten Sie die maximale Dateigröße von 25 MB pro Datei.',
+                'Translatable#CSV-File with data sets for import. Drag & Drop is possible.',
                 [
                     new FormFieldOption('MimeTypes', ['text/', '', 'application/vnd.ms-excel']),
                     new FormFieldOption('MULTI_FILES', false)
@@ -171,7 +170,7 @@ class Component {
             ),
             new FormField(
                 'Translatable#Charset', 'character_set', 'default-select-input', true,
-                'Translatable#Wählen Sie den Zeichensatz der Quelle aus.',
+                'Translatable#Select a character set.',
                 [
                     new FormFieldOption(
                         FormFieldOptionsForDefaultSelectInput.NODES,
@@ -182,7 +181,7 @@ class Component {
             ),
             new FormField(
                 'Translatable#Split Option', 'value_separator', 'default-select-input', true,
-                'Translatable#Wählen Sie die in der Quelle verwendeten Trennzeichen aus.',
+                'Translatable#Select a value separator.',
                 [
                     new FormFieldOption(
                         FormFieldOptionsForDefaultSelectInput.NODES,
@@ -194,7 +193,7 @@ class Component {
             ),
             new FormField(
                 'Translatable#Text separator', 'text_separator', 'default-select-input', true,
-                'Translatable#Wählen Sie das in der Quelle verwendete Textbegrenzungszeichen aus.',
+                'Translatable#Select a text separator.',
                 [
                     new FormFieldOption(
                         FormFieldOptionsForDefaultSelectInput.NODES,
@@ -323,7 +322,7 @@ class Component {
         const objectName = await LabelService.getInstance().getObjectName(this.objectType, true, false);
         const objectCount = this.state.importManager.objects.length;
         const tableTitle = await TranslationService.translate(
-            'Translatable#Übersicht zu importierende {0} ({1})', [objectName, objectCount]
+            'Translatable#Overview of {0} to import ({1})', [objectName, objectCount]
         );
         this.state.tableTitle = tableTitle;
     }
@@ -560,10 +559,10 @@ class Component {
             const objects = this.state.importManager.objects;
 
             const question = await TranslationService.translate(
-                'Translatable#Sie importieren {0} {1}. Ausführen?', [objects.length, objectName]
+                'Translatable#Import {0} {1}. Execute?', [objects.length, objectName]
             );
             BrowserUtil.openConfirmOverlay(
-                'Translatable#Jetzt ausführen?',
+                'Translatable#Execute now?',
                 question,
                 this.runImportManager.bind(this)
             );
@@ -653,7 +652,7 @@ class Component {
             const identifier = await this.state.importManager.getIdentifierText(object);
             const confirmText = await TranslationService.translate(
                 // tslint:disable-next-line:max-line-length
-                'Translatable#Zeile {0} in der bereit gestellten Datei mit {1} {2}: kann nicht importiert werden{3}. Wie möchten Sie weiter verfahren?',
+                'Translatable#Row {0} of the file with {1} {2}: could not import{3}. How to continue?',
                 [
                     object['CSV_LINE'],
                     objectName,
