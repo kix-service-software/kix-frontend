@@ -5,7 +5,7 @@ class Extension implements IAdminModuleExtension {
     public getAdminModules(): AdminModuleCategory[] {
         return [
             new AdminModuleCategory(
-                null, 'i18n', 'Translatable#Internationalization', null, [], [
+                null, 'i18n', 'Translatable#Internationalisation', null, [], [
                     new AdminModule(
                         null, 'translations', 'Translatable#Translations', null,
                         KIXObjectType.TRANSLATION, 'i18n-admin-translations'

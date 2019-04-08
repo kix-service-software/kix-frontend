@@ -5,7 +5,7 @@ class Extension implements IAdminModuleExtension {
     public getAdminModules(): AdminModuleCategory[] {
         return [
             new AdminModuleCategory(
-                null, 'base-data', 'Translatable#Core Data', null, [], [
+                null, 'ticket', 'Translatable#Ticket', null, [], [
                     new AdminModule(
                         null, 'ticket-types', 'Translatable#Types', null,
                         KIXObjectType.TICKET_TYPE, 'ticket-admin-types'
