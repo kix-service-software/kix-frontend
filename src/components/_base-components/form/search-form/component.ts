@@ -63,10 +63,6 @@ class Component implements ISearchFormListener {
             eventPublished: async (data: TableEventData, eventId: string) => {
                 if (this.table) {
                     if (data && data.tableId === this.table.getTableId()) {
-                        if (eventId === TableEvent.TABLE_READY) {
-                            this.state.resultCount = this.table.getRows().length;
-                        }
-
                         if (eventId === TableEvent.TABLE_INITIALIZED) {
                             await this.setAdditionalColumns();
                         }
@@ -126,12 +122,15 @@ class Component implements ISearchFormListener {
         const hint = await TranslationService.translate('Translatable#Search ...');
         DialogService.getInstance().setMainDialogLoading(true, hint, true);
 
-        await KIXObjectSearchService.getInstance().executeSearch<KIXObject>(this.formId)
+        const result = await KIXObjectSearchService.getInstance().executeSearch<KIXObject>(this.formId)
             .catch((error: Error) => {
                 BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
             });
 
         await this.setAdditionalColumns();
+
+        this.state.resultCount = Array.isArray(result) ? result.length : 0;
+        (this as any).setStateDirty();
 
         DialogService.getInstance().setMainDialogLoading(false);
     }
