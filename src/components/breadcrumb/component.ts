@@ -36,7 +36,7 @@ class BreadcrumbComponent implements IContextServiceListener {
 
             newContext.registerListener('kix-breadcrumb', {
                 objectChanged: async () => {
-                    const displayText = await newContext.getDisplayText(true);
+                    const displayText = await newContext.getDisplayText();
                     const index = this.state.contexts.findIndex((c) => c[0] === newContextId);
                     if (index !== -1) {
                         this.state.contexts[index][1] = displayText;
