@@ -5,15 +5,15 @@ class Extension implements IAdminModuleExtension {
     public getAdminModules(): AdminModuleCategory[] {
         return [
             new AdminModuleCategory(
-                null, '0_user-management', 'Translatable#User Management', null, [], [
+                null, 'user-management', 'Translatable#User Management', null, [], [
+                    new AdminModule(
+                        null, 'users', 'Translatable#Agents', null,
+                        KIXObjectType.USER, 'user-admin-users'
+                    ),
                     new AdminModule(
                         null, 'roles', 'Translatable#Roles/Permissions', null,
                         KIXObjectType.ROLE, 'user-admin-roles'
                     ),
-                    new AdminModule(
-                        null, 'users', 'Translatable#Agents', null,
-                        KIXObjectType.USER, 'user-admin-users'
-                    )
                 ])
         ];
     }

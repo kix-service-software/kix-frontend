@@ -51,9 +51,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async prepareCategoryTreeNodes(categories: AdminModuleCategory[]): Promise<TreeNode[]> {
-        const nodes = [];
+        let nodes = [];
         if (categories) {
-            for (const c of categories.sort((a, b) => a.id.localeCompare(b.id))) {
+            for (const c of categories) {
                 const categoryTreeNodes = await this.prepareCategoryTreeNodes(c.children);
                 const moduleTreeNodes = await this.prepareModuleTreeNodes(c.modules);
                 const name = await TranslationService.translate(c.name);
@@ -65,6 +65,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 );
             }
         }
+
+        nodes = this.sortNodes(nodes);
         return nodes;
     }
 
@@ -91,6 +93,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async filter(textFilterValue?: string): Promise<void> {
         this.state.filterValue = textFilterValue;
+    }
+
+    private sortNodes(nodes: TreeNode[]): TreeNode[] {
+        return nodes.sort((a, b) => {
+            if (a.children) {
+                a.children = this.sortNodes(a.children);
+            }
+            return a.label.localeCompare(b.label);
+        });
     }
 
 }
