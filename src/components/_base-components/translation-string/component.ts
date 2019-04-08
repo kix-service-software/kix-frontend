@@ -1,6 +1,8 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../core/browser';
 import { TranslationService } from '../../../core/browser/i18n/TranslationService';
+import { EventService } from '../../../core/browser/event';
+import { ApplicationEvent } from '../../../core/browser/application';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -38,6 +40,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         await this.setText();
+        EventService.getInstance().subscribe(ApplicationEvent.REFRESH, {
+            eventSubscriberId: '',
+            eventPublished: () => {
+                this.setText();
+            }
+        });
     }
 
     private async setText(): Promise<void> {

@@ -83,27 +83,27 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
             }
         });
         const chart3 = new ConfiguredWidget('20180813-3-ticket-chart-widget', new WidgetConfiguration(
-            'ticket-chart-widget', 'New Tickets (recent 7 days)', [], chartConfig3,
+            'ticket-chart-widget', 'Translatable#New Tickets (recent 7 days)', [], chartConfig3,
             false, true, WidgetSize.SMALL, null, false)
         );
 
         const predefinedToDoTableFilter = [
-            new KIXObjectPropertyFilter('Responsible Tickets', [
+            new KIXObjectPropertyFilter('Translatable#Responsible Tickets', [
                 new TableFilterCriteria(
                     TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER
                 )
             ]),
-            new KIXObjectPropertyFilter('Owner', [
+            new KIXObjectPropertyFilter('Translatable#Owner', [
                 new TableFilterCriteria(TicketProperty.OWNER_ID, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER)
             ]),
-            new KIXObjectPropertyFilter('Watched Tickets', [
+            new KIXObjectPropertyFilter('Translatable#Watched Tickets', [
                 new TableFilterCriteria(
                     TicketProperty.WATCHERS, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER, true
                 )
             ]),
         ];
         const todoTicketList = new ConfiguredWidget('20180612-to-do-widget', new WidgetConfiguration(
-            'table-widget', 'ToDo / Processing required', ['bulk-action', 'csv-export-action'],
+            'table-widget', 'Translatable#ToDo / Processing required', ['bulk-action', 'csv-export-action'],
             {
                 objectType: KIXObjectType.TICKET,
                 sort: [TicketProperty.AGE, SortOrder.UP],
