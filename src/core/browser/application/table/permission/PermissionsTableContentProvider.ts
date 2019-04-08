@@ -1,4 +1,4 @@
-import { Permission, KIXObjectLoadingOptions, KIXObjectType } from "../../../../model";
+import { Permission, KIXObjectLoadingOptions, KIXObjectType, KIXObject } from "../../../../model";
 import { TableContentProvider } from "../../../table/TableContentProvider";
 import { ITable, IRowObject, TableValue, RowObject } from "../../../table";
 import { ContextService } from "../../../context";
@@ -6,15 +6,16 @@ import { ContextService } from "../../../context";
 export class PermissionsTableContentProvider extends TableContentProvider<Permission> {
 
     public constructor(
+        public objectType: KIXObjectType,
         table: ITable,
         objectIds: Array<string | number>,
         loadingOptions: KIXObjectLoadingOptions,
-        contextId?: string
+        contextId?: string,
     ) {
         super(KIXObjectType.PERMISSION, table, objectIds, loadingOptions, contextId);
     }
     public async loadData(): Promise<Array<IRowObject<Permission>>> {
-        let object;
+        let object: KIXObject;
         if (this.contextId) {
             const context = await ContextService.getInstance().getContext(this.contextId);
             object = await context.getObject();
@@ -22,7 +23,16 @@ export class PermissionsTableContentProvider extends TableContentProvider<Permis
 
         let rowObjects = [];
         if (object && object.Permissions) {
-            rowObjects = object.Permissions.map((p) => {
+            let permissions: Permission[];
+            if (Array.isArray(object.Permissions)) {
+                permissions = object.Permissions;
+            } else {
+                permissions = this.objectType === KIXObjectType.PERMISSION_DEPENDING_OBJECTS
+                    ? object.Permissions.DependingObjects
+                    : object.Permissions.Assigned;
+            }
+
+            rowObjects = permissions.map((p) => {
                 const values: TableValue[] = [];
 
                 for (const property in p) {

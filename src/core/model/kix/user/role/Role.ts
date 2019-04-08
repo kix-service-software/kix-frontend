@@ -26,8 +26,10 @@ export class Role extends KIXObject<Role> {
 
     public UserIDs: number[];
 
+    public configuredPermissions: Permission[];
+
     public constructor(role?: Role) {
-        super();
+        super(role);
         if (role) {
             this.ID = Number(role.ID);
             this.ObjectId = this.ID;
@@ -39,9 +41,9 @@ export class Role extends KIXObject<Role> {
             this.Comment = role.Comment;
             this.ValidID = role.ValidID;
             this.UserIDs = role.UserIDs;
-            this.Permissions = role.Permissions;
-
-            this.Permissions = role.Permissions ? role.Permissions.map((p) => new Permission(p)) : [];
+            this.Permissions = role.Permissions && Array.isArray(role.Permissions)
+                ? (role.Permissions as Permission[]).map((p) => new Permission(p))
+                : [];
         }
     }
 

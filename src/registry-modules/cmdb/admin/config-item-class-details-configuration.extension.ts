@@ -42,9 +42,11 @@ export class Extension implements IConfigurationExtension {
                 'Translatable#Permissions on dependent objects',
                 ['cmdb-admin-ci-class-edit'],
                 new TableWidgetSettings(
-                    KIXObjectType.PERMISSION, [PermissionProperty.RoleID, SortOrder.UP],
-                    new TableConfiguration(KIXObjectType.PERMISSION, null, null, null, null, null, null, null, null,
-                        TableHeaderHeight.SMALL, TableRowHeight.SMALL), null, false
+                    KIXObjectType.PERMISSION_DEPENDING_OBJECTS, [PermissionProperty.RoleID, SortOrder.UP],
+                    new TableConfiguration(
+                        KIXObjectType.PERMISSION_DEPENDING_OBJECTS, null, null, null, null, null, null, null, null,
+                        TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                    ), null, false
                 ),
                 true, true, WidgetSize.BOTH, null, true
             )

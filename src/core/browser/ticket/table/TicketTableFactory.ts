@@ -2,11 +2,12 @@ import { KIXObjectType, TicketProperty, ContextMode, DataType, KIXObjectLoadingO
 import { RoutingConfiguration } from "../../router";
 import { TicketDetailsContext } from "../context";
 import {
-    TableConfiguration, ITable, Table, DefaultColumnConfiguration, ToggleOptions, ITableFactory, IColumnConfiguration
+    TableConfiguration, ITable, Table, DefaultColumnConfiguration, ToggleOptions, IColumnConfiguration
 } from "../../table";
 import { TicketTableContentProvider } from "./new";
+import { TableFactory } from "../../table/TableFactory";
 
-export class TicketTableFactory implements ITableFactory {
+export class TicketTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.TICKET;
 

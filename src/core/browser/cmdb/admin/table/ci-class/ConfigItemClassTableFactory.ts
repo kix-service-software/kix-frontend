@@ -4,12 +4,13 @@ import {
 import { RoutingConfiguration } from "../../../../router";
 import { ConfigItemClassDetailsContext } from "../../context";
 import {
-    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
+    TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../../../table";
 import { ConfigItemClassTableContentProvider } from "./ConfigItemClassTableContentProvider";
+import { TableFactory } from "../../../../table/TableFactory";
 
-export class ConfigItemClassTableFactory implements ITableFactory {
+export class ConfigItemClassTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_CLASS;
 

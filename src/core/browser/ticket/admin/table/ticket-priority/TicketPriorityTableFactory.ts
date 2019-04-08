@@ -1,13 +1,14 @@
 import { TicketPriorityDetailsContext } from "../../context";
 import { RoutingConfiguration } from "../../../../router";
 import {
-    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
+    TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../../../table";
 import { KIXObjectType, TicketPriorityProperty, DataType, ContextMode } from "../../../../../model";
 import { TicketPriorityTableContentProvider } from "./TicketPriorityTableContentProvider";
+import { TableFactory } from "../../../../table/TableFactory";
 
-export class TicketPriorityTableFactory implements ITableFactory {
+export class TicketPriorityTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.TICKET_PRIORITY;
 

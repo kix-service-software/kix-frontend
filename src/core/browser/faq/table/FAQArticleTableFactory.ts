@@ -3,12 +3,13 @@ import { FAQArticleProperty } from "../../../model/kix/faq";
 import { RoutingConfiguration } from "../../router";
 import { FAQDetailsContext } from "../context";
 import {
-    ITableFactory, TableConfiguration, ITable, Table,
+    TableConfiguration, ITable, Table,
     DefaultColumnConfiguration, IColumnConfiguration
 } from "../../table";
 import { FAQArticleTableContentProvider } from "./FAQArticleTableContentProvider";
+import { TableFactory } from "../../table/TableFactory";
 
-export class FAQArticleTableFactory implements ITableFactory {
+export class FAQArticleTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.FAQ_ARTICLE;
 

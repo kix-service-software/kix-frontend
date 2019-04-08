@@ -1,7 +1,6 @@
-import { KIXObject } from "../../model";
 import { TableValue } from "./TableValue";
 
-export interface ITableCSSHandler<T extends KIXObject> {
+export interface ITableCSSHandler<T> {
 
     getRowCSSClasses(object: T): string[];
 

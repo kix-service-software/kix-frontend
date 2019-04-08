@@ -1,12 +1,13 @@
 import { KIXObjectType, DataType } from "../../../model";
 import { FAQArticleHistoryProperty } from "../../../model/kix/faq";
 import {
-    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
+    TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableHeaderHeight, IColumnConfiguration
 } from "../../table";
 import { FAQArticleHistoryContentProvider } from "./FAQArticleHistoryContentProvider";
+import { TableFactory } from "../../table/TableFactory";
 
-export class FAQArticleHistoryTableFactory implements ITableFactory {
+export class FAQArticleHistoryTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.FAQ_ARTICLE_HISTORY;
 

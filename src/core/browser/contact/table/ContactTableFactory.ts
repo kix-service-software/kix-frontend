@@ -2,12 +2,13 @@ import { KIXObjectType, ContextMode, ContactProperty, KIXObjectLoadingOptions } 
 import { RoutingConfiguration } from "../../router";
 import { ContactDetailsContext } from "../context";
 import {
-    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
+    TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableHeaderHeight, TableRowHeight, IColumnConfiguration
 } from "../../table";
 import { ContactTableContentProvider } from "./ContactTableContentProvider";
+import { TableFactory } from "../../table/TableFactory";
 
-export class ContactTableFactory implements ITableFactory {
+export class ContactTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.CONTACT;
 

@@ -2,13 +2,12 @@ import { ITableContentProvider } from "./ITableContentProvider";
 import { KIXObjectType, KIXObjectLoadingOptions, KIXObject } from "../../model";
 import { ITable } from "./ITable";
 import { ContextService } from "../context";
-import { IdService } from "../IdService";
 import { IRowObject } from "./IRowObject";
 import { KIXObjectService } from "../kix";
 import { RowObject } from "./RowObject";
 import { TableValue } from "./TableValue";
 
-export class TableContentProvider<T extends KIXObject = any> implements ITableContentProvider<T> {
+export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
     protected initialized: boolean = false;
 
@@ -63,7 +62,7 @@ export class TableContentProvider<T extends KIXObject = any> implements ITableCo
             objects = context ? await context.getObjectList() : [];
         } else {
             if (!this.objectIds || (this.objectIds && this.objectIds.length > 0)) {
-                objects = await KIXObjectService.loadObjects<T>(
+                objects = await KIXObjectService.loadObjects<KIXObject>(
                     this.objectType, this.objectIds, this.loadingOptions, null, false
                 );
             }

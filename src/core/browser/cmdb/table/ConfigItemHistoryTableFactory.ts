@@ -1,11 +1,12 @@
 import { KIXObjectType, DataType, ConfigItemHistoryProperty } from "../../../model";
 import {
-    ITableFactory, ITable, TableConfiguration, Table, DefaultColumnConfiguration,
+    ITable, TableConfiguration, Table, DefaultColumnConfiguration,
     TableHeaderHeight, IColumnConfiguration
 } from "../../table";
 import { ConfigItemHistoryContentProvider } from "./ConfigItemHistoryContentProvider";
+import { TableFactory } from "../../table/TableFactory";
 
-export class ConfigItemHistoryTableFactory implements ITableFactory {
+export class ConfigItemHistoryTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_HISTORY;
 

@@ -1,7 +1,7 @@
 import { KIXObject } from "../KIXObject";
 import { KIXObjectType } from "../KIXObjectType";
 
-export class Permission extends KIXObject<Permission> {
+export class Permission {
 
     public KIXObjectType: KIXObjectType = KIXObjectType.PERMISSION;
 
@@ -30,7 +30,6 @@ export class Permission extends KIXObject<Permission> {
     public ChangeBy: number;
 
     public constructor(permission?: Permission) {
-        super();
         if (permission) {
             this.ID = Number(permission.ID);
             this.ObjectId = this.ID;
