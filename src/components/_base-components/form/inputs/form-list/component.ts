@@ -110,8 +110,6 @@ class Component {
     }
 
     public listToggleButtonClicked(event: Event): void {
-        event.stopPropagation();
-        event.preventDefault();
         this.toggleList();
     }
 
