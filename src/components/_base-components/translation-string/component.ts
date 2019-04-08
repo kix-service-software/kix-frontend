@@ -4,19 +4,36 @@ import { TranslationService } from '../../../core/browser/i18n/TranslationServic
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private pattern: string;
-    private placeholders: string[];
+    private pattern: string = '';
+    private placeholders: string[] = [];
 
     public onCreate(): void {
         this.state = new ComponentState();
+        this.pattern = '';
+        this.placeholders = [];
     }
 
     public onInput(input: any): void {
-        if (this.pattern !== input.pattern) {
+        const placeholders = typeof input.placeholders !== 'undefined' ? input.placeholders : [];
+        if (this.pattern !== input.pattern || this.placeholdersChanged(placeholders)) {
+            this.placeholders = placeholders;
             this.pattern = input.pattern;
-            this.placeholders = input.placeholders;
             this.setText();
         }
+    }
+
+    private placeholdersChanged(placeholders: string[]): boolean {
+        if (placeholders.length !== this.placeholders.length) {
+            return true;
+        }
+
+        for (let i = 0; i < placeholders.length; i++) {
+            if (placeholders[i] !== this.placeholders[i]) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public async onMount(): Promise<void> {

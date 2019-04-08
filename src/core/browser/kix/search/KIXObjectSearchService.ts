@@ -96,7 +96,7 @@ export class KIXObjectSearchService {
 
             if (formInstance instanceof SearchFormInstance) {
                 const criteria = formInstance.getCriteria().filter(
-                    (c) => c.value !== null && c.value !== undefined && c.value !== ''
+                    (c) => typeof c.value !== 'undefined' && c.value !== null && c.value !== ''
                 );
 
                 const preparedCriteria = await searchDefinition.prepareFormFilterCriteria(criteria);

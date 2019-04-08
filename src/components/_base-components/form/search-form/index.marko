@@ -20,16 +20,16 @@
             <translation-string pattern="Translatable#Start search" placeholders=[]/>
         </button>
     </div>
-    <if(state.table)>
-        <div.result-table>
-            <div.result-table-head>
-                <span>
-                    <translation-string pattern="Translatable#Preview ({0})" placeholders=[state.resultCount]/>
-                </span>
-            </div>
-            <standard-table-NEW table=state.table/>
+    <div.result-table>
+        <div.result-table-head>
+            <span>
+                <translation-string pattern="Translatable#Preview ({0})" placeholders=[state.resultCount]/>
+            </span>
         </div>
-    </if>
+        <if(state.table)>
+            <standard-table-NEW table=state.table/>
+        </if>
+    </div>
     <div.dialog-button-container>
         <button.cancel-button type="button" on-click("cancel") title=state.translations["Translatable#Cancel"]>
             <span.kix-icon-close/>
