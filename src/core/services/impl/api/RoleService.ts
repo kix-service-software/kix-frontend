@@ -12,8 +12,7 @@ import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { LoggingService } from '../LoggingService';
 import {
-    PermissionTypeFactory, CreatePermissionOptions,
-    CreatePermissionDescription, PermissionProperty, Permission
+    PermissionTypeFactory, CreatePermissionDescription, PermissionProperty, Permission
 } from '../../../model/kix/permission';
 
 export class RoleService extends KIXObjectService {
@@ -161,7 +160,7 @@ export class RoleService extends KIXObjectService {
         }
         if (roleId) {
             const baseUri = this.buildUri(this.RESOURCE_URI, roleId, this.SUB_RESOURCE_URI_PERMISSION);
-            const existingPermissions = await this.load<Permission>(
+            const existingPermissions = await this.load(
                 token, null, baseUri, loadingOptionsForExistingPermissions, null, 'Permission'
             );
 

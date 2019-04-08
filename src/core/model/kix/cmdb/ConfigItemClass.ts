@@ -3,6 +3,7 @@ import { KIXObjectType } from "../KIXObjectType";
 import { ConfigItemClassDefinition } from "./ConfigItemClassDefinition";
 import { ConfigItemStats } from "./ConfigItemStats";
 import { AttributeDefinition } from "./AttributeDefinition";
+import { Permissions } from "../permission";
 
 export class ConfigItemClass extends KIXObject<ConfigItemClass> {
 
@@ -33,7 +34,7 @@ export class ConfigItemClass extends KIXObject<ConfigItemClass> {
     public ConfigItemStats: ConfigItemStats;
 
     public constructor(configItemClass?: ConfigItemClass) {
-        super();
+        super(configItemClass);
         if (configItemClass) {
             this.ID = configItemClass.ID;
             this.ObjectId = this.ID;

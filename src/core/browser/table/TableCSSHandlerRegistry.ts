@@ -14,15 +14,15 @@ export class TableCSSHandlerRegistry {
 
     private constructor() { }
 
-    private handler: Map<KIXObjectType, ITableCSSHandler<KIXObject>> = new Map();
+    private handler: Map<KIXObjectType, ITableCSSHandler<any>> = new Map();
 
-    public registerCSSHandler<T extends KIXObject>(objectType: KIXObjectType, handler: ITableCSSHandler<T>): void {
+    public registerCSSHandler<T>(objectType: KIXObjectType, handler: ITableCSSHandler<T>): void {
         if (!this.handler.has(objectType)) {
             this.handler.set(objectType, handler);
         }
     }
 
-    public static getCSSHandler<T extends KIXObject>(objectType: KIXObjectType): ITableCSSHandler<T> {
+    public static getCSSHandler<T>(objectType: KIXObjectType): ITableCSSHandler<T> {
         return TableCSSHandlerRegistry.getInstance().handler.get(objectType);
     }
 

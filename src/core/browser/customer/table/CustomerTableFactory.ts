@@ -2,12 +2,13 @@ import { KIXObjectType, ContextMode, CustomerProperty, KIXObjectLoadingOptions }
 import { CustomerDetailsContext } from "../context";
 import { RoutingConfiguration } from "../../router";
 import {
-    ITableFactory, ITable, TableConfiguration, Table, TableHeaderHeight,
+    ITable, TableConfiguration, Table, TableHeaderHeight,
     TableRowHeight, IColumnConfiguration, DefaultColumnConfiguration
 } from "../../table";
 import { CustomerTableContentProvider } from "./CustomerTableContentProvider";
+import { TableFactory } from "../../table/TableFactory";
 
-export class CustomerTableFactory implements ITableFactory {
+export class CustomerTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.CUSTOMER;
 

@@ -1,13 +1,14 @@
 import { RoutingConfiguration } from "../../../../router";
 import {
-    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
+    TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../../../table";
 import { KIXObjectType, DataType, ContextMode, UserProperty, KIXObjectLoadingOptions } from "../../../../../model";
-import { RoleDetailsContext, UserDetailsContext } from "../../context";
+import { UserDetailsContext } from "../../context";
 import { UserTableContentProvider } from "./UserTableContentProvider";
+import { TableFactory } from "../../../../table/TableFactory";
 
-export class UserTableFactory implements ITableFactory {
+export class UserTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.USER;
 

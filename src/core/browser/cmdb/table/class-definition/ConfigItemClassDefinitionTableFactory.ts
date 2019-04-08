@@ -1,11 +1,12 @@
 import { KIXObjectType, DataType, ConfigItemClassDefinitionProperty } from "../../../../model";
 import {
-    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
+    TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableHeaderHeight, ToggleOptions, IColumnConfiguration
 } from "../../../table";
 import { ConfigItemClassDefinitionTableContentProvider } from "./ConfigItemClassDefinitionTableContentProvider";
+import { TableFactory } from "../../../table/TableFactory";
 
-export class ConfigItemClassDefinitionTableFactory implements ITableFactory {
+export class ConfigItemClassDefinitionTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION;
 

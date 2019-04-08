@@ -1,11 +1,12 @@
 import { KIXObjectType, DataType } from "../../../../model";
 import {
-    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
+    TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableHeaderHeight, TableRowHeight, IColumnConfiguration
 } from "../../../table";
 import { CompareConfigItemVersionTableContentProvider } from "./CompareConfigItemVersionTableContentProvider";
+import { TableFactory } from "../../../table/TableFactory";
 
-export class CompareConfigItemVersionTableFactory implements ITableFactory {
+export class CompareConfigItemVersionTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_VERSION_COMPARE;
 

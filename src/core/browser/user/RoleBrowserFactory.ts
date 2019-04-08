@@ -1,7 +1,7 @@
 import { Role } from "../../model";
-import { IKIXObjectFactory } from "../kix";
+import { KIXObjectFactory } from "../kix/KIXObjectFactory";
 
-export class RoleBrowserFactory implements IKIXObjectFactory<Role> {
+export class RoleBrowserFactory extends KIXObjectFactory<Role> {
 
     private static INSTANCE: RoleBrowserFactory;
 
@@ -12,10 +12,13 @@ export class RoleBrowserFactory implements IKIXObjectFactory<Role> {
         return RoleBrowserFactory.INSTANCE;
     }
 
-    private constructor() { }
+    private constructor() {
+        super();
+    }
 
     public async create(type: Role): Promise<Role> {
-        return new Role(type);
+        const role = new Role(type);
+        return role;
     }
 
 }

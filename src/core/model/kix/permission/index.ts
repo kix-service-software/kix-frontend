@@ -5,3 +5,4 @@ export { PermissionProperty } from './PermissionProperty';
 export { CreatePermissionDescription } from './CreatePermissionDescription';
 export { CRUD } from './CRUD';
 export { CreatePermissionOptions } from './CreatePermissionOptions';
+export { Permissions } from './Permissions';

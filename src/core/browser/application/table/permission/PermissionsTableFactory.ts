@@ -1,23 +1,29 @@
 import {
-    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
+    TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableHeaderHeight, TableRowHeight, IColumnConfiguration
 } from "../../../table";
 import { KIXObjectType, PermissionProperty, DataType } from "../../../../model";
 import { PermissionsTableContentProvider } from "./PermissionsTableContentProvider";
+import { TableFactory } from "../../../table/TableFactory";
 
-export class PermissionsTableFactory implements ITableFactory {
+export class PermissionsTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.PERMISSION;
 
+    public isFactoryFor(objectType: KIXObjectType): boolean {
+        return objectType === KIXObjectType.PERMISSION || objectType === KIXObjectType.PERMISSION_DEPENDING_OBJECTS;
+    }
+
     public createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
-        contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean
+        contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean,
+        objectType?: KIXObjectType
     ): ITable {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
         const table = new Table(tableKey, tableConfiguration);
 
-        table.setContentProvider(new PermissionsTableContentProvider(table, objectIds, null, contextId));
+        table.setContentProvider(new PermissionsTableContentProvider(objectType, table, objectIds, null, contextId));
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 
         return table;

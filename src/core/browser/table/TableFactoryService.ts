@@ -21,7 +21,7 @@ export class TableFactoryService {
     private factories: ITableFactory[] = [];
 
     public registerFactory(factory: ITableFactory): void {
-        if (this.factories.some((f) => f.objectType === factory.objectType)) {
+        if (this.factories.some((f) => f.isFactoryFor(factory.objectType))) {
             console.warn(`Redudant TableFactory for type ${factory.objectType}`);
         }
 
@@ -33,10 +33,11 @@ export class TableFactoryService {
         objectIds?: Array<number | string>, contextId?: string, defaultRouting?: boolean,
         defaultToggle?: boolean, short: boolean = false
     ): ITable {
-        const factory = this.factories.find((f) => f.objectType === objectType);
+        const factory = this.factories.find((f) => f.isFactoryFor(objectType));
         const table = factory
             ? factory.createTable(
-                tableKey, tableConfiguration, objectIds, contextId, defaultRouting, defaultToggle, short
+                tableKey, tableConfiguration, objectIds, contextId,
+                defaultRouting, defaultToggle, short, objectType
             )
             : null;
         return table;

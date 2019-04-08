@@ -1,13 +1,14 @@
 import { TicketStateDetailsContext } from "../../context";
 import { RoutingConfiguration } from "../../../../router";
 import {
-    ITableFactory, ITable, TableConfiguration, Table, DefaultColumnConfiguration,
+    ITable, TableConfiguration, Table, DefaultColumnConfiguration,
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../../../table";
 import { KIXObjectType, TicketStateProperty, DataType, ContextMode } from "../../../../../model";
 import { TicketStateTableContentProvider } from "./TicketStateTableContentProvider";
+import { TableFactory } from "../../../../table/TableFactory";
 
-export class TicketStateTableFactory implements ITableFactory {
+export class TicketStateTableFactory extends TableFactory {
 
 
     public objectType: KIXObjectType = KIXObjectType.TICKET_STATE;

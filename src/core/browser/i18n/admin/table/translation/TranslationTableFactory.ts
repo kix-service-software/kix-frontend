@@ -1,16 +1,17 @@
 import { TranslationDetailsContext } from "../../context";
 import { RoutingConfiguration } from "../../../../router";
 import {
-    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
+    TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../../../table";
 import {
     KIXObjectType, TranslationProperty, ContextMode, KIXObjectLoadingOptions, DataType
 } from "../../../../../model";
 import { TranslationTableContentProvider } from "./TranslationTableContentProvider";
+import { TableFactory } from "../../../../table/TableFactory";
 
 
-export class TranslationTableFactory implements ITableFactory {
+export class TranslationTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.TRANSLATION;
 

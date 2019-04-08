@@ -104,5 +104,7 @@ export enum KIXObjectType {
 
     PERMISSION = 'Permission',
 
-    PERMISSION_TYPE = 'PermissionType'
+    PERMISSION_TYPE = 'PermissionType',
+
+    PERMISSION_DEPENDING_OBJECTS = 'PERMISSION_DEPENDING_OBJECTS'
 }
