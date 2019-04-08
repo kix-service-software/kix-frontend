@@ -65,7 +65,10 @@ export class Component {
                 if (c.ConfigItemStats) {
                     count = (c.ConfigItemStats.PreProductiveCount + c.ConfigItemStats.ProductiveCount).toString();
                 }
-                const properties = [new TreeNodeProperty(count, `Anzahl Config Items: ${count}`)];
+
+                const text = await TranslationService.translate('Translatable#Config Items Count: {0}', [count]);
+
+                const properties = [new TreeNodeProperty(count, text)];
                 const name = await TranslationService.translate(c.Name, []);
                 nodes.push(new TreeNode(c, name, null, null, null, null, null, null, properties));
             }
@@ -85,7 +88,9 @@ export class Component {
         const context = await ContextService.getInstance().getContext<CMDBContext>(CMDBContext.CONTEXT_ID);
         this.state.activeNode = null;
         this.state.filterValue = null;
-        context.setAdditionalInformation(['Alle']);
+
+        const allText = await TranslationService.translate('Translatable#All');
+        context.setAdditionalInformation([allText]);
         context.setCIClass(null);
 
         (this as any).getComponent('ci-class-explorer-filter').reset();

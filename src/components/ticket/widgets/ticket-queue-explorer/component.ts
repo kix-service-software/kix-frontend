@@ -1,9 +1,6 @@
 import { ComponentState } from './ComponentState';
-import { ContextService, IdService, SearchOperator, KIXObjectService } from '../../../../core/browser';
-import {
-    TreeNode, Queue, TreeNodeProperty, FilterCriteria,
-    TicketProperty, FilterDataType, FilterType, KIXObjectType, KIXObjectLoadingOptions
-} from '../../../../core/model';
+import { ContextService, IdService } from '../../../../core/browser';
+import { TreeNode, Queue, TreeNodeProperty } from '../../../../core/model';
 import { TicketContext, TicketService } from '../../../../core/browser/ticket';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
@@ -63,27 +60,34 @@ export class Component {
             for (const q of categories) {
                 const name = await TranslationService.translate(q.Name);
                 const subQueues = await this.prepareTreeNodes(q.SubQueues);
+                const ticketStats = await this.getTicketStats(q);
                 nodes.push(new TreeNode(
-                    q, name, null, null, subQueues, null, null, null, this.getTicketStats(q)
+                    q, name, null, null, subQueues, null, null, null, ticketStats
                 ));
             }
         }
         return nodes;
     }
 
-    private getTicketStats(queue: Queue): TreeNodeProperty[] {
+    private async getTicketStats(queue: Queue): Promise<TreeNodeProperty[]> {
         const properties: TreeNodeProperty[] = [];
         if (queue.TicketStats) {
             const openCount = queue.TicketStats.OpenCount;
-            properties.push(new TreeNodeProperty(openCount, `offene Tickets: ${openCount}`));
+
+            const openTooltip = await TranslationService.translate('Translatable#open tickets: {0}', [openCount]);
+            properties.push(new TreeNodeProperty(openCount, openTooltip));
 
             const lockCount = openCount - queue.TicketStats.LockCount;
-            properties.push(new TreeNodeProperty(lockCount, `nicht gesperrte Tickets: ${lockCount}`));
+            const lockedTooltip = await TranslationService.translate('Translatable#free tickets: {0}', [lockCount]);
+            properties.push(new TreeNodeProperty(lockCount, lockedTooltip));
 
             const escalatedCount = queue.TicketStats.EscalatedCount;
             if (escalatedCount > 0) {
+                const escalatedTooltip = await TranslationService.translate(
+                    'Translatable#escalated tickets: {0}', [escalatedCount]
+                );
                 properties.push(
-                    new TreeNodeProperty(escalatedCount, `eskalierte Tickets: ${escalatedCount}`, 'escalated')
+                    new TreeNodeProperty(escalatedCount, escalatedTooltip, 'escalated')
                 );
             }
         }
@@ -114,8 +118,11 @@ export class Component {
     public async showAll(): Promise<void> {
         const context = await ContextService.getInstance().getContext<TicketContext>(TicketContext.CONTEXT_ID);
         this.state.activeNode = null;
+
+        const allText = await TranslationService.translate('Translatable#All');
+
         context.setQueue(null);
-        context.setAdditionalInformation(['Alle']);
+        context.setAdditionalInformation([allText]);
     }
 
 }

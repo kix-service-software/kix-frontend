@@ -26,7 +26,15 @@ class Component extends FormInputComponent<number, CompontentState> {
         await super.onMount();
         const objectData = ObjectDataService.getInstance().getObjectData();
         if (objectData) {
-            this.state.nodes = objectData.faqVisibilities.map((l) => new TreeNode(l[0], l[1]));
+
+            const nodes = [];
+
+            for (const l of objectData.faqVisibilities) {
+                const labelText = await TranslationService.translate(l[1]);
+                nodes.push(new TreeNode(l[0], labelText));
+            }
+
+            this.state.nodes = nodes;
         }
         this.setCurrentNode();
     }
