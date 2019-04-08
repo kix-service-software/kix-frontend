@@ -108,7 +108,10 @@ export class Component {
     public async showAll(): Promise<void> {
         const context = await ContextService.getInstance().getContext<FAQContext>(FAQContext.CONTEXT_ID);
         this.state.activeNode = null;
-        context.setAdditionalInformation(['Alle']);
+
+        const allText = await TranslationService.translate('Translatable#All');
+
+        context.setAdditionalInformation([allText]);
         context.setFAQCategory(null);
     }
 

@@ -3,7 +3,9 @@
     <for|context, index| of=state.contexts>
         <span.context>
             <link-target routingConfiguration=component.getRoutingConfiguration(context[0], index)>
-                <@content>${context[1]}</@content>
+                <@content>
+                    <translation-string pattern=context[1]/>
+                </@content>
             </link-target>
         </span>
     </for>
