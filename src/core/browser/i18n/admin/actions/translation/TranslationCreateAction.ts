@@ -12,7 +12,7 @@ export class TranslationCreateAction extends AbstractAction {
     public async run(event: any): Promise<void> {
         ContextService.getInstance().setDialogContext(
             NewTranslationDialogContext.CONTEXT_ID, KIXObjectType.TRANSLATION,
-            ContextMode.CREATE_ADMIN, null, true, 'Internationalisierung'
+            ContextMode.CREATE_ADMIN, null, true, 'Translatable#Internationalisation'
         );
     }
 

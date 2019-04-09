@@ -14,6 +14,8 @@ export enum ConfigItemClassDefinitionProperty {
 
     DEFINITION_ID = 'DefinitionID',
 
-    DEFINITION_STRING = 'DefinitionString'
+    DEFINITION_STRING = 'DefinitionString',
+
+    CURRENT = 'CURRENT'
 
 }

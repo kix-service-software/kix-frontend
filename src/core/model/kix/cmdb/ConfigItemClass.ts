@@ -49,7 +49,7 @@ export class ConfigItemClass extends KIXObject<ConfigItemClass> {
 
             this.Definitions = configItemClass.Definitions
                 ? configItemClass.Definitions.map((d) => new ConfigItemClassDefinition(d))
-                : null;
+                : [];
 
             this.ConfigItemStats = configItemClass.ConfigItemStats;
 
@@ -57,6 +57,14 @@ export class ConfigItemClass extends KIXObject<ConfigItemClass> {
                 this.CurrentDefinition.Definition = this.CurrentDefinition.Definition.map(
                     (d) => new AttributeDefinition(d)
                 );
+
+                const currentDefinition = this.Definitions.find(
+                    (v) => v.DefinitionID === this.CurrentDefinition.DefinitionID
+                );
+
+                if (currentDefinition) {
+                    currentDefinition.isCurrentDefinition = true;
+                }
             }
         }
     }

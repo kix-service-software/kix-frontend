@@ -89,6 +89,15 @@ export class Table implements ITable {
                 await this.sort(this.sortColumnId, this.sortOrder);
             }
 
+            if (this.tableConfiguration &&
+                this.tableConfiguration.toggle &&
+                this.tableConfiguration.toggleOptions.toggleFirst
+            ) {
+                if (this.rows.length) {
+                    this.rows[0].expand(true);
+                }
+            }
+
             this.initialized = true;
         }
     }
@@ -102,13 +111,6 @@ export class Table implements ITable {
             const rows = [];
             data.forEach((d) => rows.push(this.createRow(d)));
             this.rows = rows;
-            if (this.tableConfiguration &&
-                this.tableConfiguration.toggle &&
-                this.tableConfiguration.toggleOptions.toggleFirst) {
-                if (this.rows.length) {
-                    this.rows[0].expand(true);
-                }
-            }
         }
     }
 

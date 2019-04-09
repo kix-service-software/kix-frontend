@@ -13,7 +13,7 @@ export class ComponentState {
                 'import-action', 'csv-export-action'
             ],
             new TableWidgetSettings(KIXObjectType.ROLE, [RoleProperty.NAME, SortOrder.UP]), false, false, null,
-            'kix-icon-gear'
+            'kix-icon-gears'
         )
     ) { }
 

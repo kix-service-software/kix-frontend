@@ -8,14 +8,14 @@ export class ComponentState {
     public constructor(
         public instanceId: string = IdService.generateDateBasedId('translation-list'),
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
-            'table-widget', 'Translatable#Internationalization: Translations',
+            'table-widget', 'Translatable#Internationalisation: Translations',
             [
                 'i18n-admin-translation-create',
                 'i18n-admin-translation-import',
                 'i18n-admin-translation-csv-export'
             ],
             new TableWidgetSettings(KIXObjectType.TRANSLATION,
-                [TranslationProperty.PATTERN, SortOrder.UP]), false, false, null, 'kix-icon-gear')
+                [TranslationProperty.PATTERN, SortOrder.UP]), false, false, null, 'kix-icon-gears')
     ) { }
 
 }

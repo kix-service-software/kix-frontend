@@ -1,11 +1,11 @@
 import { IConfigurationExtension } from '../../../core/extensions';
 import {
     ContextConfiguration, WidgetConfiguration, ConfiguredWidget, WidgetSize, TableWidgetSettings,
-    KIXObjectType, PermissionProperty, SortOrder
+    KIXObjectType, PermissionProperty, SortOrder, ConfigItemClassDefinitionProperty
 } from '../../../core/model';
 import { TicketTypeDetailsContext } from '../../../core/browser/ticket';
 import { ConfigItemClassDetailsContextConfiguration } from '../../../core/browser/cmdb';
-import { TableConfiguration, TableHeaderHeight, TableRowHeight } from '../../../core/browser';
+import { TableConfiguration, TableHeaderHeight, TableRowHeight, ToggleOptions } from '../../../core/browser';
 
 export class Extension implements IConfigurationExtension {
 
@@ -26,7 +26,7 @@ export class Extension implements IConfigurationExtension {
         const ciClassObjectPermissionsWidget = new ConfiguredWidget(
             'ci-class-permissions-widget', new WidgetConfiguration(
                 'table-widget', 'Translatable#Permissions',
-                ['cmdb-admin-ci-class-edit'],
+                [],
                 new TableWidgetSettings(
                     KIXObjectType.PERMISSION, [PermissionProperty.RoleID, SortOrder.UP],
                     new TableConfiguration(KIXObjectType.PERMISSION, null, null, null, null, null, null, null, null,
@@ -40,7 +40,7 @@ export class Extension implements IConfigurationExtension {
             'ci-class-permissions-dependent-objects-widget', new WidgetConfiguration(
                 'table-widget',
                 'Translatable#Permissions on dependent objects',
-                ['cmdb-admin-ci-class-edit'],
+                [],
                 new TableWidgetSettings(
                     KIXObjectType.PERMISSION_DEPENDING_OBJECTS, [PermissionProperty.RoleID, SortOrder.UP],
                     new TableConfiguration(
@@ -54,22 +54,26 @@ export class Extension implements IConfigurationExtension {
 
         const ciClassVersionsWidget = new ConfiguredWidget(
             'ci-class-versions-widget', new WidgetConfiguration(
-                'config-item-class-versions-widget', 'Translatable#CI Class versions',
-                ['cmdb-admin-ci-class-edit'], null,
+                'table-widget', 'Translatable#Version Details',
+                [], new TableWidgetSettings(
+                    KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION,
+                    [ConfigItemClassDefinitionProperty.VERSION, SortOrder.DOWN],
+                    new TableConfiguration(
+                        KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION, null, null, null, null, null, true,
+                        new ToggleOptions('config-item-class-definition', 'definition', [], true), null,
+                        TableHeaderHeight.LARGE, TableRowHeight.LARGE
+                    ), null, false
+                ),
                 false, true, WidgetSize.BOTH, null, false
             )
         );
 
         return new ConfigItemClassDetailsContextConfiguration(
             TicketTypeDetailsContext.CONTEXT_ID, [], [], [], [],
-            [
-                'ci-class-permissions-widget',
-                'ci-class-permissions-dependent-objects-widget',
-                'ci-class-versions-widget'
-            ],
-            [ciClassObjectPermissionsWidget, ciClassDependentObjectPermissionsWidget, ciClassVersionsWidget],
+            ['ci-class-permissions-widget', 'ci-class-permissions-dependent-objects-widget'],
+            [ciClassObjectPermissionsWidget, ciClassDependentObjectPermissionsWidget],
             ['config-item-class-details-widget'], [ciClassDetailsWidget],
-            [], [],
+            ['ci-class-versions-widget'], [ciClassVersionsWidget],
             ['cmdb-admin-ci-class-create'],
             ['cmdb-admin-ci-class-edit']
         );

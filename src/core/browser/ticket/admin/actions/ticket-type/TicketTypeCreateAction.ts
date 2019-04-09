@@ -11,7 +11,7 @@ export class TicketTypeCreateAction extends AbstractAction {
     public async run(event: any): Promise<void> {
         ContextService.getInstance().setDialogContext(
             // TODO: Titel aus dem aktiven Admin-Modul ermitteln (Kategorie)
-            null, KIXObjectType.TICKET_TYPE, ContextMode.CREATE_ADMIN, null, true, 'Translatable#Add Core Data'
+            null, KIXObjectType.TICKET_TYPE, ContextMode.CREATE_ADMIN, null, true, 'Translatable#Ticket'
         );
     }
 
