@@ -6,6 +6,8 @@ export interface ILabelProvider<T> {
 
     isLabelProviderFor(object: T): boolean;
 
+    isLabelProviderForType(objectType: KIXObjectType): boolean;
+
     getObjectText(object: T, id?: boolean, title?: boolean, translatable?: boolean): Promise<string>;
 
     getObjectName(plural?: boolean, translatable?: boolean): Promise<string>;

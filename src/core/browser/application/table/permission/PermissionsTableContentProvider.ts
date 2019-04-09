@@ -1,4 +1,4 @@
-import { Permission, KIXObjectLoadingOptions, KIXObjectType, KIXObject } from "../../../../model";
+import { Permission, KIXObjectLoadingOptions, KIXObjectType, KIXObject, Role } from "../../../../model";
 import { TableContentProvider } from "../../../table/TableContentProvider";
 import { ITable, IRowObject, TableValue, RowObject } from "../../../table";
 import { ContextService } from "../../../context";
@@ -22,14 +22,15 @@ export class PermissionsTableContentProvider extends TableContentProvider<Permis
         }
 
         let rowObjects = [];
-        if (object && object.Permissions) {
-            let permissions: Permission[];
-            if (Array.isArray(object.Permissions)) {
-                permissions = object.Permissions;
+        if (object && object.ConfiguredPermissions) {
+            let permissions = [];
+
+            if (this.objectType === KIXObjectType.ROLE_PERMISSION) {
+                permissions = (object as Role).Permissions;
             } else {
                 permissions = this.objectType === KIXObjectType.PERMISSION_DEPENDING_OBJECTS
-                    ? object.Permissions.DependingObjects
-                    : object.Permissions.Assigned;
+                    ? object.ConfiguredPermissions.DependingObjects
+                    : object.ConfiguredPermissions.Assigned;
             }
 
             rowObjects = permissions.map((p) => {

@@ -7,6 +7,10 @@ export class ArticleLabelProvider implements ILabelProvider<Article> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.ARTICLE;
 
+    public isLabelProviderForType(objectType: KIXObjectType): boolean {
+        return objectType === this.kixObjectType;
+    }
+
     public async getPropertyValueDisplayText(property: string, value: string | number): Promise<string> {
         return value.toString();
     }

@@ -3,7 +3,6 @@ import { KIXObjectType } from "../KIXObjectType";
 import { ConfigItemClassDefinition } from "./ConfigItemClassDefinition";
 import { ConfigItemStats } from "./ConfigItemStats";
 import { AttributeDefinition } from "./AttributeDefinition";
-import { Permissions } from "../permission";
 
 export class ConfigItemClass extends KIXObject<ConfigItemClass> {
 

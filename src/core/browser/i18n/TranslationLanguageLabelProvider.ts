@@ -10,6 +10,10 @@ export class TranslationLanguageLabelProvider implements ILabelProvider<Translat
         return language instanceof TranslationLanguage;
     }
 
+    public isLabelProviderForType(objectType: KIXObjectType): boolean {
+        return objectType === this.kixObjectType;
+    }
+
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {

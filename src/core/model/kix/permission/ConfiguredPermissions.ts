@@ -1,6 +1,6 @@
 import { Permission } from "./Permission";
 
-export class Permissions {
+export class ConfiguredPermissions {
 
     public constructor(
         public Assigned: Permission[] = [],

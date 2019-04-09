@@ -13,6 +13,10 @@ export class TextModuleLabelProvider implements ILabelProvider<TextModule> {
         return textModule instanceof TextModule;
     }
 
+    public isLabelProviderForType(objectType: KIXObjectType): boolean {
+        return objectType === this.kixObjectType;
+    }
+
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {

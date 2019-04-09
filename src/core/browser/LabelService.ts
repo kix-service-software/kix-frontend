@@ -107,7 +107,7 @@ export class LabelService {
     }
 
     public getLabelProviderForType<T extends KIXObject>(objectType: KIXObjectType): ILabelProvider<T> {
-        return this.labelProviders.find((lp) => lp.kixObjectType === objectType);
+        return this.labelProviders.find((lp) => lp.isLabelProviderForType(objectType));
     }
 
 }

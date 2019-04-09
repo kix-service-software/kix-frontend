@@ -13,6 +13,10 @@ export class RoleLabelProvider implements ILabelProvider<Role> {
         return role instanceof Role;
     }
 
+    public isLabelProviderForType(objectType: KIXObjectType): boolean {
+        return objectType === this.kixObjectType;
+    }
+
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {

@@ -6,6 +6,10 @@ export class ChannelLabelProvider implements ILabelProvider<Channel> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CHANNEL;
 
+    public isLabelProviderForType(objectType: KIXObjectType): boolean {
+        return objectType === this.kixObjectType;
+    }
+
     public isLabelProviderFor(channel: Channel): boolean {
         return channel instanceof Channel;
     }

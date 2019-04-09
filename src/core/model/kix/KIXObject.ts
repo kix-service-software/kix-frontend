@@ -1,6 +1,6 @@
 import { KIXObjectType } from ".";
 import { Link } from "./link";
-import { Permissions, Permission } from "./permission";
+import { ConfiguredPermissions } from "./permission";
 
 export abstract class KIXObject<T = any> {
 
@@ -8,7 +8,7 @@ export abstract class KIXObject<T = any> {
 
     public abstract KIXObjectType: KIXObjectType;
 
-    public Permissions: Permissions | Permission[];
+    public ConfiguredPermissions: ConfiguredPermissions;
 
     public Links: Link[];
 
@@ -16,7 +16,7 @@ export abstract class KIXObject<T = any> {
 
     public constructor(object?: KIXObject) {
         if (object) {
-            this.Permissions = object.Permissions;
+            this.ConfiguredPermissions = object.ConfiguredPermissions;
         }
     }
 

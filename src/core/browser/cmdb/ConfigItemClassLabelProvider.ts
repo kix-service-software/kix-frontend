@@ -10,6 +10,10 @@ export class ConfigItemClassLabelProvider implements ILabelProvider<ConfigItemCl
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_CLASS;
 
+    public isLabelProviderForType(objectType: KIXObjectType): boolean {
+        return objectType === this.kixObjectType;
+    }
+
     public async getPropertyValueDisplayText(
         property: string, value: string | number | any = '', translatable: boolean = true
     ): Promise<string> {
