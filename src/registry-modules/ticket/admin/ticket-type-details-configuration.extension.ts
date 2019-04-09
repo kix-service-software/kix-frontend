@@ -17,7 +17,7 @@ export class Extension implements IConfigurationExtension {
 
         const textmodulesWidget = new ConfiguredWidget('ticket-type-assigned-textmodules', new WidgetConfiguration(
             'ticket-type-assigned-textmodules', 'Assign Text Modules',
-            ['ticket-admin-type-textmodules-edit'], null, false, true, WidgetSize.BOTH, null, false
+            ['ticket-admin-type-textmodules-edit'], null, true, true, WidgetSize.BOTH, null, false
         ));
 
         return new TicketTypeDetailsContextConfiguration(

@@ -318,7 +318,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'new-ticket-type-dialog',
             new WidgetConfiguration(
-                'new-ticket-type-dialog', 'Translatable#Add Type', [], {},
+                'new-ticket-type-dialog', 'Translatable#New Type', [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-new-gear'
             ),
             KIXObjectType.TICKET_TYPE,
@@ -338,7 +338,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'new-ticket-priority-dialog',
             new WidgetConfiguration(
-                'new-ticket-priority-dialog', 'Translatable#Add Priority', [], {},
+                'new-ticket-priority-dialog', 'Translatable#New Priority', [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-new-gear'
             ),
             KIXObjectType.TICKET_PRIORITY,
@@ -358,7 +358,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'new-ticket-state-dialog',
             new WidgetConfiguration(
-                'new-ticket-state-dialog', 'Translatable#Add State', [], {},
+                'new-ticket-state-dialog', 'Translatable#New State', [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-new-gear'
             ),
             KIXObjectType.TICKET_STATE,

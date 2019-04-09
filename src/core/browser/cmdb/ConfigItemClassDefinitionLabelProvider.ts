@@ -30,6 +30,9 @@ export class ConfigItemClassDefinitionLabelProvider implements ILabelProvider<Co
             case ConfigItemClassProperty.CREATE_BY:
                 displayValue = 'Translatable#Created by';
                 break;
+            case ConfigItemClassDefinitionProperty.CURRENT:
+                displayValue = 'Translatable#Current Definition';
+                break;
             default:
                 displayValue = property;
         }
@@ -59,6 +62,9 @@ export class ConfigItemClassDefinitionLabelProvider implements ILabelProvider<Co
                     KIXObjectType.USER, [displayValue], null, null, true
                 ).catch((error) => [] as User[]);
                 displayValue = users && !!users.length ? users[0].UserFullname : displayValue;
+                break;
+            case ConfigItemClassDefinitionProperty.CURRENT:
+                displayValue = value ? 'Translatable#(Current definition)' : '';
                 break;
             default:
                 displayValue = await this.getPropertyValueDisplayText(property, displayValue);

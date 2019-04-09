@@ -32,11 +32,15 @@ export class ConfigItemClassDefinitionTableFactory extends TableFactory {
                 ConfigItemClassDefinitionProperty.VERSION, true, false, true, true, 100, true, true
             ),
             new DefaultColumnConfiguration(
+                ConfigItemClassDefinitionProperty.CREATE_BY, true, false, true, true, 150, true, true
+            ),
+            new DefaultColumnConfiguration(
                 ConfigItemClassDefinitionProperty.CREATE_TIME, true, false, true, true, 150,
                 true, true, false, DataType.DATE_TIME
             ),
             new DefaultColumnConfiguration(
-                ConfigItemClassDefinitionProperty.CREATE_BY, true, false, true, true, 150, true, true
+                ConfigItemClassDefinitionProperty.CURRENT, true, false, true, true, 150,
+                true, true, false, DataType.DATE_TIME
             )
         ];
 

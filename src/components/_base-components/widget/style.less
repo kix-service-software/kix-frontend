@@ -1,10 +1,12 @@
 @default-widget-header-height: @margin-default;
 @overlay-widget-header-height: 1.75rem;
 @widget-header-grid-gap: 1rem;
+
 .widget(@header-background: @secondary-2, @header-color: @secondary-0, @widget-header-height: @default-widget-header-height, @widget-header-action-separator-color: @secondary-1) {
     position: relative;
     box-sizing: border-box;
     box-shadow: @shadow-1;
+
     >.widget-header {
         background: @header-background;
         color: @header-color;
@@ -18,32 +20,40 @@
         grid-template-columns: 6fr 4fr;
         grid-gap: @widget-header-grid-gap;
         grid-template-rows: @widget-header-height;
+
         &.minimizable {
             cursor: pointer;
         }
+
         >.header-left {
             display: grid;
             grid-auto-flow: column;
             grid-gap: @widget-header-grid-gap;
             grid-template-columns: minmax(auto, max-content);
+
             >[class^="kix-icon-"],
             >[class*=" kix-icon-"] {
                 line-height: @widget-header-height;
                 .icon-font-size-normal();
             }
+
             >.widget-title {
                 display: grid;
                 grid-auto-flow: column;
                 grid-gap: @margin-small;
                 min-width: 5rem;
+
                 &.with-icon {
                     grid-template-columns: min-content;
+
                     >[class^="kix-icon-"],
                     >[class*=" kix-icon-"] {
                         line-height: @widget-header-height;
                         .icon-font-size-normal();
                     }
+
                     >span.icon {
+
                         >[class^="kix-icon-"],
                         >[class*=" kix-icon-"] {
                             line-height: @widget-header-height;
@@ -51,20 +61,24 @@
                         }
                     }
                 }
+
                 >h2 {
                     .shorten-text;
                     display: inline;
                     line-height: @widget-header-height;
                 }
             }
+
             >.widget-filter {
                 justify-self: end;
                 display: grid;
+
                 .filter-count {
                     font-size: @h2-font-size;
                 }
             }
         }
+
         >.header-right {
             justify-self: right;
             display: grid;
@@ -75,19 +89,23 @@
             line-height: @widget-header-height;
             text-align: right;
             width: 100%;
+
             >.minimize-icon-wrapper,
             >.close-icon-wrapper {
                 display: grid;
                 align-content: center;
+
                 [class^="kix-icon-"],
                 [class*=" kix-icon-"] {
                     .icon-font-size-normal;
                 }
             }
+
             >.action-list-wrapper {
                 >.action-list {
                     height: @widget-header-height;
                     color: @header-color;
+
                     >li {
                         >div.action {
                             height: @widget-header-height;
@@ -95,10 +113,13 @@
                         }
                     }
                 }
+
                 .action-list-expansion-container {
                     background-color: @header-background;
+
                     .action-list-expansion {
                         color: @header-color;
+
                         li {
                             border-top: 1px solid @widget-header-action-separator-color;
                         }
@@ -106,10 +127,12 @@
                 }
             }
         }
+
         >input[type=text] {
             margin-top: 6px;
         }
     }
+
     >.widget-content {
         background: @secondary-6;
         color: @default-dark-font-color;
@@ -118,6 +141,7 @@
         height: 100%;
         border-bottom-left-radius: @border-radius;
         border-bottom-right-radius: @border-radius;
+
         >div.content-actions {
             background-color: @secondary-3;
             color: @secondary-0;
@@ -125,9 +149,11 @@
             border-bottom-right-radius: @border-radius;
             margin-bottom: 1.5em;
             padding: 0 1rem;
+
             .action-list-expansion-container {
                 background-color: @secondary-3;
                 color: @secondary-0;
+
                 .action-list-expansion {
                     li {
                         border-top: 1px solid @secondary-2;
@@ -139,6 +165,7 @@
 }
 
 .container-draggable .widget .widget-header .header-left h2 {
+
     & [class^="kix-icon-"],
     & [class*=" kix-icon-"] {
         display: none;
@@ -156,15 +183,19 @@
 
 .sidebar-widget {
     .widget(@primary-2, @default-light-font-color, @widget-header-action-separator-color: @secondary-6);
+
     .widget-header {
         grid-template-columns: 8fr 2fr;
+
         .action-list-wrapper {
+
             ul.action-list,
             .action-list-expansion-container>ul.action-list-expansion {
                 >li {
                     &.inactive {
                         color: @primary-1;
                     }
+
                     &:hover:not(.list-button):not(.inactive) {
                         color: @primary-5;
                     }
@@ -172,9 +203,11 @@
             }
         }
     }
+
     >.widget-content {
         min-height: @default-widget-height - @default-widget-header-height;
         padding: 1rem;
+
         >.scroll-container {
             overflow: auto;
         }
@@ -187,24 +220,30 @@
     max-height: 43rem;
     width: @explorer-width;
     background-color: @secondary-6;
+
     >.widget-header {
         grid-template-columns: 8fr 2fr;
+
         >.header-left {
             grid-template-columns: max-content minmax(auto, max-content);
         }
     }
+
     >.widget-content {
         overflow: auto;
         padding: 1rem .875rem;
         max-height: 43rem - @default-widget-header-height;
         min-height: 15rem - @default-widget-header-height;
+
         >span.show-all {
             display: inline-block;
             margin-bottom: 1rem;
             cursor: pointer;
+
             &:hover {
                 color: @primary-0;
             }
+
             &.active {
                 color: @primary-0;
                 font-weight: bold;
@@ -217,28 +256,36 @@
     .widget(@primary-2, @secondary-6, 1.75em);
     margin-bottom: .75em;
     box-shadow: unset;
+
     >.widget-header {
         padding-left: @margin-default + 1rem;
         border-radius: @border-radius;
         box-shadow: @shadow-1;
         grid-template-columns: 1fr 0fr; // TODO: temporary, should be changed for possible lane actions - consider different behavior for lane with tabs
+
         >.header-left {
+
             >[class^="kix-icon-"],
             >[class*=" kix-icon-"] {
                 .font-size-normal();
             }
+
             >.widget-title {
+
                 >[class^="kix-icon-"],
                 >[class*=" kix-icon-"] {
                     .font-size-normal();
                 }
+
                 >h2 {
                     .font-size-normal();
                     font-weight: bold;
                 }
             }
         }
-    } // TODO: wenn möglich mit action-list umsetzen
+    }
+
+    // TODO: wenn möglich mit action-list umsetzen
     >ul.lane-content-actions {
         list-style: none;
         position: absolute;
@@ -246,6 +293,7 @@
         right: 0.5rem;
         top: @overlay-widget-header-height;
         z-index: 1;
+
         li {
             border: 1px solid @primary-2;
             border-top-right-radius: @border-radius;
@@ -261,14 +309,18 @@
             display: grid;
             align-content: center;
             cursor: pointer;
+
             &:first-of-type {
                 margin-top: .75rem;
             }
+
             &:last-of-type {
                 margin-bottom: 1.75rem;
             }
+
             >div.action {
                 display: inherit;
+
                 [class^="kix-icon-"],
                 [class*=" kix-icon-"] {
                     font-size: 1.125rem;
@@ -276,25 +328,29 @@
             }
         }
     }
+
     >.widget-content {
         margin: 0 @margin-default;
         padding: 0.875rem 1.875rem;
         border: 1px solid @primary-2;
         border-top: 0;
         background-color: @secondary-6;
-        min-height: 3.75em;
+        min-height: 5.75em;
         max-height: 31.5rem;
         box-shadow: @shadow-1;
         overflow: auto;
     }
+
     &.minimized {
         margin-bottom: .25em;
+
         >.widget-header {
             padding-left: 1em;
             margin-left: @margin-default;
             color: @secondary-0;
             background-color: @secondary-3;
         }
+
         >.widget-content {
             display: none;
         }
@@ -306,6 +362,7 @@
     margin-bottom: @margin-small;
     overflow: unset;
     box-shadow: unset;
+
     &.minimized {
         >.widget-header {
             >.header-right {
@@ -315,19 +372,25 @@
             }
         }
     }
+
     >.widget-header {
         padding: 0;
         grid-template-columns: max-content auto;
+
         >.header-left {
+
             >[class^="kix-icon-"],
             >[class*=" kix-icon-"] {
                 .font-size-normal();
             }
+
             >.widget-title {
+
                 >[class^="kix-icon-"],
                 >[class*=" kix-icon-"] {
                     .font-size-normal();
                 }
+
                 >h2 {
                     .font-size-normal();
                     color: @secondary-7;
@@ -335,23 +398,28 @@
                 }
             }
         }
+
         >.header-right {
             width: 100%;
+
             >div.action-list-wrapper {
                 height: 1px;
                 background-color: @secondary-3;
                 align-self: center;
+
                 >.action-list {
                     display: none;
                 }
             }
         }
     }
+
     >.widget-content {
         border: 0;
         padding: 0;
         margin-left: 1.5em;
         min-height: auto;
+
         >.group-widget,
         >*>.group-widget {
             margin-right: 1.75rem;
@@ -362,18 +430,22 @@
 .dialog-widget {
     .widget(@primary-3, @secondary-6);
     .full-size();
+
     >.widget-content {
         .full-size();
         top: @default-widget-header-height;
         border: 3px solid @primary-3;
         border-top: none;
         padding: @margin-middle @margin-default;
+
         >.kix-footer {
             margin: 0;
             height: @margin-middle + .25rem;
+
             >div:first-child {
                 padding-left: 0;
             }
+
             >div:last-child {
                 padding-right: 0;
             }
@@ -384,11 +456,13 @@
 .overlay-dialog-widget {
     .widget(@primary-0, @secondary-6, @overlay-widget-header-height);
     .full-size();
+
     >.widget-content {
         .full-size();
         top: @overlay-widget-header-height;
         border: 2px solid @primary-0;
         overflow: hidden;
+
         >.overlay-dialog-spacer {
             .full-size;
             margin: (@margin-default - @margin-small);

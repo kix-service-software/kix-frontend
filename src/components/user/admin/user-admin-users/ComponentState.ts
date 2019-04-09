@@ -11,7 +11,7 @@ export class ComponentState {
             'table-widget', 'Translatable#User Management: Agents',
             ['user-admin-user-create-action', 'csv-export-action'],
             new TableWidgetSettings(KIXObjectType.USER, [UserProperty.USER_LASTNAME, SortOrder.UP]), false, false, null,
-            'kix-icon-gear'
+            'kix-icon-gears'
         )
     ) { }
 

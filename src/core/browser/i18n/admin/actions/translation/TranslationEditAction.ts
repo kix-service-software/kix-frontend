@@ -36,7 +36,7 @@ export class TranslationEditAction extends AbstractAction {
             if (translation) {
                 ContextService.getInstance().setDialogContext(
                     // TODO: Titel aus dem aktiven Admin-Modul ermitteln (Kategorie)
-                    null, KIXObjectType.TRANSLATION, ContextMode.EDIT_ADMIN, null, true, translation.Pattern
+                    null, KIXObjectType.TRANSLATION, ContextMode.EDIT_ADMIN, null, true
                 );
             }
         }
