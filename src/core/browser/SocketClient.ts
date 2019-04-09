@@ -10,7 +10,7 @@ export abstract class SocketClient {
         const socketUrl = ClientStorageService.getFrontendSocketUrl();
 
         const options = {
-            transport: ['websockets']
+            transports: ['websockets']
         };
 
         if (authenticated) {
