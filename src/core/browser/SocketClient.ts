@@ -9,9 +9,7 @@ export abstract class SocketClient {
     protected createSocket(namespace: string, authenticated: boolean = true): SocketIO.Server {
         const socketUrl = ClientStorageService.getFrontendSocketUrl();
 
-        const options = {
-            transports: ['websockets']
-        };
+        const options = {};
 
         if (authenticated) {
             const token = ClientStorageService.getToken();
