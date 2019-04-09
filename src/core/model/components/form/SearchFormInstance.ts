@@ -74,6 +74,10 @@ export class SearchFormInstance implements IFormInstance {
         return null;
     }
 
+    public async getFormFieldByProperty(property: string): Promise<FormField> {
+        return null;
+    }
+
     public getCriteria(): FilterCriteria[] {
         return this.filterCriteria;
     }

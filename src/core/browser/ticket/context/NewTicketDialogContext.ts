@@ -17,15 +17,9 @@ export class NewTicketDialogContext
     private contact: Contact;
     private customer: Customer;
 
-    public constructor(
-        descriptor: ContextDescriptor,
-        objectId: string | number = null,
-        configuration: NewTicketDialogContextConfiguration = null
-    ) {
-        super(descriptor, objectId, configuration);
-    }
-
     public async initContext(): Promise<void> {
+        this.contact = null;
+        this.customer = null;
         const formId = await FormService.getInstance().getFormIdByContext(FormContext.NEW, KIXObjectType.TICKET);
         this.formListenerId = 'NewTicketDialogContext';
         await FormService.getInstance().registerFormInstanceListener(formId, this);
@@ -88,11 +82,4 @@ export class NewTicketDialogContext
         }
         return object;
     }
-
-    public reset(): void {
-        this.contact = null;
-        this.customer = null;
-        this.initContext();
-    }
-
 }

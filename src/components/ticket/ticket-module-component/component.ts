@@ -28,7 +28,7 @@ import {
 } from '../../../core/browser/ticket';
 import {
     KIXObjectType, ContextDescriptor, ContextMode, ContextType,
-    ConfiguredDialogWidget, WidgetConfiguration, WidgetSize
+    ConfiguredDialogWidget, WidgetConfiguration, WidgetSize, DialogContextDescriptor
 } from '../../../core/model';
 import { BulkService } from '../../../core/browser/bulk';
 import { ArticleTableFactory } from '../../../core/browser/ticket/table/ArticleTableFactory';
@@ -120,25 +120,25 @@ class Component extends AbstractMarkoComponent {
         );
         ContextService.getInstance().registerContext(ticketDetailsContextDescriptor);
 
-        const newTicketContext = new ContextDescriptor(
+        const newTicketContext = new DialogContextDescriptor(
             NewTicketDialogContext.CONTEXT_ID, [KIXObjectType.TICKET], ContextType.DIALOG, ContextMode.CREATE,
             false, 'new-ticket-dialog', ['tickets'], NewTicketDialogContext
         );
         ContextService.getInstance().registerContext(newTicketContext);
 
-        const searchContext = new ContextDescriptor(
+        const searchContext = new DialogContextDescriptor(
             TicketSearchContext.CONTEXT_ID, [KIXObjectType.TICKET], ContextType.DIALOG, ContextMode.SEARCH,
             false, 'search-ticket-dialog', ['tickets'], TicketSearchContext
         );
         ContextService.getInstance().registerContext(searchContext);
 
-        const editTicketContext = new ContextDescriptor(
+        const editTicketContext = new DialogContextDescriptor(
             EditTicketDialogContext.CONTEXT_ID, [KIXObjectType.TICKET], ContextType.DIALOG, ContextMode.EDIT,
             false, 'edit-ticket-dialog', ['tickets'], EditTicketDialogContext
         );
         ContextService.getInstance().registerContext(editTicketContext);
 
-        const newTicketArticleContext = new ContextDescriptor(
+        const newTicketArticleContext = new DialogContextDescriptor(
             NewTicketArticleContext.CONTEXT_ID, [KIXObjectType.ARTICLE], ContextType.DIALOG, ContextMode.CREATE_SUB,
             true, 'new-ticket-article-dialog', ['articles'], NewTicketArticleContext
         );
@@ -159,14 +159,14 @@ class Component extends AbstractMarkoComponent {
         );
         ContextService.getInstance().registerContext(ticketTypeDetailsContextDescriptor);
 
-        const newTicketTypeContext = new ContextDescriptor(
+        const newTicketTypeContext = new DialogContextDescriptor(
             NewTicketTypeDialogContext.CONTEXT_ID, [KIXObjectType.TICKET_TYPE],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
             false, 'new-ticket-type-dialog', ['tickettypes'], NewTicketTypeDialogContext
         );
         ContextService.getInstance().registerContext(newTicketTypeContext);
 
-        const editTicketTypeContext = new ContextDescriptor(
+        const editTicketTypeContext = new DialogContextDescriptor(
             EditTicketTypeDialogContext.CONTEXT_ID, [KIXObjectType.TICKET_TYPE],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
             false, 'edit-ticket-type-dialog', ['tickettypes'], EditTicketTypeDialogContext
@@ -180,14 +180,14 @@ class Component extends AbstractMarkoComponent {
         );
         ContextService.getInstance().registerContext(ticketStateDetailsContextDescriptor);
 
-        const newTicketStateContext = new ContextDescriptor(
+        const newTicketStateContext = new DialogContextDescriptor(
             NewTicketStateDialogContext.CONTEXT_ID, [KIXObjectType.TICKET_STATE],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
             false, 'new-ticket-state-dialog', ['ticketstates'], NewTicketStateDialogContext
         );
         ContextService.getInstance().registerContext(newTicketStateContext);
 
-        const editTicketStateContext = new ContextDescriptor(
+        const editTicketStateContext = new DialogContextDescriptor(
             EditTicketStateDialogContext.CONTEXT_ID, [KIXObjectType.TICKET_STATE],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
             false, 'edit-ticket-state-dialog', ['ticketstates'], EditTicketStateDialogContext
@@ -201,14 +201,14 @@ class Component extends AbstractMarkoComponent {
         );
         ContextService.getInstance().registerContext(ticketPriorityDetailsContextDescriptor);
 
-        const newTicketPriorityContext = new ContextDescriptor(
+        const newTicketPriorityContext = new DialogContextDescriptor(
             NewTicketPriorityDialogContext.CONTEXT_ID, [KIXObjectType.TICKET_PRIORITY],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
             false, 'new-ticket-priority-dialog', ['priorities'], NewTicketPriorityDialogContext
         );
         ContextService.getInstance().registerContext(newTicketPriorityContext);
 
-        const editTicketPriorityContext = new ContextDescriptor(
+        const editTicketPriorityContext = new DialogContextDescriptor(
             EditTicketTypeDialogContext.CONTEXT_ID, [KIXObjectType.TICKET_PRIORITY],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
             false, 'edit-ticket-priority-dialog', ['priorities'], EditTicketPriorityDialogContext

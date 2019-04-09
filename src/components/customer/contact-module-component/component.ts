@@ -5,7 +5,7 @@ import {
 import { ComponentState } from './ComponentState';
 import {
     KIXObjectType, ContextDescriptor, ContextType, ContextMode, WidgetConfiguration,
-    ConfiguredDialogWidget, WidgetSize
+    ConfiguredDialogWidget, WidgetSize, DialogContextDescriptor
 } from '../../../core/model';
 import {
     ContactTableFactory, ContactLabelProvider, ContactService, ContactBrowserFactory, ContactDetailsContext,
@@ -47,25 +47,25 @@ class Component extends AbstractMarkoComponent {
         );
         ContextService.getInstance().registerContext(customerDetailsContext);
 
-        const newContactContext = new ContextDescriptor(
+        const newContactContext = new DialogContextDescriptor(
             NewContactDialogContext.CONTEXT_ID, [KIXObjectType.CONTACT], ContextType.DIALOG, ContextMode.CREATE,
             false, 'new-contact-dialog', ['contacts'], NewContactDialogContext
         );
         ContextService.getInstance().registerContext(newContactContext);
 
-        const editContactContext = new ContextDescriptor(
+        const editContactContext = new DialogContextDescriptor(
             EditContactDialogContext.CONTEXT_ID, [KIXObjectType.CONTACT], ContextType.DIALOG, ContextMode.EDIT,
             false, 'edit-contact-dialog', ['contacts'], EditContactDialogContext
         );
         ContextService.getInstance().registerContext(editContactContext);
 
-        const searchContactContext = new ContextDescriptor(
+        const searchContactContext = new DialogContextDescriptor(
             ContactSearchContext.CONTEXT_ID, [KIXObjectType.CONTACT], ContextType.DIALOG, ContextMode.SEARCH,
             false, 'search-contact-dialog', ['contacts'], ContactSearchContext
         );
         ContextService.getInstance().registerContext(searchContactContext);
 
-        const contactImportDialogContext = new ContextDescriptor(
+        const contactImportDialogContext = new DialogContextDescriptor(
             ContactImportDialogContext.CONTEXT_ID, [KIXObjectType.CONTACT],
             ContextType.DIALOG, ContextMode.IMPORT,
             false, 'import-dialog', ['contacts'], ContactImportDialogContext

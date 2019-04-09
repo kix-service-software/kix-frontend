@@ -101,17 +101,15 @@ export class Component {
 
         const context = await ContextService.getInstance().getContext<FAQContext>(FAQContext.CONTEXT_ID);
         const category = node.id as FAQCategory;
-        context.setAdditionalInformation([category.Name]);
+        context.setAdditionalInformation('STRUCTURE', [category.Name]);
         context.setFAQCategory(node.id);
     }
 
     public async showAll(): Promise<void> {
         const context = await ContextService.getInstance().getContext<FAQContext>(FAQContext.CONTEXT_ID);
         this.state.activeNode = null;
-
         const allText = await TranslationService.translate('Translatable#All');
-
-        context.setAdditionalInformation([allText]);
+        context.setAdditionalInformation('STRUCTURE', [allText]);
         context.setFAQCategory(null);
     }
 

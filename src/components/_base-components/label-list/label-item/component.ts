@@ -8,7 +8,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onInput(input: any): void {
-        this.state.isToggle = typeof input.toggle !== 'undefined' ? input.toggle : false;
+        this.state.toggled = typeof input.toggle !== 'undefined' ? input.toggle : false;
     }
 
     public labelClicked(event: any): void {

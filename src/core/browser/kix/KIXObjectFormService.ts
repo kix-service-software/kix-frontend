@@ -60,7 +60,8 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
         const newField = new FormField(
             f.label, f.property, f.inputComponent, f.required, f.hint, f.options, f.defaultValue,
             [], (parent ? parent.instanceId : f.parentInstanceId), f.countDefault, f.countMax, f.countMin,
-            f.maxLength, f.regEx, f.regExErrorMessage, (f.countDefault === 0 ? true : false), f.asStructure, f.readonly
+            f.maxLength, f.regEx, f.regExErrorMessage, (f.countDefault === 0 ? true : false), f.asStructure, f.readonly,
+            f.placeholder
         );
         const children: FormField[] = [];
         for (const child of f.children) {

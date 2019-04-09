@@ -20,7 +20,7 @@ Am Beispiel FAQ Artikel
 - Context registrieren (`ContextService`) in der Modul-Komponente (`src/components/faq/faq-module-component`)
 
 ```javascript
-const newFAQArticleContext = new ContextDescriptor(
+const newFAQArticleContext = new DialogContextDescriptor(
     NewFAQArticleDialogContext.CONTEXT_ID, [KIXObjectType.FAQ_ARTICLE], ContextType.DIALOG, ContextMode.CREATE,
     false, 'new-faq-article-dialog', 'faqarticle/new', NewFAQArticleDialogContext
 );

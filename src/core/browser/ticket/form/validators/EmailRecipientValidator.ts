@@ -59,12 +59,12 @@ export class EmailRecipientValidator implements IFormFieldValidator {
     }
 
     private isDefined(value: FormFieldValue): boolean {
-        return value && value.value && value.value !== '';
+        return value && value.value && !!value.value.length && value.value[0] !== '';
     }
 
-    private async checkEmail(value: string): Promise<ValidationResult> {
-        if (value && value !== '') {
-            const mailAddresses = value.split(',');
+    private async checkEmail(value: string[]): Promise<ValidationResult> {
+        if (value && !!value.length) {
+            const mailAddresses = value;
             for (const mail of mailAddresses) {
                 if (!this.EMAIL_REGEX.test(mail.trim()) === true) {
                     return new ValidationResult(

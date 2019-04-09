@@ -389,6 +389,7 @@ class Component {
     }
 
     public actionClicked(action: FormInputAction): void {
+        action.active = !action.active;
         action.callback(action);
     }
 }

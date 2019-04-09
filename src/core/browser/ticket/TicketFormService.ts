@@ -1,7 +1,7 @@
 import { KIXObjectFormService } from '../kix/KIXObjectFormService';
 import {
     Ticket, KIXObjectType, TicketProperty, Channel, FormField, ArticleProperty,
-    FormFieldOptions, FormFieldOption, ContextType, ContextMode, FormContext, FormFieldValue
+    FormFieldOptions, FormFieldOption, ContextType, ContextMode, FormContext, FormFieldValue, IFormInstance
 } from '../../model';
 import { PendingTimeFormValue } from './form';
 import { AutocompleteOption, AutocompleteFormFieldOption } from '../components';
@@ -46,80 +46,159 @@ export class TicketFormService extends KIXObjectFormService<Ticket> {
         return value;
     }
 
-    public async getFormFieldsForChannel(channel: Channel, formId: string): Promise<FormField[]> {
+    public async getFormFieldsForChannel(
+        channel: Channel, formId: string, clear: boolean = false
+    ): Promise<FormField[]> {
         const fields: FormField[] = [];
 
         const formInstance = await FormService.getInstance().getFormInstance(formId);
 
-        const customerVisibleReadonly = formInstance.getFormContext() === FormContext.NEW
-            && formInstance.getObjectType() !== KIXObjectType.ARTICLE;
-        const customerVisibleValue = new FormFieldValue(customerVisibleReadonly ? true : false, true);
-
-        const articleLabelText =
-            formInstance.getFormContext() === FormContext.NEW && formInstance.getObjectType() === KIXObjectType.TICKET
-                ? 'Translatable#Ticket Description'
-                : 'Translatable#Article Text';
-
         if (channel.Name === 'note') {
-            fields.push(new FormField(
-                "Translatable#Visible in customer portal", ArticleProperty.CUSTOMER_VISIBLE, 'checkbox-input',
-                false, "Translatable#Visible in customer portal", null, customerVisibleValue,
-                null, null, null, null, null, null, null, null, null, null, customerVisibleReadonly
-            ));
-            fields.push(new FormField('Translatable#Subject', ArticleProperty.SUBJECT,
-                null, true, 'Translatable#Subject'));
-            fields.push(new FormField(
-                articleLabelText, ArticleProperty.BODY, 'rich-text-input',
-                true, articleLabelText, [
-                    new FormFieldOption(FormFieldOptions.AUTO_COMPLETE, new AutocompleteFormFieldOption([
-                        new AutocompleteOption(KIXObjectType.TEXT_MODULE, '::')
-                    ]))
-                ])
-            );
-            fields.push(new FormField(
-                'Translatable#Attachments', ArticleProperty.ATTACHMENTS, 'attachment-input',
-                false, 'Translatable#Attachments')
-            );
+            fields.push(await this.getVisibleField(formInstance, clear));
+            fields.push(await this.getSubjectField(formInstance, clear));
+            fields.push(await this.getBodyField(formInstance, clear));
+            fields.push(await this.getAttachmentField(formInstance, clear));
         } else if (channel.Name === 'email') {
-            fields.push(new FormField(
-                "Translatable#Visible in customer portal", ArticleProperty.CUSTOMER_VISIBLE, 'checkbox-input',
-                false, "Translatable#Visible in customer portal", null, customerVisibleValue,
-                null, null, null, null, null, null, null, null, null, null, customerVisibleReadonly
-            ));
-
-            fields.push(new FormField(
-                'Translatable#From', ArticleProperty.FROM, 'article-email-from-input', true, 'Translatable#From'
-            ));
-
-            const context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
-            if (context.getDescriptor().contextMode === ContextMode.CREATE) {
-                fields.push(new FormField(
-                    'Translatable#Cc', ArticleProperty.CC, 'article-email-recipient-input', false, 'Translatable#Cc', [
-                        new FormFieldOption('ADDITIONAL_RECIPIENT_TYPES', [ArticleProperty.BCC])
-                    ]
-                ));
-            } else {
-                fields.push(new FormField(
-                    'Translatable#To', ArticleProperty.TO, 'article-email-recipient-input', false, 'Translatable#To', [
-                        new FormFieldOption('ADDITIONAL_RECIPIENT_TYPES', [ArticleProperty.CC, ArticleProperty.BCC])
-                    ]
-                ));
-            }
-
-            fields.push(new FormField(
-                'Translatable#Subject', ArticleProperty.SUBJECT, null, true, 'Translatable#Subject'
-            ));
-
-            fields.push(new FormField(
-                articleLabelText, ArticleProperty.BODY, 'rich-text-input', true, articleLabelText
-            ));
-
-            fields.push(new FormField(
-                'Translatable#Attachments', ArticleProperty.ATTACHMENTS, 'attachment-input',
-                false, 'Translatable#Attachments')
-            );
+            fields.push(await this.getVisibleField(formInstance, clear));
+            fields.push(await this.getFromField(formInstance, clear));
+            fields.push(await this.getToOrCcField(formInstance, clear));
+            fields.push(await this.getSubjectField(formInstance, clear));
+            fields.push(await this.getBodyField(formInstance, clear));
+            fields.push(await this.getAttachmentField(formInstance, clear));
         }
 
         return fields;
+    }
+
+    private async getVisibleField(formInstance: IFormInstance, clear: boolean): Promise<FormField> {
+        const customerVisibleReadonly = formInstance && formInstance.getFormContext() === FormContext.NEW
+            && formInstance.getObjectType() !== KIXObjectType.ARTICLE;
+        const customerVisibleValue = new FormFieldValue(customerVisibleReadonly ? true : false, true);
+
+        let field = new FormField(
+            "Translatable#Visible in customer portal", ArticleProperty.CUSTOMER_VISIBLE, 'checkbox-input',
+            false, "Translatable#Visible in customer portal", undefined, customerVisibleValue,
+            undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
+            undefined, undefined, customerVisibleReadonly
+        );
+        if (!clear && formInstance) {
+            const existingField = await formInstance.getFormFieldByProperty(ArticleProperty.CUSTOMER_VISIBLE);
+            if (existingField) {
+                field = existingField;
+                const value = await formInstance.getFormFieldValue<boolean>(existingField.instanceId);
+                if (value) {
+                    field.defaultValue = value;
+                }
+            }
+        }
+        return field;
+    }
+
+    private async getSubjectField(formInstance: IFormInstance, clear: boolean): Promise<FormField> {
+        let field = new FormField('Translatable#Subject', ArticleProperty.SUBJECT, undefined, true,
+            'Translatable#Subject'
+        );
+        if (!clear && formInstance) {
+            const existingField = await formInstance.getFormFieldByProperty(ArticleProperty.SUBJECT);
+            if (existingField) {
+                field = existingField;
+                const value = await formInstance.getFormFieldValue(existingField.instanceId);
+                if (value) {
+                    field.defaultValue = value;
+                }
+            }
+        }
+        return field;
+    }
+
+    private async getBodyField(formInstance: IFormInstance, clear: boolean): Promise<FormField> {
+        const articleLabelText = formInstance && formInstance.getFormContext() === FormContext.NEW
+            && formInstance.getObjectType() === KIXObjectType.TICKET
+            ? 'Translatable#Ticket Description'
+            : 'Translatable#Article Text';
+
+        let field = new FormField(
+            articleLabelText, ArticleProperty.BODY, 'rich-text-input',
+            true, articleLabelText, [
+                new FormFieldOption(FormFieldOptions.AUTO_COMPLETE, new AutocompleteFormFieldOption([
+                    new AutocompleteOption(KIXObjectType.TEXT_MODULE, '::')
+                ]))
+            ]
+        );
+        if (!clear && formInstance) {
+            const existingField = await formInstance.getFormFieldByProperty(ArticleProperty.BODY);
+            if (existingField) {
+                field = existingField;
+                const value = await formInstance.getFormFieldValue(existingField.instanceId);
+                if (value) {
+                    field.defaultValue = value;
+                }
+            }
+        }
+        return field;
+    }
+
+    private async getAttachmentField(formInstance: IFormInstance, clear: boolean): Promise<FormField> {
+        let field = new FormField(
+            'Translatable#Attachments', ArticleProperty.ATTACHMENTS, 'attachment-input', false,
+            'Translatable#Attachments'
+        );
+        if (!clear && formInstance) {
+            const existingField = await formInstance.getFormFieldByProperty(ArticleProperty.ATTACHMENTS);
+            if (existingField) {
+                field = existingField;
+                const value = await formInstance.getFormFieldValue(existingField.instanceId);
+                if (value) {
+                    field.defaultValue = value;
+                }
+            }
+        }
+        return field;
+    }
+
+    private async getFromField(formInstance: IFormInstance, clear: boolean): Promise<FormField> {
+        let field = new FormField(
+            'Translatable#From', ArticleProperty.FROM, 'article-email-from-input', true, 'Translatable#From'
+        );
+        if (!clear && formInstance) {
+            const existingField = await formInstance.getFormFieldByProperty(ArticleProperty.FROM);
+            if (existingField) {
+                field = existingField;
+                const value = await formInstance.getFormFieldValue(existingField.instanceId);
+                if (value) {
+                    field.defaultValue = value;
+                }
+            }
+        }
+        return field;
+    }
+
+    private async getToOrCcField(formInstance: IFormInstance, clear: boolean): Promise<FormField> {
+        let property = ArticleProperty.CC;
+        let label = 'Translatable#Cc';
+        let actions = [ArticleProperty.BCC];
+        const context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+        if (context && context.getDescriptor().contextMode !== ContextMode.CREATE) {
+            property = ArticleProperty.TO;
+            label = 'Translatable#To';
+            actions = [ArticleProperty.CC, ArticleProperty.BCC];
+        }
+
+        let field = new FormField(
+            label, property, 'article-email-recipient-input', false, label, [
+                new FormFieldOption('ADDITIONAL_RECIPIENT_TYPES', actions)
+            ]
+        );
+        if (!clear && formInstance) {
+            const existingField = await formInstance.getFormFieldByProperty(property);
+            if (existingField) {
+                field = existingField;
+                const value = await formInstance.getFormFieldValue(existingField.instanceId);
+                if (value) {
+                    field.defaultValue = value;
+                }
+            }
+        }
+        return field;
     }
 }

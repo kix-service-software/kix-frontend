@@ -80,7 +80,7 @@ export class Component {
         this.state.activeNode = node;
         const ciClass = node.id as ConfigItemClass;
         const context = await ContextService.getInstance().getContext<CMDBContext>(CMDBContext.CONTEXT_ID);
-        context.setAdditionalInformation([ciClass.Name]);
+        context.setAdditionalInformation('STRUCTURE', [ciClass.Name]);
         context.setCIClass(ciClass);
     }
 
@@ -88,9 +88,8 @@ export class Component {
         const context = await ContextService.getInstance().getContext<CMDBContext>(CMDBContext.CONTEXT_ID);
         this.state.activeNode = null;
         this.state.filterValue = null;
-
         const allText = await TranslationService.translate('Translatable#All');
-        context.setAdditionalInformation([allText]);
+        context.setAdditionalInformation('STRUCTURE', [allText]);
         context.setCIClass(null);
 
         (this as any).getComponent('ci-class-explorer-filter').reset();

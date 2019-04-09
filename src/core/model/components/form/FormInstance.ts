@@ -206,16 +206,21 @@ export class FormInstance implements IFormInstance {
     }
 
     public async getFormFieldValueByProperty<T>(property: string): Promise<FormFieldValue<T>> {
-        const iterator = this.getAllFormFieldValues().entries();
-
-        let value = iterator.next();
-        while (value.value !== null && value.value !== undefined) {
-            const formField = await this.getFormField(value.value[0]);
-            if (formField && formField.property === property) {
-                return value.value[1];
-            }
-            value = iterator.next();
+        const field = await this.getFormFieldByProperty(property);
+        if (field) {
+            return this.getFormFieldValue(field.instanceId);
         }
+        return null;
+    }
+
+    public async getFormFieldByProperty(property: string): Promise<FormField> {
+        for (const g of this.form.groups) {
+            const field = this.findFormFieldByProperty(g.formFields, property);
+            if (field) {
+                return field;
+            }
+        }
+
         return null;
     }
 
@@ -261,6 +266,22 @@ export class FormInstance implements IFormInstance {
                 const foundField = this.findFormField(f.children, formFieldInstanceId);
                 if (foundField) {
                     return foundField;
+                }
+            }
+        }
+
+        return field;
+    }
+
+    private findFormFieldByProperty(fields: FormField[], property: string): FormField {
+        let field = fields.find((f) => f.property === property);
+
+        if (!field) {
+            for (const f of fields) {
+                const foundField = this.findFormFieldByProperty(f.children, property);
+                if (foundField) {
+                    field = foundField;
+                    break;
                 }
             }
         }

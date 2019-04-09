@@ -5,3 +5,6 @@ export { IImageDialogListener } from './IImageDialogListener';
 export { AbstractNewDialog } from './AbstractNewDialog';
 export { DialogEvents } from './DialogEvents';
 export { DialogEventData } from './DialogEventData';
+export { TabContainerEvent } from './TabContainerEvent';
+export { TabContainerEventData } from './TabContainerEventData';
+export { PreviousTabData } from './PreviousTabData';

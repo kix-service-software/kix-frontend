@@ -60,7 +60,11 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
         if (!existingFormNewTicket) {
             const fields: FormField[] = [];
             fields.push(new FormField(
-                'Translatable#Contact', TicketProperty.CUSTOMER_USER_ID, 'ticket-input-contact', true, 'Translatable#A contact is a person, filing a request for the customer. Enter at least 3 characters in order to get a suggestion list of already registered contacts. You may use „*“ as wildcard.')
+                'Translatable#Contact', TicketProperty.CUSTOMER_USER_ID, 'ticket-input-contact', true, 'Translatable#A contact is a person, filing a request for the customer. Enter at least 3 characters in order to get a suggestion list of already registered contacts. You may use „*“ as wildcard.',
+                [
+                    new FormFieldOption('SHOW_NEW_CONTACT', true)
+                ]
+            )
             );
             fields.push(new FormField('Translatable#Customer', TicketProperty.CUSTOMER_ID, 'ticket-input-customer', true, 'Translatable#Choose a contact, customers will be assigned automatically.'));
             fields.push(new FormField('Translatable#Type', TicketProperty.TYPE_ID, 'ticket-input-type', true, 'Translatable#Ticket type is part of the classification of a ticket.'));

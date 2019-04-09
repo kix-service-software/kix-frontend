@@ -5,7 +5,7 @@ import {
 import { ComponentState } from './ComponentState';
 import {
     ContextDescriptor, KIXObjectType, ContextMode, ContextType,
-    ConfiguredDialogWidget, WidgetConfiguration, WidgetSize
+    ConfiguredDialogWidget, WidgetConfiguration, WidgetSize, DialogContextDescriptor
 } from '../../../core/model';
 import {
     CMDBContext, NewConfigItemDialogContext, ConfigItemDetailsContext, ConfigItemSearchContext,
@@ -79,7 +79,7 @@ class Component extends AbstractMarkoComponent {
         );
         ContextService.getInstance().registerContext(cmdbContext);
 
-        const newConfigItemDialogContext = new ContextDescriptor(
+        const newConfigItemDialogContext = new DialogContextDescriptor(
             NewConfigItemDialogContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM], ContextType.DIALOG, ContextMode.CREATE,
             false, 'new-config-item-dialog', ['configitems'], NewConfigItemDialogContext
         );
@@ -91,19 +91,19 @@ class Component extends AbstractMarkoComponent {
         );
         ContextService.getInstance().registerContext(configItemDetailsContext);
 
-        const editConfigItemContext = new ContextDescriptor(
+        const editConfigItemContext = new DialogContextDescriptor(
             EditConfigItemDialogContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM], ContextType.DIALOG, ContextMode.EDIT,
             false, 'edit-config-item-dialog', ['configitems'], EditConfigItemDialogContext
         );
         ContextService.getInstance().registerContext(editConfigItemContext);
 
-        const searchConfigItemContext = new ContextDescriptor(
+        const searchConfigItemContext = new DialogContextDescriptor(
             ConfigItemSearchContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM], ContextType.DIALOG, ContextMode.SEARCH,
             false, 'search-config-item-dialog', ['configitems'], ConfigItemSearchContext
         );
         ContextService.getInstance().registerContext(searchConfigItemContext);
 
-        const compareConfigItemContext = new ContextDescriptor(
+        const compareConfigItemContext = new DialogContextDescriptor(
             CompareConfigItemVersionDialogContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM_VERSION_COMPARE],
             ContextType.DIALOG, ContextMode.EDIT,
             false, 'compare-config-item-version-dialog', ['configitems'], CompareConfigItemVersionDialogContext
@@ -119,14 +119,14 @@ class Component extends AbstractMarkoComponent {
         );
         ContextService.getInstance().registerContext(configItemClassDetailsContext);
 
-        const newConfigItemClassDetailsContext = new ContextDescriptor(
+        const newConfigItemClassDetailsContext = new DialogContextDescriptor(
             NewConfigItemClassDialogContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM_CLASS],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
             true, 'new-config-item-class-dialog', ['configitemclasses'], NewConfigItemClassDialogContext
         );
         ContextService.getInstance().registerContext(newConfigItemClassDetailsContext);
 
-        const editConfigItemClassDetailsContext = new ContextDescriptor(
+        const editConfigItemClassDetailsContext = new DialogContextDescriptor(
             EditConfigItemClassDialogContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM_CLASS],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
             true, 'edit-config-item-class-dialog', ['configitemclasses'], EditConfigItemClassDialogContext

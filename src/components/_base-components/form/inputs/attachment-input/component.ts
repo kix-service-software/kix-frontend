@@ -41,13 +41,15 @@ class Component extends FormInputComponent<any, ComponentState> {
         document.addEventListener('dragenter', this.dragEnter.bind(this), false);
         document.addEventListener('dragleave', this.dragLeave.bind(this), false);
 
-        const optionMulti = this.state.field.options.find((o) => o.option === 'MULTI_FILES');
-        if (optionMulti) {
-            this.state.multiple = Boolean(optionMulti.value);
-        }
-        const optionMime = this.state.field.options.find((o) => o.option === 'MimeTypes');
-        if (optionMime && Array.isArray(optionMime.value) && !!optionMime.value) {
-            this.state.accept = optionMime.value.join(',');
+        if (this.state.field.options) {
+            const optionMulti = this.state.field.options.find((o) => o.option === 'MULTI_FILES');
+            if (optionMulti) {
+                this.state.multiple = Boolean(optionMulti.value);
+            }
+            const optionMime = this.state.field.options.find((o) => o.option === 'MimeTypes');
+            if (optionMime && Array.isArray(optionMime.value) && !!optionMime.value) {
+                this.state.accept = optionMime.value.join(',');
+            }
         }
         this.setCurrentValue();
     }
@@ -55,9 +57,17 @@ class Component extends FormInputComponent<any, ComponentState> {
     public setCurrentValue(): void {
         if (this.state.defaultValue && this.state.defaultValue.value) {
             if (Array.isArray(this.state.defaultValue.value)) {
-                this.attachments = this.state.defaultValue.value;
+                if (this.state.defaultValue.value[0] instanceof File) {
+                    this.files = this.state.defaultValue.value;
+                } else {
+                    this.attachments = this.state.defaultValue.value;
+                }
             } else {
-                this.attachments = [this.state.defaultValue.value];
+                if (this.state.defaultValue.value instanceof File) {
+                    this.files = [this.state.defaultValue.value];
+                } else {
+                    this.attachments = [this.state.defaultValue.value];
+                }
             }
             this.createLabels();
         }
@@ -99,7 +109,7 @@ class Component extends FormInputComponent<any, ComponentState> {
     private async appendFiles(files: File[]): Promise<void> {
         const fileErrors: Array<[File, AttachmentError]> = [];
 
-        const option = this.state.field.options.find((o) => o.option === 'MimeTypes');
+        const option = this.state.field.options ? this.state.field.options.find((o) => o.option === 'MimeTypes') : null;
         const mimeTypes = option ? option.value as string[] : null;
 
         if (!this.state.multiple) {
@@ -181,7 +191,7 @@ class Component extends FormInputComponent<any, ComponentState> {
         this.state.minimized = !this.state.minimized;
     }
 
-    private getFileIcon(mimeType: string): ObjectIcon {
+    private getFileIcon(mimeType: string = ''): ObjectIcon {
         let fileIcon = null;
         const idx = mimeType.lastIndexOf('/');
         if (idx >= 0) {
