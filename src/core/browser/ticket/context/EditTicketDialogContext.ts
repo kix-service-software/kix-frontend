@@ -17,14 +17,6 @@ export class EditTicketDialogContext
     private contact: Contact;
     private customer: Customer;
 
-    public constructor(
-        descriptor: ContextDescriptor,
-        objectId: string | number = null,
-        configuration: EditTicketDialogContextConfiguration = null
-    ) {
-        super(descriptor, objectId, configuration);
-    }
-
     public async initContext(): Promise<void> {
         const formiId = await FormService.getInstance().getFormIdByContext(FormContext.EDIT, KIXObjectType.TICKET);
         this.formListenerId = 'EditTicketDialogContext';

@@ -124,6 +124,7 @@ export class ContextService {
 
     public closeDialogContext(): void {
         this.activeContextType = ContextType.MAIN;
+        ContextFactory.getInstance().resetDialogContexts();
     }
 
     public getActiveContext(contextType?: ContextType): Context {

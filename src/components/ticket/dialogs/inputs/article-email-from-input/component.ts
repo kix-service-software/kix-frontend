@@ -65,7 +65,7 @@ class Component extends FormInputComponent<number, ComponentState> {
         formInstance.registerListener({
             formListenerId: 'article-email-from-input',
             formValueChanged: async (formField: FormField, value: FormFieldValue<any>, oldValue: any) => {
-                if (formField.property === TicketProperty.QUEUE_ID) {
+                if (formField && formField.property === TicketProperty.QUEUE_ID) {
                     if (!value) {
                         value = await formInstance.getFormFieldValueByProperty(TicketProperty.QUEUE_ID);
                     }

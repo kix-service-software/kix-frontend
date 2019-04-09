@@ -1,4 +1,5 @@
 import { AutoCompleteConfiguration, Contact, FormInputComponentState, TreeNode } from "../../../../../core/model";
+import { FormInputAction } from "../../../../../core/browser";
 
 export class ComponentState extends FormInputComponentState<string> {
 
@@ -8,7 +9,8 @@ export class ComponentState extends FormInputComponentState<string> {
         public nodes: TreeNode[] = [],
         public searchCallback: (limit: number, searchValue: string) => Promise<TreeNode[]> = null,
         public currentNode: TreeNode = null,
-        public placeholder: string = ''
+        public placeholder: string = '',
+        public actions: FormInputAction[] = []
     ) {
         super();
     }

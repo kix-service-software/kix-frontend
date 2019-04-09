@@ -43,13 +43,10 @@ class Component extends FormInputComponent<number, ComponentState> {
         }
 
         if (this.state.channels) {
-
             for (const channel of this.state.channels) {
                 const name = await this.labelProvider.getDisplayText(channel, ChannelProperty.NAME);
                 this.state.channelNames.push([channel.ID, name]);
             }
-
-
         }
 
         const noChannelOption = this.state.field.options.find((o) => o.option === 'NO_CHANNEL');
@@ -57,18 +54,22 @@ class Component extends FormInputComponent<number, ComponentState> {
             this.state.noChannel = noChannelOption.value;
         }
 
-        const defaultChannelOption = this.state.field.options.find((o) => o.option === 'CHANNEL_ID');
-        if (defaultChannelOption && defaultChannelOption.value) {
-            const defaultChannel = this.state.channels.find((c) => c.ID === defaultChannelOption.value);
-            if (defaultChannel) {
-                this.channelClicked(defaultChannel);
-            }
-        }
+        this.setCurrentChannel();
 
         if (this.state.noChannel && !this.state.currentChannel) {
-            this.channelClicked(null);
+            super.provideValue(null);
         } else if (!this.state.noChannel && !this.state.currentChannel && this.state.channels.length) {
-            this.channelClicked(this.state.channels[0]);
+            this.state.currentChannel = this.state.channels[0];
+            super.provideValue(this.state.currentChannel.ID);
+        }
+
+        this.setFields();
+    }
+
+    public setCurrentChannel(): void {
+        if (this.state.defaultValue && this.state.defaultValue.value) {
+            this.state.currentChannel = this.state.channels.find((ch) => ch.ID === this.state.defaultValue.value);
+            super.provideValue(this.state.currentChannel ? this.state.currentChannel.ID : null);
         }
     }
 
@@ -97,6 +98,12 @@ class Component extends FormInputComponent<number, ComponentState> {
     public async channelClicked(channel: Channel): Promise<void> {
         this.state.currentChannel = channel;
 
+        super.provideValue(this.state.currentChannel ? this.state.currentChannel.ID : null);
+
+        this.setFields(true);
+    }
+
+    private async setFields(clear?: boolean): Promise<void> {
         const formService = ServiceRegistry.getServiceInstance<TicketFormService>(
             KIXObjectType.TICKET, ServiceType.FORM
         );
@@ -104,14 +111,12 @@ class Component extends FormInputComponent<number, ComponentState> {
 
         if (this.state.currentChannel) {
             const channelFields = await formService.getFormFieldsForChannel(
-                this.state.currentChannel, this.state.formId
+                this.state.currentChannel, this.state.formId, clear
             );
             formInstance.addNewFormField(this.state.field, channelFields, true);
         } else {
             formInstance.addNewFormField(this.state.field, [], true);
         }
-
-        super.provideValue(this.state.currentChannel ? this.state.currentChannel.ID : null);
     }
 
 }

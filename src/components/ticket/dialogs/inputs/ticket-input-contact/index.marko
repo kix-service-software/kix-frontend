@@ -1,10 +1,13 @@
-<form-list
-    placeholder=state.placeholder
-    searchCallback=state.searchCallback
-    autoCompleteConfiguration=state.autoCompleteConfiguration
-    on-focusLost("focusLost")
-    on-nodesChanged("contactChanged")
-    selectedNodes=[state.currentNode]
-    invalid=state.invalid
-    autocomplete=true
-    readonly=state.field.readonly/>
+<span.ticket-contact-input>
+    <form-list
+        placeholder=state.placeholder
+        searchCallback=state.searchCallback
+        autoCompleteConfiguration=state.autoCompleteConfiguration
+        on-focusLost("focusLost")
+        on-nodesChanged("contactChanged")
+        selectedNodes=[state.currentNode]
+        invalid=state.invalid
+        autocomplete=true
+        readonly=state.field.readonly
+        actions=state.actions/>
+</span>

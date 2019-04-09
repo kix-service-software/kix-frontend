@@ -37,8 +37,6 @@ export class MainDialogComponent implements IMainDialogListener {
     }
 
     public close(data?: any): void {
-        this.state.show = false;
-        document.body.style.overflow = 'unset';
         const context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
         if (context) {
             EventService.getInstance().publish(
@@ -50,6 +48,8 @@ export class MainDialogComponent implements IMainDialogListener {
         if (data && data.byX) {
             ContextService.getInstance().closeDialogContext();
         }
+        this.state.show = false;
+        document.body.style.overflow = 'unset';
     }
 
     public submit(data?: any): void {

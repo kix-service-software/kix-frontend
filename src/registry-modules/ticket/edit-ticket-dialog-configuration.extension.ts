@@ -77,7 +77,6 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
             fields.push(new FormField(
                 'Translatable#Channel', ArticleProperty.CHANNEL_ID, 'channel-input', false, 'Translatable#Channel', [
                     new FormFieldOption('NO_CHANNEL', true),
-                    new FormFieldOption('CHANNEL_ID', null)
                 ])
             );
 

@@ -30,6 +30,7 @@ class TabLaneComponent implements IEventSubscriber {
         );
         EventService.getInstance().subscribe(TabContainerEvent.CHANGE_TITLE, this);
         EventService.getInstance().subscribe(TabContainerEvent.CHANGE_ICON, this);
+        EventService.getInstance().subscribe(TabContainerEvent.CHANGE_TAB, this);
     }
 
     public async onMount(): Promise<void> {
@@ -62,6 +63,7 @@ class TabLaneComponent implements IEventSubscriber {
     public onDestroy(): void {
         EventService.getInstance().unsubscribe(TabContainerEvent.CHANGE_TITLE, this);
         EventService.getInstance().unsubscribe(TabContainerEvent.CHANGE_ICON, this);
+        EventService.getInstance().unsubscribe(TabContainerEvent.CHANGE_TAB, this);
     }
 
     public async tabClicked(tab: ConfiguredWidget): Promise<void> {
@@ -113,6 +115,12 @@ class TabLaneComponent implements IEventSubscriber {
             if (tab) {
                 tab.configuration.icon = data.icon;
                 (this as any).setStateDirty('tabWidgets');
+            }
+        }
+        if (eventId === TabContainerEvent.CHANGE_TAB) {
+            const tab = this.state.tabWidgets.find((t) => t.instanceId === data.tabId);
+            if (tab) {
+                this.tabClicked(tab);
             }
         }
     }

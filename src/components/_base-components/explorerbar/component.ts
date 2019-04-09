@@ -38,7 +38,8 @@ class Component {
                     sidebarToggled: () => { return; },
                     explorerBarToggled: () => {
                         const activeContext = ContextService.getInstance().getActiveContext();
-                        const explorerStructur = [...activeContext.getAdditionalInformation()];
+                        const structur = activeContext.getAdditionalInformation('STRUCTURE');
+                        const explorerStructur = structur ? [...structur] : [];
                         if (explorerStructur && !!explorerStructur.length) {
                             this.state.explorerStructurStringLastElement = explorerStructur.pop();
                             this.state.explorerStructurString = !!explorerStructur.length ?

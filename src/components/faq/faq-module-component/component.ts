@@ -5,7 +5,7 @@ import {
 import { ComponentState } from './ComponentState';
 import {
     KIXObjectType, ContextType, ContextMode, ContextDescriptor, ConfiguredDialogWidget,
-    WidgetConfiguration, WidgetSize
+    WidgetConfiguration, WidgetSize, DialogContextDescriptor
 } from '../../../core/model';
 import {
     FAQArticleTableFactory, FAQArticleHistoryTableFactory, FAQLabelProvider, FAQArticleHistoryLabelProvider,
@@ -61,19 +61,19 @@ class Component extends AbstractMarkoComponent {
         );
         ContextService.getInstance().registerContext(faqDetailsContextDescriptor);
 
-        const newFAQArticleContext = new ContextDescriptor(
+        const newFAQArticleContext = new DialogContextDescriptor(
             NewFAQArticleDialogContext.CONTEXT_ID, [KIXObjectType.FAQ_ARTICLE], ContextType.DIALOG, ContextMode.CREATE,
             false, 'new-faq-article-dialog', ['faqarticles'], NewFAQArticleDialogContext
         );
         ContextService.getInstance().registerContext(newFAQArticleContext);
 
-        const editFAQArticleContext = new ContextDescriptor(
+        const editFAQArticleContext = new DialogContextDescriptor(
             EditFAQArticleDialogContext.CONTEXT_ID, [KIXObjectType.FAQ_ARTICLE], ContextType.DIALOG, ContextMode.EDIT,
             false, 'edit-faq-article-dialog', ['faqarticles'], EditFAQArticleDialogContext
         );
         ContextService.getInstance().registerContext(editFAQArticleContext);
 
-        const searchContactContext = new ContextDescriptor(
+        const searchContactContext = new DialogContextDescriptor(
             FAQArticleSearchContext.CONTEXT_ID, [KIXObjectType.FAQ_ARTICLE], ContextType.DIALOG, ContextMode.SEARCH,
             false, 'search-faq-article-dialog', ['faqarticles'], FAQArticleSearchContext
         );

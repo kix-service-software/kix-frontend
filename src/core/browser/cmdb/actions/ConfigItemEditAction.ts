@@ -36,7 +36,7 @@ export class ConfigItemEditAction extends AbstractAction<ConfigItem> {
 
         const dialogContext = await ContextService.getInstance().getContext(EditConfigItemDialogContext.CONTEXT_ID);
         if (dialogContext) {
-            dialogContext.setAdditionalInformation([formId]);
+            dialogContext.setAdditionalInformation('FORM_ID', formId);
         }
         ContextService.getInstance().setDialogContext(
             EditConfigItemDialogContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM, ContextMode.EDIT, null, true

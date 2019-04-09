@@ -57,10 +57,18 @@ export class TicketParameterUtil {
                         }
                     }
                 }
+            } else if (
+                (
+                    property === ArticleProperty.TO
+                    || property === ArticleProperty.CC
+                    || property === ArticleProperty.BCC
+                )
+                && Array.isArray(value)
+            ) {
+                parameter.push([property, value.join(',')]);
             } else {
                 parameter.push([property, value]);
             }
-
         } else {
             parameter.push([property, value]);
         }
