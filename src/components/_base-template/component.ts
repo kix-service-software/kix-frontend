@@ -2,7 +2,7 @@ import { Context, ContextType, ContextDescriptor, KIXObjectType, ContextMode, Ob
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../core/browser/context';
 import { ComponentsService } from '../../core/browser/components';
-import { IdService, FormService } from '../../core/browser';
+import { IdService, FormService, ServiceRegistry } from '../../core/browser';
 import { RoutingService } from '../../core/browser/router';
 import { HomeContext } from '../../core/browser/home';
 import { EventService } from '../../core/browser/event';
@@ -14,6 +14,7 @@ import { ObjectDataService } from '../../core/browser/ObjectDataService';
 import { AuthenticationSocketClient } from '../../core/browser/application/AuthenticationSocketClient';
 import { NotificationSocketClient } from '../../core/browser/notifications';
 import { ComponentInput } from './ComponentInput';
+import { AgentService } from '../../core/browser/application/AgentService';
 
 class Component {
 
@@ -33,6 +34,9 @@ class Component {
 
     public async onMount(): Promise<void> {
         const start = Date.now();
+
+        ServiceRegistry.registerServiceInstance(AgentService.getInstance());
+        ServiceRegistry.registerServiceInstance(TranslationService.getInstance());
 
         this.state.loading = true;
         this.state.loadingHint = await TranslationService.translate('Loading ...');
