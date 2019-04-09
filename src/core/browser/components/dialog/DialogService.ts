@@ -197,7 +197,7 @@ export class DialogService {
         }
     }
 
-    // FIXME: obsolet, DialogEvnets.DIALOG_CANCELED bzw. .DIALOG_FINISHED verwenden
+    // FIXME: obsolet, DialogEvents.DIALOG_CANCELED bzw. .DIALOG_FINISHED verwenden
     public registerDialogResultListener<T>(listenerId: string, component: string, listener: (result: T) => void): void {
         if (this.resultListeners.has(listenerId)) {
             this.addListener<T>(listenerId, component, listener);
@@ -206,7 +206,7 @@ export class DialogService {
         }
     }
 
-    // FIXME: obsolet, DialogEvnets.DIALOG_CANCELED bzw. .DIALOG_FINISHED verwenden
+    // FIXME: obsolet, DialogEvents.DIALOG_CANCELED bzw. .DIALOG_FINISHED verwenden
     private addListener<T>(dialogId: string, component: string, listener: (result: T) => void): void {
         const listeners = this.resultListeners.get(dialogId);
         const index = listeners.findIndex((l) => l[0] === component);
@@ -216,7 +216,7 @@ export class DialogService {
         listeners.push([component, listener]);
     }
 
-    // FIXME: obsolet, DialogEvnets.DIALOG_CANCELED bzw. .DIALOG_FINISHED verwenden
+    // FIXME: obsolet, DialogEvents.DIALOG_CANCELED bzw. .DIALOG_FINISHED verwenden
     public publishDialogResult<T>(listenerId: string, result: T): void {
         if (this.resultListeners.has(listenerId)) {
             this.resultListeners.get(listenerId).forEach((l) => l[1](result));

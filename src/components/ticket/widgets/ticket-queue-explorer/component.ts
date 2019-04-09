@@ -101,7 +101,7 @@ export class Component {
         const queue = node.id as Queue;
         const context = await ContextService.getInstance().getContext<TicketContext>(TicketContext.CONTEXT_ID);
         context.setQueue(queue);
-        context.setAdditionalInformation(this.getStructureInformation());
+        context.setAdditionalInformation('STRUCTURE', this.getStructureInformation());
     }
 
     private getStructureInformation(node: TreeNode = this.state.activeNode): string[] {
@@ -122,7 +122,7 @@ export class Component {
         const allText = await TranslationService.translate('Translatable#All');
 
         context.setQueue(null);
-        context.setAdditionalInformation([allText]);
+        context.setAdditionalInformation('STRUCTURE', [allText]);
     }
 
 }

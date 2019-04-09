@@ -29,7 +29,7 @@ class Component extends AbstractNewDialog {
         ]);
 
         const context = await ContextService.getInstance().getContext(NewTicketDialogContext.CONTEXT_ID);
-        context.reset();
+        context.initContext();
         this.state.loading = false;
     }
 

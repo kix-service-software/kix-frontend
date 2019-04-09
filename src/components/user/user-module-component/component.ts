@@ -10,7 +10,8 @@ import {
     EditUserRoleDialogContext, UserRoleFormService
 } from '../../../core/browser/user';
 import {
-    KIXObjectType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration, WidgetSize, ContextDescriptor, ContextType
+    KIXObjectType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration, WidgetSize, ContextDescriptor,
+    ContextType, DialogContextDescriptor
 } from '../../../core/model';
 import { TableFactoryService, TableCSSHandlerRegistry } from '../../../core/browser/table';
 import { DialogService } from '../../../core/browser/components/dialog';
@@ -50,7 +51,7 @@ class Component extends AbstractMarkoComponent {
     }
 
     private registerAdminContexts(): void {
-        const newUserRoleContext = new ContextDescriptor(
+        const newUserRoleContext = new DialogContextDescriptor(
             NewUserRoleDialogContext.CONTEXT_ID, [KIXObjectType.ROLE],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
             false, 'new-user-role-dialog', ['roles'], NewUserRoleDialogContext
@@ -64,14 +65,14 @@ class Component extends AbstractMarkoComponent {
         );
         ContextService.getInstance().registerContext(roleDetailsContextDescriptor);
 
-        const editUserRoleContext = new ContextDescriptor(
+        const editUserRoleContext = new DialogContextDescriptor(
             EditUserRoleDialogContext.CONTEXT_ID, [KIXObjectType.ROLE],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
             false, 'edit-user-role-dialog', ['roles'], EditUserRoleDialogContext
         );
         ContextService.getInstance().registerContext(editUserRoleContext);
 
-        const newUserContext = new ContextDescriptor(
+        const newUserContext = new DialogContextDescriptor(
             NewUserDialogContext.CONTEXT_ID, [KIXObjectType.USER],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
             false, 'new-user-dialog', ['users'], NewUserDialogContext
@@ -85,7 +86,7 @@ class Component extends AbstractMarkoComponent {
         );
         ContextService.getInstance().registerContext(userDetailsContextDescriptor);
 
-        const editUserContext = new ContextDescriptor(
+        const editUserContext = new DialogContextDescriptor(
             EditUserDialogContext.CONTEXT_ID, [KIXObjectType.USER],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
             false, 'edit-user-dialog', ['users'], EditUserDialogContext

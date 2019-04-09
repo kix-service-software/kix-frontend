@@ -6,7 +6,8 @@ import { KIXObject, KIXObjectType } from '../..';
 import { ObjectIcon } from '../../kix';
 import { ContextDescriptor } from './ContextDescriptor';
 import { BreadcrumbInformation } from '../router';
-import { ObjectUpdatedEventData } from '../../ObjectUpdatedEventData';
+import { FormService } from '../../../browser';
+import { DialogContextDescriptor } from './DialogContextDescriptor';
 
 export abstract class Context<T extends ContextConfiguration = ContextConfiguration> {
 
@@ -17,14 +18,14 @@ export abstract class Context<T extends ContextConfiguration = ContextConfigurat
     public shownSidebars: string[] = [];
 
     private dialogSubscriberId: string = null;
-    private additionalInformation: string[] = [];
+    private additionalInformation: Map<string, any> = new Map();
     private objectList: KIXObject[] = [];
     private filteredObjectList: KIXObject[] = [];
 
     private scrollInormation: [KIXObjectType, string | number] = null;
 
     public constructor(
-        protected descriptor: ContextDescriptor,
+        protected descriptor: ContextDescriptor | DialogContextDescriptor,
         protected objectId: string | number = null,
         protected configuration: T = null
     ) {
@@ -49,12 +50,12 @@ export abstract class Context<T extends ContextConfiguration = ContextConfigurat
         return this.descriptor.contextId;
     }
 
-    public getAdditionalInformation(): string[] {
-        return this.additionalInformation;
+    public getAdditionalInformation(key: string): any {
+        return this.additionalInformation.get(key);
     }
 
-    public getDescriptor(): ContextDescriptor {
-        return this.descriptor;
+    public getDescriptor<D extends ContextDescriptor = ContextDescriptor | DialogContextDescriptor>(): D {
+        return this.descriptor as D;
     }
 
     public getConfiguration(): T {
@@ -70,8 +71,12 @@ export abstract class Context<T extends ContextConfiguration = ContextConfigurat
             : [];
     }
 
-    public setAdditionalInformation(additionalInformation: string[]): void {
-        this.additionalInformation = additionalInformation;
+    public setAdditionalInformation(key: string, value: any): void {
+        this.additionalInformation.set(key, value);
+    }
+
+    public resetAdditionalInformation(): void {
+        this.additionalInformation = new Map();
     }
 
     public setDialogSubscriberId(subscriberId: string): void {
@@ -264,6 +269,10 @@ export abstract class Context<T extends ContextConfiguration = ContextConfigurat
     }
 
     public reset(): void {
+        const formId = (this.descriptor as DialogContextDescriptor).formId;
+        if (formId) {
+            FormService.getInstance().deleteFormInstance(formId);
+        }
         return;
     }
 

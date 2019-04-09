@@ -1,4 +1,4 @@
-import { ObjectIcon } from "../../model";
+import { ObjectIcon } from "../../../model";
 
 export class TabContainerEventData {
 

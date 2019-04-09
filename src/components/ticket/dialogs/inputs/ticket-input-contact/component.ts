@@ -3,9 +3,16 @@ import {
     Contact, FormInputComponent, KIXObjectType,
     TreeNode, KIXObjectLoadingOptions
 } from "../../../../../core/model";
-import { FormService } from "../../../../../core/browser/form";
-import { KIXObjectService } from "../../../../../core/browser";
+import { FormService, FormInputAction } from "../../../../../core/browser/form";
+import {
+    KIXObjectService, Label, TabContainerEvent, TabContainerEventData,
+    ContextService
+} from "../../../../../core/browser";
 import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
+import { EventService } from "../../../../../core/browser/event";
+import { NewContactDialogContext } from "../../../../../core/browser/contact";
+import { PreviousTabData } from "../../../../../core/browser/components/dialog";
+import { NewTicketDialogContext } from "../../../../../core/browser/ticket";
 
 class Component extends FormInputComponent<string, ComponentState> {
 
@@ -33,13 +40,51 @@ class Component extends FormInputComponent<string, ComponentState> {
         this.state.searchCallback = this.searchContacts.bind(this);
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         this.state.autoCompleteConfiguration = formInstance.getAutoCompleteConfiguration();
+
+        const additionalTypeOption = this.state.field.options.find((o) => o.option === 'SHOW_NEW_CONTACT');
+        const actions = [];
+        if (additionalTypeOption && additionalTypeOption.value) {
+            actions.push(new FormInputAction(
+                'NEW_CONTACT',
+                new Label(
+                    null, 'NEW_CONTACT', 'kix-icon-man-bubble-new', null, null,
+                    await TranslationService.translate('Translatable#New Contact')
+                ),
+                this.actionClicked.bind(this), false
+            ));
+        }
+
+        this.state.actions = actions;
+
         this.setCurrentNode();
     }
 
+    private async actionClicked(action: FormInputAction): Promise<void> {
+        const newContactDialogContext = await ContextService.getInstance().getContext<NewContactDialogContext>(
+            NewContactDialogContext.CONTEXT_ID
+        );
+        if (newContactDialogContext) {
+            newContactDialogContext.setAdditionalInformation('RETURN_TO_PREVIOUS_TAB', new PreviousTabData(
+                KIXObjectType.TICKET,
+                'new-ticket-dialog'
+            ));
+            EventService.getInstance().publish(
+                TabContainerEvent.CHANGE_TAB, new TabContainerEventData('new-contact-dialog')
+            );
+        }
+    }
+
     public async setCurrentNode(): Promise<void> {
-        if (this.state.defaultValue && this.state.defaultValue.value) {
+        const newTicketDialogContext = await ContextService.getInstance().getContext<NewTicketDialogContext>(
+            NewTicketDialogContext.CONTEXT_ID
+        );
+        let newContactId = null;
+        if (newTicketDialogContext) {
+            newContactId = newTicketDialogContext.getAdditionalInformation(`${KIXObjectType.CONTACT}-ID`);
+        }
+        if (newContactId || (this.state.defaultValue && this.state.defaultValue.value)) {
             const contacts = await KIXObjectService.loadObjects<Contact>(
-                KIXObjectType.CONTACT, [this.state.defaultValue.value]
+                KIXObjectType.CONTACT, [newContactId || this.state.defaultValue.value]
             );
             if (contacts && contacts.length) {
                 const contact = contacts[0];

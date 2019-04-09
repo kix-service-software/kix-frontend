@@ -40,8 +40,8 @@ class Component {
         let formId = null;
         const dialogContext = await ContextService.getInstance().getActiveContext(ContextType.DIALOG);
         if (dialogContext) {
-            const info = dialogContext.getAdditionalInformation();
-            formId = info.length ? info[0] : null;
+            const info = dialogContext.getAdditionalInformation('FORM_ID');
+            formId = info ? info : null;
         }
         setTimeout(() => {
             this.state.formId = formId;
