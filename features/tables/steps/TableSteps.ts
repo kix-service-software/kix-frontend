@@ -22,13 +22,13 @@ TableFactoryService.getInstance().registerFactory(new RoleTableFactory());
 TableFactoryService.getInstance().registerFactory(new UserTableFactory());
 
 Given('Tabelle: {string}', async (objectType: KIXObjectType) => {
-    table = TableFactoryService.getInstance().createTable(`test-table-${objectType}`, objectType);
+    table = await TableFactoryService.getInstance().createTable(`test-table-${objectType}`, objectType);
     expect(table).exist;
     await table.initialize();
 });
 
 Given('Tabelle - Schmal: {string}', async (objectType: KIXObjectType) => {
-    table = TableFactoryService.getInstance().createTable(`test-table-${objectType}`, objectType, null, null, null, false, false, true);
+    table = await TableFactoryService.getInstance().createTable(`test-table-${objectType}`, objectType, null, null, null, false, false, true);
     expect(table).exist;
     await table.initialize();
 });

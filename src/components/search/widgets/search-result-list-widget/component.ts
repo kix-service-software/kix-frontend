@@ -107,7 +107,7 @@ class Component implements IKIXObjectSearchListener {
                 objectType, null, null, null, null, true, null, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.SMALL, emptyResultHint
             );
-            const table = TableFactoryService.getInstance().createTable(
+            const table = await TableFactoryService.getInstance().createTable(
                 `search-result-list-${objectType}`, objectType, tableConfiguration,
                 null, SearchContext.CONTEXT_ID, true, true, true
             );

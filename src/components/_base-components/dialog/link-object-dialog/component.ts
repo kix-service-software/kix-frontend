@@ -182,7 +182,7 @@ class LinkDialogComponent {
             const tableConfiguration = new TableConfiguration(
                 objectType, null, 5, null, null, true, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             );
-            const table = TableFactoryService.getInstance().createTable(
+            const table = await TableFactoryService.getInstance().createTable(
                 `link-object-dialog-${objectType}`, objectType, tableConfiguration, null,
                 LinkObjectDialogContext.CONTEXT_ID, true, null, true
             );

@@ -21,7 +21,6 @@ class Component implements ISearchFormListener {
     public listenerId: string;
 
     private subscriber: IEventSubscriber;
-    private table: ITable;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -41,7 +40,7 @@ class Component implements ISearchFormListener {
             "Translatable#Detailed search results", "Translatable#Start search"
         ]);
 
-        this.state.table = this.createTable();
+        this.state.table = await this.createTable();
 
         const formInstance = await FormService.getInstance().getFormInstance<SearchFormInstance>(this.formId);
         if (formInstance) {
@@ -61,8 +60,8 @@ class Component implements ISearchFormListener {
         this.subscriber = {
             eventSubscriberId: 'search-result-list',
             eventPublished: async (data: TableEventData, eventId: string) => {
-                if (this.table) {
-                    if (data && data.tableId === this.table.getTableId()) {
+                if (this.state.table) {
+                    if (data && data.tableId === this.state.table.getTableId()) {
                         if (eventId === TableEvent.TABLE_INITIALIZED) {
                             await this.setAdditionalColumns();
                         }
@@ -175,19 +174,19 @@ class Component implements ISearchFormListener {
         await this.setCanSearch();
     }
 
-    private createTable(): ITable {
+    private async createTable(): Promise<ITable> {
         const tableConfiguration = new TableConfiguration(
             this.objectType, null, null, null, null, false, false, null, null,
             TableHeaderHeight.SMALL, TableRowHeight.SMALL
         );
-        this.table = TableFactoryService.getInstance().createTable(
+        const table = await TableFactoryService.getInstance().createTable(
             `search-form-results-${this.objectType}`, this.objectType, tableConfiguration,
             null, SearchContext.CONTEXT_ID, true, false, true
         );
 
         KIXObjectSearchService.getInstance().provideResult();
 
-        return this.table;
+        return table;
     }
 }
 

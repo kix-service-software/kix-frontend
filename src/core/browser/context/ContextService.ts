@@ -10,10 +10,14 @@ import { RoutingService } from '../router';
 import { ContextFactory } from './ContextFactory';
 import { DialogService } from '../components/dialog/DialogService';
 import { BrowserUtil } from '../BrowserUtil';
+import { EventService } from '../event';
+import { ApplicationEvent } from '../application';
 
 export class ContextService {
 
     private static INSTANCE: ContextService = null;
+
+    private refreshTimout: NodeJS.Timeout;
 
     public static getInstance<CC extends ContextConfiguration, T extends Context<CC>>(): ContextService {
         if (!ContextService.INSTANCE) {
@@ -28,6 +32,13 @@ export class ContextService {
     private activeDialogContext: Context;
     private activeContextType: ContextType = ContextType.MAIN;
 
+    private resetRefreshTimer(): void {
+        if (this.refreshTimout) {
+            clearTimeout(this.refreshTimout);
+            this.refreshTimout = null;
+        }
+    }
+
     public registerListener(listener: IContextServiceListener): void {
         this.serviceListener.push(listener);
     }
@@ -40,6 +51,11 @@ export class ContextService {
         contextId: string, kixObjectType: KIXObjectType, contextMode: ContextMode,
         objectId?: string | number, reset?: boolean, history: boolean = false
     ): Promise<void> {
+
+        this.resetRefreshTimer();
+
+        const oldContext = this.getActiveContext();
+
         const context = await ContextFactory.getInstance().getContext(
             contextId, kixObjectType, contextMode, objectId, (!history && reset)
         );
@@ -61,7 +77,7 @@ export class ContextService {
 
         this.serviceListener.forEach(
             (sl) => sl.contextChanged(
-                context.getDescriptor().contextId, context, context.getDescriptor().contextType, history
+                context.getDescriptor().contextId, context, context.getDescriptor().contextType, history, oldContext
             )
         );
     }
@@ -70,6 +86,11 @@ export class ContextService {
         contextId: string, kixObjectType: KIXObjectType, contextMode: ContextMode,
         objectId?: string | number, reset?: boolean, title?: string, singleTab?: boolean
     ): Promise<void> {
+
+        this.resetRefreshTimer();
+
+        const oldContext = this.getActiveContext();
+
         let context: Context;
         if (kixObjectType) {
             context = await ContextFactory.getInstance().getContext(
@@ -95,7 +116,7 @@ export class ContextService {
 
             this.serviceListener.forEach(
                 (sl) => sl.contextChanged(
-                    context.getDescriptor().contextId, context, context.getDescriptor().contextType, false
+                    context.getDescriptor().contextId, context, context.getDescriptor().contextType, false, oldContext
                 )
             );
         }
@@ -150,6 +171,13 @@ export class ContextService {
 
                 if (showRefreshNotification) {
                     BrowserUtil.openAppRefreshOverlay();
+                }
+            } else if (this.activeMainContext.getDescriptor().contextMode === ContextMode.DASHBOARD) {
+                if (!this.refreshTimout) {
+                    this.refreshTimout = setTimeout(() => {
+                        EventService.getInstance().publish(ApplicationEvent.REFRESH);
+                        this.refreshTimout = null;
+                    }, 120000);
                 }
             }
         }

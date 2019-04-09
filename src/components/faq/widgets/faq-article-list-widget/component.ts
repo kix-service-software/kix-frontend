@@ -77,7 +77,7 @@ class Component {
     }
 
     private async prepareTable(): Promise<void> {
-        const table = TableFactoryService.getInstance().createTable(
+        const table = await TableFactoryService.getInstance().createTable(
             'faq-articles', KIXObjectType.FAQ_ARTICLE, null, null, FAQContext.CONTEXT_ID
         );
 
