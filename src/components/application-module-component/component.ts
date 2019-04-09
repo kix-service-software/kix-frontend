@@ -52,7 +52,6 @@ class Component extends AbstractMarkoComponent {
     }
 
     public async onMount(): Promise<void> {
-        ServiceRegistry.registerServiceInstance(AgentService.getInstance());
         ServiceRegistry.registerServiceInstance(SearchService.getInstance());
         ServiceRegistry.registerServiceInstance(LinkService.getInstance());
         ServiceRegistry.registerServiceInstance(GeneralCatalogService.getInstance());
@@ -62,7 +61,6 @@ class Component extends AbstractMarkoComponent {
         ServiceRegistry.registerServiceInstance(DynamicFieldService.getInstance());
         ServiceRegistry.registerServiceInstance(SlaService.getInstance());
         ServiceRegistry.registerServiceInstance(ObjectIconService.getInstance());
-        ServiceRegistry.registerServiceInstance(TranslationService.getInstance());
         ServiceRegistry.registerServiceInstance(TranslationFormService.getInstance());
 
         ServiceRegistry.registerServiceInstance(PersonalSettingsFormService.getInstance());
