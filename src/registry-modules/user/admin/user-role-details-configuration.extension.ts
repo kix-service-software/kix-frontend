@@ -23,8 +23,8 @@ export class Extension implements IConfigurationExtension {
             new WidgetConfiguration(
                 'table-widget', 'Translatable#Permissions', [],
                 new TableWidgetSettings(
-                    KIXObjectType.PERMISSION, [PermissionProperty.TYPE_ID, SortOrder.UP],
-                    new TableConfiguration(KIXObjectType.PERMISSION, null, null, [
+                    KIXObjectType.ROLE_PERMISSION, [PermissionProperty.TYPE_ID, SortOrder.UP],
+                    new TableConfiguration(KIXObjectType.ROLE_PERMISSION, null, null, [
                         new DefaultColumnConfiguration(
                             PermissionProperty.TYPE_ID, true, false, true, false, 150, true, true, true,
                             DataType.STRING, true, null, null, false
@@ -56,7 +56,7 @@ export class Extension implements IConfigurationExtension {
                             PermissionProperty.DENY, false, false, true, false, 85,
                             false, true, true, null, null, 'crud-cell'
                         )
-                    ])
+                    ]), null, false
                 ),
                 true, true, null, null, true
             ));

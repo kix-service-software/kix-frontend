@@ -13,6 +13,10 @@ export class TicketLabelProvider implements ILabelProvider<Ticket> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.TICKET;
 
+    public isLabelProviderForType(objectType: KIXObjectType): boolean {
+        return objectType === this.kixObjectType;
+    }
+
     public async getPropertyValueDisplayText(
         property: string, value: string | number, translatable: boolean = true
     ): Promise<string> {

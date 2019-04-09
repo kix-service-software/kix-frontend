@@ -11,6 +11,10 @@ export class TicketHistoryLabelProvider implements ILabelProvider<TicketHistory>
         return value.toString();
     }
 
+    public isLabelProviderForType(objectType: KIXObjectType): boolean {
+        return objectType === this.kixObjectType;
+    }
+
     public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {

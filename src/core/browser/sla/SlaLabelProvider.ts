@@ -6,6 +6,10 @@ export class SlaLabelProvider implements ILabelProvider<Sla> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.SLA;
 
+    public isLabelProviderForType(objectType: KIXObjectType): boolean {
+        return objectType === this.kixObjectType;
+    }
+
     public isLabelProviderFor(sla: Sla): boolean {
         return sla instanceof Sla;
     }

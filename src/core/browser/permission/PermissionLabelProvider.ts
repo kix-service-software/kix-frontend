@@ -14,6 +14,10 @@ export class PermissionLabelProvider implements ILabelProvider<Permission> {
         return object instanceof Permission;
     }
 
+    public isLabelProviderForType(objectType: KIXObjectType): boolean {
+        return objectType === KIXObjectType.PERMISSION || objectType === KIXObjectType.ROLE_PERMISSION;
+    }
+
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
@@ -39,8 +43,7 @@ export class PermissionLabelProvider implements ILabelProvider<Permission> {
                 displayValue = 'Translatable#Changed at';
                 break;
             case PermissionProperty.IS_REQUIRED:
-                displayValue = 'Translatable#Required';
-                break;
+                return 'Required';
             case PermissionProperty.TARGET:
                 displayValue = 'Translatable#Path';
                 break;

@@ -7,6 +7,10 @@ export class LinkObjectLabelProvider implements ILabelProvider<LinkObject> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.LINK_OBJECT;
 
+    public isLabelProviderForType(objectType: KIXObjectType): boolean {
+        return objectType === this.kixObjectType;
+    }
+
     public async getPropertyValueDisplayText(
         property: string, value: string | number, translatable: boolean = true
     ): Promise<string> {

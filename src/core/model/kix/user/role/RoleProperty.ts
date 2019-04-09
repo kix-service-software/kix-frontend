@@ -18,6 +18,8 @@ export enum RoleProperty {
 
     USER_IDS = 'UserIDs',
 
-    PERMISSIONS = 'Permissions'
+    PERMISSIONS = 'Permissions',
+
+    CONFIGURED_PERMISSIONS = 'ConfiguredPermissions'
 
 }

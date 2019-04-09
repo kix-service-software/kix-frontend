@@ -9,6 +9,10 @@ export class UserLabelProvider implements ILabelProvider<User> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.USER;
 
+    public isLabelProviderForType(objectType: KIXObjectType): boolean {
+        return objectType === this.kixObjectType;
+    }
+
     public async getPropertyValueDisplayText(
         property: string, value: string | number, translatable: boolean = true
     ): Promise<string> {

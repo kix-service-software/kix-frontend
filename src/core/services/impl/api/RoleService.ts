@@ -99,7 +99,7 @@ export class RoleService extends KIXObjectService {
     ): Promise<string | number> {
         const updateParameter = parameter.filter(
             (p) => p[0] !== RoleProperty.USER_IDS
-                && p[0] !== RoleProperty.PERMISSIONS
+                && p[0] !== RoleProperty.CONFIGURED_PERMISSIONS
         );
         const updateRole = new UpdateRole(updateParameter);
 
@@ -114,7 +114,7 @@ export class RoleService extends KIXObjectService {
         const userIds = this.getParameterValue(parameter, RoleProperty.USER_IDS);
         await this.setUserIds(token, clientRequestId, Number(objectId), userIds);
 
-        const permissions = this.getParameterValue(parameter, RoleProperty.PERMISSIONS);
+        const permissions = this.getParameterValue(parameter, RoleProperty.CONFIGURED_PERMISSIONS);
         await this.setPermissions(token, clientRequestId, Number(objectId), permissions);
 
         const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');

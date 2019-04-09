@@ -9,6 +9,10 @@ export class TicketStateLabelProvider implements ILabelProvider<TicketState> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.TICKET_STATE;
 
+    public isLabelProviderForType(objectType: KIXObjectType): boolean {
+        return objectType === this.kixObjectType;
+    }
+
     public isLabelProviderFor(ticketState: TicketState): boolean {
         return ticketState instanceof TicketState;
     }

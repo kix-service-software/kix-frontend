@@ -13,6 +13,10 @@ export class FAQLabelProvider implements ILabelProvider<FAQArticle> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.FAQ_ARTICLE;
 
+    public isLabelProviderForType(objectType: KIXObjectType): boolean {
+        return objectType === this.kixObjectType;
+    }
+
     public async getPropertyValueDisplayText(
         property: string, value: string | number, translatable: boolean = true
     ): Promise<string> {
