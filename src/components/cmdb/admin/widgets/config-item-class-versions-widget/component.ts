@@ -52,7 +52,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async prepareTable(): Promise<void> {
-        const table = TableFactoryService.getInstance().createTable(
+        const table = await TableFactoryService.getInstance().createTable(
             'config-item-class-definitions', KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION,
             null, null, ConfigItemClassDetailsContext.CONTEXT_ID, true
         );

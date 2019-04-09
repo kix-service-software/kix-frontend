@@ -77,7 +77,7 @@ class Component {
                     null, null, null, null, null, true, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
                 );
 
-                const table = TableFactoryService.getInstance().createTable(
+                const table = await TableFactoryService.getInstance().createTable(
                     `bulk-form-list-${this.state.bulkManager.objectType}`, this.state.bulkManager.objectType,
                     configuration, null, BulkDialogContext.CONTEXT_ID,
                     true, null, true

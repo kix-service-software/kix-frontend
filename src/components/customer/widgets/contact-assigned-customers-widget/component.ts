@@ -58,7 +58,7 @@ class Component {
     private async prepareTable(): Promise<void> {
         if (this.state.contact && this.state.widgetConfiguration) {
 
-            this.state.table = TableFactoryService.getInstance().createTable(
+            this.state.table = await TableFactoryService.getInstance().createTable(
                 'contact-assigned-customer', KIXObjectType.CUSTOMER,
                 this.state.widgetConfiguration.settings, this.state.contact.UserCustomerIDs,
                 null, true

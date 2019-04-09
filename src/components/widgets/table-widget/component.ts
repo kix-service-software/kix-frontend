@@ -146,7 +146,7 @@ class Component {
                 ? context.getDescriptor().contextId
                 : null;
 
-            const table = TableFactoryService.getInstance().createTable(
+            const table = await TableFactoryService.getInstance().createTable(
                 `table-widget-${this.state.instanceId}`, this.objectType,
                 settings.tableConfiguration, null, contextId, true, true
             );

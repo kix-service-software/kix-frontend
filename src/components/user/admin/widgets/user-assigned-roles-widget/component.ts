@@ -52,7 +52,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             KIXObjectType.ROLE, null, null, columns, null, false, false, null, null,
             TableHeaderHeight.SMALL, TableRowHeight.SMALL
         );
-        const table = await TableFactoryService.getInstance().createTable(
+        const table = await await TableFactoryService.getInstance().createTable(
             'user-assigned-roles', KIXObjectType.ROLE, tableConfiguration, user.RoleIDs, null, true
         );
         this.state.table = table;

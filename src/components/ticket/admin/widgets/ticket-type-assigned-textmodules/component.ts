@@ -26,7 +26,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         this.prepareActions();
-        this.prepareTable();
+        await this.prepareTable();
         this.prepareTitle();
     }
 
@@ -43,8 +43,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    private prepareTable(): void {
-        const table = TableFactoryService.getInstance().createTable(
+    private async prepareTable(): Promise<void> {
+        const table = await TableFactoryService.getInstance().createTable(
             'ticket-type-assigned-text-modules', KIXObjectType.TEXT_MODULE, null, null, null, true
         );
 

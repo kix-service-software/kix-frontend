@@ -168,7 +168,7 @@ class Component {
     private async prepareTable(): Promise<void> {
         this.state.table = null;
 
-        const table = TableFactoryService.getInstance().createTable(
+        const table = await TableFactoryService.getInstance().createTable(
             'edit-linked-objects-dialog', KIXObjectType.LINK_OBJECT,
             null, null, EditLinkedObjectsDialogContext.CONTEXT_ID
         );

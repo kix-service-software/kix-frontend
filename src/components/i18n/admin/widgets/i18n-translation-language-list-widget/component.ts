@@ -49,7 +49,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         });
 
         await this.prepareFilter();
-        this.prepareTable();
+        await this.prepareTable();
         this.prepareActions();
         this.prepareTitle();
     }
@@ -66,8 +66,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.title = `${title} (${count})`;
     }
 
-    private prepareTable(): void {
-        const table = TableFactoryService.getInstance().createTable(
+    private async prepareTable(): Promise<void> {
+        const table = await TableFactoryService.getInstance().createTable(
             'i18n-languages', KIXObjectType.TRANSLATION_LANGUAGE, null, null, TranslationDetailsContext.CONTEXT_ID, true
         );
 
