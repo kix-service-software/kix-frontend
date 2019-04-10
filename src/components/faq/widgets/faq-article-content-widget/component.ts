@@ -32,7 +32,8 @@ class Component {
     public async onMount(): Promise<void> {
 
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Symptom", "Translatable#Cause", "Translatable#Solution", "Translatable#Comment"
+            "Translatable#Symptom", "Translatable#Cause", "Translatable#Solution", "Translatable#Comment",
+            "Translatable#Number of ratings"
         ]);
 
         WidgetService.getInstance().setWidgetType('faq-article-group', WidgetType.GROUP);
@@ -102,7 +103,7 @@ class Component {
 
     public getRatingTooltip(): string {
         const count = this.state.faqArticle.Votes ? this.state.faqArticle.Votes.length : 0;
-        return `Anzahl Bewertungen: ${count}`;
+        return `${this.state.translations["Translatable#Number of ratings"]}: ${count}`;
     }
 
     public getIcon(attachment: Attachment): ObjectIcon {

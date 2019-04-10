@@ -52,7 +52,7 @@ export class ConfigItemFormFactory {
         ));
         fields.push(new FormField(
             'Translatable#Incident state', VersionProperty.INCI_STATE_ID, 'general-catalog-input',
-            true, 'Translatable#select a incident state.',
+            true, 'Translatable#Select a incident state.',
             [
                 new FormFieldOption('GC_CLASS', 'ITSM::Core::IncidentState'),
                 new FormFieldOption('ICON', true)

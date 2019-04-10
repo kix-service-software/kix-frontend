@@ -71,7 +71,7 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
                     if (attribute.Attribute === ContactProperty.USER_LOGIN) {
                         group.formFields.push(
                             // tslint:disable-next-line:max-line-length
-                            new FormField('Translatable#Password', ContactProperty.USER_PASSWORD, null, true, 'Translatable#Legen Sie ein Passwort für den Ansprechpartner fest.',
+                            new FormField('Translatable#Password', ContactProperty.USER_PASSWORD, null, true, 'Translatable#Insert a password for the contact.',
                                 [
                                     new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)
                                 ])

@@ -1,14 +1,16 @@
 <div.faq-vote-selector>
-    <span.vote-title>Ihre Bewertung:</span>
+    <span.vote-title>
+        <translation-string pattern="Translatable#Your rating"/>:
+    </span>
     <div.star-list>
-        <span class=component.getIcon(1) on-mouseover('setCurrentRating', 1) on-click('vote', 1)/>
-        <span class=component.getIcon(2) on-mouseover('setCurrentRating', 2) on-click('vote', 2)/>
-        <span class=component.getIcon(3) on-mouseover('setCurrentRating', 3) on-click('vote', 3)/>
-        <span class=component.getIcon(4) on-mouseover('setCurrentRating', 4) on-click('vote', 4)/>
-        <span class=component.getIcon(5) on-mouseover('setCurrentRating', 5) on-click('vote', 5)/>
+        <span class=component.getIcon(1) on-mouseover("setCurrentRating", 1) on-click("vote", 1)/>
+        <span class=component.getIcon(2) on-mouseover("setCurrentRating", 2) on-click("vote", 2)/>
+        <span class=component.getIcon(3) on-mouseover("setCurrentRating", 3) on-click("vote", 3)/>
+        <span class=component.getIcon(4) on-mouseover("setCurrentRating", 4) on-click("vote", 4)/>
+        <span class=component.getIcon(5) on-mouseover("setCurrentRating", 5) on-click("vote", 5)/>
     </div>
     <span.vote-footer>
-        (<span>Gesamt:</span>
-        ${component.rating} / ${component.voteCount} Stimmen)
+        (<b><translation-string pattern="Translatable#Overall"/>:</b>
+        ${component.rating} / ${component.voteCount}&nbsp;<translation-string pattern="Translatable#Votes"/>)
     </span>
 </div>
