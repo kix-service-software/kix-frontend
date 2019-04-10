@@ -128,7 +128,7 @@ export class ArticleLabelProvider implements ILabelProvider<Article> {
                     const channel = channels.find((c) => c.ID === article.ChannelID);
                     displayValue = channel ? channel.Name : article[property];
                     if (displayValue === 'email') {
-                        displayValue = await TranslationService.translate('Translatable#E-Mail');
+                        displayValue = await TranslationService.translate('Translatable#E-mail');
                     } else if (displayValue === 'note') {
                         displayValue = await TranslationService.translate('Translatable#Note');
                     }

@@ -25,7 +25,7 @@ class Component {
 
     public async onMount(): Promise<void> {
         this.state.translations = await TranslationService.createTranslationObject(
-            ["Translatable#Parameter entfernen"]
+            ["Translatable#Remove parameter"]
         );
         await this.updateValues();
     }

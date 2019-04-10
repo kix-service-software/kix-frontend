@@ -358,8 +358,9 @@ class Component {
                 KIXObjectType.LINK_OBJECT,
                 newLinkObject,
                 new CreateLinkObjectOptions(this.mainObject)
-            ).catch((error) => {
-                BrowserUtil.openErrorOverlay('Translatable#Can not create link (' + error + ')');
+            ).catch(async (error) => {
+                const msg = await TranslationService.translate('Translatable#Can not create link ({0})', [error]);
+                BrowserUtil.openErrorOverlay(msg);
                 ok = false;
                 return;
             });

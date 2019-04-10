@@ -116,14 +116,14 @@ class OverlayComponent {
                             this.closeOverlay();
                         }, 200);
                     });
-                }
-                toast.classList.add('show-toast');
-                this.toastTimeout = setTimeout(() => {
-                    toast.classList.remove('show-toast');
+                    toast.classList.add('show-toast');
                     this.toastTimeout = setTimeout(() => {
-                        this.closeOverlay();
-                    }, 200);
-                }, toastTimeoutMillis);
+                        toast.classList.remove('show-toast');
+                        this.toastTimeout = setTimeout(() => {
+                            this.closeOverlay();
+                        }, 200);
+                    }, toastTimeoutMillis);
+                }
             }, 100);
         }
 

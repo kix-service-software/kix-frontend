@@ -62,8 +62,8 @@ export class Extension implements IConfigurationExtension {
                     'Translatable#Insert a mobile number for the user.'
                 ),
                 new FormField(
-                    'Translatable#E-Mail', UserProperty.USER_EMAIL, null, true,
-                    'Translatable#Insert a e-mail adress for the user.'
+                    'Translatable#E-mail', UserProperty.USER_EMAIL, null, true,
+                    'Translatable#Insert the e-mail address for the user.'
                 ),
                 new FormField(
                     'Translatable#Comment', UserProperty.USER_COMMENT, 'text-area-input', false,

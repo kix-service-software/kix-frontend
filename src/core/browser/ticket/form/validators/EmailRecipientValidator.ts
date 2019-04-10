@@ -68,13 +68,13 @@ export class EmailRecipientValidator implements IFormFieldValidator {
             for (const mail of mailAddresses) {
                 if (!this.EMAIL_REGEX.test(mail.trim()) === true) {
                     return new ValidationResult(
-                        ValidationSeverity.ERROR, 'Eingegebene E-Mail Adresse ist ungültig.'
+                        ValidationSeverity.ERROR, 'Translatable#Inserted e-mail address is invalid.'
                     );
                 }
 
                 if (await this.isSystemAddress(mail)) {
                     return new ValidationResult(
-                        ValidationSeverity.ERROR, 'Eingegebene E-Mail Adresse darf keine Systemaddresse sein.'
+                        ValidationSeverity.ERROR, 'Translatable#Inserted e-mail address must not be a system address.'
                     );
                 }
             }

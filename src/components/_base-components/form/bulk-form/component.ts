@@ -40,7 +40,7 @@ class Component {
 
     public async update(): Promise<void> {
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Cancel", "Translatable#Reset Data", "Translatable#Close Dialog", "Translatable#Execute now!"
+            "Translatable#Cancel", "Translatable#Reset data", "Translatable#Close Dialog", "Translatable#Execute now!"
         ]);
     }
 
