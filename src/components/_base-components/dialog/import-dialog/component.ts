@@ -99,27 +99,6 @@ class Component {
             }
         }
         this.prepareImportConfigForm();
-
-        if (this.objectType) {
-            FormService.getInstance().registerFormInstanceListener(this.state.importConfigFormId, {
-                formListenerId: this.formListenerId,
-                formValueChanged: async (formField: FormField, value: FormFieldValue<any>) => {
-                    if (this.importFormTimeout) {
-                        clearTimeout(this.importFormTimeout);
-                    } else {
-                        const loadingHint = await TranslationService.translate('Translatable#Read file.');
-                        this.fileLoaded = false;
-                    }
-                    this.importFormTimeout = setTimeout(async () => {
-                        this.importFormTimeout = null;
-                        await this.prepareTableDataByCSV();
-                    }, 100);
-
-                },
-                updateForm: () => { return; }
-            });
-        }
-
         this.createTable();
 
         return input;
@@ -208,9 +187,26 @@ class Component {
             'import-file-config', 'Import configuration',
             [formGroup], KIXObjectType.ANY, true, FormContext.NEW
         );
-        this.state.importConfigFormId = form.id;
 
-        await FormService.getInstance().addform(form);
+        await FormService.getInstance().addForm(form);
+        FormService.getInstance().registerFormInstanceListener(form.id, {
+            formListenerId: this.formListenerId,
+            formValueChanged: async (formField: FormField, value: FormFieldValue<any>) => {
+                if (this.importFormTimeout) {
+                    clearTimeout(this.importFormTimeout);
+                } else {
+                    const loadingHint = await TranslationService.translate('Translatable#Read file.');
+                    this.fileLoaded = false;
+                }
+                this.importFormTimeout = setTimeout(async () => {
+                    this.importFormTimeout = null;
+                    await this.prepareTableDataByCSV();
+                }, 100);
+
+            },
+            updateForm: () => { return; }
+        });
+        this.state.importConfigFormId = form.id;
     }
 
     private async createTable(): Promise<void> {

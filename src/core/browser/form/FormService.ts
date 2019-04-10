@@ -39,7 +39,7 @@ export class FormService {
         this.formIDsWithContext = formConfigurations[1];
     }
 
-    public async addform(form: Form): Promise<void> {
+    public async addForm(form: Form): Promise<void> {
         if (!this.forms) {
             await this.loadFormConfigurations();
         }
