@@ -22,7 +22,7 @@
         <else>
             <div.selected-nodes key=("form-list-selected-nodes-" + state.listId) on-click("toggleList", false)>
                 <for|node| of=state.selectedNodes>
-                    <div.selected-node title=node.label key=("form-list-selected-node-" + state.listId + "[]")>
+                    <div.selected-node title=state.translations[node.label] key=("form-list-selected-node-" + state.listId + "[]")>
                         <icon icon=node.icon showUnknown=true/>
                         <span.item-text>
                             <translation-string pattern=node.label/>
