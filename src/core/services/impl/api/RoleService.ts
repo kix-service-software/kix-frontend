@@ -128,7 +128,7 @@ export class RoleService extends KIXObjectService {
     }
 
     private async setUserIds(
-        token: string, clientReqeustId: string, roleId: number, userIds: number[] = []
+        token: string, clientRequestId: string, roleId: number, userIds: number[] = []
     ): Promise<void> {
         if (!userIds) {
             userIds = [];
@@ -141,18 +141,18 @@ export class RoleService extends KIXObjectService {
 
         for (const userId of userIdsToRemove) {
             const deleteUri = this.buildUri(baseUri, userId);
-            await this.sendDeleteRequest(token, clientReqeustId, deleteUri, KIXObjectType.ROLE)
+            await this.sendDeleteRequest(token, clientRequestId, deleteUri, KIXObjectType.ROLE)
                 .catch((error) => LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error));
         }
 
         for (const userId of userIdsToAdd) {
-            await this.sendCreateRequest(token, clientReqeustId, baseUri, { UserID: userId }, KIXObjectType.ROLE)
+            await this.sendCreateRequest(token, clientRequestId, baseUri, { UserID: userId }, KIXObjectType.ROLE)
                 .catch((error) => LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error));
         }
     }
 
     public async setPermissions(
-        token: string, clientReqeustId: string, roleId: number, permissionDescs: CreatePermissionDescription[] = [],
+        token: string, clientRequestId: string, roleId: number, permissionDescs: CreatePermissionDescription[] = [],
         alsoDelete: boolean = true, loadingOptionsForExistingPermissions: KIXObjectLoadingOptions = null
     ): Promise<void> {
         if (!permissionDescs) {
@@ -166,20 +166,20 @@ export class RoleService extends KIXObjectService {
 
             if (alsoDelete) {
                 await this.deletePermissions(
-                    token, clientReqeustId, roleId, existingPermissions, permissionDescs
+                    token, clientRequestId, roleId, existingPermissions, permissionDescs
                 );
             }
             await this.createPermissions(
-                token, clientReqeustId, roleId, existingPermissions, permissionDescs
+                token, clientRequestId, roleId, existingPermissions, permissionDescs
             );
             await this.updatePermissions(
-                token, clientReqeustId, roleId, existingPermissions, permissionDescs
+                token, clientRequestId, roleId, existingPermissions, permissionDescs
             );
         }
     }
 
     private async deletePermissions(
-        token: string, clientReqeustId: string, roleId: number,
+        token: string, clientRequestId: string, roleId: number,
         existingPermissions: Permission[], permissionDescs: CreatePermissionDescription[]
     ): Promise<void> {
         const permissionIdsToRemove = existingPermissions.filter(
@@ -189,16 +189,22 @@ export class RoleService extends KIXObjectService {
         ).map((ep) => ep.ID);
 
         for (const permissionId of permissionIdsToRemove) {
-            await this.sendDeleteRequest(
-                token, clientReqeustId,
-                this.buildUri(this.RESOURCE_URI, roleId, this.SUB_RESOURCE_URI_PERMISSION, permissionId),
-                KIXObjectType.PERMISSION
-            ).catch((error) => LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error));
+            await this.deletePermission(token, clientRequestId, roleId, permissionId);
         }
     }
 
+    public async deletePermission(
+        token: string, clientRequestId: string, roleId: number, permissionId: number
+    ): Promise<void> {
+        await this.sendDeleteRequest(
+            token, clientRequestId,
+            this.buildUri(this.RESOURCE_URI, roleId, this.SUB_RESOURCE_URI_PERMISSION, permissionId),
+            KIXObjectType.PERMISSION
+        ).catch((error) => LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error));
+    }
+
     private async createPermissions(
-        token: string, clientReqeustId: string, roleId: number,
+        token: string, clientRequestId: string, roleId: number,
         existingPermissions: Permission[], permissionDescs: CreatePermissionDescription[]
     ): Promise<void> {
         const permissionsToAdd = permissionDescs.filter(
@@ -209,7 +215,7 @@ export class RoleService extends KIXObjectService {
 
         for (const permissionDesc of permissionsToAdd) {
             await this.sendCreateRequest<CUPermissionResponse, CUPermissionRequest>(
-                token, clientReqeustId,
+                token, clientRequestId,
                 this.buildUri(this.RESOURCE_URI, roleId, this.SUB_RESOURCE_URI_PERMISSION),
                 this.getPermissionRequest(permissionDesc), KIXObjectType.PERMISSION
             ).catch((error) => LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error));
@@ -217,7 +223,7 @@ export class RoleService extends KIXObjectService {
     }
 
     private async updatePermissions(
-        token: string, clientReqeustId: string, roleId: number,
+        token: string, clientRequestId: string, roleId: number,
         existingPermissions: Permission[], permissionDescs: CreatePermissionDescription[]
     ): Promise<void> {
         const permissionsToPatch = permissionDescs.filter((pd) => {
@@ -234,7 +240,7 @@ export class RoleService extends KIXObjectService {
 
         for (const permissionDesc of permissionsToPatch) {
             await this.sendUpdateRequest<CUPermissionResponse, CUPermissionRequest>(
-                token, clientReqeustId,
+                token, clientRequestId,
                 this.buildUri(this.RESOURCE_URI, roleId, this.SUB_RESOURCE_URI_PERMISSION, permissionDesc.ID),
                 this.getPermissionRequest(permissionDesc), KIXObjectType.PERMISSION
             ).catch((error) => LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error));

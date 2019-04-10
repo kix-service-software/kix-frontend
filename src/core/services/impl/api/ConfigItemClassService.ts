@@ -2,7 +2,7 @@ import { KIXObjectService } from "./KIXObjectService";
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions, ConfigItemClass, ConfigItemClassFactory,
-    ConfigItemClassProperty, ObjectIcon, Error, CreatePermissionDescription
+    ConfigItemClassProperty, ObjectIcon, Error, CreatePermissionDescription, ConfigItemProperty
 } from "../../../model";
 import {
     ConfigItemClassesResponse, ConfigItemClassResponse,
@@ -56,15 +56,20 @@ export class ConfigItemClassService extends KIXObjectService {
     private async getConfigItemClasses(
         token: string, configItemClassIds: Array<number | string>, loadingOptions: KIXObjectLoadingOptions
     ): Promise<ConfigItemClass[]> {
-        if (loadingOptions && loadingOptions.includes) {
-            loadingOptions.includes.push(ConfigItemClassProperty.CURRENT_DEFINITION);
-        } else if (loadingOptions) {
-            loadingOptions.includes = [ConfigItemClassProperty.CURRENT_DEFINITION];
+        if (loadingOptions) {
+            if (loadingOptions.includes) {
+                if (!loadingOptions.includes.some((i) => i === ConfigItemClassProperty.CURRENT_DEFINITION)) {
+                    loadingOptions.includes.push(ConfigItemClassProperty.CURRENT_DEFINITION);
+                }
+            } else {
+                loadingOptions.includes = [ConfigItemClassProperty.CURRENT_DEFINITION];
+            }
         } else {
             loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, null, [
                 ConfigItemClassProperty.CURRENT_DEFINITION
             ]);
         }
+
         loadingOptions.sortOrder = 'ConfigItemClass.Name';
 
         const query = this.prepareQuery(loadingOptions);
@@ -106,7 +111,7 @@ export class ConfigItemClassService extends KIXObjectService {
         if (objectType === KIXObjectType.CONFIG_ITEM_CLASS) {
 
             const createConfigItemClass = new CreateConfigItemClass(parameter.filter(
-                (p) => p[0] !== 'ICON' && p[0] !== 'OBJECT_PERMISSION' && p[0] !== 'DEPENDENT_OBJECT_PERMISSION')
+                (p) => p[0] !== 'ICON' && p[0] !== 'OBJECT_PERMISSION' && p[0] !== 'PROPERTY_VALUE_PERMISSION')
             );
             const response = await this.sendCreateRequest<CreateConfigItemClassResponse, CreateConfigItemClassRequest>(
                 token, clientRequestId, this.RESOURCE_URI, new CreateConfigItemClassRequest(createConfigItemClass),
@@ -123,22 +128,29 @@ export class ConfigItemClassService extends KIXObjectService {
                 await this.createIcons(token, clientRequestId, icon);
             }
 
-            const objectPermisssions: CreatePermissionDescription[] = this.getParameterValue(
+            const objectPermissions: CreatePermissionDescription[] = this.getParameterValue(
                 parameter, 'OBJECT_PERMISSION'
             );
-            if (response.ConfigItemClassID && objectPermisssions && !!objectPermisssions.length) {
+            if (response.ConfigItemClassID && objectPermissions) {
                 super.setObjectPermissions(
                     token, clientRequestId,
-                    objectPermisssions,
-                    this.RESOURCE_URI, response.ConfigItemClassID
+                    objectPermissions,
+                    this.RESOURCE_URI,
+                    KIXObjectType.CONFIG_ITEM_CLASS, response.ConfigItemClassID
                 );
             }
 
-            const dependentObjectPermisssions: CreatePermissionDescription[] = this.getParameterValue(
-                parameter, 'DEPENDENT_OBJECT_PERMISSION'
+            const propertyValuePermissions: CreatePermissionDescription[] = this.getParameterValue(
+                parameter, 'PROPERTY_VALUE_PERMISSION'
             );
-            if (response.ConfigItemClassID && dependentObjectPermisssions && !!dependentObjectPermisssions.length) {
-                // TODO: permission an role anfügen
+            if (response.ConfigItemClassID && propertyValuePermissions) {
+                super.setPropertyValuePermissions(
+                    token, clientRequestId,
+                    propertyValuePermissions,
+                    '/cmdb/configitems/*',
+                    KIXObjectType.CONFIG_ITEM_CLASS, response.ConfigItemClassID,
+                    `${KIXObjectType.CONFIG_ITEM}.${ConfigItemProperty.CLASS_ID}`
+                );
             }
 
             await AppUtil.updateFormConfigurations(true);
@@ -155,7 +167,7 @@ export class ConfigItemClassService extends KIXObjectService {
             const updateConfigItemClass = new UpdateConfigItemClass(
                 parameter.filter(
                     (p) => p[0] !== 'ICON' && p[0] !== ConfigItemClassProperty.DEFINITION_STRING
-                        && p[0] !== 'OBJECT_PERMISSION' && p[0] !== 'DEPENDENT_OBJECT_PERMISSION'
+                        && p[0] !== 'OBJECT_PERMISSION' && p[0] !== 'PROPERTY_VALUE_PERMISSION'
                 )
             );
 
@@ -191,22 +203,31 @@ export class ConfigItemClassService extends KIXObjectService {
                 });
             }
 
-            const objectPermisssions: CreatePermissionDescription[] = this.getParameterValue(
+            const objectPermissions: CreatePermissionDescription[] = this.getParameterValue(
                 parameter, 'OBJECT_PERMISSION'
             );
-            if (response.ConfigItemClassID && objectPermisssions && !!objectPermisssions.length) {
+            if (response.ConfigItemClassID && objectPermissions) {
                 super.setObjectPermissions(
                     token, clientRequestId,
-                    objectPermisssions,
-                    this.RESOURCE_URI, response.ConfigItemClassID, true
+                    objectPermissions,
+                    this.RESOURCE_URI,
+                    KIXObjectType.CONFIG_ITEM_CLASS, response.ConfigItemClassID,
+                    true
                 );
             }
 
-            const dependentObjectPermisssions: CreatePermissionDescription[] = this.getParameterValue(
-                parameter, 'DEPENDENT_OBJECT_PERMISSION'
+            const propertyValuePermissions: CreatePermissionDescription[] = this.getParameterValue(
+                parameter, 'PROPERTY_VALUE_PERMISSION'
             );
-            if (response.ConfigItemClassID && dependentObjectPermisssions && !!dependentObjectPermisssions.length) {
-                // TODO: permission an role anfügen bzw. entfernen
+            if (response.ConfigItemClassID && propertyValuePermissions) {
+                super.setPropertyValuePermissions(
+                    token, clientRequestId,
+                    propertyValuePermissions,
+                    '/cmdb/configitems/*',
+                    KIXObjectType.CONFIG_ITEM_CLASS, response.ConfigItemClassID,
+                    `${KIXObjectType.CONFIG_ITEM}.${ConfigItemProperty.CLASS_ID}`,
+                    true
+                );
             }
 
             await AppUtil.updateFormConfigurations(true);

@@ -280,55 +280,107 @@ export abstract class KIXObjectService<T extends KIXObject = any> implements IKI
 
     protected async setObjectPermissions(
         token: string, clientRequestId: string, permissions: CreatePermissionDescription[],
-        resourcePath: string, objectId: string, forUpdate: boolean = false
+        resourcePath: string, objectType: KIXObjectType, objectId: string, forUpdate: boolean = false
     ): Promise<void> {
-        if (permissions && !!permissions.length && resourcePath && objectId) {
-            const roleService = KIXObjectServiceRegistry.getServiceInstance<RoleService>(
-                KIXObjectType.ROLE
+        if (resourcePath && objectId) {
+            const target = `${resourcePath.match(/^\/.+/) ? resourcePath : '/' + resourcePath}/${objectId}`;
+            if (forUpdate && objectType) {
+                await this.deleteRolePermissions(token, clientRequestId, permissions, target, 2, objectType, objectId);
+            }
+            if (permissions && !!permissions.length) {
+                this.setRolePermissions(token, clientRequestId, permissions, target, 2, forUpdate);
+            }
+        }
+    }
+
+    protected async setPropertyValuePermissions(
+        token: string, clientRequestId: string, permissions: CreatePermissionDescription[],
+        resourcePath: string, objectType: KIXObjectType, objectId: string, propertyString: string,
+        forUpdate: boolean = false
+    ): Promise<void> {
+        if (resourcePath && objectId && propertyString) {
+            // tslint:disable-next-line:max-line-length
+            const target = `${resourcePath.match(/^\/.+/) ? resourcePath : '/' + resourcePath}{${propertyString} EQ ${objectId}}`;
+            if (forUpdate && objectType) {
+                await this.deleteRolePermissions(token, clientRequestId, permissions, target, 3, objectType, objectId);
+            }
+            if (permissions && !!permissions.length) {
+                this.setRolePermissions(token, clientRequestId, permissions, target, 3, forUpdate);
+            }
+        }
+    }
+
+    private async deleteRolePermissions(
+        token: string, clientRequestId: string, permissions: CreatePermissionDescription[],
+        target: string, permissionType: number, objectType: KIXObjectType, objectId: string
+    ): Promise<void> {
+        const roleService = KIXObjectServiceRegistry.getServiceInstance<RoleService>(
+            KIXObjectType.ROLE
+        );
+        if (roleService) {
+            const objects = await this.loadObjects(token, clientRequestId, objectType, [objectId],
+                new KIXObjectLoadingOptions(
+                    [`${objectType}.ConfiguredPermissions`], null, null, null, null, ['ConfiguredPermissions']
+                ), null
             );
-            if (roleService) {
-                const permissionTypes = await roleService.loadObjects<PermissionType>(
-                    token, clientRequestId, KIXObjectType.PERMISSION_TYPE, null, null, null
+            if (
+                objects && !!objects.length && (objects[0] as KIXObject).ConfiguredPermissions
+            ) {
+                let existingPermissions = (objects[0] as KIXObject).ConfiguredPermissions.Assigned;
+                if (permissionType === 3) {
+                    existingPermissions = (objects[0] as KIXObject).ConfiguredPermissions.DependingObjects;
+                }
+                const permissionsToDelete = existingPermissions.filter(
+                    (p) => !permissions || !!!permissions.length || !permissions.some(
+                        (cp) => cp.RoleID === p.RoleID && permissionType === p.TypeID && target === p.Target
+                    )
                 );
-                const permissionType = permissionTypes.find((pt) => pt.Name === 'Object');
-                if (permissionType) {
-                    let loadingOptions = null;
-                    if (forUpdate) {
-                        loadingOptions = new KIXObjectLoadingOptions(null, [
-                            new FilterCriteria(
-                                PermissionProperty.TYPE_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                                FilterType.AND, permissionType.ID
-                            ),
-                            new FilterCriteria(
-                                PermissionProperty.TARGET, SearchOperator.EQUALS, FilterDataType.STRING,
-                                FilterType.AND, `${resourcePath}/${objectId}`
-                            )
-                        ]);
+                if (!!permissionsToDelete.length) {
+                    for (const permission of permissionsToDelete) {
+                        await roleService.deletePermission(token, clientRequestId, permission.RoleID, permission.ID);
                     }
-                    const preparedPermissions = await this.getPreparedPermissions(
-                        permissions, permissionType, resourcePath, objectId
-                    );
-                    for (const pp of preparedPermissions) {
-                        await roleService.setPermissions(
-                            token, clientRequestId, pp[0], pp[1], forUpdate, loadingOptions
-                        );
-                    }
-                } else {
-                    const message = 'Permission type "Object" not found!';
-                    LoggingService.getInstance().error(message);
-                    throw new Error('-1', message);
                 }
             }
         }
     }
 
-    private async getPreparedPermissions(
-        permissions: CreatePermissionDescription[], objectType: PermissionType, resourcePath: string, objectId: string
+    private async setRolePermissions(
+        token: string, clientRequestId: string, permissions: CreatePermissionDescription[], target: string,
+        permissionType: number, forUpdate: boolean
+    ): Promise<void> {
+        const roleService = KIXObjectServiceRegistry.getServiceInstance<RoleService>(
+            KIXObjectType.ROLE
+        );
+        if (roleService) {
+            let loadingOptions = null;
+            if (forUpdate) {
+                loadingOptions = new KIXObjectLoadingOptions(null, [
+                    new FilterCriteria(
+                        PermissionProperty.TYPE_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                        FilterType.AND, permissionType
+                    ),
+                    new FilterCriteria(
+                        PermissionProperty.TARGET, SearchOperator.EQUALS, FilterDataType.STRING,
+                        FilterType.AND, target
+                    )
+                ]);
+            }
+            const preparedPermissions = await this.getPermissionsPerRole(permissions, permissionType, target);
+            for (const pp of preparedPermissions) {
+                await roleService.setPermissions(
+                    token, clientRequestId, pp[0], pp[1], forUpdate, loadingOptions
+                );
+            }
+        }
+    }
+
+    private async getPermissionsPerRole(
+        permissions: CreatePermissionDescription[], permissionTypeId: number, target: string
     ): Promise<Array<[number, CreatePermissionDescription[]]>> {
         const permissionsByRoleId: Array<[number, CreatePermissionDescription[]]> = [];
         permissions.forEach((p) => {
-            p.TypeID = objectType.ID;
-            p.Target = `${resourcePath}/${objectId}`;
+            p.TypeID = permissionTypeId;
+            p.Target = target;
             const pByRoleId = permissionsByRoleId.find((pbri) => pbri[0] === p.RoleID);
             if (pByRoleId) {
                 pByRoleId[1].push(p);

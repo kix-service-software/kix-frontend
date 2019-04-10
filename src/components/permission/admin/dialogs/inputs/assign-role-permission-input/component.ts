@@ -2,11 +2,11 @@ import { ComponentState } from "./ComponentState";
 import {
     FormInputComponent, PermissionFormData, CreatePermissionDescription,
     CRUD, KIXObjectType, FormFieldOption, Permission, Role,
-    KIXObjectLoadingOptions, FilterCriteria, RoleProperty, FilterDataType, FilterType
+    KIXObjectLoadingOptions, FilterCriteria, RoleProperty, FilterDataType, FilterType, ContextType
 } from "../../../../../../core/model";
 import {
     IdService, LabelService, ObjectPropertyValue,
-    KIXObjectService, SearchOperator
+    KIXObjectService, SearchOperator, ContextService
 } from "../../../../../../core/browser";
 import { RolePermissionManager } from "../../../../../../core/browser/user";
 
@@ -25,10 +25,10 @@ class Component extends FormInputComponent<any[], ComponentState> {
     public onInput(input: any): void {
         super.onInput(input);
         if (input.field && input.field.options && !!input.field.options.length) {
-            const isDependentOption: FormFieldOption = input.field.options.find(
-                (o: FormFieldOption) => o.option === 'IS_DEPENDENT'
+            const propValPermissionOption: FormFieldOption = input.field.options.find(
+                (o: FormFieldOption) => o.option === 'FOR_PROPERTY_VALUE_PERMISSION'
             );
-            this.state.showRequired = isDependentOption ? isDependentOption.value : false;
+            this.state.showRequired = propValPermissionOption ? propValPermissionOption.value : false;
         }
 
         return input;
@@ -79,39 +79,46 @@ class Component extends FormInputComponent<any[], ComponentState> {
     }
 
     public async setCurrentNode(): Promise<void> {
-        // TODO: get permissions of current object
         const permissionDescriptions: CreatePermissionDescription[] = [];
-        if (this.state.defaultValue && this.state.defaultValue.value && Array.isArray(this.state.defaultValue.value)) {
-            const roles = await KIXObjectService.loadObjects<Role>(KIXObjectType.ROLE, null,
-                new KIXObjectLoadingOptions(
-                    null, [
-                        new FilterCriteria(
-                            RoleProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
+        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        if (context) {
+            const object = await context.getObject();
+            if (object && object.ConfiguredPermissions) {
+                let permissons: Permission[] = object.ConfiguredPermissions.Assigned;
+                if (this.state.showRequired) {
+                    permissons = object.ConfiguredPermissions.DependingObjects;
+                }
+                const roles = await KIXObjectService.loadObjects<Role>(KIXObjectType.ROLE, null,
+                    new KIXObjectLoadingOptions(
+                        null, [
+                            new FilterCriteria(
+                                RoleProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
+                            )
+                        ]
+                    )
+                );
+                permissons.filter(
+                    (permission: Permission) => roles.some((r) => r.ID === permission.RoleID)
+                ).forEach((permission: Permission) => {
+                    this.rolePermissionManager.setValue(
+                        new ObjectPropertyValue(
+                            permission.RoleID.toString(), null, this.getPermissionFormData(permission),
+                            null, null, null, permission.ID.toString()
                         )
-                    ]
-                )
-            );
-            this.state.defaultValue.value.filter(
-                (permission: Permission) => roles.some((r) => r.ID === permission.RoleID)
-            ).forEach((permission: Permission) => {
-                this.rolePermissionManager.setValue(
-                    new ObjectPropertyValue(
-                        permission.RoleID.toString(), null, this.getPermissionFormData(permission),
-                        null, null, null, permission.ID.toString()
-                    )
-                );
-                permissionDescriptions.push(
-                    new CreatePermissionDescription(
-                        permission.TypeID,
-                        permission.Target,
-                        permission.IsRequired,
-                        permission.Value,
-                        permission.Comment,
-                        permission.RoleID,
-                        permission.ID
-                    )
-                );
-            });
+                    );
+                    permissionDescriptions.push(
+                        new CreatePermissionDescription(
+                            permission.TypeID,
+                            permission.Target,
+                            permission.IsRequired,
+                            permission.Value,
+                            permission.Comment,
+                            permission.RoleID,
+                            permission.ID
+                        )
+                    );
+                });
+            }
         }
         super.provideValue(permissionDescriptions);
     }

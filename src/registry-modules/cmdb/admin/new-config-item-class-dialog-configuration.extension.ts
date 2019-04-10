@@ -63,8 +63,8 @@ export class Extension implements IConfigurationExtension {
 
             const dependentObjectPermissionGroup = new FormGroup('Translatable#Permissions on dependent objects', [
                 new FormField(
-                    null, 'DEPENDENT_OBJECT_PERMISSION', 'assign-role-permission-input', false, null, [
-                        new FormFieldOption('IS_DEPENDENT', true),
+                    null, 'PROPERTY_VALUE_PERMISSION', 'assign-role-permission-input', false, null, [
+                        new FormFieldOption('FOR_PROPERTY_VALUE_PERMISSION', true),
                     ]
                 )
             ]);
