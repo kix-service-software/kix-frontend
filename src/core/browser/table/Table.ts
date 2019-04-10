@@ -124,10 +124,7 @@ export class Table implements ITable {
         const column = new Column(this, columnConfiguration);
 
         this.rows.forEach((r) => {
-            const cell = r.getCell(column.getColumnId());
-            if (!cell) {
-                r.addCell(new TableValue(column.getColumnId(), null));
-            }
+            r.addCell(new TableValue(column.getColumnId(), null));
         });
 
         this.columns.push(column);
@@ -423,6 +420,13 @@ export class Table implements ITable {
             selectedRows = this.getSelectedRows(true);
         }
         await this.loadRowData();
+        if (this.columns && !!this.columns.length) {
+            this.columns.forEach((c) =>
+                this.rows.forEach((r) => {
+                    r.addCell(new TableValue(c.getColumnId(), null));
+                })
+            );
+        }
         if (keepSelection && !!selectedRows.length) {
             // TODO: auch ohne Object sollte es möglich sein, die Selektion zu erhalten
             selectedRows.map(
