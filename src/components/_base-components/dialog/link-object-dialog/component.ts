@@ -260,7 +260,7 @@ class LinkDialogComponent {
             );
 
             const toast = await TranslationService.translate(
-                '{0} Verknüpfung(en) erfolgreich zugeordnet.', [newLinks.length]
+                '{0} links assigned.', [newLinks.length]
             );
             BrowserUtil.openSuccessOverlay(toast);
             this.setLinkedAsValues(newLinks);

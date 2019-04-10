@@ -19,7 +19,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
 
         const articleListWidget =
             new ConfiguredWidget('20180727-faq-article-list-widget', new WidgetConfiguration(
-                'table-widget', 'Übersicht FAQ', ['faq-article-create-action', 'csv-export-action'],
+                'table-widget', 'Translatable#Overview FAQ', ['faq-article-create-action', 'csv-export-action'],
                 new TableWidgetSettings(
                     KIXObjectType.FAQ_ARTICLE, null,
                     new TableConfiguration(
@@ -44,7 +44,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
 
         const notesSidebar =
             new ConfiguredWidget('20180726-faq-notes', new WidgetConfiguration(
-                'notes-widget', 'Notizen', [], {},
+                'notes-widget', 'Translatable#Notes', [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-note', false)
             );
 
