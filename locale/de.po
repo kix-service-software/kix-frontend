@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-03-19 14:06+0000\n"
-"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
+"PO-Revision-Date: 2019-04-10 09:25+0000\n"
+"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -321,7 +321,7 @@ msgid "Category"
 msgstr "Kategorie"
 
 msgid "No contact available"
-msgstr "Kein Ansprechpartner verfügbar"
+msgstr "Kein Kontakt verfügbar"
 
 msgid "No customer available"
 msgstr "Kein Kunde verfügbar"
@@ -400,7 +400,7 @@ msgid "Create Priorität"
 msgstr "Neue Priorität"
 
 msgid "New Contact"
-msgstr "Neuer Ansprechpartner"
+msgstr "Neuer Kontakt"
 
 msgid "New Article"
 msgstr "Neuer Artikel"
@@ -577,7 +577,7 @@ msgid "Submit"
 msgstr "Übernehmen"
 
 msgid "Overview Contacts"
-msgstr "Übersicht Ansprechpartner"
+msgstr "Übersicht Kontakte"
 
 msgid "Overview Config Items"
 msgstr "Übersicht Config Items"
@@ -968,8 +968,8 @@ msgstr "Leerwert ersetzen"
 msgid "<p>The first line of the source file must contain the column-to-object attribute assignment by using KIX-internal identifiers (e.g. CompanyCustomerID, CompanyName, etc.). In order to update existing customer data sets, their CompanyCustomerID must be specified. If new data sets needs to be imported, all mandatory attributes must be given.</p></br><h3>Operation Explanation:</h3><ul><li>Replace empty value = selected attribute will be set to the specified value if no information is given in source file</li><li>Force = selected attribute will be set to the specified value, no matter if a value is defined in the source file or not</li><li>Ignore = selected attribute will be ignored in the import"
 msgstr "<p>Die erste Zeile der Quelldatei muss die Zuordnung der Spalten zu den Objektattributen entsprechend der KIX-internen Bezeichner (z.B. CompanyCustomerID, CompanyName, etc.) beinhalten. Für Aktualisierung von Einträgen ist die Angabe einer bestehenden CompanyCustomerID zwingend erforderlich. Für Neuanlagen ist die Angabe aller Pflichtattribute zwingend erforderlich.</p></br><h3>Erläuterung der Operatoren:</h3><ul><li>Leerwert ersetzen = Für die gewählte Spalte wird in allen Zeilen, die keinen Wert enthalten, der hier gewählte Wert gesetzt.</li><li>Erzwingen = Für die gewählte Spalte wird in allen Zeilen der hier gewählte Wert gesetzt.</li><li>Ignorieren = Die gewählte Spalte wird nicht importiert."
 
-msgid "<p>The first line of the source file must contain the column-to-object attribute assignment by using KIX-internal identifiers (e.g. UserLogin, UserCustomerID, UserLastname, etc.). In order to update existing customer data sets, their UserLogin and UserCustomerID must be specified. If new data sets needs to be imported, all mandatory attributes must be given.</p></br><h3>Operation Explanation:</h3><ul><li>Replace empty value = selected attribute will be set to the specified value if no information is given in source file</li><li>Force = selected attribute will be set to the specified value, no matter if a value is defined in the source file or not</li><li>Ignore = selected attribute will be ignored in the import"</li>
-msgstr "<p>Die erste Zeile der Quelldatei muss die Zuordnung der Spalten zu den Objektattributen entsprechend der KIX-internen Bezeichner (z.B. UserLogin, UserCustomerID, UserLastname, etc.) beinhalten. Für Aktualisierung von Einträgen ist die Angabe einer bestehenden UserLogin sowie der UserCustomerID zwingend erforderlich. Für Neuanlagen ist die Angabe aller Pflichtattribute zwingend erforderlich.</p></br><h3>Erläuterung der Operatoren:</h3><ul><li>Leerwert ersetzen = Für die gewählte Spalte wird in allen Zeilen, die keinen Wert enthalten, der hier gewählte Wert gesetzt.</li><li>Erzwingen = Für die gewählte Spalte wird in allen Zeilen der hier gewählte Wert gesetzt.</li><li>Ignorieren = Die gewählte Spalte wird nicht importiert."</li>
+msgid "<p>The first line of the source file must contain the column-to-object attribute assignment by using KIX-internal identifiers (e.g. UserLogin, UserCustomerID, UserLastname, etc.). In order to update existing customer data sets, their UserLogin and UserCustomerID must be specified. If new data sets needs to be imported, all mandatory attributes must be given.</p></br><h3>Operation Explanation:</h3><ul><li>Replace empty value = selected attribute will be set to the specified value if no information is given in source file</li><li>Force = selected attribute will be set to the specified value, no matter if a value is defined in the source file or not</li><li>Ignore = selected attribute will be ignored in the import"
+msgstr "<p>Die erste Zeile der Quelldatei muss die Zuordnung der Spalten zu den Objektattributen entsprechend der KIX-internen Bezeichner (z.B. UserLogin, UserCustomerID, UserLastname, etc.) beinhalten. Für Aktualisierung von Einträgen ist die Angabe einer bestehenden UserLogin sowie der UserCustomerID zwingend erforderlich. Für Neuanlagen ist die Angabe aller Pflichtattribute zwingend erforderlich.</p></br><h3>Erläuterung der Operatoren:</h3><ul><li>Leerwert ersetzen = Für die gewählte Spalte wird in allen Zeilen, die keinen Wert enthalten, der hier gewählte Wert gesetzt.</li><li>Erzwingen = Für die gewählte Spalte wird in allen Zeilen der hier gewählte Wert gesetzt.</li><li>Ignorieren = Die gewählte Spalte wird nicht importiert."
 
 msgid "User Management"
 msgstr "Nutzerverwaltung"
