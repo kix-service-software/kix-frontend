@@ -15,7 +15,9 @@ export class PermissionLabelProvider implements ILabelProvider<Permission> {
     }
 
     public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === KIXObjectType.PERMISSION || objectType === KIXObjectType.ROLE_PERMISSION;
+        return objectType === KIXObjectType.PERMISSION ||
+            objectType === KIXObjectType.ROLE_PERMISSION ||
+            objectType === KIXObjectType.PERMISSION_DEPENDING_OBJECTS;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
