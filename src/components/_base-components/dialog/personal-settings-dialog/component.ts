@@ -29,7 +29,7 @@ class Component {
         );
 
         const form = await this.prepareForm();
-        await FormService.getInstance().addform(form);
+        await FormService.getInstance().addForm(form);
         this.state.formId = form.id;
         this.state.loading = false;
     }

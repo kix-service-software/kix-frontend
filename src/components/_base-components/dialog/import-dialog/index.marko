@@ -2,7 +2,9 @@
     <@content>
         <div.import-container>
             <if(state.importManager)>
-                <main-form formId=state.importConfigFormId key="input-configuration-form"/>
+                <if(state.importConfigFormId)>
+                    <main-form formId=state.importConfigFormId key="input-configuration-form"/>
+                </if>
                 <div.form.import-attributes-container>
                     <widget instanceId="dynamic-form-field-group" title=state.translations["Translatable#Replace Values"] key="attributes">
                         <@content>
