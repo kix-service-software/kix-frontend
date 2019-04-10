@@ -52,7 +52,19 @@ export class HttpService {
         if (options.method === 'GET') {
             parameter = ' ' + JSON.stringify(options.qs);
         } else if (options.method === 'POST' || options.method === 'PATCH') {
-            parameter = ' ' + JSON.stringify(options.body);
+            if (typeof options.body === 'object') {
+                const body = {};
+                for (const param in options.body) {
+                    if (param.match(/password/i)) {
+                        body[param] = '*****';
+                    } else {
+                        body[param] = options.body[param];
+                    }
+                }
+                parameter = ' ' + JSON.stringify(body);
+            } else {
+                parameter = ' ' + JSON.stringify(options.body);
+            }
             parameter = parameter.replace('\\n', '\n');
         }
 
