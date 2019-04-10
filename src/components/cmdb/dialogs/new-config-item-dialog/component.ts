@@ -82,7 +82,7 @@ class Component {
             if (validationError) {
                 this.showValidationError(result);
             } else {
-                DialogService.getInstance().setMainDialogLoading(true, 'Config Item wird angelegt');
+                DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Create Config Item');
                 const cmdbService
                     = ServiceRegistry.getServiceInstance<CMDBService>(KIXObjectType.CONFIG_ITEM);
 
@@ -90,7 +90,7 @@ class Component {
                 await cmdbService.createConfigItem(this.state.formId, ciClass.ID)
                     .then((configItemId) => {
                         DialogService.getInstance().setMainDialogLoading(false);
-                        BrowserUtil.openSuccessOverlay('Config Item wurde erfolgreich angelegt.');
+                        BrowserUtil.openSuccessOverlay('Translatable#Config Item successfully created.');
                         DialogService.getInstance().submitMainDialog();
                         const routingConfiguration = new RoutingConfiguration(
                             null, ConfigItemDetailsContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM,
