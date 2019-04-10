@@ -8,7 +8,7 @@ import { EventService, IEventSubscriber } from '../../../../core/browser/event';
 import { ImportService, ImportPropertyOperator } from '../../../../core/browser/import';
 import {
     KIXObjectType, ContextMode, Form, FormContext, FormField, FormFieldOption,
-    FormFieldOptionsForDefaultSelectInput, TreeNode, FormFieldValue, WidgetType,
+    DefaultSelectInputFormOption, TreeNode, FormFieldValue, WidgetType,
     KIXObject, OverlayType, ComponentContent, DataType, Error, SortOrder, ContextType, Context
 } from '../../../../core/model';
 import { FormGroup } from '../../../../core/model/components/form/FormGroup';
@@ -152,7 +152,7 @@ class Component {
                 'Translatable#Select a character set.',
                 [
                     new FormFieldOption(
-                        FormFieldOptionsForDefaultSelectInput.NODES,
+                        DefaultSelectInputFormOption.NODES,
                         this.importConfigs.get('character_set').map((v) => new TreeNode(v.key, v.label))
                     )
                 ],
@@ -163,10 +163,10 @@ class Component {
                 'Translatable#Select a value separator.',
                 [
                     new FormFieldOption(
-                        FormFieldOptionsForDefaultSelectInput.NODES,
+                        DefaultSelectInputFormOption.NODES,
                         this.importConfigs.get('value_separator').map((v) => new TreeNode(v.key, v.label))
                     ),
-                    new FormFieldOption(FormFieldOptionsForDefaultSelectInput.MULTI, true)
+                    new FormFieldOption(DefaultSelectInputFormOption.MULTI, true)
                 ],
                 new FormFieldValue('SEMICOLON')
             ),
@@ -175,7 +175,7 @@ class Component {
                 'Translatable#Select a text separator.',
                 [
                     new FormFieldOption(
-                        FormFieldOptionsForDefaultSelectInput.NODES,
+                        DefaultSelectInputFormOption.NODES,
                         this.importConfigs.get('text_separator').map((v) => new TreeNode(v.key, v.label))
                     )
                 ],
