@@ -59,7 +59,7 @@ export class TranslationService extends KIXObjectService<Translation> {
         return languages;
     }
 
-    public async getSystemDefaultLanguage(): Promise<string> {
+    public static async getSystemDefaultLanguage(): Promise<string> {
         const defaultLanguageConfig = await KIXObjectService.loadObjects<SysConfigItem>(
             KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.DEFAULT_LANGUAGE]
         );

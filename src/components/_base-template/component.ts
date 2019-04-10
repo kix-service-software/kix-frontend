@@ -15,6 +15,7 @@ import { AuthenticationSocketClient } from '../../core/browser/application/Authe
 import { NotificationSocketClient } from '../../core/browser/notifications';
 import { ComponentInput } from './ComponentInput';
 import { AgentService } from '../../core/browser/application/AgentService';
+import { SysConfigService } from '../../core/browser/sysconfig';
 
 class Component {
 
@@ -37,6 +38,7 @@ class Component {
 
         ServiceRegistry.registerServiceInstance(AgentService.getInstance());
         ServiceRegistry.registerServiceInstance(TranslationService.getInstance());
+        ServiceRegistry.registerServiceInstance(SysConfigService.getInstance());
 
         this.state.loading = true;
         this.state.loadingHint = await TranslationService.translate('Loading ...');

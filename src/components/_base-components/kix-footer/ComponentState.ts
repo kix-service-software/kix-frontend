@@ -7,7 +7,8 @@ export class ComponentState {
         public kixProduct: string = null,
         public currentUserLogin: string = null,
         public buildNumber: string = null,
-        public releaseInfo: ReleaseInfo = null
+        public releaseInfo: ReleaseInfo = null,
+        public impressLink: string = null
     ) { }
 
 }
