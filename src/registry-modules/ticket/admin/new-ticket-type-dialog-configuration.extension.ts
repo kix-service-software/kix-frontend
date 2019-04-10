@@ -42,7 +42,7 @@ export class Extension implements IConfigurationExtension {
             ));
             fields.push(new FormField(
                 'Translatable#Validity', TicketTypeProperty.VALID_ID, 'valid-input', true,
-                'Translatable#Legen Sie fest, ob der Type „gültig“, „ungültig“ oder „temporär ungültig“ ist.',
+                'Translatable#Set the type as „valid“, „invalid (temporarily)“, or „invalid“.',
                 null, new FormFieldValue(1)
             ));
 
