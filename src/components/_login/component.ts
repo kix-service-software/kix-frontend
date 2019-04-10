@@ -13,7 +13,6 @@ class Component {
 
     public onInput(input: any): void {
         this.state.logout = input.logout;
-        this.state.releaseInfo = input.releaseInfo;
     }
 
     public onMount(): void {

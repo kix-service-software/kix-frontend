@@ -57,7 +57,6 @@ class Component extends AbstractMarkoComponent {
         ServiceRegistry.registerServiceInstance(LinkService.getInstance());
         ServiceRegistry.registerServiceInstance(GeneralCatalogService.getInstance());
         ServiceRegistry.registerServiceInstance(TextModuleService.getInstance());
-        ServiceRegistry.registerServiceInstance(SysConfigService.getInstance());
         ServiceRegistry.registerServiceInstance(SystemAddressService.getInstance());
         ServiceRegistry.registerServiceInstance(DynamicFieldService.getInstance());
         ServiceRegistry.registerServiceInstance(SlaService.getInstance());

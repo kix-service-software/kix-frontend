@@ -1,6 +1,8 @@
 import { ComponentState } from './ComponentState';
-import { ReleaseInfo } from '../../../core/model';
+import { ReleaseInfo, SysConfigItem, KIXObjectType, SysConfigKey } from '../../../core/model';
 import { ObjectDataService } from '../../../core/browser/ObjectDataService';
+import { KIXObjectService } from '../../../core/browser';
+import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 
 class Component {
 
@@ -12,6 +14,7 @@ class Component {
 
     public onInput(input: any): void {
         this.state.releaseInfo = input.releaseInfo;
+        this.state.impressLink = input.impressLink;
     }
 
     public async onMount(): Promise<void> {
@@ -28,6 +31,23 @@ class Component {
             this.state.kixProduct = this.state.releaseInfo.product;
             this.state.kixVersion = this.state.releaseInfo.version;
             this.state.buildNumber = this.getBuildNumber(this.state.releaseInfo);
+        }
+
+        if (!this.state.impressLink) {
+            const impressConfig = await KIXObjectService.loadObjects<SysConfigItem>(
+                KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.IMPRESS_LINK]
+            );
+
+            if (impressConfig && impressConfig.length) {
+                const userLanguage = await TranslationService.getUserLanguage();
+                const data = impressConfig[0].Data;
+                if (data[userLanguage]) {
+                    this.state.impressLink = data[userLanguage];
+                } else {
+                    const defaultLanguage = await TranslationService.getSystemDefaultLanguage();
+                    this.state.impressLink = data[defaultLanguage];
+                }
+            }
         }
     }
 

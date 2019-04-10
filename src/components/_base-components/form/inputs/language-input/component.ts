@@ -37,7 +37,7 @@ class Component extends FormInputComponent<string, CompontentState> {
         if (this.state.defaultValue && this.state.defaultValue.value) {
             lang = this.state.defaultValue.value;
         } else {
-            lang = await TranslationService.getInstance().getSystemDefaultLanguage();
+            lang = await TranslationService.getSystemDefaultLanguage();
         }
 
         if (lang) {
