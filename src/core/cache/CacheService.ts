@@ -121,6 +121,12 @@ export class CacheService {
             case KIXObjectType.USER:
                 cacheKeyPrefixes.push(KIXObjectType.ROLE);
                 break;
+            case KIXObjectType.LINK:
+            case KIXObjectType.LINK_OBJECT:
+                cacheKeyPrefixes.push(KIXObjectType.TICKET);
+                cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
+                cacheKeyPrefixes.push(KIXObjectType.FAQ_ARTICLE);
+                break;
             default:
         }
 

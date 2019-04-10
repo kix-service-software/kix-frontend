@@ -69,7 +69,7 @@ export class Extension implements IConfigurationExtension {
                 )
             ]);
 
-            const form = new Form(formId, 'Translatable#Edit CI Class', [
+            const form = new Form(formId, 'Translatable#Edit Class', [
                 infoGroup,
                 objectPermissionGroup,
                 dependentObjectPermissionGroup
