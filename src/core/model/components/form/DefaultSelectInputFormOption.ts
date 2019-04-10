@@ -1,4 +1,4 @@
-export enum FormFieldOptionsForDefaultSelectInput {
+export enum DefaultSelectInputFormOption {
 
     SELECTED_NODES = 'SELECTED_NODES',
 

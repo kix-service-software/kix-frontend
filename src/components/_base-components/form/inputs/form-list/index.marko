@@ -24,7 +24,9 @@
                 <for|node| of=state.selectedNodes>
                     <div.selected-node title=node.label key=("form-list-selected-node-" + state.listId + "[]")>
                         <icon icon=node.icon showUnknown=true/>
-                        <span.item-text>${node.label}</span>
+                        <span.item-text>
+                            <translation-string pattern=node.label/>
+                        </span>
                         <if(node.secondaryIcon)>
                             <icon icon=node.secondaryIcon showUnknown=true/>
                         </if>
