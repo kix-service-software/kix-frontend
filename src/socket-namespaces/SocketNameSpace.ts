@@ -31,7 +31,11 @@ export abstract class SocketNameSpace implements ISocketNamespace {
             const logData = {};
             for (const key in data as any) {
                 if (key !== 'token') {
-                    logData[key] = data[key];
+                    if (key.match(/password/i)) {
+                        logData[key] = '*****';
+                    } else {
+                        logData[key] = data[key];
+                    }
                 }
             }
 
