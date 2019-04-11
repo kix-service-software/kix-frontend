@@ -126,6 +126,8 @@ export class CacheService {
                 cacheKeyPrefixes.push(KIXObjectType.TICKET);
                 cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
                 cacheKeyPrefixes.push(KIXObjectType.FAQ_ARTICLE);
+                cacheKeyPrefixes.push(KIXObjectType.LINK);
+                cacheKeyPrefixes.push(KIXObjectType.LINK_OBJECT);
                 break;
             default:
         }
