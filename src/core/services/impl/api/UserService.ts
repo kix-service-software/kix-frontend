@@ -160,7 +160,7 @@ export class UserService extends KIXObjectService {
         }
 
         const baseUri = this.buildUri(this.RESOURCE_URI, userId, 'roleids');
-        const existingRoleIds = await this.load(token, null, baseUri, null, null, 'RoleID');
+        const existingRoleIds = await this.load(token, null, baseUri, null, null, 'RoleIDs');
 
         const rolesToDelete = existingRoleIds.filter((r) => !roleIds.some((rid) => rid === r));
         const rolesToCreate = roleIds.filter((r) => !existingRoleIds.some((rid) => rid === r));
