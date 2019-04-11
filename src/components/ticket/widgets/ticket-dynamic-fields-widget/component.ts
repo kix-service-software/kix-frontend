@@ -49,13 +49,13 @@ class Component {
 
     private async initWidget(ticket: Ticket): Promise<void> {
         this.state.ticket = ticket;
-        this.setActions();
+        this.prepareActions();
         this.setDynamicFields();
     }
 
-    private setActions(): void {
+    private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.ticket) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.actions = await ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, [this.state.ticket]
             );
         }

@@ -11,8 +11,9 @@ export abstract class AbstractAction<T = any> implements IAction<T> {
     public icon: string;
     public data: T;
 
-    public abstract initAction(): void;
-    public setData(data: T): void {
+    public abstract initAction(): Promise<void>;
+
+    public async setData(data: T): Promise<void> {
         this.data = data;
     }
 

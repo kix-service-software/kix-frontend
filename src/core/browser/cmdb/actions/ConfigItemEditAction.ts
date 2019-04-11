@@ -7,7 +7,7 @@ import { KIXObjectService } from "../../kix";
 
 export class ConfigItemEditAction extends AbstractAction<ConfigItem> {
 
-    public initAction(): void {
+    public async initAction(): Promise<void> {
         this.text = 'Edit';
         this.icon = "kix-icon-edit";
     }

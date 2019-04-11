@@ -4,7 +4,7 @@ import {
     LoadObjectsResponse, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     CreateObjectRequest, CreateObjectResponse, KIXObjectSpecificCreateOptions,
     DeleteObjectRequest, DeleteObjectResponse, UpdateObjectRequest, UpdateObjectResponse,
-    KIXObjectSpecificDeleteOptions, ISocketResponse, ISocketObjectRequest, Error
+    KIXObjectSpecificDeleteOptions, ISocketResponse, ISocketObjectRequest, Error, SocketEvent
 } from "../../model";
 import { ClientStorageService } from "../ClientStorageService";
 import { IdService } from "../IdService";
@@ -12,6 +12,7 @@ import { FactoryService } from "./FactoryService";
 import { ObjectDataService } from "../ObjectDataService";
 import { CacheService } from "../cache";
 import { SocketErrorResponse } from "../../common";
+import { PermissionError } from "../../model/PermissionError";
 
 export class KIXObjectSocketClient extends SocketClient {
 
@@ -80,9 +81,14 @@ export class KIXObjectSocketClient extends SocketClient {
                 await CacheService.getInstance().set(cacheKey, objects, request.objectType);
                 this.requestPromises.delete(cacheKey);
                 resolve(objects);
-            }).catch((error) => {
+            }).catch(async (error) => {
                 this.requestPromises.delete(cacheKey);
-                reject(error);
+                if (error instanceof PermissionError) {
+                    await CacheService.getInstance().set(cacheKey, [], request.objectType);
+                    resolve([]);
+                } else {
+                    reject(error);
+                }
             });
         });
     }
@@ -176,6 +182,16 @@ export class KIXObjectSocketClient extends SocketClient {
                     console.error(errorMessage);
                     console.error(error.error);
                     reject(error.error);
+                }
+            });
+
+            this.socket.on(SocketEvent.PERMISSION_ERROR, (error: SocketErrorResponse) => {
+                if (error.requestId === requestObject.requestId) {
+                    window.clearTimeout(timeout);
+                    console.error('No permissions');
+                    console.error(error.error);
+                    const permissionError = error.error as PermissionError;
+                    reject(new PermissionError(permissionError, permissionError.resource, permissionError.method));
                 }
             });
 

@@ -84,11 +84,17 @@ export class Cell implements ICell {
         }
 
         const displayValue = await this.getDisplayValue();
-        const match = filterCriteria.every(
-            (c) => FilterUtil.checkTableFilterCriteria(
+        let match = false;
+
+        const matchPromises = [];
+        filterCriteria.forEach(
+            (c) => matchPromises.push(FilterUtil.checkTableFilterCriteria(
                 c, c.useDisplayValue ? displayValue : this.tableValue.objectValue
-            )
+            ))
         );
+
+        const result = await Promise.all<boolean>(matchPromises);
+        match = result.every((r) => r);
 
         return match;
     }

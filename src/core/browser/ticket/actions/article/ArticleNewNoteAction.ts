@@ -4,7 +4,7 @@ import { DialogService } from '../../../components/dialog';
 
 export class ArticleNewNoteAction extends AbstractAction {
 
-    public initAction(): void {
+    public async initAction(): Promise<void> {
         this.text = 'Translatable#New Article';
         this.icon = 'kix-icon-new-note';
     }

@@ -7,6 +7,8 @@ import { ProfilingService } from '../ProfilingService';
 import { Error } from '../../../model';
 import { AuthenticationService } from './AuthenticationService';
 import { CacheService } from '../../../cache';
+import { PermissionTypeBrowserFactory } from '../../../browser/permission';
+import { PermissionError } from '../../../model/PermissionError';
 
 export class HttpService {
 
@@ -84,7 +86,11 @@ export class HttpService {
                     ProfilingService.getInstance().stop(profileTaskId, response);
                 }).catch((error) => {
                     LoggingService.getInstance().error('Error during HTTP ' + options.method + ' request.', error);
-                    reject(this.createError(error));
+                    if (error.statusCode === 403) {
+                        reject(new PermissionError(this.createError(error), resource, options.method));
+                    } else {
+                        reject(this.createError(error));
+                    }
                 });
         });
     }

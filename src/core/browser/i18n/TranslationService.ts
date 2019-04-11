@@ -67,7 +67,7 @@ export class TranslationService extends KIXObjectService<Translation> {
         return defaultLanguageConfig && defaultLanguageConfig.length ? defaultLanguageConfig[0].Data : null;
     }
 
-    public checkFilterValue(translation: Translation, criteria: TableFilterCriteria): boolean {
+    public async checkFilterValue(translation: Translation, criteria: TableFilterCriteria): Promise<boolean> {
         if (translation) {
             switch (criteria.property) {
                 case TranslationProperty.LANGUAGES:

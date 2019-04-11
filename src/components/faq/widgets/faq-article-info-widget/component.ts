@@ -49,7 +49,7 @@ class Component {
         this.state.loading = true;
 
         this.state.faqArticle = faqArticle ? faqArticle : await context.getObject<FAQArticle>();
-        this.setActions();
+        this.prepareActions();
         this.createLabels();
 
         setTimeout(() => {
@@ -57,9 +57,9 @@ class Component {
         }, 50);
     }
 
-    private setActions(): void {
+    private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.faqArticle) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.actions = await ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, [this.state.faqArticle]
             );
         }

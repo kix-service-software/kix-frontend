@@ -285,14 +285,14 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return [];
     }
 
-    public static checkFilterValue(
+    public static async checkFilterValue(
         objectType: KIXObjectType, object: KIXObject, criteria: TableFilterCriteria
-    ): boolean {
+    ): Promise<boolean> {
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
-        return service ? service.checkFilterValue(object, criteria) : true;
+        return service ? await service.checkFilterValue(object, criteria) : true;
     }
 
-    public checkFilterValue(object: T, criteria: TableFilterCriteria): boolean {
+    public async checkFilterValue(object: T, criteria: TableFilterCriteria): Promise<boolean> {
         return true;
     }
 

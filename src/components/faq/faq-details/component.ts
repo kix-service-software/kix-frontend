@@ -59,6 +59,8 @@ class Component {
         this.state.contentWidgets = this.context.getContent();
 
         await this.prepareTitle();
+        await this.prepareActions();
+        await this.preapreFAQActions();
 
         setTimeout(() => {
             this.state.loading = false;
@@ -69,22 +71,22 @@ class Component {
         this.state.title = await this.context.getDisplayText();
     }
 
-    public getFAQActions(): AbstractAction[] {
+    public async preapreFAQActions(): Promise<void> {
         let actions = [];
         const config = this.state.configuration;
         if (config && this.state.faqArticle) {
-            actions = ActionFactory.getInstance().generateActions(config.faqActions, [this.state.faqArticle]);
+            actions = await ActionFactory.getInstance().generateActions(config.faqActions, [this.state.faqArticle]);
         }
-        return actions;
+        this.state.faqActions = actions;
     }
 
-    public getActions(): AbstractAction[] {
+    public async prepareActions(): Promise<void> {
         let actions = [];
         const config = this.state.configuration;
         if (config && this.state.faqArticle) {
-            actions = ActionFactory.getInstance().generateActions(config.actions, [this.state.faqArticle]);
+            actions = await ActionFactory.getInstance().generateActions(config.actions, [this.state.faqArticle]);
         }
-        return actions;
+        this.state.actions = actions;
     }
 
     public getWidgetTemplate(instanceId: string): any {

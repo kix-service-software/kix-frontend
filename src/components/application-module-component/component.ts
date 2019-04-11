@@ -45,6 +45,7 @@ import { DialogService } from '../../core/browser/components/dialog';
 import { AgentService } from '../../core/browser/application/AgentService';
 import { PermissionLabelProvider } from '../../core/browser/permission';
 import { PermissionsTableFactory, PermissionTableCSSHandler } from '../../core/browser/application';
+import { ServiceService } from '../../core/browser/service/ServiceService';
 
 class Component extends AbstractMarkoComponent {
 
@@ -62,6 +63,7 @@ class Component extends AbstractMarkoComponent {
         ServiceRegistry.registerServiceInstance(SlaService.getInstance());
         ServiceRegistry.registerServiceInstance(ObjectIconService.getInstance());
         ServiceRegistry.registerServiceInstance(TranslationFormService.getInstance());
+        ServiceRegistry.registerServiceInstance(ServiceService.getInstance());
 
         ServiceRegistry.registerServiceInstance(PersonalSettingsFormService.getInstance());
 

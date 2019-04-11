@@ -34,7 +34,7 @@ export enum UserProperty {
 
     USER_COMMENT = 'UserComment',
 
-    USER_PASSWORD = 'UserPassword',
+    USER_PASSWORD = 'UserPw',
 
     ROLEIDS = 'RoleIDs',
 

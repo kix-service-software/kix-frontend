@@ -12,7 +12,7 @@ export class ImportAction extends AbstractAction<ITable> {
     public eventSubscriberId: string;
     public objectType: KIXObjectType;
 
-    public initAction(): void {
+    public async initAction(): Promise<void> {
         this.text = 'Translatable#Import';
         this.icon = 'kix-icon-import';
         this.eventSubscriberId = IdService.generateDateBasedId('import-action-');

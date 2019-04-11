@@ -3,7 +3,7 @@ import { ContextService } from '../../../context';
 
 export class ConfigItemClassCreateAction extends AbstractAction {
 
-    public initAction(): void {
+    public async initAction(): Promise<void> {
         this.text = 'Translatable#New Class';
         this.icon = 'kix-icon-new-gear';
     }

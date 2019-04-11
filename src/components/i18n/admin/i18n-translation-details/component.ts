@@ -1,5 +1,5 @@
 import {
-    AbstractMarkoComponent, ContextService, WidgetService, ActionFactory, IdService
+    AbstractMarkoComponent, ContextService, WidgetService, ActionFactory
 } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import { KIXObjectType, WidgetType, Translation } from '../../../../core/model';
@@ -76,14 +76,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.title = this.translation.Pattern;
     }
 
-    private prepareActions(): void {
+    private async prepareActions(): Promise<void> {
         const config = this.configuration;
         if (config && this.translation) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.actions = await ActionFactory.getInstance().generateActions(
                 config.actions, this.translation
             );
 
-            const generalActions = ActionFactory.getInstance().generateActions(
+            const generalActions = await ActionFactory.getInstance().generateActions(
                 config.generalActions, this.translation
             );
 

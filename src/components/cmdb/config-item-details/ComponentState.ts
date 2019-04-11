@@ -1,4 +1,4 @@
-import { ConfiguredWidget, ConfigItem } from "../../../core/model";
+import { ConfiguredWidget, ConfigItem, IAction } from "../../../core/model";
 import { ConfigItemDetailsContextConfiguration } from "../../../core/browser/cmdb";
 
 export class ComponentState {
@@ -12,7 +12,9 @@ export class ComponentState {
         public tabWidgets: ConfiguredWidget[] = [],
         public contentWidgets: ConfiguredWidget[] = [],
         public loading: boolean = true,
-        public title: string = ''
+        public title: string = '',
+        public actions: IAction[] = [],
+        public configItemActions: IAction[] = []
     ) { }
 
 }

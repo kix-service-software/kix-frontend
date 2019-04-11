@@ -3,13 +3,12 @@ import { TicketLabelProvider, TicketService, TicketDetailsContext } from "../../
 import { ContextService } from '../../../../core/browser/context';
 import {
     ObjectIcon, KIXObjectType, Ticket, SysconfigUtil,
-    ContextMode, CustomerProperty, ContactProperty
+    ContextMode, CustomerProperty, ContactProperty, Service
 } from '../../../../core/model';
-import { ActionFactory, IdService } from '../../../../core/browser';
+import { ActionFactory, IdService, KIXObjectService } from '../../../../core/browser';
 import { RoutingConfiguration } from '../../../../core/browser/router';
 import { ContactDetailsContext } from '../../../../core/browser/contact';
 import { CustomerDetailsContext } from '../../../../core/browser/customer';
-import { ObjectDataService } from '../../../../core/browser/ObjectDataService';
 
 class Component {
 
@@ -74,23 +73,21 @@ class Component {
         this.setActions();
     }
 
-    private setActions(): void {
+    private async setActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.ticket) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.actions = await ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, [this.state.ticket]
             );
         }
     }
 
-    public getIncidentStateId(): number {
+    public async getIncidentStateId(): Promise<number> {
         const serviceId = this.state.ticket.ServiceID;
         let incidentStateId = 0;
-        const objectData = ObjectDataService.getInstance().getObjectData();
-        if (objectData) {
-            const service = objectData.services.find((s) => s.ServiceID === serviceId);
-            if (service) {
-                incidentStateId = service.IncidentState.CurInciStateID;
-            }
+        const services = await KIXObjectService.loadObjects<Service>(KIXObjectType.SERVICE, [serviceId]);
+        const service = services.find((s) => s.ServiceID === serviceId);
+        if (service) {
+            incidentStateId = service.IncidentState.CurInciStateID;
         }
 
         return incidentStateId;

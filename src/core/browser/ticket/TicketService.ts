@@ -12,6 +12,7 @@ import { SearchProperty } from '../SearchProperty';
 import { LabelService } from '../LabelService';
 import { ObjectDataService } from '../ObjectDataService';
 import { TicketSocketClient } from './TicketSocketClient';
+import { AgentService } from '../application/AgentService';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -113,7 +114,8 @@ export class TicketService extends KIXObjectService<Ticket> {
                 values = queuesHierarchy ? this.prepareQueueTree(queuesHierarchy) : [];
                 break;
             case TicketProperty.SERVICE_ID:
-                values = this.prepareServiceTree(objectData.servicesHierarchy);
+                const servicesHierarchy = await this.getServicesHierarchy();
+                values = servicesHierarchy ? this.prepareServiceTree(servicesHierarchy) : [];
                 break;
             case TicketProperty.TYPE_ID:
                 let types = await KIXObjectService.loadObjects<TicketType>(KIXObjectType.TICKET_TYPE);
@@ -191,11 +193,12 @@ export class TicketService extends KIXObjectService<Ticket> {
         return nodes;
     }
 
-    public checkFilterValue(ticket: Ticket, criteria: TableFilterCriteria): boolean {
+    public async checkFilterValue(ticket: Ticket, criteria: TableFilterCriteria): Promise<boolean> {
         if (criteria.property === TicketProperty.WATCHERS && ticket.Watchers) {
             let value = criteria.value;
             if (criteria.value === KIXObjectType.CURRENT_USER) {
-                value = ObjectDataService.getInstance().getObjectData().currentUser.UserID;
+                const currentUser = await AgentService.getInstance().getCurrentUser();
+                value = currentUser.UserID;
             }
             return ticket.Watchers.some((w) => w.UserID === value);
         }
@@ -261,8 +264,15 @@ export class TicketService extends KIXObjectService<Ticket> {
         const loadingOptions = new KIXObjectLoadingOptions(null, [
             new FilterCriteria('ParentID', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, null)
         ], null, null, null, ['SubQueues', 'TicketStats', 'Tickets'], ['SubQueues']);
-        return await KIXObjectService.loadObjects<Queue>(
-            KIXObjectType.QUEUE, null, loadingOptions
-        );
+
+        return await KIXObjectService.loadObjects<Queue>(KIXObjectType.QUEUE, null, loadingOptions);
+    }
+
+    public async getServicesHierarchy(): Promise<Service[]> {
+        const loadingOptions = new KIXObjectLoadingOptions(null, [
+            new FilterCriteria('ParentID', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, null)
+        ], null, null, null, ['SubServices', 'IncidentState'], ['SubServices']);
+
+        return await KIXObjectService.loadObjects<Service>(KIXObjectType.SERVICE, null, loadingOptions);
     }
 }

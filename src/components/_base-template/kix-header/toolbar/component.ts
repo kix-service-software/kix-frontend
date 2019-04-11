@@ -4,6 +4,7 @@ import { ActionFactory, ContextService } from '../../../../core/browser';
 import { ShowUserTicketsAction } from '../../../../core/browser/ticket';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 import { ObjectDataService } from '../../../../core/browser/ObjectDataService';
+import { AgentService } from '../../../../core/browser/application/AgentService';
 
 class Component {
 
@@ -14,8 +15,7 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const objectData = ObjectDataService.getInstance().getObjectData();
-        const user = objectData.currentUser;
+        const user = await AgentService.getInstance().getCurrentUser();
 
         const myTicketsNewArticles = await TranslationService.translate('Translatable#My tickets with new articles');
         const myTickets = await TranslationService.translate('Translatable#My Tickets');
@@ -67,8 +67,8 @@ class Component {
         ];
     }
 
-    public actionClicked(action: ToolbarAction): void {
-        const actions = ActionFactory.getInstance().generateActions([action.actionId], action.actionData);
+    public async actionClicked(action: ToolbarAction): Promise<void> {
+        const actions = await ActionFactory.getInstance().generateActions([action.actionId], action.actionData);
         if (actions && actions.length) {
             const showTicketsAction = actions[0] as ShowUserTicketsAction;
             showTicketsAction.setText(action.title);

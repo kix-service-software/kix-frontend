@@ -8,7 +8,7 @@ export class NotesEditAction extends AbstractAction {
         this.initAction();
     }
 
-    public initAction(): void {
+    public async initAction(): Promise<void> {
         this.text = 'Edit';
         this.icon = "kix-icon-edit";
     }

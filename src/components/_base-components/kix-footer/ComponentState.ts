@@ -8,7 +8,8 @@ export class ComponentState {
         public currentUserLogin: string = null,
         public buildNumber: string = null,
         public releaseInfo: ReleaseInfo = null,
-        public impressLink: string = null
+        public impressLink: string = null,
+        public unauthorized: boolean = false
     ) { }
 
 }

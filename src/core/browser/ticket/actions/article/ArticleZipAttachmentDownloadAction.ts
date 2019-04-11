@@ -6,7 +6,7 @@ import { OverlayService } from '../../../OverlayService';
 
 export class ArticleZipAttachmentDownloadAction extends AbstractAction<Article> {
 
-    public initAction(): void {
+    public async initAction(): Promise<void> {
         this.text = 'Translatable#Download';
         this.icon = 'kix-icon-download';
     }

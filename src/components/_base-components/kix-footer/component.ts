@@ -3,6 +3,8 @@ import { ReleaseInfo, SysConfigItem, KIXObjectType, SysConfigKey } from '../../.
 import { ObjectDataService } from '../../../core/browser/ObjectDataService';
 import { KIXObjectService } from '../../../core/browser';
 import { TranslationService } from '../../../core/browser/i18n/TranslationService';
+import { ComponentInput } from './ComponentInput';
+import { AgentService } from '../../../core/browser/application/AgentService';
 
 class Component {
 
@@ -12,19 +14,21 @@ class Component {
         this.state = new ComponentState();
     }
 
-    public onInput(input: any): void {
+    public onInput(input: ComponentInput): void {
         this.state.releaseInfo = input.releaseInfo;
         this.state.impressLink = input.impressLink;
+        this.state.unauthorized = typeof input.unauthorized !== 'undefined' ? input.unauthorized : false;
     }
 
     public async onMount(): Promise<void> {
-        const objectData = ObjectDataService.getInstance().getObjectData();
-        if (objectData && objectData.currentUser) {
-            this.state.currentUserLogin = objectData.currentUser.UserLogin;
+        if (!this.state.releaseInfo) {
+            const objectData = ObjectDataService.getInstance().getObjectData();
+            this.state.releaseInfo = objectData.releaseInfo;
         }
 
-        if (!this.state.releaseInfo) {
-            this.state.releaseInfo = objectData.releaseInfo;
+        if (!this.state.unauthorized) {
+            const currentUser = await AgentService.getInstance().getCurrentUser();
+            this.state.currentUserLogin = currentUser.UserLogin;
         }
 
         if (this.state.releaseInfo) {

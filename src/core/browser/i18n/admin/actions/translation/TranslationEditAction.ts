@@ -6,7 +6,7 @@ import { FormFactory } from "../../../../form/FormFactory";
 
 export class TranslationEditAction extends AbstractAction {
 
-    public initAction(): void {
+    public async initAction(): Promise<void> {
         this.text = 'Edit';
         this.icon = "kix-icon-edit";
     }

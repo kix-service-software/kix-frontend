@@ -51,19 +51,19 @@ class Component {
         this.state.configuration = context.getConfiguration();
         this.state.lanes = context.getLanes();
         this.state.tabWidgets = context.getLaneTabs();
-        this.setActions();
+        await this.prepareActions();
         await this.prepareTitle();
     }
 
-    private setActions(): void {
+    private async prepareActions(): Promise<void> {
         const config = this.state.configuration;
         if (config && this.state.contact) {
-            const actions = ActionFactory.getInstance().generateActions(
+            const actions = await ActionFactory.getInstance().generateActions(
                 config.generalActions, [this.state.contact]
             );
             WidgetService.getInstance().registerActions(this.state.instanceId, actions);
 
-            this.state.contactActions = ActionFactory.getInstance().generateActions(
+            this.state.contactActions = await ActionFactory.getInstance().generateActions(
                 config.contactActions, [this.state.contact]
             );
         }

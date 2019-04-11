@@ -4,7 +4,7 @@ import { KIXObjectType, ContextMode } from '../../../model';
 
 export class CustomerCreateAction extends AbstractAction {
 
-    public initAction(): void {
+    public async initAction(): Promise<void> {
         this.text = 'Translatable#New Customer';
         this.icon = 'kix-icon-man-house-new';
     }

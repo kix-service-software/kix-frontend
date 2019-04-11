@@ -4,7 +4,7 @@ import { NewTranslationDialogContext } from '../../context';
 
 export class TranslationCreateAction extends AbstractAction {
 
-    public initAction(): void {
+    public async initAction(): Promise<void> {
         this.text = 'Translatable#New Translation';
         this.icon = 'kix-icon-new-gear';
     }

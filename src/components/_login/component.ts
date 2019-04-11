@@ -16,9 +16,6 @@ class Component {
     }
 
     public onMount(): void {
-        if (this.state.logout) {
-            ClientStorageService.destroyToken();
-        }
         this.checkBrowser();
         this.state.loading = false;
         setTimeout(() => {
@@ -42,8 +39,8 @@ class Component {
     private async login(event: any): Promise<void> {
         this.state.logout = false;
 
-        let userName;
-        let password;
+        let userName: string;
+        let password: string;
 
         const userElement = (this as any).getEl("login-user-name");
         if (userElement) {

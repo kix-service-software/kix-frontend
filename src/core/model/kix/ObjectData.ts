@@ -6,9 +6,6 @@ import { ReleaseInfo } from '../ReleaseInfo';
 export class ObjectData {
 
     public constructor(
-        public services: Service[] = [],
-        public servicesHierarchy: Service[] = [],
-        public currentUser: User = null,
         public validObjects: ValidObject[] = [],
         public contactAttributes: Array<[string, string]> = [],
         public customerAttributes: Array<[string, string]> = [],

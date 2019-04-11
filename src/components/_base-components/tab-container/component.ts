@@ -73,7 +73,7 @@ class TabLaneComponent implements IEventSubscriber {
             if (context) {
                 const object = await context.getObject(context.getDescriptor().kixObjectTypes[0]);
 
-                this.state.contentActions = ActionFactory.getInstance().generateActions(
+                this.state.contentActions = await ActionFactory.getInstance().generateActions(
                     tab.configuration.actions, [object]
                 );
             }

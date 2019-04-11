@@ -3,7 +3,7 @@ import { ContextService } from '../../../../context';
 
 export class TicketPriorityCreateAction extends AbstractAction {
 
-    public initAction(): void {
+    public async initAction(): Promise<void> {
         this.text = 'Translatable#New Priority';
         this.icon = 'kix-icon-new-gear';
     }

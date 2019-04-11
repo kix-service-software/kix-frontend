@@ -4,7 +4,7 @@ import { TicketListContext } from '../context';
 
 export class ShowUserTicketsAction extends AbstractAction {
 
-    public initAction(): void {
+    public async initAction(): Promise<void> {
         return;
     }
 

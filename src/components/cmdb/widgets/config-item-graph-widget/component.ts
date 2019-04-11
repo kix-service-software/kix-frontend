@@ -51,16 +51,16 @@ class Component {
         this.state.loading = true;
         this.state.configItem = configItem;
         this.state.widgetTitle = `${this.state.widgetConfiguration.title}`;
-        this.setActions();
+        this.prepareActions();
 
         setTimeout(() => {
             this.state.loading = false;
         }, 100);
     }
 
-    private setActions(): void {
+    private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.configItem) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.actions = await ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, [this.state.configItem]
             );
         }

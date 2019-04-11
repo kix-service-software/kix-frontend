@@ -5,8 +5,8 @@ import {
 } from "../../../../../core/model";
 import { FormService, KIXObjectService, ContextService } from "../../../../../core/browser";
 import { TicketDetailsContext } from "../../../../../core/browser/ticket";
-import { ObjectDataService } from "../../../../../core/browser/ObjectDataService";
 import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
+import { AgentService } from "../../../../../core/browser/application/AgentService";
 
 class Component extends FormInputComponent<number, ComponentState> {
 
@@ -83,7 +83,7 @@ class Component extends FormInputComponent<number, ComponentState> {
     private async initNodes(queueId: number): Promise<void> {
         const queues = await KIXObjectService.loadObjects<Queue>(KIXObjectType.QUEUE, [queueId]);
         if (queues && queues.length) {
-            const user = ObjectDataService.getInstance().getObjectData().currentUser;
+            const user = await AgentService.getInstance().getCurrentUser();
 
             const queue = queues[0];
 

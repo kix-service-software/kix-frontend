@@ -65,7 +65,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.tabWidgets = context.getLaneTabs();
         this.state.contentWidgets = context.getContent(true);
 
-        this.prepareActions();
+        await this.prepareActions();
 
         setTimeout(() => {
             this.state.loading = false;
@@ -76,14 +76,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.title = await LabelService.getInstance().getText(this.object);
     }
 
-    private prepareActions(): void {
+    private async prepareActions(): Promise<void> {
         const config = this.configuration;
         if (config && this.object) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.actions = await ActionFactory.getInstance().generateActions(
                 config.actions, this.object
             );
 
-            const generalActions = ActionFactory.getInstance().generateActions(
+            const generalActions = await ActionFactory.getInstance().generateActions(
                 config.generalActions, this.object
             );
 

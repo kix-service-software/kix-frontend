@@ -79,14 +79,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.title = this.ticketPriority.Name;
     }
 
-    private prepareActions(): void {
+    private async prepareActions(): Promise<void> {
         const config = this.configuration;
         if (config && this.ticketPriority) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.actions = await ActionFactory.getInstance().generateActions(
                 config.actions, this.ticketPriority
             );
 
-            const generalActions = ActionFactory.getInstance().generateActions(
+            const generalActions = await ActionFactory.getInstance().generateActions(
                 config.generalActions, this.ticketPriority
             );
 

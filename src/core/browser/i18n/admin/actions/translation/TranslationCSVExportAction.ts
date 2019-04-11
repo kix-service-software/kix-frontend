@@ -4,7 +4,7 @@ import { ITable } from "../../../../table";
 
 export class TranslationCSVExportAction extends AbstractAction<ITable> {
 
-    public initAction(): void {
+    public async initAction(): Promise<void> {
         this.text = "Translatable#CSV-Export";
         this.icon = "kix-icon-export";
     }

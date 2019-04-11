@@ -67,9 +67,9 @@ class Component {
         );
     }
 
-    private prepareActions(): void {
+    private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.actions = await ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, null
             );
         }

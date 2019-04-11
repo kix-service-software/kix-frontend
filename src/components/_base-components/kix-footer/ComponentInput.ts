@@ -6,4 +6,6 @@ export class ComponentInput {
 
     public releaseInfo: ReleaseInfo;
 
+    public unauthorized: boolean;
+
 }

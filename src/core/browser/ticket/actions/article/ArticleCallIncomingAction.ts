@@ -2,7 +2,7 @@ import { AbstractAction } from '../../../../model/components/action/AbstractActi
 
 export class ArticleCallIncomingAction extends AbstractAction {
 
-    public initAction(): void {
+    public async initAction(): Promise<void> {
         this.text = 'Translatable#Phone inbound';
         this.icon = 'kix-icon-call-receive';
     }

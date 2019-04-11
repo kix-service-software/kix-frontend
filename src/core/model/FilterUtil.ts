@@ -2,6 +2,7 @@ import { TableFilterCriteria } from "./components";
 import { SearchOperator } from "../browser";
 import { KIXObjectType, KIXObject } from "./kix";
 import { ObjectDataService } from "../browser/ObjectDataService";
+import { AgentService } from "../browser/application/AgentService";
 
 export class FilterUtil {
 
@@ -15,9 +16,10 @@ export class FilterUtil {
         return displayValue.indexOf(filterValue) !== -1;
     }
 
-    public static checkTableFilterCriteria(criteria: TableFilterCriteria, value: any): boolean {
+    public static async checkTableFilterCriteria(criteria: TableFilterCriteria, value: any): Promise<boolean> {
         if (criteria.value === KIXObjectType.CURRENT_USER) {
-            criteria.value = ObjectDataService.getInstance().getObjectData().currentUser.UserID;
+            const currentUser = await AgentService.getInstance().getCurrentUser();
+            criteria.value = currentUser.UserID;
         }
 
         switch (criteria.operator) {

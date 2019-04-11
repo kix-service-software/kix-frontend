@@ -54,7 +54,7 @@ class Component {
         this.state.configItem = configItem;
         this.state.widgetTitle = `${this.state.widgetConfiguration.title}`;
 
-        this.setActions();
+        await this.prepareActions();
         await this.prepareImages();
 
         setTimeout(() => {
@@ -62,9 +62,9 @@ class Component {
         }, 100);
     }
 
-    private setActions(): void {
+    private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.configItem) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.actions = await ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, [this.state.configItem]
             );
         }
