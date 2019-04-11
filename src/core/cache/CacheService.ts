@@ -72,7 +72,7 @@ export class CacheService {
     }
 
     public async deleteKeys(cacheKeyPrefix: string): Promise<void> {
-        const prefixes = this.getCacheKeyPrefixes(cacheKeyPrefix);
+        const prefixes = await this.getCacheKeyPrefixes(cacheKeyPrefix);
         for (const prefix of prefixes) {
             if (this.useMemcached) {
                 await Memcached.getInstance().deleteKeys(prefix);
@@ -82,8 +82,8 @@ export class CacheService {
         }
     }
 
-    private getCacheKeyPrefixes(objectNamespace: string): string[] {
-        const cacheKeyPrefixes: string[] = [];
+    private async getCacheKeyPrefixes(objectNamespace: string): Promise<string[]> {
+        let cacheKeyPrefixes: string[] = [];
         if (objectNamespace && objectNamespace.indexOf('.') !== -1) {
             const namespace = objectNamespace.split('.');
             if (namespace[0] === 'CMDB') {
@@ -115,9 +115,6 @@ export class CacheService {
             case KIXObjectType.USER_PREFERENCE:
                 cacheKeyPrefixes.push(KIXObjectType.USER);
                 break;
-            case KIXObjectType.PERMISSION:
-                cacheKeyPrefixes.push(KIXObjectType.ROLE);
-                break;
             case KIXObjectType.USER:
                 cacheKeyPrefixes.push(KIXObjectType.ROLE);
                 break;
@@ -129,10 +126,23 @@ export class CacheService {
                 cacheKeyPrefixes.push(KIXObjectType.LINK);
                 cacheKeyPrefixes.push(KIXObjectType.LINK_OBJECT);
                 break;
+            case KIXObjectType.PERMISSION:
+            case KIXObjectType.ROLE:
+                await this.clearCache();
+                cacheKeyPrefixes = [];
+                break;
             default:
         }
 
         return cacheKeyPrefixes;
+    }
+
+    private async clearCache(): Promise<void> {
+        if (this.useMemcached) {
+            await Memcached.getInstance().clear();
+        } else if (this.useInMemoryCache) {
+            await InMemoryCache.getInstance().clear();
+        }
     }
 
 }

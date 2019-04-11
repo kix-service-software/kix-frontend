@@ -1,5 +1,7 @@
 export interface ICache {
 
+    clear(): Promise<void>;
+
     has(key: string): Promise<boolean>;
 
     get(key: string): Promise<any>;

@@ -30,6 +30,16 @@ export class Memcached implements ICache {
         }
     }
 
+    public async clear(): Promise<void> {
+        const iterator = this.keyIndex.keys();
+
+        let key = iterator.next();
+        while (key && key.value) {
+            await this.delete(key.value, null);
+            key = iterator.next();
+        }
+    }
+
     public async has(key: string): Promise<boolean> {
         const hasKey = await new Promise<boolean>((resolve, reject) => {
             this.memCached.get(key, (error, data) => {
