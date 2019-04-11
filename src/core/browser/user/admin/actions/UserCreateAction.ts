@@ -3,7 +3,7 @@ import { ContextService } from '../../../context';
 
 export class UserCreateAction extends AbstractAction {
 
-    public initAction(): void {
+    public async initAction(): Promise<void> {
         this.text = 'Translatable#New Agent';
         this.icon = 'kix-icon-new-gear';
     }

@@ -55,7 +55,7 @@ class Component {
         this.state.loading = true;
         this.state.ticket = ticket;
         await this.getFirstArticle();
-        this.setActions();
+        this.prepareActions();
         await this.getTicketNotes();
 
         setTimeout(() => {
@@ -69,9 +69,9 @@ class Component {
         }
     }
 
-    private setActions(): void {
+    private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.firstArticle) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.actions = await ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, [this.state.firstArticle]
             );
         }

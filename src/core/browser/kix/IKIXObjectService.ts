@@ -28,7 +28,7 @@ export interface IKIXObjectService<T extends KIXObject = KIXObject> extends IKIX
 
     getTreeNodes(property: string): Promise<TreeNode[]>;
 
-    checkFilterValue(object: T, criteria: TableFilterCriteria): boolean;
+    checkFilterValue(object: T, criteria: TableFilterCriteria): Promise<boolean>;
 
     determineDependendObjects(
         sourceObjects: T[], targetObjectType: KIXObjectType

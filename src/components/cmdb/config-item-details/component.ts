@@ -46,28 +46,32 @@ class Component {
         this.state.contentWidgets = context.getContent(true);
 
         this.state.title = await context.getDisplayText();
+
+        await this.prepareActions();
+        await this.prepareConfigItemActions();
+
         setTimeout(() => {
             this.state.loading = false;
         }, 50);
     }
 
-    public getConfigItemActions(): AbstractAction[] {
+    public async prepareConfigItemActions(): Promise<void> {
         let actions = [];
         const config = this.state.configuration;
         if (config && this.state.configItem) {
             actions =
-                ActionFactory.getInstance().generateActions(config.configItemActions, [this.state.configItem]);
+                await ActionFactory.getInstance().generateActions(config.configItemActions, [this.state.configItem]);
         }
-        return actions;
+        this.state.configItemActions = actions;
     }
 
-    public getActions(): AbstractAction[] {
+    public async prepareActions(): Promise<void> {
         let actions = [];
         const config = this.state.configuration;
         if (config && this.state.configItem) {
-            actions = ActionFactory.getInstance().generateActions(config.actions, [this.state.configItem]);
+            actions = await ActionFactory.getInstance().generateActions(config.actions, [this.state.configItem]);
         }
-        return actions;
+        this.state.actions = actions;
     }
 
     public getWidgetTemplate(instanceId: string): any {

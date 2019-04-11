@@ -33,7 +33,7 @@ class Component implements IKIXObjectSearchListener {
             : undefined;
 
 
-        this.setActions();
+        this.prepareActions();
 
         KIXObjectSearchService.getInstance().registerListener(this);
         this.searchFinished();
@@ -154,9 +154,9 @@ class Component implements IKIXObjectSearchListener {
         WidgetService.getInstance().updateActions(this.state.instanceId);
     }
 
-    private setActions(): void {
+    private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration) {
-            this.state.actions = ActionFactory.getInstance()
+            this.state.actions = await ActionFactory.getInstance()
                 .generateActions(this.state.widgetConfiguration.actions);
         }
         WidgetService.getInstance().registerActions(this.state.instanceId, this.state.actions);

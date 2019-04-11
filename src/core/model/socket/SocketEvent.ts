@@ -6,6 +6,8 @@ export enum SocketEvent {
 
     CONNECT_TIMEOUT = "connect_timeout",
 
-    CONNECTION = "connection"
+    CONNECTION = "connection",
+
+    PERMISSION_ERROR = 'PERMISSION_ERROR'
 
 }

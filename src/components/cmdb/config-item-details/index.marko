@@ -10,8 +10,8 @@
             instanceId=state.instanceId
             minimizable=true
             title=state.title
-            actions=component.getActions()
-            contentActions=component.getConfigItemActions()>
+            actions=state.actions
+            contentActions=state.configItemActions>
             <@content>
                 <ul.lane-list no-update>
                     <li>

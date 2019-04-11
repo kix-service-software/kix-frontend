@@ -81,13 +81,13 @@ class Component {
 
     private async initWidget(contact?: Contact): Promise<void> {
         this.state.contact = contact;
-        this.setActions();
+        await this.prepareActions();
         await this.createTables();
     }
 
-    private setActions(): void {
+    private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.contact) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.actions = await ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, [this.state.contact]
             );
         }

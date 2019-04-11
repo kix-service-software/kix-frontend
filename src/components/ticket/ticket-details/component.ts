@@ -67,7 +67,8 @@ export class Component {
 
             await this.getTitle();
 
-            this.setActions();
+            this.prepareActions();
+            this.prepareTicketActions();
         }
 
         setTimeout(() => {
@@ -90,23 +91,23 @@ export class Component {
         }, 100);
     }
 
-    private setActions(): void {
+    private async prepareActions(): Promise<void> {
         const config = this.state.ticketDetailsConfiguration;
         if (config && this.state.ticket) {
-            const actions = ActionFactory.getInstance().generateActions(
+            const actions = await ActionFactory.getInstance().generateActions(
                 config.generalActions, this.state.ticket
             );
             WidgetService.getInstance().registerActions(this.state.instanceId, actions);
         }
     }
 
-    public getTicketActions(): string[] {
+    public async prepareTicketActions(): Promise<void> {
         let actions = [];
         const config = this.state.ticketDetailsConfiguration;
         if (config && this.state.ticket) {
-            actions = ActionFactory.getInstance().generateActions(config.ticketActions, this.state.ticket);
+            actions = await ActionFactory.getInstance().generateActions(config.ticketActions, this.state.ticket);
         }
-        return actions;
+        this.state.ticketActions = actions;
     }
 
     public getWidgetTemplate(instanceId: string): any {

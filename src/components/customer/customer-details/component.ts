@@ -52,8 +52,8 @@ class Component {
         this.state.configuration = context.getConfiguration();
         this.state.lanes = context.getLanes();
         this.state.tabWidgets = context.getLaneTabs();
-        this.setActions();
-        this.setContentActions();
+        await this.prepareActions();
+        this.prepareContentActions();
 
         await this.prepareTitle();
 
@@ -62,18 +62,18 @@ class Component {
         }, 50);
     }
 
-    private setActions(): void {
+    private async prepareActions(): Promise<void> {
         if (this.state.configuration && this.state.customer) {
-            const actions = ActionFactory.getInstance().generateActions(
+            const actions = await ActionFactory.getInstance().generateActions(
                 this.state.configuration.generalActions, [this.state.customer]
             );
             WidgetService.getInstance().registerActions(this.state.instanceId, actions);
         }
     }
 
-    private setContentActions(): void {
+    private async prepareContentActions(): Promise<void> {
         if (this.state.configuration && this.state.customer) {
-            this.state.contentActions = ActionFactory.getInstance().generateActions(
+            this.state.contentActions = await ActionFactory.getInstance().generateActions(
                 this.state.configuration.customerActions, [this.state.customer]
             );
         }

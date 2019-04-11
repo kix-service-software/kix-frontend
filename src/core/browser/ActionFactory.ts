@@ -24,10 +24,7 @@ export class ActionFactory<T extends AbstractAction> {
         this.actions.push([actionId, action]);
     }
 
-    public generateActions(
-        actionIds: string[],
-        data?: any
-    ): AbstractAction[] {
+    public async generateActions(actionIds: string[], data?: any): Promise<AbstractAction[]> {
         const actions = [];
         if (actionIds) {
             for (const actionId of actionIds) {
@@ -35,7 +32,7 @@ export class ActionFactory<T extends AbstractAction> {
                 if (actionPrototype) {
                     const action = new actionPrototype[1]();
                     action.initAction();
-                    action.setData(data);
+                    await action.setData(data);
                     actions.push(action);
                 }
             }

@@ -106,7 +106,7 @@ export class Row<T = any> implements IRow<T> {
         for (const c of criteria) {
             if (c.useObjectService) {
                 result = object && object instanceof KIXObject
-                    ? KIXObjectService.checkFilterValue(object.KIXObjectType, object, c)
+                    ? await KIXObjectService.checkFilterValue(object.KIXObjectType, object, c)
                     : false;
                 break;
             } else {

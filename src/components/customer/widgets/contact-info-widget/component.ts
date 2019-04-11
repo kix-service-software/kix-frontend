@@ -40,12 +40,12 @@ class Component {
         this.state.contact = null;
         setTimeout(() => {
             this.state.contact = contact;
-            this.setActions();
+            this.prepareActions();
         }, 100);
     }
-    private setActions(): void {
+    private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.contact) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.actions = await ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, [this.state.contact]
             );
         }

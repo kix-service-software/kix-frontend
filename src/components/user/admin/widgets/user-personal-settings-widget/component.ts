@@ -38,12 +38,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async initWidget(user: User): Promise<void> {
         this.state.user = user;
-        this.setActions(user);
+        this.prepareActions(user);
     }
 
-    private setActions(user: User): void {
+    private async prepareActions(user: User): Promise<void> {
         if (this.state.widgetConfiguration && user) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.actions = await ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, [user]
             );
         }

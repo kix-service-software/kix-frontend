@@ -1,6 +1,6 @@
 import { FAQArticle } from "../../../core/model/kix/faq";
 import { FAQDetailsContextConfiguration } from "../../../core/browser/faq";
-import { ConfiguredWidget } from "../../../core/model";
+import { ConfiguredWidget, IAction } from "../../../core/model";
 import { AbstractComponentState } from "../../../core/browser";
 
 export class ComponentState extends AbstractComponentState {
@@ -14,7 +14,9 @@ export class ComponentState extends AbstractComponentState {
         public tabWidgets: ConfiguredWidget[] = [],
         public contentWidgets: ConfiguredWidget[] = [],
         public loading: boolean = true,
-        public title: string = ''
+        public title: string = '',
+        public actions: IAction[] = [],
+        public faqActions: IAction[] = []
     ) {
         super();
     }

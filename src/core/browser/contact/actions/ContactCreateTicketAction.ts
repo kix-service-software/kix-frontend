@@ -4,7 +4,7 @@ import { ContextService } from '../../context';
 
 export class ContactCreateTicketAction extends AbstractAction {
 
-    public initAction(): void {
+    public async initAction(): Promise<void> {
         this.text = 'Translatable#New Ticket';
         this.icon = 'kix-icon-new-ticket';
     }

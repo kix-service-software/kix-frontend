@@ -81,24 +81,26 @@ export abstract class KIXRouter implements IRouter {
     }
 
     protected async getObjectData(token: string): Promise<ObjectData> {
-        const currentUser = await UserService.getInstance().getUserByToken(token);
+        const validObjects = await ValidObjectService.getInstance().getValidObjects(token)
+            .catch(() => []);
 
-        const services = await ServiceService.getInstance().getServices(token);
-        const servicesHierarchy = await ServiceService.getInstance().getServiceHierarchy(token);
-
-        const validObjects = await ValidObjectService.getInstance().getValidObjects(token);
-
-        const contactAttributeMapping = await ContactService.getInstance().getAttributeMapping(token);
+        const contactAttributeMapping = await ContactService.getInstance().getAttributeMapping(token)
+            .catch(() => null);
         const contactAttributes: Array<[string, string]> = [];
-        contactAttributeMapping
-            .filter((cam) => cam.Searchable)
-            .forEach((cam) => contactAttributes.push([cam.Attribute, cam.Label]));
+        if (contactAttributeMapping) {
+            contactAttributeMapping
+                .filter((cam) => cam.Searchable)
+                .forEach((cam) => contactAttributes.push([cam.Attribute, cam.Label]));
+        }
 
-        const customerAttributeMapping = await CustomerService.getInstance().getAttributeMapping(token);
+        const customerAttributeMapping = await CustomerService.getInstance().getAttributeMapping(token)
+            .catch(() => null);
         const customerAttributes: Array<[string, string]> = [];
-        customerAttributeMapping
-            .filter((cam) => cam.Searchable)
-            .forEach((cam) => customerAttributes.push([cam.Attribute, cam.Label]));
+        if (customerAttributeMapping) {
+            customerAttributeMapping
+                .filter((cam) => cam.Searchable)
+                .forEach((cam) => customerAttributes.push([cam.Attribute, cam.Label]));
+        }
 
         // TODO: hier oder wo gebraucht aus den objectDefinitions ermitteln
         const faqVisibilities: Array<[string, string]> = [
@@ -107,7 +109,8 @@ export abstract class KIXRouter implements IRouter {
             ["public", "Translatable#public"]
         ];
 
-        const objectDefinitions = await ObjectDefinitionService.getInstance().getObjectDefinitions(token);
+        const objectDefinitions = await ObjectDefinitionService.getInstance().getObjectDefinitions(token)
+            .catch(() => []);
 
         const bookmarks = await ConfigurationService.getInstance().getBookmarks();
 
@@ -117,8 +120,6 @@ export abstract class KIXRouter implements IRouter {
         const socketTimeout = ConfigurationService.getInstance().getServerConfiguration().SOCKET_TIMEOUT;
 
         const objectData = new ObjectData(
-            services, servicesHierarchy,
-            currentUser,
             validObjects,
             contactAttributes, customerAttributes,
             faqVisibilities,

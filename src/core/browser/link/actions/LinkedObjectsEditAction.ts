@@ -4,7 +4,7 @@ import { EditLinkedObjectsDialogContext } from '../context';
 
 export class LinkedObjectsEditAction extends AbstractAction {
 
-    public initAction(): void {
+    public async initAction(): Promise<void> {
         this.text = 'Translatable#Links';
         this.icon = 'kix-icon-link';
     }

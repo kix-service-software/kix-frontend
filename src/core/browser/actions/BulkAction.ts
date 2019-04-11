@@ -12,7 +12,7 @@ export class BulkAction extends AbstractAction<ITable> implements IEventSubscrib
     public eventSubscriberId: string;
     public objectType: KIXObjectType;
 
-    public initAction(): void {
+    public async initAction(): Promise<void> {
         this.text = 'Translatable#Bulk Action';
         this.icon = 'kix-icon-arrow-collect';
         this.eventSubscriberId = IdService.generateDateBasedId('bulk-action-');

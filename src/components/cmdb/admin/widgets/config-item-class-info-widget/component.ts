@@ -37,12 +37,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async initWidget(ciClass: ConfigItemClass): Promise<void> {
         this.state.ciClass = ciClass;
-        this.setActions();
+        await this.prepareActions();
     }
 
-    private setActions(): void {
+    private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.ciClass) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.actions = await ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, [this.state.ciClass]
             );
         }

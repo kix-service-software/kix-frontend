@@ -40,14 +40,14 @@ class Component {
 
     private async initWidget(faqArticle: FAQArticle): Promise<void> {
         if (faqArticle) {
-            this.setActions(faqArticle);
+            this.prepareActions(faqArticle);
             await this.prepareTable();
         }
     }
 
-    private setActions(faqArticle: FAQArticle): void {
+    private async prepareActions(faqArticle: FAQArticle): Promise<void> {
         if (this.state.widgetConfiguration && faqArticle) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.actions = await ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, [faqArticle]
             );
         }

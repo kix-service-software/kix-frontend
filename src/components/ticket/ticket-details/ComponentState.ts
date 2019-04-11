@@ -17,7 +17,7 @@ export class ComponentState extends AbstractComponentState {
         public ticket: Ticket = null,
         public hasError: boolean = false,
         public error: any = null,
-        public title: string = ''
+        public title: string = '',
     ) {
         super();
     }

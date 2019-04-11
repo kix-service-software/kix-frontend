@@ -8,8 +8,9 @@ export interface IAction<T = any> {
 
     data: T;
 
-    initAction(): void;
-    setData(data: T): void;
+    initAction(): Promise<void>;
+
+    setData(data: T): Promise<void>;
 
     canRun(): boolean;
 

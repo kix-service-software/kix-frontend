@@ -4,7 +4,7 @@ import { KIXObjectType, ContextMode } from '../../../model';
 
 export class FAQArticleCreateAction extends AbstractAction {
 
-    public initAction(): void {
+    public async initAction(): Promise<void> {
         this.text = 'Translatable#New FAQ';
         this.icon = 'kix-icon-new-faq';
     }

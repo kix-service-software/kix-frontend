@@ -5,7 +5,7 @@ import { OverlayService } from '../../OverlayService';
 
 export class FAQArticleVoteAction extends AbstractAction {
 
-    public initAction(): void {
+    public async initAction(): Promise<void> {
         this.text = 'Translatable#Rate';
         this.icon = 'kix-icon-star-fully';
     }

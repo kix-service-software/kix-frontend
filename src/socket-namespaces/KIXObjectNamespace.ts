@@ -1,11 +1,12 @@
 import {
     KIXObjectEvent, LoadObjectsRequest, LoadObjectsResponse, CreateObjectRequest,
     CreateObjectResponse, DeleteObjectRequest, DeleteObjectResponse,
-    UpdateObjectRequest, UpdateObjectResponse
+    UpdateObjectRequest, UpdateObjectResponse, SocketEvent
 } from '../core/model';
 import { SocketNameSpace } from './SocketNameSpace';
 import { SocketResponse, SocketErrorResponse } from '../core/common';
 import { KIXObjectServiceRegistry, LoggingService } from '../core/services';
+import { PermissionError } from '../core/model/PermissionError';
 
 export class KIXObjectNamespace extends SocketNameSpace {
 
@@ -51,11 +52,13 @@ export class KIXObjectNamespace extends SocketNameSpace {
                 }).catch((error) => {
                     LoggingService.getInstance().error(`ERROR: ${data.objectType}: ${data.objectIds}`);
                     LoggingService.getInstance().error(JSON.stringify(error));
-                    resolve(
-                        new SocketResponse(
-                            KIXObjectEvent.LOAD_OBJECTS_ERROR, new SocketErrorResponse(data.requestId, error)
-                        )
-                    );
+
+                    const event = error instanceof PermissionError
+                        ? SocketEvent.PERMISSION_ERROR
+                        : KIXObjectEvent.LOAD_OBJECTS_ERROR;
+
+                    const errorResponse = new SocketResponse(event, new SocketErrorResponse(data.requestId, error));
+                    resolve(errorResponse);
                 });
             } else {
                 const errorMessage = 'No API service registered for object type ' + data.objectType;

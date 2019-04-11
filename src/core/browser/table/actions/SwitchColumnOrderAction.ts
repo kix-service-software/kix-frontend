@@ -4,7 +4,7 @@ import { Table } from '../Table';
 
 export class SwitchColumnOrderAction extends AbstractAction<ITable> {
 
-    public initAction(): void {
+    public async initAction(): Promise<void> {
         this.text = 'Translatable#Switch';
         this.icon = 'kix-icon-exchange';
     }

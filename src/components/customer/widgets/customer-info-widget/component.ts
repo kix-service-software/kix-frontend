@@ -41,13 +41,13 @@ class Component {
         this.state.customer = null;
         setTimeout(() => {
             this.state.customer = customer;
-            this.setActions();
+            this.prepareActions();
         }, 100);
     }
 
-    private setActions(): void {
+    private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.customer) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.actions = await ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, [this.state.customer]
             );
         }

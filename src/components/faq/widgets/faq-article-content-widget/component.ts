@@ -89,13 +89,13 @@ class Component {
             const labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.FAQ_ARTICLE);
             this.stars = await labelProvider.getIcons(faqArticle, FAQArticleProperty.VOTES);
             this.rating = BrowserUtil.calculateAverage(faqArticle.Votes.map((v) => v.Rating));
-            this.setActions();
+            this.prepareActions();
         }
     }
 
-    private setActions(): void {
+    private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.faqArticle) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.actions = await ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, [this.state.faqArticle]
             );
         }

@@ -56,12 +56,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             'user-assigned-roles', KIXObjectType.ROLE, tableConfiguration, user.RoleIDs, null, true
         );
         this.state.table = table;
-        this.setActions(user);
+        this.prepareActions(user);
     }
 
-    private setActions(user: User): void {
+    private async prepareActions(user: User): Promise<void> {
         if (this.state.widgetConfiguration && user) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.actions = await ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, [user]
             );
         }

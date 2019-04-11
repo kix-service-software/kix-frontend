@@ -9,7 +9,7 @@ Am Beispiel von LinkedObjectsEditAction.
 ```javascript
 export class LinkedObjectsEditAction extends AbstractAction {
 
-    public initAction(): void {
+    public async initAction(): Promise<void> {
         this.text = 'Translatable#Edit';
         this.icon = 'kix-icon-edit';
     }

@@ -11,12 +11,12 @@ export class TicketLockAction extends AbstractAction<Ticket> {
 
     private currentLockId: number;
 
-    public initAction(): void {
+    public async initAction(): Promise<void> {
         this.text = 'Translatable#Lock';
         this.icon = 'kix-icon-lock-close';
     }
 
-    public setData(ticket: Ticket): void {
+    public async setData(ticket: Ticket): Promise<void> {
         this.data = ticket;
 
         this.text = ticket.LockID === 1 ? 'Translatable#Lock' : 'Translatable#Unlock';

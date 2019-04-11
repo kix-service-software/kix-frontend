@@ -2,7 +2,7 @@ import { AbstractAction } from '../../../../model/components/action/AbstractActi
 
 export class ArticleEditAction extends AbstractAction {
 
-    public initAction(): void {
+    public async initAction(): Promise<void> {
         this.text = 'Edit';
         this.icon = "kix-icon-edit";
     }

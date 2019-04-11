@@ -2,7 +2,7 @@ import { AbstractAction } from '../../../../model/components/action/AbstractActi
 
 export class ArticleDeleteAction extends AbstractAction {
 
-    public initAction(): void {
+    public async initAction(): Promise<void> {
         this.text = 'Translatable#Delete';
         this.icon = "kix-icon-mail-trash";
     }
