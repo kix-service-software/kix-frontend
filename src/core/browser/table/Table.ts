@@ -361,7 +361,6 @@ export class Table implements ITable {
         });
     }
 
-    // TODO: Test dafür erstellen!!
     public setRowSelectionByObject(objects: any[]): void {
         this.selectNone(true);
         objects.forEach((o) => {
