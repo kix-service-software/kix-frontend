@@ -38,16 +38,16 @@ class Component implements IKIXObjectSearchListener {
 
         const formInstance = await FormService.getInstance().getFormInstance<SearchFormInstance>(this.formId);
         if (formInstance) {
+            formInstance.reset();
             const listener: ISearchFormListener = {
                 listenerId: 'search-form-value-container',
                 searchCriteriaChanged: () => { return; },
                 formReseted: () => {
-                    this.state.propertyNodes = [...this.initialPropertyNodes];
+                    this.state.propertyNodes = this.initialPropertyNodes ? [...this.initialPropertyNodes] : [];
                     this.initSearchForm(formInstance);
                 }
             };
             formInstance.registerSearchFormListener(listener);
-
             await this.createPropertyNodes();
             await this.initSearchForm(formInstance);
         }

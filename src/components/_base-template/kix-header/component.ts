@@ -29,10 +29,12 @@ class KIXHeaderComponent {
         ContextService.getInstance().setDialogContext(null, null, ContextMode.CREATE, null, true);
     }
 
-    public showTemporaryComingSoon(): void {
-        const content = new ComponentContent('toast', new ToastContent(
-            'kix-icon-magicwand', 'Diese Funktionalität ist in Arbeit.', 'Coming Soon'
-        ));
+    public async showTemporaryComingSoon(): Promise<void> {
+        const text = await TranslationService.translate('Translatable#We are working on this functionality.');
+        const content = new ComponentContent(
+            'toast',
+            new ToastContent('kix-icon-magicwand', text, 'Coming Soon')
+        );
         OverlayService.getInstance().openOverlay(OverlayType.HINT_TOAST, null, content, '');
     }
 
