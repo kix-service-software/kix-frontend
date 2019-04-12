@@ -100,7 +100,7 @@ export class Memcached implements ICache {
             this.memCached.delete(key, (error) => {
                 if (!error) {
                     if (cacheKeyPrefix) {
-                        if (!this.keyIndex.has(cacheKeyPrefix)) {
+                        if (this.keyIndex.has(cacheKeyPrefix)) {
                             const keys = this.keyIndex.get(cacheKeyPrefix);
                             const index = keys.findIndex((k) => k === key);
                             if (index !== -1) {
@@ -118,7 +118,7 @@ export class Memcached implements ICache {
 
     public async deleteKeys(cacheKeyPrefix: string): Promise<void> {
         if (this.keyIndex.has(cacheKeyPrefix)) {
-            const keys = this.keyIndex.get(cacheKeyPrefix);
+            const keys = [...this.keyIndex.get(cacheKeyPrefix)];
             LoggingService.getInstance().debug(
                 `Memcached: delete cacheKeyPrefix ${cacheKeyPrefix} - key count: ${keys.length}`
             );

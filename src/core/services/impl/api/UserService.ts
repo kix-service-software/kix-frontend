@@ -70,7 +70,7 @@ export class UserService extends KIXObjectService {
         };
 
         const response = await this.httpService.get<UserResponse>(
-            this.USER_RESOURCE_URI, query, token, null, KIXObjectType.USER
+            this.USER_RESOURCE_URI, query, token, null, KIXObjectType.USER, false
         );
         return new User(response.User);
     }
