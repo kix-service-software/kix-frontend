@@ -7,6 +7,8 @@ import {
     ContextConfiguration, KIXObject, KIXObjectType, Context, WidgetType, ContextType, ContextMode
 } from "../../../core/model";
 import { TranslationService } from "../../../core/browser/i18n/TranslationService";
+import { EventService } from "../../../core/browser/event";
+import { ApplicationEvent } from "../../../core/browser/application";
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -50,6 +52,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async initWidget(context: Context, object?: KIXObject): Promise<void> {
         this.state.error = null;
         this.state.loading = true;
+
+        const loadingTimeout = window.setTimeout(() => {
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: true, hint: '' });
+        }, 500);
+
         this.object = object ? object : await context.getObject().catch((error) => null);
 
         if (!this.object) {
@@ -68,8 +75,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         await this.prepareActions();
 
         setTimeout(() => {
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
+            window.clearTimeout(loadingTimeout);
             this.state.loading = false;
-        }, 100);
+        }, 10);
     }
 
     public async prepareTitle(): Promise<void> {

@@ -18,12 +18,25 @@ export class InMemoryCache implements ICache {
 
     private constructor() { }
 
-    public async clear(): Promise<void> {
-        this.cache.clear();
-        this.keyIndex.clear();
-        LoggingService.getInstance().debug(
-            `InMemoryCache: cache cleared`
-        );
+    public async clear(ignoreKeyPrefixes: string[] = []): Promise<void> {
+        const iterator = this.keyIndex.keys();
+
+        let prefix = iterator.next();
+        while (prefix && prefix.value) {
+            if (!ignoreKeyPrefixes.some((p) => p === prefix.value)) {
+                await this.deleteKeys(prefix.value);
+            }
+            prefix = iterator.next();
+        }
+
+        const newIndex: Map<string, string[]> = new Map();
+        for (const ignorePrefix of ignoreKeyPrefixes) {
+            if (this.keyIndex.has(ignorePrefix)) {
+                newIndex.set(ignorePrefix, this.keyIndex.get(ignorePrefix));
+            }
+        }
+
+        this.keyIndex = newIndex;
     }
 
     public async has(key: string): Promise<boolean> {

@@ -1,6 +1,6 @@
 export interface ICache {
 
-    clear(): Promise<void>;
+    clear(ignoreKeyPrefixes?: string[]): Promise<void>;
 
     has(key: string): Promise<boolean>;
 
