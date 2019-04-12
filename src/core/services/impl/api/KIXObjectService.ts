@@ -288,7 +288,7 @@ export abstract class KIXObjectService<T extends KIXObject = any> implements IKI
                 await this.deleteRolePermissions(token, clientRequestId, permissions, target, 2, objectType, objectId);
             }
             if (permissions && !!permissions.length) {
-                this.setRolePermissions(token, clientRequestId, permissions, target, 2, forUpdate);
+                this.setRolePermissions(token, clientRequestId, permissions, target, 2);
             }
         }
     }
@@ -305,7 +305,7 @@ export abstract class KIXObjectService<T extends KIXObject = any> implements IKI
                 await this.deleteRolePermissions(token, clientRequestId, permissions, target, 3, objectType, objectId);
             }
             if (permissions && !!permissions.length) {
-                this.setRolePermissions(token, clientRequestId, permissions, target, 3, forUpdate);
+                this.setRolePermissions(token, clientRequestId, permissions, target, 3);
             }
         }
     }
@@ -346,29 +346,16 @@ export abstract class KIXObjectService<T extends KIXObject = any> implements IKI
 
     private async setRolePermissions(
         token: string, clientRequestId: string, permissions: CreatePermissionDescription[], target: string,
-        permissionType: number, forUpdate: boolean
+        permissionType: number
     ): Promise<void> {
         const roleService = KIXObjectServiceRegistry.getServiceInstance<RoleService>(
             KIXObjectType.ROLE
         );
         if (roleService) {
-            let loadingOptions = null;
-            if (forUpdate) {
-                loadingOptions = new KIXObjectLoadingOptions(null, [
-                    new FilterCriteria(
-                        PermissionProperty.TYPE_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                        FilterType.AND, permissionType
-                    ),
-                    new FilterCriteria(
-                        PermissionProperty.TARGET, SearchOperator.EQUALS, FilterDataType.STRING,
-                        FilterType.AND, target
-                    )
-                ]);
-            }
             const preparedPermissions = await this.getPermissionsPerRole(permissions, permissionType, target);
             for (const pp of preparedPermissions) {
                 await roleService.setPermissions(
-                    token, clientRequestId, pp[0], pp[1], forUpdate, loadingOptions
+                    token, clientRequestId, pp[0], pp[1], false
                 );
             }
         }
