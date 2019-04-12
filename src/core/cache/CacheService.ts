@@ -139,9 +139,9 @@ export class CacheService {
 
     private async clearCache(): Promise<void> {
         if (this.useMemcached) {
-            await Memcached.getInstance().clear();
+            await Memcached.getInstance().clear([KIXObjectType.TRANSLATION]);
         } else if (this.useInMemoryCache) {
-            await InMemoryCache.getInstance().clear();
+            await InMemoryCache.getInstance().clear([KIXObjectType.TRANSLATION]);
         }
     }
 

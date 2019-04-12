@@ -30,15 +30,25 @@ export class Memcached implements ICache {
         }
     }
 
-    public async clear(): Promise<void> {
+    public async clear(ignoreKeyPrefixes: string[] = []): Promise<void> {
         const iterator = this.keyIndex.keys();
 
         let prefix = iterator.next();
         while (prefix && prefix.value) {
-            await this.deleteKeys(prefix.value);
+            if (!ignoreKeyPrefixes.some((p) => p === prefix.value)) {
+                await this.deleteKeys(prefix.value);
+            }
             prefix = iterator.next();
         }
-        this.keyIndex.clear();
+
+        const newIndex: Map<string, string[]> = new Map();
+        for (const ignorePrefix of ignoreKeyPrefixes) {
+            if (this.keyIndex.has(ignorePrefix)) {
+                newIndex.set(ignorePrefix, this.keyIndex.get(ignorePrefix));
+            }
+        }
+
+        this.keyIndex = newIndex;
     }
 
     public async has(key: string): Promise<boolean> {

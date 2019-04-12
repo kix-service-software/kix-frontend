@@ -66,7 +66,7 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
                     AbstractNewDialog.prototype.showValidationError.call(this, result);
                 } else {
                     DialogService.getInstance().setMainDialogLoading(true, this.loadingHint);
-                    await KIXObjectService.createObjectByForm(this.objectType, this.state.formId, this.options)
+                    KIXObjectService.createObjectByForm(this.objectType, this.state.formId, this.options)
                         .then(async (objectId) => {
                             await AbstractNewDialog.prototype.handleDialogSuccess.call(this, objectId);
                             resolve();
@@ -82,8 +82,6 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
 
     protected async handleDialogSuccess(objectId: string | number): Promise<void> {
         await FormService.getInstance().loadFormConfigurations();
-        DialogService.getInstance().setMainDialogLoading(false);
-        BrowserUtil.openSuccessOverlay(this.successHint);
 
         const dialogContext = await ContextService.getInstance().getContextByTypeAndMode(
             this.objectType, ContextMode.CREATE
@@ -102,16 +100,19 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
             if (previousDialogContext) {
                 previousDialogContext.setAdditionalInformation(`${this.objectType}-ID`, objectId);
             }
-            FormService.getInstance().deleteFormInstance(this.state.formId);
             EventService.getInstance().publish(
                 TabContainerEvent.CHANGE_TAB, new TabContainerEventData(previousTabData.tabId)
             );
         } else {
+            DialogService.getInstance().setMainDialogLoading(false);
             DialogService.getInstance().submitMainDialog();
             if (this.routingConfiguration) {
                 RoutingService.getInstance().routeToContext(this.routingConfiguration, objectId);
             }
         }
+
+        FormService.getInstance().deleteFormInstance(this.state.formId);
+        BrowserUtil.openSuccessOverlay(this.successHint);
     }
 
     protected showValidationError(result: ValidationResult[]): void {

@@ -273,7 +273,6 @@ export abstract class Context<T extends ContextConfiguration = ContextConfigurat
         if (formId) {
             FormService.getInstance().deleteFormInstance(formId);
         }
-        return;
     }
 
 }

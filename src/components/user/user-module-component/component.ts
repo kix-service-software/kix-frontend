@@ -61,7 +61,7 @@ class Component extends AbstractMarkoComponent {
         const roleDetailsContextDescriptor = new ContextDescriptor(
             RoleDetailsContext.CONTEXT_ID, [KIXObjectType.ROLE],
             ContextType.MAIN, ContextMode.DETAILS,
-            true, 'user-role-details', ['roles'], RoleDetailsContext
+            true, 'object-details-page', ['roles'], RoleDetailsContext
         );
         ContextService.getInstance().registerContext(roleDetailsContextDescriptor);
 

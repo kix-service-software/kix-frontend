@@ -50,6 +50,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async initWidget(context: RoleDetailsContext, role?: Role): Promise<void> {
         this.state.error = null;
         this.state.loading = true;
+
         this.role = role ? role : await context.getObject<Role>().catch((error) => null);
 
         if (!this.role) {
