@@ -72,7 +72,12 @@ export class RoleService extends KIXObjectService {
     ): Promise<number> {
         let responseId;
         if (objectType === this.objectType) {
-            const createRole = new CreateRole(parameter);
+            const createParameter = parameter.filter(
+                (p) => p[0] !== RoleProperty.USER_IDS
+                    && p[0] !== RoleProperty.PERMISSIONS
+                    && p[0] !== 'ICON'
+            );
+            const createRole = new CreateRole(createParameter);
 
             const response = await this.sendCreateRequest<CreateRoleResponse, CreateRoleRequest>(
                 token, clientRequestId, this.RESOURCE_URI, new CreateRoleRequest(createRole), this.objectType
@@ -81,6 +86,9 @@ export class RoleService extends KIXObjectService {
                 throw new Error(error.Code, error.Message);
             });
             responseId = response.RoleID;
+
+            const permissions = this.getParameterValue(parameter, RoleProperty.PERMISSIONS);
+            await this.createPermissions(token, clientRequestId, Number(responseId), [], permissions);
 
             const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
             if (icon) {
@@ -100,6 +108,7 @@ export class RoleService extends KIXObjectService {
         const updateParameter = parameter.filter(
             (p) => p[0] !== RoleProperty.USER_IDS
                 && p[0] !== RoleProperty.PERMISSIONS
+                && p[0] !== 'ICON'
         );
         const updateRole = new UpdateRole(updateParameter);
 
