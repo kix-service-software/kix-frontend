@@ -19,13 +19,8 @@ export class InMemoryCache implements ICache {
     private constructor() { }
 
     public async clear(): Promise<void> {
-        const iterator = this.keyIndex.keys();
-
-        let key = iterator.next();
-        while (key && key.value) {
-            await this.delete(key.value, null);
-            key = iterator.next();
-        }
+        this.cache.clear();
+        this.keyIndex.clear();
     }
 
     public async has(key: string): Promise<boolean> {
