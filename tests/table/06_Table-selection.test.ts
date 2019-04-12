@@ -4,7 +4,7 @@ import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 
 import { ITable, Table, RowObject, IRowObject, ITableContentProvider, DefaultColumnConfiguration, SelectionState, TableValue } from '../../src/core/browser/table';
-import { KIXObjectType } from '../../src/core/model';
+import { KIXObjectType, KIXObject } from '../../src/core/model';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -69,6 +69,18 @@ describe('Table Selection Tests', () => {
 
             expect(selectedRows.some((r) => r.getRowId() === rows[0].getRowId())).is.true;
             expect(selectedRows.some((r) => r.getRowId() === 'not-existing-1')).is.false;
+        });
+
+        it('Select some rows (by object) - should return 10 rows.', async () => {
+            const rows = [...table.getRows().slice(5, 10), ...table.getRows().slice(20, 25)];
+            table.setRowSelectionByObject(rows.map((r) => r.getRowObject().getObject()));
+            const selectedRows = await table.getSelectedRows();
+            expect(selectedRows).exist;
+            expect(selectedRows).an('array');
+            expect(selectedRows.length).equal(10);
+
+            expect(selectedRows.some((r) => r.getRowId() === rows[0].getRowId())).is.true;
+            expect(selectedRows.some((r) => r.getRowId() === rows[5].getRowId())).is.true;
         });
 
         it('Check row selection state of table.', async () => {
@@ -167,12 +179,40 @@ describe('Table Selection Tests', () => {
             expect(rows[0].getRowId()).equal(row.getRowId());
         });
 
+        it('Should return true if row is selected (by object).', async () => {
+            const row = await table.getRows()[0];
+            expect(row).exist;
+            expect(row.isSelected()).is.false;
+            table.selectRowByObject(row.getRowObject().getObject(), true);
+            expect(row.isSelected()).is.true;
+
+            const rows = await table.getSelectedRows();
+            expect(rows).exist;
+            expect(rows).an('array');
+            expect(rows.length).equal(1);
+            expect(rows[0].getRowId()).equal(row.getRowId());
+        });
+
         it('Should return false if row is deselected.', async () => {
             const row = await table.getRows()[0];
             expect(row).exist;
             row.select();
             expect(row.isSelected()).is.true;
             row.select(false);
+            expect(row.isSelected()).is.false;
+
+            const rows = await table.getSelectedRows();
+            expect(rows).exist;
+            expect(rows).an('array');
+            expect(rows).is.empty;
+        });
+
+        it('Should return false if row is deselected (by object).', async () => {
+            const row = await table.getRows()[0];
+            expect(row).exist;
+            row.select();
+            expect(row.isSelected()).is.true;
+            table.selectRowByObject(row.getRowObject().getObject(), false);
             expect(row.isSelected()).is.false;
 
             const rows = await table.getSelectedRows();
@@ -265,6 +305,17 @@ describe('Table Selection Tests', () => {
             row.selectable();
             expect(row.isSelected()).is.false;
         });
+
+        it('Should return correct selectable state if row is set selectable (by object).', async () => {
+            const row = await table.getRows()[0];
+            expect(row).exist;
+            expect(row.isSelectable()).is.true;
+
+            table.setRowsSelectableByObject([row.getRowObject().getObject()], false);
+            expect(row.isSelectable()).is.false;
+            table.setRowsSelectableByObject([row.getRowObject().getObject()], true);
+            expect(row.isSelectable()).is.true;
+        });
     });
 });
 
@@ -290,7 +341,12 @@ class TestTableContentProvider implements ITableContentProvider {
                 values.push(new TableValue(`${c}`, `value-${r}-${c}`));
             }
 
-            objects.push(new RowObject(values));
+            objects.push(new RowObject(
+                values,
+                new TestTableObject({
+                    ObjectId: `object-id-${r}`
+                } as any)
+            ));
         }
         return objects;
     }
@@ -299,4 +355,21 @@ class TestTableContentProvider implements ITableContentProvider {
         //
     }
 
+}
+
+class TestTableObject extends KIXObject {
+
+    public ObjectId: string | number;
+    public KIXObjectType: KIXObjectType = KIXObjectType.ANY;
+
+    public constructor(object?: KIXObject) {
+        super(object);
+        if (object) {
+            this.ObjectId = object.ObjectId;
+        }
+    }
+
+    public equals(object: any): boolean {
+        return this.ObjectId === object.ObjectId;
+    }
 }
