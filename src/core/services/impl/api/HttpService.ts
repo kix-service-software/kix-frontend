@@ -104,28 +104,32 @@ export class HttpService {
             qs: queryParameters
         };
 
-        const cacheKey = this.buildCacheKey(resource, queryParameters, token);
-
-        if (useCache && await CacheService.getInstance().has(cacheKey, cacheKeyPrefix)) {
-            return await CacheService.getInstance().get(cacheKey, cacheKeyPrefix);
+        let cacheKey: string;
+        if (useCache) {
+            cacheKey = this.buildCacheKey(resource, queryParameters, token);
+            if (await CacheService.getInstance().has(cacheKey, cacheKeyPrefix)) {
+                return await CacheService.getInstance().get(cacheKey, cacheKeyPrefix);
+            }
         }
 
-        if (this.requestPromises.has(cacheKey)) {
-            return this.requestPromises.get(cacheKey);
+        const requestKey = this.buildCacheKey(resource, queryParameters, token);
+
+        if (this.requestPromises.has(requestKey)) {
+            return this.requestPromises.get(requestKey);
         }
 
         const requestPromise = this.executeRequest<T>(resource, token, clientRequestId, options);
 
-        this.requestPromises.set(cacheKey, requestPromise);
+        this.requestPromises.set(requestKey, requestPromise);
 
         requestPromise
             .then((response) => {
                 if (useCache) {
                     CacheService.getInstance().set(cacheKey, response, cacheKeyPrefix);
                 }
-                this.requestPromises.delete(cacheKey);
+                this.requestPromises.delete(requestKey);
             })
-            .catch(() => this.requestPromises.delete(cacheKey));
+            .catch(() => this.requestPromises.delete(requestKey));
 
         return requestPromise;
     }

@@ -59,7 +59,7 @@ export class InMemoryCache implements ICache {
 
     public async delete(key: string, cacheKeyPrefix: string): Promise<void> {
         if (cacheKeyPrefix) {
-            if (!this.keyIndex.has(cacheKeyPrefix)) {
+            if (this.keyIndex.has(cacheKeyPrefix)) {
                 const keys = this.keyIndex.get(cacheKeyPrefix);
                 const index = keys.findIndex((k) => k === key);
                 if (index !== -1) {
@@ -72,7 +72,7 @@ export class InMemoryCache implements ICache {
 
     public async deleteKeys(cacheKeyPrefix: string): Promise<void> {
         if (this.keyIndex.has(cacheKeyPrefix)) {
-            const keys = this.keyIndex.get(cacheKeyPrefix);
+            const keys = [...this.keyIndex.get(cacheKeyPrefix)];
             LoggingService.getInstance().debug(
                 `InMemoryCache: delete cacheKeyPrefix ${cacheKeyPrefix} - key count: ${keys.length}`
             );
