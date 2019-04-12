@@ -33,11 +33,12 @@ export class Memcached implements ICache {
     public async clear(): Promise<void> {
         const iterator = this.keyIndex.keys();
 
-        let key = iterator.next();
-        while (key && key.value) {
-            await this.delete(key.value, null);
-            key = iterator.next();
+        let prefix = iterator.next();
+        while (prefix && prefix.value) {
+            await this.deleteKeys(prefix.value);
+            prefix = iterator.next();
         }
+        this.keyIndex.clear();
     }
 
     public async has(key: string): Promise<boolean> {

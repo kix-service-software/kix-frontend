@@ -77,7 +77,7 @@ export class CacheService {
     }
 
     private getCacheKeyPrefix(objectNamespace: string): string[] {
-        const cacheKeyPrefixes: string[] = [];
+        let cacheKeyPrefixes: string[] = [];
         if (objectNamespace && objectNamespace.indexOf('.') !== -1) {
             const namespace = objectNamespace.split('.');
             if (namespace[0] === 'CMDB') {
@@ -123,6 +123,12 @@ export class CacheService {
                 cacheKeyPrefixes.push(KIXObjectType.FAQ_ARTICLE);
                 cacheKeyPrefixes.push(KIXObjectType.LINK);
                 cacheKeyPrefixes.push(KIXObjectType.LINK_OBJECT);
+                break;
+            case KIXObjectType.PERMISSION:
+            case KIXObjectType.ROLE:
+                this.keyIndex.clear();
+                this.cache.clear();
+                cacheKeyPrefixes = [];
                 break;
             default:
         }
