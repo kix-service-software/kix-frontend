@@ -128,6 +128,7 @@ class Component {
 
             let count = 0;
             if (this.state.table) {
+                await this.state.table.initialize();
                 count = this.state.table.getRowCount(true);
             }
             this.state.title = `${title} (${count})`;
