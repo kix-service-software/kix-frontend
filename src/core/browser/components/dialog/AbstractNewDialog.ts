@@ -102,6 +102,7 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
             if (previousDialogContext) {
                 previousDialogContext.setAdditionalInformation(`${this.objectType}-ID`, objectId);
             }
+            FormService.getInstance().deleteFormInstance(this.state.formId);
             EventService.getInstance().publish(
                 TabContainerEvent.CHANGE_TAB, new TabContainerEventData(previousTabData.tabId)
             );
