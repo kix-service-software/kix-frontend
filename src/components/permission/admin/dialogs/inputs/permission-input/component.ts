@@ -29,6 +29,8 @@ class Component extends AbstractMarkoComponent {
             });
             this.state.comment = input.value.Comment;
             (this as any).setStateDirty('checkboxOptions');
+        } else {
+            this.state.comment = '';
         }
     }
 

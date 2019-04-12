@@ -21,6 +21,9 @@ export class InMemoryCache implements ICache {
     public async clear(): Promise<void> {
         this.cache.clear();
         this.keyIndex.clear();
+        LoggingService.getInstance().debug(
+            `InMemoryCache: cache cleared`
+        );
     }
 
     public async has(key: string): Promise<boolean> {
