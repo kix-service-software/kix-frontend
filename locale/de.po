@@ -940,6 +940,9 @@ msgstr "Kunden"
 msgid "Import Data"
 msgstr "Stammdaten"
 
+msgid "Impress"
+msgstr ""
+
 msgid "in"
 msgstr ""
 
