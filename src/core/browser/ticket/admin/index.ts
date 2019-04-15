@@ -8,3 +8,4 @@ export { TicketStateService } from './TicketStateService';
 export { TicketPriorityService } from './TicketPriorityService';
 export { TicketPriorityFormService } from './TicketPriorityFormService';
 export { TicketStateFormService } from './TicketStateFormService';
+export { TicketTemplateService } from './TicketTemplateService';

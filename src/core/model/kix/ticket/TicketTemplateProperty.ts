@@ -1,4 +1,4 @@
-export enum TicketStateProperty {
+export enum TicketTemplateProperty {
 
     ID = 'ID',
 
@@ -6,7 +6,7 @@ export enum TicketStateProperty {
 
     COMMENT = 'Comment',
 
-    TYPE_NAME = 'TypeName',
+    CHANNEL_ID = 'ChannelID',
 
     TYPE_ID = 'TypeID',
 

@@ -7,6 +7,7 @@ import { EventService } from "../../../../event";
 import { KIXObjectService } from "../../../../kix";
 import { ApplicationEvent } from "../../../../application";
 import { ITable } from "../../../../table";
+import { TranslationService } from "../../../../i18n/TranslationService";
 
 export class TicketStateTableDeleteAction extends AbstractAction<ITable> {
 
@@ -27,19 +28,19 @@ export class TicketStateTableDeleteAction extends AbstractAction<ITable> {
     public async run(event: any): Promise<void> {
         if (this.canRun()) {
             const selectedRows = this.data.getSelectedRows();
+            const question = await TranslationService.translate(
+                'Translatable#The following {1} entries will be deleted. Are you sure?', [selectedRows.length]
+            );
             const content = new ComponentContent(
                 'confirm-overlay',
-                new ConfirmOverlayContent(
-                    `Die ausgewählten ${selectedRows.length} Einträge werden gelöscht. Sind Sie sicher?`,
-                    this.deleteStates.bind(this)
-                )
+                new ConfirmOverlayContent(question, this.deleteStates.bind(this))
             );
 
             OverlayService.getInstance().openOverlay(
                 OverlayType.CONFIRM,
                 null,
                 content,
-                'Translatable#Remove State',
+                'Translatable#Remove States',
                 false
             );
         }
@@ -49,7 +50,7 @@ export class TicketStateTableDeleteAction extends AbstractAction<ITable> {
         const selectedRows = this.data.getSelectedRows();
         if (selectedRows && !!selectedRows.length) {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Remove State ...'
+                loading: true, hint: 'Translatable#Remove States ...'
             });
             const failIds = await KIXObjectService.deleteObject(
                 KIXObjectType.TICKET_STATE, selectedRows.map((sR) => sR.getRowObject().getObject().ObjectId)
@@ -60,7 +61,7 @@ export class TicketStateTableDeleteAction extends AbstractAction<ITable> {
             if (!failIds || !!!failIds.length) {
                 const content = new ComponentContent(
                     'toast',
-                    new ToastContent('kix-icon-check', 'Translatable#State successfully removed.')
+                    new ToastContent('kix-icon-check', 'Translatable#States successfully removed.')
                 );
                 OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
             }
