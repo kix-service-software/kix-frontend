@@ -14,8 +14,207 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 3.5\n"
 
-msgid "(Current version)"
-msgstr "(aktuelle Version)"
+msgid "{0}/{1} {2} imported"
+msgstr ""
+
+msgid "0 data sets found."
+msgstr ""
+
+msgid "{0} File(s) added"
+msgstr "{0} Datei(en) angehangen"
+
+#, fuzzy
+#| msgid "{0} Link created"
+msgid "{0} imported"
+msgstr "{0} Verknüpfungen angelegt"
+
+msgid "{0} Link created"
+msgstr "{0} Verknüpfungen angelegt"
+
+msgid "accounted time"
+msgstr "Erfasste Zeit"
+
+msgid ""
+"A contact is a person, filing a request for the customer. Enter at least 3 "
+"characters in order to get a suggestion list of already registered contacts. "
+"You may use „*“ as wildcard."
+msgstr ""
+
+msgid "Action"
+msgstr "Aktion"
+
+msgid "Add"
+msgstr ""
+
+#, fuzzy
+#| msgid "Edit CMDB Class"
+msgid "Add CI Class"
+msgstr "Add CMDB Class"
+
+msgid "add notes here"
+msgstr ""
+
+#, fuzzy
+#| msgid "All Objects"
+msgid "Add Object"
+msgstr "Alle Objekte"
+
+msgid "Admin"
+msgstr ""
+
+msgid "Administration"
+msgstr ""
+
+msgid "Advanced Search"
+msgstr ""
+
+msgid "Affected Service"
+msgstr "Betroffener Service"
+
+msgid "Age"
+msgstr "Alter"
+
+#, fuzzy
+#| msgid "Agents"
+msgid "Agent"
+msgstr "Agenten"
+
+#, fuzzy
+#| msgid "User Assignment"
+msgid "Agent Assignment"
+msgstr "Agentenzuordnung"
+
+#, fuzzy
+#| msgid "FAQ Information"
+msgid "Agent Information"
+msgstr "FAQ Informationen"
+
+msgid "Agents"
+msgstr "Agenten"
+
+#, fuzzy
+#| msgid "Role successfully created."
+msgid "Agent successfully created."
+msgstr "Rolle wurde erfolgreich angelegt."
+
+msgid "All"
+msgstr ""
+
+msgid "All form fields marked by * are required fields."
+msgstr ""
+
+msgid "All Objects"
+msgstr "Alle Objekte"
+
+#, fuzzy
+#| msgid "New Tickets"
+msgid "All Tickets"
+msgstr "Neue Tickets"
+
+msgid "AND"
+msgstr ""
+
+msgid "An error occurred."
+msgstr "Es ist ein Fehler aufgetreten."
+
+msgid "Approved"
+msgstr "Genehmigt"
+
+msgid "A product by c.a.p.e. IT GmbH"
+msgstr "Ein Produkt der c.a.p.e. IT GmbH"
+
+msgid ""
+"A queue is a classification system for requests, comparable to folders in a "
+"file system."
+msgstr ""
+
+#, fuzzy
+#| msgid "Overview Tickets"
+msgid "Archivierte Tickets"
+msgstr "Übersicht Tickets"
+
+#, fuzzy
+#| msgid "Article Id"
+msgid "Article"
+msgstr "Artikel ID"
+
+#, fuzzy
+#| msgid "Article Id"
+msgid "Article Data"
+msgstr "Artikel ID"
+
+msgid "Article Id"
+msgstr "Artikel ID"
+
+msgid "Article Overview"
+msgstr "Artikelübersicht"
+
+#, fuzzy
+#| msgid "Role successfully created."
+msgid "Article successfully created."
+msgstr "Rolle wurde erfolgreich angelegt."
+
+#, fuzzy
+#| msgid "Article Id"
+msgid "Article Text"
+msgstr "Artikel ID"
+
+#, fuzzy
+#| msgid "Assigned Contacts "
+msgid "Assigned Agents"
+msgstr "Zugeordnete Kontakte "
+
+#, fuzzy
+#| msgid "Assigned Contacts "
+msgid "Assigned Contacts"
+msgstr "Zugeordnete Kontakte "
+
+#, fuzzy
+#| msgid "Assigned Customer"
+msgid "Assigned Customers"
+msgstr "Zugeordneter Kunde"
+
+#, fuzzy
+#| msgid "Assign Text Modules"
+msgid "Assigned Roles"
+msgstr "Zuordnung zu Textbausteinen"
+
+msgid "Assign Link"
+msgstr "Verknüpfung zuordnen"
+
+#, fuzzy
+#| msgid "Assign Link"
+msgid "Assign Links"
+msgstr "Verknüpfung zuordnen"
+
+msgid "Assign Team / Queue"
+msgstr "Zuordnung zu Team / Queue"
+
+msgid "Assign the roles for the user."
+msgstr ""
+
+msgid ""
+"Attach additional files to the FAQ article. Drag & Drop is possible. Max. "
+"file size is 25 MB."
+msgstr ""
+
+msgid "Attachments"
+msgstr "Anhänge"
+
+msgid "Attributes"
+msgstr "Attribute"
+
+msgid "attributes to change:"
+msgstr "zu ändernde Attribute:"
+
+msgid "back to"
+msgstr "zurück zu"
+
+msgid "Bcc"
+msgstr "Bcc"
+
+msgid "Benutzer"
+msgstr ""
 
 msgid ""
 "<b>-- KIX Professional Feature--</b><p>To use the text modules available in "
@@ -29,46 +228,333 @@ msgstr ""
 "können die Auswahl anhand der Schlüsselworte manuell einschränken, in dem "
 "sie weiteren Text eingeben.</p>"
 
-msgid "{0} File(s) added"
-msgstr "{0} Datei(en) angehangen"
+msgid "Bookmarks"
+msgstr ""
 
-msgid "Logged in"
-msgstr "Angemeldet"
-
-msgid "A product by c.a.p.e. IT GmbH"
-msgstr "Ein Produkt der c.a.p.e. IT GmbH"
-
-msgid "{0} Link created"
-msgstr "{0} Verknüpfungen angelegt"
-
-msgid "(today)"
-msgstr "(heute)"
-
-msgid "1 very low"
-msgstr "1 sehr niedrig"
-
-msgid "2 low"
-msgstr "2 niedrig"
-
-msgid "3 normal"
-msgstr "3 normal"
-
-msgid "4 high"
-msgstr "4 hoch"
-
-msgid "5 very high"
-msgstr "5 sehr hoch"
+#, fuzzy
+#| msgid "Action"
+msgid "Bulk Action"
+msgstr "Aktion"
 
 msgid "Cancel"
 msgstr "Abbrechen"
 
-msgid "Action"
-msgstr "Aktion"
+msgid "Cancel Process"
+msgstr "Bearbeiten wird abgebrochen"
 
-msgid "Update time"
-msgstr "Aktualisierungszeit"
+msgid "Can not create link ({0})"
+msgstr ""
 
-msgid "Current version"
+msgid "Can not use file (file is empty)."
+msgstr ""
+
+msgid "Can not use file (missing required properties):"
+msgstr ""
+
+msgid "Can not use file (no known properties found)."
+msgstr ""
+
+msgid "Category"
+msgstr "Kategorie"
+
+msgid "Catgeory"
+msgstr ""
+
+msgid "Cause"
+msgstr "Ursache"
+
+msgid "Cc"
+msgstr "Cc"
+
+msgid "Cell Phone"
+msgstr "Mobil"
+
+msgid "Changed at"
+msgstr "Geändert am"
+
+msgid "Changed by"
+msgstr "Geändert von"
+
+msgid "Changes saved."
+msgstr "Änderungen wurden gespeichert."
+
+msgid "Channel"
+msgstr "Kanal"
+
+msgid "Channels"
+msgstr "Kanäle"
+
+msgid "Charset"
+msgstr ""
+
+msgid "Choose a contact, customers will be assigned automatically."
+msgstr ""
+
+#, fuzzy
+#| msgid "CMDB Class"
+msgid "CI Class"
+msgstr "CMDB Klasse"
+
+#, fuzzy
+#| msgid "Class Definition"
+msgid "CI Class Definition"
+msgstr "Klassendefinition"
+
+#, fuzzy
+#| msgid "CMDB Class Definitions"
+msgid "CI Class Definitions"
+msgstr "CMDB Klassen Definitionen"
+
+#, fuzzy
+#| msgid "CMDB Classes"
+msgid "CI Classes"
+msgstr "CMDB Klassen"
+
+#, fuzzy
+#| msgid "CMDB Class information"
+msgid "CI Class information"
+msgstr "CMDB Klassen Informationen"
+
+#, fuzzy
+#| msgid "CMDB Class information"
+msgid "CI Class Information"
+msgstr "CMDB Klassen Informationen"
+
+#, fuzzy
+#| msgid "Role successfully created."
+msgid "CI Class successfully created."
+msgstr "Rolle wurde erfolgreich angelegt."
+
+msgid "CI link with"
+msgstr ""
+
+msgid "City"
+msgstr "Stadt"
+
+msgid "Class"
+msgstr "Klasse"
+
+msgid "Class Definition"
+msgstr "Klassendefinition"
+
+msgid "Close Dialog"
+msgstr "Dialog schließen"
+
+msgid "Close window"
+msgstr "Fenster schließen"
+
+msgid "Closing time"
+msgstr "Schließzeit"
+
+msgid "CMDB"
+msgstr ""
+
+#, fuzzy
+#| msgid "CMDB Classes"
+msgid "CMDB: CI Classes"
+msgstr "CMDB Klassen"
+
+msgid "CMDB Explorer"
+msgstr ""
+
+msgid ": (colon)"
+msgstr ""
+
+msgid ", (comma)"
+msgstr ""
+
+msgid "Comment"
+msgstr "Kommentar"
+
+#, fuzzy
+#| msgid "Location"
+msgid "Communication"
+msgstr "Standort"
+
+msgid "Compare"
+msgstr ""
+
+#, fuzzy
+#| msgid "Current version"
+msgid "Compare Versions"
+msgstr "Aktuelle Version"
+
+msgid "Config Item"
+msgstr "Config Item"
+
+msgid "Config Item Class"
+msgstr "Config Item Klasse"
+
+msgid "config item class can not be changed."
+msgstr ""
+
+#, fuzzy
+#| msgid "Config Item"
+msgid "Config Item Data"
+msgstr "Config Item"
+
+#, fuzzy
+#| msgid "Config Item Class"
+msgid "Config Item Details"
+msgstr "Config Item Klasse"
+
+#, fuzzy
+#| msgid "Config Items"
+msgid "Config Item History"
+msgstr "Config Items"
+
+#, fuzzy
+#| msgid "Contact Information"
+msgid "Config Item Information"
+msgstr "Kontaktinformationen"
+
+msgid "Config Items"
+msgstr "Config Items"
+
+#, fuzzy
+#| msgid "Config Items"
+msgid "Config Items Count: {0}"
+msgstr "Config Items"
+
+#, fuzzy
+#| msgid "Config Item"
+msgid "Config Item Search"
+msgstr "Config Item"
+
+#, fuzzy
+#| msgid "Role successfully created."
+msgid "Config Item successfully created."
+msgstr "Rolle wurde erfolgreich angelegt."
+
+#, fuzzy
+#| msgid "Config Item Class"
+msgid "Config Item Version Compare"
+msgstr "Config Item Klasse"
+
+msgid "Contact"
+msgstr "Kontakt"
+
+#, fuzzy
+#| msgid "Contacts"
+msgid "Contact Details"
+msgstr "Kontakte"
+
+msgid "Contact Information"
+msgstr "Kontaktinformationen"
+
+msgid "Contacts"
+msgstr "Kontakte"
+
+#, fuzzy
+#| msgid "Contact Role"
+msgid "Contact Search"
+msgstr "Kontaktrolle"
+
+#, fuzzy
+#| msgid "Role successfully created."
+msgid "Contact successfully created."
+msgstr "Rolle wurde erfolgreich angelegt."
+
+#, fuzzy
+#| msgid "Contacts"
+msgid "contains"
+msgstr "Kontakte"
+
+msgid "corresponds to"
+msgstr ""
+
+msgid "Country"
+msgstr "Land"
+
+#, fuzzy
+#| msgid "Created at"
+msgid "Create"
+msgstr "Erstellt am"
+
+#, fuzzy
+#| msgid "Created at"
+msgid "Create Agent"
+msgstr "Erstellt am"
+
+#, fuzzy
+#| msgid "Unread Articles"
+msgid "Create Article"
+msgstr "Ungelesene Artikel"
+
+#, fuzzy
+#| msgid "Create Core Data"
+msgid "Create CI Class"
+msgstr "Stammdaten hinzufügen"
+
+#, fuzzy
+#| msgid "Config Item"
+msgid "Create Config Item"
+msgstr "Config Item"
+
+#, fuzzy
+#| msgid "Create State"
+msgid "Create Contact"
+msgstr "Status hinzufügen"
+
+#, fuzzy
+#| msgid "New Customer"
+msgid "Create Customer"
+msgstr "Neuer Kunde"
+
+msgid "Created at"
+msgstr "Erstellt am"
+
+msgid "Created by"
+msgstr "Erstellt von"
+
+#, fuzzy
+#| msgid "FAQ Article"
+msgid "Create FAQ Article"
+msgstr "FAQ Artikel"
+
+#, fuzzy
+#| msgid "Delete Link"
+msgid "Create Links."
+msgstr "Verknüpfung löschen"
+
+#, fuzzy
+#| msgid "Create Priorität"
+msgid "Create Priority"
+msgstr "Neue Priorität"
+
+msgid "Create Role"
+msgstr "Rolle wird angelegt"
+
+msgid "Create State"
+msgstr "Status hinzufügen"
+
+#, fuzzy
+#| msgid "Create Type"
+msgid "Create Ticket"
+msgstr "Typ hinzufügen"
+
+#, fuzzy
+#| msgid "Translation"
+msgid "Create Translation"
+msgstr "Übersetzung"
+
+msgid "Create Type"
+msgstr "Typ hinzufügen"
+
+msgid "CSV-Export"
+msgstr ""
+
+msgid "CSV-File with data sets for import. Drag & Drop is possible."
+msgstr ""
+
+#, fuzzy
+#| msgid "(Current version)"
+msgid "(Current definition)"
+msgstr "(aktuelle Version)"
+
+#, fuzzy
+#| msgid "Current version"
+msgid "Current Definition"
 msgstr "Aktuelle Version"
 
 msgid "Current deployment state"
@@ -77,272 +563,24 @@ msgstr "Aktueller Verwendungsstatus"
 msgid "Current incident state"
 msgstr "Aktueller Vorfallstatus"
 
-msgid "Show all"
-msgstr "Alle anzeigen"
-
-msgid "Link Objects"
-msgstr "Objekte verknüpfen"
-
-msgid "All Objects"
-msgstr "Alle Objekte"
-
-msgid "Age"
-msgstr "Alter"
-
-msgid "To"
-msgstr "An"
-
-msgid "Changes saved."
-msgstr "Änderungen wurden gespeichert."
-
-msgid "Login"
-msgstr "Anmelden"
-
-msgid "Contact"
-msgstr "Kontakt"
-
-msgid "Edit Contact"
-msgstr "Ansprechparnter Bearbeiten"
-
-msgid "Number of Config Items"
-msgstr "Anzahl Config Items"
-
-msgid "Number of Config Items in critical incident state"
-msgstr "Anzahl Config Items mit kritischem Vorfallstatus"
-
-msgid "Number of versions"
-msgstr "Anzahl Versionen"
-
-msgid "Link Type"
-msgstr "Art der Verknüpfung"
-
-msgid "Article Id"
-msgstr "Artikel ID"
-
-msgid "Article Overview"
-msgstr "Artikelübersicht"
-
-msgid "Attributes"
-msgstr "Attribute"
-
-msgid "Bcc"
-msgstr "Bcc"
-
-msgid "watched"
-msgstr "beobachtet"
-
-msgid "Owner"
-msgstr "Bearbeiter"
-
-msgid "User"
-msgstr "Benutzer"
-
-msgid "User name"
-msgstr "Benutzername"
-
-msgid "Observer"
-msgstr "Beobachter"
-
-msgid "Watched Tickets"
-msgstr "Beobachtete Tickets"
-
-msgid "FAQ Article History"
-msgstr "FAQ Artikel Historie"
-
-msgid "Description & Comments"
-msgstr "Beschreibung & Anmerkungen"
-
-msgid "Subject"
-msgstr "Betreff"
-
-msgid "Affected Service"
-msgstr "Betroffener Service"
-
-msgid "Rating"
-msgstr "Bewertung"
-
-msgid "Label"
-msgstr "Beschriftung"
-
-msgid "select image file"
-msgstr "Bilddatei wählen"
-
-msgid "Images"
-msgstr "Bilder"
-
-msgid "Cc"
-msgstr "Cc"
-
-msgid "Edit CMDB Class"
-msgstr "Add CMDB Class"
-
-msgid "CMDB Class"
-msgstr "CMDB Klasse"
-
-msgid "CMDB Classes"
-msgstr "CMDB Klassen"
-
-msgid "CMDB Class permissions"
-msgstr "CMDB Klassen Berechtigungen"
-
-msgid "CMDB Class Definition"
-msgstr "CMDB Klassen Definition"
-
-msgid "CMDB Class Definitions"
-msgstr "CMDB Klassen Definitionen"
-
-msgid "CMDB Class information"
-msgstr "CMDB Klassen Informationen"
-
-msgid "CMDB Class versions"
-msgstr "CMDB Klassen Versionen"
-
-msgid "Coming Soon"
-msgstr "Coming Soon"
-
-msgid "Config Item"
-msgstr "Config Item"
-
-msgid "Config Items"
-msgstr "Config Items"
-
-msgid "Config Item Class"
-msgstr "Config Item Klasse"
-
-msgid "Select file"
-msgstr "Datei wählen"
-
-msgid "Error"
-msgstr "Fehler"
-
-msgid "Reset data"
-msgstr "Daten zurücksetzen"
-
-msgid "Detailed search results"
-msgstr "Detailierte Suchergebnisse"
-
-msgid "Print"
-msgstr "Drucken"
-
-msgid "Duplicate"
-msgstr "Duplizieren"
-
-msgid "E-Mail"
-msgstr "E-Mail"
-
-msgid "Recipient: To"
-msgstr "Empfänger: An"
-
-msgid "Recipient: Bcc"
-msgstr "Empfänger: Bcc"
-
-msgid "Recipient: Cc"
-msgstr "Empfänger: Cc"
-
-msgid "accounted time"
-msgstr "Erfasste Zeit"
-
-msgid "Reminder Tickets"
-msgstr "Erinnerungstickets"
-
-msgid "Created at"
-msgstr "Erstellt am"
-
-msgid "Created by"
-msgstr "Erstellt von"
-
-msgid "escalated"
-msgstr "Eskaliert"
-
-msgid "Escalation time"
-msgstr "Eskalationszeit"
-
-msgid "Escalated Tickets"
-msgstr "Eskalierte Tickets"
-
-msgid "external"
-msgstr "extern"
-
-msgid "FAQ Article"
-msgstr "FAQ Artikel"
-
-msgid "FAQ Information"
-msgstr "FAQ Informationen"
-
-msgid "Error while adding the image:"
-msgstr "Fehler beim Hinzufügen des Bildes:"
-
-msgid "Error while adding the attachement:"
-msgstr "Fehler beim Hinzufügen von Anlagen:"
-
-msgid "Error on form validation:"
-msgstr "Fehler beim Validieren des Formulars:"
-
-msgid "Close window"
-msgstr "Fenster schließen"
-
-msgid "expected time required:"
-msgstr "voraussichtlich benötigte Zeit:"
-
-msgid "Filter in list"
-msgstr "Filtern in Liste"
-
-msgid "Unlocked Tickets"
-msgstr "Freie Tickets"
-
-msgid "Unlocked"
-msgstr "Freigeben"
-
-msgid "Changed at"
-msgstr "Geändert am"
-
-msgid "Changed by"
-msgstr "Geändert von"
-
-msgid "read"
-msgstr "Gelesen"
-
-msgid "Visible in customer portal"
-msgstr "Sichtbar in Kundenportal"
-
-msgid "Approved"
-msgstr "Genehmigt"
-
-msgid "Locked"
-msgstr "Gesperrt"
-
-msgid "Locked Tickets"
-msgstr "Gesperrte Tickets"
-
-msgid "Validity"
-msgstr "Gültigkeit"
-
-msgid "Category"
-msgstr "Kategorie"
-
-msgid "No contact available"
-msgstr "Kein Kontakt verfügbar"
-
-msgid "No customer available"
-msgstr "Kein Kunde verfügbar"
-
-msgid "Class"
-msgstr "Klasse"
-
-msgid "Class Definition"
-msgstr "Klassendefinition"
-
-msgid "Comment"
-msgstr "Kommentar"
+#, fuzzy
+#| msgid "(Current version)"
+msgid "(current version)"
+msgstr "(aktuelle Version)"
+
+msgid "(Current version)"
+msgstr "(aktuelle Version)"
+
+msgid "Current version"
+msgstr "Aktuelle Version"
 
 msgid "Customer"
 msgstr "Kunde"
 
-msgid "Edit Customer"
-msgstr "Kunde bearbeiten"
-
-msgid "Customers"
-msgstr "Kunden"
+#, fuzzy
+#| msgid "Customer ID"
+msgid "Customer Details"
+msgstr "Kunden ID"
 
 msgid "Customer ID"
 msgstr "Kunden ID"
@@ -350,23 +588,632 @@ msgstr "Kunden ID"
 msgid "Customer Information"
 msgstr "Kundeninformationen"
 
-msgid "Country"
-msgstr "Land"
+msgid "Customers"
+msgstr "Kunden"
+
+#, fuzzy
+#| msgid "Customer ID"
+msgid "Customers Dashboard"
+msgstr "Kunden ID"
+
+#, fuzzy
+#| msgid "Customer"
+msgid "Customer Search"
+msgstr "Kunde"
+
+#, fuzzy
+#| msgid "Role successfully created."
+msgid "Customer successfully created."
+msgstr "Rolle wurde erfolgreich angelegt."
+
+msgid ""
+"Define where this FAQ article will be shown (internal= only Agent Portal, "
+"external = KIX Agent and Customer Portal for authenticated users only, "
+"public=KIX Agent- and Customer Portal for both, authenticated and "
+"unauthenticated users)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Delete Link"
+msgid "Delete"
+msgstr "Verknüpfung löschen"
+
+msgid "Delete Link"
+msgstr "Verknüpfung löschen"
+
+msgid "Deny"
+msgstr ""
+
+msgid "Deployment State"
+msgstr "Verwendungsstatus"
+
+msgid "Describe sympton as precisely as possible"
+msgstr ""
+
+msgid "Describe the solution for the symptons reasons as precisely as possible"
+msgstr ""
+
+msgid "Description"
+msgstr "Beschreibung"
+
+msgid "Description & Comments"
+msgstr "Beschreibung & Anmerkungen"
+
+msgid "Detailed search results"
+msgstr "Detailierte Suchergebnisse"
+
+msgid "DisplayValue"
+msgstr ""
+
+msgid ". (dot)"
+msgstr ""
+
+msgid "Download"
+msgstr ""
+
+msgid "Duplicate"
+msgstr "Duplizieren"
+
+#, fuzzy
+#| msgid "Edit {0}"
+msgid "Edit"
+msgstr "{0} bearbeiten"
+
+msgid "Edit {0}"
+msgstr "{0} bearbeiten"
+
+#, fuzzy
+#| msgid "Edit Ticket"
+msgid "Edit Agent"
+msgstr "Ticket bearbeiten"
+
+#, fuzzy
+#| msgid "Edit CMDB Class"
+msgid "Edit Class"
+msgstr "Add CMDB Class"
+
+#, fuzzy
+#| msgid "Config Item"
+msgid "Edit Config Item"
+msgstr "Config Item"
+
+msgid "Edit Contact"
+msgstr "Ansprechparnter Bearbeiten"
+
+msgid "Edit Core Data"
+msgstr "Stammdaten bearbeiten"
+
+msgid "Edit Customer"
+msgstr "Kunde bearbeiten"
+
+msgid "edited"
+msgstr "bearbeitet"
+
+#, fuzzy
+#| msgid "FAQ Article"
+msgid "Edit FAQ article"
+msgstr "FAQ Artikel"
+
+#, fuzzy
+#| msgid "FAQ Article"
+msgid "Edit FAQ Article"
+msgstr "FAQ Artikel"
+
+#, fuzzy
+#| msgid "Edit Ticket"
+msgid "Edit Links"
+msgstr "Ticket bearbeiten"
+
+#, fuzzy
+#| msgid "Object"
+msgid "Edit Object"
+msgstr "Objekt"
+
+#, fuzzy
+#| msgid "Link Objects"
+msgid "Edit Objects"
+msgstr "Objekte verknüpfen"
+
+#, fuzzy
+#| msgid "Personal Settings"
+msgid "Edit Personal Settings"
+msgstr "Persönliche Einstellungen"
+
+msgid "Edit Priority"
+msgstr "Priorität bearbeiten"
+
+#, fuzzy
+#| msgid "Edit Type"
+msgid "Edit Role"
+msgstr "Typ bearbeiten"
+
+#, fuzzy
+#| msgid "Search"
+msgid "Edit Search"
+msgstr "Suche"
+
+msgid "Edit State"
+msgstr "Status bearbeiten"
+
+msgid "Edit Ticket"
+msgstr "Ticket bearbeiten"
+
+#, fuzzy
+#| msgid "Translation"
+msgid "Edit Translation"
+msgstr "Übersetzung"
+
+msgid "Edit Type"
+msgstr "Typ bearbeiten"
+
+msgid "E-mail"
+msgstr ""
+
+msgid "ends with"
+msgstr ""
+
+#, fuzzy
+#| msgid "Start search"
+msgid "Enter search value"
+msgstr "Suche starten"
+
+msgid "equals"
+msgstr ""
+
+msgid "Error"
+msgstr "Fehler"
+
+#, fuzzy
+#| msgid "Error"
+msgid "Error!"
+msgstr "Fehler"
+
+msgid "Error on form validation:"
+msgstr "Fehler beim Validieren des Formulars:"
+
+msgid "Error while adding the attachement:"
+msgstr "Fehler beim Hinzufügen von Anlagen:"
+
+msgid "Error while adding the image:"
+msgstr "Fehler beim Hinzufügen des Bildes:"
+
+msgid "Escalated Tickets"
+msgstr "Eskalierte Tickets"
+
+#, fuzzy
+#| msgid "Escalated Tickets"
+msgid "escalated tickets: {0}"
+msgstr "Eskalierte Tickets"
+
+msgid "Escalation time"
+msgstr "Eskalationszeit"
+
+msgid "Execute now!"
+msgstr "Jetzt ausführen!"
+
+msgid "Execute now?"
+msgstr "Jetzt ausführen?"
+
+msgid "Existing Links ({0})"
+msgstr "Vorhandene Verknüpfungen ({0})"
+
+msgid "expected time required:"
+msgstr "voraussichtlich benötigte Zeit:"
+
+msgid "external"
+msgstr "extern"
+
+msgid "FAQ"
+msgstr ""
+
+msgid "FAQ Article"
+msgstr "FAQ Artikel"
+
+msgid "FAQ Article History"
+msgstr "FAQ Artikel Historie"
+
+#, fuzzy
+#| msgid "Role successfully created."
+msgid "FAQ Article successfully created."
+msgstr "Rolle wurde erfolgreich angelegt."
+
+#, fuzzy
+#| msgid "Attributes"
+msgid "FAQ Attributes"
+msgstr "Attribute"
+
+#, fuzzy
+#| msgid "Category"
+msgid "FAQ Categories"
+msgstr "Kategorie"
+
+msgid "FAQ Data"
+msgstr ""
+
+#, fuzzy
+#| msgid "FAQ Article"
+msgid "FAQ Details"
+msgstr "FAQ Artikel"
+
+msgid "FAQ Information"
+msgstr "FAQ Informationen"
+
+#, fuzzy
+#| msgid "FAQ Information"
+msgid "FAQ rating"
+msgstr "FAQ Informationen"
+
+#, fuzzy
+#| msgid "Search"
+msgid "FAQ Search"
+msgstr "Suche"
+
+msgid "Fax"
+msgstr ""
+
+msgid "Filter in list"
+msgstr "Filtern in Liste"
+
+msgid "First Name"
+msgstr "Vorname"
+
+msgid "Force"
+msgstr "Erzwingen"
+
+#, fuzzy
+msgid "free tickets: {0}"
+msgstr "Meine Tickets"
+
+msgid "From"
+msgstr "Von"
+
+msgid "Full Text"
+msgstr "Volltext"
+
+#, fuzzy
+#| msgid "Create Core Data"
+msgid "greater or equal"
+msgstr "Stammdaten hinzufügen"
+
+#, fuzzy
+#| msgid "Create State"
+msgid "greater than"
+msgstr "Status hinzufügen"
+
+msgid "Help"
+msgstr ""
+
+msgid "History"
+msgstr ""
+
+msgid "Hit List"
+msgstr "Trefferliste"
+
+msgid "Hit List ({0})"
+msgstr "Trefferliste ({0})"
+
+msgid "Home"
+msgstr ""
+
+msgid "How to create a new ticket?"
+msgstr ""
+
+msgid "How to search in KIX 18?"
+msgstr ""
+
+msgid "How to use KIX 18 – Some general notes"
+msgstr ""
+
+msgid "Icon"
+msgstr ""
+
+msgid "Id"
+msgstr ""
+
+msgid "ID"
+msgstr ""
+
+msgid "Ignore"
+msgstr "Ignorieren"
+
+msgid "Images"
+msgstr "Bilder"
+
+msgid "Import"
+msgstr ""
+
+msgid "Import {0} {1}. Execute?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Contacts"
+msgid "Import Contacts"
+msgstr "Kontakte"
+
+#, fuzzy
+#| msgid "Customers"
+msgid "Import Customers"
+msgstr "Kunden"
+
+#, fuzzy
+#| msgid "Core Data"
+msgid "Import Data"
+msgstr "Stammdaten"
+
+msgid "Impress"
+msgstr ""
+
+msgid "in"
+msgstr ""
+
+#, fuzzy
+#| msgid "Incident State"
+msgid "Incident state"
+msgstr "Vorfallstatus"
+
+msgid "Incident State"
+msgstr "Vorfallstatus"
+
+msgid "Insert a comment for the CI class."
+msgstr ""
+
+msgid "Insert a comment for the priority."
+msgstr ""
+
+msgid "Insert a comment for the role."
+msgstr ""
+
+msgid "Insert a comment for the state."
+msgstr ""
+
+msgid "Insert a comment for the type."
+msgstr ""
+
+msgid "Insert a comment for the user."
+msgstr ""
+
+msgid "Insert a config item class name."
+msgstr ""
+
+msgid "Insert additional information for this FAQ article."
+msgstr ""
+
+msgid "Insert a login for the user."
+msgstr ""
+
+msgid "Insert a mobile number for the user."
+msgstr ""
+
+msgid "Insert a name for the Config Item."
+msgstr ""
+
+msgid "Insert a name for the FAQ article."
+msgstr ""
+
+msgid "Insert a password for the contact."
+msgstr ""
+
+msgid "Insert a pattern for the translation."
+msgstr ""
+
+msgid "Insert a phone number for the user."
+msgstr ""
+
+msgid "Insert a priority name."
+msgstr ""
+
+msgid "Insert a role name."
+msgstr ""
+
+msgid "Insert a state name."
+msgstr ""
+
+msgid "Insert a ticket title."
+msgstr ""
+
+msgid "Insert a title for the user."
+msgstr ""
+
+msgid "Insert a type name."
+msgstr ""
+
+msgid "Inserted e-mail address is invalid."
+msgstr ""
+
+msgid "Inserted e-mail address must not be a system address."
+msgstr ""
+
+msgid "insert filter value"
+msgstr ""
+
+msgid "Insert key words for the FAQ article to find them more quickly."
+msgstr ""
+
+msgid "Insert the complete ticket title or a part of the title."
+msgstr ""
+
+msgid "Insert the definition for the Config Item Class."
+msgstr ""
+
+msgid "Insert the e-mail address for the user."
+msgstr ""
+
+msgid "Insert the firstname of the user."
+msgstr ""
+
+msgid "Insert the lastname of the user."
+msgstr ""
+
+msgid "Insert the ticket number or a part of the number (min. 1 character)."
+msgstr ""
+
+#, fuzzy
+#| msgid "external"
+msgid "internal"
+msgstr "extern"
+
+#, fuzzy
+#| msgid "Internationalization"
+msgid "Internationalisation"
+msgstr "Internationalisierung"
+
+#, fuzzy
+#| msgid "Internationalization"
+msgid "Internationalisation: Translations"
+msgstr "Internationalisierung"
+
+msgid "Invalid date."
+msgstr ""
+
+msgid "Label"
+msgstr "Beschriftung"
+
+msgid "Language"
+msgstr "Sprache"
+
+msgid "Languages"
+msgstr "Sprachen"
+
+msgid "Large View"
+msgstr ""
 
 msgid "last changed time"
 msgstr "Letzte Änderungszeit"
 
-msgid "Solution"
-msgstr "Lösung"
+#, fuzzy
+#| msgid "Login"
+msgid "Last Login"
+msgstr "Anmelden"
 
-msgid "Solution time"
-msgstr "Lösungszeit"
+#, fuzzy
+#| msgid "First Name"
+msgid "Last Name"
+msgstr "Vorname"
 
-msgid "My watched tickets"
-msgstr "Meine beobachteten Tickets"
+msgid "Legend"
+msgstr ""
 
-msgid "My watched tickets with new articles"
-msgstr "Meine beobachteten Tickets mit neuen Artikeln"
+msgid "less or equal"
+msgstr ""
+
+msgid "less than"
+msgstr ""
+
+#, fuzzy
+#| msgid "Edit {0}"
+msgid "link {0}"
+msgstr "{0} bearbeiten"
+
+#, fuzzy
+#| msgid "Config Item"
+msgid "Link Config Item with"
+msgstr "Config Item"
+
+msgid "Linked as"
+msgstr "Verknüpft als"
+
+msgid "Linked Objects"
+msgstr "Verknüpfte Objekte"
+
+#, fuzzy
+#| msgid "Link Ticket with"
+msgid "Link FAQ with"
+msgstr "Ticket verknüpfen mit"
+
+msgid "Link Graph"
+msgstr "Verknüpfungsgraph"
+
+msgid "Link Objects"
+msgstr "Objekte verknüpfen"
+
+msgid "Links"
+msgstr "Verknüpfungen"
+
+#, fuzzy
+#| msgid "Link Type"
+msgid "Links updated."
+msgstr "Art der Verknüpfung"
+
+msgid "Links will be removed."
+msgstr ""
+
+msgid ""
+"Link this config item to a ticket, an FAQ article or another config item."
+msgstr ""
+
+msgid ""
+"Link this FAQ article to a ticket, a config item or another FAQ article."
+msgstr ""
+
+msgid ""
+"Link this ticket item to an config item, an FAQ article or another ticket."
+msgstr ""
+
+msgid "Link Ticket with"
+msgstr "Ticket verknüpfen mit"
+
+msgid "Link to"
+msgstr "Verknüpfen mit"
+
+msgid "Link to ticket"
+msgstr "Verknüpfen mit Ticket"
+
+msgid "Link Type"
+msgstr "Art der Verknüpfung"
+
+#, fuzzy
+#| msgid "Edit Contact"
+msgid "Load Contact ..."
+msgstr "Ansprechparnter Bearbeiten"
+
+#, fuzzy
+#| msgid "Edit Customer"
+msgid "Load Customer ..."
+msgstr "Kunde bearbeiten"
+
+#, fuzzy
+#| msgid "Lock State"
+msgid "Load Ticket State ..."
+msgstr "Sperrstatus"
+
+msgid "Localisation"
+msgstr "Lokalisierung"
+
+#, fuzzy
+#| msgid "Locked"
+msgid "Lock"
+msgstr "Gesperrt"
+
+#, fuzzy
+#| msgid "Unlocked"
+msgid "locked"
+msgstr "Freigeben"
+
+msgid "Lock State"
+msgstr "Sperrstatus"
+
+#, fuzzy
+#| msgid "Locked Tickets"
+msgid "Lock Ticket ..."
+msgstr "Gesperrte Tickets"
+
+msgid "Logged in"
+msgstr "Angemeldet"
+
+msgid "Login"
+msgstr "Anmelden"
+
+msgid "Login failed"
+msgstr ""
+
+msgid "Logout"
+msgstr ""
+
+msgid "Merge"
+msgstr ""
+
+msgid "Mobile"
+msgstr ""
 
 msgid "My locked tickets"
 msgstr "Meine gesperrten Tickets"
@@ -375,41 +1222,81 @@ msgid "My locked tickets with new articles"
 msgstr "Meine gesperrten Tickets mit neuen Artikeln"
 
 #, fuzzy
-msgid "Meine Tickets"
+msgid "My Tickets"
 msgstr "Meine Tickets"
 
 msgid "My tickets with new articles"
 msgstr "Meine Tickets mit neuen Artikeln"
 
-msgid "Missing required argument."
-msgstr "Fehlende Pflichtangabe."
+msgid "My watched tickets"
+msgstr "Meine beobachteten Tickets"
 
-msgid "Cell Phone"
-msgstr "Mobil"
+msgid "My watched tickets with new articles"
+msgstr "Meine beobachteten Tickets mit neuen Artikeln"
 
-msgid "next image"
-msgstr "Nächstes Bild"
+msgid "Name"
+msgstr ""
 
 msgid "New"
 msgstr "Neu"
 
-msgid "Link Ticket with"
-msgstr "Ticket verknüpfen mit"
-
-msgid "Create Priorität"
-msgstr "Neue Priorität"
-
-msgid "New Contact"
-msgstr "Neuer Kontakt"
+#, fuzzy
+#| msgid "Agents"
+msgid "New Agent"
+msgstr "Agenten"
 
 msgid "New Article"
 msgstr "Neuer Artikel"
 
+#, fuzzy
+#| msgid "Class"
+msgid "New Class"
+msgstr "Klasse"
+
+#, fuzzy
+#| msgid "Config Item"
+msgid "New Config Item"
+msgstr "Config Item"
+
+msgid "New Contact"
+msgstr "Neuer Kontakt"
+
 msgid "New Customer"
 msgstr "Neuer Kunde"
 
-msgid "new"
-msgstr "New"
+msgid "New E-mail"
+msgstr ""
+
+msgid "New FAQ"
+msgstr ""
+
+#, fuzzy
+#| msgid "Object"
+msgid "New Object"
+msgstr "Objekt"
+
+#, fuzzy
+#| msgid "Priority"
+msgid "New Priority"
+msgstr "Priorität"
+
+msgid "New Role"
+msgstr "Neue Rolle"
+
+#, fuzzy
+#| msgid "Search"
+msgid "New Search"
+msgstr "Suche"
+
+#, fuzzy
+#| msgid "State"
+msgid "New State"
+msgstr "Status"
+
+#, fuzzy
+#| msgid "New Ticket"
+msgid "New Template"
+msgstr "Neues Ticket"
 
 msgid "New Ticket"
 msgstr "Neues Ticket"
@@ -417,14 +1304,117 @@ msgstr "Neues Ticket"
 msgid "New Tickets"
 msgstr "Neue Tickets"
 
+msgid "New Tickets (recent 7 days)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Translation"
+msgid "New Translation"
+msgstr "Übersetzung"
+
+#, fuzzy
+#| msgid "New Ticket"
+msgid "New Type"
+msgstr "Neues Ticket"
+
+#, fuzzy
+#| msgid "{0} Link created"
+msgid "New Version created"
+msgstr "{0} Verknüpfungen angelegt"
+
+#, fuzzy
+#| msgid "next image"
+msgid "Next Image"
+msgstr "Nächstes Bild"
+
+#, fuzzy
+#| msgid "Quick search (Tickets)"
+msgid "Nicht archivierte Tickets"
+msgstr "Schnellsuche (Tickets)"
+
+#, fuzzy
+#| msgid "No"
+msgid "No."
+msgstr "Nein"
+
+msgid "No {0} found (add at least {1} characters)."
+msgstr ""
+
+#, fuzzy
+#| msgid "New Article"
+msgid "No Article"
+msgstr "Neuer Artikel"
+
+#, fuzzy
+#| msgid "No contact available"
+msgid "No article available."
+msgstr "Kein Kontakt verfügbar"
+
+msgid "No CI Class available for ID {0}."
+msgstr ""
+
+msgid "No contact available"
+msgstr "Kein Kontakt verfügbar"
+
+msgid "No customer available"
+msgstr "Kein Kunde verfügbar"
+
+msgid "No general catalog class configured!"
+msgstr ""
+
+#, fuzzy
+#| msgid "No contact available"
+msgid "No object with ID {1} available."
+msgstr "Kein Kontakt verfügbar"
+
+msgid "No priority available for ID {1}."
+msgstr ""
+
+#, fuzzy
+#| msgid "No contact available"
+msgid "No rating available."
+msgstr "Kein Kontakt verfügbar"
+
+#, fuzzy
+#| msgid "No contact available"
+msgid "No role with ID {1} available."
+msgstr "Kein Kontakt verfügbar"
+
+msgid "No search query."
+msgstr ""
+
 msgid "Note"
 msgstr "Notiz"
 
 msgid "Notes"
 msgstr "Notizen"
 
+msgid "not modified"
+msgstr ""
+
+#, fuzzy
+#| msgid "No contact available"
+msgid "No version available"
+msgstr "Kein Kontakt verfügbar"
+
 msgid "Number"
 msgstr "Nummer"
+
+msgid "Number of Config Items"
+msgstr "Anzahl Config Items"
+
+msgid "Number of Config Items in critical incident state"
+msgstr "Anzahl Config Items mit kritischem Vorfallstatus"
+
+#, fuzzy
+#| msgid "Number of versions"
+msgid "Number of ratings"
+msgstr "Anzahl Versionen"
+
+#, fuzzy
+#| msgid "Number of versions"
+msgid "Number of version"
+msgstr "Anzahl Versionen"
 
 msgid "Object"
 msgstr "Objekt"
@@ -432,152 +1422,24 @@ msgstr "Objekt"
 msgid "Object Id"
 msgstr "Objekt ID"
 
+#, fuzzy
+#| msgid "Permissions"
+msgid "Object permissions"
+msgstr "Berechtigungen"
+
+msgid "Observer"
+msgstr "Beobachter"
+
 msgid "Open Tickets"
 msgstr "Offene Tickets"
 
-msgid "open"
-msgstr "offen"
+#, fuzzy
+#| msgid "Open Tickets"
+msgid "open tickets: {0}"
+msgstr "Offene Tickets"
 
-msgid "Password"
-msgstr "Passwort"
-
-msgid "pending"
-msgstr "Warten"
-
-msgid "Pending Tickets"
-msgstr "Tickets im Warten-Status"
-
-msgid "Priority"
-msgstr "Priorität"
-
-msgid "Edit Priority"
-msgstr "Priorität bearbeiten"
-
-msgid "public"
-msgstr "öffentlich"
-
-msgid "Queue"
-msgstr "Queue"
-
-msgid "Queues"
-msgstr "Queues"
-
-msgid "Response time"
-msgstr "Reaktionszeit"
-
-msgid "Release Informationen"
-msgstr "Release Informationen"
-
-msgid "Tags"
-msgstr "Schlagworte"
-
-msgid "Closing time"
-msgstr "Schließzeit"
-
-msgid "Quick search (Tickets)"
-msgstr "Schnellsuche (Tickets)"
-
-msgid "Select all"
-msgstr "Alle auswählen"
-
-msgid "Visibility"
-msgstr "Sichtbarkeit"
-
-msgid "SLA / Service Level Agreement"
-msgstr "SLA / Servicevereinbarung"
-
-msgid "Save"
-msgstr "Speichern"
-
-msgid "Lock State"
-msgstr "Sperrstatus"
-
-msgid "Language"
-msgstr "Sprache"
-
-msgid "Core Data"
-msgstr "Stammdaten"
-
-msgid "Edit Core Data"
-msgstr "Stammdaten bearbeiten"
-
-msgid "Create Core Data"
-msgstr "Stammdaten hinzufügen"
-
-msgid "State"
-msgstr "Status"
-
-msgid "Edit State"
-msgstr "Status bearbeiten"
-
-msgid "Remove State"
-msgstr "Status entfernen"
-
-msgid "Create State"
-msgstr "Status hinzufügen"
-
-msgid "State Information"
-msgstr "Status Informationen"
-
-msgid "State Type"
-msgstr "Statustyp"
-
-msgid "State Types"
-msgstr "Statustypen"
-
-msgid "Search"
-msgstr "Suche"
-
-msgid "Search ..."
-msgstr "Suche ..."
-
-msgid "Start search"
-msgstr "Suche starten"
-
-msgid "Search Results"
-msgstr "Suchergebnisse"
-
-msgid "Phone"
-msgstr "Telefon"
-
-msgid "Edit Ticket"
-msgstr "Ticket bearbeiten"
-
-msgid "Title"
-msgstr "Titel"
-
-msgid "ToDo / Processing required"
-msgstr "ToDo / Bearbeitung erforderlich"
-
-msgid "Hit List"
-msgstr "Trefferliste"
-
-msgid "Hit List ({0})"
-msgstr "Trefferliste ({0})"
-
-msgid "Preview ({0})"
-msgstr "Treffervorschau ({0})"
-
-msgid "Edit Type"
-msgstr "Typ bearbeiten"
-
-msgid "Create Type"
-msgstr "Typ hinzufügen"
-
-msgid "Type Information"
-msgstr "Typ Informationen"
-
-msgid "Types"
-msgstr "Typen"
-
-msgid "Remove Types"
-msgstr "Typen entfernen"
-
-msgid "Submit"
-msgstr "Übernehmen"
-
-msgid "Overview Contacts"
-msgstr "Übersicht Kontakte"
+msgid "Overall"
+msgstr ""
 
 msgid "Overview Config Items"
 msgstr "Übersicht Config Items"
@@ -585,8 +1447,19 @@ msgstr "Übersicht Config Items"
 msgid "Overview Config Items Deployment State"
 msgstr "Übersicht Config Items Verwendungsstatus"
 
+msgid "Overview Contacts"
+msgstr "Übersicht Kontakte"
+
 msgid "Overview Customer Organizations"
 msgstr "Übersicht Kunden"
+
+#, fuzzy
+#| msgid "Overview Tickets"
+msgid "Overview FAQ"
+msgstr "Übersicht Tickets"
+
+msgid "Overview of {0} to import ({1})"
+msgstr ""
 
 msgid "Overview Ticket Priorities"
 msgstr "Übersicht Ticketprioritäten"
@@ -597,47 +1470,996 @@ msgstr "Übersicht Tickets"
 msgid "Overview Ticket States"
 msgstr "Übersicht Ticketstatus"
 
-msgid "unread"
-msgstr "ungelesen"
+msgid "Owner"
+msgstr "Bearbeiter"
 
-msgid "Unread Articles"
-msgstr "Ungelesene Artikel"
+msgid "Owner is the user to which the ticket is assigned for processing."
+msgstr ""
 
-msgid "Cause"
-msgstr "Ursache"
+msgid "Password"
+msgstr "Passwort"
 
-msgid "Responsible Tickets"
-msgstr "Verantwortliche Tickets"
+msgid "Path"
+msgstr "Pfad"
+
+msgid "Pattern"
+msgstr ""
+
+#, fuzzy
+#| msgid "State Information"
+msgid "Pattern Information"
+msgstr "Status Informationen"
+
+msgid "Pending date is not in the future."
+msgstr ""
+
+msgid "Pending Tickets"
+msgstr "Tickets im Warten-Status"
+
+msgid "pending until"
+msgstr "Warten bis"
+
+#, fuzzy
+#| msgid "Permissions"
+msgid "Permission"
+msgstr "Berechtigungen"
+
+msgid "Permissions"
+msgstr "Berechtigungen"
+
+msgid "Permissions on dependent objects"
+msgstr ""
+
+msgid "Personal Settings"
+msgstr "Persönliche Einstellungen"
+
+msgid "Phone"
+msgstr "Telefon"
+
+msgid "Phone inbound"
+msgstr ""
+
+msgid "Phone outbound"
+msgstr ""
+
+msgid "Please describe the reason as detailed as possible."
+msgstr ""
+
+msgid "Please insert a base string for the translation."
+msgstr ""
+
+msgid "Please select a config item class. The form will be completed then."
+msgstr ""
+
+msgid "Please select a contact"
+msgstr ""
+
+msgid ""
+"Please select the language in which you want to use KIX. If not set, the "
+"system will try to choose the language automatically"
+msgstr ""
+
+msgid "Preferences"
+msgstr ""
+
+msgid "Preview ({0})"
+msgstr "Treffervorschau ({0})"
+
+msgid "Previous Image"
+msgstr "Vorheriges Bild"
+
+msgid "Print"
+msgstr "Drucken"
+
+#, fuzzy
+#| msgid "Priority"
+msgid "Prio"
+msgstr "Priorität"
+
+#, fuzzy
+#| msgid "Priority"
+msgid "Priorities"
+msgstr "Priorität"
+
+msgid ""
+"Priorities are used to mark a Ticket‘s urgency with different colours, so "
+"you can  categorize Tickets."
+msgstr ""
+
+#, fuzzy
+#| msgid "Role successfully created."
+msgid "Priorities successfully removed."
+msgstr "Rolle wurde erfolgreich angelegt."
+
+msgid "Priority"
+msgstr "Priorität"
+
+#, fuzzy
+#| msgid "Priority"
+msgid "Priority Data"
+msgstr "Priorität"
+
+#, fuzzy
+#| msgid "Warranty Information"
+msgid "Priority Information"
+msgstr "Garantie Informationen"
+
+#, fuzzy
+#| msgid "Role successfully created."
+msgid "Priority successfully created."
+msgstr "Rolle wurde erfolgreich angelegt."
+
+#, fuzzy
+#| msgid ""
+#| "<p>The first line of the source file must contain the column-to-object "
+#| "attribute assignment by using KIX-internal identifiers (e.g. "
+#| "CompanyCustomerID, CompanyName, etc.). In order to update existing "
+#| "customer data sets, their CompanyCustomerID must be specified. If new "
+#| "data sets needs to be imported, all mandatory attributes must be given.</"
+#| "p></br><h3>Operation Explanation:</h3><ul><li>Replace empty value = "
+#| "selected attribute will be set to the specified value if no information "
+#| "is given in source file</li><li>Force = selected attribute will be set to "
+#| "the specified value, no matter if a value is defined in the source file "
+#| "or not</li><li>Ignore = selected attribute will be ignored in the import"
+msgid ""
+"<p>The first line of the source file must contain the column-to-object "
+"attribute assignment by using KIX-internal identifiers (e.g. "
+"CompanyCustomerID, CompanyName, etc.). In order to update existing customer "
+"data sets, their CompanyCustomerID must be specified. If new data sets needs "
+"to be imported, all mandatory attributes must be given.</p></"
+"br><h3>Operation Explanation:</h3><ul><li>Replace empty value = selected "
+"attribute will be set to the specified value if no information is given in "
+"source file</li><li>Force = selected attribute will be set to the specified "
+"value, no matter if a value is defined in the source file or not</"
+"li><li>Ignore = selected attribute will be ignored in the import</li>"
+msgstr ""
+"<p>Die erste Zeile der Quelldatei muss die Zuordnung der Spalten zu den "
+"Objektattributen entsprechend der KIX-internen Bezeichner (z.B. "
+"CompanyCustomerID, CompanyName, etc.) beinhalten. Für Aktualisierung von "
+"Einträgen ist die Angabe einer bestehenden CompanyCustomerID zwingend "
+"erforderlich. Für Neuanlagen ist die Angabe aller Pflichtattribute zwingend "
+"erforderlich.</p></br><h3>Erläuterung der Operatoren:</h3><ul><li>Leerwert "
+"ersetzen = Für die gewählte Spalte wird in allen Zeilen, die keinen Wert "
+"enthalten, der hier gewählte Wert gesetzt.</li><li>Erzwingen = Für die "
+"gewählte Spalte wird in allen Zeilen der hier gewählte Wert gesetzt.</"
+"li><li>Ignorieren = Die gewählte Spalte wird nicht importiert."
+
+#, fuzzy
+#| msgid ""
+#| "<p>The first line of the source file must contain the column-to-object "
+#| "attribute assignment by using KIX-internal identifiers (e.g. UserLogin, "
+#| "UserCustomerID, UserLastname, etc.). In order to update existing customer "
+#| "data sets, their UserLogin and UserCustomerID must be specified. If new "
+#| "data sets needs to be imported, all mandatory attributes must be given.</"
+#| "p></br><h3>Operation Explanation:</h3><ul><li>Replace empty value = "
+#| "selected attribute will be set to the specified value if no information "
+#| "is given in source file</li><li>Force = selected attribute will be set to "
+#| "the specified value, no matter if a value is defined in the source file "
+#| "or not</li><li>Ignore = selected attribute will be ignored in the import"
+msgid ""
+"<p>The first line of the source file must contain the column-to-object "
+"attribute assignment by using KIX-internal identifiers (e.g. UserLogin, "
+"UserCustomerID, UserLastname, etc.). In order to update existing customer "
+"data sets, their UserLogin and UserCustomerID must be specified. If new data "
+"sets needs to be imported, all mandatory attributes must be given.</p></"
+"br><h3>Operation Explanation:</h3><ul><li>Replace empty value = selected "
+"attribute will be set to the specified value if no information is given in "
+"source file</li><li>Force = selected attribute will be set to the specified "
+"value, no matter if a value is defined in the source file or not</"
+"li><li>Ignore = selected attribute will be ignored in the import</li>"
+msgstr ""
+"<p>Die erste Zeile der Quelldatei muss die Zuordnung der Spalten zu den "
+"Objektattributen entsprechend der KIX-internen Bezeichner (z.B. UserLogin, "
+"UserCustomerID, UserLastname, etc.) beinhalten. Für Aktualisierung von "
+"Einträgen ist die Angabe einer bestehenden UserLogin sowie der "
+"UserCustomerID zwingend erforderlich. Für Neuanlagen ist die Angabe aller "
+"Pflichtattribute zwingend erforderlich.</p></br><h3>Erläuterung der "
+"Operatoren:</h3><ul><li>Leerwert ersetzen = Für die gewählte Spalte wird in "
+"allen Zeilen, die keinen Wert enthalten, der hier gewählte Wert gesetzt.</"
+"li><li>Erzwingen = Für die gewählte Spalte wird in allen Zeilen der hier "
+"gewählte Wert gesetzt.</li><li>Ignorieren = Die gewählte Spalte wird nicht "
+"importiert."
+
+msgid "public"
+msgstr "öffentlich"
+
+msgid "Queue"
+msgstr "Queue"
+
+msgid "Queues"
+msgstr "Queues"
+
+msgid "Quick search (Tickets)"
+msgstr "Schnellsuche (Tickets)"
+
+msgid "Rate"
+msgstr ""
+
+msgid "Rating"
+msgstr "Bewertung"
+
+msgid "Read"
+msgstr ""
+
+msgid "Read file."
+msgstr ""
+
+msgid "Recipient: Bcc"
+msgstr "Empfänger: Bcc"
+
+msgid "Recipient: Cc"
+msgstr "Empfänger: Cc"
+
+msgid "Recipient: To"
+msgstr "Empfänger: An"
+
+#, fuzzy
+#| msgid "Config Items"
+msgid "Relevant Config Items"
+msgstr "Config Items"
+
+msgid "Reminder Tickets"
+msgstr "Erinnerungstickets"
+
+#, fuzzy
+#| msgid "Remove State"
+msgid "Remove parameter"
+msgstr "Status entfernen"
+
+#, fuzzy
+#| msgid "Overview Ticket Priorities"
+msgid "Remove Priorities"
+msgstr "Übersicht Ticketprioritäten"
+
+msgid "Remove Priorities ..."
+msgstr ""
+
+#, fuzzy
+#| msgid "Remove State"
+msgid "Remove Search Criteria"
+msgstr "Status entfernen"
+
+#, fuzzy
+#| msgid "Remove State"
+msgid "Remove States"
+msgstr "Status entfernen"
+
+#, fuzzy
+#| msgid "Remove State"
+msgid "Remove States ..."
+msgstr "Status entfernen"
+
+#, fuzzy
+#| msgid "Remove Types"
+msgid "Remove Templates"
+msgstr "Typen entfernen"
+
+#, fuzzy
+#| msgid "Remove Types"
+msgid "Remove Templates ..."
+msgstr "Typen entfernen"
+
+#, fuzzy
+#| msgid "Translations"
+msgid "Remove translations"
+msgstr "Übersetzungen"
+
+#, fuzzy
+#| msgid "Translations"
+msgid "Remove translations ..."
+msgstr "Übersetzungen"
+
+msgid "Remove Types"
+msgstr "Typen entfernen"
+
+#, fuzzy
+#| msgid "Remove Types"
+msgid "Remove Types ..."
+msgstr "Typen entfernen"
+
+msgid "Replace empty value"
+msgstr "Leerwert ersetzen"
+
+#, fuzzy
+#| msgid "Replace empty value"
+msgid "Replace Values"
+msgstr "Leerwert ersetzen"
+
+msgid "Required"
+msgstr "Erforderlich"
+
+msgid "Reset data"
+msgstr "Daten zurücksetzen"
+
+msgid "Response time"
+msgstr "Reaktionszeit"
 
 msgid "Responsible"
 msgstr "Verantwortlicher"
 
-msgid "Link to"
-msgstr "Verknüpfen mit"
+msgid ""
+"Responsible is the person in charge for this tickets processing, e.g. "
+"Service Owner, Key Account Manager. It does not need to be identical with "
+"the assigned ticket owner."
+msgstr ""
 
-msgid "Link to ticket"
-msgstr "Verknüpfen mit Ticket"
+msgid "Responsible Tickets"
+msgstr "Verantwortliche Tickets"
 
-msgid "Linked as"
-msgstr "Verknüpft als"
+msgid "Results advanced search"
+msgstr ""
 
-msgid "Linked Objects"
-msgstr "Verknüpfte Objekte"
+#, fuzzy
+#| msgid "New Role"
+msgid "Role"
+msgstr "Neue Rolle"
 
-msgid "Linked Object"
-msgstr "Verknüpftes Objekt"
+#, fuzzy
+#| msgid "User Assignment"
+msgid "Role Assignment"
+msgstr "Agentenzuordnung"
 
-msgid "Delete Link"
-msgstr "Verknüpfung löschen"
+msgid "Role Information"
+msgstr "Rollen Informationen"
 
-msgid "Assign Link"
-msgstr "Verknüpfung zuordnen"
+#, fuzzy
+#| msgid "New Role"
+msgid "Roles"
+msgstr "Neue Rolle"
 
-msgid "Links"
-msgstr "Verknüpfungen"
+#, fuzzy
+#| msgid "Permissions"
+msgid "Roles/Permissions"
+msgstr "Berechtigungen"
 
-msgid "Link Graph"
-msgstr "Verknüpfungsgraph"
+msgid "Role successfully created."
+msgstr "Rolle wurde erfolgreich angelegt."
+
+msgid "Row {0} of the file with {1} {2}: could not import{3}. How to continue?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Number"
+msgid "Row Number"
+msgstr "Nummer"
+
+msgid "Rows with too less values"
+msgstr ""
+
+msgid "Save"
+msgstr "Speichern"
+
+msgid "Save Settings."
+msgstr "Einstellungen werden gespeichert."
+
+msgid "Search"
+msgstr "Suche"
+
+msgid "Search ..."
+msgstr "Suche ..."
+
+msgid "Searchable FAQ attributes: FAQ"
+msgstr ""
+
+msgid ""
+"Searchable Ticket attributes: Ticketnumber, Subject, Article content, From, "
+"To, CC"
+msgstr ""
+
+msgid "Search for config items within the choosen class."
+msgstr ""
+
+#, fuzzy
+#| msgid "Overview Config Items Deployment State"
+msgid "Search for config items with the same deployment state."
+msgstr "Übersicht Config Items Verwendungsstatus"
+
+#, fuzzy
+#| msgid "Number of Config Items in critical incident state"
+msgid "Search for config items with the same incident state."
+msgstr "Anzahl Config Items mit kritischem Vorfallstatus"
+
+msgid ""
+"Search for config items with the same name or part of the same name (min. 1 "
+"character)."
+msgstr ""
+
+msgid "Search for FAQ articles within the choosen category."
+msgstr ""
+
+msgid "Search for FAQ articles within the choosen validity."
+msgstr ""
+
+msgid ""
+"Search for FAQ articles with the same number or part of the same number "
+"(min. 1 character)."
+msgstr ""
+
+msgid ""
+"Search for FAQ articles with the same title or part of the same title (min. "
+"1 character)."
+msgstr ""
+
+msgid "Search for tickets with selected priority."
+msgstr ""
+
+msgid "Search for tickets with selected queue."
+msgstr ""
+
+msgid "Search for tickets with selected SLA."
+msgstr ""
+
+msgid "Search for tickets with selected state."
+msgstr ""
+
+msgid "Search for tickets with selected type."
+msgstr ""
+
+msgid "Search for tickets with the selected ticket."
+msgstr ""
+
+#, fuzzy
+#| msgid "Search ..."
+msgid "Search Tickets ..."
+msgstr "Suche ..."
+
+msgid "Select a character set."
+msgstr ""
+
+#, fuzzy
+#| msgid "Current deployment state"
+msgid "Select a deplyoment state."
+msgstr "Aktueller Verwendungsstatus"
+
+#, fuzzy
+#| msgid "Current incident state"
+msgid "Select a incident state."
+msgstr "Aktueller Vorfallstatus"
+
+msgid "Select a language for the user."
+msgstr ""
+
+msgid "Select a language for this FAQ article."
+msgstr ""
+
+msgid "Select all"
+msgstr "Alle auswählen"
+
+msgid "Select an FAQ category."
+msgstr ""
+
+msgid "Select an icon for this config item class."
+msgstr ""
+
+msgid "Select an icon for this priority."
+msgstr ""
+
+msgid "Select an icon for this state."
+msgstr ""
+
+msgid "Select an icon for this type."
+msgstr ""
+
+msgid "Select a state type for this state."
+msgstr ""
+
+msgid "Select a state type for this sttate."
+msgstr ""
+
+msgid "Select a text separator."
+msgstr ""
+
+msgid "Select a value separator."
+msgstr ""
+
+#, fuzzy
+#| msgid "Config Item Class"
+msgid "Select Config Item Class"
+msgstr "Config Item Klasse"
+
+msgid "Selected Search Criteria"
+msgstr ""
+
+#, fuzzy
+#| msgid "expected time required:"
+msgid "selected ticket features"
+msgstr "voraussichtlich benötigte Zeit:"
+
+msgid "Selected Versions"
+msgstr ""
+
+msgid "Select file"
+msgstr "Datei wählen"
+
+msgid "select image file"
+msgstr "Bilddatei wählen"
+
+msgid "Select which agents should be assigned to this role."
+msgstr ""
+
+msgid "; (semicolon)"
+msgstr ""
+
+msgid "Sender"
+msgstr ""
+
+msgid ""
+"Serach for config items with the same number or part of the same number "
+"(min. 1 character)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Affected Service"
+msgid "Service"
+msgstr "Betroffener Service"
+
+msgid ""
+"Service defines which content of the service catalog is being requested."
+msgstr ""
+
+msgid "Set a password for the user."
+msgstr ""
+
+msgid "Set the ci class as „valid“, „invalid (temporarily)“, or „invalid“."
+msgstr ""
+
+msgid "Set the FAQ article as „valid“, „invalid (temporarily)“, or „invalid“."
+msgstr ""
+
+msgid "Set the priority as „valid“, „invalid (temporarily)“, or „invalid“."
+msgstr ""
+
+msgid "Set the role as „valid“, „invalid (temporarily)“, or „invalid“."
+msgstr ""
+
+msgid "Set the state as „valid“, „invalid (temporarily)“, or „invalid“."
+msgstr ""
+
+msgid "Set the type as „valid“, „invalid (temporarily)“, or „invalid“."
+msgstr ""
+
+msgid "Set the user as „valid“, „invalid (temporarily)“, or „invalid“."
+msgstr ""
+
+msgid "Show all"
+msgstr "Alle anzeigen"
+
+msgid "SLA"
+msgstr ""
+
+msgid "SLA defines which target times are set for processing this ticket."
+msgstr ""
+
+msgid "SLA / Service Level Agreement"
+msgstr "SLA / Servicevereinbarung"
+
+msgid "Solution"
+msgstr "Lösung"
+
+msgid "Solution time"
+msgstr "Lösungszeit"
+
+msgid "Source"
+msgstr ""
+
+msgid "Spam"
+msgstr ""
+
+#, fuzzy
+#| msgid "Solution"
+msgid "Split Option"
+msgstr "Lösung"
+
+msgid "Start Import"
+msgstr ""
+
+msgid "Start search"
+msgstr "Suche starten"
+
+msgid "starts with"
+msgstr ""
+
+msgid "State"
+msgstr "Status"
+
+#, fuzzy
+#| msgid "State"
+msgid "State Data"
+msgstr "Status"
+
+msgid "State Information"
+msgstr "Status Informationen"
+
+#, fuzzy
+#| msgid "State"
+msgid "States"
+msgstr "Status"
+
+#, fuzzy
+#| msgid "Role successfully created."
+msgid "States successfully removed."
+msgstr "Rolle wurde erfolgreich angelegt."
+
+#, fuzzy
+#| msgid "Role successfully created."
+msgid "State successfully created."
+msgstr "Rolle wurde erfolgreich angelegt."
+
+msgid "State Type"
+msgstr "Statustyp"
+
+msgid "State Types"
+msgstr "Statustypen"
+
+msgid "Street"
+msgstr "Straße"
+
+msgid "Subject"
+msgstr "Betreff"
+
+msgid "Submit"
+msgstr "Übernehmen"
+
+msgid "Success!"
+msgstr ""
+
+#, fuzzy
+#| msgid "Role successfully created."
+msgid "Successfully rated."
+msgstr "Rolle wurde erfolgreich angelegt."
+
+msgid "Switch"
+msgstr ""
+
+#, fuzzy
+#| msgid "Visible in customer portal"
+msgid "Switch to customer portal."
+msgstr "Sichtbar in Kundenportal"
+
+msgid "Symptom"
+msgstr ""
+
+msgid "-> (tab)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Tags"
+msgid "Tag"
+msgstr "Schlagworte"
+
+msgid "Tags"
+msgstr "Schlagworte"
+
+msgid "Template"
+msgstr ""
+
+msgid "Templates"
+msgstr ""
+
+#, fuzzy
+#| msgid "Role successfully created."
+msgid "Templates successfully removed."
+msgstr "Rolle wurde erfolgreich angelegt."
+
+#, fuzzy
+#| msgid "Assign Text Modules"
+msgid "Text Modules"
+msgstr "Zuordnung zu Textbausteinen"
+
+msgid "Text separator"
+msgstr ""
+
+msgid "The following {1} entries will be deleted. Are you sure?"
+msgstr ""
+
+msgid "The search only includes current versions."
+msgstr ""
+
+msgid "This browser is not supported. You may encounter malfunctions."
+msgstr ""
+
+msgid ""
+"This is the administration panel. Please select a module from the explorer."
+msgstr ""
+
+#, fuzzy
+#| msgid "New Ticket"
+msgid "Ticket"
+msgstr "Neues Ticket"
+
+#, fuzzy
+#| msgid "Attributes"
+msgid "Ticket Attributes"
+msgstr "Attribute"
+
+#, fuzzy
+#| msgid "Core Data"
+msgid "Ticket Data"
+msgstr "Stammdaten"
+
+#, fuzzy
+#| msgid "Description"
+msgid "Ticket Description"
+msgstr "Beschreibung"
+
+#, fuzzy
+#| msgid "Version Details"
+msgid "Ticket Details"
+msgstr "Versionsdetails"
+
+#, fuzzy
+#| msgid "New Tickets"
+msgid "Ticket Flags"
+msgstr "Neue Tickets"
+
+#, fuzzy
+#| msgid "FAQ Article History"
+msgid "Ticket History"
+msgstr "FAQ Artikel Historie"
+
+#, fuzzy
+#| msgid "Type Information"
+msgid "Ticket Information"
+msgstr "Typ Informationen"
+
+msgid "Ticket is being watched."
+msgstr ""
+
+msgid "Ticket is no longer watched."
+msgstr ""
+
+msgid "Ticket locked."
+msgstr ""
+
+#, fuzzy
+#| msgid "Number"
+msgid "Ticket Number"
+msgstr "Nummer"
+
+#, fuzzy
+#| msgid "Overview Ticket Priorities"
+msgid "Ticket: Priorities"
+msgstr "Übersicht Ticketprioritäten"
+
+#, fuzzy
+#| msgid "New Tickets"
+msgid "Tickets"
+msgstr "Neue Tickets"
+
+#, fuzzy
+#| msgid "Search"
+msgid "Ticket Search"
+msgstr "Suche"
+
+msgid "Ticket search error!"
+msgstr ""
+
+#, fuzzy
+#| msgid "Lock State"
+msgid "Ticket: State"
+msgstr "Sperrstatus"
+
+#, fuzzy
+#| msgid "Overview Ticket States"
+msgid "Ticket States"
+msgstr "Übersicht Ticketstatus"
+
+msgid "Ticket status summarizes the tickets processing state."
+msgstr ""
+
+#, fuzzy
+#| msgid "Role successfully created."
+msgid "Ticket successfully created."
+msgstr "Rolle wurde erfolgreich angelegt."
+
+msgid "Ticket: Templates"
+msgstr ""
+
+msgid "Ticket type is part of the classification of a ticket."
+msgstr ""
+
+#, fuzzy
+#| msgid "Licence Type"
+msgid "Ticket: Types"
+msgstr "Lizenztyp"
+
+msgid "Ticket unlocked."
+msgstr ""
+
+msgid "Title"
+msgstr "Titel"
+
+msgid "To"
+msgstr "An"
+
+#, fuzzy
+#| msgid "to article"
+msgid "to Article"
+msgstr "zum Artikel"
+
+msgid "ToDo / Processing required"
+msgstr "ToDo / Bearbeitung erforderlich"
+
+msgid "to version"
+msgstr "zur Version"
+
+#, fuzzy
+#| msgid "to version"
+msgid "to Version"
+msgstr "zur Version"
+
+msgid "Translation"
+msgstr "Übersetzung"
+
+#, fuzzy
+#| msgid "Translation"
+msgid "Translation:"
+msgstr "Übersetzung"
+
+#, fuzzy
+#| msgid "Translation"
+msgid "TranslationLanguage"
+msgstr "Übersetzung"
+
+msgid "Translations"
+msgstr "Übersetzungen"
+
+#, fuzzy
+#| msgid "Role successfully created."
+msgid "Translations successfully removed."
+msgstr "Rolle wurde erfolgreich angelegt."
+
+#, fuzzy
+#| msgid "Role successfully created."
+msgid "Translation successfully created."
+msgstr "Rolle wurde erfolgreich angelegt."
+
+msgid "Type"
+msgstr "Typ"
+
+#, fuzzy
+#| msgid "Core Data"
+msgid "Type Data"
+msgstr "Stammdaten"
+
+msgid "Type Information"
+msgstr "Typ Informationen"
+
+msgid "Types"
+msgstr "Typen"
+
+#, fuzzy
+#| msgid "Role successfully created."
+msgid "Types successfully removed."
+msgstr "Rolle wurde erfolgreich angelegt."
+
+#, fuzzy
+#| msgid "Role successfully created."
+msgid "Type successfully created."
+msgstr "Rolle wurde erfolgreich angelegt."
+
+msgid "unequal"
+msgstr ""
+
+msgid "Unknown properties (will be ignored):"
+msgstr ""
+
+#, fuzzy
+#| msgid "Unlocked"
+msgid "Unlock"
+msgstr "Freigeben"
+
+#, fuzzy
+#| msgid "Unlocked"
+msgid "unlocked"
+msgstr "Freigeben"
+
+#, fuzzy
+#| msgid "Unlocked Tickets"
+msgid "Unlock Ticket ..."
+msgstr "Freie Tickets"
+
+msgid "Unread Articles"
+msgstr "Ungelesene Artikel"
+
+#, fuzzy
+#| msgid "watched"
+msgid "Unwatch"
+msgstr "beobachtet"
+
+#, fuzzy
+#| msgid "Watched Tickets"
+msgid "Unwatch Ticket ..."
+msgstr "Beobachtete Tickets"
+
+#, fuzzy
+#| msgid "Update time"
+msgid "Update"
+msgstr "Aktualisierungszeit"
+
+#, fuzzy
+#| msgid "Update time"
+msgid "Update Agent"
+msgstr "Aktualisierungszeit"
+
+#, fuzzy
+#| msgid "Edit CMDB Class"
+msgid "Update CI Class"
+msgstr "Add CMDB Class"
+
+#, fuzzy
+#| msgid "Config Item"
+msgid "Update Config Item"
+msgstr "Config Item"
+
+#, fuzzy
+#| msgid "Edit Contact"
+msgid "Update Contact"
+msgstr "Ansprechparnter Bearbeiten"
+
+#, fuzzy
+#| msgid "Edit Customer"
+msgid "Update Customer"
+msgstr "Kunde bearbeiten"
+
+#, fuzzy
+#| msgid "Update time"
+msgid "Update FAQ Artikel"
+msgstr "Aktualisierungszeit"
+
+#, fuzzy
+#| msgid "Edit Priority"
+msgid "Update Priority"
+msgstr "Priorität bearbeiten"
+
+#, fuzzy
+#| msgid "Create Role"
+msgid "Update Role"
+msgstr "Rolle wird angelegt"
+
+#, fuzzy
+#| msgid "Update time"
+msgid "Update State"
+msgstr "Aktualisierungszeit"
+
+msgid "Update time"
+msgstr "Aktualisierungszeit"
+
+#, fuzzy
+#| msgid "Translation"
+msgid "Update Translation"
+msgstr "Übersetzung"
+
+#, fuzzy
+#| msgid "State Type"
+msgid "Update Type"
+msgstr "Statustyp"
+
+msgid "URL"
+msgstr ""
+
+msgid "User"
+msgstr "Benutzer"
+
+msgid "User Management"
+msgstr "Nutzerverwaltung"
+
+#, fuzzy
+#| msgid "User Management: Roles"
+msgid "User Management: Agents"
+msgstr "Nutzerverwaltung: Rollen"
+
+msgid "User Management: Roles"
+msgstr "Nutzerverwaltung: Rollen"
+
+msgid "User name"
+msgstr "Benutzername"
+
+msgid "Validation error"
+msgstr ""
+
+msgid "Validity"
+msgstr "Gültigkeit"
 
 msgid "Version"
 msgstr "Version"
@@ -645,361 +2467,289 @@ msgstr "Version"
 msgid "Version Details"
 msgstr "Versionsdetails"
 
-msgid "Deployment State"
-msgstr "Verwendungsstatus"
+msgid "Visibility"
+msgstr "Sichtbarkeit"
 
-msgid "Full Text"
-msgstr "Volltext"
+msgid "Visible in customer portal"
+msgstr "Sichtbar in Kundenportal"
 
-msgid "From"
-msgstr "Von"
+#, fuzzy
+#| msgid "Notes"
+msgid "Votes"
+msgstr "Notizen"
 
-msgid "Incident State"
-msgstr "Vorfallstatus"
-
-msgid "Existing Links ({0})"
-msgstr "Vorhandene Verknüpfungen ({0})"
-
-msgid "Previous Image"
-msgstr "Vorheriges Bild"
-
-msgid "First Name"
-msgstr "Vorname"
-
-msgid "Warning"
-msgstr "Warnung"
-
-msgid "pending until"
+#, fuzzy
+#| msgid "pending until"
+msgid "Wait until"
 msgstr "Warten bis"
 
-msgid "attributes to change:"
-msgstr "zu ändernde Attribute:"
+#, fuzzy
+#| msgid "watched"
+msgid "Watch"
+msgstr "beobachtet"
 
-msgid "Assigned Contacts "
-msgstr "Zugeordnete Kontakte "
+msgid "Watched Tickets"
+msgstr "Beobachtete Tickets"
 
-msgid "to article"
-msgstr "zum Artikel"
+#, fuzzy
+#| msgid "Watched Tickets"
+msgid "Watch Ticket ..."
+msgstr "Beobachtete Tickets"
 
-msgid "Assign Team / Queue"
-msgstr "Zuordnung zu Team / Queue"
+msgid "We are working on this functionality."
+msgstr ""
 
-msgid "Assign Text Modules"
-msgstr "Zuordnung zu Textbausteinen"
+msgid "Welcome to KIX"
+msgstr ""
 
-msgid "to version"
-msgstr "zur Version"
-
-msgid "back to"
-msgstr "zurück zu"
-
-msgid "Personal Settings"
-msgstr "Persönliche Einstellungen"
-
-msgid "Localisation"
-msgstr "Lokalisierung"
-
-msgid "Save Settings."
-msgstr "Einstellungen werden gespeichert."
-
-msgid "Edit {0}"
-msgstr "{0} bearbeiten"
-
-msgid "Selected {0} ({1})"
-msgstr "Ausgewählte {0} ({1})"
-
-msgid "Execute now!"
-msgstr "Jetzt ausführen!"
-
-msgid "Execute now?"
-msgstr "Jetzt ausführen?"
+#, fuzzy
+#| msgid "Role successfully created."
+msgid "You have successfully logged out."
+msgstr "Rolle wurde erfolgreich angelegt."
 
 msgid ""
-"You will edit {0} attributes for {1} "
-"{2}. Execute now?"
+"You may attach images to this config item. Possible file types are *.png, *."
+"jpg, *.gif, *.bmp."
 msgstr ""
-"Sie ändern {0} Attribute an {1} "
-"{2}. Jetzt starten?"
 
-msgid "edited"
-msgstr "bearbeitet"
-
-msgid "An error occurred."
-msgstr "Es ist ein Fehler aufgetreten."
-
-msgid "Changes cannot be saved. How do you want to proceed?"
-msgstr "Änderung kann nicht gespeichert werden. Wie möchten Sie weiter verfahren?"
-
-msgid "Ignore"
-msgstr "Ignorieren"
-
-msgid "Zu ändernde Attribute"
-msgstr "zu ändernde Attribute"
-
-msgid "Close Dialog"
-msgstr "Dialog schließen"
-
-msgid "Cancel Process"
-msgstr "Bearbeiten wird abgebrochen"
-
-msgid "Sure?"
-msgstr "Sicher?"
-
-msgid "Are you sure?"
-msgstr "Sind Sie sicher?"
-
-msgid "Internationalization"
-msgstr "Internationalisierung"
-
-msgid "Translation"
-msgstr "Übersetzung"
-
-msgid "Translations"
-msgstr "Übersetzungen"
-
-msgid "Languages"
-msgstr "Sprachen"
-
-msgid "All languages"
-msgstr "Alle Sprachen"
-
-msgid "Basestring"
-msgstr "Basiszeichenkette"
-
-msgid "not "
-msgstr "nicht "
-
-msgid "General Information"
-msgstr "Allgemeine Informationen"
-
-msgid "Type"
-msgstr "Typ"
-
-msgid "Vendor"
-msgstr "Hersteller"
-
-msgid "Model"
-msgstr "Modell"
-
-msgid "Location"
-msgstr "Standort"
-
-msgid "Building"
-msgstr "Gebäude"
-
-msgid "Room"
-msgstr "Raum"
-
-msgid "Description"
-msgstr "Beschreibung"
-
-msgid "Attachment"
-msgstr "Anhang"
-
-msgid "Attachments"
-msgstr "Anhänge"
-
-msgid "Owner Information"
-msgstr "Besitzer Informationen"
-
-msgid "Assigned Customer"
-msgstr "Zugeordneter Kunde"
-
-msgid "Assigned Owner"
-msgstr "Zugeordneter Besitzer"
-
-msgid "Network Information"
-msgstr "Netzwerk Informationen"
-
-msgid "Network Interface"
-msgstr "Netzwerkschnittstelle"
-
-msgid "IP over DHCP"
-msgstr "IP via DHCP"
-
-msgid "Yes"
-msgstr "Ja"
-
-msgid "No"
-msgstr "Nein"
-
-msgid "yes"
-msgstr "ja"
-
-msgid "no"
-msgstr "nein"
-
-msgid "IP Address"
-msgstr "IP Adresse"
-
-msgid "Please enter a valid IPv4 address in form 123.123.123.123."
+msgid "Your rating"
 msgstr ""
-"Bitte geben Sie eine gültige IPv4 Adresse im Format 123.123.123.123 ein."
-
-msgid "Network"
-msgstr "Netzwerk"
-
-msgid "Hardware Information"
-msgstr "Hardware Informationen"
-
-msgid "Serial Number"
-msgstr "Seriennummer"
-
-msgid "Hard Disk"
-msgstr "Festplatte"
-
-msgid "Capacity"
-msgstr "Kapazität"
-
-msgid "Graphic Adapter"
-msgstr "Grafikkarte"
-
-msgid "Other Equipment"
-msgstr "Sonstige Ausstattung"
-
-msgid "Software Information"
-msgstr "Software Informationen"
-
-msgid "Operating System"
-msgstr "Betriebssystem"
-
-msgid "Installed Software"
-msgstr "Installierte Software"
-
-msgid "Warranty Information"
-msgstr "Garantie Informationen"
-
-msgid "Warranty Expiration Date"
-msgstr "Garantieende"
-
-msgid "First Usage Date"
-msgstr "Inbetriebnahme"
-
-msgid "Global Location Number"
-msgstr "Globale Lokationsnummer"
-
-msgid "Address Information"
-msgstr "Adressinformationen"
-
-msgid "Street"
-msgstr "Straße"
-
-msgid "Street 2"
-msgstr "Straße 2"
-
-msgid "City"
-msgstr "Stadt"
 
 msgid "ZIP"
 msgstr "PLZ"
 
-msgid "Region"
-msgstr "Region"
+#~ msgid "(today)"
+#~ msgstr "(heute)"
 
-msgid "Contact Information"
-msgstr "Kontaktinformationen"
+#~ msgid "1 very low"
+#~ msgstr "1 sehr niedrig"
 
-msgid "Contact Role"
-msgstr "Kontaktrolle"
+#~ msgid "2 low"
+#~ msgstr "2 niedrig"
 
-msgid "Contacts"
-msgstr "Kontakte"
+#~ msgid "3 normal"
+#~ msgstr "3 normal"
 
-msgid "Parent Location"
-msgstr "Übergeordneter Standort"
+#~ msgid "4 high"
+#~ msgstr "4 hoch"
 
-msgid "Room Type"
-msgstr "Raumtyp"
+#~ msgid "5 very high"
+#~ msgstr "5 sehr hoch"
 
-msgid "Floor"
-msgstr "Geschoss"
+#~ msgid "CMDB Class permissions"
+#~ msgstr "CMDB Klassen Berechtigungen"
 
-msgid "Please enter decimal numbers only."
-msgstr "Bitte geben Sie nur Dezimalzahlen ein."
+#~ msgid "CMDB Class Definition"
+#~ msgstr "CMDB Klassen Definition"
 
-msgid "Room Label"
-msgstr "Raumbeschriftung"
+#~ msgid "CMDB Class versions"
+#~ msgstr "CMDB Klassen Versionen"
 
-msgid "Network Address"
-msgstr "Netzwerkadresse"
+#~ msgid "Coming Soon"
+#~ msgstr "Coming Soon"
 
-msgid "Subnet Mask"
-msgstr "Subnetzmaske"
+#~ msgid "E-Mail"
+#~ msgstr "E-Mail"
 
-msgid "Product"
-msgstr "Produkt"
+#~ msgid "escalated"
+#~ msgstr "Eskaliert"
 
-msgid "License Information"
-msgstr "Lizenz Informationen"
+#~ msgid "read"
+#~ msgstr "Gelesen"
 
-msgid "Licence Type"
-msgstr "Lizenztyp"
+#~ msgid "Missing required argument."
+#~ msgstr "Fehlende Pflichtangabe."
 
-msgid "License Key"
-msgstr "Lizenzschlüssel"
+#~ msgid "new"
+#~ msgstr "New"
 
-msgid "Quantity"
-msgstr "Anzahl"
+#~ msgid "open"
+#~ msgstr "offen"
 
-msgid "Expiration Date"
-msgstr "Ablaufdatum"
+#~ msgid "pending"
+#~ msgstr "Warten"
 
-msgid "Basestrings"
-msgstr "Basiszeichenketten"
+#~ msgid "Release Informationen"
+#~ msgstr "Release Informationen"
 
-msgid "base string"
-msgstr "Basiszeichenkette"
+#~ msgid "Search Results"
+#~ msgstr "Suchergebnisse"
 
-msgid "base strings"
-msgstr "Basiszeichenketten"
+#~ msgid "unread"
+#~ msgstr "ungelesen"
 
-msgid "Channel"
-msgstr "Kanal"
+#~ msgid "Linked Object"
+#~ msgstr "Verknüpftes Objekt"
 
-msgid "Channels"
-msgstr "Kanäle"
+#~ msgid "Warning"
+#~ msgstr "Warnung"
 
-msgid "Force"
-msgstr "Erzwingen"
+#~ msgid "Selected {0} ({1})"
+#~ msgstr "Ausgewählte {0} ({1})"
 
-msgid "Replace empty value"
-msgstr "Leerwert ersetzen"
+#~ msgid "You will edit {0} attributes for {1} {2}. Execute now?"
+#~ msgstr "Sie ändern {0} Attribute an {1} {2}. Jetzt starten?"
 
-msgid "<p>The first line of the source file must contain the column-to-object attribute assignment by using KIX-internal identifiers (e.g. CompanyCustomerID, CompanyName, etc.). In order to update existing customer data sets, their CompanyCustomerID must be specified. If new data sets needs to be imported, all mandatory attributes must be given.</p></br><h3>Operation Explanation:</h3><ul><li>Replace empty value = selected attribute will be set to the specified value if no information is given in source file</li><li>Force = selected attribute will be set to the specified value, no matter if a value is defined in the source file or not</li><li>Ignore = selected attribute will be ignored in the import"
-msgstr "<p>Die erste Zeile der Quelldatei muss die Zuordnung der Spalten zu den Objektattributen entsprechend der KIX-internen Bezeichner (z.B. CompanyCustomerID, CompanyName, etc.) beinhalten. Für Aktualisierung von Einträgen ist die Angabe einer bestehenden CompanyCustomerID zwingend erforderlich. Für Neuanlagen ist die Angabe aller Pflichtattribute zwingend erforderlich.</p></br><h3>Erläuterung der Operatoren:</h3><ul><li>Leerwert ersetzen = Für die gewählte Spalte wird in allen Zeilen, die keinen Wert enthalten, der hier gewählte Wert gesetzt.</li><li>Erzwingen = Für die gewählte Spalte wird in allen Zeilen der hier gewählte Wert gesetzt.</li><li>Ignorieren = Die gewählte Spalte wird nicht importiert."
+#~ msgid "Changes cannot be saved. How do you want to proceed?"
+#~ msgstr ""
+#~ "Änderung kann nicht gespeichert werden. Wie möchten Sie weiter verfahren?"
 
-msgid "<p>The first line of the source file must contain the column-to-object attribute assignment by using KIX-internal identifiers (e.g. UserLogin, UserCustomerID, UserLastname, etc.). In order to update existing customer data sets, their UserLogin and UserCustomerID must be specified. If new data sets needs to be imported, all mandatory attributes must be given.</p></br><h3>Operation Explanation:</h3><ul><li>Replace empty value = selected attribute will be set to the specified value if no information is given in source file</li><li>Force = selected attribute will be set to the specified value, no matter if a value is defined in the source file or not</li><li>Ignore = selected attribute will be ignored in the import"
-msgstr "<p>Die erste Zeile der Quelldatei muss die Zuordnung der Spalten zu den Objektattributen entsprechend der KIX-internen Bezeichner (z.B. UserLogin, UserCustomerID, UserLastname, etc.) beinhalten. Für Aktualisierung von Einträgen ist die Angabe einer bestehenden UserLogin sowie der UserCustomerID zwingend erforderlich. Für Neuanlagen ist die Angabe aller Pflichtattribute zwingend erforderlich.</p></br><h3>Erläuterung der Operatoren:</h3><ul><li>Leerwert ersetzen = Für die gewählte Spalte wird in allen Zeilen, die keinen Wert enthalten, der hier gewählte Wert gesetzt.</li><li>Erzwingen = Für die gewählte Spalte wird in allen Zeilen der hier gewählte Wert gesetzt.</li><li>Ignorieren = Die gewählte Spalte wird nicht importiert."
+#~ msgid "Zu ändernde Attribute"
+#~ msgstr "zu ändernde Attribute"
 
-msgid "User Management"
-msgstr "Nutzerverwaltung"
+#~ msgid "Sure?"
+#~ msgstr "Sicher?"
 
-msgid "User Management: Roles"
-msgstr "Nutzerverwaltung: Rollen"
+#~ msgid "Are you sure?"
+#~ msgstr "Sind Sie sicher?"
 
-msgid "New Role"
-msgstr "Neue Rolle"
+#~ msgid "All languages"
+#~ msgstr "Alle Sprachen"
 
-msgid "Role Information"
-msgstr "Rollen Informationen"
+#~ msgid "Basestring"
+#~ msgstr "Basiszeichenkette"
 
-msgid "User Assignment"
-msgstr "Agentenzuordnung"
+#~ msgid "not "
+#~ msgstr "nicht "
 
-msgid "Agents"
-msgstr "Agenten"
+#~ msgid "General Information"
+#~ msgstr "Allgemeine Informationen"
 
-msgid "Permissions"
-msgstr "Berechtigungen"
+#~ msgid "Vendor"
+#~ msgstr "Hersteller"
 
-msgid "Required"
-msgstr "Erforderlich"
+#~ msgid "Model"
+#~ msgstr "Modell"
 
-msgid "Path"
-msgstr "Pfad"
+#~ msgid "Building"
+#~ msgstr "Gebäude"
 
-msgid "Create Role"
-msgstr "Rolle wird angelegt"
+#~ msgid "Room"
+#~ msgstr "Raum"
 
-msgid "Role successfully created."
-msgstr "Rolle wurde erfolgreich angelegt."
+#~ msgid "Attachment"
+#~ msgstr "Anhang"
+
+#~ msgid "Owner Information"
+#~ msgstr "Besitzer Informationen"
+
+#~ msgid "Assigned Owner"
+#~ msgstr "Zugeordneter Besitzer"
+
+#~ msgid "Network Information"
+#~ msgstr "Netzwerk Informationen"
+
+#~ msgid "Network Interface"
+#~ msgstr "Netzwerkschnittstelle"
+
+#~ msgid "IP over DHCP"
+#~ msgstr "IP via DHCP"
+
+#~ msgid "Yes"
+#~ msgstr "Ja"
+
+#~ msgid "yes"
+#~ msgstr "ja"
+
+#~ msgid "no"
+#~ msgstr "nein"
+
+#~ msgid "IP Address"
+#~ msgstr "IP Adresse"
+
+#~ msgid "Please enter a valid IPv4 address in form 123.123.123.123."
+#~ msgstr ""
+#~ "Bitte geben Sie eine gültige IPv4 Adresse im Format 123.123.123.123 ein."
+
+#~ msgid "Network"
+#~ msgstr "Netzwerk"
+
+#~ msgid "Hardware Information"
+#~ msgstr "Hardware Informationen"
+
+#~ msgid "Serial Number"
+#~ msgstr "Seriennummer"
+
+#~ msgid "Hard Disk"
+#~ msgstr "Festplatte"
+
+#~ msgid "Capacity"
+#~ msgstr "Kapazität"
+
+#~ msgid "Graphic Adapter"
+#~ msgstr "Grafikkarte"
+
+#~ msgid "Other Equipment"
+#~ msgstr "Sonstige Ausstattung"
+
+#~ msgid "Software Information"
+#~ msgstr "Software Informationen"
+
+#~ msgid "Operating System"
+#~ msgstr "Betriebssystem"
+
+#~ msgid "Installed Software"
+#~ msgstr "Installierte Software"
+
+#~ msgid "Warranty Expiration Date"
+#~ msgstr "Garantieende"
+
+#~ msgid "First Usage Date"
+#~ msgstr "Inbetriebnahme"
+
+#~ msgid "Global Location Number"
+#~ msgstr "Globale Lokationsnummer"
+
+#~ msgid "Address Information"
+#~ msgstr "Adressinformationen"
+
+#~ msgid "Street 2"
+#~ msgstr "Straße 2"
+
+#~ msgid "Region"
+#~ msgstr "Region"
+
+#~ msgid "Parent Location"
+#~ msgstr "Übergeordneter Standort"
+
+#~ msgid "Room Type"
+#~ msgstr "Raumtyp"
+
+#~ msgid "Floor"
+#~ msgstr "Geschoss"
+
+#~ msgid "Please enter decimal numbers only."
+#~ msgstr "Bitte geben Sie nur Dezimalzahlen ein."
+
+#~ msgid "Room Label"
+#~ msgstr "Raumbeschriftung"
+
+#~ msgid "Network Address"
+#~ msgstr "Netzwerkadresse"
+
+#~ msgid "Subnet Mask"
+#~ msgstr "Subnetzmaske"
+
+#~ msgid "Product"
+#~ msgstr "Produkt"
+
+#~ msgid "License Information"
+#~ msgstr "Lizenz Informationen"
+
+#~ msgid "License Key"
+#~ msgstr "Lizenzschlüssel"
+
+#~ msgid "Quantity"
+#~ msgstr "Anzahl"
+
+#~ msgid "Expiration Date"
+#~ msgstr "Ablaufdatum"
+
+#~ msgid "Basestrings"
+#~ msgstr "Basiszeichenketten"
+
+#~ msgid "base string"
+#~ msgstr "Basiszeichenkette"
+
+#~ msgid "base strings"
+#~ msgstr "Basiszeichenketten"
