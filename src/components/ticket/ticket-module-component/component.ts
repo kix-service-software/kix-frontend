@@ -24,7 +24,9 @@ import {
     TicketTypeService, TicketPriorityService, TicketPriorityDetailsContext, TicketPriorityEditAction,
     TicketPriorityDuplicateAction, NewTicketPriorityDialogContext, NewTicketStateDialogContext,
     EditTicketPriorityDialogContext, TicketPriorityFormService, EditTicketStateDialogContext,
-    TicketStateFormService, TicketBulkManager, TicketTableCSSHandler, ArticleTableCSSHandler, EmailRecipientValidator
+    TicketStateFormService, TicketBulkManager, TicketTableCSSHandler, ArticleTableCSSHandler, EmailRecipientValidator,
+    TicketTemplateCreateAction, TicketTemplateTableDeleteAction, TicketTemplateLabelProvider, TicketTemplateService,
+    TicketTemplateBrowserFactory, TicketTemplateTableFactory
 } from '../../../core/browser/ticket';
 import {
     KIXObjectType, ContextDescriptor, ContextMode, ContextType,
@@ -49,6 +51,7 @@ class Component extends AbstractMarkoComponent {
         ServiceRegistry.registerServiceInstance(TicketTypeService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketStateService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketPriorityService.getInstance());
+        ServiceRegistry.registerServiceInstance(TicketTemplateService.getInstance());
 
         ServiceRegistry.registerServiceInstance(TicketFormService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketTypeFormService.getInstance());
@@ -65,6 +68,7 @@ class Component extends AbstractMarkoComponent {
         LabelService.getInstance().registerLabelProvider(new TicketStateLabelProvider());
         LabelService.getInstance().registerLabelProvider(new TicketStateTypeLabelProvider());
         LabelService.getInstance().registerLabelProvider(new ChannelLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new TicketTemplateLabelProvider());
 
         TableFactoryService.getInstance().registerFactory(new TicketTableFactory());
         TableFactoryService.getInstance().registerFactory(new ArticleTableFactory());
@@ -72,6 +76,7 @@ class Component extends AbstractMarkoComponent {
         TableFactoryService.getInstance().registerFactory(new TicketTypeTableFactory());
         TableFactoryService.getInstance().registerFactory(new TicketPriorityTableFactory());
         TableFactoryService.getInstance().registerFactory(new TicketStateTableFactory());
+        TableFactoryService.getInstance().registerFactory(new TicketTemplateTableFactory());
 
         TableCSSHandlerRegistry.getInstance().registerCSSHandler(KIXObjectType.TICKET, new TicketTableCSSHandler());
         TableCSSHandlerRegistry.getInstance().registerCSSHandler(KIXObjectType.ARTICLE, new ArticleTableCSSHandler());
@@ -90,6 +95,9 @@ class Component extends AbstractMarkoComponent {
         );
         FactoryService.getInstance().registerFactory(
             KIXObjectType.TICKET_STATE_TYPE, TicketStateTypeBrowserFactory.getInstance()
+        );
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.TICKET_TEMPLATE, TicketTemplateBrowserFactory.getInstance()
         );
 
         TicketFormService.getInstance();
@@ -270,6 +278,11 @@ class Component extends AbstractMarkoComponent {
         ActionFactory.getInstance().registerAction('ticket-admin-state-delete', TicketStateDeleteAction);
         ActionFactory.getInstance().registerAction(
             'ticket-admin-state-textmodules-edit', TicketStateEditTextmodulesAction
+        );
+
+        ActionFactory.getInstance().registerAction('ticket-admin-template-create', TicketTemplateCreateAction);
+        ActionFactory.getInstance().registerAction(
+            'ticket-admin-template-table-delete', TicketTemplateTableDeleteAction
         );
     }
 

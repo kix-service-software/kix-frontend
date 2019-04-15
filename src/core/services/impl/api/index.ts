@@ -25,3 +25,4 @@ export { TicketPriorityService } from './TicketPriorityService';
 export { ConfigItemClassService } from './ConfigItemClassService';
 export { TranslationService } from './TranslationService';
 export { SystemAddressService } from './SystemAddressService';
+export { TicketTemplateService } from './TicketTemplateService';

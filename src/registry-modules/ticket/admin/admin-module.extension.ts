@@ -17,6 +17,10 @@ class Extension implements IAdminModuleExtension {
                     new AdminModule(
                         null, 'ticket-states', 'Translatable#States', null,
                         KIXObjectType.TICKET_STATE, 'ticket-admin-states'
+                    ),
+                    new AdminModule(
+                        null, 'ticket-templates', 'Translatable#Templates', null,
+                        KIXObjectType.TICKET_TEMPLATE, 'ticket-admin-templates'
                     )
                 ])
         ];

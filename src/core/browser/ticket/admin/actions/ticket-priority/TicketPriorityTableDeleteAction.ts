@@ -49,7 +49,7 @@ export class TicketPriorityTableDeleteAction extends AbstractAction<ITable> {
         const selectedRows = this.data.getSelectedRows();
         if (selectedRows && !!selectedRows.length) {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Remove Priorities'
+                loading: true, hint: 'Translatable#Remove Priorities ...'
             });
             const failIds = await KIXObjectService.deleteObject(
                 KIXObjectType.TICKET_PRIORITY, selectedRows.map((sR) => sR.getRowObject().getObject().ObjectId)

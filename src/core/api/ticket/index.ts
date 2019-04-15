@@ -7,6 +7,7 @@ export * from './ticket-priority';
 export * from './ticket-state';
 export * from './ticket-state-type';
 export * from './ticket-type';
+export * from './ticket-template';
 
 export { CreateTicketResponse } from './CreateTicketResponse';
 export { CreateTicketRequest } from './CreateTicketRequest';

@@ -20,6 +20,8 @@ export { TicketCreationError } from './TicketCreationError';
 export { Watcher } from './Watcher';
 export { TicketTypeProperty } from './TicketTypeProperty';
 export { TicketStateProperty } from './TicketStateProperty';
+export { TicketTemplate } from './TicketTemplate';
+export { TicketTemplateProperty } from './TicketTemplateProperty';
 
 export { TicketStats } from './TicketStats';
 export { CreateTicketArticleOptions } from './CreateTicketArticleOptions';

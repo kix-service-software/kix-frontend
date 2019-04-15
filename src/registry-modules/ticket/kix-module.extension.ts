@@ -60,7 +60,8 @@ class Extension implements IKIXModuleExtension {
         ['edit-ticket-state-dialog', 'ticket/admin/dialogs/edit-ticket-state-dialog'],
         ['go-to-article-cell', 'ticket/table/go-to-article-cell'],
         ['article-attachment-cell', 'ticket/table/article-attachment-cell'],
-        ['article-attachment-count', 'ticket/article-attachment-count']
+        ['article-attachment-count', 'ticket/article-attachment-count'],
+        ['ticket-admin-templates', 'ticket/admin/ticket-admin-templates']
     ];
 
 }

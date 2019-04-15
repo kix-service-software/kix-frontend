@@ -152,7 +152,7 @@ class Component {
                 settings.tableConfiguration, null, contextId, true, true
             );
 
-            if (settings.sort) {
+            if (table && settings.sort) {
                 await table.sort(settings.sort[0], settings.sort[1]);
             }
 
