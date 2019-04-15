@@ -214,7 +214,7 @@ export class RoleService extends KIXObjectService {
 
     private async createPermissions(
         token: string, clientRequestId: string, roleId: number,
-        existingPermissions: Permission[], permissionDescs: CreatePermissionDescription[]
+        existingPermissions: Permission[], permissionDescs: CreatePermissionDescription[] = []
     ): Promise<void> {
         const permissionsToAdd = permissionDescs.filter(
             (pd) => !existingPermissions.some(

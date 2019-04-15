@@ -40,7 +40,7 @@ export class CacheService {
         }
     }
 
-    public async delete(key: string, cacheKeyPrefix: string): Promise<void> {
+    public delete(key: string, cacheKeyPrefix: string): void {
         this.cache.delete(key);
         if (cacheKeyPrefix) {
             if (!this.keyIndex.has(cacheKeyPrefix)) {
@@ -53,7 +53,7 @@ export class CacheService {
         }
     }
 
-    public async deleteKeys(cacheKeyPrefix: string): Promise<void> {
+    public deleteKeys(cacheKeyPrefix: string): void {
         const prefixes = this.getCacheKeyPrefix(cacheKeyPrefix);
         for (const prefix of prefixes) {
             if (this.keyIndex.has(prefix)) {
@@ -62,7 +62,7 @@ export class CacheService {
                     `CacheService: delete cacheKeyPrefix ${prefix} - key count: ${keys.length}`
                 );
                 for (const key of keys) {
-                    await this.delete(key, prefix);
+                    this.delete(key, prefix);
                 }
             }
         }
@@ -71,7 +71,7 @@ export class CacheService {
     public async updateCaches(events: ObjectUpdatedEventData[]): Promise<void> {
         for (const event of events) {
             if (event.RequestID !== ClientStorageService.getClientRequestId()) {
-                await this.deleteKeys(event.Namespace);
+                this.deleteKeys(event.Namespace);
             }
         }
     }
@@ -126,14 +126,38 @@ export class CacheService {
                 break;
             case KIXObjectType.PERMISSION:
             case KIXObjectType.ROLE:
-                this.keyIndex.clear();
-                this.cache.clear();
+                this.clear([KIXObjectType.TRANSLATION]);
                 cacheKeyPrefixes = [];
                 break;
             default:
         }
 
         return cacheKeyPrefixes;
+    }
+
+    private clear(ignoreKeyPrefixes: string[] = []): void {
+        const iterator = this.keyIndex.keys();
+
+        let prefix = iterator.next();
+        while (prefix && prefix.value) {
+            if (!ignoreKeyPrefixes.some((p) => p === prefix.value)) {
+                const keys = this.keyIndex.get(prefix.value);
+                console.debug(
+                    `CacheService: delete cacheKeyPrefix ${prefix} - key count: ${keys.length}`
+                );
+                keys.forEach((k) => this.cache.delete(k));
+            }
+            prefix = iterator.next();
+        }
+
+        const newIndex: Map<string, string[]> = new Map();
+        for (const ignorePrefix of ignoreKeyPrefixes) {
+            if (this.keyIndex.has(ignorePrefix)) {
+                newIndex.set(ignorePrefix, this.keyIndex.get(ignorePrefix));
+            }
+        }
+
+        this.keyIndex = newIndex;
     }
 
 }
