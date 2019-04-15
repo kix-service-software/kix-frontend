@@ -71,7 +71,9 @@ export class CacheService {
     public async updateCaches(events: ObjectUpdatedEventData[]): Promise<void> {
         for (const event of events) {
             if (event.RequestID !== ClientStorageService.getClientRequestId()) {
-                this.deleteKeys(event.Namespace);
+                if (!event.Namespace.startsWith(KIXObjectType.TRANSLATION)) {
+                    this.deleteKeys(event.Namespace);
+                }
             }
         }
     }
