@@ -92,7 +92,7 @@ export class TicketPriorityDetailsContext extends Context<TicketPriorityDetailsC
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
-        const objectName = await TranslationService.translate('Translatable#Type');
+        const objectName = await TranslationService.translate('Translatable#Priority');
         const state = await this.getObject<TicketPriority>();
         return new BreadcrumbInformation(this.getIcon(), [AdminContext.CONTEXT_ID], `${objectName}: ${state.Name}`);
     }
