@@ -16,7 +16,7 @@ export class RoleDetailsContext extends Context<RoleDetailsContextConfiguration>
     public static CONTEXT_ID = 'user-role-details';
 
     public getIcon(): string {
-        return 'kix-icon-gear';
+        return 'kix-icon-admin';
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {

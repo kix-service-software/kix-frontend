@@ -14,7 +14,7 @@ export class TranslationDetailsContext extends Context<TranslationDetailsContext
     public static CONTEXT_ID = 'i18n-translation-details';
 
     public getIcon(): string {
-        return 'kix-icon-gear';
+        return 'kix-icon-admin';
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {

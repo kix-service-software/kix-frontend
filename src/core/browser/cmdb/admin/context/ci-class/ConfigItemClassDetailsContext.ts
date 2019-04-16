@@ -15,7 +15,7 @@ export class ConfigItemClassDetailsContext extends Context<ConfigItemClassDetail
     public static CONTEXT_ID = 'config-item-class-details';
 
     public getIcon(): string {
-        return 'kix-icon-gear';
+        return 'kix-icon-admin';
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {

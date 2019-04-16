@@ -104,7 +104,7 @@ export class DialogService {
                     dialogTitle = dialogTitle
                         || contextTitle
                         || await TranslationService.translate('Translatable#Edit Core Data');
-                    dialogIcon = dialogIcon || 'kix-icon-edit';
+                    dialogIcon = dialogIcon || 'kix-icon-gear';
                     singleTab = true;
                     break;
                 case ContextMode.PERSONAL_SETTINGS:

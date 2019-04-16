@@ -19,12 +19,10 @@ import { DynamicFieldService } from '../../core/browser/dynamic-fields';
 import {
     TextModuleService, TextModuleBrowserFactory, TextModuleLabelProvider, TextModulesTableFactory
 } from '../../core/browser/text-modules';
-import { SysConfigService } from '../../core/browser/sysconfig';
 import { SlaService, SlaLabelProvider, SlaBrowserFactory } from '../../core/browser/sla';
 import { ObjectIconService, ObjectIconBrowserFactory } from '../../core/browser/icon';
 import { PersonalSettingsDialogContext } from '../../core/browser';
 import { BulkDialogContext } from '../../core/browser/bulk';
-import { TranslationService } from '../../core/browser/i18n/TranslationService';
 import {
     TranslationLabelProvider, TranslationBrowserFactory, TranslationLanguageLabelProvider
 } from '../../core/browser/i18n';
@@ -42,7 +40,6 @@ import { SearchContext } from '../../core/browser/search/context';
 import { SwitchColumnOrderAction } from '../../core/browser/table/actions';
 import { SystemAddressService } from '../../core/browser/system-address';
 import { DialogService } from '../../core/browser/components/dialog';
-import { AgentService } from '../../core/browser/application/AgentService';
 import { PermissionLabelProvider } from '../../core/browser/permission';
 import { PermissionsTableFactory, PermissionTableCSSHandler } from '../../core/browser/application';
 import { ServiceService } from '../../core/browser/service/ServiceService';
@@ -218,7 +215,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'edit-translation-dialog',
             new WidgetConfiguration(
-                'edit-translation-dialog', 'Translatable#Edit Translation', [], {}, false, false, null, 'kix-icon-gear'
+                'edit-translation-dialog', 'Translatable#Edit Translation', [], {}, false, false, null, 'kix-icon-edit'
             ),
             KIXObjectType.TRANSLATION,
             ContextMode.EDIT_ADMIN

@@ -15,7 +15,7 @@ export class TicketTypeDetailsContext extends Context<TicketTypeDetailsContextCo
     public static CONTEXT_ID = 'ticket-type-details';
 
     public getIcon(): string {
-        return 'kix-icon-gear';
+        return 'kix-icon-admin';
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {

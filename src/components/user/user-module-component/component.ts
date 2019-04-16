@@ -117,7 +117,7 @@ class Component extends AbstractMarkoComponent {
             'edit-user-role-dialog',
             new WidgetConfiguration(
                 'edit-user-role-dialog', 'Translatable#Edit Role', [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-gear'
+                false, false, WidgetSize.BOTH, 'kix-icon-edit'
             ),
             KIXObjectType.ROLE,
             ContextMode.EDIT_ADMIN
