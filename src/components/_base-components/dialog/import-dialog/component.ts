@@ -1,13 +1,14 @@
 import { ComponentState } from './ComponentState';
 import {
     ContextService, LabelService, FormService, WidgetService, TableFactoryService,
-    TableConfiguration, IColumnConfiguration, TableHeaderHeight, TableRowHeight,
-    TableEvent, TableEventData, BrowserUtil, OverlayService, DefaultColumnConfiguration, ValueState
+    TableConfiguration, TableHeaderHeight, TableRowHeight,
+    TableEvent, TableEventData, BrowserUtil, OverlayService, DefaultColumnConfiguration, ValueState,
+    IColumnConfiguration
 } from '../../../../core/browser';
 import { EventService, IEventSubscriber } from '../../../../core/browser/event';
 import { ImportService, ImportPropertyOperator } from '../../../../core/browser/import';
 import {
-    KIXObjectType, ContextMode, Form, FormContext, FormField, FormFieldOption,
+    KIXObjectType, Form, FormContext, FormField, FormFieldOption,
     DefaultSelectInputFormOption, TreeNode, FormFieldValue, WidgetType,
     KIXObject, OverlayType, ComponentContent, DataType, Error, SortOrder, ContextType, Context
 } from '../../../../core/model';
@@ -60,8 +61,8 @@ class Component {
                 ],
                 [
                     'text_separator', [
-                        new ImportConfigValue('DOUBLE', '"' + 'Translatable#(double quotes)', '"'),
-                        new ImportConfigValue('SINGLE', "'" + 'Translatable#(single quotes)', "'")
+                        new ImportConfigValue('DOUBLE', 'Translatable#DOUBLE_QUOTES', '"'),
+                        new ImportConfigValue('SINGLE', 'Translatable#SINGLE_QUOTES', "'")
                     ]
                 ]
             ]
