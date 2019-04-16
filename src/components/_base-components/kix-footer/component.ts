@@ -16,7 +16,7 @@ class Component {
 
     public onInput(input: ComponentInput): void {
         this.state.releaseInfo = input.releaseInfo;
-        this.state.impressLink = input.impressLink;
+        this.state.imprintLink = input.imprintLink;
         this.state.unauthorized = typeof input.unauthorized !== 'undefined' ? input.unauthorized : false;
     }
 
@@ -37,19 +37,19 @@ class Component {
             this.state.buildNumber = this.getBuildNumber(this.state.releaseInfo);
         }
 
-        if (!this.state.impressLink) {
-            const impressConfig = await KIXObjectService.loadObjects<SysConfigItem>(
-                KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.IMPRESS_LINK]
+        if (!this.state.imprintLink) {
+            const imprintConfig = await KIXObjectService.loadObjects<SysConfigItem>(
+                KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.IMPRINT_LINK]
             );
 
-            if (impressConfig && impressConfig.length) {
+            if (imprintConfig && imprintConfig.length) {
                 const userLanguage = await TranslationService.getUserLanguage();
-                const data = impressConfig[0].Data;
+                const data = imprintConfig[0].Data;
                 if (data[userLanguage]) {
-                    this.state.impressLink = data[userLanguage];
+                    this.state.imprintLink = data[userLanguage];
                 } else {
                     const defaultLanguage = await TranslationService.getSystemDefaultLanguage();
-                    this.state.impressLink = data[defaultLanguage];
+                    this.state.imprintLink = data[defaultLanguage];
                 }
             }
         }
