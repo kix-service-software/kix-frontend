@@ -5,7 +5,8 @@ export class ComponentState extends WidgetComponentState<any> {
 
     public constructor(
         public actions: AbstractAction[] = [],
-        public table: ITable = null
+        public table: ITable = null,
+        public title: string = 'Translatable#Assigned Roles'
     ) {
         super();
     }

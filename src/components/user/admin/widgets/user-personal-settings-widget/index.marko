@@ -4,7 +4,9 @@
     contentActions=state.actions>
     <@content>
         <if(state.user)>
-            <object-property-label object=state.user property="UserLanguage" labelProvider=state.labelProvider/>
+            <div.user-preferences>
+                <object-property-label object=state.user property="UserLanguage" labelProvider=state.labelProvider/>
+            </div>
         </if>
     </@content>
 </widget>
