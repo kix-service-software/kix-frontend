@@ -22,7 +22,7 @@ export class SearchOperatorUtil {
             case SearchOperator.LESS_THAN_OR_EQUAL:
                 return await TranslationService.translate('Translatable#less or equal');
             case SearchOperator.LIKE:
-                return await TranslationService.translate('Translatable#corresponds to');
+                return await TranslationService.translate('Translatable#like');
             case SearchOperator.NOT_EQUALS:
                 return await TranslationService.translate('Translatable#unequal');
             case SearchOperator.STARTS_WITH:

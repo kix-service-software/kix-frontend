@@ -5,6 +5,7 @@ import {
 import { ComponentState } from './ComponentState';
 import { KIXObjectType, Role, UserProperty, DataType } from '../../../../../core/model';
 import { RoleDetailsContext } from '../../../../../core/browser/user';
+import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -61,9 +62,18 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             const table = await TableFactoryService.getInstance().createTable(
                 'user-role-assigned-users', KIXObjectType.USER, tableConfiguration, role.UserIDs, null, true
             );
+
             this.state.table = table;
             this.prepareActions(role);
+            this.prepareTitle(role);
         }
+    }
+
+    private async prepareTitle(role: Role): Promise<void> {
+        let title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : "";
+        title = await TranslationService.translate(title);
+        const count = role.UserIDs ? role.UserIDs.length : 0;
+        this.state.title = `${title} (${count})`;
     }
 
     private async prepareActions(role: Role): Promise<void> {

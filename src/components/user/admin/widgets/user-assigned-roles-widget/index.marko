@@ -1,7 +1,4 @@
-<widget
-    instanceId=state.instanceId
-    title=(state.widgetConfiguration ? state.widgetConfiguration.title : "Translatable#Assigned Roles")
-    contentActions=state.actions>
+<widget instanceId=state.instanceId title=state.title contentActions=state.actions>
     <@content>
         <if(state.table)>
             <standard-table-NEW table=state.table/>
