@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
 "PO-Revision-Date: 2019-04-16 07:15+0000\n"
-"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
+"Last-Translator: tto <Torsten.Thau@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Weblate 3.5\n"
 
 msgid "{0}/{1} {2} imported"
-msgstr ""
+msgstr "{0}/{1} {2} importiert"
 
 msgid "0 data sets found."
 msgstr "0 Datensätze gefunden."
@@ -23,13 +23,11 @@ msgstr "0 Datensätze gefunden."
 msgid "{0} File(s) added"
 msgstr "{0} Datei(en) angehangen"
 
-#, fuzzy
-#| msgid "{0} Link created"
 msgid "{0} imported"
-msgstr "{0} Verknüpfungen angelegt"
+msgstr "{0} importiert"
 
 msgid "{0} Link created"
-msgstr "{0} Verknüpfungen angelegt"
+msgstr "{0} Verknüpfung(en) angelegt"
 
 msgid "accounted time"
 msgstr "Erfasste Zeit"
@@ -39,34 +37,33 @@ msgid ""
 "characters in order to get a suggestion list of already registered contacts. "
 "You may use „*“ as wildcard."
 msgstr ""
+"Ein Kontakt ist eine Person, die eine Anfrage im Kontext eines Kunden "
+"stellt. Geben Sie mind. 3 Zeichen ein um eine Liste von bekannten Kontakten "
+"vorgeschlagen zu bekommen. \"*\" kann als Platzhalter verwendet werden."
 
 msgid "Action"
 msgstr "Aktion"
 
 msgid "Add"
-msgstr ""
+msgstr "Hinzufügen"
 
-#, fuzzy
-#| msgid "Edit CMDB Class"
 msgid "Add CI Class"
-msgstr "Add CMDB Class"
+msgstr "CI-Klasse Hinzufügen"
 
 msgid "add notes here"
-msgstr ""
+msgstr "Notizen hinzufügen"
 
-#, fuzzy
-#| msgid "All Objects"
 msgid "Add Object"
-msgstr "Alle Objekte"
+msgstr "Objekt Anlegen"
 
 msgid "Admin"
-msgstr ""
+msgstr "Admin"
 
 msgid "Administration"
-msgstr ""
+msgstr "Administration"
 
 msgid "Advanced Search"
-msgstr ""
+msgstr "Erweiterte Suche"
 
 msgid "Affected Service"
 msgstr "Betroffener Service"
@@ -74,45 +71,39 @@ msgstr "Betroffener Service"
 msgid "Age"
 msgstr "Alter"
 
-#, fuzzy
-#| msgid "Agents"
 msgid "Agent"
-msgstr "Agenten"
+msgstr "Agent"
 
 #, fuzzy
 #| msgid "User Assignment"
 msgid "Agent Assignment"
 msgstr "Agentenzuordnung"
 
-#, fuzzy
-#| msgid "FAQ Information"
 msgid "Agent Information"
-msgstr "FAQ Informationen"
+msgstr "Agenteninformationen"
 
 msgid "Agents"
 msgstr "Agenten"
 
-#, fuzzy
-#| msgid "Role successfully created."
 msgid "Agent successfully created."
-msgstr "Rolle wurde erfolgreich angelegt."
+msgstr "Agent wurde erfolgreich angelegt."
 
 msgid "All"
-msgstr ""
+msgstr "Alle"
 
 msgid "All form fields marked by * are required fields."
 msgstr ""
+"Alle Eingabefelder, welche mit \"*\" gekennzeichnet sind, sind "
+"Pflichtangaben."
 
 msgid "All Objects"
 msgstr "Alle Objekte"
 
-#, fuzzy
-#| msgid "New Tickets"
 msgid "All Tickets"
-msgstr "Neue Tickets"
+msgstr "Alle Tickets"
 
 msgid "AND"
-msgstr ""
+msgstr "UND"
 
 msgid "An error occurred."
 msgstr "Es ist ein Fehler aufgetreten."
@@ -127,21 +118,17 @@ msgid ""
 "A queue is a classification system for requests, comparable to folders in a "
 "file system."
 msgstr ""
+"Eine Queue ordnet Anfragen Bearbeitungsteams zu und klassifiziert die "
+"Anfrage. Queues sind vergleichbar mit Verzeichnissen im Dateisystem."
 
-#, fuzzy
-#| msgid "Overview Tickets"
 msgid "Archivierte Tickets"
-msgstr "Übersicht Tickets"
+msgstr "Archivierte Tickets"
 
-#, fuzzy
-#| msgid "Article Id"
 msgid "Article"
-msgstr "Artikel ID"
+msgstr "Artikel"
 
-#, fuzzy
-#| msgid "Article Id"
 msgid "Article Data"
-msgstr "Artikel ID"
+msgstr "Artikeldaten"
 
 msgid "Article Id"
 msgstr "Artikel ID"
@@ -149,35 +136,25 @@ msgstr "Artikel ID"
 msgid "Article Overview"
 msgstr "Artikelübersicht"
 
-#, fuzzy
-#| msgid "Role successfully created."
 msgid "Article successfully created."
-msgstr "Rolle wurde erfolgreich angelegt."
+msgstr "Artikel wurde erfolgreich angelegt."
 
-#, fuzzy
-#| msgid "Article Id"
 msgid "Article Text"
-msgstr "Artikel ID"
+msgstr "Artikeltext"
 
-#, fuzzy
-#| msgid "Assigned Contacts "
 msgid "Assigned Agents"
-msgstr "Zugeordnete Kontakte "
+msgstr "Zugeordnete Agenten"
 
 #, fuzzy
 #| msgid "Assigned Contacts "
 msgid "Assigned Contacts"
-msgstr "Zugeordnete Kontakte "
+msgstr "Zugeordnete Kontakte"
 
-#, fuzzy
-#| msgid "Assigned Customer"
 msgid "Assigned Customers"
-msgstr "Zugeordneter Kunde"
+msgstr "Zugeordnete Kunden"
 
-#, fuzzy
-#| msgid "Assign Text Modules"
 msgid "Assigned Roles"
-msgstr "Zuordnung zu Textbausteinen"
+msgstr "Zugeordnete Rollen"
 
 msgid "Assign Link"
 msgstr "Verknüpfung zuordnen"
@@ -191,7 +168,7 @@ msgid "Assign Team / Queue"
 msgstr "Zuordnung zu Team / Queue"
 
 msgid "Assign the roles for the user."
-msgstr ""
+msgstr "Dem Nutzer Rollen zuordnen."
 
 msgid ""
 "Attach additional files to the FAQ article. Drag & Drop is possible. Max. "
