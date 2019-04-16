@@ -435,9 +435,6 @@ msgstr "Rolle wurde erfolgreich angelegt."
 msgid "contains"
 msgstr "enthält"
 
-msgid "corresponds to"
-msgstr ""
-
 msgid "Country"
 msgstr "Land"
 
@@ -623,6 +620,9 @@ msgstr ""
 msgid ". (dot)"
 msgstr ""
 
+msgid "DOUBLE_QUOTES"
+msgstr ""
+
 msgid "Download"
 msgstr ""
 
@@ -781,6 +781,9 @@ msgstr "extern"
 msgid "FAQ"
 msgstr ""
 
+msgid "FAQ#"
+msgstr ""
+
 msgid "FAQ Article"
 msgstr "FAQ Artikel"
 
@@ -915,8 +918,10 @@ msgstr "Kunden"
 msgid "Import Data"
 msgstr "Stammdaten"
 
-msgid "Impress"
-msgstr "Impressum"
+#, fuzzy
+#| msgid "Print"
+msgid "Imprint"
+msgstr "Drucken"
 
 msgid "in"
 msgstr ""
@@ -1072,6 +1077,9 @@ msgid "less or equal"
 msgstr ""
 
 msgid "less than"
+msgstr ""
+
+msgid "like"
 msgstr ""
 
 #, fuzzy
@@ -1813,7 +1821,9 @@ msgstr "Suche"
 msgid "Search ..."
 msgstr "Suche ..."
 
-msgid "Searchable FAQ attributes: FAQ"
+msgid ""
+"Searchable FAQ attributes: FAQ#, Title, Symptom, Cause, Solution, Comment, "
+"Changed by, Created by, Keywords, Language, Validity"
 msgstr ""
 
 msgid ""
@@ -1998,6 +2008,9 @@ msgstr ""
 
 msgid "Show all"
 msgstr "Alle anzeigen"
+
+msgid "SINGLE_QUOTES"
+msgstr ""
 
 msgid "SLA"
 msgstr ""
@@ -2492,6 +2505,9 @@ msgstr ""
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Impress"
+#~ msgstr "Impressum"
 
 #~ msgid "(today)"
 #~ msgstr "(heute)"
