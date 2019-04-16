@@ -28,7 +28,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             objectListChanged: () => { return; },
             filteredObjectListChanged: () => { return; },
             scrollInformationChanged: () => { return; },
-            objectChanged: async (ticketId: string, user: User, type: KIXObjectType) => {
+            objectChanged: async (userId: string, user: User, type: KIXObjectType) => {
                 if (type === KIXObjectType.USER) {
                     this.initWidget(user);
                 }
