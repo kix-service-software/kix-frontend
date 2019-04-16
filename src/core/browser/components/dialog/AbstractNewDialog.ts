@@ -103,6 +103,7 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
             EventService.getInstance().publish(
                 TabContainerEvent.CHANGE_TAB, new TabContainerEventData(previousTabData.tabId)
             );
+            DialogService.getInstance().setMainDialogLoading(false);
         } else {
             DialogService.getInstance().setMainDialogLoading(false);
             DialogService.getInstance().submitMainDialog();
