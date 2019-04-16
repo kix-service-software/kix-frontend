@@ -66,13 +66,13 @@ export class TableFactoryService {
     public async createTable(
         tableKey: string, objectType: KIXObjectType, tableConfiguration?: TableConfiguration,
         objectIds?: Array<number | string>, contextId?: string, defaultRouting?: boolean,
-        defaultToggle?: boolean, short: boolean = false, reload: boolean = true
+        defaultToggle?: boolean, short: boolean = false, reload: boolean = true, recreate: boolean = false
     ): Promise<ITable> {
         let table: ITable;
 
         const context = ContextService.getInstance().getActiveContext();
         let tableContextId: string;
-        if (context) {
+        if (context && !recreate) {
             tableContextId = context.getDescriptor().contextId;
             if (this.contextTableInstances.has(tableContextId)) {
                 const tableInstances = this.contextTableInstances.get(tableContextId);

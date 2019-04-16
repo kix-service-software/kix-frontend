@@ -1,8 +1,8 @@
 import { TableContentProvider } from "../../../../table/TableContentProvider";
-import { KIXObjectType, KIXObjectLoadingOptions, Role } from "../../../../../model";
+import { KIXObjectType, KIXObjectLoadingOptions, User } from "../../../../../model";
 import { ITable } from "../../../../table";
 
-export class UserTableContentProvider extends TableContentProvider<Role> {
+export class UserTableContentProvider extends TableContentProvider<User> {
 
     public constructor(
         table: ITable,
