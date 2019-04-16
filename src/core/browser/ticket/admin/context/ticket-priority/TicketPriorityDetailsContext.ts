@@ -15,7 +15,7 @@ export class TicketPriorityDetailsContext extends Context<TicketPriorityDetailsC
     public static CONTEXT_ID = 'ticket-priority-details';
 
     public getIcon(): string {
-        return 'kix-icon-gear';
+        return 'kix-icon-admin';
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {

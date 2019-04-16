@@ -15,7 +15,7 @@ export class UserDetailsContext extends Context<UserDetailsContextConfiguration>
     public static CONTEXT_ID = 'user-details';
 
     public getIcon(): string {
-        return 'kix-icon-gear';
+        return 'kix-icon-admin';
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {

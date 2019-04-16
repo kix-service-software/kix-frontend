@@ -189,7 +189,7 @@ class Component extends AbstractMarkoComponent {
             'edit-config-item-class-dialog',
             new WidgetConfiguration(
                 'edit-config-item-class-dialog', 'Translatable#Edit Class', [], {},
-                false, false, null, 'kix-icon-gear'
+                false, false, null, 'kix-icon-edit'
             ),
             KIXObjectType.CONFIG_ITEM_CLASS,
             ContextMode.EDIT_ADMIN
