@@ -88,8 +88,8 @@ export class TranslationService extends KIXObjectService<Translation> {
         let translationValue = pattern;
         if (translationValue !== null) {
 
-            if (translationValue.startsWith('Translatable#')) {
-                translationValue = translationValue.replace('Translatable#', '');
+            if (translationValue.startsWith('Translatable' + '#')) {
+                translationValue = translationValue.replace('Translatable' + '#', '');
             }
 
             const loadingOptions = new KIXObjectLoadingOptions(

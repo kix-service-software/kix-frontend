@@ -60,8 +60,8 @@ class Component {
                 ],
                 [
                     'text_separator', [
-                        new ImportConfigValue('DOUBLE', 'Translatable#" (double quotes)', '"'),
-                        new ImportConfigValue('SINGLE', "Translatable#' (single quotes)", "'")
+                        new ImportConfigValue('DOUBLE', '"' + 'Translatable#(double quotes)', '"'),
+                        new ImportConfigValue('SINGLE', "'" + 'Translatable#(single quotes)', "'")
                     ]
                 ]
             ]
