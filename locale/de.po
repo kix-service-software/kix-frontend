@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-04-16 07:21+0000\n"
+"PO-Revision-Date: 2019-04-16 12:25+0000\n"
 "Last-Translator: jrobel <Julia.Robel@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -432,10 +432,8 @@ msgstr "Kontaktrolle"
 msgid "Contact successfully created."
 msgstr "Rolle wurde erfolgreich angelegt."
 
-#, fuzzy
-#| msgid "Contacts"
 msgid "contains"
-msgstr "Kontakte"
+msgstr "enthält"
 
 msgid "corresponds to"
 msgstr ""
@@ -1282,7 +1280,7 @@ msgid "New Tickets"
 msgstr "Neue Tickets"
 
 msgid "New Tickets (recent 7 days)"
-msgstr ""
+msgstr "Neue Tickets der letzten 7 Tage"
 
 #, fuzzy
 #| msgid "Translation"
