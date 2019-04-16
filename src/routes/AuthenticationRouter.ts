@@ -39,26 +39,26 @@ export class AuthenticationRouter extends KIXRouter {
 
         const releaseInfo = await ConfigurationService.getInstance().getModuleConfiguration('release-info', null);
 
-        const impressLink = await this.getImpressLink();
+        const imprintLink = await this.getImprintLink();
 
         res.marko(template, {
             login: true,
             logout,
             releaseInfo,
-            impressLink
+            imprintLink
         });
     }
 
-    private async getImpressLink(): Promise<string> {
-        let impressLink = '';
+    private async getImprintLink(): Promise<string> {
+        let imprintLink = '';
         const config = ConfigurationService.getInstance().getServerConfiguration();
-        const impressConfig = await SysConfigService.getInstance().loadObjects<SysConfigItem>(
-            config.BACKEND_API_TOKEN, '', KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.IMPRESS_LINK],
+        const imprintConfig = await SysConfigService.getInstance().loadObjects<SysConfigItem>(
+            config.BACKEND_API_TOKEN, '', KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.IMPRINT_LINK],
             undefined, undefined
         );
 
-        if (impressConfig && impressConfig.length) {
-            const data = impressConfig[0].Data;
+        if (imprintConfig && imprintConfig.length) {
+            const data = imprintConfig[0].Data;
 
             const defaultLangConfig = await SysConfigService.getInstance().loadObjects<SysConfigItem>(
                 config.BACKEND_API_TOKEN, '', KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.DEFAULT_LANGUAGE],
@@ -66,13 +66,13 @@ export class AuthenticationRouter extends KIXRouter {
             );
 
             if (defaultLangConfig && defaultLangConfig.length) {
-                impressLink = data[defaultLangConfig[0].Data];
+                imprintLink = data[defaultLangConfig[0].Data];
             } else {
-                impressLink = data['en'];
+                imprintLink = data['en'];
             }
         }
 
-        return impressLink;
+        return imprintLink;
     }
 
 }
