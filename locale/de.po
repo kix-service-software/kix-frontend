@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-04-17 11:23+0000\n"
+"PO-Revision-Date: 2019-04-17 11:28+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -401,20 +401,14 @@ msgstr "Neuer Agent"
 msgid "Create Article"
 msgstr "Neuer Artikel"
 
-#, fuzzy
-#| msgid "Create Core Data"
 msgid "Create CI Class"
-msgstr "Stammdaten hinzufügen"
+msgstr "Neue CI Klasse"
 
-#, fuzzy
-#| msgid "Config Item"
 msgid "Create Config Item"
-msgstr "Config Item"
+msgstr "Neues Config Item"
 
-#, fuzzy
-#| msgid "Create State"
 msgid "Create Contact"
-msgstr "Status hinzufügen"
+msgstr "Neuer Kontakt"
 
 #, fuzzy
 #| msgid "New Customer"
@@ -427,15 +421,11 @@ msgstr "Erstellt am"
 msgid "Created by"
 msgstr "Erstellt von"
 
-#, fuzzy
-#| msgid "FAQ Article"
 msgid "Create FAQ Article"
-msgstr "FAQ Artikel"
+msgstr "Neuer FAQ Artikel"
 
-#, fuzzy
-#| msgid "Delete Link"
 msgid "Create Links."
-msgstr "Verknüpfung löschen"
+msgstr "Verknüpfung hinzufügen"
 
 #, fuzzy
 #| msgid "Create Priorität"
@@ -463,15 +453,11 @@ msgstr "CSV-Export"
 msgid "CSV-File with data sets for import. Drag & Drop is possible."
 msgstr ""
 
-#, fuzzy
-#| msgid "(Current version)"
 msgid "(Current definition)"
-msgstr "(aktuelle Version)"
+msgstr "(aktuelle Definition)"
 
-#, fuzzy
-#| msgid "Current version"
 msgid "Current Definition"
-msgstr "Aktuelle Version"
+msgstr "Aktuelle Definition"
 
 msgid "Current deployment state"
 msgstr "Aktueller Verwendungsstatus"
@@ -493,10 +479,8 @@ msgstr "Aktuelle Version"
 msgid "Customer"
 msgstr "Kunde"
 
-#, fuzzy
-#| msgid "Customer ID"
 msgid "Customer Details"
-msgstr "Kunden ID"
+msgstr "Kunden Details"
 
 msgid "Customer ID"
 msgstr "Kunden ID"
@@ -507,20 +491,14 @@ msgstr "Kundeninformationen"
 msgid "Customers"
 msgstr "Kunden"
 
-#, fuzzy
-#| msgid "Customer ID"
 msgid "Customers Dashboard"
-msgstr "Kunden ID"
+msgstr "Kunden Dashboard"
 
-#, fuzzy
-#| msgid "Customer"
 msgid "Customer Search"
-msgstr "Kunde"
+msgstr "Kundensuche"
 
-#, fuzzy
-#| msgid "Role successfully created."
 msgid "Customer successfully created."
-msgstr "Rolle wurde erfolgreich angelegt."
+msgstr "Kunde wurde erfolgreich angelegt."
 
 msgid ""
 "Define where this FAQ article will be shown (internal= only Agent Portal, "
