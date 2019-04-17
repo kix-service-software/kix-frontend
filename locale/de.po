@@ -851,7 +851,7 @@ msgid "Insert a priority name."
 msgstr "Geben Sie einen Name für die Priorität ein."
 
 msgid "Insert a role name."
-msgstr ""
+msgstr "Geben Sie einen Name für die Rolle ein."
 
 msgid "Insert a state name."
 msgstr ""
