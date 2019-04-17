@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-04-17 11:57+0000\n"
+"PO-Revision-Date: 2019-04-17 12:00+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -854,37 +854,39 @@ msgid "Insert a role name."
 msgstr "Geben Sie einen Name für die Rolle ein."
 
 msgid "Insert a state name."
-msgstr ""
+msgstr "Geben Sie einen Name für den Status ein."
 
 msgid "Insert a ticket title."
-msgstr ""
+msgstr "Geben Sie einen Titel für das Ticket ein."
 
 msgid "Insert a title for the user."
-msgstr ""
+msgstr "Geben Sie einen Titel für den Nutzer ein."
 
 msgid "Insert a type name."
-msgstr ""
+msgstr "Geben Sie einen Name für den Typ ein."
 
 msgid "Inserted e-mail address is invalid."
-msgstr ""
+msgstr "Die eingegebene E-Mail-Adresse ist ungültig."
 
 msgid "Inserted e-mail address must not be a system address."
-msgstr ""
+msgstr "Die eingegebene E-Mail-Adresse darf keine Systemadresse sein."
 
 msgid "insert filter value"
-msgstr ""
+msgstr "Filterwert eingeben"
 
 msgid "Insert key words for the FAQ article to find them more quickly."
 msgstr ""
+"Vergeben Sie Schlagworte für den FAQ Artikel, um ihn später schneller wieder "
+"zu finden."
 
 msgid "Insert the complete ticket title or a part of the title."
-msgstr ""
+msgstr "Geben Sie den Titel oder Teile eines Tickettitels ein."
 
 msgid "Insert the definition for the Config Item Class."
-msgstr ""
+msgstr "Geben Sie die Definition für die CI Klasse ein."
 
 msgid "Insert the e-mail address for the user."
-msgstr ""
+msgstr "Geben Sie eine E-Mail-Adresse für den Nutzer ein."
 
 msgid "Insert the firstname of the user."
 msgstr ""
