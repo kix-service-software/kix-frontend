@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-04-17 12:34+0000\n"
+"PO-Revision-Date: 2019-04-17 12:38+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -1171,7 +1171,7 @@ msgid "No role with ID {1} available."
 msgstr "Kein Kontakt verfügbar"
 
 msgid "No search query."
-msgstr ""
+msgstr "Keine Suchanfrage verfügbar."
 
 msgid "Note"
 msgstr "Notiz"
@@ -1180,12 +1180,10 @@ msgid "Notes"
 msgstr "Notizen"
 
 msgid "not modified"
-msgstr ""
+msgstr "unverändert"
 
-#, fuzzy
-#| msgid "No contact available"
 msgid "No version available"
-msgstr "Kein Kontakt verfügbar"
+msgstr "Keine Version verfügbar"
 
 msgid "Number"
 msgstr "Nummer"
@@ -1196,13 +1194,9 @@ msgstr "Anzahl Config Items"
 msgid "Number of Config Items in critical incident state"
 msgstr "Anzahl Config Items mit kritischem Vorfallstatus"
 
-#, fuzzy
-#| msgid "Number of versions"
 msgid "Number of ratings"
-msgstr "Anzahl Versionen"
+msgstr "Anzahl Bewertungen"
 
-#, fuzzy
-#| msgid "Number of versions"
 msgid "Number of version"
 msgstr "Anzahl Versionen"
 
@@ -1223,13 +1217,11 @@ msgstr "Beobachter"
 msgid "Open Tickets"
 msgstr "Offene Tickets"
 
-#, fuzzy
-#| msgid "Open Tickets"
 msgid "open tickets: {0}"
-msgstr "Offene Tickets"
+msgstr "Offene Tickets: {0}"
 
 msgid "Overall"
-msgstr ""
+msgstr "Gesamt"
 
 msgid "Overview Config Items"
 msgstr "Übersicht Config Items"
@@ -1243,10 +1235,8 @@ msgstr "Übersicht Kontakte"
 msgid "Overview Customer Organizations"
 msgstr "Übersicht Kunden"
 
-#, fuzzy
-#| msgid "Overview Tickets"
 msgid "Overview FAQ"
-msgstr "Übersicht Tickets"
+msgstr "Übersicht FAQ"
 
 msgid "Overview of {0} to import ({1})"
 msgstr ""
