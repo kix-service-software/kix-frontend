@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-04-17 12:00+0000\n"
+"PO-Revision-Date: 2019-04-17 12:03+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -889,31 +889,29 @@ msgid "Insert the e-mail address for the user."
 msgstr "Geben Sie eine E-Mail-Adresse für den Nutzer ein."
 
 msgid "Insert the firstname of the user."
-msgstr ""
+msgstr "Geben Sie den Vorname des Nutzers ein."
 
 msgid "Insert the lastname of the user."
-msgstr ""
+msgstr "Geben Sie den Nachname des Nutzers ein."
 
 msgid "Insert the ticket number or a part of the number (min. 1 character)."
 msgstr ""
+"Geben Sie die Ticketnummer oder einen Teil der Ticketnummer ein (mindestens "
+"1 Zeichen)."
 
-#, fuzzy
-#| msgid "external"
 msgid "internal"
-msgstr "extern"
+msgstr "intern"
 
 #, fuzzy
 #| msgid "Internationalization"
 msgid "Internationalisation"
 msgstr "Internationalisierung"
 
-#, fuzzy
-#| msgid "Internationalization"
 msgid "Internationalisation: Translations"
-msgstr "Internationalisierung"
+msgstr "Internationalisierung: Übersetzungen"
 
 msgid "Invalid date."
-msgstr ""
+msgstr "Ungültiges Datum."
 
 msgid "Label"
 msgstr "Beschriftung"
@@ -925,42 +923,34 @@ msgid "Languages"
 msgstr "Sprachen"
 
 msgid "Large View"
-msgstr ""
+msgstr "Großansicht"
 
 msgid "last changed time"
 msgstr "Letzte Änderungszeit"
 
-#, fuzzy
-#| msgid "Login"
 msgid "Last Login"
-msgstr "Anmelden"
+msgstr "Letzte Anmeldung"
 
-#, fuzzy
-#| msgid "First Name"
 msgid "Last Name"
-msgstr "Vorname"
+msgstr "Name"
 
 msgid "Legend"
-msgstr ""
+msgstr "Legende"
 
 msgid "less or equal"
-msgstr ""
+msgstr "kleiner oder gleich"
 
 msgid "less than"
-msgstr ""
+msgstr "kleiner als"
 
 msgid "like"
-msgstr ""
+msgstr "entspricht"
 
-#, fuzzy
-#| msgid "Edit {0}"
 msgid "link {0}"
-msgstr "{0} bearbeiten"
+msgstr "Link {0}"
 
-#, fuzzy
-#| msgid "Config Item"
 msgid "Link Config Item with"
-msgstr "Config Item"
+msgstr "Config Item verknüpfen mit"
 
 msgid "Linked as"
 msgstr "Verknüpft als"
@@ -968,10 +958,8 @@ msgstr "Verknüpft als"
 msgid "Linked Objects"
 msgstr "Verknüpfte Objekte"
 
-#, fuzzy
-#| msgid "Link Ticket with"
 msgid "Link FAQ with"
-msgstr "Ticket verknüpfen mit"
+msgstr "FAQ verknüpfen mit"
 
 msgid "Link Graph"
 msgstr "Verknüpfungsgraph"
@@ -982,13 +970,11 @@ msgstr "Objekte verknüpfen"
 msgid "Links"
 msgstr "Verknüpfungen"
 
-#, fuzzy
-#| msgid "Link Type"
 msgid "Links updated."
-msgstr "Art der Verknüpfung"
+msgstr "Verknüpfungen aktualisiert."
 
 msgid "Links will be removed."
-msgstr ""
+msgstr "Verknüpfungen werden entfernt."
 
 msgid ""
 "Link this config item to a ticket, an FAQ article or another config item."
