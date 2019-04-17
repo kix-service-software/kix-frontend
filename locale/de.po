@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-04-17 11:46+0000\n"
+"PO-Revision-Date: 2019-04-17 11:49+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -728,18 +728,14 @@ msgstr "Von"
 msgid "Full Text"
 msgstr "Volltext"
 
-#, fuzzy
-#| msgid "Create Core Data"
 msgid "greater or equal"
-msgstr "Stammdaten hinzufügen"
+msgstr "größer oder gleich"
 
-#, fuzzy
-#| msgid "Create State"
 msgid "greater than"
-msgstr "Status hinzufügen"
+msgstr "größer als"
 
 msgid "Help"
-msgstr ""
+msgstr "Hilfe"
 
 msgid "History"
 msgstr ""
@@ -754,16 +750,16 @@ msgid "Home"
 msgstr ""
 
 msgid "How to create a new ticket?"
-msgstr ""
+msgstr "Wie lege ich ein neues Ticket an?"
 
 msgid "How to search in KIX 18?"
-msgstr ""
+msgstr "Wie suche ich in KIX 18?"
 
 msgid "How to use KIX 18 – Some general notes"
-msgstr ""
+msgstr "Allgemeine Hinweise zum Arbeiten mit KIX 18"
 
 msgid "Icon"
-msgstr ""
+msgstr "Icon"
 
 msgid "Id"
 msgstr ""
