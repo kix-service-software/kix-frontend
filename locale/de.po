@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-04-17 12:07+0000\n"
+"PO-Revision-Date: 2019-04-17 12:28+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -1072,23 +1072,17 @@ msgstr "Name"
 msgid "New"
 msgstr "Neu"
 
-#, fuzzy
-#| msgid "Agents"
 msgid "New Agent"
-msgstr "Agenten"
+msgstr "Neuer Agent"
 
 msgid "New Article"
 msgstr "Neuer Artikel"
 
-#, fuzzy
-#| msgid "Class"
 msgid "New Class"
-msgstr "Klasse"
+msgstr "Neue Klasse"
 
-#, fuzzy
-#| msgid "Config Item"
 msgid "New Config Item"
-msgstr "Config Item"
+msgstr "Neues Config Item"
 
 msgid "New Contact"
 msgstr "Neuer Kontakt"
@@ -1097,38 +1091,28 @@ msgid "New Customer"
 msgstr "Neuer Kunde"
 
 msgid "New E-mail"
-msgstr ""
+msgstr "Neue E-Mail"
 
 msgid "New FAQ"
-msgstr ""
+msgstr "Neue FAQ"
 
-#, fuzzy
-#| msgid "Object"
 msgid "New Object"
-msgstr "Objekt"
+msgstr "Neues Objekt"
 
-#, fuzzy
-#| msgid "Priority"
 msgid "New Priority"
-msgstr "Priorität"
+msgstr "Neue Priorität"
 
 msgid "New Role"
 msgstr "Neue Rolle"
 
-#, fuzzy
-#| msgid "Search"
 msgid "New Search"
-msgstr "Suche"
+msgstr "Neue Suche"
 
-#, fuzzy
-#| msgid "State"
 msgid "New State"
-msgstr "Status"
+msgstr "Neuer Status"
 
-#, fuzzy
-#| msgid "New Ticket"
 msgid "New Template"
-msgstr "Neues Ticket"
+msgstr "Neue Vorlage"
 
 msgid "New Ticket"
 msgstr "Neues Ticket"
@@ -1145,13 +1129,9 @@ msgstr "Neue Übersetzung"
 msgid "New Type"
 msgstr "Neuer Typ"
 
-#, fuzzy
-#| msgid "{0} Link created"
 msgid "New Version created"
-msgstr "{0} Verknüpfungen angelegt"
+msgstr "Neue Version wurde angelegt."
 
-#, fuzzy
-#| msgid "next image"
 msgid "Next Image"
 msgstr "Nächstes Bild"
 
