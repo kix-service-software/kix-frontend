@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-04-17 12:28+0000\n"
+"PO-Revision-Date: 2019-04-17 12:34+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -410,10 +410,8 @@ msgstr "Neues Config Item"
 msgid "Create Contact"
 msgstr "Neuer Kontakt"
 
-#, fuzzy
-#| msgid "New Customer"
 msgid "Create Customer"
-msgstr "Neuer Kunde"
+msgstr "Kunde anlegen"
 
 msgid "Created at"
 msgstr "Erstellt am"
@@ -427,10 +425,8 @@ msgstr "Neuer FAQ Artikel"
 msgid "Create Links."
 msgstr "Verknüpfung hinzufügen"
 
-#, fuzzy
-#| msgid "Create Priorität"
 msgid "Create Priority"
-msgstr "Neue Priorität"
+msgstr "Priorität anlegen"
 
 msgid "Create Role"
 msgstr "Rolle wird angelegt"
@@ -465,8 +461,6 @@ msgstr "Aktueller Verwendungsstatus"
 msgid "Current incident state"
 msgstr "Aktueller Vorfallstatus"
 
-#, fuzzy
-#| msgid "(Current version)"
 msgid "(current version)"
 msgstr "(aktuelle Version)"
 
@@ -794,8 +788,6 @@ msgstr "Impressum"
 msgid "in"
 msgstr "in"
 
-#, fuzzy
-#| msgid "Incident State"
 msgid "Incident state"
 msgstr "Vorfallstatus"
 
@@ -821,7 +813,7 @@ msgid "Insert a comment for the user."
 msgstr "Geben Sie einen Kommentar zu dem Nutzer ein."
 
 msgid "Insert a config item class name."
-msgstr ""
+msgstr "Geben Sie einen Namen für die Config Item Klasse ein."
 
 msgid "Insert additional information for this FAQ article."
 msgstr "Geben Sie zusätzliche Informationen zu diesem FAQ Artikel an."
@@ -902,8 +894,6 @@ msgstr ""
 msgid "internal"
 msgstr "intern"
 
-#, fuzzy
-#| msgid "Internationalization"
 msgid "Internationalisation"
 msgstr "Internationalisierung"
 
@@ -1140,26 +1130,20 @@ msgstr "Nächstes Bild"
 msgid "Nicht archivierte Tickets"
 msgstr "Schnellsuche (Tickets)"
 
-#, fuzzy
-#| msgid "No"
 msgid "No."
-msgstr "Nein"
+msgstr "Nr."
 
 msgid "No {0} found (add at least {1} characters)."
-msgstr ""
+msgstr "Keine {0} gefunden (mind. 1 Zeichen eingeben)."
 
-#, fuzzy
-#| msgid "New Article"
 msgid "No Article"
-msgstr "Neuer Artikel"
+msgstr "Kein Artikel"
 
-#, fuzzy
-#| msgid "No contact available"
 msgid "No article available."
-msgstr "Kein Kontakt verfügbar"
+msgstr "Kein Artikel verfügbar."
 
 msgid "No CI Class available for ID {0}."
-msgstr ""
+msgstr "Keine CI Klasse verfügbar für ID {0}."
 
 msgid "No contact available"
 msgstr "Kein Kontakt verfügbar"
@@ -1178,10 +1162,8 @@ msgstr "Kein Kontakt verfügbar"
 msgid "No priority available for ID {1}."
 msgstr ""
 
-#, fuzzy
-#| msgid "No contact available"
 msgid "No rating available."
-msgstr "Kein Kontakt verfügbar"
+msgstr "Keine Bewertung verfügbar."
 
 #, fuzzy
 #| msgid "No contact available"
