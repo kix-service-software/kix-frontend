@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-04-16 12:25+0000\n"
+"PO-Revision-Date: 2019-04-17 09:39+0000\n"
 "Last-Translator: jrobel <Julia.Robel@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -267,40 +267,26 @@ msgstr ""
 msgid "Choose a contact, customers will be assigned automatically."
 msgstr ""
 
-#, fuzzy
-#| msgid "CMDB Class"
 msgid "CI Class"
-msgstr "CMDB Klasse"
+msgstr "CI Klasse"
 
-#, fuzzy
-#| msgid "Class Definition"
 msgid "CI Class Definition"
-msgstr "Klassendefinition"
+msgstr "CI Klassendefinition"
 
-#, fuzzy
-#| msgid "CMDB Class Definitions"
 msgid "CI Class Definitions"
-msgstr "CMDB Klassen Definitionen"
+msgstr "CI Klassen Definitionen"
 
-#, fuzzy
-#| msgid "CMDB Classes"
 msgid "CI Classes"
-msgstr "CMDB Klassen"
+msgstr "CI Klassen"
 
-#, fuzzy
-#| msgid "CMDB Class information"
 msgid "CI Class information"
-msgstr "CMDB Klassen Informationen"
+msgstr "CI Klassen Informationen"
 
-#, fuzzy
-#| msgid "CMDB Class information"
 msgid "CI Class Information"
-msgstr "CMDB Klassen Informationen"
+msgstr "CI Klassen Informationen"
 
-#, fuzzy
-#| msgid "Role successfully created."
 msgid "CI Class successfully created."
-msgstr "Rolle wurde erfolgreich angelegt."
+msgstr "CI Klasse wurde erfolgreich angelegt."
 
 msgid "CI link with"
 msgstr ""
@@ -500,15 +486,11 @@ msgstr "Rolle wird angelegt"
 msgid "Create State"
 msgstr "Status hinzufügen"
 
-#, fuzzy
-#| msgid "Create Type"
 msgid "Create Ticket"
-msgstr "Typ hinzufügen"
+msgstr "Neues Ticket"
 
-#, fuzzy
-#| msgid "Translation"
 msgid "Create Translation"
-msgstr "Übersetzung"
+msgstr "Neue Übersetzung"
 
 msgid "Create Type"
 msgstr "Typ hinzufügen"
@@ -918,10 +900,8 @@ msgstr "Kunden"
 msgid "Import Data"
 msgstr "Stammdaten"
 
-#, fuzzy
-#| msgid "Print"
 msgid "Imprint"
-msgstr "Drucken"
+msgstr "Impressum"
 
 msgid "in"
 msgstr ""
@@ -1290,15 +1270,11 @@ msgstr "Neue Tickets"
 msgid "New Tickets (recent 7 days)"
 msgstr "Neue Tickets der letzten 7 Tage"
 
-#, fuzzy
-#| msgid "Translation"
 msgid "New Translation"
-msgstr "Übersetzung"
+msgstr "Neue Übersetzung"
 
-#, fuzzy
-#| msgid "New Ticket"
 msgid "New Type"
-msgstr "Neues Ticket"
+msgstr "Neuer Typ"
 
 #, fuzzy
 #| msgid "{0} Link created"
