@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-04-17 11:31+0000\n"
+"PO-Revision-Date: 2019-04-17 11:35+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -549,33 +549,25 @@ msgid "DOUBLE_QUOTES"
 msgstr ""
 
 msgid "Download"
-msgstr ""
+msgstr "Download"
 
 msgid "Duplicate"
 msgstr "Duplizieren"
 
-#, fuzzy
-#| msgid "Edit {0}"
 msgid "Edit"
-msgstr "{0} bearbeiten"
+msgstr "Bearbeiten"
 
 msgid "Edit {0}"
 msgstr "{0} bearbeiten"
 
-#, fuzzy
-#| msgid "Edit Ticket"
 msgid "Edit Agent"
-msgstr "Ticket bearbeiten"
+msgstr "Agenten bearbeiten"
 
-#, fuzzy
-#| msgid "Edit CMDB Class"
 msgid "Edit Class"
-msgstr "Add CMDB Class"
+msgstr "Klasse bearbeiten"
 
-#, fuzzy
-#| msgid "Config Item"
 msgid "Edit Config Item"
-msgstr "Config Item"
+msgstr "Config Item bearbeiten"
 
 msgid "Edit Contact"
 msgstr "Ansprechparnter Bearbeiten"
