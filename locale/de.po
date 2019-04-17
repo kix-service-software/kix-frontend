@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-04-17 11:38+0000\n"
+"PO-Revision-Date: 2019-04-17 11:42+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -593,28 +593,20 @@ msgstr "Links bearbeiten"
 msgid "Edit Object"
 msgstr "Objekt bearbeiten"
 
-#, fuzzy
-#| msgid "Link Objects"
 msgid "Edit Objects"
-msgstr "Objekte verknüpfen"
+msgstr "Objekte bearbeiten"
 
-#, fuzzy
-#| msgid "Personal Settings"
 msgid "Edit Personal Settings"
-msgstr "Persönliche Einstellungen"
+msgstr "Persönliche Einstellungen bearbeiten"
 
 msgid "Edit Priority"
 msgstr "Priorität bearbeiten"
 
-#, fuzzy
-#| msgid "Edit Type"
 msgid "Edit Role"
-msgstr "Typ bearbeiten"
+msgstr "Rolle bearbeiten"
 
-#, fuzzy
-#| msgid "Search"
 msgid "Edit Search"
-msgstr "Suche"
+msgstr "Suche bearbeiten"
 
 msgid "Edit State"
 msgstr "Status bearbeiten"
@@ -622,10 +614,8 @@ msgstr "Status bearbeiten"
 msgid "Edit Ticket"
 msgstr "Ticket bearbeiten"
 
-#, fuzzy
-#| msgid "Translation"
 msgid "Edit Translation"
-msgstr "Übersetzung"
+msgstr "Übersetzung bearbeiten"
 
 msgid "Edit Type"
 msgstr "Typ bearbeiten"
@@ -634,23 +624,19 @@ msgid "E-mail"
 msgstr ""
 
 msgid "ends with"
-msgstr ""
+msgstr "endet mit"
 
-#, fuzzy
-#| msgid "Start search"
 msgid "Enter search value"
-msgstr "Suche starten"
+msgstr "Suchbegriff eingeben"
 
 msgid "equals"
-msgstr ""
+msgstr "entspricht"
 
 msgid "Error"
 msgstr "Fehler"
 
-#, fuzzy
-#| msgid "Error"
 msgid "Error!"
-msgstr "Fehler"
+msgstr "Fehler!"
 
 msgid "Error on form validation:"
 msgstr "Fehler beim Validieren des Formulars:"
@@ -664,10 +650,8 @@ msgstr "Fehler beim Hinzufügen des Bildes:"
 msgid "Escalated Tickets"
 msgstr "Eskalierte Tickets"
 
-#, fuzzy
-#| msgid "Escalated Tickets"
 msgid "escalated tickets: {0}"
-msgstr "Eskalierte Tickets"
+msgstr "Eskalierte Tickets: {0}"
 
 msgid "Escalation time"
 msgstr "Eskalationszeit"
@@ -688,10 +672,10 @@ msgid "external"
 msgstr "extern"
 
 msgid "FAQ"
-msgstr ""
+msgstr "FAQ"
 
 msgid "FAQ#"
-msgstr ""
+msgstr "FAQ#"
 
 msgid "FAQ Article"
 msgstr "FAQ Artikel"
@@ -699,15 +683,11 @@ msgstr "FAQ Artikel"
 msgid "FAQ Article History"
 msgstr "FAQ Artikel Historie"
 
-#, fuzzy
-#| msgid "Role successfully created."
 msgid "FAQ Article successfully created."
-msgstr "Rolle wurde erfolgreich angelegt."
+msgstr "FAQ Artikel wurde erfolgreich angelegt."
 
-#, fuzzy
-#| msgid "Attributes"
 msgid "FAQ Attributes"
-msgstr "Attribute"
+msgstr "FAQ Attribute"
 
 #, fuzzy
 #| msgid "Category"
