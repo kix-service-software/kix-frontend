@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-04-17 12:03+0000\n"
+"PO-Revision-Date: 2019-04-17 12:07+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -979,14 +979,20 @@ msgstr "Verknüpfungen werden entfernt."
 msgid ""
 "Link this config item to a ticket, an FAQ article or another config item."
 msgstr ""
+"Verknüpfen Sie dieses Config Item mit einem Ticket, einem FAQ Artikel oder "
+"einem anderen Config Item."
 
 msgid ""
 "Link this FAQ article to a ticket, a config item or another FAQ article."
 msgstr ""
+"Verknüpfen Sie diesen FAQ Artikel mit einem Ticket, einem Config Item oder "
+"einem anderen FAQ Artikel."
 
 msgid ""
 "Link this ticket item to an config item, an FAQ article or another ticket."
 msgstr ""
+"Verknüpfen Sie dieses Ticket mit einem Config Item, einem FAQ Artikel oder "
+"einem anderen Ticket."
 
 msgid "Link Ticket with"
 msgstr "Ticket verknüpfen mit"
@@ -1000,41 +1006,29 @@ msgstr "Verknüpfen mit Ticket"
 msgid "Link Type"
 msgstr "Art der Verknüpfung"
 
-#, fuzzy
-#| msgid "Edit Contact"
 msgid "Load Contact ..."
-msgstr "Ansprechparnter Bearbeiten"
+msgstr "Kontak laden..."
 
-#, fuzzy
-#| msgid "Edit Customer"
 msgid "Load Customer ..."
-msgstr "Kunde bearbeiten"
+msgstr "Kunde laden..."
 
-#, fuzzy
-#| msgid "Lock State"
 msgid "Load Ticket State ..."
-msgstr "Sperrstatus"
+msgstr "Ticket Status laden..."
 
 msgid "Localisation"
 msgstr "Lokalisierung"
 
-#, fuzzy
-#| msgid "Locked"
 msgid "Lock"
 msgstr "Gesperrt"
 
-#, fuzzy
-#| msgid "Unlocked"
 msgid "locked"
-msgstr "Freigeben"
+msgstr "Gesperrt"
 
 msgid "Lock State"
 msgstr "Sperrstatus"
 
-#, fuzzy
-#| msgid "Locked Tickets"
 msgid "Lock Ticket ..."
-msgstr "Gesperrte Tickets"
+msgstr "Ticket wird gesperrt..."
 
 msgid "Logged in"
 msgstr "Angemeldet"
@@ -1043,16 +1037,16 @@ msgid "Login"
 msgstr "Anmelden"
 
 msgid "Login failed"
-msgstr ""
+msgstr "Anmeldung fehlgeschlagen"
 
 msgid "Logout"
-msgstr ""
+msgstr "Abmelden"
 
 msgid "Merge"
-msgstr ""
+msgstr "Zusammenfassen"
 
 msgid "Mobile"
-msgstr ""
+msgstr "Mobil"
 
 msgid "My locked tickets"
 msgstr "Meine gesperrten Tickets"
@@ -1060,7 +1054,6 @@ msgstr "Meine gesperrten Tickets"
 msgid "My locked tickets with new articles"
 msgstr "Meine gesperrten Tickets mit neuen Artikeln"
 
-#, fuzzy
 msgid "My Tickets"
 msgstr "Meine Tickets"
 
@@ -1074,7 +1067,7 @@ msgid "My watched tickets with new articles"
 msgstr "Meine beobachteten Tickets mit neuen Artikeln"
 
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
 msgid "New"
 msgstr "Neu"
