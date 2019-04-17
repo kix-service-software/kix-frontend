@@ -16,20 +16,29 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private object: KIXObject;
 
+    private context: Context;
+
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
-        const context = await ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        this.contextChanged();
+        ContextService.getInstance().registerListener({
+            contextChanged: this.contextChanged.bind(this)
+        });
+    }
 
-        if (context.getDescriptor().contextMode !== ContextMode.DETAILS) {
+    private async contextChanged(): Promise<void> {
+        this.context = await ContextService.getInstance().getActiveContext(ContextType.MAIN);
+
+        if (this.context.getDescriptor().contextMode !== ContextMode.DETAILS) {
             this.state.error = 'No details context available.';
             this.state.loading = false;
         } else {
-            this.state.instanceId = context.getDescriptor().contextId;
+            this.state.instanceId = this.context.getDescriptor().contextId;
 
-            context.registerListener('object-details-component', {
+            this.context.registerListener('object-details-component', {
                 explorerBarToggled: () => { return; },
                 filteredObjectListChanged: () => { return; },
                 objectListChanged: () => { return; },
@@ -38,10 +47,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 objectChanged: (
                     objectId: string, object: KIXObject, objectType: KIXObjectType, changedProperties: string[]
                 ) => {
-                    this.initWidget(context, object);
+                    this.initWidget(this.context, object);
                 }
             });
-            await this.initWidget(context);
+            await this.initWidget(this.context);
         }
     }
 
