@@ -131,13 +131,18 @@ export class TranslationService extends KIXObjectService<Translation> {
         });
     }
 
-    public static async getUserLanguage(): Promise<string> {
+    public static async getUserLanguage(systemDefaultFallback: boolean = true): Promise<string> {
         let language: string;
         const currentUser = await AgentService.getInstance().getCurrentUser();
         if (currentUser) {
             const preference = currentUser.Preferences.find((p) => p.ID === 'UserLanguage');
             language = preference ? preference.Value : null;
         }
+
+        if (!language && systemDefaultFallback) {
+            language = await this.getSystemDefaultLanguage();
+        }
+
         return language;
     }
 
