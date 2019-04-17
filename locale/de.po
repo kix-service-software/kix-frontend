@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-04-17 12:41+0000\n"
+"PO-Revision-Date: 2019-04-18 06:38+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -1295,30 +1295,34 @@ msgid "Phone"
 msgstr "Telefon"
 
 msgid "Phone inbound"
-msgstr ""
+msgstr "Eingehender Anruf"
 
 msgid "Phone outbound"
-msgstr ""
+msgstr "Ausgehender Anruf"
 
 msgid "Please describe the reason as detailed as possible."
-msgstr ""
+msgstr "Beschreiben Sie die Ursache so genau wie möglich."
 
 msgid "Please insert a base string for the translation."
-msgstr ""
+msgstr "Geben Sie die Basiszeichenkette für die Übersetzung ein."
 
 msgid "Please select a config item class. The form will be completed then."
 msgstr ""
+"Bitte wählen Sie zunächst eine Config Item-Klasse aus der Liste. "
+"Anschließend wird das vollständige Eingabe-Formular geladen."
 
 msgid "Please select a contact"
-msgstr ""
+msgstr "Wählen Sie einen Kontakt."
 
 msgid ""
 "Please select the language in which you want to use KIX. If not set, the "
 "system will try to choose the language automatically"
 msgstr ""
+"Bitte wählen Sie die Sprache, in der Sie KIX benutzen wollen. Ist nichts "
+"gesetzt, versucht das System die Sprache automatisch zu wählen."
 
 msgid "Preferences"
-msgstr ""
+msgstr "Persönliche Einstellungen"
 
 msgid "Preview ({0})"
 msgstr "Treffervorschau ({0})"
@@ -1329,25 +1333,21 @@ msgstr "Vorheriges Bild"
 msgid "Print"
 msgstr "Drucken"
 
-#, fuzzy
-#| msgid "Priority"
 msgid "Prio"
-msgstr "Priorität"
+msgstr "Prio"
 
-#, fuzzy
-#| msgid "Priority"
 msgid "Priorities"
-msgstr "Priorität"
+msgstr "Prioritäten"
 
 msgid ""
 "Priorities are used to mark a Ticket‘s urgency with different colours, so "
 "you can  categorize Tickets."
 msgstr ""
+"Prioritäten kennzeichnen farblich unterschiedliche Dringlichkeiten und "
+"können zur Kategorisierung von Tickets genutzt werden."
 
-#, fuzzy
-#| msgid "Role successfully created."
 msgid "Priorities successfully removed."
-msgstr "Rolle wurde erfolgreich angelegt."
+msgstr "Prioritäen wurden erfolgreich entfernt."
 
 msgid "Priority"
 msgstr "Priorität"
@@ -1357,28 +1357,12 @@ msgstr "Priorität"
 msgid "Priority Data"
 msgstr "Priorität"
 
-#, fuzzy
-#| msgid "Warranty Information"
 msgid "Priority Information"
-msgstr "Garantie Informationen"
+msgstr "Prioritäten Informationen"
 
-#, fuzzy
-#| msgid "Role successfully created."
 msgid "Priority successfully created."
-msgstr "Rolle wurde erfolgreich angelegt."
+msgstr "Priorität wurde erfolgreich angelegt."
 
-#, fuzzy
-#| msgid ""
-#| "<p>The first line of the source file must contain the column-to-object "
-#| "attribute assignment by using KIX-internal identifiers (e.g. "
-#| "CompanyCustomerID, CompanyName, etc.). In order to update existing "
-#| "customer data sets, their CompanyCustomerID must be specified. If new "
-#| "data sets needs to be imported, all mandatory attributes must be given.</"
-#| "p></br><h3>Operation Explanation:</h3><ul><li>Replace empty value = "
-#| "selected attribute will be set to the specified value if no information "
-#| "is given in source file</li><li>Force = selected attribute will be set to "
-#| "the specified value, no matter if a value is defined in the source file "
-#| "or not</li><li>Ignore = selected attribute will be ignored in the import"
 msgid ""
 "<p>The first line of the source file must contain the column-to-object "
 "attribute assignment by using KIX-internal identifiers (e.g. "
@@ -1399,21 +1383,9 @@ msgstr ""
 "erforderlich.</p></br><h3>Erläuterung der Operatoren:</h3><ul><li>Leerwert "
 "ersetzen = Für die gewählte Spalte wird in allen Zeilen, die keinen Wert "
 "enthalten, der hier gewählte Wert gesetzt.</li><li>Erzwingen = Für die "
-"gewählte Spalte wird in allen Zeilen der hier gewählte Wert gesetzt.</"
-"li><li>Ignorieren = Die gewählte Spalte wird nicht importiert."
+"gewählte Spalte wird in allen Zeilen der hier gewählte Wert gesetzt.</li><li>"
+"Ignorieren = Die gewählte Spalte wird nicht importiert.</li>"
 
-#, fuzzy
-#| msgid ""
-#| "<p>The first line of the source file must contain the column-to-object "
-#| "attribute assignment by using KIX-internal identifiers (e.g. UserLogin, "
-#| "UserCustomerID, UserLastname, etc.). In order to update existing customer "
-#| "data sets, their UserLogin and UserCustomerID must be specified. If new "
-#| "data sets needs to be imported, all mandatory attributes must be given.</"
-#| "p></br><h3>Operation Explanation:</h3><ul><li>Replace empty value = "
-#| "selected attribute will be set to the specified value if no information "
-#| "is given in source file</li><li>Force = selected attribute will be set to "
-#| "the specified value, no matter if a value is defined in the source file "
-#| "or not</li><li>Ignore = selected attribute will be ignored in the import"
 msgid ""
 "<p>The first line of the source file must contain the column-to-object "
 "attribute assignment by using KIX-internal identifiers (e.g. UserLogin, "
@@ -1433,10 +1405,10 @@ msgstr ""
 "UserCustomerID zwingend erforderlich. Für Neuanlagen ist die Angabe aller "
 "Pflichtattribute zwingend erforderlich.</p></br><h3>Erläuterung der "
 "Operatoren:</h3><ul><li>Leerwert ersetzen = Für die gewählte Spalte wird in "
-"allen Zeilen, die keinen Wert enthalten, der hier gewählte Wert gesetzt.</"
-"li><li>Erzwingen = Für die gewählte Spalte wird in allen Zeilen der hier "
-"gewählte Wert gesetzt.</li><li>Ignorieren = Die gewählte Spalte wird nicht "
-"importiert."
+"allen Zeilen, die keinen Wert enthalten, der hier gewählte Wert "
+"gesetzt.</li><li>Erzwingen = Für die gewählte Spalte wird in allen Zeilen "
+"der hier gewählte Wert gesetzt.</li><li>Ignorieren = Die gewählte Spalte "
+"wird nicht importiert.</li>"
 
 msgid "public"
 msgstr "öffentlich"
@@ -1451,13 +1423,13 @@ msgid "Quick search (Tickets)"
 msgstr "Schnellsuche (Tickets)"
 
 msgid "Rate"
-msgstr ""
+msgstr "Bewerten"
 
 msgid "Rating"
 msgstr "Bewertung"
 
 msgid "Read"
-msgstr ""
+msgstr "Read"
 
 msgid "Read file."
 msgstr ""
@@ -1471,77 +1443,55 @@ msgstr "Empfänger: Cc"
 msgid "Recipient: To"
 msgstr "Empfänger: An"
 
-#, fuzzy
-#| msgid "Config Items"
 msgid "Relevant Config Items"
-msgstr "Config Items"
+msgstr "Relevante Config Items"
 
 msgid "Reminder Tickets"
 msgstr "Erinnerungstickets"
 
-#, fuzzy
-#| msgid "Remove State"
 msgid "Remove parameter"
-msgstr "Status entfernen"
+msgstr "Parameter entfernen"
 
-#, fuzzy
-#| msgid "Overview Ticket Priorities"
 msgid "Remove Priorities"
-msgstr "Übersicht Ticketprioritäten"
+msgstr "Prioritäten werden entfernt"
 
 msgid "Remove Priorities ..."
-msgstr ""
+msgstr "Prioritäten werden entfernt..."
 
 #, fuzzy
 #| msgid "Remove State"
 msgid "Remove Search Criteria"
 msgstr "Status entfernen"
 
-#, fuzzy
-#| msgid "Remove State"
 msgid "Remove States"
 msgstr "Status entfernen"
 
-#, fuzzy
-#| msgid "Remove State"
 msgid "Remove States ..."
-msgstr "Status entfernen"
+msgstr "Status wird entfernt..."
 
-#, fuzzy
-#| msgid "Remove Types"
 msgid "Remove Templates"
-msgstr "Typen entfernen"
+msgstr "Vorlagen entfernen"
 
-#, fuzzy
-#| msgid "Remove Types"
 msgid "Remove Templates ..."
-msgstr "Typen entfernen"
+msgstr "Vorlage wird entfernt..."
 
-#, fuzzy
-#| msgid "Translations"
 msgid "Remove translations"
-msgstr "Übersetzungen"
+msgstr "Übersetzungen entfernen"
 
-#, fuzzy
-#| msgid "Translations"
 msgid "Remove translations ..."
-msgstr "Übersetzungen"
+msgstr "Übersetzungen werden entfernt..."
 
 msgid "Remove Types"
 msgstr "Typen entfernen"
 
-#, fuzzy
-#| msgid "Remove Types"
 msgid "Remove Types ..."
-msgstr "Typen entfernen"
+msgstr "Typen werden entfernt..."
 
 msgid "Replace empty value"
 msgstr "Leerwert ersetzen"
 
-#, fuzzy
-#| msgid "Replace empty value"
 msgid "Replace Values"
-msgstr "Leerwert ersetzen"
+msgstr "Wert ersetzen"
 
 msgid "Required"
 msgstr "Erforderlich"
@@ -1560,35 +1510,30 @@ msgid ""
 "Service Owner, Key Account Manager. It does not need to be identical with "
 "the assigned ticket owner."
 msgstr ""
+"Der Verantwortliche ist die für die Ticketbearbeitung verantwortliche "
+"Person, z.B. der Service Owner, Key Account Manager. Er ist nicht zwingend "
+"identisch mit dem Ticketbearbeiter."
 
 msgid "Responsible Tickets"
 msgstr "Verantwortliche Tickets"
 
 msgid "Results advanced search"
-msgstr ""
+msgstr "Ergebnis Komplexsuche"
 
-#, fuzzy
-#| msgid "New Role"
 msgid "Role"
-msgstr "Neue Rolle"
+msgstr "Rolle"
 
-#, fuzzy
-#| msgid "User Assignment"
 msgid "Role Assignment"
-msgstr "Agentenzuordnung"
+msgstr "Rollenzuordnung"
 
 msgid "Role Information"
 msgstr "Rollen Informationen"
 
-#, fuzzy
-#| msgid "New Role"
 msgid "Roles"
-msgstr "Neue Rolle"
+msgstr "Rollen"
 
-#, fuzzy
-#| msgid "Permissions"
 msgid "Roles/Permissions"
-msgstr "Berechtigungen"
+msgstr "Rollen/Berechtigungen"
 
 msgid "Role successfully created."
 msgstr "Rolle wurde erfolgreich angelegt."
@@ -1596,10 +1541,8 @@ msgstr "Rolle wurde erfolgreich angelegt."
 msgid "Row {0} of the file with {1} {2}: could not import{3}. How to continue?"
 msgstr ""
 
-#, fuzzy
-#| msgid "Number"
 msgid "Row Number"
-msgstr "Nummer"
+msgstr "Zeilennummer"
 
 msgid "Rows with too less values"
 msgstr ""
@@ -1620,133 +1563,129 @@ msgid ""
 "Searchable FAQ attributes: FAQ#, Title, Symptom, Cause, Solution, Comment, "
 "Changed by, Created by, Keywords, Language, Validity"
 msgstr ""
+"Durchsuchbare FAQ Attribute: FAQ#, Titel, Symptom, Ursache, Lösung, "
+"Kommentar, Geändert von, Erstellt von, Schlagworte, Sprache, Sichtbarkeit"
 
 msgid ""
 "Searchable Ticket attributes: Ticketnumber, Subject, Article content, From, "
 "To, CC"
 msgstr ""
+"Durchsuchbare Ticket Attribute: Ticketnummer, Betreff, Artikelinhalt, Von, "
+"An, CC"
 
 msgid "Search for config items within the choosen class."
-msgstr ""
+msgstr "Suche nach Config Items innerhalb der gewählten Klasse."
 
-#, fuzzy
-#| msgid "Overview Config Items Deployment State"
 msgid "Search for config items with the same deployment state."
-msgstr "Übersicht Config Items Verwendungsstatus"
+msgstr "Suche nach Config Items mit diesem Verwendungsstatus."
 
-#, fuzzy
-#| msgid "Number of Config Items in critical incident state"
 msgid "Search for config items with the same incident state."
-msgstr "Anzahl Config Items mit kritischem Vorfallstatus"
+msgstr "Suche nach Config Items mit diesem Vorfallsstatus."
 
 msgid ""
 "Search for config items with the same name or part of the same name (min. 1 "
 "character)."
 msgstr ""
+"Suche nach Config Items mit diesem Name oder Teilen des Namens (mindestens 1 "
+"Zeichen)."
 
 msgid "Search for FAQ articles within the choosen category."
-msgstr ""
+msgstr "Suche nach FAQ-Artikeln innerhalb der gewählten Kategorie."
 
 msgid "Search for FAQ articles within the choosen validity."
-msgstr ""
+msgstr "Suche nach FAQ-Artikeln mit der gewählten Gültigkeit."
 
 msgid ""
 "Search for FAQ articles with the same number or part of the same number "
 "(min. 1 character)."
 msgstr ""
+"Suche nach FAQ-Artikeln mit dieser Nummer oder Teilen der Nummer (mindestens "
+"1 Zeichen)."
 
 msgid ""
 "Search for FAQ articles with the same title or part of the same title (min. "
 "1 character)."
 msgstr ""
+"Suche nach FAQ-Artikeln mit diesem Titel oder Teilen des Titels (mindestens "
+"1 Zeichen)."
 
 msgid "Search for tickets with selected priority."
-msgstr ""
+msgstr "Suche nach Tickets mit der gewählten Priorität."
 
 msgid "Search for tickets with selected queue."
-msgstr ""
+msgstr "Suche nach Tickets mit der gewählten Queue."
 
 msgid "Search for tickets with selected SLA."
-msgstr ""
+msgstr "Suche nach Tickets mit dem gewählten SLA."
 
 msgid "Search for tickets with selected state."
-msgstr ""
+msgstr "Suche nach Tickets mit dem gewählten Status."
 
 msgid "Search for tickets with selected type."
-msgstr ""
+msgstr "Suche nach Tickets mit dem gewählten Typ."
 
 msgid "Search for tickets with the selected ticket."
 msgstr ""
 
-#, fuzzy
-#| msgid "Search ..."
 msgid "Search Tickets ..."
-msgstr "Suche ..."
+msgstr "Suche Tickets..."
 
 msgid "Select a character set."
-msgstr ""
+msgstr "Wählen Sie einen Zeichensatz."
 
-#, fuzzy
-#| msgid "Current deployment state"
 msgid "Select a deplyoment state."
-msgstr "Aktueller Verwendungsstatus"
+msgstr "Wählen Sie einen Verwendungsstatus."
 
-#, fuzzy
-#| msgid "Current incident state"
 msgid "Select a incident state."
-msgstr "Aktueller Vorfallstatus"
+msgstr "Wählen Sie einen Vorfallstatus."
 
 msgid "Select a language for the user."
-msgstr ""
+msgstr "Wählen Sie eine Sprache für den Nutzer."
 
 msgid "Select a language for this FAQ article."
-msgstr ""
+msgstr "Wählen Sie die Sprache des FAQ-Eintrages aus der Liste."
 
 msgid "Select all"
 msgstr "Alle auswählen"
 
 msgid "Select an FAQ category."
-msgstr ""
+msgstr "Wählen Sie eine FAQ-Kategorie aus der Liste."
 
 msgid "Select an icon for this config item class."
-msgstr ""
+msgstr "Wählen Sie ein Icon für die CMDB Klasse."
 
 msgid "Select an icon for this priority."
-msgstr ""
+msgstr "Wählen Sie ein Icon für die Priorität aus."
 
 msgid "Select an icon for this state."
-msgstr ""
+msgstr "Wählen Sie ein Icon für den Status aus."
 
 msgid "Select an icon for this type."
-msgstr ""
+msgstr "Wählen Sie ein Icon für den Typ aus."
 
 msgid "Select a state type for this state."
-msgstr ""
+msgstr "Wählen Sie den Statustyp für den Status aus."
 
 msgid "Select a state type for this sttate."
 msgstr ""
 
 msgid "Select a text separator."
-msgstr ""
+msgstr "Wählen Sie einen Texttrenner."
 
 msgid "Select a value separator."
 msgstr ""
 
-#, fuzzy
-#| msgid "Config Item Class"
 msgid "Select Config Item Class"
-msgstr "Config Item Klasse"
+msgstr "Wählen Sie eine Config Item Klasse aus der Liste."
 
 msgid "Selected Search Criteria"
-msgstr ""
+msgstr "Gewählte Suchkriterien"
 
-#, fuzzy
-#| msgid "expected time required:"
 msgid "selected ticket features"
-msgstr "voraussichtlich benötigte Zeit:"
+msgstr "Ausgewählte Ticketfunktionen"
 
 msgid "Selected Versions"
-msgstr ""
+msgstr "Gewählte Versionen"
 
 msgid "Select file"
 msgstr "Datei wählen"
@@ -1755,51 +1694,66 @@ msgid "select image file"
 msgstr "Bilddatei wählen"
 
 msgid "Select which agents should be assigned to this role."
-msgstr ""
+msgstr "Wählen Sie, welche Agenten zu dieser Rolle zugeordnet werden sollen."
 
 msgid "; (semicolon)"
 msgstr "; (Semikolon)"
 
 msgid "Sender"
-msgstr ""
+msgstr "Absender"
 
 msgid ""
 "Serach for config items with the same number or part of the same number "
 "(min. 1 character)."
 msgstr ""
+"Suche nach Config Items mit dieser Nummer oder Teilen der Nummer (mindestens "
+"1 Zeichen)."
 
-#, fuzzy
-#| msgid "Affected Service"
 msgid "Service"
-msgstr "Betroffener Service"
+msgstr "Service"
 
 msgid ""
 "Service defines which content of the service catalog is being requested."
 msgstr ""
+"Ein Service definiert, welche Leistung im Geschäftsprozess für das Ticket "
+"angefragt wird."
 
 msgid "Set a password for the user."
-msgstr ""
+msgstr "Legen Sie ein Passwort für den Nutzer fest."
 
 msgid "Set the ci class as „valid“, „invalid (temporarily)“, or „invalid“."
 msgstr ""
+"Setzen Sie die CI Klasse als \"gültig\", \"ungültig (temporär)\" oder \""
+"ungültig\"."
 
 msgid "Set the FAQ article as „valid“, „invalid (temporarily)“, or „invalid“."
 msgstr ""
+"Setzen Sie den FAQ Artikel als \"gültig\", \"ungültig (temporär)\" oder \""
+"ungültig\"."
 
 msgid "Set the priority as „valid“, „invalid (temporarily)“, or „invalid“."
 msgstr ""
+"Setzen Sie die Priorität als \"gültig\", \"ungültig (temporär)\" oder \""
+"ungültig\"."
 
 msgid "Set the role as „valid“, „invalid (temporarily)“, or „invalid“."
 msgstr ""
+"Setzen Sie die Rolle als \"gültig\", \"ungültig (temporär)\" oder \""
+"ungültig\"."
 
 msgid "Set the state as „valid“, „invalid (temporarily)“, or „invalid“."
 msgstr ""
+"Setzen Sie den Status als \"gültig\", \"ungültig (temporär)\" oder \""
+"ungültig\"."
 
 msgid "Set the type as „valid“, „invalid (temporarily)“, or „invalid“."
 msgstr ""
+"Setzen Sie den Typ als \"gültig\", \"ungültig (temporär)\" oder \"ungültig\"."
 
 msgid "Set the user as „valid“, „invalid (temporarily)“, or „invalid“."
 msgstr ""
+"Setzen Sie den Nutzer als \"gültig\", \"ungültig (temporär)\" oder \""
+"ungültig\"."
 
 msgid "Show all"
 msgstr "Alle anzeigen"
@@ -1808,10 +1762,12 @@ msgid "SINGLE_QUOTES"
 msgstr ""
 
 msgid "SLA"
-msgstr ""
+msgstr "SLA"
 
 msgid "SLA defines which target times are set for processing this ticket."
 msgstr ""
+"Die Servicevereinbarung (auch SLA), beschreibt welche Erfüllungszielzeiten "
+"für die Abarbeitung des Tickets gelten."
 
 msgid "SLA / Service Level Agreement"
 msgstr "SLA / Servicevereinbarung"
@@ -1823,50 +1779,40 @@ msgid "Solution time"
 msgstr "Lösungszeit"
 
 msgid "Source"
-msgstr ""
+msgstr "Quelle"
 
 msgid "Spam"
-msgstr ""
+msgstr "Spam"
 
-#, fuzzy
-#| msgid "Solution"
 msgid "Split Option"
-msgstr "Lösung"
+msgstr "Trennoptionen"
 
 msgid "Start Import"
-msgstr ""
+msgstr "Import starten"
 
 msgid "Start search"
 msgstr "Suche starten"
 
 msgid "starts with"
-msgstr ""
+msgstr "beginnt mit"
 
 msgid "State"
 msgstr "Status"
 
-#, fuzzy
-#| msgid "State"
 msgid "State Data"
-msgstr "Status"
+msgstr "Status Daten"
 
 msgid "State Information"
 msgstr "Status Informationen"
 
-#, fuzzy
-#| msgid "State"
 msgid "States"
 msgstr "Status"
 
-#, fuzzy
-#| msgid "Role successfully created."
 msgid "States successfully removed."
-msgstr "Rolle wurde erfolgreich angelegt."
+msgstr "Status wurde erfolgreich entfernt."
 
-#, fuzzy
-#| msgid "Role successfully created."
 msgid "State successfully created."
-msgstr "Rolle wurde erfolgreich angelegt."
+msgstr "Status wurde erfolgreich angelegt."
 
 msgid "State Type"
 msgstr "Statustyp"
@@ -1884,53 +1830,43 @@ msgid "Submit"
 msgstr "Übernehmen"
 
 msgid "Success!"
-msgstr ""
+msgstr "Erfolgreich!"
 
-#, fuzzy
-#| msgid "Role successfully created."
 msgid "Successfully rated."
-msgstr "Rolle wurde erfolgreich angelegt."
+msgstr "Bewertung erfolgreich."
 
 msgid "Switch"
-msgstr ""
+msgstr "Tauschen"
 
-#, fuzzy
-#| msgid "Visible in customer portal"
 msgid "Switch to customer portal."
-msgstr "Sichtbar in Kundenportal"
+msgstr "Wechsel ins Kundenportal."
 
 msgid "Symptom"
-msgstr ""
+msgstr "Symptom"
 
 msgid "-> (tab)"
-msgstr ""
+msgstr "-> (Tabulator)"
 
-#, fuzzy
-#| msgid "Tags"
 msgid "Tag"
-msgstr "Schlagworte"
+msgstr "Schlagwort"
 
 msgid "Tags"
 msgstr "Schlagworte"
 
 msgid "Template"
-msgstr ""
+msgstr "Vorlage"
 
 msgid "Templates"
-msgstr ""
+msgstr "Vorlagen"
 
-#, fuzzy
-#| msgid "Role successfully created."
 msgid "Templates successfully removed."
-msgstr "Rolle wurde erfolgreich angelegt."
+msgstr "Vorlagen wurde erfolgreich entfernt."
 
-#, fuzzy
-#| msgid "Assign Text Modules"
 msgid "Text Modules"
-msgstr "Zuordnung zu Textbausteinen"
+msgstr "Textbausteine"
 
 msgid "Text separator"
-msgstr ""
+msgstr "Texttrenner"
 
 msgid "The following {1} entries will be deleted. Are you sure?"
 msgstr ""
@@ -1940,6 +1876,7 @@ msgstr ""
 
 msgid "This browser is not supported. You may encounter malfunctions."
 msgstr ""
+"Dieser Browser wird nicht unterstützt. Es können Fehlfunktionen auftreten."
 
 msgid ""
 "This is the administration panel. Please select a module from the explorer."
