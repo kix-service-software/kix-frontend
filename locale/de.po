@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-04-17 11:35+0000\n"
+"PO-Revision-Date: 2019-04-17 11:38+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -581,25 +581,17 @@ msgstr "Kunde bearbeiten"
 msgid "edited"
 msgstr "bearbeitet"
 
-#, fuzzy
-#| msgid "FAQ Article"
 msgid "Edit FAQ article"
-msgstr "FAQ Artikel"
+msgstr "FAQ Artikel bearbeiten"
 
-#, fuzzy
-#| msgid "FAQ Article"
 msgid "Edit FAQ Article"
-msgstr "FAQ Artikel"
+msgstr "FAQ Artikel bearbeiten"
 
-#, fuzzy
-#| msgid "Edit Ticket"
 msgid "Edit Links"
-msgstr "Ticket bearbeiten"
+msgstr "Links bearbeiten"
 
-#, fuzzy
-#| msgid "Object"
 msgid "Edit Object"
-msgstr "Objekt"
+msgstr "Objekt bearbeiten"
 
 #, fuzzy
 #| msgid "Link Objects"
