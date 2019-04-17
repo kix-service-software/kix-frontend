@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-04-17 11:49+0000\n"
+"PO-Revision-Date: 2019-04-17 11:53+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -765,7 +765,7 @@ msgid "Id"
 msgstr ""
 
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 msgid "Ignore"
 msgstr "Ignorieren"
@@ -774,31 +774,25 @@ msgid "Images"
 msgstr "Bilder"
 
 msgid "Import"
-msgstr ""
+msgstr "Import"
 
 msgid "Import {0} {1}. Execute?"
-msgstr ""
+msgstr "{0} {1} importieren. Ausführen?"
 
-#, fuzzy
-#| msgid "Contacts"
 msgid "Import Contacts"
-msgstr "Kontakte"
+msgstr "Kontakte importieren"
 
-#, fuzzy
-#| msgid "Customers"
 msgid "Import Customers"
-msgstr "Kunden"
+msgstr "Kunden importieren"
 
-#, fuzzy
-#| msgid "Core Data"
 msgid "Import Data"
-msgstr "Stammdaten"
+msgstr "Daten importieren"
 
 msgid "Imprint"
 msgstr "Impressum"
 
 msgid "in"
-msgstr ""
+msgstr "in"
 
 #, fuzzy
 #| msgid "Incident State"
@@ -809,22 +803,22 @@ msgid "Incident State"
 msgstr "Vorfallstatus"
 
 msgid "Insert a comment for the CI class."
-msgstr ""
+msgstr "Geben Sie einen Kommentar zur CI Klasse ein."
 
 msgid "Insert a comment for the priority."
-msgstr ""
+msgstr "Geben Sie einen Kommentar für die Priorität ein."
 
 msgid "Insert a comment for the role."
-msgstr ""
+msgstr "Geben Sie einen Kommentar zu der Rolle ein."
 
 msgid "Insert a comment for the state."
-msgstr ""
+msgstr "Geben Sie einen Kommentar zu dem Status ein."
 
 msgid "Insert a comment for the type."
-msgstr ""
+msgstr "Geben Sie einen Kommentar für den Typ ein."
 
 msgid "Insert a comment for the user."
-msgstr ""
+msgstr "Geben Sie einen Kommentar zu dem Nutzer ein."
 
 msgid "Insert a config item class name."
 msgstr ""
