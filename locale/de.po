@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-04-17 12:40+0000\n"
+"PO-Revision-Date: 2019-04-17 12:41+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -1265,15 +1265,13 @@ msgid "Path"
 msgstr "Pfad"
 
 msgid "Pattern"
-msgstr ""
+msgstr "Pattern"
 
-#, fuzzy
-#| msgid "State Information"
 msgid "Pattern Information"
-msgstr "Status Informationen"
+msgstr "Pattern Informationen"
 
 msgid "Pending date is not in the future."
-msgstr ""
+msgstr "\"Warten bis\"-Datum liegt nicht in der Zukunft."
 
 msgid "Pending Tickets"
 msgstr "Tickets im Warten-Status"
@@ -1281,16 +1279,14 @@ msgstr "Tickets im Warten-Status"
 msgid "pending until"
 msgstr "Warten bis"
 
-#, fuzzy
-#| msgid "Permissions"
 msgid "Permission"
-msgstr "Berechtigungen"
+msgstr "Berechtigung"
 
 msgid "Permissions"
 msgstr "Berechtigungen"
 
 msgid "Permissions on dependent objects"
-msgstr ""
+msgstr "Berechtigungen auf abhängige Objekte"
 
 msgid "Personal Settings"
 msgstr "Persönliche Einstellungen"
