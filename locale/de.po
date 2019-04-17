@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
 "PO-Revision-Date: 2019-04-17 09:39+0000\n"
-"Last-Translator: jrobel <Julia.Robel@cape-it.de>\n"
+"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -74,8 +74,6 @@ msgstr "Alter"
 msgid "Agent"
 msgstr "Agent"
 
-#, fuzzy
-#| msgid "User Assignment"
 msgid "Agent Assignment"
 msgstr "Agentenzuordnung"
 
@@ -145,8 +143,6 @@ msgstr "Artikeltext"
 msgid "Assigned Agents"
 msgstr "Zugeordnete Agenten"
 
-#, fuzzy
-#| msgid "Assigned Contacts "
 msgid "Assigned Contacts"
 msgstr "Zugeordnete Kontakte"
 
@@ -159,8 +155,6 @@ msgstr "Zugeordnete Rollen"
 msgid "Assign Link"
 msgstr "Verknüpfung zuordnen"
 
-#, fuzzy
-#| msgid "Assign Link"
 msgid "Assign Links"
 msgstr "Verknüpfung zuordnen"
 
@@ -174,6 +168,8 @@ msgid ""
 "Attach additional files to the FAQ article. Drag & Drop is possible. Max. "
 "file size is 25 MB."
 msgstr ""
+"Hier können Sie zusätzliche Dateien an den FAQ Artikel hängen. Drag & Drop "
+"ist möglich. Die maximale Dateigröße beträgt 25 MB."
 
 msgid "Attachments"
 msgstr "Anhänge"
@@ -191,7 +187,7 @@ msgid "Bcc"
 msgstr "Bcc"
 
 msgid "Benutzer"
-msgstr ""
+msgstr "User"
 
 msgid ""
 "<b>-- KIX Professional Feature--</b><p>To use the text modules available in "
@@ -206,12 +202,10 @@ msgstr ""
 "sie weiteren Text eingeben.</p>"
 
 msgid "Bookmarks"
-msgstr ""
+msgstr "Lesezeichen"
 
-#, fuzzy
-#| msgid "Action"
 msgid "Bulk Action"
-msgstr "Aktion"
+msgstr "Sammelaktion"
 
 msgid "Cancel"
 msgstr "Abbrechen"
@@ -220,10 +214,10 @@ msgid "Cancel Process"
 msgstr "Bearbeiten wird abgebrochen"
 
 msgid "Can not create link ({0})"
-msgstr ""
+msgstr "Verknüfung konnte nicht angelegt werden ({0})"
 
 msgid "Can not use file (file is empty)."
-msgstr ""
+msgstr "Datei kann nicht verwendet werden (Datei ist leer)."
 
 msgid "Can not use file (missing required properties):"
 msgstr ""
@@ -265,7 +259,7 @@ msgid "Charset"
 msgstr ""
 
 msgid "Choose a contact, customers will be assigned automatically."
-msgstr ""
+msgstr "Kunden werden nach Auswahl eines Kontaktes automatisch zugewiesen."
 
 msgid "CI Class"
 msgstr "CI Klasse"
