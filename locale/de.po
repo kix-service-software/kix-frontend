@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-04-17 11:42+0000\n"
+"PO-Revision-Date: 2019-04-17 11:46+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -689,34 +689,26 @@ msgstr "FAQ Artikel wurde erfolgreich angelegt."
 msgid "FAQ Attributes"
 msgstr "FAQ Attribute"
 
-#, fuzzy
-#| msgid "Category"
 msgid "FAQ Categories"
-msgstr "Kategorie"
+msgstr "FAQ Kategorien"
 
 msgid "FAQ Data"
-msgstr ""
+msgstr "FAQ Daten"
 
-#, fuzzy
-#| msgid "FAQ Article"
 msgid "FAQ Details"
-msgstr "FAQ Artikel"
+msgstr "FAQ Details"
 
 msgid "FAQ Information"
 msgstr "FAQ Informationen"
 
-#, fuzzy
-#| msgid "FAQ Information"
 msgid "FAQ rating"
-msgstr "FAQ Informationen"
+msgstr "FAQ Bewertung"
 
-#, fuzzy
-#| msgid "Search"
 msgid "FAQ Search"
-msgstr "Suche"
+msgstr "FAQ Suche"
 
 msgid "Fax"
-msgstr ""
+msgstr "Fax"
 
 msgid "Filter in list"
 msgstr "Filtern in Liste"
@@ -727,9 +719,8 @@ msgstr "Vorname"
 msgid "Force"
 msgstr "Erzwingen"
 
-#, fuzzy
 msgid "free tickets: {0}"
-msgstr "Meine Tickets"
+msgstr "Freie Tickets: {0}"
 
 msgid "From"
 msgstr "Von"
