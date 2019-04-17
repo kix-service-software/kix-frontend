@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-04-17 09:39+0000\n"
+"PO-Revision-Date: 2019-04-17 11:23+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -304,37 +304,31 @@ msgid "Closing time"
 msgstr "Schließzeit"
 
 msgid "CMDB"
-msgstr ""
+msgstr "CMDB"
 
-#, fuzzy
-#| msgid "CMDB Classes"
 msgid "CMDB: CI Classes"
-msgstr "CMDB Klassen"
+msgstr "CMDB: CI Klassen"
 
 msgid "CMDB Explorer"
-msgstr ""
+msgstr "CMDB Explorer"
 
 msgid ": (colon)"
-msgstr ""
+msgstr ": (Doppelpunkt)"
 
 msgid ", (comma)"
-msgstr ""
+msgstr ", (Komma)"
 
 msgid "Comment"
 msgstr "Kommentar"
 
-#, fuzzy
-#| msgid "Location"
 msgid "Communication"
-msgstr "Standort"
+msgstr "Kommunikation"
 
 msgid "Compare"
-msgstr ""
+msgstr "Vergleichen"
 
-#, fuzzy
-#| msgid "Current version"
 msgid "Compare Versions"
-msgstr "Aktuelle Version"
+msgstr "Versionen vergleichen"
 
 msgid "Config Item"
 msgstr "Config Item"
@@ -345,25 +339,17 @@ msgstr "Config Item Klasse"
 msgid "config item class can not be changed."
 msgstr ""
 
-#, fuzzy
-#| msgid "Config Item"
 msgid "Config Item Data"
-msgstr "Config Item"
+msgstr "Config Item Daten"
 
-#, fuzzy
-#| msgid "Config Item Class"
 msgid "Config Item Details"
-msgstr "Config Item Klasse"
+msgstr "Config Item Details"
 
-#, fuzzy
-#| msgid "Config Items"
 msgid "Config Item History"
-msgstr "Config Items"
+msgstr "Config Item History"
 
-#, fuzzy
-#| msgid "Contact Information"
 msgid "Config Item Information"
-msgstr "Kontaktinformationen"
+msgstr "Config Item Informationen"
 
 msgid "Config Items"
 msgstr "Config Items"
@@ -373,28 +359,20 @@ msgstr "Config Items"
 msgid "Config Items Count: {0}"
 msgstr "Config Items"
 
-#, fuzzy
-#| msgid "Config Item"
 msgid "Config Item Search"
-msgstr "Config Item"
+msgstr "Config Item Suche"
 
-#, fuzzy
-#| msgid "Role successfully created."
 msgid "Config Item successfully created."
-msgstr "Rolle wurde erfolgreich angelegt."
+msgstr "Config Item wurde erfolgreich angelegt."
 
-#, fuzzy
-#| msgid "Config Item Class"
 msgid "Config Item Version Compare"
-msgstr "Config Item Klasse"
+msgstr "Config Item Versionsvergleich"
 
 msgid "Contact"
 msgstr "Kontakt"
 
-#, fuzzy
-#| msgid "Contacts"
 msgid "Contact Details"
-msgstr "Kontakte"
+msgstr "Kontakt Details"
 
 msgid "Contact Information"
 msgstr "Kontaktinformationen"
@@ -402,15 +380,11 @@ msgstr "Kontaktinformationen"
 msgid "Contacts"
 msgstr "Kontakte"
 
-#, fuzzy
-#| msgid "Contact Role"
 msgid "Contact Search"
-msgstr "Kontaktrolle"
+msgstr "Kontakt Suche"
 
-#, fuzzy
-#| msgid "Role successfully created."
 msgid "Contact successfully created."
-msgstr "Rolle wurde erfolgreich angelegt."
+msgstr "Kontakt wurde erfolgreich angelegt."
 
 msgid "contains"
 msgstr "enthält"
@@ -418,20 +392,14 @@ msgstr "enthält"
 msgid "Country"
 msgstr "Land"
 
-#, fuzzy
-#| msgid "Created at"
 msgid "Create"
-msgstr "Erstellt am"
+msgstr "Erstellt"
 
-#, fuzzy
-#| msgid "Created at"
 msgid "Create Agent"
-msgstr "Erstellt am"
+msgstr "Neuer Agent"
 
-#, fuzzy
-#| msgid "Unread Articles"
 msgid "Create Article"
-msgstr "Ungelesene Artikel"
+msgstr "Neuer Artikel"
 
 #, fuzzy
 #| msgid "Create Core Data"
@@ -490,7 +458,7 @@ msgid "Create Type"
 msgstr "Typ hinzufügen"
 
 msgid "CSV-Export"
-msgstr ""
+msgstr "CSV-Export"
 
 msgid "CSV-File with data sets for import. Drag & Drop is possible."
 msgstr ""
