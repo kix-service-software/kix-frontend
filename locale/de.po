@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-04-17 11:53+0000\n"
+"PO-Revision-Date: 2019-04-17 11:57+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -824,31 +824,31 @@ msgid "Insert a config item class name."
 msgstr ""
 
 msgid "Insert additional information for this FAQ article."
-msgstr ""
+msgstr "Geben Sie zusätzliche Informationen zu diesem FAQ Artikel an."
 
 msgid "Insert a login for the user."
-msgstr ""
+msgstr "Geben Sie den Login (Nutzername) des Kontaktes ein."
 
 msgid "Insert a mobile number for the user."
-msgstr ""
+msgstr "Geben Sie eine Mobilfunknummer für den Nutzer ein."
 
 msgid "Insert a name for the Config Item."
-msgstr ""
+msgstr "Geben Sie einen Name für das Config Item ein."
 
 msgid "Insert a name for the FAQ article."
-msgstr ""
+msgstr "Geben Sie einen Titel für den FAQ Artikel ein."
 
 msgid "Insert a password for the contact."
-msgstr ""
+msgstr "Legen Sie ein Passwort für den Kontakt fest."
 
 msgid "Insert a pattern for the translation."
-msgstr ""
+msgstr "Geben Sie ein Pattern für die Übersetzung ein."
 
 msgid "Insert a phone number for the user."
-msgstr ""
+msgstr "Geben Sie eine Telefonnummer für den Nutzer ein."
 
 msgid "Insert a priority name."
-msgstr ""
+msgstr "Geben Sie einen Name für die Priorität ein."
 
 msgid "Insert a role name."
 msgstr ""
