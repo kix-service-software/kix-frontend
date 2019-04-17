@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-04-17 11:28+0000\n"
+"PO-Revision-Date: 2019-04-17 11:31+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -506,26 +506,29 @@ msgid ""
 "public=KIX Agent- and Customer Portal for both, authenticated and "
 "unauthenticated users)."
 msgstr ""
+"Legen Sie fest, wo der FAQ-Artikel angezeigt werden darf.  (intern = nur im "
+"KIX Agentenportal, extern = KIX Agenten- und Kundenportal für auth. Nutzer, "
+"öffentlich = KIX Agenten- und Kundenportal sowohl für unauth. als auch auth. "
+"Nutzer)."
 
-#, fuzzy
-#| msgid "Delete Link"
 msgid "Delete"
-msgstr "Verknüpfung löschen"
+msgstr "Löschen"
 
 msgid "Delete Link"
 msgstr "Verknüpfung löschen"
 
 msgid "Deny"
-msgstr ""
+msgstr "Deny"
 
 msgid "Deployment State"
 msgstr "Verwendungsstatus"
 
 msgid "Describe sympton as precisely as possible"
-msgstr ""
+msgstr "Beschreiben Sie das Symptom so genau wie möglich."
 
 msgid "Describe the solution for the symptons reasons as precisely as possible"
 msgstr ""
+"Beschreiben Sie die Lösung für die Ursache des Symptoms so genau wie möglich."
 
 msgid "Description"
 msgstr "Beschreibung"
@@ -537,10 +540,10 @@ msgid "Detailed search results"
 msgstr "Detailierte Suchergebnisse"
 
 msgid "DisplayValue"
-msgstr ""
+msgstr "Anzeigewert"
 
 msgid ". (dot)"
-msgstr ""
+msgstr ". (Punkt)"
 
 msgid "DOUBLE_QUOTES"
 msgstr ""
