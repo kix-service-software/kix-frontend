@@ -49,22 +49,24 @@
             </if>
         </if>
     </tr>
-    <if(input.toggleEnabled)>
-        <table-toggle-row
-            row=state.row
-            open=state.open
-            columnLength=component.getFullColumnCount(input.selectionEnabled, input.toggleEnabled)/>
-    </if>
-    <if(state.children)>
-        <for|childRow| of=state.children>
-            <table-row
-                key=childRow.getRowId()
-                row=childRow
-                columnLength=input.columnLength
-                height=input.height
-                selectionEnabled=input.selectionEnabled
-                toggleEnabled=input.toggleEnabled
-                level=(input.level + 1)/>
-        </for>
+    <if(state.show)>
+        <if(input.toggleEnabled)>
+            <table-toggle-row
+                row=state.row
+                open=state.open
+                columnLength=component.getFullColumnCount(input.selectionEnabled, input.toggleEnabled)/>
+        </if>
+        <if(state.children)>
+            <for|childRow| of=state.children>
+                <table-row
+                    key=childRow.getRowId()
+                    row=childRow
+                    columnLength=input.columnLength
+                    height=input.height
+                    selectionEnabled=input.selectionEnabled
+                    toggleEnabled=input.toggleEnabled
+                    level=(input.level + 1)/>
+            </for>
+        </if>
     </if>
 </if>
