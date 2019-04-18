@@ -142,7 +142,7 @@ class Component {
             new FormField(
                 'Translatable#Source', 'source', 'attachment-input', true,
                 // tslint:disable-next-line:max-line-length
-                'Translatable#CSV-File with data sets for import. Drag & Drop is possible.',
+                'Translatable#Choose CSV-File with data sets for import. Drag & Drop is possible.',
                 [
                     new FormFieldOption('MimeTypes', ['text/', '', 'application/vnd.ms-excel']),
                     new FormFieldOption('MULTI_FILES', false)

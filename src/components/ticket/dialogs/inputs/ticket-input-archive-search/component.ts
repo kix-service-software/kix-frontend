@@ -26,8 +26,8 @@ class Component extends FormInputComponent<number, ComponentState> {
         await super.onMount();
         this.state.nodes = [
             new TreeNode(ArchiveFlag.ALL, 'Translatable#All Tickets'),
-            new TreeNode(ArchiveFlag.ARCHIVED, 'Translatable#Archivierte Tickets'),
-            new TreeNode(ArchiveFlag.NOT_ARCHIVED, 'Translatable#Nicht archivierte Tickets')
+            new TreeNode(ArchiveFlag.ARCHIVED, 'Translatable#archived tickets'),
+            new TreeNode(ArchiveFlag.NOT_ARCHIVED, 'Translatable#not archived tickets')
         ];
         this.setCurrentNode();
     }

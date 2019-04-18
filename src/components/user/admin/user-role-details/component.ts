@@ -55,7 +55,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         if (!this.role) {
             this.state.error = await TranslationService.translate(
-                'Translatable#No role with ID {1} available.', [context.getObjectId()]
+                'Translatable#No role with ID {0} available.', [context.getObjectId()]
             );
         } else {
             await this.prepareTitle();

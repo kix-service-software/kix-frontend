@@ -50,7 +50,7 @@ export class Extension implements IConfigurationExtension {
 
             const group = new FormGroup('Translatable#FAQ Data', fields);
 
-            const form = new Form(formId, 'Translatable#Edit FAQ article', [group], KIXObjectType.FAQ_ARTICLE, true, FormContext.EDIT);
+            const form = new Form(formId, 'Translatable#Edit FAQ Article', [group], KIXObjectType.FAQ_ARTICLE, true, FormContext.EDIT);
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
         configurationService.registerForm([FormContext.EDIT], KIXObjectType.FAQ_ARTICLE, formId);

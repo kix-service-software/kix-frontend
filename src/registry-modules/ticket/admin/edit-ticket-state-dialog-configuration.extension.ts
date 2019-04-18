@@ -34,7 +34,7 @@ export class Extension implements IConfigurationExtension {
             ));
             fields.push(new FormField(
                 'Translatable#State Type', TicketStateProperty.TYPE_ID, 'object-reference-input',
-                true, 'Translatable#Select a state type for this sttate.', [
+                true, 'Translatable#Select a state type for this state.', [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.TICKET_STATE_TYPE),
                     new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false)
                 ]

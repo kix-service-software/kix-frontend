@@ -26,8 +26,8 @@ export class FAQLabelProvider implements ILabelProvider<FAQArticle> {
             switch (property) {
                 case FAQArticleProperty.CATEGORY_ID:
                     const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(KIXObjectType.FAQ_CATEGORY);
-                    const catgeory = faqCategories.find((fc) => fc.ID === value);
-                    displayValue = catgeory ? catgeory.Name : value;
+                    const category = faqCategories.find((fc) => fc.ID === value);
+                    displayValue = category ? category.Name : value;
                     break;
                 case FAQArticleProperty.VALID_ID:
                     const valid = objectData.validObjects.find((v) => v.ID === value);
@@ -147,8 +147,8 @@ export class FAQLabelProvider implements ILabelProvider<FAQArticle> {
         switch (property) {
             case FAQArticleProperty.CATEGORY_ID:
                 const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(KIXObjectType.FAQ_CATEGORY);
-                const catgeory = faqCategories.find((fc) => fc.ID === displayValue);
-                displayValue = catgeory ? catgeory.Name : displayValue;
+                const category = faqCategories.find((fc) => fc.ID === displayValue);
+                displayValue = category ? category.Name : displayValue;
                 break;
             case FAQArticleProperty.CREATED:
             case FAQArticleProperty.CHANGED:

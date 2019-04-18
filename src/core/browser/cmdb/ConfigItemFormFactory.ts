@@ -31,7 +31,7 @@ export class ConfigItemFormFactory {
 
         if (forEdit) {
             fields.push(new FormField(
-                'Translatable#Config Item Class', VersionProperty.CLASS_ID, null, false, 'Translatable#config item class can not be changed.',
+                'Translatable#Config Item Class', VersionProperty.CLASS_ID, null, false, 'Translatable#Config Item class. Can not be changed.',
                 null, null, null, null, 1, 1, 1,
                 null, null, null, false, false, true
             ));
@@ -67,7 +67,7 @@ export class ConfigItemFormFactory {
                 null, null, null, 1, 1, 1, null, null, null, false, false
             ));
             fields.push(new FormField(
-                'Translatable#CI link with', ConfigItemProperty.LINKS, 'link-input', false, 'Translatable#Link this config item to a ticket, an FAQ article or another config item.',
+                'Translatable#Link Config Item with', ConfigItemProperty.LINKS, 'link-input', false, 'Translatable#Link this config item to a ticket, an FAQ article or another config item.',
                 null, null, null, null, 1, 1, 1, null, null, null, false, false
             ));
         }
