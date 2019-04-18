@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-04-18 07:54+0000\n"
+"PO-Revision-Date: 2019-04-18 12:28+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -119,10 +119,8 @@ msgstr ""
 "Eine Queue ordnet Anfragen Bearbeitungsteams zu und klassifiziert die "
 "Anfrage. Queues sind vergleichbar mit Verzeichnissen im Dateisystem."
 
-#, fuzzy
-#| msgid "Watched Tickets"
 msgid "archived tickets"
-msgstr "Beobachtete Tickets"
+msgstr "Archivierte Tickets"
 
 msgid "Article"
 msgstr "Artikel"
@@ -333,7 +331,7 @@ msgid "Config Item Class"
 msgstr "Config Item Klasse"
 
 msgid "Config Item class. Can not be changed."
-msgstr ""
+msgstr "Klasse des Config Items. Nicht änderbar."
 
 msgid "Config Item Data"
 msgstr "Stammdaten"
@@ -482,7 +480,7 @@ msgid "Customers Dashboard"
 msgstr "Kunden Dashboard"
 
 msgid "Customer Search"
-msgstr "Kundensuche"
+msgstr "Kunden Suche"
 
 msgid "Customer successfully created."
 msgstr "Kunde wurde erfolgreich angelegt."
@@ -1139,31 +1137,23 @@ msgstr "Kein Kunde verfügbar"
 msgid "No general catalog class configured!"
 msgstr ""
 
-#, fuzzy
-#| msgid "No contact available"
 msgid "No object with ID {0} available."
-msgstr "Kein Kontakt verfügbar"
+msgstr "Kein Objekt mit der ID {0} verfügbar."
 
-#, fuzzy
-#| msgid "No CI Class available for ID {0}."
 msgid "No priority available for ID {0}."
-msgstr "Keine CI Klasse verfügbar für ID {0}."
+msgstr "Keine Prioritätmit der ID {0} verfügbar."
 
 msgid "No rating available."
 msgstr "Keine Bewertung verfügbar."
 
-#, fuzzy
-#| msgid "No contact available"
 msgid "No role with ID {0} available."
-msgstr "Kein Kontakt verfügbar"
+msgstr "Keine Rolle mit der ID {0} verfügbar."
 
 msgid "No search query."
 msgstr "Keine Suchanfrage verfügbar."
 
-#, fuzzy
-#| msgid "My watched tickets"
 msgid "not archived tickets"
-msgstr "Meine beobachteten Tickets"
+msgstr "Nicht archivierte Tickets"
 
 msgid "Note"
 msgstr "Notiz"
@@ -1609,8 +1599,6 @@ msgstr "Suche nach Tickets mit dem gewählten Status."
 msgid "Search for tickets with selected type."
 msgstr "Suche nach Tickets mit dem gewählten Typ."
 
-#, fuzzy
-#| msgid "Search for tickets with selected state."
 msgid "Search for tickets with the selected service."
 msgstr "Suche nach Tickets mit dem gewählten Status."
 
@@ -1853,7 +1841,7 @@ msgid "Text separator"
 msgstr "Texttrenner"
 
 msgid "The following {0} entries will be deleted. Are you sure?"
-msgstr ""
+msgstr "Die ausgewählten {0} Einträge werden gelöscht. Sind Sie sicher?"
 
 msgid "The search only includes current versions."
 msgstr "Es werden nur aktuelle Versionen durchsucht."
