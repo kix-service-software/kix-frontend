@@ -55,7 +55,7 @@ export class Extension implements IConfigurationExtension {
                 )
             ]);
 
-            const objectPermissionGroup = new FormGroup('Translatable#Object permissions', [
+            const objectPermissionGroup = new FormGroup('Translatable#Permissions', [
                 new FormField(
                     null, 'OBJECT_PERMISSION', 'assign-role-permission-input', false, null
                 )
