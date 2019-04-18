@@ -119,8 +119,10 @@ msgstr ""
 "Eine Queue ordnet Anfragen Bearbeitungsteams zu und klassifiziert die "
 "Anfrage. Queues sind vergleichbar mit Verzeichnissen im Dateisystem."
 
-msgid "Archivierte Tickets"
-msgstr "Archivierte Tickets"
+#, fuzzy
+#| msgid "Watched Tickets"
+msgid "archived tickets"
+msgstr "Beobachtete Tickets"
 
 msgid "Article"
 msgstr "Artikel"
@@ -228,9 +230,6 @@ msgstr ""
 msgid "Category"
 msgstr "Kategorie"
 
-msgid "Catgeory"
-msgstr ""
-
 msgid "Cause"
 msgstr "Ursache"
 
@@ -261,6 +260,9 @@ msgstr ""
 msgid "Choose a contact, customers will be assigned automatically."
 msgstr "Kunden werden nach Auswahl eines Kontaktes automatisch zugewiesen."
 
+msgid "Choose CSV-File with data sets for import. Drag & Drop is possible."
+msgstr ""
+
 msgid "CI Class"
 msgstr "CI Klasse"
 
@@ -273,17 +275,11 @@ msgstr "CI Klassen Definitionen"
 msgid "CI Classes"
 msgstr "CI Klassen"
 
-msgid "CI Class information"
-msgstr "CI Klassen Informationen"
-
 msgid "CI Class Information"
 msgstr "CI Klassen Informationen"
 
 msgid "CI Class successfully created."
 msgstr "CI Klasse wurde erfolgreich angelegt."
-
-msgid "CI link with"
-msgstr ""
 
 msgid "City"
 msgstr "Stadt"
@@ -336,7 +332,7 @@ msgstr "Config Item"
 msgid "Config Item Class"
 msgstr "Config Item Klasse"
 
-msgid "config item class can not be changed."
+msgid "Config Item class. Can not be changed."
 msgstr ""
 
 msgid "Config Item Data"
@@ -445,9 +441,6 @@ msgstr "Typ hinzufügen"
 
 msgid "CSV-Export"
 msgstr "CSV-Export"
-
-msgid "CSV-File with data sets for import. Drag & Drop is possible."
-msgstr ""
 
 msgid "(Current definition)"
 msgstr "(aktuelle Definition)"
@@ -574,9 +567,6 @@ msgstr "Kunde bearbeiten"
 
 msgid "edited"
 msgstr "bearbeitet"
-
-msgid "Edit FAQ article"
-msgstr "FAQ Artikel bearbeiten"
 
 msgid "Edit FAQ Article"
 msgstr "FAQ Artikel bearbeiten"
@@ -1125,11 +1115,6 @@ msgstr "Neue Version wurde angelegt."
 msgid "Next Image"
 msgstr "Nächstes Bild"
 
-#, fuzzy
-#| msgid "Quick search (Tickets)"
-msgid "Nicht archivierte Tickets"
-msgstr "Schnellsuche (Tickets)"
-
 msgid "No."
 msgstr "Nr."
 
@@ -1156,22 +1141,29 @@ msgstr ""
 
 #, fuzzy
 #| msgid "No contact available"
-msgid "No object with ID {1} available."
+msgid "No object with ID {0} available."
 msgstr "Kein Kontakt verfügbar"
 
-msgid "No priority available for ID {1}."
-msgstr ""
+#, fuzzy
+#| msgid "No CI Class available for ID {0}."
+msgid "No priority available for ID {0}."
+msgstr "Keine CI Klasse verfügbar für ID {0}."
 
 msgid "No rating available."
 msgstr "Keine Bewertung verfügbar."
 
 #, fuzzy
 #| msgid "No contact available"
-msgid "No role with ID {1} available."
+msgid "No role with ID {0} available."
 msgstr "Kein Kontakt verfügbar"
 
 msgid "No search query."
 msgstr "Keine Suchanfrage verfügbar."
+
+#, fuzzy
+#| msgid "My watched tickets"
+msgid "not archived tickets"
+msgstr "Meine beobachteten Tickets"
 
 msgid "Note"
 msgstr "Notiz"
@@ -1617,8 +1609,10 @@ msgstr "Suche nach Tickets mit dem gewählten Status."
 msgid "Search for tickets with selected type."
 msgstr "Suche nach Tickets mit dem gewählten Typ."
 
-msgid "Search for tickets with the selected ticket."
-msgstr ""
+#, fuzzy
+#| msgid "Search for tickets with selected state."
+msgid "Search for tickets with the selected service."
+msgstr "Suche nach Tickets mit dem gewählten Status."
 
 msgid "Search Tickets ..."
 msgstr "Suche Tickets..."
@@ -1658,9 +1652,6 @@ msgstr "Wählen Sie ein Icon für den Typ aus."
 
 msgid "Select a state type for this state."
 msgstr "Wählen Sie den Statustyp für den Status aus."
-
-msgid "Select a state type for this sttate."
-msgstr ""
 
 msgid "Select a text separator."
 msgstr "Wählen Sie einen Texttrenner."
@@ -1861,7 +1852,7 @@ msgstr "Textbausteine"
 msgid "Text separator"
 msgstr "Texttrenner"
 
-msgid "The following {1} entries will be deleted. Are you sure?"
+msgid "The following {0} entries will be deleted. Are you sure?"
 msgstr ""
 
 msgid "The search only includes current versions."
@@ -2170,6 +2161,20 @@ msgstr "Ihre Bewertung"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Archivierte Tickets"
+#~ msgstr "Archivierte Tickets"
+
+#~ msgid "CI Class information"
+#~ msgstr "CI Klassen Informationen"
+
+#~ msgid "Edit FAQ article"
+#~ msgstr "FAQ Artikel bearbeiten"
+
+#, fuzzy
+#~| msgid "Quick search (Tickets)"
+#~ msgid "Nicht archivierte Tickets"
+#~ msgstr "Schnellsuche (Tickets)"
 
 #, fuzzy
 #~| msgid "Permissions"
