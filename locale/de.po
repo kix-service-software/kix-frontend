@@ -336,9 +336,6 @@ msgstr "Klasse des Config Items. Nicht änderbar."
 msgid "Config Item Data"
 msgstr "Stammdaten"
 
-msgid "Config Item Details"
-msgstr "Config Item Details"
-
 msgid "Config Item History"
 msgstr "Config Item Historie"
 
@@ -676,9 +673,6 @@ msgstr "FAQ Kategorien"
 
 msgid "FAQ Data"
 msgstr "Stammdaten"
-
-msgid "FAQ Details"
-msgstr "FAQ Details"
 
 msgid "FAQ Information"
 msgstr "FAQ Informationen"
@@ -1125,9 +1119,6 @@ msgstr "Kein Artikel"
 msgid "No article available."
 msgstr "Kein Artikel verfügbar."
 
-msgid "No CI Class available for ID {0}."
-msgstr "Keine CI Klasse verfügbar für ID {0}."
-
 msgid "No contact available"
 msgstr "Kein Kontakt verfügbar"
 
@@ -1140,14 +1131,8 @@ msgstr ""
 msgid "No object with ID {0} available."
 msgstr "Kein Objekt mit der ID {0} verfügbar."
 
-msgid "No priority available for ID {0}."
-msgstr "Keine Prioritätmit der ID {0} verfügbar."
-
 msgid "No rating available."
 msgstr "Keine Bewertung verfügbar."
-
-msgid "No role with ID {0} available."
-msgstr "Keine Rolle mit der ID {0} verfügbar."
 
 msgid "No search query."
 msgstr "Keine Suchanfrage verfügbar."
@@ -1244,9 +1229,6 @@ msgstr "Pfad"
 msgid "Pattern"
 msgstr "Pattern"
 
-msgid "Pattern Information"
-msgstr "Pattern Informationen"
-
 msgid "Pending date is not in the future."
 msgstr "\"Warten bis\"-Datum liegt nicht in der Zukunft."
 
@@ -1331,9 +1313,6 @@ msgstr "Priorität"
 
 msgid "Priority Data"
 msgstr "Stammdaten"
-
-msgid "Priority Information"
-msgstr "Prioritäten Informationen"
 
 msgid "Priority successfully created."
 msgstr "Priorität wurde erfolgreich angelegt."
@@ -1774,9 +1753,6 @@ msgstr "Status"
 msgid "State Data"
 msgstr "Stammdaten"
 
-msgid "State Information"
-msgstr "Status Informationen"
-
 msgid "States"
 msgstr "Status"
 
@@ -1978,9 +1954,6 @@ msgstr "Typ"
 msgid "Type Data"
 msgstr "Stammdaten"
 
-msgid "Type Information"
-msgstr "Typ Informationen"
-
 msgid "Types"
 msgstr "Typen"
 
@@ -2149,6 +2122,33 @@ msgstr "Ihre Bewertung"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Config Item Details"
+#~ msgstr "Config Item Details"
+
+#~ msgid "FAQ Details"
+#~ msgstr "FAQ Details"
+
+#~ msgid "No CI Class available for ID {0}."
+#~ msgstr "Keine CI Klasse verfügbar für ID {0}."
+
+#~ msgid "No priority available for ID {0}."
+#~ msgstr "Keine Prioritätmit der ID {0} verfügbar."
+
+#~ msgid "No role with ID {0} available."
+#~ msgstr "Keine Rolle mit der ID {0} verfügbar."
+
+#~ msgid "Pattern Information"
+#~ msgstr "Pattern Informationen"
+
+#~ msgid "Priority Information"
+#~ msgstr "Prioritäten Informationen"
+
+#~ msgid "State Information"
+#~ msgstr "Status Informationen"
+
+#~ msgid "Type Information"
+#~ msgstr "Typ Informationen"
 
 #~ msgid "Archivierte Tickets"
 #~ msgstr "Archivierte Tickets"
