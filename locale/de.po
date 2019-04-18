@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-04-18 06:38+0000\n"
+"PO-Revision-Date: 2019-04-18 07:54+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -126,7 +126,7 @@ msgid "Article"
 msgstr "Artikel"
 
 msgid "Article Data"
-msgstr "Artikeldaten"
+msgstr "Stammdaten"
 
 msgid "Article Id"
 msgstr "Artikel ID"
@@ -340,13 +340,13 @@ msgid "config item class can not be changed."
 msgstr ""
 
 msgid "Config Item Data"
-msgstr "Config Item Daten"
+msgstr "Stammdaten"
 
 msgid "Config Item Details"
 msgstr "Config Item Details"
 
 msgid "Config Item History"
-msgstr "Config Item History"
+msgstr "Config Item Historie"
 
 msgid "Config Item Information"
 msgstr "Config Item Informationen"
@@ -540,7 +540,7 @@ msgid ". (dot)"
 msgstr ". (Punkt)"
 
 msgid "DOUBLE_QUOTES"
-msgstr ""
+msgstr "\" (Doppeltes Hochkomma)"
 
 msgid "Download"
 msgstr "Download"
@@ -687,7 +687,7 @@ msgid "FAQ Categories"
 msgstr "FAQ Kategorien"
 
 msgid "FAQ Data"
-msgstr "FAQ Daten"
+msgstr "Stammdaten"
 
 msgid "FAQ Details"
 msgstr "FAQ Details"
@@ -732,7 +732,7 @@ msgid "Help"
 msgstr "Hilfe"
 
 msgid "History"
-msgstr ""
+msgstr "Historie"
 
 msgid "Hit List"
 msgstr "Trefferliste"
@@ -1347,10 +1347,8 @@ msgstr "Prioritäen wurden erfolgreich entfernt."
 msgid "Priority"
 msgstr "Priorität"
 
-#, fuzzy
-#| msgid "Priority"
 msgid "Priority Data"
-msgstr "Priorität"
+msgstr "Stammdaten"
 
 msgid "Priority Information"
 msgstr "Prioritäten Informationen"
@@ -1754,7 +1752,7 @@ msgid "Show all"
 msgstr "Alle anzeigen"
 
 msgid "SINGLE_QUOTES"
-msgstr ""
+msgstr "' (Einfaches Hochkomma)"
 
 msgid "SLA"
 msgstr "SLA"
@@ -1795,7 +1793,7 @@ msgid "State"
 msgstr "Status"
 
 msgid "State Data"
-msgstr "Status Daten"
+msgstr "Stammdaten"
 
 msgid "State Information"
 msgstr "Status Informationen"
@@ -1867,7 +1865,7 @@ msgid "The following {1} entries will be deleted. Are you sure?"
 msgstr ""
 
 msgid "The search only includes current versions."
-msgstr ""
+msgstr "Es werden nur aktuelle Versionen durchsucht."
 
 msgid "This browser is not supported. You may encounter malfunctions."
 msgstr ""
@@ -1876,110 +1874,86 @@ msgstr ""
 msgid ""
 "This is the administration panel. Please select a module from the explorer."
 msgstr ""
+"Sie befinden sich im Administrationsbereich. Wählen Sie ein Modul aus dem "
+"Explorer."
 
-#, fuzzy
-#| msgid "New Ticket"
 msgid "Ticket"
-msgstr "Neues Ticket"
+msgstr "Ticket"
 
-#, fuzzy
-#| msgid "Attributes"
 msgid "Ticket Attributes"
-msgstr "Attribute"
+msgstr "Ticket Attribute"
 
 #, fuzzy
 #| msgid "Core Data"
 msgid "Ticket Data"
 msgstr "Stammdaten"
 
-#, fuzzy
-#| msgid "Description"
 msgid "Ticket Description"
-msgstr "Beschreibung"
+msgstr "Ticket Beschreibung"
 
-#, fuzzy
-#| msgid "Version Details"
 msgid "Ticket Details"
-msgstr "Versionsdetails"
+msgstr "Ticket Details"
 
 #, fuzzy
 #| msgid "New Tickets"
 msgid "Ticket Flags"
 msgstr "Neue Tickets"
 
-#, fuzzy
-#| msgid "FAQ Article History"
 msgid "Ticket History"
-msgstr "FAQ Artikel Historie"
+msgstr "Ticket Historie"
 
-#, fuzzy
-#| msgid "Type Information"
 msgid "Ticket Information"
-msgstr "Typ Informationen"
+msgstr "Ticket Informationen"
 
 msgid "Ticket is being watched."
-msgstr ""
+msgstr "Ticket wird beobachtet."
 
 msgid "Ticket is no longer watched."
-msgstr ""
+msgstr "Ticket wird nicht mehr beobachtet."
 
 msgid "Ticket locked."
-msgstr ""
+msgstr "Ticket gesperrt."
 
-#, fuzzy
-#| msgid "Number"
 msgid "Ticket Number"
-msgstr "Nummer"
+msgstr "Ticket Nummer"
 
-#, fuzzy
-#| msgid "Overview Ticket Priorities"
 msgid "Ticket: Priorities"
-msgstr "Übersicht Ticketprioritäten"
+msgstr "Ticket: Prioritäten"
 
-#, fuzzy
-#| msgid "New Tickets"
 msgid "Tickets"
-msgstr "Neue Tickets"
+msgstr "Tickets"
 
-#, fuzzy
-#| msgid "Search"
 msgid "Ticket Search"
-msgstr "Suche"
+msgstr "Ticket Suche"
 
 msgid "Ticket search error!"
-msgstr ""
+msgstr "Fehler bei der Ticketsuche!"
 
-#, fuzzy
-#| msgid "Lock State"
 msgid "Ticket: State"
-msgstr "Sperrstatus"
+msgstr "Ticket: Status"
 
-#, fuzzy
-#| msgid "Overview Ticket States"
 msgid "Ticket States"
-msgstr "Übersicht Ticketstatus"
+msgstr "Ticketstatus"
 
 msgid "Ticket status summarizes the tickets processing state."
 msgstr ""
+"Der Status definiert, in welchem Bearbeitungszustand sich ein Ticket "
+"befindet."
 
-#, fuzzy
-#| msgid "Role successfully created."
 msgid "Ticket successfully created."
-msgstr "Rolle wurde erfolgreich angelegt."
+msgstr "Ticket wurde erfolgreich angelegt."
 
 msgid "Ticket: Templates"
-msgstr ""
+msgstr "Ticket: Vorlagen"
 
 msgid "Ticket type is part of the classification of a ticket."
-msgstr ""
+msgstr "Der Ticket-Typ dient zur Klassifizierung von Anfragen."
 
-#, fuzzy
-#| msgid "Licence Type"
 msgid "Ticket: Types"
-msgstr "Lizenztyp"
+msgstr "Ticket: Typen"
 
 msgid "Ticket unlocked."
-msgstr ""
+msgstr "Ticket entsperrt."
 
 msgid "Title"
 msgstr "Titel"
@@ -1987,8 +1961,6 @@ msgstr "Titel"
 msgid "To"
 msgstr "An"
 
-#, fuzzy
-#| msgid "to article"
 msgid "to Article"
 msgstr "zum Artikel"
 
@@ -1998,18 +1970,14 @@ msgstr "ToDo / Bearbeitung erforderlich"
 msgid "to version"
 msgstr "zur Version"
 
-#, fuzzy
-#| msgid "to version"
 msgid "to Version"
 msgstr "zur Version"
 
 msgid "Translation"
 msgstr "Übersetzung"
 
-#, fuzzy
-#| msgid "Translation"
 msgid "Translation:"
-msgstr "Übersetzung"
+msgstr "Übersetzung:"
 
 #, fuzzy
 #| msgid "Translation"
@@ -2019,21 +1987,15 @@ msgstr "Übersetzung"
 msgid "Translations"
 msgstr "Übersetzungen"
 
-#, fuzzy
-#| msgid "Role successfully created."
 msgid "Translations successfully removed."
-msgstr "Rolle wurde erfolgreich angelegt."
+msgstr "Übersetzungen wurde erfolgreich entfernt."
 
-#, fuzzy
-#| msgid "Role successfully created."
 msgid "Translation successfully created."
-msgstr "Rolle wurde erfolgreich angelegt."
+msgstr "Übersetzung wurde erfolgreich angelegt."
 
 msgid "Type"
 msgstr "Typ"
 
-#, fuzzy
-#| msgid "Core Data"
 msgid "Type Data"
 msgstr "Stammdaten"
 
@@ -2043,54 +2005,38 @@ msgstr "Typ Informationen"
 msgid "Types"
 msgstr "Typen"
 
-#, fuzzy
-#| msgid "Role successfully created."
 msgid "Types successfully removed."
-msgstr "Rolle wurde erfolgreich angelegt."
+msgstr "Typen wurde erfolgreich entfernt."
 
-#, fuzzy
-#| msgid "Role successfully created."
 msgid "Type successfully created."
-msgstr "Rolle wurde erfolgreich angelegt."
+msgstr "Typ wurde erfolgreich angelegt."
 
 msgid "unequal"
-msgstr ""
+msgstr "ungleich"
 
 msgid "Unknown properties (will be ignored):"
-msgstr ""
+msgstr "Unbekannte Eigenschaften (werden ignoriert):"
 
-#, fuzzy
-#| msgid "Unlocked"
 msgid "Unlock"
 msgstr "Freigeben"
 
-#, fuzzy
-#| msgid "Unlocked"
 msgid "unlocked"
 msgstr "Freigeben"
 
-#, fuzzy
-#| msgid "Unlocked Tickets"
 msgid "Unlock Ticket ..."
-msgstr "Freie Tickets"
+msgstr "Tickets entsperren..."
 
 msgid "Unread Articles"
 msgstr "Ungelesene Artikel"
 
-#, fuzzy
-#| msgid "watched"
 msgid "Unwatch"
-msgstr "beobachtet"
+msgstr "Nicht beobachten"
 
-#, fuzzy
-#| msgid "Watched Tickets"
 msgid "Unwatch Ticket ..."
-msgstr "Beobachtete Tickets"
+msgstr "Ticket nicht mehr beobachten..."
 
-#, fuzzy
-#| msgid "Update time"
 msgid "Update"
-msgstr "Aktualisierungszeit"
+msgstr "Aktualisierung"
 
 #, fuzzy
 #| msgid "Update time"
@@ -2151,7 +2097,7 @@ msgid "Update Type"
 msgstr "Statustyp"
 
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 msgid "User"
 msgstr "Benutzer"
@@ -2159,10 +2105,8 @@ msgstr "Benutzer"
 msgid "User Management"
 msgstr "Nutzerverwaltung"
 
-#, fuzzy
-#| msgid "User Management: Roles"
 msgid "User Management: Agents"
-msgstr "Nutzerverwaltung: Rollen"
+msgstr "Nutzerverwaltung: Agenten"
 
 msgid "User Management: Roles"
 msgstr "Nutzerverwaltung: Rollen"
@@ -2171,7 +2115,7 @@ msgid "User name"
 msgstr "Benutzername"
 
 msgid "Validation error"
-msgstr ""
+msgstr "Validierungsfehler"
 
 msgid "Validity"
 msgstr "Gültigkeit"
@@ -2188,20 +2132,14 @@ msgstr "Sichtbarkeit"
 msgid "Visible in customer portal"
 msgstr "Sichtbar in Kundenportal"
 
-#, fuzzy
-#| msgid "Notes"
 msgid "Votes"
-msgstr "Notizen"
+msgstr "Bewertungen"
 
-#, fuzzy
-#| msgid "pending until"
 msgid "Wait until"
 msgstr "Warten bis"
 
-#, fuzzy
-#| msgid "watched"
 msgid "Watch"
-msgstr "beobachtet"
+msgstr "Beobachten"
 
 msgid "Watched Tickets"
 msgstr "Beobachtete Tickets"
@@ -2212,23 +2150,23 @@ msgid "Watch Ticket ..."
 msgstr "Beobachtete Tickets"
 
 msgid "We are working on this functionality."
-msgstr ""
+msgstr "Funktionalität ist in Arbeit."
 
 msgid "Welcome to KIX"
-msgstr ""
+msgstr "Willkommen bei KIX"
 
-#, fuzzy
-#| msgid "Role successfully created."
 msgid "You have successfully logged out."
-msgstr "Rolle wurde erfolgreich angelegt."
+msgstr "Sie haben sich erfolgreich abgemeldet."
 
 msgid ""
 "You may attach images to this config item. Possible file types are *.png, *."
 "jpg, *.gif, *.bmp."
 msgstr ""
+"Möglichkeit der Anlage von Bilddateien für das Config Item. Erlaubte "
+"Dateiformate sind: *.png, *.jpg, *.gif, *.bmp."
 
 msgid "Your rating"
-msgstr ""
+msgstr "Ihre Bewertung"
 
 msgid "ZIP"
 msgstr "PLZ"
