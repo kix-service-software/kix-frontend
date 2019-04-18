@@ -3,7 +3,7 @@ import {
     ContextConfiguration, KIXObjectType,
     FormContext, SearchForm, WidgetSize, ConfiguredWidget, WidgetConfiguration
 } from '../../core/model';
-import { FAQArticleSearchContext, FAQArticleSearchContextConfiguration } from '../../core/browser/faq';
+import { FAQArticleSearchContext } from '../../core/browser/faq';
 import { FAQArticleProperty } from '../../core/model/kix/faq';
 import { ConfigurationService } from '../../core/services';
 import { SearchProperty } from '../../core/browser';
@@ -23,8 +23,9 @@ export class ModuleExtension implements IConfigurationExtension {
         ));
         const sidebarWidgets = [helpWidget];
         const sidebars = ['20180919-help-widget'];
-        return new FAQArticleSearchContextConfiguration(
-            FAQArticleSearchContext.CONTEXT_ID, [], sidebars, sidebarWidgets, [], []
+        return new ContextConfiguration(
+            FAQArticleSearchContext.CONTEXT_ID,
+            sidebars, sidebarWidgets
         );
     }
 

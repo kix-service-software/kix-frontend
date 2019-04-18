@@ -1,6 +1,8 @@
 import { IConfigurationExtension } from '../../../core/extensions';
-import { ContextConfiguration, WidgetConfiguration, ConfiguredWidget, WidgetSize } from '../../../core/model';
-import { TicketStateDetailsContextConfiguration, TicketStateDetailsContext } from '../../../core/browser/ticket';
+import {
+    ContextConfiguration, WidgetConfiguration, ConfiguredWidget, WidgetSize
+} from '../../../core/model';
+import { TicketStateDetailsContext } from '../../../core/browser/ticket';
 
 export class Extension implements IConfigurationExtension {
 
@@ -20,7 +22,7 @@ export class Extension implements IConfigurationExtension {
             ['ticket-admin-state-textmodules-edit'], null, false, true, WidgetSize.BOTH, null, false
         ));
 
-        return new TicketStateDetailsContextConfiguration(
+        return new ContextConfiguration(
             TicketStateDetailsContext.CONTEXT_ID, [], [], [], [],
             ['ticket-state-assigned-textmodules'], [textmodulesWidget],
             ['ticket-state-details-widget'], [ticketStateDetailsWidget],

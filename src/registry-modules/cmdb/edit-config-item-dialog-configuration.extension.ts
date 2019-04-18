@@ -1,10 +1,9 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import { ContextConfiguration, KIXObjectType, ConfigItemClass, KIXObjectLoadingOptions } from '../../core/model';
 import {
-    EditConfigItemDialogContext, EditConfigItemDialogContextConfiguration, ConfigItemFormFactory
+    EditConfigItemDialogContext, ConfigItemFormFactory
 } from '../../core/browser/cmdb';
 import { ConfigurationService, KIXObjectServiceRegistry } from '../../core/services';
-import { ClientStorageService } from '../../core/browser';
 
 export class EditConfigItemDialogModuleExtension implements IConfigurationExtension {
 
@@ -13,7 +12,7 @@ export class EditConfigItemDialogModuleExtension implements IConfigurationExtens
     }
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-        return new EditConfigItemDialogContextConfiguration(this.getModuleId());
+        return new ContextConfiguration(this.getModuleId());
     }
 
     public async createFormDefinitions(overwrite: boolean): Promise<void> {

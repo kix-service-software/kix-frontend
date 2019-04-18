@@ -1,11 +1,11 @@
 import { IConfigurationExtension } from '../../core/extensions';
-import { TicketSearchContextConfiguration, TicketSearchContext } from '../../core/browser/ticket';
 import {
     ContextConfiguration, KIXObjectType, TicketProperty, FormContext, SearchForm,
     ConfiguredWidget, WidgetConfiguration, WidgetSize
 } from '../../core/model';
 import { ConfigurationService } from '../../core/services';
 import { SearchProperty } from '../../core/browser';
+import { TicketSearchContext } from '../../core/browser/ticket';
 
 export class ModuleExtension implements IConfigurationExtension {
 
@@ -22,8 +22,8 @@ export class ModuleExtension implements IConfigurationExtension {
         ));
         const sidebarWidgets = [helpWidget];
         const sidebars = ['20180919-help-widget'];
-        return new TicketSearchContextConfiguration(
-            TicketSearchContext.CONTEXT_ID, [], sidebars, sidebarWidgets, [], []
+        return new ContextConfiguration(
+            TicketSearchContext.CONTEXT_ID, sidebars, sidebarWidgets
         );
     }
 

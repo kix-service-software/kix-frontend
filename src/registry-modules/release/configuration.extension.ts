@@ -1,6 +1,6 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import { ContextConfiguration } from '../../core/model';
-import { ReleaseContextConfiguration, ReleaseContext } from '../../core/browser/release';
+import { ReleaseContext } from '../../core/browser/release';
 
 export class DashboardModuleFactoryExtension implements IConfigurationExtension {
 
@@ -13,15 +13,13 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
         const content: string[] = [];
         const contentWidgets = [];
 
-        return new ReleaseContextConfiguration(
+        return new ContextConfiguration(
             this.getModuleId(),
-            [],
-            [],
-            [],
-            [],
-            content,
-            contentWidgets,
-            [],
+            [], [],
+            [], [],
+            [], [],
+            [], [],
+            content, contentWidgets
         );
     }
 

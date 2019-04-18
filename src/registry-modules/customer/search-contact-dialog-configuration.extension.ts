@@ -3,7 +3,7 @@ import {
     ContextConfiguration, KIXObjectType,
     FormContext, SearchForm, ContactProperty, ConfiguredWidget, WidgetConfiguration, WidgetSize
 } from '../../core/model';
-import { ContactSearchContext, ContactSearchContextConfiguration } from '../../core/browser/contact';
+import { ContactSearchContext } from '../../core/browser/contact';
 import { ConfigurationService } from '../../core/services';
 import { SearchProperty } from '../../core/browser';
 
@@ -22,8 +22,8 @@ export class ModuleExtension implements IConfigurationExtension {
         ));
         const sidebarWidgets = [helpWidget];
         const sidebars = ['20180919-help-widget'];
-        return new ContactSearchContextConfiguration(
-            ContactSearchContext.CONTEXT_ID, [], sidebars, sidebarWidgets, [], []
+        return new ContextConfiguration(
+            ContactSearchContext.CONTEXT_ID, sidebars, sidebarWidgets
         );
     }
 

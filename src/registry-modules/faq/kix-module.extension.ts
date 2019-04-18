@@ -9,7 +9,6 @@ class Extension implements IKIXModuleExtension {
     public tags: Array<[string, string]> = [
         ['faq-module-component', 'faq/faq-module-component'],
         ['faq', 'faq/faq-module'],
-        ['faq-details', 'faq/faq-details'],
         ['faq-vote-selector', 'faq/faq-vote-selector'],
         ['new-faq-article-dialog', 'faq/dialogs/new-faq-article-dialog'],
         ['edit-faq-article-dialog', 'faq/dialogs/edit-faq-article-dialog'],

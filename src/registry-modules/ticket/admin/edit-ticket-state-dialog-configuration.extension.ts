@@ -1,5 +1,5 @@
 import { IConfigurationExtension } from '../../../core/extensions';
-import { EditTicketStateDialogContext, EditTicketStateDialogContextConfiguration } from '../../../core/browser/ticket';
+import { EditTicketStateDialogContext } from '../../../core/browser/ticket';
 import {
     ContextConfiguration, ConfiguredWidget, FormField, KIXObjectType, Form,
     FormContext, FormFieldValue, TicketStateProperty, FormFieldOption, ObjectReferenceOptions
@@ -18,7 +18,7 @@ export class Extension implements IConfigurationExtension {
         const sidebars = [];
         const sidebarWidgets: Array<ConfiguredWidget<any>> = [];
 
-        return new EditTicketStateDialogContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
+        return new ContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
     }
 
     public async createFormDefinitions(overwrite: boolean): Promise<void> {

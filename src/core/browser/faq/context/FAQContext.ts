@@ -1,15 +1,13 @@
 import {
-    ConfiguredWidget, Context, WidgetType, WidgetConfiguration,
-    KIXObjectType, KIXObjectLoadingOptions, FilterCriteria, FilterType, FilterDataType
+    Context, KIXObjectType, KIXObjectLoadingOptions, FilterCriteria, FilterType, FilterDataType
 } from "../../../model";
-import { FAQContextConfiguration } from "./FAQContextConfiguration";
 import { FAQCategory, FAQArticleProperty } from "../../../model/kix/faq";
 import { EventService } from "../../event";
 import { KIXObjectService } from "../../kix";
 import { SearchOperator } from "../../SearchOperator";
 import { ApplicationEvent } from "../../application";
 
-export class FAQContext extends Context<FAQContextConfiguration> {
+export class FAQContext extends Context {
 
     public static CONTEXT_ID: string = 'faq';
 
@@ -21,32 +19,6 @@ export class FAQContext extends Context<FAQContextConfiguration> {
 
     public async getDisplayText(): Promise<string> {
         return 'FAQ Dashboard';
-    }
-
-    public getContent(show: boolean = false): ConfiguredWidget[] {
-        let content = this.configuration.contentWidgets;
-
-        if (show) {
-            content = content.filter(
-                (c) => this.configuration.content.findIndex((cid) => c.instanceId === cid) !== -1
-            );
-        }
-
-        return content;
-    }
-
-    protected getSpecificWidgetConfiguration<WS = any>(instanceId: string): WidgetConfiguration<WS> {
-        const widget = this.configuration.contentWidgets.find((cw) => cw.instanceId === instanceId);
-        return widget ? widget.configuration : undefined;
-    }
-
-    protected getSpecificWidgetType(instanceId: string): WidgetType {
-        let widgetType: WidgetType;
-
-        const contentWidget = this.configuration.contentWidgets.find((lw) => lw.instanceId === instanceId);
-        widgetType = contentWidget ? WidgetType.CONTENT : undefined;
-
-        return widgetType;
     }
 
     public async setFAQCategory(faqCategory: FAQCategory): Promise<void> {

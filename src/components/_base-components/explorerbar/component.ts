@@ -20,7 +20,7 @@ class Component {
 
     public onMount(): void {
         ContextService.getInstance().registerListener({
-            contextChanged: (contextId: string, context: Context<any>, type: ContextType) => {
+            contextChanged: (contextId: string, context: Context, type: ContextType) => {
                 if (type === this.state.contextType) {
                     this.setContext(context);
                 }
@@ -29,7 +29,7 @@ class Component {
         this.setContext(ContextService.getInstance().getActiveContext(this.state.contextType));
     }
 
-    private setContext(context: Context<any>): void {
+    private setContext(context: Context): void {
         if (context) {
             this.state.isExplorerBarExpanded = context.explorerBarExpanded;
             this.state.explorer = context.getExplorer() || [];

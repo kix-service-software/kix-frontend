@@ -168,7 +168,7 @@ class Component extends AbstractMarkoComponent {
         const translationDetailsContext = new ContextDescriptor(
             TranslationDetailsContext.CONTEXT_ID, [KIXObjectType.TRANSLATION],
             ContextType.MAIN, ContextMode.DETAILS,
-            false, 'i18n-translation-details', ['translations'], TranslationDetailsContext
+            false, 'object-details-page', ['translations'], TranslationDetailsContext
         );
         ContextService.getInstance().registerContext(translationDetailsContext);
     }

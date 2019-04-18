@@ -43,7 +43,7 @@ class Component extends AbstractMarkoComponent {
     private registerContexts(): void {
         const customerDetailsContext = new ContextDescriptor(
             ContactDetailsContext.CONTEXT_ID, [KIXObjectType.CONTACT], ContextType.MAIN, ContextMode.DETAILS,
-            true, 'contact-details', ['contacts'], ContactDetailsContext
+            true, 'object-details-page', ['contacts'], ContactDetailsContext
         );
         ContextService.getInstance().registerContext(customerDetailsContext);
 

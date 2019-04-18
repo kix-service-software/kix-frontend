@@ -1,11 +1,8 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    WidgetConfiguration, ContextConfiguration, ConfiguredWidget, WidgetSize, TranslationLanguageProperty, KIXObjectType,
+    WidgetConfiguration, ConfiguredWidget, WidgetSize, ContextConfiguration,
 } from '../../core/model/';
-import { TableConfiguration, TableHeaderHeight, TableRowHeight, DefaultColumnConfiguration } from '../../core/browser';
-import {
-    TranslationDetailsContextConfiguration, TranslationDetailsContext
-} from '../../core/browser/i18n/admin/context';
+import { TranslationDetailsContext } from '../../core/browser/i18n/admin/context';
 
 export class Extension implements IConfigurationExtension {
 
@@ -36,7 +33,7 @@ export class Extension implements IConfigurationExtension {
         const content = ['20190125104012-languages-list'];
         const contentWidgets = [languagesListWidget];
 
-        return new TranslationDetailsContextConfiguration(
+        return new ContextConfiguration(
             this.getModuleId(),
             [], [],
             [], [],

@@ -1,10 +1,8 @@
 import { IConfigurationExtension } from '../../../core/extensions';
-import {
-    NewTicketPriorityDialogContext, NewTicketPriorityDialogContextConfiguration
-} from '../../../core/browser/ticket';
+import { NewTicketPriorityDialogContext } from '../../../core/browser/ticket';
 import {
     ConfiguredWidget, FormField, KIXObjectType, Form,
-    FormContext, FormFieldValue, TicketPriorityProperty
+    FormContext, FormFieldValue, TicketPriorityProperty, ContextConfiguration
 } from '../../../core/model';
 import { FormGroup } from '../../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../../core/services';
@@ -15,12 +13,12 @@ export class Extension implements IConfigurationExtension {
         return NewTicketPriorityDialogContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<NewTicketPriorityDialogContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
 
         const sidebars = [];
         const sidebarWidgets: Array<ConfiguredWidget<any>> = [];
 
-        return new NewTicketPriorityDialogContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
+        return new ContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
     }
 
     public async createFormDefinitions(overwrite: boolean): Promise<void> {

@@ -1,8 +1,7 @@
 import { Context } from "../../../../model/components/context/Context";
-import { WidgetConfiguration, WidgetType, ContextDescriptor } from "../../../../model";
-import { NewUserRoleDialogContextConfiguration } from "./NewUserRoleDialogContextConfiguration";
+import { ContextDescriptor, ContextConfiguration } from "../../../../model";
 
-export class NewUserRoleDialogContext extends Context<NewUserRoleDialogContextConfiguration> {
+export class NewUserRoleDialogContext extends Context {
 
     public static CONTEXT_ID: string = 'new-user-role-dialog-context';
     public formListenerId: string;
@@ -10,17 +9,9 @@ export class NewUserRoleDialogContext extends Context<NewUserRoleDialogContextCo
     public constructor(
         descriptor: ContextDescriptor,
         objectId: string | number = null,
-        configuration: NewUserRoleDialogContextConfiguration = null
+        configuration: ContextConfiguration = null
     ) {
         super(descriptor, objectId, configuration);
     }
 
-
-    protected getSpecificWidgetConfiguration<WS = any>(instanceId: string): WidgetConfiguration<WS> {
-        return undefined;
-    }
-
-    protected getSpecificWidgetType(instanceId: string): WidgetType {
-        return undefined;
-    }
 }

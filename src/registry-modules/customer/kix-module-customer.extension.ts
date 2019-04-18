@@ -10,7 +10,6 @@ class Extension implements IKIXModuleExtension {
         ['customer-module-component', 'customer/customer-module-component'],
         ['customer-module-component', 'customer/customer-module-component'],
         ['customers', 'customer/customer-module'],
-        ['customer-details', 'customer/customer-details'],
         ['customer-info-widget', 'customer/widgets/customer-info-widget'],
         ['customer-assigned-contacts-widget', 'customer/widgets/customer-assigned-contacts-widget'],
         ['customer-assigned-tickets-widget', 'customer/widgets/customer-assigned-tickets-widget'],

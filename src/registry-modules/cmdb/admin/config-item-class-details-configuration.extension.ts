@@ -4,7 +4,6 @@ import {
     KIXObjectType, PermissionProperty, SortOrder, ConfigItemClassDefinitionProperty
 } from '../../../core/model';
 import { TicketTypeDetailsContext } from '../../../core/browser/ticket';
-import { ConfigItemClassDetailsContextConfiguration } from '../../../core/browser/cmdb';
 import { TableConfiguration, TableHeaderHeight, TableRowHeight, ToggleOptions } from '../../../core/browser';
 
 export class Extension implements IConfigurationExtension {
@@ -68,7 +67,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        return new ConfigItemClassDetailsContextConfiguration(
+        return new ContextConfiguration(
             TicketTypeDetailsContext.CONTEXT_ID, [], [], [], [],
             ['ci-class-permissions-widget', 'ci-class-permissions-dependent-objects-widget'],
             [ciClassObjectPermissionsWidget, ciClassDependentObjectPermissionsWidget],

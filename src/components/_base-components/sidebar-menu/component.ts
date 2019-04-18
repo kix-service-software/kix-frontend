@@ -20,7 +20,7 @@ class SidebarMenuComponent {
 
     public onMount(): void {
         ContextService.getInstance().registerListener({
-            contextChanged: (contextId: string, context: Context<any>, type: ContextType) => {
+            contextChanged: (contextId: string, context: Context, type: ContextType) => {
                 if (type === this.state.contextType) {
                     this.setContext(context);
                 }
@@ -30,7 +30,7 @@ class SidebarMenuComponent {
         this.setContext(ContextService.getInstance().getActiveContext(this.state.contextType));
     }
 
-    private setContext(context: Context<any>): void {
+    private setContext(context: Context): void {
         if (context) {
             context.registerListener(this.contextListernerId, {
                 sidebarToggled: () => {
@@ -46,7 +46,7 @@ class SidebarMenuComponent {
         this.setSidebarMenu(context);
     }
 
-    private async setSidebarMenu(context: Context<any>): Promise<void> {
+    private async setSidebarMenu(context: Context): Promise<void> {
         if (context) {
             this.state.sidebars = Array.from(context ? (context.getSidebars() || []) : []);
 

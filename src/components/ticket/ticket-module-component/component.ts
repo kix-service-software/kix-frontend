@@ -124,7 +124,7 @@ class Component extends AbstractMarkoComponent {
         const ticketDetailsContextDescriptor = new ContextDescriptor(
             TicketDetailsContext.CONTEXT_ID, [KIXObjectType.TICKET, KIXObjectType.ARTICLE],
             ContextType.MAIN, ContextMode.DETAILS,
-            true, 'ticket-details', ['tickets'], TicketDetailsContext
+            true, 'object-details-page', ['tickets'], TicketDetailsContext
         );
         ContextService.getInstance().registerContext(ticketDetailsContextDescriptor);
 
@@ -163,7 +163,7 @@ class Component extends AbstractMarkoComponent {
         const ticketTypeDetailsContextDescriptor = new ContextDescriptor(
             TicketTypeDetailsContext.CONTEXT_ID, [KIXObjectType.TICKET_TYPE],
             ContextType.MAIN, ContextMode.DETAILS,
-            true, 'ticket-type-details', ['tickettypes'], TicketTypeDetailsContext
+            true, 'object-details-page', ['tickettypes'], TicketTypeDetailsContext
         );
         ContextService.getInstance().registerContext(ticketTypeDetailsContextDescriptor);
 
@@ -184,7 +184,7 @@ class Component extends AbstractMarkoComponent {
         const ticketStateDetailsContextDescriptor = new ContextDescriptor(
             TicketStateDetailsContext.CONTEXT_ID, [KIXObjectType.TICKET_STATE],
             ContextType.MAIN, ContextMode.DETAILS,
-            true, 'ticket-state-details', ['ticketstates'], TicketStateDetailsContext
+            true, 'object-details-page', ['ticketstates'], TicketStateDetailsContext
         );
         ContextService.getInstance().registerContext(ticketStateDetailsContextDescriptor);
 
@@ -205,7 +205,7 @@ class Component extends AbstractMarkoComponent {
         const ticketPriorityDetailsContextDescriptor = new ContextDescriptor(
             TicketPriorityDetailsContext.CONTEXT_ID, [KIXObjectType.TICKET_PRIORITY],
             ContextType.MAIN, ContextMode.DETAILS,
-            true, 'ticket-priority-details', ['priorities'], TicketPriorityDetailsContext
+            true, 'object-details-page', ['priorities'], TicketPriorityDetailsContext
         );
         ContextService.getInstance().registerContext(ticketPriorityDetailsContextDescriptor);
 

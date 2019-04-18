@@ -9,7 +9,10 @@ export class CompareConfigItemVersionDialogContextConfiguration extends ContextC
         public sidebarWidgets: ConfiguredWidget[],
         public compareWidget: ConfiguredWidget
     ) {
-        super(CompareConfigItemVersionDialogContext.CONTEXT_ID, [], sidebars, sidebarWidgets, [], []);
+        super(
+            CompareConfigItemVersionDialogContext.CONTEXT_ID,
+            sidebars, sidebarWidgets
+        );
     }
 
 }

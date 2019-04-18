@@ -3,7 +3,7 @@ import {
     ContextConfiguration, KIXObjectType,
     FormContext, SearchForm, CustomerProperty, WidgetSize, ConfiguredWidget, WidgetConfiguration
 } from '../../core/model';
-import { CustomerSearchContext, CustomerSearchContextConfiguration } from '../../core/browser/customer';
+import { CustomerSearchContext } from '../../core/browser/customer';
 import { ConfigurationService } from '../../core/services';
 import { SearchProperty } from '../../core/browser';
 
@@ -22,8 +22,8 @@ export class ModuleExtension implements IConfigurationExtension {
         ));
         const sidebarWidgets = [helpWidget];
         const sidebars = ['20180919-help-widget'];
-        return new CustomerSearchContextConfiguration(
-            CustomerSearchContext.CONTEXT_ID, [], sidebars, sidebarWidgets, [], []
+        return new ContextConfiguration(
+            CustomerSearchContext.CONTEXT_ID, sidebars, sidebarWidgets
         );
     }
 

@@ -1,23 +1,18 @@
-import { TableConfiguration, ITable } from "../../../../core/browser";
-import { Customer, WidgetComponentState, AbstractAction, Ticket, WidgetConfiguration } from "../../../../core/model";
+import { ITable } from "../../../../core/browser";
+import { Customer, WidgetComponentState, AbstractAction } from "../../../../core/model";
 
 export class ComponentState extends WidgetComponentState<any> {
 
     public constructor(
         public customer: Customer = null,
-        public escalatedTicketsConfig: WidgetConfiguration<TableConfiguration> = null,
         public escalatedTicketsTable: ITable = null,
         public escalatedFilterValue: string = null,
-        public reminderTicketsConfig: WidgetConfiguration<TableConfiguration> = null,
         public reminderTicketsTable: ITable = null,
         public reminderFilterValue: string = null,
-        public newTicketsConfig: WidgetConfiguration<TableConfiguration> = null,
         public newTicketsTable: ITable = null,
         public newFilterValue: string = null,
-        public openTicketsConfig: WidgetConfiguration<TableConfiguration> = null,
         public openTicketsTable: ITable = null,
         public openFilterValue: string = null,
-        public pendingTicketsConfig: WidgetConfiguration<TableConfiguration> = null,
         public pendingTicketsTable: ITable = null,
         public pendingFilterValue: string = null,
         public actions: AbstractAction[] = [],

@@ -1,7 +1,5 @@
 import { IConfigurationExtension } from '../../core/extensions';
-import {
-    EditTicketDialogContextConfiguration, EditTicketDialogContext, PendingTimeFormValue
-} from '../../core/browser/ticket';
+import { EditTicketDialogContext, PendingTimeFormValue } from '../../core/browser/ticket';
 import {
     ContextConfiguration, FormField, TicketProperty, ArticleProperty,
     Form, KIXObjectType, FormContext, ConfiguredWidget, WidgetConfiguration,
@@ -49,7 +47,7 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
         const sidebars = ['20180524110915', '20180524110920', '20180919-help-widget'];
         const sidebarWidgets: Array<ConfiguredWidget<any>> = [customerInfoSidebar, contactInfoSidebar, helpWidget];
 
-        return new EditTicketDialogContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
+        return new ContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
     }
 
     // tslint:disable:max-line-length

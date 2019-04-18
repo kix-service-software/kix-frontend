@@ -1,7 +1,5 @@
 import { IConfigurationExtension } from '../../core/extensions';
-import {
-    EditTranslationDialogContext, EditTranslationDialogContextConfiguration
-} from '../../core/browser/i18n/admin/context';
+import { EditTranslationDialogContext } from '../../core/browser/i18n/admin/context';
 import {
     ContextConfiguration, ConfiguredWidget, FormField, TranslationProperty,
     SortUtil, Form, KIXObjectType, FormContext, SysConfigKey, SysConfigItem
@@ -20,7 +18,7 @@ export class Extension implements IConfigurationExtension {
         const sidebars = [];
         const sidebarWidgets: Array<ConfiguredWidget<any>> = [];
 
-        return new EditTranslationDialogContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
+        return new ContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
     }
 
     public async createFormDefinitions(overwrite: boolean): Promise<void> {

@@ -2,11 +2,11 @@ import { IConfigurationExtension } from '../../../core/extensions';
 import {
     ConfiguredWidget, FormField, KIXObjectType, Form,
     FormContext, FormFieldValue, FormFieldOption, UserProperty,
-    FormFieldOptions, InputFieldTypes, ObjectReferenceOptions
+    FormFieldOptions, InputFieldTypes, ObjectReferenceOptions, ContextConfiguration
 } from '../../../core/model';
 import { FormGroup } from '../../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../../core/services';
-import { EditUserDialogContextConfiguration, EditUserDialogContext } from '../../../core/browser/user';
+import { EditUserDialogContext } from '../../../core/browser/user';
 
 export class Extension implements IConfigurationExtension {
 
@@ -14,12 +14,12 @@ export class Extension implements IConfigurationExtension {
         return EditUserDialogContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<EditUserDialogContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
 
         const sidebars = [];
         const sidebarWidgets: Array<ConfiguredWidget<any>> = [];
 
-        return new EditUserDialogContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
+        return new ContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
     }
 
     public async createFormDefinitions(overwrite: boolean): Promise<void> {

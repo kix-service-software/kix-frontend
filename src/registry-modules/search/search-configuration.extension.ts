@@ -2,7 +2,7 @@ import { IConfigurationExtension } from '../../core/extensions';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetSize, WidgetConfiguration
 } from '../../core/model';
-import { SearchContext, SearchContextConfiguration } from '../../core/browser/search/context';
+import { SearchContext } from '../../core/browser/search/context';
 
 export class ModuleFactoryExtension implements IConfigurationExtension {
 
@@ -33,15 +33,13 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
         const content: string[] = ['201800709-search-result-list-widget'];
         const contentWidgets = [searchResultListWidget];
 
-        return new SearchContextConfiguration(
+        return new ContextConfiguration(
             this.getModuleId(),
-            explorer,
-            [],
-            [],
-            explorerWidgets,
-            content,
-            contentWidgets,
-            []
+            [], [],
+            explorer, explorerWidgets,
+            [], [],
+            [], [],
+            content, contentWidgets
         );
     }
 

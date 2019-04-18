@@ -2,11 +2,11 @@ import { IConfigurationExtension } from '../../../core/extensions';
 import {
     ConfiguredWidget, FormField, KIXObjectType, Form,
     FormContext, FormFieldValue, RoleProperty, FormFieldOption, ObjectReferenceOptions, KIXObjectLoadingOptions,
-    FilterCriteria, UserProperty, FilterDataType, FilterType
+    FilterCriteria, UserProperty, FilterDataType, FilterType, ContextConfiguration
 } from '../../../core/model';
 import { FormGroup } from '../../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../../core/services';
-import { NewUserRoleDialogContext, NewUserRoleDialogContextConfiguration } from '../../../core/browser/user';
+import { NewUserRoleDialogContext } from '../../../core/browser/user';
 import { SearchOperator } from '../../../core/browser';
 
 export class Extension implements IConfigurationExtension {
@@ -15,12 +15,12 @@ export class Extension implements IConfigurationExtension {
         return NewUserRoleDialogContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<NewUserRoleDialogContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
 
         const sidebars = [];
         const sidebarWidgets: Array<ConfiguredWidget<any>> = [];
 
-        return new NewUserRoleDialogContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
+        return new ContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
     }
 
     public async createFormDefinitions(overwrite: boolean): Promise<void> {

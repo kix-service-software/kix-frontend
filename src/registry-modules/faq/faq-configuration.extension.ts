@@ -3,7 +3,7 @@ import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize,
     FormField, Form, FormContext, KIXObjectType, TableWidgetSettings
 } from '../../core/model';
-import { FAQContext, FAQContextConfiguration } from '../../core/browser/faq';
+import { FAQContext } from '../../core/browser/faq';
 import { SearchProperty, TableConfiguration, TableHeaderHeight, TableRowHeight } from '../../core/browser';
 import { FAQArticleProperty } from '../../core/model/kix/faq';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
@@ -51,8 +51,13 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
         const sidebars = ['20180726-faq-notes'];
         const sidebarWidgets: Array<ConfiguredWidget<any>> = [notesSidebar];
 
-        return new FAQContextConfiguration(
-            this.getModuleId(), explorer, sidebars, sidebarWidgets, explorerWidgets, content, contentWidgets
+        return new ContextConfiguration(
+            this.getModuleId(),
+            sidebars, sidebarWidgets,
+            explorer, explorerWidgets,
+            [], [],
+            [], [],
+            content, contentWidgets
         );
     }
 

@@ -1,15 +1,13 @@
 import {
-    WidgetType, WidgetConfiguration, Queue, ConfiguredWidget, KIXObjectType,
-    KIXObjectLoadingOptions, FilterCriteria, FilterDataType, FilterType, TicketProperty, KIXObject
+    Queue, KIXObjectType, KIXObjectLoadingOptions, FilterCriteria, FilterDataType, FilterType, TicketProperty, KIXObject
 } from "../../../model";
-import { TicketContextConfiguration } from "./TicketContextConfiguration";
 import { Context } from '../../../model/components/context/Context';
 import { KIXObjectService } from "../../kix";
 import { SearchOperator } from "../../SearchOperator";
 import { EventService } from "../../event";
 import { ApplicationEvent } from "../../application";
 
-export class TicketContext extends Context<TicketContextConfiguration> {
+export class TicketContext extends Context {
 
     public static CONTEXT_ID: string = 'tickets';
 
@@ -21,32 +19,6 @@ export class TicketContext extends Context<TicketContextConfiguration> {
 
     public async getDisplayText(): Promise<string> {
         return 'Ticket Dashboard';
-    }
-
-    public getContent(show: boolean = false): ConfiguredWidget[] {
-        let content = this.configuration.contentWidgets;
-
-        if (show) {
-            content = content.filter(
-                (c) => this.configuration.content.findIndex((cid) => c.instanceId === cid) !== -1
-            );
-        }
-
-        return content;
-    }
-
-    protected getSpecificWidgetConfiguration<WS = any>(instanceId: string): WidgetConfiguration<WS> {
-        const widget = this.configuration.contentWidgets.find((cw) => cw.instanceId === instanceId);
-        return widget ? widget.configuration : undefined;
-    }
-
-    protected getSpecificWidgetType(instanceId: string): WidgetType {
-        let widgetType: WidgetType;
-
-        const contentWidget = this.configuration.contentWidgets.find((lw) => lw.instanceId === instanceId);
-        widgetType = contentWidget ? WidgetType.CONTENT : undefined;
-
-        return widgetType;
     }
 
     public async setQueue(queue: Queue): Promise<void> {

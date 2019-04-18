@@ -1,10 +1,8 @@
 import { IConfigurationExtension } from '../../core/extensions';
-import {
-    NewTranslationDialogContext, NewTranslationDialogContextConfiguration
-} from '../../core/browser/i18n/admin/context';
+import { NewTranslationDialogContext } from '../../core/browser/i18n/admin/context';
 import {
     ConfiguredWidget, FormField, TranslationProperty, Form, KIXObjectType, FormContext,
-    SysConfigItem, SysConfigKey, SortUtil
+    SysConfigItem, SysConfigKey, SortUtil, ContextConfiguration
 } from '../../core/model';
 import { ConfigurationService, KIXObjectServiceRegistry } from '../../core/services';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
@@ -15,12 +13,12 @@ export class Extension implements IConfigurationExtension {
         return NewTranslationDialogContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<NewTranslationDialogContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
 
         const sidebars = [];
         const sidebarWidgets: Array<ConfiguredWidget<any>> = [];
 
-        return new NewTranslationDialogContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
+        return new ContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
     }
 
     public async createFormDefinitions(overwrite: boolean): Promise<void> {

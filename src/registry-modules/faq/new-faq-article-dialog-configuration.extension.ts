@@ -4,7 +4,7 @@ import {
 import { IConfigurationExtension } from '../../core/extensions';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
 import { FAQArticleProperty } from '../../core/model/kix/faq';
-import { NewFAQArticleDialogContext, NewFAQArticleDialogContextConfiguration } from '../../core/browser/faq';
+import { NewFAQArticleDialogContext } from '../../core/browser/faq';
 import { ConfigurationService } from '../../core/services';
 
 export class Extension implements IConfigurationExtension {
@@ -14,7 +14,7 @@ export class Extension implements IConfigurationExtension {
     }
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-        return new NewFAQArticleDialogContextConfiguration();
+        return new ContextConfiguration(this.getModuleId());
     }
 
     // tslint:disable:max-line-length
