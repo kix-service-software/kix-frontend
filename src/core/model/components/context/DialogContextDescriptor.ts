@@ -17,7 +17,7 @@ export class DialogContextDescriptor extends ContextDescriptor {
         public urlPaths: string[],
         public contextClass: new (
             descriptor: DialogContextDescriptor, objectId: string | number, configuration: ContextConfiguration
-        ) => Context<ContextConfiguration>,
+        ) => Context,
         public formId: string = ''
     ) {
         super(

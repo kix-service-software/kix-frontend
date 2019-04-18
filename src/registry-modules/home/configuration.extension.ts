@@ -1,12 +1,13 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    WidgetConfiguration, ConfiguredWidget, WidgetSize, DataType, ContextConfiguration,
-    FilterCriteria, FilterDataType, FilterType, KIXObjectPropertyFilter, TableFilterCriteria, KIXObjectType, SortOrder
+    WidgetConfiguration, ConfiguredWidget, WidgetSize, DataType,
+    FilterCriteria, FilterDataType, FilterType, KIXObjectPropertyFilter,
+    TableFilterCriteria, KIXObjectType, SortOrder, ContextConfiguration
 } from '../../core/model';
 import {
     SearchOperator, ToggleOptions, TableConfiguration, DefaultColumnConfiguration
 } from '../../core/browser';
-import { HomeContextConfiguration, HomeContext } from '../../core/browser/home';
+import { HomeContext } from '../../core/browser/home';
 import { TicketProperty } from '../../core/model/';
 import { TicketChartConfiguration } from '../../core/browser/ticket';
 
@@ -190,12 +191,12 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
         const sidebars = ['20180607-home-notes'];
         const sidebarWidgets: Array<ConfiguredWidget<any>> = [notesSidebar];
 
-        return new HomeContextConfiguration(
+        return new ContextConfiguration(
             this.getModuleId(),
-            [],
-            sidebars,
-            sidebarWidgets,
-            [],
+            sidebars, sidebarWidgets,
+            [], [],
+            [], [],
+            [], [],
             content,
             contentWidgets,
             [],

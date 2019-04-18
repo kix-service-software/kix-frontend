@@ -2,9 +2,10 @@ import { IConfigurationExtension } from '../../core/extensions';
 import {
     ConfiguredWidget, WidgetConfiguration, WidgetSize, KIXObjectPropertyFilter, TableFilterCriteria,
     TicketProperty, FilterCriteria, FilterDataType, FilterType, FormField, KIXObjectType, Form,
-    FormContext, ContextConfiguration
+    FormContext,
+    ContextConfiguration
 } from '../../core/model';
-import { TicketContextConfiguration, TicketContext, TicketChartConfiguration } from '../../core/browser/ticket';
+import { TicketContext, TicketChartConfiguration } from '../../core/browser/ticket';
 import {
     ToggleOptions, TableHeaderHeight, TableRowHeight, TableConfiguration, SearchOperator, SearchProperty
 } from '../../core/browser';
@@ -180,8 +181,13 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
         ];
         const contentWidgets = [chart1, chart2, chart3, ticketListWidget];
 
-        return new TicketContextConfiguration(
-            this.getModuleId(), explorer, sidebars, sidebarWidgets, explorerWidgets, content, contentWidgets, []
+        return new ContextConfiguration(
+            this.getModuleId(),
+            sidebars, sidebarWidgets,
+            explorer, explorerWidgets,
+            [], [],
+            [], [],
+            content, contentWidgets
         );
     }
 

@@ -1,8 +1,7 @@
 import { Context } from "../../../../../model/components/context/Context";
-import { WidgetConfiguration, WidgetType, ContextDescriptor } from "../../../../../model";
-import { EditTranslationDialogContextConfiguration } from "./EditTranslationDialogContextConfiguration";
+import { ContextDescriptor, ContextConfiguration } from "../../../../../model";
 
-export class EditTranslationDialogContext extends Context<EditTranslationDialogContextConfiguration> {
+export class EditTranslationDialogContext extends Context {
 
     public static CONTEXT_ID: string = 'edit-translation-dialog-context';
     public formListenerId: string;
@@ -10,17 +9,8 @@ export class EditTranslationDialogContext extends Context<EditTranslationDialogC
     public constructor(
         descriptor: ContextDescriptor,
         objectId: string | number = null,
-        configuration: EditTranslationDialogContextConfiguration = null
+        configuration: ContextConfiguration = null
     ) {
         super(descriptor, objectId, configuration);
-    }
-
-
-    protected getSpecificWidgetConfiguration<WS = any>(instanceId: string): WidgetConfiguration<WS> {
-        return undefined;
-    }
-
-    protected getSpecificWidgetType(instanceId: string): WidgetType {
-        return undefined;
     }
 }

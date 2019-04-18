@@ -55,7 +55,7 @@ class Component {
         });
 
         ContextService.getInstance().registerListener({
-            contextChanged: (contextId: string, context: Context<any>, type: ContextType) => {
+            contextChanged: (contextId: string, context: Context, type: ContextType) => {
                 if (type === ContextType.MAIN) {
                     this.setContext(context);
                 }
@@ -124,7 +124,7 @@ class Component {
         ContextService.getInstance().registerContext(releaseContext);
     }
 
-    private setContext(context: Context<any> = ContextService.getInstance().getActiveContext()): void {
+    private setContext(context: Context = ContextService.getInstance().getActiveContext()): void {
         if (context) {
             this.state.hasExplorer = context.isExplorerBarShown();
             context.registerListener(this.contextListernerId, {

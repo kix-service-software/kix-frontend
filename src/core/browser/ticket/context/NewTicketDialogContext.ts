@@ -1,15 +1,12 @@
 import { Context } from "../../../model/components/context/Context";
 import {
-    WidgetConfiguration, WidgetType, KIXObject,
-    KIXObjectType, TicketProperty, Customer, Contact,
-    ContextDescriptor, IFormInstanceListener, FormField, FormFieldValue, FormContext
+    KIXObject, KIXObjectType, TicketProperty, Customer, Contact,
+    IFormInstanceListener, FormField, FormFieldValue, FormContext
 } from "../../../model";
-import { NewTicketDialogContextConfiguration } from "./NewTicketDialogContextConfiguration";
 import { FormService } from "../../form";
 import { KIXObjectService } from "../../kix";
 
-export class NewTicketDialogContext
-    extends Context<NewTicketDialogContextConfiguration> implements IFormInstanceListener {
+export class NewTicketDialogContext extends Context implements IFormInstanceListener {
 
     public static CONTEXT_ID: string = 'new-ticket-dialog-context';
     public formListenerId: string;
@@ -63,14 +60,6 @@ export class NewTicketDialogContext
                 }
             }
         }
-    }
-
-    protected getSpecificWidgetConfiguration<WS = any>(instanceId: string): WidgetConfiguration<WS> {
-        return undefined;
-    }
-
-    protected getSpecificWidgetType(instanceId: string): WidgetType {
-        return undefined;
     }
 
     public async getObject<O extends KIXObject>(kixObjectType: KIXObjectType): Promise<O> {

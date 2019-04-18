@@ -1,14 +1,8 @@
 import { IConfigurationExtension } from "../../core/extensions";
 import {
-    ContextConfiguration, ConfiguredWidget, WidgetConfiguration,
-    WidgetSize,
-    KIXObjectType,
-    DataType
+    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize, KIXObjectType,
 } from "../../core/model";
-import {
-    TableConfiguration, TableHeaderHeight, TableRowHeight, DefaultColumnConfiguration
-} from '../../core/browser';
-import { ConfigItemDetailsContextConfiguration, ConfigItemDetailsContext } from "../../core/browser/cmdb";
+import { ConfigItemDetailsContext } from "../../core/browser/cmdb";
 
 export class Extension implements IConfigurationExtension {
 
@@ -17,11 +11,6 @@ export class Extension implements IConfigurationExtension {
     }
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-        // Content Widgets
-        const configItemDetailsWidget = new ConfiguredWidget("config-item-details", new WidgetConfiguration(
-            "config-item-details-widget", "Translatable#Config Item Details", [], null,
-            false, true, WidgetSize.BOTH, null, false
-        ));
 
         const configItemInfoLaneTab =
             new ConfiguredWidget('config-item-info-lane',
@@ -82,8 +71,7 @@ export class Extension implements IConfigurationExtension {
             'config-item-images-widget', 'config-item-history-widget'
         ];
         const laneWidgets: Array<ConfiguredWidget<any>> = [
-            configItemDetailsWidget, configItemLinkedObjectsLane,
-            configItemGraphLane, configItemImagesLane, configItemHistoryLane
+            configItemLinkedObjectsLane, configItemGraphLane, configItemImagesLane, configItemHistoryLane
         ];
 
         const actions = ['config-item-create-action'];
@@ -102,9 +90,14 @@ export class Extension implements IConfigurationExtension {
         const content = ['config-item-version-widget'];
         const contentWidgets = [configItemVersionLane];
 
-        return new ConfigItemDetailsContextConfiguration(
-            this.getModuleId(), [], [], [], [], lanes, laneTabs, laneWidgets, laneTabWidgets,
-            actions, configItemActions, content, contentWidgets
+        return new ContextConfiguration(
+            this.getModuleId(),
+            [], [],
+            [], [],
+            lanes, laneWidgets,
+            laneTabs, laneTabWidgets,
+            content, contentWidgets,
+            actions, configItemActions,
         );
     }
 

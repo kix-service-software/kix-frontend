@@ -1,7 +1,9 @@
 import { IConfigurationExtension } from '../../../core/extensions';
-import { ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize } from '../../../core/model';
+import {
+    ConfiguredWidget, WidgetConfiguration, WidgetSize, ContextConfiguration
+} from '../../../core/model';
 import { TicketPriorityDetailsContext } from '../../../core/browser/ticket';
-import { UserDetailsContextConfiguration, UserDetailsContext } from '../../../core/browser/user';
+import { UserDetailsContext } from '../../../core/browser/user';
 
 export class Extension implements IConfigurationExtension {
 
@@ -24,8 +26,10 @@ export class Extension implements IConfigurationExtension {
             'user-assigned-roles-widget', 'Translatable#Assigned Roles', [], null, false, true, WidgetSize.BOTH
         ));
 
-        return new UserDetailsContextConfiguration(
-            TicketPriorityDetailsContext.CONTEXT_ID, [], [], [], [],
+        return new ContextConfiguration(
+            TicketPriorityDetailsContext.CONTEXT_ID,
+            [], [],
+            [], [],
             ['user-personal-settings-widget', 'user-assigned-roles-widget'],
             [personalSettingsWidget, assignedRolesWidget],
             ['user-info-widget'], [userInfoWidget],

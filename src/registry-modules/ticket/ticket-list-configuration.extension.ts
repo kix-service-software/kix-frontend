@@ -1,9 +1,9 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
     ConfiguredWidget, WidgetConfiguration, WidgetSize, FilterCriteria, FilterDataType,
-    FilterType, ContextConfiguration, KIXObjectType
+    FilterType, KIXObjectType, ContextConfiguration
 } from '../../core/model';
-import { TicketListContext, TicketListContextConfiguration } from '../../core/browser/ticket';
+import { TicketListContext } from '../../core/browser/ticket';
 import {
     ToggleOptions, TableHeaderHeight, TableRowHeight, TableConfiguration, SearchOperator
 } from '../../core/browser';
@@ -47,8 +47,13 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
         const sidebars = ['20181010-ticket-notes'];
         const sidebarWidgets: Array<ConfiguredWidget<any>> = [notesSidebar];
 
-        return new TicketListContextConfiguration(
-            this.getModuleId(), sidebars, sidebarWidgets, [], [], content, contentWidgets, []
+        return new ContextConfiguration(
+            this.getModuleId(),
+            sidebars, sidebarWidgets,
+            [], [],
+            [], [],
+            [], [],
+            content, contentWidgets
         );
     }
 

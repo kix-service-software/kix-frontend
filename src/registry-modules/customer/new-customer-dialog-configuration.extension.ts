@@ -2,9 +2,7 @@ import {
     ContextConfiguration, FormField, CustomerSourceAttributeMapping, Form, FormContext, KIXObjectType, CustomerProperty
 } from '../../core/model';
 import { IConfigurationExtension } from '../../core/extensions';
-import {
-    NewCustomerDialogContextConfiguration, NewCustomerDialogContext, CustomerLabelProvider
-} from '../../core/browser/customer';
+import { NewCustomerDialogContext, CustomerLabelProvider } from '../../core/browser/customer';
 import { CustomerService, ConfigurationService } from '../../core/services';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
 
@@ -15,7 +13,7 @@ export class NewCustomerDialogModuleExtension implements IConfigurationExtension
     }
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-        return new NewCustomerDialogContextConfiguration();
+        return new ContextConfiguration(NewCustomerDialogContext.CONTEXT_ID);
     }
 
     public async createFormDefinitions(overwrite: boolean): Promise<void> {

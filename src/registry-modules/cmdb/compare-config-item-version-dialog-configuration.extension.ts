@@ -3,8 +3,11 @@ import {
 } from "../../core/model";
 import { IConfigurationExtension } from "../../core/extensions";
 import {
-    CompareConfigItemVersionDialogContext, CompareConfigItemVersionDialogContextConfiguration
+    CompareConfigItemVersionDialogContext
 } from "../../core/browser/cmdb";
+import {
+    CompareConfigItemVersionDialogContextConfiguration
+} from "../../core/browser/cmdb/context/CompareConfigItemVersionDialogContextConfiguration";
 
 export class Extension implements IConfigurationExtension {
 

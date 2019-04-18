@@ -23,34 +23,39 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        this.contextChanged();
+        const context = await ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        this.contextChanged(null, context, ContextType.MAIN, null, null);
         ContextService.getInstance().registerListener({
             contextChanged: this.contextChanged.bind(this)
         });
     }
 
-    private async contextChanged(): Promise<void> {
-        this.context = await ContextService.getInstance().getActiveContext(ContextType.MAIN);
+    private async contextChanged(
+        contextId: string, context: Context, type: ContextType, history: boolean, oldContext: Context
+    ): Promise<void> {
+        if (type === ContextType.MAIN && context.getDescriptor().contextMode === ContextMode.DETAILS) {
+            this.context = await ContextService.getInstance().getActiveContext(ContextType.MAIN);
 
-        if (this.context.getDescriptor().contextMode !== ContextMode.DETAILS) {
-            this.state.error = 'No details context available.';
-            this.state.loading = false;
-        } else {
-            this.state.instanceId = this.context.getDescriptor().contextId;
+            if (this.context.getDescriptor().contextMode !== ContextMode.DETAILS) {
+                this.state.error = 'No details context available.';
+                this.state.loading = false;
+            } else {
+                this.state.instanceId = this.context.getDescriptor().contextId;
 
-            this.context.registerListener('object-details-component', {
-                explorerBarToggled: () => { return; },
-                filteredObjectListChanged: () => { return; },
-                objectListChanged: () => { return; },
-                sidebarToggled: () => { return; },
-                scrollInformationChanged: () => { return; },
-                objectChanged: (
-                    objectId: string, object: KIXObject, objectType: KIXObjectType, changedProperties: string[]
-                ) => {
-                    this.initWidget(this.context, object);
-                }
-            });
-            await this.initWidget(this.context);
+                this.context.registerListener('object-details-component', {
+                    explorerBarToggled: () => { return; },
+                    filteredObjectListChanged: () => { return; },
+                    objectListChanged: () => { return; },
+                    sidebarToggled: () => { return; },
+                    scrollInformationChanged: () => { return; },
+                    objectChanged: (
+                        objectId: string, object: KIXObject, objectType: KIXObjectType, changedProperties: string[]
+                    ) => {
+                        this.initWidget(this.context, object);
+                    }
+                });
+                await this.initWidget(this.context);
+            }
         }
     }
 

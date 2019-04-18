@@ -1,5 +1,5 @@
 import { IConfigurationExtension } from '../../core/extensions';
-import { CustomerContext, CustomerContextConfiguration } from '../../core/browser/customer';
+import { CustomerContext } from '../../core/browser/customer';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize, KIXObjectType
 } from '../../core/model';
@@ -56,8 +56,13 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
         const sidebars = ['20181010-customer-notes'];
         const sidebarWidgets: Array<ConfiguredWidget<any>> = [notesSidebar];
 
-        return new CustomerContextConfiguration(
-            this.getModuleId(), [], sidebars, sidebarWidgets, [], content, contentWidgets
+        return new ContextConfiguration(
+            this.getModuleId(),
+            sidebars, sidebarWidgets,
+            [], [],
+            [], [],
+            [], [],
+            content, contentWidgets
         );
     }
 

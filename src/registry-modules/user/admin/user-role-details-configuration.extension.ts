@@ -4,7 +4,7 @@ import {
     KIXObjectType, PermissionProperty, SortOrder, DataType
 } from '../../../core/model';
 import { TicketPriorityDetailsContext } from '../../../core/browser/ticket';
-import { RoleDetailsContextConfiguration, RoleDetailsContext } from '../../../core/browser/user';
+import { RoleDetailsContext } from '../../../core/browser/user';
 import { TableConfiguration, DefaultColumnConfiguration } from '../../../core/browser';
 
 export class Extension implements IConfigurationExtension {
@@ -66,8 +66,10 @@ export class Extension implements IConfigurationExtension {
             false, true, WidgetSize.BOTH, null, false
         ));
 
-        return new RoleDetailsContextConfiguration(
-            TicketPriorityDetailsContext.CONTEXT_ID, [], [], [], [],
+        return new ContextConfiguration(
+            TicketPriorityDetailsContext.CONTEXT_ID,
+            [], [],
+            [], [],
             ['user-role-assigned-permissions-widget', 'user-role-assigned-users-widget'],
             [assignedPermissionsWidget, assignedUsersWidget],
             ['user-role-info-widget'], [userRoleInfoWidget],

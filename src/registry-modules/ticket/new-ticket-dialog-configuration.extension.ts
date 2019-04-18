@@ -1,6 +1,6 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    NewTicketDialogContext, NewTicketDialogContextConfiguration, PendingTimeFormValue
+    NewTicketDialogContext, PendingTimeFormValue
 } from '../../core/browser/ticket';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetSize, WidgetConfiguration, TicketProperty,
@@ -50,7 +50,7 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
         const sidebars = ['20180524110915', '20180524110920', '20180919-help-widget'];
         const sidebarWidgets: Array<ConfiguredWidget<any>> = [customerInfoSidebar, contactInfoSidebar, helpWidget];
 
-        return new NewTicketDialogContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
+        return new ContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
     }
 
     public async createFormDefinitions(overwrite: boolean): Promise<void> {

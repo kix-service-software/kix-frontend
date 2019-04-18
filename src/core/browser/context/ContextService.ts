@@ -1,5 +1,5 @@
 import {
-    Context, ContextConfiguration, WidgetConfiguration,
+    Context, WidgetConfiguration,
     ContextType, KIXObjectType, ContextMode, ContextDescriptor, ObjectUpdatedEventData
 } from '../../model';
 import { ContextSocketClient } from './ContextSocketClient';
@@ -19,7 +19,7 @@ export class ContextService {
 
     private refreshTimout: NodeJS.Timeout;
 
-    public static getInstance<CC extends ContextConfiguration, T extends Context<CC>>(): ContextService {
+    public static getInstance(): ContextService {
         if (!ContextService.INSTANCE) {
             ContextService.INSTANCE = new ContextService();
         }

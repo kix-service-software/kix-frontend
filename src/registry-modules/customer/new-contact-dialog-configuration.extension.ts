@@ -4,9 +4,7 @@ import {
     ContactProperty, FormFieldOption, FormFieldOptions, InputFieldTypes
 } from '../../core/model';
 import { IConfigurationExtension } from '../../core/extensions';
-import {
-    NewContactDialogContextConfiguration, NewContactDialogContext, ContactLabelProvider
-} from '../../core/browser/contact';
+import { NewContactDialogContext, ContactLabelProvider } from '../../core/browser/contact';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
 import { ConfigurationService, ContactService } from '../../core/services';
 
@@ -17,7 +15,7 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
     }
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-        return new NewContactDialogContextConfiguration();
+        return new ContextConfiguration(this.getModuleId());
     }
 
     public async createFormDefinitions(overwrite: boolean): Promise<void> {

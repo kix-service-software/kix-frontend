@@ -20,7 +20,7 @@ class Component {
 
     public onMount(): void {
         ContextService.getInstance().registerListener({
-            contextChanged: (contextId: string, context: Context<any>, type: ContextType) => {
+            contextChanged: (contextId: string, context: Context, type: ContextType) => {
                 if (type === this.state.contextType) {
                     this.setContext(context);
                 }
@@ -29,7 +29,7 @@ class Component {
         this.setContext(ContextService.getInstance().getActiveContext(this.state.contextType));
     }
 
-    private setContext(context: Context<any>): void {
+    private setContext(context: Context): void {
         if (context) {
             context.registerListener(this.contextListernerId, {
                 sidebarToggled: () => {
@@ -45,7 +45,7 @@ class Component {
         this.updateSidebars(context);
     }
 
-    private updateSidebars(context: Context<any>): void {
+    private updateSidebars(context: Context): void {
         this.state.loading = true;
         this.state.sidebars = null;
 

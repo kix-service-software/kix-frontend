@@ -16,7 +16,7 @@ export class FAQDetailsContext extends Context<FAQDetailsContextConfiguration> {
 ```
 Ggf. "getDisplayText"-Methode von abstrakter Klasse "Context" überschreiben
 
-## DetailsContextConfiguration implementieren
+## ContextConfiguration implementieren
 
 Die Konfiguration bietet den Inhalt des Kontextes an. Die Konfiguration wird als JSON gespeichert und der Kontext muss Informationen aus der Konfiguration lesen/interpretieren.
 

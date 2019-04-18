@@ -1,8 +1,8 @@
 import { IConfigurationExtension } from '../../core/extensions';
-import { CustomerDetailsContextConfiguration, CustomerDetailsContext } from '../../core/browser/customer';
+import { CustomerDetailsContext } from '../../core/browser/customer';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize, ContactProperty,
-    TicketProperty, DataType, KIXObjectType
+    DataType, KIXObjectType
 } from '../../core/model';
 import { TableConfiguration, TableHeaderHeight, TableRowHeight, DefaultColumnConfiguration } from '../../core/browser';
 
@@ -73,188 +73,6 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
             false, true, WidgetSize.LARGE, null, false
         ));
 
-        const openTicketsGroup =
-            new ConfiguredWidget('customer-open-tickets-group', new WidgetConfiguration(
-                'customer-open-tickets-group', 'Translatable#Open Tickets', [],
-                new TableConfiguration(KIXObjectType.TICKET,
-                    null, null,
-                    [
-                        new DefaultColumnConfiguration(
-                            TicketProperty.PRIORITY_ID, false, true, true, true, 65, true, true, true
-                        ),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.TICKET_NUMBER, true, false, true, true, 135, true, true
-                        ),
-                        new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260, true, true),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.STATE_ID, false, true, true, true, 80, true, true, true
-                        ),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.QUEUE_ID, true, false, true, true, 100, true, true, true
-                        ),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.CUSTOMER_USER_ID, true, false, true, true, 150, true, true
-                        ),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.CHANGED, true, false, true, true, 125, true, true, false, DataType.DATE_TIME
-                        ),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.DATE_TIME
-                        )
-                    ], [
-
-                    ], null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
-                ),
-                false, true, WidgetSize.SMALL, null, false)
-            );
-
-        const escalatedTicketsGroup =
-            new ConfiguredWidget('customer-escalated-tickets-group', new WidgetConfiguration(
-                'customer-escalated-tickets-group', 'Translatable#Escalated Tickets', [], new TableConfiguration(
-                    KIXObjectType.TICKET,
-                    null, null,
-                    [
-                        new DefaultColumnConfiguration(
-                            TicketProperty.PRIORITY_ID, false, true, true, true, 65, true, true, true
-                        ),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.TICKET_NUMBER, true, false, true, true, 135, true, true
-                        ),
-                        new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260, true, true),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.STATE_ID, false, true, true, true, 80, true, true, true
-                        ),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.QUEUE_ID, true, false, true, true, 100, true, true, true
-                        ),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.CUSTOMER_USER_ID, true, false, true, true, 150, true, true
-                        ),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.ESCALATION_RESPONSE_TIME, true, false, true, true, 150, true, true
-                        ),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.ESCALATION_UPDATE_TIME, true, false, true, true, 150, true, true
-                        ),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.ESCALATION_SOLUTIONS_TIME, true, false, true, true, 150, true, true
-                        ),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.CHANGED, true, false, true, true, 125, true, true, false, DataType.DATE_TIME
-                        ),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.DATE_TIME
-                        )
-                    ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
-                ),
-                false, true, WidgetSize.SMALL, null, false)
-            );
-
-        const reminderTicketsGroup =
-            new ConfiguredWidget('customer-reminder-tickets-group', new WidgetConfiguration(
-                'customer-reminder-tickets-group', 'Translatable#Reminder Tickets', [], new TableConfiguration(
-                    KIXObjectType.TICKET,
-                    null, null,
-                    [
-                        new DefaultColumnConfiguration(
-                            TicketProperty.PRIORITY_ID, false, true, true, true, 65, true, true, true
-                        ),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.TICKET_NUMBER, true, false, true, true, 135, true, true
-                        ),
-                        new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260, true, true),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.STATE_ID, false, true, true, true, 80, true, true, true
-                        ),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.QUEUE_ID, true, false, true, true, 100, true, true, true
-                        ),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.CUSTOMER_USER_ID, true, false, true, true, 150, true, true
-                        ),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.PENDING_TIME, true, false, true, true, 150, true, true
-                        ),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.CHANGED, true, false, true, true, 125, true, true, false, DataType.DATE_TIME
-                        ),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.DATE_TIME
-                        )
-                    ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
-                ),
-                false, true, WidgetSize.SMALL, null, false)
-            );
-
-        const newTicketsGroup =
-            new ConfiguredWidget('customer-new-tickets-group', new WidgetConfiguration(
-                'customer-new-tickets-group', 'Translatable#New Tickets', [],
-                new TableConfiguration(KIXObjectType.TICKET,
-                    null, null,
-                    [
-                        new DefaultColumnConfiguration(
-                            TicketProperty.PRIORITY_ID, false, true, true, true, 65, true, true, true
-                        ),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.TICKET_NUMBER, true, false, true, true, 135, true, true
-                        ),
-                        new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260, true, true),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.STATE_ID, false, true, true, true, 80, true, true, true
-                        ),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.QUEUE_ID, true, false, true, true, 100, true, true, true
-                        ),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.CUSTOMER_USER_ID, true, false, true, true, 150, true, true
-                        ),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.CHANGED, true, false, true, true, 125, true, true, false, DataType.DATE_TIME
-                        ),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.DATE_TIME
-                        )
-                    ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
-                ),
-                false, true, WidgetSize.SMALL, null, false)
-            );
-
-        const pendingTicketsGroup =
-            new ConfiguredWidget('customer-pending-tickets-group', new WidgetConfiguration(
-                'customer-pending-tickets-group', 'Translatable#Pending Tickets', [], new TableConfiguration(
-                    KIXObjectType.TICKET,
-                    null, null,
-                    [
-                        new DefaultColumnConfiguration(
-                            TicketProperty.PRIORITY_ID, false, true, true, true, 65, true, true, true
-                        ),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.TICKET_NUMBER, true, false, true, true, 135, true, true
-                        ),
-                        new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260, true, true),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.STATE_ID, false, true, true, true, 80, true, true, true
-                        ),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.QUEUE_ID, true, false, true, true, 100, true, true, true
-                        ),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.CUSTOMER_USER_ID, true, false, true, true, 150, true, true
-                        ),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.PENDING_TIME, true, false, true, true, 150, true, true
-                        ),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.CHANGED, true, false, true, true, 125, true, true, false, DataType.DATE_TIME
-                        ),
-                        new DefaultColumnConfiguration(
-                            TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.DATE_TIME
-                        )
-                    ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
-                ),
-                false, true, WidgetSize.SMALL, null, false)
-            );
-
         const lanes = ['customer-assigned-contacts-widget', 'customer-assigned-tickets-widget'];
 
         const laneWidgets: Array<ConfiguredWidget<any>> = [
@@ -269,13 +87,14 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
             'customer-create-ci-action', 'customer-print-action'
         ];
 
-        const groups = [
-            escalatedTicketsGroup, reminderTicketsGroup, newTicketsGroup, openTicketsGroup, pendingTicketsGroup
-        ];
-
-        return new CustomerDetailsContextConfiguration(
-            this.getModuleId(), [], [], [], [], lanes, laneTabs,
-            laneWidgets, laneTabWidgets, generalActions, customerActions, groups, []
+        return new ContextConfiguration(
+            this.getModuleId(),
+            [], [],
+            [], [],
+            lanes, laneWidgets,
+            laneTabs, laneTabWidgets,
+            [], [],
+            generalActions, customerActions
         );
     }
 

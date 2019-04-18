@@ -3,9 +3,7 @@ import {
     Form, FormContext, KIXObjectType, ContactProperty
 } from "../../core/model";
 import { IConfigurationExtension } from "../../core/extensions";
-import {
-    EditContactDialogContextConfiguration, EditContactDialogContext, ContactLabelProvider
-} from "../../core/browser/contact";
+import { EditContactDialogContext, ContactLabelProvider } from "../../core/browser/contact";
 import { FormGroup } from "../../core/model/components/form/FormGroup";
 import { ConfigurationService, ContactService } from "../../core/services";
 
@@ -16,7 +14,7 @@ export class Extension implements IConfigurationExtension {
     }
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-        return new EditContactDialogContextConfiguration();
+        return new ContextConfiguration(this.getModuleId());
     }
 
     public async createFormDefinitions(overwrite: boolean): Promise<void> {

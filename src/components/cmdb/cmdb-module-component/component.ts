@@ -87,7 +87,7 @@ class Component extends AbstractMarkoComponent {
 
         const configItemDetailsContext = new ContextDescriptor(
             ConfigItemDetailsContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM], ContextType.MAIN, ContextMode.DETAILS,
-            true, 'config-item-details', ['configitems'], ConfigItemDetailsContext
+            true, 'object-details-page', ['configitems'], ConfigItemDetailsContext
         );
         ContextService.getInstance().registerContext(configItemDetailsContext);
 
@@ -115,7 +115,7 @@ class Component extends AbstractMarkoComponent {
         const configItemClassDetailsContext = new ContextDescriptor(
             ConfigItemClassDetailsContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM_CLASS],
             ContextType.MAIN, ContextMode.DETAILS,
-            true, 'config-item-class-details', ['configitemclasses'], ConfigItemClassDetailsContext
+            true, 'object-details-page', ['configitemclasses'], ConfigItemClassDetailsContext
         );
         ContextService.getInstance().registerContext(configItemClassDetailsContext);
 
@@ -126,12 +126,12 @@ class Component extends AbstractMarkoComponent {
         );
         ContextService.getInstance().registerContext(newConfigItemClassDetailsContext);
 
-        const editConfigItemClassDetailsContext = new DialogContextDescriptor(
+        const editConfigItemClassContext = new DialogContextDescriptor(
             EditConfigItemClassDialogContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM_CLASS],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
             true, 'edit-config-item-class-dialog', ['configitemclasses'], EditConfigItemClassDialogContext
         );
-        ContextService.getInstance().registerContext(editConfigItemClassDetailsContext);
+        ContextService.getInstance().registerContext(editConfigItemClassContext);
     }
 
     private registerDialogs(): void {

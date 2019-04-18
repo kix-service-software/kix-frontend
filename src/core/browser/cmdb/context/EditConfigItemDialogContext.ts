@@ -1,8 +1,7 @@
 import { Context } from "../../../model/components/context/Context";
-import { WidgetConfiguration, WidgetType, ContextDescriptor, } from "../../../model";
-import { EditConfigItemDialogContextConfiguration } from "./EditConfigItemDialogContextConfiguration";
+import { ContextDescriptor, ContextConfiguration, } from "../../../model";
 
-export class EditConfigItemDialogContext extends Context<EditConfigItemDialogContextConfiguration>  {
+export class EditConfigItemDialogContext extends Context {
 
     public static CONTEXT_ID: string = 'edit-config-item-dialog-context';
     public formListenerId: string;
@@ -10,16 +9,8 @@ export class EditConfigItemDialogContext extends Context<EditConfigItemDialogCon
     public constructor(
         descriptor: ContextDescriptor,
         objectId: string | number = null,
-        configuration: EditConfigItemDialogContextConfiguration = null
+        configuration: ContextConfiguration = null
     ) {
         super(descriptor, objectId, configuration);
-    }
-
-    protected getSpecificWidgetConfiguration<WS = any>(instanceId: string): WidgetConfiguration<WS> {
-        return undefined;
-    }
-
-    protected getSpecificWidgetType(instanceId: string): WidgetType {
-        return undefined;
     }
 }

@@ -5,9 +5,7 @@ import {
 } from '../../../core/model';
 import { IConfigurationExtension } from '../../../core/extensions';
 import { ConfigurationService } from '../../../core/services';
-import {
-    NewConfigItemClassDialogContext, NewConfigItemClassDialogContextConfiguration
-} from '../../../core/browser/cmdb';
+import { NewConfigItemClassDialogContext } from '../../../core/browser/cmdb';
 import { FormGroup } from '../../../core/model/components/form/FormGroup';
 
 export class Extension implements IConfigurationExtension {
@@ -20,7 +18,7 @@ export class Extension implements IConfigurationExtension {
         const sidebars = [];
         const sidebarWidgets: Array<ConfiguredWidget<any>> = [];
 
-        return new NewConfigItemClassDialogContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
+        return new ContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
     }
 
     public async createFormDefinitions(overwrite: boolean): Promise<void> {

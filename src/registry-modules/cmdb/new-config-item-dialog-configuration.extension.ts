@@ -1,9 +1,7 @@
 import { ContextConfiguration, ConfigItemClass, KIXObjectType, KIXObjectLoadingOptions } from "../../core/model";
 import { IConfigurationExtension } from "../../core/extensions";
 import { ConfigurationService, KIXObjectServiceRegistry } from "../../core/services";
-import {
-    NewConfigItemDialogContext, NewConfigItemDialogContextConfiguration, ConfigItemFormFactory
-} from "../../core/browser/cmdb";
+import { NewConfigItemDialogContext, ConfigItemFormFactory } from "../../core/browser/cmdb";
 
 export class Extension implements IConfigurationExtension {
 
@@ -12,7 +10,7 @@ export class Extension implements IConfigurationExtension {
     }
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-        return new NewConfigItemDialogContextConfiguration();
+        return new ContextConfiguration(NewConfigItemDialogContext.CONTEXT_ID);
     }
 
     public async createFormDefinitions(overwrite: boolean): Promise<void> {

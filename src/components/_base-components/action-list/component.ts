@@ -48,7 +48,7 @@ export class Component implements IActionListener {
         window.addEventListener('resize', this.windowResizeThrottler.bind(this), false);
     }
 
-    public setContext(context: Context<any>): void {
+    public setContext(context: Context): void {
         context.registerListener(this.contextListernerId, this.contextListener);
     }
 
@@ -109,7 +109,7 @@ class ComponentContextServiceListener extends AbstractContextServiceListener {
         super();
     }
 
-    public contextChanged(contextId: string, context: Context<any>): void {
+    public contextChanged(contextId: string, context: Context): void {
         this.actionListComponent.setContext(context);
     }
 

@@ -18,7 +18,7 @@ export class ContextFactory {
     private constructor() { }
 
     private registeredContexts: ContextDescriptor[] = [];
-    private contextInstances: Array<Context<ContextConfiguration>> = [];
+    private contextInstances: Context[] = [];
     private contextCreatePromises: Map<string, Promise<any>> = new Map();
 
     public registerContext(contextDescriptor: ContextDescriptor): void {

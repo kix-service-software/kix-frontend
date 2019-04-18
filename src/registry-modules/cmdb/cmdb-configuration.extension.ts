@@ -4,10 +4,10 @@ import {
     FormField, VersionProperty, FormFieldOption, FormContext, KIXObjectType, Form,
     KIXObjectPropertyFilter, TableFilterCriteria
 } from '../../core/model';
-import { CMDBContext, CMDBContextConfiguration, ConfigItemChartConfiguration } from '../../core/browser/cmdb';
+import { CMDBContext, ConfigItemChartConfiguration } from '../../core/browser/cmdb';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
 import { ConfigurationService, CMDBService } from '../../core/services';
-import { SearchOperator, TableConfiguration, TableRowHeight } from '../../core/browser';
+import { SearchOperator } from '../../core/browser';
 
 export class Extension implements IConfigurationExtension {
 
@@ -143,8 +143,13 @@ export class Extension implements IConfigurationExtension {
 
         const contentWidgets = [chart1, chart2, chart3, ciListWidget];
 
-        return new CMDBContextConfiguration(
-            this.getModuleId(), explorer, sidebars, sidebarWidgets, explorerWidgets, content, contentWidgets
+        return new ContextConfiguration(
+            this.getModuleId(),
+            sidebars, sidebarWidgets,
+            explorer, explorerWidgets,
+            [], [],
+            [], [],
+            content, contentWidgets
         );
     }
 

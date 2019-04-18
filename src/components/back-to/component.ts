@@ -1,8 +1,8 @@
 import { ComponentState } from './ComponentState';
 import { ContextService, IContextServiceListener } from '../../core/browser';
-import { ContextType, Context, ContextConfiguration } from '../../core/model';
+import { ContextType, Context } from '../../core/model';
 import { ContextHistoryEntry } from '../../core/browser/context/ContextHistoryEntry';
-import { RoutingConfiguration, RoutingService } from '../../core/browser/router';
+import { RoutingConfiguration } from '../../core/browser/router';
 
 class Component implements IContextServiceListener {
 
@@ -39,7 +39,7 @@ class Component implements IContextServiceListener {
         this.toggleList();
     }
 
-    public contextChanged(contextId: string, context: Context<ContextConfiguration>, type: ContextType): void {
+    public contextChanged(contextId: string, context: Context, type: ContextType): void {
         this.state.history = ContextService.getInstance().getHistory();
     }
 

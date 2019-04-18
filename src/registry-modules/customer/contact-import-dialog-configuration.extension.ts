@@ -1,6 +1,6 @@
 import { ContextConfiguration, ConfiguredWidget, WidgetConfiguration } from "../../core/model";
 import { IConfigurationExtension } from "../../core/extensions";
-import { ContactImportDialogContext, ContactImportDialogContextConfiguration } from "../../core/browser/contact";
+import { ContactImportDialogContext } from "../../core/browser/contact";
 
 export class Extension implements IConfigurationExtension {
 
@@ -18,7 +18,8 @@ export class Extension implements IConfigurationExtension {
             false, false, null, 'kix-icon-query'
         ));
 
-        return new ContactImportDialogContextConfiguration(
+        return new ContextConfiguration(
+            ContactImportDialogContext.CONTEXT_ID,
             ['20190312-contact-import-help-widget'], [helpWidget]
         );
     }

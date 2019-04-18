@@ -57,7 +57,7 @@ class Component extends AbstractMarkoComponent {
         const faqDetailsContextDescriptor = new ContextDescriptor(
             FAQDetailsContext.CONTEXT_ID, [KIXObjectType.FAQ_ARTICLE],
             ContextType.MAIN, ContextMode.DETAILS,
-            true, 'faq-details', ['faqarticles'], FAQDetailsContext
+            true, 'object-details-page', ['faqarticles'], FAQDetailsContext
         );
         ContextService.getInstance().registerContext(faqDetailsContextDescriptor);
 

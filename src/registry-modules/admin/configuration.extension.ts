@@ -2,7 +2,7 @@ import { IConfigurationExtension } from '../../core/extensions';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize
 } from '../../core/model';
-import { AdminContext, AdminContextConfiguration } from '../../core/browser/admin';
+import { AdminContext } from '../../core/browser/admin';
 import { AdminModuleService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
@@ -32,8 +32,10 @@ export class Extension implements IConfigurationExtension {
         const explorer = ['20181127-admin-module-categories-explorer'];
         const explorerWidgets: Array<ConfiguredWidget<any>> = [adminModuleCategoriesExplorer];
 
-        return new AdminContextConfiguration(
-            this.getModuleId(), explorer, sidebars, sidebarWidgets, explorerWidgets, [], []
+        return new ContextConfiguration(
+            this.getModuleId(),
+            sidebars, sidebarWidgets,
+            explorer, explorerWidgets
         );
     }
 

@@ -21,7 +21,7 @@ export class WidgetService {
         this.widgetTypes.set(instanceId, widgetType);
     }
 
-    public getWidgetType(instanceId: string, context?: Context<any>): WidgetType {
+    public getWidgetType(instanceId: string, context?: Context): WidgetType {
         let widgetType = context ? context.getContextSpecificWidgetType(instanceId) : undefined;
 
         if (!widgetType && this.widgetTypes.has(instanceId)) {

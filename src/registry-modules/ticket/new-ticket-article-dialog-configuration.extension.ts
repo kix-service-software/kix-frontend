@@ -1,5 +1,5 @@
 import { IConfigurationExtension } from '../../core/extensions';
-import { NewTicketArticleContextConfiguration, NewTicketArticleContext } from '../../core/browser/ticket';
+import { NewTicketArticleContext } from '../../core/browser/ticket';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetSize, WidgetConfiguration, TicketProperty,
     FormField, ArticleProperty, KIXObjectType, Form, FormContext, FormFieldOption, FormFieldValue, FormFieldOptions
@@ -27,7 +27,7 @@ export class Extension implements IConfigurationExtension {
         const sidebars = ['20180919-help-widget'];
         const sidebarWidgets: Array<ConfiguredWidget<any>> = [helpWidget];
 
-        return new NewTicketArticleContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
+        return new ContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
     }
 
     public async createFormDefinitions(overwrite: boolean): Promise<void> {

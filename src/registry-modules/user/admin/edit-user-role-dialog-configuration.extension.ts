@@ -6,7 +6,7 @@ import {
 } from '../../../core/model';
 import { FormGroup } from '../../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../../core/services';
-import { EditUserRoleDialogContext, EditUserRoleDialogContextConfiguration } from '../../../core/browser/user';
+import { EditUserRoleDialogContext } from '../../../core/browser/user';
 import { SearchOperator } from '../../../core/browser';
 
 export class Extension implements IConfigurationExtension {
@@ -20,7 +20,7 @@ export class Extension implements IConfigurationExtension {
         const sidebars = [];
         const sidebarWidgets: Array<ConfiguredWidget<any>> = [];
 
-        return new EditUserRoleDialogContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
+        return new ContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
     }
 
     public async createFormDefinitions(overwrite: boolean): Promise<void> {

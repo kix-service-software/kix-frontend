@@ -1,8 +1,7 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    WidgetConfiguration, ContextConfiguration, ConfiguredWidget, WidgetSize, KIXObjectType
+    WidgetConfiguration, ConfiguredWidget, WidgetSize, KIXObjectType, ContextConfiguration
 } from '../../core/model/';
-import { TicketDetailsContextConfiguration } from '../../core/browser/ticket';
 
 export class TicketDetailsModuleFactoryExtension implements IConfigurationExtension {
 
@@ -152,16 +151,15 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
         const content = ['20180921-article-list'];
         const contentWidgets = [articleListWidget];
 
-        return new TicketDetailsContextConfiguration(
+        return new ContextConfiguration(
             this.getModuleId(),
-            [],
             sidebars, sidebarWidgets,
-            [],
-            lanes, laneTabs,
-            laneWidgets, laneTabWidgets,
+            [], [],
+            lanes, laneWidgets,
+            laneTabs, laneTabWidgets,
+            content, contentWidgets,
             generalActions, ticketActions,
-            infoOverlayWidgets,
-            content, contentWidgets
+            infoOverlayWidgets
         );
     }
 

@@ -9,7 +9,7 @@ import { BreadcrumbInformation } from '../router';
 import { FormService } from '../../../browser';
 import { DialogContextDescriptor } from './DialogContextDescriptor';
 
-export abstract class Context<T extends ContextConfiguration = ContextConfiguration> {
+export abstract class Context {
 
     protected listeners: Map<string, IContextListener> = new Map();
 
@@ -27,16 +27,12 @@ export abstract class Context<T extends ContextConfiguration = ContextConfigurat
     public constructor(
         protected descriptor: ContextDescriptor | DialogContextDescriptor,
         protected objectId: string | number = null,
-        protected configuration: T = null
+        protected configuration: ContextConfiguration = null
     ) {
         if (this.configuration) {
             this.setConfiguration(configuration);
         }
     }
-
-    protected abstract getSpecificWidgetConfiguration<WS = any>(instanceId: string): WidgetConfiguration<WS>;
-
-    protected abstract getSpecificWidgetType(instanceId: string): WidgetType;
 
     public async initContext(): Promise<void> {
         return;
@@ -58,11 +54,11 @@ export abstract class Context<T extends ContextConfiguration = ContextConfigurat
         return this.descriptor as D;
     }
 
-    public getConfiguration(): T {
+    public getConfiguration(): ContextConfiguration {
         return this.configuration;
     }
 
-    public setConfiguration(configuration: T): void {
+    public setConfiguration(configuration: ContextConfiguration): void {
         this.configuration = configuration;
         this.shownSidebars = configuration
             ? [...configuration.sidebars.filter(
@@ -127,15 +123,39 @@ export abstract class Context<T extends ContextConfiguration = ContextConfigurat
     }
 
     public getLanes(show: boolean = false): ConfiguredWidget[] {
-        return [];
+        let lanes = this.configuration.laneWidgets;
+
+        if (show) {
+            lanes = lanes.filter(
+                (l) => this.configuration.lanes.findIndex((lid) => l.instanceId === lid) !== -1
+            );
+        }
+
+        return lanes;
     }
 
     public getLaneTabs(show: boolean = false): ConfiguredWidget[] {
-        return [];
+        let laneTabs = this.configuration.laneTabWidgets;
+
+        if (show) {
+            laneTabs = laneTabs.filter(
+                (lt) => this.configuration.laneTabs.findIndex((ltId) => lt.instanceId === ltId) !== -1
+            );
+        }
+
+        return laneTabs;
     }
 
     public getContent(show: boolean = false): ConfiguredWidget[] {
-        return [];
+        let content = this.configuration.contentWidgets;
+
+        if (show && content) {
+            content = content.filter(
+                (l) => this.configuration.content.findIndex((cid) => l.instanceId === cid) !== -1
+            );
+        }
+
+        return content;
     }
 
     public getExplorer(show: boolean = false): ConfiguredWidget[] {
@@ -217,10 +237,21 @@ export abstract class Context<T extends ContextConfiguration = ContextConfigurat
                 const overlay = this.configuration.overlayWidgets.find((o) => o.instanceId === instanceId);
                 configuration = overlay ? overlay.configuration : undefined;
             }
-        }
 
-        if (!configuration) {
-            configuration = this.getSpecificWidgetConfiguration(instanceId);
+            if (!configuration) {
+                const laneWidget = this.configuration.laneWidgets.find((lw) => lw.instanceId === instanceId);
+                configuration = laneWidget ? laneWidget.configuration : undefined;
+            }
+
+            if (!configuration) {
+                const laneTabWidget = this.configuration.laneTabWidgets.find((ltw) => ltw.instanceId === instanceId);
+                configuration = laneTabWidget ? laneTabWidget.configuration : undefined;
+            }
+
+            if (!configuration) {
+                const contentWidget = this.configuration.contentWidgets.find((cw) => cw.instanceId === instanceId);
+                configuration = contentWidget ? contentWidget.configuration : undefined;
+            }
         }
 
         return configuration;
@@ -242,10 +273,16 @@ export abstract class Context<T extends ContextConfiguration = ContextConfigurat
                 const overlay = this.configuration.overlayWidgets.find((ow) => ow.instanceId === instanceId);
                 widgetType = overlay ? WidgetType.OVERLAY : undefined;
             }
-        }
 
-        if (!widgetType) {
-            widgetType = this.getSpecificWidgetType(instanceId);
+            if (!widgetType) {
+                const laneWidget = this.configuration.laneWidgets.find((lw) => lw.instanceId === instanceId);
+                widgetType = laneWidget ? WidgetType.LANE : undefined;
+            }
+
+            if (!widgetType) {
+                const laneTabWidget = this.configuration.laneTabWidgets.find((ltw) => ltw.instanceId === instanceId);
+                widgetType = laneTabWidget ? WidgetType.LANE_TAB : undefined;
+            }
         }
 
         return widgetType;

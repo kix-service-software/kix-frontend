@@ -9,7 +9,6 @@ class Extension implements IKIXModuleExtension {
     public tags: Array<[string, string]> = [
         ['contact-module-component', 'customer/contact-module-component'],
         ['contact-module-component', 'customer/contact-module-component'],
-        ['contact-details', 'customer/contact-details'],
         ['contact-info-widget', 'customer/widgets/contact-info-widget'],
         ['contact-assigned-customers-widget', 'customer/widgets/contact-assigned-customers-widget'],
         ['contact-assigned-tickets-widget', 'customer/widgets/contact-assigned-tickets-widget'],

@@ -1,8 +1,8 @@
 import { IConfigurationExtension } from '../../../core/extensions';
-import { NewTicketTypeDialogContext, NewTicketTypeDialogContextConfiguration } from '../../../core/browser/ticket';
+import { NewTicketTypeDialogContext } from '../../../core/browser/ticket';
 import {
     ConfiguredWidget, FormField, KIXObjectType, Form,
-    FormContext, FormFieldValue, TicketTypeProperty
+    FormContext, FormFieldValue, TicketTypeProperty, ContextConfiguration
 } from '../../../core/model';
 import { FormGroup } from '../../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../../core/services';
@@ -13,12 +13,12 @@ export class Extension implements IConfigurationExtension {
         return NewTicketTypeDialogContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<NewTicketTypeDialogContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
 
         const sidebars = [];
         const sidebarWidgets: Array<ConfiguredWidget<any>> = [];
 
-        return new NewTicketTypeDialogContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
+        return new ContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
     }
 
     public async createFormDefinitions(overwrite: boolean): Promise<void> {

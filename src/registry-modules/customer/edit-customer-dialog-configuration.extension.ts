@@ -3,7 +3,7 @@ import {
 } from "../../core/model";
 import { IConfigurationExtension } from "../../core/extensions";
 import {
-    CustomerLabelProvider, EditCustomerDialogContext, EditCustomerDialogContextConfiguration
+    CustomerLabelProvider, EditCustomerDialogContext
 } from "../../core/browser/customer";
 import { CustomerService, ConfigurationService } from "../../core/services";
 import { FormGroup } from "../../core/model/components/form/FormGroup";
@@ -15,7 +15,7 @@ export class Extension implements IConfigurationExtension {
     }
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-        return new EditCustomerDialogContextConfiguration();
+        return new ContextConfiguration(EditCustomerDialogContext.CONTEXT_ID);
     }
 
     public async createFormDefinitions(overwrite: boolean): Promise<void> {
