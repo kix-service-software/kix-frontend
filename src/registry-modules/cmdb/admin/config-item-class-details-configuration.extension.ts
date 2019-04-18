@@ -17,7 +17,7 @@ export class Extension implements IConfigurationExtension {
 
         const ciClassDetailsWidget = new ConfiguredWidget(
             'config-item-class-details-widget', new WidgetConfiguration(
-                'config-item-class-info-widget', 'Translatable#CI Class information',
+                'config-item-class-info-widget', 'Translatable#CI Class Information',
                 ['cmdb-admin-ci-class-edit'], null,
                 false, true, WidgetSize.BOTH, null, false
             )

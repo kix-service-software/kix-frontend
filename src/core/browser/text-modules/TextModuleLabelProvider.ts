@@ -30,7 +30,7 @@ export class TextModuleLabelProvider implements ILabelProvider<TextModule> {
                 displayValue = 'Translatable#Language';
                 break;
             case TextModuleProperty.CATEGORY:
-                displayValue = 'Translatable#Catgeory';
+                displayValue = 'Translatable#Category';
                 break;
             case TextModuleProperty.KEYWORDS:
                 displayValue = 'Translatable#Tags';

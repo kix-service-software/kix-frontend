@@ -29,7 +29,7 @@ export class TicketStateTableDeleteAction extends AbstractAction<ITable> {
         if (this.canRun()) {
             const selectedRows = this.data.getSelectedRows();
             const question = await TranslationService.translate(
-                'Translatable#The following {1} entries will be deleted. Are you sure?', [selectedRows.length]
+                'Translatable#The following {0} entries will be deleted. Are you sure?', [selectedRows.length]
             );
             const content = new ComponentContent(
                 'confirm-overlay',

@@ -70,7 +70,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         if (!this.object) {
             this.state.error = await TranslationService.translate(
-                'Translatable#No object with ID {1} available.', [context.getObjectId()]
+                'Translatable#No object with ID {0} available.', [context.getObjectId()]
             );
         } else {
             await this.prepareTitle();

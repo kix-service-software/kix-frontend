@@ -56,7 +56,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         if (!this.ticketPriority) {
             const error = await TranslationService.translate(
-                'Translatable#No priority available for ID {1}.', [context.getObjectId()]
+                'Translatable#No priority available for ID {0}.', [context.getObjectId()]
             );
             this.state.error = error;
         } else {
