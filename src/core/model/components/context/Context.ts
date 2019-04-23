@@ -23,7 +23,7 @@ export abstract class Context {
     private scrollInormation: [KIXObjectType, string | number] = null;
 
     public constructor(
-        protected descriptor: ContextDescriptor | ContextDescriptor,
+        protected descriptor: ContextDescriptor,
         protected objectId: string | number = null,
         protected configuration: ContextConfiguration = null
     ) {
@@ -48,8 +48,8 @@ export abstract class Context {
         return this.additionalInformation.get(key);
     }
 
-    public getDescriptor<D extends ContextDescriptor = ContextDescriptor | ContextDescriptor>(): D {
-        return this.descriptor as D;
+    public getDescriptor(): ContextDescriptor {
+        return this.descriptor;
     }
 
     public getConfiguration(): ContextConfiguration {
