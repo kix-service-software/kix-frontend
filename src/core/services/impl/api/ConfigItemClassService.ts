@@ -131,27 +131,27 @@ export class ConfigItemClassService extends KIXObjectService {
             const objectPermissions: CreatePermissionDescription[] = this.getParameterValue(
                 parameter, 'OBJECT_PERMISSION'
             );
-            if (response.ConfigItemClassID && objectPermissions) {
-                super.setObjectPermissions(
-                    token, clientRequestId,
-                    objectPermissions,
-                    this.RESOURCE_URI,
-                    KIXObjectType.CONFIG_ITEM_CLASS, response.ConfigItemClassID
-                );
-            }
+            // if (response.ConfigItemClassID && objectPermissions) {
+            //     super.setObjectPermissions(
+            //         token, clientRequestId,
+            //         objectPermissions,
+            //         this.RESOURCE_URI,
+            //         KIXObjectType.CONFIG_ITEM_CLASS, response.ConfigItemClassID
+            //     );
+            // }
 
             const propertyValuePermissions: CreatePermissionDescription[] = this.getParameterValue(
                 parameter, 'PROPERTY_VALUE_PERMISSION'
             );
-            if (response.ConfigItemClassID && propertyValuePermissions) {
-                super.setPropertyValuePermissions(
-                    token, clientRequestId,
-                    propertyValuePermissions,
-                    '/cmdb/configitems/*',
-                    KIXObjectType.CONFIG_ITEM_CLASS, response.ConfigItemClassID,
-                    `${KIXObjectType.CONFIG_ITEM}.${ConfigItemProperty.CLASS_ID}`
-                );
-            }
+            // if (response.ConfigItemClassID && propertyValuePermissions) {
+            //     super.setPropertyValuePermissions(
+            //         token, clientRequestId,
+            //         propertyValuePermissions,
+            //         // TODO: ggf. aus SysConfig relevanten String ermitteln
+            //         `${KIXObjectType.CONFIG_ITEM}.${ConfigItemProperty.CLASS_ID}`,
+            //         KIXObjectType.CONFIG_ITEM_CLASS, response.ConfigItemClassID
+            //     );
+            // }
 
             await AppUtil.updateFormConfigurations(true);
 
@@ -206,29 +206,29 @@ export class ConfigItemClassService extends KIXObjectService {
             const objectPermissions: CreatePermissionDescription[] = this.getParameterValue(
                 parameter, 'OBJECT_PERMISSION'
             );
-            if (response.ConfigItemClassID && objectPermissions) {
-                super.setObjectPermissions(
-                    token, clientRequestId,
-                    objectPermissions,
-                    this.RESOURCE_URI,
-                    KIXObjectType.CONFIG_ITEM_CLASS, response.ConfigItemClassID,
-                    true
-                );
-            }
+            // if (response.ConfigItemClassID && objectPermissions) {
+            //     super.setObjectPermissions(
+            //         token, clientRequestId,
+            //         objectPermissions,
+            //         this.RESOURCE_URI,
+            //         KIXObjectType.CONFIG_ITEM_CLASS, response.ConfigItemClassID,
+            //         true
+            //     );
+            // }
 
             const propertyValuePermissions: CreatePermissionDescription[] = this.getParameterValue(
                 parameter, 'PROPERTY_VALUE_PERMISSION'
             );
-            if (response.ConfigItemClassID && propertyValuePermissions) {
-                super.setPropertyValuePermissions(
-                    token, clientRequestId,
-                    propertyValuePermissions,
-                    '/cmdb/configitems/*',
-                    KIXObjectType.CONFIG_ITEM_CLASS, response.ConfigItemClassID,
-                    `${KIXObjectType.CONFIG_ITEM}.${ConfigItemProperty.CLASS_ID}`,
-                    true
-                );
-            }
+            // if (response.ConfigItemClassID && propertyValuePermissions) {
+            //     super.setPropertyValuePermissions(
+            //         token, clientRequestId,
+            //         propertyValuePermissions,
+            //         // TODO: ggf. aus SysConfig relevanten String ermitteln
+            //         `${KIXObjectType.CONFIG_ITEM}.${ConfigItemProperty.CLASS_ID}`,
+            //         KIXObjectType.CONFIG_ITEM_CLASS, response.ConfigItemClassID,
+            //         true
+            //     );
+            // }
 
             await AppUtil.updateFormConfigurations(true);
 

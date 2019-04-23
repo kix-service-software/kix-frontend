@@ -295,12 +295,11 @@ export abstract class KIXObjectService<T extends KIXObject = any> implements IKI
 
     protected async setPropertyValuePermissions(
         token: string, clientRequestId: string, permissions: CreatePermissionDescription[],
-        resourcePath: string, objectType: KIXObjectType, objectId: string, propertyString: string,
-        forUpdate: boolean = false
+        propertyString: string, objectType: KIXObjectType, objectId: string, forUpdate: boolean = false
     ): Promise<void> {
-        if (resourcePath && objectId && propertyString) {
-            // tslint:disable-next-line:max-line-length
-            const target = `${resourcePath.match(/^\/.+/) ? resourcePath : '/' + resourcePath}{${propertyString} EQ ${objectId}}`;
+        if (objectId && propertyString) {
+            // TODO: ggf. aus SysConfig relevanten String ermitteln
+            const target = `{${propertyString} EQ ${objectId}}`;
             if (forUpdate && objectType) {
                 await this.deleteRolePermissions(token, clientRequestId, permissions, target, 3, objectType, objectId);
             }
