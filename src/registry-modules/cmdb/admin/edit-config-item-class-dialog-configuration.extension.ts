@@ -69,8 +69,8 @@ export class Extension implements IConfigurationExtension {
 
             const form = new Form(formId, 'Translatable#Edit Class', [
                 infoGroup,
-                objectPermissionGroup,
-                dependentObjectPermissionGroup
+                // objectPermissionGroup,
+                // dependentObjectPermissionGroup
             ], KIXObjectType.CONFIG_ITEM_CLASS, true, FormContext.EDIT);
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
