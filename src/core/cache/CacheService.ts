@@ -100,6 +100,10 @@ export class CacheService {
         }
 
         switch (cacheKeyPrefixes[0]) {
+            case KIXObjectType.WATCHER:
+            case KIXObjectType.ARTICLE:
+                cacheKeyPrefixes.push(KIXObjectType.TICKET);
+                break;
             case KIXObjectType.TICKET:
                 cacheKeyPrefixes.push(KIXObjectType.CUSTOMER);
                 cacheKeyPrefixes.push(KIXObjectType.CONTACT);
