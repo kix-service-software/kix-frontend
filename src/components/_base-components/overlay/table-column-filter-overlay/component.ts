@@ -6,7 +6,6 @@ import { TranslationService } from '../../../../core/browser/i18n/TranslationSer
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     public filterValues: TreeNode[];
-    public filterText: string;
     private column: IColumn;
 
     public onCreate(): void {
@@ -17,7 +16,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.column = input.column;
         this.state.nodes = null;
         this.filterValues = null;
-        this.filterText = null;
+        this.state.filterText = null;
         this.update();
     }
 
@@ -78,7 +77,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                         ? currentfilter[1][0].value as any[] : [];
                     this.state.selectedNodes = this.state.nodes.filter((n) => values.some((v) => v === n.id));
                 } else {
-                    this.filterText = currentfilter[0];
+                    this.state.filterText = currentfilter[0];
                 }
             }
         }
@@ -98,12 +97,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public textFilterValueChanged(event: any): void {
-        this.filterText = event.target.value;
+        this.state.filterText = event.target.value;
     }
 
     public filterKeyDown(event: any): void {
         if (event.keyCode === 13 || event.key === 'Enter') {
-            this.filterText = event.target.value;
+            this.state.filterText = event.target.value;
             this.filter();
         }
     }
@@ -113,7 +112,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             if (this.state.hasListFilter) {
                 this.column.filter(this.filterValues);
             } else {
-                this.column.filter(null, this.filterText);
+                this.column.filter(null, this.state.filterText);
                 (this as any).emit('closeOverlay');
             }
         }
