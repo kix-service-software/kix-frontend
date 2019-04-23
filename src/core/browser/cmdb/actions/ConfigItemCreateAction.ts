@@ -10,7 +10,10 @@ export class ConfigItemCreateAction extends AbstractAction {
     }
 
     public async run(event: any): Promise<void> {
-        ContextService.getInstance().setDialogContext(null, KIXObjectType.CONFIG_ITEM, ContextMode.CREATE, null, true);
+        ContextService.getInstance().setDialogContext(
+            null, KIXObjectType.CONFIG_ITEM, ContextMode.CREATE, null, true,
+            undefined, undefined, 'new-config-item-form'
+        );
     }
 
 }

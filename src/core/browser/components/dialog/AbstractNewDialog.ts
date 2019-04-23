@@ -1,6 +1,6 @@
 import {
     ValidationResult, ValidationSeverity, ComponentContent, OverlayType, KIXObjectType,
-    KIXObjectSpecificCreateOptions, Error, ContextMode, DialogContextDescriptor
+    KIXObjectSpecificCreateOptions, Error, ContextMode
 } from "../../../model";
 import { OverlayService } from "../../OverlayService";
 import { DialogService } from "./DialogService";
@@ -35,12 +35,6 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
 
     public async onMount(): Promise<void> {
         DialogService.getInstance().setMainDialogHint('Translatable#All form fields marked by * are required fields.');
-        const dialogContext = await ContextService.getInstance().getContextByTypeAndMode(
-            this.objectType, ContextMode.CREATE
-        );
-        if (dialogContext) {
-            dialogContext.getDescriptor<DialogContextDescriptor>().formId = this.state.formId;
-        }
     }
 
     public async onDestroy(): Promise<void> {

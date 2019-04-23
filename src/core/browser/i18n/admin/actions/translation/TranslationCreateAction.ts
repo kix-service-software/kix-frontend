@@ -12,7 +12,8 @@ export class TranslationCreateAction extends AbstractAction {
     public async run(event: any): Promise<void> {
         ContextService.getInstance().setDialogContext(
             NewTranslationDialogContext.CONTEXT_ID, KIXObjectType.TRANSLATION,
-            ContextMode.CREATE_ADMIN, null, true, 'Translatable#Internationalisation'
+            ContextMode.CREATE_ADMIN, null, true, 'Translatable#Internationalisation',
+            undefined, 'new-translation-form'
         );
     }
 

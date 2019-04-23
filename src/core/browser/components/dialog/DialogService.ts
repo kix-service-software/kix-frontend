@@ -128,7 +128,8 @@ export class DialogService {
                 dialogTitle,
                 dialogs,
                 activeDialog ? activeDialog.instanceId : dialogId,
-                dialogIcon);
+                dialogIcon
+            );
         }
     }
 

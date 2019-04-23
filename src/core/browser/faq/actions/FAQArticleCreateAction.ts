@@ -10,7 +10,10 @@ export class FAQArticleCreateAction extends AbstractAction {
     }
 
     public async run(event: any): Promise<void> {
-        ContextService.getInstance().setDialogContext(null, KIXObjectType.FAQ_ARTICLE, ContextMode.CREATE, null, true);
+        ContextService.getInstance().setDialogContext(
+            null, KIXObjectType.FAQ_ARTICLE, ContextMode.CREATE, null, true,
+            undefined, undefined, 'new-faq-article-form'
+        );
     }
 
 }
