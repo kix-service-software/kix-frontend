@@ -628,9 +628,10 @@ class Component {
         const time = average * (
             this.state.importManager.objects.length - this.finishedObjects.length - this.errorObjects.length
         );
+        const finishCount = this.finishedObjects.length + this.errorObjects.length;
+        const totalCount = this.state.importManager.objects.length + this.finishedObjects.length;
         const loadingHint = await TranslationService.translate(
-            'Translatable#{0}/{1} {2} imported',
-            [this.finishedObjects.length, this.state.importManager.objects.length, objectName]
+            'Translatable#{0}/{1} {2} imported', [finishCount, totalCount, objectName]
         );
         DialogService.getInstance().setMainDialogLoading(
             true, loadingHint, false, time, this.cancelImport.bind(this)
