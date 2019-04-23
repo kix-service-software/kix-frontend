@@ -12,7 +12,7 @@ import {
 } from '../../../core/browser/customer';
 import {
     KIXObjectType, ContextDescriptor, ContextType, ContextMode, WidgetConfiguration,
-    ConfiguredDialogWidget, WidgetSize, DialogContextDescriptor
+    ConfiguredDialogWidget, WidgetSize
 } from '../../../core/model';
 import { ImportService } from '../../../core/browser/import';
 import { DialogService } from '../../../core/browser/components/dialog';
@@ -52,25 +52,25 @@ class Component extends AbstractMarkoComponent {
         );
         ContextService.getInstance().registerContext(customerDetailsContext);
 
-        const newCustomerContext = new DialogContextDescriptor(
+        const newCustomerContext = new ContextDescriptor(
             NewCustomerDialogContext.CONTEXT_ID, [KIXObjectType.CUSTOMER], ContextType.DIALOG, ContextMode.CREATE,
             false, 'new-customer-dialog', ['customers'], NewCustomerDialogContext
         );
         ContextService.getInstance().registerContext(newCustomerContext);
 
-        const editCustomerContext = new DialogContextDescriptor(
+        const editCustomerContext = new ContextDescriptor(
             EditCustomerDialogContext.CONTEXT_ID, [KIXObjectType.CUSTOMER], ContextType.DIALOG, ContextMode.EDIT,
             false, 'edit-customer-dialog', ['customers'], EditCustomerDialogContext
         );
         ContextService.getInstance().registerContext(editCustomerContext);
 
-        const searchContactContext = new DialogContextDescriptor(
+        const searchContactContext = new ContextDescriptor(
             CustomerSearchContext.CONTEXT_ID, [KIXObjectType.CUSTOMER], ContextType.DIALOG, ContextMode.SEARCH,
             false, 'search-customer-dialog', ['customers'], CustomerSearchContext
         );
         ContextService.getInstance().registerContext(searchContactContext);
 
-        const customerImportDialogContext = new DialogContextDescriptor(
+        const customerImportDialogContext = new ContextDescriptor(
             CustomerImportDialogContext.CONTEXT_ID, [KIXObjectType.CUSTOMER], ContextType.DIALOG, ContextMode.IMPORT,
             false, 'import-dialog', ['customers'], CustomerImportDialogContext
         );

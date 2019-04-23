@@ -10,7 +10,9 @@ export class TicketCreateAction extends AbstractAction {
     }
 
     public async run(): Promise<void> {
-        ContextService.getInstance().setDialogContext(null, KIXObjectType.TICKET, ContextMode.CREATE, null, true);
+        ContextService.getInstance().setDialogContext(
+            null, KIXObjectType.TICKET, ContextMode.CREATE, null, true, undefined, undefined, 'new-ticket-form'
+        );
     }
 
 }

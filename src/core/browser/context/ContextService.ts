@@ -1,6 +1,6 @@
 import {
     Context, WidgetConfiguration,
-    ContextType, KIXObjectType, ContextMode, ContextDescriptor, ObjectUpdatedEventData
+    ContextType, KIXObjectType, ContextMode, ContextDescriptor, ObjectUpdatedEventData, FormContext
 } from '../../model';
 import { ContextSocketClient } from './ContextSocketClient';
 import { IContextServiceListener } from './IContextServiceListener';
@@ -12,6 +12,7 @@ import { DialogService } from '../components/dialog/DialogService';
 import { BrowserUtil } from '../BrowserUtil';
 import { EventService } from '../event';
 import { ApplicationEvent } from '../application';
+import { FormService } from '../form';
 
 export class ContextService {
 
@@ -84,7 +85,7 @@ export class ContextService {
 
     public async setDialogContext(
         contextId: string, kixObjectType: KIXObjectType, contextMode: ContextMode,
-        objectId?: string | number, reset?: boolean, title?: string, singleTab?: boolean
+        objectId?: string | number, reset?: boolean, title?: string, singleTab?: boolean, formId?: string
     ): Promise<void> {
 
         this.resetRefreshTimer();
@@ -102,10 +103,24 @@ export class ContextService {
                 context = await ContextFactory.getInstance().getContext(
                     contextId, dialogs[0].kixObjectType, dialogs[0].contextMode, null, reset
                 );
+
+                if (reset) {
+                    for (const dialog of dialogs) {
+                        const fid = await FormService.getInstance().getFormIdByContext(
+                            FormContext.NEW, dialog.kixObjectType
+                        );
+                        FormService.getInstance().deleteFormInstance(fid);
+                    }
+                }
             }
         }
 
         if (context && context.getDescriptor().contextType === ContextType.DIALOG) {
+
+            if (reset && formId) {
+                FormService.getInstance().deleteFormInstance(formId);
+            }
+
             this.activeDialogContext = context;
             this.activeContextType = ContextType.DIALOG;
 

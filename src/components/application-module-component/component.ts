@@ -6,8 +6,7 @@ import { ComponentState } from './ComponentState';
 import { SearchService } from '../../core/browser/search';
 import { CSVExportAction, BulkAction, ImportAction } from '../../core/browser/actions';
 import {
-    ContextDescriptor, KIXObjectType, ContextType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration,
-    DialogContextDescriptor
+    ContextDescriptor, KIXObjectType, ContextType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration
 } from '../../core/model';
 import {
     LinkService, LinkedObjectsEditAction, EditLinkedObjectsDialogContext, LinkObjectTableFactory,
@@ -123,42 +122,42 @@ class Component extends AbstractMarkoComponent {
         );
         ContextService.getInstance().registerContext(searchContext);
 
-        const linkObjectDialogContext = new DialogContextDescriptor(
+        const linkObjectDialogContext = new ContextDescriptor(
             LinkObjectDialogContext.CONTEXT_ID, [KIXObjectType.LINK],
             ContextType.DIALOG, ContextMode.CREATE,
             false, 'link-objects-dialog', ['links'], LinkObjectDialogContext
         );
         ContextService.getInstance().registerContext(linkObjectDialogContext);
 
-        const editLinkObjectDialogContext = new DialogContextDescriptor(
+        const editLinkObjectDialogContext = new ContextDescriptor(
             EditLinkedObjectsDialogContext.CONTEXT_ID, [KIXObjectType.LINK],
             ContextType.DIALOG, ContextMode.EDIT_LINKS,
             false, 'edit-linked-objects-dialog', ['links'], EditLinkedObjectsDialogContext
         );
         ContextService.getInstance().registerContext(editLinkObjectDialogContext);
 
-        const bulkDialogContext = new DialogContextDescriptor(
+        const bulkDialogContext = new ContextDescriptor(
             BulkDialogContext.CONTEXT_ID, [KIXObjectType.ANY],
             ContextType.DIALOG, ContextMode.EDIT_BULK,
             false, 'bulk-dialog', ['bulk'], BulkDialogContext
         );
         ContextService.getInstance().registerContext(bulkDialogContext);
 
-        const settingsDialogContext = new DialogContextDescriptor(
+        const settingsDialogContext = new ContextDescriptor(
             PersonalSettingsDialogContext.CONTEXT_ID, [KIXObjectType.PERSONAL_SETTINGS],
             ContextType.DIALOG, ContextMode.PERSONAL_SETTINGS,
             false, 'personal-settings-dialog', ['personal-settings'], PersonalSettingsDialogContext
         );
         ContextService.getInstance().registerContext(settingsDialogContext);
 
-        const newTranslationDialogContext = new DialogContextDescriptor(
+        const newTranslationDialogContext = new ContextDescriptor(
             NewTranslationDialogContext.CONTEXT_ID, [KIXObjectType.TRANSLATION],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
             false, 'new-translation-dialog', ['translations'], NewTranslationDialogContext
         );
         ContextService.getInstance().registerContext(newTranslationDialogContext);
 
-        const editTranslationDialogContext = new DialogContextDescriptor(
+        const editTranslationDialogContext = new ContextDescriptor(
             EditTranslationDialogContext.CONTEXT_ID, [KIXObjectType.TRANSLATION],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
             false, 'edit-translation-dialog', ['translations'], EditTranslationDialogContext

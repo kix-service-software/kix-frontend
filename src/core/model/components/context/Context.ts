@@ -6,8 +6,6 @@ import { KIXObject, KIXObjectType } from '../..';
 import { ObjectIcon } from '../../kix';
 import { ContextDescriptor } from './ContextDescriptor';
 import { BreadcrumbInformation } from '../router';
-import { FormService } from '../../../browser';
-import { DialogContextDescriptor } from './DialogContextDescriptor';
 
 export abstract class Context {
 
@@ -25,7 +23,7 @@ export abstract class Context {
     private scrollInormation: [KIXObjectType, string | number] = null;
 
     public constructor(
-        protected descriptor: ContextDescriptor | DialogContextDescriptor,
+        protected descriptor: ContextDescriptor | ContextDescriptor,
         protected objectId: string | number = null,
         protected configuration: ContextConfiguration = null
     ) {
@@ -50,7 +48,7 @@ export abstract class Context {
         return this.additionalInformation.get(key);
     }
 
-    public getDescriptor<D extends ContextDescriptor = ContextDescriptor | DialogContextDescriptor>(): D {
+    public getDescriptor<D extends ContextDescriptor = ContextDescriptor | ContextDescriptor>(): D {
         return this.descriptor as D;
     }
 
@@ -306,10 +304,7 @@ export abstract class Context {
     }
 
     public reset(): void {
-        const formId = (this.descriptor as DialogContextDescriptor).formId;
-        if (formId) {
-            FormService.getInstance().deleteFormInstance(formId);
-        }
+        return;
     }
 
 }

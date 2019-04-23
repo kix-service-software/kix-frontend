@@ -1,6 +1,5 @@
 import {
-    ContextConfiguration, Context, KIXObjectType, ContextMode,
-    ContextDescriptor, ContextType, DialogContextDescriptor
+    ContextConfiguration, Context, KIXObjectType, ContextMode, ContextDescriptor, ContextType
 } from "../../model";
 import { ContextSocketClient } from "./ContextSocketClient";
 
@@ -17,12 +16,12 @@ export class ContextFactory {
 
     private constructor() { }
 
-    private registeredContexts: ContextDescriptor[] = [];
+    private registeredDescriptors: ContextDescriptor[] = [];
     private contextInstances: Context[] = [];
     private contextCreatePromises: Map<string, Promise<any>> = new Map();
 
     public registerContext(contextDescriptor: ContextDescriptor): void {
-        this.registeredContexts.push(contextDescriptor);
+        this.registeredDescriptors.push(contextDescriptor);
     }
 
     public async getContext(
@@ -51,11 +50,9 @@ export class ContextFactory {
         return context;
     }
 
-    public getContextDescriptor<D extends ContextDescriptor = ContextDescriptor | DialogContextDescriptor>(
-        contextId: string
-    ): D {
-        const descriptor = this.registeredContexts.find((c) => c.contextId === contextId);
-        return descriptor as D;
+    public getContextDescriptor(contextId: string): ContextDescriptor {
+        const descriptor = this.registeredDescriptors.find((c) => c.contextId === contextId);
+        return descriptor;
     }
 
     public async getContextForUrl(
@@ -76,7 +73,7 @@ export class ContextFactory {
         );
 
         if (!context) {
-            const descriptor = this.registeredContexts.find(
+            const descriptor = this.registeredDescriptors.find(
                 (cd) => cd.contextMode === contextMode
                     && cd.urlPaths.some((u) => u === contextUrl)
             );
@@ -97,9 +94,9 @@ export class ContextFactory {
             const promise = new Promise<Context>(async (resolve, reject) => {
                 let descriptor;
                 if (contextId) {
-                    descriptor = this.registeredContexts.find((rc) => rc.contextId === contextId);
+                    descriptor = this.registeredDescriptors.find((rc) => rc.contextId === contextId);
                 } else {
-                    descriptor = this.registeredContexts.find(
+                    descriptor = this.registeredDescriptors.find(
                         (cd) => cd.isContextFor(kixObjectType) && cd.contextMode === contextMode
                     );
                 }
