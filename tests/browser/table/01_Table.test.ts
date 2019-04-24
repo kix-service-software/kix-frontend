@@ -3,7 +3,7 @@
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 
-import { ITable, Row, Column, Table, IRow, IColumn, RowObject, DefaultColumnConfiguration, TableConfiguration } from '../../src/core/browser/table';
+import { ITable, Row, Column, Table, IRow, IColumn, RowObject, DefaultColumnConfiguration, TableConfiguration } from '../../../src/core/browser/table';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

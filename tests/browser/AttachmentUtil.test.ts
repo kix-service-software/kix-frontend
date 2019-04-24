@@ -2,8 +2,8 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { AttachmentUtil } from '../src/core/browser';
-import { AttachmentError } from '../src/core/model';
+import { AttachmentUtil } from '../../src/core/browser';
+import { AttachmentError } from '../../src/core/model';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

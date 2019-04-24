@@ -3,8 +3,8 @@
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 
-import { ITable, Table, RowObject, IRowObject, ITableContentProvider, DefaultColumnConfiguration, SelectionState, TableValue } from '../../src/core/browser/table';
-import { KIXObjectType, KIXObject } from '../../src/core/model';
+import { ITable, Table, RowObject, IRowObject, ITableContentProvider, DefaultColumnConfiguration, SelectionState, TableValue } from '../../../src/core/browser/table';
+import { KIXObjectType, KIXObject } from '../../../src/core/model';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

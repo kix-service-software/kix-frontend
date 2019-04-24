@@ -2,8 +2,8 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { Table, ITable, ITableContentProvider, IRowObject, RowObject, ICell, DefaultColumnConfiguration, TableValue } from '../../src/core/browser/table';
-import { KIXObjectType } from '../../src/core/model';
+import { Table, ITable, ITableContentProvider, IRowObject, RowObject, ICell, DefaultColumnConfiguration, TableValue } from '../../../src/core/browser/table';
+import { KIXObjectType } from '../../../src/core/model';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

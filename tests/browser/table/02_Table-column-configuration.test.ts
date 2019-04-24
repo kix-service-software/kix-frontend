@@ -2,7 +2,7 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { Table, ITable, IColumnConfiguration, DefaultColumnConfiguration } from '../../src/core/browser/table';
+import { Table, ITable, IColumnConfiguration, DefaultColumnConfiguration } from '../../../src/core/browser/table';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
