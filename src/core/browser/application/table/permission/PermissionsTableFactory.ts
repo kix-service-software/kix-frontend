@@ -40,19 +40,24 @@ export class PermissionsTableFactory extends TableFactory {
                 DataType.STRING, true, null, null, false
             ),
             new DefaultColumnConfiguration(
-                PermissionProperty.CREATE, false, false, true, false, 85, false, true, true, null, null, 'crud-cell'
+                PermissionProperty.CREATE, false, false, true, false, 85,
+                false, true, true, null, null, 'crud-cell', null, false
             ),
             new DefaultColumnConfiguration(
-                PermissionProperty.READ, false, false, true, false, 85, false, true, true, null, null, 'crud-cell'
+                PermissionProperty.READ, false, false, true, false, 85,
+                false, true, true, null, null, 'crud-cell', null, false
             ),
             new DefaultColumnConfiguration(
-                PermissionProperty.UPDATE, false, false, true, false, 85, false, true, true, null, null, 'crud-cell'
+                PermissionProperty.UPDATE, false, false, true, false, 85,
+                false, true, true, null, null, 'crud-cell', null, false
             ),
             new DefaultColumnConfiguration(
-                PermissionProperty.DELETE, false, false, true, false, 85, false, true, true, null, null, 'crud-cell'
+                PermissionProperty.DELETE, false, false, true, false, 85,
+                false, true, true, null, null, 'crud-cell', null, false
             ),
             new DefaultColumnConfiguration(
-                PermissionProperty.DENY, false, false, true, false, 85, false, true, true, null, null, 'crud-cell'
+                PermissionProperty.DENY, false, false, true, false, 85,
+                false, true, true, null, null, 'crud-cell', null, false
             )
         ];
 

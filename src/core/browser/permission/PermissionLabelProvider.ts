@@ -47,7 +47,7 @@ export class PermissionLabelProvider implements ILabelProvider<Permission> {
             case PermissionProperty.IS_REQUIRED:
                 return 'Required';
             case PermissionProperty.TARGET:
-                displayValue = 'Translatable#Path';
+                displayValue = 'Translatable#Target';
                 break;
             case PermissionProperty.ID:
                 displayValue = 'Translatable#Icon';
@@ -55,19 +55,19 @@ export class PermissionLabelProvider implements ILabelProvider<Permission> {
                 displayValue = 'Translatable#Permission';
                 break;
             case PermissionProperty.CREATE:
-                displayValue = 'Translatable#Create';
+                displayValue = 'Create';
                 break;
             case PermissionProperty.READ:
-                displayValue = 'Translatable#Read';
+                displayValue = 'Read';
                 break;
             case PermissionProperty.UPDATE:
-                displayValue = 'Translatable#Update';
+                displayValue = 'Update';
                 break;
             case PermissionProperty.DELETE:
-                displayValue = 'Translatable#Delete';
+                displayValue = 'Delete';
                 break;
             case PermissionProperty.DENY:
-                displayValue = 'Translatable#Deny';
+                displayValue = 'Deny';
                 break;
             default:
                 displayValue = property;
