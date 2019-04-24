@@ -39,7 +39,7 @@ export class PermissionManager extends AbstractDynamicFormManager {
     }
 
     public async getOperationsPlaceholder(): Promise<string> {
-        return 'Translatable#Path';
+        return 'Translatable#Target';
     }
 
     public async getOpertationsType(property: string): Promise<DynamicFormOperationsType> {
