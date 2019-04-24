@@ -73,8 +73,7 @@ export class RoleService extends KIXObjectService {
         let responseId;
         if (objectType === this.objectType) {
             const createParameter = parameter.filter(
-                (p) => p[0] !== RoleProperty.USER_IDS
-                    && p[0] !== RoleProperty.PERMISSIONS
+                (p) => p[0] !== RoleProperty.PERMISSIONS
                     && p[0] !== 'ICON'
             );
             const createRole = new CreateRole(createParameter);
