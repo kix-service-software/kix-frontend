@@ -1,6 +1,4 @@
-import {
-    ContextConfiguration, Context, KIXObjectType, ContextMode, ContextDescriptor, ContextType
-} from "../../model";
+import { Context, KIXObjectType, ContextMode, ContextDescriptor, ContextType } from "../../model";
 import { ContextSocketClient } from "./ContextSocketClient";
 
 export class ContextFactory {
@@ -25,24 +23,17 @@ export class ContextFactory {
     }
 
     public async getContext(
-        contextId: string, kixObjectType: KIXObjectType, contextMode: ContextMode,
+        contextId: string, objectType: KIXObjectType, contextMode: ContextMode,
         objectId?: string | number, reset?: boolean
     ): Promise<Context> {
-        let context: Context;
-
-        if (contextId) {
-            context = this.contextInstances.find((c) => c.getDescriptor().contextId === contextId);
-        } else {
-            context = this.contextInstances.find(
-                (c) => c.getDescriptor().isContextFor(kixObjectType) && c.getDescriptor().contextMode === contextMode
-            );
-        }
+        let context = this.contextInstances.find(
+            (c) => this.isContext(contextId, c.getDescriptor(), objectType, contextMode)
+        );
 
         if (!context) {
-            context = await this.createContextInstance(contextId, kixObjectType, contextMode, objectId);
+            context = await this.createContextInstance(contextId, objectType, contextMode, objectId);
         } else if (reset) {
-            const configuration = await ContextSocketClient.getInstance()
-                .loadContextConfiguration<ContextConfiguration>(context.getDescriptor().contextId);
+            const configuration = await ContextSocketClient.loadContextConfiguration(context.getDescriptor().contextId);
             context.setConfiguration(configuration);
             context.reset();
         }
@@ -55,8 +46,8 @@ export class ContextFactory {
         return descriptor;
     }
 
-    public async getContextForUrl(
-        contextUrl: string, objectId: string | number, contextMode: ContextMode
+    public static async getContextForUrl(
+        contextUrl: string, objectId?: string | number, contextMode?: ContextMode
     ): Promise<Context> {
         let context;
         if (!contextMode) {
@@ -67,18 +58,17 @@ export class ContextFactory {
             }
         }
 
-        context = this.contextInstances.find(
-            (c) => c.getDescriptor().contextMode === contextMode
-                && c.getDescriptor().urlPaths.some((u) => u === contextUrl)
+        context = this.getInstance().contextInstances.find(
+            (c) => this.isDescriptorForUrl(c.getDescriptor(), contextMode, contextUrl)
         );
 
         if (!context) {
-            const descriptor = this.registeredDescriptors.find(
-                (cd) => cd.contextMode === contextMode
-                    && cd.urlPaths.some((u) => u === contextUrl)
+            const descriptor = this.getInstance().registeredDescriptors.find(
+                (cd) => this.isDescriptorForUrl(cd, contextMode, contextUrl)
             );
+
             if (descriptor) {
-                context = this.createContextInstance(descriptor.contextId, null, null);
+                context = this.getInstance().createContextInstance(descriptor.contextId);
             }
         }
 
@@ -86,52 +76,61 @@ export class ContextFactory {
     }
 
     private async createContextInstance(
-        contextId: string, kixObjectType: KIXObjectType, contextMode: ContextMode,
-        objectId?: string | number
+        contextId: string, objectType?: KIXObjectType, contextMode?: ContextMode, objectId?: string | number
     ): Promise<Context> {
-        const promiseKey = JSON.stringify({ contextId, kixObjectType, contextMode, objectId });
+        const promiseKey = JSON.stringify({ contextId, kixObjectType: objectType, contextMode, objectId });
         if (!this.contextCreatePromises.has(promiseKey)) {
-            const promise = new Promise<Context>(async (resolve, reject) => {
-                let descriptor;
-                if (contextId) {
-                    descriptor = this.registeredDescriptors.find((rc) => rc.contextId === contextId);
-                } else {
-                    descriptor = this.registeredDescriptors.find(
-                        (cd) => cd.isContextFor(kixObjectType) && cd.contextMode === contextMode
-                    );
-                }
-
-                let context;
-                if (descriptor) {
-                    const configuration = await ContextSocketClient.getInstance()
-                        .loadContextConfiguration<ContextConfiguration>(descriptor.contextId);
-                    context = new descriptor.contextClass(descriptor, objectId, configuration);
-                    await context.initContext();
-                }
-
-                resolve(context);
-            });
             this.contextCreatePromises.set(
-                promiseKey, promise
+                promiseKey, this.createPromise(contextId, objectType, contextMode, objectId)
             );
         }
-        const newContext = await this.contextCreatePromises.get(promiseKey).catch(() => {
-            return null;
-        });
+
+        const contextPromise = this.contextCreatePromises.get(promiseKey);
+        const newContext = await contextPromise.catch(() => null);
+
         if (newContext) {
-            if (!this.contextInstances.some(
-                (c) => c.getDescriptor().contextId === newContext.getDescriptor().contextId)
-            ) {
-                this.contextInstances.push(newContext);
-            }
+            this.contextInstances.push(newContext);
         }
+
         this.contextCreatePromises.delete(promiseKey);
         return newContext;
+    }
+
+    private createPromise(
+        contextId: string, objectType: KIXObjectType, contextMode: ContextMode, objectId?: string | number
+    ): Promise<Context> {
+        return new Promise<Context>(async (resolve, reject) => {
+            const descriptor = this.registeredDescriptors.find(
+                (cd) => this.isContext(contextId, cd, objectType, contextMode)
+            );
+
+            let context: Context;
+            if (descriptor) {
+                const configuration = await ContextSocketClient.loadContextConfiguration(descriptor.contextId);
+                context = new descriptor.contextClass(descriptor, objectId, configuration);
+                await context.initContext();
+            }
+
+            resolve(context);
+        });
     }
 
     public resetDialogContexts(): void {
         this.contextInstances.filter((c) => c.getDescriptor().contextType === ContextType.DIALOG)
             .forEach((c) => c.reset());
+    }
+
+    private isContext(
+        contextId: string, descriptor: ContextDescriptor, objectType: KIXObjectType, contextMode: ContextMode
+    ): boolean {
+        return descriptor.contextId === contextId ||
+            (descriptor.isContextFor(objectType) && descriptor.contextMode === contextMode);
+    }
+
+    private static isDescriptorForUrl(
+        descriptor: ContextDescriptor, contextMode: ContextMode, contextUrl: string
+    ): boolean {
+        return descriptor.contextMode === contextMode && descriptor.urlPaths.some((u) => u === contextUrl);
     }
 
 }

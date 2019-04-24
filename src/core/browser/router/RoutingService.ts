@@ -53,7 +53,7 @@ export class RoutingService {
 
                 let context: Context;
                 if (contextUrl && contextUrl !== '') {
-                    context = await ContextFactory.getInstance().getContextForUrl(contextUrl, objectId, null);
+                    context = await ContextFactory.getContextForUrl(contextUrl, objectId);
                 }
 
                 if (context) {
@@ -83,7 +83,7 @@ export class RoutingService {
         if (params.has('new')) {
             const url = path.length === 4 ? path[3] : contextUrl;
             const mode = path.length === 4 ? ContextMode.CREATE_SUB : ContextMode.CREATE;
-            context = await ContextFactory.getInstance().getContextForUrl(url, null, mode);
+            context = await ContextFactory.getContextForUrl(url, undefined, mode);
             if (!context && mode === ContextMode.CREATE) {
                 await ContextService.getInstance().setDialogContext(
                     null, null, mode, null, true
@@ -91,11 +91,11 @@ export class RoutingService {
             }
         } else if (params.has('edit')) {
             context = contextUrl
-                ? await ContextFactory.getInstance().getContextForUrl(contextUrl, null, ContextMode.EDIT)
+                ? await ContextFactory.getContextForUrl(contextUrl, undefined, ContextMode.EDIT)
                 : null;
         } else if (params.has('editLinks')) {
             context = contextUrl
-                ? await ContextFactory.getInstance().getContextForUrl('links', null, ContextMode.EDIT_LINKS)
+                ? await ContextFactory.getContextForUrl('links', undefined, ContextMode.EDIT_LINKS)
                 : null;
         }
 

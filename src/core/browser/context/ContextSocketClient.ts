@@ -30,8 +30,8 @@ export class ContextSocketClient extends SocketClient {
         this.socket = this.createSocket('context', true);
     }
 
-    public loadContextConfiguration<T extends ContextConfiguration>(contextId: string): Promise<T> {
-        return new Promise<T>((resolve, reject) => {
+    public static loadContextConfiguration(contextId: string): Promise<ContextConfiguration> {
+        return new Promise<ContextConfiguration>((resolve, reject) => {
 
             const requestId = IdService.generateDateBasedId();
             const token = ClientStorageService.getToken();
@@ -40,26 +40,30 @@ export class ContextSocketClient extends SocketClient {
                 reject('Timeout: ' + ContextEvent.LOAD_CONTEXT_CONFIGURATION);
             }, 30000);
 
-            this.socket.on(ContextEvent.CONTEXT_CONFIGURATION_LOADED, (result: LoadContextConfigurationResponse<T>) => {
-                if (result.requestId === requestId) {
-                    window.clearTimeout(timeout);
-                    resolve(result.contextConfiguration);
+            this.getInstance().socket.on(ContextEvent.CONTEXT_CONFIGURATION_LOADED,
+                (result: LoadContextConfigurationResponse<ContextConfiguration>) => {
+                    if (result.requestId === requestId) {
+                        window.clearTimeout(timeout);
+                        resolve(result.contextConfiguration);
+                    }
                 }
-            });
+            );
 
-            this.socket.emit(
+            this.getInstance().socket.emit(
                 ContextEvent.LOAD_CONTEXT_CONFIGURATION, new LoadContextConfigurationRequest(
                     token, requestId, ClientStorageService.getClientRequestId(), contextId
                 )
             );
 
-            this.socket.on(ContextEvent.CONTEXT_CONFIGURATION_LOAD_ERROR, (error: SocketErrorResponse) => {
-                if (error.requestId === requestId) {
-                    window.clearTimeout(timeout);
-                    console.error(error.error);
-                    reject(error.error);
+            this.getInstance().socket.on(ContextEvent.CONTEXT_CONFIGURATION_LOAD_ERROR,
+                (error: SocketErrorResponse) => {
+                    if (error.requestId === requestId) {
+                        window.clearTimeout(timeout);
+                        console.error(error.error);
+                        reject(error.error);
+                    }
                 }
-            });
+            );
         });
     }
 
