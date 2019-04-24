@@ -12,9 +12,11 @@ import {
     FAQService, FAQContext, FAQDetailsContext, NewFAQArticleDialogContext, FAQArticleSearchContext,
     FAQArticleVoteAction, FAQArticlePrintAction, FAQArticleEditAction, FAQArticleDeleteAction,
     FAQArticleCreateAction, FAQArticleBrowserFactory, FAQArticleAttachmentBrowserFactory,
-    FAQArticleSearchDefinition, FAQArticleFormService, EditFAQArticleDialogContext
+    FAQArticleSearchDefinition, FAQArticleFormService, EditFAQArticleDialogContext, FAQCategoryLabelProvider
 } from '../../../core/browser/faq';
 import { DialogService } from '../../../core/browser/components/dialog';
+import { FAQCategoryTableFactory } from '../../../core/browser/faq/admin';
+import { FAQCategoryBrowserFactory } from '../../../core/browser/faq/FAQCategoryBrowserFactory';
 
 class Component extends AbstractMarkoComponent {
 
@@ -26,14 +28,21 @@ class Component extends AbstractMarkoComponent {
         FactoryService.getInstance().registerFactory(
             KIXObjectType.FAQ_ARTICLE, FAQArticleBrowserFactory.getInstance()
         );
+
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.FAQ_CATEGORY, FAQCategoryBrowserFactory.getInstance()
+        );
+
         FactoryService.getInstance().registerFactory(
             KIXObjectType.FAQ_ARTICLE_ATTACHMENT, FAQArticleAttachmentBrowserFactory.getInstance()
         );
 
         TableFactoryService.getInstance().registerFactory(new FAQArticleTableFactory());
+        TableFactoryService.getInstance().registerFactory(new FAQCategoryTableFactory());
         TableFactoryService.getInstance().registerFactory(new FAQArticleHistoryTableFactory());
 
         LabelService.getInstance().registerLabelProvider(new FAQLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new FAQCategoryLabelProvider());
         LabelService.getInstance().registerLabelProvider(new FAQArticleHistoryLabelProvider());
 
         ServiceRegistry.registerServiceInstance(FAQService.getInstance());
