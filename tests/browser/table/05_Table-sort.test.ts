@@ -39,6 +39,20 @@ describe('Table Sort Tests', () => {
             const sortOrder = table.getColumn('1').getSortOrder();
             expect(sortOrder).exist;
             expect(sortOrder).equals(SortOrder.DOWN);
+
+            const childRows = rows[rows.length - 1].getChildren();
+            expect(childRows.length).equals(10);
+
+            const childCells = childRows.map((r) => r.getCell('1'));
+            expect(childCells[0].getValue().objectValue, 'children not sorted correctly').equals(9);
+            expect(childCells[childCells.length - 1].getValue().objectValue, 'children not sorted correctly').equals(0);
+
+            const grantChildRows = childRows[childRows.length - 1].getChildren();
+            expect(grantChildRows.length).equals(10);
+
+            const grantChildCells = grantChildRows.map((r) => r.getCell('1'));
+            expect(grantChildCells[0].getValue().objectValue, 'grantchildren not sorted correctly').equals(9);
+            expect(grantChildCells[grantChildCells.length - 1].getValue().objectValue, 'grantchildren not sorted correctly').equals(0);
         });
 
         it('Should sort rows by column up', async () => {
@@ -56,10 +70,23 @@ describe('Table Sort Tests', () => {
             const sortOrder = table.getColumn('1').getSortOrder();
             expect(sortOrder).exist;
             expect(sortOrder).equals(SortOrder.UP);
+
+            const childRows = rows[0].getChildren();
+            expect(childRows.length).equals(10);
+
+            const childCells = childRows.map((r) => r.getCell('1'));
+            expect(childCells[0].getValue().objectValue, 'children not sorted correctly').equals(0);
+            expect(childCells[childCells.length - 1].getValue().objectValue, 'children not sorted correctly').equals(9);
+
+            const grantChildRows = childRows[0].getChildren();
+            expect(grantChildRows.length).equals(10);
+
+            const grantChildCells = grantChildRows.map((r) => r.getCell('1'));
+            expect(grantChildCells[0].getValue().objectValue, 'grantchildren not sorted correctly').equals(0);
+            expect(grantChildCells[grantChildCells.length - 1].getValue().objectValue, 'grantchildren not sorted correctly').equals(9);
         });
 
     });
-
 });
 
 class TestTableContentProvider implements ITableContentProvider {
@@ -77,17 +104,38 @@ class TestTableContentProvider implements ITableContentProvider {
     }
 
     public async loadData(): Promise<IRowObject[]> {
-        const objects = [];
+        const rowObjects: RowObject[] = [];
         for (let r = 0; r < this.rowCount; r++) {
-            const rowObject: TableValue[] = [];
+            const values: TableValue[] = [];
 
             for (let c = 0; c < this.cellCount; c++) {
-                rowObject.push(new TableValue(`${c}`, r));
+                values.push(new TableValue(`${c}`, r));
             }
 
-            objects.push(new RowObject(rowObject, this.withObject ? {} : null));
+            rowObjects.push(new RowObject(values, this.withObject ? {} : null));
         }
-        return objects;
+
+        const children: RowObject[] = [];
+        for (let r = 0; r < 10; r++) {
+            const values: TableValue[] = [];
+            for (let c = 0; c < this.cellCount; c++) {
+                values.push(new TableValue(`${c}`, r));
+            }
+            children.push(new RowObject(values, this.withObject ? {} : null));
+        }
+        const grantchildren: RowObject[] = [];
+        for (let r = 0; r < 10; r++) {
+            const values: TableValue[] = [];
+            for (let c = 0; c < this.cellCount; c++) {
+                values.push(new TableValue(`${c}`, r));
+            }
+            grantchildren.push(new RowObject(values, this.withObject ? {} : null));
+        }
+
+        children[0]['children'] = grantchildren;
+        rowObjects[0]['children'] = children;
+
+        return rowObjects;
     }
 
     public async destroy(): Promise<void> {

@@ -34,13 +34,13 @@ export class TicketQueueTableContentProvider extends TableContentProvider<Queue>
 
         const rowObjects = [];
         queues.forEach((fc) => {
-            rowObjects.push(this.createRow(fc, null));
+            rowObjects.push(this.createRowObject(fc));
         });
 
         return rowObjects;
     }
 
-    private createRow(queue: Queue, parent: RowObject): RowObject {
+    private createRowObject(queue: Queue): RowObject {
         const values: TableValue[] = [];
 
         for (const property in queue) {
@@ -51,14 +51,9 @@ export class TicketQueueTableContentProvider extends TableContentProvider<Queue>
 
         const rowObject = new RowObject<Queue>(values, queue);
 
-        if (queue.SubQueues) {
-            queue.SubQueues.forEach((sc) => {
-                const row = this.createRow(sc, rowObject);
-                if (parent) {
-                    parent.addChild(row);
-                } else {
-                    rowObject.addChild(row);
-                }
+        if (queue.SubQueues && Array.isArray(queue.SubQueues) && queue.SubQueues.length) {
+            queue.SubQueues.forEach((sq) => {
+                rowObject.addChild(this.createRowObject(sq));
             });
         }
 
