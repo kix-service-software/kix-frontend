@@ -112,7 +112,7 @@ export class TranslationService extends KIXObjectService<Translation> {
                 }
             }
 
-            translationValue = this.format(translationValue, placeholderValues.map((p) => p.toString()));
+            translationValue = this.format(translationValue, placeholderValues.map((p) => (p ? p : '').toString()));
         }
         const debug = ClientStorageService.getOption('i18n-debug');
 

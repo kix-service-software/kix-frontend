@@ -141,15 +141,20 @@ export class FAQCategoryLabelProvider implements ILabelProvider<FAQCategory> {
     }
 
     public getObjectIcon(faqCategory: FAQCategory): string | ObjectIcon {
-        return 'kix-icon-faq';
+        return new ObjectIcon('FAQCategory', faqCategory.ID);
     }
 
     public getObjectTooltip(faqCategory: FAQCategory): string {
         return faqCategory.Name;
     }
 
-    public async getObjectName(): Promise<string> {
-        return "FAQ Category";
+    public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
+        if (translatable) {
+            return await TranslationService.translate(
+                plural ? 'Translatable#FAQ Categories' : 'Translatable#FAQ Category'
+            );
+        }
+        return plural ? 'FAQ Categories' : 'FAQ Category';
     }
 
     public async getIcons(
