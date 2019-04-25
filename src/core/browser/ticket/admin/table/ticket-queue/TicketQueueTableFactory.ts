@@ -1,15 +1,15 @@
+import { RoutingConfiguration } from "../../../../router";
 import {
-    ITable, TableConfiguration, Table, DefaultColumnConfiguration,
+    TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../../../table";
-import { KIXObjectType, TicketTemplateProperty, DataType } from "../../../../../model";
-import { TicketTemplateTableContentProvider } from "./TicketTemplateTableContentProvider";
+import { KIXObjectType, DataType, ContextMode, QueueProperty } from "../../../../../model";
+import { TicketQueueTableContentProvider } from "./TicketQueueTableContentProvider";
 import { TableFactory } from "../../../../table/TableFactory";
 
-export class TicketTemplateTableFactory extends TableFactory {
+export class TicketQueueTableFactory extends TableFactory {
 
-
-    public objectType: KIXObjectType = KIXObjectType.TICKET_TEMPLATE;
+    public objectType: KIXObjectType = KIXObjectType.QUEUE;
 
     public createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
@@ -17,9 +17,9 @@ export class TicketTemplateTableFactory extends TableFactory {
     ): ITable {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
-
         const table = new Table(tableKey, tableConfiguration);
-        table.setContentProvider(new TicketTemplateTableContentProvider(table, objectIds, null, contextId));
+
+        table.setContentProvider(new TicketQueueTableContentProvider(table, objectIds, null, contextId));
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 
         return table;
@@ -29,21 +29,22 @@ export class TicketTemplateTableFactory extends TableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            this.getDefaultColumnConfiguration(TicketTemplateProperty.NAME),
+            this.getDefaultColumnConfiguration(QueueProperty.NAME),
             this.getDefaultColumnConfiguration('ICON'),
-            this.getDefaultColumnConfiguration(TicketTemplateProperty.TYPE_ID),
-            this.getDefaultColumnConfiguration(TicketTemplateProperty.CHANNEL_ID),
-            this.getDefaultColumnConfiguration(TicketTemplateProperty.COMMENT),
-            this.getDefaultColumnConfiguration(TicketTemplateProperty.VALID_ID),
-            this.getDefaultColumnConfiguration(TicketTemplateProperty.CREATE_TIME),
-            this.getDefaultColumnConfiguration(TicketTemplateProperty.CREATE_BY),
-            this.getDefaultColumnConfiguration(TicketTemplateProperty.CHANGE_TIME),
-            this.getDefaultColumnConfiguration(TicketTemplateProperty.CHANGE_BY)
+            this.getDefaultColumnConfiguration(QueueProperty.FOLLOW_UP_ID),
+            this.getDefaultColumnConfiguration(QueueProperty.UNLOCK_TIMEOUT),
+            this.getDefaultColumnConfiguration(QueueProperty.SYSTEM_ADDRESS_ID),
+            this.getDefaultColumnConfiguration(QueueProperty.COMMENT),
+            this.getDefaultColumnConfiguration(QueueProperty.VALID_ID),
+            this.getDefaultColumnConfiguration(QueueProperty.CREATE_TIME),
+            this.getDefaultColumnConfiguration(QueueProperty.CREATE_BY),
+            this.getDefaultColumnConfiguration(QueueProperty.CHANGE_TIME),
+            this.getDefaultColumnConfiguration(QueueProperty.CHANGE_BY)
         ];
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.TICKET_TEMPLATE, null, null, tableColumns, null, true, false, null, null,
+                KIXObjectType.QUEUE, null, null, tableColumns, null, true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;
@@ -53,19 +54,19 @@ export class TicketTemplateTableFactory extends TableFactory {
 
         if (defaultRouting) {
             // tableConfiguration.routingConfiguration = new RoutingConfiguration(
-            //     null, TicketTemplateDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_TEMPLATE,
-            //     ContextMode.DETAILS, TicketTemplateProperty.ID
+            //     null, TicketQueueDetailsContext.CONTEXT_ID, KIXObjectType.QUEUE,
+            //     ContextMode.DETAILS, QueueProperty.ID
             // );
         }
 
         return tableConfiguration;
     }
 
-    // TODO: implementieren
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
         let config;
         switch (property) {
-            case TicketTemplateProperty.NAME:
+            case QueueProperty.NAME:
+            case QueueProperty.SYSTEM_ADDRESS_ID:
                 config = new DefaultColumnConfiguration(property, true, false, true, false, 200, true, true);
                 break;
             case 'ICON':
@@ -73,16 +74,20 @@ export class TicketTemplateTableFactory extends TableFactory {
                     property, false, true, false, false, null, false, false, false, undefined, false
                 );
                 break;
-            case TicketTemplateProperty.TYPE_ID:
-            case TicketTemplateProperty.CHANNEL_ID:
-            case TicketTemplateProperty.VALID_ID:
+            case QueueProperty.VALID_ID:
+            case QueueProperty.FOLLOW_UP_ID:
                 config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true, true);
                 break;
-            case TicketTemplateProperty.COMMENT:
+            case QueueProperty.UNLOCK_TIMEOUT:
+                config = new DefaultColumnConfiguration(
+                    property, true, false, true, false, 150, true, true, false, DataType.NUMBER
+                );
+                break;
+            case QueueProperty.COMMENT:
                 config = new DefaultColumnConfiguration(property, true, false, true, false, 350, true, true);
                 break;
-            case TicketTemplateProperty.CHANGE_TIME:
-            case TicketTemplateProperty.CREATE_TIME:
+            case QueueProperty.CHANGE_TIME:
+            case QueueProperty.CREATE_TIME:
                 config = new DefaultColumnConfiguration(
                     property, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
                 );

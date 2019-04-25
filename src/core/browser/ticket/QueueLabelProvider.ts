@@ -1,16 +1,15 @@
 import { ILabelProvider } from "../ILabelProvider";
-import { TicketType, KIXObjectType, ObjectIcon, TicketTypeProperty, DateTimeUtil, User } from "../../model";
-import { SearchProperty } from "../SearchProperty";
+import { KIXObjectType, ObjectIcon, DateTimeUtil, User, Queue, QueueProperty, SystemAddress } from "../../model";
 import { TranslationService } from "../i18n/TranslationService";
 import { ObjectDataService } from "../ObjectDataService";
 import { KIXObjectService } from "../kix";
 
-export class TicketTypeLabelProvider implements ILabelProvider<TicketType> {
+export class QueueLabelProvider implements ILabelProvider<Queue> {
 
-    public kixObjectType: KIXObjectType = KIXObjectType.TICKET_TYPE;
+    public kixObjectType: KIXObjectType = KIXObjectType.QUEUE;
 
-    public isLabelProviderFor(ticketType: TicketType): boolean {
-        return ticketType instanceof TicketType;
+    public isLabelProviderFor(queue: Queue): boolean {
+        return queue instanceof Queue;
     }
 
     public isLabelProviderForType(objectType: KIXObjectType): boolean {
@@ -20,31 +19,40 @@ export class TicketTypeLabelProvider implements ILabelProvider<TicketType> {
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
-            case SearchProperty.FULLTEXT:
-                displayValue = 'Translatable#Full Text';
-                break;
-            case TicketTypeProperty.NAME:
+            case QueueProperty.NAME:
                 displayValue = 'Translatable#Name';
                 break;
-            case TicketTypeProperty.COMMENT:
+            case QueueProperty.FULLNAME:
+                displayValue = 'Translatable#Fullname';
+                break;
+            case QueueProperty.COMMENT:
                 displayValue = 'Translatable#Comment';
                 break;
-            case TicketTypeProperty.CREATE_BY:
+            case QueueProperty.CREATE_BY:
                 displayValue = 'Translatable#Created by';
                 break;
-            case TicketTypeProperty.CREATE_TIME:
+            case QueueProperty.CREATE_TIME:
                 displayValue = 'Translatable#Created at';
                 break;
-            case TicketTypeProperty.CHANGE_BY:
+            case QueueProperty.CHANGE_BY:
                 displayValue = 'Translatable#Changed by';
                 break;
-            case TicketTypeProperty.CHANGE_TIME:
+            case QueueProperty.CHANGE_TIME:
                 displayValue = 'Translatable#Changed at';
                 break;
-            case TicketTypeProperty.VALID_ID:
+            case QueueProperty.VALID_ID:
                 displayValue = 'Translatable#Validity';
                 break;
-            case TicketTypeProperty.ID:
+            case QueueProperty.SYSTEM_ADDRESS_ID:
+                displayValue = 'Translatable#Email address';
+                break;
+            case QueueProperty.UNLOCK_TIMEOUT:
+                displayValue = 'Translatable#Unlock Timeout (min)';
+                break;
+            case QueueProperty.FOLLOW_UP_ID:
+                displayValue = 'Translatable#Follow Up Possible';
+                break;
+            case QueueProperty.QUEUE_ID:
                 displayValue = 'Translatable#Icon';
                 break;
             case 'ICON':
@@ -66,14 +74,14 @@ export class TicketTypeLabelProvider implements ILabelProvider<TicketType> {
     }
 
     public async getDisplayText(
-        ticketType: TicketType, property: string, value?: string, translatable: boolean = true
+        queue: Queue, property: string, value?: string, translatable: boolean = true
     ): Promise<string> {
-        let displayValue = ticketType[property] || '';
+        let displayValue = queue[property];
 
         switch (property) {
-            case TicketTypeProperty.ID:
+            case QueueProperty.QUEUE_ID:
             case 'ICON':
-                displayValue = ticketType.Name;
+                displayValue = queue.Name;
                 break;
             default:
                 displayValue = await this.getPropertyValueDisplayText(property, displayValue);
@@ -92,23 +100,35 @@ export class TicketTypeLabelProvider implements ILabelProvider<TicketType> {
         let displayValue = value;
         const objectData = ObjectDataService.getInstance().getObjectData();
         switch (property) {
-            case TicketTypeProperty.VALID_ID:
+            case QueueProperty.VALID_ID:
                 const valid = objectData.validObjects.find((v) => v.ID.toString() === value.toString());
                 if (valid) {
                     displayValue = valid.Name;
                 }
                 break;
-            case TicketTypeProperty.CREATE_BY:
-            case TicketTypeProperty.CHANGE_BY:
+            case QueueProperty.CREATE_BY:
+            case QueueProperty.CHANGE_BY:
                 const users = await KIXObjectService.loadObjects<User>(
                     KIXObjectType.USER, [value], null, null, true
                 ).catch((error) => [] as User[]);
                 displayValue = users && !!users.length ? users[0].UserFullname : value;
                 break;
-            case TicketTypeProperty.CREATE_TIME:
-            case TicketTypeProperty.CHANGE_TIME:
+            case QueueProperty.CREATE_TIME:
+            case QueueProperty.CHANGE_TIME:
                 displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
+            case QueueProperty.SYSTEM_ADDRESS_ID:
+                const systemAddresses = await KIXObjectService.loadObjects<SystemAddress>(
+                    KIXObjectType.SYSTEM_ADDRESS, [value], null, null, true
+                ).catch((error) => [] as SystemAddress[]);
+                displayValue = systemAddresses && !!systemAddresses.length ? systemAddresses[0].Realname : value;
+                break;
+            // case QueueProperty.FOLLOW_UP_ID:
+            //     const follwoUptypes = await KIXObjectService.loadObjects<FollowUpType>(
+            //         KIXObjectType.FOLLOW_UP_TYPE, [value], null, null, true
+            //     ).catch((error) => [] as FollowUpType[]);
+            //     displayValue = follwoUptypes && !!follwoUptypes.length ? follwoUptypes[0].Name : value;
+            //     break;
             default:
         }
 
@@ -119,44 +139,44 @@ export class TicketTypeLabelProvider implements ILabelProvider<TicketType> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public getDisplayTextClasses(ticketType: TicketType, property: string): string[] {
+    public getDisplayTextClasses(queue: Queue, property: string): string[] {
         return [];
     }
 
-    public getObjectClasses(ticketType: TicketType): string[] {
+    public getObjectClasses(queue: Queue): string[] {
         return [];
     }
 
-    public async getObjectText(ticketType: TicketType, id?: boolean, title?: boolean): Promise<string> {
-        return ticketType.Name;
+    public async getObjectText(queue: Queue, id?: boolean, title?: boolean): Promise<string> {
+        return queue.Name;
     }
 
-    public getObjectAdditionalText(ticketType: TicketType): string {
+    public getObjectAdditionalText(queue: Queue): string {
         return null;
     }
 
-    public getObjectIcon(ticketType?: TicketType): string | ObjectIcon {
-        return new ObjectIcon('TicketType', ticketType.ID);
+    public getObjectIcon(queue?: Queue): string | ObjectIcon {
+        return new ObjectIcon('Queue', queue.QueueID);
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
         if (translatable) {
             return await TranslationService.translate(
-                plural ? 'Translatable#Types' : 'Translatable#Type'
+                plural ? 'Translatable#Queues' : 'Translatable#Queue'
             );
         }
-        return plural ? 'Types' : 'Type';
+        return plural ? 'Queues' : 'Queue';
     }
 
-    public getObjectTooltip(ticketType: TicketType): string {
-        return ticketType.Name;
+    public getObjectTooltip(queue: Queue): string {
+        return queue.Name;
     }
 
     public async getIcons(
-        ticketType: TicketType, property: string, value?: string | number
+        queue: Queue, property: string, value?: string | number
     ): Promise<Array<string | ObjectIcon>> {
-        if (property === TicketTypeProperty.ID || property === 'ICON') {
-            return [new ObjectIcon('TicketType', ticketType.ID)];
+        if (property === QueueProperty.QUEUE_ID || property === 'ICON') {
+            return [new ObjectIcon('Priority', queue.QueueID)];
         }
         return null;
     }

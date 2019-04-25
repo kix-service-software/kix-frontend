@@ -18,6 +18,10 @@ class Extension implements IAdminModuleExtension {
                         null, 'ticket-states', 'Translatable#States', null,
                         KIXObjectType.TICKET_STATE, 'ticket-admin-states'
                     ),
+                    new AdminModule(
+                        null, 'queues', 'Translatable#Queues', null,
+                        KIXObjectType.QUEUE, 'ticket-admin-queues'
+                    ),
                     // TODO: wieder aktivieren mit KIX2018-1865
                     // new AdminModule(
                     //     null, 'ticket-templates', 'Translatable#Templates', null,

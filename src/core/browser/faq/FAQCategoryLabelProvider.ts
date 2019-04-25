@@ -13,36 +13,6 @@ export class FAQCategoryLabelProvider implements ILabelProvider<FAQCategory> {
         return objectType === this.kixObjectType;
     }
 
-    public async getPropertyValueDisplayText(
-        property: string, value: string | number, translatable: boolean = true
-    ): Promise<string> {
-        let displayValue = value;
-        const objectData = ObjectDataService.getInstance().getObjectData();
-        if (objectData) {
-            switch (property) {
-                case FAQCategoryProperty.PARENT_ID:
-                    const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(KIXObjectType.FAQ_CATEGORY);
-                    const category = faqCategories.find((fc) => fc.ID === value);
-                    displayValue = category ? category.Name : value;
-                    break;
-                case FAQCategoryProperty.VALID_ID:
-                    const valid = objectData.validObjects.find((v) => v.ID.toString() === value.toString());
-                    if (valid) {
-                        displayValue = valid.Name;
-                    }
-                    break;
-                default:
-                    displayValue = value;
-            }
-        }
-
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
-        }
-
-        return displayValue ? displayValue.toString() : '';
-    }
-
     public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
@@ -90,30 +60,57 @@ export class FAQCategoryLabelProvider implements ILabelProvider<FAQCategory> {
     ): Promise<string> {
         let displayValue = faqCategory[property];
 
-        const objectData = ObjectDataService.getInstance().getObjectData();
-
         switch (property) {
-            case FAQCategoryProperty.CHANGE_TIME:
-            case FAQCategoryProperty.CREATE_TIME:
-                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
-                break;
-            case FAQCategoryProperty.CREATE_BY:
-            case FAQCategoryProperty.CHANGE_BY:
-                if (displayValue) {
-                    const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [displayValue], null, null, true
-                    ).catch((error) => [] as User[]);
-                    displayValue = users && !!users.length ? users[0].UserFullname : displayValue;
-                }
-                break;
-            case FAQCategoryProperty.VALID_ID:
-                const valid = objectData.validObjects.find((v) => v.ID.toString() === displayValue.toString());
-                if (valid) {
-                    displayValue = valid.Name;
-                }
+            case FAQCategoryProperty.ID:
+            case 'ICON':
+                displayValue = faqCategory.Name;
                 break;
             default:
                 displayValue = await this.getPropertyValueDisplayText(property, displayValue);
+        }
+
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
+        }
+
+        return displayValue ? displayValue.toString() : '';
+    }
+
+    public async getPropertyValueDisplayText(
+        property: string, value: string | number, translatable: boolean = true
+    ): Promise<string> {
+        let displayValue = value;
+        const objectData = ObjectDataService.getInstance().getObjectData();
+
+        if (objectData) {
+            switch (property) {
+                case FAQCategoryProperty.CHANGE_TIME:
+                case FAQCategoryProperty.CREATE_TIME:
+                    displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
+                    break;
+                case FAQCategoryProperty.CREATE_BY:
+                case FAQCategoryProperty.CHANGE_BY:
+                    if (displayValue) {
+                        const users = await KIXObjectService.loadObjects<User>(
+                            KIXObjectType.USER, [displayValue], null, null, true
+                        ).catch((error) => [] as User[]);
+                        displayValue = users && !!users.length ? users[0].UserFullname : displayValue;
+                    }
+                    break;
+                case FAQCategoryProperty.PARENT_ID:
+                    const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(KIXObjectType.FAQ_CATEGORY);
+                    const category = faqCategories.find((fc) => fc.ID === value);
+                    displayValue = category ? category.Name : value;
+                    break;
+                case FAQCategoryProperty.VALID_ID:
+                    const valid = objectData.validObjects.find((v) => v.ID.toString() === value.toString());
+                    if (valid) {
+                        displayValue = valid.Name;
+                    }
+                    break;
+                default:
+                    displayValue = value;
+            }
         }
 
         if (translatable && displayValue) {

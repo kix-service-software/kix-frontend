@@ -8,7 +8,7 @@ class Extension implements IAdminModuleExtension {
                 null, 'knowledge-database', 'Translatable#Knowledge Database', null, [], [
                     new AdminModule(
                         null, 'faq-categories', 'Translatable#FAQ Categories', null,
-                        KIXObjectType.FAQ_CATEGORY, 'faq-admin-catgeries'
+                        KIXObjectType.FAQ_CATEGORY, 'faq-admin-categories'
                     )
                 ])
         ];

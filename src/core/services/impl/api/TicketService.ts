@@ -5,11 +5,11 @@ import {
 } from '../../../api';
 
 import {
-    Article, Attachment, ArticleProperty, FilterCriteria, Queue, TicketProperty,
+    Article, Attachment, ArticleProperty, FilterCriteria, TicketProperty,
     TicketFactory, KIXObjectType, FilterType, User, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions, CreateTicketArticleOptions, CreateTicketWatcherOptions,
-    KIXObjectSpecificDeleteOptions, DeleteTicketWatcherOptions, Error, QueueFactory,
-    SenderTypeFactory, ArticleFactory, LockFactory
+    KIXObjectSpecificDeleteOptions, DeleteTicketWatcherOptions, Error,
+    SenderTypeFactory, ArticleFactory, LockFactory, Queue
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
@@ -43,7 +43,6 @@ export class TicketService extends KIXObjectService {
     private constructor() {
         super([
             new TicketFactory(),
-            new QueueFactory(),
             new SenderTypeFactory(),
             new ArticleFactory(),
             new LockFactory()
@@ -54,7 +53,6 @@ export class TicketService extends KIXObjectService {
     public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.TICKET
             || kixObjectType === KIXObjectType.ARTICLE
-            || kixObjectType === KIXObjectType.QUEUE
             || kixObjectType === KIXObjectType.SENDER_TYPE
             || kixObjectType === KIXObjectType.LOCK
             || kixObjectType === KIXObjectType.WATCHER;
@@ -70,8 +68,6 @@ export class TicketService extends KIXObjectService {
             objects = await super.load(
                 token, KIXObjectType.TICKET, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.TICKET
             );
-        } else if (objectType === KIXObjectType.QUEUE) {
-            objects = await super.load(token, KIXObjectType.QUEUE, 'queues', loadingOptions, null, KIXObjectType.QUEUE);
         } else if (objectType === KIXObjectType.SENDER_TYPE) {
             objects = await super.load(token, KIXObjectType.SENDER_TYPE, 'sendertypes', null, null, 'SenderType');
         } else if (objectType === KIXObjectType.LOCK) {
@@ -94,7 +90,7 @@ export class TicketService extends KIXObjectService {
             const queueId = this.getParameterValue(parameter, TicketProperty.QUEUE_ID);
             const contactId = this.getParameterValue(parameter, TicketProperty.CUSTOMER_USER_ID);
 
-            const createArticle = await this.prepareArticleData(token, parameter, queueId, contactId);
+            const createArticle = await this.prepareArticleData(token, clientRequestId, parameter, queueId, contactId);
 
             const createTicket = new CreateTicket(
                 this.getParameterValue(parameter, TicketProperty.TITLE),
@@ -137,7 +133,7 @@ export class TicketService extends KIXObjectService {
                 queueId = tickets[0].QueueID;
             }
 
-            const createArticle = await this.prepareArticleData(token, parameter, queueId);
+            const createArticle = await this.prepareArticleData(token, clientRequestId, parameter, queueId);
             const uri = this.buildUri(this.RESOURCE_URI, options.ticketId, this.SUB_RESOURCE_URI);
             const response = await this.sendCreateRequest<CreateArticleResponse, CreateArticleRequest>(
                 token, clientRequestId, uri, new CreateArticleRequest(createArticle), this.objectType
@@ -165,7 +161,7 @@ export class TicketService extends KIXObjectService {
     ): Promise<string | number> {
         const queueId = this.getParameterValue(parameter, TicketProperty.QUEUE_ID);
 
-        const createArticle = await this.prepareArticleData(token, parameter, queueId);
+        const createArticle = await this.prepareArticleData(token, clientRequestId, parameter, queueId);
 
         const updateTicket = new UpdateTicket(
             this.getParameterValue(parameter, TicketProperty.TITLE),
@@ -206,7 +202,7 @@ export class TicketService extends KIXObjectService {
     }
 
     private async prepareArticleData(
-        token: string, parameter: Array<[string, any]>, queueId: number, contactId?: string
+        token: string, clientRequestId: string, parameter: Array<[string, any]>, queueId: number, contactId?: string
     ): Promise<CreateArticle> {
         const attachments = this.createAttachments(this.getParameterValue(parameter, ArticleProperty.ATTACHMENTS));
 
@@ -239,8 +235,8 @@ export class TicketService extends KIXObjectService {
         const channel = channels.find((c) => c.ID === channelId);
         if (channel && channel.Name === 'email') {
             if (queueId) {
-                const queues = await super.load<Queue>(
-                    token, KIXObjectType.QUEUE, 'queues', null, null, KIXObjectType.QUEUE
+                const queues = await super.loadObjects<Queue>(
+                    token, clientRequestId, KIXObjectType.QUEUE, null, null, null
                 );
                 const queue = queues.find((q) => q.QueueID === queueId);
                 if (queue && queue.Signature) {

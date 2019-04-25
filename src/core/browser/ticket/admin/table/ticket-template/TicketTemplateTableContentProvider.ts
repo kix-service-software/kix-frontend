@@ -2,7 +2,7 @@ import { TableContentProvider } from "../../../../table/TableContentProvider";
 import { KIXObjectType, KIXObjectLoadingOptions, TicketTemplate } from "../../../../../model";
 import { ITable } from "../../../../table";
 
-export class TicketStateTableContentProvider extends TableContentProvider<TicketTemplate> {
+export class TicketTemplateTableContentProvider extends TableContentProvider<TicketTemplate> {
 
     public constructor(
         table: ITable,
