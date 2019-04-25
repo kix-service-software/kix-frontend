@@ -40,7 +40,7 @@ export class QueueService extends KIXObjectService {
             const uri = this.buildUri(this.RESOURCE_URI);
             objects = await super.load(token, KIXObjectType.QUEUE, uri, loadingOptions, null, KIXObjectType.QUEUE);
             if (objectIds && objectIds.length) {
-                objects = objects.filter((t) => objectIds.some((oid) => oid === t.ObjectId));
+                objects = objects.filter((q) => objectIds.some((oid) => oid.toString() === q.ObjectId.toString()));
             }
         }
         return objects;

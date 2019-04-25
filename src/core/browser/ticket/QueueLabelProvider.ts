@@ -121,7 +121,8 @@ export class QueueLabelProvider implements ILabelProvider<Queue> {
                 const systemAddresses = await KIXObjectService.loadObjects<SystemAddress>(
                     KIXObjectType.SYSTEM_ADDRESS, [value], null, null, true
                 ).catch((error) => [] as SystemAddress[]);
-                displayValue = systemAddresses && !!systemAddresses.length ? systemAddresses[0].Realname : value;
+                displayValue = systemAddresses && !!systemAddresses.length ?
+                    `${systemAddresses[0].Realname} <${systemAddresses[0].Name}>` : value;
                 break;
             // case QueueProperty.FOLLOW_UP_ID:
             //     const follwoUptypes = await KIXObjectService.loadObjects<FollowUpType>(

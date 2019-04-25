@@ -35,13 +35,13 @@ export class FAQCategoryTableContentProvider extends TableContentProvider<FAQCat
 
         const rowObjects = [];
         faqCategories.forEach((fc) => {
-            rowObjects.push(this.createRow(fc, null));
+            rowObjects.push(this.createRowObject(fc));
         });
 
         return rowObjects;
     }
 
-    private createRow(category: FAQCategory, parent: RowObject): RowObject {
+    private createRowObject(category: FAQCategory): RowObject {
         const values: TableValue[] = [];
 
         for (const property in category) {
@@ -52,14 +52,9 @@ export class FAQCategoryTableContentProvider extends TableContentProvider<FAQCat
 
         const rowObject = new RowObject<FAQCategory>(values, category);
 
-        if (category.SubCategories) {
+        if (category.SubCategories && Array.isArray(category.SubCategories) && category.SubCategories.length) {
             category.SubCategories.forEach((sc) => {
-                const row = this.createRow(sc, rowObject);
-                if (parent) {
-                    parent.addChild(row);
-                } else {
-                    rowObject.addChild(row);
-                }
+                rowObject.addChild(this.createRowObject(sc));
             });
         }
 

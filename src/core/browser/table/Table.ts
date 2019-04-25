@@ -339,10 +339,16 @@ export class Table implements ITable {
                 this.filteredRows = await TableSortUtil.sort(
                     this.filteredRows, columnId, sortOrder, column.getColumnConfiguration().dataType
                 );
+                for (const row of this.filteredRows) {
+                    await row.sortChildren(columnId, sortOrder, column.getColumnConfiguration().dataType);
+                }
             } else {
                 this.rows = await TableSortUtil.sort(
                     this.rows, columnId, sortOrder, column.getColumnConfiguration().dataType
                 );
+                for (const row of this.rows) {
+                    await row.sortChildren(columnId, sortOrder, column.getColumnConfiguration().dataType);
+                }
             }
             EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
             EventService.getInstance().publish(
