@@ -383,9 +383,6 @@ msgstr "enthält"
 msgid "Country"
 msgstr "Land"
 
-msgid "Create"
-msgstr "Erstellt"
-
 msgid "Create Agent"
 msgstr "Neuer Agent"
 
@@ -499,9 +496,6 @@ msgstr "Löschen"
 msgid "Delete Link"
 msgstr "Verknüpfung löschen"
 
-msgid "Deny"
-msgstr "Deny"
-
 msgid "Deployment State"
 msgstr "Verwendungsstatus"
 
@@ -602,6 +596,11 @@ msgstr "Typ bearbeiten"
 msgid "E-mail"
 msgstr ""
 
+#, fuzzy
+#| msgid "IP Address"
+msgid "Email address"
+msgstr "IP Adresse"
+
 msgid "ends with"
 msgstr "endet mit"
 
@@ -677,6 +676,9 @@ msgstr "Stammdaten"
 msgid "FAQ Information"
 msgstr "FAQ Informationen"
 
+msgid "FAQ Knowledge Database: FAQ Categories"
+msgstr ""
+
 msgid "FAQ rating"
 msgstr "FAQ Bewertung"
 
@@ -692,6 +694,9 @@ msgstr "Filtern in Liste"
 msgid "First Name"
 msgstr "Vorname"
 
+msgid "Follow Up Possible"
+msgstr ""
+
 msgid "Force"
 msgstr "Erzwingen"
 
@@ -700,6 +705,9 @@ msgstr "Freie Tickets: {0}"
 
 msgid "From"
 msgstr "Von"
+
+msgid "Fullname"
+msgstr ""
 
 msgid "Full Text"
 msgstr "Volltext"
@@ -884,6 +892,9 @@ msgstr "Internationalisierung: Übersetzungen"
 
 msgid "Invalid date."
 msgstr "Ungültiges Datum."
+
+msgid "Knowledge Database"
+msgstr ""
 
 msgid "Label"
 msgstr "Beschriftung"
@@ -1074,6 +1085,11 @@ msgstr "Neues Objekt"
 msgid "New Priority"
 msgstr "Neue Priorität"
 
+#, fuzzy
+#| msgid "Queue"
+msgid "New Queue"
+msgstr "Queue"
+
 msgid "New Role"
 msgstr "Neue Rolle"
 
@@ -1220,11 +1236,13 @@ msgstr ""
 "Der Bearbeiter ist die Person, die für die Bearbeitung des Ticket zuständig "
 "sein soll."
 
+#, fuzzy
+#| msgid "Category"
+msgid "Parent Category"
+msgstr "Kategorie"
+
 msgid "Password"
 msgstr "Passwort"
-
-msgid "Path"
-msgstr "Pfad"
 
 msgid "Pattern"
 msgstr "Pattern"
@@ -1381,9 +1399,6 @@ msgstr "Bewerten"
 
 msgid "Rating"
 msgstr "Bewertung"
-
-msgid "Read"
-msgstr "Read"
 
 msgid "Read file."
 msgstr ""
@@ -1801,6 +1816,9 @@ msgstr "Schlagwort"
 msgid "Tags"
 msgstr "Schlagworte"
 
+msgid "Target"
+msgstr ""
+
 msgid "Template"
 msgstr "Vorlage"
 
@@ -1874,6 +1892,11 @@ msgstr "Ticket Nummer"
 
 msgid "Ticket: Priorities"
 msgstr "Ticket: Prioritäten"
+
+#, fuzzy
+#| msgid "Ticket: Types"
+msgid "Ticket: Queues"
+msgstr "Ticket: Typen"
 
 msgid "Tickets"
 msgstr "Tickets"
@@ -1978,6 +2001,11 @@ msgstr "Freigeben"
 msgid "Unlock Ticket ..."
 msgstr "Tickets entsperren..."
 
+#, fuzzy
+#| msgid "Unlock Ticket ..."
+msgid "Unlock Timeout (min)"
+msgstr "Tickets entsperren..."
+
 msgid "Unread Articles"
 msgstr "Ungelesene Artikel"
 
@@ -1986,9 +2014,6 @@ msgstr "Nicht beobachten"
 
 msgid "Unwatch Ticket ..."
 msgstr "Ticket nicht mehr beobachten..."
-
-msgid "Update"
-msgstr "Aktualisierung"
 
 #, fuzzy
 #| msgid "Update time"
@@ -2120,6 +2145,21 @@ msgstr "Ihre Bewertung"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Create"
+#~ msgstr "Erstellt"
+
+#~ msgid "Deny"
+#~ msgstr "Deny"
+
+#~ msgid "Path"
+#~ msgstr "Pfad"
+
+#~ msgid "Read"
+#~ msgstr "Read"
+
+#~ msgid "Update"
+#~ msgstr "Aktualisierung"
 
 #~ msgid "Config Item Details"
 #~ msgstr "Config Item Details"
@@ -2305,9 +2345,6 @@ msgstr "PLZ"
 
 #~ msgid "no"
 #~ msgstr "nein"
-
-#~ msgid "IP Address"
-#~ msgstr "IP Adresse"
 
 #~ msgid "Please enter a valid IPv4 address in form 123.123.123.123."
 #~ msgstr ""
