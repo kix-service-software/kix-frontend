@@ -1,7 +1,7 @@
 import { ComponentState } from './ComponentState';
 import { ContextService, IdService } from '../../../../core/browser';
 import { TreeNode, Queue, TreeNodeProperty } from '../../../../core/model';
-import { TicketContext, TicketService } from '../../../../core/browser/ticket';
+import { TicketContext, QueueService } from '../../../../core/browser/ticket';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 export class Component {
@@ -27,7 +27,7 @@ export class Component {
 
     private async loadQueues(context: TicketContext): Promise<void> {
         this.state.nodes = null;
-        const queuesHierarchy = await TicketService.getInstance().getQueuesHierarchy();
+        const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy();
         this.state.nodes = await this.prepareTreeNodes(queuesHierarchy);
         this.setActiveNode(context.queue);
     }

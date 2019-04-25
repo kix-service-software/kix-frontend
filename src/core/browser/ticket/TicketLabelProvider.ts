@@ -189,7 +189,7 @@ export class TicketLabelProvider implements ILabelProvider<Ticket> {
             displayValue = await TranslationService.translate(displayValue.toString());
         }
 
-        return displayValue;
+        return displayValue ? displayValue.toString() : '';
     }
 
     public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {

@@ -55,7 +55,7 @@ export class TicketStateTypeLabelProvider implements ILabelProvider<TicketStateT
             displayValue = await TranslationService.translate(displayValue.toString());
         }
 
-        return displayValue;
+        return displayValue ? displayValue.toString() : '';
     }
 
     public async getPropertyValueDisplayText(property: string, value: string | number): Promise<string> {

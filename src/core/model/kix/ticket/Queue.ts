@@ -1,6 +1,6 @@
-import { TicketStats, Ticket } from "./ticket";
-import { KIXObject } from "./KIXObject";
-import { KIXObjectType } from "./KIXObjectType";
+import { TicketStats, Ticket } from "./../ticket";
+import { KIXObject } from "./../KIXObject";
+import { KIXObjectType } from "./../KIXObjectType";
 
 export class Queue extends KIXObject<Queue> {
 
@@ -17,11 +17,8 @@ export class Queue extends KIXObject<Queue> {
     public UnlockTimeout: number;
     public Calendar: string;
     public Email: string;
-    public GroupID: number;
-    public SalutationID: number;
     public RealName: string;
     public FollowUpLock: number;
-    public SignatureID: number;
     public FirstResponseTime: number;
     public FirstResponseNotify: number;
     public UpdateTime: number;
@@ -31,6 +28,7 @@ export class Queue extends KIXObject<Queue> {
     public CreateTime: string;
     public ChangeTime: string;
     public Signature: string;
+    public ParentID: number | string;
     public SubQueues: Queue[];
     public TicketStats: TicketStats;
     public Tickets: number[] | Ticket[];
@@ -49,11 +47,9 @@ export class Queue extends KIXObject<Queue> {
             this.UnlockTimeout = queue.UnlockTimeout;
             this.Calendar = queue.Calendar;
             this.Email = queue.Email;
-            this.GroupID = queue.GroupID;
-            this.SalutationID = queue.SalutationID;
             this.RealName = queue.RealName;
             this.FollowUpLock = queue.FollowUpID;
-            this.SignatureID = queue.SignatureID;
+            this.Signature = queue.Signature;
             this.FirstResponseTime = queue.FirstResponseTime;
             this.FirstResponseNotify = queue.FirstResponseNotify;
             this.UpdateTime = queue.UpdateTime;
@@ -63,6 +59,7 @@ export class Queue extends KIXObject<Queue> {
             this.SolutionNotify = queue.SolutionNotify;
             this.CreateTime = queue.CreateTime;
             this.ChangeTime = queue.ChangeTime;
+            this.ParentID = queue.ParentID;
 
             this.SubQueues = queue.SubQueues ? queue.SubQueues.map((q) => new Queue(q)) : [];
             this.TicketStats = new TicketStats(queue.TicketStats);

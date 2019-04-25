@@ -57,6 +57,7 @@ class Extension implements IKIXModuleExtension {
         ['go-to-article-cell', 'ticket/table/go-to-article-cell'],
         ['article-attachment-cell', 'ticket/table/article-attachment-cell'],
         ['article-attachment-count', 'ticket/article-attachment-count'],
+        ['ticket-admin-queues', 'ticket/admin/ticket-admin-queues'],
         ['ticket-admin-templates', 'ticket/admin/ticket-admin-templates']
     ];
 
