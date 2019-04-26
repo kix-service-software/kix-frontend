@@ -17,8 +17,10 @@ class TreeComponent {
     }
 
     private async update(input: any): Promise<void> {
-        for (const n of input.nodes) {
-            (n as TreeNode).label = await TranslationService.translate(n.label, []);
+        if (input.nodes && Array.isArray(input.nodes)) {
+            for (const n of input.nodes) {
+                (n as TreeNode).label = await TranslationService.translate(n.label, []);
+            }
         }
         this.state.nodes = input.nodes;
         this.state.filterValue = input.filterValue;
