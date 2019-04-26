@@ -87,7 +87,10 @@ export class TicketQueueTableFactory extends TableFactory {
                 );
                 break;
             case QueueProperty.COMMENT:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 350, true, true);
+                config = new DefaultColumnConfiguration(
+                    property, true, false, true, false, 350, true, true, false,
+                    DataType.STRING, true, undefined, null, false
+                );
                 break;
             case QueueProperty.CHANGE_TIME:
             case QueueProperty.CREATE_TIME:

@@ -17,7 +17,8 @@ export class DefaultColumnConfiguration implements IColumnConfiguration {
         public resizable: boolean = true,
         public componentId: string = null,
         public defaultText: string = null,
-        public translatable: boolean = true
+        public translatable: boolean = true,
+        public titleTranslatable: boolean = true
     ) {
     }
 }

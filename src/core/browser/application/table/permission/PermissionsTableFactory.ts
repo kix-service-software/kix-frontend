@@ -22,7 +22,9 @@ export class PermissionsTableFactory extends TableFactory {
         objectType?: KIXObjectType
     ): ITable {
 
-        tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
+        tableConfiguration = this.setDefaultTableConfiguration(
+            tableConfiguration, defaultRouting, defaultToggle, objectType
+        );
         const table = new Table(tableKey, tableConfiguration);
 
         table.setContentProvider(new PermissionsTableContentProvider(objectType, table, objectIds, null, contextId));
@@ -32,34 +34,32 @@ export class PermissionsTableFactory extends TableFactory {
     }
 
     private setDefaultTableConfiguration(
-        tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
+        tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean,
+        objectType: KIXObjectType = KIXObjectType.ROLE_PERMISSION
     ): TableConfiguration {
-        const tableColumns = [
-            new DefaultColumnConfiguration(
-                PermissionProperty.RoleID, true, false, true, false, 150, true, true, true,
-                DataType.STRING, true, null, null, false
-            ),
-            new DefaultColumnConfiguration(
-                PermissionProperty.CREATE, false, false, true, false, 85,
-                false, true, true, null, null, 'crud-cell', null, false
-            ),
-            new DefaultColumnConfiguration(
-                PermissionProperty.READ, false, false, true, false, 85,
-                false, true, true, null, null, 'crud-cell', null, false
-            ),
-            new DefaultColumnConfiguration(
-                PermissionProperty.UPDATE, false, false, true, false, 85,
-                false, true, true, null, null, 'crud-cell', null, false
-            ),
-            new DefaultColumnConfiguration(
-                PermissionProperty.DELETE, false, false, true, false, 85,
-                false, true, true, null, null, 'crud-cell', null, false
-            ),
-            new DefaultColumnConfiguration(
-                PermissionProperty.DENY, false, false, true, false, 85,
-                false, true, true, null, null, 'crud-cell', null, false
-            )
-        ];
+        let tableColumns = [];
+        if (objectType === KIXObjectType.ROLE_PERMISSION) {
+            tableColumns = [
+                this.getDefaultColumnConfiguration(PermissionProperty.TYPE_ID),
+                this.getDefaultColumnConfiguration(PermissionProperty.TARGET),
+                this.getDefaultColumnConfiguration(PermissionProperty.IS_REQUIRED),
+                this.getDefaultColumnConfiguration(PermissionProperty.CREATE),
+                this.getDefaultColumnConfiguration(PermissionProperty.READ),
+                this.getDefaultColumnConfiguration(PermissionProperty.UPDATE),
+                this.getDefaultColumnConfiguration(PermissionProperty.DELETE),
+                this.getDefaultColumnConfiguration(PermissionProperty.DENY),
+                this.getDefaultColumnConfiguration(PermissionProperty.COMMENT)
+            ];
+        } else {
+            tableColumns = [
+                this.getDefaultColumnConfiguration(PermissionProperty.RoleID),
+                this.getDefaultColumnConfiguration(PermissionProperty.CREATE),
+                this.getDefaultColumnConfiguration(PermissionProperty.READ),
+                this.getDefaultColumnConfiguration(PermissionProperty.UPDATE),
+                this.getDefaultColumnConfiguration(PermissionProperty.DELETE),
+                this.getDefaultColumnConfiguration(PermissionProperty.DENY)
+            ];
+        }
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
@@ -75,6 +75,62 @@ export class PermissionsTableFactory extends TableFactory {
     }
 
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
-        return;
+        let config;
+        switch (property) {
+            case PermissionProperty.RoleID:
+                config = new DefaultColumnConfiguration(
+                    property, true, false, true, false, 150, true, true, true,
+                    DataType.STRING, true, null, null, false
+                );
+                break;
+            case 'ICON':
+                config = new DefaultColumnConfiguration(
+                    property, false, true, false, false, null, false, false, false, undefined, false
+                );
+                break;
+            case PermissionProperty.TYPE_ID:
+                config = new DefaultColumnConfiguration(
+                    property, true, false, true, false, 150, true, true, true,
+                    DataType.STRING, true, null, null, false
+                );
+                break;
+            case PermissionProperty.TARGET:
+                config = new DefaultColumnConfiguration(
+                    property, true, false, true, false, 250, true, true, false,
+                    DataType.STRING, true, null, null, false
+                );
+                break;
+            case PermissionProperty.IS_REQUIRED:
+                config = new DefaultColumnConfiguration(
+                    property, false, true, true, false, 85,
+                    true, true, true, null, true, null, null, false, false
+                );
+                break;
+            case PermissionProperty.CREATE:
+            case PermissionProperty.READ:
+            case PermissionProperty.UPDATE:
+            case PermissionProperty.DELETE:
+            case PermissionProperty.DENY:
+                config = new DefaultColumnConfiguration(
+                    property, false, false, true, false, 85,
+                    false, true, true, null, null, 'crud-cell', null, false, false
+                );
+                break;
+            case PermissionProperty.COMMENT:
+                config = new DefaultColumnConfiguration(
+                    property, true, false, true, false, 350, true, true, false,
+                    DataType.STRING, true, undefined, null, false
+                );
+                break;
+            case PermissionProperty.CHANGE_TIME:
+            case PermissionProperty.CREATE_TIME:
+                config = new DefaultColumnConfiguration(
+                    property, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
+                );
+                break;
+            default:
+                config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true);
+        }
+        return config;
     }
 }

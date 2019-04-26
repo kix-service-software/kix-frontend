@@ -149,7 +149,7 @@ class Component {
 
             const table = await TableFactoryService.getInstance().createTable(
                 `table-widget-${this.state.instanceId}`, this.objectType,
-                settings.tableConfiguration, null, contextId, true, true
+                settings.tableConfiguration, null, contextId, true, true, settings.shortTable
             );
 
             if (table && settings.sort) {
