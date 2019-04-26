@@ -15,7 +15,7 @@ import {
     FAQArticleSearchDefinition, FAQArticleFormService, EditFAQArticleDialogContext, FAQCategoryLabelProvider
 } from '../../../core/browser/faq';
 import { DialogService } from '../../../core/browser/components/dialog';
-import { FAQCategoryTableFactory } from '../../../core/browser/faq/admin';
+import { FAQCategoryTableFactory, FAQCategoryCreateAction } from '../../../core/browser/faq/admin';
 import { FAQCategoryBrowserFactory } from '../../../core/browser/faq/FAQCategoryBrowserFactory';
 
 class Component extends AbstractMarkoComponent {
@@ -53,6 +53,8 @@ class Component extends AbstractMarkoComponent {
         this.registerContexts();
         this.registerDialogs();
         this.registerActions();
+
+        this.registerAdminActions();
     }
 
     private registerContexts(): void {
@@ -127,6 +129,10 @@ class Component extends AbstractMarkoComponent {
         ActionFactory.getInstance().registerAction('faq-article-edit-action', FAQArticleEditAction);
         ActionFactory.getInstance().registerAction('faq-article-print-action', FAQArticlePrintAction);
         ActionFactory.getInstance().registerAction('faq-article-vote-action', FAQArticleVoteAction);
+    }
+
+    private registerAdminActions(): void {
+        ActionFactory.getInstance().registerAction('faq-admin-category-create-action', FAQCategoryCreateAction);
     }
 
 }

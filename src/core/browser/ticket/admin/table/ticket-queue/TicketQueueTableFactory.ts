@@ -67,7 +67,10 @@ export class TicketQueueTableFactory extends TableFactory {
         switch (property) {
             case QueueProperty.NAME:
             case QueueProperty.SYSTEM_ADDRESS_ID:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 200, true, true);
+                config = new DefaultColumnConfiguration(
+                    property, true, false, true, false, 200, true, true,
+                    false, DataType.STRING, true, null, null, false
+                );
                 break;
             case 'ICON':
                 config = new DefaultColumnConfiguration(

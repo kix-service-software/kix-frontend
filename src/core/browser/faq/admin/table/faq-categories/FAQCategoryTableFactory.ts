@@ -29,28 +29,14 @@ export class FAQCategoryTableFactory extends TableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new DefaultColumnConfiguration(
-                FAQCategoryProperty.NAME, true, false, true, false, 250, true, true, false,
-                DataType.STRING, true, null, null, false
-            ),
-            new DefaultColumnConfiguration(FAQCategoryProperty.ID, false, true, false, true, 41, false),
-            new DefaultColumnConfiguration(
-                FAQCategoryProperty.PARENT_ID, true, false, true, false, 100, true, true, true
-            ),
-            new DefaultColumnConfiguration(
-                FAQCategoryProperty.COMMENT, true, false, true, false, 100, true, true
-            ),
-            new DefaultColumnConfiguration(
-                FAQCategoryProperty.VALID_ID, true, false, true, false, 100, true, true, true
-            ),
-            new DefaultColumnConfiguration(
-                FAQCategoryProperty.CREATE_TIME, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
-            ),
-            new DefaultColumnConfiguration(FAQCategoryProperty.CREATE_BY, true, false, true, true, 150, true, true),
-            new DefaultColumnConfiguration(
-                FAQCategoryProperty.CHANGE_TIME, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
-            ),
-            new DefaultColumnConfiguration(FAQCategoryProperty.CHANGE_BY, true, false, true, false, 150, true, true)
+            this.getDefaultColumnConfiguration(FAQCategoryProperty.NAME),
+            this.getDefaultColumnConfiguration('ICON'),
+            this.getDefaultColumnConfiguration(FAQCategoryProperty.COMMENT),
+            this.getDefaultColumnConfiguration(FAQCategoryProperty.VALID_ID),
+            this.getDefaultColumnConfiguration(FAQCategoryProperty.CREATE_TIME),
+            this.getDefaultColumnConfiguration(FAQCategoryProperty.CREATE_BY),
+            this.getDefaultColumnConfiguration(FAQCategoryProperty.CHANGE_TIME),
+            this.getDefaultColumnConfiguration(FAQCategoryProperty.CHANGE_BY)
         ];
 
         if (!tableConfiguration) {
@@ -73,8 +59,35 @@ export class FAQCategoryTableFactory extends TableFactory {
         return tableConfiguration;
     }
 
-    // TODO: implementieren
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
-        return;
+        let config;
+        switch (property) {
+            case FAQCategoryProperty.NAME:
+                config = new DefaultColumnConfiguration(
+                    property, true, false, true, false, 200, true, true,
+                    false, DataType.STRING, true, null, null, false
+                );
+                break;
+            case 'ICON':
+                config = new DefaultColumnConfiguration(
+                    property, false, true, false, false, null, false, false, false, undefined, false
+                );
+                break;
+            case FAQCategoryProperty.VALID_ID:
+                config = new DefaultColumnConfiguration(property, true, false, true, false, 130, true, true, true);
+                break;
+            case FAQCategoryProperty.COMMENT:
+                config = new DefaultColumnConfiguration(property, true, false, true, false, 275, true, true);
+                break;
+            case FAQCategoryProperty.CHANGE_TIME:
+            case FAQCategoryProperty.CREATE_TIME:
+                config = new DefaultColumnConfiguration(
+                    property, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
+                );
+                break;
+            default:
+                config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true);
+        }
+        return config;
     }
 }

@@ -1,0 +1,1 @@
+export { FAQCategoryCreateAction } from './FAQCategoryCreateAction';
