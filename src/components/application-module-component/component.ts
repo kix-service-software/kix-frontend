@@ -21,6 +21,9 @@ import {
 import {
     SystemAddressBrowserFactory, SystemAddressLabelProvider, SystemAddressTableFactory
 } from '../../core/browser/system-address';
+import {
+    SystemAddressCreateAction, SystemAddressDeleteAction
+} from '../../core/browser/system-address/actions';
 import { SlaService, SlaLabelProvider, SlaBrowserFactory } from '../../core/browser/sla';
 import { ObjectIconService, ObjectIconBrowserFactory } from '../../core/browser/icon';
 import { PersonalSettingsDialogContext } from '../../core/browser';
@@ -112,6 +115,12 @@ class Component extends AbstractMarkoComponent {
         );
         TableFactoryService.getInstance().registerFactory(new SystemAddressTableFactory());
         LabelService.getInstance().registerLabelProvider(new SystemAddressLabelProvider());
+        ActionFactory.getInstance().registerAction(
+            'communication-admin-system-addresses-create', SystemAddressCreateAction
+        );
+        ActionFactory.getInstance().registerAction(
+            'communication-admin-system-addresses-table-delete', SystemAddressDeleteAction
+        );
 
 
         ActionFactory.getInstance().registerAction('csv-export-action', CSVExportAction);
