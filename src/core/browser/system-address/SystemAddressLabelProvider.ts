@@ -5,7 +5,7 @@ import { ObjectDataService } from '../ObjectDataService';
 
 export class SystemAddressLabelProvider implements ILabelProvider<SystemAddress> {
 
-    public kixObjectType: KIXObjectType = KIXObjectType.CONTACT;
+    public kixObjectType: KIXObjectType = KIXObjectType.SYSTEM_ADDRESS;
 
     public isLabelProviderForType(objectType: KIXObjectType): boolean {
         return objectType === this.kixObjectType;

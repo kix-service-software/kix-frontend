@@ -5,7 +5,7 @@ import { IdService } from "../../../../core/browser";
 
 export class ComponentState {
     public constructor(
-        public instanceId: string = IdService.generateDateBasedId('ticket-states-list'),
+        public instanceId: string = IdService.generateDateBasedId('ticket-system-addresses-list'),
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
             'table-widget', 'Translatable#Communication: E-mail-addresses',
             [],
