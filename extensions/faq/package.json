@@ -10,6 +10,9 @@
         },
         "kix:modules": {
             "faq-module": "../../dist/registry-modules/faq/kix-module.extension"
+        },
+        "kix:admin-module": {
+            "faq-admin": "../../dist/registry-modules/faq/admin/admin-module.extension"
         }
     }
 }

@@ -10,7 +10,10 @@ export class ContactCreateCustomerAction extends AbstractAction {
     }
 
     public async run(event: any): Promise<void> {
-        ContextService.getInstance().setDialogContext(null, KIXObjectType.CUSTOMER, ContextMode.CREATE, null, true);
+        ContextService.getInstance().setDialogContext(
+            null, KIXObjectType.CUSTOMER, ContextMode.CREATE, null, true,
+            undefined, undefined, 'new-customer-form'
+        );
     }
 
 }

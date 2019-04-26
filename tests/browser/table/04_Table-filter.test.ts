@@ -3,10 +3,10 @@
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 
-import { TableFilterCriteria, KIXObjectType } from '../../src/core/model';
-import { SearchOperator, TableValue } from '../../src/core/browser';
-import { ITable, Table, RowObject, IRowObject, ITableContentProvider, DefaultColumnConfiguration, TableEvent, TableEventData } from '../../src/core/browser/table';
-import { EventService, IEventSubscriber } from '../../src/core/browser/event';
+import { TableFilterCriteria, KIXObjectType } from '../../../src/core/model';
+import { SearchOperator, TableValue } from '../../../src/core/browser';
+import { ITable, Table, RowObject, IRowObject, ITableContentProvider, DefaultColumnConfiguration, TableEvent, TableEventData } from '../../../src/core/browser/table';
+import { EventService, IEventSubscriber } from '../../../src/core/browser/event';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

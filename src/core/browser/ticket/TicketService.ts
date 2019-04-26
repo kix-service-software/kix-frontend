@@ -2,7 +2,7 @@ import { TicketDetailsContext } from '.';
 import { SearchOperator, ContextService } from '..';
 import {
     Attachment, KIXObjectType, Ticket, TicketProperty, FilterDataType, FilterCriteria, FilterType,
-    TreeNode, ObjectIcon, Queue, Service, TicketPriority, TicketType,
+    TreeNode, ObjectIcon, Service, TicketPriority, TicketType,
     TicketState, StateType, KIXObject, Sla, TableFilterCriteria, User, KIXObjectLoadingOptions,
     KIXObjectSpecificLoadingOptions
 } from '../../model';
@@ -13,6 +13,7 @@ import { LabelService } from '../LabelService';
 import { ObjectDataService } from '../ObjectDataService';
 import { TicketSocketClient } from './TicketSocketClient';
 import { AgentService } from '../application/AgentService';
+import { QueueService } from './admin';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -29,7 +30,6 @@ export class TicketService extends KIXObjectService<Ticket> {
     public isServiceFor(kixObjectType: KIXObjectType) {
         return kixObjectType === KIXObjectType.TICKET
             || kixObjectType === KIXObjectType.ARTICLE
-            || kixObjectType === KIXObjectType.QUEUE
             || kixObjectType === KIXObjectType.SENDER_TYPE
             || kixObjectType === KIXObjectType.LOCK
             || kixObjectType === KIXObjectType.WATCHER;
@@ -41,9 +41,7 @@ export class TicketService extends KIXObjectService<Ticket> {
     ): Promise<O[]> {
         let objects: O[];
         let superLoad = false;
-        if (objectType === KIXObjectType.QUEUE) {
-            objects = await super.loadObjects<O>(KIXObjectType.QUEUE, null, loadingOptions);
-        } else if (objectType === KIXObjectType.SENDER_TYPE) {
+        if (objectType === KIXObjectType.SENDER_TYPE) {
             objects = await super.loadObjects<O>(KIXObjectType.SENDER_TYPE, null, loadingOptions);
         } else if (objectType === KIXObjectType.LOCK) {
             objects = await super.loadObjects<O>(KIXObjectType.LOCK, null, loadingOptions);
@@ -110,8 +108,8 @@ export class TicketService extends KIXObjectService<Ticket> {
 
         switch (property) {
             case TicketProperty.QUEUE_ID:
-                const queuesHierarchy = await this.getQueuesHierarchy();
-                values = queuesHierarchy ? this.prepareQueueTree(queuesHierarchy) : [];
+                const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy();
+                values = queuesHierarchy ? QueueService.getInstance().prepareQueueTree(queuesHierarchy) : [];
                 break;
             case TicketProperty.SERVICE_ID:
                 const servicesHierarchy = await this.getServicesHierarchy();
@@ -160,22 +158,6 @@ export class TicketService extends KIXObjectService<Ticket> {
         }
 
         return values;
-    }
-
-    private prepareQueueTree(queues: Queue[]): TreeNode[] {
-        let nodes = [];
-        if (queues) {
-            nodes = queues.filter((q) => q.ValidID === 1).map((queue: Queue) => {
-                const treeNode = new TreeNode(
-                    queue.QueueID, queue.Name,
-                    new ObjectIcon('Queue', queue.QueueID),
-                    null,
-                    this.prepareQueueTree(queue.SubQueues)
-                );
-                return treeNode;
-            });
-        }
-        return nodes;
     }
 
     private prepareServiceTree(services: Service[]): TreeNode[] {
@@ -258,14 +240,6 @@ export class TicketService extends KIXObjectService<Ticket> {
         const id = object ? object.ObjectId : objectId;
         const context = await ContextService.getInstance().getContext(TicketDetailsContext.CONTEXT_ID);
         return context.getDescriptor().urlPaths[0] + '/' + id;
-    }
-
-    public async getQueuesHierarchy(): Promise<Queue[]> {
-        const loadingOptions = new KIXObjectLoadingOptions(null, [
-            new FilterCriteria('ParentID', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, null)
-        ], null, null, null, ['SubQueues', 'TicketStats', 'Tickets'], ['SubQueues']);
-
-        return await KIXObjectService.loadObjects<Queue>(KIXObjectType.QUEUE, null, loadingOptions);
     }
 
     public async getServicesHierarchy(): Promise<Service[]> {

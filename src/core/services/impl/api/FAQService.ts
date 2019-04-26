@@ -1,5 +1,5 @@
 import {
-    FAQArticleProperty, Attachment, FAQArticleAttachmentLoadingOptions, CreateFAQVoteOptions
+    FAQArticleProperty, Attachment, FAQArticleAttachmentLoadingOptions, CreateFAQVoteOptions, FAQCategoryFactory
 } from "../../../model/kix/faq";
 import { KIXObjectService } from "./KIXObjectService";
 import {
@@ -28,7 +28,7 @@ export class FAQService extends KIXObjectService {
     }
 
     private constructor() {
-        super();
+        super([new FAQCategoryFactory()]);
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 

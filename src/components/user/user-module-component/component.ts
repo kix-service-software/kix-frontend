@@ -11,7 +11,7 @@ import {
 } from '../../../core/browser/user';
 import {
     KIXObjectType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration, WidgetSize, ContextDescriptor,
-    ContextType, DialogContextDescriptor
+    ContextType
 } from '../../../core/model';
 import { TableFactoryService, TableCSSHandlerRegistry } from '../../../core/browser/table';
 import { DialogService } from '../../../core/browser/components/dialog';
@@ -51,7 +51,7 @@ class Component extends AbstractMarkoComponent {
     }
 
     private registerAdminContexts(): void {
-        const newUserRoleContext = new DialogContextDescriptor(
+        const newUserRoleContext = new ContextDescriptor(
             NewUserRoleDialogContext.CONTEXT_ID, [KIXObjectType.ROLE],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
             false, 'new-user-role-dialog', ['roles'], NewUserRoleDialogContext
@@ -65,14 +65,14 @@ class Component extends AbstractMarkoComponent {
         );
         ContextService.getInstance().registerContext(roleDetailsContextDescriptor);
 
-        const editUserRoleContext = new DialogContextDescriptor(
+        const editUserRoleContext = new ContextDescriptor(
             EditUserRoleDialogContext.CONTEXT_ID, [KIXObjectType.ROLE],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
             false, 'edit-user-role-dialog', ['roles'], EditUserRoleDialogContext
         );
         ContextService.getInstance().registerContext(editUserRoleContext);
 
-        const newUserContext = new DialogContextDescriptor(
+        const newUserContext = new ContextDescriptor(
             NewUserDialogContext.CONTEXT_ID, [KIXObjectType.USER],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
             false, 'new-user-dialog', ['users'], NewUserDialogContext
@@ -86,7 +86,7 @@ class Component extends AbstractMarkoComponent {
         );
         ContextService.getInstance().registerContext(userDetailsContextDescriptor);
 
-        const editUserContext = new DialogContextDescriptor(
+        const editUserContext = new ContextDescriptor(
             EditUserDialogContext.CONTEXT_ID, [KIXObjectType.USER],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
             false, 'edit-user-dialog', ['users'], EditUserDialogContext

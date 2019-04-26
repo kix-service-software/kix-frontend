@@ -5,16 +5,18 @@ import {
 import { ComponentState } from './ComponentState';
 import {
     KIXObjectType, ContextType, ContextMode, ContextDescriptor, ConfiguredDialogWidget,
-    WidgetConfiguration, WidgetSize, DialogContextDescriptor
+    WidgetConfiguration, WidgetSize
 } from '../../../core/model';
 import {
     FAQArticleTableFactory, FAQArticleHistoryTableFactory, FAQLabelProvider, FAQArticleHistoryLabelProvider,
     FAQService, FAQContext, FAQDetailsContext, NewFAQArticleDialogContext, FAQArticleSearchContext,
     FAQArticleVoteAction, FAQArticlePrintAction, FAQArticleEditAction, FAQArticleDeleteAction,
     FAQArticleCreateAction, FAQArticleBrowserFactory, FAQArticleAttachmentBrowserFactory,
-    FAQArticleSearchDefinition, FAQArticleFormService, EditFAQArticleDialogContext
+    FAQArticleSearchDefinition, FAQArticleFormService, EditFAQArticleDialogContext, FAQCategoryLabelProvider
 } from '../../../core/browser/faq';
 import { DialogService } from '../../../core/browser/components/dialog';
+import { FAQCategoryTableFactory, FAQCategoryCreateAction } from '../../../core/browser/faq/admin';
+import { FAQCategoryBrowserFactory } from '../../../core/browser/faq/FAQCategoryBrowserFactory';
 
 class Component extends AbstractMarkoComponent {
 
@@ -26,14 +28,21 @@ class Component extends AbstractMarkoComponent {
         FactoryService.getInstance().registerFactory(
             KIXObjectType.FAQ_ARTICLE, FAQArticleBrowserFactory.getInstance()
         );
+
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.FAQ_CATEGORY, FAQCategoryBrowserFactory.getInstance()
+        );
+
         FactoryService.getInstance().registerFactory(
             KIXObjectType.FAQ_ARTICLE_ATTACHMENT, FAQArticleAttachmentBrowserFactory.getInstance()
         );
 
         TableFactoryService.getInstance().registerFactory(new FAQArticleTableFactory());
+        TableFactoryService.getInstance().registerFactory(new FAQCategoryTableFactory());
         TableFactoryService.getInstance().registerFactory(new FAQArticleHistoryTableFactory());
 
         LabelService.getInstance().registerLabelProvider(new FAQLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new FAQCategoryLabelProvider());
         LabelService.getInstance().registerLabelProvider(new FAQArticleHistoryLabelProvider());
 
         ServiceRegistry.registerServiceInstance(FAQService.getInstance());
@@ -44,6 +53,8 @@ class Component extends AbstractMarkoComponent {
         this.registerContexts();
         this.registerDialogs();
         this.registerActions();
+
+        this.registerAdminActions();
     }
 
     private registerContexts(): void {
@@ -61,19 +72,19 @@ class Component extends AbstractMarkoComponent {
         );
         ContextService.getInstance().registerContext(faqDetailsContextDescriptor);
 
-        const newFAQArticleContext = new DialogContextDescriptor(
+        const newFAQArticleContext = new ContextDescriptor(
             NewFAQArticleDialogContext.CONTEXT_ID, [KIXObjectType.FAQ_ARTICLE], ContextType.DIALOG, ContextMode.CREATE,
             false, 'new-faq-article-dialog', ['faqarticles'], NewFAQArticleDialogContext
         );
         ContextService.getInstance().registerContext(newFAQArticleContext);
 
-        const editFAQArticleContext = new DialogContextDescriptor(
+        const editFAQArticleContext = new ContextDescriptor(
             EditFAQArticleDialogContext.CONTEXT_ID, [KIXObjectType.FAQ_ARTICLE], ContextType.DIALOG, ContextMode.EDIT,
             false, 'edit-faq-article-dialog', ['faqarticles'], EditFAQArticleDialogContext
         );
         ContextService.getInstance().registerContext(editFAQArticleContext);
 
-        const searchContactContext = new DialogContextDescriptor(
+        const searchContactContext = new ContextDescriptor(
             FAQArticleSearchContext.CONTEXT_ID, [KIXObjectType.FAQ_ARTICLE], ContextType.DIALOG, ContextMode.SEARCH,
             false, 'search-faq-article-dialog', ['faqarticles'], FAQArticleSearchContext
         );
@@ -118,6 +129,10 @@ class Component extends AbstractMarkoComponent {
         ActionFactory.getInstance().registerAction('faq-article-edit-action', FAQArticleEditAction);
         ActionFactory.getInstance().registerAction('faq-article-print-action', FAQArticlePrintAction);
         ActionFactory.getInstance().registerAction('faq-article-vote-action', FAQArticleVoteAction);
+    }
+
+    private registerAdminActions(): void {
+        ActionFactory.getInstance().registerAction('faq-admin-category-create-action', FAQCategoryCreateAction);
     }
 
 }

@@ -2,11 +2,13 @@ import { IConfigurationExtension } from '../../../core/extensions';
 import {
     ConfiguredWidget, FormField, KIXObjectType, Form,
     FormContext, FormFieldValue, FormFieldOption, UserProperty,
-    FormFieldOptions, InputFieldTypes, ObjectReferenceOptions, ContextConfiguration
+    FormFieldOptions, InputFieldTypes, ObjectReferenceOptions, ContextConfiguration, KIXObjectLoadingOptions,
+    FilterCriteria, RoleProperty, FilterDataType, FilterType
 } from '../../../core/model';
 import { FormGroup } from '../../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../../core/services';
 import { EditUserDialogContext } from '../../../core/browser/user';
+import { SearchOperator } from '../../../core/browser';
 
 export class Extension implements IConfigurationExtension {
 
@@ -82,7 +84,17 @@ export class Extension implements IConfigurationExtension {
                 'Translatable#Assign the roles for the user.', [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.ROLE),
                     new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
-                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true)
+                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            null, [
+                                new FilterCriteria(
+                                    RoleProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                )
+                            ]
+                        )
+                    )
                 ]
             );
             const roleGroup = new FormGroup('Translatable#Role Assignment', [roleField]);

@@ -1,5 +1,5 @@
 import { IObjectFactory } from "../IObjectFactory";
-import { Queue } from "../Queue";
+import { Queue } from "./Queue";
 import { KIXObjectType } from "../KIXObjectType";
 
 export class QueueFactory implements IObjectFactory<Queue> {

@@ -41,7 +41,9 @@ export class SystemAddressService extends KIXObjectService {
         if (objectType === KIXObjectType.SYSTEM_ADDRESS) {
             const systemAddresses = await this.getSystemAddresses(token);
             if (objectIds && objectIds.length) {
-                objects = systemAddresses.filter((t) => objectIds.some((oid) => oid === t.ObjectId));
+                objects = systemAddresses.filter(
+                    (sa) => objectIds.some((oid) => oid.toString() === sa.ObjectId.toString())
+                );
             } else {
                 objects = systemAddresses;
             }

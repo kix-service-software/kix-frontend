@@ -2,7 +2,7 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { TreeNode, TreeUtil } from '../src/core/model';
+import { TreeNode, TreeUtil } from '../../src/core/model';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

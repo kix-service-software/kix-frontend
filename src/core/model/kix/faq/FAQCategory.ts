@@ -36,7 +36,9 @@ export class FAQCategory extends KIXObject<FAQCategory> {
             this.CreateTime = faqCategory.CreateTime;
             this.ChangeBy = faqCategory.ChangeBy;
             this.ChangeTime = faqCategory.ChangeTime;
-            this.SubCategories = faqCategory.SubCategories;
+            this.SubCategories = faqCategory.SubCategories
+                ? faqCategory.SubCategories.map((sc) => new FAQCategory(sc))
+                : [];
             this.Articles = faqCategory.Articles;
         }
     }

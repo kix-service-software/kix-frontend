@@ -25,4 +25,5 @@ export { TicketPriorityService } from './TicketPriorityService';
 export { ConfigItemClassService } from './ConfigItemClassService';
 export { TranslationService } from './TranslationService';
 export { SystemAddressService } from './SystemAddressService';
+export { QueueService } from './QueueService';
 export { TicketTemplateService } from './TicketTemplateService';

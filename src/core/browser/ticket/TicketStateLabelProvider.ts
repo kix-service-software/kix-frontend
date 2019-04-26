@@ -90,7 +90,7 @@ export class TicketStateLabelProvider implements ILabelProvider<TicketState> {
             displayValue = await TranslationService.translate(displayValue.toString());
         }
 
-        return displayValue;
+        return displayValue ? displayValue.toString() : '';
     }
 
     public async getPropertyValueDisplayText(
@@ -123,7 +123,7 @@ export class TicketStateLabelProvider implements ILabelProvider<TicketState> {
             displayValue = await TranslationService.translate(displayValue.toString());
         }
 
-        return displayValue.toString();
+        return displayValue ? displayValue.toString() : '';
     }
 
     public getDisplayTextClasses(ticketState: TicketState, property: string): string[] {

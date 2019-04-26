@@ -3,7 +3,7 @@ import {
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../../../table";
 import { KIXObjectType, TicketTemplateProperty, DataType } from "../../../../../model";
-import { TicketStateTableContentProvider } from "./TicketTemplateTableContentProvider";
+import { TicketTemplateTableContentProvider } from "./TicketTemplateTableContentProvider";
 import { TableFactory } from "../../../../table/TableFactory";
 
 export class TicketTemplateTableFactory extends TableFactory {
@@ -19,7 +19,7 @@ export class TicketTemplateTableFactory extends TableFactory {
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
 
         const table = new Table(tableKey, tableConfiguration);
-        table.setContentProvider(new TicketStateTableContentProvider(table, objectIds, null, contextId));
+        table.setContentProvider(new TicketTemplateTableContentProvider(table, objectIds, null, contextId));
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 
         return table;
@@ -53,7 +53,7 @@ export class TicketTemplateTableFactory extends TableFactory {
 
         if (defaultRouting) {
             // tableConfiguration.routingConfiguration = new RoutingConfiguration(
-            //     null, TicketStateDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_TEMPLATE,
+            //     null, TicketTemplateDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_TEMPLATE,
             //     ContextMode.DETAILS, TicketTemplateProperty.ID
             // );
         }

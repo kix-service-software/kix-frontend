@@ -83,7 +83,7 @@ export class TicketPriorityLabelProvider implements ILabelProvider<TicketPriorit
             displayValue = await TranslationService.translate(displayValue.toString());
         }
 
-        return displayValue;
+        return displayValue ? displayValue.toString() : '';
     }
 
     public async getPropertyValueDisplayText(
@@ -116,7 +116,7 @@ export class TicketPriorityLabelProvider implements ILabelProvider<TicketPriorit
             displayValue = await TranslationService.translate(displayValue.toString());
         }
 
-        return displayValue.toString();
+        return displayValue ? displayValue.toString() : '';
     }
 
     public getDisplayTextClasses(ticketPriority: TicketPriority, property: string): string[] {

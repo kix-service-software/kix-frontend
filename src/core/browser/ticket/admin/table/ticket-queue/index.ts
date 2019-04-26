@@ -1,0 +1,1 @@
+export { TicketQueueTableFactory } from './TicketQueueTableFactory';

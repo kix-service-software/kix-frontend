@@ -5,7 +5,7 @@ import { KIXObjectType } from "../KIXObjectType";
 export class LockFactory implements IObjectFactory<Lock> {
 
     public isFactoryFor(objectType: KIXObjectType): boolean {
-        return objectType === KIXObjectType.QUEUE;
+        return objectType === KIXObjectType.LOCK;
     }
 
     public create(lock?: Lock): Lock {
