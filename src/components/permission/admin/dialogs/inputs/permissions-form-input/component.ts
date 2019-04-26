@@ -92,22 +92,22 @@ class Component extends FormInputComponent<any[], ComponentState> {
 
     private async prepareTitles(): Promise<void> {
         this.state.createTitle = await LabelService.getInstance().getPropertyText(
-            this.state.createTitle, KIXObjectType.PERMISSION
+            this.state.createTitle, KIXObjectType.PERMISSION, false, false
         );
         this.state.readTitle = await LabelService.getInstance().getPropertyText(
-            this.state.readTitle, KIXObjectType.PERMISSION
+            this.state.readTitle, KIXObjectType.PERMISSION, false, false
         );
         this.state.updateTitle = await LabelService.getInstance().getPropertyText(
-            this.state.updateTitle, KIXObjectType.PERMISSION
+            this.state.updateTitle, KIXObjectType.PERMISSION, false, false
         );
         this.state.deleteTitle = await LabelService.getInstance().getPropertyText(
-            this.state.deleteTitle, KIXObjectType.PERMISSION
+            this.state.deleteTitle, KIXObjectType.PERMISSION, false, false
         );
         this.state.denyTitle = await LabelService.getInstance().getPropertyText(
-            this.state.denyTitle, KIXObjectType.PERMISSION
+            this.state.denyTitle, KIXObjectType.PERMISSION, false, false
         );
         this.state.requiredTitle = await LabelService.getInstance().getPropertyText(
-            this.state.requiredTitle, KIXObjectType.PERMISSION
+            this.state.requiredTitle, KIXObjectType.PERMISSION, false, false
         );
     }
 

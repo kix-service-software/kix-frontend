@@ -83,7 +83,9 @@ class Component extends AbstractMarkoComponent {
 
     private async prepareTitles(): Promise<void> {
         for (const option of this.state.checkboxOptions) {
-            const title = await LabelService.getInstance().getPropertyText(option.id, KIXObjectType.PERMISSION);
+            const title = await LabelService.getInstance().getPropertyText(
+                option.id, KIXObjectType.PERMISSION, false, false
+            );
             this.state.titles.set(option.id, title || option.id);
         }
         (this as any).setStateDirty('titles');

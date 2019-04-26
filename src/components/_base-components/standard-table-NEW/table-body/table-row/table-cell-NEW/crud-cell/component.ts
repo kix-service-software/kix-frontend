@@ -42,7 +42,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async update(property: string): Promise<void> {
         this.state.tooltip = await LabelService.getInstance().getPropertyText(
-            property, KIXObjectType.PERMISSION
+            property, KIXObjectType.PERMISSION, false, false
         );
     }
 
