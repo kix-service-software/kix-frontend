@@ -54,7 +54,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             TableHeaderHeight.SMALL, TableRowHeight.SMALL
         );
         const table = await await TableFactoryService.getInstance().createTable(
-            'user-assigned-roles', KIXObjectType.ROLE, tableConfiguration, user.RoleIDs, null, true
+            'user-assigned-roles', KIXObjectType.ROLE, tableConfiguration, user.RoleIDs, null, true,
+            undefined, false, true, true
         );
         this.state.table = table;
         this.prepareActions(user);
