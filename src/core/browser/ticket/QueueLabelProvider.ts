@@ -53,8 +53,6 @@ export class QueueLabelProvider implements ILabelProvider<Queue> {
                 displayValue = 'Translatable#Follow Up Possible';
                 break;
             case QueueProperty.QUEUE_ID:
-                displayValue = 'Translatable#Icon';
-                break;
             case 'ICON':
                 displayValue = 'Translatable#Icon';
                 break;

@@ -40,6 +40,9 @@ export class FAQCategoryLabelProvider implements ILabelProvider<FAQCategory> {
             case FAQCategoryProperty.ID:
                 displayValue = 'Translatable#Id';
                 break;
+            case 'ICON':
+                displayValue = 'Translatable#Icon';
+                break;
             default:
                 displayValue = property;
         }
