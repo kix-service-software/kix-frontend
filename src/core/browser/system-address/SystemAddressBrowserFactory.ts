@@ -16,9 +16,9 @@ export class SystemAddressBrowserFactory extends KIXObjectFactory<SystemAddress>
         super();
     }
 
-    public async create(type: SystemAddress): Promise<SystemAddress> {
-        const systemAddress = new SystemAddress(type);
-        return systemAddress;
+    public async create(systemAddress: SystemAddress): Promise<SystemAddress> {
+        const newSystemAddress = new SystemAddress(systemAddress);
+        return newSystemAddress;
     }
 
 }

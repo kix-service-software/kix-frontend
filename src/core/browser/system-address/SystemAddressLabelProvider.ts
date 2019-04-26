@@ -103,15 +103,6 @@ export class SystemAddressLabelProvider implements ILabelProvider<SystemAddress>
             case SystemAddressProperty.ID:
                 displayValue = systemAddress.Name;
                 break;
-            case SystemAddressProperty.CHANGE_BY:
-                if (displayValue) {
-                    const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [displayValue], null, null, true
-                    ).catch((error) => [] as User[]);
-                    displayValue = users && !!users.length ? users[0].UserFullname : displayValue;
-                }
-                break;
-
             default:
                 displayValue = await this.getPropertyValueDisplayText(property, displayValue);
         }
@@ -142,7 +133,7 @@ export class SystemAddressLabelProvider implements ILabelProvider<SystemAddress>
     }
 
     public getObjectIcon(object: SystemAddress): string | ObjectIcon {
-        return 'kix-icon-man-bubble';
+        return new ObjectIcon('SystemAddress', object.ID);
     }
 
     public getObjectTooltip(object: SystemAddress): string {
@@ -152,7 +143,7 @@ export class SystemAddressLabelProvider implements ILabelProvider<SystemAddress>
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
         if (translatable) {
             return await TranslationService.translate(
-                plural ? 'Translatable#SystemAddresses' : 'Translatable#SystemAddress'
+                plural ? 'Translatable#System Addresses' : 'Translatable#System Address'
             );
         }
         return plural ? 'SystemAddresses' : 'SystemAddress';

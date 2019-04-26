@@ -31,11 +31,11 @@ export class SystemAddressTableFactory extends TableFactory {
     ): TableConfiguration {
         const tableColumns = [
             new DefaultColumnConfiguration(
-                SystemAddressProperty.NAME, true, false, true, false, 300, true, true, false,
+                SystemAddressProperty.NAME, true, false, true, false, 150, true, true, false,
                 DataType.STRING, true, null, null, false
             ),
             new DefaultColumnConfiguration(
-                SystemAddressProperty.REALNAME, true, false, true, false, 300, true, true, false,
+                SystemAddressProperty.REALNAME, true, false, true, false, 150, true, true, false,
                 DataType.STRING, true, null, null, false
             ),
             new DefaultColumnConfiguration(

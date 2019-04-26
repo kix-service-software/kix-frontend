@@ -1,2 +1,2 @@
 export { SystemAddressCreateAction } from './SystemAddressCreateAction';
-export { SystemAddressDeleteAction } from './SystemAddressDeleteAction';
+export { SystemAddressDeleteTableAction } from './SystemAddressDeleteTableAction';

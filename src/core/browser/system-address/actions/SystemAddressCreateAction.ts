@@ -8,12 +8,12 @@ export class SystemAddressCreateAction extends AbstractAction {
         this.icon = 'kix-icon-new-gear';
     }
 
-    public async run(event: any): Promise<void> {
-        ContextService.getInstance().setDialogContext(
-            // TODO: Titel aus dem aktiven Admin-Modul ermitteln (Kategorie)
-            null, KIXObjectType.SYSTEM_ADDRESS, ContextMode.CREATE_ADMIN, null, true,
-            'Translatable#System Addresses', undefined, 'new-user-form'
-        );
-    }
+    // public async run(event: any): Promise<void> {
+    //     ContextService.getInstance().setDialogContext(
+    //         // TODO: Titel aus dem aktiven Admin-Modul ermitteln
+    //         null, KIXObjectType.SYSTEM_ADDRESS, ContextMode.CREATE_ADMIN, null, true,
+    //         'Translatable#System Addresses', undefined, 'new-system-address-form'
+    //     );
+    // }
 
 }

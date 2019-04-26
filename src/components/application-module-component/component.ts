@@ -22,7 +22,7 @@ import {
     SystemAddressBrowserFactory, SystemAddressLabelProvider, SystemAddressTableFactory
 } from '../../core/browser/system-address';
 import {
-    SystemAddressCreateAction, SystemAddressDeleteAction
+    SystemAddressCreateAction, SystemAddressDeleteTableAction
 } from '../../core/browser/system-address/actions';
 import { SlaService, SlaLabelProvider, SlaBrowserFactory } from '../../core/browser/sla';
 import { ObjectIconService, ObjectIconBrowserFactory } from '../../core/browser/icon';
@@ -119,7 +119,7 @@ class Component extends AbstractMarkoComponent {
             'communication-admin-system-addresses-create', SystemAddressCreateAction
         );
         ActionFactory.getInstance().registerAction(
-            'communication-admin-system-addresses-table-delete', SystemAddressDeleteAction
+            'communication-admin-system-addresses-table-delete', SystemAddressDeleteTableAction
         );
 
 
