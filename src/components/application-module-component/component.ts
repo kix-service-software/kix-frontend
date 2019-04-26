@@ -18,6 +18,12 @@ import { DynamicFieldService } from '../../core/browser/dynamic-fields';
 import {
     TextModuleService, TextModuleBrowserFactory, TextModuleLabelProvider, TextModulesTableFactory
 } from '../../core/browser/text-modules';
+import {
+    SystemAddressBrowserFactory, SystemAddressLabelProvider, SystemAddressTableFactory
+} from '../../core/browser/system-address';
+import {
+    SystemAddressCreateAction, SystemAddressDeleteTableAction
+} from '../../core/browser/system-address/actions';
 import { SlaService, SlaLabelProvider, SlaBrowserFactory } from '../../core/browser/sla';
 import { ObjectIconService, ObjectIconBrowserFactory } from '../../core/browser/icon';
 import { PersonalSettingsDialogContext } from '../../core/browser';
@@ -102,6 +108,18 @@ class Component extends AbstractMarkoComponent {
         TableFactoryService.getInstance().registerFactory(new PermissionsTableFactory());
         TableCSSHandlerRegistry.getInstance().registerCSSHandler(
             KIXObjectType.PERMISSION, new PermissionTableCSSHandler()
+        );
+
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.SYSTEM_ADDRESS, SystemAddressBrowserFactory.getInstance()
+        );
+        TableFactoryService.getInstance().registerFactory(new SystemAddressTableFactory());
+        LabelService.getInstance().registerLabelProvider(new SystemAddressLabelProvider());
+        ActionFactory.getInstance().registerAction(
+            'communication-admin-system-addresses-create', SystemAddressCreateAction
+        );
+        ActionFactory.getInstance().registerAction(
+            'communication-admin-system-addresses-table-delete', SystemAddressDeleteTableAction
         );
 
 

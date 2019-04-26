@@ -34,7 +34,8 @@
             "admin-module": "../../dist/registry-modules/admin/kix-module.extension"
         },
         "kix:admin-module": {
-            "i18n-admin": "../../dist/registry-modules/admin/i18n-admin-module.extension"
+            "i18n-admin": "../../dist/registry-modules/admin/i18n-admin-module.extension",
+            "system-address-admin": "../../dist/registry-modules/admin/system-address-admin-module.extension"
         }
     }
 }

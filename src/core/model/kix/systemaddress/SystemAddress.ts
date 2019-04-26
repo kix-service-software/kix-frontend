@@ -1,5 +1,5 @@
-import { KIXObject } from "./KIXObject";
-import { KIXObjectType } from "./KIXObjectType";
+import { KIXObject } from "./../KIXObject";
+import { KIXObjectType } from "./../KIXObjectType";
 
 export class SystemAddress extends KIXObject {
 

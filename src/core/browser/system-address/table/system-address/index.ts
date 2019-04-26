@@ -1,0 +1,1 @@
+export { SystemAddressTableFactory } from './SystemAddressTableFactory';

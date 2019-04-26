@@ -1,6 +1,6 @@
 import { AbstractAction } from "../../../../../model";
 
-export class TranslationDeleteAction extends AbstractAction {
+export class TranslationDeleteTableAction extends AbstractAction {
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Delete';
