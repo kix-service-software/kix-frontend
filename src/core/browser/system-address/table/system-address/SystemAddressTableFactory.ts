@@ -35,6 +35,13 @@ export class SystemAddressTableFactory extends TableFactory {
                 DataType.STRING, true, null, null, false
             ),
             new DefaultColumnConfiguration(
+                SystemAddressProperty.REALNAME, true, false, true, false, 300, true, true, false,
+                DataType.STRING, true, null, null, false
+            ),
+            new DefaultColumnConfiguration(
+                SystemAddressProperty.VALID_ID, true, false, true, false, 100, true, true, true
+            ),
+            new DefaultColumnConfiguration(
                 SystemAddressProperty.CREATE_TIME, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
             ),
             new DefaultColumnConfiguration(SystemAddressProperty.CREATE_BY, true, false, true, false, 150, true, true),

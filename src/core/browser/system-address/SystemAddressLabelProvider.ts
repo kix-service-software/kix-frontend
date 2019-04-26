@@ -1,7 +1,8 @@
-import { ObjectIcon, KIXObjectType, SystemAddress, SystemAddressProperty } from '../../model';
+import { ObjectIcon, KIXObjectType, SystemAddress, SystemAddressProperty, User, DateTimeUtil } from '../../model';
 import { ILabelProvider } from '..';
 import { TranslationService } from '../i18n/TranslationService';
 import { ObjectDataService } from '../ObjectDataService';
+import { KIXObjectService } from "../kix";
 
 export class SystemAddressLabelProvider implements ILabelProvider<SystemAddress> {
 
@@ -21,6 +22,17 @@ export class SystemAddressLabelProvider implements ILabelProvider<SystemAddress>
                 case SystemAddressProperty.VALID_ID:
                     const valid = objectData.validObjects.find((v) => v.ID === value);
                     displayValue = valid ? valid.Name : value;
+                    break;
+                case SystemAddressProperty.CREATE_BY:
+                case SystemAddressProperty.CHANGE_BY:
+                    const users = await KIXObjectService.loadObjects<User>(
+                        KIXObjectType.USER, [value], null, null, true
+                    ).catch((error) => [] as User[]);
+                    displayValue = users && !!users.length ? users[0].UserFullname : value;
+                    break;
+                case SystemAddressProperty.CREATE_TIME:
+                case SystemAddressProperty.CHANGE_TIME:
+                    displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                     break;
                 default:
             }
@@ -42,6 +54,9 @@ export class SystemAddressLabelProvider implements ILabelProvider<SystemAddress>
         switch (property) {
             case SystemAddressProperty.NAME:
                 displayValue = 'Translatable#Name';
+                break;
+            case SystemAddressProperty.REALNAME:
+                displayValue = 'Translatable#Display Name';
                 break;
             case SystemAddressProperty.COMMENT:
                 displayValue = 'Translatable#Comment';
@@ -88,6 +103,15 @@ export class SystemAddressLabelProvider implements ILabelProvider<SystemAddress>
             case SystemAddressProperty.ID:
                 displayValue = systemAddress.Name;
                 break;
+            case SystemAddressProperty.CHANGE_BY:
+                if (displayValue) {
+                    const users = await KIXObjectService.loadObjects<User>(
+                        KIXObjectType.USER, [displayValue], null, null, true
+                    ).catch((error) => [] as User[]);
+                    displayValue = users && !!users.length ? users[0].UserFullname : displayValue;
+                }
+                break;
+
             default:
                 displayValue = await this.getPropertyValueDisplayText(property, displayValue);
         }
