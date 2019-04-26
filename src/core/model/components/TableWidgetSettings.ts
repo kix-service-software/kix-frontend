@@ -9,7 +9,8 @@ export class TableWidgetSettings {
         public sort?: [string, SortOrder],
         public tableConfiguration?: TableConfiguration,
         public headerComponents?: string[],
-        public showFilter: boolean = true
+        public showFilter: boolean = true,
+        public shortTable: boolean = false
     ) { }
 
 }

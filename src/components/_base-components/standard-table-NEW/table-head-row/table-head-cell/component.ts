@@ -65,7 +65,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             } else {
                 this.state.title = await LabelService.getInstance().getPropertyText(
                     this.state.column.getColumnId(), objectType, true,
-                    this.state.column.getColumnConfiguration().translatable
+                    this.state.column.getColumnConfiguration().titleTranslatable
                 );
             }
         }

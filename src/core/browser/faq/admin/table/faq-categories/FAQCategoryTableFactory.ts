@@ -77,7 +77,10 @@ export class FAQCategoryTableFactory extends TableFactory {
                 config = new DefaultColumnConfiguration(property, true, false, true, false, 130, true, true, true);
                 break;
             case FAQCategoryProperty.COMMENT:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 275, true, true);
+                config = new DefaultColumnConfiguration(
+                    property, true, false, true, false, 275, true, true, false,
+                    DataType.STRING, true, undefined, null, false
+                );
                 break;
             case FAQCategoryProperty.CHANGE_TIME:
             case FAQCategoryProperty.CREATE_TIME:

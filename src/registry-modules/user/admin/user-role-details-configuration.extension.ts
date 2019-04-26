@@ -24,43 +24,7 @@ export class Extension implements IConfigurationExtension {
                 'table-widget', 'Translatable#Permissions', [],
                 new TableWidgetSettings(
                     KIXObjectType.ROLE_PERMISSION, [PermissionProperty.TYPE_ID, SortOrder.UP],
-                    new TableConfiguration(KIXObjectType.ROLE_PERMISSION, null, null, [
-                        new DefaultColumnConfiguration(
-                            PermissionProperty.TYPE_ID, true, false, true, false, 150, true, true, true,
-                            DataType.STRING, true, null, null, false
-                        ),
-                        new DefaultColumnConfiguration(
-                            PermissionProperty.TARGET, true, false, true, false, 250, true, true, false,
-                            DataType.STRING, true, null, null, false
-                        ),
-                        new DefaultColumnConfiguration(
-                            PermissionProperty.IS_REQUIRED, false, true, true, false, 85,
-                            true, true, true, null, true, null, null, false
-                        ),
-                        new DefaultColumnConfiguration(
-                            PermissionProperty.CREATE, false, false, true, false, 85,
-                            false, true, true, null, null, 'crud-cell', null, false
-                        ),
-                        new DefaultColumnConfiguration(
-                            PermissionProperty.READ, false, false, true, false, 85,
-                            false, true, true, null, null, 'crud-cell', null, false
-                        ),
-                        new DefaultColumnConfiguration(
-                            PermissionProperty.UPDATE, false, false, true, false, 85,
-                            false, true, true, null, null, 'crud-cell', null, false
-                        ),
-                        new DefaultColumnConfiguration(
-                            PermissionProperty.DELETE, false, false, true, false, 85,
-                            false, true, true, null, null, 'crud-cell', null, false
-                        ),
-                        new DefaultColumnConfiguration(
-                            PermissionProperty.DENY, false, false, true, false, 85,
-                            false, true, true, null, null, 'crud-cell', null, false
-                        ),
-                        new DefaultColumnConfiguration(
-                            PermissionProperty.COMMENT, false, false, true, false, 150, false, true, true
-                        )
-                    ]), null, false
+                    new TableConfiguration(KIXObjectType.ROLE_PERMISSION, null, null, null), null, false
                 ),
                 true, true, null, null, true
             ));

@@ -3,15 +3,13 @@
         <div.role-permission-description-container>
             <div.crud-description>
                 <span title=(state.showRequired ? state.requiredTitle : "")>
-                    <if(state.showRequired)>
-                        <translation-string pattern="Translatable#Required"/>
-                    </if>
+                    <if(state.showRequired)>${state.requiredTitle}</if>
                 </span>
-                <span title=state.createTitle>C</span>
-                <span title=state.readTitle>R</span>
-                <span title=state.updateTitle>U</span>
-                <span title=state.deleteTitle>D</span>
-                <span title=state.denyTitle>DN</span>
+                <span title=state.createTitle>${state.createTitle}</span>
+                <span title=state.readTitle>${state.readTitle}</span>
+                <span title=state.updateTitle>${state.updateTitle}</span>
+                <span title=state.deleteTitle>${state.deleteTitle}</span>
+                <span title=state.denyTitle>${state.denyTitle}</span>
             </div>
         </div>
     </div>
