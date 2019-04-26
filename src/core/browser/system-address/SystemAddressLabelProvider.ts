@@ -108,9 +108,9 @@ export class SystemAddressLabelProvider implements ILabelProvider<SystemAddress>
     }
 
     public async getObjectText(
-        role: SystemAddress, id?: boolean, title?: boolean, translatable?: boolean
+        systemAddress: SystemAddress, id?: boolean, title?: boolean, translatable?: boolean
     ): Promise<string> {
-        return role.Name;
+        return systemAddress.Name;
     }
 
     public getObjectAdditionalText(object: SystemAddress, translatable: boolean = true): string {
@@ -128,7 +128,7 @@ export class SystemAddressLabelProvider implements ILabelProvider<SystemAddress>
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
         if (translatable) {
             return await TranslationService.translate(
-                plural ? 'Translatable#Roles' : 'Translatable#SystemAddress'
+                plural ? 'Translatable#SystemAddresses' : 'Translatable#SystemAddress'
             );
         }
         return plural ? 'SystemAddresses' : 'SystemAddress';
