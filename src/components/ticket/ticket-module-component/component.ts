@@ -27,7 +27,7 @@ import {
     TicketStateFormService, TicketBulkManager, TicketTableCSSHandler, ArticleTableCSSHandler, EmailRecipientValidator,
     TicketTemplateCreateAction, TicketTemplateTableDeleteAction, TicketTemplateLabelProvider, TicketTemplateService,
     TicketTemplateBrowserFactory, TicketTemplateTableFactory, TicketQueueCreateAction, TicketQueueTableFactory,
-    QueueLabelProvider, QueueBrowserFactory, QueueService
+    QueueLabelProvider, QueueBrowserFactory, QueueService, NewQueueDialogContext, FollowUpTypeBrowserFactory
 } from '../../../core/browser/ticket';
 import {
     KIXObjectType, ContextDescriptor, ContextMode, ContextType,
@@ -102,6 +102,9 @@ class Component extends AbstractMarkoComponent {
         );
         FactoryService.getInstance().registerFactory(
             KIXObjectType.QUEUE, QueueBrowserFactory.getInstance()
+        );
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.FOLLOW_UP_TYPE, FollowUpTypeBrowserFactory.getInstance()
         );
         FactoryService.getInstance().registerFactory(
             KIXObjectType.TICKET_TEMPLATE, TicketTemplateBrowserFactory.getInstance()
@@ -229,6 +232,13 @@ class Component extends AbstractMarkoComponent {
             false, 'edit-ticket-priority-dialog', ['priorities'], EditTicketPriorityDialogContext
         );
         ContextService.getInstance().registerContext(editTicketPriorityContext);
+
+        const newQueueContext = new ContextDescriptor(
+            NewQueueDialogContext.CONTEXT_ID, [KIXObjectType.QUEUE],
+            ContextType.DIALOG, ContextMode.CREATE_ADMIN,
+            false, 'new-ticket-queue-dialog', ['queues'], NewQueueDialogContext
+        );
+        ContextService.getInstance().registerContext(newQueueContext);
     }
 
     private registerTicketActions(): void {
@@ -395,6 +405,16 @@ class Component extends AbstractMarkoComponent {
             ),
             KIXObjectType.TICKET_STATE,
             ContextMode.EDIT_ADMIN
+        ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'new-ticket-queue-dialog',
+            new WidgetConfiguration(
+                'new-ticket-queue-dialog', 'Translatable#New Queue', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-new-gear'
+            ),
+            KIXObjectType.QUEUE,
+            ContextMode.CREATE_ADMIN
         ));
     }
 }

@@ -4,13 +4,13 @@ import {
     Attachment, KIXObjectType, Ticket, TicketProperty, FilterDataType, FilterCriteria, FilterType,
     TreeNode, ObjectIcon, Service, TicketPriority, TicketType,
     TicketState, StateType, KIXObject, Sla, TableFilterCriteria, User, KIXObjectLoadingOptions,
-    KIXObjectSpecificLoadingOptions
+    KIXObjectSpecificLoadingOptions,
+    FormFieldOption
 } from '../../model';
 import { TicketParameterUtil } from './TicketParameterUtil';
 import { KIXObjectService } from '../kix';
 import { SearchProperty } from '../SearchProperty';
 import { LabelService } from '../LabelService';
-import { ObjectDataService } from '../ObjectDataService';
 import { TicketSocketClient } from './TicketSocketClient';
 import { AgentService } from '../application/AgentService';
 import { QueueService } from './admin';
@@ -99,17 +99,15 @@ export class TicketService extends KIXObjectService<Ticket> {
         ];
     }
 
-    public async getTreeNodes(property: string): Promise<TreeNode[]> {
+    public async getTreeNodes(property: string, options?: FormFieldOption[]): Promise<TreeNode[]> {
         let values: TreeNode[] = [];
-
-        const objectData = ObjectDataService.getInstance().getObjectData();
 
         const labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.TICKET);
 
         switch (property) {
             case TicketProperty.QUEUE_ID:
                 const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy();
-                values = queuesHierarchy ? QueueService.getInstance().prepareQueueTree(queuesHierarchy) : [];
+                values = queuesHierarchy ? QueueService.getInstance().prepareQueueTree(queuesHierarchy, options) : [];
                 break;
             case TicketProperty.SERVICE_ID:
                 const servicesHierarchy = await this.getServicesHierarchy();

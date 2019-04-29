@@ -1,7 +1,7 @@
 import {
     KIXObject, KIXObjectType, FilterCriteria, TreeNode,
     KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, KIXObjectSpecificDeleteOptions, TableFilterCriteria
+    KIXObjectSpecificCreateOptions, KIXObjectSpecificDeleteOptions, TableFilterCriteria, FormFieldOption
 } from "../../model";
 import { IKIXService } from "./IKIXService";
 import { IAutofillConfiguration } from "../components";
@@ -26,7 +26,7 @@ export interface IKIXObjectService<T extends KIXObject = KIXObject> extends IKIX
 
     prepareFullTextFilter(searchValue: string): FilterCriteria[];
 
-    getTreeNodes(property: string): Promise<TreeNode[]>;
+    getTreeNodes(property: string, options?: FormFieldOption[]): Promise<TreeNode[]>;
 
     checkFilterValue(object: T, criteria: TableFilterCriteria): Promise<boolean>;
 

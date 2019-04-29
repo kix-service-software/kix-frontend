@@ -22,6 +22,8 @@ export enum QueueProperty {
 
     FOLLOW_UP_ID = 'FollowUpID',
 
+    FOLLOW_UP_LOCK = 'FollowUpLock',
+
     UNLOCK_TIMEOUT = 'UnlockTimeout',
 
     SIGNATURE = 'Signature',

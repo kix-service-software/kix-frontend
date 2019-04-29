@@ -1,5 +1,5 @@
 import { ComponentState } from './ComponentState';
-import { FormInputComponent, InputFieldTypes, FormFieldOptions } from '../../../../../core/model';
+import { FormInputComponent, InputFieldTypes, FormFieldOptions, NumberInputOptions } from '../../../../../core/model';
 import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
 class Component extends FormInputComponent<string, ComponentState> {
@@ -13,14 +13,6 @@ class Component extends FormInputComponent<string, ComponentState> {
 
         this.state.currentValue = typeof input.currentValue !== 'undefined' ?
             input.currentValue : this.state.currentValue;
-        if (this.state.field && this.state.field.options) {
-            const inputTypeOption = this.state.field.options.find(
-                (o) => o.option === FormFieldOptions.INPUT_FIELD_TYPE
-            );
-            if (inputTypeOption) {
-                this.state.inputType = inputTypeOption.value.toString() || InputFieldTypes.TEXT;
-            }
-        }
         this.update();
     }
 
@@ -29,11 +21,45 @@ class Component extends FormInputComponent<string, ComponentState> {
             ? this.state.field.placeholder
             : this.state.field.required ? this.state.field.label : '';
         this.state.placeholder = await TranslationService.translate(placeholderText);
+        this.prepareOptions();
     }
 
     public async onMount(): Promise<void> {
         await super.onMount();
         this.setCurrentValue();
+    }
+
+    private async prepareOptions(): Promise<void> {
+        if (this.state.field && this.state.field.options) {
+            const maxOption = this.state.field.options.find(
+                (o) => o.option === NumberInputOptions.MAX
+            );
+            if (maxOption) {
+                this.state.max = maxOption.value;
+            }
+            const minOption = this.state.field.options.find(
+                (o) => o.option === NumberInputOptions.MIN
+            );
+            if (minOption) {
+                this.state.min = minOption.value;
+                if (typeof this.state.currentValue === 'undefined' || this.state.currentValue === null) {
+                    this.state.currentValue = this.state.min.toString();
+                }
+            }
+            const stepOption = this.state.field.options.find(
+                (o) => o.option === NumberInputOptions.STEP
+            );
+            if (stepOption) {
+                this.state.step = stepOption.value;
+            }
+            const unitStringOption = this.state.field.options.find(
+                (o) => o.option === NumberInputOptions.UNIT_STRING
+            );
+            if (unitStringOption) {
+                const string = await TranslationService.translate(unitStringOption.value);
+                this.state.unitstring = ` ${string}`;
+            }
+        }
     }
 
     public setCurrentValue(): void {
@@ -50,14 +76,6 @@ class Component extends FormInputComponent<string, ComponentState> {
             (this as any).emit('valueChanged', this.state.currentValue);
             super.provideValue(this.state.currentValue);
         }
-    }
-
-    public getAutoCompleteOption(): string {
-        if (this.state.inputType === InputFieldTypes.PASSWORD) {
-            return 'new-password';
-        }
-
-        return 'nope';
     }
 
     public async focusLost(event: any): Promise<void> {

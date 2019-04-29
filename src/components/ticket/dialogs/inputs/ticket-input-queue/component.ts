@@ -24,7 +24,9 @@ class Component extends FormInputComponent<number[], ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        this.state.nodes = await TicketService.getInstance().getTreeNodes(TicketProperty.QUEUE_ID);
+        this.state.nodes = await TicketService.getInstance().getTreeNodes(
+            TicketProperty.QUEUE_ID, this.state.field.options
+        );
         this.setCurrentNode();
     }
 

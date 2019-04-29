@@ -1,8 +1,11 @@
 import { ILabelProvider } from "../ILabelProvider";
-import { KIXObjectType, ObjectIcon, DateTimeUtil, User, Queue, QueueProperty, SystemAddress } from "../../model";
+import {
+    KIXObjectType, ObjectIcon, DateTimeUtil, User, Queue, QueueProperty, SystemAddress, FollowUpType
+} from "../../model";
 import { TranslationService } from "../i18n/TranslationService";
 import { ObjectDataService } from "../ObjectDataService";
 import { KIXObjectService } from "../kix";
+import { LabelService } from "../LabelService";
 
 export class QueueLabelProvider implements ILabelProvider<Queue> {
 
@@ -50,7 +53,10 @@ export class QueueLabelProvider implements ILabelProvider<Queue> {
                 displayValue = 'Translatable#Unlock Timeout (min)';
                 break;
             case QueueProperty.FOLLOW_UP_ID:
-                displayValue = 'Translatable#Follow Up Possible';
+                displayValue = 'Translatable#Follow Up on Tickets possible';
+                break;
+            case QueueProperty.FOLLOW_UP_LOCK:
+                displayValue = 'Translatable#Follow Up Ticket Lock';
                 break;
             case QueueProperty.QUEUE_ID:
             case 'ICON':
@@ -120,14 +126,14 @@ export class QueueLabelProvider implements ILabelProvider<Queue> {
                     KIXObjectType.SYSTEM_ADDRESS, [value], null, null, true
                 ).catch((error) => [] as SystemAddress[]);
                 displayValue = systemAddresses && !!systemAddresses.length ?
-                    `${systemAddresses[0].Realname} <${systemAddresses[0].Name}>` : value;
+                    await LabelService.getInstance().getText(systemAddresses[0]) : value;
                 break;
-            // case QueueProperty.FOLLOW_UP_ID:
-            //     const follwoUptypes = await KIXObjectService.loadObjects<FollowUpType>(
-            //         KIXObjectType.FOLLOW_UP_TYPE, [value], null, null, true
-            //     ).catch((error) => [] as FollowUpType[]);
-            //     displayValue = follwoUptypes && !!follwoUptypes.length ? follwoUptypes[0].Name : value;
-            //     break;
+            case QueueProperty.FOLLOW_UP_ID:
+                const follwoUptypes = await KIXObjectService.loadObjects<FollowUpType>(
+                    KIXObjectType.FOLLOW_UP_TYPE, [value], null, null, true
+                ).catch((error) => [] as FollowUpType[]);
+                displayValue = follwoUptypes && !!follwoUptypes.length ? follwoUptypes[0].Name : value;
+                break;
             default:
         }
 
@@ -175,7 +181,10 @@ export class QueueLabelProvider implements ILabelProvider<Queue> {
         queue: Queue, property: string, value?: string | number
     ): Promise<Array<string | ObjectIcon>> {
         if (property === QueueProperty.QUEUE_ID || property === 'ICON') {
-            return [new ObjectIcon('Priority', queue.QueueID)];
+            return [new ObjectIcon('Queue', queue.QueueID)];
+        }
+        if (property === QueueProperty.FOLLOW_UP_ID) {
+            return [new ObjectIcon('FollowUpType', value)];
         }
         return null;
     }
