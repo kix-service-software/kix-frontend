@@ -419,6 +419,11 @@ msgstr "Verknüpfung hinzufügen"
 msgid "Create Priority"
 msgstr "Priorität anlegen"
 
+#, fuzzy
+#| msgid "Create Role"
+msgid "Create Queue"
+msgstr "Rolle wird angelegt"
+
 msgid "Create Role"
 msgstr "Rolle wird angelegt"
 
@@ -704,7 +709,10 @@ msgstr "Filtern in Liste"
 msgid "First Name"
 msgstr "Vorname"
 
-msgid "Follow Up Possible"
+msgid "Follow Up on Tickets possible"
+msgstr ""
+
+msgid "Follow Up Ticket Lock"
 msgstr ""
 
 msgid "Force"
@@ -730,6 +738,36 @@ msgstr "größer als"
 
 msgid "Help"
 msgstr "Hilfe"
+
+msgid "Helptext_Admin_QueueCreate_Comment"
+msgstr ""
+
+msgid "Helptext_Admin_QueueCreate_FollowUp"
+msgstr ""
+
+msgid "Helptext_Admin_QueueCreate_FollowUpTicketLock"
+msgstr ""
+
+msgid "Helptext_Admin_QueueCreate_Icon."
+msgstr ""
+
+msgid "Helptext_Admin_QueueCreate_Name"
+msgstr ""
+
+msgid "Helptext_Admin_QueueCreate_ParentQueue"
+msgstr ""
+
+msgid "Helptext_Admin_QueueCreate_SenderAddress."
+msgstr ""
+
+msgid "Helptext_Admin_QueueCreate_Signature"
+msgstr ""
+
+msgid "Helptext_Admin_QueueCreate_UnlockTimeout"
+msgstr ""
+
+msgid "Helptext_Admin_QueueCreate_Validity"
+msgstr ""
 
 msgid "History"
 msgstr "Historie"
@@ -1038,6 +1076,9 @@ msgstr "Abmelden"
 msgid "Merge"
 msgstr "Zusammenfassen"
 
+msgid "Minutes"
+msgstr ""
+
 msgid "Mobile"
 msgstr "Mobil"
 
@@ -1253,6 +1294,11 @@ msgstr ""
 msgid "Parent Category"
 msgstr "Übergeordnete Kategorie"
 
+#, fuzzy
+#| msgid "New Queue"
+msgid "Parent Queue"
+msgstr "Neue Queue"
+
 msgid "Password"
 msgstr "Passwort"
 
@@ -1400,8 +1446,18 @@ msgstr "öffentlich"
 msgid "Queue"
 msgstr "Queue"
 
+#, fuzzy
+#| msgid "FAQ Information"
+msgid "Queue Information"
+msgstr "FAQ Informationen"
+
 msgid "Queues"
 msgstr "Queues"
+
+#, fuzzy
+#| msgid "Role successfully created."
+msgid "Queue successfully created."
+msgstr "Rolle wurde erfolgreich angelegt."
 
 msgid "Quick search (Tickets)"
 msgstr "Schnellsuche (Tickets)"
@@ -1675,6 +1731,9 @@ msgstr "; (Semikolon)"
 msgid "Sender"
 msgstr "Absender"
 
+msgid "Sender Address (Email)"
+msgstr ""
+
 msgid ""
 "Serach for config items with the same number or part of the same number "
 "(min. 1 character)."
@@ -1730,6 +1789,9 @@ msgstr ""
 
 msgid "Show all"
 msgstr "Alle anzeigen"
+
+msgid "Signature"
+msgstr ""
 
 msgid "SINGLE_QUOTES"
 msgstr "' (Einfaches Hochkomma)"
@@ -2008,6 +2070,11 @@ msgid "unlocked"
 msgstr "Freigeben"
 
 msgid "Unlock Ticket ..."
+msgstr "Tickets entsperren..."
+
+#, fuzzy
+#| msgid "Unlock Ticket ..."
+msgid "Unlock Timeout"
 msgstr "Tickets entsperren..."
 
 #, fuzzy
