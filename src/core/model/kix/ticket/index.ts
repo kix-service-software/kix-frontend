@@ -24,6 +24,7 @@ export { Queue } from './Queue';
 export { QueueProperty } from './QueueProperty';
 export { TicketTemplate } from './TicketTemplate';
 export { TicketTemplateProperty } from './TicketTemplateProperty';
+export { FollowUpType } from './FollowUpType';
 
 export { TicketStats } from './TicketStats';
 export { CreateTicketArticleOptions } from './CreateTicketArticleOptions';
@@ -35,5 +36,6 @@ export { TicketFactory } from './TicketFactory';
 export { QueueFactory } from './QueueFactory';
 export { SenderTypeFactory } from './SenderTypeFactory';
 export { LockFactory } from './LockFactory';
+export { FollowUpTypeFactory } from './FollowUpTypeFactory';
 
 export * from './socket';

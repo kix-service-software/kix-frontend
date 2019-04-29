@@ -32,6 +32,7 @@ class Extension implements IKIXModuleExtension {
         ['general-catalog-input', '_base-components/form/inputs/general-catalog-input'],
         ['text-area-input', '_base-components/form/inputs/text-area-input'],
         ['object-reference-input', '_base-components/form/inputs/object-reference-input'],
+        ['number-input', '_base-components/form/inputs/number-input'],
         ['date-time-input', '_base-components/form/inputs/date-time-input'],
         ['notes-widget', 'widgets/notes-widget'],
         ['linked-objects-widget', 'widgets/linked-objects-widget'],

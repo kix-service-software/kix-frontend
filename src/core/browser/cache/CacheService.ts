@@ -146,7 +146,7 @@ export class CacheService {
             if (!ignoreKeyPrefixes.some((p) => p === prefix.value)) {
                 const keys = this.keyIndex.get(prefix.value);
                 console.debug(
-                    `CacheService: delete cacheKeyPrefix ${prefix} - key count: ${keys.length}`
+                    `CacheService: delete cacheKeyPrefix ${prefix.value} - key count: ${keys.length}`
                 );
                 keys.forEach((k) => this.cache.delete(k));
             }

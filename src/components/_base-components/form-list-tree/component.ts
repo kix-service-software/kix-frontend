@@ -26,7 +26,8 @@ class TreeComponent {
         this.state.filterValue = input.filterValue;
         TreeUtil.linkTreeNodes(this.state.nodes, this.state.filterValue);
 
-        this.state.activeNodes = input.activeNodes;
+        this.state.activeNodes = input.activeNodes ?
+            (input.activeNodes as TreeNode[]).filter((an) => an.clickable) : [];
         (this as any).setStateDirty('activeNodes');
         this.state.treeStyle = input.treeStyle;
     }

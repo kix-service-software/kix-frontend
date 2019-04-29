@@ -125,7 +125,7 @@ export class SystemAddressLabelProvider implements ILabelProvider<SystemAddress>
     public async getObjectText(
         systemAddress: SystemAddress, id?: boolean, title?: boolean, translatable?: boolean
     ): Promise<string> {
-        return systemAddress.Name;
+        return `${systemAddress.Realname} <${systemAddress.Name}>`;
     }
 
     public getObjectAdditionalText(object: SystemAddress, translatable: boolean = true): string {

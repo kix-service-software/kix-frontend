@@ -1,0 +1,17 @@
+<if(state.field)>
+    <input.input-style
+        type="number"
+        class={
+                invalid: state.invalid
+            }
+        value=state.currentValue
+        min=state.min
+        max=state.max
+        step=state.step
+        placeholder=state.placeholder
+        required=input.required
+        readonly=state.field.readonly
+        disabled=state.field.readonly
+        on-blur("focusLost")
+        on-input("valueChanged")/>${state.unitString}
+</if>

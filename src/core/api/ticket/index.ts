@@ -2,6 +2,7 @@ export * from './article';
 export * from './attachment';
 export * from './history';
 export * from './watcher';
+export * from './queue';
 
 export * from './ticket-priority';
 export * from './ticket-state';
