@@ -1,7 +1,6 @@
 import { IRow } from "./IRow";
 import { SortOrder, DataType, SortUtil } from "../../model";
 import { ICell } from "./ICell";
-import { IColumn } from "./IColumn";
 
 export class TableSortUtil {
 

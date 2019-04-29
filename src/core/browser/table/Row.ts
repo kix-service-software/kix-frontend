@@ -24,6 +24,8 @@ export class Row<T = any> implements IRow<T> {
     private children: IRow[] = [];
     private filteredChildren: IRow[] = null;
 
+    public filterMatch: boolean = true;
+
     public constructor(
         private table: ITable, private rowObject?: IRowObject
     ) {
@@ -68,6 +70,7 @@ export class Row<T = any> implements IRow<T> {
         if (!this.isFilterDefined(filterValue, criteria)) {
             this.filteredChildren = null;
             this.children.forEach((cr) => cr.filter(filterValue, criteria));
+            this.filterMatch = true;
             return true;
         }
 
@@ -95,6 +98,7 @@ export class Row<T = any> implements IRow<T> {
             }
         }
 
+        this.filterMatch = criteriaMatch;
         return criteriaMatch;
     }
 
@@ -153,7 +157,7 @@ export class Row<T = any> implements IRow<T> {
         return this.selected;
     }
 
-    public select(selected: boolean = true): void {
+    public select(selected: boolean = true, selectChildren: boolean = false, withoutFilter: boolean = false): void {
         let notify = false;
 
         if (selected) {
@@ -166,6 +170,14 @@ export class Row<T = any> implements IRow<T> {
                 this.selected = false;
                 notify = true;
             }
+        }
+
+        if (selectChildren && this.children) {
+            let children = this.children;
+            if (!withoutFilter) {
+                children = this.children.filter((c: Row) => c.filterMatch);
+            }
+            children.forEach((c) => c.select(selected, selectChildren, withoutFilter));
         }
 
         if (notify) {

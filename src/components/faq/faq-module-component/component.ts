@@ -12,7 +12,8 @@ import {
     FAQService, FAQContext, FAQDetailsContext, NewFAQArticleDialogContext, FAQArticleSearchContext,
     FAQArticleVoteAction, FAQArticlePrintAction, FAQArticleEditAction, FAQArticleDeleteAction,
     FAQArticleCreateAction, FAQArticleBrowserFactory, FAQArticleAttachmentBrowserFactory,
-    FAQArticleSearchDefinition, FAQArticleFormService, EditFAQArticleDialogContext, FAQCategoryLabelProvider
+    FAQArticleSearchDefinition, FAQArticleFormService, EditFAQArticleDialogContext, FAQCategoryLabelProvider,
+    FAQCategoryCSVExportAction
 } from '../../../core/browser/faq';
 import { DialogService } from '../../../core/browser/components/dialog';
 import { FAQCategoryTableFactory, FAQCategoryCreateAction } from '../../../core/browser/faq/admin';
@@ -129,6 +130,7 @@ class Component extends AbstractMarkoComponent {
         ActionFactory.getInstance().registerAction('faq-article-edit-action', FAQArticleEditAction);
         ActionFactory.getInstance().registerAction('faq-article-print-action', FAQArticlePrintAction);
         ActionFactory.getInstance().registerAction('faq-article-vote-action', FAQArticleVoteAction);
+        ActionFactory.getInstance().registerAction('faq-category-csv-export-action', FAQCategoryCSVExportAction);
     }
 
     private registerAdminActions(): void {
