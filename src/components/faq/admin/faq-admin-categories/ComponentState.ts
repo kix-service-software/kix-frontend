@@ -8,7 +8,7 @@ export class ComponentState {
         public instanceId: string = IdService.generateDateBasedId('faq-admin-categories'),
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
             'table-widget', 'Translatable#FAQ Knowledge Database: FAQ Categories',
-            ['faq-admin-category-create-action', 'csv-export-action'],
+            ['faq-admin-category-create-action', 'faq-category-csv-export-action'],
             new TableWidgetSettings(KIXObjectType.FAQ_CATEGORY, [FAQCategoryProperty.NAME, SortOrder.UP]),
             false, false, null, 'kix-icon-gears'
         )

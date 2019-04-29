@@ -13,9 +13,17 @@ export class FAQCategoryLabelProvider implements ILabelProvider<FAQCategory> {
         return objectType === this.kixObjectType;
     }
 
-    public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
+    public async getPropertyText(
+        property: string, short: boolean = false, translatable: boolean = true
+    ): Promise<string> {
         let displayValue = property;
         switch (property) {
+            case FAQCategoryProperty.NAME:
+                displayValue = 'Translatable#Name';
+                break;
+            case FAQCategoryProperty.FULL_NAME:
+                displayValue = 'Translatable#Fullname';
+                break;
             case FAQCategoryProperty.PARENT_ID:
                 displayValue = 'Translatable#Parent Category';
                 break;

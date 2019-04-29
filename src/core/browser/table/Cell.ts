@@ -33,14 +33,17 @@ export class Cell implements ICell {
             return this.getValue().displayValue;
         }
 
-        let value;
+        let value: string;
         const object = this.getRow().getRowObject().getObject();
+
+        const columnConfiguration = this.getColumnConfiguration();
+        const translatable = columnConfiguration ? columnConfiguration.translatable : true;
 
         if (object) {
             value = await LabelService.getInstance().getPropertyValueDisplayText(
                 object, this.tableValue.property,
                 this.tableValue.objectValue ? this.tableValue.objectValue.toString() : null,
-                this.getColumnConfiguration().translatable
+                translatable
             );
         } else {
             const objectType = this.getRow().getTable().getObjectType();
@@ -49,7 +52,7 @@ export class Cell implements ICell {
                 value = await labelProvider.getPropertyValueDisplayText(
                     this.tableValue.property,
                     this.tableValue.objectValue ? this.tableValue.objectValue.toString() : null,
-                    this.getColumnConfiguration().translatable
+                    translatable
                 );
             }
         }

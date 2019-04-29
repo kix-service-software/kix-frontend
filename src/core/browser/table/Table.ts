@@ -139,7 +139,27 @@ export class Table implements ITable {
     }
 
     public getSelectedRows(all?: boolean): IRow[] {
-        return this.getRows(all).filter((r) => r.isSelected());
+        const rows = this.getRows(all);
+        const selectedRows = this.determineSelectedRows(rows);
+        return selectedRows;
+    }
+
+    private determineSelectedRows(rows: IRow[]): IRow[] {
+        let selectedRows = [];
+
+        rows.forEach((r) => {
+            if (r.isSelected()) {
+                selectedRows.push(r);
+            }
+
+            const children = r.getChildren();
+            if (children && children.length) {
+                const selectedSubRows = this.determineSelectedRows(children);
+                selectedRows = [...selectedRows, ...selectedSubRows];
+            }
+        });
+
+        return selectedRows;
     }
 
     public getRow(rowId: string): IRow {
@@ -378,11 +398,11 @@ export class Table implements ITable {
     }
 
     public selectAll(withoutFilter: boolean = false): void {
-        this.getRows(withoutFilter).forEach((r) => r.select());
+        this.getRows(withoutFilter).forEach((r) => r.select(undefined, true, withoutFilter));
     }
 
     public selectNone(withoutFilter: boolean = false): void {
-        this.getRows(withoutFilter).forEach((r) => r.select(false));
+        this.getRows(withoutFilter).forEach((r) => r.select(false, true, withoutFilter));
     }
 
     public selectRowByObject(object: any, select?: boolean): void {

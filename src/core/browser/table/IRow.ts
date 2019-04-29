@@ -21,7 +21,7 @@ export interface IRow<T = any> {
 
     isSelected(): boolean;
 
-    select(selected?: boolean): void;
+    select(selected?: boolean, selectChildren?: boolean, withoutFilter?: boolean): void;
 
     isSelectable(): boolean;
 

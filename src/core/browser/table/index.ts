@@ -24,3 +24,4 @@ export { ValueState } from './ValueState';
 export { TableValue } from './TableValue';
 export { ITableCSSHandler } from './ITableCSSHandler';
 export { TableCSSHandlerRegistry } from './TableCSSHandlerRegistry';
+export { TableExportUtil } from './TableExportUtil';
