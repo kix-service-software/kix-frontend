@@ -318,6 +318,11 @@ msgstr "Kommentar"
 msgid "Communication"
 msgstr "Kommunikation"
 
+#, fuzzy
+#| msgid "Communication"
+msgid "Communication: E-mail"
+msgstr "Kommunikation"
+
 msgid "Compare"
 msgstr "Vergleichen"
 
@@ -515,6 +520,11 @@ msgstr "Beschreibung & Anmerkungen"
 msgid "Detailed search results"
 msgstr "Detailierte Suchergebnisse"
 
+#, fuzzy
+#| msgid "DisplayValue"
+msgid "Display Name"
+msgstr "Anzeigewert"
+
 msgid "DisplayValue"
 msgstr "Anzeigewert"
 
@@ -601,6 +611,11 @@ msgstr ""
 msgid "Email address"
 msgstr "IP Adresse"
 
+#, fuzzy
+#| msgid "IP Address"
+msgid "E-mail-Addresses"
+msgstr "IP Adresse"
+
 msgid "ends with"
 msgstr "endet mit"
 
@@ -668,6 +683,11 @@ msgid "FAQ Attributes"
 msgstr "FAQ Attribute"
 
 msgid "FAQ Categories"
+msgstr "FAQ Kategorien"
+
+#, fuzzy
+#| msgid "FAQ Categories"
+msgid "FAQ Category"
 msgstr "FAQ Kategorien"
 
 msgid "FAQ Data"
@@ -1055,11 +1075,21 @@ msgstr "Name"
 msgid "New"
 msgstr "Neu"
 
+#, fuzzy
+#| msgid "Network Address"
+msgid "New Address"
+msgstr "Netzwerkadresse"
+
 msgid "New Agent"
 msgstr "Neuer Agent"
 
 msgid "New Article"
 msgstr "Neuer Artikel"
+
+#, fuzzy
+#| msgid "Category"
+msgid "New Category"
+msgstr "Kategorie"
 
 msgid "New Class"
 msgstr "Neue Klasse"
@@ -1462,9 +1492,6 @@ msgstr "Leerwert ersetzen"
 msgid "Replace Values"
 msgstr "Wert ersetzen"
 
-msgid "Required"
-msgstr "Erforderlich"
-
 msgid "Reset data"
 msgstr "Daten zurücksetzen"
 
@@ -1807,6 +1834,14 @@ msgstr "Wechsel ins Kundenportal."
 msgid "Symptom"
 msgstr "Symptom"
 
+#, fuzzy
+#| msgid "Network Address"
+msgid "System Address"
+msgstr "Netzwerkadresse"
+
+msgid "System Addresses"
+msgstr ""
+
 msgid "-> (tab)"
 msgstr "-> (Tabulator)"
 
@@ -2146,6 +2181,9 @@ msgstr "Ihre Bewertung"
 msgid "ZIP"
 msgstr "PLZ"
 
+#~ msgid "Required"
+#~ msgstr "Erforderlich"
+
 #~ msgid "Create"
 #~ msgstr "Erstellt"
 
@@ -2412,9 +2450,6 @@ msgstr "PLZ"
 
 #~ msgid "Room Label"
 #~ msgstr "Raumbeschriftung"
-
-#~ msgid "Network Address"
-#~ msgstr "Netzwerkadresse"
 
 #~ msgid "Subnet Mask"
 #~ msgstr "Subnetzmaske"
