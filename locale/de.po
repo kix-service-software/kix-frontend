@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
 "PO-Revision-Date: 2019-04-29 11:17+0000\n"
-"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
+"Last-Translator: ddoerffel <Dorothea.Doerffel@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -220,10 +220,10 @@ msgid "Can not use file (file is empty)."
 msgstr "Datei kann nicht verwendet werden (Datei ist leer)."
 
 msgid "Can not use file (missing required properties):"
-msgstr ""
+msgstr "Datei kann nicht genutzt werden (Fehlende Pflichtattribute):"
 
 msgid "Can not use file (no known properties found)."
-msgstr ""
+msgstr "Datei kann nicht genutzt werden (Keine bekannten Attribute gefunden)."
 
 msgid "Category"
 msgstr "Kategorie"
@@ -260,6 +260,8 @@ msgstr "Kunden werden nach Auswahl eines Kontaktes automatisch zugewiesen."
 
 msgid "Choose CSV-File with data sets for import. Drag & Drop is possible."
 msgstr ""
+"Wählen Sie eine CSV-Datei mit zu importierenden Datensätzen. Drag & Drop ist "
+"möglich."
 
 msgid "CI Class"
 msgstr "CI Klasse"
@@ -348,10 +350,8 @@ msgstr "Config Item Informationen"
 msgid "Config Items"
 msgstr "Config Items"
 
-#, fuzzy
-#| msgid "Config Items"
 msgid "Config Items Count: {0}"
-msgstr "Config Items"
+msgstr "Anzahl Config Items: {0}"
 
 msgid "Config Item Search"
 msgstr "Config Item Suche"
@@ -518,8 +518,6 @@ msgstr "Beschreibung & Anmerkungen"
 msgid "Detailed search results"
 msgstr "Detailierte Suchergebnisse"
 
-#, fuzzy
-#| msgid "DisplayValue"
 msgid "Display Name"
 msgstr "Anzeigewert"
 
@@ -602,7 +600,7 @@ msgid "Edit Type"
 msgstr "Typ bearbeiten"
 
 msgid "E-mail"
-msgstr ""
+msgstr "E-Mail"
 
 msgid "Email address"
 msgstr "E-Mail Adresse"
@@ -681,10 +679,8 @@ msgstr "FAQ Attribute"
 msgid "FAQ Categories"
 msgstr "FAQ Kategorien"
 
-#, fuzzy
-#| msgid "FAQ Categories"
 msgid "FAQ Category"
-msgstr "FAQ Kategorien"
+msgstr "FAQ Kategorie"
 
 msgid "FAQ Data"
 msgstr "Stammdaten"
@@ -693,7 +689,7 @@ msgid "FAQ Information"
 msgstr "FAQ Informationen"
 
 msgid "FAQ Knowledge Database: FAQ Categories"
-msgstr ""
+msgstr "FAQ Wissensdatenbank: FAQ Kategorien"
 
 msgid "FAQ rating"
 msgstr "FAQ Bewertung"
@@ -1071,10 +1067,8 @@ msgstr "Name"
 msgid "New"
 msgstr "Neu"
 
-#, fuzzy
-#| msgid "Network Address"
 msgid "New Address"
-msgstr "Netzwerkadresse"
+msgstr "Neue Adresse"
 
 msgid "New Agent"
 msgstr "Neuer Agent"
@@ -1082,10 +1076,8 @@ msgstr "Neuer Agent"
 msgid "New Article"
 msgstr "Neuer Artikel"
 
-#, fuzzy
-#| msgid "Category"
 msgid "New Category"
-msgstr "Kategorie"
+msgstr "Neue Kategorie"
 
 msgid "New Class"
 msgstr "Neue Klasse"
@@ -1111,10 +1103,8 @@ msgstr "Neues Objekt"
 msgid "New Priority"
 msgstr "Neue Priorität"
 
-#, fuzzy
-#| msgid "Queue"
 msgid "New Queue"
-msgstr "Queue"
+msgstr "Neue Queue"
 
 msgid "New Role"
 msgstr "Neue Rolle"
@@ -1262,10 +1252,8 @@ msgstr ""
 "Der Bearbeiter ist die Person, die für die Bearbeitung des Ticket zuständig "
 "sein soll."
 
-#, fuzzy
-#| msgid "Category"
 msgid "Parent Category"
-msgstr "Kategorie"
+msgstr "Übergeordnete Kategorie"
 
 msgid "Password"
 msgstr "Passwort"
@@ -1453,10 +1441,8 @@ msgstr "Prioritäten werden entfernt"
 msgid "Remove Priorities ..."
 msgstr "Prioritäten werden entfernt..."
 
-#, fuzzy
-#| msgid "Remove State"
 msgid "Remove Search Criteria"
-msgstr "Status entfernen"
+msgstr "Suchkriterien entfernen"
 
 msgid "Remove States"
 msgstr "Status entfernen"
@@ -1830,10 +1816,8 @@ msgstr "Wechsel ins Kundenportal."
 msgid "Symptom"
 msgstr "Symptom"
 
-#, fuzzy
-#| msgid "Network Address"
 msgid "System Address"
-msgstr "Netzwerkadresse"
+msgstr "Systemadresse"
 
 msgid "System Addresses"
 msgstr ""
@@ -1887,10 +1871,8 @@ msgstr "Ticket"
 msgid "Ticket Attributes"
 msgstr "Ticket Attribute"
 
-#, fuzzy
-#| msgid "Core Data"
 msgid "Ticket Data"
-msgstr "Stammdaten"
+msgstr "Ticketdaten"
 
 msgid "Ticket Description"
 msgstr "Ticket Beschreibung"
@@ -1924,10 +1906,8 @@ msgstr "Ticket Nummer"
 msgid "Ticket: Priorities"
 msgstr "Ticket: Prioritäten"
 
-#, fuzzy
-#| msgid "Ticket: Types"
 msgid "Ticket: Queues"
-msgstr "Ticket: Typen"
+msgstr "Ticket: Queues"
 
 msgid "Tickets"
 msgstr "Tickets"
