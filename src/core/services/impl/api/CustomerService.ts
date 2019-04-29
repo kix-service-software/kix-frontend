@@ -22,7 +22,7 @@ export class CustomerService extends KIXObjectService {
         return CustomerService.INSTANCE;
     }
 
-    protected RESOURCE_URI: string = 'customers';
+    protected RESOURCE_URI: string = 'organisations';
 
     private sourcesCache: CustomerSource[] = [];
 
@@ -176,13 +176,14 @@ export class CustomerService extends KIXObjectService {
     }
 
     private async loadCustomerSources(token: string): Promise<void> {
-        const uri = this.buildUri(this.RESOURCE_URI, 'sources');
-        const response = await this.getObjectByUri<CustomerSourcesResponse>(token, uri);
-        response.CustomerSource.forEach((s) => {
-            if (!this.sourcesCache.find((cs) => cs.ID === s.ID)) {
-                this.sourcesCache.push(s);
-            }
-        });
+        // const uri = this.buildUri(this.RESOURCE_URI, 'sources');
+        // const response = await this.getObjectByUri<CustomerSourcesResponse>(token, uri);
+        // response.CustomerSource.forEach((s) => {
+        //     if (!this.sourcesCache.find((cs) => cs.ID === s.ID)) {
+        //         this.sourcesCache.push(s);
+        //     }
+        // });
+        this.sourcesCache = [];
     }
 
     private buildSearchFilter(source: CustomerSource, searchValue: string, query: any): void {

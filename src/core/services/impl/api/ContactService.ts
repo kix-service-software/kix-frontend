@@ -112,14 +112,15 @@ export class ContactService extends KIXObjectService {
     }
 
     private async loadContactSources(token: string): Promise<void> {
-        const uri = this.buildUri(this.RESOURCE_URI, 'sources');
-        const response = await this.getObjectByUri<ContactSourcesResponse>(token, uri);
+        // const uri = this.buildUri(this.RESOURCE_URI, 'sources');
+        // const response = await this.getObjectByUri<ContactSourcesResponse>(token, uri);
 
-        response.ContactSource.forEach((s) => {
-            if (!this.sourcesCache.find((cs) => cs.ID === s.ID)) {
-                this.sourcesCache.push(s);
-            }
-        });
+        // response.ContactSource.forEach((s) => {
+        //     if (!this.sourcesCache.find((cs) => cs.ID === s.ID)) {
+        //         this.sourcesCache.push(s);
+        //     }
+        // });
+        this.sourcesCache = [];
     }
 
     public async getAttributeMapping(token: string): Promise<ContactSourceAttributeMapping[]> {

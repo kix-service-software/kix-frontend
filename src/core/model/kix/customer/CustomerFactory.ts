@@ -16,18 +16,20 @@ export class CustomerFactory {
     private static mapCustomerSource(customer: Customer, source: CustomerSource): void {
         customer.customerSourceMap = [];
         const unknownGroupAttributes: Array<[string, string]> = [];
-        source.AttributeMapping.forEach((am) => {
-            if (am.DisplayGroup) {
-                const group = customer.customerSourceMap.find((csm) => csm[0] === am.DisplayGroup);
-                if (!group) {
-                    customer.customerSourceMap.push([am.DisplayGroup, [[am.Label, am.Attribute]]]);
+        if (source) {
+            source.AttributeMapping.forEach((am) => {
+                if (am.DisplayGroup) {
+                    const group = customer.customerSourceMap.find((csm) => csm[0] === am.DisplayGroup);
+                    if (!group) {
+                        customer.customerSourceMap.push([am.DisplayGroup, [[am.Label, am.Attribute]]]);
+                    } else {
+                        group[1].push([am.Label, am.Attribute]);
+                    }
                 } else {
-                    group[1].push([am.Label, am.Attribute]);
+                    unknownGroupAttributes.push([am.Label, am.Attribute]);
                 }
-            } else {
-                unknownGroupAttributes.push([am.Label, am.Attribute]);
-            }
-        });
+            });
+        }
 
         if (unknownGroupAttributes.length > 0) {
             customer.customerSourceMap.push(['UNKNOWN', unknownGroupAttributes]);
