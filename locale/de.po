@@ -320,7 +320,9 @@ msgstr "Kommentar"
 msgid "Communication"
 msgstr "Kommunikation"
 
-msgid "Communication: E-mail"
+#, fuzzy
+#| msgid "Communication: E-mail"
+msgid "Communication: Email"
 msgstr "Kommunikation: E-Mail"
 
 msgid "Compare"
@@ -604,13 +606,14 @@ msgstr "Übersetzung bearbeiten"
 msgid "Edit Type"
 msgstr "Typ bearbeiten"
 
-msgid "E-mail"
+#, fuzzy
+#| msgid "E-mail"
+msgid "Email"
 msgstr "E-Mail"
 
-msgid "Email address"
-msgstr "E-Mail Adresse"
-
-msgid "E-mail-Addresses"
+#, fuzzy
+#| msgid "E-mail-Addresses"
+msgid "Email Addresses"
 msgstr "E-Mail Adressen"
 
 msgid "ends with"
@@ -915,7 +918,9 @@ msgstr "Geben Sie den Titel oder Teile eines Tickettitels ein."
 msgid "Insert the definition for the Config Item Class."
 msgstr "Geben Sie die Definition für die CI Klasse ein."
 
-msgid "Insert the e-mail address for the user."
+#, fuzzy
+#| msgid "Insert the e-mail address for the user."
+msgid "Insert the email address for the user."
 msgstr "Geben Sie eine E-Mail-Adresse für den Nutzer ein."
 
 msgid "Insert the firstname of the user."
@@ -1130,7 +1135,9 @@ msgstr "Neuer Kontakt"
 msgid "New Customer"
 msgstr "Neuer Kunde"
 
-msgid "New E-mail"
+#, fuzzy
+#| msgid "New E-mail"
+msgid "New Email"
 msgstr "Neue E-Mail"
 
 msgid "New FAQ"
@@ -2221,6 +2228,9 @@ msgstr "Ihre Bewertung"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Email address"
+#~ msgstr "E-Mail Adresse"
 
 #~ msgid "Required"
 #~ msgstr "Erforderlich"
