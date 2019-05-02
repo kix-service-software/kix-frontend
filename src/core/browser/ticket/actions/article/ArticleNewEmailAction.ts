@@ -3,7 +3,7 @@ import { AbstractAction } from '../../../../model/components/action/AbstractActi
 export class ArticleNewEmailAction extends AbstractAction {
 
     public async initAction(): Promise<void> {
-        this.text = 'Translatable#New E-mail';
+        this.text = 'Translatable#New Email';
         this.icon = 'kix-icon-new-mail';
     }
 

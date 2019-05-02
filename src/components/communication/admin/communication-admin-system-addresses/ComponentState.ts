@@ -7,7 +7,7 @@ export class ComponentState {
     public constructor(
         public instanceId: string = IdService.generateDateBasedId('communication-system-addresses-list'),
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
-            'table-widget', 'Translatable#Communication: E-mail',
+            'table-widget', 'Translatable#Communication: Email',
             [
                 'communication-admin-system-addresses-create', 'communication-admin-system-addresses-table-delete'
             ],

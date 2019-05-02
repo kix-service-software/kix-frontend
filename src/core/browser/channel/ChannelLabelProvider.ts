@@ -62,7 +62,7 @@ export class ChannelLabelProvider implements ILabelProvider<Channel> {
                     displayValue = await TranslationService.translate('Translatable#Note', []);
                 }
                 if (channel.Name === 'email') {
-                    displayValue = await TranslationService.translate('Translatable#E-mail', []);
+                    displayValue = await TranslationService.translate('Translatable#Email', []);
                 }
                 break;
             default:
