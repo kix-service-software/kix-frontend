@@ -1,12 +1,4 @@
-<!-- TOC -->
-
-- [1. KIXng Webapplication](#1-kixng-webapplication)
-- [2. Installation & Start](#2-installation-start)
-    - [2.1. Command Line](#21-command-line)
-    - [2.2. debuggen im VSCode](#22-debuggen-im-vscode)
-- [3. Verwendete Third-Party Libraries](#3-verwendete-third-party-libraries)
-
-<!-- /TOC -->
+<!-- TOC -->autoauto- [1. KIXng Webapplication](#1-kixng-webapplication)auto- [2. Installation & Start](#2-installation--start)auto    - [2.1. Command Line](#21-command-line)auto    - [2.2. debuggen im VSCode](#22-debuggen-im-vscode)auto- [3. Verwendete Third-Party Libraries](#3-verwendete-third-party-libraries)auto- [4. ...](#4-)autoauto<!-- /TOC -->
 # 1. KIXng Webapplication
 Node Projekt für KIXng Webanwendung.
 
@@ -35,3 +27,5 @@ npm install --all
 * Socket.io (2.1.2) ```/src/static/thirdparty/socket.io.js```
 * D3 (4.10.2) ```/src/static/thirdparty/d3-4.10.2```
 * ckeditor (4.7.3) ```/src/static/thirdparty/ckeditor-4.7.3```
+
+# 4. ...
