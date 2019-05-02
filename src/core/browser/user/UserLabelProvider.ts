@@ -65,7 +65,7 @@ export class UserLabelProvider implements ILabelProvider<User> {
                 displayValue = 'Translatable#Validity';
                 break;
             case UserProperty.USER_EMAIL:
-                displayValue = 'Translatable#E-mail';
+                displayValue = 'Translatable#Email';
                 break;
             case UserProperty.USER_PHONE:
                 displayValue = 'Translatable#Phone';

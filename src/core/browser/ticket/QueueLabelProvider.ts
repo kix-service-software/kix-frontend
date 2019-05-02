@@ -47,7 +47,7 @@ export class QueueLabelProvider implements ILabelProvider<Queue> {
                 displayValue = 'Translatable#Validity';
                 break;
             case QueueProperty.SYSTEM_ADDRESS_ID:
-                displayValue = 'Translatable#Email address';
+                displayValue = 'Translatable#Sender Address (Email)';
                 break;
             case QueueProperty.UNLOCK_TIMEOUT:
                 displayValue = 'Translatable#Unlock Timeout (min)';

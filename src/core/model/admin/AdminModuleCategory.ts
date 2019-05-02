@@ -15,8 +15,8 @@ export class AdminModuleCategory {
             this.id = category.id;
             this.name = category.name;
             this.icon = category.icon;
-            this.children = category.children.map((c) => new AdminModuleCategory(c));
-            this.modules = category.modules.map((m) => new AdminModule(m));
+            this.children = category.children ? category.children.map((c) => new AdminModuleCategory(c)) : [];
+            this.modules = category.modules ? category.modules.map((m) => new AdminModule(m)) : [];
         }
     }
 

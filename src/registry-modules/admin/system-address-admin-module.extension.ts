@@ -5,10 +5,14 @@ class Extension implements IAdminModuleExtension {
     public getAdminModules(): AdminModuleCategory[] {
         return [
             new AdminModuleCategory(
-                null, 'communication', 'Translatable#Communication', null, [], [
-                    new AdminModule(
-                        null, 'system-address', 'Translatable#E-mail-Addresses', null,
-                        KIXObjectType.SYSTEM_ADDRESS, 'communication-admin-system-addresses'
+                null, 'communication', 'Translatable#Communication', null, [
+                    new AdminModuleCategory(
+                        null, 'communication_email', 'Translatable#Email', null, [], [
+                            new AdminModule(
+                                null, 'system-address', 'Translatable#Email Addresses', null,
+                                KIXObjectType.SYSTEM_ADDRESS, 'communication-admin-system-addresses'
+                            )
+                        ]
                     )
                 ])
         ];

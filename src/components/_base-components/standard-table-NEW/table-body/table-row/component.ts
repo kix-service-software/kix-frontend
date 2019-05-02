@@ -22,7 +22,6 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             this.state.selectable = this.state.row.isSelectable();
             this.state.open = this.state.row.isExpanded();
             this.state.children = this.state.row.getChildren();
-            this.prepareObserver();
         }
     }
 
@@ -51,8 +50,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     private prepareObserver(): void {
-        if (this.supportsIntersectionObserver()) {
-            this.state.show = false;
+        if (!this.state.show && this.supportsIntersectionObserver()) {
             const row = (this as any).getEl();
             if (row) {
                 if (this.observer) {

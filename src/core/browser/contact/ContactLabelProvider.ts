@@ -55,7 +55,7 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
                 displayValue = 'Translatable#Name';
                 break;
             case ContactProperty.USER_EMAIL:
-                displayValue = 'Translatable#E-mail';
+                displayValue = 'Translatable#Email';
                 break;
             case ContactProperty.USER_LOGIN:
                 displayValue = 'Translatable#Login';
