@@ -13,7 +13,13 @@ export class ClientStorageService {
     }
 
     public static getFrontendSocketUrl(): string {
-        const socketUrl = ClientStorageService.getCookie("frontendSocketUrl");
+        let socketUrl = ClientStorageService.getCookie("frontendSocketUrl");
+
+        if (!socketUrl || socketUrl === "") {
+            // use current location as socket URL
+            socketUrl = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port;
+        }
+
         return socketUrl;
     }
 

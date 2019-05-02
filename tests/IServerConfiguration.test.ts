@@ -35,9 +35,7 @@ describe('Server Configuration', () => {
     });
 
     it('Should contain FRONTEND_URL as type of string.', () => {
-        expect(serverConfiguration.FRONTEND_URL).to.not.be.undefined;
         expect(serverConfiguration.FRONTEND_URL).to.be.an('string');
-        expect(serverConfiguration.FRONTEND_URL).to.not.be.empty;
     });
 
     it('Should contain BACKEND_API_URL as type of string.', () => {
