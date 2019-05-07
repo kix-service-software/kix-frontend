@@ -1,4 +1,3 @@
-import { UserResponse, } from '../../../api';
 import {
     User, KIXObjectType, Error, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     PreferencesLoadingOptions, KIXObjectSpecificCreateOptions
@@ -9,7 +8,7 @@ import {
     CreateUser, CreateUserRequest, CreateUserResponse, UpdateUser, UpdateUserRequest
 } from '../../../api/user';
 import { LoggingService } from '../LoggingService';
-import { SetPreferenceOptions, UserFactory, UserPreference, UserProperty, Role } from '../../../model/kix/user';
+import { SetPreferenceOptions, UserFactory, UserPreference, UserProperty } from '../../../model/kix/user';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { UserPreferenceFactory } from '../../../model/kix/user/UserPreferenceFactory';
 
@@ -65,14 +64,12 @@ export class UserService extends KIXObjectService {
     }
 
     public async getUserByToken(token: string): Promise<User> {
-        const query = {
-            include: 'Tickets,Preferences'
-        };
-
-        const response = await this.httpService.get<UserResponse>(
-            this.USER_RESOURCE_URI, query, token, null, KIXObjectType.USER, false
+        const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, null, ['Tickets', 'Preferences']);
+        const users = await super.load<User>(
+            token, KIXObjectType.USER, this.USER_RESOURCE_URI, loadingOptions, null, KIXObjectType.USER
         );
-        return new User(response.User);
+
+        return users && users.length ? users[0] : null;
     }
 
     public async createObject(

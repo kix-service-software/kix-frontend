@@ -1,5 +1,5 @@
-import { KIXObject } from "./KIXObject";
-import { KIXObjectType } from "./KIXObjectType";
+import { KIXObject } from "../KIXObject";
+import { KIXObjectType } from "../KIXObjectType";
 
 export class GeneralCatalogItem extends KIXObject<GeneralCatalogItem> {
     public ObjectId: string | number;
@@ -25,7 +25,7 @@ export class GeneralCatalogItem extends KIXObject<GeneralCatalogItem> {
     public ChangeTime: string;
 
     public constructor(item?: GeneralCatalogItem) {
-        super();
+        super(item);
         if (item) {
             this.ItemID = Number(item.ItemID);
             this.ObjectId = this.ItemID;

@@ -1,5 +1,5 @@
 import { IKIXObjectFactory } from "../kix";
-import { GeneralCatalogItem } from "../../api";
+import { GeneralCatalogItem } from "../../model";
 
 export class GeneralCatalogBrowserFactory implements IKIXObjectFactory<GeneralCatalogItem> {
 

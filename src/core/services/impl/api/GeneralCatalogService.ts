@@ -1,8 +1,8 @@
 import { KIXObjectService } from './KIXObjectService';
 import {
-    GeneralCatalogItem, KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, Error
+    GeneralCatalogItem, KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
+    Error, GeneralCatalogItemFactory
 } from '../../../model';
-import { GeneralCatalogItemsResponse, GeneralCatalogItemResponse } from '../../../api';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 
 export class GeneralCatalogService extends KIXObjectService {
@@ -22,7 +22,7 @@ export class GeneralCatalogService extends KIXObjectService {
 
 
     private constructor() {
-        super();
+        super([new GeneralCatalogItemFactory()]);
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -38,34 +38,13 @@ export class GeneralCatalogService extends KIXObjectService {
         let objects = [];
 
         if (objectType === KIXObjectType.GENERAL_CATALOG_ITEM) {
-            if (objectIds && objectIds.length) {
-                const uri = this.buildUri(this.RESOURCE_URI, objectIds.join(','));
-                if (objectIds.length === 1) {
-                    const response = await this.getObjectByUri<GeneralCatalogItemResponse>(token, uri);
-                    objects = [...objects, response.GeneralCatalogItem];
-                } else {
-                    const response = await this.getObjectByUri<GeneralCatalogItemsResponse>(token, uri);
-                    objects = [...objects, ...response.GeneralCatalogItem];
-                }
-            } else if (loadingOptions.filter) {
-                await this.buildFilter(loadingOptions.filter, 'GeneralCatalogItem', token, query);
-                const response = await this.getObjects<GeneralCatalogItemsResponse>(
-                    token, loadingOptions.limit, null, null, query
-                );
-                objects = response.GeneralCatalogItem;
-            }
-            return objects;
+            objects = await super.load<GeneralCatalogItem>(
+                token, KIXObjectType.GENERAL_CATALOG_ITEM, this.RESOURCE_URI,
+                loadingOptions, objectIds, 'GeneralCatalogItem'
+            );
         }
-    }
 
-    public async getItemsByClass(token: string, classId: string): Promise<GeneralCatalogItem[]> {
-        const catalog = await this.getGeneralCatalog(token);
-        return catalog.filter((gc) => gc.Class === classId);
-    }
-
-    private async getGeneralCatalog(token: string): Promise<GeneralCatalogItem[]> {
-        const response = await this.getObjects<GeneralCatalogItemsResponse>(token);
-        return response.GeneralCatalogItem;
+        return objects;
     }
 
     public createObject(

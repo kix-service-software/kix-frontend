@@ -1,6 +1,8 @@
-import { ValidObjectResponse, ValidObjectsResponse } from '../../../api';
-import { ValidObject, SortOrder, KIXObjectType, Error } from '../../../model';
+import {
+    KIXObjectType, Error, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, ValidObject, ValidObjectFactory
+} from '../../../model';
 import { KIXObjectService } from './KIXObjectService';
+import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 
 export class ValidObjectService extends KIXObjectService {
 
@@ -14,7 +16,8 @@ export class ValidObjectService extends KIXObjectService {
     }
 
     private constructor() {
-        super();
+        super([new ValidObjectFactory()]);
+        KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
     protected RESOURCE_URI: string = "valid";
@@ -25,22 +28,19 @@ export class ValidObjectService extends KIXObjectService {
         return kixObjectType === KIXObjectType.VALID_OBJECT;
     }
 
-    public async getValidObjects(
-        token: string, limit?: number, order?: SortOrder, changedAfter?: string, query?: any
-    ): Promise<ValidObject[]> {
-        const response = await this.getObjects<ValidObjectsResponse>(
-            token, limit, order, changedAfter, query
-        );
+    public async loadObjects<T>(
+        token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
+        loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
+    ): Promise<T[]> {
 
-        return response.Valid.map((v) => new ValidObject(v));
-    }
+        let objects = [];
+        if (objectType === KIXObjectType.VALID_OBJECT) {
+            objects = await super.load<ValidObject>(
+                token, KIXObjectType.VALID_OBJECT, this.RESOURCE_URI, loadingOptions, objectIds, 'Valid'
+            );
+        }
 
-    public async getValidObject(token: string, validObjectId: number, query?: any): Promise<ValidObject> {
-        const response = await this.getObject<ValidObjectResponse>(
-            token, validObjectId
-        );
-
-        return new ValidObject(response.Valid);
+        return objects;
     }
 
     public createObject(

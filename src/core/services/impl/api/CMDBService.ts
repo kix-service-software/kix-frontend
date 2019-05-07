@@ -3,13 +3,13 @@ import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions, ConfigItemProperty, ConfigItem, ConfigItemFactory, ImagesLoadingOptions,
     ConfigItemImage, ConfigItemImageFactory, ConfigItemAttachment, CreateConfigItemVersionOptions,
-    Error, FilterDataType, FilterType, FilterCriteria
+    Error, FilterDataType, FilterType, FilterCriteria, GeneralCatalogItem
 } from "../../../model";
 import {
     CreateConfigItem, CreateConfigItemResponse, CreateConfigItemRequest, ConfigItemResponse,
     ConfigItemsResponse, ConfigItemImagesResponse, ConfigItemImageResponse,
     ConfigItemAttachmentResponse, ConfigItemAttachmentsResponse,
-    CreateConfigItemVersionResponse, CreateConfigItemVersionRequest, CreateConfigItemVersion, GeneralCatalogItem
+    CreateConfigItemVersionResponse, CreateConfigItemVersionRequest, CreateConfigItemVersion
 } from "../../../api";
 import { KIXObjectServiceRegistry } from "../../KIXObjectServiceRegistry";
 import { SearchOperator } from "../../../browser";

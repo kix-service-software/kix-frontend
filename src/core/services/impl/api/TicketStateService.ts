@@ -1,11 +1,10 @@
 import {
-    TicketStatesResponse, TicketStateTypesResponse,
     CreateTicketStateResponse, CreateTicketStateRequest, CreateTicketState, UpdateTicketState,
     UpdateTicketStateResponse, UpdateTicketStateRequest
 } from '../../../api';
 import {
     TicketState, KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, StateType, ObjectIcon, Error
+    KIXObjectSpecificCreateOptions, StateType, ObjectIcon, Error, TicketStateFactory, TicketStateTypeFactory
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
@@ -28,7 +27,7 @@ export class TicketStateService extends KIXObjectService {
     public objectType: KIXObjectType = KIXObjectType.TICKET_STATE;
 
     private constructor() {
-        super();
+        super([new TicketStateFactory(), new TicketStateTypeFactory()]);
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -44,19 +43,13 @@ export class TicketStateService extends KIXObjectService {
 
         let objects = [];
         if (objectType === KIXObjectType.TICKET_STATE) {
-            const ticketState = await this.getTicketStates(token);
-            if (objectIds && objectIds.length) {
-                objects = ticketState.filter((t) => objectIds.some((oid) => oid === t.ObjectId));
-            } else {
-                objects = ticketState;
-            }
+            objects = await super.load<TicketState>(
+                token, KIXObjectType.TICKET_STATE, this.RESOURCE_URI, loadingOptions, objectIds, 'TicketState'
+            );
         } else if (objectType === KIXObjectType.TICKET_STATE_TYPE) {
-            const stateTypes = await this.getTicketStateTypes(token);
-            if (objectIds && objectIds.length) {
-                objects = stateTypes.filter((t) => objectIds.some((oid) => oid === t.ObjectId));
-            } else {
-                objects = stateTypes;
-            }
+            objects = await super.load<StateType>(
+                token, KIXObjectType.TICKET_STATE_TYPE, 'statetypes', loadingOptions, objectIds, 'StateType'
+            );
         }
 
         return objects;
@@ -109,19 +102,4 @@ export class TicketStateService extends KIXObjectService {
         return response.TicketStateID;
     }
 
-    public async getTicketStates(token: string): Promise<TicketState[]> {
-        const uri = this.buildUri(this.RESOURCE_URI);
-        const response = await this.getObjectByUri<TicketStatesResponse>(token, uri, {
-            sort: 'TicketState.Name'
-        });
-        return response.TicketState.map((s) => new TicketState(s));
-    }
-
-    public async getTicketStateTypes(token: string): Promise<StateType[]> {
-        const uri = this.buildUri('statetypes');
-        const response = await this.getObjectByUri<TicketStateTypesResponse>(token, uri, {
-            sort: 'StateType.Name'
-        });
-        return response.StateType.map((st) => new StateType(st));
-    }
 }

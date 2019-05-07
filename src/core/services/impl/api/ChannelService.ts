@@ -1,4 +1,3 @@
-import { ChannelsResponse } from '../../../api';
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions, Error, Channel, ChannelFactory
@@ -38,12 +37,9 @@ export class ChannelService extends KIXObjectService {
 
         let objects = [];
         if (objectType === KIXObjectType.CHANNEL) {
-            const channels = await this.getChannels(token);
-            if (objectIds && objectIds.length) {
-                objects = channels.filter((t) => objectIds.some((oid) => oid === t.ObjectId));
-            } else {
-                objects = channels;
-            }
+            objects = await super.load<Channel>(
+                token, KIXObjectType.CHANNEL, this.RESOURCE_URI, loadingOptions, objectIds, 'Channel'
+            );
         }
 
         return objects;
@@ -61,11 +57,5 @@ export class ChannelService extends KIXObjectService {
         parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
         throw new Error('0', 'Method not implemented');
-    }
-
-    public async getChannels(token: string): Promise<Channel[]> {
-        const uri = this.buildUri(this.RESOURCE_URI);
-        const response = await this.getObjectByUri<ChannelsResponse>(token, uri);
-        return response.Channel.map((c) => new Channel(c));
     }
 }

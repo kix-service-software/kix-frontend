@@ -4,7 +4,8 @@ import {
     KIXObjectSpecificCreateOptions, Sla, Error
 } from "../../../model";
 import { KIXObjectServiceRegistry } from "../../KIXObjectServiceRegistry";
-import { SlasResponse } from "../../../api";
+import { SlaBrowserFactory } from "../../../browser/sla";
+import { SlaFactory } from "../../../model/kix/sla/SlaFactory";
 
 export class SlaService extends KIXObjectService {
 
@@ -20,7 +21,7 @@ export class SlaService extends KIXObjectService {
     }
 
     private constructor() {
-        super();
+        super([new SlaFactory()]);
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -38,18 +39,14 @@ export class SlaService extends KIXObjectService {
 
         switch (objectType) {
             case KIXObjectType.SLA:
-                objects = await this.loadSLAs(token);
+                objects = await super.load<Sla>(
+                    token, KIXObjectType.SLA, this.RESOURCE_URI, loadingOptions, objectIds, 'SLA'
+                );
                 break;
             default:
         }
 
         return objects;
-    }
-
-    private async loadSLAs(token: string): Promise<Sla[]> {
-        const uri = this.buildUri(this.RESOURCE_URI);
-        const response = await this.getObjectByUri<SlasResponse>(token, uri);
-        return response.SLA.map((sla) => new Sla(sla));
     }
 
     public createObject(

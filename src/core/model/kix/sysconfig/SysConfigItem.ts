@@ -2,6 +2,7 @@ import { KIXObject } from "../KIXObject";
 import { KIXObjectType } from "../KIXObjectType";
 
 export class SysConfigItem extends KIXObject<SysConfigItem> {
+
     public ObjectId: string | number;
 
     public KIXObjectType: KIXObjectType = KIXObjectType.SYS_CONFIG_ITEM;

@@ -1,15 +1,14 @@
 import {
-    TicketPrioritiesResponse, UpdateTicketPriorityRequest, CreateTicketPriorityRequest,
+    UpdateTicketPriorityRequest, CreateTicketPriorityRequest,
     CreateTicketPriorityResponse, UpdateTicketPriorityResponse, UpdateTicketPriority, CreateTicketPriority
 } from '../../../api';
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, TicketPriority, ObjectIcon, Error
+    KIXObjectSpecificCreateOptions, TicketPriority, ObjectIcon, Error, TicketPriorityFactory
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
-import { ConfigurationService } from '../ConfigurationService';
 import { LoggingService } from '../LoggingService';
 
 export class TicketPriorityService extends KIXObjectService {
@@ -28,7 +27,7 @@ export class TicketPriorityService extends KIXObjectService {
     public objectType: KIXObjectType = KIXObjectType.TICKET_PRIORITY;
 
     private constructor() {
-        super();
+        super([new TicketPriorityFactory()]);
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -43,11 +42,13 @@ export class TicketPriorityService extends KIXObjectService {
 
         let objects = [];
         if (objectType === KIXObjectType.TICKET_PRIORITY) {
-            const ticketTypes = await this.getTicketPriorities(token);
+            const priorities = await super.load<TicketPriority>(
+                token, KIXObjectType.TICKET_PRIORITY, this.RESOURCE_URI, loadingOptions, objectIds, 'Priority'
+            );
             if (objectIds && objectIds.length) {
-                objects = ticketTypes.filter((t) => objectIds.some((oid) => oid === t.ObjectId));
+                objects = priorities.filter((t) => objectIds.some((oid) => oid === t.ObjectId));
             } else {
-                objects = ticketTypes;
+                objects = priorities;
             }
         }
 
@@ -101,9 +102,4 @@ export class TicketPriorityService extends KIXObjectService {
         return response.PriorityID;
     }
 
-    public async getTicketPriorities(token: string): Promise<TicketPriority[]> {
-        const uri = this.buildUri(this.RESOURCE_URI);
-        const response = await this.getObjectByUri<TicketPrioritiesResponse>(token, uri);
-        return response.Priority.map((p) => new TicketPriority(p));
-    }
 }

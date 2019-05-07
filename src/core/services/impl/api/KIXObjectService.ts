@@ -16,11 +16,9 @@ import { SearchOperator } from '../../../browser';
 /**
  * Generic abstract class for all ObjectServices.
  *
- * <T> is the type of object which is handled by the service.
- *
  * The class provides generic methods to make get, update, create and delete requests against the REST-API.
  */
-export abstract class KIXObjectService<T extends KIXObject = any> implements IKIXObjectService {
+export abstract class KIXObjectService implements IKIXObjectService {
 
     protected httpService: HttpService = HttpService.getInstance();
 
@@ -61,7 +59,7 @@ export abstract class KIXObjectService<T extends KIXObject = any> implements IKI
 
         const uri = objectIds.length
             ? this.buildUri(baseUri, objectIds.join(','))
-            : this.buildUri(baseUri);
+            : baseUri;
 
         const response = await this.getObjectByUri(token, uri, query);
 

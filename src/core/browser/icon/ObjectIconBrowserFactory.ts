@@ -15,17 +15,7 @@ export class ObjectIconBrowserFactory implements IKIXObjectFactory<ObjectIcon> {
     private constructor() { }
 
     public async create(objectIcon: ObjectIcon): Promise<ObjectIcon> {
-        return new ObjectIcon(
-            objectIcon.Object,
-            objectIcon.ObjectID,
-            objectIcon.ContentType,
-            objectIcon.Content,
-            objectIcon.ID,
-            objectIcon.CreateBy,
-            objectIcon.CreateTime,
-            objectIcon.ChangeBy,
-            objectIcon.ChangeTime
-        );
+        return new ObjectIcon(null, null, null, null, objectIcon);
     }
 
 }

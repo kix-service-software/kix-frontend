@@ -1,12 +1,10 @@
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, Error, SystemAddress
+    KIXObjectSpecificCreateOptions, Error, SystemAddress, SystemAddressFactory
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
-import { ConfigurationService } from '../ConfigurationService';
-import { SystemAddressesResponse } from '../../../api';
 
 export class SystemAddressService extends KIXObjectService {
 
@@ -24,7 +22,7 @@ export class SystemAddressService extends KIXObjectService {
     public objectType: KIXObjectType = KIXObjectType.SYSTEM_ADDRESS;
 
     private constructor() {
-        super();
+        super([new SystemAddressFactory()]);
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -39,14 +37,9 @@ export class SystemAddressService extends KIXObjectService {
 
         let objects = [];
         if (objectType === KIXObjectType.SYSTEM_ADDRESS) {
-            const systemAddresses = await this.getSystemAddresses(token);
-            if (objectIds && objectIds.length) {
-                objects = systemAddresses.filter(
-                    (sa) => objectIds.some((oid) => oid.toString() === sa.ObjectId.toString())
-                );
-            } else {
-                objects = systemAddresses;
-            }
+            objects = await super.load<SystemAddress>(
+                token, KIXObjectType.SYSTEM_ADDRESS, this.RESOURCE_URI, loadingOptions, objectIds, 'SystemAddress'
+            );
         }
 
         return objects;
@@ -66,9 +59,4 @@ export class SystemAddressService extends KIXObjectService {
         throw new Error("0", 'Method not implemented.');
     }
 
-    public async getSystemAddresses(token: string): Promise<SystemAddress[]> {
-        const uri = this.buildUri(this.RESOURCE_URI);
-        const response = await this.getObjectByUri<SystemAddressesResponse>(token, uri);
-        return response.SystemAddress.map((sa) => new SystemAddress(sa));
-    }
 }
