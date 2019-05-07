@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-04-29 13:29+0000\n"
+"PO-Revision-Date: 2019-05-07 13:39+0000\n"
 "Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -713,10 +713,10 @@ msgid "First Name"
 msgstr "Vorname"
 
 msgid "Follow Up on Tickets possible"
-msgstr ""
+msgstr "Nachfrage an Tickets möglich"
 
 msgid "Follow Up Ticket Lock"
-msgstr ""
+msgstr "Sperrung der Tickets bei Nachfrage"
 
 msgid "Force"
 msgstr "Erzwingen"
@@ -947,7 +947,7 @@ msgid "Invalid date."
 msgstr "Ungültiges Datum."
 
 msgid "Knowledge Database"
-msgstr ""
+msgstr "Wissensdatenbank"
 
 msgid "Label"
 msgstr "Beschriftung"
@@ -1301,10 +1301,8 @@ msgstr ""
 msgid "Parent Category"
 msgstr "Übergeordnete Kategorie"
 
-#, fuzzy
-#| msgid "New Queue"
 msgid "Parent Queue"
-msgstr "Neue Queue"
+msgstr "Übergeordnete Queue"
 
 msgid "Password"
 msgstr "Passwort"
@@ -1453,10 +1451,8 @@ msgstr "öffentlich"
 msgid "Queue"
 msgstr "Queue"
 
-#, fuzzy
-#| msgid "FAQ Information"
 msgid "Queue Information"
-msgstr "FAQ Informationen"
+msgstr "Queue Informationen"
 
 msgid "Queues"
 msgstr "Queues"
@@ -1739,7 +1735,7 @@ msgid "Sender"
 msgstr "Absender"
 
 msgid "Sender Address (Email)"
-msgstr ""
+msgstr "Absender-Adresse (E-Mail)"
 
 msgid ""
 "Serach for config items with the same number or part of the same number "
@@ -1798,7 +1794,7 @@ msgid "Show all"
 msgstr "Alle anzeigen"
 
 msgid "Signature"
-msgstr ""
+msgstr "Signatur"
 
 msgid "SINGLE_QUOTES"
 msgstr "' (Einfaches Hochkomma)"
@@ -1887,7 +1883,7 @@ msgid "System Address"
 msgstr "Systemadresse"
 
 msgid "System Addresses"
-msgstr ""
+msgstr "Systemadressen"
 
 msgid "-> (tab)"
 msgstr "-> (Tabulator)"
@@ -2079,15 +2075,11 @@ msgstr "Freigeben"
 msgid "Unlock Ticket ..."
 msgstr "Tickets entsperren..."
 
-#, fuzzy
-#| msgid "Unlock Ticket ..."
 msgid "Unlock Timeout"
-msgstr "Tickets entsperren..."
+msgstr "Entsperrzeit"
 
-#, fuzzy
-#| msgid "Unlock Ticket ..."
 msgid "Unlock Timeout (min)"
-msgstr "Tickets entsperren..."
+msgstr "Entsperrzeit (min)"
 
 msgid "Unread Articles"
 msgstr "Ungelesene Artikel"
@@ -2098,63 +2090,41 @@ msgstr "Nicht beobachten"
 msgid "Unwatch Ticket ..."
 msgstr "Ticket nicht mehr beobachten..."
 
-#, fuzzy
-#| msgid "Update time"
 msgid "Update Agent"
-msgstr "Aktualisierungszeit"
+msgstr "Aktualisierung wird durchgeführt"
 
-#, fuzzy
-#| msgid "Edit CMDB Class"
 msgid "Update CI Class"
-msgstr "Add CMDB Class"
+msgstr "Aktualisierung wird durchgeführt"
 
-#, fuzzy
-#| msgid "Config Item"
 msgid "Update Config Item"
-msgstr "Config Item"
+msgstr "Aktualisierung wird durchgeführt"
 
-#, fuzzy
-#| msgid "Edit Contact"
 msgid "Update Contact"
-msgstr "Ansprechparnter Bearbeiten"
+msgstr "Aktualisierung wird durchgeführt"
 
-#, fuzzy
-#| msgid "Edit Customer"
 msgid "Update Customer"
-msgstr "Kunde bearbeiten"
+msgstr "Aktualisierung wird durchgeführt"
 
-#, fuzzy
-#| msgid "Update time"
 msgid "Update FAQ Artikel"
-msgstr "Aktualisierungszeit"
+msgstr "Aktualisierung wird durchgeführt"
 
-#, fuzzy
-#| msgid "Edit Priority"
 msgid "Update Priority"
-msgstr "Priorität bearbeiten"
+msgstr "Aktualisierung wird durchgeführt"
 
-#, fuzzy
-#| msgid "Create Role"
 msgid "Update Role"
-msgstr "Rolle wird angelegt"
+msgstr "Aktualisierung wird durchgeführt"
 
-#, fuzzy
-#| msgid "Update time"
 msgid "Update State"
-msgstr "Aktualisierungszeit"
+msgstr "Aktualisierung wird durchgeführt"
 
 msgid "Update time"
-msgstr "Aktualisierungszeit"
+msgstr "Aktualisierung wird durchgeführt"
 
-#, fuzzy
-#| msgid "Translation"
 msgid "Update Translation"
-msgstr "Übersetzung"
+msgstr "Aktualisierung wird durchgeführt"
 
-#, fuzzy
-#| msgid "State Type"
 msgid "Update Type"
-msgstr "Statustyp"
+msgstr "Aktualisierung wird durchgeführt"
 
 msgid "URL"
 msgstr "URL"
