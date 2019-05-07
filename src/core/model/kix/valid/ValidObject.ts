@@ -1,5 +1,5 @@
-import { KIXObject } from "./KIXObject";
-import { KIXObjectType } from "./KIXObjectType";
+import { KIXObject } from "../KIXObject";
+import { KIXObjectType } from "../KIXObjectType";
 
 export class ValidObject extends KIXObject<ValidObject> {
 
@@ -12,7 +12,7 @@ export class ValidObject extends KIXObject<ValidObject> {
     public ID: number;
 
     public constructor(validObject?: ValidObject) {
-        super();
+        super(validObject);
         if (validObject) {
             this.ID = Number(validObject.ID);
             this.ObjectId = this.ID;

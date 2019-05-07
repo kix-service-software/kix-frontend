@@ -1,10 +1,10 @@
 import {
-    TicketTypesResponse, CreateTicketType, CreateTicketTypeResponse, CreateTicketTypeRequest,
+    CreateTicketType, CreateTicketTypeResponse, CreateTicketTypeRequest,
     UpdateTicketType, UpdateTicketTypeResponse, UpdateTicketTypeRequest
 } from '../../../api';
 import {
     TicketType, KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, ObjectIcon, Error
+    KIXObjectSpecificCreateOptions, ObjectIcon, Error, TicketTypeFactory
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
@@ -27,7 +27,7 @@ export class TicketTypeService extends KIXObjectService {
     public objectType: KIXObjectType = KIXObjectType.TICKET_TYPE;
 
     private constructor() {
-        super();
+        super([new TicketTypeFactory()]);
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -42,12 +42,9 @@ export class TicketTypeService extends KIXObjectService {
 
         let objects = [];
         if (objectType === KIXObjectType.TICKET_TYPE) {
-            const ticketTypes = await this.getTicketTypes(token);
-            if (objectIds && objectIds.length) {
-                objects = ticketTypes.filter((t) => objectIds.some((oid) => oid === t.ObjectId));
-            } else {
-                objects = ticketTypes;
-            }
+            objects = await super.load<TicketType>(
+                token, KIXObjectType.TICKET_TYPE, this.RESOURCE_URI, loadingOptions, objectIds, 'TicketType'
+            );
         }
 
         return objects;
@@ -100,11 +97,4 @@ export class TicketTypeService extends KIXObjectService {
         return response.TypeID;
     }
 
-    public async getTicketTypes(token: string): Promise<TicketType[]> {
-        const uri = this.buildUri(this.RESOURCE_URI);
-        const response = await this.getObjectByUri<TicketTypesResponse>(token, uri, {
-            sort: 'TicketType.Name'
-        });
-        return response.TicketType.map((t) => new TicketType(t));
-    }
 }

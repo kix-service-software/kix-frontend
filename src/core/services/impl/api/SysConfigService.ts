@@ -1,8 +1,7 @@
 import { KIXObjectService } from './KIXObjectService';
 import {
-    KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, SysConfigItem, Error
+    KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, SysConfigItem, Error, SysConfigItemFactory
 } from '../../../model';
-import { SysConfigItemsResponse, SysConfigItemResponse } from '../../../api';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 
 export class SysConfigService extends KIXObjectService {
@@ -20,10 +19,8 @@ export class SysConfigService extends KIXObjectService {
 
     public objectType: KIXObjectType = KIXObjectType.SYS_CONFIG_ITEM;
 
-    private sysconfigCache: SysConfigItem[] = [];
-
     private constructor() {
-        super();
+        super([new SysConfigItemFactory()]);
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -37,34 +34,11 @@ export class SysConfigService extends KIXObjectService {
     ): Promise<O[]> {
         let objects = [];
 
-        if (objectType === KIXObjectType.SYS_CONFIG_ITEM && objectIds) {
-            const ids = [...objectIds];
-            for (const objectId of ids) {
-                const index = this.sysconfigCache.findIndex((sci) => sci.ID === objectId);
-                if (index !== -1) {
-                    objects.push(this.sysconfigCache[index]);
-
-                    const idx = objectIds.findIndex((oid) => oid === objectId);
-                    objectIds.splice(idx, 1);
-                }
-            }
-
-            if (objectIds.length > 1) {
-                const uri = this.buildUri(this.RESOURCE_URI, objectIds.join(','));
-                const response = await this.getObjectByUri<SysConfigItemsResponse>(
-                    token, uri
-                );
-                objects = [...objects, ...response.SysConfigItem];
-            } else if (objectIds.length === 1) {
-                const uri = this.buildUri(this.RESOURCE_URI, objectIds[0]);
-                const response = await this.getObjectByUri<SysConfigItemResponse>(
-                    token, uri
-                );
-                objects = [...objects, response.SysConfigItem];
-            }
+        if (objectType === KIXObjectType.SYS_CONFIG_ITEM) {
+            objects = await super.load<SysConfigItem>(
+                token, KIXObjectType.SYS_CONFIG_ITEM, this.RESOURCE_URI, loadingOptions, objectIds, 'SysConfigItem'
+            );
         }
-
-        objects = objects.map((sci) => new SysConfigItem(sci));
 
         return objects;
     }

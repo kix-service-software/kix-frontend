@@ -1,5 +1,5 @@
 import {
-    ObjectIconsResponse, CreateObjectIcon, CreateObjectIconRequest, CreateObjectIconResponse,
+    CreateObjectIcon, CreateObjectIconRequest, CreateObjectIconResponse,
     UpdateObjectIcon, UpdateObjectIconResponse, UpdateObjectIconRequest
 } from '../../../api';
 import {
@@ -8,6 +8,8 @@ import {
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { LoggingService } from '../LoggingService';
+import { ObjectIconBrowserFactory } from '../../../browser/icon';
+import { ObjectIconFactory } from '../../../api/object-icon/ObjectIconFactory';
 
 export class ObjectIconService extends KIXObjectService {
 
@@ -25,7 +27,7 @@ export class ObjectIconService extends KIXObjectService {
     public objectType: KIXObjectType = KIXObjectType.OBJECT_ICON;
 
     private constructor() {
-        super();
+        super([new ObjectIconFactory()]);
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -64,18 +66,10 @@ export class ObjectIconService extends KIXObjectService {
         });
     }
 
-    public getObjectIcons(token: string): Promise<ObjectIcon[]> {
-        return new Promise<ObjectIcon[]>((resolve, reject) => {
-            const uri = this.buildUri(this.RESOURCE_URI);
-            this.getObjectByUri<ObjectIconsResponse>(token, uri).then((response) => {
-                resolve(
-                    response.ObjectIcon.map((s) => new ObjectIcon(
-                        s.Object, s.ObjectID, s.ContentType, s.Content,
-                        s.ID, s.CreateBy, s.CreateTime, s.ChangeBy, s.ChangeTime
-                    ))
-                );
-            });
-        });
+    public async getObjectIcons(token: string): Promise<ObjectIcon[]> {
+        return await super.load<ObjectIcon>(
+            token, KIXObjectType.OBJECT_ICON, this.RESOURCE_URI, null, null, 'ObjectIcon'
+        );
     }
 
     public async createObject(

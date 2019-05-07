@@ -44,7 +44,7 @@ export class Sla extends KIXObject<Sla> {
     public UpdateTime: number;
 
     public constructor(sla?: Sla) {
-        super();
+        super(sla);
         if (sla) {
             this.SLAID = Number(sla.SLAID);
             this.ObjectId = this.SLAID;

@@ -9,7 +9,7 @@ import {
     TicketFactory, KIXObjectType, FilterType, User, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions, CreateTicketArticleOptions, CreateTicketWatcherOptions,
     KIXObjectSpecificDeleteOptions, DeleteTicketWatcherOptions, Error,
-    SenderTypeFactory, ArticleFactory, LockFactory, Queue
+    SenderTypeFactory, ArticleFactory, LockFactory, Queue, Channel
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
@@ -231,7 +231,9 @@ export class TicketService extends KIXObjectService {
         const cc = this.getParameterValue(parameter, ArticleProperty.CC);
         const bcc = this.getParameterValue(parameter, ArticleProperty.BCC);
 
-        const channels = await ChannelService.getInstance().getChannels(token);
+        const channels = await ChannelService.getInstance().loadObjects<Channel>(
+            token, clientRequestId, KIXObjectType.CHANNEL, null, null, null
+        );
         const channel = channels.find((c) => c.ID === channelId);
         if (channel && channel.Name === 'email') {
             if (queueId) {

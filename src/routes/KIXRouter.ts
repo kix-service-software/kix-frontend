@@ -3,10 +3,9 @@ import { Request, Response, Router } from 'express';
 import { IRouter } from './IRouter';
 import { IServerConfiguration } from '../core/common';
 import {
-    ProfilingService, ConfigurationService, UserService, ServiceService, ValidObjectService,
-    ContactService, CustomerService, ObjectDefinitionService
+    ProfilingService, ConfigurationService, ValidObjectService, ContactService, CustomerService, ObjectDefinitionService
 } from '../core/services';
-import { ObjectData, ReleaseInfo } from '../core/model';
+import { ObjectData, ReleaseInfo, KIXObjectType, ValidObject } from '../core/model';
 
 export abstract class KIXRouter implements IRouter {
 
@@ -81,8 +80,9 @@ export abstract class KIXRouter implements IRouter {
     }
 
     protected async getObjectData(token: string): Promise<ObjectData> {
-        const validObjects = await ValidObjectService.getInstance().getValidObjects(token)
-            .catch(() => []);
+        const validObjects = await ValidObjectService.getInstance().loadObjects<ValidObject>(
+            token, null, KIXObjectType.VALID_OBJECT, null, null, null
+        ).catch(() => []);
 
         const contactAttributeMapping = await ContactService.getInstance().getAttributeMapping(token)
             .catch(() => null);
