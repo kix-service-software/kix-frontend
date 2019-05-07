@@ -1,6 +1,5 @@
 import {
-    CreateTicketType, CreateTicketTypeResponse, CreateTicketTypeRequest,
-    UpdateTicketType, UpdateTicketTypeResponse, UpdateTicketTypeRequest
+    CreateTicketType, CreateTicketTypeResponse, CreateTicketTypeRequest
 } from '../../../api';
 import {
     TicketType, KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
@@ -77,24 +76,9 @@ export class TicketTypeService extends KIXObjectService {
         token: string, clientRequestId: string, objectType: KIXObjectType,
         parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
-        const updateTicketType = new UpdateTicketType(parameter);
-
-        const response = await this.sendUpdateRequest<UpdateTicketTypeResponse, UpdateTicketTypeRequest>(
-            token, clientRequestId, this.buildUri(this.RESOURCE_URI, objectId),
-            new UpdateTicketTypeRequest(updateTicketType), this.objectType
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
-
-        const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
-        if (icon) {
-            icon.Object = 'TicketType';
-            icon.ObjectID = response.TypeID;
-            await this.updateIcon(token, clientRequestId, icon);
-        }
-
-        return response.TypeID;
+        const uri = this.buildUri(this.RESOURCE_URI, objectId);
+        const id = await super.update(token, clientRequestId, parameter, uri, this.objectType, 'TypeID');
+        return id;
     }
 
 }

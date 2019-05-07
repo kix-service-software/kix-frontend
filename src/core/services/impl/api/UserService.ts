@@ -5,7 +5,7 @@ import {
 import { KIXObjectService } from './KIXObjectService';
 import {
     SetPreference, SetPreferenceResponse, SetPreferenceRequest,
-    CreateUser, CreateUserRequest, CreateUserResponse, UpdateUser, UpdateUserRequest
+    CreateUser, CreateUserRequest, CreateUserResponse
 } from '../../../api/user';
 import { LoggingService } from '../LoggingService';
 import { SetPreferenceOptions, UserFactory, UserPreference, UserProperty } from '../../../model/kix/user';
@@ -113,18 +113,17 @@ export class UserService extends KIXObjectService {
                 parameter = parameter.filter((p) => p[0] !== UserProperty.USER_PASSWORD);
             }
 
-            const updateParameter = parameter.filter(
-                (p) => p[0] !== UserProperty.USER_LANGUAGE
-                    && p[0] !== UserProperty.ROLEIDS
-                    && p[0] !== UserProperty.PREFERENCES
+            const updateParameter = parameter.filter((p) =>
+                p[0] !== UserProperty.USER_LANGUAGE &&
+                p[0] !== UserProperty.ROLEIDS &&
+                p[0] !== UserProperty.PREFERENCES
             );
 
             const userId = Number(objectId);
 
-            const updateUser = new UpdateUser(updateParameter);
             const uri = this.buildUri(this.RESOURCE_URI, userId);
-            await this.sendUpdateRequest(
-                token, clientRequestId, uri, new UpdateUserRequest(updateUser), KIXObjectType.USER
+            const id = await super.update(
+                token, clientRequestId, updateParameter, uri, this.objectType, 'UserID'
             );
 
             const roleIds = this.getParameterValue(parameter, UserProperty.ROLEIDS);
@@ -134,6 +133,8 @@ export class UserService extends KIXObjectService {
             if (userLanguage) {
                 await this.setPreferences(token, clientRequestId, [userLanguage], userId);
             }
+
+            return id;
         } else if (objectType === KIXObjectType.USER_PREFERENCE) {
             const options = updateOptions as SetPreferenceOptions;
             const updatePreference = new SetPreference(parameter);

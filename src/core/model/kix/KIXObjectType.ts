@@ -80,9 +80,9 @@ export enum KIXObjectType {
 
     TICKET_PRIORITY = 'Priority',
 
-    TICKET_TYPE = 'Type',
+    TICKET_TYPE = 'TicketType',
 
-    TICKET_STATE = 'State',
+    TICKET_STATE = 'TicketState',
 
     TICKET_STATE_TYPE = 'StateType',
 

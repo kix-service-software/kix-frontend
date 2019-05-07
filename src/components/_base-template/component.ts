@@ -2,7 +2,7 @@ import { Context, ContextType, ContextDescriptor, KIXObjectType, ContextMode, Ob
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../core/browser/context';
 import { ComponentsService } from '../../core/browser/components';
-import { IdService, FormService, ServiceRegistry } from '../../core/browser';
+import { IdService, FormService, ServiceRegistry, FactoryService } from '../../core/browser';
 import { RoutingService } from '../../core/browser/router';
 import { HomeContext } from '../../core/browser/home';
 import { EventService } from '../../core/browser/event';
@@ -16,6 +16,7 @@ import { NotificationSocketClient } from '../../core/browser/notifications';
 import { ComponentInput } from './ComponentInput';
 import { AgentService } from '../../core/browser/application/AgentService';
 import { SysConfigService } from '../../core/browser/sysconfig';
+import { TranslationBrowserFactory } from '../../core/browser/i18n';
 
 class Component {
 
@@ -35,6 +36,10 @@ class Component {
 
     public async onMount(): Promise<void> {
         const start = Date.now();
+
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.TRANSLATION, TranslationBrowserFactory.getInstance()
+        );
 
         ServiceRegistry.registerServiceInstance(AgentService.getInstance());
         ServiceRegistry.registerServiceInstance(TranslationService.getInstance());

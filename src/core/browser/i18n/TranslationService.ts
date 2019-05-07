@@ -1,7 +1,7 @@
 import { KIXObjectService } from "../kix/KIXObjectService";
 import {
     Translation, KIXObjectType, SysConfigItem, SysConfigKey, TranslationProperty,
-    TableFilterCriteria, KIXObjectLoadingOptions
+    TableFilterCriteria, KIXObjectLoadingOptions, KIXObject, KIXObjectSpecificLoadingOptions
 } from "../../model";
 import { SearchOperator } from "../SearchOperator";
 import { ClientStorageService } from "../ClientStorageService";
@@ -29,6 +29,26 @@ export class TranslationService extends KIXObjectService<Translation> {
 
     public async init(): Promise<void> {
         await this.loadObjects(KIXObjectType.TRANSLATION, null);
+    }
+
+    public async loadObjects<O extends KIXObject>(
+        objectType: KIXObjectType, objectIds: Array<string | number>,
+        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions
+    ): Promise<O[]> {
+        let objects: O[];
+        let superLoad = false;
+        if (objectType === KIXObjectType.TRANSLATION) {
+            objects = await super.loadObjects<O>(KIXObjectType.TRANSLATION, null, loadingOptions);
+        } else {
+            superLoad = true;
+            objects = await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions);
+        }
+
+        if (objectIds && !superLoad) {
+            objects = objects.filter((c) => objectIds.some((oid) => c.ObjectId === oid));
+        }
+
+        return objects;
     }
 
     public async getLanguageName(lang: string): Promise<string> {

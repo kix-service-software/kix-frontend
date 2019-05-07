@@ -1,6 +1,5 @@
 import {
     CreateRole, CreateRoleResponse, CreateRoleRequest,
-    UpdateRole, UpdateRoleResponse, UpdateRoleRequest,
     PermissionRequestObject, CUPermissionRequest, CUPermissionResponse
 } from '../../../api';
 import {
@@ -107,17 +106,10 @@ export class RoleService extends KIXObjectService {
         const updateParameter = parameter.filter(
             (p) => p[0] !== RoleProperty.USER_IDS
                 && p[0] !== RoleProperty.PERMISSIONS
-                && p[0] !== 'ICON'
         );
-        const updateRole = new UpdateRole(updateParameter);
 
-        const response = await this.sendUpdateRequest<UpdateRoleResponse, UpdateRoleRequest>(
-            token, clientRequestId, this.buildUri(this.RESOURCE_URI, objectId), new UpdateRoleRequest(updateRole),
-            this.objectType
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        const uri = this.buildUri(this.RESOURCE_URI, objectId);
+        const id = await super.update(token, clientRequestId, updateParameter, uri, this.objectType, 'RoleID');
 
         const userIds = this.getParameterValue(parameter, RoleProperty.USER_IDS);
         await this.setUserIds(token, clientRequestId, Number(objectId), userIds);
@@ -125,14 +117,7 @@ export class RoleService extends KIXObjectService {
         const permissions = this.getParameterValue(parameter, RoleProperty.PERMISSIONS);
         await this.setPermissions(token, clientRequestId, Number(objectId), permissions);
 
-        const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
-        if (icon) {
-            icon.Object = 'Role';
-            icon.ObjectID = response.RoleID;
-            await this.updateIcon(token, clientRequestId, icon);
-        }
-
-        return response.RoleID;
+        return id;
     }
 
     private async setUserIds(
