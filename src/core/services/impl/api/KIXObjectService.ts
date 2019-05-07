@@ -4,7 +4,7 @@ import {
     KIXObjectSpecificCreateOptions, KIXObjectSpecificDeleteOptions, ObjectIcon, ObjectIconLoadingOptions,
     Error, IObjectFactory, CreatePermissionDescription, PermissionType, PermissionProperty, FilterDataType
 } from '../../../model';
-import { Query, CreateLink, CreateLinkRequest } from '../../../api';
+import { Query, CreateLink, CreateLinkRequest, RequestObject } from '../../../api';
 import { IKIXObjectService } from '../../IKIXObjectService';
 import { HttpService } from './HttpService';
 import { LoggingService } from '../LoggingService';
@@ -70,6 +70,29 @@ export abstract class KIXObjectService implements IKIXObjectService {
             : [responseObject];
 
         return objects.map((o) => ObjectFactoryService.createObject(objectType, o));
+    }
+
+    public async update(
+        token: string, clientRequestId: string, parameter: Array<[string, any]>, uri: string,
+        objectType: KIXObjectType, responseProperty: string
+    ): Promise<string | number> {
+        const object = {};
+        object[objectType] = new RequestObject(parameter.filter((p) => p[0] !== 'ICON'));
+
+        const response = await this.sendUpdateRequest(token, clientRequestId, uri, object, this.objectType)
+            .catch((error: Error) => {
+                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                throw new Error(error.Code, error.Message);
+            });
+
+        const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
+        if (icon) {
+            icon.Object = objectType;
+            icon.ObjectID = response[responseProperty];
+            await this.updateIcon(token, clientRequestId, icon);
+        }
+
+        return response[responseProperty];
     }
 
     public abstract async createObject(

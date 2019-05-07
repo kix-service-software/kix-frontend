@@ -1,6 +1,5 @@
 import {
-    CreateTicketStateResponse, CreateTicketStateRequest, CreateTicketState, UpdateTicketState,
-    UpdateTicketStateResponse, UpdateTicketStateRequest
+    CreateTicketStateResponse, CreateTicketStateRequest, CreateTicketState
 } from '../../../api';
 import {
     TicketState, KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
@@ -82,24 +81,9 @@ export class TicketStateService extends KIXObjectService {
         token: string, clientRequestId: string, objectType: KIXObjectType,
         parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
-        const updateTicketState = new UpdateTicketState(parameter);
-
-        const response = await this.sendUpdateRequest<UpdateTicketStateResponse, UpdateTicketStateRequest>(
-            token, clientRequestId, this.buildUri(this.RESOURCE_URI, objectId),
-            new UpdateTicketStateRequest(updateTicketState), this.objectType
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
-
-        const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
-        if (icon) {
-            icon.Object = 'TicketState';
-            icon.ObjectID = response.TicketStateID;
-            await this.updateIcon(token, clientRequestId, icon);
-        }
-
-        return response.TicketStateID;
+        const uri = this.buildUri(this.RESOURCE_URI, objectId);
+        const id = await super.update(token, clientRequestId, parameter, uri, this.objectType, 'TicketStateID');
+        return id;
     }
 
 }

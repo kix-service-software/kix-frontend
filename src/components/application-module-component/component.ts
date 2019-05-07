@@ -92,10 +92,6 @@ class Component extends AbstractMarkoComponent {
         LabelService.getInstance().registerLabelProvider(new LinkObjectLabelProvider());
         ActionFactory.getInstance().registerAction('linked-objects-edit-action', LinkedObjectsEditAction);
 
-
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.TRANSLATION, TranslationBrowserFactory.getInstance()
-        );
         TableFactoryService.getInstance().registerFactory(new TranslationTableFactory());
         TableFactoryService.getInstance().registerFactory(new TranslationLanguageTableFactory());
         LabelService.getInstance().registerLabelProvider(new TranslationLabelProvider());

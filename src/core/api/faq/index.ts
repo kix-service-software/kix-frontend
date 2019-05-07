@@ -5,7 +5,6 @@ export { FAQArticleAttachmentResponse } from './FAQArticleAttachmentResponse';
 export { CreateFAQVoteResponse } from './CreateFAQVoteResponse';
 export { CreateFAQVoteRequest } from './CreateFAQVoteRequest';
 export { CreateFAQVote } from './CreateFAQVote';
-export { UpdateFAQArticle } from './UpdateFAQArticle';
 export { UpdateFAQArticleRequest } from './UpdateFAQArticleRequest';
 export { UpdateFAQArticleResponse } from './UpdateFAQArticleResponse';
 export { CreateFAQArticleAttachmentResponse } from './CreateFAQArticleAttachmentResponse';

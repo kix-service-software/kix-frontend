@@ -8,7 +8,7 @@ import {
 } from "../../../model";
 import {
     CreateFAQArticle, CreateFAQArticleResponse, CreateFAQArticleRequest, FAQArticleAttachmentResponse, CreateFAQVote,
-    CreateFAQVoteResponse, CreateFAQVoteRequest, UpdateFAQArticle, UpdateFAQArticleResponse, UpdateFAQArticleRequest,
+    CreateFAQVoteResponse, CreateFAQVoteRequest, UpdateFAQArticleResponse, UpdateFAQArticleRequest,
     CreateFAQArticleAttachmentResponse, CreateFAQArticleAttachmentRequest, FAQArticleAttachmentsResponse
 } from "../../../api/faq";
 import { KIXObjectServiceRegistry } from "../../KIXObjectServiceRegistry";
@@ -87,25 +87,19 @@ export class FAQService extends KIXObjectService {
         token: string, clientRequestId: string, objectType: KIXObjectType,
         parameter: Array<[string, any]>, objectId: number
     ): Promise<string | number> {
-
-        const updateFAQArticle = new UpdateFAQArticle(
-            parameter.filter((p) => p[0] !== FAQArticleProperty.LINK && p[0] !== FAQArticleProperty.ATTACHMENTS)
+        const updateParameter = parameter.filter(
+            (p) => p[0] !== FAQArticleProperty.LINK && p[0] !== FAQArticleProperty.ATTACHMENTS
         );
 
-        const response = await this.sendUpdateRequest<UpdateFAQArticleResponse, UpdateFAQArticleRequest>(
-            token, clientRequestId, this.buildUri(this.RESOURCE_URI, 'articles', objectId),
-            new UpdateFAQArticleRequest(updateFAQArticle), this.objectType
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        const uri = this.buildUri(this.RESOURCE_URI, 'articles', objectId);
+        const id = await super.update(token, clientRequestId, updateParameter, uri, this.objectType, 'FAQArticleID');
 
         const attachments = parameter.find((p) => p[0] === FAQArticleProperty.ATTACHMENTS);
         await this.updateAttachments(
             token, clientRequestId, objectId, attachments && attachments.length ? attachments[1] : []
         );
 
-        return response.FAQArticleID;
+        return id;
     }
 
     private async updateAttachments(

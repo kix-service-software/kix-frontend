@@ -1,6 +1,5 @@
 import {
-    UpdateTicketPriorityRequest, CreateTicketPriorityRequest,
-    CreateTicketPriorityResponse, UpdateTicketPriorityResponse, UpdateTicketPriority, CreateTicketPriority
+    CreateTicketPriorityRequest, CreateTicketPriorityResponse, CreateTicketPriority
 } from '../../../api';
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
@@ -83,23 +82,9 @@ export class TicketPriorityService extends KIXObjectService {
         token: string, clientRequestId: string, objectType: KIXObjectType,
         parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
-        const updateTicketPriority = new UpdateTicketPriority(parameter);
-
-        const response = await this.sendUpdateRequest<UpdateTicketPriorityResponse, UpdateTicketPriorityRequest>(
-            token, clientRequestId, this.buildUri(this.RESOURCE_URI, objectId),
-            new UpdateTicketPriorityRequest(updateTicketPriority), this.objectType
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
-        const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
-        if (icon) {
-            icon.Object = 'Priority';
-            icon.ObjectID = response.PriorityID;
-            await this.updateIcon(token, clientRequestId, icon);
-        }
-
-        return response.PriorityID;
+        const uri = this.buildUri(this.RESOURCE_URI, objectId);
+        const id = await super.update(token, clientRequestId, parameter, uri, this.objectType, 'PriorityID');
+        return id;
     }
 
 }

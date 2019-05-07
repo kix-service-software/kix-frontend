@@ -1,9 +1,7 @@
-import { UpdateFAQArticle } from "./UpdateFAQArticle";
+import { RequestObject } from "../RequestObject";
 
 export class UpdateFAQArticleRequest {
 
-    public constructor(
-        public FAQArticle: UpdateFAQArticle
-    ) { }
+    public constructor(public FAQArticle: RequestObject) { }
 
 }

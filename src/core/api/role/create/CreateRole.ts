@@ -4,16 +4,15 @@ import { RoleProperty, PermissionProperty, CreatePermissionDescription } from '.
 export class CreateRole extends RequestObject {
 
     public constructor(parameter: Array<[string, any]>) {
-        super();
-        parameter.forEach((p) => {
-            if (p[0] === RoleProperty.PERMISSIONS) {
-                p[1].forEach((pd: CreatePermissionDescription) => {
-                    delete (pd.ID);
-                    delete (pd.RoleID);
-                });
-            }
-            this.applyProperty(p[0], p[1]);
-        });
+        super(parameter.filter((p) => p[0] !== RoleProperty.PERMISSIONS));
+
+        const permissionParameter = parameter.find((p) => p[0] === RoleProperty.PERMISSIONS);
+        if (permissionParameter) {
+            permissionParameter[1].forEach((pd: CreatePermissionDescription) => {
+                delete (pd.ID);
+                delete (pd.RoleID);
+            });
+        }
     }
 
 }
