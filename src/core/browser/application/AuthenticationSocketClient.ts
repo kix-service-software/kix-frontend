@@ -64,12 +64,13 @@ export class AuthenticationSocketClient extends SocketClient {
             this.authenticationSocket.on(AuthenticationEvent.UNAUTHORIZED, (result: AuthenticationResult) => {
                 if (result.requestId === requestId) {
                     window.clearTimeout(timeout);
+                    ClientStorageService.destroyToken();
                     resolve(true);
                 }
             });
 
             const request: ISocketRequest = {
-                token: '',
+                token: ClientStorageService.getToken(),
                 requestId,
                 clientRequestId: ClientStorageService.getClientRequestId(),
             };

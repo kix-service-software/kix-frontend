@@ -56,7 +56,6 @@ class KIXHeaderComponent {
             ApplicationEvent.APP_LOADING, { loading: true, hint: 'Logout ...' }
         );
         await AuthenticationSocketClient.getInstance().logout();
-        ClientStorageService.destroyToken();
     }
 
 }
