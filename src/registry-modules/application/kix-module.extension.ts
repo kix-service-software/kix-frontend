@@ -50,7 +50,8 @@ class Extension implements IKIXModuleExtension {
         ['permissions-form-input', 'permission/admin/dialogs/inputs/permissions-form-input'],
         ['permission-input', 'permission/admin/dialogs/inputs/permission-input'],
         ['assign-role-permission-input', 'permission/admin/dialogs/inputs/assign-role-permission-input'],
-        ['object-details-page', '_base-components/object-details-page']
+        ['object-details-page', '_base-components/object-details-page'],
+        ['new-system-address-dialog', 'communication/admin/dialogs/new-system-address-dialog']
     ];
 
 
