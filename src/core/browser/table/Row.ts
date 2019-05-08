@@ -267,6 +267,10 @@ export class Row<T = any> implements IRow<T> {
         if (!cell) {
             this.cells.push(new Cell(this, value));
         }
+        const children = this.getChildren();
+        if (Array.isArray(children)) {
+            children.forEach((r) => r.addCell(value));
+        }
     }
 
     private isFilterDefined(value: string, criteria: TableFilterCriteria[]): boolean {
