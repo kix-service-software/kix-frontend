@@ -10,7 +10,6 @@ export * from './link';
 export * from './object-icon';
 export * from './mail-account';
 export * from './queue';
-export * from './role';
 export * from './salutation';
 export * from './search-profile';
 export * from './service';
@@ -18,8 +17,6 @@ export * from './signature';
 export * from './standard-attachment';
 export * from './text-module';
 export * from './ticket';
-export * from './user';
-export * from './i18n';
 
 export { Query } from './Query';
 export { RequestObject } from './RequestObject';

@@ -72,14 +72,14 @@ export abstract class KIXObjectService implements IKIXObjectService {
         return objects.map((o) => ObjectFactoryService.createObject(objectType, o));
     }
 
-    public async update(
+    protected async executeUpdateOrCreateRequest<R = number>(
         token: string, clientRequestId: string, parameter: Array<[string, any]>, uri: string,
-        objectType: KIXObjectType, responseProperty: string
-    ): Promise<string | number> {
+        objectType: KIXObjectType, responseProperty: string, create: boolean = false
+    ): Promise<R> {
         const object = {};
         object[objectType] = new RequestObject(parameter.filter((p) => p[0] !== 'ICON'));
 
-        const response = await this.sendUpdateRequest(token, clientRequestId, uri, object, this.objectType)
+        const response = await this.sendRequest(token, clientRequestId, uri, object, this.objectType, create)
             .catch((error: Error) => {
                 LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
                 throw new Error(error.Code, error.Message);
@@ -89,7 +89,13 @@ export abstract class KIXObjectService implements IKIXObjectService {
         if (icon) {
             icon.Object = objectType;
             icon.ObjectID = response[responseProperty];
-            await this.updateIcon(token, clientRequestId, icon);
+            if (create) {
+                await this.createIcons(token, clientRequestId, icon)
+                    .catch(() => { return; });
+            } else {
+                await this.updateIcon(token, clientRequestId, icon)
+                    .catch(() => { return; });
+            }
         }
 
         return response[responseProperty];
@@ -179,6 +185,17 @@ export abstract class KIXObjectService implements IKIXObjectService {
         return await this.httpService.get<R>(uri, query, token, null, cacheKeyPrefix);
     }
 
+    protected async sendRequest(
+        token: string, clientRequestId: string, uri: string, content: any,
+        cacheKeyPrefix: string, create: boolean = false
+    ): Promise<any> {
+        if (create) {
+            return await this.httpService.post(uri, content, token, clientRequestId, cacheKeyPrefix);
+        } else {
+            return await this.httpService.patch(uri, content, token, clientRequestId, cacheKeyPrefix);
+        }
+    }
+
     protected async sendCreateRequest<R, C>(
         token: string, clientRequestId: string, uri: string, content: C, cacheKeyPrefix: string
     ): Promise<R> {
@@ -263,7 +280,6 @@ export abstract class KIXObjectService implements IKIXObjectService {
                     ['Content', icon.Content]
                 ], null, KIXObjectType.OBJECT_ICON
                 ).catch((error: Error) => {
-                    LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
                     throw new Error(error.Code, error.Message);
                 });
             }
@@ -290,11 +306,13 @@ export abstract class KIXObjectService implements IKIXObjectService {
                     ],
                     icons[0].ID, null, KIXObjectType.OBJECT_ICON
                 ).catch((error: Error) => {
-                    LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
                     throw new Error(error.Code, error.Message);
                 });
             } else {
-                this.createIcons(token, clientRequestId, icon);
+                this.createIcons(token, clientRequestId, icon)
+                    .catch((error) => {
+                        throw error;
+                    });
             }
         }
     }

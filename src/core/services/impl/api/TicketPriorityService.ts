@@ -1,7 +1,4 @@
 import {
-    CreateTicketPriorityRequest, CreateTicketPriorityResponse, CreateTicketPriority
-} from '../../../api';
-import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions, TicketPriority, ObjectIcon, Error, TicketPriorityFactory
 } from '../../../model';
@@ -58,32 +55,26 @@ export class TicketPriorityService extends KIXObjectService {
         token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
         createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<number> {
-        const createTicketPriority = new CreateTicketPriority(parameter);
-
-        const response = await this.sendCreateRequest<CreateTicketPriorityResponse, CreateTicketPriorityRequest>(
-            token, clientRequestId, this.RESOURCE_URI, new CreateTicketPriorityRequest(createTicketPriority),
-            this.objectType
+        const id = await super.executeUpdateOrCreateRequest<number>(
+            token, clientRequestId, parameter, this.RESOURCE_URI, this.objectType, 'PriorityID', true
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
         });
-
-        const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
-        if (icon) {
-            icon.Object = 'Priority';
-            icon.ObjectID = response.PriorityID;
-            await this.createIcons(token, clientRequestId, icon);
-        }
-
-        return response.PriorityID;
+        return id;
     }
 
     public async updateObject(
         token: string, clientRequestId: string, objectType: KIXObjectType,
         parameter: Array<[string, any]>, objectId: number | string
-    ): Promise<string | number> {
+    ): Promise<number> {
         const uri = this.buildUri(this.RESOURCE_URI, objectId);
-        const id = await super.update(token, clientRequestId, parameter, uri, this.objectType, 'PriorityID');
+        const id = await super.executeUpdateOrCreateRequest<number>(
+            token, clientRequestId, parameter, uri, this.objectType, 'PriorityID'
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
+        });
         return id;
     }
 
