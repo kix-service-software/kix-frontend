@@ -4,13 +4,17 @@ export class FormValidationService {
 
     private static INSTANCE: FormValidationService;
 
+    // tslint:disable-next-line:max-line-length
+    public static EMAIL_REGEX = '^(([^<>()\\[\\]\\.,;:\\s@"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@"]+)*)|(".+"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$';
+
+    public static EMAIL_REGEX_ERROR_MESSAGE = 'Translatable#Inserted email address is invalid.';
+
     public static getInstance(): FormValidationService {
         if (!FormValidationService.INSTANCE) {
             FormValidationService.INSTANCE = new FormValidationService();
         }
         return FormValidationService.INSTANCE;
     }
-
     private constructor() { }
 
     private formFieldValidators: IFormFieldValidator[] = [];

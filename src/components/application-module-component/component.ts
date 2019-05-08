@@ -24,6 +24,9 @@ import {
 import {
     SystemAddressCreateAction, SystemAddressDeleteTableAction
 } from '../../core/browser/system-address/actions';
+import {
+    NewSystemAddressDialogContext
+} from '../../core/browser/system-address/context/system-address';
 import { SlaService, SlaLabelProvider, SlaBrowserFactory } from '../../core/browser/sla';
 import { ObjectIconService, ObjectIconBrowserFactory } from '../../core/browser/icon';
 import { PersonalSettingsDialogContext } from '../../core/browser';
@@ -184,6 +187,14 @@ class Component extends AbstractMarkoComponent {
             false, 'object-details-page', ['translations'], TranslationDetailsContext
         );
         ContextService.getInstance().registerContext(translationDetailsContext);
+
+        const newSystemAddressDialogContext = new ContextDescriptor(
+            NewSystemAddressDialogContext.CONTEXT_ID, [KIXObjectType.SYSTEM_ADDRESS],
+            ContextType.DIALOG, ContextMode.CREATE_ADMIN,
+            false, 'new-system-address-dialog', ['system-address'], NewSystemAddressDialogContext
+        );
+        ContextService.getInstance().registerContext(newSystemAddressDialogContext);
+
     }
 
     private registerDialogs(): void {
@@ -233,6 +244,17 @@ class Component extends AbstractMarkoComponent {
             KIXObjectType.TRANSLATION,
             ContextMode.EDIT_ADMIN
         ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'new-system-address-dialog',
+            new WidgetConfiguration(
+                'new-system-address-dialog', 'Translatable#New Address',
+                [], {}, false, false, null, 'kix-icon-new-gear'
+            ),
+            KIXObjectType.SYSTEM_ADDRESS,
+            ContextMode.CREATE_ADMIN
+        ));
+
     }
 
 }
