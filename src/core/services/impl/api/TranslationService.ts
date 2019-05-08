@@ -7,10 +7,6 @@ import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { LoggingService } from '../LoggingService';
 import {
-    CreateTranslation, CreateTranslationResponse, CreateTranslationRequest,
-    CreateTranslationLanguage, CreateTranslationLanguageResponse, CreateTranslationLanguageRequest
-} from '../../../api';
-import {
     Translation, TranslationLanguageLoadingOptions, TranslationLanguage, TranslationProperty,
     TranslationLanguageProperty, PODefinition
 } from '../../../model/kix/i18n';
@@ -83,16 +79,14 @@ export class TranslationService extends KIXObjectService {
             createParameter.push([TranslationProperty.LANGUAGES, languages]);
         }
 
-        const createTranslation = new CreateTranslation(createParameter);
-        const response = await this.sendCreateRequest<CreateTranslationResponse, CreateTranslationRequest>(
-            token, clientRequestId, this.RESOURCE_URI, new CreateTranslationRequest(createTranslation),
-            KIXObjectType.TRANSLATION
+        const id = await super.executeUpdateOrCreateRequest(
+            token, clientRequestId, createParameter, this.RESOURCE_URI, KIXObjectType.TRANSLATION, 'TranslationID', true
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
         });
 
-        return response.TranslationID;
+        return id;
     }
 
     public async updateObject(
@@ -102,7 +96,9 @@ export class TranslationService extends KIXObjectService {
         const pattern = parameter.find((p) => p[0] === TranslationProperty.PATTERN);
 
         const uri = this.buildUri(this.RESOURCE_URI, objectId);
-        const id = await super.update(token, clientRequestId, [pattern], uri, this.objectType, 'TranslationID');
+        const id = await super.executeUpdateOrCreateRequest(
+            token, clientRequestId, [pattern], uri, this.objectType, 'TranslationID'
+        );
 
         const translations = await this.getTranslations(token);
         const translation = translations.find((t) => t.ID === objectId);
@@ -129,7 +125,7 @@ export class TranslationService extends KIXObjectService {
                         [[TranslationLanguageProperty.VALUE, param[1].trim()]];
 
                     const uri = this.buildUri(this.RESOURCE_URI, translationId, 'languages', param[0]);
-                    await super.update(
+                    await super.executeUpdateOrCreateRequest(
                         token, clientRequestId, translationParameter, uri,
                         KIXObjectType.TRANSLATION_LANGUAGE, 'TranslationLanguageID'
                     );
@@ -144,14 +140,16 @@ export class TranslationService extends KIXObjectService {
                 }
 
             } else if (this.hasValue(param[1])) {
-                const createTranslationLanguage = new CreateTranslationLanguage([
+                const createParameter: Array<[string, any]> = [
                     [TranslationLanguageProperty.LANGUAGE, param[0]],
                     [TranslationLanguageProperty.VALUE, param[1].trim()]
-                ]);
+                ];
 
-                await this.sendCreateRequest<CreateTranslationLanguageResponse, CreateTranslationLanguageRequest>(
-                    token, clientRequestId, this.buildUri(this.RESOURCE_URI, translationId, 'languages'),
-                    new CreateTranslationLanguageRequest(createTranslationLanguage), KIXObjectType.TRANSLATION
+                const uri = this.buildUri(this.RESOURCE_URI, translationId, 'languages');
+
+                await super.executeUpdateOrCreateRequest(
+                    token, clientRequestId, createParameter, uri, KIXObjectType.TRANSLATION_LANGUAGE,
+                    'TranslationLanguageID', true
                 ).catch((error: Error) => {
                     LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
                     throw new Error(error.Code, error.Message);

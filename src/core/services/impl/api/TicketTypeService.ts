@@ -1,9 +1,6 @@
 import {
-    CreateTicketType, CreateTicketTypeResponse, CreateTicketTypeRequest
-} from '../../../api';
-import {
     TicketType, KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, ObjectIcon, Error, TicketTypeFactory
+    KIXObjectSpecificCreateOptions, TicketTypeFactory, Error
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
@@ -53,23 +50,13 @@ export class TicketTypeService extends KIXObjectService {
         token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
         createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<number> {
-        const createTicketType = new CreateTicketType(parameter);
-
-        const response = await this.sendCreateRequest<CreateTicketTypeResponse, CreateTicketTypeRequest>(
-            token, clientRequestId, this.RESOURCE_URI, new CreateTicketTypeRequest(createTicketType), this.objectType
+        const id = await super.executeUpdateOrCreateRequest(
+            token, clientRequestId, parameter, this.RESOURCE_URI, this.objectType, 'TypeID', true
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
         });
-
-        const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
-        if (icon) {
-            icon.Object = 'TicketType';
-            icon.ObjectID = response.TypeID;
-            await this.createIcons(token, clientRequestId, icon);
-        }
-
-        return response.TypeID;
+        return id;
     }
 
     public async updateObject(
@@ -77,7 +64,12 @@ export class TicketTypeService extends KIXObjectService {
         parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
         const uri = this.buildUri(this.RESOURCE_URI, objectId);
-        const id = await super.update(token, clientRequestId, parameter, uri, this.objectType, 'TypeID');
+        const id = await super.executeUpdateOrCreateRequest(
+            token, clientRequestId, parameter, uri, this.objectType, 'TypeID'
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
+        });
         return id;
     }
 

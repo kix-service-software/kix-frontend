@@ -6,11 +6,6 @@ import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions, Error
 } from "../../../model";
-import {
-    CreateFAQArticle, CreateFAQArticleResponse, CreateFAQArticleRequest, FAQArticleAttachmentResponse, CreateFAQVote,
-    CreateFAQVoteResponse, CreateFAQVoteRequest, UpdateFAQArticleResponse, UpdateFAQArticleRequest,
-    CreateFAQArticleAttachmentResponse, CreateFAQArticleAttachmentRequest, FAQArticleAttachmentsResponse
-} from "../../../api/faq";
 import { KIXObjectServiceRegistry } from "../../KIXObjectServiceRegistry";
 import { LoggingService } from "../LoggingService";
 
@@ -92,7 +87,9 @@ export class FAQService extends KIXObjectService {
         );
 
         const uri = this.buildUri(this.RESOURCE_URI, 'articles', objectId);
-        const id = await super.update(token, clientRequestId, updateParameter, uri, this.objectType, 'FAQArticleID');
+        const id = await super.executeUpdateOrCreateRequest(
+            token, clientRequestId, updateParameter, uri, this.objectType, 'FAQArticleID'
+        );
 
         const attachments = parameter.find((p) => p[0] === FAQArticleProperty.ATTACHMENTS);
         await this.updateAttachments(
@@ -107,8 +104,9 @@ export class FAQService extends KIXObjectService {
     ): Promise<void> {
         const uri = this.buildUri(this.RESOURCE_URI, 'articles', objectId, 'attachments');
 
-        const attachmentsResponse = await this.getObjectByUri<FAQArticleAttachmentsResponse>(token, uri);
-        const existingAttachments = attachmentsResponse.Attachment;
+        const existingAttachments = await super.load<Attachment>(
+            token, KIXObjectType.FAQ_ARTICLE_ATTACHMENT, uri, null, null, 'Attachment'
+        );
 
         const deletableAttachments = existingAttachments
             ? existingAttachments.filter((a) => a.Disposition !== 'inline' && !attachments.some((at) => at.ID === a.ID))
@@ -121,9 +119,15 @@ export class FAQService extends KIXObjectService {
 
         const newAttachments = attachments ? attachments.filter((a) => !a.ID) : [];
         for (const attachment of newAttachments) {
-            await this.sendCreateRequest<CreateFAQArticleAttachmentResponse, CreateFAQArticleAttachmentRequest>(
-                token, clientRequestId, this.buildUri(this.RESOURCE_URI, 'articles', objectId, 'attachments'),
-                new CreateFAQArticleAttachmentRequest(attachment), this.objectType
+            const parameter: Array<[string, any]> = [];
+            for (const p in attachment) {
+                if (attachment[p]) {
+                    parameter.push([p, attachment[p]]);
+                }
+            }
+
+            await super.executeUpdateOrCreateRequest(
+                token, clientRequestId, parameter, uri, KIXObjectType.FAQ_ARTICLE_ATTACHMENT, 'AttachmentID', true
             ).catch((error: Error) => {
                 LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
                 throw new Error(error.Code, error.Message);
@@ -134,39 +138,36 @@ export class FAQService extends KIXObjectService {
     private async createFAQArticle(
         token: string, clientRequestId: string, parameter: Array<[string, any]>
     ): Promise<number> {
-        const createFAQArticle = new CreateFAQArticle(parameter.filter((p) => p[0] !== FAQArticleProperty.LINK));
-
+        const createParameter = parameter.filter((p) => p[0] !== FAQArticleProperty.LINK);
         const uri = this.buildUri(this.RESOURCE_URI, 'articles');
-        const response = await this.sendCreateRequest<CreateFAQArticleResponse, CreateFAQArticleRequest>(
-            token, clientRequestId, uri, new CreateFAQArticleRequest(createFAQArticle), this.objectType
+
+        const id = await super.executeUpdateOrCreateRequest(
+            token, clientRequestId, createParameter, uri, this.objectType, 'FAQArticleID', true
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
         });
 
-        const faqId = response.FAQArticleID;
-
         await this.createLinks(
-            token, clientRequestId, faqId, this.getParameterValue(parameter, FAQArticleProperty.LINK)
+            token, clientRequestId, id, this.getParameterValue(parameter, FAQArticleProperty.LINK)
         );
 
-        return faqId;
+        return id;
     }
 
     private async createFAQVote(
         token: string, clientRequestId: string, parameter: Array<[string, any]>, createOptions: CreateFAQVoteOptions
     ): Promise<number> {
-        const createFAQVote = new CreateFAQVote(parameter);
         const uri = this.buildUri(this.RESOURCE_URI, 'articles', createOptions.faqArticleId, 'votes');
-        const response = await this.sendCreateRequest<CreateFAQVoteResponse, CreateFAQVoteRequest>(
-            token, clientRequestId, uri, new CreateFAQVoteRequest(createFAQVote), this.objectType
+
+        const id = await super.executeUpdateOrCreateRequest(
+            token, clientRequestId, parameter, uri, KIXObjectType.FAQ_VOTE, 'FAQVoteID', true
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
         });
 
-        const faqId = response.FAQVoteID;
-        return faqId;
+        return id;
     }
 
     public async loadAttachment(
@@ -178,9 +179,9 @@ export class FAQService extends KIXObjectService {
                 'articles', objectLoadingOptions.faqArticleId,
                 'attachments', objectLoadingOptions.attachmentId
             );
-            const query = this.prepareQuery(loadingOptions);
-            const response = await this.getObjectByUri<FAQArticleAttachmentResponse>(token, uri, query);
-            return [response.Attachment];
+
+            const attachments = await super.load<Attachment>(token, null, uri, loadingOptions, null, 'Attachment');
+            return attachments;
         } else {
             const error = 'No FAQArticleAttachmentLoadingOptions given.';
             throw error;

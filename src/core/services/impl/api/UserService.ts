@@ -3,10 +3,6 @@ import {
     PreferencesLoadingOptions, KIXObjectSpecificCreateOptions
 } from '../../../model';
 import { KIXObjectService } from './KIXObjectService';
-import {
-    SetPreference, SetPreferenceResponse, SetPreferenceRequest,
-    CreateUser, CreateUserRequest, CreateUserResponse
-} from '../../../api/user';
 import { LoggingService } from '../LoggingService';
 import { SetPreferenceOptions, UserFactory, UserPreference, UserProperty } from '../../../model/kix/user';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
@@ -77,28 +73,34 @@ export class UserService extends KIXObjectService {
         createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<string | number> {
         if (objectType === KIXObjectType.USER) {
-            const createRole = new CreateUser(parameter);
+            const createParameter = parameter.filter((p) => p[0] !== UserProperty.USER_LANGUAGE);
+            const userLanguage = parameter.find((p) => p[0] === UserProperty.USER_LANGUAGE);
+            if (userLanguage) {
+                const preferences = [
+                    {
+                        ID: UserProperty.USER_LANGUAGE,
+                        Value: userLanguage[1]
+                    }
+                ];
+                createParameter.push([UserProperty.PREFERENCES, preferences]);
+            }
 
-            const response = await this.sendCreateRequest<CreateUserResponse, CreateUserRequest>(
-                token, clientRequestId, this.RESOURCE_URI, new CreateUserRequest(createRole), this.objectType
-            ).catch((error: Error) => {
-                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                throw new Error(error.Code, error.Message);
-            });
+            const id = await super.executeUpdateOrCreateRequest(
+                token, clientRequestId, createParameter, this.RESOURCE_URI, this.objectType, 'UserID', true
+            );
 
-            return response.UserID;
+            return id;
         } else if (objectType === KIXObjectType.USER_PREFERENCE) {
             const options = createOptions as SetPreferenceOptions;
-            const createPreference = new SetPreference(parameter);
-            const response = await this.sendCreateRequest<SetPreferenceResponse, SetPreferenceRequest>(
-                token, clientRequestId,
-                this.buildUri(this.RESOURCE_URI, options.userId, this.SUB_RESOURCE_URI),
-                new SetPreferenceRequest(createPreference), objectType
+            const uri = this.buildUri(this.RESOURCE_URI, options.userId, this.SUB_RESOURCE_URI);
+            const id = await super.executeUpdateOrCreateRequest(
+                token, clientRequestId, parameter, uri, objectType, 'UserPreferenceID', true
             ).catch((error: Error) => {
                 LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
                 throw new Error(error.Code, error.Message);
             });
-            return response.UserPreferenceID;
+
+            return id;
         }
     }
 
@@ -122,9 +124,12 @@ export class UserService extends KIXObjectService {
             const userId = Number(objectId);
 
             const uri = this.buildUri(this.RESOURCE_URI, userId);
-            const id = await super.update(
+            const id = await super.executeUpdateOrCreateRequest(
                 token, clientRequestId, updateParameter, uri, this.objectType, 'UserID'
-            );
+            ).catch((error: Error) => {
+                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                throw new Error(error.Code, error.Message);
+            });
 
             const roleIds = this.getParameterValue(parameter, UserProperty.ROLEIDS);
             await this.updateUserRoles(token, clientRequestId, roleIds, userId);
@@ -137,16 +142,11 @@ export class UserService extends KIXObjectService {
             return id;
         } else if (objectType === KIXObjectType.USER_PREFERENCE) {
             const options = updateOptions as SetPreferenceOptions;
-            const updatePreference = new SetPreference(parameter);
-            const response = await this.sendUpdateRequest<SetPreferenceResponse, SetPreferenceRequest>(
-                token, clientRequestId,
-                this.buildUri(this.RESOURCE_URI, options.userId, this.SUB_RESOURCE_URI, objectId),
-                new SetPreferenceRequest(updatePreference), objectType
-            ).catch((error: Error) => {
-                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                throw new Error(error.Code, error.Message);
-            });
-            return response.UserPreferenceID;
+            const uri = this.buildUri(this.RESOURCE_URI, options.userId, this.SUB_RESOURCE_URI, objectId);
+            const id = await super.executeUpdateOrCreateRequest(
+                token, clientRequestId, parameter, uri, objectType, 'UserPreferenceID'
+            );
+            return id;
         }
     }
 

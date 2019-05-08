@@ -4,9 +4,6 @@ export * from './history';
 export * from './watcher';
 export * from './queue';
 
-export * from './ticket-priority';
-export * from './ticket-state';
-export * from './ticket-type';
 export * from './ticket-template';
 
 export { CreateTicketResponse } from './CreateTicketResponse';
