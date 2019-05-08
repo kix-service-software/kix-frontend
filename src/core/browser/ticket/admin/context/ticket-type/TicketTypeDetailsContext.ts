@@ -22,8 +22,10 @@ export class TicketTypeDetailsContext extends Context {
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
         const objectName = await TranslationService.translate('Translatable#Type');
-        const state = await this.getObject<TicketType>();
-        return new BreadcrumbInformation(this.getIcon(), [AdminContext.CONTEXT_ID], `${objectName}: ${state.Name}`);
+        const type = await this.getObject<TicketType>();
+        return new BreadcrumbInformation(
+            this.getIcon(), [AdminContext.CONTEXT_ID], `${objectName}: ${type ? type.Name : ''}`
+        );
     }
 
     public async getObject<O extends KIXObject>(
