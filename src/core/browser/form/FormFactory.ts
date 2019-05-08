@@ -1,4 +1,4 @@
-import { Form, FormField, Group } from "../../model";
+import { Form, FormField } from "../../model";
 import { FormGroup } from "../../model/components/form/FormGroup";
 
 export class FormFactory {

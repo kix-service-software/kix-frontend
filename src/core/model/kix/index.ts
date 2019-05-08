@@ -19,15 +19,9 @@ export * from './valid';
 export * from './general-catalog';
 
 export { ClientRegistration } from './ClientRegistration';
-export { Group } from './Group';
 export { KIXObject } from './KIXObject';
 export { KIXObjectType } from './KIXObjectType';
 export { Lock } from './Lock';
-export { MailAccount } from './MailAccount';
-export { Salutation } from './Salutation';
-export { SearchProfile } from './SearchProfile';
-export { Signature } from './Signature';
-export { StandardAttachment } from './StandardAttachment';
 export { ObjectData } from './ObjectData';
 export { AttachmentError } from './AttachmentError';
 export { IObjectFactory } from './IObjectFactory';
