@@ -56,7 +56,7 @@ class Component {
 
         const modules = KIXModulesService.getInstance().getModules();
         modules.forEach((m) => {
-            this.state.moduleTemplates.push(ComponentsService.getInstance().getComponentTemplate(m.initComponentId));
+            this.state.moduleTemplates.push(ComponentsService.getInstance().getComponentTemplate(m.initComponentIds));
         });
 
         ContextService.getInstance().registerListener({

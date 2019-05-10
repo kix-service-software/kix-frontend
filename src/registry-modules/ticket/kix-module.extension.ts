@@ -1,8 +1,9 @@
 import { IKIXModuleExtension } from "../../core/extensions";
+import { UIComponent } from "../../core/model/UIComponent";
 
 class Extension implements IKIXModuleExtension {
 
-    public initComponentId: string = 'ticket-module-component';
+    public initComponentIds: string = 'ticket-module-component';
 
     public external: boolean = false;
 
@@ -64,6 +65,10 @@ class Extension implements IKIXModuleExtension {
         ['ticket-queue-signature', 'ticket/admin/widgets/ticket-queue-signature'],
         ['ticket-admin-templates', 'ticket/admin/ticket-admin-templates']
     ];
+
+    public getUIComponents(): UIComponent[] {
+
+    }
 
 }
 

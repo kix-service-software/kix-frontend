@@ -44,7 +44,12 @@ export class KIXModuleNamespace extends SocketNameSpace {
                     const version = packageJson.version;
                     const prePath = '/@kix/frontend$' + version + '/dist/components/';
 
-                    modules.forEach((m) => m.tags.forEach((t) => t[1] = prePath + t[1]));
+                    const tags: Array<[string, string]> = [];
+                    modules.forEach(
+                        (m) => m.getUIComponents().forEach(
+                            (uic) => tags.push([uic.tagId, prePath + uic.componentPath])
+                        )
+                    );
 
                     resolve(
                         new SocketResponse(

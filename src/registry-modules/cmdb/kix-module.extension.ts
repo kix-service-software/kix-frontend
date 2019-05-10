@@ -2,7 +2,7 @@ import { IKIXModuleExtension } from "../../core/extensions";
 
 class Extension implements IKIXModuleExtension {
 
-    public initComponentId: string = 'cmdb-module-component';
+    public initComponentIds: string = 'cmdb-module-component';
 
     public external: boolean = false;
 

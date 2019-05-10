@@ -12,3 +12,5 @@ export * from './ticket';
 
 export { Query } from './Query';
 export { RequestObject } from './RequestObject';
+export { OptionsResponse } from './OptionsResponse';
+export { RequestMethod } from './RequestMethod';

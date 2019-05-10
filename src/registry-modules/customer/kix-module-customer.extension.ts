@@ -2,7 +2,7 @@ import { IKIXModuleExtension } from "../../core/extensions";
 
 class Extension implements IKIXModuleExtension {
 
-    public initComponentId: string = 'customer-module-component';
+    public initComponentIds: string = 'customer-module-component';
 
     public external: boolean = false;
 

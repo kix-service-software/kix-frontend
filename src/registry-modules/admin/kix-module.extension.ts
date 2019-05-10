@@ -2,7 +2,7 @@ import { IKIXModuleExtension } from "../../core/extensions";
 
 class KIXModuleExtension implements IKIXModuleExtension {
 
-    public initComponentId: string = 'admin-module-component';
+    public initComponentIds: string = 'admin-module-component';
 
     public external: boolean = false;
 
