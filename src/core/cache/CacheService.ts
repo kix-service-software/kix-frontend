@@ -1,7 +1,8 @@
 import { ConfigurationService, LoggingService } from "../services";
-import { Memcached } from "./Memcached";
 import { InMemoryCache } from "./InMemoryCache";
 import { ObjectUpdatedEventData, KIXObjectType } from "../model";
+import { RedisCache } from "./RedisCache";
+
 import md5 = require('md5');
 
 export class CacheService {
@@ -15,16 +16,16 @@ export class CacheService {
         return CacheService.INSTANCE;
     }
 
-    private useMemcached: boolean = false;
+    private useRedisCache: boolean = false;
     private useInMemoryCache: boolean = false;
 
     private constructor() { }
 
     public init(): void {
         const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-        if (serverConfig.USE_MEMCACHED && serverConfig.MEMCACHED) {
-            this.useMemcached = true;
-            Memcached.getInstance();
+        if (serverConfig.USE_REDIS_CACHE) {
+            this.useRedisCache = true;
+            RedisCache.getInstance();
         }
 
         if (serverConfig.USE_IN_MEMORY_CACHE) {
@@ -32,33 +33,22 @@ export class CacheService {
         }
     }
 
-    public async has(key: string, cacheKeyPrefix?: string): Promise<boolean> {
-        key = md5(key);
-        if (process.env.NODE_ENV === 'test') {
-            return false;
-        } else if (this.useMemcached) {
-            return await Memcached.getInstance().has(key);
-        } else if (this.useInMemoryCache) {
-            return await InMemoryCache.getInstance().has(key);
-        }
-
-        return false;
-    }
-
     public async get(key: string, cacheKeyPrefix?: string): Promise<any> {
         key = md5(key);
-        if (this.useMemcached) {
-            return await Memcached.getInstance().get(key);
+        if (process.env.NODE_ENV === 'test') {
+            return undefined;
+        } else if (this.useRedisCache) {
+            return await RedisCache.getInstance().get(key, cacheKeyPrefix);
         } else if (this.useInMemoryCache) {
-            return await InMemoryCache.getInstance().get(key);
+            return await InMemoryCache.getInstance().get(key, cacheKeyPrefix);
         }
         return null;
     }
 
     public async set(key: string, value: any, cacheKeyPrefix?: string): Promise<void> {
         key = md5(key);
-        if (this.useMemcached) {
-            await Memcached.getInstance().set(key, cacheKeyPrefix, value);
+        if (this.useRedisCache) {
+            await RedisCache.getInstance().set(key, cacheKeyPrefix, value);
         } else if (this.useInMemoryCache) {
             await InMemoryCache.getInstance().set(key, cacheKeyPrefix, value);
         }
@@ -76,8 +66,8 @@ export class CacheService {
     public async deleteKeys(cacheKeyPrefix: string): Promise<void> {
         const prefixes = await this.getCacheKeyPrefixes(cacheKeyPrefix);
         for (const prefix of prefixes) {
-            if (this.useMemcached) {
-                await Memcached.getInstance().deleteKeys(prefix);
+            if (this.useRedisCache) {
+                await RedisCache.getInstance().deleteKeys(prefix);
             } else if (this.useInMemoryCache) {
                 await InMemoryCache.getInstance().deleteKeys(prefix);
             }
@@ -144,8 +134,8 @@ export class CacheService {
     }
 
     private async clearCache(): Promise<void> {
-        if (this.useMemcached) {
-            await Memcached.getInstance().clear([KIXObjectType.TRANSLATION]);
+        if (this.useRedisCache) {
+            await RedisCache.getInstance().clear([KIXObjectType.TRANSLATION]);
         } else if (this.useInMemoryCache) {
             await InMemoryCache.getInstance().clear([KIXObjectType.TRANSLATION]);
         }
