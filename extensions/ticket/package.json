@@ -18,7 +18,8 @@
             "ticket-priority-details-configuration": "../../dist/registry-modules/ticket/admin/ticket-priority-details-configuration.extension",
             "new-ticket-priority-dialog-configuration": "../../dist/registry-modules/ticket/admin/new-ticket-priority-dialog-configuration.extension",
             "edit-ticket-priority-dialog-configuration": "../../dist/registry-modules/ticket/admin/edit-ticket-priority-dialog-configuration.extension",
-            "new-ticket-queue-dialog-configuration": "../../dist/registry-modules/ticket/admin/new-ticket-queue-dialog-configuration.extension"
+            "new-ticket-queue-dialog-configuration": "../../dist/registry-modules/ticket/admin/new-ticket-queue-dialog-configuration.extension",
+            "ticket-queue-details-configuration": "../../dist/registry-modules/ticket/admin/ticket-queue-details-configuration.extension"
         },
         "kix:modules": {
             "ticket-module": "../../dist/registry-modules/ticket/kix-module.extension"

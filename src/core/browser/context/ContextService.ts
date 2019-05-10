@@ -175,7 +175,7 @@ export class ContextService {
     }
 
     public async handleUpdateNotifications(events: ObjectUpdatedEventData[]): Promise<void> {
-        if (this.activeContextType === ContextType.MAIN) {
+        if (this.activeContextType === ContextType.MAIN && this.activeMainContext) {
             if (this.activeMainContext.getDescriptor().contextMode === ContextMode.DETAILS) {
                 const showRefreshNotification = events.some((e) => {
                     const objectType = this.getObjectType(e.Namespace);

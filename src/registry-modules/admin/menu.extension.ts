@@ -6,6 +6,7 @@ import {
 import { ConfigItemClassDetailsContext } from '../../core/browser/cmdb';
 import { TranslationDetailsContext } from '../../core/browser/i18n/admin/context';
 import { RoleDetailsContext, UserDetailsContext } from '../../core/browser/user';
+import { QueueDetailsContext } from '../../core/browser/ticket/admin/context/ticket-queue';
 
 export class Extension implements IMainMenuExtension {
 
@@ -23,7 +24,8 @@ export class Extension implements IMainMenuExtension {
         TicketStateDetailsContext.CONTEXT_ID,
         ConfigItemClassDetailsContext.CONTEXT_ID,
         RoleDetailsContext.CONTEXT_ID,
-        UserDetailsContext.CONTEXT_ID
+        UserDetailsContext.CONTEXT_ID,
+        QueueDetailsContext.CONTEXT_ID
     ];
 
     public primaryMenu: boolean = false;
