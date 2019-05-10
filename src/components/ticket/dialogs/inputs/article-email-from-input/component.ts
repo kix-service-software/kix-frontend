@@ -1,7 +1,7 @@
 import { ComponentState } from "./ComponentState";
 import {
     FormInputComponent, TreeNode, TicketProperty, FormField,
-    FormFieldValue, Queue, KIXObjectType, ContextType, ContextMode, Ticket
+    FormFieldValue, Queue, KIXObjectType, ContextType, ContextMode, Ticket, SystemAddress
 } from "../../../../../core/model";
 import { FormService, KIXObjectService, ContextService } from "../../../../../core/browser";
 import { TicketDetailsContext } from "../../../../../core/browser/ticket";
@@ -88,8 +88,12 @@ class Component extends FormInputComponent<number, ComponentState> {
             const queue = queues[0];
 
             const userName = `${user.UserFirstname} ${user.UserLastname}`;
-            const queueMail = queue.Email;
-            const realName = queue.RealName;
+
+            const systemAddress = await KIXObjectService.loadObjects<SystemAddress>(
+                KIXObjectType.SYSTEM_ADDRESS, [queue.SystemAddressID], null, null, true
+            );
+            const queueMail = systemAddress[0].Name;
+            const realName = systemAddress[0].Realname;
 
             const labels = [
                 [`\"<${realName}>\" <${queueMail}>`, `${realName}`],

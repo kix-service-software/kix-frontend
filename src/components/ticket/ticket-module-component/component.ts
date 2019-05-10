@@ -27,7 +27,8 @@ import {
     TicketStateFormService, TicketBulkManager, TicketTableCSSHandler, ArticleTableCSSHandler, EmailRecipientValidator,
     TicketTemplateCreateAction, TicketTemplateTableDeleteAction, TicketTemplateLabelProvider, TicketTemplateService,
     TicketTemplateBrowserFactory, TicketTemplateTableFactory, TicketQueueCreateAction, TicketQueueTableFactory,
-    QueueLabelProvider, QueueBrowserFactory, QueueService, NewQueueDialogContext, FollowUpTypeBrowserFactory
+    QueueLabelProvider, QueueBrowserFactory, QueueService, NewQueueDialogContext, FollowUpTypeBrowserFactory,
+    TicketQueueEditAction, QueueDetailsContext
 } from '../../../core/browser/ticket';
 import {
     KIXObjectType, ContextDescriptor, ContextMode, ContextType,
@@ -239,6 +240,13 @@ class Component extends AbstractMarkoComponent {
             false, 'new-ticket-queue-dialog', ['queues'], NewQueueDialogContext
         );
         ContextService.getInstance().registerContext(newQueueContext);
+
+        const ticketQueueDetailsContextDescriptor = new ContextDescriptor(
+            QueueDetailsContext.CONTEXT_ID, [KIXObjectType.QUEUE],
+            ContextType.MAIN, ContextMode.DETAILS,
+            true, 'object-details-page', ['queues'], QueueDetailsContext
+        );
+        ContextService.getInstance().registerContext(ticketQueueDetailsContextDescriptor);
     }
 
     private registerTicketActions(): void {
@@ -298,6 +306,7 @@ class Component extends AbstractMarkoComponent {
         );
 
         ActionFactory.getInstance().registerAction('ticket-admin-queue-create', TicketQueueCreateAction);
+        ActionFactory.getInstance().registerAction('ticket-admin-queue-edit', TicketQueueEditAction);
 
         ActionFactory.getInstance().registerAction('ticket-admin-template-create', TicketTemplateCreateAction);
         ActionFactory.getInstance().registerAction(

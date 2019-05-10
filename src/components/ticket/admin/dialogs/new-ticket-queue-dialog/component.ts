@@ -1,7 +1,9 @@
-import { KIXObjectType } from "../../../../../core/model";
+import { KIXObjectType, ContextMode, QueueProperty } from "../../../../../core/model";
 import { ComponentState } from "./ComponentState";
 import { AbstractNewDialog } from "../../../../../core/browser/components/dialog";
 import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
+import { RoutingConfiguration } from "../../../../../core/browser/router";
+import { QueueDetailsContext } from "../../../../../core/browser/ticket";
 
 class Component extends AbstractNewDialog {
 
@@ -11,11 +13,10 @@ class Component extends AbstractNewDialog {
             'Translatable#Create Queue',
             'Translatable#Queue successfully created.',
             KIXObjectType.QUEUE,
-            // new RoutingConfiguration(
-            //     null, TicketTypeDetailsContext.CONTEXT_ID, KIXObjectType.QUEUE,
-            //     ContextMode.DETAILS, QueueProperty.QUEUE_ID, true
-            // )
-            null
+            new RoutingConfiguration(
+                null, QueueDetailsContext.CONTEXT_ID, KIXObjectType.QUEUE,
+                ContextMode.DETAILS, QueueProperty.QUEUE_ID, true
+            )
         );
     }
 

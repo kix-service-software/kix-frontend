@@ -6,6 +6,7 @@ import {
 import { KIXObjectType, DataType, ContextMode, QueueProperty } from "../../../../../model";
 import { TicketQueueTableContentProvider } from "./TicketQueueTableContentProvider";
 import { TableFactory } from "../../../../table/TableFactory";
+import { QueueDetailsContext } from "../../context";
 
 export class TicketQueueTableFactory extends TableFactory {
 
@@ -53,10 +54,10 @@ export class TicketQueueTableFactory extends TableFactory {
         }
 
         if (defaultRouting) {
-            // tableConfiguration.routingConfiguration = new RoutingConfiguration(
-            //     null, TicketQueueDetailsContext.CONTEXT_ID, KIXObjectType.QUEUE,
-            //     ContextMode.DETAILS, QueueProperty.ID
-            // );
+            tableConfiguration.routingConfiguration = new RoutingConfiguration(
+                null, QueueDetailsContext.CONTEXT_ID, KIXObjectType.QUEUE,
+                ContextMode.DETAILS, QueueProperty.QUEUE_ID
+            );
         }
 
         return tableConfiguration;

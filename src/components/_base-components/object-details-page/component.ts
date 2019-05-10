@@ -78,7 +78,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 'Translatable#No object with ID {0} available.', [context.getObjectId()]
             );
         } else {
-            await this.prepareTitle();
+            this.state.title = await context.getDisplayText();
         }
 
         this.configuration = context.getConfiguration();
@@ -93,10 +93,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             window.clearTimeout(loadingTimeout);
             this.state.loading = false;
         }, 10);
-    }
-
-    public async prepareTitle(): Promise<void> {
-        this.state.title = await LabelService.getInstance().getText(this.object);
     }
 
     private async prepareActions(): Promise<void> {
