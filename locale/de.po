@@ -161,6 +161,11 @@ msgstr "Verknüpfung zuordnen"
 msgid "Assign Team / Queue"
 msgstr "Zuordnung zu Team / Queue"
 
+#, fuzzy
+#| msgid "Text Modules"
+msgid "Assign Text Modules"
+msgstr "Textbausteine"
+
 msgid "Assign the roles for the user."
 msgstr "Dem Nutzer Rollen zuordnen."
 
@@ -890,10 +895,14 @@ msgstr "Geben Sie einen Titel für den Nutzer ein."
 msgid "Insert a type name."
 msgstr "Geben Sie einen Name für den Typ ein."
 
-msgid "Inserted e-mail address is invalid."
+#, fuzzy
+#| msgid "Inserted e-mail address is invalid."
+msgid "Inserted email address is invalid."
 msgstr "Die eingegebene E-Mail-Adresse ist ungültig."
 
-msgid "Inserted e-mail address must not be a system address."
+#, fuzzy
+#| msgid "Inserted e-mail address must not be a system address."
+msgid "Inserted email address must not be a system address."
 msgstr "Die eingegebene E-Mail-Adresse darf keine Systemadresse sein."
 
 msgid "insert filter value"
@@ -1177,6 +1186,11 @@ msgstr "Neue Version wurde angelegt."
 msgid "Next Image"
 msgstr "Nächstes Bild"
 
+#, fuzzy
+#| msgid "No."
+msgid "No"
+msgstr "Nr."
+
 msgid "No."
 msgstr "Nr."
 
@@ -1206,6 +1220,9 @@ msgstr "Keine Bewertung verfügbar."
 
 msgid "No search query."
 msgstr "Keine Suchanfrage verfügbar."
+
+msgid "No signature defined."
+msgstr ""
 
 msgid "not archived tickets"
 msgstr "Nicht archivierte Tickets"
@@ -2041,6 +2058,9 @@ msgstr "Typ"
 msgid "Type Data"
 msgstr "Stammdaten"
 
+msgid "Type Information"
+msgstr "Typ Informationen"
+
 msgid "Types"
 msgstr "Typen"
 
@@ -2173,6 +2193,9 @@ msgstr "Funktionalität ist in Arbeit."
 msgid "Welcome to KIX"
 msgstr "Willkommen bei KIX"
 
+msgid "Yes"
+msgstr "Ja"
+
 msgid "You have successfully logged out."
 msgstr "Sie haben sich erfolgreich abgemeldet."
 
@@ -2233,9 +2256,6 @@ msgstr "PLZ"
 
 #~ msgid "State Information"
 #~ msgstr "Status Informationen"
-
-#~ msgid "Type Information"
-#~ msgstr "Typ Informationen"
 
 #~ msgid "Archivierte Tickets"
 #~ msgstr "Archivierte Tickets"
@@ -2385,9 +2405,6 @@ msgstr "PLZ"
 
 #~ msgid "IP over DHCP"
 #~ msgstr "IP via DHCP"
-
-#~ msgid "Yes"
-#~ msgstr "Ja"
 
 #~ msgid "yes"
 #~ msgstr "ja"
