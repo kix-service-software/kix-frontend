@@ -7,7 +7,6 @@ import { ProfilingService } from '../ProfilingService';
 import { Error } from '../../../model';
 import { AuthenticationService } from './AuthenticationService';
 import { CacheService } from '../../../cache';
-import { PermissionTypeBrowserFactory } from '../../../browser/permission';
 import { PermissionError } from '../../../model/PermissionError';
 
 export class HttpService {
@@ -107,8 +106,9 @@ export class HttpService {
         let cacheKey: string;
         if (useCache) {
             cacheKey = this.buildCacheKey(resource, queryParameters, token);
-            if (await CacheService.getInstance().has(cacheKey, cacheKeyPrefix)) {
-                return await CacheService.getInstance().get(cacheKey, cacheKeyPrefix);
+            const cachedObject = await CacheService.getInstance().get(cacheKey, cacheKeyPrefix);
+            if (cachedObject) {
+                return cachedObject;
             }
         }
 
