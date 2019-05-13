@@ -193,6 +193,63 @@ describe('Permission Service', () => {
         });
     });
 
+    describe('UI components permission filter for components with multiplie resource permissions', () => {
+
+        let uiComponents = [];
+        let originalOptionsMethod;
+
+        before(() => {
+            uiComponents = [
+                new UIComponent('organisations-create', 'ticket-create', [
+                    new UIComponentPermission('tickets', [CRUD.CREATE]),
+                    new UIComponentPermission('organisations', [CRUD.READ])
+                ]),
+                new UIComponent('tickets-update', 'ticket-update', [
+                    new UIComponentPermission('tickets', [CRUD.UPDATE])
+                ]),
+                new UIComponent('contacts-details', 'contacts-details', [
+                    new UIComponentPermission('contacts', [CRUD.READ])
+                ]),
+                new UIComponent('tickets-info', 'ticket-info', [
+                    new UIComponentPermission('tickets', [CRUD.READ]),
+                    new UIComponentPermission('organisations', [CRUD.READ]),
+                    new UIComponentPermission('contacts', [CRUD.READ])
+                ]),
+                new UIComponent('tickets-info-2', 'ticket-info-2', [
+                    new UIComponentPermission('tickets', [CRUD.READ]),
+                    new UIComponentPermission('organisations', [CRUD.READ]),
+                    new UIComponentPermission('contacts', [CRUD.READ, CRUD.UPDATE])
+                ]),
+                new UIComponent('contact-info-2', 'contact-info-2', [
+                    new UIComponentPermission('organisations', [CRUD.READ]),
+                    new UIComponentPermission('contacts', [CRUD.READ])
+                ])
+            ];
+
+            originalOptionsMethod = HttpService.getInstance().options;
+            HttpService.getInstance().options = async (token: string, resource: string): Promise<OptionsResponse> => {
+                if (resource === 'tickets') {
+                    return createOptionsResponse([RequestMethod.GET]);
+                } else if (resource === 'organisations') {
+                    return createOptionsResponse([RequestMethod.GET]);
+                } else if (resource === 'contacts') {
+                    return createOptionsResponse([RequestMethod.GET]);
+                }
+            };
+        });
+
+        after(() => {
+            HttpService.getInstance().options = originalOptionsMethod;
+        })
+
+        it('Should retrieve tags where the user has permissions for the resources.', async () => {
+            const filteredComponents = await PermissionService.getInstance().filterUIComponents('test-token-1234', uiComponents);
+            expect(filteredComponents).exist;
+            expect(filteredComponents).be.an('array');
+            expect(filteredComponents.length).equals(4);
+        });
+    });
+
 });
 
 function createOptionsResponse(methods: RequestMethod[]): OptionsResponse {

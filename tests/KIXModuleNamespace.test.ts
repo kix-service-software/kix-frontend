@@ -79,17 +79,17 @@ describe('KIXModuleNamespace', () => {
         });
 
         it('TestExtension2 should contain 2 init components.', () => {
-            const uiModule = socketRespopnse.data.modules.find((m) => m.id === 'TestExtension1');
+            const uiModule = socketRespopnse.data.modules.find((m) => m.id === 'TestExtension2');
             expect(uiModule.initComponents).exist;
             expect(uiModule.initComponents).an('array');
             expect(uiModule.initComponents.length).equals(2);
         });
 
         it('TestExtension2 should contain 3 ui components.', () => {
-            const uiModule = socketRespopnse.data.modules.find((m) => m.id === 'TestExtension1');
+            const uiModule = socketRespopnse.data.modules.find((m) => m.id === 'TestExtension2');
             expect(uiModule.uiComponents).exist;
             expect(uiModule.uiComponents).an('array');
-            expect(uiModule.uiComponents.length).equals(3);
+            expect(uiModule.uiComponents.length).equals(4);
         });
     });
 
@@ -158,7 +158,7 @@ class TestExtension2 implements IKIXModuleExtension {
     ];
 
     uiComponents: UIComponent[] = [
-        new UIComponent('organisations-create', 'ticket-create', [
+        new UIComponent('organisations-create', 'organisations-create', [
             new UIComponentPermission('tickets', [CRUD.CREATE]),
             new UIComponentPermission('organisations', [CRUD.READ])
         ]),
