@@ -54,8 +54,11 @@ describe('Permission Service', () => {
             new UIComponent('test-tag-05', '/somwhere/tag03', [new UIComponentPermission('faq', [CRUD.READ]),]),
             new UIComponent('test-tag-06', '/somwhere/tag04', [new UIComponentPermission('cmdb', [CRUD.DELETE]),])
         ];
+        let originalOptionsMethod;
 
         before(() => {
+
+            originalOptionsMethod = HttpService.getInstance().options;
             HttpService.getInstance().options = async (token: string, resource: string): Promise<OptionsResponse> => {
                 if (resource === 'tickets') {
                     return createOptionsResponse([RequestMethod.GET]);
@@ -66,6 +69,10 @@ describe('Permission Service', () => {
                 }
             };
         });
+
+        after(() => {
+            HttpService.getInstance().options = originalOptionsMethod;
+        })
 
         it('Should retrieve tags where the user has READ permissions for the resource ticket.', async () => {
             const filteredComponents = await PermissionService.getInstance().filterUIComponents('test-token-1234', uiComponents);
@@ -78,6 +85,7 @@ describe('Permission Service', () => {
     describe('UI components permission filter for tickets (CR)', () => {
 
         let uiComponents = [];
+        let originalOptionsMethod;
 
         before(() => {
             uiComponents = [
@@ -87,6 +95,7 @@ describe('Permission Service', () => {
                 new UIComponent('test-tag-04', '/somwhere/tag04', [new UIComponentPermission('cmdb', [CRUD.DELETE]),])
             ];
 
+            originalOptionsMethod = HttpService.getInstance().options;
             HttpService.getInstance().options = async (token: string, resource: string): Promise<OptionsResponse> => {
                 if (resource === 'tickets') {
                     return createOptionsResponse([RequestMethod.GET, RequestMethod.POST]);
@@ -97,6 +106,10 @@ describe('Permission Service', () => {
                 }
             };
         });
+
+        after(() => {
+            HttpService.getInstance().options = originalOptionsMethod;
+        })
 
         it('Should retrieve tags where the user has READ permissions for the resource ticket.', async () => {
             const filteredComponents = await PermissionService.getInstance().filterUIComponents('test-token-1234', uiComponents);
@@ -110,6 +123,7 @@ describe('Permission Service', () => {
     describe('UI components permission filter for components without defined permission', () => {
 
         let uiComponents = [];
+        let originalOptionsMethod;
 
         before(() => {
             uiComponents = [
@@ -118,12 +132,17 @@ describe('Permission Service', () => {
                 new UIComponent('test-tag-02', '/somwhere/tag02', [new UIComponentPermission('tickets', [CRUD.DELETE]),])
             ];
 
+            originalOptionsMethod = HttpService.getInstance().options;
             HttpService.getInstance().options = async (token: string, resource: string): Promise<OptionsResponse> => {
                 if (resource === 'tickets') {
                     return createOptionsResponse([RequestMethod.GET]);
                 }
             };
         });
+
+        after(() => {
+            HttpService.getInstance().options = originalOptionsMethod;
+        })
 
         it('Should retrieve tags where the user has READ permissions for the resource ticket.', async () => {
             const filteredComponents = await PermissionService.getInstance().filterUIComponents('test-token-1234', uiComponents);
@@ -136,6 +155,7 @@ describe('Permission Service', () => {
     describe('UI components permission filter for components with multiplie resource permissions', () => {
 
         let uiComponents = [];
+        let originalOptionsMethod;
 
         before(() => {
             uiComponents = [
@@ -147,6 +167,7 @@ describe('Permission Service', () => {
                 new UIComponent('other-component', 'resource', [new UIComponentPermission('faq', [CRUD.READ])])
             ];
 
+            originalOptionsMethod = HttpService.getInstance().options;
             HttpService.getInstance().options = async (token: string, resource: string): Promise<OptionsResponse> => {
                 if (resource === 'tickets') {
                     return createOptionsResponse([RequestMethod.GET]);
@@ -159,6 +180,10 @@ describe('Permission Service', () => {
                 }
             };
         });
+
+        after(() => {
+            HttpService.getInstance().options = originalOptionsMethod;
+        })
 
         it('Should retrieve tags where the user has READ permissions for the resource ticket.', async () => {
             const filteredComponents = await PermissionService.getInstance().filterUIComponents('test-token-1234', uiComponents);

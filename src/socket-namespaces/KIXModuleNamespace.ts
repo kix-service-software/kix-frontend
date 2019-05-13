@@ -5,7 +5,7 @@ import {
     KIXModulesEvent, LoadKIXModulesRequest, LoadKIXModulesResponse,
     LoadFormConfigurationsRequest, LoadFormConfigurationsResponse
 } from '../core/model';
-import { KIXExtensions, IKIXModuleExtension } from '../core/extensions';
+import { KIXExtensions, IKIXModuleExtension, KIXModuleFactory } from '../core/extensions';
 import { PluginService, PermissionService } from '../services';
 import { ConfigurationService } from '../core/services';
 
@@ -40,24 +40,17 @@ export class KIXModuleNamespace extends SocketNameSpace {
         return new Promise<SocketResponse<LoadKIXModulesResponse>>((resolve, reject) => {
             PluginService.getInstance().getExtensions<IKIXModuleExtension>(KIXExtensions.MODULES)
                 .then(async (modules) => {
-                    const packageJson = require('../../package.json');
-                    const version = packageJson.version;
-                    const prePath = '/@kix/frontend$' + version + '/dist/components/';
-
-                    const tags: Array<[string, string]> = [];
+                    const createPromises: Array<Promise<IKIXModuleExtension>> = [];
                     for (const uiModule of modules) {
-                        const components = await PermissionService.getInstance().filterUIComponents(
-                            data.token, [...uiModule.getUIComponents(), ...uiModule.initComponents]
-                        );
-
-                        components.forEach(
-                            (uic) => tags.push([uic.tagId, prePath + uic.componentPath])
-                        );
+                        createPromises.push(KIXModuleFactory.getInstance().create(data.token, uiModule));
                     }
+
+                    const uiModules = await Promise.all(createPromises);
 
                     resolve(
                         new SocketResponse(
-                            KIXModulesEvent.LOAD_MODULES_FINISHED, new LoadKIXModulesResponse(data.requestId, modules)
+                            KIXModulesEvent.LOAD_MODULES_FINISHED,
+                            new LoadKIXModulesResponse(data.requestId, uiModules)
                         )
                     );
                 });
