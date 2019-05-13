@@ -17,6 +17,7 @@ import { ComponentInput } from './ComponentInput';
 import { AgentService } from '../../core/browser/application/AgentService';
 import { SysConfigService } from '../../core/browser/sysconfig';
 import { TranslationBrowserFactory } from '../../core/browser/i18n';
+import { UIComponent } from '../../core/model/UIComponent';
 
 class Component {
 
@@ -55,8 +56,10 @@ class Component {
         await KIXModulesService.getInstance().init();
 
         const modules = KIXModulesService.getInstance().getModules();
-        modules.forEach((m) => {
-            this.state.moduleTemplates.push(ComponentsService.getInstance().getComponentTemplate(m.initComponentIds));
+        modules.map((m) => m.initComponents).forEach((ic: UIComponent[]) => {
+            ic.forEach((c) =>
+                this.state.moduleTemplates.push(ComponentsService.getInstance().getComponentTemplate(c.componentPath))
+            );
         });
 
         ContextService.getInstance().registerListener({

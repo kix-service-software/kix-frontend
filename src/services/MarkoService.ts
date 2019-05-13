@@ -40,7 +40,8 @@ export class MarkoService {
                 prePath = 'require: ../../../node_modules/';
             }
 
-            for (const uiComponent of kixModule.getUIComponents()) {
+            const components = [...kixModule.getUIComponents(), ...kixModule.initComponents];
+            for (const uiComponent of components) {
                 const dependency = prePath + uiComponent.componentPath;
                 const exists = browserJSON.dependencies.find((d) => d === dependency);
                 if (!exists) {

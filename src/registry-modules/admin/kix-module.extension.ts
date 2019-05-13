@@ -1,22 +1,31 @@
 import { IKIXModuleExtension } from "../../core/extensions";
+import { UIComponent } from "../../core/model/UIComponent";
 
 class KIXModuleExtension implements IKIXModuleExtension {
 
-    public initComponentIds: string = 'admin-module-component';
+    public initComponents: UIComponent[] = [
+        new UIComponent('admin-module-component', 'admin/admin-module-component', [])
+    ];
 
     public external: boolean = false;
 
-    public tags: Array<[string, string]> = [
-        ['admin-module-component', 'admin/admin-module-component'],
-        ['admin', 'admin/admin-module'],
-        ['admin-modules-explorer', 'admin/widgets/admin-modules-explorer'],
-        ['i18n-admin-translations', 'i18n/admin/i18n-admin-translations'],
-        ['new-translation-dialog', 'i18n/admin/dialogs/new-translation-dialog'],
-        ['edit-translation-dialog', 'i18n/admin/dialogs/edit-translation-dialog'],
-        ['i18n-translation-language-list-widget', 'i18n/admin/widgets/i18n-translation-language-list-widget'],
-        ['i18n-translation-info-widget', 'i18n/admin/widgets/i18n-translation-info-widget'],
-        ['communication-admin-system-addresses', 'communication/admin/communication-admin-system-addresses']
-    ];
+    public getUIComponents(): UIComponent[] {
+        return [
+            new UIComponent('admin', 'admin/admin-module', []),
+            new UIComponent('admin-modules-explorer', 'admin/widgets/admin-modules-explorer', []),
+            new UIComponent('i18n-admin-translations', 'i18n/admin/i18n-admin-translations', []),
+            new UIComponent('new-translation-dialog', 'i18n/admin/dialogs/new-translation-dialog', []),
+            new UIComponent('edit-translation-dialog', 'i18n/admin/dialogs/edit-translation-dialog', []),
+            new UIComponent(
+                'i18n-translation-language-list-widget', 'i18n/admin/widgets/i18n-translation-language-list-widget', []
+            ),
+            new UIComponent(
+                'i18n-translation-info-widget', 'i18n/admin/widgets/i18n-translation-info-widget', []),
+            new UIComponent(
+                'communication-admin-system-addresses', 'communication/admin/communication-admin-system-addresses', []
+            )
+        ];
+    }
 
 }
 

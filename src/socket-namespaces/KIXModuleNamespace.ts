@@ -6,7 +6,7 @@ import {
     LoadFormConfigurationsRequest, LoadFormConfigurationsResponse
 } from '../core/model';
 import { KIXExtensions, IKIXModuleExtension } from '../core/extensions';
-import { PluginService } from '../services';
+import { PluginService, PermissionService } from '../services';
 import { ConfigurationService } from '../core/services';
 
 export class KIXModuleNamespace extends SocketNameSpace {
@@ -39,17 +39,21 @@ export class KIXModuleNamespace extends SocketNameSpace {
 
         return new Promise<SocketResponse<LoadKIXModulesResponse>>((resolve, reject) => {
             PluginService.getInstance().getExtensions<IKIXModuleExtension>(KIXExtensions.MODULES)
-                .then((modules) => {
+                .then(async (modules) => {
                     const packageJson = require('../../package.json');
                     const version = packageJson.version;
                     const prePath = '/@kix/frontend$' + version + '/dist/components/';
 
                     const tags: Array<[string, string]> = [];
-                    modules.forEach(
-                        (m) => m.getUIComponents().forEach(
+                    for (const uiModule of modules) {
+                        const components = await PermissionService.getInstance().filterUIComponents(
+                            data.token, [...uiModule.getUIComponents(), ...uiModule.initComponents]
+                        );
+
+                        components.forEach(
                             (uic) => tags.push([uic.tagId, prePath + uic.componentPath])
-                        )
-                    );
+                        );
+                    }
 
                     resolve(
                         new SocketResponse(

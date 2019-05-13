@@ -1,5 +1,5 @@
 import { UIComponent } from "../core/model/UIComponent";
-import { HttpService, LoggingService } from "../core/services";
+import { HttpService } from "../core/services";
 import { UIComponentPermission } from "../core/model/UIComponentPermission";
 
 export class PermissionService {
@@ -17,17 +17,14 @@ export class PermissionService {
 
     public async filterUIComponents(token: string, uiComponents: UIComponent[]): Promise<UIComponent[]> {
         const components: UIComponent[] = [];
-        const permissionChecks: Array<Promise<boolean>> = [];
         for (const component of uiComponents) {
+            const permissionChecks: Array<Promise<boolean>> = [];
             component.permissions.forEach((p) => {
                 permissionChecks.push(this.methodAllowed(token, p));
             });
-        }
-        const checks = await Promise.all(permissionChecks);
-
-        for (let i = 0; i < uiComponents.length; i++) {
-            if (checks[i]) {
-                components.push(uiComponents[i]);
+            const checks = await Promise.all(permissionChecks);
+            if (!checks.some((c) => !c)) {
+                components.push(component);
             }
         }
 
@@ -35,12 +32,16 @@ export class PermissionService {
     }
 
     private async  methodAllowed(token: string, permission: UIComponentPermission): Promise<boolean> {
-        const response = await HttpService.getInstance().options(token, permission.target)
-            .catch((error) => {
-                console.error(error);
-                return null;
-            });
-        return response !== null && (response.headers.AllowPermissionValue & permission.value) > 0;
+        if (permission.permissions && permission.permissions.length) {
+            const response = await HttpService.getInstance().options(token, permission.target)
+                .catch((error) => {
+                    console.error(error);
+                    return null;
+                });
+            return response !== null && (response.headers.AllowPermissionValue & permission.value) > 0;
+        }
+
+        return true;
     }
 
 }
