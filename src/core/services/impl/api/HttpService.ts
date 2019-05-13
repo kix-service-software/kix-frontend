@@ -118,7 +118,7 @@ export class HttpService {
             method: RequestMethod.OPTIONS
         };
 
-        const response = this.executeRequest(resource, token, null, options);
+        const response = await this.executeRequest<Response>(resource, token, null, options);
         return new OptionsResponse(response);
     }
 

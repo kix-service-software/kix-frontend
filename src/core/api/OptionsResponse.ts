@@ -4,7 +4,7 @@ export class OptionsResponse {
 
     public headers: OptionsResponseHeader;
 
-    public constructor(response: any) {
+    public constructor(response: Response) {
         this.headers = new OptionsResponseHeader(response.headers);
     }
 }

@@ -1,14 +1,13 @@
 import { RequestMethod } from "./RequestMethod";
 import { CRUD } from "../model";
-import { ValueState } from "../browser";
 
 export class OptionsResponseHeader {
 
     public Allow: RequestMethod[] = [];
 
-    public AllowPermission: CRUD = 0;
+    public AllowPermissionValue: CRUD = 0;
 
-    public constructor(headers: any) {
+    public constructor(headers: Headers) {
         if (headers['Allow']) {
             this.Allow = headers['Allow'].split(',');
 
@@ -24,7 +23,7 @@ export class OptionsResponseHeader {
                     value = CRUD.DELETE;
                 }
 
-                this.AllowPermission = this.AllowPermission || value;
+                this.AllowPermissionValue = this.AllowPermissionValue | value;
             });
         }
     }
