@@ -3,6 +3,8 @@ import { UIComponent } from "../../core/model/UIComponent";
 
 class Extension implements IKIXModuleExtension {
 
+    public tags: Array<[string, string]>;
+
     public id = 'user-module';
 
     public initComponents: UIComponent[] = [

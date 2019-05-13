@@ -118,12 +118,12 @@ export class HttpService {
             method: RequestMethod.OPTIONS
         };
 
-        const response = await this.executeRequest<Response>(resource, token, null, options);
+        const response = await this.executeRequest<Response>(resource, token, null, options, true);
         return new OptionsResponse(response);
     }
 
     private executeRequest<T>(
-        resource: string, token: string, clientRequestId: string, options: any
+        resource: string, token: string, clientRequestId: string, options: any, fullResponse: boolean = false
     ): Promise<T> {
         const backendToken = AuthenticationService.getInstance().getBackendToken(token);
 
@@ -135,6 +135,10 @@ export class HttpService {
         };
         options.json = true;
         options.ca = this.backendCertificate;
+
+        if (fullResponse) {
+            options.resolveWithFullResponse = true;
+        }
 
         let parameter = '';
         if (options.method === 'GET') {

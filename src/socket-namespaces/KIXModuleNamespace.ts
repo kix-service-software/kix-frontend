@@ -6,7 +6,7 @@ import {
     LoadFormConfigurationsRequest, LoadFormConfigurationsResponse
 } from '../core/model';
 import { KIXExtensions, IKIXModuleExtension, KIXModuleFactory } from '../core/extensions';
-import { PluginService, PermissionService } from '../services';
+import { PluginService } from '../services';
 import { ConfigurationService } from '../core/services';
 
 export class KIXModuleNamespace extends SocketNameSpace {

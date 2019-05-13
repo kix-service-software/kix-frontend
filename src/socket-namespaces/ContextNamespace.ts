@@ -72,8 +72,8 @@ export class ContextNamespace extends SocketNameSpace {
 
     }
 
-    private saveContextConfiguration(data: SaveContextConfigurationRequest): Promise<SocketResponse<void>> {
-        return new Promise<SocketResponse<void>>((resolve, reject) => {
+    private saveContextConfiguration(data: SaveContextConfigurationRequest): Promise<SocketResponse> {
+        return new Promise<SocketResponse>((resolve, reject) => {
             UserService.getInstance().getUserByToken(data.token).then((user) => {
                 const userId = user && user.UserID;
 
@@ -85,7 +85,7 @@ export class ContextNamespace extends SocketNameSpace {
         });
     }
 
-    private async saveWidgetConfiguration(data: SaveWidgetRequest): Promise<SocketResponse<void>> {
+    private async saveWidgetConfiguration(data: SaveWidgetRequest): Promise<SocketResponse> {
         const user = await UserService.getInstance().getUserByToken(data.token);
         const userId = user && user.UserID;
 

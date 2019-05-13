@@ -108,11 +108,13 @@ function createOptionsResponse(methods: RequestMethod[]): OptionsResponse {
 
 class TestExtension1 implements IKIXModuleExtension {
 
-    id = 'TestExtension1';
+    public tags: Array<[string, string]>;
 
-    external: boolean = false;
+    public id = 'TestExtension1';
 
-    initComponents: UIComponent[] = [
+    public external: boolean = false;
+
+    public initComponents: UIComponent[] = [
         new UIComponent('tickets-module', 'ticket-component', [
             new UIComponentPermission('tickets', [CRUD.READ])
         ]),
@@ -121,7 +123,7 @@ class TestExtension1 implements IKIXModuleExtension {
         ])
     ];
 
-    uiComponents: UIComponent[] = [
+    public uiComponents: UIComponent[] = [
         new UIComponent('tickets-create', 'ticket-create', [
             new UIComponentPermission('tickets', [CRUD.CREATE])
         ]),
@@ -141,11 +143,13 @@ class TestExtension1 implements IKIXModuleExtension {
 
 class TestExtension2 implements IKIXModuleExtension {
 
-    id = 'TestExtension2';
+    public tags: Array<[string, string]>;
 
-    external: boolean = false;
+    public id = 'TestExtension2';
 
-    initComponents: UIComponent[] = [
+    public external: boolean = false;
+
+    public initComponents: UIComponent[] = [
         new UIComponent('organisations-module', 'organisations-component', [
             new UIComponentPermission('organisations', [CRUD.READ])
         ]),
@@ -157,7 +161,7 @@ class TestExtension2 implements IKIXModuleExtension {
         ])
     ];
 
-    uiComponents: UIComponent[] = [
+    public uiComponents: UIComponent[] = [
         new UIComponent('organisations-create', 'organisations-create', [
             new UIComponentPermission('tickets', [CRUD.CREATE]),
             new UIComponentPermission('organisations', [CRUD.READ])

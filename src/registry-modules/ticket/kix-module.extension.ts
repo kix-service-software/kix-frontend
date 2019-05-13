@@ -5,13 +5,30 @@ import { CRUD } from "../../core/model";
 
 class Extension implements IKIXModuleExtension {
 
+    public tags: Array<[string, string]>;
+
     public id = 'ticket-module';
 
     public initComponents: UIComponent[] = [
-        new UIComponent('ticket-module-component', 'ticket/ticket-module-component',
+        new UIComponent('ticket-read-module-component', 'ticket/module/ticket-read-module-component',
             [
                 new UIComponentPermission('tickets', [CRUD.READ])
             ]
+        ),
+        new UIComponent('ticket-create-module-component', 'ticket/module/ticket-create-module-component',
+            [
+                new UIComponentPermission('tickets', [CRUD.CREATE])
+            ]
+        ),
+        new UIComponent('ticket-update-module-component', 'ticket/module/ticket-update-module-component',
+            [
+                new UIComponentPermission('tickets', [CRUD.UPDATE])
+            ]
+        ),
+        new UIComponent(
+            'ticket-article-create-module-component',
+            'ticket/module/ticket-article-create-module-component',
+            []
         )
     ];
 
