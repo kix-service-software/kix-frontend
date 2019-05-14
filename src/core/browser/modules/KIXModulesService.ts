@@ -21,7 +21,7 @@ export class KIXModulesService {
         this.modules = await KIXModulesSocketClient.getInstance().loadModules();
 
         let tags = [];
-        this.modules.forEach((m) => tags = [...tags, ...m.tags]);
+        this.modules.forEach((m) => tags = [...tags, ...m.uiComponents.map((c) => [c.tagId, c.componentPath])]);
         ComponentsService.getInstance().init(tags);
     }
 

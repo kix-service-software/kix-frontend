@@ -10,6 +10,4 @@ export interface IKIXModuleExtension {
 
     uiComponents: UIComponent[];
 
-    tags: Array<[string, string]>;
-
 }
