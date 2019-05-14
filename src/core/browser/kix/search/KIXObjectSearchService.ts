@@ -162,9 +162,7 @@ export class KIXObjectSearchService {
 
         const searchDefinition = this.getSearchDefinition(objectType);
         const criteria = searchDefinition.prepareSearchFormValue(SearchProperty.FULLTEXT, searchValue);
-
         const loadingOptions = searchDefinition.getLoadingOptions(criteria);
-        loadingOptions.searchValue = searchValue;
 
         const objects = await this.doSearch(objectType, loadingOptions);
 

@@ -1,5 +1,5 @@
 import { ILabelProvider } from '../../../../core/browser';
-import { AbstractAction, Ticket, WidgetComponentState } from '../../../../core/model';
+import { AbstractAction, Ticket, WidgetComponentState, Organisation, Contact } from '../../../../core/model';
 
 export class ComponentState extends WidgetComponentState<any> {
 
@@ -9,8 +9,10 @@ export class ComponentState extends WidgetComponentState<any> {
         public isAccountTimeEnabled: boolean = false,
         public labelProvider: ILabelProvider<Ticket> = null,
         public actions: AbstractAction[] = [],
-        public customerInfoGroups: string[] = null,
-        public contactInfoGroups: string[] = null
+        public organisationProperties: string[] = null,
+        public contactProperties: string[] = null,
+        public organisation: Organisation = null,
+        public contact: Contact = null
     ) {
         super();
     }

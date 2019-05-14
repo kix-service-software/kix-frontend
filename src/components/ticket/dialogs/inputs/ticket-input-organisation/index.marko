@@ -1,0 +1,13 @@
+<if(state.loading)>
+    <loading-spinner/>
+</if>
+<else>
+    <form-list
+        readonly=(!state.hasContact || state.field.readonly)
+        selectedNodes=[state.currentNode]
+        nodes=state.nodes
+        placeholder=state.placeholder
+        on-focusLost("focusLost")
+        on-nodesChanged("organisationChanged")
+        invalid=state.invalid/>
+</else>

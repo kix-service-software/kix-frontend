@@ -7,7 +7,7 @@ import {
 import { FormGroup } from '../../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../../core/services';
 import { NewUserDialogContext } from '../../../core/browser/user';
-import { SearchOperator } from '../../../core/browser';
+import { SearchOperator, FormValidationService } from '../../../core/browser';
 
 export class Extension implements IConfigurationExtension {
 
@@ -62,7 +62,9 @@ export class Extension implements IConfigurationExtension {
                 ),
                 new FormField(
                     'Translatable#Email', UserProperty.USER_EMAIL, null, true,
-                    'Translatable#Insert the email address for the user.'
+                    'Translatable#Insert the email address for the user.',
+                    null, null, null, null, null, null, null, null,
+                    FormValidationService.EMAIL_REGEX, FormValidationService.EMAIL_REGEX_ERROR_MESSAGE
                 ),
                 new FormField(
                     'Translatable#Comment', UserProperty.USER_COMMENT, 'text-area-input', false,

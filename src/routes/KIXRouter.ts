@@ -3,7 +3,7 @@ import { Request, Response, Router } from 'express';
 import { IRouter } from './IRouter';
 import { IServerConfiguration } from '../core/common';
 import {
-    ProfilingService, ConfigurationService, ValidObjectService, ContactService, CustomerService, ObjectDefinitionService
+    ProfilingService, ConfigurationService, ValidObjectService, ObjectDefinitionService
 } from '../core/services';
 import { ObjectData, ReleaseInfo, KIXObjectType, ValidObject } from '../core/model';
 
@@ -84,24 +84,6 @@ export abstract class KIXRouter implements IRouter {
             token, null, KIXObjectType.VALID_OBJECT, null, null, null
         ).catch(() => []);
 
-        const contactAttributeMapping = await ContactService.getInstance().getAttributeMapping(token)
-            .catch(() => null);
-        const contactAttributes: Array<[string, string]> = [];
-        if (contactAttributeMapping) {
-            contactAttributeMapping
-                .filter((cam) => cam.Searchable)
-                .forEach((cam) => contactAttributes.push([cam.Attribute, cam.Label]));
-        }
-
-        const customerAttributeMapping = await CustomerService.getInstance().getAttributeMapping(token)
-            .catch(() => null);
-        const customerAttributes: Array<[string, string]> = [];
-        if (customerAttributeMapping) {
-            customerAttributeMapping
-                .filter((cam) => cam.Searchable)
-                .forEach((cam) => customerAttributes.push([cam.Attribute, cam.Label]));
-        }
-
         // TODO: hier oder wo gebraucht aus den objectDefinitions ermitteln
         const faqVisibilities: Array<[string, string]> = [
             ["internal", "Translatable#internal"],
@@ -121,7 +103,6 @@ export abstract class KIXRouter implements IRouter {
 
         const objectData = new ObjectData(
             validObjects,
-            contactAttributes, customerAttributes,
             faqVisibilities,
             objectDefinitions,
             bookmarks,

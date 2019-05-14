@@ -55,8 +55,8 @@ export class Server {
         this.application = express();
 
         this.application.use(compression());
-        this.application.use(bodyParser.json());
-        this.application.use(bodyParser.urlencoded({ extended: true }));
+        this.application.use(bodyParser.json({ limit: '50mb', extended: true }));
+        this.application.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
         this.application.use(cookieParser());
 
         const httpsPort = this.serverConfig.HTTPS_PORT || 3001;

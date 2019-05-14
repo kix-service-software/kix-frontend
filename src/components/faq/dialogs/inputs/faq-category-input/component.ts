@@ -34,7 +34,7 @@ class Component extends FormInputComponent<number[], ComponentState> {
                 FAQCategoryProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, null
             )
         ];
-        const loadingOptions = new KIXObjectLoadingOptions(null, categoryFilter, null, null, null,
+        const loadingOptions = new KIXObjectLoadingOptions(null, categoryFilter, null, null,
             ['SubCategories', 'Articles'], ['SubCategories']
         );
 

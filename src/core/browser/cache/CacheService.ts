@@ -99,7 +99,7 @@ export class CacheService {
                 cacheKeyPrefixes.push(KIXObjectType.TICKET);
                 break;
             case KIXObjectType.TICKET:
-                cacheKeyPrefixes.push(KIXObjectType.CUSTOMER);
+                cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
                 cacheKeyPrefixes.push(KIXObjectType.CONTACT);
                 break;
             case KIXObjectType.FAQ_VOTE:
@@ -126,6 +126,11 @@ export class CacheService {
                 cacheKeyPrefixes.push(KIXObjectType.FAQ_ARTICLE);
                 cacheKeyPrefixes.push(KIXObjectType.LINK);
                 cacheKeyPrefixes.push(KIXObjectType.LINK_OBJECT);
+                break;
+            case KIXObjectType.CONTACT:
+                cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
+                cacheKeyPrefixes.push(KIXObjectType.CONTACT);
+                cacheKeyPrefixes.push(KIXObjectType.TICKET);
                 break;
             case KIXObjectType.PERMISSION:
             case KIXObjectType.ROLE:

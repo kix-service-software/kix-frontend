@@ -1,5 +1,5 @@
 import { IKIXObjectFactory } from "../kix";
-import { Contact, ContactFactory } from "../../model";
+import { Contact } from "../../model";
 
 export class ContactBrowserFactory implements IKIXObjectFactory<Contact> {
 
@@ -13,7 +13,7 @@ export class ContactBrowserFactory implements IKIXObjectFactory<Contact> {
     }
 
     public async create(contact: Contact): Promise<Contact> {
-        return ContactFactory.create(contact);
+        return new Contact(contact);
     }
 
 }

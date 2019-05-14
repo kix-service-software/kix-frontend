@@ -1,6 +1,5 @@
 export { ContactResponse } from './ContactResponse';
 export { ContactsResponse } from './ContactsResponse';
-export { ContactSourcesResponse } from './ContactSourcesResponse';
 export { CreateContact } from './CreateContact';
 export { CreateContactResponse } from './CreateContactResponse';
 export { CreateContactRequest } from './CreateContactRequest';

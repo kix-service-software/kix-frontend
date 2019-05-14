@@ -1,4 +1,4 @@
-import { ObjectIcon, Contact, ContactProperty, Customer, KIXObjectType } from '../../model';
+import { ObjectIcon, Contact, ContactProperty, Organisation, KIXObjectType, KIXObjectProperty } from '../../model';
 import { ILabelProvider } from '..';
 import { KIXObjectService } from '../kix';
 import { SearchProperty } from '../SearchProperty';
@@ -20,7 +20,7 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
         const objectData = ObjectDataService.getInstance().getObjectData();
         if (objectData) {
             switch (property) {
-                case ContactProperty.VALID_ID:
+                case KIXObjectProperty.VALID_ID:
                     const valid = objectData.validObjects.find((v) => v.ID === value);
                     displayValue = valid ? valid.Name : value;
                     break;
@@ -45,58 +45,58 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
             case SearchProperty.FULLTEXT:
                 displayValue = 'Translatable#Full Text';
                 break;
-            case ContactProperty.ContactID:
+            case ContactProperty.ID:
                 displayValue = 'Translatable#ID';
                 break;
-            case ContactProperty.USER_FIRST_NAME:
+            case ContactProperty.FIRST_NAME:
                 displayValue = 'Translatable#First Name';
                 break;
-            case ContactProperty.USER_LAST_NAME:
+            case ContactProperty.LAST_NAME:
                 displayValue = 'Translatable#Name';
                 break;
-            case ContactProperty.USER_EMAIL:
+            case ContactProperty.EMAIL:
                 displayValue = 'Translatable#Email';
                 break;
-            case ContactProperty.USER_LOGIN:
+            case ContactProperty.LOGIN:
                 displayValue = 'Translatable#Login';
                 break;
-            case ContactProperty.USER_CUSTOMER_IDS:
-                displayValue = 'Translatable#Assigned Customers';
+            case ContactProperty.ORGANISATION_IDS:
+                displayValue = 'Translatable#Assigned Organisations';
                 break;
-            case ContactProperty.USER_CUSTOMER_ID:
-                displayValue = 'Translatable#Customer ID';
+            case ContactProperty.PRIMARY_ORGANISATION_ID:
+                displayValue = 'Translatable#Organisation';
                 break;
-            case ContactProperty.USER_PHONE:
+            case ContactProperty.PHONE:
                 displayValue = 'Translatable#Phone';
                 break;
-            case ContactProperty.USER_FAX:
+            case ContactProperty.FAX:
                 displayValue = 'Translatable#Fax';
                 break;
-            case ContactProperty.USER_MOBILE:
+            case ContactProperty.MOBILE:
                 displayValue = 'Translatable#Cell Phone';
                 break;
-            case ContactProperty.USER_STREET:
+            case ContactProperty.STREET:
                 displayValue = 'Translatable#Street';
                 break;
-            case ContactProperty.USER_CITY:
+            case ContactProperty.CITY:
                 displayValue = 'Translatable#City';
                 break;
-            case ContactProperty.USER_ZIP:
+            case ContactProperty.ZIP:
                 displayValue = 'Translatable#ZIP';
                 break;
-            case ContactProperty.USER_COUNTRY:
+            case ContactProperty.COUNTRY:
                 displayValue = 'Translatable#Country';
                 break;
-            case ContactProperty.USER_TITLE:
+            case ContactProperty.TITLE:
                 displayValue = 'Translatable#Title';
                 break;
-            case ContactProperty.USER_COMMENT:
+            case ContactProperty.COMMENT:
                 displayValue = 'Translatable#Comment';
                 break;
-            case ContactProperty.USER_PASSWORD:
+            case ContactProperty.PASSWORD:
                 displayValue = 'Translatable#Password';
                 break;
-            case ContactProperty.VALID_ID:
+            case KIXObjectProperty.VALID_ID:
                 displayValue = 'Translatable#Validity';
                 break;
             case ContactProperty.OPEN_TICKETS_COUNT:
@@ -137,26 +137,27 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
         const objectData = ObjectDataService.getInstance().getObjectData();
 
         switch (property) {
-            case ContactProperty.VALID_ID:
+            case KIXObjectProperty.VALID_ID:
                 const valid = objectData.validObjects.find((v) => v.ID.toString() === contact[property].toString());
                 displayValue = valid ? valid.Name : contact[property].toString();
                 break;
-            case ContactProperty.USER_CUSTOMER_ID:
-                const mainCustomers = await KIXObjectService.loadObjects<Customer>(
-                    KIXObjectType.CUSTOMER, [contact.UserCustomerID], null, null, true
+            case ContactProperty.PRIMARY_ORGANISATION_ID:
+                const primaryOrganisations = await KIXObjectService.loadObjects<Organisation>(
+                    KIXObjectType.ORGANISATION, [contact.PrimaryOrganisationID], null, null, true
                 ).catch((error) => console.log(error));
-                displayValue = mainCustomers && mainCustomers.length
-                    ? mainCustomers[0].CustomerCompanyName : contact.UserCustomerID;
+                displayValue = primaryOrganisations && primaryOrganisations.length
+                    ? `${primaryOrganisations[0].Name} (${primaryOrganisations[0].Number})`
+                    : contact.PrimaryOrganisationID;
                 break;
-            case ContactProperty.USER_CUSTOMER_IDS:
-                if (contact.UserCustomerIDs && contact.UserCustomerIDs.length) {
-                    const customers = await KIXObjectService.loadObjects<Customer>(
-                        KIXObjectType.CUSTOMER, contact.UserCustomerIDs, null, null, true
+            case ContactProperty.ORGANISATION_IDS:
+                if (contact.OrganisationIDs && contact.OrganisationIDs.length) {
+                    const organisations = await KIXObjectService.loadObjects<Organisation>(
+                        KIXObjectType.ORGANISATION, contact.OrganisationIDs, null, null, true
                     ).catch((error) => console.log(error));
-                    const customerNames = customers && customers.length
-                        ? customers.map((c) => c.CustomerCompanyName)
-                        : contact.UserCustomerIDs;
-                    displayValue = customerNames.join(', ');
+                    const organisationNames = organisations && organisations.length
+                        ? organisations.map((c) => c.Name)
+                        : contact.OrganisationIDs;
+                    displayValue = organisationNames.join(', ');
                 }
                 break;
             case ContactProperty.CREATE_NEW_TICKET:
@@ -205,17 +206,16 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
         let returnString = '';
         if (contact) {
             if (id) {
-                returnString = contact.UserLogin;
+                returnString = contact.Login;
             }
             if (name) {
-                returnString = `${contact.UserFirstname} ${contact.UserLastname}`;
+                returnString = `${contact.Firstname} ${contact.Lastname}`;
             }
             if (id && name) {
-                returnString = `${contact.UserFirstname} ${contact.UserLastname} (${contact.UserLogin})`;
+                returnString = `${contact.Firstname} ${contact.Lastname} (${contact.Login})`;
             }
             if (!id && !name) {
-                returnString = contact.DisplayValue
-                    ? contact.DisplayValue : `${contact.UserFirstname} ${contact.UserLastname} (${contact.UserLogin})`;
+                returnString = `${contact.Firstname} ${contact.Lastname} (${contact.Login})`;
             }
         } else {
             const contactLabel = await TranslationService.translate('Translatable#Contact');

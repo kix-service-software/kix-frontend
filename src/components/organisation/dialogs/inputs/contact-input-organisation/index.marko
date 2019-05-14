@@ -1,0 +1,10 @@
+<form-list
+    placeholder=state.placeholder
+    searchCallback=state.searchCallback
+    autoCompleteConfiguration=state.autoCompleteConfiguration
+    on-focusLost("focusLost")
+    on-nodesChanged("organisationChanged")
+    selectedNodes=[state.currentNode]
+    invalid=state.invalid
+    autocomplete=true
+    readonly=state.field.readonly/>

@@ -33,7 +33,7 @@ export class FAQContext extends Context {
     }
 
     private async loadFAQArticles(): Promise<void> {
-        const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, 1000, ['Votes'], ['Votes']);
+        const loadingOptions = new KIXObjectLoadingOptions(null, null, null, 1000, ['Votes'], ['Votes']);
         if (this.faqCategory) {
             loadingOptions.filter = [new FilterCriteria(
                 FAQArticleProperty.CATEGORY_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,

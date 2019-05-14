@@ -3,7 +3,7 @@ import {
     KIXObjectType, FormFieldValue,
     Form, FormField, ConfigItem, VersionProperty, ConfigItemProperty,
     GeneralCatalogItem, KIXObjectLoadingOptions, FilterCriteria, FilterDataType,
-    FilterType, ConfigItemClass, Contact, Customer, FormFieldOptions, InputFieldTypes
+    FilterType, ConfigItemClass, Contact, Organisation, FormFieldOptions, InputFieldTypes
 } from "../../model";
 import { KIXObjectService } from '../kix/';
 import { LabelService } from "../LabelService";
@@ -230,7 +230,7 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
                     KIXObjectType.CONTACT, [preparedData.Value], null
                 );
                 if (contacts && !!contacts.length) {
-                    value = contacts[0].ContactID;
+                    value = contacts[0].ID;
                 } else {
                     value = new Contact();
                     value.ContactID = preparedData.Value;
@@ -238,12 +238,12 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
                     value.DisplayValue = preparedData.DisplayValue;
                 }
                 break;
-            case 'Customer':
-                const customers = await KIXObjectService.loadObjects<Customer>(
-                    KIXObjectType.CUSTOMER, [preparedData.Value], null
+            case 'Organisation':
+                const organisations = await KIXObjectService.loadObjects<Organisation>(
+                    KIXObjectType.ORGANISATION, [preparedData.Value], null
                 );
-                if (customers && !!customers.length) {
-                    value = customers[0].CustomerID;
+                if (organisations && !!organisations.length) {
+                    value = organisations[0].ID;
                 } else {
                     value = preparedData.Value;
                 }

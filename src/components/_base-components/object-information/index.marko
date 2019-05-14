@@ -1,0 +1,21 @@
+<if(state.object)>
+    <div.object-information>
+        <div.information-list class={
+            "flat-list": state.flat
+        }>
+            <for|property| of=state.properties>
+                <div>
+                    <object-property-label
+                        object=input.object
+                        property=property
+                        labelProvider=state.labelProvider
+                        routingConfiguration=component.getRoutingConfiguration(property)
+                        objectId=input.object.ObjectId/>
+                </div>
+            </for>
+        </div>
+    </div>
+</if>
+<else>
+    <span>${state.missingObjectText}</span>
+</else>

@@ -152,7 +152,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                                 TicketProperty.QUEUE_ID, true, false, true, true, 175, true, true, true
                             ),
                             new DefaultColumnConfiguration(
-                                TicketProperty.CUSTOMER_ID, true, false, true, true, 225, true, true
+                                TicketProperty.ORGANISATION_ID, true, false, true, true, 225, true, true
                             ),
                             new DefaultColumnConfiguration(
                                 TicketProperty.CREATED, true, false, true, true, 155,

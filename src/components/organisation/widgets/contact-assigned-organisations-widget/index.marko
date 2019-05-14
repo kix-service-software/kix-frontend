@@ -1,0 +1,10 @@
+<widget instanceId=state.instanceId title=state.title contentActions=state.actions>
+    <@content>
+        <if(state.table)>
+            <div.organisation-filter>
+                <filter filterCount=state.filterCount on-filter("filter")/>
+            </div>
+            <standard-table-NEW table=state.table/>
+        </if>
+    </@content>
+</widget>

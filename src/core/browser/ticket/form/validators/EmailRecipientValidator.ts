@@ -5,11 +5,9 @@ import {
 import { FormService } from "../../..";
 import { KIXObjectService } from "../../../kix";
 import { ContextService } from "../../../context";
+import { FormValidationService } from "../../../form";
 
 export class EmailRecipientValidator implements IFormFieldValidator {
-
-    // tslint:disable-next-line:max-line-length
-    private EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     public isValidatorFor(formField: FormField, formId: string): boolean {
         return formField.property === ArticleProperty.TO
@@ -25,7 +23,7 @@ export class EmailRecipientValidator implements IFormFieldValidator {
         if (!this.isDefined(toValue)) {
             const context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
             if (context && context.getDescriptor().contextMode === ContextMode.CREATE) {
-                toValue = await formInstance.getFormFieldValueByProperty<string>(TicketProperty.CUSTOMER_USER_ID);
+                toValue = await formInstance.getFormFieldValueByProperty<string>(TicketProperty.CONTACT_ID);
                 checkToValue = false;
             }
         }
@@ -66,9 +64,10 @@ export class EmailRecipientValidator implements IFormFieldValidator {
         if (value && !!value.length) {
             const mailAddresses = value;
             for (const mail of mailAddresses) {
-                if (!this.EMAIL_REGEX.test(mail.trim()) === true) {
+                const regex = new RegExp(FormValidationService.EMAIL_REGEX);
+                if (!regex.test(mail.trim()) === true) {
                     return new ValidationResult(
-                        ValidationSeverity.ERROR, 'Translatable#Inserted email address is invalid.'
+                        ValidationSeverity.ERROR, FormValidationService.EMAIL_REGEX_ERROR_MESSAGE
                     );
                 }
 

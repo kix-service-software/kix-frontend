@@ -2,7 +2,7 @@ export { AuthenticationService } from './AuthenticationService';
 export { ChannelService } from './ChannelService';
 export { ClientRegistrationService } from './ClientRegistrationService';
 export { ContactService } from './ContactService';
-export { CustomerService } from './CustomerService';
+export { OrganisationService } from './OrganisationService';
 export { DynamicFieldService } from './DynamicFieldService';
 export { GeneralCatalogService } from './GeneralCatalogService';
 export { HttpService } from './HttpService';

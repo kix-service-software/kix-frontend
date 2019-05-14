@@ -66,7 +66,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                 ConfigItemProperty.NUMBER, SearchOperator.CONTAINS,
                 FilterDataType.STRING, FilterType.AND, searchValue
             )
-        ], null, null, limit);
+        ], null, limit);
 
         const configItemsByNumber = await KIXObjectService.loadObjects<ConfigItem>(
             KIXObjectType.CONFIG_ITEM, null, loadingOptionsNumber, null, false
@@ -81,7 +81,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                 'CurrentVersion.' + VersionProperty.NAME, SearchOperator.CONTAINS,
                 FilterDataType.STRING, FilterType.AND, searchValue
             )
-        ], null, null, limit);
+        ], null, limit);
 
         const configItemsByName = await KIXObjectService.loadObjects<ConfigItem>(
             KIXObjectType.CONFIG_ITEM, null, loadingOptionsName, null, false

@@ -16,6 +16,7 @@ import { FormGroup } from '../../../../core/model/components/form/FormGroup';
 import { ImportConfigValue } from './ImportConfigValue';
 import { DialogService } from '../../../../core/browser/components/dialog';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
+import { ApplicationEvent } from '../../../../core/browser/application';
 
 class Component {
 
@@ -543,6 +544,7 @@ class Component {
     public submit(): void {
         if (this.state.run) {
             DialogService.getInstance().closeMainDialog();
+            EventService.getInstance().publish(ApplicationEvent.REFRESH);
         }
     }
 

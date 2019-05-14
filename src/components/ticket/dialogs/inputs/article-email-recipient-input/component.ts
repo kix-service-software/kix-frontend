@@ -5,6 +5,7 @@ import {
 } from "../../../../../core/model";
 import { FormService, FormInputAction } from "../../../../../core/browser/form";
 import { KIXObjectService, Label, LabelService, SearchOperator } from "../../../../../core/browser";
+import { ContactService } from "../../../../../core/browser/contact";
 
 class Component extends FormInputComponent<string[], ComponentState> {
 
@@ -31,12 +32,11 @@ class Component extends FormInputComponent<string[], ComponentState> {
             const contactEmails: any[] = Array.isArray(this.state.defaultValue.value)
                 ? this.state.defaultValue.value : [this.state.defaultValue.value];
 
-            // TODO: nicht sehr performant
             const contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, null,
                 new KIXObjectLoadingOptions(
                     null,
                     contactEmails.map((email) => new FilterCriteria(
-                        ContactProperty.USER_EMAIL, SearchOperator.EQUALS, FilterDataType.STRING,
+                        ContactProperty.EMAIL, SearchOperator.EQUALS, FilterDataType.STRING,
                         FilterType.OR, email
                     ))
 
@@ -96,23 +96,29 @@ class Component extends FormInputComponent<string[], ComponentState> {
     }
 
     private async searchContacts(limit: number, searchValue: string): Promise<TreeNode[]> {
-        const loadingOptions = new KIXObjectLoadingOptions(null, null, null, searchValue, limit);
+        const loadingOptions = new KIXObjectLoadingOptions(
+            null, ContactService.getInstance().prepareFullTextFilter(searchValue), null, limit
+        );
         const contacts = await KIXObjectService.loadObjects<Contact>(
             KIXObjectType.CONTACT, null, loadingOptions, null, false
         );
 
         this.state.nodes = [];
         if (searchValue && searchValue !== '') {
-            this.state.nodes = contacts.filter((c) => c.UserEmail).map(
-                (c) => this.createTreeNode(c)
-            );
+            const nodes = [];
+            for (const c of contacts.filter((co) => co.Email)) {
+                const node = await this.createTreeNode(c);
+                nodes.push(node);
+            }
+            this.state.nodes = nodes;
         }
 
         return this.state.nodes;
     }
 
-    private createTreeNode(contact: Contact): TreeNode {
-        return new TreeNode(contact.UserEmail, contact.DisplayValue, 'kix-icon-man-bubble');
+    private async createTreeNode(contact: Contact): Promise<TreeNode> {
+        const displayValue = await LabelService.getInstance().getText(contact);
+        return new TreeNode(contact.Email, displayValue, 'kix-icon-man-bubble');
     }
 
     public async focusLost(event: any): Promise<void> {

@@ -1,6 +1,6 @@
 export { ContactCreateAction } from './ContactCreateAction';
 export { ContactSearchAction } from './ContactSearchAction';
-export { ContactCreateCustomerAction } from './ContactCreateCustomerAction';
+export { ContactCreateOrganisationAction } from './ContactCreateOrganisationAction';
 export { ContactEditAction } from './ContactEditAction';
 export { ContactPrintAction } from './ContactPrintAction';
 export { ContactCreateCIAction } from './ContactCreateCIAction';

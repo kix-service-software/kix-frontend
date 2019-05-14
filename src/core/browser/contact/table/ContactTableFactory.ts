@@ -1,4 +1,6 @@
-import { KIXObjectType, ContextMode, ContactProperty, KIXObjectLoadingOptions } from "../../../model";
+import {
+    KIXObjectType, ContextMode, ContactProperty, KIXObjectLoadingOptions, KIXObjectProperty, DataType
+} from "../../../model";
 import { RoutingConfiguration } from "../../router";
 import { ContactDetailsContext } from "../context";
 import {
@@ -20,7 +22,7 @@ export class ContactTableFactory extends TableFactory {
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, short);
 
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, tableConfiguration.filter, tableConfiguration.sortOrder, null,
+            null, tableConfiguration.filter, tableConfiguration.sortOrder,
             tableConfiguration.limit, ['TicketStats']
         );
 
@@ -36,27 +38,27 @@ export class ContactTableFactory extends TableFactory {
         let tableColumns;
         if (short) {
             tableColumns = [
-                this.getDefaultColumnConfiguration(ContactProperty.USER_FIRST_NAME),
-                this.getDefaultColumnConfiguration(ContactProperty.USER_LAST_NAME),
-                this.getDefaultColumnConfiguration(ContactProperty.USER_EMAIL),
-                this.getDefaultColumnConfiguration(ContactProperty.USER_LOGIN),
-                this.getDefaultColumnConfiguration(ContactProperty.USER_CUSTOMER_ID),
-                this.getDefaultColumnConfiguration(ContactProperty.USER_CITY),
-                this.getDefaultColumnConfiguration(ContactProperty.USER_STREET),
-                this.getDefaultColumnConfiguration(ContactProperty.VALID_ID)
+                this.getDefaultColumnConfiguration(ContactProperty.FIRST_NAME),
+                this.getDefaultColumnConfiguration(ContactProperty.LAST_NAME),
+                this.getDefaultColumnConfiguration(ContactProperty.EMAIL),
+                this.getDefaultColumnConfiguration(ContactProperty.LOGIN),
+                this.getDefaultColumnConfiguration(ContactProperty.PRIMARY_ORGANISATION_ID),
+                this.getDefaultColumnConfiguration(ContactProperty.CITY),
+                this.getDefaultColumnConfiguration(ContactProperty.STREET),
+                this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID)
             ];
         } else {
             tableColumns = [
-                this.getDefaultColumnConfiguration(ContactProperty.USER_FIRST_NAME),
-                this.getDefaultColumnConfiguration(ContactProperty.USER_LAST_NAME),
-                this.getDefaultColumnConfiguration(ContactProperty.USER_EMAIL),
-                this.getDefaultColumnConfiguration(ContactProperty.USER_LOGIN),
-                this.getDefaultColumnConfiguration(ContactProperty.USER_CUSTOMER_ID),
-                this.getDefaultColumnConfiguration(ContactProperty.USER_PHONE),
-                this.getDefaultColumnConfiguration(ContactProperty.USER_COUNTRY),
-                this.getDefaultColumnConfiguration(ContactProperty.USER_CITY),
-                this.getDefaultColumnConfiguration(ContactProperty.USER_STREET),
-                this.getDefaultColumnConfiguration(ContactProperty.VALID_ID)
+                this.getDefaultColumnConfiguration(ContactProperty.FIRST_NAME),
+                this.getDefaultColumnConfiguration(ContactProperty.LAST_NAME),
+                this.getDefaultColumnConfiguration(ContactProperty.EMAIL),
+                this.getDefaultColumnConfiguration(ContactProperty.LOGIN),
+                this.getDefaultColumnConfiguration(ContactProperty.PRIMARY_ORGANISATION_ID),
+                this.getDefaultColumnConfiguration(ContactProperty.PHONE),
+                this.getDefaultColumnConfiguration(ContactProperty.COUNTRY),
+                this.getDefaultColumnConfiguration(ContactProperty.CITY),
+                this.getDefaultColumnConfiguration(ContactProperty.STREET),
+                this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID)
             ];
         }
 
@@ -75,7 +77,7 @@ export class ContactTableFactory extends TableFactory {
         if (defaultRouting) {
             tableConfiguration.routingConfiguration = new RoutingConfiguration(
                 null, ContactDetailsContext.CONTEXT_ID, KIXObjectType.CONTACT,
-                ContextMode.DETAILS, ContactProperty.ContactID
+                ContextMode.DETAILS, ContactProperty.ID
             );
         }
 
@@ -87,16 +89,22 @@ export class ContactTableFactory extends TableFactory {
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
         let config;
         switch (property) {
-            case ContactProperty.USER_EMAIL:
+            case ContactProperty.EMAIL:
                 config = new DefaultColumnConfiguration(property, true, false, true, false, 175, true, true);
                 break;
-            case ContactProperty.USER_PHONE:
-            case ContactProperty.USER_COUNTRY:
-            case ContactProperty.USER_CITY:
+            case ContactProperty.PHONE:
+            case ContactProperty.COUNTRY:
+            case ContactProperty.CITY:
                 config = new DefaultColumnConfiguration(property, true, false, true, false, 130, true, true);
                 break;
-            case ContactProperty.VALID_ID:
+            case KIXObjectProperty.VALID_ID:
                 config = new DefaultColumnConfiguration(property, true, false, true, false, 130, true, true, true);
+                break;
+            case ContactProperty.PRIMARY_ORGANISATION_ID:
+                config = new DefaultColumnConfiguration(
+                    property, true, false, true, false, 150, true, true, true, DataType.STRING, true, null,
+                    'Translatable#Organisation'
+                );
                 break;
             default:
                 config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true);

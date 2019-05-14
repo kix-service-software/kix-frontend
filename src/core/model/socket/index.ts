@@ -1,7 +1,5 @@
 export * from './application';
 export * from './authentication';
-export * from './contact';
-export * from './customer';
 export * from './kix';
 export * from './notes';
 export * from './notifications';
