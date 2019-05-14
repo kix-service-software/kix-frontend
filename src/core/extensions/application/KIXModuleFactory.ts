@@ -27,10 +27,10 @@ export class KIXModuleFactory {
         const version = packageJson.version;
         const prePath = '/@kix/frontend$' + version + '/dist/components/';
 
-        const tags = [];
+        const tags: Array<[string, string]> = [];
 
-        initComponents.forEach((m) => tags.push(prePath + m.componentPath));
-        uiComponents.forEach((m) => tags.push(prePath + m.componentPath));
+        initComponents.forEach((m) => tags.push([m.tagId, prePath + m.componentPath]));
+        uiComponents.forEach((m) => tags.push([m.tagId, prePath + m.componentPath]));
 
         return {
             id: uiModule.id,
