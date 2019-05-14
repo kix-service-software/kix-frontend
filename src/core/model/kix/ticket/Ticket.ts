@@ -27,9 +27,9 @@ export class Ticket extends KIXObject<Ticket> {
 
     public QueueID: number;
 
-    public CustomerID: string;
+    public OrganisationID: string;
 
-    public CustomerUserID: string;
+    public ContactID: string;
 
     public OwnerID: number;
 
@@ -132,8 +132,8 @@ export class Ticket extends KIXObject<Ticket> {
             this.PriorityID = ticket.PriorityID;
             this.LockID = ticket.LockID;
             this.QueueID = ticket.QueueID;
-            this.CustomerID = ticket.CustomerID;
-            this.CustomerUserID = ticket.CustomerUserID;
+            this.OrganisationID = ticket.OrganisationID;
+            this.ContactID = ticket.ContactID;
             this.OwnerID = ticket.OwnerID;
             this.TypeID = ticket.TypeID;
 

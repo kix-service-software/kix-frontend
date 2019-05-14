@@ -104,8 +104,8 @@ export class ConfigItemFormFactory {
             formField = this.getTextAreaField(ad, parentInstanceId);
         } else if (ad.Input.Type === 'Contact') {
             formField = this.getObjectReferenceField(ad, parentInstanceId, KIXObjectType.CONTACT);
-        } else if (ad.Input.Type === 'Customer') {
-            formField = this.getObjectReferenceField(ad, parentInstanceId, KIXObjectType.CUSTOMER);
+        } else if (ad.Input.Type === 'Organisation') {
+            formField = this.getObjectReferenceField(ad, parentInstanceId, KIXObjectType.ORGANISATION);
         } else if (ad.Input.Type === 'CIClassReference') {
             formField = this.getCIClassReferenceField(ad, parentInstanceId);
         } else if (ad.Input.Type === 'Date') {

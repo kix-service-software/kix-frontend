@@ -7,7 +7,7 @@ export class UpdateContact extends RequestObject {
         super();
         parameter.forEach((p) => {
             // TODO: Login wird aktuell noch nicht geändert
-            if (p[0] !== ContactProperty.USER_LOGIN) {
+            if (p[0] !== ContactProperty.LOGIN) {
                 this.applyProperty(p[0], p[1]);
             }
         });

@@ -43,7 +43,7 @@ export class InMemoryCache implements ICache {
         return this.cache.has(key);
     }
 
-    public async get(key: string): Promise<any> {
+    public async get(key: string, cacheKeyPrefix?: string): Promise<any> {
         return this.cache.get(key);
     }
 

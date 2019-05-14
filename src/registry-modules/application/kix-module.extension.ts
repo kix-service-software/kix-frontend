@@ -72,6 +72,8 @@ class Extension implements IKIXModuleExtension {
             []
         ),
         new UIComponent('object-details-page', '_base-components/object-details-page', []),
+        new UIComponent('object-information-widget', 'widgets/object-information-widget', []),
+        new UIComponent('object-information', '_base-components/object-information', []),
         new UIComponent('new-system-address-dialog', 'communication/admin/dialogs/new-system-address-dialog', [])
     ];
 

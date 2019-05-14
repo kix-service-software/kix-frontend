@@ -39,7 +39,7 @@ export class ConfigItemDetailsContext extends Context {
 
     private async loadConfigItem(): Promise<ConfigItem> {
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, null, null,
+            null, null, null, null,
             [
                 'Versions', 'Links', 'History', VersionProperty.DEFINITION,
                 VersionProperty.DATA, VersionProperty.PREPARED_DATA

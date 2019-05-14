@@ -1,7 +1,7 @@
 import { ILabelProvider } from "..";
 import {
     Ticket, TicketProperty, DateTimeUtil, ObjectIcon,
-    Customer, KIXObjectType, Contact, TicketPriority, TicketType,
+    Organisation, KIXObjectType, Contact, TicketPriority, TicketType,
     TicketState, Queue, SysConfigItem, SysConfigKey, Sla, User, Service
 } from "../../model";
 import { KIXObjectService } from "../kix";
@@ -131,10 +131,10 @@ export class TicketLabelProvider implements ILabelProvider<Ticket> {
             case TicketProperty.RESPONSIBLE_ID:
                 displayValue = 'Translatable#Responsible';
                 break;
-            case TicketProperty.CUSTOMER_ID:
-                displayValue = 'Translatable#Customer';
+            case TicketProperty.ORGANISATION_ID:
+                displayValue = 'Translatable#Organisation';
                 break;
-            case TicketProperty.CUSTOMER_USER_ID:
+            case TicketProperty.CONTACT_ID:
                 displayValue = 'Translatable#Contact';
                 break;
             case TicketProperty.AGE:
@@ -265,29 +265,29 @@ export class TicketLabelProvider implements ILabelProvider<Ticket> {
                     KIXObjectType.USER, [displayValue], null, null, true
                 ).catch((error) => [] as User[]);
                 displayValue = users && !!users.length ? users[0].UserFullname : displayValue;
-            case TicketProperty.CUSTOMER_ID:
-                if (ticket.CustomerID) {
-                    let customers;
-                    if (ticket.CustomerID) {
-                        customers = await KIXObjectService.loadObjects<Customer>(
-                            KIXObjectType.CUSTOMER, [ticket.CustomerID], null, null, true
+            case TicketProperty.ORGANISATION_ID:
+                if (ticket.OrganisationID) {
+                    let organisations: Organisation[];
+                    if (ticket.OrganisationID) {
+                        organisations = await KIXObjectService.loadObjects<Organisation>(
+                            KIXObjectType.ORGANISATION, [ticket.OrganisationID], null, null, true
                         ).catch((error) => []);
                     }
-                    displayValue = customers && customers.length
-                        ? customers[0].CustomerCompanyName
-                        : ticket.CustomerID;
+                    displayValue = organisations && organisations.length
+                        ? organisations[0].Name
+                        : ticket.OrganisationID;
                 }
                 break;
-            case TicketProperty.CUSTOMER_USER_ID:
-                let contacts;
-                if (ticket.CustomerUserID) {
+            case TicketProperty.CONTACT_ID:
+                let contacts: Contact[];
+                if (ticket.ContactID) {
                     contacts = await KIXObjectService.loadObjects<Contact>(
-                        KIXObjectType.CONTACT, [ticket.CustomerUserID], null, null, true
+                        KIXObjectType.CONTACT, [ticket.ContactID], null, null, true
                     ).catch((error) => []);
                 }
                 displayValue = contacts && contacts.length
-                    ? contacts[0].UserFirstname + ' ' + contacts[0].UserLastname
-                    : ticket.CustomerUserID;
+                    ? contacts[0].Firstname + ' ' + contacts[0].Lastname
+                    : ticket.ContactID;
                 break;
             case TicketProperty.AGE:
                 displayValue = DateTimeUtil.calculateAge(displayValue);

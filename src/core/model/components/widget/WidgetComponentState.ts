@@ -1,6 +1,7 @@
 import { WidgetConfiguration } from '../..';
 import { ContextType } from '../context';
 import { AbstractComponentState } from '../../../browser/components/AbstractComponentState';
+import { ObjectIcon } from '../../kix';
 
 export abstract class WidgetComponentState<T = any> extends AbstractComponentState {
 
@@ -13,7 +14,8 @@ export abstract class WidgetComponentState<T = any> extends AbstractComponentSta
         public explorer: boolean = false,
         public minimized: boolean = false,
         public minimizable: boolean = true,
-        public closable: boolean = false
+        public closable: boolean = false,
+        public icon: string | ObjectIcon = null
     ) {
         super();
     }

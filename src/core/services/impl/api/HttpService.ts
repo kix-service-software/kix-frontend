@@ -48,8 +48,9 @@ export class HttpService {
         let cacheKey: string;
         if (useCache) {
             cacheKey = this.buildCacheKey(resource, queryParameters, token);
-            if (await CacheService.getInstance().has(cacheKey, cacheKeyPrefix)) {
-                return await CacheService.getInstance().get(cacheKey, cacheKeyPrefix);
+            const cachedObject = await CacheService.getInstance().get(cacheKey, cacheKeyPrefix);
+            if (cachedObject) {
+                return cachedObject;
             }
         }
 

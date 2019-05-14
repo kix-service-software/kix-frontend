@@ -190,14 +190,14 @@ export class TicketService extends KIXObjectService<Ticket> {
 
         if (targetObjectType === KIXObjectType.CONTACT) {
             tickets.forEach((t) => {
-                if (!ids.some((cid) => cid === t.CustomerUserID)) {
-                    ids.push(t.CustomerUserID);
+                if (!ids.some((cid) => cid === t.ContactID)) {
+                    ids.push(t.ContactID);
                 }
             });
-        } else if (targetObjectType === KIXObjectType.CUSTOMER) {
+        } else if (targetObjectType === KIXObjectType.ORGANISATION) {
             tickets.forEach((t) => {
-                if (!ids.some((cid) => cid === t.CustomerID)) {
-                    ids.push(t.CustomerID);
+                if (!ids.some((cid) => cid === t.OrganisationID)) {
+                    ids.push(t.OrganisationID);
                 }
             });
         } else if (targetObjectType === KIXObjectType.CONFIG_ITEM) {
@@ -243,7 +243,7 @@ export class TicketService extends KIXObjectService<Ticket> {
     public async getServicesHierarchy(): Promise<Service[]> {
         const loadingOptions = new KIXObjectLoadingOptions(null, [
             new FilterCriteria('ParentID', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, null)
-        ], null, null, null, ['SubServices', 'IncidentState'], ['SubServices']);
+        ], null, null, ['SubServices', 'IncidentState'], ['SubServices']);
 
         return await KIXObjectService.loadObjects<Service>(KIXObjectType.SERVICE, null, loadingOptions);
     }

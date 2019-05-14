@@ -1,5 +1,4 @@
 import { LogLevel } from './LogLevel';
-import { MemcachedConfiguration } from '../cache';
 
 export interface IServerConfiguration {
 
@@ -39,8 +38,10 @@ export interface IServerConfiguration {
 
     USE_IN_MEMORY_CACHE: boolean;
 
-    USE_MEMCACHED: boolean;
+    USE_REDIS_CACHE: boolean;
 
-    MEMCACHED: MemcachedConfiguration;
+    REDIS_CACHE_PORT: number;
+
+    REDIS_CACHE_HOST: string;
 
 }

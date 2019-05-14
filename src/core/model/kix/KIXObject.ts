@@ -14,13 +14,30 @@ export abstract class KIXObject<T = any> {
 
     public LinkTypeName: string;
 
+    public ChangeBy: number;
+
+    public ChangeTime: string;
+
+    public CreateBy: number;
+
+    public CreateTime: string;
+
+    public ValidID: number;
+
     public constructor(object?: KIXObject) {
         if (object) {
             this.ConfiguredPermissions = object.ConfiguredPermissions;
+            this.CreateBy = object.CreateBy;
+            this.ChangeBy = object.ChangeBy;
+            this.CreateTime = object.CreateTime;
+            this.ChangeTime = object.ChangeTime;
+            this.ValidID = object.ValidID;
         }
     }
 
-    public abstract equals(object: T): boolean;
+    public equals(object: KIXObject): boolean {
+        return this.ObjectId === object.ObjectId;
+    }
 
     public getIdPropertyName(): string {
         return 'ID';

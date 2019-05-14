@@ -2,9 +2,7 @@ export interface ICache {
 
     clear(ignoreKeyPrefixes?: string[]): Promise<void>;
 
-    has(key: string): Promise<boolean>;
-
-    get(key: string): Promise<any>;
+    get(key: string, cacheKeyPrefix: string): Promise<any>;
 
     set(key: string, cacheKeyPrefix: string, value: any): Promise<void>;
 

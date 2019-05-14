@@ -1,7 +1,7 @@
 import { AutoCompleteConfiguration, Contact, FormInputComponentState, TreeNode } from "../../../../../core/model";
 import { FormInputAction } from "../../../../../core/browser";
 
-export class ComponentState extends FormInputComponentState<string> {
+export class ComponentState extends FormInputComponentState<number> {
 
     public constructor(
         public autoCompleteConfiguration: AutoCompleteConfiguration = null,

@@ -2,7 +2,7 @@ export * from './authentication';
 export * from './client-registration';
 export * from './cmdb';
 export * from './contact';
-export * from './customer';
+export * from './organisation';
 export * from './dynamic-field';
 export * from './general-catalog';
 export * from './link';

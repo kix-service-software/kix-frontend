@@ -24,7 +24,7 @@ export class TicketQueueTableContentProvider extends TableContentProvider<Queue>
                 QueueProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, null
             )
         ];
-        const loadingOptions = new KIXObjectLoadingOptions(null, queueFilter, null, null, null,
+        const loadingOptions = new KIXObjectLoadingOptions(null, queueFilter, null, null,
             ['SubQueues'], ['SubQueues']
         );
 

@@ -2,13 +2,16 @@ import { SearchDefinition, SearchResultCategory, KIXObjectService } from "../kix
 import {
     KIXObjectType, ConfigItemProperty, FilterCriteria, ConfigItemClass, FilterDataType,
     FilterType, GeneralCatalogItem, VersionProperty, KIXObjectLoadingOptions, InputFieldTypes,
-    TreeNode, ObjectIcon, DataType, AttributeDefinition, Customer, Contact, InputDefinition, ConfigItem
+    TreeNode, ObjectIcon, DataType, AttributeDefinition, Organisation, Contact, InputDefinition, ConfigItem
 } from "../../model";
 import { SearchOperator } from "../SearchOperator";
 import { SearchProperty } from "../SearchProperty";
 import { ConfigItemClassAttributeUtil } from "./ConfigItemClassAttributeUtil";
 import { CMDBService } from "./CMDBService";
 import { IColumnConfiguration, DefaultColumnConfiguration } from "../table";
+import { ContactService } from "../contact";
+import { LabelService } from "../LabelService";
+import { OrganisationService } from "../organisation";
 
 export class ConfigItemSearchDefinition extends SearchDefinition {
 
@@ -18,7 +21,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
 
     public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
         return new KIXObjectLoadingOptions(
-            null, criteria, null, null, null,
+            null, criteria, null, null,
             [VersionProperty.DATA, VersionProperty.PREPARED_DATA, 'Links', ConfigItemProperty.CURRENT_VERSION],
             [VersionProperty.DATA, VersionProperty.PREPARED_DATA, 'Links']
         );
@@ -92,7 +95,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                     operations = stringOperators;
                 } else if (type === 'GeneralCatalog'
                     || type === 'CIClassReference'
-                    || type === 'Customer'
+                    || type === 'Organisation'
                     || type === 'Contact'
                 ) {
                     operations = numberOperators;
@@ -126,7 +129,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                 return InputFieldTypes.DROPDOWN;
             } else if (type === 'CIClassReference') {
                 return InputFieldTypes.CI_REFERENCE;
-            } else if (type === 'Customer' || type === 'Contact') {
+            } else if (type === 'Organisation' || type === 'Contact') {
                 return InputFieldTypes.OBJECT_REFERENCE;
             }
         }
@@ -281,22 +284,32 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
             return configItems.map(
                 (ci) => new TreeNode(ci.ConfigItemID, ci.Name, new ObjectIcon(ci.KIXObjectType, ci.ConfigItemID))
             );
-        } else if (input.Type === 'Customer') {
-            const loadingOptions = new KIXObjectLoadingOptions(null, null, null, searchValue, limit);
-            const customers = await KIXObjectService.loadObjects<Customer>(
-                KIXObjectType.CUSTOMER, null, loadingOptions, null, false
+        } else if (input.Type === 'Organisation') {
+            const loadingOptions = new KIXObjectLoadingOptions(
+                null, OrganisationService.getInstance().prepareFullTextFilter(searchValue), null, limit
             );
-            return customers.map(
-                (c) => new TreeNode(c.CustomerID, c.DisplayValue, new ObjectIcon(c.KIXObjectType, c.CustomerID))
+            const organisations = await KIXObjectService.loadObjects<Organisation>(
+                KIXObjectType.ORGANISATION, null, loadingOptions, null, false
             );
+            const nodes = [];
+            for (const c of organisations) {
+                const displayValue = await LabelService.getInstance().getText(c);
+                nodes.push(new TreeNode(c.ID, displayValue, new ObjectIcon(c.KIXObjectType, c.ID)));
+            }
+            return nodes;
         } else if (input.Type === 'Contact') {
-            const loadingOptions = new KIXObjectLoadingOptions(null, null, null, searchValue, limit);
+            const loadingOptions = new KIXObjectLoadingOptions(
+                null, ContactService.getInstance().prepareFullTextFilter(searchValue), null, limit
+            );
             const contacts = await KIXObjectService.loadObjects<Contact>(
                 KIXObjectType.CONTACT, null, loadingOptions, null, false
             );
-            return contacts.map(
-                (c) => new TreeNode(c.ContactID, c.DisplayValue, new ObjectIcon(c.KIXObjectType, c.ContactID))
-            );
+            const nodes = [];
+            for (const c of contacts) {
+                const displayValue = await LabelService.getInstance().getText(c);
+                nodes.push(new TreeNode(c.ID, displayValue, new ObjectIcon(c.KIXObjectType, c.ID)));
+            }
+            return nodes;
         }
         return [];
     }
@@ -376,13 +389,13 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                 if (configItems && configItems.length) {
                     displayValue = configItems[0].Name;
                 }
-            } else if (input.Type === 'Customer') {
-                const customers = await KIXObjectService.loadObjects<Customer>(
-                    KIXObjectType.CUSTOMER, [value], null, null, false
+            } else if (input.Type === 'Organisation') {
+                const organisations = await KIXObjectService.loadObjects<Organisation>(
+                    KIXObjectType.ORGANISATION, [value], null, null, false
                 );
 
-                if (customers && customers.length) {
-                    displayValue = customers[0].DisplayValue;
+                if (organisations && organisations.length) {
+                    displayValue = await LabelService.getInstance().getText(organisations[0]);
                 }
             } else if (input.Type === 'Contact') {
                 const contacts = await KIXObjectService.loadObjects<Contact>(
@@ -390,7 +403,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                 );
 
                 if (contacts && contacts.length) {
-                    displayValue = contacts[0].DisplayValue;
+                    displayValue = await LabelService.getInstance().getText(contacts[0]);
                 }
             }
         }
