@@ -146,8 +146,10 @@ msgstr "Zugeordnete Agenten"
 msgid "Assigned Contacts"
 msgstr "Zugeordnete Kontakte"
 
-msgid "Assigned Customers"
-msgstr "Zugeordnete Kunden"
+#, fuzzy
+#| msgid "Assigned Agents"
+msgid "Assigned Organisations"
+msgstr "Zugeordnete Agenten"
 
 msgid "Assigned Roles"
 msgstr "Zugeordnete Rollen"
@@ -187,6 +189,11 @@ msgstr "zu ändernde Attribute:"
 
 msgid "back to"
 msgstr "Zurück zu"
+
+#, fuzzy
+#| msgid "Ticket Data"
+msgid "Basic Data"
+msgstr "Ticketdaten"
 
 msgid "Bcc"
 msgstr "Bcc"
@@ -370,9 +377,6 @@ msgstr "Config Item Versionsvergleich"
 msgid "Contact"
 msgstr "Kontakt"
 
-msgid "Contact Details"
-msgstr "Kontakt Details"
-
 msgid "Contact Information"
 msgstr "Kontaktinformationen"
 
@@ -406,9 +410,6 @@ msgstr "Neues Config Item"
 msgid "Create Contact"
 msgstr "Neuer Kontakt"
 
-msgid "Create Customer"
-msgstr "Kunde anlegen"
-
 msgid "Created at"
 msgstr "Erstellt am"
 
@@ -420,6 +421,11 @@ msgstr "Neuer FAQ Artikel"
 
 msgid "Create Links."
 msgstr "Verknüpfung hinzufügen"
+
+#, fuzzy
+#| msgid "Create Translation"
+msgid "Create Organisation"
+msgstr "Neue Übersetzung"
 
 msgid "Create Priority"
 msgstr "Priorität anlegen"
@@ -466,34 +472,16 @@ msgstr "(aktuelle Version)"
 msgid "Current version"
 msgstr "Aktuelle Version"
 
-msgid "Customer"
-msgstr "Kunde"
-
-msgid "Customer Details"
-msgstr "Kunden Details"
-
-msgid "Customer ID"
-msgstr "Kunden ID"
-
-msgid "Customer Information"
-msgstr "Kundeninformationen"
-
-msgid "Customers"
-msgstr "Kunden"
-
-msgid "Customers Dashboard"
-msgstr "Kunden Dashboard"
-
-msgid "Customer Search"
-msgstr "Kunden Suche"
-
-msgid "Customer successfully created."
-msgstr "Kunde wurde erfolgreich angelegt."
-
+#, fuzzy
+#| msgid ""
+#| "Define where this FAQ article will be shown (internal= only Agent Portal, "
+#| "external = KIX Agent and Customer Portal for authenticated users only, "
+#| "public=KIX Agent- and Customer Portal for both, authenticated and "
+#| "unauthenticated users)."
 msgid ""
 "Define where this FAQ article will be shown (internal= only Agent Portal, "
-"external = KIX Agent and Customer Portal for authenticated users only, "
-"public=KIX Agent- and Customer Portal for both, authenticated and "
+"external = KIX Agent and Organisation Portal for authenticated users only, "
+"public=KIX Agent- and Organisation Portal for both, authenticated and "
 "unauthenticated users)."
 msgstr ""
 "Legen Sie fest, wo der FAQ-Artikel angezeigt werden darf.  (intern = nur im "
@@ -529,9 +517,6 @@ msgstr "Detailierte Suchergebnisse"
 msgid "Display Name"
 msgstr "Anzeigewert"
 
-msgid "DisplayValue"
-msgstr "Anzeigewert"
-
 msgid ". (dot)"
 msgstr ". (Punkt)"
 
@@ -565,9 +550,6 @@ msgstr "Ansprechparnter Bearbeiten"
 msgid "Edit Core Data"
 msgstr "Stammdaten bearbeiten"
 
-msgid "Edit Customer"
-msgstr "Kunde bearbeiten"
-
 msgid "edited"
 msgstr "bearbeitet"
 
@@ -582,6 +564,11 @@ msgstr "Objekt bearbeiten"
 
 msgid "Edit Objects"
 msgstr "Objekte bearbeiten"
+
+#, fuzzy
+#| msgid "Edit Translation"
+msgid "Edit Organisation"
+msgstr "Übersetzung bearbeiten"
 
 msgid "Edit Personal Settings"
 msgstr "Persönliche Einstellungen bearbeiten"
@@ -706,6 +693,11 @@ msgstr "Fax"
 msgid "Filter in list"
 msgstr "Filtern in Liste"
 
+#, fuzzy
+#| msgid "First Name"
+msgid "Firstname"
+msgstr "Vorname"
+
 msgid "First Name"
 msgstr "Vorname"
 
@@ -769,6 +761,138 @@ msgstr ""
 msgid "Helptext_Admin_QueueCreate_Validity"
 msgstr ""
 
+msgid "Helptext_Organisations_ContactCreate_City"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactCreate_Comment"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactCreate_Country"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactCreate_Email"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactCreate_Fax"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactCreate_Firstname"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactCreate_Lastname"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactCreate_Login"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactCreate_Mobile"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactCreate_Organisation"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactCreate_Password"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactCreate_Phone"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactCreate_Street"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactCreate_Title"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactCreate_Validity"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactCreate_Zip"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactEdit_City"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactEdit_Comment"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactEdit_Country"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactEdit_Email"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactEdit_Fax"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactEdit_Firstname"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactEdit_Lastname"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactEdit_Mobile"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactEdit_Phone"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactEdit_Street"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactEdit_Title"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactEdit_Validity"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactEdit_Zip"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactImport"
+msgstr ""
+
+msgid "Helptext_Organisations_OrganisationCreate_City"
+msgstr ""
+
+msgid "Helptext_Organisations_OrganisationCreate_Comment"
+msgstr ""
+
+msgid "Helptext_Organisations_OrganisationCreate_Country"
+msgstr ""
+
+msgid "Helptext_Organisations_OrganisationCreate_Name"
+msgstr ""
+
+msgid "Helptext_Organisations_OrganisationCreate_Number"
+msgstr ""
+
+msgid "Helptext_Organisations_OrganisationCreate_Street"
+msgstr ""
+
+msgid "Helptext_Organisations_OrganisationCreate_URL"
+msgstr ""
+
+msgid "Helptext_Organisations_OrganisationCreate_Validity"
+msgstr ""
+
+msgid "Helptext_Organisations_OrganisationCreate_Zip"
+msgstr ""
+
+msgid "Helptext_Organisations_OrganisationImport"
+msgstr ""
+
+msgid "Helptext_Search_Contact"
+msgstr ""
+
+msgid "Helptext_Search_Organisation"
+msgstr ""
+
+msgid "Helptext_Textmodules_TicketCreate"
+msgstr ""
+
+msgid "Helptext_Textmodules_TicketEdit"
+msgstr ""
+
 msgid "History"
 msgstr "Historie"
 
@@ -814,11 +938,13 @@ msgstr "{0} {1} importieren. Ausführen?"
 msgid "Import Contacts"
 msgstr "Kontakte importieren"
 
-msgid "Import Customers"
-msgstr "Kunden importieren"
-
 msgid "Import Data"
 msgstr "Daten importieren"
+
+#, fuzzy
+#| msgid "Remove translations"
+msgid "Import Organisations"
+msgstr "Übersetzungen entfernen"
 
 msgid "Imprint"
 msgstr "Impressum"
@@ -867,9 +993,6 @@ msgstr "Geben Sie einen Name für das Config Item ein."
 
 msgid "Insert a name for the FAQ article."
 msgstr "Geben Sie einen Titel für den FAQ Artikel ein."
-
-msgid "Insert a password for the contact."
-msgstr "Legen Sie ein Passwort für den Kontakt fest."
 
 msgid "Insert a pattern for the translation."
 msgstr "Geben Sie ein Pattern für die Übersetzung ein."
@@ -968,6 +1091,11 @@ msgstr "Letzte Änderungszeit"
 msgid "Last Login"
 msgstr "Letzte Anmeldung"
 
+#, fuzzy
+#| msgid "Last Name"
+msgid "Lastname"
+msgstr "Name"
+
 msgid "Last Name"
 msgstr "Name"
 
@@ -1046,8 +1174,10 @@ msgstr "Art der Verknüpfung"
 msgid "Load Contact ..."
 msgstr "Kontak laden..."
 
-msgid "Load Customer ..."
-msgstr "Kunde laden..."
+#, fuzzy
+#| msgid "Remove translations ..."
+msgid "Load Organisation ..."
+msgstr "Übersetzungen werden entfernt..."
 
 msgid "Load Ticket State ..."
 msgstr "Ticket Status laden..."
@@ -1133,9 +1263,6 @@ msgstr "Neues Config Item"
 msgid "New Contact"
 msgstr "Neuer Kontakt"
 
-msgid "New Customer"
-msgstr "Neuer Kunde"
-
 #, fuzzy
 #| msgid "New E-mail"
 msgid "New Email"
@@ -1146,6 +1273,11 @@ msgstr "Neue FAQ"
 
 msgid "New Object"
 msgstr "Neues Objekt"
+
+#, fuzzy
+#| msgid "New Translation"
+msgid "New Organisation"
+msgstr "Neue Übersetzung"
 
 msgid "New Priority"
 msgstr "Neue Priorität"
@@ -1194,6 +1326,11 @@ msgstr "Nr."
 msgid "No."
 msgstr "Nr."
 
+#, fuzzy
+#| msgid "No contact available"
+msgid "No {0} available"
+msgstr "Kein Kontakt verfügbar"
+
 msgid "No {0} found (add at least {1} characters)."
 msgstr "Keine {0} gefunden (mind. 1 Zeichen eingeben)."
 
@@ -1206,14 +1343,16 @@ msgstr "Kein Artikel verfügbar."
 msgid "No contact available"
 msgstr "Kein Kontakt verfügbar"
 
-msgid "No customer available"
-msgstr "Kein Kunde verfügbar"
-
 msgid "No general catalog class configured!"
 msgstr ""
 
 msgid "No object with ID {0} available."
 msgstr "Kein Objekt mit der ID {0} verfügbar."
+
+#, fuzzy
+#| msgid "No version available"
+msgid "No organisation available"
+msgstr "Keine Version verfügbar"
 
 msgid "No rating available."
 msgstr "Keine Bewertung verfügbar."
@@ -1269,6 +1408,49 @@ msgstr "Offene Tickets"
 msgid "open tickets: {0}"
 msgstr "Offene Tickets: {0}"
 
+#, fuzzy
+#| msgid "Translation"
+msgid "Organisation"
+msgstr "Übersetzung"
+
+#, fuzzy
+#| msgid "Version Details"
+msgid "Organisation Details"
+msgstr "Versionsdetails"
+
+#, fuzzy
+#| msgid "Translation"
+msgid "Organisation ID"
+msgstr "Übersetzung"
+
+#, fuzzy
+#| msgid "Agent Information"
+msgid "Organisation Information"
+msgstr "Agenteninformationen"
+
+#, fuzzy
+#| msgid "Translations"
+msgid "Organisations"
+msgstr "Übersetzungen"
+
+#, fuzzy
+#| msgid "Customers Dashboard"
+msgid "Organisations Dashboard"
+msgstr "Kunden Dashboard"
+
+#, fuzzy
+#| msgid "Contact Search"
+msgid "Organisation Search"
+msgstr "Kontakt Suche"
+
+#, fuzzy
+#| msgid "Translation successfully created."
+msgid "Organisation successfully created."
+msgstr "Übersetzung wurde erfolgreich angelegt."
+
+msgid "Other"
+msgstr ""
+
 msgid "Overall"
 msgstr "Gesamt"
 
@@ -1281,14 +1463,16 @@ msgstr "Übersicht Config Items Verwendungsstatus"
 msgid "Overview Contacts"
 msgstr "Übersicht Kontakte"
 
-msgid "Overview Customer Organizations"
-msgstr "Übersicht Kunden"
-
 msgid "Overview FAQ"
 msgstr "Übersicht FAQ"
 
 msgid "Overview of {0} to import ({1})"
 msgstr "Übersicht zu importierende {0} ({1})"
+
+#, fuzzy
+#| msgid "Overview Customer Organizations"
+msgid "Overview Organisations"
+msgstr "Übersicht Kunden"
 
 msgid "Overview Ticket Priorities"
 msgstr "Übersicht Ticketprioritäten"
@@ -1370,6 +1554,11 @@ msgstr ""
 "Bitte wählen Sie die Sprache, in der Sie KIX benutzen wollen. Ist nichts "
 "gesetzt, versucht das System die Sprache automatisch zu wählen."
 
+#, fuzzy
+#| msgid "System Address"
+msgid "Postal Address"
+msgstr "Systemadresse"
+
 msgid "Preferences"
 msgstr "Persönliche Einstellungen"
 
@@ -1406,53 +1595,6 @@ msgstr "Stammdaten"
 
 msgid "Priority successfully created."
 msgstr "Priorität wurde erfolgreich angelegt."
-
-msgid ""
-"<p>The first line of the source file must contain the column-to-object "
-"attribute assignment by using KIX-internal identifiers (e.g. "
-"CompanyCustomerID, CompanyName, etc.). In order to update existing customer "
-"data sets, their CompanyCustomerID must be specified. If new data sets needs "
-"to be imported, all mandatory attributes must be given.</p></"
-"br><h3>Operation Explanation:</h3><ul><li>Replace empty value = selected "
-"attribute will be set to the specified value if no information is given in "
-"source file</li><li>Force = selected attribute will be set to the specified "
-"value, no matter if a value is defined in the source file or not</"
-"li><li>Ignore = selected attribute will be ignored in the import</li>"
-msgstr ""
-"<p>Die erste Zeile der Quelldatei muss die Zuordnung der Spalten zu den "
-"Objektattributen entsprechend der KIX-internen Bezeichner (z.B. "
-"CompanyCustomerID, CompanyName, etc.) beinhalten. Für Aktualisierung von "
-"Einträgen ist die Angabe einer bestehenden CompanyCustomerID zwingend "
-"erforderlich. Für Neuanlagen ist die Angabe aller Pflichtattribute zwingend "
-"erforderlich.</p></br><h3>Erläuterung der Operatoren:</h3><ul><li>Leerwert "
-"ersetzen = Für die gewählte Spalte wird in allen Zeilen, die keinen Wert "
-"enthalten, der hier gewählte Wert gesetzt.</li><li>Erzwingen = Für die "
-"gewählte Spalte wird in allen Zeilen der hier gewählte Wert gesetzt.</"
-"li><li>Ignorieren = Die gewählte Spalte wird nicht importiert.</li>"
-
-msgid ""
-"<p>The first line of the source file must contain the column-to-object "
-"attribute assignment by using KIX-internal identifiers (e.g. UserLogin, "
-"UserCustomerID, UserLastname, etc.). In order to update existing customer "
-"data sets, their UserLogin and UserCustomerID must be specified. If new data "
-"sets needs to be imported, all mandatory attributes must be given.</p></"
-"br><h3>Operation Explanation:</h3><ul><li>Replace empty value = selected "
-"attribute will be set to the specified value if no information is given in "
-"source file</li><li>Force = selected attribute will be set to the specified "
-"value, no matter if a value is defined in the source file or not</"
-"li><li>Ignore = selected attribute will be ignored in the import</li>"
-msgstr ""
-"<p>Die erste Zeile der Quelldatei muss die Zuordnung der Spalten zu den "
-"Objektattributen entsprechend der KIX-internen Bezeichner (z.B. UserLogin, "
-"UserCustomerID, UserLastname, etc.) beinhalten. Für Aktualisierung von "
-"Einträgen ist die Angabe einer bestehenden UserLogin sowie der "
-"UserCustomerID zwingend erforderlich. Für Neuanlagen ist die Angabe aller "
-"Pflichtattribute zwingend erforderlich.</p></br><h3>Erläuterung der "
-"Operatoren:</h3><ul><li>Leerwert ersetzen = Für die gewählte Spalte wird in "
-"allen Zeilen, die keinen Wert enthalten, der hier gewählte Wert gesetzt.</"
-"li><li>Erzwingen = Für die gewählte Spalte wird in allen Zeilen der hier "
-"gewählte Wert gesetzt.</li><li>Ignorieren = Die gewählte Spalte wird nicht "
-"importiert.</li>"
 
 msgid "public"
 msgstr "öffentlich"
@@ -2112,10 +2254,12 @@ msgstr "Aktualisierung wird durchgeführt"
 msgid "Update Contact"
 msgstr "Aktualisierung wird durchgeführt"
 
-msgid "Update Customer"
+msgid "Update FAQ Artikel"
 msgstr "Aktualisierung wird durchgeführt"
 
-msgid "Update FAQ Artikel"
+#, fuzzy
+#| msgid "Update Translation"
+msgid "Update Organisation"
 msgstr "Aktualisierung wird durchgeführt"
 
 msgid "Update Priority"
@@ -2209,8 +2353,115 @@ msgstr ""
 msgid "Your rating"
 msgstr "Ihre Bewertung"
 
+msgid "Zip"
+msgstr ""
+
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Assigned Customers"
+#~ msgstr "Zugeordnete Kunden"
+
+#~ msgid "Contact Details"
+#~ msgstr "Kontakt Details"
+
+#~ msgid "Create Customer"
+#~ msgstr "Kunde anlegen"
+
+#~ msgid "Customer"
+#~ msgstr "Kunde"
+
+#~ msgid "Customer Details"
+#~ msgstr "Kunden Details"
+
+#~ msgid "Customer ID"
+#~ msgstr "Kunden ID"
+
+#~ msgid "Customer Information"
+#~ msgstr "Kundeninformationen"
+
+#~ msgid "Customers"
+#~ msgstr "Kunden"
+
+#~ msgid "Customer Search"
+#~ msgstr "Kunden Suche"
+
+#~ msgid "Customer successfully created."
+#~ msgstr "Kunde wurde erfolgreich angelegt."
+
+#~ msgid "DisplayValue"
+#~ msgstr "Anzeigewert"
+
+#~ msgid "Edit Customer"
+#~ msgstr "Kunde bearbeiten"
+
+#~ msgid "Import Customers"
+#~ msgstr "Kunden importieren"
+
+#~ msgid "Insert a password for the contact."
+#~ msgstr "Legen Sie ein Passwort für den Kontakt fest."
+
+#~ msgid "Load Customer ..."
+#~ msgstr "Kunde laden..."
+
+#~ msgid "New Customer"
+#~ msgstr "Neuer Kunde"
+
+#~ msgid "No customer available"
+#~ msgstr "Kein Kunde verfügbar"
+
+#~ msgid ""
+#~ "<p>The first line of the source file must contain the column-to-object "
+#~ "attribute assignment by using KIX-internal identifiers (e.g. "
+#~ "CompanyCustomerID, CompanyName, etc.). In order to update existing "
+#~ "customer data sets, their CompanyCustomerID must be specified. If new "
+#~ "data sets needs to be imported, all mandatory attributes must be given.</"
+#~ "p></br><h3>Operation Explanation:</h3><ul><li>Replace empty value = "
+#~ "selected attribute will be set to the specified value if no information "
+#~ "is given in source file</li><li>Force = selected attribute will be set to "
+#~ "the specified value, no matter if a value is defined in the source file "
+#~ "or not</li><li>Ignore = selected attribute will be ignored in the import</"
+#~ "li>"
+#~ msgstr ""
+#~ "<p>Die erste Zeile der Quelldatei muss die Zuordnung der Spalten zu den "
+#~ "Objektattributen entsprechend der KIX-internen Bezeichner (z.B. "
+#~ "CompanyCustomerID, CompanyName, etc.) beinhalten. Für Aktualisierung von "
+#~ "Einträgen ist die Angabe einer bestehenden CompanyCustomerID zwingend "
+#~ "erforderlich. Für Neuanlagen ist die Angabe aller Pflichtattribute "
+#~ "zwingend erforderlich.</p></br><h3>Erläuterung der Operatoren:</"
+#~ "h3><ul><li>Leerwert ersetzen = Für die gewählte Spalte wird in allen "
+#~ "Zeilen, die keinen Wert enthalten, der hier gewählte Wert gesetzt.</"
+#~ "li><li>Erzwingen = Für die gewählte Spalte wird in allen Zeilen der hier "
+#~ "gewählte Wert gesetzt.</li><li>Ignorieren = Die gewählte Spalte wird "
+#~ "nicht importiert.</li>"
+
+#~ msgid ""
+#~ "<p>The first line of the source file must contain the column-to-object "
+#~ "attribute assignment by using KIX-internal identifiers (e.g. UserLogin, "
+#~ "UserCustomerID, UserLastname, etc.). In order to update existing customer "
+#~ "data sets, their UserLogin and UserCustomerID must be specified. If new "
+#~ "data sets needs to be imported, all mandatory attributes must be given.</"
+#~ "p></br><h3>Operation Explanation:</h3><ul><li>Replace empty value = "
+#~ "selected attribute will be set to the specified value if no information "
+#~ "is given in source file</li><li>Force = selected attribute will be set to "
+#~ "the specified value, no matter if a value is defined in the source file "
+#~ "or not</li><li>Ignore = selected attribute will be ignored in the import</"
+#~ "li>"
+#~ msgstr ""
+#~ "<p>Die erste Zeile der Quelldatei muss die Zuordnung der Spalten zu den "
+#~ "Objektattributen entsprechend der KIX-internen Bezeichner (z.B. "
+#~ "UserLogin, UserCustomerID, UserLastname, etc.) beinhalten. Für "
+#~ "Aktualisierung von Einträgen ist die Angabe einer bestehenden UserLogin "
+#~ "sowie der UserCustomerID zwingend erforderlich. Für Neuanlagen ist die "
+#~ "Angabe aller Pflichtattribute zwingend erforderlich.</p></"
+#~ "br><h3>Erläuterung der Operatoren:</h3><ul><li>Leerwert ersetzen = Für "
+#~ "die gewählte Spalte wird in allen Zeilen, die keinen Wert enthalten, der "
+#~ "hier gewählte Wert gesetzt.</li><li>Erzwingen = Für die gewählte Spalte "
+#~ "wird in allen Zeilen der hier gewählte Wert gesetzt.</li><li>Ignorieren = "
+#~ "Die gewählte Spalte wird nicht importiert.</li>"
+
+#~ msgid "Update Customer"
+#~ msgstr "Aktualisierung wird durchgeführt"
 
 #~ msgid "Email address"
 #~ msgstr "E-Mail Adresse"
