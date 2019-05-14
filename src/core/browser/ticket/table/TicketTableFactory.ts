@@ -21,7 +21,7 @@ export class TicketTableFactory extends TableFactory {
         );
 
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, tableConfiguration.filter, tableConfiguration.sortOrder, null,
+            null, tableConfiguration.filter, tableConfiguration.sortOrder,
             tableConfiguration.limit, [TicketProperty.WATCHERS]
         );
 
@@ -55,7 +55,7 @@ export class TicketTableFactory extends TableFactory {
                     TicketProperty.OWNER_ID, true, false, true, false, 150, true, true, true
                 ),
                 new DefaultColumnConfiguration(
-                    TicketProperty.CUSTOMER_ID, true, false, true, false, 150, true, true, true
+                    TicketProperty.ORGANISATION_ID, true, false, true, false, 150, true, true, true
                 ),
                 new DefaultColumnConfiguration(
                     TicketProperty.CREATED, true, false, true, false, 125, true, true, false, DataType.DATE_TIME
@@ -85,7 +85,9 @@ export class TicketTableFactory extends TableFactory {
                 new DefaultColumnConfiguration(
                     TicketProperty.OWNER_ID, true, false, true, false, 150, true, true, true
                 ),
-                new DefaultColumnConfiguration(TicketProperty.CUSTOMER_ID, true, false, true, false, 150, true, true),
+                new DefaultColumnConfiguration(
+                    TicketProperty.ORGANISATION_ID, true, false, true, false, 150, true, true
+                ),
                 new DefaultColumnConfiguration(
                     TicketProperty.CHANGED, true, false, true, false, 125, true, true, false, DataType.DATE_TIME
                 ),

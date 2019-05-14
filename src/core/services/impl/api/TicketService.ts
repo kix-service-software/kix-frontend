@@ -9,7 +9,7 @@ import {
     TicketFactory, KIXObjectType, FilterType, User, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions, CreateTicketArticleOptions, CreateTicketWatcherOptions,
     KIXObjectSpecificDeleteOptions, DeleteTicketWatcherOptions, Error,
-    SenderTypeFactory, ArticleFactory, LockFactory, Queue, Channel
+    SenderTypeFactory, ArticleFactory, LockFactory, Queue, Contact, Channel
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
@@ -18,7 +18,6 @@ import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { UserService } from './UserService';
 import { LoggingService } from '../LoggingService';
 import { ChannelService } from './ChannelService';
-import { ContactService } from './ContactService';
 
 const RESOURCE_ARTICLES: string = 'articles';
 const RESOURCE_ATTACHMENTS: string = 'attachments';
@@ -88,14 +87,14 @@ export class TicketService extends KIXObjectService {
     ): Promise<number> {
         if (objectType === KIXObjectType.TICKET) {
             const queueId = this.getParameterValue(parameter, TicketProperty.QUEUE_ID);
-            const contactId = this.getParameterValue(parameter, TicketProperty.CUSTOMER_USER_ID);
+            const contactId = this.getParameterValue(parameter, TicketProperty.CONTACT_ID);
 
             const createArticle = await this.prepareArticleData(token, clientRequestId, parameter, queueId, contactId);
 
             const createTicket = new CreateTicket(
                 this.getParameterValue(parameter, TicketProperty.TITLE),
-                this.getParameterValue(parameter, TicketProperty.CUSTOMER_USER_ID),
-                this.getParameterValue(parameter, TicketProperty.CUSTOMER_ID),
+                this.getParameterValue(parameter, TicketProperty.CONTACT_ID),
+                this.getParameterValue(parameter, TicketProperty.ORGANISATION_ID),
                 this.getParameterValue(parameter, TicketProperty.STATE_ID),
                 this.getParameterValue(parameter, TicketProperty.PRIORITY_ID),
                 queueId,
@@ -165,8 +164,8 @@ export class TicketService extends KIXObjectService {
 
         const updateTicket = new UpdateTicket(
             this.getParameterValue(parameter, TicketProperty.TITLE),
-            this.getParameterValue(parameter, TicketProperty.CUSTOMER_USER_ID),
-            this.getParameterValue(parameter, TicketProperty.CUSTOMER_ID),
+            this.getParameterValue(parameter, TicketProperty.CONTACT_ID),
+            this.getParameterValue(parameter, TicketProperty.ORGANISATION_ID),
             this.getParameterValue(parameter, TicketProperty.STATE_ID),
             this.getParameterValue(parameter, TicketProperty.PRIORITY_ID),
             queueId,
@@ -223,9 +222,11 @@ export class TicketService extends KIXObjectService {
         const customerVisible = this.getParameterValue(parameter, ArticleProperty.CUSTOMER_VISIBLE);
         let to = this.getParameterValue(parameter, ArticleProperty.TO);
         if (!to && contactId) {
-            const contact = await ContactService.getInstance().getContact(token, contactId);
-            if (contact) {
-                to = contact.UserEmail;
+            const contacts = await super.load<Contact>(
+                token, KIXObjectType.CONTACT, 'contacts', null, [contactId], 'Contact'
+            );
+            if (contacts && contactId.length) {
+                to = contacts[0].Email;
             }
         }
         const cc = this.getParameterValue(parameter, ArticleProperty.CC);
@@ -300,7 +301,7 @@ export class TicketService extends KIXObjectService {
 
         const baseUri = this.buildUri(this.RESOURCE_URI, ticketId, this.SUB_RESOURCE_URI, articleId);
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, null, null, [ArticleProperty.FLAGS], [ArticleProperty.FLAGS]
+            null, null, null, null, [ArticleProperty.FLAGS], [ArticleProperty.FLAGS]
         );
 
         const articles = await super.load<Article>(

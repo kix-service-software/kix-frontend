@@ -1,6 +1,6 @@
 import { Context } from "../../../model/components/context/Context";
 import {
-    KIXObject, KIXObjectType, TicketProperty, Customer, Contact,
+    KIXObject, KIXObjectType, TicketProperty, Organisation, Contact,
     IFormInstanceListener, FormField, FormFieldValue, FormContext
 } from "../../../model";
 import { FormService } from "../../form";
@@ -12,11 +12,11 @@ export class NewTicketDialogContext extends Context implements IFormInstanceList
     public formListenerId: string;
 
     private contact: Contact;
-    private customer: Customer;
+    private organisation: Organisation;
 
     public async initContext(): Promise<void> {
         this.contact = null;
-        this.customer = null;
+        this.organisation = null;
         const formId = await FormService.getInstance().getFormIdByContext(FormContext.NEW, KIXObjectType.TICKET);
         this.formListenerId = 'NewTicketDialogContext';
         await FormService.getInstance().registerFormInstanceListener(formId, this);
@@ -27,23 +27,23 @@ export class NewTicketDialogContext extends Context implements IFormInstanceList
     }
 
     public async formValueChanged(formField: FormField, value: FormFieldValue<any>, oldValue: any): Promise<void> {
-        if (formField && formField.property === TicketProperty.CUSTOMER_ID) {
+        if (formField && formField.property === TicketProperty.ORGANISATION_ID) {
             if (value && value.value) {
-                const customers = await KIXObjectService.loadObjects<Customer>(
-                    KIXObjectType.CUSTOMER, [value.value]
+                const organisations = await KIXObjectService.loadObjects<Organisation>(
+                    KIXObjectType.ORGANISATION, [value.value]
                 );
-                if (customers && customers.length) {
-                    this.customer = customers[0];
+                if (organisations && organisations.length) {
+                    this.organisation = organisations[0];
                     this.listeners.forEach(
                         (l) => l.objectChanged(
-                            this.customer ? this.customer.CustomerID : null,
-                            this.customer,
-                            KIXObjectType.CUSTOMER
+                            this.organisation ? this.organisation.ID : null,
+                            this.organisation,
+                            KIXObjectType.ORGANISATION
                         )
                     );
                 }
             }
-        } else if (formField && formField.property === TicketProperty.CUSTOMER_USER_ID) {
+        } else if (formField && formField.property === TicketProperty.CONTACT_ID) {
             if (value && value.value) {
                 const contacts = await KIXObjectService.loadObjects<Contact>(
                     KIXObjectType.CONTACT, [value.value]
@@ -52,7 +52,7 @@ export class NewTicketDialogContext extends Context implements IFormInstanceList
                     this.contact = contacts[0];
                     this.listeners.forEach(
                         (l) => l.objectChanged(
-                            this.contact ? this.contact.ContactID : null,
+                            this.contact ? this.contact.ID : null,
                             this.contact,
                             KIXObjectType.CONTACT
                         )
@@ -64,8 +64,8 @@ export class NewTicketDialogContext extends Context implements IFormInstanceList
 
     public async getObject<O extends KIXObject>(kixObjectType: KIXObjectType): Promise<O> {
         let object;
-        if (kixObjectType === KIXObjectType.CUSTOMER) {
-            object = this.customer;
+        if (kixObjectType === KIXObjectType.ORGANISATION) {
+            object = this.organisation;
         } else if (kixObjectType === KIXObjectType.CONTACT) {
             object = this.contact;
         }

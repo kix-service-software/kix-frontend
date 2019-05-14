@@ -1,13 +1,11 @@
-import { Customer } from "../../../core/model";
-import { CustomerLabelProvider } from "../../../core/browser/customer";
+import { Organisation } from "../../../core/model";
 
 export class ComponentState {
 
     public constructor(
-        public customer: Customer = null,
-        public labelProvider: CustomerLabelProvider = new CustomerLabelProvider(),
+        public organisation: Organisation = null,
         public error: any = null,
-        public info: Array<[string, Array<[string, string]>]> = [],
+        public properties: string[] = []
     ) { }
 
 }

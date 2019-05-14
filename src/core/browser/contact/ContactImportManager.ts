@@ -1,12 +1,14 @@
 import {
     KIXObjectType, InputFieldTypes, TreeNode, SortUtil, ContactProperty,
-    Contact, KIXObjectLoadingOptions, Customer, ObjectIcon
+    Contact, KIXObjectLoadingOptions, Organisation, ObjectIcon, KIXObjectProperty
 } from "../../model";
 import { LabelService } from "../LabelService";
 import { ObjectPropertyValue } from "../ObjectPropertyValue";
 import { ImportManager, ImportPropertyOperator } from "../import";
 import { ContactService } from "./ContactService";
 import { KIXObjectService } from "../kix";
+import { SearchOperator } from "../SearchOperator";
+import { OrganisationService } from "../organisation";
 
 export class ContactImportManager extends ImportManager {
 
@@ -15,25 +17,21 @@ export class ContactImportManager extends ImportManager {
     public reset(): void {
         super.reset();
         this.values.push(new ObjectPropertyValue(
-            ContactProperty.VALID_ID, ImportPropertyOperator.REPLACE_EMPTY, 1)
+            KIXObjectProperty.VALID_ID, ImportPropertyOperator.REPLACE_EMPTY, 1)
         );
     }
 
     protected getSpecificObject(object: {}): Contact {
-        object[ContactProperty.ContactID] = object[ContactProperty.USER_LOGIN];
         return new Contact(object as Contact);
     }
 
     public async getInputType(property: string): Promise<InputFieldTypes> {
-        // TODO: ContactDefinition verwenden
-        // const objectData = ContextService.getInstance().getObjectData();
-        // const contactDefinition = objectData.objectDefinitions.find((od) => od.Object === this.objectType);
         switch (property) {
-            case ContactProperty.VALID_ID:
+            case KIXObjectProperty.VALID_ID:
                 return InputFieldTypes.DROPDOWN;
-            case ContactProperty.USER_COMMENT:
+            case ContactProperty.COMMENT:
                 return InputFieldTypes.TEXT_AREA;
-            case ContactProperty.USER_CUSTOMER_ID:
+            case ContactProperty.PRIMARY_ORGANISATION_ID:
                 return InputFieldTypes.OBJECT_REFERENCE;
             default:
                 return super.getInputType(property);
@@ -43,11 +41,8 @@ export class ContactImportManager extends ImportManager {
     public async getInputTypeOptions(
         property: ContactProperty, operator: ImportPropertyOperator
     ): Promise<Array<[string, any]>> {
-        // TODO: ContactDefinition verwenden
-        // const objectData = ContextService.getInstance().getObjectData();
-        // const contactDefinition = objectData.objectDefinitions.find((od) => od.Object === this.objectType);
         switch (property) {
-            case ContactProperty.USER_COMMENT:
+            case ContactProperty.COMMENT:
                 return [
                     ['maxLength', 250]
                 ];
@@ -58,28 +53,23 @@ export class ContactImportManager extends ImportManager {
 
     public async getProperties(): Promise<Array<[string, string]>> {
         const properties: Array<[string, string]> = [];
-        // TODO: ContactDefinition verwenden
-        // const objectData = ContextService.getInstance().getObjectData();
-        // const contactDefinition = objectData.objectDefinitions.find((od) => od.Object === this.objectType);
         const labelProvider = LabelService.getInstance().getLabelProviderForType(this.objectType);
         const attributes = [
-            ContactProperty.USER_PASSWORD,
-            ContactProperty.USER_CUSTOMER_ID,
-            // ContactProperty.USER_CUSTOMER_IDS, // TODO: später
-            ContactProperty.USER_FIRST_NAME,
-            ContactProperty.USER_LAST_NAME,
-            ContactProperty.USER_TITLE,
-            // TODO: email syntax prüfen (oder nur backend)? --> wenn auch frontend: siehe "input type=email"
-            ContactProperty.USER_EMAIL,
-            ContactProperty.USER_PHONE,
-            ContactProperty.USER_MOBILE,
-            ContactProperty.USER_FAX,
-            ContactProperty.USER_STREET,
-            ContactProperty.USER_CITY,
-            ContactProperty.USER_ZIP,
-            ContactProperty.USER_COUNTRY,
-            ContactProperty.USER_COMMENT,
-            ContactProperty.VALID_ID
+            ContactProperty.PASSWORD,
+            ContactProperty.PRIMARY_ORGANISATION_ID,
+            ContactProperty.FIRST_NAME,
+            ContactProperty.LAST_NAME,
+            ContactProperty.TITLE,
+            ContactProperty.EMAIL,
+            ContactProperty.PHONE,
+            ContactProperty.MOBILE,
+            ContactProperty.FAX,
+            ContactProperty.STREET,
+            ContactProperty.CITY,
+            ContactProperty.ZIP,
+            ContactProperty.COUNTRY,
+            ContactProperty.COMMENT,
+            KIXObjectProperty.VALID_ID
         ];
         for (const attribute of attributes) {
             const label = await labelProvider.getPropertyText(attribute);
@@ -91,19 +81,24 @@ export class ContactImportManager extends ImportManager {
     }
 
     public async getRequiredProperties(): Promise<string[]> {
-        return [ContactProperty.USER_LOGIN, ContactProperty.USER_CUSTOMER_ID];
+        return [ContactProperty.LOGIN, ContactProperty.PRIMARY_ORGANISATION_ID];
     }
 
     public async searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]> {
         switch (property) {
-            case ContactProperty.USER_CUSTOMER_ID:
-                const loadingOptions = new KIXObjectLoadingOptions(null, null, null, searchValue, limit);
-                const contacts = await KIXObjectService.loadObjects<Customer>(
-                    KIXObjectType.CUSTOMER, null, loadingOptions, null, false
+            case ContactProperty.PRIMARY_ORGANISATION_ID:
+                const filter = OrganisationService.getInstance().prepareFullTextFilter(searchValue);
+                const loadingOptions = new KIXObjectLoadingOptions(null, filter, null, limit);
+                const organisations = await KIXObjectService.loadObjects<Organisation>(
+                    KIXObjectType.ORGANISATION, null, loadingOptions, null, false
                 );
-                return contacts.map(
-                    (c) => new TreeNode(c.CustomerID, c.DisplayValue, new ObjectIcon(c.KIXObjectType, c.CustomerID))
-                );
+
+                const nodes = [];
+                for (const o of organisations) {
+                    const displayValue = await LabelService.getInstance().getText(o);
+                    nodes.push(new TreeNode(o.ID, displayValue, new ObjectIcon(o.KIXObjectType, o.ID)));
+                }
+                return nodes;
             default:
         }
 

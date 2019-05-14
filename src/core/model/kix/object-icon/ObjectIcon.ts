@@ -17,14 +17,6 @@ export class ObjectIcon extends KIXObject<ObjectIcon> {
 
     public Content: string;
 
-    public CreateBy: string;
-
-    public CreateTime: string;
-
-    public ChangeBy: number;
-
-    public ChangeTime: string;
-
     public constructor(
         object?: string, id?: string | number, contentType?: string, content?: any, objectIcon?: ObjectIcon
     ) {
@@ -37,10 +29,6 @@ export class ObjectIcon extends KIXObject<ObjectIcon> {
             this.ObjectId = this.ID;
             this.Object = objectIcon.Object;
             this.ObjectID = objectIcon.ObjectID;
-            this.CreateTime = objectIcon.CreateTime;
-            this.CreateBy = objectIcon.CreateBy;
-            this.ChangeTime = objectIcon.ChangeTime;
-            this.ChangeBy = objectIcon.ChangeBy;
         } else {
             this.ObjectID = id;
             this.Object = object;

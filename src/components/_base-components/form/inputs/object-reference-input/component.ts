@@ -1,10 +1,10 @@
 import { ComponentState } from './ComponentState';
 import {
     FormInputComponent, KIXObjectType,
-    TreeNode, KIXObjectLoadingOptions, KIXObject, ObjectReferenceOptions
+    TreeNode, KIXObjectLoadingOptions, KIXObject, ObjectReferenceOptions, FilterCriteria
 } from '../../../../../core/model';
 import { FormService } from '../../../../../core/browser/form';
-import { LabelService, KIXObjectService } from '../../../../../core/browser';
+import { LabelService, KIXObjectService, ServiceRegistry, IKIXObjectService } from '../../../../../core/browser';
 import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
 class Component extends FormInputComponent<string | number, ComponentState> {
@@ -122,7 +122,15 @@ class Component extends FormInputComponent<string | number, ComponentState> {
             if (this.state.autocomplete) {
                 const objectType = objectOption.value as KIXObjectType;
 
-                const loadingOptions = new KIXObjectLoadingOptions(null, null, null, searchValue, limit);
+                const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(objectType);
+                let filter: FilterCriteria[];
+                if (service) {
+                    filter = service.prepareFullTextFilter(searchValue);
+                }
+
+                const loadingOptions = new KIXObjectLoadingOptions(
+                    null, filter, null, limit
+                );
                 this.objects = await KIXObjectService.loadObjects<KIXObject>(
                     objectType, null, loadingOptions, null, false
                 );

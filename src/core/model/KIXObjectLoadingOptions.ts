@@ -6,7 +6,6 @@ export class KIXObjectLoadingOptions {
         public properties?: string[],
         public filter?: FilterCriteria[],
         public sortOrder?: string,
-        public searchValue?: string,
         public limit?: number,
         public includes?: string[],
         public expands?: string[],

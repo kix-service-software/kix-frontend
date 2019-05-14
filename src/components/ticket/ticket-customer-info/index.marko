@@ -1,10 +1,6 @@
-<if(state.customer)>
-    <for|groupTuple| of=state.info>
-        <div.customer-attribute-group>
-            <for|attributeTuple| of=groupTuple[1]>
-                <customer-label object=state.customer property=attributeTuple[0] labelProvider=state.labelProvider/>
-            </for>
-        </div>
+<if(state.organisation)>
+    <for|property| of=state.properties>
+        <customer-label object=state.organisation property=property labelProvider=state.labelProvider/>
     </for>
 </if>
 <else-if(state.error)>
@@ -12,6 +8,6 @@
 </else-if>
 <else>
     <span>
-        <translation-string pattern="Translatable#No customer available"/>
+        <translation-string pattern="Translatable#No organisation available"/>
     </span>
 </else>

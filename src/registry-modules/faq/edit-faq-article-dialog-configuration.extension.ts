@@ -35,7 +35,7 @@ export class Extension implements IConfigurationExtension {
             ));
             fields.push(new FormField('Translatable#Tags', FAQArticleProperty.KEYWORDS, null, false, 'Translatable#Insert key words for the FAQ article to find them more quickly.'));
             fields.push(new FormField(
-                'Translatable#Visibility', FAQArticleProperty.VISIBILITY, 'faq-visibility-input', true, 'Translatable#Define where this FAQ article will be shown (internal= only Agent Portal, external = KIX Agent and Customer Portal for authenticated users only, public=KIX Agent- and Customer Portal for both, authenticated and unauthenticated users).',
+                'Translatable#Visibility', FAQArticleProperty.VISIBILITY, 'faq-visibility-input', true, 'Translatable#Define where this FAQ article will be shown (internal= only Agent Portal, external = KIX Agent and Organisation Portal for authenticated users only, public=KIX Agent- and Organisation Portal for both, authenticated and unauthenticated users).',
                 null, new FormFieldValue('internal')
             ));
             fields.push(new FormField('Translatable#Attachments', FAQArticleProperty.ATTACHMENTS, 'attachment-input', false, 'Translatable#Attach additional files to the FAQ article. Drag & Drop is possible. Max. file size is 25 MB.'));

@@ -6,7 +6,7 @@ import {
     ContextConfiguration, ConfiguredWidget, WidgetSize, WidgetConfiguration, TicketProperty,
     FormField, ArticleProperty, KIXObjectType, Form, FormContext, FormFieldValue, FormFieldOption,
     ObjectReferenceOptions, KIXObjectLoadingOptions, FilterCriteria,
-    UserProperty, FilterDataType, FilterType
+    UserProperty, FilterDataType, FilterType, ObjectinformationWidgetSettings, ContactProperty, OrganisationProperty
 } from '../../core/model';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../core/services';
@@ -20,35 +20,46 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
 
-        const customerInfoSidebar =
+        const organisationInfoSidebar =
             new ConfiguredWidget('20180524110915', new WidgetConfiguration(
-                'ticket-customer-info-widget', 'Translatable#Customer', [], {
-                    groups: [
-                        'Core Data', 'Adresse'
-                    ]
-                },
+                'object-information-widget', 'Translatable#Organisation', [],
+                new ObjectinformationWidgetSettings(KIXObjectType.ORGANISATION, [
+                    OrganisationProperty.NUMBER,
+                    OrganisationProperty.NAME,
+                    OrganisationProperty.URL,
+                    OrganisationProperty.STREET,
+                    OrganisationProperty.ZIP,
+                    OrganisationProperty.CITY,
+                    OrganisationProperty.COUNTRY
+                ], true),
                 false, false, WidgetSize.BOTH, 'kix-icon-man-house', false)
             );
         const contactInfoSidebar =
             new ConfiguredWidget('20180524110920', new WidgetConfiguration(
-                'ticket-contact-info-widget', 'Translatable#Contact', [], {
-                    groups: [
-                        'Core Data', 'Kommunikation'
-                    ]
-                },
+                'object-information-widget', 'Translatable#Contact', [],
+                new ObjectinformationWidgetSettings(KIXObjectType.CONTACT, [
+                    ContactProperty.LOGIN,
+                    ContactProperty.TITLE,
+                    ContactProperty.LAST_NAME,
+                    ContactProperty.FIRST_NAME,
+                    ContactProperty.PRIMARY_ORGANISATION_ID,
+                    ContactProperty.PHONE,
+                    ContactProperty.MOBILE,
+                    ContactProperty.EMAIL
+                ], true),
                 false, false, WidgetSize.BOTH, 'kix-icon-man-bubble', false)
             );
 
         const helpWidget = new ConfiguredWidget('20180919-help-widget', new WidgetConfiguration(
             'help-widget', 'Translatable#Text Modules', [], {
                 // tslint:disable-next-line:max-line-length
-                helpText: 'Translatable#<b>-- KIX Professional Feature--</b><p>To use the text modules available in your system, enter „::“ (colon colon). Then choose the text modules you want to use in the context menu. You can narrow down the key word selection manually by entering more text.</p>'
+                helpText: 'Translatable#Helptext_Textmodules_TicketCreate'
             },
             false, false, WidgetSize.BOTH, 'kix-icon-textblocks'
         ));
 
         const sidebars = ['20180524110915', '20180524110920', '20180919-help-widget'];
-        const sidebarWidgets: Array<ConfiguredWidget<any>> = [customerInfoSidebar, contactInfoSidebar, helpWidget];
+        const sidebarWidgets: Array<ConfiguredWidget<any>> = [organisationInfoSidebar, contactInfoSidebar, helpWidget];
 
         return new ContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
     }
@@ -60,13 +71,13 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
         if (!existingFormNewTicket) {
             const fields: FormField[] = [];
             fields.push(new FormField(
-                'Translatable#Contact', TicketProperty.CUSTOMER_USER_ID, 'ticket-input-contact', true, 'Translatable#A contact is a person, filing a request for the customer. Enter at least 3 characters in order to get a suggestion list of already registered contacts. You may use „*“ as wildcard.',
+                'Translatable#Contact', TicketProperty.CONTACT_ID, 'ticket-input-contact', true, 'Translatable#A contact is a person, filing a request for the customer. Enter at least 3 characters in order to get a suggestion list of already registered contacts. You may use „*“ as wildcard.',
                 [
                     new FormFieldOption('SHOW_NEW_CONTACT', true)
                 ]
             )
             );
-            fields.push(new FormField('Translatable#Customer', TicketProperty.CUSTOMER_ID, 'ticket-input-customer', true, 'Translatable#Choose a contact, customers will be assigned automatically.'));
+            fields.push(new FormField('Translatable#Organisation', TicketProperty.ORGANISATION_ID, 'ticket-input-organisation', true, 'Translatable#Choose a contact, customers will be assigned automatically.'));
             fields.push(new FormField('Translatable#Type', TicketProperty.TYPE_ID, 'ticket-input-type', true, 'Translatable#Ticket type is part of the classification of a ticket.'));
             fields.push(new FormField(
                 'Translatable#Assign Team / Queue', TicketProperty.QUEUE_ID, 'ticket-input-queue', true, 'Translatable#A queue is a classification system for requests, comparable to folders in a file system.')

@@ -16,9 +16,9 @@ export enum TicketProperty {
 
     QUEUE_ID = 'QueueID',
 
-    CUSTOMER_ID = 'CustomerID',
+    ORGANISATION_ID = 'OrganisationID',
 
-    CUSTOMER_USER_ID = 'CustomerUserID',
+    CONTACT_ID = 'ContactID',
 
     OWNER_ID = 'OwnerID',
 

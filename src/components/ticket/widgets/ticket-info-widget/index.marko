@@ -9,18 +9,19 @@
                     <div>
                         <object-property-label
                             object=state.ticket
-                            property="CustomerID"
+                            property="OrganisationID"
                             labelProvider=state.labelProvider
-                            routingConfiguration=component.customerRoutingConfiguration
-                            objectId=state.ticket.CustomerID>
+                            routingConfiguration=component.organisationRoutingConfiguration
+                            objectId=state.ticket.OrganisationID>
                             <@info>
-                                <if(state.ticket.CustomerID)>
+                                <if(state.ticket.OrganisationID)>
                                     <overlay-icon
-                                        content="ticket-customer-info"
-                                        instanceId="customer-info-overlay"
+                                        content="object-information"
+                                        instanceId="organisation-info-overlay"
                                         data={
-                                                                                customerId: state.ticket.CustomerID,
-                                                                                groups: state.customerInfoGroups
+                                                                                object: state.organisation,
+                                                                                properties: state.organisationProperties,
+                                                                                flat: true
                                                                             }/>
                                 </if>
                             </@info>
@@ -29,18 +30,19 @@
                     <div>
                         <object-property-label
                             object=state.ticket
-                            property="CustomerUserID"
+                            property="ContactID"
                             labelProvider=state.labelProvider
                             routingConfiguration=component.contactRoutingConfiguration
-                            objectId=state.ticket.CustomerUserID>
+                            objectId=state.ticket.ContactID>
                             <@info>
-                                <if(state.ticket.CustomerUserID)>
+                                <if(state.ticket.ContactID)>
                                     <overlay-icon
-                                        content="ticket-contact-info"
+                                        content="object-information"
                                         instanceId="contact-info-overlay"
                                         data={
-                                                                                contactId: state.ticket.CustomerUserID,
-                                                                                groups: state.contactInfoGroups
+                                                                                object: state.contact,
+                                                                                properties: state.contactProperties,
+                                                                                flat: true
                                                                             }/>
                                 </if>
                             </@info>

@@ -33,12 +33,6 @@ class ContactInfoComponent {
 
             if (contacts && contacts.length) {
                 this.state.contact = contacts[0];
-                this.state.info = this.state.contact.getContactInfoData();
-                if (this.state.groups && this.state.groups.length) {
-                    this.state.info = this.state.info.filter(
-                        (g) => this.state.groups.some((group) => group === g[0])
-                    );
-                }
             }
         }
     }

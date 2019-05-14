@@ -34,7 +34,7 @@ export enum KIXObjectType {
 
     CURRENT_USER = 'CURRENT_USER',
 
-    CUSTOMER = 'Customer',
+    ORGANISATION = 'Organisation',
 
     DYNAMIC_FIELD = 'DynamicField',
 

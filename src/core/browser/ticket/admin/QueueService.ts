@@ -83,7 +83,7 @@ export class QueueService extends KIXObjectService<Queue> {
             new FilterCriteria(
                 QueueProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, null
             )
-        ], null, null, null, ['SubQueues', 'TicketStats', 'Tickets'], ['SubQueues']);
+        ], null, null, ['SubQueues', 'TicketStats', 'Tickets'], ['SubQueues']);
 
         return await KIXObjectService.loadObjects<Queue>(KIXObjectType.QUEUE, null, loadingOptions);
     }

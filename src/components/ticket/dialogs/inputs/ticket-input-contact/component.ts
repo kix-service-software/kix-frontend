@@ -6,15 +6,16 @@ import {
 import { FormService, FormInputAction } from "../../../../../core/browser/form";
 import {
     KIXObjectService, Label, TabContainerEvent, TabContainerEventData,
-    ContextService
+    ContextService,
+    LabelService
 } from "../../../../../core/browser";
 import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
 import { EventService } from "../../../../../core/browser/event";
-import { NewContactDialogContext } from "../../../../../core/browser/contact";
+import { NewContactDialogContext, ContactService } from "../../../../../core/browser/contact";
 import { PreviousTabData } from "../../../../../core/browser/components/dialog";
 import { NewTicketDialogContext } from "../../../../../core/browser/ticket";
 
-class Component extends FormInputComponent<string, ComponentState> {
+class Component extends FormInputComponent<number, ComponentState> {
 
     private contacts: Contact[];
 
@@ -88,9 +89,9 @@ class Component extends FormInputComponent<string, ComponentState> {
             );
             if (contacts && contacts.length) {
                 const contact = contacts[0];
-                this.state.currentNode = this.createTreeNode(contact);
+                this.state.currentNode = await this.createTreeNode(contact);
                 this.state.nodes = [this.state.currentNode];
-                super.provideValue(contact.ContactID);
+                super.provideValue(contact.ID);
             }
         }
     }
@@ -101,23 +102,29 @@ class Component extends FormInputComponent<string, ComponentState> {
     }
 
     private async searchContacts(limit: number, searchValue: string): Promise<TreeNode[]> {
-        const loadingOptions = new KIXObjectLoadingOptions(null, null, null, searchValue, limit);
+        const loadingOptions = new KIXObjectLoadingOptions(
+            null, ContactService.getInstance().prepareFullTextFilter(searchValue), null, limit
+        );
         this.contacts = await KIXObjectService.loadObjects<Contact>(
             KIXObjectType.CONTACT, null, loadingOptions, null, false
         );
 
         this.state.nodes = [];
         if (searchValue && searchValue !== '') {
-            this.state.nodes = this.contacts.map(
-                (c) => this.createTreeNode(c)
-            );
+            const nodes = [];
+            for (const c of this.contacts) {
+                const node = await this.createTreeNode(c);
+                nodes.push(node);
+            }
+            this.state.nodes = nodes;
         }
 
         return this.state.nodes;
     }
 
-    private createTreeNode(contact: Contact): TreeNode {
-        return new TreeNode(contact.ContactID, contact.DisplayValue, 'kix-icon-man-bubble');
+    private async createTreeNode(contact: Contact): Promise<TreeNode> {
+        const displayValue = await LabelService.getInstance().getText(contact);
+        return new TreeNode(contact.ID, displayValue, 'kix-icon-man-bubble');
     }
 
     public async focusLost(event: any): Promise<void> {

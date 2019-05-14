@@ -1,7 +1,11 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    WidgetConfiguration, ConfiguredWidget, WidgetSize, KIXObjectType, ContextConfiguration
+    WidgetConfiguration, ConfiguredWidget, WidgetSize, KIXObjectType, ContextConfiguration,
+    ObjectinformationWidgetSettings, OrganisationProperty, KIXObjectProperty, ContactProperty, ContextMode
 } from '../../core/model/';
+import { RoutingConfiguration } from '../../core/browser/router';
+import { OrganisationDetailsContext } from '../../core/browser/organisation';
+import { ContactDetailsContext } from '../../core/browser/contact';
 
 export class TicketDetailsModuleFactoryExtension implements IConfigurationExtension {
 
@@ -63,27 +67,51 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
         const laneTabs = ['ticket-information-lane'];
         const laneTabWidgets = [ticketInfoLane];
 
+        const organisationRouting = new RoutingConfiguration(
+            null, OrganisationDetailsContext.CONTEXT_ID, KIXObjectType.ORGANISATION,
+            ContextMode.DETAILS, OrganisationProperty.ID
+        );
+
+        const contactRouting = new RoutingConfiguration(
+            null, ContactDetailsContext.CONTEXT_ID, KIXObjectType.CONTACT,
+            ContextMode.DETAILS, ContactProperty.ID
+        );
+
         // Sidebars
-        const customerInfoSidebar =
+        const organisationInfoSidebar =
             new ConfiguredWidget('20180116143215', new WidgetConfiguration(
-                'ticket-customer-info-widget', 'Translatable#Customer', [], {
-                    groups: [
-                        'Core Data', 'Adresse'
-                    ]
-                },
+                'object-information-widget', 'Translatable#Organisation', [],
+                new ObjectinformationWidgetSettings(KIXObjectType.ORGANISATION, [
+                    OrganisationProperty.NUMBER,
+                    OrganisationProperty.NAME,
+                    OrganisationProperty.URL,
+                    OrganisationProperty.STREET,
+                    OrganisationProperty.ZIP,
+                    OrganisationProperty.CITY,
+                    OrganisationProperty.COUNTRY
+                ], true, organisationRouting, [OrganisationProperty.NUMBER, OrganisationProperty.NAME]),
                 false, false, WidgetSize.BOTH, 'kix-icon-man-house', false)
             );
         const contactInfoSidebar =
             new ConfiguredWidget('20180116143216', new WidgetConfiguration(
-                'ticket-contact-info-widget', 'Translatable#Contact', [], {
-                    groups: [
-                        'Core Data', 'Kommunikation'
-                    ]
-                },
+                'object-information-widget', 'Translatable#Contact', [],
+                new ObjectinformationWidgetSettings(
+                    KIXObjectType.CONTACT, [
+                        ContactProperty.TITLE,
+                        ContactProperty.LAST_NAME,
+                        ContactProperty.FIRST_NAME,
+                        ContactProperty.LOGIN,
+                        ContactProperty.PRIMARY_ORGANISATION_ID,
+                        ContactProperty.PHONE,
+                        ContactProperty.MOBILE,
+                        ContactProperty.FAX,
+                        ContactProperty.EMAIL
+                    ], true, contactRouting,
+                    [ContactProperty.LAST_NAME, ContactProperty.FIRST_NAME, ContactProperty.LOGIN]),
                 false, false, WidgetSize.BOTH, 'kix-icon-man-bubble', false)
             );
         const sidebars = ['20180116143215', '20180116143216'];
-        const sidebarWidgets: Array<ConfiguredWidget<any>> = [customerInfoSidebar, contactInfoSidebar];
+        const sidebarWidgets: Array<ConfiguredWidget<any>> = [organisationInfoSidebar, contactInfoSidebar];
 
         // actions
         const generalActions = ['ticket-create-action'];
@@ -94,22 +122,38 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
         ];
 
         // Overlays
-        const customerInfoOverlay =
-            new ConfiguredWidget('customer-info-overlay', new WidgetConfiguration(
-                'ticket-customer-info', 'Translatable#Customer', [], {
-                    groups: [
-                        'Core Data', 'Adresse'
-                    ]
-                },
+        const organisationInfoOverlay =
+            new ConfiguredWidget('organisation-info-overlay', new WidgetConfiguration(
+                'object-information', 'Translatable#Organisation', [],
+                new ObjectinformationWidgetSettings(
+                    KIXObjectType.ORGANISATION, [
+                        OrganisationProperty.NUMBER,
+                        OrganisationProperty.NAME,
+                        OrganisationProperty.URL,
+                        OrganisationProperty.STREET,
+                        OrganisationProperty.ZIP,
+                        OrganisationProperty.CITY,
+                        OrganisationProperty.COUNTRY
+                    ], true, contactRouting,
+                    [ContactProperty.LAST_NAME, ContactProperty.FIRST_NAME, ContactProperty.LOGIN]
+                ),
                 false, false, WidgetSize.BOTH, 'kix-icon-man-house', false)
             );
         const contactInfoOverlay =
             new ConfiguredWidget('contact-info-overlay', new WidgetConfiguration(
-                'ticket-contact-info', 'Translatable#Contact', [], {
-                    groups: [
-                        'Core Data', 'Kommunikation'
-                    ]
-                },
+                'object-information', 'Translatable#Contact', [],
+                new ObjectinformationWidgetSettings(KIXObjectType.CONTACT, [
+                    ContactProperty.LOGIN,
+                    ContactProperty.TITLE,
+                    ContactProperty.LAST_NAME,
+                    ContactProperty.FIRST_NAME,
+                    ContactProperty.PRIMARY_ORGANISATION_ID,
+                    ContactProperty.PHONE,
+                    ContactProperty.MOBILE,
+                    ContactProperty.EMAIL
+                ],
+                    true, organisationRouting, [OrganisationProperty.NUMBER, OrganisationProperty.NAME]
+                ),
                 false, false, WidgetSize.BOTH, 'kix-icon-man-bubble', false)
             );
         const toReceiverOverlay =
@@ -133,7 +177,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                 false, false, WidgetSize.BOTH, 'kix-icon-attachement', false)
             );
         const infoOverlayWidgets = [
-            customerInfoOverlay, contactInfoOverlay,
+            organisationInfoOverlay, contactInfoOverlay,
             toReceiverOverlay, ccReceiverOverlay, bccReceiverOverlay,
             articleAttachmentOverlay
         ];

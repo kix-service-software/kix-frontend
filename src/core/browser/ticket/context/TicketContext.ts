@@ -29,7 +29,7 @@ export class TicketContext extends Context {
     private async loadTickets(): Promise<void> {
         const loadingOptions = new KIXObjectLoadingOptions(null, [
             new FilterCriteria('StateType', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'),
-        ], null, null, 1000, ['EscalationTime', 'Watchers']);
+        ], null, 1000, ['EscalationTime', 'Watchers']);
 
         if (this.queue) {
             const queueFilter = new FilterCriteria(

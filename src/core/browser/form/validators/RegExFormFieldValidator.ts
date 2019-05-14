@@ -14,8 +14,8 @@ export class RegExFormFieldValidator implements IFormFieldValidator {
         const value = formInstance.getFormFieldValue(formField.instanceId);
         const fieldValue = value ? value.value : null;
         if (fieldValue && typeof fieldValue === 'string' && fieldValue !== '') {
-            const regEx = new RegExp(formField.regEx);
-            if (!regEx.test(fieldValue)) {
+            const regex = new RegExp(formField.regEx);
+            if (!regex.test(fieldValue)) {
                 return new ValidationResult(
                     ValidationSeverity.ERROR,
                     `Feld ${formField.label} hat ungültigen Wert (${formField.regExErrorMessage}).`

@@ -1,11 +1,11 @@
 import {
     Context, Contact, KIXObjectType, BreadcrumbInformation, KIXObject, KIXObjectLoadingOptions
 } from "../../../model";
-import { CustomerContext } from "../../customer";
 import { KIXObjectService } from "../../kix";
 import { EventService } from "../../event";
 import { LabelService } from "../../LabelService";
 import { ApplicationEvent } from "../../application";
+import { OrganisationContext } from "../../organisation";
 
 export class ContactDetailsContext extends Context {
 
@@ -22,7 +22,7 @@ export class ContactDetailsContext extends Context {
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
         const object = await this.getObject<Contact>();
         const text = await LabelService.getInstance().getText(object);
-        return new BreadcrumbInformation('kix-icon-customers', [CustomerContext.CONTEXT_ID], text);
+        return new BreadcrumbInformation('kix-icon-organisation', [OrganisationContext.CONTEXT_ID], text);
     }
 
     public async getObject<O extends KIXObject>(
@@ -44,7 +44,7 @@ export class ContactDetailsContext extends Context {
             );
         }, 500);
 
-        const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, null, ['TicketStats', 'Tickets']);
+        const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, ['TicketStats', 'Tickets']);
 
         const contacts = await KIXObjectService.loadObjects<Contact>(
             KIXObjectType.CONTACT, [this.objectId], loadingOptions, null, true
@@ -55,7 +55,7 @@ export class ContactDetailsContext extends Context {
 
         window.clearTimeout(timeout);
 
-        let contact;
+        let contact: Contact;
         if (contacts && contacts.length) {
             contact = contacts[0];
         }

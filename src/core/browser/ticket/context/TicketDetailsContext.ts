@@ -1,6 +1,6 @@
 import { Context } from '../../../model/components/context/Context';
 import {
-    Ticket, KIXObject, KIXObjectType, KIXObjectLoadingOptions, BreadcrumbInformation
+    Ticket, KIXObject, KIXObjectType, KIXObjectLoadingOptions, BreadcrumbInformation, Organisation, Contact
 } from '../../../model';
 import { TicketContext } from './TicketContext';
 import { KIXObjectService } from '../../kix';
@@ -23,9 +23,8 @@ export class TicketDetailsContext extends Context {
     public async getObject<O extends KIXObject>(
         objectType: KIXObjectType = KIXObjectType.TICKET, reload: boolean = false, changedProperties: string[] = []
     ): Promise<O> {
-        let object;
-
-        let ticket: Ticket;
+        let object: O;
+        let ticket;
 
         if (!objectType) {
             objectType = KIXObjectType.TICKET;
@@ -35,11 +34,14 @@ export class TicketDetailsContext extends Context {
 
         if (objectType === KIXObjectType.TICKET) {
             object = ticket;
-        } else if (objectType === KIXObjectType.CUSTOMER && ticket) {
-            const customers = await KIXObjectService.loadObjects(KIXObjectType.CUSTOMER, [ticket.CustomerID]);
-            object = customers && customers.length ? customers[0] : null;
+        } else if (objectType === KIXObjectType.ORGANISATION && ticket) {
+            const organisations = await KIXObjectService.loadObjects<Organisation>(
+                KIXObjectType.ORGANISATION, [ticket.OrganisationID]
+            ).catch(() => []);
+            object = organisations && organisations.length ? organisations[0] : null;
         } else if (objectType === KIXObjectType.CONTACT && ticket) {
-            const contacts = await KIXObjectService.loadObjects(KIXObjectType.CONTACT, [ticket.CustomerUserID]);
+            const contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, [ticket.ContactID])
+                .catch(() => []);
             object = contacts && contacts.length ? contacts[0] : null;
         }
 
@@ -62,7 +64,7 @@ export class TicketDetailsContext extends Context {
 
     private async loadTicket(changedProperties: string[] = [], cache: boolean = true): Promise<Ticket> {
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, null, null,
+            null, null, null, null,
             ['TimeUnits', 'DynamicFields', 'Links', 'Flags', 'History', 'Watchers', 'Articles', 'Attachments'],
             ['Links']
         );
@@ -76,7 +78,7 @@ export class TicketDetailsContext extends Context {
             });
         }, 500);
 
-        const tickets = await KIXObjectService.loadObjects<Ticket>(
+        const tickets: Ticket[] = await KIXObjectService.loadObjects<Ticket>(
             KIXObjectType.TICKET, [ticketId], loadingOptions, null, cache
         ).catch((error) => {
             console.error(error);
@@ -89,18 +91,14 @@ export class TicketDetailsContext extends Context {
         if (tickets && tickets.length) {
             ticket = tickets[0];
             // TODO: in eigenen "Notification" Service auslagern
-            if (!ticket || ticket.CustomerID !== tickets[0].CustomerID) {
+            if (!ticket || ticket.OrganisationID !== tickets[0].OrganisationID) {
                 this.listeners.forEach((l) => l.objectChanged(
-                    tickets[0].CustomerID,
-                    tickets[0].customer,
-                    KIXObjectType.CUSTOMER
+                    tickets[0].OrganisationID, null, KIXObjectType.ORGANISATION
                 ));
             }
-            if (!ticket || ticket.CustomerUserID !== tickets[0].CustomerUserID) {
+            if (!ticket || ticket.ContactID !== tickets[0].ContactID) {
                 this.listeners.forEach((l) => l.objectChanged(
-                    tickets[0].CustomerUserID,
-                    tickets[0].contact,
-                    KIXObjectType.CONTACT
+                    tickets[0].ContactID, null, KIXObjectType.CONTACT
                 ));
             }
         }

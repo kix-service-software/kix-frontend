@@ -1,5 +1,5 @@
 import {
-    ContactService, CustomerService, ServiceService, SysConfigService, TicketService, FAQService,
+    ContactService, OrganisationService, ServiceService, SysConfigService, TicketService, FAQService,
     GeneralCatalogService, DynamicFieldService, LinkService, CMDBService, ObjectDefinitionService,
     TextModuleService, UserService, ValidObjectService, TicketTypeService, ObjectIconService,
     TicketStateService, TicketPriorityService, ConfigItemClassService, TranslationService,
@@ -37,7 +37,7 @@ export class CoreServiceRegistry {
             CMDBService.getInstance();
             ConfigItemClassService.getInstance();
             ContactService.getInstance();
-            CustomerService.getInstance();
+            OrganisationService.getInstance();
             DynamicFieldService.getInstance();
             FAQService.getInstance();
             GeneralCatalogService.getInstance();
