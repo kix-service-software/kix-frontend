@@ -1,9 +1,8 @@
 import { ComponentState } from './ComponentState';
 import { ToolbarAction } from './ToolbarAction';
-import { ActionFactory, ContextService } from '../../../../core/browser';
+import { ActionFactory } from '../../../../core/browser';
 import { ShowUserTicketsAction } from '../../../../core/browser/ticket';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
-import { ObjectDataService } from '../../../../core/browser/ObjectDataService';
 import { AgentService } from '../../../../core/browser/application/AgentService';
 
 class Component {
@@ -28,43 +27,43 @@ class Component {
         );
         const myLockedTickets = await TranslationService.translate('Translatable#My locked tickets');
 
-        this.state.toolbarGroups = [
-            [
-                new ToolbarAction(
-                    'kix-icon-man', myTicketsNewArticles, true, user.Tickets.OwnedAndUnseen.length,
-                    'show-user-tickets', user.Tickets.OwnedAndUnseen.map((id) => Number(id))
-                ),
-                new ToolbarAction(
-                    'kix-icon-man', myTickets, false,
-                    user.Tickets.Owned.length,
-                    'show-user-tickets', user.Tickets.Owned
-                )
-            ],
-            [
-                new ToolbarAction(
-                    'kix-icon-eye', myWatchedTicketsNewArticles, true,
-                    user.Tickets.WatchedAndUnseen.length,
-                    'show-user-tickets', user.Tickets.WatchedAndUnseen.map((id) => Number(id))
-                ),
-                new ToolbarAction(
-                    'kix-icon-eye', myWatchedTickets, false,
-                    user.Tickets.Watched.length,
-                    'show-user-tickets', user.Tickets.Watched.map((id) => Number(id))
-                )
-            ],
-            [
-                new ToolbarAction(
-                    'kix-icon-lock-close', myLockedTicketsNewArticles, true,
-                    user.Tickets.OwnedAndLockedAndUnseen.length,
-                    'show-user-tickets', user.Tickets.OwnedAndLockedAndUnseen.map((id) => Number(id))
-                ),
-                new ToolbarAction(
-                    'kix-icon-lock-close', myLockedTickets, false,
-                    user.Tickets.OwnedAndLocked.length,
-                    'show-user-tickets', user.Tickets.OwnedAndLocked.map((id) => Number(id))
-                )
-            ]
-        ];
+        const actionId = 'show-user-tickets';
+
+        if (ActionFactory.getInstance().hasAction(actionId)) {
+            ActionFactory.getInstance().generateActions([actionId]);
+
+            const group1 = [];
+            const group2 = [];
+            const group3 = [];
+
+            group1.push(new ToolbarAction(
+                'kix-icon-man', myTicketsNewArticles, true, user.Tickets.OwnedAndUnseen.length, actionId,
+                user.Tickets.OwnedAndUnseen.map((id) => Number(id))
+            ));
+            group1.push(new ToolbarAction(
+                'kix-icon-man', myTickets, false, user.Tickets.Owned.length, actionId, user.Tickets.Owned
+            ));
+
+            group2.push(new ToolbarAction(
+                'kix-icon-eye', myWatchedTicketsNewArticles, true, user.Tickets.WatchedAndUnseen.length,
+                actionId, user.Tickets.WatchedAndUnseen.map((id) => Number(id))
+            ));
+            group2.push(new ToolbarAction(
+                'kix-icon-eye', myWatchedTickets, false, user.Tickets.Watched.length, actionId,
+                user.Tickets.Watched.map((id) => Number(id))
+            ));
+
+
+            group3.push(new ToolbarAction(
+                'kix-icon-lock-close', myLockedTicketsNewArticles, true, user.Tickets.OwnedAndLockedAndUnseen.length,
+                actionId, user.Tickets.OwnedAndLockedAndUnseen.map((id) => Number(id))
+            ));
+            group3.push(new ToolbarAction(
+                'kix-icon-lock-close', myLockedTickets, false, user.Tickets.OwnedAndLocked.length, actionId,
+                user.Tickets.OwnedAndLocked.map((id) => Number(id))
+            ));
+            this.state.toolbarGroups = [group1, group2, group3];
+        }
     }
 
     public async actionClicked(action: ToolbarAction): Promise<void> {

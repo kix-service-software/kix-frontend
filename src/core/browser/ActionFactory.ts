@@ -24,6 +24,10 @@ export class ActionFactory<T extends AbstractAction> {
         this.actions.push([actionId, action]);
     }
 
+    public hasAction(actionId: string): boolean {
+        return this.actions.some((al) => al[0] === actionId);
+    }
+
     public async generateActions(actionIds: string[], data?: any): Promise<AbstractAction[]> {
         const actions = [];
         if (actionIds) {
