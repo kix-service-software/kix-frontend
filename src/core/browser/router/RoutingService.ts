@@ -6,6 +6,7 @@ import { ContextFactory } from '../context/ContextFactory';
 import { ClientStorageService } from '../ClientStorageService';
 import { ReleaseContext } from '../release';
 import { ObjectDataService } from '../ObjectDataService';
+import { BrowserUtil } from '../BrowserUtil';
 
 export class RoutingService {
 
@@ -45,7 +46,7 @@ export class RoutingService {
             ClientStorageService.setOption(VISITED_KEY, buildNumber.toString());
         } else {
             const parsedUrl = new URL(window.location.href);
-            const path = parsedUrl.pathname.split('/');
+            const path = parsedUrl.pathname === '/' ? [] : parsedUrl.pathname.split('/');
             let contextUrl = 'home';
             if (path.length > 1) {
                 contextUrl = path[1];
@@ -61,6 +62,7 @@ export class RoutingService {
                         context.getDescriptor().contextId, null, context.getDescriptor().contextMode, objectId
                     );
                 } else {
+                    BrowserUtil.openAccessDeniedOverlay();
                     await this.setHomeContext();
                 }
             } else {
@@ -80,7 +82,9 @@ export class RoutingService {
 
         const contextUrl = path[1];
 
+        let needDialog = false;
         if (params.has('new')) {
+            needDialog = true;
             const url = path.length === 4 ? path[3] : contextUrl;
             const mode = path.length === 4 ? ContextMode.CREATE_SUB : ContextMode.CREATE;
             context = await ContextFactory.getContextForUrl(url, undefined, mode);
@@ -90,10 +94,12 @@ export class RoutingService {
                 );
             }
         } else if (params.has('edit')) {
+            needDialog = true;
             context = contextUrl
                 ? await ContextFactory.getContextForUrl(contextUrl, undefined, ContextMode.EDIT)
                 : null;
         } else if (params.has('editLinks')) {
+            needDialog = true;
             context = contextUrl
                 ? await ContextFactory.getContextForUrl('links', undefined, ContextMode.EDIT_LINKS)
                 : null;
@@ -104,6 +110,8 @@ export class RoutingService {
             await ContextService.getInstance().setDialogContext(
                 descriptor.contextId, descriptor.kixObjectTypes[0], descriptor.contextMode, null, true
             );
+        } else if (needDialog) {
+            BrowserUtil.openAccessDeniedOverlay();
         }
     }
 

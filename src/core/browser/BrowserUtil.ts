@@ -32,6 +32,16 @@ export class BrowserUtil {
         );
     }
 
+    public static async openAccessDeniedOverlay(): Promise<void> {
+        const content = new ComponentContent(
+            'toast',
+            new ToastContent(
+                'kix-icon-close', 'Translatable#No permission for this object.', 'Translatable#Access denied'
+            )
+        );
+        OverlayService.getInstance().openOverlay(OverlayType.HINT_TOAST, null, content, 'Translatable#Access denied');
+    }
+
     public static startBrowserDownload(fileName: string, content: string, contentType: string): void {
         content = content.replace(/\r?\n|\r/, '\n');
 
