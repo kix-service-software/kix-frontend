@@ -7,7 +7,7 @@ import { IMainMenuExtension, KIXExtensions } from '../core/extensions';
 import { SocketResponse } from '../core/common';
 import { SocketNameSpace } from './SocketNameSpace';
 import { ConfigurationService, UserService } from '../core/services';
-import { PluginService } from '../services';
+import { PluginService, PermissionService } from '../services';
 
 export class MainMenuNamespace extends SocketNameSpace {
 
@@ -48,11 +48,13 @@ export class MainMenuNamespace extends SocketNameSpace {
             configuration = await this.createDefaultConfiguration(extensions, user.UserID);
         }
 
-        const primaryEntries =
-            this.getMenuEntries(extensions, configuration.primaryMenuEntryConfigurations);
+        const primaryEntries = await this.getMenuEntries(
+            data.token, extensions, configuration.primaryMenuEntryConfigurations
+        );
 
-        const secondaryEntries =
-            this.getMenuEntries(extensions, configuration.secondaryMenuEntryConfigurations);
+        const secondaryEntries = await this.getMenuEntries(
+            data.token, extensions, configuration.secondaryMenuEntryConfigurations
+        );
 
         const response = new MainMenuEntriesResponse(
             data.requestId, primaryEntries, secondaryEntries, configuration.showText
@@ -81,14 +83,21 @@ export class MainMenuNamespace extends SocketNameSpace {
         return configuration;
     }
 
-    private getMenuEntries(
-        extensions: IMainMenuExtension[], entryConfigurations: MenuEntry[]
-    ): MenuEntry[] {
+    private async getMenuEntries(
+        token: string, extensions: IMainMenuExtension[], entryConfigurations: MenuEntry[]
+    ): Promise<MenuEntry[]> {
 
-        const entries = entryConfigurations.map((ec) => {
+        const entries: MenuEntry[] = [];
+
+        for (const ec of entryConfigurations) {
             const menu = extensions.find((me) => me.mainContextId === ec.mainContextId);
-            return new MenuEntry(menu.icon, menu.text, menu.mainContextId, menu.contextIds);
-        });
+            if (menu) {
+                const allowed = await PermissionService.getInstance().checkPermissions(token, menu.permissions);
+                if (allowed) {
+                    entries.push(new MenuEntry(menu.icon, menu.text, menu.mainContextId, menu.contextIds));
+                }
+            }
+        }
 
         return entries;
     }

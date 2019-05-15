@@ -1,6 +1,7 @@
 import { IMainMenuExtension } from '../../core/extensions';
 import { ContactDetailsContext } from '../../core/browser/contact';
 import { OrganisationContext, OrganisationDetailsContext } from '../../core/browser/organisation';
+import { UIComponentPermission } from '../../core/model/UIComponentPermission';
 
 export class Extension implements IMainMenuExtension {
 
@@ -16,6 +17,7 @@ export class Extension implements IMainMenuExtension {
 
     public text: string = "Translatable#Organisations";
 
+    public permissions: UIComponentPermission[] = [];
 
 }
 

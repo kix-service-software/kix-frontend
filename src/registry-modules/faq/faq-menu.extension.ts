@@ -1,5 +1,6 @@
 import { IMainMenuExtension } from '../../core/extensions';
 import { FAQContext, FAQDetailsContext } from '../../core/browser/faq';
+import { UIComponentPermission } from '../../core/model/UIComponentPermission';
 
 export class Extension implements IMainMenuExtension {
 
@@ -13,7 +14,7 @@ export class Extension implements IMainMenuExtension {
 
     public text: string = "Translatable#FAQ";
 
-
+    public permissions: UIComponentPermission[] = [];
 
 }
 

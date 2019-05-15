@@ -6,6 +6,7 @@ import { PermissionService } from '../src/services/PermissionService';
 import { HttpService } from '../src/core/services';
 import { OptionsResponse, RequestMethod, ResponseHeader } from '../src/core/api';
 import { CRUD } from '../src/core/model';
+import { HTTPUtil } from './utils/HTTPUtil';
 
 const expect = chai.expect;
 describe('Permission Service', () => {
@@ -47,12 +48,12 @@ describe('Permission Service', () => {
     describe('UI components permission filter for tickets (R)', () => {
 
         const uiComponents = [
-            new UIComponent('test-tag-01', '/somwhere/tag01', [new UIComponentPermission('tickets', [CRUD.READ]),]),
-            new UIComponent('test-tag-02', '/somwhere/tag02', [new UIComponentPermission('tickets', [CRUD.READ]),]),
-            new UIComponent('test-tag-03', '/somwhere/tag02', [new UIComponentPermission('tickets', [CRUD.CREATE]),]),
-            new UIComponent('test-tag-04', '/somwhere/tag02', [new UIComponentPermission('tickets', [CRUD.UPDATE]),]),
-            new UIComponent('test-tag-05', '/somwhere/tag03', [new UIComponentPermission('faq', [CRUD.READ]),]),
-            new UIComponent('test-tag-06', '/somwhere/tag04', [new UIComponentPermission('cmdb', [CRUD.DELETE]),])
+            new UIComponent('test-tag-01', '/somwhere/tag01', [new UIComponentPermission('tickets', [CRUD.READ])]),
+            new UIComponent('test-tag-02', '/somwhere/tag02', [new UIComponentPermission('tickets', [CRUD.READ])]),
+            new UIComponent('test-tag-03', '/somwhere/tag02', [new UIComponentPermission('tickets', [CRUD.CREATE])]),
+            new UIComponent('test-tag-04', '/somwhere/tag02', [new UIComponentPermission('tickets', [CRUD.UPDATE])]),
+            new UIComponent('test-tag-05', '/somwhere/tag03', [new UIComponentPermission('faq', [CRUD.READ])]),
+            new UIComponent('test-tag-06', '/somwhere/tag04', [new UIComponentPermission('cmdb', [CRUD.DELETE])])
         ];
         let originalOptionsMethod;
 
@@ -61,11 +62,11 @@ describe('Permission Service', () => {
             originalOptionsMethod = HttpService.getInstance().options;
             HttpService.getInstance().options = async (token: string, resource: string): Promise<OptionsResponse> => {
                 if (resource === 'tickets') {
-                    return createOptionsResponse([RequestMethod.GET]);
+                    return HTTPUtil.createOptionsResponse([RequestMethod.GET]);
                 } else if (resource === 'faq') {
-                    return createOptionsResponse([RequestMethod.POST]);
+                    return HTTPUtil.createOptionsResponse([RequestMethod.POST]);
                 } else if (resource === 'cmdb') {
-                    return createOptionsResponse([RequestMethod.POST]);
+                    return HTTPUtil.createOptionsResponse([RequestMethod.POST]);
                 }
             };
         });
@@ -98,11 +99,11 @@ describe('Permission Service', () => {
             originalOptionsMethod = HttpService.getInstance().options;
             HttpService.getInstance().options = async (token: string, resource: string): Promise<OptionsResponse> => {
                 if (resource === 'tickets') {
-                    return createOptionsResponse([RequestMethod.GET, RequestMethod.POST]);
+                    return HTTPUtil.createOptionsResponse([RequestMethod.GET, RequestMethod.POST]);
                 } else if (resource === 'faq') {
-                    return createOptionsResponse([RequestMethod.GET]);
+                    return HTTPUtil.createOptionsResponse([RequestMethod.GET]);
                 } else if (resource === 'cmdb') {
-                    return createOptionsResponse([RequestMethod.GET]);
+                    return HTTPUtil.createOptionsResponse([RequestMethod.GET]);
                 }
             };
         });
@@ -135,7 +136,7 @@ describe('Permission Service', () => {
             originalOptionsMethod = HttpService.getInstance().options;
             HttpService.getInstance().options = async (token: string, resource: string): Promise<OptionsResponse> => {
                 if (resource === 'tickets') {
-                    return createOptionsResponse([RequestMethod.GET]);
+                    return HTTPUtil.createOptionsResponse([RequestMethod.GET]);
                 }
             };
         });
@@ -170,13 +171,13 @@ describe('Permission Service', () => {
             originalOptionsMethod = HttpService.getInstance().options;
             HttpService.getInstance().options = async (token: string, resource: string): Promise<OptionsResponse> => {
                 if (resource === 'tickets') {
-                    return createOptionsResponse([RequestMethod.GET]);
+                    return HTTPUtil.createOptionsResponse([RequestMethod.GET]);
                 } else if (resource === 'organisations') {
-                    return createOptionsResponse([RequestMethod.GET]);
+                    return HTTPUtil.createOptionsResponse([RequestMethod.GET]);
                 } else if (resource === 'contacts') {
-                    return createOptionsResponse([RequestMethod.GET]);
+                    return HTTPUtil.createOptionsResponse([RequestMethod.GET]);
                 } else if (resource === 'faq') {
-                    return createOptionsResponse([RequestMethod.PATCH]);
+                    return HTTPUtil.createOptionsResponse([RequestMethod.PATCH]);
                 }
             };
         });
@@ -185,11 +186,11 @@ describe('Permission Service', () => {
             HttpService.getInstance().options = originalOptionsMethod;
         })
 
-        it('Should retrieve tags where the user has READ permissions for the resource ticket.', async () => {
+        it('Should retrieve tags no tags if only one permission is given.', async () => {
             const filteredComponents = await PermissionService.getInstance().filterUIComponents('test-token-1234', uiComponents);
             expect(filteredComponents).exist;
             expect(filteredComponents).be.an('array');
-            expect(filteredComponents.length).equals(1);
+            expect(filteredComponents.length).equals(0);
         });
     });
 
@@ -229,33 +230,83 @@ describe('Permission Service', () => {
             originalOptionsMethod = HttpService.getInstance().options;
             HttpService.getInstance().options = async (token: string, resource: string): Promise<OptionsResponse> => {
                 if (resource === 'tickets') {
-                    return createOptionsResponse([RequestMethod.GET]);
+                    return HTTPUtil.createOptionsResponse([RequestMethod.GET]);
                 } else if (resource === 'organisations') {
-                    return createOptionsResponse([RequestMethod.GET]);
+                    return HTTPUtil.createOptionsResponse([RequestMethod.GET]);
                 } else if (resource === 'contacts') {
-                    return createOptionsResponse([RequestMethod.GET]);
+                    return HTTPUtil.createOptionsResponse([RequestMethod.GET]);
                 }
             };
         });
 
         after(() => {
             HttpService.getInstance().options = originalOptionsMethod;
-        })
+        });
 
         it('Should retrieve tags where the user has permissions for the resources.', async () => {
             const filteredComponents = await PermissionService.getInstance().filterUIComponents('test-token-1234', uiComponents);
             expect(filteredComponents).exist;
             expect(filteredComponents).be.an('array');
-            expect(filteredComponents.length).equals(4);
+            expect(filteredComponents.length).equals(3);
         });
     });
 
+    describe('Check permissions', () => {
+
+        let originalOptionsMethod;
+
+        before(() => {
+            originalOptionsMethod = HttpService.getInstance().options;
+            HttpService.getInstance().options = async (token: string, resource: string): Promise<OptionsResponse> => {
+                if (resource === 'tickets') {
+                    return HTTPUtil.createOptionsResponse([RequestMethod.GET]);
+                } else if (resource === 'organisations') {
+                    return HTTPUtil.createOptionsResponse([RequestMethod.GET]);
+                } else if (resource === 'contacts') {
+                    return HTTPUtil.createOptionsResponse([RequestMethod.GET]);
+                }
+            };
+        });
+
+        after(() => {
+            HttpService.getInstance().options = originalOptionsMethod;
+        });
+
+        it('The permissions must be checked correctly and allow access', async () => {
+            const allowed = await PermissionService.getInstance().checkPermissions('token1234', [
+                new UIComponentPermission('tickets', [CRUD.READ]),
+                new UIComponentPermission('organisations', [CRUD.READ]),
+                new UIComponentPermission('contacts', [CRUD.READ])
+            ]);
+
+            expect(allowed).true;
+        });
+
+        it('The permissions must be checked correctly and allow access if no permissions given', async () => {
+            const allowed = await PermissionService.getInstance().checkPermissions('token1234', []);
+            expect(allowed).true;
+        });
+
+        it('The permissions must be checked correctly and deny access if permissions are wrong', async () => {
+            const allowed = await PermissionService.getInstance().checkPermissions('token1234', [
+                new UIComponentPermission('tickets', [CRUD.READ]),
+                new UIComponentPermission('organisations', [CRUD.CREATE]),
+                new UIComponentPermission('contacts', [CRUD.READ])
+            ]);
+
+            expect(allowed).false;
+        });
+
+        it('The permissions must be checked correctly and deny access if multiple permissions needed', async () => {
+            const allowed = await PermissionService.getInstance().checkPermissions('token1234', [
+                new UIComponentPermission('tickets', [CRUD.READ, CRUD.CREATE]),
+                new UIComponentPermission('organisations', [CRUD.READ]),
+                new UIComponentPermission('contacts', [CRUD.READ])
+            ]);
+
+            expect(allowed).false;
+        });
+
+    });
+
 });
-
-function createOptionsResponse(methods: RequestMethod[]): OptionsResponse {
-    const headers = {};
-    headers[ResponseHeader.ALLOW] = methods.join(',');
-    const response = { headers };
-
-    return new OptionsResponse(response as any);
-}

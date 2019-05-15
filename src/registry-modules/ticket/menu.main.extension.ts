@@ -1,5 +1,7 @@
 import { IMainMenuExtension } from '../../core/extensions';
 import { TicketContext, TicketDetailsContext } from '../../core/browser/ticket';
+import { UIComponentPermission } from '../../core/model/UIComponentPermission';
+import { CRUD } from '../../core/model';
 
 export class Extension implements IMainMenuExtension {
 
@@ -12,6 +14,10 @@ export class Extension implements IMainMenuExtension {
     public icon: string = "kix-icon-ticket";
 
     public text: string = "Translatable#Tickets";
+
+    public permissions: UIComponentPermission[] = [
+        new UIComponentPermission('tickets', [CRUD.READ])
+    ];
 
 }
 

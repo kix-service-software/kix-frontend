@@ -31,6 +31,18 @@ export class PermissionService {
         return components;
     }
 
+    public async checkPermissions(token: string, permissions: UIComponentPermission[] = []): Promise<boolean> {
+        const permissionChecks: Array<Promise<boolean>> = [];
+        if (permissions) {
+            permissions.forEach((p) => {
+                permissionChecks.push(this.methodAllowed(token, p));
+            });
+        }
+
+        const checks = await Promise.all(permissionChecks);
+        return checks.every((c) => c);
+    }
+
     private async  methodAllowed(token: string, permission: UIComponentPermission): Promise<boolean> {
         if (permission.permissions && permission.permissions.length) {
             const response = await HttpService.getInstance().options(token, permission.target)
@@ -38,7 +50,9 @@ export class PermissionService {
                     console.error(error);
                     return null;
                 });
-            return response !== null && (response.headers.AllowPermissionValue & permission.value) > 0;
+
+            const accessPermission = response.headers.AllowPermissionValue & permission.value;
+            return accessPermission === permission.value;
         }
 
         return true;

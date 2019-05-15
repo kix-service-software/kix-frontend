@@ -1,5 +1,6 @@
 import { IMainMenuExtension } from '../../core/extensions';
 import { HomeContext } from '../../core/browser/home';
+import { UIComponentPermission } from '../../core/model/UIComponentPermission';
 
 export class Extensions implements IMainMenuExtension {
 
@@ -12,6 +13,8 @@ export class Extensions implements IMainMenuExtension {
     public icon: string = "kix-icon-home";
 
     public text: string = "Translatable#Home";
+
+    public permissions: UIComponentPermission[] = [];
 
 }
 

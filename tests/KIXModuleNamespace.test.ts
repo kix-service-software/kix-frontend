@@ -9,6 +9,7 @@ import { PluginService } from '../src/services';
 import { KIXExtensions, IKIXModuleExtension } from '../src/core/extensions';
 import { KIXModuleNamespace } from '../src/socket-namespaces/KIXModuleNamespace';
 import { SocketResponse } from '../src/core/common';
+import { HTTPUtil } from './utils/HTTPUtil';
 
 const expect = chai.expect;
 describe('KIXModuleNamespace', () => {
@@ -33,11 +34,11 @@ describe('KIXModuleNamespace', () => {
             originalOptionsMethod = HttpService.getInstance().options;
             HttpService.getInstance().options = async (token: string, resource: string): Promise<OptionsResponse> => {
                 if (resource === 'tickets') {
-                    return createOptionsResponse([RequestMethod.GET]);
+                    return HTTPUtil.createOptionsResponse([RequestMethod.GET]);
                 } else if (resource === 'organisations') {
-                    return createOptionsResponse([RequestMethod.GET]);
+                    return HTTPUtil.createOptionsResponse([RequestMethod.GET]);
                 } else if (resource === 'contacts') {
-                    return createOptionsResponse([RequestMethod.GET]);
+                    return HTTPUtil.createOptionsResponse([RequestMethod.GET]);
                 }
             };
 
@@ -89,20 +90,11 @@ describe('KIXModuleNamespace', () => {
             const uiModule = socketRespopnse.data.modules.find((m) => m.id === 'TestExtension2');
             expect(uiModule.uiComponents).exist;
             expect(uiModule.uiComponents).an('array');
-            expect(uiModule.uiComponents.length).equals(4);
+            expect(uiModule.uiComponents.length).equals(3);
         });
     });
 
 });
-
-function createOptionsResponse(methods: RequestMethod[]): OptionsResponse {
-    const headers = {};
-    headers[ResponseHeader.ALLOW] = methods.join(',');
-    const response = { headers };
-
-    return new OptionsResponse(response as any);
-}
-
 
 class TestExtension1 implements IKIXModuleExtension {
 

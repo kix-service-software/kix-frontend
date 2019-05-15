@@ -1,4 +1,5 @@
 import { ObjectIcon } from "../../model";
+import { UIComponentPermission } from "../../model/UIComponentPermission";
 
 export interface IMainMenuExtension {
 
@@ -11,5 +12,7 @@ export interface IMainMenuExtension {
     contextIds: string[];
 
     primaryMenu: boolean;
+
+    permissions: UIComponentPermission[];
 
 }

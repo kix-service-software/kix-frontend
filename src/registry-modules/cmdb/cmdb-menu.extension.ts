@@ -1,5 +1,6 @@
 import { IMainMenuExtension } from '../../core/extensions';
 import { CMDBContext, ConfigItemDetailsContext } from '../../core/browser/cmdb';
+import { UIComponentPermission } from '../../core/model/UIComponentPermission';
 
 export class Extension implements IMainMenuExtension {
 
@@ -13,6 +14,7 @@ export class Extension implements IMainMenuExtension {
 
     public text: string = "Translatable#CMDB";
 
+    public permissions: UIComponentPermission[] = [];
 }
 
 module.exports = (data, host, options) => {
