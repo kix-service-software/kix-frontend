@@ -28,13 +28,16 @@ class Extension implements IKIXModuleExtension {
         new UIComponent(
             'ticket-article-create-module-component',
             'ticket/module/ticket-article-create-module-component',
-            []
+            [
+                new UIComponentPermission('tickets/*/articles', [CRUD.CREATE])
+            ]
         )
     ];
 
     public external: boolean = false;
 
     public uiComponents: UIComponent[] = [
+        new UIComponent('tickets', 'ticket/ticket-module', []),
         new UIComponent('ticket-list-module', 'ticket/ticket-list-module', []),
         new UIComponent('ticket-article-attachment-list', 'ticket/ticket-article-attachment-list', []),
         new UIComponent('ticket-article-details', 'ticket/ticket-article-details', []),
