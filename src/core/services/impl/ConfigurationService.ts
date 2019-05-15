@@ -65,7 +65,7 @@ export class ConfigurationService {
             : [];
     }
 
-    public getModuleConfiguration(contextId: string, userId?: number): any {
+    public getModuleConfiguration<T = any>(contextId: string, userId?: number): T {
 
         const configurationFileName = this.buildConfigurationFileName(contextId, userId);
         const filePath = this.getComponentConfigurationFilePath(configurationFileName);

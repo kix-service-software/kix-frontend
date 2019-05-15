@@ -5,7 +5,7 @@ import { UIComponentPermission } from '../src/core/model/UIComponentPermission';
 import { PermissionService } from '../src/services/PermissionService';
 import { HttpService } from '../src/core/services';
 import { OptionsResponse, RequestMethod, ResponseHeader } from '../src/core/api';
-import { CRUD } from '../src/core/model';
+import { CRUD, ContextConfiguration, ConfiguredWidget } from '../src/core/model';
 import { HTTPUtil } from './utils/HTTPUtil';
 
 const expect = chai.expect;
@@ -307,6 +307,117 @@ describe('Permission Service', () => {
             expect(allowed).false;
         });
 
+    });
+
+    describe('Filter ContextConfiguration for permission', () => {
+
+        const contextConfiguration = new ContextConfiguration(
+            'contextId',
+            [
+                'sidebar01', 'sidebar02', 'sidebar03'
+            ], [
+                new ConfiguredWidget('sidebar01', null, [new UIComponentPermission('tickets', [CRUD.READ])]),
+                new ConfiguredWidget('sidebar02', null, [new UIComponentPermission('cmdb', [CRUD.READ])]),
+                new ConfiguredWidget('sidebar03', null, [new UIComponentPermission('organisations', [CRUD.READ])])
+            ],
+            [
+                'explorer01', 'explorer02', 'explorer03'
+            ], [
+                new ConfiguredWidget('explorer01', null, [new UIComponentPermission('faq', [CRUD.READ])]),
+                new ConfiguredWidget('explorer01', null, [new UIComponentPermission('cmdb', [CRUD.CREATE])]),
+                new ConfiguredWidget('explorer01', null, [new UIComponentPermission('organisations', [CRUD.UPDATE])])
+            ],
+            [
+                'lane01', 'lane02', 'lane03'
+            ], [
+                new ConfiguredWidget('lane01', null, [new UIComponentPermission('tickets', [CRUD.READ])]),
+                new ConfiguredWidget('lane02', null, [new UIComponentPermission('faq', [CRUD.READ])]),
+                new ConfiguredWidget('lane03', null, [new UIComponentPermission('cmdb', [CRUD.READ])])
+            ],
+            [
+                'laneTab01', 'laneTab02', 'laneTab03'
+            ], [
+                new ConfiguredWidget('laneTab01', null, [new UIComponentPermission('tickets', [CRUD.READ, CRUD.CREATE])]),
+                new ConfiguredWidget('laneTab02', null, [new UIComponentPermission('faq', [CRUD.READ])]),
+                new ConfiguredWidget('laneTab03', null, [new UIComponentPermission('cmdb', [CRUD.READ])])
+            ],
+            [
+                'content01', 'content02', 'content03'
+            ], [
+                new ConfiguredWidget('content01', null, [new UIComponentPermission('tickets', [CRUD.READ])]),
+                new ConfiguredWidget('content02', null, [new UIComponentPermission('organisations', [])]),
+                new ConfiguredWidget('content03', null, [new UIComponentPermission('faq', [])]),
+            ],
+            [], [],
+            [
+                new ConfiguredWidget('overlay01', null, [new UIComponentPermission('tickets', [CRUD.READ])]),
+                new ConfiguredWidget('overlay02', null, [new UIComponentPermission('faq', [CRUD.UPDATE])])
+            ]
+        );
+
+        let originalOptionsMethod;
+
+        before(() => {
+
+            originalOptionsMethod = HttpService.getInstance().options;
+            HttpService.getInstance().options = async (token: string, resource: string): Promise<OptionsResponse> => {
+                if (resource === 'tickets') {
+                    return HTTPUtil.createOptionsResponse([RequestMethod.GET]);
+                } else if (resource === 'faq') {
+                    return HTTPUtil.createOptionsResponse([RequestMethod.GET]);
+                } else if (resource === 'cmdb') {
+                    return HTTPUtil.createOptionsResponse([RequestMethod.GET]);
+                } else {
+                    return HTTPUtil.createOptionsResponse([]);
+                }
+            };
+        });
+
+        after(() => {
+            HttpService.getInstance().options = originalOptionsMethod;
+        })
+
+        it('Should retrieve a configuration with 2 sidebar widgets.', async () => {
+            const config = await PermissionService.getInstance().filterContextConfiguration('test-token-1234', contextConfiguration);
+            expect(config).exist;
+            expect(config.sidebarWidgets).exist;
+            expect(config.sidebarWidgets.length).equals(2);
+        });
+
+        it('Should retrieve a configuration with 1 explorer widgets.', async () => {
+            const config = await PermissionService.getInstance().filterContextConfiguration('test-token-1234', contextConfiguration);
+            expect(config).exist;
+            expect(config.explorerWidgets).exist;
+            expect(config.explorerWidgets.length).equals(1);
+        });
+
+        it('Should retrieve a configuration with 3 lane widgets.', async () => {
+            const config = await PermissionService.getInstance().filterContextConfiguration('test-token-1234', contextConfiguration);
+            expect(config).exist;
+            expect(config.laneWidgets).exist;
+            expect(config.laneWidgets.length).equals(3);
+        });
+
+        it('Should retrieve a configuration with 2 lane tab widgets.', async () => {
+            const config = await PermissionService.getInstance().filterContextConfiguration('test-token-1234', contextConfiguration);
+            expect(config).exist;
+            expect(config.laneTabWidgets).exist;
+            expect(config.laneTabWidgets.length).equals(2);
+        });
+
+        it('Should retrieve a configuration with 3 content widgets.', async () => {
+            const config = await PermissionService.getInstance().filterContextConfiguration('test-token-1234', contextConfiguration);
+            expect(config).exist;
+            expect(config.contentWidgets).exist;
+            expect(config.contentWidgets.length).equals(3);
+        });
+
+        it('Should retrieve a configuration with 3 content widgets.', async () => {
+            const config = await PermissionService.getInstance().filterContextConfiguration('test-token-1234', contextConfiguration);
+            expect(config).exist;
+            expect(config.overlayWidgets).exist;
+            expect(config.overlayWidgets.length).equals(1);
+        });
     });
 
 });

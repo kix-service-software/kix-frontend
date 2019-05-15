@@ -1,10 +1,11 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize, ContactProperty,
-    DataType, KIXObjectType, OrganisationProperty, KIXObjectProperty, ObjectinformationWidgetSettings
+    DataType, KIXObjectType, OrganisationProperty, KIXObjectProperty, ObjectinformationWidgetSettings, CRUD
 } from '../../core/model';
 import { TableConfiguration, TableHeaderHeight, TableRowHeight, DefaultColumnConfiguration } from '../../core/browser';
 import { OrganisationDetailsContext } from '../../core/browser/organisation';
+import { UIComponentPermission } from '../../core/model/UIComponentPermission';
 
 export class ModuleFactoryExtension implements IConfigurationExtension {
 
@@ -87,7 +88,9 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
                     'organisation-create-ticket-action', 'organisation-print-action'
                 ], {},
                 false, true, WidgetSize.LARGE, null, false
-            ));
+            ),
+            [new UIComponentPermission('tickets', [CRUD.READ])]
+        );
 
         const lanes = ['organisation-assigned-contacts-widget', 'organisation-assigned-tickets-widget'];
 

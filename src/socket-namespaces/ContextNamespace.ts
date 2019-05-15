@@ -1,12 +1,13 @@
 import { SocketNameSpace } from './SocketNameSpace';
 import {
     SaveWidgetRequest, ContextEvent, LoadContextConfigurationRequest, LoadContextConfigurationResponse,
-    SaveContextConfigurationRequest
+    SaveContextConfigurationRequest,
+    ContextConfiguration
 } from '../core/model';
 
 import { SocketResponse, SocketErrorResponse } from '../core/common';
 import { ConfigurationService, UserService } from '../core/services';
-import { PluginService } from '../services';
+import { PluginService, PermissionService } from '../services';
 
 export class ContextNamespace extends SocketNameSpace {
 
@@ -45,7 +46,9 @@ export class ContextNamespace extends SocketNameSpace {
         const user = await UserService.getInstance().getUserByToken(data.token);
         const userId = user.UserID;
 
-        let configuration = await ConfigurationService.getInstance().getModuleConfiguration(data.contextId, userId);
+        let configuration = await ConfigurationService.getInstance().getModuleConfiguration<ContextConfiguration>(
+            data.contextId, userId
+        );
 
         if (!configuration) {
             const configurationExtension = await PluginService.getInstance().getConfigurationExtension(data.contextId);
@@ -66,6 +69,7 @@ export class ContextNamespace extends SocketNameSpace {
         }
 
         configuration.contextId = data.contextId;
+        configuration = await PermissionService.getInstance().filterContextConfiguration(data.token, configuration);
 
         const response = new LoadContextConfigurationResponse(data.requestId, configuration);
         return new SocketResponse(ContextEvent.CONTEXT_CONFIGURATION_LOADED, response);

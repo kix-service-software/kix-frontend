@@ -1,6 +1,8 @@
 import { UIComponent } from "../core/model/UIComponent";
 import { HttpService } from "../core/services";
 import { UIComponentPermission } from "../core/model/UIComponentPermission";
+import { ContextConfiguration, Context, WidgetConfiguration, ConfiguredWidget } from "../core/model";
+import { config } from "memcached";
 
 export class PermissionService {
 
@@ -29,6 +31,46 @@ export class PermissionService {
         }
 
         return components;
+    }
+
+    public async filterContextConfiguration(
+        token: string, configuration: ContextConfiguration
+    ): Promise<ContextConfiguration> {
+
+        const sidebars = await this.checkConfiguration(token, configuration.sidebars, configuration.sidebarWidgets);
+        const explorer = await this.checkConfiguration(token, configuration.explorer, configuration.explorerWidgets);
+        const lanes = await this.checkConfiguration(token, configuration.lanes, configuration.laneWidgets);
+        const laneTabs = await this.checkConfiguration(token, configuration.laneTabs, configuration.laneTabWidgets);
+        const content = await this.checkConfiguration(token, configuration.content, configuration.contentWidgets);
+        const overlays = await this.checkConfiguration(
+            token, configuration.overlayWidgets.map((ow) => ow.instanceId), configuration.overlayWidgets
+        );
+
+        return new ContextConfiguration(
+            configuration.contextId,
+            sidebars.map((w) => w.instanceId), sidebars.map((w) => w),
+            explorer.map((w) => w.instanceId), explorer.map((w) => w),
+            lanes.map((w) => w.instanceId), lanes.map((w) => w),
+            laneTabs.map((w) => w.instanceId), laneTabs.map((w) => w),
+            content.map((w) => w.instanceId), content.map((w) => w),
+            configuration.generalActions,
+            configuration.actions,
+            overlays
+        );
+    }
+
+    private async checkConfiguration(
+        token: string, instanceIds: string[], widgets: ConfiguredWidget[]
+    ): Promise<ConfiguredWidget[]> {
+        const allowedWidgets: ConfiguredWidget[] = [];
+        widgets = widgets.filter((w) => instanceIds.some((id) => id === w.instanceId));
+        for (const widget of widgets) {
+            const allowed = await this.checkPermissions(token, widget.permissions);
+            if (allowed) {
+                allowedWidgets.push(widget);
+            }
+        }
+        return allowedWidgets;
     }
 
     public async checkPermissions(token: string, permissions: UIComponentPermission[] = []): Promise<boolean> {
