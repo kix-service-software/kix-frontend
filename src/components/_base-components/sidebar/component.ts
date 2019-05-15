@@ -1,8 +1,8 @@
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../../core/browser/context';
-import { ComponentsService } from '../../../core/browser/components';
 import { Context, ContextType } from '../../../core/model';
 import { IdService } from '../../../core/browser';
+import { KIXModulesService } from '../../../core/browser/modules';
 
 class Component {
 
@@ -59,7 +59,7 @@ class Component {
     public getSidebarTemplate(instanceId: string): any {
         const context = ContextService.getInstance().getActiveContext(this.state.contextType);
         const config = context ? context.getWidgetConfiguration(instanceId) : undefined;
-        return config ? ComponentsService.getInstance().getComponentTemplate(config.widgetId) : undefined;
+        return config ? KIXModulesService.getComponentTemplate(config.widgetId) : undefined;
     }
 }
 

@@ -1,4 +1,3 @@
-export { ComponentsService } from './ComponentsService';
 export { DisplayImageDescription } from './DisplayImageDescription';
 export { Label } from './Label';
 export { IAutofillConfiguration } from './IAutofillConfiguration';

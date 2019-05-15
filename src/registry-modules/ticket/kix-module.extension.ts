@@ -22,7 +22,7 @@ class Extension implements IKIXModuleExtension {
         ),
         new UIComponent('ticket-update-module-component', 'ticket/module/ticket-update-module-component',
             [
-                new UIComponentPermission('tickets', [CRUD.UPDATE])
+                new UIComponentPermission('tickets/*', [CRUD.UPDATE]),
             ]
         ),
         new UIComponent(

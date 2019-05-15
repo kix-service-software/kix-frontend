@@ -4,8 +4,8 @@ import {
     OverlayType, ComponentContent, WidgetType, KIXObject, ToastContent
 } from "../../../core/model";
 import { ContextService } from "../../../core/browser/context";
-import { ComponentsService } from "../../../core/browser/components";
 import { TranslationService } from "../../../core/browser/i18n/TranslationService";
+import { KIXModulesService } from "../../../core/browser/modules";
 
 class OverlayComponent {
 
@@ -258,7 +258,7 @@ class OverlayComponent {
     public getTemplate(): any {
         if (this.isComponentContent()) {
             const content = (this.state.content as ComponentContent<any>);
-            return ComponentsService.getInstance().getComponentTemplate(content.getValue());
+            return KIXModulesService.getComponentTemplate(content.getValue());
         }
 
     }

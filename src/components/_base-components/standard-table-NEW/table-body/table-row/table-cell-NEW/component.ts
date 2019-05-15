@@ -1,7 +1,8 @@
 import { ComponentState } from './ComponentState';
 import {
-    AbstractMarkoComponent, ComponentsService, IColumn, ValueState, ICell, TableCSSHandlerRegistry
+    AbstractMarkoComponent, IColumn, ValueState, ICell, TableCSSHandlerRegistry
 } from '../../../../../../core/browser';
+import { KIXModulesService } from '../../../../../../core/browser/modules';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -36,7 +37,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public getCellTemplate(): any {
         if (this.column) {
-            return ComponentsService.getInstance().getComponentTemplate(
+            return KIXModulesService.getComponentTemplate(
                 this.column.getColumnConfiguration().componentId
             );
         }

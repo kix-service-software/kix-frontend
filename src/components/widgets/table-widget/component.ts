@@ -4,11 +4,11 @@ import {
 } from '../../../core/model';
 import { IEventSubscriber, EventService } from '../../../core/browser/event';
 import {
-    ContextService, IdService, TableEvent, WidgetService, ActionFactory, TableFactoryService,
-    TableEventData, ComponentsService
+    ContextService, IdService, TableEvent, WidgetService, ActionFactory, TableFactoryService, TableEventData
 } from '../../../core/browser';
 import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 import { ComponentInput } from './ComponentInput';
+import { KIXModulesService } from '../../../core/browser/modules';
 class Component {
 
     public state: ComponentState;
@@ -194,7 +194,7 @@ class Component {
     }
 
     public getTemplate(componentId: string): any {
-        return ComponentsService.getInstance().getComponentTemplate(componentId);
+        return KIXModulesService.getComponentTemplate(componentId);
     }
 
 }

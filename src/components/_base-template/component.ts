@@ -1,8 +1,7 @@
 import { Context, ContextType, ContextDescriptor, KIXObjectType, ContextMode, ObjectData } from '../../core/model';
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../core/browser/context';
-import { ComponentsService } from '../../core/browser/components';
-import { IdService, FormService, ServiceRegistry, FactoryService } from '../../core/browser';
+import { IdService, ServiceRegistry, FactoryService } from '../../core/browser';
 import { RoutingService } from '../../core/browser/router';
 import { HomeContext } from '../../core/browser/home';
 import { EventService } from '../../core/browser/event';

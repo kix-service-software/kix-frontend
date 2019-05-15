@@ -2,7 +2,7 @@ import { ComponentState } from './ComponentState';
 import { ContextService } from '../../../core/browser';
 import { FAQContext } from '../../../core/browser/faq';
 import { ConfiguredWidget } from '../../../core/model';
-import { ComponentsService } from '../../../core/browser/components';
+import { KIXModulesService } from '../../../core/browser/modules';
 
 class Component {
 
@@ -18,7 +18,7 @@ class Component {
     }
 
     public getTemplate(widget: ConfiguredWidget): any {
-        return ComponentsService.getInstance().getComponentTemplate(widget.configuration.widgetId);
+        return KIXModulesService.getComponentTemplate(widget.configuration.widgetId);
     }
 
 }

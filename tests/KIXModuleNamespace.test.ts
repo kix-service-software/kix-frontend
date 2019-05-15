@@ -3,7 +3,7 @@ import * as chai from 'chai';
 import { UIComponent } from '../src/core/model/UIComponent';
 import { UIComponentPermission } from '../src/core/model/UIComponentPermission';
 import { HttpService } from '../src/core/services';
-import { OptionsResponse, RequestMethod } from '../src/core/api';
+import { OptionsResponse, RequestMethod, ResponseHeader } from '../src/core/api';
 import { CRUD, LoadKIXModulesResponse } from '../src/core/model';
 import { PluginService } from '../src/services';
 import { KIXExtensions, IKIXModuleExtension } from '../src/core/extensions';
@@ -96,11 +96,9 @@ describe('KIXModuleNamespace', () => {
 });
 
 function createOptionsResponse(methods: RequestMethod[]): OptionsResponse {
-    const response = {
-        headers: {
-            Allow: methods.join(',')
-        }
-    };
+    const headers = {};
+    headers[ResponseHeader.ALLOW] = methods.join(',');
+    const response = { headers };
 
     return new OptionsResponse(response as any);
 }

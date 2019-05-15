@@ -1,10 +1,11 @@
 import { ContextService } from '../../../core/browser/context';
-import { ComponentsService, TabContainerEvent, TabContainerEventData } from '../../../core/browser/components';
+import { TabContainerEvent, TabContainerEventData } from '../../../core/browser/components';
 import { WidgetType, ConfiguredWidget } from '../../../core/model';
 import { ComponentState } from './ComponentState';
 import { WidgetService, ActionFactory, IdService } from '../../../core/browser';
 import { IEventSubscriber, EventService } from '../../../core/browser/event';
 import { TranslationService } from '../../../core/browser/i18n/TranslationService';
+import { KIXModulesService } from '../../../core/browser/modules';
 
 class TabLaneComponent implements IEventSubscriber {
 
@@ -83,7 +84,7 @@ class TabLaneComponent implements IEventSubscriber {
 
     public getWidgetTemplate(): any {
         return this.state.activeTab
-            ? ComponentsService.getInstance().getComponentTemplate(this.state.activeTab.configuration.widgetId)
+            ? KIXModulesService.getComponentTemplate(this.state.activeTab.configuration.widgetId)
             : undefined;
     }
 

@@ -1,8 +1,8 @@
 import { ContextService } from '../../../core/browser/context/';
 import { ConfiguredWidget, Context, ContextType } from '../../../core/model/';
-import { ComponentsService } from '../../../core/browser/components';
 import { ComponentState } from './ComponentState';
 import { IdService } from '../../../core/browser';
+import { KIXModulesService } from '../../../core/browser/modules';
 
 class Component {
 
@@ -58,7 +58,7 @@ class Component {
     }
 
     public getExplorerTemplate(widget: ConfiguredWidget): any {
-        return ComponentsService.getInstance().getComponentTemplate(widget.configuration.widgetId);
+        return KIXModulesService.getComponentTemplate(widget.configuration.widgetId);
     }
 
     public isExplorerBarExpanded(instanceId: string): boolean {

@@ -1,7 +1,7 @@
 import { RouterComponentState } from './RouterComponentState';
-import { ComponentsService } from '../../../core/browser/components';
 import { RoutingService, IRoutingServiceListener } from '../../../core/browser/router';
 import { ComponentRouter } from '../../../core/model';
+import { KIXModulesService } from '../../../core/browser/modules';
 
 export class RouterOutletComponent implements IRoutingServiceListener {
 
@@ -23,7 +23,7 @@ export class RouterOutletComponent implements IRoutingServiceListener {
         if (router) {
             this.state.componentId = router.componentId;
             this.state.data = router.data;
-            this.state.template = ComponentsService.getInstance().getComponentTemplate(this.state.componentId);
+            this.state.template = KIXModulesService.getComponentTemplate(this.state.componentId);
             (this as any).update();
         }
     }

@@ -1,5 +1,6 @@
 import { RequestMethod } from "./RequestMethod";
 import { CRUD } from "../model";
+import { ResponseHeader } from "./ResponseHeader";
 
 export class OptionsResponseHeader {
 
@@ -8,18 +9,19 @@ export class OptionsResponseHeader {
     public AllowPermissionValue: CRUD = 0;
 
     public constructor(headers: Headers) {
-        if (headers['Allow']) {
-            this.Allow = headers['Allow'].split(',');
+        if (headers[ResponseHeader.ALLOW]) {
+            this.Allow = headers[ResponseHeader.ALLOW].split(',');
 
             this.Allow.forEach((m) => {
                 let value = 0;
-                if (m === RequestMethod.POST) {
+                const method = m.trim();
+                if (method === RequestMethod.POST) {
                     value = CRUD.CREATE;
-                } else if (m === RequestMethod.GET) {
+                } else if (method === RequestMethod.GET) {
                     value = CRUD.READ;
-                } else if (m === RequestMethod.PATCH) {
+                } else if (method === RequestMethod.PATCH) {
                     value = CRUD.UPDATE;
-                } else if (m === RequestMethod.DELETE) {
+                } else if (method === RequestMethod.DELETE) {
                     value = CRUD.DELETE;
                 }
 
