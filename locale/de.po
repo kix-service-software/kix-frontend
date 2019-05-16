@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-05-16 09:03+0000\n"
+"PO-Revision-Date: 2019-05-16 12:42+0000\n"
 "Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -1427,15 +1427,11 @@ msgstr "Kunden"
 msgid "Organisations Dashboard"
 msgstr "Kunden Dashboard"
 
-#, fuzzy
-#| msgid "Contact Search"
 msgid "Organisation Search"
-msgstr "Kontakt Suche"
+msgstr "Kunden Suche"
 
-#, fuzzy
-#| msgid "Translation successfully created."
 msgid "Organisation successfully created."
-msgstr "Übersetzung wurde erfolgreich angelegt."
+msgstr "Kunde wurde erfolgreich angelegt."
 
 msgid "Other"
 msgstr "Sonstiges"
@@ -1543,10 +1539,8 @@ msgstr ""
 "Bitte wählen Sie die Sprache, in der Sie KIX benutzen wollen. Ist nichts "
 "gesetzt, versucht das System die Sprache automatisch zu wählen."
 
-#, fuzzy
-#| msgid "System Address"
 msgid "Postal Address"
-msgstr "Systemadresse"
+msgstr "Adresse"
 
 msgid "Preferences"
 msgstr "Persönliche Einstellungen"
@@ -1843,7 +1837,7 @@ msgid "Select a text separator."
 msgstr "Wählen Sie einen Texttrenner."
 
 msgid "Select a value separator."
-msgstr ""
+msgstr "Wählen Sie einen Werttrenner."
 
 msgid "Select Config Item Class"
 msgstr "Wählen Sie eine Config Item Klasse aus der Liste."
@@ -1919,13 +1913,11 @@ msgstr ""
 "Setzen Sie den Status als \"gültig\", \"ungültig (temporär)\" oder \"ungültig"
 "\"."
 
-#, fuzzy
-#| msgid "Set the state as „valid“, „invalid (temporarily)“, or „invalid“."
 msgid ""
 "Set the system address as „valid“, „invalid (temporarily)“, or „invalid“."
 msgstr ""
-"Setzen Sie den Status als \"gültig\", \"ungültig (temporär)\" oder \"ungültig"
-"\"."
+"Setzen Sie die Systemadresse als \"gültig\", \"ungültig (temporär)\" oder \""
+"ungültig\"."
 
 msgid "Set the type as „valid“, „invalid (temporarily)“, or „invalid“."
 msgstr ""
@@ -2089,10 +2081,8 @@ msgstr "Ticket Beschreibung"
 msgid "Ticket Details"
 msgstr "Ticket Details"
 
-#, fuzzy
-#| msgid "New Tickets"
 msgid "Ticket Flags"
-msgstr "Neue Tickets"
+msgstr "Ticket Flags"
 
 msgid "Ticket History"
 msgstr "Ticket Historie"
@@ -2177,10 +2167,8 @@ msgstr "Übersetzung"
 msgid "Translation:"
 msgstr "Übersetzung:"
 
-#, fuzzy
-#| msgid "Translation"
 msgid "TranslationLanguage"
-msgstr "Übersetzung"
+msgstr "Übersetzungssprache"
 
 msgid "Translations"
 msgstr "Übersetzungen"
@@ -2348,7 +2336,7 @@ msgid "Your rating"
 msgstr "Ihre Bewertung"
 
 msgid "Zip"
-msgstr ""
+msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
