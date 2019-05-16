@@ -59,7 +59,7 @@ export class UserLabelProvider implements ILabelProvider<User> {
                 displayValue = 'Translatable#Last Name';
                 break;
             case UserProperty.USER_LOGIN:
-                displayValue = 'Translatable#Login';
+                displayValue = 'Translatable#Login Name';
                 break;
             case UserProperty.VALID_ID:
                 displayValue = 'Translatable#Validity';
