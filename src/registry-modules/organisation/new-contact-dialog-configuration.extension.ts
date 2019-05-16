@@ -40,7 +40,7 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
                     'Translatable#Helptext_Organisations_ContactCreate_Firstname'
                 ),
                 new FormField(
-                    'Translatable#Login', ContactProperty.LOGIN, null, true,
+                    'Translatable#Login Name', ContactProperty.LOGIN, null, true,
                     'Translatable#Helptext_Organisations_ContactCreate_Login'
                 ),
                 new FormField('Translatable#Password', ContactProperty.PASSWORD, null, true,

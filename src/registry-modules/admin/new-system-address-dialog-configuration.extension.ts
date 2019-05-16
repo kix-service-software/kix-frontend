@@ -35,7 +35,7 @@ export class Extension implements IConfigurationExtension {
                     FormValidationService.EMAIL_REGEX, FormValidationService.EMAIL_REGEX_ERROR_MESSAGE
                 ),
                 new FormField(
-                    'Translatable#Displayname', SystemAddressProperty.REALNAME, null, true,
+                    'Translatable#Display Name', SystemAddressProperty.REALNAME, null, true,
                     ''
                 ),
                 new FormField(
@@ -50,7 +50,7 @@ export class Extension implements IConfigurationExtension {
                 )
             ];
 
-            const group = new FormGroup('Translatable#System Adresses', fields);
+            const group = new FormGroup('Translatable#System Addresses', fields);
 
             const form = new Form(formId, 'Translatable#New Address', [group], KIXObjectType.SYSTEM_ADDRESS);
             await configurationService.saveModuleConfiguration(form.id, null, form);
