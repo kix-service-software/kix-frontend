@@ -42,8 +42,8 @@ class Component {
             : defaultPlaceholder;
     }
 
-    private textFilterValueChanged(event: any): void {
-        this.state.textFilterValue = event.target.value;
+    public textFilterValueChanged(event: any, externalFilterText?: string): void {
+        this.state.textFilterValue = event ? event.target.value : externalFilterText;
     }
 
     public predefinedFilterChanged(nodes: TreeNode[]): void {

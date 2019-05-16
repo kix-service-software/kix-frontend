@@ -304,7 +304,7 @@ export abstract class Context {
     }
 
     public reset(): void {
-        return;
+        this.resetAdditionalInformation();
     }
 
 }

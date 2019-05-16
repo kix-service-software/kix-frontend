@@ -102,7 +102,12 @@ class Component extends FormInputComponent<number, ComponentState> {
             ];
 
             const nodes = [];
-            labels.forEach((l) => nodes.push(new TreeNode(l[0], l[1])));
+            labels.forEach((l) => nodes.push(
+                new TreeNode(
+                    l[0], l[1], null, null, null, null, null, null, null,
+                    undefined, undefined, undefined, undefined, l[0]
+                )
+            ));
 
             this.state.nodes = nodes;
             this.fromChanged([nodes[0]]);

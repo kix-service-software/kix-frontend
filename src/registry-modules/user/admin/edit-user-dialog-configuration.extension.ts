@@ -44,7 +44,7 @@ export class Extension implements IConfigurationExtension {
                     'Translatable#Insert the lastname of the user.'
                 ),
                 new FormField(
-                    'Translatable#Login', UserProperty.USER_LOGIN, null, true,
+                    'Translatable#Login Name', UserProperty.USER_LOGIN, null, true,
                     'Translatable#Insert a login for the user.'
                 ),
                 new FormField(

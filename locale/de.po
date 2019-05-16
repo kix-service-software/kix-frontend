@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-05-14 06:10+0000\n"
-"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
+"PO-Revision-Date: 2019-05-16 12:42+0000\n"
+"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -55,6 +55,9 @@ msgstr "Notizen hinzufügen"
 
 msgid "Add Object"
 msgstr "Objekt Anlegen"
+
+msgid "Address successfully created."
+msgstr "Adresse wurde erfolgreich angelegt."
 
 msgid "Admin"
 msgstr "Admin"
@@ -146,10 +149,8 @@ msgstr "Zugeordnete Agenten"
 msgid "Assigned Contacts"
 msgstr "Zugeordnete Kontakte"
 
-#, fuzzy
-#| msgid "Assigned Agents"
 msgid "Assigned Organisations"
-msgstr "Zugeordnete Agenten"
+msgstr "Zugeordnete Kunden"
 
 msgid "Assigned Roles"
 msgstr "Zugeordnete Rollen"
@@ -163,10 +164,8 @@ msgstr "Verknüpfung zuordnen"
 msgid "Assign Team / Queue"
 msgstr "Zuordnung zu Team / Queue"
 
-#, fuzzy
-#| msgid "Text Modules"
 msgid "Assign Text Modules"
-msgstr "Textbausteine"
+msgstr "Zuordnung zu Textbausteinen"
 
 msgid "Assign the roles for the user."
 msgstr "Dem Nutzer Rollen zuordnen."
@@ -395,6 +394,9 @@ msgstr "enthält"
 msgid "Country"
 msgstr "Land"
 
+msgid "Create Address"
+msgstr "Neue Adresse"
+
 msgid "Create Agent"
 msgstr "Neuer Agent"
 
@@ -422,10 +424,8 @@ msgstr "Neuer FAQ Artikel"
 msgid "Create Links."
 msgstr "Verknüpfung hinzufügen"
 
-#, fuzzy
-#| msgid "Create Translation"
 msgid "Create Organisation"
-msgstr "Neue Übersetzung"
+msgstr "Neuer Kunde"
 
 msgid "Create Priority"
 msgstr "Priorität anlegen"
@@ -565,10 +565,8 @@ msgstr "Objekt bearbeiten"
 msgid "Edit Objects"
 msgstr "Objekte bearbeiten"
 
-#, fuzzy
-#| msgid "Edit Translation"
 msgid "Edit Organisation"
-msgstr "Übersetzung bearbeiten"
+msgstr "Kunde bearbeiten"
 
 msgid "Edit Personal Settings"
 msgstr "Persönliche Einstellungen bearbeiten"
@@ -596,6 +594,9 @@ msgstr "Typ bearbeiten"
 
 msgid "Email"
 msgstr "E-Mail"
+
+msgid "Email Address"
+msgstr "E-Mail Adresse"
 
 msgid "Email Addresses"
 msgstr "E-Mail Adressen"
@@ -732,166 +733,166 @@ msgid "Help"
 msgstr "Hilfe"
 
 msgid "Helptext_Admin_QueueCreate_Comment"
-msgstr ""
+msgstr "Hilfetext_Admin_QueueCreate_Comment"
 
 msgid "Helptext_Admin_QueueCreate_FollowUp"
-msgstr ""
+msgstr "Hilfetext_Admin_QueueCreate_FollowUp"
 
 msgid "Helptext_Admin_QueueCreate_FollowUpTicketLock"
-msgstr ""
+msgstr "Hilfetext_Admin_QueueCreate_FollowUpTicketLock"
 
 msgid "Helptext_Admin_QueueCreate_Icon."
-msgstr ""
+msgstr "Hilfetext_Admin_QueueCreate_Icon."
 
 msgid "Helptext_Admin_QueueCreate_Name"
-msgstr ""
+msgstr "Hilfetext_Admin_QueueCreate_Name"
 
 msgid "Helptext_Admin_QueueCreate_ParentQueue"
-msgstr ""
+msgstr "Hilfetext_Admin_QueueCreate_ParentQueue"
 
 msgid "Helptext_Admin_QueueCreate_SenderAddress."
-msgstr ""
+msgstr "Hilfetext_Admin_QueueCreate_SenderAddress."
 
 msgid "Helptext_Admin_QueueCreate_Signature"
-msgstr ""
+msgstr "Hilfetext_Admin_QueueCreate_Signature"
 
 msgid "Helptext_Admin_QueueCreate_UnlockTimeout"
-msgstr ""
+msgstr "Hilfetext_Admin_QueueCreate_UnlockTimeout"
 
 msgid "Helptext_Admin_QueueCreate_Validity"
-msgstr ""
+msgstr "Hilfetext_Admin_QueueCreate_Validity"
 
 msgid "Helptext_Organisations_ContactCreate_City"
-msgstr ""
+msgstr "Hilfetext_Organisations_ContactCreate_City"
 
 msgid "Helptext_Organisations_ContactCreate_Comment"
-msgstr ""
+msgstr "Hilfetext_Organisations_ContactCreate_Comment"
 
 msgid "Helptext_Organisations_ContactCreate_Country"
-msgstr ""
+msgstr "Hilfetext_Organisations_ContactCreate_Country"
 
 msgid "Helptext_Organisations_ContactCreate_Email"
-msgstr ""
+msgstr "Hilfetext_Organisations_ContactCreate_Email"
 
 msgid "Helptext_Organisations_ContactCreate_Fax"
-msgstr ""
+msgstr "Hilfetext_Organisations_ContactCreate_Fax"
 
 msgid "Helptext_Organisations_ContactCreate_Firstname"
-msgstr ""
+msgstr "Hilfetext_Organisations_ContactCreate_Firstname"
 
 msgid "Helptext_Organisations_ContactCreate_Lastname"
-msgstr ""
+msgstr "Hilfetext_Organisations_ContactCreate_Lastname"
 
 msgid "Helptext_Organisations_ContactCreate_Login"
-msgstr ""
+msgstr "Hilfetext_Organisations_ContactCreate_Login"
 
 msgid "Helptext_Organisations_ContactCreate_Mobile"
-msgstr ""
+msgstr "Hilfetext_Organisations_ContactCreate_Mobile"
 
 msgid "Helptext_Organisations_ContactCreate_Organisation"
-msgstr ""
+msgstr "Hilfetext_Organisations_ContactCreate_Organisation"
 
 msgid "Helptext_Organisations_ContactCreate_Password"
-msgstr ""
+msgstr "Hilfetext_Organisations_ContactCreate_Password"
 
 msgid "Helptext_Organisations_ContactCreate_Phone"
-msgstr ""
+msgstr "Hilfetext_Organisations_ContactCreate_Phone"
 
 msgid "Helptext_Organisations_ContactCreate_Street"
-msgstr ""
+msgstr "Hilfetext_Organisations_ContactCreate_Street"
 
 msgid "Helptext_Organisations_ContactCreate_Title"
-msgstr ""
+msgstr "Hilfetext_Organisations_ContactCreate_Title"
 
 msgid "Helptext_Organisations_ContactCreate_Validity"
-msgstr ""
+msgstr "Hilfetext_Organisations_ContactCreate_Validity"
 
 msgid "Helptext_Organisations_ContactCreate_Zip"
-msgstr ""
+msgstr "Hilfetext_Organisations_ContactCreate_Zip"
 
 msgid "Helptext_Organisations_ContactEdit_City"
-msgstr ""
+msgstr "Hilfetext_Organisations_ContactEdit_City"
 
 msgid "Helptext_Organisations_ContactEdit_Comment"
-msgstr ""
+msgstr "Hilfetext_Organisations_ContactEdit_Comment"
 
 msgid "Helptext_Organisations_ContactEdit_Country"
-msgstr ""
+msgstr "Hilfetext_Organisations_ContactEdit_Country"
 
 msgid "Helptext_Organisations_ContactEdit_Email"
-msgstr ""
+msgstr "Hilfetext_Organisations_ContactEdit_Email"
 
 msgid "Helptext_Organisations_ContactEdit_Fax"
-msgstr ""
+msgstr "Hilfetext_Organisations_ContactEdit_Fax"
 
 msgid "Helptext_Organisations_ContactEdit_Firstname"
-msgstr ""
+msgstr "Hilfetext_Organisations_ContactEdit_Firstname"
 
 msgid "Helptext_Organisations_ContactEdit_Lastname"
-msgstr ""
+msgstr "Hilfetext_Organisations_ContactEdit_Lastname"
 
 msgid "Helptext_Organisations_ContactEdit_Mobile"
-msgstr ""
+msgstr "Hilfetext_Organisations_ContactEdit_Mobile"
 
 msgid "Helptext_Organisations_ContactEdit_Phone"
-msgstr ""
+msgstr "Hilfetext_Organisations_ContactEdit_Phone"
 
 msgid "Helptext_Organisations_ContactEdit_Street"
-msgstr ""
+msgstr "Hilfetext_Organisations_ContactEdit_Street"
 
 msgid "Helptext_Organisations_ContactEdit_Title"
-msgstr ""
+msgstr "Hilfetext_Organisations_ContactEdit_Title"
 
 msgid "Helptext_Organisations_ContactEdit_Validity"
-msgstr ""
+msgstr "Hilfetext_Organisations_ContactEdit_Validity"
 
 msgid "Helptext_Organisations_ContactEdit_Zip"
-msgstr ""
+msgstr "Hilfetext_Organisations_ContactEdit_Zip"
 
 msgid "Helptext_Organisations_ContactImport"
-msgstr ""
+msgstr "Hilfetext_Organisations_ContactImport"
 
 msgid "Helptext_Organisations_OrganisationCreate_City"
-msgstr ""
+msgstr "Hilfetext_Organisations_OrganisationCreate_City"
 
 msgid "Helptext_Organisations_OrganisationCreate_Comment"
-msgstr ""
+msgstr "Hilfetext_Organisations_OrganisationCreate_Comment"
 
 msgid "Helptext_Organisations_OrganisationCreate_Country"
-msgstr ""
+msgstr "Hilfetext_Organisations_OrganisationCreate_Country"
 
 msgid "Helptext_Organisations_OrganisationCreate_Name"
-msgstr ""
+msgstr "Hilfetext_Organisations_OrganisationCreate_Name"
 
 msgid "Helptext_Organisations_OrganisationCreate_Number"
-msgstr ""
+msgstr "Hilfetext_Organisations_OrganisationCreate_Number"
 
 msgid "Helptext_Organisations_OrganisationCreate_Street"
-msgstr ""
+msgstr "Hilfetext_Organisations_OrganisationCreate_Street"
 
 msgid "Helptext_Organisations_OrganisationCreate_URL"
-msgstr ""
+msgstr "Hilfetext_Organisations_OrganisationCreate_URL"
 
 msgid "Helptext_Organisations_OrganisationCreate_Validity"
-msgstr ""
+msgstr "Hilfetext_Organisations_OrganisationCreate_Validity"
 
 msgid "Helptext_Organisations_OrganisationCreate_Zip"
-msgstr ""
+msgstr "HIlfetext_Organisations_OrganisationCreate_Zip"
 
 msgid "Helptext_Organisations_OrganisationImport"
-msgstr ""
+msgstr "Hilfetext_Organisations_OrganisationImport"
 
 msgid "Helptext_Search_Contact"
-msgstr ""
+msgstr "Hilfetext_Search_Contact"
 
 msgid "Helptext_Search_Organisation"
-msgstr ""
+msgstr "Hilfetext_Search_Organisation"
 
 msgid "Helptext_Textmodules_TicketCreate"
-msgstr ""
+msgstr "Hilfetext_Textmodules_TicketCreate"
 
 msgid "Helptext_Textmodules_TicketEdit"
-msgstr ""
+msgstr "Hilfetext_Textmodules_TicketEdit"
 
 msgid "History"
 msgstr "Historie"
@@ -918,7 +919,7 @@ msgid "Icon"
 msgstr "Icon"
 
 msgid "Id"
-msgstr ""
+msgstr "Id"
 
 msgid "ID"
 msgstr "ID"
@@ -941,10 +942,8 @@ msgstr "Kontakte importieren"
 msgid "Import Data"
 msgstr "Daten importieren"
 
-#, fuzzy
-#| msgid "Remove translations"
 msgid "Import Organisations"
-msgstr "Übersetzungen entfernen"
+msgstr "Kunden importieren"
 
 msgid "Imprint"
 msgstr "Impressum"
@@ -969,6 +968,9 @@ msgstr "Geben Sie einen Kommentar zu der Rolle ein."
 
 msgid "Insert a comment for the state."
 msgstr "Geben Sie einen Kommentar zu dem Status ein."
+
+msgid "Insert a comment for the system address."
+msgstr "Geben Sie einen Kommentar zu der Systemadresse ein."
 
 msgid "Insert a comment for the type."
 msgstr "Geben Sie einen Kommentar für den Typ ein."
@@ -1174,10 +1176,8 @@ msgstr "Art der Verknüpfung"
 msgid "Load Contact ..."
 msgstr "Kontak laden..."
 
-#, fuzzy
-#| msgid "Remove translations ..."
 msgid "Load Organisation ..."
-msgstr "Übersetzungen werden entfernt..."
+msgstr "Kunde laden..."
 
 msgid "Load Ticket State ..."
 msgstr "Ticket Status laden..."
@@ -1206,6 +1206,9 @@ msgstr "Anmelden"
 msgid "Login failed"
 msgstr "Anmeldung fehlgeschlagen"
 
+msgid "Login Name"
+msgstr "Nutzername"
+
 msgid "Logout"
 msgstr "Abmelden"
 
@@ -1213,7 +1216,7 @@ msgid "Merge"
 msgstr "Zusammenfassen"
 
 msgid "Minutes"
-msgstr ""
+msgstr "Minuten"
 
 msgid "Mobile"
 msgstr "Mobil"
@@ -1274,10 +1277,8 @@ msgstr "Neue FAQ"
 msgid "New Object"
 msgstr "Neues Objekt"
 
-#, fuzzy
-#| msgid "New Translation"
 msgid "New Organisation"
-msgstr "Neue Übersetzung"
+msgstr "Neuer Kunde"
 
 msgid "New Priority"
 msgstr "Neue Priorität"
@@ -1326,11 +1327,6 @@ msgstr "Nr."
 msgid "No."
 msgstr "Nr."
 
-#, fuzzy
-#| msgid "No contact available"
-msgid "No {0} available"
-msgstr "Kein Kontakt verfügbar"
-
 msgid "No {0} found (add at least {1} characters)."
 msgstr "Keine {0} gefunden (mind. 1 Zeichen eingeben)."
 
@@ -1346,13 +1342,14 @@ msgstr "Kein Kontakt verfügbar"
 msgid "No general catalog class configured!"
 msgstr ""
 
+msgid "No object available"
+msgstr "Kein Objekt verfügbar"
+
 msgid "No object with ID {0} available."
 msgstr "Kein Objekt mit der ID {0} verfügbar."
 
-#, fuzzy
-#| msgid "No version available"
 msgid "No organisation available"
-msgstr "Keine Version verfügbar"
+msgstr "Kein Kunde verfügbar"
 
 msgid "No rating available."
 msgstr "Keine Bewertung verfügbar."
@@ -1361,7 +1358,7 @@ msgid "No search query."
 msgstr "Keine Suchanfrage verfügbar."
 
 msgid "No signature defined."
-msgstr ""
+msgstr "Keine Signatur definiert."
 
 msgid "not archived tickets"
 msgstr "Nicht archivierte Tickets"
@@ -1408,48 +1405,34 @@ msgstr "Offene Tickets"
 msgid "open tickets: {0}"
 msgstr "Offene Tickets: {0}"
 
-#, fuzzy
-#| msgid "Translation"
 msgid "Organisation"
-msgstr "Übersetzung"
+msgstr "Kunde"
 
-#, fuzzy
-#| msgid "Version Details"
 msgid "Organisation Details"
-msgstr "Versionsdetails"
+msgstr "Kundendetails"
 
-#, fuzzy
-#| msgid "Translation"
 msgid "Organisation ID"
-msgstr "Übersetzung"
+msgstr "Kunden ID"
 
-#, fuzzy
-#| msgid "Agent Information"
 msgid "Organisation Information"
-msgstr "Agenteninformationen"
+msgstr "Kundeninformationen"
 
-#, fuzzy
-#| msgid "Translations"
 msgid "Organisations"
-msgstr "Übersetzungen"
+msgstr "Kunden"
 
 #, fuzzy
 #| msgid "Customers Dashboard"
 msgid "Organisations Dashboard"
 msgstr "Kunden Dashboard"
 
-#, fuzzy
-#| msgid "Contact Search"
 msgid "Organisation Search"
-msgstr "Kontakt Suche"
+msgstr "Kunden Suche"
 
-#, fuzzy
-#| msgid "Translation successfully created."
 msgid "Organisation successfully created."
-msgstr "Übersetzung wurde erfolgreich angelegt."
+msgstr "Kunde wurde erfolgreich angelegt."
 
 msgid "Other"
-msgstr ""
+msgstr "Sonstiges"
 
 msgid "Overall"
 msgstr "Gesamt"
@@ -1554,10 +1537,8 @@ msgstr ""
 "Bitte wählen Sie die Sprache, in der Sie KIX benutzen wollen. Ist nichts "
 "gesetzt, versucht das System die Sprache automatisch zu wählen."
 
-#, fuzzy
-#| msgid "System Address"
 msgid "Postal Address"
-msgstr "Systemadresse"
+msgstr "Adresse"
 
 msgid "Preferences"
 msgstr "Persönliche Einstellungen"
@@ -1854,7 +1835,7 @@ msgid "Select a text separator."
 msgstr "Wählen Sie einen Texttrenner."
 
 msgid "Select a value separator."
-msgstr ""
+msgstr "Wählen Sie einen Werttrenner."
 
 msgid "Select Config Item Class"
 msgstr "Wählen Sie eine Config Item Klasse aus der Liste."
@@ -1929,6 +1910,12 @@ msgid "Set the state as „valid“, „invalid (temporarily)“, or „invalid�
 msgstr ""
 "Setzen Sie den Status als \"gültig\", \"ungültig (temporär)\" oder \"ungültig"
 "\"."
+
+msgid ""
+"Set the system address as „valid“, „invalid (temporarily)“, or „invalid“."
+msgstr ""
+"Setzen Sie die Systemadresse als \"gültig\", \"ungültig (temporär)\" oder \""
+"ungültig\"."
 
 msgid "Set the type as „valid“, „invalid (temporarily)“, or „invalid“."
 msgstr ""
@@ -2092,10 +2079,8 @@ msgstr "Ticket Beschreibung"
 msgid "Ticket Details"
 msgstr "Ticket Details"
 
-#, fuzzy
-#| msgid "New Tickets"
 msgid "Ticket Flags"
-msgstr "Neue Tickets"
+msgstr "Ticket Flags"
 
 msgid "Ticket History"
 msgstr "Ticket Historie"
@@ -2180,10 +2165,8 @@ msgstr "Übersetzung"
 msgid "Translation:"
 msgstr "Übersetzung:"
 
-#, fuzzy
-#| msgid "Translation"
 msgid "TranslationLanguage"
-msgstr "Übersetzung"
+msgstr "Übersetzungssprache"
 
 msgid "Translations"
 msgstr "Übersetzungen"
@@ -2295,9 +2278,6 @@ msgstr "Nutzerverwaltung: Agenten"
 msgid "User Management: Roles"
 msgstr "Nutzerverwaltung: Rollen"
 
-msgid "User name"
-msgstr "Benutzername"
-
 msgid "Validation error"
 msgstr "Validierungsfehler"
 
@@ -2354,10 +2334,18 @@ msgid "Your rating"
 msgstr "Ihre Bewertung"
 
 msgid "Zip"
-msgstr ""
+msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#, fuzzy
+#~| msgid "No contact available"
+#~ msgid "No {0} available"
+#~ msgstr "Kein Kontakt verfügbar"
+
+#~ msgid "User name"
+#~ msgstr "Benutzername"
 
 #~ msgid "Assigned Customers"
 #~ msgstr "Zugeordnete Kunden"

@@ -54,7 +54,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 displayValue = 'Translatable#Email';
                 break;
             case ContactProperty.LOGIN:
-                displayValue = 'Translatable#Login';
+                displayValue = 'Translatable#Login Name';
                 break;
             case ContactProperty.ORGANISATION_IDS:
                 displayValue = 'Translatable#Assigned Organisations';

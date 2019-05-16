@@ -58,6 +58,7 @@ export class FAQContext extends Context {
     }
 
     public reset(): void {
+        super.reset();
         this.faqCategory = null;
     }
 
