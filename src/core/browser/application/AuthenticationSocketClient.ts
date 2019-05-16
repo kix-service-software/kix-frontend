@@ -1,7 +1,11 @@
 import { SocketClient } from "../SocketClient";
-import { AuthenticationEvent, UserType, AuthenticationResult, ISocketRequest, LoginRequest } from "../../model";
+import {
+    AuthenticationEvent, UserType, AuthenticationResult, ISocketRequest, LoginRequest,
+    ISocketResponse, PermissionCheckRequest
+} from "../../model";
 import { IdService } from "../IdService";
 import { ClientStorageService } from "../ClientStorageService";
+import { UIComponentPermission } from "../../model/UIComponentPermission";
 
 export class AuthenticationSocketClient extends SocketClient {
 
@@ -107,6 +111,44 @@ export class AuthenticationSocketClient extends SocketClient {
                 clientRequestId: ClientStorageService.getClientRequestId()
             };
             this.authenticationSocket.emit(AuthenticationEvent.VALIDATE_TOKEN, request);
+        });
+    }
+
+    public checkPermissions(permissions: UIComponentPermission[]): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+
+            const requestId = IdService.generateDateBasedId();
+
+            const timeout = window.setTimeout(() => {
+                reject('Timeout: ' + AuthenticationEvent.VALIDATE_TOKEN);
+            }, 30000);
+
+            this.authenticationSocket.on(
+                AuthenticationEvent.PERMISSION_CHECK_SUCCESS,
+                (result: ISocketResponse) => {
+                    if (result.requestId === requestId) {
+                        window.clearTimeout(timeout);
+                        resolve(true);
+                    }
+                }
+            );
+
+            this.authenticationSocket.on(
+                AuthenticationEvent.PERMISSION_CHECK_FAILED,
+                (result: ISocketResponse) => {
+                    if (result.requestId === requestId) {
+                        window.clearTimeout(timeout);
+                        resolve(false);
+                    }
+                });
+
+            const request = new PermissionCheckRequest(
+                ClientStorageService.getToken(),
+                requestId,
+                ClientStorageService.getClientRequestId(),
+                permissions
+            );
+            this.authenticationSocket.emit(AuthenticationEvent.PERMISSION_CHECK, request);
         });
     }
 

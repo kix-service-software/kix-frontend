@@ -1,13 +1,13 @@
 /* tslint:disable*/
 import * as chai from 'chai';
-import { UIComponentPermission } from '../src/core/model/UIComponentPermission';
-import { HttpService } from '../src/core/services';
-import { OptionsResponse, RequestMethod, ResponseHeader } from '../src/core/api';
-import { CRUD, MainMenuConfiguration, MenuEntry } from '../src/core/model';
-import { PluginService } from '../src/services';
-import { KIXExtensions, IMainMenuExtension } from '../src/core/extensions';
-import { HTTPUtil } from './utils/HTTPUtil';
-import { MainMenuNamespace } from '../src/socket-namespaces/MainMenuNamespace';
+import { UIComponentPermission } from '../../src/core/model/UIComponentPermission';
+import { HttpService } from '../../src/core/services';
+import { OptionsResponse, RequestMethod, ResponseHeader } from '../../src/core/api';
+import { CRUD, MainMenuConfiguration, MenuEntry } from '../../src/core/model';
+import { PluginService } from '../../src/services';
+import { KIXExtensions, IMainMenuExtension } from '../../src/core/extensions';
+import { HTTPUtil } from '../utils/HTTPUtil';
+import { MainMenuNamespace } from '../../src/socket-namespaces/MainMenuNamespace';
 
 const expect = chai.expect;
 describe('MainMenuNamespace', () => {

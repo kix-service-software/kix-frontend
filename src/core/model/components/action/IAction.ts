@@ -1,3 +1,5 @@
+import { UIComponentPermission } from "../../UIComponentPermission";
+
 export interface IAction<T = any> {
 
     id: string;
@@ -15,5 +17,7 @@ export interface IAction<T = any> {
     canRun(): boolean;
 
     run(event: any): void;
+
+    permissions: UIComponentPermission[];
 
 }

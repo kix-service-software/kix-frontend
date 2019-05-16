@@ -1,9 +1,10 @@
-import { AbstractAction } from "../model";
+import { AbstractAction, IAction } from "../model";
+import { AuthenticationSocketClient } from "./application/AuthenticationSocketClient";
 
 
 export class ActionFactory<T extends AbstractAction> {
 
-    private actions: Array<[string, new () => T]> = [];
+    private actions: Map<string, new () => T> = new Map();
 
     private static INSTANCE: ActionFactory<AbstractAction> = null;
 
@@ -16,29 +17,36 @@ export class ActionFactory<T extends AbstractAction> {
     }
 
     public registerAction(actionId: string, action: new () => T): void {
-        const index = this.actions.findIndex((a) => a[0] === actionId);
-        if (index !== -1) {
-            // TODO: Error Handling and logging
+        if (this.actions.has(actionId)) {
             console.warn('Duplicate action registered: ' + actionId);
         }
-        this.actions.push([actionId, action]);
+        this.actions.set(actionId, action);
     }
 
     public hasAction(actionId: string): boolean {
-        return this.actions.some((al) => al[0] === actionId);
+        return this.actions.has(actionId);
     }
 
-    public async generateActions(actionIds: string[], data?: any): Promise<AbstractAction[]> {
+    public async generateActions(actionIds: string[] = [], data?: any): Promise<AbstractAction[]> {
         const actions = [];
-        if (actionIds) {
-            for (const actionId of actionIds) {
-                const actionPrototype = this.actions.find((al) => al[0] === actionId);
-                if (actionPrototype) {
-                    const action = new actionPrototype[1]();
-                    action.initAction();
+        for (const actionId of actionIds) {
+            if (this.actions.has(actionId)) {
+                const actionPrototype = this.actions.get(actionId);
+                let action: IAction = new actionPrototype();
+
+                let allowed = true;
+                if (action.permissions && action.permissions.length) {
+                    allowed = await AuthenticationSocketClient.getInstance().checkPermissions(action.permissions);
+                }
+
+                if (allowed) {
+                    await action.initAction();
                     await action.setData(data);
                     actions.push(action);
+                } else {
+                    action = undefined;
                 }
+
             }
         }
 

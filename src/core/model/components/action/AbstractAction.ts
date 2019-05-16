@@ -3,6 +3,7 @@ import { OverlayService } from '../../../browser';
 import { ComponentContent } from '../widget';
 import { ToastContent, OverlayType } from '../overlay';
 import { TranslationService } from '../../../browser/i18n/TranslationService';
+import { UIComponentPermission } from '../../UIComponentPermission';
 
 export abstract class AbstractAction<T = any> implements IAction<T> {
 
@@ -10,6 +11,8 @@ export abstract class AbstractAction<T = any> implements IAction<T> {
     public text: string;
     public icon: string;
     public data: T;
+
+    public permissions: UIComponentPermission[] = [];
 
     public abstract initAction(): Promise<void>;
 

@@ -1,9 +1,10 @@
 import {
-    AuthenticationResult, LoginRequest, SocketEvent, Error, AuthenticationEvent, ISocketRequest
+    AuthenticationResult, LoginRequest, SocketEvent, Error, AuthenticationEvent, ISocketRequest, PermissionCheckRequest
 } from '../core/model';
 import { SocketResponse } from '../core/common';
 import { SocketNameSpace } from './SocketNameSpace';
 import { LoggingService, AuthenticationService } from '../core/services';
+import { PermissionService } from '../services';
 
 export class AuthenticationNamespace extends SocketNameSpace {
 
@@ -35,6 +36,7 @@ export class AuthenticationNamespace extends SocketNameSpace {
         this.registerEventHandler(client, AuthenticationEvent.LOGIN, this.login.bind(this));
         this.registerEventHandler(client, AuthenticationEvent.LOGOUT, this.logout.bind(this));
         this.registerEventHandler(client, AuthenticationEvent.VALIDATE_TOKEN, this.validateToken.bind(this));
+        this.registerEventHandler(client, AuthenticationEvent.PERMISSION_CHECK, this.checkPermissions.bind(this));
     }
 
     private async login(data: LoginRequest): Promise<SocketResponse<AuthenticationResult>> {
@@ -82,6 +84,19 @@ export class AuthenticationNamespace extends SocketNameSpace {
                     }
                     resolve(new SocketResponse(event, new AuthenticationResult(data.token, data.requestId)));
                 });
+        });
+    }
+
+    private async checkPermissions(data: PermissionCheckRequest): Promise<SocketResponse> {
+        return new Promise<SocketResponse>(async (resolve, reject) => {
+            let event = AuthenticationEvent.PERMISSION_CHECK_SUCCESS;
+
+            const allowed = await PermissionService.getInstance().checkPermissions(data.token, data.permissions);
+            if (!allowed) {
+                event = AuthenticationEvent.PERMISSION_CHECK_FAILED;
+            }
+
+            resolve(new SocketResponse(event, { requestId: data.requestId }));
         });
     }
 

@@ -30,8 +30,6 @@ class Component {
         const actionId = 'show-user-tickets';
 
         if (ActionFactory.getInstance().hasAction(actionId)) {
-            ActionFactory.getInstance().generateActions([actionId]);
-
             const group1 = [];
             const group2 = [];
             const group3 = [];
