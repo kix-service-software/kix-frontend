@@ -53,6 +53,9 @@ msgstr ""
 msgid "Add Object"
 msgstr ""
 
+msgid "Address successfully created."
+msgstr ""
+
 msgid "Admin"
 msgstr ""
 
@@ -373,6 +376,9 @@ msgstr ""
 msgid "Country"
 msgstr ""
 
+msgid "Create Address"
+msgstr ""
+
 msgid "Create Agent"
 msgstr ""
 
@@ -558,6 +564,9 @@ msgid "Edit Type"
 msgstr ""
 
 msgid "Email"
+msgstr ""
+
+msgid "Email Address"
 msgstr ""
 
 msgid "Email Addresses"
@@ -929,6 +938,9 @@ msgstr ""
 msgid "Insert a comment for the state."
 msgstr ""
 
+msgid "Insert a comment for the system address."
+msgstr ""
+
 msgid "Insert a comment for the type."
 msgstr ""
 
@@ -1145,6 +1157,9 @@ msgstr ""
 msgid "Login failed"
 msgstr ""
 
+msgid "Login Name"
+msgstr ""
+
 msgid "Logout"
 msgstr ""
 
@@ -1259,9 +1274,6 @@ msgstr ""
 msgid "No."
 msgstr ""
 
-msgid "No {0} available"
-msgstr ""
-
 msgid "No {0} found (add at least {1} characters)."
 msgstr ""
 
@@ -1275,6 +1287,9 @@ msgid "No contact available"
 msgstr ""
 
 msgid "No general catalog class configured!"
+msgstr ""
+
+msgid "No object available"
 msgstr ""
 
 msgid "No object with ID {0} available."
@@ -1804,6 +1819,10 @@ msgstr ""
 msgid "Set the state as „valid“, „invalid (temporarily)“, or „invalid“."
 msgstr ""
 
+msgid ""
+"Set the system address as „valid“, „invalid (temporarily)“, or „invalid“."
+msgstr ""
+
 msgid "Set the type as „valid“, „invalid (temporarily)“, or „invalid“."
 msgstr ""
 
@@ -2151,9 +2170,6 @@ msgid "User Management: Agents"
 msgstr ""
 
 msgid "User Management: Roles"
-msgstr ""
-
-msgid "User name"
 msgstr ""
 
 msgid "Validation error"

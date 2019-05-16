@@ -56,6 +56,11 @@ msgstr "Notizen hinzufügen"
 msgid "Add Object"
 msgstr "Objekt Anlegen"
 
+#, fuzzy
+#| msgid "Article successfully created."
+msgid "Address successfully created."
+msgstr "Artikel wurde erfolgreich angelegt."
+
 msgid "Admin"
 msgstr "Admin"
 
@@ -395,6 +400,11 @@ msgstr "enthält"
 msgid "Country"
 msgstr "Land"
 
+#, fuzzy
+#| msgid "New Address"
+msgid "Create Address"
+msgstr "Neue Adresse"
+
 msgid "Create Agent"
 msgstr "Neuer Agent"
 
@@ -596,6 +606,11 @@ msgstr "Typ bearbeiten"
 
 msgid "Email"
 msgstr "E-Mail"
+
+#, fuzzy
+#| msgid "Email Addresses"
+msgid "Email Address"
+msgstr "E-Mail Adressen"
 
 msgid "Email Addresses"
 msgstr "E-Mail Adressen"
@@ -970,6 +985,11 @@ msgstr "Geben Sie einen Kommentar zu der Rolle ein."
 msgid "Insert a comment for the state."
 msgstr "Geben Sie einen Kommentar zu dem Status ein."
 
+#, fuzzy
+#| msgid "Insert a comment for the state."
+msgid "Insert a comment for the system address."
+msgstr "Geben Sie einen Kommentar zu dem Status ein."
+
 msgid "Insert a comment for the type."
 msgstr "Geben Sie einen Kommentar für den Typ ein."
 
@@ -1206,6 +1226,11 @@ msgstr "Anmelden"
 msgid "Login failed"
 msgstr "Anmeldung fehlgeschlagen"
 
+#, fuzzy
+#| msgid "Login failed"
+msgid "Login Name"
+msgstr "Anmeldung fehlgeschlagen"
+
 msgid "Logout"
 msgstr "Abmelden"
 
@@ -1326,11 +1351,6 @@ msgstr "Nr."
 msgid "No."
 msgstr "Nr."
 
-#, fuzzy
-#| msgid "No contact available"
-msgid "No {0} available"
-msgstr "Kein Kontakt verfügbar"
-
 msgid "No {0} found (add at least {1} characters)."
 msgstr "Keine {0} gefunden (mind. 1 Zeichen eingeben)."
 
@@ -1345,6 +1365,11 @@ msgstr "Kein Kontakt verfügbar"
 
 msgid "No general catalog class configured!"
 msgstr ""
+
+#, fuzzy
+#| msgid "No contact available"
+msgid "No object available"
+msgstr "Kein Kontakt verfügbar"
 
 msgid "No object with ID {0} available."
 msgstr "Kein Objekt mit der ID {0} verfügbar."
@@ -1930,6 +1955,14 @@ msgstr ""
 "Setzen Sie den Status als \"gültig\", \"ungültig (temporär)\" oder \"ungültig"
 "\"."
 
+#, fuzzy
+#| msgid "Set the state as „valid“, „invalid (temporarily)“, or „invalid“."
+msgid ""
+"Set the system address as „valid“, „invalid (temporarily)“, or „invalid“."
+msgstr ""
+"Setzen Sie den Status als \"gültig\", \"ungültig (temporär)\" oder \"ungültig"
+"\"."
+
 msgid "Set the type as „valid“, „invalid (temporarily)“, or „invalid“."
 msgstr ""
 "Setzen Sie den Typ als \"gültig\", \"ungültig (temporär)\" oder \"ungültig\"."
@@ -2295,9 +2328,6 @@ msgstr "Nutzerverwaltung: Agenten"
 msgid "User Management: Roles"
 msgstr "Nutzerverwaltung: Rollen"
 
-msgid "User name"
-msgstr "Benutzername"
-
 msgid "Validation error"
 msgstr "Validierungsfehler"
 
@@ -2358,6 +2388,14 @@ msgstr ""
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#, fuzzy
+#~| msgid "No contact available"
+#~ msgid "No {0} available"
+#~ msgstr "Kein Kontakt verfügbar"
+
+#~ msgid "User name"
+#~ msgstr "Benutzername"
 
 #~ msgid "Assigned Customers"
 #~ msgstr "Zugeordnete Kunden"
