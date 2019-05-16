@@ -71,6 +71,7 @@ export class EditTicketDialogContext extends Context implements IFormInstanceLis
     }
 
     public reset(): void {
+        super.reset();
         this.contact = null;
         this.organisation = null;
         this.initContext();

@@ -64,6 +64,7 @@ export class TicketContext extends Context {
     }
 
     public reset(): void {
+        super.reset();
         this.queue = null;
     }
 

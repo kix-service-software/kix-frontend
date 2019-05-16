@@ -1,7 +1,7 @@
 import { ComponentState } from './ComponentState';
 import { ContextService, IdService, KIXObjectService } from '../../../../core/browser';
 import {
-    TreeNode, ConfigItemClass, KIXObjectType, TreeNodeProperty, ObjectIcon, KIXObjectLoadingOptions
+    TreeNode, ConfigItemClass, KIXObjectType, TreeNodeProperty, KIXObjectLoadingOptions
 } from '../../../../core/model';
 import { CMDBContext } from '../../../../core/browser/cmdb';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
@@ -20,16 +20,23 @@ export class Component {
     }
 
     public async onMount(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<CMDBContext>(CMDBContext.CONTEXT_ID);
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
-
         const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, null, ['ConfigItemStats']);
         const ciClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
             KIXObjectType.CONFIG_ITEM_CLASS, null, loadingOptions, null, false
         );
         this.state.nodes = await this.prepareTreeNodes(ciClasses);
 
-        if (context.currentCIClass) {
+        const context = await ContextService.getInstance().getContext<CMDBContext>(CMDBContext.CONTEXT_ID);
+        if (context) {
+            this.state.filterValue = context.getAdditionalInformation('EXPLORER_FILTER_CI_CLASSES');
+            if (this.state.filterValue) {
+                const filter = (this as any).getComponent('ci-class-explorer-filter');
+                if (filter) {
+                    filter.textFilterValueChanged(null, this.state.filterValue);
+                }
+            }
+            this.state.widgetConfiguration = context.getWidgetConfiguration(this.state.instanceId);
+
             this.setActiveNode(context.currentCIClass);
         } else {
             this.showAll();
@@ -97,6 +104,10 @@ export class Component {
 
     public async filter(textFilterValue?: string): Promise<void> {
         this.state.filterValue = textFilterValue;
+        const context = await ContextService.getInstance().getContext<CMDBContext>(CMDBContext.CONTEXT_ID);
+        if (context) {
+            context.setAdditionalInformation('EXPLORER_FILTER_CI_CLASSES', this.state.filterValue);
+        }
     }
 
 }
