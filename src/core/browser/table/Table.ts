@@ -72,6 +72,7 @@ export class Table implements ITable {
 
     public async initialize(): Promise<void> {
         if (!this.initialized) {
+            this.initialized = true;
             if (this.contentProvider) {
                 await this.contentProvider.initialize();
                 await this.loadRowData();
@@ -97,8 +98,6 @@ export class Table implements ITable {
                     this.rows[0].expand(true);
                 }
             }
-
-            this.initialized = true;
         }
     }
 
