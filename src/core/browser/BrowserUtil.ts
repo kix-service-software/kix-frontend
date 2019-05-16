@@ -39,7 +39,7 @@ export class BrowserUtil {
                 'kix-icon-close', 'Translatable#No permission for this object.', 'Translatable#Access denied'
             )
         );
-        OverlayService.getInstance().openOverlay(OverlayType.HINT_TOAST, null, content, 'Translatable#Access denied');
+        OverlayService.getInstance().openOverlay(OverlayType.ERROR_TOAST, null, content, 'Translatable#Access denied');
     }
 
     public static startBrowserDownload(fileName: string, content: string, contentType: string): void {

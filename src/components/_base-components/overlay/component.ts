@@ -229,6 +229,8 @@ class OverlayComponent {
                 return 'toast-overlay success-toast';
             case OverlayType.HINT_TOAST:
                 return 'toast-overlay';
+            case OverlayType.ERROR_TOAST:
+                return 'toast-overlay error-toast';
             case OverlayType.CONTENT_OVERLAY:
                 return 'content-overlay' + (large ? ' large' : '');
             case OverlayType.TABLE_COLUMN_FILTER:
@@ -246,6 +248,8 @@ class OverlayComponent {
                 return 'kix-icon-info';
             case OverlayType.WARNING:
                 return 'kix-icon-exclamation';
+            case OverlayType.WARNING:
+                return 'kix-icon-close';
             default:
                 return '';
         }
