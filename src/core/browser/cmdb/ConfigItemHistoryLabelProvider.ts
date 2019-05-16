@@ -1,23 +1,14 @@
-import { ILabelProvider } from '..';
 import {
     ConfigItemHistory, DateTimeUtil, ObjectIcon, KIXObjectType,
     ConfigItemHistoryProperty, User
 } from '../../model';
 import { TranslationService } from '../i18n/TranslationService';
-import { ObjectDataService } from '../ObjectDataService';
 import { KIXObjectService } from '../kix';
+import { LabelProvider } from '../LabelProvider';
 
-export class ConfigItemHistoryLabelProvider implements ILabelProvider<ConfigItemHistory> {
+export class ConfigItemHistoryLabelProvider extends LabelProvider<ConfigItemHistory> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_HISTORY;
-
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
-    }
-
-    public async getPropertyValueDisplayText(property: string, value: string | number): Promise<string> {
-        return value.toString();
-    }
 
     public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
         let displayValue = property;
@@ -46,10 +37,6 @@ export class ConfigItemHistoryLabelProvider implements ILabelProvider<ConfigItem
         }
 
         return displayValue;
-    }
-
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
     }
 
     public async getDisplayText(
@@ -81,34 +68,6 @@ export class ConfigItemHistoryLabelProvider implements ILabelProvider<ConfigItem
         }
 
         return displayValue;
-    }
-
-    public getDisplayTextClasses(object: ConfigItemHistory, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(object: ConfigItemHistory): string[] {
-        return [];
-    }
-
-    public isLabelProviderFor(object: ConfigItemHistory): boolean {
-        return object instanceof ConfigItemHistory;
-    }
-
-    public async getObjectText(object: ConfigItemHistory): Promise<string> {
-        throw new Error('Method not implemented.');
-    }
-
-    public getObjectAdditionalText(object: ConfigItemHistory): string {
-        throw new Error('Method not implemented.');
-    }
-
-    public getObjectIcon(object: ConfigItemHistory): string | ObjectIcon {
-        throw new Error('Method not implemented.');
-    }
-
-    public getObjectTooltip(object: ConfigItemHistory): string {
-        throw new Error('Method not implemented.');
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {

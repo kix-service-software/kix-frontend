@@ -24,8 +24,10 @@ export class FilterUtil {
 
         switch (criteria.operator) {
             case SearchOperator.EQUALS:
+                value = value ? value : '';
                 return value.toString().toLocaleLowerCase() === criteria.value.toString().toLocaleLowerCase();
             case SearchOperator.CONTAINS:
+                value = value ? value : '';
                 return value.toString().toLocaleLowerCase().indexOf(
                     criteria.value.toString().toLocaleLowerCase()
                 ) !== -1;

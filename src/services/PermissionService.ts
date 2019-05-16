@@ -93,8 +93,12 @@ export class PermissionService {
                     return null;
                 });
 
-            const accessPermission = response.headers.AllowPermissionValue & permission.value;
-            return accessPermission === permission.value;
+            if (response !== null) {
+                const accessPermission = response.headers.AllowPermissionValue & permission.value;
+                return accessPermission === permission.value;
+            } else {
+                return false;
+            }
         }
 
         return true;

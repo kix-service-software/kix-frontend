@@ -37,6 +37,7 @@
                 "--require",
                 "source-map-support/register",
                 "tests/**/*.test.ts",
+                "tests/api/**/*.test.ts",
                 "tests/browser/**/*.test.ts",
                 "tests/*.test.ts"
             ],

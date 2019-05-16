@@ -1,8 +1,7 @@
-import { IObjectFactory } from "../IObjectFactory";
-import { Lock } from "../Lock";
-import { KIXObjectType } from "../KIXObjectType";
+import { ObjectFactory } from "./ObjectFactory";
+import { Lock, KIXObjectType } from "../../model";
 
-export class LockFactory implements IObjectFactory<Lock> {
+export class LockFactory extends ObjectFactory<Lock> {
 
     public isFactoryFor(objectType: KIXObjectType): boolean {
         return objectType === KIXObjectType.LOCK;
@@ -11,6 +10,5 @@ export class LockFactory implements IObjectFactory<Lock> {
     public create(lock?: Lock): Lock {
         return new Lock(lock);
     }
-
 
 }

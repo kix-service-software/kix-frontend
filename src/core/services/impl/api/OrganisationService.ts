@@ -1,6 +1,6 @@
 import { KIXObjectService } from './KIXObjectService';
 import {
-    OrganisationFactory, KIXObjectType, KIXObjectLoadingOptions, Error
+    KIXObjectType, KIXObjectLoadingOptions, Error
 } from '../../../model';
 import {
     CreateOrganisation, CreateOrganisationResponse, CreateOrganisationRequest,
@@ -8,6 +8,7 @@ import {
 } from '../../../api';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { LoggingService } from '../LoggingService';
+import { OrganisationFactory } from '../../object-factories/OrganisationFactory';
 
 export class OrganisationService extends KIXObjectService {
 

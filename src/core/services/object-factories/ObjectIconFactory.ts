@@ -1,6 +1,7 @@
-import { IObjectFactory, ObjectIcon, KIXObjectType } from "../../model";
+import { ObjectFactory } from "./ObjectFactory";
+import { ObjectIcon, KIXObjectType } from "../../model";
 
-export class ObjectIconFactory implements IObjectFactory<ObjectIcon> {
+export class ObjectIconFactory extends ObjectFactory<ObjectIcon> {
 
     public isFactoryFor(objectType: KIXObjectType): boolean {
         return objectType === KIXObjectType.OBJECT_ICON;

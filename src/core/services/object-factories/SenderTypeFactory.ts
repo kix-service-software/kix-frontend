@@ -1,8 +1,7 @@
-import { IObjectFactory } from "../IObjectFactory";
-import { KIXObjectType } from "../KIXObjectType";
-import { SenderType } from "./SenderType";
+import { ObjectFactory } from "./ObjectFactory";
+import { SenderType, KIXObjectType } from "../../model";
 
-export class SenderTypeFactory implements IObjectFactory<SenderType> {
+export class SenderTypeFactory extends ObjectFactory<SenderType> {
 
     public isFactoryFor(objectType: KIXObjectType): boolean {
         return objectType === KIXObjectType.SENDER_TYPE;
@@ -11,6 +10,5 @@ export class SenderTypeFactory implements IObjectFactory<SenderType> {
     public create(senderType?: SenderType): SenderType {
         return new SenderType(senderType);
     }
-
 
 }

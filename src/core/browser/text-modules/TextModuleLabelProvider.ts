@@ -1,20 +1,16 @@
-import { ILabelProvider } from "../ILabelProvider";
 import {
     TextModule, KIXObjectType, ObjectIcon, TextModuleProperty
 } from "../../model";
 import { SearchProperty } from "../SearchProperty";
 import { TranslationService } from "../i18n/TranslationService";
+import { LabelProvider } from "../LabelProvider";
 
-export class TextModuleLabelProvider implements ILabelProvider<TextModule> {
+export class TextModuleLabelProvider extends LabelProvider<TextModule> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.TEXT_MODULE;
 
     public isLabelProviderFor(textModule: TextModule): boolean {
         return textModule instanceof TextModule;
-    }
-
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
@@ -64,10 +60,6 @@ export class TextModuleLabelProvider implements ILabelProvider<TextModule> {
         return displayValue;
     }
 
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
-    }
-
     public getDisplayText(textModule: TextModule, property: string): Promise<string> {
         return textModule[property];
     }
@@ -76,27 +68,11 @@ export class TextModuleLabelProvider implements ILabelProvider<TextModule> {
         return value.toString();
     }
 
-    public getDisplayTextClasses(textModule: TextModule, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(textModule: TextModule): string[] {
-        return [];
-    }
-
     public async getObjectText(
         textModule: TextModule, id?: boolean, title?: boolean, translatable?: boolean
     ): Promise<string> {
         const objectName = await this.getObjectName(false, translatable);
         return `${objectName}: ${textModule.Name}`;
-    }
-
-    public getObjectAdditionalText(textModule: TextModule): string {
-        return null;
-    }
-
-    public getObjectIcon(textModule?: TextModule): string | ObjectIcon {
-        return null;
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
@@ -109,12 +85,6 @@ export class TextModuleLabelProvider implements ILabelProvider<TextModule> {
 
     public getObjectTooltip(textModule: TextModule): string {
         return textModule.Name;
-    }
-
-    public async getIcons(
-        textModule: TextModule, property: string, value?: string | number
-    ): Promise<Array<string | ObjectIcon>> {
-        return [];
     }
 
 }

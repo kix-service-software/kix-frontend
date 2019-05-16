@@ -1,9 +1,6 @@
 import {
-    TicketTemplatesResponse
-} from '../../../api';
-import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, TicketTemplate
+    KIXObjectSpecificCreateOptions
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';

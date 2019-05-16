@@ -1,8 +1,8 @@
-import { ILabelProvider } from "../ILabelProvider";
 import { KIXObjectType, Sla, ObjectIcon } from "../../model";
 import { TranslationService } from "../i18n/TranslationService";
+import { LabelProvider } from "../LabelProvider";
 
-export class SlaLabelProvider implements ILabelProvider<Sla> {
+export class SlaLabelProvider extends LabelProvider<Sla> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.SLA;
 
@@ -28,36 +28,12 @@ export class SlaLabelProvider implements ILabelProvider<Sla> {
         return displayValue;
     }
 
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
-    }
-
     public getDisplayText(sla: Sla, property: string): Promise<string> {
         return sla[property];
     }
 
-    public async getPropertyValueDisplayText(property: string, value: string | number): Promise<string> {
-        return "";
-    }
-
     public getDisplayTextClasses(sla: Sla, property: string): string[] {
         return sla[property];
-    }
-
-    public getObjectClasses(sla: Sla): string[] {
-        return [];
-    }
-
-    public async getObjectText(sla: Sla): Promise<string> {
-        return "";
-    }
-
-    public getObjectAdditionalText(sla: Sla): string {
-        return "";
-    }
-
-    public getObjectIcon(sla?: Sla): string | ObjectIcon {
-        return null;
     }
 
     public async getObjectName(plural?: boolean): Promise<string> {
@@ -66,10 +42,6 @@ export class SlaLabelProvider implements ILabelProvider<Sla> {
 
     public getObjectTooltip(sla: Sla): string {
         return sla.Name;
-    }
-
-    public async getIcons(sla: Sla, property: string, value?: string | number): Promise<Array<string | ObjectIcon>> {
-        return [];
     }
 
 

@@ -2,7 +2,7 @@ import {
     SortOrder, KIXObjectType, KIXObject, FilterCriteria, FilterType,
     KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, CreateLinkDescription,
     KIXObjectSpecificCreateOptions, KIXObjectSpecificDeleteOptions, ObjectIcon, ObjectIconLoadingOptions,
-    Error, IObjectFactory, CreatePermissionDescription, PermissionType, PermissionProperty, FilterDataType
+    Error, CreatePermissionDescription, PermissionType, PermissionProperty, FilterDataType
 } from '../../../model';
 import { Query, CreateLink, CreateLinkRequest, RequestObject } from '../../../api';
 import { IKIXObjectService } from '../../IKIXObjectService';
@@ -12,6 +12,7 @@ import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { ObjectFactoryService } from '../../ObjectFactoryService';
 import { RoleService } from './RoleService';
 import { SearchOperator } from '../../../browser';
+import { IObjectFactory } from '../../object-factories/IObjectFactory';
 
 /**
  * Generic abstract class for all ObjectServices.
@@ -69,7 +70,13 @@ export abstract class KIXObjectService implements IKIXObjectService {
             ? responseObject
             : [responseObject];
 
-        return objects.map((o) => ObjectFactoryService.createObject(objectType, o));
+        const result = [];
+        for (const o of objects) {
+            const object = await ObjectFactoryService.createObject(token, objectType, o);
+            result.push(object);
+        }
+
+        return result;
     }
 
     protected async executeUpdateOrCreateRequest<R = number>(

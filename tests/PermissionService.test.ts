@@ -4,8 +4,8 @@ import { UIComponent } from '../src/core/model/UIComponent';
 import { UIComponentPermission } from '../src/core/model/UIComponentPermission';
 import { PermissionService } from '../src/services/PermissionService';
 import { HttpService } from '../src/core/services';
-import { OptionsResponse, RequestMethod, ResponseHeader } from '../src/core/api';
-import { CRUD, ContextConfiguration, ConfiguredWidget } from '../src/core/model';
+import { OptionsResponse, RequestMethod } from '../src/core/api';
+import { CRUD, ContextConfiguration, ConfiguredWidget, Error } from '../src/core/model';
 import { HTTPUtil } from './utils/HTTPUtil';
 
 const expect = chai.expect;
@@ -417,6 +417,33 @@ describe('Permission Service', () => {
             expect(config).exist;
             expect(config.overlayWidgets).exist;
             expect(config.overlayWidgets.length).equals(1);
+        });
+    });
+
+    describe('Options request with failure.', () => {
+
+        let originalOptionsMethod;
+
+        before(() => {
+
+            originalOptionsMethod = HttpService.getInstance().options;
+            HttpService.getInstance().options = async (token: string, resource: string): Promise<OptionsResponse> => {
+                throw new Error('error', 'error');
+            };
+        });
+
+        after(() => {
+            HttpService.getInstance().options = originalOptionsMethod;
+        })
+
+        it('Should return true if no permissions are given and the option request provides errors.', async () => {
+            const allowed = await PermissionService.getInstance().checkPermissions('test-token-1234', []);
+            expect(allowed).true;
+        });
+
+        it('Should return false if permissions are given and the option request provides errors.', async () => {
+            const allowed = await PermissionService.getInstance().checkPermissions('test-token-1234', [new UIComponentPermission('somewhere', [CRUD.READ])]);
+            expect(allowed).false;
         });
     });
 

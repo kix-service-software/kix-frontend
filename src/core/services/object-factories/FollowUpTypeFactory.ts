@@ -1,8 +1,7 @@
-import { IObjectFactory } from "../IObjectFactory";
-import { KIXObjectType } from "../KIXObjectType";
-import { FollowUpType } from "./FollowUpType";
+import { ObjectFactory } from "./ObjectFactory";
+import { FollowUpType, KIXObjectType } from "../../model";
 
-export class FollowUpTypeFactory implements IObjectFactory<FollowUpType> {
+export class FollowUpTypeFactory extends ObjectFactory<FollowUpType> {
 
     public isFactoryFor(objectType: KIXObjectType): boolean {
         return objectType === KIXObjectType.FOLLOW_UP_TYPE;

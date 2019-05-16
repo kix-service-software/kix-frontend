@@ -41,9 +41,7 @@ export class Cell implements ICell {
 
         if (object) {
             value = await LabelService.getInstance().getPropertyValueDisplayText(
-                object, this.tableValue.property,
-                this.tableValue.objectValue ? this.tableValue.objectValue.toString() : null,
-                translatable
+                object, this.tableValue.property, null, translatable
             );
         } else {
             const objectType = this.getRow().getTable().getObjectType();
@@ -56,7 +54,7 @@ export class Cell implements ICell {
                 );
             }
         }
-        return value ? value : this.tableValue.objectValue ? this.tableValue.objectValue.toString() : '';
+        return value;
     }
 
     public async filter(filterValue: string, criteria: TableFilterCriteria[]): Promise<boolean> {

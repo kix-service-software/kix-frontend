@@ -1,19 +1,15 @@
 import {
     Organisation, OrganisationProperty, ObjectIcon, KIXObjectType, KIXObjectProperty, User, DateTimeUtil
 } from '../../model';
-import { ILabelProvider } from '..';
 import { SearchProperty } from '../SearchProperty';
 import { TranslationService } from '../i18n/TranslationService';
 import { ObjectDataService } from '../ObjectDataService';
 import { KIXObjectService } from '../kix';
+import { LabelProvider } from '../LabelProvider';
 
-export class OrganisationLabelProvider implements ILabelProvider<Organisation> {
+export class OrganisationLabelProvider extends LabelProvider<Organisation> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.ORGANISATION;
-
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
-    }
 
     public async getPropertyValueDisplayText(
         property: string, value: string | number, translatable: boolean = true
@@ -120,10 +116,6 @@ export class OrganisationLabelProvider implements ILabelProvider<Organisation> {
         return displayValue;
     }
 
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
-    }
-
     public async getDisplayText(
         organisation: Organisation, property: string, defaultValue?: string, translatable: boolean = true
     ): Promise<string> {
@@ -157,14 +149,6 @@ export class OrganisationLabelProvider implements ILabelProvider<Organisation> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public getDisplayTextClasses(object: Organisation, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(object: Organisation): string[] {
-        return [];
-    }
-
     public async getObjectText(
         organisation: Organisation, id: boolean = false, name: boolean = false, translatable: boolean = true
     ): Promise<string> {
@@ -186,16 +170,8 @@ export class OrganisationLabelProvider implements ILabelProvider<Organisation> {
         return returnString;
     }
 
-    public getObjectAdditionalText(object: Organisation, translatable: boolean = true): string {
-        return '';
-    }
-
     public getObjectIcon(object: Organisation): string | ObjectIcon {
         return 'kix-icon-man-house';
-    }
-
-    public getObjectTooltip(object: Organisation, translatable: boolean = true): string {
-        return '';
     }
 
     public async getObjectName(plural: boolean = false, translatable: boolean = true): Promise<string> {
@@ -206,10 +182,6 @@ export class OrganisationLabelProvider implements ILabelProvider<Organisation> {
             : value;
 
         return organisationLabel;
-    }
-
-    public async getIcons(object: Organisation, property: string): Promise<Array<string | ObjectIcon>> {
-        return [];
     }
 
 }

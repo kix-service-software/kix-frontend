@@ -109,7 +109,7 @@ class TestTableContentProvider implements ITableContentProvider {
             const values: TableValue[] = [];
 
             for (let c = 0; c < this.cellCount; c++) {
-                values.push(new TableValue(`${c}`, r));
+                values.push(new TableValue(`${c}`, r, `${r}`));
             }
 
             rowObjects.push(new RowObject(values, this.withObject ? {} : null));
@@ -119,7 +119,7 @@ class TestTableContentProvider implements ITableContentProvider {
         for (let r = 0; r < 10; r++) {
             const values: TableValue[] = [];
             for (let c = 0; c < this.cellCount; c++) {
-                values.push(new TableValue(`${c}`, r));
+                values.push(new TableValue(`${c}`, r, `${r}`));
             }
             children.push(new RowObject(values, this.withObject ? {} : null));
         }
@@ -127,7 +127,7 @@ class TestTableContentProvider implements ITableContentProvider {
         for (let r = 0; r < 10; r++) {
             const values: TableValue[] = [];
             for (let c = 0; c < this.cellCount; c++) {
-                values.push(new TableValue(`${c}`, r));
+                values.push(new TableValue(`${c}`, r, `${r}`));
             }
             grantchildren.push(new RowObject(values, this.withObject ? {} : null));
         }

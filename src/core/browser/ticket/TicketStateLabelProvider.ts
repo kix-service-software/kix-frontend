@@ -1,17 +1,13 @@
-import { ILabelProvider } from "../ILabelProvider";
 import { TicketState, KIXObjectType, ObjectIcon, TicketStateProperty, DateTimeUtil, User } from "../../model";
 import { SearchProperty } from "../SearchProperty";
 import { TranslationService } from "../i18n/TranslationService";
 import { ObjectDataService } from "../ObjectDataService";
 import { KIXObjectService } from "../kix";
+import { LabelProvider } from "../LabelProvider";
 
-export class TicketStateLabelProvider implements ILabelProvider<TicketState> {
+export class TicketStateLabelProvider extends LabelProvider<TicketState> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.TICKET_STATE;
-
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
-    }
 
     public isLabelProviderFor(ticketState: TicketState): boolean {
         return ticketState instanceof TicketState;
@@ -63,10 +59,6 @@ export class TicketStateLabelProvider implements ILabelProvider<TicketState> {
         }
 
         return displayValue;
-    }
-
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
     }
 
     public async getDisplayText(
@@ -126,20 +118,8 @@ export class TicketStateLabelProvider implements ILabelProvider<TicketState> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public getDisplayTextClasses(ticketState: TicketState, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(ticketState: TicketState): string[] {
-        return [];
-    }
-
     public async getObjectText(ticketState: TicketState, id?: boolean, title?: boolean): Promise<string> {
         return ticketState.Name;
-    }
-
-    public getObjectAdditionalText(ticketState: TicketState): string {
-        return null;
     }
 
     public getObjectIcon(ticketState?: TicketState): string | ObjectIcon {

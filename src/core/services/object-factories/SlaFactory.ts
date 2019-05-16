@@ -1,8 +1,7 @@
-import { IObjectFactory } from "../IObjectFactory";
-import { Sla } from "./Sla";
-import { KIXObjectType } from "../KIXObjectType";
+import { ObjectFactory } from "./ObjectFactory";
+import { Sla, KIXObjectType } from "../../model";
 
-export class SlaFactory implements IObjectFactory<Sla> {
+export class SlaFactory extends ObjectFactory<Sla> {
 
     public isFactoryFor(objectType: KIXObjectType): boolean {
         return objectType === KIXObjectType.SLA;

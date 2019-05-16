@@ -1,8 +1,7 @@
-import { User } from "./User";
-import { IObjectFactory } from "../IObjectFactory";
-import { KIXObjectType } from "../KIXObjectType";
+import { ObjectFactory } from "./ObjectFactory";
+import { User, KIXObjectType } from "../../model";
 
-export class UserFactory implements IObjectFactory<User> {
+export class UserFactory extends ObjectFactory<User> {
 
     public isFactoryFor(objectType: KIXObjectType): boolean {
         return objectType === KIXObjectType.USER;

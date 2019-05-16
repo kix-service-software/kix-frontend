@@ -1,10 +1,11 @@
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, Error, Channel, ChannelFactory
+    KIXObjectSpecificCreateOptions, Error, Channel
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
+import { ChannelFactory } from '../../object-factories/ChannelFactory';
 
 export class ChannelService extends KIXObjectService {
 

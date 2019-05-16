@@ -1,9 +1,9 @@
-import { ILabelProvider } from "../ILabelProvider";
 import { Translation, KIXObjectType, ObjectIcon, TranslationProperty, DateTimeUtil, User } from "../../model";
 import { TranslationService } from "./TranslationService";
 import { KIXObjectService } from "../kix";
+import { LabelProvider } from "../LabelProvider";
 
-export class TranslationLabelProvider implements ILabelProvider<Translation> {
+export class TranslationLabelProvider extends LabelProvider<Translation> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.TRANSLATION;
 
@@ -48,10 +48,6 @@ export class TranslationLabelProvider implements ILabelProvider<Translation> {
         return displayValue;
     }
 
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
-    }
-
     public async getDisplayText(
         translation: Translation, property: string, value?: string, translatable: boolean = true
     ): Promise<string> {
@@ -83,18 +79,6 @@ export class TranslationLabelProvider implements ILabelProvider<Translation> {
         }
 
         return displayValue;
-    }
-
-    public async getPropertyValueDisplayText(property: string, value: string | number): Promise<string> {
-        return value.toString();
-    }
-
-    public getDisplayTextClasses(translation: Translation, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(translation: Translation): string[] {
-        return [];
     }
 
     public async getObjectText(

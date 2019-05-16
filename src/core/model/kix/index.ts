@@ -24,5 +24,4 @@ export { KIXObjectType } from './KIXObjectType';
 export { Lock } from './Lock';
 export { ObjectData } from './ObjectData';
 export { AttachmentError } from './AttachmentError';
-export { IObjectFactory } from './IObjectFactory';
 export { KIXObjectProperty } from './KIXObjectProperty';

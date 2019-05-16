@@ -1,4 +1,3 @@
-import { ILabelProvider } from '..';
 import {
     ObjectIcon, KIXObjectType, ConfigItemProperty, ConfigItem,
     DateTimeUtil, ConfigItemClass, GeneralCatalogItem, KIXObject, SysConfigItem, SysConfigKey, VersionProperty
@@ -6,14 +5,11 @@ import {
 import { KIXObjectService } from '../kix';
 import { SearchProperty } from '../SearchProperty';
 import { TranslationService } from '../i18n/TranslationService';
+import { LabelProvider } from '../LabelProvider';
 
-export class ConfigItemLabelProvider implements ILabelProvider<ConfigItem> {
+export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM;
-
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
-    }
 
     public async getPropertyValueDisplayText(
         property: string, value: any = '', translatable: boolean = true
@@ -185,14 +181,6 @@ export class ConfigItemLabelProvider implements ILabelProvider<ConfigItem> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public getDisplayTextClasses(configItem: ConfigItem, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(configItem: ConfigItem): string[] {
-        return [];
-    }
-
     public isLabelProviderFor(configItem: ConfigItem): boolean {
         return configItem instanceof ConfigItem;
     }
@@ -220,10 +208,6 @@ export class ConfigItemLabelProvider implements ILabelProvider<ConfigItem> {
             returnString = await this.getObjectName(false);
         }
         return returnString;
-    }
-
-    public getObjectAdditionalText(configItem: ConfigItem): string {
-        return null;
     }
 
     public getObjectIcon(configItem: ConfigItem): string | ObjectIcon {

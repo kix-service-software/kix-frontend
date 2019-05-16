@@ -1,15 +1,11 @@
-import { ILabelProvider } from "..";
 import { ObjectIcon, KIXObjectType, LinkObject, LinkObjectProperty, KIXObject } from "../../model";
 import { LabelService } from "../LabelService";
 import { TranslationService } from "../i18n/TranslationService";
+import { LabelProvider } from "../LabelProvider";
 
-export class LinkObjectLabelProvider implements ILabelProvider<LinkObject> {
+export class LinkObjectLabelProvider extends LabelProvider<LinkObject> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.LINK_OBJECT;
-
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
-    }
 
     public async getPropertyValueDisplayText(
         property: string, value: string | number, translatable: boolean = true
@@ -77,24 +73,12 @@ export class LinkObjectLabelProvider implements ILabelProvider<LinkObject> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public getDisplayTextClasses(linkObject: LinkObject, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(linkObject: LinkObject): string[] {
-        return [];
-    }
-
     public isLabelProviderFor(linkObject: LinkObject): boolean {
         return linkObject instanceof LinkObject;
     }
 
     public async getObjectText(linkObject: LinkObject): Promise<string> {
         return linkObject.title;
-    }
-
-    public getObjectAdditionalText(linkObject: LinkObject): string {
-        return null;
     }
 
     public getObjectIcon(linkObject: LinkObject): string | ObjectIcon {

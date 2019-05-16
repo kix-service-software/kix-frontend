@@ -1,8 +1,9 @@
 import {
-    KIXObjectType, Error, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, ValidObject, ValidObjectFactory
+    KIXObjectType, Error, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, ValidObject
 } from '../../../model';
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
+import { ValidObjectFactory } from '../../object-factories/ValidObjectFactory';
 
 export class ValidObjectService extends KIXObjectService {
 

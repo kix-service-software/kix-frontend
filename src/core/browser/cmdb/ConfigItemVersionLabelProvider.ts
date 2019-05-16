@@ -1,15 +1,11 @@
-import { ILabelProvider } from '..';
 import { Version, DateTimeUtil, ObjectIcon, KIXObjectType, VersionProperty, User } from '../../model';
 import { TranslationService } from '../i18n/TranslationService';
 import { KIXObjectService } from '../kix';
+import { LabelProvider } from '../LabelProvider';
 
-export class ConfigItemVersionLabelProvider implements ILabelProvider<Version> {
+export class ConfigItemVersionLabelProvider extends LabelProvider<Version> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_VERSION;
-
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
-    }
 
     public async getPropertyValueDisplayText(
         property: string, value: string | number, translatable: boolean = true
@@ -62,10 +58,6 @@ export class ConfigItemVersionLabelProvider implements ILabelProvider<Version> {
         return displayValue;
     }
 
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
-    }
-
     public async getDisplayText(
         version: Version, property: string, value?: string | number, translatable: boolean = true
     ): Promise<string> {
@@ -91,40 +83,8 @@ export class ConfigItemVersionLabelProvider implements ILabelProvider<Version> {
         return displayValue;
     }
 
-    public getDisplayTextClasses(object: Version, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(object: Version): string[] {
-        return [];
-    }
-
-    public isLabelProviderFor(object: Version): boolean {
-        return object instanceof Version;
-    }
-
-    public async getObjectText(object: Version): Promise<string> {
-        throw new Error('Method not implemented.');
-    }
-
-    public getObjectAdditionalText(object: Version): string {
-        throw new Error('Method not implemented.');
-    }
-
-    public getObjectIcon(object: Version): string | ObjectIcon {
-        throw new Error('Method not implemented.');
-    }
-
-    public getObjectTooltip(object: Version): string {
-        throw new Error('Method not implemented.');
-    }
-
     public async getObjectName(): Promise<string> {
         return 'Config Item Version';
-    }
-
-    public async getIcons(object: Version, property: string): Promise<Array<string | ObjectIcon>> {
-        return null;
     }
 
 }

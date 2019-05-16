@@ -1,12 +1,14 @@
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, QueueFactory, FollowUpTypeFactory, ObjectIcon, Error
+    KIXObjectSpecificCreateOptions, ObjectIcon, Error
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { LoggingService } from '../LoggingService';
 import { QueueRequestObject, CUQueueResponse, CUQueueRequest } from '../../../api';
+import { QueueFactory } from '../../object-factories/QueueFactory';
+import { FollowUpTypeFactory } from '../../object-factories/FollowUpTypeFactory';
 
 export class QueueService extends KIXObjectService {
 

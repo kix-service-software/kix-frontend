@@ -152,6 +152,8 @@ export enum TicketProperty {
 
     ARTICLES = 'Articles',
 
-    UNSEEN = 'Unseen'
+    UNSEEN = 'Unseen',
+
+    HISTORY = 'History'
 
 }

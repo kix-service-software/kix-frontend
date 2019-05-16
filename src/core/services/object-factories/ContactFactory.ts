@@ -1,8 +1,7 @@
-import { Contact } from './Contact';
-import { IObjectFactory } from '../IObjectFactory';
-import { KIXObjectType } from '../KIXObjectType';
+import { ObjectFactory } from "./ObjectFactory";
+import { Contact, KIXObjectType } from "../../model";
 
-export class ContactFactory implements IObjectFactory<Contact> {
+export class ContactFactory extends ObjectFactory<Contact> {
 
     public isFactoryFor(objectType: KIXObjectType): boolean {
         return objectType === KIXObjectType.CONTACT;

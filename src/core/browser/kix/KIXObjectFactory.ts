@@ -5,6 +5,21 @@ export abstract class KIXObjectFactory<T extends KIXObject> implements IKIXObjec
 
     public abstract create(object: T): Promise<T>;
 
+    protected constructor() { }
+
+    public cleanupProperties(target: T, source: T): T {
+        const propertiesToDelete: string[] = [];
+        for (const property in target) {
+            if (!source.hasOwnProperty(property)) {
+                propertiesToDelete.push(property);
+            }
+        }
+
+        propertiesToDelete.forEach((p) => delete target[p]);
+
+        return target;
+    }
+
     public createPermissions(object: T): void {
         if (object.ConfiguredPermissions && !Array.isArray(object.ConfiguredPermissions)) {
             if (object.ConfiguredPermissions.Assigned) {

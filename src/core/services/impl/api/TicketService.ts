@@ -6,10 +6,9 @@ import {
 
 import {
     Article, Attachment, ArticleProperty, FilterCriteria, TicketProperty,
-    TicketFactory, KIXObjectType, FilterType, User, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
+    KIXObjectType, FilterType, User, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions, CreateTicketArticleOptions, CreateTicketWatcherOptions,
-    KIXObjectSpecificDeleteOptions, DeleteTicketWatcherOptions, Error,
-    SenderTypeFactory, ArticleFactory, LockFactory, Queue, Contact, Channel
+    KIXObjectSpecificDeleteOptions, DeleteTicketWatcherOptions, Error, Queue, Contact, Channel
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
@@ -18,6 +17,10 @@ import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { UserService } from './UserService';
 import { LoggingService } from '../LoggingService';
 import { ChannelService } from './ChannelService';
+import { TicketFactory } from '../../object-factories/TicketFactory';
+import { SenderTypeFactory } from '../../object-factories/SenderTypeFactory';
+import { LockFactory } from '../../object-factories/LockFactory';
+import { ArticleFactory } from '../../object-factories/ArticleFactory';
 
 const RESOURCE_ARTICLES: string = 'articles';
 const RESOURCE_ATTACHMENTS: string = 'attachments';

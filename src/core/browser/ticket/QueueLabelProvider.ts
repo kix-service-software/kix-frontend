@@ -1,4 +1,3 @@
-import { ILabelProvider } from "../ILabelProvider";
 import {
     KIXObjectType, ObjectIcon, DateTimeUtil, User, Queue, QueueProperty, SystemAddress, FollowUpType
 } from "../../model";
@@ -6,8 +5,9 @@ import { TranslationService } from "../i18n/TranslationService";
 import { ObjectDataService } from "../ObjectDataService";
 import { KIXObjectService } from "../kix";
 import { LabelService } from "../LabelService";
+import { LabelProvider } from "../LabelProvider";
 
-export class QueueLabelProvider implements ILabelProvider<Queue> {
+export class QueueLabelProvider extends LabelProvider<Queue> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.QUEUE;
 

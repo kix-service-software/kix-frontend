@@ -1,4 +1,3 @@
-import { ILabelProvider } from "..";
 import {
     DateTimeUtil, ObjectIcon, KIXObjectType, SysConfigItem, SysConfigKey
 } from "../../model";
@@ -8,14 +7,11 @@ import { BrowserUtil } from "../BrowserUtil";
 import { SearchProperty } from "../SearchProperty";
 import { TranslationService } from "../i18n/TranslationService";
 import { ObjectDataService } from "../ObjectDataService";
+import { LabelProvider } from "../LabelProvider";
 
-export class FAQLabelProvider implements ILabelProvider<FAQArticle> {
+export class FAQLabelProvider extends LabelProvider<FAQArticle> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.FAQ_ARTICLE;
-
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
-    }
 
     public async getPropertyValueDisplayText(
         property: string, value: string | number, translatable: boolean = true
@@ -133,10 +129,6 @@ export class FAQLabelProvider implements ILabelProvider<FAQArticle> {
         return displayValue;
     }
 
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
-    }
-
     public async getDisplayText(
         faqArticle: FAQArticle, property: string, defaultValue?: string, translatable: boolean = true
     ): Promise<string> {
@@ -188,14 +180,6 @@ export class FAQLabelProvider implements ILabelProvider<FAQArticle> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public getDisplayTextClasses(faqArticle: FAQArticle, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(faqArticle: FAQArticle): string[] {
-        return [];
-    }
-
     public isLabelProviderFor(faqArticle: FAQArticle): boolean {
         return faqArticle instanceof FAQArticle;
     }
@@ -224,10 +208,6 @@ export class FAQLabelProvider implements ILabelProvider<FAQArticle> {
             returnString = await TranslationService.translate('Translatable#FAQ Article');
         }
         return returnString;
-    }
-
-    public getObjectAdditionalText(faqArticle: FAQArticle): string {
-        return null;
     }
 
     public getObjectIcon(faqArticle: FAQArticle): string | ObjectIcon {

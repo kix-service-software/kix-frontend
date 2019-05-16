@@ -1,8 +1,7 @@
-import { IObjectFactory } from "../IObjectFactory";
-import { ValidObject } from "./ValidObject";
-import { KIXObjectType } from "../KIXObjectType";
+import { ObjectFactory } from "./ObjectFactory";
+import { ValidObject, KIXObjectType } from "../../model";
 
-export class ValidObjectFactory implements IObjectFactory<ValidObject> {
+export class ValidObjectFactory extends ObjectFactory<ValidObject> {
 
     public isFactoryFor(objectType: KIXObjectType): boolean {
         return objectType === KIXObjectType.VALID_OBJECT;

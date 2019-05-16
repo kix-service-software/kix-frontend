@@ -1,17 +1,13 @@
-import { ILabelProvider } from "../ILabelProvider";
 import { TranslationLanguage, KIXObjectType, ObjectIcon, TranslationLanguageProperty } from "../../model";
 import { TranslationService } from "./TranslationService";
+import { LabelProvider } from "../LabelProvider";
 
-export class TranslationLanguageLabelProvider implements ILabelProvider<TranslationLanguage> {
+export class TranslationLanguageLabelProvider extends LabelProvider<TranslationLanguage> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.TRANSLATION_LANGUAGE;
 
     public isLabelProviderFor(language: TranslationLanguage): boolean {
         return language instanceof TranslationLanguage;
-    }
-
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
@@ -32,10 +28,6 @@ export class TranslationLanguageLabelProvider implements ILabelProvider<Translat
         }
 
         return displayValue;
-    }
-
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
     }
 
     public async getDisplayText(
@@ -60,24 +52,8 @@ export class TranslationLanguageLabelProvider implements ILabelProvider<Translat
         return displayValue;
     }
 
-    public async getPropertyValueDisplayText(property: string, value: string | number): Promise<string> {
-        return value.toString();
-    }
-
-    public getDisplayTextClasses(language: TranslationLanguage, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(language: TranslationLanguage): string[] {
-        return [];
-    }
-
     public async getObjectText(language: TranslationLanguage, id?: boolean, title?: boolean): Promise<string> {
         return await TranslationService.translate('Translatable#TranslationLanguage');
-    }
-
-    public getObjectAdditionalText(language: TranslationLanguage): string {
-        return null;
     }
 
     public getObjectIcon(language?: TranslationLanguage): string | ObjectIcon {

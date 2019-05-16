@@ -1,8 +1,7 @@
-import { IObjectFactory } from "../IObjectFactory";
-import { KIXObjectType } from "../KIXObjectType";
-import { UserPreference } from "./UserPreference";
+import { ObjectFactory } from "./ObjectFactory";
+import { UserPreference, KIXObjectType } from "../../model";
 
-export class UserPreferenceFactory implements IObjectFactory<UserPreference> {
+export class UserPreferenceFactory extends ObjectFactory<UserPreference> {
 
     public isFactoryFor(objectType: KIXObjectType): boolean {
         return objectType === KIXObjectType.USER_PREFERENCE;

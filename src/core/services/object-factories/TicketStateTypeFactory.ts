@@ -1,8 +1,7 @@
-import { IObjectFactory } from "../IObjectFactory";
-import { TicketStateType } from "./TicketStateType";
-import { KIXObjectType } from "../KIXObjectType";
+import { ObjectFactory } from "./ObjectFactory";
+import { TicketStateType, KIXObjectType } from "../../model";
 
-export class TicketStateTypeFactory implements IObjectFactory<TicketStateType> {
+export class TicketStateTypeFactory extends ObjectFactory<TicketStateType> {
 
     public isFactoryFor(objectType: KIXObjectType): boolean {
         return objectType === KIXObjectType.TICKET_STATE_TYPE;

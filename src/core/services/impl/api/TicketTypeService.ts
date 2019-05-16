@@ -1,11 +1,12 @@
 import {
     TicketType, KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, TicketTypeFactory, Error
+    KIXObjectSpecificCreateOptions, Error
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { LoggingService } from '../LoggingService';
+import { TicketTypeFactory } from '../../object-factories/TicketTypeFactory';
 
 export class TicketTypeService extends KIXObjectService {
 

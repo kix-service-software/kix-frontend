@@ -69,7 +69,7 @@ class TestTableContentProvider implements ITableContentProvider {
             const values: TableValue[] = [];
 
             for (let c = 0; c < this.cellCount; c++) {
-                values.push(new TableValue(`${c}`, `value-${r}-${c}`));
+                values.push(new TableValue(`${c}`, `value-${r}-${c}`, `value-${r}-${c}`));
             }
 
             objects.push(new RowObject(values));

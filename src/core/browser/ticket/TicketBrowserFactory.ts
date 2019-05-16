@@ -1,9 +1,8 @@
 import { Ticket, TicketHistory, Link, DynamicField } from '../../model';
-import { IKIXObjectFactory } from '../kix';
+import { KIXObjectFactory } from '../kix';
 import { ArticleBrowserFactory } from './ArticleBrowserFactory';
-import { ObjectDataService } from '../ObjectDataService';
 
-export class TicketBrowserFactory implements IKIXObjectFactory<Ticket> {
+export class TicketBrowserFactory extends KIXObjectFactory<Ticket> {
 
     private static INSTANCE: TicketBrowserFactory;
 
@@ -14,22 +13,29 @@ export class TicketBrowserFactory implements IKIXObjectFactory<Ticket> {
         return TicketBrowserFactory.INSTANCE;
     }
 
-    private constructor() { }
+    protected constructor() {
+        super();
+    }
 
     public async create(ticket: Ticket): Promise<Ticket> {
-        const newTicket = new Ticket(ticket);
+        const newTicket = this.cleanupProperties(new Ticket(ticket), ticket);
         await this.mapTicketData(newTicket);
         return newTicket;
     }
 
     private async mapTicketData(ticket: Ticket): Promise<void> {
-        const objectData = ObjectDataService.getInstance().getObjectData();
-        if (objectData) {
-            await this.initArticles(ticket);
+        await this.initArticles(ticket);
 
-            ticket.DynamicFields = ticket.DynamicFields ? ticket.DynamicFields.map((df) => new DynamicField(df)) : [];
-            ticket.History = ticket.History ? ticket.History.map((th) => new TicketHistory(th)) : [];
-            ticket.Links = ticket.Links ? ticket.Links.map((l) => new Link(l)) : [];
+        if (ticket.DynamicFields) {
+            ticket.DynamicFields = ticket.DynamicFields.map((df) => new DynamicField(df));
+        }
+
+        if (ticket.History) {
+            ticket.History = ticket.History.map((th) => new TicketHistory(th));
+        }
+
+        if (ticket.Links) {
+            ticket.Links = ticket.Links.map((l) => new Link(l));
         }
     }
 

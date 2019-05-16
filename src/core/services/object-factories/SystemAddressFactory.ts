@@ -1,8 +1,7 @@
-import { IObjectFactory } from "../IObjectFactory";
-import { SystemAddress } from "./SystemAddress";
-import { KIXObjectType } from "../KIXObjectType";
+import { ObjectFactory } from "./ObjectFactory";
+import { SystemAddress, KIXObjectType } from "../../model";
 
-export class SystemAddressFactory implements IObjectFactory<SystemAddress> {
+export class SystemAddressFactory extends ObjectFactory<SystemAddress> {
 
     public isFactoryFor(objectType: KIXObjectType): boolean {
         return objectType === KIXObjectType.SYSTEM_ADDRESS;

@@ -1,13 +1,18 @@
 import { AbstractAction } from '../../../model/components/action/AbstractAction';
-import { Ticket, KIXObjectType, TicketProperty } from '../../../model';
+import { Ticket, KIXObjectType, TicketProperty, CRUD } from '../../../model';
 import { ContextService } from '../../context';
 import { KIXObjectService } from '../../kix';
 import { EventService } from '../../event';
 import { TicketDetailsContext } from '../context';
 import { BrowserUtil } from '../../BrowserUtil';
 import { ApplicationEvent } from '../../application';
+import { UIComponentPermission } from '../../../model/UIComponentPermission';
 
 export class TicketLockAction extends AbstractAction<Ticket> {
+
+    public permissions = [
+        new UIComponentPermission('tickets/*', [CRUD.UPDATE])
+    ];
 
     private currentLockId: number;
 

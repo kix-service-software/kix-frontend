@@ -1,8 +1,7 @@
-import { IObjectFactory } from "../IObjectFactory";
-import { KIXObjectType } from "../KIXObjectType";
-import { GeneralCatalogItem } from './GeneralCatalogItem';
+import { ObjectFactory } from "./ObjectFactory";
+import { GeneralCatalogItem, KIXObjectType } from "../../model";
 
-export class GeneralCatalogItemFactory implements IObjectFactory<GeneralCatalogItem> {
+export class GeneralCatalogItemFactory extends ObjectFactory<GeneralCatalogItem> {
 
     public isFactoryFor(objectType: KIXObjectType): boolean {
         return objectType === KIXObjectType.GENERAL_CATALOG_ITEM;

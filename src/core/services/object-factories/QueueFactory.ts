@@ -1,8 +1,7 @@
-import { IObjectFactory } from "../IObjectFactory";
-import { Queue } from "./Queue";
-import { KIXObjectType } from "../KIXObjectType";
+import { ObjectFactory } from "./ObjectFactory";
+import { Queue, KIXObjectType } from "../../model";
 
-export class QueueFactory implements IObjectFactory<Queue> {
+export class QueueFactory extends ObjectFactory<Queue> {
 
     public isFactoryFor(objectType: KIXObjectType): boolean {
         return objectType === KIXObjectType.QUEUE;

@@ -1,14 +1,16 @@
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, RoleFactory, KIXObject, RoleProperty
+    KIXObjectSpecificCreateOptions, KIXObject, RoleProperty
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { LoggingService } from '../LoggingService';
 import {
-    PermissionTypeFactory, CreatePermissionDescription, PermissionProperty, Permission
+    CreatePermissionDescription, PermissionProperty, Permission
 } from '../../../model/kix/permission';
+import { PermissionTypeFactory } from '../../object-factories/PermissionTypeFactory';
+import { RoleFactory } from '../../object-factories/RoleFactory';
 
 export class RoleService extends KIXObjectService {
 
