@@ -2,8 +2,9 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { ITable, Table, IRowObject, ITableContentProvider, RowObject, DefaultColumnConfiguration, TableValue } from '../../../src/core/browser/table';
+import { ITable, Table, IRowObject, ITableContentProvider, RowObject, DefaultColumnConfiguration, TableValue, TableEvent, TableEventData } from '../../../src/core/browser/table';
 import { SortOrder, DataType, KIXObjectType } from '../../../src/core/model';
+import { EventService, IEventSubscriber } from '../../../src/core/browser/event';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -87,6 +88,68 @@ describe('Table Sort Tests', () => {
         });
 
     });
+    describe('Sort table on initialisation', () => {
+        let table: ITable;
+        let subscriber: IEventSubscriber;
+
+        before(async () => {
+            table = new Table('test');
+            table.setContentProvider(new TestTableContentProvider(50, 10, false, true));
+            table.setColumnConfiguration([
+                new DefaultColumnConfiguration('0', true, true, false, false, 100, false, false, false, DataType.NUMBER),
+                new DefaultColumnConfiguration('1', true, true, false, false, 100, false, false, false, DataType.NUMBER),
+                new DefaultColumnConfiguration('2', true, true, false, false, 100, false, false, false, DataType.NUMBER)
+            ]);
+
+            subscriber = {
+                eventSubscriberId: 'sort-test-subscriber',
+                eventPublished: (data: TableEventData, eventId: string, subscriberId?: string) => {
+                    expect(data.tableId).equals(table.getTableId());
+                    expect(eventId).equals(TableEvent.TABLE_INITIALIZED);
+
+                    const rows = table.getRows();
+                    expect(rows).exist;
+                    expect(rows).an('array');
+                    expect(rows.length).equals(50);
+
+                    const cells = rows.map((r) => r.getCell('1'));
+
+                    expect(cells[0].getValue().objectValue).equals(49);
+                    expect(cells[cells.length - 1].getValue().objectValue).equals(0);
+
+                    const sortOrder = table.getColumn('1').getSortOrder();
+                    expect(sortOrder).exist;
+                    expect(sortOrder).equals(SortOrder.DOWN);
+
+                    const childRows = rows[rows.length - 1].getChildren();
+                    expect(childRows.length).equals(10);
+
+                    const childCells = childRows.map((r) => r.getCell('1'));
+                    expect(childCells[0].getValue().objectValue, 'children not sorted correctly').equals(9);
+                    expect(childCells[childCells.length - 1].getValue().objectValue, 'children not sorted correctly').equals(0);
+
+                    const grantChildRows = childRows[childRows.length - 1].getChildren();
+                    expect(grantChildRows.length).equals(10);
+
+                    const grantChildCells = grantChildRows.map((r) => r.getCell('1'));
+                    expect(grantChildCells[0].getValue().objectValue, 'grantchildren not sorted correctly').equals(9);
+                    expect(grantChildCells[grantChildCells.length - 1].getValue().objectValue, 'grantchildren not sorted correctly').equals(0);
+                }
+            };
+        });
+
+        after(() => {
+            EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, subscriber);
+        });
+
+        it('Should sort rows by column down', async () => {
+            await table.sort('1', SortOrder.DOWN); // set sort settings (but do not sort --> table not initialized yet)
+            EventService.getInstance().subscribe(TableEvent.TABLE_INITIALIZED, subscriber);
+            table.initialize(); // do not wait for completion
+            expect(table['initialized'], 'initialized state of table is true too late (KIX2018-2095)').is.true;
+        });
+
+    });
 });
 
 class TestTableContentProvider implements ITableContentProvider {
@@ -94,10 +157,21 @@ class TestTableContentProvider implements ITableContentProvider {
     public constructor(
         private rowCount = 1,
         private cellCount = 2,
-        private withObject: boolean = false
+        private withObject: boolean = false,
+        private wait: boolean = false
     ) { }
 
-    public async initialize(): Promise<void> { }
+    public initialize(): Promise<void> {
+        return new Promise((resolve) => {
+            if (this.wait) {
+                setTimeout(() => {
+                    resolve();
+                }, 1000);
+            } else {
+                resolve();
+            }
+        });
+    }
 
     public getObjectType(): KIXObjectType {
         return KIXObjectType.ANY;
