@@ -59,7 +59,7 @@ class Component {
     public async onMount(): Promise<void> {
         this.state.translations = await TranslationService.createTranslationObject([
             "Translatable#Submit",
-            ...this.state.nodes.map((n) => n.label)
+            ...this.state.nodes.map((n) => n.tooltip)
         ]);
 
         document.addEventListener('click', (event) => {

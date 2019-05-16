@@ -15,6 +15,7 @@ export class TreeNode {
         public expanded: boolean = false,
         public visible: boolean = false,
         public expandOnClick: boolean = false,
-        public clickable: boolean = true
+        public clickable: boolean = true,
+        public tooltip: string = label
     ) { }
 }
