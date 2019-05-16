@@ -73,6 +73,7 @@ export class CMDBContext extends Context {
     }
 
     public reset(): void {
+        super.reset();
         this.currentCIClass = null;
     }
 

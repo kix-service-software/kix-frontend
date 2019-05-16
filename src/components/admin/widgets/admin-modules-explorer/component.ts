@@ -17,15 +17,24 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         const context = await ContextService.getInstance().getContext<AdminContext>(AdminContext.CONTEXT_ID);
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
-        let categories = this.state.widgetConfiguration.settings;
+        if (context) {
+            this.state.filterValue = context.getAdditionalInformation('EXPLORER_FILTER_ADMIN');
+            if (this.state.filterValue) {
+                const filter = (this as any).getComponent('admin-modules-explorer-filter');
+                if (filter) {
+                    filter.textFilterValueChanged(null, this.state.filterValue);
+                }
+            }
+            this.state.widgetConfiguration = context.getWidgetConfiguration(this.state.instanceId);
+            let categories = this.state.widgetConfiguration ? this.state.widgetConfiguration.settings : null;
 
-        if (categories) {
-            categories = categories.map((c) => new AdminModuleCategory(c));
-            this.state.nodes = await this.prepareCategoryTreeNodes(categories);
+            if (categories) {
+                categories = categories.map((c) => new AdminModuleCategory(c));
+                this.state.nodes = await this.prepareCategoryTreeNodes(categories);
+            }
+
+            this.setActiveNode(context.adminModule);
         }
-
-        this.setActiveNode(context.adminModule);
     }
 
     private setActiveNode(adminModule: AdminModule): void {
@@ -93,6 +102,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async filter(textFilterValue?: string): Promise<void> {
         this.state.filterValue = textFilterValue;
+        const context = await ContextService.getInstance().getContext<AdminContext>(AdminContext.CONTEXT_ID);
+        if (context) {
+            context.setAdditionalInformation('EXPLORER_FILTER_ADMIN', this.state.filterValue);
+        }
     }
 
     private sortNodes(nodes: TreeNode[]): TreeNode[] {

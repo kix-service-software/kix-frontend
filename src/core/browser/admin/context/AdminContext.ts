@@ -24,6 +24,7 @@ export class AdminContext extends Context {
     }
 
     public reset(): void {
+        super.reset();
         this.adminModule = null;
         this.categoryName = null;
     }
