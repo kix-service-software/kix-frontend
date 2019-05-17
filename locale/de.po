@@ -242,6 +242,11 @@ msgstr "Datei kann nicht genutzt werden (Keine bekannten Attribute gefunden)."
 msgid "Category"
 msgstr "Kategorie"
 
+#, fuzzy
+#| msgid "State successfully created."
+msgid "Category successfully created."
+msgstr "Status wurde erfolgreich angelegt."
+
 msgid "Cause"
 msgstr "Ursache"
 
@@ -405,6 +410,11 @@ msgstr "Neuer Agent"
 
 msgid "Create Article"
 msgstr "Neuer Artikel"
+
+#, fuzzy
+#| msgid "Parent Category"
+msgid "Create Category"
+msgstr "Übergeordnete Kategorie"
 
 msgid "Create CI Class"
 msgstr "Neue CI Klasse"
@@ -676,6 +686,11 @@ msgstr "FAQ Kategorien"
 msgid "FAQ Category"
 msgstr "FAQ Kategorie"
 
+#, fuzzy
+#| msgid "FAQ Information"
+msgid "FAQ Category Information"
+msgstr "FAQ Informationen"
+
 msgid "FAQ Data"
 msgstr "FAQ Daten"
 
@@ -735,6 +750,31 @@ msgstr "größer als"
 
 msgid "Help"
 msgstr "Hilfe"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Comment"
+msgid "Helptext_Admin_FAQCategoryCreate_Comment"
+msgstr "Hilfetext_Admin_QueueCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Icon."
+msgid "Helptext_Admin_FAQCategoryCreate_Icon"
+msgstr "Hilfetext_Admin_QueueCreate_Icon."
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Name"
+msgid "Helptext_Admin_FAQCategoryCreate_Name"
+msgstr "Hilfetext_Admin_QueueCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_ParentQueue"
+msgid "Helptext_Admin_FAQCategoryCreate_ParentCategory"
+msgstr "Hilfetext_Admin_QueueCreate_ParentQueue"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Validity"
+msgid "Helptext_Admin_FAQCategoryCreate_Validity"
+msgstr "Hilfetext_Admin_QueueCreate_Validity"
 
 msgid "Helptext_Admin_QueueCreate_Comment"
 msgstr "Hilfetext_Admin_QueueCreate_Comment"
@@ -1267,6 +1307,11 @@ msgstr "Neue E-Mail"
 
 msgid "New FAQ"
 msgstr "Neue FAQ"
+
+#, fuzzy
+#| msgid "FAQ Category"
+msgid "New FAQ Category"
+msgstr "FAQ Kategorie"
 
 msgid "New Object"
 msgstr "Neues Objekt"
