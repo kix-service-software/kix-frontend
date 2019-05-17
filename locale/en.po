@@ -695,6 +695,9 @@ msgstr ""
 msgid "Force"
 msgstr ""
 
+msgid "Forward"
+msgstr ""
+
 msgid "free tickets: {0}"
 msgstr ""
 
@@ -1247,9 +1250,6 @@ msgstr ""
 msgid "New Contact"
 msgstr ""
 
-msgid "New Email"
-msgstr ""
-
 msgid "New FAQ"
 msgstr ""
 
@@ -1627,6 +1627,12 @@ msgid "Replace empty value"
 msgstr ""
 
 msgid "Replace Values"
+msgstr ""
+
+msgid "Reply"
+msgstr ""
+
+msgid "Reply all"
 msgstr ""
 
 msgid "Required field '{0}' has no value."

@@ -730,6 +730,9 @@ msgstr "Sperrung der Tickets bei Nachfrage"
 msgid "Force"
 msgstr "Erzwingen"
 
+msgid "Forward"
+msgstr ""
+
 msgid "free tickets: {0}"
 msgstr "Freie Tickets: {0}"
 
@@ -1302,9 +1305,6 @@ msgstr "Neues Config Item"
 msgid "New Contact"
 msgstr "Neuer Kontakt"
 
-msgid "New Email"
-msgstr "Neue E-Mail"
-
 msgid "New FAQ"
 msgstr "Neue FAQ"
 
@@ -1695,6 +1695,14 @@ msgstr "Leerwert ersetzen"
 
 msgid "Replace Values"
 msgstr "Wert ersetzen"
+
+msgid "Reply"
+msgstr ""
+
+#, fuzzy
+#| msgid "Select all"
+msgid "Reply all"
+msgstr "Alle auswählen"
 
 msgid "Required field '{0}' has no value."
 msgstr ""
@@ -2379,6 +2387,9 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "New Email"
+#~ msgstr "Neue E-Mail"
 
 #, fuzzy
 #~| msgid "No contact available"
