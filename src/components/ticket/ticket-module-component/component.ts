@@ -9,7 +9,7 @@ import {
     TicketContext, TicketDetailsContext, NewTicketDialogContext, TicketSearchContext, EditTicketDialogContext,
     NewTicketArticleContext, TicketListContext, ArticleZipAttachmentDownloadAction, ArticleBulkAction,
     ArticleCallIncomingAction, ArticleCallOutgoingAction, ArticleCommunicationAction, ArticleEditAction,
-    ArticleMaximizeAction, ArticleNewEmailAction, ArticleNewNoteAction, ArticlePrintAction, ArticleTagAction,
+    ArticleMaximizeAction, ArticleNewAction, ArticlePrintAction, ArticleTagAction,
     TicketEditAction, TicketLockAction, TicketMergeAction, TicketCreateAction, TicketPrintAction, TicketSpamAction,
     TicketWatchAction, TicketSearchAction, ShowUserTicketsAction, TicketSearchDefinition, TicketTypeCreateAction,
     TicketTypeImportAction, TicketTypeDeleteAction, TicketTypeTableFactory, TicketTypeLabelProvider,
@@ -28,7 +28,7 @@ import {
     TicketTemplateCreateAction, TicketTemplateTableDeleteAction, TicketTemplateLabelProvider, TicketTemplateService,
     TicketTemplateBrowserFactory, TicketTemplateTableFactory, TicketQueueCreateAction, TicketQueueTableFactory,
     QueueLabelProvider, QueueBrowserFactory, QueueService, NewQueueDialogContext, FollowUpTypeBrowserFactory,
-    TicketQueueEditAction, QueueDetailsContext
+    TicketQueueEditAction, QueueDetailsContext, ArticleReplyAction, ArticleFormService
 } from '../../../core/browser/ticket';
 import {
     KIXObjectType, ContextDescriptor, ContextMode, ContextType,
@@ -58,6 +58,7 @@ class Component extends AbstractMarkoComponent {
         ServiceRegistry.registerServiceInstance(TicketTemplateService.getInstance());
 
         ServiceRegistry.registerServiceInstance(TicketFormService.getInstance());
+        ServiceRegistry.registerServiceInstance(ArticleFormService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketTypeFormService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketPriorityFormService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketStateFormService.getInstance());
@@ -111,9 +112,6 @@ class Component extends AbstractMarkoComponent {
         FactoryService.getInstance().registerFactory(
             KIXObjectType.TICKET_TEMPLATE, TicketTemplateBrowserFactory.getInstance()
         );
-
-        TicketFormService.getInstance();
-        TicketTypeFormService.getInstance();
 
         BulkService.getInstance().registerBulkManager(new TicketBulkManager());
 
@@ -259,8 +257,8 @@ class Component extends AbstractMarkoComponent {
         ActionFactory.getInstance().registerAction('article-communication-action', ArticleCommunicationAction);
         ActionFactory.getInstance().registerAction('article-edit-action', ArticleEditAction);
         ActionFactory.getInstance().registerAction('article-maximize-action', ArticleMaximizeAction);
-        ActionFactory.getInstance().registerAction('article-new-email-action', ArticleNewEmailAction);
-        ActionFactory.getInstance().registerAction('article-new-note-action', ArticleNewNoteAction);
+        ActionFactory.getInstance().registerAction('article-new-action', ArticleNewAction);
+        ActionFactory.getInstance().registerAction('article-answer-action', ArticleReplyAction);
         ActionFactory.getInstance().registerAction('article-print-action', ArticlePrintAction);
         ActionFactory.getInstance().registerAction('article-tag-action', ArticleTagAction);
 

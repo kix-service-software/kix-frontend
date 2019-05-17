@@ -5,7 +5,7 @@
         <if(input.open)>
             <div.content style=("width: " + state.width)>
                 <ul.toggle-actions>
-                    <for|action| of=component.getToggleActions()>
+                    <for|action| of=state.actions>
                         <li>
                             <action action=action displayText=false/>
                         </li>

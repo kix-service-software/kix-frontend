@@ -38,6 +38,7 @@ export { SenderTypeFactory } from './SenderTypeFactory';
 export { LockFactory } from './LockFactory';
 export { FollowUpTypeFactory } from './FollowUpTypeFactory';
 
+export { ArticleLoadingOptions } from './ArticleLoadingOptions';
 export { TicketPriorityFactory } from './TicketPriorityFactory';
 export { TicketStateFactory } from './TicketStateFactory';
 export { TicketStateTypeFactory } from './TicketStateTypeFactory';

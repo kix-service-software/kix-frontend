@@ -12,7 +12,6 @@ export class EmailRecipientValidator implements IFormFieldValidator {
     public isValidatorFor(formField: FormField, formId: string): boolean {
         return formField.property === ArticleProperty.TO
             || formField.property === ArticleProperty.CC
-            || formField.property === ArticleProperty.BCC
             || formField.property === ArticleProperty.BCC;
     }
 

@@ -1,6 +1,6 @@
 import {
     Context, WidgetConfiguration,
-    ContextType, KIXObjectType, ContextMode, ContextDescriptor, ObjectUpdatedEventData, FormContext
+    ContextType, KIXObjectType, ContextMode, ContextDescriptor, ObjectUpdatedEventData, FormContext, ObjectIcon
 } from '../../model';
 import { ContextSocketClient } from './ContextSocketClient';
 import { IContextServiceListener } from './IContextServiceListener';
@@ -84,8 +84,8 @@ export class ContextService {
     }
 
     public async setDialogContext(
-        contextId: string, kixObjectType: KIXObjectType, contextMode: ContextMode,
-        objectId?: string | number, reset?: boolean, title?: string, singleTab?: boolean, formId?: string
+        contextId: string, kixObjectType: KIXObjectType, contextMode: ContextMode, objectId?: string | number,
+        reset?: boolean, title?: string, singleTab?: boolean, formId?: string, icon?: string | ObjectIcon
     ): Promise<void> {
 
         this.resetRefreshTimer();
@@ -120,13 +120,16 @@ export class ContextService {
             if (reset && formId) {
                 FormService.getInstance().deleteFormInstance(formId);
             }
+            if (formId) {
+                context.setAdditionalInformation('FORM_ID', formId);
+            }
 
             this.activeDialogContext = context;
             this.activeContextType = ContextType.DIALOG;
 
             DialogService.getInstance().openMainDialog(
                 context.getDescriptor().contextMode, context.getDescriptor().componentId,
-                kixObjectType, title, null, singleTab
+                kixObjectType, title, icon, singleTab
             );
 
             this.serviceListener.forEach(

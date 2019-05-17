@@ -5,7 +5,8 @@ import {
     TreeNode, ObjectIcon, Service, TicketPriority, TicketType,
     TicketState, StateType, KIXObject, Sla, TableFilterCriteria, User, KIXObjectLoadingOptions,
     KIXObjectSpecificLoadingOptions,
-    FormFieldOption
+    FormFieldOption,
+    Article
 } from '../../model';
 import { TicketParameterUtil } from './TicketParameterUtil';
 import { KIXObjectService } from '../kix';
@@ -14,6 +15,7 @@ import { LabelService } from '../LabelService';
 import { TicketSocketClient } from './TicketSocketClient';
 import { AgentService } from '../application/AgentService';
 import { QueueService } from './admin';
+import { InlineContent } from '../components';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -248,5 +250,32 @@ export class TicketService extends KIXObjectService<Ticket> {
         ], null, null, ['SubServices', 'IncidentState'], ['SubServices']);
 
         return await KIXObjectService.loadObjects<Service>(KIXObjectType.SERVICE, null, loadingOptions);
+    }
+
+    public async getPreparedArticleBodyContent(article: Article): Promise<[string, InlineContent[]]> {
+        if (article.bodyAttachment) {
+
+            const AttachmentWithContent = await this.loadArticleAttachment(
+                article.TicketID, article.ArticleID, article.bodyAttachment.ID
+            );
+
+            const inlineAttachments = article.Attachments.filter((a) => a.Disposition === 'inline');
+            for (const inlineAttachment of inlineAttachments) {
+                const attachment = await this.loadArticleAttachment(
+                    article.TicketID, article.ArticleID, inlineAttachment.ID
+                );
+                if (attachment) {
+                    inlineAttachment.Content = attachment.Content;
+                }
+            }
+
+            const inlineContent: InlineContent[] = [];
+            inlineAttachments.forEach(
+                (a) => inlineContent.push(new InlineContent(a.ContentID, a.Content, a.ContentType))
+            );
+            return [new Buffer(AttachmentWithContent.Content, 'base64').toString('utf8'), inlineContent];
+        } else {
+            return [article.Body, null];
+        }
     }
 }

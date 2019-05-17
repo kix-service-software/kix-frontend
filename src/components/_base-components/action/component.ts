@@ -15,9 +15,7 @@ class ActionComponent {
     }
 
     public async onMount(): Promise<void> {
-        if (this.state.displayText) {
-            this.state.text = await TranslationService.translate(this.state.action.text);
-        }
+        this.state.text = await TranslationService.translate(this.state.action.text);
     }
 
     public doAction(event: any): void {
