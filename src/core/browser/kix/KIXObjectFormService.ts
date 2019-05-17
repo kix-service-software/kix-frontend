@@ -29,6 +29,18 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
         return formFieldValues;
     }
 
+    public async initOptions(form: Form): Promise<void> {
+        let kixObject: KIXObject;
+        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        if (context) {
+            kixObject = await context.getObject();
+        }
+
+        for (const g of form.groups) {
+            await this.prepareFormFieldOptions(g.formFields, kixObject, form.formContext);
+        }
+    }
+
     protected async prepareFormFieldValues(
         formFields: FormField[], kixObject: KIXObject, formFieldValues: Map<string, FormFieldValue<any>>,
         formContext: FormContext
@@ -65,6 +77,10 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
                 this.prepareFormFieldValues(f.children, kixObject, formFieldValues, formContext);
             }
         }
+    }
+
+    protected async prepareFormFieldOptions(formFields: FormField[], kixObject: KIXObject, formContext: FormContext) {
+        return;
     }
 
     public getNewFormField(f: FormField, parent?: FormField): FormField {

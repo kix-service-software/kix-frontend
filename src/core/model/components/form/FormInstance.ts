@@ -24,6 +24,7 @@ export class FormInstance implements IFormInstance {
         await this.initFormFieldValues();
         this.initAutoCompleteConfiguration();
         this.initFormStructure();
+        await this.initFormFieldOptions();
     }
 
     private async initFormFieldValues(): Promise<void> {
@@ -59,6 +60,15 @@ export class FormInstance implements IFormInstance {
 
     private initFormStructure(): void {
         this.form.groups.forEach((g) => this.initStructure(g.formFields));
+    }
+
+    private async initFormFieldOptions(): Promise<void> {
+        const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(
+            this.form.objectType, ServiceType.FORM
+        );
+        if (service) {
+            await service.initOptions(this.form);
+        }
     }
 
     private initStructure(formFields: FormField[], parent?: FormField): void {

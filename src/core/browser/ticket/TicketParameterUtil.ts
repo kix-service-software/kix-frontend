@@ -98,6 +98,10 @@ export class TicketParameterUtil {
                 if (reply) {
                     parameter.push([ArticleProperty.EXEC_REPLY, 1]);
                 }
+                const forward = dialogContext.getAdditionalInformation('ARTICLE_FORWARD');
+                if (!reply && forward) {
+                    parameter.push([ArticleProperty.EXEC_FORWARD, 1]);
+                }
             }
         }
 

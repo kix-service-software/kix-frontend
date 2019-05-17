@@ -5,6 +5,8 @@ export interface IKIXObjectFormService<T extends KIXObject = KIXObject> extends 
 
     initValues(form: Form): Promise<Map<string, FormFieldValue<any>>>;
 
+    initOptions(form: Form): Promise<void>;
+
     getNewFormField(formField: FormField): FormField;
 
 }
