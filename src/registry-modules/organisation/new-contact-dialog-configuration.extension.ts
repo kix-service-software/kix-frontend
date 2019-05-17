@@ -3,10 +3,10 @@ import {
     ContactProperty, FormFieldOption, FormFieldOptions, InputFieldTypes, KIXObjectProperty, FormFieldValue
 } from '../../core/model';
 import { IConfigurationExtension } from '../../core/extensions';
-import { NewContactDialogContext, ContactLabelProvider } from '../../core/browser/contact';
+import { NewContactDialogContext } from '../../core/browser/contact';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
-import { ConfigurationService, ContactService } from '../../core/services';
-import { FormValidationService } from '../../core/browser';
+import { ConfigurationService } from '../../core/services';
+import { FormValidationService } from '../../core/browser/form/validation';
 
 export class NewContactDialogModuleExtension implements IConfigurationExtension {
 

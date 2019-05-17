@@ -1,5 +1,6 @@
 import { IFormFieldValidator, FormField, ValidationResult, ValidationSeverity } from "../../../model";
 import { FormService } from "..";
+import { TranslationService } from "../../i18n/TranslationService";
 
 export class RequiredFormFieldValidator implements IFormFieldValidator {
 
@@ -21,7 +22,11 @@ export class RequiredFormFieldValidator implements IFormFieldValidator {
         if (ok) {
             return new ValidationResult(ValidationSeverity.OK, '');
         } else {
-            return new ValidationResult(ValidationSeverity.ERROR, `Pflichtfeld ${formField.label} hat keinen Wert.`);
+            const fieldLabel = await TranslationService.translate(formField.label);
+            const errorString = await TranslationService.translate(
+                "Translatable#Required field '{0}' has no value.", [fieldLabel]
+            );
+            return new ValidationResult(ValidationSeverity.ERROR, errorString);
         }
     }
 

@@ -6,7 +6,7 @@ import {
 } from '../../core/model';
 import { ConfigurationService } from '../../core/services';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
-import { FormValidationService } from '../../core/browser';
+import { FormValidationService } from '../../core/browser/form/validation';
 
 export class Extension implements IConfigurationExtension {
 

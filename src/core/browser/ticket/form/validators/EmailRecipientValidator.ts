@@ -5,7 +5,7 @@ import {
 import { FormService } from "../../..";
 import { KIXObjectService } from "../../../kix";
 import { ContextService } from "../../../context";
-import { FormValidationService } from "../../../form";
+import { FormValidationService } from "../../../form/validation";
 
 export class EmailRecipientValidator implements IFormFieldValidator {
 
@@ -49,7 +49,8 @@ export class EmailRecipientValidator implements IFormFieldValidator {
             }
         } else {
             return new ValidationResult(
-                ValidationSeverity.ERROR, 'Mindestens eines der Felder An, Cc oder Bcc muss eine Eingabe beinhalten.'
+                ValidationSeverity.ERROR,
+                "Translatable#At least one of the fields 'To', 'Cc' or 'Bcc' must contain an entry."
             );
         }
 
