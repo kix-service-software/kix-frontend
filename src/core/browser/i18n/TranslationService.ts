@@ -113,7 +113,7 @@ export class TranslationService extends KIXObjectService<Translation> {
             }
 
             const loadingOptions = new KIXObjectLoadingOptions(
-                null, null, null, null, null, [TranslationProperty.LANGUAGES]
+                null, null, null, null, [TranslationProperty.LANGUAGES]
             );
 
             const translations = await KIXObjectService.loadObjects<Translation>(

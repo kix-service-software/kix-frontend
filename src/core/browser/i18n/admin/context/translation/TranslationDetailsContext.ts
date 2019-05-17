@@ -42,7 +42,7 @@ export class TranslationDetailsContext extends Context {
 
     private async loadTranslation(): Promise<Translation> {
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, null, null, [TranslationProperty.LANGUAGES]
+            null, null, null, null, [TranslationProperty.LANGUAGES]
         );
 
         const timeout = window.setTimeout(() => {

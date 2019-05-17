@@ -24,7 +24,7 @@ export class TranslationTableFactory extends TableFactory {
         const table = new Table(tableKey, tableConfiguration);
 
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, tableConfiguration.filter, tableConfiguration.sortOrder, null, null, [TranslationProperty.LANGUAGES]
+            null, tableConfiguration.filter, tableConfiguration.sortOrder, null, [TranslationProperty.LANGUAGES]
         );
 
         table.setContentProvider(new TranslationTableContentProvider(table, objectIds, loadingOptions, contextId));

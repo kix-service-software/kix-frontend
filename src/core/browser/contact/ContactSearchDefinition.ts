@@ -16,7 +16,7 @@ export class ContactSearchDefinition extends SearchDefinition {
     }
 
     public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(null, criteria, null, null, null, ['Tickets', 'Contacts'], null);
+        return new KIXObjectLoadingOptions(null, criteria, null, null, ['Tickets'], null);
     }
 
     public async getProperties(): Promise<Array<[string, string]>> {
