@@ -9,4 +9,5 @@ export { ArticleNewAction } from './ArticleNewAction';
 export { ArticlePrintAction } from './ArticlePrintAction';
 export { ArticleTagAction } from './ArticleTagAction';
 export { ArticleReplyAction } from './ArticleReplyAction';
+export { ArticleForwardAction } from './ArticleForwardAction';
 export { ArticleZipAttachmentDownloadAction } from './ArticleZipAttachmentDownloadAction';

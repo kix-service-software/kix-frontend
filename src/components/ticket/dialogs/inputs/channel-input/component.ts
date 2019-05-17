@@ -70,6 +70,8 @@ class Component extends FormInputComponent<number, ComponentState> {
         if (this.state.defaultValue && this.state.defaultValue.value) {
             const channel = this.state.channels.find((ch) => ch.ID === this.state.defaultValue.value);
             this.channelClicked(channel);
+        } else if (this.state.channels.length === 1) {
+            this.channelClicked(this.state.channels[0]);
         }
     }
 

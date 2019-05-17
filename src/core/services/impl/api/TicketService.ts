@@ -260,7 +260,8 @@ export class TicketService extends KIXObjectService {
                 customerVisible !== undefined ? customerVisible : false,
                 to, cc, bcc,
                 this.getParameterValue(parameter, ArticleProperty.REFERENCED_ARTICLE_ID),
-                this.getParameterValue(parameter, ArticleProperty.EXEC_REPLY)
+                this.getParameterValue(parameter, ArticleProperty.EXEC_REPLY),
+                this.getParameterValue(parameter, ArticleProperty.EXEC_FORWARD)
             );
         }
         return createArticle;

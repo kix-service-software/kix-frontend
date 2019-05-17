@@ -28,7 +28,7 @@ import {
     TicketTemplateCreateAction, TicketTemplateTableDeleteAction, TicketTemplateLabelProvider, TicketTemplateService,
     TicketTemplateBrowserFactory, TicketTemplateTableFactory, TicketQueueCreateAction, TicketQueueTableFactory,
     QueueLabelProvider, QueueBrowserFactory, QueueService, NewQueueDialogContext, FollowUpTypeBrowserFactory,
-    TicketQueueEditAction, QueueDetailsContext, ArticleReplyAction, ArticleFormService
+    TicketQueueEditAction, QueueDetailsContext, ArticleReplyAction, ArticleFormService, ArticleForwardAction
 } from '../../../core/browser/ticket';
 import {
     KIXObjectType, ContextDescriptor, ContextMode, ContextType,
@@ -258,7 +258,8 @@ class Component extends AbstractMarkoComponent {
         ActionFactory.getInstance().registerAction('article-edit-action', ArticleEditAction);
         ActionFactory.getInstance().registerAction('article-maximize-action', ArticleMaximizeAction);
         ActionFactory.getInstance().registerAction('article-new-action', ArticleNewAction);
-        ActionFactory.getInstance().registerAction('article-answer-action', ArticleReplyAction);
+        ActionFactory.getInstance().registerAction('article-reply-action', ArticleReplyAction);
+        ActionFactory.getInstance().registerAction('article-forward-action', ArticleForwardAction);
         ActionFactory.getInstance().registerAction('article-print-action', ArticlePrintAction);
         ActionFactory.getInstance().registerAction('article-tag-action', ArticleTagAction);
 

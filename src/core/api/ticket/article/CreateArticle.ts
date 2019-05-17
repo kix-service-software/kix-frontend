@@ -1,5 +1,5 @@
 import { CreateAttachment } from '..';
-import { DynamicField, ArticleProperty, Article } from '../../../model';
+import { DynamicField, ArticleProperty } from '../../../model';
 import { RequestObject } from '../../RequestObject';
 
 export class CreateArticle extends RequestObject {
@@ -10,7 +10,7 @@ export class CreateArticle extends RequestObject {
         historyComment?: string, timeUnit?: string, noAgentNotify?: boolean, forceNotificationToUserID?: number[],
         excludeNotificationToUserID?: number[], excludeMuteNotificationToUserID?: number[],
         dynamicFields?: DynamicField[], attachments?: CreateAttachment[], customerVisible?: boolean,
-        to?: string, cc?: string, bcc?: string, referencedArticleId?: number, execReply?: number
+        to?: string, cc?: string, bcc?: string, referencedArticleId?: number, execReply?: number, execForward?: number
     ) {
         super();
 
@@ -40,6 +40,8 @@ export class CreateArticle extends RequestObject {
             this.applyProperty(ArticleProperty.REFERENCED_ARTICLE_ID, referencedArticleId);
             if (execReply) {
                 this.applyProperty(ArticleProperty.EXEC_REPLY, execReply);
+            } else if (execForward) {
+                this.applyProperty(ArticleProperty.EXEC_FORWARD, execForward);
             }
         }
     }
