@@ -56,6 +56,12 @@ export enum ArticleProperty {
 
     CUSTOMER_VISIBLE = 'CustomerVisible',
 
-    FLAGS = 'Flags'
+    FLAGS = 'Flags',
+
+    REFERENCED_ARTICLE_ID = 'ReferencedArticleID',
+
+    EXEC_REPLY = 'ExecReply',
+
+    EXEC_FORWARD = 'ExecForward',
 
 }

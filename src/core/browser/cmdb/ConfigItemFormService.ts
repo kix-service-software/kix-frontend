@@ -1,9 +1,8 @@
 import { KIXObjectFormService } from "../kix/KIXObjectFormService";
 import {
-    KIXObjectType, FormFieldValue,
-    Form, FormField, ConfigItem, VersionProperty, ConfigItemProperty,
+    KIXObjectType, FormFieldValue, FormField, ConfigItem, VersionProperty, ConfigItemProperty,
     GeneralCatalogItem, KIXObjectLoadingOptions, FilterCriteria, FilterDataType,
-    FilterType, ConfigItemClass, Contact, Organisation, FormFieldOptions, InputFieldTypes
+    FilterType, ConfigItemClass, Contact, Organisation, FormFieldOptions, InputFieldTypes, FormContext
 } from "../../model";
 import { KIXObjectService } from '../kix/';
 import { LabelService } from "../LabelService";
@@ -30,9 +29,10 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
     }
 
     public async prepareFormFieldValues(
-        formFields: FormField[], configItem: ConfigItem, formFieldValues: Map<string, FormFieldValue<any>>
+        formFields: FormField[], configItem: ConfigItem, formFieldValues: Map<string, FormFieldValue<any>>,
+        formContext: FormContext
     ): Promise<void> {
-        if (configItem) {
+        if (configItem && formContext === FormContext.EDIT) {
             const fields = await this.prepareConfigItemValues(configItem, formFields, formFieldValues);
             formFields.splice(0, formFields.length);
             fields.forEach((f) => formFields.push(f));
@@ -51,7 +51,7 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
                 }
                 formFieldValues.set(f.instanceId, formFieldValue);
                 if (f.children) {
-                    await this.prepareFormFieldValues(f.children, null, formFieldValues);
+                    await this.prepareFormFieldValues(f.children, null, formFieldValues, formContext);
                 }
             }
         }

@@ -10,7 +10,7 @@ export class CreateArticle extends RequestObject {
         historyComment?: string, timeUnit?: string, noAgentNotify?: boolean, forceNotificationToUserID?: number[],
         excludeNotificationToUserID?: number[], excludeMuteNotificationToUserID?: number[],
         dynamicFields?: DynamicField[], attachments?: CreateAttachment[], customerVisible?: boolean,
-        to?: string, cc?: string, bcc?: string
+        to?: string, cc?: string, bcc?: string, referencedArticleId?: number, execReply?: number
     ) {
         super();
 
@@ -36,6 +36,12 @@ export class CreateArticle extends RequestObject {
         this.applyProperty(ArticleProperty.TO, to);
         this.applyProperty(ArticleProperty.CC, cc);
         this.applyProperty(ArticleProperty.BCC, bcc);
+        if (referencedArticleId) {
+            this.applyProperty(ArticleProperty.REFERENCED_ARTICLE_ID, referencedArticleId);
+            if (execReply) {
+                this.applyProperty(ArticleProperty.EXEC_REPLY, execReply);
+            }
+        }
     }
 
 }

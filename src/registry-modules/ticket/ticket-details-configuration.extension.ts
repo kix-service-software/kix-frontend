@@ -116,7 +116,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
         // actions
         const generalActions = ['ticket-create-action'];
         const ticketActions = [
-            'ticket-edit-action', 'article-new-note-action', 'ticket-merge-action', 'linked-objects-edit-action',
+            'ticket-edit-action', 'article-new-action', 'ticket-merge-action', 'linked-objects-edit-action',
             'ticket-lock-action', 'ticket-watch-action', 'ticket-spam-action',
             'ticket-print-action',
         ];
@@ -184,7 +184,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
 
         const articleListWidget =
             new ConfiguredWidget('20180921-article-list', new WidgetConfiguration(
-                'table-widget', 'Translatable#Article Overview', ['article-bulk-action', 'article-new-note-action'],
+                'table-widget', 'Translatable#Article Overview', ['article-bulk-action', 'article-new-action'],
                 {
                     objectType: KIXObjectType.ARTICLE,
                     headerComponents: ['article-attachment-count']

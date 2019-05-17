@@ -32,14 +32,7 @@ export class FormInstance implements IFormInstance {
                 this.form.objectType, ServiceType.FORM
             );
             if (service) {
-                let object: KIXObject;
-                if (this.form.formContext === FormContext.EDIT) {
-                    const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-                    if (context) {
-                        object = await context.getObject();
-                    }
-                }
-                this.formFieldValues = await service.initValues(this.form, object);
+                this.formFieldValues = await service.initValues(this.form);
             } else {
                 this.form.groups.forEach((g) => this.initValues(g.formFields));
             }

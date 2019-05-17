@@ -117,7 +117,10 @@ export class ContextFactory {
 
     public resetDialogContexts(): void {
         this.contextInstances.filter((c) => c.getDescriptor().contextType === ContextType.DIALOG)
-            .forEach((c) => c.reset());
+            .forEach((c) => {
+                c.reset();
+                c.resetAdditionalInformation();
+            });
     }
 
     private isContext(

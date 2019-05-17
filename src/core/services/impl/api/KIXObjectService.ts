@@ -34,7 +34,7 @@ export abstract class KIXObjectService implements IKIXObjectService {
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<O[]> {
-        throw new Error('-1', 'Method loadObjects not implemented');
+        throw new Error('-1', `Method loadObjects not implemented (${objectType})`);
     }
 
     protected async load<O extends KIXObject = any>(

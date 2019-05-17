@@ -1,13 +1,19 @@
 import { ComponentState } from "./ComponentState";
 import {
     Contact, FormInputComponent, KIXObjectType, TreeNode, KIXObjectLoadingOptions,
-    AutoCompleteConfiguration, FormField, FilterCriteria, ContactProperty, FilterDataType, FilterType
+    AutoCompleteConfiguration, FormField, FilterCriteria, ContactProperty, FilterDataType, FilterType,
+    ArticleProperty, ContextType, SystemAddress, ArticleReceiver, Ticket, Article
 } from "../../../../../core/model";
 import { FormService, FormInputAction } from "../../../../../core/browser/form";
-import { KIXObjectService, Label, LabelService, SearchOperator } from "../../../../../core/browser";
+import { KIXObjectService, Label, LabelService, SearchOperator, ContextService } from "../../../../../core/browser";
 import { ContactService } from "../../../../../core/browser/contact";
+import { EventService, IEventSubscriber } from "../../../../../core/browser/event";
+import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
 
 class Component extends FormInputComponent<string[], ComponentState> {
+
+    private ccSubscriber: IEventSubscriber;
+    private ccReadySubscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -25,6 +31,23 @@ class Component extends FormInputComponent<string[], ComponentState> {
 
         this.prepareActions();
         this.setCurrentNodes();
+
+        if (this.state.field.property === ArticleProperty.CC) {
+            this.ccSubscriber = {
+                eventSubscriberId: 'article-email-cc-recipient-input',
+                eventPublished: (data: any, eventId: string) => {
+                    const newCcNodes = this.prepareMailNodes(data ? data.ccList : null, data ? data.filterList : null);
+                    this.contactChanged(newCcNodes);
+                }
+            };
+            EventService.getInstance().subscribe('SET_CC_RECIPIENTS', this.ccSubscriber);
+            EventService.getInstance().publish('CC_READY');
+        }
+    }
+
+    public async onDestroy(): Promise<void> {
+        EventService.getInstance().unsubscribe('SET_CC_RECIPIENTS', this.ccSubscriber);
+        EventService.getInstance().unsubscribe('CC_READY', this.ccReadySubscriber);
     }
 
     public async setCurrentNodes(): Promise<void> {
@@ -32,26 +55,39 @@ class Component extends FormInputComponent<string[], ComponentState> {
             const contactEmails: any[] = Array.isArray(this.state.defaultValue.value)
                 ? this.state.defaultValue.value : [this.state.defaultValue.value];
 
-            const contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, null,
-                new KIXObjectLoadingOptions(
-                    null,
-                    contactEmails.map((email) => new FilterCriteria(
-                        ContactProperty.EMAIL, SearchOperator.EQUALS, FilterDataType.STRING,
-                        FilterType.OR, email
-                    ))
-
-                )
+            const nodes = [];
+            const systemAddresses = await KIXObjectService.loadObjects<SystemAddress>(
+                KIXObjectType.SYSTEM_ADDRESS
             );
-            if (contacts && !!contacts.length) {
-                const nodes = [];
-                for (const object of contacts) {
-                    nodes.push(await this.createTreeNode(object));
-                }
-                this.state.nodes = nodes;
-                this.state.currentNodes = nodes;
-            }
+            // TODO: nicht sehr performant
+            for (const email of contactEmails) {
+                const plainMail = email.replace(/.+ <(.+)>/, '$1');
+                const contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, null,
+                    new KIXObjectLoadingOptions(
+                        null,
+                        [
+                            new FilterCriteria(
+                                ContactProperty.EMAIL, SearchOperator.EQUALS, FilterDataType.STRING,
+                                FilterType.OR, plainMail
+                            )
+                        ]
 
-            this.contactChanged(this.state.currentNodes);
+                    )
+                );
+                if (contacts && !!contacts.length) {
+                    nodes.push(await this.createTreeNode(contacts[0]));
+                } else {
+                    if (
+                        !systemAddresses
+                        || !!!systemAddresses.length
+                        || !systemAddresses.map((sa) => sa.Name).some((f) => f === plainMail)
+                    ) {
+                        nodes.push(new TreeNode(plainMail, email, 'kix-icon-man-bubble'));
+                    }
+                }
+            }
+            this.state.nodes = nodes;
+            this.contactChanged(nodes);
         }
     }
 
@@ -72,22 +108,114 @@ class Component extends FormInputComponent<string[], ComponentState> {
                 actions.push(action);
             }
         }
+        if (this.state.field.property === ArticleProperty.TO) {
+            const replyAllAction = await this.getReplyAllAction();
+            if (replyAllAction) {
+                actions.push(replyAllAction);
+            }
+        }
         this.state.actions = actions;
     }
 
-    private async actionClicked(action: FormInputAction): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        let field = this.state.field.children.find((f) => f.property === action.id);
-        if (field) {
-            formInstance.removeFormField(field, this.state.field);
-        } else {
-            const label = await LabelService.getInstance().getPropertyText(action.id, KIXObjectType.ARTICLE);
-            field = new FormField(
-                label, action.id, 'article-email-recipient-input', false, label
-            );
-            formInstance.addNewFormField(this.state.field, [field]);
+    private async getReplyAllAction(): Promise<FormInputAction> {
+        let action: FormInputAction = null;
+        const context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+        if (context) {
+            const addReplyAll = context.getAdditionalInformation('ARTICLE_REPLY');
+            if (addReplyAll) {
+                action = new FormInputAction(
+                    'ReplyAll', new Label(null, 'ReplyAll', 'kix-icon-mail-answerall-outline', null, null,
+                        await TranslationService.translate('Translatable#Reply all')
+                    ),
+                    this.actionClicked.bind(this), false, false
+                );
+            }
         }
-        (this as any).setStateDirty('actions');
+        return action;
+    }
+
+    private async actionClicked(action: FormInputAction): Promise<void> {
+        if (action.id === 'ReplyAll') {
+            await this.handleReplyAll();
+        } else {
+            const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+            let field = this.state.field.children.find((f) => f.property === action.id);
+            if (field) {
+                formInstance.removeFormField(field, this.state.field);
+                action.active = false;
+            } else {
+                const label = await LabelService.getInstance().getPropertyText(action.id, KIXObjectType.ARTICLE);
+                field = new FormField(
+                    label, action.id, 'article-email-recipient-input', false, label
+                );
+                formInstance.addNewFormField(this.state.field, [field]);
+                action.active = true;
+            }
+            (this as any).setStateDirty('actions');
+        }
+    }
+
+    private async handleReplyAll(): Promise<void> {
+        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+        if (this.state.field.property === ArticleProperty.TO && context && dialogContext) {
+            const replyId = dialogContext.getAdditionalInformation('REFERENCED_ARTICLE_ID');
+            const ticket = await context.getObject<Ticket>();
+            if (replyId && ticket) {
+                const replyArticle = ticket.Articles.find((a) => a.ArticleID === replyId);
+                if (replyArticle) {
+                    const systemAddresses = await KIXObjectService.loadObjects<SystemAddress>(
+                        KIXObjectType.SYSTEM_ADDRESS
+                    );
+                    const newToNodes = this.prepareMailNodes(replyArticle.toList, systemAddresses.map((sa) => sa.Name));
+                    this.contactChanged(newToNodes);
+
+                    this.handleCcField(
+                        replyArticle,
+                        [...newToNodes.map((n) => n.id), ...systemAddresses.map((sa) => sa.Name)]
+                    );
+                }
+            }
+        }
+    }
+
+    private async handleCcField(replyArticle: Article, filterList: string[]): Promise<void> {
+        const ccAction = this.state.actions.find((a) => a.id === ArticleProperty.CC);
+        if (ccAction) {
+            const ccField = this.state.field.children.find((f) => f.property === ArticleProperty.CC);
+            if (!ccField) {
+                this.ccReadySubscriber = {
+                    eventSubscriberId: 'article-email-to-recipient-input',
+                    eventPublished: (data: any, eventId: string) => {
+                        EventService.getInstance().publish('SET_CC_RECIPIENTS', {
+                            ccList: replyArticle.ccList,
+                            filterList
+                        });
+                        EventService.getInstance().unsubscribe('CC_READY', this.ccReadySubscriber);
+                    }
+                };
+                EventService.getInstance().subscribe('CC_READY', this.ccReadySubscriber);
+                await this.actionClicked(ccAction);
+            } else {
+                EventService.getInstance().publish('SET_CC_RECIPIENTS', {
+                    ccList: replyArticle.ccList,
+                    filterList
+                });
+            }
+        }
+    }
+
+    private prepareMailNodes(receiverList: ArticleReceiver[], filterList: string[] = []): TreeNode[] {
+        const nodes: TreeNode[] = this.state.currentNodes;
+        if (Array.isArray(receiverList)) {
+            for (const receiver of receiverList) {
+                const email = receiver.email.replace(/.+ <(.+)>/, '$1');
+                if (!nodes.some((n) => n.id === email)) {
+                    nodes.push(new TreeNode(email, receiver.email, 'kix-icon-man-bubble'));
+                }
+            }
+        }
+        return nodes.filter((n) => !filterList.some((f) => f === n.id));
     }
 
     public contactChanged(nodes: TreeNode[]): void {

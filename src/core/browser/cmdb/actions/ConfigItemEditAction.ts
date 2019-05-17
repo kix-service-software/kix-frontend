@@ -1,4 +1,4 @@
-import { AbstractAction, KIXObjectType, ContextMode, ContextType, ConfigItem, ConfigItemClass } from "../../../model";
+import { AbstractAction, KIXObjectType, ContextMode, ConfigItem, ConfigItemClass } from "../../../model";
 import { ContextService } from "../../context";
 import { FormService } from "../../form";
 import { EditConfigItemDialogContext, ConfigItemDetailsContext } from "../context";

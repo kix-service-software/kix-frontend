@@ -1,5 +1,7 @@
 import { TicketArticleDetailsComponentState } from './TicketArticleDetailsComponentState';
-import { Article, Ticket, KIXObjectType, KIXObjectLoadingOptions, ArticleProperty } from '../../../core/model';
+import {
+    Article, Ticket, KIXObjectType, KIXObjectLoadingOptions, ArticleProperty, ArticleLoadingOptions
+} from '../../../core/model';
 import { KIXObjectService } from '../../../core/browser';
 
 export class TicketArticleDetailsComponent {
@@ -20,8 +22,9 @@ export class TicketArticleDetailsComponent {
         } else if (this.state.inputObject instanceof Ticket) {
             const ticket = (this.state.inputObject as Ticket);
             const articles = await KIXObjectService.loadObjects<Article>(
-                KIXObjectType.ARTICLE, [ticket.TicketID],
+                KIXObjectType.ARTICLE, null,
                 new KIXObjectLoadingOptions(null, null, 'Article.-ArticleID', 1, [ArticleProperty.ATTACHMENTS]),
+                new ArticleLoadingOptions(ticket.TicketID)
             );
 
             if (articles && articles.length) {
