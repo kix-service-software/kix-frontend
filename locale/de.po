@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-05-17 08:41+0000\n"
-"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
+"PO-Revision-Date: 2019-05-17 09:05+0000\n"
+"Last-Translator: ddoerffel <Dorothea.Doerffel@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -172,6 +172,8 @@ msgstr "Dem Nutzer Rollen zuordnen."
 
 msgid "At least one of the fields 'To', 'Cc' or 'Bcc' must contain an entry."
 msgstr ""
+"Mindestens eins der Felder  'To', 'Cc' oder 'Bcc' muss einen Eintrag "
+"enthalten."
 
 msgid ""
 "Attach additional files to the FAQ article. Drag & Drop is possible. Max. "
@@ -192,10 +194,8 @@ msgstr "zu ändernde Attribute:"
 msgid "back to"
 msgstr "Zurück zu"
 
-#, fuzzy
-#| msgid "Ticket Data"
 msgid "Basic Data"
-msgstr "Ticketdaten"
+msgstr "Stammdaten"
 
 msgid "Bcc"
 msgstr "Bcc"
@@ -695,13 +695,11 @@ msgid "Fax"
 msgstr "Fax"
 
 msgid "Field '{0}' has an invalid value ({1})."
-msgstr ""
+msgstr "Feld '{0}' enthält einen ungültigen Wert ({1})."
 
 msgid "Filter in list"
 msgstr "Filtern in Liste"
 
-#, fuzzy
-#| msgid "First Name"
 msgid "Firstname"
 msgstr "Vorname"
 
@@ -724,7 +722,7 @@ msgid "From"
 msgstr "Von"
 
 msgid "Fullname"
-msgstr ""
+msgstr "Vollständiger Name"
 
 msgid "Full Text"
 msgstr "Volltext"
@@ -1026,13 +1024,9 @@ msgstr "Geben Sie einen Titel für den Nutzer ein."
 msgid "Insert a type name."
 msgstr "Geben Sie einen Name für den Typ ein."
 
-#, fuzzy
-#| msgid "Inserted e-mail address is invalid."
 msgid "Inserted email address is invalid."
 msgstr "Die eingegebene E-Mail-Adresse ist ungültig."
 
-#, fuzzy
-#| msgid "Inserted e-mail address must not be a system address."
 msgid "Inserted email address must not be a system address."
 msgstr "Die eingegebene E-Mail-Adresse darf keine Systemadresse sein."
 
@@ -1050,8 +1044,6 @@ msgstr "Geben Sie den Titel oder Teile eines Tickettitels ein."
 msgid "Insert the definition for the Config Item Class."
 msgstr "Geben Sie die Definition für die CI Klasse ein."
 
-#, fuzzy
-#| msgid "Insert the e-mail address for the user."
 msgid "Insert the email address for the user."
 msgstr "Geben Sie eine E-Mail-Adresse für den Nutzer ein."
 
@@ -1099,10 +1091,8 @@ msgstr "Letzte Änderungszeit"
 msgid "Last Login"
 msgstr "Letzte Anmeldung"
 
-#, fuzzy
-#| msgid "Last Name"
 msgid "Lastname"
-msgstr "Name"
+msgstr "Nachname"
 
 msgid "Last Name"
 msgstr "Name"
@@ -1272,8 +1262,6 @@ msgstr "Neues Config Item"
 msgid "New Contact"
 msgstr "Neuer Kontakt"
 
-#, fuzzy
-#| msgid "New E-mail"
 msgid "New Email"
 msgstr "Neue E-Mail"
 
@@ -1325,8 +1313,6 @@ msgstr "Neue Version wurde angelegt."
 msgid "Next Image"
 msgstr "Nächstes Bild"
 
-#, fuzzy
-#| msgid "No."
 msgid "No"
 msgstr "Nr."
 
@@ -1426,8 +1412,6 @@ msgstr "Kundeninformationen"
 msgid "Organisations"
 msgstr "Kunden"
 
-#, fuzzy
-#| msgid "Customers Dashboard"
 msgid "Organisations Dashboard"
 msgstr "Kunden Dashboard"
 
