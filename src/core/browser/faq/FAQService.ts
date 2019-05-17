@@ -92,7 +92,7 @@ export class FAQService extends KIXObjectService {
         return filter;
     }
 
-    public async getTreeNodes(property: string): Promise<TreeNode[]> {
+    public async getTreeNodes(property: string, showInvalid: boolean = false): Promise<TreeNode[]> {
         let values: TreeNode[] = [];
 
         const objectData = ObjectDataService.getInstance().getObjectData();
@@ -106,8 +106,9 @@ export class FAQService extends KIXObjectService {
 
             switch (property) {
                 case FAQArticleProperty.CATEGORY_ID:
+                case FAQCategoryProperty.PARENT_ID:
                     const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(KIXObjectType.FAQ_CATEGORY);
-                    values = this.prepareCategoryTree(faqCategories);
+                    values = this.prepareCategoryTree(faqCategories, showInvalid);
                     break;
                 case FAQArticleProperty.VISIBILITY:
                     values = this.preparePossibleValueTree(faqSearchAttributes, FAQArticleProperty.VISIBILITY);
@@ -132,15 +133,18 @@ export class FAQService extends KIXObjectService {
         return values;
     }
 
-    private prepareCategoryTree(faqCategories: FAQCategory[]): TreeNode[] {
+    private prepareCategoryTree(faqCategories: FAQCategory[], showInvalid: boolean = false): TreeNode[] {
         let nodes: TreeNode[] = [];
         if (faqCategories) {
+            if (!showInvalid) {
+                faqCategories = faqCategories.filter((q) => q.ValidID === 1);
+            }
             nodes = faqCategories.map((category: FAQCategory) => {
                 const treeNode = new TreeNode(
                     category.ID, category.Name,
                     new ObjectIcon(FAQCategoryProperty.ID, category.ID),
                     null,
-                    this.prepareCategoryTree(category.SubCategories)
+                    this.prepareCategoryTree(category.SubCategories, showInvalid)
                 );
                 return treeNode;
             });

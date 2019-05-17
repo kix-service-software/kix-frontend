@@ -4,7 +4,7 @@ import {
 import { KIXObjectService } from "./KIXObjectService";
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, Error
+    KIXObjectSpecificCreateOptions, Error, ObjectIcon
 } from "../../../model";
 import { KIXObjectServiceRegistry } from "../../KIXObjectServiceRegistry";
 import { LoggingService } from "../LoggingService";
@@ -72,6 +72,9 @@ export class FAQService extends KIXObjectService {
                 return this.createFAQArticle(token, clientRequestId, parameter);
             case KIXObjectType.FAQ_VOTE:
                 return this.createFAQVote(token, clientRequestId, parameter, (createOptions as CreateFAQVoteOptions));
+            case KIXObjectType.FAQ_CATEGORY:
+                return this.createFAQCategory(token, clientRequestId, parameter);
+                break;
             default:
                 const error = 'No create option for object type ' + objectType;
                 throw error;
@@ -162,6 +165,21 @@ export class FAQService extends KIXObjectService {
 
         const id = await super.executeUpdateOrCreateRequest(
             token, clientRequestId, parameter, uri, KIXObjectType.FAQ_VOTE, 'FAQVoteID', true
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
+        });
+
+        return id;
+    }
+
+    public async createFAQCategory(
+        token: string, clientRequestId: string, parameter: Array<[string, any]>
+    ): Promise<number> {
+        const uri = this.buildUri(this.RESOURCE_URI, 'categories');
+
+        const id = super.executeUpdateOrCreateRequest(
+            token, clientRequestId, parameter, uri, KIXObjectType.FAQ_CATEGORY, 'FAQCategoryID', true
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);

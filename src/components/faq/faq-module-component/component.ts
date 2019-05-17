@@ -16,7 +16,10 @@ import {
     FAQCategoryCSVExportAction
 } from '../../../core/browser/faq';
 import { DialogService } from '../../../core/browser/components/dialog';
-import { FAQCategoryTableFactory, FAQCategoryCreateAction } from '../../../core/browser/faq/admin';
+import {
+    FAQCategoryTableFactory, FAQCategoryCreateAction, FAQCategoryEditAction,
+    NewFAQCategoryDialogContext, FAQCategoryDetailsContext
+} from '../../../core/browser/faq/admin';
 import { FAQCategoryBrowserFactory } from '../../../core/browser/faq/FAQCategoryBrowserFactory';
 
 class Component extends AbstractMarkoComponent {
@@ -55,6 +58,8 @@ class Component extends AbstractMarkoComponent {
         this.registerDialogs();
         this.registerActions();
 
+        this.registerAdminContexts();
+        this.registerAdminDialogs();
         this.registerAdminActions();
     }
 
@@ -133,8 +138,36 @@ class Component extends AbstractMarkoComponent {
         ActionFactory.getInstance().registerAction('faq-category-csv-export-action', FAQCategoryCSVExportAction);
     }
 
+    private registerAdminContexts(): void {
+        const newFAQCategoryContext = new ContextDescriptor(
+            NewFAQCategoryDialogContext.CONTEXT_ID, [KIXObjectType.FAQ_CATEGORY], ContextType.DIALOG,
+            ContextMode.CREATE_ADMIN, false, 'new-faq-category-dialog', ['faqcategories'], NewFAQCategoryDialogContext
+        );
+        ContextService.getInstance().registerContext(newFAQCategoryContext);
+
+        const faqCategoryDetailsContextDescriptor = new ContextDescriptor(
+            FAQCategoryDetailsContext.CONTEXT_ID, [KIXObjectType.FAQ_CATEGORY],
+            ContextType.MAIN, ContextMode.DETAILS,
+            true, 'object-details-page', ['faqcategories'], FAQCategoryDetailsContext
+        );
+        ContextService.getInstance().registerContext(faqCategoryDetailsContextDescriptor);
+    }
+
+    private registerAdminDialogs(): void {
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'new-faq-category-dialog',
+            new WidgetConfiguration(
+                'new-faq-category-dialog', 'Translatable#New Category', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-new-gear'
+            ),
+            KIXObjectType.FAQ_CATEGORY,
+            ContextMode.CREATE_ADMIN
+        ));
+    }
+
     private registerAdminActions(): void {
         ActionFactory.getInstance().registerAction('faq-admin-category-create-action', FAQCategoryCreateAction);
+        ActionFactory.getInstance().registerAction('faq-admin-category-edit-action', FAQCategoryEditAction);
     }
 
 }

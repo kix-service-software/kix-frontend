@@ -20,7 +20,9 @@ class Extension implements IKIXModuleExtension {
         ['faq-article-history-widget', 'faq/widgets/faq-article-history-widget'],
         ['faq-article-list-widget', 'faq/widgets/faq-article-list-widget'],
         ['faq-category-explorer', 'faq/widgets/faq-category-explorer'],
-        ['faq-admin-categories', 'faq/admin/faq-admin-categories']
+        ['faq-admin-categories', 'faq/admin/faq-admin-categories'],
+        ['new-faq-category-dialog', 'faq/admin/dialogs/new-faq-category-dialog'],
+        ['faq-category-info-widget', 'faq/admin/widgets/faq-category-info-widget']
     ];
 
 }
