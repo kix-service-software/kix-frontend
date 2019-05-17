@@ -81,7 +81,7 @@ export class OrganisationSearchDefinition extends SearchDefinition {
     }
 
     public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(null, criteria, null, null, null, ['Tickets', 'Contacts']);
+        return new KIXObjectLoadingOptions(null, criteria, null, null, ['Tickets', 'Contacts']);
     }
 
     public async prepareFormFilterCriteria(criteria: FilterCriteria[]): Promise<FilterCriteria[]> {

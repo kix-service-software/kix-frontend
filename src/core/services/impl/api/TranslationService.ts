@@ -169,7 +169,7 @@ export class TranslationService extends KIXObjectService {
         if (!loadingOptions) {
             loadingOptions = new KIXObjectLoadingOptions(
                 null, null, 'Translation.' + TranslationProperty.PATTERN,
-                null, null, [TranslationProperty.LANGUAGES]
+                null, [TranslationProperty.LANGUAGES]
             );
         }
 

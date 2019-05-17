@@ -21,7 +21,7 @@ export class Extension implements IConfigurationExtension {
             KIXObjectType.CONFIG_ITEM_CLASS
         );
 
-        const options = new KIXObjectLoadingOptions(null, null, null, null, null, [
+        const options = new KIXObjectLoadingOptions(null, null, null, null, [
             'CurrentDefinition'
         ]);
 

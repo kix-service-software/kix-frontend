@@ -52,7 +52,7 @@ export class FAQArticleFormService extends KIXObjectFormService<FAQArticle> {
         if (faqArticle.Attachments) {
             const inlineAttachments = faqArticle.Attachments.filter((a) => a.Disposition === 'inline');
             for (const attachment of inlineAttachments) {
-                const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, null, ['Content']);
+                const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, ['Content']);
                 const faqArticleAttachmentOptions = new FAQArticleAttachmentLoadingOptions(
                     faqArticle.ID, attachment.ID
                 );

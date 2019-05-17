@@ -27,8 +27,7 @@ class Component {
         const loadingOptions = new KIXObjectLoadingOptions(
             null, [
                 new FilterCriteria('ObjectType', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Ticket')
-            ], null, null, null,
-            ['Config']
+            ], null, null, ['Config']
         );
 
         const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(

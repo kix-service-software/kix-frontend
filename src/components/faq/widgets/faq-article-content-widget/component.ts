@@ -65,7 +65,7 @@ class Component {
             this.state.attachments = faqArticle.Attachments.filter((a) => a.Disposition !== 'inline');
             const inlineAttachments = faqArticle.Attachments.filter((a) => a.Disposition === 'inline');
             for (const attachment of inlineAttachments) {
-                const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, null, ['Content']);
+                const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, ['Content']);
                 const faqArticleAttachmentOptions = new FAQArticleAttachmentLoadingOptions(
                     faqArticle.ID, attachment.ID
                 );
@@ -117,7 +117,7 @@ class Component {
     }
 
     public async download(attachment: Attachment): Promise<void> {
-        const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, null, ['Content']);
+        const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, ['Content']);
         const faqArticleAttachmentOptions = new FAQArticleAttachmentLoadingOptions(
             this.state.faqArticle.ID, attachment.ID
         );
