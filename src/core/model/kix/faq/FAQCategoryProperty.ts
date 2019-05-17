@@ -22,6 +22,8 @@ export enum FAQCategoryProperty {
 
     SUB_CATEGORIES = 'SubCategories',
 
-    FULL_NAME = 'Fullname'
+    FULL_NAME = 'Fullname',
+
+    ICON = 'ICON'
 
 }

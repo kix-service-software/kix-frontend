@@ -57,11 +57,10 @@ export class QueueService extends KIXObjectService<Queue> {
         return [[property, value]];
     }
 
-    public prepareQueueTree(queues: Queue[], options?: FormFieldOption[]): TreeNode[] {
+    public prepareQueueTree(queues: Queue[], showInvalid: boolean = false): TreeNode[] {
         let nodes = [];
         if (queues && !!queues.length) {
-            const validOption = options ? options.find((o) => o.option === 'showValid') : null;
-            if (!validOption || !validOption.value) {
+            if (!showInvalid) {
                 queues = queues.filter((q) => q.ValidID === 1);
             }
             nodes = queues.map((queue: Queue) => {
@@ -69,7 +68,7 @@ export class QueueService extends KIXObjectService<Queue> {
                     queue.QueueID, queue.Name,
                     new ObjectIcon('Queue', queue.QueueID),
                     null,
-                    this.prepareQueueTree(queue.SubQueues, options),
+                    this.prepareQueueTree(queue.SubQueues, showInvalid),
                     null, null, null, null, null, null, null, queue.ValidID === 1 ? true : false
                 );
                 return treeNode;

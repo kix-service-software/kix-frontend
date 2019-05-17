@@ -99,7 +99,7 @@ export class TicketService extends KIXObjectService<Ticket> {
         ];
     }
 
-    public async getTreeNodes(property: string, options?: FormFieldOption[]): Promise<TreeNode[]> {
+    public async getTreeNodes(property: string, showInvalid: boolean = false): Promise<TreeNode[]> {
         let values: TreeNode[] = [];
 
         const labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.TICKET);
@@ -107,7 +107,9 @@ export class TicketService extends KIXObjectService<Ticket> {
         switch (property) {
             case TicketProperty.QUEUE_ID:
                 const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy();
-                values = queuesHierarchy ? QueueService.getInstance().prepareQueueTree(queuesHierarchy, options) : [];
+                values = queuesHierarchy
+                    ? QueueService.getInstance().prepareQueueTree(queuesHierarchy, showInvalid)
+                    : [];
                 break;
             case TicketProperty.SERVICE_ID:
                 const servicesHierarchy = await this.getServicesHierarchy();

@@ -1,11 +1,12 @@
 import { ComponentState } from "./ComponentState";
 import {
     ObjectIcon, TreeNode, FormInputComponent, KIXObjectType,
-    FilterCriteria, FilterDataType, FilterType, KIXObjectLoadingOptions
+    FilterCriteria, FilterDataType, FilterType, KIXObjectLoadingOptions, FormFieldOptions
 } from "../../../../../core/model";
 import { FAQCategory, FAQCategoryProperty } from "../../../../../core/model/kix/faq";
 import { KIXObjectService, SearchOperator } from "../../../../../core/browser";
 import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
+import { FAQService } from "../../../../../core/browser/faq";
 
 class Component extends FormInputComponent<number[], ComponentState> {
 
@@ -29,20 +30,15 @@ class Component extends FormInputComponent<number[], ComponentState> {
     public async onMount(): Promise<void> {
         await super.onMount();
 
-        const categoryFilter = [
-            new FilterCriteria(
-                FAQCategoryProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, null
-            )
-        ];
-        const loadingOptions = new KIXObjectLoadingOptions(null, categoryFilter, null, null,
-            ['SubCategories', 'Articles'], ['SubCategories']
-        );
+        const validOption = this.state.field.options
+            ? this.state.field.options.find((o) => o.option === FormFieldOptions.SHOW_INVALID)
+            : null;
 
-        const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(
-            KIXObjectType.FAQ_CATEGORY, null, loadingOptions
-        );
+        const showInvalid = validOption ? validOption.value : false;
 
-        this.state.nodes = this.prepareTree(faqCategories);
+        const nodes = await FAQService.getInstance().getTreeNodes(FAQCategoryProperty.PARENT_ID, showInvalid);
+
+        this.state.nodes = nodes;
         this.setCurrentNode();
     }
 
@@ -56,22 +52,6 @@ class Component extends FormInputComponent<number[], ComponentState> {
                     : null
             );
         }
-    }
-
-    private prepareTree(faqCategories: FAQCategory[]): TreeNode[] {
-        let nodes = [];
-        if (faqCategories) {
-            nodes = faqCategories.map((category: FAQCategory) => {
-                const treeNode = new TreeNode(
-                    category.ID, category.Name,
-                    new ObjectIcon(FAQCategoryProperty.ID, category.ID),
-                    null,
-                    this.prepareTree(category.SubCategories)
-                );
-                return treeNode;
-            });
-        }
-        return nodes;
     }
 
     public categoryChanged(nodes: TreeNode[]): void {
