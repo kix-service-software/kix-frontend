@@ -170,6 +170,9 @@ msgstr "Zuordnung zu Textbausteinen"
 msgid "Assign the roles for the user."
 msgstr "Dem Nutzer Rollen zuordnen."
 
+msgid "At least one of the fields 'To', 'Cc' or 'Bcc' must contain an entry."
+msgstr ""
+
 msgid ""
 "Attach additional files to the FAQ article. Drag & Drop is possible. Max. "
 "file size is 25 MB."
@@ -690,6 +693,9 @@ msgstr "FAQ Suche"
 
 msgid "Fax"
 msgstr "Fax"
+
+msgid "Field '{0}' has an invalid value ({1})."
+msgstr ""
 
 msgid "Filter in list"
 msgstr "Filtern in Liste"
@@ -1661,6 +1667,9 @@ msgstr "Leerwert ersetzen"
 msgid "Replace Values"
 msgstr "Wert ersetzen"
 
+msgid "Required field '{0}' has no value."
+msgstr ""
+
 msgid "Reset data"
 msgstr "Daten zurücksetzen"
 
@@ -1914,8 +1923,8 @@ msgstr ""
 msgid ""
 "Set the system address as „valid“, „invalid (temporarily)“, or „invalid“."
 msgstr ""
-"Setzen Sie die Systemadresse als \"gültig\", \"ungültig (temporär)\" oder \""
-"ungültig\"."
+"Setzen Sie die Systemadresse als \"gültig\", \"ungültig (temporär)\" oder "
+"\"ungültig\"."
 
 msgid "Set the type as „valid“, „invalid (temporarily)“, or „invalid“."
 msgstr ""
@@ -2283,6 +2292,9 @@ msgstr "Validierungsfehler"
 
 msgid "Validity"
 msgstr "Gültigkeit"
+
+msgid "Value of field '{0}' is too long (max: {1})."
+msgstr ""
 
 msgid "Version"
 msgstr "Version"

@@ -163,6 +163,9 @@ msgstr ""
 msgid "Assign the roles for the user."
 msgstr ""
 
+msgid "At least one of the fields 'To', 'Cc' or 'Bcc' must contain an entry."
+msgstr ""
+
 msgid ""
 "Attach additional files to the FAQ article. Drag & Drop is possible. Max. "
 "file size is 25 MB."
@@ -660,6 +663,9 @@ msgid "FAQ Search"
 msgstr ""
 
 msgid "Fax"
+msgstr ""
+
+msgid "Field '{0}' has an invalid value ({1})."
 msgstr ""
 
 msgid "Filter in list"
@@ -1596,6 +1602,9 @@ msgstr ""
 msgid "Replace Values"
 msgstr ""
 
+msgid "Required field '{0}' has no value."
+msgstr ""
+
 msgid "Reset data"
 msgstr ""
 
@@ -2176,6 +2185,9 @@ msgid "Validation error"
 msgstr ""
 
 msgid "Validity"
+msgstr ""
+
+msgid "Value of field '{0}' is too long (max: {1})."
 msgstr ""
 
 msgid "Version"
