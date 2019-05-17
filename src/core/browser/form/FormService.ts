@@ -1,9 +1,7 @@
 import {
     FormInstance, FormContext, KIXObjectType, IFormInstance, SearchFormInstance, SearchForm, Form, IFormInstanceListener
 } from "../../model";
-import { FormValidationService, RequiredFormFieldValidator } from ".";
 import { FormFactory } from "./FormFactory";
-import { MaxLengthFormFieldValidator, RegExFormFieldValidator } from "./validators";
 import { KIXModulesSocketClient } from "../modules/KIXModulesSocketClient";
 import { BrowserUtil } from "../BrowserUtil";
 
@@ -23,15 +21,7 @@ export class FormService {
     private forms: Form[] = null;
     private formIDsWithContext: Array<[FormContext, KIXObjectType, string]> = null;
 
-    private constructor() {
-        this.initValidators();
-    }
-
-    private initValidators(): void {
-        FormValidationService.getInstance().registerValidator(new RequiredFormFieldValidator());
-        FormValidationService.getInstance().registerValidator(new MaxLengthFormFieldValidator());
-        FormValidationService.getInstance().registerValidator(new RegExFormFieldValidator());
-    }
+    private constructor() { }
 
     public async loadFormConfigurations(): Promise<void> {
         const formConfigurations = await KIXModulesSocketClient.getInstance().loadFormConfigurations();

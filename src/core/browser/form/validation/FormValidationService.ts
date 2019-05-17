@@ -1,4 +1,5 @@
-import { IFormFieldValidator, ValidationResult, FormField } from "../../model";
+import { IFormFieldValidator, ValidationResult, FormField } from "../../../model";
+import { RequiredFormFieldValidator, MaxLengthFormFieldValidator, RegExFormFieldValidator } from ".";
 
 export class FormValidationService {
 
@@ -15,7 +16,15 @@ export class FormValidationService {
         }
         return FormValidationService.INSTANCE;
     }
-    private constructor() { }
+    private constructor() {
+        this.initDefaultValidators();
+    }
+
+    private initDefaultValidators(): void {
+        this.registerValidator(new RequiredFormFieldValidator());
+        this.registerValidator(new MaxLengthFormFieldValidator());
+        this.registerValidator(new RegExFormFieldValidator());
+    }
 
     private formFieldValidators: IFormFieldValidator[] = [];
 

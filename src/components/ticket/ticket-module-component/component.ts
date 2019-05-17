@@ -1,7 +1,7 @@
 import { ComponentState } from './ComponentState';
 import {
     AbstractMarkoComponent, ServiceRegistry, LabelService, FactoryService,
-    FormValidationService, ContextService, ActionFactory, KIXObjectSearchService
+    ContextService, ActionFactory, KIXObjectSearchService
 } from '../../../core/browser';
 import {
     TicketService, TicketHistoryLabelProvider, ArticleLabelProvider, TicketLabelProvider, TicketTableFactory,
@@ -40,6 +40,7 @@ import { ChannelService } from '../../../core/browser/channel';
 import { TableFactoryService, TableCSSHandlerRegistry } from '../../../core/browser/table';
 import { ChannelLabelProvider } from '../../../core/browser/channel/ChannelLabelProvider';
 import { DialogService } from '../../../core/browser/components/dialog';
+import { FormValidationService } from '../../../core/browser/form/validation';
 
 class Component extends AbstractMarkoComponent {
 
