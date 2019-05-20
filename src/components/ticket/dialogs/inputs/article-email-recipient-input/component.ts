@@ -72,7 +72,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
                             )
                         ]
 
-                    )
+                    ), null, true
                 );
                 if (contacts && !!contacts.length) {
                     nodes.push(await this.createTreeNode(contacts[0]));
