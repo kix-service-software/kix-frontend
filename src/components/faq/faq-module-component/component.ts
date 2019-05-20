@@ -13,12 +13,13 @@ import {
     FAQArticleVoteAction, FAQArticlePrintAction, FAQArticleEditAction, FAQArticleDeleteAction,
     FAQArticleCreateAction, FAQArticleBrowserFactory, FAQArticleAttachmentBrowserFactory,
     FAQArticleSearchDefinition, FAQArticleFormService, EditFAQArticleDialogContext, FAQCategoryLabelProvider,
-    FAQCategoryCSVExportAction
+    FAQCategoryCSVExportAction,
+    FAQCategoryFormService
 } from '../../../core/browser/faq';
 import { DialogService } from '../../../core/browser/components/dialog';
 import {
     FAQCategoryTableFactory, FAQCategoryCreateAction, FAQCategoryEditAction,
-    NewFAQCategoryDialogContext, FAQCategoryDetailsContext
+    NewFAQCategoryDialogContext, FAQCategoryDetailsContext, EditFAQCategoryDialogContext
 } from '../../../core/browser/faq/admin';
 import { FAQCategoryBrowserFactory } from '../../../core/browser/faq/FAQCategoryBrowserFactory';
 
@@ -51,6 +52,7 @@ class Component extends AbstractMarkoComponent {
 
         ServiceRegistry.registerServiceInstance(FAQService.getInstance());
         ServiceRegistry.registerServiceInstance(FAQArticleFormService.getInstance());
+        ServiceRegistry.registerServiceInstance(FAQCategoryFormService.getInstance());
 
         KIXObjectSearchService.getInstance().registerSearchDefinition(new FAQArticleSearchDefinition());
 
@@ -95,6 +97,26 @@ class Component extends AbstractMarkoComponent {
             false, 'search-faq-article-dialog', ['faqarticles'], FAQArticleSearchContext
         );
         ContextService.getInstance().registerContext(searchContactContext);
+
+        const newFAQCategoryContext = new ContextDescriptor(
+            NewFAQCategoryDialogContext.CONTEXT_ID, [KIXObjectType.FAQ_CATEGORY], ContextType.DIALOG,
+            ContextMode.CREATE_ADMIN, false, 'new-faq-category-dialog', ['faqcategories'], NewFAQCategoryDialogContext
+        );
+        ContextService.getInstance().registerContext(newFAQCategoryContext);
+
+        const editFAQCategoryContext = new ContextDescriptor(
+            EditFAQCategoryDialogContext.CONTEXT_ID, [KIXObjectType.FAQ_CATEGORY], ContextType.DIALOG,
+            ContextMode.EDIT_ADMIN, false, 'edit-faq-category-dialog', ['faqcategories'], EditFAQCategoryDialogContext
+        );
+        ContextService.getInstance().registerContext(editFAQCategoryContext);
+
+
+        const faqCategoryDetailsContextDescriptor = new ContextDescriptor(
+            FAQCategoryDetailsContext.CONTEXT_ID, [KIXObjectType.FAQ_CATEGORY],
+            ContextType.MAIN, ContextMode.DETAILS,
+            true, 'object-details-page', ['faqcategories'], FAQCategoryDetailsContext
+        );
+        ContextService.getInstance().registerContext(faqCategoryDetailsContextDescriptor);
     }
 
     private registerDialogs(): void {
@@ -126,6 +148,26 @@ class Component extends AbstractMarkoComponent {
             ),
             KIXObjectType.FAQ_ARTICLE,
             ContextMode.SEARCH
+        ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'new-faq-category-dialog',
+            new WidgetConfiguration(
+                'new-faq-category-dialog', 'Translatable#New Category', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-new-gear'
+            ),
+            KIXObjectType.FAQ_CATEGORY,
+            ContextMode.CREATE_ADMIN
+        ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'edit-faq-category-dialog',
+            new WidgetConfiguration(
+                'edit-faq-category-dialog', 'Translatable#Edit FAQ Category', [], {}, false,
+                false, WidgetSize.BOTH, 'kix-icon-edit'
+            ),
+            KIXObjectType.FAQ_CATEGORY,
+            ContextMode.EDIT_ADMIN
         ));
     }
 

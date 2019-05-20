@@ -1,10 +1,6 @@
 import { ComponentState } from "./ComponentState";
-import {
-    ObjectIcon, TreeNode, FormInputComponent, KIXObjectType,
-    FilterCriteria, FilterDataType, FilterType, KIXObjectLoadingOptions, FormFieldOptions
-} from "../../../../../core/model";
-import { FAQCategory, FAQCategoryProperty } from "../../../../../core/model/kix/faq";
-import { KIXObjectService, SearchOperator } from "../../../../../core/browser";
+import { TreeNode, FormInputComponent, FormFieldOptions } from "../../../../../core/model";
+import { FAQCategoryProperty } from "../../../../../core/model/kix/faq";
 import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
 import { FAQService } from "../../../../../core/browser/faq";
 

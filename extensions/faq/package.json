@@ -8,6 +8,7 @@
             "edit-faq-dialog-configuration": "../../dist/registry-modules/faq/edit-faq-article-dialog-configuration.extension",
             "search-faq-article-dialog-configuration": "../../dist/registry-modules/faq/search-faq-article-dialog-configuration.extension",
             "new-faq-catgeory-dialog-configuration": "../../dist/registry-modules/faq/admin/new-faq-category-dialog-configuration.extension",
+            "edit-faq-category-dialog-configuration": "../../dist/registry-modules/faq/admin/edit-faq-category-dialog-configuration.extension",
             "faq-catgeory-details-configuration": "../../dist/registry-modules/faq/admin/faq-category-details-configuration.extension"
         },
         "kix:modules": {
