@@ -4,7 +4,7 @@ import { IRowObject } from "./IRowObject";
 import { ICell } from "./ICell";
 import { Cell } from "./Cell";
 import { ITable } from "./ITable";
-import { TableFilterCriteria, KIXObject, FilterCriteria, SortOrder, DataType } from "../../model";
+import { TableFilterCriteria, KIXObject, SortOrder, DataType } from "../../model";
 import { KIXObjectService } from "../kix";
 import { EventService } from "../event";
 import { TableEvent } from "./TableEvent";
@@ -289,11 +289,11 @@ export class Row<T = any> implements IRow<T> {
         return count;
     }
 
-    public async sortChildren(columnId: string, sortOrder: SortOrder, dataType: DataType): Promise<void> {
+    public sortChildren(columnId: string, sortOrder: SortOrder, dataType: DataType): void {
         if (this.children && this.children.length) {
-            this.children = await TableSortUtil.sort(this.children, columnId, sortOrder, dataType);
+            this.children = TableSortUtil.sort(this.children, columnId, sortOrder, dataType);
             for (const row of this.children) {
-                await row.sortChildren(columnId, sortOrder, dataType);
+                row.sortChildren(columnId, sortOrder, dataType);
             }
         }
     }

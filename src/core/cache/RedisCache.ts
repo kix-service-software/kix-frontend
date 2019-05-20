@@ -7,6 +7,8 @@ export class RedisCache implements ICache {
 
     private static INSTANCE: RedisCache;
 
+    private KIX_CACHE_PREFIX = 'KIXWebAPP';
+
     public static getInstance(): RedisCache {
         if (!RedisCache.INSTANCE) {
             RedisCache.INSTANCE = new RedisCache();
@@ -40,11 +42,15 @@ export class RedisCache implements ICache {
     }
 
     public async clear(ignoreKeyPrefixes?: string[]): Promise<void> {
-        await this.flushAllAsync();
+        let keys = await this.keysAsync(`${this.KIX_CACHE_PREFIX}::*`);
+        keys = keys.filter((k) => !ignoreKeyPrefixes.some((p) => k.startsWith(`${this.KIX_CACHE_PREFIX}::${p}`)));
+        for (const key of keys) {
+            await this.delete(key);
+        }
     }
 
     public async get(key: string, cacheKeyPrefix?: string): Promise<any> {
-        let value = await this.getAsync(`${cacheKeyPrefix}::${key}`);
+        let value = await this.getAsync(`${this.KIX_CACHE_PREFIX}::${cacheKeyPrefix}::${key}`);
 
         try {
             value = JSON.parse(value);
@@ -59,15 +65,15 @@ export class RedisCache implements ICache {
             value = JSON.stringify(value);
         }
 
-        await this.setAsync(`${cacheKeyPrefix}::${key}`, value);
+        await this.setAsync(`${this.KIX_CACHE_PREFIX}::${cacheKeyPrefix}::${key}`, value);
     }
 
-    public async delete(key: string, cacheKeyPrefix: string): Promise<void> {
+    public async delete(key: string, cacheKeyPrefix?: string): Promise<void> {
         await this.delAsync(key);
     }
 
     public async deleteKeys(cacheKeyPrefix: string): Promise<void> {
-        const keys = await this.keysAsync(`${cacheKeyPrefix}::*`);
+        const keys = await this.keysAsync(`${this.KIX_CACHE_PREFIX}::${cacheKeyPrefix}::*`);
         LoggingService.getInstance().debug(
             `Redis Cache: delete cacheKeyPrefix ${cacheKeyPrefix} - key count: ${keys.length}`
         );

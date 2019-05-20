@@ -78,10 +78,6 @@ export class TranslationLabelProvider implements ILabelProvider<Translation> {
             default:
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
-        }
-
         return displayValue;
     }
 

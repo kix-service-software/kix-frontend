@@ -16,7 +16,7 @@
         </if>
     </@headerFilter>
     <@content>
-        <if(state.table)>
+        <if(state.table && !state.loading)>
             <standard-table-NEW table=state.table key=state.table.getTableId()/>
         </if>
     </@content>
