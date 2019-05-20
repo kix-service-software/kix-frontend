@@ -1,5 +1,5 @@
 import { ComponentState } from './ComponentState';
-import { FormInputComponent, InputFieldTypes, FormFieldOptions, NumberInputOptions } from '../../../../../core/model';
+import { FormInputComponent, NumberInputOptions } from '../../../../../core/model';
 import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
 class Component extends FormInputComponent<string, ComponentState> {
@@ -57,7 +57,7 @@ class Component extends FormInputComponent<string, ComponentState> {
             );
             if (unitStringOption) {
                 const string = await TranslationService.translate(unitStringOption.value);
-                this.state.unitstring = ` ${string}`;
+                this.state.unitString = ` ${string}`;
             }
         }
     }

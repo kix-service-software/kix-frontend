@@ -47,7 +47,7 @@ export class Extension implements IConfigurationExtension {
                 ),
                 new FormField(
                     'Translatable#Follow Up on Tickets possible', QueueProperty.FOLLOW_UP_ID, 'queue-input-follow-up',
-                    false, 'Translatable#Helptext_Admin_QueueCreate_FollowUp'
+                    true, 'Translatable#Helptext_Admin_QueueCreate_FollowUp', null, new FormFieldValue(3)
                 ),
                 new FormField(
                     'Translatable#Unlock Timeout', QueueProperty.UNLOCK_TIMEOUT, 'number-input',

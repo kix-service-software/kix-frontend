@@ -1,0 +1,10 @@
+div.number-input {
+    display: grid;
+    grid-template-columns: minmax(5rem, 1fr) 9fr;
+    grid-gap: @margin-small;
+    align-items: center;
+
+    >span.unit-string.invalid {
+        color: @tertiary-0;
+    }
+}
