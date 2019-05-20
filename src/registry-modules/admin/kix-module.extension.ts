@@ -15,7 +15,9 @@ class KIXModuleExtension implements IKIXModuleExtension {
         ['edit-translation-dialog', 'i18n/admin/dialogs/edit-translation-dialog'],
         ['i18n-translation-language-list-widget', 'i18n/admin/widgets/i18n-translation-language-list-widget'],
         ['i18n-translation-info-widget', 'i18n/admin/widgets/i18n-translation-info-widget'],
-        ['communication-admin-system-addresses', 'communication/admin/communication-admin-system-addresses']
+        ['communication-admin-system-addresses', 'communication/admin/communication-admin-system-addresses'],
+        ['system-address-info-widget', 'communication/admin/widgets/system-address-info-widget'],
+        ['system-address-assigned-queues-widget', 'communication/admin/widgets/system-address-assigned-queues-widget']
     ];
 
 }

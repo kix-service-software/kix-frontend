@@ -9,7 +9,7 @@ export class ComponentState {
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
             'table-widget', 'Translatable#Communication: Email',
             [
-                'communication-admin-system-addresses-create', 'communication-admin-system-addresses-table-delete'
+                'system-address-create', 'system-addresses-table-delete'
             ],
             new TableWidgetSettings(KIXObjectType.SYSTEM_ADDRESS,
                 [SystemAddressProperty.REALNAME, SortOrder.UP]), false, false, null, 'kix-icon-gears')

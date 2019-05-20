@@ -22,14 +22,14 @@ export class TicketQueueTableContentProvider extends TableContentProvider<Queue>
         const queueFilter = [
             new FilterCriteria(
                 QueueProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, null
-            )
+            ),
         ];
         const loadingOptions = new KIXObjectLoadingOptions(null, queueFilter, null, null,
             ['SubQueues'], ['SubQueues']
         );
 
         const queues = await KIXObjectService.loadObjects<Queue>(
-            KIXObjectType.QUEUE, null, loadingOptions
+            KIXObjectType.QUEUE, null, this.loadingOptions ? this.loadingOptions : loadingOptions
         );
 
         const rowObjects = [];
@@ -39,6 +39,7 @@ export class TicketQueueTableContentProvider extends TableContentProvider<Queue>
 
         return rowObjects;
     }
+
 
     private createRowObject(queue: Queue): RowObject {
         const values: TableValue[] = [];

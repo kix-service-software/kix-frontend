@@ -3,7 +3,7 @@ import {
     TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../../../table";
-import { KIXObjectType, DataType, ContextMode, QueueProperty } from "../../../../../model";
+import { KIXObjectType, DataType, ContextMode, QueueProperty, KIXObjectLoadingOptions } from "../../../../../model";
 import { TicketQueueTableContentProvider } from "./TicketQueueTableContentProvider";
 import { TableFactory } from "../../../../table/TableFactory";
 import { QueueDetailsContext } from "../../context";
@@ -20,7 +20,12 @@ export class TicketQueueTableFactory extends TableFactory {
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
         const table = new Table(tableKey, tableConfiguration);
 
-        table.setContentProvider(new TicketQueueTableContentProvider(table, objectIds, null, contextId));
+        let loadingOptions = null;
+        if (tableConfiguration.filter && tableConfiguration.filter.length) {
+            loadingOptions = new KIXObjectLoadingOptions(null, tableConfiguration.filter);
+        }
+
+        table.setContentProvider(new TicketQueueTableContentProvider(table, objectIds, loadingOptions, contextId));
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 
         return table;
