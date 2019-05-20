@@ -22,6 +22,7 @@ class Extension implements IKIXModuleExtension {
         ['faq-category-explorer', 'faq/widgets/faq-category-explorer'],
         ['faq-admin-categories', 'faq/admin/faq-admin-categories'],
         ['new-faq-category-dialog', 'faq/admin/dialogs/new-faq-category-dialog'],
+        ['edit-faq-category-dialog', 'faq/admin/dialogs/edit-faq-category-dialog'],
         ['faq-category-info-widget', 'faq/admin/widgets/faq-category-info-widget']
     ];
 

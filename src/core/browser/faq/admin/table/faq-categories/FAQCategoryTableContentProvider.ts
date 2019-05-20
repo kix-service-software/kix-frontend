@@ -26,7 +26,7 @@ export class FAQCategoryTableContentProvider extends TableContentProvider<FAQCat
             )
         ];
         const loadingOptions = new KIXObjectLoadingOptions(null, categoryFilter, null, null,
-            ['SubCategories'], ['SubCategories']
+            [FAQCategoryProperty.SUB_CATEGORIES], [FAQCategoryProperty.SUB_CATEGORIES]
         );
 
         const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(

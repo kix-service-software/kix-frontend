@@ -1,9 +1,7 @@
 import { KIXObjectService, ServiceRegistry } from "../kix";
 import {
     KIXObjectType, FilterCriteria, FilterDataType, FilterType, TreeNode, ObjectIcon, DataType,
-    KIXObject,
-    KIXObjectLoadingOptions,
-    KIXObjectSpecificLoadingOptions
+    KIXObject, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, ContextType
 } from "../../model";
 import { ContextService } from "../context";
 import { FAQDetailsContext } from "./context";
@@ -142,7 +140,7 @@ export class FAQService extends KIXObjectService {
             nodes = faqCategories.map((category: FAQCategory) => {
                 const treeNode = new TreeNode(
                     category.ID, category.Name,
-                    new ObjectIcon(FAQCategoryProperty.ID, category.ID),
+                    new ObjectIcon(KIXObjectType.FAQ_CATEGORY, category.ID),
                     null,
                     this.prepareCategoryTree(category.SubCategories, showInvalid)
                 );
