@@ -298,4 +298,92 @@ describe('Browser / Components / Tree', () => {
 
     });
 
+    describe('Filter subtrees', () => {
+        let tree: TreeNode[] = [];
+
+        before(() => {
+            tree = [
+                new TreeNode('cmdb', 'CMDB', null, null, [
+                    new TreeNode('ci-class', 'CI Classes')
+                ]),
+                new TreeNode('communication', 'Communication', null, null, [
+                    new TreeNode('email', 'Email', null, null, [
+                        new TreeNode('email-addresses', 'Email Addresses')
+                    ])
+                ]),
+                new TreeNode('internationalisation', 'Internationalisation', null, null, [
+                    new TreeNode('translations', 'Translations')
+                ]),
+                new TreeNode('faq', 'Knowledge Database', null, null, [
+                    new TreeNode('faq-categories', 'FAQ Categories')
+                ]),
+                new TreeNode('ticket', 'Ticket', null, null, [
+                    new TreeNode('priorities', 'Priorities'),
+                    new TreeNode('queues', 'Queues'),
+                    new TreeNode('states', 'States'),
+                    new TreeNode('types', 'Types')
+                ]),
+                new TreeNode('user', 'User Management', null, null, [
+                    new TreeNode('agents', 'Agents'),
+                    new TreeNode('roles', 'Roles/Permissions')
+                ]),
+            ];
+        })
+
+        describe("Filter for Ticket", () => {
+            before(() => {
+                TreeUtil.linkTreeNodes(tree, 'Ticket');
+            });
+
+            it('The tree should only contain the node Ticket as visible.', () => {
+                const visibleNodes = tree.filter((n) => n.visible);
+                expect(visibleNodes.length).equals(1);
+                expect(visibleNodes[0].id).equals('ticket');
+            });
+
+            it('The node ticket should contain 4 visible children', () => {
+                const visibleNodes = tree.filter((n) => n.visible);
+                expect(visibleNodes[0].children).exist;
+
+                const children = visibleNodes[0].children.filter((n) => n.visible);
+                expect(children.length).equals(4);
+            });
+        });
+
+        describe("Filter for Communication", () => {
+            before(() => {
+                TreeUtil.linkTreeNodes(tree, 'Communication');
+            });
+
+            it('The tree should only contain the node Communication as visible.', () => {
+                const visibleNodes = tree.filter((n) => n.visible);
+                expect(visibleNodes.length).equals(1);
+                expect(visibleNodes[0].label).equals('Communication');
+            });
+
+            it('The node Communication should contain 1 visible children Email', () => {
+                const visibleNodes = tree.filter((n) => n.visible);
+                expect(visibleNodes[0].children).exist;
+
+                const children = visibleNodes[0].children.filter((n) => n.visible);
+                expect(children.length).equals(1);
+
+                expect(children[0].label).equals('Email');
+            });
+
+            it('The node Email should contain 1 visible children Email Addresses', () => {
+                const visibleNodes = tree.filter((n) => n.visible);
+                expect(visibleNodes[0].children).exist;
+
+                const children = visibleNodes[0].children.filter((n) => n.visible);
+                expect(children.length).equals(1);
+
+                const subChildren = children[0].children.filter((c) => c.visible);
+                expect(subChildren.length).equals(1);
+                expect(subChildren[0].label).equals('Email Addresses');
+            });
+        });
+
+    });
+
 });

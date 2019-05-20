@@ -1,7 +1,7 @@
 import { AbstractMarkoComponent, ContextService } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import { AdminContext } from '../../../../core/browser/admin';
-import { TreeNode, AdminModuleCategory, AdminModule } from '../../../../core/model';
+import { TreeNode, AdminModuleCategory, AdminModule, TreeUtil } from '../../../../core/model';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
