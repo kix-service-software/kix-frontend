@@ -1,13 +1,15 @@
 import { ComponentState } from './ComponentState';
 import {
-    AbstractMarkoComponent, ServiceRegistry, FormValidationService, ContextService, ActionFactory, DialogService
+    AbstractMarkoComponent, ServiceRegistry, ContextService, ActionFactory, DialogService
 } from '../../../../core/browser';
 import {
-    TicketFormService, EmailRecipientValidator, NewTicketArticleContext, ArticleNewNoteAction, ArticleNewEmailAction
+    TicketFormService, EmailRecipientValidator, NewTicketArticleContext
 } from '../../../../core/browser/ticket';
 import {
     ContextDescriptor, KIXObjectType, ContextType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration, WidgetSize
 } from '../../../../core/model';
+import { FormValidationService } from '../../../../core/browser/form/validation';
+import { ArticleNewAction } from '../../../../core/browser/ticket/actions/article/ArticleNewAction';
 
 class Component extends AbstractMarkoComponent {
 
@@ -35,8 +37,7 @@ class Component extends AbstractMarkoComponent {
     }
 
     private registerTicketActions(): void {
-        ActionFactory.getInstance().registerAction('article-new-email-action', ArticleNewEmailAction);
-        ActionFactory.getInstance().registerAction('article-new-note-action', ArticleNewNoteAction);
+        ActionFactory.getInstance().registerAction('article-new-action', ArticleNewAction);
     }
 
     private registerTicketDialogs(): void {

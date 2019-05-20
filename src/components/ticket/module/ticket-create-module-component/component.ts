@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
 import {
-    AbstractMarkoComponent, ServiceRegistry, FormValidationService, ContextService, ActionFactory, DialogService
+    AbstractMarkoComponent, ServiceRegistry, ContextService, ActionFactory, DialogService
 } from '../../../../core/browser';
 import {
     TicketFormService, PendingTimeValidator, EmailRecipientValidator, NewTicketDialogContext, TicketCreateAction,
@@ -10,6 +10,7 @@ import {
     ContextDescriptor, KIXObjectType, ContextType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration,
     WidgetSize
 } from '../../../../core/model';
+import { FormValidationService } from '../../../../core/browser/form/validation';
 
 class Component extends AbstractMarkoComponent {
 
