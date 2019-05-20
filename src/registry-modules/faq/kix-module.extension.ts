@@ -26,7 +26,10 @@ class Extension implements IKIXModuleExtension {
         new UIComponent('faq-article-history-widget', 'faq/widgets/faq-article-history-widget', []),
         new UIComponent('faq-article-list-widget', 'faq/widgets/faq-article-list-widget', []),
         new UIComponent('faq-category-explorer', 'faq/widgets/faq-category-explorer', []),
-        new UIComponent('faq-admin-categories', 'faq/admin/faq-admin-categories', [])
+        new UIComponent('faq-admin-categories', 'faq/admin/faq-admin-categories', []),
+        new UIComponent('new-faq-category-dialog', 'faq/admin/dialogs/new-faq-category-dialog', []),
+        new UIComponent('edit-faq-category-dialog', 'faq/admin/dialogs/edit-faq-category-dialog', []),
+        new UIComponent('faq-category-info-widget', 'faq/admin/widgets/faq-category-info-widget', [])
     ];
 
 }

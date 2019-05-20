@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-05-16 12:42+0000\n"
+"PO-Revision-Date: 2019-05-17 09:05+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -170,6 +170,11 @@ msgstr "Zuordnung zu Textbausteinen"
 msgid "Assign the roles for the user."
 msgstr "Dem Nutzer Rollen zuordnen."
 
+msgid "At least one of the fields 'To', 'Cc' or 'Bcc' must contain an entry."
+msgstr ""
+"Mindestens eins der Felder  'To', 'Cc' oder 'Bcc' muss einen Eintrag "
+"enthalten."
+
 msgid ""
 "Attach additional files to the FAQ article. Drag & Drop is possible. Max. "
 "file size is 25 MB."
@@ -189,10 +194,8 @@ msgstr "zu ändernde Attribute:"
 msgid "back to"
 msgstr "Zurück zu"
 
-#, fuzzy
-#| msgid "Ticket Data"
 msgid "Basic Data"
-msgstr "Ticketdaten"
+msgstr "Stammdaten"
 
 msgid "Bcc"
 msgstr "Bcc"
@@ -238,6 +241,11 @@ msgstr "Datei kann nicht genutzt werden (Keine bekannten Attribute gefunden)."
 
 msgid "Category"
 msgstr "Kategorie"
+
+#, fuzzy
+#| msgid "State successfully created."
+msgid "Category successfully created."
+msgstr "Status wurde erfolgreich angelegt."
 
 msgid "Cause"
 msgstr "Ursache"
@@ -403,6 +411,11 @@ msgstr "Neuer Agent"
 msgid "Create Article"
 msgstr "Neuer Artikel"
 
+#, fuzzy
+#| msgid "Parent Category"
+msgid "Create Category"
+msgstr "Übergeordnete Kategorie"
+
 msgid "Create CI Class"
 msgstr "Neue CI Klasse"
 
@@ -556,6 +569,11 @@ msgstr "bearbeitet"
 msgid "Edit FAQ Article"
 msgstr "FAQ Artikel bearbeiten"
 
+#, fuzzy
+#| msgid "FAQ Category"
+msgid "Edit FAQ Category"
+msgstr "FAQ Kategorie"
+
 msgid "Edit Links"
 msgstr "Links bearbeiten"
 
@@ -673,14 +691,16 @@ msgstr "FAQ Kategorien"
 msgid "FAQ Category"
 msgstr "FAQ Kategorie"
 
+#, fuzzy
+#| msgid "FAQ Information"
+msgid "FAQ Category Information"
+msgstr "FAQ Informationen"
+
 msgid "FAQ Data"
 msgstr "FAQ Daten"
 
 msgid "FAQ Information"
 msgstr "FAQ Informationen"
-
-msgid "FAQ Knowledge Database: FAQ Categories"
-msgstr "FAQ Wissensdatenbank: FAQ Kategorien"
 
 msgid "FAQ rating"
 msgstr "FAQ Bewertung"
@@ -691,11 +711,12 @@ msgstr "FAQ Suche"
 msgid "Fax"
 msgstr "Fax"
 
+msgid "Field '{0}' has an invalid value ({1})."
+msgstr "Feld '{0}' enthält einen ungültigen Wert ({1})."
+
 msgid "Filter in list"
 msgstr "Filtern in Liste"
 
-#, fuzzy
-#| msgid "First Name"
 msgid "Firstname"
 msgstr "Vorname"
 
@@ -711,6 +732,9 @@ msgstr "Sperrung der Tickets bei Nachfrage"
 msgid "Force"
 msgstr "Erzwingen"
 
+msgid "Forward"
+msgstr ""
+
 msgid "free tickets: {0}"
 msgstr "Freie Tickets: {0}"
 
@@ -718,7 +742,7 @@ msgid "From"
 msgstr "Von"
 
 msgid "Fullname"
-msgstr ""
+msgstr "Vollständiger Name"
 
 msgid "Full Text"
 msgstr "Volltext"
@@ -731,6 +755,56 @@ msgstr "größer als"
 
 msgid "Help"
 msgstr "Hilfe"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Comment"
+msgid "Helptext_Admin_FAQCategoryCreate_Comment"
+msgstr "Hilfetext_Admin_QueueCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Icon."
+msgid "Helptext_Admin_FAQCategoryCreate_Icon"
+msgstr "Hilfetext_Admin_QueueCreate_Icon."
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Name"
+msgid "Helptext_Admin_FAQCategoryCreate_Name"
+msgstr "Hilfetext_Admin_QueueCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_ParentQueue"
+msgid "Helptext_Admin_FAQCategoryCreate_ParentCategory"
+msgstr "Hilfetext_Admin_QueueCreate_ParentQueue"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Validity"
+msgid "Helptext_Admin_FAQCategoryCreate_Validity"
+msgstr "Hilfetext_Admin_QueueCreate_Validity"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Comment"
+msgid "Helptext_Admin_FAQCategoryEdit_Comment"
+msgstr "Hilfetext_Admin_QueueCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Icon."
+msgid "Helptext_Admin_FAQCategoryEdit_Icon"
+msgstr "Hilfetext_Admin_QueueCreate_Icon."
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Name"
+msgid "Helptext_Admin_FAQCategoryEdit_Name"
+msgstr "Hilfetext_Admin_QueueCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_ParentQueue"
+msgid "Helptext_Admin_FAQCategoryEdit_ParentCategory"
+msgstr "Hilfetext_Admin_QueueCreate_ParentQueue"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Validity"
+msgid "Helptext_Admin_FAQCategoryEdit_Validity"
+msgstr "Hilfetext_Admin_QueueCreate_Validity"
 
 msgid "Helptext_Admin_QueueCreate_Comment"
 msgstr "Hilfetext_Admin_QueueCreate_Comment"
@@ -904,7 +978,7 @@ msgid "Hit List ({0})"
 msgstr "Trefferliste ({0})"
 
 msgid "Home"
-msgstr ""
+msgstr "Home"
 
 msgid "How to create a new ticket?"
 msgstr "Wie lege ich ein neues Ticket an?"
@@ -1020,13 +1094,9 @@ msgstr "Geben Sie einen Titel für den Nutzer ein."
 msgid "Insert a type name."
 msgstr "Geben Sie einen Name für den Typ ein."
 
-#, fuzzy
-#| msgid "Inserted e-mail address is invalid."
 msgid "Inserted email address is invalid."
 msgstr "Die eingegebene E-Mail-Adresse ist ungültig."
 
-#, fuzzy
-#| msgid "Inserted e-mail address must not be a system address."
 msgid "Inserted email address must not be a system address."
 msgstr "Die eingegebene E-Mail-Adresse darf keine Systemadresse sein."
 
@@ -1044,8 +1114,6 @@ msgstr "Geben Sie den Titel oder Teile eines Tickettitels ein."
 msgid "Insert the definition for the Config Item Class."
 msgstr "Geben Sie die Definition für die CI Klasse ein."
 
-#, fuzzy
-#| msgid "Insert the e-mail address for the user."
 msgid "Insert the email address for the user."
 msgstr "Geben Sie eine E-Mail-Adresse für den Nutzer ein."
 
@@ -1075,6 +1143,11 @@ msgstr "Ungültiges Datum."
 msgid "Knowledge Database"
 msgstr "Wissensdatenbank"
 
+#, fuzzy
+#| msgid "FAQ Knowledge Database: FAQ Categories"
+msgid "Knowledge Database: FAQ Categories"
+msgstr "FAQ Wissensdatenbank: FAQ Kategorien"
+
 msgid "Label"
 msgstr "Beschriftung"
 
@@ -1093,10 +1166,8 @@ msgstr "Letzte Änderungszeit"
 msgid "Last Login"
 msgstr "Letzte Anmeldung"
 
-#, fuzzy
-#| msgid "Last Name"
 msgid "Lastname"
-msgstr "Name"
+msgstr "Nachname"
 
 msgid "Last Name"
 msgstr "Name"
@@ -1266,13 +1337,13 @@ msgstr "Neues Config Item"
 msgid "New Contact"
 msgstr "Neuer Kontakt"
 
-#, fuzzy
-#| msgid "New E-mail"
-msgid "New Email"
-msgstr "Neue E-Mail"
-
 msgid "New FAQ"
 msgstr "Neue FAQ"
+
+#, fuzzy
+#| msgid "FAQ Category"
+msgid "New FAQ Category"
+msgstr "FAQ Kategorie"
 
 msgid "New Object"
 msgstr "Neues Objekt"
@@ -1319,8 +1390,6 @@ msgstr "Neue Version wurde angelegt."
 msgid "Next Image"
 msgstr "Nächstes Bild"
 
-#, fuzzy
-#| msgid "No."
 msgid "No"
 msgstr "Nr."
 
@@ -1340,7 +1409,7 @@ msgid "No contact available"
 msgstr "Kein Kontakt verfügbar"
 
 msgid "No general catalog class configured!"
-msgstr ""
+msgstr "Keine General Catalog Klasse konfiguriert!"
 
 msgid "No object available"
 msgstr "Kein Objekt verfügbar"
@@ -1420,8 +1489,6 @@ msgstr "Kundeninformationen"
 msgid "Organisations"
 msgstr "Kunden"
 
-#, fuzzy
-#| msgid "Customers Dashboard"
 msgid "Organisations Dashboard"
 msgstr "Kunden Dashboard"
 
@@ -1660,6 +1727,17 @@ msgstr "Leerwert ersetzen"
 
 msgid "Replace Values"
 msgstr "Wert ersetzen"
+
+msgid "Reply"
+msgstr ""
+
+#, fuzzy
+#| msgid "Select all"
+msgid "Reply all"
+msgstr "Alle auswählen"
+
+msgid "Required field '{0}' has no value."
+msgstr ""
 
 msgid "Reset data"
 msgstr "Daten zurücksetzen"
@@ -1914,8 +1992,8 @@ msgstr ""
 msgid ""
 "Set the system address as „valid“, „invalid (temporarily)“, or „invalid“."
 msgstr ""
-"Setzen Sie die Systemadresse als \"gültig\", \"ungültig (temporär)\" oder \""
-"ungültig\"."
+"Setzen Sie die Systemadresse als \"gültig\", \"ungültig (temporär)\" oder "
+"\"ungültig\"."
 
 msgid "Set the type as „valid“, „invalid (temporarily)“, or „invalid“."
 msgstr ""
@@ -2241,6 +2319,11 @@ msgid "Update FAQ Artikel"
 msgstr "Aktualisierung wird durchgeführt"
 
 #, fuzzy
+#| msgid "FAQ Category"
+msgid "Update FAQ Category"
+msgstr "FAQ Kategorie"
+
+#, fuzzy
 #| msgid "Update Translation"
 msgid "Update Organisation"
 msgstr "Aktualisierung wird durchgeführt"
@@ -2283,6 +2366,9 @@ msgstr "Validierungsfehler"
 
 msgid "Validity"
 msgstr "Gültigkeit"
+
+msgid "Value of field '{0}' is too long (max: {1})."
+msgstr ""
 
 msgid "Version"
 msgstr "Version"
@@ -2338,6 +2424,9 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "New Email"
+#~ msgstr "Neue E-Mail"
 
 #, fuzzy
 #~| msgid "No contact available"

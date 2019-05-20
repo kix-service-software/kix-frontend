@@ -151,7 +151,7 @@ export class FAQCategoryLabelProvider extends LabelProvider<FAQCategory> {
     public async getIcons(
         faqCategory: FAQCategory, property: string, value?: number | string
     ): Promise<Array<string | ObjectIcon>> {
-        if (property === FAQCategoryProperty.ID || property === 'ICON') {
+        if (property === FAQCategoryProperty.ID || property === FAQCategoryProperty.ICON) {
             return [new ObjectIcon('FAQCategory', faqCategory.ID)];
         }
         return null;

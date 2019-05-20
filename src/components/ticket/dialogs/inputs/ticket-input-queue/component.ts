@@ -1,5 +1,5 @@
 import { ComponentState } from "./ComponentState";
-import { TicketProperty, TreeNode, FormInputComponent } from "../../../../../core/model";
+import { TicketProperty, TreeNode, FormInputComponent, FormFieldOptions } from "../../../../../core/model";
 import { TicketService } from "../../../../../core/browser/ticket";
 import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
 
@@ -24,8 +24,14 @@ class Component extends FormInputComponent<number[], ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+        const validOption = this.state.field.options
+            ? this.state.field.options.find((o) => o.option === FormFieldOptions.SHOW_INVALID)
+            : null;
+
+        const showInvalid = validOption ? validOption.value : false;
+
         this.state.nodes = await TicketService.getInstance().getTreeNodes(
-            TicketProperty.QUEUE_ID, this.state.field.options
+            TicketProperty.QUEUE_ID, showInvalid
         );
         this.setCurrentNode();
     }

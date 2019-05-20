@@ -42,11 +42,11 @@ export enum KIXObjectType {
 
     FAQ_ARTICLE_ATTACHMENT = 'Attachment',
 
-    FAQ_ARTICLE_HISTORY = 'FAQ_ARTICLE_HISTORY',
+    FAQ_ARTICLE_HISTORY = 'FAQHistory',
 
-    FAQ_CATEGORY = 'FAQ_CATEGORY',
+    FAQ_CATEGORY = 'FAQCategory',
 
-    FAQ_VOTE = 'FAQ_VOTE',
+    FAQ_VOTE = 'FAQVote',
 
     GENERAL_CATALOG_ITEM = 'GeneralCatalogItem',
 

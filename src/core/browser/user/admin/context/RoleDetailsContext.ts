@@ -45,7 +45,7 @@ export class RoleDetailsContext extends Context {
         const roleId = Number(this.objectId);
 
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, null, null,
+            null, null, null, null,
             [RoleProperty.USER_IDS, RoleProperty.PERMISSIONS, RoleProperty.CONFIGURED_PERMISSIONS]
         );
 

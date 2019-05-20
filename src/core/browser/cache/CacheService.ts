@@ -114,6 +114,7 @@ export class CacheService {
                 break;
             case KIXObjectType.PERSONAL_SETTINGS:
             case KIXObjectType.USER_PREFERENCE:
+                cacheKeyPrefixes.push(KIXObjectType.USER);
                 cacheKeyPrefixes.push(KIXObjectType.CURRENT_USER);
                 break;
             case KIXObjectType.USER:

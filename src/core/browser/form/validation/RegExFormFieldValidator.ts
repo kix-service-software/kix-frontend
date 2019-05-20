@@ -1,5 +1,6 @@
 import { IFormFieldValidator, FormField, ValidationResult, ValidationSeverity } from "../../../model";
 import { FormService } from "../FormService";
+import { TranslationService } from "../../i18n/TranslationService";
 
 export class RegExFormFieldValidator implements IFormFieldValidator {
 
@@ -16,10 +17,12 @@ export class RegExFormFieldValidator implements IFormFieldValidator {
         if (fieldValue && typeof fieldValue === 'string' && fieldValue !== '') {
             const regex = new RegExp(formField.regEx);
             if (!regex.test(fieldValue)) {
-                return new ValidationResult(
-                    ValidationSeverity.ERROR,
-                    `Feld ${formField.label} hat ungültigen Wert (${formField.regExErrorMessage}).`
+                const fieldLabel = await TranslationService.translate(formField.label);
+                const errorMessage = await TranslationService.translate(formField.regExErrorMessage);
+                const errorString = await TranslationService.translate(
+                    "Translatable#Field '{0}' has an invalid value ({1}).", [fieldLabel, errorMessage]
                 );
+                return new ValidationResult(ValidationSeverity.ERROR, errorString);
             }
         }
         return new ValidationResult(ValidationSeverity.OK, '');

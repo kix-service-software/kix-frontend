@@ -52,7 +52,7 @@ export class FAQArticleFormService extends KIXObjectFormService<FAQArticle> {
         if (faqArticle.Attachments) {
             const inlineAttachments = faqArticle.Attachments.filter((a) => a.Disposition === 'inline');
             for (const attachment of inlineAttachments) {
-                const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, null, ['Content']);
+                const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, ['Content']);
                 const faqArticleAttachmentOptions = new FAQArticleAttachmentLoadingOptions(
                     faqArticle.ID, attachment.ID
                 );
@@ -72,20 +72,6 @@ export class FAQArticleFormService extends KIXObjectFormService<FAQArticle> {
             );
         }
         return inlineContent;
-    }
-
-    private replaceInlineContent(value: string, inlineContent: InlineContent[]): string {
-        let newString = value;
-        for (const contentItem of inlineContent) {
-            if (contentItem.contentId) {
-                const replaceString = `data:${contentItem.contentType};base64,${contentItem.content}`;
-                const contentIdLength = contentItem.contentId.length - 1;
-                const contentId = contentItem.contentId.substring(1, contentIdLength);
-                const regexpString = new RegExp('cid:' + contentId, "g");
-                newString = newString.replace(regexpString, replaceString);
-            }
-        }
-        return newString;
     }
 
 }

@@ -7,7 +7,8 @@ import {
 import { FormGroup } from '../../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../../core/services';
 import { NewUserDialogContext } from '../../../core/browser/user';
-import { SearchOperator, FormValidationService } from '../../../core/browser';
+import { SearchOperator } from '../../../core/browser';
+import { FormValidationService } from '../../../core/browser/form/validation';
 
 export class Extension implements IConfigurationExtension {
 

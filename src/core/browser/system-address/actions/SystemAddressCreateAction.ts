@@ -11,7 +11,7 @@ export class SystemAddressCreateAction extends AbstractAction {
     public async run(event: any): Promise<void> {
         ContextService.getInstance().setDialogContext(
             null, KIXObjectType.SYSTEM_ADDRESS, ContextMode.CREATE_ADMIN, null, true,
-            'Translatable#System Addresses', undefined, 'new-system-address-form'
+            'Translatable#Communication: Email', undefined, 'new-system-address-form'
         );
     }
 

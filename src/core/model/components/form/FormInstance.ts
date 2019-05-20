@@ -4,13 +4,11 @@ import {
 } from ".";
 import { FormContext } from "./FormContext";
 import { IFormInstance } from "./IFormInstance";
-import {
-    FormValidationService, ContextService,
-    ServiceRegistry, ServiceType
-} from "../../../browser";
+import { ContextService, ServiceRegistry, ServiceType } from "../../../browser";
 import { KIXObjectType, KIXObject } from "../../kix";
 import { IKIXObjectFormService } from "../../../browser/kix/IKIXObjectFormService";
 import { ContextType } from "../context";
+import { FormValidationService } from "../../../browser/form/validation";
 
 export class FormInstance implements IFormInstance {
 
@@ -26,6 +24,7 @@ export class FormInstance implements IFormInstance {
         await this.initFormFieldValues();
         this.initAutoCompleteConfiguration();
         this.initFormStructure();
+        await this.initFormFieldOptions();
     }
 
     private async initFormFieldValues(): Promise<void> {
@@ -34,14 +33,7 @@ export class FormInstance implements IFormInstance {
                 this.form.objectType, ServiceType.FORM
             );
             if (service) {
-                let object: KIXObject;
-                if (this.form.formContext === FormContext.EDIT) {
-                    const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-                    if (context) {
-                        object = await context.getObject();
-                    }
-                }
-                this.formFieldValues = await service.initValues(this.form, object);
+                this.formFieldValues = await service.initValues(this.form);
             } else {
                 this.form.groups.forEach((g) => this.initValues(g.formFields));
             }
@@ -68,6 +60,15 @@ export class FormInstance implements IFormInstance {
 
     private initFormStructure(): void {
         this.form.groups.forEach((g) => this.initStructure(g.formFields));
+    }
+
+    private async initFormFieldOptions(): Promise<void> {
+        const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(
+            this.form.objectType, ServiceType.FORM
+        );
+        if (service) {
+            await service.initOptions(this.form);
+        }
     }
 
     private initStructure(formFields: FormField[], parent?: FormField): void {

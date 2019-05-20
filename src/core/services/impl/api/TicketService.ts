@@ -21,6 +21,8 @@ import { TicketFactory } from '../../object-factories/TicketFactory';
 import { SenderTypeFactory } from '../../object-factories/SenderTypeFactory';
 import { LockFactory } from '../../object-factories/LockFactory';
 import { ArticleFactory } from '../../object-factories/ArticleFactory';
+import { QueueService } from './QueueService';
+import { ArticleLoadingOptions } from '../../../model/kix/ticket/ArticleLoadingOptions';
 
 const RESOURCE_ARTICLES: string = 'articles';
 const RESOURCE_ATTACHMENTS: string = 'attachments';
@@ -75,9 +77,11 @@ export class TicketService extends KIXObjectService {
         } else if (objectType === KIXObjectType.LOCK) {
             objects = await super.load(token, KIXObjectType.LOCK, 'ticketlocks', null, null, 'Lock');
         } else if (objectType === KIXObjectType.ARTICLE) {
-            if (objectIds && objectIds.length) {
-                const uri = this.buildUri(this.RESOURCE_URI, objectIds[0], this.SUB_RESOURCE_URI);
-                objects = await super.load(token, KIXObjectType.ARTICLE, uri, loadingOptions, null, 'Article');
+            if (objectLoadingOptions) {
+                const uri = this.buildUri(
+                    this.RESOURCE_URI, (objectLoadingOptions as ArticleLoadingOptions).ticketId, this.SUB_RESOURCE_URI
+                );
+                objects = await super.load(token, KIXObjectType.ARTICLE, uri, loadingOptions, objectIds, 'Article');
             }
         }
 
@@ -241,10 +245,10 @@ export class TicketService extends KIXObjectService {
         const channel = channels.find((c) => c.ID === channelId);
         if (channel && channel.Name === 'email') {
             if (queueId) {
-                const queues = await super.loadObjects<Queue>(
-                    token, clientRequestId, KIXObjectType.QUEUE, null, null, null
+                const queues = await QueueService.getInstance().loadObjects<Queue>(
+                    token, clientRequestId, KIXObjectType.QUEUE, [queueId], null, null
                 );
-                const queue = queues.find((q) => q.QueueID === queueId);
+                const queue = queues && !!queues.length ? queues[0] : null;
                 if (queue && queue.Signature) {
                     body += `\n<p>--</p>\n${queue.Signature}`;
                 }
@@ -258,7 +262,10 @@ export class TicketService extends KIXObjectService {
                 channelId, senderType, null, from, null, null, null, null, null, null, null, null,
                 attachments.length ? attachments : null,
                 customerVisible !== undefined ? customerVisible : false,
-                to, cc, bcc
+                to, cc, bcc,
+                this.getParameterValue(parameter, ArticleProperty.REFERENCED_ARTICLE_ID),
+                this.getParameterValue(parameter, ArticleProperty.EXEC_REPLY),
+                this.getParameterValue(parameter, ArticleProperty.EXEC_FORWARD)
             );
         }
         return createArticle;

@@ -35,7 +35,7 @@ export abstract class KIXObjectService implements IKIXObjectService {
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<O[]> {
-        throw new Error('-1', 'Method loadObjects not implemented');
+        throw new Error('-1', `Method loadObjects not implemented (${objectType})`);
     }
 
     protected async load<O extends KIXObject = any>(
@@ -365,7 +365,7 @@ export abstract class KIXObjectService implements IKIXObjectService {
         if (roleService) {
             const objects = await this.loadObjects(token, clientRequestId, objectType, [objectId],
                 new KIXObjectLoadingOptions(
-                    [`${objectType}.ConfiguredPermissions`], null, null, null, null, ['ConfiguredPermissions']
+                    [`${objectType}.ConfiguredPermissions`], null, null, null, ['ConfiguredPermissions']
                 ), null
             );
             if (

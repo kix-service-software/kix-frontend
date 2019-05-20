@@ -3,7 +3,8 @@ import { NewQueueDialogContext } from '../../../core/browser/ticket';
 import {
     ConfiguredWidget, FormField, KIXObjectType, Form,
     FormContext, FormFieldValue, ContextConfiguration, QueueProperty, FormFieldOption, ObjectReferenceOptions,
-    KIXObjectLoadingOptions, FilterCriteria, SystemAddressProperty, FilterDataType, FilterType, NumberInputOptions
+    KIXObjectLoadingOptions, FilterCriteria, SystemAddressProperty, FilterDataType, FilterType,
+    NumberInputOptions, FormFieldOptions
 } from '../../../core/model';
 import { FormGroup } from '../../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../../core/services';
@@ -41,7 +42,7 @@ export class Extension implements IConfigurationExtension {
                 new FormField(
                     'Translatable#Parent Queue', QueueProperty.PARENT_ID, 'ticket-input-queue', false,
                     'Translatable#Helptext_Admin_QueueCreate_ParentQueue', [
-                        new FormFieldOption('showValid', true)
+                        new FormFieldOption(FormFieldOptions.SHOW_INVALID, true)
                     ]
                 ),
                 new FormField(

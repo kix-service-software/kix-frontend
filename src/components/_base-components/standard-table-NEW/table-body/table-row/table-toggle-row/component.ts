@@ -2,7 +2,6 @@ import { ComponentState } from './ComponentState';
 import {
     ToggleOptions, AbstractMarkoComponent, BrowserUtil, ActionFactory, ContextService
 } from '../../../../../../core/browser';
-import { IAction } from '../../../../../../core/model';
 import { TableEvent, TableEventData } from '../../../../../../core/browser/table';
 import { IEventSubscriber, EventService } from '../../../../../../core/browser/event';
 import { KIXModulesService } from '../../../../../../core/browser/modules';
@@ -21,6 +20,9 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         this.state.row = input.row;
         if (this.state.row) {
             this.toggleOptions = this.state.row.getTable().getTableConfiguration().toggleOptions;
+            if (this.toggleOptions) {
+                this.setToggleActions();
+            }
             this.setWidth();
         }
     }
@@ -69,24 +71,26 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         }, 70);
     }
 
-    public async getToggleActions(): Promise<IAction[]> {
-        const actions = this.toggleOptions && this.state.row ? await ActionFactory.getInstance().generateActions(
+    public async setToggleActions(): Promise<void> {
+        this.state.actions = this.toggleOptions && this.state.row ? await ActionFactory.getInstance().generateActions(
             this.toggleOptions.actions, [this.state.row.getRowObject().getObject()]
         ) : [];
-        return actions;
     }
 
     public calculateToggleContentMinHeight(index: number): string {
         const minHeight = "10em"; // TODO: echten Wert ermitteln .toggle-row > td >.content
         setTimeout(async () => {
-            const actions = await this.getToggleActions();
-            if (actions && actions.length > 5) {
-                const actionList = (this as any).getEl().querySelector('ul.toggle-actions');
-                if (actionList) {
-                    const computedHeight = getComputedStyle(actionList).height;
-                    const rowContent = (this as any).getEl("row-toggle-content");
-                    if (rowContent && computedHeight) {
-                        rowContent.style.minHeight = computedHeight;
+            await this.setToggleActions();
+            if (this.state.actions && this.state.actions.length > 5) {
+                const root = (this as any).getEl();
+                if (root) {
+                    const actionList = root.querySelector('ul.toggle-actions');
+                    if (actionList) {
+                        const computedHeight = getComputedStyle(actionList).height;
+                        const rowContent = (this as any).getEl("row-toggle-content");
+                        if (rowContent && computedHeight) {
+                            rowContent.style.minHeight = computedHeight;
+                        }
                     }
                 }
             }

@@ -24,7 +24,7 @@ class Component {
             ).map((l) => l.SourceKey);
 
             if (linkedConfigItemIds && linkedConfigItemIds.length) {
-                const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, null, ['CurrentVersion']);
+                const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, ['CurrentVersion']);
 
                 const configItems = await KIXObjectService.loadObjects<ConfigItem>(
                     KIXObjectType.CONFIG_ITEM, linkedConfigItemIds, loadingOptions

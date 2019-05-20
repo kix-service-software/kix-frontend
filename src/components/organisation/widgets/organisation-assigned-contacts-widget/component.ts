@@ -43,6 +43,9 @@ class Component {
 
     private async initWidget(organisation: Organisation): Promise<void> {
         this.state.organisation = organisation;
+        this.state.title = this.state.widgetConfiguration.title
+            + (this.state.organisation.Contacts && !!this.state.organisation.Contacts.length ?
+                ` (${this.state.organisation.Contacts.length})` : '');
         this.prepareTable();
         this.prepareActions();
     }
@@ -63,6 +66,10 @@ class Component {
                 'organisation-assigned-contacts', KIXObjectType.CONTACT,
                 this.state.widgetConfiguration.settings, contactIds, null, true
             );
+            const count = this.state.organisation.Contacts.length;
+            if (count > 0) {
+                this.state.title = `${this.state.widgetConfiguration.title} (${count})`;
+            }
         }
     }
 

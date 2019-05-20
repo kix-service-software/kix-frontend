@@ -23,7 +23,7 @@ export class UserTableFactory extends TableFactory {
         table.setContentProvider(
             new UserTableContentProvider(
                 table, objectIds,
-                new KIXObjectLoadingOptions(null, null, null, null, null, [UserProperty.PREFERENCES]),
+                new KIXObjectLoadingOptions(null, null, null, null, [UserProperty.PREFERENCES]),
                 contextId
             )
         );

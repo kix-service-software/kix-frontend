@@ -2,10 +2,12 @@ import {
     TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../../../table";
-import { KIXObjectType, DataType } from "../../../../../model";
+import { KIXObjectType, DataType, ContextMode } from "../../../../../model";
 import { TableFactory } from "../../../../table/TableFactory";
 import { FAQCategoryTableContentProvider } from "./FAQCategoryTableContentProvider";
 import { FAQCategoryProperty } from "../../../../../model/kix/faq";
+import { FAQCategoryDetailsContext } from "../../context";
+import { RoutingConfiguration } from "../../../../router";
 
 export class FAQCategoryTableFactory extends TableFactory {
 
@@ -30,7 +32,7 @@ export class FAQCategoryTableFactory extends TableFactory {
     ): TableConfiguration {
         const tableColumns = [
             this.getDefaultColumnConfiguration(FAQCategoryProperty.NAME),
-            this.getDefaultColumnConfiguration('ICON'),
+            this.getDefaultColumnConfiguration(FAQCategoryProperty.ICON),
             this.getDefaultColumnConfiguration(FAQCategoryProperty.COMMENT),
             this.getDefaultColumnConfiguration(FAQCategoryProperty.VALID_ID),
             this.getDefaultColumnConfiguration(FAQCategoryProperty.CREATE_TIME),
@@ -50,10 +52,10 @@ export class FAQCategoryTableFactory extends TableFactory {
         }
 
         if (defaultRouting) {
-            // tableConfiguration.routingConfiguration = new RoutingConfiguration(
-            //     null, UserDetailsContext.CONTEXT_ID, KIXObjectType.USER,
-            //     ContextMode.DETAILS, UserProperty.USER_ID
-            // );
+            tableConfiguration.routingConfiguration = new RoutingConfiguration(
+                null, FAQCategoryDetailsContext.CONTEXT_ID, KIXObjectType.FAQ_CATEGORY,
+                ContextMode.DETAILS, FAQCategoryProperty.ID
+            );
         }
 
         return tableConfiguration;

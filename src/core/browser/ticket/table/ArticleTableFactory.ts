@@ -82,6 +82,8 @@ export class ArticleTableFactory extends TableFactory {
         if (defaultToggle) {
             tableConfiguration.toggle = true;
             tableConfiguration.toggleOptions = new ToggleOptions('ticket-article-details', 'article', [
+                'article-reply-action',
+                'article-forward-action',
                 'article-print-action',
                 'article-edit-action',
                 'article-communication-action',

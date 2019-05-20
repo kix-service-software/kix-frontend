@@ -8,13 +8,11 @@ export class FAQCategoryCreateAction extends AbstractAction {
         this.icon = 'kix-icon-new-gear';
     }
 
-    // public async run(event: any): Promise<void> {
-    //     ContextService.getInstance().setDialogContext(
-    //         // TODO: Titel aus dem aktiven Admin-Modul ermitteln (Kategorie)
-    // tslint:disable-next-line:max-line-length
-    //         null, KIXObjectType.FAQ_CATEGORY, ContextMode.CREATE_ADMIN, null, true, 'Translatable#Knowledge Database',
-    //         undefined, 'new-faq-category-form'
-    //     );
-    // }
+    public async run(event: any): Promise<void> {
+        ContextService.getInstance().setDialogContext(
+            null, KIXObjectType.FAQ_CATEGORY, ContextMode.CREATE_ADMIN, null, true, 'Translatable#Knowledge Database',
+            undefined, 'new-faq-category-form'
+        );
+    }
 
 }

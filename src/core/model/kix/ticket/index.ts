@@ -30,4 +30,6 @@ export { CreateTicketWatcherOptions } from './CreateTicketWatcherOptions';
 export { DeleteTicketWatcherOptions } from './DeleteTicketWatcherOptions';
 export { TicketPriorityProperty } from './TicketPriorityProperty';
 
+export { ArticleLoadingOptions } from './ArticleLoadingOptions';
+
 export * from './socket';

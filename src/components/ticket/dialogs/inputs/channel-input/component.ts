@@ -3,7 +3,7 @@ import { FormInputComponent, Channel, KIXObjectType, ChannelProperty, ObjectIcon
 import {
     KIXObjectService, LabelService, ILabelProvider, FormService, ServiceRegistry, ServiceType
 } from '../../../../../core/browser';
-import { TicketFormService } from '../../../../../core/browser/ticket';
+import { TicketFormService, ArticleFormService } from '../../../../../core/browser/ticket';
 import { isArray } from 'util';
 import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
@@ -68,8 +68,10 @@ class Component extends FormInputComponent<number, ComponentState> {
 
     public setCurrentChannel(): void {
         if (this.state.defaultValue && this.state.defaultValue.value) {
-            this.state.currentChannel = this.state.channels.find((ch) => ch.ID === this.state.defaultValue.value);
-            super.provideValue(this.state.currentChannel ? this.state.currentChannel.ID : null);
+            const channel = this.state.channels.find((ch) => ch.ID === this.state.defaultValue.value);
+            this.channelClicked(channel);
+        } else if (this.state.channels.length === 1) {
+            this.channelClicked(this.state.channels[0]);
         }
     }
 
@@ -97,15 +99,13 @@ class Component extends FormInputComponent<number, ComponentState> {
 
     public async channelClicked(channel: Channel): Promise<void> {
         this.state.currentChannel = channel;
-
         super.provideValue(this.state.currentChannel ? this.state.currentChannel.ID : null);
-
         this.setFields(true);
     }
 
     private async setFields(clear?: boolean): Promise<void> {
-        const formService = ServiceRegistry.getServiceInstance<TicketFormService>(
-            KIXObjectType.TICKET, ServiceType.FORM
+        const formService = ServiceRegistry.getServiceInstance<ArticleFormService>(
+            KIXObjectType.ARTICLE, ServiceType.FORM
         );
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
 

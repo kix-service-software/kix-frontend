@@ -8,11 +8,20 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onInput(input: any): void {
-        this.state.toggled = typeof input.toggle !== 'undefined' ? input.toggle : false;
+        this.state.showToggle = typeof input.showToggle !== 'undefined' ? input.showToggle : true;
+        if (this.state.showToggle) {
+            this.state.toggled = typeof input.toggle !== 'undefined' ? input.toggle : false;
+        } else {
+            this.state.toggled = false;
+        }
     }
 
     public labelClicked(event: any): void {
-        this.state.toggled = !this.state.toggled;
+        if (this.state.showToggle) {
+            this.state.toggled = !this.state.toggled;
+        } else {
+            this.state.toggled = false;
+        }
         event.stopPropagation();
         event.preventDefault();
         (this as any).emit('labelClicked');

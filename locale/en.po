@@ -163,6 +163,9 @@ msgstr ""
 msgid "Assign the roles for the user."
 msgstr ""
 
+msgid "At least one of the fields 'To', 'Cc' or 'Bcc' must contain an entry."
+msgstr ""
+
 msgid ""
 "Attach additional files to the FAQ article. Drag & Drop is possible. Max. "
 "file size is 25 MB."
@@ -221,6 +224,9 @@ msgid "Can not use file (no known properties found)."
 msgstr ""
 
 msgid "Category"
+msgstr ""
+
+msgid "Category successfully created."
 msgstr ""
 
 msgid "Cause"
@@ -385,6 +391,9 @@ msgstr ""
 msgid "Create Article"
 msgstr ""
 
+msgid "Create Category"
+msgstr ""
+
 msgid "Create CI Class"
 msgstr ""
 
@@ -527,6 +536,9 @@ msgstr ""
 msgid "Edit FAQ Article"
 msgstr ""
 
+msgid "Edit FAQ Category"
+msgstr ""
+
 msgid "Edit Links"
 msgstr ""
 
@@ -644,13 +656,13 @@ msgstr ""
 msgid "FAQ Category"
 msgstr ""
 
+msgid "FAQ Category Information"
+msgstr ""
+
 msgid "FAQ Data"
 msgstr ""
 
 msgid "FAQ Information"
-msgstr ""
-
-msgid "FAQ Knowledge Database: FAQ Categories"
 msgstr ""
 
 msgid "FAQ rating"
@@ -660,6 +672,9 @@ msgid "FAQ Search"
 msgstr ""
 
 msgid "Fax"
+msgstr ""
+
+msgid "Field '{0}' has an invalid value ({1})."
 msgstr ""
 
 msgid "Filter in list"
@@ -678,6 +693,9 @@ msgid "Follow Up Ticket Lock"
 msgstr ""
 
 msgid "Force"
+msgstr ""
+
+msgid "Forward"
 msgstr ""
 
 msgid "free tickets: {0}"
@@ -699,6 +717,36 @@ msgid "greater than"
 msgstr ""
 
 msgid "Help"
+msgstr ""
+
+msgid "Helptext_Admin_FAQCategoryCreate_Comment"
+msgstr ""
+
+msgid "Helptext_Admin_FAQCategoryCreate_Icon"
+msgstr ""
+
+msgid "Helptext_Admin_FAQCategoryCreate_Name"
+msgstr ""
+
+msgid "Helptext_Admin_FAQCategoryCreate_ParentCategory"
+msgstr ""
+
+msgid "Helptext_Admin_FAQCategoryCreate_Validity"
+msgstr ""
+
+msgid "Helptext_Admin_FAQCategoryEdit_Comment"
+msgstr ""
+
+msgid "Helptext_Admin_FAQCategoryEdit_Icon"
+msgstr ""
+
+msgid "Helptext_Admin_FAQCategoryEdit_Name"
+msgstr ""
+
+msgid "Helptext_Admin_FAQCategoryEdit_ParentCategory"
+msgstr ""
+
+msgid "Helptext_Admin_FAQCategoryEdit_Validity"
 msgstr ""
 
 msgid "Helptext_Admin_QueueCreate_Comment"
@@ -1034,6 +1082,9 @@ msgstr ""
 msgid "Knowledge Database"
 msgstr ""
 
+msgid "Knowledge Database: FAQ Categories"
+msgstr ""
+
 msgid "Label"
 msgstr ""
 
@@ -1217,10 +1268,10 @@ msgstr ""
 msgid "New Contact"
 msgstr ""
 
-msgid "New Email"
+msgid "New FAQ"
 msgstr ""
 
-msgid "New FAQ"
+msgid "New FAQ Category"
 msgstr ""
 
 msgid "New Object"
@@ -1594,6 +1645,15 @@ msgid "Replace empty value"
 msgstr ""
 
 msgid "Replace Values"
+msgstr ""
+
+msgid "Reply"
+msgstr ""
+
+msgid "Reply all"
+msgstr ""
+
+msgid "Required field '{0}' has no value."
 msgstr ""
 
 msgid "Reset data"
@@ -2136,6 +2196,9 @@ msgstr ""
 msgid "Update FAQ Artikel"
 msgstr ""
 
+msgid "Update FAQ Category"
+msgstr ""
+
 msgid "Update Organisation"
 msgstr ""
 
@@ -2176,6 +2239,9 @@ msgid "Validation error"
 msgstr ""
 
 msgid "Validity"
+msgstr ""
+
+msgid "Value of field '{0}' is too long (max: {1})."
 msgstr ""
 
 msgid "Version"
