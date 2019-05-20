@@ -6,6 +6,7 @@ import { FormService } from "../../..";
 import { KIXObjectService } from "../../../kix";
 import { ContextService } from "../../../context";
 import { FormValidationService } from "../../../form/validation";
+import { TranslationService } from "../../../i18n/TranslationService";
 
 export class EmailRecipientValidator implements IFormFieldValidator {
 
@@ -64,17 +65,18 @@ export class EmailRecipientValidator implements IFormFieldValidator {
         if (value && !!value.length) {
             const mailAddresses = value;
             for (const mail of mailAddresses) {
-                const regex = new RegExp(FormValidationService.EMAIL_REGEX);
-                if (!regex.test(mail.trim()) === true) {
-                    return new ValidationResult(
-                        ValidationSeverity.ERROR, FormValidationService.EMAIL_REGEX_ERROR_MESSAGE
+                if (!FormValidationService.getInstance().isValidEmail(mail)) {
+                    const errorString = await TranslationService.translate(
+                        `${FormValidationService.EMAIL_REGEX_ERROR_MESSAGE} ({0}).`, [mail]
                     );
+                    return new ValidationResult(ValidationSeverity.ERROR, errorString);
                 }
 
-                if (await this.isSystemAddress(mail)) {
-                    return new ValidationResult(
-                        ValidationSeverity.ERROR, 'Translatable#Inserted email address must not be a system address.'
+                if (await this.isSystemAddress(mail.replace(/.+ <(.+)>/, '$1'))) {
+                    const errorString = await TranslationService.translate(
+                        'Translatable#Inserted email address must not be a system address ({0}).', [mail]
                     );
+                    return new ValidationResult(ValidationSeverity.ERROR, errorString);
                 }
             }
         }

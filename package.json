@@ -21,6 +21,7 @@
   "author": "c.a.p.e. IT GmbH",
   "dependencies": {
     "@lasso/marko-taglib": "1.0.13",
+    "address-rfc2822": "2.0.4",
     "body-parser": "1.18.3",
     "bowser": "2.1.2",
     "compression": "1.7.3",
