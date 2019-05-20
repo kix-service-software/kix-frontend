@@ -569,6 +569,11 @@ msgstr "bearbeitet"
 msgid "Edit FAQ Article"
 msgstr "FAQ Artikel bearbeiten"
 
+#, fuzzy
+#| msgid "FAQ Category"
+msgid "Edit FAQ Category"
+msgstr "FAQ Kategorie"
+
 msgid "Edit Links"
 msgstr "Links bearbeiten"
 
@@ -697,9 +702,6 @@ msgstr "FAQ Daten"
 msgid "FAQ Information"
 msgstr "FAQ Informationen"
 
-msgid "FAQ Knowledge Database: FAQ Categories"
-msgstr "FAQ Wissensdatenbank: FAQ Kategorien"
-
 msgid "FAQ rating"
 msgstr "FAQ Bewertung"
 
@@ -777,6 +779,31 @@ msgstr "Hilfetext_Admin_QueueCreate_ParentQueue"
 #, fuzzy
 #| msgid "Helptext_Admin_QueueCreate_Validity"
 msgid "Helptext_Admin_FAQCategoryCreate_Validity"
+msgstr "Hilfetext_Admin_QueueCreate_Validity"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Comment"
+msgid "Helptext_Admin_FAQCategoryEdit_Comment"
+msgstr "Hilfetext_Admin_QueueCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Icon."
+msgid "Helptext_Admin_FAQCategoryEdit_Icon"
+msgstr "Hilfetext_Admin_QueueCreate_Icon."
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Name"
+msgid "Helptext_Admin_FAQCategoryEdit_Name"
+msgstr "Hilfetext_Admin_QueueCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_ParentQueue"
+msgid "Helptext_Admin_FAQCategoryEdit_ParentCategory"
+msgstr "Hilfetext_Admin_QueueCreate_ParentQueue"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Validity"
+msgid "Helptext_Admin_FAQCategoryEdit_Validity"
 msgstr "Hilfetext_Admin_QueueCreate_Validity"
 
 msgid "Helptext_Admin_QueueCreate_Comment"
@@ -1115,6 +1142,11 @@ msgstr "Ungültiges Datum."
 
 msgid "Knowledge Database"
 msgstr "Wissensdatenbank"
+
+#, fuzzy
+#| msgid "FAQ Knowledge Database: FAQ Categories"
+msgid "Knowledge Database: FAQ Categories"
+msgstr "FAQ Wissensdatenbank: FAQ Kategorien"
 
 msgid "Label"
 msgstr "Beschriftung"
@@ -2285,6 +2317,11 @@ msgstr "Aktualisierung wird durchgeführt"
 
 msgid "Update FAQ Artikel"
 msgstr "Aktualisierung wird durchgeführt"
+
+#, fuzzy
+#| msgid "FAQ Category"
+msgid "Update FAQ Category"
+msgstr "FAQ Kategorie"
 
 #, fuzzy
 #| msgid "Update Translation"

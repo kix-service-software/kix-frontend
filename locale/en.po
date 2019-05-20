@@ -536,6 +536,9 @@ msgstr ""
 msgid "Edit FAQ Article"
 msgstr ""
 
+msgid "Edit FAQ Category"
+msgstr ""
+
 msgid "Edit Links"
 msgstr ""
 
@@ -662,9 +665,6 @@ msgstr ""
 msgid "FAQ Information"
 msgstr ""
 
-msgid "FAQ Knowledge Database: FAQ Categories"
-msgstr ""
-
 msgid "FAQ rating"
 msgstr ""
 
@@ -732,6 +732,21 @@ msgid "Helptext_Admin_FAQCategoryCreate_ParentCategory"
 msgstr ""
 
 msgid "Helptext_Admin_FAQCategoryCreate_Validity"
+msgstr ""
+
+msgid "Helptext_Admin_FAQCategoryEdit_Comment"
+msgstr ""
+
+msgid "Helptext_Admin_FAQCategoryEdit_Icon"
+msgstr ""
+
+msgid "Helptext_Admin_FAQCategoryEdit_Name"
+msgstr ""
+
+msgid "Helptext_Admin_FAQCategoryEdit_ParentCategory"
+msgstr ""
+
+msgid "Helptext_Admin_FAQCategoryEdit_Validity"
 msgstr ""
 
 msgid "Helptext_Admin_QueueCreate_Comment"
@@ -1065,6 +1080,9 @@ msgid "Invalid date."
 msgstr ""
 
 msgid "Knowledge Database"
+msgstr ""
+
+msgid "Knowledge Database: FAQ Categories"
 msgstr ""
 
 msgid "Label"
@@ -2176,6 +2194,9 @@ msgid "Update Contact"
 msgstr ""
 
 msgid "Update FAQ Artikel"
+msgstr ""
+
+msgid "Update FAQ Category"
 msgstr ""
 
 msgid "Update Organisation"
