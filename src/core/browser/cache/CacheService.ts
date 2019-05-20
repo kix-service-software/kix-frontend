@@ -86,6 +86,7 @@ export class CacheService {
                 cacheKeyPrefixes.push(namespace[1]);
             } else if (namespace[0] === 'FAQ') {
                 cacheKeyPrefixes.push(KIXObjectType.FAQ_ARTICLE);
+                cacheKeyPrefixes.push(KIXObjectType.FAQ_CATEGORY);
             } else {
                 cacheKeyPrefixes.push(namespace[0]);
             }
