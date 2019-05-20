@@ -85,7 +85,8 @@ export class ContextService {
 
     public async setDialogContext(
         contextId: string, kixObjectType: KIXObjectType, contextMode: ContextMode, objectId?: string | number,
-        reset?: boolean, title?: string, singleTab?: boolean, formId?: string, icon?: string | ObjectIcon
+        resetContext?: boolean, title?: string, singleTab?: boolean, formId?: string, icon?: string | ObjectIcon,
+        resetForm: boolean = resetContext
     ): Promise<void> {
 
         this.resetRefreshTimer();
@@ -95,16 +96,16 @@ export class ContextService {
         let context: Context;
         if (kixObjectType) {
             context = await ContextFactory.getInstance().getContext(
-                contextId, kixObjectType, contextMode, objectId, reset
+                contextId, kixObjectType, contextMode, objectId, resetContext
             );
         } else {
             const dialogs = DialogService.getInstance().getRegisteredDialogs(contextMode);
             if (dialogs && dialogs.length) {
                 context = await ContextFactory.getInstance().getContext(
-                    contextId, dialogs[0].kixObjectType, dialogs[0].contextMode, null, reset
+                    contextId, dialogs[0].kixObjectType, dialogs[0].contextMode, null, resetContext
                 );
 
-                if (reset) {
+                if (resetContext) {
                     for (const dialog of dialogs) {
                         const fid = await FormService.getInstance().getFormIdByContext(
                             FormContext.NEW, dialog.kixObjectType
@@ -117,7 +118,7 @@ export class ContextService {
 
         if (context && context.getDescriptor().contextType === ContextType.DIALOG) {
 
-            if (reset && formId) {
+            if (resetForm && formId) {
                 FormService.getInstance().deleteFormInstance(formId);
             }
             if (formId) {

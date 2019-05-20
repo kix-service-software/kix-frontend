@@ -50,7 +50,8 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
             if (kixObject || f.defaultValue) {
                 let value = await this.getValue(
                     f.property,
-                    kixObject && formContext === FormContext.EDIT ? kixObject[f.property] : f.defaultValue.value,
+                    kixObject && formContext === FormContext.EDIT ? kixObject[f.property] :
+                        f.defaultValue ? f.defaultValue.value : null,
                     kixObject
                 );
 

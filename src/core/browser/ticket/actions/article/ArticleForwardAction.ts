@@ -32,6 +32,7 @@ export class ArticleForwardAction extends AbstractAction {
         if (this.article) {
             const context = await ContextService.getInstance().getContext(NewTicketArticleContext.CONTEXT_ID);
             if (context) {
+                context.reset();
                 context.setAdditionalInformation('REFERENCED_ARTICLE_ID', this.article.ArticleID);
                 context.setAdditionalInformation('ARTICLE_FORWARD', true);
                 context.setAdditionalInformation(
@@ -41,7 +42,7 @@ export class ArticleForwardAction extends AbstractAction {
             }
             ContextService.getInstance().setDialogContext(
                 NewTicketArticleContext.CONTEXT_ID, KIXObjectType.ARTICLE, ContextMode.CREATE_SUB,
-                this.article.ArticleID, true, null, true, 'new-ticket-article-form'
+                this.article.ArticleID, false, null, true, 'new-ticket-article-form', null, true
             );
         }
     }
