@@ -87,7 +87,7 @@ export class Table implements ITable {
             }
 
             if (this.sortColumnId && this.sortOrder) {
-                await this.sort(this.sortColumnId, this.sortOrder);
+                this.sort(this.sortColumnId, this.sortOrder);
             }
 
             if (this.tableConfiguration &&
@@ -354,19 +354,29 @@ export class Table implements ITable {
         const column = this.getColumn(columnId);
         if (column) {
             column.setSortOrder(sortOrder);
+
+            const start = new Date().getTime();
+            const rows = this.getRows(true);
+            const cellPromises: Array<Promise<string>> = [];
+            rows.forEach((r) => cellPromises.push(r.getCell(columnId).getDisplayValue()));
+            await Promise.all(cellPromises);
+            const end = new Date().getTime();
+
+            console.debug('init values for sort: ' + (end - start));
+
             if (this.filteredRows) {
-                this.filteredRows = await TableSortUtil.sort(
+                this.filteredRows = TableSortUtil.sort(
                     this.filteredRows, columnId, sortOrder, column.getColumnConfiguration().dataType
                 );
                 for (const row of this.filteredRows) {
-                    await row.sortChildren(columnId, sortOrder, column.getColumnConfiguration().dataType);
+                    row.sortChildren(columnId, sortOrder, column.getColumnConfiguration().dataType);
                 }
             } else {
-                this.rows = await TableSortUtil.sort(
+                this.rows = TableSortUtil.sort(
                     this.rows, columnId, sortOrder, column.getColumnConfiguration().dataType
                 );
                 for (const row of this.rows) {
-                    await row.sortChildren(columnId, sortOrder, column.getColumnConfiguration().dataType);
+                    row.sortChildren(columnId, sortOrder, column.getColumnConfiguration().dataType);
                 }
             }
             EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));

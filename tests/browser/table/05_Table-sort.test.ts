@@ -150,6 +150,29 @@ describe('Table Sort Tests', () => {
         });
 
     });
+
+    describe('Sort table performance', () => {
+        let table: ITable;
+
+        before(async () => {
+            table = new Table('test');
+            table.setContentProvider(new TestTableContentProvider(1500, 10, false));
+            table.setColumnConfiguration([
+                new DefaultColumnConfiguration('0', true, true, false, false, 100, false, false, false, DataType.NUMBER),
+                new DefaultColumnConfiguration('1', true, true, false, false, 100, false, false, false, DataType.NUMBER),
+                new DefaultColumnConfiguration('2', true, true, false, false, 100, false, false, false, DataType.NUMBER)
+            ]);
+            await table.initialize();
+        });
+
+        it('Should sort 1500 rows below 1 second', async () => {
+            const start = new Date().getTime();
+            await table.sort('0', SortOrder.UP);
+            const end = new Date().getTime();
+            expect(end - start).below(1000);
+        });
+
+    });
 });
 
 class TestTableContentProvider implements ITableContentProvider {
@@ -183,7 +206,7 @@ class TestTableContentProvider implements ITableContentProvider {
             const values: TableValue[] = [];
 
             for (let c = 0; c < this.cellCount; c++) {
-                values.push(new TableValue(`${c}`, r));
+                values.push(new TableValue(`${c}`, r, `${r}`));
             }
 
             rowObjects.push(new RowObject(values, this.withObject ? {} : null));
@@ -193,7 +216,7 @@ class TestTableContentProvider implements ITableContentProvider {
         for (let r = 0; r < 10; r++) {
             const values: TableValue[] = [];
             for (let c = 0; c < this.cellCount; c++) {
-                values.push(new TableValue(`${c}`, r));
+                values.push(new TableValue(`${c}`, r, `${r}`));
             }
             children.push(new RowObject(values, this.withObject ? {} : null));
         }
@@ -201,7 +224,7 @@ class TestTableContentProvider implements ITableContentProvider {
         for (let r = 0; r < 10; r++) {
             const values: TableValue[] = [];
             for (let c = 0; c < this.cellCount; c++) {
-                values.push(new TableValue(`${c}`, r));
+                values.push(new TableValue(`${c}`, r, `${r}`));
             }
             grantchildren.push(new RowObject(values, this.withObject ? {} : null));
         }
