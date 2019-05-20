@@ -152,6 +152,11 @@ msgstr "Zugeordnete Kontakte"
 msgid "Assigned Organisations"
 msgstr "Zugeordnete Kunden"
 
+#, fuzzy
+#| msgid "Assign Team / Queue"
+msgid "Assigned Queues"
+msgstr "Zuordnung zu Team / Queue"
+
 msgid "Assigned Roles"
 msgstr "Zugeordnete Rollen"
 
@@ -1094,10 +1099,14 @@ msgstr "Geben Sie einen Titel für den Nutzer ein."
 msgid "Insert a type name."
 msgstr "Geben Sie einen Name für den Typ ein."
 
-msgid "Inserted email address is invalid."
+#, fuzzy
+#| msgid "Inserted email address is invalid."
+msgid "Inserted email address is invalid"
 msgstr "Die eingegebene E-Mail-Adresse ist ungültig."
 
-msgid "Inserted email address must not be a system address."
+#, fuzzy
+#| msgid "Inserted email address must not be a system address."
+msgid "Inserted email address must not be a system address ({0})."
 msgstr "Die eingegebene E-Mail-Adresse darf keine Systemadresse sein."
 
 msgid "insert filter value"
@@ -1424,6 +1433,11 @@ msgid "No rating available."
 msgstr "Keine Bewertung verfügbar."
 
 msgid "No search query."
+msgstr "Keine Suchanfrage verfügbar."
+
+#, fuzzy
+#| msgid "No search query."
+msgid "No search query found."
 msgstr "Keine Suchanfrage verfügbar."
 
 msgid "No signature defined."

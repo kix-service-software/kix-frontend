@@ -145,6 +145,9 @@ msgstr ""
 msgid "Assigned Organisations"
 msgstr ""
 
+msgid "Assigned Queues"
+msgstr ""
+
 msgid "Assigned Roles"
 msgstr ""
 
@@ -1037,10 +1040,10 @@ msgstr ""
 msgid "Insert a type name."
 msgstr ""
 
-msgid "Inserted email address is invalid."
+msgid "Inserted email address is invalid"
 msgstr ""
 
-msgid "Inserted email address must not be a system address."
+msgid "Inserted email address must not be a system address ({0})."
 msgstr ""
 
 msgid "insert filter value"
@@ -1353,6 +1356,9 @@ msgid "No rating available."
 msgstr ""
 
 msgid "No search query."
+msgstr ""
+
+msgid "No search query found."
 msgstr ""
 
 msgid "No signature defined."
