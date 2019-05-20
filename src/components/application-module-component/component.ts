@@ -22,10 +22,10 @@ import {
     SystemAddressBrowserFactory, SystemAddressLabelProvider, SystemAddressTableFactory
 } from '../../core/browser/system-address';
 import {
-    SystemAddressCreateAction, SystemAddressDeleteTableAction
+    SystemAddressCreateAction, SystemAddressDeleteTableAction, SystemAddressEditAction
 } from '../../core/browser/system-address/actions';
 import {
-    NewSystemAddressDialogContext
+    NewSystemAddressDialogContext, SystemAddressDetailsContext
 } from '../../core/browser/system-address/context/system-address';
 import { SlaService, SlaLabelProvider, SlaBrowserFactory } from '../../core/browser/sla';
 import { ObjectIconService, ObjectIconBrowserFactory } from '../../core/browser/icon';
@@ -115,10 +115,14 @@ class Component extends AbstractMarkoComponent {
         TableFactoryService.getInstance().registerFactory(new SystemAddressTableFactory());
         LabelService.getInstance().registerLabelProvider(new SystemAddressLabelProvider());
         ActionFactory.getInstance().registerAction(
-            'communication-admin-system-addresses-create', SystemAddressCreateAction
+            'system-address-create', SystemAddressCreateAction
+        );
+
+        ActionFactory.getInstance().registerAction(
+            'system-addresses-table-delete', SystemAddressDeleteTableAction
         );
         ActionFactory.getInstance().registerAction(
-            'communication-admin-system-addresses-table-delete', SystemAddressDeleteTableAction
+            'system-address-admin-edit', SystemAddressEditAction
         );
 
 
@@ -194,6 +198,14 @@ class Component extends AbstractMarkoComponent {
             false, 'new-system-address-dialog', ['system-address'], NewSystemAddressDialogContext
         );
         ContextService.getInstance().registerContext(newSystemAddressDialogContext);
+
+        const systemAddressDetailsContext = new ContextDescriptor(
+            SystemAddressDetailsContext.CONTEXT_ID, [KIXObjectType.SYSTEM_ADDRESS],
+            ContextType.MAIN, ContextMode.DETAILS,
+            false, 'object-details-page', ['system-address'], SystemAddressDetailsContext
+        );
+
+        ContextService.getInstance().registerContext(systemAddressDetailsContext);
 
     }
 

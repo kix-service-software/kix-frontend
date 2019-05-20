@@ -100,7 +100,7 @@ class Component implements IKIXObjectSearchListener {
 
             let emptyResultHint;
             if (!cache) {
-                emptyResultHint = 'Translatable#No search query.';
+                emptyResultHint = 'Translatable#No search query found.';
             }
 
             const tableConfiguration = new TableConfiguration(

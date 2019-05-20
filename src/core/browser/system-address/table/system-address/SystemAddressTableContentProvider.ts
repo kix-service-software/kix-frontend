@@ -1,5 +1,5 @@
 import { TableContentProvider } from "../../../table/TableContentProvider";
-import { KIXObjectType, KIXObjectLoadingOptions, SystemAddress } from "../../../../model";
+import { KIXObjectType, KIXObjectLoadingOptions, SystemAddress, FilterCriteria } from "../../../../model";
 import { ITable } from "../../../table";
 
 export class SystemAddressTableContentProvider extends TableContentProvider<SystemAddress> {
