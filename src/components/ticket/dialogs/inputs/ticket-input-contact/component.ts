@@ -1,21 +1,23 @@
 import { ComponentState } from "./ComponentState";
 import {
     Contact, FormInputComponent, KIXObjectType,
-    TreeNode, KIXObjectLoadingOptions
+    TreeNode, KIXObjectLoadingOptions, FilterCriteria, ContactProperty, FilterDataType, FilterType
 } from "../../../../../core/model";
 import { FormService, FormInputAction } from "../../../../../core/browser/form";
 import {
     KIXObjectService, Label, TabContainerEvent, TabContainerEventData,
     ContextService,
-    LabelService
+    LabelService,
+    SearchOperator
 } from "../../../../../core/browser";
 import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
 import { EventService } from "../../../../../core/browser/event";
 import { NewContactDialogContext, ContactService } from "../../../../../core/browser/contact";
 import { PreviousTabData } from "../../../../../core/browser/components/dialog";
 import { NewTicketDialogContext } from "../../../../../core/browser/ticket";
+import { FormValidationService } from "../../../../../core/browser/form/validation";
 
-class Component extends FormInputComponent<number, ComponentState> {
+class Component extends FormInputComponent<number | string, ComponentState> {
 
     private contacts: Contact[];
 
@@ -79,26 +81,35 @@ class Component extends FormInputComponent<number, ComponentState> {
         const newTicketDialogContext = await ContextService.getInstance().getContext<NewTicketDialogContext>(
             NewTicketDialogContext.CONTEXT_ID
         );
-        let newContactId = null;
+        let contactId: number | string = null;
         if (newTicketDialogContext) {
-            newContactId = newTicketDialogContext.getAdditionalInformation(`${KIXObjectType.CONTACT}-ID`);
+            contactId = newTicketDialogContext.getAdditionalInformation(`${KIXObjectType.CONTACT}-ID`);
         }
-        if (newContactId || (this.state.defaultValue && this.state.defaultValue.value)) {
-            const contacts = await KIXObjectService.loadObjects<Contact>(
-                KIXObjectType.CONTACT, [newContactId || this.state.defaultValue.value]
-            );
-            if (contacts && contacts.length) {
-                const contact = contacts[0];
-                this.state.currentNode = await this.createTreeNode(contact);
+
+        if (contactId || (this.state.defaultValue && this.state.defaultValue.value)) {
+            contactId = contactId || this.state.defaultValue.value;
+            if (!isNaN(Number(contactId))) {
+                this.setContact(Number(contactId));
+            } else {
+                this.state.currentNode = new TreeNode(contactId, contactId.toString(), 'kix-icon-man-bubble');
                 this.state.nodes = [this.state.currentNode];
-                super.provideValue(contact.ID);
             }
         }
+
+        super.provideValue(contactId);
     }
 
-    public contactChanged(nodes: TreeNode[]): void {
+    public async contactChanged(nodes: TreeNode[]): Promise<void> {
         this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
-        super.provideValue(this.state.currentNode ? this.state.currentNode.id : null);
+        let contactId = this.state.currentNode ? this.state.currentNode.id : null;
+        if (contactId) {
+            if (!isNaN(contactId)) {
+                await this.setContact(contactId);
+            } else {
+                contactId = await this.handleUnknownContactId(contactId);
+            }
+        }
+        super.provideValue(contactId);
     }
 
     private async searchContacts(limit: number, searchValue: string): Promise<TreeNode[]> {
@@ -122,13 +133,47 @@ class Component extends FormInputComponent<number, ComponentState> {
         return this.state.nodes;
     }
 
+    public async focusLost(event: any): Promise<void> {
+        await super.focusLost();
+    }
+
+    private async setContact(contactId: number): Promise<void> {
+        const contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, [contactId]);
+        if (contacts && contacts.length) {
+            const contact = contacts[0];
+            this.state.currentNode = await this.createTreeNode(contact);
+            this.state.nodes = [this.state.currentNode];
+            contactId = contact.ID;
+        }
+    }
+
+    private async handleUnknownContactId(contactId: number | string): Promise<string | number> {
+        if (FormValidationService.getInstance().isValidEmail(contactId.toString())) {
+            const loadingOptions = new KIXObjectLoadingOptions(null, [
+                new FilterCriteria(
+                    ContactProperty.EMAIL, SearchOperator.EQUALS, FilterDataType.STRING,
+                    FilterType.AND, contactId
+                )
+            ]);
+            const contacts = await KIXObjectService.loadObjects<Contact>(
+                KIXObjectType.CONTACT, null, loadingOptions
+            );
+            if (contacts && contacts.length) {
+                const contact = contacts[0];
+                this.state.currentNode = await this.createTreeNode(contact);
+                this.state.nodes = [this.state.currentNode];
+                contactId = contact.ID;
+            }
+        } else {
+            contactId = null;
+        }
+
+        return contactId;
+    }
+
     private async createTreeNode(contact: Contact): Promise<TreeNode> {
         const displayValue = await LabelService.getInstance().getText(contact);
         return new TreeNode(contact.ID, displayValue, 'kix-icon-man-bubble');
-    }
-
-    public async focusLost(event: any): Promise<void> {
-        await super.focusLost();
     }
 }
 

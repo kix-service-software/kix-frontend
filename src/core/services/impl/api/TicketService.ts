@@ -204,7 +204,7 @@ export class TicketService extends KIXObjectService {
     }
 
     private async prepareArticleData(
-        token: string, clientRequestId: string, parameter: Array<[string, any]>, queueId: number, contactId?: string
+        token: string, clientRequestId: string, parameter: Array<[string, any]>, queueId: number, contactId?: number
     ): Promise<CreateArticle> {
         const attachments = this.createAttachments(this.getParameterValue(parameter, ArticleProperty.ATTACHMENTS));
 
@@ -225,11 +225,15 @@ export class TicketService extends KIXObjectService {
         const customerVisible = this.getParameterValue(parameter, ArticleProperty.CUSTOMER_VISIBLE);
         let to = this.getParameterValue(parameter, ArticleProperty.TO);
         if (!to && contactId) {
-            const contacts = await super.load<Contact>(
-                token, KIXObjectType.CONTACT, 'contacts', null, [contactId], 'Contact'
-            );
-            if (contacts && contactId.length) {
-                to = contacts[0].Email;
+            if (!isNaN(contactId)) {
+                const contacts = await super.load<Contact>(
+                    token, KIXObjectType.CONTACT, 'contacts', null, [contactId], 'Contact'
+                );
+                if (contacts && contacts.length) {
+                    to = contacts[0].Email;
+                }
+            } else {
+                to = contactId;
             }
         }
         const cc = this.getParameterValue(parameter, ArticleProperty.CC);

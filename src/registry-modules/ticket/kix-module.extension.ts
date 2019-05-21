@@ -16,8 +16,6 @@ class Extension implements IKIXModuleExtension {
         ['search-ticket-dialog', 'ticket/dialogs/search-ticket-dialog'],
         ['edit-ticket-dialog', 'ticket/dialogs/edit-ticket-dialog'],
         ['new-ticket-article-dialog', 'ticket/dialogs/new-ticket-article-dialog'],
-        ['ticket-contact-info', 'ticket/ticket-contact-info'],
-        ['ticket-customer-info', 'ticket/ticket-customer-info'],
         ['article-receiver-list', 'ticket/article-receiver-list'],
         ['ticket-info-widget', 'ticket/widgets/ticket-info-widget'],
         ['ticket-history-widget', 'ticket/widgets/ticket-history-widget'],

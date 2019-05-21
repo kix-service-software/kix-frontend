@@ -35,14 +35,18 @@ export class TicketDetailsContext extends Context {
         if (objectType === KIXObjectType.TICKET) {
             object = ticket;
         } else if (objectType === KIXObjectType.ORGANISATION && ticket) {
-            const organisations = await KIXObjectService.loadObjects<Organisation>(
-                KIXObjectType.ORGANISATION, [ticket.OrganisationID]
-            ).catch(() => []);
-            object = organisations && organisations.length ? organisations[0] : null;
+            if (!isNaN(ticket.OrganisationID)) {
+                const organisations = await KIXObjectService.loadObjects<Organisation>(
+                    KIXObjectType.ORGANISATION, [ticket.OrganisationID]
+                ).catch(() => []);
+                object = organisations && organisations.length ? organisations[0] : null;
+            }
         } else if (objectType === KIXObjectType.CONTACT && ticket) {
-            const contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, [ticket.ContactID])
-                .catch(() => []);
-            object = contacts && contacts.length ? contacts[0] : null;
+            if (!isNaN(ticket.ContactID)) {
+                const contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, [ticket.ContactID])
+                    .catch(() => []);
+                object = contacts && contacts.length ? contacts[0] : null;
+            }
         }
 
         if (reload && objectType === KIXObjectType.TICKET) {

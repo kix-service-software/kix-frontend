@@ -2,7 +2,6 @@ import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent, LabelService } from '../../../core/browser';
 import { ComponentInput } from './ComponentInput';
 import { KIXObject } from '../../../core/model';
-import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 import { RoutingConfiguration } from '../../../core/browser/router';
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -25,10 +24,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async init(object: KIXObject): Promise<void> {
         if (object) {
             this.state.labelProvider = LabelService.getInstance().getLabelProvider(object);
-        } else {
-            this.state.missingObjectText = await TranslationService.translate(
-                'Translatable#No object available'
-            );
         }
 
         this.state.object = object;
