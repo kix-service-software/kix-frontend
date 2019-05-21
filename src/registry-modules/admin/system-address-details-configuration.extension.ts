@@ -34,7 +34,7 @@ export class Extension implements IConfigurationExtension {
             ['system-address-info-widget'], [systemAddressInfoWidget],
             [], [],
             ['system-address-create'],
-            ['system-address-admin-edit']
+            ['system-address-edit']
         );
     }
 

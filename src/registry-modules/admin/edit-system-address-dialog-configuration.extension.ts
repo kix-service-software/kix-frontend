@@ -1,5 +1,4 @@
 import { IConfigurationExtension } from '../../core/extensions';
-import { NewSystemAddressDialogContext } from '../../core/browser/system-address/context/system-address';
 import {
     ConfiguredWidget, FormField, FormFieldValue, SystemAddressProperty, Form,
     KIXObjectType, FormContext, ContextConfiguration
@@ -7,11 +6,12 @@ import {
 import { ConfigurationService } from '../../core/services';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
 import { FormValidationService } from '../../core/browser/form/validation';
+import { EditSystemAddressDialogContext } from '../../core/browser/system-address';
 
 export class Extension implements IConfigurationExtension {
 
     public getModuleId(): string {
-        return NewSystemAddressDialogContext.CONTEXT_ID;
+        return EditSystemAddressDialogContext.CONTEXT_ID;
     }
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
@@ -25,7 +25,7 @@ export class Extension implements IConfigurationExtension {
     public async createFormDefinitions(overwrite: boolean): Promise<void> {
         const configurationService = ConfigurationService.getInstance();
 
-        const formId = 'new-system-address-form';
+        const formId = 'edit-system-address-form';
         const existing = configurationService.getModuleConfiguration(formId, null);
         if (!existing) {
             const fields: FormField[] = [
@@ -52,10 +52,12 @@ export class Extension implements IConfigurationExtension {
 
             const group = new FormGroup('Translatable#System Addresses', fields);
 
-            const form = new Form(formId, 'Translatable#New Address', [group], KIXObjectType.SYSTEM_ADDRESS);
+            const form = new Form(
+                formId, 'Translatable#Edit Address', [group], KIXObjectType.SYSTEM_ADDRESS, true, FormContext.EDIT
+            );
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
-        configurationService.registerForm([FormContext.NEW], KIXObjectType.SYSTEM_ADDRESS, formId);
+        configurationService.registerForm([FormContext.EDIT], KIXObjectType.SYSTEM_ADDRESS, formId);
     }
 }
 
