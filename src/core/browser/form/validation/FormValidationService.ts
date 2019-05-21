@@ -47,7 +47,11 @@ export class FormValidationService {
 
     public isValidEmail(email: string): boolean {
         let isValidEmail: boolean = true;
-        try { addrparser.parse(email.trim().toLowerCase()); } catch { isValidEmail = false; }
+        try {
+            addrparser.parse(email.trim().toLowerCase());
+        } catch {
+            isValidEmail = false;
+        }
         return isValidEmail;
     }
 

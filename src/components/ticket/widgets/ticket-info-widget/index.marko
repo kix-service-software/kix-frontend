@@ -14,7 +14,7 @@
                             routingConfiguration=component.organisationRoutingConfiguration
                             objectId=state.ticket.OrganisationID>
                             <@info>
-                                <if(state.ticket.OrganisationID)>
+                                <if(state.organisation)>
                                     <overlay-icon
                                         content="object-information"
                                         instanceId="organisation-info-overlay"
@@ -35,7 +35,7 @@
                             routingConfiguration=component.contactRoutingConfiguration
                             objectId=state.ticket.ContactID>
                             <@info>
-                                <if(state.ticket.ContactID)>
+                                <if(state.contact)>
                                     <overlay-icon
                                         content="object-information"
                                         instanceId="contact-info-overlay"

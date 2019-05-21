@@ -2,8 +2,8 @@ import { ComponentState } from './ComponentState';
 import { TicketLabelProvider, TicketService, TicketDetailsContext } from "../../../../core/browser/ticket";
 import { ContextService } from '../../../../core/browser/context';
 import {
-    ObjectIcon, KIXObjectType, Ticket, SysconfigUtil,
-    ContextMode, OrganisationProperty, ContactProperty, Service, ObjectinformationWidgetSettings, Contact, Organisation
+    ObjectIcon, KIXObjectType, Ticket, SysconfigUtil, ContextMode, OrganisationProperty,
+    ContactProperty, Service, ObjectinformationWidgetSettings, Contact, Organisation, Context
 } from '../../../../core/model';
 import { ActionFactory, IdService, KIXObjectService } from '../../../../core/browser';
 import { RoutingConfiguration } from '../../../../core/browser/router';
@@ -61,33 +61,10 @@ class Component {
                 TicketDetailsContext.CONTEXT_ID
             );
 
-            const organisationInfoOverlayConfig = context
-                ? context.getWidgetConfiguration('organisation-info-overlay')
-                : undefined;
-            if (organisationInfoOverlayConfig && organisationInfoOverlayConfig.settings) {
-                const organisation = await KIXObjectService.loadObjects<Organisation>(
-                    KIXObjectType.ORGANISATION, [this.state.ticket.OrganisationID]
-                );
-                this.state.organisation = organisation && organisation.length ? organisation[0] : null;
-                const settings = organisationInfoOverlayConfig.settings as ObjectinformationWidgetSettings;
-                this.state.organisationProperties = settings.properties;
-            }
-
-            const contactInfoOverlayConfig = context
-                ? context.getWidgetConfiguration('contact-info-overlay')
-                : undefined;
-            if (contactInfoOverlayConfig && contactInfoOverlayConfig.settings) {
-                const contacts = await KIXObjectService.loadObjects<Contact>(
-                    KIXObjectType.CONTACT, [this.state.ticket.ContactID]
-                );
-                this.state.contact = contacts && contacts.length ? contacts[0] : null;
-                const settings = contactInfoOverlayConfig.settings as ObjectinformationWidgetSettings;
-                this.state.contactProperties = settings.properties;
-            }
+            this.initOrganisation(context);
+            this.initContact(context);
         }
 
-        this.contactRoutingConfiguration = await this.getContactRoutingConfiguration();
-        this.organisationRoutingConfiguration = await this.getOrganisationRoutingConfiguration();
         this.setActions();
     }
 
@@ -113,6 +90,38 @@ class Component {
 
     public getIcon(object: string, objectId: string): ObjectIcon {
         return new ObjectIcon(object, objectId);
+    }
+
+    private async initContact(context: Context): Promise<void> {
+        const config = context ? context.getWidgetConfiguration('contact-info-overlay') : undefined;
+        if (config && config.settings && !isNaN(Number(this.state.ticket.ContactID))) {
+
+            const contacts = await KIXObjectService.loadObjects<Contact>(
+                KIXObjectType.CONTACT, [this.state.ticket.ContactID]
+            );
+            this.state.contact = contacts && contacts.length ? contacts[0] : null;
+
+            const settings = config.settings as ObjectinformationWidgetSettings;
+            this.state.contactProperties = settings.properties;
+
+            this.contactRoutingConfiguration = await this.getContactRoutingConfiguration();
+        }
+    }
+
+    private async initOrganisation(context: Context): Promise<void> {
+        const config = context ? context.getWidgetConfiguration('organisation-info-overlay') : undefined;
+        if (config && config.settings && !isNaN(Number(this.state.ticket.OrganisationID))) {
+
+            const organisation = await KIXObjectService.loadObjects<Organisation>(
+                KIXObjectType.ORGANISATION, [this.state.ticket.OrganisationID]
+            );
+            this.state.organisation = organisation && organisation.length ? organisation[0] : null;
+
+            const settings = config.settings as ObjectinformationWidgetSettings;
+            this.state.organisationProperties = settings.properties;
+
+            this.organisationRoutingConfiguration = await this.getOrganisationRoutingConfiguration();
+        }
     }
 
     private async getContactRoutingConfiguration(): Promise<RoutingConfiguration> {
