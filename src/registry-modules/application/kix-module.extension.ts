@@ -53,7 +53,8 @@ class Extension implements IKIXModuleExtension {
         ['object-details-page', '_base-components/object-details-page'],
         ['object-information-widget', 'widgets/object-information-widget'],
         ['object-information', '_base-components/object-information'],
-        ['new-system-address-dialog', 'communication/admin/dialogs/new-system-address-dialog']
+        ['new-system-address-dialog', 'communication/admin/dialogs/new-system-address-dialog'],
+        ['edit-system-address-dialog', 'communication/admin/dialogs/edit-system-address-dialog']
     ];
 
 

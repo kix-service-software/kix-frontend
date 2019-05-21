@@ -1,15 +1,19 @@
 import {
     AbstractMarkoComponent, ActionFactory, ContextService, TableFactoryService,
-    TableConfiguration, TableHeaderHeight, TableRowHeight, DefaultColumnConfiguration, SearchOperator
+    TableConfiguration, TableHeaderHeight, TableRowHeight, DefaultColumnConfiguration, SearchOperator,
+    TableEvent, TableEventData
 } from '../../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 import { SystemAddressDetailsContext } from '../../../../../core/browser/system-address';
 import {
-    SystemAddress, KIXObjectType, SystemAddressProperty, FilterCriteria, QueueProperty, FilterDataType, FilterType
+    SystemAddress, KIXObjectType, FilterCriteria, QueueProperty, FilterDataType, FilterType
 } from '../../../../../core/model';
+import { IEventSubscriber, EventService } from '../../../../../core/browser/event';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
+
+    private subscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -41,15 +45,25 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         await this.initWidget(await context.getObject<SystemAddress>());
     }
 
+    public async onDestroy(): Promise<void> {
+        const context = await ContextService.getInstance().getContext<SystemAddressDetailsContext>(
+            SystemAddressDetailsContext.CONTEXT_ID
+        );
+        if (context) {
+            context.unregisterListener('system-address-assigned-queues-widget');
+        }
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this.subscriber);
+    }
+
     private async initWidget(systemAddress: SystemAddress): Promise<void> {
         const columns = [
             new DefaultColumnConfiguration(
-                SystemAddressProperty.NAME, true, false, true, false, 250, true, true, false
+                QueueProperty.NAME, true, false, true, false, 250, true, true, false
             ),
             new DefaultColumnConfiguration(
-                SystemAddressProperty.COMMENT, true, false, true, false, 250, true, true, false
+                QueueProperty.COMMENT, true, false, true, false, 350, true, true, false
             ),
-            new DefaultColumnConfiguration(SystemAddressProperty.VALID_ID, true, false, true, false, 100, true, true)
+            new DefaultColumnConfiguration(QueueProperty.VALID_ID, true, false, true, false, 150, true, true)
         ];
         const filterCriteria =
             [
@@ -65,18 +79,37 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         );
         const table = await await TableFactoryService.getInstance().createTable(
             'system-address-assigned-queues', KIXObjectType.QUEUE, tableConfiguration,
-            systemAddress.QueueIDs, null, true,
+            undefined, null, true,
             undefined, false, true, true
         );
+        this.state.title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : "";
+
+        this.subscriber = {
+            eventSubscriberId: 'system-address-assigned-queues-widget',
+            eventPublished: async (data: TableEventData, eventId: string) => {
+                if (this.state.table && data && data.tableId === this.state.table.getTableId()) {
+                    if (eventId === TableEvent.TABLE_INITIALIZED) {
+                        await this.prepareTitle();
+                    }
+                }
+            }
+        };
+        EventService.getInstance().subscribe(TableEvent.TABLE_INITIALIZED, this.subscriber);
+
         this.state.table = table;
         this.prepareActions(systemAddress);
-        this.prepareTitle(systemAddress);
     }
 
-    private async prepareTitle(systemAddress: SystemAddress): Promise<void> {
+    private async prepareTitle(): Promise<void> {
         let title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : "";
+
         title = await TranslationService.translate(title);
-        const count = systemAddress.QueueIDs ? systemAddress.QueueIDs.length : 0;
+
+        let count = 0;
+        if (this.state.table) {
+            await this.state.table.initialize();
+            count = this.state.table.getRowCount(true);
+        }
         this.state.title = `${title} (${count})`;
     }
 

@@ -1,4 +1,5 @@
-import { AbstractAction } from '../../../model';
+import { AbstractAction, KIXObjectType, ContextMode } from '../../../model';
+import { ContextService } from '../..';
 
 export class SystemAddressEditAction extends AbstractAction {
 
@@ -7,4 +8,9 @@ export class SystemAddressEditAction extends AbstractAction {
         this.icon = "kix-icon-edit";
     }
 
+    public async run(event: any): Promise<void> {
+        ContextService.getInstance().setDialogContext(
+            null, KIXObjectType.SYSTEM_ADDRESS, ContextMode.EDIT_ADMIN, null, true
+        );
+    }
 }
