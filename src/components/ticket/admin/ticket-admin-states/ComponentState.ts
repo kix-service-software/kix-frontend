@@ -8,7 +8,7 @@ export class ComponentState {
     public constructor(
         public instanceId: string = IdService.generateDateBasedId('ticket-states-list'),
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
-            'table-widget', 'Translatable#Ticket: State',
+            'table-widget', 'Translatable#Ticket: States',
             [
                 'ticket-admin-state-create', 'ticket-admin-state-table-delete',
                 'ticket-admin-state-import', 'csv-export-action'
