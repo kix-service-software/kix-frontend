@@ -553,6 +553,11 @@ msgstr "Bearbeiten"
 msgid "Edit {0}"
 msgstr "{0} bearbeiten"
 
+#, fuzzy
+#| msgid "Email Address"
+msgid "Edit Address"
+msgstr "E-Mail Adresse"
+
 msgid "Edit Agent"
 msgstr "Agenten bearbeiten"
 
@@ -841,6 +846,26 @@ msgstr "Hilfetext_Admin_QueueCreate_UnlockTimeout"
 msgid "Helptext_Admin_QueueCreate_Validity"
 msgstr "Hilfetext_Admin_QueueCreate_Validity"
 
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Comment"
+msgid "Helptext_Admin_SystemAddressCreate_Comment"
+msgstr "Hilfetext_Admin_QueueCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Name"
+msgid "Helptext_Admin_SystemAddressCreate_DisplayName"
+msgstr "Hilfetext_Admin_QueueCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Name"
+msgid "Helptext_Admin_SystemAddressCreate_Name"
+msgstr "Hilfetext_Admin_QueueCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Validity"
+msgid "Helptext_Admin_SystemAddressCreate_Validity"
+msgstr "Hilfetext_Admin_QueueCreate_Validity"
+
 msgid "Helptext_Organisations_ContactCreate_City"
 msgstr "Hilfetext_Organisations_ContactCreate_City"
 
@@ -1047,9 +1072,6 @@ msgstr "Geben Sie einen Kommentar zu der Rolle ein."
 
 msgid "Insert a comment for the state."
 msgstr "Geben Sie einen Kommentar zu dem Status ein."
-
-msgid "Insert a comment for the system address."
-msgstr "Geben Sie einen Kommentar zu der Systemadresse ein."
 
 msgid "Insert a comment for the type."
 msgstr "Geben Sie einen Kommentar für den Typ ein."
@@ -2003,12 +2025,6 @@ msgstr ""
 "Setzen Sie den Status als \"gültig\", \"ungültig (temporär)\" oder \"ungültig"
 "\"."
 
-msgid ""
-"Set the system address as „valid“, „invalid (temporarily)“, or „invalid“."
-msgstr ""
-"Setzen Sie die Systemadresse als \"gültig\", \"ungültig (temporär)\" oder "
-"\"ungültig\"."
-
 msgid "Set the type as „valid“, „invalid (temporarily)“, or „invalid“."
 msgstr ""
 "Setzen Sie den Typ als \"gültig\", \"ungültig (temporär)\" oder \"ungültig\"."
@@ -2329,6 +2345,11 @@ msgstr "Aktualisierung wird durchgeführt"
 msgid "Update Contact"
 msgstr "Aktualisierung wird durchgeführt"
 
+#, fuzzy
+#| msgid "Email Address"
+msgid "Update Email Address"
+msgstr "E-Mail Adresse"
+
 msgid "Update FAQ Artikel"
 msgstr "Aktualisierung wird durchgeführt"
 
@@ -2438,6 +2459,15 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Insert a comment for the system address."
+#~ msgstr "Geben Sie einen Kommentar zu der Systemadresse ein."
+
+#~ msgid ""
+#~ "Set the system address as „valid“, „invalid (temporarily)“, or „invalid“."
+#~ msgstr ""
+#~ "Setzen Sie die Systemadresse als \"gültig\", \"ungültig (temporär)\" oder "
+#~ "\"ungültig\"."
 
 #~ msgid "New Email"
 #~ msgstr "Neue E-Mail"
