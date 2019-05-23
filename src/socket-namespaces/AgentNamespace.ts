@@ -62,7 +62,7 @@ export class AgentNamespace extends SocketNameSpace {
             }).catch((error) => {
                 LoggingService.getInstance().error(error.Code + ' - ' + error.Message);
                 response = new SocketResponse(
-                    AgentEvent.SET_PREFERENCES_ERROR, error
+                    AgentEvent.SET_PREFERENCES_ERROR, new SocketErrorResponse(data.requestId, error)
                 );
             });
             return response;

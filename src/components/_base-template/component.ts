@@ -91,7 +91,7 @@ class Component {
                     setTimeout(() => {
                         this.state.reload = false;
                         setTimeout(() => {
-                            RoutingService.getInstance().routeToInitialContext();
+                            RoutingService.getInstance().routeToInitialContext(true);
                         }, 500);
                     }, 20);
                 }
