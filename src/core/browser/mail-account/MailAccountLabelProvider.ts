@@ -61,6 +61,9 @@ export class MailAccountLabelProvider implements ILabelProvider<MailAccount> {
             case MailAccountProperty.PASSWORD:
                 displayValue = 'Translatable#Password';
                 break;
+            case MailAccountProperty.IMAP_FOLDER:
+                displayValue = 'Translatable#IMAP Folder';
+                break;
             case MailAccountProperty.VALID_ID:
                 displayValue = 'Translatable#Validity';
                 break;

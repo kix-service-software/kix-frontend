@@ -12,8 +12,10 @@ import {
     EditSystemAddressDialogContext, SystemAddressEditAction, SystemAddressDeleteTableAction
 } from '../../../core/browser/system-address';
 import {
-    MailAccountService, MailAccountBrowserFactory, MailAccountTableFactory, MailAccountLabelProvider
+    MailAccountService, MailAccountBrowserFactory, MailAccountTableFactory, MailAccountLabelProvider,
+    NewMailAccountDialogContext
 } from '../../../core/browser/mail-account';
+import { MailAccountCreateAction } from '../../../core/browser/mail-account/actions';
 
 class Component extends AbstractMarkoComponent {
 
@@ -64,6 +66,13 @@ class Component extends AbstractMarkoComponent {
             false, 'edit-system-address-dialog', ['system-addresses'], EditSystemAddressDialogContext
         );
         ContextService.getInstance().registerContext(editSystemAddressDialogContext);
+
+        const newMailAccountDialogContext = new ContextDescriptor(
+            NewMailAccountDialogContext.CONTEXT_ID, [KIXObjectType.MAIL_ACCOUNT],
+            ContextType.DIALOG, ContextMode.CREATE_ADMIN,
+            false, 'new-mail-account-dialog', ['mail-accounts'], NewMailAccountDialogContext
+        );
+        ContextService.getInstance().registerContext(newMailAccountDialogContext);
     }
 
     private registerAdminActions(): void {
@@ -75,6 +84,10 @@ class Component extends AbstractMarkoComponent {
         );
         ActionFactory.getInstance().registerAction(
             'system-address-edit', SystemAddressEditAction
+        );
+
+        ActionFactory.getInstance().registerAction(
+            'mail-account-create', MailAccountCreateAction
         );
     }
 
@@ -97,6 +110,16 @@ class Component extends AbstractMarkoComponent {
             ),
             KIXObjectType.SYSTEM_ADDRESS,
             ContextMode.EDIT_ADMIN
+        ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'new-mail-account-dialog',
+            new WidgetConfiguration(
+                'new-mail-account-dialog', 'Translatable#New Email Account',
+                [], {}, false, false, null, 'kix-icon-new-gear'
+            ),
+            KIXObjectType.MAIL_ACCOUNT,
+            ContextMode.CREATE_ADMIN
         ));
     }
 }

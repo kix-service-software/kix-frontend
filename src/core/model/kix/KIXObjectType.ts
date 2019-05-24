@@ -114,5 +114,7 @@ export enum KIXObjectType {
 
     FOLLOW_UP_TYPE = 'FollowUpType',
 
-    MAIL_ACCOUNT = 'MailAccount'
+    MAIL_ACCOUNT = 'MailAccount',
+
+    MAIL_ACCOUNT_TYPE = 'MailAccountType'
 }

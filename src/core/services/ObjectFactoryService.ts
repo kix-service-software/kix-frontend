@@ -19,13 +19,12 @@ export class ObjectFactoryService {
         this.getInstance().factories.push(factory);
     }
 
-    public static createObject<T extends KIXObject = any>(objectType: KIXObjectType, object: T): T {
+    public static createObject<T extends KIXObject | string = any>(objectType: KIXObjectType, object: T): T {
         const factory = this.getInstance().factories.find((f) => f.isFactoryFor(objectType));
         if (factory) {
             return factory.create(object);
         }
         return object;
     }
-
 
 }
