@@ -1,11 +1,12 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
     WidgetConfiguration, ConfiguredWidget, WidgetSize, KIXObjectType, ContextConfiguration,
-    ObjectinformationWidgetSettings, OrganisationProperty, KIXObjectProperty, ContactProperty, ContextMode
+    ObjectinformationWidgetSettings, OrganisationProperty, KIXObjectProperty, ContactProperty, ContextMode, CRUD
 } from '../../core/model/';
 import { RoutingConfiguration } from '../../core/browser/router';
 import { OrganisationDetailsContext } from '../../core/browser/organisation';
 import { ContactDetailsContext } from '../../core/browser/contact';
+import { UIComponentPermission } from '../../core/model/UIComponentPermission';
 
 export class TicketDetailsModuleFactoryExtension implements IConfigurationExtension {
 
@@ -23,13 +24,15 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
         const ticketHistoryLane =
             new ConfiguredWidget('ticket-history-lane', new WidgetConfiguration(
                 'ticket-history-widget', 'Translatable#History', ['ticket-print-action'],
-                null, true, true, WidgetSize.BOTH, null, false)
+                null, true, true, WidgetSize.BOTH, null, false),
+                [new UIComponentPermission('ticket/*/history', [CRUD.READ])]
             );
         const descriptionLane =
             new ConfiguredWidget('ticket-description-lane', new WidgetConfiguration(
                 'ticket-description-widget', 'Translatable#Description & Comments',
                 ['ticket-print-action', 'article-edit-action', 'article-maximize-action'], {},
-                false, true, WidgetSize.BOTH, null, false)
+                false, true, WidgetSize.BOTH, null, false),
+                [new UIComponentPermission('tickets/*/articles', [CRUD.READ])]
             );
 
         const linkedObjectsLane =
@@ -43,7 +46,8 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                         ['FAQs', KIXObjectType.FAQ_ARTICLE],
                     ]
                 },
-                true, true, WidgetSize.BOTH, null, false)
+                true, true, WidgetSize.BOTH, null, false),
+                [new UIComponentPermission('links', [CRUD.READ])]
             );
 
         const lanes =
@@ -90,7 +94,8 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                     OrganisationProperty.CITY,
                     OrganisationProperty.COUNTRY
                 ], true, organisationRouting, [OrganisationProperty.NUMBER, OrganisationProperty.NAME]),
-                false, false, WidgetSize.BOTH, 'kix-icon-man-house', false)
+                false, false, WidgetSize.BOTH, 'kix-icon-man-house', false),
+                [new UIComponentPermission('organisations', [CRUD.READ])]
             );
         const contactInfoSidebar =
             new ConfiguredWidget('20180116143216', new WidgetConfiguration(
@@ -108,7 +113,8 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                         ContactProperty.EMAIL
                     ], true, contactRouting,
                     [ContactProperty.LAST_NAME, ContactProperty.FIRST_NAME, ContactProperty.LOGIN]),
-                false, false, WidgetSize.BOTH, 'kix-icon-man-bubble', false)
+                false, false, WidgetSize.BOTH, 'kix-icon-man-bubble', false),
+                [new UIComponentPermission('contacts', [CRUD.READ])]
             );
         const sidebars = ['20180116143215', '20180116143216'];
         const sidebarWidgets: Array<ConfiguredWidget<any>> = [organisationInfoSidebar, contactInfoSidebar];
@@ -137,7 +143,8 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                     ], true, contactRouting,
                     [ContactProperty.LAST_NAME, ContactProperty.FIRST_NAME, ContactProperty.LOGIN]
                 ),
-                false, false, WidgetSize.BOTH, 'kix-icon-man-house', false)
+                false, false, WidgetSize.BOTH, 'kix-icon-man-house', false),
+                [new UIComponentPermission('organisations', [CRUD.READ])]
             );
         const contactInfoOverlay =
             new ConfiguredWidget('contact-info-overlay', new WidgetConfiguration(
@@ -154,7 +161,8 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                 ],
                     true, organisationRouting, [OrganisationProperty.NUMBER, OrganisationProperty.NAME]
                 ),
-                false, false, WidgetSize.BOTH, 'kix-icon-man-bubble', false)
+                false, false, WidgetSize.BOTH, 'kix-icon-man-bubble', false),
+                [new UIComponentPermission('contacts', [CRUD.READ])]
             );
         const toReceiverOverlay =
             new ConfiguredWidget('to-receiver-overlay', new WidgetConfiguration(
@@ -189,7 +197,8 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                     objectType: KIXObjectType.ARTICLE,
                     headerComponents: ['article-attachment-count']
                 },
-                false, true, WidgetSize.LARGE, null, true)
+                false, true, WidgetSize.LARGE, null, true),
+                [new UIComponentPermission('tickets/*/articles', [CRUD.READ])]
             );
 
         const content = ['20180921-article-list'];
