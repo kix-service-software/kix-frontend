@@ -2,7 +2,7 @@ import { IConfigurationExtension } from '../../core/extensions';
 import {
     WidgetConfiguration, ConfiguredWidget, WidgetSize, ContextConfiguration
 } from '../../core/model';
-import { SystemAddressDetailsContext } from '../../core/browser/system-address/context/system-address';
+import { SystemAddressDetailsContext } from '../../core/browser/system-address/context';
 
 export class Extension implements IConfigurationExtension {
 

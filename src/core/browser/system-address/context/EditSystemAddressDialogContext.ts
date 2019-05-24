@@ -1,4 +1,4 @@
-import { ContextDescriptor, Context, ContextConfiguration } from "../../../../model";
+import { ContextDescriptor, Context, ContextConfiguration } from "../../../model";
 
 export class EditSystemAddressDialogContext extends Context {
 

@@ -1,1 +1,1 @@
-export * from './system-address';
+export { SystemAddressTableFactory } from './SystemAddressTableFactory';

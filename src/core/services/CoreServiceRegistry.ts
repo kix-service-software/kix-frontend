@@ -3,12 +3,10 @@ import {
     GeneralCatalogService, DynamicFieldService, LinkService, CMDBService, ObjectDefinitionService,
     TextModuleService, UserService, ValidObjectService, TicketTypeService, ObjectIconService,
     TicketStateService, TicketPriorityService, ConfigItemClassService, TranslationService,
-    ChannelService, TicketTemplateService, QueueService
+    ChannelService, TicketTemplateService, QueueService, MailAccountService, RoleService,
+    SystemAddressService, SlaService
 } from "./impl";
 import { CacheService } from "../cache";
-import { SlaService } from "./impl/api/SlaService";
-import { SystemAddressService } from "./impl/api/SystemAddressService";
-import { RoleService } from "./impl/api/RoleService";
 
 export class CoreServiceRegistry {
 
@@ -57,6 +55,7 @@ export class CoreServiceRegistry {
             SystemAddressService.getInstance();
             RoleService.getInstance();
             QueueService.getInstance();
+            MailAccountService.getInstance();
             TicketTemplateService.getInstance();
 
             registry.initialized = true;

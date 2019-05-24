@@ -1,13 +1,13 @@
-import { RoutingConfiguration } from "../../../router";
+import { RoutingConfiguration } from "../../router";
 import {
     TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
-} from "../../../table";
-import { KIXObjectType, DataType, ContextMode, KIXObjectLoadingOptions } from "../../../../model";
+} from "../../table";
+import { KIXObjectType, DataType, ContextMode, KIXObjectLoadingOptions } from "../../../model";
 import { SystemAddressTableContentProvider } from "./SystemAddressTableContentProvider";
-import { SystemAddressProperty } from "../../../../model/kix/systemaddress";
-import { TableFactory } from "../../../table/TableFactory";
-import { SystemAddressDetailsContext } from "../../context";
+import { SystemAddressProperty } from "../../../model/kix/systemaddress";
+import { TableFactory } from "../../table/TableFactory";
+import { SystemAddressDetailsContext } from "../context";
 
 export class SystemAddressTableFactory extends TableFactory {
 

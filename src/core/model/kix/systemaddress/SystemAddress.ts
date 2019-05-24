@@ -7,15 +7,10 @@ export class SystemAddress extends KIXObject {
 
     public ObjectId: string | number;
 
-    public ChangeBy: number;
-    public ChangeTime: string;
     public Comment: string;
-    public CreateBy: number;
-    public CreateTime: string;
     public ID: string | number;
     public Name: string;
     public Realname: string;
-    public ValidID: number;
     public QueueIDs: number[];
 
     public constructor(

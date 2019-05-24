@@ -10,29 +10,19 @@ import {
 } from '../../core/model';
 import {
     LinkService, LinkedObjectsEditAction, EditLinkedObjectsDialogContext, LinkObjectTableFactory,
-    LinkObjectLabelProvider,
-    LinkObjectDialogContext
+    LinkObjectLabelProvider, LinkObjectDialogContext
 } from '../../core/browser/link';
 import { GeneralCatalogService, GeneralCatalogBrowserFactory } from '../../core/browser/general-catalog';
 import { DynamicFieldService } from '../../core/browser/dynamic-fields';
 import {
     TextModuleService, TextModuleBrowserFactory, TextModuleLabelProvider, TextModulesTableFactory
 } from '../../core/browser/text-modules';
-import {
-    SystemAddressBrowserFactory, SystemAddressLabelProvider, SystemAddressTableFactory, SystemAddressFormService
-} from '../../core/browser/system-address';
-import {
-    SystemAddressCreateAction, SystemAddressDeleteTableAction, SystemAddressEditAction
-} from '../../core/browser/system-address/actions';
-import {
-    NewSystemAddressDialogContext, SystemAddressDetailsContext, EditSystemAddressDialogContext
-} from '../../core/browser/system-address/context/system-address';
 import { SlaService, SlaLabelProvider, SlaBrowserFactory } from '../../core/browser/sla';
 import { ObjectIconService, ObjectIconBrowserFactory } from '../../core/browser/icon';
 import { PersonalSettingsDialogContext } from '../../core/browser';
 import { BulkDialogContext } from '../../core/browser/bulk';
 import {
-    TranslationLabelProvider, TranslationBrowserFactory, TranslationLanguageLabelProvider
+    TranslationLabelProvider, TranslationLanguageLabelProvider
 } from '../../core/browser/i18n';
 import {
     TranslationCreateAction, TranslationImportAction, TranslationCSVExportAction, TranslationEditAction
@@ -46,7 +36,6 @@ import { TranslationFormService } from '../../core/browser/i18n/admin/Translatio
 import { SearchResultPrintAction } from '../../core/browser/search/actions';
 import { SearchContext } from '../../core/browser/search/context';
 import { SwitchColumnOrderAction } from '../../core/browser/table/actions';
-import { SystemAddressService } from '../../core/browser/system-address';
 import { DialogService } from '../../core/browser/components/dialog';
 import { PermissionLabelProvider } from '../../core/browser/permission';
 import { PermissionsTableFactory, PermissionTableCSSHandler } from '../../core/browser/application';
@@ -63,7 +52,6 @@ class Component extends AbstractMarkoComponent {
         ServiceRegistry.registerServiceInstance(LinkService.getInstance());
         ServiceRegistry.registerServiceInstance(GeneralCatalogService.getInstance());
         ServiceRegistry.registerServiceInstance(TextModuleService.getInstance());
-        ServiceRegistry.registerServiceInstance(SystemAddressService.getInstance());
         ServiceRegistry.registerServiceInstance(DynamicFieldService.getInstance());
         ServiceRegistry.registerServiceInstance(SlaService.getInstance());
         ServiceRegistry.registerServiceInstance(ObjectIconService.getInstance());
@@ -72,8 +60,6 @@ class Component extends AbstractMarkoComponent {
         ServiceRegistry.registerServiceInstance(TranslationFormService.getInstance());
 
         ServiceRegistry.registerServiceInstance(PersonalSettingsFormService.getInstance());
-
-        ServiceRegistry.registerServiceInstance(SystemAddressFormService.getInstance());
 
         FactoryService.getInstance().registerFactory(
             KIXObjectType.GENERAL_CATALOG_ITEM, GeneralCatalogBrowserFactory.getInstance()
@@ -110,21 +96,6 @@ class Component extends AbstractMarkoComponent {
         TableFactoryService.getInstance().registerFactory(new PermissionsTableFactory());
         TableCSSHandlerRegistry.getInstance().registerCSSHandler(
             KIXObjectType.PERMISSION, new PermissionTableCSSHandler()
-        );
-
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.SYSTEM_ADDRESS, SystemAddressBrowserFactory.getInstance()
-        );
-        TableFactoryService.getInstance().registerFactory(new SystemAddressTableFactory());
-        LabelService.getInstance().registerLabelProvider(new SystemAddressLabelProvider());
-        ActionFactory.getInstance().registerAction(
-            'system-address-create', SystemAddressCreateAction
-        );
-        ActionFactory.getInstance().registerAction(
-            'system-addresses-table-delete', SystemAddressDeleteTableAction
-        );
-        ActionFactory.getInstance().registerAction(
-            'system-address-edit', SystemAddressEditAction
         );
 
         ActionFactory.getInstance().registerAction('csv-export-action', CSVExportAction);
@@ -193,26 +164,6 @@ class Component extends AbstractMarkoComponent {
         );
         ContextService.getInstance().registerContext(translationDetailsContext);
 
-        const newSystemAddressDialogContext = new ContextDescriptor(
-            NewSystemAddressDialogContext.CONTEXT_ID, [KIXObjectType.SYSTEM_ADDRESS],
-            ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-system-address-dialog', ['system-addresses'], NewSystemAddressDialogContext
-        );
-        ContextService.getInstance().registerContext(newSystemAddressDialogContext);
-
-        const systemAddressDetailsContext = new ContextDescriptor(
-            SystemAddressDetailsContext.CONTEXT_ID, [KIXObjectType.SYSTEM_ADDRESS],
-            ContextType.MAIN, ContextMode.DETAILS,
-            false, 'object-details-page', ['system-addresses'], SystemAddressDetailsContext
-        );
-        ContextService.getInstance().registerContext(systemAddressDetailsContext);
-
-        const editSystemAddressDialogContext = new ContextDescriptor(
-            EditSystemAddressDialogContext.CONTEXT_ID, [KIXObjectType.SYSTEM_ADDRESS],
-            ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            false, 'edit-system-address-dialog', ['system-addresses'], EditSystemAddressDialogContext
-        );
-        ContextService.getInstance().registerContext(editSystemAddressDialogContext);
     }
 
     private registerDialogs(): void {
@@ -262,27 +213,6 @@ class Component extends AbstractMarkoComponent {
             KIXObjectType.TRANSLATION,
             ContextMode.EDIT_ADMIN
         ));
-
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'new-system-address-dialog',
-            new WidgetConfiguration(
-                'new-system-address-dialog', 'Translatable#New Address',
-                [], {}, false, false, null, 'kix-icon-new-gear'
-            ),
-            KIXObjectType.SYSTEM_ADDRESS,
-            ContextMode.CREATE_ADMIN
-        ));
-
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'edit-system-address-dialog',
-            new WidgetConfiguration(
-                'edit-system-address-dialog', 'Translatable#Edit Address',
-                [], {}, false, false, null, 'kix-icon-edit'
-            ),
-            KIXObjectType.SYSTEM_ADDRESS,
-            ContextMode.EDIT_ADMIN
-        ));
-
     }
 
 }

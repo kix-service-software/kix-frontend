@@ -1,5 +1,5 @@
 import { IConfigurationExtension } from '../../core/extensions';
-import { NewSystemAddressDialogContext } from '../../core/browser/system-address/context/system-address';
+import { NewSystemAddressDialogContext } from '../../core/browser/system-address/context';
 import {
     ConfiguredWidget, FormField, FormFieldValue, SystemAddressProperty, Form,
     KIXObjectType, FormContext, ContextConfiguration
