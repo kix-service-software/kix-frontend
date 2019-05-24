@@ -11,6 +11,10 @@ class Extension implements IAdminModuleExtension {
                             new AdminModule(
                                 null, 'system-address', 'Translatable#Email Addresses', null,
                                 KIXObjectType.SYSTEM_ADDRESS, 'communication-admin-system-addresses'
+                            ),
+                            new AdminModule(
+                                null, 'mail-account', 'Translatable#Email Accounts', null,
+                                KIXObjectType.MAIL_ACCOUNT, 'communication-admin-mail-accounts'
                             )
                         ]
                     )

@@ -27,18 +27,14 @@
             "personal-settings-dialog-configuration": "../../dist/registry-modules/application/personal-settings-dialog-configuration.extension",
             "i18n-new-translation": "../../dist/registry-modules/admin/new-translation-dialog-configuration.extension",
             "i18n-edit-translation": "../../dist/registry-modules/admin/edit-translation-dialog-configuration.extension",
-            "i18n-translation-details-configuration": "../../dist/registry-modules/admin/i18n-translation-details.extension",
-            "new-system-address-dialog-configuration": "../../dist/registry-modules/admin/new-system-address-dialog-configuration.extension",
-            "system-address-details-configuration": "../../dist/registry-modules/admin/system-address-details-configuration.extension",
-            "edit-system-address-dialog-configuration": "../../dist/registry-modules/admin/edit-system-address-dialog-configuration.extension"
+            "i18n-translation-details-configuration": "../../dist/registry-modules/admin/i18n-translation-details.extension"
         },
         "kix:modules": {
             "app-module": "../../dist/registry-modules/application/kix-module.extension",
             "admin-module": "../../dist/registry-modules/admin/kix-module.extension"
         },
         "kix:admin-module": {
-            "i18n-admin": "../../dist/registry-modules/admin/i18n-admin-module.extension",
-            "system-address-admin": "../../dist/registry-modules/admin/system-address-admin-module.extension"
+            "i18n-admin": "../../dist/registry-modules/admin/i18n-admin-module.extension"
         }
     }
 }

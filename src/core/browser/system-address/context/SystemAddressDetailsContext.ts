@@ -1,12 +1,12 @@
 import {
     Context, BreadcrumbInformation, KIXObject, KIXObjectType, TicketPriority, SystemAddress
-} from "../../../../model";
-import { AdminContext } from "../../../admin";
-import { EventService } from "../../../event";
-import { KIXObjectService } from "../../../kix";
-import { LabelService } from "../../../LabelService";
-import { ApplicationEvent } from "../../../application";
-import { TranslationService } from "../../../i18n/TranslationService";
+} from "../../../model";
+import { AdminContext } from "../../admin";
+import { EventService } from "../../event";
+import { KIXObjectService } from "../../kix";
+import { LabelService } from "../../LabelService";
+import { ApplicationEvent } from "../../application";
+import { TranslationService } from "../../i18n/TranslationService";
 
 export class SystemAddressDetailsContext extends Context {
 

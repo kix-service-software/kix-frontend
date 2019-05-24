@@ -17,6 +17,7 @@ export * from './permission';
 export * from './general-catalog';
 export * from './valid';
 export * from './general-catalog';
+export * from './mail-account';
 
 export { ClientRegistration } from './ClientRegistration';
 export { KIXObject } from './KIXObject';

@@ -84,7 +84,6 @@ export abstract class KIXRouter implements IRouter {
             token, null, KIXObjectType.VALID_OBJECT, null, null, null
         ).catch(() => []);
 
-        // TODO: hier oder wo gebraucht aus den objectDefinitions ermitteln
         const faqVisibilities: Array<[string, string]> = [
             ["internal", "Translatable#internal"],
             ["external", "Translatable#external"],
