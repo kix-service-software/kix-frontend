@@ -267,7 +267,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 ).catch((error) => [] as User[]);
                 displayValue = users && !!users.length ? users[0].UserFullname : '';
             case TicketProperty.ORGANISATION_ID:
-                if (ticket.OrganisationID) {
+                if (ticket.OrganisationID && !isNaN(Number(ticket.OrganisationID))) {
                     let organisations: Organisation[];
                     if (ticket.OrganisationID) {
                         organisations = await KIXObjectService.loadObjects<Organisation>(
@@ -281,7 +281,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 break;
             case TicketProperty.CONTACT_ID:
                 let contacts: Contact[];
-                if (ticket.ContactID) {
+                if (ticket.ContactID && !isNaN(Number(ticket.ContactID))) {
                     contacts = await KIXObjectService.loadObjects<Contact>(
                         KIXObjectType.CONTACT, [ticket.ContactID], null, null, true
                     ).catch((error) => []);

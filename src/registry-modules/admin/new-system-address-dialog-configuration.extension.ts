@@ -31,21 +31,21 @@ export class Extension implements IConfigurationExtension {
             const fields: FormField[] = [
                 new FormField(
                     'Translatable#Email Address', SystemAddressProperty.NAME, null, true,
-                    '', null, null, null, null, null, null, null, null,
-                    FormValidationService.EMAIL_REGEX, FormValidationService.EMAIL_REGEX_ERROR_MESSAGE
+                    'Translatable#Helptext_Admin_SystemAddressCreate_Name', null, null, null, null, null,
+                    null, null, null, FormValidationService.EMAIL_REGEX, FormValidationService.EMAIL_REGEX_ERROR_MESSAGE
                 ),
                 new FormField(
                     'Translatable#Display Name', SystemAddressProperty.REALNAME, null, true,
-                    ''
+                    'Translatable#Helptext_Admin_SystemAddressCreate_DisplayName'
                 ),
                 new FormField(
                     'Translatable#Comment', SystemAddressProperty.COMMENT, 'text-area-input', false,
-                    'Translatable#Insert a comment for the system address.', null, null, null,
+                    'Translatable#Helptext_Admin_SystemAddressCreate_Comment', null, null, null,
                     null, null, null, null, 250
                 ),
                 new FormField(
                     'Translatable#Validity', SystemAddressProperty.VALID_ID, 'valid-input', true,
-                    "Translatable#Set the system address as „valid“, „invalid (temporarily)“, or „invalid“.",
+                    'Translatable#Helptext_Admin_SystemAddressCreate_Validity',
                     null, new FormFieldValue(1)
                 )
             ];

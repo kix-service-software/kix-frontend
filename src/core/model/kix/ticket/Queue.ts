@@ -49,7 +49,7 @@ export class Queue extends KIXObject<Queue> {
             this.UnlockTimeout = queue.UnlockTimeout;
             this.Calendar = queue.Calendar;
             this.Fullname = queue.Fullname;
-            this.FollowUpLock = queue.FollowUpID;
+            this.FollowUpLock = queue.FollowUpLock;
             this.Signature = queue.Signature;
             this.FirstResponseTime = queue.FirstResponseTime;
             this.FirstResponseNotify = queue.FirstResponseNotify;

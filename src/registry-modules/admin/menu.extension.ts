@@ -9,6 +9,9 @@ import { RoleDetailsContext, UserDetailsContext } from '../../core/browser/user'
 import { QueueDetailsContext } from '../../core/browser/ticket/admin/context/ticket-queue';
 import { UIComponentPermission } from '../../core/model/UIComponentPermission';
 import { FAQCategoryDetailsContext } from '../../core/browser/faq/admin/context';
+import {
+    SystemAddressDetailsContext
+} from '../../core/browser/system-address/context/system-address/SystemAddressDetailsContext';
 
 export class Extension implements IMainMenuExtension {
 
@@ -28,6 +31,7 @@ export class Extension implements IMainMenuExtension {
         RoleDetailsContext.CONTEXT_ID,
         UserDetailsContext.CONTEXT_ID,
         QueueDetailsContext.CONTEXT_ID,
+        SystemAddressDetailsContext.CONTEXT_ID,
         FAQCategoryDetailsContext.CONTEXT_ID
     ];
 

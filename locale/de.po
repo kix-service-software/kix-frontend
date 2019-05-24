@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-05-17 09:05+0000\n"
-"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
+"PO-Revision-Date: 2019-05-20 13:20+0000\n"
+"Last-Translator: jrobel <Julia.Robel@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -151,6 +151,11 @@ msgstr "Zugeordnete Kontakte"
 
 msgid "Assigned Organisations"
 msgstr "Zugeordnete Kunden"
+
+#, fuzzy
+#| msgid "Assign Team / Queue"
+msgid "Assigned Queues"
+msgstr "Zuordnung zu Team / Queue"
 
 msgid "Assigned Roles"
 msgstr "Zugeordnete Rollen"
@@ -528,7 +533,7 @@ msgid "Detailed search results"
 msgstr "Detailierte Suchergebnisse"
 
 msgid "Display Name"
-msgstr "Anzeigewert"
+msgstr "Anzeigename"
 
 msgid ". (dot)"
 msgstr ". (Punkt)"
@@ -547,6 +552,11 @@ msgstr "Bearbeiten"
 
 msgid "Edit {0}"
 msgstr "{0} bearbeiten"
+
+#, fuzzy
+#| msgid "Email Address"
+msgid "Edit Address"
+msgstr "E-Mail Adresse"
 
 msgid "Edit Agent"
 msgstr "Agenten bearbeiten"
@@ -836,6 +846,26 @@ msgstr "Hilfetext_Admin_QueueCreate_UnlockTimeout"
 msgid "Helptext_Admin_QueueCreate_Validity"
 msgstr "Hilfetext_Admin_QueueCreate_Validity"
 
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Comment"
+msgid "Helptext_Admin_SystemAddressCreate_Comment"
+msgstr "Hilfetext_Admin_QueueCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Name"
+msgid "Helptext_Admin_SystemAddressCreate_DisplayName"
+msgstr "Hilfetext_Admin_QueueCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Name"
+msgid "Helptext_Admin_SystemAddressCreate_Name"
+msgstr "Hilfetext_Admin_QueueCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Validity"
+msgid "Helptext_Admin_SystemAddressCreate_Validity"
+msgstr "Hilfetext_Admin_QueueCreate_Validity"
+
 msgid "Helptext_Organisations_ContactCreate_City"
 msgstr "Hilfetext_Organisations_ContactCreate_City"
 
@@ -1043,9 +1073,6 @@ msgstr "Geben Sie einen Kommentar zu der Rolle ein."
 msgid "Insert a comment for the state."
 msgstr "Geben Sie einen Kommentar zu dem Status ein."
 
-msgid "Insert a comment for the system address."
-msgstr "Geben Sie einen Kommentar zu der Systemadresse ein."
-
 msgid "Insert a comment for the type."
 msgstr "Geben Sie einen Kommentar für den Typ ein."
 
@@ -1094,10 +1121,14 @@ msgstr "Geben Sie einen Titel für den Nutzer ein."
 msgid "Insert a type name."
 msgstr "Geben Sie einen Name für den Typ ein."
 
-msgid "Inserted email address is invalid."
+#, fuzzy
+#| msgid "Inserted email address is invalid."
+msgid "Inserted email address is invalid"
 msgstr "Die eingegebene E-Mail-Adresse ist ungültig."
 
-msgid "Inserted email address must not be a system address."
+#, fuzzy
+#| msgid "Inserted email address must not be a system address."
+msgid "Inserted email address must not be a system address ({0})."
 msgstr "Die eingegebene E-Mail-Adresse darf keine Systemadresse sein."
 
 msgid "insert filter value"
@@ -1424,6 +1455,11 @@ msgid "No rating available."
 msgstr "Keine Bewertung verfügbar."
 
 msgid "No search query."
+msgstr "Keine Suchanfrage verfügbar."
+
+#, fuzzy
+#| msgid "No search query."
+msgid "No search query found."
 msgstr "Keine Suchanfrage verfügbar."
 
 msgid "No signature defined."
@@ -1989,12 +2025,6 @@ msgstr ""
 "Setzen Sie den Status als \"gültig\", \"ungültig (temporär)\" oder \"ungültig"
 "\"."
 
-msgid ""
-"Set the system address as „valid“, „invalid (temporarily)“, or „invalid“."
-msgstr ""
-"Setzen Sie die Systemadresse als \"gültig\", \"ungültig (temporär)\" oder "
-"\"ungültig\"."
-
 msgid "Set the type as „valid“, „invalid (temporarily)“, or „invalid“."
 msgstr ""
 "Setzen Sie den Typ als \"gültig\", \"ungültig (temporär)\" oder \"ungültig\"."
@@ -2315,6 +2345,11 @@ msgstr "Aktualisierung wird durchgeführt"
 msgid "Update Contact"
 msgstr "Aktualisierung wird durchgeführt"
 
+#, fuzzy
+#| msgid "Email Address"
+msgid "Update Email Address"
+msgstr "E-Mail Adresse"
+
 msgid "Update FAQ Artikel"
 msgstr "Aktualisierung wird durchgeführt"
 
@@ -2424,6 +2459,15 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Insert a comment for the system address."
+#~ msgstr "Geben Sie einen Kommentar zu der Systemadresse ein."
+
+#~ msgid ""
+#~ "Set the system address as „valid“, „invalid (temporarily)“, or „invalid“."
+#~ msgstr ""
+#~ "Setzen Sie die Systemadresse als \"gültig\", \"ungültig (temporär)\" oder "
+#~ "\"ungültig\"."
 
 #~ msgid "New Email"
 #~ msgstr "Neue E-Mail"

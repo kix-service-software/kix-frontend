@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
 import {
-    AbstractMarkoComponent, TableEvent, ContextService, ITable, BrowserUtil, IColumn, IRow, TableEventData
+    AbstractMarkoComponent, TableEvent, ContextService, ITable, BrowserUtil, IColumn, IRow, TableEventData, Table
 } from '../../../core/browser';
 import { EventService, IEventSubscriber } from '../../../core/browser/event';
 
@@ -15,15 +15,16 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     public onInput(input: any): void {
-        if (
-            (!this.state.table && input.table)
-            || (input.table && this.state.table.getTableId() !== input.table.getTableId())
-        ) {
-            if (this.state.table && input.table && this.state.table.getTableId() !== input.table.getTableId()) {
+        if (!this.state.table && input.table || this.isTableChanged(input.table)) {
+            if (this.state.table && this.isTableChanged(input.table)) {
                 this.state.table.destroy();
             }
             this.init(input.table);
         }
+    }
+
+    private isTableChanged(table: Table): boolean {
+        return table && this.state.table.getTableId() !== table.getTableId();
     }
 
     private async init(table: ITable): Promise<void> {
@@ -34,17 +35,21 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
         this.eventSubscriberId = this.state.table.getTableId();
 
-        await this.state.table.initialize();
-        this.state.rows = this.state.table.getRows();
-        this.state.columns = this.state.table.getColumns();
-        this.setTableHeight();
+        setTimeout(async () => {
+            await this.state.table.initialize();
+            this.state.rows = this.state.table.getRows();
+            this.state.columns = this.state.table.getColumns();
+            this.setTableHeight();
 
-        this.state.loading = false;
-        EventService.getInstance().publish(
-            TableEvent.TABLE_INITIALIZED,
-            new TableEventData(this.state.table.getTableId())
-        );
-        EventService.getInstance().publish(TableEvent.TABLE_READY, new TableEventData(this.state.table.getTableId()));
+            this.state.loading = false;
+            EventService.getInstance().publish(
+                TableEvent.TABLE_INITIALIZED,
+                new TableEventData(this.state.table.getTableId())
+            );
+            EventService.getInstance().publish(
+                TableEvent.TABLE_READY, new TableEventData(this.state.table.getTableId())
+            );
+        }, 20);
     }
 
     public async onMount(): Promise<void> {
@@ -103,6 +108,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             }
 
             if (eventId === TableEvent.SORTED || eventId === TableEvent.TABLE_FILTERED) {
+                this.state.rows = this.state.table.getRows();
                 const container = (this as any).getEl(this.state.table.getTableId() + "table-container");
                 if (container) {
                     container.scrollTop = 0;

@@ -34,7 +34,7 @@ export class RoutingService {
         this.routingConfigurations.push(configuration);
     }
 
-    public async routeToInitialContext(): Promise<void> {
+    public async routeToInitialContext(history: boolean = false): Promise<void> {
         const VISITED_KEY = 'kix-18-site-visited';
         const visitedOption = ClientStorageService.getOption(VISITED_KEY);
         const objectData = ObjectDataService.getInstance().getObjectData();
@@ -59,7 +59,8 @@ export class RoutingService {
 
                 if (context) {
                     await ContextService.getInstance().setContext(
-                        context.getDescriptor().contextId, null, context.getDescriptor().contextMode, objectId
+                        context.getDescriptor().contextId, null,
+                        context.getDescriptor().contextMode, objectId, undefined, history
                     );
                 } else {
                     BrowserUtil.openAccessDeniedOverlay();

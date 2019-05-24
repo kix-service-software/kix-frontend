@@ -26,6 +26,12 @@ class Extension implements IKIXModuleExtension {
             'i18n-translation-info-widget', 'i18n/admin/widgets/i18n-translation-info-widget', []),
         new UIComponent(
             'communication-admin-system-addresses', 'communication/admin/communication-admin-system-addresses', []
+        ),
+        new UIComponent('system-address-info-widget', 'communication/admin/widgets/system-address-info-widget', []),
+        new UIComponent(
+            'system-address-assigned-queues-widget',
+            'communication/admin/widgets/system-address-assigned-queues-widget',
+            []
         )
     ];
 

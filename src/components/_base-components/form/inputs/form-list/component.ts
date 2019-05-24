@@ -152,7 +152,6 @@ class Component {
             if (value && value !== '') {
                 const freeTextNode = new TreeNode(value, value);
                 this.nodeClicked(freeTextNode);
-                this.toggleList(true);
             }
         }
     }

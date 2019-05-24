@@ -41,6 +41,6 @@ export interface IRow<T = any> {
 
     getRowCount(): number;
 
-    sortChildren(columnId: string, sortOrder: SortOrder, dataType: DataType): Promise<void>;
+    sortChildren(columnId: string, sortOrder: SortOrder, dataType: DataType): void;
 
 }

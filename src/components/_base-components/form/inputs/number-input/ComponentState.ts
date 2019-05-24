@@ -8,7 +8,7 @@ export class ComponentState extends FormInputComponentState<string> {
         public min: number = null,
         public max: number = null,
         public step: number = 1,
-        public unitstring: string = ''
+        public unitString: string = ''
     ) {
         super();
     }

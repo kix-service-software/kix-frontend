@@ -1,7 +1,9 @@
-import { KIXObjectType } from "../../../../../core/model";
+import { KIXObjectType, SystemAddressProperty, ContextMode } from "../../../../../core/model";
 import { ComponentState } from "./ComponentState";
 import { AbstractNewDialog } from "../../../../../core/browser/components/dialog";
 import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
+import { RoutingConfiguration } from "../../../../../core/browser/router";
+import { SystemAddressDetailsContext } from "../../../../../core/browser/system-address";
 
 class Component extends AbstractNewDialog {
 
@@ -11,7 +13,10 @@ class Component extends AbstractNewDialog {
             'Translatable#Create Address',
             'Translatable#Address successfully created.',
             KIXObjectType.SYSTEM_ADDRESS,
-            null
+            new RoutingConfiguration(
+                null, SystemAddressDetailsContext.CONTEXT_ID, KIXObjectType.SYSTEM_ADDRESS,
+                ContextMode.DETAILS, SystemAddressProperty.ID, true
+            )
         );
     }
 

@@ -49,7 +49,7 @@ export class SystemAddressLabelProvider extends LabelProvider<SystemAddress> {
         let displayValue = property;
         switch (property) {
             case SystemAddressProperty.NAME:
-                displayValue = 'Translatable#Name';
+                displayValue = 'Translatable#Email Address';
                 break;
             case SystemAddressProperty.REALNAME:
                 displayValue = 'Translatable#Display Name';
@@ -109,7 +109,7 @@ export class SystemAddressLabelProvider extends LabelProvider<SystemAddress> {
     public async getObjectText(
         systemAddress: SystemAddress, id?: boolean, title?: boolean, translatable?: boolean
     ): Promise<string> {
-        return `${systemAddress.Realname} <${systemAddress.Name}>`;
+        return `${systemAddress.Name} (${systemAddress.Realname})`;
     }
 
     public getObjectIcon(object: SystemAddress): string | ObjectIcon {

@@ -54,25 +54,29 @@ export class SystemAddressService extends KIXObjectService {
         createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<number> {
 
-        const createAddress = new CreateSystemAddresses(parameter);
-
-        const response = await this.sendCreateRequest<CreateSystemAddressesResponse, CreateSystemAddressesRequest>(
-            token, clientRequestId, this.RESOURCE_URI,
-            new CreateSystemAddressesRequest(createAddress), this.objectType
+        const id = super.executeUpdateOrCreateRequest(
+            token, clientRequestId, parameter, this.RESOURCE_URI, KIXObjectType.SYSTEM_ADDRESS, 'SystemAddressID', true
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
         });
 
-        return response.SystemAddressID;
-
+        return id;
     }
 
     public async updateObject(
         token: string, clientRequestId: string, objectType: KIXObjectType,
         parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
-        throw new Error("0", 'Method not implemented.');
-    }
+        const uri = this.buildUri(this.RESOURCE_URI, objectId);
 
+        const id = super.executeUpdateOrCreateRequest(
+            token, clientRequestId, parameter, uri, KIXObjectType.SYSTEM_ADDRESS, 'SystemAddressID'
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
+        });
+
+        return id;
+    }
 }

@@ -16,6 +16,7 @@ export class SystemAddress extends KIXObject {
     public Name: string;
     public Realname: string;
     public ValidID: number;
+    public QueueIDs: number[];
 
     public constructor(
         systemAddress?: SystemAddress
@@ -32,6 +33,7 @@ export class SystemAddress extends KIXObject {
             this.Name = systemAddress.Name;
             this.Realname = systemAddress.Realname;
             this.ValidID = systemAddress.ValidID;
+            this.QueueIDs = systemAddress.QueueIDs;
         }
     }
 

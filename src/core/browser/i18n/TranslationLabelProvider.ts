@@ -74,10 +74,6 @@ export class TranslationLabelProvider extends LabelProvider<Translation> {
             default:
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
-        }
-
         return displayValue;
     }
 

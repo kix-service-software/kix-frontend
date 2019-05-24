@@ -145,6 +145,9 @@ msgstr ""
 msgid "Assigned Organisations"
 msgstr ""
 
+msgid "Assigned Queues"
+msgstr ""
+
 msgid "Assigned Roles"
 msgstr ""
 
@@ -515,6 +518,9 @@ msgstr ""
 msgid "Edit {0}"
 msgstr ""
 
+msgid "Edit Address"
+msgstr ""
+
 msgid "Edit Agent"
 msgstr ""
 
@@ -779,6 +785,18 @@ msgstr ""
 msgid "Helptext_Admin_QueueCreate_Validity"
 msgstr ""
 
+msgid "Helptext_Admin_SystemAddressCreate_Comment"
+msgstr ""
+
+msgid "Helptext_Admin_SystemAddressCreate_DisplayName"
+msgstr ""
+
+msgid "Helptext_Admin_SystemAddressCreate_Name"
+msgstr ""
+
+msgid "Helptext_Admin_SystemAddressCreate_Validity"
+msgstr ""
+
 msgid "Helptext_Organisations_ContactCreate_City"
 msgstr ""
 
@@ -986,9 +1004,6 @@ msgstr ""
 msgid "Insert a comment for the state."
 msgstr ""
 
-msgid "Insert a comment for the system address."
-msgstr ""
-
 msgid "Insert a comment for the type."
 msgstr ""
 
@@ -1037,10 +1052,10 @@ msgstr ""
 msgid "Insert a type name."
 msgstr ""
 
-msgid "Inserted email address is invalid."
+msgid "Inserted email address is invalid"
 msgstr ""
 
-msgid "Inserted email address must not be a system address."
+msgid "Inserted email address must not be a system address ({0})."
 msgstr ""
 
 msgid "insert filter value"
@@ -1353,6 +1368,9 @@ msgid "No rating available."
 msgstr ""
 
 msgid "No search query."
+msgstr ""
+
+msgid "No search query found."
 msgstr ""
 
 msgid "No signature defined."
@@ -1879,10 +1897,6 @@ msgstr ""
 msgid "Set the state as „valid“, „invalid (temporarily)“, or „invalid“."
 msgstr ""
 
-msgid ""
-"Set the system address as „valid“, „invalid (temporarily)“, or „invalid“."
-msgstr ""
-
 msgid "Set the type as „valid“, „invalid (temporarily)“, or „invalid“."
 msgstr ""
 
@@ -2191,6 +2205,9 @@ msgid "Update Config Item"
 msgstr ""
 
 msgid "Update Contact"
+msgstr ""
+
+msgid "Update Email Address"
 msgstr ""
 
 msgid "Update FAQ Artikel"

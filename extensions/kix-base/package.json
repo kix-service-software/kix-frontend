@@ -28,7 +28,9 @@
             "i18n-new-translation": "../../dist/registry-modules/admin/new-translation-dialog-configuration.extension",
             "i18n-edit-translation": "../../dist/registry-modules/admin/edit-translation-dialog-configuration.extension",
             "i18n-translation-details-configuration": "../../dist/registry-modules/admin/i18n-translation-details.extension",
-            "new-system-address-dialog-configuration": "../../dist/registry-modules/admin/new-system-address-dialog-configuration.extension"
+            "new-system-address-dialog-configuration": "../../dist/registry-modules/admin/new-system-address-dialog-configuration.extension",
+            "system-address-details-configuration": "../../dist/registry-modules/admin/system-address-details-configuration.extension",
+            "edit-system-address-dialog-configuration": "../../dist/registry-modules/admin/edit-system-address-dialog-configuration.extension"
         },
         "kix:modules": {
             "app-module": "../../dist/registry-modules/application/kix-module.extension",

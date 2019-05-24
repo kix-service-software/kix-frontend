@@ -44,6 +44,7 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+        this.state.loading = true;
         this.state.filterPlaceHolder = await TranslationService.translate(this.state.filterPlaceHolder);
         this.additionalFilterCriteria = [];
         const context = ContextService.getInstance().getActiveContext(this.contextType);
@@ -72,6 +73,7 @@ class Component {
                             this.state.filterCount = this.state.table.isFiltered()
                                 ? this.state.table.getRowCount()
                                 : null;
+                            this.prepareTitle();
                         }
                         WidgetService.getInstance().updateActions(this.state.instanceId);
                     }
@@ -81,9 +83,9 @@ class Component {
             EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.subscriber);
             EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
 
-            await this.prepareHeader();
+            this.prepareHeader();
             await this.prepareTable();
-            await this.prepareTitle();
+            this.prepareTitle();
             this.prepareActions();
 
             if (this.state.widgetConfiguration.contextDependent) {
@@ -104,6 +106,10 @@ class Component {
                     }
                 });
             }
+
+            setTimeout(() => {
+                this.state.loading = false;
+            }, 20);
         }
     }
 
@@ -128,7 +134,6 @@ class Component {
 
             let count = 0;
             if (this.state.table) {
-                await this.state.table.initialize();
                 count = this.state.table.getRowCount(true);
             }
             this.state.title = `${title} (${count})`;
@@ -153,7 +158,7 @@ class Component {
             );
 
             if (table && settings.sort) {
-                await table.sort(settings.sort[0], settings.sort[1]);
+                table.sort(settings.sort[0], settings.sort[1]);
             }
 
             this.state.table = table;

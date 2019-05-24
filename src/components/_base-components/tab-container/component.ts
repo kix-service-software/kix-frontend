@@ -72,6 +72,7 @@ class TabLaneComponent implements IEventSubscriber {
 
     public async tabClicked(tab: ConfiguredWidget): Promise<void> {
         this.state.activeTab = tab;
+        this.state.activeTabTitle = this.state.activeTab ? this.state.activeTab.configuration.title : '';
         if (tab) {
             const context = await ContextService.getInstance().getActiveContext(this.state.contextType);
             if (context) {

@@ -3,10 +3,11 @@ import {
     TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../../table";
-import { KIXObjectType, DataType } from "../../../../model";
+import { KIXObjectType, DataType, ContextMode, KIXObjectLoadingOptions } from "../../../../model";
 import { SystemAddressTableContentProvider } from "./SystemAddressTableContentProvider";
 import { SystemAddressProperty } from "../../../../model/kix/systemaddress";
 import { TableFactory } from "../../../table/TableFactory";
+import { SystemAddressDetailsContext } from "../../context";
 
 export class SystemAddressTableFactory extends TableFactory {
 
@@ -20,7 +21,14 @@ export class SystemAddressTableFactory extends TableFactory {
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
         const table = new Table(tableKey, tableConfiguration);
 
-        table.setContentProvider(new SystemAddressTableContentProvider(table, objectIds, null, contextId));
+        let loadingOptions = null;
+        if (tableConfiguration.filter && tableConfiguration.filter.length) {
+            loadingOptions = new KIXObjectLoadingOptions(null, tableConfiguration.filter);
+        }
+
+        table.setContentProvider(new SystemAddressTableContentProvider(
+            table, objectIds, loadingOptions, contextId
+        ));
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 
         return table;
@@ -62,7 +70,10 @@ export class SystemAddressTableFactory extends TableFactory {
         }
 
         if (defaultRouting) {
-            // ToDo
+            tableConfiguration.routingConfiguration = new RoutingConfiguration(
+                null, SystemAddressDetailsContext.CONTEXT_ID, KIXObjectType.SYSTEM_ADDRESS,
+                ContextMode.DETAILS, SystemAddressProperty.ID
+            );
         }
 
         return tableConfiguration;
