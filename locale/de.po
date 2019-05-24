@@ -29,8 +29,16 @@ msgstr "{0} importiert"
 msgid "{0} Link created"
 msgstr "{0} Verknüpfung(en) angelegt"
 
+msgid "Accept KIX Header"
+msgstr ""
+
 msgid "accounted time"
 msgstr "Erfasste Zeit"
+
+#, fuzzy
+#| msgid "Agent successfully created."
+msgid "Account successfully created."
+msgstr "Agent wurde erfolgreich angelegt."
 
 msgid ""
 "A contact is a person, filing a request for the customer. Enter at least 3 "
@@ -348,6 +356,11 @@ msgstr "Kommunikation"
 msgid "Communication: Email"
 msgstr "Kommunikation: E-Mail"
 
+#, fuzzy
+#| msgid "Communication: Email"
+msgid "Communication: Email: Email Accounts"
+msgstr "Kommunikation: E-Mail"
+
 msgid "Compare"
 msgstr "Vergleichen"
 
@@ -407,6 +420,11 @@ msgstr "enthält"
 
 msgid "Country"
 msgstr "Land"
+
+#, fuzzy
+#| msgid "Create Agent"
+msgid "Create Account"
+msgstr "Neuer Agent"
 
 msgid "Create Address"
 msgstr "Neue Adresse"
@@ -491,6 +509,9 @@ msgstr "(aktuelle Version)"
 msgid "Current version"
 msgstr "Aktuelle Version"
 
+msgid "Default"
+msgstr ""
+
 #, fuzzy
 #| msgid ""
 #| "Define where this FAQ article will be shown (internal= only Agent Portal, "
@@ -532,6 +553,9 @@ msgstr "Beschreibung & Anmerkungen"
 
 msgid "Detailed search results"
 msgstr "Detailierte Suchergebnisse"
+
+msgid "Dispatching"
+msgstr ""
 
 msgid "Display Name"
 msgstr "Anzeigename"
@@ -623,6 +647,12 @@ msgstr "Typ bearbeiten"
 
 msgid "Email"
 msgstr "E-Mail"
+
+msgid "Email Account"
+msgstr ""
+
+msgid "Email Accounts"
+msgstr ""
 
 msgid "Email Address"
 msgstr "E-Mail Adresse"
@@ -815,6 +845,51 @@ msgstr "Hilfetext_Admin_QueueCreate_ParentQueue"
 #, fuzzy
 #| msgid "Helptext_Admin_QueueCreate_Validity"
 msgid "Helptext_Admin_FAQCategoryEdit_Validity"
+msgstr "Hilfetext_Admin_QueueCreate_Validity"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Name"
+msgid "Helptext_Admin_MailAccountCreate_AcceptKIXHeader"
+msgstr "Hilfetext_Admin_QueueCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Comment"
+msgid "Helptext_Admin_MailAccountCreate_Comment"
+msgstr "Hilfetext_Admin_QueueCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Icon."
+msgid "Helptext_Admin_MailAccountCreate_Dispachting"
+msgstr "Hilfetext_Admin_QueueCreate_Icon."
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Comment"
+msgid "Helptext_Admin_MailAccountCreate_Host"
+msgstr "Hilfetext_Admin_QueueCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Icon."
+msgid "Helptext_Admin_MailAccountCreate_IMAPFolder"
+msgstr "Hilfetext_Admin_QueueCreate_Icon."
+
+#, fuzzy
+#| msgid "Helptext_Organisations_ContactCreate_Password"
+msgid "Helptext_Admin_MailAccountCreate_Password"
+msgstr "Hilfetext_Organisations_ContactCreate_Password"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Name"
+msgid "Helptext_Admin_MailAccountCreate_Type."
+msgstr "Hilfetext_Admin_QueueCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Name"
+msgid "Helptext_Admin_MailAccountCreate_UserName"
+msgstr "Hilfetext_Admin_QueueCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Validity"
+msgid "Helptext_Admin_MailAccountCreate_Validity"
 msgstr "Hilfetext_Admin_QueueCreate_Validity"
 
 msgid "Helptext_Admin_QueueCreate_Comment"
@@ -1011,6 +1086,14 @@ msgstr "Trefferliste ({0})"
 msgid "Home"
 msgstr "Home"
 
+msgid "Host"
+msgstr ""
+
+#, fuzzy
+#| msgid "Lastname"
+msgid "Hostname"
+msgstr "Nachname"
+
 msgid "How to create a new ticket?"
 msgstr "Wie lege ich ein neues Ticket an?"
 
@@ -1034,6 +1117,9 @@ msgstr "Ignorieren"
 
 msgid "Images"
 msgstr "Bilder"
+
+msgid "IMAP Folder"
+msgstr ""
 
 msgid "Import"
 msgstr "Import"
@@ -1348,6 +1434,11 @@ msgstr "Name"
 msgid "New"
 msgstr "Neu"
 
+#, fuzzy
+#| msgid "New Agent"
+msgid "New Account"
+msgstr "Neuer Agent"
+
 msgid "New Address"
 msgstr "Neue Adresse"
 
@@ -1368,6 +1459,11 @@ msgstr "Neues Config Item"
 
 msgid "New Contact"
 msgstr "Neuer Kontakt"
+
+#, fuzzy
+#| msgid "New Email"
+msgid "New Email Account"
+msgstr "Neue E-Mail"
 
 msgid "New FAQ"
 msgstr "Neue FAQ"
@@ -1437,20 +1533,11 @@ msgstr "Kein Artikel"
 msgid "No article available."
 msgstr "Kein Artikel verfügbar."
 
-msgid "No contact available"
-msgstr "Kein Kontakt verfügbar"
-
 msgid "No general catalog class configured!"
 msgstr "Keine General Catalog Klasse konfiguriert!"
 
-msgid "No object available"
-msgstr "Kein Objekt verfügbar"
-
 msgid "No object with ID {0} available."
 msgstr "Kein Objekt mit der ID {0} verfügbar."
-
-msgid "No organisation available"
-msgstr "Kein Kunde verfügbar"
 
 msgid "No rating available."
 msgstr "Keine Bewertung verfügbar."
@@ -2224,11 +2311,13 @@ msgstr "Ticket Suche"
 msgid "Ticket search error!"
 msgstr "Fehler bei der Ticketsuche!"
 
-msgid "Ticket: State"
-msgstr "Ticket: Status"
-
 msgid "Ticket States"
 msgstr "Ticketstatus"
+
+#, fuzzy
+#| msgid "Ticket: State"
+msgid "Ticket: States"
+msgstr "Ticket: Status"
 
 msgid "Ticket status summarizes the tickets processing state."
 msgstr ""
@@ -2397,6 +2486,11 @@ msgstr "Nutzerverwaltung: Agenten"
 msgid "User Management: Roles"
 msgstr "Nutzerverwaltung: Rollen"
 
+#, fuzzy
+#| msgid "User name"
+msgid "User Name"
+msgstr "Benutzername"
+
 msgid "Validation error"
 msgstr "Validierungsfehler"
 
@@ -2461,6 +2555,15 @@ msgstr "PLZ"
 msgid "ZIP"
 msgstr "PLZ"
 
+#~ msgid "No contact available"
+#~ msgstr "Kein Kontakt verfügbar"
+
+#~ msgid "No object available"
+#~ msgstr "Kein Objekt verfügbar"
+
+#~ msgid "No organisation available"
+#~ msgstr "Kein Kunde verfügbar"
+
 #~ msgid "Insert a comment for the system address."
 #~ msgstr "Geben Sie einen Kommentar zu der Systemadresse ein."
 
@@ -2470,16 +2573,10 @@ msgstr "PLZ"
 #~ "Setzen Sie die Systemadresse als \"gültig\", \"ungültig (temporär)\" oder "
 #~ "\"ungültig\"."
 
-#~ msgid "New Email"
-#~ msgstr "Neue E-Mail"
-
 #, fuzzy
 #~| msgid "No contact available"
 #~ msgid "No {0} available"
 #~ msgstr "Kein Kontakt verfügbar"
-
-#~ msgid "User name"
-#~ msgstr "Benutzername"
 
 #~ msgid "Assigned Customers"
 #~ msgstr "Zugeordnete Kunden"
