@@ -1,6 +1,6 @@
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, Error, MailAccount, MailAccountFactory
+    KIXObjectSpecificCreateOptions, Error, MailAccount, MailAccountFactory, MailAccountProperty, DispatchingType
 } from '../../../model';
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
@@ -18,6 +18,7 @@ export class MailAccountService extends KIXObjectService {
     }
 
     protected RESOURCE_URI: string = 'mailaccounts';
+    protected SUB_RESOURCE_URI: string = 'types';
 
     public objectType: KIXObjectType = KIXObjectType.MAIL_ACCOUNT;
 
@@ -27,7 +28,8 @@ export class MailAccountService extends KIXObjectService {
     }
 
     public isServiceFor(kixObjectType: KIXObjectType): boolean {
-        return kixObjectType === this.objectType;
+        return kixObjectType === this.objectType
+            || kixObjectType === KIXObjectType.MAIL_ACCOUNT_TYPE;
     }
 
     public async loadObjects<T>(
@@ -40,6 +42,11 @@ export class MailAccountService extends KIXObjectService {
             objects = await super.load<MailAccount>(
                 token, KIXObjectType.MAIL_ACCOUNT, this.RESOURCE_URI, loadingOptions, objectIds, 'MailAccount'
             );
+        } else if (objectType === KIXObjectType.MAIL_ACCOUNT_TYPE) {
+            const uri = this.buildUri(this.RESOURCE_URI, this.SUB_RESOURCE_URI);
+            objects = await super.load<string>(
+                token, KIXObjectType.MAIL_ACCOUNT_TYPE, uri, null, null, 'MailAccountType'
+            );
         }
 
         return objects;
@@ -49,15 +56,16 @@ export class MailAccountService extends KIXObjectService {
         token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
         createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<number> {
-        return;
-        // const id = super.executeUpdateOrCreateRequest(
-        //     token, clientRequestId, parameter, this.RESOURCE_URI, KIXObjectType.MAIL_ACCOUNT, 'MailAccountID', true
-        // ).catch((error: Error) => {
-        //     LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-        //     throw new Error(error.Code, error.Message);
-        // });
+        parameter = this.prepareParameter(parameter);
 
-        // return id;
+        const id = super.executeUpdateOrCreateRequest(
+            token, clientRequestId, parameter, this.RESOURCE_URI, KIXObjectType.MAIL_ACCOUNT, 'MailAccountID', true
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
+        });
+
+        return id;
     }
 
     public async updateObject(
@@ -65,6 +73,7 @@ export class MailAccountService extends KIXObjectService {
         parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
         return;
+        // parameter = this.prepareParameter(parameter);
         // const uri = this.buildUri(this.RESOURCE_URI, objectId);
 
         // const id = super.executeUpdateOrCreateRequest(
@@ -75,5 +84,28 @@ export class MailAccountService extends KIXObjectService {
         // });
 
         // return id;
+    }
+
+    private prepareParameter(parameter: Array<[string, any]>): Array<[string, any]> {
+        const dispatchingIndex = parameter.findIndex((p) => p[0] === MailAccountProperty.DISPATCHING_BY);
+        if (dispatchingIndex !== -1) {
+            if (parameter[dispatchingIndex][1] === 'USE_DEFAULT') {
+                parameter[dispatchingIndex][1] = DispatchingType.DEFAULT;
+            } else {
+                if (!parameter.some((p) => p[0] === MailAccountProperty.QUEUE_ID)) {
+                    parameter.push([MailAccountProperty.QUEUE_ID, parameter[dispatchingIndex][1]]);
+                }
+                parameter[dispatchingIndex][1] = DispatchingType.QUEUE;
+            }
+        }
+        const trustedIndex = parameter.findIndex((p) => p[0] === MailAccountProperty.TRUSTED);
+        if (trustedIndex !== -1) {
+            parameter.push([MailAccountProperty.TRUSTED, 0]);
+        }
+        const password = this.getParameterValue(parameter, MailAccountProperty.PASSWORD);
+        if (!password || password === '') {
+            parameter = parameter.filter((p) => p[0] !== MailAccountProperty.PASSWORD);
+        }
+        return parameter;
     }
 }

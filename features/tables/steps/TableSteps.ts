@@ -10,6 +10,7 @@ import { ContactTableFactory } from '../../../src/core/browser/contact';
 import { ConfigItemTableFactory } from '../../../src/core/browser/cmdb';
 import { RoleTableFactory, UserTableFactory } from '../../../src/core/browser/user';
 import { OrganisationTableFactory } from '../../../src/core/browser/organisation';
+import { MailAccountTableFactory } from '../../../src/core/browser/mail-account';
 
 let table: ITable;
 TableFactoryService.getInstance().registerFactory(new FAQArticleTableFactory());
@@ -20,6 +21,7 @@ TableFactoryService.getInstance().registerFactory(new ContactTableFactory());
 TableFactoryService.getInstance().registerFactory(new ConfigItemTableFactory());
 TableFactoryService.getInstance().registerFactory(new RoleTableFactory());
 TableFactoryService.getInstance().registerFactory(new UserTableFactory());
+TableFactoryService.getInstance().registerFactory(new MailAccountTableFactory());
 
 Given('Tabelle: {string}', async (objectType: KIXObjectType) => {
     table = await TableFactoryService.getInstance().createTable(`test-table-${objectType}`, objectType);

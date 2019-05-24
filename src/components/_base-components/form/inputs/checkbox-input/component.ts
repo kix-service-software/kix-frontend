@@ -17,8 +17,8 @@ class Component extends FormInputComponent<any, ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        if (this.state.defaultValue && this.state.defaultValue.value) {
-            this.state.checked = this.state.defaultValue.value;
+        if (this.state.defaultValue && typeof this.state.defaultValue.value !== 'undefined') {
+            this.state.checked = Boolean(this.state.defaultValue.value);
             super.provideValue(this.state.checked);
         }
     }

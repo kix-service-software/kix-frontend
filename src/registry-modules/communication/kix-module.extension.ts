@@ -13,7 +13,10 @@ class KIXModuleExtension implements IKIXModuleExtension {
         ['system-address-assigned-queues-widget', 'communication/admin/widgets/system-address-assigned-queues-widget'],
         ['new-system-address-dialog', 'communication/admin/dialogs/new-system-address-dialog'],
         ['edit-system-address-dialog', 'communication/admin/dialogs/edit-system-address-dialog'],
-        ['communication-admin-mail-accounts', 'communication/admin/communication-admin-mail-accounts']
+        ['communication-admin-mail-accounts', 'communication/admin/communication-admin-mail-accounts'],
+        ['new-mail-account-dialog', 'communication/admin/dialogs/new-mail-account-dialog'],
+        ['mail-account-input-dispatching', 'communication/admin/dialogs/inputs/mail-account-input-dispatching'],
+        ['mail-account-input-types', 'communication/admin/dialogs/inputs/mail-account-input-types']
     ];
 
 }

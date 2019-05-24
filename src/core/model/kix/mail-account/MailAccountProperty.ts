@@ -10,7 +10,7 @@ export enum MailAccountProperty {
 
     TYPE = 'Type',
 
-    IMAPFOLDER = 'IMAPFolder',
+    IMAP_FOLDER = 'IMAPFolder',
 
     TRUSTED = 'Trusted',
 

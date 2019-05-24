@@ -2,7 +2,7 @@ import {
     SortOrder, KIXObjectType, KIXObject, FilterCriteria, FilterType,
     KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, CreateLinkDescription,
     KIXObjectSpecificCreateOptions, KIXObjectSpecificDeleteOptions, ObjectIcon, ObjectIconLoadingOptions,
-    Error, IObjectFactory, CreatePermissionDescription, PermissionType, PermissionProperty, FilterDataType
+    Error, IObjectFactory, CreatePermissionDescription
 } from '../../../model';
 import { Query, CreateLink, CreateLinkRequest, RequestObject } from '../../../api';
 import { IKIXObjectService } from '../../IKIXObjectService';
@@ -11,7 +11,6 @@ import { LoggingService } from '../LoggingService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { ObjectFactoryService } from '../../ObjectFactoryService';
 import { RoleService } from './RoleService';
-import { SearchOperator } from '../../../browser';
 
 /**
  * Generic abstract class for all ObjectServices.
@@ -37,7 +36,7 @@ export abstract class KIXObjectService implements IKIXObjectService {
         throw new Error('-1', `Method loadObjects not implemented (${objectType})`);
     }
 
-    protected async load<O extends KIXObject = any>(
+    protected async load<O extends KIXObject | string = any>(
         token: string, objectType: KIXObjectType, baseUri: string, loadingOptions: KIXObjectLoadingOptions,
         objectIds: Array<number | string>, responseProperty: string
     ): Promise<O[]> {
