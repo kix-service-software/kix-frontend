@@ -14,7 +14,7 @@ class Component extends AbstractNewDialog {
             'Translatable#Priority successfully created.',
             KIXObjectType.TICKET_PRIORITY,
             new RoutingConfiguration(
-                null, TicketPriorityDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_PRIORITY,
+                TicketPriorityDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_PRIORITY,
                 ContextMode.DETAILS, TicketPriorityProperty.ID, true
             )
         );

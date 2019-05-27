@@ -7,8 +7,7 @@ export class ObjectinformationWidgetSettings {
         public objectType: KIXObjectType,
         public properties: string[] = [],
         public displayFlatList: boolean = false,
-        public routingConfiguration: RoutingConfiguration = null,
-        public navigationProperties: string[] = []
+        public routingConfigurations: Array<[string, RoutingConfiguration]> = null
     ) { }
 
 }

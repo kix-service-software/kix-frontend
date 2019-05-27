@@ -47,7 +47,7 @@ class KIXHeaderComponent {
 
     public getReleaseRoutingConfig(): RoutingConfiguration {
         return new RoutingConfiguration(
-            null, ReleaseContext.CONTEXT_ID, null, ContextMode.DASHBOARD, null
+            ReleaseContext.CONTEXT_ID, null, ContextMode.DASHBOARD, null
         );
     }
 

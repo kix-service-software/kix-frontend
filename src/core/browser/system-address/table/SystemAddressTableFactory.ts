@@ -71,7 +71,7 @@ export class SystemAddressTableFactory extends TableFactory {
 
         if (defaultRouting) {
             tableConfiguration.routingConfiguration = new RoutingConfiguration(
-                null, SystemAddressDetailsContext.CONTEXT_ID, KIXObjectType.SYSTEM_ADDRESS,
+                SystemAddressDetailsContext.CONTEXT_ID, KIXObjectType.SYSTEM_ADDRESS,
                 ContextMode.DETAILS, SystemAddressProperty.ID
             );
         }

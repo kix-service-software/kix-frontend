@@ -14,7 +14,7 @@ class Component extends AbstractNewDialog {
             'Translatable#Organisation successfully created.',
             KIXObjectType.ORGANISATION,
             new RoutingConfiguration(
-                null, OrganisationDetailsContext.CONTEXT_ID, KIXObjectType.ORGANISATION,
+                OrganisationDetailsContext.CONTEXT_ID, KIXObjectType.ORGANISATION,
                 ContextMode.DETAILS, OrganisationProperty.ID, true
             )
         );

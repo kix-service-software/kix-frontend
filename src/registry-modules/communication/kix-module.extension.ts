@@ -16,7 +16,8 @@ class KIXModuleExtension implements IKIXModuleExtension {
         ['communication-admin-mail-accounts', 'communication/admin/communication-admin-mail-accounts'],
         ['new-mail-account-dialog', 'communication/admin/dialogs/new-mail-account-dialog'],
         ['mail-account-input-dispatching', 'communication/admin/dialogs/inputs/mail-account-input-dispatching'],
-        ['mail-account-input-types', 'communication/admin/dialogs/inputs/mail-account-input-types']
+        ['mail-account-input-types', 'communication/admin/dialogs/inputs/mail-account-input-types'],
+        ['mail-account-info-widget', 'communication/admin/widgets/mail-account-info-widget']
     ];
 
 }

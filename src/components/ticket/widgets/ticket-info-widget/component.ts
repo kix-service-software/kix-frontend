@@ -125,19 +125,15 @@ class Component {
     }
 
     private async getContactRoutingConfiguration(): Promise<RoutingConfiguration> {
-        const context = await ContextService.getInstance().getContext(ContactDetailsContext.CONTEXT_ID);
-        const contextDescriptor = context.getDescriptor();
         return new RoutingConfiguration(
-            contextDescriptor.urlPaths[0], ContactDetailsContext.CONTEXT_ID, KIXObjectType.CONTACT,
+            ContactDetailsContext.CONTEXT_ID, KIXObjectType.CONTACT,
             ContextMode.DETAILS, ContactProperty.ID, false
         );
     }
 
     private async getOrganisationRoutingConfiguration(): Promise<RoutingConfiguration> {
-        const context = await ContextService.getInstance().getContext(OrganisationDetailsContext.CONTEXT_ID);
-        const contextDescriptor = context.getDescriptor();
         return new RoutingConfiguration(
-            contextDescriptor.urlPaths[0], OrganisationDetailsContext.CONTEXT_ID, KIXObjectType.ORGANISATION,
+            OrganisationDetailsContext.CONTEXT_ID, KIXObjectType.ORGANISATION,
             ContextMode.DETAILS, OrganisationProperty.ID, false
         );
     }

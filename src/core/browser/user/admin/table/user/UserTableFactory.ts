@@ -82,7 +82,7 @@ export class UserTableFactory extends TableFactory {
 
         if (defaultRouting) {
             tableConfiguration.routingConfiguration = new RoutingConfiguration(
-                null, UserDetailsContext.CONTEXT_ID, KIXObjectType.USER,
+                UserDetailsContext.CONTEXT_ID, KIXObjectType.USER,
                 ContextMode.DETAILS, UserProperty.USER_ID
             );
         }

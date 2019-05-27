@@ -61,7 +61,7 @@ export class RoleTableFactory extends TableFactory {
 
         if (defaultRouting) {
             tableConfiguration.routingConfiguration = new RoutingConfiguration(
-                null, RoleDetailsContext.CONTEXT_ID, KIXObjectType.ROLE,
+                RoleDetailsContext.CONTEXT_ID, KIXObjectType.ROLE,
                 ContextMode.DETAILS, RoleProperty.ID
             );
         }

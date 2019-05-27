@@ -1,9 +1,9 @@
-import { KIXObjectType, SystemAddressProperty, ContextMode, MailAccountProperty } from "../../../../../core/model";
+import { KIXObjectType, ContextMode, MailAccountProperty } from "../../../../../core/model";
 import { ComponentState } from "./ComponentState";
 import { AbstractNewDialog } from "../../../../../core/browser/components/dialog";
 import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
 import { RoutingConfiguration } from "../../../../../core/browser/router";
-import { SystemAddressDetailsContext } from "../../../../../core/browser/system-address";
+import { MailAccountDetailsContext } from "../../../../../core/browser/mail-account";
 
 class Component extends AbstractNewDialog {
 
@@ -13,11 +13,10 @@ class Component extends AbstractNewDialog {
             'Translatable#Create Account',
             'Translatable#Account successfully created.',
             KIXObjectType.MAIL_ACCOUNT,
-            null
-            // new RoutingConfiguration(
-            //     null, MailAccountDetailsContext.CONTEXT_ID, KIXObjectType.MAIL_ACCOUNT,
-            //     ContextMode.DETAILS, MailAccountProperty.ID, true
-            // )
+            new RoutingConfiguration(
+                MailAccountDetailsContext.CONTEXT_ID, KIXObjectType.MAIL_ACCOUNT,
+                ContextMode.DETAILS, MailAccountProperty.ID, true
+            )
         );
     }
 

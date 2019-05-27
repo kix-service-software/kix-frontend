@@ -36,7 +36,7 @@ class KIXMenuComponent implements IContextServiceListener {
 
     public getRoutingConfiguration(menuEntry: MenuEntry): RoutingConfiguration {
         return new RoutingConfiguration(
-            null, menuEntry.mainContextId, null, ContextMode.DASHBOARD, null
+            menuEntry.mainContextId, null, ContextMode.DASHBOARD, null
         );
     }
 

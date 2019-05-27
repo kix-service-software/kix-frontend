@@ -108,7 +108,7 @@ export class TicketTableFactory extends TableFactory {
 
         if (defaultRouting) {
             tableConfiguration.routingConfiguration = new RoutingConfiguration(
-                null, TicketDetailsContext.CONTEXT_ID, KIXObjectType.TICKET,
+                TicketDetailsContext.CONTEXT_ID, KIXObjectType.TICKET,
                 ContextMode.DETAILS, TicketProperty.TICKET_ID
             );
         }

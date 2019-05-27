@@ -14,7 +14,7 @@ class Component extends AbstractNewDialog {
             'Translatable#Queue successfully created.',
             KIXObjectType.QUEUE,
             new RoutingConfiguration(
-                null, QueueDetailsContext.CONTEXT_ID, KIXObjectType.QUEUE,
+                QueueDetailsContext.CONTEXT_ID, KIXObjectType.QUEUE,
                 ContextMode.DETAILS, QueueProperty.QUEUE_ID, true
             )
         );
