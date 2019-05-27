@@ -40,14 +40,42 @@ class Component extends FormInputComponent<number[], ComponentState> {
 
     public setCurrentNode(): void {
         if (this.state.defaultValue && this.state.defaultValue.value) {
-            const node = this.state.nodes.find((n) => n.id === this.state.defaultValue.value);
-            this.state.currentNodes = node ? [node] : [];
+            let ids: number[] = this.state.defaultValue.value;
+            if (!Array.isArray(ids)) {
+                ids = [ids];
+            }
+            const currentNodes: TreeNode[] = [];
+            for (const id of ids) {
+                const node = this.findNode(id);
+                if (node) {
+                    currentNodes.push(node);
+                }
+            }
+            this.state.currentNodes = currentNodes;
             super.provideValue(
                 this.state.currentNodes && this.state.currentNodes.length
                     ? this.state.currentNodes[0].id
                     : null
             );
         }
+    }
+
+    private findNode(id: number, nodes: TreeNode[] = this.state.nodes): TreeNode {
+        let returnNode: TreeNode;
+        if (Array.isArray(nodes)) {
+            returnNode = nodes.find((n) => n.id === id);
+            if (!returnNode) {
+                for (const node of nodes) {
+                    if (node.children && Array.isArray(node.children)) {
+                        returnNode = this.findNode(id, node.children);
+                        if (returnNode) {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return returnNode;
     }
 
     public categoryChanged(nodes: TreeNode[]): void {

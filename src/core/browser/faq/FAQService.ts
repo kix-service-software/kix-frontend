@@ -43,26 +43,6 @@ export class FAQService extends KIXObjectService {
         return "FAQArticle";
     }
 
-    public async loadObjects<O extends KIXObject>(
-        objectType: KIXObjectType, objectIds: Array<string | number>,
-        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions
-    ): Promise<O[]> {
-        let objects: O[];
-        let superLoad = false;
-        if (objectType === KIXObjectType.FAQ_CATEGORY) {
-            objects = await super.loadObjects<O>(KIXObjectType.FAQ_CATEGORY, null, loadingOptions);
-        } else {
-            superLoad = true;
-            objects = await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions);
-        }
-
-        if (objectIds && !superLoad) {
-            objects = objects.filter((c) => objectIds.some((oid) => c.ObjectId === oid));
-        }
-
-        return objects;
-    }
-
     public prepareFullTextFilter(searchValue: string): FilterCriteria[] {
         const filter: FilterCriteria[] = [];
 
@@ -105,8 +85,21 @@ export class FAQService extends KIXObjectService {
             switch (property) {
                 case FAQArticleProperty.CATEGORY_ID:
                 case FAQCategoryProperty.PARENT_ID:
-                    const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(KIXObjectType.FAQ_CATEGORY);
-                    values = this.prepareCategoryTree(faqCategories, showInvalid);
+                    const loadingOptions = new KIXObjectLoadingOptions(null, [
+                        new FilterCriteria(
+                            FAQCategoryProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.STRING,
+                            FilterType.AND, null
+                        )
+                    ], null, null, [FAQCategoryProperty.SUB_CATEGORIES], [FAQCategoryProperty.SUB_CATEGORIES]);
+                    const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(
+                        KIXObjectType.FAQ_CATEGORY, null, loadingOptions
+                    );
+                    const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+                    const object = context ? await context.getObject() : null;
+                    values = this.prepareCategoryTree(
+                        faqCategories, showInvalid, object && object.KIXObjectType === KIXObjectType.FAQ_CATEGORY ?
+                            Number(object.ObjectId) : null
+                    );
                     break;
                 case FAQArticleProperty.VISIBILITY:
                     values = this.preparePossibleValueTree(faqSearchAttributes, FAQArticleProperty.VISIBILITY);
@@ -131,18 +124,24 @@ export class FAQService extends KIXObjectService {
         return values;
     }
 
-    private prepareCategoryTree(faqCategories: FAQCategory[], showInvalid: boolean = false): TreeNode[] {
+    private prepareCategoryTree(
+        faqCategories: FAQCategory[], showInvalid: boolean = false, objectId?: number
+    ): TreeNode[] {
         let nodes: TreeNode[] = [];
-        if (faqCategories) {
+        if (faqCategories && !!faqCategories.length) {
             if (!showInvalid) {
-                faqCategories = faqCategories.filter((q) => q.ValidID === 1);
+                faqCategories = faqCategories.filter((c) => c.ValidID === 1);
+            }
+            if (objectId) {
+                faqCategories = faqCategories.filter((c) => c.ID !== objectId);
             }
             nodes = faqCategories.map((category: FAQCategory) => {
                 const treeNode = new TreeNode(
                     category.ID, category.Name,
                     new ObjectIcon(KIXObjectType.FAQ_CATEGORY, category.ID),
                     null,
-                    this.prepareCategoryTree(category.SubCategories, showInvalid)
+                    this.prepareCategoryTree(category.SubCategories, showInvalid, objectId),
+                    null, null, null, null, null, null, null, category.ValidID === 1 ? true : false
                 );
                 return treeNode;
             });

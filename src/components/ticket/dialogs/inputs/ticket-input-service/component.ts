@@ -30,9 +30,35 @@ class Component extends FormInputComponent<number, ComponentState> {
 
     public setCurrentNode(): void {
         if (this.state.defaultValue && this.state.defaultValue.value) {
-            this.state.currentNode = this.getCurrentServiceNode(this.state.defaultValue.value);
-            super.provideValue(this.state.currentNode ? Number(this.state.currentNode.id) : null);
+            let node;
+            if (Array.isArray(this.state.defaultValue.value)) {
+                node = this.findNode(this.state.defaultValue.value[0]);
+            } else {
+                node = this.findNode(this.state.defaultValue.value);
+            }
+            this.state.currentNode = node;
+            super.provideValue(
+                this.state.currentNode ? Number(this.state.currentNode.id) : null
+            );
         }
+    }
+
+    private findNode(id: any, nodes: TreeNode[] = this.state.nodes): TreeNode {
+        let returnNode: TreeNode;
+        if (Array.isArray(nodes)) {
+            returnNode = nodes.find((n) => n.id === id);
+            if (!returnNode) {
+                for (const node of nodes) {
+                    if (node.children && Array.isArray(node.children)) {
+                        returnNode = this.findNode(id, node.children);
+                        if (returnNode) {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return returnNode;
     }
 
     private getCurrentServiceNode(id: number, nodes: TreeNode[] = this.state.nodes): TreeNode {
