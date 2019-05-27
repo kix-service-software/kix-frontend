@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-05-24 10:52+0000\n"
+"PO-Revision-Date: 2019-05-28 05:35+0000\n"
 "Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -30,7 +30,7 @@ msgid "{0} Link created"
 msgstr "{0} Verknüpfung(en) angelegt"
 
 msgid "Accept KIX Header"
-msgstr ""
+msgstr "KIX Header akzeptieren"
 
 msgid "accounted time"
 msgstr "Erfasste Zeit"
@@ -165,10 +165,8 @@ msgstr "Zugeordnete Kontakte"
 msgid "Assigned Organisations"
 msgstr "Zugeordnete Kunden"
 
-#, fuzzy
-#| msgid "Assign Team / Queue"
 msgid "Assigned Queues"
-msgstr "Zuordnung zu Team / Queue"
+msgstr "Zugeordnete Queues"
 
 msgid "Assigned Roles"
 msgstr "Zugeordnete Rollen"
@@ -515,7 +513,7 @@ msgid "Current version"
 msgstr "Aktuelle Version"
 
 msgid "Default"
-msgstr ""
+msgstr "Standard"
 
 #, fuzzy
 #| msgid ""
@@ -560,7 +558,7 @@ msgid "Detailed search results"
 msgstr "Detailierte Suchergebnisse"
 
 msgid "Dispatching"
-msgstr ""
+msgstr "Verteilung"
 
 msgid "Display Name"
 msgstr "Anzeigename"
@@ -583,10 +581,8 @@ msgstr "Bearbeiten"
 msgid "Edit {0}"
 msgstr "{0} bearbeiten"
 
-#, fuzzy
-#| msgid "Email Address"
 msgid "Edit Address"
-msgstr "E-Mail Adresse"
+msgstr "Adresse bearbeiten"
 
 msgid "Edit Agent"
 msgstr "Agenten bearbeiten"
@@ -609,10 +605,8 @@ msgstr "bearbeitet"
 msgid "Edit FAQ Article"
 msgstr "FAQ Artikel bearbeiten"
 
-#, fuzzy
-#| msgid "FAQ Category"
 msgid "Edit FAQ Category"
-msgstr "FAQ Kategorie"
+msgstr "FAQ Kategorie bearbeiten"
 
 msgid "Edit Links"
 msgstr "Links bearbeiten"
@@ -654,10 +648,10 @@ msgid "Email"
 msgstr "E-Mail"
 
 msgid "Email Account"
-msgstr ""
+msgstr "E-Mail Konto"
 
 msgid "Email Accounts"
-msgstr ""
+msgstr "E-Mail Konten"
 
 msgid "Email Address"
 msgstr "E-Mail Adresse"
@@ -665,10 +659,8 @@ msgstr "E-Mail Adresse"
 msgid "Email Addresses"
 msgstr "E-Mail Adressen"
 
-#, fuzzy
-#| msgid "Role Information"
 msgid "Email Information"
-msgstr "Rollen Informationen"
+msgstr "E-Mail Informationen"
 
 msgid "ends with"
 msgstr "endet mit"
@@ -784,7 +776,7 @@ msgid "Force"
 msgstr "Erzwingen"
 
 msgid "Forward"
-msgstr ""
+msgstr "Weiterleiten"
 
 msgid "free tickets: {0}"
 msgstr "Freie Tickets: {0}"
@@ -1097,7 +1089,7 @@ msgid "Home"
 msgstr "Home"
 
 msgid "Host"
-msgstr ""
+msgstr "Host"
 
 #, fuzzy
 #| msgid "Lastname"
@@ -1129,7 +1121,7 @@ msgid "Images"
 msgstr "Bilder"
 
 msgid "IMAP Folder"
-msgstr ""
+msgstr "IMAP-Ordner"
 
 msgid "Import"
 msgstr "Import"
@@ -1444,10 +1436,8 @@ msgstr "Name"
 msgid "New"
 msgstr "Neu"
 
-#, fuzzy
-#| msgid "New Agent"
 msgid "New Account"
-msgstr "Neuer Agent"
+msgstr "Neues Konto"
 
 msgid "New Address"
 msgstr "Neue Adresse"
@@ -1470,18 +1460,14 @@ msgstr "Neues Config Item"
 msgid "New Contact"
 msgstr "Neuer Kontakt"
 
-#, fuzzy
-#| msgid "New Email"
 msgid "New Email Account"
-msgstr "Neue E-Mail"
+msgstr "Neues E-Mail Konto"
 
 msgid "New FAQ"
 msgstr "Neue FAQ"
 
-#, fuzzy
-#| msgid "FAQ Category"
 msgid "New FAQ Category"
-msgstr "FAQ Kategorie"
+msgstr "Neue FAQ Kategorie"
 
 msgid "New Object"
 msgstr "Neues Objekt"
@@ -1803,7 +1789,7 @@ msgid "Rating"
 msgstr "Bewertung"
 
 msgid "Read file."
-msgstr ""
+msgstr "Datei lesen."
 
 msgid "Recipient: Bcc"
 msgstr "Empfänger: Bcc"
@@ -1863,15 +1849,13 @@ msgid "Replace Values"
 msgstr "Wert ersetzen"
 
 msgid "Reply"
-msgstr ""
+msgstr "Antworten"
 
-#, fuzzy
-#| msgid "Select all"
 msgid "Reply all"
-msgstr "Alle auswählen"
+msgstr "Allen antworten"
 
 msgid "Required field '{0}' has no value."
-msgstr ""
+msgstr "Benötigtes Feld '{0}' hat keinen Wert."
 
 msgid "Reset data"
 msgstr "Daten zurücksetzen"
@@ -1922,7 +1906,7 @@ msgid "Row Number"
 msgstr "Zeilennummer"
 
 msgid "Rows with too less values"
-msgstr ""
+msgstr "Zeilen mit zu wenigen Werten"
 
 msgid "Save"
 msgstr "Speichern"
@@ -2445,18 +2429,14 @@ msgstr "Aktualisierung wird durchgeführt"
 msgid "Update Contact"
 msgstr "Aktualisierung wird durchgeführt"
 
-#, fuzzy
-#| msgid "Email Address"
 msgid "Update Email Address"
-msgstr "E-Mail Adresse"
+msgstr "Aktualisierung wird durchgeführt"
 
 msgid "Update FAQ Artikel"
 msgstr "Aktualisierung wird durchgeführt"
 
-#, fuzzy
-#| msgid "FAQ Category"
 msgid "Update FAQ Category"
-msgstr "FAQ Kategorie"
+msgstr "Aktualisierung wird durchgeführt"
 
 #, fuzzy
 #| msgid "Update Translation"
