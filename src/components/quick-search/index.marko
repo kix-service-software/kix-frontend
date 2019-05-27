@@ -1,3 +1,6 @@
-<div.quick-search-input>
-    <filter on-filter("search") key="quick-search-filter" placeholder=state.placeholder icon="kix-icon-search-quick"/>
-</div>
+<if(state.show)>
+    <div.quick-search-input>
+        <filter on-filter("search") key="quick-search-filter" placeholder=state.placeholder icon="kix-icon-search-quick"/>
+    </div>
+    <div.header-separator/>
+</if>
