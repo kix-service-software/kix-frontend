@@ -5,7 +5,7 @@ import {
 import { KIXObjectService } from "./KIXObjectService";
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, Error
+    KIXObjectSpecificCreateOptions, Error, ObjectIcon
 } from "../../../model";
 import { KIXObjectServiceRegistry } from "../../KIXObjectServiceRegistry";
 import { LoggingService } from "../LoggingService";
@@ -75,7 +75,6 @@ export class FAQService extends KIXObjectService {
                 return this.createFAQVote(token, clientRequestId, parameter, (createOptions as CreateFAQVoteOptions));
             case KIXObjectType.FAQ_CATEGORY:
                 return this.createFAQCategory(token, clientRequestId, parameter);
-                break;
             default:
                 const error = 'No create option for object type ' + objectType;
                 throw error;

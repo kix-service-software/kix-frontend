@@ -92,31 +92,11 @@ class Component extends AbstractMarkoComponent {
         );
         ContextService.getInstance().registerContext(editFAQArticleContext);
 
-        const searchContactContext = new ContextDescriptor(
+        const searchFAQArticleContext = new ContextDescriptor(
             FAQArticleSearchContext.CONTEXT_ID, [KIXObjectType.FAQ_ARTICLE], ContextType.DIALOG, ContextMode.SEARCH,
             false, 'search-faq-article-dialog', ['faqarticles'], FAQArticleSearchContext
         );
-        ContextService.getInstance().registerContext(searchContactContext);
-
-        const newFAQCategoryContext = new ContextDescriptor(
-            NewFAQCategoryDialogContext.CONTEXT_ID, [KIXObjectType.FAQ_CATEGORY], ContextType.DIALOG,
-            ContextMode.CREATE_ADMIN, false, 'new-faq-category-dialog', ['faqcategories'], NewFAQCategoryDialogContext
-        );
-        ContextService.getInstance().registerContext(newFAQCategoryContext);
-
-        const editFAQCategoryContext = new ContextDescriptor(
-            EditFAQCategoryDialogContext.CONTEXT_ID, [KIXObjectType.FAQ_CATEGORY], ContextType.DIALOG,
-            ContextMode.EDIT_ADMIN, false, 'edit-faq-category-dialog', ['faqcategories'], EditFAQCategoryDialogContext
-        );
-        ContextService.getInstance().registerContext(editFAQCategoryContext);
-
-
-        const faqCategoryDetailsContextDescriptor = new ContextDescriptor(
-            FAQCategoryDetailsContext.CONTEXT_ID, [KIXObjectType.FAQ_CATEGORY],
-            ContextType.MAIN, ContextMode.DETAILS,
-            true, 'object-details-page', ['faqcategories'], FAQCategoryDetailsContext
-        );
-        ContextService.getInstance().registerContext(faqCategoryDetailsContextDescriptor);
+        ContextService.getInstance().registerContext(searchFAQArticleContext);
     }
 
     private registerDialogs(): void {
@@ -149,7 +129,38 @@ class Component extends AbstractMarkoComponent {
             KIXObjectType.FAQ_ARTICLE,
             ContextMode.SEARCH
         ));
+    }
 
+    private registerActions(): void {
+        ActionFactory.getInstance().registerAction('faq-article-create-action', FAQArticleCreateAction);
+        ActionFactory.getInstance().registerAction('faq-article-delete-action', FAQArticleDeleteAction);
+        ActionFactory.getInstance().registerAction('faq-article-edit-action', FAQArticleEditAction);
+        ActionFactory.getInstance().registerAction('faq-article-print-action', FAQArticlePrintAction);
+        ActionFactory.getInstance().registerAction('faq-article-vote-action', FAQArticleVoteAction);
+    }
+
+    private registerAdminContexts(): void {
+        const newFAQCategoryContext = new ContextDescriptor(
+            NewFAQCategoryDialogContext.CONTEXT_ID, [KIXObjectType.FAQ_CATEGORY], ContextType.DIALOG,
+            ContextMode.CREATE_ADMIN, false, 'new-faq-category-dialog', ['faqcategories'], NewFAQCategoryDialogContext
+        );
+        ContextService.getInstance().registerContext(newFAQCategoryContext);
+
+        const faqCategoryDetailsContextDescriptor = new ContextDescriptor(
+            FAQCategoryDetailsContext.CONTEXT_ID, [KIXObjectType.FAQ_CATEGORY],
+            ContextType.MAIN, ContextMode.DETAILS,
+            true, 'object-details-page', ['faqcategories'], FAQCategoryDetailsContext
+        );
+        ContextService.getInstance().registerContext(faqCategoryDetailsContextDescriptor);
+
+        const editFAQCategoryContext = new ContextDescriptor(
+            EditFAQCategoryDialogContext.CONTEXT_ID, [KIXObjectType.FAQ_CATEGORY], ContextType.DIALOG,
+            ContextMode.EDIT_ADMIN, false, 'edit-faq-category-dialog', ['faqcategories'], EditFAQCategoryDialogContext
+        );
+        ContextService.getInstance().registerContext(editFAQCategoryContext);
+    }
+
+    private registerAdminDialogs(): void {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'new-faq-category-dialog',
             new WidgetConfiguration(
@@ -171,45 +182,10 @@ class Component extends AbstractMarkoComponent {
         ));
     }
 
-    private registerActions(): void {
-        ActionFactory.getInstance().registerAction('faq-article-create-action', FAQArticleCreateAction);
-        ActionFactory.getInstance().registerAction('faq-article-delete-action', FAQArticleDeleteAction);
-        ActionFactory.getInstance().registerAction('faq-article-edit-action', FAQArticleEditAction);
-        ActionFactory.getInstance().registerAction('faq-article-print-action', FAQArticlePrintAction);
-        ActionFactory.getInstance().registerAction('faq-article-vote-action', FAQArticleVoteAction);
-        ActionFactory.getInstance().registerAction('faq-category-csv-export-action', FAQCategoryCSVExportAction);
-    }
-
-    private registerAdminContexts(): void {
-        const newFAQCategoryContext = new ContextDescriptor(
-            NewFAQCategoryDialogContext.CONTEXT_ID, [KIXObjectType.FAQ_CATEGORY], ContextType.DIALOG,
-            ContextMode.CREATE_ADMIN, false, 'new-faq-category-dialog', ['faqcategories'], NewFAQCategoryDialogContext
-        );
-        ContextService.getInstance().registerContext(newFAQCategoryContext);
-
-        const faqCategoryDetailsContextDescriptor = new ContextDescriptor(
-            FAQCategoryDetailsContext.CONTEXT_ID, [KIXObjectType.FAQ_CATEGORY],
-            ContextType.MAIN, ContextMode.DETAILS,
-            true, 'object-details-page', ['faqcategories'], FAQCategoryDetailsContext
-        );
-        ContextService.getInstance().registerContext(faqCategoryDetailsContextDescriptor);
-    }
-
-    private registerAdminDialogs(): void {
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'new-faq-category-dialog',
-            new WidgetConfiguration(
-                'new-faq-category-dialog', 'Translatable#New Category', [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-new-gear'
-            ),
-            KIXObjectType.FAQ_CATEGORY,
-            ContextMode.CREATE_ADMIN
-        ));
-    }
-
     private registerAdminActions(): void {
         ActionFactory.getInstance().registerAction('faq-admin-category-create-action', FAQCategoryCreateAction);
         ActionFactory.getInstance().registerAction('faq-admin-category-edit-action', FAQCategoryEditAction);
+        ActionFactory.getInstance().registerAction('faq-category-csv-export-action', FAQCategoryCSVExportAction);
     }
 
 }
