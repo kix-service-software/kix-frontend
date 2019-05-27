@@ -93,7 +93,7 @@ class Component {
                         BrowserUtil.openSuccessOverlay('Translatable#Config Item successfully created.');
                         DialogService.getInstance().submitMainDialog();
                         const routingConfiguration = new RoutingConfiguration(
-                            null, ConfigItemDetailsContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM,
+                             ConfigItemDetailsContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM,
                             ContextMode.DETAILS, ConfigItemProperty.CONFIG_ITEM_ID, true
                         );
                         RoutingService.getInstance().routeToContext(routingConfiguration, configItemId);

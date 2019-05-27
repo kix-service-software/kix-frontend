@@ -1,4 +1,7 @@
-import { ObjectIcon, KIXObjectType, MailAccount, MailAccountProperty, User, DateTimeUtil } from '../../model';
+import {
+    ObjectIcon, KIXObjectType, MailAccount, MailAccountProperty, User, DateTimeUtil,
+    KIXObjectProperty, DispatchingType, Queue
+} from '../../model';
 import { ILabelProvider } from '..';
 import { TranslationService } from '../i18n/TranslationService';
 import { ObjectDataService } from '../ObjectDataService';
@@ -10,39 +13,6 @@ export class MailAccountLabelProvider implements ILabelProvider<MailAccount> {
 
     public isLabelProviderForType(objectType: KIXObjectType): boolean {
         return objectType === this.kixObjectType;
-    }
-
-    public async getPropertyValueDisplayText(
-        property: string, value: string | number, translatable: boolean = true
-    ): Promise<string> {
-        let displayValue = value;
-        const objectData = ObjectDataService.getInstance().getObjectData();
-        if (objectData) {
-            switch (property) {
-                case MailAccountProperty.VALID_ID:
-                    const valid = objectData.validObjects.find((v) => v.ID === value);
-                    displayValue = valid ? valid.Name : value;
-                    break;
-                case MailAccountProperty.CREATE_BY:
-                case MailAccountProperty.CHANGE_BY:
-                    const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [value], null, null, true
-                    ).catch((error) => [] as User[]);
-                    displayValue = users && !!users.length ? users[0].UserFullname : value;
-                    break;
-                case MailAccountProperty.CREATE_TIME:
-                case MailAccountProperty.CHANGE_TIME:
-                    displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
-                    break;
-                default:
-            }
-        }
-
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
-        }
-
-        return displayValue ? displayValue.toString() : '';
     }
 
     public isLabelProviderFor(object: MailAccount): boolean {
@@ -64,7 +34,13 @@ export class MailAccountLabelProvider implements ILabelProvider<MailAccount> {
             case MailAccountProperty.IMAP_FOLDER:
                 displayValue = 'Translatable#IMAP Folder';
                 break;
-            case MailAccountProperty.VALID_ID:
+            case MailAccountProperty.TRUSTED:
+                displayValue = 'Translatable#Accept KIX Header';
+                break;
+            case MailAccountProperty.DISPATCHING_BY:
+                displayValue = 'Translatable#Dispatching';
+                break;
+            case KIXObjectProperty.VALID_ID:
                 displayValue = 'Translatable#Validity';
                 break;
             case MailAccountProperty.CREATE_BY:
@@ -106,6 +82,16 @@ export class MailAccountLabelProvider implements ILabelProvider<MailAccount> {
             case MailAccountProperty.ID:
                 displayValue = mailAccount.Host;
                 break;
+            case MailAccountProperty.DISPATCHING_BY:
+                if (mailAccount.DispatchingBy === DispatchingType.DEFAULT) {
+                    displayValue = 'Translatable#Default';
+                } else if (mailAccount.QueueID) {
+                    const queues = await KIXObjectService.loadObjects<Queue>(
+                        KIXObjectType.QUEUE, [mailAccount.QueueID], null, null, true
+                    ).catch((error) => [] as Queue[]);
+                    displayValue = queues && !!queues.length ? queues[0].Name : value;
+                }
+                break;
             default:
                 displayValue = await this.getPropertyValueDisplayText(property, displayValue);
         }
@@ -115,6 +101,42 @@ export class MailAccountLabelProvider implements ILabelProvider<MailAccount> {
         }
 
         return displayValue;
+    }
+
+    public async getPropertyValueDisplayText(
+        property: string, value: string | number, translatable: boolean = true
+    ): Promise<string> {
+        let displayValue = value;
+        const objectData = ObjectDataService.getInstance().getObjectData();
+        if (objectData) {
+            switch (property) {
+                case KIXObjectProperty.VALID_ID:
+                    const valid = objectData.validObjects.find((v) => v.ID === value);
+                    displayValue = valid ? valid.Name : value;
+                    break;
+                case KIXObjectProperty.CREATE_BY:
+                case KIXObjectProperty.CHANGE_BY:
+                    const users = await KIXObjectService.loadObjects<User>(
+                        KIXObjectType.USER, [value], null, null, true
+                    ).catch((error) => [] as User[]);
+                    displayValue = users && !!users.length ? users[0].UserFullname : value;
+                    break;
+                case KIXObjectProperty.CREATE_TIME:
+                case KIXObjectProperty.CHANGE_TIME:
+                    displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
+                    break;
+                case MailAccountProperty.TRUSTED:
+                    displayValue = Boolean(value) ? 'Translatable#Yes' : 'Translatable#No';
+                    break;
+                default:
+            }
+        }
+
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
+        }
+
+        return displayValue ? displayValue.toString() : '';
     }
 
     public getDisplayTextClasses(object: MailAccount, property: string): string[] {

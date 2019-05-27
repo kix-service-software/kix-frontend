@@ -59,7 +59,7 @@ export class TranslationTableFactory extends TableFactory {
 
         if (defaultRouting) {
             tableConfiguration.routingConfiguration = new RoutingConfiguration(
-                null, TranslationDetailsContext.CONTEXT_ID, KIXObjectType.TRANSLATION,
+                TranslationDetailsContext.CONTEXT_ID, KIXObjectType.TRANSLATION,
                 ContextMode.DETAILS, TranslationProperty.ID
             );
         }

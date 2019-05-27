@@ -14,7 +14,7 @@ class Component extends AbstractNewDialog {
             'Translatable#Agent successfully created.',
             KIXObjectType.USER,
             new RoutingConfiguration(
-                null, UserDetailsContext.CONTEXT_ID, KIXObjectType.USER,
+                UserDetailsContext.CONTEXT_ID, KIXObjectType.USER,
                 ContextMode.DETAILS, UserProperty.USER_ID, true
             )
         );

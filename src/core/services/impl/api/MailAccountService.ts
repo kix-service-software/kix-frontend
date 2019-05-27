@@ -98,8 +98,7 @@ export class MailAccountService extends KIXObjectService {
                 parameter[dispatchingIndex][1] = DispatchingType.QUEUE;
             }
         }
-        const trustedIndex = parameter.findIndex((p) => p[0] === MailAccountProperty.TRUSTED);
-        if (trustedIndex !== -1) {
+        if (!parameter.some((p) => p[0] === MailAccountProperty.TRUSTED)) {
             parameter.push([MailAccountProperty.TRUSTED, 0]);
         }
         const password = this.getParameterValue(parameter, MailAccountProperty.PASSWORD);

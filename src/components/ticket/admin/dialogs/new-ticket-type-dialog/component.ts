@@ -14,7 +14,7 @@ class Component extends AbstractNewDialog {
             'Translatable#Type successfully created.',
             KIXObjectType.TICKET_TYPE,
             new RoutingConfiguration(
-                null, TicketTypeDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_TYPE,
+                 TicketTypeDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_TYPE,
                 ContextMode.DETAILS, TicketTypeProperty.ID, true
             )
         );

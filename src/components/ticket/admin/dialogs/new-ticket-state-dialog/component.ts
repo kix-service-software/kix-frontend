@@ -14,7 +14,7 @@ class Component extends AbstractNewDialog {
             'Translatable#State successfully created.',
             KIXObjectType.TICKET_STATE,
             new RoutingConfiguration(
-                null, TicketStateDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_STATE,
+                TicketStateDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_STATE,
                 ContextMode.DETAILS, TicketStateProperty.ID, true
             )
         );

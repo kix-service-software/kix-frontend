@@ -14,7 +14,7 @@ class Component extends AbstractNewDialog {
             'Translatable#Address successfully created.',
             KIXObjectType.SYSTEM_ADDRESS,
             new RoutingConfiguration(
-                null, SystemAddressDetailsContext.CONTEXT_ID, KIXObjectType.SYSTEM_ADDRESS,
+                SystemAddressDetailsContext.CONTEXT_ID, KIXObjectType.SYSTEM_ADDRESS,
                 ContextMode.DETAILS, SystemAddressProperty.ID, true
             )
         );

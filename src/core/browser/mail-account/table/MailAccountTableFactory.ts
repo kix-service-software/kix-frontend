@@ -3,10 +3,11 @@ import {
     TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../table";
-import { KIXObjectType, DataType, ContextMode, KIXObjectLoadingOptions } from "../../../model";
+import { KIXObjectType, DataType, ContextMode, KIXObjectLoadingOptions, KIXObjectProperty } from "../../../model";
 import { MailAccountTableContentProvider } from "./MailAccountTableContentProvider";
 import { MailAccountProperty } from "../../../model";
 import { TableFactory } from "../../table/TableFactory";
+import { MailAccountDetailsContext } from "../context";
 
 export class MailAccountTableFactory extends TableFactory {
 
@@ -41,11 +42,11 @@ export class MailAccountTableFactory extends TableFactory {
             this.getDefaultColumnConfiguration(MailAccountProperty.LOGIN),
             this.getDefaultColumnConfiguration(MailAccountProperty.TYPE),
             this.getDefaultColumnConfiguration(MailAccountProperty.COMMENT),
-            this.getDefaultColumnConfiguration(MailAccountProperty.VALID_ID),
-            this.getDefaultColumnConfiguration(MailAccountProperty.CREATE_TIME),
-            this.getDefaultColumnConfiguration(MailAccountProperty.CREATE_BY),
-            this.getDefaultColumnConfiguration(MailAccountProperty.CHANGE_TIME),
-            this.getDefaultColumnConfiguration(MailAccountProperty.CHANGE_BY)
+            this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CREATE_TIME),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CREATE_BY),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CHANGE_TIME),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CHANGE_BY)
         ];
 
         if (!tableConfiguration) {
@@ -59,10 +60,10 @@ export class MailAccountTableFactory extends TableFactory {
         }
 
         if (defaultRouting) {
-            // tableConfiguration.routingConfiguration = new RoutingConfiguration(
-            //     null, MailAccountDetailsContext.CONTEXT_ID, KIXObjectType.MAIL_ACCOUNT,
-            //     ContextMode.DETAILS, MailAccountProperty.ID
-            // );
+            tableConfiguration.routingConfiguration = new RoutingConfiguration(
+                MailAccountDetailsContext.CONTEXT_ID, KIXObjectType.MAIL_ACCOUNT,
+                ContextMode.DETAILS, MailAccountProperty.ID
+            );
         }
 
         return tableConfiguration;
@@ -78,7 +79,7 @@ export class MailAccountTableFactory extends TableFactory {
                     false, DataType.STRING, true, null, null, false
                 );
                 break;
-            case MailAccountProperty.VALID_ID:
+            case KIXObjectProperty.VALID_ID:
             case MailAccountProperty.TYPE:
                 config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true, true);
                 break;
@@ -88,8 +89,8 @@ export class MailAccountTableFactory extends TableFactory {
                     DataType.STRING, true, undefined, null, false
                 );
                 break;
-            case MailAccountProperty.CHANGE_TIME:
-            case MailAccountProperty.CREATE_TIME:
+            case KIXObjectProperty.CHANGE_TIME:
+            case KIXObjectProperty.CREATE_TIME:
                 config = new DefaultColumnConfiguration(
                     property, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
                 );

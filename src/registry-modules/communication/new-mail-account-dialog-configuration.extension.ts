@@ -2,7 +2,8 @@ import { IConfigurationExtension } from '../../core/extensions';
 import { NewMailAccountDialogContext } from '../../core/browser/mail-account';
 import {
     ConfiguredWidget, FormField, FormFieldValue, MailAccountProperty, Form,
-    KIXObjectType, FormContext, ContextConfiguration, FormFieldOption, FormFieldOptions, InputFieldTypes
+    KIXObjectType, FormContext, ContextConfiguration, FormFieldOption, FormFieldOptions, InputFieldTypes,
+    KIXObjectProperty
 } from '../../core/model';
 import { ConfigurationService } from '../../core/services';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
@@ -64,7 +65,7 @@ export class Extension implements IConfigurationExtension {
                     null, null, null, null, 250
                 ),
                 new FormField(
-                    'Translatable#Validity', MailAccountProperty.VALID_ID, 'valid-input', true,
+                    'Translatable#Validity', KIXObjectProperty.VALID_ID, 'valid-input', true,
                     'Translatable#Helptext_Admin_MailAccountCreate_Validity',
                     null, new FormFieldValue(1)
                 )

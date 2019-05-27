@@ -14,7 +14,7 @@ class Component extends AbstractNewDialog {
             'Translatable#Contact successfully created.',
             KIXObjectType.CONTACT,
             new RoutingConfiguration(
-                null, ContactDetailsContext.CONTEXT_ID, KIXObjectType.CONTACT,
+                ContactDetailsContext.CONTEXT_ID, KIXObjectType.CONTACT,
                 ContextMode.DETAILS, ContactProperty.ID, true
             )
         );

@@ -13,7 +13,7 @@ export class MailAccount extends KIXObject {
     public Type: string;
     public IMAPFolder: string;
     public Trusted: number;
-    public DispachtingBy: string;
+    public DispatchingBy: string;
     public QueueID: number;
     public Comment: string;
 
@@ -33,7 +33,7 @@ export class MailAccount extends KIXObject {
             this.Type = mailAccount.Type;
             this.IMAPFolder = mailAccount.IMAPFolder;
             this.Trusted = mailAccount.Trusted;
-            this.DispachtingBy = mailAccount.DispachtingBy;
+            this.DispatchingBy = mailAccount.DispatchingBy;
             this.QueueID = mailAccount.QueueID;
         }
     }

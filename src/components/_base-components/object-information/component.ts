@@ -5,9 +5,7 @@ import { KIXObject } from '../../../core/model';
 import { RoutingConfiguration } from '../../../core/browser/router';
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private routingConfiguration: RoutingConfiguration;
-
-    private navigationProperties: string[];
+    private routingConfigurations: Array<[string, RoutingConfiguration]>;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -15,8 +13,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onInput(input: ComponentInput): void {
         this.state.properties = input.properties;
-        this.routingConfiguration = input.routingConfiguration;
-        this.navigationProperties = input.navigationProperties;
+        this.routingConfigurations = input.routingConfigurations;
         this.state.flat = input.flat;
         this.init(input.object);
     }
@@ -30,9 +27,16 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public getRoutingConfiguration(property: string): RoutingConfiguration {
-        if (this.navigationProperties && this.navigationProperties.some((np) => np === property)) {
-            return this.routingConfiguration;
+        if (this.routingConfigurations && !!this.routingConfigurations.length) {
+            const config = this.routingConfigurations.find((rc) => rc[0] === property);
+            return config ? config[1] : undefined;
         }
+    }
+
+    public getRoutingObjectId(property: string): string | number {
+        const config = this.getRoutingConfiguration(property);
+        return config ? config.replaceObjectId :
+            this.state.object ? this.state.object[property] : undefined;
     }
 }
 

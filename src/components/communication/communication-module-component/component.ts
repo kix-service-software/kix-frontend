@@ -13,7 +13,7 @@ import {
 } from '../../../core/browser/system-address';
 import {
     MailAccountService, MailAccountBrowserFactory, MailAccountTableFactory, MailAccountLabelProvider,
-    NewMailAccountDialogContext
+    NewMailAccountDialogContext, MailAccountDetailsContext
 } from '../../../core/browser/mail-account';
 import { MailAccountCreateAction } from '../../../core/browser/mail-account/actions';
 
@@ -73,6 +73,13 @@ class Component extends AbstractMarkoComponent {
             false, 'new-mail-account-dialog', ['mail-accounts'], NewMailAccountDialogContext
         );
         ContextService.getInstance().registerContext(newMailAccountDialogContext);
+
+        const mailAccountDetailsContext = new ContextDescriptor(
+            MailAccountDetailsContext.CONTEXT_ID, [KIXObjectType.MAIL_ACCOUNT],
+            ContextType.MAIN, ContextMode.DETAILS,
+            false, 'object-details-page', ['mail-accounts'], MailAccountDetailsContext
+        );
+        ContextService.getInstance().registerContext(mailAccountDetailsContext);
     }
 
     private registerAdminActions(): void {

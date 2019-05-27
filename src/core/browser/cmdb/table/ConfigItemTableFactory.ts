@@ -95,7 +95,7 @@ export class ConfigItemTableFactory extends TableFactory {
 
         if (defaultRouting) {
             tableConfiguration.routingConfiguration = new RoutingConfiguration(
-                null, ConfigItemDetailsContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM,
+                ConfigItemDetailsContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM,
                 ContextMode.DETAILS, ConfigItemProperty.CONFIG_ITEM_ID
             );
         }

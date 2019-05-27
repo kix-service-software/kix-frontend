@@ -15,7 +15,7 @@ class Component extends AbstractNewDialog {
             'Translatable#Category successfully created.',
             KIXObjectType.FAQ_CATEGORY,
             new RoutingConfiguration(
-                null, FAQCategoryDetailsContext.CONTEXT_ID, KIXObjectType.FAQ_CATEGORY,
+                FAQCategoryDetailsContext.CONTEXT_ID, KIXObjectType.FAQ_CATEGORY,
                 ContextMode.DETAILS, FAQCategoryProperty.ID, true
             )
         );

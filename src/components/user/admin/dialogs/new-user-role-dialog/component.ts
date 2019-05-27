@@ -14,7 +14,7 @@ class Component extends AbstractNewDialog {
             'Translatable#Role successfully created.',
             KIXObjectType.ROLE,
             new RoutingConfiguration(
-                null, RoleDetailsContext.CONTEXT_ID, KIXObjectType.ROLE,
+                RoleDetailsContext.CONTEXT_ID, KIXObjectType.ROLE,
                 ContextMode.DETAILS, RoleProperty.ID, true
             )
         );

@@ -53,7 +53,7 @@ export class TicketTemplateTableFactory extends TableFactory {
 
         if (defaultRouting) {
             // tableConfiguration.routingConfiguration = new RoutingConfiguration(
-            //     null, TicketTemplateDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_TEMPLATE,
+            //     TicketTemplateDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_TEMPLATE,
             //     ContextMode.DETAILS, TicketTemplateProperty.ID
             // );
         }

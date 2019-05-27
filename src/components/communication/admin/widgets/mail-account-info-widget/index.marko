@@ -1,13 +1,12 @@
 <widget
     instanceId=state.instanceId
     title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
-    contentActions=state.actions
-    icon=(state.widgetConfiguration ? state.widgetConfiguration.icon : null)>
+    contentActions=state.actions>
     <@content>
         <object-information
-            object=state.object
+            object=state.account
             properties=state.properties
-            flat=state.flat
+            flat=false
             routingConfigurations=state.routingConfigurations/>
     </@content>
 </widget>
