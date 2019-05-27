@@ -35,6 +35,9 @@ msgstr ""
 msgid "accounted time"
 msgstr ""
 
+msgid "Account Information"
+msgstr ""
+
 msgid "Account successfully created."
 msgstr ""
 
@@ -612,6 +615,9 @@ msgid "Email Address"
 msgstr ""
 
 msgid "Email Addresses"
+msgstr ""
+
+msgid "Email Information"
 msgstr ""
 
 msgid "ends with"
