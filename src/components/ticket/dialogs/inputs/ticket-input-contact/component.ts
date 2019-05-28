@@ -94,9 +94,8 @@ class Component extends FormInputComponent<number | string, ComponentState> {
                 this.state.currentNode = new TreeNode(contactId, contactId.toString(), 'kix-icon-man-bubble');
                 this.state.nodes = [this.state.currentNode];
             }
+            super.provideValue(contactId);
         }
-
-        super.provideValue(contactId);
     }
 
     public async contactChanged(nodes: TreeNode[]): Promise<void> {
