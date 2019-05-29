@@ -9,8 +9,6 @@ export class ComponentInput {
 
     public flat: boolean;
 
-    public routingConfiguration: RoutingConfiguration;
-
-    public navigationProperties: string[];
+    public routingConfigurations: Array<[string, RoutingConfiguration]>;
 
 }

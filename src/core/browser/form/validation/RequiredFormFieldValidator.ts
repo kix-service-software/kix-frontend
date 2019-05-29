@@ -12,7 +12,7 @@ export class RequiredFormFieldValidator implements IFormFieldValidator {
         const formInstance = await FormService.getInstance().getFormInstance(formId);
         const value = formInstance.getFormFieldValue(formField.instanceId);
         let ok = false;
-        if (value && value.value && value.value !== '') {
+        if (value && typeof value.value !== 'undefined' && value.value !== null && value.value !== '') {
             if (Array.isArray(value.value)) {
                 ok = !!value.value.length;
             } else {

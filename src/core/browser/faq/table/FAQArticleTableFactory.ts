@@ -88,7 +88,7 @@ export class FAQArticleTableFactory extends TableFactory {
 
         if (defaultRouting) {
             tableConfiguration.routingConfiguration = new RoutingConfiguration(
-                null, FAQDetailsContext.CONTEXT_ID, KIXObjectType.FAQ_ARTICLE,
+                FAQDetailsContext.CONTEXT_ID, KIXObjectType.FAQ_ARTICLE,
                 ContextMode.DETAILS, FAQArticleProperty.ID
             );
         }

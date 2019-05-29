@@ -112,5 +112,9 @@ export enum KIXObjectType {
 
     ROLE_PERMISSION = 'ROLE_PERMISSION',
 
-    FOLLOW_UP_TYPE = 'FollowUpType'
+    FOLLOW_UP_TYPE = 'FollowUpType',
+
+    MAIL_ACCOUNT = 'MailAccount',
+
+    MAIL_ACCOUNT_TYPE = 'MailAccountType'
 }

@@ -9,8 +9,7 @@ export class ComponentState extends WidgetComponentState {
         public actions: AbstractAction[] = [],
         public properties: string[] = [],
         public flat: boolean = false,
-        public routingConfiguration: RoutingConfiguration = null,
-        public navigationProperties: string[] = []
+        public routingConfigurations: Array<[string, RoutingConfiguration]> = null
     ) {
         super();
     }

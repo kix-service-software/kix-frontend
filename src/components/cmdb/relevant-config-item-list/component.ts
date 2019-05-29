@@ -49,7 +49,7 @@ class Component {
 
     public getRoutingConfiguration(configItem: ConfigItem): RoutingConfiguration {
         return new RoutingConfiguration(
-            null, ConfigItemDetailsContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM,
+            ConfigItemDetailsContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM,
             ContextMode.DETAILS, ConfigItemProperty.CONFIG_ITEM_ID
         );
     }

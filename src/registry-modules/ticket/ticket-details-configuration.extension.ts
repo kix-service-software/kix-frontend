@@ -72,12 +72,12 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
         const laneTabWidgets = [ticketInfoLane];
 
         const organisationRouting = new RoutingConfiguration(
-            null, OrganisationDetailsContext.CONTEXT_ID, KIXObjectType.ORGANISATION,
+            OrganisationDetailsContext.CONTEXT_ID, KIXObjectType.ORGANISATION,
             ContextMode.DETAILS, OrganisationProperty.ID
         );
 
         const contactRouting = new RoutingConfiguration(
-            null, ContactDetailsContext.CONTEXT_ID, KIXObjectType.CONTACT,
+            ContactDetailsContext.CONTEXT_ID, KIXObjectType.CONTACT,
             ContextMode.DETAILS, ContactProperty.ID
         );
 
@@ -85,15 +85,20 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
         const organisationInfoSidebar =
             new ConfiguredWidget('20180116143215', new WidgetConfiguration(
                 'object-information-widget', 'Translatable#Organisation', [],
-                new ObjectinformationWidgetSettings(KIXObjectType.ORGANISATION, [
-                    OrganisationProperty.NUMBER,
-                    OrganisationProperty.NAME,
-                    OrganisationProperty.URL,
-                    OrganisationProperty.STREET,
-                    OrganisationProperty.ZIP,
-                    OrganisationProperty.CITY,
-                    OrganisationProperty.COUNTRY
-                ], true, organisationRouting, [OrganisationProperty.NUMBER, OrganisationProperty.NAME]),
+                new ObjectinformationWidgetSettings(
+                    KIXObjectType.ORGANISATION, [
+                        OrganisationProperty.NUMBER,
+                        OrganisationProperty.NAME,
+                        OrganisationProperty.URL,
+                        OrganisationProperty.STREET,
+                        OrganisationProperty.ZIP,
+                        OrganisationProperty.CITY,
+                        OrganisationProperty.COUNTRY
+                    ], true, [
+                        [OrganisationProperty.NUMBER, organisationRouting],
+                        [OrganisationProperty.NAME, organisationRouting]
+                    ]
+                ),
                 false, false, WidgetSize.BOTH, 'kix-icon-man-house', false),
                 [new UIComponentPermission('organisations', [CRUD.READ])]
             );
@@ -111,8 +116,12 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                         ContactProperty.MOBILE,
                         ContactProperty.FAX,
                         ContactProperty.EMAIL
-                    ], true, contactRouting,
-                    [ContactProperty.LAST_NAME, ContactProperty.FIRST_NAME, ContactProperty.LOGIN]),
+                    ], true, [
+                        [ContactProperty.LAST_NAME, contactRouting],
+                        [ContactProperty.FIRST_NAME, contactRouting],
+                        [ContactProperty.LOGIN, contactRouting]
+                    ]
+                ),
                 false, false, WidgetSize.BOTH, 'kix-icon-man-bubble', false),
                 [new UIComponentPermission('contacts', [CRUD.READ])]
             );
@@ -140,8 +149,11 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                         OrganisationProperty.ZIP,
                         OrganisationProperty.CITY,
                         OrganisationProperty.COUNTRY
-                    ], true, contactRouting,
-                    [ContactProperty.LAST_NAME, ContactProperty.FIRST_NAME, ContactProperty.LOGIN]
+                    ], true, [
+                        [ContactProperty.LAST_NAME, contactRouting],
+                        [ContactProperty.FIRST_NAME, contactRouting],
+                        [ContactProperty.LOGIN, contactRouting]
+                    ]
                 ),
                 false, false, WidgetSize.BOTH, 'kix-icon-man-house', false),
                 [new UIComponentPermission('organisations', [CRUD.READ])]
@@ -159,7 +171,10 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                     ContactProperty.MOBILE,
                     ContactProperty.EMAIL
                 ],
-                    true, organisationRouting, [OrganisationProperty.NUMBER, OrganisationProperty.NAME]
+                    true, [
+                        [OrganisationProperty.NUMBER, organisationRouting],
+                        [OrganisationProperty.NAME, organisationRouting]
+                    ]
                 ),
                 false, false, WidgetSize.BOTH, 'kix-icon-man-bubble', false),
                 [new UIComponentPermission('contacts', [CRUD.READ])]

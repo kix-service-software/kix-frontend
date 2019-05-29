@@ -125,10 +125,7 @@ export class RoutingService {
                 objectId, true, routingConfiguration.history
             );
 
-            let url = routingConfiguration.path;
-            if (!url) {
-                url = await this.buildUrl(routingConfiguration, objectId);
-            }
+            const url = await this.buildUrl(routingConfiguration, objectId);
 
             history.replaceState(null, null, `/${url}`);
         }

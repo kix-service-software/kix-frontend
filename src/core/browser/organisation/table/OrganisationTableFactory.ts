@@ -58,7 +58,7 @@ export class OrganisationTableFactory extends TableFactory {
 
         if (defaultRouting) {
             tableConfiguration.routingConfiguration = new RoutingConfiguration(
-                null, OrganisationDetailsContext.CONTEXT_ID, KIXObjectType.ORGANISATION,
+                OrganisationDetailsContext.CONTEXT_ID, KIXObjectType.ORGANISATION,
                 ContextMode.DETAILS, OrganisationProperty.ID
             );
         }

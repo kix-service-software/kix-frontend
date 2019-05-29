@@ -14,7 +14,6 @@ class Component extends AbstractNewDialog {
             'Translatable#CI Class successfully created.',
             KIXObjectType.CONFIG_ITEM_CLASS,
             new RoutingConfiguration(
-                null,
                 ConfigItemClassDetailsContext.CONTEXT_ID,
                 KIXObjectType.CONFIG_ITEM_CLASS,
                 ContextMode.DETAILS,

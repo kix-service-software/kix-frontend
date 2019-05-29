@@ -60,7 +60,7 @@ export class TicketQueueTableFactory extends TableFactory {
 
         if (defaultRouting) {
             tableConfiguration.routingConfiguration = new RoutingConfiguration(
-                null, QueueDetailsContext.CONTEXT_ID, KIXObjectType.QUEUE,
+                QueueDetailsContext.CONTEXT_ID, KIXObjectType.QUEUE,
                 ContextMode.DETAILS, QueueProperty.QUEUE_ID
             );
         }

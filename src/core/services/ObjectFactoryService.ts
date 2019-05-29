@@ -31,5 +31,4 @@ export class ObjectFactoryService {
         return object;
     }
 
-
 }

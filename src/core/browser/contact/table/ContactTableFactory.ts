@@ -76,7 +76,7 @@ export class ContactTableFactory extends TableFactory {
 
         if (defaultRouting) {
             tableConfiguration.routingConfiguration = new RoutingConfiguration(
-                null, ContactDetailsContext.CONTEXT_ID, KIXObjectType.CONTACT,
+                ContactDetailsContext.CONTEXT_ID, KIXObjectType.CONTACT,
                 ContextMode.DETAILS, ContactProperty.ID
             );
         }

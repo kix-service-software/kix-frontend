@@ -18,18 +18,19 @@ export class EmailRecipientValidator implements IFormFieldValidator {
 
     public async validate(formField: FormField, formId: string): Promise<ValidationResult> {
         const formInstance = await FormService.getInstance().getFormInstance(formId);
-        let toValue = await formInstance.getFormFieldValueByProperty<string>(ArticleProperty.TO);
+        let toValue = await formInstance.getFormFieldValueByProperty<string[]>(ArticleProperty.TO);
         let checkToValue = true;
         if (!this.isDefined(toValue)) {
             const context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
             if (context && context.getDescriptor().contextMode === ContextMode.CREATE) {
-                toValue = await formInstance.getFormFieldValueByProperty<string>(TicketProperty.CONTACT_ID);
+                const contactValue = await formInstance.getFormFieldValueByProperty<string>(TicketProperty.CONTACT_ID);
+                toValue = new FormFieldValue([contactValue.value], contactValue.valid);
                 checkToValue = false;
             }
         }
 
-        const ccValue = await formInstance.getFormFieldValueByProperty<string>(ArticleProperty.CC);
-        const bccValue = await formInstance.getFormFieldValueByProperty<string>(ArticleProperty.BCC);
+        const ccValue = await formInstance.getFormFieldValueByProperty<string[]>(ArticleProperty.CC);
+        const bccValue = await formInstance.getFormFieldValueByProperty<string[]>(ArticleProperty.BCC);
 
         if (this.isDefined(toValue) || this.isDefined(ccValue) || this.isDefined(bccValue)) {
             let value;
@@ -47,7 +48,7 @@ export class EmailRecipientValidator implements IFormFieldValidator {
                     return mailCheckResult;
                 }
             }
-        } else {
+        } else if (checkToValue) {
             return new ValidationResult(
                 ValidationSeverity.ERROR,
                 "Translatable#At least one of the fields 'To', 'Cc' or 'Bcc' must contain an entry."

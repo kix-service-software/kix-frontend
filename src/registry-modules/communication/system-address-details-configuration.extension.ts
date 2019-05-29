@@ -2,7 +2,7 @@ import { IConfigurationExtension } from '../../core/extensions';
 import {
     WidgetConfiguration, ConfiguredWidget, WidgetSize, ContextConfiguration
 } from '../../core/model';
-import { SystemAddressDetailsContext } from '../../core/browser/system-address/context/system-address';
+import { SystemAddressDetailsContext } from '../../core/browser/system-address/context';
 
 export class Extension implements IConfigurationExtension {
 
@@ -14,14 +14,14 @@ export class Extension implements IConfigurationExtension {
 
         const systemAddressInfoWidget = new ConfiguredWidget('system-address-info-widget',
             new WidgetConfiguration(
-                'system-address-info-widget', 'Email Information', [], null,
+                'system-address-info-widget', 'Translatable#Email Information', ['system-address-edit'], null,
                 false, true, WidgetSize.BOTH, null, false
             )
         );
 
         const systemAddressAssignedQueuesWidget = new ConfiguredWidget('system-address-assigned-queues-widget',
             new WidgetConfiguration(
-                'system-address-assigned-queues-widget', 'Assigned Queues', [], null,
+                'system-address-assigned-queues-widget', 'Translatable#Assigned Queues', [], null,
                 false, true, WidgetSize.BOTH, null, false
             )
         );

@@ -66,7 +66,9 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
                             resolve();
                         }).catch((error: Error) => {
                             DialogService.getInstance().setMainDialogLoading(false);
-                            BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
+                            BrowserUtil.openErrorOverlay(
+                                error.Message ? `${error.Code}: ${error.Message}` : error.toString()
+                            );
                             reject();
                         });
                 }

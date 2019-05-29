@@ -26,4 +26,5 @@ export { ConfigItemClassService } from './ConfigItemClassService';
 export { TranslationService } from './TranslationService';
 export { SystemAddressService } from './SystemAddressService';
 export { QueueService } from './QueueService';
+export { MailAccountService } from './MailAccountService';
 export { TicketTemplateService } from './TicketTemplateService';

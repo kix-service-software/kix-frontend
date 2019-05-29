@@ -3,7 +3,7 @@ import { TicketProperty, TreeNode, FormInputComponent, FormFieldOptions } from "
 import { TicketService } from "../../../../../core/browser/ticket";
 import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
 
-class Component extends FormInputComponent<number[], ComponentState> {
+class Component extends FormInputComponent<number, ComponentState> {
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -38,9 +38,35 @@ class Component extends FormInputComponent<number[], ComponentState> {
 
     public setCurrentNode(): void {
         if (this.state.defaultValue && this.state.defaultValue.value) {
-            this.state.currentNode = this.state.nodes.find((n) => n.id === this.state.defaultValue.value);
-            super.provideValue(this.state.currentNode ? this.state.currentNode.id : null);
+            let node;
+            if (Array.isArray(this.state.defaultValue.value)) {
+                node = this.findNode(this.state.defaultValue.value[0]);
+            } else {
+                node = this.findNode(this.state.defaultValue.value);
+            }
+            this.state.currentNode = node;
+            super.provideValue(
+                this.state.currentNode ? Number(this.state.currentNode.id) : null
+            );
         }
+    }
+
+    private findNode(id: any, nodes: TreeNode[] = this.state.nodes): TreeNode {
+        let returnNode: TreeNode;
+        if (Array.isArray(nodes)) {
+            returnNode = nodes.find((n) => n.id === id);
+            if (!returnNode) {
+                for (const node of nodes) {
+                    if (node.children && Array.isArray(node.children)) {
+                        returnNode = this.findNode(id, node.children);
+                        if (returnNode) {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return returnNode;
     }
 
     public queueChanged(nodes: TreeNode[]): void {

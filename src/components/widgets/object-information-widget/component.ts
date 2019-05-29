@@ -25,8 +25,7 @@ class Component {
         if (settings) {
             this.state.properties = settings.properties;
             this.state.flat = settings.displayFlatList;
-            this.state.routingConfiguration = settings.routingConfiguration;
-            this.state.navigationProperties = settings.navigationProperties;
+            this.state.routingConfigurations = settings.routingConfigurations;
         }
 
         this.contextListenerId = IdService.generateDateBasedId('object-information-widget-');

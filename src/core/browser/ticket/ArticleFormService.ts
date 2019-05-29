@@ -2,7 +2,7 @@ import { KIXObjectFormService } from '../kix/KIXObjectFormService';
 import {
     KIXObjectType, Channel, FormField, ArticleProperty,
     FormFieldOptions, FormFieldOption, ContextType, ContextMode, FormContext, FormFieldValue, IFormInstance,
-    Article, Ticket, Context, SystemAddress, DateTimeUtil
+    Article, Ticket, Context, SystemAddress, DateTimeUtil, Attachment
 } from '../../model';
 import { AutocompleteOption, AutocompleteFormFieldOption } from '../components';
 import { ContextService } from '../context';
@@ -10,7 +10,6 @@ import { FormService } from "../form";
 import { TicketService } from './TicketService';
 import { KIXObjectService } from '../kix';
 import { TranslationService } from '../i18n/TranslationService';
-import { Attachment } from '../../model/kix/faq';
 
 export class ArticleFormService extends KIXObjectFormService<Article> {
 
@@ -284,10 +283,23 @@ export class ArticleFormService extends KIXObjectFormService<Article> {
 
     private async getAttachmentFieldValue(): Promise<Attachment[]> {
         let value = await this.getReferencedValue<Attachment[]>(ArticleProperty.ATTACHMENTS);
+        const newValue: Attachment[] = [];
         if (Array.isArray(value)) {
             value = value.filter((a) => a.Disposition !== 'inline');
+            if (!!value.length) {
+                // FIXME: not very performant (maybe some reference attachment id)
+                const referencedArticle = await this.getReferencedArticle();
+                for (const attachment of value) {
+                    const attachmentWithContent = await TicketService.getInstance().loadArticleAttachment(
+                        referencedArticle.TicketID, referencedArticle.ArticleID, attachment.ID
+                    );
+                    if (attachmentWithContent) {
+                        newValue.push(attachmentWithContent);
+                    }
+                }
+            }
         }
-        return value;
+        return !!newValue.length ? newValue : null;
     }
 
     private async getToFieldValue(dialogContext: Context): Promise<string> {

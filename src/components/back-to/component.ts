@@ -44,7 +44,7 @@ class Component implements IContextServiceListener {
     }
 
     public getRoutingConfiguration(entry: ContextHistoryEntry): RoutingConfiguration {
-        return new RoutingConfiguration(null, entry.contextId, null, entry.descriptor.contextMode, null, true);
+        return new RoutingConfiguration(entry.contextId, null, entry.descriptor.contextMode, null, true);
     }
 
 }
