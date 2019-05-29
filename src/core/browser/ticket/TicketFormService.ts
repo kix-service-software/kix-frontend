@@ -1,9 +1,6 @@
 import { KIXObjectFormService } from '../kix/KIXObjectFormService';
-import {
-    Ticket, KIXObjectType, TicketProperty, Channel, FormField
-} from '../../model';
+import { Ticket, KIXObjectType, TicketProperty } from '../../model';
 import { PendingTimeFormValue } from './form';
-import { ArticleFormService } from './ArticleFormService';
 
 export class TicketFormService extends KIXObjectFormService<Ticket> {
 

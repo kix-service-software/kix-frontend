@@ -50,13 +50,15 @@ export class BrowserUtil {
 
     public static readFile(file: File): Promise<string> {
         return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => {
-                let content = reader.result.toString();
-                content = content.split(',')[1];
-                resolve(content);
-            };
-            reader.readAsDataURL(file);
+            if (file instanceof File) {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    let content = reader.result.toString();
+                    content = content.split(',')[1];
+                    resolve(content);
+                };
+                reader.readAsDataURL(file);
+            }
         });
     }
 
