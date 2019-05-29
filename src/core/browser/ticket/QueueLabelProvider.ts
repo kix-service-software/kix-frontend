@@ -146,11 +146,13 @@ export class QueueLabelProvider implements ILabelProvider<Queue> {
                 displayValue = `${value} ${minuteString}`;
                 break;
             case QueueProperty.PARENT_ID:
-                const parentQueue = await KIXObjectService.loadObjects<Queue>(
-                    KIXObjectType.QUEUE, [value], null, null, true
-                ).catch((error) => [] as Queue[]);
-                displayValue = parentQueue && !!parentQueue.length ?
-                    await LabelService.getInstance().getText(parentQueue[0], true, false) : value;
+                if (value) {
+                    const parentQueue = await KIXObjectService.loadObjects<Queue>(
+                        KIXObjectType.QUEUE, [value], null, null, true
+                    ).catch((error) => [] as Queue[]);
+                    displayValue = parentQueue && !!parentQueue.length ?
+                        await LabelService.getInstance().getText(parentQueue[0], true, false) : value;
+                }
                 break;
             default:
         }

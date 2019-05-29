@@ -1,7 +1,7 @@
 import { KIXObjectService } from "../../kix";
 import {
     KIXObjectType, KIXObjectSpecificLoadingOptions, KIXObjectLoadingOptions, KIXObject, Queue,
-    TreeNode, ObjectIcon, FilterCriteria, FilterDataType, FilterType, QueueProperty, FormFieldOption,
+    TreeNode, ObjectIcon, FilterCriteria, FilterDataType, FilterType, QueueProperty,
     FollowUpType, TreeNodeProperty
 } from "../../../model";
 import { SearchOperator } from "../../SearchOperator";
@@ -60,12 +60,16 @@ export class QueueService extends KIXObjectService<Queue> {
     }
 
     public async prepareQueueTree(
-        queues: Queue[], showInvalid: boolean = false, includeTicketStats: boolean = false
+        queues: Queue[], showInvalid?: boolean, objectId?: number, includeTicketStats: boolean = false
     ): Promise<TreeNode[]> {
         const nodes = [];
         if (queues && !!queues.length) {
             if (!showInvalid) {
                 queues = queues.filter((q) => q.ValidID === 1);
+            }
+
+            if (objectId) {
+                queues = queues.filter((q) => q.QueueID !== objectId);
             }
 
             for (const queue of queues) {
@@ -74,10 +78,10 @@ export class QueueService extends KIXObjectService<Queue> {
                     ticketStats = await this.getTicketStats(queue);
                 }
 
-                const subTree = await this.prepareQueueTree(queue.SubQueues, showInvalid);
+                const subTree = await this.prepareQueueTree(queue.SubQueues, showInvalid, objectId, includeTicketStats);
                 const treeNode = new TreeNode(
                     queue.QueueID, queue.Name,
-                    new ObjectIcon('Queue', queue.QueueID),
+                    new ObjectIcon(KIXObjectType.QUEUE, queue.QueueID),
                     null,
                     subTree,
                     null, null, null,
@@ -121,12 +125,12 @@ export class QueueService extends KIXObjectService<Queue> {
             new FilterCriteria(
                 QueueProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, null
             )
-        ], null, null, ['SubQueues', 'TicketStats', 'Tickets'], ['SubQueues']);
+        ], null, null, [QueueProperty.SUB_QUEUES, 'TicketStats', 'Tickets'], [QueueProperty.SUB_QUEUES]);
 
         return await KIXObjectService.loadObjects<Queue>(KIXObjectType.QUEUE, null, loadingOptions);
     }
 
-    public async getTreeNodes(property: string, options?: FormFieldOption[]): Promise<TreeNode[]> {
+    public async getTreeNodes(property: string, showInvalid?: boolean): Promise<TreeNode[]> {
         const values: TreeNode[] = [];
 
         const labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.QUEUE);
@@ -134,8 +138,7 @@ export class QueueService extends KIXObjectService<Queue> {
         switch (property) {
             case QueueProperty.FOLLOW_UP_ID:
                 let followUpTypes = await KIXObjectService.loadObjects<FollowUpType>(KIXObjectType.FOLLOW_UP_TYPE);
-                const validOption = options ? options.find((o) => o.option === 'showValid') : null;
-                if (!validOption || !validOption.value) {
+                if (!showInvalid) {
                     followUpTypes = followUpTypes.filter((q) => q.ValidID === 1);
                 }
                 for (const type of followUpTypes) {

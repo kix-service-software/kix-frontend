@@ -9,7 +9,7 @@ import {
     TicketContext, TicketDetailsContext, NewTicketDialogContext, TicketSearchContext, EditTicketDialogContext,
     NewTicketArticleContext, TicketListContext, ArticleZipAttachmentDownloadAction, ArticleBulkAction,
     ArticleCallIncomingAction, ArticleCallOutgoingAction, ArticleCommunicationAction, ArticleEditAction,
-    ArticleMaximizeAction, ArticleNewAction, ArticlePrintAction, ArticleTagAction,
+    ArticleMaximizeAction, ArticlePrintAction, ArticleTagAction,
     TicketEditAction, TicketLockAction, TicketMergeAction, TicketCreateAction, TicketPrintAction, TicketSpamAction,
     TicketWatchAction, TicketSearchAction, ShowUserTicketsAction, TicketSearchDefinition, TicketTypeCreateAction,
     TicketTypeImportAction, TicketTypeDeleteAction, TicketTypeTableFactory, TicketTypeLabelProvider,
@@ -28,7 +28,7 @@ import {
     TicketTemplateCreateAction, TicketTemplateTableDeleteAction, TicketTemplateLabelProvider, TicketTemplateService,
     TicketTemplateBrowserFactory, TicketTemplateTableFactory, TicketQueueCreateAction, TicketQueueTableFactory,
     QueueLabelProvider, QueueBrowserFactory, QueueService, NewQueueDialogContext, FollowUpTypeBrowserFactory,
-    TicketQueueEditAction, QueueDetailsContext, ArticleReplyAction, ArticleFormService, ArticleForwardAction
+    TicketQueueEditAction, QueueDetailsContext, EditQueueDialogContext, QueueFormService
 } from '../../../core/browser/ticket';
 import {
     KIXObjectType, ContextDescriptor, ContextMode, ContextType,
@@ -41,6 +41,10 @@ import { TableFactoryService, TableCSSHandlerRegistry } from '../../../core/brow
 import { ChannelLabelProvider } from '../../../core/browser/channel/ChannelLabelProvider';
 import { DialogService } from '../../../core/browser/components/dialog';
 import { FormValidationService } from '../../../core/browser/form/validation';
+import { ArticleReplyAction } from '../../../core/browser/ticket/actions/article/ArticleReplyAction';
+import { ArticleForwardAction } from '../../../core/browser/ticket/actions/article/ArticleForwardAction';
+import { ArticleFormService } from '../../../core/browser/ticket/ArticleFormService';
+import { ArticleNewAction } from '../../../core/browser/ticket/actions/article/ArticleNewAction';
 
 class Component extends AbstractMarkoComponent {
 
@@ -62,6 +66,7 @@ class Component extends AbstractMarkoComponent {
         ServiceRegistry.registerServiceInstance(TicketTypeFormService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketPriorityFormService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketStateFormService.getInstance());
+        ServiceRegistry.registerServiceInstance(QueueFormService.getInstance());
 
         KIXObjectSearchService.getInstance().registerSearchDefinition(new TicketSearchDefinition());
 
@@ -246,6 +251,13 @@ class Component extends AbstractMarkoComponent {
             true, 'object-details-page', ['queues'], QueueDetailsContext
         );
         ContextService.getInstance().registerContext(ticketQueueDetailsContextDescriptor);
+
+        const editQueueContext = new ContextDescriptor(
+            EditQueueDialogContext.CONTEXT_ID, [KIXObjectType.QUEUE],
+            ContextType.DIALOG, ContextMode.EDIT_ADMIN,
+            false, 'edit-ticket-queue-dialog', ['queues'], EditQueueDialogContext
+        );
+        ContextService.getInstance().registerContext(editQueueContext);
     }
 
     private registerTicketActions(): void {
@@ -424,6 +436,16 @@ class Component extends AbstractMarkoComponent {
             ),
             KIXObjectType.QUEUE,
             ContextMode.CREATE_ADMIN
+        ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'edit-ticket-queue-dialog',
+            new WidgetConfiguration(
+                'edit-ticket-queue-dialog', 'Translatable#Edit Queue', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-edit'
+            ),
+            KIXObjectType.QUEUE,
+            ContextMode.EDIT_ADMIN
         ));
     }
 }
