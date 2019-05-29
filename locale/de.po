@@ -581,6 +581,11 @@ msgstr "Bearbeiten"
 msgid "Edit {0}"
 msgstr "{0} bearbeiten"
 
+#, fuzzy
+#| msgid "Email Account"
+msgid "Edit Account"
+msgstr "E-Mail Konto"
+
 msgid "Edit Address"
 msgstr "Adresse bearbeiten"
 
@@ -892,6 +897,51 @@ msgstr "Hilfetext_Admin_QueueCreate_Name"
 #, fuzzy
 #| msgid "Helptext_Admin_QueueCreate_Validity"
 msgid "Helptext_Admin_MailAccountCreate_Validity"
+msgstr "Hilfetext_Admin_QueueCreate_Validity"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Name"
+msgid "Helptext_Admin_MailAccountEdit_AcceptKIXHeader"
+msgstr "Hilfetext_Admin_QueueCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Comment"
+msgid "Helptext_Admin_MailAccountEdit_Comment"
+msgstr "Hilfetext_Admin_QueueCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Icon."
+msgid "Helptext_Admin_MailAccountEdit_Dispachting"
+msgstr "Hilfetext_Admin_QueueCreate_Icon."
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Comment"
+msgid "Helptext_Admin_MailAccountEdit_Host"
+msgstr "Hilfetext_Admin_QueueCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Icon."
+msgid "Helptext_Admin_MailAccountEdit_IMAPFolder"
+msgstr "Hilfetext_Admin_QueueCreate_Icon."
+
+#, fuzzy
+#| msgid "Helptext_Organisations_ContactCreate_Password"
+msgid "Helptext_Admin_MailAccountEdit_Password"
+msgstr "Hilfetext_Organisations_ContactCreate_Password"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Name"
+msgid "Helptext_Admin_MailAccountEdit_Type."
+msgstr "Hilfetext_Admin_QueueCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Name"
+msgid "Helptext_Admin_MailAccountEdit_UserName"
+msgstr "Hilfetext_Admin_QueueCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Validity"
+msgid "Helptext_Admin_MailAccountEdit_Validity"
 msgstr "Hilfetext_Admin_QueueCreate_Validity"
 
 msgid "Helptext_Admin_QueueCreate_Comment"
@@ -1457,9 +1507,6 @@ msgstr "Neues Config Item"
 
 msgid "New Contact"
 msgstr "Neuer Kontakt"
-
-msgid "New Email Account"
-msgstr "Neues E-Mail Konto"
 
 msgid "New FAQ"
 msgstr "Neue FAQ"
@@ -2415,6 +2462,11 @@ msgstr "Nicht beobachten"
 msgid "Unwatch Ticket ..."
 msgstr "Ticket nicht mehr beobachten..."
 
+#, fuzzy
+#| msgid "Create Agent"
+msgid "Update Account"
+msgstr "Neuer Agent"
+
 msgid "Update Agent"
 msgstr "Aktualisierung wird durchgeführt"
 
@@ -2542,6 +2594,9 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "New Email Account"
+#~ msgstr "Neues E-Mail Konto"
 
 #~ msgid "No contact available"
 #~ msgstr "Kein Kontakt verfügbar"
