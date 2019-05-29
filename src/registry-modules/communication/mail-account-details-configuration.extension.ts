@@ -16,7 +16,7 @@ export class Extension implements IConfigurationExtension {
         const mailAccountInfoLane =
             new ConfiguredWidget('mail-account-information-lane', new WidgetConfiguration(
                 'mail-account-info-widget', 'Translatable#Account Information',
-                ['mail-account-edit-action'],
+                ['mail-account-edit'],
                 new ObjectinformationWidgetSettings(KIXObjectType.MAIL_ACCOUNT, [
                     MailAccountProperty.LOGIN,
                     MailAccountProperty.HOST,

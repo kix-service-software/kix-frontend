@@ -5,7 +5,6 @@ import { TicketDetailsContext, NewTicketArticleContext } from '../../../../core/
 import {
     AbstractNewDialog, TabContainerEvent, TabContainerEventData
 } from '../../../../core/browser/components/dialog';
-import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 import { EventService } from '../../../../core/browser/event';
 
 class Component extends AbstractNewDialog {
@@ -22,10 +21,6 @@ class Component extends AbstractNewDialog {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-
-        (this.state as ComponentState).translations = await TranslationService.createTranslationObject([
-            "Translatable#Cancel", "Translatable#Save"
-        ]);
 
         const context = await ContextService.getInstance().getContext(TicketDetailsContext.CONTEXT_ID);
         const dialogContext = await ContextService.getInstance().getContext(NewTicketArticleContext.CONTEXT_ID);
