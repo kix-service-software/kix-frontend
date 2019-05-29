@@ -4,9 +4,7 @@ import {
     Attachment, KIXObjectType, Ticket, TicketProperty, FilterDataType, FilterCriteria, FilterType,
     TreeNode, ObjectIcon, Service, TicketPriority, TicketType,
     TicketState, StateType, KIXObject, Sla, TableFilterCriteria, User, KIXObjectLoadingOptions,
-    KIXObjectSpecificLoadingOptions,
-    FormFieldOption,
-    Article
+    KIXObjectSpecificLoadingOptions, ContextType, Article
 } from '../../model';
 import { TicketParameterUtil } from './TicketParameterUtil';
 import { KIXObjectService } from '../kix';
@@ -101,7 +99,7 @@ export class TicketService extends KIXObjectService<Ticket> {
         ];
     }
 
-    public async getTreeNodes(property: string, showInvalid: boolean = false): Promise<TreeNode[]> {
+    public async getTreeNodes(property: string, showInvalid?: boolean): Promise<TreeNode[]> {
         let values: TreeNode[] = [];
 
         const labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.TICKET);
@@ -109,9 +107,14 @@ export class TicketService extends KIXObjectService<Ticket> {
         switch (property) {
             case TicketProperty.QUEUE_ID:
                 const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy();
-                values = queuesHierarchy
-                    ? await QueueService.getInstance().prepareQueueTree(queuesHierarchy, showInvalid)
-                    : [];
+                const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+                const object = context ? await context.getObject() : null;
+                const objectId = object && object.KIXObjectType === KIXObjectType.QUEUE
+                    ? Number(object.ObjectId)
+                    : null;
+                values = queuesHierarchy ? await QueueService.getInstance().prepareQueueTree(
+                    queuesHierarchy, showInvalid, objectId
+                ) : [];
                 break;
             case TicketProperty.SERVICE_ID:
                 const servicesHierarchy = await this.getServicesHierarchy();

@@ -58,6 +58,7 @@ class Extension implements IKIXModuleExtension {
         ['queue-input-follow-up', 'ticket/admin/dialogs/inputs/queue-input-follow-up'],
         ['ticket-queue-info-widget', 'ticket/admin/widgets/ticket-queue-info-widget'],
         ['ticket-queue-signature', 'ticket/admin/widgets/ticket-queue-signature'],
+        ['edit-ticket-queue-dialog', 'ticket/admin/dialogs/edit-ticket-queue-dialog'],
         ['ticket-admin-templates', 'ticket/admin/ticket-admin-templates']
     ];
 

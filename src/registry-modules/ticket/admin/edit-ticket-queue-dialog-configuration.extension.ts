@@ -1,10 +1,9 @@
 import { IConfigurationExtension } from '../../../core/extensions';
-import { NewQueueDialogContext } from '../../../core/browser/ticket';
+import { EditQueueDialogContext } from '../../../core/browser/ticket';
 import {
-    ConfiguredWidget, FormField, KIXObjectType, Form,
-    FormContext, FormFieldValue, ContextConfiguration, QueueProperty, FormFieldOption, ObjectReferenceOptions,
-    KIXObjectLoadingOptions, FilterCriteria, SystemAddressProperty, FilterDataType, FilterType, NumberInputOptions,
-    FormFieldOptions
+    ContextConfiguration, ConfiguredWidget, FormField, KIXObjectType, Form,
+    FormContext, FormFieldValue, QueueProperty, FormFieldOption, NumberInputOptions, ObjectReferenceOptions,
+    KIXObjectLoadingOptions, FilterCriteria, SystemAddressProperty, FilterDataType, FilterType, FormFieldOptions
 } from '../../../core/model';
 import { FormGroup } from '../../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../../core/services';
@@ -13,7 +12,7 @@ import { SearchOperator } from '../../../core/browser';
 export class Extension implements IConfigurationExtension {
 
     public getModuleId(): string {
-        return NewQueueDialogContext.CONTEXT_ID;
+        return EditQueueDialogContext.CONTEXT_ID;
     }
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
@@ -27,38 +26,38 @@ export class Extension implements IConfigurationExtension {
     public async createFormDefinitions(overwrite: boolean): Promise<void> {
         const configurationService = ConfigurationService.getInstance();
 
-        const formId = 'new-ticket-queue-form';
+        const formId = 'edit-ticket-queue-form';
         const existing = configurationService.getModuleConfiguration(formId, null);
         if (!existing) {
             const infoGroup = new FormGroup('Translatable#Queue Information', [
                 new FormField(
                     'Translatable#Name', QueueProperty.NAME, null, true,
-                    'Translatable#Helptext_Admin_QueueCreate_Name'
+                    'Translatable#Helptext_Admin_QueueEdit_Name'
                 ),
                 new FormField(
                     'Translatable#Icon', 'ICON', 'icon-input', false,
-                    'Translatable#Helptext_Admin_QueueCreate_Icon.'
+                    'Translatable#Helptext_Admin_QueueEdit_Icon.'
                 ),
                 new FormField(
                     'Translatable#Parent Queue', QueueProperty.PARENT_ID, 'ticket-input-queue', false,
-                    'Translatable#Helptext_Admin_QueueCreate_ParentQueue', [
+                    'Translatable#Helptext_Admin_QueueEdit_ParentQueue', [
                         new FormFieldOption(FormFieldOptions.SHOW_INVALID, true)
                     ]
                 ),
                 new FormField(
                     'Translatable#Follow Up on Tickets possible', QueueProperty.FOLLOW_UP_ID, 'queue-input-follow-up',
-                    true, 'Translatable#Helptext_Admin_QueueCreate_FollowUp', null, new FormFieldValue(3)
+                    true, 'Translatable#Helptext_Admin_QueueEdit_FollowUp'
                 ),
                 new FormField(
                     'Translatable#Unlock Timeout', QueueProperty.UNLOCK_TIMEOUT, 'number-input',
-                    false, 'Translatable#Helptext_Admin_QueueCreate_UnlockTimeout', [
+                    false, 'Translatable#Helptext_Admin_QueueEdit_UnlockTimeout', [
                         new FormFieldOption(NumberInputOptions.MIN, 0),
                         new FormFieldOption(NumberInputOptions.UNIT_STRING, 'Translatable#Minutes')
                     ]
                 ),
                 new FormField(
                     'Translatable#Sender Address (Email)', QueueProperty.SYSTEM_ADDRESS_ID, 'object-reference-input',
-                    true, 'Translatable#Helptext_Admin_QueueCreate_SenderAddress.', [
+                    true, 'Translatable#Helptext_Admin_QueueEdit_SenderAddress.', [
                         new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.SYSTEM_ADDRESS),
                         new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
                         new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
@@ -75,26 +74,29 @@ export class Extension implements IConfigurationExtension {
                 ),
                 new FormField(
                     'Translatable#Comment', QueueProperty.COMMENT, 'text-area-input', false,
-                    'Translatable#Helptext_Admin_QueueCreate_Comment',
+                    'Translatable#Helptext_Admin_QueueEdit_Comment',
                     null, null, null, null, null, null, null, 250
                 ),
                 new FormField(
                     'Translatable#Validity', QueueProperty.VALID_ID, 'valid-input', true,
-                    'Translatable#Helptext_Admin_QueueCreate_Validity',
+                    'Translatable#Helptext_Admin_QueueEdit_Validity',
                     null, new FormFieldValue(1)
                 )
             ]);
             const signatureGroup = new FormGroup('Translatable#Signature', [
                 new FormField(
                     'Translatable#Signature', QueueProperty.SIGNATURE, 'rich-text-input', false,
-                    'Translatable#Helptext_Admin_QueueCreate_Signature'
+                    'Translatable#Helptext_Admin_QueueEdit_Signature'
                 )
             ]);
 
-            const form = new Form(formId, 'Translatable#New Queue', [infoGroup, signatureGroup], KIXObjectType.QUEUE);
+            const form = new Form(
+                formId, 'Translatable#Edit Queue', [infoGroup, signatureGroup], KIXObjectType.QUEUE,
+                true, FormContext.EDIT
+            );
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
-        configurationService.registerForm([FormContext.NEW], KIXObjectType.QUEUE, formId);
+        configurationService.registerForm([FormContext.EDIT], KIXObjectType.QUEUE, formId);
     }
 
 }

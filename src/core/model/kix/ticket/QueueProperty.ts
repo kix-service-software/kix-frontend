@@ -28,6 +28,8 @@ export enum QueueProperty {
 
     SIGNATURE = 'Signature',
 
-    PARENT_ID = 'ParentID'
+    PARENT_ID = 'ParentID',
+
+    SUB_QUEUES = 'SubQueues'
 
 }

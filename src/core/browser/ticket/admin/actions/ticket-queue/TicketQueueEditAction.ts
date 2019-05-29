@@ -9,12 +9,12 @@ export class TicketQueueEditAction extends AbstractAction {
         this.icon = "kix-icon-edit";
     }
 
-    // public async run(): Promise<void> {
-    //     await FormService.getInstance().getFormInstance<FormInstance>('edit-ticket-queue-form', false);
-    //     ContextService.getInstance().setDialogContext(
-    //         // TODO: Titel aus dem aktiven Admin-Modul ermitteln (Kategorie)
-    //         null, KIXObjectType.QUEUE, ContextMode.EDIT_ADMIN, null, true
-    //     );
-    // }
+    public async run(): Promise<void> {
+        await FormService.getInstance().getFormInstance<FormInstance>('edit-ticket-queue-form', false);
+        ContextService.getInstance().setDialogContext(
+            // TODO: Titel aus dem aktiven Admin-Modul ermitteln (Kategorie)
+            null, KIXObjectType.QUEUE, ContextMode.EDIT_ADMIN, null, true
+        );
+    }
 
 }

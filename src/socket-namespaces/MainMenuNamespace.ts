@@ -85,10 +85,13 @@ export class MainMenuNamespace extends SocketNameSpace {
         extensions: IMainMenuExtension[], entryConfigurations: MenuEntry[]
     ): MenuEntry[] {
 
-        const entries = entryConfigurations.map((ec) => {
+        const entries: MenuEntry[] = [];
+        for (const ec of entryConfigurations) {
             const menu = extensions.find((me) => me.mainContextId === ec.mainContextId);
-            return new MenuEntry(menu.icon, menu.text, menu.mainContextId, menu.contextIds);
-        });
+            if (menu) {
+                entries.push(new MenuEntry(menu.icon, menu.text, menu.mainContextId, menu.contextIds));
+            }
+        }
 
         return entries;
     }

@@ -56,7 +56,7 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
                 );
 
                 if (f.property === 'ICON') {
-                    if (kixObject) {
+                    if (kixObject && formContext === FormContext.EDIT) {
                         const icon = LabelService.getInstance().getIcon(kixObject);
                         if (icon instanceof ObjectIcon) {
                             value = icon;
@@ -66,9 +66,9 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
                     }
                 }
 
-                formFieldValue = kixObject
+                formFieldValue = kixObject && formContext === FormContext.EDIT
                     ? new FormFieldValue(value)
-                    : new FormFieldValue(value, f.defaultValue.valid);
+                    : new FormFieldValue(value, f.defaultValue ? f.defaultValue.valid : undefined);
             } else {
                 formFieldValue = new FormFieldValue(null);
             }
