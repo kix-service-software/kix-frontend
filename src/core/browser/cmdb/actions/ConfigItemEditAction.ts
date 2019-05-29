@@ -1,11 +1,17 @@
-import { AbstractAction, KIXObjectType, ContextMode, ConfigItem, ConfigItemClass } from "../../../model";
+import { AbstractAction, KIXObjectType, ContextMode, ConfigItem, ConfigItemClass, CRUD } from "../../../model";
 import { ContextService } from "../../context";
 import { FormService } from "../../form";
 import { EditConfigItemDialogContext, ConfigItemDetailsContext } from "../context";
 import { ConfigItemFormFactory } from "../ConfigItemFormFactory";
 import { KIXObjectService } from "../../kix";
+import { UIComponentPermission } from "../../../model/UIComponentPermission";
 
 export class ConfigItemEditAction extends AbstractAction<ConfigItem> {
+
+    public permissions: UIComponentPermission[] = [
+        new UIComponentPermission('cmdb/*/versions', [CRUD.CREATE]),
+        new UIComponentPermission('cmdb/configitems', [CRUD.UPDATE])
+    ];
 
     public async initAction(): Promise<void> {
         this.text = 'Edit';

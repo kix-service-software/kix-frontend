@@ -1,6 +1,7 @@
 import { IMainMenuExtension } from '../../core/extensions';
 import { CMDBContext, ConfigItemDetailsContext } from '../../core/browser/cmdb';
 import { UIComponentPermission } from '../../core/model/UIComponentPermission';
+import { CRUD } from '../../core/model';
 
 export class Extension implements IMainMenuExtension {
 
@@ -14,7 +15,9 @@ export class Extension implements IMainMenuExtension {
 
     public text: string = "Translatable#CMDB";
 
-    public permissions: UIComponentPermission[] = [];
+    public permissions: UIComponentPermission[] = [
+        new UIComponentPermission('cmdb/configitems', [CRUD.READ])
+    ];
 }
 
 module.exports = (data, host, options) => {

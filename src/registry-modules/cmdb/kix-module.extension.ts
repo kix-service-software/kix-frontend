@@ -1,5 +1,7 @@
 import { IKIXModuleExtension } from "../../core/extensions";
 import { UIComponent } from "../../core/model/UIComponent";
+import { UIComponentPermission } from "../../core/model/UIComponentPermission";
+import { CRUD } from "../../core/model";
 
 class Extension implements IKIXModuleExtension {
 
@@ -8,13 +10,18 @@ class Extension implements IKIXModuleExtension {
     public id = 'cmdb-module';
 
     public initComponents: UIComponent[] = [
-        new UIComponent('cmdb-module-component', 'cmdb/cmdb-module-component', [])
+        new UIComponent('cmdb-module-read-component', 'cmdb/module/cmdb-module-read-component', [
+            new UIComponentPermission('cmdb/configitems', [CRUD.READ])
+        ]),
+        new UIComponent('cmdb-module-edit-component', 'cmdb/module/cmdb-module-edit-component', [
+            new UIComponentPermission('cmdb/configitems', [CRUD.UPDATE]),
+            new UIComponentPermission('cmdb/configitems/*/versions', [CRUD.CREATE])
+        ])
     ];
 
     public external: boolean = false;
 
     public uiComponents: UIComponent[] = [
-        new UIComponent('cmdb-module', 'cmdb/cmdb-module', []),
         new UIComponent('config-item-info', 'cmdb/config-item-info', []),
         new UIComponent('new-config-item-dialog', 'cmdb/dialogs/new-config-item-dialog', []),
         new UIComponent('edit-config-item-dialog', 'cmdb/dialogs/edit-config-item-dialog', []),
