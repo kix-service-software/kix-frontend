@@ -14,7 +14,6 @@ class KIXModuleExtension implements IKIXModuleExtension {
     public external: boolean = false;
 
     public uiComponents: UIComponent[] = [
-        new UIComponent('communication-module-component', '', []),
         new UIComponent(
             'communication-admin-system-addresses', 'communication/admin/communication-admin-system-addresses', []
         ),
