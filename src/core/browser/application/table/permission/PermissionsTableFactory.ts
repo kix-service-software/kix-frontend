@@ -40,15 +40,12 @@ export class PermissionsTableFactory extends TableFactory {
         let tableColumns = [];
         if (objectType === KIXObjectType.ROLE_PERMISSION) {
             tableColumns = [
-                this.getDefaultColumnConfiguration(PermissionProperty.TYPE_ID),
                 this.getDefaultColumnConfiguration(PermissionProperty.TARGET),
-                this.getDefaultColumnConfiguration(PermissionProperty.IS_REQUIRED),
                 this.getDefaultColumnConfiguration(PermissionProperty.CREATE),
                 this.getDefaultColumnConfiguration(PermissionProperty.READ),
                 this.getDefaultColumnConfiguration(PermissionProperty.UPDATE),
                 this.getDefaultColumnConfiguration(PermissionProperty.DELETE),
-                this.getDefaultColumnConfiguration(PermissionProperty.DENY),
-                this.getDefaultColumnConfiguration(PermissionProperty.COMMENT)
+                this.getDefaultColumnConfiguration(PermissionProperty.DENY)
             ];
         } else {
             tableColumns = [
