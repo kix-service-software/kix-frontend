@@ -1,7 +1,6 @@
 import { KIXObject } from "../KIXObject";
 import { KIXObjectType } from "../KIXObjectType";
 import { PreparedData } from "./PreparedData";
-import { AttributeDefinition } from "./AttributeDefinition";
 import { ConfigItemClassDefinition } from "./ConfigItemClassDefinition";
 
 export class Version extends KIXObject<Version> {

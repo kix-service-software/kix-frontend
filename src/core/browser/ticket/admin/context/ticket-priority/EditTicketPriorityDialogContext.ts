@@ -1,8 +1,7 @@
 import { Context } from "../../../../../model/components/context/Context";
-import { WidgetConfiguration, WidgetType, ContextDescriptor } from "../../../../../model";
-import { EditTicketPriorityDialogContextConfiguration } from "./EditTicketPriorityDialogContextConfiguration";
+import { ContextDescriptor, ContextConfiguration } from "../../../../../model";
 
-export class EditTicketPriorityDialogContext extends Context<EditTicketPriorityDialogContextConfiguration> {
+export class EditTicketPriorityDialogContext extends Context {
 
     public static CONTEXT_ID: string = 'edit-ticket-priority-dialog-context';
     public formListenerId: string;
@@ -10,17 +9,8 @@ export class EditTicketPriorityDialogContext extends Context<EditTicketPriorityD
     public constructor(
         descriptor: ContextDescriptor,
         objectId: string | number = null,
-        configuration: EditTicketPriorityDialogContextConfiguration = null
+        configuration: ContextConfiguration = null
     ) {
         super(descriptor, objectId, configuration);
-    }
-
-
-    protected getSpecificWidgetConfiguration<WS = any>(instanceId: string): WidgetConfiguration<WS> {
-        return undefined;
-    }
-
-    protected getSpecificWidgetType(instanceId: string): WidgetType {
-        return undefined;
     }
 }

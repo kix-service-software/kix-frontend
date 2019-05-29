@@ -24,9 +24,10 @@ import forceSSl = require('express-force-ssl');
 import { ReleaseInfoUtil } from './ReleaseInfoUtil';
 import { CreateClientRegistration } from './core/api';
 import {
-    ConfigurationService, LoggingService, ClientRegistrationService
+    ConfigurationService, LoggingService, ClientRegistrationService, TranslationService, AuthenticationService
 } from './core/services';
-import { PluginService, MarkoService, SocketCommunicationService } from './services';
+import { PluginService, MarkoService, SocketService } from './services';
+import { SystemInfo } from './core/model';
 
 export class Server {
 
@@ -42,9 +43,9 @@ export class Server {
     public application: express.Application;
     private serverConfig: IServerConfiguration;
 
-    private constructor() {
+    public async initServer(): Promise<void> {
         this.serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-        this.initializeApplication();
+        await this.initializeApplication();
     }
 
     private async initializeApplication(): Promise<void> {
@@ -54,8 +55,8 @@ export class Server {
         this.application = express();
 
         this.application.use(compression());
-        this.application.use(bodyParser.json());
-        this.application.use(bodyParser.urlencoded({ extended: true }));
+        this.application.use(bodyParser.json({ limit: '50mb', extended: true }));
+        this.application.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
         this.application.use(cookieParser());
 
         const httpsPort = this.serverConfig.HTTPS_PORT || 3001;
@@ -69,33 +70,49 @@ export class Server {
         }
 
         await this.registerStaticContent();
-        await this.createReleaseInfoConfig();
-
-        await this.initHttpServer();
+        const systemInfo = await this.createClientRegistration();
+        await this.createReleaseInformation(systemInfo);
 
         // tslint:disable-next-line:no-unused-expression
         new ServerRouter(this.application);
     }
 
-    private async createReleaseInfoConfig(): Promise<void> {
-        const releaseInfo = await ReleaseInfoUtil.getReleaseInfo();
+    private async createClientRegistration(): Promise<SystemInfo> {
+        let poDefinitions = [];
+
+        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+
+        const updateTranslations = serverConfig.UPDATE_TRANSLATIONS;
+        if (updateTranslations) {
+            LoggingService.getInstance().info('Update translations ...');
+            poDefinitions = await TranslationService.getInstance().getPODefinitions();
+        }
 
         const createClientRegistration = new CreateClientRegistration(
-            Date.now().toString(), this.serverConfig.FRONTEND_URL, '12345'
+            this.serverConfig.NOTIFICATION_CLIENT_ID,
+            this.serverConfig.NOTIFICATION_URL,
+            this.serverConfig.NOTIFICATION_INTERVAL,
+            'Token ' + AuthenticationService.getInstance().getCallbackToken(),
+            poDefinitions
         );
 
         const systemInfo = await ClientRegistrationService.getInstance().createClientRegistration(
-            this.serverConfig.BACKEND_API_TOKEN, createClientRegistration
+            this.serverConfig.BACKEND_API_TOKEN, null, createClientRegistration
         ).catch((error) => {
             LoggingService.getInstance().error(error);
             return null;
         });
 
+        return systemInfo;
+    }
+
+    private async createReleaseInformation(systemInfo: SystemInfo): Promise<void> {
+        const releaseInfo = await ReleaseInfoUtil.getReleaseInfo();
         releaseInfo.backendSystemInfo = systemInfo;
         ConfigurationService.getInstance().saveModuleConfiguration('release-info', null, releaseInfo);
     }
 
-    private async initHttpServer(): Promise<void> {
+    public async initHttpServer(): Promise<void> {
         const httpPort = this.serverConfig.HTTP_PORT || 3000;
         const httpServer = http.createServer(this.application).listen(httpPort, () => {
             LoggingService.getInstance().info("KIX (HTTP) running on *:" + httpPort);
@@ -112,13 +129,13 @@ export class Server {
 
             const httpsPort = this.serverConfig.HTTPS_PORT || 3001;
 
-            await SocketCommunicationService.getInstance().initialize(httpsServer);
+            await SocketService.getInstance().initialize(httpsServer);
 
             httpsServer.listen(httpsPort, () => {
                 LoggingService.getInstance().info("KIX (HTTPS) running on *:" + httpsPort);
             });
         } else {
-            await SocketCommunicationService.getInstance().initialize(httpServer);
+            await SocketService.getInstance().initialize(httpServer);
         }
     }
 

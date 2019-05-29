@@ -1,3 +1,9 @@
-<form-list nodes=state.nodes placeholder=(state.field.required ? "Bereich / Queue des Tickets zuordnen" : "")
-    selectedNodes=[state.currentNode] required=state.field.required on-focusLost('focusLost')
-    on-nodesChanged('queueChanged') invalid=state.invalid multiselect=state.multiselect/>
+<form-list
+    nodes=state.nodes
+    placeholder=state.placeholder
+    selectedNodes=[state.currentNode]
+    required=state.field.required
+    on-focusLost("focusLost")
+    on-nodesChanged("queueChanged")
+    invalid=state.invalid
+    multiselect=state.multiselect/>

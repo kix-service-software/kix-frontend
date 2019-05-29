@@ -12,7 +12,7 @@
             <textarea.text rows=3>${state.displayValue}</textarea>
         </else-if>
         <else-if(Array.isArray(state.displayValue))>
-            <for(value in state.displayValue)>
+            <for|value| of=state.displayValue>
                 <span.text.multi-text title=value>${value}</span>
             </for>
         </else-if>

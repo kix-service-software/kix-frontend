@@ -1,11 +1,11 @@
 import {
     IdService, KIXObjectSearchService, SearchOperator, SearchOperatorUtil, SearchProperty, SearchDefinition
-} from "../../../../../core/browser";
+} from '../../../../../core/browser';
 import {
     TreeNode, FilterCriteria, FilterDataType,
     FilterType, KIXObjectType, InputFieldTypes, DateTimeUtil
-} from "../../../../../core/model";
-import { isArray } from "util";
+} from '../../../../../core/model';
+import { isArray } from 'util';
 
 export class FormSearchValue {
 
@@ -57,7 +57,11 @@ export class FormSearchValue {
                 );
             }
 
-            this.operationNodes = operations.map((o) => new TreeNode(o, SearchOperatorUtil.getText(o)));
+            this.operationNodes = [];
+            for (const o of operations) {
+                const label = await SearchOperatorUtil.getText(o);
+                this.operationNodes.push(new TreeNode(o, label));
+            }
             if (this.operationNodes && this.operationNodes.length) {
                 this.setOperationNode(this.operationNodes[0]);
             }
@@ -105,11 +109,31 @@ export class FormSearchValue {
         this.currentValueNodes = [];
         if (this.isDropdown) {
             if (isArray(value)) {
-                value.forEach((v) => this.currentValueNodes.push(this.nodes.find((n) => n.id === v)));
+                const valueNodes = [];
+                value.forEach((v) => {
+                    const node = this.getSelectedNode(v);
+                    if (node) {
+                        valueNodes.push(node);
+                    }
+                });
+                this.currentValueNodes = valueNodes;
             } else {
                 this.currentValueNodes = [this.nodes.find((n) => n.id === value)];
             }
         }
+    }
+
+    private getSelectedNode(value: any, nodes: TreeNode[] = this.nodes): TreeNode {
+        let valueNode = null;
+        for (const n of nodes) {
+            valueNode = n.id === value
+                ? n
+                : n.children ? this.getSelectedNode(value, n.children) : null;
+            if (valueNode) {
+                break;
+            }
+        }
+        return valueNode;
     }
 
     public setTreeValues(nodes: TreeNode[]): void {

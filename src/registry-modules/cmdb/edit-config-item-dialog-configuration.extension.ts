@@ -1,7 +1,7 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import { ContextConfiguration, KIXObjectType, ConfigItemClass, KIXObjectLoadingOptions } from '../../core/model';
 import {
-    EditConfigItemDialogContext, EditConfigItemDialogContextConfiguration, ConfigItemFormFactory
+    EditConfigItemDialogContext, ConfigItemFormFactory
 } from '../../core/browser/cmdb';
 import { ConfigurationService, KIXObjectServiceRegistry } from '../../core/services';
 
@@ -12,7 +12,7 @@ export class EditConfigItemDialogModuleExtension implements IConfigurationExtens
     }
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-        return new EditConfigItemDialogContextConfiguration(this.getModuleId());
+        return new ContextConfiguration(this.getModuleId());
     }
 
     public async createFormDefinitions(overwrite: boolean): Promise<void> {
@@ -23,12 +23,12 @@ export class EditConfigItemDialogModuleExtension implements IConfigurationExtens
             KIXObjectType.CONFIG_ITEM_CLASS
         );
 
-        const options = new KIXObjectLoadingOptions(null, null, null, null, null, [
+        const options = new KIXObjectLoadingOptions(null, null, null, null, [
             'CurrentDefinition'
         ]);
 
         const ciClasses = await configItemClassService.loadObjects<ConfigItemClass>(
-            token, KIXObjectType.CONFIG_ITEM_CLASS, null, options, null
+            token, null, KIXObjectType.CONFIG_ITEM_CLASS, null, options, null
         );
 
         for (const ciClass of ciClasses) {

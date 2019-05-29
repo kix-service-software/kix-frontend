@@ -1,0 +1,28 @@
+.toast-content {
+    width: 17.5rem;
+    height: 6.25rem;
+    display: grid;
+    grid-template-columns: 3rem 14.5rem;
+    >.toast-icon {
+        display: grid;
+        align-content: center;
+        justify-content: center;
+        [class^="kix-icon-"],
+        [class*="kix-icon-"] {
+            font-size: 2.75rem;
+        }
+    }
+    >.toast-text {
+        margin: 1rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        >b {
+            white-space: nowrap;
+        }
+        >p {
+            .font-size-small;
+            line-height: 1rem;
+            margin-top: .125rem;
+        }
+    }
+}

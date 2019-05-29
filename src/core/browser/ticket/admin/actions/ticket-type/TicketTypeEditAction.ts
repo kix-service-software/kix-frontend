@@ -4,8 +4,8 @@ import { FormService } from "../../../../form";
 
 export class TicketTypeEditAction extends AbstractAction {
 
-    public initAction(): void {
-        this.text = "Bearbeiten";
+    public async initAction(): Promise<void> {
+        this.text = 'Edit';
         this.icon = "kix-icon-edit";
     }
 
@@ -13,7 +13,7 @@ export class TicketTypeEditAction extends AbstractAction {
         await FormService.getInstance().getFormInstance<FormInstance>('edit-ticket-type-form', false);
         ContextService.getInstance().setDialogContext(
             // TODO: Titel aus dem aktiven Admin-Modul ermitteln (Kategorie)
-            null, KIXObjectType.TICKET_TYPE, ContextMode.EDIT_ADMIN, null, true, 'Stammdaten bearbeiten'
+            null, KIXObjectType.TICKET_TYPE, ContextMode.EDIT_ADMIN, null, true
         );
     }
 

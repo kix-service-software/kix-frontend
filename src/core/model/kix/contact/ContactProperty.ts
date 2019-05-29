@@ -1,44 +1,38 @@
 export enum ContactProperty {
 
-    ContactID = 'ContactID',
+    ID = 'ID',
 
-    SourceID = 'SourceID',
+    FIRST_NAME = 'Firstname',
 
-    DisplayValue = 'DisplayValue',
+    LAST_NAME = 'Lastname',
 
-    USER_LOGIN = 'UserLogin',
+    LOGIN = 'Login',
 
-    USER_PASSWORD = "UserPassword",
+    CITY = 'City',
 
-    USER_PHONE = 'UserPhone',
+    STREET = 'Street',
 
-    USER_CUSTOMER_ID = 'UserCustomerID',
+    COMMENT = 'Comment',
 
-    USER_CUSTOMER_IDS = 'UserCustomerIDs',
+    COUNTRY = 'Country',
 
-    USER_COUNTRY = 'UserCountry',
+    EMAIL = 'Email',
 
-    USER_LAST_NAME = 'UserLastname',
+    FAX = 'Fax',
 
-    USER_FIRST_NAME = 'UserFirstname',
+    MOBILE = 'Mobile',
 
-    USER_TITLE = 'UserTitle',
+    PHONE = 'Phone',
 
-    USER_FAX = 'UserFax',
+    PRIMARY_ORGANISATION_ID = 'PrimaryOrganisationID',
 
-    USER_MOBILE = 'UserMobile',
+    ORGANISATION_IDS = 'OrganisationIDs',
 
-    USER_COMMENT = 'UserComment',
+    TITLE = 'Title',
 
-    USER_STREET = 'UserStreet',
+    ZIP = 'Zip',
 
-    USER_EMAIL = 'UserEmail',
-
-    USER_CITY = 'UserCity',
-
-    USER_ZIP = 'UserZip',
-
-    VALID_ID = 'ValidID',
+    TICKET_STATS = 'TicketStats',
 
     OPEN_TICKETS_COUNT = 'OPEN_TICKETS_COUNT',
 
@@ -46,8 +40,8 @@ export enum ContactProperty {
 
     REMINDER_TICKETS_COUNT = 'REMINDER_TICKETS_COUNT',
 
-    TICKET_STATS = 'TicketStats',
+    CREATE_NEW_TICKET = 'CREATE_NEW_TICKET',
 
-    CREATE_NEW_TICKET = 'CREATE_NEW_TICKET'
+    PASSWORD = 'Password'
 
 }

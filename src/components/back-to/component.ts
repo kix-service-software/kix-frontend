@@ -1,8 +1,8 @@
-import { ComponentState } from "./ComponentState";
-import { ContextService, IContextServiceListener } from "../../core/browser";
-import { ContextType, Context, ContextConfiguration } from "../../core/model";
-import { ContextHistoryEntry } from "../../core/browser/context/ContextHistoryEntry";
-import { RoutingConfiguration, RoutingService } from "../../core/browser/router";
+import { ComponentState } from './ComponentState';
+import { ContextService, IContextServiceListener } from '../../core/browser';
+import { ContextType, Context } from '../../core/model';
+import { ContextHistoryEntry } from '../../core/browser/context/ContextHistoryEntry';
+import { RoutingConfiguration } from '../../core/browser/router';
 
 class Component implements IContextServiceListener {
 
@@ -15,7 +15,7 @@ class Component implements IContextServiceListener {
     public onMount(): void {
         ContextService.getInstance().registerListener(this);
 
-        document.addEventListener("click", (event: any) => {
+        document.addEventListener('click', (event: any) => {
             if (!this.state.minimized) {
                 if (this.state.keepShow) {
                     this.state.keepShow = false;
@@ -39,12 +39,12 @@ class Component implements IContextServiceListener {
         this.toggleList();
     }
 
-    public contextChanged(contextId: string, context: Context<ContextConfiguration>, type: ContextType): void {
+    public contextChanged(contextId: string, context: Context, type: ContextType): void {
         this.state.history = ContextService.getInstance().getHistory();
     }
 
     public getRoutingConfiguration(entry: ContextHistoryEntry): RoutingConfiguration {
-        return new RoutingConfiguration(null, entry.contextId, null, entry.descriptor.contextMode, null, true);
+        return new RoutingConfiguration(entry.contextId, null, entry.descriptor.contextMode, null, true);
     }
 
 }

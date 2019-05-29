@@ -1,4 +1,4 @@
-import { FormInputComponentState, TreeNode, GeneralCatalogItem } from "../../../../../core/model";
+import { FormInputComponentState, TreeNode, GeneralCatalogItem } from '../../../../../core/model';
 
 export class CompontentState extends FormInputComponentState<GeneralCatalogItem> {
 
@@ -7,6 +7,7 @@ export class CompontentState extends FormInputComponentState<GeneralCatalogItem>
         public currentNode: TreeNode = null,
         public loading: boolean = true,
         public error: string = null,
+        public placeholder: string = ''
     ) {
         super();
     }

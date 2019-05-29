@@ -2,11 +2,12 @@ import { KIXObjectType, TicketProperty, ContextMode, DataType, KIXObjectLoadingO
 import { RoutingConfiguration } from "../../router";
 import { TicketDetailsContext } from "../context";
 import {
-    TableConfiguration, ITable, Table, DefaultColumnConfiguration, ToggleOptions, ITableFactory, IColumnConfiguration
+    TableConfiguration, ITable, Table, DefaultColumnConfiguration, ToggleOptions, IColumnConfiguration
 } from "../../table";
 import { TicketTableContentProvider } from "./new";
+import { TableFactory } from "../../table/TableFactory";
 
-export class TicketTableFactory implements ITableFactory {
+export class TicketTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.TICKET;
 
@@ -20,7 +21,7 @@ export class TicketTableFactory implements ITableFactory {
         );
 
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, tableConfiguration.filter, tableConfiguration.sortOrder, null,
+            null, tableConfiguration.filter, tableConfiguration.sortOrder,
             tableConfiguration.limit, [TicketProperty.WATCHERS]
         );
 
@@ -54,7 +55,7 @@ export class TicketTableFactory implements ITableFactory {
                     TicketProperty.OWNER_ID, true, false, true, false, 150, true, true, true
                 ),
                 new DefaultColumnConfiguration(
-                    TicketProperty.CUSTOMER_ID, true, false, true, false, 150, true, true, true
+                    TicketProperty.ORGANISATION_ID, true, false, true, false, 150, true, true, true
                 ),
                 new DefaultColumnConfiguration(
                     TicketProperty.CREATED, true, false, true, false, 125, true, true, false, DataType.DATE_TIME
@@ -84,7 +85,9 @@ export class TicketTableFactory implements ITableFactory {
                 new DefaultColumnConfiguration(
                     TicketProperty.OWNER_ID, true, false, true, false, 150, true, true, true
                 ),
-                new DefaultColumnConfiguration(TicketProperty.CUSTOMER_ID, true, false, true, false, 150, true, true),
+                new DefaultColumnConfiguration(
+                    TicketProperty.ORGANISATION_ID, true, false, true, false, 150, true, true
+                ),
                 new DefaultColumnConfiguration(
                     TicketProperty.CHANGED, true, false, true, false, 125, true, true, false, DataType.DATE_TIME
                 ),
@@ -105,7 +108,7 @@ export class TicketTableFactory implements ITableFactory {
 
         if (defaultRouting) {
             tableConfiguration.routingConfiguration = new RoutingConfiguration(
-                null, TicketDetailsContext.CONTEXT_ID, KIXObjectType.TICKET,
+                TicketDetailsContext.CONTEXT_ID, KIXObjectType.TICKET,
                 ContextMode.DETAILS, TicketProperty.TICKET_ID
             );
         }

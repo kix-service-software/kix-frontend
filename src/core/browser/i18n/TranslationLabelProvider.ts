@@ -1,6 +1,7 @@
 import { ILabelProvider } from "../ILabelProvider";
-import { Translation, KIXObjectType, ObjectIcon, TranslationProperty, DateTimeUtil } from "../../model";
-import { ContextService } from "../context";
+import { Translation, KIXObjectType, ObjectIcon, TranslationProperty, DateTimeUtil, User } from "../../model";
+import { TranslationService } from "./TranslationService";
+import { KIXObjectService } from "../kix";
 
 export class TranslationLabelProvider implements ILabelProvider<Translation> {
 
@@ -10,31 +11,40 @@ export class TranslationLabelProvider implements ILabelProvider<Translation> {
         return translation instanceof Translation;
     }
 
-    public async getPropertyText(property: string, short?: boolean): Promise<string> {
+    public isLabelProviderForType(objectType: KIXObjectType): boolean {
+        return objectType === this.kixObjectType;
+    }
+
+    public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
 
         switch (property) {
             case TranslationProperty.PATTERN:
-                displayValue = 'Basiszeichenkette';
+                displayValue = 'Translatable#Pattern';
                 break;
             case TranslationProperty.LANGUAGES:
-                displayValue = 'Sprachen';
+                displayValue = 'Translatable#Languages';
                 break;
             case TranslationProperty.CREATE_BY:
-                displayValue = 'Erstellt von';
+                displayValue = 'Translatable#Created by';
                 break;
             case TranslationProperty.CREATE_TIME:
-                displayValue = 'Erstellt am';
+                displayValue = 'Translatable#Created at';
                 break;
             case TranslationProperty.CHANGE_BY:
-                displayValue = 'Geändert von';
+                displayValue = 'Translatable#Changed by';
                 break;
             case TranslationProperty.CHANGE_TIME:
-                displayValue = 'Geändert am';
+                displayValue = 'Translatable#Changed at';
                 break;
             default:
                 displayValue = property;
         }
+
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
+        }
+
         return displayValue;
     }
 
@@ -42,10 +52,10 @@ export class TranslationLabelProvider implements ILabelProvider<Translation> {
         return;
     }
 
-    public async getDisplayText(translation: Translation, property: string): Promise<string> {
+    public async getDisplayText(
+        translation: Translation, property: string, value?: string, translatable: boolean = true
+    ): Promise<string> {
         let displayValue = translation[property];
-
-        const objectData = ContextService.getInstance().getObjectData();
 
         switch (property) {
             case TranslationProperty.PATTERN:
@@ -56,14 +66,14 @@ export class TranslationLabelProvider implements ILabelProvider<Translation> {
                 break;
             case TranslationProperty.CREATE_BY:
             case TranslationProperty.CHANGE_BY:
-                const user = objectData.users.find((u) => u.UserID === displayValue);
-                if (user) {
-                    displayValue = user.UserFullname;
-                }
+                const users = await KIXObjectService.loadObjects<User>(
+                    KIXObjectType.USER, [value], null, null, true
+                ).catch((error) => [] as User[]);
+                displayValue = users && !!users.length ? users[0].UserFullname : value;
                 break;
             case TranslationProperty.CREATE_TIME:
             case TranslationProperty.CHANGE_TIME:
-                displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
+                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
             default:
         }
@@ -83,8 +93,14 @@ export class TranslationLabelProvider implements ILabelProvider<Translation> {
         return [];
     }
 
-    public async getObjectText(translation: Translation, id?: boolean, title?: boolean): Promise<string> {
-        return 'Übersetzung: ' + translation.Pattern;
+    public async getObjectText(
+        translation: Translation, id?: boolean, title?: boolean, translatable: boolean = true
+    ): Promise<string> {
+        let displayValue = 'Translatable#Translation';
+        if (translatable) {
+            displayValue = await TranslationService.translate(displayValue);
+        }
+        return `${displayValue}: ${translation.Pattern}`;
     }
 
     public getObjectAdditionalText(translation: Translation): string {
@@ -95,8 +111,12 @@ export class TranslationLabelProvider implements ILabelProvider<Translation> {
         return new ObjectIcon('Translation', translation.ObjectId);
     }
 
-    public getObjectName(plural?: boolean): string {
-        return plural ? 'Übersetzung' : 'Übersetzungen';
+    public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
+        let displayValue = plural ? 'Translations' : 'Translation';
+        if (translatable) {
+            displayValue = await TranslationService.translate(displayValue);
+        }
+        return displayValue;
     }
 
     public getObjectTooltip(translation: Translation): string {

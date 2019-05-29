@@ -3,7 +3,7 @@ import { Context } from "../../model";
 
 export abstract class AbstractContextServiceListener implements IContextServiceListener {
 
-    public contextChanged(contextId: string, context: Context<any>): void {
+    public contextChanged(contextId: string, context: Context): void {
         // do nothing
     }
 

@@ -1,13 +1,14 @@
 import { TicketStateDetailsContext } from "../../context";
 import { RoutingConfiguration } from "../../../../router";
 import {
-    ITableFactory, ITable, TableConfiguration, Table, DefaultColumnConfiguration,
+    ITable, TableConfiguration, Table, DefaultColumnConfiguration,
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../../../table";
 import { KIXObjectType, TicketStateProperty, DataType, ContextMode } from "../../../../../model";
 import { TicketStateTableContentProvider } from "./TicketStateTableContentProvider";
+import { TableFactory } from "../../../../table/TableFactory";
 
-export class TicketStateTableFactory implements ITableFactory {
+export class TicketStateTableFactory extends TableFactory {
 
 
     public objectType: KIXObjectType = KIXObjectType.TICKET_STATE;
@@ -30,10 +31,14 @@ export class TicketStateTableFactory implements ITableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new DefaultColumnConfiguration(TicketStateProperty.NAME, true, false, true, true, 200, true, true),
+            new DefaultColumnConfiguration(
+                TicketStateProperty.NAME, true, false, true, true, 200, true, true, false,
+                DataType.STRING, true, null, null, false
+            ),
             new DefaultColumnConfiguration(TicketStateProperty.ID, false, true, false, true, 41, false),
             new DefaultColumnConfiguration(
-                TicketStateProperty.TYPE_NAME, true, false, true, true, 150, true, true, true
+                TicketStateProperty.TYPE_NAME, true, false, true, true, 150, true, true, true,
+                DataType.STRING, true, null, null, false
             ),
             new DefaultColumnConfiguration(TicketStateProperty.COMMENT, true, false, true, true, 350, true, true),
             new DefaultColumnConfiguration(
@@ -57,7 +62,7 @@ export class TicketStateTableFactory implements ITableFactory {
 
         if (defaultRouting) {
             tableConfiguration.routingConfiguration = new RoutingConfiguration(
-                null, TicketStateDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_STATE,
+                TicketStateDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_STATE,
                 ContextMode.DETAILS, TicketStateProperty.ID
             );
         }

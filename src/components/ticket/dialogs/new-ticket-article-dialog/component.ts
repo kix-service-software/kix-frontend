@@ -1,15 +1,19 @@
-import { AbstractNewDialog, ContextService, BrowserUtil } from "../../../../core/browser";
-import { KIXObjectType, CreateTicketArticleOptions, TicketProperty, Ticket } from "../../../../core/model";
+import { ContextService, BrowserUtil } from '../../../../core/browser';
+import { KIXObjectType, CreateTicketArticleOptions, TicketProperty, Ticket } from '../../../../core/model';
 import { ComponentState } from './ComponentState';
-import { TicketDetailsContext } from "../../../../core/browser/ticket";
+import { TicketDetailsContext, NewTicketArticleContext } from '../../../../core/browser/ticket';
+import {
+    AbstractNewDialog, TabContainerEvent, TabContainerEventData
+} from '../../../../core/browser/components/dialog';
+import { EventService } from '../../../../core/browser/event';
 
 class Component extends AbstractNewDialog {
 
     public onCreate(): void {
         this.state = new ComponentState();
         super.init(
-            'Artikel wird angelegt',
-            'Artikel wurde erfolgreich angelegt.',
+            'Translatable#Create Article',
+            'Translatable#Article successfully created.',
             KIXObjectType.ARTICLE,
             null
         );
@@ -17,8 +21,27 @@ class Component extends AbstractNewDialog {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+
         const context = await ContextService.getInstance().getContext(TicketDetailsContext.CONTEXT_ID);
-        this.options = new CreateTicketArticleOptions(Number(context.getObjectId()));
+        const dialogContext = await ContextService.getInstance().getContext(NewTicketArticleContext.CONTEXT_ID);
+        if (dialogContext) {
+            const tabTitle = dialogContext.getAdditionalInformation('NEW_ARTICLE_TAB_TITLE');
+            if (tabTitle) {
+                EventService.getInstance().publish(
+                    TabContainerEvent.CHANGE_TITLE, new TabContainerEventData('new-ticket-article-dialog', tabTitle)
+                );
+            }
+            const tabIcon = dialogContext.getAdditionalInformation('NEW_ARTICLE_TAB_ICON');
+            if (tabIcon) {
+                EventService.getInstance().publish(
+                    TabContainerEvent.CHANGE_ICON,
+                    new TabContainerEventData('new-ticket-article-dialog', null, tabIcon)
+                );
+            }
+        }
+        this.options = new CreateTicketArticleOptions(
+            Number(context.getObjectId())
+        );
     }
 
     public async onDestroy(): Promise<void> {

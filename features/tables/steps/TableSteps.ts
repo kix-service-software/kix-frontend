@@ -1,31 +1,36 @@
 // tslint:disable
-import { expect } from "chai";
-import { Given, When, Then } from "cucumber";
+import { expect } from 'chai';
+import { Given, When, Then } from 'cucumber';
 import { ITable, TableFactoryService } from '../../../src/core/browser/table';
-import { KIXObjectType } from "../../../src/core/model";
-import { FAQArticleTableFactory, FAQContext } from "../../../src/core/browser/faq";
-import { TicketTableFactory } from "../../../src/core/browser/ticket";
-import { ArticleTableFactory } from "../../../src/core/browser/ticket/table/ArticleTableFactory";
-import { CustomerTableFactory } from "../../../src/core/browser/customer";
-import { ContactTableFactory } from "../../../src/core/browser/contact";
-import { ConfigItemTableFactory } from "../../../src/core/browser/cmdb";
+import { KIXObjectType } from '../../../src/core/model';
+import { FAQArticleTableFactory } from '../../../src/core/browser/faq';
+import { TicketTableFactory } from '../../../src/core/browser/ticket';
+import { ArticleTableFactory } from '../../../src/core/browser/ticket/table/ArticleTableFactory';
+import { ContactTableFactory } from '../../../src/core/browser/contact';
+import { ConfigItemTableFactory } from '../../../src/core/browser/cmdb';
+import { RoleTableFactory, UserTableFactory } from '../../../src/core/browser/user';
+import { OrganisationTableFactory } from '../../../src/core/browser/organisation';
+import { MailAccountTableFactory } from '../../../src/core/browser/mail-account';
 
 let table: ITable;
 TableFactoryService.getInstance().registerFactory(new FAQArticleTableFactory());
 TableFactoryService.getInstance().registerFactory(new TicketTableFactory());
 TableFactoryService.getInstance().registerFactory(new ArticleTableFactory());
-TableFactoryService.getInstance().registerFactory(new CustomerTableFactory());
+TableFactoryService.getInstance().registerFactory(new OrganisationTableFactory());
 TableFactoryService.getInstance().registerFactory(new ContactTableFactory());
 TableFactoryService.getInstance().registerFactory(new ConfigItemTableFactory());
+TableFactoryService.getInstance().registerFactory(new RoleTableFactory());
+TableFactoryService.getInstance().registerFactory(new UserTableFactory());
+TableFactoryService.getInstance().registerFactory(new MailAccountTableFactory());
 
 Given('Tabelle: {string}', async (objectType: KIXObjectType) => {
-    table = TableFactoryService.getInstance().createTable(`test-table-${objectType}`, objectType);
+    table = await TableFactoryService.getInstance().createTable(`test-table-${objectType}`, objectType);
     expect(table).exist;
     await table.initialize();
 });
 
 Given('Tabelle - Schmal: {string}', async (objectType: KIXObjectType) => {
-    table = TableFactoryService.getInstance().createTable(`test-table-${objectType}`, objectType, null, null, null, false, false, true);
+    table = await TableFactoryService.getInstance().createTable(`test-table-${objectType}`, objectType, null, null, null, false, false, true);
     expect(table).exist;
     await table.initialize();
 });
@@ -50,7 +55,7 @@ Then('Die Spalte {string} muss filterbar sein: {int}', async (columnId: string, 
     expect(column.getColumnConfiguration().filterable).equals(Boolean(filterable));
 });
 
-Then('Die Spalte {string} muss {int} breit betragen', async (columnId: string, width: Number) => {
+Then('Die Spalte {string} muss {int} breit sein', async (columnId: string, width: Number) => {
     const column = table.getColumn(columnId);
     expect(column).exist;
     expect(column.getColumnConfiguration().size).equals(width);

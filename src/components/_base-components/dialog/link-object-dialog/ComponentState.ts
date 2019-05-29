@@ -1,5 +1,5 @@
-import { KIXObject, LinkTypeDescription, CreateLinkDescription, TreeNode, KIXObjectType } from "../../../../core/model";
-import { ITable } from "../../../../core/browser";
+import { KIXObject, LinkTypeDescription, CreateLinkDescription, TreeNode, KIXObjectType } from '../../../../core/model';
+import { ITable } from '../../../../core/browser';
 
 export class ComponentState {
 
@@ -17,6 +17,7 @@ export class ComponentState {
         public canSubmit: boolean = false,
         public tableId: string = null,
         public filterCount: number = null,
-        public loading: boolean = true
+        public loading: boolean = true,
+        public translations: any = {}
     ) { }
 }

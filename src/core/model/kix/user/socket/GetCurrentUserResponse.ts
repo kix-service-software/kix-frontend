@@ -5,6 +5,7 @@ export class GetCurrentUserResponse implements ISocketResponse {
 
     public constructor(
         public requestId: string,
+
         public currentUser: User
     ) { }
 

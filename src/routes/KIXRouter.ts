@@ -1,12 +1,11 @@
 import { Request, Response, Router } from 'express';
 
 import { IRouter } from './IRouter';
-import { IServerConfiguration, BaseTemplateInput } from '../core/common';
+import { IServerConfiguration } from '../core/common';
 import {
-    ProfilingService, ConfigurationService, UserService, ServiceService, ValidObjectService,
-    ContactService, CustomerService, ObjectDefinitionService
+    ProfilingService, ConfigurationService, ValidObjectService, ObjectDefinitionService
 } from '../core/services';
-import { ObjectData, ReleaseInfo } from '../core/model';
+import { ObjectData, ReleaseInfo, KIXObjectType, ValidObject } from '../core/model';
 
 export abstract class KIXRouter implements IRouter {
 
@@ -49,7 +48,7 @@ export abstract class KIXRouter implements IRouter {
         res.marko(this.appTemplate, {
             themeCSS,
             specificCSS,
-            data: new BaseTemplateInput(contextId, objectData, objectId)
+            data: { objectData }
         });
 
         // stop profiling
@@ -81,32 +80,18 @@ export abstract class KIXRouter implements IRouter {
     }
 
     protected async getObjectData(token: string): Promise<ObjectData> {
-        const users = await UserService.getInstance().getUsers(token);
-        const currentUser = await UserService.getInstance().getUserByToken(token);
+        const validObjects = await ValidObjectService.getInstance().loadObjects<ValidObject>(
+            token, null, KIXObjectType.VALID_OBJECT, null, null, null
+        ).catch(() => []);
 
-        const services = await ServiceService.getInstance().getServices(token);
-        const servicesHierarchy = await ServiceService.getInstance().getServiceHierarchy(token);
-
-        const validObjects = await ValidObjectService.getInstance().getValidObjects(token);
-
-        const contactAttributeMapping = await ContactService.getInstance().getAttributeMapping(token);
-        const contactAttributes: Array<[string, string]> = [];
-        contactAttributeMapping
-            .filter((cam) => cam.Searchable)
-            .forEach((cam) => contactAttributes.push([cam.Attribute, cam.Label]));
-
-        const customerAttributeMapping = await CustomerService.getInstance().getAttributeMapping(token);
-        const customerAttributes: Array<[string, string]> = [];
-        customerAttributeMapping
-            .filter((cam) => cam.Searchable)
-            .forEach((cam) => customerAttributes.push([cam.Attribute, cam.Label]));
-
-        // TODO: hier oder wo gebraucht aus den objectDefinitions ermitteln
         const faqVisibilities: Array<[string, string]> = [
-            ["internal", "intern"], ["external", "extern"], ["public", "öffentlich"]
+            ["internal", "Translatable#internal"],
+            ["external", "Translatable#external"],
+            ["public", "Translatable#public"]
         ];
 
-        const objectDefinitions = await ObjectDefinitionService.getInstance().getObjectDefinitions(token);
+        const objectDefinitions = await ObjectDefinitionService.getInstance().getObjectDefinitions(token)
+            .catch(() => []);
 
         const bookmarks = await ConfigurationService.getInstance().getBookmarks();
 
@@ -116,10 +101,7 @@ export abstract class KIXRouter implements IRouter {
         const socketTimeout = ConfigurationService.getInstance().getServerConfiguration().SOCKET_TIMEOUT;
 
         const objectData = new ObjectData(
-            services, servicesHierarchy,
-            users, currentUser,
             validObjects,
-            contactAttributes, customerAttributes,
             faqVisibilities,
             objectDefinitions,
             bookmarks,

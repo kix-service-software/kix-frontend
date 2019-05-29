@@ -1,7 +1,7 @@
-import { IKIXObjectFactory } from '../kix';
+import { KIXObjectFactory } from '../kix';
 import { ConfigItemClass, ConfigItemClassFactory } from '../../model';
 
-export class ConfigItemClassBrowserFactory implements IKIXObjectFactory<ConfigItemClass> {
+export class ConfigItemClassBrowserFactory extends KIXObjectFactory<ConfigItemClass> {
 
     private static INSTANCE: ConfigItemClassBrowserFactory;
 
@@ -12,10 +12,13 @@ export class ConfigItemClassBrowserFactory implements IKIXObjectFactory<ConfigIt
         return ConfigItemClassBrowserFactory.INSTANCE;
     }
 
-    private constructor() { }
+    private constructor() {
+        super();
+    }
 
     public async create(configItemClass: ConfigItemClass): Promise<ConfigItemClass> {
         const newConfigItemClass = ConfigItemClassFactory.create(configItemClass);
+        super.createPermissions(newConfigItemClass);
         return newConfigItemClass;
     }
 

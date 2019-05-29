@@ -9,6 +9,7 @@ import {
 } from '../../../../core/browser';
 import { SearchContext } from '../../../../core/browser/search/context';
 import { EventService, IEventSubscriber } from '../../../../core/browser/event';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component implements IKIXObjectSearchListener {
 
@@ -32,7 +33,7 @@ class Component implements IKIXObjectSearchListener {
             : undefined;
 
 
-        this.setActions();
+        this.prepareActions();
 
         KIXObjectSearchService.getInstance().registerListener(this);
         this.searchFinished();
@@ -92,28 +93,29 @@ class Component implements IKIXObjectSearchListener {
 
             const labelProvider = LabelService.getInstance().getLabelProviderForType(objectType);
             this.state.resultIcon = labelProvider.getObjectIcon();
-            this.state.resultTitle = `Trefferliste ${labelProvider.getObjectName(true)} (${resultCount})`;
+            const objectName = await labelProvider.getObjectName(true);
+
+            const titleLabel = await TranslationService.translate('Translatable#Hit List', []);
+            this.state.resultTitle = `${titleLabel} ${objectName} (${resultCount})`;
 
             let emptyResultHint;
             if (!cache) {
-                emptyResultHint = 'Keine Suche ausgeführt.';
+                emptyResultHint = 'Translatable#No search query found.';
             }
 
             const tableConfiguration = new TableConfiguration(
                 objectType, null, null, null, null, true, null, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.SMALL, emptyResultHint
             );
-            const table = TableFactoryService.getInstance().createTable(
+            const table = await TableFactoryService.getInstance().createTable(
                 `search-result-list-${objectType}`, objectType, tableConfiguration,
                 null, SearchContext.CONTEXT_ID, true, true, true
             );
 
-
-
             this.tableSubscriber = {
                 eventSubscriberId: 'search-result-table-listener',
                 eventPublished: async (data: TableEventData, eventId: string) => {
-                    if (data && data.tableId === table.getTableId()) {
+                    if (data && this.state.table && data.tableId === this.state.table.getTableId()) {
                         if (eventId === TableEvent.TABLE_INITIALIZED && isSearchMainObject) {
                             const parameter: Array<[string, any]> = [];
                             for (const c of cache.criteria) {
@@ -136,15 +138,15 @@ class Component implements IKIXObjectSearchListener {
                 }
             };
 
-            EventService.getInstance().subscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
-            EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
-
             WidgetService.getInstance().setActionData(this.state.instanceId, table);
             this.state.table = table;
+            EventService.getInstance().subscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
+            EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
             this.setActionsDirty();
         } else {
             this.state.resultIcon = null;
-            this.state.resultTitle = 'Trefferliste';
+            const titleLabel = await TranslationService.translate('Translatable#Hit List', []);
+            this.state.resultTitle = titleLabel;
         }
     }
 
@@ -152,9 +154,9 @@ class Component implements IKIXObjectSearchListener {
         WidgetService.getInstance().updateActions(this.state.instanceId);
     }
 
-    private setActions(): void {
+    private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration) {
-            this.state.actions = ActionFactory.getInstance()
+            this.state.actions = await ActionFactory.getInstance()
                 .generateActions(this.state.widgetConfiguration.actions);
         }
         WidgetService.getInstance().registerActions(this.state.instanceId, this.state.actions);

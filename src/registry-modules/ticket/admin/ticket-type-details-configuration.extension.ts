@@ -1,6 +1,6 @@
 import { IConfigurationExtension } from '../../../core/extensions';
 import { ContextConfiguration, WidgetConfiguration, ConfiguredWidget, WidgetSize } from '../../../core/model';
-import { TicketTypeDetailsContextConfiguration, TicketTypeDetailsContext } from '../../../core/browser/ticket';
+import { TicketTypeDetailsContext } from '../../../core/browser/ticket';
 
 export class Extension implements IConfigurationExtension {
 
@@ -11,17 +11,19 @@ export class Extension implements IConfigurationExtension {
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
 
         const ticketTypesDetailsWidget = new ConfiguredWidget('ticket-type-details-widget', new WidgetConfiguration(
-            'ticket-type-info-widget', 'Typ Informationen', ['ticket-admin-type-edit'], null,
+            'ticket-type-info-widget', 'Translatable#Type Information', ['ticket-admin-type-edit'], null,
             false, true, WidgetSize.BOTH, null, false
         ));
 
         const textmodulesWidget = new ConfiguredWidget('ticket-type-assigned-textmodules', new WidgetConfiguration(
-            'ticket-type-assigned-textmodules', 'Zuordnung zu Textbausteinen',
-            ['ticket-admin-type-textmodules-edit'], null, false, true, WidgetSize.BOTH, null, false
+            'ticket-type-assigned-textmodules', 'Translatable#Assign Text Modules',
+            ['ticket-admin-type-textmodules-edit'], null, true, true, WidgetSize.BOTH, null, false
         ));
 
-        return new TicketTypeDetailsContextConfiguration(
-            TicketTypeDetailsContext.CONTEXT_ID, [], [], [], [],
+        return new ContextConfiguration(
+            TicketTypeDetailsContext.CONTEXT_ID,
+            [], [],
+            [], [],
             ['ticket-type-assigned-textmodules'], [textmodulesWidget],
             ['ticket-type-details-widget'], [ticketTypesDetailsWidget],
             [], [],

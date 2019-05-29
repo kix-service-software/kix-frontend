@@ -2,6 +2,7 @@ import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent, ContextService, OverlayService } from '../../../core/browser';
 import { TicketDetailsContext } from '../../../core/browser/ticket';
 import { Ticket, ComponentContent, ToastContent, OverlayType } from '../../../core/model';
+import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -33,10 +34,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    public attachmentsClicked(): void {
-        const content = new ComponentContent('toast', new ToastContent(
-            'kix-icon-magicwand', 'Diese Funktionalität ist in Arbeit.', 'Coming Soon'
-        ));
+    public async attachmentsClicked(): Promise<void> {
+        const text = await TranslationService.translate('Translatable#We are working on this functionality.');
+        const content = new ComponentContent(
+            'toast',
+            new ToastContent('kix-icon-magicwand', text, 'Coming Soon')
+        );
         OverlayService.getInstance().openOverlay(OverlayType.HINT_TOAST, null, content, '');
     }
 

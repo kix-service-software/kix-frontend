@@ -1,7 +1,11 @@
 <div.back-to>
-    <div.back-to-button class={"list-open": !state.minimized} on-click('toggleList')>
+    <div.back-to-button class={
+        "list-open": !state.minimized
+    } on-click("toggleList")>
         <span.kix-icon-arrow-receive/>
-        <span>Zurück zu:</span>
+        <span>
+            <translation-string pattern="Translatable#back to"/>:
+        </span>
         <if(state.minimized)>
             <span.kix-icon-sort-down/>
         </if>
@@ -11,8 +15,8 @@
     </div>
     <if(!state.minimized)>
         <ul.menu.back-to-list>
-            <for(entry in state.history)>
-                <li title=entry.displayText onClick('navigate', entry)>
+            <for|entry| of=state.history>
+                <li title=entry.displayText onClick("navigate", entry)>
                     <link-target routingConfiguration=component.getRoutingConfiguration(entry) objectId=entry.objectId>
                         <@content>
                             <icon icon=entry.icon/>

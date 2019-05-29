@@ -1,6 +1,8 @@
 import { IConfigurationExtension } from '../../../core/extensions';
-import { ContextConfiguration, WidgetConfiguration, ConfiguredWidget, WidgetSize } from '../../../core/model';
-import { TicketPriorityDetailsContext, TicketPriorityDetailsContextConfiguration } from '../../../core/browser/ticket';
+import {
+    WidgetConfiguration, ConfiguredWidget, WidgetSize, ContextConfiguration
+} from '../../../core/model';
+import { TicketPriorityDetailsContext } from '../../../core/browser/ticket';
 
 export class Extension implements IConfigurationExtension {
 
@@ -11,11 +13,11 @@ export class Extension implements IConfigurationExtension {
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
 
         const priorityDetailsWidget = new ConfiguredWidget('ticket-priority-details-widget', new WidgetConfiguration(
-            'ticket-priority-info-widget', 'Priorität Informationen', ['ticket-admin-priority-edit'], null,
+            'ticket-priority-info-widget', 'Priority Information', ['ticket-admin-priority-edit'], null,
             false, true, WidgetSize.BOTH, null, false
         ));
 
-        return new TicketPriorityDetailsContextConfiguration(
+        return new ContextConfiguration(
             TicketPriorityDetailsContext.CONTEXT_ID, [], [], [], [],
             [], [],
             ['ticket-priority-details-widget'], [priorityDetailsWidget],

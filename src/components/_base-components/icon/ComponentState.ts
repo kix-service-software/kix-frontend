@@ -1,5 +1,5 @@
-import { ObjectIcon } from "../../../core/model";
-import { IdService } from "../../../core/browser";
+import { ObjectIcon } from '../../../core/model';
+import { IdService } from '../../../core/browser';
 
 export class ComponentState {
 

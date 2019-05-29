@@ -2,7 +2,7 @@ import { KIXObjectService } from "./KIXObjectService";
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions, ConfigItemClass, ConfigItemClassFactory,
-    ConfigItemClassProperty, ObjectIcon, Error
+    ConfigItemClassProperty, ObjectIcon, Error, CreatePermissionDescription, ConfigItemProperty
 } from "../../../model";
 import {
     ConfigItemClassesResponse, ConfigItemClassResponse,
@@ -11,10 +11,11 @@ import {
 } from "../../../api";
 import { KIXObjectServiceRegistry } from "../../KIXObjectServiceRegistry";
 import { AppUtil } from "../../../common";
-import { setTimeout } from "timers";
 import { LoggingService } from "../LoggingService";
 
 export class ConfigItemClassService extends KIXObjectService {
+
+    protected objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_CLASS;
 
     private static INSTANCE: ConfigItemClassService;
 
@@ -38,7 +39,7 @@ export class ConfigItemClassService extends KIXObjectService {
     }
 
     public async loadObjects<T>(
-        token: string, objectType: KIXObjectType, objectIds: Array<number | string>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<T[]> {
         let objects = [];
@@ -55,15 +56,20 @@ export class ConfigItemClassService extends KIXObjectService {
     private async getConfigItemClasses(
         token: string, configItemClassIds: Array<number | string>, loadingOptions: KIXObjectLoadingOptions
     ): Promise<ConfigItemClass[]> {
-        if (loadingOptions && loadingOptions.includes) {
-            loadingOptions.includes.push(ConfigItemClassProperty.CURRENT_DEFINITION);
-        } else if (loadingOptions) {
-            loadingOptions.includes = [ConfigItemClassProperty.CURRENT_DEFINITION];
+        if (loadingOptions) {
+            if (loadingOptions.includes) {
+                if (!loadingOptions.includes.some((i) => i === ConfigItemClassProperty.CURRENT_DEFINITION)) {
+                    loadingOptions.includes.push(ConfigItemClassProperty.CURRENT_DEFINITION);
+                }
+            } else {
+                loadingOptions.includes = [ConfigItemClassProperty.CURRENT_DEFINITION];
+            }
         } else {
-            loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, null, [
+            loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, [
                 ConfigItemClassProperty.CURRENT_DEFINITION
             ]);
         }
+
         loadingOptions.sortOrder = 'ConfigItemClass.Name';
 
         const query = this.prepareQuery(loadingOptions);
@@ -99,13 +105,17 @@ export class ConfigItemClassService extends KIXObjectService {
     }
 
     public async createObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
         createOptions: KIXObjectSpecificCreateOptions
     ): Promise<string | number> {
         if (objectType === KIXObjectType.CONFIG_ITEM_CLASS) {
-            const createConfigItemClass = new CreateConfigItemClass(parameter.filter((p) => p[0] !== 'ICON'));
+
+            const createConfigItemClass = new CreateConfigItemClass(parameter.filter(
+                (p) => p[0] !== 'ICON' && p[0] !== 'OBJECT_PERMISSION' && p[0] !== 'PROPERTY_VALUE_PERMISSION')
+            );
             const response = await this.sendCreateRequest<CreateConfigItemClassResponse, CreateConfigItemClassRequest>(
-                token, this.RESOURCE_URI, new CreateConfigItemClassRequest(createConfigItemClass)
+                token, clientRequestId, this.RESOURCE_URI, new CreateConfigItemClassRequest(createConfigItemClass),
+                this.objectType
             ).catch((error: Error) => {
                 LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
                 throw new Error(error.Code, error.Message);
@@ -115,8 +125,33 @@ export class ConfigItemClassService extends KIXObjectService {
             if (icon) {
                 icon.Object = 'ConfigItemClass';
                 icon.ObjectID = response.ConfigItemClassID;
-                await this.createIcons(token, icon);
+                await this.createIcons(token, clientRequestId, icon);
             }
+
+            const objectPermissions: CreatePermissionDescription[] = this.getParameterValue(
+                parameter, 'OBJECT_PERMISSION'
+            );
+            // if (response.ConfigItemClassID && objectPermissions) {
+            //     super.setObjectPermissions(
+            //         token, clientRequestId,
+            //         objectPermissions,
+            //         this.RESOURCE_URI,
+            //         KIXObjectType.CONFIG_ITEM_CLASS, response.ConfigItemClassID
+            //     );
+            // }
+
+            const propertyValuePermissions: CreatePermissionDescription[] = this.getParameterValue(
+                parameter, 'PROPERTY_VALUE_PERMISSION'
+            );
+            // if (response.ConfigItemClassID && propertyValuePermissions) {
+            //     super.setPropertyValuePermissions(
+            //         token, clientRequestId,
+            //         propertyValuePermissions,
+            //         // TODO: ggf. aus SysConfig relevanten String ermitteln
+            //         `${KIXObjectType.CONFIG_ITEM}.${ConfigItemProperty.CLASS_ID}`,
+            //         KIXObjectType.CONFIG_ITEM_CLASS, response.ConfigItemClassID
+            //     );
+            // }
 
             await AppUtil.updateFormConfigurations(true);
 
@@ -125,16 +160,20 @@ export class ConfigItemClassService extends KIXObjectService {
     }
 
     public async updateObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
+        token: string, clientRequestId: string, objectType: KIXObjectType,
+        parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
         if (objectType === KIXObjectType.CONFIG_ITEM_CLASS) {
             const updateConfigItemClass = new UpdateConfigItemClass(
-                parameter.filter((p) => p[0] !== 'ICON' && p[0] !== ConfigItemClassProperty.DEFINITION_STRING)
+                parameter.filter(
+                    (p) => p[0] !== 'ICON' && p[0] !== ConfigItemClassProperty.DEFINITION_STRING
+                        && p[0] !== 'OBJECT_PERMISSION' && p[0] !== 'PROPERTY_VALUE_PERMISSION'
+                )
             );
 
             const response = await this.sendUpdateRequest<UpdateConfigItemClassResponse, UpdateConfigItemClassRequest>(
-                token, this.buildUri(this.RESOURCE_URI, objectId),
-                new UpdateConfigItemClassRequest(updateConfigItemClass)
+                token, clientRequestId, this.buildUri(this.RESOURCE_URI, objectId),
+                new UpdateConfigItemClassRequest(updateConfigItemClass), this.objectType
             ).catch((error) => {
                 throw error;
             });
@@ -143,17 +182,17 @@ export class ConfigItemClassService extends KIXObjectService {
             if (icon) {
                 icon.Object = 'ConfigItemClass';
                 icon.ObjectID = response.ConfigItemClassID;
-                await this.updateIcon(token, icon);
+                await this.updateIcon(token, clientRequestId, icon);
             }
 
             const definitionParameter = parameter.find((p) => p[0] === ConfigItemClassProperty.DEFINITION_STRING);
             if (definitionParameter) {
                 const uri = this.buildUri(this.RESOURCE_URI, objectId, 'definitions');
-                await this.sendCreateRequest(token, uri, {
+                await this.sendCreateRequest(token, clientRequestId, uri, {
                     ConfigItemClassDefinition: {
                         DefinitionString: definitionParameter[1]
                     }
-                }).catch((error: Error) => {
+                }, this.objectType).catch((error: Error) => {
                     if (error.StatusCode === 409) {
                         LoggingService.getInstance().warning(
                             `Could not create new definition of Config Item Class ${objectId}.`, error
@@ -163,6 +202,33 @@ export class ConfigItemClassService extends KIXObjectService {
                     }
                 });
             }
+
+            const objectPermissions: CreatePermissionDescription[] = this.getParameterValue(
+                parameter, 'OBJECT_PERMISSION'
+            );
+            // if (response.ConfigItemClassID && objectPermissions) {
+            //     super.setObjectPermissions(
+            //         token, clientRequestId,
+            //         objectPermissions,
+            //         this.RESOURCE_URI,
+            //         KIXObjectType.CONFIG_ITEM_CLASS, response.ConfigItemClassID,
+            //         true
+            //     );
+            // }
+
+            const propertyValuePermissions: CreatePermissionDescription[] = this.getParameterValue(
+                parameter, 'PROPERTY_VALUE_PERMISSION'
+            );
+            // if (response.ConfigItemClassID && propertyValuePermissions) {
+            //     super.setPropertyValuePermissions(
+            //         token, clientRequestId,
+            //         propertyValuePermissions,
+            //         // TODO: ggf. aus SysConfig relevanten String ermitteln
+            //         `${KIXObjectType.CONFIG_ITEM}.${ConfigItemProperty.CLASS_ID}`,
+            //         KIXObjectType.CONFIG_ITEM_CLASS, response.ConfigItemClassID,
+            //         true
+            //     );
+            // }
 
             await AppUtil.updateFormConfigurations(true);
 

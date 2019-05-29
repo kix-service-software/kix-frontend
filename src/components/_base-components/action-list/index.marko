@@ -1,6 +1,6 @@
 <div.action-list-wrapper>
     <ul.action-list key="action-list">
-        <for(element in state.listDefault)>
+        <for|element| of=state.listDefault>
             <li class={inactive: !element.canRun()}>
                 <action action=element displayText=state.displayText/>
             </li>
@@ -14,7 +14,7 @@
     <if(state.showListExpansion)>
         <div.action-list-expansion-container>
             <ul.action-list-expansion>
-                <for(element in state.listExpansion)>
+                <for|element| of=state.listExpansion>
                     <li class={inactive: !element.canRun()}>
                         <action action=element displayText=true/>
                     </li>

@@ -1,0 +1,17 @@
+<widget
+    instanceId=state.instanceId
+    title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
+    contentActions=state.actions>
+    <@content>
+        <div.queue-signature>
+            <if(state.queue && state.queue.Signature && state.queue.Signature !== "")>
+                <editor readOnly=true value=state.queue.Signature useReadonlyStyle=true/>
+            </if>
+            <else>
+                <span>
+                    <translation-string pattern="Translatable#No signature defined."/>
+                </span>
+            </else>
+        </div>
+    </@content>
+</widget>

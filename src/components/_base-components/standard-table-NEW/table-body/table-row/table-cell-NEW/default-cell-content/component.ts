@@ -10,9 +10,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state = new ComponentState();
     }
 
-    public async onInput(input: any): Promise<void> {
+    public onInput(input: any): void {
         this.state.loading = true;
         this.state.cell = input.cell;
+        this.update();
+    }
+
+    private async update(): Promise<void> {
         if (this.state.cell) {
             const config = this.state.cell.getColumnConfiguration();
             if (config) {

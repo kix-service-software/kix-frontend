@@ -1,19 +1,19 @@
-# Translation String
+#### Translation String
 
-## Description
+##### Description
 This component can be used to translate given patterns in marko templates.
 
-## Tag
+##### Tag
 `<translation-string pattern="pattern" placeholders=[]/>`
 
-## Attributes
+##### Attributes
 
 | Attribute    | Required |   Type   |                           Value(s) |
 | ------------ | :------: | :------: | ---------------------------------: |
 | pattern      |   yes    |  String  |   the base pattern for translation |
 | placeholders | optional | String[] | variables for pattern placeholders |
 
-## Examples
+##### Examples
 
 `<translation-string pattern="This is a text to translate"/>`
 

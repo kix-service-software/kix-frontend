@@ -3,12 +3,14 @@ import {
 } from '../../../../core/model';
 import { FormService } from '../../../../core/browser/form';
 import {
-    WidgetService, DialogService, KIXObjectSearchService, IdService, TableConfiguration, TableHeaderHeight,
+    WidgetService, KIXObjectSearchService, IdService, TableConfiguration, TableHeaderHeight,
     TableRowHeight, BrowserUtil, ITable, TableFactoryService, TableEvent, SearchProperty, TableEventData
 } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import { SearchContext } from '../../../../core/browser/search/context';
 import { EventService, IEventSubscriber } from '../../../../core/browser/event';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
+import { DialogService } from '../../../../core/browser/components/dialog';
 
 class Component implements ISearchFormListener {
 
@@ -19,7 +21,6 @@ class Component implements ISearchFormListener {
     public listenerId: string;
 
     private subscriber: IEventSubscriber;
-    private table: ITable;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -33,7 +34,13 @@ class Component implements ISearchFormListener {
     }
 
     public async onMount(): Promise<void> {
-        this.state.table = this.createTable();
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Attributes", "Translatable#Reset data", "Translatable#Cancel",
+            "Translatable#Detailed search results", "Translatable#Start search"
+        ]);
+
+        this.state.table = await this.createTable();
 
         const formInstance = await FormService.getInstance().getFormInstance<SearchFormInstance>(this.formId);
         if (formInstance) {
@@ -53,12 +60,8 @@ class Component implements ISearchFormListener {
         this.subscriber = {
             eventSubscriberId: 'search-result-list',
             eventPublished: async (data: TableEventData, eventId: string) => {
-                if (this.table) {
-                    if (data && data.tableId === this.table.getTableId()) {
-                        if (eventId === TableEvent.TABLE_READY) {
-                            this.state.resultCount = this.table.getRows().length;
-                        }
-
+                if (this.state.table) {
+                    if (data && data.tableId === this.state.table.getTableId()) {
                         if (eventId === TableEvent.TABLE_INITIALIZED) {
                             await this.setAdditionalColumns();
                         }
@@ -115,14 +118,18 @@ class Component implements ISearchFormListener {
     }
 
     public async search(): Promise<void> {
-        DialogService.getInstance().setMainDialogLoading(true, "Suche ...", true);
+        const hint = await TranslationService.translate('Translatable#Search ...');
+        DialogService.getInstance().setMainDialogLoading(true, hint, true);
 
-        await KIXObjectSearchService.getInstance().executeSearch<KIXObject>(this.formId)
+        const result = await KIXObjectSearchService.getInstance().executeSearch<KIXObject>(this.formId)
             .catch((error: Error) => {
                 BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
             });
 
         await this.setAdditionalColumns();
+
+        this.state.resultCount = Array.isArray(result) ? result.length : 0;
+        (this as any).setStateDirty();
 
         DialogService.getInstance().setMainDialogLoading(false);
     }
@@ -167,19 +174,19 @@ class Component implements ISearchFormListener {
         await this.setCanSearch();
     }
 
-    private createTable(): ITable {
+    private async createTable(): Promise<ITable> {
         const tableConfiguration = new TableConfiguration(
             this.objectType, null, null, null, null, false, false, null, null,
             TableHeaderHeight.SMALL, TableRowHeight.SMALL
         );
-        this.table = TableFactoryService.getInstance().createTable(
+        const table = await TableFactoryService.getInstance().createTable(
             `search-form-results-${this.objectType}`, this.objectType, tableConfiguration,
             null, SearchContext.CONTEXT_ID, true, false, true
         );
 
         KIXObjectSearchService.getInstance().provideResult();
 
-        return this.table;
+        return table;
     }
 }
 

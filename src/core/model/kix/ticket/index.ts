@@ -8,7 +8,6 @@ export { Attachment } from './Attachment';
 export { SenderType } from './SenderType';
 export { StateType } from './StateType';
 export { Ticket } from './Ticket';
-export { TicketFactory } from './TicketFactory';
 export { TicketHistory } from './TicketHistory';
 export { TicketHistoryFactory } from './TicketHistoryFactory';
 export { TicketHistoryProperty } from './TicketHistoryProperty';
@@ -21,16 +20,28 @@ export { TicketCreationError } from './TicketCreationError';
 export { Watcher } from './Watcher';
 export { TicketTypeProperty } from './TicketTypeProperty';
 export { TicketStateProperty } from './TicketStateProperty';
+export { Queue } from './Queue';
+export { QueueProperty } from './QueueProperty';
+export { TicketTemplate } from './TicketTemplate';
+export { TicketTemplateProperty } from './TicketTemplateProperty';
+export { FollowUpType } from './FollowUpType';
 
-export { ArticlesLoadingOptions } from './ArticlesLoadingOptions';
 export { TicketStats } from './TicketStats';
 export { CreateTicketArticleOptions } from './CreateTicketArticleOptions';
 export { CreateTicketWatcherOptions } from './CreateTicketWatcherOptions';
 export { DeleteTicketWatcherOptions } from './DeleteTicketWatcherOptions';
-export { TicketCacheHandler } from './TicketCacheHandler';
-export { TicketTypeCacheHandler } from './TicketTypeCacheHandler';
 export { TicketPriorityProperty } from './TicketPriorityProperty';
-export { TicketStateCacheHandler } from './TicketStateCacheHandler';
-export { TicketPriorityCacheHandler } from './TicketPriorityCacheHandler';
+
+export { TicketFactory } from './TicketFactory';
+export { QueueFactory } from './QueueFactory';
+export { SenderTypeFactory } from './SenderTypeFactory';
+export { LockFactory } from './LockFactory';
+export { FollowUpTypeFactory } from './FollowUpTypeFactory';
+
+export { ArticleLoadingOptions } from './ArticleLoadingOptions';
+export { TicketPriorityFactory } from './TicketPriorityFactory';
+export { TicketStateFactory } from './TicketStateFactory';
+export { TicketStateTypeFactory } from './TicketStateTypeFactory';
+export { TicketTypeFactory } from './TicketTypeFactory';
 
 export * from './socket';

@@ -1,10 +1,11 @@
 import { ComponentState } from "./ComponentState";
-import { OverlayService, ActionFactory, WidgetService, BrowserUtil } from "../../../core/browser";
+import { OverlayService, ActionFactory, WidgetService } from "../../../core/browser";
 import {
     OverlayType, ComponentContent, WidgetType, KIXObject, ToastContent
 } from "../../../core/model";
 import { ContextService } from "../../../core/browser/context";
 import { ComponentsService } from "../../../core/browser/components";
+import { TranslationService } from "../../../core/browser/i18n/TranslationService";
 
 class OverlayComponent {
 
@@ -20,7 +21,12 @@ class OverlayComponent {
         this.state = new ComponentState();
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Close window"
+        ]);
+
         OverlayService.getInstance().registerOverlayComponentListener(this.openOverlay.bind(this));
 
         WidgetService.getInstance().setWidgetType(this.state.overlayInstanceId, WidgetType.OVERLAY);
@@ -60,7 +66,8 @@ class OverlayComponent {
 
     private openOverlay<T extends KIXObject<T>>(
         type: OverlayType, widgetInstanceId: string, content: ComponentContent<T>, title: string,
-        closeButton: boolean, position: [number, number], newListenerId: string, large: boolean
+        closeButton: boolean, position: [number, number], newListenerId: string, large: boolean,
+        toastTimeoutMillis: number = 2000
     ): void {
         if (this.currentListenerId) {
             this.closeOverlay();
@@ -94,7 +101,7 @@ class OverlayComponent {
             if (type && type === OverlayType.SUCCESS_TOAST) {
                 const toastContent = this.state.content.getComponentData() as ToastContent;
                 if (toastContent && typeof toastContent.title === 'undefined') {
-                    toastContent.title = 'Erfolgreich!';
+                    toastContent.title = 'Translatable#Success!';
                 }
             }
             this.toastTimeout = setTimeout(() => {
@@ -109,14 +116,14 @@ class OverlayComponent {
                             this.closeOverlay();
                         }, 200);
                     });
-                }
-                toast.classList.add('show-toast');
-                this.toastTimeout = setTimeout(() => {
-                    toast.classList.remove('show-toast');
+                    toast.classList.add('show-toast');
                     this.toastTimeout = setTimeout(() => {
-                        this.closeOverlay();
-                    }, 200);
-                }, 2000);
+                        toast.classList.remove('show-toast');
+                        this.toastTimeout = setTimeout(() => {
+                            this.closeOverlay();
+                        }, 200);
+                    }, toastTimeoutMillis);
+                }
             }, 100);
         }
 
@@ -125,12 +132,12 @@ class OverlayComponent {
         }
     }
 
-    private applyWidgetConfiguration(widgetInstanceId: string): void {
+    private async applyWidgetConfiguration(widgetInstanceId: string): Promise<void> {
         if (widgetInstanceId && widgetInstanceId !== '') {
             const context = ContextService.getInstance().getActiveContext();
             const widgetConfiguration = context.getWidgetConfiguration(widgetInstanceId);
             if (widgetConfiguration) {
-                this.state.actions = ActionFactory.getInstance().generateActions(
+                this.state.actions = await ActionFactory.getInstance().generateActions(
                     widgetConfiguration.actions, this.state.content.getActionObject()
                 );
                 WidgetService.getInstance().registerActions(this.state.overlayInstanceId, this.state.actions, false);

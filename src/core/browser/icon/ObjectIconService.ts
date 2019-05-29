@@ -1,6 +1,6 @@
 import {
-    ObjectIcon, KIXObjectType, KIXObject,
-    KIXObjectLoadingOptions, KIXObjectCache, ObjectIconLoadingOptions
+    ObjectIcon, KIXObjectType, KIXObject, KIXObjectLoadingOptions,
+    KIXObjectSpecificLoadingOptions, ObjectIconLoadingOptions
 } from "../../model";
 import { KIXObjectService } from "../kix";
 
@@ -16,43 +16,40 @@ export class ObjectIconService extends KIXObjectService<ObjectIcon> {
         return ObjectIconService.INSTANCE;
     }
 
+    private constructor() {
+        super();
+    }
+
+
+    public async loadObjects<O extends KIXObject>(
+        objectType: KIXObjectType, objectIds: Array<string | number>,
+        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions
+    ): Promise<O[]> {
+        const icons = await super.loadObjects<ObjectIcon>(KIXObjectType.OBJECT_ICON, null);
+        if (objectLoadingOptions && objectLoadingOptions instanceof ObjectIconLoadingOptions) {
+            const icon = icons.find(
+                (i) => {
+                    const objectId = objectLoadingOptions.objectId
+                        ? objectLoadingOptions.objectId.toString()
+                        : null;
+                    return i.ObjectID.toString() === objectId && i.Object === objectLoadingOptions.object;
+                }
+            );
+
+            if (icon) {
+                return [icon as any];
+            }
+        }
+
+        return [];
+    }
+
     public isServiceFor(kixObjectType: KIXObjectType) {
         return kixObjectType === KIXObjectType.OBJECT_ICON;
     }
 
     public getLinkObjectName(): string {
         return 'ObjectIcon';
-    }
-
-    public async init(): Promise<void> {
-        this.loadObjects(KIXObjectType.OBJECT_ICON, null);
-    }
-
-    public async loadObjects<O extends KIXObject>(
-        objectType: KIXObjectType, objectIds: Array<string | number>,
-        loadingOptions?: KIXObjectLoadingOptions, objectIconLoadingOptions?: ObjectIconLoadingOptions,
-        cache: boolean = true
-    ): Promise<O[]> {
-
-        if (objectType === KIXObjectType.OBJECT_ICON) {
-            if (!KIXObjectCache.hasObjectCache(objectType)) {
-                const objects = await super.loadObjects(objectType, null, null, null, false);
-                objects.forEach((i) => KIXObjectCache.addObject(objectType, i));
-            }
-
-            if (!objectIds && objectIconLoadingOptions) {
-                const icons: any[] = KIXObjectCache.getObjectCache<ObjectIcon>(objectType).filter(
-                    (oi) => oi.Object === objectIconLoadingOptions.object
-                        && oi.ObjectID.toString() === objectIconLoadingOptions.objectId.toString()
-                );
-                return icons;
-            } else {
-                return KIXObjectCache.getObjectCache(objectType);
-            }
-        }
-        return await super.loadObjects<O>(
-            objectType, objectIds, loadingOptions, objectIconLoadingOptions, cache
-        );
     }
 
 }

@@ -24,7 +24,7 @@ class Component {
             ).map((l) => l.SourceKey);
 
             if (linkedConfigItemIds && linkedConfigItemIds.length) {
-                const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, null, ['CurrentVersion']);
+                const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, ['CurrentVersion']);
 
                 const configItems = await KIXObjectService.loadObjects<ConfigItem>(
                     KIXObjectType.CONFIG_ITEM, linkedConfigItemIds, loadingOptions
@@ -49,7 +49,7 @@ class Component {
 
     public getRoutingConfiguration(configItem: ConfigItem): RoutingConfiguration {
         return new RoutingConfiguration(
-            null, ConfigItemDetailsContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM,
+            ConfigItemDetailsContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM,
             ContextMode.DETAILS, ConfigItemProperty.CONFIG_ITEM_ID
         );
     }

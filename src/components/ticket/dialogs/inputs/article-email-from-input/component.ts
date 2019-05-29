@@ -1,10 +1,12 @@
 import { ComponentState } from "./ComponentState";
 import {
     FormInputComponent, TreeNode, TicketProperty, FormField,
-    FormFieldValue, Queue, KIXObjectType, ContextType, ContextMode, Ticket
+    FormFieldValue, Queue, KIXObjectType, ContextType, ContextMode, Ticket, SystemAddress
 } from "../../../../../core/model";
 import { FormService, KIXObjectService, ContextService } from "../../../../../core/browser";
 import { TicketDetailsContext } from "../../../../../core/browser/ticket";
+import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
+import { AgentService } from "../../../../../core/browser/application/AgentService";
 
 class Component extends FormInputComponent<number, ComponentState> {
 
@@ -12,8 +14,17 @@ class Component extends FormInputComponent<number, ComponentState> {
         this.state = new ComponentState();
     }
 
-    public async onInput(input: any): Promise<void> {
-        await super.onInput(input);
+    public onInput(input: any): void {
+        super.onInput(input);
+        this.update();
+    }
+
+    public async update(): Promise<void> {
+        const placeholderText = this.state.field.placeholder
+            ? this.state.field.placeholder
+            : this.state.field.required ? this.state.field.label : '';
+
+        this.state.placeholder = await TranslationService.translate(placeholderText);
     }
 
     public async onMount(): Promise<void> {
@@ -54,7 +65,7 @@ class Component extends FormInputComponent<number, ComponentState> {
         formInstance.registerListener({
             formListenerId: 'article-email-from-input',
             formValueChanged: async (formField: FormField, value: FormFieldValue<any>, oldValue: any) => {
-                if (formField.property === TicketProperty.QUEUE_ID) {
+                if (formField && formField.property === TicketProperty.QUEUE_ID) {
                     if (!value) {
                         value = await formInstance.getFormFieldValueByProperty(TicketProperty.QUEUE_ID);
                     }
@@ -72,13 +83,17 @@ class Component extends FormInputComponent<number, ComponentState> {
     private async initNodes(queueId: number): Promise<void> {
         const queues = await KIXObjectService.loadObjects<Queue>(KIXObjectType.QUEUE, [queueId]);
         if (queues && queues.length) {
-            const user = ContextService.getInstance().getObjectData().currentUser;
+            const user = await AgentService.getInstance().getCurrentUser();
 
             const queue = queues[0];
 
             const userName = `${user.UserFirstname} ${user.UserLastname}`;
-            const queueMail = queue.Email;
-            const realName = queue.RealName;
+
+            const systemAddress = await KIXObjectService.loadObjects<SystemAddress>(
+                KIXObjectType.SYSTEM_ADDRESS, [queue.SystemAddressID], null, null, true
+            );
+            const queueMail = systemAddress[0].Name;
+            const realName = systemAddress[0].Realname;
 
             const labels = [
                 [`\"<${realName}>\" <${queueMail}>`, `${realName}`],
@@ -87,7 +102,12 @@ class Component extends FormInputComponent<number, ComponentState> {
             ];
 
             const nodes = [];
-            labels.forEach((l) => nodes.push(new TreeNode(l[0], l[1])));
+            labels.forEach((l) => nodes.push(
+                new TreeNode(
+                    l[0], l[1], null, null, null, null, null, null, null,
+                    undefined, undefined, undefined, undefined, l[0]
+                )
+            ));
 
             this.state.nodes = nodes;
             this.fromChanged([nodes[0]]);

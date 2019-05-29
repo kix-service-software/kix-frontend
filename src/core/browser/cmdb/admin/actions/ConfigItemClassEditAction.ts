@@ -4,8 +4,8 @@ import { ContextService } from "../../../context";
 
 export class ConfigItemClassEditAction extends AbstractAction {
 
-    public initAction(): void {
-        this.text = "Bearbeiten";
+    public async initAction(): Promise<void> {
+        this.text = 'Edit';
         this.icon = 'kix-icon-edit';
     }
 
@@ -13,7 +13,7 @@ export class ConfigItemClassEditAction extends AbstractAction {
         await FormService.getInstance().getFormInstance<FormInstance>('edit-config-item-class-form', false);
         ContextService.getInstance().setDialogContext(
             // TODO: Titel aus dem aktiven Admin-Modul ermitteln (Kategorie)
-            null, KIXObjectType.CONFIG_ITEM_CLASS, ContextMode.EDIT_ADMIN, null, true, 'Stammdaten bearbeiten'
+            null, KIXObjectType.CONFIG_ITEM_CLASS, ContextMode.EDIT_ADMIN, null, true
         );
     }
 

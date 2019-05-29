@@ -11,7 +11,7 @@ export class Extension implements IMainMenuExtension {
 
     public icon: string = "kix-icon-cmdb";
 
-    public text: string = "CMDB";
+    public text: string = "Translatable#CMDB";
 
 }
 

@@ -1,9 +1,9 @@
 import {
     IdService, LabelService, KIXObjectService, ObjectPropertyValue, PropertyOperator
-} from "../../../../../core/browser";
-import { TreeNode, InputFieldTypes, DateTimeUtil, TreeUtil } from "../../../../../core/model";
-import { BulkManager } from "../../../../../core/browser/bulk";
-import { PropertyOperatorUtil } from "../../../../../core/browser/PropertyOperatorUtil";
+} from '../../../../../core/browser';
+import { TreeNode, InputFieldTypes, DateTimeUtil, TreeUtil } from '../../../../../core/model';
+import { BulkManager } from '../../../../../core/browser/bulk';
+import { PropertyOperatorUtil } from '../../../../../core/browser/PropertyOperatorUtil';
 
 export class BulkValue {
 

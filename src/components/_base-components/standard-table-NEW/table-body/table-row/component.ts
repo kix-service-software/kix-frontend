@@ -1,7 +1,7 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../core/browser';
 import {
-    IColumn, ICell, TableEvent, TableEventData, TableCSSHandlerRegsitry
+    IColumn, ICell, TableEvent, TableEventData, TableCSSHandlerRegistry
 } from '../../../../../core/browser/table';
 import { IEventSubscriber, EventService } from '../../../../../core/browser/event';
 
@@ -22,7 +22,6 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             this.state.selectable = this.state.row.isSelectable();
             this.state.open = this.state.row.isExpanded();
             this.state.children = this.state.row.getChildren();
-            this.prepareObserver();
         }
     }
 
@@ -51,16 +50,13 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     private prepareObserver(): void {
-        if (this.supportsIntersectionObserver()) {
-            this.state.show = false;
+        if (!this.state.show && this.supportsIntersectionObserver()) {
             const row = (this as any).getEl();
             if (row) {
                 if (this.observer) {
                     this.observer.disconnect();
                 }
-                this.observer = new IntersectionObserver(this.intersectionCallback.bind(this), {
-                    threshold: [0, 1]
-                });
+                this.observer = new IntersectionObserver(this.intersectionCallback.bind(this));
                 this.observer.observe(row);
             }
         } else {
@@ -76,7 +72,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
     private intersectionCallback(entries, observer): void {
         entries.forEach((entry) => {
-            if (entry.isIntersecting) {
+            if (entry.isIntersecting && entry.intersectionRatio > 0) {
                 this.state.show = true;
                 this.observer.disconnect();
             }
@@ -152,7 +148,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
         if (object) {
             const objectType = this.state.row.getTable().getObjectType();
-            const cssHandler = TableCSSHandlerRegsitry.getCSSHandler(objectType);
+            const cssHandler = TableCSSHandlerRegistry.getCSSHandler(objectType);
             if (cssHandler) {
                 const classes = cssHandler.getRowCSSClasses(object);
                 classes.forEach((c) => stateClass.push(c));

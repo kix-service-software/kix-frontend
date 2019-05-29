@@ -5,11 +5,10 @@ import {
 import { FormService } from "../../..";
 import { KIXObjectService } from "../../../kix";
 import { ContextService } from "../../../context";
+import { FormValidationService } from "../../../form/validation";
+import { TranslationService } from "../../../i18n/TranslationService";
 
 export class EmailRecipientValidator implements IFormFieldValidator {
-
-    // tslint:disable-next-line:max-line-length
-    private EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     public isValidatorFor(formField: FormField, formId: string): boolean {
         return formField.property === ArticleProperty.TO
@@ -19,18 +18,19 @@ export class EmailRecipientValidator implements IFormFieldValidator {
 
     public async validate(formField: FormField, formId: string): Promise<ValidationResult> {
         const formInstance = await FormService.getInstance().getFormInstance(formId);
-        let toValue = await formInstance.getFormFieldValueByProperty<string>(ArticleProperty.TO);
+        let toValue = await formInstance.getFormFieldValueByProperty<string[]>(ArticleProperty.TO);
         let checkToValue = true;
         if (!this.isDefined(toValue)) {
             const context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
             if (context && context.getDescriptor().contextMode === ContextMode.CREATE) {
-                toValue = await formInstance.getFormFieldValueByProperty<string>(TicketProperty.CUSTOMER_USER_ID);
+                const contactValue = await formInstance.getFormFieldValueByProperty<string>(TicketProperty.CONTACT_ID);
+                toValue = new FormFieldValue([contactValue.value], contactValue.valid);
                 checkToValue = false;
             }
         }
 
-        const ccValue = await formInstance.getFormFieldValueByProperty<string>(ArticleProperty.CC);
-        const bccValue = await formInstance.getFormFieldValueByProperty<string>(ArticleProperty.BCC);
+        const ccValue = await formInstance.getFormFieldValueByProperty<string[]>(ArticleProperty.CC);
+        const bccValue = await formInstance.getFormFieldValueByProperty<string[]>(ArticleProperty.BCC);
 
         if (this.isDefined(toValue) || this.isDefined(ccValue) || this.isDefined(bccValue)) {
             let value;
@@ -48,9 +48,10 @@ export class EmailRecipientValidator implements IFormFieldValidator {
                     return mailCheckResult;
                 }
             }
-        } else {
+        } else if (checkToValue) {
             return new ValidationResult(
-                ValidationSeverity.ERROR, 'Mindestens eines der Felder An, Cc oder Bcc muss eine Eingabe beinhalten.'
+                ValidationSeverity.ERROR,
+                "Translatable#At least one of the fields 'To', 'Cc' or 'Bcc' must contain an entry."
             );
         }
 
@@ -58,23 +59,25 @@ export class EmailRecipientValidator implements IFormFieldValidator {
     }
 
     private isDefined(value: FormFieldValue): boolean {
-        return value && value.value && value.value !== '';
+        return value && value.value && !!value.value.length && value.value[0] !== '';
     }
 
-    private async checkEmail(value: string): Promise<ValidationResult> {
-        if (value && value !== '') {
-            const mailAddresses = value.split(',');
+    private async checkEmail(value: string[]): Promise<ValidationResult> {
+        if (value && !!value.length) {
+            const mailAddresses = value;
             for (const mail of mailAddresses) {
-                if (!this.EMAIL_REGEX.test(mail.trim()) === true) {
-                    return new ValidationResult(
-                        ValidationSeverity.ERROR, 'Eingegebene E-Mail Adresse ist ungültig.'
+                if (!FormValidationService.getInstance().isValidEmail(mail)) {
+                    const errorString = await TranslationService.translate(
+                        `${FormValidationService.EMAIL_REGEX_ERROR_MESSAGE} ({0}).`, [mail]
                     );
+                    return new ValidationResult(ValidationSeverity.ERROR, errorString);
                 }
 
-                if (await this.isSystemAddress(mail)) {
-                    return new ValidationResult(
-                        ValidationSeverity.ERROR, 'Eingegebene E-Mail Adresse darf keine Systemaddresse sein.'
+                if (await this.isSystemAddress(mail.replace(/.+ <(.+)>/, '$1'))) {
+                    const errorString = await TranslationService.translate(
+                        'Translatable#Inserted email address must not be a system address ({0}).', [mail]
                     );
+                    return new ValidationResult(ValidationSeverity.ERROR, errorString);
                 }
             }
         }

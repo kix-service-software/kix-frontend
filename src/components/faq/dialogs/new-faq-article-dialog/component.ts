@@ -1,20 +1,20 @@
 import { ComponentState } from './ComponentState';
-import { AbstractNewDialog } from '../../../../core/browser';
 import { KIXObjectType, ContextMode } from '../../../../core/model';
 import { FAQDetailsContext } from '../../../../core/browser/faq';
 import { FAQArticleProperty } from '../../../../core/model/kix/faq';
 import { RoutingConfiguration } from '../../../../core/browser/router';
+import { AbstractNewDialog } from '../../../../core/browser/components/dialog';
 
 class Component extends AbstractNewDialog {
 
     public onCreate(): void {
         this.state = new ComponentState();
         super.init(
-            'FAQ Artikel wird angelegt',
-            'FAQ Artikel wurde erfolgreich angelegt.',
+            'Translatable#Create FAQ Article',
+            'Translatable#FAQ Article successfully created.',
             KIXObjectType.FAQ_ARTICLE,
             new RoutingConfiguration(
-                null, FAQDetailsContext.CONTEXT_ID, KIXObjectType.FAQ_ARTICLE,
+                FAQDetailsContext.CONTEXT_ID, KIXObjectType.FAQ_ARTICLE,
                 ContextMode.DETAILS, FAQArticleProperty.ID, true
             )
         );

@@ -41,21 +41,21 @@ class Component {
 
     private async initWidget(configItem: ConfigItem): Promise<void> {
         if (configItem) {
-            this.setActions(configItem);
+            this.prepareActions(configItem);
             await this.prepareTable();
         }
     }
 
-    private setActions(configItem: ConfigItem): void {
+    private async prepareActions(configItem: ConfigItem): Promise<void> {
         if (this.state.widgetConfiguration && configItem) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.actions = await ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, [configItem]
             );
         }
     }
 
     private async prepareTable(): Promise<void> {
-        const table = TableFactoryService.getInstance().createTable(
+        const table = await TableFactoryService.getInstance().createTable(
             'config-item-history', KIXObjectType.CONFIG_ITEM_HISTORY, null, null, ConfigItemDetailsContext.CONTEXT_ID
         );
 

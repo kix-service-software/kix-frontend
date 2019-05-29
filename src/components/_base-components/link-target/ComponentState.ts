@@ -1,5 +1,5 @@
-import { ContextMode, KIXObjectType, KIXObject } from "../../../core/model";
-import { RoutingConfiguration } from "../../../core/browser/router";
+import { ContextMode, KIXObjectType, KIXObject } from '../../../core/model';
+import { RoutingConfiguration } from '../../../core/browser/router';
 
 export class ComponentState {
 

@@ -95,7 +95,9 @@ export class KIXObjectSearchService {
             const searchDefinition = this.getSearchDefinition(objectType);
 
             if (formInstance instanceof SearchFormInstance) {
-                const criteria = formInstance.getCriteria().filter((c) => c.value !== null && c.value !== undefined);
+                const criteria = formInstance.getCriteria().filter(
+                    (c) => typeof c.value !== 'undefined' && c.value !== null && c.value !== ''
+                );
 
                 const preparedCriteria = await searchDefinition.prepareFormFilterCriteria(criteria);
                 const searchLoadingOptions = searchDefinition.getLoadingOptions(preparedCriteria);
@@ -160,9 +162,7 @@ export class KIXObjectSearchService {
 
         const searchDefinition = this.getSearchDefinition(objectType);
         const criteria = searchDefinition.prepareSearchFormValue(SearchProperty.FULLTEXT, searchValue);
-
         const loadingOptions = searchDefinition.getLoadingOptions(criteria);
-        loadingOptions.searchValue = searchValue;
 
         const objects = await this.doSearch(objectType, loadingOptions);
 

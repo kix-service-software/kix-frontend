@@ -8,6 +8,7 @@ import {
 } from "../../../../core/model/kix/faq";
 import { InlineContent } from "../../../../core/browser/components";
 import { FAQDetailsContext } from "../../../../core/browser/faq";
+import { TranslationService } from "../../../../core/browser/i18n/TranslationService";
 
 class Component {
 
@@ -29,6 +30,12 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Symptom", "Translatable#Cause", "Translatable#Solution", "Translatable#Comment",
+            "Translatable#Number of ratings"
+        ]);
+
         WidgetService.getInstance().setWidgetType('faq-article-group', WidgetType.GROUP);
 
         const context = await ContextService.getInstance().getContext<FAQDetailsContext>(FAQDetailsContext.CONTEXT_ID);
@@ -58,7 +65,7 @@ class Component {
             this.state.attachments = faqArticle.Attachments.filter((a) => a.Disposition !== 'inline');
             const inlineAttachments = faqArticle.Attachments.filter((a) => a.Disposition === 'inline');
             for (const attachment of inlineAttachments) {
-                const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, null, ['Content']);
+                const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, ['Content']);
                 const faqArticleAttachmentOptions = new FAQArticleAttachmentLoadingOptions(
                     faqArticle.ID, attachment.ID
                 );
@@ -82,13 +89,13 @@ class Component {
             const labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.FAQ_ARTICLE);
             this.stars = await labelProvider.getIcons(faqArticle, FAQArticleProperty.VOTES);
             this.rating = BrowserUtil.calculateAverage(faqArticle.Votes.map((v) => v.Rating));
-            this.setActions();
+            this.prepareActions();
         }
     }
 
-    private setActions(): void {
+    private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.faqArticle) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.actions = await ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, [this.state.faqArticle]
             );
         }
@@ -96,7 +103,7 @@ class Component {
 
     public getRatingTooltip(): string {
         const count = this.state.faqArticle.Votes ? this.state.faqArticle.Votes.length : 0;
-        return `Anzahl Bewertungen: ${count}`;
+        return `${this.state.translations["Translatable#Number of ratings"]}: ${count}`;
     }
 
     public getIcon(attachment: Attachment): ObjectIcon {
@@ -110,7 +117,7 @@ class Component {
     }
 
     public async download(attachment: Attachment): Promise<void> {
-        const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, null, ['Content']);
+        const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, ['Content']);
         const faqArticleAttachmentOptions = new FAQArticleAttachmentLoadingOptions(
             this.state.faqArticle.ID, attachment.ID
         );

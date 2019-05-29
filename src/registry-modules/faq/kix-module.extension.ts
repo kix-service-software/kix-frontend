@@ -1,6 +1,6 @@
 import { IKIXModuleExtension } from "../../core/extensions";
 
-class KIXModuleExtionsion implements IKIXModuleExtension {
+class Extension implements IKIXModuleExtension {
 
     public initComponentId: string = 'faq-module-component';
 
@@ -9,7 +9,6 @@ class KIXModuleExtionsion implements IKIXModuleExtension {
     public tags: Array<[string, string]> = [
         ['faq-module-component', 'faq/faq-module-component'],
         ['faq', 'faq/faq-module'],
-        ['faq-details', 'faq/faq-details'],
         ['faq-vote-selector', 'faq/faq-vote-selector'],
         ['new-faq-article-dialog', 'faq/dialogs/new-faq-article-dialog'],
         ['edit-faq-article-dialog', 'faq/dialogs/edit-faq-article-dialog'],
@@ -20,11 +19,15 @@ class KIXModuleExtionsion implements IKIXModuleExtension {
         ['faq-article-content-widget', 'faq/widgets/faq-article-content-widget'],
         ['faq-article-history-widget', 'faq/widgets/faq-article-history-widget'],
         ['faq-article-list-widget', 'faq/widgets/faq-article-list-widget'],
-        ['faq-category-explorer', 'faq/widgets/faq-category-explorer']
+        ['faq-category-explorer', 'faq/widgets/faq-category-explorer'],
+        ['faq-admin-categories', 'faq/admin/faq-admin-categories'],
+        ['new-faq-category-dialog', 'faq/admin/dialogs/new-faq-category-dialog'],
+        ['edit-faq-category-dialog', 'faq/admin/dialogs/edit-faq-category-dialog'],
+        ['faq-category-info-widget', 'faq/admin/widgets/faq-category-info-widget']
     ];
 
 }
 
 module.exports = (data, host, options) => {
-    return new KIXModuleExtionsion();
+    return new Extension();
 };

@@ -1,22 +1,27 @@
-import { AbstractMarkoComponent, IColumn, LabelService } from "../../../../core/browser";
+import { AbstractMarkoComponent, IColumn, LabelService } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
-import { TreeNode, KIXObjectType, ObjectIcon } from "../../../../core/model";
+import { TreeNode, KIXObjectType, ObjectIcon } from '../../../../core/model';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     public filterValues: TreeNode[];
-    public filterText: string;
     private column: IColumn;
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
-    public async onInput(input: any): Promise<void> {
+    public onInput(input: any): void {
         this.column = input.column;
         this.state.nodes = null;
         this.filterValues = null;
-        this.filterText = null;
+        this.state.filterText = null;
+        this.update();
+    }
+
+    private async update(): Promise<void> {
+        this.state.placeholder = await TranslationService.translate('Translatable#insert filter value');
 
         if (this.column && this.column.getColumnConfiguration().hasListFilter) {
             this.state.hasListFilter = true;
@@ -72,7 +77,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                         ? currentfilter[1][0].value as any[] : [];
                     this.state.selectedNodes = this.state.nodes.filter((n) => values.some((v) => v === n.id));
                 } else {
-                    this.filterText = currentfilter[0];
+                    this.state.filterText = currentfilter[0];
                 }
             }
         }
@@ -92,12 +97,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public textFilterValueChanged(event: any): void {
-        this.filterText = event.target.value;
+        this.state.filterText = event.target.value;
     }
 
     public filterKeyDown(event: any): void {
         if (event.keyCode === 13 || event.key === 'Enter') {
-            this.filterText = event.target.value;
+            this.state.filterText = event.target.value;
             this.filter();
         }
     }
@@ -107,7 +112,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             if (this.state.hasListFilter) {
                 this.column.filter(this.filterValues);
             } else {
-                this.column.filter(null, this.filterText);
+                this.column.filter(null, this.state.filterText);
                 (this as any).emit('closeOverlay');
             }
         }

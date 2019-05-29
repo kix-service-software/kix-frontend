@@ -1,5 +1,6 @@
 import { ComponentState } from './ComponentState';
 import { FormInputComponent, InputFieldTypes, FormFieldOptions } from '../../../../../core/model';
+import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
 class Component extends FormInputComponent<string, ComponentState> {
 
@@ -7,9 +8,9 @@ class Component extends FormInputComponent<string, ComponentState> {
         this.state = new ComponentState();
     }
 
-    public async onInput(input: any): Promise<void> {
-        await super.onInput(input);
-        this.state.placeholder = typeof input.placeholder !== 'undefined' ? input.placeholder : this.state.field.label;
+    public onInput(input: any): void {
+        super.onInput(input);
+
         this.state.currentValue = typeof input.currentValue !== 'undefined' ?
             input.currentValue : this.state.currentValue;
         if (this.state.field && this.state.field.options) {
@@ -20,6 +21,14 @@ class Component extends FormInputComponent<string, ComponentState> {
                 this.state.inputType = inputTypeOption.value.toString() || InputFieldTypes.TEXT;
             }
         }
+        this.update();
+    }
+
+    private async update(): Promise<void> {
+        const placeholderText = this.state.field.placeholder
+            ? this.state.field.placeholder
+            : this.state.field.required ? this.state.field.label : '';
+        this.state.placeholder = await TranslationService.translate(placeholderText);
     }
 
     public async onMount(): Promise<void> {
@@ -35,7 +44,7 @@ class Component extends FormInputComponent<string, ComponentState> {
         }
     }
 
-    private valueChanged(event: any): void {
+    public valueChanged(event: any): void {
         if (event) {
             this.state.currentValue = event.target && event.target.value !== '' ? event.target.value : null;
             (this as any).emit('valueChanged', this.state.currentValue);
@@ -43,18 +52,12 @@ class Component extends FormInputComponent<string, ComponentState> {
         }
     }
 
-    public keyDown(event: any): void {
-        setTimeout(() => {
-            this.valueChanged(event);
-        }, 100);
-    }
-
     public getAutoCompleteOption(): string {
         if (this.state.inputType === InputFieldTypes.PASSWORD) {
-            return "new-password";
+            return 'new-password';
         }
 
-        return "nope";
+        return 'nope';
     }
 
     public async focusLost(event: any): Promise<void> {

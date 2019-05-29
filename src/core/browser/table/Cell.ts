@@ -7,6 +7,8 @@ import { TableValue } from "./TableValue";
 
 export class Cell implements ICell {
 
+    private loadingPromise: Promise<string>;
+
     public constructor(
         private row: IRow,
         private tableValue: TableValue
@@ -33,25 +35,43 @@ export class Cell implements ICell {
             return this.getValue().displayValue;
         }
 
-        let value;
-        const object = this.getRow().getRowObject().getObject();
-
-        if (object) {
-            value = await LabelService.getInstance().getPropertyValueDisplayText(
-                object, this.tableValue.property,
-                this.tableValue.objectValue ? this.tableValue.objectValue.toString() : null
-            );
-        } else {
-            const objectType = this.getRow().getTable().getObjectType();
-            const labelProvider = LabelService.getInstance().getLabelProviderForType(objectType);
-            if (labelProvider) {
-                value = await labelProvider.getPropertyValueDisplayText(
-                    this.tableValue.property,
-                    this.tableValue.objectValue ? this.tableValue.objectValue.toString() : null
-                );
-            }
+        if (this.loadingPromise) {
+            return this.loadingPromise;
         }
-        return value ? value : this.tableValue.objectValue ? this.tableValue.objectValue.toString() : '';
+
+        this.loadingPromise = new Promise<string>(async (resolve, reject) => {
+
+            let value: string;
+            const object = this.getRow().getRowObject().getObject();
+
+            const columnConfiguration = this.getColumnConfiguration();
+            const translatable = columnConfiguration ? columnConfiguration.translatable : true;
+
+            if (object) {
+                value = await LabelService.getInstance().getPropertyValueDisplayText(
+                    object, this.tableValue.property,
+                    this.tableValue.objectValue ? this.tableValue.objectValue.toString() : null,
+                    translatable
+                );
+            } else {
+                const objectType = this.getRow().getTable().getObjectType();
+                const labelProvider = LabelService.getInstance().getLabelProviderForType(objectType);
+                if (labelProvider) {
+                    value = await labelProvider.getPropertyValueDisplayText(
+                        this.tableValue.property,
+                        this.tableValue.objectValue ? this.tableValue.objectValue.toString() : null,
+                        translatable
+                    );
+                }
+            }
+            value = value ? value : this.tableValue.objectValue ? this.tableValue.objectValue.toString() : '';
+            this.getValue().displayValue = value;
+
+            resolve(value);
+            this.loadingPromise = null;
+        });
+
+        return this.loadingPromise;
     }
 
     public async filter(filterValue: string, criteria: TableFilterCriteria[]): Promise<boolean> {
@@ -82,11 +102,17 @@ export class Cell implements ICell {
         }
 
         const displayValue = await this.getDisplayValue();
-        const match = filterCriteria.every(
-            (c) => FilterUtil.checkTableFilterCriteria(
+        let match = false;
+
+        const matchPromises = [];
+        filterCriteria.forEach(
+            (c) => matchPromises.push(FilterUtil.checkTableFilterCriteria(
                 c, c.useDisplayValue ? displayValue : this.tableValue.objectValue
-            )
+            ))
         );
+
+        const result = await Promise.all<boolean>(matchPromises);
+        match = result.every((r) => r);
 
         return match;
     }

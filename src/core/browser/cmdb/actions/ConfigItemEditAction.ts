@@ -1,4 +1,4 @@
-import { AbstractAction, KIXObjectType, ContextMode, ContextType, ConfigItem, ConfigItemClass } from "../../../model";
+import { AbstractAction, KIXObjectType, ContextMode, ConfigItem, ConfigItemClass } from "../../../model";
 import { ContextService } from "../../context";
 import { FormService } from "../../form";
 import { EditConfigItemDialogContext, ConfigItemDetailsContext } from "../context";
@@ -7,8 +7,8 @@ import { KIXObjectService } from "../../kix";
 
 export class ConfigItemEditAction extends AbstractAction<ConfigItem> {
 
-    public initAction(): void {
-        this.text = "Bearbeiten";
+    public async initAction(): Promise<void> {
+        this.text = 'Edit';
         this.icon = "kix-icon-edit";
     }
 
@@ -36,7 +36,7 @@ export class ConfigItemEditAction extends AbstractAction<ConfigItem> {
 
         const dialogContext = await ContextService.getInstance().getContext(EditConfigItemDialogContext.CONTEXT_ID);
         if (dialogContext) {
-            dialogContext.setAdditionalInformation([formId]);
+            dialogContext.setAdditionalInformation('FORM_ID', formId);
         }
         ContextService.getInstance().setDialogContext(
             EditConfigItemDialogContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM, ContextMode.EDIT, null, true

@@ -1,11 +1,8 @@
 import { IConfigurationExtension } from '../../../core/extensions';
-import {
-    NewTicketStateDialogContext, NewTicketStateDialogContextConfiguration
-} from '../../../core/browser/ticket';
+import { NewTicketStateDialogContext } from '../../../core/browser/ticket';
 import {
     ConfiguredWidget, FormField, KIXObjectType, Form,
-    FormContext, FormFieldValue, TicketStateProperty, FormFieldOption, ObjectReferenceOptions,
-    FormFieldOptions, InputFieldTypes
+    FormContext, FormFieldValue, TicketStateProperty, FormFieldOption, ObjectReferenceOptions, ContextConfiguration,
 } from '../../../core/model';
 import { FormGroup } from '../../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../../core/services';
@@ -16,12 +13,12 @@ export class Extension implements IConfigurationExtension {
         return NewTicketStateDialogContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<NewTicketStateDialogContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
 
         const sidebars = [];
         const sidebarWidgets: Array<ConfiguredWidget<any>> = [];
 
-        return new NewTicketStateDialogContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
+        return new ContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
     }
 
     public async createFormDefinitions(overwrite: boolean): Promise<void> {
@@ -32,32 +29,33 @@ export class Extension implements IConfigurationExtension {
         if (!existing) {
             const fields: FormField[] = [];
             fields.push(new FormField(
-                "Name", TicketStateProperty.NAME, null, true, "Geben Sie einen Namen für den Status ein."
+                'Translatable#Name', TicketStateProperty.NAME, null, true,
+                'Translatable#Insert a state name.'
             ));
             fields.push(new FormField(
-                "Statustyp", TicketStateProperty.TYPE_ID, 'object-reference-input',
-                true, "Wählen Sie den Statustyp für den Status aus.", [
+                'Translatable#State Type', TicketStateProperty.TYPE_ID, 'object-reference-input',
+                true, 'Translatable#Select a state type for this state.', [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.TICKET_STATE_TYPE),
                     new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false)
                 ]
             ));
             fields.push(new FormField(
-                "Icon", 'ICON', 'icon-input', false,
-                "Wählen Sie ein Icon für den Status aus."
+                'Translatable#Icon', 'ICON', 'icon-input', false,
+                'Translatable#Select an icon for this state.'
             ));
             fields.push(new FormField(
-                "Kommentar", TicketStateProperty.COMMENT, 'text-area-input', false,
-                "Geben Sie einen Kommentar für den Status ein.", null, null, null, null, null, null, null, 250
+                'Translatable#Comment', TicketStateProperty.COMMENT, 'text-area-input', false,
+                'Translatable#Insert a comment for the state.', null, null, null, null, null, null, null, 250
             ));
             fields.push(new FormField(
-                "Gültigkeit", TicketStateProperty.VALID_ID, 'valid-input', true,
-                "Legen Sie fest, ob der Status „gültig“, „ungültig“ oder „temporär ungültig“ ist.",
+                'Translatable#Validity', TicketStateProperty.VALID_ID, 'valid-input', true,
+                'Translatable#Set the state as „valid“, „invalid (temporarily)“, or „invalid“.',
                 null, new FormFieldValue(1)
             ));
 
-            const group = new FormGroup('Statusdaten', fields);
+            const group = new FormGroup('Translatable#State Data', fields);
 
-            const form = new Form(formId, 'Status hinzufügen', [group], KIXObjectType.TICKET_STATE);
+            const form = new Form(formId, 'Translatable#Create State', [group], KIXObjectType.TICKET_STATE);
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
         configurationService.registerForm([FormContext.NEW], KIXObjectType.TICKET_STATE, formId);

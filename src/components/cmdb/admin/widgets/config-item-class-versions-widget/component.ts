@@ -41,7 +41,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async initWidget(ciClass: ConfigItemClass): Promise<void> {
-        this.prepareActions(ciClass);
+        await this.prepareActions(ciClass);
         this.prepareTable();
     }
 
@@ -52,7 +52,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async prepareTable(): Promise<void> {
-        const table = TableFactoryService.getInstance().createTable(
+        const table = await TableFactoryService.getInstance().createTable(
             'config-item-class-definitions', KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION,
             null, null, ConfigItemClassDetailsContext.CONTEXT_ID, true
         );
@@ -73,9 +73,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.table = table;
     }
 
-    private prepareActions(ciClass: ConfigItemClass): void {
+    private async prepareActions(ciClass: ConfigItemClass): Promise<void> {
         if (this.state.widgetConfiguration && ciClass) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.actions = await ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, [ciClass]
             );
         }

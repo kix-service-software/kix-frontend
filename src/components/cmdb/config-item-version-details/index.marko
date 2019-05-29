@@ -1,6 +1,8 @@
 <if(state.groups)>
-    <label-value-group groups=state.groups on-fileClicked('fileClicked')/>
+    <label-value-group groups=state.groups on-fileClicked("fileClicked")/>
 </if>
 <else>
-    <span>Keine Versionsdaten verfügbar.</span>
+    <span>
+        <translation-string pattern="Translatable#No version available"/>
+    </span>
 </else>

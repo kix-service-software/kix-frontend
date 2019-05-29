@@ -1,5 +1,13 @@
-export class SaveContextConfigurationRequest {
+import { ISocketRequest } from "../../../socket";
 
-    public constructor(public token: string, public contextId: string, public configuration: any) { }
+export class SaveContextConfigurationRequest implements ISocketRequest {
+
+    public constructor(
+        public token: string,
+        public requestId: string,
+        public clientRequestId: string,
+        public contextId: string,
+        public configuration: any
+    ) { }
 
 }

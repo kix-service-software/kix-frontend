@@ -1,8 +1,10 @@
 <div.list-with-title>
-    <b>${input.title}</b>
+    <b><translation-string pattern=input.title/></b>
     <ul>
-        <for(text in input.list)>
-            <li>${text}</li>
+        <for|text| of=input.list>
+            <li>
+                <translation-string pattern=text/>
+            </li>
         </for>
     </ul>
 </div>

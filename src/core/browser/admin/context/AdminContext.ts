@@ -1,9 +1,6 @@
-import {
-    ConfiguredWidget, Context, WidgetType, WidgetConfiguration, AdminModule, KIXObjectType
-} from "../../../model";
-import { AdminContextConfiguration } from "./AdminContextConfiguration";
+import { Context, AdminModule, KIXObjectType } from "../../../model";
 
-export class AdminContext extends Context<AdminContextConfiguration> {
+export class AdminContext extends Context {
 
     public static CONTEXT_ID: string = 'admin';
 
@@ -26,30 +23,10 @@ export class AdminContext extends Context<AdminContextConfiguration> {
         }
     }
 
-    public getContent(show: boolean = false): ConfiguredWidget[] {
-        let content = this.configuration.contentWidgets;
-
-        if (show) {
-            content = content.filter(
-                (c) => this.configuration.content.findIndex((cid) => c.instanceId === cid) !== -1
-            );
-        }
-
-        return content;
-    }
-
-    protected getSpecificWidgetConfiguration<WS = any>(instanceId: string): WidgetConfiguration<WS> {
-        const widget = this.configuration.contentWidgets.find((cw) => cw.instanceId === instanceId);
-        return widget ? widget.configuration : undefined;
-    }
-
-    protected getSpecificWidgetType(instanceId: string): WidgetType {
-        let widgetType: WidgetType;
-
-        const contentWidget = this.configuration.contentWidgets.find((lw) => lw.instanceId === instanceId);
-        widgetType = contentWidget ? WidgetType.CONTENT : undefined;
-
-        return widgetType;
+    public reset(): void {
+        super.reset();
+        this.adminModule = null;
+        this.categoryName = null;
     }
 
 }

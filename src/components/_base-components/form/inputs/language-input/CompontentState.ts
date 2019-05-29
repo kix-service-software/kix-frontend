@@ -1,10 +1,11 @@
-import { FormInputComponentState, TreeNode } from "../../../../../core/model";
+import { FormInputComponentState, TreeNode } from '../../../../../core/model';
 
-export class CompontentState extends FormInputComponentState<number> {
+export class CompontentState extends FormInputComponentState<string> {
 
     public constructor(
         public nodes: TreeNode[] = [],
-        public currentNode: TreeNode = null
+        public currentNode: TreeNode = null,
+        public placeholder: string = ''
     ) {
         super();
     }

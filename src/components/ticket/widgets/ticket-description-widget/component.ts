@@ -1,11 +1,12 @@
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../../../core/browser/context';
 import {
-    WidgetType, Ticket, KIXObjectType, Context, DynamicField, KIXObjectLoadingOptions,
-    FilterCriteria, FilterDataType, FilterType, ArticlesLoadingOptions, Article
+    WidgetType, Ticket, KIXObjectType, DynamicField, KIXObjectLoadingOptions,
+    FilterCriteria, FilterDataType, FilterType
 } from '../../../../core/model/';
 import { ActionFactory, WidgetService, KIXObjectService, SearchOperator } from '../../../../core/browser';
 import { TicketDetailsContext } from '../../../../core/browser/ticket';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component {
 
@@ -21,6 +22,11 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Description", "Translatable#Comment"
+        ]);
+
         const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
             TicketDetailsContext.CONTEXT_ID
         );
@@ -49,7 +55,7 @@ class Component {
         this.state.loading = true;
         this.state.ticket = ticket;
         await this.getFirstArticle();
-        this.setActions();
+        this.prepareActions();
         await this.getTicketNotes();
 
         setTimeout(() => {
@@ -63,9 +69,9 @@ class Component {
         }
     }
 
-    private setActions(): void {
+    private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.firstArticle) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.actions = await ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, [this.state.firstArticle]
             );
         }

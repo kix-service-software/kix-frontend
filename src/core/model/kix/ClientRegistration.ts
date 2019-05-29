@@ -9,9 +9,11 @@ export class ClientRegistration extends KIXObject<ClientRegistration> {
 
     public ClientID: string;
 
-    public CallbackURL: string;
+    public NotificationURL: string;
 
-    public Authentication: string;
+    public Authorization: string;
+
+    public NotificationInterval: number = 5;
 
     public constructor() {
         super();

@@ -1,10 +1,8 @@
 import {
     FormInstance, FormContext, KIXObjectType, IFormInstance, SearchFormInstance, SearchForm, Form, IFormInstanceListener
 } from "../../model";
-import { FormValidationService, RequiredFormFieldValidator } from ".";
 import { FormFactory } from "./FormFactory";
-import { MaxLengthFormFieldValidator, RegExFormFieldValidator } from "./validators";
-import { KIXModulesSocketListener } from "../modules/KIXModulesSocketListener";
+import { KIXModulesSocketClient } from "../modules/KIXModulesSocketClient";
 import { BrowserUtil } from "../BrowserUtil";
 
 export class FormService {
@@ -20,33 +18,26 @@ export class FormService {
 
     private formInstances: Map<string, IFormInstance> = new Map();
 
-    private forms: Form[] = [];
-    private formIDsWithContext: Array<[FormContext, KIXObjectType, string]> = [];
+    private forms: Form[] = null;
+    private formIDsWithContext: Array<[FormContext, KIXObjectType, string]> = null;
 
-    private constructor() {
-        this.initValidators();
-    }
-
-    private initValidators(): void {
-        FormValidationService.getInstance().registerValidator(new RequiredFormFieldValidator());
-        FormValidationService.getInstance().registerValidator(new MaxLengthFormFieldValidator());
-        FormValidationService.getInstance().registerValidator(new RegExFormFieldValidator());
-    }
+    private constructor() { }
 
     public async loadFormConfigurations(): Promise<void> {
-        const formConfigurations = await KIXModulesSocketListener.getInstance().loadFormConfigurations();
+        const formConfigurations = await KIXModulesSocketClient.getInstance().loadFormConfigurations();
         this.forms = formConfigurations[0];
         this.formIDsWithContext = formConfigurations[1];
     }
 
-    public addform(form: Form): void {
-        if (this.forms) {
-            const formIndex = this.forms.findIndex((f) => f.id === form.id);
-            if (formIndex !== 1) {
-                this.forms.splice(formIndex, 1, form);
-            } else {
-                this.forms.push(form);
-            }
+    public async addForm(form: Form): Promise<void> {
+        if (!this.forms) {
+            await this.loadFormConfigurations();
+        }
+        const formIndex = this.forms.findIndex((f) => f.id === form.id);
+        if (formIndex !== -1) {
+            this.forms.splice(formIndex, 1, form);
+        } else {
+            this.forms.push(form);
         }
     }
 
@@ -59,8 +50,8 @@ export class FormService {
                 formInstance = this.formInstances.get(formId);
             } else {
                 this.deleteFormInstance(formId);
-                if (!form && this.forms) {
-                    const configuredForm = this.getForm(formId);
+                if (!form) {
+                    const configuredForm = await this.getForm(formId);
                     if (configuredForm) {
                         form = { ...configuredForm };
                     } else {
@@ -82,25 +73,30 @@ export class FormService {
         return formInstance;
     }
 
-    public getForm(formId: string): Form {
+    public async getForm(formId: string): Promise<Form> {
+        if (!this.forms) {
+            await this.loadFormConfigurations();
+        }
         return this.forms.find((f) => f.id === formId);
     }
 
     public deleteFormInstance(formId: string): void {
-        if (this.formInstances.has(formId)) {
+        if (formId && this.formInstances.has(formId)) {
             this.formInstances.delete(formId);
         }
     }
 
-    public getFormIdByContext(formContext: FormContext, formObject: KIXObjectType): string {
+    public async getFormIdByContext(formContext: FormContext, formObject: KIXObjectType): Promise<string> {
         let formId;
-        if (this.formIDsWithContext) {
-            const formIdByContext = this.formIDsWithContext.find(
-                (fidwc) => fidwc[0] === formContext && fidwc[1] === formObject
-            );
-            if (formIdByContext && formIdByContext[2]) {
-                formId = formIdByContext[2];
-            }
+        if (!this.formIDsWithContext) {
+            await this.loadFormConfigurations();
+        }
+
+        const formIdByContext = this.formIDsWithContext.find(
+            (fidwc) => fidwc[0] === formContext && fidwc[1] === formObject
+        );
+        if (formIdByContext && formIdByContext[2]) {
+            formId = formIdByContext[2];
         }
         return formId;
     }

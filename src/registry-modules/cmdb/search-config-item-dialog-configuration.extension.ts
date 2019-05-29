@@ -3,7 +3,7 @@ import {
     ContextConfiguration, KIXObjectType,
     FormContext, SearchForm, WidgetSize, ConfiguredWidget, WidgetConfiguration, ConfigItemProperty
 } from '../../core/model';
-import { ConfigItemSearchContextConfiguration, ConfigItemSearchContext } from '../../core/browser/cmdb';
+import { ConfigItemSearchContext } from '../../core/browser/cmdb';
 import { ConfigurationService } from '../../core/services';
 import { SearchProperty } from '../../core/browser';
 
@@ -15,16 +15,16 @@ export class ModuleExtension implements IConfigurationExtension {
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
         const helpWidget = new ConfiguredWidget('20181022-help-widget', new WidgetConfiguration(
-            'help-widget', 'Hilfe', [], {
-                helpText: 'Eine <b>Erläuterung zu den Suchoperatoren</b> finden Sie hier: '
-                    + '<a href="faqarticles/2" target="_blank">'
-                    + 'Wie suche ich in KIX 18?</a>'
+            'help-widget', 'Translatable#Help', [], {
+                // tslint:disable-next-line:max-line-length
+                helpText: 'The FAQ article <a href=\"faqarticles/2\" target=\"_blank\">How to search in KIX 18?</a> offers a detailed <b>explanation for the search operators<b>'
             }, false, false, WidgetSize.BOTH, 'kix-icon-query', false
         ));
         const sidebarWidgets = [helpWidget];
         const sidebars = ['20181022-help-widget'];
-        return new ConfigItemSearchContextConfiguration(
-            ConfigItemSearchContext.CONTEXT_ID, [], sidebars, sidebarWidgets, [], []
+        return new ContextConfiguration(
+            ConfigItemSearchContext.CONTEXT_ID,
+            sidebars, sidebarWidgets
         );
     }
 

@@ -1,9 +1,9 @@
-import { AbstractAction } from "../../../../../model";
+import { AbstractAction } from '../../../../../model';
 
 export class TicketTypeImportAction extends AbstractAction {
 
-    public initAction(): void {
-        this.text = "Import";
+    public async initAction(): Promise<void> {
+        this.text = 'Translatable#Import';
         this.icon = 'kix-icon-import';
     }
 

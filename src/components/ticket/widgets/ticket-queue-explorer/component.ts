@@ -1,10 +1,8 @@
 import { ComponentState } from './ComponentState';
-import { ContextService, IdService, SearchOperator, KIXObjectService } from '../../../../core/browser';
-import {
-    TreeNode, Queue, TreeNodeProperty, FilterCriteria,
-    TicketProperty, FilterDataType, FilterType, KIXObjectType, KIXObjectLoadingOptions, KIXObjectCache
-} from '../../../../core/model';
-import { TicketContext } from '../../../../core/browser/ticket';
+import { ContextService, IdService } from '../../../../core/browser';
+import { TreeNode, Queue, TreeNodeProperty } from '../../../../core/model';
+import { TicketContext, QueueService } from '../../../../core/browser/ticket';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 export class Component {
 
@@ -25,29 +23,12 @@ export class Component {
         const context = await ContextService.getInstance().getContext<TicketContext>(TicketContext.CONTEXT_ID);
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
         await this.loadQueues(context);
-
-        KIXObjectCache.registerCacheListener({
-            objectAdded: () => { return; },
-            objectRemoved: () => { return; },
-            cacheCleared: (objectType: KIXObjectType) => {
-                if (objectType === KIXObjectType.QUEUE_HIERARCHY) {
-                    this.loadQueues(context);
-                }
-            }
-        });
     }
 
     private async loadQueues(context: TicketContext): Promise<void> {
         this.state.nodes = null;
-
-        const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, null, null, null, null, [['TicketStats.StateType', 'Open']]
-        );
-        const queuesHierarchy = await KIXObjectService.loadObjects<Queue>(
-            KIXObjectType.QUEUE_HIERARCHY, null, loadingOptions
-        );
-
-        this.state.nodes = this.prepareTreeNodes(queuesHierarchy);
+        const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy();
+        this.state.nodes = await QueueService.getInstance().prepareQueueTree(queuesHierarchy, false, null, true);
         this.setActiveNode(context.queue);
     }
 
@@ -73,41 +54,13 @@ export class Component {
         return activeNode;
     }
 
-    private prepareTreeNodes(categories: Queue[]): TreeNode[] {
-        return categories
-            ? categories.map((q) => new TreeNode(
-                q, q.Name, null, null, this.prepareTreeNodes(q.SubQueues), null, null, null, this.getTicketStats(q))
-            )
-            : [];
-    }
-
-    private getTicketStats(queue: Queue): TreeNodeProperty[] {
-        const properties: TreeNodeProperty[] = [];
-        if (queue.TicketStats) {
-            const openCount = queue.TicketStats.OpenCount;
-            properties.push(new TreeNodeProperty(openCount, `offene Tickets: ${openCount}`));
-
-            const lockCount = openCount - queue.TicketStats.LockCount;
-            properties.push(new TreeNodeProperty(lockCount, `nicht gesperrte Tickets: ${lockCount}`));
-
-            const escalatedCount = queue.TicketStats.EscalatedCount;
-            if (escalatedCount > 0) {
-                properties.push(
-                    new TreeNodeProperty(escalatedCount, `eskalierte Tickets: ${escalatedCount}`, 'escalated')
-                );
-            }
-        }
-
-        return properties;
-    }
-
     public async activeNodeChanged(node: TreeNode): Promise<void> {
         this.state.activeNode = node;
 
         const queue = node.id as Queue;
         const context = await ContextService.getInstance().getContext<TicketContext>(TicketContext.CONTEXT_ID);
         context.setQueue(queue);
-        context.setAdditionalInformation(this.getStructureInformation());
+        context.setAdditionalInformation('STRUCTURE', this.getStructureInformation());
     }
 
     private getStructureInformation(node: TreeNode = this.state.activeNode): string[] {
@@ -124,8 +77,11 @@ export class Component {
     public async showAll(): Promise<void> {
         const context = await ContextService.getInstance().getContext<TicketContext>(TicketContext.CONTEXT_ID);
         this.state.activeNode = null;
+
+        const allText = await TranslationService.translate('Translatable#All');
+
         context.setQueue(null);
-        context.setAdditionalInformation(['Alle']);
+        context.setAdditionalInformation('STRUCTURE', [allText]);
     }
 
 }

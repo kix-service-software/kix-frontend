@@ -18,9 +18,9 @@ export enum KIXObjectType {
 
     CONFIG_ITEM_VERSION = 'ConfigItemVersion',
 
-    CONFIG_ITEM_CLASS = 'ConfigItemClass',
+    CONFIG_ITEM_CLASS = 'Class',
 
-    CONFIG_ITEM_CLASS_DEFINITION = 'ConfigItemClassDefinition',
+    CONFIG_ITEM_CLASS_DEFINITION = 'Definition',
 
     CONFIG_ITEM_IMAGE = 'CONFIG_ITEM_IMAGE',
 
@@ -34,21 +34,19 @@ export enum KIXObjectType {
 
     CURRENT_USER = 'CURRENT_USER',
 
-    CUSTOMER = 'Customer',
+    ORGANISATION = 'Organisation',
 
     DYNAMIC_FIELD = 'DynamicField',
 
     FAQ_ARTICLE = 'FAQArticle',
 
-    FAQ_ARTICLE_ATTACHMENT = 'FAQ_ARTICLE_ATTACHMENT',
+    FAQ_ARTICLE_ATTACHMENT = 'Attachment',
 
-    FAQ_ARTICLE_HISTORY = 'FAQ_ARTICLE_HISTORY',
+    FAQ_ARTICLE_HISTORY = 'FAQHistory',
 
-    FAQ_CATEGORY = 'FAQ_CATEGORY',
+    FAQ_CATEGORY = 'FAQCategory',
 
-    FAQ_CATEGORY_HIERARCHY = 'FAQ_CATEGORY_HIERARCHY',
-
-    FAQ_VOTE = 'FAQ_VOTE',
+    FAQ_VOTE = 'FAQVote',
 
     GENERAL_CATALOG_ITEM = 'GeneralCatalogItem',
 
@@ -64,7 +62,7 @@ export enum KIXObjectType {
 
     QUEUE = 'Queue',
 
-    QUEUE_HIERARCHY = 'QUEUE_HIERARCHY',
+    ROLE = 'Role',
 
     SERVICE = 'Service',
 
@@ -78,15 +76,17 @@ export enum KIXObjectType {
 
     TICKET = 'Ticket',
 
-    TICKET_HISTORY = 'TICKET_HISTORY',
+    TICKET_HISTORY = 'History',
 
-    TICKET_PRIORITY = 'TICKET_PRIORITY',
+    TICKET_PRIORITY = 'Priority',
 
-    TICKET_TYPE = 'TICKET_TYPE',
+    TICKET_TYPE = 'TicketType',
 
-    TICKET_STATE = 'TICKET_STATE',
+    TICKET_STATE = 'TicketState',
 
-    TICKET_STATE_TYPE = 'TICKET_STATE_TYPE',
+    TICKET_STATE_TYPE = 'StateType',
+
+    TICKET_TEMPLATE = 'TICKET_TEMPLATE',
 
     TRANSLATION = 'Translation',
 
@@ -94,11 +94,27 @@ export enum KIXObjectType {
 
     USER = 'User',
 
-    USER_PREFERENCE = 'USER_PREFERENCE',
+    USER_PREFERENCE = 'UserPreference',
 
     VALID_OBJECT = 'ValidObject',
 
     WATCHER = 'Watcher',
 
-    PERSONAL_SETTINGS = 'PERSONAL_SETTINGS'
+    PERSONAL_SETTINGS = 'PERSONAL_SETTINGS',
+
+    IMPORT_OBJECT = 'IMPORT_OBJECT',
+
+    PERMISSION = 'Permission',
+
+    PERMISSION_TYPE = 'PermissionType',
+
+    PERMISSION_DEPENDING_OBJECTS = 'PERMISSION_DEPENDING_OBJECTS',
+
+    ROLE_PERMISSION = 'ROLE_PERMISSION',
+
+    FOLLOW_UP_TYPE = 'FollowUpType',
+
+    MAIL_ACCOUNT = 'MailAccount',
+
+    MAIL_ACCOUNT_TYPE = 'MailAccountType'
 }

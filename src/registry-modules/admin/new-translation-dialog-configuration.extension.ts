@@ -1,13 +1,11 @@
-import { IConfigurationExtension } from "../../core/extensions";
-import {
-    NewTranslationDialogContext, NewTranslationDialogContextConfiguration
-} from "../../core/browser/i18n/admin/context";
+import { IConfigurationExtension } from '../../core/extensions';
+import { NewTranslationDialogContext } from '../../core/browser/i18n/admin/context';
 import {
     ConfiguredWidget, FormField, TranslationProperty, Form, KIXObjectType, FormContext,
-    SysConfigItem, SysConfigKey, SortUtil
-} from "../../core/model";
-import { ConfigurationService, KIXObjectServiceRegistry } from "../../core/services";
-import { FormGroup } from "../../core/model/components/form/FormGroup";
+    SysConfigItem, SysConfigKey, SortUtil, ContextConfiguration
+} from '../../core/model';
+import { ConfigurationService, KIXObjectServiceRegistry } from '../../core/services';
+import { FormGroup } from '../../core/model/components/form/FormGroup';
 
 export class Extension implements IConfigurationExtension {
 
@@ -15,12 +13,12 @@ export class Extension implements IConfigurationExtension {
         return NewTranslationDialogContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<NewTranslationDialogContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
 
         const sidebars = [];
         const sidebarWidgets: Array<ConfiguredWidget<any>> = [];
 
-        return new NewTranslationDialogContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
+        return new ContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
     }
 
     public async createFormDefinitions(overwrite: boolean): Promise<void> {
@@ -33,21 +31,22 @@ export class Extension implements IConfigurationExtension {
 
             fields.push(new FormField(
                 // tslint:disable-next-line:max-line-length
-                "Basiszeichenkette", TranslationProperty.PATTERN, 'text-area-input', true, "Geben Sie eine Basiszeichenkette für die Übersetzung ein."
+                'Translatable#Pattern', TranslationProperty.PATTERN, 'text-area-input', true, 'Translatable#Insert a pattern for the translation.'
             ));
 
             const languages = await this.getLanguages();
             languages.sort((a, b) => SortUtil.compareString(a[1], b[1])).forEach((l) => {
                 const languageField = new FormField(
-                    l[1], l[0], 'text-area-input', false, `Geben Sie eine Übersetzung für die Sprache ${l[1]} ein.`
+                    l[1], l[0], 'text-area-input', false,
+                    `Translatable#Select a language for the translation.`
                 );
-                languageField.placeholder = 'Übersetzung';
+                languageField.placeholder = 'Translation';
                 fields.push(languageField);
             });
 
-            const group = new FormGroup('Übersetzungen', fields);
+            const group = new FormGroup('Translatable#Translations', fields);
 
-            const form = new Form(formId, 'Neue Übersetzung', [group], KIXObjectType.TRANSLATION);
+            const form = new Form(formId, 'Translatable#New Translation', [group], KIXObjectType.TRANSLATION);
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
         configurationService.registerForm([FormContext.NEW], KIXObjectType.TRANSLATION, formId);
@@ -59,7 +58,7 @@ export class Extension implements IConfigurationExtension {
 
         const service = KIXObjectServiceRegistry.getServiceInstance(KIXObjectType.SYS_CONFIG_ITEM);
         const languagesConfig = await service.loadObjects<SysConfigItem>(
-            token, KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.DEFAULT_USED_LANGUAGES], null, null
+            token, null, KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.DEFAULT_USED_LANGUAGES], null, null
         );
 
         const languages: Array<[string, string]> = [];

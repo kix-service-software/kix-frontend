@@ -1,11 +1,13 @@
 import { ComponentState } from './ComponentState';
 import {
-    KIXObjectSearchService, FormService, LabelService, IKIXObjectSearchListener, IdService, DialogService
+    KIXObjectSearchService, FormService, LabelService, IKIXObjectSearchListener, IdService
 } from '../../../../../core/browser';
 import {
     TreeNode, SearchFormInstance, CacheState, ISearchFormListener, KIXObjectType
 } from '../../../../../core/model';
 import { FormSearchValue } from './FormSearchValue';
+import { DialogService } from '../../../../../core/browser/components/dialog';
+import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
 class Component implements IKIXObjectSearchListener {
 
@@ -14,6 +16,7 @@ class Component implements IKIXObjectSearchListener {
     private state: ComponentState;
     private objectType: KIXObjectType = null;
     private formId: string = null;
+    private initialPropertyNodes: TreeNode[];
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -26,20 +29,26 @@ class Component implements IKIXObjectSearchListener {
     }
 
     public async onMount(): Promise<void> {
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Remove Search Criteria"
+        ]);
+
         DialogService.getInstance().setMainDialogLoading(true);
         KIXObjectSearchService.getInstance().registerListener(this);
 
         const formInstance = await FormService.getInstance().getFormInstance<SearchFormInstance>(this.formId);
         if (formInstance) {
+            formInstance.reset();
             const listener: ISearchFormListener = {
                 listenerId: 'search-form-value-container',
                 searchCriteriaChanged: () => { return; },
-                formReseted: () => { this.initSearchForm(formInstance); }
+                formReseted: () => {
+                    this.state.propertyNodes = this.initialPropertyNodes ? [...this.initialPropertyNodes] : [];
+                    this.initSearchForm(formInstance);
+                }
             };
             formInstance.registerSearchFormListener(listener);
-
-            const properties = await KIXObjectSearchService.getInstance().getSearchProperties(this.objectType);
-            await this.createPropertyNodes(properties);
+            await this.createPropertyNodes();
             await this.initSearchForm(formInstance);
         }
         DialogService.getInstance().setMainDialogLoading(false);
@@ -76,9 +85,17 @@ class Component implements IKIXObjectSearchListener {
         const parameter = this.getSearchParameter(formInstance);
         await searchValue.setPropertyNode(nodes && nodes.length ? nodes[0] : null, parameter);
         await this.provideFilterCriteria(searchValue);
-        await this.checkFormContent();
+        this.setAvailablePropertyNodes();
         this.addEmptySearchValue();
         (this as any).setStateDirty('searchValues');
+    }
+
+    private setAvailablePropertyNodes(): void {
+        this.state.propertyNodes = this.initialPropertyNodes.filter(
+            (pn) => !this.state.searchValues.some(
+                (sv) => sv.currentPropertyNode && sv.currentPropertyNode.id === pn.id
+            )
+        );
     }
 
     public async operationChanged(searchValue: FormSearchValue, nodes: TreeNode[]): Promise<void> {
@@ -127,6 +144,8 @@ class Component implements IKIXObjectSearchListener {
             this.state.searchValues = [...this.state.searchValues];
             await this.checkFormContent();
         }
+        this.setAvailablePropertyNodes();
+        this.addEmptySearchValue();
     }
 
     private async checkFormContent(): Promise<void> {
@@ -137,15 +156,9 @@ class Component implements IKIXObjectSearchListener {
         const formInstance = await FormService.getInstance().getFormInstance<SearchFormInstance>(this.formId);
         if (formInstance) {
             const searchParameter: Array<[string, any]> = this.getSearchParameter(formInstance);
-
-            const properties = await KIXObjectSearchService.getInstance().getSearchProperties(
-                this.objectType, searchParameter
-            );
-
             this.state.searchValues.forEach((sv) => sv.setSearchParameter(searchParameter));
-
-            this.updateSearchValues(properties.map((p) => p[0]));
-            await this.createPropertyNodes(properties);
+            await this.createPropertyNodes(searchParameter);
+            this.updateSearchValues();
         }
 
         window.clearTimeout(timeout);
@@ -165,6 +178,7 @@ class Component implements IKIXObjectSearchListener {
                     searchValue.setSearchParameter(parameter);
                     this.state.searchValues.push(searchValue);
                     await this.provideFilterCriteria(searchValue);
+                    this.setAvailablePropertyNodes();
                 }
             }
         }
@@ -185,8 +199,11 @@ class Component implements IKIXObjectSearchListener {
         return;
     }
 
-    private async createPropertyNodes(properties: Array<[string, string]>): Promise<void> {
-        if (properties) {
+    private async createPropertyNodes(searchParameter: Array<[string, any]> = []): Promise<void> {
+        const properties = await KIXObjectSearchService.getInstance().getSearchProperties(
+            this.objectType, searchParameter
+        );
+        if (properties && !!properties.length) {
             const labelProvider = LabelService.getInstance().getLabelProviderForType(this.objectType);
             const nodes = [];
             for (const p of properties) {
@@ -196,7 +213,8 @@ class Component implements IKIXObjectSearchListener {
                 }
                 nodes.push(new TreeNode(p[0], displayText || p[0]));
             }
-            this.state.propertyNodes = nodes;
+            this.initialPropertyNodes = nodes;
+            this.state.propertyNodes = [...this.initialPropertyNodes];
         }
     }
 
@@ -210,17 +228,21 @@ class Component implements IKIXObjectSearchListener {
             emptyField = this.state.searchValues.splice(index, 1)[0];
         }
 
-        this.state.searchValues = [...this.state.searchValues, emptyField];
+        if (!!this.state.propertyNodes.length) {
+            this.state.searchValues = [...this.state.searchValues, emptyField];
+        }
     }
 
-    private updateSearchValues(properties: string[]): void {
+    private updateSearchValues(): void {
         const searchValuesToRemove = [];
         this.state.searchValues.filter((sv) => sv.currentPropertyNode).forEach((sv) => {
-            if (!properties.some((p) => p === sv.currentPropertyNode.id)) {
+            if (!this.initialPropertyNodes.map((pn) => pn.id).some((p) => p === sv.currentPropertyNode.id)) {
                 searchValuesToRemove.push(sv);
             }
         });
         searchValuesToRemove.forEach((sv) => this.removeValue(sv, true));
+        this.setAvailablePropertyNodes();
+        this.addEmptySearchValue();
     }
 
     private getSearchParameter(formInstance: SearchFormInstance): Array<[string, any]> {

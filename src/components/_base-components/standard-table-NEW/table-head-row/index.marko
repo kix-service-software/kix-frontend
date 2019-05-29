@@ -6,7 +6,7 @@
             <input type="checkbox" on-click("selectionChanged") key="allCheck"/>
         </th>
     </if>
-    <for(column in state.columns | status-var=loop)>
+    <for|column| of=state.columns>
         <table-head-cell height=component.getHeaderHeight() column=column/>
     </for>
     <th.column-spacer/>

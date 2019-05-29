@@ -1,5 +1,5 @@
 import { IConfigurationExtension } from '../../core/extensions';
-import { NewTicketArticleContextConfiguration, NewTicketArticleContext } from '../../core/browser/ticket';
+import { NewTicketArticleContext } from '../../core/browser/ticket';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetSize, WidgetConfiguration, TicketProperty,
     FormField, ArticleProperty, KIXObjectType, Form, FormContext, FormFieldOption, FormFieldValue, FormFieldOptions
@@ -17,9 +17,9 @@ export class Extension implements IConfigurationExtension {
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
 
         const helpWidget = new ConfiguredWidget('20180919-help-widget', new WidgetConfiguration(
-            'help-widget', 'Textbausteine', [], {
+            'help-widget', 'Translatable#Text Modules', [], {
                 // tslint:disable-next-line:max-line-length
-                helpText: '<b>-- KIX Professional Feature --</b><p>Um die in Ihrem System verfügbaren Textbausteine zu nutzen, geben Sie "::" (Doppelpunkt Doppelpunkt) ein. Wählen Sie anschließend im Kontextmenü den gewünschten Textbaustein aus. Sie können die Auswahl anhand der Schlüsselworte manuell einschränken, in dem sie weiteren Text eingeben.</p>'
+                helpText: 'Translatable#<b>-- KIX Professional Feature--</b><p>To use the text modules available in your system, enter „::“ (colon colon). Then choose the text modules you want to use in the context menu. You can narrow down the key word selection manually by entering more text.</p>'
             },
             false, false, WidgetSize.BOTH, 'kix-icon-textblocks'
         ));
@@ -27,7 +27,7 @@ export class Extension implements IConfigurationExtension {
         const sidebars = ['20180919-help-widget'];
         const sidebarWidgets: Array<ConfiguredWidget<any>> = [helpWidget];
 
-        return new NewTicketArticleContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
+        return new ContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
     }
 
     public async createFormDefinitions(overwrite: boolean): Promise<void> {
@@ -38,12 +38,12 @@ export class Extension implements IConfigurationExtension {
         if (!existing) {
             const fields: FormField[] = [];
             fields.push(new FormField(
-                "Kommunikationskanal", ArticleProperty.CHANNEL_ID, 'channel-input', true, "Kommunikationskanal")
+                'Translatable#Channel', ArticleProperty.CHANNEL_ID, 'channel-input', true, 'Translatable#Channel')
             );
 
-            const group = new FormGroup('Artikeldaten', fields);
+            const group = new FormGroup('Translatable#Article Data', fields);
 
-            const form = new Form(formId, 'Neuer Artikel', [group], KIXObjectType.ARTICLE);
+            const form = new Form(formId, 'Translatable#New Article', [group], KIXObjectType.ARTICLE);
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
         configurationService.registerForm([FormContext.NEW], KIXObjectType.ARTICLE, formId);

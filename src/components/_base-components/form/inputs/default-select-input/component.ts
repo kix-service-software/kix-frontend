@@ -1,5 +1,6 @@
-import { FormInputComponent, TreeNode, FormFieldOptionsForDefaultSelectInput } from "../../../../../core/model";
-import { CompontentState } from "./CompontentState";
+import { FormInputComponent, TreeNode, DefaultSelectInputFormOption } from '../../../../../core/model';
+import { CompontentState } from './CompontentState';
+import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
 class Component extends FormInputComponent<string | number | string[] | number[], CompontentState> {
 
@@ -7,8 +8,17 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         this.state = new CompontentState();
     }
 
-    public async onInput(input: any): Promise<void> {
-        await super.onInput(input);
+    public onInput(input: any): void {
+        super.onInput(input);
+
+        this.update();
+    }
+
+    private async update(): Promise<void> {
+        const placeholderText = this.state.field.placeholder
+            ? this.state.field.placeholder
+            : this.state.field.required ? this.state.field.label : '';
+        this.state.placeholder = await TranslationService.translate(placeholderText);
     }
 
     public async onMount(): Promise<void> {
@@ -20,17 +30,17 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     private prepareList(): void {
         if (this.state.field && this.state.field.options && !!this.state.field.options) {
             const nodesOption = this.state.field.options.find(
-                (o) => o.option === FormFieldOptionsForDefaultSelectInput.NODES
+                (o) => o.option === DefaultSelectInputFormOption.NODES
             );
             this.state.nodes = nodesOption ? nodesOption.value : [];
 
             const selectedNodesOption = this.state.field.options.find(
-                (o) => o.option === FormFieldOptionsForDefaultSelectInput.NODES
+                (o) => o.option === DefaultSelectInputFormOption.NODES
             );
             this.state.selectedNodes = selectedNodesOption ? selectedNodesOption.value : null;
 
             const asMultiselectOption = this.state.field.options.find(
-                (o) => o.option === FormFieldOptionsForDefaultSelectInput.MULTI
+                (o) => o.option === DefaultSelectInputFormOption.MULTI
             );
             this.state.asMultiselect = asMultiselectOption && typeof asMultiselectOption.value === 'boolean'
                 ? asMultiselectOption.value : false;

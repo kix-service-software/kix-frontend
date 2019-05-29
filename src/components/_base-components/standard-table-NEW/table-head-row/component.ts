@@ -13,9 +13,11 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         this.state = new ComponentState();
     }
 
-    public async onInput(input: any): Promise<void> {
+    public onInput(input: any): void {
         this.table = input.table;
         this.state.columns = this.table.getColumns();
+
+        return input;
     }
 
     public async onMount(): Promise<void> {

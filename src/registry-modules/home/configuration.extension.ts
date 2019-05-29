@@ -1,12 +1,13 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    WidgetConfiguration, ConfiguredWidget, WidgetSize, DataType, ContextConfiguration,
-    FilterCriteria, FilterDataType, FilterType, KIXObjectPropertyFilter, TableFilterCriteria, KIXObjectType, SortOrder
+    WidgetConfiguration, ConfiguredWidget, WidgetSize, DataType,
+    FilterCriteria, FilterDataType, FilterType, KIXObjectPropertyFilter,
+    TableFilterCriteria, KIXObjectType, SortOrder, ContextConfiguration
 } from '../../core/model';
 import {
-    SearchOperator, ToggleOptions, TableHeaderHeight, TableRowHeight, TableConfiguration, DefaultColumnConfiguration
+    SearchOperator, ToggleOptions, TableConfiguration, DefaultColumnConfiguration
 } from '../../core/browser';
-import { HomeContextConfiguration, HomeContext } from '../../core/browser/home';
+import { HomeContext } from '../../core/browser/home';
 import { TicketProperty } from '../../core/model/';
 import { TicketChartConfiguration } from '../../core/browser/ticket';
 
@@ -33,7 +34,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
             }
         });
         const chart1 = new ConfiguredWidget('20180813-1-ticket-chart-widget', new WidgetConfiguration(
-            'ticket-chart-widget', 'Übersicht Ticketprioritäten', [], chartConfig1,
+            'ticket-chart-widget', 'Overview Ticket Priorities', [], chartConfig1,
             false, true, WidgetSize.SMALL, null, false)
         );
 
@@ -42,7 +43,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
             data: {
                 labels: ["new", "open", "pending", "escalated"],
                 datasets: [{
-                    label: "Ticketstatus",
+                    label: "Ticket State",
                     data: [20, 50, 32, 8],
                     backgroundColor: [
                         'rgba(0, 255, 0, 0.8)',
@@ -61,14 +62,14 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
             }
         });
         const chart2 = new ConfiguredWidget('20180813-2-ticket-chart-widget', new WidgetConfiguration(
-            'ticket-chart-widget', 'Übersicht Ticketstatus', [], chartConfig2,
+            'ticket-chart-widget', 'Overview Ticket States', [], chartConfig2,
             false, true, WidgetSize.SMALL, null, false)
         );
 
         const chartConfig3 = new TicketChartConfiguration(TicketProperty.CREATE_TIME, {
             type: 'line',
             data: {
-                labels: ["7", "6", "5", "4", "3", "2", "1 (heute)"],
+                labels: ["7", "6", "5", "4", "3", "2", "1 (today)"],
                 datasets: [{
                     data: [5, 25, 12, 3, 30, 16, 24],
                     backgroundColor: [
@@ -83,27 +84,27 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
             }
         });
         const chart3 = new ConfiguredWidget('20180813-3-ticket-chart-widget', new WidgetConfiguration(
-            'ticket-chart-widget', 'Neue Tickets der letzten 7 Tage', [], chartConfig3,
+            'ticket-chart-widget', 'Translatable#New Tickets (recent 7 days)', [], chartConfig3,
             false, true, WidgetSize.SMALL, null, false)
         );
 
         const predefinedToDoTableFilter = [
-            new KIXObjectPropertyFilter('Verantwortliche Tickets', [
+            new KIXObjectPropertyFilter('Translatable#Responsible Tickets', [
                 new TableFilterCriteria(
                     TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER
                 )
             ]),
-            new KIXObjectPropertyFilter('Bearbeiter', [
+            new KIXObjectPropertyFilter('Translatable#Owner', [
                 new TableFilterCriteria(TicketProperty.OWNER_ID, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER)
             ]),
-            new KIXObjectPropertyFilter('Beobachtete Tickets', [
+            new KIXObjectPropertyFilter('Translatable#Watched Tickets', [
                 new TableFilterCriteria(
                     TicketProperty.WATCHERS, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER, true
                 )
             ]),
         ];
         const todoTicketList = new ConfiguredWidget('20180612-to-do-widget', new WidgetConfiguration(
-            'table-widget', 'ToDo / Bearbeitung erforderlich', ['bulk-action', 'csv-export-action'],
+            'table-widget', 'Translatable#ToDo / Processing required', ['bulk-action', 'csv-export-action'],
             {
                 objectType: KIXObjectType.TICKET,
                 sort: [TicketProperty.AGE, SortOrder.UP],
@@ -132,7 +133,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
 
         const newTicketsListWidget =
             new ConfiguredWidget('20180612-new-tickets-widget', new WidgetConfiguration(
-                'table-widget', 'Neue Tickets', ['bulk-action', 'csv-export-action'],
+                'table-widget', 'New Tickets', ['bulk-action', 'csv-export-action'],
                 {
                     objectType: KIXObjectType.TICKET,
                     sort: [TicketProperty.AGE, SortOrder.DOWN],
@@ -151,7 +152,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                                 TicketProperty.QUEUE_ID, true, false, true, true, 175, true, true, true
                             ),
                             new DefaultColumnConfiguration(
-                                TicketProperty.CUSTOMER_ID, true, false, true, true, 225, true, true
+                                TicketProperty.ORGANISATION_ID, true, false, true, true, 225, true, true
                             ),
                             new DefaultColumnConfiguration(
                                 TicketProperty.CREATED, true, false, true, true, 155,
@@ -183,19 +184,19 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
         // sidebars
         const notesSidebar =
             new ConfiguredWidget('20180607-home-notes', new WidgetConfiguration(
-                'notes-widget', 'Notizen', [], {},
+                'notes-widget', 'Translatable#Notes', [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-note', false)
             );
 
         const sidebars = ['20180607-home-notes'];
         const sidebarWidgets: Array<ConfiguredWidget<any>> = [notesSidebar];
 
-        return new HomeContextConfiguration(
+        return new ContextConfiguration(
             this.getModuleId(),
-            [],
-            sidebars,
-            sidebarWidgets,
-            [],
+            sidebars, sidebarWidgets,
+            [], [],
+            [], [],
+            [], [],
             content,
             contentWidgets,
             [],

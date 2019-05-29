@@ -5,6 +5,9 @@ import { ConfigurationService } from '../ConfigurationService';
 import { LoggingService } from '../LoggingService';
 import { ProfilingService } from '../ProfilingService';
 import { Error } from '../../../model';
+import { AuthenticationService } from './AuthenticationService';
+import { CacheService } from '../../../cache';
+import { PermissionError } from '../../../model/PermissionError';
 
 export class HttpService {
 
@@ -21,6 +24,8 @@ export class HttpService {
     private apiURL: string;
     private backendCertificate: any;
 
+    private requestPromises: Map<string, Promise<any>> = new Map();
+
     private constructor() {
         const serverConfig: IServerConfiguration = ConfigurationService.getInstance().getServerConfiguration();
         this.apiURL = serverConfig.BACKEND_API_URL;
@@ -30,15 +35,16 @@ export class HttpService {
         this.backendCertificate = fs.readFileSync(certPath);
     }
 
-    public initCache(): Promise<void> {
-        return;
-    }
+    private executeRequest<T>(
+        resource: string, token: string, clientRequestId: string, options: any
+    ): Promise<T> {
+        const backendToken = AuthenticationService.getInstance().getBackendToken(token);
 
-    private async executeRequest<T>(resource: string, token: string, options: any): Promise<T> {
         // extend options
         options.uri = this.buildRequestUrl(resource);
         options.headers = {
-            Authorization: 'Token ' + token
+            'Authorization': 'Token ' + backendToken,
+            'KIX-Request-ID': clientRequestId
         };
         options.json = true;
         options.ca = this.backendCertificate;
@@ -47,7 +53,19 @@ export class HttpService {
         if (options.method === 'GET') {
             parameter = ' ' + JSON.stringify(options.qs);
         } else if (options.method === 'POST' || options.method === 'PATCH') {
-            parameter = ' ' + JSON.stringify(options.body);
+            if (typeof options.body === 'object') {
+                const body = {};
+                for (const param in options.body) {
+                    if (param.match(/password/i)) {
+                        body[param] = '*****';
+                    } else {
+                        body[param] = options.body[param];
+                    }
+                }
+                parameter = ' ' + JSON.stringify(body);
+            } else {
+                parameter = ' ' + JSON.stringify(options.body);
+            }
             parameter = parameter.replace('\\n', '\n');
         }
 
@@ -60,60 +78,98 @@ export class HttpService {
                 b: parameter
             });
 
-        const response = await this.request(options)
-            .catch((error) => {
-                LoggingService.getInstance().error('Error during HTTP ' + options.method + ' request.', error);
-                return Promise.reject(this.createError(error));
-            });
-
-        // stop profiling
-        ProfilingService.getInstance().stop(profileTaskId, response);
-
-        return response;
+        return new Promise((resolve, reject) => {
+            this.request(options)
+                .then((response) => {
+                    resolve(response);
+                    ProfilingService.getInstance().stop(profileTaskId, response);
+                }).catch((error) => {
+                    LoggingService.getInstance().error('Error during HTTP ' + options.method + ' request.', error);
+                    if (error.statusCode === 403) {
+                        reject(new PermissionError(this.createError(error), resource, options.method));
+                    } else {
+                        reject(this.createError(error));
+                    }
+                });
+        });
     }
 
-    public async get<T>(resource: string, queryParameters, token?: any): Promise<T> {
+    public async get<T>(
+        resource: string, queryParameters: any, token: any, clientRequestId: string,
+        cacheKeyPrefix: string = '', useCache: boolean = true
+    ): Promise<T> {
         const options = {
             method: 'GET',
             qs: queryParameters
         };
 
-        return this.executeRequest<T>(resource, token, options);
+        let cacheKey: string;
+        if (useCache) {
+            cacheKey = this.buildCacheKey(resource, queryParameters, token);
+            const cachedObject = await CacheService.getInstance().get(cacheKey, cacheKeyPrefix);
+            if (cachedObject) {
+                return cachedObject;
+            }
+        }
+
+        const requestKey = this.buildCacheKey(resource, queryParameters, token);
+
+        if (this.requestPromises.has(requestKey)) {
+            return this.requestPromises.get(requestKey);
+        }
+
+        const requestPromise = this.executeRequest<T>(resource, token, clientRequestId, options);
+
+        this.requestPromises.set(requestKey, requestPromise);
+
+        requestPromise
+            .then((response) => {
+                if (useCache) {
+                    CacheService.getInstance().set(cacheKey, response, cacheKeyPrefix);
+                }
+                this.requestPromises.delete(requestKey);
+            })
+            .catch(() => this.requestPromises.delete(requestKey));
+
+        return requestPromise;
     }
 
-    public async post<T>(resource: string, content: any, token?: any): Promise<T> {
+    public async post<T>(
+        resource: string, content: any, token: any, clientRequestId: string, cacheKeyPrefix: string = ''
+    ): Promise<T> {
         const options = {
             method: 'POST',
             body: content
         };
 
-        return this.executeRequest<T>(resource, token, options);
+        const response = this.executeRequest<T>(resource, token, clientRequestId, options);
+        await CacheService.getInstance().deleteKeys(cacheKeyPrefix);
+        return response;
     }
 
-    public async put<T>(resource: string, content: any, token?: any): Promise<T> {
-        const options = {
-            method: 'PUT',
-            body: content
-        };
-
-        return this.executeRequest<T>(resource, token, options);
-    }
-
-    public async patch<T>(resource: string, content: any, token?: any): Promise<T> {
+    public async patch<T>(
+        resource: string, content: any, token: any, clientRequestId: string, cacheKeyPrefix: string = ''
+    ): Promise<T> {
         const options = {
             method: 'PATCH',
             body: content
         };
 
-        return this.executeRequest<T>(resource, token, options);
+        const response = this.executeRequest<T>(resource, token, clientRequestId, options);
+        await CacheService.getInstance().deleteKeys(cacheKeyPrefix);
+        return response;
     }
 
-    public async delete<T>(resource: string, token?: any): Promise<T> {
+    public async delete<T>(
+        resource: string, token: any, clientRequestId: string, cacheKeyPrefix: string = ''
+    ): Promise<T> {
         const options = {
             method: 'DELETE',
         };
 
-        return this.executeRequest<T>(resource, token, options);
+        const response = this.executeRequest<T>(resource, token, clientRequestId, options);
+        await CacheService.getInstance().deleteKeys(cacheKeyPrefix);
+        return response;
     }
 
     private buildRequestUrl(resource: string): string {
@@ -123,6 +179,21 @@ export class HttpService {
     private createError(err: any): Error {
         LoggingService.getInstance().error(`(${err.statusCode}) ${err.error.Code}  ${err.error.Message}`);
         return new Error(err.error.Code, err.error.Message, err.statusCode);
+    }
+
+    private buildCacheKey(resource: string, query: any, token: string): string {
+        const ordered = {};
+
+        if (query) {
+            Object.keys(query).sort().forEach((k) => {
+                ordered[k] = query[k];
+            });
+        }
+
+        const queryString = JSON.stringify(ordered);
+        const key = `${token};${resource};${queryString}`;
+
+        return key;
     }
 
 }

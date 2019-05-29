@@ -1,8 +1,7 @@
-import { WidgetType, WidgetConfiguration, ObjectIcon } from "../../../model";
-import { SearchContextConfiguration } from "./SearchContextConfiguration";
+import { ObjectIcon } from "../../../model";
 import { Context } from '../../../model/components/context/Context';
 
-export class SearchContext extends Context<SearchContextConfiguration> {
+export class SearchContext extends Context {
 
     public static CONTEXT_ID = 'search';
 
@@ -11,16 +10,7 @@ export class SearchContext extends Context<SearchContextConfiguration> {
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {
-        return short ? 'Ergebnis Komplexsuche' : 'Komplexsuche';
-    }
-
-    protected getSpecificWidgetType(instanceId: string): WidgetType {
-        return undefined;
-    }
-
-    protected getSpecificWidgetConfiguration<WS = any>(instanceId: string): WidgetConfiguration<WS> {
-        const widget = this.configuration.contentWidgets.find((cw) => cw.instanceId === instanceId);
-        return widget ? widget.configuration : undefined;
+        return short ? 'Translatable#Results advanced search' : 'Translatable#Advanced Search';
     }
 
 }

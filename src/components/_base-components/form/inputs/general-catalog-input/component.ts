@@ -1,9 +1,10 @@
 import {
     FormInputComponent, TreeNode, KIXObjectType, KIXObjectLoadingOptions,
     FilterCriteria, FilterDataType, FilterType, GeneralCatalogItem, ObjectIcon
-} from "../../../../../core/model";
-import { CompontentState } from "./CompontentState";
-import { SearchOperator, KIXObjectService } from "../../../../../core/browser";
+} from '../../../../../core/model';
+import { CompontentState } from './CompontentState';
+import { SearchOperator, KIXObjectService } from '../../../../../core/browser';
+import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
 class Component extends FormInputComponent<GeneralCatalogItem, CompontentState> {
 
@@ -11,12 +12,17 @@ class Component extends FormInputComponent<GeneralCatalogItem, CompontentState> 
         this.state = new CompontentState();
     }
 
-    public async onInput(input: any): Promise<void> {
-        await super.onInput(input);
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 
     public async onMount(): Promise<void> {
         await super.onMount();
+
+        const placeholderText = this.state.field.placeholder
+            ? this.state.field.placeholder
+            : this.state.field.required ? this.state.field.label : '';
+        this.state.placeholder = await TranslationService.translate(placeholderText);
 
         const classOption = this.state.field.options.find((o) => o.option === 'GC_CLASS');
         if (classOption) {
@@ -40,7 +46,8 @@ class Component extends FormInputComponent<GeneralCatalogItem, CompontentState> 
 
             this.state.loading = false;
         } else {
-            this.state.error = 'No gc class configured!';
+            const error = await TranslationService.translate('Translatable#No general catalog class configured!');
+            this.state.error = error;
         }
         this.setCurrentNode();
     }

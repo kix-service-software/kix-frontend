@@ -4,13 +4,16 @@ import { KIXObjectType, ContextMode } from '../../../model';
 
 export class ConfigItemCreateAction extends AbstractAction {
 
-    public initAction(): void {
-        this.text = "Neues Config Item";
-        this.icon = "kix-icon-new-ci";
+    public async initAction(): Promise<void> {
+        this.text = 'Translatable#New Config Item';
+        this.icon = 'kix-icon-new-ci';
     }
 
-    public run(): void {
-        ContextService.getInstance().setDialogContext(null, KIXObjectType.CONFIG_ITEM, ContextMode.CREATE, null, true);
+    public async run(event: any): Promise<void> {
+        ContextService.getInstance().setDialogContext(
+            null, KIXObjectType.CONFIG_ITEM, ContextMode.CREATE, null, true,
+            undefined, undefined, 'new-config-item-form'
+        );
     }
 
 }

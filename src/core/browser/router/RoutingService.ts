@@ -5,6 +5,7 @@ import { ContextService } from '../context';
 import { ContextFactory } from '../context/ContextFactory';
 import { ClientStorageService } from '../ClientStorageService';
 import { ReleaseContext } from '../release';
+import { ObjectDataService } from '../ObjectDataService';
 
 export class RoutingService {
 
@@ -32,12 +33,12 @@ export class RoutingService {
         this.routingConfigurations.push(configuration);
     }
 
-    public async routeToInitialContext(): Promise<void> {
+    public async routeToInitialContext(history: boolean = false): Promise<void> {
         const VISITED_KEY = 'kix-18-site-visited';
         const visitedOption = ClientStorageService.getOption(VISITED_KEY);
-        const objectData = ContextService.getInstance().getObjectData();
-        const buildNumber = objectData.releaseInfo.buildNumber;
-        if (!visitedOption || visitedOption !== buildNumber.toString()) {
+        const objectData = ObjectDataService.getInstance().getObjectData();
+        const buildNumber = objectData.releaseInfo ? objectData.releaseInfo.buildNumber : null;
+        if (!visitedOption || (buildNumber && visitedOption !== buildNumber.toString())) {
             await ContextService.getInstance().setContext(
                 ReleaseContext.CONTEXT_ID, KIXObjectType.ANY, ContextMode.DASHBOARD
             );
@@ -52,12 +53,13 @@ export class RoutingService {
 
                 let context: Context;
                 if (contextUrl && contextUrl !== '') {
-                    context = await ContextFactory.getInstance().getContextForUrl(contextUrl, objectId, null);
+                    context = await ContextFactory.getContextForUrl(contextUrl, objectId);
                 }
 
                 if (context) {
                     await ContextService.getInstance().setContext(
-                        context.getDescriptor().contextId, null, context.getDescriptor().contextMode, objectId
+                        context.getDescriptor().contextId, null,
+                        context.getDescriptor().contextMode, objectId, undefined, history
                     );
                 } else {
                     await this.setHomeContext();
@@ -82,7 +84,7 @@ export class RoutingService {
         if (params.has('new')) {
             const url = path.length === 4 ? path[3] : contextUrl;
             const mode = path.length === 4 ? ContextMode.CREATE_SUB : ContextMode.CREATE;
-            context = await ContextFactory.getInstance().getContextForUrl(url, null, mode);
+            context = await ContextFactory.getContextForUrl(url, undefined, mode);
             if (!context && mode === ContextMode.CREATE) {
                 await ContextService.getInstance().setDialogContext(
                     null, null, mode, null, true
@@ -90,11 +92,11 @@ export class RoutingService {
             }
         } else if (params.has('edit')) {
             context = contextUrl
-                ? await ContextFactory.getInstance().getContextForUrl(contextUrl, null, ContextMode.EDIT)
+                ? await ContextFactory.getContextForUrl(contextUrl, undefined, ContextMode.EDIT)
                 : null;
         } else if (params.has('editLinks')) {
             context = contextUrl
-                ? await ContextFactory.getInstance().getContextForUrl('links', null, ContextMode.EDIT_LINKS)
+                ? await ContextFactory.getContextForUrl('links', undefined, ContextMode.EDIT_LINKS)
                 : null;
         }
 
@@ -115,10 +117,7 @@ export class RoutingService {
                 objectId, true, routingConfiguration.history
             );
 
-            let url = routingConfiguration.path;
-            if (!url) {
-                url = await this.buildUrl(routingConfiguration, objectId);
-            }
+            const url = await this.buildUrl(routingConfiguration, objectId);
 
             history.replaceState(null, null, `/${url}`);
         }

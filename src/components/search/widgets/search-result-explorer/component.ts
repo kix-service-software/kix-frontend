@@ -9,6 +9,7 @@ import {
     IKIXObjectService
 } from '../../../../core/browser';
 import { TreeNode, KIXObjectType } from '../../../../core/model';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 export class Component implements IKIXObjectSearchListener {
 
@@ -54,29 +55,32 @@ export class Component implements IKIXObjectSearchListener {
 
     private async prepareTree(): Promise<void> {
         this.rootCategory = await KIXObjectSearchService.getInstance().getSearchResultCategories();
-        this.state.nodes = this.rootCategory ?
-            this.prepareTreeNodes([this.rootCategory], true) : [];
+        this.state.nodes = this.rootCategory ? await this.prepareTreeNodes([this.rootCategory], true) : [];
     }
 
-    private prepareTreeNodes(categories: SearchResultCategory[], isRoot: boolean = false): TreeNode[] {
-        let nodes: TreeNode[] = [];
+    private async prepareTreeNodes(categories: SearchResultCategory[], isRoot: boolean = false): Promise<TreeNode[]> {
+        const nodes: TreeNode[] = [];
         const searchCache = KIXObjectSearchService.getInstance().getSearchCache();
         if (searchCache && categories) {
             const objectService
                 = ServiceRegistry.getServiceInstance<IKIXObjectService>(searchCache.objectType);
             if (objectService) {
-                nodes = categories.map((category: SearchResultCategory) => {
+                for (const category of categories) {
                     category.objectIds = objectService.determineDependendObjects(
                         searchCache.result, category.objectType
                     ) || [];
-                    return new TreeNode(
+
+                    const label = await TranslationService.translate(category.label);
+                    const children = await this.prepareTreeNodes(category.children);
+
+                    nodes.push(new TreeNode(
                         category.objectType,
-                        category.label + ` (${isRoot ? searchCache.result.length : category.objectIds.length})`,
+                        label + ` (${isRoot ? searchCache.result.length : category.objectIds.length})`,
                         null, null,
-                        this.prepareTreeNodes(category.children),
+                        children,
                         null, null, null, null, isRoot
-                    );
-                });
+                    ));
+                }
             }
         }
         return nodes;

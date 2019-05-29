@@ -1,4 +1,4 @@
-import { FormInputComponentState } from "../../../../../core/model";
+import { FormInputComponentState } from '../../../../../core/model';
 
 export class ComponentState extends FormInputComponentState<string> {
 

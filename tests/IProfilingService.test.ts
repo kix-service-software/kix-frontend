@@ -59,7 +59,7 @@ describe('Profiling Service', () => {
             }
         });
         it('Should return numeric ID if message is privided.', () => {
-            const id = ProfilingService.getInstance().start('catgeory', 'test');
+            const id = ProfilingService.getInstance().start('category', 'test');
             expect(id).an('number');
         });
         it('Should return numeric ID if message and data is privided.', () => {

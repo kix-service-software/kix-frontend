@@ -4,12 +4,13 @@ import {
 import { RoutingConfiguration } from "../../../../router";
 import { ConfigItemClassDetailsContext } from "../../context";
 import {
-    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
+    TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../../../table";
 import { ConfigItemClassTableContentProvider } from "./ConfigItemClassTableContentProvider";
+import { TableFactory } from "../../../../table/TableFactory";
 
-export class ConfigItemClassTableFactory implements ITableFactory {
+export class ConfigItemClassTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_CLASS;
 
@@ -31,7 +32,10 @@ export class ConfigItemClassTableFactory implements ITableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new DefaultColumnConfiguration(ConfigItemClassProperty.NAME, true, false, true, true, 200, true, true),
+            new DefaultColumnConfiguration(
+                ConfigItemClassProperty.NAME, true, false, true, true, 200, true, true, false,
+                DataType.STRING, true, null, null, false
+            ),
             new DefaultColumnConfiguration(ConfigItemClassProperty.ID, false, true, false, true, 41, false),
             new DefaultColumnConfiguration(
                 ConfigItemClassProperty.COMMENT, true, false, true, true, 350, true, true, false, DataType.STRING
@@ -57,7 +61,7 @@ export class ConfigItemClassTableFactory implements ITableFactory {
 
         if (defaultRouting) {
             tableConfiguration.routingConfiguration = new RoutingConfiguration(
-                null, ConfigItemClassDetailsContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM_CLASS,
+                ConfigItemClassDetailsContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM_CLASS,
                 ContextMode.DETAILS, ConfigItemClassProperty.ID
             );
         }

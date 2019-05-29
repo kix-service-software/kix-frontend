@@ -1,21 +1,28 @@
-import { ILabelProvider } from "..";
+import { ILabelProvider } from '..';
 import {
     ObjectIcon, KIXObjectType, ConfigItemProperty, ConfigItem,
     DateTimeUtil, ConfigItemClass, GeneralCatalogItem, KIXObject, SysConfigItem, SysConfigKey, VersionProperty
-} from "../../model";
-import { KIXObjectService } from "../kix";
-import { SearchProperty } from "../SearchProperty";
+} from '../../model';
+import { KIXObjectService } from '../kix';
+import { SearchProperty } from '../SearchProperty';
+import { TranslationService } from '../i18n/TranslationService';
 
 export class ConfigItemLabelProvider implements ILabelProvider<ConfigItem> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM;
 
-    public async getPropertyValueDisplayText(property: string, value: string | number | any = ''): Promise<string> {
+    public isLabelProviderForType(objectType: KIXObjectType): boolean {
+        return objectType === this.kixObjectType;
+    }
+
+    public async getPropertyValueDisplayText(
+        property: string, value: any = '', translatable: boolean = true
+    ): Promise<string> {
         let displayValue = value;
         switch (property) {
             case ConfigItemProperty.CREATE_TIME:
             case ConfigItemProperty.CHANGE_TIME:
-                displayValue = DateTimeUtil.getLocalDateTimeString(value);
+                displayValue = await DateTimeUtil.getLocalDateTimeString(value);
                 break;
             case ConfigItemProperty.CLASS_ID:
                 const ciClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
@@ -50,36 +57,40 @@ export class ConfigItemLabelProvider implements ILabelProvider<ConfigItem> {
                 displayValue = value;
         }
 
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
+        }
+
         return displayValue ? displayValue.toString() : '';
     }
 
-    public async getPropertyText(property: string, short?: boolean): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
             case ConfigItemProperty.CLASS:
             case ConfigItemProperty.CLASS_ID:
-                displayValue = 'Klasse';
+                displayValue = 'Translatable#Class';
                 break;
             case ConfigItemProperty.CUR_DEPL_STATE_ID:
-                displayValue = 'Aktueller Verwendungsstatus';
+                displayValue = 'Translatable#Current deployment state';
                 break;
             case ConfigItemProperty.CUR_INCI_STATE_ID:
-                displayValue = 'Aktueller Vorfallstatus';
+                displayValue = 'Translatable#Current incident state';
                 break;
             case ConfigItemProperty.CHANGE_TIME:
-                displayValue = 'Geändert am';
+                displayValue = 'Translatable#Changed at';
                 break;
             case ConfigItemProperty.CHANGE_BY:
-                displayValue = 'Geändert von';
+                displayValue = 'Translatable#Changed by';
                 break;
             case ConfigItemProperty.CREATE_TIME:
-                displayValue = 'Erstellt am';
+                displayValue = 'Translatable#Created at';
                 break;
             case ConfigItemProperty.CREATE_BY:
-                displayValue = 'Erstellt von';
+                displayValue = 'Translatable#Created by';
                 break;
             case ConfigItemProperty.VERSIONS:
-                displayValue = 'Anzahl Versionen';
+                displayValue = 'Translatable#Number of version';
                 break;
             case ConfigItemProperty.NUMBER:
                 const hookConfig = await KIXObjectService.loadObjects<SysConfigItem>(
@@ -88,14 +99,22 @@ export class ConfigItemLabelProvider implements ILabelProvider<ConfigItem> {
                 displayValue = hookConfig && hookConfig.length ? hookConfig[0].Data : 'CI#';
                 break;
             case 'LinkedAs':
-                displayValue = 'Verknüpft als';
+                displayValue = 'Translatable#Linked as';
                 break;
             case SearchProperty.FULLTEXT:
-                displayValue = 'Volltext';
+                displayValue = 'Translatable#Full Text';
+                break;
+            case ConfigItemProperty.NAME:
+                displayValue = 'Translatable#Name';
                 break;
             default:
                 displayValue = property;
         }
+
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
+        }
+
         return displayValue.toString();
     }
 
@@ -113,7 +132,9 @@ export class ConfigItemLabelProvider implements ILabelProvider<ConfigItem> {
         return icon;
     }
 
-    public async getDisplayText(configItem: ConfigItem, property: string): Promise<string> {
+    public async getDisplayText(
+        configItem: ConfigItem, property: string, value?: string, translatable: boolean = true
+    ): Promise<string> {
         let displayValue = configItem[property];
 
         switch (property) {
@@ -157,6 +178,10 @@ export class ConfigItemLabelProvider implements ILabelProvider<ConfigItem> {
                 }
         }
 
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
+        }
+
         return displayValue ? displayValue.toString() : '';
     }
 
@@ -189,10 +214,10 @@ export class ConfigItemLabelProvider implements ILabelProvider<ConfigItem> {
                 returnString = `${configItemHook}${configItem.Number}`;
             }
             if (name && configItem.CurrentVersion && configItem.CurrentVersion.Name) {
-                returnString += (id ? " - " : '') + configItem.CurrentVersion.Name;
+                returnString += (id ? ' - ' : '') + configItem.CurrentVersion.Name;
             }
         } else {
-            returnString = "Config Item";
+            returnString = await this.getObjectName(false);
         }
         return returnString;
     }
@@ -210,8 +235,13 @@ export class ConfigItemLabelProvider implements ILabelProvider<ConfigItem> {
             configItem.CurrentVersion.Name : configItem.Number;
     }
 
-    public getObjectName(plural: boolean = false): string {
-        return plural ? "Config Items" : "Config Item";
+    public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
+        if (translatable) {
+            return await TranslationService.translate(
+                plural ? 'Translatable#Config Items' : 'Translatable#Config Item'
+            );
+        }
+        return plural ? 'Config Items' : 'Config Item';
     }
 
     public async getIcons(

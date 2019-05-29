@@ -1,19 +1,19 @@
-import { AbstractNewDialog } from "../../../../../core/browser";
 import { KIXObjectType, ContextMode, TicketTypeProperty } from "../../../../../core/model";
 import { ComponentState } from "./ComponentState";
 import { TicketTypeDetailsContext } from "../../../../../core/browser/ticket";
 import { RoutingConfiguration } from "../../../../../core/browser/router";
+import { AbstractNewDialog } from "../../../../../core/browser/components/dialog";
 
 class Component extends AbstractNewDialog {
 
     public onCreate(): void {
         this.state = new ComponentState();
         super.init(
-            'Typ wird angelegt',
-            'Typ wurde erfolgreich angelegt.',
+            'Translatable#Create Type',
+            'Translatable#Type successfully created.',
             KIXObjectType.TICKET_TYPE,
             new RoutingConfiguration(
-                null, TicketTypeDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_TYPE,
+                TicketTypeDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_TYPE,
                 ContextMode.DETAILS, TicketTypeProperty.ID, true
             )
         );

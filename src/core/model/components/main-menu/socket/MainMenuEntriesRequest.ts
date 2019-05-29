@@ -1,9 +1,11 @@
-export class MainMenuEntriesRequest {
+import { ISocketRequest } from "../../../socket";
 
-    public token: string;
+export class MainMenuEntriesRequest implements ISocketRequest {
 
-    public constructor(token: string) {
-        this.token = token;
-    }
+    public constructor(
+        public token: string,
+        public requestId: string,
+        public clientRequestId: string
+    ) { }
 
 }

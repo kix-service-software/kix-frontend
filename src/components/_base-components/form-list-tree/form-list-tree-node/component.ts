@@ -56,7 +56,9 @@ class TreeNodeComponent {
     }
 
     public nodeClicked(): void {
-        (this as any).emit('nodeClicked', this.state.node);
+        if (this.state.node.clickable) {
+            (this as any).emit('nodeClicked', this.state.node);
+        }
     }
 
     public nodeHovered(): void {

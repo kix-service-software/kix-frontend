@@ -1,6 +1,6 @@
 <div.sidebar-area>
     <if(!state.loading && state.showSidebar)>
-        <for(sidebar in state.sidebars)>
+        <for|sidebar| of=state.sidebars>
             <div.sidebar>
                 <${component.getSidebarTemplate(sidebar.instanceId)} ...{
                     instanceId: sidebar.instanceId,

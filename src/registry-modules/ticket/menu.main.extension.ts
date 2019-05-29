@@ -11,7 +11,7 @@ export class Extension implements IMainMenuExtension {
 
     public icon: string = "kix-icon-ticket";
 
-    public text: string = "Tickets";
+    public text: string = "Translatable#Tickets";
 
 }
 

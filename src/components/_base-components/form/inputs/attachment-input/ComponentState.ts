@@ -1,5 +1,5 @@
-import { FormInputComponentState, Attachment } from "../../../../../core/model";
-import { Label } from "../../../../../core/browser/components";
+import { FormInputComponentState, Attachment } from '../../../../../core/model';
+import { Label } from '../../../../../core/browser/components';
 
 export class ComponentState extends FormInputComponentState<any> {
 
@@ -8,7 +8,8 @@ export class ComponentState extends FormInputComponentState<any> {
         public dragging: boolean = false,
         public minimized: boolean = false,
         public labels: Label[] = [],
-        public multiple: boolean = true
+        public multiple: boolean = true,
+        public accept: string = null,
     ) {
         super();
     }

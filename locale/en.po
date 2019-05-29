@@ -1,0 +1,2444 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-05-07 09:05+0000\n"
+"PO-Revision-Date: 2019-05-07 13:39+0000\n"
+"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
+"Language-Team: English <http://translate.kix18.docker.vm.devel.cape-it.de/"
+"projects/kix18/frontend-app/en/>\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.5\n"
+
+msgid "{0}/{1} {2} imported"
+msgstr ""
+
+msgid "0 data sets found."
+msgstr ""
+
+msgid "{0} File(s) added"
+msgstr ""
+
+msgid "{0} imported"
+msgstr ""
+
+msgid "{0} Link created"
+msgstr ""
+
+msgid "Accept KIX Header"
+msgstr ""
+
+msgid "accounted time"
+msgstr ""
+
+msgid "Account Information"
+msgstr ""
+
+msgid "Account successfully created."
+msgstr ""
+
+msgid ""
+"A contact is a person, filing a request for the customer. Enter at least 3 "
+"characters in order to get a suggestion list of already registered contacts. "
+"You may use „*“ as wildcard."
+msgstr ""
+
+msgid "Action"
+msgstr ""
+
+msgid "Add"
+msgstr ""
+
+msgid "Add CI Class"
+msgstr ""
+
+msgid "add notes here"
+msgstr ""
+
+msgid "Add Object"
+msgstr ""
+
+msgid "Address successfully created."
+msgstr ""
+
+msgid "Admin"
+msgstr ""
+
+msgid "Administration"
+msgstr ""
+
+msgid "Advanced Search"
+msgstr ""
+
+msgid "Affected Service"
+msgstr ""
+
+msgid "Age"
+msgstr ""
+
+msgid "Agent"
+msgstr ""
+
+msgid "Agent Assignment"
+msgstr ""
+
+msgid "Agent Information"
+msgstr ""
+
+msgid "Agents"
+msgstr ""
+
+msgid "Agent successfully created."
+msgstr ""
+
+msgid "All"
+msgstr ""
+
+msgid "All form fields marked by * are required fields."
+msgstr ""
+
+msgid "All Objects"
+msgstr ""
+
+msgid "All Tickets"
+msgstr ""
+
+msgid "AND"
+msgstr ""
+
+msgid "An error occurred."
+msgstr ""
+
+msgid "Approved"
+msgstr ""
+
+msgid "A product by c.a.p.e. IT GmbH"
+msgstr ""
+
+msgid ""
+"A queue is a classification system for requests, comparable to folders in a "
+"file system."
+msgstr ""
+
+msgid "archived tickets"
+msgstr ""
+
+msgid "Article"
+msgstr ""
+
+msgid "Article Data"
+msgstr ""
+
+msgid "Article Id"
+msgstr ""
+
+msgid "Article Overview"
+msgstr ""
+
+msgid "Article successfully created."
+msgstr ""
+
+msgid "Article Text"
+msgstr ""
+
+msgid "Assigned Agents"
+msgstr ""
+
+msgid "Assigned Contacts"
+msgstr ""
+
+msgid "Assigned Organisations"
+msgstr ""
+
+msgid "Assigned Queues"
+msgstr ""
+
+msgid "Assigned Roles"
+msgstr ""
+
+msgid "Assign Link"
+msgstr ""
+
+msgid "Assign Links"
+msgstr ""
+
+msgid "Assign Team / Queue"
+msgstr ""
+
+msgid "Assign Text Modules"
+msgstr ""
+
+msgid "Assign the roles for the user."
+msgstr ""
+
+msgid "At least one of the fields 'To', 'Cc' or 'Bcc' must contain an entry."
+msgstr ""
+
+msgid ""
+"Attach additional files to the FAQ article. Drag & Drop is possible. Max. "
+"file size is 25 MB."
+msgstr ""
+
+msgid "Attachments"
+msgstr ""
+
+msgid "Attributes"
+msgstr ""
+
+msgid "attributes to change:"
+msgstr ""
+
+msgid "back to"
+msgstr ""
+
+msgid "Basic Data"
+msgstr ""
+
+msgid "Bcc"
+msgstr ""
+
+msgid "Benutzer"
+msgstr ""
+
+msgid ""
+"<b>-- KIX Professional Feature--</b><p>To use the text modules available in "
+"your system, enter „::“ (colon colon). Then choose the text modules you want "
+"to use in the context menu. You can narrow down the key word selection "
+"manually by entering more text.</p>"
+msgstr ""
+
+msgid "Bookmarks"
+msgstr ""
+
+msgid "Bulk Action"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Cancel Process"
+msgstr ""
+
+msgid "Can not create link ({0})"
+msgstr ""
+
+msgid "Can not use file (file is empty)."
+msgstr ""
+
+msgid "Can not use file (missing required properties):"
+msgstr ""
+
+msgid "Can not use file (no known properties found)."
+msgstr ""
+
+msgid "Category"
+msgstr ""
+
+msgid "Category successfully created."
+msgstr ""
+
+msgid "Cause"
+msgstr ""
+
+msgid "Cc"
+msgstr ""
+
+msgid "Cell Phone"
+msgstr ""
+
+msgid "Changed at"
+msgstr ""
+
+msgid "Changed by"
+msgstr ""
+
+msgid "Changes saved."
+msgstr ""
+
+msgid "Channel"
+msgstr ""
+
+msgid "Channels"
+msgstr ""
+
+msgid "Charset"
+msgstr ""
+
+msgid "Choose a contact, customers will be assigned automatically."
+msgstr ""
+
+msgid "Choose CSV-File with data sets for import. Drag & Drop is possible."
+msgstr ""
+
+msgid "CI Class"
+msgstr ""
+
+msgid "CI Class Definition"
+msgstr ""
+
+msgid "CI Class Definitions"
+msgstr ""
+
+msgid "CI Classes"
+msgstr ""
+
+msgid "CI Class Information"
+msgstr ""
+
+msgid "CI Class successfully created."
+msgstr ""
+
+msgid "City"
+msgstr ""
+
+msgid "Class"
+msgstr ""
+
+msgid "Class Definition"
+msgstr ""
+
+msgid "Close Dialog"
+msgstr ""
+
+msgid "Close window"
+msgstr ""
+
+msgid "Closing time"
+msgstr ""
+
+msgid "CMDB"
+msgstr ""
+
+msgid "CMDB: CI Classes"
+msgstr ""
+
+msgid "CMDB Explorer"
+msgstr ""
+
+msgid ": (colon)"
+msgstr ""
+
+msgid ", (comma)"
+msgstr ""
+
+msgid "Comment"
+msgstr ""
+
+msgid "Communication"
+msgstr ""
+
+msgid "Communication: Email"
+msgstr ""
+
+msgid "Communication: Email: Email Accounts"
+msgstr ""
+
+msgid "Compare"
+msgstr ""
+
+msgid "Compare Versions"
+msgstr ""
+
+msgid "Config Item"
+msgstr ""
+
+msgid "Config Item Class"
+msgstr ""
+
+msgid "Config Item class. Can not be changed."
+msgstr ""
+
+msgid "Config Item Data"
+msgstr ""
+
+msgid "Config Item History"
+msgstr ""
+
+msgid "Config Item Information"
+msgstr ""
+
+msgid "Config Items"
+msgstr ""
+
+msgid "Config Items Count: {0}"
+msgstr ""
+
+msgid "Config Item Search"
+msgstr ""
+
+msgid "Config Item successfully created."
+msgstr ""
+
+msgid "Config Item Version Compare"
+msgstr ""
+
+msgid "Contact"
+msgstr ""
+
+msgid "Contact Information"
+msgstr ""
+
+msgid "Contacts"
+msgstr ""
+
+msgid "Contact Search"
+msgstr ""
+
+msgid "Contact successfully created."
+msgstr ""
+
+msgid "contains"
+msgstr ""
+
+msgid "Country"
+msgstr ""
+
+msgid "Create Account"
+msgstr ""
+
+msgid "Create Address"
+msgstr ""
+
+msgid "Create Agent"
+msgstr ""
+
+msgid "Create Article"
+msgstr ""
+
+msgid "Create Category"
+msgstr ""
+
+msgid "Create CI Class"
+msgstr ""
+
+msgid "Create Config Item"
+msgstr ""
+
+msgid "Create Contact"
+msgstr ""
+
+msgid "Created at"
+msgstr ""
+
+msgid "Created by"
+msgstr ""
+
+msgid "Create FAQ Article"
+msgstr ""
+
+msgid "Create Links."
+msgstr ""
+
+msgid "Create Organisation"
+msgstr ""
+
+msgid "Create Priority"
+msgstr ""
+
+msgid "Create Queue"
+msgstr ""
+
+msgid "Create Role"
+msgstr ""
+
+msgid "Create State"
+msgstr ""
+
+msgid "Create Ticket"
+msgstr ""
+
+msgid "Create Translation"
+msgstr ""
+
+msgid "Create Type"
+msgstr ""
+
+msgid "CSV-Export"
+msgstr ""
+
+msgid "(Current definition)"
+msgstr ""
+
+msgid "Current Definition"
+msgstr ""
+
+msgid "Current deployment state"
+msgstr ""
+
+msgid "Current incident state"
+msgstr ""
+
+msgid "(current version)"
+msgstr ""
+
+msgid "(Current version)"
+msgstr ""
+
+msgid "Current version"
+msgstr ""
+
+msgid "Default"
+msgstr ""
+
+msgid ""
+"Define where this FAQ article will be shown (internal= only Agent Portal, "
+"external = KIX Agent and Organisation Portal for authenticated users only, "
+"public=KIX Agent- and Organisation Portal for both, authenticated and "
+"unauthenticated users)."
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Delete Link"
+msgstr ""
+
+msgid "Deployment State"
+msgstr ""
+
+msgid "Describe sympton as precisely as possible"
+msgstr ""
+
+msgid "Describe the solution for the symptons reasons as precisely as possible"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "Description & Comments"
+msgstr ""
+
+msgid "Detailed search results"
+msgstr ""
+
+msgid "Dispatching"
+msgstr ""
+
+msgid "Display Name"
+msgstr ""
+
+msgid ". (dot)"
+msgstr ""
+
+msgid "DOUBLE_QUOTES"
+msgstr "\" (Double Quotes)"
+
+msgid "Download"
+msgstr ""
+
+msgid "Duplicate"
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "Edit {0}"
+msgstr ""
+
+msgid "Edit Account"
+msgstr ""
+
+msgid "Edit Address"
+msgstr ""
+
+msgid "Edit Agent"
+msgstr ""
+
+msgid "Edit Class"
+msgstr ""
+
+msgid "Edit Config Item"
+msgstr ""
+
+msgid "Edit Contact"
+msgstr ""
+
+msgid "Edit Core Data"
+msgstr ""
+
+msgid "edited"
+msgstr ""
+
+msgid "Edit FAQ Article"
+msgstr ""
+
+msgid "Edit FAQ Category"
+msgstr ""
+
+msgid "Edit Links"
+msgstr ""
+
+msgid "Edit Object"
+msgstr ""
+
+msgid "Edit Objects"
+msgstr ""
+
+msgid "Edit Organisation"
+msgstr ""
+
+msgid "Edit Personal Settings"
+msgstr ""
+
+msgid "Edit Priority"
+msgstr ""
+
+msgid "Edit Queue"
+msgstr ""
+
+msgid "Edit Role"
+msgstr ""
+
+msgid "Edit Search"
+msgstr ""
+
+msgid "Edit State"
+msgstr ""
+
+msgid "Edit Ticket"
+msgstr ""
+
+msgid "Edit Translation"
+msgstr ""
+
+msgid "Edit Type"
+msgstr ""
+
+msgid "Email"
+msgstr ""
+
+msgid "Email Account"
+msgstr ""
+
+msgid "Email Accounts"
+msgstr ""
+
+msgid "Email Address"
+msgstr ""
+
+msgid "Email Addresses"
+msgstr ""
+
+msgid "Email Information"
+msgstr ""
+
+msgid "ends with"
+msgstr ""
+
+msgid "Enter search value"
+msgstr ""
+
+msgid "equals"
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
+msgid "Error!"
+msgstr ""
+
+msgid "Error on form validation:"
+msgstr ""
+
+msgid "Error while adding the attachement:"
+msgstr ""
+
+msgid "Error while adding the image:"
+msgstr ""
+
+msgid "Escalated Tickets"
+msgstr ""
+
+msgid "escalated tickets: {0}"
+msgstr ""
+
+msgid "Escalation time"
+msgstr ""
+
+msgid "Execute now!"
+msgstr ""
+
+msgid "Execute now?"
+msgstr ""
+
+msgid "Existing Links ({0})"
+msgstr ""
+
+msgid "expected time required:"
+msgstr ""
+
+msgid "external"
+msgstr ""
+
+msgid "FAQ"
+msgstr ""
+
+msgid "FAQ#"
+msgstr ""
+
+msgid "FAQ Article"
+msgstr ""
+
+msgid "FAQ Article History"
+msgstr ""
+
+msgid "FAQ Article successfully created."
+msgstr ""
+
+msgid "FAQ Attributes"
+msgstr ""
+
+msgid "FAQ Categories"
+msgstr ""
+
+msgid "FAQ Category"
+msgstr ""
+
+msgid "FAQ Category Information"
+msgstr ""
+
+msgid "FAQ Data"
+msgstr ""
+
+msgid "FAQ Information"
+msgstr ""
+
+msgid "FAQ rating"
+msgstr ""
+
+msgid "FAQ Search"
+msgstr ""
+
+msgid "Fax"
+msgstr ""
+
+msgid "Field '{0}' has an invalid value ({1})."
+msgstr ""
+
+msgid "Filter in list"
+msgstr ""
+
+msgid "Firstname"
+msgstr ""
+
+msgid "First Name"
+msgstr ""
+
+msgid "Follow Up on Tickets possible"
+msgstr ""
+
+msgid "Follow Up Ticket Lock"
+msgstr ""
+
+msgid "Force"
+msgstr ""
+
+msgid "Forward"
+msgstr ""
+
+msgid "free tickets: {0}"
+msgstr ""
+
+msgid "From"
+msgstr ""
+
+msgid "Fullname"
+msgstr ""
+
+msgid "Full Text"
+msgstr ""
+
+msgid "greater or equal"
+msgstr ""
+
+msgid "greater than"
+msgstr ""
+
+msgid "Help"
+msgstr ""
+
+msgid "Helptext_Admin_FAQCategoryCreate_Comment"
+msgstr ""
+
+msgid "Helptext_Admin_FAQCategoryCreate_Icon"
+msgstr ""
+
+msgid "Helptext_Admin_FAQCategoryCreate_Name"
+msgstr ""
+
+msgid "Helptext_Admin_FAQCategoryCreate_ParentCategory"
+msgstr ""
+
+msgid "Helptext_Admin_FAQCategoryCreate_Validity"
+msgstr ""
+
+msgid "Helptext_Admin_FAQCategoryEdit_Comment"
+msgstr ""
+
+msgid "Helptext_Admin_FAQCategoryEdit_Icon"
+msgstr ""
+
+msgid "Helptext_Admin_FAQCategoryEdit_Name"
+msgstr ""
+
+msgid "Helptext_Admin_FAQCategoryEdit_ParentCategory"
+msgstr ""
+
+msgid "Helptext_Admin_FAQCategoryEdit_Validity"
+msgstr ""
+
+msgid "Helptext_Admin_MailAccountCreate_AcceptKIXHeader"
+msgstr ""
+
+msgid "Helptext_Admin_MailAccountCreate_Comment"
+msgstr ""
+
+msgid "Helptext_Admin_MailAccountCreate_Dispachting"
+msgstr ""
+
+msgid "Helptext_Admin_MailAccountCreate_Host"
+msgstr ""
+
+msgid "Helptext_Admin_MailAccountCreate_IMAPFolder"
+msgstr ""
+
+msgid "Helptext_Admin_MailAccountCreate_Password"
+msgstr ""
+
+msgid "Helptext_Admin_MailAccountCreate_Type."
+msgstr ""
+
+msgid "Helptext_Admin_MailAccountCreate_UserName"
+msgstr ""
+
+msgid "Helptext_Admin_MailAccountCreate_Validity"
+msgstr ""
+
+msgid "Helptext_Admin_MailAccountEdit_AcceptKIXHeader"
+msgstr ""
+
+msgid "Helptext_Admin_MailAccountEdit_Comment"
+msgstr ""
+
+msgid "Helptext_Admin_MailAccountEdit_Dispachting"
+msgstr ""
+
+msgid "Helptext_Admin_MailAccountEdit_Host"
+msgstr ""
+
+msgid "Helptext_Admin_MailAccountEdit_IMAPFolder"
+msgstr ""
+
+msgid "Helptext_Admin_MailAccountEdit_Password"
+msgstr ""
+
+msgid "Helptext_Admin_MailAccountEdit_Type."
+msgstr ""
+
+msgid "Helptext_Admin_MailAccountEdit_UserName"
+msgstr ""
+
+msgid "Helptext_Admin_MailAccountEdit_Validity"
+msgstr ""
+
+msgid "Helptext_Admin_QueueCreate_Comment"
+msgstr ""
+
+msgid "Helptext_Admin_QueueCreate_FollowUp"
+msgstr ""
+
+msgid "Helptext_Admin_QueueCreate_FollowUpTicketLock"
+msgstr ""
+
+msgid "Helptext_Admin_QueueCreate_Icon."
+msgstr ""
+
+msgid "Helptext_Admin_QueueCreate_Name"
+msgstr ""
+
+msgid "Helptext_Admin_QueueCreate_ParentQueue"
+msgstr ""
+
+msgid "Helptext_Admin_QueueCreate_SenderAddress."
+msgstr ""
+
+msgid "Helptext_Admin_QueueCreate_Signature"
+msgstr ""
+
+msgid "Helptext_Admin_QueueCreate_UnlockTimeout"
+msgstr ""
+
+msgid "Helptext_Admin_QueueCreate_Validity"
+msgstr ""
+
+msgid "Helptext_Admin_QueueEdit_Comment"
+msgstr ""
+
+msgid "Helptext_Admin_QueueEdit_FollowUp"
+msgstr ""
+
+msgid "Helptext_Admin_QueueEdit_Icon."
+msgstr ""
+
+msgid "Helptext_Admin_QueueEdit_Name"
+msgstr ""
+
+msgid "Helptext_Admin_QueueEdit_ParentQueue"
+msgstr ""
+
+msgid "Helptext_Admin_QueueEdit_SenderAddress."
+msgstr ""
+
+msgid "Helptext_Admin_QueueEdit_Signature"
+msgstr ""
+
+msgid "Helptext_Admin_QueueEdit_UnlockTimeout"
+msgstr ""
+
+msgid "Helptext_Admin_QueueEdit_Validity"
+msgstr ""
+
+msgid "Helptext_Admin_SystemAddressCreate_Comment"
+msgstr ""
+
+msgid "Helptext_Admin_SystemAddressCreate_DisplayName"
+msgstr ""
+
+msgid "Helptext_Admin_SystemAddressCreate_Name"
+msgstr ""
+
+msgid "Helptext_Admin_SystemAddressCreate_Validity"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactCreate_City"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactCreate_Comment"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactCreate_Country"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactCreate_Email"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactCreate_Fax"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactCreate_Firstname"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactCreate_Lastname"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactCreate_Login"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactCreate_Mobile"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactCreate_Organisation"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactCreate_Password"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactCreate_Phone"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactCreate_Street"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactCreate_Title"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactCreate_Validity"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactCreate_Zip"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactEdit_City"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactEdit_Comment"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactEdit_Country"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactEdit_Email"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactEdit_Fax"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactEdit_Firstname"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactEdit_Lastname"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactEdit_Mobile"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactEdit_Phone"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactEdit_Street"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactEdit_Title"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactEdit_Validity"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactEdit_Zip"
+msgstr ""
+
+msgid "Helptext_Organisations_ContactImport"
+msgstr ""
+
+msgid "Helptext_Organisations_OrganisationCreate_City"
+msgstr ""
+
+msgid "Helptext_Organisations_OrganisationCreate_Comment"
+msgstr ""
+
+msgid "Helptext_Organisations_OrganisationCreate_Country"
+msgstr ""
+
+msgid "Helptext_Organisations_OrganisationCreate_Name"
+msgstr ""
+
+msgid "Helptext_Organisations_OrganisationCreate_Number"
+msgstr ""
+
+msgid "Helptext_Organisations_OrganisationCreate_Street"
+msgstr ""
+
+msgid "Helptext_Organisations_OrganisationCreate_URL"
+msgstr ""
+
+msgid "Helptext_Organisations_OrganisationCreate_Validity"
+msgstr ""
+
+msgid "Helptext_Organisations_OrganisationCreate_Zip"
+msgstr ""
+
+msgid "Helptext_Organisations_OrganisationImport"
+msgstr ""
+
+msgid "Helptext_Search_Contact"
+msgstr ""
+
+msgid "Helptext_Search_Organisation"
+msgstr ""
+
+msgid "Helptext_Textmodules_TicketCreate"
+msgstr ""
+
+msgid "Helptext_Textmodules_TicketEdit"
+msgstr ""
+
+msgid "History"
+msgstr ""
+
+msgid "Hit List"
+msgstr ""
+
+msgid "Hit List ({0})"
+msgstr ""
+
+msgid "Home"
+msgstr ""
+
+msgid "Host"
+msgstr ""
+
+msgid "Hostname"
+msgstr ""
+
+msgid "How to create a new ticket?"
+msgstr ""
+
+msgid "How to search in KIX 18?"
+msgstr ""
+
+msgid "How to use KIX 18 – Some general notes"
+msgstr ""
+
+msgid "Icon"
+msgstr ""
+
+msgid "Id"
+msgstr ""
+
+msgid "ID"
+msgstr ""
+
+msgid "Ignore"
+msgstr ""
+
+msgid "Images"
+msgstr ""
+
+msgid "IMAP Folder"
+msgstr ""
+
+msgid "Import"
+msgstr ""
+
+msgid "Import {0} {1}. Execute?"
+msgstr ""
+
+msgid "Import Contacts"
+msgstr ""
+
+msgid "Import Data"
+msgstr ""
+
+msgid "Import Organisations"
+msgstr ""
+
+msgid "Imprint"
+msgstr ""
+
+msgid "in"
+msgstr ""
+
+msgid "Incident state"
+msgstr ""
+
+msgid "Incident State"
+msgstr ""
+
+msgid "Insert a comment for the CI class."
+msgstr ""
+
+msgid "Insert a comment for the priority."
+msgstr ""
+
+msgid "Insert a comment for the role."
+msgstr ""
+
+msgid "Insert a comment for the state."
+msgstr ""
+
+msgid "Insert a comment for the type."
+msgstr ""
+
+msgid "Insert a comment for the user."
+msgstr ""
+
+msgid "Insert a config item class name."
+msgstr ""
+
+msgid "Insert additional information for this FAQ article."
+msgstr ""
+
+msgid "Insert a login for the user."
+msgstr ""
+
+msgid "Insert a mobile number for the user."
+msgstr ""
+
+msgid "Insert a name for the Config Item."
+msgstr ""
+
+msgid "Insert a name for the FAQ article."
+msgstr ""
+
+msgid "Insert a pattern for the translation."
+msgstr ""
+
+msgid "Insert a phone number for the user."
+msgstr ""
+
+msgid "Insert a priority name."
+msgstr ""
+
+msgid "Insert a role name."
+msgstr ""
+
+msgid "Insert a state name."
+msgstr ""
+
+msgid "Insert a ticket title."
+msgstr ""
+
+msgid "Insert a title for the user."
+msgstr ""
+
+msgid "Insert a type name."
+msgstr ""
+
+msgid "Inserted email address is invalid"
+msgstr ""
+
+msgid "Inserted email address must not be a system address ({0})."
+msgstr ""
+
+msgid "insert filter value"
+msgstr ""
+
+msgid "Insert key words for the FAQ article to find them more quickly."
+msgstr ""
+
+msgid "Insert the complete ticket title or a part of the title."
+msgstr ""
+
+msgid "Insert the definition for the Config Item Class."
+msgstr ""
+
+msgid "Insert the email address for the user."
+msgstr ""
+
+msgid "Insert the firstname of the user."
+msgstr ""
+
+msgid "Insert the lastname of the user."
+msgstr ""
+
+msgid "Insert the ticket number or a part of the number (min. 1 character)."
+msgstr ""
+
+msgid "internal"
+msgstr ""
+
+msgid "Internationalisation"
+msgstr ""
+
+msgid "Internationalisation: Translations"
+msgstr ""
+
+msgid "Invalid date."
+msgstr ""
+
+msgid "Knowledge Database"
+msgstr ""
+
+msgid "Knowledge Database: FAQ Categories"
+msgstr ""
+
+msgid "Label"
+msgstr ""
+
+msgid "Language"
+msgstr ""
+
+msgid "Languages"
+msgstr ""
+
+msgid "Large View"
+msgstr ""
+
+msgid "last changed time"
+msgstr ""
+
+msgid "Last Login"
+msgstr ""
+
+msgid "Lastname"
+msgstr ""
+
+msgid "Last Name"
+msgstr ""
+
+msgid "Legend"
+msgstr ""
+
+msgid "less or equal"
+msgstr ""
+
+msgid "less than"
+msgstr ""
+
+msgid "like"
+msgstr ""
+
+msgid "link {0}"
+msgstr ""
+
+msgid "Link Config Item with"
+msgstr ""
+
+msgid "Linked as"
+msgstr ""
+
+msgid "Linked Objects"
+msgstr ""
+
+msgid "Link FAQ with"
+msgstr ""
+
+msgid "Link Graph"
+msgstr ""
+
+msgid "Link Objects"
+msgstr ""
+
+msgid "Links"
+msgstr ""
+
+msgid "Links updated."
+msgstr ""
+
+msgid "Links will be removed."
+msgstr ""
+
+msgid ""
+"Link this config item to a ticket, an FAQ article or another config item."
+msgstr ""
+
+msgid ""
+"Link this FAQ article to a ticket, a config item or another FAQ article."
+msgstr ""
+
+msgid ""
+"Link this ticket item to an config item, an FAQ article or another ticket."
+msgstr ""
+
+msgid "Link Ticket with"
+msgstr ""
+
+msgid "Link to"
+msgstr ""
+
+msgid "Link to ticket"
+msgstr ""
+
+msgid "Link Type"
+msgstr ""
+
+msgid "Load Contact ..."
+msgstr ""
+
+msgid "Load Organisation ..."
+msgstr ""
+
+msgid "Load Ticket State ..."
+msgstr ""
+
+msgid "Localisation"
+msgstr ""
+
+msgid "Lock"
+msgstr ""
+
+msgid "locked"
+msgstr ""
+
+msgid "Lock State"
+msgstr ""
+
+msgid "Lock Ticket ..."
+msgstr ""
+
+msgid "Logged in"
+msgstr ""
+
+msgid "Login"
+msgstr ""
+
+msgid "Login failed"
+msgstr ""
+
+msgid "Login Name"
+msgstr ""
+
+msgid "Logout"
+msgstr ""
+
+msgid "Merge"
+msgstr ""
+
+msgid "Minutes"
+msgstr ""
+
+msgid "Mobile"
+msgstr ""
+
+msgid "My locked tickets"
+msgstr ""
+
+msgid "My locked tickets with new articles"
+msgstr ""
+
+msgid "My Tickets"
+msgstr ""
+
+msgid "My tickets with new articles"
+msgstr ""
+
+msgid "My watched tickets"
+msgstr ""
+
+msgid "My watched tickets with new articles"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "New"
+msgstr ""
+
+msgid "New Account"
+msgstr ""
+
+msgid "New Address"
+msgstr ""
+
+msgid "New Agent"
+msgstr ""
+
+msgid "New Article"
+msgstr ""
+
+msgid "New Category"
+msgstr ""
+
+msgid "New Class"
+msgstr ""
+
+msgid "New Config Item"
+msgstr ""
+
+msgid "New Contact"
+msgstr ""
+
+msgid "New FAQ"
+msgstr ""
+
+msgid "New FAQ Category"
+msgstr ""
+
+msgid "New Object"
+msgstr ""
+
+msgid "New Organisation"
+msgstr ""
+
+msgid "New Priority"
+msgstr ""
+
+msgid "New Queue"
+msgstr ""
+
+msgid "New Role"
+msgstr ""
+
+msgid "New Search"
+msgstr ""
+
+msgid "New State"
+msgstr ""
+
+msgid "New Template"
+msgstr ""
+
+msgid "New Ticket"
+msgstr ""
+
+msgid "New Tickets"
+msgstr ""
+
+msgid "New Tickets (recent 7 days)"
+msgstr ""
+
+msgid "New Translation"
+msgstr ""
+
+msgid "New Type"
+msgstr ""
+
+msgid "New Version created"
+msgstr ""
+
+msgid "Next Image"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "No."
+msgstr ""
+
+msgid "No {0} found (add at least {1} characters)."
+msgstr ""
+
+msgid "No Article"
+msgstr ""
+
+msgid "No article available."
+msgstr ""
+
+msgid "No general catalog class configured!"
+msgstr ""
+
+msgid "No object with ID {0} available."
+msgstr ""
+
+msgid "No rating available."
+msgstr ""
+
+msgid "No search query."
+msgstr ""
+
+msgid "No search query found."
+msgstr ""
+
+msgid "No signature defined."
+msgstr ""
+
+msgid "not archived tickets"
+msgstr ""
+
+msgid "Note"
+msgstr ""
+
+msgid "Notes"
+msgstr ""
+
+msgid "not modified"
+msgstr ""
+
+msgid "No version available"
+msgstr ""
+
+msgid "Number"
+msgstr ""
+
+msgid "Number of Config Items"
+msgstr ""
+
+msgid "Number of Config Items in critical incident state"
+msgstr ""
+
+msgid "Number of ratings"
+msgstr ""
+
+msgid "Number of version"
+msgstr ""
+
+msgid "Object"
+msgstr ""
+
+msgid "Object Id"
+msgstr ""
+
+msgid "Observer"
+msgstr ""
+
+msgid "Open Tickets"
+msgstr ""
+
+msgid "open tickets: {0}"
+msgstr ""
+
+msgid "Organisation"
+msgstr ""
+
+msgid "Organisation Details"
+msgstr ""
+
+msgid "Organisation ID"
+msgstr ""
+
+msgid "Organisation Information"
+msgstr ""
+
+msgid "Organisations"
+msgstr ""
+
+msgid "Organisations Dashboard"
+msgstr ""
+
+msgid "Organisation Search"
+msgstr ""
+
+msgid "Organisation successfully created."
+msgstr ""
+
+msgid "Other"
+msgstr ""
+
+msgid "Overall"
+msgstr ""
+
+msgid "Overview Config Items"
+msgstr ""
+
+msgid "Overview Config Items Deployment State"
+msgstr ""
+
+msgid "Overview Contacts"
+msgstr ""
+
+msgid "Overview FAQ"
+msgstr ""
+
+msgid "Overview of {0} to import ({1})"
+msgstr ""
+
+msgid "Overview Organisations"
+msgstr ""
+
+msgid "Overview Ticket Priorities"
+msgstr ""
+
+msgid "Overview Tickets"
+msgstr ""
+
+msgid "Overview Ticket States"
+msgstr ""
+
+msgid "Owner"
+msgstr ""
+
+msgid "Owner is the user to which the ticket is assigned for processing."
+msgstr ""
+
+msgid "Parent Category"
+msgstr ""
+
+msgid "Parent Queue"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+msgid "Pattern"
+msgstr ""
+
+msgid "Pending date is not in the future."
+msgstr ""
+
+msgid "Pending Tickets"
+msgstr ""
+
+msgid "pending until"
+msgstr ""
+
+msgid "Permission"
+msgstr ""
+
+msgid "Permissions"
+msgstr ""
+
+msgid "Permissions on dependent objects"
+msgstr ""
+
+msgid "Personal Settings"
+msgstr ""
+
+msgid "Phone"
+msgstr ""
+
+msgid "Phone inbound"
+msgstr ""
+
+msgid "Phone outbound"
+msgstr ""
+
+msgid "Please describe the reason as detailed as possible."
+msgstr ""
+
+msgid "Please insert a base string for the translation."
+msgstr ""
+
+msgid "Please select a config item class. The form will be completed then."
+msgstr ""
+
+msgid "Please select a contact"
+msgstr ""
+
+msgid ""
+"Please select the language in which you want to use KIX. If not set, the "
+"system will try to choose the language automatically"
+msgstr ""
+
+msgid "Postal Address"
+msgstr ""
+
+msgid "Preferences"
+msgstr ""
+
+msgid "Preview ({0})"
+msgstr ""
+
+msgid "Previous Image"
+msgstr ""
+
+msgid "Print"
+msgstr ""
+
+msgid "Prio"
+msgstr ""
+
+msgid "Priorities"
+msgstr ""
+
+msgid ""
+"Priorities are used to mark a Ticket‘s urgency with different colours, so "
+"you can  categorize Tickets."
+msgstr ""
+
+msgid "Priorities successfully removed."
+msgstr ""
+
+msgid "Priority"
+msgstr ""
+
+msgid "Priority Data"
+msgstr ""
+
+msgid "Priority successfully created."
+msgstr ""
+
+msgid "public"
+msgstr ""
+
+msgid "Queue"
+msgstr ""
+
+msgid "Queue Information"
+msgstr ""
+
+msgid "Queues"
+msgstr ""
+
+msgid "Queue successfully created."
+msgstr ""
+
+msgid "Quick search (Tickets)"
+msgstr ""
+
+msgid "Rate"
+msgstr ""
+
+msgid "Rating"
+msgstr ""
+
+msgid "Read file."
+msgstr ""
+
+msgid "Recipient: Bcc"
+msgstr ""
+
+msgid "Recipient: Cc"
+msgstr ""
+
+msgid "Recipient: To"
+msgstr ""
+
+msgid "Relevant Config Items"
+msgstr ""
+
+msgid "Reminder Tickets"
+msgstr ""
+
+msgid "Remove parameter"
+msgstr ""
+
+msgid "Remove Priorities"
+msgstr ""
+
+msgid "Remove Priorities ..."
+msgstr ""
+
+msgid "Remove Search Criteria"
+msgstr ""
+
+msgid "Remove States"
+msgstr ""
+
+msgid "Remove States ..."
+msgstr ""
+
+msgid "Remove Templates"
+msgstr ""
+
+msgid "Remove Templates ..."
+msgstr ""
+
+msgid "Remove translations"
+msgstr ""
+
+msgid "Remove translations ..."
+msgstr ""
+
+msgid "Remove Types"
+msgstr ""
+
+msgid "Remove Types ..."
+msgstr ""
+
+msgid "Replace empty value"
+msgstr ""
+
+msgid "Replace Values"
+msgstr ""
+
+msgid "Reply"
+msgstr ""
+
+msgid "Reply all"
+msgstr ""
+
+msgid "Required field '{0}' has no value."
+msgstr ""
+
+msgid "Reset data"
+msgstr ""
+
+msgid "Response time"
+msgstr ""
+
+msgid "Responsible"
+msgstr ""
+
+msgid ""
+"Responsible is the person in charge for this tickets processing, e.g. "
+"Service Owner, Key Account Manager. It does not need to be identical with "
+"the assigned ticket owner."
+msgstr ""
+
+msgid "Responsible Tickets"
+msgstr ""
+
+msgid "Results advanced search"
+msgstr ""
+
+msgid "Role"
+msgstr ""
+
+msgid "Role Assignment"
+msgstr ""
+
+msgid "Role Information"
+msgstr ""
+
+msgid "Roles"
+msgstr ""
+
+msgid "Roles/Permissions"
+msgstr ""
+
+msgid "Role successfully created."
+msgstr ""
+
+msgid "Row {0} of the file with {1} {2}: could not import{3}. How to continue?"
+msgstr ""
+
+msgid "Row Number"
+msgstr ""
+
+msgid "Rows with too less values"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Save Settings."
+msgstr ""
+
+msgid "Search"
+msgstr ""
+
+msgid "Search ..."
+msgstr ""
+
+msgid ""
+"Searchable FAQ attributes: FAQ#, Title, Symptom, Cause, Solution, Comment, "
+"Changed by, Created by, Keywords, Language, Validity"
+msgstr ""
+
+msgid ""
+"Searchable Ticket attributes: Ticketnumber, Subject, Article content, From, "
+"To, CC"
+msgstr ""
+
+msgid "Search for config items within the choosen class."
+msgstr ""
+
+msgid "Search for config items with the same deployment state."
+msgstr ""
+
+msgid "Search for config items with the same incident state."
+msgstr ""
+
+msgid ""
+"Search for config items with the same name or part of the same name (min. 1 "
+"character)."
+msgstr ""
+
+msgid "Search for FAQ articles within the choosen category."
+msgstr ""
+
+msgid "Search for FAQ articles within the choosen validity."
+msgstr ""
+
+msgid ""
+"Search for FAQ articles with the same number or part of the same number "
+"(min. 1 character)."
+msgstr ""
+
+msgid ""
+"Search for FAQ articles with the same title or part of the same title (min. "
+"1 character)."
+msgstr ""
+
+msgid "Search for tickets with selected priority."
+msgstr ""
+
+msgid "Search for tickets with selected queue."
+msgstr ""
+
+msgid "Search for tickets with selected SLA."
+msgstr ""
+
+msgid "Search for tickets with selected state."
+msgstr ""
+
+msgid "Search for tickets with selected type."
+msgstr ""
+
+msgid "Search for tickets with the selected service."
+msgstr ""
+
+msgid "Search Tickets ..."
+msgstr ""
+
+msgid "Select a character set."
+msgstr ""
+
+msgid "Select a deplyoment state."
+msgstr ""
+
+msgid "Select a incident state."
+msgstr ""
+
+msgid "Select a language for the user."
+msgstr ""
+
+msgid "Select a language for this FAQ article."
+msgstr ""
+
+msgid "Select all"
+msgstr ""
+
+msgid "Select an FAQ category."
+msgstr ""
+
+msgid "Select an icon for this config item class."
+msgstr ""
+
+msgid "Select an icon for this priority."
+msgstr ""
+
+msgid "Select an icon for this state."
+msgstr ""
+
+msgid "Select an icon for this type."
+msgstr ""
+
+msgid "Select a state type for this state."
+msgstr ""
+
+msgid "Select a text separator."
+msgstr ""
+
+msgid "Select a value separator."
+msgstr ""
+
+msgid "Select Config Item Class"
+msgstr ""
+
+msgid "Selected Search Criteria"
+msgstr ""
+
+msgid "selected ticket features"
+msgstr ""
+
+msgid "Selected Versions"
+msgstr ""
+
+msgid "Select file"
+msgstr ""
+
+msgid "select image file"
+msgstr ""
+
+msgid "Select which agents should be assigned to this role."
+msgstr ""
+
+msgid "; (semicolon)"
+msgstr ""
+
+msgid "Sender"
+msgstr ""
+
+msgid "Sender Address (Email)"
+msgstr ""
+
+msgid ""
+"Serach for config items with the same number or part of the same number "
+"(min. 1 character)."
+msgstr ""
+
+msgid "Service"
+msgstr ""
+
+msgid ""
+"Service defines which content of the service catalog is being requested."
+msgstr ""
+
+msgid "Set a password for the user."
+msgstr ""
+
+msgid "Set the ci class as „valid“, „invalid (temporarily)“, or „invalid“."
+msgstr ""
+
+msgid "Set the FAQ article as „valid“, „invalid (temporarily)“, or „invalid“."
+msgstr ""
+
+msgid "Set the priority as „valid“, „invalid (temporarily)“, or „invalid“."
+msgstr ""
+
+msgid "Set the role as „valid“, „invalid (temporarily)“, or „invalid“."
+msgstr ""
+
+msgid "Set the state as „valid“, „invalid (temporarily)“, or „invalid“."
+msgstr ""
+
+msgid "Set the type as „valid“, „invalid (temporarily)“, or „invalid“."
+msgstr ""
+
+msgid "Set the user as „valid“, „invalid (temporarily)“, or „invalid“."
+msgstr ""
+
+msgid "Show all"
+msgstr ""
+
+msgid "Signature"
+msgstr ""
+
+msgid "SINGLE_QUOTES"
+msgstr "' (Single Quotes)"
+
+msgid "SLA"
+msgstr ""
+
+msgid "SLA defines which target times are set for processing this ticket."
+msgstr ""
+
+msgid "SLA / Service Level Agreement"
+msgstr ""
+
+msgid "Solution"
+msgstr ""
+
+msgid "Solution time"
+msgstr ""
+
+msgid "Source"
+msgstr ""
+
+msgid "Spam"
+msgstr ""
+
+msgid "Split Option"
+msgstr ""
+
+msgid "Start Import"
+msgstr ""
+
+msgid "Start search"
+msgstr ""
+
+msgid "starts with"
+msgstr ""
+
+msgid "State"
+msgstr ""
+
+msgid "State Data"
+msgstr ""
+
+msgid "States"
+msgstr ""
+
+msgid "States successfully removed."
+msgstr ""
+
+msgid "State successfully created."
+msgstr ""
+
+msgid "State Type"
+msgstr ""
+
+msgid "State Types"
+msgstr ""
+
+msgid "Street"
+msgstr ""
+
+msgid "Subject"
+msgstr ""
+
+msgid "Submit"
+msgstr ""
+
+msgid "Success!"
+msgstr ""
+
+msgid "Successfully rated."
+msgstr ""
+
+msgid "Switch"
+msgstr ""
+
+msgid "Switch to customer portal."
+msgstr ""
+
+msgid "Symptom"
+msgstr ""
+
+msgid "System Address"
+msgstr ""
+
+msgid "System Addresses"
+msgstr ""
+
+msgid "-> (tab)"
+msgstr ""
+
+msgid "Tag"
+msgstr ""
+
+msgid "Tags"
+msgstr ""
+
+msgid "Target"
+msgstr ""
+
+msgid "Template"
+msgstr ""
+
+msgid "Templates"
+msgstr ""
+
+msgid "Templates successfully removed."
+msgstr ""
+
+msgid "Text Modules"
+msgstr ""
+
+msgid "Text separator"
+msgstr ""
+
+msgid "The following {0} entries will be deleted. Are you sure?"
+msgstr ""
+
+msgid "The search only includes current versions."
+msgstr ""
+
+msgid "This browser is not supported. You may encounter malfunctions."
+msgstr ""
+
+msgid ""
+"This is the administration panel. Please select a module from the explorer."
+msgstr ""
+
+msgid "Ticket"
+msgstr ""
+
+msgid "Ticket Attributes"
+msgstr ""
+
+msgid "Ticket Data"
+msgstr ""
+
+msgid "Ticket Description"
+msgstr ""
+
+msgid "Ticket Details"
+msgstr ""
+
+msgid "Ticket Flags"
+msgstr ""
+
+msgid "Ticket History"
+msgstr ""
+
+msgid "Ticket Information"
+msgstr ""
+
+msgid "Ticket is being watched."
+msgstr ""
+
+msgid "Ticket is no longer watched."
+msgstr ""
+
+msgid "Ticket locked."
+msgstr ""
+
+msgid "Ticket Number"
+msgstr ""
+
+msgid "Ticket: Priorities"
+msgstr ""
+
+msgid "Ticket: Queues"
+msgstr ""
+
+msgid "Tickets"
+msgstr ""
+
+msgid "Ticket Search"
+msgstr ""
+
+msgid "Ticket search error!"
+msgstr ""
+
+msgid "Ticket States"
+msgstr ""
+
+msgid "Ticket: States"
+msgstr ""
+
+msgid "Ticket status summarizes the tickets processing state."
+msgstr ""
+
+msgid "Ticket successfully created."
+msgstr ""
+
+msgid "Ticket: Templates"
+msgstr ""
+
+msgid "Ticket type is part of the classification of a ticket."
+msgstr ""
+
+msgid "Ticket: Types"
+msgstr ""
+
+msgid "Ticket unlocked."
+msgstr ""
+
+msgid "Title"
+msgstr ""
+
+msgid "To"
+msgstr ""
+
+msgid "to Article"
+msgstr ""
+
+msgid "ToDo / Processing required"
+msgstr ""
+
+msgid "to version"
+msgstr ""
+
+msgid "to Version"
+msgstr ""
+
+msgid "Translation"
+msgstr ""
+
+msgid "Translation:"
+msgstr ""
+
+msgid "TranslationLanguage"
+msgstr ""
+
+msgid "Translations"
+msgstr ""
+
+msgid "Translations successfully removed."
+msgstr ""
+
+msgid "Translation successfully created."
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Type Data"
+msgstr ""
+
+msgid "Type Information"
+msgstr ""
+
+msgid "Types"
+msgstr ""
+
+msgid "Types successfully removed."
+msgstr ""
+
+msgid "Type successfully created."
+msgstr ""
+
+msgid "unequal"
+msgstr ""
+
+msgid "Unknown properties (will be ignored):"
+msgstr ""
+
+msgid "Unlock"
+msgstr ""
+
+msgid "unlocked"
+msgstr ""
+
+msgid "Unlock Ticket ..."
+msgstr ""
+
+msgid "Unlock Timeout"
+msgstr ""
+
+msgid "Unlock Timeout (min)"
+msgstr ""
+
+msgid "Unread Articles"
+msgstr ""
+
+msgid "Unwatch"
+msgstr ""
+
+msgid "Unwatch Ticket ..."
+msgstr ""
+
+msgid "Update Account"
+msgstr ""
+
+msgid "Update Agent"
+msgstr ""
+
+msgid "Update CI Class"
+msgstr ""
+
+msgid "Update Config Item"
+msgstr ""
+
+msgid "Update Contact"
+msgstr ""
+
+msgid "Update Email Address"
+msgstr ""
+
+msgid "Update FAQ Artikel"
+msgstr ""
+
+msgid "Update FAQ Category"
+msgstr ""
+
+msgid "Update Organisation"
+msgstr ""
+
+msgid "Update Priority"
+msgstr ""
+
+msgid "Update Queue"
+msgstr ""
+
+msgid "Update Role"
+msgstr ""
+
+msgid "Update State"
+msgstr ""
+
+msgid "Update time"
+msgstr ""
+
+msgid "Update Translation"
+msgstr ""
+
+msgid "Update Type"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
+msgid "User"
+msgstr ""
+
+msgid "User Management"
+msgstr ""
+
+msgid "User Management: Agents"
+msgstr ""
+
+msgid "User Management: Roles"
+msgstr ""
+
+msgid "User Name"
+msgstr ""
+
+msgid "Validation error"
+msgstr ""
+
+msgid "Validity"
+msgstr ""
+
+msgid "Value of field '{0}' is too long (max: {1})."
+msgstr ""
+
+msgid "Version"
+msgstr ""
+
+msgid "Version Details"
+msgstr ""
+
+msgid "Visibility"
+msgstr ""
+
+msgid "Visible in customer portal"
+msgstr ""
+
+msgid "Votes"
+msgstr ""
+
+msgid "Wait until"
+msgstr ""
+
+msgid "Watch"
+msgstr ""
+
+msgid "Watched Tickets"
+msgstr ""
+
+msgid "Watch Ticket ..."
+msgstr ""
+
+msgid "We are working on this functionality."
+msgstr ""
+
+msgid "Welcome to KIX"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "You have successfully logged out."
+msgstr ""
+
+msgid ""
+"You may attach images to this config item. Possible file types are *.png, *."
+"jpg, *.gif, *.bmp."
+msgstr ""
+
+msgid "Your rating"
+msgstr ""
+
+msgid "Zip"
+msgstr ""
+
+msgid "ZIP"
+msgstr ""

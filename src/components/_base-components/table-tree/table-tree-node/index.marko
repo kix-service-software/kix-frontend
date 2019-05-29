@@ -1,27 +1,40 @@
-<li.table-tree-node class={active: component.isNodeActive() | component.hasActiveChild()} id=state.nodeId
+<li.table-tree-node
+    class={
+        active: component.isNodeActive() | component.hasActiveChild()
+    }
+    id=state.nodeId
     key=state.nodeId>
     <span.tree-icon>
         <if(component.hasChildren())>
-            <span id="tree-expand" class=(state.node.expanded ? "kix-icon-minus" : "kix-icon-plus-blank") on-click('toggleNode')/>
+            <span id="tree-expand" class=(state.node.expanded ? "kix-icon-minus" : "kix-icon-plus-blank") on-click("toggleNode")/>
         </if>
     </span>
-    <div.node-value on-mousemove('nodeHovered') on-click('nodeClicked')>
-        <for(nodeLabel in state.node.labels)>
+    <div.node-value on-mousemove("nodeHovered") on-click("nodeClicked")>
+        <for|nodeLabel| of=state.node.labels>
             <if(nodeLabel.attachment)>
                 <file-entry attachment=nodeLabel.attachment/>
             </if>
             <else>
-                <span.node-title class={expanded: state.node.expanded, "title-node": state.title}>${nodeLabel.label}</span>
+                <span.node-title class={
+                    expanded: state.node.expanded,
+                    "title-node": state.title
+                }>${nodeLabel.label}</span>
             </else>
         </for>
     </div>
     <if(state.node.expanded)>
         <ul.table-tree-list>
-            <for(node in state.node.children)>
+            <for|node| of=state.node.children>
                 <if(node.visible)>
-                    <table-tree-node node=node filterValue=state.filterValue activeNode=state.activeNode treeParent=input.treeParent
-                        treeId=state.treeId on-nodeToggled('childNodeToggled') on-nodeClicked('childNodeClicked')
-                        on-nodeHovered('childNodeHovered')/>
+                    <table-tree-node
+                        node=node
+                        filterValue=state.filterValue
+                        activeNode=state.activeNode
+                        treeParent=input.treeParent
+                        treeId=state.treeId
+                        on-nodeToggled("childNodeToggled")
+                        on-nodeClicked("childNodeClicked")
+                        on-nodeHovered("childNodeHovered")/>
                 </if>
             </for>
         </ul>

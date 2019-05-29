@@ -7,7 +7,7 @@
                 readonly: state.readonly
             }
         key=("form-list-input-container-" + state.listId)
-        title=input.placeholder>
+        title=state.placeholder>
         <if(state.selectedNodes.length === 0)>
             <input.input-style
                 type="text"
@@ -15,16 +15,20 @@
                                 invalid: state.invalid
                             }
                 readonly=state.readonly
-                disabled=state.readonly
-                placeholder=input.placeholder
+                placeholder=state.placeholder
+                disabled=(state.readonly || state.disabled)
                 on-click("toggleList", false)/>
         </if>
         <else>
             <div.selected-nodes key=("form-list-selected-nodes-" + state.listId) on-click("toggleList", false)>
-                <for(node in state.selectedNodes)>
-                    <div.selected-node title=node.label key=("form-list-selected-node-" + state.listId + "[]")>
+                <for|node| of=state.selectedNodes>
+                    <div.selected-node
+                        title=(state.translations[node.tooltip] ? state.translations[node.tooltip] : node.tooltip)
+                        key=("form-list-selected-node-" + state.listId + "[]")>
                         <icon icon=node.icon showUnknown=true/>
-                        <span.item-text>${node.label}</span>
+                        <span.item-text>
+                            <translation-string pattern=node.label/>
+                        </span>
                         <if(node.secondaryIcon)>
                             <icon icon=node.secondaryIcon showUnknown=true/>
                         </if>
@@ -37,8 +41,14 @@
         </else>
         <div.form-input-control-list>
             <div.input-action-list>
-                <for(action in state.actions)>
-                    <label-item label=action.label removeLabels=false on-labelClicked("actionClicked", action)/>
+                <for|action| of=state.actions>
+                    <label-item
+                        label=action.label
+                        toggle=action.active
+                        showToggle=action.showActive
+                        removeLabels=false
+                        translatable=true
+                        on-labelClicked("actionClicked", action)/>
                 </for>
             </div>
             <span.form-list-button.kix-icon-sort-down on-click("listToggleButtonClicked")/>
@@ -55,7 +65,7 @@
                 <if(state.asAutocomplete || state.nodes.length > 7)>
                     <input.input-style
                         type="text"
-                        placeholder=(state.asAutocomplete ? "Suchbegriff eingeben" : "Filtern in Liste")
+                        placeholder=state.autoCompletePlaceholder
                         value=(state.asAutocomplete ? state.autocompleteSearchValue : state.filterValue)
                         key=("form-list-input-" + state.listId)
                         on-keydown("keyDown")
@@ -63,7 +73,7 @@
                 </if>
                 <if(state.asAutocomplete && state.nodes.length === 0)>
                     <div.form-list-autocomplete-no-results>
-                        <span>${component.getAutocompleteNotFoundText()}</span>
+                        <span>${state.autocompleteNotFoundText}</span>
                     </div>
                 </if>
                 <else>
@@ -77,11 +87,12 @@
                     <if(state.asMultiselect)>
                         <div.button-bar key="buttonbar">
                             <span on-click("selectAll")>
-                                <input.select-all-Checkbox type="checkbox" key="selectAllCheckbox"/>Alle auswählen
+                                <input.select-all-Checkbox type="checkbox" key="selectAllCheckbox"/>
+                                <translation-string pattern="Translatable#Select all"/>
                             </span>
-                            <button.submit-button type="button" on-click("submit") title="Bestätigen">
+                            <button.submit-button type="button" on-click("submit") title=state.translations["Translatable#Submit"]>
                                 <span.kix-icon-check/>
-                                Bestätigen
+                                <translation-string pattern="Translatable#Submit"/>
                             </button>
                         </div>
                     </if>

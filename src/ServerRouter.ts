@@ -1,5 +1,6 @@
 import { Application, Router } from 'express';
-import { IRouter, ApplicationRouter, AuthenticationRouter } from './routes';
+import { ApplicationRouter, AuthenticationRouter } from './routes';
+import { NotificationRouter } from './routes/NotificationRouter';
 
 export class ServerRouter {
 
@@ -23,5 +24,9 @@ export class ServerRouter {
             ApplicationRouter.getInstance().getBaseRoute(), ApplicationRouter.getInstance().getRouter()
         );
         ApplicationRouter.getInstance().setAppTemplate(require('./components/_app'));
+
+        this.expressRouter.use(
+            NotificationRouter.getInstance().getBaseRoute(), NotificationRouter.getInstance().getRouter()
+        );
     }
 }

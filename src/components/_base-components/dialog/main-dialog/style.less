@@ -8,59 +8,74 @@
     justify-content: center;
     align-content: center;
     box-shadow: @shadow-3;
-    >.dialog-widget {
-        >.widget-content {
-            >.tab-container {
-                height: 100%;
-                >.lane-widget {
+
+    >div {
+        >.dialog-widget {
+            >.widget-content {
+                >.tab-container {
                     height: 100%;
-                    margin-bottom: 0;
-                    >.widget-header {
-                        border-bottom-right-radius: 0;
-                        border-bottom-left-radius: 0;
-                        padding-left: 0;
-                        height: @default-widget-header-height;
-                        >.header-left {
-                            padding-left: 2px;
-                            >.tab-list {
-                                margin-top: .5em;
-                                >li {
-                                    height: 1.75em;
-                                    &.active {
-                                        background-color: @secondary-5;
+
+                    >.lane-widget {
+                        height: 100%;
+                        margin-bottom: 0;
+
+                        >.widget-header {
+                            border-bottom-right-radius: 0;
+                            border-bottom-left-radius: 0;
+                            padding-left: 0;
+                            height: @default-widget-header-height;
+
+                            >.header-left {
+                                padding-left: 2px;
+
+                                >.tab-list {
+                                    margin-top: .5em;
+
+                                    >li {
+                                        height: 1.75em;
+
+                                        &.active {
+                                            background-color: @secondary-5;
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
-                    >.widget-content {
-                        .full-size();
-                        top: @default-widget-header-height;
-                        background-color: @secondary-5;
-                        border-width: 2px;
-                        margin: 0;
-                        padding: 0;
-                        overflow: hidden;
-                        >div.tab-sidebar-grid {
+
+                        >.widget-content {
                             .full-size();
-                            top: @margin-default;
-                            bottom: @margin-default;
-                            display: grid;
-                            grid-template-columns: minmax(@default-widget-width, auto) @sidebar-width @margin-default;
-                            grid-column-gap: @margin-default;
-                            overflow: auto;
-                            >.tab-content {
-                                margin: 0;
-                                height: 100%;
-                                >.lane-tab-widget {
+                            top: @default-widget-header-height;
+                            background-color: @secondary-5;
+                            border-width: 2px;
+                            margin: 0;
+                            padding: 0;
+                            overflow: hidden;
+
+                            >div.tab-sidebar-grid {
+                                .full-size();
+                                top: @margin-default;
+                                bottom: @margin-default;
+                                display: grid;
+                                grid-template-columns: minmax(@default-widget-width, auto) @sidebar-width @margin-default;
+                                grid-column-gap: @margin-default;
+                                overflow: auto;
+
+                                >.tab-content {
+                                    margin: 0;
                                     height: 100%;
-                                    >.widget-content {
-                                        background-color: @secondary-5;
+
+                                    >.lane-tab-widget {
+                                        height: 100%;
+
+                                        >.widget-content {
+                                            background-color: @secondary-5;
+                                        }
                                     }
                                 }
-                            }
-                            >.site-menu-wrapper {
-                                width: 2.25rem
+
+                                >.site-menu-wrapper {
+                                    width: 2.25rem
+                                }
                             }
                         }
                     }
@@ -68,6 +83,7 @@
             }
         }
     }
+
     >.close-button {
         font-size: 3.5em;
         position: absolute;
@@ -76,6 +92,7 @@
         color: @primary-3;
         text-shadow: -3px 0 @secondary-6, 0 3px @secondary-6, 3px 0 @secondary-6, 0 -3px @secondary-6;
         cursor: pointer;
+
         &:hover {
             color: darken(@primary-3, 10%);
         }

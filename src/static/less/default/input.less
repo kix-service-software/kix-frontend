@@ -9,25 +9,31 @@
     min-height: @default-input-height;
     width: 100%;
     color: @default-dark-font-color;
+
     input[type="text"]& {
         &:disabled {
             background-color: @secondary-4;
         }
+
         &:invalid {
             // TODO: eigenes Styling nutzen? Firefox setzt box-shadow
             box-shadow: none;
         }
     }
+
     &:focus:not(:disabled),
     &:hover:not(:disabled) {
         border-color: darken(@secondary-3, 20%);
     }
+
     &.invalid {
         border-color: @tertiary-0;
+
         &::placeholder {
             color: @tertiary-0;
         }
     }
+
     &.article-body {
         padding: 0;
         height: unset;
@@ -42,6 +48,7 @@ textarea.input-style {
 
 .form-list {
     position: relative;
+
     >.form-list-loading,
     >.form-list-autocomplete-no-results,
     >.value-list {
@@ -56,29 +63,35 @@ textarea.input-style {
         border-bottom-left-radius: @border-radius;
         border-bottom-right-radius: @border-radius;
         display: grid;
+
         >input {
             margin-bottom: @margin-small;
         }
+
         >.form-list-tree {
             max-height: 15rem;
             overflow: auto;
         }
+
         .button-bar {
             margin: 1rem @margin-small @margin-small @margin-small;
             display: grid;
             grid-template-columns: 1fr 1fr;
             align-items: center;
+
             .select-all-Checkbox {
                 margin-right: .5rem;
             }
         }
     }
+
     >.form-list-loading {
         >.loading-spinner {
             width: 1.75rem;
             height: 1.75rem;
         }
     }
+
     >div.form-list-input-container {
         min-height: 2rem;
         position: relative;
@@ -86,48 +99,59 @@ textarea.input-style {
         overflow: hidden;
         display: grid;
         grid-template-columns: auto max-content;
+
         &.readonly {
             background-color: @secondary-4;
+
             &:hover {
                 border-color: @secondary-3;
             }
         }
+
         &:hover:not(.readonly),
         &.list-shown {
             border-color: darken(@secondary-3, 20%);
+
             >input.input-style:not(:disabled),
             >input.input-style:not(:disabled)~.form-input-control-list>.form-list-button,
             >.selected-nodes~.form-input-control-list>.form-list-button {
                 border-color: darken(@secondary-3, 20%);
             }
         }
+
         &.invalid {
             >.form-input-control-list>.form-list-button {
                 color: @tertiary-0;
             }
         }
+
         >input.input-style:focus:not(:disabled)~.form-input-control-list>.form-list-button {
             border-color: darken(@secondary-3, 20%);
         }
+
         &:not(.readonly)>input.input-style:not(:disabled)~.form-input-control-list>.form-list-button:hover,
         &:not(.readonly)>.selected-nodes~.form-input-control-list>.form-list-button:hover {
             background-color: darken(@secondary-4, 10%);
             color: darken(@secondary-2, 10%);
             cursor: pointer;
         }
+
         >input.invalid~.form-input-control-list>.form-list-button {
             color: @tertiary-0;
             border-color: @tertiary-0;
         }
+
         >input {
             border: none;
         }
+
         >.selected-nodes {
             padding: .25rem 2.5rem 0 .25rem;
             display: flex;
             flex-wrap: wrap;
             margin-top: -1px;
             margin-bottom: -1px;
+
             >.selected-node {
                 .font-size-small;
                 display: grid;
@@ -141,31 +165,38 @@ textarea.input-style {
                 height: 1.5rem;
                 box-sizing: border-box;
                 margin: 0 .25rem .25rem 0;
+
                 span:first-child,
                 span:first-child {
                     height: .875rem;
                 }
+
                 .item-text {
                     .shorten-text;
                 }
+
                 .kix-icon-close {
                     font-size: .75rem;
                     color: @secondary-2;
                     cursor: pointer;
+
                     &:hover {
                         color: darken(@secondary-2, 20%);
                     }
                 }
             }
         }
+
         >.form-input-control-list {
             display: grid;
             grid-template-columns: max-content @default-input-height;
             grid-column-gap: @margin-small;
+
             >.input-action-list {
                 display: grid;
                 grid-auto-flow: column;
                 align-items: center;
+
                 .label-item {
                     padding: 0;
                     border: 1px solid @secondary-2;
@@ -174,20 +205,30 @@ textarea.input-style {
                     height: 1.5rem;
                     font-weight: bold;
                     cursor: pointer;
+
                     &:hover {
                         border-color: darken(@secondary-2, 10%);
                         color: darken(@secondary-2, 10%);
                     }
+
                     &.toggled {
                         border-color: @primary-1;
                         color: @primary-1;
+
                         &:hover {
                             border-color: darken(@primary-1, 15%);
                             color: darken(@primary-1, 15%);
                         }
                     }
+
+                    >.icon {
+                        >span {
+                            font-size: 1.25rem;
+                        }
+                    }
                 }
             }
+
             >.form-list-button {
                 font-size: 1.25rem;
                 background-color: @secondary-4;

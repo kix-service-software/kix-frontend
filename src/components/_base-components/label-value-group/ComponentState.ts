@@ -1,4 +1,4 @@
-import { LabelValueGroup } from "../../../core/model";
+import { LabelValueGroup } from '../../../core/model';
 
 export class ComponentState {
 

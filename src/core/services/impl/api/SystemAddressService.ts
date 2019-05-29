@@ -1,12 +1,13 @@
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, KIXObjectCache, Error, SystemAddress
+    KIXObjectSpecificCreateOptions, Error, SystemAddress, SystemAddressFactory
 } from '../../../model';
-
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
-import { ConfigurationService } from '../ConfigurationService';
-import { SystemAddressesResponse } from '../../../api';
+import { CreateSystemAddresses } from '../../../api/system-addresses/CreateSystemAddresses';
+import { CreateSystemAddressesResponse } from '../../../api/system-addresses/CreateSystemAddressesResponse';
+import { CreateSystemAddressesRequest } from '../../../api/system-addresses/CreateSystemAddressesRequest';
+import { LoggingService } from '../LoggingService';
 
 export class SystemAddressService extends KIXObjectService {
 
@@ -21,10 +22,10 @@ export class SystemAddressService extends KIXObjectService {
 
     protected RESOURCE_URI: string = 'systemaddresses';
 
-    public kixObjectType: KIXObjectType = KIXObjectType.SYSTEM_ADDRESS;
+    public objectType: KIXObjectType = KIXObjectType.SYSTEM_ADDRESS;
 
     private constructor() {
-        super();
+        super([new SystemAddressFactory()]);
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -32,52 +33,49 @@ export class SystemAddressService extends KIXObjectService {
         return kixObjectType === KIXObjectType.SYSTEM_ADDRESS;
     }
 
-    public async initCache(): Promise<void> {
-        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-        const token = serverConfig.BACKEND_API_TOKEN;
-
-        await this.getSystemAddresses(token);
-    }
-
     public async loadObjects<T>(
-        token: string, objectType: KIXObjectType, objectIds: Array<number | string>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<T[]> {
 
         let objects = [];
         if (objectType === KIXObjectType.SYSTEM_ADDRESS) {
-            const systemAddresses = await this.getSystemAddresses(token);
-            if (objectIds && objectIds.length) {
-                objects = systemAddresses.filter((t) => objectIds.some((oid) => oid === t.ObjectId));
-            } else {
-                objects = systemAddresses;
-            }
+            objects = await super.load<SystemAddress>(
+                token, KIXObjectType.SYSTEM_ADDRESS, this.RESOURCE_URI, loadingOptions, objectIds, 'SystemAddress'
+            );
         }
 
         return objects;
     }
 
     public async createObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
         createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<number> {
-        throw new Error("0", 'Method not implemented.');
+
+        const id = super.executeUpdateOrCreateRequest(
+            token, clientRequestId, parameter, this.RESOURCE_URI, KIXObjectType.SYSTEM_ADDRESS, 'SystemAddressID', true
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
+        });
+
+        return id;
     }
 
     public async updateObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
+        token: string, clientRequestId: string, objectType: KIXObjectType,
+        parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
-        throw new Error("0", 'Method not implemented.');
-    }
+        const uri = this.buildUri(this.RESOURCE_URI, objectId);
 
-    public async getSystemAddresses(token: string): Promise<SystemAddress[]> {
-        if (!KIXObjectCache.hasObjectCache(KIXObjectType.SYSTEM_ADDRESS)) {
-            const uri = this.buildUri(this.RESOURCE_URI);
-            const response = await this.getObjectByUri<SystemAddressesResponse>(token, uri);
-            response.SystemAddress
-                .map((sa) => new SystemAddress(sa))
-                .forEach((sa) => KIXObjectCache.addObject(KIXObjectType.SYSTEM_ADDRESS, sa));
-        }
-        return KIXObjectCache.getObjectCache(KIXObjectType.SYSTEM_ADDRESS);
+        const id = super.executeUpdateOrCreateRequest(
+            token, clientRequestId, parameter, uri, KIXObjectType.SYSTEM_ADDRESS, 'SystemAddressID'
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
+        });
+
+        return id;
     }
 }

@@ -1,9 +1,10 @@
 import { ContextService } from '../../../core/browser/context';
 import { ComponentsService, TabContainerEvent, TabContainerEventData } from '../../../core/browser/components';
-import { WidgetType, ConfiguredWidget } from '../../../core/model';
+import { WidgetType, ConfiguredWidget, ObjectIcon } from '../../../core/model';
 import { ComponentState } from './ComponentState';
 import { WidgetService, ActionFactory, IdService } from '../../../core/browser';
 import { IEventSubscriber, EventService } from '../../../core/browser/event';
+import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 
 class TabLaneComponent implements IEventSubscriber {
 
@@ -11,12 +12,17 @@ class TabLaneComponent implements IEventSubscriber {
 
     private state: ComponentState;
 
+    private initialTabId: string;
+    private tabIcons: Map<string, string | ObjectIcon>;
+    private tabTitles: Map<string, string>;
+
     public onCreate(input: any): void {
         this.state = new ComponentState(input.tabWidgets);
+        this.tabTitles = new Map();
+        this.tabIcons = new Map();
 
         this.state.tabWidgets = input.tabWidgets ? input.tabWidgets : [];
-        this.state.tabId = input.tabId;
-        this.state.title = input.title;
+        this.initialTabId = input.tabId;
         this.state.minimizable = typeof input.minimizable !== 'undefined' ? input.minimizable : true;
         this.state.contextType = input.contextType;
         this.state.showSidebar = typeof input.showSidebar !== 'undefined' ? input.showSidebar : true;
@@ -27,12 +33,18 @@ class TabLaneComponent implements IEventSubscriber {
         );
         EventService.getInstance().subscribe(TabContainerEvent.CHANGE_TITLE, this);
         EventService.getInstance().subscribe(TabContainerEvent.CHANGE_ICON, this);
+        EventService.getInstance().subscribe(TabContainerEvent.CHANGE_TAB, this);
     }
 
     public async onMount(): Promise<void> {
         if (this.state.tabWidgets.length) {
-            if (this.state.tabId) {
-                await this.tabClicked(this.state.tabWidgets.find((tw) => tw.instanceId === this.state.tabId));
+
+            this.state.translations = await TranslationService.createTranslationObject(
+                this.state.tabWidgets.map((t) => t.configuration.title)
+            );
+
+            if (this.initialTabId) {
+                await this.tabClicked(this.state.tabWidgets.find((tw) => tw.instanceId === this.initialTabId));
             }
             if (!this.state.activeTab) {
                 await this.tabClicked(this.state.tabWidgets[0]);
@@ -54,16 +66,18 @@ class TabLaneComponent implements IEventSubscriber {
     public onDestroy(): void {
         EventService.getInstance().unsubscribe(TabContainerEvent.CHANGE_TITLE, this);
         EventService.getInstance().unsubscribe(TabContainerEvent.CHANGE_ICON, this);
+        EventService.getInstance().unsubscribe(TabContainerEvent.CHANGE_TAB, this);
     }
 
     public async tabClicked(tab: ConfiguredWidget): Promise<void> {
         this.state.activeTab = tab;
+        this.state.activeTabTitle = this.state.activeTab ? this.state.activeTab.configuration.title : '';
         if (tab) {
             const context = await ContextService.getInstance().getActiveContext(this.state.contextType);
             if (context) {
                 const object = await context.getObject(context.getDescriptor().kixObjectTypes[0]);
 
-                this.state.contentActions = ActionFactory.getInstance().generateActions(
+                this.state.contentActions = await ActionFactory.getInstance().generateActions(
                     tab.configuration.actions, [object]
                 );
             }
@@ -92,21 +106,37 @@ class TabLaneComponent implements IEventSubscriber {
         return this.state.activeTab && this.state.activeTab.instanceId === tabId;
     }
 
-    public eventPublished(data: TabContainerEventData, eventId: string): void {
+    public async eventPublished(data: TabContainerEventData, eventId: string): Promise<void> {
         if (eventId === TabContainerEvent.CHANGE_TITLE) {
             const tab = this.state.tabWidgets.find((t) => t.instanceId === data.tabId);
             if (tab) {
-                tab.configuration.title = data.title;
+                const newTitle = await TranslationService.translate(data.title);
+                this.tabTitles.set(tab.instanceId, newTitle);
                 (this as any).setStateDirty('tabWidgets');
             }
         }
         if (eventId === TabContainerEvent.CHANGE_ICON) {
             const tab = this.state.tabWidgets.find((t) => t.instanceId === data.tabId);
             if (tab) {
-                tab.configuration.icon = data.icon;
+                this.tabIcons.set(tab.instanceId, data.icon);
                 (this as any).setStateDirty('tabWidgets');
             }
         }
+        if (eventId === TabContainerEvent.CHANGE_TAB) {
+            const tab = this.state.tabWidgets.find((t) => t.instanceId === data.tabId);
+            if (tab) {
+                this.tabClicked(tab);
+            }
+        }
+    }
+
+    public getTitle(tab: ConfiguredWidget): string {
+        return this.tabTitles.has(tab.instanceId) ?
+            this.tabTitles.get(tab.instanceId) : this.state.translations[tab.configuration.title];
+    }
+
+    public getIcon(tab: ConfiguredWidget): string | ObjectIcon {
+        return this.tabIcons.has(tab.instanceId) ? this.tabIcons.get(tab.instanceId) : tab.configuration.icon;
     }
 }
 

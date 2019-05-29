@@ -1,0 +1,12 @@
+<widget
+    instanceId=state.instanceId
+    title=(state.widgetConfiguration ? state.widgetConfiguration.title : "Translatable#Preferences")
+    contentActions=state.actions>
+    <@content>
+        <if(state.user)>
+            <div.user-preferences>
+                <object-property-label object=state.user property="UserLanguage" labelProvider=state.labelProvider/>
+            </div>
+        </if>
+    </@content>
+</widget>

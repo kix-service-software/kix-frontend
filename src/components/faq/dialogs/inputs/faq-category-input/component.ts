@@ -1,10 +1,8 @@
 import { ComponentState } from "./ComponentState";
-import {
-    ObjectIcon, TreeNode, FormInputComponent, KIXObjectType,
-    FilterCriteria, FilterDataType, FilterType, KIXObjectLoadingOptions
-} from "../../../../../core/model";
-import { FAQCategory, FAQCategoryProperty } from "../../../../../core/model/kix/faq";
-import { KIXObjectService, SearchOperator } from "../../../../../core/browser";
+import { TreeNode, FormInputComponent, FormFieldOptions } from "../../../../../core/model";
+import { FAQCategoryProperty } from "../../../../../core/model/kix/faq";
+import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
+import { FAQService } from "../../../../../core/browser/faq";
 
 class Component extends FormInputComponent<number[], ComponentState> {
 
@@ -12,34 +10,48 @@ class Component extends FormInputComponent<number[], ComponentState> {
         this.state = new ComponentState();
     }
 
-    public async onInput(input: any): Promise<void> {
-        await super.onInput(input);
+    public onInput(input: any): void {
+        super.onInput(input);
+        this.update();
+    }
+
+    public async update(): Promise<void> {
+        const placeholderText = this.state.field.placeholder
+            ? this.state.field.placeholder
+            : this.state.field.required ? this.state.field.label : '';
+
+        this.state.placeholder = await TranslationService.translate(placeholderText);
     }
 
     public async onMount(): Promise<void> {
         await super.onMount();
 
-        const categoryFilter = [
-            new FilterCriteria(
-                FAQCategoryProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, null
-            )
-        ];
-        const loadingOptions = new KIXObjectLoadingOptions(null, categoryFilter, null, null, null,
-            ['SubCategories', 'Articles'], ['SubCategories']
-        );
+        const validOption = this.state.field.options
+            ? this.state.field.options.find((o) => o.option === FormFieldOptions.SHOW_INVALID)
+            : null;
 
-        const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(
-            KIXObjectType.FAQ_CATEGORY_HIERARCHY, null, loadingOptions
-        );
+        const showInvalid = validOption ? validOption.value : false;
 
-        this.state.nodes = this.prepareTree(faqCategories);
+        const nodes = await FAQService.getInstance().getTreeNodes(FAQCategoryProperty.PARENT_ID, showInvalid);
+
+        this.state.nodes = nodes;
         this.setCurrentNode();
     }
 
     public setCurrentNode(): void {
         if (this.state.defaultValue && this.state.defaultValue.value) {
-            const node = this.state.nodes.find((n) => n.id === this.state.defaultValue.value);
-            this.state.currentNodes = node ? [node] : [];
+            let ids: number[] = this.state.defaultValue.value;
+            if (!Array.isArray(ids)) {
+                ids = [ids];
+            }
+            const currentNodes: TreeNode[] = [];
+            for (const id of ids) {
+                const node = this.findNode(id);
+                if (node) {
+                    currentNodes.push(node);
+                }
+            }
+            this.state.currentNodes = currentNodes;
             super.provideValue(
                 this.state.currentNodes && this.state.currentNodes.length
                     ? this.state.currentNodes[0].id
@@ -48,20 +60,22 @@ class Component extends FormInputComponent<number[], ComponentState> {
         }
     }
 
-    private prepareTree(faqCategories: FAQCategory[]): TreeNode[] {
-        let nodes = [];
-        if (faqCategories) {
-            nodes = faqCategories.map((category: FAQCategory) => {
-                const treeNode = new TreeNode(
-                    category.ID, category.Name,
-                    new ObjectIcon(FAQCategoryProperty.ID, category.ID),
-                    null,
-                    this.prepareTree(category.SubCategories)
-                );
-                return treeNode;
-            });
+    private findNode(id: number, nodes: TreeNode[] = this.state.nodes): TreeNode {
+        let returnNode: TreeNode;
+        if (Array.isArray(nodes)) {
+            returnNode = nodes.find((n) => n.id === id);
+            if (!returnNode) {
+                for (const node of nodes) {
+                    if (node.children && Array.isArray(node.children)) {
+                        returnNode = this.findNode(id, node.children);
+                        if (returnNode) {
+                            break;
+                        }
+                    }
+                }
+            }
         }
-        return nodes;
+        return returnNode;
     }
 
     public categoryChanged(nodes: TreeNode[]): void {

@@ -1,5 +1,5 @@
-import { ComponentState } from "./ComponentState";
-import { FormInputComponent } from "../../../../../core/model";
+import { ComponentState } from './ComponentState';
+import { FormInputComponent } from '../../../../../core/model';
 
 class Component extends FormInputComponent<any, ComponentState> {
 
@@ -7,8 +7,8 @@ class Component extends FormInputComponent<any, ComponentState> {
         this.state = new ComponentState();
     }
 
-    public async onInput(input: any): Promise<void> {
-        await super.onInput(input);
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 
     public async onMount(): Promise<void> {
@@ -17,8 +17,8 @@ class Component extends FormInputComponent<any, ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        if (this.state.defaultValue && this.state.defaultValue.value) {
-            this.state.checked = this.state.defaultValue.value;
+        if (this.state.defaultValue && typeof this.state.defaultValue.value !== 'undefined') {
+            this.state.checked = Boolean(this.state.defaultValue.value);
             super.provideValue(this.state.checked);
         }
     }

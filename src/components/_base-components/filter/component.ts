@@ -1,5 +1,7 @@
 import { ComponentState } from './ComponentState';
 import { KIXObjectPropertyFilter, TreeNode } from '../../../core/model';
+import { TranslationService } from '../../../core/browser/i18n/TranslationService';
+import { ComponentInput } from './ComponentInput';
 
 class Component {
 
@@ -9,7 +11,7 @@ class Component {
         this.state = new ComponentState();
     }
 
-    public onInput(input: any): void {
+    public onInput(input: ComponentInput): void {
         if (input.predefinedFilter) {
             this.state.predefinedFilter = input.predefinedFilter;
             this.state.predefinedFilterList = this.state.predefinedFilter.map(
@@ -19,18 +21,29 @@ class Component {
             this.state.predefinedFilter = [];
             this.state.predefinedFilterList = [];
         }
-        this.state.predefinedFilterPlaceholder = typeof input.predefinedFilterPlaceholder !== 'undefined' ?
-            input.predefinedFilterPlaceholder : "Alle Objekte";
 
-        this.state.placeholder = typeof input.placeholder !== 'undefined' ? input.placeholder : 'Filtern in Liste';
+        this.state.disabled = typeof input.disabled !== 'undefined' ? input.disabled : false;
 
         this.state.icon = typeof input.icon !== 'undefined' ? input.icon : 'kix-icon-filter';
         this.state.showFilterCount = typeof input.showFilterCount !== 'undefined' ? input.showFilterCount : true;
         this.setFilterCount(input.filterCount);
+
+        this.update(input);
     }
 
-    private textFilterValueChanged(event: any): void {
-        this.state.textFilterValue = event.target.value;
+    private async update(input: any): Promise<void> {
+        this.state.predefinedFilterPlaceholder = typeof input.predefinedFilterPlaceholder !== 'undefined'
+            ? await TranslationService.translate(input.predefinedFilterPlaceholder)
+            : await TranslationService.translate('Translatable#All Objects');
+
+        const defaultPlaceholder = await TranslationService.translate('Translatable#Filter in list');
+        this.state.placeholder = typeof input.placeholder !== 'undefined'
+            ? await TranslationService.translate(input.placeholder)
+            : defaultPlaceholder;
+    }
+
+    public textFilterValueChanged(event: any, externalFilterText?: string): void {
+        this.state.textFilterValue = event ? event.target.value : externalFilterText;
     }
 
     public predefinedFilterChanged(nodes: TreeNode[]): void {
@@ -47,8 +60,10 @@ class Component {
     }
 
     public filter(): void {
-        const filter = this.state.currentFilter ? this.state.predefinedFilter[this.state.currentFilter.id] : null;
-        (this as any).emit('filter', this.state.textFilterValue, filter);
+        if (!this.state.disabled) {
+            const filter = this.state.currentFilter ? this.state.predefinedFilter[this.state.currentFilter.id] : null;
+            (this as any).emit('filter', this.state.textFilterValue, filter);
+        }
     }
 
     public reset(): void {

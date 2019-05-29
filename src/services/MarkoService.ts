@@ -1,6 +1,5 @@
 import { KIXExtensions, IKIXModuleExtension } from '../core/extensions';
 import jsonfile = require('jsonfile');
-import { BaseTemplateInput } from '../core/common';
 import { ObjectData } from '../core/model';
 import { PluginService } from './PluginService';
 import { ProfilingService, LoggingService } from '../core/services';
@@ -21,10 +20,6 @@ export class MarkoService {
     private ready: boolean = false;
 
     private constructor() { }
-
-    public initCache(): Promise<void> {
-        return;
-    }
 
     public async registerMarkoDependencies(): Promise<void> {
         const modules: IKIXModuleExtension[] = await PluginService.getInstance().getExtensions<IKIXModuleExtension>(
@@ -82,7 +77,7 @@ export class MarkoService {
                 {
                     themeCSS: [],
                     specificCSS: [],
-                    data: new BaseTemplateInput('home', new ObjectData(), null)
+                    data: { objectData: new ObjectData() }
                 }, (error, result) => {
                     if (error) {
                         ProfilingService.getInstance().stop(profileTaskId, 'Login build error.');
@@ -101,7 +96,7 @@ export class MarkoService {
                 {
                     themeCSS: [],
                     specificCSS: [],
-                    data: new BaseTemplateInput('home', new ObjectData(), null)
+                    data: { objectData: new ObjectData() }
                 }, (error, result) => {
                     if (error) {
                         ProfilingService.getInstance().stop(profileTaskId, 'App build error.');

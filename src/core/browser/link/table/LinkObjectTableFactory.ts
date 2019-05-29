@@ -1,11 +1,12 @@
-import { KIXObjectType, LinkObject, LinkObjectProperty } from "../../../model";
+import { KIXObjectType, LinkObjectProperty } from "../../../model";
 import {
-    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
+    TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../table";
 import { LinkObjectTableContentProvider } from "./LinkObjectTableContentProvider";
+import { TableFactory } from "../../table/TableFactory";
 
-export class LinkObjectTableFactory implements ITableFactory {
+export class LinkObjectTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.LINK_OBJECT;
 

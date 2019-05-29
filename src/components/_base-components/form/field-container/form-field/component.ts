@@ -1,7 +1,8 @@
-import { ComponentsService } from "../../../../../core/browser/components";
-import { ComponentState } from "./ComponentState";
-import { FormService, IdService } from "../../../../../core/browser";
-import { FormField } from "../../../../../core/model";
+import { ComponentsService } from '../../../../../core/browser/components';
+import { ComponentState } from './ComponentState';
+import { FormService, IdService } from '../../../../../core/browser';
+import { FormField } from '../../../../../core/model';
+import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
 class Component {
 
@@ -14,11 +15,18 @@ class Component {
 
     public onInput(input: any): void {
         this.state.field = input.field;
+
         this.state.formId = input.formId;
         this.state.level = typeof input.level !== 'undefined' ? input.level : 0;
         if (this.state.level > 14) {
             this.state.level = 14;
         }
+
+        this.update();
+    }
+
+    private async update(): Promise<void> {
+        this.state.translations = await TranslationService.createTranslationObject([this.state.field.label]);
     }
 
     public async onMount(): Promise<void> {
@@ -67,14 +75,14 @@ class Component {
     }
 
     public getPaddingLeft(): string {
-        return (this.state.level * 2) + "rem";
+        return (this.state.level * 2) + 'rem';
     }
 
     public getPaddingRight(): string {
         if (this.state.level > 1) {
-            return "1.75rem";
+            return '1.75rem';
         } else {
-            return "0";
+            return '0';
         }
     }
 

@@ -13,6 +13,7 @@ export class FAQCategory extends KIXObject<FAQCategory> {
     public Comment: string;
     public ParentID: number;
     public GroupIDs: number[];
+    public Fullname: string;
     public ValidID: number;
     public CreateBy: number;
     public CreateTime: string;
@@ -31,12 +32,15 @@ export class FAQCategory extends KIXObject<FAQCategory> {
             this.Comment = faqCategory.Comment;
             this.ParentID = faqCategory.ParentID;
             this.GroupIDs = faqCategory.GroupIDs;
+            this.Fullname = faqCategory.Fullname;
             this.ValidID = faqCategory.ValidID;
             this.CreateBy = faqCategory.CreateBy;
             this.CreateTime = faqCategory.CreateTime;
             this.ChangeBy = faqCategory.ChangeBy;
             this.ChangeTime = faqCategory.ChangeTime;
-            this.SubCategories = faqCategory.SubCategories;
+            this.SubCategories = faqCategory.SubCategories
+                ? faqCategory.SubCategories.map((sc) => new FAQCategory(sc))
+                : [];
             this.Articles = faqCategory.Articles;
         }
     }

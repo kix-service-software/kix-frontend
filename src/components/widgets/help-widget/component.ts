@@ -1,5 +1,6 @@
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../../core/browser';
+import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 
 export class Component {
 
@@ -17,7 +18,7 @@ export class Component {
     public async onMount(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext(this.state.contextType);
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
-        this.state.helpText = this.state.widgetConfiguration.settings.helpText;
+        this.state.helpText = await TranslationService.translate(this.state.widgetConfiguration.settings.helpText);
     }
 
 }

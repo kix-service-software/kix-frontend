@@ -8,12 +8,12 @@ export class NotesEditAction extends AbstractAction {
         this.initAction();
     }
 
-    public initAction(): void {
-        this.text = "Bearbeiten";
+    public async initAction(): Promise<void> {
+        this.text = 'Edit';
         this.icon = "kix-icon-edit";
     }
 
-    public run(): void {
+    public async run(event: any): Promise<void> {
         this.component.setEditorActive();
     }
 }

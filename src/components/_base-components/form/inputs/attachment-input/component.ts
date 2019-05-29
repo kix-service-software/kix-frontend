@@ -1,10 +1,11 @@
-import { ComponentState } from "./ComponentState";
+import { ComponentState } from './ComponentState';
 import {
     ObjectIcon, AttachmentError, OverlayType, ComponentContent, FormInputComponent, Attachment
-} from "../../../../../core/model";
-import { AttachmentUtil } from "../../../../../core/browser";
-import { OverlayService } from "../../../../../core/browser/OverlayService";
-import { Label } from "../../../../../core/browser/components";
+} from '../../../../../core/model';
+import { AttachmentUtil } from '../../../../../core/browser';
+import { OverlayService } from '../../../../../core/browser/OverlayService';
+import { Label } from '../../../../../core/browser/components';
+import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
 class Component extends FormInputComponent<any, ComponentState> {
 
@@ -17,12 +18,17 @@ class Component extends FormInputComponent<any, ComponentState> {
         this.state = new ComponentState();
     }
 
-    public async onInput(input: any): Promise<void> {
-        await super.onInput(input);
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 
     public async onMount(): Promise<void> {
         await super.onMount();
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Select file"
+        ]);
+
         this.files = [];
         this.attachments = [];
         this.dragCounter = 0;
@@ -35,9 +41,15 @@ class Component extends FormInputComponent<any, ComponentState> {
         document.addEventListener('dragenter', this.dragEnter.bind(this), false);
         document.addEventListener('dragleave', this.dragLeave.bind(this), false);
 
-        const option = this.state.field.options.find((o) => o.option === 'MULTI_FILES');
-        if (option) {
-            this.state.multiple = Boolean(option.value);
+        if (this.state.field.options) {
+            const optionMulti = this.state.field.options.find((o) => o.option === 'MULTI_FILES');
+            if (optionMulti) {
+                this.state.multiple = Boolean(optionMulti.value);
+            }
+            const optionMime = this.state.field.options.find((o) => o.option === 'MimeTypes');
+            if (optionMime && Array.isArray(optionMime.value) && !!optionMime.value) {
+                this.state.accept = optionMime.value.join(',');
+            }
         }
         this.setCurrentValue();
     }
@@ -45,9 +57,17 @@ class Component extends FormInputComponent<any, ComponentState> {
     public setCurrentValue(): void {
         if (this.state.defaultValue && this.state.defaultValue.value) {
             if (Array.isArray(this.state.defaultValue.value)) {
-                this.attachments = this.state.defaultValue.value;
+                if (this.state.defaultValue.value[0] instanceof File) {
+                    this.files = this.state.defaultValue.value;
+                } else {
+                    this.attachments = this.state.defaultValue.value;
+                }
             } else {
-                this.attachments = [this.state.defaultValue.value];
+                if (this.state.defaultValue.value instanceof File) {
+                    this.files = [this.state.defaultValue.value];
+                } else {
+                    this.attachments = [this.state.defaultValue.value];
+                }
             }
             this.createLabels();
         }
@@ -89,7 +109,7 @@ class Component extends FormInputComponent<any, ComponentState> {
     private async appendFiles(files: File[]): Promise<void> {
         const fileErrors: Array<[File, AttachmentError]> = [];
 
-        const option = this.state.field.options.find((o) => o.option === 'MimeTypes');
+        const option = this.state.field.options ? this.state.field.options.find((o) => o.option === 'MimeTypes') : null;
         const mimeTypes = option ? option.value as string[] : null;
 
         if (!this.state.multiple) {
@@ -116,9 +136,11 @@ class Component extends FormInputComponent<any, ComponentState> {
 
         if (fileErrors.length) {
             const errorMessages = await AttachmentUtil.buildErrorMessages(fileErrors);
+            const title = await TranslationService.translate('Translatable#Error while adding the attachement:');
+
             const content = new ComponentContent('list-with-title',
                 {
-                    title: 'Fehler beim Hinzufügen von Anlagen:',
+                    title,
                     list: errorMessages
                 }
             );
@@ -127,7 +149,7 @@ class Component extends FormInputComponent<any, ComponentState> {
                 OverlayType.WARNING,
                 null,
                 content,
-                'Fehler!',
+                'Translatable#Error!',
                 true
             );
         }
@@ -169,14 +191,14 @@ class Component extends FormInputComponent<any, ComponentState> {
         this.state.minimized = !this.state.minimized;
     }
 
-    private getFileIcon(mimeType: string): ObjectIcon {
+    private getFileIcon(mimeType: string = ''): ObjectIcon {
         let fileIcon = null;
         const idx = mimeType.lastIndexOf('/');
         if (idx >= 0) {
             const extension = mimeType.substring(idx + 1, mimeType.length);
-            fileIcon = new ObjectIcon("Filetype", extension);
+            fileIcon = new ObjectIcon('Filetype', extension);
         } else if (mimeType) {
-            fileIcon = new ObjectIcon("Filetype", mimeType);
+            fileIcon = new ObjectIcon('Filetype', mimeType);
         }
         return fileIcon;
     }

@@ -1,4 +1,4 @@
-import { BulkManager } from "../../../../core/browser/bulk";
+import { BulkManager } from '../../../../core/browser/bulk';
 
 export class ComponentState {
 

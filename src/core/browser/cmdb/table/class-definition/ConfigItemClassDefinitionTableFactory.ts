@@ -1,11 +1,12 @@
 import { KIXObjectType, DataType, ConfigItemClassDefinitionProperty } from "../../../../model";
 import {
-    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
+    TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableHeaderHeight, ToggleOptions, IColumnConfiguration
 } from "../../../table";
 import { ConfigItemClassDefinitionTableContentProvider } from "./ConfigItemClassDefinitionTableContentProvider";
+import { TableFactory } from "../../../table/TableFactory";
 
-export class ConfigItemClassDefinitionTableFactory implements ITableFactory {
+export class ConfigItemClassDefinitionTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION;
 
@@ -31,11 +32,15 @@ export class ConfigItemClassDefinitionTableFactory implements ITableFactory {
                 ConfigItemClassDefinitionProperty.VERSION, true, false, true, true, 100, true, true
             ),
             new DefaultColumnConfiguration(
+                ConfigItemClassDefinitionProperty.CREATE_BY, true, false, true, true, 150, true, true
+            ),
+            new DefaultColumnConfiguration(
                 ConfigItemClassDefinitionProperty.CREATE_TIME, true, false, true, true, 150,
                 true, true, false, DataType.DATE_TIME
             ),
             new DefaultColumnConfiguration(
-                ConfigItemClassDefinitionProperty.CREATE_BY, true, false, true, true, 150, true, true
+                ConfigItemClassDefinitionProperty.CURRENT, true, false, true, true, 150,
+                true, true, false, DataType.DATE_TIME
             )
         ];
 

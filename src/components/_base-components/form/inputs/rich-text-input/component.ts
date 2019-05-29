@@ -1,6 +1,6 @@
-import { ComponentState } from "./ComponentState";
-import { FormInputComponent, KIXObjectType, FormFieldOptions } from "../../../../../core/model";
-import { IAutofillConfiguration, AutocompleteFormFieldOption } from "../../../../../core/browser/components";
+import { ComponentState } from './ComponentState';
+import { FormInputComponent, KIXObjectType, FormFieldOptions } from '../../../../../core/model';
+import { IAutofillConfiguration, AutocompleteFormFieldOption } from '../../../../../core/browser/components';
 
 class Component extends FormInputComponent<string, ComponentState> {
 
@@ -8,8 +8,8 @@ class Component extends FormInputComponent<string, ComponentState> {
         this.state = new ComponentState();
     }
 
-    public async onInput(input: any): Promise<void> {
-        await super.onInput(input);
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 
     public async onMount(): Promise<void> {

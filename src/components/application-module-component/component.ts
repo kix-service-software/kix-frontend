@@ -1,40 +1,34 @@
 import {
     AbstractMarkoComponent, ActionFactory, ServiceRegistry, ContextService,
-    LabelService, DialogService, FactoryService, TableFactoryService
+    LabelService, FactoryService, TableFactoryService, TableCSSHandlerRegistry
 } from '../../core/browser';
 import { ComponentState } from './ComponentState';
 import { SearchService } from '../../core/browser/search';
 import { CSVExportAction, BulkAction, ImportAction } from '../../core/browser/actions';
 import {
-    ContextDescriptor, KIXObjectType, ContextType, ContextMode, KIXObjectCache, LinkCacheHandler,
-    ConfiguredDialogWidget, WidgetConfiguration, TranslationCacheHandler
+    ContextDescriptor, KIXObjectType, ContextType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration
 } from '../../core/model';
 import {
     LinkService, LinkedObjectsEditAction, EditLinkedObjectsDialogContext, LinkObjectTableFactory,
-    LinkObjectLabelProvider,
-    LinkObjectDialogContext
+    LinkObjectLabelProvider, LinkObjectDialogContext
 } from '../../core/browser/link';
 import { GeneralCatalogService, GeneralCatalogBrowserFactory } from '../../core/browser/general-catalog';
 import { DynamicFieldService } from '../../core/browser/dynamic-fields';
 import {
     TextModuleService, TextModuleBrowserFactory, TextModuleLabelProvider, TextModulesTableFactory
 } from '../../core/browser/text-modules';
-import { SysConfigService } from '../../core/browser/sysconfig';
 import { SlaService, SlaLabelProvider, SlaBrowserFactory } from '../../core/browser/sla';
 import { ObjectIconService, ObjectIconBrowserFactory } from '../../core/browser/icon';
 import { PersonalSettingsDialogContext } from '../../core/browser';
 import { BulkDialogContext } from '../../core/browser/bulk';
-import { TranslationService } from '../../core/browser/i18n/TranslationService';
 import {
-    TranslationLabelProvider, TranslationBrowserFactory, TranslationLanguageLabelProvider
+    TranslationLabelProvider, TranslationLanguageLabelProvider
 } from '../../core/browser/i18n';
 import {
     TranslationCreateAction, TranslationImportAction, TranslationCSVExportAction, TranslationEditAction
 } from '../../core/browser/i18n/admin/actions';
 import { TranslationTableFactory, TranslationLanguageTableFactory } from '../../core/browser/i18n/admin/table';
-import { AgentService } from '../../core/browser/application';
 import { PersonalSettingsFormService } from '../../core/browser/settings/PersonalSettingsFormService';
-import { UserCacheHandler } from '../../core/model/kix/user/UserCacheHandler';
 import {
     NewTranslationDialogContext, TranslationDetailsContext, EditTranslationDialogContext
 } from '../../core/browser/i18n/admin/context';
@@ -42,8 +36,10 @@ import { TranslationFormService } from '../../core/browser/i18n/admin/Translatio
 import { SearchResultPrintAction } from '../../core/browser/search/actions';
 import { SearchContext } from '../../core/browser/search/context';
 import { SwitchColumnOrderAction } from '../../core/browser/table/actions';
-import { SystemAddressService } from '../../core/browser/system-address';
-import { ImportDialogContext } from '../../core/browser/import';
+import { DialogService } from '../../core/browser/components/dialog';
+import { PermissionLabelProvider } from '../../core/browser/permission';
+import { PermissionsTableFactory, PermissionTableCSSHandler } from '../../core/browser/application';
+import { ServiceService } from '../../core/browser/service/ServiceService';
 
 class Component extends AbstractMarkoComponent {
 
@@ -52,24 +48,18 @@ class Component extends AbstractMarkoComponent {
     }
 
     public async onMount(): Promise<void> {
-        ServiceRegistry.registerServiceInstance(AgentService.getInstance());
         ServiceRegistry.registerServiceInstance(SearchService.getInstance());
         ServiceRegistry.registerServiceInstance(LinkService.getInstance());
         ServiceRegistry.registerServiceInstance(GeneralCatalogService.getInstance());
         ServiceRegistry.registerServiceInstance(TextModuleService.getInstance());
-        ServiceRegistry.registerServiceInstance(SysConfigService.getInstance());
-        ServiceRegistry.registerServiceInstance(SystemAddressService.getInstance());
         ServiceRegistry.registerServiceInstance(DynamicFieldService.getInstance());
         ServiceRegistry.registerServiceInstance(SlaService.getInstance());
         ServiceRegistry.registerServiceInstance(ObjectIconService.getInstance());
-        ServiceRegistry.registerServiceInstance(TranslationService.getInstance());
+        ServiceRegistry.registerServiceInstance(ServiceService.getInstance());
+
         ServiceRegistry.registerServiceInstance(TranslationFormService.getInstance());
 
         ServiceRegistry.registerServiceInstance(PersonalSettingsFormService.getInstance());
-
-        KIXObjectCache.registerCacheHandler(new LinkCacheHandler());
-        KIXObjectCache.registerCacheHandler(new UserCacheHandler());
-        KIXObjectCache.registerCacheHandler(new TranslationCacheHandler());
 
         FactoryService.getInstance().registerFactory(
             KIXObjectType.GENERAL_CATALOG_ITEM, GeneralCatalogBrowserFactory.getInstance()
@@ -79,6 +69,7 @@ class Component extends AbstractMarkoComponent {
             KIXObjectType.OBJECT_ICON, ObjectIconBrowserFactory.getInstance()
         );
 
+        LabelService.getInstance().registerLabelProvider(new PermissionLabelProvider());
 
         FactoryService.getInstance().registerFactory(KIXObjectType.TEXT_MODULE, TextModuleBrowserFactory.getInstance());
         TableFactoryService.getInstance().registerFactory(new TextModulesTableFactory());
@@ -93,10 +84,6 @@ class Component extends AbstractMarkoComponent {
         LabelService.getInstance().registerLabelProvider(new LinkObjectLabelProvider());
         ActionFactory.getInstance().registerAction('linked-objects-edit-action', LinkedObjectsEditAction);
 
-
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.TRANSLATION, TranslationBrowserFactory.getInstance()
-        );
         TableFactoryService.getInstance().registerFactory(new TranslationTableFactory());
         TableFactoryService.getInstance().registerFactory(new TranslationLanguageTableFactory());
         LabelService.getInstance().registerLabelProvider(new TranslationLabelProvider());
@@ -105,6 +92,11 @@ class Component extends AbstractMarkoComponent {
         ActionFactory.getInstance().registerAction('i18n-admin-translation-edit', TranslationEditAction);
         ActionFactory.getInstance().registerAction('i18n-admin-translation-import', TranslationImportAction);
         ActionFactory.getInstance().registerAction('i18n-admin-translation-csv-export', TranslationCSVExportAction);
+
+        TableFactoryService.getInstance().registerFactory(new PermissionsTableFactory());
+        TableCSSHandlerRegistry.getInstance().registerCSSHandler(
+            KIXObjectType.PERMISSION, new PermissionTableCSSHandler()
+        );
 
         ActionFactory.getInstance().registerAction('csv-export-action', CSVExportAction);
         ActionFactory.getInstance().registerAction('bulk-action', BulkAction);
@@ -168,23 +160,17 @@ class Component extends AbstractMarkoComponent {
         const translationDetailsContext = new ContextDescriptor(
             TranslationDetailsContext.CONTEXT_ID, [KIXObjectType.TRANSLATION],
             ContextType.MAIN, ContextMode.DETAILS,
-            false, 'i18n-translation-details', ['translations'], TranslationDetailsContext
+            false, 'object-details-page', ['translations'], TranslationDetailsContext
         );
         ContextService.getInstance().registerContext(translationDetailsContext);
 
-        const importDialogContext = new ContextDescriptor(
-            ImportDialogContext.CONTEXT_ID, [KIXObjectType.ANY],
-            ContextType.DIALOG, ContextMode.IMPORT,
-            false, 'import-dialog', ['import'], ImportDialogContext
-        );
-        ContextService.getInstance().registerContext(importDialogContext);
     }
 
     private registerDialogs(): void {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'edit-linked-objects-dialog',
             new WidgetConfiguration(
-                'edit-linked-objects-dialog', 'Verknüpfungen bearbeiten', [], {}, false, false, null, 'kix-icon-link'
+                'edit-linked-objects-dialog', 'Translatable#Edit Links', [], {}, false, false, null, 'kix-icon-link'
             ),
             KIXObjectType.LINK,
             ContextMode.EDIT_LINKS
@@ -193,7 +179,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'personal-settings-dialog',
             new WidgetConfiguration(
-                'personal-settings-dialog', 'Persönliche Einstellungen bearbeiten',
+                'personal-settings-dialog', 'Translatable#Edit Personal Settings',
                 [], {}, false, false, null, 'kix-icon-edit'
             ),
             KIXObjectType.PERSONAL_SETTINGS,
@@ -203,7 +189,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'bulk-dialog',
             new WidgetConfiguration(
-                'bulk-dialog', 'Objekte bearbeiten', [], {}, false, false, null, 'kix-icon-edit'
+                'bulk-dialog', 'Translatable#Edit Objects', [], {}, false, false, null, 'kix-icon-edit'
             ),
             KIXObjectType.ANY,
             ContextMode.EDIT_BULK
@@ -212,7 +198,8 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'new-translation-dialog',
             new WidgetConfiguration(
-                'new-translation-dialog', 'Neue Übersetzung', [], {}, false, false, null, 'kix-icon-new-gear'
+                'new-translation-dialog', 'Translatable#New Translation', [], {},
+                false, false, null, 'kix-icon-new-gear'
             ),
             KIXObjectType.TRANSLATION,
             ContextMode.CREATE_ADMIN
@@ -221,19 +208,10 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'edit-translation-dialog',
             new WidgetConfiguration(
-                'edit-translation-dialog', 'Übersetzung bearbeiten', [], {}, false, false, null, 'kix-icon-gear'
+                'edit-translation-dialog', 'Translatable#Edit Translation', [], {}, false, false, null, 'kix-icon-edit'
             ),
             KIXObjectType.TRANSLATION,
             ContextMode.EDIT_ADMIN
-        ));
-
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'import-dialog',
-            new WidgetConfiguration(
-                'import-dialog', 'Objekte importieren', [], {}, false, false, null, 'kix-icon-import'
-            ),
-            KIXObjectType.ANY,
-            ContextMode.IMPORT
         ));
     }
 

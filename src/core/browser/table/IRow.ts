@@ -1,7 +1,7 @@
 import { IRowObject } from "./IRowObject";
 import { ICell } from "./ICell";
 import { ITable } from "./ITable";
-import { TableFilterCriteria } from "../../model";
+import { TableFilterCriteria, SortOrder, DataType } from "../../model";
 import { ValueState } from "./ValueState";
 import { TableValue } from "./TableValue";
 
@@ -21,7 +21,7 @@ export interface IRow<T = any> {
 
     isSelected(): boolean;
 
-    select(selected?: boolean): void;
+    select(selected?: boolean, selectChildren?: boolean, withoutFilter?: boolean): void;
 
     isSelectable(): boolean;
 
@@ -40,5 +40,7 @@ export interface IRow<T = any> {
     addCell(value: TableValue): void;
 
     getRowCount(): number;
+
+    sortChildren(columnId: string, sortOrder: SortOrder, dataType: DataType): void;
 
 }

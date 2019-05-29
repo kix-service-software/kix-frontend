@@ -20,6 +20,12 @@ export enum FAQCategoryProperty {
 
     CHANGE_TIME = 'ChangeTime',
 
-    SUB_CATEGORIES = 'SubCategories'
+    SUB_CATEGORIES = 'SubCategories',
+
+    FULL_NAME = 'Fullname',
+
+    ICON = 'ICON',
+
+    ARTICLES = 'Articles'
 
 }

@@ -51,10 +51,6 @@ export class ConfigurationService {
         this.preDefinedWidgetConfiguration = require(this.getConfigurationFilePath("pre-defined-widgets"));
     }
 
-    public initCache(): Promise<void> {
-        return;
-    }
-
     public getServerConfiguration(): IServerConfiguration {
         return this.serverConfiguration;
     }
@@ -168,7 +164,7 @@ export class ConfigurationService {
                         break;
                     }
                     case "object": {
-                        config[key] = Object(process.env[key].split(/\s+/));
+                        config[key] = JSON.parse(process.env[key]);
                         break;
                     }
                     default: {
@@ -273,19 +269,19 @@ export class ConfigurationService {
         if (!configuration) {
             configuration = [
                 new Bookmark(
-                    'Allgemeine Hinweise zum Arbeiten mit KIX 18', 'kix-icon-faq', 1,
+                    'Translatable#How to use KIX 18 – Some general notes', 'kix-icon-faq', 1,
                     KIXObjectType.FAQ_ARTICLE, FAQDetailsContext.CONTEXT_ID
                 ),
                 new Bookmark(
-                    'Wie suche ich in KIX 18', 'kix-icon-faq', 2,
+                    'Translatable#How to search in KIX 18?', 'kix-icon-faq', 2,
                     KIXObjectType.FAQ_ARTICLE, FAQDetailsContext.CONTEXT_ID
                 ),
                 new Bookmark(
-                    'Wie lege ich ein neues Ticket an?', 'kix-icon-faq', 3,
+                    'Translatable#How to create a new ticket?', 'kix-icon-faq', 3,
                     KIXObjectType.FAQ_ARTICLE, FAQDetailsContext.CONTEXT_ID
                 ),
                 new Bookmark(
-                    'Ausgewählte Ticket Funktionen', 'kix-icon-faq', 4,
+                    'Translatable#selected ticket features', 'kix-icon-faq', 4,
                     KIXObjectType.FAQ_ARTICLE, FAQDetailsContext.CONTEXT_ID
                 )
             ];

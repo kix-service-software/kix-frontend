@@ -9,39 +9,32 @@ export class ObjectIcon extends KIXObject<ObjectIcon> {
 
     public ID: number;
 
+    public Object: string;
+
+    public ObjectID: string | number;
+
     public ContentType: string;
 
     public Content: string;
 
-    public CreateBy: string;
-
-    public CreateTime: string;
-
-    public ChangeBy: number;
-
-    public ChangeTime: string;
-
     public constructor(
-        public Object: string,
-        public ObjectID: number | string,
-        contentType?: string,
-        content?: string,
-        id?: number,
-        createBy?: string,
-        createTime?: string,
-        changeBy?: number,
-        changeTime?: string,
+        object?: string, id?: string | number, contentType?: string, content?: any, objectIcon?: ObjectIcon
     ) {
-        super();
+        super(objectIcon);
 
-        this.ContentType = contentType;
-        this.Content = content;
-        this.ID = id;
-        this.ObjectId = this.ID;
-        this.CreateTime = createTime;
-        this.CreateBy = createBy;
-        this.ChangeTime = changeTime;
-        this.ChangeBy = changeBy;
+        if (objectIcon) {
+            this.ContentType = objectIcon.ContentType;
+            this.Content = objectIcon.Content;
+            this.ID = objectIcon.ID;
+            this.ObjectId = this.ID;
+            this.Object = objectIcon.Object;
+            this.ObjectID = objectIcon.ObjectID;
+        } else {
+            this.ObjectID = id;
+            this.Object = object;
+            this.ContentType = contentType;
+            this.Content = content;
+        }
     }
 
     public equals(object: ObjectIcon): boolean {

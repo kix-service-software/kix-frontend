@@ -16,8 +16,10 @@ class Startup {
         const certDir = __dirname + '/../cert/';
         ConfigurationService.getInstance().init(configDir, certDir);
 
-        await this.bindServices();
         this.server = Server.getInstance();
+        await this.server.initServer();
+        await this.bindServices();
+        await this.server.initHttpServer();
     }
 
     private async bindServices(): Promise<void> {

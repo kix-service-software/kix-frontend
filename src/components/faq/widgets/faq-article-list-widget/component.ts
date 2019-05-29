@@ -1,11 +1,11 @@
-import { ComponentState } from "./ComponentState";
+import { ComponentState } from './ComponentState';
 import {
     ContextService, ActionFactory, SearchOperator, WidgetService, ServiceRegistry, TableFactoryService
-} from "../../../../core/browser";
-import { KIXObjectType, KIXObjectPropertyFilter, TableFilterCriteria, KIXObject } from "../../../../core/model";
-import { FAQArticleProperty, FAQCategory } from "../../../../core/model/kix/faq";
-import { FAQContext } from "../../../../core/browser/faq";
-import { TranslationService } from "../../../../core/browser/i18n/TranslationService";
+} from '../../../../core/browser';
+import { KIXObjectType, KIXObjectPropertyFilter, TableFilterCriteria, KIXObject } from '../../../../core/model';
+import { FAQArticleProperty, FAQCategory } from '../../../../core/model/kix/faq';
+import { FAQContext } from '../../../../core/browser/faq';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component {
 
@@ -67,9 +67,9 @@ class Component {
         );
     }
 
-    private prepareActions(): void {
+    private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.actions = await ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, null
             );
         }
@@ -77,7 +77,7 @@ class Component {
     }
 
     private async prepareTable(): Promise<void> {
-        const table = TableFactoryService.getInstance().createTable(
+        const table = await TableFactoryService.getInstance().createTable(
             'faq-articles', KIXObjectType.FAQ_ARTICLE, null, null, FAQContext.CONTEXT_ID
         );
 
@@ -96,7 +96,7 @@ class Component {
     }
 
     private setTitle(count: number = 0): void {
-        let title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : "";
+        let title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : '';
         if (this.state.table) {
             title = `${title} (${count})`;
         }

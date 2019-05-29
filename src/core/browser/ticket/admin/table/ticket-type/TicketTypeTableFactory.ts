@@ -1,13 +1,14 @@
 import { TicketTypeDetailsContext } from "../../context";
 import { RoutingConfiguration } from "../../../../router";
 import {
-    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
+    TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../../../table";
 import { KIXObjectType, TicketTypeProperty, DataType, ContextMode } from "../../../../../model";
 import { TicketTypeTableContentProvider } from "./TicketTypeTableContentProvider";
+import { TableFactory } from "../../../../table/TableFactory";
 
-export class TicketTypeTableFactory implements ITableFactory {
+export class TicketTypeTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.TICKET_TYPE;
 
@@ -29,7 +30,10 @@ export class TicketTypeTableFactory implements ITableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new DefaultColumnConfiguration(TicketTypeProperty.NAME, true, false, true, true, 200, true, true),
+            new DefaultColumnConfiguration(
+                TicketTypeProperty.NAME, true, false, true, true, 200, true, true, false,
+                DataType.STRING, true, null, null, false
+            ),
             new DefaultColumnConfiguration(TicketTypeProperty.ID, false, true, false, true, 41, false),
             new DefaultColumnConfiguration(TicketTypeProperty.VALID_ID, true, false, true, true, 150, true, true, true),
             new DefaultColumnConfiguration(
@@ -54,7 +58,7 @@ export class TicketTypeTableFactory implements ITableFactory {
 
         if (defaultRouting) {
             tableConfiguration.routingConfiguration = new RoutingConfiguration(
-                null, TicketTypeDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_TYPE,
+                TicketTypeDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_TYPE,
                 ContextMode.DETAILS, TicketTypeProperty.ID
             );
         }

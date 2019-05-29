@@ -1,8 +1,8 @@
 import { IConfigurationExtension } from '../../../core/extensions';
-import { NewTicketTypeDialogContext, NewTicketTypeDialogContextConfiguration } from '../../../core/browser/ticket';
+import { NewTicketTypeDialogContext } from '../../../core/browser/ticket';
 import {
     ConfiguredWidget, FormField, KIXObjectType, Form,
-    FormContext, FormFieldValue, TicketTypeProperty
+    FormContext, FormFieldValue, TicketTypeProperty, ContextConfiguration
 } from '../../../core/model';
 import { FormGroup } from '../../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../../core/services';
@@ -13,12 +13,12 @@ export class Extension implements IConfigurationExtension {
         return NewTicketTypeDialogContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<NewTicketTypeDialogContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
 
         const sidebars = [];
         const sidebarWidgets: Array<ConfiguredWidget<any>> = [];
 
-        return new NewTicketTypeDialogContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
+        return new ContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
     }
 
     public async createFormDefinitions(overwrite: boolean): Promise<void> {
@@ -29,25 +29,26 @@ export class Extension implements IConfigurationExtension {
         if (!existing) {
             const fields: FormField[] = [];
             fields.push(new FormField(
-                "Name", TicketTypeProperty.NAME, null, true, "Geben Sie einen Namen für den Typ ein."
+                'Translatable#Name', TicketTypeProperty.NAME, null, true,
+                'Translatable#Insert a type name.'
             ));
             fields.push(new FormField(
-                "Icon", 'ICON', 'icon-input', false,
-                "Wählen Sie ein Icon für den Status aus."
+                'Translatable#Icon', 'ICON', 'icon-input', false,
+                'Translatable#Select an icon for this type.'
             ));
             fields.push(new FormField(
-                "Kommentar", TicketTypeProperty.COMMENT, 'text-area-input', false,
-                "Geben Sie einen Kommentar für den Typ ein.", null, null, null, null, null, null, null, 250
+                'Translatable#Comment', TicketTypeProperty.COMMENT, 'text-area-input', false,
+                'Translatable#Insert a comment for the type.', null, null, null, null, null, null, null, 250
             ));
             fields.push(new FormField(
-                "Gültigkeit", TicketTypeProperty.VALID_ID, 'valid-input', true,
-                "Legen Sie fest, ob der Type „gültig“, „ungültig“ oder „temporär ungültig“ ist.",
+                'Translatable#Validity', TicketTypeProperty.VALID_ID, 'valid-input', true,
+                'Translatable#Set the type as „valid“, „invalid (temporarily)“, or „invalid“.',
                 null, new FormFieldValue(1)
             ));
 
-            const group = new FormGroup('Typdaten', fields);
+            const group = new FormGroup('Translatable#Type Data', fields);
 
-            const form = new Form(formId, 'Typ hinzufügen', [group], KIXObjectType.TICKET_TYPE);
+            const form = new Form(formId, 'Translatable#Create Type', [group], KIXObjectType.TICKET_TYPE);
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
         configurationService.registerForm([FormContext.NEW], KIXObjectType.TICKET_TYPE, formId);

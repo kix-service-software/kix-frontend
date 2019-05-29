@@ -1,19 +1,18 @@
-import { ComponentState } from "./ComponentState";
-import { KIXObjectType, ContextMode, ConfigItemClassProperty } from "../../../../../core/model";
-import { RoutingConfiguration } from "../../../../../core/browser/router";
-import { ConfigItemClassDetailsContext } from "../../../../../core/browser/cmdb";
-import { AbstractNewDialog } from "../../../../../core/browser";
+import { ComponentState } from './ComponentState';
+import { KIXObjectType, ContextMode, ConfigItemClassProperty } from '../../../../../core/model';
+import { RoutingConfiguration } from '../../../../../core/browser/router';
+import { ConfigItemClassDetailsContext } from '../../../../../core/browser/cmdb';
+import { AbstractNewDialog } from '../../../../../core/browser/components/dialog';
 
 class Component extends AbstractNewDialog {
 
     public onCreate(): void {
         this.state = new ComponentState();
         super.init(
-            'CMDB Klasse wird angelegt',
-            'CMDB Klasse wurde erfolgreich angelegt.',
+            'Translatable#Create CI Class',
+            'Translatable#CI Class successfully created.',
             KIXObjectType.CONFIG_ITEM_CLASS,
             new RoutingConfiguration(
-                null,
                 ConfigItemClassDetailsContext.CONTEXT_ID,
                 KIXObjectType.CONFIG_ITEM_CLASS,
                 ContextMode.DETAILS,

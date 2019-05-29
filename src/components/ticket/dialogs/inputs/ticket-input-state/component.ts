@@ -5,6 +5,7 @@ import {
 import { PendingTimeFormValue, TicketStateOptions, TicketService } from "../../../../../core/browser/ticket";
 import { FormInputComponent } from '../../../../../core/model/components/form/FormInputComponent';
 import { KIXObjectService } from "../../../../../core/browser";
+import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
 
 class Component extends FormInputComponent<PendingTimeFormValue, ComponentState> {
 
@@ -12,8 +13,17 @@ class Component extends FormInputComponent<PendingTimeFormValue, ComponentState>
         this.state = new ComponentState();
     }
 
-    public async onInput(input: any): Promise<void> {
-        await super.onInput(input);
+    public onInput(input: any): void {
+        super.onInput(input);
+        this.update();
+    }
+
+    public async update(): Promise<void> {
+        const placeholderText = this.state.field.placeholder
+            ? this.state.field.placeholder
+            : this.state.field.required ? this.state.field.label : '';
+
+        this.state.placeholder = await TranslationService.translate(placeholderText);
     }
 
     public async onMount(): Promise<void> {

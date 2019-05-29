@@ -3,12 +3,13 @@ import { FAQArticleProperty } from "../../../model/kix/faq";
 import { RoutingConfiguration } from "../../router";
 import { FAQDetailsContext } from "../context";
 import {
-    ITableFactory, TableConfiguration, ITable, Table,
+    TableConfiguration, ITable, Table,
     DefaultColumnConfiguration, IColumnConfiguration
 } from "../../table";
 import { FAQArticleTableContentProvider } from "./FAQArticleTableContentProvider";
+import { TableFactory } from "../../table/TableFactory";
 
-export class FAQArticleTableFactory implements ITableFactory {
+export class FAQArticleTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.FAQ_ARTICLE;
 
@@ -79,6 +80,7 @@ export class FAQArticleTableFactory implements ITableFactory {
             tableConfiguration.tableColumns = tableColumns;
             tableConfiguration.enableSelection = true;
             tableConfiguration.toggle = false;
+            tableConfiguration.displayLimit = null;
             defaultRouting = true;
         } else if (!tableConfiguration.tableColumns) {
             tableConfiguration.tableColumns = tableColumns;
@@ -86,7 +88,7 @@ export class FAQArticleTableFactory implements ITableFactory {
 
         if (defaultRouting) {
             tableConfiguration.routingConfiguration = new RoutingConfiguration(
-                null, FAQDetailsContext.CONTEXT_ID, KIXObjectType.FAQ_ARTICLE,
+                FAQDetailsContext.CONTEXT_ID, KIXObjectType.FAQ_ARTICLE,
                 ContextMode.DETAILS, FAQArticleProperty.ID
             );
         }

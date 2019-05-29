@@ -1,5 +1,5 @@
 import {
-    DialogService, OverlayService, FormService, ServiceRegistry, SearchOperator, KIXObjectService, BrowserUtil
+    OverlayService, FormService, ServiceRegistry, SearchOperator, KIXObjectService, BrowserUtil
 } from '../../../../core/browser';
 import {
     ComponentContent, OverlayType, StringContent, TreeNode, ValidationResult,
@@ -9,6 +9,8 @@ import {
 import { ComponentState } from './ComponentState';
 import { CMDBService, ConfigItemDetailsContext, ConfigItemFormFactory } from '../../../../core/browser/cmdb';
 import { RoutingService, RoutingConfiguration } from '../../../../core/browser/router';
+import { DialogService } from '../../../../core/browser/components/dialog';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component {
 
@@ -19,6 +21,13 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Cancel", "Translatable#Config Item Class", "Translatable#Save"
+        ]);
+
+        this.state.placeholder = await TranslationService.translate("Translatable#Select Config Item Class");
+
         const configItemClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
             KIXObjectType.CONFIG_ITEM_CLASS, null,
             new KIXObjectLoadingOptions(null, [
@@ -73,7 +82,7 @@ class Component {
             if (validationError) {
                 this.showValidationError(result);
             } else {
-                DialogService.getInstance().setMainDialogLoading(true, 'Config Item wird angelegt');
+                DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Create Config Item');
                 const cmdbService
                     = ServiceRegistry.getServiceInstance<CMDBService>(KIXObjectType.CONFIG_ITEM);
 
@@ -81,10 +90,10 @@ class Component {
                 await cmdbService.createConfigItem(this.state.formId, ciClass.ID)
                     .then((configItemId) => {
                         DialogService.getInstance().setMainDialogLoading(false);
-                        BrowserUtil.openSuccessOverlay('Config Item wurde erfolgreich angelegt.');
+                        BrowserUtil.openSuccessOverlay('Translatable#Config Item successfully created.');
                         DialogService.getInstance().submitMainDialog();
                         const routingConfiguration = new RoutingConfiguration(
-                            null, ConfigItemDetailsContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM,
+                             ConfigItemDetailsContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM,
                             ContextMode.DETAILS, ConfigItemProperty.CONFIG_ITEM_ID, true
                         );
                         RoutingService.getInstance().routeToContext(routingConfiguration, configItemId);
@@ -100,13 +109,13 @@ class Component {
         const errorMessages = result.filter((r) => r.severity === ValidationSeverity.ERROR).map((r) => r.message);
         const content = new ComponentContent('list-with-title',
             {
-                title: 'Fehler beim Validieren des Formulars:',
+                title: 'Translatable#Error on form validation:',
                 list: errorMessages
             }
         );
 
         OverlayService.getInstance().openOverlay(
-            OverlayType.WARNING, null, content, 'Validierungsfehler', true
+            OverlayType.WARNING, null, content, 'Translatable#Validation error', true
         );
     }
 

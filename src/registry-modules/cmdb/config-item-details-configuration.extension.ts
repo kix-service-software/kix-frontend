@@ -1,14 +1,8 @@
 import { IConfigurationExtension } from "../../core/extensions";
 import {
-    ContextConfiguration, ConfiguredWidget, WidgetConfiguration,
-    WidgetSize,
-    KIXObjectType,
-    DataType
+    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize, KIXObjectType,
 } from "../../core/model";
-import {
-    TableConfiguration, TableHeaderHeight, TableRowHeight, DefaultColumnConfiguration
-} from '../../core/browser';
-import { ConfigItemDetailsContextConfiguration, ConfigItemDetailsContext } from "../../core/browser/cmdb";
+import { ConfigItemDetailsContext } from "../../core/browser/cmdb";
 
 export class Extension implements IConfigurationExtension {
 
@@ -17,16 +11,11 @@ export class Extension implements IConfigurationExtension {
     }
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-        // Content Widgets
-        const configItemDetailsWidget = new ConfiguredWidget("config-item-details", new WidgetConfiguration(
-            "config-item-details-widget", "Config Item Details", [], null,
-            false, true, WidgetSize.BOTH, null, false
-        ));
 
         const configItemInfoLaneTab =
             new ConfiguredWidget('config-item-info-lane',
                 new WidgetConfiguration(
-                    'config-item-info-widget', 'Config Item Informationen',
+                    'config-item-info-widget', 'Translatable#Config Item Information',
                     ['config-item-edit-action', 'config-item-print-action'],
                     {}, false, true, WidgetSize.LARGE, null, false
                 )
@@ -34,14 +23,14 @@ export class Extension implements IConfigurationExtension {
 
         const configItemHistoryLane =
             new ConfiguredWidget("config-item-history-widget", new WidgetConfiguration(
-                "config-item-history-widget", "Historie", ['config-item-print-action'],
+                "config-item-history-widget", "Translatable#History", ['config-item-print-action'],
                 null, true, true, WidgetSize.BOTH, null, false)
             );
 
         const configItemLinkedObjectsLane =
             new ConfiguredWidget('config-item-linked-objects-widget',
                 new WidgetConfiguration(
-                    'linked-objects-widget', 'Verknüpfte Objekte',
+                    'linked-objects-widget', 'Translatable#Linked Objects',
                     ['linked-objects-edit-action', 'config-item-print-action'],
                     {
                         linkedObjectTypes: [
@@ -57,7 +46,7 @@ export class Extension implements IConfigurationExtension {
         const configItemGraphLane =
             new ConfiguredWidget('config-item-graph-widget',
                 new WidgetConfiguration(
-                    'config-item-graph-widget', 'Verknüpfungsgraph',
+                    'config-item-graph-widget', 'Translatable#Link Graph',
                     ['config-item-print-action'],
                     null,
                     true, true, WidgetSize.LARGE, null, false
@@ -67,7 +56,7 @@ export class Extension implements IConfigurationExtension {
         const configItemImagesLane =
             new ConfiguredWidget('config-item-images-widget',
                 new WidgetConfiguration(
-                    'config-item-images-widget', 'Bilder',
+                    'config-item-images-widget', 'Translatable#Images',
                     [],
                     null,
                     true, true, WidgetSize.LARGE, null, false
@@ -82,8 +71,7 @@ export class Extension implements IConfigurationExtension {
             'config-item-images-widget', 'config-item-history-widget'
         ];
         const laneWidgets: Array<ConfiguredWidget<any>> = [
-            configItemDetailsWidget, configItemLinkedObjectsLane,
-            configItemGraphLane, configItemImagesLane, configItemHistoryLane
+            configItemLinkedObjectsLane, configItemGraphLane, configItemImagesLane, configItemHistoryLane
         ];
 
         const actions = ['config-item-create-action'];
@@ -94,7 +82,7 @@ export class Extension implements IConfigurationExtension {
 
         const configItemVersionLane = new ConfiguredWidget('config-item-version-widget',
             new WidgetConfiguration(
-                'table-widget', "Versionsdetails",
+                'table-widget', "Translatable#Version Details",
                 ['config-item-version-compare-action', 'config-item-edit-action'],
                 { objectType: KIXObjectType.CONFIG_ITEM_VERSION }, false, true, WidgetSize.BOTH, null, true
             ));
@@ -102,9 +90,14 @@ export class Extension implements IConfigurationExtension {
         const content = ['config-item-version-widget'];
         const contentWidgets = [configItemVersionLane];
 
-        return new ConfigItemDetailsContextConfiguration(
-            this.getModuleId(), [], [], [], [], lanes, laneTabs, laneWidgets, laneTabWidgets,
-            actions, configItemActions, content, contentWidgets
+        return new ContextConfiguration(
+            this.getModuleId(),
+            [], [],
+            [], [],
+            lanes, laneWidgets,
+            laneTabs, laneTabWidgets,
+            content, contentWidgets,
+            actions, configItemActions,
         );
     }
 

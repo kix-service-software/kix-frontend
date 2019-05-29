@@ -35,9 +35,7 @@ describe('Server Configuration', () => {
     });
 
     it('Should contain FRONTEND_URL as type of string.', () => {
-        expect(serverConfiguration.FRONTEND_URL).to.not.be.undefined;
         expect(serverConfiguration.FRONTEND_URL).to.be.an('string');
-        expect(serverConfiguration.FRONTEND_URL).to.not.be.empty;
     });
 
     it('Should contain BACKEND_API_URL as type of string.', () => {
@@ -62,4 +60,10 @@ describe('Server Configuration', () => {
         expect(serverConfiguration.USE_SSL).to.be.an('boolean');
         expect(serverConfiguration.USE_SSL).to.be.true;
     });
+
+    it('Should contain UPDATE_TRANSLATIONS as type of boolean.', () => {
+        expect(serverConfiguration.UPDATE_TRANSLATIONS).to.not.be.undefined;
+        expect(serverConfiguration.UPDATE_TRANSLATIONS).to.be.an('boolean');
+    });
+
 });

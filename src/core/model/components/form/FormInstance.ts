@@ -4,13 +4,11 @@ import {
 } from ".";
 import { FormContext } from "./FormContext";
 import { IFormInstance } from "./IFormInstance";
-import {
-    FormValidationService, ContextService,
-    ServiceRegistry, ServiceType
-} from "../../../browser";
+import { ContextService, ServiceRegistry, ServiceType } from "../../../browser";
 import { KIXObjectType, KIXObject } from "../../kix";
 import { IKIXObjectFormService } from "../../../browser/kix/IKIXObjectFormService";
 import { ContextType } from "../context";
+import { FormValidationService } from "../../../browser/form/validation";
 
 export class FormInstance implements IFormInstance {
 
@@ -26,6 +24,7 @@ export class FormInstance implements IFormInstance {
         await this.initFormFieldValues();
         this.initAutoCompleteConfiguration();
         this.initFormStructure();
+        await this.initFormFieldOptions();
     }
 
     private async initFormFieldValues(): Promise<void> {
@@ -34,14 +33,7 @@ export class FormInstance implements IFormInstance {
                 this.form.objectType, ServiceType.FORM
             );
             if (service) {
-                let object: KIXObject;
-                if (this.form.formContext === FormContext.EDIT) {
-                    const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-                    if (context) {
-                        object = await context.getObject();
-                    }
-                }
-                this.formFieldValues = await service.initValues(this.form, object);
+                this.formFieldValues = await service.initValues(this.form);
             } else {
                 this.form.groups.forEach((g) => this.initValues(g.formFields));
             }
@@ -68,6 +60,15 @@ export class FormInstance implements IFormInstance {
 
     private initFormStructure(): void {
         this.form.groups.forEach((g) => this.initStructure(g.formFields));
+    }
+
+    private async initFormFieldOptions(): Promise<void> {
+        const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(
+            this.form.objectType, ServiceType.FORM
+        );
+        if (service) {
+            await service.initOptions(this.form);
+        }
     }
 
     private initStructure(formFields: FormField[], parent?: FormField): void {
@@ -206,16 +207,21 @@ export class FormInstance implements IFormInstance {
     }
 
     public async getFormFieldValueByProperty<T>(property: string): Promise<FormFieldValue<T>> {
-        const iterator = this.getAllFormFieldValues().entries();
-
-        let value = iterator.next();
-        while (value.value !== null && value.value !== undefined) {
-            const formField = await this.getFormField(value.value[0]);
-            if (formField && formField.property === property) {
-                return value.value[1];
-            }
-            value = iterator.next();
+        const field = await this.getFormFieldByProperty(property);
+        if (field) {
+            return this.getFormFieldValue(field.instanceId);
         }
+        return null;
+    }
+
+    public async getFormFieldByProperty(property: string): Promise<FormField> {
+        for (const g of this.form.groups) {
+            const field = this.findFormFieldByProperty(g.formFields, property);
+            if (field) {
+                return field;
+            }
+        }
+
         return null;
     }
 
@@ -261,6 +267,22 @@ export class FormInstance implements IFormInstance {
                 const foundField = this.findFormField(f.children, formFieldInstanceId);
                 if (foundField) {
                     return foundField;
+                }
+            }
+        }
+
+        return field;
+    }
+
+    private findFormFieldByProperty(fields: FormField[], property: string): FormField {
+        let field = fields.find((f) => f.property === property);
+
+        if (!field) {
+            for (const f of fields) {
+                const foundField = this.findFormFieldByProperty(f.children, property);
+                if (foundField) {
+                    field = foundField;
+                    break;
                 }
             }
         }

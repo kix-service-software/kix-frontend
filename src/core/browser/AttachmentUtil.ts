@@ -33,9 +33,15 @@ export class AttachmentUtil {
         return maxUploadFileSize && maxUploadFileSize.length ? maxUploadFileSize[0].Data : null;
     }
 
+    // TODO: byte-sequenz mal mit prüfen
     public static checkMimeType(file: File, mimeTypes: string[]): boolean {
-        const index = mimeTypes.findIndex((mt) => mt === file.type);
-        return index !== -1;
+        return mimeTypes.some((mt) => {
+            if (mt === '') {
+                return mt === file.type;
+            } else {
+                return !!file.type.match(new RegExp(mt));
+            }
+        });
     }
 
     // tslint:disable:max-line-length

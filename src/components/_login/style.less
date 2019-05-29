@@ -3,15 +3,18 @@
     background: url("static/img/background.png") 0 0 repeat-x @secondary-5;
     height: 100%;
     background-size: contain;
+
     .login-page {
         position: absolute;
         width: 746px;
         min-height: 545px;
         left: 50%;
         margin-left: -373px;
+
         .loading-spinner {
             margin: 184px auto 33px;
         }
+
         .login-background {
             position: absolute;
             top: 0;
@@ -23,6 +26,7 @@
             border-bottom-right-radius: 25px;
             border-bottom-left-radius: 25px;
         }
+
         .login-dialog {
             position: relative;
             width: 638px;
@@ -32,18 +36,21 @@
             box-shadow: 0 0 10px 0 @secondary-1;
             box-sizing: border-box;
             background-color: @secondary-6;
+
             .dialog-header {
                 background: @primary-1;
                 color: @default-light-font-color;
                 margin-bottom: 0;
                 height: 87px;
                 border-bottom: 6px solid @primary-6;
+
                 h1 {
                     position: absolute;
                     top: 21px;
                     left: 112px;
                     margin-bottom: 0;
                 }
+
                 & #kix-logo {
                     background: @secondary-6;
                     top: 10px;
@@ -53,11 +60,13 @@
                     height: 60px;
                     border-top-right-radius: 14px;
                     border-bottom-right-radius: 14px;
+
                     & img {
                         height: 60px;
                     }
                 }
             }
+
             .dialog-message-area {
                 margin: 0 1.5em;
                 border-bottom: 3px solid @primary-3;
@@ -65,6 +74,7 @@
                 padding: 2em;
                 box-sizing: border-box;
                 color: @secondary-0;
+
                 .message {
                     position: relative;
                     border-radius: 3px;
@@ -76,6 +86,7 @@
                     border: 2px solid @primary-6;
                     box-sizing: border-box;
                     overflow: hidden;
+
                     &::before {
                         content: " ";
                         display: block;
@@ -88,28 +99,49 @@
                         cursor: pointer;
                         margin-right: 1em;
                     }
+
+                    &.message-hint {
+                        border-color: @tertiary-1;
+
+                        &::before {
+                            border-right-color: @tertiary-1;
+                            color: @tertiary-1;
+                        }
+
+                        & [class^="kix-icon-"],
+                        & [class*=" kix-icon-"] {
+                            color: @tertiary-1;
+                        }
+                    }
+
                     &.message-error {
                         border-color: @tertiary-0;
+
                         &::before {
                             border-right-color: @tertiary-0;
                             color: @tertiary-0;
                         }
+
                         & [class^="kix-icon-"],
                         & [class*=" kix-icon-"] {
                             color: @tertiary-0;
                         }
                     }
+
                     &.message-success {
                         border-color: @primary-6;
+
                         &::before {
                             border-right-color: @primary-6;
                             color: @primary-6;
                         }
+
                         & [class^="kix-icon-"],
                         & [class*=" kix-icon-"] {
                             color: @primary-6;
                         }
                     }
+
                     & [class^="kix-icon-"],
                     & [class*=" kix-icon-"] {
                         position: absolute;
@@ -120,10 +152,12 @@
                     }
                 }
             }
+
             .dialog-content {
                 padding: 2em 9em 2em 2em;
                 text-align: right;
                 color: @secondary-0;
+
                 label {
                     display: grid;
                     align-items: center;
@@ -131,11 +165,13 @@
                     grid-column-gap: 0.5rem;
                     margin-bottom: 0.5rem;
                 }
+
                 .dialog-buttons {
                     margin-top: 2em;
                 }
             }
         }
+
         >.kix-footer {
             position: absolute;
             bottom: 0;

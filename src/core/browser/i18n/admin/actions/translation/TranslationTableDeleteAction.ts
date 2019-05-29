@@ -1,18 +1,19 @@
 import {
     AbstractAction, ComponentContent, ConfirmOverlayContent,
     OverlayType, KIXObjectType, ToastContent
-} from "../../../../../model";
-import { OverlayService } from "../../../../OverlayService";
-import { EventService } from "../../../../event";
-import { KIXObjectService } from "../../../../kix";
-import { ApplicationEvent } from "../../../../application";
-import { ITable } from "../../../../table";
+} from '../../../../../model';
+import { OverlayService } from '../../../../OverlayService';
+import { EventService } from '../../../../event';
+import { KIXObjectService } from '../../../../kix';
+import { ApplicationEvent } from '../../../../application';
+import { ITable } from '../../../../table';
+import { TranslationService } from '../../../TranslationService';
 
 export class TranslationTableDeleteAction extends AbstractAction<ITable> {
 
-    public initAction(): void {
-        this.text = "Löschen";
-        this.icon = "kix-icon-trash";
+    public async initAction(): Promise<void> {
+        this.text = 'Translatable#Delete';
+        this.icon = 'kix-icon-trash';
     }
 
     public canRun(): boolean {
@@ -24,22 +25,22 @@ export class TranslationTableDeleteAction extends AbstractAction<ITable> {
         return canRun;
     }
 
-    public run(): void {
+    public async run(event: any): Promise<void> {
         if (this.canRun()) {
             const selectedRows = this.data.getSelectedRows();
+            const question = await TranslationService.translate(
+                'Translatable#The following {0} entries will be deleted. Are you sure?', [selectedRows.length]
+            );
             const content = new ComponentContent(
                 'confirm-overlay',
-                new ConfirmOverlayContent(
-                    `Die ausgewählten ${selectedRows.length} Einträge werden gelöscht. Sind Sie sicher?`,
-                    this.deleteTranslations.bind(this)
-                )
+                new ConfirmOverlayContent(question, this.deleteTranslations.bind(this))
             );
 
             OverlayService.getInstance().openOverlay(
                 OverlayType.CONFIRM,
                 null,
                 content,
-                'Übersetzungen entfernen',
+                'Translatable#Remove translations',
                 false
             );
         }
@@ -49,7 +50,7 @@ export class TranslationTableDeleteAction extends AbstractAction<ITable> {
         const selectedRows = this.data.getSelectedRows();
         if (selectedRows && !!selectedRows.length) {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Entferne Übersetzungen ...'
+                loading: true, hint: 'Translatable#Remove translations ...'
             });
             const failIds = await KIXObjectService.deleteObject(
                 KIXObjectType.TRANSLATION, selectedRows.map((sR) => sR.getRowObject().getObject().ObjectId)
@@ -60,7 +61,7 @@ export class TranslationTableDeleteAction extends AbstractAction<ITable> {
             if (!failIds || !!!failIds.length) {
                 const content = new ComponentContent(
                     'toast',
-                    new ToastContent('kix-icon-check', 'Übersetzungen wurden entfernt.')
+                    new ToastContent('kix-icon-check', 'Translatable#Translations successfully removed.')
                 );
                 OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
             }

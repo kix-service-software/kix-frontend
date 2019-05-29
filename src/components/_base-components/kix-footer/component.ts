@@ -1,6 +1,10 @@
 import { ComponentState } from './ComponentState';
-import { ContextService } from '../../../core/browser';
-import { ReleaseInfo } from '../../../core/model';
+import { ReleaseInfo, SysConfigItem, KIXObjectType, SysConfigKey } from '../../../core/model';
+import { ObjectDataService } from '../../../core/browser/ObjectDataService';
+import { KIXObjectService } from '../../../core/browser';
+import { TranslationService } from '../../../core/browser/i18n/TranslationService';
+import { ComponentInput } from './ComponentInput';
+import { AgentService } from '../../../core/browser/application/AgentService';
 
 class Component {
 
@@ -10,16 +14,21 @@ class Component {
         this.state = new ComponentState();
     }
 
-    public onInput(input: any): void {
+    public onInput(input: ComponentInput): void {
         this.state.releaseInfo = input.releaseInfo;
+        this.state.imprintLink = input.imprintLink;
+        this.state.unauthorized = typeof input.unauthorized !== 'undefined' ? input.unauthorized : false;
     }
 
     public async onMount(): Promise<void> {
-        const objectData = ContextService.getInstance().getObjectData();
-        this.state.currentUserLogin = objectData.currentUser.UserLogin;
-
         if (!this.state.releaseInfo) {
+            const objectData = ObjectDataService.getInstance().getObjectData();
             this.state.releaseInfo = objectData.releaseInfo;
+        }
+
+        if (!this.state.unauthorized) {
+            const currentUser = await AgentService.getInstance().getCurrentUser();
+            this.state.currentUserLogin = currentUser.UserLogin;
         }
 
         if (this.state.releaseInfo) {
@@ -27,10 +36,28 @@ class Component {
             this.state.kixVersion = this.state.releaseInfo.version;
             this.state.buildNumber = this.getBuildNumber(this.state.releaseInfo);
         }
+
+        if (!this.state.imprintLink) {
+            const imprintConfig = await KIXObjectService.loadObjects<SysConfigItem>(
+                KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.IMPRINT_LINK]
+            );
+
+            if (imprintConfig && imprintConfig.length) {
+                const userLanguage = await TranslationService.getUserLanguage();
+                const data = imprintConfig[0].Data;
+                if (data[userLanguage]) {
+                    this.state.imprintLink = data[userLanguage];
+                } else {
+                    const defaultLanguage = await TranslationService.getSystemDefaultLanguage();
+                    this.state.imprintLink = data[defaultLanguage];
+                }
+            }
+        }
     }
 
     private getBuildNumber(releaseInfo: ReleaseInfo): string {
-        return `(Build: ${releaseInfo.buildNumber.toString()}.${releaseInfo.backendSystemInfo.BuildNumber})`;
+        const backendBuildNumber = releaseInfo.backendSystemInfo ? releaseInfo.backendSystemInfo.BuildNumber : '';
+        return `(Build: ${releaseInfo.buildNumber.toString()}.${backendBuildNumber})`;
     }
 }
 

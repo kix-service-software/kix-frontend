@@ -14,7 +14,7 @@ export enum TicketStateProperty {
 
     CREATE_TIME = 'CreateTime',
 
-    CREATED_BY = 'CreateBy',
+    CREATE_BY = 'CreateBy',
 
     CHANGE_TIME = 'ChangeTime',
 

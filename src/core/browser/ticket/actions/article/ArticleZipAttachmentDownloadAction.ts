@@ -6,9 +6,9 @@ import { OverlayService } from '../../../OverlayService';
 
 export class ArticleZipAttachmentDownloadAction extends AbstractAction<Article> {
 
-    public initAction(): void {
-        this.text = "Download";
-        this.icon = "kix-icon-download";
+    public async initAction(): Promise<void> {
+        this.text = 'Translatable#Download';
+        this.icon = 'kix-icon-download';
     }
 
     public async run(): Promise<void> {
@@ -21,7 +21,7 @@ export class ArticleZipAttachmentDownloadAction extends AbstractAction<Article> 
         } else {
             const error = 'Kein Artikel verfügbar!';
             OverlayService.getInstance().openOverlay(
-                OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true
+                OverlayType.WARNING, null, new StringContent(error), 'Translatable#Error!', true
             );
         }
     }

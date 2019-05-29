@@ -24,6 +24,8 @@ export class ConfigItemClassDefinition extends KIXObject<ConfigItemClassDefiniti
 
     public DefinitionString: string;
 
+    public isCurrentDefinition: boolean;
+
     public constructor(configItemClassDefintion: ConfigItemClassDefinition) {
         super();
         if (configItemClassDefintion) {
@@ -36,6 +38,7 @@ export class ConfigItemClassDefinition extends KIXObject<ConfigItemClassDefiniti
             this.CreateTime = configItemClassDefintion.CreateTime;
             this.Definition = configItemClassDefintion.Definition;
             this.DefinitionString = configItemClassDefintion.DefinitionString;
+            this.isCurrentDefinition = configItemClassDefintion.isCurrentDefinition;
         }
     }
 

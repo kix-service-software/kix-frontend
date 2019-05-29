@@ -1,15 +1,16 @@
-import { SidebarMenuComponentState } from './SidebarMenuComponentState';
+import { ComponentState } from './SidebarMenuComponentState';
 import { ContextService } from '../../../core/browser/context';
 import { Context, ConfiguredWidget, ContextType } from '../../../core/model';
 import { IdService } from '../../../core/browser';
+import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 
 class SidebarMenuComponent {
 
-    private state: SidebarMenuComponentState;
+    private state: ComponentState;
     private contextListernerId: string;
 
     public onCreate(input: any): void {
-        this.state = new SidebarMenuComponentState();
+        this.state = new ComponentState();
         this.contextListernerId = IdService.generateDateBasedId('sidebar-menu-');
     }
 
@@ -19,7 +20,7 @@ class SidebarMenuComponent {
 
     public onMount(): void {
         ContextService.getInstance().registerListener({
-            contextChanged: (contextId: string, context: Context<any>, type: ContextType) => {
+            contextChanged: (contextId: string, context: Context, type: ContextType) => {
                 if (type === this.state.contextType) {
                     this.setContext(context);
                 }
@@ -29,7 +30,7 @@ class SidebarMenuComponent {
         this.setContext(ContextService.getInstance().getActiveContext(this.state.contextType));
     }
 
-    private setContext(context: Context<any>): void {
+    private setContext(context: Context): void {
         if (context) {
             context.registerListener(this.contextListernerId, {
                 sidebarToggled: () => {
@@ -45,9 +46,13 @@ class SidebarMenuComponent {
         this.setSidebarMenu(context);
     }
 
-    private setSidebarMenu(context: Context<any>): void {
+    private async setSidebarMenu(context: Context): Promise<void> {
         if (context) {
             this.state.sidebars = Array.from(context ? (context.getSidebars() || []) : []);
+
+            this.state.translations = await TranslationService.createTranslationObject(
+                this.state.sidebars.map((s) => s.configuration.title)
+            );
         }
     }
 

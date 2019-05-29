@@ -5,17 +5,28 @@ class Extension implements IAdminModuleExtension {
     public getAdminModules(): AdminModuleCategory[] {
         return [
             new AdminModuleCategory(
-                null, 'base-data', 'Stammdaten', null, [], [
+                null, 'ticket', 'Translatable#Ticket', null, [], [
                     new AdminModule(
-                        null, 'ticket-types', 'Typen', null, KIXObjectType.TICKET_TYPE, 'ticket-admin-types'
+                        null, 'ticket-types', 'Translatable#Types', null,
+                        KIXObjectType.TICKET_TYPE, 'ticket-admin-types'
                     ),
                     new AdminModule(
-                        null, 'ticket-priorities', 'Prioritäten', null,
+                        null, 'ticket-priorities', 'Translatable#Priorities', null,
                         KIXObjectType.TICKET_PRIORITY, 'ticket-admin-priorities'
                     ),
                     new AdminModule(
-                        null, 'ticket-states', 'Status', null, KIXObjectType.TICKET_STATE, 'ticket-admin-states'
-                    )
+                        null, 'ticket-states', 'Translatable#States', null,
+                        KIXObjectType.TICKET_STATE, 'ticket-admin-states'
+                    ),
+                    new AdminModule(
+                        null, 'queues', 'Translatable#Queues', null,
+                        KIXObjectType.QUEUE, 'ticket-admin-queues'
+                    ),
+                    // TODO: wieder aktivieren mit KIX2018-1865
+                    // new AdminModule(
+                    //     null, 'ticket-templates', 'Translatable#Templates', null,
+                    //     KIXObjectType.TICKET_TEMPLATE, 'ticket-admin-templates'
+                    // )
                 ])
         ];
     }

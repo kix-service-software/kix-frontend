@@ -12,3 +12,5 @@ export * from './table-tree';
 export * from './label-value-group';
 
 export { Bookmark } from './Bookmark';
+export { TableWidgetSettings } from './TableWidgetSettings';
+export { ObjectinformationWidgetSettings } from './ObjectinformationWidgetSettings';

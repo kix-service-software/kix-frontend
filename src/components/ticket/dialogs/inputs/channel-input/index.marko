@@ -1,6 +1,6 @@
 <if(state.channels)>
     <div.channel-list>
-        <for(channel in state.channels)>
+        <for|channel| of=state.channels>
             <div.channel-item
                 on-click("channelClicked", channel)
                 title=component.getDisplayText(channel)
@@ -16,7 +16,7 @@
         <if(state.noChannel)>
             <div.channel-item
                 on-click("channelClicked", null)
-                title="Kein Artikel"
+                title=state.translations["Translatable#No Article"]
                 class={
                                 active: component.isActive(null)
                             }>

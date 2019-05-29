@@ -5,7 +5,7 @@
         <search-form formId=state.formId objectType=state.objectType/>
     </if>
     <else-if(state.formInstance && state.formInstance.form && state.formId)>
-        <for(group in state.formInstance.form.groups)>
+        <for|group| of=state.formInstance.form.groups>
             <if(state.formInstance.form.groups.length > 1 || state.formInstance.form.showSingleGroup)>
                 <widget instanceId="form-group" title=group.name on-minimizedChanged('handleFormGroupMinimizeState', group.name)
                     key=group.name>

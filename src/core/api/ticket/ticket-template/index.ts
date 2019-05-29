@@ -1,0 +1,1 @@
+export { TicketTemplatesResponse } from './TicketTemplatesResponse';

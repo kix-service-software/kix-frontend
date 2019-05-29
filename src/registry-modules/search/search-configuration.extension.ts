@@ -2,7 +2,7 @@ import { IConfigurationExtension } from '../../core/extensions';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetSize, WidgetConfiguration
 } from '../../core/model';
-import { SearchContext, SearchContextConfiguration } from '../../core/browser/search/context';
+import { SearchContext } from '../../core/browser/search/context';
 
 export class ModuleFactoryExtension implements IConfigurationExtension {
 
@@ -15,7 +15,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
         // explorer
         const searchResultExplorer =
             new ConfiguredWidget("20180625-search-result-explorer", new WidgetConfiguration(
-                "search-result-explorer", "Suchergebnisse", [], {},
+                "search-result-explorer", "Search Results", [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-search', false)
             );
 
@@ -24,7 +24,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
 
         const searchResultListWidget =
             new ConfiguredWidget("201800709-search-result-list-widget", new WidgetConfiguration(
-                "search-result-list-widget", "Trefferliste", [
+                "search-result-list-widget", "Hit List", [
                     'csv-export-action', 'bulk-action', 'search-result-print-action'
                 ], {},
                 false, true, WidgetSize.LARGE, null, true)
@@ -33,15 +33,13 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
         const content: string[] = ['201800709-search-result-list-widget'];
         const contentWidgets = [searchResultListWidget];
 
-        return new SearchContextConfiguration(
+        return new ContextConfiguration(
             this.getModuleId(),
-            explorer,
-            [],
-            [],
-            explorerWidgets,
-            content,
-            contentWidgets,
-            []
+            [], [],
+            explorer, explorerWidgets,
+            [], [],
+            [], [],
+            content, contentWidgets
         );
     }
 

@@ -1,10 +1,13 @@
-import { SearchDefinition, SearchResultCategory } from "../kix";
+import { SearchDefinition, SearchResultCategory, KIXObjectService } from "../kix";
 import {
     KIXObjectType, TicketProperty, InputFieldTypes, FilterCriteria,
-    KIXObjectLoadingOptions, FilterDataType, FilterType, ArchiveFlag
+    KIXObjectLoadingOptions, FilterDataType, FilterType, ArchiveFlag, TreeNode, Organisation, ObjectIcon, Contact
 } from "../../model";
 import { SearchOperator } from "../SearchOperator";
 import { SearchProperty } from "../SearchProperty";
+import { OrganisationService } from "../organisation";
+import { LabelService } from "../LabelService";
+import { ContactService } from "../contact";
 
 export class TicketSearchDefinition extends SearchDefinition {
 
@@ -13,7 +16,7 @@ export class TicketSearchDefinition extends SearchDefinition {
     }
 
     public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(null, criteria, null, null, null, ['Links'], ['Links']);
+        return new KIXObjectLoadingOptions(null, criteria, null, null, ['Links'], ['Links']);
     }
 
     public async getProperties(): Promise<Array<[string, string]>> {
@@ -21,8 +24,8 @@ export class TicketSearchDefinition extends SearchDefinition {
             [SearchProperty.FULLTEXT, null],
             [TicketProperty.TICKET_NUMBER, null],
             [TicketProperty.TITLE, null],
-            [TicketProperty.CUSTOMER_ID, null],
-            [TicketProperty.CUSTOMER_USER_ID, null],
+            [TicketProperty.ORGANISATION_ID, null],
+            [TicketProperty.CONTACT_ID, null],
             [TicketProperty.TYPE_ID, null],
             [TicketProperty.STATE_ID, null],
             [TicketProperty.QUEUE_ID, null],
@@ -70,8 +73,6 @@ export class TicketSearchDefinition extends SearchDefinition {
         switch (property) {
             case TicketProperty.TICKET_NUMBER:
             case TicketProperty.TITLE:
-            case TicketProperty.CUSTOMER_ID:
-            case TicketProperty.CUSTOMER_USER_ID:
                 operations = stringOperators;
                 break;
             case TicketProperty.TYPE_ID:
@@ -81,6 +82,8 @@ export class TicketSearchDefinition extends SearchDefinition {
             case TicketProperty.SLA_ID:
             case TicketProperty.PRIORITY_ID:
             case TicketProperty.LOCK_ID:
+            case TicketProperty.ORGANISATION_ID:
+            case TicketProperty.CONTACT_ID:
                 operations = numberOperators;
                 break;
             case TicketProperty.AGE:
@@ -107,6 +110,8 @@ export class TicketSearchDefinition extends SearchDefinition {
             return InputFieldTypes.DROPDOWN;
         } else if (TicketSearchDefinition.isDateTime(property)) {
             return InputFieldTypes.DATE_TIME;
+        } else if (property === TicketProperty.ORGANISATION_ID || property === TicketProperty.CONTACT_ID) {
+            return InputFieldTypes.OBJECT_REFERENCE;
         }
 
         return InputFieldTypes.TEXT;
@@ -148,12 +153,12 @@ export class TicketSearchDefinition extends SearchDefinition {
     }
 
     public async getSearchResultCategories(): Promise<SearchResultCategory> {
-        const contactCategory = new SearchResultCategory('Ansprechpartner', KIXObjectType.CONTACT);
-        const customerCategory = new SearchResultCategory('Kunden', KIXObjectType.CUSTOMER);
-        const ciCategory = new SearchResultCategory('Config Items', KIXObjectType.CONFIG_ITEM);
+        const contactCategory = new SearchResultCategory('Translatable#Contacts', KIXObjectType.CONTACT);
+        const organisationCategory = new SearchResultCategory('Translatable#Organisation', KIXObjectType.ORGANISATION);
+        const ciCategory = new SearchResultCategory('Translatable#Config Items', KIXObjectType.CONFIG_ITEM);
 
         return new SearchResultCategory(
-            'Tickets', KIXObjectType.TICKET, [contactCategory, customerCategory, ciCategory]
+            'Translatable#Tickets', KIXObjectType.TICKET, [contactCategory, organisationCategory, ciCategory]
         );
     }
 
@@ -250,5 +255,37 @@ export class TicketSearchDefinition extends SearchDefinition {
         }
 
         return criteria;
+    }
+
+    public async searchValues(
+        property: string, parameter: Array<[string, any]>, searchValue: string, limit: number
+    ): Promise<TreeNode[]> {
+        if (property === TicketProperty.ORGANISATION_ID) {
+            const loadingOptions = new KIXObjectLoadingOptions(
+                null, OrganisationService.getInstance().prepareFullTextFilter(searchValue), null, limit
+            );
+            const organisations = await KIXObjectService.loadObjects<Organisation>(
+                KIXObjectType.ORGANISATION, null, loadingOptions, null, false
+            );
+            const nodes = [];
+            for (const c of organisations) {
+                const displayValue = await LabelService.getInstance().getText(c);
+                nodes.push(new TreeNode(c.ID, displayValue, new ObjectIcon(c.KIXObjectType, c.ID)));
+            }
+            return nodes;
+        } else if (property === TicketProperty.CONTACT_ID) {
+            const loadingOptions = new KIXObjectLoadingOptions(
+                null, ContactService.getInstance().prepareFullTextFilter(searchValue), null, limit
+            );
+            const contacts = await KIXObjectService.loadObjects<Contact>(
+                KIXObjectType.CONTACT, null, loadingOptions, null, false
+            );
+            const nodes = [];
+            for (const c of contacts) {
+                const displayValue = await LabelService.getInstance().getText(c);
+                nodes.push(new TreeNode(c.ID, displayValue, new ObjectIcon(c.KIXObjectType, c.ID)));
+            }
+            return nodes;
+        }
     }
 }

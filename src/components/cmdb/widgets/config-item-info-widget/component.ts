@@ -47,16 +47,16 @@ class Component {
         this.state.loading = true;
 
         this.state.configItem = configItem ? configItem : await context.getObject<ConfigItem>();
-        this.setActions();
+        await this.prepareActions();
 
         setTimeout(() => {
             this.state.loading = false;
         }, 50);
     }
 
-    private setActions(): void {
+    private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.configItem) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.actions = await ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, [this.state.configItem]
             );
         }

@@ -2,12 +2,13 @@ import {
     KIXObjectType, TicketHistoryProperty, DataType
 } from "../../../model";
 import {
-    ITableFactory, ITable, TableConfiguration, Table, DefaultColumnConfiguration,
+    ITable, TableConfiguration, Table, DefaultColumnConfiguration,
     TableHeaderHeight, IColumnConfiguration
 } from "../../table";
 import { TicketHistoryContentProvider } from "./TicketHistoryContentProvider";
+import { TableFactory } from "../../table/TableFactory";
 
-export class TicketHistoryTableFactory implements ITableFactory {
+export class TicketHistoryTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.TICKET_HISTORY;
 

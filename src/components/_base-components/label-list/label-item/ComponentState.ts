@@ -1,8 +1,8 @@
 export class ComponentState {
 
     public constructor(
-        public isToggle: boolean = false,
-        public toggled: boolean = false
+        public toggled: boolean = false,
+        public showToggle: boolean = true
     ) { }
 
 }

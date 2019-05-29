@@ -12,6 +12,12 @@ export interface IServerConfiguration {
 
     FRONTEND_URL: string;
 
+    NOTIFICATION_URL: string;
+
+    NOTIFICATION_INTERVAL: number;
+
+    NOTIFICATION_CLIENT_ID: string;
+
     BACKEND_API_URL: string;
 
     LOG_LEVEL: LogLevel;
@@ -27,5 +33,15 @@ export interface IServerConfiguration {
     BACKEND_API_TOKEN: string;
 
     SOCKET_TIMEOUT: number;
+
+    UPDATE_TRANSLATIONS: boolean;
+
+    USE_IN_MEMORY_CACHE: boolean;
+
+    USE_REDIS_CACHE: boolean;
+
+    REDIS_CACHE_PORT: number;
+
+    REDIS_CACHE_HOST: string;
 
 }

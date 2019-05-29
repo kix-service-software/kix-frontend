@@ -3,7 +3,8 @@ import { IMainDialogListener } from ".";
 import { IOverlayDialogListener } from "./IOverlayDialogListener";
 import { DisplayImageDescription } from "../../components/DisplayImageDescription";
 import { IImageDialogListener } from "./IImageDialogListener";
-import { ContextService } from '../../context';
+import { ContextService } from '../../context/ContextService';
+import { TranslationService } from "../../i18n/TranslationService";
 
 export class DialogService {
 
@@ -61,55 +62,59 @@ export class DialogService {
     ): Promise<void> {
         const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
         const contextIcon = context ? context.getIcon() : null;
-        const contextTitle = context ? await context.getDisplayText() : '';
+        const contextTitle = context ? await context.getDisplayText(true) : '';
 
         let dialogTitle = title;
         if (this.mainDialogListener) {
+            const objectTitle = await TranslationService.translate('Translatable#New Object', []);
             switch (contextMode) {
                 case ContextMode.CREATE:
-                    dialogTitle = dialogTitle || 'Neues Objekt anlegen';
+                    dialogTitle = dialogTitle || objectTitle;
                     dialogIcon = dialogIcon || 'kix-icon-plus-blank';
                     break;
                 case ContextMode.CREATE_SUB:
-                    dialogTitle = contextTitle || dialogTitle || 'Neues Objekt anlegen';
+                    dialogTitle = contextTitle || dialogTitle || objectTitle;
                     dialogIcon = contextIcon || dialogIcon || 'kix-icon-unknown';
                     break;
                 case ContextMode.CREATE_ADMIN:
-                    dialogTitle = dialogTitle || 'Objekt hinzufügen';
+                    dialogTitle = dialogTitle || await TranslationService.translate('Translatable#Add Object');
                     dialogIcon = dialogIcon || 'kix-icon-plus-blank';
                     singleTab = true;
                     break;
                 case ContextMode.SEARCH:
-                    dialogTitle = dialogTitle || 'Komplexsuche';
+                    dialogTitle = dialogTitle || await TranslationService.translate('Translatable#Advanced Search', []);
                     dialogIcon = dialogIcon || 'kix-icon-search';
                     break;
                 case ContextMode.EDIT:
-                    dialogTitle = contextTitle || 'Objekt bearbeiten';
+                    dialogTitle = contextTitle || await TranslationService.translate('Translatable#Edit Object');
                     dialogIcon = dialogIcon || contextIcon;
                     singleTab = true;
                     break;
                 case ContextMode.EDIT_BULK:
-                    dialogTitle = 'Sammelaktion';
+                    dialogTitle = await TranslationService.translate('Translatable#Bulk Action');
                     dialogIcon = dialogIcon || 'kix-icon-arrow-collect';
                     singleTab = true;
                     break;
                 case ContextMode.EDIT_LINKS:
-                    dialogTitle = contextTitle || 'Verknüpfungen bearbeiten';
+                    dialogTitle = contextTitle || await TranslationService.translate('Translatable#Edit Links');
                     dialogIcon = dialogIcon || contextIcon;
                     singleTab = true;
                     break;
                 case ContextMode.EDIT_ADMIN:
-                    dialogTitle = dialogTitle || 'Stammdaten bearbeiten';
-                    dialogIcon = dialogIcon || 'kix-icon-edit';
+                    dialogTitle = dialogTitle
+                        || contextTitle
+                        || await TranslationService.translate('Translatable#Edit Core Data');
+                    dialogIcon = dialogIcon || 'kix-icon-gear';
                     singleTab = true;
                     break;
                 case ContextMode.PERSONAL_SETTINGS:
-                    dialogTitle = dialogTitle || 'Persönliche Einstellungen';
+                    const settingsTitle = await TranslationService.translate('Translatable#Personal Settings', []);
+                    dialogTitle = dialogTitle || settingsTitle;
                     dialogIcon = dialogIcon || 'kix-icon-gear';
                     singleTab = true;
                     break;
                 case ContextMode.IMPORT:
-                    dialogTitle = 'Datenimport';
+                    dialogTitle = await TranslationService.translate('Translatable#Import Data');
                     dialogIcon = dialogIcon || 'kix-icon-import';
                     singleTab = true;
                     break;
@@ -117,10 +122,14 @@ export class DialogService {
                     dialogTitle = 'Dialog';
             }
 
+            const dialogs = this.getRegisteredDialogs(contextMode, (singleTab ? kixObjectType : null));
+            const activeDialog = dialogs.find((d) => d.kixObjectType === kixObjectType);
             this.mainDialogListener.open(
                 dialogTitle,
-                this.getRegisteredDialogs(contextMode, (singleTab ? kixObjectType : null)),
-                dialogId, dialogIcon);
+                dialogs,
+                activeDialog ? activeDialog.instanceId : dialogId,
+                dialogIcon
+            );
         }
     }
 
@@ -189,7 +198,7 @@ export class DialogService {
         }
     }
 
-    // FIXME: obsolet, DialogEvnets.DIALOG_CANCELED bzw. .DIALOG_FINISHED verwenden
+    // FIXME: obsolet, DialogEvents.DIALOG_CANCELED bzw. .DIALOG_FINISHED verwenden
     public registerDialogResultListener<T>(listenerId: string, component: string, listener: (result: T) => void): void {
         if (this.resultListeners.has(listenerId)) {
             this.addListener<T>(listenerId, component, listener);
@@ -198,7 +207,7 @@ export class DialogService {
         }
     }
 
-    // FIXME: obsolet, DialogEvnets.DIALOG_CANCELED bzw. .DIALOG_FINISHED verwenden
+    // FIXME: obsolet, DialogEvents.DIALOG_CANCELED bzw. .DIALOG_FINISHED verwenden
     private addListener<T>(dialogId: string, component: string, listener: (result: T) => void): void {
         const listeners = this.resultListeners.get(dialogId);
         const index = listeners.findIndex((l) => l[0] === component);
@@ -208,7 +217,7 @@ export class DialogService {
         listeners.push([component, listener]);
     }
 
-    // FIXME: obsolet, DialogEvnets.DIALOG_CANCELED bzw. .DIALOG_FINISHED verwenden
+    // FIXME: obsolet, DialogEvents.DIALOG_CANCELED bzw. .DIALOG_FINISHED verwenden
     public publishDialogResult<T>(listenerId: string, result: T): void {
         if (this.resultListeners.has(listenerId)) {
             this.resultListeners.get(listenerId).forEach((l) => l[1](result));

@@ -1,6 +1,7 @@
-import { ContextService } from "../../../../../core/browser/context";
 import { FormInputComponent, TreeNode } from "../../../../../core/model";
 import { CompontentState } from "./CompontentState";
+import { ObjectDataService } from "../../../../../core/browser/ObjectDataService";
+import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
 
 class Component extends FormInputComponent<number, CompontentState> {
 
@@ -8,15 +9,32 @@ class Component extends FormInputComponent<number, CompontentState> {
         this.state = new CompontentState();
     }
 
-    public async onInput(input: any): Promise<void> {
-        await super.onInput(input);
+    public onInput(input: any): void {
+        super.onInput(input);
+        this.update();
+    }
+
+    public async update(): Promise<void> {
+        const placeholderText = this.state.field.placeholder
+            ? this.state.field.placeholder
+            : this.state.field.required ? this.state.field.label : '';
+
+        this.state.placeholder = await TranslationService.translate(placeholderText);
     }
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        const objectData = ContextService.getInstance().getObjectData();
+        const objectData = ObjectDataService.getInstance().getObjectData();
         if (objectData) {
-            this.state.nodes = objectData.faqVisibilities.map((l) => new TreeNode(l[0], l[1]));
+
+            const nodes = [];
+
+            for (const l of objectData.faqVisibilities) {
+                const labelText = await TranslationService.translate(l[1]);
+                nodes.push(new TreeNode(l[0], labelText));
+            }
+
+            this.state.nodes = nodes;
         }
         this.setCurrentNode();
     }

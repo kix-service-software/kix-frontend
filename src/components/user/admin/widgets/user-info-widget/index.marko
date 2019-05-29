@@ -1,0 +1,52 @@
+<widget
+    instanceId=state.instanceId
+    title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
+    contentActions=state.actions>
+    <@content>
+        <if(state.user)>
+            <div.user-information>
+                <div.information-list>
+                    <div>
+                        <object-property-label object=state.user property="UserTitle" labelProvider=state.labelProvider/>
+                    </div>
+                    <div>
+                        <object-property-label object=state.user property="UserFirstname" labelProvider=state.labelProvider/>
+                    </div>
+                    <div>
+                        <object-property-label object=state.user property="UserLastname" labelProvider=state.labelProvider/>
+                    </div>
+                    <div>
+                        <object-property-label object=state.user property="UserLogin" labelProvider=state.labelProvider/>
+                    </div>
+                    <div>
+                        <object-property-label object=state.user property="UserPhone" labelProvider=state.labelProvider/>
+                    </div>
+                    <div>
+                        <object-property-label object=state.user property="UserMobile" labelProvider=state.labelProvider/>
+                    </div>
+                    <div>
+                        <object-property-label object=state.user property="UserEmail" labelProvider=state.labelProvider/>
+                    </div>
+                    <div>
+                        <object-property-label object=state.user property="ValidID" labelProvider=state.labelProvider/>
+                    </div>
+                    <div>
+                        <object-property-label object=state.user property="UserComment" labelProvider=state.labelProvider/>
+                    </div>
+                    <div>
+                        <object-property-label object=state.user property="CreateTime" labelProvider=state.labelProvider/>
+                    </div>
+                    <div>
+                        <object-property-label object=state.user property="CreateBy" labelProvider=state.labelProvider/>
+                    </div>
+                    <div>
+                        <object-property-label object=state.user property="ChangeTime" labelProvider=state.labelProvider/>
+                    </div>
+                    <div>
+                        <object-property-label object=state.user property="ChangeBy" labelProvider=state.labelProvider/>
+                    </div>
+                </div>
+            </div>
+        </if>
+    </@content>
+</widget>

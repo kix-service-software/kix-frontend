@@ -1,6 +1,6 @@
 <form-list
     nodes=state.nodes
-    placeholder=(state.field.required ? state.field.label : "")
+    placeholder=state.placeholder
     on-focusLost("focusLost")
     on-nodesChanged("valueChanged")
     selectedNodes=state.selectedNodes

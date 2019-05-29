@@ -14,6 +14,9 @@ export class TreeNode {
         public properties?: TreeNodeProperty[],
         public expanded: boolean = false,
         public visible: boolean = false,
-        public expandOnClick: boolean = false
+        public expandOnClick: boolean = false,
+        public clickable: boolean = true,
+        public tooltip: string = label,
+        public flags: string[] = []
     ) { }
 }

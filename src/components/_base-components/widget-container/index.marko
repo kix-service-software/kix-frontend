@@ -1,5 +1,5 @@
 <div.widget-container>
-    <for(kixWidget in state.widgets)>
+    <for|kixWidget| of=state.widgets>
         <div.widget-frame class={
             large: component.isLarge(kixWidget),
             small: !component.isLarge(kixWidget)

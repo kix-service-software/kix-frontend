@@ -5,8 +5,8 @@ import { FormService } from '../../form';
 
 export class TicketEditAction extends AbstractAction<Ticket> {
 
-    public initAction(): void {
-        this.text = "Bearbeiten";
+    public async initAction(): Promise<void> {
+        this.text = 'Translatable#Edit';
         this.icon = "kix-icon-edit";
     }
 

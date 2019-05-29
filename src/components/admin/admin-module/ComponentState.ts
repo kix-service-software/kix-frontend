@@ -1,5 +1,11 @@
-export class ComponentState {
+import { AbstractComponentState } from "../../../core/browser";
 
-    public constructor(public template: any = null) { }
+export class ComponentState extends AbstractComponentState {
+
+    public constructor(
+        public template: any = null
+    ) {
+        super();
+    }
 
 }

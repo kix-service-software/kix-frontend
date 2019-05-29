@@ -1,5 +1,5 @@
 import {
-    KIXObjectType, InputFieldTypes, TreeNode, KIXObject, KIXObjectCache
+    KIXObjectType, InputFieldTypes, TreeNode, KIXObject
 } from "../../model";
 import { ObjectPropertyValue } from "../ObjectPropertyValue";
 import { PropertyOperator } from "../PropertyOperator";

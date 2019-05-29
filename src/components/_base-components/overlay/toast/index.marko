@@ -3,7 +3,9 @@
         <icon icon=input.icon/>
     </div>
     <div.toast-text>
-        <b title=(input.title || "")>${(input.title || '')}</b>
-        <p title=input.text>${input.text}</p>
+        <b title=(input.title || "")><translation-string pattern=(input.title || "")/></b>
+        <p title=input.text>
+            <translation-string pattern=input.text/>
+        </p>
     </div>
 </div>

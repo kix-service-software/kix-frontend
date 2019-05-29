@@ -4,17 +4,17 @@ import { ContextService } from '../context';
 import { BulkDialogContext, BulkService } from '../bulk';
 import { EventService, IEventSubscriber } from '../event';
 import { IdService } from '../IdService';
-import { DialogEvents, DialogEventData } from '../components';
 import { ITable } from '../table';
+import { DialogEvents, DialogEventData } from '../components/dialog';
 
 export class BulkAction extends AbstractAction<ITable> implements IEventSubscriber {
 
     public eventSubscriberId: string;
     public objectType: KIXObjectType;
 
-    public initAction(): void {
-        this.text = "Sammelaktion";
-        this.icon = "kix-icon-arrow-collect";
+    public async initAction(): Promise<void> {
+        this.text = 'Translatable#Bulk Action';
+        this.icon = 'kix-icon-arrow-collect';
         this.eventSubscriberId = IdService.generateDateBasedId('bulk-action-');
     }
 

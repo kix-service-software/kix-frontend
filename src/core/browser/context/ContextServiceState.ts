@@ -1,12 +1,12 @@
-import { ObjectData, Context, ContextConfiguration, ContextType } from "../../model";
+import { ObjectData, Context, ContextType } from "../../model";
 
 export class ContextServiceState {
 
     public previousContextId: string = null;
 
-    public contexts: Array<Context<ContextConfiguration>> = [];
+    public contexts: Context[] = [];
 
-    public activeContexts: Map<ContextType, Context<ContextConfiguration>> = new Map();
+    public activeContexts: Map<ContextType, Context> = new Map();
 
     public activeContextType: ContextType = ContextType.MAIN;
 

@@ -44,7 +44,7 @@ export interface ITable {
 
     getColumn(columnId: string): IColumn;
 
-    removeColumns(columnIds: string[]): IColumn[];
+    removeColumns(columnIds: string[]): IColumn[] | IColumnConfiguration[];
 
     addColumns(columns: IColumnConfiguration[]): void;
 
@@ -57,6 +57,8 @@ export interface ITable {
     sort(columnId: string, sortOrder: SortOrder): Promise<void>;
 
     setRowSelection(rowIds: string[]): void;
+
+    setRowSelectionByObject(objects: any[]): void;
 
     selectAll(withoutFilter?: boolean): void;
 

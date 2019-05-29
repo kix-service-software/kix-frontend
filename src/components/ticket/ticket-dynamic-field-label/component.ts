@@ -33,9 +33,9 @@ export class TicketPriorityLabelComponent {
                     this.state.displayValue = field.DisplayValue;
 
                     if (this.state.field.FieldType === "Date") {
-                        this.state.displayValue = DateTimeUtil.getLocalDateString(field.DisplayValue);
+                        this.state.displayValue = await DateTimeUtil.getLocalDateString(field.DisplayValue);
                     } else if (this.state.field.FieldType === "DateTime") {
-                        this.state.displayValue = DateTimeUtil.getLocalDateTimeString(field.DisplayValue);
+                        this.state.displayValue = await DateTimeUtil.getLocalDateTimeString(field.DisplayValue);
                     }
                 }
             }

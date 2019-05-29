@@ -1,0 +1,18 @@
+<if(state.object)>
+    <div.object-information>
+        <div.information-list class={
+            "flat-list": state.flat
+        }>
+            <for|property| of=state.properties>
+                <div>
+                    <object-property-label
+                        object=state.object
+                        property=property
+                        labelProvider=state.labelProvider
+                        routingConfiguration=component.getRoutingConfiguration(property)
+                        objectId=component.getRoutingObjectId(property)/>
+                </div>
+            </for>
+        </div>
+    </div>
+</if>

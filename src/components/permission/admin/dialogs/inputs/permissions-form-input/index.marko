@@ -1,0 +1,14 @@
+<if(state.permissionManager)>
+    <div.permission-form-container>
+        <div.permission-description-container>
+            <div.crud-description>
+                <span title=state.createTitle>${state.createTitle}</span>
+                <span title=state.readTitle>${state.readTitle}</span>
+                <span title=state.updateTitle>${state.updateTitle}</span>
+                <span title=state.deleteTitle>${state.deleteTitle}</span>
+                <span title=state.denyTitle>${state.denyTitle}</span>
+            </div>
+        </div>
+    </div>
+    <dynamic-form-field-container manager=state.permissionManager/>
+</if>

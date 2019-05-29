@@ -1,9 +1,8 @@
 import { KIXObjectFormService } from "../kix/KIXObjectFormService";
 import {
-    KIXObjectType, FormFieldValue,
-    Form, FormField, ConfigItem, VersionProperty, ConfigItemProperty,
+    KIXObjectType, FormFieldValue, FormField, ConfigItem, VersionProperty, ConfigItemProperty,
     GeneralCatalogItem, KIXObjectLoadingOptions, FilterCriteria, FilterDataType,
-    FilterType, ConfigItemClass, Contact, Customer, FormFieldOptions, InputFieldTypes
+    FilterType, ConfigItemClass, Contact, Organisation, FormFieldOptions, InputFieldTypes, FormContext
 } from "../../model";
 import { KIXObjectService } from '../kix/';
 import { LabelService } from "../LabelService";
@@ -30,9 +29,10 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
     }
 
     public async prepareFormFieldValues(
-        formFields: FormField[], configItem: ConfigItem, formFieldValues: Map<string, FormFieldValue<any>>
+        formFields: FormField[], configItem: ConfigItem, formFieldValues: Map<string, FormFieldValue<any>>,
+        formContext: FormContext
     ): Promise<void> {
-        if (configItem) {
+        if (configItem && formContext === FormContext.EDIT) {
             const fields = await this.prepareConfigItemValues(configItem, formFields, formFieldValues);
             formFields.splice(0, formFields.length);
             fields.forEach((f) => formFields.push(f));
@@ -51,7 +51,7 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
                 }
                 formFieldValues.set(f.instanceId, formFieldValue);
                 if (f.children) {
-                    await this.prepareFormFieldValues(f.children, null, formFieldValues);
+                    await this.prepareFormFieldValues(f.children, null, formFieldValues, formContext);
                 }
             }
         }
@@ -230,7 +230,7 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
                     KIXObjectType.CONTACT, [preparedData.Value], null
                 );
                 if (contacts && !!contacts.length) {
-                    value = contacts[0].ContactID;
+                    value = contacts[0].ID;
                 } else {
                     value = new Contact();
                     value.ContactID = preparedData.Value;
@@ -238,12 +238,12 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
                     value.DisplayValue = preparedData.DisplayValue;
                 }
                 break;
-            case 'Customer':
-                const customers = await KIXObjectService.loadObjects<Customer>(
-                    KIXObjectType.CUSTOMER, [preparedData.Value], null
+            case 'Organisation':
+                const organisations = await KIXObjectService.loadObjects<Organisation>(
+                    KIXObjectType.ORGANISATION, [preparedData.Value], null
                 );
-                if (customers && !!customers.length) {
-                    value = customers[0].CustomerID;
+                if (organisations && !!organisations.length) {
+                    value = organisations[0].ID;
                 } else {
                     value = preparedData.Value;
                 }

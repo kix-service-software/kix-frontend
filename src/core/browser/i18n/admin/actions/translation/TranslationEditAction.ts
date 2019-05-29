@@ -6,13 +6,14 @@ import { FormFactory } from "../../../../form/FormFactory";
 
 export class TranslationEditAction extends AbstractAction {
 
-    public initAction(): void {
-        this.text = "Bearbeiten";
+    public async initAction(): Promise<void> {
+        this.text = 'Edit';
         this.icon = "kix-icon-edit";
     }
 
     public async run(): Promise<void> {
-        const form = { ...FormService.getInstance().getForm('edit-translation-form') };
+        const configuredForm = await FormService.getInstance().getForm('edit-translation-form');
+        const form = { ...configuredForm };
         if (form) {
             FormFactory.initForm(form);
             const context = await ContextService.getInstance().getContext<TranslationDetailsContext>(
@@ -35,7 +36,7 @@ export class TranslationEditAction extends AbstractAction {
             if (translation) {
                 ContextService.getInstance().setDialogContext(
                     // TODO: Titel aus dem aktiven Admin-Modul ermitteln (Kategorie)
-                    null, KIXObjectType.TRANSLATION, ContextMode.EDIT_ADMIN, null, true, translation.Pattern
+                    null, KIXObjectType.TRANSLATION, ContextMode.EDIT_ADMIN, null, true
                 );
             }
         }

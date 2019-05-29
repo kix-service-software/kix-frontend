@@ -4,10 +4,10 @@ import {
     FormField, VersionProperty, FormFieldOption, FormContext, KIXObjectType, Form,
     KIXObjectPropertyFilter, TableFilterCriteria
 } from '../../core/model';
-import { CMDBContext, CMDBContextConfiguration, ConfigItemChartConfiguration } from '../../core/browser/cmdb';
+import { CMDBContext, ConfigItemChartConfiguration } from '../../core/browser/cmdb';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
 import { ConfigurationService, CMDBService } from '../../core/services';
-import { SearchOperator, TableConfiguration, TableRowHeight } from '../../core/browser';
+import { SearchOperator } from '../../core/browser';
 
 export class Extension implements IConfigurationExtension {
 
@@ -21,7 +21,7 @@ export class Extension implements IConfigurationExtension {
 
         const notesSidebar = new ConfiguredWidget('20180830-cmdb-notes-sidebar',
             new WidgetConfiguration(
-                'notes-widget', 'Notizen', [], {}, false, false, WidgetSize.BOTH, 'kix-icon-note', false
+                'notes-widget', 'Translatable#Notes', [], {}, false, false, WidgetSize.BOTH, 'kix-icon-note', false
             ));
 
         const sidebarWidgets = [notesSidebar];
@@ -30,7 +30,7 @@ export class Extension implements IConfigurationExtension {
 
         const ciClassExplorer = new ConfiguredWidget('20180830-ci-class-explorer',
             new WidgetConfiguration(
-                'config-item-class-explorer', 'CMDB Explorer', [], {}, false, false
+                'config-item-class-explorer', 'Translatable#CMDB Explorer', [], {}, false, false
             ));
         const explorerWidgets = [ciClassExplorer];
 
@@ -50,7 +50,7 @@ export class Extension implements IConfigurationExtension {
             }
         });
         const chart1 = new ConfiguredWidget('20180903-cmdb-chart-1', new WidgetConfiguration(
-            'config-item-chart-widget', 'Anzahl Config Items', [], chartConfig1,
+            'config-item-chart-widget', 'Translatable#Number of Config Items', [], chartConfig1,
             false, true, WidgetSize.SMALL, null, true)
         );
 
@@ -90,7 +90,7 @@ export class Extension implements IConfigurationExtension {
             }
         });
         const chart2 = new ConfiguredWidget('20180903-cmdb-chart-2', new WidgetConfiguration(
-            'config-item-chart-widget', 'Übersicht Config Items Verwendungsstatus', [], chartConfig2,
+            'config-item-chart-widget', 'Translatable#Overview Config Items Deployment State', [], chartConfig2,
             false, true, WidgetSize.SMALL, null, true)
         );
 
@@ -116,8 +116,8 @@ export class Extension implements IConfigurationExtension {
             }
         });
         const chart3 = new ConfiguredWidget('20180903-cmdb-chart-3', new WidgetConfiguration(
-            'config-item-chart-widget', 'Anzahl Config Items mit kritischem Vorfallstatus', [], chartConfig3,
-            false, true, WidgetSize.SMALL, null, true)
+            'config-item-chart-widget', 'Translatable#Number of Config Items in critical incident state',
+            [], chartConfig3, false, true, WidgetSize.SMALL, null, true)
         );
 
         const content = [
@@ -135,7 +135,7 @@ export class Extension implements IConfigurationExtension {
             ])));
 
         const ciListWidget = new ConfiguredWidget('20180905-ci-list-widget', new WidgetConfiguration(
-            'table-widget', 'Übersicht Config Items', [
+            'table-widget', 'Translatable#Overview Config Items', [
                 'bulk-action', 'ticket-create-action', 'config-item-create-action', 'csv-export-action'
             ],
             { objectType: KIXObjectType.CONFIG_ITEM }, false, false, WidgetSize.LARGE, 'kix-icon-ci', true, filter
@@ -143,8 +143,13 @@ export class Extension implements IConfigurationExtension {
 
         const contentWidgets = [chart1, chart2, chart3, ciListWidget];
 
-        return new CMDBContextConfiguration(
-            this.getModuleId(), explorer, sidebars, sidebarWidgets, explorerWidgets, content, contentWidgets
+        return new ContextConfiguration(
+            this.getModuleId(),
+            sidebars, sidebarWidgets,
+            explorer, explorerWidgets,
+            [], [],
+            [], [],
+            content, contentWidgets
         );
     }
 
@@ -158,29 +163,30 @@ export class Extension implements IConfigurationExtension {
             const fields: FormField[] = [];
             fields.push(
                 new FormField(
-                    'Config Item Klasse', ConfigItemProperty.CLASS_ID,
-                    'ci-class-input', false, 'Suche nach Config Items innerhalb der gewählten Klasse.'
+                    'Translatable#Config Item Class', ConfigItemProperty.CLASS_ID,
+                    'ci-class-input', false,
+                    'Translatable#Search for config items within the choosen class.'
                 )
             );
-            fields.push(new FormField('Name', ConfigItemProperty.NAME, null, false, 'Suche nach Config Items mit diesem Name oder Teilen des Namens (mindestens 1 Zeichen).'));
-            fields.push(new FormField('Nummer', ConfigItemProperty.NUMBER, null, false, 'Suche nach Config Items mit dieser Nummer oder Teilen der Nummer (mindestens 1 Zeichen).'));
+            fields.push(new FormField('Translatable#Name', ConfigItemProperty.NAME, null, false, 'Translatable#Search for config items with the same name or part of the same name (min. 1 character).'));
+            fields.push(new FormField('Translatable#Number', ConfigItemProperty.NUMBER, null, false, 'Translatable#Serach for config items with the same number or part of the same number (min. 1 character).'));
             fields.push(new FormField(
-                'Verwendungsstatus', VersionProperty.CUR_DEPL_STATE_ID, 'general-catalog-input',
-                false, 'Suche nach Config Items mit diesem Verwendungsstatus.',
+                'Translatable#Deployment State', VersionProperty.CUR_DEPL_STATE_ID, 'general-catalog-input',
+                false, 'Translatable#Search for config items with the same deployment state.',
                 [new FormFieldOption('GC_CLASS', 'ITSM::ConfigItem::DeploymentState')],
                 null, null, null, 1, 1, 1, null, null, null, false, false
             ));
             fields.push(new FormField(
-                'Vorfallstatus', VersionProperty.CUR_INCI_STATE_ID, 'general-catalog-input',
-                false, 'Suche nach Config Items mit diesem Vorfallstatus.',
+                'Translatable#Incident State', VersionProperty.CUR_INCI_STATE_ID, 'general-catalog-input',
+                false, 'Translatable#Search for config items with the same incident state.',
                 [new FormFieldOption('GC_CLASS', 'ITSM::Core::IncidentState')],
                 null, null, null, 1, 1, 1, null, null, null, false, false
             ));
 
-            const group = new FormGroup('Config Item Daten', fields);
+            const group = new FormGroup('Translatable#Config Item Data', fields);
 
             const form = new Form(
-                linkFormId, 'Verknüpfen mit Config Item', [group], KIXObjectType.CONFIG_ITEM, false, FormContext.LINK
+                linkFormId, 'Translatable#Link Config Item with', [group], KIXObjectType.CONFIG_ITEM, false, FormContext.LINK
             );
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }

@@ -1,12 +1,19 @@
-<for(field in state.fields)>
-    <form-field field=field level=state.level formId=input.formId
-        additionalFieldControlsNeeded=input.additionalFieldControlsNeeded key=field.instanceId>
+<for|field| of=state.fields>
+    <form-field
+        field=field
+        level=state.level
+        formId=input.formId
+        additionalFieldControlsNeeded=input.additionalFieldControlsNeeded
+        key=field.instanceId>
         <@additionalFieldControls>
             <if(input.additionalFieldControlsNeeded)>
                 <div.additionalFieldControls>
                     <if(!field.asStructure)>
                         <if(component.canAdd(field))>
-                            <button.form-control-button.button-without-text type="button" title="Hinzufügen" on-click('addField', field)>
+                            <button.form-control-button.button-without-text
+                                type="button"
+                                title=state.translations["Translatable#Add"]
+                                on-click("addField", field)>
                                 <span.kix-icon-plus-blank/>
                             </button>
                         </if>
@@ -14,7 +21,10 @@
                             <span/>
                         </else>
                         <if(component.canRemove(field))>
-                            <button.form-control-button.button-without-text type="button" title="Entfernen" on-click('removeField', field)>
+                            <button.form-control-button.button-without-text
+                                type="button"
+                                title=state.translations["Translatable#Delete"]
+                                on-click("removeField", field)>
                                 <span.kix-icon-minus/>
                             </button>
                         </if>

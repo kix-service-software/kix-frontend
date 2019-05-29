@@ -1,14 +1,17 @@
 import { TranslationDetailsContext } from "../../context";
 import { RoutingConfiguration } from "../../../../router";
 import {
-    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
+    TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../../../table";
-import { KIXObjectType, TranslationProperty, ContextMode, KIXObjectLoadingOptions } from "../../../../../model";
+import {
+    KIXObjectType, TranslationProperty, ContextMode, KIXObjectLoadingOptions, DataType
+} from "../../../../../model";
 import { TranslationTableContentProvider } from "./TranslationTableContentProvider";
+import { TableFactory } from "../../../../table/TableFactory";
 
 
-export class TranslationTableFactory implements ITableFactory {
+export class TranslationTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.TRANSLATION;
 
@@ -21,7 +24,7 @@ export class TranslationTableFactory implements ITableFactory {
         const table = new Table(tableKey, tableConfiguration);
 
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, tableConfiguration.filter, tableConfiguration.sortOrder, null, null, [TranslationProperty.LANGUAGES]
+            null, tableConfiguration.filter, tableConfiguration.sortOrder, null, [TranslationProperty.LANGUAGES]
         );
 
         table.setContentProvider(new TranslationTableContentProvider(table, objectIds, loadingOptions, contextId));
@@ -34,7 +37,10 @@ export class TranslationTableFactory implements ITableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new DefaultColumnConfiguration(TranslationProperty.PATTERN, true, false, true, true, 400, true, true),
+            new DefaultColumnConfiguration(
+                TranslationProperty.PATTERN, true, false, true, true, 400, true, true, false,
+                DataType.STRING, true, null, null, false
+            ),
             new DefaultColumnConfiguration(
                 TranslationProperty.LANGUAGES, true, false, true, true, 250, true, true, true, null, true,
                 'label-list-cell-content'
@@ -53,7 +59,7 @@ export class TranslationTableFactory implements ITableFactory {
 
         if (defaultRouting) {
             tableConfiguration.routingConfiguration = new RoutingConfiguration(
-                null, TranslationDetailsContext.CONTEXT_ID, KIXObjectType.TRANSLATION,
+                TranslationDetailsContext.CONTEXT_ID, KIXObjectType.TRANSLATION,
                 ContextMode.DETAILS, TranslationProperty.ID
             );
         }

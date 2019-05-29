@@ -1,7 +1,6 @@
 import { KIXObjectService } from "../../kix";
 import {
-    TicketType, KIXObjectType, KIXObject, KIXObjectLoadingOptions,
-    KIXObjectSpecificLoadingOptions, KIXObjectCache
+    TicketType, KIXObjectType, KIXObject, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions
 } from "../../../model";
 
 export class TicketTypeService extends KIXObjectService<TicketType> {
@@ -26,21 +25,22 @@ export class TicketTypeService extends KIXObjectService<TicketType> {
 
     public async loadObjects<O extends KIXObject>(
         objectType: KIXObjectType, objectIds: Array<string | number>,
-        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
-        cache: boolean = true
+        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions
     ): Promise<O[]> {
-
+        let objects: O[];
+        let superLoad = false;
         if (objectType === KIXObjectType.TICKET_TYPE) {
-            if (!KIXObjectCache.hasObjectCache(objectType)) {
-                const objects = await super.loadObjects(objectType, null, null, null, false);
-                objects.forEach((q) => KIXObjectCache.addObject(objectType, q));
-            }
-
-            if (!objectIds) {
-                return KIXObjectCache.getObjectCache(objectType);
-            }
+            objects = await super.loadObjects<O>(KIXObjectType.TICKET_TYPE, null, loadingOptions);
+        } else {
+            superLoad = true;
+            objects = await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions);
         }
 
-        return await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions, cache);
+        if (objectIds && !superLoad) {
+            objects = objects.filter((c) => objectIds.some((oid) => c.ObjectId === oid));
+        }
+
+        return objects;
     }
+
 }

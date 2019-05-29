@@ -4,13 +4,16 @@ import { ContextService } from '../../context';
 
 export class ContactCreateTicketAction extends AbstractAction {
 
-    public initAction(): void {
-        this.text = "Neues Ticket";
-        this.icon = "kix-icon-new-ticket";
+    public async initAction(): Promise<void> {
+        this.text = 'Translatable#New Ticket';
+        this.icon = 'kix-icon-new-ticket';
     }
 
-    public run(): void {
-        ContextService.getInstance().setDialogContext(null, KIXObjectType.TICKET, ContextMode.CREATE, null, true);
+    public async run(event: any): Promise<void> {
+        ContextService.getInstance().setDialogContext(
+            null, KIXObjectType.TICKET, ContextMode.CREATE, null, true,
+            undefined, undefined, 'new-ticket-form'
+        );
     }
 
 }

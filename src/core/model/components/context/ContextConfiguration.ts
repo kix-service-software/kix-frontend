@@ -1,14 +1,22 @@
-import { ConfiguredWidget, WidgetDescriptor } from "..";
+import { ConfiguredWidget } from "..";
 
-export abstract class ContextConfiguration {
+export class ContextConfiguration {
 
     public constructor(
         public contextId: string,
-        public explorer: string[],
-        public sidebars: string[],
-        public sidebarWidgets: ConfiguredWidget[],
-        public explorerWidgets: ConfiguredWidget[],
-        public overlayWidgets: ConfiguredWidget[]
+        public sidebars: string[] = [],
+        public sidebarWidgets: ConfiguredWidget[] = [],
+        public explorer: string[] = [],
+        public explorerWidgets: ConfiguredWidget[] = [],
+        public lanes: string[] = [],
+        public laneWidgets: ConfiguredWidget[] = [],
+        public laneTabs: string[] = [],
+        public laneTabWidgets: ConfiguredWidget[] = [],
+        public content: string[] = [],
+        public contentWidgets: ConfiguredWidget[] = [],
+        public generalActions: string[] = [],
+        public actions: string[] = [],
+        public overlayWidgets: ConfiguredWidget[] = []
     ) { }
 
 }

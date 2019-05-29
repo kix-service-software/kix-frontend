@@ -1,18 +1,18 @@
 <widget instanceId=state.instanceId>
     <@content>
         <div.import-container>
-            <if(!state.loading)>
-                <main-form formId=state.formId key="input-configuration-form"/>
+            <if(state.importManager)>
+                <if(state.importConfigFormId)>
+                    <main-form formId=state.importConfigFormId key="input-configuration-form"/>
+                </if>
                 <div.form.import-attributes-container>
-                    <if(state.importManager)>
-                        <widget instanceId="dynamic-form-field-group" title="Werte ersetzen" key="attributes">
-                            <@content>
-                                <div.import-attributes>
-                                    <dynamic-form-field-container manager=state.importManager/>
-                                </div>
-                            </@content>
-                        </widget>
-                    </if>
+                    <widget instanceId="dynamic-form-field-group" title=state.translations["Translatable#Replace Values"] key="attributes">
+                        <@content>
+                            <div.import-attributes>
+                                <dynamic-form-field-container manager=state.importManager/>
+                            </div>
+                        </@content>
+                    </widget>
                 </div>
                 <if(state.table)>
                     <div.object-table>
@@ -23,22 +23,30 @@
                     </div>
                 </if>
                 <div.dialog-button-container>
-                    <!-- <button.cancel-button type="button" on-click("cancel") title="Abbrechen">
-                    <span.kix-icon-close/>Abbrechen
-                </button>
-                <div.submit-buttons>
-                    <button.submit-button type="button" on-click("submit") title="Dialog schließen" disabled=!state.run>
-                        <span.kix-icon-check/>Dialog schließen
+                    <button.cancel-button type="button" on-click("cancel") title=state.translations["Translatable#Cancel"]>
+                        <span.kix-icon-close/>
+                        <translation-string pattern="Translatable#Cancel"/>
                     </button>
-                    <button.submit-button type="button" on-click("run") title="Import starten" disabled=!state.canRun>
-                        <span.kix-icon-edit/>Import starten
-                    </button>
-                </div> -->
+                    <div.submit-buttons>
+                        <button.submit-button
+                            type="button"
+                            on-click("submit")
+                            title=state.translations["Translatable#Close Dialog"]
+                            disabled=!state.run>
+                            <span.kix-icon-check/>
+                            <translation-string pattern="Translatable#Close Dialog"/>
+                        </button>
+                        <button.submit-button
+                            type="button"
+                            on-click("run")
+                            title=state.translations["Translatable#Start Import"]
+                            disabled=!state.canRun>
+                            <span.kix-icon-import/>
+                            <translation-string pattern="Translatable#Start Import"/>
+                        </button>
+                    </div>
                 </div>
             </if>
-            <else>
-                <loading-spinner/>
-            </else>
         </div>
     </@content>
 </widget>

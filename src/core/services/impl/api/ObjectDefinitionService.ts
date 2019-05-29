@@ -6,6 +6,8 @@ import { ObjectDefinitionsResponse } from "../../../api/object-definition";
 
 export class ObjectDefinitionService extends KIXObjectService {
 
+    protected objectType: KIXObjectType = KIXObjectType.OBJECT_DEFINITION;
+
     private static INSTANCE: ObjectDefinitionService;
 
     public static getInstance(): ObjectDefinitionService {
@@ -32,13 +34,14 @@ export class ObjectDefinitionService extends KIXObjectService {
     }
 
     public createObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, string]>
+        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>
     ): Promise<string | number> {
         throw new Error('', "Method not implemented.");
     }
 
     public async updateObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
+        token: string, clientRequestId: string, objectType: KIXObjectType,
+        parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
         throw new Error('', "Method not implemented.");
     }

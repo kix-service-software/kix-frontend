@@ -1,6 +1,7 @@
 import { ComponentState } from './ComponentState';
 import { ServiceRegistry, IKIXObjectService, AttachmentUtil } from '../../../core/browser';
 import { AutocompleteFormFieldOption, InlineContent } from '../../../core/browser/components';
+import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 
 declare var CKEDITOR: any;
 
@@ -21,7 +22,11 @@ class EditorComponent {
         );
     }
 
-    public async onInput(input: any): Promise<void> {
+    public onInput(input: any): void {
+        this.update(input);
+    }
+
+    private async update(input: any): Promise<void> {
         this.useReadonlyStyle = typeof input.useReadonlyStyle ? input.useReadonlyStyle : false;
         if (await this.isEditorReady()) {
             if (input.addValue) {
@@ -44,6 +49,10 @@ class EditorComponent {
         this.autoCompletePlugins = [];
 
         if (!this.instanceExists()) {
+            const userLanguage = await TranslationService.getUserLanguage();
+            if (userLanguage) {
+                this.state.config['language'] = userLanguage;
+            }
             if (this.state.inline) {
                 this.editor = CKEDITOR.inline(this.state.id, {
                     ...this.state.config
@@ -118,20 +127,22 @@ class EditorComponent {
         }
     }
 
-    public setAutocompleteConfiguration(autocompleteOption: AutocompleteFormFieldOption): void {
-        autocompleteOption.autocompleteObjects.forEach((ao) => {
-            const service = (ServiceRegistry.getServiceInstance(ao.objectType) as IKIXObjectService);
-            if (service) {
-                const config = service.getAutoFillConfiguration(CKEDITOR.plugins.textMatch, ao.placeholder);
-                if (config) {
-                    const plugin = new CKEDITOR.plugins.autocomplete(this.editor, config);
-                    plugin.getHtmlToInsert = function (item) {
-                        return this.outputTemplate ? this.outputTemplate.output(item) : item.name;
-                    };
-                    this.autoCompletePlugins.push(plugin);
+    public async setAutocompleteConfiguration(autocompleteOption: AutocompleteFormFieldOption): Promise<void> {
+        if (await this.isEditorReady()) {
+            autocompleteOption.autocompleteObjects.forEach((ao) => {
+                const service = (ServiceRegistry.getServiceInstance(ao.objectType) as IKIXObjectService);
+                if (service) {
+                    const config = service.getAutoFillConfiguration(CKEDITOR.plugins.textMatch, ao.placeholder);
+                    if (config) {
+                        const plugin = new CKEDITOR.plugins.autocomplete(this.editor, config);
+                        plugin.getHtmlToInsert = function (item) {
+                            return this.outputTemplate ? this.outputTemplate.output(item) : item.name;
+                        };
+                        this.autoCompletePlugins.push(plugin);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     // TODO: bessere Lösung finden (im Moment gibt es warnings im Log, ...->
@@ -184,7 +195,7 @@ class EditorComponent {
                     const replaceString = `data:${contentItem.contentType};base64,${contentItem.content}`;
                     const contentIdLength = contentItem.contentId.length - 1;
                     const contentId = contentItem.contentId.substring(1, contentIdLength);
-                    const regexpString = new RegExp('cid:' + contentId, "g");
+                    const regexpString = new RegExp('cid:' + contentId, 'g');
                     newString = newString.replace(regexpString, replaceString);
                 }
             }

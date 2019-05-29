@@ -49,13 +49,13 @@ export class Component {
                 .then(() => {
                     const content = new ComponentContent(
                         'toast',
-                        new ToastContent('kix-icon-check', 'Bewertung erfolgreich abgegeben.')
+                        new ToastContent('kix-icon-check', 'Translatable#Successfully rated.')
                     );
 
                     OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
                 }).catch((error) => {
                     OverlayService.getInstance().openOverlay(
-                        OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true
+                        OverlayType.WARNING, null, new StringContent(error), 'Translatable#Error!', true
                     );
                 });
 

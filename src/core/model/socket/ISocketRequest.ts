@@ -4,4 +4,6 @@ export interface ISocketRequest {
 
     requestId: string;
 
+    clientRequestId: string;
+
 }

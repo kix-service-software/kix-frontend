@@ -2,12 +2,13 @@ import { KIXObjectType, ContextMode, ConfigItemProperty, DataType } from "../../
 import { RoutingConfiguration } from "../../router";
 import { ConfigItemDetailsContext } from "../context";
 import {
-    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
+    TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     ToggleOptions, TableRowHeight, IColumnConfiguration
 } from "../../table";
 import { ConfigItemTableContentProvider } from "./ConfigItemTableContentProvider";
+import { TableFactory } from "../../table/TableFactory";
 
-export class ConfigItemTableFactory implements ITableFactory {
+export class ConfigItemTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM;
 
@@ -94,7 +95,7 @@ export class ConfigItemTableFactory implements ITableFactory {
 
         if (defaultRouting) {
             tableConfiguration.routingConfiguration = new RoutingConfiguration(
-                null, ConfigItemDetailsContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM,
+                ConfigItemDetailsContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM,
                 ContextMode.DETAILS, ConfigItemProperty.CONFIG_ITEM_ID
             );
         }

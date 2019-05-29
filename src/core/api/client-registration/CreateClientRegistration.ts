@@ -1,18 +1,16 @@
 import { RequestObject } from '../RequestObject';
+import { PODefinition } from '../../model';
 
 export class CreateClientRegistration extends RequestObject {
 
     public constructor(
-        public clientId: string,
-        public callbackURL: string,
-        public authentication: string = null
+        public ClientID: string,
+        public NotificationURL: string,
+        public NotificationInterval: number,
+        public Authorization: string = null,
+        public Translations: PODefinition[] = [],
     ) {
         super();
-        this.applyProperty("ClientID", clientId);
-        this.applyProperty("CallbackURL", callbackURL);
-        this.applyProperty("Authentication", authentication);
     }
-
-
 
 }

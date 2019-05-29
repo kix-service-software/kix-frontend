@@ -1,6 +1,10 @@
+import { AuthenticationService, UserService } from "../../services";
+import { AgentService } from "../../browser/application/AgentService";
+import { TranslationService } from "../../browser/i18n/TranslationService";
+
 export class DateTimeUtil {
 
-    public static getLocalDateString(value: any, locale: string = 'de-DE', weekday: boolean = false): string {
+    public static async getLocalDateString(value: any): Promise<string> {
         let string = '';
         if (value) {
             const date = new Date(value);
@@ -9,15 +13,13 @@ export class DateTimeUtil {
                 month: '2-digit',
                 year: 'numeric'
             };
-            if (weekday) {
-                options['weekday'] = 'long';
-            }
-            string = date.toLocaleDateString(locale, options);
+            const userLanguage = await TranslationService.getUserLanguage();
+            string = date.toLocaleDateString(userLanguage, options);
         }
         return string;
     }
 
-    public static getLocalDateTimeString(value: any, locale: string = 'de-DE', weekday: boolean = false): string {
+    public static async getLocalDateTimeString(value: any): Promise<string> {
         let string = '';
         if (value) {
             const date = new Date(value);
@@ -28,10 +30,9 @@ export class DateTimeUtil {
                 hour: '2-digit',
                 minute: '2-digit'
             };
-            if (weekday) {
-                options['weekday'] = 'long';
-            }
-            string = date.toLocaleString(locale, options);
+
+            const userLanguage = await TranslationService.getUserLanguage();
+            string = date.toLocaleString(userLanguage, options);
         }
         return string;
     }

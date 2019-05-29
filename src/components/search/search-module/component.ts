@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
 import { ContextService, IContextServiceListener, KIXObjectSearchService } from "../../../core/browser";
-import { ContextMode, ContextType, ContextConfiguration, Context, CacheState } from "../../../core/model";
+import { ContextMode, ContextType, Context, CacheState } from "../../../core/model";
 import { SearchContext } from '../../../core/browser/search/context';
 
 class Component implements IContextServiceListener {
@@ -26,7 +26,7 @@ class Component implements IContextServiceListener {
     }
 
     public contextChanged(
-        contextId: string, context: Context<ContextConfiguration>, type: ContextType, history: boolean
+        contextId: string, context: Context, type: ContextType, history: boolean
     ): void {
         if (contextId === SearchContext.CONTEXT_ID && !history) {
             const cache = KIXObjectSearchService.getInstance().getSearchCache();

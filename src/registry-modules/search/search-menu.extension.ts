@@ -12,7 +12,7 @@ export class Extension implements IMainMenuExtension {
 
     public icon: string = "kix-icon-search";
 
-    public text: string = "Suche";
+    public text: string = "Translatable#Search";
 
 }
 

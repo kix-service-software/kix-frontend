@@ -49,9 +49,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         await this.prepareLinkedObjectsGroups();
     }
 
-    private setActions(): void {
+    private async setActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.kixObject) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.actions = await ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, [this.state.kixObject]
             );
         }
@@ -77,7 +77,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 );
 
                 const objects = linkDescriptions.map((ld) => ld.linkableObject);
-                const table = TableFactoryService.getInstance().createTable(
+                const table = await TableFactoryService.getInstance().createTable(
                     `link-objects-${lot[1]}`, lot[1], tableConfiguration,
                     objects.map((o) => o.ObjectId), null, true, null, true
                 );

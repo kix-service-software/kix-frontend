@@ -4,7 +4,8 @@ export class ComponentState extends FormInputComponentState<number[]> {
 
     public constructor(
         public nodes: TreeNode[] = [],
-        public currentNodes: TreeNode[] = []
+        public currentNodes: TreeNode[] = [],
+        public placeholder: string = ''
     ) {
         super();
     }

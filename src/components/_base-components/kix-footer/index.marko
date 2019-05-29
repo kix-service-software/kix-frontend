@@ -1,7 +1,20 @@
 <div.kix-footer>
-    <div.left-text>${input.leftText}</div>
-    <div>
-        ${state.kixProduct} ${state.kixVersion} ${state.buildNumber} | Angemeldet: ${state.currentUserLogin} | Ein Produkt der c.a.p.e. IT GmbH
+    <div.left-text>
+        <translation-string pattern=input.leftText/>
     </div>
-    <div.right-text>${input.rightText}</div>
+    <div>
+        <if(state.currentUserLogin)>
+            ${state.kixProduct}${state.kixVersion}${state.buildNumber} |
+            <translation-string pattern="Translatable#Logged in"/>
+            ${" " + state.currentUserLogin} |
+        </if>
+        <translation-string pattern="Translatable#A product by c.a.p.e. IT GmbH"/>
+        |
+        <a href=state.imprintLink target="_blank">
+            <translation-string pattern="Translatable#Imprint"/>
+        </a>
+    </div>
+    <div.right-text>
+        <translation-string pattern=input.rightText/>
+    </div>
 </div>

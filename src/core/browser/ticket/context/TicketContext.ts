@@ -1,15 +1,13 @@
 import {
-    WidgetType, WidgetConfiguration, Queue, ConfiguredWidget, KIXObjectType,
-    KIXObjectLoadingOptions, FilterCriteria, FilterDataType, FilterType, TicketProperty, KIXObject
+    Queue, KIXObjectType, KIXObjectLoadingOptions, FilterCriteria, FilterDataType, FilterType, TicketProperty, KIXObject
 } from "../../../model";
-import { TicketContextConfiguration } from "./TicketContextConfiguration";
 import { Context } from '../../../model/components/context/Context';
 import { KIXObjectService } from "../../kix";
 import { SearchOperator } from "../../SearchOperator";
 import { EventService } from "../../event";
 import { ApplicationEvent } from "../../application";
 
-export class TicketContext extends Context<TicketContextConfiguration> {
+export class TicketContext extends Context {
 
     public static CONTEXT_ID: string = 'tickets';
 
@@ -23,32 +21,6 @@ export class TicketContext extends Context<TicketContextConfiguration> {
         return 'Ticket Dashboard';
     }
 
-    public getContent(show: boolean = false): ConfiguredWidget[] {
-        let content = this.configuration.contentWidgets;
-
-        if (show) {
-            content = content.filter(
-                (c) => this.configuration.content.findIndex((cid) => c.instanceId === cid) !== -1
-            );
-        }
-
-        return content;
-    }
-
-    protected getSpecificWidgetConfiguration<WS = any>(instanceId: string): WidgetConfiguration<WS> {
-        const widget = this.configuration.contentWidgets.find((cw) => cw.instanceId === instanceId);
-        return widget ? widget.configuration : undefined;
-    }
-
-    protected getSpecificWidgetType(instanceId: string): WidgetType {
-        let widgetType: WidgetType;
-
-        const contentWidget = this.configuration.contentWidgets.find((lw) => lw.instanceId === instanceId);
-        widgetType = contentWidget ? WidgetType.CONTENT : undefined;
-
-        return widgetType;
-    }
-
     public async setQueue(queue: Queue): Promise<void> {
         this.queue = queue;
         await this.loadTickets();
@@ -57,7 +29,7 @@ export class TicketContext extends Context<TicketContextConfiguration> {
     private async loadTickets(): Promise<void> {
         const loadingOptions = new KIXObjectLoadingOptions(null, [
             new FilterCriteria('StateType', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'),
-        ], null, null, 1000, ['EscalationTime', 'Watchers']);
+        ], null, 1000, ['EscalationTime', 'Watchers']);
 
         if (this.queue) {
             const queueFilter = new FilterCriteria(
@@ -69,7 +41,7 @@ export class TicketContext extends Context<TicketContextConfiguration> {
 
         const timeout = window.setTimeout(() => {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: `Lade Tickets ...`
+                loading: true, hint: `Translatable#Load Tickets ...`
             });
         }, 500);
 
@@ -89,6 +61,11 @@ export class TicketContext extends Context<TicketContextConfiguration> {
             await this.loadTickets();
         }
         return await super.getObjectList();
+    }
+
+    public reset(): void {
+        super.reset();
+        this.queue = null;
     }
 
 }

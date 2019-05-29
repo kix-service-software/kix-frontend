@@ -1,9 +1,10 @@
-import { AgentSocketListener } from "./AgentSocketListener";
-import { UserType } from "../../model/kix/user/UserType";
-import { PersonalSetting, KIXObjectType, Error, User, KIXObjectCache } from "../../model";
-import { KIXObjectService, ServiceMethod } from "../kix";
+import { AgentSocketClient } from './AgentSocketClient';
+import { UserType } from '../../model/kix/user/UserType';
+import { PersonalSetting, KIXObjectType, User } from '../../model';
+import { KIXObjectService } from '../kix';
+import { AuthenticationSocketClient } from './AuthenticationSocketClient';
 
-export class AgentService extends KIXObjectService {
+export class AgentService extends KIXObjectService<User> {
 
     private static INSTANCE: AgentService = null;
 
@@ -16,33 +17,29 @@ export class AgentService extends KIXObjectService {
     }
 
     public getLinkObjectName(): string {
-        return "";
+        return 'User';
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {
-        return kixObjectType === KIXObjectType.PERSONAL_SETTINGS;
+        return kixObjectType === KIXObjectType.USER ||
+            kixObjectType === KIXObjectType.PERSONAL_SETTINGS;
     }
 
     public async login(userName: string, password: string, userType: UserType = UserType.AGENT): Promise<boolean> {
-        return await AgentSocketListener.getInstance().login(userName, password, userType);
+        return await AuthenticationSocketClient.getInstance().login(userName, password, userType);
     }
 
     public async getPersonalSettings(): Promise<PersonalSetting[]> {
-        return await AgentSocketListener.getInstance().getPersonalSettings();
+        return await AgentSocketClient.getInstance().getPersonalSettings();
     }
 
-    public async getCurrentUser(cache: boolean = true): Promise<User> {
-        if (!KIXObjectCache.hasObjectCache(KIXObjectType.CURRENT_USER)) {
-            const currentUser = await AgentSocketListener.getInstance().getCurrentUser(cache);
-            KIXObjectCache.addObject(KIXObjectType.CURRENT_USER, currentUser);
-        }
-        return KIXObjectCache.getObjectCache<User>(KIXObjectType.CURRENT_USER)[0];
+    public async getCurrentUser(): Promise<User> {
+        const currentUser = await AgentSocketClient.getInstance().getCurrentUser();
+        return currentUser;
     }
 
     public async setPreferencesByForm(formId: string): Promise<void> {
-        KIXObjectCache.updateCache(KIXObjectType.CURRENT_USER, null, ServiceMethod.UPDATE);
         const parameter: Array<[string, any]> = await this.prepareFormFields(formId);
-        return await AgentSocketListener.getInstance().setPreferences(parameter);
+        await AgentSocketClient.getInstance().setPreferences(parameter);
     }
-
 }

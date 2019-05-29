@@ -1,6 +1,6 @@
 import {
     ValidationResult, ValidationSeverity, ComponentContent, OverlayType, KIXObjectType,
-    KIXObjectSpecificCreateOptions, Error
+    KIXObjectSpecificCreateOptions, Error, ContextMode
 } from "../../../model";
 import { OverlayService } from "../../OverlayService";
 import { DialogService } from "./DialogService";
@@ -9,6 +9,12 @@ import { FormService } from "../../form";
 import { AbstractMarkoComponent } from "../../marko";
 import { BrowserUtil } from "../../BrowserUtil";
 import { RoutingConfiguration, RoutingService } from "../../router";
+import { ContextService } from "../../context";
+import { EventService } from "../../event";
+import { TabContainerEvent } from "./TabContainerEvent";
+import { TabContainerEventData } from "./TabContainerEventData";
+import { PreviousTabData } from "./PreviousTabData";
+import { TranslationService } from "../../i18n/TranslationService";
 
 export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
 
@@ -29,15 +35,23 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
     }
 
     public async onMount(): Promise<void> {
-        DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
+        DialogService.getInstance().setMainDialogHint('Translatable#All form fields marked by * are required fields.');
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Cancel", "Translatable#Save"
+        ]);
     }
 
     public async onDestroy(): Promise<void> {
-        FormService.getInstance().deleteFormInstance(this.state.formId);
+        const dialogContext = await ContextService.getInstance().getContextByTypeAndMode(
+            this.objectType, ContextMode.CREATE
+        );
+        if (dialogContext) {
+            dialogContext.resetAdditionalInformation();
+        }
     }
 
     public async cancel(): Promise<void> {
-        FormService.getInstance().deleteFormInstance(this.state.formId);
         DialogService.getInstance().closeMainDialog();
     }
 
@@ -51,19 +65,15 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
                     AbstractNewDialog.prototype.showValidationError.call(this, result);
                 } else {
                     DialogService.getInstance().setMainDialogLoading(true, this.loadingHint);
-                    await KIXObjectService.createObjectByForm(this.objectType, this.state.formId, this.options)
-                        .then(async (ciClassId) => {
-                            await FormService.getInstance().loadFormConfigurations();
-                            DialogService.getInstance().setMainDialogLoading(false);
-                            BrowserUtil.openSuccessOverlay(this.successHint);
-                            DialogService.getInstance().submitMainDialog();
-                            if (this.routingConfiguration) {
-                                RoutingService.getInstance().routeToContext(this.routingConfiguration, ciClassId);
-                            }
+                    KIXObjectService.createObjectByForm(this.objectType, this.state.formId, this.options)
+                        .then(async (objectId) => {
+                            await AbstractNewDialog.prototype.handleDialogSuccess.call(this, objectId);
                             resolve();
                         }).catch((error: Error) => {
                             DialogService.getInstance().setMainDialogLoading(false);
-                            BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
+                            BrowserUtil.openErrorOverlay(
+                                error.Message ? `${error.Code}: ${error.Message}` : error.toString()
+                            );
                             reject();
                         });
                 }
@@ -71,17 +81,53 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
         });
     }
 
+    protected async handleDialogSuccess(objectId: string | number): Promise<void> {
+        await FormService.getInstance().loadFormConfigurations();
+
+        const dialogContext = await ContextService.getInstance().getContextByTypeAndMode(
+            this.objectType, ContextMode.CREATE
+        );
+        let previousTabData: PreviousTabData = null;
+        if (dialogContext) {
+            previousTabData = dialogContext.getAdditionalInformation(
+                'RETURN_TO_PREVIOUS_TAB'
+            );
+        }
+
+        if (previousTabData && previousTabData.objectType && previousTabData.tabId) {
+            const previousDialogContext = await ContextService.getInstance().getContextByTypeAndMode(
+                previousTabData.objectType, ContextMode.CREATE
+            );
+            if (previousDialogContext) {
+                previousDialogContext.setAdditionalInformation(`${this.objectType}-ID`, objectId);
+            }
+            EventService.getInstance().publish(
+                TabContainerEvent.CHANGE_TAB, new TabContainerEventData(previousTabData.tabId)
+            );
+            DialogService.getInstance().setMainDialogLoading(false);
+        } else {
+            DialogService.getInstance().setMainDialogLoading(false);
+            DialogService.getInstance().submitMainDialog();
+            if (this.routingConfiguration) {
+                RoutingService.getInstance().routeToContext(this.routingConfiguration, objectId);
+            }
+        }
+
+        FormService.getInstance().deleteFormInstance(this.state.formId);
+        BrowserUtil.openSuccessOverlay(this.successHint);
+    }
+
     protected showValidationError(result: ValidationResult[]): void {
         const errorMessages = result.filter((r) => r.severity === ValidationSeverity.ERROR).map((r) => r.message);
         const content = new ComponentContent('list-with-title',
             {
-                title: 'Fehler beim Validieren des Formulars:',
+                title: 'Translatable#Error on form validation:',
                 list: errorMessages
             }
         );
 
         OverlayService.getInstance().openOverlay(
-            OverlayType.WARNING, null, content, 'Validierungsfehler', true
+            OverlayType.WARNING, null, content, 'Translatable#Validation error', true
         );
     }
 

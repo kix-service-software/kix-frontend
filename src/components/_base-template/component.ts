@@ -1,40 +1,56 @@
-import { Context, ContextType, ContextDescriptor, KIXObjectType, ContextMode } from '../../core/model';
-import { ClientStorageService } from '../../core/browser/ClientStorageService';
+import { Context, ContextType, ContextDescriptor, KIXObjectType, ContextMode, ObjectData } from '../../core/model';
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../core/browser/context';
 import { ComponentsService } from '../../core/browser/components';
-import { IdService, FormService } from '../../core/browser';
+import { IdService, FormService, ServiceRegistry, FactoryService } from '../../core/browser';
 import { RoutingService } from '../../core/browser/router';
 import { HomeContext } from '../../core/browser/home';
 import { EventService } from '../../core/browser/event';
 import { ReleaseContext } from '../../core/browser/release';
 import { KIXModulesService } from '../../core/browser/modules';
-import { ObjectIconService } from '../../core/browser/icon';
 import { TranslationService } from '../../core/browser/i18n/TranslationService';
 import { ApplicationEvent } from '../../core/browser/application';
-import { ConfigItemClassService } from '../../core/browser/cmdb';
-import { FAQService } from '../../core/browser/faq';
+import { ObjectDataService } from '../../core/browser/ObjectDataService';
+import { AuthenticationSocketClient } from '../../core/browser/application/AuthenticationSocketClient';
+import { NotificationSocketClient } from '../../core/browser/notifications';
+import { ComponentInput } from './ComponentInput';
+import { AgentService } from '../../core/browser/application/AgentService';
 import { SysConfigService } from '../../core/browser/sysconfig';
-
-declare var io: any;
+import { TranslationBrowserFactory } from '../../core/browser/i18n';
 
 class Component {
 
     public state: ComponentState;
     private contextListernerId: string;
 
+    private objectData: ObjectData;
+
     public onCreate(input: any): void {
-        this.state = new ComponentState(
-            input.contextId, input.objectData, input.objectId
-        );
+        this.state = new ComponentState();
         this.contextListernerId = IdService.generateDateBasedId('base-template-');
     }
 
+    public onInput(input: ComponentInput): void {
+        this.objectData = input.objectData;
+    }
+
     public async onMount(): Promise<void> {
+        const start = Date.now();
+
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.TRANSLATION, TranslationBrowserFactory.getInstance()
+        );
+
+        ServiceRegistry.registerServiceInstance(AgentService.getInstance());
+        ServiceRegistry.registerServiceInstance(TranslationService.getInstance());
+        ServiceRegistry.registerServiceInstance(SysConfigService.getInstance());
+
         this.state.loading = true;
-        this.state.loadingHint = 'Lade KIX ...';
+        this.state.loadingHint = await TranslationService.translate('Loading ...');
 
         await this.checkAuthentication();
+
+        NotificationSocketClient.getInstance();
 
         await KIXModulesService.getInstance().init();
 
@@ -44,22 +60,15 @@ class Component {
         });
 
         ContextService.getInstance().registerListener({
-            contextChanged: (contextId: string, context: Context<any>, type: ContextType) => {
+            contextChanged: (contextId: string, context: Context, type: ContextType) => {
                 if (type === ContextType.MAIN) {
                     this.setContext(context);
                 }
             }
         });
 
-        ContextService.getInstance().setObjectData(this.state.objectData);
+        ObjectDataService.getInstance().setObjectData(this.objectData);
         await this.bootstrapServices();
-
-        await ObjectIconService.getInstance().init();
-        // FIXME: nur temporär auskommentiert
-        // await TranslationService.getInstance().init();
-        await ConfigItemClassService.getInstance().init();
-        await FAQService.getInstance().init();
-        await SysConfigService.getInstance().init();
 
         this.setContext();
 
@@ -73,8 +82,28 @@ class Component {
             }
         });
 
+        EventService.getInstance().subscribe(ApplicationEvent.REFRESH, {
+            eventSubscriberId: 'BASE-TEMPLATE-REFRESH',
+            eventPublished: (data: any, eventId: string) => {
+                if (eventId === ApplicationEvent.REFRESH) {
+                    this.state.reload = true;
+
+                    setTimeout(() => {
+                        this.state.reload = false;
+                        setTimeout(() => {
+                            RoutingService.getInstance().routeToInitialContext(true);
+                        }, 500);
+                    }, 20);
+                }
+            }
+        });
+
         this.state.initialized = true;
         this.state.loading = false;
+
+        const end = Date.now();
+
+        console.debug(`mount base template: ${(end - start) / 1000} sec.`);
 
         setTimeout(() => {
             RoutingService.getInstance().routeToInitialContext();
@@ -82,16 +111,9 @@ class Component {
     }
 
     private async checkAuthentication(): Promise<void> {
-        const token = ClientStorageService.getToken();
-        const socketUrl = ClientStorageService.getFrontendSocketUrl();
-
-        const configurationSocket = io.connect(socketUrl + "/kixmodules", {
-            query: "Token=" + token
-        });
-
-        configurationSocket.on('error', (error) => {
+        if (!AuthenticationSocketClient.getInstance().validateToken()) {
             window.location.replace('/auth');
-        });
+        }
     }
 
     private async bootstrapServices(): Promise<void> {
@@ -105,12 +127,9 @@ class Component {
             false, 'release', ['release'], ReleaseContext
         );
         ContextService.getInstance().registerContext(releaseContext);
-
-        FormService.getInstance();
-        await FormService.getInstance().loadFormConfigurations();
     }
 
-    private setContext(context: Context<any> = ContextService.getInstance().getActiveContext()): void {
+    private setContext(context: Context = ContextService.getInstance().getActiveContext()): void {
         if (context) {
             this.state.hasExplorer = context.isExplorerBarShown();
             context.registerListener(this.contextListernerId, {

@@ -96,7 +96,7 @@ export class ConfigItemClassAttributeUtil {
         }
 
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, null, null, [ConfigItemClassProperty.CURRENT_DEFINITION]
+            null, null, null, null, [ConfigItemClassProperty.CURRENT_DEFINITION]
         );
 
         const ciClasses = await KIXObjectService.loadObjects<ConfigItemClass>(

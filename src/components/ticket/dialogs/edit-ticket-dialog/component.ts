@@ -1,5 +1,5 @@
 import {
-    OverlayService, FormService, ContextService, KIXObjectService, BrowserUtil, DialogService
+    OverlayService, FormService, ContextService, KIXObjectService, BrowserUtil
 } from "../../../../core/browser";
 import {
     ValidationSeverity, OverlayType, ComponentContent, ValidationResult,
@@ -7,6 +7,8 @@ import {
 } from "../../../../core/model";
 import { ComponentState } from "./ComponentState";
 import { TicketDetailsContext } from "../../../../core/browser/ticket";
+import { TranslationService } from "../../../../core/browser/i18n/TranslationService";
+import { DialogService } from "../../../../core/browser/components/dialog";
 
 class Component {
 
@@ -17,7 +19,11 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
+        DialogService.getInstance().setMainDialogHint('Translatable#All form fields marked by * are required fields.');
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Cancel", "Translatable#Save"
+        ]);
     }
 
     public async cancel(): Promise<void> {
@@ -37,7 +43,7 @@ class Component {
             if (validationError) {
                 this.showValidationError(result);
             } else {
-                DialogService.getInstance().setMainDialogLoading(true, "Ticket wird aktualisiert");
+                DialogService.getInstance().setMainDialogLoading(true, "Update Ticket");
                 const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
                     TicketDetailsContext.CONTEXT_ID
                 );
@@ -53,7 +59,8 @@ class Component {
                         if (article.isUnsent()) {
                             BrowserUtil.openErrorOverlay(article.getUnsentError());
                         } else {
-                            BrowserUtil.openSuccessOverlay('Änderungen wurden gespeichert.');
+                            const toast = await TranslationService.translate('Translatable#Changes saved.');
+                            BrowserUtil.openSuccessOverlay(toast);
                         }
                         DialogService.getInstance().submitMainDialog();
                     }).catch((error: Error) => {
@@ -69,13 +76,13 @@ class Component {
         const errorMessages = result.filter((r) => r.severity === ValidationSeverity.ERROR).map((r) => r.message);
         const content = new ComponentContent('list-with-title',
             {
-                title: 'Fehler beim Validieren des Formulars:',
+                title: 'Translatable#Error on form validation:',
                 list: errorMessages
             }
         );
 
         OverlayService.getInstance().openOverlay(
-            OverlayType.WARNING, null, content, 'Validierungsfehler', true
+            OverlayType.WARNING, null, content, 'Translatable#Validation error', true
         );
     }
 

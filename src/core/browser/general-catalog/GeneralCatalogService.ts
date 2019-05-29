@@ -19,11 +19,4 @@ export class GeneralCatalogService extends KIXObjectService<GeneralCatalogItem> 
     public getLinkObjectName(): string {
         return "GeneralCatalogItem";
     }
-
-    protected async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
-        return [
-            [property, value]
-        ];
-    }
-
 }

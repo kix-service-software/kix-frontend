@@ -6,7 +6,8 @@ export class FormInputAction {
         public id: string,
         public label: Label,
         public callback: (action: FormInputAction) => void,
-        public active: boolean = false
+        public active: boolean = false,
+        public showActive: boolean = true
     ) { }
 
 }

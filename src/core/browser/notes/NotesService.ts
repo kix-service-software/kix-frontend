@@ -1,4 +1,4 @@
-import { NotesSocketListener } from "./NotesSocketListener";
+import { NotesSocketClient } from "./NotesSocketClient";
 
 export class NotesService {
 
@@ -15,10 +15,10 @@ export class NotesService {
     private constructor() { }
 
     public async loadNotes(contextId: string): Promise<string> {
-        return await NotesSocketListener.getInstance().loadNotes(contextId);
+        return await NotesSocketClient.getInstance().loadNotes(contextId);
     }
 
     public async saveNotes(contextId: string, notes: string): Promise<void> {
-        await NotesSocketListener.getInstance().saveNotes(contextId, notes);
+        await NotesSocketClient.getInstance().saveNotes(contextId, notes);
     }
 }

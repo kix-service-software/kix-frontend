@@ -1,24 +1,18 @@
 import {
-    FAQCategory, FAQArticleProperty, FAQArticle, FAQArticleFactory,
-    Attachment, FAQArticleAttachmentLoadingOptions, CreateFAQVoteOptions, FAQCacheHandler
+    FAQArticleProperty, Attachment, FAQArticleAttachmentLoadingOptions, CreateFAQVoteOptions,
+    FAQCategoryFactory
 } from "../../../model/kix/faq";
 import { KIXObjectService } from "./KIXObjectService";
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions,
-    KIXObjectCache,
-    Error
+    KIXObjectSpecificCreateOptions, Error, ObjectIcon
 } from "../../../model";
-import {
-    FAQCategoriesResponse, FAQCategoryResponse, FAQArticlesResponse, FAQArticleResponse, CreateFAQArticle,
-    CreateFAQArticleResponse, CreateFAQArticleRequest, FAQArticleAttachmentResponse, CreateFAQVote,
-    CreateFAQVoteResponse, CreateFAQVoteRequest, UpdateFAQArticle, UpdateFAQArticleResponse, UpdateFAQArticleRequest,
-    CreateFAQArticleAttachmentResponse, CreateFAQArticleAttachmentRequest, FAQArticleAttachmentsResponse
-} from "../../../api/faq";
 import { KIXObjectServiceRegistry } from "../../KIXObjectServiceRegistry";
 import { LoggingService } from "../LoggingService";
 
 export class FAQService extends KIXObjectService {
+
+    protected objectType: KIXObjectType = KIXObjectType.FAQ_ARTICLE;
 
     private static INSTANCE: FAQService;
 
@@ -30,9 +24,8 @@ export class FAQService extends KIXObjectService {
     }
 
     private constructor() {
-        super();
+        super([new FAQCategoryFactory()]);
         KIXObjectServiceRegistry.registerServiceInstance(this);
-        KIXObjectCache.registerCacheHandler(new FAQCacheHandler());
     }
 
     public isServiceFor(type: KIXObjectType): boolean {
@@ -40,25 +33,25 @@ export class FAQService extends KIXObjectService {
             || type === KIXObjectType.FAQ_ARTICLE_ATTACHMENT
             || type === KIXObjectType.FAQ_ARTICLE_HISTORY
             || type === KIXObjectType.FAQ_CATEGORY
-            || type === KIXObjectType.FAQ_CATEGORY_HIERARCHY
             || type === KIXObjectType.FAQ_VOTE;
     }
 
     protected RESOURCE_URI: string = 'faq';
 
     public async loadObjects<T>(
-        token: string, objectType: KIXObjectType, objectIds: Array<number | string>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<T[]> {
         let objects = [];
 
         switch (objectType) {
             case KIXObjectType.FAQ_ARTICLE:
-                objects = await this.getArticles(token, objectIds, loadingOptions);
+                const articlesUri = this.buildUri(this.RESOURCE_URI, 'articles');
+                objects = await super.load(token, objectType, articlesUri, loadingOptions, objectIds, 'FAQArticle');
                 break;
             case KIXObjectType.FAQ_CATEGORY:
-            case KIXObjectType.FAQ_CATEGORY_HIERARCHY:
-                objects = await this.getCategories(token, objectIds, loadingOptions);
+                const categoryUri = this.buildUri(this.RESOURCE_URI, 'categories');
+                objects = await super.load(token, objectType, categoryUri, loadingOptions, objectIds, 'FAQCategory');
                 break;
             case KIXObjectType.FAQ_ARTICLE_ATTACHMENT:
                 objects = await this.loadAttachment(
@@ -71,83 +64,17 @@ export class FAQService extends KIXObjectService {
         return objects;
     }
 
-    private async getArticles(
-        token: string, articleIds: Array<number | string>, loadingOptions: KIXObjectLoadingOptions
-    ): Promise<FAQArticle[]> {
-
-        loadingOptions = loadingOptions || new KIXObjectLoadingOptions();
-        if (loadingOptions.includes && !!loadingOptions.includes.length) {
-            if (!loadingOptions.includes.some((i) => i === FAQArticleProperty.VOTES)) {
-                loadingOptions.includes = [...loadingOptions.includes, FAQArticleProperty.VOTES];
-            }
-            if (!loadingOptions.expands.some((i) => i === FAQArticleProperty.VOTES)) {
-                loadingOptions.expands = [...loadingOptions.expands, FAQArticleProperty.VOTES];
-            }
-        } else {
-            loadingOptions.includes = [FAQArticleProperty.VOTES];
-            loadingOptions.expands = [FAQArticleProperty.VOTES];
-        }
-
-        const query = this.prepareQuery(loadingOptions);
-
-        let faqArticles: FAQArticle[] = [];
-
-        if (articleIds && articleIds.length) {
-            articleIds = articleIds.filter((id) => typeof id !== 'undefined' && id.toString() !== '' && id !== null);
-            const uri = this.buildUri(this.RESOURCE_URI, 'articles', articleIds.join(','));
-            const response = await this.getObjectByUri<FAQArticlesResponse | FAQArticleResponse>(token, uri, query);
-            if (articleIds.length === 1) {
-                faqArticles = [(response as FAQArticleResponse).FAQArticle];
-            } else {
-                faqArticles = (response as FAQArticlesResponse).FAQArticle;
-            }
-        } else if (loadingOptions.filter) {
-            await this.buildFilter(loadingOptions.filter, 'FAQArticle', token, query);
-            const uri = this.buildUri(this.RESOURCE_URI, 'articles');
-            const response = await this.getObjectByUri<FAQArticlesResponse>(token, uri, query);
-            faqArticles = response.FAQArticle;
-        } else {
-            const uri = this.buildUri(this.RESOURCE_URI, 'articles');
-            const response = await this.getObjectByUri<FAQArticlesResponse>(token, uri, query);
-            faqArticles = response.FAQArticle;
-        }
-
-        return faqArticles.map((faq) => FAQArticleFactory.create(faq));
-    }
-
-    private async getCategories(
-        token: string, categoryIds: Array<number | string>, loadingOptions: KIXObjectLoadingOptions
-    ): Promise<FAQCategory[]> {
-        const ids = categoryIds ? categoryIds.join(',') : null;
-        let uri = this.buildUri(this.RESOURCE_URI, 'categories');
-        if (ids) {
-            uri = this.buildUri(this.RESOURCE_URI, 'categories', ids);
-        }
-
-        const query = this.prepareQuery(loadingOptions);
-        if (loadingOptions.filter) {
-            await this.buildFilter(loadingOptions.filter, 'FAQCategory', token, query);
-        }
-
-        const response = await this.getObjectByUri<FAQCategoriesResponse | FAQCategoryResponse>(token, uri, query);
-        let result = [];
-        if (categoryIds && categoryIds.length === 1) {
-            result = [(response as FAQCategoryResponse).FAQCategory];
-        } else {
-            result = (response as FAQCategoriesResponse).FAQCategory;
-        }
-        return result.map((fc) => new FAQCategory(fc));
-    }
-
     public createObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, string]>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>,
         createOptions: KIXObjectSpecificCreateOptions
     ): Promise<string | number> {
         switch (objectType) {
             case KIXObjectType.FAQ_ARTICLE:
-                return this.createFAQArticle(token, parameter);
+                return this.createFAQArticle(token, clientRequestId, parameter);
             case KIXObjectType.FAQ_VOTE:
-                return this.createFAQVote(token, parameter, (createOptions as CreateFAQVoteOptions));
+                return this.createFAQVote(token, clientRequestId, parameter, (createOptions as CreateFAQVoteOptions));
+            case KIXObjectType.FAQ_CATEGORY:
+                return this.createFAQCategory(token, clientRequestId, parameter);
             default:
                 const error = 'No create option for object type ' + objectType;
                 throw error;
@@ -155,31 +82,28 @@ export class FAQService extends KIXObjectService {
     }
 
     public async updateObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number
+        token: string, clientRequestId: string, objectType: KIXObjectType,
+        parameter: Array<[string, any]>, objectId: number
     ): Promise<string | number> {
-
-        const updateFAQArticle = new UpdateFAQArticle(
-            parameter.filter((p) => p[0] !== FAQArticleProperty.LINK && p[0] !== FAQArticleProperty.ATTACHMENTS)
-        );
-
-        const response = await this.sendUpdateRequest<UpdateFAQArticleResponse, UpdateFAQArticleRequest>(
-            token, this.buildUri(this.RESOURCE_URI, 'articles', objectId), new UpdateFAQArticleRequest(updateFAQArticle)
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
-
-        const attachments = parameter.find((p) => p[0] === FAQArticleProperty.ATTACHMENTS);
-        await this.updateAttachments(token, objectId, attachments && attachments.length ? attachments[1] : []);
-
-        return response.FAQArticleID;
+        switch (objectType) {
+            case KIXObjectType.FAQ_ARTICLE:
+                return this.updateFAQArticle(token, clientRequestId, parameter, objectId);
+            case KIXObjectType.FAQ_CATEGORY:
+                return this.updateFAQCategory(token, clientRequestId, parameter, objectId);
+            default:
+                const error = 'No update option for object type ' + objectType;
+                throw error;
+        }
     }
 
-    private async updateAttachments(token: string, objectId: number, attachments: Attachment[]): Promise<void> {
+    private async updateAttachments(
+        token: string, clientRequestId: string, objectId: number, attachments: Attachment[]
+    ): Promise<void> {
         const uri = this.buildUri(this.RESOURCE_URI, 'articles', objectId, 'attachments');
 
-        const attachmentsResponse = await this.getObjectByUri<FAQArticleAttachmentsResponse>(token, uri);
-        const existingAttachments = attachmentsResponse.Attachment;
+        const existingAttachments = await super.load<Attachment>(
+            token, KIXObjectType.FAQ_ARTICLE_ATTACHMENT, uri, null, null, 'Attachment'
+        );
 
         const deletableAttachments = existingAttachments
             ? existingAttachments.filter((a) => a.Disposition !== 'inline' && !attachments.some((at) => at.ID === a.ID))
@@ -187,14 +111,20 @@ export class FAQService extends KIXObjectService {
 
         for (const attachment of deletableAttachments) {
             const attachmentUri = this.buildUri(this.RESOURCE_URI, 'articles', objectId, 'attachments', attachment.ID);
-            await this.sendDeleteRequest(token, attachmentUri);
+            await this.sendDeleteRequest(token, clientRequestId, attachmentUri, this.objectType);
         }
 
         const newAttachments = attachments ? attachments.filter((a) => !a.ID) : [];
         for (const attachment of newAttachments) {
-            await this.sendCreateRequest<CreateFAQArticleAttachmentResponse, CreateFAQArticleAttachmentRequest>(
-                token, this.buildUri(this.RESOURCE_URI, 'articles', objectId, 'attachments'),
-                new CreateFAQArticleAttachmentRequest(attachment)
+            const parameter: Array<[string, any]> = [];
+            for (const p in attachment) {
+                if (attachment[p]) {
+                    parameter.push([p, attachment[p]]);
+                }
+            }
+
+            await super.executeUpdateOrCreateRequest(
+                token, clientRequestId, parameter, uri, KIXObjectType.FAQ_ARTICLE_ATTACHMENT, 'AttachmentID', true
             ).catch((error: Error) => {
                 LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
                 throw new Error(error.Code, error.Message);
@@ -202,38 +132,90 @@ export class FAQService extends KIXObjectService {
         }
     }
 
-    private async createFAQArticle(token: string, parameter: Array<[string, any]>): Promise<number> {
-        const createFAQArticle = new CreateFAQArticle(parameter.filter((p) => p[0] !== FAQArticleProperty.LINK));
-
+    private async createFAQArticle(
+        token: string, clientRequestId: string, parameter: Array<[string, any]>
+    ): Promise<number> {
+        const createParameter = parameter.filter((p) => p[0] !== FAQArticleProperty.LINK);
         const uri = this.buildUri(this.RESOURCE_URI, 'articles');
-        const response = await this.sendCreateRequest<CreateFAQArticleResponse, CreateFAQArticleRequest>(
-            token, uri, new CreateFAQArticleRequest(createFAQArticle)
+
+        const id = await super.executeUpdateOrCreateRequest(
+            token, clientRequestId, createParameter, uri, this.objectType, 'FAQArticleID', true
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
         });
 
-        const faqId = response.FAQArticleID;
+        await this.createLinks(
+            token, clientRequestId, id, this.getParameterValue(parameter, FAQArticleProperty.LINK)
+        );
 
-        await this.createLinks(token, faqId, this.getParameterValue(parameter, FAQArticleProperty.LINK));
-
-        return faqId;
+        return id;
     }
 
-    private async createFAQVote(
-        token: string, parameter: Array<[string, any]>, createOptions: CreateFAQVoteOptions
+    private async updateFAQArticle(
+        token: string, clientRequestId: string, parameter: Array<[string, any]>, objectId: number
     ): Promise<number> {
-        const createFAQVote = new CreateFAQVote(parameter);
-        const uri = this.buildUri(this.RESOURCE_URI, 'articles', createOptions.faqArticleId, 'votes');
-        const response = await this.sendCreateRequest<CreateFAQVoteResponse, CreateFAQVoteRequest>(
-            token, uri, new CreateFAQVoteRequest(createFAQVote)
+        const updateParameter = parameter.filter(
+            (p) => p[0] !== FAQArticleProperty.LINK && p[0] !== FAQArticleProperty.ATTACHMENTS
+        );
+
+        const uri = this.buildUri(this.RESOURCE_URI, 'articles', objectId);
+        const id = await super.executeUpdateOrCreateRequest(
+            token, clientRequestId, updateParameter, uri, this.objectType, 'FAQArticleID'
+        );
+
+        const attachments = parameter.find((p) => p[0] === FAQArticleProperty.ATTACHMENTS);
+        await this.updateAttachments(
+            token, clientRequestId, objectId, attachments && attachments.length ? attachments[1] : []
+        );
+
+        return id;
+    }
+
+    public async updateFAQCategory(
+        token: string, clientRequestId: string, parameter: Array<[string, any]>, objectId: number
+    ): Promise<number> {
+        const uri = this.buildUri(this.RESOURCE_URI, 'categories', objectId);
+
+        const id = super.executeUpdateOrCreateRequest(
+            token, clientRequestId, parameter, uri, KIXObjectType.FAQ_CATEGORY, 'FAQCategoryID'
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
         });
 
-        const faqId = response.FAQVoteID;
-        return faqId;
+        return id;
+    }
+
+
+    private async createFAQVote(
+        token: string, clientRequestId: string, parameter: Array<[string, any]>, createOptions: CreateFAQVoteOptions
+    ): Promise<number> {
+        const uri = this.buildUri(this.RESOURCE_URI, 'articles', createOptions.faqArticleId, 'votes');
+
+        const id = await super.executeUpdateOrCreateRequest(
+            token, clientRequestId, parameter, uri, KIXObjectType.FAQ_VOTE, 'FAQVoteID', true
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
+        });
+
+        return id;
+    }
+
+    public async createFAQCategory(
+        token: string, clientRequestId: string, parameter: Array<[string, any]>
+    ): Promise<number> {
+        const uri = this.buildUri(this.RESOURCE_URI, 'categories');
+
+        const id = super.executeUpdateOrCreateRequest(
+            token, clientRequestId, parameter, uri, KIXObjectType.FAQ_CATEGORY, 'FAQCategoryID', true
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
+        });
+
+        return id;
     }
 
     public async loadAttachment(
@@ -245,9 +227,9 @@ export class FAQService extends KIXObjectService {
                 'articles', objectLoadingOptions.faqArticleId,
                 'attachments', objectLoadingOptions.attachmentId
             );
-            const query = this.prepareQuery(loadingOptions);
-            const response = await this.getObjectByUri<FAQArticleAttachmentResponse>(token, uri, query);
-            return [response.Attachment];
+
+            const attachments = await super.load<Attachment>(token, null, uri, loadingOptions, null, 'Attachment');
+            return attachments;
         } else {
             const error = 'No FAQArticleAttachmentLoadingOptions given.';
             throw error;

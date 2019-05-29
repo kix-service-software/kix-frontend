@@ -30,10 +30,6 @@ export class ProfilingService {
         }
     }
 
-    public initCache(): Promise<void> {
-        return;
-    }
-
     @validate
     public start(@required category: string, @required message: string, inputData?: any): number {
         if (!this.active) {

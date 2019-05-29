@@ -10,7 +10,7 @@
     <if(!state.loading)>
         <if(component.showIcons)>
             <span>
-                <for(icon in state.icons)>
+                <for|icon| of=state.icons>
                     <icon icon=icon showUnknown=true/>
                 </for>
             </span>

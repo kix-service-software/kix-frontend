@@ -16,7 +16,7 @@ export class ContextDescriptor {
         public urlPaths: string[],
         public contextClass: new (
             descriptor: ContextDescriptor, objectId: string | number, configuration: ContextConfiguration
-        ) => Context<ContextConfiguration>
+        ) => Context
     ) { }
 
     public isContextFor(kixObjectType: KIXObjectType): boolean {

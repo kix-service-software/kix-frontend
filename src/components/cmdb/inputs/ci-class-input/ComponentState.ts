@@ -5,7 +5,8 @@ export class ComponentState extends FormInputComponentState<ConfigItemClass> {
     public constructor(
         public isLoading: boolean = false,
         public nodes: TreeNode[] = [],
-        public currentNode: TreeNode = null
+        public currentNode: TreeNode = null,
+        public placeholder: string = ''
     ) {
         super();
     }

@@ -21,6 +21,8 @@ export interface IFormInstance {
 
     getFormFieldValueByProperty<T>(property: string): Promise<FormFieldValue<T>>;
 
+    getFormFieldByProperty(property: string): Promise<FormField>;
+
     getAllFormFieldValues(): Map<string, FormFieldValue<any>>;
 
     getFormField(formFieldInstanceId: string): Promise<FormField>;

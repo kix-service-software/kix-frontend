@@ -3,12 +3,13 @@ import {
     KIXObjectType, InputFieldTypes, TicketProperty, TreeNode, KIXObjectLoadingOptions,
     ObjectIcon, Contact, SortUtil
 } from "../../model";
-import { ContextService } from "../context";
 import { LabelService } from "../LabelService";
 import { ObjectDefinitionUtil, KIXObjectService } from "../kix";
 import { TicketService } from "./TicketService";
 import { ObjectPropertyValue } from "../ObjectPropertyValue";
 import { PropertyOperator } from "../PropertyOperator";
+import { ObjectDataService } from "../ObjectDataService";
+import { ContactService } from "../contact";
 
 export class TicketBulkManager extends BulkManager {
 
@@ -26,8 +27,8 @@ export class TicketBulkManager extends BulkManager {
         if (property) {
             switch (property) {
                 case TicketProperty.TITLE:
-                case TicketProperty.CUSTOMER_USER_ID:
-                case TicketProperty.CUSTOMER_ID:
+                case TicketProperty.CONTACT_ID:
+                case TicketProperty.ORGANISATION_ID:
                 case TicketProperty.QUEUE_ID:
                 case TicketProperty.OWNER_ID:
                 case TicketProperty.RESPONSIBLE_ID:
@@ -44,11 +45,11 @@ export class TicketBulkManager extends BulkManager {
     }
 
     public async getInputType(property: string): Promise<InputFieldTypes> {
-        const objectData = ContextService.getInstance().getObjectData();
+        const objectData = ObjectDataService.getInstance().getObjectData();
         const ticketDefinition = objectData.objectDefinitions.find((od) => od.Object === this.objectType);
         if (ticketDefinition) {
             switch (property) {
-                case TicketProperty.CUSTOMER_USER_ID:
+                case TicketProperty.CONTACT_ID:
                     return InputFieldTypes.OBJECT_REFERENCE;
                 case TicketProperty.QUEUE_ID:
                 case TicketProperty.STATE_ID:
@@ -59,7 +60,7 @@ export class TicketBulkManager extends BulkManager {
                 case TicketProperty.RESPONSIBLE_ID:
                 case TicketProperty.OWNER_ID:
                 case TicketProperty.LOCK_ID:
-                case TicketProperty.CUSTOMER_ID:
+                case TicketProperty.ORGANISATION_ID:
                     return InputFieldTypes.DROPDOWN;
                 case TicketProperty.PENDING_TIME:
                     return InputFieldTypes.DATE_TIME;
@@ -73,14 +74,14 @@ export class TicketBulkManager extends BulkManager {
 
     public async getProperties(): Promise<Array<[string, string]>> {
         const properties: Array<[string, string]> = [];
-        const objectData = ContextService.getInstance().getObjectData();
+        const objectData = ObjectDataService.getInstance().getObjectData();
         const ticketDefinition = objectData.objectDefinitions.find((od) => od.Object === this.objectType);
         if (ticketDefinition) {
             const labelProvider = LabelService.getInstance().getLabelProviderForType(this.objectType);
             const attributes = ticketDefinition.Attributes.filter((a) =>
                 !a.ReadOnly
                 && a.Name !== TicketProperty.PENDING_TIME
-                && a.Name !== TicketProperty.CUSTOMER_ID
+                && a.Name !== TicketProperty.ORGANISATION_ID
             );
             for (const attribute of attributes) {
                 const label = await labelProvider.getPropertyText(attribute.Name);
@@ -94,14 +95,19 @@ export class TicketBulkManager extends BulkManager {
 
     public async searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]> {
         switch (property) {
-            case TicketProperty.CUSTOMER_USER_ID:
-                const loadingOptions = new KIXObjectLoadingOptions(null, null, null, searchValue, limit);
+            case TicketProperty.CONTACT_ID:
+                const loadingOptions = new KIXObjectLoadingOptions(
+                    null, ContactService.getInstance().prepareFullTextFilter(searchValue), null, limit
+                );
                 const contacts = await KIXObjectService.loadObjects<Contact>(
                     KIXObjectType.CONTACT, null, loadingOptions, null, false
                 );
-                return contacts.map(
-                    (c) => new TreeNode(c.ContactID, c.DisplayValue, new ObjectIcon(c.KIXObjectType, c.ContactID))
-                );
+                const nodes = [];
+                for (const c of contacts) {
+                    const displayValue = await LabelService.getInstance().getText(c);
+                    nodes.push(new TreeNode(c.ID, displayValue, new ObjectIcon(c.KIXObjectType, c.ID)));
+                }
+                return nodes;
             default:
         }
 
@@ -118,32 +124,32 @@ export class TicketBulkManager extends BulkManager {
     }
 
     private async checkContactValue(): Promise<void> {
-        const contactValue = this.bulkValues.find((bv) => bv.property === TicketProperty.CUSTOMER_USER_ID);
+        const contactValue = this.bulkValues.find((bv) => bv.property === TicketProperty.CONTACT_ID);
         if (contactValue) {
             contactValue.objectType = KIXObjectType.CONTACT;
             if (contactValue.value) {
-                const customerValue = this.bulkValues.find((bv) => bv.property === TicketProperty.CUSTOMER_ID);
-                if (!customerValue) {
+                const organisationValue = this.bulkValues.find((bv) => bv.property === TicketProperty.ORGANISATION_ID);
+                if (!organisationValue) {
                     const contacts = await KIXObjectService.loadObjects<Contact>(
                         KIXObjectType.CONTACT, [contactValue.value.toString()]
                     );
                     if (contacts && contacts.length) {
-                        const customerId = contacts[0].UserCustomerID;
+                        const orgId = contacts[0].PrimaryOrganisationID;
                         const value = new ObjectPropertyValue(
-                            TicketProperty.CUSTOMER_ID, PropertyOperator.CHANGE, customerId,
-                            KIXObjectType.CUSTOMER, true, false
+                            TicketProperty.ORGANISATION_ID, PropertyOperator.CHANGE, orgId,
+                            KIXObjectType.ORGANISATION, true, false
                         );
                         const index = this.bulkValues.findIndex(
-                            (bv) => bv.property === TicketProperty.CUSTOMER_USER_ID
+                            (bv) => bv.property === TicketProperty.CONTACT_ID
                         );
                         this.bulkValues.splice(index + 1, 0, value);
                     }
                 }
             } else {
-                await this.deleteValue(TicketProperty.CUSTOMER_ID);
+                await this.deleteValue(TicketProperty.ORGANISATION_ID);
             }
         } else {
-            await this.deleteValue(TicketProperty.CUSTOMER_ID);
+            await this.deleteValue(TicketProperty.ORGANISATION_ID);
         }
     }
 

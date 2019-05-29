@@ -53,23 +53,23 @@ describe('HTTP Service', () => {
         });
 
         it('Should return an empty object.', async () => {
-            const res = await HttpService.getInstance().get('testGet', {});
+            const res = await HttpService.getInstance().get('testGet', {}, 'token', null);
             expect(res).exist;
             expect(res).deep.equal({});
         });
 
         it('Should return a object with properties.', async () => {
-            const res = await HttpService.getInstance().get("testGetObject", {});
+            const res = await HttpService.getInstance().get("testGetObject", {}, 'token', null);
             expect(res).deep.equal(this.testObject);
         });
 
         it('Should return a object with the values of the query parameter.', async () => {
-            const res = await HttpService.getInstance().get('object', { id: '12345' });
+            const res = await HttpService.getInstance().get('object', { id: '12345' }, 'token', null);
             expect(res).deep.equal(this.parameterObject);
         });
 
         it('Should return a correct http error if resource not exists.', async () => {
-            const res = await HttpService.getInstance().get('unknownResource', {})
+            const res = await HttpService.getInstance().get('unknownResource', {}, 'token', null)
                 .catch((err: Error) => {
                     expect(err).exist;
                     expect(err).instanceof(Error);
@@ -92,44 +92,14 @@ describe('HTTP Service', () => {
         });
 
         it('Should return the id of the new created object.', async () => {
-            const response: string = await HttpService.getInstance().post<string>("post", { name: 'testobject' });
+            const response: string = await HttpService.getInstance().post<string>("post", { name: 'testobject' }, '', null);
             expect(response).exist;
             expect(response).an('string');
             expect(response).equal('Object#12345');
         });
 
         it('Should return a correct http error if resource not exists.', async () => {
-            const res = await HttpService.getInstance().post('unknownResource', {})
-                .catch((err: Error) => {
-                    expect(err).exist;
-                    expect(err).instanceof(Error);
-                    expect(err.StatusCode).equal(404);
-                });
-        });
-    });
-
-    describe('PUT Requests', () => {
-        before(() => {
-            nockScope
-                .put('/put/12345', {
-                    name: 'testobject'
-                })
-                .reply(200, 'Object#12345');
-
-            nockScope
-                .put('/unknownResource')
-                .reply(404, new Error('404', 'Error', 404));
-        });
-
-        it('Should return the id of the updated object.', async () => {
-            const response: string = await HttpService.getInstance().put<string>("put/12345", { name: 'testobject' });
-            expect(response).exist;
-            expect(response).an('string');
-            expect(response).equal('Object#12345');
-        });
-
-        it('Should return a correct http error if resource not exists.', async () => {
-            const res = await HttpService.getInstance().put('unknownResource', {})
+            const res = await HttpService.getInstance().post('unknownResource', {}, '', null)
                 .catch((err: Error) => {
                     expect(err).exist;
                     expect(err).instanceof(Error);
@@ -154,14 +124,14 @@ describe('HTTP Service', () => {
         });
 
         it('Should return the id of the patched object.', async () => {
-            const response: string = await HttpService.getInstance().patch<string>("patch/12345", { name: 'testobject' });
+            const response: string = await HttpService.getInstance().patch<string>("patch/12345", { name: 'testobject' }, '', null);
             expect(response).exist;
             expect(response).an('string');
             expect(response).equal('Object#12345');
         });
 
         it('Should return a correct http error if resource not exists.', async () => {
-            const res = await HttpService.getInstance().patch('unknownResource', { name: 'testobject' })
+            const res = await HttpService.getInstance().patch('unknownResource', { name: 'testobject' }, '', null)
                 .catch((err: Error) => {
                     expect(err).exist;
                     expect(err).instanceof(Error);
@@ -182,12 +152,12 @@ describe('HTTP Service', () => {
         });
 
         it('Should return nothing if object is deleted.', async () => {
-            const response = await HttpService.getInstance().delete("delete/12345");
+            const response = await HttpService.getInstance().delete("delete/12345", '', null);
             expect(response).undefined;
         });
 
         it('Should return a correct http error if resource not exists.', async () => {
-            const res = await HttpService.getInstance().delete('unknownResource')
+            const res = await HttpService.getInstance().delete('unknownResource', '', null)
                 .catch((err: Error) => {
                     expect(err).exist;
                     expect(err).instanceof(Error);

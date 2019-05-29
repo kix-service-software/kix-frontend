@@ -2,7 +2,7 @@ import { IConfigurationExtension } from '../../core/extensions';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize
 } from '../../core/model';
-import { AdminContext, AdminContextConfiguration } from '../../core/browser/admin';
+import { AdminContext } from '../../core/browser/admin';
 import { AdminModuleService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
@@ -14,7 +14,7 @@ export class Extension implements IConfigurationExtension {
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
         const notesSidebar =
             new ConfiguredWidget('20181126-admin-notes', new WidgetConfiguration(
-                'notes-widget', 'Notizen', [], {},
+                'notes-widget', 'Translatable#Notes', [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-note', false)
             );
 
@@ -25,15 +25,17 @@ export class Extension implements IConfigurationExtension {
 
         const adminModuleCategoriesExplorer =
             new ConfiguredWidget('20181127-admin-module-categories-explorer', new WidgetConfiguration(
-                'admin-modules-explorer', 'Verwaltung', [], categories,
+                'admin-modules-explorer', 'Translatable#Administration', [], categories,
                 false, false, WidgetSize.BOTH, null, false)
             );
 
         const explorer = ['20181127-admin-module-categories-explorer'];
         const explorerWidgets: Array<ConfiguredWidget<any>> = [adminModuleCategoriesExplorer];
 
-        return new AdminContextConfiguration(
-            this.getModuleId(), explorer, sidebars, sidebarWidgets, explorerWidgets, [], []
+        return new ContextConfiguration(
+            this.getModuleId(),
+            sidebars, sidebarWidgets,
+            explorer, explorerWidgets
         );
     }
 

@@ -4,23 +4,32 @@ import { OverlayType, StringContent, ComponentContent, ToastContent, ConfirmOver
 export class BrowserUtil {
 
     public static openErrorOverlay(error: string): void {
-        OverlayService.getInstance().openOverlay(OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true);
+        OverlayService.getInstance().openOverlay(
+            OverlayType.WARNING, null, new StringContent(error), 'Translatable#Error!', true
+        );
     }
 
-    public static openSuccessOverlay(message: string): void {
+    public static async openSuccessOverlay(message: string): Promise<void> {
         const content = new ComponentContent('toast', new ToastContent('kix-icon-check', message));
         OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
     }
 
     public static openConfirmOverlay(
-        title: string = 'Sicher?', confirmText: string = 'Sind Sie sicher?',
+        title: string = 'Sure?', confirmText: string = 'Are you sure?',
         confirmCallback: () => void = null, cancelCallback: () => void = null,
-        labels: [string, string] = ['Ja', 'Nein']
+        labels: [string, string] = ['Yes', 'No']
     ): void {
         const content = new ComponentContent(
             'confirm-overlay', new ConfirmOverlayContent(confirmText, confirmCallback, cancelCallback, labels)
         );
         OverlayService.getInstance().openOverlay(OverlayType.CONFIRM, null, content, title, false);
+    }
+
+    public static openAppRefreshOverlay(): void {
+        const componentContent = new ComponentContent('refresh-app-toast', {});
+        OverlayService.getInstance().openOverlay(
+            OverlayType.HINT_TOAST, null, componentContent, 'Update', null, null, null, null, 15000
+        );
     }
 
     public static startBrowserDownload(fileName: string, content: string, contentType: string): void {
@@ -36,21 +45,66 @@ export class BrowserUtil {
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-
         }
     }
 
     public static readFile(file: File): Promise<string> {
         return new Promise((resolve, reject) => {
+            if (file instanceof File) {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    let content = reader.result.toString();
+                    content = content.split(',')[1];
+                    resolve(content);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    public static readFileAsText(file: File, encoding: string = 'UTF-8'): Promise<string> {
+        return new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onload = () => {
-                let content = reader.result.toString();
-                content = content.split(',')[1];
+                const content = reader.result.toString();
                 resolve(content);
             };
-            reader.readAsDataURL(file);
+            reader.readAsText(file, encoding);
         });
+    }
 
+    public static parseCSV(csvString: string, textSeparator: string = '"', valueSeparator: string = ';'): string[][] {
+        const list = [];
+        let quote = false;
+
+        for (let row = 0, column = 0, character = 0; character < csvString.length; character++) {
+            const currentCharacter = csvString[character];
+            const nextCharacter = csvString[character + 1];
+            list[row] = list[row] || [];
+            list[row][column] = list[row][column] || '';
+
+            if (
+                currentCharacter.match(new RegExp(textSeparator))
+                && quote && nextCharacter && nextCharacter.match(new RegExp(textSeparator))
+            ) {
+                list[row][column] += currentCharacter; ++character; continue;
+            }
+
+            if (currentCharacter.match(new RegExp(textSeparator))) { quote = !quote; continue; }
+
+            if (currentCharacter.match(new RegExp(valueSeparator)) && !quote) { ++column; continue; }
+
+            if (
+                currentCharacter === '\r' && nextCharacter === '\n' && !quote
+            ) { ++row; column = 0; ++character; continue; }
+
+            if (currentCharacter === '\n' && !quote) { ++row; column = 0; continue; }
+            if (currentCharacter === '\r' && !quote) { ++row; column = 0; continue; }
+
+            list[row][column] += currentCharacter;
+        }
+
+        return list;
     }
 
     public static calculateAverage(values: number[]): number {

@@ -1,19 +1,19 @@
-import { AbstractNewDialog } from "../../../../../core/browser";
 import { KIXObjectType, ContextMode, TicketStateProperty } from "../../../../../core/model";
 import { ComponentState } from "./ComponentState";
 import { TicketStateDetailsContext } from "../../../../../core/browser/ticket";
 import { RoutingConfiguration } from "../../../../../core/browser/router";
+import { AbstractNewDialog } from "../../../../../core/browser/components/dialog";
 
 class Component extends AbstractNewDialog {
 
     public onCreate(): void {
         this.state = new ComponentState();
         super.init(
-            'Status wird angelegt',
-            'Status wurde erfolgreich angelegt.',
+            'Translatable#Create State',
+            'Translatable#State successfully created.',
             KIXObjectType.TICKET_STATE,
             new RoutingConfiguration(
-                null, TicketStateDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_STATE,
+                TicketStateDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_STATE,
                 ContextMode.DETAILS, TicketStateProperty.ID, true
             )
         );

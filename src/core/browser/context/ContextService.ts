@@ -1,20 +1,26 @@
 import {
-    Context, ContextConfiguration, ObjectData, WidgetConfiguration,
-    ContextType, KIXObjectType, ContextMode, ContextDescriptor
+    Context, WidgetConfiguration,
+    ContextType, KIXObjectType, ContextMode, ContextDescriptor, ObjectUpdatedEventData, FormContext, ObjectIcon
 } from '../../model';
-import { ContextSocketListener } from './ContextSocketListener';
+import { ContextSocketClient } from './ContextSocketClient';
 import { IContextServiceListener } from './IContextServiceListener';
 import { ContextHistoryEntry } from './ContextHistoryEntry';
 import { ContextHistory } from './ContextHistory';
 import { RoutingService } from '../router';
 import { ContextFactory } from './ContextFactory';
-import { DialogService } from '../components';
+import { DialogService } from '../components/dialog/DialogService';
+import { BrowserUtil } from '../BrowserUtil';
+import { EventService } from '../event';
+import { ApplicationEvent } from '../application';
+import { FormService } from '../form';
 
 export class ContextService {
 
     private static INSTANCE: ContextService = null;
 
-    public static getInstance<CC extends ContextConfiguration, T extends Context<CC>>(): ContextService {
+    private refreshTimout: NodeJS.Timeout;
+
+    public static getInstance(): ContextService {
         if (!ContextService.INSTANCE) {
             ContextService.INSTANCE = new ContextService();
         }
@@ -26,7 +32,13 @@ export class ContextService {
     private activeMainContext: Context;
     private activeDialogContext: Context;
     private activeContextType: ContextType = ContextType.MAIN;
-    private objectData: ObjectData;
+
+    private resetRefreshTimer(): void {
+        if (this.refreshTimout) {
+            clearTimeout(this.refreshTimout);
+            this.refreshTimout = null;
+        }
+    }
 
     public registerListener(listener: IContextServiceListener): void {
         this.serviceListener.push(listener);
@@ -40,8 +52,13 @@ export class ContextService {
         contextId: string, kixObjectType: KIXObjectType, contextMode: ContextMode,
         objectId?: string | number, reset?: boolean, history: boolean = false
     ): Promise<void> {
+
+        this.resetRefreshTimer();
+
+        const oldContext = this.getActiveContext();
+
         const context = await ContextFactory.getInstance().getContext(
-            contextId, kixObjectType, contextMode, objectId, reset
+            contextId, kixObjectType, contextMode, objectId, (!history && reset)
         );
 
         if (context && context.getDescriptor().contextType === ContextType.MAIN) {
@@ -61,41 +78,64 @@ export class ContextService {
 
         this.serviceListener.forEach(
             (sl) => sl.contextChanged(
-                context.getDescriptor().contextId, context, context.getDescriptor().contextType, history
+                context.getDescriptor().contextId, context, context.getDescriptor().contextType, history, oldContext
             )
         );
     }
 
     public async setDialogContext(
-        contextId: string, kixObjectType: KIXObjectType, contextMode: ContextMode,
-        objectId?: string | number, reset?: boolean, title?: string, singleTab?: boolean
+        contextId: string, kixObjectType: KIXObjectType, contextMode: ContextMode, objectId?: string | number,
+        resetContext?: boolean, title?: string, singleTab?: boolean, formId?: string, icon?: string | ObjectIcon,
+        resetForm: boolean = resetContext
     ): Promise<void> {
+
+        this.resetRefreshTimer();
+
+        const oldContext = this.getActiveContext();
+
         let context: Context;
         if (kixObjectType) {
             context = await ContextFactory.getInstance().getContext(
-                contextId, kixObjectType, contextMode, objectId, reset
+                contextId, kixObjectType, contextMode, objectId, resetContext
             );
         } else {
             const dialogs = DialogService.getInstance().getRegisteredDialogs(contextMode);
             if (dialogs && dialogs.length) {
                 context = await ContextFactory.getInstance().getContext(
-                    contextId, dialogs[0].kixObjectType, dialogs[0].contextMode, null, reset
+                    contextId, dialogs[0].kixObjectType, dialogs[0].contextMode, null, resetContext
                 );
+
+                if (resetContext) {
+                    for (const dialog of dialogs) {
+                        const fid = await FormService.getInstance().getFormIdByContext(
+                            FormContext.NEW, dialog.kixObjectType
+                        );
+                        FormService.getInstance().deleteFormInstance(fid);
+                    }
+                }
             }
         }
 
         if (context && context.getDescriptor().contextType === ContextType.DIALOG) {
+
+            if (resetForm && formId) {
+                FormService.getInstance().deleteFormInstance(formId);
+            }
+            if (formId) {
+                context.setAdditionalInformation('FORM_ID', formId);
+            }
+
             this.activeDialogContext = context;
             this.activeContextType = ContextType.DIALOG;
 
             DialogService.getInstance().openMainDialog(
                 context.getDescriptor().contextMode, context.getDescriptor().componentId,
-                kixObjectType, title, null, singleTab
+                kixObjectType, title, icon, singleTab
             );
 
             this.serviceListener.forEach(
                 (sl) => sl.contextChanged(
-                    context.getDescriptor().contextId, context, context.getDescriptor().contextType, false
+                    context.getDescriptor().contextId, context, context.getDescriptor().contextType, false, oldContext
                 )
             );
         }
@@ -103,6 +143,7 @@ export class ContextService {
 
     public closeDialogContext(): void {
         this.activeContextType = ContextType.MAIN;
+        ContextFactory.getInstance().resetDialogContexts();
     }
 
     public getActiveContext(contextType?: ContextType): Context {
@@ -112,6 +153,12 @@ export class ContextService {
 
     public async getContext<T extends Context = Context>(contextId: string, objectId?: string | number): Promise<T> {
         return (await ContextFactory.getInstance().getContext(contextId, null, null, objectId) as T);
+    }
+
+    public async getContextByTypeAndMode<T extends Context = Context>(
+        objectType: KIXObjectType, contextMode: ContextMode = ContextMode.DETAILS
+    ): Promise<T> {
+        return (await ContextFactory.getInstance().getContext(null, objectType, contextMode) as T);
     }
 
     public getHistory(limit: number = 10): ContextHistoryEntry[] {
@@ -128,15 +175,44 @@ export class ContextService {
         instanceId: string, widgetConfiguration: WidgetConfiguration<T>,
         contextId: string = this.activeMainContext.getDescriptor().contextId
     ): Promise<void> {
-        await ContextSocketListener.getInstance().saveWidgetConfiguration(instanceId, widgetConfiguration, contextId);
+        await ContextSocketClient.getInstance().saveWidgetConfiguration(instanceId, widgetConfiguration, contextId);
     }
 
-    public setObjectData(objectData: ObjectData): void {
-        this.objectData = objectData;
+    public async handleUpdateNotifications(events: ObjectUpdatedEventData[]): Promise<void> {
+        if (this.activeContextType === ContextType.MAIN && this.activeMainContext) {
+            if (this.activeMainContext.getDescriptor().contextMode === ContextMode.DETAILS) {
+                const showRefreshNotification = events.some((e) => {
+                    const objectType = this.getObjectType(e.Namespace);
+                    const isObjectType = objectType === this.activeMainContext.getDescriptor().kixObjectTypes[0];
+                    const eventObjectId = e.ObjectID.split('::');
+                    const isObject = eventObjectId[0] === this.activeMainContext.getObjectId().toString();
+                    return isObjectType && isObject;
+                });
+
+                if (showRefreshNotification) {
+                    BrowserUtil.openAppRefreshOverlay();
+                }
+            } else if (this.activeMainContext.getDescriptor().contextMode === ContextMode.DASHBOARD) {
+                if (!this.refreshTimout) {
+                    this.refreshTimout = setTimeout(() => {
+                        EventService.getInstance().publish(ApplicationEvent.REFRESH);
+                        this.refreshTimout = null;
+                    }, 120000);
+                }
+            }
+        }
     }
 
-    public getObjectData(): ObjectData {
-        return this.objectData;
+    private getObjectType(namespace: string): string {
+        const objects = namespace.split('.');
+        if (objects.length > 1) {
+            if (objects[0] === 'FAQ') {
+                return KIXObjectType.FAQ_ARTICLE;
+            } else if (objects[0] === 'CMDB') {
+                return objects[1];
+            }
+        }
+        return objects[0];
     }
 
 }

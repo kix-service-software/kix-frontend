@@ -1,16 +1,25 @@
-import { FormInputComponent, TreeNode, KIXObjectType } from "../../../../../core/model";
-import { CompontentState } from "./CompontentState";
-import { ServiceRegistry } from "../../../../../core/browser";
-import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
+import { FormInputComponent, TreeNode, KIXObjectType } from '../../../../../core/model';
+import { CompontentState } from './CompontentState';
+import { ServiceRegistry } from '../../../../../core/browser';
+import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
-class Component extends FormInputComponent<number, CompontentState> {
+class Component extends FormInputComponent<string, CompontentState> {
 
     public onCreate(): void {
         this.state = new CompontentState();
     }
 
-    public async onInput(input: any): Promise<void> {
-        await super.onInput(input);
+    public onInput(input: any): void {
+        super.onInput(input);
+        this.update();
+    }
+
+    public async update(): Promise<void> {
+        const placeholderText = this.state.field.placeholder
+            ? this.state.field.placeholder
+            : this.state.field.required ? this.state.field.label : '';
+
+        this.state.placeholder = await TranslationService.translate(placeholderText);
     }
 
     public async onMount(): Promise<void> {
@@ -20,12 +29,19 @@ class Component extends FormInputComponent<number, CompontentState> {
         );
         const languages = await translationService.getLanguages();
         this.state.nodes = languages.map((l) => new TreeNode(l[0], l[1]));
-        this.setCurrentNode();
+        await this.setCurrentNode();
     }
 
-    public setCurrentNode(): void {
+    public async setCurrentNode(): Promise<void> {
+        let lang: string;
         if (this.state.defaultValue && this.state.defaultValue.value) {
-            this.state.currentNode = this.state.nodes.find((n) => n.id === this.state.defaultValue.value);
+            lang = this.state.defaultValue.value;
+        } else {
+            lang = await TranslationService.getSystemDefaultLanguage();
+        }
+
+        if (lang) {
+            this.state.currentNode = this.state.nodes.find((n) => n.id === lang);
             super.provideValue(this.state.currentNode ? this.state.currentNode.id : null);
         }
     }

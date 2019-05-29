@@ -160,7 +160,7 @@ export class LinkUtil {
         const linkTypes = await KIXObjectService.loadObjects<LinkType>(KIXObjectType.LINK_TYPE, null, null, null, false)
             .catch((error) => [] as LinkType[]);
 
-        linkTypes.forEach((lt) => {
+        for (const lt of linkTypes) {
             let linkableObjectType = null;
 
             if (lt.Source === rootType) {
@@ -173,11 +173,11 @@ export class LinkUtil {
                 let objectName = linkableObjectType;
                 const labelProvider = LabelService.getInstance().getLabelProviderForType(linkableObjectType);
                 if (labelProvider) {
-                    objectName = labelProvider.getObjectName();
+                    objectName = await labelProvider.getObjectName();
                 }
                 partners.push([objectName, linkableObjectType]);
             }
-        });
+        }
 
         return partners;
     }

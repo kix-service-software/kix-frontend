@@ -11,7 +11,7 @@ export class Extension implements IMainMenuExtension {
 
     public icon: string = "kix-icon-faq";
 
-    public text: string = "FAQ";
+    public text: string = "Translatable#FAQ";
 
 
 

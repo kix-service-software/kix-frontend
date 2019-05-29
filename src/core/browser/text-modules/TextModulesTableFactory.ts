@@ -1,11 +1,12 @@
 import { KIXObjectType, TextModuleProperty } from "../../model";
 import {
-    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
+    TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableHeaderHeight, IColumnConfiguration
 } from "../table";
 import { TextModulesTableContentProvider } from "./TextModulesTableContentProvider";
+import { TableFactory } from "../table/TableFactory";
 
-export class TextModulesTableFactory implements ITableFactory {
+export class TextModulesTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.TEXT_MODULE;
 

@@ -1,4 +1,4 @@
-import { ReleaseInfo } from "../../../core/model";
+import { ReleaseInfo } from '../../../core/model';
 
 export class ComponentState {
 
@@ -7,7 +7,9 @@ export class ComponentState {
         public kixProduct: string = null,
         public currentUserLogin: string = null,
         public buildNumber: string = null,
-        public releaseInfo: ReleaseInfo = null
+        public releaseInfo: ReleaseInfo = null,
+        public imprintLink: string = null,
+        public unauthorized: boolean = false
     ) { }
 
 }

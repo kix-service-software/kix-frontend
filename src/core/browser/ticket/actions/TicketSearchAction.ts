@@ -4,12 +4,12 @@ import { KIXObjectType, ContextMode } from '../../../model';
 
 export class TicketSearchAction extends AbstractAction {
 
-    public initAction(): void {
-        this.text = "Suche";
-        this.icon = "kix-icon-search";
+    public async initAction(): Promise<void> {
+        this.text = 'Translatable#Search';
+        this.icon = 'kix-icon-search';
     }
 
-    public run(): void {
+    public async run(event: any): Promise<void> {
         ContextService.getInstance().setDialogContext(null, KIXObjectType.TICKET, ContextMode.SEARCH, null, true);
     }
 

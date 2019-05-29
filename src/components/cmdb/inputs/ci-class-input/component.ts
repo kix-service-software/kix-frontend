@@ -1,6 +1,7 @@
-import { ComponentState } from "./ComponentState";
-import { FormInputComponent, TreeNode, ConfigItemClass, KIXObjectType, ObjectIcon } from "../../../../core/model";
-import { KIXObjectService } from "../../../../core/browser";
+import { ComponentState } from './ComponentState';
+import { FormInputComponent, TreeNode, ConfigItemClass, KIXObjectType, ObjectIcon } from '../../../../core/model';
+import { KIXObjectService } from '../../../../core/browser';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component extends FormInputComponent<ConfigItemClass, ComponentState> {
 
@@ -10,8 +11,17 @@ class Component extends FormInputComponent<ConfigItemClass, ComponentState> {
         this.state = new ComponentState();
     }
 
-    public async onInput(input: any): Promise<void> {
-        await super.onInput(input);
+    public onInput(input: any): void {
+        super.onInput(input);
+        this.update();
+    }
+
+    public async update(): Promise<void> {
+        const placeholderText = this.state.field.placeholder
+            ? this.state.field.placeholder
+            : this.state.field.required ? this.state.field.label : '';
+
+        this.state.placeholder = await TranslationService.translate(placeholderText);
     }
 
     public async onMount(): Promise<void> {

@@ -4,8 +4,8 @@
 <else>
     <input.input-style
         type="text"
-        placeholder="Filterwert eingeben"
-        value=component.filterText
+        placeholder=state.placeholder
+        value=state.filterText
         on-change("textFilterValueChanged")
         on-keydown("filterKeyDown")
         key="column-filter-input"/>

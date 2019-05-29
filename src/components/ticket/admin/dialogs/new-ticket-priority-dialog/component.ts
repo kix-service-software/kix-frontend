@@ -1,19 +1,19 @@
-import { AbstractNewDialog } from "../../../../../core/browser";
 import { KIXObjectType, ContextMode, TicketPriorityProperty, } from "../../../../../core/model";
 import { ComponentState } from "./ComponentState";
 import { TicketPriorityDetailsContext } from "../../../../../core/browser/ticket";
 import { RoutingConfiguration } from "../../../../../core/browser/router";
+import { AbstractNewDialog } from "../../../../../core/browser/components/dialog";
 
 class Component extends AbstractNewDialog {
 
     public onCreate(): void {
         this.state = new ComponentState();
         super.init(
-            'Priorität wird angelegt',
-            'Priorität wurde erfolgreich angelegt.',
+            'Translatable#Create Priority',
+            'Translatable#Priority successfully created.',
             KIXObjectType.TICKET_PRIORITY,
             new RoutingConfiguration(
-                null, TicketPriorityDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_PRIORITY,
+                TicketPriorityDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_PRIORITY,
                 ContextMode.DETAILS, TicketPriorityProperty.ID, true
             )
         );

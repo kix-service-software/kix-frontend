@@ -1,5 +1,6 @@
 import { ComponentState } from "./CompontentState";
 import { ArchiveFlag, FormInputComponent, TreeNode } from "../../../../../core/model";
+import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
 
 
 class Component extends FormInputComponent<number, ComponentState> {
@@ -8,16 +9,25 @@ class Component extends FormInputComponent<number, ComponentState> {
         this.state = new ComponentState();
     }
 
-    public async onInput(input: any): Promise<void> {
-        await super.onInput(input);
+    public onInput(input: any): void {
+        super.onInput(input);
+        this.update();
+    }
+
+    public async update(): Promise<void> {
+        const placeholderText = this.state.field.placeholder
+            ? this.state.field.placeholder
+            : this.state.field.required ? this.state.field.label : '';
+
+        this.state.placeholder = await TranslationService.translate(placeholderText);
     }
 
     public async onMount(): Promise<void> {
         await super.onMount();
         this.state.nodes = [
-            new TreeNode(ArchiveFlag.ALL, 'Alle Tickets'),
-            new TreeNode(ArchiveFlag.ARCHIVED, 'Archivierte Tickets'),
-            new TreeNode(ArchiveFlag.NOT_ARCHIVED, 'Nicht archivierte Tickets')
+            new TreeNode(ArchiveFlag.ALL, 'Translatable#All Tickets'),
+            new TreeNode(ArchiveFlag.ARCHIVED, 'Translatable#archived tickets'),
+            new TreeNode(ArchiveFlag.NOT_ARCHIVED, 'Translatable#not archived tickets')
         ];
         this.setCurrentNode();
     }

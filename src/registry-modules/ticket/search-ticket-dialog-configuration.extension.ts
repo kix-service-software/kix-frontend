@@ -1,11 +1,11 @@
 import { IConfigurationExtension } from '../../core/extensions';
-import { TicketSearchContextConfiguration, TicketSearchContext } from '../../core/browser/ticket';
 import {
     ContextConfiguration, KIXObjectType, TicketProperty, FormContext, SearchForm,
     ConfiguredWidget, WidgetConfiguration, WidgetSize
 } from '../../core/model';
 import { ConfigurationService } from '../../core/services';
 import { SearchProperty } from '../../core/browser';
+import { TicketSearchContext } from '../../core/browser/ticket';
 
 export class ModuleExtension implements IConfigurationExtension {
 
@@ -15,16 +15,15 @@ export class ModuleExtension implements IConfigurationExtension {
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
         const helpWidget = new ConfiguredWidget('20180919-help-widget', new WidgetConfiguration(
-            'help-widget', 'Hilfe', [], {
-                helpText: 'Eine <b>Erläuterung zu den Suchoperatoren</b> finden Sie hier: '
-                    + '<a href="faqarticles/2" target="_blank">'
-                    + 'Wie suche ich in KIX 18?</a>'
+            'help-widget', 'Translatable#Help', [], {
+                // tslint:disable-next-line:max-line-length
+                helpText: 'The FAQ article <a href=\"faqarticles/2\" target=\"_blank\">How to search in KIX 18?</a> offers a detailed <b>explanation for the search operators<b>'
             }, false, false, WidgetSize.BOTH, 'kix-icon-query', false
         ));
         const sidebarWidgets = [helpWidget];
         const sidebars = ['20180919-help-widget'];
-        return new TicketSearchContextConfiguration(
-            TicketSearchContext.CONTEXT_ID, [], sidebars, sidebarWidgets, [], []
+        return new ContextConfiguration(
+            TicketSearchContext.CONTEXT_ID, sidebars, sidebarWidgets
         );
     }
 
@@ -34,7 +33,7 @@ export class ModuleExtension implements IConfigurationExtension {
         if (!existingForm || overwrite) {
             const form = new SearchForm(
                 formId,
-                'Ticketsuche',
+                'Ticket Search',
                 KIXObjectType.TICKET,
                 FormContext.SEARCH,
                 null,

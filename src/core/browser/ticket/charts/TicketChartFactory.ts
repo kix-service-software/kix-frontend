@@ -1,7 +1,7 @@
 import { TicketProperty, Ticket, KIXObjectType, DateTimeUtil, TicketPriority, TicketState } from "../../../model";
 import { LabelService } from "../../LabelService";
-import { ContextService } from "../../context";
 import { KIXObjectService } from "../../kix";
+import { ObjectDataService } from "../../ObjectDataService";
 
 export class TicketChartFactory {
 
@@ -22,7 +22,7 @@ export class TicketChartFactory {
             case TicketProperty.PRIORITY_ID:
                 return await this.preparePropertyCountData(property, tickets);
             case TicketProperty.CREATED:
-                return this.prepareCreatedData(property, tickets);
+                return await this.prepareCreatedData(property, tickets);
             default:
                 return new Map();
         }
@@ -45,7 +45,7 @@ export class TicketChartFactory {
     }
 
     private async initMap(property: TicketProperty): Promise<Map<string, number>> {
-        const objectData = ContextService.getInstance().getObjectData();
+        const objectData = ObjectDataService.getInstance().getObjectData();
         const map = new Map<string, number>();
         switch (property) {
             case TicketProperty.PRIORITY_ID:
@@ -65,13 +65,13 @@ export class TicketChartFactory {
         }
     }
 
-    private prepareCreatedData(property: TicketProperty, tickets: Ticket[]): Map<string, number> {
+    private async prepareCreatedData(property: TicketProperty, tickets: Ticket[]): Promise<Map<string, number>> {
         const data = new Map<string, number>();
         const currentDate = new Date();
         currentDate.setDate(currentDate.getDate() - 8);
         for (let i = 1; i <= 8; i++) {
             currentDate.setDate(currentDate.getDate() + 1);
-            const label = DateTimeUtil.getLocalDateString(currentDate);
+            const label = await DateTimeUtil.getLocalDateString(currentDate);
             const createdTickets = tickets.filter((t) => DateTimeUtil.sameDay(currentDate, new Date(t.Created)));
             data.set(label, createdTickets.length);
         }

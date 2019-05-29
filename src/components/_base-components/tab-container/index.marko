@@ -1,18 +1,22 @@
 <div.tab-container>
-    <widget instanceId="tab-widget" title=state.title minimizable=state.minimizable contentActions=state.contentActions>
+    <widget
+        instanceId="tab-widget"
+        minimizable=state.minimizable
+        contentActions=state.contentActions
+        title=state.activeTabTitle>
         <@headerContent>
             <ul.tab-list>
-                <for(tab in state.tabWidgets)>
+                <for|tab| of=state.tabWidgets>
                     <li
-                        title=tab.configuration.title
+                        title=component.getTitle(tab)
                         class={
                                                 active: component.isActiveTab(tab.instanceId)
                                             }
                         on-click("tabClicked", tab)>
-                        <if(tab.configuration.icon)>
-                            <icon icon=tab.configuration.icon showUnknown=false/>
+                        <if(component.getIcon(tab))>
+                            <icon icon=component.getIcon(tab) showUnknown=false/>
                         </if>
-                        ${tab.configuration.title}
+                        ${component.getTitle(tab)}
                     </li>
                 </for>
             </ul>

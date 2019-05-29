@@ -1,10 +1,10 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize,
-    FormField, Form, FormContext, KIXObjectType
+    FormField, Form, FormContext, KIXObjectType, TableWidgetSettings
 } from '../../core/model';
-import { FAQContext, FAQContextConfiguration } from '../../core/browser/faq';
-import { SearchProperty, TableConfiguration } from '../../core/browser';
+import { FAQContext } from '../../core/browser/faq';
+import { SearchProperty, TableConfiguration, TableHeaderHeight, TableRowHeight } from '../../core/browser';
 import { FAQArticleProperty } from '../../core/model/kix/faq';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../core/services';
@@ -19,8 +19,15 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
 
         const articleListWidget =
             new ConfiguredWidget('20180727-faq-article-list-widget', new WidgetConfiguration(
-                'table-widget', 'Übersicht FAQ', ['faq-article-create-action', 'csv-export-action'],
-                { objectType: KIXObjectType.FAQ_ARTICLE }, false, false, WidgetSize.BOTH, 'kix-icon-faq', true)
+                'table-widget', 'Translatable#Overview FAQ', ['faq-article-create-action', 'csv-export-action'],
+                new TableWidgetSettings(
+                    KIXObjectType.FAQ_ARTICLE, null,
+                    new TableConfiguration(
+                        KIXObjectType.FAQ_ARTICLE, null, 25, null, null, true, null, null, null,
+                        TableHeaderHeight.LARGE, TableRowHeight.LARGE
+                    )
+                ),
+                false, false, WidgetSize.BOTH, 'kix-icon-faq', true)
             );
 
         const content = ['20180727-faq-article-list-widget'];
@@ -28,7 +35,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
 
         const faqCategoryExplorer =
             new ConfiguredWidget('20180625-faq-category-explorer', new WidgetConfiguration(
-                'faq-category-explorer', 'FAQ Kategorien', [], {},
+                'faq-category-explorer', 'Translatable#FAQ Categories', [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-faq', false)
             );
 
@@ -37,15 +44,20 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
 
         const notesSidebar =
             new ConfiguredWidget('20180726-faq-notes', new WidgetConfiguration(
-                'notes-widget', 'Notizen', [], {},
+                'notes-widget', 'Translatable#Notes', [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-note', false)
             );
 
         const sidebars = ['20180726-faq-notes'];
         const sidebarWidgets: Array<ConfiguredWidget<any>> = [notesSidebar];
 
-        return new FAQContextConfiguration(
-            this.getModuleId(), explorer, sidebars, sidebarWidgets, explorerWidgets, content, contentWidgets
+        return new ContextConfiguration(
+            this.getModuleId(),
+            sidebars, sidebarWidgets,
+            explorer, explorerWidgets,
+            [], [],
+            [], [],
+            content, contentWidgets
         );
     }
 
@@ -56,18 +68,18 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
         const existingLinkForm = configurationService.getModuleConfiguration(linkFormId, null);
         if (!existingLinkForm) {
             const fields: FormField[] = [];
-            fields.push(new FormField("Volltext", SearchProperty.FULLTEXT, null, false, "Suche in folgenden  Feldern der FAQ-Artikel:  FAQ#,  Titel, Symptom, Ursache, Lösung, Kommentar, Geändert von, Erstellt von, Schlüsselworte, Sprache, Gültigkeit"));
-            fields.push(new FormField("FAQ#", FAQArticleProperty.NUMBER, null, false, "Suche nach FAQ-Artikeln mit dieser Nummer oder Teilen der Nummer (mindestens 1 Zeichen)."));
-            fields.push(new FormField("Titel", FAQArticleProperty.TITLE, null, false, "Suche nach FAQ-Artikeln mit diesem Titel oder Teilen des Titels (mindestens 1 Zeichen)."));
+            fields.push(new FormField("Translatable#Full Text", SearchProperty.FULLTEXT, null, false, "Translatable#Searchable FAQ attributes: FAQ#, Title, Symptom, Cause, Solution, Comment, Changed by, Created by, Keywords, Language, Validity"));
+            fields.push(new FormField("Translatable#FAQ#", FAQArticleProperty.NUMBER, null, false, "Translatable#Search for FAQ articles with the same title or part of the same title (min. 1 character)."));
+            fields.push(new FormField('Translatable#Title', FAQArticleProperty.TITLE, null, false, "Translatable#Search for FAQ articles with the same number or part of the same number (min. 1 character)."));
             fields.push(new FormField(
-                "Kategorie", FAQArticleProperty.CATEGORY_ID, 'faq-category-input', false, "Suche nach FAQ-Artikeln innerhalb der gewählten Kategorie.")
+                "Category", FAQArticleProperty.CATEGORY_ID, 'faq-category-input', false, "Translatable#Search for FAQ articles within the choosen category.")
             );
-            fields.push(new FormField("Gültigkeit", FAQArticleProperty.VALID_ID, 'valid-input', false, "Suche nach FAQ-Artikeln mit der gewählten Gültigkeit."));
+            fields.push(new FormField('Validity', FAQArticleProperty.VALID_ID, 'valid-input', false, "Translatable#Search for FAQ articles within the choosen validity."));
 
-            const attributeGroup = new FormGroup('FAQ-Attribute', fields);
+            const attributeGroup = new FormGroup('Translatable#FAQ Attributes', fields);
 
             const form = new Form(
-                linkFormId, 'Verknüpfen mit FAQ', [attributeGroup],
+                linkFormId, 'Translatable#Link FAQ with', [attributeGroup],
                 KIXObjectType.FAQ_ARTICLE, false, FormContext.LINK, null, true
             );
             await configurationService.saveModuleConfiguration(form.id, null, form);

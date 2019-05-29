@@ -1,13 +1,14 @@
 import { TicketPriorityDetailsContext } from "../../context";
 import { RoutingConfiguration } from "../../../../router";
 import {
-    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
+    TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../../../table";
 import { KIXObjectType, TicketPriorityProperty, DataType, ContextMode } from "../../../../../model";
 import { TicketPriorityTableContentProvider } from "./TicketPriorityTableContentProvider";
+import { TableFactory } from "../../../../table/TableFactory";
 
-export class TicketPriorityTableFactory implements ITableFactory {
+export class TicketPriorityTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.TICKET_PRIORITY;
 
@@ -29,7 +30,10 @@ export class TicketPriorityTableFactory implements ITableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new DefaultColumnConfiguration(TicketPriorityProperty.NAME, true, false, true, true, 200, true, true),
+            new DefaultColumnConfiguration(
+                TicketPriorityProperty.NAME, true, false, true, true, 200, true, true, false,
+                DataType.STRING, true, null, null, false
+            ),
             new DefaultColumnConfiguration(TicketPriorityProperty.ID, false, true, false, true, 41, false),
             new DefaultColumnConfiguration(TicketPriorityProperty.COMMENT, true, false, true, true, 350, true, true),
             new DefaultColumnConfiguration(
@@ -53,7 +57,7 @@ export class TicketPriorityTableFactory implements ITableFactory {
 
         if (defaultRouting) {
             tableConfiguration.routingConfiguration = new RoutingConfiguration(
-                null, TicketPriorityDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_PRIORITY,
+                TicketPriorityDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_PRIORITY,
                 ContextMode.DETAILS, TicketPriorityProperty.ID
             );
         }

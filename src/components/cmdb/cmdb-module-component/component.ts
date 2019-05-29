@@ -1,12 +1,11 @@
 import {
-    AbstractMarkoComponent, ContextService, DialogService, ActionFactory, KIXObjectSearchService,
+    AbstractMarkoComponent, ContextService, ActionFactory, KIXObjectSearchService,
     LabelService, FactoryService, ServiceRegistry, TableFactoryService
 } from '../../../core/browser';
-import { BulkAction } from '../../../core/browser/actions';
 import { ComponentState } from './ComponentState';
 import {
     ContextDescriptor, KIXObjectType, ContextMode, ContextType,
-    ConfiguredDialogWidget, WidgetConfiguration, WidgetSize, KIXObjectCache, ConfigItemClassCacheHandler
+    ConfiguredDialogWidget, WidgetConfiguration, WidgetSize
 } from '../../../core/model';
 import {
     CMDBContext, NewConfigItemDialogContext, ConfigItemDetailsContext, ConfigItemSearchContext,
@@ -25,6 +24,7 @@ import {
     CompareConfigItemVersionTableFactory,
     ConfigItemVersionCompareLabelProvider
 } from '../../../core/browser/cmdb';
+import { DialogService } from '../../../core/browser/components/dialog';
 
 class Component extends AbstractMarkoComponent {
 
@@ -37,8 +37,6 @@ class Component extends AbstractMarkoComponent {
         ServiceRegistry.registerServiceInstance(ConfigItemClassService.getInstance());
         ServiceRegistry.registerServiceInstance(ConfigItemFormService.getInstance());
         ServiceRegistry.registerServiceInstance(ConfigItemClassFormService.getInstance());
-
-        KIXObjectCache.registerCacheHandler(new ConfigItemClassCacheHandler());
 
         FactoryService.getInstance().registerFactory(
             KIXObjectType.CONFIG_ITEM, ConfigItemBrowserFactory.getInstance()
@@ -89,7 +87,7 @@ class Component extends AbstractMarkoComponent {
 
         const configItemDetailsContext = new ContextDescriptor(
             ConfigItemDetailsContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM], ContextType.MAIN, ContextMode.DETAILS,
-            true, 'config-item-details', ['configitems'], ConfigItemDetailsContext
+            true, 'object-details-page', ['configitems'], ConfigItemDetailsContext
         );
         ContextService.getInstance().registerContext(configItemDetailsContext);
 
@@ -117,7 +115,7 @@ class Component extends AbstractMarkoComponent {
         const configItemClassDetailsContext = new ContextDescriptor(
             ConfigItemClassDetailsContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM_CLASS],
             ContextType.MAIN, ContextMode.DETAILS,
-            true, 'config-item-class-details', ['configitemclasses'], ConfigItemClassDetailsContext
+            true, 'object-details-page', ['configitemclasses'], ConfigItemClassDetailsContext
         );
         ContextService.getInstance().registerContext(configItemClassDetailsContext);
 
@@ -128,19 +126,19 @@ class Component extends AbstractMarkoComponent {
         );
         ContextService.getInstance().registerContext(newConfigItemClassDetailsContext);
 
-        const editConfigItemClassDetailsContext = new ContextDescriptor(
+        const editConfigItemClassContext = new ContextDescriptor(
             EditConfigItemClassDialogContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM_CLASS],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
             true, 'edit-config-item-class-dialog', ['configitemclasses'], EditConfigItemClassDialogContext
         );
-        ContextService.getInstance().registerContext(editConfigItemClassDetailsContext);
+        ContextService.getInstance().registerContext(editConfigItemClassContext);
     }
 
     private registerDialogs(): void {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'new-config-item-dialog',
             new WidgetConfiguration(
-                'new-config-item-dialog', 'Neues Config Item', [], {}, false, false, null, 'kix-icon-new-ci'
+                'new-config-item-dialog', 'Translatable#New Config Item', [], {}, false, false, null, 'kix-icon-new-ci'
             ),
             KIXObjectType.CONFIG_ITEM,
             ContextMode.CREATE
@@ -149,7 +147,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'edit-config-item-dialog',
             new WidgetConfiguration(
-                'edit-config-item-dialog', 'Config Item bearbeiten', [], {}, false, false, null, 'kix-icon-edit'
+                'edit-config-item-dialog', 'Translatable#Edit Config Item', [], {}, false, false, null, 'kix-icon-edit'
             ),
             KIXObjectType.CONFIG_ITEM,
             ContextMode.EDIT
@@ -158,7 +156,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'search-config-item-dialog',
             new WidgetConfiguration(
-                'search-config-item-dialog', 'Config Item Suche', [], {},
+                'search-config-item-dialog', 'Translatable#Config Item Search', [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-search-ci'
             ),
             KIXObjectType.CONFIG_ITEM,
@@ -168,7 +166,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'compare-config-item-version-dialog',
             new WidgetConfiguration(
-                'compare-config-item-version-dialog', 'Versionen vergleichen', [], {},
+                'compare-config-item-version-dialog', 'Translatable#Compare Versions', [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-comparison-version'
             ),
             KIXObjectType.CONFIG_ITEM_VERSION_COMPARE,
@@ -180,7 +178,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'new-config-item-class-dialog',
             new WidgetConfiguration(
-                'new-config-item-class-dialog', 'CMDB Klasse hinzufügen', [], {}, false, false, null,
+                'new-config-item-class-dialog', 'Translatable#New Class', [], {}, false, false, null,
                 'kix-icon-new-gear'
             ),
             KIXObjectType.CONFIG_ITEM_CLASS,
@@ -190,7 +188,8 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'edit-config-item-class-dialog',
             new WidgetConfiguration(
-                'edit-config-item-class-dialog', 'CMDB Klasse bearbeiten', [], {}, false, false, null, 'kix-icon-gear'
+                'edit-config-item-class-dialog', 'Translatable#Edit Class', [], {},
+                false, false, null, 'kix-icon-edit'
             ),
             KIXObjectType.CONFIG_ITEM_CLASS,
             ContextMode.EDIT_ADMIN

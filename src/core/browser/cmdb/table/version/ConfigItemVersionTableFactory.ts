@@ -1,11 +1,12 @@
 import { KIXObjectType, VersionProperty, DataType } from "../../../../model";
 import {
-    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
+    TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableHeaderHeight, TableRowHeight, ToggleOptions, IColumnConfiguration
 } from "../../../table";
 import { ConfigItemVersionContentProvider } from "./ConfigItemVersionContentProvider";
+import { TableFactory } from "../../../table/TableFactory";
 
-export class ConfigItemVersionTableFactory implements ITableFactory {
+export class ConfigItemVersionTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_VERSION;
 

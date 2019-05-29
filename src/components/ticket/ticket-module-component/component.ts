@@ -1,15 +1,15 @@
-import { ComponentState } from "./ComponentState";
+import { ComponentState } from './ComponentState';
 import {
     AbstractMarkoComponent, ServiceRegistry, LabelService, FactoryService,
-    FormValidationService, ContextService, ActionFactory, DialogService, KIXObjectSearchService
-} from "../../../core/browser";
+    ContextService, ActionFactory, KIXObjectSearchService
+} from '../../../core/browser';
 import {
     TicketService, TicketHistoryLabelProvider, ArticleLabelProvider, TicketLabelProvider, TicketTableFactory,
     TicketHistoryTableFactory, PendingTimeValidator, TicketBrowserFactory, ArticleBrowserFactory, TicketFormService,
     TicketContext, TicketDetailsContext, NewTicketDialogContext, TicketSearchContext, EditTicketDialogContext,
     NewTicketArticleContext, TicketListContext, ArticleZipAttachmentDownloadAction, ArticleBulkAction,
     ArticleCallIncomingAction, ArticleCallOutgoingAction, ArticleCommunicationAction, ArticleEditAction,
-    ArticleMaximizeAction, ArticleNewEmailAction, ArticleNewNoteAction, ArticlePrintAction, ArticleTagAction,
+    ArticleMaximizeAction, ArticlePrintAction, ArticleTagAction,
     TicketEditAction, TicketLockAction, TicketMergeAction, TicketCreateAction, TicketPrintAction, TicketSpamAction,
     TicketWatchAction, TicketSearchAction, ShowUserTicketsAction, TicketSearchDefinition, TicketTypeCreateAction,
     TicketTypeImportAction, TicketTypeDeleteAction, TicketTypeTableFactory, TicketTypeLabelProvider,
@@ -24,18 +24,27 @@ import {
     TicketTypeService, TicketPriorityService, TicketPriorityDetailsContext, TicketPriorityEditAction,
     TicketPriorityDuplicateAction, NewTicketPriorityDialogContext, NewTicketStateDialogContext,
     EditTicketPriorityDialogContext, TicketPriorityFormService, EditTicketStateDialogContext,
-    TicketStateFormService, TicketBulkManager, TicketTableCSSHandler, ArticleTableCSSHandler, EmailRecipientValidator
-} from "../../../core/browser/ticket";
+    TicketStateFormService, TicketBulkManager, TicketTableCSSHandler, ArticleTableCSSHandler, EmailRecipientValidator,
+    TicketTemplateCreateAction, TicketTemplateTableDeleteAction, TicketTemplateLabelProvider, TicketTemplateService,
+    TicketTemplateBrowserFactory, TicketTemplateTableFactory, TicketQueueCreateAction, TicketQueueTableFactory,
+    QueueLabelProvider, QueueBrowserFactory, QueueService, NewQueueDialogContext, FollowUpTypeBrowserFactory,
+    TicketQueueEditAction, QueueDetailsContext, EditQueueDialogContext, QueueFormService
+} from '../../../core/browser/ticket';
 import {
-    KIXObjectType, KIXObjectCache, TicketCacheHandler, ContextDescriptor, ContextMode, ContextType,
-    ConfiguredDialogWidget, WidgetConfiguration, WidgetSize, TicketTypeCacheHandler, TicketStateCacheHandler,
-    TicketPriorityCacheHandler
-} from "../../../core/model";
-import { BulkService } from "../../../core/browser/bulk";
-import { ArticleTableFactory } from "../../../core/browser/ticket/table/ArticleTableFactory";
-import { ChannelService } from "../../../core/browser/channel";
-import { TableFactoryService, TableCSSHandlerRegsitry } from "../../../core/browser/table";
-import { ChannelLabelProvider } from "../../../core/browser/channel/ChannelLabelProvider";
+    KIXObjectType, ContextDescriptor, ContextMode, ContextType,
+    ConfiguredDialogWidget, WidgetConfiguration, WidgetSize
+} from '../../../core/model';
+import { BulkService } from '../../../core/browser/bulk';
+import { ArticleTableFactory } from '../../../core/browser/ticket/table/ArticleTableFactory';
+import { ChannelService } from '../../../core/browser/channel';
+import { TableFactoryService, TableCSSHandlerRegistry } from '../../../core/browser/table';
+import { ChannelLabelProvider } from '../../../core/browser/channel/ChannelLabelProvider';
+import { DialogService } from '../../../core/browser/components/dialog';
+import { FormValidationService } from '../../../core/browser/form/validation';
+import { ArticleReplyAction } from '../../../core/browser/ticket/actions/article/ArticleReplyAction';
+import { ArticleForwardAction } from '../../../core/browser/ticket/actions/article/ArticleForwardAction';
+import { ArticleFormService } from '../../../core/browser/ticket/ArticleFormService';
+import { ArticleNewAction } from '../../../core/browser/ticket/actions/article/ArticleNewAction';
 
 class Component extends AbstractMarkoComponent {
 
@@ -49,16 +58,15 @@ class Component extends AbstractMarkoComponent {
         ServiceRegistry.registerServiceInstance(TicketTypeService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketStateService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketPriorityService.getInstance());
+        ServiceRegistry.registerServiceInstance(QueueService.getInstance());
+        ServiceRegistry.registerServiceInstance(TicketTemplateService.getInstance());
 
         ServiceRegistry.registerServiceInstance(TicketFormService.getInstance());
+        ServiceRegistry.registerServiceInstance(ArticleFormService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketTypeFormService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketPriorityFormService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketStateFormService.getInstance());
-
-        KIXObjectCache.registerCacheHandler(new TicketCacheHandler());
-        KIXObjectCache.registerCacheHandler(new TicketTypeCacheHandler());
-        KIXObjectCache.registerCacheHandler(new TicketStateCacheHandler());
-        KIXObjectCache.registerCacheHandler(new TicketPriorityCacheHandler());
+        ServiceRegistry.registerServiceInstance(QueueFormService.getInstance());
 
         KIXObjectSearchService.getInstance().registerSearchDefinition(new TicketSearchDefinition());
 
@@ -70,6 +78,8 @@ class Component extends AbstractMarkoComponent {
         LabelService.getInstance().registerLabelProvider(new TicketStateLabelProvider());
         LabelService.getInstance().registerLabelProvider(new TicketStateTypeLabelProvider());
         LabelService.getInstance().registerLabelProvider(new ChannelLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new QueueLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new TicketTemplateLabelProvider());
 
         TableFactoryService.getInstance().registerFactory(new TicketTableFactory());
         TableFactoryService.getInstance().registerFactory(new ArticleTableFactory());
@@ -77,9 +87,11 @@ class Component extends AbstractMarkoComponent {
         TableFactoryService.getInstance().registerFactory(new TicketTypeTableFactory());
         TableFactoryService.getInstance().registerFactory(new TicketPriorityTableFactory());
         TableFactoryService.getInstance().registerFactory(new TicketStateTableFactory());
+        TableFactoryService.getInstance().registerFactory(new TicketQueueTableFactory());
+        TableFactoryService.getInstance().registerFactory(new TicketTemplateTableFactory());
 
-        TableCSSHandlerRegsitry.getInstance().registerCSSHandler(KIXObjectType.TICKET, new TicketTableCSSHandler());
-        TableCSSHandlerRegsitry.getInstance().registerCSSHandler(KIXObjectType.ARTICLE, new ArticleTableCSSHandler());
+        TableCSSHandlerRegistry.getInstance().registerCSSHandler(KIXObjectType.TICKET, new TicketTableCSSHandler());
+        TableCSSHandlerRegistry.getInstance().registerCSSHandler(KIXObjectType.ARTICLE, new ArticleTableCSSHandler());
 
         FormValidationService.getInstance().registerValidator(new PendingTimeValidator());
         FormValidationService.getInstance().registerValidator(new EmailRecipientValidator());
@@ -96,9 +108,15 @@ class Component extends AbstractMarkoComponent {
         FactoryService.getInstance().registerFactory(
             KIXObjectType.TICKET_STATE_TYPE, TicketStateTypeBrowserFactory.getInstance()
         );
-
-        TicketFormService.getInstance();
-        TicketTypeFormService.getInstance();
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.QUEUE, QueueBrowserFactory.getInstance()
+        );
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.FOLLOW_UP_TYPE, FollowUpTypeBrowserFactory.getInstance()
+        );
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.TICKET_TEMPLATE, TicketTemplateBrowserFactory.getInstance()
+        );
 
         BulkService.getInstance().registerBulkManager(new TicketBulkManager());
 
@@ -121,7 +139,7 @@ class Component extends AbstractMarkoComponent {
         const ticketDetailsContextDescriptor = new ContextDescriptor(
             TicketDetailsContext.CONTEXT_ID, [KIXObjectType.TICKET, KIXObjectType.ARTICLE],
             ContextType.MAIN, ContextMode.DETAILS,
-            true, 'ticket-details', ['tickets'], TicketDetailsContext
+            true, 'object-details-page', ['tickets'], TicketDetailsContext
         );
         ContextService.getInstance().registerContext(ticketDetailsContextDescriptor);
 
@@ -160,14 +178,14 @@ class Component extends AbstractMarkoComponent {
         const ticketTypeDetailsContextDescriptor = new ContextDescriptor(
             TicketTypeDetailsContext.CONTEXT_ID, [KIXObjectType.TICKET_TYPE],
             ContextType.MAIN, ContextMode.DETAILS,
-            true, 'ticket-type-details', ['tickettypes'], TicketTypeDetailsContext
+            true, 'object-details-page', ['tickettypes'], TicketTypeDetailsContext
         );
         ContextService.getInstance().registerContext(ticketTypeDetailsContextDescriptor);
 
         const newTicketTypeContext = new ContextDescriptor(
             NewTicketTypeDialogContext.CONTEXT_ID, [KIXObjectType.TICKET_TYPE],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-ticket-type-dialog', ['tickettypes'], NewTicketDialogContext
+            false, 'new-ticket-type-dialog', ['tickettypes'], NewTicketTypeDialogContext
         );
         ContextService.getInstance().registerContext(newTicketTypeContext);
 
@@ -181,7 +199,7 @@ class Component extends AbstractMarkoComponent {
         const ticketStateDetailsContextDescriptor = new ContextDescriptor(
             TicketStateDetailsContext.CONTEXT_ID, [KIXObjectType.TICKET_STATE],
             ContextType.MAIN, ContextMode.DETAILS,
-            true, 'ticket-state-details', ['ticketstates'], TicketStateDetailsContext
+            true, 'object-details-page', ['ticketstates'], TicketStateDetailsContext
         );
         ContextService.getInstance().registerContext(ticketStateDetailsContextDescriptor);
 
@@ -202,7 +220,7 @@ class Component extends AbstractMarkoComponent {
         const ticketPriorityDetailsContextDescriptor = new ContextDescriptor(
             TicketPriorityDetailsContext.CONTEXT_ID, [KIXObjectType.TICKET_PRIORITY],
             ContextType.MAIN, ContextMode.DETAILS,
-            true, 'ticket-priority-details', ['priorities'], TicketPriorityDetailsContext
+            true, 'object-details-page', ['priorities'], TicketPriorityDetailsContext
         );
         ContextService.getInstance().registerContext(ticketPriorityDetailsContextDescriptor);
 
@@ -219,6 +237,27 @@ class Component extends AbstractMarkoComponent {
             false, 'edit-ticket-priority-dialog', ['priorities'], EditTicketPriorityDialogContext
         );
         ContextService.getInstance().registerContext(editTicketPriorityContext);
+
+        const newQueueContext = new ContextDescriptor(
+            NewQueueDialogContext.CONTEXT_ID, [KIXObjectType.QUEUE],
+            ContextType.DIALOG, ContextMode.CREATE_ADMIN,
+            false, 'new-ticket-queue-dialog', ['queues'], NewQueueDialogContext
+        );
+        ContextService.getInstance().registerContext(newQueueContext);
+
+        const ticketQueueDetailsContextDescriptor = new ContextDescriptor(
+            QueueDetailsContext.CONTEXT_ID, [KIXObjectType.QUEUE],
+            ContextType.MAIN, ContextMode.DETAILS,
+            true, 'object-details-page', ['queues'], QueueDetailsContext
+        );
+        ContextService.getInstance().registerContext(ticketQueueDetailsContextDescriptor);
+
+        const editQueueContext = new ContextDescriptor(
+            EditQueueDialogContext.CONTEXT_ID, [KIXObjectType.QUEUE],
+            ContextType.DIALOG, ContextMode.EDIT_ADMIN,
+            false, 'edit-ticket-queue-dialog', ['queues'], EditQueueDialogContext
+        );
+        ContextService.getInstance().registerContext(editQueueContext);
     }
 
     private registerTicketActions(): void {
@@ -230,8 +269,9 @@ class Component extends AbstractMarkoComponent {
         ActionFactory.getInstance().registerAction('article-communication-action', ArticleCommunicationAction);
         ActionFactory.getInstance().registerAction('article-edit-action', ArticleEditAction);
         ActionFactory.getInstance().registerAction('article-maximize-action', ArticleMaximizeAction);
-        ActionFactory.getInstance().registerAction('article-new-email-action', ArticleNewEmailAction);
-        ActionFactory.getInstance().registerAction('article-new-note-action', ArticleNewNoteAction);
+        ActionFactory.getInstance().registerAction('article-new-action', ArticleNewAction);
+        ActionFactory.getInstance().registerAction('article-reply-action', ArticleReplyAction);
+        ActionFactory.getInstance().registerAction('article-forward-action', ArticleForwardAction);
         ActionFactory.getInstance().registerAction('article-print-action', ArticlePrintAction);
         ActionFactory.getInstance().registerAction('article-tag-action', ArticleTagAction);
 
@@ -276,13 +316,22 @@ class Component extends AbstractMarkoComponent {
         ActionFactory.getInstance().registerAction(
             'ticket-admin-state-textmodules-edit', TicketStateEditTextmodulesAction
         );
+
+        ActionFactory.getInstance().registerAction('ticket-admin-queue-create', TicketQueueCreateAction);
+        ActionFactory.getInstance().registerAction('ticket-admin-queue-edit', TicketQueueEditAction);
+
+        ActionFactory.getInstance().registerAction('ticket-admin-template-create', TicketTemplateCreateAction);
+        ActionFactory.getInstance().registerAction(
+            'ticket-admin-template-table-delete', TicketTemplateTableDeleteAction
+        );
     }
 
     private registerTicketDialogs(): void {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'new-ticket-dialog',
             new WidgetConfiguration(
-                'new-ticket-dialog', 'Neues Ticket', [], {}, false, false, WidgetSize.BOTH, 'kix-icon-new-ticket'
+                'new-ticket-dialog', 'Translatable#New Ticket', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-new-ticket'
             ),
             KIXObjectType.TICKET,
             ContextMode.CREATE
@@ -291,7 +340,8 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'search-ticket-dialog',
             new WidgetConfiguration(
-                'search-ticket-dialog', 'Ticketsuche', [], {}, false, false, WidgetSize.BOTH, 'kix-icon-search-ticket'
+                'search-ticket-dialog', 'Translatable#Ticket Search', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-search-ticket'
             ),
             KIXObjectType.TICKET,
             ContextMode.SEARCH
@@ -300,7 +350,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'edit-ticket-dialog',
             new WidgetConfiguration(
-                'edit-ticket-dialog', 'Ticket bearbeiten', [], {}, false, false, WidgetSize.BOTH, 'kix-icon-edit'
+                'edit-ticket-dialog', 'Translatable#Edit Ticket', [], {}, false, false, WidgetSize.BOTH, 'kix-icon-edit'
             ),
             KIXObjectType.TICKET,
             ContextMode.EDIT
@@ -309,7 +359,8 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'new-ticket-article-dialog',
             new WidgetConfiguration(
-                'new-ticket-article-dialog', 'Neuer Artikel', [], {}, false, false, WidgetSize.BOTH, 'kix-icon-new-note'
+                'new-ticket-article-dialog', 'Translatable#New Article', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-new-note'
             ),
             KIXObjectType.ARTICLE,
             ContextMode.CREATE_SUB
@@ -320,7 +371,8 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'new-ticket-type-dialog',
             new WidgetConfiguration(
-                'new-ticket-type-dialog', 'Typ hinzufügen', [], {}, false, false, WidgetSize.BOTH, 'kix-icon-new-gear'
+                'new-ticket-type-dialog', 'Translatable#New Type', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-new-gear'
             ),
             KIXObjectType.TICKET_TYPE,
             ContextMode.CREATE_ADMIN
@@ -329,7 +381,8 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'edit-ticket-type-dialog',
             new WidgetConfiguration(
-                'edit-ticket-type-dialog', 'Typ bearbeiten', [], {}, false, false, WidgetSize.BOTH, 'kix-icon-gear'
+                'edit-ticket-type-dialog', 'Translatable#Edit Type', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-edit'
             ),
             KIXObjectType.TICKET_TYPE,
             ContextMode.EDIT_ADMIN
@@ -338,7 +391,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'new-ticket-priority-dialog',
             new WidgetConfiguration(
-                'new-ticket-priority-dialog', 'Priorität hinzufügen', [], {},
+                'new-ticket-priority-dialog', 'Translatable#New Priority', [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-new-gear'
             ),
             KIXObjectType.TICKET_PRIORITY,
@@ -348,8 +401,8 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'edit-ticket-priority-dialog',
             new WidgetConfiguration(
-                'edit-ticket-priority-dialog', 'Priorität bearbeiten', [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-gear'
+                'edit-ticket-priority-dialog', 'Translatable#Edit Priority', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-edit'
             ),
             KIXObjectType.TICKET_PRIORITY,
             ContextMode.EDIT_ADMIN
@@ -358,7 +411,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'new-ticket-state-dialog',
             new WidgetConfiguration(
-                'new-ticket-state-dialog', 'Status hinzufügen', [], {},
+                'new-ticket-state-dialog', 'Translatable#New State', [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-new-gear'
             ),
             KIXObjectType.TICKET_STATE,
@@ -368,9 +421,30 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'edit-ticket-state-dialog',
             new WidgetConfiguration(
-                'edit-ticket-state-dialog', 'Status bearbeiten', [], {}, false, false, WidgetSize.BOTH, 'kix-icon-gear'
+                'edit-ticket-state-dialog', 'Translatable#Edit State', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-edit'
             ),
             KIXObjectType.TICKET_STATE,
+            ContextMode.EDIT_ADMIN
+        ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'new-ticket-queue-dialog',
+            new WidgetConfiguration(
+                'new-ticket-queue-dialog', 'Translatable#New Queue', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-new-gear'
+            ),
+            KIXObjectType.QUEUE,
+            ContextMode.CREATE_ADMIN
+        ));
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'edit-ticket-queue-dialog',
+            new WidgetConfiguration(
+                'edit-ticket-queue-dialog', 'Translatable#Edit Queue', [], {},
+                false, false, WidgetSize.BOTH, 'kix-icon-edit'
+            ),
+            KIXObjectType.QUEUE,
             ContextMode.EDIT_ADMIN
         ));
     }

@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
 import {
-    AbstractMarkoComponent, ComponentsService, IColumn, ValueState, ICell, TableCSSHandlerRegsitry
+    AbstractMarkoComponent, ComponentsService, IColumn, ValueState, ICell, TableCSSHandlerRegistry
 } from '../../../../../../core/browser';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
@@ -80,7 +80,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const object = cell.getRow().getRowObject().getObject();
         if (object) {
             const objectType = cell.getRow().getTable().getObjectType();
-            const cssHandler = TableCSSHandlerRegsitry.getCSSHandler(objectType);
+            const cssHandler = TableCSSHandlerRegistry.getCSSHandler(objectType);
             if (cssHandler) {
                 const valueClasses = cssHandler.getValueCSSClasses(object, cell.getValue());
                 valueClasses.forEach((c) => classes.push(c));

@@ -64,6 +64,8 @@ export class Article extends KIXObject<Article> {
 
     public CustomerVisible: boolean;
 
+    public ChangeTime: string;
+
     // UI Properties
 
     public senderType: SenderType;
@@ -103,6 +105,7 @@ export class Article extends KIXObject<Article> {
             this.Channel = article.Channel;
             this.ChannelID = article.ChannelID;
             this.CustomerVisible = article.CustomerVisible;
+            this.ChangeTime = article.ChangeTime;
 
             this.bodyAttachment = article.bodyAttachment;
         }

@@ -1,10 +1,11 @@
-import { KIXObjectService } from "../kix";
+import { KIXObjectService } from "../kix/KIXObjectService";
 import {
-    Translation, KIXObjectType, KIXObject, KIXObjectLoadingOptions,
-    KIXObjectSpecificLoadingOptions, KIXObjectCache, SysConfigItem, SysConfigKey,
-    TranslationProperty, TableFilterCriteria
+    Translation, KIXObjectType, SysConfigItem, SysConfigKey, TranslationProperty,
+    TableFilterCriteria, KIXObjectLoadingOptions, KIXObject, KIXObjectSpecificLoadingOptions
 } from "../../model";
 import { SearchOperator } from "../SearchOperator";
+import { ClientStorageService } from "../ClientStorageService";
+import { AgentService } from "../application/AgentService";
 
 export class TranslationService extends KIXObjectService<Translation> {
 
@@ -32,26 +33,22 @@ export class TranslationService extends KIXObjectService<Translation> {
 
     public async loadObjects<O extends KIXObject>(
         objectType: KIXObjectType, objectIds: Array<string | number>,
-        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
-        cache: boolean = true
+        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions
     ): Promise<O[]> {
-
+        let objects: O[];
+        let superLoad = false;
         if (objectType === KIXObjectType.TRANSLATION) {
-            if (!KIXObjectCache.hasObjectCache(objectType)) {
-                loadingOptions = new KIXObjectLoadingOptions(
-                    null, null, null, null, null, [TranslationProperty.LANGUAGES]
-                );
-
-                const objects = await super.loadObjects(objectType, null, loadingOptions, null, false);
-                objects.forEach((q) => KIXObjectCache.addObject(objectType, q));
-            }
-
-            if (!objectIds) {
-                return KIXObjectCache.getObjectCache(objectType);
-            }
+            objects = await super.loadObjects<O>(KIXObjectType.TRANSLATION, null, loadingOptions);
+        } else {
+            superLoad = true;
+            objects = await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions);
         }
 
-        return await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions, cache);
+        if (objectIds && !superLoad) {
+            objects = objects.filter((c) => objectIds.some((oid) => c.ObjectId === oid));
+        }
+
+        return objects;
     }
 
     public async getLanguageName(lang: string): Promise<string> {
@@ -82,7 +79,15 @@ export class TranslationService extends KIXObjectService<Translation> {
         return languages;
     }
 
-    public checkFilterValue(translation: Translation, criteria: TableFilterCriteria): boolean {
+    public static async getSystemDefaultLanguage(): Promise<string> {
+        const defaultLanguageConfig = await KIXObjectService.loadObjects<SysConfigItem>(
+            KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.DEFAULT_LANGUAGE]
+        );
+
+        return defaultLanguageConfig && defaultLanguageConfig.length ? defaultLanguageConfig[0].Data : null;
+    }
+
+    public async checkFilterValue(translation: Translation, criteria: TableFilterCriteria): Promise<boolean> {
         if (translation) {
             switch (criteria.property) {
                 case TranslationProperty.LANGUAGES:
@@ -95,6 +100,79 @@ export class TranslationService extends KIXObjectService<Translation> {
             }
         }
         return true;
+    }
+
+    public static async translate(
+        pattern: string = '', placeholderValues: Array<string | number> = []
+    ): Promise<string> {
+        let translationValue = pattern;
+        if (translationValue !== null) {
+
+            if (translationValue.startsWith('Translatable' + '#')) {
+                translationValue = translationValue.replace('Translatable' + '#', '');
+            }
+
+            const loadingOptions = new KIXObjectLoadingOptions(
+                null, null, null, null, [TranslationProperty.LANGUAGES]
+            );
+
+            const translations = await KIXObjectService.loadObjects<Translation>(
+                KIXObjectType.TRANSLATION, null, loadingOptions
+            );
+
+            const translation = translations.find((t) => t.Pattern === translationValue);
+
+            if (translation) {
+                const language = await this.getUserLanguage();
+                if (language) {
+                    const translationLanguage = translation.Languages.find((l) => l.Language === language);
+                    if (translationLanguage) {
+                        translationValue = translationLanguage.Value;
+                    }
+                }
+            }
+
+            translationValue = this.format(translationValue, placeholderValues.map((p) => (p ? p : '').toString()));
+        }
+        const debug = ClientStorageService.getOption('i18n-debug');
+
+        if (debug && debug !== 'false' && debug !== '0') {
+            translationValue = 'TR-' + pattern;
+        }
+
+        return translationValue;
+    }
+
+    private static format(format: string, args: string[]): string {
+        return format.replace(/{(\d+)}/g, (match, number) => {
+            return args && typeof args[number] !== 'undefined'
+                ? args[number]
+                : '';
+        });
+    }
+
+    public static async getUserLanguage(systemDefaultFallback: boolean = true): Promise<string> {
+        let language: string;
+        const currentUser = await AgentService.getInstance().getCurrentUser();
+        if (currentUser) {
+            const preference = currentUser.Preferences.find((p) => p.ID === 'UserLanguage');
+            language = preference ? preference.Value : null;
+        }
+
+        if (!language && systemDefaultFallback) {
+            language = await this.getSystemDefaultLanguage();
+        }
+
+        return language;
+    }
+
+    public static async createTranslationObject(patterns: string[]): Promise<any> {
+        const translationObject = {};
+        for (const pattern of patterns) {
+            const text = await TranslationService.translate(pattern);
+            translationObject[pattern] = text;
+        }
+        return translationObject;
     }
 
 }

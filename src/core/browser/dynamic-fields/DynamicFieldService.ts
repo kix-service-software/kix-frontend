@@ -24,8 +24,4 @@ export class DynamicFieldService extends KIXObjectService<DynamicField> {
     public getLinkObjectName(): string {
         return 'DynamicField';
     }
-
-    protected async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
-        return [];
-    }
 }

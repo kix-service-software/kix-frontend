@@ -38,12 +38,6 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
         return 'ConfigItem';
     }
 
-    protected async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
-        const parameter: Array<[string, any]> = [];
-        parameter.push([property, value]);
-        return parameter;
-    }
-
     public async createConfigItem(formId: string, classId: number): Promise<string | number> {
         const parameter = await CreateConfigItemUtil.createParameter(formId, classId);
         const configItemId = await KIXObjectService.createObject(KIXObjectType.CONFIG_ITEM, parameter);
@@ -72,7 +66,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                 ConfigItemProperty.NUMBER, SearchOperator.CONTAINS,
                 FilterDataType.STRING, FilterType.AND, searchValue
             )
-        ], null, null, limit);
+        ], null, limit);
 
         const configItemsByNumber = await KIXObjectService.loadObjects<ConfigItem>(
             KIXObjectType.CONFIG_ITEM, null, loadingOptionsNumber, null, false
@@ -87,7 +81,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                 'CurrentVersion.' + VersionProperty.NAME, SearchOperator.CONTAINS,
                 FilterDataType.STRING, FilterType.AND, searchValue
             )
-        ], null, null, limit);
+        ], null, limit);
 
         const configItemsByName = await KIXObjectService.loadObjects<ConfigItem>(
             KIXObjectType.CONFIG_ITEM, null, loadingOptionsName, null, false

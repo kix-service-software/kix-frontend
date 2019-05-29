@@ -6,4 +6,3 @@ export { CreateLinkObjectOptions } from './CreateLinkObjectOptions';
 export { LinkObjectProperty } from './LinkObjectProperty';
 export { CreateLinkDescription } from './CreateLinkDescription';
 export { LinkTypeDescription } from './LinkTypeDescription';
-export { LinkCacheHandler } from './LinkCacheHandler';

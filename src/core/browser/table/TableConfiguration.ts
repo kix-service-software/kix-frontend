@@ -45,7 +45,7 @@ export class TableConfiguration {
         }
 
         if (!emptyResultHint) {
-            this.emptyResultHint = '0 Datensätze gefunden.';
+            this.emptyResultHint = 'Translatable#0 data sets found.';
         }
     }
 

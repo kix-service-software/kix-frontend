@@ -1,36 +1,50 @@
 import { ILabelProvider } from "..";
 import {
-    ObjectIcon, KIXObjectType, ConfigItemClassDefinition, KIXObject, ConfigItemClassProperty, DateTimeUtil,
-    ConfigItemClassDefinitionProperty
+    ObjectIcon, KIXObjectType, ConfigItemClassDefinition, ConfigItemClassProperty, DateTimeUtil,
+    ConfigItemClassDefinitionProperty, User
 } from "../../model";
-import { ContextService } from "../context";
+import { TranslationService } from "../i18n/TranslationService";
+import { ObjectDataService } from "../ObjectDataService";
+import { KIXObjectService } from "../kix";
 
 export class ConfigItemClassDefinitionLabelProvider implements ILabelProvider<ConfigItemClassDefinition> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION;
 
-    public async getPropertyValueDisplayText(property: string, value: string | number | any = ''): Promise<string> {
-        return value;
+    public isLabelProviderForType(objectType: KIXObjectType): boolean {
+        return objectType === this.kixObjectType;
     }
 
-    public async getPropertyText(property: string, short?: boolean): Promise<string> {
+    public async getPropertyValueDisplayText(property: string, value: string | number | any = ''): Promise<string> {
+        return value.toString();
+    }
+
+    public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
             case ConfigItemClassDefinitionProperty.VERSION:
-                displayValue = 'Version';
+                displayValue = 'Translatable#Version';
                 break;
             case ConfigItemClassProperty.CHANGE_BY:
-                displayValue = 'Geändert von';
+                displayValue = 'Translatable#Changed by';
                 break;
             case ConfigItemClassProperty.CREATE_TIME:
-                displayValue = 'Erstellt am';
+                displayValue = 'Translatable#Created at';
                 break;
             case ConfigItemClassProperty.CREATE_BY:
-                displayValue = 'Erstellt von';
+                displayValue = 'Translatable#Created by';
+                break;
+            case ConfigItemClassDefinitionProperty.CURRENT:
+                displayValue = 'Translatable#Current Definition';
                 break;
             default:
                 displayValue = property;
         }
+
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
+        }
+
         return displayValue;
     }
 
@@ -38,24 +52,32 @@ export class ConfigItemClassDefinitionLabelProvider implements ILabelProvider<Co
         return;
     }
 
-    public async getDisplayText(ciClassDefinition: ConfigItemClassDefinition, property: string): Promise<string> {
+    public async getDisplayText(
+        ciClassDefinition: ConfigItemClassDefinition, property: string, value?: string, translatable: boolean = true
+    ): Promise<string> {
         let displayValue = ciClassDefinition[property];
-
-        const objectData = ContextService.getInstance().getObjectData();
 
         switch (property) {
             case ConfigItemClassDefinitionProperty.CREATE_TIME:
-                displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
+                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
             case ConfigItemClassDefinitionProperty.CREATE_BY:
-                const user = objectData.users.find((u) => u.UserID === displayValue);
-                if (user) {
-                    displayValue = user.UserFullname;
-                }
+                const users = await KIXObjectService.loadObjects<User>(
+                    KIXObjectType.USER, [displayValue], null, null, true
+                ).catch((error) => [] as User[]);
+                displayValue = users && !!users.length ? users[0].UserFullname : displayValue;
+                break;
+            case ConfigItemClassDefinitionProperty.CURRENT:
+                displayValue = value ? 'Translatable#(Current definition)' : '';
                 break;
             default:
-                displayValue = ciClassDefinition[property];
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue);
         }
+
+        if (translatable && displayValue) {
+            displayValue = await TranslationService.translate(displayValue.toString());
+        }
+
         return displayValue;
     }
 
@@ -72,9 +94,10 @@ export class ConfigItemClassDefinitionLabelProvider implements ILabelProvider<Co
     }
 
     public async getObjectText(
-        ciClassDefinition: ConfigItemClassDefinition, id: boolean = true, name: boolean = true
+        ciClassDefinition: ConfigItemClassDefinition, id: boolean = true, name: boolean = true,
+        translatable: boolean = true
     ): Promise<string> {
-        return ciClassDefinition.Class;
+        return translatable ? await TranslationService.translate(ciClassDefinition.Class) : ciClassDefinition.Class;
     }
 
     public getObjectAdditionalText(ciClassDefinition: ConfigItemClassDefinition): string {
@@ -89,8 +112,18 @@ export class ConfigItemClassDefinitionLabelProvider implements ILabelProvider<Co
         return ciClassDefinition.Class;
     }
 
-    public getObjectName(plural: boolean = false): string {
-        return plural ? "CMDB Klassen Definitionen" : "CMDB Klasse Definition";
+    public async getObjectName(plural: boolean = false, translatable: boolean = true): Promise<string> {
+        if (plural) {
+            const definitionsLabel = translatable
+                ? await TranslationService.translate('Translatable#CI Class Definitions')
+                : 'CI Class Definitions';
+            return definitionsLabel;
+        }
+
+        const definitionLabel = translatable
+            ? await TranslationService.translate('Translatable#CI Class Definition')
+            : 'CI Class Definition';
+        return definitionLabel;
     }
 
     public async getIcons(

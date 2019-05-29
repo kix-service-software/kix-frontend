@@ -3,7 +3,7 @@ import {
     TicketProperty, ArticleProperty,
     DateTimeUtil, Attachment, Ticket,
     Lock, KIXObjectType, SenderType,
-    KIXObjectLoadingOptions, FilterCriteria, FilterDataType, FilterType
+    KIXObjectLoadingOptions, FilterCriteria, FilterDataType, FilterType, ContextType
 } from "../../model";
 import { ContextService } from "../context";
 import { KIXObjectService } from "../kix";
@@ -57,10 +57,18 @@ export class TicketParameterUtil {
                         }
                     }
                 }
+            } else if (
+                (
+                    property === ArticleProperty.TO
+                    || property === ArticleProperty.CC
+                    || property === ArticleProperty.BCC
+                )
+                && Array.isArray(value)
+            ) {
+                parameter.push([property, value.join(',')]);
             } else {
                 parameter.push([property, value]);
             }
-
         } else {
             parameter.push([property, value]);
         }
@@ -81,6 +89,22 @@ export class TicketParameterUtil {
             parameter.push([ArticleProperty.SENDER_TYPE_ID, senderTypes[0].ID]);
         }
 
+        const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+        if (dialogContext) {
+            const referencedArticleId = dialogContext.getAdditionalInformation('REFERENCED_ARTICLE_ID');
+            if (referencedArticleId) {
+                parameter.push([ArticleProperty.REFERENCED_ARTICLE_ID, referencedArticleId]);
+                const reply = dialogContext.getAdditionalInformation('ARTICLE_REPLY');
+                if (reply) {
+                    parameter.push([ArticleProperty.EXEC_REPLY, 1]);
+                }
+                const forward = dialogContext.getAdditionalInformation('ARTICLE_FORWARD');
+                if (!reply && forward) {
+                    parameter.push([ArticleProperty.EXEC_FORWARD, 1]);
+                }
+            }
+        }
+
         return parameter;
     }
 
@@ -88,10 +112,14 @@ export class TicketParameterUtil {
         const attachments = [];
         for (const f of files) {
             const attachment = new Attachment();
-            attachment.ContentType = f.type !== '' ? f.type : 'text';
-            attachment.Filename = f.name;
-            attachment.Content = await BrowserUtil.readFile(f);
-            attachments.push(attachment);
+            if (f instanceof File) {
+                attachment.ContentType = f.type !== '' ? f.type : 'text';
+                attachment.Filename = f.name;
+                attachment.Content = await BrowserUtil.readFile(f);
+                attachments.push(attachment);
+            } else {
+                attachments.push(f);
+            }
         }
         return attachments;
     }

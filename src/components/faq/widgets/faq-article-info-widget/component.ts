@@ -1,9 +1,9 @@
-import { ComponentState } from "./ComponentState";
-import { ContextService, ActionFactory, IdService } from "../../../../core/browser";
-import { KIXObjectType, Customer, ContextMode, Context } from "../../../../core/model";
-import { FAQArticle, FAQArticleProperty } from "../../../../core/model/kix/faq";
-import { FAQLabelProvider, FAQDetailsContext } from "../../../../core/browser/faq";
-import { Label } from "../../../../core/browser/components";
+import { ComponentState } from './ComponentState';
+import { ContextService, ActionFactory, IdService } from '../../../../core/browser';
+import { KIXObjectType, Organisation, ContextMode, Context } from '../../../../core/model';
+import { FAQArticle, FAQArticleProperty } from '../../../../core/model/kix/faq';
+import { FAQLabelProvider, FAQDetailsContext } from '../../../../core/browser/faq';
+import { Label } from '../../../../core/browser/components';
 
 class Component {
 
@@ -49,7 +49,7 @@ class Component {
         this.state.loading = true;
 
         this.state.faqArticle = faqArticle ? faqArticle : await context.getObject<FAQArticle>();
-        this.setActions();
+        this.prepareActions();
         this.createLabels();
 
         setTimeout(() => {
@@ -57,9 +57,9 @@ class Component {
         }, 50);
     }
 
-    private setActions(): void {
+    private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.faqArticle) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.actions = await ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, [this.state.faqArticle]
             );
         }

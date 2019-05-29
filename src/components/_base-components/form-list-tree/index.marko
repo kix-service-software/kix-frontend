@@ -1,9 +1,15 @@
 <ul.form-list-tree key=state.treeId style=state.treeStyle>
-    <for(node in state.nodes)>
+    <for|node| of=state.nodes>
         <if(node.visible)>
-            <form-list-tree-node treeId=state.treeId node=node activeNodes=state.activeNodes filterValue=state.filterValue
-                treeParent=state.treeParent on-nodeToggled('nodeToggled') on-nodeClicked('nodeClicked')
-                on-nodeHovered('nodeHovered')/>
+            <form-list-tree-node
+                treeId=state.treeId
+                node=node
+                activeNodes=state.activeNodes
+                filterValue=state.filterValue
+                treeParent=state.treeParent
+                on-nodeToggled("nodeToggled")
+                on-nodeClicked("nodeClicked")
+                on-nodeHovered("nodeHovered")/>
         </if>
     </for>
 </ul>

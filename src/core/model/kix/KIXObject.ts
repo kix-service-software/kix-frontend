@@ -1,5 +1,6 @@
 import { KIXObjectType } from ".";
 import { Link } from "./link";
+import { ConfiguredPermissions } from "./permission";
 
 export abstract class KIXObject<T = any> {
 
@@ -7,12 +8,36 @@ export abstract class KIXObject<T = any> {
 
     public abstract KIXObjectType: KIXObjectType;
 
-    // TODO: ggf. wieder entfernen, aber notwendig für edit-linked-objects-dialog
+    public ConfiguredPermissions: ConfiguredPermissions;
+
     public Links: Link[];
 
     public LinkTypeName: string;
 
-    public abstract equals(object: T): boolean;
+    public ChangeBy: number;
+
+    public ChangeTime: string;
+
+    public CreateBy: number;
+
+    public CreateTime: string;
+
+    public ValidID: number;
+
+    public constructor(object?: KIXObject) {
+        if (object) {
+            this.ConfiguredPermissions = object.ConfiguredPermissions;
+            this.CreateBy = object.CreateBy;
+            this.ChangeBy = object.ChangeBy;
+            this.CreateTime = object.CreateTime;
+            this.ChangeTime = object.ChangeTime;
+            this.ValidID = object.ValidID;
+        }
+    }
+
+    public equals(object: KIXObject): boolean {
+        return this.ObjectId === object.ObjectId;
+    }
 
     public getIdPropertyName(): string {
         return 'ID';

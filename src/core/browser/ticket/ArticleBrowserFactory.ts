@@ -18,7 +18,7 @@ export class ArticleBrowserFactory implements IKIXObjectFactory<Article> {
     private constructor() { }
 
     public async create(article: Article): Promise<Article> {
-        const newArticle = ArticleFactory.create(article);
+        const newArticle = new Article(article);
         await this.mapArticleData(newArticle);
         return newArticle;
     }

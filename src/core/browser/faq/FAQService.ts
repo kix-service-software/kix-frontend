@@ -1,7 +1,7 @@
 import { KIXObjectService, ServiceRegistry } from "../kix";
 import {
     KIXObjectType, FilterCriteria, FilterDataType, FilterType, TreeNode, ObjectIcon, DataType,
-    KIXObject, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, KIXObjectCache
+    KIXObject, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, ContextType
 } from "../../model";
 import { ContextService } from "../context";
 import { FAQDetailsContext } from "./context";
@@ -12,6 +12,7 @@ import { SearchOperator } from "../SearchOperator";
 import { ObjectDefinitionSearchAttribute } from "../../model/kix/object-definition";
 import { BrowserUtil } from "../BrowserUtil";
 import { TranslationService } from "../i18n/TranslationService";
+import { ObjectDataService } from "../ObjectDataService";
 
 export class FAQService extends KIXObjectService {
 
@@ -30,39 +31,11 @@ export class FAQService extends KIXObjectService {
         super();
     }
 
-    public async init(): Promise<void> {
-        await this.loadObjects(KIXObjectType.FAQ_CATEGORY, null);
-        await this.loadObjects(KIXObjectType.FAQ_CATEGORY_HIERARCHY, null);
-    }
-
-    public async loadObjects<O extends KIXObject>(
-        kixObjectType: KIXObjectType, objectIds: Array<string | number>,
-        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
-        cache: boolean = true
-    ): Promise<O[]> {
-
-        if (kixObjectType === KIXObjectType.FAQ_CATEGORY_HIERARCHY || kixObjectType === KIXObjectType.FAQ_CATEGORY) {
-            if (!KIXObjectCache.hasObjectCache(kixObjectType)) {
-                const objects = await super.loadObjects(
-                    kixObjectType, null, loadingOptions, objectLoadingOptions, cache
-                );
-                objects.forEach((o) => KIXObjectCache.addObject(kixObjectType, o));
-            }
-
-            if (!objectIds) {
-                return KIXObjectCache.getObjectCache(kixObjectType);
-            }
-        }
-
-        return await super.loadObjects<O>(kixObjectType, objectIds, loadingOptions, objectLoadingOptions, cache);
-    }
-
     public isServiceFor(type: KIXObjectType) {
         return type === KIXObjectType.FAQ_ARTICLE
             || type === KIXObjectType.FAQ_ARTICLE_ATTACHMENT
             || type === KIXObjectType.FAQ_ARTICLE_HISTORY
             || type === KIXObjectType.FAQ_CATEGORY
-            || type === KIXObjectType.FAQ_CATEGORY_HIERARCHY
             || type === KIXObjectType.FAQ_VOTE;
     }
 
@@ -73,7 +46,7 @@ export class FAQService extends KIXObjectService {
     public prepareFullTextFilter(searchValue: string): FilterCriteria[] {
         const filter: FilterCriteria[] = [];
 
-        const objectData = ContextService.getInstance().getObjectData();
+        const objectData = ObjectDataService.getInstance().getObjectData();
         if (objectData) {
             let faqSearchAttributes: ObjectDefinitionSearchAttribute[];
             const faqDefinition = objectData.objectDefinitions.find((od) => od.Object === KIXObjectType.FAQ_ARTICLE);
@@ -97,10 +70,10 @@ export class FAQService extends KIXObjectService {
         return filter;
     }
 
-    public async getTreeNodes(property: string): Promise<TreeNode[]> {
+    public async getTreeNodes(property: string, showInvalid: boolean = false): Promise<TreeNode[]> {
         let values: TreeNode[] = [];
 
-        const objectData = ContextService.getInstance().getObjectData();
+        const objectData = ObjectDataService.getInstance().getObjectData();
         if (objectData) {
             // TODO: im Moment nur für Suche, auch für Create umsetzen, ggf. mit Varible (isSearch) abfragen?
             let faqSearchAttributes: ObjectDefinitionSearchAttribute[];
@@ -111,8 +84,22 @@ export class FAQService extends KIXObjectService {
 
             switch (property) {
                 case FAQArticleProperty.CATEGORY_ID:
-                    const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(KIXObjectType.FAQ_CATEGORY);
-                    values = this.prepareCategoryTree(faqCategories);
+                case FAQCategoryProperty.PARENT_ID:
+                    const loadingOptions = new KIXObjectLoadingOptions(null, [
+                        new FilterCriteria(
+                            FAQCategoryProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.STRING,
+                            FilterType.AND, null
+                        )
+                    ], null, null, [FAQCategoryProperty.SUB_CATEGORIES], [FAQCategoryProperty.SUB_CATEGORIES]);
+                    const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(
+                        KIXObjectType.FAQ_CATEGORY, null, loadingOptions
+                    );
+                    const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+                    const object = context ? await context.getObject() : null;
+                    values = this.prepareCategoryTree(
+                        faqCategories, showInvalid, object && object.KIXObjectType === KIXObjectType.FAQ_CATEGORY ?
+                            Number(object.ObjectId) : null
+                    );
                     break;
                 case FAQArticleProperty.VISIBILITY:
                     values = this.preparePossibleValueTree(faqSearchAttributes, FAQArticleProperty.VISIBILITY);
@@ -137,15 +124,24 @@ export class FAQService extends KIXObjectService {
         return values;
     }
 
-    private prepareCategoryTree(faqCategories: FAQCategory[]): TreeNode[] {
+    private prepareCategoryTree(
+        faqCategories: FAQCategory[], showInvalid: boolean = false, objectId?: number
+    ): TreeNode[] {
         let nodes: TreeNode[] = [];
-        if (faqCategories) {
+        if (faqCategories && !!faqCategories.length) {
+            if (!showInvalid) {
+                faqCategories = faqCategories.filter((c) => c.ValidID === 1);
+            }
+            if (objectId) {
+                faqCategories = faqCategories.filter((c) => c.ID !== objectId);
+            }
             nodes = faqCategories.map((category: FAQCategory) => {
                 const treeNode = new TreeNode(
                     category.ID, category.Name,
-                    new ObjectIcon(FAQCategoryProperty.ID, category.ID),
+                    new ObjectIcon(KIXObjectType.FAQ_CATEGORY, category.ID),
                     null,
-                    this.prepareCategoryTree(category.SubCategories)
+                    this.prepareCategoryTree(category.SubCategories, showInvalid, objectId),
+                    null, null, null, null, null, null, null, category.ValidID === 1 ? true : false
                 );
                 return treeNode;
             });
