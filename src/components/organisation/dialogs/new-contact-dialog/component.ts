@@ -3,7 +3,6 @@ import { ContextMode, KIXObjectType, ContactProperty } from '../../../../core/mo
 import { ContactDetailsContext } from '../../../../core/browser/contact';
 import { RoutingConfiguration } from '../../../../core/browser/router';
 import { AbstractNewDialog } from '../../../../core/browser/components/dialog';
-import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component extends AbstractNewDialog {
 
@@ -22,10 +21,6 @@ class Component extends AbstractNewDialog {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-
-        this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Cancel", "Translatable#Save"
-        ]);
     }
 
     public async onDestroy(): Promise<void> {

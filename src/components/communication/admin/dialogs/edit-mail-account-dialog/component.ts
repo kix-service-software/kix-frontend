@@ -1,17 +1,17 @@
 import { KIXObjectType } from '../../../../../core/model';
 import { ComponentState } from './ComponentState';
 import { AbstractEditDialog } from '../../../../../core/browser/components/dialog';
-import { SystemAddressDetailsContext } from '../../../../../core/browser/system-address';
+import { MailAccountDetailsContext } from '../../../../../core/browser/mail-account';
 
 class Component extends AbstractEditDialog {
 
     public onCreate(): void {
         this.state = new ComponentState();
         super.init(
-            'Translatable#Update Email Address',
+            'Translatable#Update Account',
             undefined,
-            KIXObjectType.SYSTEM_ADDRESS,
-            SystemAddressDetailsContext.CONTEXT_ID
+            KIXObjectType.MAIL_ACCOUNT,
+            MailAccountDetailsContext.CONTEXT_ID
         );
     }
 

@@ -1,9 +1,11 @@
 import { ComponentState } from "./ComponentState";
-import { TicketProperty, TreeNode, FormInputComponent, FormFieldOptions } from "../../../../../../core/model";
+import {
+    TicketProperty, TreeNode, FormInputComponent, FormFieldOptions, DispatchingType
+} from "../../../../../../core/model";
 import { TicketService } from "../../../../../../core/browser/ticket";
 import { TranslationService } from "../../../../../../core/browser/i18n/TranslationService";
 
-class Component extends FormInputComponent<number[], ComponentState> {
+class Component extends FormInputComponent<number, ComponentState> {
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -34,7 +36,7 @@ class Component extends FormInputComponent<number[], ComponentState> {
             TicketProperty.QUEUE_ID, showInvalid
         );
         this.state.nodes = [
-            new TreeNode('USE_DEFAULT', 'Translatable#Default'),
+            new TreeNode(DispatchingType.FRONTEND_KEY_DEFAULT, 'Translatable#Default'),
             ...queueNodes
         ];
         this.setCurrentNode();
@@ -42,12 +44,37 @@ class Component extends FormInputComponent<number[], ComponentState> {
 
     public setCurrentNode(): void {
         if (this.state.defaultValue && this.state.defaultValue.value) {
-            this.state.currentNode = this.state.nodes.find((n) => n.id === this.state.defaultValue.value);
+            let node;
+            if (Array.isArray(this.state.defaultValue.value)) {
+                node = this.findNode(this.state.defaultValue.value[0]);
+            } else {
+                node = this.findNode(this.state.defaultValue.value);
+            }
+            this.state.currentNode = node;
         } else {
-            this.state.currentNode = this.state.nodes.find((n) => n.id === 'USE_DEFAULT');
+            this.state.currentNode = this.findNode(DispatchingType.FRONTEND_KEY_DEFAULT);
         }
         super.provideValue(this.state.currentNode ? this.state.currentNode.id : null);
     }
+
+    private findNode(id: any, nodes: TreeNode[] = this.state.nodes): TreeNode {
+        let returnNode: TreeNode;
+        if (Array.isArray(nodes)) {
+            returnNode = nodes.find((n) => n.id === id);
+            if (!returnNode) {
+                for (const node of nodes) {
+                    if (node.children && Array.isArray(node.children)) {
+                        returnNode = this.findNode(id, node.children);
+                        if (returnNode) {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return returnNode;
+    }
+
 
     public nodeChanged(nodes: TreeNode[]): void {
         this.state.currentNode = nodes && nodes.length ? nodes[0] : null;

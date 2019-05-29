@@ -2,7 +2,6 @@ import { KIXObjectType, ContextMode } from "../../../../../core/model";
 import { ComponentState } from "./ComponentState";
 import { RoutingConfiguration } from "../../../../../core/browser/router";
 import { AbstractNewDialog } from "../../../../../core/browser/components/dialog";
-import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
 import { FAQCategoryDetailsContext } from "../../../../../core/browser/faq/admin";
 import { FAQCategoryProperty } from "../../../../../core/model/kix/faq";
 
@@ -23,10 +22,6 @@ class Component extends AbstractNewDialog {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-
-        this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Cancel", "Translatable#Save"
-        ]);
     }
 
     public async onDestroy(): Promise<void> {

@@ -72,30 +72,29 @@ export class MailAccountService extends KIXObjectService {
         token: string, clientRequestId: string, objectType: KIXObjectType,
         parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
-        return;
-        // parameter = this.prepareParameter(parameter);
-        // const uri = this.buildUri(this.RESOURCE_URI, objectId);
+        parameter = this.prepareParameter(parameter);
+        const uri = this.buildUri(this.RESOURCE_URI, objectId);
 
-        // const id = super.executeUpdateOrCreateRequest(
-        //     token, clientRequestId, parameter, uri, KIXObjectType.MAIL_ACCOUNT, 'MailAccountID'
-        // ).catch((error: Error) => {
-        //     LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-        //     throw new Error(error.Code, error.Message);
-        // });
+        const id = super.executeUpdateOrCreateRequest(
+            token, clientRequestId, parameter, uri, KIXObjectType.MAIL_ACCOUNT, 'MailAccountID'
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
+        });
 
-        // return id;
+        return id;
     }
 
     private prepareParameter(parameter: Array<[string, any]>): Array<[string, any]> {
         const dispatchingIndex = parameter.findIndex((p) => p[0] === MailAccountProperty.DISPATCHING_BY);
         if (dispatchingIndex !== -1) {
-            if (parameter[dispatchingIndex][1] === 'USE_DEFAULT') {
-                parameter[dispatchingIndex][1] = DispatchingType.DEFAULT;
+            if (parameter[dispatchingIndex][1] === DispatchingType.FRONTEND_KEY_DEFAULT) {
+                parameter[dispatchingIndex][1] = DispatchingType.BACKEND_KEY_DEFAULT;
             } else {
                 if (!parameter.some((p) => p[0] === MailAccountProperty.QUEUE_ID)) {
                     parameter.push([MailAccountProperty.QUEUE_ID, parameter[dispatchingIndex][1]]);
                 }
-                parameter[dispatchingIndex][1] = DispatchingType.QUEUE;
+                parameter[dispatchingIndex][1] = DispatchingType.BACKEND_KEY_QUEUE;
             }
         }
         if (!parameter.some((p) => p[0] === MailAccountProperty.TRUSTED)) {

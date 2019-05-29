@@ -83,7 +83,7 @@ export class MailAccountLabelProvider implements ILabelProvider<MailAccount> {
                 displayValue = mailAccount.Host;
                 break;
             case MailAccountProperty.DISPATCHING_BY:
-                if (mailAccount.DispatchingBy === DispatchingType.DEFAULT) {
+                if (mailAccount.DispatchingBy === DispatchingType.BACKEND_KEY_DEFAULT) {
                     displayValue = 'Translatable#Default';
                 } else if (mailAccount.QueueID) {
                     const queues = await KIXObjectService.loadObjects<Queue>(
