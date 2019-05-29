@@ -20,7 +20,7 @@ export class ObjectFactoryService {
         this.getInstance().factories.push(factory);
     }
 
-    public static async createObject<T extends KIXObject = any>(
+    public static async createObject<T extends KIXObject | string = any>(
         token: string, objectType: KIXObjectType, object: T
     ): Promise<T> {
         const factory = this.getInstance().factories.find((f) => f.isFactoryFor(objectType));
