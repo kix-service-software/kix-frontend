@@ -112,10 +112,14 @@ export class TicketParameterUtil {
         const attachments = [];
         for (const f of files) {
             const attachment = new Attachment();
-            attachment.ContentType = f.type !== '' ? f.type : 'text';
-            attachment.Filename = f.name;
-            attachment.Content = await BrowserUtil.readFile(f);
-            attachments.push(attachment);
+            if (f instanceof File) {
+                attachment.ContentType = f.type !== '' ? f.type : 'text';
+                attachment.Filename = f.name;
+                attachment.Content = await BrowserUtil.readFile(f);
+                attachments.push(attachment);
+            } else {
+                attachments.push(f);
+            }
         }
         return attachments;
     }
