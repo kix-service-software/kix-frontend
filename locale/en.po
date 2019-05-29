@@ -587,6 +587,9 @@ msgstr ""
 msgid "Edit Priority"
 msgstr ""
 
+msgid "Edit Queue"
+msgstr ""
+
 msgid "Edit Role"
 msgstr ""
 
@@ -870,6 +873,33 @@ msgid "Helptext_Admin_QueueCreate_UnlockTimeout"
 msgstr ""
 
 msgid "Helptext_Admin_QueueCreate_Validity"
+msgstr ""
+
+msgid "Helptext_Admin_QueueEdit_Comment"
+msgstr ""
+
+msgid "Helptext_Admin_QueueEdit_FollowUp"
+msgstr ""
+
+msgid "Helptext_Admin_QueueEdit_Icon."
+msgstr ""
+
+msgid "Helptext_Admin_QueueEdit_Name"
+msgstr ""
+
+msgid "Helptext_Admin_QueueEdit_ParentQueue"
+msgstr ""
+
+msgid "Helptext_Admin_QueueEdit_SenderAddress."
+msgstr ""
+
+msgid "Helptext_Admin_QueueEdit_Signature"
+msgstr ""
+
+msgid "Helptext_Admin_QueueEdit_UnlockTimeout"
+msgstr ""
+
+msgid "Helptext_Admin_QueueEdit_Validity"
 msgstr ""
 
 msgid "Helptext_Admin_SystemAddressCreate_Comment"
@@ -2313,6 +2343,9 @@ msgid "Update Organisation"
 msgstr ""
 
 msgid "Update Priority"
+msgstr ""
+
+msgid "Update Queue"
 msgstr ""
 
 msgid "Update Role"

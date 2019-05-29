@@ -631,6 +631,11 @@ msgstr "Persönliche Einstellungen bearbeiten"
 msgid "Edit Priority"
 msgstr "Priorität bearbeiten"
 
+#, fuzzy
+#| msgid "Ticket: Queues"
+msgid "Edit Queue"
+msgstr "Ticket: Queues"
+
 msgid "Edit Role"
 msgstr "Rolle bearbeiten"
 
@@ -972,6 +977,51 @@ msgid "Helptext_Admin_QueueCreate_UnlockTimeout"
 msgstr "Hilfetext_Admin_QueueCreate_UnlockTimeout"
 
 msgid "Helptext_Admin_QueueCreate_Validity"
+msgstr "Hilfetext_Admin_QueueCreate_Validity"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Comment"
+msgid "Helptext_Admin_QueueEdit_Comment"
+msgstr "Hilfetext_Admin_QueueCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_FollowUp"
+msgid "Helptext_Admin_QueueEdit_FollowUp"
+msgstr "Hilfetext_Admin_QueueCreate_FollowUp"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Icon."
+msgid "Helptext_Admin_QueueEdit_Icon."
+msgstr "Hilfetext_Admin_QueueCreate_Icon."
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Name"
+msgid "Helptext_Admin_QueueEdit_Name"
+msgstr "Hilfetext_Admin_QueueCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_ParentQueue"
+msgid "Helptext_Admin_QueueEdit_ParentQueue"
+msgstr "Hilfetext_Admin_QueueCreate_ParentQueue"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_SenderAddress."
+msgid "Helptext_Admin_QueueEdit_SenderAddress."
+msgstr "Hilfetext_Admin_QueueCreate_SenderAddress."
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Signature"
+msgid "Helptext_Admin_QueueEdit_Signature"
+msgstr "Hilfetext_Admin_QueueCreate_Signature"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_UnlockTimeout"
+msgid "Helptext_Admin_QueueEdit_UnlockTimeout"
+msgstr "Hilfetext_Admin_QueueCreate_UnlockTimeout"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Validity"
+msgid "Helptext_Admin_QueueEdit_Validity"
 msgstr "Hilfetext_Admin_QueueCreate_Validity"
 
 #, fuzzy
@@ -2495,6 +2545,11 @@ msgstr "Aktualisierung wird durchgeführt"
 
 msgid "Update Priority"
 msgstr "Aktualisierung wird durchgeführt"
+
+#, fuzzy
+#| msgid "Create Queue"
+msgid "Update Queue"
+msgstr "Queue wird angelegt"
 
 msgid "Update Role"
 msgstr "Aktualisierung wird durchgeführt"
