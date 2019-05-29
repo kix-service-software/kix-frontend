@@ -126,7 +126,7 @@ export class ContextFactory {
     private isContext(
         contextId: string, descriptor: ContextDescriptor, objectType: KIXObjectType, contextMode: ContextMode
     ): boolean {
-        return descriptor.contextId === contextId ||
+        return contextId ? descriptor.contextId === contextId :
             (descriptor.isContextFor(objectType) && descriptor.contextMode === contextMode);
     }
 
