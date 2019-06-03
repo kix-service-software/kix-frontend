@@ -1,5 +1,4 @@
 import { ComponentState } from './ComponentState';
-import { ClientStorageService } from '../../core/browser/ClientStorageService';
 import { AgentService } from '../../core/browser/application/AgentService';
 import * as Bowser from "bowser";
 
