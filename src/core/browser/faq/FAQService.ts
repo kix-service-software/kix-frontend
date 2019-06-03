@@ -1,7 +1,7 @@
 import { KIXObjectService, ServiceRegistry } from "../kix";
 import {
     KIXObjectType, FilterCriteria, FilterDataType, FilterType, TreeNode, ObjectIcon, DataType,
-    KIXObject, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, ContextType
+    KIXObject, KIXObjectLoadingOptions
 } from "../../model";
 import { ContextService } from "../context";
 import { FAQDetailsContext } from "./context";
@@ -70,7 +70,9 @@ export class FAQService extends KIXObjectService {
         return filter;
     }
 
-    public async getTreeNodes(property: string, showInvalid: boolean = false): Promise<TreeNode[]> {
+    public async getTreeNodes(
+        property: string, showInvalid: boolean = false, filterIds?: Array<string | number>
+    ): Promise<TreeNode[]> {
         let values: TreeNode[] = [];
 
         const objectData = ObjectDataService.getInstance().getObjectData();
@@ -94,11 +96,9 @@ export class FAQService extends KIXObjectService {
                     const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(
                         KIXObjectType.FAQ_CATEGORY, null, loadingOptions
                     );
-                    const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-                    const object = context ? await context.getObject() : null;
                     values = this.prepareCategoryTree(
-                        faqCategories, showInvalid, object && object.KIXObjectType === KIXObjectType.FAQ_CATEGORY ?
-                            Number(object.ObjectId) : null
+                        faqCategories, showInvalid,
+                        filterIds ? filterIds.map((fid) => Number(fid)) : null
                     );
                     break;
                 case FAQArticleProperty.VISIBILITY:
@@ -125,22 +125,23 @@ export class FAQService extends KIXObjectService {
     }
 
     private prepareCategoryTree(
-        faqCategories: FAQCategory[], showInvalid: boolean = false, objectId?: number
+        faqCategories: FAQCategory[], showInvalid: boolean = false, filterIds?: number[]
     ): TreeNode[] {
         let nodes: TreeNode[] = [];
         if (faqCategories && !!faqCategories.length) {
             if (!showInvalid) {
                 faqCategories = faqCategories.filter((c) => c.ValidID === 1);
             }
-            if (objectId) {
-                faqCategories = faqCategories.filter((c) => c.ID !== objectId);
+            if (filterIds && filterIds.length) {
+                faqCategories = faqCategories.filter((c) => !filterIds.some((fid) => fid === c.ID));
             }
+
             nodes = faqCategories.map((category: FAQCategory) => {
                 const treeNode = new TreeNode(
                     category.ID, category.Name,
                     new ObjectIcon(KIXObjectType.FAQ_CATEGORY, category.ID),
                     null,
-                    this.prepareCategoryTree(category.SubCategories, showInvalid, objectId),
+                    this.prepareCategoryTree(category.SubCategories, showInvalid, filterIds),
                     null, null, null, null, null, null, null, category.ValidID === 1 ? true : false
                 );
                 return treeNode;

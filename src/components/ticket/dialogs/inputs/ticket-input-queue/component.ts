@@ -1,7 +1,10 @@
 import { ComponentState } from "./ComponentState";
-import { TicketProperty, TreeNode, FormInputComponent, FormFieldOptions } from "../../../../../core/model";
+import {
+    TicketProperty, TreeNode, FormInputComponent, FormFieldOptions, KIXObjectType
+} from "../../../../../core/model";
 import { TicketService } from "../../../../../core/browser/ticket";
 import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
+import { UIUtil } from "../../../../../core/browser";
 
 class Component extends FormInputComponent<number, ComponentState> {
 
@@ -30,8 +33,9 @@ class Component extends FormInputComponent<number, ComponentState> {
 
         const showInvalid = validOption ? validOption.value : false;
 
+        const queueId = await UIUtil.getEditObjectId(KIXObjectType.QUEUE);
         this.state.nodes = await TicketService.getInstance().getTreeNodes(
-            TicketProperty.QUEUE_ID, showInvalid
+            TicketProperty.QUEUE_ID, showInvalid, queueId ? [queueId] : null
         );
         this.setCurrentNode();
     }
