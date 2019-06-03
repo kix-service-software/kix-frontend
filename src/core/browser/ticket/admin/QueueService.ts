@@ -60,7 +60,7 @@ export class QueueService extends KIXObjectService<Queue> {
     }
 
     public async prepareQueueTree(
-        queues: Queue[], showInvalid?: boolean, objectId?: number, includeTicketStats: boolean = false
+        queues: Queue[], showInvalid?: boolean, filterIds?: number[], includeTicketStats: boolean = false
     ): Promise<TreeNode[]> {
         const nodes = [];
         if (queues && !!queues.length) {
@@ -68,8 +68,8 @@ export class QueueService extends KIXObjectService<Queue> {
                 queues = queues.filter((q) => q.ValidID === 1);
             }
 
-            if (objectId) {
-                queues = queues.filter((q) => q.QueueID !== objectId);
+            if (filterIds && filterIds.length) {
+                queues = queues.filter((q) => !filterIds.some((fid) => fid === q.QueueID));
             }
 
             for (const queue of queues) {
@@ -78,7 +78,9 @@ export class QueueService extends KIXObjectService<Queue> {
                     ticketStats = await this.getTicketStats(queue);
                 }
 
-                const subTree = await this.prepareQueueTree(queue.SubQueues, showInvalid, objectId, includeTicketStats);
+                const subTree = await this.prepareQueueTree(
+                    queue.SubQueues, showInvalid, filterIds, includeTicketStats
+                );
                 const treeNode = new TreeNode(
                     queue.QueueID, queue.Name,
                     new ObjectIcon(KIXObjectType.QUEUE, queue.QueueID),

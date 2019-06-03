@@ -1,8 +1,9 @@
 import { ComponentState } from "./ComponentState";
-import { TreeNode, FormInputComponent, FormFieldOptions } from "../../../../../core/model";
+import { TreeNode, FormInputComponent, FormFieldOptions, KIXObjectType } from "../../../../../core/model";
 import { FAQCategoryProperty } from "../../../../../core/model/kix/faq";
 import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
 import { FAQService } from "../../../../../core/browser/faq";
+import { UIUtil } from "../../../../../core/browser";
 
 class Component extends FormInputComponent<number[], ComponentState> {
 
@@ -32,7 +33,10 @@ class Component extends FormInputComponent<number[], ComponentState> {
 
         const showInvalid = validOption ? validOption.value : false;
 
-        const nodes = await FAQService.getInstance().getTreeNodes(FAQCategoryProperty.PARENT_ID, showInvalid);
+        const categoryId = await UIUtil.getEditObjectId(KIXObjectType.FAQ_CATEGORY);
+        const nodes = await FAQService.getInstance().getTreeNodes(
+            FAQCategoryProperty.PARENT_ID, showInvalid, categoryId ? [categoryId] : null
+        );
 
         this.state.nodes = nodes;
         this.setCurrentNode();

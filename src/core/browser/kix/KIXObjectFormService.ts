@@ -32,7 +32,7 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
     public async initOptions(form: Form): Promise<void> {
         let kixObject: KIXObject;
         const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-        if (context) {
+        if (context && form.formContext && form.formContext === FormContext.EDIT) {
             kixObject = await context.getObject();
         }
 

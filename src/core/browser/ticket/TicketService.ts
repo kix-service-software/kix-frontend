@@ -4,7 +4,7 @@ import {
     Attachment, KIXObjectType, Ticket, TicketProperty, FilterDataType, FilterCriteria, FilterType,
     TreeNode, ObjectIcon, Service, TicketPriority, TicketType,
     TicketState, StateType, KIXObject, Sla, TableFilterCriteria, User, KIXObjectLoadingOptions,
-    KIXObjectSpecificLoadingOptions, ContextType, Article
+    KIXObjectSpecificLoadingOptions, Article
 } from '../../model';
 import { TicketParameterUtil } from './TicketParameterUtil';
 import { KIXObjectService } from '../kix';
@@ -99,7 +99,9 @@ export class TicketService extends KIXObjectService<Ticket> {
         ];
     }
 
-    public async getTreeNodes(property: string, showInvalid?: boolean): Promise<TreeNode[]> {
+    public async getTreeNodes(
+        property: string, showInvalid?: boolean, filterIds?: Array<string | number>
+    ): Promise<TreeNode[]> {
         let values: TreeNode[] = [];
 
         const labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.TICKET);
@@ -107,14 +109,9 @@ export class TicketService extends KIXObjectService<Ticket> {
         switch (property) {
             case TicketProperty.QUEUE_ID:
                 const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy();
-                const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-                const object = context ? await context.getObject() : null;
-                const objectId = object && object.KIXObjectType === KIXObjectType.QUEUE
-                    ? Number(object.ObjectId)
-                    : null;
-                values = queuesHierarchy ? await QueueService.getInstance().prepareQueueTree(
-                    queuesHierarchy, showInvalid, objectId
-                ) : [];
+                values = await QueueService.getInstance().prepareQueueTree(
+                    queuesHierarchy, showInvalid, filterIds ? filterIds.map((fid) => Number(fid)) : null
+                );
                 break;
             case TicketProperty.SERVICE_ID:
                 const servicesHierarchy = await this.getServicesHierarchy();
@@ -122,7 +119,9 @@ export class TicketService extends KIXObjectService<Ticket> {
                 break;
             case TicketProperty.TYPE_ID:
                 let types = await KIXObjectService.loadObjects<TicketType>(KIXObjectType.TICKET_TYPE);
-                types = types.filter((t) => t.ValidID === 1);
+                if (!showInvalid) {
+                    types = types.filter((t) => t.ValidID === 1);
+                }
                 for (const t of types) {
                     const icons = await labelProvider.getIcons(null, property, t.ID);
                     values.push(new TreeNode(t.ID, t.Name, (icons && icons.length) ? icons[0] : null));
@@ -130,7 +129,9 @@ export class TicketService extends KIXObjectService<Ticket> {
                 break;
             case TicketProperty.PRIORITY_ID:
                 let priorities = await KIXObjectService.loadObjects<TicketPriority>(KIXObjectType.TICKET_PRIORITY);
-                priorities = priorities.filter((p) => p.ValidID === 1);
+                if (!showInvalid) {
+                    priorities = priorities.filter((p) => p.ValidID === 1);
+                }
                 for (const p of priorities) {
                     const icons = await labelProvider.getIcons(null, property, p.ID);
                     values.push(new TreeNode(p.ID, p.Name, (icons && icons.length) ? icons[0] : null));
@@ -138,7 +139,9 @@ export class TicketService extends KIXObjectService<Ticket> {
                 break;
             case TicketProperty.STATE_ID:
                 let states = await KIXObjectService.loadObjects<TicketState>(KIXObjectType.TICKET_STATE);
-                states = states.filter((s) => s.ValidID === 1);
+                if (!showInvalid) {
+                    states = states.filter((s) => s.ValidID === 1);
+                }
                 for (const s of states) {
                     const icons = await labelProvider.getIcons(null, property, s.ID);
                     values.push(new TreeNode(s.ID, s.Name, (icons && icons.length) ? icons[0] : null));
@@ -149,8 +152,8 @@ export class TicketService extends KIXObjectService<Ticket> {
                 slas.forEach((s) => values.push(new TreeNode(s.SLAID, s.Name, null)));
                 break;
             case TicketProperty.LOCK_ID:
-                values.push(new TreeNode(1, 'freigegeben', 'kix-icon-lock-open'));
-                values.push(new TreeNode(2, 'gesperrt', 'kix-icon-lock-close'));
+                values.push(new TreeNode(1, 'Translatable#unlocked', 'kix-icon-lock-open'));
+                values.push(new TreeNode(2, 'Translatable#locked', 'kix-icon-lock-close'));
                 break;
             case TicketProperty.RESPONSIBLE_ID:
             case TicketProperty.OWNER_ID:
