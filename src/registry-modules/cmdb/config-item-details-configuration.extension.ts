@@ -1,8 +1,9 @@
 import { IConfigurationExtension } from "../../core/extensions";
 import {
-    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize, KIXObjectType,
+    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize, KIXObjectType, CRUD,
 } from "../../core/model";
 import { ConfigItemDetailsContext } from "../../core/browser/cmdb";
+import { UIComponentPermission } from "../../core/model/UIComponentPermission";
 
 export class Extension implements IConfigurationExtension {
 
@@ -18,13 +19,17 @@ export class Extension implements IConfigurationExtension {
                     'config-item-info-widget', 'Translatable#Config Item Information',
                     ['config-item-edit-action', 'config-item-print-action'],
                     {}, false, true, WidgetSize.LARGE, null, false
-                )
+                ),
+                [new UIComponentPermission('cmdb/configitems', [CRUD.READ])]
             );
 
         const configItemHistoryLane =
-            new ConfiguredWidget("config-item-history-widget", new WidgetConfiguration(
-                "config-item-history-widget", "Translatable#History", ['config-item-print-action'],
-                null, true, true, WidgetSize.BOTH, null, false)
+            new ConfiguredWidget("config-item-history-widget",
+                new WidgetConfiguration(
+                    "config-item-history-widget", "Translatable#History", ['config-item-print-action'],
+                    null, true, true, WidgetSize.BOTH, null, false
+                ),
+                [new UIComponentPermission('cmdb/configitems/*/history', [CRUD.READ])]
             );
 
         const configItemLinkedObjectsLane =
@@ -40,7 +45,8 @@ export class Extension implements IConfigurationExtension {
                         ]
                     },
                     true, true, WidgetSize.LARGE, null, false
-                )
+                ),
+                [new UIComponentPermission('links', [CRUD.READ])]
             );
 
         const configItemGraphLane =
@@ -50,7 +56,8 @@ export class Extension implements IConfigurationExtension {
                     ['config-item-print-action'],
                     null,
                     true, true, WidgetSize.LARGE, null, false
-                )
+                ),
+                [new UIComponentPermission('cmdb/configitems', [CRUD.READ])]
             );
 
         const configItemImagesLane =
@@ -60,7 +67,8 @@ export class Extension implements IConfigurationExtension {
                     [],
                     null,
                     true, true, WidgetSize.LARGE, null, false
-                )
+                ),
+                [new UIComponentPermission('cmdb/configitems/*/images', [CRUD.READ])]
             );
 
         const laneTabs = ['config-item-info-lane'];
@@ -85,7 +93,9 @@ export class Extension implements IConfigurationExtension {
                 'table-widget', "Translatable#Version Details",
                 ['config-item-version-compare-action', 'config-item-edit-action'],
                 { objectType: KIXObjectType.CONFIG_ITEM_VERSION }, false, true, WidgetSize.BOTH, null, true
-            ));
+            ),
+            [new UIComponentPermission('cmdb/configitems/*/versions', [CRUD.READ])]
+        );
 
         const content = ['config-item-version-widget'];
         const contentWidgets = [configItemVersionLane];

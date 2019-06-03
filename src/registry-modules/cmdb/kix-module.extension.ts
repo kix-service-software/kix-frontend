@@ -14,7 +14,7 @@ class Extension implements IKIXModuleExtension {
             new UIComponentPermission('cmdb/configitems', [CRUD.READ])
         ]),
         new UIComponent('cmdb-module-edit-component', 'cmdb/module/cmdb-edit-module-component', [
-            new UIComponentPermission('cmdb/configitems', [CRUD.UPDATE]),
+            new UIComponentPermission('cmdb/configitems/*', [CRUD.UPDATE]),
             new UIComponentPermission('cmdb/configitems/*/versions', [CRUD.CREATE])
         ])
     ];
@@ -22,6 +22,7 @@ class Extension implements IKIXModuleExtension {
     public external: boolean = false;
 
     public uiComponents: UIComponent[] = [
+        new UIComponent('cmdb-module', 'cmdb/cmdb-module', []),
         new UIComponent('config-item-info', 'cmdb/config-item-info', []),
         new UIComponent('new-config-item-dialog', 'cmdb/dialogs/new-config-item-dialog', []),
         new UIComponent('edit-config-item-dialog', 'cmdb/dialogs/edit-config-item-dialog', []),
