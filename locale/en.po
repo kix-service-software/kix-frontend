@@ -881,6 +881,9 @@ msgstr ""
 msgid "Helptext_Admin_QueueEdit_FollowUp"
 msgstr ""
 
+msgid "Helptext_Admin_QueueEdit_FollowUpTicketLock"
+msgstr ""
+
 msgid "Helptext_Admin_QueueEdit_Icon."
 msgstr ""
 

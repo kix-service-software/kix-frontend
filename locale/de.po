@@ -991,6 +991,11 @@ msgid "Helptext_Admin_QueueEdit_FollowUp"
 msgstr "Hilfetext_Admin_QueueCreate_FollowUp"
 
 #, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_FollowUpTicketLock"
+msgid "Helptext_Admin_QueueEdit_FollowUpTicketLock"
+msgstr "Hilfetext_Admin_QueueCreate_FollowUpTicketLock"
+
+#, fuzzy
 #| msgid "Helptext_Admin_QueueCreate_Icon."
 msgid "Helptext_Admin_QueueEdit_Icon."
 msgstr "Hilfetext_Admin_QueueCreate_Icon."
