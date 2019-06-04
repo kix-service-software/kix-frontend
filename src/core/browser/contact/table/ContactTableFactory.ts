@@ -64,7 +64,7 @@ export class ContactTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.CONTACT, null, 5, tableColumns, null, false, false, null, null,
+                KIXObjectType.CONTACT, 1000, null, tableColumns, null, false, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.SMALL
             );
             tableConfiguration.enableSelection = true;
@@ -85,7 +85,6 @@ export class ContactTableFactory extends TableFactory {
         return tableConfiguration;
     }
 
-    // TODO: implementieren
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
         let config;
         switch (property) {
@@ -102,12 +101,12 @@ export class ContactTableFactory extends TableFactory {
                 break;
             case ContactProperty.PRIMARY_ORGANISATION_ID:
                 config = new DefaultColumnConfiguration(
-                    property, true, false, true, false, 150, true, true, true, DataType.STRING, true, null,
+                    property, true, false, true, false, 150, true, true, false, DataType.STRING, true, null,
                     'Translatable#Organisation'
                 );
                 break;
             default:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true);
+                config = super.getDefaultColumnConfiguration(property);
         }
         return config;
     }

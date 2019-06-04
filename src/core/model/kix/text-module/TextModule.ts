@@ -21,23 +21,11 @@ export class TextModule extends KIXObject<TextModule> {
 
     public Language: string;
 
-    public Category: string;
+    // public AgentFrontend: number;
 
-    public AgentFrontend: number;
+    // public CustomerFrontend: number;
 
-    public CustomerFrontend: number;
-
-    public PublicFrontend: number;
-
-    public ValidID: number;
-
-    public CreatedBy: number;
-
-    public CreateTime: string;
-
-    public ChangedBy: number;
-
-    public ChangeTime: string;
+    // public PublicFrontend: number;
 
     public equals(textModule: TextModule): boolean {
         return this.ID === textModule.ID;
@@ -54,11 +42,14 @@ export class TextModule extends KIXObject<TextModule> {
             this.Comment = textModule.Comment;
             this.Subject = textModule.Subject;
             this.Language = textModule.Language;
-            this.Category = textModule.Category;
-            this.AgentFrontend = textModule.AgentFrontend;
-            this.CustomerFrontend = textModule.CustomerFrontend;
-            this.PublicFrontend = textModule.PublicFrontend;
+            // this.AgentFrontend = textModule.AgentFrontend;
+            // this.CustomerFrontend = textModule.CustomerFrontend;
+            // this.PublicFrontend = textModule.PublicFrontend;
             this.ValidID = textModule.ValidID;
+            this.CreateBy = textModule.CreateBy;
+            this.CreateTime = textModule.CreateTime;
+            this.ChangeBy = textModule.ChangeBy;
+            this.ChangeTime = textModule.ChangeTime;
         }
     }
 

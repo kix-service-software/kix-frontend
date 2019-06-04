@@ -7,7 +7,7 @@ import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 import { SystemAddressDetailsContext } from '../../../../../core/browser/system-address';
 import {
-    SystemAddress, KIXObjectType, FilterCriteria, QueueProperty, FilterDataType, FilterType
+    SystemAddress, KIXObjectType, FilterCriteria, QueueProperty, FilterDataType, FilterType, KIXObjectProperty
 } from '../../../../../core/model';
 import { IEventSubscriber, EventService } from '../../../../../core/browser/event';
 
@@ -63,7 +63,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             new DefaultColumnConfiguration(
                 QueueProperty.COMMENT, true, false, true, false, 350, true, true, false
             ),
-            new DefaultColumnConfiguration(QueueProperty.VALID_ID, true, false, true, false, 150, true, true)
+            new DefaultColumnConfiguration(KIXObjectProperty.VALID_ID, true, false, true, false, 150, true, true)
         ];
         const filterCriteria =
             [

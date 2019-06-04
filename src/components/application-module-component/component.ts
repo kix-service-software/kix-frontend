@@ -14,9 +14,6 @@ import {
 } from '../../core/browser/link';
 import { GeneralCatalogService, GeneralCatalogBrowserFactory } from '../../core/browser/general-catalog';
 import { DynamicFieldService } from '../../core/browser/dynamic-fields';
-import {
-    TextModuleService, TextModuleBrowserFactory, TextModuleLabelProvider, TextModulesTableFactory
-} from '../../core/browser/text-modules';
 import { SlaService, SlaLabelProvider, SlaBrowserFactory } from '../../core/browser/sla';
 import { ObjectIconService, ObjectIconBrowserFactory } from '../../core/browser/icon';
 import { PersonalSettingsDialogContext } from '../../core/browser';
@@ -51,7 +48,6 @@ class Component extends AbstractMarkoComponent {
         ServiceRegistry.registerServiceInstance(SearchService.getInstance());
         ServiceRegistry.registerServiceInstance(LinkService.getInstance());
         ServiceRegistry.registerServiceInstance(GeneralCatalogService.getInstance());
-        ServiceRegistry.registerServiceInstance(TextModuleService.getInstance());
         ServiceRegistry.registerServiceInstance(DynamicFieldService.getInstance());
         ServiceRegistry.registerServiceInstance(SlaService.getInstance());
         ServiceRegistry.registerServiceInstance(ObjectIconService.getInstance());
@@ -70,10 +66,6 @@ class Component extends AbstractMarkoComponent {
         );
 
         LabelService.getInstance().registerLabelProvider(new PermissionLabelProvider());
-
-        FactoryService.getInstance().registerFactory(KIXObjectType.TEXT_MODULE, TextModuleBrowserFactory.getInstance());
-        TableFactoryService.getInstance().registerFactory(new TextModulesTableFactory());
-        LabelService.getInstance().registerLabelProvider(new TextModuleLabelProvider());
 
         FactoryService.getInstance().registerFactory(
             KIXObjectType.SLA, SlaBrowserFactory.getInstance()

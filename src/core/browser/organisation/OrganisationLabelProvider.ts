@@ -28,11 +28,12 @@ export class OrganisationLabelProvider implements ILabelProvider<Organisation> {
                     break;
                 case KIXObjectProperty.CREATE_BY:
                 case KIXObjectProperty.CHANGE_BY:
-                    const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [value], null, null, true
-                    ).catch((error) => [] as User[]);
-                    displayValue = users && !!users.length ? users[0].UserFullname : value;
-                    break;
+                    if (value) {
+                        const users = await KIXObjectService.loadObjects<User>(
+                            KIXObjectType.USER, [value], null, null, true
+                        ).catch((error) => [] as User[]);
+                        displayValue = users && !!users.length ? users[0].UserFullname : value;
+                    }
                 case KIXObjectProperty.CREATE_TIME:
                 case KIXObjectProperty.CHANGE_TIME:
                     displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);

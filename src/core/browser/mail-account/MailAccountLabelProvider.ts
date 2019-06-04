@@ -43,16 +43,16 @@ export class MailAccountLabelProvider implements ILabelProvider<MailAccount> {
             case KIXObjectProperty.VALID_ID:
                 displayValue = 'Translatable#Validity';
                 break;
-            case MailAccountProperty.CREATE_BY:
+            case KIXObjectProperty.CREATE_BY:
                 displayValue = 'Translatable#Created by';
                 break;
-            case MailAccountProperty.CREATE_TIME:
+            case KIXObjectProperty.CREATE_TIME:
                 displayValue = 'Translatable#Created at';
                 break;
-            case MailAccountProperty.CHANGE_BY:
+            case KIXObjectProperty.CHANGE_BY:
                 displayValue = 'Translatable#Changed by';
                 break;
-            case MailAccountProperty.CHANGE_TIME:
+            case KIXObjectProperty.CHANGE_TIME:
                 displayValue = 'Translatable#Changed at';
                 break;
             case MailAccountProperty.ID:
@@ -116,11 +116,12 @@ export class MailAccountLabelProvider implements ILabelProvider<MailAccount> {
                     break;
                 case KIXObjectProperty.CREATE_BY:
                 case KIXObjectProperty.CHANGE_BY:
-                    const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [value], null, null, true
-                    ).catch((error) => [] as User[]);
-                    displayValue = users && !!users.length ? users[0].UserFullname : value;
-                    break;
+                    if (value) {
+                        const users = await KIXObjectService.loadObjects<User>(
+                            KIXObjectType.USER, [value], null, null, true
+                        ).catch((error) => [] as User[]);
+                        displayValue = users && !!users.length ? users[0].UserFullname : value;
+                    }
                 case KIXObjectProperty.CREATE_TIME:
                 case KIXObjectProperty.CHANGE_TIME:
                     displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
@@ -162,7 +163,7 @@ export class MailAccountLabelProvider implements ILabelProvider<MailAccount> {
     }
 
     public getObjectTooltip(object: MailAccount): string {
-        return '';
+        return object.Host;
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
