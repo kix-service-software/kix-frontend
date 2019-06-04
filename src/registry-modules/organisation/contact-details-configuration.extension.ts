@@ -82,7 +82,9 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
                     ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
                 ),
                 false, true, WidgetSize.LARGE, null, false
-            ));
+            ),
+            [new UIComponentPermission('organisations', [CRUD.READ])]
+        );
 
         const assignedTicketsLane = new ConfiguredWidget('contact-assigned-tickets-widget',
             new WidgetConfiguration(
