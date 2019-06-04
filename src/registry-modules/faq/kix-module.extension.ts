@@ -1,5 +1,7 @@
 import { IKIXModuleExtension } from "../../core/extensions";
 import { UIComponent } from "../../core/model/UIComponent";
+import { UIComponentPermission } from "../../core/model/UIComponentPermission";
+import { CRUD } from "../../core/model";
 
 class Extension implements IKIXModuleExtension {
 
@@ -8,7 +10,13 @@ class Extension implements IKIXModuleExtension {
     public id = 'faq-module';
 
     public initComponents: UIComponent[] = [
-        new UIComponent('faq-module-component', 'faq/faq-module-component', [])
+        new UIComponent('faq-read-module-component', 'faq/module/faq-read-module-component', [
+            new UIComponentPermission('faq/articles', [CRUD.READ])
+        ]),
+        new UIComponent('faq-edit-module-component', 'faq/module/faq-edit-module-component', [
+            new UIComponentPermission('faq/articles', [CRUD.CREATE]),
+            new UIComponentPermission('faq/articles/*', [CRUD.UPDATE])
+        ])
     ];
 
     public external: boolean = false;

@@ -37,8 +37,7 @@ export class Component {
 
     public async vote(rating: number): Promise<void> {
         if (this.faqArticle) {
-            const service
-                = ServiceRegistry.getServiceInstance<FAQService>(KIXObjectType.FAQ_VOTE);
+            const service = ServiceRegistry.getServiceInstance<FAQService>(KIXObjectType.FAQ_VOTE);
             const faqVote = new FAQVote();
             faqVote.Rating = rating;
             // TODO: auf angemeldeten Agenten/IP ändern
