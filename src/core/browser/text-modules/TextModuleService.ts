@@ -1,10 +1,12 @@
 import { KIXObjectService } from "../kix";
 import {
     KIXObjectType, KIXObjectLoadingOptions, FilterCriteria,
-    TextModuleProperty, FilterDataType, FilterType, TextModule
+    TextModuleProperty, FilterDataType, FilterType, TextModule, CRUD
 } from "../../model";
 import { IAutofillConfiguration } from "../components";
 import { SearchOperator } from "../SearchOperator";
+import { AuthenticationSocketClient } from "../application/AuthenticationSocketClient";
+import { UIComponentPermission } from "../../model/UIComponentPermission";
 
 export class TextModuleService extends KIXObjectService {
 
@@ -29,42 +31,50 @@ export class TextModuleService extends KIXObjectService {
         return 'TextModule';
     }
 
-    public getAutoFillConfiguration(textMatch: any, placeholder: string): IAutofillConfiguration {
-        // tslint:disable:max-line-length
-        const itemTemplate = `<li data-id="{id}" class="text-module-autofill-item"><div class="text-module-category">{Category}</div><div class="text-module-info"><span class="text-module-name">{Name}</span><span class="text-module-label">{Keywords}</span></div></li>`;
-        const matchCallback = (text: string, offset) => {
+    public async getAutoFillConfiguration(textMatch: any, placeholder: string): Promise<IAutofillConfiguration> {
+        const allowed = await AuthenticationSocketClient.getInstance().checkPermissions([
+            new UIComponentPermission('textmodules', [CRUD.READ])
+        ]);
 
-            const left = text.slice(0, offset);
-            const match = left.match(new RegExp(`${placeholder}[^\\s]*$`));
-            if (!match) {
-                return null;
-            }
+        let config: IAutofillConfiguration;
 
-            return {
-                start: match.index, end: offset
-            };
-        };
+        if (allowed) {
+            // tslint:disable:max-line-length
+            const itemTemplate = `<li data-id="{id}" class="text-module-autofill-item"><div class="text-module-category">{Category}</div><div class="text-module-info"><span class="text-module-name">{Name}</span><span class="text-module-label">{Keywords}</span></div></li>`;
+            const matchCallback = (text: string, offset) => {
 
-        const config: IAutofillConfiguration = {
-            textTestCallback: (range) => {
-                if (!range.collapsed) {
+                const left = text.slice(0, offset);
+                const match = left.match(new RegExp(`${placeholder}[^\\s]*$`));
+                if (!match) {
                     return null;
                 }
-                return textMatch.match(range, matchCallback);
-            }
-            ,
-            dataCallback: async (matchInfo, callback) => {
-                const query = matchInfo.query.substring(placeholder.length);
-                const modules = await this.getTextModules(query);
-                modules.forEach((tm) => {
-                    tm['id'] = tm.ID;
-                    tm['name'] = tm.Name;
-                });
-                callback(modules);
-            },
-            itemTemplate,
-            outputTemplate: '{Text}'
-        };
+
+                return {
+                    start: match.index, end: offset
+                };
+            };
+
+            config = {
+                textTestCallback: (range) => {
+                    if (!range.collapsed) {
+                        return null;
+                    }
+                    return textMatch.match(range, matchCallback);
+                }
+                ,
+                dataCallback: async (matchInfo, callback) => {
+                    const query = matchInfo.query.substring(placeholder.length);
+                    const modules = await this.getTextModules(query);
+                    modules.forEach((tm) => {
+                        tm['id'] = tm.ID;
+                        tm['name'] = tm.Name;
+                    });
+                    callback(modules);
+                },
+                itemTemplate,
+                outputTemplate: '{Text}'
+            };
+        }
 
         return config;
     }

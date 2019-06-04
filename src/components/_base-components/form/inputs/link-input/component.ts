@@ -1,8 +1,10 @@
 import { ComponentState } from './ComponentState';
-import { CreateLinkDescription, FormInputComponent } from '../../../../../core/model';
+import { CreateLinkDescription, FormInputComponent, CRUD } from '../../../../../core/model';
 import { FormService, LabelService, IdService, Label } from '../../../../../core/browser';
 import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 import { DialogService } from '../../../../../core/browser/components/dialog';
+import { AuthenticationSocketClient } from '../../../../../core/browser/application/AuthenticationSocketClient';
+import { UIComponentPermission } from '../../../../../core/model/UIComponentPermission';
 
 class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescription[], ComponentState> {
 
@@ -19,6 +21,10 @@ class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescr
 
         this.state.translations = await TranslationService.createTranslationObject([
             "Translatable#Assign Links"
+        ]);
+
+        this.state.allowCreate = await AuthenticationSocketClient.getInstance().checkPermissions([
+            new UIComponentPermission('links', [CRUD.CREATE])
         ]);
     }
 

@@ -13,7 +13,8 @@ import {
     TicketStateTypeBrowserFactory, QueueBrowserFactory, FollowUpTypeBrowserFactory, TicketTemplateBrowserFactory,
     TicketContext, TicketDetailsContext, TicketSearchContext, TicketListContext, ArticleZipAttachmentDownloadAction,
     ArticlePrintAction, TicketPrintAction, TicketSearchAction, ShowUserTicketsAction, TicketPriorityTableFactory,
-    TicketQueueTableFactory, TicketTypeTableFactory, TicketStateTableFactory
+    TicketQueueTableFactory, TicketTypeTableFactory, TicketStateTableFactory, TicketFormService,
+    EmailRecipientValidator, PendingTimeValidator
 } from "../../../../core/browser/ticket";
 import { ChannelService } from "../../../../core/browser/channel";
 import { ChannelLabelProvider } from "../../../../core/browser/channel/ChannelLabelProvider";
@@ -21,6 +22,7 @@ import { ArticleTableFactory } from "../../../../core/browser/ticket/table/Artic
 import {
     KIXObjectType, ContextDescriptor, ContextType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration, WidgetSize
 } from "../../../../core/model";
+import { FormValidationService } from "../../../../core/browser/form/validation";
 
 class Component extends AbstractMarkoComponent {
 
@@ -36,6 +38,12 @@ class Component extends AbstractMarkoComponent {
         ServiceRegistry.registerServiceInstance(TicketPriorityService.getInstance());
         ServiceRegistry.registerServiceInstance(QueueService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketTemplateService.getInstance());
+        ServiceRegistry.registerServiceInstance(TicketFormService.getInstance());
+
+        FormValidationService.getInstance().registerValidator(new PendingTimeValidator());
+        FormValidationService.getInstance().registerValidator(new EmailRecipientValidator());
+
+        TicketFormService.getInstance();
 
         KIXObjectSearchService.getInstance().registerSearchDefinition(new TicketSearchDefinition());
 

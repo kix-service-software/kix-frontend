@@ -3,10 +3,12 @@
         <loading-spinner/>
     </if>
     <else>
-        <button.form-button type="button" title=state.translations["Assign Links"] on-click("openDialog")>
-            <span.kix-icon-new-link/>
-            <translation-string pattern="Translatable#Assign Links"/>
-        </button>
+        <if(state.allowCreate)>
+            <button.form-button type="button" title=state.translations["Assign Links"] on-click("openDialog")>
+                <span.kix-icon-new-link/>
+                <translation-string pattern="Translatable#Assign Links"/>
+            </button>
+        </if>
         <span.link-notice on-click("minimize") class={
             "has-text": !!state.linkDescriptions.length
         }>

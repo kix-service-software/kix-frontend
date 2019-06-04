@@ -7,7 +7,8 @@ export class ComponentState extends FormInputComponentState<CreateLinkDescriptio
         public linkDescriptions: CreateLinkDescription[] = [],
         public minimized: boolean = false,
         public labels: Label[] = [],
-        public loading: boolean = false
+        public loading: boolean = false,
+        public allowCreate: boolean = false
     ) {
         super();
     }

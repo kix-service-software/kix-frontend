@@ -300,7 +300,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return [];
     }
 
-    public getAutoFillConfiguration(textMatch: any, placeholder: string): IAutofillConfiguration {
+    public async getAutoFillConfiguration(textMatch: any, placeholder: string): Promise<IAutofillConfiguration> {
         return null;
     }
 

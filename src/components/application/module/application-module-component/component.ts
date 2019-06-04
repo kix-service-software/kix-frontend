@@ -1,45 +1,45 @@
 import {
     AbstractMarkoComponent, ActionFactory, ServiceRegistry, ContextService,
     LabelService, FactoryService, TableFactoryService, TableCSSHandlerRegistry
-} from '../../core/browser';
+} from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
-import { SearchService } from '../../core/browser/search';
-import { CSVExportAction, BulkAction, ImportAction } from '../../core/browser/actions';
+import { SearchService } from '../../../../core/browser/search';
+import { CSVExportAction, BulkAction, ImportAction } from '../../../../core/browser/actions';
 import {
     ContextDescriptor, KIXObjectType, ContextType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration
-} from '../../core/model';
+} from '../../../../core/model';
 import {
     LinkService, LinkedObjectsEditAction, EditLinkedObjectsDialogContext, LinkObjectTableFactory,
     LinkObjectLabelProvider, LinkObjectDialogContext
-} from '../../core/browser/link';
-import { GeneralCatalogService, GeneralCatalogBrowserFactory } from '../../core/browser/general-catalog';
-import { DynamicFieldService } from '../../core/browser/dynamic-fields';
+} from '../../../../core/browser/link';
+import { GeneralCatalogService, GeneralCatalogBrowserFactory } from '../../../../core/browser/general-catalog';
+import { DynamicFieldService } from '../../../../core/browser/dynamic-fields';
 import {
     TextModuleService, TextModuleBrowserFactory, TextModuleLabelProvider, TextModulesTableFactory
-} from '../../core/browser/text-modules';
-import { SlaService, SlaLabelProvider, SlaBrowserFactory } from '../../core/browser/sla';
-import { ObjectIconService, ObjectIconBrowserFactory } from '../../core/browser/icon';
-import { PersonalSettingsDialogContext } from '../../core/browser';
-import { BulkDialogContext } from '../../core/browser/bulk';
+} from '../../../../core/browser/text-modules';
+import { SlaService, SlaLabelProvider, SlaBrowserFactory } from '../../../../core/browser/sla';
+import { ObjectIconService, ObjectIconBrowserFactory } from '../../../../core/browser/icon';
+import { PersonalSettingsDialogContext } from '../../../../core/browser';
+import { BulkDialogContext } from '../../../../core/browser/bulk';
 import {
     TranslationLabelProvider, TranslationLanguageLabelProvider
-} from '../../core/browser/i18n';
+} from '../../../../core/browser/i18n';
 import {
     TranslationCreateAction, TranslationImportAction, TranslationCSVExportAction, TranslationEditAction
-} from '../../core/browser/i18n/admin/actions';
-import { TranslationTableFactory, TranslationLanguageTableFactory } from '../../core/browser/i18n/admin/table';
-import { PersonalSettingsFormService } from '../../core/browser/settings/PersonalSettingsFormService';
+} from '../../../../core/browser/i18n/admin/actions';
+import { TranslationTableFactory, TranslationLanguageTableFactory } from '../../../../core/browser/i18n/admin/table';
+import { PersonalSettingsFormService } from '../../../../core/browser/settings/PersonalSettingsFormService';
 import {
     NewTranslationDialogContext, TranslationDetailsContext, EditTranslationDialogContext
-} from '../../core/browser/i18n/admin/context';
-import { TranslationFormService } from '../../core/browser/i18n/admin/TranslationFormService';
-import { SearchResultPrintAction } from '../../core/browser/search/actions';
-import { SearchContext } from '../../core/browser/search/context';
-import { SwitchColumnOrderAction } from '../../core/browser/table/actions';
-import { DialogService } from '../../core/browser/components/dialog';
-import { PermissionLabelProvider } from '../../core/browser/permission';
-import { PermissionsTableFactory, PermissionTableCSSHandler } from '../../core/browser/application';
-import { ServiceService } from '../../core/browser/service/ServiceService';
+} from '../../../../core/browser/i18n/admin/context';
+import { TranslationFormService } from '../../../../core/browser/i18n/admin/TranslationFormService';
+import { SearchResultPrintAction } from '../../../../core/browser/search/actions';
+import { SearchContext } from '../../../../core/browser/search/context';
+import { SwitchColumnOrderAction } from '../../../../core/browser/table/actions';
+import { DialogService } from '../../../../core/browser/components/dialog';
+import { PermissionLabelProvider } from '../../../../core/browser/permission';
+import { PermissionsTableFactory, PermissionTableCSSHandler } from '../../../../core/browser/application';
+import { ServiceService } from '../../../../core/browser/service/ServiceService';
 
 class Component extends AbstractMarkoComponent {
 
@@ -80,9 +80,6 @@ class Component extends AbstractMarkoComponent {
         );
         LabelService.getInstance().registerLabelProvider(new SlaLabelProvider());
 
-        TableFactoryService.getInstance().registerFactory(new LinkObjectTableFactory());
-        LabelService.getInstance().registerLabelProvider(new LinkObjectLabelProvider());
-        ActionFactory.getInstance().registerAction('linked-objects-edit-action', LinkedObjectsEditAction);
 
         TableFactoryService.getInstance().registerFactory(new TranslationTableFactory());
         TableFactoryService.getInstance().registerFactory(new TranslationLanguageTableFactory());
@@ -114,20 +111,6 @@ class Component extends AbstractMarkoComponent {
             false, 'search', ['search'], SearchContext
         );
         ContextService.getInstance().registerContext(searchContext);
-
-        const linkObjectDialogContext = new ContextDescriptor(
-            LinkObjectDialogContext.CONTEXT_ID, [KIXObjectType.LINK],
-            ContextType.DIALOG, ContextMode.CREATE,
-            false, 'link-objects-dialog', ['links'], LinkObjectDialogContext
-        );
-        ContextService.getInstance().registerContext(linkObjectDialogContext);
-
-        const editLinkObjectDialogContext = new ContextDescriptor(
-            EditLinkedObjectsDialogContext.CONTEXT_ID, [KIXObjectType.LINK],
-            ContextType.DIALOG, ContextMode.EDIT_LINKS,
-            false, 'edit-linked-objects-dialog', ['links'], EditLinkedObjectsDialogContext
-        );
-        ContextService.getInstance().registerContext(editLinkObjectDialogContext);
 
         const bulkDialogContext = new ContextDescriptor(
             BulkDialogContext.CONTEXT_ID, [KIXObjectType.ANY],
@@ -167,15 +150,6 @@ class Component extends AbstractMarkoComponent {
     }
 
     private registerDialogs(): void {
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'edit-linked-objects-dialog',
-            new WidgetConfiguration(
-                'edit-linked-objects-dialog', 'Translatable#Edit Links', [], {}, false, false, null, 'kix-icon-link'
-            ),
-            KIXObjectType.LINK,
-            ContextMode.EDIT_LINKS
-        ));
-
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'personal-settings-dialog',
             new WidgetConfiguration(

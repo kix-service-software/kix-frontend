@@ -2,11 +2,13 @@
     <img#logo alt="KIX 2018" src="/static/img/kix-logo.png"/>
     <div>
         <!-- Neues Objekt -->
-        <button.special-button type="button" on-click("openDialog")>
-            <span.kix-icon-plus-blank/>
-            <translation-string pattern="Translatable#New"/>
-        </button>
-        <div.header-separator/>
+        <if(state.allowNew)>
+            <button.special-button type="button" on-click("openDialog")>
+                <span.kix-icon-plus-blank/>
+                <translation-string pattern="Translatable#New"/>
+            </button>
+            <div.header-separator/>
+        </if>
         <!-- Lesezeichen & Suchvorlagen -->
         <bookmarks/>
         <div.header-separator/>

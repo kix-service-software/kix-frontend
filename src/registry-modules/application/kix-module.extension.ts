@@ -1,5 +1,7 @@
 import { IKIXModuleExtension } from "../../core/extensions";
 import { UIComponent } from "../../core/model/UIComponent";
+import { UIComponentPermission } from "../../core/model/UIComponentPermission";
+import { CRUD } from "../../core/model";
 
 class Extension implements IKIXModuleExtension {
 
@@ -8,7 +10,10 @@ class Extension implements IKIXModuleExtension {
     public id = 'application-module';
 
     public initComponents: UIComponent[] = [
-        new UIComponent('application-module-component', 'application-module-component', [])
+        new UIComponent('application-module-component', 'application/module/application-module-component', []),
+        new UIComponent('application-links-module-component', 'application/module/application-links-module-component', [
+            new UIComponentPermission('links', [CRUD.READ])
+        ])
     ];
 
     public external: boolean = false;

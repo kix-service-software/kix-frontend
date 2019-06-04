@@ -1,8 +1,13 @@
-import { AbstractAction, KIXObjectType, ContextMode } from '../../../model';
+import { AbstractAction, KIXObjectType, ContextMode, CRUD } from '../../../model';
 import { ContextService } from '../../context';
 import { EditLinkedObjectsDialogContext } from '../context';
+import { UIComponentPermission } from '../../../model/UIComponentPermission';
 
 export class LinkedObjectsEditAction extends AbstractAction {
+
+    public permissions: UIComponentPermission[] = [
+        new UIComponentPermission('links', [CRUD.READ])
+    ];
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Links';

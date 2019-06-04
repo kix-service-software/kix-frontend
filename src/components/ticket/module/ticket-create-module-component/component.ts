@@ -1,16 +1,10 @@
 import { ComponentState } from './ComponentState';
-import {
-    AbstractMarkoComponent, ServiceRegistry, ContextService, ActionFactory, DialogService
-} from '../../../../core/browser';
-import {
-    TicketFormService, PendingTimeValidator, EmailRecipientValidator, NewTicketDialogContext, TicketCreateAction,
-    TicketWatchAction
-} from '../../../../core/browser/ticket';
+import { AbstractMarkoComponent, ContextService, ActionFactory, DialogService } from '../../../../core/browser';
+import { NewTicketDialogContext, TicketCreateAction, TicketWatchAction } from '../../../../core/browser/ticket';
 import {
     ContextDescriptor, KIXObjectType, ContextType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration,
     WidgetSize
 } from '../../../../core/model';
-import { FormValidationService } from '../../../../core/browser/form/validation';
 
 class Component extends AbstractMarkoComponent {
 
@@ -19,13 +13,6 @@ class Component extends AbstractMarkoComponent {
     }
 
     public async onMount(): Promise<void> {
-        ServiceRegistry.registerServiceInstance(TicketFormService.getInstance());
-
-        FormValidationService.getInstance().registerValidator(new PendingTimeValidator());
-        FormValidationService.getInstance().registerValidator(new EmailRecipientValidator());
-
-        TicketFormService.getInstance();
-
         this.registerContexts();
         this.registerTicketActions();
         this.registerTicketDialogs();

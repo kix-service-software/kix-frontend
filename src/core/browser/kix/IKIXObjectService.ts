@@ -40,7 +40,7 @@ export interface IKIXObjectService<T extends KIXObject = KIXObject> extends IKIX
         objectType: KIXObjectType, objectId: string | number, deleteOptions?: KIXObjectSpecificDeleteOptions
     ): Promise<void>;
 
-    getAutoFillConfiguration(textMatch: any, placeholder: string): IAutofillConfiguration;
+    getAutoFillConfiguration(textMatch: any, placeholder: string): Promise<IAutofillConfiguration>;
 
     getObjectUrl(object?: KIXObject, objectId?: string | number): Promise<string>;
 
