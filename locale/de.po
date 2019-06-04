@@ -646,6 +646,11 @@ msgstr "Suche bearbeiten"
 msgid "Edit State"
 msgstr "Status bearbeiten"
 
+#, fuzzy
+#| msgid "Text Modules"
+msgid "Edit Text Module"
+msgstr "Textbausteine"
+
 msgid "Edit Ticket"
 msgstr "Ticket bearbeiten"
 
@@ -1594,6 +1599,11 @@ msgstr "Neuer Status"
 msgid "New Template"
 msgstr "Neue Vorlage"
 
+#, fuzzy
+#| msgid "Text Modules"
+msgid "New Text Module"
+msgstr "Textbausteine"
+
 msgid "New Ticket"
 msgstr "Neues Ticket"
 
@@ -2333,6 +2343,11 @@ msgstr "Vorlagen"
 msgid "Templates successfully removed."
 msgstr "Vorlagen wurde erfolgreich entfernt."
 
+#, fuzzy
+#| msgid "Text Modules"
+msgid "Text Module"
+msgstr "Textbausteine"
+
 msgid "Text Modules"
 msgstr "Textbausteine"
 
@@ -2424,6 +2439,11 @@ msgstr "Ticket wurde erfolgreich angelegt."
 
 msgid "Ticket: Templates"
 msgstr "Ticket: Vorlagen"
+
+#, fuzzy
+#| msgid "Text Modules"
+msgid "Ticket: Text Modules"
+msgstr "Textbausteine"
 
 msgid "Ticket type is part of the classification of a ticket."
 msgstr "Der Ticket-Typ dient zur Klassifizierung von Anfragen."

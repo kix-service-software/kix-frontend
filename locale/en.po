@@ -599,6 +599,9 @@ msgstr ""
 msgid "Edit State"
 msgstr ""
 
+msgid "Edit Text Module"
+msgstr ""
+
 msgid "Edit Ticket"
 msgstr ""
 
@@ -1445,6 +1448,9 @@ msgstr ""
 msgid "New Template"
 msgstr ""
 
+msgid "New Text Module"
+msgstr ""
+
 msgid "New Ticket"
 msgstr ""
 
@@ -2140,6 +2146,9 @@ msgstr ""
 msgid "Templates successfully removed."
 msgstr ""
 
+msgid "Text Module"
+msgstr ""
+
 msgid "Text Modules"
 msgstr ""
 
@@ -2223,6 +2232,9 @@ msgid "Ticket successfully created."
 msgstr ""
 
 msgid "Ticket: Templates"
+msgstr ""
+
+msgid "Ticket: Text Modules"
 msgstr ""
 
 msgid "Ticket type is part of the classification of a ticket."
