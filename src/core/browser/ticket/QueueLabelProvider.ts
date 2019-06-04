@@ -1,6 +1,6 @@
 import { ILabelProvider } from "../ILabelProvider";
 import {
-    KIXObjectType, ObjectIcon, DateTimeUtil, User, Queue, QueueProperty, SystemAddress, FollowUpType
+    KIXObjectType, ObjectIcon, DateTimeUtil, User, Queue, QueueProperty, SystemAddress, FollowUpType, KIXObjectProperty
 } from "../../model";
 import { TranslationService } from "../i18n/TranslationService";
 import { ObjectDataService } from "../ObjectDataService";
@@ -31,19 +31,19 @@ export class QueueLabelProvider implements ILabelProvider<Queue> {
             case QueueProperty.COMMENT:
                 displayValue = 'Translatable#Comment';
                 break;
-            case QueueProperty.CREATE_BY:
+            case KIXObjectProperty.CREATE_BY:
                 displayValue = 'Translatable#Created by';
                 break;
-            case QueueProperty.CREATE_TIME:
+            case KIXObjectProperty.CREATE_TIME:
                 displayValue = 'Translatable#Created at';
                 break;
-            case QueueProperty.CHANGE_BY:
+            case KIXObjectProperty.CHANGE_BY:
                 displayValue = 'Translatable#Changed by';
                 break;
-            case QueueProperty.CHANGE_TIME:
+            case KIXObjectProperty.CHANGE_TIME:
                 displayValue = 'Translatable#Changed at';
                 break;
-            case QueueProperty.VALID_ID:
+            case KIXObjectProperty.VALID_ID:
                 displayValue = 'Translatable#Validity';
                 break;
             case QueueProperty.SYSTEM_ADDRESS_ID:
@@ -107,22 +107,21 @@ export class QueueLabelProvider implements ILabelProvider<Queue> {
         let displayValue = value;
         const objectData = ObjectDataService.getInstance().getObjectData();
         switch (property) {
-            case QueueProperty.VALID_ID:
+            case KIXObjectProperty.VALID_ID:
                 const valid = objectData.validObjects.find((v) => v.ID.toString() === value.toString());
                 if (valid) {
                     displayValue = valid.Name;
                 }
                 break;
-            case QueueProperty.CREATE_BY:
-            case QueueProperty.CHANGE_BY:
+            case KIXObjectProperty.CREATE_BY:
+            case KIXObjectProperty.CHANGE_BY:
                 const users = await KIXObjectService.loadObjects<User>(
                     KIXObjectType.USER, [value], null, null, true
                 ).catch((error) => [] as User[]);
                 displayValue = users && !!users.length ? users[0].UserFullname : value;
                 break;
-            case QueueProperty.CREATE_TIME:
-            case QueueProperty.CHANGE_TIME:
-            case QueueProperty.CHANGE_TIME:
+            case KIXObjectProperty.CREATE_TIME:
+            case KIXObjectProperty.CHANGE_TIME:
                 displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
             case QueueProperty.SYSTEM_ADDRESS_ID:

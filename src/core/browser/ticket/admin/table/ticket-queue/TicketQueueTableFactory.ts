@@ -3,7 +3,9 @@ import {
     TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../../../table";
-import { KIXObjectType, DataType, ContextMode, QueueProperty, KIXObjectLoadingOptions } from "../../../../../model";
+import {
+    KIXObjectType, DataType, ContextMode, QueueProperty, KIXObjectLoadingOptions, KIXObjectProperty
+} from "../../../../../model";
 import { TicketQueueTableContentProvider } from "./TicketQueueTableContentProvider";
 import { TableFactory } from "../../../../table/TableFactory";
 import { QueueDetailsContext } from "../../context";
@@ -41,11 +43,11 @@ export class TicketQueueTableFactory extends TableFactory {
             this.getDefaultColumnConfiguration(QueueProperty.UNLOCK_TIMEOUT),
             this.getDefaultColumnConfiguration(QueueProperty.SYSTEM_ADDRESS_ID),
             this.getDefaultColumnConfiguration(QueueProperty.COMMENT),
-            this.getDefaultColumnConfiguration(QueueProperty.VALID_ID),
-            this.getDefaultColumnConfiguration(QueueProperty.CREATE_TIME),
-            this.getDefaultColumnConfiguration(QueueProperty.CREATE_BY),
-            this.getDefaultColumnConfiguration(QueueProperty.CHANGE_TIME),
-            this.getDefaultColumnConfiguration(QueueProperty.CHANGE_BY)
+            this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CREATE_TIME),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CREATE_BY),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CHANGE_TIME),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CHANGE_BY)
         ];
 
         if (!tableConfiguration) {
@@ -78,12 +80,6 @@ export class TicketQueueTableFactory extends TableFactory {
                     false, DataType.STRING, true, null, null, false
                 );
                 break;
-            case 'ICON':
-                config = new DefaultColumnConfiguration(
-                    property, false, true, false, false, null, false, false, false, undefined, false
-                );
-                break;
-            case QueueProperty.VALID_ID:
             case QueueProperty.FOLLOW_UP_ID:
                 config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true, true);
                 break;
@@ -92,20 +88,8 @@ export class TicketQueueTableFactory extends TableFactory {
                     property, true, false, true, false, 150, true, true, false, DataType.NUMBER
                 );
                 break;
-            case QueueProperty.COMMENT:
-                config = new DefaultColumnConfiguration(
-                    property, true, false, true, false, 350, true, true, false,
-                    DataType.STRING, true, undefined, null, false
-                );
-                break;
-            case QueueProperty.CHANGE_TIME:
-            case QueueProperty.CREATE_TIME:
-                config = new DefaultColumnConfiguration(
-                    property, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
-                );
-                break;
             default:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true);
+                config = super.getDefaultColumnConfiguration(property);
         }
         return config;
     }

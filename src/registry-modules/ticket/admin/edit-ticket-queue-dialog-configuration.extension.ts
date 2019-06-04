@@ -3,7 +3,8 @@ import { EditQueueDialogContext } from '../../../core/browser/ticket';
 import {
     ContextConfiguration, ConfiguredWidget, FormField, KIXObjectType, Form,
     FormContext, FormFieldValue, QueueProperty, FormFieldOption, NumberInputOptions, ObjectReferenceOptions,
-    KIXObjectLoadingOptions, FilterCriteria, SystemAddressProperty, FilterDataType, FilterType, FormFieldOptions
+    KIXObjectLoadingOptions, FilterCriteria, SystemAddressProperty, FilterDataType, FilterType, FormFieldOptions,
+    KIXObjectProperty
 } from '../../../core/model';
 import { FormGroup } from '../../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../../core/services';
@@ -78,7 +79,7 @@ export class Extension implements IConfigurationExtension {
                     null, null, null, null, null, null, null, 250
                 ),
                 new FormField(
-                    'Translatable#Validity', QueueProperty.VALID_ID, 'valid-input', true,
+                    'Translatable#Validity', KIXObjectProperty.VALID_ID, 'valid-input', true,
                     'Translatable#Helptext_Admin_QueueEdit_Validity',
                     null, new FormFieldValue(1)
                 )

@@ -2,7 +2,7 @@ import { IConfigurationExtension } from '../../../core/extensions';
 import { EditTicketStateDialogContext } from '../../../core/browser/ticket';
 import {
     ContextConfiguration, ConfiguredWidget, FormField, KIXObjectType, Form,
-    FormContext, FormFieldValue, TicketStateProperty, FormFieldOption, ObjectReferenceOptions
+    FormContext, FormFieldValue, TicketStateProperty, FormFieldOption, ObjectReferenceOptions, KIXObjectProperty
 } from '../../../core/model';
 import { FormGroup } from '../../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../../core/services';
@@ -48,7 +48,7 @@ export class Extension implements IConfigurationExtension {
                 'Translatable#Insert a comment for the state.', null, null, null, null, null, null, null, 250
             ));
             fields.push(new FormField(
-                'Translatable#Validity', TicketStateProperty.VALID_ID, 'valid-input', true,
+                'Translatable#Validity', KIXObjectProperty.VALID_ID, 'valid-input', true,
                 'Translatable#Set the state as „valid“, „invalid (temporarily)“, or „invalid“.',
                 null, new FormFieldValue(1)
             ));

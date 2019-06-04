@@ -1,0 +1,12 @@
+{
+    "name": "kix-text-module",
+    "extensions": {
+        "kix:configuration": {},
+        "kix:modules": {
+            "text-module-module": "../../dist/registry-modules/text-module/kix-module.extension"
+        },
+        "kix:admin-module": {
+            "text-module-admin": "../../dist/registry-modules/text-module/admin/admin-module.extension"
+        }
+    }
+}

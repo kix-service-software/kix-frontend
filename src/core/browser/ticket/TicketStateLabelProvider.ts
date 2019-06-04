@@ -1,5 +1,7 @@
 import { ILabelProvider } from "../ILabelProvider";
-import { TicketState, KIXObjectType, ObjectIcon, TicketStateProperty, DateTimeUtil, User } from "../../model";
+import {
+    TicketState, KIXObjectType, ObjectIcon, TicketStateProperty, DateTimeUtil, User, KIXObjectProperty
+} from "../../model";
 import { SearchProperty } from "../SearchProperty";
 import { TranslationService } from "../i18n/TranslationService";
 import { ObjectDataService } from "../ObjectDataService";
@@ -33,19 +35,19 @@ export class TicketStateLabelProvider implements ILabelProvider<TicketState> {
             case TicketStateProperty.TYPE_ID:
                 displayValue = 'Translatable#State Type';
                 break;
-            case TicketStateProperty.CREATE_BY:
+            case KIXObjectProperty.CREATE_BY:
                 displayValue = 'Translatable#Created by';
                 break;
-            case TicketStateProperty.CREATE_TIME:
+            case KIXObjectProperty.CREATE_TIME:
                 displayValue = 'Translatable#Created at';
                 break;
-            case TicketStateProperty.CHANGE_BY:
+            case KIXObjectProperty.CHANGE_BY:
                 displayValue = 'Translatable#Changed by';
                 break;
-            case TicketStateProperty.CHANGE_TIME:
+            case KIXObjectProperty.CHANGE_TIME:
                 displayValue = 'Translatable#Changed at';
                 break;
-            case TicketStateProperty.VALID_ID:
+            case KIXObjectProperty.VALID_ID:
                 displayValue = 'Translatable#Validity';
                 break;
             case TicketStateProperty.ID:
@@ -99,21 +101,21 @@ export class TicketStateLabelProvider implements ILabelProvider<TicketState> {
         let displayValue = value;
         const objectData = ObjectDataService.getInstance().getObjectData();
         switch (property) {
-            case TicketStateProperty.VALID_ID:
+            case KIXObjectProperty.VALID_ID:
                 const valid = objectData.validObjects.find((v) => v.ID.toString() === value.toString());
                 if (valid) {
                     displayValue = valid.Name;
                 }
                 break;
-            case TicketStateProperty.CREATE_BY:
-            case TicketStateProperty.CHANGE_BY:
+            case KIXObjectProperty.CREATE_BY:
+            case KIXObjectProperty.CHANGE_BY:
                 const users = await KIXObjectService.loadObjects<User>(
                     KIXObjectType.USER, [value], null, null, true
                 ).catch((error) => [] as User[]);
                 displayValue = users && !!users.length ? users[0].UserFullname : value;
                 break;
-            case TicketStateProperty.CREATE_TIME:
-            case TicketStateProperty.CHANGE_TIME:
+            case KIXObjectProperty.CREATE_TIME:
+            case KIXObjectProperty.CHANGE_TIME:
                 displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
             default:

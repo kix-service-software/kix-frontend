@@ -1,6 +1,6 @@
 import { IdService } from "../../../../core/browser";
 import {
-    WidgetConfiguration, KIXObjectType, SortOrder, TableWidgetSettings, TicketTemplateProperty
+    WidgetConfiguration, KIXObjectType, SortOrder, TableWidgetSettings, QueueProperty
 } from "../../../../core/model";
 
 export class ComponentState {
@@ -12,7 +12,7 @@ export class ComponentState {
             [
                 'ticket-admin-queue-create', 'csv-export-action'
             ],
-            new TableWidgetSettings(KIXObjectType.QUEUE, [TicketTemplateProperty.NAME, SortOrder.UP]),
+            new TableWidgetSettings(KIXObjectType.QUEUE, [QueueProperty.NAME, SortOrder.UP]),
             false, false, null, 'kix-icon-gears')
     ) { }
 
