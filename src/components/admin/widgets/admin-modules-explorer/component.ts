@@ -1,6 +1,6 @@
 import { AbstractMarkoComponent, ContextService } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
-import { AdminContext } from '../../../../core/browser/admin';
+import { AdminContext, AdministrationSocketClient } from '../../../../core/browser/admin';
 import { TreeNode, AdminModuleCategory, AdminModule, TreeUtil } from '../../../../core/model';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
@@ -26,10 +26,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 }
             }
             this.state.widgetConfiguration = context.getWidgetConfiguration(this.state.instanceId);
-            let categories = this.state.widgetConfiguration ? this.state.widgetConfiguration.settings : null;
+
+            const categories = await AdministrationSocketClient.getInstance().loadAdminCategories();
 
             if (categories) {
-                categories = categories.map((c) => new AdminModuleCategory(c));
                 this.state.nodes = await this.prepareCategoryTreeNodes(categories);
             }
 

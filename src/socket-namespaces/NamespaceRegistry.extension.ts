@@ -8,6 +8,7 @@ import { NotesNamespace } from './NotesNamespace';
 import { KIXModuleNamespace } from './KIXModuleNamespace';
 import { AuthenticationNamespace } from './AuthenticationNamespace';
 import { NotificationNamespace } from './NotificationNamespace';
+import { AdministrationNamespace } from './AdministrationNamespace';
 
 export class NamespaceRegistry implements ISocketNamespaceRegistryExtension {
 
@@ -21,7 +22,8 @@ export class NamespaceRegistry implements ISocketNamespaceRegistryExtension {
             MainMenuNamespace.getInstance(),
             TicketNamespace.getInstance(),
             NotesNamespace.getInstance(),
-            KIXModuleNamespace.getInstance()
+            KIXModuleNamespace.getInstance(),
+            AdministrationNamespace.getInstance()
         ];
     }
 

@@ -11,7 +11,7 @@ export class Extension implements IConfigurationExtension {
         return AdminContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async getDefaultConfiguration(token: string): Promise<ContextConfiguration> {
         const notesSidebar =
             new ConfiguredWidget('20181126-admin-notes', new WidgetConfiguration(
                 'notes-widget', 'Translatable#Notes', [], {},
@@ -21,11 +21,9 @@ export class Extension implements IConfigurationExtension {
         const sidebars = ['20181126-admin-notes'];
         const sidebarWidgets: Array<ConfiguredWidget<any>> = [notesSidebar];
 
-        const categories = await AdminModuleService.getInstance().getAdminModuls();
-
         const adminModuleCategoriesExplorer =
             new ConfiguredWidget('20181127-admin-module-categories-explorer', new WidgetConfiguration(
-                'admin-modules-explorer', 'Translatable#Administration', [], categories,
+                'admin-modules-explorer', 'Translatable#Administration', [], null,
                 false, false, WidgetSize.BOTH, null, false)
             );
 

@@ -11,6 +11,7 @@ import { UIComponentPermission } from '../../core/model/UIComponentPermission';
 import { FAQCategoryDetailsContext } from '../../core/browser/faq/admin/context';
 import { SystemAddressDetailsContext } from '../../core/browser/system-address';
 import { MailAccountDetailsContext } from '../../core/browser/mail-account';
+import { CRUD } from '../../core/model';
 
 export class Extension implements IMainMenuExtension {
 
@@ -41,7 +42,30 @@ export class Extension implements IMainMenuExtension {
 
     public text: string = "Translatable#Admin";
 
-    public permissions: UIComponentPermission[] = [];
+    public permissions: UIComponentPermission[] = [
+        new UIComponentPermission('cmdb/classes', [CRUD.CREATE], true),
+        new UIComponentPermission('cmdb/classes', [CRUD.UPDATE], true),
+        new UIComponentPermission('faq/categories', [CRUD.CREATE], true),
+        new UIComponentPermission('faq/categories', [CRUD.UPDATE], true),
+        new UIComponentPermission('queues', [CRUD.CREATE], true),
+        new UIComponentPermission('queues', [CRUD.UPDATE], true),
+        new UIComponentPermission('tickettypes', [CRUD.CREATE], true),
+        new UIComponentPermission('tickettypes', [CRUD.UPDATE], true),
+        new UIComponentPermission('ticketstates', [CRUD.CREATE], true),
+        new UIComponentPermission('ticketstates', [CRUD.UPDATE], true),
+        new UIComponentPermission('priorities', [CRUD.CREATE], true),
+        new UIComponentPermission('priorities', [CRUD.UPDATE], true),
+        new UIComponentPermission('systemaddresses', [CRUD.CREATE], true),
+        new UIComponentPermission('systemaddresses', [CRUD.UPDATE], true),
+        new UIComponentPermission('mailaccounts', [CRUD.CREATE], true),
+        new UIComponentPermission('mailaccounts', [CRUD.UPDATE], true),
+        new UIComponentPermission('users', [CRUD.CREATE], true),
+        new UIComponentPermission('users', [CRUD.UPDATE], true),
+        new UIComponentPermission('roles', [CRUD.CREATE], true),
+        new UIComponentPermission('roles', [CRUD.UPDATE], true),
+        new UIComponentPermission('i18n/translations', [CRUD.CREATE], true),
+        new UIComponentPermission('i18n/translations', [CRUD.UPDATE], true)
+    ];
 }
 
 module.exports = (data, host, options) => {

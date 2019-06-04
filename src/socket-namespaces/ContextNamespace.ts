@@ -52,7 +52,7 @@ export class ContextNamespace extends SocketNameSpace {
 
         if (!configuration) {
             const configurationExtension = await PluginService.getInstance().getConfigurationExtension(data.contextId);
-            const moduleDefaultConfiguration = await configurationExtension.getDefaultConfiguration();
+            const moduleDefaultConfiguration = await configurationExtension.getDefaultConfiguration(data.token);
             if (moduleDefaultConfiguration) {
                 ConfigurationService.getInstance().saveModuleConfiguration(
                     data.contextId, userId, moduleDefaultConfiguration);
