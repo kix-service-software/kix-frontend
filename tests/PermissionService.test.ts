@@ -309,6 +309,80 @@ describe('Permission Service', () => {
 
     });
 
+    describe('Check alternative (OR) permissions', () => {
+
+        let originalOptionsMethod;
+
+        before(() => {
+            originalOptionsMethod = HttpService.getInstance().options;
+            HttpService.getInstance().options = async (token: string, resource: string): Promise<OptionsResponse> => {
+                if (resource === 'organisations') {
+                    return HTTPUtil.createOptionsResponse([RequestMethod.POST]);
+                } else if (resource === 'contacts') {
+                    return HTTPUtil.createOptionsResponse([RequestMethod.GET]);
+                } else {
+                    return HTTPUtil.createOptionsResponse([]);
+                }
+            };
+        });
+
+        after(() => {
+            HttpService.getInstance().options = originalOptionsMethod;
+        });
+
+        it('The permissions must be checked correctly and allow access', async () => {
+            const allowed = await PermissionService.getInstance().checkPermissions('token1234', [
+                new UIComponentPermission('organisations', [CRUD.READ]),
+                new UIComponentPermission('contacts', [CRUD.READ], true)
+            ]);
+
+            expect(allowed).true;
+        });
+
+        it('The permissions must be checked correctly and allow access', async () => {
+            const allowed = await PermissionService.getInstance().checkPermissions('token1234', [
+                new UIComponentPermission('organisations', [CRUD.READ]),
+                new UIComponentPermission('tickets', [CRUD.READ], true),
+                new UIComponentPermission('faq', [CRUD.READ], true),
+                new UIComponentPermission('contacts', [CRUD.READ], true)
+            ]);
+
+            expect(allowed).true;
+        });
+
+        it('The permissions must be checked correctly and allow access', async () => {
+            const allowed = await PermissionService.getInstance().checkPermissions('token1234', [
+                new UIComponentPermission('contacts', [CRUD.READ]),
+                new UIComponentPermission('tickets', [CRUD.READ], true),
+                new UIComponentPermission('faq', [CRUD.READ], true),
+                new UIComponentPermission('organisations', [CRUD.READ], true)
+            ]);
+
+            expect(allowed).true;
+        });
+
+        it('The permissions must be checked correctly and deny access', async () => {
+            const allowed = await PermissionService.getInstance().checkPermissions('token1234', [
+                new UIComponentPermission('organisations', [CRUD.UPDATE]),
+                new UIComponentPermission('contacts', [CRUD.CREATE], true)
+            ]);
+
+            expect(allowed).false;
+        });
+
+        it('The permissions must be checked correctly and deny access', async () => {
+            const allowed = await PermissionService.getInstance().checkPermissions('token1234', [
+                new UIComponentPermission('contacts', [CRUD.CREATE]),
+                new UIComponentPermission('tickets', [CRUD.READ], true),
+                new UIComponentPermission('faq', [CRUD.READ], true),
+                new UIComponentPermission('organisations', [CRUD.READ], true)
+            ]);
+
+            expect(allowed).false;
+        });
+
+    });
+
     describe('Filter ContextConfiguration for permission', () => {
 
         const contextConfiguration = new ContextConfiguration(

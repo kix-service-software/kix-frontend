@@ -23,8 +23,6 @@ export class ImportAction extends AbstractAction<ITable> {
             this.objectType = this.data.getObjectType();
             if (ImportService.getInstance().hasImportManager(this.objectType)) {
                 await this.openDialog();
-            } else {
-                super.run(event);
             }
         }
     }
@@ -32,6 +30,10 @@ export class ImportAction extends AbstractAction<ITable> {
     public canRun(): boolean {
         const type = this.data ? this.data.getObjectType() : null;
         return typeof type !== 'undefined' && type !== null;
+    }
+
+    public canShow(): boolean {
+        return ImportService.getInstance().hasImportManager(this.data.getObjectType());
     }
 
     private async openDialog(): Promise<void> {

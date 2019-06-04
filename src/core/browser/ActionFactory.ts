@@ -42,7 +42,9 @@ export class ActionFactory<T extends AbstractAction> {
                 if (allowed) {
                     await action.initAction();
                     await action.setData(data);
-                    actions.push(action);
+                    if (action.canShow()) {
+                        actions.push(action);
+                    }
                 } else {
                     action = undefined;
                 }

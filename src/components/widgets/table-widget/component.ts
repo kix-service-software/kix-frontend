@@ -74,6 +74,7 @@ class Component {
                                 ? this.state.table.getRowCount()
                                 : null;
                             this.prepareTitle();
+                            this.prepareActions();
                         }
                         WidgetService.getInstance().updateActions(this.state.instanceId);
                     }
@@ -86,7 +87,6 @@ class Component {
             this.prepareHeader();
             await this.prepareTable();
             this.prepareTitle();
-            this.prepareActions();
 
             if (this.state.widgetConfiguration.contextDependent) {
                 context.registerListener('table-widget-' + this.state.table.getTableId(), {

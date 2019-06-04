@@ -1,9 +1,10 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize, KIXObjectType
+    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize, KIXObjectType, CRUD
 } from '../../core/model';
 import { TableConfiguration } from '../../core/browser';
 import { OrganisationContext } from '../../core/browser/organisation';
+import { UIComponentPermission } from '../../core/model/UIComponentPermission';
 
 export class DashboardModuleFactoryExtension implements IConfigurationExtension {
 
@@ -12,8 +13,8 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
     }
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-        const organisationListWidget =
-            new ConfiguredWidget('20180529102830', new WidgetConfiguration(
+        const organisationListWidget = new ConfiguredWidget('20180529102830',
+            new WidgetConfiguration(
                 'table-widget', 'Translatable#Overview Organisations', [
                     'organisation-search-action',
                     'organisation-create-action',
@@ -25,8 +26,10 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                         null, null, null, null, true
                     )
                 },
-                false, true, WidgetSize.LARGE, 'kix-icon-man-house', false)
-            );
+                false, true, WidgetSize.LARGE, 'kix-icon-man-house', false
+            ),
+            [new UIComponentPermission('organisations', [CRUD.READ])]
+        );
 
         const contactListWidget =
             new ConfiguredWidget('20180529144530', new WidgetConfiguration(

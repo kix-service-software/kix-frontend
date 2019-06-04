@@ -24,6 +24,10 @@ export abstract class AbstractAction<T = any> implements IAction<T> {
         return true;
     }
 
+    public canShow(): boolean {
+        return true;
+    }
+
     public async run(event: any): Promise<void> {
         const text = await TranslationService.translate('Translatable#We are working on this functionality.');
         const content = new ComponentContent(

@@ -16,6 +16,8 @@ export interface IAction<T = any> {
 
     canRun(): boolean;
 
+    canShow(): boolean;
+
     run(event: any): void;
 
     permissions: UIComponentPermission[];

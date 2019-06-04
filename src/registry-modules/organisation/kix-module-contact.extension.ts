@@ -1,5 +1,7 @@
 import { IKIXModuleExtension } from "../../core/extensions";
 import { UIComponent } from "../../core/model/UIComponent";
+import { UIComponentPermission } from "../../core/model/UIComponentPermission";
+import { CRUD } from "../../core/model";
 
 class Extension implements IKIXModuleExtension {
 
@@ -10,7 +12,13 @@ class Extension implements IKIXModuleExtension {
     public external: boolean = false;
 
     public initComponents: UIComponent[] = [
-        new UIComponent('contact-module-component', 'organisation/contact-module-component', [])
+        new UIComponent('contact-read-module-component', 'organisation/module/contact-read-module-component', [
+            new UIComponentPermission('contacts', [CRUD.READ])
+        ]),
+        new UIComponent('contact-edit-module-component', 'organisation/module/contact-edit-module-component', [
+            new UIComponentPermission('contacts', [CRUD.CREATE]),
+            new UIComponentPermission('contacts/*', [CRUD.UPDATE])
+        ])
     ];
 
     public uiComponents: UIComponent[] = [

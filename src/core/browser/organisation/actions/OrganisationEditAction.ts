@@ -1,9 +1,14 @@
 import { AbstractAction } from '../../../model/components/action/AbstractAction';
 import { FormService } from '../../form';
-import { FormInstance, ContextMode, KIXObjectType } from '../../../model';
+import { FormInstance, ContextMode, KIXObjectType, CRUD } from '../../../model';
 import { ContextService } from '../../context';
+import { UIComponentPermission } from '../../../model/UIComponentPermission';
 
 export class OrganisationEditAction extends AbstractAction {
+
+    public permissions: UIComponentPermission[] = [
+        new UIComponentPermission('organisations', [CRUD.UPDATE])
+    ];
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Edit';
