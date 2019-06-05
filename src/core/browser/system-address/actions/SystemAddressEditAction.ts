@@ -1,7 +1,12 @@
-import { AbstractAction, KIXObjectType, ContextMode } from '../../../model';
+import { AbstractAction, KIXObjectType, ContextMode, CRUD } from '../../../model';
 import { ContextService } from '../..';
+import { UIComponentPermission } from '../../../model/UIComponentPermission';
 
 export class SystemAddressEditAction extends AbstractAction {
+
+    public permissions: UIComponentPermission[] = [
+        new UIComponentPermission('ticketstates', [CRUD.UPDATE])
+    ];
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Edit';

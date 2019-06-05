@@ -22,7 +22,8 @@
             "ticket-queue-details-configuration": "../../dist/registry-modules/ticket/admin/ticket-queue-details-configuration.extension"
         },
         "kix:modules": {
-            "ticket-module": "../../dist/registry-modules/ticket/kix-module.extension"
+            "ticket-module": "../../dist/registry-modules/ticket/kix-module.extension",
+            "ticket-admin-module": "../../dist/registry-modules/ticket/admin/kix-module.extension"
         },
         "kix:admin-module": {
             "ticket-admin": "../../dist/registry-modules/ticket/admin/admin-module.extension"

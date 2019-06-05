@@ -20,12 +20,7 @@ export class PermissionService {
     public async filterUIComponents(token: string, uiComponents: UIComponent[]): Promise<UIComponent[]> {
         const components: UIComponent[] = [];
         for (const component of uiComponents) {
-            const permissionChecks: Array<Promise<boolean>> = [];
-            component.permissions.forEach((p) => {
-                permissionChecks.push(this.methodAllowed(token, p));
-            });
-            const checks = await Promise.all(permissionChecks);
-            if (!checks.some((c) => !c)) {
+            if (await this.checkPermissions(token, component.permissions)) {
                 components.push(component);
             }
         }
@@ -74,24 +69,29 @@ export class PermissionService {
     }
 
     public async checkPermissions(token: string, permissions: UIComponentPermission[] = []): Promise<boolean> {
-        const andPermissionChecks: Array<Promise<boolean>> = [];
-        const orPermissionChecks: Array<Promise<boolean>> = [];
-        if (permissions) {
-            permissions.filter((p) => p.OR).forEach((p) => {
-                orPermissionChecks.push(this.methodAllowed(token, p));
-            });
-            permissions.filter((p) => !p.OR).forEach((p) => {
-                andPermissionChecks.push(this.methodAllowed(token, p));
-            });
+        if (permissions && permissions.length) {
+            const andPermissionChecks: Array<Promise<boolean>> = [];
+            const orPermissionChecks: Array<Promise<boolean>> = [];
+            if (permissions) {
+                permissions.filter((p) => p.OR).forEach((p) => {
+                    orPermissionChecks.push(this.methodAllowed(token, p));
+                });
+                permissions.filter((p) => !p.OR).forEach((p) => {
+                    andPermissionChecks.push(this.methodAllowed(token, p));
+                });
+            }
+
+            const andChecks = await Promise.all(andPermissionChecks);
+            const andCheck = andChecks.every((c) => c);
+
+            const orChecks = await Promise.all(orPermissionChecks);
+            const orCheck = orChecks.some((c) => c);
+
+            return andChecks.length === 0 && orChecks.length > 0
+                ? orCheck
+                : andCheck || orCheck;
         }
-
-        const andChecks = await Promise.all(andPermissionChecks);
-        const andCheck = andChecks.every((c) => c);
-
-        const orChecks = await Promise.all(orPermissionChecks);
-        const orCheck = orChecks.some((c) => c);
-
-        return andCheck || orCheck;
+        return true;
     }
 
     private async  methodAllowed(token: string, permission: UIComponentPermission): Promise<boolean> {

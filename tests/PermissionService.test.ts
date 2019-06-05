@@ -381,6 +381,21 @@ describe('Permission Service', () => {
             expect(allowed).false;
         });
 
+        it('The permissions must be checked correctly and deny access', async () => {
+            const allowed = await PermissionService.getInstance().checkPermissions('token1234', [
+                new UIComponentPermission('tickets', [CRUD.READ], true),
+                new UIComponentPermission('faq', [CRUD.READ], true),
+                new UIComponentPermission('organisations', [CRUD.READ], true)
+            ]);
+
+            expect(allowed).false;
+        });
+
+        it('The permissions must be checked correctly and allow access (no permissions given)', async () => {
+            const allowed = await PermissionService.getInstance().checkPermissions('token1234', []);
+            expect(allowed).true;
+        });
+
     });
 
     describe('Filter ContextConfiguration for permission', () => {

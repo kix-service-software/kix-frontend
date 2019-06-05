@@ -1,8 +1,11 @@
-import { AbstractAction, KIXObjectType, ContextMode, FormInstance } from "../../../../../model";
-import { ContextService } from "../../../../context";
-import { FormService } from "../../../../form";
+import { AbstractAction, CRUD } from "../../../../../model";
+import { UIComponentPermission } from "../../../../../model/UIComponentPermission";
 
 export class TicketQueueEditAction extends AbstractAction {
+
+    public permissions: UIComponentPermission[] = [
+        new UIComponentPermission('queues/*', [CRUD.UPDATE])
+    ];
 
     public async initAction(): Promise<void> {
         this.text = 'Edit';

@@ -18,11 +18,6 @@ class Component extends AbstractMarkoComponent {
     }
 
     public async onMount(): Promise<void> {
-        ServiceRegistry.registerServiceInstance(TicketFormService.getInstance());
-        FormValidationService.getInstance().registerValidator(new EmailRecipientValidator());
-
-        TicketFormService.getInstance();
-
         this.registerContexts();
         this.registerTicketActions();
         this.registerTicketDialogs();
