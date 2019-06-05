@@ -1,6 +1,6 @@
 import { AbstractMarkoComponent, ContextService } from '../../../core/browser';
 import { ComponentState } from './ComponentState';
-import { AdminContext } from '../../../core/browser/admin';
+import { AdminContext, AdministrationSocketClient } from '../../../core/browser/admin';
 import { ContextDescriptor, KIXObjectType, ContextMode, ContextType } from '../../../core/model';
 
 class Component extends AbstractMarkoComponent {
@@ -10,26 +10,16 @@ class Component extends AbstractMarkoComponent {
     }
 
     public async onMount(): Promise<void> {
-        this.registerContexts();
-        this.registerDialogs();
-        this.registerActions();
-    }
+        const adminModules = await AdministrationSocketClient.getInstance().loadAdminCategories();
 
-    private registerContexts(): void {
-        const contextDescriptor = new ContextDescriptor(
-            AdminContext.CONTEXT_ID, [KIXObjectType.ANY],
-            ContextType.MAIN, ContextMode.DASHBOARD,
-            false, 'admin', ['admin'], AdminContext
-        );
-        ContextService.getInstance().registerContext(contextDescriptor);
-    }
-
-    private registerDialogs(): void {
-        return;
-    }
-
-    private registerActions(): void {
-        return;
+        if (adminModules && adminModules.length) {
+            const contextDescriptor = new ContextDescriptor(
+                AdminContext.CONTEXT_ID, [KIXObjectType.ANY],
+                ContextType.MAIN, ContextMode.DASHBOARD,
+                false, 'admin', ['admin'], AdminContext
+            );
+            ContextService.getInstance().registerContext(contextDescriptor);
+        }
     }
 
 }

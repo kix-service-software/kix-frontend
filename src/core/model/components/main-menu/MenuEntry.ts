@@ -7,7 +7,8 @@ export class MenuEntry {
         public text: string,
         public mainContextId: string,
         public contextIds: string[],
-        public active?: boolean
+        public active?: boolean,
+        public show?: boolean
     ) { }
 
 }

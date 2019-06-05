@@ -39,8 +39,8 @@ export class MainMenuSocketClient extends SocketClient {
         });
     }
 
-    public async loadMenuEntries(): Promise<[MenuEntry[], MenuEntry[], boolean]> {
-        return new Promise<[MenuEntry[], MenuEntry[], boolean]>((resolve, reject) => {
+    public async loadMenuEntries(): Promise<MainMenuEntriesResponse> {
+        return new Promise<MainMenuEntriesResponse>((resolve, reject) => {
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + MainMenuEvent.LOAD_MENU_ENTRIES);
             }, 30000);
@@ -57,7 +57,7 @@ export class MainMenuSocketClient extends SocketClient {
             this.socket.on(MainMenuEvent.MENU_ENTRIES_LOADED, (result: MainMenuEntriesResponse) => {
                 if (requestId === result.requestId) {
                     window.clearTimeout(timeout);
-                    resolve([result.primaryMenuEntries, result.secondaryMenuEntries, result.showText]);
+                    resolve(result);
                 }
             });
         });

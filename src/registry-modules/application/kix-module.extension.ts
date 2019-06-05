@@ -69,17 +69,10 @@ class Extension implements IKIXModuleExtension {
         new UIComponent('checkbox-input', '_base-components/form/inputs/checkbox-input', []),
         new UIComponent('translation-string', '_base-components/translation-string', []),
         new UIComponent('import-dialog', '_base-components/dialog/import-dialog', []),
-        new UIComponent('permissions-form-input', 'permission/admin/dialogs/inputs/permissions-form-input', []),
-        new UIComponent('permission-input', 'permission/admin/dialogs/inputs/permission-input', []),
-        new UIComponent(
-            'assign-role-permission-input',
-            'permission/admin/dialogs/inputs/assign-role-permission-input',
-            []
-        ),
+
         new UIComponent('object-details-page', '_base-components/object-details-page', []),
         new UIComponent('object-information-widget', 'widgets/object-information-widget', []),
-        new UIComponent('object-information', '_base-components/object-information', []),
-        new UIComponent('new-system-address-dialog', 'communication/admin/dialogs/new-system-address-dialog', [])
+        new UIComponent('object-information', '_base-components/object-information', [])
     ];
 
 }

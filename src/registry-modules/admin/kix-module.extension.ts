@@ -32,6 +32,14 @@ class Extension implements IKIXModuleExtension {
             'system-address-assigned-queues-widget',
             'communication/admin/widgets/system-address-assigned-queues-widget',
             []
+        ),
+        new UIComponent('new-system-address-dialog', 'communication/admin/dialogs/new-system-address-dialog', []),
+        new UIComponent('permissions-form-input', 'permission/admin/dialogs/inputs/permissions-form-input', []),
+        new UIComponent('permission-input', 'permission/admin/dialogs/inputs/permission-input', []),
+        new UIComponent(
+            'assign-role-permission-input',
+            'permission/admin/dialogs/inputs/assign-role-permission-input',
+            []
         )
     ];
 

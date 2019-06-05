@@ -13,6 +13,7 @@
         "faq",
         "cmdb",
         "user",
-        "widgets"
+        "widgets",
+        "main-menu"
     ]
 }
