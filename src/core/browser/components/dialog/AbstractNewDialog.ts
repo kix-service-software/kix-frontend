@@ -15,6 +15,7 @@ import { TabContainerEvent } from "./TabContainerEvent";
 import { TabContainerEventData } from "./TabContainerEventData";
 import { PreviousTabData } from "./PreviousTabData";
 import { TranslationService } from "../../i18n/TranslationService";
+import { ApplicationEvent } from "../../application";
 
 export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
 
@@ -110,6 +111,8 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
             DialogService.getInstance().submitMainDialog();
             if (this.routingConfiguration) {
                 RoutingService.getInstance().routeToContext(this.routingConfiguration, objectId);
+            } else {
+                EventService.getInstance().publish(ApplicationEvent.REFRESH);
             }
         }
 

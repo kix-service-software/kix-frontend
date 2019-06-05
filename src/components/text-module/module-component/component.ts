@@ -7,7 +7,8 @@ import {
 } from '../../../core/model';
 import { TableFactoryService } from '../../../core/browser/table';
 import {
-    TextModuleService, TextModuleBrowserFactory, TextModulesTableFactory, TextModuleLabelProvider
+    TextModuleService, TextModuleBrowserFactory, TextModulesTableFactory, TextModuleLabelProvider,
+    NewTextModuleDialogContext, TextModuleCreateAction
 } from '../../../core/browser/text-modules';
 
 class Component extends AbstractMarkoComponent {
@@ -30,12 +31,12 @@ class Component extends AbstractMarkoComponent {
     }
 
     private registerAdminContexts(): void {
-        // const newTextModuleDialogContext = new ContextDescriptor(
-        //     NewTextModuleDialogContext.CONTEXT_ID, [KIXObjectType.TEXT_MODULE],
-        //     ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-        //     false, 'new-text-module-dialog', ['text-modules'], NewTextModuleDialogContext
-        // );
-        // ContextService.getInstance().registerContext(newTextModuleDialogContext);
+        const newTextModuleDialogContext = new ContextDescriptor(
+            NewTextModuleDialogContext.CONTEXT_ID, [KIXObjectType.TEXT_MODULE],
+            ContextType.DIALOG, ContextMode.CREATE_ADMIN,
+            false, 'new-text-module-dialog', ['text-modules'], NewTextModuleDialogContext
+        );
+        ContextService.getInstance().registerContext(newTextModuleDialogContext);
 
         // const editTextModuleDialogContext = new ContextDescriptor(
         //     EditTextModuleDialogContext.CONTEXT_ID, [KIXObjectType.TEXT_MODULE],
@@ -46,21 +47,21 @@ class Component extends AbstractMarkoComponent {
     }
 
     private registerAdminActions(): void {
-        // ActionFactory.getInstance().registerAction(
-        //     'text-module-create', TextModuleCreateAction
-        // );
+        ActionFactory.getInstance().registerAction(
+            'text-module-create', TextModuleCreateAction
+        );
     }
 
     private registerAdminDialogs(): void {
-        // DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-        //     'new-text-module-dialog',
-        //     new WidgetConfiguration(
-        //         'new-text-module-dialog', 'Translatable#New Text Module',
-        //         [], {}, false, false, null, 'kix-icon-new-gear'
-        //     ),
-        //     KIXObjectType.TEXT_MODULE,
-        //     ContextMode.CREATE_ADMIN
-        // ));
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'new-text-module-dialog',
+            new WidgetConfiguration(
+                'new-text-module-dialog', 'Translatable#New Text Module',
+                [], {}, false, false, null, 'kix-icon-new-gear'
+            ),
+            KIXObjectType.TEXT_MODULE,
+            ContextMode.CREATE_ADMIN
+        ));
 
         // DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
         //     'edit-text-module-dialog',
