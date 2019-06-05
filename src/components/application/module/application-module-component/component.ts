@@ -11,6 +11,7 @@ import {
 import {
     LinkService, LinkedObjectsEditAction, EditLinkedObjectsDialogContext, LinkObjectTableFactory,
     LinkObjectLabelProvider, LinkObjectDialogContext
+<<<<<<< HEAD:src/components/application/module/application-module-component/component.ts
 } from '../../../../core/browser/link';
 import { GeneralCatalogService, GeneralCatalogBrowserFactory } from '../../../../core/browser/general-catalog';
 import { DynamicFieldService } from '../../../../core/browser/dynamic-fields';
@@ -21,6 +22,15 @@ import { SlaService, SlaLabelProvider, SlaBrowserFactory } from '../../../../cor
 import { ObjectIconService, ObjectIconBrowserFactory } from '../../../../core/browser/icon';
 import { PersonalSettingsDialogContext } from '../../../../core/browser';
 import { BulkDialogContext } from '../../../../core/browser/bulk';
+=======
+} from '../../core/browser/link';
+import { GeneralCatalogService, GeneralCatalogBrowserFactory } from '../../core/browser/general-catalog';
+import { DynamicFieldService } from '../../core/browser/dynamic-fields';
+import { SlaService, SlaLabelProvider, SlaBrowserFactory } from '../../core/browser/sla';
+import { ObjectIconService, ObjectIconBrowserFactory } from '../../core/browser/icon';
+import { PersonalSettingsDialogContext } from '../../core/browser';
+import { BulkDialogContext } from '../../core/browser/bulk';
+>>>>>>> origin/rel-18_FEATURE:src/components/application-module-component/component.ts
 import {
     TranslationLabelProvider, TranslationLanguageLabelProvider
 } from '../../../../core/browser/i18n';
@@ -51,7 +61,6 @@ class Component extends AbstractMarkoComponent {
         ServiceRegistry.registerServiceInstance(SearchService.getInstance());
         ServiceRegistry.registerServiceInstance(LinkService.getInstance());
         ServiceRegistry.registerServiceInstance(GeneralCatalogService.getInstance());
-        ServiceRegistry.registerServiceInstance(TextModuleService.getInstance());
         ServiceRegistry.registerServiceInstance(DynamicFieldService.getInstance());
         ServiceRegistry.registerServiceInstance(SlaService.getInstance());
         ServiceRegistry.registerServiceInstance(ObjectIconService.getInstance());
@@ -70,10 +79,6 @@ class Component extends AbstractMarkoComponent {
         );
 
         LabelService.getInstance().registerLabelProvider(new PermissionLabelProvider());
-
-        FactoryService.getInstance().registerFactory(KIXObjectType.TEXT_MODULE, TextModuleBrowserFactory.getInstance());
-        TableFactoryService.getInstance().registerFactory(new TextModulesTableFactory());
-        LabelService.getInstance().registerLabelProvider(new TextModuleLabelProvider());
 
         FactoryService.getInstance().registerFactory(
             KIXObjectType.SLA, SlaBrowserFactory.getInstance()

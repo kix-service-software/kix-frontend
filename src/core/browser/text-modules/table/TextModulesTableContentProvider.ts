@@ -1,6 +1,6 @@
-import { TableContentProvider } from "../table/TableContentProvider";
-import { KIXObjectType, KIXObjectLoadingOptions, TextModule } from "../../model";
-import { ITable, IRowObject } from "../table";
+import { TableContentProvider } from "../../table/TableContentProvider";
+import { KIXObjectType, KIXObjectLoadingOptions, TextModule } from "../../../model";
+import { ITable } from "../../table";
 
 export class TextModulesTableContentProvider extends TableContentProvider<TextModule> {
 
@@ -11,10 +11,6 @@ export class TextModulesTableContentProvider extends TableContentProvider<TextMo
         contextId?: string
     ) {
         super(KIXObjectType.TEXT_MODULE, table, objectIds, loadingOptions, contextId);
-    }
-
-    public async loadData(): Promise<Array<IRowObject<TextModule>>> {
-        return [];
     }
 
 }

@@ -24,9 +24,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             values = value.objectValue;
         }
 
-        this.state.cellLabels = (values as TranslationLanguage[]).map(
-            (v) => new Label(null, v.Value, null, v.Language, null, v.Language, false)
-        );
+        this.state.cellLabels = !!values.length && values[0] instanceof TranslationLanguage ?
+            (values as TranslationLanguage[]).map(
+                (v) => new Label(null, v.Value, null, v.Language, null, v.Language, false)
+            ) : values.map((v) => new Label(null, v, null, v, null, v, false));
     }
 
 }

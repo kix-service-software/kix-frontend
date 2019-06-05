@@ -1,5 +1,5 @@
 import {
-    KIXObjectType, DataType, ConfigItemClassProperty, ContextMode
+    KIXObjectType, DataType, ConfigItemClassProperty, ContextMode, KIXObjectProperty
 } from "../../../../../model";
 import { RoutingConfiguration } from "../../../../router";
 import { ConfigItemClassDetailsContext } from "../../context";
@@ -32,21 +32,12 @@ export class ConfigItemClassTableFactory extends TableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new DefaultColumnConfiguration(
-                ConfigItemClassProperty.NAME, true, false, true, true, 200, true, true, false,
-                DataType.STRING, true, null, null, false
-            ),
-            new DefaultColumnConfiguration(ConfigItemClassProperty.ID, false, true, false, true, 41, false),
-            new DefaultColumnConfiguration(
-                ConfigItemClassProperty.COMMENT, true, false, true, true, 350, true, true, false, DataType.STRING
-            ),
-            new DefaultColumnConfiguration(
-                ConfigItemClassProperty.VALID_ID, true, false, true, true, 150, true, true, true
-            ),
-            new DefaultColumnConfiguration(
-                ConfigItemClassProperty.CHANGE_TIME, true, false, true, true, 150, true, true, false, DataType.DATE_TIME
-            ),
-            new DefaultColumnConfiguration(ConfigItemClassProperty.CHANGE_BY, true, false, true, true, 150, true, true)
+            this.getDefaultColumnConfiguration(ConfigItemClassProperty.NAME),
+            this.getDefaultColumnConfiguration('ICON'),
+            this.getDefaultColumnConfiguration(ConfigItemClassProperty.COMMENT),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CHANGE_TIME),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CHANGE_BY)
         ];
 
         if (!tableConfiguration) {
@@ -69,8 +60,18 @@ export class ConfigItemClassTableFactory extends TableFactory {
         return tableConfiguration;
     }
 
-    // TODO: implementieren
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
-        return;
+        let config;
+        switch (property) {
+            case ConfigItemClassProperty.NAME:
+                config = new DefaultColumnConfiguration(
+                    property, true, false, true, false, 200, true, true,
+                    false, DataType.STRING, true, null, null, false
+                );
+                break;
+            default:
+                config = super.getDefaultColumnConfiguration(property);
+        }
+        return config;
     }
 }

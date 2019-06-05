@@ -37,14 +37,8 @@ export class TranslationTableFactory extends TableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new DefaultColumnConfiguration(
-                TranslationProperty.PATTERN, true, false, true, true, 400, true, true, false,
-                DataType.STRING, true, null, null, false
-            ),
-            new DefaultColumnConfiguration(
-                TranslationProperty.LANGUAGES, true, false, true, true, 250, true, true, true, null, true,
-                'label-list-cell-content'
-            )
+            this.getDefaultColumnConfiguration(TranslationProperty.PATTERN),
+            this.getDefaultColumnConfiguration(TranslationProperty.LANGUAGES)
         ];
 
         if (!tableConfiguration) {
@@ -69,6 +63,23 @@ export class TranslationTableFactory extends TableFactory {
 
     // TODO: implementieren
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
-        return;
+        let config;
+        switch (property) {
+            case TranslationProperty.PATTERN:
+                config = new DefaultColumnConfiguration(
+                    property, true, false, true, false, 400, true, true, false,
+                    DataType.STRING, true, null, null, false
+                );
+                break;
+            case TranslationProperty.LANGUAGES:
+                config = new DefaultColumnConfiguration(
+                    property, true, false, true, false, 250, true, true, true,
+                    DataType.STRING, true, 'label-list-cell-content'
+                );
+                break;
+            default:
+                config = super.getDefaultColumnConfiguration(property);
+        }
+        return config;
     }
 }

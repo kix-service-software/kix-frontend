@@ -18,16 +18,6 @@ export enum MailAccountProperty {
 
     QUEUE_ID = 'QueueID',
 
-    COMMENT = 'Comment',
-
-    CHANGE_TIME = 'ChangeTime',
-
-    CREATE_TIME = 'CreateTime',
-
-    CHANGE_BY = 'ChangeBy',
-
-    CREATE_BY = 'CreateBy',
-
-    VALID_ID = 'ValidID'
+    COMMENT = 'Comment'
 
 }

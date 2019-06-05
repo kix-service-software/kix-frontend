@@ -41,9 +41,6 @@ class Component extends AbstractMarkoComponent {
     private async setCheckboxOptions(input: any): Promise<void> {
         const options = await this.getOptions(input);
         this.state.checkboxOptions = [
-            new CheckboxOption(
-                PermissionProperty.IS_REQUIRED, false, options[0], options[1]
-            ),
             new CheckboxOption(PermissionProperty.CREATE),
             new CheckboxOption(PermissionProperty.READ),
             new CheckboxOption(PermissionProperty.UPDATE),

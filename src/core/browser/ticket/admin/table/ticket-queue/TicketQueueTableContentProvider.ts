@@ -25,7 +25,7 @@ export class TicketQueueTableContentProvider extends TableContentProvider<Queue>
             ),
         ];
         const loadingOptions = new KIXObjectLoadingOptions(null, queueFilter, null, null,
-            ['SubQueues'], ['SubQueues']
+            [QueueProperty.SUB_QUEUES], [QueueProperty.SUB_QUEUES]
         );
 
         const queues = await KIXObjectService.loadObjects<Queue>(

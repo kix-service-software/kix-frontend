@@ -52,10 +52,10 @@ export class TicketTableFactory extends TableFactory {
                     TicketProperty.QUEUE_ID, true, false, true, false, 100, true, true, true
                 ),
                 new DefaultColumnConfiguration(
-                    TicketProperty.OWNER_ID, true, false, true, false, 150, true, true, true
+                    TicketProperty.OWNER_ID, true, false, true, false, 150, true, true
                 ),
                 new DefaultColumnConfiguration(
-                    TicketProperty.ORGANISATION_ID, true, false, true, false, 150, true, true, true
+                    TicketProperty.ORGANISATION_ID, true, false, true, false, 150, true, true
                 ),
                 new DefaultColumnConfiguration(
                     TicketProperty.CREATED, true, false, true, false, 125, true, true, false, DataType.DATE_TIME
@@ -80,10 +80,10 @@ export class TicketTableFactory extends TableFactory {
                     TicketProperty.QUEUE_ID, true, false, true, false, 100, true, true, true
                 ),
                 new DefaultColumnConfiguration(
-                    TicketProperty.RESPONSIBLE_ID, true, false, true, false, 150, true, true, true
+                    TicketProperty.RESPONSIBLE_ID, true, false, true, false, 150, true, true
                 ),
                 new DefaultColumnConfiguration(
-                    TicketProperty.OWNER_ID, true, false, true, false, 150, true, true, true
+                    TicketProperty.OWNER_ID, true, false, true, false, 150, true, true
                 ),
                 new DefaultColumnConfiguration(
                     TicketProperty.ORGANISATION_ID, true, false, true, false, 150, true, true
@@ -98,7 +98,7 @@ export class TicketTableFactory extends TableFactory {
         }
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(KIXObjectType.TICKET);
+            tableConfiguration = new TableConfiguration(KIXObjectType.TICKET, 1000);
             tableConfiguration.tableColumns = tableColumns;
             tableConfiguration.enableSelection = true;
             defaultToggle = true;

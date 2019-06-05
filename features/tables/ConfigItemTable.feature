@@ -4,48 +4,54 @@ Feature: Als Nutzer möchte ich eine korrekte Standardkonfiguration für eine Ta
         Given Tabelle: <objectType>
         Then Selection: <selection>
         Then Toggle: <toggle>
+        Then Kopfzeilengröße: <headerHeight>
+        Then Zeilengröße: <rowHeight>
+        Then Limit: <limit>
+        Then DisplayLimit: <displayLimit>
         Examples:
-            | selection | toggle | objectType   |
-            | 1         | 1      | 'ConfigItem' |
+            | selection | toggle | objectType   | headerHeight | rowHeight | displayLimit | limit |
+            | 1         | 1      | 'ConfigItem' | 'l'          | 'l'       | 25           | 1000  |
 
     Scenario Outline: Tabelle mit korrekter Spalte <column>
         Given Tabelle: <objectType>
         Then Die Spalte <column> muss sortierbar sein: <sortable>
         Then Die Spalte <column> muss filterbar sein: <filterable>
+        Then Die Spalte <column> hat einen diskreten Filter: <listFilter>
         Then Die Spalte <column> muss <width> breit sein
         Then Die Spalte <column> hat eine flexible Breite: <flexible>
         Then Die Spalte <column> zeigt Text an: <showText>
         Then Die Spalte <column> zeigt Icon an: <showIcon>
-        Then Die Spalte <column> ist vom Type: <type>
+        Then Die Spalte <column> ist vom Typ: <type>
         Then Die Spalte <column> zeigt Spaltenbezeichnung an: <columnTitle>
         Then Die Spalte <column> zeigt Spaltenicon an: <columnIcon>
         Examples:
-            | column           | sortable | filterable | width | flexible | showText | showIcon | type       | columnTitle | columnIcon | objectType   |
-            | 'Number'         | 1        | 1          | 135   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'ConfigItem' |
-            | 'Name'           | 1        | 1          | 300   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'ConfigItem' |
-            | 'CurDeplStateID' | 1        | 1          | 55    | 0        | 0        | 1        | 'STRING'   | 0           | 1          | 'ConfigItem' |
-            | 'CurInciStateID' | 1        | 1          | 55    | 0        | 0        | 1        | 'STRING'   | 0           | 1          | 'ConfigItem' |
-            | 'ClassID'        | 1        | 1          | 200   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'ConfigItem' |
-            | 'ChangeTime'     | 1        | 1          | 125   | 1        | 1        | 0        | 'DATETIME' | 1           | 0          | 'ConfigItem' |
-            | 'ChangeBy'       | 1        | 1          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'ConfigItem' |
+            | column           | sortable | filterable | listFilter | width | flexible | showText | showIcon | type       | columnTitle | columnIcon | objectType   |
+            | 'Number'         | 1        | 1          | 0          | 135   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'ConfigItem' |
+            | 'Name'           | 1        | 1          | 0          | 300   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'ConfigItem' |
+            | 'CurDeplStateID' | 1        | 1          | 1          | 55    | 0        | 0        | 1        | 'STRING'   | 0           | 1          | 'ConfigItem' |
+            | 'CurInciStateID' | 1        | 1          | 1          | 55    | 0        | 0        | 1        | 'STRING'   | 0           | 1          | 'ConfigItem' |
+            | 'ClassID'        | 1        | 1          | 1          | 200   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'ConfigItem' |
+            | 'ChangeTime'     | 1        | 1          | 0          | 125   | 1        | 1        | 0        | 'DATETIME' | 1           | 0          | 'ConfigItem' |
+            | 'ChangeBy'       | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'ConfigItem' |
 
     Scenario Outline: Tabelle - Schmal mit korrekter Spalte <column>
         Given Tabelle - Schmal: <objectType>
         Then Die Spalte <column> muss sortierbar sein: <sortable>
         Then Die Spalte <column> muss filterbar sein: <filterable>
+        Then Die Spalte <column> hat einen diskreten Filter: <listFilter>
         Then Die Spalte <column> muss <width> breit sein
         Then Die Spalte <column> hat eine flexible Breite: <flexible>
         Then Die Spalte <column> zeigt Text an: <showText>
         Then Die Spalte <column> zeigt Icon an: <showIcon>
-        Then Die Spalte <column> ist vom Type: <type>
+        Then Die Spalte <column> ist vom Typ: <type>
         Then Die Spalte <column> zeigt Spaltenbezeichnung an: <columnTitle>
         Then Die Spalte <column> zeigt Spaltenicon an: <columnIcon>
         Examples:
-            | column           | sortable | filterable | width | flexible | showText | showIcon | type       | columnTitle | columnIcon | objectType   |
-            | 'Number'         | 1        | 1          | 135   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'ConfigItem' |
-            | 'Name'           | 1        | 1          | 300   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'ConfigItem' |
-            | 'CurDeplStateID' | 1        | 1          | 55    | 0        | 0        | 1        | 'STRING'   | 0           | 1          | 'ConfigItem' |
-            | 'CurInciStateID' | 1        | 1          | 55    | 0        | 0        | 1        | 'STRING'   | 0           | 1          | 'ConfigItem' |
-            | 'ClassID'        | 1        | 1          | 200   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'ConfigItem' |
-            | 'ChangeTime'     | 1        | 1          | 125   | 1        | 1        | 0        | 'DATETIME' | 1           | 0          | 'ConfigItem' |
-            | 'ChangeBy'       | 1        | 1          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'ConfigItem' |
+            | column           | sortable | filterable | listFilter | width | flexible | showText | showIcon | type       | columnTitle | columnIcon | objectType   |
+            | 'Number'         | 1        | 1          | 0          | 135   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'ConfigItem' |
+            | 'Name'           | 1        | 1          | 0          | 300   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'ConfigItem' |
+            | 'CurDeplStateID' | 1        | 1          | 1          | 55    | 0        | 0        | 1        | 'STRING'   | 0           | 1          | 'ConfigItem' |
+            | 'CurInciStateID' | 1        | 1          | 1          | 55    | 0        | 0        | 1        | 'STRING'   | 0           | 1          | 'ConfigItem' |
+            | 'ClassID'        | 1        | 1          | 1          | 200   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'ConfigItem' |
+            | 'ChangeTime'     | 1        | 1          | 0          | 125   | 1        | 1        | 0        | 'DATETIME' | 1           | 0          | 'ConfigItem' |
+            | 'ChangeBy'       | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'ConfigItem' |

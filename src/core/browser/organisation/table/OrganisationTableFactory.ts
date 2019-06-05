@@ -46,8 +46,8 @@ export class OrganisationTableFactory extends TableFactory {
         ];
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.ORGANISATION, null, 5, tableColumns, null, false, false, null, null,
-                TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                KIXObjectType.ORGANISATION, 1000, null, tableColumns, null, false, false, null, null,
+                TableHeaderHeight.LARGE, TableRowHeight.SMALL
             );
             tableConfiguration.enableSelection = true;
             tableConfiguration.toggle = false;

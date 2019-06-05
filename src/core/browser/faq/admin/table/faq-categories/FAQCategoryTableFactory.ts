@@ -2,7 +2,7 @@ import {
     TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../../../table";
-import { KIXObjectType, DataType, ContextMode } from "../../../../../model";
+import { KIXObjectType, DataType, ContextMode, KIXObjectProperty } from "../../../../../model";
 import { TableFactory } from "../../../../table/TableFactory";
 import { FAQCategoryTableContentProvider } from "./FAQCategoryTableContentProvider";
 import { FAQCategoryProperty } from "../../../../../model/kix/faq";
@@ -34,11 +34,11 @@ export class FAQCategoryTableFactory extends TableFactory {
             this.getDefaultColumnConfiguration(FAQCategoryProperty.NAME),
             this.getDefaultColumnConfiguration(FAQCategoryProperty.ICON),
             this.getDefaultColumnConfiguration(FAQCategoryProperty.COMMENT),
-            this.getDefaultColumnConfiguration(FAQCategoryProperty.VALID_ID),
-            this.getDefaultColumnConfiguration(FAQCategoryProperty.CREATE_TIME),
-            this.getDefaultColumnConfiguration(FAQCategoryProperty.CREATE_BY),
-            this.getDefaultColumnConfiguration(FAQCategoryProperty.CHANGE_TIME),
-            this.getDefaultColumnConfiguration(FAQCategoryProperty.CHANGE_BY)
+            this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CREATE_TIME),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CREATE_BY),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CHANGE_TIME),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CHANGE_BY)
         ];
 
         if (!tableConfiguration) {
@@ -70,28 +70,14 @@ export class FAQCategoryTableFactory extends TableFactory {
                     false, DataType.STRING, true, null, null, false
                 );
                 break;
-            case 'ICON':
-                config = new DefaultColumnConfiguration(
-                    property, false, true, false, false, null, false, false, false, undefined, false
-                );
-                break;
-            case FAQCategoryProperty.VALID_ID:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 130, true, true, true);
-                break;
             case FAQCategoryProperty.COMMENT:
                 config = new DefaultColumnConfiguration(
                     property, true, false, true, false, 275, true, true, false,
                     DataType.STRING, true, undefined, null, false
                 );
                 break;
-            case FAQCategoryProperty.CHANGE_TIME:
-            case FAQCategoryProperty.CREATE_TIME:
-                config = new DefaultColumnConfiguration(
-                    property, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
-                );
-                break;
             default:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true);
+                config = super.getDefaultColumnConfiguration(property);
         }
         return config;
     }

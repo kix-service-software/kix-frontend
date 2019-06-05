@@ -16,6 +16,8 @@ export enum KIXObjectProperty {
 
     CREATE_TIME = 'CreateTime',
 
-    VALID_ID = 'ValidID'
+    VALID_ID = 'ValidID',
+
+    COMMENT = 'Comment'
 
 }

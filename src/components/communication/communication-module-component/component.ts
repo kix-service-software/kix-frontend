@@ -13,9 +13,11 @@ import {
 } from '../../../core/browser/system-address';
 import {
     MailAccountService, MailAccountBrowserFactory, MailAccountTableFactory, MailAccountLabelProvider,
-    NewMailAccountDialogContext, MailAccountDetailsContext
+    NewMailAccountDialogContext, MailAccountDetailsContext, EditMailAccountDialogContext
 } from '../../../core/browser/mail-account';
+import { MailAccountFormService } from '../../../core/browser/mail-account/MailAccountFormService';
 import { MailAccountCreateAction } from '../../../core/browser/mail-account/actions';
+import { MailAccountEditAction } from '../../../core/browser/mail-account/actions/MailAccountEditAction';
 
 class Component extends AbstractMarkoComponent {
 
@@ -33,7 +35,7 @@ class Component extends AbstractMarkoComponent {
         LabelService.getInstance().registerLabelProvider(new SystemAddressLabelProvider());
 
         ServiceRegistry.registerServiceInstance(MailAccountService.getInstance());
-        // ServiceRegistry.registerServiceInstance(MailAccountFormService.getInstance());
+        ServiceRegistry.registerServiceInstance(MailAccountFormService.getInstance());
         FactoryService.getInstance().registerFactory(
             KIXObjectType.MAIL_ACCOUNT, MailAccountBrowserFactory.getInstance()
         );
@@ -80,6 +82,13 @@ class Component extends AbstractMarkoComponent {
             false, 'object-details-page', ['mail-accounts'], MailAccountDetailsContext
         );
         ContextService.getInstance().registerContext(mailAccountDetailsContext);
+
+        const editMailAccountDialogContext = new ContextDescriptor(
+            EditMailAccountDialogContext.CONTEXT_ID, [KIXObjectType.MAIL_ACCOUNT],
+            ContextType.DIALOG, ContextMode.EDIT_ADMIN,
+            false, 'edit-mail-account-dialog', ['mail-accounts'], EditMailAccountDialogContext
+        );
+        ContextService.getInstance().registerContext(editMailAccountDialogContext);
     }
 
     private registerAdminActions(): void {
@@ -96,6 +105,9 @@ class Component extends AbstractMarkoComponent {
         ActionFactory.getInstance().registerAction(
             'mail-account-create', MailAccountCreateAction
         );
+        ActionFactory.getInstance().registerAction(
+            'mail-account-edit', MailAccountEditAction
+        );
     }
 
     private registerAdminDialogs(): void {
@@ -108,7 +120,6 @@ class Component extends AbstractMarkoComponent {
             KIXObjectType.SYSTEM_ADDRESS,
             ContextMode.CREATE_ADMIN
         ));
-
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'edit-system-address-dialog',
             new WidgetConfiguration(
@@ -122,11 +133,20 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'new-mail-account-dialog',
             new WidgetConfiguration(
-                'new-mail-account-dialog', 'Translatable#New Email Account',
+                'new-mail-account-dialog', 'Translatable#New Account',
                 [], {}, false, false, null, 'kix-icon-new-gear'
             ),
             KIXObjectType.MAIL_ACCOUNT,
             ContextMode.CREATE_ADMIN
+        ));
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'edit-mail-account-dialog',
+            new WidgetConfiguration(
+                'edit-mail-account-dialog', 'Translatable#Edit Account',
+                [], {}, false, false, null, 'kix-icon-edit'
+            ),
+            KIXObjectType.MAIL_ACCOUNT,
+            ContextMode.EDIT_ADMIN
         ));
     }
 }

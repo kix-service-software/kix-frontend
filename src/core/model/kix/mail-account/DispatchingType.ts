@@ -1,7 +1,9 @@
 export enum DispatchingType {
 
-    DEFAULT = 'From',
+    FRONTEND_KEY_DEFAULT = 'USE_DEFAULT',
 
-    QUEUE = 'Queue'
+    BACKEND_KEY_DEFAULT = 'From',
+
+    BACKEND_KEY_QUEUE = 'Queue'
 
 }

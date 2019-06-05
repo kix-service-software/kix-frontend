@@ -14,6 +14,7 @@ import { EventService } from "../../event";
 import { TabContainerEvent } from "./TabContainerEvent";
 import { TabContainerEventData } from "./TabContainerEventData";
 import { PreviousTabData } from "./PreviousTabData";
+import { TranslationService } from "../../i18n/TranslationService";
 
 export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
 
@@ -35,6 +36,10 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
 
     public async onMount(): Promise<void> {
         DialogService.getInstance().setMainDialogHint('Translatable#All form fields marked by * are required fields.');
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Cancel", "Translatable#Save"
+        ]);
     }
 
     public async onDestroy(): Promise<void> {

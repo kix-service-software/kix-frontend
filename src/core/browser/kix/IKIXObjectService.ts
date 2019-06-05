@@ -26,7 +26,7 @@ export interface IKIXObjectService<T extends KIXObject = KIXObject> extends IKIX
 
     prepareFullTextFilter(searchValue: string): FilterCriteria[];
 
-    getTreeNodes(property: string, showInvalid?: boolean): Promise<TreeNode[]>;
+    getTreeNodes(property: string, showInvalid?: boolean, filterIds?: Array<string | number>): Promise<TreeNode[]>;
 
     checkFilterValue(object: T, criteria: TableFilterCriteria): Promise<boolean>;
 

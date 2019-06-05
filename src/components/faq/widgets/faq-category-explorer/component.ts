@@ -70,10 +70,11 @@ export class Component {
     private async prepareTreeNodes(categories: FAQCategory[]): Promise<TreeNode[]> {
         const nodes = [];
         if (categories) {
-            for (const c of categories) {
-                const label = await this.getCategoryLabel(c);
-                const children = await this.prepareTreeNodes(c.SubCategories);
-                nodes.push(new TreeNode(c, label, null, null, children));
+            const validCategories = categories.filter((c) => c.ValidID === 1);
+            for (const category of validCategories) {
+                const label = await this.getCategoryLabel(category);
+                const children = await this.prepareTreeNodes(category.SubCategories);
+                nodes.push(new TreeNode(category, label, null, null, children));
             }
         }
 

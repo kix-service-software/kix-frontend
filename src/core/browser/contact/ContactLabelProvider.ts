@@ -1,4 +1,6 @@
-import { ObjectIcon, Contact, ContactProperty, Organisation, KIXObjectType, KIXObjectProperty } from '../../model';
+import {
+    ObjectIcon, Contact, ContactProperty, Organisation, KIXObjectType, KIXObjectProperty, DateTimeUtil, User
+} from '../../model';
 import { KIXObjectService } from '../kix';
 import { SearchProperty } from '../SearchProperty';
 import { TranslationService } from '../i18n/TranslationService';
@@ -19,6 +21,17 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 case KIXObjectProperty.VALID_ID:
                     const valid = objectData.validObjects.find((v) => v.ID === value);
                     displayValue = valid ? valid.Name : value;
+                    break;
+                case KIXObjectProperty.CREATE_BY:
+                case KIXObjectProperty.CHANGE_BY:
+                    const users = await KIXObjectService.loadObjects<User>(
+                        KIXObjectType.USER, [value], null, null, true
+                    ).catch((error) => [] as User[]);
+                    displayValue = users && !!users.length ? users[0].UserFullname : value;
+                    break;
+                case KIXObjectProperty.CREATE_TIME:
+                case KIXObjectProperty.CHANGE_TIME:
+                    displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                     break;
                 default:
             }
@@ -106,6 +119,18 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 break;
             case ContactProperty.CREATE_NEW_TICKET:
                 displayValue = 'Translatable#New Ticket';
+                break;
+            case KIXObjectProperty.CREATE_BY:
+                displayValue = 'Translatable#Created by';
+                break;
+            case KIXObjectProperty.CREATE_TIME:
+                displayValue = 'Translatable#Created at';
+                break;
+            case KIXObjectProperty.CHANGE_BY:
+                displayValue = 'Translatable#Changed by';
+                break;
+            case KIXObjectProperty.CHANGE_TIME:
+                displayValue = 'Translatable#Changed at';
                 break;
             default:
                 displayValue = property;

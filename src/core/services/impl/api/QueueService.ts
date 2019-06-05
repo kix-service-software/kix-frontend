@@ -1,12 +1,11 @@
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, ObjectIcon, Error
+    KIXObjectSpecificCreateOptions, Error
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { LoggingService } from '../LoggingService';
-import { QueueRequestObject, CUQueueResponse, CUQueueRequest } from '../../../api';
 import { QueueFactory } from '../../object-factories/QueueFactory';
 import { FollowUpTypeFactory } from '../../object-factories/FollowUpTypeFactory';
 
@@ -61,53 +60,26 @@ export class QueueService extends KIXObjectService {
         token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
         createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<number> {
-        const createParameter = parameter.filter(
-            (p) => p[0] !== 'ICON'
-        );
-        const createQueue = new QueueRequestObject(createParameter);
-
-        const response = await this.sendCreateRequest<CUQueueResponse, CUQueueRequest>(
-            token, clientRequestId, this.RESOURCE_URI, new CUQueueRequest(createQueue),
-            this.objectType
+        const id = await super.executeUpdateOrCreateRequest<number>(
+            token, clientRequestId, parameter, this.RESOURCE_URI, this.objectType, 'QueueID', true
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
         });
-
-        const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
-        if (icon) {
-            icon.Object = 'Queue';
-            icon.ObjectID = response.QueueID;
-            await this.createIcons(token, clientRequestId, icon);
-        }
-
-        return response.QueueID;
+        return id;
     }
 
     public async updateObject(
         token: string, clientRequestId: string, objectType: KIXObjectType,
         parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
-        // const updateParameter = parameter.filter(
-        //     (p) => p[0] !== 'ICON'
-        // );
-        // const updateQueue = new UpdateQueue(updateParameter);
-
-        // const response = await this.sendUpdateRequest<UpdateQueueResponse, UpdateQueueRequest>(
-        //     token, clientRequestId, this.buildUri(this.RESOURCE_URI, objectId),
-        //     new UpdateQueueRequest(updateQueue), this.objectType
-        // ).catch((error: Error) => {
-        //     LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-        //     throw new Error(error.Code, error.Message);
-        // });
-        // const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
-        // if (icon) {
-        //     icon.Object = 'Queue';
-        //     icon.ObjectID = response.QueueID;
-        //     await this.updateIcon(token, clientRequestId, icon);
-        // }
-
-        // return response.QueueID;
-        return;
+        const uri = this.buildUri(this.RESOURCE_URI, objectId);
+        const id = await super.executeUpdateOrCreateRequest<number>(
+            token, clientRequestId, parameter, uri, this.objectType, 'QueueID'
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
+        });
+        return id;
     }
 }

@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 
-import { ReleaseInfo, KIXObjectType, SysConfigKey, SysConfigItem } from '../core/model';
+import { KIXObjectType, SysConfigKey, SysConfigItem } from '../core/model';
 import { ConfigurationService, SysConfigService } from '../core/services';
 import { KIXRouter } from './KIXRouter';
+import * as Bowser from "bowser";
 
 export class AuthenticationRouter extends KIXRouter {
 
@@ -32,21 +33,32 @@ export class AuthenticationRouter extends KIXRouter {
     }
 
     public async login(req: Request, res: Response): Promise<void> {
-        const template = require('../components/_login-app/');
-        this.setFrontendSocketUrl(res);
+        if (this.isUnsupportedBrowser(req)) {
+            res.redirect('/static/html/unsupported-browser/index.html');
+        } else {
+            const template = require('../components/_login-app/');
+            this.setFrontendSocketUrl(res);
 
-        const logout = req.query.logout !== undefined;
+            const logout = req.query.logout !== undefined;
 
-        const releaseInfo = await ConfigurationService.getInstance().getModuleConfiguration('release-info', null);
+            const releaseInfo = await ConfigurationService.getInstance().getModuleConfiguration('release-info', null);
 
-        const imprintLink = await this.getImprintLink();
+            const imprintLink = await this.getImprintLink();
 
-        res.marko(template, {
-            login: true,
-            logout,
-            releaseInfo,
-            imprintLink
-        });
+            res.marko(template, {
+                login: true,
+                logout,
+                releaseInfo,
+                imprintLink
+            });
+        }
+    }
+
+    private isUnsupportedBrowser(req: Request): boolean {
+        const browser = Bowser.getParser(req.headers['user-agent']);
+        const requesteBrowser = browser.getBrowser();
+        const unsupported = requesteBrowser.name === 'Internet Explorer' && requesteBrowser.version === '11.0';
+        return unsupported;
     }
 
     private async getImprintLink(): Promise<string> {

@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2019-05-07 13:39+0000\n"
-"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
+"PO-Revision-Date: 2019-06-01 13:34+0000\n"
+"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: English <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/en/>\n"
 "Language: en\n"
@@ -539,6 +539,9 @@ msgstr ""
 msgid "Edit {0}"
 msgstr ""
 
+msgid "Edit Account"
+msgstr "Edit Email Account"
+
 msgid "Edit Address"
 msgstr ""
 
@@ -584,6 +587,9 @@ msgstr ""
 msgid "Edit Priority"
 msgstr ""
 
+msgid "Edit Queue"
+msgstr ""
+
 msgid "Edit Role"
 msgstr ""
 
@@ -591,6 +597,9 @@ msgid "Edit Search"
 msgstr ""
 
 msgid "Edit State"
+msgstr ""
+
+msgid "Edit Text Module"
 msgstr ""
 
 msgid "Edit Ticket"
@@ -812,6 +821,33 @@ msgstr ""
 msgid "Helptext_Admin_MailAccountCreate_Validity"
 msgstr ""
 
+msgid "Helptext_Admin_MailAccountEdit_AcceptKIXHeader"
+msgstr ""
+
+msgid "Helptext_Admin_MailAccountEdit_Comment"
+msgstr ""
+
+msgid "Helptext_Admin_MailAccountEdit_Dispachting"
+msgstr ""
+
+msgid "Helptext_Admin_MailAccountEdit_Host"
+msgstr ""
+
+msgid "Helptext_Admin_MailAccountEdit_IMAPFolder"
+msgstr ""
+
+msgid "Helptext_Admin_MailAccountEdit_Password"
+msgstr ""
+
+msgid "Helptext_Admin_MailAccountEdit_Type."
+msgstr ""
+
+msgid "Helptext_Admin_MailAccountEdit_UserName"
+msgstr ""
+
+msgid "Helptext_Admin_MailAccountEdit_Validity"
+msgstr ""
+
 msgid "Helptext_Admin_QueueCreate_Comment"
 msgstr ""
 
@@ -840,6 +876,36 @@ msgid "Helptext_Admin_QueueCreate_UnlockTimeout"
 msgstr ""
 
 msgid "Helptext_Admin_QueueCreate_Validity"
+msgstr ""
+
+msgid "Helptext_Admin_QueueEdit_Comment"
+msgstr ""
+
+msgid "Helptext_Admin_QueueEdit_FollowUp"
+msgstr ""
+
+msgid "Helptext_Admin_QueueEdit_FollowUpTicketLock"
+msgstr ""
+
+msgid "Helptext_Admin_QueueEdit_Icon."
+msgstr ""
+
+msgid "Helptext_Admin_QueueEdit_Name"
+msgstr ""
+
+msgid "Helptext_Admin_QueueEdit_ParentQueue"
+msgstr ""
+
+msgid "Helptext_Admin_QueueEdit_SenderAddress."
+msgstr ""
+
+msgid "Helptext_Admin_QueueEdit_Signature"
+msgstr ""
+
+msgid "Helptext_Admin_QueueEdit_UnlockTimeout"
+msgstr ""
+
+msgid "Helptext_Admin_QueueEdit_Validity"
 msgstr ""
 
 msgid "Helptext_Admin_SystemAddressCreate_Comment"
@@ -1352,9 +1418,6 @@ msgstr ""
 msgid "New Contact"
 msgstr ""
 
-msgid "New Email Account"
-msgstr ""
-
 msgid "New FAQ"
 msgstr ""
 
@@ -1383,6 +1446,9 @@ msgid "New State"
 msgstr ""
 
 msgid "New Template"
+msgstr ""
+
+msgid "New Text Module"
 msgstr ""
 
 msgid "New Ticket"
@@ -2080,6 +2146,9 @@ msgstr ""
 msgid "Templates successfully removed."
 msgstr ""
 
+msgid "Text Module"
+msgstr ""
+
 msgid "Text Modules"
 msgstr ""
 
@@ -2163,6 +2232,9 @@ msgid "Ticket successfully created."
 msgstr ""
 
 msgid "Ticket: Templates"
+msgstr ""
+
+msgid "Ticket: Text Modules"
 msgstr ""
 
 msgid "Ticket type is part of the classification of a ticket."
@@ -2258,6 +2330,9 @@ msgstr ""
 msgid "Unwatch Ticket ..."
 msgstr ""
 
+msgid "Update Account"
+msgstr ""
+
 msgid "Update Agent"
 msgstr ""
 
@@ -2283,6 +2358,9 @@ msgid "Update Organisation"
 msgstr ""
 
 msgid "Update Priority"
+msgstr ""
+
+msgid "Update Queue"
 msgstr ""
 
 msgid "Update Role"

@@ -4,7 +4,7 @@ import {
     TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../../../table";
-import { KIXObjectType, TicketTypeProperty, DataType, ContextMode } from "../../../../../model";
+import { KIXObjectType, TicketTypeProperty, DataType, ContextMode, KIXObjectProperty } from "../../../../../model";
 import { TicketTypeTableContentProvider } from "./TicketTypeTableContentProvider";
 import { TableFactory } from "../../../../table/TableFactory";
 
@@ -30,20 +30,13 @@ export class TicketTypeTableFactory extends TableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new DefaultColumnConfiguration(
-                TicketTypeProperty.NAME, true, false, true, true, 200, true, true, false,
-                DataType.STRING, true, null, null, false
-            ),
-            new DefaultColumnConfiguration(TicketTypeProperty.ID, false, true, false, true, 41, false),
-            new DefaultColumnConfiguration(TicketTypeProperty.VALID_ID, true, false, true, true, 150, true, true, true),
-            new DefaultColumnConfiguration(
-                TicketTypeProperty.CREATE_TIME, true, false, true, true, 150, true, true, false, DataType.DATE_TIME
-            ),
-            new DefaultColumnConfiguration(TicketTypeProperty.CREATE_BY, true, false, true, true, 150, true, true),
-            new DefaultColumnConfiguration(
-                TicketTypeProperty.CHANGE_TIME, true, false, true, true, 150, true, true, false, DataType.DATE_TIME
-            ),
-            new DefaultColumnConfiguration(TicketTypeProperty.CHANGE_BY, true, false, true, true, 150, true, true)
+            this.getDefaultColumnConfiguration(TicketTypeProperty.NAME),
+            this.getDefaultColumnConfiguration('ICON'),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CREATE_TIME),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CREATE_BY),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CHANGE_TIME),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CHANGE_BY)
         ];
 
         if (!tableConfiguration) {
@@ -66,8 +59,18 @@ export class TicketTypeTableFactory extends TableFactory {
         return tableConfiguration;
     }
 
-    // TODO: implementieren
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
-        return;
+        let config;
+        switch (property) {
+            case TicketTypeProperty.NAME:
+                config = new DefaultColumnConfiguration(
+                    property, true, false, true, false, 200, true, true,
+                    false, DataType.STRING, true, null, null, false
+                );
+                break;
+            default:
+                config = super.getDefaultColumnConfiguration(property);
+        }
+        return config;
     }
 }

@@ -101,9 +101,12 @@ export class FAQCategoryLabelProvider extends LabelProvider<FAQCategory> {
                     }
                     break;
                 case FAQCategoryProperty.PARENT_ID:
-                    const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(KIXObjectType.FAQ_CATEGORY);
-                    const category = faqCategories.find((fc) => fc.ID === value);
-                    displayValue = category ? category.Name : value;
+                    if (value) {
+                        const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(
+                            KIXObjectType.FAQ_CATEGORY, [value], null, null, true
+                        ).catch((error) => [] as FAQCategory[]);
+                        displayValue = faqCategories && !!faqCategories.length ? faqCategories[0].Name : value;
+                    }
                     break;
                 case FAQCategoryProperty.VALID_ID:
                     const valid = objectData.validObjects.find((v) => v.ID.toString() === value.toString());

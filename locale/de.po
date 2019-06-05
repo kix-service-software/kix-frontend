@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-05-29 05:49+0000\n"
+"PO-Revision-Date: 2019-06-01 13:34+0000\n"
 "Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -141,6 +141,7 @@ msgstr "Archivierte Tickets"
 msgid "Article"
 msgstr "Artikel"
 
+#, fuzzy
 msgid "Article Data"
 msgstr "Stammdaten"
 
@@ -407,7 +408,7 @@ msgid "Contact"
 msgstr "Kontakt"
 
 msgid "Contact Information"
-msgstr "Kontaktinformationen"
+msgstr "Kontakt Informationen"
 
 msgid "Contacts"
 msgstr "Kontakte"
@@ -581,6 +582,11 @@ msgstr "Bearbeiten"
 msgid "Edit {0}"
 msgstr "{0} bearbeiten"
 
+#, fuzzy
+#| msgid "Email Account"
+msgid "Edit Account"
+msgstr "E-Mail Konto"
+
 msgid "Edit Address"
 msgstr "Adresse bearbeiten"
 
@@ -626,6 +632,11 @@ msgstr "Persönliche Einstellungen bearbeiten"
 msgid "Edit Priority"
 msgstr "Priorität bearbeiten"
 
+#, fuzzy
+#| msgid "Ticket: Queues"
+msgid "Edit Queue"
+msgstr "Ticket: Queues"
+
 msgid "Edit Role"
 msgstr "Rolle bearbeiten"
 
@@ -634,6 +645,11 @@ msgstr "Suche bearbeiten"
 
 msgid "Edit State"
 msgstr "Status bearbeiten"
+
+#, fuzzy
+#| msgid "Text Modules"
+msgid "Edit Text Module"
+msgstr "Textbausteine"
 
 msgid "Edit Ticket"
 msgstr "Ticket bearbeiten"
@@ -894,6 +910,51 @@ msgstr "Hilfetext_Admin_QueueCreate_Name"
 msgid "Helptext_Admin_MailAccountCreate_Validity"
 msgstr "Hilfetext_Admin_QueueCreate_Validity"
 
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Name"
+msgid "Helptext_Admin_MailAccountEdit_AcceptKIXHeader"
+msgstr "Hilfetext_Admin_QueueCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Comment"
+msgid "Helptext_Admin_MailAccountEdit_Comment"
+msgstr "Hilfetext_Admin_QueueCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Icon."
+msgid "Helptext_Admin_MailAccountEdit_Dispachting"
+msgstr "Hilfetext_Admin_QueueCreate_Icon."
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Comment"
+msgid "Helptext_Admin_MailAccountEdit_Host"
+msgstr "Hilfetext_Admin_QueueCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Icon."
+msgid "Helptext_Admin_MailAccountEdit_IMAPFolder"
+msgstr "Hilfetext_Admin_QueueCreate_Icon."
+
+#, fuzzy
+#| msgid "Helptext_Organisations_ContactCreate_Password"
+msgid "Helptext_Admin_MailAccountEdit_Password"
+msgstr "Hilfetext_Organisations_ContactCreate_Password"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Name"
+msgid "Helptext_Admin_MailAccountEdit_Type."
+msgstr "Hilfetext_Admin_QueueCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Name"
+msgid "Helptext_Admin_MailAccountEdit_UserName"
+msgstr "Hilfetext_Admin_QueueCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Validity"
+msgid "Helptext_Admin_MailAccountEdit_Validity"
+msgstr "Hilfetext_Admin_QueueCreate_Validity"
+
 msgid "Helptext_Admin_QueueCreate_Comment"
 msgstr "Hilfetext_Admin_QueueCreate_Comment"
 
@@ -922,6 +983,56 @@ msgid "Helptext_Admin_QueueCreate_UnlockTimeout"
 msgstr "Hilfetext_Admin_QueueCreate_UnlockTimeout"
 
 msgid "Helptext_Admin_QueueCreate_Validity"
+msgstr "Hilfetext_Admin_QueueCreate_Validity"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Comment"
+msgid "Helptext_Admin_QueueEdit_Comment"
+msgstr "Hilfetext_Admin_QueueCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_FollowUp"
+msgid "Helptext_Admin_QueueEdit_FollowUp"
+msgstr "Hilfetext_Admin_QueueCreate_FollowUp"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_FollowUpTicketLock"
+msgid "Helptext_Admin_QueueEdit_FollowUpTicketLock"
+msgstr "Hilfetext_Admin_QueueCreate_FollowUpTicketLock"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Icon."
+msgid "Helptext_Admin_QueueEdit_Icon."
+msgstr "Hilfetext_Admin_QueueCreate_Icon."
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Name"
+msgid "Helptext_Admin_QueueEdit_Name"
+msgstr "Hilfetext_Admin_QueueCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_ParentQueue"
+msgid "Helptext_Admin_QueueEdit_ParentQueue"
+msgstr "Hilfetext_Admin_QueueCreate_ParentQueue"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_SenderAddress."
+msgid "Helptext_Admin_QueueEdit_SenderAddress."
+msgstr "Hilfetext_Admin_QueueCreate_SenderAddress."
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Signature"
+msgid "Helptext_Admin_QueueEdit_Signature"
+msgstr "Hilfetext_Admin_QueueCreate_Signature"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_UnlockTimeout"
+msgid "Helptext_Admin_QueueEdit_UnlockTimeout"
+msgstr "Hilfetext_Admin_QueueCreate_UnlockTimeout"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Validity"
+msgid "Helptext_Admin_QueueEdit_Validity"
 msgstr "Hilfetext_Admin_QueueCreate_Validity"
 
 #, fuzzy
@@ -1458,9 +1569,6 @@ msgstr "Neues Config Item"
 msgid "New Contact"
 msgstr "Neuer Kontakt"
 
-msgid "New Email Account"
-msgstr "Neues E-Mail Konto"
-
 msgid "New FAQ"
 msgstr "Neue FAQ"
 
@@ -1490,6 +1598,11 @@ msgstr "Neuer Status"
 
 msgid "New Template"
 msgstr "Neue Vorlage"
+
+#, fuzzy
+#| msgid "Text Modules"
+msgid "New Text Module"
+msgstr "Textbausteine"
 
 msgid "New Ticket"
 msgstr "Neues Ticket"
@@ -2230,6 +2343,11 @@ msgstr "Vorlagen"
 msgid "Templates successfully removed."
 msgstr "Vorlagen wurde erfolgreich entfernt."
 
+#, fuzzy
+#| msgid "Text Modules"
+msgid "Text Module"
+msgstr "Textbausteine"
+
 msgid "Text Modules"
 msgstr "Textbausteine"
 
@@ -2321,6 +2439,11 @@ msgstr "Ticket wurde erfolgreich angelegt."
 
 msgid "Ticket: Templates"
 msgstr "Ticket: Vorlagen"
+
+#, fuzzy
+#| msgid "Text Modules"
+msgid "Ticket: Text Modules"
+msgstr "Textbausteine"
 
 msgid "Ticket type is part of the classification of a ticket."
 msgstr "Der Ticket-Typ dient zur Klassifizierung von Anfragen."
@@ -2415,6 +2538,11 @@ msgstr "Nicht beobachten"
 msgid "Unwatch Ticket ..."
 msgstr "Ticket nicht mehr beobachten..."
 
+#, fuzzy
+#| msgid "Create Agent"
+msgid "Update Account"
+msgstr "Neuer Agent"
+
 msgid "Update Agent"
 msgstr "Aktualisierung wird durchgeführt"
 
@@ -2443,6 +2571,11 @@ msgstr "Aktualisierung wird durchgeführt"
 
 msgid "Update Priority"
 msgstr "Aktualisierung wird durchgeführt"
+
+#, fuzzy
+#| msgid "Create Queue"
+msgid "Update Queue"
+msgstr "Queue wird angelegt"
 
 msgid "Update Role"
 msgstr "Aktualisierung wird durchgeführt"
@@ -2542,6 +2675,9 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "New Email Account"
+#~ msgstr "Neues E-Mail Konto"
 
 #~ msgid "No contact available"
 #~ msgstr "Kein Kontakt verfügbar"

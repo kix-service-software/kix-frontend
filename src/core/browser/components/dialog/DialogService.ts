@@ -62,7 +62,7 @@ export class DialogService {
     ): Promise<void> {
         const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
         const contextIcon = context ? context.getIcon() : null;
-        const contextTitle = context ? await context.getDisplayText() : '';
+        const contextTitle = context ? await context.getDisplayText(true) : '';
 
         let dialogTitle = title;
         if (this.mainDialogListener) {
