@@ -1,7 +1,9 @@
 {
     "name": "kix-text-module",
     "extensions": {
-        "kix:configuration": {},
+        "kix:configuration": {
+            "new-text-module-dialog-configuration": "../../dist/registry-modules/text-module/new-text-module-dialog-configuration.extension"
+        },
         "kix:modules": {
             "text-module-module": "../../dist/registry-modules/text-module/kix-module.extension"
         },

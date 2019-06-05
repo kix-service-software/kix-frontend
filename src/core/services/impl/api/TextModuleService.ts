@@ -3,6 +3,7 @@ import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, TextModule, Error, TextModuleFactory
 } from '../../../model';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
+import { LoggingService } from '../LoggingService';
 
 export class TextModuleService extends KIXObjectService {
 
@@ -47,7 +48,14 @@ export class TextModuleService extends KIXObjectService {
     public createObject(
         token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>
     ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
+        const id = super.executeUpdateOrCreateRequest(
+            token, clientRequestId, parameter, this.RESOURCE_URI, KIXObjectType.TEXT_MODULE, 'TextModuleID', true
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
+        });
+
+        return id;
     }
 
     public async updateObject(
