@@ -29,6 +29,16 @@ export class TextModuleService extends KIXObjectService {
         return 'TextModule';
     }
 
+    protected async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+        switch (property) {
+            case TextModuleProperty.KEYWORDS:
+                value = value.split(/[,;\s]\s?/);
+                break;
+            default:
+        }
+        return [[property, value]];
+    }
+
     public getAutoFillConfiguration(textMatch: any, placeholder: string): IAutofillConfiguration {
         // tslint:disable:max-line-length
         const itemTemplate
