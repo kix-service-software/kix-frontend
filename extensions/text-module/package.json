@@ -1,0 +1,14 @@
+{
+    "name": "kix-text-module",
+    "extensions": {
+        "kix:configuration": {
+            "new-text-module-dialog-configuration": "../../dist/registry-modules/text-module/new-text-module-dialog-configuration.extension"
+        },
+        "kix:modules": {
+            "text-module-module": "../../dist/registry-modules/text-module/kix-module.extension"
+        },
+        "kix:admin-module": {
+            "text-module-admin": "../../dist/registry-modules/text-module/admin/admin-module.extension"
+        }
+    }
+}

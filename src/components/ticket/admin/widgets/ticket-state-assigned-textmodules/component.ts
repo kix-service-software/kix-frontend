@@ -1,6 +1,6 @@
 import {
     AbstractMarkoComponent, ContextService, ActionFactory, TableFactoryService,
-    WidgetService, TableEvent, TableEventData
+    WidgetService, TableEvent, TableEventData, TableConfiguration, TableHeaderHeight
 } from '../../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import { TicketStateDetailsContext } from '../../../../../core/browser/ticket';
@@ -44,8 +44,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async prepareTable(): Promise<void> {
+        const tableConfiguration = new TableConfiguration(
+            KIXObjectType.TEXT_MODULE, null, null, null, null, false, false, null, null,
+            TableHeaderHeight.SMALL
+        );
         const table = await TableFactoryService.getInstance().createTable(
-            'ticket-state-assigned-text-modules', KIXObjectType.TEXT_MODULE, null, null, null, true
+            'ticket-state-assigned-text-modules', KIXObjectType.TEXT_MODULE, tableConfiguration,
+            null, null, true, false, true
         );
 
         WidgetService.getInstance().setActionData(this.state.instanceId, table);

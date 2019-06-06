@@ -8,16 +8,6 @@ export enum TicketStateProperty {
 
     TYPE_NAME = 'TypeName',
 
-    TYPE_ID = 'TypeID',
-
-    VALID_ID = 'ValidID',
-
-    CREATE_TIME = 'CreateTime',
-
-    CREATE_BY = 'CreateBy',
-
-    CHANGE_TIME = 'ChangeTime',
-
-    CHANGE_BY = 'ChangeBy'
+    TYPE_ID = 'TypeID'
 
 }

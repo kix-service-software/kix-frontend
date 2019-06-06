@@ -4,7 +4,7 @@ import {
     ConfiguredWidget, FormField, KIXObjectType, Form,
     FormContext, FormFieldValue, ContextConfiguration, QueueProperty, FormFieldOption, ObjectReferenceOptions,
     KIXObjectLoadingOptions, FilterCriteria, SystemAddressProperty, FilterDataType, FilterType,
-    NumberInputOptions, FormFieldOptions
+    NumberInputOptions, FormFieldOptions, KIXObjectProperty
 } from '../../../core/model';
 import { FormGroup } from '../../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../../core/services';
@@ -79,7 +79,7 @@ export class Extension implements IConfigurationExtension {
                     null, null, null, null, null, null, null, 250
                 ),
                 new FormField(
-                    'Translatable#Validity', QueueProperty.VALID_ID, 'valid-input', true,
+                    'Translatable#Validity', KIXObjectProperty.VALID_ID, 'valid-input', true,
                     'Translatable#Helptext_Admin_QueueCreate_Validity',
                     null, new FormFieldValue(1)
                 )

@@ -95,7 +95,8 @@ gulp.task('minify-js', (cb) => {
 gulp.task('test', () => {
     process.env.NODE_ENV = 'test';
     return gulp.src([
-        'tests/**/*.test.ts'
+        'tests/**/*.test.ts',
+        'tests/browser/**/*.test.ts'
     ])
         .pipe(mocha({
             reporter: 'spec',

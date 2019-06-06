@@ -1,0 +1,1 @@
+export { TextModulesTableFactory } from './TextModulesTableFactory';

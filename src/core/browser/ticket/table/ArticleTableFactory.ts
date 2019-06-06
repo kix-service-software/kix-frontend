@@ -48,14 +48,14 @@ export class ArticleTableFactory extends TableFactory {
                 false, false, false, DataType.STRING, false
             ),
             new DefaultColumnConfiguration(
-                ArticleProperty.SENDER_TYPE_ID, true, false, true, false, 120, true, true
+                ArticleProperty.SENDER_TYPE_ID, true, false, true, false, 120, true, true, true
             ),
             new DefaultColumnConfiguration(ArticleProperty.FROM, true, false, true, false, 300, true, true),
             new DefaultColumnConfiguration(
                 ArticleProperty.CUSTOMER_VISIBLE, false, true, false, true, 75, false, false
             ),
             new DefaultColumnConfiguration(
-                ArticleProperty.CHANNEL_ID, false, true, true, false, 75, true, true
+                ArticleProperty.CHANNEL_ID, false, true, true, false, 75, true, true, true
             ),
             new DefaultColumnConfiguration(ArticleProperty.SUBJECT, true, false, true, false, 500, true, true),
             new DefaultColumnConfiguration(
@@ -70,7 +70,7 @@ export class ArticleTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.ARTICLE, null, null, tableColumns, null, true, true, null, null,
+                KIXObjectType.ARTICLE, 1000, null, tableColumns, null, true, true, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             tableConfiguration.displayLimit = null;

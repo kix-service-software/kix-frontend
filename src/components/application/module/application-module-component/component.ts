@@ -1,6 +1,6 @@
 import {
     AbstractMarkoComponent, ActionFactory, ServiceRegistry, ContextService,
-    LabelService, FactoryService, TableFactoryService, TableCSSHandlerRegistry
+    LabelService, FactoryService, TableFactoryService, TableCSSHandlerRegistry, PersonalSettingsDialogContext
 } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import { SearchService } from '../../../../core/browser/search';
@@ -8,19 +8,6 @@ import { CSVExportAction, BulkAction, ImportAction } from '../../../../core/brow
 import {
     ContextDescriptor, KIXObjectType, ContextType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration
 } from '../../../../core/model';
-import {
-    LinkService, LinkedObjectsEditAction, EditLinkedObjectsDialogContext, LinkObjectTableFactory,
-    LinkObjectLabelProvider, LinkObjectDialogContext
-} from '../../../../core/browser/link';
-import { GeneralCatalogService, GeneralCatalogBrowserFactory } from '../../../../core/browser/general-catalog';
-import { DynamicFieldService } from '../../../../core/browser/dynamic-fields';
-import {
-    TextModuleService, TextModuleBrowserFactory, TextModuleLabelProvider, TextModulesTableFactory
-} from '../../../../core/browser/text-modules';
-import { SlaService, SlaLabelProvider, SlaBrowserFactory } from '../../../../core/browser/sla';
-import { ObjectIconService, ObjectIconBrowserFactory } from '../../../../core/browser/icon';
-import { PersonalSettingsDialogContext } from '../../../../core/browser';
-import { BulkDialogContext } from '../../../../core/browser/bulk';
 import {
     TranslationLabelProvider, TranslationLanguageLabelProvider
 } from '../../../../core/browser/i18n';
@@ -40,6 +27,12 @@ import { DialogService } from '../../../../core/browser/components/dialog';
 import { PermissionLabelProvider } from '../../../../core/browser/permission';
 import { PermissionsTableFactory, PermissionTableCSSHandler } from '../../../../core/browser/application';
 import { ServiceService } from '../../../../core/browser/service/ServiceService';
+import { LinkService } from '../../../../core/browser/link';
+import { GeneralCatalogService, GeneralCatalogBrowserFactory } from '../../../../core/browser/general-catalog';
+import { DynamicFieldService } from '../../../../core/browser/dynamic-fields';
+import { SlaService, SlaBrowserFactory, SlaLabelProvider } from '../../../../core/browser/sla';
+import { ObjectIconService, ObjectIconBrowserFactory } from '../../../../core/browser/icon';
+import { BulkDialogContext } from '../../../../core/browser/bulk';
 
 class Component extends AbstractMarkoComponent {
 
@@ -51,7 +44,6 @@ class Component extends AbstractMarkoComponent {
         ServiceRegistry.registerServiceInstance(SearchService.getInstance());
         ServiceRegistry.registerServiceInstance(LinkService.getInstance());
         ServiceRegistry.registerServiceInstance(GeneralCatalogService.getInstance());
-        ServiceRegistry.registerServiceInstance(TextModuleService.getInstance());
         ServiceRegistry.registerServiceInstance(DynamicFieldService.getInstance());
         ServiceRegistry.registerServiceInstance(SlaService.getInstance());
         ServiceRegistry.registerServiceInstance(ObjectIconService.getInstance());
@@ -70,10 +62,6 @@ class Component extends AbstractMarkoComponent {
         );
 
         LabelService.getInstance().registerLabelProvider(new PermissionLabelProvider());
-
-        FactoryService.getInstance().registerFactory(KIXObjectType.TEXT_MODULE, TextModuleBrowserFactory.getInstance());
-        TableFactoryService.getInstance().registerFactory(new TextModulesTableFactory());
-        LabelService.getInstance().registerLabelProvider(new TextModuleLabelProvider());
 
         FactoryService.getInstance().registerFactory(
             KIXObjectType.SLA, SlaBrowserFactory.getInstance()

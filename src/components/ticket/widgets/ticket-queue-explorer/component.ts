@@ -28,7 +28,7 @@ export class Component {
     private async loadQueues(context: TicketContext): Promise<void> {
         this.state.nodes = null;
         const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy();
-        this.state.nodes = await this.prepareTreeNodes(queuesHierarchy);
+        this.state.nodes = await QueueService.getInstance().prepareQueueTree(queuesHierarchy, false, null, true);
         this.setActiveNode(context.queue);
     }
 
@@ -52,47 +52,6 @@ export class Component {
             }
         }
         return activeNode;
-    }
-
-    private async prepareTreeNodes(categories: Queue[]): Promise<TreeNode[]> {
-        const nodes = [];
-        if (categories) {
-            for (const q of categories) {
-                const name = await TranslationService.translate(q.Name);
-                const subQueues = await this.prepareTreeNodes(q.SubQueues);
-                const ticketStats = await this.getTicketStats(q);
-                nodes.push(new TreeNode(
-                    q, name, null, null, subQueues, null, null, null, ticketStats
-                ));
-            }
-        }
-        return nodes;
-    }
-
-    private async getTicketStats(queue: Queue): Promise<TreeNodeProperty[]> {
-        const properties: TreeNodeProperty[] = [];
-        if (queue.TicketStats) {
-            const openCount = queue.TicketStats.OpenCount;
-
-            const openTooltip = await TranslationService.translate('Translatable#open tickets: {0}', [openCount]);
-            properties.push(new TreeNodeProperty(openCount, openTooltip));
-
-            const lockCount = openCount - queue.TicketStats.LockCount;
-            const lockedTooltip = await TranslationService.translate('Translatable#free tickets: {0}', [lockCount]);
-            properties.push(new TreeNodeProperty(lockCount, lockedTooltip));
-
-            const escalatedCount = queue.TicketStats.EscalatedCount;
-            if (escalatedCount > 0) {
-                const escalatedTooltip = await TranslationService.translate(
-                    'Translatable#escalated tickets: {0}', [escalatedCount]
-                );
-                properties.push(
-                    new TreeNodeProperty(escalatedCount, escalatedTooltip, 'escalated')
-                );
-            }
-        }
-
-        return properties;
     }
 
     public async activeNodeChanged(node: TreeNode): Promise<void> {

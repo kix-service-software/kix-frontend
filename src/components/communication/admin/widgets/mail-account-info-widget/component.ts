@@ -70,7 +70,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async setDispatchingRoutingConfiguration(): Promise<void> {
         if (
-            this.state.account && this.state.account.DispatchingBy === DispatchingType.QUEUE
+            this.state.account && this.state.account.DispatchingBy === DispatchingType.BACKEND_KEY_QUEUE
             && this.state.account.QueueID
         ) {
             this.state.routingConfigurations = [

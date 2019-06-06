@@ -40,7 +40,14 @@ export class TextModuleService extends KIXObjectService {
 
         if (allowed) {
             // tslint:disable:max-line-length
-            const itemTemplate = `<li data-id="{id}" class="text-module-autofill-item"><div class="text-module-category">{Category}</div><div class="text-module-info"><span class="text-module-name">{Name}</span><span class="text-module-label">{Keywords}</span></div></li>`;
+            const itemTemplate
+                = '<li data-id="{id}" class="text-module-autofill-item">'
+                + '<div class="text-module-info">'
+                + '<span class="text-module-name">{Name}</span>'
+                + '<span class="text-module-label">{Keywords}</span>'
+                + '</div>'
+                + '</li>';
+
             const matchCallback = (text: string, offset) => {
 
                 const left = text.slice(0, offset);
@@ -81,17 +88,14 @@ export class TextModuleService extends KIXObjectService {
 
     private async getTextModules(query: string): Promise<TextModule[]> {
         let filterCriteria = [
-            new FilterCriteria(
-                TextModuleProperty.AGENT_FRONTEND, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
-            )
+            // new FilterCriteria(
+            //     TextModuleProperty.AGENT_FRONTEND, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
+            // )
         ];
 
         if (query && query !== '') {
             filterCriteria = [
                 ...filterCriteria,
-                new FilterCriteria(
-                    TextModuleProperty.CATEGORY, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, query
-                ),
                 new FilterCriteria(
                     TextModuleProperty.SUBJECT, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, query
                 ),

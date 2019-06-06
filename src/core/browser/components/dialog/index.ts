@@ -3,6 +3,7 @@ export { IMainDialogListener } from './IMainDialogListener';
 export { IOverlayDialogListener } from './IOverlayDialogListener';
 export { IImageDialogListener } from './IImageDialogListener';
 export { AbstractNewDialog } from './AbstractNewDialog';
+export { AbstractEditDialog } from './AbstractEditDialog';
 export { DialogEvents } from './DialogEvents';
 export { DialogEventData } from './DialogEventData';
 export { TabContainerEvent } from './TabContainerEvent';

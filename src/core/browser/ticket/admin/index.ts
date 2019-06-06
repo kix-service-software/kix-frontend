@@ -9,4 +9,5 @@ export { TicketPriorityService } from './TicketPriorityService';
 export { TicketPriorityFormService } from './TicketPriorityFormService';
 export { TicketStateFormService } from './TicketStateFormService';
 export { QueueService } from './QueueService';
+export { QueueFormService } from './QueueFormService';
 export { TicketTemplateService } from './TicketTemplateService';

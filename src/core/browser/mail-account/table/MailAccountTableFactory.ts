@@ -79,24 +79,8 @@ export class MailAccountTableFactory extends TableFactory {
                     false, DataType.STRING, true, null, null, false
                 );
                 break;
-            case KIXObjectProperty.VALID_ID:
-            case MailAccountProperty.TYPE:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true, true);
-                break;
-            case MailAccountProperty.COMMENT:
-                config = new DefaultColumnConfiguration(
-                    property, true, false, true, false, 350, true, true, false,
-                    DataType.STRING, true, undefined, null, false
-                );
-                break;
-            case KIXObjectProperty.CHANGE_TIME:
-            case KIXObjectProperty.CREATE_TIME:
-                config = new DefaultColumnConfiguration(
-                    property, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
-                );
-                break;
             default:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true);
+                config = super.getDefaultColumnConfiguration(property);
         }
         return config;
     }

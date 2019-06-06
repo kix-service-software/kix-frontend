@@ -139,6 +139,14 @@ export class CacheService {
                 this.clear([KIXObjectType.TRANSLATION]);
                 cacheKeyPrefixes = [];
                 break;
+            case KIXObjectType.QUEUE:
+            case KIXObjectType.TICKET_PRIORITY:
+            case KIXObjectType.TICKET_STATE:
+            case KIXObjectType.TICKET_TYPE:
+            case KIXObjectType.CONFIG_ITEM_CLASS:
+            case KIXObjectType.TICKET_PRIORITY:
+                cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
+                break;
             default:
         }
 

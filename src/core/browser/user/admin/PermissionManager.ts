@@ -1,11 +1,6 @@
-import {
-    KIXObjectType, InputFieldTypes, SortUtil, PermissionType, KIXObjectLoadingOptions,
-    FilterCriteria, FilterDataType, FilterType
-} from "../../../model";
+import { KIXObjectType, InputFieldTypes } from "../../../model";
 import { DynamicFormOperationsType, AbstractDynamicFormManager } from "../../form";
-import { KIXObjectService } from "../../kix";
 import { ObjectPropertyValue } from "../../ObjectPropertyValue";
-import { SearchOperator } from "../../SearchOperator";
 
 export class PermissionManager extends AbstractDynamicFormManager {
 
@@ -24,23 +19,7 @@ export class PermissionManager extends AbstractDynamicFormManager {
     }
 
     public async getProperties(): Promise<Array<[string, string]>> {
-        const properties: Array<[string, string]> = [];
-        const permissionTypes = await KIXObjectService.loadObjects<PermissionType>(
-            this.objectType, null, new KIXObjectLoadingOptions(
-                null, [
-                    new FilterCriteria(
-                        'ValidID', SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                        FilterType.AND, 1
-                    )
-                ]
-            )
-        );
-        for (const permissionType of permissionTypes) {
-            properties.push([permissionType.ID.toString(), permissionType.Name]);
-        }
-
-        properties.sort((a1, a2) => SortUtil.compareString(a1[1], a2[1]));
-        return properties;
+        return [["1", "Resource"]];
     }
 
     public async getPropertiesPlaceholder(): Promise<string> {
@@ -57,5 +36,9 @@ export class PermissionManager extends AbstractDynamicFormManager {
 
     public async getOpertationsType(property: string): Promise<DynamicFormOperationsType> {
         return DynamicFormOperationsType.STRING;
+    }
+
+    public async getOperations(property: string): Promise<any[]> {
+        return [];
     }
 }

@@ -21,3 +21,4 @@ export { BrowserUtil } from './BrowserUtil';
 export { SearchProperty } from './SearchProperty';
 export { PropertyOperator } from './PropertyOperator';
 export { ObjectPropertyValue } from './ObjectPropertyValue';
+export { UIUtil } from './UIUtil';
