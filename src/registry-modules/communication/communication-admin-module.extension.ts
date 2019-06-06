@@ -1,4 +1,5 @@
-import { IAdminModuleExtension, AdminModuleCategory, AdminModule, KIXObjectType } from "../../core/model";
+import { IAdminModuleExtension, AdminModuleCategory, AdminModule, KIXObjectType, CRUD } from "../../core/model";
+import { UIComponentPermission } from "../../core/model/UIComponentPermission";
 
 class Extension implements IAdminModuleExtension {
 
@@ -10,11 +11,17 @@ class Extension implements IAdminModuleExtension {
                         null, 'communication_email', 'Translatable#Email', null, [], [
                             new AdminModule(
                                 null, 'system-address', 'Translatable#Email Addresses', null,
-                                KIXObjectType.SYSTEM_ADDRESS, 'communication-admin-system-addresses'
+                                KIXObjectType.SYSTEM_ADDRESS, 'communication-admin-system-addresses', [
+                                    new UIComponentPermission('systemaddresses', [CRUD.CREATE]),
+                                    new UIComponentPermission('systemaddresses/*', [CRUD.UPDATE])
+                                ]
                             ),
                             new AdminModule(
                                 null, 'mail-account', 'Translatable#Email Accounts', null,
-                                KIXObjectType.MAIL_ACCOUNT, 'communication-admin-mail-accounts'
+                                KIXObjectType.MAIL_ACCOUNT, 'communication-admin-mail-accounts', [
+                                    new UIComponentPermission('mailaccounts', [CRUD.CREATE]),
+                                    new UIComponentPermission('mailaccounts/*', [CRUD.UPDATE])
+                                ]
                             )
                         ]
                     )
