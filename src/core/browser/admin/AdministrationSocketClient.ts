@@ -20,7 +20,13 @@ export class AdministrationSocketClient extends SocketClient {
         this.socket = this.createSocket('administration', true);
     }
 
+    private categories: AdminModuleCategory[];
+
     public async loadAdminCategories(): Promise<AdminModuleCategory[]> {
+        if (this.categories) {
+            return this.categories;
+        }
+
         return new Promise<AdminModuleCategory[]>((resolve, reject) => {
 
             const requestId = IdService.generateDateBasedId();
@@ -35,6 +41,7 @@ export class AdministrationSocketClient extends SocketClient {
                     if (result.requestId === requestId) {
                         window.clearTimeout(timeout);
                         const categories = result.categories.map((c) => new AdminModuleCategory(c));
+                        this.categories = categories;
                         resolve(categories);
                     }
                 }
