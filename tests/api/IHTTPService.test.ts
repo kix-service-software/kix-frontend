@@ -53,23 +53,23 @@ describe('HTTP Service', () => {
         });
 
         it('Should return an empty object.', async () => {
-            const res = await HttpService.getInstance().get('testGet', {}, 'token', null);
+            const res = await HttpService.getInstance().get('testGet', {}, 'token', null, null, false);
             expect(res).exist;
             expect(res).deep.equal({});
         });
 
         it('Should return a object with properties.', async () => {
-            const res = await HttpService.getInstance().get("testGetObject", {}, 'token', null);
+            const res = await HttpService.getInstance().get("testGetObject", {}, 'token', null, null, false);
             expect(res).deep.equal(this.testObject);
         });
 
         it('Should return a object with the values of the query parameter.', async () => {
-            const res = await HttpService.getInstance().get('object', { id: '12345' }, 'token', null);
+            const res = await HttpService.getInstance().get('object', { id: '12345' }, 'token', null, null, false);
             expect(res).deep.equal(this.parameterObject);
         });
 
         it('Should return a correct http error if resource not exists.', async () => {
-            const res = await HttpService.getInstance().get('unknownResource', {}, 'token', null)
+            const res = await HttpService.getInstance().get('unknownResource', {}, 'token', null, null, false)
                 .catch((err: Error) => {
                     expect(err).exist;
                     expect(err).instanceof(Error);

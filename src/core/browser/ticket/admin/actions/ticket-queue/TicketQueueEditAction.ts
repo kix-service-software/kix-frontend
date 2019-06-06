@@ -1,5 +1,7 @@
-import { AbstractAction, CRUD } from "../../../../../model";
+import { AbstractAction, CRUD, FormInstance, KIXObjectType, ContextMode } from "../../../../../model";
 import { UIComponentPermission } from "../../../../../model/UIComponentPermission";
+import { FormService } from "../../../../form";
+import { ContextService } from "../../../../context";
 
 export class TicketQueueEditAction extends AbstractAction {
 
