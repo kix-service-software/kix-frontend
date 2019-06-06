@@ -129,8 +129,7 @@ export class TextModuleLabelProvider implements ILabelProvider<TextModule> {
     public async getObjectText(
         textModule: TextModule, id?: boolean, title?: boolean, translatable?: boolean
     ): Promise<string> {
-        const objectName = await this.getObjectName(false, translatable);
-        return `${objectName}: ${textModule.Name}`;
+        return `${textModule.Name}`;
     }
 
     public getObjectAdditionalText(object: TextModule, translatable: boolean = true): string {

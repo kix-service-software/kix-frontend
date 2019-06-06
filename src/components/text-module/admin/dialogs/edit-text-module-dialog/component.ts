@@ -1,15 +1,17 @@
 import { KIXObjectType } from "../../../../../core/model";
 import { ComponentState } from "./ComponentState";
-import { AbstractNewDialog } from "../../../../../core/browser/components/dialog";
+import { AbstractEditDialog } from "../../../../../core/browser/components/dialog";
+import { EditTextModuleDialogContext } from "../../../../../core/browser/text-modules";
 
-class Component extends AbstractNewDialog {
+class Component extends AbstractEditDialog {
 
     public onCreate(): void {
         this.state = new ComponentState();
         super.init(
-            'Translatable#Create Text Module',
-            'Translatable#Text Module successfully created.',
-            KIXObjectType.TEXT_MODULE, null
+            'Translatable#Update Text Module',
+            undefined,
+            KIXObjectType.TEXT_MODULE,
+            EditTextModuleDialogContext.CONTEXT_ID
         );
     }
 

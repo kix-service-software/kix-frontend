@@ -62,7 +62,16 @@ export class TextModuleService extends KIXObjectService {
         token: string, clientRequestId: string, objectType: KIXObjectType,
         parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
+        const uri = this.buildUri(this.RESOURCE_URI, objectId);
+
+        const id = super.executeUpdateOrCreateRequest(
+            token, clientRequestId, parameter, uri, KIXObjectType.TEXT_MODULE, 'TextModuleID'
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
+        });
+
+        return id;
     }
 
 }

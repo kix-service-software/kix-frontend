@@ -32,7 +32,7 @@ export class TextModuleService extends KIXObjectService {
     protected async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
         switch (property) {
             case TextModuleProperty.KEYWORDS:
-                value = value.split(/[,;\s]\s?/);
+                value = value ? value.split(/[,;\s]\s?/) : undefined;
                 break;
             default:
         }
@@ -87,15 +87,10 @@ export class TextModuleService extends KIXObjectService {
     }
 
     private async getTextModules(query: string): Promise<TextModule[]> {
-        let filterCriteria = [
-            // new FilterCriteria(
-            //     TextModuleProperty.AGENT_FRONTEND, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
-            // )
-        ];
+        let filterCriteria = [];
 
         if (query && query !== '') {
             filterCriteria = [
-                ...filterCriteria,
                 new FilterCriteria(
                     TextModuleProperty.SUBJECT, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, query
                 ),

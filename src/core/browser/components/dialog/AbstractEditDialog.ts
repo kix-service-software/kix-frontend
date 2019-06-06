@@ -1,6 +1,6 @@
 import {
     ValidationResult, ValidationSeverity, ComponentContent, OverlayType, KIXObjectType,
-    Error, ContextMode
+    Error, ContextMode, ContextType
 } from "../../../model";
 import { OverlayService } from "../../OverlayService";
 import { DialogService } from "./DialogService";
@@ -10,13 +10,15 @@ import { AbstractMarkoComponent } from "../../marko";
 import { BrowserUtil } from "../../BrowserUtil";
 import { ContextService } from "../../context";
 import { TranslationService } from "../../i18n/TranslationService";
+import { EventService } from "../../event";
+import { ApplicationEvent } from "../../application";
 
 export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
 
     protected loadingHint: string;
     protected successHint: string;
     protected objectType: KIXObjectType;
-    protected detailsContextId: string;
+    protected contextId: string;
 
     protected init(
         loadingHint: string, successHint: string = 'Translatable#Changes saved.', objectType: KIXObjectType,
@@ -25,7 +27,7 @@ export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
         this.loadingHint = loadingHint;
         this.successHint = successHint;
         this.objectType = objectType;
-        this.detailsContextId = detailsContextId;
+        this.contextId = detailsContextId;
     }
 
     public async onMount(): Promise<void> {
@@ -58,16 +60,25 @@ export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
                     AbstractEditDialog.prototype.showValidationError.call(this, result);
                 } else {
                     DialogService.getInstance().setMainDialogLoading(true, this.loadingHint);
-                    const context = await ContextService.getInstance().getContext(this.detailsContextId);
-                    KIXObjectService.updateObjectByForm(this.objectType, this.state.formId, context.getObjectId())
-                        .then(async (objectId) => {
-                            await AbstractEditDialog.prototype.handleDialogSuccess.call(this, objectId);
-                            resolve();
-                        }).catch((error: Error) => {
-                            DialogService.getInstance().setMainDialogLoading(false);
-                            BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
-                            reject();
-                        });
+                    let context;
+                    if (this.contextId) {
+                        context = await ContextService.getInstance().getContext(this.contextId);
+                    } else {
+                        context = await ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+                    }
+                    if (context && context.getObjectId()) {
+                        KIXObjectService.updateObjectByForm(this.objectType, this.state.formId, context.getObjectId())
+                            .then(async (objectId) => {
+                                await AbstractEditDialog.prototype.handleDialogSuccess.call(this, objectId);
+                                resolve();
+                            }).catch((error: Error) => {
+                                DialogService.getInstance().setMainDialogLoading(false);
+                                BrowserUtil.openErrorOverlay(
+                                    error.Message ? `${error.Code}: ${error.Message}` : error.toString()
+                                );
+                                reject();
+                            });
+                    }
                 }
             }, 300);
         });
@@ -78,9 +89,18 @@ export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
 
         DialogService.getInstance().setMainDialogLoading(false);
         DialogService.getInstance().submitMainDialog();
-        if (this.detailsContextId) {
-            const context = await ContextService.getInstance().getContext(this.detailsContextId);
-            context.getObject(this.objectType, true);
+
+        if (this.contextId) {
+            const context = await ContextService.getInstance().getContext(this.contextId);
+            if (context) {
+                if (context.getDescriptor().contextType === ContextType.DIALOG) {
+                    EventService.getInstance().publish(ApplicationEvent.REFRESH);
+                } else {
+                    context.getObject(this.objectType, true);
+                }
+            }
+        } else {
+            EventService.getInstance().publish(ApplicationEvent.REFRESH);
         }
 
         FormService.getInstance().deleteFormInstance(this.state.formId);

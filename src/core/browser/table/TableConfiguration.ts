@@ -1,5 +1,5 @@
 import { FilterCriteria, KIXObjectType } from "../../model";
-import { RoutingConfiguration } from "../router";
+import { RoutingConfiguration, DialogRoutingConfiguration } from "../router";
 import { ToggleOptions } from "./ToggleOptions";
 import { TableHeaderHeight } from "./TableHeaderHeight";
 import { TableRowHeight } from "./TableRowHeight";
@@ -20,7 +20,7 @@ export class TableConfiguration {
         public headerHeight?: TableHeaderHeight,
         public rowHeight?: TableRowHeight,
         public emptyResultHint?: string,
-        public routingConfiguration?: RoutingConfiguration,
+        public routingConfiguration?: RoutingConfiguration | DialogRoutingConfiguration,
         public fixedFirstColumn: boolean = false
     ) {
 

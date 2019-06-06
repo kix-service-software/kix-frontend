@@ -25,7 +25,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             if (tableConfiguration && tableConfiguration.routingConfiguration) {
                 this.state.object = input.cell.getRow().getRowObject().getObject();
                 this.state.routingConfiguration = tableConfiguration.routingConfiguration;
-                if (this.state.routingConfiguration && this.state.object) {
+                if (
+                    this.state.routingConfiguration && this.state.routingConfiguration.objectIdProperty
+                    && this.state.object
+                ) {
                     this.state.objectId = this.state.object[this.state.routingConfiguration.objectIdProperty];
                 }
             }
