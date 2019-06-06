@@ -36,14 +36,7 @@ class Extension implements IKIXModuleExtension {
         new UIComponent('config-item-class-explorer', 'cmdb/widgets/config-item-class-explorer', []),
         new UIComponent('config-item-chart-widget', 'cmdb/widgets/config-item-chart-widget', []),
         new UIComponent('config-item-images-widget', 'cmdb/widgets/config-item-images-widget', []),
-        new UIComponent('cmdb-admin-ci-classes', 'cmdb/admin/cmdb-admin-ci-classes', []),
-        new UIComponent('config-item-class-info-widget', 'cmdb/admin/widgets/config-item-class-info-widget', []),
-        new UIComponent(
-            'config-item-class-versions-widget', 'cmdb/admin/widgets/config-item-class-versions-widget', []
-        ),
         new UIComponent('config-item-class-definition', 'cmdb/config-item-class-definition', []),
-        new UIComponent('new-config-item-class-dialog', 'cmdb/admin/dialogs/new-config-item-class-dialog', []),
-        new UIComponent('edit-config-item-class-dialog', 'cmdb/admin/dialogs/edit-config-item-class-dialog', []),
         new UIComponent(
             'compare-config-item-version-dialog', 'cmdb/dialogs/compare-config-item-version-dialog', []
         ),

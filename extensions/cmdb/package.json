@@ -13,7 +13,8 @@
             "compare-config-item-version-dialog-configuration": "../../dist/registry-modules/cmdb/compare-config-item-version-dialog-configuration.extension"
         },
         "kix:modules": {
-            "cmdb-module": "../../dist/registry-modules/cmdb/kix-module.extension"
+            "cmdb-module": "../../dist/registry-modules/cmdb/kix-module.extension",
+            "cmdb-admin-module": "../../dist/registry-modules/cmdb/admin/kix-module.extension"
         },
         "kix:admin-module": {
             "cmdb-admin": "../../dist/registry-modules/cmdb/admin/admin-module.extension"
