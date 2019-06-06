@@ -468,6 +468,11 @@ msgstr "Rolle wird angelegt"
 msgid "Create State"
 msgstr "Status hinzufügen"
 
+#, fuzzy
+#| msgid "New Text Module"
+msgid "Create Text Module"
+msgstr "Neuer Textbaustein"
+
 msgid "Create Ticket"
 msgstr "Neues Ticket"
 
@@ -953,6 +958,76 @@ msgstr "Hilfetext_Admin_SystemAddressCreate_Name"
 msgid "Helptext_Admin_SystemAddressCreate_Validity"
 msgstr "Hilfetext_Admin_SystemAddressCreate_Validity"
 
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Comment"
+msgid "Helptext_Admin_TextModuleCreate_Comment"
+msgstr "Hilfetext_Admin_QueueCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Name"
+msgid "Helptext_Admin_TextModuleCreate_Keywords"
+msgstr "Hilfetext_Admin_QueueCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Name"
+msgid "Helptext_Admin_TextModuleCreate_Language"
+msgstr "Hilfetext_Admin_QueueCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Name"
+msgid "Helptext_Admin_TextModuleCreate_Name"
+msgstr "Hilfetext_Admin_QueueCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Signature"
+msgid "Helptext_Admin_TextModuleCreate_Subject"
+msgstr "Hilfetext_Admin_QueueCreate_Signature"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Name"
+msgid "Helptext_Admin_TextModuleCreate_Text"
+msgstr "Hilfetext_Admin_QueueCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Validity"
+msgid "Helptext_Admin_TextModuleCreate_Validity"
+msgstr "Hilfetext_Admin_QueueCreate_Validity"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_Comment"
+msgid "Helptext_Admin_TextModuleEdit_Comment"
+msgstr "Hilfetext_Admin_QueueEdit_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_Name"
+msgid "Helptext_Admin_TextModuleEdit_Keywords"
+msgstr "Hilfetext_Admin_QueueEdit_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_Name"
+msgid "Helptext_Admin_TextModuleEdit_Language"
+msgstr "Hilfetext_Admin_QueueEdit_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_Name"
+msgid "Helptext_Admin_TextModuleEdit_Name"
+msgstr "Hilfetext_Admin_QueueEdit_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_Signature"
+msgid "Helptext_Admin_TextModuleEdit_Subject"
+msgstr "Hilfetext_Admin_QueueEdit_Signature"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_Name"
+msgid "Helptext_Admin_TextModuleEdit_Text"
+msgstr "Hilfetext_Admin_QueueEdit_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_Validity"
+msgid "Helptext_Admin_TextModuleEdit_Validity"
+msgstr "Hilfetext_Admin_QueueEdit_Validity"
+
 msgid "Helptext_Organisations_ContactCreate_City"
 msgstr "Hilfetext_Organisations_ContactCreate_City"
 
@@ -1264,6 +1339,9 @@ msgstr "Internationalisierung: Übersetzungen"
 
 msgid "Invalid date."
 msgstr "Ungültiges Datum."
+
+msgid "Keywords"
+msgstr ""
 
 msgid "Knowledge Database"
 msgstr "Wissensdatenbank"
@@ -2233,11 +2311,21 @@ msgstr "Vorlagen"
 msgid "Templates successfully removed."
 msgstr "Vorlagen wurde erfolgreich entfernt."
 
+#, fuzzy
+#| msgid "Full Text"
+msgid "Text"
+msgstr "Volltext"
+
 msgid "Text Module"
 msgstr "Textbaustein"
 
 msgid "Text Modules"
 msgstr "Textbausteine"
+
+#, fuzzy
+#| msgid "Role successfully created."
+msgid "Text Module successfully created."
+msgstr "Rolle wurde erfolgreich angelegt."
 
 msgid "Text separator"
 msgstr "Texttrenner"
@@ -2460,6 +2548,11 @@ msgstr "Aktualisierung wird durchgeführt"
 
 msgid "Update State"
 msgstr "Aktualisierung wird durchgeführt"
+
+#, fuzzy
+#| msgid "Edit Text Module"
+msgid "Update Text Module"
+msgstr "Textbausteine bearbeiten"
 
 msgid "Update time"
 msgstr "Aktualisierung wird durchgeführt"
