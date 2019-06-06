@@ -1,6 +1,6 @@
 import {
     AbstractAction, ComponentContent, ConfirmOverlayContent,
-    OverlayType, KIXObjectType, ToastContent
+    OverlayType, KIXObjectType, ToastContent, CRUD
 } from '../../../../../model';
 import { OverlayService } from '../../../../OverlayService';
 import { EventService } from '../../../../event';
@@ -8,8 +8,13 @@ import { KIXObjectService } from '../../../../kix';
 import { ApplicationEvent } from '../../../../application';
 import { ITable } from '../../../../table';
 import { TranslationService } from '../../../TranslationService';
+import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 
 export class TranslationTableDeleteAction extends AbstractAction<ITable> {
+
+    public permissions: UIComponentPermission[] = [
+        new UIComponentPermission('i18n/translations/*', [CRUD.DELETE])
+    ];
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Delete';

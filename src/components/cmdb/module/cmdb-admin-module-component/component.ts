@@ -6,7 +6,7 @@ import {
     KIXObjectType, ContextDescriptor, ContextType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration, CRUD
 } from "../../../../core/model";
 import {
-    ConfigItemClassCreateAction, ConfigItemClassImportAction, ConfigItemClassEditAction, ConfigItemClassDetailsContext,
+    ConfigItemClassCreateAction, ConfigItemClassEditAction, ConfigItemClassDetailsContext,
     NewConfigItemClassDialogContext, EditConfigItemClassDialogContext
 } from "../../../../core/browser/cmdb";
 import { AuthenticationSocketClient } from "../../../../core/browser/application/AuthenticationSocketClient";
@@ -19,8 +19,6 @@ class Component extends AbstractMarkoComponent {
     }
 
     public async onMount(): Promise<void> {
-
-        ActionFactory.getInstance().registerAction('cmdb-admin-ci-class-import', ConfigItemClassImportAction);
 
         if (await this.checkPermission('cmdb/classes', CRUD.CREATE)) {
             ActionFactory.getInstance().registerAction('cmdb-admin-ci-class-create', ConfigItemClassCreateAction);

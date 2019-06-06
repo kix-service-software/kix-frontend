@@ -11,14 +11,8 @@ import {
 import {
     TranslationLabelProvider, TranslationLanguageLabelProvider
 } from '../../../../core/browser/i18n';
-import {
-    TranslationCreateAction, TranslationImportAction, TranslationCSVExportAction, TranslationEditAction
-} from '../../../../core/browser/i18n/admin/actions';
 import { TranslationTableFactory, TranslationLanguageTableFactory } from '../../../../core/browser/i18n/admin/table';
 import { PersonalSettingsFormService } from '../../../../core/browser/settings/PersonalSettingsFormService';
-import {
-    NewTranslationDialogContext, TranslationDetailsContext, EditTranslationDialogContext
-} from '../../../../core/browser/i18n/admin/context';
 import { TranslationFormService } from '../../../../core/browser/i18n/admin/TranslationFormService';
 import { SearchResultPrintAction } from '../../../../core/browser/search/actions';
 import { SearchContext } from '../../../../core/browser/search/context';
@@ -73,10 +67,6 @@ class Component extends AbstractMarkoComponent {
         TableFactoryService.getInstance().registerFactory(new TranslationLanguageTableFactory());
         LabelService.getInstance().registerLabelProvider(new TranslationLabelProvider());
         LabelService.getInstance().registerLabelProvider(new TranslationLanguageLabelProvider());
-        ActionFactory.getInstance().registerAction('i18n-admin-translation-create', TranslationCreateAction);
-        ActionFactory.getInstance().registerAction('i18n-admin-translation-edit', TranslationEditAction);
-        ActionFactory.getInstance().registerAction('i18n-admin-translation-import', TranslationImportAction);
-        ActionFactory.getInstance().registerAction('i18n-admin-translation-csv-export', TranslationCSVExportAction);
 
         TableFactoryService.getInstance().registerFactory(new PermissionsTableFactory());
         TableCSSHandlerRegistry.getInstance().registerCSSHandler(
@@ -114,27 +104,6 @@ class Component extends AbstractMarkoComponent {
         );
         ContextService.getInstance().registerContext(settingsDialogContext);
 
-        const newTranslationDialogContext = new ContextDescriptor(
-            NewTranslationDialogContext.CONTEXT_ID, [KIXObjectType.TRANSLATION],
-            ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-translation-dialog', ['translations'], NewTranslationDialogContext
-        );
-        ContextService.getInstance().registerContext(newTranslationDialogContext);
-
-        const editTranslationDialogContext = new ContextDescriptor(
-            EditTranslationDialogContext.CONTEXT_ID, [KIXObjectType.TRANSLATION],
-            ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            false, 'edit-translation-dialog', ['translations'], EditTranslationDialogContext
-        );
-        ContextService.getInstance().registerContext(editTranslationDialogContext);
-
-        const translationDetailsContext = new ContextDescriptor(
-            TranslationDetailsContext.CONTEXT_ID, [KIXObjectType.TRANSLATION],
-            ContextType.MAIN, ContextMode.DETAILS,
-            false, 'object-details-page', ['translations'], TranslationDetailsContext
-        );
-        ContextService.getInstance().registerContext(translationDetailsContext);
-
     }
 
     private registerDialogs(): void {
@@ -155,25 +124,6 @@ class Component extends AbstractMarkoComponent {
             ),
             KIXObjectType.ANY,
             ContextMode.EDIT_BULK
-        ));
-
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'new-translation-dialog',
-            new WidgetConfiguration(
-                'new-translation-dialog', 'Translatable#New Translation', [], {},
-                false, false, null, 'kix-icon-new-gear'
-            ),
-            KIXObjectType.TRANSLATION,
-            ContextMode.CREATE_ADMIN
-        ));
-
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'edit-translation-dialog',
-            new WidgetConfiguration(
-                'edit-translation-dialog', 'Translatable#Edit Translation', [], {}, false, false, null, 'kix-icon-edit'
-            ),
-            KIXObjectType.TRANSLATION,
-            ContextMode.EDIT_ADMIN
         ));
     }
 

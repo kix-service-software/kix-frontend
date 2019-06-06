@@ -1,8 +1,13 @@
-import { AbstractAction, FormInstance, KIXObjectType, ContextMode } from "../../../../model";
+import { AbstractAction, FormInstance, KIXObjectType, ContextMode, CRUD } from "../../../../model";
 import { FormService } from "../../../form";
 import { ContextService } from "../../../context";
+import { UIComponentPermission } from "../../../../model/UIComponentPermission";
 
 export class ConfigItemClassEditAction extends AbstractAction {
+
+    public permissions: UIComponentPermission[] = [
+        new UIComponentPermission('camdb/classes/*', [CRUD.UPDATE])
+    ];
 
     public async initAction(): Promise<void> {
         this.text = 'Edit';

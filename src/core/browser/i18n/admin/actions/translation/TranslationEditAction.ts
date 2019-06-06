@@ -1,10 +1,17 @@
-import { AbstractAction, ContextMode, KIXObjectType, FormInstance, Translation, FormField } from "../../../../../model";
+import {
+    AbstractAction, ContextMode, KIXObjectType, FormInstance, Translation, FormField, CRUD
+} from "../../../../../model";
 import { ContextService } from "../../../../context";
 import { FormService } from "../../../../form";
 import { TranslationDetailsContext } from "../../context";
 import { FormFactory } from "../../../../form/FormFactory";
+import { UIComponentPermission } from "../../../../../model/UIComponentPermission";
 
 export class TranslationEditAction extends AbstractAction {
+
+    public permissions: UIComponentPermission[] = [
+        new UIComponentPermission('i18n/translations/*', [CRUD.UPDATE])
+    ];
 
     public async initAction(): Promise<void> {
         this.text = 'Edit';

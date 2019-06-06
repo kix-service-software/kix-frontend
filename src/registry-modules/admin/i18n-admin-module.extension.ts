@@ -1,4 +1,5 @@
-import { IAdminModuleExtension, AdminModuleCategory, AdminModule, KIXObjectType } from "../../core/model";
+import { IAdminModuleExtension, AdminModuleCategory, AdminModule, KIXObjectType, CRUD } from "../../core/model";
+import { UIComponentPermission } from "../../core/model/UIComponentPermission";
 
 class Extension implements IAdminModuleExtension {
 
@@ -8,7 +9,10 @@ class Extension implements IAdminModuleExtension {
                 null, 'i18n', 'Translatable#Internationalisation', null, [], [
                     new AdminModule(
                         null, 'translations', 'Translatable#Translations', null,
-                        KIXObjectType.TRANSLATION, 'i18n-admin-translations'
+                        KIXObjectType.TRANSLATION, 'i18n-admin-translations', [
+                            new UIComponentPermission('i18n/translations', [CRUD.CREATE], true),
+                            new UIComponentPermission('i18n/translations/*', [CRUD.UPDATE], true)
+                        ]
                     )
                 ])
         ];
