@@ -12,14 +12,6 @@ export enum TextModuleProperty {
 
     SUBJECT = 'Subject',
 
-    LANGUAGE = 'Language',
-
-    // AGENT_FRONTEND = 'AgentFrontend',
-
-    // CUSTOMER_FRONTEND = 'CustomerFrontend',
-
-    // PUBLIC_FRONTEND = 'PublicFrontend',
-
-    // INTERFACE = 'INTERFACE'
+    LANGUAGE = 'Language'
 
 }

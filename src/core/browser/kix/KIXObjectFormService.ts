@@ -15,11 +15,12 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
         return kixObjectServiceType === ServiceType.FORM;
     }
 
-    public async initValues(form: Form): Promise<Map<string, FormFieldValue<any>>> {
-        let kixObject: KIXObject;
-        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-        if (context) {
-            kixObject = await context.getObject();
+    public async initValues(form: Form, kixObject?: KIXObject): Promise<Map<string, FormFieldValue<any>>> {
+        if (!kixObject) {
+            const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+            if (context) {
+                kixObject = await context.getObject();
+            }
         }
 
         const formFieldValues: Map<string, FormFieldValue<any>> = new Map();
