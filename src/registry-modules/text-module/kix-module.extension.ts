@@ -1,12 +1,17 @@
 import { IKIXModuleExtension } from "../../core/extensions";
 import { UIComponent } from "../../core/model/UIComponent";
+import { UIComponentPermission } from "../../core/model/UIComponentPermission";
+import { CRUD } from "../../core/model";
 
 class Extension implements IKIXModuleExtension {
 
     public id = 'text-module-module';
 
     public initComponents: UIComponent[] = [
-        new UIComponent('text-module-module-component', 'text-module/module-component', [])
+        new UIComponent('text-module-module-component', 'text-module/module-component', [
+            new UIComponentPermission('textmodules', [CRUD.CREATE], true),
+            new UIComponentPermission('textmodules/*', [CRUD.UPDATE], true)
+        ])
     ];
 
     public external: boolean = false;

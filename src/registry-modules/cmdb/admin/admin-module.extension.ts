@@ -10,8 +10,8 @@ class Extension implements IAdminModuleExtension {
                     new AdminModule(
                         null, 'cmdb-classes', 'Translatable#CI Classes', null,
                         KIXObjectType.CONFIG_ITEM_CLASS, 'cmdb-admin-ci-classes', [
-                            new UIComponentPermission('cmdb/classes', [CRUD.CREATE]),
-                            new UIComponentPermission('cmdb/classes/*', [CRUD.UPDATE])
+                            new UIComponentPermission('cmdb/classes', [CRUD.CREATE], true),
+                            new UIComponentPermission('cmdb/classes/*', [CRUD.UPDATE], true)
                         ]
                     )
                 ])

@@ -10,15 +10,15 @@ class Extension implements IAdminModuleExtension {
                     new AdminModule(
                         null, 'users', 'Translatable#Agents', null,
                         KIXObjectType.USER, 'user-admin-users', [
-                            new UIComponentPermission('users', [CRUD.CREATE]),
-                            new UIComponentPermission('users/*', [CRUD.UPDATE])
+                            new UIComponentPermission('users', [CRUD.CREATE], true),
+                            new UIComponentPermission('users/*', [CRUD.UPDATE], true)
                         ]
                     ),
                     new AdminModule(
                         null, 'roles', 'Translatable#Roles/Permissions', null,
                         KIXObjectType.ROLE, 'user-admin-roles', [
-                            new UIComponentPermission('roles', [CRUD.CREATE]),
-                            new UIComponentPermission('roles/*', [CRUD.UPDATE])
+                            new UIComponentPermission('roles', [CRUD.CREATE], true),
+                            new UIComponentPermission('roles/*', [CRUD.UPDATE], true)
                         ]
                     ),
                 ])
