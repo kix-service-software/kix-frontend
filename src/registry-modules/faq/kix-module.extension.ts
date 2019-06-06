@@ -16,7 +16,11 @@ class Extension implements IKIXModuleExtension {
         new UIComponent('faq-edit-module-component', 'faq/module/faq-edit-module-component', [
             new UIComponentPermission('faq/articles', [CRUD.CREATE]),
             new UIComponentPermission('faq/articles/*', [CRUD.UPDATE])
-        ])
+        ]),
+        new UIComponent('faq-read-module-component', 'faq/module/faq-admin-module-component', [
+            new UIComponentPermission('faq/categories', [CRUD.CREATE], true),
+            new UIComponentPermission('faq/categories/*', [CRUD.UPDATE], true)
+        ]),
     ];
 
     public external: boolean = false;

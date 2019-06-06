@@ -1,4 +1,5 @@
-import { IAdminModuleExtension, AdminModuleCategory, AdminModule, KIXObjectType } from "../../../core/model";
+import { IAdminModuleExtension, AdminModuleCategory, AdminModule, KIXObjectType, CRUD } from "../../../core/model";
+import { UIComponentPermission } from "../../../core/model/UIComponentPermission";
 
 class Extension implements IAdminModuleExtension {
 
@@ -8,7 +9,10 @@ class Extension implements IAdminModuleExtension {
                 null, 'knowledge-database', 'Translatable#Knowledge Database', null, [], [
                     new AdminModule(
                         null, 'faq-categories', 'Translatable#FAQ Categories', null,
-                        KIXObjectType.FAQ_CATEGORY, 'faq-admin-categories'
+                        KIXObjectType.FAQ_CATEGORY, 'faq-admin-categories', [
+                            new UIComponentPermission('faq/categories', [CRUD.CREATE], true),
+                            new UIComponentPermission('faq/categories/*', [CRUD.UPDATE], true)
+                        ]
                     )
                 ])
         ];
