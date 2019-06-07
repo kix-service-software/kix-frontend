@@ -46,6 +46,8 @@ export class Component {
     private setActiveNode(category: ConfigItemClass): void {
         if (category) {
             this.state.activeNode = this.getActiveNode(category);
+        } else {
+            this.showAll();
         }
     }
 
