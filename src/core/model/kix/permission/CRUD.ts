@@ -1,12 +1,12 @@
 export enum CRUD {
 
-    CREATE = 1 << 0,
+    CREATE = 0x0001,
 
-    READ = 1 << 1,
+    READ = 0x0002,
 
-    UPDATE = 1 << 2,
+    UPDATE = 0x0004,
 
-    DELETE = 1 << 3,
+    DELETE = 0x0008,
 
-    DENY = 1 << 4
+    DENY = 0xf000
 }
