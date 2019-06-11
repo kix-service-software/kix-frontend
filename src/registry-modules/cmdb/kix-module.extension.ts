@@ -15,7 +15,8 @@ class Extension implements IKIXModuleExtension {
         ]),
         new UIComponent('cmdb-module-edit-component', 'cmdb/module/cmdb-edit-module-component', [
             new UIComponentPermission('cmdb/configitems/*', [CRUD.UPDATE]),
-            new UIComponentPermission('cmdb/configitems/*/versions', [CRUD.CREATE])
+            new UIComponentPermission('cmdb/configitems/*/versions', [CRUD.CREATE]),
+            new UIComponentPermission('cmdb/classes', [CRUD.READ])
         ])
     ];
 
