@@ -15,6 +15,7 @@
             "contact-import-dialog-configuration": "../../dist/registry-modules/organisation/contact-import-dialog-configuration.extension"
         },
         "kix:modules": {
+            "customer-module": "../../dist/registry-modules/organisation/kix-module-customer.extension",
             "contact-module": "../../dist/registry-modules/organisation/kix-module-contact.extension",
             "organisation-module": "../../dist/registry-modules/organisation/kix-module-organisation.extension"
         }

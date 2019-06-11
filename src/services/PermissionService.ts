@@ -1,8 +1,7 @@
 import { UIComponent } from "../core/model/UIComponent";
 import { HttpService } from "../core/services";
 import { UIComponentPermission } from "../core/model/UIComponentPermission";
-import { ContextConfiguration, Context, WidgetConfiguration, ConfiguredWidget } from "../core/model";
-import { config } from "memcached";
+import { ContextConfiguration, ConfiguredWidget } from "../core/model";
 
 export class PermissionService {
 
@@ -20,12 +19,7 @@ export class PermissionService {
     public async filterUIComponents(token: string, uiComponents: UIComponent[]): Promise<UIComponent[]> {
         const components: UIComponent[] = [];
         for (const component of uiComponents) {
-            const permissionChecks: Array<Promise<boolean>> = [];
-            component.permissions.forEach((p) => {
-                permissionChecks.push(this.methodAllowed(token, p));
-            });
-            const checks = await Promise.all(permissionChecks);
-            if (!checks.some((c) => !c)) {
+            if (await this.checkPermissions(token, component.permissions)) {
                 components.push(component);
             }
         }

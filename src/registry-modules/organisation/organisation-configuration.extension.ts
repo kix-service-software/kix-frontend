@@ -32,19 +32,22 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
         );
 
         const contactListWidget =
-            new ConfiguredWidget('20180529144530', new WidgetConfiguration(
-                'table-widget', 'Translatable#Overview Contacts', [
-                    'contact-search-action',
-                    'contact-create-action',
-                    'import-action',
-                    'csv-export-action'
-                ], {
-                    objectType: KIXObjectType.CONTACT,
-                    tableConfiguration: new TableConfiguration(KIXObjectType.CONTACT,
-                        null, null, null, null, true
-                    )
-                },
-                false, true, WidgetSize.LARGE, 'kix-icon-man-bubble', false)
+            new ConfiguredWidget('20180529144530',
+                new WidgetConfiguration(
+                    'table-widget', 'Translatable#Overview Contacts', [
+                        'contact-search-action',
+                        'contact-create-action',
+                        'import-action',
+                        'csv-export-action'
+                    ], {
+                        objectType: KIXObjectType.CONTACT,
+                        tableConfiguration: new TableConfiguration(KIXObjectType.CONTACT,
+                            null, null, null, null, true
+                        )
+                    },
+                    false, true, WidgetSize.LARGE, 'kix-icon-man-bubble', false
+                ),
+                [new UIComponentPermission('contacts', [CRUD.READ])]
             );
 
         const content: string[] = ['20180529102830', '20180529144530'];
