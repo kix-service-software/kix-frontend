@@ -2,7 +2,8 @@
     "name": "kix-text-module",
     "extensions": {
         "kix:configuration": {
-            "new-text-module-dialog-configuration": "../../dist/registry-modules/text-module/new-text-module-dialog-configuration.extension"
+            "new-text-module-dialog-configuration": "../../dist/registry-modules/text-module/new-text-module-dialog-configuration.extension",
+            "edit-text-module-dialog-configuration": "../../dist/registry-modules/text-module/edit-text-module-dialog-configuration.extension"
         },
         "kix:modules": {
             "text-module-module": "../../dist/registry-modules/text-module/kix-module.extension"

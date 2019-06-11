@@ -31,6 +31,16 @@ export class TextModuleService extends KIXObjectService {
         return 'TextModule';
     }
 
+    protected async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+        switch (property) {
+            case TextModuleProperty.KEYWORDS:
+                value = value ? value.split(/[,;\s]\s?/) : undefined;
+                break;
+            default:
+        }
+        return [[property, value]];
+    }
+
     public async getAutoFillConfiguration(textMatch: any, placeholder: string): Promise<IAutofillConfiguration> {
         const allowed = await AuthenticationSocketClient.getInstance().checkPermissions([
             new UIComponentPermission('textmodules', [CRUD.READ])
@@ -87,15 +97,10 @@ export class TextModuleService extends KIXObjectService {
     }
 
     private async getTextModules(query: string): Promise<TextModule[]> {
-        let filterCriteria = [
-            // new FilterCriteria(
-            //     TextModuleProperty.AGENT_FRONTEND, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
-            // )
-        ];
+        let filterCriteria = [];
 
         if (query && query !== '') {
             filterCriteria = [
-                ...filterCriteria,
                 new FilterCriteria(
                     TextModuleProperty.SUBJECT, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, query
                 ),

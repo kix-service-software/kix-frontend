@@ -1,10 +1,11 @@
-import { KIXObjectType, TextModuleProperty, KIXObjectProperty, DataType } from "../../../model";
+import { KIXObjectType, TextModuleProperty, KIXObjectProperty, DataType, ContextMode } from "../../../model";
 import {
     TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableHeaderHeight, IColumnConfiguration, TableRowHeight
 } from "../../table";
 import { TextModulesTableContentProvider } from "./TextModulesTableContentProvider";
 import { TableFactory } from "../../table/TableFactory";
+import { DialogRoutingConfiguration } from "../../router";
 
 export class TextModulesTableFactory extends TableFactory {
 
@@ -60,7 +61,10 @@ export class TextModulesTableFactory extends TableFactory {
         }
 
         if (defaultRouting) {
-            //
+            tableConfiguration.routingConfiguration = new DialogRoutingConfiguration(
+                null, KIXObjectType.TEXT_MODULE, ContextMode.EDIT_ADMIN, TextModuleProperty.ID, null, true,
+                undefined, true, 'edit-text-module-form'
+            );
         }
 
         return tableConfiguration;

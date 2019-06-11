@@ -8,7 +8,7 @@ import {
 import { TableFactoryService } from '../../../core/browser/table';
 import {
     TextModuleService, TextModuleBrowserFactory, TextModulesTableFactory, TextModuleLabelProvider,
-    NewTextModuleDialogContext, TextModuleCreateAction
+    NewTextModuleDialogContext, TextModuleCreateAction, EditTextModuleDialogContext, TextModuleFormService
 } from '../../../core/browser/text-modules';
 
 class Component extends AbstractMarkoComponent {
@@ -25,6 +25,8 @@ class Component extends AbstractMarkoComponent {
         TableFactoryService.getInstance().registerFactory(new TextModulesTableFactory());
         LabelService.getInstance().registerLabelProvider(new TextModuleLabelProvider());
 
+        ServiceRegistry.registerServiceInstance(TextModuleFormService.getInstance());
+
         this.registerAdminContexts();
         this.registerAdminActions();
         this.registerAdminDialogs();
@@ -38,12 +40,12 @@ class Component extends AbstractMarkoComponent {
         );
         ContextService.getInstance().registerContext(newTextModuleDialogContext);
 
-        // const editTextModuleDialogContext = new ContextDescriptor(
-        //     EditTextModuleDialogContext.CONTEXT_ID, [KIXObjectType.TEXT_MODULE],
-        //     ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-        //     false, 'edit-text-module-dialog', ['text-modules'], EditTextModuleDialogContext
-        // );
-        // ContextService.getInstance().registerContext(editTextModuleDialogContext);
+        const editTextModuleDialogContext = new ContextDescriptor(
+            EditTextModuleDialogContext.CONTEXT_ID, [KIXObjectType.TEXT_MODULE],
+            ContextType.DIALOG, ContextMode.EDIT_ADMIN,
+            false, 'edit-text-module-dialog', ['text-modules'], EditTextModuleDialogContext
+        );
+        ContextService.getInstance().registerContext(editTextModuleDialogContext);
     }
 
     private registerAdminActions(): void {
@@ -63,15 +65,15 @@ class Component extends AbstractMarkoComponent {
             ContextMode.CREATE_ADMIN
         ));
 
-        // DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-        //     'edit-text-module-dialog',
-        //     new WidgetConfiguration(
-        //         'edit-text-module-dialog', 'Translatable#Edit Text Module',
-        //         [], {}, false, false, null, 'kix-icon-edit'
-        //     ),
-        //     KIXObjectType.TEXT_MODULE,
-        //     ContextMode.EDIT_ADMIN
-        // ));
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'edit-text-module-dialog',
+            new WidgetConfiguration(
+                'edit-text-module-dialog', 'Translatable#Edit Text Module',
+                [], {}, false, false, null, 'kix-icon-edit'
+            ),
+            KIXObjectType.TEXT_MODULE,
+            ContextMode.EDIT_ADMIN
+        ));
     }
 }
 

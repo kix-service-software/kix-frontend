@@ -448,6 +448,9 @@ msgstr ""
 msgid "Create State"
 msgstr ""
 
+msgid "Create Text Module"
+msgstr ""
+
 msgid "Create Ticket"
 msgstr ""
 
@@ -920,6 +923,48 @@ msgstr ""
 msgid "Helptext_Admin_SystemAddressCreate_Validity"
 msgstr ""
 
+msgid "Helptext_Admin_TextModuleCreate_Comment"
+msgstr ""
+
+msgid "Helptext_Admin_TextModuleCreate_Keywords"
+msgstr ""
+
+msgid "Helptext_Admin_TextModuleCreate_Language"
+msgstr ""
+
+msgid "Helptext_Admin_TextModuleCreate_Name"
+msgstr ""
+
+msgid "Helptext_Admin_TextModuleCreate_Subject"
+msgstr ""
+
+msgid "Helptext_Admin_TextModuleCreate_Text"
+msgstr ""
+
+msgid "Helptext_Admin_TextModuleCreate_Validity"
+msgstr ""
+
+msgid "Helptext_Admin_TextModuleEdit_Comment"
+msgstr ""
+
+msgid "Helptext_Admin_TextModuleEdit_Keywords"
+msgstr ""
+
+msgid "Helptext_Admin_TextModuleEdit_Language"
+msgstr ""
+
+msgid "Helptext_Admin_TextModuleEdit_Name"
+msgstr ""
+
+msgid "Helptext_Admin_TextModuleEdit_Subject"
+msgstr ""
+
+msgid "Helptext_Admin_TextModuleEdit_Text"
+msgstr ""
+
+msgid "Helptext_Admin_TextModuleEdit_Validity"
+msgstr ""
+
 msgid "Helptext_Organisations_ContactCreate_City"
 msgstr ""
 
@@ -1224,6 +1269,9 @@ msgid "Internationalisation: Translations"
 msgstr ""
 
 msgid "Invalid date."
+msgstr ""
+
+msgid "Keywords"
 msgstr ""
 
 msgid "Knowledge Database"
@@ -2146,10 +2194,16 @@ msgstr ""
 msgid "Templates successfully removed."
 msgstr ""
 
+msgid "Text"
+msgstr ""
+
 msgid "Text Module"
 msgstr ""
 
 msgid "Text Modules"
+msgstr ""
+
+msgid "Text Module successfully created."
 msgstr ""
 
 msgid "Text separator"
@@ -2367,6 +2421,9 @@ msgid "Update Role"
 msgstr ""
 
 msgid "Update State"
+msgstr ""
+
+msgid "Update Text Module"
 msgstr ""
 
 msgid "Update time"
