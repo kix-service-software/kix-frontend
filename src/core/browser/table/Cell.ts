@@ -62,7 +62,6 @@ export class Cell implements ICell {
                     );
                 }
             }
-            value = value ? value : this.tableValue.objectValue ? this.tableValue.objectValue.toString() : '';
             this.getValue().displayValue = value;
 
             resolve(value);
