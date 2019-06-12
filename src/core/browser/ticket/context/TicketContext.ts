@@ -11,7 +11,7 @@ export class TicketContext extends Context {
 
     public static CONTEXT_ID: string = 'tickets';
 
-    public queue: Queue;
+    public queueId: number;
 
     public getIcon(): string {
         return 'kix-icon-ticket';
@@ -21,8 +21,8 @@ export class TicketContext extends Context {
         return 'Ticket Dashboard';
     }
 
-    public async setQueue(queue: Queue): Promise<void> {
-        this.queue = queue;
+    public async setQueue(queueId: number): Promise<void> {
+        this.queueId = queueId;
         await this.loadTickets();
     }
 
@@ -31,10 +31,10 @@ export class TicketContext extends Context {
             new FilterCriteria('StateType', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'),
         ], null, 1000, ['EscalationTime', 'Watchers']);
 
-        if (this.queue) {
+        if (this.queueId) {
             const queueFilter = new FilterCriteria(
                 TicketProperty.QUEUE_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                FilterType.AND, this.queue.QueueID
+                FilterType.AND, this.queueId
             );
             loadingOptions.filter.push(queueFilter);
         }
@@ -65,7 +65,7 @@ export class TicketContext extends Context {
 
     public reset(): void {
         super.reset();
-        this.queue = null;
+        this.queueId = null;
     }
 
 }
