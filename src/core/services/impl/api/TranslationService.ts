@@ -13,6 +13,8 @@ import {
 
 export class TranslationService extends KIXObjectService {
 
+    protected RESOURCE_URI: string = this.buildUri('i18n', 'translations');
+
     private static INSTANCE: TranslationService;
 
     public static getInstance(): TranslationService {
@@ -21,8 +23,6 @@ export class TranslationService extends KIXObjectService {
         }
         return TranslationService.INSTANCE;
     }
-
-    protected RESOURCE_URI: string = 'i18n/translations';
 
     public objectType: KIXObjectType = KIXObjectType.TRANSLATION;
 
@@ -79,8 +79,9 @@ export class TranslationService extends KIXObjectService {
             createParameter.push([TranslationProperty.LANGUAGES, languages]);
         }
 
+        const uri = this.buildUri('system', 'i18n', 'translations');
         const id = await super.executeUpdateOrCreateRequest(
-            token, clientRequestId, createParameter, this.RESOURCE_URI, KIXObjectType.TRANSLATION, 'TranslationID', true
+            token, clientRequestId, createParameter, uri, KIXObjectType.TRANSLATION, 'TranslationID', true
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
@@ -95,7 +96,7 @@ export class TranslationService extends KIXObjectService {
     ): Promise<string | number> {
         const pattern = parameter.find((p) => p[0] === TranslationProperty.PATTERN);
 
-        const uri = this.buildUri(this.RESOURCE_URI, objectId);
+        const uri = this.buildUri('system', 'i18n', 'translations', objectId);
         const id = await super.executeUpdateOrCreateRequest(
             token, clientRequestId, [pattern], uri, this.objectType, 'TranslationID'
         );
@@ -124,19 +125,18 @@ export class TranslationService extends KIXObjectService {
                     const translationParameter: Array<[string, string]> =
                         [[TranslationLanguageProperty.VALUE, param[1].trim()]];
 
-                    const uri = this.buildUri(this.RESOURCE_URI, translationId, 'languages', param[0]);
+                    const uri = this.buildUri('system', 'i18n', 'translations', translationId, 'languages', param[0]);
                     await super.executeUpdateOrCreateRequest(
                         token, clientRequestId, translationParameter, uri,
                         KIXObjectType.TRANSLATION_LANGUAGE, 'TranslationLanguageID'
                     );
                 } else {
-                    await this.sendDeleteRequest(
-                        token, clientRequestId, this.buildUri(this.RESOURCE_URI, translationId, 'languages', param[0]),
-                        KIXObjectType.TRANSLATION
-                    ).catch((error: Error) => {
-                        LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                        throw new Error(error.Code, error.Message);
-                    });
+                    const uri = this.buildUri('system', 'i18n', 'translations', translationId, 'languages', param[0]);
+                    await this.sendDeleteRequest(token, clientRequestId, uri, KIXObjectType.TRANSLATION)
+                        .catch((error: Error) => {
+                            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                            throw new Error(error.Code, error.Message);
+                        });
                 }
 
             } else if (this.hasValue(param[1])) {
@@ -145,7 +145,7 @@ export class TranslationService extends KIXObjectService {
                     [TranslationLanguageProperty.VALUE, param[1].trim()]
                 ];
 
-                const uri = this.buildUri(this.RESOURCE_URI, translationId, 'languages');
+                const uri = this.buildUri('system', 'i18n', 'translations', translationId, 'languages');
 
                 await super.executeUpdateOrCreateRequest(
                     token, clientRequestId, createParameter, uri, KIXObjectType.TRANSLATION_LANGUAGE,
@@ -164,7 +164,7 @@ export class TranslationService extends KIXObjectService {
     }
 
     public async getTranslations(token: string, loadingOptions?: KIXObjectLoadingOptions): Promise<Translation[]> {
-        const uri = this.buildUri(this.RESOURCE_URI);
+        const uri = this.buildUri('system', 'i18n', 'translations');
 
         if (!loadingOptions) {
             loadingOptions = new KIXObjectLoadingOptions(

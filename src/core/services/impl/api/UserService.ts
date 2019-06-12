@@ -25,9 +25,7 @@ export class UserService extends KIXObjectService {
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
-    protected RESOURCE_URI: string = "users";
-    private USER_RESOURCE_URI = "user";
-    protected SUB_RESOURCE_URI: string = 'preferences';
+    protected RESOURCE_URI: string = this.buildUri('system', 'users');
 
     public objectType: KIXObjectType = KIXObjectType.USER;
 
@@ -49,7 +47,7 @@ export class UserService extends KIXObjectService {
         } else if (objectType === KIXObjectType.USER_PREFERENCE) {
             if ((objectLoadingOptions as PreferencesLoadingOptions).userId) {
                 const uri = this.buildUri(
-                    this.RESOURCE_URI, (objectLoadingOptions as PreferencesLoadingOptions).userId, this.SUB_RESOURCE_URI
+                    this.RESOURCE_URI, (objectLoadingOptions as PreferencesLoadingOptions).userId, 'preferences'
                 );
                 objects = await super.load(
                     token, KIXObjectType.USER_PREFERENCE, uri, loadingOptions, objectIds, KIXObjectType.USER_PREFERENCE
@@ -63,7 +61,7 @@ export class UserService extends KIXObjectService {
     public async getUserByToken(token: string): Promise<User> {
         const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, ['Tickets', 'Preferences']);
         const users = await super.load<User>(
-            token, KIXObjectType.USER, this.USER_RESOURCE_URI, loadingOptions, null, KIXObjectType.USER, false
+            token, KIXObjectType.USER, 'user', loadingOptions, null, KIXObjectType.USER, false
         );
 
         return users && users.length ? users[0] : null;
@@ -93,7 +91,7 @@ export class UserService extends KIXObjectService {
             return id;
         } else if (objectType === KIXObjectType.USER_PREFERENCE) {
             const options = createOptions as SetPreferenceOptions;
-            const uri = this.buildUri(this.RESOURCE_URI, options.userId, this.SUB_RESOURCE_URI);
+            const uri = this.buildUri(this.RESOURCE_URI, options.userId, 'preferences');
             const id = await super.executeUpdateOrCreateRequest(
                 token, clientRequestId, parameter, uri, objectType, 'UserPreferenceID', true
             ).catch((error: Error) => {
@@ -143,7 +141,7 @@ export class UserService extends KIXObjectService {
             return id;
         } else if (objectType === KIXObjectType.USER_PREFERENCE) {
             const options = updateOptions as SetPreferenceOptions;
-            const uri = this.buildUri(this.RESOURCE_URI, options.userId, this.SUB_RESOURCE_URI, objectId);
+            const uri = this.buildUri(this.RESOURCE_URI, options.userId, 'preferences', objectId);
             const id = await super.executeUpdateOrCreateRequest(
                 token, clientRequestId, parameter, uri, objectType, 'UserPreferenceID'
             );

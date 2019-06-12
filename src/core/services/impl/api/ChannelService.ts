@@ -18,7 +18,7 @@ export class ChannelService extends KIXObjectService {
         return ChannelService.INSTANCE;
     }
 
-    protected RESOURCE_URI: string = 'channels';
+    protected RESOURCE_URI: string = this.buildUri('system', 'communication', 'channels');
 
     public objectType: KIXObjectType = KIXObjectType.CHANNEL;
 
@@ -46,17 +46,4 @@ export class ChannelService extends KIXObjectService {
         return objects;
     }
 
-    public async createObject(
-        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
-        createOptions?: KIXObjectSpecificCreateOptions
-    ): Promise<number> {
-        throw new Error('0', 'Method not implemented');
-    }
-
-    public async updateObject(
-        token: string, clientRequestId: string, objectType: KIXObjectType,
-        parameter: Array<[string, any]>, objectId: number | string
-    ): Promise<string | number> {
-        throw new Error('0', 'Method not implemented');
-    }
 }

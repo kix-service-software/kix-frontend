@@ -20,8 +20,7 @@ export class QueueService extends KIXObjectService {
         return QueueService.INSTANCE;
     }
 
-    protected RESOURCE_URI: string = 'queues';
-    protected SUB_RESOUCE_URI: string = 'followuptypes';
+    protected RESOURCE_URI: string = this.buildUri('system', 'queues');
 
     public objectType: KIXObjectType = KIXObjectType.QUEUE;
 
@@ -45,7 +44,7 @@ export class QueueService extends KIXObjectService {
             const uri = this.buildUri(this.RESOURCE_URI);
             objects = await super.load(token, KIXObjectType.QUEUE, uri, loadingOptions, objectIds, KIXObjectType.QUEUE);
         } else if (objectType === KIXObjectType.FOLLOW_UP_TYPE) {
-            const uri = this.buildUri(this.RESOURCE_URI, this.SUB_RESOUCE_URI);
+            const uri = this.buildUri(this.RESOURCE_URI, 'followuptypes');
             objects = await super.load(
                 token, KIXObjectType.FOLLOW_UP_TYPE, uri, loadingOptions, null, KIXObjectType.FOLLOW_UP_TYPE
             );

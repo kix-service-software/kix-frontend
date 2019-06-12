@@ -1,9 +1,7 @@
 import { KIXObjectService } from './KIXObjectService';
-import { ClientRegistration, SortOrder, KIXObjectType, SystemInfo, Error } from '../../../model';
+import { ClientRegistration, SortOrder, KIXObjectType, SystemInfo } from '../../../model';
 import {
-    CreateClientRegistration,
-    CreateClientRegistrationResponse,
-    CreateClientRegistrationRequest,
+    CreateClientRegistration, CreateClientRegistrationResponse, CreateClientRegistrationRequest,
     ClientRegistrationsResponse
 } from '../../../api';
 import { LoggingService } from '../LoggingService';
@@ -63,19 +61,6 @@ export class ClientRegistrationService extends KIXObjectService {
             );
 
         return response.SystemInfo;
-    }
-
-    public createObject(
-        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>
-    ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
-    }
-
-    public async updateObject(
-        token: string, clientRequestId: string, objectType: KIXObjectType,
-        parameter: Array<[string, any]>, objectId: number | string
-    ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
     }
 
     public async deleteClientRegistration(token: string, clientRequestId: string, clientId: number): Promise<void> {

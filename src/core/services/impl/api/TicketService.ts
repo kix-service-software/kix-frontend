@@ -24,10 +24,6 @@ import { ArticleFactory } from '../../object-factories/ArticleFactory';
 import { QueueService } from './QueueService';
 import { ArticleLoadingOptions } from '../../../model/kix/ticket/ArticleLoadingOptions';
 
-const RESOURCE_ARTICLES: string = 'articles';
-const RESOURCE_ATTACHMENTS: string = 'attachments';
-const RESOURCE_WATCHERS: string = 'watchers';
-
 export class TicketService extends KIXObjectService {
 
     private static INSTANCE: TicketService;
@@ -40,7 +36,6 @@ export class TicketService extends KIXObjectService {
     }
 
     protected RESOURCE_URI: string = 'tickets';
-    protected SUB_RESOURCE_URI: string = 'articles';
 
     public objectType: KIXObjectType = KIXObjectType.TICKET;
 
@@ -73,13 +68,15 @@ export class TicketService extends KIXObjectService {
                 token, KIXObjectType.TICKET, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.TICKET
             );
         } else if (objectType === KIXObjectType.SENDER_TYPE) {
-            objects = await super.load(token, KIXObjectType.SENDER_TYPE, 'sendertypes', null, null, 'SenderType');
+            const uri = this.buildUri('system', 'communication', 'sendertypes');
+            objects = await super.load(token, KIXObjectType.SENDER_TYPE, uri, null, null, 'SenderType');
         } else if (objectType === KIXObjectType.LOCK) {
-            objects = await super.load(token, KIXObjectType.LOCK, 'ticketlocks', null, null, 'Lock');
+            const uri = this.buildUri('system', 'ticket', 'locks');
+            objects = await super.load(token, KIXObjectType.LOCK, uri, null, null, 'Lock');
         } else if (objectType === KIXObjectType.ARTICLE) {
             if (objectLoadingOptions) {
                 const uri = this.buildUri(
-                    this.RESOURCE_URI, (objectLoadingOptions as ArticleLoadingOptions).ticketId, this.SUB_RESOURCE_URI
+                    this.RESOURCE_URI, (objectLoadingOptions as ArticleLoadingOptions).ticketId, 'articles'
                 );
                 objects = await super.load(token, KIXObjectType.ARTICLE, uri, loadingOptions, objectIds, 'Article');
             }
@@ -140,7 +137,7 @@ export class TicketService extends KIXObjectService {
             }
 
             const createArticle = await this.prepareArticleData(token, clientRequestId, parameter, queueId);
-            const uri = this.buildUri(this.RESOURCE_URI, options.ticketId, this.SUB_RESOURCE_URI);
+            const uri = this.buildUri(this.RESOURCE_URI, options.ticketId, 'articles');
             const response = await this.sendCreateRequest<CreateArticleResponse, CreateArticleRequest>(
                 token, clientRequestId, uri, new CreateArticleRequest(createArticle), this.objectType
             );
@@ -196,7 +193,7 @@ export class TicketService extends KIXObjectService {
 
         if (createArticle) {
             await this.sendCreateRequest<CreateArticleResponse, CreateArticleRequest>(
-                token, clientRequestId, this.buildUri(this.RESOURCE_URI, objectId, this.SUB_RESOURCE_URI),
+                token, clientRequestId, this.buildUri(this.RESOURCE_URI, objectId, 'articles'),
                 new CreateArticleRequest(createArticle), this.objectType
             ).catch((error) => {
                 LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
@@ -288,7 +285,7 @@ export class TicketService extends KIXObjectService {
     ): Promise<Attachment> {
 
         const uri = this.buildUri(
-            this.RESOURCE_URI, ticketId, RESOURCE_ARTICLES, articleId, RESOURCE_ATTACHMENTS, attachmentId
+            this.RESOURCE_URI, ticketId, 'articles', articleId, 'attachments', attachmentId
         );
 
         const response = await this.getObjectByUri<ArticleAttachmentResponse>(token, uri, {
@@ -299,7 +296,7 @@ export class TicketService extends KIXObjectService {
 
     public async loadArticleZipAttachment(token: string, ticketId: number, articleId: number): Promise<Attachment> {
         const uri = this.buildUri(
-            this.RESOURCE_URI, ticketId, RESOURCE_ARTICLES, articleId, RESOURCE_ATTACHMENTS, 'zip'
+            this.RESOURCE_URI, ticketId, 'articles', articleId, 'attachments', 'zip'
         );
 
         const response = await this.getObjectByUri<ArticleAttachmentResponse>(token, uri, {
@@ -313,7 +310,7 @@ export class TicketService extends KIXObjectService {
     ): Promise<void> {
         const seenFlag = 'Seen';
 
-        const baseUri = this.buildUri(this.RESOURCE_URI, ticketId, this.SUB_RESOURCE_URI, articleId);
+        const baseUri = this.buildUri(this.RESOURCE_URI, ticketId, 'articles', articleId);
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null, null, [ArticleProperty.FLAGS], [ArticleProperty.FLAGS]
         );
@@ -347,7 +344,7 @@ export class TicketService extends KIXObjectService {
     // -----------------------------
 
     public async addWatcher(token: string, clientRequestId: string, ticketId: number, userId: number): Promise<number> {
-        const uri = this.buildUri(this.RESOURCE_URI, ticketId, RESOURCE_WATCHERS);
+        const uri = this.buildUri(this.RESOURCE_URI, ticketId, 'watchers');
         const createWatcher = new CreateWatcher(userId);
         const response = await this.sendCreateRequest<CreateWatcherResponse, CreateWatcherRequest>(
             token, clientRequestId, uri, new CreateWatcherRequest(createWatcher), this.objectType
@@ -361,7 +358,7 @@ export class TicketService extends KIXObjectService {
     public async removeWatcher(
         token: string, clientRequestId: string, ticketId: number, watcherId: number
     ): Promise<void> {
-        const uri = this.buildUri(this.RESOURCE_URI, ticketId, RESOURCE_WATCHERS, watcherId);
+        const uri = this.buildUri(this.RESOURCE_URI, ticketId, 'watchers', watcherId);
         await this.sendDeleteRequest<void>(token, clientRequestId, uri, this.objectType);
     }
 

@@ -19,7 +19,7 @@ export class TicketTypeService extends KIXObjectService {
         return TicketTypeService.INSTANCE;
     }
 
-    protected RESOURCE_URI: string = 'tickettypes';
+    protected RESOURCE_URI: string = this.buildUri('system', 'tickettypes');
 
     public objectType: KIXObjectType = KIXObjectType.TICKET_TYPE;
 

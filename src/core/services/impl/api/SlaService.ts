@@ -1,7 +1,6 @@
 import { KIXObjectService } from "./KIXObjectService";
 import {
-    KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, Sla, Error
+    KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, Sla
 } from "../../../model";
 import { KIXObjectServiceRegistry } from "../../KIXObjectServiceRegistry";
 import { SlaFactory } from "../../object-factories/SlaFactory";
@@ -28,7 +27,7 @@ export class SlaService extends KIXObjectService {
         return type === KIXObjectType.SLA;
     }
 
-    protected RESOURCE_URI: string = 'slas';
+    protected RESOURCE_URI: string = this.buildUri('system', 'slas');
 
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
@@ -46,19 +45,6 @@ export class SlaService extends KIXObjectService {
         }
 
         return objects;
-    }
-
-    public createObject(
-        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>,
-        createOptions?: KIXObjectSpecificCreateOptions
-    ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
-    }
-    public updateObject(
-        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>,
-        objectId: string | number, updateOptions?: KIXObjectSpecificCreateOptions
-    ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
     }
 
 }

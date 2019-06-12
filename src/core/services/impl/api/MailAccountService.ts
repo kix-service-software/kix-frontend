@@ -9,6 +9,8 @@ import { MailAccountFactory } from '../../object-factories/MailAccountFactory';
 
 export class MailAccountService extends KIXObjectService {
 
+    protected RESOURCE_URI: string = this.buildUri('system', 'communication', 'mailaccounts');
+
     private static INSTANCE: MailAccountService;
 
     public static getInstance(): MailAccountService {
@@ -17,9 +19,6 @@ export class MailAccountService extends KIXObjectService {
         }
         return MailAccountService.INSTANCE;
     }
-
-    protected RESOURCE_URI: string = 'mailaccounts';
-    protected SUB_RESOURCE_URI: string = 'types';
 
     public objectType: KIXObjectType = KIXObjectType.MAIL_ACCOUNT;
 
@@ -40,11 +39,12 @@ export class MailAccountService extends KIXObjectService {
 
         let objects = [];
         if (objectType === KIXObjectType.MAIL_ACCOUNT) {
+            const uri = this.buildUri('system', 'communication', 'mailaccounts');
             objects = await super.load<MailAccount>(
-                token, KIXObjectType.MAIL_ACCOUNT, this.RESOURCE_URI, loadingOptions, objectIds, 'MailAccount'
+                token, KIXObjectType.MAIL_ACCOUNT, uri, loadingOptions, objectIds, 'MailAccount'
             );
         } else if (objectType === KIXObjectType.MAIL_ACCOUNT_TYPE) {
-            const uri = this.buildUri(this.RESOURCE_URI, this.SUB_RESOURCE_URI);
+            const uri = this.buildUri('system', 'communication', 'mailaccounts', 'types');
             objects = await super.load<string>(
                 token, KIXObjectType.MAIL_ACCOUNT_TYPE, uri, null, null, 'MailAccountType'
             );
@@ -59,8 +59,9 @@ export class MailAccountService extends KIXObjectService {
     ): Promise<number> {
         parameter = this.prepareParameter(parameter);
 
+        const uri = this.buildUri('system', 'communication', 'mailaccounts');
         const id = super.executeUpdateOrCreateRequest(
-            token, clientRequestId, parameter, this.RESOURCE_URI, KIXObjectType.MAIL_ACCOUNT, 'MailAccountID', true
+            token, clientRequestId, parameter, uri, KIXObjectType.MAIL_ACCOUNT, 'MailAccountID', true
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
@@ -74,7 +75,7 @@ export class MailAccountService extends KIXObjectService {
         parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
         parameter = this.prepareParameter(parameter);
-        const uri = this.buildUri(this.RESOURCE_URI, objectId);
+        const uri = this.buildUri('system', 'communication', 'mailaccounts', objectId);
 
         const id = super.executeUpdateOrCreateRequest(
             token, clientRequestId, parameter, uri, KIXObjectType.MAIL_ACCOUNT, 'MailAccountID'

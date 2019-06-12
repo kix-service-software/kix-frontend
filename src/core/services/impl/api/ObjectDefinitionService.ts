@@ -6,6 +6,8 @@ import { ObjectDefinitionsResponse } from "../../../api/object-definition";
 
 export class ObjectDefinitionService extends KIXObjectService {
 
+    protected RESOURCE_URI: string = this.buildUri('system', 'objectdefinitions');
+
     protected objectType: KIXObjectType = KIXObjectType.OBJECT_DEFINITION;
 
     private static INSTANCE: ObjectDefinitionService;
@@ -16,8 +18,6 @@ export class ObjectDefinitionService extends KIXObjectService {
         }
         return ObjectDefinitionService.INSTANCE;
     }
-
-    protected RESOURCE_URI: string = 'objectdefinitions';
 
     private constructor() {
         super();
