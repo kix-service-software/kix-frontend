@@ -5,7 +5,7 @@ import { UIComponentPermission } from '../../../model/UIComponentPermission';
 export class SystemAddressEditAction extends AbstractAction {
 
     public permissions: UIComponentPermission[] = [
-        new UIComponentPermission('systemaddresses/*', [CRUD.UPDATE])
+        new UIComponentPermission('system/communication/systemaddresses/*', [CRUD.UPDATE])
     ];
 
     public async initAction(): Promise<void> {

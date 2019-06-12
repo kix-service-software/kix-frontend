@@ -6,7 +6,7 @@ import { UIComponentPermission } from "../../../../model/UIComponentPermission";
 export class ConfigItemClassEditAction extends AbstractAction {
 
     public permissions: UIComponentPermission[] = [
-        new UIComponentPermission('camdb/classes/*', [CRUD.UPDATE])
+        new UIComponentPermission('system/cmdb/classes/*', [CRUD.UPDATE])
     ];
 
     public async initAction(): Promise<void> {

@@ -6,7 +6,7 @@ import { UIComponentPermission } from "../../../../../model/UIComponentPermissio
 export class TicketTypeEditAction extends AbstractAction {
 
     public permissions: UIComponentPermission[] = [
-        new UIComponentPermission('tickettypes/*', [CRUD.UPDATE])
+        new UIComponentPermission('system/ticket/types/*', [CRUD.UPDATE])
     ];
 
     public async initAction(): Promise<void> {

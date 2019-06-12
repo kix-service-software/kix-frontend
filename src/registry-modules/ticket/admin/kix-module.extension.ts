@@ -12,14 +12,14 @@ class Extension implements IKIXModuleExtension {
     public initComponents: UIComponent[] = [
         new UIComponent('ticket-admin-module-component', 'ticket/module/ticket-admin-module-component',
             [
-                new UIComponentPermission('queues', [CRUD.CREATE], true),
-                new UIComponentPermission('queues/*', [CRUD.UPDATE], true),
-                new UIComponentPermission('tickettypes', [CRUD.CREATE], true),
-                new UIComponentPermission('tickettypes/*', [CRUD.UPDATE], true),
-                new UIComponentPermission('ticketstates', [CRUD.CREATE], true),
-                new UIComponentPermission('ticketstates/*', [CRUD.UPDATE], true),
-                new UIComponentPermission('priorities', [CRUD.CREATE], true),
-                new UIComponentPermission('priorities/*', [CRUD.UPDATE], true)
+                new UIComponentPermission('system/ticket/queues', [CRUD.CREATE], true),
+                new UIComponentPermission('system/ticket/queues/*', [CRUD.UPDATE], true),
+                new UIComponentPermission('system/ticket/types', [CRUD.CREATE], true),
+                new UIComponentPermission('system/ticket/types/*', [CRUD.UPDATE], true),
+                new UIComponentPermission('system/ticket/states', [CRUD.CREATE], true),
+                new UIComponentPermission('system/ticket/states/*', [CRUD.UPDATE], true),
+                new UIComponentPermission('system/ticket/priorities', [CRUD.CREATE], true),
+                new UIComponentPermission('system/ticket/priorities/*', [CRUD.UPDATE], true)
             ]
         )
     ];

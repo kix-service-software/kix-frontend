@@ -25,7 +25,7 @@ class Component extends AbstractMarkoComponent {
 
         ActionFactory.getInstance().registerAction('faq-category-csv-export-action', FAQCategoryCSVExportAction);
 
-        if (await this.checkPermission('faq/categories', CRUD.CREATE)) {
+        if (await this.checkPermission('system/faq/categories', CRUD.CREATE)) {
             ActionFactory.getInstance().registerAction('faq-admin-category-create-action', FAQCategoryCreateAction);
 
             const newFAQCategoryContext = new ContextDescriptor(
@@ -46,7 +46,7 @@ class Component extends AbstractMarkoComponent {
             ));
         }
 
-        if (await this.checkPermission('faq/categories/*', CRUD.UPDATE)) {
+        if (await this.checkPermission('system/faq/categories/*', CRUD.UPDATE)) {
             ActionFactory.getInstance().registerAction('faq-admin-category-edit-action', FAQCategoryEditAction);
 
             const editFAQCategoryContext = new ContextDescriptor(

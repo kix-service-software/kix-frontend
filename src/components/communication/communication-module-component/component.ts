@@ -102,7 +102,7 @@ class Component extends AbstractMarkoComponent {
 
     private async registerMailAccounts(): Promise<void> {
 
-        if (await this.checkPermission('mailaccounts', CRUD.CREATE)) {
+        if (await this.checkPermission('system/mailaccounts', CRUD.CREATE)) {
             ActionFactory.getInstance().registerAction('mail-account-create', MailAccountCreateAction);
 
             const newMailAccountDialogContext = new ContextDescriptor(
@@ -123,7 +123,7 @@ class Component extends AbstractMarkoComponent {
             ));
         }
 
-        if (await this.checkPermission('mailaccounts/*', CRUD.UPDATE)) {
+        if (await this.checkPermission('system/mailaccounts/*', CRUD.UPDATE)) {
             ActionFactory.getInstance().registerAction('mail-account-edit', MailAccountEditAction);
 
             const editMailAccountDialogContext = new ContextDescriptor(

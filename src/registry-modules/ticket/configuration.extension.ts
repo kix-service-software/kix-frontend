@@ -29,7 +29,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
                 ),
                 [
                     new UIComponentPermission('tickets', [CRUD.READ]),
-                    new UIComponentPermission('queues', [CRUD.READ])
+                    new UIComponentPermission('system/ticket/queues', [CRUD.READ])
                 ]
             );
 

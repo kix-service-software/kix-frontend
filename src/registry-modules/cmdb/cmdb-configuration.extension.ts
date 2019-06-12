@@ -33,7 +33,7 @@ export class Extension implements IConfigurationExtension {
             new WidgetConfiguration(
                 'config-item-class-explorer', 'Translatable#CMDB Explorer', [], {}, false, false
             ),
-            [new UIComponentPermission('cmdb/classes', [CRUD.READ])]
+            [new UIComponentPermission('system/cmdb/classes', [CRUD.READ])]
         );
         const explorerWidgets = [ciClassExplorer];
 

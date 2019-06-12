@@ -5,7 +5,7 @@ import { UIComponentPermission } from '../../../../../model/UIComponentPermissio
 export class TicketQueueCreateAction extends AbstractAction {
 
     public permissions: UIComponentPermission[] = [
-        new UIComponentPermission('queues', [CRUD.CREATE])
+        new UIComponentPermission('system/ticket/queues', [CRUD.CREATE])
     ];
 
     public async initAction(): Promise<void> {

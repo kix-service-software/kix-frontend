@@ -12,15 +12,23 @@ class Extension implements IAdminModuleExtension {
                             new AdminModule(
                                 null, 'system-address', 'Translatable#Email Addresses', null,
                                 KIXObjectType.SYSTEM_ADDRESS, 'communication-admin-system-addresses', [
-                                    new UIComponentPermission('systemaddresses', [CRUD.CREATE], true),
-                                    new UIComponentPermission('systemaddresses/*', [CRUD.UPDATE], true)
+                                    new UIComponentPermission(
+                                        'system/communication/systemaddresses', [CRUD.CREATE], true
+                                    ),
+                                    new UIComponentPermission(
+                                        'system/communication/systemaddresses/*', [CRUD.UPDATE], true
+                                    )
                                 ]
                             ),
                             new AdminModule(
                                 null, 'mail-account', 'Translatable#Email Accounts', null,
                                 KIXObjectType.MAIL_ACCOUNT, 'communication-admin-mail-accounts', [
-                                    new UIComponentPermission('mailaccounts', [CRUD.CREATE], true),
-                                    new UIComponentPermission('mailaccounts/*', [CRUD.UPDATE], true)
+                                    new UIComponentPermission(
+                                        'system/communication/mailaccounts', [CRUD.CREATE], true
+                                    ),
+                                    new UIComponentPermission(
+                                        'system/communication/mailaccounts/*', [CRUD.UPDATE], true
+                                    )
                                 ]
                             )
                         ]

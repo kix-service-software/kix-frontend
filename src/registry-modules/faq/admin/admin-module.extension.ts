@@ -10,8 +10,8 @@ class Extension implements IAdminModuleExtension {
                     new AdminModule(
                         null, 'faq-categories', 'Translatable#FAQ Categories', null,
                         KIXObjectType.FAQ_CATEGORY, 'faq-admin-categories', [
-                            new UIComponentPermission('faq/categories', [CRUD.CREATE], true),
-                            new UIComponentPermission('faq/categories/*', [CRUD.UPDATE], true)
+                            new UIComponentPermission('system/faq/categories', [CRUD.CREATE], true),
+                            new UIComponentPermission('system/faq/categories/*', [CRUD.UPDATE], true)
                         ]
                     )
                 ])

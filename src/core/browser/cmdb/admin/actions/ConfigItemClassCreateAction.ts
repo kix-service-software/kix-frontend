@@ -5,7 +5,7 @@ import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 export class ConfigItemClassCreateAction extends AbstractAction {
 
     public permissions: UIComponentPermission[] = [
-        new UIComponentPermission('cmdb/classes', [CRUD.CREATE])
+        new UIComponentPermission('system/cmdb/classes', [CRUD.CREATE])
     ];
 
     public async initAction(): Promise<void> {

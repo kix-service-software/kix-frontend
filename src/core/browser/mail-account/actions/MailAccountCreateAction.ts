@@ -5,7 +5,7 @@ import { UIComponentPermission } from '../../../model/UIComponentPermission';
 export class MailAccountCreateAction extends AbstractAction {
 
     public permissions: UIComponentPermission[] = [
-        new UIComponentPermission('mailaccounts', [CRUD.CREATE])
+        new UIComponentPermission('system/communication/mailaccounts', [CRUD.CREATE])
     ];
 
     public async initAction(): Promise<void> {

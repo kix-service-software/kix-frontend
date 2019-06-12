@@ -27,7 +27,7 @@ class Component extends AbstractMarkoComponent {
         TableFactoryService.getInstance().registerFactory(new TextModulesTableFactory());
         LabelService.getInstance().registerLabelProvider(new TextModuleLabelProvider());
 
-        if (await this.checkPermission('textmodules', CRUD.CREATE)) {
+        if (await this.checkPermission('system/textmodules', CRUD.CREATE)) {
             ActionFactory.getInstance().registerAction('text-module-create', TextModuleCreateAction);
 
             const newTextModuleDialogContext = new ContextDescriptor(
@@ -48,7 +48,7 @@ class Component extends AbstractMarkoComponent {
             ));
         }
 
-        if (await this.checkPermission('textmodules/*', CRUD.UPDATE)) {
+        if (await this.checkPermission('system/textmodules/*', CRUD.UPDATE)) {
             const editTextModuleDialogContext = new ContextDescriptor(
                 EditTextModuleDialogContext.CONTEXT_ID, [KIXObjectType.TEXT_MODULE],
                 ContextType.DIALOG, ContextMode.EDIT_ADMIN,

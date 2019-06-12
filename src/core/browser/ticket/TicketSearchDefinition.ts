@@ -46,31 +46,31 @@ export class TicketSearchDefinition extends SearchDefinition {
             properties.push([TicketProperty.CONTACT_ID, null]);
         }
 
-        if (await this.checkReadPermissions('tickettypes')) {
+        if (await this.checkReadPermissions('system/ticket/types')) {
             properties.push([TicketProperty.TYPE_ID, null]);
         }
 
-        if (await this.checkReadPermissions('ticketstates')) {
+        if (await this.checkReadPermissions('system/ticket/states')) {
             properties.push([TicketProperty.STATE_ID, null]);
         }
 
-        if (await this.checkReadPermissions('queues')) {
+        if (await this.checkReadPermissions('system/ticket/queues')) {
             properties.push([TicketProperty.QUEUE_ID, null]);
         }
 
-        if (await this.checkReadPermissions('services')) {
+        if (await this.checkReadPermissions('system/services')) {
             properties.push([TicketProperty.SERVICE_ID, null]);
         }
 
-        if (await this.checkReadPermissions('slas')) {
+        if (await this.checkReadPermissions('system/slas')) {
             properties.push([TicketProperty.SLA_ID, null]);
         }
 
-        if (await this.checkReadPermissions('priorities')) {
+        if (await this.checkReadPermissions('system/ticket/priorities')) {
             properties.push([TicketProperty.PRIORITY_ID, null]);
         }
 
-        if (await this.checkReadPermissions('ticketlocks')) {
+        if (await this.checkReadPermissions('system/ticket/locks')) {
             properties.push([TicketProperty.LOCK_ID, null]);
         }
 

@@ -63,7 +63,7 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
                     helpText: 'Translatable#Helptext_Textmodules_TicketEdit'
                 }, false, false, WidgetSize.BOTH, 'kix-icon-textblocks'
             ),
-            [new UIComponentPermission('textmodules', [CRUD.READ])]
+            [new UIComponentPermission('system/textmodules', [CRUD.READ])]
         );
 
         const sidebars = ['20180524110915', '20180524110920', '20180919-help-widget'];

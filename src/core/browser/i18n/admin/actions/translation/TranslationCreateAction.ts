@@ -6,7 +6,7 @@ import { UIComponentPermission } from '../../../../../model/UIComponentPermissio
 export class TranslationCreateAction extends AbstractAction {
 
     public permissions: UIComponentPermission[] = [
-        new UIComponentPermission('i18n/translations', [CRUD.CREATE])
+        new UIComponentPermission('system/i18n/translations', [CRUD.CREATE])
     ];
 
     public async initAction(): Promise<void> {

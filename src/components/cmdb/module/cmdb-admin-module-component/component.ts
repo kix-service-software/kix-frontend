@@ -20,7 +20,7 @@ class Component extends AbstractMarkoComponent {
 
     public async onMount(): Promise<void> {
 
-        if (await this.checkPermission('cmdb/classes', CRUD.CREATE)) {
+        if (await this.checkPermission('system/cmdb/classes', CRUD.CREATE)) {
             ActionFactory.getInstance().registerAction('cmdb-admin-ci-class-create', ConfigItemClassCreateAction);
 
             const newConfigItemClassDetailsContext = new ContextDescriptor(
@@ -41,7 +41,7 @@ class Component extends AbstractMarkoComponent {
             ));
         }
 
-        if (await this.checkPermission('cmdb/classes/*', CRUD.UPDATE)) {
+        if (await this.checkPermission('system/cmdb/classes/*', CRUD.UPDATE)) {
             ActionFactory.getInstance().registerAction('cmdb-admin-ci-class-edit', ConfigItemClassEditAction);
 
             const editConfigItemClassContext = new ContextDescriptor(

@@ -43,7 +43,7 @@ export class TextModuleService extends KIXObjectService {
 
     public async getAutoFillConfiguration(textMatch: any, placeholder: string): Promise<IAutofillConfiguration> {
         const allowed = await AuthenticationSocketClient.getInstance().checkPermissions([
-            new UIComponentPermission('textmodules', [CRUD.READ])
+            new UIComponentPermission('system/textmodules', [CRUD.READ])
         ]);
 
         let config: IAutofillConfiguration;

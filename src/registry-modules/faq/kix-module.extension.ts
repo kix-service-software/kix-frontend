@@ -18,8 +18,8 @@ class Extension implements IKIXModuleExtension {
             new UIComponentPermission('faq/articles/*', [CRUD.UPDATE])
         ]),
         new UIComponent('faq-read-module-component', 'faq/module/faq-admin-module-component', [
-            new UIComponentPermission('faq/categories', [CRUD.CREATE], true),
-            new UIComponentPermission('faq/categories/*', [CRUD.UPDATE], true)
+            new UIComponentPermission('system/faq/categories', [CRUD.CREATE], true),
+            new UIComponentPermission('system/faq/categories/*', [CRUD.UPDATE], true)
         ]),
     ];
 

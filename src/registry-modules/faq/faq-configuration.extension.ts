@@ -43,7 +43,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                     'faq-category-explorer', 'Translatable#FAQ Categories', [], {},
                     false, false, WidgetSize.BOTH, 'kix-icon-faq', false
                 ),
-                [new UIComponentPermission('faq/categories', [CRUD.READ])]
+                [new UIComponentPermission('system/faq/categories', [CRUD.READ])]
             );
 
         const explorer = ['20180625-faq-category-explorer'];

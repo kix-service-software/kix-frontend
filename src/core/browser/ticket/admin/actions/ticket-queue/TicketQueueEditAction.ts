@@ -6,7 +6,7 @@ import { ContextService } from "../../../../context";
 export class TicketQueueEditAction extends AbstractAction {
 
     public permissions: UIComponentPermission[] = [
-        new UIComponentPermission('queues/*', [CRUD.UPDATE])
+        new UIComponentPermission('system/ticket/queues/*', [CRUD.UPDATE])
     ];
 
     public async initAction(): Promise<void> {

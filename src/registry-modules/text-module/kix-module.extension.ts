@@ -9,8 +9,8 @@ class Extension implements IKIXModuleExtension {
 
     public initComponents: UIComponent[] = [
         new UIComponent('text-module-module-component', 'text-module/module-component', [
-            new UIComponentPermission('textmodules', [CRUD.CREATE], true),
-            new UIComponentPermission('textmodules/*', [CRUD.UPDATE], true)
+            new UIComponentPermission('system/textmodules', [CRUD.CREATE], true),
+            new UIComponentPermission('system/textmodules/*', [CRUD.UPDATE], true)
         ])
     ];
 

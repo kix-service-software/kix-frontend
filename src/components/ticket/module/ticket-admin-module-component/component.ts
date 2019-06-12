@@ -207,7 +207,7 @@ class Component extends AbstractMarkoComponent {
 
     private async registerTicketQueuesAdmin(): Promise<void> {
 
-        if (await this.checkPermission('queues', CRUD.CREATE)) {
+        if (await this.checkPermission('system/ticket/queues', CRUD.CREATE)) {
             ActionFactory.getInstance().registerAction('ticket-admin-queue-create', TicketQueueCreateAction);
 
             const newQueueContext = new ContextDescriptor(
@@ -228,7 +228,7 @@ class Component extends AbstractMarkoComponent {
             ));
         }
 
-        if (await this.checkPermission('queues/*', CRUD.UPDATE)) {
+        if (await this.checkPermission('system/ticket/queues/*', CRUD.UPDATE)) {
             ActionFactory.getInstance().registerAction('ticket-admin-queue-edit', TicketQueueEditAction);
         }
 

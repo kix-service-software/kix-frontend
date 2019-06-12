@@ -6,7 +6,7 @@ import { UIComponentPermission } from '../../../../../model/UIComponentPermissio
 export class FAQCategoryEditAction extends AbstractAction {
 
     public permissions: UIComponentPermission[] = [
-        new UIComponentPermission('faq/categories/*', [CRUD.UPDATE])
+        new UIComponentPermission('system/faq/categories/*', [CRUD.UPDATE])
     ];
 
     public async initAction(): Promise<void> {

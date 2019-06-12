@@ -38,7 +38,7 @@ class Component extends AbstractMarkoComponent {
 
         ActionFactory.getInstance().registerAction('i18n-admin-translation-csv-export', TranslationCSVExportAction);
 
-        if (await this.checkPermission('i18n/translations', CRUD.CREATE)) {
+        if (await this.checkPermission('system/i18n/translations', CRUD.CREATE)) {
             ActionFactory.getInstance().registerAction('i18n-admin-translation-create', TranslationCreateAction);
             const newTranslationDialogContext = new ContextDescriptor(
                 NewTranslationDialogContext.CONTEXT_ID, [KIXObjectType.TRANSLATION],
@@ -58,7 +58,7 @@ class Component extends AbstractMarkoComponent {
             ));
         }
 
-        if (await this.checkPermission('i18n/translations/*', CRUD.UPDATE)) {
+        if (await this.checkPermission('system/i18n/translations/*', CRUD.UPDATE)) {
             ActionFactory.getInstance().registerAction('i18n-admin-translation-edit', TranslationEditAction);
             const editTranslationDialogContext = new ContextDescriptor(
                 EditTranslationDialogContext.CONTEXT_ID, [KIXObjectType.TRANSLATION],

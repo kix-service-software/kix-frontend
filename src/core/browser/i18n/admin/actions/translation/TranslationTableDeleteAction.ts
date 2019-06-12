@@ -13,7 +13,7 @@ import { UIComponentPermission } from '../../../../../model/UIComponentPermissio
 export class TranslationTableDeleteAction extends AbstractAction<ITable> {
 
     public permissions: UIComponentPermission[] = [
-        new UIComponentPermission('i18n/translations/*', [CRUD.DELETE])
+        new UIComponentPermission('system/i18n/translations/*', [CRUD.DELETE])
     ];
 
     public async initAction(): Promise<void> {
