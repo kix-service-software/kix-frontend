@@ -20,7 +20,8 @@ class Extension implements IKIXModuleExtension {
 
     public uiComponents: UIComponent[] = [
         new UIComponent('ticket-admin-text-modules', 'text-module/admin/ticket-admin-text-modules', []),
-        new UIComponent('new-text-module-dialog', 'text-module/admin/dialogs/new-text-module-dialog', [])
+        new UIComponent('new-text-module-dialog', 'text-module/admin/dialogs/new-text-module-dialog', []),
+        new UIComponent('edit-text-module-dialog', 'text-module/admin/dialogs/edit-text-module-dialog', [])
     ];
 
 }

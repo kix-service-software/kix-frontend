@@ -1,8 +1,7 @@
 import { UIComponent } from "../core/model/UIComponent";
 import { HttpService } from "../core/services";
 import { UIComponentPermission } from "../core/model/UIComponentPermission";
-import { ContextConfiguration, Context, WidgetConfiguration, ConfiguredWidget } from "../core/model";
-import { config } from "memcached";
+import { ContextConfiguration, ConfiguredWidget } from "../core/model";
 
 export class PermissionService {
 

@@ -26,7 +26,6 @@ class Extension implements IKIXModuleExtension {
     ];
 
     public uiComponents: UIComponent[] = [
-        new UIComponent('organisations', 'organisation/organisation-module', []),
         new UIComponent(
             'organisation-assigned-contacts-widget', 'organisation/widgets/organisation-assigned-contacts-widget', []
         ),

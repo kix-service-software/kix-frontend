@@ -124,6 +124,9 @@ export class ContextService {
             if (formId) {
                 context.setAdditionalInformation('FORM_ID', formId);
             }
+            if (objectId) {
+                context.setObjectId(objectId);
+            }
 
             this.activeDialogContext = context;
             this.activeContextType = ContextType.DIALOG;

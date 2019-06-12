@@ -117,8 +117,7 @@ export class TextModuleLabelProvider extends LabelProvider<TextModule> {
     public async getObjectText(
         textModule: TextModule, id?: boolean, title?: boolean, translatable?: boolean
     ): Promise<string> {
-        const objectName = await this.getObjectName(false, translatable);
-        return `${objectName}: ${textModule.Name}`;
+        return `${textModule.Name}`;
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {

@@ -8,7 +8,7 @@ import {
 import { TableFactoryService } from '../../../core/browser/table';
 import {
     TextModuleService, TextModuleBrowserFactory, TextModulesTableFactory, TextModuleLabelProvider,
-    NewTextModuleDialogContext, TextModuleCreateAction
+    NewTextModuleDialogContext, TextModuleCreateAction, EditTextModuleDialogContext, TextModuleFormService
 } from '../../../core/browser/text-modules';
 import { UIComponentPermission } from '../../../core/model/UIComponentPermission';
 import { AuthenticationSocketClient } from '../../../core/browser/application/AuthenticationSocketClient';
@@ -45,6 +45,25 @@ class Component extends AbstractMarkoComponent {
                 ),
                 KIXObjectType.TEXT_MODULE,
                 ContextMode.CREATE_ADMIN
+            ));
+        }
+
+        if (await this.checkPermission('textmodules/*', CRUD.UPDATE)) {
+            const editTextModuleDialogContext = new ContextDescriptor(
+                EditTextModuleDialogContext.CONTEXT_ID, [KIXObjectType.TEXT_MODULE],
+                ContextType.DIALOG, ContextMode.EDIT_ADMIN,
+                false, 'edit-text-module-dialog', ['text-modules'], EditTextModuleDialogContext
+            );
+            ContextService.getInstance().registerContext(editTextModuleDialogContext);
+
+            DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+                'edit-text-module-dialog',
+                new WidgetConfiguration(
+                    'edit-text-module-dialog', 'Translatable#Edit Text Module',
+                    [], {}, false, false, null, 'kix-icon-edit'
+                ),
+                KIXObjectType.TEXT_MODULE,
+                ContextMode.EDIT_ADMIN
             ));
         }
     }

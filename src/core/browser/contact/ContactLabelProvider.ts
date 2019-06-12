@@ -168,7 +168,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 ).catch((error) => console.log(error));
                 displayValue = primaryOrganisations && primaryOrganisations.length
                     ? `${primaryOrganisations[0].Name} (${primaryOrganisations[0].Number})`
-                    : contact.PrimaryOrganisationID;
+                    : '';
                 break;
             case ContactProperty.ORGANISATION_IDS:
                 if (contact.OrganisationIDs && contact.OrganisationIDs.length) {
@@ -177,7 +177,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                     ).catch((error) => console.log(error));
                     const organisationNames = organisations && organisations.length
                         ? organisations.map((c) => c.Name)
-                        : contact.OrganisationIDs;
+                        : [];
                     displayValue = organisationNames.join(', ');
                 }
                 break;

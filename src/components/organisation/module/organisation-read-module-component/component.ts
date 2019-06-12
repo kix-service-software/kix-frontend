@@ -38,12 +38,6 @@ class Component extends AbstractMarkoComponent {
     }
 
     private registerContexts(): void {
-        const organisationListContext = new ContextDescriptor(
-            OrganisationContext.CONTEXT_ID, [KIXObjectType.ORGANISATION], ContextType.MAIN, ContextMode.DASHBOARD,
-            false, 'organisations', ['organisations', 'contacts'], OrganisationContext
-        );
-        ContextService.getInstance().registerContext(organisationListContext);
-
         const organisationDetailsContext = new ContextDescriptor(
             OrganisationDetailsContext.CONTEXT_ID, [KIXObjectType.ORGANISATION], ContextType.MAIN, ContextMode.DETAILS,
             true, 'object-details-page', ['organisations'], OrganisationDetailsContext

@@ -1,6 +1,8 @@
-import { ContextMode, KIXObjectType } from "../../model";
+import { ContextMode, KIXObjectType, ContextType } from "../../model";
 
 export class RoutingConfiguration {
+
+    public contextType: ContextType = ContextType.MAIN;
 
     public constructor(
         public contextId: string,
