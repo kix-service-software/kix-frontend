@@ -1,5 +1,5 @@
 import {
-    FormService, ContextService, OverlayService, ServiceRegistry, BrowserUtil
+    FormService, ContextService, OverlayService, ServiceRegistry, BrowserUtil, AdditionalContextInformation
 } from '../../../../core/browser';
 import {
     ValidationSeverity, ContextType, ValidationResult, ComponentContent,
@@ -40,7 +40,7 @@ class Component {
         let formId = null;
         const dialogContext = await ContextService.getInstance().getActiveContext(ContextType.DIALOG);
         if (dialogContext) {
-            const info = dialogContext.getAdditionalInformation('FORM_ID');
+            const info = dialogContext.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
             formId = info ? info : null;
         }
         setTimeout(() => {

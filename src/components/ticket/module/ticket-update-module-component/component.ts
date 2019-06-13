@@ -9,9 +9,11 @@ import {
 import { BulkService } from '../../../../core/browser/bulk';
 import {
     ContextDescriptor, KIXObjectType, ContextType, ContextMode,
-    ConfiguredDialogWidget, WidgetConfiguration, WidgetSize
+    ConfiguredDialogWidget, WidgetConfiguration, WidgetSize, CRUD
 } from '../../../../core/model';
 import { FormValidationService } from '../../../../core/browser/form/validation';
+import { AuthenticationSocketClient } from '../../../../core/browser/application/AuthenticationSocketClient';
+import { UIComponentPermission } from '../../../../core/model/UIComponentPermission';
 
 class Component extends AbstractMarkoComponent {
 
@@ -23,9 +25,24 @@ class Component extends AbstractMarkoComponent {
         ServiceRegistry.registerServiceInstance(TicketFormService.getInstance());
         BulkService.getInstance().registerBulkManager(new TicketBulkManager());
 
+        FormValidationService.getInstance().registerValidator(new PendingTimeValidator());
+        FormValidationService.getInstance().registerValidator(new EmailRecipientValidator());
+
+        TicketFormService.getInstance();
+
+        if (await this.checkPermissions('tickets/*', [CRUD.UPDATE])) {
+            BulkService.getInstance().registerBulkManager(new TicketBulkManager());
+        }
+
         this.registerContexts();
         this.registerTicketActions();
         this.registerTicketDialogs();
+    }
+
+    private async checkPermissions(resource: string, crud: CRUD[]): Promise<boolean> {
+        return await AuthenticationSocketClient.getInstance().checkPermissions(
+            [new UIComponentPermission(resource, crud)]
+        );
     }
 
     private registerContexts(): void {
