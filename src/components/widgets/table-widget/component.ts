@@ -161,6 +161,8 @@ class Component {
                 table.sort(settings.sort[0], settings.sort[1]);
             }
 
+            await table.initialize();
+
             this.state.table = table;
         }
     }
