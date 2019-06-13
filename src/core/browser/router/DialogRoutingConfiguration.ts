@@ -1,6 +1,7 @@
 import { ContextMode, KIXObjectType, ObjectIcon, ContextType } from "../../model";
+import { RoutingConfiguration } from "./RoutingConfiguration";
 
-export class DialogRoutingConfiguration {
+export class DialogRoutingConfiguration extends RoutingConfiguration {
 
     public contextType: ContextType = ContextType.DIALOG;
 
@@ -8,7 +9,7 @@ export class DialogRoutingConfiguration {
         public contextId: string,
         public objectType: KIXObjectType,
         public contextMode: ContextMode,
-        public objectIdProperty?: string,
+        public objectIdProperty: string,
         public objectId?: string | number,
         public resetContext?: boolean,
         public title?: string,
@@ -16,6 +17,8 @@ export class DialogRoutingConfiguration {
         public formId?: string,
         public icon?: string | ObjectIcon,
         public resetForm: boolean = resetContext
-    ) { }
+    ) {
+        super(contextId, objectType, contextMode, objectIdProperty);
+    }
 
 }
