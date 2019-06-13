@@ -13,6 +13,7 @@ import { BrowserUtil } from '../BrowserUtil';
 import { EventService } from '../event';
 import { ApplicationEvent } from '../application';
 import { FormService } from '../form';
+import { AdditionalContextInformation } from './AdditionalContextInformation';
 
 export class ContextService {
 
@@ -121,9 +122,11 @@ export class ContextService {
             if (resetForm && formId) {
                 FormService.getInstance().deleteFormInstance(formId);
             }
+
             if (formId) {
-                context.setAdditionalInformation('FORM_ID', formId);
+                context.setAdditionalInformation(AdditionalContextInformation.FORM_ID, formId);
             }
+
             if (objectId) {
                 context.setObjectId(objectId);
             }
