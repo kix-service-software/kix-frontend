@@ -1,5 +1,5 @@
 import { ComponentState } from './ComponentState';
-import { RoutingService, RoutingConfiguration, DialogRoutingConfiguration } from '../../../core/browser/router';
+import { RoutingService, DialogRoutingConfiguration } from '../../../core/browser/router';
 import { ContextService, KIXObjectService, LabelService } from '../../../core/browser';
 import { ContextType } from '../../../core/model';
 
@@ -20,7 +20,7 @@ class Component {
 
     private async setURL(): Promise<void> {
         this.state.loading = true;
-        if (this.state.routingConfiguration && this.state.routingConfiguration instanceof RoutingConfiguration) {
+        if (this.state.routingConfiguration) {
             const contextUrl = await RoutingService.getInstance().buildUrl(
                 this.state.routingConfiguration, this.state.objectId
             );
@@ -35,54 +35,55 @@ class Component {
     }
 
     public async linkClicked(event: any): Promise<void> {
-        if (
-            this.state.routingConfiguration.contextType &&
-            this.state.routingConfiguration.contextType === ContextType.DIALOG
-        ) {
-            this.openDialog();
+        const contextType = this.state.routingConfiguration.contextType;
+        if (contextType && contextType === ContextType.DIALOG) {
+            this.openDialog(event);
         } else {
-            this.routeTo();
+            this.routeTo(event);
         }
     }
 
-    private async openDialog(): Promise<void> {
-        this.state.routingConfiguration = this.state.routingConfiguration as DialogRoutingConfiguration;
+    private async openDialog(event: any): Promise<void> {
+        if (event.preventDefault) {
+            event.preventDefault();
+        }
+        const configuration = this.state.routingConfiguration as DialogRoutingConfiguration;
 
-        const objectId = this.state.routingConfiguration.objectId
-            ? this.state.routingConfiguration.objectId : this.state.objectId;
+        const objectId = configuration.objectId ? configuration.objectId : this.state.objectId;
 
         // TODO: it is not the right place to prepare the title like this, but have to (currently)
-        if (
-            !this.state.routingConfiguration.title
-            && this.state.routingConfiguration.objectType
-            && objectId
-        ) {
-            const objects = objectId ? await KIXObjectService.loadObjects(
-                this.state.routingConfiguration.objectType, [objectId]
-            ) : null;
+        if (!configuration.title && configuration.objectType && objectId) {
+            const objects = await KIXObjectService.loadObjects(configuration.objectType, [objectId]);
+
             if (objects && !!objects.length) {
-                this.state.routingConfiguration.title = await LabelService.getInstance().getText(objects[0]);
+                configuration.title = await LabelService.getInstance().getText(objects[0]);
             }
         }
 
         ContextService.getInstance().setDialogContext(
-            this.state.routingConfiguration.contextId,
-            this.state.routingConfiguration.objectType, this.state.routingConfiguration.contextMode,
-            objectId, this.state.routingConfiguration.resetContext,
-            this.state.routingConfiguration.title, this.state.routingConfiguration.singleTab,
-            this.state.routingConfiguration.formId, this.state.routingConfiguration.icon,
-            this.state.routingConfiguration.resetForm
+            configuration.contextId,
+            configuration.objectType,
+            configuration.contextMode,
+            objectId,
+            configuration.resetContext,
+            configuration.title,
+            configuration.singleTab,
+            configuration.formId,
+            configuration.icon,
+            configuration.resetForm
         );
     }
 
-    private routeTo(): void {
-        this.state.routingConfiguration = this.state.routingConfiguration as RoutingConfiguration;
+    private routeTo(event: any): void {
         let externalLink = this.state.routingConfiguration
-            ? this.state.routingConfiguration.externalLink : undefined;
+            ? this.state.routingConfiguration.externalLink
+            : undefined;
+
         if (typeof externalLink === 'undefined') {
             const context = ContextService.getInstance().getActiveContext();
             externalLink = context ? context.getDescriptor().contextType === ContextType.DIALOG : false;
         }
+
         if (!externalLink) {
             if (event.preventDefault) {
                 event.preventDefault();
