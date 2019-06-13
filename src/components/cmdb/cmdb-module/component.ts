@@ -11,8 +11,9 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const context = (await ContextService.getInstance().getContext(CMDBContext.CONTEXT_ID) as CMDBContext);
+        const context = await ContextService.getInstance().getContext<CMDBContext>(CMDBContext.CONTEXT_ID);
         this.state.contentWidgets = context.getContent();
+        context.setCIClass(null);
     }
 
 }
