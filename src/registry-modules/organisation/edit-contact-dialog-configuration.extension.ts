@@ -36,6 +36,10 @@ export class Extension implements IConfigurationExtension {
                 new FormField(
                     'Translatable#Firstname', ContactProperty.FIRST_NAME, null, true,
                     'Translatable#Helptext_Organisations_ContactEdit_Firstname'
+                ),
+                new FormField(
+                    'Translatable#Organisation', ContactProperty.PRIMARY_ORGANISATION_ID, 'contact-input-organisation',
+                    true, 'Translatable#Helptext_Organisations_ContactEdit_Organisation'
                 )
             ]));
 
