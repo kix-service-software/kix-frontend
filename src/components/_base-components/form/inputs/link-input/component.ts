@@ -24,7 +24,7 @@ class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescr
         ]);
 
         this.state.allowCreate = await AuthenticationSocketClient.getInstance().checkPermissions([
-            new UIComponentPermission('links', [CRUD.CREATE])
+            new UIComponentPermission('links', [CRUD.READ, CRUD.CREATE])
         ]);
     }
 
