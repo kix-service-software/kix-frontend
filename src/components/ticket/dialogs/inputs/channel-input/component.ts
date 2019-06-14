@@ -98,9 +98,11 @@ class Component extends FormInputComponent<number, ComponentState> {
     }
 
     public async channelClicked(channel: Channel): Promise<void> {
-        this.state.currentChannel = channel;
-        super.provideValue(this.state.currentChannel ? this.state.currentChannel.ID : null);
-        this.setFields(true);
+        if (!this.isActive(channel)) {
+            this.state.currentChannel = channel;
+            super.provideValue(this.state.currentChannel ? this.state.currentChannel.ID : null);
+            this.setFields(true);
+        }
     }
 
     private async setFields(clear?: boolean): Promise<void> {
