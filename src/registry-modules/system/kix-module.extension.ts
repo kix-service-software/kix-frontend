@@ -7,6 +7,7 @@ class KIXModuleExtension implements IKIXModuleExtension {
     public external: boolean = false;
 
     public tags: Array<[string, string]> = [
+        ['system-module-component', 'system/system-module-component'],
     ];
 
 }

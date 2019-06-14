@@ -5,16 +5,13 @@ class Extension implements IAdminModuleExtension {
     public getAdminModules(): AdminModuleCategory[] {
         return [
             new AdminModuleCategory(
-                null, 'system', 'Translatable#System', null, [
-                    new AdminModuleCategory(
-                        null, 'system_sysconfig', 'Translatable#SysConfig', null, [], [
-                            new AdminModule(
-                                null, 'sysconfig', 'Translatable#', null,
-                                KIXObjectType.SYS_CONFIG_ITEM, 'system-admin-sysconfig'
-                            ),
-                        ]
+                null, 'system', 'Translatable#System', null, [], [
+                    new AdminModule(
+                        null, 'sysconfig', 'Translatable#SysConfig', null,
+                        KIXObjectType.SYS_CONFIG_ITEM, 'system-admin-sysconfig'
                     )
-                ])
+                ]
+            )
         ];
     }
 
