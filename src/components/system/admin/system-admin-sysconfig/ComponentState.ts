@@ -7,11 +7,11 @@ export class ComponentState {
     public constructor(
         public instanceId: string = IdService.generateDateBasedId('system-sysconfig-list'),
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
-            'table-widget', 'Translatable#Communication: Email',
+            'table-widget', 'Translatable#System: SysConfig',
             [
             ],
             new TableWidgetSettings(KIXObjectType.SYS_CONFIG_ITEM,
-                [SysConfigProperty.NAME, SortOrder.UP]), false, false, null, 'kix-icon-gears')
+                [SysConfigProperty.ID, SortOrder.UP]), false, false, null, 'kix-icon-gears')
     ) { }
 
 }
