@@ -74,9 +74,9 @@
             </if>
         </if>
         <if(!state.minimized && component.isInputDefined(input.content))>
-            <div.scroll-container body-only-if(!component.isSidebarWidget())>
+            <${component.isSidebarWidget() ? "div" : null} class="scroll-container">
                 <${input.content} key=state.instanceId/>
-            </div>
+            </>
         </if>
     </div>
 </div>
