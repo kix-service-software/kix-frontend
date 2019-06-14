@@ -6,7 +6,6 @@ import {
 import { SocketNameSpace } from './SocketNameSpace';
 import { SocketResponse } from '../core/common';
 import { TicketService } from '../core/services';
-import { ClientStorageService } from '../core/browser';
 
 export class TicketNamespace extends SocketNameSpace {
 
