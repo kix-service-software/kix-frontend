@@ -8,6 +8,7 @@ class KIXModuleExtension implements IKIXModuleExtension {
 
     public tags: Array<[string, string]> = [
         ['system-module-component', 'system/system-module-component'],
+        ['system-admin-sysconfig', 'system/admin/system-admin-sysconfig'],
     ];
 
 }
