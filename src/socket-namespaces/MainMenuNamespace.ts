@@ -67,12 +67,16 @@ export class MainMenuNamespace extends SocketNameSpace {
     ): Promise<MainMenuConfiguration> {
 
         const primaryConfiguration = extensions
-            .filter((me) => me.primaryMenu).map(
+            .filter((me) => me.primaryMenu)
+            .sort((a, b) => a.orderRang - b.orderRang)
+            .map(
                 (me) => new MenuEntry(me.icon, me.text, me.mainContextId, me.contextIds)
             );
 
         const secondaryConfiguration = extensions
-            .filter((me) => !me.primaryMenu).map(
+            .filter((me) => !me.primaryMenu)
+            .sort((a, b) => a.orderRang - b.orderRang)
+            .map(
                 (me) => new MenuEntry(me.icon, me.text, me.mainContextId, me.contextIds)
             );
         const configuration = new MainMenuConfiguration(primaryConfiguration, secondaryConfiguration);

@@ -1,0 +1,52 @@
+{
+    "name": "kix-cmdb",
+    "extensions": {
+        "kix:menu:main": {
+            "cmdb-menu-main": {
+                "module": "cmdb-menu.extension"
+            }
+        },
+        "kix:configuration": {
+            "new-config-item-dialog-configuration": {
+                "module": "new-config-item-dialog-configuration.extension"
+            },
+            "config-item-details-configuration": {
+                "module": "config-item-details-configuration.extension"
+            },
+            "cmdb-configuration": {
+                "module": "cmdb-configuration.extension"
+            },
+            "edit-config-item-dialog-configuration": {
+                "module": "edit-config-item-dialog-configuration.extension"
+            },
+            "config-item-class-details-configuration": {
+                "module": "config-item-class-details-configuration.extension"
+            },
+            "new-config-item-class-dialog-configuration": {
+                "module": "new-config-item-class-dialog-configuration.extension"
+            },
+            "edit-config-item-class-dialog-configuration": {
+                "module": "edit-config-item-class-dialog-configuration.extension"
+            },
+            "search-config-item-dialog-configuration": {
+                "module": "search-config-item-dialog-configuration.extension"
+            },
+            "compare-config-item-version-dialog-configuration": {
+                "module": "compare-config-item-version-dialog-configuration.extension"
+            }
+        },
+        "kix:modules": {
+            "cmdb-module": {
+                "module": "kix-module.extension"
+            },
+            "cmdb-admin-module": {
+                "module": "kix-admin-module.extension"
+            }
+        },
+        "kix:admin-module": {
+            "cmdb-admin": {
+                "module": "admin-module.extension"
+            }
+        }
+    }
+}

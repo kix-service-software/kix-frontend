@@ -1,0 +1,10 @@
+{
+    "name": "kix-release",
+    "extensions": {
+        "kix:configuration": {
+            "release-configuration": {
+                "module": "configuration.extension"
+            }
+        }
+    }
+}

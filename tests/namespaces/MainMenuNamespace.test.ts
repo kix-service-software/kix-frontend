@@ -128,6 +128,7 @@ function createMenuExtension(mainContextId: string, permissions: UIComponentPerm
         mainContextId,
         permissions,
         primaryMenu: true,
-        text: ''
+        text: '',
+        orderRang: 100
     }
 }

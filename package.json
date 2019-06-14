@@ -7,8 +7,8 @@
   },
   "scripts": {
     "start": "node dist/index.js",
-    "build-cucumber": "rm -R dist/ && tsc && cp -R features/ dist/",
-    "test-cucumber": "rm -R dist/ && tsc && cp -R features/ dist/ && ./node_modules/cucumber/bin/cucumber-js dist/features/ -f json:features/report/cucumber_report.json",
+    "build-cucumber": "rm -R dist/ && tsc && cp -R features/ dist/ && cp -R src/extensions dist/src/",
+    "test-cucumber": "rm -R dist/ && tsc && cp -R features/ dist/ && cp -R src/extensions dist/src/ && ./node_modules/cucumber/bin/cucumber-js dist/features/ -f json:features/report/cucumber_report.json",
     "test": "export http_proxy= && export https_proxy= && export NODE_ENV=test && mocha --reporter spec --compilers ts:ts-node/register --require source-map-support/register --full-trace --bail 'tests/**/*.test.ts'",
     "pub": "gulp && npm version patch && npm publish",
     "bundle": "rm -f ${npm_package_config_bundlefile} && tar cvfz ${npm_package_config_bundlefile} * --exclude-from=.bundleignore",
