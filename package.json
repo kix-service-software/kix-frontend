@@ -12,7 +12,8 @@
     "test": "export http_proxy= && export https_proxy= && export NODE_ENV=test && mocha --reporter spec --compilers ts:ts-node/register --require source-map-support/register 'tests/**/*.test.ts'",
     "pub": "gulp && npm version patch && npm publish",
     "bundle": "rm -f ${npm_package_config_bundlefile} && tar cvfz ${npm_package_config_bundlefile} * --exclude-from=.bundleignore",
-    "extract-translatables": "./extract-translatables.sh"
+    "extract-translatables": "./extract-translatables.sh",
+    "build-doc": "raml2html --template ./doc/_raml2html_template/index.nunjucks ./doc/index.raml > ./doc/index.html"
   },
   "repository": {
     "type": "git",

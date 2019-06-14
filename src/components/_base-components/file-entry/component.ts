@@ -6,9 +6,6 @@ class ArticleAttachmentComponent {
 
     private state: ComponentState;
 
-    private content: string;
-    private contentType: string;
-
     public onCreate(): void {
         this.state = new ComponentState();
     }
@@ -19,8 +16,6 @@ class ArticleAttachmentComponent {
             this.state.fileSize = typeof input.attachment.FilesizeRaw !== 'undefined' ?
                 AttachmentUtil.getFileSize(input.attachment.FilesizeRaw) : input.attachment.Filesize;
             this.state.icon = this.getIcon(input.attachment);
-            this.content = input.attachment.Content;
-            this.contentType = input.attachment.ContentType;
         } else {
             this.state.fileName = input.fileName;
             this.state.fileSize = input.fileSize;
