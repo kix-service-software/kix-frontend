@@ -1,6 +1,6 @@
 import { KIXObjectService } from "../kix/KIXObjectService";
 import {
-    Translation, KIXObjectType, SysConfigItem, SysConfigKey, TranslationProperty,
+    Translation, KIXObjectType, SysConfigOption, SysConfigKey, TranslationProperty,
     TableFilterCriteria, KIXObjectLoadingOptions, KIXObject, KIXObjectSpecificLoadingOptions
 } from "../../model";
 import { SearchOperator } from "../SearchOperator";
@@ -52,27 +52,27 @@ export class TranslationService extends KIXObjectService<Translation> {
     }
 
     public async getLanguageName(lang: string): Promise<string> {
-        const languagesConfig = await KIXObjectService.loadObjects<SysConfigItem>(
-            KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.DEFAULT_USED_LANGUAGES]
+        const languagesConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.DEFAULT_USED_LANGUAGES]
         );
 
-        if (languagesConfig && languagesConfig.length && languagesConfig[0].Data[lang]) {
-            return languagesConfig[0].Data[lang];
+        if (languagesConfig && languagesConfig.length && languagesConfig[0].Value[lang]) {
+            return languagesConfig[0].Value[lang];
         }
 
         return lang;
     }
 
     public async getLanguages(): Promise<Array<[string, string]>> {
-        const languagesConfig = await KIXObjectService.loadObjects<SysConfigItem>(
-            KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.DEFAULT_USED_LANGUAGES]
+        const languagesConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.DEFAULT_USED_LANGUAGES]
         );
 
         const languages: Array<[string, string]> = [];
         if (languagesConfig && languagesConfig.length) {
-            for (const lang in languagesConfig[0].Data) {
-                if (languagesConfig[0].Data[lang]) {
-                    languages.push([lang, languagesConfig[0].Data[lang]]);
+            for (const lang in languagesConfig[0].Value) {
+                if (languagesConfig[0].Value[lang]) {
+                    languages.push([lang, languagesConfig[0].Value[lang]]);
                 }
             }
         }
@@ -80,11 +80,11 @@ export class TranslationService extends KIXObjectService<Translation> {
     }
 
     public static async getSystemDefaultLanguage(): Promise<string> {
-        const defaultLanguageConfig = await KIXObjectService.loadObjects<SysConfigItem>(
-            KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.DEFAULT_LANGUAGE]
+        const defaultLanguageConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.DEFAULT_LANGUAGE]
         );
 
-        return defaultLanguageConfig && defaultLanguageConfig.length ? defaultLanguageConfig[0].Data : null;
+        return defaultLanguageConfig && defaultLanguageConfig.length ? defaultLanguageConfig[0].Value : null;
     }
 
     public async checkFilterValue(translation: Translation, criteria: TableFilterCriteria): Promise<boolean> {

@@ -1,7 +1,7 @@
 import { KIXObjectService } from "../kix";
-import { SysConfigItem, KIXObjectType } from "../../model";
+import { SysConfigOption, KIXObjectType } from "../../model";
 
-export class SysConfigService extends KIXObjectService<SysConfigItem> {
+export class SysConfigService extends KIXObjectService<SysConfigOption> {
 
     private static INSTANCE: SysConfigService = null;
 
@@ -14,11 +14,11 @@ export class SysConfigService extends KIXObjectService<SysConfigItem> {
     }
 
     public async init(): Promise<void> {
-        await this.loadObjects(KIXObjectType.SYS_CONFIG_ITEM, null);
+        await this.loadObjects(KIXObjectType.SYS_CONFIG_OPTION, null);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {
-        return kixObjectType === KIXObjectType.SYS_CONFIG_ITEM;
+        return kixObjectType === KIXObjectType.SYS_CONFIG_OPTION;
     }
 
     public getLinkObjectName(): string {

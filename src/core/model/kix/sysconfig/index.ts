@@ -1,4 +1,4 @@
-export { SysConfigItem } from './SysConfigItem';
+export { SysConfigOption } from './SysConfigOption';
 export { SysConfigKey } from './SysConfigKey';
-export { SysConfigItemFactory } from './SysConfigItemFactory';
+export { SysConfigOptionFactory } from './SysConfigOptionFactory';
 export { SysConfigProperty } from './SysConfigProperty';

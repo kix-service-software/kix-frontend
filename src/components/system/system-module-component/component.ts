@@ -19,7 +19,7 @@ class Component extends AbstractMarkoComponent {
         ServiceRegistry.registerServiceInstance(SysConfigService.getInstance());
         ServiceRegistry.registerServiceInstance(SysConfigFormService.getInstance());
         FactoryService.getInstance().registerFactory(
-            KIXObjectType.SYS_CONFIG_ITEM, SysConfigBrowserFactory.getInstance()
+            KIXObjectType.SYS_CONFIG_OPTION, SysConfigBrowserFactory.getInstance()
         );
         TableFactoryService.getInstance().registerFactory(new SysConfigTableFactory());
         LabelService.getInstance().registerLabelProvider(new SysConfigLabelProvider());

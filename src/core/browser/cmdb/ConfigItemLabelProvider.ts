@@ -1,7 +1,7 @@
 import { ILabelProvider } from '..';
 import {
     ObjectIcon, KIXObjectType, ConfigItemProperty, ConfigItem,
-    DateTimeUtil, ConfigItemClass, GeneralCatalogItem, KIXObject, SysConfigItem, SysConfigKey, VersionProperty
+    DateTimeUtil, ConfigItemClass, GeneralCatalogItem, KIXObject, SysConfigOption, SysConfigKey, VersionProperty
 } from '../../model';
 import { KIXObjectService } from '../kix';
 import { SearchProperty } from '../SearchProperty';
@@ -93,8 +93,8 @@ export class ConfigItemLabelProvider implements ILabelProvider<ConfigItem> {
                 displayValue = 'Translatable#Number of version';
                 break;
             case ConfigItemProperty.NUMBER:
-                const hookConfig = await KIXObjectService.loadObjects<SysConfigItem>(
-                    KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.CONFIG_ITEM_HOOK]
+                const hookConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+                    KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.CONFIG_ITEM_HOOK]
                 ).catch((error) => []);
                 displayValue = hookConfig && hookConfig.length ? hookConfig[0].Data : 'CI#';
                 break;
@@ -203,8 +203,8 @@ export class ConfigItemLabelProvider implements ILabelProvider<ConfigItem> {
             if (id) {
                 let configItemHook: string = '';
 
-                const hookConfig = await KIXObjectService.loadObjects<SysConfigItem>(
-                    KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.CONFIG_ITEM_HOOK]
+                const hookConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+                    KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.CONFIG_ITEM_HOOK]
                 ).catch((error) => []);
 
                 if (hookConfig && hookConfig.length) {

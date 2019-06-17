@@ -1,8 +1,8 @@
 import { KIXObjectFormService } from "../kix/KIXObjectFormService";
 import { KIXObjectType } from "../../model";
-import { SysConfigItem } from "../../model/kix/sysconfig/SysConfigItem";
+import { SysConfigOption } from "../../model/kix/sysconfig/SysConfigOption";
 
-export class SysConfigFormService extends KIXObjectFormService<SysConfigItem> {
+export class SysConfigFormService extends KIXObjectFormService<SysConfigOption> {
 
     private static INSTANCE: SysConfigFormService = null;
 
@@ -19,6 +19,6 @@ export class SysConfigFormService extends KIXObjectFormService<SysConfigItem> {
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {
-        return kixObjectType === KIXObjectType.SYS_CONFIG_ITEM;
+        return kixObjectType === KIXObjectType.SYS_CONFIG_OPTION;
     }
 }

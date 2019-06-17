@@ -8,7 +8,7 @@ class Extension implements IAdminModuleExtension {
                 null, 'system', 'Translatable#System', null, [], [
                     new AdminModule(
                         null, 'sysconfig', 'Translatable#SysConfig', null,
-                        KIXObjectType.SYS_CONFIG_ITEM, 'system-admin-sysconfig'
+                        KIXObjectType.SYS_CONFIG_OPTION, 'system-admin-sysconfig'
                     )
                 ]
             )

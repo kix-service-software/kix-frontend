@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import { KIXObjectType, SysConfigKey, SysConfigItem } from '../core/model';
+import { KIXObjectType, SysConfigKey, SysConfigOption } from '../core/model';
 import { ConfigurationService, SysConfigService } from '../core/services';
 import { KIXRouter } from './KIXRouter';
 import * as Bowser from "bowser";
@@ -64,21 +64,21 @@ export class AuthenticationRouter extends KIXRouter {
     private async getImprintLink(): Promise<string> {
         let imprintLink = '';
         const config = ConfigurationService.getInstance().getServerConfiguration();
-        const imprintConfig = await SysConfigService.getInstance().loadObjects<SysConfigItem>(
-            config.BACKEND_API_TOKEN, '', KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.IMPRINT_LINK],
+        const imprintConfig = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
+            config.BACKEND_API_TOKEN, '', KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.IMPRINT_LINK],
             undefined, undefined
         );
 
         if (imprintConfig && imprintConfig.length) {
-            const data = imprintConfig[0].Data;
+            const data = imprintConfig[0].Value;
 
-            const defaultLangConfig = await SysConfigService.getInstance().loadObjects<SysConfigItem>(
-                config.BACKEND_API_TOKEN, '', KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.DEFAULT_LANGUAGE],
+            const defaultLangConfig = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
+                config.BACKEND_API_TOKEN, '', KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.DEFAULT_LANGUAGE],
                 undefined, undefined
             );
 
             if (defaultLangConfig && defaultLangConfig.length) {
-                imprintLink = data[defaultLangConfig[0].Data];
+                imprintLink = data[defaultLangConfig[0].Value];
             } else {
                 imprintLink = data['en'];
             }

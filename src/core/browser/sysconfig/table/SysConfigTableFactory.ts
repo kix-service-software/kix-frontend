@@ -3,13 +3,13 @@ import {
     TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../table";
-import { KIXObjectType, DataType, KIXObjectLoadingOptions, SysConfigProperty } from "../../../model";
+import { KIXObjectType, DataType, KIXObjectLoadingOptions, SysConfigProperty, KIXObjectProperty } from "../../../model";
 import { TableFactory } from "../../table/TableFactory";
 import { SysConfigTableContentProvider } from "./SysConfigTableContentProvider";
 
 export class SysConfigTableFactory extends TableFactory {
 
-    public objectType: KIXObjectType = KIXObjectType.SYS_CONFIG_ITEM;
+    public objectType: KIXObjectType = KIXObjectType.SYS_CONFIG_OPTION;
 
     public createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
@@ -37,7 +37,7 @@ export class SysConfigTableFactory extends TableFactory {
     ): TableConfiguration {
         const tableColumns = [
             new DefaultColumnConfiguration(
-                SysConfigProperty.KEY, true, false, true, false, 150, true, true, false,
+                SysConfigProperty.NAME, true, false, true, false, 150, true, true, false,
                 DataType.STRING, true, null, null, false
             ),
             new DefaultColumnConfiguration(
@@ -45,16 +45,16 @@ export class SysConfigTableFactory extends TableFactory {
                 DataType.STRING, true, null, null, false
             ),
             new DefaultColumnConfiguration(
-                SysConfigProperty.VALID_ID, true, false, true, false, 100, true, true, true
+                KIXObjectProperty.VALID_ID, true, false, true, false, 100, true, true, true
             ),
             new DefaultColumnConfiguration(
-                SysConfigProperty.CREATE_TIME, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
+                KIXObjectProperty.CREATE_TIME, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
             ),
-            new DefaultColumnConfiguration(SysConfigProperty.CREATE_BY, true, false, true, false, 150, true, true),
+            new DefaultColumnConfiguration(KIXObjectProperty.CREATE_BY, true, false, true, false, 150, true, true),
             new DefaultColumnConfiguration(
-                SysConfigProperty.CHANGE_TIME, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
+                KIXObjectProperty.CHANGE_TIME, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
             ),
-            new DefaultColumnConfiguration(SysConfigProperty.CHANGE_BY, true, false, true, false, 150, true, true)
+            new DefaultColumnConfiguration(KIXObjectProperty.CHANGE_BY, true, false, true, false, 150, true, true)
         ];
 
         if (!tableConfiguration) {

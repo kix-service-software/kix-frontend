@@ -1,9 +1,9 @@
 import { TableContentProvider } from "../../table/TableContentProvider";
 import { KIXObjectType, KIXObjectLoadingOptions } from "../../../model";
 import { ITable } from "../../table";
-import { SysConfigItem } from "../../../model/kix/sysconfig/SysConfigItem";
+import { SysConfigOption } from "../../../model/kix/sysconfig/SysConfigOption";
 
-export class SysConfigTableContentProvider extends TableContentProvider<SysConfigItem> {
+export class SysConfigTableContentProvider extends TableContentProvider<SysConfigOption> {
 
     public constructor(
         table: ITable,
@@ -11,7 +11,7 @@ export class SysConfigTableContentProvider extends TableContentProvider<SysConfi
         loadingOptions: KIXObjectLoadingOptions,
         contextId?: string
     ) {
-        super(KIXObjectType.SYS_CONFIG_ITEM, table, objectIds, loadingOptions, contextId);
+        super(KIXObjectType.SYS_CONFIG_OPTION, table, objectIds, loadingOptions, contextId);
     }
 
 }

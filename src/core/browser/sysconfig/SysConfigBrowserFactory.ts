@@ -1,7 +1,7 @@
 import { KIXObjectFactory } from "../kix/KIXObjectFactory";
-import { SysConfigItem } from "../../model/kix/sysconfig/SysConfigItem";
+import { SysConfigOption } from "../../model/kix/sysconfig/SysConfigOption";
 
-export class SysConfigBrowserFactory extends KIXObjectFactory<SysConfigItem> {
+export class SysConfigBrowserFactory extends KIXObjectFactory<SysConfigOption> {
 
     private static INSTANCE: SysConfigBrowserFactory;
 
@@ -16,8 +16,8 @@ export class SysConfigBrowserFactory extends KIXObjectFactory<SysConfigItem> {
         super();
     }
 
-    public async create(sysConfig: SysConfigItem): Promise<SysConfigItem> {
-        const newSysConfig = new SysConfigItem(sysConfig);
+    public async create(sysConfig: SysConfigOption): Promise<SysConfigOption> {
+        const newSysConfig = new SysConfigOption(sysConfig);
         return newSysConfig;
     }
 

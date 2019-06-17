@@ -1,4 +1,4 @@
-import { AttachmentError, KIXObjectType, SysConfigKey, SysConfigItem } from "../model";
+import { AttachmentError, KIXObjectType, SysConfigKey, SysConfigOption } from "../model";
 import { KIXObjectService } from "./kix";
 
 export class AttachmentUtil {
@@ -27,10 +27,10 @@ export class AttachmentUtil {
     }
 
     public static async getMaxUploadFileSize(): Promise<number> {
-        const maxUploadFileSize = await KIXObjectService.loadObjects<SysConfigItem>(
-            KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.MAX_ALLOWED_SIZE]
+        const maxUploadFileSize = await KIXObjectService.loadObjects<SysConfigOption>(
+            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.MAX_ALLOWED_SIZE]
         );
-        return maxUploadFileSize && maxUploadFileSize.length ? maxUploadFileSize[0].Data : null;
+        return maxUploadFileSize && maxUploadFileSize.length ? maxUploadFileSize[0].Value : null;
     }
 
     // TODO: byte-sequenz mal mit prüfen

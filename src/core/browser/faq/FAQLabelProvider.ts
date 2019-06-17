@@ -1,6 +1,6 @@
 import { ILabelProvider } from "..";
 import {
-    DateTimeUtil, ObjectIcon, KIXObjectType, SysConfigItem, SysConfigKey
+    DateTimeUtil, ObjectIcon, KIXObjectType, SysConfigOption, SysConfigKey
 } from "../../model";
 import { FAQArticleProperty, FAQArticle, FAQCategory } from "../../model/kix/faq";
 import { KIXObjectService, ServiceRegistry } from "../kix";
@@ -100,8 +100,8 @@ export class FAQLabelProvider implements ILabelProvider<FAQArticle> {
                 displayValue = 'Translatable#Links';
                 break;
             case FAQArticleProperty.NUMBER:
-                const hookConfig = await KIXObjectService.loadObjects<SysConfigItem>(
-                    KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.FAQ_HOOK]
+                const hookConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+                    KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.FAQ_HOOK]
                 ).catch((error) => []);
                 if (hookConfig && hookConfig.length) {
                     displayValue = hookConfig[0].Data;
@@ -206,8 +206,8 @@ export class FAQLabelProvider implements ILabelProvider<FAQArticle> {
             if (id) {
                 let faqHook: string = '';
 
-                const hookConfig = await KIXObjectService.loadObjects<SysConfigItem>(
-                    KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.FAQ_HOOK]
+                const hookConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+                    KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.FAQ_HOOK]
                 ).catch((error) => []);
 
                 if (hookConfig && hookConfig.length) {

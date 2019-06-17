@@ -10,8 +10,8 @@ export class ComponentState {
             'table-widget', 'Translatable#System: SysConfig',
             [
             ],
-            new TableWidgetSettings(KIXObjectType.SYS_CONFIG_ITEM,
-                [SysConfigProperty.ID, SortOrder.UP]), false, false, null, 'kix-icon-gears')
+            new TableWidgetSettings(KIXObjectType.SYS_CONFIG_OPTION,
+                [SysConfigProperty.NAME, SortOrder.UP]), false, false, null, 'kix-icon-gears')
     ) { }
 
 }
