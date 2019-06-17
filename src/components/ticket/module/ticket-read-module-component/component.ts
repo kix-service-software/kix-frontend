@@ -14,7 +14,7 @@ import {
     TicketContext, TicketDetailsContext, TicketSearchContext, TicketListContext, ArticleZipAttachmentDownloadAction,
     ArticlePrintAction, TicketPrintAction, TicketSearchAction, ShowUserTicketsAction, TicketPriorityTableFactory,
     TicketQueueTableFactory, TicketTypeTableFactory, TicketStateTableFactory, TicketFormService,
-    EmailRecipientValidator, PendingTimeValidator
+    EmailRecipientValidator, PendingTimeValidator, ArticleFormService
 } from "../../../../core/browser/ticket";
 import { ChannelService } from "../../../../core/browser/channel";
 import { ChannelLabelProvider } from "../../../../core/browser/channel/ChannelLabelProvider";
@@ -39,6 +39,7 @@ class Component extends AbstractMarkoComponent {
         ServiceRegistry.registerServiceInstance(QueueService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketTemplateService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketFormService.getInstance());
+        ServiceRegistry.registerServiceInstance(ArticleFormService.getInstance());
 
         FormValidationService.getInstance().registerValidator(new PendingTimeValidator());
         FormValidationService.getInstance().registerValidator(new EmailRecipientValidator());
