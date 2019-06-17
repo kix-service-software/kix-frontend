@@ -1,4 +1,4 @@
-export enum SysConfigProperty {
+export enum SysConfigOptionProperty {
 
     NAME = 'Name',
 

@@ -1,5 +1,5 @@
 import {
-    ObjectIcon, KIXObjectType, User, DateTimeUtil, SysConfigProperty, KIXObjectProperty
+    ObjectIcon, KIXObjectType, User, DateTimeUtil, SysConfigOptionProperty, KIXObjectProperty
 } from '../../model';
 import { ILabelProvider } from '..';
 import { TranslationService } from '../i18n/TranslationService';
@@ -26,14 +26,12 @@ export class SysConfigLabelProvider implements ILabelProvider<SysConfigOption> {
                     const valid = objectData.validObjects.find((v) => v.ID === value);
                     displayValue = valid ? valid.Name : value;
                     break;
-                case KIXObjectProperty.CREATE_BY:
                 case KIXObjectProperty.CHANGE_BY:
                     const users = await KIXObjectService.loadObjects<User>(
                         KIXObjectType.USER, [value], null, null, true
                     ).catch((error) => [] as User[]);
                     displayValue = users && !!users.length ? users[0].UserFullname : value;
                     break;
-                case KIXObjectProperty.CREATE_TIME:
                 case KIXObjectProperty.CHANGE_TIME:
                     displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                     break;
@@ -55,10 +53,10 @@ export class SysConfigLabelProvider implements ILabelProvider<SysConfigOption> {
     public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
-            case SysConfigProperty.NAME:
-                displayValue = 'Translatable#Key';
+            case SysConfigOptionProperty.NAME:
+                displayValue = 'Translatable#Name';
                 break;
-            case SysConfigProperty.VALUE:
+            case SysConfigOptionProperty.VALUE:
                 displayValue = 'Translatable#Value';
                 break;
             case KIXObjectProperty.COMMENT:
@@ -66,12 +64,6 @@ export class SysConfigLabelProvider implements ILabelProvider<SysConfigOption> {
                 break;
             case KIXObjectProperty.VALID_ID:
                 displayValue = 'Translatable#Validity';
-                break;
-            case KIXObjectProperty.CREATE_BY:
-                displayValue = 'Translatable#Created by';
-                break;
-            case KIXObjectProperty.CREATE_TIME:
-                displayValue = 'Translatable#Created at';
                 break;
             case KIXObjectProperty.CHANGE_BY:
                 displayValue = 'Translatable#Changed by';
@@ -100,7 +92,7 @@ export class SysConfigLabelProvider implements ILabelProvider<SysConfigOption> {
         let displayValue = sysConfig[property];
 
         switch (property) {
-            case SysConfigProperty.NAME:
+            case SysConfigOptionProperty.NAME:
                 displayValue = sysConfig.Name;
                 break;
             default:
@@ -143,10 +135,10 @@ export class SysConfigLabelProvider implements ILabelProvider<SysConfigOption> {
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
         if (translatable) {
             return await TranslationService.translate(
-                plural ? 'Translatable#System Addresses' : 'Translatable#System Address'
+                plural ? 'Translatable#' : 'Translatable#'
             );
         }
-        return plural ? 'SystemAddresses' : 'SystemAddress';
+        return plural ? '' : '';
     }
 
 
