@@ -70,6 +70,8 @@ export enum KIXObjectType {
 
     SYS_CONFIG_OPTION = 'SysConfigOption',
 
+    SYS_CONFIG_OPTION_DEFINITION = 'SysConfigOptionDefinition',
+
     SYSTEM_ADDRESS = 'SystemAddress',
 
     TEXT_MODULE = "TextModule",
