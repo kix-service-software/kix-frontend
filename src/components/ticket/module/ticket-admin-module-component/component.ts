@@ -50,7 +50,7 @@ class Component extends AbstractMarkoComponent {
                 'new-ticket-type-dialog',
                 new WidgetConfiguration(
                     'new-ticket-type-dialog', 'Translatable#New Type', [], {},
-                    false, false, WidgetSize.BOTH, 'kix-icon-new-gear'
+                    false, false, 'kix-icon-new-gear'
                 ),
                 KIXObjectType.TICKET_TYPE,
                 ContextMode.CREATE_ADMIN
@@ -72,7 +72,7 @@ class Component extends AbstractMarkoComponent {
                 'edit-ticket-type-dialog',
                 new WidgetConfiguration(
                     'edit-ticket-type-dialog', 'Translatable#Edit Type', [], {},
-                    false, false, WidgetSize.BOTH, 'kix-icon-edit'
+                    false, false, 'kix-icon-edit'
                 ),
                 KIXObjectType.TICKET_TYPE,
                 ContextMode.EDIT_ADMIN
@@ -107,7 +107,7 @@ class Component extends AbstractMarkoComponent {
                 'new-ticket-state-dialog',
                 new WidgetConfiguration(
                     'new-ticket-state-dialog', 'Translatable#New State', [], {},
-                    false, false, WidgetSize.BOTH, 'kix-icon-new-gear'
+                    false, false, 'kix-icon-new-gear'
                 ),
                 KIXObjectType.TICKET_STATE,
                 ContextMode.CREATE_ADMIN
@@ -128,7 +128,7 @@ class Component extends AbstractMarkoComponent {
                 'edit-ticket-state-dialog',
                 new WidgetConfiguration(
                     'edit-ticket-state-dialog', 'Translatable#Edit State', [], {},
-                    false, false, WidgetSize.BOTH, 'kix-icon-edit'
+                    false, false, 'kix-icon-edit'
                 ),
                 KIXObjectType.TICKET_STATE,
                 ContextMode.EDIT_ADMIN
@@ -163,7 +163,7 @@ class Component extends AbstractMarkoComponent {
                 'new-ticket-priority-dialog',
                 new WidgetConfiguration(
                     'new-ticket-priority-dialog', 'Translatable#New Priority', [], {},
-                    false, false, WidgetSize.BOTH, 'kix-icon-new-gear'
+                    false, false, 'kix-icon-new-gear'
                 ),
                 KIXObjectType.TICKET_PRIORITY,
                 ContextMode.CREATE_ADMIN
@@ -184,7 +184,7 @@ class Component extends AbstractMarkoComponent {
                 'edit-ticket-priority-dialog',
                 new WidgetConfiguration(
                     'edit-ticket-priority-dialog', 'Translatable#Edit Priority', [], {},
-                    false, false, WidgetSize.BOTH, 'kix-icon-edit'
+                    false, false, 'kix-icon-edit'
                 ),
                 KIXObjectType.TICKET_PRIORITY,
                 ContextMode.EDIT_ADMIN
@@ -221,7 +221,7 @@ class Component extends AbstractMarkoComponent {
                 'new-ticket-queue-dialog',
                 new WidgetConfiguration(
                     'new-ticket-queue-dialog', 'Translatable#New Queue', [], {},
-                    false, false, WidgetSize.BOTH, 'kix-icon-new-gear'
+                    false, false, 'kix-icon-new-gear'
                 ),
                 KIXObjectType.QUEUE,
                 ContextMode.CREATE_ADMIN

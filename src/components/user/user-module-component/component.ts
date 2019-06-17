@@ -68,7 +68,7 @@ class Component extends AbstractMarkoComponent {
                 'new-user-dialog',
                 new WidgetConfiguration(
                     'new-user-dialog', 'Translatable#New Agent', [], {},
-                    false, false, WidgetSize.BOTH, 'kix-icon-new-gear'
+                    false, false, 'kix-icon-new-gear'
                 ),
                 KIXObjectType.USER,
                 ContextMode.CREATE_ADMIN
@@ -89,7 +89,7 @@ class Component extends AbstractMarkoComponent {
                 'edit-user-dialog',
                 new WidgetConfiguration(
                     'edit-user-dialog', 'Translatable#Edit Agent', [], {},
-                    false, false, WidgetSize.BOTH, 'kix-icon-edit'
+                    false, false, 'kix-icon-edit'
                 ),
                 KIXObjectType.USER,
                 ContextMode.EDIT_ADMIN
@@ -120,7 +120,7 @@ class Component extends AbstractMarkoComponent {
                 'new-user-role-dialog',
                 new WidgetConfiguration(
                     'new-user-role-dialog', 'Translatable#New Role', [], {},
-                    false, false, WidgetSize.BOTH, 'kix-icon-new-gear'
+                    false, false, 'kix-icon-new-gear'
                 ),
                 KIXObjectType.ROLE,
                 ContextMode.CREATE_ADMIN
@@ -141,7 +141,7 @@ class Component extends AbstractMarkoComponent {
                 'edit-user-role-dialog',
                 new WidgetConfiguration(
                     'edit-user-role-dialog', 'Translatable#Edit Role', [], {},
-                    false, false, WidgetSize.BOTH, 'kix-icon-edit'
+                    false, false, 'kix-icon-edit'
                 ),
                 KIXObjectType.ROLE,
                 ContextMode.EDIT_ADMIN

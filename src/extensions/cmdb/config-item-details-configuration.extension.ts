@@ -18,7 +18,7 @@ export class Extension implements IConfigurationExtension {
                 new WidgetConfiguration(
                     'config-item-info-widget', 'Translatable#Config Item Information',
                     ['config-item-edit-action', 'config-item-print-action'],
-                    {}, false, true, WidgetSize.LARGE, null, false
+                    {}, false, true, null, false
                 ),
                 [new UIComponentPermission('cmdb/configitems', [CRUD.READ])]
             );
@@ -27,7 +27,7 @@ export class Extension implements IConfigurationExtension {
             new ConfiguredWidget("config-item-history-widget",
                 new WidgetConfiguration(
                     "config-item-history-widget", "Translatable#History", ['config-item-print-action'],
-                    null, true, true, WidgetSize.BOTH, null, false
+                    null, true, true, null, false
                 ),
                 [new UIComponentPermission('cmdb/configitems/*/history', [CRUD.READ])]
             );
@@ -44,7 +44,7 @@ export class Extension implements IConfigurationExtension {
                             ["FAQs", KIXObjectType.FAQ_ARTICLE]
                         ]
                     },
-                    true, true, WidgetSize.LARGE, null, false
+                    true, true, null, false
                 ),
                 [new UIComponentPermission('links', [CRUD.READ])]
             );
@@ -55,7 +55,7 @@ export class Extension implements IConfigurationExtension {
                     'config-item-graph-widget', 'Translatable#Link Graph',
                     ['config-item-print-action'],
                     null,
-                    true, true, WidgetSize.LARGE, null, false
+                    true, true, null, false
                 ),
                 [new UIComponentPermission('cmdb/configitems', [CRUD.READ])]
             );
@@ -66,7 +66,7 @@ export class Extension implements IConfigurationExtension {
                     'config-item-images-widget', 'Translatable#Images',
                     [],
                     null,
-                    true, true, WidgetSize.LARGE, null, false
+                    true, true, null, false
                 ),
                 [new UIComponentPermission('cmdb/configitems/*/images', [CRUD.READ])]
             );
@@ -92,7 +92,7 @@ export class Extension implements IConfigurationExtension {
             new WidgetConfiguration(
                 'table-widget', "Translatable#Version Details",
                 ['config-item-version-compare-action', 'config-item-edit-action'],
-                { objectType: KIXObjectType.CONFIG_ITEM_VERSION }, false, true, WidgetSize.BOTH, null, true
+                { objectType: KIXObjectType.CONFIG_ITEM_VERSION }, false, true, WidgetSize.BOTH, true
             ),
             [new UIComponentPermission('cmdb/configitems/*/versions', [CRUD.READ])]
         );

@@ -14,12 +14,12 @@ export class Extension implements IConfigurationExtension {
 
         const ticketStateDetailsWidget = new ConfiguredWidget('ticket-state-details-widget', new WidgetConfiguration(
             'ticket-state-info-widget', 'State Information', ['ticket-admin-state-edit'], null,
-            false, true, WidgetSize.BOTH, null, false
+            false, true, null, false
         ));
 
         const textmodulesWidget = new ConfiguredWidget('ticket-state-assigned-textmodules', new WidgetConfiguration(
             'ticket-state-assigned-textmodules', 'Assign Text Modules',
-            ['ticket-admin-state-textmodules-edit'], null, false, true, WidgetSize.BOTH, null, false
+            ['ticket-admin-state-textmodules-edit'], null, false, true, null, false
         ));
 
         return new ContextConfiguration(

@@ -18,7 +18,7 @@ export class ModuleExtension implements IConfigurationExtension {
         const helpWidget = new ConfiguredWidget('20180919-help-widget',
             new WidgetConfiguration(
                 'help-widget', 'Translatable#Help', [], { helpText: 'Translatable#Helptext_Search_Organisation' },
-                false, false, WidgetSize.BOTH, 'kix-icon-query', false
+                false, false, 'kix-icon-query', false
             ),
             [new UIComponentPermission('faq/articles', [CRUD.READ])]
         );

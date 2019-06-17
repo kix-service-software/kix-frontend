@@ -21,7 +21,7 @@ export class Extension implements IConfigurationExtension {
                 // tslint:disable-next-line:max-line-length
                 helpText: 'Translatable#<b>-- KIX Professional Feature--</b><p>To use the text modules available in your system, enter „::“ (colon colon). Then choose the text modules you want to use in the context menu. You can narrow down the key word selection manually by entering more text.</p>'
             },
-            false, false, WidgetSize.BOTH, 'kix-icon-textblocks'
+            false, false, 'kix-icon-textblocks'
         ));
 
         const sidebars = ['20180919-help-widget'];

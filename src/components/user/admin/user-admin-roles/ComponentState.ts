@@ -12,7 +12,7 @@ export class ComponentState {
                 'user-admin-role-create-action', 'user-admin-role-table-delete-action',
                 'import-action', 'csv-export-action'
             ],
-            new TableWidgetSettings(KIXObjectType.ROLE, [RoleProperty.NAME, SortOrder.UP]), false, false, null,
+            new TableWidgetSettings(KIXObjectType.ROLE, [RoleProperty.NAME, SortOrder.UP]), false, false,
             'kix-icon-gears'
         )
     ) { }

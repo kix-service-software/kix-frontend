@@ -141,7 +141,7 @@ class Component extends AbstractMarkoComponent {
             'search-ticket-dialog',
             new WidgetConfiguration(
                 'search-ticket-dialog', 'Translatable#Ticket Search', [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-search-ticket'
+                false, false, 'kix-icon-search-ticket'
             ),
             KIXObjectType.TICKET,
             ContextMode.SEARCH

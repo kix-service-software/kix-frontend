@@ -26,7 +26,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                         null, null, null, null, true
                     )
                 },
-                false, true, WidgetSize.LARGE, 'kix-icon-man-house', false
+                false, true, 'kix-icon-man-house', false
             ),
             [new UIComponentPermission('organisations', [CRUD.READ])]
         );
@@ -45,7 +45,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                             null, null, null, null, true
                         )
                     },
-                    false, true, WidgetSize.LARGE, 'kix-icon-man-bubble', false
+                    false, true, 'kix-icon-man-bubble', false
                 ),
                 [new UIComponentPermission('contacts', [CRUD.READ])]
             );
@@ -56,7 +56,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
         const notesSidebar =
             new ConfiguredWidget('20181010-organisation-notes', new WidgetConfiguration(
                 'notes-widget', 'Translatable#Notes', [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-note', false)
+                false, false, 'kix-icon-note', false)
             );
 
         const sidebars = ['20181010-organisation-notes'];

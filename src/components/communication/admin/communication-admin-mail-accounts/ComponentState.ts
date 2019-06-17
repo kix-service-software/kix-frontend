@@ -10,7 +10,7 @@ export class ComponentState {
             'table-widget', 'Translatable#Communication: Email: Email Accounts',
             ['mail-account-create'],
             new TableWidgetSettings(KIXObjectType.MAIL_ACCOUNT,
-                [MailAccountProperty.HOST, SortOrder.UP]), false, false, null, 'kix-icon-gears')
+                [MailAccountProperty.HOST, SortOrder.UP]), false, false, 'kix-icon-gears')
     ) { }
 
 }

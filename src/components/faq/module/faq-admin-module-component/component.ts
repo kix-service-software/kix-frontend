@@ -39,7 +39,7 @@ class Component extends AbstractMarkoComponent {
                 'new-faq-category-dialog',
                 new WidgetConfiguration(
                     'new-faq-category-dialog', 'Translatable#New Category', [], {},
-                    false, false, WidgetSize.BOTH, 'kix-icon-new-gear'
+                    false, false, 'kix-icon-new-gear'
                 ),
                 KIXObjectType.FAQ_CATEGORY,
                 ContextMode.CREATE_ADMIN
@@ -60,7 +60,7 @@ class Component extends AbstractMarkoComponent {
                 'edit-faq-category-dialog',
                 new WidgetConfiguration(
                     'edit-faq-category-dialog', 'Translatable#Edit FAQ Category', [], {}, false,
-                    false, WidgetSize.BOTH, 'kix-icon-edit'
+                    false, 'kix-icon-edit'
                 ),
                 KIXObjectType.FAQ_CATEGORY,
                 ContextMode.EDIT_ADMIN

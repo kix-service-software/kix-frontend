@@ -56,7 +56,7 @@ class Component extends AbstractMarkoComponent {
             'search-organisation-dialog',
             new WidgetConfiguration(
                 'search-organisation-dialog', 'Translatable#Organisation Search', [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-search-man-house'
+                false, false, 'kix-icon-search-man-house'
             ),
             KIXObjectType.ORGANISATION,
             ContextMode.SEARCH

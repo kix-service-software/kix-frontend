@@ -2,7 +2,7 @@ import { IConfigurationExtension } from '../../core/extensions';
 import {
     ContextConfiguration, WidgetConfiguration, WidgetSize, ConfiguredWidget, ConfigItemProperty,
     FormField, VersionProperty, FormFieldOption, FormContext, KIXObjectType, Form,
-    KIXObjectPropertyFilter, TableFilterCriteria, CRUD
+    KIXObjectPropertyFilter, TableFilterCriteria, CRUD, TableWidgetSettings
 } from '../../core/model';
 import { CMDBContext, ConfigItemChartConfiguration } from '../../core/browser/cmdb';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
@@ -22,7 +22,7 @@ export class Extension implements IConfigurationExtension {
 
         const notesSidebar = new ConfiguredWidget('20180830-cmdb-notes-sidebar',
             new WidgetConfiguration(
-                'notes-widget', 'Translatable#Notes', [], {}, false, false, WidgetSize.BOTH, 'kix-icon-note', false
+                'notes-widget', 'Translatable#Notes', [], {}, false, false, 'kix-icon-note', false
             ));
 
         const sidebarWidgets = [notesSidebar];
@@ -55,9 +55,10 @@ export class Extension implements IConfigurationExtension {
         const chart1 = new ConfiguredWidget('20180903-cmdb-chart-1',
             new WidgetConfiguration(
                 'config-item-chart-widget', 'Translatable#Number of Config Items', [], chartConfig1,
-                false, true, WidgetSize.SMALL, null, true
+                false, true, null, true
             ),
-            [new UIComponentPermission('cmdb/configitems', [CRUD.READ])]
+            [new UIComponentPermission('cmdb/configitems', [CRUD.READ])],
+            WidgetSize.SMALL
         );
 
         const chartConfig2 = new ConfigItemChartConfiguration(ConfigItemProperty.CUR_DEPL_STATE_ID, {
@@ -98,9 +99,10 @@ export class Extension implements IConfigurationExtension {
         const chart2 = new ConfiguredWidget('20180903-cmdb-chart-2',
             new WidgetConfiguration(
                 'config-item-chart-widget', 'Translatable#Overview Config Items Deployment State', [], chartConfig2,
-                false, true, WidgetSize.SMALL, null, true
+                false, true, null, true
             ),
-            [new UIComponentPermission('cmdb/configitems', [CRUD.READ])]
+            [new UIComponentPermission('cmdb/configitems', [CRUD.READ])],
+            WidgetSize.SMALL
         );
 
         const chartConfig3 = new ConfigItemChartConfiguration(ConfigItemProperty.CUR_INCI_STATE_ID, {
@@ -127,9 +129,10 @@ export class Extension implements IConfigurationExtension {
         const chart3 = new ConfiguredWidget('20180903-cmdb-chart-3',
             new WidgetConfiguration(
                 'config-item-chart-widget', 'Translatable#Number of Config Items in critical incident state',
-                [], chartConfig3, false, true, WidgetSize.SMALL, null, true
+                [], chartConfig3, false, true, null, true
             ),
-            [new UIComponentPermission('cmdb/configitems', [CRUD.READ])]
+            [new UIComponentPermission('cmdb/configitems', [CRUD.READ])],
+            WidgetSize.SMALL
         );
 
         const content = [
@@ -151,9 +154,11 @@ export class Extension implements IConfigurationExtension {
                 'table-widget', 'Translatable#Overview Config Items', [
                     'bulk-action', 'ticket-create-action', 'config-item-create-action', 'csv-export-action'
                 ],
-                { objectType: KIXObjectType.CONFIG_ITEM }, false, false, WidgetSize.LARGE, 'kix-icon-ci', true, filter
+                new TableWidgetSettings(KIXObjectType.CONFIG_ITEM, null, null, null, null, null, filter),
+                false, false, 'kix-icon-ci', true
             ),
-            [new UIComponentPermission('cmdb/configitems', [CRUD.READ])]
+            [new UIComponentPermission('cmdb/configitems', [CRUD.READ])],
+            WidgetSize.LARGE
         );
 
         const contentWidgets = [chart1, chart2, chart3, ciListWidget];

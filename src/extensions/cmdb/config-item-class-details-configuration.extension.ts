@@ -18,7 +18,7 @@ export class Extension implements IConfigurationExtension {
             'config-item-class-details-widget', new WidgetConfiguration(
                 'config-item-class-info-widget', 'Translatable#CI Class Information',
                 ['cmdb-admin-ci-class-edit'], null,
-                false, true, WidgetSize.BOTH, null, false
+                false, true, null, false
             )
         );
 
@@ -31,7 +31,7 @@ export class Extension implements IConfigurationExtension {
                     new TableConfiguration(KIXObjectType.PERMISSION, null, null, null, null, null, null, null, null,
                         TableHeaderHeight.SMALL, TableRowHeight.SMALL), null, false
                 ),
-                true, true, WidgetSize.BOTH, null, true
+                true, true, null, true
             )
         );
 
@@ -47,7 +47,7 @@ export class Extension implements IConfigurationExtension {
                         TableHeaderHeight.SMALL, TableRowHeight.SMALL
                     ), null, false
                 ),
-                true, true, WidgetSize.BOTH, null, true
+                true, true, null, true
             )
         );
 
@@ -63,7 +63,7 @@ export class Extension implements IConfigurationExtension {
                         TableHeaderHeight.LARGE, TableRowHeight.LARGE
                     ), null, false
                 ),
-                false, true, WidgetSize.BOTH, null, false
+                false, true, null, false
             )
         );
 

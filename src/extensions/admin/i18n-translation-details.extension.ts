@@ -14,7 +14,7 @@ export class Extension implements IConfigurationExtension {
         const translationInfoLane =
             new ConfiguredWidget("i18n-translation-information-lane", new WidgetConfiguration(
                 "i18n-translation-info-widget", "Pattern Information", [], {},
-                false, true, WidgetSize.SMALL, null, false)
+                false, true, null, false)
             );
 
         const laneTabs = ["i18n-translation-information-lane"];
@@ -27,7 +27,7 @@ export class Extension implements IConfigurationExtension {
         const languagesListWidget =
             new ConfiguredWidget("20190125104012-languages-list", new WidgetConfiguration(
                 "i18n-translation-language-list-widget", "Translations", [], null,
-                false, true, WidgetSize.LARGE, null, false)
+                false, true, null, false)
             );
 
         const content = ['20190125104012-languages-list'];

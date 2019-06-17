@@ -32,7 +32,7 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
                     OrganisationProperty.CITY,
                     OrganisationProperty.COUNTRY
                 ], true),
-                false, false, WidgetSize.BOTH, 'kix-icon-man-house', false)
+                false, false, 'kix-icon-man-house', false)
             );
         const contactInfoSidebar =
             new ConfiguredWidget('20180524110920', new WidgetConfiguration(
@@ -47,7 +47,7 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
                     ContactProperty.MOBILE,
                     ContactProperty.EMAIL
                 ], true),
-                false, false, WidgetSize.BOTH, 'kix-icon-man-bubble', false)
+                false, false, 'kix-icon-man-bubble', false)
             );
 
         const helpWidget = new ConfiguredWidget('20180919-help-widget', new WidgetConfiguration(
@@ -55,7 +55,7 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
                 // tslint:disable-next-line:max-line-length
                 helpText: 'Translatable#Helptext_Textmodules_TicketCreate'
             },
-            false, false, WidgetSize.BOTH, 'kix-icon-textblocks'
+            false, false, 'kix-icon-textblocks'
         ));
 
         const sidebars = ['20180524110915', '20180524110920', '20180919-help-widget'];

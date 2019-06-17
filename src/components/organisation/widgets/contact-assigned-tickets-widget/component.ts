@@ -74,7 +74,7 @@ class Component {
                     )
                 ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             ),
-            false, true, WidgetSize.SMALL, null, false)
+            false, true, null, false)
             ;
 
         this.escalatedTicketsConfig = new WidgetConfiguration(
@@ -115,7 +115,7 @@ class Component {
                     )
                 ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             ),
-            false, true, WidgetSize.SMALL, null, false);
+            false, true, null, false);
 
         this.reminderTicketsConfig = new WidgetConfiguration(
             'contact-reminder-tickets-group', 'Translatable#Reminder Tickets', [],
@@ -148,7 +148,7 @@ class Component {
                     )
                 ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             ),
-            false, true, WidgetSize.SMALL, null, false);
+            false, true, null, false);
 
         this.newTicketsConfig = new WidgetConfiguration(
             'contact-new-tickets-group', 'Translatable#New Tickets', [],
@@ -179,7 +179,7 @@ class Component {
                     )
                 ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             ),
-            false, true, WidgetSize.SMALL, null, false);
+            false, true, null, false);
 
         this.pendingTicketsConfig = new WidgetConfiguration(
             'contact-pending-tickets-group', 'Translatable#Pending Tickets', [], new TableConfiguration(
@@ -213,7 +213,7 @@ class Component {
                     )
                 ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             ),
-            false, true, WidgetSize.SMALL, null, false);
+            false, true, null, false);
 
         context.registerListener('contact-assigned-tickets-component', {
             explorerBarToggled: () => { return; },

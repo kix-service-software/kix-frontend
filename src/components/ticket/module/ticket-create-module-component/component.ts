@@ -36,7 +36,7 @@ class Component extends AbstractMarkoComponent {
             'new-ticket-dialog',
             new WidgetConfiguration(
                 'new-ticket-dialog', 'Translatable#New Ticket', [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-new-ticket'
+                false, false, 'kix-icon-new-ticket'
             ),
             KIXObjectType.TICKET,
             ContextMode.CREATE

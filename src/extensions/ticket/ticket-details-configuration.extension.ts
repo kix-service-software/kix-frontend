@@ -18,20 +18,20 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
         // Content Widgets
         const ticketDetailsWidget = new ConfiguredWidget('ticket-details-widget', new WidgetConfiguration(
             'ticket-details-widget', 'Translatable#Ticket Details', ['ticket-create-action'], null,
-            false, true, WidgetSize.BOTH, null, false
+            false, true, null, false
         ));
 
         const ticketHistoryLane =
             new ConfiguredWidget('ticket-history-lane', new WidgetConfiguration(
                 'ticket-history-widget', 'Translatable#History', ['ticket-print-action'],
-                null, true, true, WidgetSize.BOTH, null, false),
+                null, true, true, null, false),
                 [new UIComponentPermission('ticket/*/history', [CRUD.READ])]
             );
         const descriptionLane =
             new ConfiguredWidget('ticket-description-lane', new WidgetConfiguration(
                 'ticket-description-widget', 'Translatable#Description & Comments',
                 ['ticket-print-action', 'article-edit-action', 'article-maximize-action'], {},
-                false, true, WidgetSize.BOTH, null, false),
+                false, true, null, false),
                 [new UIComponentPermission('tickets/*/articles', [CRUD.READ])]
             );
 
@@ -46,7 +46,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                         ['FAQs', KIXObjectType.FAQ_ARTICLE],
                     ]
                 },
-                true, true, WidgetSize.BOTH, null, false),
+                true, true, null, false),
                 [new UIComponentPermission('links', [CRUD.READ])]
             );
 
@@ -65,7 +65,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
             new ConfiguredWidget('ticket-information-lane', new WidgetConfiguration(
                 'ticket-info-widget', 'Translatable#Ticket Information',
                 ['ticket-print-action', 'ticket-edit-action'], {},
-                false, true, WidgetSize.SMALL, null, false)
+                false, true, null, false)
             );
 
         const laneTabs = ['ticket-information-lane'];
@@ -99,7 +99,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                         [OrganisationProperty.NAME, organisationRouting]
                     ]
                 ),
-                false, false, WidgetSize.BOTH, 'kix-icon-man-house', false),
+                false, false, 'kix-icon-man-house', false),
                 [new UIComponentPermission('organisations', [CRUD.READ])]
             );
         const contactInfoSidebar =
@@ -122,7 +122,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                         [ContactProperty.LOGIN, contactRouting]
                     ]
                 ),
-                false, false, WidgetSize.BOTH, 'kix-icon-man-bubble', false),
+                false, false, 'kix-icon-man-bubble', false),
                 [new UIComponentPermission('contacts', [CRUD.READ])]
             );
         const sidebars = ['20180116143215', '20180116143216'];
@@ -155,7 +155,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                         [ContactProperty.LOGIN, contactRouting]
                     ]
                 ),
-                false, false, WidgetSize.BOTH, 'kix-icon-man-house', false),
+                false, false, 'kix-icon-man-house', false),
                 [new UIComponentPermission('organisations', [CRUD.READ])]
             );
         const contactInfoOverlay =
@@ -176,28 +176,28 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                         [OrganisationProperty.NAME, organisationRouting]
                     ]
                 ),
-                false, false, WidgetSize.BOTH, 'kix-icon-man-bubble', false),
+                false, false, 'kix-icon-man-bubble', false),
                 [new UIComponentPermission('contacts', [CRUD.READ])]
             );
         const toReceiverOverlay =
             new ConfiguredWidget('to-receiver-overlay', new WidgetConfiguration(
                 'article-receiver-list', 'Translatable#Recipient: To', [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-man-mail-To', false)
+                false, false, 'kix-icon-man-mail-To', false)
             );
         const ccReceiverOverlay =
             new ConfiguredWidget('cc-receiver-overlay', new WidgetConfiguration(
                 'article-receiver-list', 'Translatable#Recipient: Cc', [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-man-mail-Cc', false)
+                false, false, 'kix-icon-man-mail-Cc', false)
             );
         const bccReceiverOverlay =
             new ConfiguredWidget('bcc-receiver-overlay', new WidgetConfiguration(
                 'article-receiver-list', 'Translatable#Recipient: Bcc', [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-man-mail-Bcc', false)
+                false, false, 'kix-icon-man-mail-Bcc', false)
             );
         const articleAttachmentOverlay =
             new ConfiguredWidget('article-attachment-widget', new WidgetConfiguration(
                 'article-attachment-widget', 'Translatable#Attachments', ['article-attachment-zip-download'], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-attachement', false)
+                false, false, 'kix-icon-attachement', false)
             );
         const infoOverlayWidgets = [
             organisationInfoOverlay, contactInfoOverlay,
@@ -212,7 +212,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                     objectType: KIXObjectType.ARTICLE,
                     headerComponents: ['article-attachment-count']
                 },
-                false, true, WidgetSize.LARGE, null, true),
+                false, true, null, true),
                 [new UIComponentPermission('tickets/*/articles', [CRUD.READ])]
             );
 

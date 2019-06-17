@@ -14,7 +14,7 @@ export class Extension implements IConfigurationExtension {
             new ConfiguredWidget('faq-category-info-widget',
                 new WidgetConfiguration(
                     'faq-category-info-widget', 'Translatable#FAQ Category Information',
-                    [], {}, false, true, WidgetSize.LARGE, null, false
+                    [], {}, false, true, null, false
                 )
             );
 

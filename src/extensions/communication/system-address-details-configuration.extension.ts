@@ -15,14 +15,14 @@ export class Extension implements IConfigurationExtension {
         const systemAddressInfoWidget = new ConfiguredWidget('system-address-info-widget',
             new WidgetConfiguration(
                 'system-address-info-widget', 'Translatable#Email Information', ['system-address-edit'], null,
-                false, true, WidgetSize.BOTH, null, false
+                false, true, null, false
             )
         );
 
         const systemAddressAssignedQueuesWidget = new ConfiguredWidget('system-address-assigned-queues-widget',
             new WidgetConfiguration(
                 'system-address-assigned-queues-widget', 'Translatable#Assigned Queues', [], null,
-                false, true, WidgetSize.BOTH, null, false
+                false, true, null, false
             )
         );
 

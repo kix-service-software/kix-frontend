@@ -82,7 +82,7 @@ class Component extends AbstractMarkoComponent {
             'search-faq-article-dialog',
             new WidgetConfiguration(
                 'search-faq-article-dialog', 'Translatable#FAQ Search', [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-search-faq'
+                false, false, 'kix-icon-search-faq'
             ),
             KIXObjectType.FAQ_ARTICLE,
             ContextMode.SEARCH

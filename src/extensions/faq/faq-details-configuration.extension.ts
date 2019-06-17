@@ -19,7 +19,7 @@ export class Extension implements IConfigurationExtension {
                 new WidgetConfiguration(
                     'faq-article-info-widget', 'Translatable#FAQ Information',
                     ['faq-article-edit-action', 'faq-article-print-action'],
-                    {}, false, true, WidgetSize.LARGE, null, false
+                    {}, false, true, null, false
                 )
             );
         const faqLinkedObjectsLane =
@@ -34,7 +34,7 @@ export class Extension implements IConfigurationExtension {
                             ["Config Items", KIXObjectType.CONFIG_ITEM]
                         ]
                     },
-                    true, true, WidgetSize.LARGE, null, false
+                    true, true, null, false
                 ),
                 [new UIComponentPermission('links', [CRUD.READ])]
             );
@@ -43,7 +43,7 @@ export class Extension implements IConfigurationExtension {
             new ConfiguredWidget('faq-article-history-widget',
                 new WidgetConfiguration(
                     'faq-article-history-widget', 'Translatable#History', ['faq-article-print-action'], {},
-                    true, true, WidgetSize.LARGE, null, false
+                    true, true, null, false
                 ),
                 [new UIComponentPermission('faq/articles/*/history', [CRUD.READ])]
             );
@@ -54,7 +54,7 @@ export class Extension implements IConfigurationExtension {
                     'faq-article-content-widget', 'Translatable#FAQ Article',
                     ['faq-article-vote-action', 'faq-article-edit-action', 'faq-article-print-action'],
                     {},
-                    false, true, WidgetSize.LARGE, null, false
+                    false, true, null, false
                 )
             );
 

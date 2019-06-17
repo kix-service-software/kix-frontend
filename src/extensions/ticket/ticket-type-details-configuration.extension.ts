@@ -12,12 +12,12 @@ export class Extension implements IConfigurationExtension {
 
         const ticketTypesDetailsWidget = new ConfiguredWidget('ticket-type-details-widget', new WidgetConfiguration(
             'ticket-type-info-widget', 'Translatable#Type Information', ['ticket-admin-type-edit'], null,
-            false, true, WidgetSize.BOTH, null, false
+            false, true, null, false
         ));
 
         const textmodulesWidget = new ConfiguredWidget('ticket-type-assigned-textmodules', new WidgetConfiguration(
             'ticket-type-assigned-textmodules', 'Translatable#Assign Text Modules',
-            ['ticket-admin-type-textmodules-edit'], null, true, true, WidgetSize.BOTH, null, false
+            ['ticket-admin-type-textmodules-edit'], null, true, true, null, false
         ));
 
         return new ContextConfiguration(

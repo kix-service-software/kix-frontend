@@ -60,7 +60,7 @@ class Component extends AbstractMarkoComponent {
             'new-organisation-dialog',
             new WidgetConfiguration(
                 'new-organisation-dialog', 'Translatable#New Organisation', [], {},
-                false, false, null, 'kix-icon-man-house-new'
+                false, false, 'kix-icon-man-house-new'
             ),
             KIXObjectType.ORGANISATION,
             ContextMode.CREATE
@@ -70,7 +70,7 @@ class Component extends AbstractMarkoComponent {
             'edit-organisation-dialog',
             new WidgetConfiguration(
                 'edit-organisation-dialog', 'Translatable#Edit Organisation', [], {},
-                false, false, null, 'kix-icon-edit'
+                false, false, 'kix-icon-edit'
             ),
             KIXObjectType.ORGANISATION,
             ContextMode.EDIT
@@ -80,7 +80,7 @@ class Component extends AbstractMarkoComponent {
             'organisation-import-dialog',
             new WidgetConfiguration(
                 'import-dialog', 'Translatable#Import Organisations', [], {},
-                false, false, null, 'kix-icon-man-house-new'
+                false, false, 'kix-icon-man-house-new'
             ),
             KIXObjectType.ORGANISATION,
             ContextMode.IMPORT

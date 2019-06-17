@@ -33,7 +33,7 @@ class Component extends AbstractMarkoComponent {
             DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
                 'new-config-item-class-dialog',
                 new WidgetConfiguration(
-                    'new-config-item-class-dialog', 'Translatable#New Class', [], {}, false, false, null,
+                    'new-config-item-class-dialog', 'Translatable#New Class', [], {}, false, false,
                     'kix-icon-new-gear'
                 ),
                 KIXObjectType.CONFIG_ITEM_CLASS,
@@ -55,7 +55,7 @@ class Component extends AbstractMarkoComponent {
                 'edit-config-item-class-dialog',
                 new WidgetConfiguration(
                     'edit-config-item-class-dialog', 'Translatable#Edit Class', [], {},
-                    false, false, null, 'kix-icon-edit'
+                    false, false, 'kix-icon-edit'
                 ),
                 KIXObjectType.CONFIG_ITEM_CLASS,
                 ContextMode.EDIT_ADMIN

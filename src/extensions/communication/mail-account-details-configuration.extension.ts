@@ -31,7 +31,7 @@ export class Extension implements IConfigurationExtension {
                     KIXObjectProperty.CHANGE_BY,
                     KIXObjectProperty.CHANGE_TIME
                 ]),
-                false, true, WidgetSize.LARGE, null, false)
+                false, true, null, false)
             );
 
         return new ContextConfiguration(

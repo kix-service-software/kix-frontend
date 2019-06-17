@@ -13,7 +13,7 @@ export class ComponentState {
                 'ticket-admin-queue-create', 'csv-export-action'
             ],
             new TableWidgetSettings(KIXObjectType.QUEUE, [QueueProperty.NAME, SortOrder.UP]),
-            false, false, null, 'kix-icon-gears')
+            false, false, 'kix-icon-gears')
     ) { }
 
 }

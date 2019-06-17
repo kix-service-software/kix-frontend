@@ -94,7 +94,7 @@ class Component extends AbstractMarkoComponent {
             'search-config-item-dialog',
             new WidgetConfiguration(
                 'search-config-item-dialog', 'Translatable#Config Item Search', [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-search-ci'
+                false, false, 'kix-icon-search-ci'
             ),
             KIXObjectType.CONFIG_ITEM,
             ContextMode.SEARCH
@@ -104,7 +104,7 @@ class Component extends AbstractMarkoComponent {
             'compare-config-item-version-dialog',
             new WidgetConfiguration(
                 'compare-config-item-version-dialog', 'Translatable#Compare Versions', [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-comparison-version'
+                false, false, 'kix-icon-comparison-version'
             ),
             KIXObjectType.CONFIG_ITEM_VERSION_COMPARE,
             ContextMode.EDIT

@@ -2,7 +2,7 @@ import { IConfigurationExtension } from '../../core/extensions';
 import {
     WidgetConfiguration, ConfiguredWidget, WidgetSize, DataType,
     FilterCriteria, FilterDataType, FilterType, KIXObjectPropertyFilter,
-    TableFilterCriteria, KIXObjectType, SortOrder, ContextConfiguration, CRUD
+    TableFilterCriteria, KIXObjectType, SortOrder, ContextConfiguration, CRUD, TableWidgetSettings
 } from '../../core/model';
 import {
     SearchOperator, ToggleOptions, TableConfiguration, DefaultColumnConfiguration
@@ -38,9 +38,10 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
             '20180813-1-ticket-chart-widget',
             new WidgetConfiguration(
                 'ticket-chart-widget', 'Overview Ticket Priorities', [], chartConfig1,
-                false, true, WidgetSize.SMALL, null, false
+                false, true, null, false
             ),
-            [new UIComponentPermission('tickets', [CRUD.READ])]
+            [new UIComponentPermission('tickets', [CRUD.READ])],
+            WidgetSize.SMALL
         );
 
         const chartConfig2 = new TicketChartConfiguration(TicketProperty.STATE_ID, {
@@ -70,9 +71,10 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
             '20180813-2-ticket-chart-widget',
             new WidgetConfiguration(
                 'ticket-chart-widget', 'Overview Ticket States', [], chartConfig2,
-                false, true, WidgetSize.SMALL, null, false
+                false, true, null, false
             ),
-            [new UIComponentPermission('tickets', [CRUD.READ])]
+            [new UIComponentPermission('tickets', [CRUD.READ])],
+            WidgetSize.SMALL
         );
 
         const chartConfig3 = new TicketChartConfiguration(TicketProperty.CREATE_TIME, {
@@ -96,9 +98,10 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
             '20180813-3-ticket-chart-widget',
             new WidgetConfiguration(
                 'ticket-chart-widget', 'Translatable#New Tickets (recent 7 days)', [], chartConfig3,
-                false, true, WidgetSize.SMALL, null, false
+                false, true, null, false
             ),
-            [new UIComponentPermission('tickets', [CRUD.READ])]
+            [new UIComponentPermission('tickets', [CRUD.READ])],
+            WidgetSize.SMALL
         );
 
         const predefinedToDoTableFilter = [
@@ -120,10 +123,9 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
             '20180612-to-do-widget',
             new WidgetConfiguration(
                 'table-widget', 'Translatable#ToDo / Processing required', ['bulk-action', 'csv-export-action'],
-                {
-                    objectType: KIXObjectType.TICKET,
-                    sort: [TicketProperty.AGE, SortOrder.UP],
-                    tableConfiguration: new TableConfiguration(KIXObjectType.TICKET,
+                new TableWidgetSettings(
+                    KIXObjectType.TICKET, [TicketProperty.AGE, SortOrder.UP], new TableConfiguration(
+                        KIXObjectType.TICKET,
                         500, null, null,
                         [
                             new FilterCriteria(
@@ -141,9 +143,9 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                         ],
                         true, true, new ToggleOptions('ticket-article-details', 'article', [], true),
                         'Ticket.Age:numeric'
-                    )
-                },
-                false, true, WidgetSize.LARGE, 'kix-icon-ticket', false, predefinedToDoTableFilter
+                    ), null, null, null, predefinedToDoTableFilter
+                ),
+                false, true, 'kix-icon-ticket', false
             ),
             [new UIComponentPermission('tickets', [CRUD.READ])]
         );
@@ -191,7 +193,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                             'Ticket.-Age:numeric'
                         )
                     },
-                    false, true, WidgetSize.LARGE, 'kix-icon-ticket', false
+                    false, true, 'kix-icon-ticket', false
                 ),
                 [new UIComponentPermission('tickets', [CRUD.READ])]
             );
@@ -206,7 +208,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
         const notesSidebar =
             new ConfiguredWidget('20180607-home-notes', new WidgetConfiguration(
                 'notes-widget', 'Translatable#Notes', [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-note', false)
+                false, false, 'kix-icon-note', false)
             );
 
         const sidebars = ['20180607-home-notes'];

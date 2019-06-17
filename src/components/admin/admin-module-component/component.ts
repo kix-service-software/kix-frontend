@@ -51,7 +51,7 @@ class Component extends AbstractMarkoComponent {
                 'new-translation-dialog',
                 new WidgetConfiguration(
                     'new-translation-dialog', 'Translatable#New Translation', [], {},
-                    false, false, null, 'kix-icon-new-gear'
+                    false, false, 'kix-icon-new-gear'
                 ),
                 KIXObjectType.TRANSLATION,
                 ContextMode.CREATE_ADMIN
@@ -71,7 +71,7 @@ class Component extends AbstractMarkoComponent {
                 'edit-translation-dialog',
                 new WidgetConfiguration(
                     'edit-translation-dialog', 'Translatable#Edit Translation', [], {},
-                    false, false, null, 'kix-icon-edit'
+                    false, false, 'kix-icon-edit'
                 ),
                 KIXObjectType.TRANSLATION,
                 ContextMode.EDIT_ADMIN

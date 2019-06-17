@@ -111,7 +111,7 @@ class Component extends AbstractMarkoComponent {
             'personal-settings-dialog',
             new WidgetConfiguration(
                 'personal-settings-dialog', 'Translatable#Edit Personal Settings',
-                [], {}, false, false, null, 'kix-icon-edit'
+                [], {}, false, false, 'kix-icon-edit'
             ),
             KIXObjectType.PERSONAL_SETTINGS,
             ContextMode.PERSONAL_SETTINGS
@@ -120,7 +120,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'bulk-dialog',
             new WidgetConfiguration(
-                'bulk-dialog', 'Translatable#Edit Objects', [], {}, false, false, null, 'kix-icon-edit'
+                'bulk-dialog', 'Translatable#Edit Objects', [], {}, false, false, 'kix-icon-edit'
             ),
             KIXObjectType.ANY,
             ContextMode.EDIT_BULK

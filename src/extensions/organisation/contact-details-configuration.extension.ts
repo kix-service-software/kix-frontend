@@ -43,7 +43,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
                     KIXObjectProperty.CHANGE_BY,
                     KIXObjectProperty.CHANGE_TIME
                 ]),
-                false, true, WidgetSize.LARGE, null, false)
+                false, true, null, false)
             );
 
         const assignedOrganisationsLane = new ConfiguredWidget('contact-assigned-organisations-widget',
@@ -82,7 +82,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
                         ),
                     ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
                 ),
-                false, true, WidgetSize.LARGE, null, false
+                false, true, null, false
             ),
             [new UIComponentPermission('organisations', [CRUD.READ])]
         );
@@ -92,7 +92,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
                 'contact-assigned-tickets-widget', 'Translatable#Overview Tickets', [
                     'contact-create-ticket-action', 'contact-print-action'
                 ], {},
-                false, true, WidgetSize.LARGE, null, false
+                false, true, null, false
             ),
             [new UIComponentPermission('tickets', [CRUD.READ])]
         );

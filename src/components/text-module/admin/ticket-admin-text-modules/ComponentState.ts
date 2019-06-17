@@ -13,7 +13,7 @@ export class ComponentState {
                 'text-module-create', 'csv-export-action'
             ],
             new TableWidgetSettings(KIXObjectType.TEXT_MODULE, [TextModuleProperty.NAME, SortOrder.UP]),
-            false, false, null, 'kix-icon-gears')
+            false, false, 'kix-icon-gears')
     ) { }
 
 }

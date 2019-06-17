@@ -58,11 +58,6 @@ export abstract class Context {
 
     public setConfiguration(configuration: ContextConfiguration): void {
         this.configuration = configuration;
-        this.shownSidebars = configuration
-            ? [...configuration.sidebars.filter(
-                (s) => configuration.sidebarWidgets.some((sw) => sw.instanceId === s && sw.configuration.show)
-            )]
-            : [];
     }
 
     public setAdditionalInformation(key: string, value: any): void {

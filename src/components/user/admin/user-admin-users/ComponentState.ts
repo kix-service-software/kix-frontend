@@ -10,7 +10,7 @@ export class ComponentState {
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
             'table-widget', 'Translatable#User Management: Agents',
             ['user-admin-user-create-action', 'csv-export-action'],
-            new TableWidgetSettings(KIXObjectType.USER, [UserProperty.USER_LASTNAME, SortOrder.UP]), false, false, null,
+            new TableWidgetSettings(KIXObjectType.USER, [UserProperty.USER_LASTNAME, SortOrder.UP]), false, false,
             'kix-icon-gears'
         )
     ) { }

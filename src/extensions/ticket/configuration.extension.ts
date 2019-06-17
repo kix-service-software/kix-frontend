@@ -4,7 +4,8 @@ import {
     TicketProperty, FilterCriteria, FilterDataType, FilterType, FormField, KIXObjectType, Form,
     FormContext,
     ContextConfiguration,
-    CRUD
+    CRUD,
+    TableWidgetSettings
 } from '../../core/model';
 import { TicketContext, TicketChartConfiguration } from '../../core/browser/ticket';
 import {
@@ -25,7 +26,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
             new ConfiguredWidget(
                 '20180813-ticket-queue-explorer', new WidgetConfiguration(
                     'ticket-queue-explorer', 'Translatable#Queues', [], {},
-                    false, false, WidgetSize.SMALL, null
+                    false, false, null
                 ),
                 [
                     new UIComponentPermission('tickets', [CRUD.READ]),
@@ -40,7 +41,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
         const notesSidebar =
             new ConfiguredWidget('20180814-ticket-notes', new WidgetConfiguration(
                 'notes-widget', 'Translatable#Notes', [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-note', false)
+                false, false, 'kix-icon-note', false)
             );
 
         const sidebars = ['20180814-ticket-notes'];
@@ -91,8 +92,9 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
         });
         const chart1 = new ConfiguredWidget('20180814-1-ticket-chart-widget', new WidgetConfiguration(
             'ticket-chart-widget', 'Translatable#Overview Ticket Priorities', [], chartConfig1,
-            false, true, WidgetSize.SMALL, null, true),
-            [new UIComponentPermission('tickets', [CRUD.READ])]
+            false, true, null, true),
+            [new UIComponentPermission('tickets', [CRUD.READ])],
+            WidgetSize.SMALL
         );
 
         const chartConfig2 = new TicketChartConfiguration(TicketProperty.STATE_ID, {
@@ -132,8 +134,9 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
         });
         const chart2 = new ConfiguredWidget('20180814-2-ticket-chart-widget', new WidgetConfiguration(
             'ticket-chart-widget', 'Translatable#Overview Ticket States', [], chartConfig2,
-            false, true, WidgetSize.SMALL, null, true),
-            [new UIComponentPermission('tickets', [CRUD.READ])]
+            false, true, null, true),
+            [new UIComponentPermission('tickets', [CRUD.READ])],
+            WidgetSize.SMALL
         );
 
         const chartConfig3 = new TicketChartConfiguration(TicketProperty.CREATED, {
@@ -163,8 +166,9 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
         } as any);
         const chart3 = new ConfiguredWidget('20180814-3-ticket-chart-widget', new WidgetConfiguration(
             'ticket-chart-widget', 'Translatable#New Tickets (recent 7 days)', [], chartConfig3,
-            false, true, WidgetSize.SMALL, null, true),
-            [new UIComponentPermission('tickets', [CRUD.READ])]
+            false, true, null, true),
+            [new UIComponentPermission('tickets', [CRUD.READ])],
+            WidgetSize.SMALL
         );
 
         const ticketListWidget =
@@ -173,20 +177,21 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
                     'table-widget', 'Translatable#Overview Tickets', [
                         'ticket-create-action', 'bulk-action', 'csv-export-action', 'ticket-search-action'
                     ],
-                    {
-                        objectType: KIXObjectType.TICKET,
-                        tableConfiguration: new TableConfiguration(KIXObjectType.TICKET,
+                    new TableWidgetSettings(KIXObjectType.TICKET, null,
+                        new TableConfiguration(KIXObjectType.TICKET,
                             1000, 25, null, [new FilterCriteria(
                                 'StateType', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'
                             )],
                             true, true,
                             new ToggleOptions('ticket-article-details', 'article', [], true),
                             null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
-                        )
-                    },
-                    false, false, WidgetSize.LARGE, 'kix-icon-ticket', true, predefinedTicketFilter
+                        ),
+                        null, null, null, predefinedTicketFilter
+                    ),
+                    false, false, 'kix-icon-ticket', true
                 ),
-                [new UIComponentPermission('tickets', [CRUD.READ])]
+                [new UIComponentPermission('tickets', [CRUD.READ])],
+                WidgetSize.LARGE
             );
 
         const content = [

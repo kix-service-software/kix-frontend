@@ -12,11 +12,11 @@ export class Extension implements IConfigurationExtension {
 
         const ticketQueueDetailsWidget = new ConfiguredWidget('ticket-queue-details-widget', new WidgetConfiguration(
             'ticket-queue-info-widget', 'Translatable#Queue Information', ['ticket-admin-queue-edit'], null,
-            false, true, WidgetSize.BOTH, null, false
+            false, true, WidgetSize.BOTH, false
         ));
 
         const signatureWidget = new ConfiguredWidget('ticket-queue-signature', new WidgetConfiguration(
-            'ticket-queue-signature', 'Translatable#Signature', [], null, true, true, WidgetSize.BOTH, null, false
+            'ticket-queue-signature', 'Translatable#Signature', [], null, true, true, WidgetSize.BOTH, false
         ));
 
         return new ContextConfiguration(

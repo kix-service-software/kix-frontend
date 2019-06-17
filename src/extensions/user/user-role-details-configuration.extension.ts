@@ -26,12 +26,12 @@ export class Extension implements IConfigurationExtension {
                     KIXObjectType.ROLE_PERMISSION, [PermissionProperty.TYPE_ID, SortOrder.UP],
                     new TableConfiguration(KIXObjectType.ROLE_PERMISSION, null, null, null), null, false
                 ),
-                true, true, null, null, true
+                true, true, null, true
             ));
 
         const userRoleInfoWidget = new ConfiguredWidget('user-role-info-widget', new WidgetConfiguration(
             'user-role-info-widget', 'Translatable#Role Information', ['user-admin-role-edit-action'], null,
-            false, true, WidgetSize.BOTH, null, false
+            false, true, WidgetSize.BOTH, false
         ));
 
         return new ContextConfiguration(

@@ -15,7 +15,7 @@ export class Extension implements IConfigurationExtension {
         const notesSidebar =
             new ConfiguredWidget('20181126-admin-notes', new WidgetConfiguration(
                 'notes-widget', 'Translatable#Notes', [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-note', false)
+                false, false, 'kix-icon-note', false)
             );
 
         const sidebars = ['20181126-admin-notes'];
@@ -24,7 +24,7 @@ export class Extension implements IConfigurationExtension {
         const adminModuleCategoriesExplorer =
             new ConfiguredWidget('20181127-admin-module-categories-explorer', new WidgetConfiguration(
                 'admin-modules-explorer', 'Translatable#Administration', [], null,
-                false, false, WidgetSize.BOTH, null, false)
+                false, false, null, false)
             );
 
         const explorer = ['20181127-admin-module-categories-explorer'];

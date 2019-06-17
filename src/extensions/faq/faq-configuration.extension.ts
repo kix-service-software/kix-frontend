@@ -29,7 +29,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                             TableHeaderHeight.LARGE, TableRowHeight.LARGE
                         )
                     ),
-                    false, false, WidgetSize.BOTH, 'kix-icon-faq', true
+                    false, false, 'kix-icon-faq', true
                 ),
                 [new UIComponentPermission('faq/articles', [CRUD.READ])]
             );
@@ -41,7 +41,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
             new ConfiguredWidget('20180625-faq-category-explorer',
                 new WidgetConfiguration(
                     'faq-category-explorer', 'Translatable#FAQ Categories', [], {},
-                    false, false, WidgetSize.BOTH, 'kix-icon-faq', false
+                    false, false, 'kix-icon-faq', false
                 ),
                 [new UIComponentPermission('system/faq/categories', [CRUD.READ])]
             );
@@ -52,7 +52,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
         const notesSidebar =
             new ConfiguredWidget('20180726-faq-notes', new WidgetConfiguration(
                 'notes-widget', 'Translatable#Notes', [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-note', false)
+                false, false, 'kix-icon-note', false)
             );
 
         const sidebars = ['20180726-faq-notes'];

@@ -15,7 +15,7 @@ export class Extension implements IConfigurationExtension {
                 // tslint:disable-next-line:max-line-length
                 helpText: 'Translatable#Helptext_Organisations_ContactImport'
             },
-            false, false, null, 'kix-icon-query'
+            false, false, 'kix-icon-query'
         ));
 
         return new ContextConfiguration(

@@ -13,7 +13,7 @@ export class ComponentState {
                 'ticket-admin-template-create', 'ticket-admin-template-table-delete'
             ],
             new TableWidgetSettings(KIXObjectType.TICKET_TEMPLATE,
-                [TicketTemplateProperty.NAME, SortOrder.UP]), false, false, null, 'kix-icon-gears')
+                [TicketTemplateProperty.NAME, SortOrder.UP]), false, false, 'kix-icon-gears')
     ) { }
 
 }

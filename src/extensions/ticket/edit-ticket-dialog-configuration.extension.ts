@@ -33,7 +33,7 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
                         OrganisationProperty.CITY,
                         OrganisationProperty.COUNTRY
                     ], true),
-                    false, false, null, 'kix-icon-man-house', false
+                    false, false, 'kix-icon-man-house', false
                 ),
                 [new UIComponentPermission('organisations', [CRUD.READ])]
             );
@@ -51,7 +51,7 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
                         ContactProperty.MOBILE,
                         ContactProperty.EMAIL
                     ], true),
-                    false, false, null, 'kix-icon-man-bubble', false
+                    false, false, 'kix-icon-man-bubble', false
                 ),
                 [new UIComponentPermission('contacts', [CRUD.READ])]
             );
@@ -61,7 +61,7 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
                 'help-widget', 'Text Modules', [], {
                     // tslint:disable-next-line:max-line-length
                     helpText: 'Translatable#Helptext_Textmodules_TicketEdit'
-                }, false, false, WidgetSize.BOTH, 'kix-icon-textblocks'
+                }, false, false, 'kix-icon-textblocks'
             ),
             [new UIComponentPermission('system/textmodules', [CRUD.READ])]
         );

@@ -16,7 +16,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
         const searchResultExplorer =
             new ConfiguredWidget("20180625-search-result-explorer", new WidgetConfiguration(
                 "search-result-explorer", "Search Results", [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-search', false)
+                false, false, 'kix-icon-search', false)
             );
 
         const explorer = ['20180625-search-result-explorer'];
@@ -27,7 +27,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
                 "search-result-list-widget", "Hit List", [
                     'csv-export-action', 'bulk-action', 'search-result-print-action'
                 ], {},
-                false, true, WidgetSize.LARGE, null, true)
+                false, true, null, true)
             );
 
         const content: string[] = ['201800709-search-result-list-widget'];
