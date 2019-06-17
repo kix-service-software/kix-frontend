@@ -9,7 +9,7 @@ export class ConfigItemEditAction extends AbstractAction<ConfigItem> {
 
     public permissions: UIComponentPermission[] = [
         new UIComponentPermission('cmdb/*/versions', [CRUD.CREATE]),
-        new UIComponentPermission('cmdb/configitems', [CRUD.UPDATE])
+        new UIComponentPermission('cmdb/configitems/*', [CRUD.UPDATE])
     ];
 
     public async initAction(): Promise<void> {
