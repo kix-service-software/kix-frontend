@@ -1,15 +1,15 @@
 import {
-    ObjectIcon, KIXObjectType, User, DateTimeUtil, SysConfigOptionProperty, KIXObjectProperty
+    ObjectIcon, KIXObjectType, User, DateTimeUtil, KIXObjectProperty, SysConfigOptionDefinitionProperty
 } from '../../model';
 import { ILabelProvider } from '..';
 import { TranslationService } from '../i18n/TranslationService';
 import { ObjectDataService } from '../ObjectDataService';
 import { KIXObjectService } from "../kix";
-import { SysConfigOption } from '../../model/kix/sysconfig/SysConfigOption';
+import { SysConfigOptionDefinition } from '../../model/kix/sysconfig/SysConfigOptionDefinition';
 
-export class SysConfigLabelProvider implements ILabelProvider<SysConfigOption> {
+export class SysConfigLabelProvider implements ILabelProvider<SysConfigOptionDefinition> {
 
-    public kixObjectType: KIXObjectType = KIXObjectType.SYS_CONFIG_OPTION;
+    public kixObjectType: KIXObjectType = KIXObjectType.SYS_CONFIG_OPTION_DEFINITION;
 
     public isLabelProviderForType(objectType: KIXObjectType): boolean {
         return objectType === this.kixObjectType;
@@ -46,17 +46,17 @@ export class SysConfigLabelProvider implements ILabelProvider<SysConfigOption> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public isLabelProviderFor(object: SysConfigOption): boolean {
-        return object instanceof SysConfigOption;
+    public isLabelProviderFor(object: SysConfigOptionDefinition): boolean {
+        return object instanceof SysConfigOptionDefinition;
     }
 
     public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
-            case SysConfigOptionProperty.NAME:
+            case SysConfigOptionDefinitionProperty.NAME:
                 displayValue = 'Translatable#Name';
                 break;
-            case SysConfigOptionProperty.VALUE:
+            case SysConfigOptionDefinitionProperty.VALUE:
                 displayValue = 'Translatable#Value';
                 break;
             case KIXObjectProperty.COMMENT:
@@ -87,12 +87,12 @@ export class SysConfigLabelProvider implements ILabelProvider<SysConfigOption> {
     }
 
     public async getDisplayText(
-        sysConfig: SysConfigOption, property: string, value?: string, translatable: boolean = true
+        sysConfig: SysConfigOptionDefinition, property: string, value?: string, translatable: boolean = true
     ): Promise<string> {
         let displayValue = sysConfig[property];
 
         switch (property) {
-            case SysConfigOptionProperty.NAME:
+            case SysConfigOptionDefinitionProperty.NAME:
                 displayValue = sysConfig.Name;
                 break;
             default:
@@ -106,29 +106,29 @@ export class SysConfigLabelProvider implements ILabelProvider<SysConfigOption> {
         return displayValue;
     }
 
-    public getDisplayTextClasses(object: SysConfigOption, property: string): string[] {
+    public getDisplayTextClasses(object: SysConfigOptionDefinition, property: string): string[] {
         return [];
     }
 
-    public getObjectClasses(object: SysConfigOption): string[] {
+    public getObjectClasses(object: SysConfigOptionDefinition): string[] {
         return [];
     }
 
     public async getObjectText(
-        sysConfig: SysConfigOption, id?: boolean, title?: boolean, translatable?: boolean
+        sysConfig: SysConfigOptionDefinition, id?: boolean, title?: boolean, translatable?: boolean
     ): Promise<string> {
         return `${sysConfig.Name} (${sysConfig.ObjectId})`;
     }
 
-    public getObjectAdditionalText(object: SysConfigOption, translatable: boolean = true): string {
+    public getObjectAdditionalText(object: SysConfigOptionDefinition, translatable: boolean = true): string {
         return '';
     }
 
-    public getObjectIcon(object: SysConfigOption): string | ObjectIcon {
+    public getObjectIcon(object: SysConfigOptionDefinition): string | ObjectIcon {
         return new ObjectIcon('SysConfig', object.Name);
     }
 
-    public getObjectTooltip(object: SysConfigOption): string {
+    public getObjectTooltip(object: SysConfigOptionDefinition): string {
         return '';
     }
 
@@ -142,7 +142,7 @@ export class SysConfigLabelProvider implements ILabelProvider<SysConfigOption> {
     }
 
 
-    public async getIcons(object: SysConfigOption, property: string): Promise<Array<string | ObjectIcon>> {
+    public async getIcons(object: SysConfigOptionDefinition, property: string): Promise<Array<string | ObjectIcon>> {
         const icons = [];
         return icons;
     }

@@ -4,14 +4,14 @@ import {
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../table";
 import {
-    KIXObjectType, DataType, KIXObjectLoadingOptions, SysConfigOptionProperty, KIXObjectProperty
+    KIXObjectType, DataType, KIXObjectLoadingOptions, KIXObjectProperty, SysConfigOptionDefinitionProperty
 } from "../../../model";
 import { TableFactory } from "../../table/TableFactory";
 import { SysConfigTableContentProvider } from "./SysConfigTableContentProvider";
 
 export class SysConfigTableFactory extends TableFactory {
 
-    public objectType: KIXObjectType = KIXObjectType.SYS_CONFIG_OPTION;
+    public objectType: KIXObjectType = KIXObjectType.SYS_CONFIG_OPTION_DEFINITION;
 
     public createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
@@ -39,15 +39,15 @@ export class SysConfigTableFactory extends TableFactory {
     ): TableConfiguration {
         const tableColumns = [
             new DefaultColumnConfiguration(
-                SysConfigOptionProperty.NAME, true, false, true, false, 150, true, true, false,
-                DataType.STRING, true, null, null, false
-            ),
-            new DefaultColumnConfiguration(
-                SysConfigOptionProperty.VALUE, true, false, true, false, 150, true, true, false,
+                SysConfigOptionDefinitionProperty.NAME, true, false, true, false, 150, true, true, false,
                 DataType.STRING, true, null, null, false
             ),
             new DefaultColumnConfiguration(
                 KIXObjectProperty.VALID_ID, true, false, true, false, 100, true, true, true
+            ),
+            new DefaultColumnConfiguration(
+                SysConfigOptionDefinitionProperty.VALUE, true, false, true, false, 300, true, true, false,
+                DataType.STRING, true, null, null, false
             ),
             new DefaultColumnConfiguration(
                 KIXObjectProperty.CHANGE_TIME, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
@@ -57,7 +57,7 @@ export class SysConfigTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.SYS_CONFIG_OPTION, null, null, tableColumns, null, true, false, null, null,
+                KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, null, null, tableColumns, null, true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;

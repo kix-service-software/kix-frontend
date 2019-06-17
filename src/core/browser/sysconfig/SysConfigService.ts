@@ -13,12 +13,9 @@ export class SysConfigService extends KIXObjectService<SysConfigOption> {
         return SysConfigService.INSTANCE;
     }
 
-    public async init(): Promise<void> {
-        await this.loadObjects(KIXObjectType.SYS_CONFIG_OPTION, null);
-    }
-
     public isServiceFor(kixObjectType: KIXObjectType) {
-        return kixObjectType === KIXObjectType.SYS_CONFIG_OPTION;
+        return kixObjectType === KIXObjectType.SYS_CONFIG_OPTION
+            || kixObjectType === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION;
     }
 
     public getLinkObjectName(): string {

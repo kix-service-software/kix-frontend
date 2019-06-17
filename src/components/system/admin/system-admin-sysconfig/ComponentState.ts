@@ -1,5 +1,5 @@
 import {
-    WidgetConfiguration, KIXObjectType, TableWidgetSettings, SortOrder, SysConfigOptionProperty
+    WidgetConfiguration, KIXObjectType, TableWidgetSettings, SortOrder, SysConfigOptionDefinitionProperty
 } from "../../../../core/model";
 import { IdService } from "../../../../core/browser";
 
@@ -10,8 +10,8 @@ export class ComponentState {
             'table-widget', 'Translatable#System: SysConfig',
             [
             ],
-            new TableWidgetSettings(KIXObjectType.SYS_CONFIG_OPTION,
-                [SysConfigOptionProperty.NAME, SortOrder.UP]), false, false, null, 'kix-icon-gears')
+            new TableWidgetSettings(KIXObjectType.SYS_CONFIG_OPTION_DEFINITION,
+                [SysConfigOptionDefinitionProperty.NAME, SortOrder.UP]), false, false, null, 'kix-icon-gears')
     ) { }
 
 }
