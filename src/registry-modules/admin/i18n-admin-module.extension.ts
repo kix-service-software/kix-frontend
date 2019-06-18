@@ -8,7 +8,7 @@ class Extension implements IAdminModuleExtension {
                 null, 'i18n', 'Translatable#Internationalisation', null, [], [
                     new AdminModule(
                         null, 'translations', 'Translatable#Translations', null,
-                        KIXObjectType.TRANSLATION, 'i18n-admin-translations'
+                        KIXObjectType.TRANSLATION_PATTERN, 'i18n-admin-translations'
                     )
                 ])
         ];

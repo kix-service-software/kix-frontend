@@ -16,7 +16,7 @@ import { NotificationSocketClient } from '../../core/browser/notifications';
 import { ComponentInput } from './ComponentInput';
 import { AgentService } from '../../core/browser/application/AgentService';
 import { SysConfigService } from '../../core/browser/sysconfig';
-import { TranslationBrowserFactory } from '../../core/browser/i18n';
+import { TranslationPatternBrowserFactory, TranslationBrowserFactory } from '../../core/browser/i18n';
 
 class Component {
 
@@ -38,7 +38,10 @@ class Component {
         const start = Date.now();
 
         FactoryService.getInstance().registerFactory(
-            KIXObjectType.TRANSLATION, TranslationBrowserFactory.getInstance()
+            KIXObjectType.TRANSLATION_PATTERN, TranslationBrowserFactory.getInstance()
+        );
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.TRANSLATION_PATTERN, TranslationPatternBrowserFactory.getInstance()
         );
 
         ServiceRegistry.registerServiceInstance(AgentService.getInstance());

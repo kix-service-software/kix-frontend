@@ -1,4 +1,4 @@
-import { KIXObjectType, ContextMode, TranslationProperty } from '../../../../../core/model';
+import { KIXObjectType, ContextMode, TranslationPatternProperty } from '../../../../../core/model';
 import { ComponentState } from './ComponentState';
 import { RoutingConfiguration } from '../../../../../core/browser/router';
 import { TranslationDetailsContext } from '../../../../../core/browser/i18n/admin/context';
@@ -11,10 +11,10 @@ class Component extends AbstractNewDialog {
         super.init(
             'Translatable#Create Translation',
             'Translatable#Translation successfully created.',
-            KIXObjectType.TRANSLATION,
+            KIXObjectType.TRANSLATION_PATTERN,
             new RoutingConfiguration(
-                TranslationDetailsContext.CONTEXT_ID, KIXObjectType.TRANSLATION,
-                ContextMode.DETAILS, TranslationProperty.ID, true
+                TranslationDetailsContext.CONTEXT_ID, KIXObjectType.TRANSLATION_PATTERN,
+                ContextMode.DETAILS, TranslationPatternProperty.ID, true
             )
         );
     }

@@ -46,9 +46,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 );
 
                 await KIXObjectService.updateObjectByForm(
-                    KIXObjectType.TRANSLATION, this.state.formId, context.getObjectId()
+                    KIXObjectType.TRANSLATION_PATTERN, this.state.formId, context.getObjectId()
                 ).then(async (typeId) => {
-                    context.getObject(KIXObjectType.TRANSLATION, true);
+                    context.getObject(KIXObjectType.TRANSLATION_PATTERN, true);
                     DialogService.getInstance().setMainDialogLoading(false);
 
                     const toast = await TranslationService.translate('Translatable#Changes saved.');

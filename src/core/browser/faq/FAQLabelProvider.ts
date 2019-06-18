@@ -173,7 +173,7 @@ export class FAQLabelProvider implements ILabelProvider<FAQArticle> {
                 break;
             case FAQArticleProperty.LANGUAGE:
                 const translationService = ServiceRegistry.getServiceInstance<TranslationService>(
-                    KIXObjectType.TRANSLATION
+                    KIXObjectType.TRANSLATION_PATTERN
                 );
                 displayValue = await translationService.getLanguageName(faqArticle.Language);
                 break;
