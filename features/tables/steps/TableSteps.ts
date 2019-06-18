@@ -12,7 +12,7 @@ import { RoleTableFactory, UserTableFactory } from '../../../src/core/browser/us
 import { OrganisationTableFactory } from '../../../src/core/browser/organisation';
 import { MailAccountTableFactory } from '../../../src/core/browser/mail-account';
 import { FAQCategoryTableFactory } from '../../../src/core/browser/faq/admin';
-import { TranslationTableFactory } from '../../../src/core/browser/i18n/admin/table';
+import { TranslationPatternTableFactory } from '../../../src/core/browser/i18n/admin/table';
 import { TextModulesTableFactory } from '../../../src/core/browser/text-modules';
 
 let table: ITable;
@@ -30,7 +30,7 @@ TableFactoryService.getInstance().registerFactory(new TicketStateTableFactory())
 TableFactoryService.getInstance().registerFactory(new TicketPriorityTableFactory());
 TableFactoryService.getInstance().registerFactory(new FAQCategoryTableFactory());
 TableFactoryService.getInstance().registerFactory(new TicketQueueTableFactory());
-TableFactoryService.getInstance().registerFactory(new TranslationTableFactory());
+TableFactoryService.getInstance().registerFactory(new TranslationPatternTableFactory());
 TableFactoryService.getInstance().registerFactory(new ConfigItemClassTableFactory());
 TableFactoryService.getInstance().registerFactory(new TextModulesTableFactory());
 

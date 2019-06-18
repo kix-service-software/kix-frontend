@@ -90,6 +90,8 @@ export enum KIXObjectType {
 
     TRANSLATION = 'Translation',
 
+    TRANSLATION_PATTERN = 'TranslationPattern',
+
     TRANSLATION_LANGUAGE = 'TranslationLanguage',
 
     USER = 'User',

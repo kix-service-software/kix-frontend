@@ -1,7 +1,7 @@
 import { AbstractMarkoComponent, ActionFactory, ContextService } from '../../../../../core/browser';
 import { ComponentState } from './ComponentState';
-import { KIXObjectType, Translation } from '../../../../../core/model';
-import { TranslationLabelProvider } from '../../../../../core/browser/i18n';
+import { KIXObjectType, TranslationPattern } from '../../../../../core/model';
+import { TranslationPatternLabelProvider } from '../../../../../core/browser/i18n';
 import { TranslationDetailsContext } from '../../../../../core/browser/i18n/admin/context';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
@@ -15,7 +15,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        this.state.labelProvider = new TranslationLabelProvider();
+        this.state.labelProvider = new TranslationPatternLabelProvider();
         const context = await ContextService.getInstance().getContext<TranslationDetailsContext>(
             TranslationDetailsContext.CONTEXT_ID
         );
@@ -25,18 +25,18 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             objectListChanged: () => { return; },
             filteredObjectListChanged: () => { return; },
             scrollInformationChanged: () => { return; },
-            objectChanged: async (translationId: string, translation: Translation, type: KIXObjectType) => {
-                if (type === KIXObjectType.TRANSLATION) {
+            objectChanged: async (translationId: string, translation: TranslationPattern, type: KIXObjectType) => {
+                if (type === KIXObjectType.TRANSLATION_PATTERN) {
                     this.initWidget(translation);
                 }
             }
         });
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        await this.initWidget(await context.getObject<Translation>());
+        await this.initWidget(await context.getObject<TranslationPattern>());
     }
 
-    private async initWidget(translation: Translation): Promise<void> {
+    private async initWidget(translation: TranslationPattern): Promise<void> {
         this.state.translation = translation;
         this.prepareActions();
     }

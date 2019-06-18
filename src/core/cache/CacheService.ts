@@ -57,7 +57,7 @@ export class CacheService {
     public async updateCaches(events: ObjectUpdatedEventData[]): Promise<void> {
         for (const event of events) {
             LoggingService.getInstance().debug('Backend Notification: ' + JSON.stringify(event));
-            if (!event.Namespace.startsWith(KIXObjectType.TRANSLATION)) {
+            if (!event.Namespace.startsWith(KIXObjectType.TRANSLATION_PATTERN)) {
                 await this.deleteKeys(event.Namespace);
             }
         }
@@ -136,6 +136,13 @@ export class CacheService {
                 await this.clearCache();
                 cacheKeyPrefixes = [];
                 break;
+            case KIXObjectType.TRANSLATION_PATTERN:
+            case KIXObjectType.TRANSLATION:
+            case KIXObjectType.TRANSLATION_LANGUAGE:
+                cacheKeyPrefixes.push(KIXObjectType.TRANSLATION_PATTERN);
+                cacheKeyPrefixes.push(KIXObjectType.TRANSLATION);
+                cacheKeyPrefixes.push(KIXObjectType.TRANSLATION_LANGUAGE);
+                break;
             default:
         }
 
@@ -144,9 +151,9 @@ export class CacheService {
 
     private async clearCache(): Promise<void> {
         if (this.useRedisCache) {
-            await RedisCache.getInstance().clear([KIXObjectType.TRANSLATION]);
+            await RedisCache.getInstance().clear();
         } else if (this.useInMemoryCache) {
-            await InMemoryCache.getInstance().clear([KIXObjectType.TRANSLATION]);
+            await InMemoryCache.getInstance().clear();
         }
     }
 

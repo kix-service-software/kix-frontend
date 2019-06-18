@@ -14,7 +14,7 @@ import {
     TicketContext, TicketDetailsContext, TicketSearchContext, TicketListContext, ArticleZipAttachmentDownloadAction,
     ArticlePrintAction, TicketPrintAction, TicketSearchAction, ShowUserTicketsAction, TicketPriorityTableFactory,
     TicketQueueTableFactory, TicketTypeTableFactory, TicketStateTableFactory, TicketFormService,
-    EmailRecipientValidator, PendingTimeValidator, ArticleFormService
+    EmailRecipientValidator, PendingTimeValidator, ArticleFormService, TicketHistoryBrowserFactory
 } from "../../../../core/browser/ticket";
 import { ChannelService } from "../../../../core/browser/channel";
 import { ChannelLabelProvider } from "../../../../core/browser/channel/ChannelLabelProvider";
@@ -72,6 +72,9 @@ class Component extends AbstractMarkoComponent {
         TableCSSHandlerRegistry.getInstance().registerCSSHandler(KIXObjectType.ARTICLE, new ArticleTableCSSHandler());
 
         FactoryService.getInstance().registerFactory(KIXObjectType.TICKET, TicketBrowserFactory.getInstance());
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.TICKET_HISTORY, TicketHistoryBrowserFactory.getInstance()
+        );
         FactoryService.getInstance().registerFactory(KIXObjectType.ARTICLE, ArticleBrowserFactory.getInstance());
         FactoryService.getInstance().registerFactory(KIXObjectType.TICKET_TYPE, TicketTypeBrowserFactory.getInstance());
         FactoryService.getInstance().registerFactory(

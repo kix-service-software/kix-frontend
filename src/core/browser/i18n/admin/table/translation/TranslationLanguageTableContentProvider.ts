@@ -1,6 +1,6 @@
 import { TableContentProvider } from "../../../../table/TableContentProvider";
 import {
-    KIXObjectType, KIXObjectLoadingOptions, TranslationLanguage, Translation,
+    KIXObjectType, KIXObjectLoadingOptions, TranslationLanguage, TranslationPattern,
     TranslationLanguageProperty, DataType, SortOrder, SortUtil
 } from "../../../../../model";
 import { ITable, IRowObject, TableValue, RowObject } from "../../../../table";
@@ -21,7 +21,7 @@ export class TranslationLanguageTableContentProvider extends TableContentProvide
         let rowObjects = [];
         if (this.contextId) {
             const context = await ContextService.getInstance().getContext(this.contextId);
-            const translation = await context.getObject<Translation>();
+            const translation = await context.getObject<TranslationPattern>();
             if (translation && translation.Languages && !!translation.Languages.length) {
                 rowObjects = SortUtil.sortObjects(
                     translation.Languages, TranslationLanguageProperty.LANGUAGE,

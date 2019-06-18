@@ -41,7 +41,7 @@ export class RedisCache implements ICache {
         this.flushAllAsync = promisify(this.redisClient.flushall).bind(this.redisClient);
     }
 
-    public async clear(ignoreKeyPrefixes?: string[]): Promise<void> {
+    public async clear(ignoreKeyPrefixes: string[] = []): Promise<void> {
         let keys = await this.keysAsync(`${this.KIX_CACHE_PREFIX}::*`);
         keys = keys.filter((k) => !ignoreKeyPrefixes.some((p) => k.startsWith(`${this.KIX_CACHE_PREFIX}::${p}`)));
         for (const key of keys) {

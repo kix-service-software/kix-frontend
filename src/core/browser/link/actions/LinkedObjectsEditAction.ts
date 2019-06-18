@@ -6,7 +6,8 @@ import { UIComponentPermission } from '../../../model/UIComponentPermission';
 export class LinkedObjectsEditAction extends AbstractAction {
 
     public permissions: UIComponentPermission[] = [
-        new UIComponentPermission('links', [CRUD.READ])
+        new UIComponentPermission('links', [CRUD.READ, CRUD.CREATE], true),
+        new UIComponentPermission('links', [CRUD.READ, CRUD.DELETE], true)
     ];
 
     public async initAction(): Promise<void> {
