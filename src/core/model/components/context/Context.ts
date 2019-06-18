@@ -127,18 +127,6 @@ export abstract class Context {
         return lanes;
     }
 
-    public getLaneTabs(show: boolean = false): ConfiguredWidget[] {
-        let laneTabs = this.configuration.laneTabWidgets;
-
-        if (show) {
-            laneTabs = laneTabs.filter(
-                (lt) => this.configuration.laneTabs.findIndex((ltId) => lt.instanceId === ltId) !== -1
-            );
-        }
-
-        return laneTabs;
-    }
-
     public getContent(show: boolean = false): ConfiguredWidget[] {
         let content = this.configuration.contentWidgets;
 
@@ -237,11 +225,6 @@ export abstract class Context {
             }
 
             if (!configuration) {
-                const laneTabWidget = this.configuration.laneTabWidgets.find((ltw) => ltw.instanceId === instanceId);
-                configuration = laneTabWidget ? laneTabWidget.configuration : undefined;
-            }
-
-            if (!configuration) {
                 const contentWidget = this.configuration.contentWidgets.find((cw) => cw.instanceId === instanceId);
                 configuration = contentWidget ? contentWidget.configuration : undefined;
             }
@@ -270,11 +253,6 @@ export abstract class Context {
             if (!widgetType) {
                 const laneWidget = this.configuration.laneWidgets.find((lw) => lw.instanceId === instanceId);
                 widgetType = laneWidget ? WidgetType.LANE : undefined;
-            }
-
-            if (!widgetType) {
-                const laneTabWidget = this.configuration.laneTabWidgets.find((ltw) => ltw.instanceId === instanceId);
-                widgetType = laneTabWidget ? WidgetType.LANE_TAB : undefined;
             }
         }
 

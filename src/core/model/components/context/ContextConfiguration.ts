@@ -10,8 +10,6 @@ export class ContextConfiguration {
         public explorerWidgets: ConfiguredWidget[] = [],
         public lanes: string[] = [],
         public laneWidgets: ConfiguredWidget[] = [],
-        public laneTabs: string[] = [],
-        public laneTabWidgets: ConfiguredWidget[] = [],
         public content: string[] = [],
         public contentWidgets: ConfiguredWidget[] = [],
         public generalActions: string[] = [],
