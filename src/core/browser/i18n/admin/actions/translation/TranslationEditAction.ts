@@ -1,5 +1,5 @@
 import {
-    AbstractAction, ContextMode, KIXObjectType, FormInstance, Translation, FormField, CRUD
+    AbstractAction, ContextMode, KIXObjectType, FormInstance, TranslationPattern, FormField, CRUD
 } from "../../../../../model";
 import { ContextService } from "../../../../context";
 import { FormService } from "../../../../form";
@@ -26,7 +26,7 @@ export class TranslationEditAction extends AbstractAction {
             const context = await ContextService.getInstance().getContext<TranslationDetailsContext>(
                 TranslationDetailsContext.CONTEXT_ID
             );
-            const translation = await context.getObject<Translation>();
+            const translation = await context.getObject<TranslationPattern>();
 
             translation.Languages.forEach((l) => {
                 const index = form.groups[0].formFields.findIndex((ff) => ff.property === l.Language);
@@ -43,7 +43,7 @@ export class TranslationEditAction extends AbstractAction {
             if (translation) {
                 ContextService.getInstance().setDialogContext(
                     // TODO: Titel aus dem aktiven Admin-Modul ermitteln (Kategorie)
-                    null, KIXObjectType.TRANSLATION, ContextMode.EDIT_ADMIN, null, true
+                    null, KIXObjectType.TRANSLATION_PATTERN, ContextMode.EDIT_ADMIN, null, true
                 );
             }
         }

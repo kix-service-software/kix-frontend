@@ -1,7 +1,7 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import { EditTranslationDialogContext } from '../../core/browser/i18n/admin/context';
 import {
-    ContextConfiguration, ConfiguredWidget, FormField, TranslationProperty,
+    ContextConfiguration, ConfiguredWidget, FormField, TranslationPatternProperty,
     SortUtil, Form, KIXObjectType, FormContext, SysConfigKey, SysConfigItem
 } from '../../core/model';
 import { ConfigurationService, KIXObjectServiceRegistry } from '../../core/services';
@@ -31,7 +31,7 @@ export class Extension implements IConfigurationExtension {
 
             fields.push(new FormField(
                 // tslint:disable-next-line:max-line-length
-                'Translatable#Pattern', TranslationProperty.PATTERN, 'text-area-input', true, 'Translatable#Please insert a base string for the translation.'
+                'Translatable#Pattern', TranslationPatternProperty.VALUE, 'text-area-input', true, 'Translatable#Please insert a base string for the translation.'
             ));
 
             const languages = await this.getLanguages();
@@ -47,11 +47,12 @@ export class Extension implements IConfigurationExtension {
             const group = new FormGroup('Translatable#Translations', fields);
 
             const form = new Form(
-                formId, 'Translatable#Edit Translation', [group], KIXObjectType.TRANSLATION, true, FormContext.EDIT
+                formId, 'Translatable#Edit Translation', [group],
+                KIXObjectType.TRANSLATION_PATTERN, true, FormContext.EDIT
             );
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }
-        configurationService.registerForm([FormContext.EDIT], KIXObjectType.TRANSLATION, formId);
+        configurationService.registerForm([FormContext.EDIT], KIXObjectType.TRANSLATION_PATTERN, formId);
     }
 
     private async getLanguages(): Promise<Array<[string, string]>> {

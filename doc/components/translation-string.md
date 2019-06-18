@@ -9,7 +9,7 @@ This component can be used to translate given patterns in marko templates.
 ##### Attributes
 
 | Attribute    | Required |   Type   |                           Value(s) |
-| ------------ | :------: | :------: | ---------------------------------: |
+| :----------- | :------: | :------: | ---------------------------------: |
 | pattern      |   yes    |  String  |   the base pattern for translation |
 | placeholders | optional | String[] | variables for pattern placeholders |
 

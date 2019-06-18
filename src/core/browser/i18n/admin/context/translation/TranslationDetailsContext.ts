@@ -1,6 +1,6 @@
 import {
     Context, BreadcrumbInformation, KIXObject,
-    KIXObjectType, Translation, KIXObjectLoadingOptions, TranslationProperty
+    KIXObjectType, TranslationPattern, KIXObjectLoadingOptions, TranslationPatternProperty
 } from "../../../../../model";
 import { AdminContext } from "../../../../admin";
 import { LabelService } from "../../../../LabelService";
@@ -17,32 +17,35 @@ export class TranslationDetailsContext extends Context {
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {
-        return await LabelService.getInstance().getText(await this.getObject<Translation>(), true, !short);
+        return await LabelService.getInstance().getText(await this.getObject<TranslationPattern>(), true, !short);
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
         const objectName = await TranslationService.translate('Translatable#Translation:');
-        const state = await this.getObject<Translation>();
-        return new BreadcrumbInformation(this.getIcon(), [AdminContext.CONTEXT_ID], `${objectName}: ${state.Pattern}`);
+        const state = await this.getObject<TranslationPattern>();
+        return new BreadcrumbInformation(this.getIcon(), [AdminContext.CONTEXT_ID], `${objectName}: ${state.Value}`);
     }
 
     public async getObject<O extends KIXObject>(
-        objectType: KIXObjectType = KIXObjectType.TRANSLATION, reload: boolean = false, changedProperties: string[] = []
+        objectType: KIXObjectType = KIXObjectType.TRANSLATION_PATTERN,
+        reload: boolean = false, changedProperties: string[] = []
     ): Promise<O> {
         const object = await this.loadTranslation() as any;
 
         if (reload) {
             this.listeners.forEach(
-                (l) => l.objectChanged(Number(this.objectId), object, KIXObjectType.TRANSLATION, changedProperties)
+                (l) => l.objectChanged(
+                    Number(this.objectId), object, KIXObjectType.TRANSLATION_PATTERN, changedProperties
+                )
             );
         }
 
         return object;
     }
 
-    private async loadTranslation(): Promise<Translation> {
+    private async loadTranslation(): Promise<TranslationPattern> {
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, null, [TranslationProperty.LANGUAGES]
+            null, null, null, null, [TranslationPatternProperty.LANGUAGES]
         );
 
         const timeout = window.setTimeout(() => {
@@ -51,8 +54,8 @@ export class TranslationDetailsContext extends Context {
             });
         }, 500);
 
-        const translations = await TranslationService.getInstance().loadObjects<Translation>(
-            KIXObjectType.TRANSLATION, [this.objectId], loadingOptions
+        const translations = await TranslationService.getInstance().loadObjects<TranslationPattern>(
+            KIXObjectType.TRANSLATION_PATTERN, [this.objectId], loadingOptions
         );
 
         window.clearTimeout(timeout);

@@ -1,12 +1,12 @@
-import { WidgetComponentState, AbstractAction, Translation } from '../../../../../core/model';
-import { TranslationLabelProvider } from '../../../../../core/browser/i18n';
+import { WidgetComponentState, AbstractAction, TranslationPattern } from '../../../../../core/model';
+import { TranslationPatternLabelProvider } from '../../../../../core/browser/i18n';
 
 export class ComponentState extends WidgetComponentState<any> {
 
     public constructor(
-        public labelProvider: TranslationLabelProvider = null,
+        public labelProvider: TranslationPatternLabelProvider = null,
         public actions: AbstractAction[] = [],
-        public translation: Translation = null
+        public translation: TranslationPattern = null
     ) {
         super();
     }

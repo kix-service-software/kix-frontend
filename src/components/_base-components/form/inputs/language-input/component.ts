@@ -25,7 +25,7 @@ class Component extends FormInputComponent<string, CompontentState> {
     public async onMount(): Promise<void> {
         await super.onMount();
         const translationService = ServiceRegistry.getServiceInstance<TranslationService>(
-            KIXObjectType.TRANSLATION
+            KIXObjectType.TRANSLATION_PATTERN
         );
         const languages = await translationService.getLanguages();
         this.state.nodes = languages.map((l) => new TreeNode(l[0], l[1]));

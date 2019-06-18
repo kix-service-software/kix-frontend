@@ -8,8 +8,8 @@ Feature: Als Nutzer möchte ich eine korrekte Standardkonfiguration für eine Ta
         Then Zeilengröße: <rowHeight>
         Then DisplayLimit: <displayLimit>
         Examples:
-            | selection | toggle | objectType    | headerHeight | rowHeight | displayLimit |
-            | 1         | 0      | 'Translation' | 'l'          | 'l'       | 25           |
+            | selection | toggle | objectType           | headerHeight | rowHeight | displayLimit |
+            | 1         | 0      | 'TranslationPattern' | 'l'          | 'l'       | 25           |
 
     Scenario Outline: Tabelle mit korrekter Spalte <column>
         Given Tabelle: <objectType>
@@ -24,6 +24,6 @@ Feature: Als Nutzer möchte ich eine korrekte Standardkonfiguration für eine Ta
         Then Die Spalte <column> zeigt Spaltenbezeichnung an: <columnTitle>
         Then Die Spalte <column> zeigt Spaltenicon an: <columnIcon>
         Examples:
-            | column      | sortable | filterable | listFilter | width | flexible | showText | showIcon | type     | columnTitle | columnIcon | objectType    |
-            | 'Pattern'   | 1        | 1          | 0          | 400   | 1        | 1        | 0        | 'STRING' | 1           | 0          | 'Translation' |
-            | 'Languages' | 1        | 1          | 1          | 250   | 1        | 1        | 0        | 'STRING' | 1           | 0          | 'Translation' |
+            | column               | sortable | filterable | listFilter | width | flexible | showText | showIcon | type     | columnTitle | columnIcon | objectType           |
+            | 'Value'              | 1        | 1          | 0          | 400   | 1        | 1        | 0        | 'STRING' | 1           | 0          | 'TranslationPattern' |
+            | 'AvailableLanguages' | 1        | 1          | 1          | 250   | 1        | 1        | 0        | 'STRING' | 1           | 0          | 'TranslationPattern' |

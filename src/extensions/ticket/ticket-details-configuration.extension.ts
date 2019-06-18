@@ -1,12 +1,13 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
     WidgetConfiguration, ConfiguredWidget, KIXObjectType, ContextConfiguration,
-    ObjectinformationWidgetSettings, OrganisationProperty, ContactProperty, ContextMode, CRUD, TabWidgetSettings
+    ObjectinformationWidgetSettings, OrganisationProperty, ContactProperty, ContextMode, CRUD
 } from '../../core/model/';
 import { RoutingConfiguration } from '../../core/browser/router';
 import { OrganisationDetailsContext } from '../../core/browser/organisation';
 import { ContactDetailsContext } from '../../core/browser/contact';
 import { UIComponentPermission } from '../../core/model/UIComponentPermission';
+import { TabWidgetSettings } from '../../core/model/components/TabWidgetSettings';
 
 export class TicketDetailsModuleFactoryExtension implements IConfigurationExtension {
 
@@ -32,7 +33,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
             new ConfiguredWidget('ticket-history-lane', new WidgetConfiguration(
                 'ticket-history-widget', 'Translatable#History', ['ticket-print-action'],
                 null, true, true, null, false),
-                [new UIComponentPermission('ticket/*/history', [CRUD.READ])]
+                [new UIComponentPermission('tickets/*/history', [CRUD.READ])]
             );
         const descriptionLane =
             new ConfiguredWidget('ticket-description-lane', new WidgetConfiguration(
