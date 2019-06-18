@@ -1,7 +1,7 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
     ContextConfiguration, WidgetConfiguration, ConfiguredWidget, WidgetSize, TableWidgetSettings,
-    KIXObjectType, PermissionProperty, SortOrder, ConfigItemClassDefinitionProperty
+    KIXObjectType, PermissionProperty, SortOrder, ConfigItemClassDefinitionProperty, TabWidgetSettings
 } from '../../core/model';
 import { TicketTypeDetailsContext } from '../../core/browser/ticket';
 import { TableConfiguration, TableHeaderHeight, TableRowHeight, ToggleOptions } from '../../core/browser';
@@ -14,7 +14,11 @@ export class Extension implements IConfigurationExtension {
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
 
-        const ciClassDetailsWidget = new ConfiguredWidget(
+        const tabLane = new ConfiguredWidget('config-item-class-details-tab-widget',
+            new WidgetConfiguration('tab-widget', '', [], new TabWidgetSettings(['config-item-class-details-widget']))
+        );
+
+        const ciClassInfoWidget = new ConfiguredWidget(
             'config-item-class-details-widget', new WidgetConfiguration(
                 'config-item-class-info-widget', 'Translatable#CI Class Information',
                 ['cmdb-admin-ci-class-edit'], null,
@@ -75,9 +79,10 @@ export class Extension implements IConfigurationExtension {
                 'ci-class-permissions-dependent-objects-widget'
             ],
             [
+                tabLane,
                 ciClassObjectPermissionsWidget,
                 ciClassDependentObjectPermissionsWidget,
-                ciClassDetailsWidget
+                ciClassInfoWidget
             ],
             ['ci-class-versions-widget'], [ciClassVersionsWidget],
             ['cmdb-admin-ci-class-create'],

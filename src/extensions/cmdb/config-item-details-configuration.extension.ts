@@ -1,6 +1,6 @@
 import { IConfigurationExtension } from "../../core/extensions";
 import {
-    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize, KIXObjectType, CRUD,
+    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize, KIXObjectType, CRUD, TabWidgetSettings,
 } from "../../core/model";
 import { ConfigItemDetailsContext } from "../../core/browser/cmdb";
 import { UIComponentPermission } from "../../core/model/UIComponentPermission";
@@ -12,6 +12,10 @@ export class Extension implements IConfigurationExtension {
     }
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
+
+        const tabLane = new ConfiguredWidget('config-item-details-tab-widget',
+            new WidgetConfiguration('tab-widget', '', [], new TabWidgetSettings(['config-item-info-lane']))
+        );
 
         const configItemInfoLaneTab =
             new ConfiguredWidget('config-item-info-lane',
@@ -77,7 +81,7 @@ export class Extension implements IConfigurationExtension {
             'config-item-images-widget', 'config-item-history-widget'
         ];
         const laneWidgets: Array<ConfiguredWidget<any>> = [
-            configItemLinkedObjectsLane, configItemGraphLane, configItemImagesLane, configItemHistoryLane,
+            tabLane, configItemLinkedObjectsLane, configItemGraphLane, configItemImagesLane, configItemHistoryLane,
             configItemInfoLaneTab
         ];
 

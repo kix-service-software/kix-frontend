@@ -1,5 +1,5 @@
 import { IConfigurationExtension } from '../../core/extensions';
-import { ContextConfiguration, WidgetConfiguration, ConfiguredWidget, WidgetSize } from '../../core/model';
+import { ContextConfiguration, WidgetConfiguration, ConfiguredWidget, TabWidgetSettings } from '../../core/model';
 import { TicketTypeDetailsContext } from '../../core/browser/ticket';
 
 export class Extension implements IConfigurationExtension {
@@ -10,7 +10,11 @@ export class Extension implements IConfigurationExtension {
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
 
-        const ticketTypesDetailsWidget = new ConfiguredWidget('ticket-type-details-widget', new WidgetConfiguration(
+        const tabLane = new ConfiguredWidget('ticket-type-details-tab-widget',
+            new WidgetConfiguration('tab-widget', '', [], new TabWidgetSettings(['ticket-type-details-widget']))
+        );
+
+        const ticketTypesInfoWidget = new ConfiguredWidget('ticket-type-details-widget', new WidgetConfiguration(
             'ticket-type-info-widget', 'Translatable#Type Information', ['ticket-admin-type-edit'], null,
             false, true, null, false
         ));
@@ -25,7 +29,7 @@ export class Extension implements IConfigurationExtension {
             [], [],
             [], [],
             ['ticket-type-details-widget', 'ticket-type-assigned-textmodules'],
-            [textmodulesWidget, ticketTypesDetailsWidget],
+            [tabLane, textmodulesWidget, ticketTypesInfoWidget],
             [], [],
             ['ticket-admin-type-create'],
             ['ticket-admin-type-duplication', 'ticket-admin-type-edit', 'ticket-admin-type-delete']

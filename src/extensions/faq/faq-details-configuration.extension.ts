@@ -1,7 +1,7 @@
 import { IConfigurationExtension } from "../../core/extensions";
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration,
-    WidgetSize, KIXObjectType, CRUD
+    WidgetSize, KIXObjectType, CRUD, TabWidgetSettings
 } from "../../core/model";
 import { FAQDetailsContext } from "../../core/browser/faq";
 import { UIComponentPermission } from "../../core/model/UIComponentPermission";
@@ -13,6 +13,10 @@ export class Extension implements IConfigurationExtension {
     }
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
+
+        const tabLane = new ConfiguredWidget('faq-details-tab-widget',
+            new WidgetConfiguration('tab-widget', '', [], new TabWidgetSettings(['faq-article-info-lane']))
+        );
 
         const faqInfoLaneTab =
             new ConfiguredWidget('faq-article-info-lane',
@@ -69,7 +73,7 @@ export class Extension implements IConfigurationExtension {
             [], [],
             [], [],
             ['faq-article-info-lane', 'faq-article-linked-objects-widget', 'faq-article-history-widget'],
-            [faqLinkedObjectsLane, faqHistoryLane, faqInfoLaneTab],
+            [tabLane, faqLinkedObjectsLane, faqHistoryLane, faqInfoLaneTab],
             ['20181017-faq-article-content-widget'], [faqArticleWidget],
             actions, faqActions
         );

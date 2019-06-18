@@ -1,7 +1,7 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    WidgetConfiguration, ConfiguredWidget, WidgetSize, ContextConfiguration, ObjectinformationWidgetSettings,
-    KIXObjectType, MailAccountProperty, KIXObjectProperty
+    WidgetConfiguration, ConfiguredWidget, ContextConfiguration, ObjectinformationWidgetSettings,
+    KIXObjectType, MailAccountProperty, KIXObjectProperty, TabWidgetSettings
 } from '../../core/model';
 import { MailAccountDetailsContext } from '../../core/browser/mail-account/context';
 
@@ -12,6 +12,10 @@ export class Extension implements IConfigurationExtension {
     }
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
+
+        const tabLane = new ConfiguredWidget('mail-account-details-tab-widget',
+            new WidgetConfiguration('tab-widget', '', [], new TabWidgetSettings(['mail-account-information-lane']))
+        );
 
         const mailAccountInfoLane =
             new ConfiguredWidget('mail-account-information-lane', new WidgetConfiguration(
@@ -38,7 +42,7 @@ export class Extension implements IConfigurationExtension {
             MailAccountDetailsContext.CONTEXT_ID,
             [], [],
             [], [],
-            ['mail-account-info-widget'], [mailAccountInfoLane],
+            ['mail-account-info-widget'], [tabLane, mailAccountInfoLane],
             [], [],
             ['mail-account-create'],
             ['mail-account-edit']

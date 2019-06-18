@@ -1,6 +1,6 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    ConfiguredWidget, WidgetConfiguration, WidgetSize, ContextConfiguration
+    ConfiguredWidget, WidgetConfiguration, WidgetSize, ContextConfiguration, TabWidgetSettings
 } from '../../core/model';
 import { TicketPriorityDetailsContext } from '../../core/browser/ticket';
 import { UserDetailsContext } from '../../core/browser/user';
@@ -12,6 +12,10 @@ export class Extension implements IConfigurationExtension {
     }
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
+
+        const tabLane = new ConfiguredWidget('user-details-tab-widget',
+            new WidgetConfiguration('tab-widget', '', [], new TabWidgetSettings(['user-info-widget']))
+        );
 
         const userInfoWidget = new ConfiguredWidget('user-info-widget', new WidgetConfiguration(
             'user-info-widget', 'Translatable#Agent Information', ['user-admin-user-edit-action'], null,
@@ -31,7 +35,7 @@ export class Extension implements IConfigurationExtension {
             [], [],
             [], [],
             ['user-info-widget', 'user-personal-settings-widget', 'user-assigned-roles-widget'],
-            [personalSettingsWidget, assignedRolesWidget, userInfoWidget],
+            [tabLane, personalSettingsWidget, assignedRolesWidget, userInfoWidget],
             [], [],
             ['user-admin-user-create-action'],
             ['user-admin-user-edit-action']

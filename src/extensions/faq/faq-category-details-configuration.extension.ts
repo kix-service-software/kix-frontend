@@ -1,6 +1,6 @@
 import { IConfigurationExtension } from "../../core/extensions";
 import { FAQCategoryDetailsContext } from "../../core/browser/faq/admin";
-import { ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize } from "../../core/model";
+import { ContextConfiguration, ConfiguredWidget, WidgetConfiguration, TabWidgetSettings } from "../../core/model";
 
 export class Extension implements IConfigurationExtension {
 
@@ -9,6 +9,10 @@ export class Extension implements IConfigurationExtension {
     }
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
+
+        const tabLane = new ConfiguredWidget('faq-category-details-tab-widget',
+            new WidgetConfiguration('tab-widget', '', [], new TabWidgetSettings(['faq-category-info-widget']))
+        );
 
         const faqInfoLaneTab =
             new ConfiguredWidget('faq-category-info-widget',
@@ -25,7 +29,7 @@ export class Extension implements IConfigurationExtension {
             this.getModuleId(),
             [], [],
             [], [],
-            ['faq-category-info-widget'], [faqInfoLaneTab],
+            ['faq-category-info-widget'], [tabLane, faqInfoLaneTab],
             [], [],
             actions, faqActions
         );

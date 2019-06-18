@@ -1,7 +1,7 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
     WidgetConfiguration, ConfiguredWidget, KIXObjectType, ContextConfiguration,
-    ObjectinformationWidgetSettings, OrganisationProperty, ContactProperty, ContextMode, CRUD
+    ObjectinformationWidgetSettings, OrganisationProperty, ContactProperty, ContextMode, CRUD, TabWidgetSettings
 } from '../../core/model/';
 import { RoutingConfiguration } from '../../core/browser/router';
 import { OrganisationDetailsContext } from '../../core/browser/organisation';
@@ -15,11 +15,18 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
     }
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-        // Content Widgets
-        const ticketDetailsWidget = new ConfiguredWidget('ticket-details-widget', new WidgetConfiguration(
-            'ticket-details-widget', 'Translatable#Ticket Details', ['ticket-create-action'], null,
-            false, true, null, false
-        ));
+        const tabwidget = new ConfiguredWidget('ticket-details-tab-widget',
+            new WidgetConfiguration('tab-widget', '', [], new TabWidgetSettings([
+                'ticket-information-lane'
+            ]), false, true)
+        );
+
+        const ticketInfoLane =
+            new ConfiguredWidget('ticket-information-lane', new WidgetConfiguration(
+                'ticket-info-widget', 'Translatable#Ticket Information',
+                ['ticket-print-action', 'ticket-edit-action'], {},
+                false, true, null, false)
+            );
 
         const ticketHistoryLane =
             new ConfiguredWidget('ticket-history-lane', new WidgetConfiguration(
@@ -50,13 +57,6 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                 [new UIComponentPermission('links', [CRUD.READ])]
             );
 
-        const ticketInfoLane =
-            new ConfiguredWidget('ticket-information-lane', new WidgetConfiguration(
-                'ticket-info-widget', 'Translatable#Ticket Information',
-                ['ticket-print-action', 'ticket-edit-action'], {},
-                false, true, null, false)
-            );
-
         const lanes =
             [
                 'ticket-information-lane',
@@ -66,7 +66,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
             ];
 
         const laneWidgets: Array<ConfiguredWidget<any>> = [
-            ticketInfoLane, descriptionLane, linkedObjectsLane, ticketHistoryLane, ticketDetailsWidget
+            tabwidget, ticketInfoLane, descriptionLane, linkedObjectsLane, ticketHistoryLane
         ];
 
         const organisationRouting = new RoutingConfiguration(

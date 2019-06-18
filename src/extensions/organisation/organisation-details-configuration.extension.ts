@@ -1,7 +1,8 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize, ContactProperty,
-    DataType, KIXObjectType, OrganisationProperty, KIXObjectProperty, ObjectinformationWidgetSettings, CRUD
+    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, ContactProperty,
+    DataType, KIXObjectType, OrganisationProperty, KIXObjectProperty, ObjectinformationWidgetSettings,
+    CRUD, TabWidgetSettings
 } from '../../core/model';
 import { TableConfiguration, TableHeaderHeight, TableRowHeight, DefaultColumnConfiguration } from '../../core/browser';
 import { OrganisationDetailsContext } from '../../core/browser/organisation';
@@ -15,10 +16,10 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
         const generalActions = ['organisation-create-action'];
-        const organisationDetailsWidget = new ConfiguredWidget('organisation-details-widget', new WidgetConfiguration(
-            'organisation-details-widget', 'Translatable#Organisation Details', generalActions, null,
-            false, true, null, false
-        ));
+
+        const tabLane = new ConfiguredWidget('organisation-details-tab-widget',
+            new WidgetConfiguration('tab-widget', '', [], new TabWidgetSettings(['organisation-information-lane']))
+        );
 
         const organisationInfoLane = new ConfiguredWidget('organisation-information-lane',
             new WidgetConfiguration(
@@ -103,7 +104,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
         ];
 
         const laneWidgets: Array<ConfiguredWidget<any>> = [
-            organisationDetailsWidget, assignedContactsLane, assignedTicketsLane, organisationInfoLane
+            tabLane, assignedContactsLane, assignedTicketsLane, organisationInfoLane
         ];
 
         const organisationActions = [

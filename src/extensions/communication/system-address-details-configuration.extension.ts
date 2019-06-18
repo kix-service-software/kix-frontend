@@ -1,6 +1,6 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    WidgetConfiguration, ConfiguredWidget, ContextConfiguration
+    WidgetConfiguration, ConfiguredWidget, ContextConfiguration, TabWidgetSettings
 } from '../../core/model';
 import { SystemAddressDetailsContext } from '../../core/browser/system-address/context';
 
@@ -11,6 +11,10 @@ export class Extension implements IConfigurationExtension {
     }
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
+
+        const tabLane = new ConfiguredWidget('system-address-details-tab-widget',
+            new WidgetConfiguration('tab-widget', '', [], new TabWidgetSettings(['system-address-info-widget']))
+        );
 
         const systemAddressInfoWidget = new ConfiguredWidget('system-address-info-widget',
             new WidgetConfiguration(
@@ -30,7 +34,7 @@ export class Extension implements IConfigurationExtension {
             SystemAddressDetailsContext.CONTEXT_ID,
             [], [],
             [], [],
-            ['system-address-info-widget'], [systemAddressAssignedQueuesWidget, systemAddressInfoWidget],
+            ['system-address-info-widget'], [tabLane, systemAddressAssignedQueuesWidget, systemAddressInfoWidget],
             [], [],
             ['system-address-create'],
             ['system-address-edit']

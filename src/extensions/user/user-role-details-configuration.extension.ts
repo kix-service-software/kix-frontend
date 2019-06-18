@@ -1,7 +1,7 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
     ContextConfiguration, WidgetConfiguration, ConfiguredWidget, WidgetSize, TableWidgetSettings,
-    KIXObjectType, PermissionProperty, SortOrder
+    KIXObjectType, PermissionProperty, SortOrder, TabWidgetSettings
 } from '../../core/model';
 import { TicketPriorityDetailsContext } from '../../core/browser/ticket';
 import { RoleDetailsContext } from '../../core/browser/user';
@@ -14,6 +14,15 @@ export class Extension implements IConfigurationExtension {
     }
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
+
+        const tabLane = new ConfiguredWidget('user-role-details-tab-widget',
+            new WidgetConfiguration('tab-widget', '', [], new TabWidgetSettings(['user-role-info-widget']))
+        );
+
+        const userRoleInfoWidget = new ConfiguredWidget('user-role-info-widget', new WidgetConfiguration(
+            'user-role-info-widget', 'Translatable#Role Information', ['user-admin-role-edit-action'], null,
+            false, true, WidgetSize.BOTH, false
+        ));
 
         const assignedUsersWidget = new ConfiguredWidget('user-role-assigned-users-widget', new WidgetConfiguration(
             'user-role-assigned-users-widget', 'Translatable#Assigned Agents', [], null, true, true,
@@ -29,17 +38,12 @@ export class Extension implements IConfigurationExtension {
                 true, true, null, true
             ));
 
-        const userRoleInfoWidget = new ConfiguredWidget('user-role-info-widget', new WidgetConfiguration(
-            'user-role-info-widget', 'Translatable#Role Information', ['user-admin-role-edit-action'], null,
-            false, true, WidgetSize.BOTH, false
-        ));
-
         return new ContextConfiguration(
             TicketPriorityDetailsContext.CONTEXT_ID,
             [], [],
             [], [],
             ['user-role-info-widget', 'user-role-assigned-permissions-widget', 'user-role-assigned-users-widget'],
-            [assignedPermissionsWidget, assignedUsersWidget, userRoleInfoWidget],
+            [tabLane, assignedPermissionsWidget, assignedUsersWidget, userRoleInfoWidget],
             [], [],
             ['user-admin-role-create-action'],
             ['user-admin-role-edit-action']

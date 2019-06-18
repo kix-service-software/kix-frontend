@@ -1,5 +1,7 @@
 import { IConfigurationExtension } from '../../core/extensions';
-import { ContextConfiguration, WidgetConfiguration, ConfiguredWidget, WidgetSize } from '../../core/model';
+import {
+    ContextConfiguration, WidgetConfiguration, ConfiguredWidget, WidgetSize, TabWidgetSettings
+} from '../../core/model';
 import { QueueDetailsContext } from '../../core/browser/ticket';
 
 export class Extension implements IConfigurationExtension {
@@ -10,7 +12,11 @@ export class Extension implements IConfigurationExtension {
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
 
-        const ticketQueueDetailsWidget = new ConfiguredWidget('ticket-queue-details-widget', new WidgetConfiguration(
+        const tabLane = new ConfiguredWidget('ticket-queue-details-tab-widget',
+            new WidgetConfiguration('tab-widget', '', [], new TabWidgetSettings(['ticket-queue-details-widget']))
+        );
+
+        const ticketQueueInfoWidget = new ConfiguredWidget('ticket-queue-details-widget', new WidgetConfiguration(
             'ticket-queue-info-widget', 'Translatable#Queue Information', ['ticket-admin-queue-edit'], null,
             false, true, WidgetSize.BOTH, false
         ));
@@ -23,7 +29,8 @@ export class Extension implements IConfigurationExtension {
             QueueDetailsContext.CONTEXT_ID,
             [], [],
             [], [],
-            ['ticket-queue-details-widget', 'ticket-queue-signature'], [signatureWidget, ticketQueueDetailsWidget],
+            ['ticket-queue-details-widget', 'ticket-queue-signature'],
+            [tabLane, signatureWidget, ticketQueueInfoWidget],
             [], [],
             ['ticket-admin-queue-create'],
             ['ticket-admin-queue-edit']

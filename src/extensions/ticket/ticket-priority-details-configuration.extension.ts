@@ -1,6 +1,6 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    WidgetConfiguration, ConfiguredWidget, WidgetSize, ContextConfiguration
+    WidgetConfiguration, ConfiguredWidget, WidgetSize, ContextConfiguration, TabWidgetSettings
 } from '../../core/model';
 import { TicketPriorityDetailsContext } from '../../core/browser/ticket';
 
@@ -12,6 +12,10 @@ export class Extension implements IConfigurationExtension {
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
 
+        const tabLane = new ConfiguredWidget('ticket-priority-details-tab-widget',
+            new WidgetConfiguration('tab-widget', '', [], new TabWidgetSettings(['ticket-priority-details-widget']))
+        );
+
         const priorityDetailsWidget = new ConfiguredWidget('ticket-priority-details-widget', new WidgetConfiguration(
             'ticket-priority-info-widget', 'Priority Information', ['ticket-admin-priority-edit'], null,
             false, true, null, false
@@ -19,7 +23,7 @@ export class Extension implements IConfigurationExtension {
 
         return new ContextConfiguration(
             TicketPriorityDetailsContext.CONTEXT_ID, [], [], [], [],
-            ['ticket-priority-details-widget'], [priorityDetailsWidget],
+            ['ticket-priority-details-widget'], [tabLane, priorityDetailsWidget],
             [], [],
             ['ticket-admin-priority-create'],
             ['ticket-admin-priority-duplication', 'ticket-admin-priority-edit', 'ticket-admin-priority-delete']

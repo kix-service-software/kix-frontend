@@ -51,6 +51,7 @@ class Extension implements IKIXModuleExtension {
         new UIComponent('personal-settings-dialog', '_base-components/dialog/personal-settings-dialog', []),
         new UIComponent('bulk-dialog', '_base-components/dialog/bulk-dialog', []),
         new UIComponent('table-widget', 'widgets/table-widget', []),
+        new UIComponent('tab-widget', 'widgets/tab-widget', []),
         new UIComponent(
             'label-list-cell-content',
             '_base-components/standard-table-NEW/table-body/table-row/table-cell-NEW/label-list-cell-content',

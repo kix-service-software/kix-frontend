@@ -1,8 +1,9 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import { ContactDetailsContext } from '../../core/browser/contact';
 import {
-    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize, OrganisationProperty,
-    DataType, KIXObjectType, ObjectinformationWidgetSettings, ContactProperty, KIXObjectProperty, CRUD
+    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, OrganisationProperty,
+    DataType, KIXObjectType, ObjectinformationWidgetSettings, ContactProperty,
+    KIXObjectProperty, CRUD, TabWidgetSettings
 } from '../../core/model';
 import {
     TableConfiguration, TableHeaderHeight, TableRowHeight, DefaultColumnConfiguration
@@ -17,6 +18,10 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
         const generalActions = ['contact-create-action'];
+
+        const tabLane = new ConfiguredWidget('contact-details-tab-widget',
+            new WidgetConfiguration('tab-widget', '', [], new TabWidgetSettings(['contact-information-lane']))
+        );
 
         const contactInfoLane =
             new ConfiguredWidget('contact-information-lane', new WidgetConfiguration(
@@ -102,7 +107,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
         ];
 
         const laneWidgets: Array<ConfiguredWidget<any>> = [
-            assignedOrganisationsLane, assignedTicketsLane, contactInfoLane
+            tabLane, assignedOrganisationsLane, assignedTicketsLane, contactInfoLane
         ];
 
         const contactActions = [
