@@ -24,8 +24,8 @@ export class Extension implements IConfigurationExtension {
 
         return new ContextConfiguration(
             TicketStateDetailsContext.CONTEXT_ID, [], [], [], [],
-            ['ticket-state-assigned-textmodules'], [textmodulesWidget],
-            ['ticket-state-details-widget'], [ticketStateDetailsWidget],
+            ['ticket-state-details-widget', 'ticket-state-assigned-textmodules'],
+            [textmodulesWidget, ticketStateDetailsWidget],
             [], [],
             ['ticket-admin-state-create'],
             ['ticket-admin-state-duplication', 'ticket-admin-state-edit', 'ticket-admin-state-delete']

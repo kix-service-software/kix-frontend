@@ -168,7 +168,6 @@ export class Extension implements IConfigurationExtension {
             sidebars, sidebarWidgets,
             explorer, explorerWidgets,
             [], [],
-            [], [],
             content, contentWidgets
         );
     }

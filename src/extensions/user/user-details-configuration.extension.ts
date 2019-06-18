@@ -30,9 +30,8 @@ export class Extension implements IConfigurationExtension {
             TicketPriorityDetailsContext.CONTEXT_ID,
             [], [],
             [], [],
-            ['user-personal-settings-widget', 'user-assigned-roles-widget'],
-            [personalSettingsWidget, assignedRolesWidget],
-            ['user-info-widget'], [userInfoWidget],
+            ['user-info-widget', 'user-personal-settings-widget', 'user-assigned-roles-widget'],
+            [personalSettingsWidget, assignedRolesWidget, userInfoWidget],
             [], [],
             ['user-admin-user-create-action'],
             ['user-admin-user-edit-action']

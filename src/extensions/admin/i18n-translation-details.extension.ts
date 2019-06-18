@@ -1,6 +1,6 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    WidgetConfiguration, ConfiguredWidget, WidgetSize, ContextConfiguration,
+    WidgetConfiguration, ConfiguredWidget, ContextConfiguration,
 } from '../../core/model/';
 import { TranslationDetailsContext } from '../../core/browser/i18n/admin/context';
 
@@ -17,8 +17,8 @@ export class Extension implements IConfigurationExtension {
                 false, true, null, false)
             );
 
-        const laneTabs = ["i18n-translation-information-lane"];
-        const laneTabWidgets = [translationInfoLane];
+        const lanes = ["i18n-translation-information-lane"];
+        const laneWidgets = [translationInfoLane];
 
         // actions
         const generalActions = ['i18n-admin-translation-create'];
@@ -37,8 +37,7 @@ export class Extension implements IConfigurationExtension {
             this.getModuleId(),
             [], [],
             [], [],
-            [], [],
-            laneTabs, laneTabWidgets,
+            lanes, laneWidgets,
             content, contentWidgets,
             generalActions, translationActions
         );

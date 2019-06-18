@@ -1,6 +1,6 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    WidgetConfiguration, ConfiguredWidget, WidgetSize, ContextConfiguration
+    WidgetConfiguration, ConfiguredWidget, ContextConfiguration
 } from '../../core/model';
 import { SystemAddressDetailsContext } from '../../core/browser/system-address/context';
 
@@ -30,8 +30,7 @@ export class Extension implements IConfigurationExtension {
             SystemAddressDetailsContext.CONTEXT_ID,
             [], [],
             [], [],
-            [], [systemAddressAssignedQueuesWidget],
-            ['system-address-info-widget'], [systemAddressInfoWidget],
+            ['system-address-info-widget'], [systemAddressAssignedQueuesWidget, systemAddressInfoWidget],
             [], [],
             ['system-address-create'],
             ['system-address-edit']

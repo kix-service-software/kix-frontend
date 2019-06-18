@@ -8,14 +8,12 @@ export enum WidgetType {
 
     LANE = 1 << 3,
 
-    LANE_TAB = 1 << 4,
+    GROUP = 1 << 4,
 
-    GROUP = 1 << 5,
+    OVERLAY = 1 << 5,
 
-    OVERLAY = 1 << 6,
+    DIALOG = 1 << 6,
 
-    DIALOG = 1 << 7,
-
-    OVERLAY_DIALOG = 1 << 8
+    OVERLAY_DIALOG = 1 << 7
 
 }

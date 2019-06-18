@@ -424,13 +424,6 @@ describe('Permission Service', () => {
                 new ConfiguredWidget('lane03', null, [new UIComponentPermission('cmdb', [CRUD.READ])])
             ],
             [
-                'laneTab01', 'laneTab02', 'laneTab03'
-            ], [
-                new ConfiguredWidget('laneTab01', null, [new UIComponentPermission('tickets', [CRUD.READ, CRUD.CREATE])]),
-                new ConfiguredWidget('laneTab02', null, [new UIComponentPermission('faq', [CRUD.READ])]),
-                new ConfiguredWidget('laneTab03', null, [new UIComponentPermission('cmdb', [CRUD.READ])])
-            ],
-            [
                 'content01', 'content02', 'content03'
             ], [
                 new ConfiguredWidget('content01', null, [new UIComponentPermission('tickets', [CRUD.READ])]),
@@ -485,13 +478,6 @@ describe('Permission Service', () => {
             expect(config).exist;
             expect(config.laneWidgets).exist;
             expect(config.laneWidgets.length).equals(3);
-        });
-
-        it('Should retrieve a configuration with 2 lane tab widgets.', async () => {
-            const config = await PermissionService.getInstance().filterContextConfiguration('test-token-1234', contextConfiguration);
-            expect(config).exist;
-            expect(config.laneTabWidgets).exist;
-            expect(config.laneTabWidgets.length).equals(2);
         });
 
         it('Should retrieve a configuration with 3 content widgets.', async () => {

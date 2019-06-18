@@ -71,15 +71,14 @@ export class Extension implements IConfigurationExtension {
                 [new UIComponentPermission('cmdb/configitems/*/images', [CRUD.READ])]
             );
 
-        const laneTabs = ['config-item-info-lane'];
-        const laneTabWidgets = [configItemInfoLaneTab];
-
         const lanes = [
+            'config-item-info-lane',
             'config-item-linked-objects-widget', 'config-item-graph-widget',
             'config-item-images-widget', 'config-item-history-widget'
         ];
         const laneWidgets: Array<ConfiguredWidget<any>> = [
-            configItemLinkedObjectsLane, configItemGraphLane, configItemImagesLane, configItemHistoryLane
+            configItemLinkedObjectsLane, configItemGraphLane, configItemImagesLane, configItemHistoryLane,
+            configItemInfoLaneTab
         ];
 
         const actions = ['config-item-create-action'];
@@ -105,7 +104,6 @@ export class Extension implements IConfigurationExtension {
             [], [],
             [], [],
             lanes, laneWidgets,
-            laneTabs, laneTabWidgets,
             content, contentWidgets,
             actions, configItemActions,
         );

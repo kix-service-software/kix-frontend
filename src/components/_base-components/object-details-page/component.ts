@@ -84,7 +84,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.configuration = context.getConfiguration();
         this.state.lanes = context.getLanes();
-        this.state.tabWidgets = context.getLaneTabs();
         this.state.contentWidgets = context.getContent(true);
 
         await this.prepareActions();

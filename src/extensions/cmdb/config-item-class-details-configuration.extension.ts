@@ -69,9 +69,16 @@ export class Extension implements IConfigurationExtension {
 
         return new ContextConfiguration(
             TicketTypeDetailsContext.CONTEXT_ID, [], [], [], [],
-            ['ci-class-permissions-widget', 'ci-class-permissions-dependent-objects-widget'],
-            [ciClassObjectPermissionsWidget, ciClassDependentObjectPermissionsWidget],
-            ['config-item-class-details-widget'], [ciClassDetailsWidget],
+            [
+                'config-item-class-details-widget',
+                'ci-class-permissions-widget',
+                'ci-class-permissions-dependent-objects-widget'
+            ],
+            [
+                ciClassObjectPermissionsWidget,
+                ciClassDependentObjectPermissionsWidget,
+                ciClassDetailsWidget
+            ],
             ['ci-class-versions-widget'], [ciClassVersionsWidget],
             ['cmdb-admin-ci-class-create'],
             ['cmdb-admin-ci-class-edit']

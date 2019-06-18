@@ -19,7 +19,6 @@ export class Extension implements IConfigurationExtension {
 
         return new ContextConfiguration(
             TicketPriorityDetailsContext.CONTEXT_ID, [], [], [], [],
-            [], [],
             ['ticket-priority-details-widget'], [priorityDetailsWidget],
             [], [],
             ['ticket-admin-priority-create'],

@@ -25,7 +25,6 @@ export class Extension implements IConfigurationExtension {
             this.getModuleId(),
             [], [],
             [], [],
-            [], [],
             ['faq-category-info-widget'], [faqInfoLaneTab],
             [], [],
             actions, faqActions

@@ -34,7 +34,6 @@ export class PermissionService {
         const sidebars = await this.checkConfiguration(token, configuration.sidebars, configuration.sidebarWidgets);
         const explorer = await this.checkConfiguration(token, configuration.explorer, configuration.explorerWidgets);
         const lanes = await this.checkConfiguration(token, configuration.lanes, configuration.laneWidgets);
-        const laneTabs = await this.checkConfiguration(token, configuration.laneTabs, configuration.laneTabWidgets);
         const content = await this.checkConfiguration(token, configuration.content, configuration.contentWidgets);
         const overlays = await this.checkConfiguration(
             token, configuration.overlayWidgets.map((ow) => ow.instanceId), configuration.overlayWidgets
@@ -45,7 +44,6 @@ export class PermissionService {
             sidebars.map((w) => w.instanceId), sidebars.map((w) => w),
             explorer.map((w) => w.instanceId), explorer.map((w) => w),
             lanes.map((w) => w.instanceId), lanes.map((w) => w),
-            laneTabs.map((w) => w.instanceId), laneTabs.map((w) => w),
             content.map((w) => w.instanceId), content.map((w) => w),
             configuration.generalActions,
             configuration.actions,

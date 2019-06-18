@@ -1,7 +1,7 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    WidgetConfiguration, ConfiguredWidget, WidgetSize, KIXObjectType, ContextConfiguration,
-    ObjectinformationWidgetSettings, OrganisationProperty, KIXObjectProperty, ContactProperty, ContextMode, CRUD
+    WidgetConfiguration, ConfiguredWidget, KIXObjectType, ContextConfiguration,
+    ObjectinformationWidgetSettings, OrganisationProperty, ContactProperty, ContextMode, CRUD
 } from '../../core/model/';
 import { RoutingConfiguration } from '../../core/browser/router';
 import { OrganisationDetailsContext } from '../../core/browser/organisation';
@@ -50,17 +50,6 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                 [new UIComponentPermission('links', [CRUD.READ])]
             );
 
-        const lanes =
-            [
-                'ticket-history-lane',
-                'ticket-description-lane',
-                'ticket-linked-objects-lane'
-            ];
-
-        const laneWidgets: Array<ConfiguredWidget<any>> = [
-            descriptionLane, linkedObjectsLane, ticketHistoryLane, ticketDetailsWidget
-        ];
-
         const ticketInfoLane =
             new ConfiguredWidget('ticket-information-lane', new WidgetConfiguration(
                 'ticket-info-widget', 'Translatable#Ticket Information',
@@ -68,8 +57,17 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                 false, true, null, false)
             );
 
-        const laneTabs = ['ticket-information-lane'];
-        const laneTabWidgets = [ticketInfoLane];
+        const lanes =
+            [
+                'ticket-information-lane',
+                'ticket-history-lane',
+                'ticket-description-lane',
+                'ticket-linked-objects-lane'
+            ];
+
+        const laneWidgets: Array<ConfiguredWidget<any>> = [
+            ticketInfoLane, descriptionLane, linkedObjectsLane, ticketHistoryLane, ticketDetailsWidget
+        ];
 
         const organisationRouting = new RoutingConfiguration(
             OrganisationDetailsContext.CONTEXT_ID, KIXObjectType.ORGANISATION,
@@ -224,7 +222,6 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
             sidebars, sidebarWidgets,
             [], [],
             lanes, laneWidgets,
-            laneTabs, laneTabWidgets,
             content, contentWidgets,
             generalActions, ticketActions,
             infoOverlayWidgets

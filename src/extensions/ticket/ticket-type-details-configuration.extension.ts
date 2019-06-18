@@ -24,8 +24,8 @@ export class Extension implements IConfigurationExtension {
             TicketTypeDetailsContext.CONTEXT_ID,
             [], [],
             [], [],
-            ['ticket-type-assigned-textmodules'], [textmodulesWidget],
-            ['ticket-type-details-widget'], [ticketTypesDetailsWidget],
+            ['ticket-type-details-widget', 'ticket-type-assigned-textmodules'],
+            [textmodulesWidget, ticketTypesDetailsWidget],
             [], [],
             ['ticket-admin-type-create'],
             ['ticket-admin-type-duplication', 'ticket-admin-type-edit', 'ticket-admin-type-delete']

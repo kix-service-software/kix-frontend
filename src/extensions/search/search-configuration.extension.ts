@@ -38,7 +38,6 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
             [], [],
             explorer, explorerWidgets,
             [], [],
-            [], [],
             content, contentWidgets
         );
     }

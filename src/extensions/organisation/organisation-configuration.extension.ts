@@ -67,7 +67,6 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
             sidebars, sidebarWidgets,
             [], [],
             [], [],
-            [], [],
             content, contentWidgets
         );
     }

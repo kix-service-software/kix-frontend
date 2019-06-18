@@ -38,7 +38,6 @@ export class Extension implements IConfigurationExtension {
             MailAccountDetailsContext.CONTEXT_ID,
             [], [],
             [], [],
-            [], [],
             ['mail-account-info-widget'], [mailAccountInfoLane],
             [], [],
             ['mail-account-create'],

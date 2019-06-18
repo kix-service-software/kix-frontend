@@ -96,14 +96,15 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
             [new UIComponentPermission('tickets', [CRUD.READ])]
         );
 
-        const lanes = ['organisation-assigned-contacts-widget', 'organisation-assigned-tickets-widget'];
-
-        const laneWidgets: Array<ConfiguredWidget<any>> = [
-            organisationDetailsWidget, assignedContactsLane, assignedTicketsLane
+        const lanes = [
+            'organisation-information-lane',
+            'organisation-assigned-contacts-widget',
+            'organisation-assigned-tickets-widget'
         ];
 
-        const laneTabs = ['organisation-information-lane'];
-        const laneTabWidgets = [organisationInfoLane];
+        const laneWidgets: Array<ConfiguredWidget<any>> = [
+            organisationDetailsWidget, assignedContactsLane, assignedTicketsLane, organisationInfoLane
+        ];
 
         const organisationActions = [
             'organisation-edit-action', 'organisation-create-contact-action', 'organisation-create-ticket-action',
@@ -115,7 +116,6 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
             [], [],
             [], [],
             lanes, laneWidgets,
-            laneTabs, laneTabWidgets,
             [], [],
             generalActions, organisationActions
         );

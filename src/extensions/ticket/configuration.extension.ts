@@ -205,7 +205,6 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
             sidebars, sidebarWidgets,
             explorer, explorerWidgets,
             [], [],
-            [], [],
             content, contentWidgets
         );
     }
