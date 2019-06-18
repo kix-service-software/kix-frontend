@@ -60,7 +60,7 @@ export abstract class KIXObjectService implements IKIXObjectService {
             ? this.buildUri(baseUri, objectIds.join(','))
             : baseUri;
 
-        const response = await this.getObjectByUri(token, uri, query);
+        const response = await this.getObjectByUri(token, uri, query, objectType);
 
         const responseObject = response[responseProperty];
 
@@ -78,7 +78,7 @@ export abstract class KIXObjectService implements IKIXObjectService {
         const object = {};
         object[objectType] = new RequestObject(parameter.filter((p) => p[0] !== 'ICON'));
 
-        const response = await this.sendRequest(token, clientRequestId, uri, object, this.objectType, create)
+        const response = await this.sendRequest(token, clientRequestId, uri, object, objectType, create)
             .catch((error: Error) => {
                 LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
                 throw new Error(error.Code, error.Message);

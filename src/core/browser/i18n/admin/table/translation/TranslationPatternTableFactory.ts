@@ -5,15 +5,15 @@ import {
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../../../table";
 import {
-    KIXObjectType, TranslationProperty, ContextMode, KIXObjectLoadingOptions, DataType
+    KIXObjectType, TranslationPatternProperty, ContextMode, KIXObjectLoadingOptions, DataType
 } from "../../../../../model";
-import { TranslationTableContentProvider } from "./TranslationTableContentProvider";
 import { TableFactory } from "../../../../table/TableFactory";
+import { TranslationPatternTableContentProvider } from "./TranslationPatternTableContentProvider";
 
 
-export class TranslationTableFactory extends TableFactory {
+export class TranslationPatternTableFactory extends TableFactory {
 
-    public objectType: KIXObjectType = KIXObjectType.TRANSLATION;
+    public objectType: KIXObjectType = KIXObjectType.TRANSLATION_PATTERN;
 
     public createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
@@ -24,10 +24,13 @@ export class TranslationTableFactory extends TableFactory {
         const table = new Table(tableKey, tableConfiguration);
 
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, tableConfiguration.filter, tableConfiguration.sortOrder, null, [TranslationProperty.LANGUAGES]
+            null, tableConfiguration.filter, tableConfiguration.sortOrder, null,
+            [TranslationPatternProperty.AVAILABLE_LANGUAGES]
         );
 
-        table.setContentProvider(new TranslationTableContentProvider(table, objectIds, loadingOptions, contextId));
+        table.setContentProvider(new TranslationPatternTableContentProvider(
+            table, objectIds, loadingOptions, contextId)
+        );
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 
         return table;
@@ -37,13 +40,13 @@ export class TranslationTableFactory extends TableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            this.getDefaultColumnConfiguration(TranslationProperty.PATTERN),
-            this.getDefaultColumnConfiguration(TranslationProperty.LANGUAGES)
+            this.getDefaultColumnConfiguration(TranslationPatternProperty.VALUE),
+            this.getDefaultColumnConfiguration(TranslationPatternProperty.AVAILABLE_LANGUAGES)
         ];
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.TRANSLATION, null, null, tableColumns, null, true, false, null, null,
+                KIXObjectType.TRANSLATION_PATTERN, null, null, tableColumns, null, true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;
@@ -53,8 +56,8 @@ export class TranslationTableFactory extends TableFactory {
 
         if (defaultRouting) {
             tableConfiguration.routingConfiguration = new RoutingConfiguration(
-                TranslationDetailsContext.CONTEXT_ID, KIXObjectType.TRANSLATION,
-                ContextMode.DETAILS, TranslationProperty.ID
+                TranslationDetailsContext.CONTEXT_ID, KIXObjectType.TRANSLATION_PATTERN,
+                ContextMode.DETAILS, TranslationPatternProperty.ID
             );
         }
 
@@ -65,13 +68,13 @@ export class TranslationTableFactory extends TableFactory {
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
         let config;
         switch (property) {
-            case TranslationProperty.PATTERN:
+            case TranslationPatternProperty.VALUE:
                 config = new DefaultColumnConfiguration(
                     property, true, false, true, false, 400, true, true, false,
                     DataType.STRING, true, null, null, false
                 );
                 break;
-            case TranslationProperty.LANGUAGES:
+            case TranslationPatternProperty.AVAILABLE_LANGUAGES:
                 config = new DefaultColumnConfiguration(
                     property, true, false, true, false, 250, true, true, true,
                     DataType.STRING, true, 'label-list-cell-content'

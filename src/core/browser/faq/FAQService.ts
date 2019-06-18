@@ -109,7 +109,7 @@ export class FAQService extends KIXObjectService {
                     break;
                 case FAQArticleProperty.LANGUAGE:
                     const translationService = ServiceRegistry.getServiceInstance<TranslationService>(
-                        KIXObjectType.TRANSLATION
+                        KIXObjectType.TRANSLATION_PATTERN
                     );
                     const languages = await translationService.getLanguages();
                     values = languages.map((l) => new TreeNode(l[0], l[1]));

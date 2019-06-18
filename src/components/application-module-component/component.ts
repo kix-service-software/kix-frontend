@@ -19,12 +19,12 @@ import { ObjectIconService, ObjectIconBrowserFactory } from '../../core/browser/
 import { PersonalSettingsDialogContext } from '../../core/browser';
 import { BulkDialogContext } from '../../core/browser/bulk';
 import {
-    TranslationLabelProvider, TranslationLanguageLabelProvider
+    TranslationPatternLabelProvider, TranslationLanguageLabelProvider
 } from '../../core/browser/i18n';
 import {
     TranslationCreateAction, TranslationImportAction, TranslationCSVExportAction, TranslationEditAction
 } from '../../core/browser/i18n/admin/actions';
-import { TranslationTableFactory, TranslationLanguageTableFactory } from '../../core/browser/i18n/admin/table';
+import { TranslationPatternTableFactory, TranslationLanguageTableFactory } from '../../core/browser/i18n/admin/table';
 import { PersonalSettingsFormService } from '../../core/browser/settings/PersonalSettingsFormService';
 import {
     NewTranslationDialogContext, TranslationDetailsContext, EditTranslationDialogContext
@@ -76,9 +76,9 @@ class Component extends AbstractMarkoComponent {
         LabelService.getInstance().registerLabelProvider(new LinkObjectLabelProvider());
         ActionFactory.getInstance().registerAction('linked-objects-edit-action', LinkedObjectsEditAction);
 
-        TableFactoryService.getInstance().registerFactory(new TranslationTableFactory());
+        TableFactoryService.getInstance().registerFactory(new TranslationPatternTableFactory());
         TableFactoryService.getInstance().registerFactory(new TranslationLanguageTableFactory());
-        LabelService.getInstance().registerLabelProvider(new TranslationLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new TranslationPatternLabelProvider());
         LabelService.getInstance().registerLabelProvider(new TranslationLanguageLabelProvider());
         ActionFactory.getInstance().registerAction('i18n-admin-translation-create', TranslationCreateAction);
         ActionFactory.getInstance().registerAction('i18n-admin-translation-edit', TranslationEditAction);
@@ -136,21 +136,21 @@ class Component extends AbstractMarkoComponent {
         ContextService.getInstance().registerContext(settingsDialogContext);
 
         const newTranslationDialogContext = new ContextDescriptor(
-            NewTranslationDialogContext.CONTEXT_ID, [KIXObjectType.TRANSLATION],
+            NewTranslationDialogContext.CONTEXT_ID, [KIXObjectType.TRANSLATION_PATTERN],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
             false, 'new-translation-dialog', ['translations'], NewTranslationDialogContext
         );
         ContextService.getInstance().registerContext(newTranslationDialogContext);
 
         const editTranslationDialogContext = new ContextDescriptor(
-            EditTranslationDialogContext.CONTEXT_ID, [KIXObjectType.TRANSLATION],
+            EditTranslationDialogContext.CONTEXT_ID, [KIXObjectType.TRANSLATION_PATTERN],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
             false, 'edit-translation-dialog', ['translations'], EditTranslationDialogContext
         );
         ContextService.getInstance().registerContext(editTranslationDialogContext);
 
         const translationDetailsContext = new ContextDescriptor(
-            TranslationDetailsContext.CONTEXT_ID, [KIXObjectType.TRANSLATION],
+            TranslationDetailsContext.CONTEXT_ID, [KIXObjectType.TRANSLATION_PATTERN],
             ContextType.MAIN, ContextMode.DETAILS,
             false, 'object-details-page', ['translations'], TranslationDetailsContext
         );
@@ -193,7 +193,7 @@ class Component extends AbstractMarkoComponent {
                 'new-translation-dialog', 'Translatable#New Translation', [], {},
                 false, false, null, 'kix-icon-new-gear'
             ),
-            KIXObjectType.TRANSLATION,
+            KIXObjectType.TRANSLATION_PATTERN,
             ContextMode.CREATE_ADMIN
         ));
 
@@ -202,7 +202,7 @@ class Component extends AbstractMarkoComponent {
             new WidgetConfiguration(
                 'edit-translation-dialog', 'Translatable#Edit Translation', [], {}, false, false, null, 'kix-icon-edit'
             ),
-            KIXObjectType.TRANSLATION,
+            KIXObjectType.TRANSLATION_PATTERN,
             ContextMode.EDIT_ADMIN
         ));
     }

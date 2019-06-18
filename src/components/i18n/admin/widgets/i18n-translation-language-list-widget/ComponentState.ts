@@ -1,4 +1,6 @@
-import { WidgetComponentState, AbstractAction, KIXObjectPropertyFilter, Translation } from "../../../../../core/model";
+import {
+    WidgetComponentState, AbstractAction, KIXObjectPropertyFilter, TranslationPattern
+} from "../../../../../core/model";
 import { ITable } from "../../../../../core/browser";
 
 export class ComponentState extends WidgetComponentState {
@@ -9,7 +11,7 @@ export class ComponentState extends WidgetComponentState {
         public title: string = null,
         public predefinedTableFilter: KIXObjectPropertyFilter[] = [],
         public filterCount: number = null,
-        public translation: Translation = null
+        public translation: TranslationPattern = null
     ) {
         super();
     }
