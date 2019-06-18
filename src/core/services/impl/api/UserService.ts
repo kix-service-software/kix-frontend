@@ -45,9 +45,10 @@ export class UserService extends KIXObjectService {
                 token, KIXObjectType.USER, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.USER
             );
         } else if (objectType === KIXObjectType.USER_PREFERENCE) {
-            if ((objectLoadingOptions as PreferencesLoadingOptions).userId) {
+            const preferenceOptions = (objectLoadingOptions as PreferencesLoadingOptions);
+            if (preferenceOptions.userId) {
                 const uri = this.buildUri(
-                    this.RESOURCE_URI, (objectLoadingOptions as PreferencesLoadingOptions).userId, 'preferences'
+                    this.RESOURCE_URI, preferenceOptions.userId, 'preferences'
                 );
                 objects = await super.load(
                     token, KIXObjectType.USER_PREFERENCE, uri, loadingOptions, objectIds, KIXObjectType.USER_PREFERENCE
@@ -61,7 +62,7 @@ export class UserService extends KIXObjectService {
     public async getUserByToken(token: string): Promise<User> {
         const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, ['Tickets', 'Preferences']);
         const users = await super.load<User>(
-            token, KIXObjectType.USER, 'user', loadingOptions, null, KIXObjectType.USER, false
+            token, KIXObjectType.USER, this.buildUri('session', 'user'), loadingOptions, null, KIXObjectType.USER, false
         );
 
         return users && users.length ? users[0] : null;

@@ -154,7 +154,7 @@ class Component extends AbstractMarkoComponent {
             'new-translation-dialog',
             new WidgetConfiguration(
                 'new-translation-dialog', 'Translatable#New Translation', [], {},
-                false, false, null, 'kix-icon-new-gear'
+                false, false, 'kix-icon-new-gear'
             ),
             KIXObjectType.TRANSLATION_PATTERN,
             ContextMode.CREATE_ADMIN
@@ -163,7 +163,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'edit-translation-dialog',
             new WidgetConfiguration(
-                'edit-translation-dialog', 'Translatable#Edit Translation', [], {}, false, false, null, 'kix-icon-edit'
+                'edit-translation-dialog', 'Translatable#Edit Translation', [], {}, false, false, 'kix-icon-edit'
             ),
             KIXObjectType.TRANSLATION_PATTERN,
             ContextMode.EDIT_ADMIN

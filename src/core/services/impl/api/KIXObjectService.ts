@@ -63,7 +63,7 @@ export abstract class KIXObjectService implements IKIXObjectService {
             ? this.buildUri(baseUri, objectIds.join(','))
             : baseUri;
 
-        const response = await this.getObjectByUri(token, uri, query, objectType);
+        const response = await this.getObjectByUri(token, uri, query, objectType, useCache);
 
         const responseObject = response[responseProperty];
 
