@@ -2,10 +2,11 @@ import { ComponentState } from './ComponentState';
 import {
     AbstractMarkoComponent, ServiceRegistry, FactoryService, TableFactoryService, LabelService
 } from '../../../core/browser';
-import { SysConfigService } from '../../../core/browser/sysconfig';
+import {
+    SysConfigService, SysConfigOptionBrowserFactory, SysConfigOptionDefinitionBrowserFactory
+} from '../../../core/browser/sysconfig';
 import { KIXObjectType } from '../../../core/model';
 import { SysConfigFormService } from '../../../core/browser/sysconfig/SysConfigFormService';
-import { SysConfigBrowserFactory } from '../../../core/browser/sysconfig/SysConfigBrowserFactory';
 import { SysConfigTableFactory } from '../../../core/browser/sysconfig/table';
 import { SysConfigLabelProvider } from '../../../core/browser/sysconfig/SysConfigLabelProvider';
 
@@ -19,7 +20,10 @@ class Component extends AbstractMarkoComponent {
         ServiceRegistry.registerServiceInstance(SysConfigService.getInstance());
         ServiceRegistry.registerServiceInstance(SysConfigFormService.getInstance());
         FactoryService.getInstance().registerFactory(
-            KIXObjectType.SYS_CONFIG_OPTION, SysConfigBrowserFactory.getInstance()
+            KIXObjectType.SYS_CONFIG_OPTION, SysConfigOptionBrowserFactory.getInstance()
+        );
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, SysConfigOptionDefinitionBrowserFactory.getInstance()
         );
         TableFactoryService.getInstance().registerFactory(new SysConfigTableFactory());
         LabelService.getInstance().registerLabelProvider(new SysConfigLabelProvider());

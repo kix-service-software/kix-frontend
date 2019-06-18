@@ -39,8 +39,11 @@ export class SysConfigTableFactory extends TableFactory {
     ): TableConfiguration {
         const tableColumns = [
             new DefaultColumnConfiguration(
-                SysConfigOptionDefinitionProperty.NAME, true, false, true, false, 150, true, true, false,
+                SysConfigOptionDefinitionProperty.NAME, true, false, true, false, 400, true, true, false,
                 DataType.STRING, true, null, null, false
+            ),
+            new DefaultColumnConfiguration(
+                SysConfigOptionDefinitionProperty.IS_MODIFIED, true, false, true, false, 50, true, true, true
             ),
             new DefaultColumnConfiguration(
                 KIXObjectProperty.VALID_ID, true, false, true, false, 100, true, true, true

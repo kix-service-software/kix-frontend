@@ -35,6 +35,9 @@ export class SysConfigLabelProvider implements ILabelProvider<SysConfigOptionDef
                 case KIXObjectProperty.CHANGE_TIME:
                     displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                     break;
+                case SysConfigOptionDefinitionProperty.IS_MODIFIED:
+                    displayValue = value === 1 ? 'Translatable#Modified' : '';
+                    break;
                 default:
             }
         }
@@ -58,6 +61,9 @@ export class SysConfigLabelProvider implements ILabelProvider<SysConfigOptionDef
                 break;
             case SysConfigOptionDefinitionProperty.VALUE:
                 displayValue = 'Translatable#Value';
+                break;
+            case SysConfigOptionDefinitionProperty.IS_MODIFIED:
+                displayValue = 'Translatable#Modified';
                 break;
             case KIXObjectProperty.COMMENT:
                 displayValue = 'Translatable#Comment';
