@@ -43,7 +43,7 @@ export class SysConfigTableFactory extends TableFactory {
                 DataType.STRING, true, null, null, false
             ),
             new DefaultColumnConfiguration(
-                SysConfigOptionDefinitionProperty.IS_MODIFIED, true, false, true, false, 50, true, true, true
+                SysConfigOptionDefinitionProperty.IS_MODIFIED, true, false, false, false, 100, true, true, true
             ),
             new DefaultColumnConfiguration(
                 KIXObjectProperty.VALID_ID, true, false, true, false, 100, true, true, true
