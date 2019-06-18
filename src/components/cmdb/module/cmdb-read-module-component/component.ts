@@ -13,7 +13,8 @@ import {
     ConfigItemSearchContext, CompareConfigItemVersionDialogContext, ConfigItemPrintAction,
     ConfigItemVersionCompareAction,
     ConfigItemClassFormService,
-    ConfigItemFormService
+    ConfigItemFormService,
+    ConfigItemHistoryBrowserFactory
 } from "../../../../core/browser/cmdb";
 import {
     KIXObjectType, ContextDescriptor, ContextType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration, WidgetSize
@@ -33,6 +34,9 @@ class Component extends AbstractMarkoComponent {
 
         FactoryService.getInstance().registerFactory(
             KIXObjectType.CONFIG_ITEM, ConfigItemBrowserFactory.getInstance()
+        );
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.CONFIG_ITEM_HISTORY, ConfigItemHistoryBrowserFactory.getInstance()
         );
         FactoryService.getInstance().registerFactory(
             KIXObjectType.CONFIG_ITEM_CLASS, ConfigItemClassBrowserFactory.getInstance()

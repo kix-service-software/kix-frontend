@@ -25,7 +25,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
             new ConfiguredWidget('ticket-history-lane', new WidgetConfiguration(
                 'ticket-history-widget', 'Translatable#History', ['ticket-print-action'],
                 null, true, true, WidgetSize.BOTH, null, false),
-                [new UIComponentPermission('ticket/*/history', [CRUD.READ])]
+                [new UIComponentPermission('tickets/*/history', [CRUD.READ])]
             );
         const descriptionLane =
             new ConfiguredWidget('ticket-description-lane', new WidgetConfiguration(

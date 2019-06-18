@@ -10,6 +10,10 @@ export class ConfigItemHistoryLabelProvider extends LabelProvider<ConfigItemHist
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_HISTORY;
 
+    public isLabelProviderFor(object: ConfigItemHistory): boolean {
+        return object instanceof ConfigItemHistory;
+    }
+
     public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
