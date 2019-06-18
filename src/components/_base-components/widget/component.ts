@@ -135,9 +135,6 @@ class WidgetComponent implements IEventSubscriber {
                 case WidgetType.LANE:
                     typeClass = 'lane-widget';
                     break;
-                case WidgetType.LANE_TAB:
-                    typeClass = 'lane-tab-widget';
-                    break;
                 case WidgetType.EXPLORER:
                     typeClass = 'explorer-widget';
                     break;
