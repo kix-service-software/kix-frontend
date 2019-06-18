@@ -1,4 +1,4 @@
-import { AbstractAction, Translation } from "../../../../../model";
+import { AbstractAction, TranslationPattern } from "../../../../../model";
 import { TranslationService } from "../../../TranslationService";
 import { ITable } from "../../../../table";
 
@@ -26,9 +26,9 @@ export class TranslationCSVExportAction extends AbstractAction<ITable> {
 
             const selectedRows = this.data.getSelectedRows();
 
-            const translations = selectedRows.map((r) => r.getRowObject().getObject()) as Translation[];
+            const translations = selectedRows.map((r) => r.getRowObject().getObject()) as TranslationPattern[];
             for (const translation of translations) {
-                const pattern = this.escapeText(translation.Pattern);
+                const pattern = this.escapeText(translation.Value);
                 csvString += `"${pattern}"`;
                 csvString += ';';
 

@@ -1,6 +1,7 @@
 import {
     AbstractMarkoComponent, ActionFactory, ServiceRegistry, ContextService,
-    LabelService, FactoryService, TableFactoryService, TableCSSHandlerRegistry, PersonalSettingsDialogContext
+    LabelService, FactoryService, TableFactoryService, TableCSSHandlerRegistry,
+    PersonalSettingsDialogContext, PersonalSettingsFormService
 } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import { SearchService } from '../../../../core/browser/search';
@@ -8,14 +9,6 @@ import { CSVExportAction, BulkAction, ImportAction } from '../../../../core/brow
 import {
     ContextDescriptor, KIXObjectType, ContextType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration
 } from '../../../../core/model';
-import {
-    TranslationLabelProvider, TranslationLanguageLabelProvider
-} from '../../../../core/browser/i18n';
-import {
-    TranslationCreateAction, TranslationImportAction, TranslationCSVExportAction, TranslationEditAction
-} from '../../../../core/browser/i18n/admin/actions';
-import { TranslationTableFactory, TranslationLanguageTableFactory } from '../../../../core/browser/i18n/admin/table';
-import { PersonalSettingsFormService } from '../../../../core/browser/settings/PersonalSettingsFormService';
 import {
     NewTranslationDialogContext, TranslationDetailsContext, EditTranslationDialogContext
 } from '../../../../core/browser/i18n/admin/context';
@@ -33,6 +26,13 @@ import { DynamicFieldService } from '../../../../core/browser/dynamic-fields';
 import { SlaService, SlaBrowserFactory, SlaLabelProvider } from '../../../../core/browser/sla';
 import { ObjectIconService, ObjectIconBrowserFactory } from '../../../../core/browser/icon';
 import { BulkDialogContext } from '../../../../core/browser/bulk';
+import {
+    TranslationPatternTableFactory, TranslationLanguageTableFactory
+} from '../../../../core/browser/i18n/admin/table';
+import { TranslationPatternLabelProvider, TranslationLanguageLabelProvider } from '../../../../core/browser/i18n';
+import {
+    TranslationCreateAction, TranslationEditAction, TranslationImportAction, TranslationCSVExportAction
+} from '../../../../core/browser/i18n/admin/actions';
 
 class Component extends AbstractMarkoComponent {
 
@@ -69,9 +69,9 @@ class Component extends AbstractMarkoComponent {
         LabelService.getInstance().registerLabelProvider(new SlaLabelProvider());
 
 
-        TableFactoryService.getInstance().registerFactory(new TranslationTableFactory());
+        TableFactoryService.getInstance().registerFactory(new TranslationPatternTableFactory());
         TableFactoryService.getInstance().registerFactory(new TranslationLanguageTableFactory());
-        LabelService.getInstance().registerLabelProvider(new TranslationLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new TranslationPatternLabelProvider());
         LabelService.getInstance().registerLabelProvider(new TranslationLanguageLabelProvider());
         ActionFactory.getInstance().registerAction('i18n-admin-translation-create', TranslationCreateAction);
         ActionFactory.getInstance().registerAction('i18n-admin-translation-edit', TranslationEditAction);
@@ -115,21 +115,21 @@ class Component extends AbstractMarkoComponent {
         ContextService.getInstance().registerContext(settingsDialogContext);
 
         const newTranslationDialogContext = new ContextDescriptor(
-            NewTranslationDialogContext.CONTEXT_ID, [KIXObjectType.TRANSLATION],
+            NewTranslationDialogContext.CONTEXT_ID, [KIXObjectType.TRANSLATION_PATTERN],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
             false, 'new-translation-dialog', ['translations'], NewTranslationDialogContext
         );
         ContextService.getInstance().registerContext(newTranslationDialogContext);
 
         const editTranslationDialogContext = new ContextDescriptor(
-            EditTranslationDialogContext.CONTEXT_ID, [KIXObjectType.TRANSLATION],
+            EditTranslationDialogContext.CONTEXT_ID, [KIXObjectType.TRANSLATION_PATTERN],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
             false, 'edit-translation-dialog', ['translations'], EditTranslationDialogContext
         );
         ContextService.getInstance().registerContext(editTranslationDialogContext);
 
         const translationDetailsContext = new ContextDescriptor(
-            TranslationDetailsContext.CONTEXT_ID, [KIXObjectType.TRANSLATION],
+            TranslationDetailsContext.CONTEXT_ID, [KIXObjectType.TRANSLATION_PATTERN],
             ContextType.MAIN, ContextMode.DETAILS,
             false, 'object-details-page', ['translations'], TranslationDetailsContext
         );
@@ -163,7 +163,7 @@ class Component extends AbstractMarkoComponent {
                 'new-translation-dialog', 'Translatable#New Translation', [], {},
                 false, false, null, 'kix-icon-new-gear'
             ),
-            KIXObjectType.TRANSLATION,
+            KIXObjectType.TRANSLATION_PATTERN,
             ContextMode.CREATE_ADMIN
         ));
 
@@ -172,7 +172,7 @@ class Component extends AbstractMarkoComponent {
             new WidgetConfiguration(
                 'edit-translation-dialog', 'Translatable#Edit Translation', [], {}, false, false, null, 'kix-icon-edit'
             ),
-            KIXObjectType.TRANSLATION,
+            KIXObjectType.TRANSLATION_PATTERN,
             ContextMode.EDIT_ADMIN
         ));
     }

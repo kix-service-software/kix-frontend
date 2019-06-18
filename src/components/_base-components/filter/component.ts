@@ -36,10 +36,9 @@ class Component {
             ? await TranslationService.translate(input.predefinedFilterPlaceholder)
             : await TranslationService.translate('Translatable#All Objects');
 
-        const defaultPlaceholder = await TranslationService.translate('Translatable#Filter in list');
         this.state.placeholder = typeof input.placeholder !== 'undefined'
             ? await TranslationService.translate(input.placeholder)
-            : defaultPlaceholder;
+            : await TranslationService.translate('Translatable#Filter in list');
     }
 
     public textFilterValueChanged(event: any, externalFilterText?: string): void {

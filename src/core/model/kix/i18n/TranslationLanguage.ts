@@ -7,7 +7,7 @@ export class TranslationLanguage extends KIXObject {
 
     public KIXObjectType: KIXObjectType.TRANSLATION_LANGUAGE;
 
-    public TranslationID: number;
+    public PatternID: number;
 
     public Language: string;
 
@@ -18,7 +18,7 @@ export class TranslationLanguage extends KIXObject {
         if (translationLanguage) {
             this.Language = translationLanguage.Language;
             this.ObjectId = this.Language;
-            this.TranslationID = translationLanguage.TranslationID;
+            this.PatternID = translationLanguage.PatternID;
             this.Value = translationLanguage.Value;
         }
     }

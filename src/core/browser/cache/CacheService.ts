@@ -71,7 +71,7 @@ export class CacheService {
     public async updateCaches(events: ObjectUpdatedEventData[]): Promise<void> {
         for (const event of events) {
             if (event.RequestID !== ClientStorageService.getClientRequestId()) {
-                if (!event.Namespace.startsWith(KIXObjectType.TRANSLATION)) {
+                if (!event.Namespace.startsWith(KIXObjectType.TRANSLATION_PATTERN)) {
                     this.deleteKeys(event.Namespace);
                 }
             }
@@ -136,7 +136,7 @@ export class CacheService {
                 break;
             case KIXObjectType.PERMISSION:
             case KIXObjectType.ROLE:
-                this.clear([KIXObjectType.TRANSLATION]);
+                this.clear();
                 cacheKeyPrefixes = [];
                 break;
             case KIXObjectType.QUEUE:
@@ -146,6 +146,13 @@ export class CacheService {
             case KIXObjectType.CONFIG_ITEM_CLASS:
             case KIXObjectType.TICKET_PRIORITY:
                 cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
+                break;
+            case KIXObjectType.TRANSLATION_PATTERN:
+            case KIXObjectType.TRANSLATION:
+            case KIXObjectType.TRANSLATION_LANGUAGE:
+                cacheKeyPrefixes.push(KIXObjectType.TRANSLATION_PATTERN);
+                cacheKeyPrefixes.push(KIXObjectType.TRANSLATION);
+                cacheKeyPrefixes.push(KIXObjectType.TRANSLATION_LANGUAGE);
                 break;
             default:
         }

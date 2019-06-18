@@ -1,4 +1,4 @@
-export enum TranslationProperty {
+export enum TranslationPatternProperty {
 
     ID = 'ID',
 
@@ -10,8 +10,10 @@ export enum TranslationProperty {
 
     CREATE_TIME = 'CreateTime',
 
-    PATTERN = 'Pattern',
+    VALUE = 'Value',
 
-    LANGUAGES = 'Languages'
+    LANGUAGES = 'Languages',
+
+    AVAILABLE_LANGUAGES = 'AvailableLanguages'
 
 }

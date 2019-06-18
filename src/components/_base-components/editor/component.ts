@@ -17,6 +17,7 @@ class EditorComponent {
             input.inline,
             input.simple,
             input.readOnly,
+            input.invalid,
             input.resize,
             input.resizeDir
         );

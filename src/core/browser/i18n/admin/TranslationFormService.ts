@@ -1,7 +1,7 @@
-import { Translation, KIXObjectType, TranslationProperty } from "../../../model";
+import { TranslationPattern, KIXObjectType, TranslationPatternProperty } from "../../../model";
 import { KIXObjectFormService } from "../../kix/KIXObjectFormService";
 
-export class TranslationFormService extends KIXObjectFormService<Translation> {
+export class TranslationFormService extends KIXObjectFormService<TranslationPattern> {
 
     private static INSTANCE: TranslationFormService = null;
 
@@ -18,11 +18,11 @@ export class TranslationFormService extends KIXObjectFormService<Translation> {
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {
-        return kixObjectType === KIXObjectType.TRANSLATION;
+        return kixObjectType === KIXObjectType.TRANSLATION_PATTERN;
     }
 
-    protected async getValue(property: string, value: any, translation: Translation): Promise<any> {
-        if (translation && property !== TranslationProperty.PATTERN && translation.Languages) {
+    protected async getValue(property: string, value: any, translation: TranslationPattern): Promise<any> {
+        if (translation && property !== TranslationPatternProperty.VALUE && translation.Languages) {
             const language = translation.Languages.find((l) => l.Language === property);
             if (language) {
                 value = language.Value;

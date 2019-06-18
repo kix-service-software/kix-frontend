@@ -73,7 +73,7 @@ export class QueueService extends KIXObjectService<Queue> {
             }
 
             for (const queue of queues) {
-                let ticketStats = [];
+                let ticketStats = null;
                 if (includeTicketStats) {
                     ticketStats = await this.getTicketStats(queue);
                 }

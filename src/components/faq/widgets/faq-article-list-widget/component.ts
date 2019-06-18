@@ -57,7 +57,7 @@ class Component {
 
     private async prepareFilter(): Promise<void> {
         const translationService = ServiceRegistry.getServiceInstance<TranslationService>(
-            KIXObjectType.TRANSLATION
+            KIXObjectType.TRANSLATION_PATTERN
         );
         const languages = await translationService.getLanguages();
         this.state.predefinedTableFilter = languages.map(
