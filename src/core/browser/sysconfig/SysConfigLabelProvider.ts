@@ -38,6 +38,9 @@ export class SysConfigLabelProvider implements ILabelProvider<SysConfigOptionDef
                 case SysConfigOptionDefinitionProperty.IS_MODIFIED:
                     displayValue = value === 1 ? 'Translatable#Modified' : '';
                     break;
+                case SysConfigOptionDefinitionProperty.VALUE:
+                    displayValue = JSON.stringify(value);
+                    break;
                 default:
             }
         }
@@ -96,10 +99,15 @@ export class SysConfigLabelProvider implements ILabelProvider<SysConfigOptionDef
         sysConfig: SysConfigOptionDefinition, property: string, value?: string, translatable: boolean = true
     ): Promise<string> {
         let displayValue = sysConfig[property];
-
         switch (property) {
             case SysConfigOptionDefinitionProperty.NAME:
                 displayValue = sysConfig.Name;
+                break;
+            case SysConfigOptionDefinitionProperty.VALUE:
+                displayValue = sysConfig.IsModified === 1
+                    ? sysConfig.Value : sysConfig.Default;
+                displayValue = sysConfig.Type === "Hash"
+                    ? JSON.stringify(displayValue) : displayValue;
                 break;
             default:
                 displayValue = await this.getPropertyValueDisplayText(property, displayValue);

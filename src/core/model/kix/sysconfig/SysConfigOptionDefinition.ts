@@ -29,7 +29,7 @@ export class SysConfigOptionDefinition extends KIXObject<SysConfigOptionDefiniti
 
 
     public constructor(sysConfigOptionDefinition?: SysConfigOptionDefinition) {
-        super();
+        super(sysConfigOptionDefinition);
         if (sysConfigOptionDefinition) {
             this.Name = sysConfigOptionDefinition.Name;
             this.ObjectId = this.Name;
