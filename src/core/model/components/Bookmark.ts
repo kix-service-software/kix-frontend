@@ -1,4 +1,5 @@
 import { KIXObjectType, ObjectIcon } from "../kix";
+import { UIComponentPermission } from "../UIComponentPermission";
 
 export class Bookmark {
 
@@ -7,7 +8,8 @@ export class Bookmark {
         public icon: string | ObjectIcon,
         public objectID: string | number,
         public objectType: KIXObjectType,
-        public contextId: string
+        public contextId: string,
+        public permissions: UIComponentPermission[] = []
     ) { }
 
 }
