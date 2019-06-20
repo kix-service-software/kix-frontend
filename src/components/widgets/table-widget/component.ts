@@ -66,7 +66,7 @@ class Component {
             this.subscriber = {
                 eventSubscriberId: IdService.generateDateBasedId(this.state.instanceId),
                 eventPublished: async (data: TableEventData, eventId: string) => {
-                    if (data && data.tableId === this.state.table.getTableId()) {
+                    if (data && this.state.table && data.tableId === this.state.table.getTableId()) {
                         if (eventId === TableEvent.TABLE_READY) {
                             await this.prepareTitle();
                             this.state.filterCount = this.state.table.isFiltered()

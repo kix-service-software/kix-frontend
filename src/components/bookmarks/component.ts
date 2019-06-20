@@ -3,6 +3,7 @@ import { ContextService } from '../../core/browser';
 import { TreeNode, Bookmark } from '../../core/model';
 import { ObjectDataService } from '../../core/browser/ObjectDataService';
 import { TranslationService } from '../../core/browser/i18n/TranslationService';
+import { AuthenticationSocketClient } from '../../core/browser/application/AuthenticationSocketClient';
 
 class Component {
 
@@ -18,9 +19,14 @@ class Component {
         this.state.placeholder = await TranslationService.translate('Translatable#Bookmarks');
 
         if (objectData) {
-            this.state.bookmarks = objectData.bookmarks.map(
-                (b) => new TreeNode(b, b.title, b.icon)
-            );
+            const availableBookmarks = [];
+            for (const b of objectData.bookmarks) {
+                if (await AuthenticationSocketClient.getInstance().checkPermissions(b.permissions)) {
+                    availableBookmarks.push(new TreeNode(b, b.title, b.icon));
+                }
+            }
+            this.state.bookmarks = availableBookmarks;
+
         }
     }
 

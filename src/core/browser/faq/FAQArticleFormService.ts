@@ -1,8 +1,10 @@
 import { KIXObjectFormService } from "../kix/KIXObjectFormService";
-import { KIXObjectType, KIXObjectLoadingOptions } from "../../model";
+import { KIXObjectType, KIXObjectLoadingOptions, FormField, CRUD } from "../../model";
 import { FAQArticleProperty, FAQArticle, FAQArticleAttachmentLoadingOptions, Attachment } from "../../model/kix/faq";
 import { InlineContent } from "../components";
 import { KIXObjectService } from "../kix";
+import { AuthenticationSocketClient } from "../application/AuthenticationSocketClient";
+import { UIComponentPermission } from "../../model/UIComponentPermission";
 
 export class FAQArticleFormService extends KIXObjectFormService<FAQArticle> {
 
@@ -72,6 +74,29 @@ export class FAQArticleFormService extends KIXObjectFormService<FAQArticle> {
             );
         }
         return inlineContent;
+    }
+
+    public async hasPermissions(field: FormField): Promise<boolean> {
+        let hasPermissions = true;
+        switch (field.property) {
+            case FAQArticleProperty.CATEGORY_ID:
+                hasPermissions = await this.checkPermissions('faq/categories');
+                break;
+            case FAQArticleProperty.ATTACHMENTS:
+                hasPermissions = await this.checkPermissions('faq/articles/*/attachments', [CRUD.CREATE]);
+                break;
+            case FAQArticleProperty.LINK:
+                hasPermissions = await this.checkPermissions('links', [CRUD.CREATE]);
+                break;
+            default:
+        }
+        return hasPermissions;
+    }
+
+    private async checkPermissions(resource: string, crud: CRUD[] = [CRUD.READ]): Promise<boolean> {
+        return await AuthenticationSocketClient.getInstance().checkPermissions(
+            [new UIComponentPermission(resource, crud)]
+        );
     }
 
 }
