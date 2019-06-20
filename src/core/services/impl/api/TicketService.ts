@@ -220,7 +220,7 @@ export class TicketService extends KIXObjectService {
         let from = this.getParameterValue(parameter, ArticleProperty.FROM);
         if (!from) {
             const user = await UserService.getInstance().getUserByToken(token);
-            from = user.UserLogin;
+            from = user.UserEmail;
         }
 
         const channelId = this.getParameterValue(parameter, ArticleProperty.CHANNEL_ID);
