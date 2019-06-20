@@ -2,12 +2,14 @@ import { KIXObjectFormService } from "../kix/KIXObjectFormService";
 import {
     KIXObjectType, FormFieldValue, FormField, ConfigItem, VersionProperty, ConfigItemProperty,
     GeneralCatalogItem, KIXObjectLoadingOptions, FilterCriteria, FilterDataType,
-    FilterType, ConfigItemClass, Contact, Organisation, FormFieldOptions, InputFieldTypes, FormContext
+    FilterType, ConfigItemClass, Contact, Organisation, FormFieldOptions, InputFieldTypes, FormContext, CRUD
 } from "../../model";
 import { KIXObjectService } from '../kix/';
 import { LabelService } from "../LabelService";
 import { SearchOperator } from "../SearchOperator";
 import { PreparedData } from "../../model/kix/cmdb/PreparedData";
+import { AuthenticationSocketClient } from "../application/AuthenticationSocketClient";
+import { UIComponentPermission } from "../../model/UIComponentPermission";
 
 export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
 
@@ -267,5 +269,22 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
                 value = preparedData.DisplayValue;
         }
         return value;
+    }
+
+    public async hasPermissions(field: FormField): Promise<boolean> {
+        let hasPermissions = true;
+        switch (field.property) {
+            case ConfigItemProperty.CLASS_ID:
+                hasPermissions = await this.checkPermissions('cmdb/classes');
+                break;
+            default:
+        }
+        return hasPermissions;
+    }
+
+    private async checkPermissions(resource: string, crud: CRUD[] = [CRUD.READ]): Promise<boolean> {
+        return await AuthenticationSocketClient.getInstance().checkPermissions(
+            [new UIComponentPermission(resource, crud)]
+        );
     }
 }

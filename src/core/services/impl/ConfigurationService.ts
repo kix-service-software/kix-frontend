@@ -1,10 +1,11 @@
 import { Environment, IServerConfiguration } from '../../common';
-import { WidgetDescriptor, Form, FormContext, KIXObjectType, Bookmark } from '../../model';
+import { WidgetDescriptor, Form, FormContext, KIXObjectType, Bookmark, CRUD } from '../../model';
 
 import jsonfile = require('jsonfile');
 import fs = require('fs');
 import { FAQDetailsContext } from '../../browser/faq';
 import { LoggingService } from './LoggingService';
+import { UIComponentPermission } from '../../model/UIComponentPermission';
 
 export class ConfigurationService {
 
@@ -270,19 +271,23 @@ export class ConfigurationService {
             configuration = [
                 new Bookmark(
                     'Translatable#How to use KIX 18 – Some general notes', 'kix-icon-faq', 1,
-                    KIXObjectType.FAQ_ARTICLE, FAQDetailsContext.CONTEXT_ID
+                    KIXObjectType.FAQ_ARTICLE, FAQDetailsContext.CONTEXT_ID,
+                    [new UIComponentPermission('faq/articles', [CRUD.READ])]
                 ),
                 new Bookmark(
                     'Translatable#How to search in KIX 18?', 'kix-icon-faq', 2,
-                    KIXObjectType.FAQ_ARTICLE, FAQDetailsContext.CONTEXT_ID
+                    KIXObjectType.FAQ_ARTICLE, FAQDetailsContext.CONTEXT_ID,
+                    [new UIComponentPermission('faq/articles', [CRUD.READ])]
                 ),
                 new Bookmark(
                     'Translatable#How to create a new ticket?', 'kix-icon-faq', 3,
-                    KIXObjectType.FAQ_ARTICLE, FAQDetailsContext.CONTEXT_ID
+                    KIXObjectType.FAQ_ARTICLE, FAQDetailsContext.CONTEXT_ID,
+                    [new UIComponentPermission('faq/articles', [CRUD.READ])]
                 ),
                 new Bookmark(
                     'Translatable#selected ticket features', 'kix-icon-faq', 4,
-                    KIXObjectType.FAQ_ARTICLE, FAQDetailsContext.CONTEXT_ID
+                    KIXObjectType.FAQ_ARTICLE, FAQDetailsContext.CONTEXT_ID,
+                    [new UIComponentPermission('faq/articles', [CRUD.READ])]
                 )
             ];
             this.saveModuleConfiguration("bookmarks", null, configuration);

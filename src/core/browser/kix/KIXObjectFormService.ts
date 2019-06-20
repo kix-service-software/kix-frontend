@@ -125,4 +125,8 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
         }
         return newString;
     }
+
+    public async hasPermissions(field: FormField): Promise<boolean> {
+        return true;
+    }
 }
