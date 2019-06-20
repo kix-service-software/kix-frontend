@@ -1,7 +1,7 @@
 import { AbstractAction } from '../../../model/components/action/AbstractAction';
-import { ContextService } from '../../context';
-import { KIXObjectType, ContextMode, CRUD } from '../../../model';
+import { CRUD } from '../../../model';
 import { UIComponentPermission } from '../../../model/UIComponentPermission';
+import { ConfigItemDialogUtil } from '../ConfigItemDialogUtil';
 
 export class ConfigItemCreateAction extends AbstractAction {
 
@@ -16,10 +16,7 @@ export class ConfigItemCreateAction extends AbstractAction {
     }
 
     public async run(event: any): Promise<void> {
-        ContextService.getInstance().setDialogContext(
-            null, KIXObjectType.CONFIG_ITEM, ContextMode.CREATE, null, true,
-            undefined, undefined, 'new-config-item-form'
-        );
+        ConfigItemDialogUtil.create();
     }
 
 }

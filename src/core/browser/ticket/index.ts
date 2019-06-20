@@ -29,3 +29,4 @@ export { TicketTemplateLabelProvider } from './TicketTemplateLabelProvider';
 export { TicketTemplateBrowserFactory } from './TicketTemplateBrowserFactory';
 export { ArticleFormService } from './ArticleFormService';
 export { TicketHistoryBrowserFactory } from './TicketHistoryBrowserFactory';
+export { TicketDialogUtil } from './TicketDialogUtil';

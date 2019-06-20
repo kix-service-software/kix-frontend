@@ -1,6 +1,7 @@
 import { AbstractAction, ContextMode, KIXObjectType, FormInstance } from "../../../../../model";
 import { ContextService } from "../../../../context";
 import { FormService } from "../../../../form";
+import { TicketStateDetailsContext, EditTicketStateDialogContext } from "../../context";
 
 export class TicketStateEditAction extends AbstractAction {
 
@@ -10,11 +11,19 @@ export class TicketStateEditAction extends AbstractAction {
     }
 
     public async run(): Promise<void> {
-        await FormService.getInstance().getFormInstance<FormInstance>('edit-ticket-state-form', false);
-        ContextService.getInstance().setDialogContext(
-            // TODO: Titel aus dem aktiven Admin-Modul ermitteln (Kategorie)
-            null, KIXObjectType.TICKET_STATE, ContextMode.EDIT_ADMIN, null, true
+        const context = await ContextService.getInstance().getContext<TicketStateDetailsContext>(
+            TicketStateDetailsContext.CONTEXT_ID
         );
+
+        if (context) {
+            const id = context.getObjectId();
+            if (id) {
+                ContextService.getInstance().setDialogContext(
+                    EditTicketStateDialogContext.CONTEXT_ID, KIXObjectType.TICKET_STATE,
+                    ContextMode.EDIT_ADMIN, id
+                );
+            }
+        }
     }
 
 }

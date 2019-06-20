@@ -1,6 +1,5 @@
 import { AbstractAction } from '../../../model/components/action/AbstractAction';
-import { ContextService } from '../../context';
-import { KIXObjectType, ContextMode } from '../../../model';
+import { OrganisationDialogUtil } from '../../organisation';
 
 export class ContactCreateOrganisationAction extends AbstractAction {
 
@@ -10,10 +9,7 @@ export class ContactCreateOrganisationAction extends AbstractAction {
     }
 
     public async run(event: any): Promise<void> {
-        ContextService.getInstance().setDialogContext(
-            null, KIXObjectType.ORGANISATION, ContextMode.CREATE, null, true,
-            undefined, undefined, 'new-organisation-form'
-        );
+        OrganisationDialogUtil.create();
     }
 
 }

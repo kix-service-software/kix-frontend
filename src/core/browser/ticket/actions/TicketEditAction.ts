@@ -1,9 +1,13 @@
 import { AbstractAction } from '../../../model/components/action/AbstractAction';
-import { ContextService } from '../../context';
-import { KIXObjectType, ContextMode, FormInstance, Ticket } from '../../../model';
-import { FormService } from '../../form';
+import { Ticket, CRUD } from '../../../model';
+import { UIComponentPermission } from '../../../model/UIComponentPermission';
+import { TicketDialogUtil } from '../TicketDialogUtil';
 
 export class TicketEditAction extends AbstractAction<Ticket> {
+
+    public permissions: UIComponentPermission[] = [
+        new UIComponentPermission('tickets/*', [CRUD.UPDATE])
+    ];
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Edit';
@@ -11,8 +15,7 @@ export class TicketEditAction extends AbstractAction<Ticket> {
     }
 
     public async run(): Promise<void> {
-        await FormService.getInstance().getFormInstance<FormInstance>('edit-ticket-form', false);
-        ContextService.getInstance().setDialogContext(null, KIXObjectType.TICKET, ContextMode.EDIT, null, true);
+        TicketDialogUtil.editTicket();
     }
 
 }

@@ -1,7 +1,7 @@
 import { AbstractAction } from '../../../model/components/action/AbstractAction';
-import { ContextService } from '../../context';
-import { KIXObjectType, ContextMode, CRUD } from '../../../model';
+import { CRUD } from '../../../model';
 import { UIComponentPermission } from '../../../model/UIComponentPermission';
+import { OrganisationDialogUtil } from '../OrganisationDialogUtil';
 
 export class OrganisationCreateAction extends AbstractAction {
 
@@ -15,10 +15,7 @@ export class OrganisationCreateAction extends AbstractAction {
     }
 
     public async run(event: any): Promise<void> {
-        ContextService.getInstance().setDialogContext(
-            null, KIXObjectType.ORGANISATION, ContextMode.CREATE, null, true, undefined, undefined,
-            'new-organisation-form'
-        );
+        OrganisationDialogUtil.create();
     }
 
 }

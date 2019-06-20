@@ -1,7 +1,7 @@
 import { AbstractAction } from '../../../model/components/action/AbstractAction';
-import { ContextMode, KIXObjectType, CRUD } from '../../../model';
-import { ContextService } from '../../context';
+import { CRUD } from '../../../model';
 import { UIComponentPermission } from '../../../model/UIComponentPermission';
+import { TicketDialogUtil } from '../../ticket';
 
 export class ContactCreateTicketAction extends AbstractAction {
 
@@ -15,10 +15,7 @@ export class ContactCreateTicketAction extends AbstractAction {
     }
 
     public async run(event: any): Promise<void> {
-        ContextService.getInstance().setDialogContext(
-            null, KIXObjectType.TICKET, ContextMode.CREATE, null, true,
-            undefined, undefined, 'new-ticket-form'
-        );
+        TicketDialogUtil.createTicket();
     }
 
 }

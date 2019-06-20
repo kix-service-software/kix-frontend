@@ -11,8 +11,7 @@ export class UserRoleCreateAction extends AbstractAction {
     public async run(event: any): Promise<void> {
         ContextService.getInstance().setDialogContext(
             // TODO: Titel aus dem aktiven Admin-Modul ermitteln (Kategorie)
-            null, KIXObjectType.ROLE, ContextMode.CREATE_ADMIN, null, true, 'Translatable#User Management',
-            undefined, 'new-user-role-form'
+            null, KIXObjectType.ROLE, ContextMode.CREATE_ADMIN, null, true, 'Translatable#User Management'
         );
     }
 

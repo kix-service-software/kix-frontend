@@ -12,7 +12,7 @@ export class UserCreateAction extends AbstractAction {
         ContextService.getInstance().setDialogContext(
             // TODO: Titel aus dem aktiven Admin-Modul ermitteln (Kategorie)
             null, KIXObjectType.USER, ContextMode.CREATE_ADMIN, null, true,
-            'Translatable#User Management', undefined, 'new-user-form'
+            'Translatable#User Management'
         );
     }
 
