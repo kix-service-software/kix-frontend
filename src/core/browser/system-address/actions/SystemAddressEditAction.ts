@@ -1,6 +1,7 @@
 import { AbstractAction, KIXObjectType, ContextMode, CRUD } from '../../../model';
 import { ContextService } from '../..';
 import { UIComponentPermission } from '../../../model/UIComponentPermission';
+import { EditSystemAddressDialogContext, SystemAddressDetailsContext } from '../context';
 
 export class SystemAddressEditAction extends AbstractAction {
 
@@ -14,8 +15,18 @@ export class SystemAddressEditAction extends AbstractAction {
     }
 
     public async run(event: any): Promise<void> {
-        ContextService.getInstance().setDialogContext(
-            null, KIXObjectType.SYSTEM_ADDRESS, ContextMode.EDIT_ADMIN, null, true
+        const context = await ContextService.getInstance().getContext<SystemAddressDetailsContext>(
+            SystemAddressDetailsContext.CONTEXT_ID
         );
+
+        if (context) {
+            const id = context.getObjectId();
+            if (id) {
+                ContextService.getInstance().setDialogContext(
+                    EditSystemAddressDialogContext.CONTEXT_ID, KIXObjectType.SYSTEM_ADDRESS,
+                    ContextMode.EDIT_ADMIN, id
+                );
+            }
+        }
     }
 }

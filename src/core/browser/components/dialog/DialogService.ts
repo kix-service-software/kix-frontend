@@ -19,6 +19,8 @@ export class DialogService {
 
     private dialogs: ConfiguredDialogWidget[] = [];
 
+    public activeDialog: ConfiguredDialogWidget = null;
+
     private constructor() { }
 
     public static getInstance(): DialogService {
@@ -123,17 +125,18 @@ export class DialogService {
             }
 
             const dialogs = this.getRegisteredDialogs(contextMode, (singleTab ? kixObjectType : null));
-            const activeDialog = dialogs.find((d) => d.kixObjectType === kixObjectType);
+            this.activeDialog = dialogs.find((d) => d.kixObjectType === kixObjectType);
             this.mainDialogListener.open(
                 dialogTitle,
                 dialogs,
-                activeDialog ? activeDialog.instanceId : dialogId,
+                this.activeDialog ? this.activeDialog.instanceId : dialogId,
                 dialogIcon
             );
         }
     }
 
     public closeMainDialog(data?: any): void {
+        this.activeDialog = null;
         if (this.mainDialogListener) {
             this.mainDialogListener.close(data);
             if (this.overlayDialogListener) {

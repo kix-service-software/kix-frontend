@@ -13,7 +13,7 @@ import { ServiceRegistry } from "../ServiceRegistry";
 import { SearchProperty } from "../../SearchProperty";
 import { ITable } from "../../table";
 import { ContextService } from "../../context";
-import { SearchContext } from "../../search/context";
+import { SearchContext } from "../../search/context/SearchContext";
 
 export class KIXObjectSearchService {
 

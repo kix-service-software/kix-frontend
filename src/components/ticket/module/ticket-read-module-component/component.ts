@@ -1,5 +1,5 @@
 import {
-    AbstractMarkoComponent, ServiceRegistry, KIXObjectSearchService, LabelService, TableFactoryService,
+    AbstractMarkoComponent, ServiceRegistry, LabelService, TableFactoryService,
     TableCSSHandlerRegistry, FactoryService, ContextService, DialogService, ActionFactory
 } from "../../../../core/browser";
 import { ComponentState } from './ComponentState';
@@ -23,6 +23,7 @@ import {
     KIXObjectType, ContextDescriptor, ContextType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration, WidgetSize
 } from "../../../../core/model";
 import { FormValidationService } from "../../../../core/browser/form/validation";
+import { KIXObjectSearchService } from "../../../../core/browser/kix/search/KIXObjectSearchService";
 
 class Component extends AbstractMarkoComponent {
 

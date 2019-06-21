@@ -15,8 +15,7 @@ export class FAQCategoryCreateAction extends AbstractAction {
 
     public async run(event: any): Promise<void> {
         ContextService.getInstance().setDialogContext(
-            null, KIXObjectType.FAQ_CATEGORY, ContextMode.CREATE_ADMIN, null, true, 'Translatable#Knowledge Database',
-            undefined, 'new-faq-category-form'
+            null, KIXObjectType.FAQ_CATEGORY, ContextMode.CREATE_ADMIN, null, true, 'Translatable#Knowledge Database'
         );
     }
 

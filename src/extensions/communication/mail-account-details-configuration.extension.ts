@@ -1,9 +1,10 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
     WidgetConfiguration, ConfiguredWidget, ContextConfiguration, ObjectinformationWidgetSettings,
-    KIXObjectType, MailAccountProperty, KIXObjectProperty, TabWidgetSettings
+    KIXObjectType, MailAccountProperty, KIXObjectProperty
 } from '../../core/model';
 import { MailAccountDetailsContext } from '../../core/browser/mail-account/context';
+import { TabWidgetSettings } from '../../core/model/components/TabWidgetSettings';
 
 export class Extension implements IConfigurationExtension {
 
@@ -35,14 +36,14 @@ export class Extension implements IConfigurationExtension {
                     KIXObjectProperty.CHANGE_BY,
                     KIXObjectProperty.CHANGE_TIME
                 ]),
-                false, true, null, false)
+                false, true)
             );
 
         return new ContextConfiguration(
             MailAccountDetailsContext.CONTEXT_ID,
             [], [],
             [], [],
-            ['mail-account-info-widget'], [tabLane, mailAccountInfoLane],
+            ['mail-account-information-lane'], [tabLane, mailAccountInfoLane],
             [], [],
             ['mail-account-create'],
             ['mail-account-edit']

@@ -3,7 +3,7 @@ import {
     KIXObject, KIXObjectType, FilterCriteria, TreeNode,
     KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions, OverlayType, KIXObjectSpecificDeleteOptions,
-    ComponentContent, Error, TableFilterCriteria
+    ComponentContent, Error, TableFilterCriteria, CRUD
 } from "../../model";
 import { KIXObjectSocketClient } from "./KIXObjectSocketClient";
 import { FormService } from "../form";
@@ -11,6 +11,8 @@ import { ServiceType } from "./ServiceType";
 import { IAutofillConfiguration } from "../components";
 import { ServiceRegistry } from "./ServiceRegistry";
 import { OverlayService } from "../OverlayService";
+import { AuthenticationSocketClient } from "../application/AuthenticationSocketClient";
+import { UIComponentPermission } from "../../model/UIComponentPermission";
 
 export abstract class KIXObjectService<T extends KIXObject = KIXObject> implements IKIXObjectService<T> {
 
@@ -330,6 +332,17 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
     public async getObjectUrl(object?: KIXObject, objectId?: string | number): Promise<string> {
         return '';
+    }
+
+    public async hasReadPermissionFor(objectType: KIXObjectType): Promise<boolean> {
+        const resource = this.getResource(objectType);
+        return await AuthenticationSocketClient.getInstance().checkPermissions([
+            new UIComponentPermission(resource, [CRUD.READ])
+        ]);
+    }
+
+    protected getResource(objectType: KIXObjectType): string {
+        return objectType.toLocaleLowerCase();
     }
 
 }

@@ -1,5 +1,5 @@
 import {
-    AbstractMarkoComponent, ServiceRegistry, FactoryService, KIXObjectSearchService, LabelService,
+    AbstractMarkoComponent, ServiceRegistry, FactoryService, LabelService,
     TableFactoryService, ContextService, DialogService, ActionFactory
 } from "../../../../core/browser";
 import { ComponentState } from './ComponentState';
@@ -11,14 +11,12 @@ import {
     ConfigItemHistoryLabelProvider, ConfigItemVersionLabelProvider, ConfigItemClassDefinitionLabelProvider,
     ConfigItemVersionCompareLabelProvider, ConfigItemSearchDefinition, CMDBContext, ConfigItemDetailsContext,
     ConfigItemSearchContext, CompareConfigItemVersionDialogContext, ConfigItemPrintAction,
-    ConfigItemVersionCompareAction,
-    ConfigItemClassFormService,
-    ConfigItemFormService,
-    ConfigItemHistoryBrowserFactory
+    ConfigItemVersionCompareAction, ConfigItemClassFormService, ConfigItemFormService, ConfigItemHistoryBrowserFactory
 } from "../../../../core/browser/cmdb";
 import {
     KIXObjectType, ContextDescriptor, ContextType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration, WidgetSize
 } from "../../../../core/model";
+import { KIXObjectSearchService } from "../../../../core/browser/kix/search/KIXObjectSearchService";
 
 class Component extends AbstractMarkoComponent {
 

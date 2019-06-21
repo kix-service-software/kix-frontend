@@ -7,6 +7,10 @@ export class ConfigItemVersionLabelProvider extends LabelProvider<Version> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_VERSION;
 
+    public isLabelProviderFor(object: Version) {
+        return object instanceof Version;
+    }
+
     public async getPropertyValueDisplayText(
         property: string, value: string | number, translatable: boolean = true
     ): Promise<string> {

@@ -1,4 +1,6 @@
-import { TranslationPattern, KIXObjectType, TranslationPatternProperty } from "../../../model";
+import {
+    TranslationPattern, KIXObjectType, TranslationPatternProperty, Form, KIXObject, FormFieldValue, FormField
+} from "../../../model";
 import { KIXObjectFormService } from "../../kix/KIXObjectFormService";
 
 export class TranslationFormService extends KIXObjectFormService<TranslationPattern> {

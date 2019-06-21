@@ -1,6 +1,6 @@
 import {
     AbstractMarkoComponent, LabelService, ServiceRegistry,
-    FactoryService, ContextService, ActionFactory, KIXObjectSearchService, TableFactoryService
+    FactoryService, ContextService, ActionFactory, TableFactoryService
 } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
@@ -9,14 +9,11 @@ import {
 } from '../../../../core/model';
 import {
     ContactTableFactory, ContactLabelProvider, ContactService, ContactBrowserFactory, ContactDetailsContext,
-    NewContactDialogContext, ContactSearchContext, ContactSearchAction, ContactCreateAction,
-    ContactEditAction, ContactCreateOrganisationAction, ContactPrintAction, ContactCreateTicketAction,
-    ContactCreateCIAction, ContactSearchDefinition, EditContactDialogContext, ContactFormService,
-    ContactImportDialogContext
+    ContactSearchContext, ContactSearchAction, ContactCreateOrganisationAction, ContactPrintAction,
+    ContactCreateTicketAction, ContactCreateCIAction, ContactSearchDefinition, ContactFormService
 } from '../../../../core/browser/contact';
 import { DialogService } from '../../../../core/browser/components/dialog';
-import { ImportService } from '../../../../core/browser/import';
-import { ContactImportManager } from '../../../../core/browser/contact/ContactImportManager';
+import { KIXObjectSearchService } from '../../../../core/browser/kix/search/KIXObjectSearchService';
 
 class Component extends AbstractMarkoComponent {
 

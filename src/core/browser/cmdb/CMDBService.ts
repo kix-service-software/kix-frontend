@@ -174,4 +174,12 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
         return context.getDescriptor().urlPaths[0] + '/' + id;
     }
 
+    protected getResource(objectType: KIXObjectType): string {
+        if (objectType === KIXObjectType.CONFIG_ITEM) {
+            return 'cmdb/configitems';
+        } else {
+            return super.getResource(objectType);
+        }
+    }
+
 }

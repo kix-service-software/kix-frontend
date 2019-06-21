@@ -1,12 +1,12 @@
 import { AbstractAction } from '../../../model/components/action/AbstractAction';
 import { UIComponentPermission } from '../../../model/UIComponentPermission';
-import { CRUD, KIXObjectType, ContextMode } from '../../../model';
-import { ContextService } from '../../context';
+import { CRUD } from '../../../model';
+import { ConfigItemDialogUtil } from '../../cmdb';
 
 export class ContactCreateCIAction extends AbstractAction {
 
     public permissions: UIComponentPermission[] = [
-        new UIComponentPermission('cmdb/configitems/*', [CRUD.UPDATE]),
+        new UIComponentPermission('cmdb/configitems/*', [CRUD.CREATE]),
         new UIComponentPermission('cmdb/configitems/*/versions', [CRUD.CREATE]),
         new UIComponentPermission('system/cmdb/classes', [CRUD.READ])
     ];
@@ -17,10 +17,7 @@ export class ContactCreateCIAction extends AbstractAction {
     }
 
     public async run(event: any): Promise<void> {
-        ContextService.getInstance().setDialogContext(
-            null, KIXObjectType.CONFIG_ITEM, ContextMode.CREATE, null, true,
-            undefined, undefined, 'new-config-item-form'
-        );
+        ConfigItemDialogUtil.create();
     }
 
 }

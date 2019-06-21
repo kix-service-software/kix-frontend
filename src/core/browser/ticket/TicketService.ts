@@ -4,7 +4,7 @@ import {
     Attachment, KIXObjectType, Ticket, TicketProperty, FilterDataType, FilterCriteria, FilterType,
     TreeNode, ObjectIcon, Service, TicketPriority, TicketType,
     TicketState, StateType, KIXObject, Sla, TableFilterCriteria, User, KIXObjectLoadingOptions,
-    KIXObjectSpecificLoadingOptions, Article
+    KIXObjectSpecificLoadingOptions, Article, ContextMode
 } from '../../model';
 import { TicketParameterUtil } from './TicketParameterUtil';
 import { KIXObjectService } from '../kix';
@@ -14,6 +14,7 @@ import { TicketSocketClient } from './TicketSocketClient';
 import { AgentService } from '../application/AgentService';
 import { QueueService } from './admin';
 import { InlineContent } from '../components';
+import { EditTicketDialogContext } from './context';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -282,6 +283,14 @@ export class TicketService extends KIXObjectService<Ticket> {
             return [new Buffer(AttachmentWithContent.Content, 'base64').toString('utf8'), inlineContent];
         } else {
             return [article.Body, null];
+        }
+    }
+
+    protected getResource(objectType: KIXObjectType): string {
+        if (objectType === KIXObjectType.TICKET) {
+            return 'tickets';
+        } else {
+            return super.getResource(objectType);
         }
     }
 }

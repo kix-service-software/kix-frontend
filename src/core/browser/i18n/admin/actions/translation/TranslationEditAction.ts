@@ -1,11 +1,7 @@
-import {
-    AbstractAction, ContextMode, KIXObjectType, FormInstance, TranslationPattern, FormField, CRUD
-} from "../../../../../model";
-import { ContextService } from "../../../../context";
-import { FormService } from "../../../../form";
-import { TranslationDetailsContext } from "../../context";
-import { FormFactory } from "../../../../form/FormFactory";
+import { AbstractAction, ContextMode, KIXObjectType, CRUD } from "../../../../../model";
 import { UIComponentPermission } from "../../../../../model/UIComponentPermission";
+import { ContextService } from "../../../../context";
+import { TranslationDetailsContext, EditTranslationDialogContext } from "../../context";
 
 export class TranslationEditAction extends AbstractAction {
 
@@ -19,31 +15,16 @@ export class TranslationEditAction extends AbstractAction {
     }
 
     public async run(): Promise<void> {
-        const configuredForm = await FormService.getInstance().getForm('edit-translation-form');
-        const form = { ...configuredForm };
-        if (form) {
-            FormFactory.initForm(form);
-            const context = await ContextService.getInstance().getContext<TranslationDetailsContext>(
-                TranslationDetailsContext.CONTEXT_ID
-            );
-            const translation = await context.getObject<TranslationPattern>();
+        const context = await ContextService.getInstance().getContext<TranslationDetailsContext>(
+            TranslationDetailsContext.CONTEXT_ID
+        );
 
-            translation.Languages.forEach((l) => {
-                const index = form.groups[0].formFields.findIndex((ff) => ff.property === l.Language);
-                if (index === -1) {
-                    form.groups[0].formFields.push(new FormField(
-                        l.Language, l.Language, 'text-area-input', false,
-                        `Geben Sie eine Übersetzung für die Sprache ${l.Language} ein.`
-                    ));
-                }
-            });
-
-            await FormService.getInstance().getFormInstance<FormInstance>('edit-translation-form', false, form);
-
-            if (translation) {
+        if (context) {
+            const id = context.getObjectId();
+            if (id) {
                 ContextService.getInstance().setDialogContext(
-                    // TODO: Titel aus dem aktiven Admin-Modul ermitteln (Kategorie)
-                    null, KIXObjectType.TRANSLATION_PATTERN, ContextMode.EDIT_ADMIN, null, true
+                    EditTranslationDialogContext.CONTEXT_ID, KIXObjectType.TRANSLATION_PATTERN,
+                    ContextMode.EDIT_ADMIN, id
                 );
             }
         }

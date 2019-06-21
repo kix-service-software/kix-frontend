@@ -1,7 +1,6 @@
-import { AbstractAction, FormInstance, KIXObjectType, ContextMode, CRUD } from "../../../model";
-import { FormService } from "../../form";
-import { ContextService } from "../../context";
+import { AbstractAction, CRUD } from "../../../model";
 import { UIComponentPermission } from "../../../model/UIComponentPermission";
+import { FAQArticleDialogUtil } from "../FAQArticleDialogUtil";
 
 export class FAQArticleEditAction extends AbstractAction {
 
@@ -15,8 +14,7 @@ export class FAQArticleEditAction extends AbstractAction {
     }
 
     public async run(): Promise<void> {
-        await FormService.getInstance().getFormInstance<FormInstance>('edit-faq-article-form', false);
-        ContextService.getInstance().setDialogContext(null, KIXObjectType.FAQ_ARTICLE, ContextMode.EDIT, null, true);
+        FAQArticleDialogUtil.edit();
     }
 
 }
