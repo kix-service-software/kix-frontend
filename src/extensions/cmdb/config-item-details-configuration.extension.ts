@@ -76,13 +76,13 @@ export class Extension implements IConfigurationExtension {
             );
 
         const lanes = [
-            'config-item-info-lane',
+            'config-item-details-tab-widget',
             'config-item-linked-objects-widget', 'config-item-graph-widget',
             'config-item-images-widget', 'config-item-history-widget'
         ];
         const laneWidgets: Array<ConfiguredWidget<any>> = [
-            tabLane, configItemLinkedObjectsLane, configItemGraphLane, configItemImagesLane, configItemHistoryLane,
-            configItemInfoLaneTab
+            tabLane, configItemInfoLaneTab, configItemLinkedObjectsLane, configItemGraphLane,
+            configItemImagesLane, configItemHistoryLane
         ];
 
         const actions = ['config-item-create-action'];

@@ -24,9 +24,16 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         if (this.state.widgetConfiguration) {
             const settings: TabWidgetSettings = this.state.widgetConfiguration.settings;
-            const lanes = context.getLanes();
-            this.state.widgets = lanes.filter((l) => settings.widgets.some((w) => w === l.instanceId));
+            const widgets = [];
+            settings.widgets.forEach((w) => {
+                const config = context.getWidget(w);
+                if (config) {
+                    widgets.push(config);
+                }
+            });
+            this.state.widgets = widgets;
         }
+        this.state.show = true;
     }
 
 }

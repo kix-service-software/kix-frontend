@@ -236,6 +236,32 @@ export abstract class Context {
         return configuration;
     }
 
+    public getWidget<WS = any>(instanceId: string): ConfiguredWidget {
+        let widget: ConfiguredWidget;
+
+        if (this.configuration) {
+            widget = this.configuration.explorerWidgets.find((e) => e.instanceId === instanceId);
+
+            if (!widget) {
+                widget = this.configuration.sidebarWidgets.find((e) => e.instanceId === instanceId);
+            }
+
+            if (!widget) {
+                widget = this.configuration.overlayWidgets.find((o) => o.instanceId === instanceId);
+            }
+
+            if (!widget) {
+                widget = this.configuration.laneWidgets.find((lw) => lw.instanceId === instanceId);
+            }
+
+            if (!widget) {
+                widget = this.configuration.contentWidgets.find((cw) => cw.instanceId === instanceId);
+            }
+        }
+
+        return widget;
+    }
+
     public getContextSpecificWidgetType(instanceId: string): WidgetType {
         let widgetType: WidgetType;
 

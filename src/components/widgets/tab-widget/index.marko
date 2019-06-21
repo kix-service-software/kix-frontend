@@ -1,9 +1,3 @@
-<widget instanceId=state.instanceId minimizable=true>
-    <@content>
-        <ul.lane-list no-update>
-            <li>
-                <tab-container tabWidgets=state.widgets showSidebar=false/>
-            </li>
-        </ul>
-    </@content>
-</widget>
+<if(state.show)>
+    <tab-container tabWidgets=state.widgets showSidebar=false/>
+</if>

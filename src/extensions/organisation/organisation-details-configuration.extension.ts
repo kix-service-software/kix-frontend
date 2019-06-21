@@ -98,13 +98,13 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
         );
 
         const lanes = [
-            'organisation-information-lane',
+            'organisation-details-tab-widget',
             'organisation-assigned-contacts-widget',
             'organisation-assigned-tickets-widget'
         ];
 
         const laneWidgets: Array<ConfiguredWidget<any>> = [
-            tabLane, assignedContactsLane, assignedTicketsLane, organisationInfoLane
+            tabLane, organisationInfoLane, assignedContactsLane, assignedTicketsLane
         ];
 
         const organisationActions = [

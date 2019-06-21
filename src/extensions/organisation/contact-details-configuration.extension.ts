@@ -103,11 +103,11 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
         );
 
         const lanes = [
-            'contact-information-lane', 'contact-assigned-organisations-widget', 'contact-assigned-tickets-widget'
+            'contact-details-tab-widget', 'contact-assigned-organisations-widget', 'contact-assigned-tickets-widget'
         ];
 
         const laneWidgets: Array<ConfiguredWidget<any>> = [
-            tabLane, assignedOrganisationsLane, assignedTicketsLane, contactInfoLane
+            tabLane, contactInfoLane, assignedOrganisationsLane, assignedTicketsLane
         ];
 
         const contactActions = [

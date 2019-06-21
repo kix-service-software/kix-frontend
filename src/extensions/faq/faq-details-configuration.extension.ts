@@ -72,8 +72,11 @@ export class Extension implements IConfigurationExtension {
             this.getModuleId(),
             [], [],
             [], [],
-            ['faq-article-info-lane', 'faq-article-linked-objects-widget', 'faq-article-history-widget'],
-            [tabLane, faqLinkedObjectsLane, faqHistoryLane, faqInfoLaneTab],
+            [
+                'faq-details-tab-widget',
+                'faq-article-linked-objects-widget', 'faq-article-history-widget'
+            ],
+            [tabLane, faqInfoLaneTab, faqLinkedObjectsLane, faqHistoryLane],
             ['20181017-faq-article-content-widget'], [faqArticleWidget],
             actions, faqActions
         );

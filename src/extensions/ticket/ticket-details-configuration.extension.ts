@@ -60,7 +60,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
 
         const lanes =
             [
-                'ticket-information-lane',
+                'ticket-details-tab-widget',
                 'ticket-history-lane',
                 'ticket-description-lane',
                 'ticket-linked-objects-lane'
