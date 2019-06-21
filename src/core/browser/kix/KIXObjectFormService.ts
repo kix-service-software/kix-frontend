@@ -1,11 +1,13 @@
 import {
-    KIXObject, KIXObjectType, FormFieldValue, Form, FormField, ObjectIcon, FormContext, ContextType
+    KIXObject, KIXObjectType, FormFieldValue, Form, FormField, ObjectIcon, FormContext, ContextType, CRUD
 } from "../../model";
 import { IKIXObjectFormService } from "./IKIXObjectFormService";
 import { ServiceType } from "./ServiceType";
 import { LabelService } from "../LabelService";
 import { ContextService } from "../context";
 import { InlineContent, DialogService } from "../components";
+import { AuthenticationSocketClient } from "../application/AuthenticationSocketClient";
+import { UIComponentPermission } from "../../model/UIComponentPermission";
 
 export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> implements IKIXObjectFormService<T> {
 
@@ -128,5 +130,16 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
 
     public async hasPermissions(field: FormField): Promise<boolean> {
         return true;
+    }
+
+    public async hasReadPermissionFor(objectType: KIXObjectType): Promise<boolean> {
+        const resource = this.getResource(objectType);
+        return await AuthenticationSocketClient.getInstance().checkPermissions([
+            new UIComponentPermission(resource, [CRUD.READ])
+        ]);
+    }
+
+    protected getResource(objectType: KIXObjectType): string {
+        return objectType.toLocaleLowerCase();
     }
 }

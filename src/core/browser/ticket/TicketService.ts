@@ -285,4 +285,12 @@ export class TicketService extends KIXObjectService<Ticket> {
             return [article.Body, null];
         }
     }
+
+    protected getResource(objectType: KIXObjectType): string {
+        if (objectType === KIXObjectType.TICKET) {
+            return 'tickets';
+        } else {
+            return super.getResource(objectType);
+        }
+    }
 }

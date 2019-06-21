@@ -224,4 +224,12 @@ export class FAQService extends KIXObjectService {
         return context.getDescriptor().urlPaths[0] + '/' + id;
     }
 
+    protected getResource(objectType: KIXObjectType): string {
+        if (objectType === KIXObjectType.FAQ_ARTICLE) {
+            return 'faq/articles';
+        } else if (objectType === KIXObjectType.FAQ_CATEGORY) {
+            return 'faq/categories';
+        }
+    }
+
 }
