@@ -8,7 +8,7 @@ import { ContextDescriptor } from './ContextDescriptor';
 import { BreadcrumbInformation } from '../router';
 import { KIXObjectService, FormService } from '../../../browser';
 import { ContextMode } from './ContextMode';
-import { FormContext } from '../form';
+import { FormContext } from '../form/FormContext';
 
 export abstract class Context {
 

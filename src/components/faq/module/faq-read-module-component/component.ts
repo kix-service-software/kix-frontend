@@ -1,6 +1,6 @@
 import {
     AbstractMarkoComponent, FactoryService, LabelService, ServiceRegistry,
-    KIXObjectSearchService, ContextService, ActionFactory, TableFactoryService
+    ContextService, ActionFactory, TableFactoryService
 } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
@@ -16,6 +16,7 @@ import {
 import { DialogService } from '../../../../core/browser/components/dialog';
 import { FAQCategoryTableFactory } from '../../../../core/browser/faq/admin';
 import { FAQCategoryBrowserFactory } from '../../../../core/browser/faq/FAQCategoryBrowserFactory';
+import { KIXObjectSearchService } from '../../../../core/browser/kix/search/KIXObjectSearchService';
 
 class Component extends AbstractMarkoComponent {
 

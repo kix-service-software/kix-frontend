@@ -9,8 +9,8 @@ import { AutoCompleteConfiguration } from "./AutoCompleteConfiguration";
 import { FormContext } from "./FormContext";
 import { SearchForm } from "./SearchForm";
 import { ISearchFormListener } from "./ISearchFormListener";
-import { KIXObjectSearchService } from "../../../browser";
 import { Form } from "./Form";
+import { KIXObjectSearchService } from "../../../browser/kix/search/KIXObjectSearchService";
 
 export class SearchFormInstance implements IFormInstance {
 

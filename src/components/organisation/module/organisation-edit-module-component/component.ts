@@ -1,21 +1,14 @@
-import {
-    AbstractMarkoComponent, LabelService, ServiceRegistry,
-    FactoryService, ContextService, ActionFactory, KIXObjectSearchService, TableFactoryService
-} from '../../../../core/browser';
+import { AbstractMarkoComponent, ContextService, ActionFactory } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
     KIXObjectType, ContextDescriptor, ContextType, ContextMode, WidgetConfiguration,
-    ConfiguredDialogWidget, WidgetSize
+    ConfiguredDialogWidget
 } from '../../../../core/model';
 import { ImportService } from '../../../../core/browser/import';
 import { DialogService } from '../../../../core/browser/components/dialog';
 import {
-    OrganisationFormService, OrganisationTableFactory, OrganisationLabelProvider, OrganisationService,
-    OrganisationBrowserFactory, OrganisationSearchDefinition, OrganisationImportManager,
-    OrganisationImportDialogContext, OrganisationSearchContext, EditOrganisationDialogContext,
-    NewOrganisationDialogContext, OrganisationDetailsContext, OrganisationContext, OrganisationSearchAction,
-    OrganisationCreateAction, OrganisationEditAction, OrganisationCreateContactAction,
-    OrganisationPrintAction, OrganisationCreateCIAction, OrganisationCreateTicketAction
+    OrganisationImportManager, OrganisationImportDialogContext, EditOrganisationDialogContext,
+    NewOrganisationDialogContext, OrganisationCreateAction, OrganisationEditAction, OrganisationCreateContactAction
 } from '../../../../core/browser/organisation';
 
 class Component extends AbstractMarkoComponent {
