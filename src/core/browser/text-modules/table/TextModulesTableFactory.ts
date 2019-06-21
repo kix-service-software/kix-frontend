@@ -63,7 +63,7 @@ export class TextModulesTableFactory extends TableFactory {
         if (defaultRouting) {
             tableConfiguration.routingConfiguration = new DialogRoutingConfiguration(
                 null, KIXObjectType.TEXT_MODULE, ContextMode.EDIT_ADMIN, TextModuleProperty.ID, null, true,
-                undefined, true, 'edit-text-module-form'
+                undefined, true
             );
         }
 

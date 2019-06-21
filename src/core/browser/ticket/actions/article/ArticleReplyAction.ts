@@ -42,7 +42,7 @@ export class ArticleReplyAction extends AbstractAction {
             }
             ContextService.getInstance().setDialogContext(
                 NewTicketArticleContext.CONTEXT_ID, KIXObjectType.ARTICLE, ContextMode.CREATE_SUB,
-                this.article.ArticleID, false, null, true, 'new-ticket-article-form', null, true
+                this.article.ArticleID, false, null, true
             );
         }
     }

@@ -1,6 +1,6 @@
 import {
     AbstractMarkoComponent, LabelService, ServiceRegistry,
-    FactoryService, ContextService, ActionFactory, KIXObjectSearchService, TableFactoryService
+    FactoryService, ContextService, ActionFactory, TableFactoryService
 } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
@@ -14,6 +14,7 @@ import {
     OrganisationDetailsContext, OrganisationContext, OrganisationSearchAction,
     OrganisationPrintAction, OrganisationCreateCIAction, OrganisationCreateTicketAction
 } from '../../../../core/browser/organisation';
+import { KIXObjectSearchService } from '../../../../core/browser/kix/search/KIXObjectSearchService';
 
 class Component extends AbstractMarkoComponent {
 

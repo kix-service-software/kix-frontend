@@ -45,10 +45,10 @@ class TabLaneComponent implements IEventSubscriber {
             );
 
             if (this.initialTabId) {
-                await this.tabClicked(this.state.tabWidgets.find((tw) => tw.instanceId === this.initialTabId));
+                await this.tabClicked(this.state.tabWidgets.find((tw) => tw.instanceId === this.initialTabId), true);
             }
             if (!this.state.activeTab) {
-                await this.tabClicked(this.state.tabWidgets[0]);
+                await this.tabClicked(this.state.tabWidgets[0], true);
             }
         }
 
@@ -70,7 +70,7 @@ class TabLaneComponent implements IEventSubscriber {
         EventService.getInstance().unsubscribe(TabContainerEvent.CHANGE_TAB, this);
     }
 
-    public async tabClicked(tab: ConfiguredWidget): Promise<void> {
+    public async tabClicked(tab: ConfiguredWidget, silent?: boolean): Promise<void> {
         this.state.activeTab = tab;
         this.state.activeTabTitle = this.state.activeTab ? this.state.activeTab.configuration.title : '';
         if (tab) {
@@ -83,7 +83,9 @@ class TabLaneComponent implements IEventSubscriber {
                 );
             }
         }
-        (this as any).emit('tabChanged', tab);
+        if (!silent) {
+            (this as any).emit('tabChanged', tab);
+        }
     }
 
     public getWidgetTemplate(): any {

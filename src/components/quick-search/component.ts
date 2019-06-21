@@ -1,12 +1,13 @@
 import { ComponentState } from './ComponentState';
-import { KIXObjectSearchService, ContextService, OverlayService } from '../../core/browser';
+import { ContextService, OverlayService } from '../../core/browser';
 import { KIXObjectType, Ticket, OverlayType, StringContent, CRUD } from '../../core/model';
 import { EventService } from '../../core/browser/event';
 import { ApplicationEvent } from '../../core/browser/application';
-import { SearchContext } from '../../core/browser/search/context';
+import { SearchContext } from '../../core/browser/search/context/SearchContext';
 import { TranslationService } from '../../core/browser/i18n/TranslationService';
 import { AuthenticationSocketClient } from '../../core/browser/application/AuthenticationSocketClient';
 import { UIComponentPermission } from '../../core/model/UIComponentPermission';
+import { KIXObjectSearchService } from '../../core/browser/kix/search/KIXObjectSearchService';
 
 export class Component {
 

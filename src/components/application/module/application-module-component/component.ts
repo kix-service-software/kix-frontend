@@ -14,7 +14,7 @@ import {
 } from '../../../../core/browser/i18n/admin/context';
 import { TranslationFormService } from '../../../../core/browser/i18n/admin/TranslationFormService';
 import { SearchResultPrintAction } from '../../../../core/browser/search/actions';
-import { SearchContext } from '../../../../core/browser/search/context';
+import { SearchContext } from '../../../../core/browser/search/context/SearchContext';
 import { SwitchColumnOrderAction } from '../../../../core/browser/table/actions';
 import { DialogService } from '../../../../core/browser/components/dialog';
 import { PermissionLabelProvider } from '../../../../core/browser/permission';

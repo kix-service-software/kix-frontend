@@ -16,8 +16,7 @@ export class ConfigItemClassCreateAction extends AbstractAction {
     public async run(event: any): Promise<void> {
         ContextService.getInstance().setDialogContext(
             // TODO: Titel aus dem aktiven Admin-Modul ermitteln (Kategorie)
-            null, KIXObjectType.CONFIG_ITEM_CLASS, ContextMode.CREATE_ADMIN, null, true, 'Translatable#CMDB',
-            undefined, 'new-config-item-class-form'
+            null, KIXObjectType.CONFIG_ITEM_CLASS, ContextMode.CREATE_ADMIN, null, true, 'Translatable#CMDB'
         );
     }
 

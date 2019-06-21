@@ -1,11 +1,12 @@
 import {
-    IdService, KIXObjectSearchService, SearchOperator, SearchOperatorUtil, SearchProperty, SearchDefinition
+    IdService, SearchOperator, SearchOperatorUtil, SearchProperty, SearchDefinition
 } from '../../../../../core/browser';
 import {
     TreeNode, FilterCriteria, FilterDataType,
     FilterType, KIXObjectType, InputFieldTypes, DateTimeUtil
 } from '../../../../../core/model';
 import { isArray } from 'util';
+import { KIXObjectSearchService } from '../../../../../core/browser/kix/search/KIXObjectSearchService';
 
 export class FormSearchValue {
 
