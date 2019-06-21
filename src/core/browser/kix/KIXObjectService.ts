@@ -281,7 +281,9 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return [];
     }
 
-    public async getTreeNodes(property: string): Promise<TreeNode[]> {
+    public async getTreeNodes(
+        property: string, showInvalid?: boolean, filterIds?: Array<string | number>
+    ): Promise<TreeNode[]> {
         return [];
     }
 

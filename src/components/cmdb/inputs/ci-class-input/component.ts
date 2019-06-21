@@ -1,7 +1,7 @@
 import { ComponentState } from './ComponentState';
-import { FormInputComponent, TreeNode, ConfigItemClass, KIXObjectType, ObjectIcon } from '../../../../core/model';
-import { KIXObjectService } from '../../../../core/browser';
+import { FormInputComponent, TreeNode, ConfigItemClass, ConfigItemProperty } from '../../../../core/model';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
+import { CMDBService } from '../../../../core/browser/cmdb';
 
 class Component extends FormInputComponent<ConfigItemClass, ComponentState> {
 
@@ -26,15 +26,7 @@ class Component extends FormInputComponent<ConfigItemClass, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-
-        const classes = await KIXObjectService.loadObjects<ConfigItemClass>(
-            KIXObjectType.CONFIG_ITEM_CLASS, null, null, null, false
-        );
-
-        this.state.nodes = classes.map(
-            (c) => new TreeNode(c, c.Name, new ObjectIcon(KIXObjectType.CONFIG_ITEM_CLASS, c.ID))
-        );
-
+        this.state.nodes = await CMDBService.getInstance().getTreeNodes(ConfigItemProperty.CLASS_ID);
         this.setCurrentNode();
     }
 
