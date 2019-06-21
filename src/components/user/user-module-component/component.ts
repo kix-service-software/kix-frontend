@@ -54,7 +54,7 @@ class Component extends AbstractMarkoComponent {
 
     private async registerUser(): Promise<void> {
 
-        if (await this.checkPermission('users', CRUD.CREATE)) {
+        if (await this.checkPermission('system/users', CRUD.CREATE)) {
             ActionFactory.getInstance().registerAction('user-admin-user-create-action', UserCreateAction);
 
             const newUserContext = new ContextDescriptor(
@@ -75,7 +75,7 @@ class Component extends AbstractMarkoComponent {
             ));
         }
 
-        if (await this.checkPermission('users/*', CRUD.UPDATE)) {
+        if (await this.checkPermission('system/users/*', CRUD.UPDATE)) {
             ActionFactory.getInstance().registerAction('user-admin-user-edit-action', UserEditAction);
 
             const editUserContext = new ContextDescriptor(

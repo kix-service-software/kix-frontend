@@ -50,7 +50,7 @@ class Component extends AbstractMarkoComponent {
 
     private async registerSystemAddresses(): Promise<void> {
 
-        if (await this.checkPermission('systemaddresses', CRUD.CREATE)) {
+        if (await this.checkPermission('/system/communication/systemaddresses', CRUD.CREATE)) {
             ActionFactory.getInstance().registerAction('system-address-create', SystemAddressCreateAction);
 
             const newSystemAddressDialogContext = new ContextDescriptor(
@@ -71,7 +71,7 @@ class Component extends AbstractMarkoComponent {
             ));
         }
 
-        if (await this.checkPermission('systemaddresses/*', CRUD.UPDATE)) {
+        if (await this.checkPermission('/system/communication/systemaddresses/*', CRUD.UPDATE)) {
             ActionFactory.getInstance().registerAction('system-address-edit', SystemAddressEditAction);
 
             const editSystemAddressDialogContext = new ContextDescriptor(

@@ -177,7 +177,10 @@ export class HttpService {
                     resolve(response);
                     ProfilingService.getInstance().stop(profileTaskId, response);
                 }).catch((error) => {
-                    LoggingService.getInstance().error('Error during HTTP ' + options.method + ' request.', error);
+                    LoggingService.getInstance().error(
+                        `Error during HTTP (${resource}) ${options.method} request.`, error
+                    );
+                    ProfilingService.getInstance().stop(profileTaskId, 'Error');
                     if (error.statusCode === 403) {
                         reject(new PermissionError(this.createError(error), resource, options.method));
                     } else {

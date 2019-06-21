@@ -8,7 +8,7 @@ export class OrganisationCreateCIAction extends AbstractAction {
     public permissions: UIComponentPermission[] = [
         new UIComponentPermission('cmdb/configitems/*', [CRUD.CREATE]),
         new UIComponentPermission('cmdb/configitems/*/versions', [CRUD.CREATE]),
-        new UIComponentPermission('cmdb/classes', [CRUD.READ])
+        new UIComponentPermission('system/cmdb/classes', [CRUD.READ])
     ];
 
     public async initAction(): Promise<void> {

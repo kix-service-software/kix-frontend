@@ -20,7 +20,7 @@ export class QueueService extends KIXObjectService {
         return QueueService.INSTANCE;
     }
 
-    protected RESOURCE_URI: string = this.buildUri('system', 'queues');
+    protected RESOURCE_URI: string = this.buildUri('system', 'ticket', 'queues');
 
     public objectType: KIXObjectType = KIXObjectType.QUEUE;
 

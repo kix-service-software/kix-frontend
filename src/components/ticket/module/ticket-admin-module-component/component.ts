@@ -36,7 +36,7 @@ class Component extends AbstractMarkoComponent {
 
     private async registerTicketTypeAdmin(): Promise<void> {
 
-        if (await this.checkPermission('tickettypes', CRUD.CREATE)) {
+        if (await this.checkPermission('system/ticket/types', CRUD.CREATE)) {
             ActionFactory.getInstance().registerAction('ticket-admin-type-create', TicketTypeCreateAction);
 
             const newTicketTypeContext = new ContextDescriptor(
@@ -57,7 +57,7 @@ class Component extends AbstractMarkoComponent {
             ));
         }
 
-        if (await this.checkPermission('tickettypes/*', CRUD.UPDATE)) {
+        if (await this.checkPermission('system/ticket/types/*', CRUD.UPDATE)) {
             ActionFactory.getInstance().registerAction('ticket-admin-type-edit', TicketTypeEditAction);
             const editTicketTypeContext = new ContextDescriptor(
                 EditTicketTypeDialogContext.CONTEXT_ID, [KIXObjectType.TICKET_TYPE],
@@ -79,7 +79,7 @@ class Component extends AbstractMarkoComponent {
             ));
         }
 
-        if (await this.checkPermission('tickettypes/*', CRUD.DELETE)) {
+        if (await this.checkPermission('system/ticket/types/*', CRUD.DELETE)) {
             ActionFactory.getInstance().registerAction('ticket-admin-type-table-delete', TicketTypeTableDeleteAction);
         }
 
@@ -93,7 +93,7 @@ class Component extends AbstractMarkoComponent {
 
     private async registerTicketStatesAdmin(): Promise<void> {
 
-        if (await this.checkPermission('ticketstates', CRUD.CREATE)) {
+        if (await this.checkPermission('system/ticket/states', CRUD.CREATE)) {
             ActionFactory.getInstance().registerAction('ticket-admin-state-create', TicketStateCreateAction);
 
             const newTicketStateContext = new ContextDescriptor(
@@ -114,7 +114,7 @@ class Component extends AbstractMarkoComponent {
             ));
         }
 
-        if (await this.checkPermission('ticketstates/*', CRUD.UPDATE)) {
+        if (await this.checkPermission('system/ticket/states/*', CRUD.UPDATE)) {
             ActionFactory.getInstance().registerAction('ticket-admin-state-edit', TicketStateEditAction);
 
             const editTicketStateContext = new ContextDescriptor(
@@ -135,7 +135,7 @@ class Component extends AbstractMarkoComponent {
             ));
         }
 
-        if (await this.checkPermission('ticketstates/*', CRUD.DELETE)) {
+        if (await this.checkPermission('system/ticket/states/*', CRUD.DELETE)) {
             ActionFactory.getInstance().registerAction('ticket-admin-state-table-delete', TicketStateTableDeleteAction);
         }
 
@@ -149,7 +149,7 @@ class Component extends AbstractMarkoComponent {
 
     private async registerTicketPrioritiesAdmin(): Promise<void> {
 
-        if (await this.checkPermission('priorities', CRUD.CREATE)) {
+        if (await this.checkPermission('system/ticket/priorities', CRUD.CREATE)) {
             ActionFactory.getInstance().registerAction('ticket-admin-priority-create', TicketPriorityCreateAction);
 
             const newTicketPriorityContext = new ContextDescriptor(
@@ -170,7 +170,7 @@ class Component extends AbstractMarkoComponent {
             ));
         }
 
-        if (await this.checkPermission('priorities/*', CRUD.UPDATE)) {
+        if (await this.checkPermission('system/ticket/priorities/*', CRUD.UPDATE)) {
             ActionFactory.getInstance().registerAction('ticket-admin-priority-edit', TicketPriorityEditAction);
 
             const editTicketPriorityContext = new ContextDescriptor(
@@ -191,7 +191,7 @@ class Component extends AbstractMarkoComponent {
             ));
         }
 
-        if (await this.checkPermission('priorities/*', CRUD.DELETE)) {
+        if (await this.checkPermission('system/ticket/priorities/*', CRUD.DELETE)) {
             ActionFactory.getInstance().registerAction('ticket-admin-priority-table-delete',
                 TicketPriorityTableDeleteAction
             );
