@@ -14,7 +14,7 @@ export enum SysConfigOptionDefinitionProperty {
 
     IS_REQUIRED = 'IsRequired',
 
-    LEVEL = 'Default',
+    LEVEL = 'Level',
 
     SETTING = 'Setting',
 
