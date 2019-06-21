@@ -1,9 +1,9 @@
 import { Context } from "../../../model/components/context/Context";
 import {
-    ContextDescriptor, ContextConfiguration, KIXObject, KIXObjectType, KIXObjectLoadingOptions, VersionProperty, ContextMode, ConfigItemClass, ConfigItem
+    ContextDescriptor, ContextConfiguration, KIXObject, KIXObjectType, KIXObjectLoadingOptions,
+    VersionProperty, ContextMode, ConfigItemClass, ConfigItem
 } from "../../../model";
 import { KIXObjectService } from "../../kix";
-import { load } from "nock";
 import { ConfigItemFormFactory } from "../ConfigItemFormFactory";
 
 export class EditConfigItemDialogContext extends Context {

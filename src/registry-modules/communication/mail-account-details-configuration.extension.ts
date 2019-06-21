@@ -39,7 +39,7 @@ export class Extension implements IConfigurationExtension {
             [], [],
             [], [],
             [], [],
-            ['mail-account-info-widget'], [mailAccountInfoLane],
+            ['mail-account-information-lane'], [mailAccountInfoLane],
             [], [],
             ['mail-account-create'],
             ['mail-account-edit']

@@ -1,10 +1,6 @@
-import {
-    AbstractAction, ContextMode, KIXObjectType, FormInstance, TranslationPattern, FormField
-} from "../../../../../model";
+import { AbstractAction, ContextMode, KIXObjectType } from "../../../../../model";
 import { ContextService } from "../../../../context";
-import { FormService } from "../../../../form";
 import { TranslationDetailsContext, EditTranslationDialogContext } from "../../context";
-import { FormFactory } from "../../../../form/FormFactory";
 
 export class TranslationEditAction extends AbstractAction {
 
@@ -22,7 +18,7 @@ export class TranslationEditAction extends AbstractAction {
             const id = context.getObjectId();
             if (id) {
                 ContextService.getInstance().setDialogContext(
-                    EditTranslationDialogContext.CONTEXT_ID, KIXObjectType.TRANSLATION,
+                    EditTranslationDialogContext.CONTEXT_ID, KIXObjectType.TRANSLATION_PATTERN,
                     ContextMode.EDIT_ADMIN, id
                 );
             }
