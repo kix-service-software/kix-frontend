@@ -28,8 +28,12 @@ export class SysConfigTableContentProvider extends TableContentProvider<SysConfi
         if (configLevel && !!configLevel.length) {
             const definitionFilter = [
                 new FilterCriteria(
+                    SysConfigOptionDefinitionProperty.LEVEL, SearchOperator.GREATER_THAN_OR_EQUAL,
+                    FilterDataType.NUMERIC, FilterType.OR, configLevel[0].Value
+                ),
+                new FilterCriteria(
                     SysConfigOptionDefinitionProperty.LEVEL, SearchOperator.EQUALS,
-                    FilterDataType.NUMERIC, FilterType.AND, configLevel[0].Value
+                    FilterDataType.NUMERIC, FilterType.OR, null
                 ),
             ];
             loadingOptions = new KIXObjectLoadingOptions(null, definitionFilter);
