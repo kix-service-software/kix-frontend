@@ -18,7 +18,7 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
     }
 
     public async initValues(form: Form, kixObject?: KIXObject): Promise<Map<string, FormFieldValue<any>>> {
-        if (!kixObject && DialogService.getInstance().activeDialog) {
+        if (!kixObject) {
             const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
             if (dialogContext) {
                 kixObject = await dialogContext.getObject(form.objectType);

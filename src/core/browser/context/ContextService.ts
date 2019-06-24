@@ -103,31 +103,25 @@ export class ContextService {
                 context = await ContextFactory.getInstance().getContext(
                     contextId, dialogs[0].kixObjectType, dialogs[0].contextMode, null, resetContext
                 );
-
-                if (resetContext) {
-                    for (const dialog of dialogs) {
-                        const fid = await FormService.getInstance().getFormIdByContext(
-                            FormContext.NEW, dialog.kixObjectType
-                        );
-                        FormService.getInstance().deleteFormInstance(fid);
-                    }
-                }
             }
         }
 
         if (context && context.getDescriptor().contextType === ContextType.DIALOG) {
 
+            this.activeDialogContext = context;
+            this.activeContextType = ContextType.DIALOG;
+
             if (!formId) {
                 formId = await context.getFormId(contextMode, objectType, objectId);
             }
 
-            FormService.getInstance().deleteFormInstance(formId);
             context.setAdditionalInformation(AdditionalContextInformation.FORM_ID, formId);
+            await context.setObjectId(objectId);
 
-            context.setObjectId(objectId);
+            FormService.getInstance().deleteFormInstance(formId);
+            await FormService.getInstance().getFormInstance(formId);
 
-            this.activeDialogContext = context;
-            this.activeContextType = ContextType.DIALOG;
+            await context.initContext();
 
             DialogService.getInstance().openMainDialog(
                 context.getDescriptor().contextMode, context.getDescriptor().componentId,

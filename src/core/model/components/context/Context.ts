@@ -90,7 +90,7 @@ export abstract class Context {
 
     public async setObjectId(objectId: string | number): Promise<void> {
         this.objectId = objectId;
-        await this.getObject(null, true);
+        await this.getObject(undefined, true);
     }
 
     public getObjectId(): string | number {

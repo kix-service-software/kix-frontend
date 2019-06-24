@@ -28,7 +28,6 @@ class Component extends AbstractMarkoComponent {
 
     private registerTicketActions(): void {
         ActionFactory.getInstance().registerAction('ticket-create-action', TicketCreateAction);
-        ActionFactory.getInstance().registerAction('ticket-watch-action', TicketWatchAction);
     }
 
     private registerTicketDialogs(): void {

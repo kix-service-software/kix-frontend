@@ -57,7 +57,6 @@ export class EditTicketDialogContext extends Context implements IFormInstanceLis
         super.reset();
         this.contact = null;
         this.organisation = null;
-        this.initContext();
     }
 
     private async handleOrganisation(value: FormFieldValue): Promise<void> {
