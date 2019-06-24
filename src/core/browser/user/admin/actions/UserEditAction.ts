@@ -5,7 +5,7 @@ import { ContextService } from '../../../context';
 export class UserEditAction extends AbstractAction {
 
     public async initAction(): Promise<void> {
-        this.text = 'Translatable#Edit Agent';
+        this.text = 'Translatable#Edit';
         this.icon = 'kix-icon-edit';
     }
 

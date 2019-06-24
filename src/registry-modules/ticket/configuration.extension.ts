@@ -40,24 +40,24 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
 
 
         const predefinedTicketFilter = [
-            new KIXObjectPropertyFilter('Owner', [
+            new KIXObjectPropertyFilter('Translatable#Owner', [
                 new TableFilterCriteria(TicketProperty.OWNER_ID, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER)
             ]),
-            new KIXObjectPropertyFilter('Watched Tickets', [
+            new KIXObjectPropertyFilter('Translatable#Watched Tickets', [
                 new TableFilterCriteria(
                     TicketProperty.WATCHERS, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER, true
                 )
             ]),
-            new KIXObjectPropertyFilter('Escalated Tickets', [
+            new KIXObjectPropertyFilter('Translatable#Escalated Tickets', [
                 new TableFilterCriteria(TicketProperty.ESCALATION_TIME, SearchOperator.LESS_THAN, 0)
             ]),
-            new KIXObjectPropertyFilter('Unlocked Tickets', [
+            new KIXObjectPropertyFilter('Translatable#Unlocked Tickets', [
                 new TableFilterCriteria(TicketProperty.LOCK_ID, SearchOperator.EQUALS, 1)
             ]),
-            new KIXObjectPropertyFilter('Locked Tickets', [
+            new KIXObjectPropertyFilter('Translatable#Locked Tickets', [
                 new TableFilterCriteria(TicketProperty.LOCK_ID, SearchOperator.EQUALS, 2)
             ]),
-            new KIXObjectPropertyFilter('Responsible Tickets', [
+            new KIXObjectPropertyFilter('Translatable#Responsible Tickets', [
                 new TableFilterCriteria(
                     TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER
                 )

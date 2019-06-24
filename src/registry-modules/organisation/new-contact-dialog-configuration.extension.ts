@@ -26,7 +26,7 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
         if (!existingForm || overwrite) {
             const groups: FormGroup[] = [];
 
-            groups.push(new FormGroup('Translatable#Basic Data', [
+            groups.push(new FormGroup('Translatable#Contact Information', [
                 new FormField(
                     'Translatable#Title', ContactProperty.TITLE, null, false,
                     'Translatable#Helptext_Organisations_ContactCreate_Title'

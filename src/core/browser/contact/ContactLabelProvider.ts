@@ -86,7 +86,7 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
                 displayValue = 'Translatable#Fax';
                 break;
             case ContactProperty.MOBILE:
-                displayValue = 'Translatable#Cell Phone';
+                displayValue = 'Translatable#Mobile';
                 break;
             case ContactProperty.STREET:
                 displayValue = 'Translatable#Street';

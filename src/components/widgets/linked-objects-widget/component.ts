@@ -7,6 +7,7 @@ import {
 import { KIXObjectType, Link, KIXObject, WidgetType, ContextType, DataType } from '../../../core/model';
 import { LinkUtil } from '../../../core/browser/link';
 import { EventService, IEventSubscriber } from '../../../core/browser/event';
+import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -63,8 +64,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             const linkedObjectTypes: Array<[string, KIXObjectType]> =
                 this.state.widgetConfiguration.settings.linkedObjectTypes;
 
-            this.state.title = `${this.state.widgetConfiguration.title}`;
-
             let objectsCount = 0;
             for (const lot of linkedObjectTypes) {
                 const objectLinks = this.state.kixObject.Links.filter((link) => this.checkLink(link, lot[1]));
@@ -92,7 +91,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 this.state.linkedObjectGroups.push([title, table, objects.length, linkDescriptions]);
             }
 
-            this.state.title = `${this.state.widgetConfiguration.title} (${objectsCount})`;
+            const text = await TranslationService.translate(this.state.widgetConfiguration.title, []);
+            this.state.title = `${text} (${objectsCount})`;
             this.initTableSubscriber();
         }
     }
