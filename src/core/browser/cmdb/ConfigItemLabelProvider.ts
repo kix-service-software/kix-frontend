@@ -14,7 +14,7 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
     public async getPropertyValueDisplayText(
         property: string, value: any = '', translatable: boolean = true
     ): Promise<string> {
-        let displayValue = value;
+        let displayValue = '';
         switch (property) {
             case ConfigItemProperty.CREATE_TIME:
             case ConfigItemProperty.CHANGE_TIME:
@@ -46,7 +46,7 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
                 break;
             case ConfigItemProperty.VERSIONS:
                 if (value && Array.isArray(value)) {
-                    displayValue = value.length;
+                    displayValue = value.length.toString();
                 }
                 break;
             default:
