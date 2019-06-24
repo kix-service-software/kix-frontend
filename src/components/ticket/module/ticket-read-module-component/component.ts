@@ -14,7 +14,8 @@ import {
     TicketContext, TicketDetailsContext, TicketSearchContext, TicketListContext, ArticleZipAttachmentDownloadAction,
     ArticlePrintAction, TicketPrintAction, TicketSearchAction, ShowUserTicketsAction, TicketPriorityTableFactory,
     TicketQueueTableFactory, TicketTypeTableFactory, TicketStateTableFactory, TicketFormService,
-    EmailRecipientValidator, PendingTimeValidator, ArticleFormService, TicketHistoryBrowserFactory
+    EmailRecipientValidator, PendingTimeValidator, ArticleFormService, TicketHistoryBrowserFactory,
+    TicketWatchAction, TicketLockAction
 } from "../../../../core/browser/ticket";
 import { ChannelService } from "../../../../core/browser/channel";
 import { ChannelLabelProvider } from "../../../../core/browser/channel/ChannelLabelProvider";
@@ -108,6 +109,8 @@ class Component extends AbstractMarkoComponent {
         ActionFactory.getInstance().registerAction('ticket-print-action', TicketPrintAction);
         ActionFactory.getInstance().registerAction('ticket-search-action', TicketSearchAction);
         ActionFactory.getInstance().registerAction('show-user-tickets', ShowUserTicketsAction);
+        ActionFactory.getInstance().registerAction('ticket-watch-action', TicketWatchAction);
+        ActionFactory.getInstance().registerAction('ticket-lock-action', TicketLockAction);
     }
 
     private registerContexts(): void {

@@ -5,6 +5,9 @@ import { DisplayImageDescription } from "../../components/DisplayImageDescriptio
 import { IImageDialogListener } from "./IImageDialogListener";
 import { ContextService } from '../../context/ContextService';
 import { TranslationService } from "../../i18n/TranslationService";
+import { ApplicationEvent } from "../../application/ApplicationEvent";
+import { EventService } from "../../event";
+import { CacheService } from "../../cache";
 
 export class DialogService {
 
@@ -154,6 +157,11 @@ export class DialogService {
             }
         }
         ContextService.getInstance().closeDialogContext();
+
+        setTimeout(async () => {
+            await CacheService.getInstance().deleteKeys(KIXObjectType.CURRENT_USER);
+            EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
+        }, 500);
     }
 
     public openOverlayDialog(dialogTagId: string, input?: any, title?: string, icon?: string | ObjectIcon): void {

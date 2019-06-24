@@ -30,7 +30,11 @@ export class AgentSocketClient extends SocketClient {
         this.agentSocket = this.createSocket('agent');
     }
 
-    public async getCurrentUser(): Promise<User> {
+    public async getCurrentUser(useCache: boolean = true): Promise<User> {
+        if (!useCache) {
+            await CacheService.getInstance().deleteKeys(KIXObjectType.CURRENT_USER);
+        }
+
         if (await CacheService.getInstance().has(KIXObjectType.CURRENT_USER, KIXObjectType.CURRENT_USER)) {
             return await CacheService.getInstance().get(KIXObjectType.CURRENT_USER, KIXObjectType.CURRENT_USER);
         }
@@ -60,6 +64,7 @@ export class AgentSocketClient extends SocketClient {
                         await CacheService.getInstance().set(
                             KIXObjectType.CURRENT_USER, result.currentUser, KIXObjectType.CURRENT_USER
                         );
+                        this.currentUserRequestPromise = null;
                         resolve(result.currentUser);
                     }
                 });
