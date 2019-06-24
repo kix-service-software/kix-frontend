@@ -1,11 +1,10 @@
 import { SearchDefinition, SearchResultCategory } from "../kix";
 import {
     KIXObjectType, OrganisationProperty, InputFieldTypes, FilterCriteria,
-    KIXObjectLoadingOptions, FilterDataType, FilterType, KIXObjectProperty
+    KIXObjectLoadingOptions, KIXObjectProperty
 } from "../../model";
 import { SearchOperator } from "../SearchOperator";
 import { SearchProperty } from "../SearchProperty";
-import { ObjectDataService } from "../ObjectDataService";
 import { OrganisationService } from "./OrganisationService";
 
 export class OrganisationSearchDefinition extends SearchDefinition {
@@ -43,7 +42,6 @@ export class OrganisationSearchDefinition extends SearchDefinition {
             SearchOperator.IN
         ];
 
-        const properties = await this.getProperties();
         if (this.isDropDown(property)) {
             operations = numberOperators;
         } else {
@@ -72,7 +70,7 @@ export class OrganisationSearchDefinition extends SearchDefinition {
     }
 
     public async getSearchResultCategories(): Promise<SearchResultCategory> {
-        const contactCategory = new SearchResultCategory('Trranslatable#Contacts', KIXObjectType.CONTACT);
+        const contactCategory = new SearchResultCategory('Translatable#Contacts', KIXObjectType.CONTACT);
         const ticketCategory = new SearchResultCategory('Translatable#Tickets', KIXObjectType.TICKET);
 
         return new SearchResultCategory(

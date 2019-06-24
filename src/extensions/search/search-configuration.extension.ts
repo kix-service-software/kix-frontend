@@ -1,6 +1,6 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    ContextConfiguration, ConfiguredWidget, WidgetSize, WidgetConfiguration
+    ContextConfiguration, ConfiguredWidget, WidgetConfiguration
 } from '../../core/model';
 import { SearchContext } from '../../core/browser/search/context/SearchContext';
 
@@ -15,7 +15,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
         // explorer
         const searchResultExplorer =
             new ConfiguredWidget("20180625-search-result-explorer", new WidgetConfiguration(
-                "search-result-explorer", "Search Results", [], {},
+                "search-result-explorer", "Translatable#Search Results", [], {},
                 false, false, 'kix-icon-search', false)
             );
 

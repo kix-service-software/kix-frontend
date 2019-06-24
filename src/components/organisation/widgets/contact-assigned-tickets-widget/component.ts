@@ -9,6 +9,7 @@ import {
     FilterType, FilterDataType, StateType, TicketState, DateTimeUtil, DataType, WidgetSize, WidgetType
 } from '../../../../core/model';
 import { IEventSubscriber, EventService } from '../../../../core/browser/event';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component {
 
@@ -45,8 +46,11 @@ class Component {
             ? context.getWidgetConfiguration(this.state.instanceId)
             : undefined;
 
+        this.state.widgetTitle = await TranslationService.translate('Translatable#Overview Tickets');
+
+        this.state.openTicketsTitle = await TranslationService.translate('Translatable#Open Tickets');
         this.openTicketsConfig = new WidgetConfiguration(
-            'contact-open-tickets-group', 'Translatable#Open Tickets', [],
+            'contact-open-tickets-group', this.state.openTicketsTitle, [],
             new TableConfiguration(KIXObjectType.TICKET,
                 null, null,
                 [
@@ -77,8 +81,9 @@ class Component {
             false, true, null, false)
             ;
 
+        this.state.escalatedTicketsTitle = await TranslationService.translate('Translatable#Escalated Tickets');
         this.escalatedTicketsConfig = new WidgetConfiguration(
-            'contact-escalated-tickets-group', 'Translatable#Escalated Tickets', [], new TableConfiguration(
+            'contact-escalated-tickets-group', this.state.escalatedTicketsTitle, [], new TableConfiguration(
                 KIXObjectType.TICKET,
                 null, null,
                 [
@@ -117,8 +122,9 @@ class Component {
             ),
             false, true, null, false);
 
+        this.state.reminderTicketsTitle = await TranslationService.translate('Translatable#Reminder Tickets');
         this.reminderTicketsConfig = new WidgetConfiguration(
-            'contact-reminder-tickets-group', 'Translatable#Reminder Tickets', [],
+            'contact-reminder-tickets-group', this.state.reminderTicketsTitle, [],
             new TableConfiguration(KIXObjectType.TICKET, null, null,
                 [
                     new DefaultColumnConfiguration(
@@ -150,8 +156,9 @@ class Component {
             ),
             false, true, null, false);
 
+        this.state.newTicketsTitle = await TranslationService.translate('Translatable#New Tickets');
         this.newTicketsConfig = new WidgetConfiguration(
-            'contact-new-tickets-group', 'Translatable#New Tickets', [],
+            'contact-new-tickets-group', this.state.newTicketsTitle, [],
             new TableConfiguration(KIXObjectType.TICKET,
                 null, null,
                 [
@@ -181,8 +188,9 @@ class Component {
             ),
             false, true, null, false);
 
+        this.state.pendingTicketsTitle = await TranslationService.translate('Translatable#Pending Tickets');
         this.pendingTicketsConfig = new WidgetConfiguration(
-            'contact-pending-tickets-group', 'Translatable#Pending Tickets', [], new TableConfiguration(
+            'contact-pending-tickets-group', this.state.pendingTicketsTitle, [], new TableConfiguration(
                 KIXObjectType.TICKET,
                 null, null,
                 [
@@ -539,10 +547,7 @@ class Component {
     }
 
     public getTitle(): string {
-        const title = this.state.widgetConfiguration
-            ? this.state.widgetConfiguration.title
-            : '';
-
+        const title = this.state.widgetTitle;
         return `${title} (${this.getTicketCount()})`;
     }
 
@@ -577,51 +582,43 @@ class Component {
 
     public getEscalatedTicketsTitle(): string {
         return this.getTicketTableTitle(
-            this.escalatedTicketsConfig,
             this.state.escalatedTicketsTable ? this.state.escalatedTicketsTable.getRows(true).length : 0,
-            'Escalated Tickets'
+            this.state.escalatedTicketsTitle
         );
     }
 
     public getReminderTicketsTitle(): string {
         return this.getTicketTableTitle(
-            this.reminderTicketsConfig,
             this.state.reminderTicketsTable ? this.state.reminderTicketsTable.getRows(true).length : 0,
-            'Reminder Tickets'
+            this.state.reminderTicketsTitle
         );
     }
 
     public getNewTicketsTitle(): string {
         return this.getTicketTableTitle(
-            this.newTicketsConfig,
             this.state.newTicketsTable ? this.state.newTicketsTable.getRows(true).length : 0,
-            'New Tickets'
+            this.state.newTicketsTitle
         );
     }
 
     public getOpenTicketsTitle(): string {
         return this.getTicketTableTitle(
-            this.openTicketsConfig,
             this.state.openTicketsTable ? this.state.openTicketsTable.getRows(true).length : 0,
-            'Reminder Tickets'
+            this.state.reminderTicketsTitle
         );
     }
 
     public getPendingTicketsTitle(): string {
         return this.getTicketTableTitle(
-            this.pendingTicketsConfig,
             this.state.pendingTicketsTable ? this.state.pendingTicketsTable.getRows(true).length : 0,
-            'Pending Tickets'
+            this.state.pendingTicketsTitle
         );
 
     }
 
     private getTicketTableTitle(
-        config: WidgetConfiguration,
-        count: number = 0,
-        defaultTitle: string = 'Tickets'
+        count: number = 0, title: string = 'Tickets'
     ): string {
-        const title = config ? config.title : defaultTitle;
         return `${title} (${count})`;
     }
 

@@ -73,7 +73,7 @@ export class Extension implements IConfigurationExtension {
             ]);
 
             const form = new Form(
-                formId, 'Translatable#Edit Account', [group], KIXObjectType.MAIL_ACCOUNT, true, FormContext.EDIT
+                formId, 'Translatable#Edit Email Account', [group], KIXObjectType.MAIL_ACCOUNT, true, FormContext.EDIT
             );
             await configurationService.saveModuleConfiguration(form.id, null, form);
         }

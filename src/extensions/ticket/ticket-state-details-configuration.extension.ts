@@ -17,12 +17,12 @@ export class Extension implements IConfigurationExtension {
         );
 
         const ticketStateInfoWidget = new ConfiguredWidget('ticket-state-details-widget', new WidgetConfiguration(
-            'ticket-state-info-widget', 'State Information', ['ticket-admin-state-edit'], null,
+            'ticket-state-info-widget', 'Translatable#State Information', ['ticket-admin-state-edit'], null,
             false, true, null, false
         ));
 
         const textmodulesWidget = new ConfiguredWidget('ticket-state-assigned-textmodules', new WidgetConfiguration(
-            'ticket-state-assigned-textmodules', 'Assign Text Modules',
+            'ticket-state-assigned-textmodules', 'Translatable#Assigned Text Modules',
             ['ticket-admin-state-textmodules-edit'], null, false, true, null, false
         ));
 

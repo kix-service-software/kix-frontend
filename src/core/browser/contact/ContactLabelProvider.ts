@@ -82,7 +82,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 displayValue = 'Translatable#Fax';
                 break;
             case ContactProperty.MOBILE:
-                displayValue = 'Translatable#Cell Phone';
+                displayValue = 'Translatable#Mobile';
                 break;
             case ContactProperty.STREET:
                 displayValue = 'Translatable#Street';

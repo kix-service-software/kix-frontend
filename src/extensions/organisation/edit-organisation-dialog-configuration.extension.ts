@@ -24,7 +24,7 @@ export class Extension implements IConfigurationExtension {
         if (!existingForm || overwrite) {
             const groups: FormGroup[] = [];
 
-            groups.push(new FormGroup('Translatable#Basic Data', [
+            groups.push(new FormGroup('Translatable#Organisation Information', [
                 new FormField(
                     'Translatable#Name', OrganisationProperty.NAME, null, true,
                     'Translatable#Helptext_Organisations_OrganisationCreate_Name'

@@ -16,8 +16,8 @@ export class Extension implements IConfigurationExtension {
         );
 
         const translationInfoLane =
-            new ConfiguredWidget('i18n-translation-information-lane', new WidgetConfiguration(
-                'i18n-translation-info-widget', 'Pattern Information', [], {},
+            new ConfiguredWidget("i18n-translation-information-lane", new WidgetConfiguration(
+                "i18n-translation-info-widget", "Translatable#Pattern Information", [], {},
                 false, true, null, false)
             );
 
@@ -29,8 +29,8 @@ export class Extension implements IConfigurationExtension {
         const translationActions = ['i18n-admin-translation-edit'];
 
         const languagesListWidget =
-            new ConfiguredWidget('20190125104012-languages-list', new WidgetConfiguration(
-                'i18n-translation-language-list-widget', 'Translations', [], null,
+            new ConfiguredWidget("20190125104012-languages-list", new WidgetConfiguration(
+                "i18n-translation-language-list-widget", "Translatable#Translations", [], null,
                 false, true, null, false)
             );
 
