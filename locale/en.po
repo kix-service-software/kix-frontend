@@ -160,6 +160,9 @@ msgstr ""
 msgid "Assigned Roles"
 msgstr ""
 
+msgid "Assigned Text Modules"
+msgstr ""
+
 msgid "Assign Link"
 msgstr ""
 
@@ -167,9 +170,6 @@ msgid "Assign Links"
 msgstr ""
 
 msgid "Assign Team / Queue"
-msgstr ""
-
-msgid "Assign Text Modules"
 msgstr ""
 
 msgid "Assign the roles for the user."
@@ -193,9 +193,6 @@ msgid "attributes to change:"
 msgstr ""
 
 msgid "back to"
-msgstr ""
-
-msgid "Basic Data"
 msgstr ""
 
 msgid "Bcc"
@@ -245,9 +242,6 @@ msgid "Cause"
 msgstr ""
 
 msgid "Cc"
-msgstr ""
-
-msgid "Cell Phone"
 msgstr ""
 
 msgid "Changed at"
@@ -542,9 +536,6 @@ msgstr ""
 msgid "Edit {0}"
 msgstr ""
 
-msgid "Edit Account"
-msgstr "Edit Email Account"
-
 msgid "Edit Address"
 msgstr ""
 
@@ -565,6 +556,11 @@ msgstr ""
 
 msgid "edited"
 msgstr ""
+
+#, fuzzy
+#| msgid "Edit Account"
+msgid "Edit Email Account"
+msgstr "Edit Email Account"
 
 msgid "Edit FAQ Article"
 msgstr ""
@@ -1037,6 +1033,9 @@ msgstr ""
 msgid "Helptext_Organisations_ContactEdit_Mobile"
 msgstr ""
 
+msgid "Helptext_Organisations_ContactEdit_Organisation"
+msgstr ""
+
 msgid "Helptext_Organisations_ContactEdit_Phone"
 msgstr ""
 
@@ -1113,9 +1112,6 @@ msgid "Home"
 msgstr ""
 
 msgid "Host"
-msgstr ""
-
-msgid "Hostname"
 msgstr ""
 
 msgid "How to create a new ticket?"
@@ -1391,6 +1387,9 @@ msgstr ""
 msgid "locked"
 msgstr ""
 
+msgid "Locked Tickets"
+msgstr ""
+
 msgid "Lock State"
 msgstr ""
 
@@ -1445,9 +1444,6 @@ msgstr ""
 msgid "New"
 msgstr ""
 
-msgid "New Account"
-msgstr ""
-
 msgid "New Address"
 msgstr ""
 
@@ -1468,6 +1464,11 @@ msgstr ""
 
 msgid "New Contact"
 msgstr ""
+
+#, fuzzy
+#| msgid "Edit Account"
+msgid "New Email Account"
+msgstr "Edit Email Account"
 
 msgid "New FAQ"
 msgstr ""
@@ -1592,6 +1593,9 @@ msgstr ""
 msgid "Object Id"
 msgstr ""
 
+msgid "Objects"
+msgstr ""
+
 msgid "Observer"
 msgstr ""
 
@@ -1676,6 +1680,9 @@ msgstr ""
 msgid "Pattern"
 msgstr ""
 
+msgid "Pattern Information"
+msgstr ""
+
 msgid "Pending date is not in the future."
 msgstr ""
 
@@ -1756,6 +1763,9 @@ msgid "Priority"
 msgstr ""
 
 msgid "Priority Data"
+msgstr ""
+
+msgid "Priority Information"
 msgstr ""
 
 msgid "Priority successfully created."
@@ -1972,6 +1982,9 @@ msgstr ""
 msgid "Search for tickets with the selected service."
 msgstr ""
 
+msgid "Search Results"
+msgstr ""
+
 msgid "Search Tickets ..."
 msgstr ""
 
@@ -2129,6 +2142,9 @@ msgid "State"
 msgstr ""
 
 msgid "State Data"
+msgstr ""
+
+msgid "State Information"
 msgstr ""
 
 msgid "States"
@@ -2367,6 +2383,9 @@ msgid "Unlock"
 msgstr ""
 
 msgid "unlocked"
+msgstr ""
+
+msgid "Unlocked Tickets"
 msgstr ""
 
 msgid "Unlock Ticket ..."
