@@ -15,7 +15,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
         // explorer
         const searchResultExplorer =
             new ConfiguredWidget("20180625-search-result-explorer", new WidgetConfiguration(
-                "search-result-explorer", "Search Results", [], {},
+                "search-result-explorer", "Translatable#Search Results", [], {},
                 false, false, WidgetSize.BOTH, 'kix-icon-search', false)
             );
 

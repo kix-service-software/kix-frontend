@@ -168,6 +168,11 @@ msgstr "Zugeordnete Queues"
 msgid "Assigned Roles"
 msgstr "Zugeordnete Rollen"
 
+#, fuzzy
+#| msgid "Assign Text Modules"
+msgid "Assigned Text Modules"
+msgstr "Zuordnung zu Textbausteinen"
+
 msgid "Assign Link"
 msgstr "Verknüpfung zuordnen"
 
@@ -176,9 +181,6 @@ msgstr "Verknüpfung zuordnen"
 
 msgid "Assign Team / Queue"
 msgstr "Zuordnung zu Team / Queue"
-
-msgid "Assign Text Modules"
-msgstr "Zuordnung zu Textbausteinen"
 
 msgid "Assign the roles for the user."
 msgstr "Dem Nutzer Rollen zuordnen."
@@ -206,9 +208,6 @@ msgstr "zu ändernde Attribute:"
 
 msgid "back to"
 msgstr "Zurück zu"
-
-msgid "Basic Data"
-msgstr "Stammdaten"
 
 msgid "Bcc"
 msgstr "Bcc"
@@ -263,9 +262,6 @@ msgstr "Ursache"
 
 msgid "Cc"
 msgstr "Cc"
-
-msgid "Cell Phone"
-msgstr "Mobil"
 
 msgid "Changed at"
 msgstr "Geändert am"
@@ -569,9 +565,6 @@ msgstr "Bearbeiten"
 msgid "Edit {0}"
 msgstr "{0} bearbeiten"
 
-msgid "Edit Account"
-msgstr "Konto bearbeiten"
-
 msgid "Edit Address"
 msgstr "Adresse bearbeiten"
 
@@ -592,6 +585,11 @@ msgstr "Stammdaten bearbeiten"
 
 msgid "edited"
 msgstr "bearbeitet"
+
+#, fuzzy
+#| msgid "Email Account"
+msgid "Edit Email Account"
+msgstr "E-Mail Konto"
 
 msgid "Edit FAQ Article"
 msgstr "FAQ Artikel bearbeiten"
@@ -1100,6 +1098,11 @@ msgstr "Hilfetext_Organisations_ContactEdit_Lastname"
 msgid "Helptext_Organisations_ContactEdit_Mobile"
 msgstr "Hilfetext_Organisations_ContactEdit_Mobile"
 
+#, fuzzy
+#| msgid "Helptext_Organisations_ContactCreate_Organisation"
+msgid "Helptext_Organisations_ContactEdit_Organisation"
+msgstr "Hilfetext_Organisations_ContactCreate_Organisation"
+
 msgid "Helptext_Organisations_ContactEdit_Phone"
 msgstr "Hilfetext_Organisations_ContactEdit_Phone"
 
@@ -1177,9 +1180,6 @@ msgstr "Home"
 
 msgid "Host"
 msgstr "Host"
-
-msgid "Hostname"
-msgstr "Hostname"
 
 msgid "How to create a new ticket?"
 msgstr "Wie lege ich ein neues Ticket an?"
@@ -1466,6 +1466,11 @@ msgstr "Gesperrt"
 msgid "locked"
 msgstr "Gesperrt"
 
+#, fuzzy
+#| msgid "My locked tickets"
+msgid "Locked Tickets"
+msgstr "Meine gesperrten Tickets"
+
 msgid "Lock State"
 msgstr "Sperrstatus"
 
@@ -1520,9 +1525,6 @@ msgstr "Name"
 msgid "New"
 msgstr "Neu"
 
-msgid "New Account"
-msgstr "Neues Konto"
-
 msgid "New Address"
 msgstr "Neue Adresse"
 
@@ -1543,6 +1545,9 @@ msgstr "Neues Config Item"
 
 msgid "New Contact"
 msgstr "Neuer Kontakt"
+
+msgid "New Email Account"
+msgstr "Neues E-Mail Konto"
 
 msgid "New FAQ"
 msgstr "Neue FAQ"
@@ -1667,6 +1672,11 @@ msgstr "Objekt"
 msgid "Object Id"
 msgstr "Objekt ID"
 
+#, fuzzy
+#| msgid "Object"
+msgid "Objects"
+msgstr "Objekt"
+
 msgid "Observer"
 msgstr "Beobachter"
 
@@ -1752,6 +1762,9 @@ msgstr "Passwort"
 
 msgid "Pattern"
 msgstr "Pattern"
+
+msgid "Pattern Information"
+msgstr "Pattern Informationen"
 
 msgid "Pending date is not in the future."
 msgstr "\"Warten bis\"-Datum liegt nicht in der Zukunft."
@@ -1841,6 +1854,9 @@ msgstr "Priorität"
 #, fuzzy
 msgid "Priority Data"
 msgstr "Stammdaten"
+
+msgid "Priority Information"
+msgstr "Prioritäten Informationen"
 
 msgid "Priority successfully created."
 msgstr "Priorität wurde erfolgreich angelegt."
@@ -2069,6 +2085,9 @@ msgstr "Suche nach Tickets mit dem gewählten Typ."
 msgid "Search for tickets with the selected service."
 msgstr "Suche nach Tickets mit dem gewählten Status."
 
+msgid "Search Results"
+msgstr "Suchergebnisse"
+
 msgid "Search Tickets ..."
 msgstr "Suche Tickets..."
 
@@ -2246,6 +2265,9 @@ msgstr "Status"
 
 msgid "State Data"
 msgstr "Stammdaten"
+
+msgid "State Information"
+msgstr "Status Informationen"
 
 msgid "States"
 msgstr "Status"
@@ -2496,6 +2518,11 @@ msgstr "Freigeben"
 msgid "unlocked"
 msgstr "Freigeben"
 
+#, fuzzy
+#| msgid "My locked tickets"
+msgid "Unlocked Tickets"
+msgstr "Meine gesperrten Tickets"
+
 msgid "Unlock Ticket ..."
 msgstr "Tickets entsperren..."
 
@@ -2649,8 +2676,20 @@ msgstr "PLZ"
 msgid "ZIP"
 msgstr "PLZ"
 
-#~ msgid "New Email Account"
-#~ msgstr "Neues E-Mail Konto"
+#~ msgid "Basic Data"
+#~ msgstr "Stammdaten"
+
+#~ msgid "Cell Phone"
+#~ msgstr "Mobil"
+
+#~ msgid "Edit Account"
+#~ msgstr "Konto bearbeiten"
+
+#~ msgid "Hostname"
+#~ msgstr "Hostname"
+
+#~ msgid "New Account"
+#~ msgstr "Neues Konto"
 
 #~ msgid "No contact available"
 #~ msgstr "Kein Kontakt verfügbar"
@@ -2815,15 +2854,6 @@ msgstr "PLZ"
 #~ msgid "No role with ID {0} available."
 #~ msgstr "Keine Rolle mit der ID {0} verfügbar."
 
-#~ msgid "Pattern Information"
-#~ msgstr "Pattern Informationen"
-
-#~ msgid "Priority Information"
-#~ msgstr "Prioritäten Informationen"
-
-#~ msgid "State Information"
-#~ msgstr "Status Informationen"
-
 #~ msgid "Archivierte Tickets"
 #~ msgstr "Archivierte Tickets"
 
@@ -2899,9 +2929,6 @@ msgstr "PLZ"
 
 #~ msgid "Release Informationen"
 #~ msgstr "Release Informationen"
-
-#~ msgid "Search Results"
-#~ msgstr "Suchergebnisse"
 
 #~ msgid "unread"
 #~ msgstr "ungelesen"

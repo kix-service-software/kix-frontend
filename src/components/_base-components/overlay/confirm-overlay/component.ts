@@ -15,7 +15,7 @@ class OverlayComponent extends AbstractMarkoComponent<ComponentState> {
     public onInput(input: ConfirmOverlayContent): void {
         this.confirmCallback = input.confirmCallback;
         this.cancelCallback = input.cancelCallback;
-        this.buttonLabels = input.buttonLabels ? input.buttonLabels : ['Ja', 'Nein'];
+        this.buttonLabels = input.buttonLabels ? input.buttonLabels : ['Yes', 'No'];
         this.state.text = input.text;
     }
 
@@ -34,9 +34,9 @@ class OverlayComponent extends AbstractMarkoComponent<ComponentState> {
 
     public getButtonLabel(confirm: boolean = false): string {
         if (confirm) {
-            return this.buttonLabels[0] || 'Ja';
+            return this.buttonLabels[0] || 'Yes';
         } else {
-            return this.buttonLabels[1] || 'Nein';
+            return this.buttonLabels[1] || 'No';
         }
     }
 }

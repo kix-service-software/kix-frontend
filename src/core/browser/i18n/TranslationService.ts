@@ -33,7 +33,7 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
         );
 
         if (languagesConfig && languagesConfig.length && languagesConfig[0].Data[lang]) {
-            return languagesConfig[0].Data[lang];
+            return await TranslationService.translate(languagesConfig[0].Data[lang]);
         }
 
         return lang;

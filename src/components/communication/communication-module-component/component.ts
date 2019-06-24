@@ -133,7 +133,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'new-mail-account-dialog',
             new WidgetConfiguration(
-                'new-mail-account-dialog', 'Translatable#New Account',
+                'new-mail-account-dialog', 'Translatable#New Email Account',
                 [], {}, false, false, null, 'kix-icon-new-gear'
             ),
             KIXObjectType.MAIL_ACCOUNT,
@@ -142,7 +142,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'edit-mail-account-dialog',
             new WidgetConfiguration(
-                'edit-mail-account-dialog', 'Translatable#Edit Account',
+                'edit-mail-account-dialog', 'Translatable#Edit Email Account',
                 [], {}, false, false, null, 'kix-icon-edit'
             ),
             KIXObjectType.MAIL_ACCOUNT,

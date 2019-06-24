@@ -317,7 +317,7 @@ class Component {
     }
 
     private async prepareTitle(): Promise<void> {
-        const objectName = await LabelService.getInstance().getObjectName(this.objectType, true, false);
+        const objectName = await LabelService.getInstance().getObjectName(this.objectType, true);
         const objectCount = this.state.importManager.objects.length;
         const tableTitle = await TranslationService.translate(
             'Translatable#Overview of {0} to import ({1})', [objectName, objectCount]

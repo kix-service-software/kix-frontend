@@ -25,7 +25,13 @@ export class ComponentState extends WidgetComponentState<any> {
         public reminderTicketsFilterCount: number = null,
         public newTicketsFilterCount: number = null,
         public openTicketsFilterCount: number = null,
-        public pendingTicketsFilterCount: number = null
+        public pendingTicketsFilterCount: number = null,
+        public escalatedTicketsTitle: string = '',
+        public reminderTicketsTitle: string = '',
+        public newTicketsTitle: string = '',
+        public openTicketsTitle: string = '',
+        public pendingTicketsTitle: string = '',
+        public widgetTitle: string = ''
     ) {
         super();
     }

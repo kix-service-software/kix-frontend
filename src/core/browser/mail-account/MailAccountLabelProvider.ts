@@ -23,7 +23,7 @@ export class MailAccountLabelProvider extends LabelProvider<MailAccount> {
         let displayValue = property;
         switch (property) {
             case MailAccountProperty.HOST:
-                displayValue = 'Translatable#Hostname';
+                displayValue = 'Translatable#Host';
                 break;
             case MailAccountProperty.LOGIN:
                 displayValue = 'Translatable#User Name';
