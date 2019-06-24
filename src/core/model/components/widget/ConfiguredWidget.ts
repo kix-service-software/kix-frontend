@@ -7,6 +7,6 @@ export class ConfiguredWidget<T = any> {
         public instanceId: string,
         public configuration: WidgetConfiguration<T>,
         public permissions: UIComponentPermission[] = [],
-        public size: WidgetSize = WidgetSize.BOTH,
+        public size: WidgetSize = WidgetSize.LARGE,
     ) { }
 }
