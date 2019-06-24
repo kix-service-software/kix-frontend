@@ -74,7 +74,7 @@ export class Extension implements IConfigurationExtension {
         return new ContextConfiguration(
             TicketTypeDetailsContext.CONTEXT_ID, [], [], [], [],
             [
-                'config-item-class-details-widget',
+                'config-item-class-details-tab-widget',
                 'ci-class-permissions-widget',
                 'ci-class-permissions-dependent-objects-widget'
             ],

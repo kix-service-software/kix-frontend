@@ -34,7 +34,8 @@ export class Extension implements IConfigurationExtension {
             SystemAddressDetailsContext.CONTEXT_ID,
             [], [],
             [], [],
-            ['system-address-info-widget'], [tabLane, systemAddressAssignedQueuesWidget, systemAddressInfoWidget],
+            ['system-address-details-tab-widget'],
+            [tabLane, systemAddressAssignedQueuesWidget, systemAddressInfoWidget],
             [], [],
             ['system-address-create'],
             ['system-address-edit']

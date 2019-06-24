@@ -29,7 +29,7 @@ export class Extension implements IConfigurationExtension {
             QueueDetailsContext.CONTEXT_ID,
             [], [],
             [], [],
-            ['ticket-queue-details-widget', 'ticket-queue-signature'],
+            ['ticket-queue-details-tab-widget', 'ticket-queue-signature'],
             [tabLane, signatureWidget, ticketQueueInfoWidget],
             [], [],
             ['ticket-admin-queue-create'],

@@ -29,7 +29,7 @@ export class Extension implements IConfigurationExtension {
             this.getModuleId(),
             [], [],
             [], [],
-            ['faq-category-info-widget'], [tabLane, faqInfoLaneTab],
+            ['faq-category-details-tab-widget'], [tabLane, faqInfoLaneTab],
             [], [],
             actions, faqActions
         );

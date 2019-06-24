@@ -42,7 +42,10 @@ export class Extension implements IConfigurationExtension {
             TicketPriorityDetailsContext.CONTEXT_ID,
             [], [],
             [], [],
-            ['user-role-info-widget', 'user-role-assigned-permissions-widget', 'user-role-assigned-users-widget'],
+            [
+                'user-role-details-tab-widget', 'user-role-assigned-permissions-widget',
+                'user-role-assigned-users-widget'
+            ],
             [tabLane, assignedPermissionsWidget, assignedUsersWidget, userRoleInfoWidget],
             [], [],
             ['user-admin-role-create-action'],
