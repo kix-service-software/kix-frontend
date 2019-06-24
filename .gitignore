@@ -1,5 +1,6 @@
 config/components/*.json
 .cache
+package-lock.json
 gulp-*
 dist
 node_modules

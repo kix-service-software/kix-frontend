@@ -1,10 +1,7 @@
+import { OverlayService, FormService, ServiceRegistry, BrowserUtil } from '../../../../core/browser';
 import {
-    OverlayService, FormService, ServiceRegistry, SearchOperator, KIXObjectService, BrowserUtil
-} from '../../../../core/browser';
-import {
-    ComponentContent, OverlayType, StringContent, TreeNode, ValidationResult,
-    ValidationSeverity, ConfigItemClass, KIXObjectType, ContextMode, ToastContent, KIXObjectLoadingOptions,
-    FilterCriteria, ConfigItemClassProperty, FilterDataType, FilterType, ConfigItemProperty, Error
+    ComponentContent, OverlayType, TreeNode, ValidationResult,
+    ValidationSeverity, ConfigItemClass, KIXObjectType, ContextMode, ConfigItemProperty, Error
 } from '../../../../core/model';
 import { ComponentState } from './ComponentState';
 import { CMDBService, ConfigItemDetailsContext, ConfigItemFormFactory } from '../../../../core/browser/cmdb';
@@ -27,21 +24,7 @@ class Component {
         ]);
 
         this.state.placeholder = await TranslationService.translate("Translatable#Select Config Item Class");
-
-        const configItemClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
-            KIXObjectType.CONFIG_ITEM_CLASS, null,
-            new KIXObjectLoadingOptions(null, [
-                new FilterCriteria(
-                    ConfigItemClassProperty.CURRENT_DEFINITION, SearchOperator.NOT_EQUALS,
-                    FilterDataType.STRING, FilterType.AND, null
-                )], null, null, null,
-                ['CurrentDefinition,Definitions']),
-            null, false
-        );
-
-        this.state.classNodes = configItemClasses.map(
-            (ci) => new TreeNode(ci, ci.Name)
-        );
+        this.state.classNodes = await CMDBService.getInstance().getTreeNodes(ConfigItemProperty.CLASS_ID);
     }
 
     public async onDestroy(): Promise<void> {
@@ -93,7 +76,7 @@ class Component {
                         BrowserUtil.openSuccessOverlay('Translatable#Config Item successfully created.');
                         DialogService.getInstance().submitMainDialog();
                         const routingConfiguration = new RoutingConfiguration(
-                             ConfigItemDetailsContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM,
+                            ConfigItemDetailsContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM,
                             ContextMode.DETAILS, ConfigItemProperty.CONFIG_ITEM_ID, true
                         );
                         RoutingService.getInstance().routeToContext(routingConfiguration, configItemId);
