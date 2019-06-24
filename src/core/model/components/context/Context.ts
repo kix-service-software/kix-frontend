@@ -61,6 +61,7 @@ export abstract class Context {
 
     public setConfiguration(configuration: ContextConfiguration): void {
         this.configuration = configuration;
+        this.shownSidebars = [...this.configuration.sidebars];
     }
 
     public setAdditionalInformation(key: string, value: any): void {
@@ -147,7 +148,7 @@ export abstract class Context {
 
         if (show && explorer) {
             explorer = explorer.filter(
-                (ex) => this.configuration.explorer.findIndex((e) => ex.instanceId === e) !== -1
+                (ex) => this.configuration.explorer.some((e) => ex.instanceId === e)
             );
         }
 
@@ -158,9 +159,9 @@ export abstract class Context {
         let sidebars = this.configuration.sidebarWidgets;
 
         if (show && sidebars) {
-            sidebars = sidebars.filter(
-                (sb) => this.shownSidebars.some((s) => sb.instanceId === s)
-            );
+            sidebars = sidebars
+                .filter((sb) => this.configuration.sidebars.some((s) => sb.instanceId === s))
+                .filter((sb) => this.shownSidebars.some((s) => sb.instanceId === s));
         }
 
         return sidebars;
