@@ -4,6 +4,8 @@ import { ActionFactory } from '../../../../core/browser';
 import { ShowUserTicketsAction } from '../../../../core/browser/ticket';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 import { AgentService } from '../../../../core/browser/application/AgentService';
+import { EventService } from '../../../../core/browser/event';
+import { ApplicationEvent } from '../../../../core/browser/application';
 
 class Component {
 
@@ -14,7 +16,18 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const user = await AgentService.getInstance().getCurrentUser();
+        this.initActions();
+
+        EventService.getInstance().subscribe(ApplicationEvent.REFRESH_TOOLBAR, {
+            eventSubscriberId: 'app-toolbar-subscriber',
+            eventPublished: () => {
+                this.initActions();
+            }
+        });
+    }
+
+    private async initActions(): Promise<void> {
+        const user = await AgentService.getInstance().getCurrentUser(false);
 
         const myTicketsNewArticles = await TranslationService.translate('Translatable#My tickets with new articles');
         const myTickets = await TranslationService.translate('Translatable#My Tickets');
@@ -28,6 +41,8 @@ class Component {
         const myLockedTickets = await TranslationService.translate('Translatable#My locked tickets');
 
         const actionId = 'show-user-tickets';
+
+        this.state.toolbarGroups = [];
 
         if (ActionFactory.getInstance().hasAction(actionId)) {
             const group1 = [];
@@ -60,7 +75,8 @@ class Component {
                 'kix-icon-lock-close', myLockedTickets, false, user.Tickets.OwnedAndLocked.length, actionId,
                 user.Tickets.OwnedAndLocked.map((id) => Number(id))
             ));
-            this.state.toolbarGroups = [group1, group2, group3];
+
+            setTimeout(() => this.state.toolbarGroups = [group1, group2, group3], 50);
         }
     }
 

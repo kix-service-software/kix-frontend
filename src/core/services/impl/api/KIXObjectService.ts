@@ -39,7 +39,7 @@ export abstract class KIXObjectService implements IKIXObjectService {
 
     protected async load<O extends KIXObject | string = any>(
         token: string, objectType: KIXObjectType, baseUri: string, loadingOptions: KIXObjectLoadingOptions,
-        objectIds: Array<number | string>, responseProperty: string
+        objectIds: Array<number | string>, responseProperty: string, useCache?: boolean
     ): Promise<O[]> {
         const query = this.prepareQuery(loadingOptions);
         if (loadingOptions && loadingOptions.filter && loadingOptions.filter.length) {
@@ -61,7 +61,7 @@ export abstract class KIXObjectService implements IKIXObjectService {
             ? this.buildUri(baseUri, objectIds.join(','))
             : baseUri;
 
-        const response = await this.getObjectByUri(token, uri, query, objectType);
+        const response = await this.getObjectByUri(token, uri, query, objectType, useCache);
 
         const responseObject = response[responseProperty];
 
@@ -182,13 +182,13 @@ export abstract class KIXObjectService implements IKIXObjectService {
     }
 
     protected async getObjectByUri<R>(
-        token: string, uri: string, query?: any, cacheKeyPrefix: string = this.objectType
+        token: string, uri: string, query?: any, cacheKeyPrefix: string = this.objectType, useCache?: boolean
     ): Promise<R> {
         if (!query) {
             query = {};
         }
 
-        return await this.httpService.get<R>(uri, query, token, null, cacheKeyPrefix);
+        return await this.httpService.get<R>(uri, query, token, null, cacheKeyPrefix, useCache);
     }
 
     protected async sendRequest(

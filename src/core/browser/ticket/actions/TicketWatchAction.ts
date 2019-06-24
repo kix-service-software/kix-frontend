@@ -8,6 +8,7 @@ import { BrowserUtil } from '../../BrowserUtil';
 import { ApplicationEvent } from '../../application';
 import { AgentService } from '../../application/AgentService';
 import { UIComponentPermission } from '../../../model/UIComponentPermission';
+import { CacheService } from '../../cache';
 
 export class TicketWatchAction extends AbstractAction<Ticket> {
 
@@ -77,6 +78,9 @@ export class TicketWatchAction extends AbstractAction<Ticket> {
             }
 
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
+
+            await CacheService.getInstance().deleteKeys(KIXObjectType.CURRENT_USER);
+            EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
 
         }, 1000);
     }
