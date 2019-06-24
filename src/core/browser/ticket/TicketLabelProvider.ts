@@ -276,7 +276,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                     }
                     displayValue = organisations && organisations.length
                         ? organisations[0].Name
-                        : '';
+                        : ticket.OrganisationID;
                 }
                 break;
             case TicketProperty.CONTACT_ID:
@@ -288,7 +288,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 }
                 displayValue = contacts && contacts.length
                     ? contacts[0].Firstname + ' ' + contacts[0].Lastname
-                    : '';
+                    : ticket.ContactID;
                 break;
             case TicketProperty.AGE:
                 displayValue = DateTimeUtil.calculateAge(displayValue);

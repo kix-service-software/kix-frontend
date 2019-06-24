@@ -34,17 +34,19 @@ class FieldContainerComponent {
     private async initFields(fields: FormField[]): Promise<void> {
         if (this.formId) {
             const formInstance = await FormService.getInstance().getFormInstance(this.formId);
-            const availableFields: FormField[] = [];
+            let availableFields: FormField[] = fields;
 
             const formService = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
                 formInstance.getObjectType(), ServiceType.FORM
             );
             if (formService) {
+                const fieldsWithPermission = [];
                 for (const field of fields) {
                     if (await formService.hasPermissions(field)) {
-                        availableFields.push(field);
+                        fieldsWithPermission.push(field);
                     }
                 }
+                availableFields = fieldsWithPermission;
             }
             this.state.fields = availableFields;
         }
