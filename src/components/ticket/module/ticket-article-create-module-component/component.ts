@@ -3,7 +3,7 @@ import {
     AbstractMarkoComponent, ServiceRegistry, ContextService, ActionFactory, DialogService
 } from '../../../../core/browser';
 import {
-    TicketFormService, EmailRecipientValidator, NewTicketArticleContext
+    TicketFormService, EmailRecipientValidator, NewTicketArticleContext, ArticleReplyAction, ArticleForwardAction
 } from '../../../../core/browser/ticket';
 import {
     ContextDescriptor, KIXObjectType, ContextType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration, WidgetSize
@@ -37,6 +37,8 @@ class Component extends AbstractMarkoComponent {
 
     private registerTicketActions(): void {
         ActionFactory.getInstance().registerAction('article-new-action', ArticleNewAction);
+        ActionFactory.getInstance().registerAction('article-reply-action', ArticleReplyAction);
+        ActionFactory.getInstance().registerAction('article-forward-action', ArticleForwardAction);
     }
 
     private registerTicketDialogs(): void {

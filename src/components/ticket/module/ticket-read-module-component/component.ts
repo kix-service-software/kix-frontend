@@ -12,7 +12,7 @@ import {
     ArticleBrowserFactory, TicketTypeBrowserFactory, TicketPriorityBrowserFactory, TicketStateBrowserFactory,
     TicketStateTypeBrowserFactory, QueueBrowserFactory, FollowUpTypeBrowserFactory, TicketTemplateBrowserFactory,
     TicketContext, TicketDetailsContext, TicketSearchContext, TicketListContext, ArticleZipAttachmentDownloadAction,
-    ArticlePrintAction, TicketPrintAction, TicketSearchAction, ShowUserTicketsAction, TicketPriorityTableFactory,
+    TicketPrintAction, TicketSearchAction, ShowUserTicketsAction, TicketPriorityTableFactory,
     TicketQueueTableFactory, TicketTypeTableFactory, TicketStateTableFactory, TicketFormService,
     EmailRecipientValidator, PendingTimeValidator, ArticleFormService, TicketHistoryBrowserFactory,
     TicketWatchAction, TicketLockAction
@@ -105,7 +105,6 @@ class Component extends AbstractMarkoComponent {
     private registerTicketActions(): void {
         ActionFactory.getInstance()
             .registerAction('article-attachment-zip-download', ArticleZipAttachmentDownloadAction);
-        ActionFactory.getInstance().registerAction('article-print-action', ArticlePrintAction);
         ActionFactory.getInstance().registerAction('ticket-print-action', TicketPrintAction);
         ActionFactory.getInstance().registerAction('ticket-search-action', TicketSearchAction);
         ActionFactory.getInstance().registerAction('show-user-tickets', ShowUserTicketsAction);
