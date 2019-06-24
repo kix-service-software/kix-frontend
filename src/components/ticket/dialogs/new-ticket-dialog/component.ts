@@ -22,9 +22,6 @@ class Component extends AbstractNewDialog {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-
-        const context = await ContextService.getInstance().getContext(NewTicketDialogContext.CONTEXT_ID);
-        context.initContext();
         this.state.loading = false;
     }
 
