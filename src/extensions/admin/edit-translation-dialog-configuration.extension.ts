@@ -1,8 +1,8 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import { EditTranslationDialogContext } from '../../core/browser/i18n/admin/context';
 import {
-    ContextConfiguration, ConfiguredWidget, FormField, TranslationPatternProperty,
-    SortUtil, Form, KIXObjectType, FormContext, SysConfigKey, SysConfigItem
+    ContextConfiguration, ConfiguredWidget, FormField, TranslationProperty,
+    SortUtil, Form, KIXObjectType, FormContext, SysConfigKey, SysConfigOption
 } from '../../core/model';
 import { ConfigurationService, KIXObjectServiceRegistry } from '../../core/services';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
@@ -59,16 +59,16 @@ export class Extension implements IConfigurationExtension {
         const configurationService = ConfigurationService.getInstance();
         const token = configurationService.getServerConfiguration().BACKEND_API_TOKEN;
 
-        const service = KIXObjectServiceRegistry.getServiceInstance(KIXObjectType.SYS_CONFIG_ITEM);
-        const languagesConfig = await service.loadObjects<SysConfigItem>(
-            token, null, KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.DEFAULT_USED_LANGUAGES], null, null
+        const service = KIXObjectServiceRegistry.getServiceInstance(KIXObjectType.SYS_CONFIG_OPTION);
+        const languagesConfig = await service.loadObjects<SysConfigOption>(
+            token, null, KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.DEFAULT_USED_LANGUAGES], null, null
         );
 
         const languages: Array<[string, string]> = [];
         if (languagesConfig && languagesConfig.length) {
-            for (const lang in languagesConfig[0].Data) {
-                if (languagesConfig[0].Data[lang]) {
-                    languages.push([lang, languagesConfig[0].Data[lang]]);
+            for (const lang in languagesConfig[0].Value) {
+                if (languagesConfig[0].Value[lang]) {
+                    languages.push([lang, languagesConfig[0].Value[lang]]);
                 }
             }
         }

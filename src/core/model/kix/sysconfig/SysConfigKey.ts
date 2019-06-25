@@ -22,6 +22,8 @@ export enum SysConfigKey {
 
     MAX_ALLOWED_SIZE = 'FileUpload::MaxAllowedSize',
 
-    IMPRINT_LINK = 'ImprintLink'
+    IMPRINT_LINK = 'ImprintLink',
+
+    CONFIG_LEVEL = 'ConfigLevel'
 
 }

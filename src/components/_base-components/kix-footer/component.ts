@@ -1,5 +1,5 @@
 import { ComponentState } from './ComponentState';
-import { ReleaseInfo, SysConfigItem, KIXObjectType, SysConfigKey } from '../../../core/model';
+import { ReleaseInfo, SysConfigOption, KIXObjectType, SysConfigKey } from '../../../core/model';
 import { ObjectDataService } from '../../../core/browser/ObjectDataService';
 import { KIXObjectService } from '../../../core/browser';
 import { TranslationService } from '../../../core/browser/i18n/TranslationService';
@@ -38,13 +38,13 @@ class Component {
         }
 
         if (!this.state.imprintLink) {
-            const imprintConfig = await KIXObjectService.loadObjects<SysConfigItem>(
-                KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.IMPRINT_LINK]
+            const imprintConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+                KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.IMPRINT_LINK]
             );
 
             if (imprintConfig && imprintConfig.length) {
                 const userLanguage = await TranslationService.getUserLanguage();
-                const data = imprintConfig[0].Data;
+                const data = imprintConfig[0].Value;
                 if (data[userLanguage]) {
                     this.state.imprintLink = data[userLanguage];
                 } else {

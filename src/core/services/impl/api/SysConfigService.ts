@@ -1,9 +1,11 @@
 import { KIXObjectService } from './KIXObjectService';
 import {
-    KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, SysConfigItem
+    KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, SysConfigOption
 } from '../../../model';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
-import { SysConfigItemFactory } from '../../object-factories/SysConfigItemFactory';
+import { SysConfigOptionFactory } from '../../object-factories/SysConfigItemFactory';
+import { SysConfigOptionDefinitionFactory } from '../../../model/kix/sysconfig/SysConfigOptionDefinitionFactory';
+import { SysConfigOptionDefinition } from '../../../model/kix/sysconfig/SysConfigOptionDefinition';
 
 export class SysConfigService extends KIXObjectService {
 
@@ -18,15 +20,16 @@ export class SysConfigService extends KIXObjectService {
 
     protected RESOURCE_URI: string = this.buildUri('system', 'config');
 
-    public objectType: KIXObjectType = KIXObjectType.SYS_CONFIG_ITEM;
+    public objectType: KIXObjectType = KIXObjectType.SYS_CONFIG_OPTION;
 
     private constructor() {
-        super([new SysConfigItemFactory()]);
+        super([new SysConfigOptionFactory(), new SysConfigOptionDefinitionFactory()]);
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType): boolean {
-        return kixObjectType === KIXObjectType.SYS_CONFIG_ITEM;
+        return kixObjectType === KIXObjectType.SYS_CONFIG_OPTION
+            || kixObjectType === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION;
     }
 
     public async loadObjects<O>(
@@ -35,9 +38,15 @@ export class SysConfigService extends KIXObjectService {
     ): Promise<O[]> {
         let objects = [];
 
-        if (objectType === KIXObjectType.SYS_CONFIG_ITEM) {
-            objects = await super.load<SysConfigItem>(
-                token, KIXObjectType.SYS_CONFIG_ITEM, this.RESOURCE_URI, loadingOptions, objectIds, 'SysConfigItem'
+        if (objectType === KIXObjectType.SYS_CONFIG_OPTION) {
+            objects = await super.load<SysConfigOption>(
+                token, KIXObjectType.SYS_CONFIG_OPTION, this.RESOURCE_URI, loadingOptions, objectIds, 'SysConfigOption'
+            );
+        } else if (objectType === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION) {
+            const uri = this.buildUri(this.RESOURCE_URI, 'definitions');
+            objects = await super.load<SysConfigOptionDefinition>(
+                token, KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, uri,
+                loadingOptions, objectIds, 'SysConfigOptionDefinition'
             );
         }
 

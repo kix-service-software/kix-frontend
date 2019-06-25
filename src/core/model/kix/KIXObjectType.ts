@@ -68,7 +68,9 @@ export enum KIXObjectType {
 
     SLA = 'SLA',
 
-    SYS_CONFIG_ITEM = 'SysConfigItem',
+    SYS_CONFIG_OPTION = 'SysConfigOption',
+
+    SYS_CONFIG_OPTION_DEFINITION = 'SysConfigOptionDefinition',
 
     SYSTEM_ADDRESS = 'SystemAddress',
 

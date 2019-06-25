@@ -2,7 +2,7 @@ import { ILabelProvider } from "..";
 import {
     Ticket, TicketProperty, DateTimeUtil, ObjectIcon,
     Organisation, KIXObjectType, Contact, TicketPriority, TicketType,
-    TicketState, Queue, SysConfigItem, SysConfigKey, Sla, User, Service
+    TicketState, Queue, SysConfigOption, SysConfigKey, Sla, User, Service
 } from "../../model";
 import { KIXObjectService } from "../kix";
 import { SearchProperty } from "../SearchProperty";
@@ -145,8 +145,8 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 displayValue = 'Translatable#pending until';
                 break;
             case TicketProperty.TICKET_NUMBER:
-                const hookConfig = await KIXObjectService.loadObjects<SysConfigItem>(
-                    KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.TICKET_HOOK], null, null, true
+                const hookConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+                    KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_HOOK], null, null, true
                 ).catch((error) => []);
                 if (hookConfig && hookConfig.length) {
                     displayValue = hookConfig[0].Data;
@@ -366,11 +366,11 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 let ticketHook: string = '';
                 let ticketHookDivider: string = '';
 
-                const hookConfig = await KIXObjectService.loadObjects<SysConfigItem>(
-                    KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.TICKET_HOOK]
+                const hookConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+                    KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_HOOK]
                 ).catch((error) => []);
-                const dividerConfig = await KIXObjectService.loadObjects<SysConfigItem>(
-                    KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.TICKET_HOOK_DIVIDER]
+                const dividerConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+                    KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_HOOK_DIVIDER]
                 ).catch((error) => []);
 
                 if (hookConfig && hookConfig.length) {
