@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import { KIXObjectType, SysConfigKey, SysConfigOption } from '../core/model';
+import { KIXObjectType, SysConfigKey, SysConfigOption, ReleaseInfo } from '../core/model';
 import { ConfigurationService, SysConfigService } from '../core/services';
 import { KIXRouter } from './KIXRouter';
 import * as Bowser from "bowser";
@@ -41,9 +41,10 @@ export class AuthenticationRouter extends KIXRouter {
 
             const logout = req.query.logout !== undefined;
 
-            const releaseInfo = await ConfigurationService.getInstance().getModuleConfiguration('release-info', null);
+            const releaseInfo = ConfigurationService.getInstance().getModuleConfiguration('release-info', null);
 
-            const imprintLink = await this.getImprintLink();
+            const imprintLink = await this.getImprintLink()
+                .catch((e) => '');
 
             res.marko(template, {
                 login: true,
