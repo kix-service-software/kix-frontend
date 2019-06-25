@@ -1,13 +1,13 @@
 import {
     ObjectIcon, KIXObjectType, User, DateTimeUtil, KIXObjectProperty, SysConfigOptionDefinitionProperty
 } from '../../model';
-import { ILabelProvider } from '..';
 import { TranslationService } from '../i18n/TranslationService';
 import { ObjectDataService } from '../ObjectDataService';
 import { KIXObjectService } from "../kix";
 import { SysConfigOptionDefinition } from '../../model/kix/sysconfig/SysConfigOptionDefinition';
+import { LabelProvider } from '../LabelProvider';
 
-export class SysConfigLabelProvider implements ILabelProvider<SysConfigOptionDefinition> {
+export class SysConfigLabelProvider extends LabelProvider<SysConfigOptionDefinition> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.SYS_CONFIG_OPTION_DEFINITION;
 

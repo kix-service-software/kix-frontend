@@ -1,8 +1,8 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import { EditTranslationDialogContext } from '../../core/browser/i18n/admin/context';
 import {
-    ContextConfiguration, ConfiguredWidget, FormField, TranslationProperty,
-    SortUtil, Form, KIXObjectType, FormContext, SysConfigKey, SysConfigOption
+    ContextConfiguration, ConfiguredWidget, FormField,
+    SortUtil, Form, KIXObjectType, FormContext, SysConfigKey, SysConfigOption, TranslationPatternProperty
 } from '../../core/model';
 import { ConfigurationService, KIXObjectServiceRegistry } from '../../core/services';
 import { FormGroup } from '../../core/model/components/form/FormGroup';

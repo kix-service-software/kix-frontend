@@ -1,8 +1,8 @@
-import { IObjectFactory } from "../IObjectFactory";
 import { SysConfigOption } from "./SysConfigOption";
+import { ObjectFactory } from "../../../services/object-factories/ObjectFactory";
 import { KIXObjectType } from "../KIXObjectType";
 
-export class SysConfigOptionFactory implements IObjectFactory<SysConfigOption> {
+export class SysConfigOptionFactory extends ObjectFactory<SysConfigOption> {
 
     public isFactoryFor(objectType: KIXObjectType): boolean {
         return objectType === KIXObjectType.SYS_CONFIG_OPTION;

@@ -11,7 +11,7 @@ export class ComponentState {
             [
             ],
             new TableWidgetSettings(KIXObjectType.SYS_CONFIG_OPTION_DEFINITION,
-                [SysConfigOptionDefinitionProperty.NAME, SortOrder.UP]), false, false, null, 'kix-icon-gears')
+                [SysConfigOptionDefinitionProperty.NAME, SortOrder.UP]), false, false, 'kix-icon-gears')
     ) { }
 
 }
