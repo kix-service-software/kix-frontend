@@ -1,8 +1,8 @@
-import { ILabelProvider } from '../ILabelProvider';
 import { Channel, KIXObjectType, ObjectIcon, ChannelProperty } from '../../model';
 import { TranslationService } from '../i18n/TranslationService';
+import { LabelProvider } from '../LabelProvider';
 
-export class ChannelLabelProvider implements ILabelProvider<Channel> {
+export class ChannelLabelProvider extends LabelProvider<Channel> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CHANNEL;
 
@@ -47,10 +47,6 @@ export class ChannelLabelProvider implements ILabelProvider<Channel> {
         return displayValue;
     }
 
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
-    }
-
     public async getDisplayText(
         channel: Channel, property: string, value?: string, translatable: boolean = true
     ): Promise<string> {
@@ -73,18 +69,6 @@ export class ChannelLabelProvider implements ILabelProvider<Channel> {
         }
 
         return displayValue;
-    }
-
-    public async getPropertyValueDisplayText(property: string, value: string | number): Promise<string> {
-        return value.toString();
-    }
-
-    public getDisplayTextClasses(channel: Channel, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(channel: Channel): string[] {
-        return [];
     }
 
     public async getObjectText(

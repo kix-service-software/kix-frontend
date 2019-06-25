@@ -1,10 +1,11 @@
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, Error, MailAccount, MailAccountFactory, MailAccountProperty, DispatchingType
+    KIXObjectSpecificCreateOptions, Error, MailAccount, MailAccountProperty, DispatchingType
 } from '../../../model';
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { LoggingService } from '../LoggingService';
+import { MailAccountFactory } from '../../object-factories/MailAccountFactory';
 
 export class MailAccountService extends KIXObjectService {
 

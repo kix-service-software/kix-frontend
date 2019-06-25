@@ -10,7 +10,9 @@ export class ComponentState extends AbstractComponentState {
         public predefinedTableFilter: KIXObjectPropertyFilter[] = [],
         public canDelete: boolean = false,
         public canSubmit: boolean = false,
-        public filterCount: number = null
+        public filterCount: number = null,
+        public allowDelete: boolean = false,
+        public allowCreate: boolean = false
     ) {
         super();
     }

@@ -1,8 +1,7 @@
 import { Context, ContextType, ContextDescriptor, KIXObjectType, ContextMode, ObjectData } from '../../core/model';
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../core/browser/context';
-import { ComponentsService } from '../../core/browser/components';
-import { IdService, FormService, ServiceRegistry, FactoryService } from '../../core/browser';
+import { IdService, ServiceRegistry, FactoryService } from '../../core/browser';
 import { RoutingService } from '../../core/browser/router';
 import { HomeContext } from '../../core/browser/home';
 import { EventService } from '../../core/browser/event';
@@ -17,6 +16,7 @@ import { ComponentInput } from './ComponentInput';
 import { AgentService } from '../../core/browser/application/AgentService';
 import { SysConfigService } from '../../core/browser/sysconfig';
 import { TranslationPatternBrowserFactory, TranslationBrowserFactory } from '../../core/browser/i18n';
+import { UIComponent } from '../../core/model/UIComponent';
 
 class Component {
 
@@ -58,8 +58,8 @@ class Component {
         await KIXModulesService.getInstance().init();
 
         const modules = KIXModulesService.getInstance().getModules();
-        modules.forEach((m) => {
-            this.state.moduleTemplates.push(ComponentsService.getInstance().getComponentTemplate(m.initComponentId));
+        modules.map((m) => m.initComponents).forEach((ic: UIComponent[]) => {
+            ic.forEach((c) => this.state.moduleTemplates.push(require(c.componentPath)));
         });
 
         ContextService.getInstance().registerListener({

@@ -2,7 +2,7 @@ import { KIXObjectService } from "./KIXObjectService";
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions, ConfigItemClass, ConfigItemClassFactory,
-    ConfigItemClassProperty, ObjectIcon, Error, CreatePermissionDescription, ConfigItemProperty
+    ConfigItemClassProperty, ObjectIcon, Error, CreatePermissionDescription
 } from "../../../model";
 import {
     ConfigItemClassesResponse, ConfigItemClassResponse,

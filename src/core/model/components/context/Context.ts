@@ -6,6 +6,9 @@ import { KIXObject, KIXObjectType } from '../..';
 import { ObjectIcon } from '../../kix';
 import { ContextDescriptor } from './ContextDescriptor';
 import { BreadcrumbInformation } from '../router';
+import { KIXObjectService, FormService } from '../../../browser';
+import { ContextMode } from './ContextMode';
+import { FormContext } from '../form/FormContext';
 
 export abstract class Context {
 
@@ -92,7 +95,7 @@ export abstract class Context {
 
     public async setObjectId(objectId: string | number): Promise<void> {
         this.objectId = objectId;
-        await this.getObject(null, true);
+        await this.getObject(undefined, true);
     }
 
     public getObjectId(): string | number {
@@ -287,9 +290,17 @@ export abstract class Context {
     }
 
     public async getObject<O extends KIXObject>(
-        kixObjectType: KIXObjectType = null, reload: boolean = false, changedProperties?: string[]
+        objectType: KIXObjectType = null, reload: boolean = false, changedProperties?: string[]
     ): Promise<O> {
-        return undefined;
+        let object;
+        if (objectType) {
+            const objectId = this.getObjectId();
+            if (objectId) {
+                const objects = await KIXObjectService.loadObjects(objectType, [objectId]);
+                object = objects && objects.length ? objects[0] : null;
+            }
+        }
+        return object;
     }
 
     public provideScrollInformation(objectType: KIXObjectType, objectId: string | number): void {
@@ -305,6 +316,19 @@ export abstract class Context {
 
     public reset(): void {
         this.resetAdditionalInformation();
+    }
+
+    public async getFormId(
+        contextMode: ContextMode, objectType: KIXObjectType, objectId: string | number
+    ): Promise<string> {
+        const formContext =
+            contextMode === ContextMode.EDIT ||
+                contextMode === ContextMode.EDIT_ADMIN ||
+                contextMode === ContextMode.EDIT_BULK
+                ? FormContext.EDIT
+                : FormContext.NEW;
+
+        return await FormService.getInstance().getFormIdByContext(formContext, objectType);
     }
 
 }

@@ -1,17 +1,13 @@
-import { ILabelProvider } from "../ILabelProvider";
 import { User, KIXObjectType, UserProperty, ObjectIcon, DateTimeUtil } from "../../model";
 import { ObjectDataService } from "../ObjectDataService";
 import { TranslationService } from "../i18n/TranslationService";
 import { KIXObjectService } from "../kix";
+import { LabelProvider } from "../LabelProvider";
 
 
-export class UserLabelProvider implements ILabelProvider<User> {
+export class UserLabelProvider extends LabelProvider<User> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.USER;
-
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
-    }
 
     public async getPropertyValueDisplayText(
         property: string, value: string | number, translatable: boolean = true
@@ -105,10 +101,6 @@ export class UserLabelProvider implements ILabelProvider<User> {
         return displayValue;
     }
 
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
-    }
-
     public async getDisplayText(
         user: User, property: string, defaultValue?: string, translatable: boolean = true
     ): Promise<string> {
@@ -151,29 +143,13 @@ export class UserLabelProvider implements ILabelProvider<User> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public getDisplayTextClasses(object: User, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(object: User): string[] {
-        return [];
-    }
-
     public async getObjectText(user: User, id?: boolean, title?: boolean, translatable?: boolean): Promise<string> {
         const email = user.UserEmail ? `(${user.UserEmail})` : '';
         return `${user.UserFirstname} ${user.UserLastname} ${email}`;
     }
 
-    public getObjectAdditionalText(object: User, translatable: boolean = true): string {
-        return '';
-    }
-
     public getObjectIcon(object: User): string | ObjectIcon {
         return 'kix-icon-man';
-    }
-
-    public getObjectTooltip(object: User, translatable: boolean = true): string {
-        return '';
     }
 
     public async getObjectName(plural: boolean = false, translatable: boolean = true): Promise<string> {
@@ -185,9 +161,4 @@ export class UserLabelProvider implements ILabelProvider<User> {
         return plural ? 'Agents' : 'Agent';
     }
 
-    public async getIcons(object: User, property: string): Promise<Array<string | ObjectIcon>> {
-        return [];
-    }
-
 }
-

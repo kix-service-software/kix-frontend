@@ -1,5 +1,5 @@
 import {
-    ArticleFactory, Article, SenderType, KIXObjectType,
+    Article, SenderType, KIXObjectType,
     ArticleReceiver, ArticleProperty
 } from '../../model';
 import { IKIXObjectFactory, KIXObjectService } from '../kix';

@@ -1,18 +1,14 @@
-import { ILabelProvider } from "../ILabelProvider";
 import {
-    TextModule, KIXObjectType, ObjectIcon, TextModuleProperty, KIXObjectProperty, User, DateTimeUtil
+    TextModule, KIXObjectType, TextModuleProperty, KIXObjectProperty, User, DateTimeUtil, ObjectIcon
 } from "../../model";
 import { TranslationService } from "../i18n/TranslationService";
 import { ObjectDataService } from "../ObjectDataService";
 import { KIXObjectService } from "../kix";
+import { LabelProvider } from "../LabelProvider";
 
-export class TextModuleLabelProvider implements ILabelProvider<TextModule> {
+export class TextModuleLabelProvider extends LabelProvider<TextModule> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.TEXT_MODULE;
-
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
-    }
 
     public isLabelProviderFor(textModule: TextModule): boolean {
         return textModule instanceof TextModule;
@@ -118,26 +114,10 @@ export class TextModuleLabelProvider implements ILabelProvider<TextModule> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public getDisplayTextClasses(textModule: TextModule, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(textModule: TextModule): string[] {
-        return [];
-    }
-
     public async getObjectText(
         textModule: TextModule, id?: boolean, title?: boolean, translatable?: boolean
     ): Promise<string> {
         return `${textModule.Name}`;
-    }
-
-    public getObjectAdditionalText(object: TextModule, translatable: boolean = true): string {
-        return '';
-    }
-
-    public getObjectIcon(textModule?: TextModule): string | ObjectIcon {
-        return null;
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
@@ -151,12 +131,6 @@ export class TextModuleLabelProvider implements ILabelProvider<TextModule> {
 
     public getObjectTooltip(textModule: TextModule): string {
         return textModule.Name;
-    }
-
-    public async getIcons(
-        textModule: TextModule, property: string, value?: string | number
-    ): Promise<Array<string | ObjectIcon>> {
-        return [];
     }
 
 }

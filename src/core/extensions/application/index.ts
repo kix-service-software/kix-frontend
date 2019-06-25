@@ -3,3 +3,4 @@ export { IRouterExtension } from './IRouterExtension';
 export { ISocketNamespaceRegistryExtension } from './ISocketNamespaceRegistryExtension';
 export { IServiceRegistryExtension } from './IServiceRegistryExtension';
 export { IKIXModuleExtension } from './IKIXModuleExtension';
+export { KIXModuleFactory } from './KIXModuleFactory';

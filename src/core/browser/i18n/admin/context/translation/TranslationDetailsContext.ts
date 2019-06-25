@@ -54,18 +54,18 @@ export class TranslationDetailsContext extends Context {
             });
         }, 500);
 
-        const translations = await TranslationService.getInstance().loadObjects<TranslationPattern>(
+        const translationPatterns = await TranslationService.getInstance().loadObjects<TranslationPattern>(
             KIXObjectType.TRANSLATION_PATTERN, [this.objectId], loadingOptions
         );
 
         window.clearTimeout(timeout);
 
-        const translation = translations && translations.length ? translations[0] : null;
+        const translationPattern = translationPatterns && translationPatterns.length ? translationPatterns[0] : null;
 
         EventService.getInstance().publish(
             ApplicationEvent.APP_LOADING, { loading: false, hint: '' }
         );
-        return translation;
+        return translationPattern;
     }
 
 }

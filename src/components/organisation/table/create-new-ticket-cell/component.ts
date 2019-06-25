@@ -1,5 +1,5 @@
 import { ComponentState } from './ComponentState';
-import { AbstractMarkoComponent, ContextService, ICell } from '../../../../core/browser';
+import { AbstractMarkoComponent, ContextService, ICell, DialogService } from '../../../../core/browser';
 import { KIXObjectType, ContextMode, Contact } from '../../../../core/model';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
@@ -13,7 +13,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             const cell: ICell = input.cell;
             const contact: Contact = cell.getRow().getRowObject().getObject();
             if (contact && contact instanceof Contact) {
-                this.state.show = contact.ValidID === 1;
+                const dialogs = DialogService.getInstance().getRegisteredDialogs(
+                    ContextMode.CREATE, KIXObjectType.TICKET
+                );
+                this.state.show = contact.ValidID === 1 && dialogs && dialogs.length > 0;
             }
         }
     }

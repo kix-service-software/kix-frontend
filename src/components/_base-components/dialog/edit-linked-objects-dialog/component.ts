@@ -6,12 +6,14 @@ import {
 import {
     KIXObject, LinkObject, KIXObjectType, CreateLinkDescription, KIXObjectPropertyFilter, TableFilterCriteria,
     LinkObjectProperty, LinkTypeDescription, CreateLinkObjectOptions, LinkType, ContextType,
-    SortUtil, DataType
+    SortUtil, DataType, CRUD
 } from '../../../../core/model';
 import { LinkUtil, EditLinkedObjectsDialogContext } from '../../../../core/browser/link';
 import { IEventSubscriber, EventService } from '../../../../core/browser/event';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 import { DialogService } from '../../../../core/browser/components/dialog';
+import { AuthenticationSocketClient } from '../../../../core/browser/application/AuthenticationSocketClient';
+import { UIComponentPermission } from '../../../../core/model/UIComponentPermission';
 
 class Component {
 
@@ -46,6 +48,15 @@ class Component {
         ]);
 
         if (context) {
+
+            this.state.allowCreate = await AuthenticationSocketClient.getInstance().checkPermissions(
+                [new UIComponentPermission('links', [CRUD.CREATE])]
+            );
+
+            this.state.allowDelete = await AuthenticationSocketClient.getInstance().checkPermissions(
+                [new UIComponentPermission('links/*', [CRUD.DELETE])]
+            );
+
             this.mainObject = await context.getObject();
 
             this.availableLinkObjects = await LinkUtil.getLinkObjects(this.mainObject);

@@ -1,15 +1,10 @@
-import { ILabelProvider } from "../ILabelProvider";
 import { KIXObjectType, ObjectIcon, TicketStateProperty, DateTimeUtil, TicketStateType } from "../../model";
-import { ContextService } from "../context";
 import { TranslationService } from "../i18n/TranslationService";
+import { LabelProvider } from "../LabelProvider";
 
-export class TicketStateTypeLabelProvider implements ILabelProvider<TicketStateType> {
+export class TicketStateTypeLabelProvider extends LabelProvider<TicketStateType> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.TICKET_STATE_TYPE;
-
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
-    }
 
     public isLabelProviderFor(ticketStateType: TicketStateType): boolean {
         return ticketStateType instanceof TicketStateType;
@@ -35,10 +30,6 @@ export class TicketStateTypeLabelProvider implements ILabelProvider<TicketStateT
         return displayValue;
     }
 
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
-    }
-
     public async getDisplayText(
         ticketStateType: TicketStateType, property: string, value?: string, translatable: boolean = true
     ): Promise<string> {
@@ -62,24 +53,8 @@ export class TicketStateTypeLabelProvider implements ILabelProvider<TicketStateT
         return value.toString();
     }
 
-    public getDisplayTextClasses(ticketStateType: TicketStateType, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(ticketStateType: TicketStateType): string[] {
-        return [];
-    }
-
     public async getObjectText(ticketStateType: TicketStateType, id?: boolean, title?: boolean): Promise<string> {
         return ticketStateType.Name;
-    }
-
-    public getObjectAdditionalText(ticketStateType: TicketStateType): string {
-        return null;
-    }
-
-    public getObjectIcon(ticketState?: TicketStateType): string | ObjectIcon {
-        return null;
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {

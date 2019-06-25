@@ -1,18 +1,14 @@
-import { ILabelProvider } from '..';
 import {
     ObjectIcon, KIXObjectType, ConfigItemClass, ConfigItemClassProperty, DateTimeUtil, User
 } from "../../model";
 import { TranslationService } from "../i18n/TranslationService";
 import { ObjectDataService } from "../ObjectDataService";
 import { KIXObjectService } from "../kix";
+import { LabelProvider } from "../LabelProvider";
 
-export class ConfigItemClassLabelProvider implements ILabelProvider<ConfigItemClass> {
+export class ConfigItemClassLabelProvider extends LabelProvider<ConfigItemClass> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_CLASS;
-
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
-    }
 
     public async getPropertyValueDisplayText(
         property: string, value: string | number | any = '', translatable: boolean = true
@@ -88,10 +84,6 @@ export class ConfigItemClassLabelProvider implements ILabelProvider<ConfigItemCl
         return displayValue;
     }
 
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
-    }
-
     public async getDisplayText(
         ciClass: ConfigItemClass, property: string, value?: string, translatable: boolean = true
     ): Promise<string> {
@@ -113,14 +105,6 @@ export class ConfigItemClassLabelProvider implements ILabelProvider<ConfigItemCl
         return displayValue;
     }
 
-    public getDisplayTextClasses(ciClass: ConfigItemClass, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(ciClass: ConfigItemClass): string[] {
-        return [];
-    }
-
     public isLabelProviderFor(ciClass: ConfigItemClass): boolean {
         return ciClass instanceof ConfigItemClass;
     }
@@ -129,10 +113,6 @@ export class ConfigItemClassLabelProvider implements ILabelProvider<ConfigItemCl
         ciClass: ConfigItemClass, id: boolean = true, name: boolean = true, translatable?: boolean
     ): Promise<string> {
         return ciClass.Name;
-    }
-
-    public getObjectAdditionalText(ciClass: ConfigItemClass): string {
-        return null;
     }
 
     public getObjectIcon(ciClass: ConfigItemClass): string | ObjectIcon {

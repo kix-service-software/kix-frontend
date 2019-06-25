@@ -19,20 +19,24 @@
                 <loading-spinner/>
             </else>
             <div.dialog-button-container>
-                <button.form-blank-cancel-button
-                    type="button"
-                    on-click("markToDelete")
-                    title=state.translations["Translatable#Delete Link"]>
-                    <span.kix-icon-trash/>
-                    <translation-string pattern="Translatable#Delete Link"/>
-                </button>
-                <button.form-blank-button
-                    type="button"
-                    on-click("openAddLinkDialog")
-                    title=state.translations["Translatable#Assign Link"]>
-                    <span.kix-icon-new-link/>
-                    <translation-string pattern="Translatable#Assign Link"/>
-                </button>
+                <if(state.allowDelete)>
+                    <button.form-blank-cancel-button
+                        type="button"
+                        on-click("markToDelete")
+                        title=state.translations["Translatable#Delete Link"]>
+                        <span.kix-icon-trash/>
+                        <translation-string pattern="Translatable#Delete Link"/>
+                    </button>
+                </if>
+                <if(state.allowCreate)>
+                    <button.form-blank-button
+                        type="button"
+                        on-click("openAddLinkDialog")
+                        title=state.translations["Translatable#Assign Link"]>
+                        <span.kix-icon-new-link/>
+                        <translation-string pattern="Translatable#Assign Link"/>
+                    </button>
+                </if>
             </div>
         </div>
         <div.dialog-button-container>

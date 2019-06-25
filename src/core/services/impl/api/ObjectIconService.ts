@@ -8,8 +8,7 @@ import {
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { LoggingService } from '../LoggingService';
-import { ObjectIconBrowserFactory } from '../../../browser/icon';
-import { ObjectIconFactory } from '../../../api/object-icon/ObjectIconFactory';
+import { ObjectIconFactory } from '../../object-factories/ObjectIconFactory';
 
 export class ObjectIconService extends KIXObjectService {
 

@@ -130,10 +130,10 @@ class EditorComponent {
 
     public async setAutocompleteConfiguration(autocompleteOption: AutocompleteFormFieldOption): Promise<void> {
         if (await this.isEditorReady()) {
-            autocompleteOption.autocompleteObjects.forEach((ao) => {
+            for (const ao of autocompleteOption.autocompleteObjects) {
                 const service = (ServiceRegistry.getServiceInstance(ao.objectType) as IKIXObjectService);
                 if (service) {
-                    const config = service.getAutoFillConfiguration(CKEDITOR.plugins.textMatch, ao.placeholder);
+                    const config = await service.getAutoFillConfiguration(CKEDITOR.plugins.textMatch, ao.placeholder);
                     if (config) {
                         const plugin = new CKEDITOR.plugins.autocomplete(this.editor, config);
                         plugin.getHtmlToInsert = function (item) {
@@ -142,7 +142,7 @@ class EditorComponent {
                         this.autoCompletePlugins.push(plugin);
                     }
                 }
-            });
+            }
         }
     }
 

@@ -85,58 +85,47 @@ export class ContextService {
     }
 
     public async setDialogContext(
-        contextId: string, kixObjectType: KIXObjectType, contextMode: ContextMode, objectId?: string | number,
-        resetContext?: boolean, title?: string, singleTab?: boolean, formId?: string, icon?: string | ObjectIcon,
-        resetForm: boolean = resetContext
+        contextId: string, objectType?: KIXObjectType, contextMode?: ContextMode, objectId?: string | number,
+        resetContext?: boolean, title?: string, singleTab?: boolean, icon?: string | ObjectIcon, formId?: string
     ): Promise<void> {
 
         this.resetRefreshTimer();
 
         const oldContext = this.getActiveContext();
 
-        let context: Context;
-        if (kixObjectType) {
-            context = await ContextFactory.getInstance().getContext(
-                contextId, kixObjectType, contextMode, objectId, resetContext
-            );
-        } else {
+        let context: Context = await ContextFactory.getInstance().getContext(
+            contextId, objectType, contextMode, objectId, resetContext
+        );
+
+        if (!context) {
             const dialogs = DialogService.getInstance().getRegisteredDialogs(contextMode);
             if (dialogs && dialogs.length) {
                 context = await ContextFactory.getInstance().getContext(
                     contextId, dialogs[0].kixObjectType, dialogs[0].contextMode, null, resetContext
                 );
-
-                if (resetContext) {
-                    for (const dialog of dialogs) {
-                        const fid = await FormService.getInstance().getFormIdByContext(
-                            FormContext.NEW, dialog.kixObjectType
-                        );
-                        FormService.getInstance().deleteFormInstance(fid);
-                    }
-                }
             }
         }
 
         if (context && context.getDescriptor().contextType === ContextType.DIALOG) {
 
-            if (resetForm && formId) {
-                FormService.getInstance().deleteFormInstance(formId);
-            }
-
-            if (formId) {
-                context.setAdditionalInformation(AdditionalContextInformation.FORM_ID, formId);
-            }
-
-            if (objectId) {
-                context.setObjectId(objectId);
-            }
-
             this.activeDialogContext = context;
             this.activeContextType = ContextType.DIALOG;
 
+            if (!formId) {
+                formId = await context.getFormId(contextMode, objectType, objectId);
+            }
+
+            context.setAdditionalInformation(AdditionalContextInformation.FORM_ID, formId);
+            await context.setObjectId(objectId);
+
+            FormService.getInstance().deleteFormInstance(formId);
+            await FormService.getInstance().getFormInstance(formId);
+
+            await context.initContext();
+
             DialogService.getInstance().openMainDialog(
                 context.getDescriptor().contextMode, context.getDescriptor().componentId,
-                kixObjectType, title, icon, singleTab
+                objectType, title, icon, singleTab
             );
 
             this.serviceListener.forEach(
@@ -149,6 +138,7 @@ export class ContextService {
 
     public closeDialogContext(): void {
         this.activeContextType = ContextType.MAIN;
+        this.activeDialogContext = null;
         ContextFactory.getInstance().resetDialogContexts();
     }
 

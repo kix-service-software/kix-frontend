@@ -4,9 +4,10 @@ import {
 } from '../../../model';
 import { KIXObjectService } from './KIXObjectService';
 import { LoggingService } from '../LoggingService';
-import { SetPreferenceOptions, UserFactory, UserPreference, UserProperty } from '../../../model/kix/user';
+import { SetPreferenceOptions, UserPreference, UserProperty } from '../../../model/kix/user';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
-import { UserPreferenceFactory } from '../../../model/kix/user/UserPreferenceFactory';
+import { UserFactory } from '../../object-factories/UserFactory';
+import { UserPreferenceFactory } from '../../object-factories/UserPreferenceFactory';
 
 export class UserService extends KIXObjectService {
 
@@ -62,7 +63,7 @@ export class UserService extends KIXObjectService {
     public async getUserByToken(token: string): Promise<User> {
         const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, ['Tickets', 'Preferences']);
         const users = await super.load<User>(
-            token, KIXObjectType.USER, this.USER_RESOURCE_URI, loadingOptions, null, KIXObjectType.USER
+            token, KIXObjectType.USER, this.USER_RESOURCE_URI, loadingOptions, null, KIXObjectType.USER, false
         );
 
         return users && users.length ? users[0] : null;

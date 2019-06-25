@@ -1,5 +1,5 @@
 import {
-    KIXObjectSearchService, WidgetService, TableConfiguration, TableRowHeight,
+    WidgetService, TableConfiguration, TableRowHeight,
     TableHeaderHeight, KIXObjectService, SearchOperator, BrowserUtil,
     TableFactoryService, ContextService, TableEvent, DefaultColumnConfiguration, ValueState, TableEventData
 } from '../../../../core/browser';
@@ -13,6 +13,7 @@ import { LinkUtil, LinkObjectDialogContext } from '../../../../core/browser/link
 import { EventService, IEventSubscriber } from '../../../../core/browser/event';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 import { DialogService } from '../../../../core/browser/components/dialog';
+import { KIXObjectSearchService } from '../../../../core/browser/kix/search/KIXObjectSearchService';
 
 class LinkDialogComponent {
 

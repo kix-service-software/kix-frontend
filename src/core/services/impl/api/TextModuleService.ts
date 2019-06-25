@@ -1,9 +1,10 @@
 import { KIXObjectService } from './KIXObjectService';
 import {
-    KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, TextModule, Error, TextModuleFactory
+    KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, TextModule, Error
 } from '../../../model';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { LoggingService } from '../LoggingService';
+import { TextModuleFactory } from '../../object-factories/TextModuleFactory';
 
 export class TextModuleService extends KIXObjectService {
 

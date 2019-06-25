@@ -2,12 +2,12 @@ import {
     ObjectIcon, KIXObjectType, MailAccount, MailAccountProperty, User, DateTimeUtil,
     KIXObjectProperty, DispatchingType, Queue
 } from '../../model';
-import { ILabelProvider } from '..';
 import { TranslationService } from '../i18n/TranslationService';
 import { ObjectDataService } from '../ObjectDataService';
 import { KIXObjectService } from "../kix";
+import { LabelProvider } from '../LabelProvider';
 
-export class MailAccountLabelProvider implements ILabelProvider<MailAccount> {
+export class MailAccountLabelProvider extends LabelProvider<MailAccount> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.MAIL_ACCOUNT;
 

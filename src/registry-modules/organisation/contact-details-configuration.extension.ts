@@ -2,11 +2,12 @@ import { IConfigurationExtension } from '../../core/extensions';
 import { ContactDetailsContext } from '../../core/browser/contact';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize, OrganisationProperty,
-    DataType, KIXObjectType, ObjectinformationWidgetSettings, ContactProperty, KIXObjectProperty
+    DataType, KIXObjectType, ObjectinformationWidgetSettings, ContactProperty, KIXObjectProperty, CRUD
 } from '../../core/model';
 import {
     TableConfiguration, TableHeaderHeight, TableRowHeight, DefaultColumnConfiguration
 } from '../../core/browser';
+import { UIComponentPermission } from '../../core/model/UIComponentPermission';
 
 export class ModuleFactoryExtension implements IConfigurationExtension {
 
@@ -82,14 +83,19 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
                     ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
                 ),
                 false, true, WidgetSize.LARGE, null, false
-            ));
+            ),
+            [new UIComponentPermission('organisations', [CRUD.READ])]
+        );
 
-        const assignedTicketsLane = new ConfiguredWidget('contact-assigned-tickets-widget', new WidgetConfiguration(
-            'contact-assigned-tickets-widget', 'Translatable#Overview Tickets', [
-                'contact-create-ticket-action', 'contact-print-action'
-            ], {},
-            false, true, WidgetSize.LARGE, null, false
-        ));
+        const assignedTicketsLane = new ConfiguredWidget('contact-assigned-tickets-widget',
+            new WidgetConfiguration(
+                'contact-assigned-tickets-widget', 'Translatable#Overview Tickets', [
+                    'contact-create-ticket-action', 'contact-print-action'
+                ], {},
+                false, true, WidgetSize.LARGE, null, false
+            ),
+            [new UIComponentPermission('tickets', [CRUD.READ])]
+        );
 
         const lanes = ['contact-assigned-organisations-widget', 'contact-assigned-tickets-widget'];
 

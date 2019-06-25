@@ -1,11 +1,10 @@
 import {
     IdService, LabelService, KIXObjectService, ObjectPropertyValue, IDynamicFormManager,
-    DynamicFormAutocompleteDefinition,
-    ComponentsService,
-    DynamicFormOperationsType
+    DynamicFormAutocompleteDefinition, DynamicFormOperationsType
 } from '../../../../core/browser';
 import { TreeNode, InputFieldTypes, DateTimeUtil, TreeUtil } from '../../../../core/model';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
+import { KIXModulesService } from '../../../../core/browser/modules';
 
 export class DynamicFieldValue {
 
@@ -118,7 +117,7 @@ export class DynamicFieldValue {
             if (this.isSpecificInput) {
                 const specificInputType = this.manager.getSpecificInput();
                 if (specificInputType) {
-                    this.specificInputType = ComponentsService.getInstance().getComponentTemplate(specificInputType);
+                    this.specificInputType = KIXModulesService.getComponentTemplate(specificInputType);
                 }
             }
 

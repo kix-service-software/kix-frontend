@@ -1,17 +1,13 @@
-import { ILabelProvider } from "..";
 import { DateTimeUtil, ObjectIcon, KIXObjectType, User } from "../../model";
 import { FAQCategory, FAQCategoryProperty } from "../../model/kix/faq";
 import { KIXObjectService } from "../kix";
 import { TranslationService } from "../i18n/TranslationService";
 import { ObjectDataService } from "../ObjectDataService";
+import { LabelProvider } from "../LabelProvider";
 
-export class FAQCategoryLabelProvider implements ILabelProvider<FAQCategory> {
+export class FAQCategoryLabelProvider extends LabelProvider<FAQCategory> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.FAQ_CATEGORY;
-
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
-    }
 
     public async getPropertyText(
         property: string, short: boolean = false, translatable: boolean = true
@@ -60,10 +56,6 @@ export class FAQCategoryLabelProvider implements ILabelProvider<FAQCategory> {
         }
 
         return displayValue;
-    }
-
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
     }
 
     public async getDisplayText(
@@ -134,24 +126,12 @@ export class FAQCategoryLabelProvider implements ILabelProvider<FAQCategory> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public getDisplayTextClasses(faqCategory: FAQCategory, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(faqCategory: FAQCategory): string[] {
-        return [];
-    }
-
     public isLabelProviderFor(faqCategory: FAQCategory): boolean {
         return faqCategory instanceof FAQCategory;
     }
 
     public async getObjectText(faqCategory: FAQCategory, id: boolean = true, title: boolean = true): Promise<string> {
         return faqCategory.Name;
-    }
-
-    public getObjectAdditionalText(faqCategory: FAQCategory): string {
-        return null;
     }
 
     public getObjectIcon(faqCategory: FAQCategory): string | ObjectIcon {

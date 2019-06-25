@@ -2,7 +2,7 @@ import { AbstractMarkoComponent, ContextService } from '../../../core/browser';
 import { ComponentState } from './ComponentState';
 import { AdminContext } from '../../../core/browser/admin';
 import { KIXObject, KIXObjectType, AdminModule, ContextType } from '../../../core/model';
-import { ComponentsService } from '../../../core/browser/components';
+import { KIXModulesService } from '../../../core/browser/modules';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -14,7 +14,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         ContextService.getInstance().registerListener({
             contextChanged: (contextId: string, c: AdminContext, type: ContextType, history: boolean) => {
                 if (contextId === AdminContext.CONTEXT_ID && c.adminModule) {
-                    this.state.template = ComponentsService.getInstance().getComponentTemplate(
+                    this.state.template = KIXModulesService.getComponentTemplate(
                         c.adminModule.componentId
                     );
                     (this as any).setStateDirty('template');
@@ -36,7 +36,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         objectId: string | number, object: KIXObject | any, type: KIXObjectType, changedProperties?: string[]
     ): void {
         if (object instanceof AdminModule) {
-            this.state.template = ComponentsService.getInstance().getComponentTemplate(object.componentId);
+            this.state.template = KIXModulesService.getComponentTemplate(object.componentId);
         }
     }
 

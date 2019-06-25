@@ -1,6 +1,5 @@
 import {
     FAQArticleProperty, Attachment, FAQArticleAttachmentLoadingOptions, CreateFAQVoteOptions,
-    FAQCategoryFactory
 } from "../../../model/kix/faq";
 import { KIXObjectService } from "./KIXObjectService";
 import {
@@ -9,6 +8,7 @@ import {
 } from "../../../model";
 import { KIXObjectServiceRegistry } from "../../KIXObjectServiceRegistry";
 import { LoggingService } from "../LoggingService";
+import { FAQCategoryFactory } from "../../object-factories/FAQCategoryFactory";
 
 export class FAQService extends KIXObjectService {
 

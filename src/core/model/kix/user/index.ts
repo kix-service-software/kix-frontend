@@ -12,5 +12,3 @@ export { IPersonalSettingsExtension } from './IPersonalSettingsExtension';
 export { PreferencesLoadingOptions } from './PreferencesLoadingOptions';
 export { SetPreferenceOptions } from './SetPreferenceOptions';
 export { UserProperty } from './UserProperty';
-export { UserFactory } from './UserFactory';
-export { UserPreferenceFactory } from './UserPreferenceFactory';

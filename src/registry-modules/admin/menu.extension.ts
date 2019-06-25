@@ -7,8 +7,9 @@ import { ConfigItemClassDetailsContext } from '../../core/browser/cmdb';
 import { TranslationDetailsContext } from '../../core/browser/i18n/admin/context';
 import { RoleDetailsContext, UserDetailsContext } from '../../core/browser/user';
 import { QueueDetailsContext } from '../../core/browser/ticket/admin/context/ticket-queue';
+import { UIComponentPermission } from '../../core/model/UIComponentPermission';
+import { FAQCategoryDetailsContext } from '../../core/browser/faq/admin/context';
 import { SystemAddressDetailsContext } from '../../core/browser/system-address';
-import { FAQCategoryDetailsContext } from '../../core/browser/faq/admin';
 import { MailAccountDetailsContext } from '../../core/browser/mail-account';
 
 export class Extension implements IMainMenuExtension {
@@ -40,8 +41,7 @@ export class Extension implements IMainMenuExtension {
 
     public text: string = "Translatable#Admin";
 
-
-
+    public permissions: UIComponentPermission[] = [];
 }
 
 module.exports = (data, host, options) => {

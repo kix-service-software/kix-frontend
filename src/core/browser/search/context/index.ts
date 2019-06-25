@@ -1,1 +1,0 @@
-export { SearchContext } from './SearchContext';

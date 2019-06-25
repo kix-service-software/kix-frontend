@@ -3,14 +3,15 @@ import {
 } from '../../../../core/model';
 import { FormService } from '../../../../core/browser/form';
 import {
-    WidgetService, KIXObjectSearchService, IdService, TableConfiguration, TableHeaderHeight,
+    WidgetService, IdService, TableConfiguration, TableHeaderHeight,
     TableRowHeight, BrowserUtil, ITable, TableFactoryService, TableEvent, SearchProperty, TableEventData
 } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
-import { SearchContext } from '../../../../core/browser/search/context';
+import { SearchContext } from '../../../../core/browser/search/context/SearchContext';
 import { EventService, IEventSubscriber } from '../../../../core/browser/event';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 import { DialogService } from '../../../../core/browser/components/dialog';
+import { KIXObjectSearchService } from '../../../../core/browser/kix/search/KIXObjectSearchService';
 
 class Component implements ISearchFormListener {
 

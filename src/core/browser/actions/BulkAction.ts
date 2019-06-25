@@ -28,6 +28,10 @@ export class BulkAction extends AbstractAction<ITable> implements IEventSubscrib
         return canRun;
     }
 
+    public canShow(): boolean {
+        return BulkService.getInstance().hasBulkManager(this.data.getObjectType());
+    }
+
     public async run(event: any): Promise<void> {
         if (this.canRun()) {
             const rows = this.data.getSelectedRows();

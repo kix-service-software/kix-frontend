@@ -1,6 +1,7 @@
 import { AbstractAction, FormInstance, KIXObjectType, ContextMode } from '../../../model';
 import { FormService } from '../../form';
 import { ContextService } from '../../context';
+import { EditMailAccountDialogContext, MailAccountDetailsContext } from '../context';
 
 export class MailAccountEditAction extends AbstractAction {
 
@@ -10,10 +11,19 @@ export class MailAccountEditAction extends AbstractAction {
     }
 
     public async run(): Promise<void> {
-        await FormService.getInstance().getFormInstance<FormInstance>('edit-mail-account-form', false);
-        ContextService.getInstance().setDialogContext(
-            null, KIXObjectType.MAIL_ACCOUNT, ContextMode.EDIT_ADMIN, null, true
+        const context = await ContextService.getInstance().getContext<MailAccountDetailsContext>(
+            MailAccountDetailsContext.CONTEXT_ID
         );
+
+        if (context) {
+            const id = context.getObjectId();
+            if (id) {
+                ContextService.getInstance().setDialogContext(
+                    EditMailAccountDialogContext.CONTEXT_ID, KIXObjectType.MAIL_ACCOUNT,
+                    ContextMode.EDIT_ADMIN, id
+                );
+            }
+        }
     }
 
 }

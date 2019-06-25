@@ -1,6 +1,7 @@
 import { AbstractAction, FormInstance, KIXObjectType, ContextMode } from '../../../../model';
 import { FormService } from '../../../form';
 import { ContextService } from '../../../context';
+import { UserDetailsContext, EditUserDialogContext } from '../context';
 
 export class UserEditAction extends AbstractAction {
 
@@ -10,11 +11,19 @@ export class UserEditAction extends AbstractAction {
     }
 
     public async run(): Promise<void> {
-        await FormService.getInstance().getFormInstance<FormInstance>('edit-user-form', false);
-        ContextService.getInstance().setDialogContext(
-            // TODO: Titel aus dem aktiven Admin-Modul ermitteln (Kategorie)
-            null, KIXObjectType.USER, ContextMode.EDIT_ADMIN, null, true
+        const context = await ContextService.getInstance().getContext<UserDetailsContext>(
+            UserDetailsContext.CONTEXT_ID
         );
+
+        if (context) {
+            const id = context.getObjectId();
+            if (id) {
+                ContextService.getInstance().setDialogContext(
+                    EditUserDialogContext.CONTEXT_ID, KIXObjectType.USER,
+                    ContextMode.EDIT_ADMIN, id
+                );
+            }
+        }
     }
 
 }

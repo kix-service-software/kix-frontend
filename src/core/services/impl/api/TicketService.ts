@@ -6,10 +6,9 @@ import {
 
 import {
     Article, Attachment, ArticleProperty, FilterCriteria, TicketProperty,
-    TicketFactory, KIXObjectType, FilterType, User, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
+    KIXObjectType, FilterType, User, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions, CreateTicketArticleOptions, CreateTicketWatcherOptions,
-    KIXObjectSpecificDeleteOptions, DeleteTicketWatcherOptions, Error,
-    SenderTypeFactory, ArticleFactory, LockFactory, Queue, Contact, Channel, ArticleLoadingOptions
+    KIXObjectSpecificDeleteOptions, DeleteTicketWatcherOptions, Error, Queue, Contact, Channel
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
@@ -18,7 +17,12 @@ import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { UserService } from './UserService';
 import { LoggingService } from '../LoggingService';
 import { ChannelService } from './ChannelService';
+import { TicketFactory } from '../../object-factories/TicketFactory';
+import { SenderTypeFactory } from '../../object-factories/SenderTypeFactory';
+import { LockFactory } from '../../object-factories/LockFactory';
+import { ArticleFactory } from '../../object-factories/ArticleFactory';
 import { QueueService } from './QueueService';
+import { ArticleLoadingOptions } from '../../../model/kix/ticket/ArticleLoadingOptions';
 
 const RESOURCE_ARTICLES: string = 'articles';
 const RESOURCE_ATTACHMENTS: string = 'attachments';
@@ -216,7 +220,7 @@ export class TicketService extends KIXObjectService {
         let from = this.getParameterValue(parameter, ArticleProperty.FROM);
         if (!from) {
             const user = await UserService.getInstance().getUserByToken(token);
-            from = user.UserLogin;
+            from = user.UserEmail;
         }
 
         const channelId = this.getParameterValue(parameter, ArticleProperty.CHANNEL_ID);

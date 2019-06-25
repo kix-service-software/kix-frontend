@@ -6,8 +6,8 @@ import {
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { LoggingService } from '../LoggingService';
-import { QueueFactory } from '../../../model/kix/ticket/QueueFactory';
-import { FollowUpTypeFactory } from '../../../model/kix/ticket/FollowUpTypeFactory';
+import { QueueFactory } from '../../object-factories/QueueFactory';
+import { FollowUpTypeFactory } from '../../object-factories/FollowUpTypeFactory';
 
 export class QueueService extends KIXObjectService {
 

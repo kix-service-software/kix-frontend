@@ -11,7 +11,7 @@ export class MailAccountCreateAction extends AbstractAction {
     public async run(event: any): Promise<void> {
         ContextService.getInstance().setDialogContext(
             null, KIXObjectType.MAIL_ACCOUNT, ContextMode.CREATE_ADMIN, null, true,
-            'Translatable#Communication: Email', undefined, 'new-mail-account-form'
+            'Translatable#Communication: Email'
         );
     }
 

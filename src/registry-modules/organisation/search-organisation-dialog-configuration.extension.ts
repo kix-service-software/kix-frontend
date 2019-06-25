@@ -1,11 +1,12 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
     ContextConfiguration, KIXObjectType,
-    FormContext, SearchForm, OrganisationProperty, WidgetSize, ConfiguredWidget, WidgetConfiguration
+    FormContext, SearchForm, OrganisationProperty, WidgetSize, ConfiguredWidget, WidgetConfiguration, CRUD
 } from '../../core/model';
 import { ConfigurationService } from '../../core/services';
 import { SearchProperty } from '../../core/browser';
 import { OrganisationSearchContext } from '../../core/browser/organisation';
+import { UIComponentPermission } from '../../core/model/UIComponentPermission';
 
 export class ModuleExtension implements IConfigurationExtension {
 
@@ -14,10 +15,13 @@ export class ModuleExtension implements IConfigurationExtension {
     }
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-        const helpWidget = new ConfiguredWidget('20180919-help-widget', new WidgetConfiguration(
-            'help-widget', 'Translatable#Help', [], { helpText: 'Translatable#Helptext_Search_Organisation' },
-            false, false, WidgetSize.BOTH, 'kix-icon-query', false
-        ));
+        const helpWidget = new ConfiguredWidget('20180919-help-widget',
+            new WidgetConfiguration(
+                'help-widget', 'Translatable#Help', [], { helpText: 'Translatable#Helptext_Search_Organisation' },
+                false, false, WidgetSize.BOTH, 'kix-icon-query', false
+            ),
+            [new UIComponentPermission('faq/articles', [CRUD.READ])]
+        );
         const sidebarWidgets = [helpWidget];
         const sidebars = ['20180919-help-widget'];
         return new ContextConfiguration(

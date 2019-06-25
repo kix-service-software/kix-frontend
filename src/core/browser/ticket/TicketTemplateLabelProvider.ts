@@ -1,16 +1,12 @@
-import { ILabelProvider } from "../ILabelProvider";
 import { KIXObjectType, ObjectIcon, TicketTemplate, TicketTemplateProperty, User, DateTimeUtil } from "../../model";
 import { TranslationService } from "../i18n/TranslationService";
 import { ObjectDataService } from "../ObjectDataService";
 import { KIXObjectService } from "../kix";
+import { LabelProvider } from "../LabelProvider";
 
-export class TicketTemplateLabelProvider implements ILabelProvider<TicketTemplate> {
+export class TicketTemplateLabelProvider extends LabelProvider<TicketTemplate> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.TICKET_TEMPLATE;
-
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
-    }
 
     public isLabelProviderFor(ticketTemplate: TicketTemplate): boolean {
         return ticketTemplate instanceof TicketTemplate;
@@ -61,10 +57,6 @@ export class TicketTemplateLabelProvider implements ILabelProvider<TicketTemplat
         }
 
         return displayValue;
-    }
-
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
     }
 
     public async getDisplayText(
@@ -121,24 +113,8 @@ export class TicketTemplateLabelProvider implements ILabelProvider<TicketTemplat
         return displayValue.toString();
     }
 
-    public getDisplayTextClasses(ticketTemplate: TicketTemplate, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(ticketTemplate: TicketTemplate): string[] {
-        return [];
-    }
-
     public async getObjectText(ticketTemplate: TicketTemplate, id?: boolean, title?: boolean): Promise<string> {
         return ticketTemplate.Name;
-    }
-
-    public getObjectAdditionalText(ticketTemplate: TicketTemplate): string {
-        return null;
-    }
-
-    public getObjectIcon(ticketTemplate?: TicketTemplate): string | ObjectIcon {
-        return null;
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {

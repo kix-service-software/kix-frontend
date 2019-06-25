@@ -1,0 +1,41 @@
+.kix-toolbar {
+    display: grid;
+    grid-gap: .75rem;
+    grid-auto-flow: column;
+    align-self: end;
+
+    >div.toolbar-group {
+        display: grid;
+        grid-auto-flow: column;
+        grid-gap: 0.125rem;
+
+        >a>div,
+        >div {
+            display: grid;
+            grid-template-rows: @toolbar-icon-size @toolbar-icon-size;
+            grid-template-columns: auto auto;
+            justify-items: center;
+            cursor: pointer;
+
+            >.action-icon {
+
+                [class^="kix-icon-"],
+                [class*=" kix-icon-"] {
+                    .icon-font-size-normal;
+                }
+            }
+
+            >.new-icon {
+                font-size: .875rem;
+                vertical-align: super;
+                margin-left: -5px;
+                margin-right: -3px;
+            }
+
+            >.action-text {
+                .font-size-normal;
+                grid-row: 2;
+            }
+        }
+    }
+}

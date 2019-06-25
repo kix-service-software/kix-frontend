@@ -1,6 +1,7 @@
 import { AbstractAction, KIXObjectType, ContextMode, FormInstance } from "../../../../../model";
 import { ContextService } from "../../../../context";
 import { FormService } from "../../../../form";
+import { TicketPriorityDetailsContext, EditTicketPriorityDialogContext } from "../../context";
 
 export class TicketPriorityEditAction extends AbstractAction {
 
@@ -10,11 +11,19 @@ export class TicketPriorityEditAction extends AbstractAction {
     }
 
     public async run(): Promise<void> {
-        await FormService.getInstance().getFormInstance<FormInstance>('edit-ticket-priority-form', false);
-        ContextService.getInstance().setDialogContext(
-            // TODO: Titel aus dem aktiven Admin-Modul ermitteln (Kategorie)
-            null, KIXObjectType.TICKET_PRIORITY, ContextMode.EDIT_ADMIN, null, true
+        const context = await ContextService.getInstance().getContext<TicketPriorityDetailsContext>(
+            TicketPriorityDetailsContext.CONTEXT_ID
         );
+
+        if (context) {
+            const id = context.getObjectId();
+            if (id) {
+                ContextService.getInstance().setDialogContext(
+                    EditTicketPriorityDialogContext.CONTEXT_ID, KIXObjectType.TICKET_PRIORITY,
+                    ContextMode.EDIT_ADMIN, id
+                );
+            }
+        }
     }
 
 }

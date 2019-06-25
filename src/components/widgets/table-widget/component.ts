@@ -4,11 +4,11 @@ import {
 } from '../../../core/model';
 import { IEventSubscriber, EventService } from '../../../core/browser/event';
 import {
-    ContextService, IdService, TableEvent, WidgetService, ActionFactory, TableFactoryService,
-    TableEventData, ComponentsService
+    ContextService, IdService, TableEvent, WidgetService, ActionFactory, TableFactoryService, TableEventData
 } from '../../../core/browser';
 import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 import { ComponentInput } from './ComponentInput';
+import { KIXModulesService } from '../../../core/browser/modules';
 class Component {
 
     public state: ComponentState;
@@ -67,13 +67,14 @@ class Component {
             this.subscriber = {
                 eventSubscriberId: IdService.generateDateBasedId(this.state.instanceId),
                 eventPublished: async (data: TableEventData, eventId: string) => {
-                    if (data && data.tableId === this.state.table.getTableId()) {
+                    if (data && this.state.table && data.tableId === this.state.table.getTableId()) {
                         if (eventId === TableEvent.TABLE_READY) {
                             await this.prepareTitle();
                             this.state.filterCount = this.state.table.isFiltered()
                                 ? this.state.table.getRowCount()
                                 : null;
                             this.prepareTitle();
+                            this.prepareActions();
                         }
                         WidgetService.getInstance().updateActions(this.state.instanceId);
                     }
@@ -86,7 +87,6 @@ class Component {
             this.prepareHeader();
             await this.prepareTable();
             this.prepareTitle();
-            this.prepareActions();
 
             if (this.state.widgetConfiguration.contextDependent) {
                 context.registerListener('table-widget-' + this.state.table.getTableId(), {
@@ -201,7 +201,7 @@ class Component {
     }
 
     public getTemplate(componentId: string): any {
-        return ComponentsService.getInstance().getComponentTemplate(componentId);
+        return KIXModulesService.getComponentTemplate(componentId);
     }
 
 }

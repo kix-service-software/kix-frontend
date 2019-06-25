@@ -34,9 +34,9 @@ export class KIXObjectNamespace extends SocketNameSpace {
         this.registerEventHandler(client, KIXObjectEvent.DELETE_OBJECT, this.deleteObject.bind(this));
     }
 
-    private loadObjects(data: LoadObjectsRequest): Promise<SocketResponse<LoadObjectsResponse<any>>> {
+    private loadObjects(data: LoadObjectsRequest): Promise<SocketResponse> {
 
-        return new Promise<SocketResponse<LoadObjectsResponse<any>>>((resolve, reject) => {
+        return new Promise<SocketResponse>((resolve, reject) => {
             const service = KIXObjectServiceRegistry.getServiceInstance(data.objectType);
             if (service) {
 

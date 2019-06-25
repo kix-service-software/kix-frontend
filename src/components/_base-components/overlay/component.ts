@@ -4,8 +4,8 @@ import {
     OverlayType, ComponentContent, WidgetType, KIXObject, ToastContent
 } from "../../../core/model";
 import { ContextService } from "../../../core/browser/context";
-import { ComponentsService } from "../../../core/browser/components";
 import { TranslationService } from "../../../core/browser/i18n/TranslationService";
+import { KIXModulesService } from "../../../core/browser/modules";
 
 class OverlayComponent {
 
@@ -229,6 +229,8 @@ class OverlayComponent {
                 return 'toast-overlay success-toast';
             case OverlayType.HINT_TOAST:
                 return 'toast-overlay';
+            case OverlayType.ERROR_TOAST:
+                return 'toast-overlay error-toast';
             case OverlayType.CONTENT_OVERLAY:
                 return 'content-overlay' + (large ? ' large' : '');
             case OverlayType.TABLE_COLUMN_FILTER:
@@ -246,6 +248,8 @@ class OverlayComponent {
                 return 'kix-icon-info';
             case OverlayType.WARNING:
                 return 'kix-icon-exclamation';
+            case OverlayType.WARNING:
+                return 'kix-icon-close';
             default:
                 return '';
         }
@@ -258,7 +262,7 @@ class OverlayComponent {
     public getTemplate(): any {
         if (this.isComponentContent()) {
             const content = (this.state.content as ComponentContent<any>);
-            return ComponentsService.getInstance().getComponentTemplate(content.getValue());
+            return KIXModulesService.getComponentTemplate(content.getValue());
         }
 
     }
