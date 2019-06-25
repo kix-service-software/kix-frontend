@@ -25,7 +25,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
         const searchResultListWidget =
             new ConfiguredWidget("201800709-search-result-list-widget", new WidgetConfiguration(
                 "search-result-list-widget", "Hit List", [
-                    'csv-export-action', 'bulk-action', 'search-result-print-action'
+                    'csv-export-action', 'bulk-action'
                 ], {},
                 false, true, null, true)
             );
