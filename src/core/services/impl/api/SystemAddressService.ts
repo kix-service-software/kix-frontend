@@ -18,7 +18,7 @@ export class SystemAddressService extends KIXObjectService {
         return SystemAddressService.INSTANCE;
     }
 
-    protected RESOURCE_URI: string = this.buildUri('system', 'systemaddresses');
+    protected RESOURCE_URI: string = this.buildUri('system', 'communication', 'systemaddresses');
 
     public objectType: KIXObjectType = KIXObjectType.SYSTEM_ADDRESS;
 
