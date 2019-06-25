@@ -1,5 +1,7 @@
 import { IKIXModuleExtension } from "../../core/extensions";
 import { UIComponent } from "../../core/model/UIComponent";
+import { UIComponentPermission } from "../../core/model/UIComponentPermission";
+import { CRUD } from "../../core/model";
 
 class Extension implements IKIXModuleExtension {
 
@@ -8,7 +10,11 @@ class Extension implements IKIXModuleExtension {
     public id = 'application-admin-module';
 
     public initComponents: UIComponent[] = [
-        new UIComponent('admin-module-component', 'admin/admin-module-component', [])
+        new UIComponent('admin-module-component', 'admin/admin-module-component', []),
+        new UIComponent('system-module-component', 'system/system-module-component', [
+            new UIComponentPermission('system/config', [CRUD.CREATE], true),
+            new UIComponentPermission('system/config', [CRUD.UPDATE], true)
+        ])
     ];
 
     public external: boolean = false;
@@ -23,6 +29,7 @@ class Extension implements IKIXModuleExtension {
             'permission/admin/dialogs/inputs/assign-role-permission-input',
             []
         ),
+        new UIComponent('system-admin-sysconfig', 'system/admin/system-admin-sysconfig', []),
         new UIComponent('i18n-admin-translations', 'i18n/admin/i18n-admin-translations', []),
         new UIComponent('new-translation-dialog', 'i18n/admin/dialogs/new-translation-dialog', []),
         new UIComponent('edit-translation-dialog', 'i18n/admin/dialogs/edit-translation-dialog', []),

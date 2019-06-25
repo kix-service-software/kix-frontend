@@ -28,6 +28,9 @@
         "kix:admin-module": {
             "i18n-admin": {
                 "module": "i18n-admin-module.extension"
+            },
+            "system-admin": {
+                "module": "admin-module.extension"
             }
         }
     }

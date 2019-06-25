@@ -12,7 +12,7 @@ export class DateTimeUtil {
                 year: 'numeric'
             };
             const userLanguage = await TranslationService.getUserLanguage();
-            string = date.toLocaleDateString(userLanguage, options);
+            string = userLanguage ? date.toLocaleDateString(userLanguage, options) : value;
         }
         return string;
     }
@@ -30,7 +30,7 @@ export class DateTimeUtil {
             };
 
             const userLanguage = await TranslationService.getUserLanguage();
-            string = date.toLocaleString(userLanguage, options);
+            string = userLanguage ? date.toLocaleDateString(userLanguage, options) : value;
         }
         return string;
     }
