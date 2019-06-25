@@ -31,7 +31,7 @@ export class AdministrationNamespace extends SocketNameSpace {
     private async loadAdminCategories(
         data: MainMenuEntriesRequest
     ): Promise<SocketResponse<AdminCategoriesResponse>> {
-        const categories = await AdminModuleService.getInstance().getAdminModuls(data.token);
+        const categories = await AdminModuleService.getInstance().getAdminModules(data.token);
         const response = new AdminCategoriesResponse(data.requestId, categories);
         return new SocketResponse(AdministrationEvent.ADMIN_CATEGORIES_LOADED, response);
     }

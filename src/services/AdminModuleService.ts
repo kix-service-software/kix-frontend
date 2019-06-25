@@ -16,7 +16,7 @@ export class AdminModuleService {
 
     private constructor() { }
 
-    public async getAdminModuls(token: string): Promise<AdminModuleCategory[]> {
+    public async getAdminModules(token: string): Promise<AdminModuleCategory[]> {
         const moduleExtensions = await PluginService.getInstance().getExtensions<IAdminModuleExtension>(
             KIXExtensions.ADMIN_MODULE
         );
