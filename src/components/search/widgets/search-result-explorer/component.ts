@@ -1,15 +1,10 @@
 import { ComponentState } from './ComponentState';
 import {
-    ContextService,
-    IdService,
-    IKIXObjectSearchListener,
-    KIXObjectSearchService,
-    SearchResultCategory,
-    ServiceRegistry,
-    IKIXObjectService
+    ContextService, IdService, IKIXObjectSearchListener, SearchResultCategory, ServiceRegistry, IKIXObjectService
 } from '../../../../core/browser';
 import { TreeNode, KIXObjectType } from '../../../../core/model';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
+import { KIXObjectSearchService } from '../../../../core/browser/kix/search/KIXObjectSearchService';
 
 export class Component implements IKIXObjectSearchListener {
 

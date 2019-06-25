@@ -1,9 +1,10 @@
 import { IConfigurationExtension } from "../../core/extensions";
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration,
-    WidgetSize, KIXObjectType
+    WidgetSize, KIXObjectType, CRUD
 } from "../../core/model";
 import { FAQDetailsContext } from "../../core/browser/faq";
+import { UIComponentPermission } from "../../core/model/UIComponentPermission";
 
 export class Extension implements IConfigurationExtension {
 
@@ -34,7 +35,8 @@ export class Extension implements IConfigurationExtension {
                         ]
                     },
                     true, true, WidgetSize.LARGE, null, false
-                )
+                ),
+                [new UIComponentPermission('links', [CRUD.READ])]
             );
 
         const faqHistoryLane =
@@ -42,7 +44,8 @@ export class Extension implements IConfigurationExtension {
                 new WidgetConfiguration(
                     'faq-article-history-widget', 'Translatable#History', ['faq-article-print-action'], {},
                     true, true, WidgetSize.LARGE, null, false
-                )
+                ),
+                [new UIComponentPermission('faq/articles/*/history', [CRUD.READ])]
             );
 
         const faqArticleWidget =

@@ -35,8 +35,8 @@ export class PluginService {
         this.pluginManager.scan();
     }
 
-    public async getExtensions<T>(extensionId: string): Promise<T[]> {
-        return await new Promise<T[]>((resolve, reject) => {
+    public getExtensions<T>(extensionId: string): Promise<T[]> {
+        return new Promise<T[]>((resolve, reject) => {
             const config = { multi: true };
             this.pluginManager.connect(host, extensionId, config,
                 (error, extensions: T[], names) => {

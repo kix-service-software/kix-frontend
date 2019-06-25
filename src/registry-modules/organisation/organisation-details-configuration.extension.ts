@@ -1,10 +1,11 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize, ContactProperty,
-    DataType, KIXObjectType, OrganisationProperty, KIXObjectProperty, ObjectinformationWidgetSettings
+    DataType, KIXObjectType, OrganisationProperty, KIXObjectProperty, ObjectinformationWidgetSettings, CRUD
 } from '../../core/model';
 import { TableConfiguration, TableHeaderHeight, TableRowHeight, DefaultColumnConfiguration } from '../../core/browser';
 import { OrganisationDetailsContext } from '../../core/browser/organisation';
+import { UIComponentPermission } from '../../core/model/UIComponentPermission';
 
 export class ModuleFactoryExtension implements IConfigurationExtension {
 
@@ -19,8 +20,8 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
             false, true, WidgetSize.LARGE, null, false
         ));
 
-        const organisationInfoLane =
-            new ConfiguredWidget('organisation-information-lane', new WidgetConfiguration(
+        const organisationInfoLane = new ConfiguredWidget('organisation-information-lane',
+            new WidgetConfiguration(
                 'object-information-widget', 'Translatable#Organisation Information', [
                     'organisation-edit-action', 'organisation-print-action'
                 ], new ObjectinformationWidgetSettings(KIXObjectType.ORGANISATION, [
@@ -38,8 +39,10 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
                     KIXObjectProperty.CHANGE_BY,
                     KIXObjectProperty.CHANGE_TIME
                 ]),
-                false, true, WidgetSize.LARGE, null, false)
-            );
+                false, true, WidgetSize.LARGE, null, false
+            ),
+            [new UIComponentPermission('organisations', [CRUD.READ])]
+        );
 
         const assignedContactsLane = new ConfiguredWidget('organisation-assigned-contacts-widget',
             new WidgetConfiguration(
@@ -79,7 +82,9 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
                     ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
                 ),
                 false, true, WidgetSize.LARGE, null, false
-            ));
+            ),
+            [new UIComponentPermission('contacts', [CRUD.READ])]
+        );
 
         const assignedTicketsLane = new ConfiguredWidget('organisation-assigned-tickets-widget',
             new WidgetConfiguration(
@@ -87,7 +92,9 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
                     'organisation-create-ticket-action', 'organisation-print-action'
                 ], {},
                 false, true, WidgetSize.LARGE, null, false
-            ));
+            ),
+            [new UIComponentPermission('tickets', [CRUD.READ])]
+        );
 
         const lanes = ['organisation-assigned-contacts-widget', 'organisation-assigned-tickets-widget'];
 

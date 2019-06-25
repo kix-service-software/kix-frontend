@@ -1,10 +1,13 @@
 import { ComponentState } from './ComponentState';
-import { KIXObjectSearchService, ContextService, OverlayService } from '../../core/browser';
-import { KIXObjectType, Ticket, OverlayType, StringContent } from '../../core/model';
+import { ContextService, OverlayService } from '../../core/browser';
+import { KIXObjectType, Ticket, OverlayType, StringContent, CRUD } from '../../core/model';
 import { EventService } from '../../core/browser/event';
 import { ApplicationEvent } from '../../core/browser/application';
-import { SearchContext } from '../../core/browser/search/context';
+import { SearchContext } from '../../core/browser/search/context/SearchContext';
 import { TranslationService } from '../../core/browser/i18n/TranslationService';
+import { AuthenticationSocketClient } from '../../core/browser/application/AuthenticationSocketClient';
+import { UIComponentPermission } from '../../core/model/UIComponentPermission';
+import { KIXObjectSearchService } from '../../core/browser/kix/search/KIXObjectSearchService';
 
 export class Component {
 
@@ -16,6 +19,10 @@ export class Component {
 
     public async onMount(): Promise<void> {
         this.state.placeholder = await TranslationService.translate("Translatable#Quick search (Tickets)");
+        const allowed = await AuthenticationSocketClient.getInstance().checkPermissions([
+            new UIComponentPermission('tickets', [CRUD.READ])
+        ]);
+        this.state.show = allowed;
     }
 
     public async search(textValue: string): Promise<void> {

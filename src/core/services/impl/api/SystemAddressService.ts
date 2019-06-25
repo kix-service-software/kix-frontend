@@ -1,6 +1,6 @@
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, Error, SystemAddress, SystemAddressFactory
+    KIXObjectSpecificCreateOptions, Error, SystemAddress
 } from '../../../model';
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
@@ -8,6 +8,7 @@ import { CreateSystemAddresses } from '../../../api/system-addresses/CreateSyste
 import { CreateSystemAddressesResponse } from '../../../api/system-addresses/CreateSystemAddressesResponse';
 import { CreateSystemAddressesRequest } from '../../../api/system-addresses/CreateSystemAddressesRequest';
 import { LoggingService } from '../LoggingService';
+import { SystemAddressFactory } from '../../object-factories/SystemAddressFactory';
 
 export class SystemAddressService extends KIXObjectService {
 

@@ -1,12 +1,12 @@
-import { ILabelProvider } from "../ILabelProvider";
 import {
     Permission, KIXObjectType, PermissionProperty, ObjectIcon, User,
     DateTimeUtil, PermissionType, Role
 } from "../../model";
 import { TranslationService } from "../i18n/TranslationService";
 import { KIXObjectService } from "../kix";
+import { LabelProvider } from "../LabelProvider";
 
-export class PermissionLabelProvider implements ILabelProvider<Permission> {
+export class PermissionLabelProvider extends LabelProvider<Permission> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.PERMISSION;
 
@@ -80,10 +80,6 @@ export class PermissionLabelProvider implements ILabelProvider<Permission> {
         return displayValue;
     }
 
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
-    }
-
     public async getDisplayText(
         permission: Permission, property: string, value?: string, translatable: boolean = true
     ): Promise<string> {
@@ -153,22 +149,10 @@ export class PermissionLabelProvider implements ILabelProvider<Permission> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public getDisplayTextClasses(object: Permission, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(object: Permission): string[] {
-        return [];
-    }
-
     public async getObjectText(
         object: Permission, id?: boolean, title?: boolean, translatable?: boolean
     ): Promise<string> {
         return await this.getObjectName(false, translatable);
-    }
-
-    public getObjectAdditionalText(object: Permission): string {
-        return null;
     }
 
     public getObjectIcon(object?: Permission): string | ObjectIcon {

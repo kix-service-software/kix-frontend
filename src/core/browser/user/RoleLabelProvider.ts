@@ -1,20 +1,16 @@
-import { ILabelProvider } from "../ILabelProvider";
 import { Role, KIXObjectType, ObjectIcon, RoleProperty, DateTimeUtil, User } from "../../model";
 import { SearchProperty } from "../SearchProperty";
 import { TranslationService } from "../i18n/TranslationService";
 import { ObjectDataService } from "../ObjectDataService";
 import { KIXObjectService } from "../kix";
+import { LabelProvider } from "../LabelProvider";
 
-export class RoleLabelProvider implements ILabelProvider<Role> {
+export class RoleLabelProvider extends LabelProvider<Role> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.ROLE;
 
     public isLabelProviderFor(role: Role): boolean {
         return role instanceof Role;
-    }
-
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
@@ -56,10 +52,6 @@ export class RoleLabelProvider implements ILabelProvider<Role> {
         }
 
         return displayValue;
-    }
-
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
     }
 
     public async getDisplayText(
@@ -115,20 +107,8 @@ export class RoleLabelProvider implements ILabelProvider<Role> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public getDisplayTextClasses(role: Role, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(role: Role): string[] {
-        return [];
-    }
-
     public async getObjectText(role: Role, id?: boolean, title?: boolean, translatable?: boolean): Promise<string> {
         return role.Name;
-    }
-
-    public getObjectAdditionalText(role: Role): string {
-        return null;
     }
 
     public getObjectIcon(role?: Role): string | ObjectIcon {

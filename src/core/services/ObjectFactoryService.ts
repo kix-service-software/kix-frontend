@@ -1,4 +1,5 @@
-import { IObjectFactory, KIXObjectType, KIXObject } from "../model";
+import { KIXObjectType, KIXObject } from "../model";
+import { IObjectFactory } from "./object-factories/IObjectFactory";
 
 export class ObjectFactoryService {
 
@@ -19,10 +20,13 @@ export class ObjectFactoryService {
         this.getInstance().factories.push(factory);
     }
 
-    public static createObject<T extends KIXObject | string = any>(objectType: KIXObjectType, object: T): T {
+    public static async createObject<T extends KIXObject | string = any>(
+        token: string, objectType: KIXObjectType, object: T
+    ): Promise<T> {
         const factory = this.getInstance().factories.find((f) => f.isFactoryFor(objectType));
         if (factory) {
-            return factory.create(object);
+            object = factory.create(object);
+            object = await factory.applyPermissions(token, object);
         }
         return object;
     }

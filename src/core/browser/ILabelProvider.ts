@@ -32,4 +32,6 @@ export interface ILabelProvider<T> {
 
     getIcons(object: T, property: string, value?: string | number): Promise<Array<string | ObjectIcon>>;
 
+    canShow(property: string, object: T): boolean;
+
 }

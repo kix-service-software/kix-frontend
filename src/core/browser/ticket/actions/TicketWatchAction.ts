@@ -1,15 +1,21 @@
 import { AbstractAction } from '../../../model/components/action/AbstractAction';
-import { Ticket, KIXObjectType, CreateTicketWatcherOptions, DeleteTicketWatcherOptions } from '../../../model';
+import { Ticket, KIXObjectType, CreateTicketWatcherOptions, DeleteTicketWatcherOptions, CRUD } from '../../../model';
 import { ContextService } from '../../context';
 import { KIXObjectService } from '../../kix';
 import { EventService } from '../../event';
 import { TicketDetailsContext } from '../context';
 import { BrowserUtil } from '../../BrowserUtil';
 import { ApplicationEvent } from '../../application';
-import { ObjectDataService } from '../../ObjectDataService';
 import { AgentService } from '../../application/AgentService';
+import { UIComponentPermission } from '../../../model/UIComponentPermission';
+import { CacheService } from '../../cache';
 
 export class TicketWatchAction extends AbstractAction<Ticket> {
+
+    public permissions = [
+        new UIComponentPermission('tickets/*/watchers', [CRUD.CREATE]),
+        new UIComponentPermission('tickets/*/watchers/*', [CRUD.DELETE])
+    ];
 
     private isWatching: boolean = false;
 
@@ -72,6 +78,9 @@ export class TicketWatchAction extends AbstractAction<Ticket> {
             }
 
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
+
+            await CacheService.getInstance().deleteKeys(KIXObjectType.CURRENT_USER);
+            EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
 
         }, 1000);
     }

@@ -68,9 +68,7 @@ class Component {
             configuration.resetContext,
             configuration.title,
             configuration.singleTab,
-            configuration.formId,
             configuration.icon,
-            configuration.resetForm
         );
     }
 

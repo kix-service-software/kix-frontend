@@ -11,8 +11,9 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const context = (await ContextService.getInstance().getContext(TicketContext.CONTEXT_ID) as TicketContext);
+        const context = await ContextService.getInstance().getContext<TicketContext>(TicketContext.CONTEXT_ID);
         this.state.contentWidgets = context.getContent();
+        context.setQueue(null);
     }
 
 }

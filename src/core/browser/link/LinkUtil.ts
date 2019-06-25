@@ -2,7 +2,7 @@ import {
     LinkType, Link, LinkObject, KIXObject, KIXObjectType,
     CreateLinkDescription, LinkTypeDescription
 } from "../../model";
-import { FactoryService, KIXObjectService } from "../kix";
+import { FactoryService, KIXObjectService, ServiceRegistry } from "../kix";
 import { LabelService } from "../LabelService";
 
 export class LinkUtil {
@@ -175,7 +175,13 @@ export class LinkUtil {
                 if (labelProvider) {
                     objectName = await labelProvider.getObjectName();
                 }
-                partners.push([objectName, linkableObjectType]);
+
+                const service = ServiceRegistry.getServiceInstance(linkableObjectType);
+                if (service) {
+                    if (await service.hasReadPermissionFor(linkableObjectType)) {
+                        partners.push([objectName, linkableObjectType]);
+                    }
+                }
             }
         }
 

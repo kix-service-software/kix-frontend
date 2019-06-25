@@ -1,7 +1,8 @@
 import { ComponentState } from './ComponentState';
 import { ObjectIcon, WidgetType } from '../../../../core/model';
-import { WidgetService, ComponentsService } from '../../../../core/browser';
+import { WidgetService } from '../../../../core/browser';
 import { IOverlayDialogListener, DialogService } from '../../../../core/browser/components/dialog';
+import { KIXModulesService } from '../../../../core/browser/modules';
 
 export class OverlayDialogComponent implements IOverlayDialogListener {
 
@@ -17,7 +18,7 @@ export class OverlayDialogComponent implements IOverlayDialogListener {
     }
 
     public open(dialogTagId?: string, input?: any, title?: string, icon?: string | ObjectIcon): void {
-        this.state.dialogTemplate = ComponentsService.getInstance().getComponentTemplate(dialogTagId);
+        this.state.dialogTemplate = KIXModulesService.getComponentTemplate(dialogTagId);
         this.state.dialogInput = input;
         this.state.title = title;
         this.state.icon = icon;

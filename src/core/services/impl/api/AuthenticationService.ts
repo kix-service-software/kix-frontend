@@ -3,7 +3,6 @@ import { SocketAuthenticationError, UserType, UserLogin } from '../../../model';
 import { LoginResponse, SessionResponse } from '../../../api';
 import { HttpService } from './HttpService';
 import { ConfigurationService } from '../ConfigurationService';
-import { LoggingService } from '../LoggingService';
 
 export class AuthenticationService {
 

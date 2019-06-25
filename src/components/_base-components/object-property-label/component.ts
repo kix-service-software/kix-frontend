@@ -1,25 +1,32 @@
 import { ComponentState } from './ComponentState';
 import { ObjectPropertyLabelInput } from './ObjectPropertyLabelInput';
 import { ObjectIcon } from '../../../core/model';
+import { ILabelProvider } from '../../../core/browser';
 
 export class ObjectPropertyLabelComponent<T> {
 
     private state: ComponentState<T>;
+
+    private object: any;
+    private property: string;
+    private labelProvider: ILabelProvider<any>;
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
     public onInput(input: ObjectPropertyLabelInput<T>): void {
-        this.state.object = input.object;
-        this.state.property = input.property;
-        this.state.labelProvider = input.labelProvider;
+        this.object = input.object;
+        this.property = input.property;
+        this.labelProvider = input.labelProvider;
         this.state.hasText = typeof input.showText !== 'undefined' ? input.showText : true;
     }
 
     public onMount(): void {
-        this.prepareDisplayText();
-        this.preparePropertyName();
+        if (this.object) {
+            this.prepareDisplayText();
+            this.preparePropertyName();
+        }
     }
 
     private async prepareDisplayText(): Promise<void> {
@@ -28,15 +35,15 @@ export class ObjectPropertyLabelComponent<T> {
     }
 
     private async preparePropertyName(): Promise<void> {
-        let name = this.state.property;
-        if (this.state.labelProvider) {
-            name = await this.state.labelProvider.getPropertyText(this.state.property);
+        let name = this.property;
+        if (this.labelProvider) {
+            name = await this.labelProvider.getPropertyText(this.property);
         }
         this.state.propertyName = name;
     }
 
     private async getIcon(): Promise<string | ObjectIcon> {
-        const icons = await this.state.labelProvider.getIcons(this.state.object, this.state.property);
+        const icons = await this.labelProvider.getIcons(this.object, this.property);
         let icon = null;
         if (icons && icons.length) {
             icon = icons[0];
@@ -45,17 +52,17 @@ export class ObjectPropertyLabelComponent<T> {
     }
 
     private async getPropertyDisplayText(): Promise<string> {
-        let value = this.state.property;
-        if (this.state.labelProvider && this.state.object) {
-            value = await this.state.labelProvider.getDisplayText(this.state.object, this.state.property);
+        let value = this.property;
+        if (this.labelProvider && this.object) {
+            value = await this.labelProvider.getDisplayText(this.object, this.property);
         }
         return value;
     }
 
     public getValueClasses(): string {
         let classes = [];
-        if (this.state.labelProvider) {
-            classes = this.state.labelProvider.getDisplayTextClasses(this.state.object, this.state.property);
+        if (this.labelProvider) {
+            classes = this.labelProvider.getDisplayTextClasses(this.object, this.property);
         }
         return classes.join(',');
     }

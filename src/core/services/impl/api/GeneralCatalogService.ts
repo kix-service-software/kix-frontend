@@ -1,9 +1,10 @@
 import { KIXObjectService } from './KIXObjectService';
 import {
     GeneralCatalogItem, KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    Error, GeneralCatalogItemFactory
+    Error
 } from '../../../model';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
+import { GeneralCatalogItemFactory } from '../../object-factories/GeneralCatalogItemFactory';
 
 export class GeneralCatalogService extends KIXObjectService {
 

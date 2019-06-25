@@ -1,9 +1,10 @@
 import { ComponentState } from './ComponentState';
 import {
-    ToggleOptions, ComponentsService, AbstractMarkoComponent, BrowserUtil, ActionFactory, ContextService
+    ToggleOptions, AbstractMarkoComponent, BrowserUtil, ActionFactory, ContextService
 } from '../../../../../../core/browser';
 import { TableEvent, TableEventData } from '../../../../../../core/browser/table';
 import { IEventSubscriber, EventService } from '../../../../../../core/browser/event';
+import { KIXModulesService } from '../../../../../../core/browser/modules';
 
 class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
 
@@ -100,7 +101,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
     public getToggleTemplate(): any {
         return this.toggleOptions && this.toggleOptions.componentId ?
-            ComponentsService.getInstance().getComponentTemplate(this.toggleOptions.componentId) : undefined;
+            KIXModulesService.getComponentTemplate(this.toggleOptions.componentId) : undefined;
     }
 
     public getToggleInput(): any {

@@ -1,19 +1,15 @@
 import {
     ObjectIcon, Contact, ContactProperty, Organisation, KIXObjectType, KIXObjectProperty, DateTimeUtil, User
 } from '../../model';
-import { ILabelProvider } from '..';
 import { KIXObjectService } from '../kix';
 import { SearchProperty } from '../SearchProperty';
 import { TranslationService } from '../i18n/TranslationService';
 import { ObjectDataService } from '../ObjectDataService';
+import { LabelProvider } from '../LabelProvider';
 
-export class ContactLabelProvider implements ILabelProvider<Contact> {
+export class ContactLabelProvider extends LabelProvider<Contact> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONTACT;
-
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
-    }
 
     public async getPropertyValueDisplayText(
         property: string, value: string | number, translatable: boolean = true
@@ -172,7 +168,7 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
                 ).catch((error) => console.log(error));
                 displayValue = primaryOrganisations && primaryOrganisations.length
                     ? `${primaryOrganisations[0].Name} (${primaryOrganisations[0].Number})`
-                    : contact.PrimaryOrganisationID;
+                    : '';
                 break;
             case ContactProperty.ORGANISATION_IDS:
                 if (contact.OrganisationIDs && contact.OrganisationIDs.length) {
@@ -181,7 +177,7 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
                     ).catch((error) => console.log(error));
                     const organisationNames = organisations && organisations.length
                         ? organisations.map((c) => c.Name)
-                        : contact.OrganisationIDs;
+                        : [];
                     displayValue = organisationNames.join(', ');
                 }
                 break;
@@ -217,14 +213,6 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public getDisplayTextClasses(object: Contact, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(object: Contact): string[] {
-        return [];
-    }
-
     public async getObjectText(
         contact: Contact, id: boolean = false, name: boolean = false, translatable: boolean = true
     ): Promise<string> {
@@ -249,16 +237,8 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
         return returnString;
     }
 
-    public getObjectAdditionalText(object: Contact, translatable: boolean = true): string {
-        return '';
-    }
-
     public getObjectIcon(object: Contact): string | ObjectIcon {
         return 'kix-icon-man-bubble';
-    }
-
-    public getObjectTooltip(object: Contact): string {
-        return '';
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
@@ -271,11 +251,6 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
 
         const contactLabel = translatable ? await TranslationService.translate('Translatable#Contact') : 'Contact';
         return contactLabel;
-    }
-
-    public async getIcons(object: Contact, property: string): Promise<Array<string | ObjectIcon>> {
-        const icons = [];
-        return icons;
     }
 
 }

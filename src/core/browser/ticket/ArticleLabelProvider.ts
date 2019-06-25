@@ -1,9 +1,9 @@
-import { ILabelProvider } from '..';
 import { Article, ArticleProperty, DateTimeUtil, ObjectIcon, KIXObjectType, Channel } from '../../model';
 import { KIXObjectService } from '../kix';
 import { TranslationService } from '../i18n/TranslationService';
+import { LabelProvider } from '../LabelProvider';
 
-export class ArticleLabelProvider implements ILabelProvider<Article> {
+export class ArticleLabelProvider extends LabelProvider<Article> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.ARTICLE;
 

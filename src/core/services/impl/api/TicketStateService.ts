@@ -1,11 +1,13 @@
 import {
     TicketState, KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, StateType, ObjectIcon, Error, TicketStateFactory, TicketStateTypeFactory
+    KIXObjectSpecificCreateOptions, StateType, Error
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { LoggingService } from '../LoggingService';
+import { TicketStateFactory } from '../../object-factories/TicketStateFactory';
+import { TicketStateTypeFactory } from '../../object-factories/TicketStateTypeFactory';
 
 export class TicketStateService extends KIXObjectService {
 

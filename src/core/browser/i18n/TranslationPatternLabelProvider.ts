@@ -1,11 +1,11 @@
-import { ILabelProvider } from "../ILabelProvider";
 import {
     TranslationPattern, KIXObjectType, ObjectIcon, TranslationPatternProperty, DateTimeUtil, User
 } from "../../model";
 import { TranslationService } from "./TranslationService";
 import { KIXObjectService } from "../kix";
+import { LabelProvider } from "../LabelProvider";
 
-export class TranslationPatternLabelProvider implements ILabelProvider<TranslationPattern> {
+export class TranslationPatternLabelProvider extends LabelProvider<TranslationPattern> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.TRANSLATION_PATTERN;
 
@@ -49,10 +49,6 @@ export class TranslationPatternLabelProvider implements ILabelProvider<Translati
         }
 
         return displayValue;
-    }
-
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
     }
 
     public async getDisplayText(

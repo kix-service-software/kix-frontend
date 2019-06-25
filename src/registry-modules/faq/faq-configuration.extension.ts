@@ -1,13 +1,14 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize,
-    FormField, Form, FormContext, KIXObjectType, TableWidgetSettings
+    FormField, Form, FormContext, KIXObjectType, TableWidgetSettings, CRUD
 } from '../../core/model';
 import { FAQContext } from '../../core/browser/faq';
 import { SearchProperty, TableConfiguration, TableHeaderHeight, TableRowHeight } from '../../core/browser';
 import { FAQArticleProperty } from '../../core/model/kix/faq';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../core/services';
+import { UIComponentPermission } from '../../core/model/UIComponentPermission';
 
 export class DashboardModuleFactoryExtension implements IConfigurationExtension {
 
@@ -18,25 +19,31 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
 
         const articleListWidget =
-            new ConfiguredWidget('20180727-faq-article-list-widget', new WidgetConfiguration(
-                'table-widget', 'Translatable#Overview FAQ', ['faq-article-create-action', 'csv-export-action'],
-                new TableWidgetSettings(
-                    KIXObjectType.FAQ_ARTICLE, null,
-                    new TableConfiguration(
-                        KIXObjectType.FAQ_ARTICLE, null, 25, null, null, true, null, null, null,
-                        TableHeaderHeight.LARGE, TableRowHeight.LARGE
-                    )
+            new ConfiguredWidget('20180727-faq-article-list-widget',
+                new WidgetConfiguration(
+                    'table-widget', 'Translatable#Overview FAQ', ['faq-article-create-action', 'csv-export-action'],
+                    new TableWidgetSettings(
+                        KIXObjectType.FAQ_ARTICLE, null,
+                        new TableConfiguration(
+                            KIXObjectType.FAQ_ARTICLE, null, 25, null, null, true, null, null, null,
+                            TableHeaderHeight.LARGE, TableRowHeight.LARGE
+                        )
+                    ),
+                    false, false, WidgetSize.BOTH, 'kix-icon-faq', true
                 ),
-                false, false, WidgetSize.BOTH, 'kix-icon-faq', true)
+                [new UIComponentPermission('faq/articles', [CRUD.READ])]
             );
 
         const content = ['20180727-faq-article-list-widget'];
         const contentWidgets = [articleListWidget];
 
         const faqCategoryExplorer =
-            new ConfiguredWidget('20180625-faq-category-explorer', new WidgetConfiguration(
-                'faq-category-explorer', 'Translatable#FAQ Categories', [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-faq', false)
+            new ConfiguredWidget('20180625-faq-category-explorer',
+                new WidgetConfiguration(
+                    'faq-category-explorer', 'Translatable#FAQ Categories', [], {},
+                    false, false, WidgetSize.BOTH, 'kix-icon-faq', false
+                ),
+                [new UIComponentPermission('faq/categories', [CRUD.READ])]
             );
 
         const explorer = ['20180625-faq-category-explorer'];

@@ -1,6 +1,5 @@
 export { ArchiveFlag } from './ArchiveFlag';
 export { Article } from './Article';
-export { ArticleFactory } from './ArticleFactory';
 export { ArticleFlag } from './ArticleFlag';
 export { ArticleReceiver } from './ArticleReceiver';
 export { ArticleProperty } from './ArticleProperty';
@@ -9,7 +8,6 @@ export { SenderType } from './SenderType';
 export { StateType } from './StateType';
 export { Ticket } from './Ticket';
 export { TicketHistory } from './TicketHistory';
-export { TicketHistoryFactory } from './TicketHistoryFactory';
 export { TicketHistoryProperty } from './TicketHistoryProperty';
 export { TicketPriority } from './TicketPriority';
 export { TicketState } from './TicketState';
@@ -32,16 +30,6 @@ export { CreateTicketWatcherOptions } from './CreateTicketWatcherOptions';
 export { DeleteTicketWatcherOptions } from './DeleteTicketWatcherOptions';
 export { TicketPriorityProperty } from './TicketPriorityProperty';
 
-export { TicketFactory } from './TicketFactory';
-export { QueueFactory } from './QueueFactory';
-export { SenderTypeFactory } from './SenderTypeFactory';
-export { LockFactory } from './LockFactory';
-export { FollowUpTypeFactory } from './FollowUpTypeFactory';
-
 export { ArticleLoadingOptions } from './ArticleLoadingOptions';
-export { TicketPriorityFactory } from './TicketPriorityFactory';
-export { TicketStateFactory } from './TicketStateFactory';
-export { TicketStateTypeFactory } from './TicketStateTypeFactory';
-export { TicketTypeFactory } from './TicketTypeFactory';
 
 export * from './socket';

@@ -8,6 +8,7 @@ import { Error } from '../../../model';
 import { AuthenticationService } from './AuthenticationService';
 import { CacheService } from '../../../cache';
 import { PermissionError } from '../../../model/PermissionError';
+import { OptionsResponse, RequestMethod } from '../../../api';
 
 export class HttpService {
 
@@ -35,8 +36,95 @@ export class HttpService {
         this.backendCertificate = fs.readFileSync(certPath);
     }
 
+    public async get<T>(
+        resource: string, queryParameters: any, token: any, clientRequestId: string,
+        cacheKeyPrefix: string = '', useCache: boolean = true
+    ): Promise<T> {
+        const options = {
+            method: RequestMethod.GET,
+            qs: queryParameters
+        };
+
+        let cacheKey: string;
+        if (useCache) {
+            cacheKey = this.buildCacheKey(resource, queryParameters, token);
+            const cachedObject = await CacheService.getInstance().get(cacheKey, cacheKeyPrefix);
+            if (cachedObject) {
+                return cachedObject;
+            }
+        }
+
+        const requestKey = this.buildCacheKey(resource, queryParameters, token);
+
+        if (this.requestPromises.has(requestKey)) {
+            return this.requestPromises.get(requestKey);
+        }
+
+        const requestPromise = this.executeRequest<T>(resource, token, clientRequestId, options);
+
+        this.requestPromises.set(requestKey, requestPromise);
+
+        requestPromise
+            .then((response) => {
+                if (useCache) {
+                    CacheService.getInstance().set(cacheKey, response, cacheKeyPrefix);
+                }
+                this.requestPromises.delete(requestKey);
+            })
+            .catch(() => this.requestPromises.delete(requestKey));
+
+        return requestPromise;
+    }
+
+    public async post<T>(
+        resource: string, content: any, token: any, clientRequestId: string, cacheKeyPrefix: string = ''
+    ): Promise<T> {
+        const options = {
+            method: RequestMethod.POST,
+            body: content
+        };
+
+        const response = this.executeRequest<T>(resource, token, clientRequestId, options);
+        await CacheService.getInstance().deleteKeys(cacheKeyPrefix);
+        return response;
+    }
+
+    public async patch<T>(
+        resource: string, content: any, token: any, clientRequestId: string, cacheKeyPrefix: string = ''
+    ): Promise<T> {
+        const options = {
+            method: RequestMethod.PATCH,
+            body: content
+        };
+
+        const response = this.executeRequest<T>(resource, token, clientRequestId, options);
+        await CacheService.getInstance().deleteKeys(cacheKeyPrefix);
+        return response;
+    }
+
+    public async delete<T>(
+        resource: string, token: any, clientRequestId: string, cacheKeyPrefix: string = ''
+    ): Promise<T> {
+        const options = {
+            method: RequestMethod.DELETE,
+        };
+
+        const response = this.executeRequest<T>(resource, token, clientRequestId, options);
+        await CacheService.getInstance().deleteKeys(cacheKeyPrefix);
+        return response;
+    }
+
+    public async options(token: string, resource: string): Promise<OptionsResponse> {
+        const options = {
+            method: RequestMethod.OPTIONS
+        };
+
+        const response = await this.executeRequest<Response>(resource, token, null, options, true);
+        return new OptionsResponse(response);
+    }
+
     private executeRequest<T>(
-        resource: string, token: string, clientRequestId: string, options: any
+        resource: string, token: string, clientRequestId: string, options: any, fullResponse: boolean = false
     ): Promise<T> {
         const backendToken = AuthenticationService.getInstance().getBackendToken(token);
 
@@ -48,6 +136,10 @@ export class HttpService {
         };
         options.json = true;
         options.ca = this.backendCertificate;
+
+        if (fullResponse) {
+            options.resolveWithFullResponse = true;
+        }
 
         let parameter = '';
         if (options.method === 'GET') {
@@ -92,84 +184,6 @@ export class HttpService {
                     }
                 });
         });
-    }
-
-    public async get<T>(
-        resource: string, queryParameters: any, token: any, clientRequestId: string,
-        cacheKeyPrefix: string = '', useCache: boolean = true
-    ): Promise<T> {
-        const options = {
-            method: 'GET',
-            qs: queryParameters
-        };
-
-        let cacheKey: string;
-        if (useCache) {
-            cacheKey = this.buildCacheKey(resource, queryParameters, token);
-            const cachedObject = await CacheService.getInstance().get(cacheKey, cacheKeyPrefix);
-            if (cachedObject) {
-                return cachedObject;
-            }
-        }
-
-        const requestKey = this.buildCacheKey(resource, queryParameters, token);
-
-        if (this.requestPromises.has(requestKey)) {
-            return this.requestPromises.get(requestKey);
-        }
-
-        const requestPromise = this.executeRequest<T>(resource, token, clientRequestId, options);
-
-        this.requestPromises.set(requestKey, requestPromise);
-
-        requestPromise
-            .then((response) => {
-                if (useCache) {
-                    CacheService.getInstance().set(cacheKey, response, cacheKeyPrefix);
-                }
-                this.requestPromises.delete(requestKey);
-            })
-            .catch(() => this.requestPromises.delete(requestKey));
-
-        return requestPromise;
-    }
-
-    public async post<T>(
-        resource: string, content: any, token: any, clientRequestId: string, cacheKeyPrefix: string = ''
-    ): Promise<T> {
-        const options = {
-            method: 'POST',
-            body: content
-        };
-
-        const response = this.executeRequest<T>(resource, token, clientRequestId, options);
-        await CacheService.getInstance().deleteKeys(cacheKeyPrefix);
-        return response;
-    }
-
-    public async patch<T>(
-        resource: string, content: any, token: any, clientRequestId: string, cacheKeyPrefix: string = ''
-    ): Promise<T> {
-        const options = {
-            method: 'PATCH',
-            body: content
-        };
-
-        const response = this.executeRequest<T>(resource, token, clientRequestId, options);
-        await CacheService.getInstance().deleteKeys(cacheKeyPrefix);
-        return response;
-    }
-
-    public async delete<T>(
-        resource: string, token: any, clientRequestId: string, cacheKeyPrefix: string = ''
-    ): Promise<T> {
-        const options = {
-            method: 'DELETE',
-        };
-
-        const response = this.executeRequest<T>(resource, token, clientRequestId, options);
-        await CacheService.getInstance().deleteKeys(cacheKeyPrefix);
-        return response;
     }
 
     private buildRequestUrl(resource: string): string {

@@ -4,8 +4,7 @@ import {
     KIXObjectSpecificCreateOptions, Sla, Error
 } from "../../../model";
 import { KIXObjectServiceRegistry } from "../../KIXObjectServiceRegistry";
-import { SlaBrowserFactory } from "../../../browser/sla";
-import { SlaFactory } from "../../../model/kix/sla/SlaFactory";
+import { SlaFactory } from "../../object-factories/SlaFactory";
 
 export class SlaService extends KIXObjectService {
 

@@ -1,60 +1,86 @@
 import { IKIXModuleExtension } from "../../core/extensions";
+import { UIComponent } from "../../core/model/UIComponent";
+import { UIComponentPermission } from "../../core/model/UIComponentPermission";
+import { CRUD } from "../../core/model";
 
 class Extension implements IKIXModuleExtension {
 
-    public initComponentId: string = 'application-module-component';
+    public tags: Array<[string, string]>;
+
+    public id = 'application-module';
+
+    public initComponents: UIComponent[] = [
+        new UIComponent('application-module-component', 'application/module/application-module-component', []),
+        new UIComponent('application-links-module-component', 'application/module/application-links-module-component', [
+            new UIComponentPermission('links', [CRUD.READ])
+        ])
+    ];
 
     public external: boolean = false;
 
-    public tags: Array<[string, string]> = [
-        ['application-module-component', 'application-module-component'],
-        ['home', 'home/home-module'],
-        ['release', 'release/release-module'],
-        ['search', 'search/search-module'],
-        ['search-result-explorer', 'search/widgets/search-result-explorer'],
-        ['icon', '_base-components/icon'],
-        ['list-with-title', '_base-components/base-html-components/list-with-title'],
-        ['link-object-dialog', '_base-components/dialog/link-object-dialog'],
-        ['edit-linked-objects-dialog', '_base-components/dialog/edit-linked-objects-dialog'],
-        ['toast', '_base-components/overlay/toast'],
-        ['refresh-app-toast', '_base-components/overlay/refresh-app-toast'],
-        ['confirm-overlay', '_base-components/overlay/confirm-overlay'],
-        ['table-column-filter-overlay', '_base-components/overlay/table-column-filter-overlay'],
-        ['default-text-input', '_base-components/form/inputs/default-text-input'],
-        ['default-select-input', '_base-components/form/inputs/default-select-input'],
-        ['form-list', '_base-components/form/inputs/form-list'],
-        ['rich-text-input', '_base-components/form/inputs/rich-text-input'],
-        ['valid-input', '_base-components/form/inputs/valid-input'],
-        ['attachment-input', '_base-components/form/inputs/attachment-input'],
-        ['icon-input', '_base-components/form/inputs/icon-input'],
-        ['link-input', '_base-components/form/inputs/link-input'],
-        ['language-input', '_base-components/form/inputs/language-input'],
-        ['general-catalog-input', '_base-components/form/inputs/general-catalog-input'],
-        ['text-area-input', '_base-components/form/inputs/text-area-input'],
-        ['object-reference-input', '_base-components/form/inputs/object-reference-input'],
-        ['number-input', '_base-components/form/inputs/number-input'],
-        ['date-time-input', '_base-components/form/inputs/date-time-input'],
-        ['notes-widget', 'widgets/notes-widget'],
-        ['linked-objects-widget', 'widgets/linked-objects-widget'],
-        ['help-widget', 'widgets/help-widget'],
-        ['personal-settings-dialog', '_base-components/dialog/personal-settings-dialog'],
-        ['bulk-dialog', '_base-components/dialog/bulk-dialog'],
-        ['table-widget', 'widgets/table-widget'],
-        // tslint:disable-next-line:max-line-length
-        ['label-list-cell-content', '_base-components/standard-table-NEW/table-body/table-row/table-cell-NEW/label-list-cell-content'],
-        ['multiline-cell', '_base-components/standard-table-NEW/table-body/table-row/table-cell-NEW/multiline-cell'],
-        ['crud-cell', '_base-components/standard-table-NEW/table-body/table-row/table-cell-NEW/crud-cell'],
-        ['checkbox-input', '_base-components/form/inputs/checkbox-input'],
-        ['translation-string', '_base-components/translation-string'],
-        ['import-dialog', '_base-components/dialog/import-dialog'],
-        ['permissions-form-input', 'permission/admin/dialogs/inputs/permissions-form-input'],
-        ['permission-input', 'permission/admin/dialogs/inputs/permission-input'],
-        ['assign-role-permission-input', 'permission/admin/dialogs/inputs/assign-role-permission-input'],
-        ['object-details-page', '_base-components/object-details-page'],
-        ['object-information-widget', 'widgets/object-information-widget'],
-        ['object-information', '_base-components/object-information']
+    public uiComponents: UIComponent[] = [
+        new UIComponent('home', 'home/home-module', []),
+        new UIComponent('release', 'release/release-module', []),
+        new UIComponent('search', 'search/search-module', []),
+        new UIComponent('search-result-explorer', 'search/widgets/search-result-explorer', []),
+        new UIComponent('icon', '_base-components/icon', []),
+        new UIComponent('list-with-title', '_base-components/base-html-components/list-with-title', []),
+        new UIComponent('link-object-dialog', '_base-components/dialog/link-object-dialog', []),
+        new UIComponent('edit-linked-objects-dialog', '_base-components/dialog/edit-linked-objects-dialog', []),
+        new UIComponent('toast', '_base-components/overlay/toast', []),
+        new UIComponent('refresh-app-toast', '_base-components/overlay/refresh-app-toast', []),
+        new UIComponent('confirm-overlay', '_base-components/overlay/confirm-overlay', []),
+        new UIComponent('table-column-filter-overlay', '_base-components/overlay/table-column-filter-overlay', []),
+        new UIComponent('default-text-input', '_base-components/form/inputs/default-text-input', []),
+        new UIComponent('default-select-input', '_base-components/form/inputs/default-select-input', []),
+        new UIComponent('form-list', '_base-components/form/inputs/form-list', []),
+        new UIComponent('rich-text-input', '_base-components/form/inputs/rich-text-input', []),
+        new UIComponent('valid-input', '_base-components/form/inputs/valid-input', []),
+        new UIComponent('attachment-input', '_base-components/form/inputs/attachment-input', []),
+        new UIComponent('icon-input', '_base-components/form/inputs/icon-input', []),
+        new UIComponent('link-input', '_base-components/form/inputs/link-input', []),
+        new UIComponent('language-input', '_base-components/form/inputs/language-input', []),
+        new UIComponent('general-catalog-input', '_base-components/form/inputs/general-catalog-input', []),
+        new UIComponent('text-area-input', '_base-components/form/inputs/text-area-input', []),
+        new UIComponent('object-reference-input', '_base-components/form/inputs/object-reference-input', []),
+        new UIComponent('number-input', '_base-components/form/inputs/number-input', []),
+        new UIComponent('date-time-input', '_base-components/form/inputs/date-time-input', []),
+        new UIComponent('notes-widget', 'widgets/notes-widget', []),
+        new UIComponent('linked-objects-widget', 'widgets/linked-objects-widget', []),
+        new UIComponent('help-widget', 'widgets/help-widget', []),
+        new UIComponent('personal-settings-dialog', '_base-components/dialog/personal-settings-dialog', []),
+        new UIComponent('bulk-dialog', '_base-components/dialog/bulk-dialog', []),
+        new UIComponent('table-widget', 'widgets/table-widget', []),
+        new UIComponent(
+            'label-list-cell-content',
+            '_base-components/standard-table-NEW/table-body/table-row/table-cell-NEW/label-list-cell-content',
+            []
+        ),
+        new UIComponent(
+            'multiline-cell',
+            '_base-components/standard-table-NEW/table-body/table-row/table-cell-NEW/multiline-cell',
+            []
+        ),
+        new UIComponent(
+            'crud-cell',
+            '_base-components/standard-table-NEW/table-body/table-row/table-cell-NEW/crud-cell',
+            []
+        ),
+        new UIComponent('checkbox-input', '_base-components/form/inputs/checkbox-input', []),
+        new UIComponent('translation-string', '_base-components/translation-string', []),
+        new UIComponent('import-dialog', '_base-components/dialog/import-dialog', []),
+        new UIComponent('permissions-form-input', 'permission/admin/dialogs/inputs/permissions-form-input', []),
+        new UIComponent('permission-input', 'permission/admin/dialogs/inputs/permission-input', []),
+        new UIComponent(
+            'assign-role-permission-input',
+            'permission/admin/dialogs/inputs/assign-role-permission-input',
+            []
+        ),
+        new UIComponent('object-details-page', '_base-components/object-details-page', []),
+        new UIComponent('object-information-widget', 'widgets/object-information-widget', []),
+        new UIComponent('object-information', '_base-components/object-information', []),
+        new UIComponent('new-system-address-dialog', 'communication/admin/dialogs/new-system-address-dialog', [])
     ];
-
 
 }
 

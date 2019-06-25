@@ -1,11 +1,12 @@
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, TicketPriority, ObjectIcon, Error, TicketPriorityFactory
+    KIXObjectSpecificCreateOptions, TicketPriority, Error
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { LoggingService } from '../LoggingService';
+import { TicketPriorityFactory } from '../../object-factories/TicketPriorityFactory';
 
 export class TicketPriorityService extends KIXObjectService {
 

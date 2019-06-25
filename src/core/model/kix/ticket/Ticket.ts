@@ -19,28 +19,6 @@ export class Ticket extends KIXObject<Ticket> {
 
     public TicketID: number;
 
-    public StateID: number;
-
-    public PriorityID: number;
-
-    public LockID: number;
-
-    public QueueID: number;
-
-    public OrganisationID: string;
-
-    public ContactID: string;
-
-    public OwnerID: number;
-
-    public TypeID: number;
-
-    public SLAID?: number | string;
-
-    public ServiceID?: number;
-
-    public ResponsibleID: number;
-
     public Age: number;
 
     public Created: string;
@@ -113,13 +91,37 @@ export class Ticket extends KIXObject<Ticket> {
 
     public DynamicFields: DynamicField[];
 
+    public Unseen: number;
+
+    // Object References
+
+    public StateID: number;
+
+    public PriorityID: number;
+
+    public LockID: number;
+
+    public QueueID: number;
+
+    public OrganisationID: string;
+
+    public ContactID: string;
+
+    public OwnerID: number;
+
+    public TypeID: number;
+
+    public SLAID?: number | string;
+
+    public ServiceID?: number;
+
+    public ResponsibleID: number;
+
     public Articles: Article[];
 
     public History: TicketHistory[];
 
     public Watchers: Watcher[];
-
-    public Unseen: number;
 
     public constructor(ticket?: Ticket) {
         super();

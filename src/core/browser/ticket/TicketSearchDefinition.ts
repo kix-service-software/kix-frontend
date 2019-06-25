@@ -1,13 +1,15 @@
 import { SearchDefinition, SearchResultCategory, KIXObjectService } from "../kix";
 import {
     KIXObjectType, TicketProperty, InputFieldTypes, FilterCriteria,
-    KIXObjectLoadingOptions, FilterDataType, FilterType, ArchiveFlag, TreeNode, Organisation, ObjectIcon, Contact
+    KIXObjectLoadingOptions, FilterDataType, FilterType, ArchiveFlag, TreeNode, Organisation, ObjectIcon, Contact, CRUD
 } from "../../model";
 import { SearchOperator } from "../SearchOperator";
 import { SearchProperty } from "../SearchProperty";
 import { OrganisationService } from "../organisation";
 import { LabelService } from "../LabelService";
 import { ContactService } from "../contact";
+import { AuthenticationSocketClient } from "../application/AuthenticationSocketClient";
+import { UIComponentPermission } from "../../model/UIComponentPermission";
 
 export class TicketSearchDefinition extends SearchDefinition {
 
@@ -20,19 +22,10 @@ export class TicketSearchDefinition extends SearchDefinition {
     }
 
     public async getProperties(): Promise<Array<[string, string]>> {
-        return [
+        const properties: Array<[string, string]> = [
             [SearchProperty.FULLTEXT, null],
             [TicketProperty.TICKET_NUMBER, null],
             [TicketProperty.TITLE, null],
-            [TicketProperty.ORGANISATION_ID, null],
-            [TicketProperty.CONTACT_ID, null],
-            [TicketProperty.TYPE_ID, null],
-            [TicketProperty.STATE_ID, null],
-            [TicketProperty.QUEUE_ID, null],
-            [TicketProperty.SERVICE_ID, null],
-            [TicketProperty.SLA_ID, null],
-            [TicketProperty.PRIORITY_ID, null],
-            [TicketProperty.LOCK_ID, null],
             [TicketProperty.AGE, null],
             [TicketProperty.CREATE_TIME, null],
             [TicketProperty.CLOSE_TIME, null],
@@ -44,6 +37,50 @@ export class TicketSearchDefinition extends SearchDefinition {
             [TicketProperty.ESCALATION_UPDATE_TIME, null],
             [TicketProperty.ESCALATION_SOLUTIONS_TIME, null]
         ];
+
+        if (await this.checkReadPermissions('organisations')) {
+            properties.push([TicketProperty.ORGANISATION_ID, null]);
+        }
+
+        if (await this.checkReadPermissions('contacts')) {
+            properties.push([TicketProperty.CONTACT_ID, null]);
+        }
+
+        if (await this.checkReadPermissions('tickettypes')) {
+            properties.push([TicketProperty.TYPE_ID, null]);
+        }
+
+        if (await this.checkReadPermissions('ticketstates')) {
+            properties.push([TicketProperty.STATE_ID, null]);
+        }
+
+        if (await this.checkReadPermissions('queues')) {
+            properties.push([TicketProperty.QUEUE_ID, null]);
+        }
+
+        if (await this.checkReadPermissions('services')) {
+            properties.push([TicketProperty.SERVICE_ID, null]);
+        }
+
+        if (await this.checkReadPermissions('slas')) {
+            properties.push([TicketProperty.SLA_ID, null]);
+        }
+
+        if (await this.checkReadPermissions('priorities')) {
+            properties.push([TicketProperty.PRIORITY_ID, null]);
+        }
+
+        if (await this.checkReadPermissions('ticketlocks')) {
+            properties.push([TicketProperty.LOCK_ID, null]);
+        }
+
+        return properties;
+    }
+
+    private async checkReadPermissions(resource: string): Promise<boolean> {
+        return await AuthenticationSocketClient.getInstance().checkPermissions(
+            [new UIComponentPermission(resource, [CRUD.READ])]
+        );
     }
 
     public async getOperations(property: string): Promise<SearchOperator[]> {

@@ -11,7 +11,7 @@ export class TextModuleCreateAction extends AbstractAction {
     public async run(event: any): Promise<void> {
         ContextService.getInstance().setDialogContext(
             null, KIXObjectType.TEXT_MODULE, ContextMode.CREATE_ADMIN, null, true,
-            'Translatable#Ticket', undefined, 'new-text-module-form'
+            'Translatable#Ticket'
         );
     }
 

@@ -3,18 +3,20 @@
         <span.property-name>${state.propertyName}</span>
     </div>
     <div.info>
-        <if(input.info)>
+        <if(input.info && state.propertyDisplayText)>
             <${input.info}/>
         </if>
     </div>
     <div.value title=state.propertyDisplayText class=component.getValueClasses()>
-        <link-target routingConfiguration=input.routingConfiguration objectId=input.objectId>
-            <@content>
-                <span>
-                    <if(state.hasText)>${state.propertyDisplayText}</if>
-                </span>
-                <icon icon=state.propertyIcon/>
-            </@content>
-        </link-target>
+        <if(state.propertyDisplayText)>
+            <link-target routingConfiguration=input.routingConfiguration objectId=input.objectId>
+                <@content>
+                    <span>
+                        <if(state.hasText)>${state.propertyDisplayText}</if>
+                    </span>
+                    <icon icon=state.propertyIcon/>
+                </@content>
+            </link-target>
+        </if>
     </div>
 </div>

@@ -1,8 +1,9 @@
-import { ContextService, ComponentsService } from "../../../../core/browser";
+import { ContextService } from "../../../../core/browser";
 import { ComponentState } from "./ComponentState";
 import { CompareConfigItemVersionDialogContext } from "../../../../core/browser/cmdb";
 import { DialogService } from "../../../../core/browser/components/dialog";
 import { TranslationService } from "../../../../core/browser/i18n/TranslationService";
+import { KIXModulesService } from "../../../../core/browser/modules";
 
 class Component {
 
@@ -36,7 +37,7 @@ class Component {
     }
 
     public getCompareWidgetTemplate(instanceId: string): any {
-        return ComponentsService.getInstance().getComponentTemplate(this.state.compareWidget.configuration.widgetId);
+        return KIXModulesService.getComponentTemplate(this.state.compareWidget.configuration.widgetId);
     }
 
 }

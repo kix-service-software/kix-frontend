@@ -2,7 +2,7 @@ import { IConfigurationExtension } from '../../core/extensions';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetSize, WidgetConfiguration
 } from '../../core/model';
-import { SearchContext } from '../../core/browser/search/context';
+import { SearchContext } from '../../core/browser/search/context/SearchContext';
 
 export class ModuleFactoryExtension implements IConfigurationExtension {
 
@@ -25,7 +25,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
         const searchResultListWidget =
             new ConfiguredWidget("201800709-search-result-list-widget", new WidgetConfiguration(
                 "search-result-list-widget", "Hit List", [
-                    'csv-export-action', 'bulk-action', 'search-result-print-action'
+                    'csv-export-action', 'bulk-action'
                 ], {},
                 false, true, WidgetSize.LARGE, null, true)
             );

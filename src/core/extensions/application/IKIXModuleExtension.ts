@@ -1,9 +1,13 @@
+import { UIComponent } from "../../model/UIComponent";
+
 export interface IKIXModuleExtension {
 
-    initComponentId: string;
-
-    tags: Array<[string, string]>;
+    id: string;
 
     external: boolean;
+
+    initComponents: UIComponent[];
+
+    uiComponents: UIComponent[];
 
 }

@@ -1,7 +1,7 @@
 import { Context } from "../../../model/components/context/Context";
 import {
     KIXObject, KIXObjectType, TicketProperty, Organisation, Contact,
-    IFormInstanceListener, FormField, FormFieldValue, FormContext
+    IFormInstanceListener, FormField, FormFieldValue, FormContext, KIXObjectLoadingOptions, Ticket
 } from "../../../model";
 import { FormService } from "../../form";
 import { KIXObjectService } from "../../kix";
@@ -32,9 +32,20 @@ export class EditTicketDialogContext extends Context implements IFormInstanceLis
         }
     }
 
-    public async getObject<O extends KIXObject>(kixObjectType: KIXObjectType): Promise<O> {
+    public async getObject<O extends KIXObject>(kixObjectType: KIXObjectType = KIXObjectType.TICKET): Promise<O> {
         let object;
-        if (kixObjectType === KIXObjectType.ORGANISATION) {
+        if (kixObjectType === KIXObjectType.TICKET) {
+            const ticketId = this.getObjectId();
+            if (ticketId) {
+                const loadingOptions = new KIXObjectLoadingOptions(
+                    null, null, null, null, [TicketProperty.LINK], [TicketProperty.LINK]
+                );
+                const objects = await KIXObjectService.loadObjects<Ticket>(
+                    KIXObjectType.TICKET, [ticketId], loadingOptions
+                );
+                object = objects && objects.length ? objects[0] : null;
+            }
+        } else if (kixObjectType === KIXObjectType.ORGANISATION) {
             object = this.organisation;
         } else if (kixObjectType === KIXObjectType.CONTACT) {
             object = this.contact;
@@ -46,7 +57,6 @@ export class EditTicketDialogContext extends Context implements IFormInstanceLis
         super.reset();
         this.contact = null;
         this.organisation = null;
-        this.initContext();
     }
 
     private async handleOrganisation(value: FormFieldValue): Promise<void> {

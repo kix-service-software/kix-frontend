@@ -1,8 +1,15 @@
 import { AbstractAction } from '../../../model/components/action/AbstractAction';
 import { ContextService } from '../../context';
-import { KIXObjectType, ContextMode } from '../../../model';
+import { KIXObjectType, ContextMode, CRUD } from '../../../model';
+import { UIComponentPermission } from '../../../model/UIComponentPermission';
 
 export class OrganisationCreateCIAction extends AbstractAction {
+
+    public permissions: UIComponentPermission[] = [
+        new UIComponentPermission('cmdb/configitems/*', [CRUD.CREATE]),
+        new UIComponentPermission('cmdb/configitems/*/versions', [CRUD.CREATE]),
+        new UIComponentPermission('cmdb/classes', [CRUD.READ])
+    ];
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#New Config Item';
@@ -11,8 +18,7 @@ export class OrganisationCreateCIAction extends AbstractAction {
 
     public async run(event: any): Promise<void> {
         ContextService.getInstance().setDialogContext(
-            null, KIXObjectType.CONFIG_ITEM, ContextMode.CREATE, null, true,
-            undefined, undefined, 'new-config-item-form'
+            null, KIXObjectType.CONFIG_ITEM, ContextMode.CREATE, null, true
         );
     }
 

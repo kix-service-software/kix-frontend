@@ -1,9 +1,12 @@
-import { AbstractAction, OverlayType, ComponentContent } from '../../../model';
-import { EventService } from '../../event';
-import { FAQEvent } from '../FAQEvent';
+import { AbstractAction, OverlayType, ComponentContent, CRUD } from '../../../model';
 import { OverlayService } from '../../OverlayService';
+import { UIComponentPermission } from '../../../model/UIComponentPermission';
 
 export class FAQArticleVoteAction extends AbstractAction {
+
+    public permissions: UIComponentPermission[] = [
+        new UIComponentPermission('faq/articles/*/votes', [CRUD.CREATE])
+    ];
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Rate';

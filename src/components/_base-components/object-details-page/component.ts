@@ -1,6 +1,5 @@
 import {
-    AbstractMarkoComponent, ContextService, WidgetService, LabelService, ActionFactory,
-    ComponentsService
+    AbstractMarkoComponent, ContextService, WidgetService, LabelService, ActionFactory
 } from "../../../core/browser";
 import { ComponentState } from './ComponentState';
 import {
@@ -9,6 +8,7 @@ import {
 import { TranslationService } from "../../../core/browser/i18n/TranslationService";
 import { EventService } from "../../../core/browser/event";
 import { ApplicationEvent } from "../../../core/browser/application";
+import { KIXModulesService } from "../../../core/browser/modules";
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -113,7 +113,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public getWidgetTemplate(instanceId: string): any {
         const context = ContextService.getInstance().getActiveContext();
         const config = context ? context.getWidgetConfiguration(instanceId) : undefined;
-        return config ? ComponentsService.getInstance().getComponentTemplate(config.widgetId) : undefined;
+        return config ? KIXModulesService.getComponentTemplate(config.widgetId) : undefined;
     }
 
     public getLaneWidgetType(): number {

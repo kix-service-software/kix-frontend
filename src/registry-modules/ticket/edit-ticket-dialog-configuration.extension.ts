@@ -5,11 +5,12 @@ import {
     Form, KIXObjectType, FormContext, ConfiguredWidget, WidgetConfiguration,
     FormFieldOption, WidgetSize, ObjectReferenceOptions, KIXObjectLoadingOptions,
     FilterCriteria, UserProperty, FilterDataType, FilterType, ObjectinformationWidgetSettings,
-    OrganisationProperty, ContactProperty
+    OrganisationProperty, ContactProperty, CRUD
 } from '../../core/model';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../core/services';
 import { SearchOperator } from '../../core/browser';
+import { UIComponentPermission } from '../../core/model/UIComponentPermission';
 
 export class EditTicketDialogModuleExtension implements IConfigurationExtension {
 
@@ -20,41 +21,50 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
 
         const organisationInfoSidebar =
-            new ConfiguredWidget('20180524110915', new WidgetConfiguration(
-                'object-information-widget', 'Translatable#Organisation', [],
-                new ObjectinformationWidgetSettings(KIXObjectType.ORGANISATION, [
-                    OrganisationProperty.NUMBER,
-                    OrganisationProperty.NAME,
-                    OrganisationProperty.URL,
-                    OrganisationProperty.STREET,
-                    OrganisationProperty.ZIP,
-                    OrganisationProperty.CITY,
-                    OrganisationProperty.COUNTRY
-                ], true),
-                false, false, null, 'kix-icon-man-house', false)
+            new ConfiguredWidget('20180524110915',
+                new WidgetConfiguration(
+                    'object-information-widget', 'Translatable#Organisation', [],
+                    new ObjectinformationWidgetSettings(KIXObjectType.ORGANISATION, [
+                        OrganisationProperty.NUMBER,
+                        OrganisationProperty.NAME,
+                        OrganisationProperty.URL,
+                        OrganisationProperty.STREET,
+                        OrganisationProperty.ZIP,
+                        OrganisationProperty.CITY,
+                        OrganisationProperty.COUNTRY
+                    ], true),
+                    false, false, null, 'kix-icon-man-house', false
+                ),
+                [new UIComponentPermission('organisations', [CRUD.READ])]
             );
         const contactInfoSidebar =
-            new ConfiguredWidget('20180524110920', new WidgetConfiguration(
-                'object-information-widget', 'Translatable#Contact', [],
-                new ObjectinformationWidgetSettings(KIXObjectType.CONTACT, [
-                    ContactProperty.LOGIN,
-                    ContactProperty.TITLE,
-                    ContactProperty.LAST_NAME,
-                    ContactProperty.FIRST_NAME,
-                    ContactProperty.PRIMARY_ORGANISATION_ID,
-                    ContactProperty.PHONE,
-                    ContactProperty.MOBILE,
-                    ContactProperty.EMAIL
-                ], true),
-                false, false, null, 'kix-icon-man-bubble', false)
+            new ConfiguredWidget('20180524110920',
+                new WidgetConfiguration(
+                    'object-information-widget', 'Translatable#Contact', [],
+                    new ObjectinformationWidgetSettings(KIXObjectType.CONTACT, [
+                        ContactProperty.LOGIN,
+                        ContactProperty.TITLE,
+                        ContactProperty.LAST_NAME,
+                        ContactProperty.FIRST_NAME,
+                        ContactProperty.PRIMARY_ORGANISATION_ID,
+                        ContactProperty.PHONE,
+                        ContactProperty.MOBILE,
+                        ContactProperty.EMAIL
+                    ], true),
+                    false, false, null, 'kix-icon-man-bubble', false
+                ),
+                [new UIComponentPermission('contacts', [CRUD.READ])]
             );
 
-        const helpWidget = new ConfiguredWidget('20180919-help-widget', new WidgetConfiguration(
-            'help-widget', 'Text Modules', [], {
-                // tslint:disable-next-line:max-line-length
-                helpText: 'Translatable#Helptext_Textmodules_TicketEdit'
-            }, false, false, WidgetSize.BOTH, 'kix-icon-textblocks'
-        ));
+        const helpWidget = new ConfiguredWidget('20180919-help-widget',
+            new WidgetConfiguration(
+                'help-widget', 'Text Modules', [], {
+                    // tslint:disable-next-line:max-line-length
+                    helpText: 'Translatable#Helptext_Textmodules_TicketEdit'
+                }, false, false, WidgetSize.BOTH, 'kix-icon-textblocks'
+            ),
+            [new UIComponentPermission('textmodules', [CRUD.READ])]
+        );
 
         const sidebars = ['20180524110915', '20180524110920', '20180919-help-widget'];
         const sidebarWidgets: Array<ConfiguredWidget<any>> = [organisationInfoSidebar, contactInfoSidebar, helpWidget];

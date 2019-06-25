@@ -1,10 +1,11 @@
 import { ContextService } from '../../../core/browser/context';
-import { ComponentsService, TabContainerEvent, TabContainerEventData } from '../../../core/browser/components';
+import { TabContainerEvent, TabContainerEventData } from '../../../core/browser/components';
 import { WidgetType, ConfiguredWidget, ObjectIcon } from '../../../core/model';
 import { ComponentState } from './ComponentState';
 import { WidgetService, ActionFactory, IdService } from '../../../core/browser';
 import { IEventSubscriber, EventService } from '../../../core/browser/event';
 import { TranslationService } from '../../../core/browser/i18n/TranslationService';
+import { KIXModulesService } from '../../../core/browser/modules';
 
 class TabLaneComponent implements IEventSubscriber {
 
@@ -44,10 +45,10 @@ class TabLaneComponent implements IEventSubscriber {
             );
 
             if (this.initialTabId) {
-                await this.tabClicked(this.state.tabWidgets.find((tw) => tw.instanceId === this.initialTabId));
+                await this.tabClicked(this.state.tabWidgets.find((tw) => tw.instanceId === this.initialTabId), true);
             }
             if (!this.state.activeTab) {
-                await this.tabClicked(this.state.tabWidgets[0]);
+                await this.tabClicked(this.state.tabWidgets[0], true);
             }
         }
 
@@ -69,7 +70,7 @@ class TabLaneComponent implements IEventSubscriber {
         EventService.getInstance().unsubscribe(TabContainerEvent.CHANGE_TAB, this);
     }
 
-    public async tabClicked(tab: ConfiguredWidget): Promise<void> {
+    public async tabClicked(tab: ConfiguredWidget, silent?: boolean): Promise<void> {
         this.state.activeTab = tab;
         this.state.activeTabTitle = this.state.activeTab ? this.state.activeTab.configuration.title : '';
         if (tab) {
@@ -82,12 +83,14 @@ class TabLaneComponent implements IEventSubscriber {
                 );
             }
         }
-        (this as any).emit('tabChanged', tab);
+        if (!silent) {
+            (this as any).emit('tabChanged', tab);
+        }
     }
 
     public getWidgetTemplate(): any {
         return this.state.activeTab
-            ? ComponentsService.getInstance().getComponentTemplate(this.state.activeTab.configuration.widgetId)
+            ? KIXModulesService.getComponentTemplate(this.state.activeTab.configuration.widgetId)
             : undefined;
     }
 

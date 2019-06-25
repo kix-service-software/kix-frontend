@@ -4,10 +4,9 @@ import {
 } from ".";
 import { FormContext } from "./FormContext";
 import { IFormInstance } from "./IFormInstance";
-import { ContextService, ServiceRegistry, ServiceType } from "../../../browser";
-import { KIXObjectType, KIXObject } from "../../kix";
+import { ServiceRegistry, ServiceType } from "../../../browser";
+import { KIXObjectType } from "../../kix";
 import { IKIXObjectFormService } from "../../../browser/kix/IKIXObjectFormService";
-import { ContextType } from "../context";
 import { FormValidationService } from "../../../browser/form/validation";
 
 export class FormInstance implements IFormInstance {

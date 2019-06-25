@@ -1,20 +1,16 @@
-import { ILabelProvider } from "../ILabelProvider";
 import { TicketType, KIXObjectType, ObjectIcon, TicketTypeProperty, DateTimeUtil, User } from "../../model";
 import { SearchProperty } from "../SearchProperty";
 import { TranslationService } from "../i18n/TranslationService";
 import { ObjectDataService } from "../ObjectDataService";
 import { KIXObjectService } from "../kix";
+import { LabelProvider } from "../LabelProvider";
 
-export class TicketTypeLabelProvider implements ILabelProvider<TicketType> {
+export class TicketTypeLabelProvider extends LabelProvider<TicketType> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.TICKET_TYPE;
 
     public isLabelProviderFor(ticketType: TicketType): boolean {
         return ticketType instanceof TicketType;
-    }
-
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
@@ -59,10 +55,6 @@ export class TicketTypeLabelProvider implements ILabelProvider<TicketType> {
         }
 
         return displayValue;
-    }
-
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
     }
 
     public async getDisplayText(
@@ -119,20 +111,8 @@ export class TicketTypeLabelProvider implements ILabelProvider<TicketType> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public getDisplayTextClasses(ticketType: TicketType, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(ticketType: TicketType): string[] {
-        return [];
-    }
-
     public async getObjectText(ticketType: TicketType, id?: boolean, title?: boolean): Promise<string> {
         return ticketType.Name;
-    }
-
-    public getObjectAdditionalText(ticketType: TicketType): string {
-        return null;
     }
 
     public getObjectIcon(ticketType?: TicketType): string | ObjectIcon {

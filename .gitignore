@@ -10,3 +10,6 @@ npm-debug.log
 src/log/**/*
 src/logs/**/*
 src/**/.gulp-*
+
+coverage
+.nyc_output

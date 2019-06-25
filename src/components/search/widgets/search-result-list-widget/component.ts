@@ -2,14 +2,14 @@ import { ComponentState } from './ComponentState';
 import { KIXObjectPropertyFilter, KIXObject, KIXObjectType, } from '../../../../core/model/';
 import { ContextService } from "../../../../core/browser/context";
 import {
-    ActionFactory, KIXObjectSearchService, IKIXObjectSearchListener,
-    LabelService, WidgetService,
+    ActionFactory, IKIXObjectSearchListener, LabelService, WidgetService,
     TableConfiguration, TableHeaderHeight, TableRowHeight, SearchResultCategory,
-    KIXObjectSearchCache, KIXObjectService, SearchProperty, TableFactoryService, TableEvent, TableEventData
+    KIXObjectSearchCache, KIXObjectService, SearchProperty, TableFactoryService, TableEvent, TableEventData, ITable
 } from '../../../../core/browser';
-import { SearchContext } from '../../../../core/browser/search/context';
+import { SearchContext } from '../../../../core/browser/search/context/SearchContext';
 import { EventService, IEventSubscriber } from '../../../../core/browser/event';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
+import { KIXObjectSearchService } from '../../../../core/browser/kix/search/KIXObjectSearchService';
 
 class Component implements IKIXObjectSearchListener {
 
@@ -31,9 +31,6 @@ class Component implements IKIXObjectSearchListener {
         this.state.widgetConfiguration = currentContext
             ? currentContext.getWidgetConfiguration(this.state.instanceId)
             : undefined;
-
-
-        this.prepareActions();
 
         KIXObjectSearchService.getInstance().registerListener(this);
         this.searchFinished();
@@ -134,12 +131,15 @@ class Component implements IKIXObjectSearchListener {
                                 ? this.state.table.getRowCount()
                                 : null;
                         }
+                        await this.prepareActions(table);
                     }
                 }
             };
 
-            WidgetService.getInstance().setActionData(this.state.instanceId, table);
+            await this.prepareActions(table);
+
             this.state.table = table;
+            EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
             EventService.getInstance().subscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
             EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
             this.setActionsDirty();
@@ -154,10 +154,11 @@ class Component implements IKIXObjectSearchListener {
         WidgetService.getInstance().updateActions(this.state.instanceId);
     }
 
-    private async prepareActions(): Promise<void> {
+    private async prepareActions(table: ITable): Promise<void> {
+        // WidgetService.getInstance().setActionData(this.state.instanceId, table);
         if (this.state.widgetConfiguration) {
             this.state.actions = await ActionFactory.getInstance()
-                .generateActions(this.state.widgetConfiguration.actions);
+                .generateActions(this.state.widgetConfiguration.actions, table);
         }
         WidgetService.getInstance().registerActions(this.state.instanceId, this.state.actions);
     }

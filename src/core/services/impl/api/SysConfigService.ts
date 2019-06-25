@@ -1,8 +1,9 @@
 import { KIXObjectService } from './KIXObjectService';
 import {
-    KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, SysConfigItem, Error, SysConfigItemFactory
+    KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, SysConfigItem, Error
 } from '../../../model';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
+import { SysConfigItemFactory } from '../../object-factories/SysConfigItemFactory';
 
 export class SysConfigService extends KIXObjectService {
 

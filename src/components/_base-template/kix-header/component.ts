@@ -1,5 +1,5 @@
 import { ClientStorageService } from '../../../core/browser/ClientStorageService';
-import { ContextService, OverlayService } from '../../../core/browser';
+import { ContextService, OverlayService, DialogService } from '../../../core/browser';
 import { ContextMode, ComponentContent, ToastContent, OverlayType, KIXObjectType } from '../../../core/model';
 import { RoutingConfiguration } from '../../../core/browser/router';
 import { ReleaseContext } from '../../../core/browser/release';
@@ -23,6 +23,9 @@ class KIXHeaderComponent {
             "Translatable#Personal Settings", "Translatable#Switch to customer portal.",
             "Translatable#Help", "Translatable#Logout"
         ]);
+
+        const dialogs = DialogService.getInstance().getRegisteredDialogs(ContextMode.CREATE);
+        this.state.allowNew = dialogs && (dialogs.length > 0);
     }
 
     public openDialog(): void {

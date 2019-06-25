@@ -1,6 +1,6 @@
 import {
     Context, ConfigItemClass, KIXObjectType, KIXObjectLoadingOptions,
-    FilterCriteria, ConfigItemProperty, FilterDataType, FilterType, VersionProperty
+    FilterCriteria, ConfigItemProperty, FilterDataType, FilterType, VersionProperty, KIXObject
 } from "../../../model";
 import { ServiceRegistry, KIXObjectService } from "../../kix";
 import { SearchOperator } from "../../SearchOperator";
@@ -70,6 +70,13 @@ export class CMDBContext extends Context {
         );
         const catalogItems = await service.getDeploymentStates();
         return catalogItems.map((c) => c.ItemID);
+    }
+
+    public async getObjectList(reload: boolean = false): Promise<KIXObject[]> {
+        if (reload) {
+            await this.loadConfigItems();
+        }
+        return await super.getObjectList();
     }
 
     public reset(): void {

@@ -1,8 +1,8 @@
-import { ComponentsService } from '../../../../../core/browser/components';
 import { ComponentState } from './ComponentState';
 import { FormService, IdService } from '../../../../../core/browser';
 import { FormField } from '../../../../../core/model';
 import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
+import { KIXModulesService } from '../../../../../core/browser/modules';
 
 class Component {
 
@@ -63,7 +63,7 @@ class Component {
 
     public getInputComponent(): any {
         const componentId = this.state.field.inputComponent ? this.state.field.inputComponent : 'default-text-input';
-        return ComponentsService.getInstance().getComponentTemplate(componentId);
+        return KIXModulesService.getComponentTemplate(componentId);
     }
 
     public minimize(): void {

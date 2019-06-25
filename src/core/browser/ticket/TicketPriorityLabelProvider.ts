@@ -1,4 +1,3 @@
-import { ILabelProvider } from "../ILabelProvider";
 import {
     TicketPriority, KIXObjectType, ObjectIcon, TicketPriorityProperty, DateTimeUtil, User, KIXObjectProperty
 } from "../../model";
@@ -6,17 +5,14 @@ import { SearchProperty } from "../SearchProperty";
 import { TranslationService } from "../i18n/TranslationService";
 import { ObjectDataService } from "../ObjectDataService";
 import { KIXObjectService } from "../kix";
+import { LabelProvider } from "../LabelProvider";
 
-export class TicketPriorityLabelProvider implements ILabelProvider<TicketPriority> {
+export class TicketPriorityLabelProvider extends LabelProvider<TicketPriority> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.TICKET_PRIORITY;
 
     public isLabelProviderFor(ticketPriority: TicketPriority): boolean {
         return ticketPriority instanceof TicketPriority;
-    }
-
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
@@ -61,10 +57,6 @@ export class TicketPriorityLabelProvider implements ILabelProvider<TicketPriorit
         }
 
         return displayValue;
-    }
-
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
     }
 
     public async getDisplayText(
@@ -121,20 +113,8 @@ export class TicketPriorityLabelProvider implements ILabelProvider<TicketPriorit
         return displayValue ? displayValue.toString() : '';
     }
 
-    public getDisplayTextClasses(ticketPriority: TicketPriority, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(ticketPriority: TicketPriority): string[] {
-        return [];
-    }
-
     public async getObjectText(ticketPriority: TicketPriority, id?: boolean, title?: boolean): Promise<string> {
         return ticketPriority.Name;
-    }
-
-    public getObjectAdditionalText(ticketPriority: TicketPriority): string {
-        return null;
     }
 
     public getObjectIcon(ticketPriority?: TicketPriority): string | ObjectIcon {

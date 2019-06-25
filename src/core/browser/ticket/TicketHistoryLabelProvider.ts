@@ -1,9 +1,9 @@
-import { ILabelProvider } from '..';
 import { TicketHistory, DateTimeUtil, ObjectIcon, KIXObjectType, TicketHistoryProperty, User } from '../../model';
 import { TranslationService } from '../i18n/TranslationService';
 import { KIXObjectService } from '../kix';
+import { LabelProvider } from '../LabelProvider';
 
-export class TicketHistoryLabelProvider implements ILabelProvider<TicketHistory> {
+export class TicketHistoryLabelProvider extends LabelProvider<TicketHistory> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.TICKET_HISTORY;
 

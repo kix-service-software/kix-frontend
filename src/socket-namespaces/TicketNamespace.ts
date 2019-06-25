@@ -56,7 +56,7 @@ export class TicketNamespace extends SocketNameSpace {
         return new SocketResponse(TicketEvent.ARTICLE_ZIP_ATTACHMENT_LOADED, response);
     }
 
-    private async removeArticleSeenFlag(data: SetArticleSeenFlagRequest): Promise<SocketResponse<void>> {
+    private async removeArticleSeenFlag(data: SetArticleSeenFlagRequest): Promise<SocketResponse> {
         await TicketService.getInstance().setArticleSeenFlag(
             data.token, null, data.ticketId, data.articleId
         );

@@ -1,6 +1,6 @@
 import { KIXObjectService } from './KIXObjectService';
 import {
-    ContactProperty, KIXObjectType, KIXObjectLoadingOptions, Error, ContactFactory
+    ContactProperty, KIXObjectType, KIXObjectLoadingOptions, Error
 } from "../../../model";
 import {
     CreateContact, CreateContactResponse, CreateContactRequest, UpdateContactResponse,
@@ -8,6 +8,7 @@ import {
 } from "../../../api";
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { LoggingService } from '../LoggingService';
+import { ContactFactory } from '../../object-factories/ContactFactory';
 
 export class ContactService extends KIXObjectService {
 

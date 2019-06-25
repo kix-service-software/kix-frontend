@@ -14,7 +14,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const cell: ICell = input.cell;
         if (cell) {
             this.article = cell.getRow().getRowObject().getObject();
-            if (this.article && this.article instanceof Article) {
+            if (this.article && this.article.Attachments) {
                 const attachments = this.article.Attachments.filter((a) => a.Disposition !== 'inline');
                 this.state.show = attachments.length > 0;
                 this.state.count = attachments.length;
