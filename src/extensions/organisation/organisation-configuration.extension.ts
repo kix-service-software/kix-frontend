@@ -45,11 +45,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                             null, null, null, null, true
                         )
                     },
-<<<<<<< HEAD:src/registry-modules/organisation/organisation-configuration.extension.ts
-                    false, true, WidgetSize.LARGE, 'kix-icon-man-bubble', false
-=======
                     false, true, 'kix-icon-man-bubble', false
->>>>>>> origin/KIX2018-2079:src/extensions/organisation/organisation-configuration.extension.ts
                 ),
                 [new UIComponentPermission('contacts', [CRUD.READ])]
             );

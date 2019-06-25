@@ -61,11 +61,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'edit-ticket-dialog',
             new WidgetConfiguration(
-<<<<<<< HEAD
-                'edit-ticket-dialog', 'Translatable#Edit Ticket', [], {}, false, false, WidgetSize.BOTH, 'kix-icon-edit'
-=======
                 'edit-ticket-dialog', 'Translatable#Edit Ticket', [], {}, false, false, 'kix-icon-edit'
->>>>>>> origin/KIX2018-2079
             ),
             KIXObjectType.TICKET,
             ContextMode.EDIT
