@@ -49,7 +49,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:61"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -73,7 +74,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:72"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -85,8 +87,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:83"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           }
         ]
@@ -108,8 +109,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -121,7 +121,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -157,8 +158,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -170,7 +170,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -182,8 +183,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -207,7 +207,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -220,7 +221,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 1000000
+              "duration": 2000000
             }
           },
           {
@@ -267,7 +268,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -279,7 +281,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -339,8 +342,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -410,7 +412,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -446,7 +449,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 2000000
             }
           },
           {
@@ -482,7 +486,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -541,7 +546,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 1000000
+              "duration": 2000000
             }
           },
           {
@@ -553,7 +558,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -589,7 +595,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -637,7 +644,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -683,7 +691,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -695,7 +704,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -707,8 +717,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -757,7 +766,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 1000000
+              "duration": 2000000
             }
           },
           {
@@ -793,7 +802,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:126"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -827,7 +837,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -864,7 +875,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -888,7 +900,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -900,8 +913,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -925,7 +937,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -949,8 +962,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:131"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           }
         ]
@@ -995,8 +1007,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:58"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -1020,8 +1031,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:64"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -1067,8 +1077,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -1142,8 +1151,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -1155,7 +1163,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 2000000
             }
           },
           {
@@ -1213,7 +1222,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -1225,8 +1235,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -1238,7 +1247,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -1274,8 +1284,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -1287,7 +1296,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -1335,7 +1345,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:131"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           }
         ]
@@ -1357,8 +1368,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -1370,7 +1380,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -1406,7 +1417,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -1430,7 +1442,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -1500,7 +1513,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -1512,7 +1526,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -1548,7 +1563,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 2000000
             }
           },
           {
@@ -1667,8 +1683,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -1704,8 +1719,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -1717,8 +1731,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -1730,8 +1743,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -1801,8 +1813,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -1814,7 +1825,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -1826,7 +1838,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -1838,7 +1851,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -1850,8 +1864,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -1899,8 +1912,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:126"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -1912,7 +1924,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:131"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           }
         ]
@@ -1934,8 +1947,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -1959,7 +1971,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -1971,7 +1984,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -1983,8 +1997,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -2020,7 +2033,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -2032,8 +2046,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -2079,8 +2092,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -2104,7 +2116,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -2164,8 +2177,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -2177,7 +2189,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -2234,7 +2247,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 1000000
+              "duration": 3000000
             }
           },
           {
@@ -2246,7 +2259,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:58"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -2258,8 +2272,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:61"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -2342,7 +2355,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 1000000
+              "duration": 2000000
             }
           },
           {
@@ -2378,7 +2391,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -2390,8 +2404,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -2439,8 +2452,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:131"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           }
         ]
@@ -2462,7 +2474,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -2474,8 +2487,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -2487,7 +2499,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -2511,8 +2524,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -2548,7 +2560,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -2560,8 +2573,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed",
-              "duration": 4000000
+              "status": "passed"
             }
           },
           {
@@ -2644,7 +2656,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 3000000
             }
           },
           {
@@ -2693,7 +2706,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -2705,8 +2719,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -2752,7 +2765,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -2813,7 +2827,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -2873,8 +2888,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:131"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           }
         ]
@@ -2956,8 +2970,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -3039,7 +3052,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -3075,7 +3089,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -3087,7 +3102,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -3124,7 +3140,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -3148,7 +3165,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:126"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -3160,7 +3178,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:131"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           }
         ]
@@ -3182,7 +3201,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -3218,7 +3238,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -3254,7 +3275,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -3278,8 +3300,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -3291,7 +3312,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:126"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -3303,8 +3325,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:131"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           }
         ]
@@ -3326,7 +3347,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -3362,7 +3384,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -3374,8 +3397,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -3387,7 +3409,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -3411,7 +3434,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -3423,8 +3447,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -3471,7 +3494,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 1000000
+              "duration": 2000000
             }
           },
           {
@@ -3483,7 +3506,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -3495,7 +3519,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -3519,8 +3544,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -3568,8 +3592,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -3593,7 +3616,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:131"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           }
         ]
@@ -3662,8 +3686,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:64"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -3709,8 +3732,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -3722,7 +3744,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -3758,8 +3781,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -3771,7 +3793,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -3807,8 +3830,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -3832,7 +3854,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:131"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           }
         ]
@@ -3854,8 +3877,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -3879,7 +3901,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -3927,7 +3950,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -3939,7 +3963,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -4024,7 +4049,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 2000000
             }
           },
           {
@@ -4061,8 +4087,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -4074,8 +4099,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -4088,7 +4112,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 1000000
+              "duration": 2000000
             }
           },
           {
@@ -4124,7 +4148,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:131"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           }
         ]
@@ -4170,8 +4195,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -4219,8 +4243,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -4314,8 +4337,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -4339,7 +4361,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -4363,8 +4386,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -4434,7 +4456,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -4446,7 +4469,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -4471,7 +4495,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -4483,7 +4508,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -4519,7 +4545,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -4531,7 +4558,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -4589,7 +4617,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -4601,8 +4630,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -4614,7 +4642,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -4638,7 +4667,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -4662,7 +4692,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -4698,7 +4729,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:131"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           }
         ]
@@ -4720,7 +4752,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -4732,7 +4765,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -4744,7 +4778,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -4829,7 +4864,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:126"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -4876,7 +4912,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -4924,7 +4961,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -4984,7 +5022,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:131"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           }
         ]
@@ -5018,7 +5057,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -5102,7 +5142,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -5114,8 +5155,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:126"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -5149,7 +5189,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -5161,8 +5202,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -5186,8 +5226,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -5199,7 +5238,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -5235,8 +5275,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -5248,8 +5287,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -5342,8 +5380,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:64"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -5355,7 +5392,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:72"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -5545,7 +5583,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -5581,8 +5620,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -5619,7 +5657,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 3000000
+              "duration": 1000000
             }
           },
           {
@@ -5631,8 +5669,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -5679,7 +5716,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -5691,8 +5729,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -5704,7 +5741,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -5728,8 +5766,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -5741,7 +5778,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -5823,7 +5861,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -5919,7 +5958,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -5965,7 +6005,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -6025,7 +6066,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -6037,8 +6079,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -6229,8 +6270,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:131"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           }
         ]
@@ -6324,7 +6364,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -6404,8 +6445,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -6417,7 +6457,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:58"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -6429,8 +6470,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:61"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -6512,7 +6552,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -6524,8 +6565,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -6631,8 +6671,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -6656,7 +6695,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -6680,8 +6720,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -6717,7 +6756,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -6811,7 +6851,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -6871,7 +6912,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -6883,8 +6925,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:126"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -6896,7 +6937,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:131"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           }
         ]
@@ -6918,7 +6960,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -6930,8 +6973,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -6991,7 +7033,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -7015,7 +7058,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -7061,7 +7105,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -7134,7 +7179,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -7146,8 +7192,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -7171,7 +7216,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:126"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -7205,8 +7251,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -7218,7 +7263,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -7230,7 +7276,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -7254,8 +7301,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -7267,7 +7313,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -7291,7 +7338,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -7315,7 +7363,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:126"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -7327,7 +7376,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:131"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           }
         ]
@@ -7349,8 +7399,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -7374,7 +7423,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -7386,8 +7436,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -7411,8 +7460,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -7472,8 +7520,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:131"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           }
         ]
@@ -7507,8 +7554,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -7556,8 +7602,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -7593,7 +7638,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -7639,8 +7685,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -7652,8 +7697,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -7737,8 +7781,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -7762,7 +7805,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:131"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           }
         ]
@@ -7794,8 +7838,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -7877,8 +7920,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -7902,7 +7944,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -7938,8 +7981,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed",
-              "duration": 2000000
+              "status": "passed"
             }
           },
           {
@@ -7951,7 +7993,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -7963,8 +8006,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -8022,8 +8064,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -8035,8 +8076,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -8120,7 +8160,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -8166,7 +8207,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -8214,7 +8256,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -8226,8 +8269,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -8263,7 +8305,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -8309,8 +8352,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -8334,7 +8376,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -8358,8 +8401,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -8371,7 +8413,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -8526,8 +8569,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -8597,7 +8639,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -8645,7 +8688,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -8749,8 +8793,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -8832,8 +8875,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -8857,7 +8899,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -8881,8 +8924,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -8918,7 +8960,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -8976,7 +9019,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -9036,8 +9080,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -9097,7 +9140,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:131"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           }
         ]
@@ -9312,8 +9356,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -9373,8 +9416,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:126"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -9408,7 +9450,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -9420,8 +9463,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -9457,7 +9499,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -9481,7 +9524,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -9563,7 +9607,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -9575,8 +9620,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -9588,7 +9632,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -9695,7 +9740,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -9707,8 +9753,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -9720,7 +9765,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -9758,7 +9804,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -9770,8 +9817,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -9795,8 +9841,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -9890,8 +9935,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:64"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -9937,8 +9981,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -9974,8 +10017,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed",
-              "duration": 4000000
+              "status": "passed"
             }
           },
           {
@@ -10023,8 +10065,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -10106,7 +10147,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -10118,7 +10160,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -10166,7 +10209,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -10178,8 +10222,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -10225,7 +10268,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -10273,7 +10317,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -10285,8 +10330,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -10334,7 +10378,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:126"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -10346,8 +10391,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:131"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           }
         ]
@@ -10429,8 +10473,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -10442,7 +10485,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -10548,7 +10592,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -10654,8 +10699,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -10667,7 +10711,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -10715,8 +10760,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -10728,7 +10772,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -10846,7 +10891,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -10906,7 +10952,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:126"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -10963,8 +11010,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:58"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -11070,8 +11116,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -11131,8 +11176,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -11262,8 +11306,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -11331,8 +11374,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -11368,8 +11410,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:64"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -11524,7 +11565,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:126"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -11631,7 +11673,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -11737,7 +11780,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -11797,7 +11841,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -11855,8 +11900,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -11868,7 +11912,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -11892,8 +11937,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -11905,7 +11949,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -11987,7 +12032,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -11999,8 +12045,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -12048,7 +12093,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -12060,8 +12106,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -12097,8 +12142,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:126"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -12132,8 +12176,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -12157,8 +12200,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -12170,7 +12212,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -12182,8 +12225,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -12207,8 +12249,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -12232,7 +12273,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -12364,7 +12406,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -12400,7 +12443,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:131"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           }
         ]
@@ -12422,7 +12466,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -12458,8 +12503,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -12471,8 +12515,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -12484,7 +12527,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -12508,8 +12552,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -12545,8 +12588,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:131"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           }
         ]
@@ -12593,7 +12635,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -12605,7 +12648,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -12617,7 +12661,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -12641,7 +12686,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -12665,7 +12711,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 2000000
             }
           },
           {
@@ -12712,7 +12759,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -12748,7 +12796,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -12760,8 +12809,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -12797,8 +12845,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -12903,8 +12950,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:64"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -12950,8 +12996,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -12963,7 +13008,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -13011,7 +13057,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -13093,7 +13140,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -13129,8 +13177,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -13142,7 +13189,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -13202,8 +13250,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:126"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -13261,8 +13308,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -13287,7 +13333,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 1000000
+              "duration": 2000000
             }
           },
           {
@@ -13299,7 +13345,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -13335,7 +13382,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -13347,8 +13395,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:126"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -13382,7 +13429,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -13430,8 +13478,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -13526,8 +13573,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -13671,8 +13717,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -13684,7 +13729,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -13708,8 +13754,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -13721,7 +13766,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -13745,7 +13791,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 26000000
             }
           },
           {
@@ -13758,7 +13805,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 27000000
+              "duration": 1000000
             }
           },
           {
@@ -13770,8 +13817,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -13783,8 +13829,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:126"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -13796,7 +13841,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:131"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           }
         ]
@@ -13818,8 +13864,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -13855,8 +13900,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -13892,8 +13936,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -13905,7 +13948,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -13929,8 +13973,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:126"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -13964,8 +14007,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -14025,7 +14067,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -14061,8 +14104,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -14108,7 +14150,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -14120,8 +14163,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -14145,7 +14187,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -14261,7 +14304,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -14391,7 +14435,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -14427,8 +14472,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -14452,7 +14496,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -14582,7 +14627,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -14652,8 +14698,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -14701,7 +14746,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -14713,8 +14759,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -14738,7 +14783,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -14796,7 +14842,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -14881,7 +14928,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -14893,8 +14941,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:126"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -14940,8 +14987,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -14965,7 +15011,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -15025,7 +15072,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -15071,7 +15119,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -15084,7 +15133,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 1000000
+              "duration": 2000000
             }
           },
           {
@@ -15096,7 +15145,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -15108,7 +15158,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -15120,8 +15171,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -15145,7 +15195,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -15181,8 +15232,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:126"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -15216,7 +15266,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -15276,8 +15327,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -15289,7 +15339,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -15301,8 +15352,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -15372,8 +15422,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -15409,7 +15458,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -15457,7 +15507,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -15503,7 +15554,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:53"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -15564,8 +15616,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -15601,7 +15652,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -15647,7 +15699,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:53"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -15790,8 +15843,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:53"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -15815,7 +15867,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -15827,8 +15880,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -15946,8 +15998,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -15983,7 +16034,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -16043,8 +16095,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:126"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -16079,8 +16130,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:53"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -16104,8 +16154,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -16129,7 +16178,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -16153,8 +16203,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -16225,7 +16274,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:53"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -16249,8 +16299,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -16286,8 +16335,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -16311,7 +16359,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -16323,8 +16372,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -16441,7 +16489,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:80"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -16475,7 +16524,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -16511,7 +16561,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -16737,8 +16788,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:131"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           }
         ]
@@ -16772,7 +16822,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -16796,8 +16847,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -16857,8 +16907,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -16904,7 +16953,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -16916,8 +16966,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -16965,7 +17014,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -16989,8 +17039,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -17026,7 +17075,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:131"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           }
         ]
@@ -17048,8 +17098,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -17121,8 +17170,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -17146,7 +17194,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -17192,8 +17241,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -17253,8 +17301,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -17348,7 +17395,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -17420,7 +17468,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -17657,7 +17706,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -17717,7 +17767,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -17763,7 +17814,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 2000000
             }
           },
           {
@@ -17811,8 +17863,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed",
-              "duration": 2000000
+              "status": "passed"
             }
           },
           {
@@ -17906,8 +17957,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:53"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -17955,7 +18005,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -17979,8 +18030,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -18050,8 +18100,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:53"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -18123,8 +18172,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -18194,8 +18242,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:53"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -18267,8 +18314,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -18280,7 +18326,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -18387,7 +18434,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -18411,8 +18459,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -18482,8 +18529,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:53"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -18507,8 +18553,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -18556,7 +18601,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -18638,8 +18684,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -18675,8 +18720,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -18712,8 +18756,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -18771,8 +18814,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:53"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -18784,7 +18826,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -18796,8 +18839,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -18833,7 +18875,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -18845,8 +18888,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -18942,8 +18984,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -18955,7 +18996,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -18979,7 +19021,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -19015,8 +19058,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -19073,7 +19115,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 1000000
+              "duration": 3000000
             }
           },
           {
@@ -19085,7 +19127,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:58"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -19121,7 +19164,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:72"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -19145,8 +19189,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:83"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           }
         ]
@@ -19168,7 +19211,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -19180,8 +19224,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -19466,8 +19509,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -19479,7 +19521,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -19539,8 +19582,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -19552,7 +19594,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -19610,7 +19653,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -19670,8 +19714,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -19683,7 +19726,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -19741,8 +19785,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -19814,7 +19857,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -19945,7 +19989,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -20089,8 +20134,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -20138,8 +20182,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:126"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -20173,7 +20216,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -20209,7 +20253,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -20221,8 +20266,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -20316,8 +20360,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:53"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -20425,7 +20468,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:126"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -20495,7 +20539,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -20543,8 +20588,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -20626,8 +20670,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -20723,7 +20766,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:131"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           }
         ]
@@ -20793,7 +20837,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -20841,7 +20886,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -20961,8 +21007,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -21033,8 +21078,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:53"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -21058,8 +21102,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -21083,8 +21126,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -21108,8 +21150,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -21121,7 +21162,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -21296,8 +21338,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -21357,8 +21398,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -21370,7 +21410,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -21572,7 +21613,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -21715,8 +21757,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -21752,7 +21793,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -21764,8 +21806,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed",
-              "duration": 3000000
+              "status": "passed"
             }
           },
           {
@@ -21789,7 +21830,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -21801,7 +21843,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 3000000
             }
           },
           {
@@ -21813,8 +21856,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -21872,7 +21914,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -21884,7 +21927,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -21956,8 +22000,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -22099,8 +22142,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -22112,7 +22154,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:126"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -22156,8 +22199,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -22205,8 +22247,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:72"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -22442,8 +22483,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -22455,7 +22495,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -22537,7 +22578,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -22679,7 +22721,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -22739,7 +22782,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -22821,8 +22865,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -22870,7 +22913,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -22988,8 +23032,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -23108,8 +23151,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -23157,8 +23199,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -23300,8 +23341,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -23313,7 +23353,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -23443,8 +23484,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -23456,7 +23496,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -23538,7 +23579,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -23586,8 +23628,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -23681,7 +23722,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -23823,7 +23865,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:48"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -23847,8 +23890,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:91"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -23908,8 +23950,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -23945,8 +23986,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:131"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           }
         ]
@@ -24017,7 +24057,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -24029,8 +24070,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -24054,7 +24094,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -24148,7 +24189,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -24172,8 +24214,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:106"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -24255,8 +24296,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:53"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -24292,7 +24332,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:96"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -24304,8 +24345,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -24341,8 +24381,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -24473,7 +24512,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:111"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -24555,8 +24595,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:86"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -24628,7 +24667,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -24783,7 +24823,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -24829,7 +24870,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:53"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -24913,7 +24955,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -24937,7 +24980,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:126"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -24971,7 +25015,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:53"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -25019,8 +25064,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:101"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -25056,8 +25100,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
@@ -25201,7 +25244,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:116"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -25213,7 +25257,8 @@
               "location": "dist/features/tables/steps/TableSteps.js:121"
             },
             "result": {
-              "status": "passed"
+              "status": "passed",
+              "duration": 1000000
             }
           },
           {
@@ -25225,8 +25270,7 @@
               "location": "dist/features/tables/steps/TableSteps.js:126"
             },
             "result": {
-              "status": "passed",
-              "duration": 1000000
+              "status": "passed"
             }
           },
           {
