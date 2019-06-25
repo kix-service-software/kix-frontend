@@ -43,7 +43,7 @@ class Component extends AbstractMarkoComponent {
             'new-faq-article-dialog',
             new WidgetConfiguration(
                 'new-faq-article-dialog', 'Translatable#New FAQ', [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-new-faq'
+                false, false, 'kix-icon-new-faq'
             ),
             KIXObjectType.FAQ_ARTICLE,
             ContextMode.CREATE
@@ -53,7 +53,7 @@ class Component extends AbstractMarkoComponent {
             'edit-faq-article-dialog',
             new WidgetConfiguration(
                 'edit-faq-article-dialog', 'Translatable#Edit FAQ Article', [], {}, false,
-                false, WidgetSize.BOTH, 'kix-icon-edit'
+                false, 'kix-icon-edit'
             ),
             KIXObjectType.FAQ_ARTICLE,
             ContextMode.EDIT

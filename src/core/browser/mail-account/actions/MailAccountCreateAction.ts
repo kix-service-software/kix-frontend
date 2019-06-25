@@ -1,7 +1,12 @@
-import { AbstractAction, KIXObjectType, ContextMode } from '../../../model';
+import { AbstractAction, KIXObjectType, ContextMode, CRUD } from '../../../model';
 import { ContextService } from '../../context';
+import { UIComponentPermission } from '../../../model/UIComponentPermission';
 
 export class MailAccountCreateAction extends AbstractAction {
+
+    public permissions: UIComponentPermission[] = [
+        new UIComponentPermission('system/communication/mailaccounts', [CRUD.CREATE])
+    ];
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#New Email Account';

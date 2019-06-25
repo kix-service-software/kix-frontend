@@ -1,6 +1,6 @@
 import { KIXObjectService } from './KIXObjectService';
 import {
-    KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, SysConfigItem, Error
+    KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, SysConfigItem
 } from '../../../model';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { SysConfigItemFactory } from '../../object-factories/SysConfigItemFactory';
@@ -16,7 +16,7 @@ export class SysConfigService extends KIXObjectService {
         return SysConfigService.INSTANCE;
     }
 
-    protected RESOURCE_URI: string = "sysconfig";
+    protected RESOURCE_URI: string = this.buildUri('system', 'config');
 
     public objectType: KIXObjectType = KIXObjectType.SYS_CONFIG_ITEM;
 
@@ -42,19 +42,6 @@ export class SysConfigService extends KIXObjectService {
         }
 
         return objects;
-    }
-
-    public createObject(
-        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>
-    ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
-    }
-
-    public async updateObject(
-        token: string, clientRequestId: string, objectType: KIXObjectType,
-        parameter: Array<[string, any]>, objectId: number | string
-    ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
     }
 
 }

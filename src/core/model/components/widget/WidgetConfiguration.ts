@@ -11,11 +11,8 @@ export class WidgetConfiguration<T = any> {
         public settings: T,
         public minimized: boolean = false,
         public minimizable: boolean = true,
-        public size: WidgetSize = WidgetSize.BOTH,
         public icon: string | ObjectIcon = '',
-        public contextDependent: boolean = false,
-        public predefinedTableFilters: KIXObjectPropertyFilter[] = [],
-        public show: boolean = true
+        public contextDependent: boolean = false
     ) { }
 
 }

@@ -29,9 +29,7 @@ class TabLaneComponent implements IEventSubscriber {
         this.state.showSidebar = typeof input.showSidebar !== 'undefined' ? input.showSidebar : true;
 
         WidgetService.getInstance().setWidgetType("tab-widget", WidgetType.LANE);
-        this.state.tabWidgets.forEach(
-            (tab) => WidgetService.getInstance().setWidgetType(tab.instanceId, WidgetType.LANE_TAB)
-        );
+
         EventService.getInstance().subscribe(TabContainerEvent.CHANGE_TITLE, this);
         EventService.getInstance().subscribe(TabContainerEvent.CHANGE_ICON, this);
         EventService.getInstance().subscribe(TabContainerEvent.CHANGE_TAB, this);
@@ -92,10 +90,6 @@ class TabLaneComponent implements IEventSubscriber {
         return this.state.activeTab
             ? KIXModulesService.getComponentTemplate(this.state.activeTab.configuration.widgetId)
             : undefined;
-    }
-
-    public getLaneTabWidgetType(): number {
-        return WidgetType.LANE_TAB;
     }
 
     private setSidebars(): void {

@@ -19,7 +19,7 @@ class Component {
     }
 
     public isLarge(widget: ConfiguredWidget): boolean {
-        return widget.configuration.size === WidgetSize.LARGE;
+        return widget.size === WidgetSize.LARGE;
     }
 
 }

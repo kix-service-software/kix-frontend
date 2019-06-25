@@ -1,6 +1,7 @@
 import { PluginService } from "./PluginService";
 import { KIXExtensions } from "../core/extensions";
-import { AdminModuleCategory, IAdminModuleExtension } from "../core/model";
+import { AdminModuleCategory, IAdminModuleExtension, AdminModule } from "../core/model";
+import { PermissionService } from "./PermissionService";
 
 export class AdminModuleService {
 
@@ -15,17 +16,19 @@ export class AdminModuleService {
 
     private constructor() { }
 
-    public async getAdminModuls(): Promise<AdminModuleCategory[]> {
+    public async getAdminModuls(token: string): Promise<AdminModuleCategory[]> {
         const moduleExtensions = await PluginService.getInstance().getExtensions<IAdminModuleExtension>(
             KIXExtensions.ADMIN_MODULE
         );
 
-        const categories: AdminModuleCategory[] = [];
+        let categories: AdminModuleCategory[] = [];
 
         moduleExtensions.forEach((m) => {
             const moduleCategories = m.getAdminModules();
             moduleCategories.forEach((c) => this.mergeCategory(categories, c));
         });
+
+        categories = await this.checkPermissions(token, categories);
 
         return categories;
     }
@@ -38,6 +41,37 @@ export class AdminModuleService {
         } else {
             categories.push(category);
         }
+    }
+
+    private async checkPermissions(token: string, categories: AdminModuleCategory[]): Promise<AdminModuleCategory[]> {
+        const result: AdminModuleCategory[] = [];
+        for (const category of categories) {
+            const modules: AdminModule[] = [];
+
+            if (category.modules) {
+                for (const adminModule of category.modules) {
+                    const allowed = await PermissionService.getInstance().checkPermissions(
+                        token, adminModule.permissions
+                    );
+
+                    if (allowed) {
+                        modules.push(adminModule);
+                    }
+                }
+            }
+
+            category.modules = modules;
+
+            if (category.children && category.children.length) {
+                category.children = await this.checkPermissions(token, category.children);
+            }
+
+            if (category.modules.length || category.children.length) {
+                result.push(category);
+            }
+        }
+
+        return result;
     }
 
 }

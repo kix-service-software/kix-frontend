@@ -46,7 +46,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'edit-linked-objects-dialog',
             new WidgetConfiguration(
-                'edit-linked-objects-dialog', 'Translatable#Edit Links', [], {}, false, false, null, 'kix-icon-link'
+                'edit-linked-objects-dialog', 'Translatable#Edit Links', [], {}, false, false, 'kix-icon-link'
             ),
             KIXObjectType.LINK,
             ContextMode.EDIT_LINKS

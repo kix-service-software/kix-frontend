@@ -105,7 +105,7 @@ class Component extends AbstractMarkoComponent {
             'new-faq-article-dialog',
             new WidgetConfiguration(
                 'new-faq-article-dialog', 'Translatable#New FAQ', [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-new-faq'
+                false, false, 'kix-icon-new-faq'
             ),
             KIXObjectType.FAQ_ARTICLE,
             ContextMode.CREATE
@@ -115,7 +115,7 @@ class Component extends AbstractMarkoComponent {
             'edit-faq-article-dialog',
             new WidgetConfiguration(
                 'edit-faq-article-dialog', 'Translatable#Edit FAQ Article', [], {}, false,
-                false, WidgetSize.BOTH, 'kix-icon-edit'
+                false, 'kix-icon-edit'
             ),
             KIXObjectType.FAQ_ARTICLE,
             ContextMode.EDIT
@@ -125,7 +125,7 @@ class Component extends AbstractMarkoComponent {
             'search-faq-article-dialog',
             new WidgetConfiguration(
                 'search-faq-article-dialog', 'Translatable#FAQ Search', [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-search-faq'
+                false, false, 'kix-icon-search-faq'
             ),
             KIXObjectType.FAQ_ARTICLE,
             ContextMode.SEARCH
@@ -166,7 +166,7 @@ class Component extends AbstractMarkoComponent {
             'new-faq-category-dialog',
             new WidgetConfiguration(
                 'new-faq-category-dialog', 'Translatable#New Category', [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-new-gear'
+                false, false, 'kix-icon-new-gear'
             ),
             KIXObjectType.FAQ_CATEGORY,
             ContextMode.CREATE_ADMIN
@@ -176,7 +176,7 @@ class Component extends AbstractMarkoComponent {
             'edit-faq-category-dialog',
             new WidgetConfiguration(
                 'edit-faq-category-dialog', 'Translatable#Edit FAQ Category', [], {}, false,
-                false, WidgetSize.BOTH, 'kix-icon-edit'
+                false, 'kix-icon-edit'
             ),
             KIXObjectType.FAQ_CATEGORY,
             ContextMode.EDIT_ADMIN

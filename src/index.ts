@@ -1,5 +1,6 @@
 import { Server } from './Server';
 import { CoreServiceRegistry, ConfigurationService } from './core/services';
+import { PluginService } from './services';
 
 process.setMaxListeners(0);
 
@@ -15,6 +16,8 @@ class Startup {
         const configDir = __dirname + '/../config/';
         const certDir = __dirname + '/../cert/';
         ConfigurationService.getInstance().init(configDir, certDir);
+
+        PluginService.getInstance().init(['extensions']);
 
         this.server = Server.getInstance();
         await this.server.initServer();

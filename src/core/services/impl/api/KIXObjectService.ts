@@ -24,6 +24,8 @@ export abstract class KIXObjectService implements IKIXObjectService {
 
     protected abstract objectType: KIXObjectType;
 
+    protected abstract RESOURCE_URI: string;
+
     public constructor(factories: IObjectFactory[] = []) {
         factories.forEach((f) => ObjectFactoryService.registerFactory(f));
     }
@@ -107,20 +109,19 @@ export abstract class KIXObjectService implements IKIXObjectService {
         return response[responseProperty];
     }
 
-    public abstract async createObject(
+    public createObject(
         token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>,
-        createOptions?: KIXObjectSpecificCreateOptions
-    ): Promise<string | number>;
+        createOptions: KIXObjectSpecificCreateOptions, cacheKeyPrefix: string
+    ): Promise<string | number> {
+        throw new Error('', "Method not implemented.");
+    }
 
-    public abstract async updateObject(
+    public async updateObject(
         token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>,
-        objectId: number | string, updateOptions?: KIXObjectSpecificCreateOptions
-    ): Promise<string | number>;
-
-    /**
-     * The base uri to reach the object in the REST-API. Have to be implemented by each service
-     */
-    protected abstract RESOURCE_URI: string;
+        objectId: number | string, updateOptions: KIXObjectSpecificCreateOptions, cacheKeyPrefix: string
+    ): Promise<string | number> {
+        throw new Error('', "Method not implemented.");
+    }
 
     protected prepareQuery(loadingOptions: KIXObjectLoadingOptions): any {
         let query = {};

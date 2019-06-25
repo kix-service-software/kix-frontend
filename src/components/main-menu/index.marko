@@ -3,56 +3,26 @@
         "image-only": !state.showText
     }>
         <for|menuEntry| of=state.primaryMenuEntries>
-            <li key=menuEntry.text class={
-                active: menuEntry.active
-            }>
-                <link-target routingConfiguration=component.getRoutingConfiguration(menuEntry)>
-                    <@content>
-                        <span class="hover-label">
-                            <icon icon=menuEntry.icon/>
-                            <div>
-                                <translation-string pattern=menuEntry.text/>
-                            </div>
-                        </span>
-                        <span class="label-wrapper">
-                            <icon icon=menuEntry.icon/>
-                            <if(state.showText)>
-                                <div>
-                                    <translation-string pattern=menuEntry.text/>
-                                </div>
-                            </if>
-                        </span>
-                    </@content>
-                </link-target>
-            </li>
+            <if(menuEntry.show)>
+                <li key=menuEntry.text class={
+                    active: menuEntry.active
+                }>
+                    <menu-entry entry=menuEntry/>
+                </li>
+            </if>
         </for>
     </ul>
     <ul.menu.user-menu class={
         "image-only": !state.showText
     }>
         <for|menuEntry| of=state.secondaryMenuEntries>
-            <li key=menuEntry.text class={
-                active: menuEntry.active
-            }>
-                <link-target routingConfiguration=component.getRoutingConfiguration(menuEntry)>
-                    <@content>
-                        <span class="hover-label">
-                            <icon icon=menuEntry.icon/>
-                            <div>
-                                <translation-string pattern=menuEntry.text/>
-                            </div>
-                        </span>
-                        <span class="label-wrapper">
-                            <icon icon=menuEntry.icon/>
-                            <if(state.showText)>
-                                <div>
-                                    <translation-string pattern=menuEntry.text/>
-                                </div>
-                            </if>
-                        </span>
-                    </@content>
-                </link-target>
-            </li>
+            <if(menuEntry.show)>
+                <li key=menuEntry.text class={
+                    active: menuEntry.active
+                }>
+                    <menu-entry entry=menuEntry/>
+                </li>
+            </if>
         </for>
     </ul>
 </div>

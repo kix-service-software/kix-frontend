@@ -13,7 +13,7 @@ export class ComponentState {
                 'cmdb-admin-ci-class-create', 'cmdb-admin-ci-class-import', 'csv-export-action'
             ],
             new TableWidgetSettings(KIXObjectType.CONFIG_ITEM_CLASS,
-                [ConfigItemClassProperty.NAME, SortOrder.UP]), false, false, null, 'kix-icon-gears')
+                [ConfigItemClassProperty.NAME, SortOrder.UP]), false, false, 'kix-icon-gears')
     ) { }
 
 }

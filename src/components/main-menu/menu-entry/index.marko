@@ -1,0 +1,20 @@
+<if(state.entry)>
+    <link-target routingConfiguration=component.getRoutingConfiguration(state.entry)>
+        <@content>
+            <span class="hover-label">
+                <icon icon=state.entry.icon/>
+                <div>
+                    <translation-string pattern=state.entry.text/>
+                </div>
+            </span>
+            <span class="label-wrapper">
+                <icon icon=state.entry.icon/>
+                <if(state.showText)>
+                    <div>
+                        <translation-string pattern=state.entry.text/>
+                    </div>
+                </if>
+            </span>
+        </@content>
+    </link-target>
+</if>

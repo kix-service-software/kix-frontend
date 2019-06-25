@@ -84,7 +84,7 @@ export class AuthenticationService {
     public async login(user: string, password: string, type: UserType, clientRequestId: string): Promise<string> {
         const userLogin = new UserLogin(user, password, type);
         const response = await HttpService.getInstance().post<LoginResponse>(
-            'sessions', userLogin, null, clientRequestId
+            'auth', userLogin, null, clientRequestId
         );
         const token = this.createToken(user, response.Token);
         return token;
@@ -93,7 +93,7 @@ export class AuthenticationService {
     public async logout(token: string): Promise<boolean> {
         if (this.frontendTokenCache.has(token)) {
             const backendToken = this.frontendTokenCache.get(token);
-            await HttpService.getInstance().delete('sessions/' + backendToken, token, null);
+            await HttpService.getInstance().delete('system/sessions/' + backendToken, token, null);
             this.frontendTokenCache.delete(token);
         }
         return true;

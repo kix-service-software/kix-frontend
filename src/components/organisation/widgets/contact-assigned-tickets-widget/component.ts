@@ -78,7 +78,7 @@ class Component {
                     )
                 ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             ),
-            false, true, WidgetSize.SMALL, null, false)
+            false, true, null, false)
             ;
 
         this.state.escalatedTicketsTitle = await TranslationService.translate('Translatable#Escalated Tickets');
@@ -120,7 +120,7 @@ class Component {
                     )
                 ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             ),
-            false, true, WidgetSize.SMALL, null, false);
+            false, true, null, false);
 
         this.state.reminderTicketsTitle = await TranslationService.translate('Translatable#Reminder Tickets');
         this.reminderTicketsConfig = new WidgetConfiguration(
@@ -154,7 +154,7 @@ class Component {
                     )
                 ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             ),
-            false, true, WidgetSize.SMALL, null, false);
+            false, true, null, false);
 
         this.state.newTicketsTitle = await TranslationService.translate('Translatable#New Tickets');
         this.newTicketsConfig = new WidgetConfiguration(
@@ -186,7 +186,7 @@ class Component {
                     )
                 ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             ),
-            false, true, WidgetSize.SMALL, null, false);
+            false, true, null, false);
 
         this.state.pendingTicketsTitle = await TranslationService.translate('Translatable#Pending Tickets');
         this.pendingTicketsConfig = new WidgetConfiguration(
@@ -221,7 +221,7 @@ class Component {
                     )
                 ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             ),
-            false, true, WidgetSize.SMALL, null, false);
+            false, true, null, false);
 
         context.registerListener('contact-assigned-tickets-component', {
             explorerBarToggled: () => { return; },

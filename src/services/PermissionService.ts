@@ -31,33 +31,26 @@ export class PermissionService {
         token: string, configuration: ContextConfiguration
     ): Promise<ContextConfiguration> {
 
-        const sidebars = await this.checkConfiguration(token, configuration.sidebars, configuration.sidebarWidgets);
-        const explorer = await this.checkConfiguration(token, configuration.explorer, configuration.explorerWidgets);
-        const lanes = await this.checkConfiguration(token, configuration.lanes, configuration.laneWidgets);
-        const laneTabs = await this.checkConfiguration(token, configuration.laneTabs, configuration.laneTabWidgets);
-        const content = await this.checkConfiguration(token, configuration.content, configuration.contentWidgets);
-        const overlays = await this.checkConfiguration(
-            token, configuration.overlayWidgets.map((ow) => ow.instanceId), configuration.overlayWidgets
-        );
+        const sidebars = await this.checkConfiguration(token, configuration.sidebarWidgets);
+        const explorer = await this.checkConfiguration(token, configuration.explorerWidgets);
+        const lanes = await this.checkConfiguration(token, configuration.laneWidgets);
+        const content = await this.checkConfiguration(token, configuration.contentWidgets);
+        const overlays = await this.checkConfiguration(token, configuration.overlayWidgets);
 
         return new ContextConfiguration(
             configuration.contextId,
-            sidebars.map((w) => w.instanceId), sidebars.map((w) => w),
-            explorer.map((w) => w.instanceId), explorer.map((w) => w),
-            lanes.map((w) => w.instanceId), lanes.map((w) => w),
-            laneTabs.map((w) => w.instanceId), laneTabs.map((w) => w),
-            content.map((w) => w.instanceId), content.map((w) => w),
+            configuration.sidebars, sidebars.map((w) => w),
+            configuration.explorer, explorer.map((w) => w),
+            configuration.lanes, lanes.map((w) => w),
+            configuration.content, content.map((w) => w),
             configuration.generalActions,
             configuration.actions,
             overlays
         );
     }
 
-    private async checkConfiguration(
-        token: string, instanceIds: string[], widgets: ConfiguredWidget[]
-    ): Promise<ConfiguredWidget[]> {
+    private async checkConfiguration(token: string, widgets: ConfiguredWidget[]): Promise<ConfiguredWidget[]> {
         const allowedWidgets: ConfiguredWidget[] = [];
-        widgets = widgets.filter((w) => instanceIds.some((id) => id === w.instanceId));
         for (const widget of widgets) {
             const allowed = await this.checkPermissions(token, widget.permissions);
             if (allowed) {

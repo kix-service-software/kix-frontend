@@ -21,7 +21,7 @@ export class ObjectIconService extends KIXObjectService {
         return ObjectIconService.INSTANCE;
     }
 
-    protected RESOURCE_URI: string = "objecticons";
+    protected RESOURCE_URI: string = this.buildUri('system', 'objecticons');
 
     public objectType: KIXObjectType = KIXObjectType.OBJECT_ICON;
 

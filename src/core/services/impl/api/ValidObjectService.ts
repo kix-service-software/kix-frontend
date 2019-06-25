@@ -21,7 +21,7 @@ export class ValidObjectService extends KIXObjectService {
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
-    protected RESOURCE_URI: string = "valid";
+    protected RESOURCE_URI: string = this.buildUri('system', 'valid');
 
     public objectType: KIXObjectType = KIXObjectType.VALID_OBJECT;
 
@@ -42,19 +42,6 @@ export class ValidObjectService extends KIXObjectService {
         }
 
         return objects;
-    }
-
-    public createObject(
-        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>
-    ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
-    }
-
-    public async updateObject(
-        token: string, clientRequestId: string, objectType: KIXObjectType,
-        parameter: Array<[string, any]>, objectId: number | string
-    ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
     }
 
 }

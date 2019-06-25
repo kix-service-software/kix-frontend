@@ -20,7 +20,7 @@ export class ServiceService extends KIXObjectService {
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
-    protected RESOURCE_URI: string = "services";
+    protected RESOURCE_URI: string = this.buildUri('system', 'services');
 
     public objectType: KIXObjectType = KIXObjectType.SERVICE;
 
@@ -46,16 +46,4 @@ export class ServiceService extends KIXObjectService {
         return objects;
     }
 
-    public createObject(
-        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>
-    ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
-    }
-
-    public async updateObject(
-        token: string, clientRequestId: string, objectType: KIXObjectType,
-        parameter: Array<[string, any]>, objectId: number | string
-    ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
-    }
 }

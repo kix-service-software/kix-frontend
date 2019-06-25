@@ -1,9 +1,13 @@
-import { AbstractAction, FormInstance, KIXObjectType, ContextMode } from '../../../../../model';
-import { FormService } from '../../../../form';
+import { AbstractAction, KIXObjectType, ContextMode, CRUD } from '../../../../../model';
 import { ContextService } from '../../../../context';
+import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { FAQCategoryDetailsContext, EditFAQCategoryDialogContext } from '../../context';
 
 export class FAQCategoryEditAction extends AbstractAction {
+
+    public permissions: UIComponentPermission[] = [
+        new UIComponentPermission('system/faq/categories/*', [CRUD.UPDATE])
+    ];
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Edit';

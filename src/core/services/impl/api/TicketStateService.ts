@@ -20,7 +20,7 @@ export class TicketStateService extends KIXObjectService {
         return TicketStateService.INSTANCE;
     }
 
-    protected RESOURCE_URI: string = 'ticketstates';
+    protected RESOURCE_URI: string = this.buildUri('system', 'ticket', 'states');
 
     public objectType: KIXObjectType = KIXObjectType.TICKET_STATE;
 
@@ -45,8 +45,9 @@ export class TicketStateService extends KIXObjectService {
                 token, KIXObjectType.TICKET_STATE, this.RESOURCE_URI, loadingOptions, objectIds, 'TicketState'
             );
         } else if (objectType === KIXObjectType.TICKET_STATE_TYPE) {
+            const uri = this.buildUri(this.RESOURCE_URI, 'types');
             objects = await super.load<StateType>(
-                token, KIXObjectType.TICKET_STATE_TYPE, 'statetypes', loadingOptions, objectIds, 'StateType'
+                token, KIXObjectType.TICKET_STATE_TYPE, uri, loadingOptions, objectIds, 'StateType'
             );
         }
 

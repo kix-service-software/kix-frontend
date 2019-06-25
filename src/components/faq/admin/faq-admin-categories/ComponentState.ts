@@ -10,7 +10,7 @@ export class ComponentState {
             'table-widget', 'Translatable#Knowledge Database: FAQ Categories',
             ['faq-admin-category-create-action', 'faq-category-csv-export-action'],
             new TableWidgetSettings(KIXObjectType.FAQ_CATEGORY, [FAQCategoryProperty.NAME, SortOrder.UP]),
-            false, false, null, 'kix-icon-gears'
+            false, false, 'kix-icon-gears'
         )
     ) { }
 

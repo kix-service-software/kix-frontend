@@ -80,7 +80,7 @@ export class FAQArticleFormService extends KIXObjectFormService<FAQArticle> {
         let hasPermissions = true;
         switch (field.property) {
             case FAQArticleProperty.CATEGORY_ID:
-                hasPermissions = await this.checkPermissions('faq/categories');
+                hasPermissions = await this.checkPermissions('system/faq/categories');
                 break;
             case FAQArticleProperty.ATTACHMENTS:
                 hasPermissions = await this.checkPermissions('faq/articles/*/attachments', [CRUD.CREATE]);

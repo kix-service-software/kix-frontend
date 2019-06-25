@@ -1,4 +1,5 @@
 import { KIXObjectType, ObjectIcon } from "../kix";
+import { UIComponentPermission } from "../UIComponentPermission";
 
 export class AdminModule {
 
@@ -8,7 +9,8 @@ export class AdminModule {
         public name?: string,
         public icon?: string | ObjectIcon,
         public objectType?: KIXObjectType,
-        public componentId?: string
+        public componentId?: string,
+        public permissions: UIComponentPermission[] = []
     ) {
         if (adminModule) {
             this.id = adminModule.id;

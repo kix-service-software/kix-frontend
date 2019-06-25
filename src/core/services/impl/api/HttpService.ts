@@ -9,6 +9,7 @@ import { AuthenticationService } from './AuthenticationService';
 import { CacheService } from '../../../cache';
 import { PermissionError } from '../../../model/PermissionError';
 import { OptionsResponse, RequestMethod } from '../../../api';
+import { UserService } from './UserService';
 
 export class HttpService {
 
@@ -47,14 +48,14 @@ export class HttpService {
 
         let cacheKey: string;
         if (useCache) {
-            cacheKey = this.buildCacheKey(resource, queryParameters, token);
+            cacheKey = await this.buildCacheKey(resource, queryParameters, token);
             const cachedObject = await CacheService.getInstance().get(cacheKey, cacheKeyPrefix);
             if (cachedObject) {
                 return cachedObject;
             }
         }
 
-        const requestKey = this.buildCacheKey(resource, queryParameters, token);
+        const requestKey = await this.buildCacheKey(resource, queryParameters, token, true);
 
         if (this.requestPromises.has(requestKey)) {
             return this.requestPromises.get(requestKey);
@@ -176,7 +177,10 @@ export class HttpService {
                     resolve(response);
                     ProfilingService.getInstance().stop(profileTaskId, response);
                 }).catch((error) => {
-                    LoggingService.getInstance().error('Error during HTTP ' + options.method + ' request.', error);
+                    LoggingService.getInstance().error(
+                        `Error during HTTP (${resource}) ${options.method} request.`, error
+                    );
+                    ProfilingService.getInstance().stop(profileTaskId, 'Error');
                     if (error.statusCode === 403) {
                         reject(new PermissionError(this.createError(error), resource, options.method));
                     } else {
@@ -195,7 +199,12 @@ export class HttpService {
         return new Error(err.error.Code, err.error.Message, err.statusCode);
     }
 
-    private buildCacheKey(resource: string, query: any, token: string): string {
+    private async buildCacheKey(resource: string, query: any, token: string, useToken?: boolean): Promise<string> {
+        let cacheId = token;
+        if (!useToken) {
+            const user = await UserService.getInstance().getUserByToken(token);
+            cacheId = user.UserID.toString();
+        }
         const ordered = {};
 
         if (query) {
@@ -205,7 +214,7 @@ export class HttpService {
         }
 
         const queryString = JSON.stringify(ordered);
-        const key = `${token};${resource};${queryString}`;
+        const key = `${cacheId};${resource};${queryString}`;
 
         return key;
     }

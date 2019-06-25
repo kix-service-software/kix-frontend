@@ -59,7 +59,6 @@ class Component extends AbstractMarkoComponent {
                 {},
                 false,
                 false,
-                WidgetSize.BOTH,
                 'kix-icon-search-man-bubble'
             ),
             KIXObjectType.CONTACT,

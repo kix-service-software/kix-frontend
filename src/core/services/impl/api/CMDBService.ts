@@ -17,6 +17,8 @@ import { LoggingService } from "../LoggingService";
 
 export class CMDBService extends KIXObjectService {
 
+    protected RESOURCE_URI: string = 'cmdb';
+
     protected objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM;
 
     private static INSTANCE: CMDBService;
@@ -27,9 +29,6 @@ export class CMDBService extends KIXObjectService {
         }
         return CMDBService.INSTANCE;
     }
-
-    protected RESOURCE_URI: string = 'cmdb';
-    protected SUB_RESOURCE_URI: string = 'versions';
 
     private constructor() {
         super();
@@ -85,8 +84,6 @@ export class CMDBService extends KIXObjectService {
     private async getConfigItems(
         token: string, configItemIds: Array<number | string>, loadingOptions: KIXObjectLoadingOptions
     ): Promise<ConfigItem[]> {
-        const subResource = 'configitems';
-
         loadingOptions = loadingOptions || new KIXObjectLoadingOptions();
         if (loadingOptions.includes && !!loadingOptions.includes.length) {
             if (!loadingOptions.includes.some((i) => i === ConfigItemProperty.CURRENT_VERSION)) {
@@ -106,7 +103,7 @@ export class CMDBService extends KIXObjectService {
                     (id) => typeof id !== 'undefined' && id.toString() !== '' && id !== null
                 );
 
-                const uri = this.buildUri(this.RESOURCE_URI, subResource, configItemIds.join(','));
+                const uri = this.buildUri('cmdb', 'configitems', configItemIds.join(','));
                 const response = await this.getObjectByUri<ConfigItemResponse | ConfigItemsResponse>(
                     token, uri, query
                 );
@@ -120,11 +117,11 @@ export class CMDBService extends KIXObjectService {
 
         } else if (loadingOptions.filter) {
             await this.buildFilter(loadingOptions.filter, 'ConfigItem', token, query);
-            const uri = this.buildUri(this.RESOURCE_URI, subResource);
+            const uri = this.buildUri('cmdb', 'configitems');
             const response = await this.getObjectByUri<ConfigItemsResponse>(token, uri, query);
             configItems = response.ConfigItem;
         } else {
-            const uri = this.buildUri(this.RESOURCE_URI, subResource);
+            const uri = this.buildUri('cmdb', 'configitems');
             const response = await this.getObjectByUri<ConfigItemsResponse>(token, uri, query);
             configItems = response.ConfigItem;
         }
@@ -158,7 +155,7 @@ export class CMDBService extends KIXObjectService {
                     (id) => typeof id !== 'undefined' && id.toString() !== '' && id !== null
                 );
 
-                const uri = this.buildUri(this.RESOURCE_URI, subResource, imageIds.join(','));
+                const uri = this.buildUri('cmdb', subResource, imageIds.join(','));
                 const response = await this.getObjectByUri<ConfigItemImageResponse | ConfigItemImagesResponse>(
                     token, uri, query
                 );
@@ -171,11 +168,11 @@ export class CMDBService extends KIXObjectService {
 
             } else if (loadingOptions.filter) {
                 await this.buildFilter(loadingOptions.filter, 'Image', token, query);
-                const uri = this.buildUri(this.RESOURCE_URI, subResource);
+                const uri = this.buildUri('cmdb', subResource);
                 const response = await this.getObjectByUri<ConfigItemImagesResponse>(token, uri, query);
                 images = response.Image;
             } else {
-                const uri = this.buildUri(this.RESOURCE_URI, subResource);
+                const uri = this.buildUri('cmdb', subResource);
                 const response = await this.getObjectByUri<ConfigItemImagesResponse>(token, uri, query);
                 images = response.Image;
             }
@@ -203,7 +200,7 @@ export class CMDBService extends KIXObjectService {
                 (id) => typeof id !== 'undefined' && id.toString() !== '' && id !== null
             );
 
-            const uri = this.buildUri(this.RESOURCE_URI, subResource, attachmentIds.join(','));
+            const uri = this.buildUri('cmdb', subResource, attachmentIds.join(','));
             const response = await this.getObjectByUri<ConfigItemAttachmentResponse | ConfigItemAttachmentsResponse>(
                 token, uri, query
             );
@@ -225,7 +222,7 @@ export class CMDBService extends KIXObjectService {
         if (objectType === KIXObjectType.CONFIG_ITEM_VERSION) {
             const options = createOptions as CreateConfigItemVersionOptions;
             const createConfigItemVersion = new CreateConfigItemVersion(parameter);
-            const uri = this.buildUri(this.RESOURCE_URI, 'configitems', options.configItemId, this.SUB_RESOURCE_URI);
+            const uri = this.buildUri('cmdb', 'configitems', options.configItemId, 'versions');
             const response
                 = await this.sendCreateRequest<CreateConfigItemVersionResponse, CreateConfigItemVersionRequest>(
                     token, clientRequestId, uri, new CreateConfigItemVersionRequest(createConfigItemVersion),
@@ -234,7 +231,7 @@ export class CMDBService extends KIXObjectService {
             return response.VersionID;
         } else {
             const createConfigItem = new CreateConfigItem(parameter.filter((p) => p[0] !== ConfigItemProperty.LINKS));
-            const uri = this.buildUri(this.RESOURCE_URI, 'configitems');
+            const uri = this.buildUri('cmdb', 'configitems');
             const response = await this.sendCreateRequest<CreateConfigItemResponse, CreateConfigItemRequest>(
                 token, clientRequestId, uri, new CreateConfigItemRequest(createConfigItem), this.objectType
             ).catch((error: Error) => {

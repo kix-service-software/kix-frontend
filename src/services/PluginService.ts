@@ -18,20 +18,14 @@ export class PluginService {
 
     public pluginManager: any;
 
-    private constructor() {
+    private constructor() { }
+
+    public init(extensionFolder: string[]): void {
         this.pluginManager = new Plugins();
 
-        const pluginDirs = [];
-        const fs = require('fs');
+        extensionFolder = extensionFolder.map((ef) => __dirname + '/../' + ef);
 
-        // FIXME: use Plugin folders from configuration service
-        const PLUGIN_FOLDERS = ["node_modules/@kix", "extensions"];
-        for (const dir of PLUGIN_FOLDERS) {
-            const path = __dirname + '/../../' + dir;
-            pluginDirs.push(path);
-        }
-
-        this.pluginManager.scanSubdirs(pluginDirs);
+        this.pluginManager.scanSubdirs(extensionFolder);
         this.pluginManager.scan();
     }
 

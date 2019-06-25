@@ -31,7 +31,7 @@ export class TicketFactory extends ObjectFactory<Ticket> {
 
     // public async applyPermissions(token: string, ticket: Ticket): Promise<Ticket> {
 
-    //     if (await this.readAccessDenied(token, 'ticketstates')) {
+    //     if (await this.readAccessDenied(token, 'system/ticket/states')) {
     //         delete ticket.StateID;
     //     }
 
@@ -55,12 +55,12 @@ export class TicketFactory extends ObjectFactory<Ticket> {
     //         delete ticket.ContactID;
     //     }
 
-    //     if (await this.readAccessDenied(token, 'users')) {
+    //     if (await this.readAccessDenied(token, 'system/users')) {
     //         delete ticket.OwnerID;
     //         delete ticket.ResponsibleID;
     //     }
 
-    //     if (await this.readAccessDenied(token, 'tickettypes')) {
+    //     if (await this.readAccessDenied(token, 'system/ticket/types')) {
     //         delete ticket.TypeID;
     //     }
 

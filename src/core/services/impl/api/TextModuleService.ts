@@ -17,7 +17,7 @@ export class TextModuleService extends KIXObjectService {
         return TextModuleService.INSTANCE;
     }
 
-    protected RESOURCE_URI: string = 'textmodules';
+    protected RESOURCE_URI: string = this.buildUri('system', 'textmodules');
 
     public objectType: KIXObjectType = KIXObjectType.TEXT_MODULE;
 

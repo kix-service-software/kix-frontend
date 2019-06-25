@@ -15,7 +15,8 @@ export class ComponentState {
                 'i18n-admin-translation-csv-export'
             ],
             new TableWidgetSettings(KIXObjectType.TRANSLATION_PATTERN,
-                [TranslationPatternProperty.VALUE, SortOrder.UP]), false, false, null, 'kix-icon-gears')
+                [TranslationPatternProperty.VALUE, SortOrder.UP]), false, false, 'kix-icon-gears'
+        )
     ) { }
 
 }

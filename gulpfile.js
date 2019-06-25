@@ -40,10 +40,10 @@ const prodTSCConfig = {
 gulp.task('default', (cb) => {
     if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test") {
         console.log("Build app for development.");
-        runseq('clean', 'tslint', 'compile-src', 'test', 'compile-themes', 'copy-component-templates', 'copy-static', cb);
+        runseq('clean', 'tslint', 'compile-src', 'test', 'copy-extensions', 'compile-themes', 'copy-component-templates', 'copy-static', cb);
     } else {
         console.log("Build app for production.");
-        runseq('clean', 'tslint', 'compile-src', 'test', 'compile-themes', 'copy-component-templates', 'uglify', 'copy-static', cb);
+        runseq('clean', 'tslint', 'compile-src', 'test', 'copy-extensions', 'compile-themes', 'copy-component-templates', 'uglify', 'copy-static', cb);
     }
 });
 
@@ -104,6 +104,13 @@ gulp.task('test', () => {
             timeout: '15000'
         }));
 });
+
+gulp.task('copy-extensions', () => {
+    return gulp
+        .src(['src/extensions/**/package.json'])
+        .pipe(gulp.dest('dist/extensions'));
+});
+
 
 gulp.task('compile-themes', () => {
     let config = prodTSCConfig;

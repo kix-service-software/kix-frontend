@@ -4,9 +4,6 @@ import {
 } from '../../../model';
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
-import { CreateSystemAddresses } from '../../../api/system-addresses/CreateSystemAddresses';
-import { CreateSystemAddressesResponse } from '../../../api/system-addresses/CreateSystemAddressesResponse';
-import { CreateSystemAddressesRequest } from '../../../api/system-addresses/CreateSystemAddressesRequest';
 import { LoggingService } from '../LoggingService';
 import { SystemAddressFactory } from '../../object-factories/SystemAddressFactory';
 
@@ -21,7 +18,7 @@ export class SystemAddressService extends KIXObjectService {
         return SystemAddressService.INSTANCE;
     }
 
-    protected RESOURCE_URI: string = 'systemaddresses';
+    protected RESOURCE_URI: string = this.buildUri('system', 'systemaddresses');
 
     public objectType: KIXObjectType = KIXObjectType.SYSTEM_ADDRESS;
 

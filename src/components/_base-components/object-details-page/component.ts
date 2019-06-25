@@ -1,3 +1,4 @@
+
 import {
     AbstractMarkoComponent, ContextService, WidgetService, LabelService, ActionFactory
 } from "../../../core/browser";
@@ -82,8 +83,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         this.configuration = context.getConfiguration();
-        this.state.lanes = context.getLanes();
-        this.state.tabWidgets = context.getLaneTabs();
+        this.state.lanes = context.getLanes(true);
         this.state.contentWidgets = context.getContent(true);
 
         await this.prepareActions();

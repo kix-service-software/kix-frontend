@@ -46,35 +46,35 @@ export class TicketFormService extends KIXObjectFormService<Ticket> {
         let hasPermissions = true;
         switch (field.property) {
             case TicketProperty.QUEUE_ID:
-                hasPermissions = await this.checkPermissions('queues');
+                hasPermissions = await this.checkPermissions('system/ticket/queues');
                 break;
             case TicketProperty.STATE_ID:
-                hasPermissions = await this.checkPermissions('ticketstates');
+                hasPermissions = await this.checkPermissions('system/ticket/states');
                 break;
             case TicketProperty.TYPE_ID:
-                hasPermissions = await this.checkPermissions('tickettypes');
+                hasPermissions = await this.checkPermissions('system/ticket/types');
                 break;
             case TicketProperty.PRIORITY_ID:
-                hasPermissions = await this.checkPermissions('priorities');
+                hasPermissions = await this.checkPermissions('system/ticket/priorities');
                 break;
             case TicketProperty.SERVICE_ID:
-                hasPermissions = await this.checkPermissions('services');
+                hasPermissions = await this.checkPermissions('system/services');
                 break;
             case TicketProperty.SLA_ID:
-                hasPermissions = await this.checkPermissions('slas');
+                hasPermissions = await this.checkPermissions('system/slas');
                 break;
             case ArticleProperty.CHANNEL_ID:
-                hasPermissions = await this.checkPermissions('channels');
+                hasPermissions = await this.checkPermissions('system/communication/channels');
                 break;
             case ArticleProperty.ATTACHMENTS:
-                hasPermissions = await this.checkPermissions('ticket/*/articles/*/attachments', [CRUD.CREATE]);
+                hasPermissions = await this.checkPermissions('tickets/*/articles/*/attachments', [CRUD.CREATE]);
                 break;
             case TicketProperty.LINK:
                 hasPermissions = await this.checkPermissions('links', [CRUD.CREATE]);
                 break;
             case TicketProperty.OWNER_ID:
             case TicketProperty.RESPONSIBLE_ID:
-                hasPermissions = await this.checkPermissions('users');
+                hasPermissions = await this.checkPermissions('system/users');
                 break;
             default:
         }

@@ -12,7 +12,7 @@ export class ComponentState {
                 'system-address-create', 'system-addresses-table-delete'
             ],
             new TableWidgetSettings(KIXObjectType.SYSTEM_ADDRESS,
-                [SystemAddressProperty.REALNAME, SortOrder.UP]), false, false, null, 'kix-icon-gears')
+                [SystemAddressProperty.REALNAME, SortOrder.UP]), false, false, 'kix-icon-gears')
     ) { }
 
 }

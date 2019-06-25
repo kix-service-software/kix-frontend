@@ -61,11 +61,7 @@ export abstract class Context {
 
     public setConfiguration(configuration: ContextConfiguration): void {
         this.configuration = configuration;
-        this.shownSidebars = configuration
-            ? [...configuration.sidebars.filter(
-                (s) => configuration.sidebarWidgets.some((sw) => sw.instanceId === s && sw.configuration.show)
-            )]
-            : [];
+        this.shownSidebars = [...this.configuration.sidebars];
     }
 
     public setAdditionalInformation(key: string, value: any): void {
@@ -135,18 +131,6 @@ export abstract class Context {
         return lanes;
     }
 
-    public getLaneTabs(show: boolean = false): ConfiguredWidget[] {
-        let laneTabs = this.configuration.laneTabWidgets;
-
-        if (show) {
-            laneTabs = laneTabs.filter(
-                (lt) => this.configuration.laneTabs.findIndex((ltId) => lt.instanceId === ltId) !== -1
-            );
-        }
-
-        return laneTabs;
-    }
-
     public getContent(show: boolean = false): ConfiguredWidget[] {
         let content = this.configuration.contentWidgets;
 
@@ -164,7 +148,7 @@ export abstract class Context {
 
         if (show && explorer) {
             explorer = explorer.filter(
-                (ex) => this.configuration.explorer.findIndex((e) => ex.instanceId === e) !== -1
+                (ex) => this.configuration.explorer.some((e) => ex.instanceId === e)
             );
         }
 
@@ -175,9 +159,9 @@ export abstract class Context {
         let sidebars = this.configuration.sidebarWidgets;
 
         if (show && sidebars) {
-            sidebars = sidebars.filter(
-                (sb) => this.shownSidebars.some((s) => sb.instanceId === s)
-            );
+            sidebars = sidebars
+                .filter((sb) => this.configuration.sidebars.some((s) => sb.instanceId === s))
+                .filter((sb) => this.shownSidebars.some((s) => sb.instanceId === s));
         }
 
         return sidebars;
@@ -245,17 +229,38 @@ export abstract class Context {
             }
 
             if (!configuration) {
-                const laneTabWidget = this.configuration.laneTabWidgets.find((ltw) => ltw.instanceId === instanceId);
-                configuration = laneTabWidget ? laneTabWidget.configuration : undefined;
-            }
-
-            if (!configuration) {
                 const contentWidget = this.configuration.contentWidgets.find((cw) => cw.instanceId === instanceId);
                 configuration = contentWidget ? contentWidget.configuration : undefined;
             }
         }
 
         return configuration;
+    }
+
+    public getWidget<WS = any>(instanceId: string): ConfiguredWidget {
+        let widget: ConfiguredWidget;
+
+        if (this.configuration) {
+            widget = this.configuration.explorerWidgets.find((e) => e.instanceId === instanceId);
+
+            if (!widget) {
+                widget = this.configuration.sidebarWidgets.find((e) => e.instanceId === instanceId);
+            }
+
+            if (!widget) {
+                widget = this.configuration.overlayWidgets.find((o) => o.instanceId === instanceId);
+            }
+
+            if (!widget) {
+                widget = this.configuration.laneWidgets.find((lw) => lw.instanceId === instanceId);
+            }
+
+            if (!widget) {
+                widget = this.configuration.contentWidgets.find((cw) => cw.instanceId === instanceId);
+            }
+        }
+
+        return widget;
     }
 
     public getContextSpecificWidgetType(instanceId: string): WidgetType {
@@ -278,11 +283,6 @@ export abstract class Context {
             if (!widgetType) {
                 const laneWidget = this.configuration.laneWidgets.find((lw) => lw.instanceId === instanceId);
                 widgetType = laneWidget ? WidgetType.LANE : undefined;
-            }
-
-            if (!widgetType) {
-                const laneTabWidget = this.configuration.laneTabWidgets.find((ltw) => ltw.instanceId === instanceId);
-                widgetType = laneTabWidget ? WidgetType.LANE_TAB : undefined;
             }
         }
 

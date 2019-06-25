@@ -15,4 +15,6 @@ export interface IMainMenuExtension {
 
     permissions: UIComponentPermission[];
 
+    orderRang: number;
+
 }

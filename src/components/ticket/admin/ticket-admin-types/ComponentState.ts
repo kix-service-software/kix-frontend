@@ -14,7 +14,7 @@ export class ComponentState {
                 'ticket-admin-type-import', 'csv-export-action'
             ],
             new TableWidgetSettings(KIXObjectType.TICKET_TYPE,
-                [TicketTypeProperty.NAME, SortOrder.UP]), false, false, null, 'kix-icon-gears')
+                [TicketTypeProperty.NAME, SortOrder.UP]), false, false, 'kix-icon-gears')
     ) { }
 
 }

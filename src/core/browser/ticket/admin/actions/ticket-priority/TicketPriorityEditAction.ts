@@ -1,9 +1,13 @@
-import { AbstractAction, KIXObjectType, ContextMode, FormInstance } from "../../../../../model";
+import { AbstractAction, KIXObjectType, ContextMode, CRUD } from "../../../../../model";
 import { ContextService } from "../../../../context";
-import { FormService } from "../../../../form";
+import { UIComponentPermission } from "../../../../../model/UIComponentPermission";
 import { TicketPriorityDetailsContext, EditTicketPriorityDialogContext } from "../../context";
 
 export class TicketPriorityEditAction extends AbstractAction {
+
+    public permissions: UIComponentPermission[] = [
+        new UIComponentPermission('system/ticket/priorities/*', [CRUD.UPDATE])
+    ];
 
     public async initAction(): Promise<void> {
         this.text = 'Edit';

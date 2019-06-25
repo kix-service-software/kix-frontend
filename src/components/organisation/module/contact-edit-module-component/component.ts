@@ -54,7 +54,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'new-contact-dialog',
             new WidgetConfiguration(
-                'new-contact-dialog', 'Translatable#New Contact', [], {}, false, false, null, 'kix-icon-man-bubble-new'
+                'new-contact-dialog', 'Translatable#New Contact', [], {}, false, false, 'kix-icon-man-bubble-new'
             ),
             KIXObjectType.CONTACT,
             ContextMode.CREATE
@@ -63,7 +63,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'edit-contact-dialog',
             new WidgetConfiguration(
-                'edit-contact-dialog', 'Translatable#Edit Contact', [], {}, false, false, null, 'kix-icon-edit'
+                'edit-contact-dialog', 'Translatable#Edit Contact', [], {}, false, false, 'kix-icon-edit'
             ),
             KIXObjectType.CONTACT,
             ContextMode.EDIT
@@ -72,7 +72,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'contact-import-dialog',
             new WidgetConfiguration(
-                'import-dialog', 'Translatable#Import Contacts', [], {}, false, false, null, 'kix-icon-man-bubble-new'
+                'import-dialog', 'Translatable#Import Contacts', [], {}, false, false, 'kix-icon-man-bubble-new'
             ),
             KIXObjectType.CONTACT,
             ContextMode.IMPORT

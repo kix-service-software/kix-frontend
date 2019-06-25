@@ -14,7 +14,7 @@ export class ComponentState {
                 'ticket-admin-priority-import', 'csv-export-action'
             ],
             new TableWidgetSettings(KIXObjectType.TICKET_PRIORITY,
-                [TicketPriorityProperty.NAME, SortOrder.UP]), false, false, null, 'kix-icon-gears')
+                [TicketPriorityProperty.NAME, SortOrder.UP]), false, false, 'kix-icon-gears')
     ) { }
 
 }

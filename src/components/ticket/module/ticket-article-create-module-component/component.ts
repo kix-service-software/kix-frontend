@@ -46,7 +46,7 @@ class Component extends AbstractMarkoComponent {
             'new-ticket-article-dialog',
             new WidgetConfiguration(
                 'new-ticket-article-dialog', 'Translatable#New Article', [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-new-note'
+                false, false, 'kix-icon-new-note'
             ),
             KIXObjectType.ARTICLE,
             ContextMode.CREATE_SUB

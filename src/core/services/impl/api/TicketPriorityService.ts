@@ -19,7 +19,7 @@ export class TicketPriorityService extends KIXObjectService {
         return TicketPriorityService.INSTANCE;
     }
 
-    protected RESOURCE_URI: string = 'priorities';
+    protected RESOURCE_URI: string = this.buildUri('system', 'ticket', 'priorities');
 
     public objectType: KIXObjectType = KIXObjectType.TICKET_PRIORITY;
 

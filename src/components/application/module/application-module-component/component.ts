@@ -30,9 +30,6 @@ import {
     TranslationPatternTableFactory, TranslationLanguageTableFactory
 } from '../../../../core/browser/i18n/admin/table';
 import { TranslationPatternLabelProvider, TranslationLanguageLabelProvider } from '../../../../core/browser/i18n';
-import {
-    TranslationCreateAction, TranslationEditAction, TranslationImportAction, TranslationCSVExportAction
-} from '../../../../core/browser/i18n/admin/actions';
 
 class Component extends AbstractMarkoComponent {
 
@@ -73,10 +70,6 @@ class Component extends AbstractMarkoComponent {
         TableFactoryService.getInstance().registerFactory(new TranslationLanguageTableFactory());
         LabelService.getInstance().registerLabelProvider(new TranslationPatternLabelProvider());
         LabelService.getInstance().registerLabelProvider(new TranslationLanguageLabelProvider());
-        ActionFactory.getInstance().registerAction('i18n-admin-translation-create', TranslationCreateAction);
-        ActionFactory.getInstance().registerAction('i18n-admin-translation-edit', TranslationEditAction);
-        ActionFactory.getInstance().registerAction('i18n-admin-translation-import', TranslationImportAction);
-        ActionFactory.getInstance().registerAction('i18n-admin-translation-csv-export', TranslationCSVExportAction);
 
         TableFactoryService.getInstance().registerFactory(new PermissionsTableFactory());
         TableCSSHandlerRegistry.getInstance().registerCSSHandler(
@@ -142,7 +135,7 @@ class Component extends AbstractMarkoComponent {
             'personal-settings-dialog',
             new WidgetConfiguration(
                 'personal-settings-dialog', 'Translatable#Edit Personal Settings',
-                [], {}, false, false, null, 'kix-icon-edit'
+                [], {}, false, false, 'kix-icon-edit'
             ),
             KIXObjectType.PERSONAL_SETTINGS,
             ContextMode.PERSONAL_SETTINGS
@@ -151,7 +144,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'bulk-dialog',
             new WidgetConfiguration(
-                'bulk-dialog', 'Translatable#Edit Objects', [], {}, false, false, null, 'kix-icon-edit'
+                'bulk-dialog', 'Translatable#Edit Objects', [], {}, false, false, 'kix-icon-edit'
             ),
             KIXObjectType.ANY,
             ContextMode.EDIT_BULK
@@ -161,7 +154,7 @@ class Component extends AbstractMarkoComponent {
             'new-translation-dialog',
             new WidgetConfiguration(
                 'new-translation-dialog', 'Translatable#New Translation', [], {},
-                false, false, null, 'kix-icon-new-gear'
+                false, false, 'kix-icon-new-gear'
             ),
             KIXObjectType.TRANSLATION_PATTERN,
             ContextMode.CREATE_ADMIN
@@ -170,7 +163,7 @@ class Component extends AbstractMarkoComponent {
         DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'edit-translation-dialog',
             new WidgetConfiguration(
-                'edit-translation-dialog', 'Translatable#Edit Translation', [], {}, false, false, null, 'kix-icon-edit'
+                'edit-translation-dialog', 'Translatable#Edit Translation', [], {}, false, false, 'kix-icon-edit'
             ),
             KIXObjectType.TRANSLATION_PATTERN,
             ContextMode.EDIT_ADMIN

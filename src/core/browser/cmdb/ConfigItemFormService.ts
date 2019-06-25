@@ -275,7 +275,7 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
         let hasPermissions = true;
         switch (field.property) {
             case ConfigItemProperty.CLASS_ID:
-                hasPermissions = await this.checkPermissions('cmdb/classes');
+                hasPermissions = await this.checkPermissions('system/cmdb/classes');
                 break;
             default:
         }

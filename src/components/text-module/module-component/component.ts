@@ -3,13 +3,15 @@ import {
     AbstractMarkoComponent, ServiceRegistry, LabelService, FactoryService, ActionFactory, ContextService, DialogService
 } from '../../../core/browser';
 import {
-    KIXObjectType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration, ContextDescriptor, ContextType
+    KIXObjectType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration, ContextDescriptor, ContextType, CRUD
 } from '../../../core/model';
 import { TableFactoryService } from '../../../core/browser/table';
 import {
     TextModuleService, TextModuleBrowserFactory, TextModulesTableFactory, TextModuleLabelProvider,
     NewTextModuleDialogContext, TextModuleCreateAction, EditTextModuleDialogContext, TextModuleFormService
 } from '../../../core/browser/text-modules';
+import { UIComponentPermission } from '../../../core/model/UIComponentPermission';
+import { AuthenticationSocketClient } from '../../../core/browser/application/AuthenticationSocketClient';
 
 class Component extends AbstractMarkoComponent {
 
@@ -25,56 +27,53 @@ class Component extends AbstractMarkoComponent {
         TableFactoryService.getInstance().registerFactory(new TextModulesTableFactory());
         LabelService.getInstance().registerLabelProvider(new TextModuleLabelProvider());
 
-        ServiceRegistry.registerServiceInstance(TextModuleFormService.getInstance());
+        if (await this.checkPermission('system/textmodules', CRUD.CREATE)) {
+            ActionFactory.getInstance().registerAction('text-module-create', TextModuleCreateAction);
 
-        this.registerAdminContexts();
-        this.registerAdminActions();
-        this.registerAdminDialogs();
+            const newTextModuleDialogContext = new ContextDescriptor(
+                NewTextModuleDialogContext.CONTEXT_ID, [KIXObjectType.TEXT_MODULE],
+                ContextType.DIALOG, ContextMode.CREATE_ADMIN,
+                false, 'new-text-module-dialog', ['text-modules'], NewTextModuleDialogContext
+            );
+            ContextService.getInstance().registerContext(newTextModuleDialogContext);
+
+            DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+                'new-text-module-dialog',
+                new WidgetConfiguration(
+                    'new-text-module-dialog', 'Translatable#New Text Module',
+                    [], {}, false, false, 'kix-icon-new-gear'
+                ),
+                KIXObjectType.TEXT_MODULE,
+                ContextMode.CREATE_ADMIN
+            ));
+        }
+
+        if (await this.checkPermission('system/textmodules/*', CRUD.UPDATE)) {
+            const editTextModuleDialogContext = new ContextDescriptor(
+                EditTextModuleDialogContext.CONTEXT_ID, [KIXObjectType.TEXT_MODULE],
+                ContextType.DIALOG, ContextMode.EDIT_ADMIN,
+                false, 'edit-text-module-dialog', ['text-modules'], EditTextModuleDialogContext
+            );
+            ContextService.getInstance().registerContext(editTextModuleDialogContext);
+
+            DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+                'edit-text-module-dialog',
+                new WidgetConfiguration(
+                    'edit-text-module-dialog', 'Translatable#Edit Text Module',
+                    [], {}, false, false, 'kix-icon-edit'
+                ),
+                KIXObjectType.TEXT_MODULE,
+                ContextMode.EDIT_ADMIN
+            ));
+        }
     }
 
-    private registerAdminContexts(): void {
-        const newTextModuleDialogContext = new ContextDescriptor(
-            NewTextModuleDialogContext.CONTEXT_ID, [KIXObjectType.TEXT_MODULE],
-            ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-text-module-dialog', ['text-modules'], NewTextModuleDialogContext
+    private async checkPermission(resource: string, crud: CRUD): Promise<boolean> {
+        return await AuthenticationSocketClient.getInstance().checkPermissions(
+            [new UIComponentPermission(resource, [crud])]
         );
-        ContextService.getInstance().registerContext(newTextModuleDialogContext);
-
-        const editTextModuleDialogContext = new ContextDescriptor(
-            EditTextModuleDialogContext.CONTEXT_ID, [KIXObjectType.TEXT_MODULE],
-            ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            false, 'edit-text-module-dialog', ['text-modules'], EditTextModuleDialogContext
-        );
-        ContextService.getInstance().registerContext(editTextModuleDialogContext);
     }
 
-    private registerAdminActions(): void {
-        ActionFactory.getInstance().registerAction(
-            'text-module-create', TextModuleCreateAction
-        );
-    }
-
-    private registerAdminDialogs(): void {
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'new-text-module-dialog',
-            new WidgetConfiguration(
-                'new-text-module-dialog', 'Translatable#New Text Module',
-                [], {}, false, false, null, 'kix-icon-new-gear'
-            ),
-            KIXObjectType.TEXT_MODULE,
-            ContextMode.CREATE_ADMIN
-        ));
-
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'edit-text-module-dialog',
-            new WidgetConfiguration(
-                'edit-text-module-dialog', 'Translatable#Edit Text Module',
-                [], {}, false, false, null, 'kix-icon-edit'
-            ),
-            KIXObjectType.TEXT_MODULE,
-            ContextMode.EDIT_ADMIN
-        ));
-    }
 }
 
 module.exports = Component;

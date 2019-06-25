@@ -61,8 +61,7 @@ class Component {
 
             this.state.icon = this.state.widgetConfiguration.icon;
 
-            this.state.predefinedTableFilter = this.state.widgetConfiguration ?
-                this.state.widgetConfiguration.predefinedTableFilters : [];
+            this.state.predefinedTableFilter = settings.predefinedTableFilters ? settings.predefinedTableFilters : [];
 
             this.subscriber = {
                 eventSubscriberId: IdService.generateDateBasedId(this.state.instanceId),

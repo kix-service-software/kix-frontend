@@ -4,19 +4,22 @@ import {
 } from '../../../core/browser';
 import {
     RoleService, RoleTableFactory, RoleBrowserFactory, RoleLabelProvider, UserRoleCreateAction,
-    NewUserRoleDialogContext, UserRoleTableDeleteAction, UserLabelProvider, UserBrowserFactory,
+    NewUserRoleDialogContext, UserLabelProvider, UserBrowserFactory,
     UserRoleEditAction, RoleDetailsContext, UserTableFactory,
     UserCreateAction, NewUserDialogContext, UserDetailsContext, UserEditAction, UserFormService, EditUserDialogContext,
     EditUserRoleDialogContext, UserRoleFormService
 } from '../../../core/browser/user';
 import {
     KIXObjectType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration, WidgetSize, ContextDescriptor,
-    ContextType
+    ContextType,
+    CRUD
 } from '../../../core/model';
 import { TableFactoryService, TableCSSHandlerRegistry } from '../../../core/browser/table';
 import { DialogService } from '../../../core/browser/components/dialog';
 import { PermissionTypeBrowserFactory } from '../../../core/browser/permission';
 import { PermissionTableCSSHandler } from '../../../core/browser/application';
+import { AuthenticationSocketClient } from '../../../core/browser/application/AuthenticationSocketClient';
+import { UIComponentPermission } from '../../../core/model/UIComponentPermission';
 
 class Component extends AbstractMarkoComponent {
 
@@ -45,39 +48,53 @@ class Component extends AbstractMarkoComponent {
             KIXObjectType.PERMISSION_TYPE, PermissionTypeBrowserFactory.getInstance()
         );
 
-        this.registerAdminContexts();
-        this.registerAdminActions();
-        this.registerAdminDialogs();
+        this.registerUser();
+        this.registerRole();
     }
 
-    private registerAdminContexts(): void {
-        const newUserRoleContext = new ContextDescriptor(
-            NewUserRoleDialogContext.CONTEXT_ID, [KIXObjectType.ROLE],
-            ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-user-role-dialog', ['roles'], NewUserRoleDialogContext
-        );
-        ContextService.getInstance().registerContext(newUserRoleContext);
+    private async registerUser(): Promise<void> {
 
-        const roleDetailsContextDescriptor = new ContextDescriptor(
-            RoleDetailsContext.CONTEXT_ID, [KIXObjectType.ROLE],
-            ContextType.MAIN, ContextMode.DETAILS,
-            true, 'object-details-page', ['roles'], RoleDetailsContext
-        );
-        ContextService.getInstance().registerContext(roleDetailsContextDescriptor);
+        if (await this.checkPermission('system/users', CRUD.CREATE)) {
+            ActionFactory.getInstance().registerAction('user-admin-user-create-action', UserCreateAction);
 
-        const editUserRoleContext = new ContextDescriptor(
-            EditUserRoleDialogContext.CONTEXT_ID, [KIXObjectType.ROLE],
-            ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            false, 'edit-user-role-dialog', ['roles'], EditUserRoleDialogContext
-        );
-        ContextService.getInstance().registerContext(editUserRoleContext);
+            const newUserContext = new ContextDescriptor(
+                NewUserDialogContext.CONTEXT_ID, [KIXObjectType.USER],
+                ContextType.DIALOG, ContextMode.CREATE_ADMIN,
+                false, 'new-user-dialog', ['users'], NewUserDialogContext
+            );
+            ContextService.getInstance().registerContext(newUserContext);
 
-        const newUserContext = new ContextDescriptor(
-            NewUserDialogContext.CONTEXT_ID, [KIXObjectType.USER],
-            ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-user-dialog', ['users'], NewUserDialogContext
-        );
-        ContextService.getInstance().registerContext(newUserContext);
+            DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+                'new-user-dialog',
+                new WidgetConfiguration(
+                    'new-user-dialog', 'Translatable#New Agent', [], {},
+                    false, false, 'kix-icon-new-gear'
+                ),
+                KIXObjectType.USER,
+                ContextMode.CREATE_ADMIN
+            ));
+        }
+
+        if (await this.checkPermission('system/users/*', CRUD.UPDATE)) {
+            ActionFactory.getInstance().registerAction('user-admin-user-edit-action', UserEditAction);
+
+            const editUserContext = new ContextDescriptor(
+                EditUserDialogContext.CONTEXT_ID, [KIXObjectType.USER],
+                ContextType.DIALOG, ContextMode.EDIT_ADMIN,
+                false, 'edit-user-dialog', ['users'], EditUserDialogContext
+            );
+            ContextService.getInstance().registerContext(editUserContext);
+
+            DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+                'edit-user-dialog',
+                new WidgetConfiguration(
+                    'edit-user-dialog', 'Translatable#Edit Agent', [], {},
+                    false, false, 'kix-icon-edit'
+                ),
+                KIXObjectType.USER,
+                ContextMode.EDIT_ADMIN
+            ));
+        }
 
         const userDetailsContextDescriptor = new ContextDescriptor(
             UserDetailsContext.CONTEXT_ID, [KIXObjectType.USER],
@@ -85,64 +102,66 @@ class Component extends AbstractMarkoComponent {
             true, 'object-details-page', ['users'], UserDetailsContext
         );
         ContextService.getInstance().registerContext(userDetailsContextDescriptor);
+    }
 
-        const editUserContext = new ContextDescriptor(
-            EditUserDialogContext.CONTEXT_ID, [KIXObjectType.USER],
-            ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            false, 'edit-user-dialog', ['users'], EditUserDialogContext
+    private async registerRole(): Promise<void> {
+
+        if (await this.checkPermission('system/roles', CRUD.CREATE)) {
+            ActionFactory.getInstance().registerAction('user-admin-role-create-action', UserRoleCreateAction);
+
+            const newUserRoleContext = new ContextDescriptor(
+                NewUserRoleDialogContext.CONTEXT_ID, [KIXObjectType.ROLE],
+                ContextType.DIALOG, ContextMode.CREATE_ADMIN,
+                false, 'new-user-role-dialog', ['roles'], NewUserRoleDialogContext
+            );
+            ContextService.getInstance().registerContext(newUserRoleContext);
+
+            DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+                'new-user-role-dialog',
+                new WidgetConfiguration(
+                    'new-user-role-dialog', 'Translatable#New Role', [], {},
+                    false, false, 'kix-icon-new-gear'
+                ),
+                KIXObjectType.ROLE,
+                ContextMode.CREATE_ADMIN
+            ));
+        }
+
+        if (await this.checkPermission('system/roles/*', CRUD.UPDATE)) {
+            ActionFactory.getInstance().registerAction('user-admin-role-edit-action', UserRoleEditAction);
+
+            const editUserRoleContext = new ContextDescriptor(
+                EditUserRoleDialogContext.CONTEXT_ID, [KIXObjectType.ROLE],
+                ContextType.DIALOG, ContextMode.EDIT_ADMIN,
+                false, 'edit-user-role-dialog', ['roles'], EditUserRoleDialogContext
+            );
+            ContextService.getInstance().registerContext(editUserRoleContext);
+
+            DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+                'edit-user-role-dialog',
+                new WidgetConfiguration(
+                    'edit-user-role-dialog', 'Translatable#Edit Role', [], {},
+                    false, false, 'kix-icon-edit'
+                ),
+                KIXObjectType.ROLE,
+                ContextMode.EDIT_ADMIN
+            ));
+        }
+
+        const roleDetailsContextDescriptor = new ContextDescriptor(
+            RoleDetailsContext.CONTEXT_ID, [KIXObjectType.ROLE],
+            ContextType.MAIN, ContextMode.DETAILS,
+            true, 'object-details-page', ['roles'], RoleDetailsContext
         );
-        ContextService.getInstance().registerContext(editUserContext);
+        ContextService.getInstance().registerContext(roleDetailsContextDescriptor);
     }
 
-    private registerAdminActions(): void {
-        ActionFactory.getInstance().registerAction('user-admin-role-create-action', UserRoleCreateAction);
-        ActionFactory.getInstance().registerAction('user-admin-role-edit-action', UserRoleEditAction);
-        ActionFactory.getInstance().registerAction('user-admin-role-table-delete-action', UserRoleTableDeleteAction);
-        ActionFactory.getInstance().registerAction('user-admin-user-create-action', UserCreateAction);
-        ActionFactory.getInstance().registerAction('user-admin-user-edit-action', UserEditAction);
+    private async checkPermission(resource: string, crud: CRUD): Promise<boolean> {
+        return await AuthenticationSocketClient.getInstance().checkPermissions(
+            [new UIComponentPermission(resource, [crud])]
+        );
     }
 
-    private registerAdminDialogs(): void {
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'new-user-role-dialog',
-            new WidgetConfiguration(
-                'new-user-role-dialog', 'Translatable#New Role', [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-new-gear'
-            ),
-            KIXObjectType.ROLE,
-            ContextMode.CREATE_ADMIN
-        ));
-
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'edit-user-role-dialog',
-            new WidgetConfiguration(
-                'edit-user-role-dialog', 'Translatable#Edit Role', [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-edit'
-            ),
-            KIXObjectType.ROLE,
-            ContextMode.EDIT_ADMIN
-        ));
-
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'new-user-dialog',
-            new WidgetConfiguration(
-                'new-user-dialog', 'Translatable#New Agent', [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-new-gear'
-            ),
-            KIXObjectType.USER,
-            ContextMode.CREATE_ADMIN
-        ));
-
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'edit-user-dialog',
-            new WidgetConfiguration(
-                'edit-user-dialog', 'Translatable#Edit Agent', [], {},
-                false, false, WidgetSize.BOTH, 'kix-icon-edit'
-            ),
-            KIXObjectType.USER,
-            ContextMode.EDIT_ADMIN
-        ));
-    }
 }
 
 module.exports = Component;

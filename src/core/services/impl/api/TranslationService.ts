@@ -14,6 +14,8 @@ import { Translation } from '../../../model/kix/i18n/Translation';
 
 export class TranslationService extends KIXObjectService {
 
+    protected RESOURCE_URI: string = this.buildUri('i18n', 'translations');
+
     private static INSTANCE: TranslationService;
 
     public static getInstance(): TranslationService {
@@ -22,8 +24,6 @@ export class TranslationService extends KIXObjectService {
         }
         return TranslationService.INSTANCE;
     }
-
-    protected RESOURCE_URI: string = this.buildUri('i18n', 'translations');
 
     public objectType: KIXObjectType = KIXObjectType.TRANSLATION;
 

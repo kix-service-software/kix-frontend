@@ -4,7 +4,7 @@ export interface IConfigurationExtension {
 
     getModuleId(): string;
 
-    getDefaultConfiguration(): Promise<ContextConfiguration>;
+    getDefaultConfiguration(token: string): Promise<ContextConfiguration>;
 
     createFormDefinitions(overwrite: boolean): Promise<void>;
 
