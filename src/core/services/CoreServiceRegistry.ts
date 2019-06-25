@@ -1,12 +1,13 @@
 import {
     ContactService, OrganisationService, ServiceService, SysConfigService, TicketService, FAQService,
     GeneralCatalogService, DynamicFieldService, LinkService, CMDBService, ObjectDefinitionService,
-    TextModuleService, UserService, ValidObjectService, TicketTypeService, ObjectIconService,
+    TextModuleService, ValidObjectService, TicketTypeService, ObjectIconService,
     TicketStateService, TicketPriorityService, ConfigItemClassService, TranslationService,
     ChannelService, TicketTemplateService, QueueService, MailAccountService, RoleService,
     SystemAddressService, SlaService
 } from "./impl";
 import { CacheService } from "../cache";
+import { UserService } from "./impl/api/UserService";
 
 export class CoreServiceRegistry {
 

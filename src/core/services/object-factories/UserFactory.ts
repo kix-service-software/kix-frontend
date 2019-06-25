@@ -1,5 +1,6 @@
 import { ObjectFactory } from "./ObjectFactory";
-import { User, KIXObjectType } from "../../model";
+import { User } from "../../model/kix/user/User";
+import { KIXObjectType } from "../../model/kix/KIXObjectType";
 
 export class UserFactory extends ObjectFactory<User> {
 

@@ -10,7 +10,6 @@ export { LinkService } from './LinkService';
 export { ObjectIconService } from './ObjectIconService';
 export { ServiceService } from './ServiceService';
 export { SysConfigService } from './SysConfigService';
-export { UserService } from './UserService';
 export { RoleService } from './RoleService';
 export { SlaService } from './SlaService';
 export { ValidObjectService } from './ValidObjectService';

@@ -1,8 +1,9 @@
 import { ComponentState } from './ComponentState';
-import { FAQService, FAQDetailsContext } from '../../../core/browser/faq';
+import { FAQService } from '../../../core/browser/faq';
 import { FAQArticle, FAQVote, CreateFAQVoteOptions } from '../../../core/model/kix/faq';
 import { KIXObjectType, ComponentContent, OverlayType, StringContent, ToastContent } from '../../../core/model';
 import { ServiceRegistry, OverlayService, ContextService, BrowserUtil } from '../../../core/browser';
+import { FAQDetailsContext } from '../../../core/browser/faq/context/FAQDetailsContext';
 
 export class Component {
 

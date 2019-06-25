@@ -3,7 +3,8 @@ import {
     NotesEvent, LoadNotesRequest, LoadNotesResponse, SaveNotesRequest
 } from '../core/model';
 import { SocketResponse, SocketErrorResponse } from '../core/common';
-import { ConfigurationService, UserService } from '../core/services';
+import { ConfigurationService } from '../core/services';
+import { UserService } from '../core/services/impl/api/UserService';
 
 export class NotesNamespace extends SocketNameSpace {
 

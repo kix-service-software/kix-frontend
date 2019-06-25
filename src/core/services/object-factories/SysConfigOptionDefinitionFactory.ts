@@ -1,6 +1,5 @@
-import { SysConfigOptionDefinition } from "./SysConfigOptionDefinition";
-import { KIXObjectType } from "../KIXObjectType";
-import { ObjectFactory } from "../../../services/object-factories/ObjectFactory";
+import { ObjectFactory } from "./ObjectFactory";
+import { SysConfigOptionDefinition, KIXObjectType } from "../../model";
 
 export class SysConfigOptionDefinitionFactory extends ObjectFactory<SysConfigOptionDefinition> {
 

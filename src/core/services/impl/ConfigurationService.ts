@@ -3,9 +3,9 @@ import { WidgetDescriptor, Form, FormContext, KIXObjectType, Bookmark, CRUD } fr
 
 import jsonfile = require('jsonfile');
 import fs = require('fs');
-import { FAQDetailsContext } from '../../browser/faq';
 import { LoggingService } from './LoggingService';
 import { UIComponentPermission } from '../../model/UIComponentPermission';
+import { FAQDetailsContext } from '../../browser/faq/context/FAQDetailsContext';
 
 export class ConfigurationService {
 

@@ -3,9 +3,9 @@ import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, SysConfigOption
 } from '../../../model';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
-import { SysConfigOptionFactory } from '../../object-factories/SysConfigItemFactory';
-import { SysConfigOptionDefinitionFactory } from '../../../model/kix/sysconfig/SysConfigOptionDefinitionFactory';
+import { SysConfigOptionFactory } from '../../object-factories/SysConfigOptionFactory';
 import { SysConfigOptionDefinition } from '../../../model/kix/sysconfig/SysConfigOptionDefinition';
+import { SysConfigOptionDefinitionFactory } from '../../object-factories/SysConfigOptionDefinitionFactory';
 
 export class SysConfigService extends KIXObjectService {
 

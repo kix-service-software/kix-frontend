@@ -1,10 +1,10 @@
 import { IConfigurationExtension } from "../../core/extensions";
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration,
-    WidgetSize, KIXObjectType, CRUD, TabWidgetSettings
+    KIXObjectType, CRUD, TabWidgetSettings
 } from "../../core/model";
-import { FAQDetailsContext } from "../../core/browser/faq";
 import { UIComponentPermission } from "../../core/model/UIComponentPermission";
+import { FAQDetailsContext } from "../../core/browser/faq/context/FAQDetailsContext";
 
 export class Extension implements IConfigurationExtension {
 

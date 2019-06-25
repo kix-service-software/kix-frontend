@@ -1,4 +1,3 @@
-import { validate, required } from '../../decorators';
 import { LogLevel, IServerConfiguration } from '../../common';
 import winston = require('winston');
 import path = require('path');
@@ -41,8 +40,7 @@ export class LoggingService {
 
     }
 
-    @validate
-    public error(@required message: string, meta?: any): void {
+    public error(message: string, meta?: any): void {
         if (this.checkLogLevel(LogLevel.ERROR)) {
             if (this.kixLogger) {
                 const winstonMeta = { ...meta };
@@ -56,8 +54,7 @@ export class LoggingService {
         }
     }
 
-    @validate
-    public warning(@required message: string, meta?: any): void {
+    public warning(message: string, meta?: any): void {
         if (this.checkLogLevel(LogLevel.WARNING)) {
             if (this.kixLogger) {
                 const winstonMeta = { ...meta };
@@ -68,8 +65,7 @@ export class LoggingService {
         }
     }
 
-    @validate
-    public info(@required message: string, meta?: any): void {
+    public info(message: string, meta?: any): void {
         if (this.checkLogLevel(LogLevel.INFO)) {
             if (this.kixLogger) {
                 const winstonMeta = { ...meta };
@@ -80,8 +76,7 @@ export class LoggingService {
         }
     }
 
-    @validate
-    public debug(@required message: string, meta?: any): void {
+    public debug(message: string, meta?: any): void {
         if (this.checkLogLevel(LogLevel.DEBUG)) {
             if (this.kixLogger) {
                 const winstonMeta = { ...meta };

@@ -4,8 +4,9 @@ import {
 } from '../core/model';
 import { SocketResponse, SocketErrorResponse } from '../core/common';
 import { SocketNameSpace } from './SocketNameSpace';
-import { LoggingService, UserService } from '../core/services';
+import { LoggingService } from '../core/services';
 import { PersonalSettingsService } from '../services';
+import { UserService } from '../core/services/impl/api/UserService';
 
 export class AgentNamespace extends SocketNameSpace {
 

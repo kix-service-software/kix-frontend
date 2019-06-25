@@ -1,8 +1,8 @@
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../../core/browser';
-import { FAQContext } from '../../../core/browser/faq';
 import { ConfiguredWidget } from '../../../core/model';
 import { KIXModulesService } from '../../../core/browser/modules';
+import { FAQContext } from '../../../core/browser/faq/context/FAQContext';
 
 class Component {
 

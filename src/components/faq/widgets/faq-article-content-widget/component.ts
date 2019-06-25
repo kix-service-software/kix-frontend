@@ -7,8 +7,8 @@ import {
     FAQArticle, Attachment, FAQArticleAttachmentLoadingOptions, FAQArticleProperty
 } from "../../../../core/model/kix/faq";
 import { InlineContent } from "../../../../core/browser/components";
-import { FAQDetailsContext } from "../../../../core/browser/faq";
 import { TranslationService } from "../../../../core/browser/i18n/TranslationService";
+import { FAQDetailsContext } from "../../../../core/browser/faq/context/FAQDetailsContext";
 
 class Component {
 

@@ -4,8 +4,8 @@ import {
 } from '../../../../core/browser';
 import { KIXObjectType, KIXObjectPropertyFilter, TableFilterCriteria, KIXObject } from '../../../../core/model';
 import { FAQArticleProperty, FAQCategory } from '../../../../core/model/kix/faq';
-import { FAQContext } from '../../../../core/browser/faq';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
+import { FAQContext } from '../../../../core/browser/faq/context/FAQContext';
 
 class Component {
 

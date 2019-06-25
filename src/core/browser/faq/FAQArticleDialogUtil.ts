@@ -1,6 +1,7 @@
-import { NewFAQArticleDialogContext, EditFAQArticleDialogContext, FAQDetailsContext } from "./context";
+import { NewFAQArticleDialogContext, EditFAQArticleDialogContext } from "./context";
 import { KIXObjectType, ContextMode } from "../../model";
 import { ContextService } from "../context";
+import { FAQDetailsContext } from "./context/FAQDetailsContext";
 
 export class FAQArticleDialogUtil {
 

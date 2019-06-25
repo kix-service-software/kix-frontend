@@ -1,6 +1,7 @@
 import {
-    Context, KIXObjectType, BreadcrumbInformation, KIXObject, KIXObjectLoadingOptions
+    KIXObjectType, BreadcrumbInformation, KIXObject, KIXObjectLoadingOptions
 } from "../../../model";
+import { Context } from '../../../model/components/context/Context';
 import { FAQArticle } from "../../../model/kix/faq";
 import { FAQContext } from "./FAQContext";
 import { KIXObjectService } from "../../kix";

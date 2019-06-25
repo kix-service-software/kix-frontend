@@ -3,12 +3,12 @@ import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize,
     FormField, Form, FormContext, KIXObjectType, TableWidgetSettings, CRUD
 } from '../../core/model';
-import { FAQContext } from '../../core/browser/faq';
 import { SearchProperty, TableConfiguration, TableHeaderHeight, TableRowHeight } from '../../core/browser';
 import { FAQArticleProperty } from '../../core/model/kix/faq';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../core/services';
 import { UIComponentPermission } from '../../core/model/UIComponentPermission';
+import { FAQContext } from '../../core/browser/faq/context/FAQContext';
 
 export class DashboardModuleFactoryExtension implements IConfigurationExtension {
 

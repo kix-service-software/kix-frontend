@@ -3,7 +3,7 @@ import { ComponentState } from './ComponentState';
 import { ActionFactory, TableFactoryService } from '../../../../core/browser';
 import { KIXObjectType } from '../../../../core/model';
 import { FAQArticle } from '../../../../core/model/kix/faq';
-import { FAQDetailsContext } from '../../../../core/browser/faq';
+import { FAQDetailsContext } from '../../../../core/browser/faq/context/FAQDetailsContext';
 
 class Component {
 

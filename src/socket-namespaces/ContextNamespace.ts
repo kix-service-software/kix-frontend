@@ -6,8 +6,9 @@ import {
 } from '../core/model';
 
 import { SocketResponse, SocketErrorResponse } from '../core/common';
-import { ConfigurationService, UserService } from '../core/services';
+import { ConfigurationService } from '../core/services';
 import { PluginService, PermissionService } from '../services';
+import { UserService } from '../core/services/impl/api/UserService';
 
 export class ContextNamespace extends SocketNameSpace {
 

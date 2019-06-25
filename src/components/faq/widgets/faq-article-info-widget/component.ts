@@ -1,9 +1,10 @@
 import { ComponentState } from './ComponentState';
 import { ContextService, ActionFactory, IdService } from '../../../../core/browser';
-import { KIXObjectType, Organisation, ContextMode, Context } from '../../../../core/model';
+import { KIXObjectType, Context } from '../../../../core/model';
 import { FAQArticle, FAQArticleProperty } from '../../../../core/model/kix/faq';
-import { FAQLabelProvider, FAQDetailsContext } from '../../../../core/browser/faq';
+import { FAQLabelProvider } from '../../../../core/browser/faq';
 import { Label } from '../../../../core/browser/components';
+import { FAQDetailsContext } from '../../../../core/browser/faq/context/FAQDetailsContext';
 
 class Component {
 

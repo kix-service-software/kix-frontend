@@ -6,8 +6,9 @@ import {
 import { IMainMenuExtension, KIXExtensions } from '../core/extensions';
 import { SocketResponse } from '../core/common';
 import { SocketNameSpace } from './SocketNameSpace';
-import { ConfigurationService, UserService } from '../core/services';
+import { ConfigurationService } from '../core/services';
 import { PluginService, PermissionService } from '../services';
+import { UserService } from '../core/services/impl/api/UserService';
 
 export class MainMenuNamespace extends SocketNameSpace {
 

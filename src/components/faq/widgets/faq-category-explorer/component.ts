@@ -4,8 +4,8 @@ import {
     TreeNode, KIXObjectType, KIXObjectLoadingOptions, FilterDataType, FilterType, FilterCriteria
 } from '../../../../core/model';
 import { FAQCategory, FAQCategoryProperty } from '../../../../core/model/kix/faq';
-import { FAQContext } from '../../../../core/browser/faq';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
+import { FAQContext } from '../../../../core/browser/faq/context/FAQContext';
 
 export class Component {
 

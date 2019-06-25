@@ -1,6 +1,7 @@
 import {
-    Context, KIXObjectType, KIXObjectLoadingOptions, FilterCriteria, FilterType, FilterDataType
+    KIXObjectType, KIXObjectLoadingOptions, FilterCriteria, FilterType, FilterDataType
 } from "../../../model";
+import { Context } from '../../../model/components/context/Context';
 import { FAQCategory, FAQArticleProperty } from "../../../model/kix/faq";
 import { EventService } from "../../event";
 import { KIXObjectService } from "../../kix";

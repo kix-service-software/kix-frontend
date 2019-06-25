@@ -1,13 +1,13 @@
 import { KIXObjectType, ContextMode, DataType } from "../../../model";
 import { FAQArticleProperty } from "../../../model/kix/faq";
 import { RoutingConfiguration } from "../../router";
-import { FAQDetailsContext } from "../context";
 import {
     TableConfiguration, ITable, Table,
     DefaultColumnConfiguration, IColumnConfiguration
 } from "../../table";
 import { FAQArticleTableContentProvider } from "./FAQArticleTableContentProvider";
 import { TableFactory } from "../../table/TableFactory";
+import { FAQDetailsContext } from "../context/FAQDetailsContext";
 
 export class FAQArticleTableFactory extends TableFactory {
 

@@ -1,4 +1,3 @@
-import { validate, required } from '../../decorators';
 import { IServerConfiguration } from '../../common';
 import { ConfigurationService } from './ConfigurationService';
 import { LoggingService } from './LoggingService';
@@ -30,8 +29,7 @@ export class ProfilingService {
         }
     }
 
-    @validate
-    public start(@required category: string, @required message: string, inputData?: any): number {
+    public start(category: string, message: string, inputData?: any): number {
         if (!this.active) {
             return -1;  // invalid task ID
         }
@@ -55,8 +53,7 @@ export class ProfilingService {
         return taskId;
     }
 
-    @validate
-    public stop(@required profileTaskId: number, outputData?: any): void {
+    public stop(profileTaskId: number, outputData?: any): void {
         if (!this.active) {
             return;
         }

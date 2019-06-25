@@ -9,7 +9,7 @@ import {
 } from '../../../../core/model';
 import {
     FAQArticleTableFactory, FAQArticleHistoryTableFactory, FAQLabelProvider, FAQArticleHistoryLabelProvider,
-    FAQService, FAQContext, FAQDetailsContext, FAQArticleSearchContext, FAQArticleVoteAction, FAQArticlePrintAction,
+    FAQService, FAQArticleSearchContext, FAQArticleVoteAction, FAQArticlePrintAction,
     FAQArticleBrowserFactory, FAQArticleAttachmentBrowserFactory, FAQArticleSearchDefinition, FAQArticleFormService,
     FAQCategoryLabelProvider, FAQCategoryFormService
 } from '../../../../core/browser/faq';
@@ -17,6 +17,8 @@ import { DialogService } from '../../../../core/browser/components/dialog';
 import { FAQCategoryTableFactory } from '../../../../core/browser/faq/admin';
 import { FAQCategoryBrowserFactory } from '../../../../core/browser/faq/FAQCategoryBrowserFactory';
 import { KIXObjectSearchService } from '../../../../core/browser/kix/search/KIXObjectSearchService';
+import { FAQContext } from '../../../../core/browser/faq/context/FAQContext';
+import { FAQDetailsContext } from '../../../../core/browser/faq/context/FAQDetailsContext';
 
 class Component extends AbstractMarkoComponent {
 

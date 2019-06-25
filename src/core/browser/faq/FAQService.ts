@@ -4,7 +4,6 @@ import {
     KIXObject, KIXObjectLoadingOptions
 } from "../../model";
 import { ContextService } from "../context";
-import { FAQDetailsContext } from "./context";
 import {
     FAQArticleProperty, Attachment, FAQCategory, FAQCategoryProperty, FAQArticle
 } from "../../model/kix/faq";
@@ -13,6 +12,7 @@ import { ObjectDefinitionSearchAttribute } from "../../model/kix/object-definiti
 import { BrowserUtil } from "../BrowserUtil";
 import { TranslationService } from "../i18n/TranslationService";
 import { ObjectDataService } from "../ObjectDataService";
+import { FAQDetailsContext } from "./context/FAQDetailsContext";
 
 export class FAQService extends KIXObjectService {
 

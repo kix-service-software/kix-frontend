@@ -1,7 +1,8 @@
 import { IMainMenuExtension } from '../../core/extensions';
-import { FAQContext, FAQDetailsContext } from '../../core/browser/faq';
 import { UIComponentPermission } from '../../core/model/UIComponentPermission';
 import { CRUD } from '../../core/model';
+import { FAQContext } from '../../core/browser/faq/context/FAQContext';
+import { FAQDetailsContext } from '../../core/browser/faq/context/FAQDetailsContext';
 
 export class Extension implements IMainMenuExtension {
 
