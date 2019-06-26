@@ -24,7 +24,7 @@ export class EditUserRoleDialogContext extends Context {
             const roleId = this.getObjectId();
             if (roleId) {
                 const loadingOptions = new KIXObjectLoadingOptions(
-                    null, null, null, null,
+                    null, null, null,
                     [RoleProperty.USER_IDS, RoleProperty.PERMISSIONS, RoleProperty.CONFIGURED_PERMISSIONS]
                 );
                 const objects = await KIXObjectService.loadObjects<Role>(KIXObjectType.ROLE, [roleId], loadingOptions);
