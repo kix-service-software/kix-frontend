@@ -151,7 +151,7 @@ export class MailAccountLabelProvider extends LabelProvider<MailAccount> {
     public async getObjectText(
         mailAccount: MailAccount, id?: boolean, title?: boolean, translatable?: boolean
     ): Promise<string> {
-        return `${mailAccount.Host}`;
+        return `${mailAccount.Login}@${mailAccount.Host}`;
     }
 
     public getObjectAdditionalText(object: MailAccount, translatable: boolean = true): string {
