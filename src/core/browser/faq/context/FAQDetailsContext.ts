@@ -43,7 +43,7 @@ export class FAQDetailsContext extends Context {
 
     private async loadFAQArticle(): Promise<FAQArticle> {
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, null,
+            null, null, null,
             ['Attachments', 'Votes', 'Links', 'History'],
             ['Links', 'Votes']
         );

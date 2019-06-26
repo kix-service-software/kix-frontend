@@ -18,7 +18,7 @@ export class TicketSearchDefinition extends SearchDefinition {
     }
 
     public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(null, criteria, null, null, ['Links'], ['Links']);
+        return new KIXObjectLoadingOptions(criteria, null, null, ['Links'], ['Links']);
     }
 
     public async getProperties(): Promise<Array<[string, string]>> {
@@ -299,7 +299,7 @@ export class TicketSearchDefinition extends SearchDefinition {
     ): Promise<TreeNode[]> {
         if (property === TicketProperty.ORGANISATION_ID) {
             const loadingOptions = new KIXObjectLoadingOptions(
-                null, OrganisationService.getInstance().prepareFullTextFilter(searchValue), null, limit
+                OrganisationService.getInstance().prepareFullTextFilter(searchValue), null, limit
             );
             const organisations = await KIXObjectService.loadObjects<Organisation>(
                 KIXObjectType.ORGANISATION, null, loadingOptions, null, false
@@ -312,7 +312,7 @@ export class TicketSearchDefinition extends SearchDefinition {
             return nodes;
         } else if (property === TicketProperty.CONTACT_ID) {
             const loadingOptions = new KIXObjectLoadingOptions(
-                null, ContactService.getInstance().prepareFullTextFilter(searchValue), null, limit
+                ContactService.getInstance().prepareFullTextFilter(searchValue), null, limit
             );
             const contacts = await KIXObjectService.loadObjects<Contact>(
                 KIXObjectType.CONTACT, null, loadingOptions, null, false

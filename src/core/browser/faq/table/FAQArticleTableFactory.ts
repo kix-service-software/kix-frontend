@@ -80,7 +80,7 @@ export class FAQArticleTableFactory extends TableFactory {
         }
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(KIXObjectType.FAQ_ARTICLE, 1000);
+            tableConfiguration = new TableConfiguration(KIXObjectType.FAQ_ARTICLE, null, undefined);
             tableConfiguration.tableColumns = tableColumns;
             tableConfiguration.enableSelection = true;
             tableConfiguration.toggle = false;

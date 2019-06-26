@@ -312,7 +312,7 @@ export class TicketService extends KIXObjectService {
 
         const baseUri = this.buildUri(this.RESOURCE_URI, ticketId, 'articles', articleId);
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, null, [ArticleProperty.FLAGS], [ArticleProperty.FLAGS]
+            null, null, null, [ArticleProperty.FLAGS], [ArticleProperty.FLAGS]
         );
 
         const articles = await super.load<Article>(

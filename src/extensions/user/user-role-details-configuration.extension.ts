@@ -33,7 +33,7 @@ export class Extension implements IConfigurationExtension {
                 'table-widget', 'Translatable#Permissions', [],
                 new TableWidgetSettings(
                     KIXObjectType.ROLE_PERMISSION, [PermissionProperty.TYPE_ID, SortOrder.UP],
-                    new TableConfiguration(KIXObjectType.ROLE_PERMISSION, null, null, null), null, false
+                    new TableConfiguration(KIXObjectType.ROLE_PERMISSION), null, false
                 ),
                 true, true, null, true
             ));

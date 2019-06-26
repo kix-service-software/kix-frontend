@@ -23,7 +23,7 @@ export class TicketArticleDetailsComponent {
             const ticket = (this.state.inputObject as Ticket);
             const articles = await KIXObjectService.loadObjects<Article>(
                 KIXObjectType.ARTICLE, null,
-                new KIXObjectLoadingOptions(null, null, 'Article.-ArticleID', 1, [ArticleProperty.ATTACHMENTS]),
+                new KIXObjectLoadingOptions(null, 'Article.-ArticleID', 1, [ArticleProperty.ATTACHMENTS]),
                 new ArticleLoadingOptions(ticket.TicketID)
             );
 

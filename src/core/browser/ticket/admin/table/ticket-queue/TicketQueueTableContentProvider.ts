@@ -19,17 +19,8 @@ export class TicketQueueTableContentProvider extends TableContentProvider<Queue>
 
     public async loadData(): Promise<Array<IRowObject<Queue>>> {
 
-        const queueFilter = [
-            new FilterCriteria(
-                QueueProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, null
-            ),
-        ];
-        const loadingOptions = new KIXObjectLoadingOptions(null, queueFilter, null, null,
-            [QueueProperty.SUB_QUEUES], [QueueProperty.SUB_QUEUES]
-        );
-
         const queues = await KIXObjectService.loadObjects<Queue>(
-            KIXObjectType.QUEUE, null, this.loadingOptions ? this.loadingOptions : loadingOptions
+            KIXObjectType.QUEUE, null, this.loadingOptions
         );
 
         const rowObjects = [];

@@ -23,7 +23,7 @@ export class UserTableFactory extends TableFactory {
         table.setContentProvider(
             new UserTableContentProvider(
                 table, objectIds,
-                new KIXObjectLoadingOptions(null, null, null, null, [UserProperty.PREFERENCES]),
+                new KIXObjectLoadingOptions(null, null, null, [UserProperty.PREFERENCES]),
                 contextId
             )
         );
@@ -72,7 +72,7 @@ export class UserTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.USER, null, null, tableColumns, null, true, false, null, null,
+                KIXObjectType.USER, null, undefined, tableColumns, true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;

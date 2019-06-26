@@ -45,7 +45,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async prepareTable(): Promise<void> {
         const tableConfiguration = new TableConfiguration(
-            KIXObjectType.TEXT_MODULE, null, null, null, null, false, false, null, null,
+            KIXObjectType.TEXT_MODULE, null, null, null, false, false, null, null,
             TableHeaderHeight.SMALL
         );
         const table = await TableFactoryService.getInstance().createTable(

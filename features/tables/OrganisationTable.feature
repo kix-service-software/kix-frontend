@@ -6,11 +6,10 @@ Feature: Als Nutzer möchte ich eine korrekte Standardkonfiguration für eine Ta
         Then Toggle: <toggle>
         Then Kopfzeilengröße: <headerHeight>
         Then Zeilengröße: <rowHeight>
-        Then Limit: <limit>
         Then DisplayLimit: <displayLimit>
         Examples:
-            | selection | toggle | objectType     | headerHeight | rowHeight | displayLimit | limit |
-            | 1         | 0      | 'Organisation' | 'l'          | 's'       | 10           | 1000  |
+            | selection | toggle | objectType     | headerHeight | rowHeight | displayLimit |
+            | 1         | 0      | 'Organisation' | 'l'          | 's'       | 10           |
 
     Scenario Outline: Tabelle mit korrekter Spalte <column>
         Given Tabelle: <objectType>

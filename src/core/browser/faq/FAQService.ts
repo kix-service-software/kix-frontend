@@ -87,7 +87,7 @@ export class FAQService extends KIXObjectService {
             switch (property) {
                 case FAQArticleProperty.CATEGORY_ID:
                 case FAQCategoryProperty.PARENT_ID:
-                    const loadingOptions = new KIXObjectLoadingOptions(null, [
+                    const loadingOptions = new KIXObjectLoadingOptions([
                         new FilterCriteria(
                             FAQCategoryProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.STRING,
                             FilterType.AND, null

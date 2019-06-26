@@ -26,7 +26,7 @@ class Component extends FormInputComponent<GeneralCatalogItem, CompontentState> 
 
         const classOption = this.state.field.options.find((o) => o.option === 'GC_CLASS');
         if (classOption) {
-            const loadingOptions = new KIXObjectLoadingOptions(null, [new FilterCriteria(
+            const loadingOptions = new KIXObjectLoadingOptions([new FilterCriteria(
                 'Class', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, classOption.value.toString()
             )]);
 

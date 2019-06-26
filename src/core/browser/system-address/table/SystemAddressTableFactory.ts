@@ -21,13 +21,8 @@ export class SystemAddressTableFactory extends TableFactory {
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
         const table = new Table(tableKey, tableConfiguration);
 
-        let loadingOptions = null;
-        if (tableConfiguration.filter && tableConfiguration.filter.length) {
-            loadingOptions = new KIXObjectLoadingOptions(null, tableConfiguration.filter);
-        }
-
         table.setContentProvider(new SystemAddressTableContentProvider(
-            table, objectIds, loadingOptions, contextId
+            table, objectIds, tableConfiguration.loadingOptions, contextId
         ));
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 
@@ -61,7 +56,7 @@ export class SystemAddressTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.SYSTEM_ADDRESS, null, null, tableColumns, null, true, false, null, null,
+                KIXObjectType.SYSTEM_ADDRESS, null, null, tableColumns, true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;

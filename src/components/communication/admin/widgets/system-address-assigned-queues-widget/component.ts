@@ -7,7 +7,8 @@ import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 import { SystemAddressDetailsContext } from '../../../../../core/browser/system-address';
 import {
-    SystemAddress, KIXObjectType, FilterCriteria, QueueProperty, FilterDataType, FilterType, KIXObjectProperty
+    SystemAddress, KIXObjectType, FilterCriteria, QueueProperty, FilterDataType,
+    FilterType, KIXObjectProperty, KIXObjectLoadingOptions
 } from '../../../../../core/model';
 import { IEventSubscriber, EventService } from '../../../../../core/browser/event';
 
@@ -65,16 +66,18 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             ),
             new DefaultColumnConfiguration(KIXObjectProperty.VALID_ID, true, false, true, false, 150, true, true)
         ];
-        const filterCriteria =
+
+        const filter =
             [
                 new FilterCriteria(
                     QueueProperty.SYSTEM_ADDRESS_ID, SearchOperator.EQUALS,
                     FilterDataType.NUMERIC, FilterType.AND, systemAddress.ID
                 ),
             ];
+        const loadingOptions = new KIXObjectLoadingOptions(filter);
 
         const tableConfiguration = new TableConfiguration(
-            KIXObjectType.QUEUE, null, null, columns, filterCriteria, false, false, null, null,
+            KIXObjectType.QUEUE, loadingOptions, null, columns, false, false, null, null,
             TableHeaderHeight.SMALL, TableRowHeight.SMALL
         );
         const table = await await TableFactoryService.getInstance().createTable(

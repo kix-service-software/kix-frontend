@@ -132,10 +132,6 @@ export abstract class KIXObjectService implements IKIXObjectService {
                 query = { ...query, limit: loadingOptions.limit };
             }
 
-            if (loadingOptions.properties && loadingOptions.properties.length) {
-                query = { ...query, fields: loadingOptions.properties.join(',') };
-            }
-
             if (loadingOptions.sortOrder) {
                 query = { ...query, sort: loadingOptions.sortOrder };
             }
@@ -366,7 +362,8 @@ export abstract class KIXObjectService implements IKIXObjectService {
         if (roleService) {
             const objects = await this.loadObjects(token, clientRequestId, objectType, [objectId],
                 new KIXObjectLoadingOptions(
-                    [`${objectType}.ConfiguredPermissions`], null, null, null, ['ConfiguredPermissions']
+                    null, null, null, ['ConfiguredPermissions'], null,
+                    [['fields', `${objectType}.ConfiguredPermissions`]]
                 ), null
             );
             if (

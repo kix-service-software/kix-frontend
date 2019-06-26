@@ -64,7 +64,7 @@ export class ConfigItemClassService extends KIXObjectService {
                 loadingOptions.includes = [ConfigItemClassProperty.CURRENT_DEFINITION];
             }
         } else {
-            loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, [
+            loadingOptions = new KIXObjectLoadingOptions(null, null, null, [
                 ConfigItemClassProperty.CURRENT_DEFINITION
             ]);
         }

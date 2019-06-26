@@ -36,7 +36,7 @@ export class TranslationLanguageTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.TRANSLATION_LANGUAGE, null, null, tableColumns, null, false, false, null, null,
+                KIXObjectType.TRANSLATION_LANGUAGE, null, null, tableColumns,  false, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
         } else if (!tableConfiguration.tableColumns) {

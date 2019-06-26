@@ -21,7 +21,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
 
     public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
         return new KIXObjectLoadingOptions(
-            null, criteria, null, null,
+            criteria, null, null,
             [VersionProperty.DATA, VersionProperty.PREPARED_DATA, 'Links', ConfigItemProperty.CURRENT_VERSION],
             [VersionProperty.DATA, VersionProperty.PREPARED_DATA, 'Links']
         );
@@ -286,7 +286,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
             );
         } else if (input.Type === 'Organisation') {
             const loadingOptions = new KIXObjectLoadingOptions(
-                null, OrganisationService.getInstance().prepareFullTextFilter(searchValue), null, limit
+                OrganisationService.getInstance().prepareFullTextFilter(searchValue), null, limit
             );
             const organisations = await KIXObjectService.loadObjects<Organisation>(
                 KIXObjectType.ORGANISATION, null, loadingOptions, null, false
@@ -299,7 +299,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
             return nodes;
         } else if (input.Type === 'Contact') {
             const loadingOptions = new KIXObjectLoadingOptions(
-                null, ContactService.getInstance().prepareFullTextFilter(searchValue), null, limit
+                ContactService.getInstance().prepareFullTextFilter(searchValue), null, limit
             );
             const contacts = await KIXObjectService.loadObjects<Contact>(
                 KIXObjectType.CONTACT, null, loadingOptions, null, false
@@ -412,10 +412,12 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
     }
 
     private async getGeneralCatalogItems(input: InputDefinition): Promise<GeneralCatalogItem[]> {
-        const loadingOptions = new KIXObjectLoadingOptions(null, [new FilterCriteria(
-            'Class', SearchOperator.EQUALS, FilterDataType.STRING,
-            FilterType.AND, input['Class']
-        )]);
+        const loadingOptions = new KIXObjectLoadingOptions([
+            new FilterCriteria(
+                'Class', SearchOperator.EQUALS, FilterDataType.STRING,
+                FilterType.AND, input['Class']
+            )
+        ]);
 
         const items = await KIXObjectService.loadObjects<GeneralCatalogItem>(
             KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions, null, false

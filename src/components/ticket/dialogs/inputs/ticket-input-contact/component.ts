@@ -113,7 +113,7 @@ class Component extends FormInputComponent<number | string, ComponentState> {
 
     private async searchContacts(limit: number, searchValue: string): Promise<TreeNode[]> {
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, ContactService.getInstance().prepareFullTextFilter(searchValue), null, limit
+            ContactService.getInstance().prepareFullTextFilter(searchValue), null, limit
         );
         this.contacts = await KIXObjectService.loadObjects<Contact>(
             KIXObjectType.CONTACT, null, loadingOptions, null, false
@@ -148,7 +148,7 @@ class Component extends FormInputComponent<number | string, ComponentState> {
 
     private async handleUnknownContactId(contactId: number | string): Promise<string | number> {
         if (FormValidationService.getInstance().isValidEmail(contactId.toString())) {
-            const loadingOptions = new KIXObjectLoadingOptions(null, [
+            const loadingOptions = new KIXObjectLoadingOptions([
                 new FilterCriteria(
                     ContactProperty.EMAIL, SearchOperator.EQUALS, FilterDataType.STRING,
                     FilterType.AND, contactId

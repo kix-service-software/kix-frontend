@@ -38,7 +38,7 @@ export class CompareConfigItemVersionTableFactory extends TableFactory {
             )];
 
         tableConfiguration = new TableConfiguration(
-            KIXObjectType.CONFIG_ITEM_VERSION_COMPARE, null, null, columns, null, false, false, null, null,
+            KIXObjectType.CONFIG_ITEM_VERSION_COMPARE, null, null, columns,  false, false, null, null,
             TableHeaderHeight.LARGE, TableRowHeight.LARGE, null, null, true
         );
         tableConfiguration.displayLimit = 18;

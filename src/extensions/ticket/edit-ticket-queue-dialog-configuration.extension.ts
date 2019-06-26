@@ -63,7 +63,7 @@ export class Extension implements IConfigurationExtension {
                         new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
                         new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                             new KIXObjectLoadingOptions(
-                                null, [
+                                [
                                     new FilterCriteria(
                                         SystemAddressProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
                                         FilterType.AND, 1

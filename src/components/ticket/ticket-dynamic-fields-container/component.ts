@@ -25,9 +25,10 @@ class Component {
 
     private async setDisplayGroups(): Promise<void> {
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, [
+            [
                 new FilterCriteria('ObjectType', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Ticket')
-            ], null, null, ['Config']
+            ],
+            null, null, ['Config']
         );
 
         const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
@@ -36,7 +37,7 @@ class Component {
 
         this.state.dynamicFields = dynamicFields;
 
-        const loadingOptionsGroups = new KIXObjectLoadingOptions(null, [
+        const loadingOptionsGroups = new KIXObjectLoadingOptions([
             new FilterCriteria(
                 'Class', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'DynamicField::DisplayGroup'
             )

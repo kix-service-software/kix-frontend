@@ -1,5 +1,5 @@
 import {
-    Context, Contact, KIXObjectType, BreadcrumbInformation, KIXObject, KIXObjectLoadingOptions
+    Context, Contact, KIXObjectType, BreadcrumbInformation, KIXObject, KIXObjectLoadingOptions, ContactProperty
 } from "../../../model";
 import { KIXObjectService } from "../../kix";
 import { EventService } from "../../event";
@@ -44,7 +44,9 @@ export class ContactDetailsContext extends Context {
             );
         }, 500);
 
-        const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, ['TicketStats', 'Tickets']);
+        const loadingOptions = new KIXObjectLoadingOptions(
+            null, null, null, [ContactProperty.TICKET_STATS, 'Tickets']
+        );
 
         const contacts = await KIXObjectService.loadObjects<Contact>(
             KIXObjectType.CONTACT, [this.objectId], loadingOptions, null, true

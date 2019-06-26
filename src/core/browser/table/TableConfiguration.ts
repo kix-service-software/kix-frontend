@@ -1,4 +1,4 @@
-import { FilterCriteria, KIXObjectType } from "../../model";
+import { FilterCriteria, KIXObjectType, KIXObjectLoadingOptions } from "../../model";
 import { RoutingConfiguration, DialogRoutingConfiguration } from "../router";
 import { ToggleOptions } from "./ToggleOptions";
 import { TableHeaderHeight } from "./TableHeaderHeight";
@@ -9,10 +9,9 @@ export class TableConfiguration {
 
     public constructor(
         public objectType?: KIXObjectType,
-        public limit?: number,
+        public loadingOptions?: KIXObjectLoadingOptions,
         public displayLimit?: number,
         public tableColumns?: IColumnConfiguration[],
-        public filter?: FilterCriteria[],
         public enableSelection: boolean = false,
         public toggle: boolean = false,
         public toggleOptions?: ToggleOptions,
@@ -32,7 +31,7 @@ export class TableConfiguration {
             this.rowHeight = TableRowHeight.SMALL;
         }
 
-        if (!displayLimit) {
+        if (typeof displayLimit === 'undefined') {
             if (this.headerHeight === TableHeaderHeight.SMALL) {
                 this.displayLimit = 5;
             } else {

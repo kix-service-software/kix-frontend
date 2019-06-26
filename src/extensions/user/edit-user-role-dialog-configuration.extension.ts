@@ -60,7 +60,7 @@ export class Extension implements IConfigurationExtension {
                         new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
                         new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                             new KIXObjectLoadingOptions(
-                                null, [
+                                [
                                     new FilterCriteria(
                                         UserProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
                                         FilterType.AND, 1

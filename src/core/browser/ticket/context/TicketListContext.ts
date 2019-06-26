@@ -24,7 +24,7 @@ export class TicketListContext extends Context {
 
         this.text = text;
         this.ticketIds = ticketIds;
-        const loadingOptions = new KIXObjectLoadingOptions(null, null, null, 1000, ['Watchers']);
+        const loadingOptions = new KIXObjectLoadingOptions(null, null, 1000, ['Watchers']);
 
         const timeout = window.setTimeout(() => {
             EventService.getInstance().publish(

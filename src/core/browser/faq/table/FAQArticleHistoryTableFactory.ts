@@ -38,7 +38,7 @@ export class FAQArticleHistoryTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.FAQ_ARTICLE_HISTORY, null, null, tableColumns, null, null, null, null, null,
+                KIXObjectType.FAQ_ARTICLE_HISTORY, null, null, tableColumns,  null, null, null, null,
                 TableHeaderHeight.SMALL
             );
         } else if (!tableConfiguration.tableColumns) {

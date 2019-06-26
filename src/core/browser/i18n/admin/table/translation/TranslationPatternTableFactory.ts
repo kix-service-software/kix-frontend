@@ -23,13 +23,8 @@ export class TranslationPatternTableFactory extends TableFactory {
 
         const table = new Table(tableKey, tableConfiguration);
 
-        const loadingOptions = new KIXObjectLoadingOptions(
-            null, tableConfiguration.filter, tableConfiguration.sortOrder, null,
-            [TranslationPatternProperty.AVAILABLE_LANGUAGES]
-        );
-
         table.setContentProvider(new TranslationPatternTableContentProvider(
-            table, objectIds, loadingOptions, contextId)
+            table, objectIds, tableConfiguration.loadingOptions, contextId)
         );
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 
@@ -46,7 +41,7 @@ export class TranslationPatternTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.TRANSLATION_PATTERN, null, null, tableColumns, null, true, false, null, null,
+                KIXObjectType.TRANSLATION_PATTERN, null, undefined, tableColumns, true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;

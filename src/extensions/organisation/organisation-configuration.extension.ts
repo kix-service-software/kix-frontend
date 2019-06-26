@@ -1,6 +1,6 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize, KIXObjectType, CRUD
+    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize, KIXObjectType, CRUD, TableWidgetSettings
 } from '../../core/model';
 import { TableConfiguration } from '../../core/browser';
 import { OrganisationContext } from '../../core/browser/organisation';
@@ -20,12 +20,13 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                     'organisation-create-action',
                     'import-action',
                     'csv-export-action'
-                ], {
-                    objectType: KIXObjectType.ORGANISATION,
-                    tableConfiguration: new TableConfiguration(KIXObjectType.ORGANISATION,
-                        null, null, null, null, true
+                ],
+                new TableWidgetSettings(
+                    KIXObjectType.ORGANISATION, null,
+                    new TableConfiguration(KIXObjectType.ORGANISATION,
+                        null, null, null, true
                     )
-                },
+                ),
                 false, true, 'kix-icon-man-house', false
             ),
             [new UIComponentPermission('organisations', [CRUD.READ])]
@@ -39,12 +40,12 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                         'contact-create-action',
                         'import-action',
                         'csv-export-action'
-                    ], {
-                        objectType: KIXObjectType.CONTACT,
-                        tableConfiguration: new TableConfiguration(KIXObjectType.CONTACT,
-                            null, null, null, null, true
+                    ], new TableWidgetSettings(
+                        KIXObjectType.CONTACT, null,
+                        new TableConfiguration(KIXObjectType.CONTACT,
+                            null, null, null, true
                         )
-                    },
+                    ),
                     false, true, 'kix-icon-man-bubble', false
                 ),
                 [new UIComponentPermission('contacts', [CRUD.READ])]

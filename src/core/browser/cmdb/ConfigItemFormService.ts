@@ -127,9 +127,11 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
                         || property === VersionProperty.DEPL_STATE_ID
                         ? 'ITSM::ConfigItem::DeploymentState'
                         : 'ITSM::Core::IncidentState';
-                    const loadingOptions = new KIXObjectLoadingOptions(null, [new FilterCriteria(
-                        'Class', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, classId
-                    )]);
+                    const loadingOptions = new KIXObjectLoadingOptions([
+                        new FilterCriteria(
+                            'Class', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, classId
+                        )
+                    ]);
 
                     const items = await KIXObjectService.loadObjects<GeneralCatalogItem>(
                         KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions, null, false

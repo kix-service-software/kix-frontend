@@ -70,7 +70,7 @@ export class ArticleTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.ARTICLE, 1000, null, tableColumns, null, true, true, null, null,
+                KIXObjectType.ARTICLE, null, null, tableColumns, true, true, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             tableConfiguration.displayLimit = null;

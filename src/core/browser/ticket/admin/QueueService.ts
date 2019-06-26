@@ -123,7 +123,7 @@ export class QueueService extends KIXObjectService<Queue> {
     }
 
     public async getQueuesHierarchy(): Promise<Queue[]> {
-        const loadingOptions = new KIXObjectLoadingOptions(null, [
+        const loadingOptions = new KIXObjectLoadingOptions([
             new FilterCriteria(
                 QueueProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, null
             )

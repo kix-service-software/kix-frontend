@@ -252,7 +252,7 @@ export class TicketService extends KIXObjectService<Ticket> {
     }
 
     public async getServicesHierarchy(): Promise<Service[]> {
-        const loadingOptions = new KIXObjectLoadingOptions(null, [
+        const loadingOptions = new KIXObjectLoadingOptions([
             new FilterCriteria('ParentID', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, null)
         ], null, null, ['SubServices', 'IncidentState'], ['SubServices']);
 

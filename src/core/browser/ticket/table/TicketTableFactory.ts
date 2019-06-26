@@ -20,14 +20,11 @@ export class TicketTableFactory extends TableFactory {
             tableConfiguration, defaultRouting, defaultToggle, short
         );
 
-        const loadingOptions = new KIXObjectLoadingOptions(
-            null, tableConfiguration.filter, tableConfiguration.sortOrder,
-            tableConfiguration.limit, [TicketProperty.WATCHERS]
-        );
-
         const table = new Table(tableKey, tableConfiguration, contextId);
 
-        const contentProvider = new TicketTableContentProvider(table, objectIds, loadingOptions, contextId);
+        const contentProvider = new TicketTableContentProvider(
+            table, objectIds, tableConfiguration.loadingOptions, contextId
+        );
 
         table.setContentProvider(contentProvider);
         table.setColumnConfiguration(tableConfiguration.tableColumns);
@@ -98,7 +95,7 @@ export class TicketTableFactory extends TableFactory {
         }
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(KIXObjectType.TICKET, 1000);
+            tableConfiguration = new TableConfiguration(KIXObjectType.TICKET, null, undefined);
             tableConfiguration.tableColumns = tableColumns;
             tableConfiguration.enableSelection = true;
             defaultToggle = true;

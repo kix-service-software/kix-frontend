@@ -88,7 +88,7 @@ export class ContactImportManager extends ImportManager {
         switch (property) {
             case ContactProperty.PRIMARY_ORGANISATION_ID:
                 const filter = OrganisationService.getInstance().prepareFullTextFilter(searchValue);
-                const loadingOptions = new KIXObjectLoadingOptions(null, filter, null, limit);
+                const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit);
                 const organisations = await KIXObjectService.loadObjects<Organisation>(
                     KIXObjectType.ORGANISATION, null, loadingOptions, null, false
                 );

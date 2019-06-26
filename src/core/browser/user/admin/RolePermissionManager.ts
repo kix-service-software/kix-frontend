@@ -38,7 +38,7 @@ export class RolePermissionManager extends AbstractDynamicFormManager {
     public async getProperties(): Promise<Array<[string, string]>> {
         const properties: Array<[string, string]> = [];
         const roles = await KIXObjectService.loadObjects<Role>(this.objectType, null, new KIXObjectLoadingOptions(
-            null, [
+            [
                 new FilterCriteria(
                     RoleProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
                 )

@@ -41,7 +41,7 @@ export class ConfigItemVersionTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.CONFIG_ITEM_VERSION, null, null, tableColumns, null, true, true, null, null,
+                KIXObjectType.CONFIG_ITEM_VERSION, null, null, tableColumns,  true, true, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             tableConfiguration.displayLimit = null;
