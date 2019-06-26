@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-06-25 09:30+0000\n"
-"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
+"PO-Revision-Date: 2019-06-26 08:07+0000\n"
+"Last-Translator: fwichmann <Felix.Wichmann@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -1464,10 +1464,8 @@ msgstr "Gesperrt"
 msgid "locked"
 msgstr "Gesperrt"
 
-#, fuzzy
-#| msgid "My locked tickets"
 msgid "Locked Tickets"
-msgstr "Meine gesperrten Tickets"
+msgstr "Gesperrte Tickets"
 
 msgid "Lock State"
 msgstr "Sperrstatus"
@@ -1608,7 +1606,7 @@ msgid "No."
 msgstr "Nr."
 
 msgid "No {0} found (add at least {1} characters)."
-msgstr "Keine {0} gefunden (mind. 1 Zeichen eingeben)."
+msgstr "Keine {0} gefunden (mind. {1} Zeichen eingeben)."
 
 msgid "No Article"
 msgstr "Kein Artikel"
@@ -2516,10 +2514,8 @@ msgstr "Freigeben"
 msgid "unlocked"
 msgstr "Freigeben"
 
-#, fuzzy
-#| msgid "My locked tickets"
 msgid "Unlocked Tickets"
-msgstr "Meine gesperrten Tickets"
+msgstr "Freie Tickets"
 
 msgid "Unlock Ticket ..."
 msgstr "Tickets entsperren..."
