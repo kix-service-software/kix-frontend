@@ -115,7 +115,7 @@ class Component extends AbstractMarkoComponent {
             DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
                 'new-mail-account-dialog',
                 new WidgetConfiguration(
-                    'new-mail-account-dialog', 'Translatable#New Account',
+                    'new-mail-account-dialog', 'Translatable#New Email Account',
                     [], {}, false, false, 'kix-icon-new-gear'
                 ),
                 KIXObjectType.MAIL_ACCOUNT,

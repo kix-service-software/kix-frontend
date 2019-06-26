@@ -3,6 +3,6 @@ export class ConfirmOverlayContent {
         public text: string,
         public confirmCallback: () => void = null,
         public cancelCallback: () => void = null,
-        public buttonLabels: [string, string] = ['Ja', 'Nein']
+        public buttonLabels: [string, string] = ['Yes', 'No']
     ) { }
 }
