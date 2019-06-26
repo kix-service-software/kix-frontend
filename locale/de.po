@@ -32,6 +32,9 @@ msgstr "{0} Verknüpfung(en) angelegt"
 msgid "Accept KIX Header"
 msgstr "KIX Header akzeptieren"
 
+msgid "Access denied"
+msgstr ""
+
 msgid "accounted time"
 msgstr "Erfasste Zeit"
 
@@ -556,14 +559,14 @@ msgstr "\" (Doppeltes Hochkomma)"
 msgid "Download"
 msgstr "Download"
 
-msgid "Duplicate"
-msgstr "Duplizieren"
-
 msgid "Edit"
 msgstr "Bearbeiten"
 
 msgid "Edit {0}"
 msgstr "{0} bearbeiten"
+
+msgid "Edit Account"
+msgstr "Konto bearbeiten"
 
 msgid "Edit Address"
 msgstr "Adresse bearbeiten"
@@ -1497,6 +1500,11 @@ msgstr "Minuten"
 msgid "Mobile"
 msgstr "Mobil"
 
+#, fuzzy
+#| msgid "not modified"
+msgid "Modified"
+msgstr "unverändert"
+
 msgid "My locked tickets"
 msgstr "Meine gesperrten Tickets"
 
@@ -1620,6 +1628,11 @@ msgstr "Keine General Catalog Klasse konfiguriert!"
 msgid "No object with ID {0} available."
 msgstr "Kein Objekt mit der ID {0} verfügbar."
 
+#, fuzzy
+#| msgid "Permissions on dependent objects"
+msgid "No permission for this object."
+msgstr "Berechtigungen auf abhängige Objekte"
+
 msgid "No rating available."
 msgstr "Keine Bewertung verfügbar."
 
@@ -1684,9 +1697,6 @@ msgstr "Offene Tickets: {0}"
 
 msgid "Organisation"
 msgstr "Kunde"
-
-msgid "Organisation Details"
-msgstr "Kundendetails"
 
 msgid "Organisation ID"
 msgstr "Kunden ID"
@@ -1785,12 +1795,6 @@ msgstr "Persönliche Einstellungen"
 
 msgid "Phone"
 msgstr "Telefon"
-
-msgid "Phone inbound"
-msgstr "Eingehender Anruf"
-
-msgid "Phone outbound"
-msgstr "Ausgehender Anruf"
 
 msgid "Please describe the reason as detailed as possible."
 msgstr "Beschreiben Sie die Ursache so genau wie möglich."
@@ -2304,17 +2308,27 @@ msgstr "Wechsel ins Kundenportal."
 msgid "Symptom"
 msgstr "Symptom"
 
+#, fuzzy
+#| msgid "Config Item"
+msgid "SysConfig"
+msgstr "Config Item"
+
+#, fuzzy
+#| msgid "System Address"
+msgid "System"
+msgstr "Systemadresse"
+
 msgid "System Address"
 msgstr "Systemadresse"
 
 msgid "System Addresses"
 msgstr "Systemadressen"
 
+msgid "System: SysConfig"
+msgstr ""
+
 msgid "-> (tab)"
 msgstr "-> (Tabulator)"
-
-msgid "Tag"
-msgstr "Schlagwort"
 
 #, fuzzy
 msgid "Tags"
@@ -2378,9 +2392,6 @@ msgstr "Ticketdaten"
 
 msgid "Ticket Description"
 msgstr "Ticket Beschreibung"
-
-msgid "Ticket Details"
-msgstr "Ticket Details"
 
 msgid "Ticket Flags"
 msgstr "Ticket Kennzeichnung"
@@ -2612,6 +2623,9 @@ msgstr "Validierungsfehler"
 msgid "Validity"
 msgstr "Gültigkeit"
 
+msgid "Value"
+msgstr ""
+
 msgid "Value of field '{0}' is too long (max: {1})."
 msgstr ""
 
@@ -2670,14 +2684,29 @@ msgstr "PLZ"
 msgid "ZIP"
 msgstr "PLZ"
 
+#~ msgid "Duplicate"
+#~ msgstr "Duplizieren"
+
+#~ msgid "Organisation Details"
+#~ msgstr "Kundendetails"
+
+#~ msgid "Phone inbound"
+#~ msgstr "Eingehender Anruf"
+
+#~ msgid "Phone outbound"
+#~ msgstr "Ausgehender Anruf"
+
+#~ msgid "Tag"
+#~ msgstr "Schlagwort"
+
+#~ msgid "Ticket Details"
+#~ msgstr "Ticket Details"
+
 #~ msgid "Basic Data"
 #~ msgstr "Stammdaten"
 
 #~ msgid "Cell Phone"
 #~ msgstr "Mobil"
-
-#~ msgid "Edit Account"
-#~ msgstr "Konto bearbeiten"
 
 #~ msgid "Hostname"
 #~ msgstr "Hostname"

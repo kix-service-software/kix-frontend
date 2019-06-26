@@ -32,6 +32,9 @@ msgstr ""
 msgid "Accept KIX Header"
 msgstr ""
 
+msgid "Access denied"
+msgstr ""
+
 msgid "accounted time"
 msgstr ""
 
@@ -527,14 +530,16 @@ msgstr "\" (Double Quotes)"
 msgid "Download"
 msgstr ""
 
-msgid "Duplicate"
-msgstr ""
-
 msgid "Edit"
 msgstr ""
 
 msgid "Edit {0}"
 msgstr ""
+
+#, fuzzy
+#| msgid "Edit Account"
+msgid "Edit Account"
+msgstr "Edit Email Account"
 
 msgid "Edit Address"
 msgstr ""
@@ -1420,6 +1425,9 @@ msgstr ""
 msgid "Mobile"
 msgstr ""
 
+msgid "Modified"
+msgstr ""
+
 msgid "My locked tickets"
 msgstr ""
 
@@ -1545,6 +1553,9 @@ msgstr ""
 msgid "No object with ID {0} available."
 msgstr ""
 
+msgid "No permission for this object."
+msgstr ""
+
 msgid "No rating available."
 msgstr ""
 
@@ -1606,9 +1617,6 @@ msgid "open tickets: {0}"
 msgstr ""
 
 msgid "Organisation"
-msgstr ""
-
-msgid "Organisation Details"
 msgstr ""
 
 msgid "Organisation ID"
@@ -1705,12 +1713,6 @@ msgid "Personal Settings"
 msgstr ""
 
 msgid "Phone"
-msgstr ""
-
-msgid "Phone inbound"
-msgstr ""
-
-msgid "Phone outbound"
 msgstr ""
 
 msgid "Please describe the reason as detailed as possible."
@@ -2186,16 +2188,22 @@ msgstr ""
 msgid "Symptom"
 msgstr ""
 
+msgid "SysConfig"
+msgstr ""
+
+msgid "System"
+msgstr ""
+
 msgid "System Address"
 msgstr ""
 
 msgid "System Addresses"
 msgstr ""
 
-msgid "-> (tab)"
+msgid "System: SysConfig"
 msgstr ""
 
-msgid "Tag"
+msgid "-> (tab)"
 msgstr ""
 
 msgid "Tags"
@@ -2251,9 +2259,6 @@ msgid "Ticket Data"
 msgstr ""
 
 msgid "Ticket Description"
-msgstr ""
-
-msgid "Ticket Details"
 msgstr ""
 
 msgid "Ticket Flags"
@@ -2479,6 +2484,9 @@ msgid "Validation error"
 msgstr ""
 
 msgid "Validity"
+msgstr ""
+
+msgid "Value"
 msgstr ""
 
 msgid "Value of field '{0}' is too long (max: {1})."
