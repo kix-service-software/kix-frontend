@@ -64,7 +64,6 @@ class Component extends FormInputComponent<string[], ComponentState> {
                 const plainMail = email.replace(/.+ <(.+)>/, '$1');
                 const contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, null,
                     new KIXObjectLoadingOptions(
-                        null,
                         [
                             new FilterCriteria(
                                 ContactProperty.EMAIL, SearchOperator.EQUALS, FilterDataType.STRING,
@@ -225,7 +224,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
 
     private async searchContacts(limit: number, searchValue: string): Promise<TreeNode[]> {
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, ContactService.getInstance().prepareFullTextFilter(searchValue), null, limit
+            ContactService.getInstance().prepareFullTextFilter(searchValue), null, limit
         );
         const contacts = await KIXObjectService.loadObjects<Contact>(
             KIXObjectType.CONTACT, null, loadingOptions, null, false

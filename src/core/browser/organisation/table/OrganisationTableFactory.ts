@@ -22,12 +22,9 @@ export class OrganisationTableFactory extends TableFactory {
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting);
         const table = new Table(tableKey, tableConfiguration);
 
-        const loadingOptions = new KIXObjectLoadingOptions(
-            null, tableConfiguration.filter, tableConfiguration.sortOrder,
-            tableConfiguration.limit, [OrganisationProperty.TICKET_STATS]
+        table.setContentProvider(
+            new OrganisationTableContentProvider(table, objectIds, tableConfiguration.loadingOptions, contextId)
         );
-
-        table.setContentProvider(new OrganisationTableContentProvider(table, objectIds, loadingOptions, contextId));
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 
         return table;
@@ -46,7 +43,7 @@ export class OrganisationTableFactory extends TableFactory {
         ];
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.ORGANISATION, 1000, null, tableColumns, null, false, false, null, null,
+                KIXObjectType.ORGANISATION, null, undefined, tableColumns, false, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.SMALL
             );
             tableConfiguration.enableSelection = true;

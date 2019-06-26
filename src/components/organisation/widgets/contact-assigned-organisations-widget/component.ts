@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
 import { ContextService, ActionFactory, TableFactoryService } from '../../../../core/browser';
-import { KIXObjectType, Contact } from '../../../../core/model';
+import { KIXObjectType, Contact, KIXObjectLoadingOptions, OrganisationProperty } from '../../../../core/model';
 
 class Component {
 
@@ -56,7 +56,6 @@ class Component {
 
     private async prepareTable(): Promise<void> {
         if (this.state.contact && this.state.widgetConfiguration) {
-
             this.state.table = await TableFactoryService.getInstance().createTable(
                 'contact-assigned-organisation', KIXObjectType.ORGANISATION,
                 this.state.widgetConfiguration.settings, this.state.contact.OrganisationIDs,

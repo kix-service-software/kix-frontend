@@ -129,7 +129,7 @@ class Component extends FormInputComponent<string | number, ComponentState> {
                 }
 
                 const loadingOptions = new KIXObjectLoadingOptions(
-                    null, filter, null, limit
+                    filter, null, limit
                 );
                 this.objects = await KIXObjectService.loadObjects<KIXObject>(
                     objectType, null, loadingOptions, null, false

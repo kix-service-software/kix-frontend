@@ -59,7 +59,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 new DefaultColumnConfiguration(UserProperty.VALID_ID, true, false, true, false, 100, true, true)
             ];
             const tableConfiguration = new TableConfiguration(
-                KIXObjectType.USER, null, 32, columns, null, false, false, null, null,
+                KIXObjectType.USER, null, 32, columns,  false, false, null, null,
                 TableHeaderHeight.SMALL, TableRowHeight.SMALL
             );
             const table = await TableFactoryService.getInstance().createTable(

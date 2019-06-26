@@ -26,7 +26,7 @@ export class EditConfigItemDialogContext extends Context {
         const objectId = this.getObjectId();
         if (objectId) {
             const loadingOptions = new KIXObjectLoadingOptions(
-                null, null, null, null,
+                null, null, null,
                 ['Versions', 'Links', VersionProperty.DEFINITION, VersionProperty.DATA, VersionProperty.PREPARED_DATA],
                 ['Links']
             );

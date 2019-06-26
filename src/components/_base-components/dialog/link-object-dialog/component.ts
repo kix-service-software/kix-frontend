@@ -181,7 +181,7 @@ class LinkDialogComponent {
             const objectType = formInstance.getObjectType();
 
             const tableConfiguration = new TableConfiguration(
-                objectType, null, 5, null, null, true, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                objectType, null, 5, null, true, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             );
             const table = await TableFactoryService.getInstance().createTable(
                 `link-object-dialog-${objectType}`, objectType, tableConfiguration, null,
@@ -280,7 +280,7 @@ class LinkDialogComponent {
             const linkPartner = this.linkPartners.find(
                 (lp) => lp[0] === this.state.currentLinkableObjectNode.label
             );
-            const loadingOptions = new KIXObjectLoadingOptions(null, [
+            const loadingOptions = new KIXObjectLoadingOptions([
                 new FilterCriteria(
                     'Source', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, this.state.objectType
                 ),

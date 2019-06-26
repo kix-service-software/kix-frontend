@@ -13,7 +13,7 @@ export class EditFAQArticleDialogContext extends Context {
         const objectId = this.getObjectId();
         if (objectId) {
             const loadingOptions = new KIXObjectLoadingOptions(
-                null, null, null, null,
+                null, null, null,
                 ['Attachments', 'Links'],
                 ['Links']
             );

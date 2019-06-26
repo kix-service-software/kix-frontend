@@ -60,7 +60,7 @@ export class UserService extends KIXObjectService {
     }
 
     public async getUserByToken(token: string): Promise<User> {
-        const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, ['Tickets', 'Preferences']);
+        const loadingOptions = new KIXObjectLoadingOptions(null, null, null, ['Tickets', 'Preferences']);
         const users = await super.load<User>(
             token, KIXObjectType.USER, this.buildUri('session', 'user'), loadingOptions, null, KIXObjectType.USER, false
         );

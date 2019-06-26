@@ -2,7 +2,8 @@ import { IConfigurationExtension } from '../../core/extensions';
 import {
     WidgetConfiguration, ConfiguredWidget, WidgetSize, DataType,
     FilterCriteria, FilterDataType, FilterType, KIXObjectPropertyFilter,
-    TableFilterCriteria, KIXObjectType, SortOrder, ContextConfiguration, CRUD, TableWidgetSettings
+    TableFilterCriteria, KIXObjectType, SortOrder, ContextConfiguration, CRUD,
+    TableWidgetSettings, KIXObjectLoadingOptions
 } from '../../core/model';
 import {
     SearchOperator, ToggleOptions, TableConfiguration, DefaultColumnConfiguration
@@ -126,23 +127,22 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                 new TableWidgetSettings(
                     KIXObjectType.TICKET, [TicketProperty.AGE, SortOrder.UP], new TableConfiguration(
                         KIXObjectType.TICKET,
-                        500, null, null,
-                        [
-                            new FilterCriteria(
-                                TicketProperty.OWNER_ID, SearchOperator.EQUALS,
-                                FilterDataType.STRING, FilterType.OR, KIXObjectType.CURRENT_USER
-                            ),
-                            new FilterCriteria(
-                                TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS,
-                                FilterDataType.STRING, FilterType.OR, KIXObjectType.CURRENT_USER
-                            ),
-                            new FilterCriteria(
-                                TicketProperty.LOCK_ID, SearchOperator.EQUALS,
-                                FilterDataType.NUMERIC, FilterType.OR, 2
-                            )
-                        ],
-                        true, true, new ToggleOptions('ticket-article-details', 'article', [], true),
-                        'Ticket.Age:numeric'
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    TicketProperty.OWNER_ID, SearchOperator.EQUALS,
+                                    FilterDataType.STRING, FilterType.OR, KIXObjectType.CURRENT_USER
+                                ),
+                                new FilterCriteria(
+                                    TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS,
+                                    FilterDataType.STRING, FilterType.OR, KIXObjectType.CURRENT_USER
+                                ),
+                                new FilterCriteria(
+                                    TicketProperty.LOCK_ID, SearchOperator.EQUALS,
+                                    FilterDataType.NUMERIC, FilterType.OR, 2
+                                )
+                            ], 'Ticket.Age:numeric', 500, [TicketProperty.WATCHERS]
+                        ), null, null, true, true, new ToggleOptions('ticket-article-details', 'article', [], true)
                     ), null, null, null, predefinedToDoTableFilter
                 ),
                 false, true, 'kix-icon-ticket', false
@@ -154,11 +154,20 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
             new ConfiguredWidget('20180612-new-tickets-widget',
                 new WidgetConfiguration(
                     'table-widget', 'New Tickets', ['bulk-action', 'csv-export-action'],
-                    {
-                        objectType: KIXObjectType.TICKET,
-                        sort: [TicketProperty.AGE, SortOrder.DOWN],
-                        tableConfiguration: new TableConfiguration(KIXObjectType.TICKET,
-                            500, null, [
+                    new TableWidgetSettings(
+                        KIXObjectType.TICKET,
+                        [TicketProperty.AGE, SortOrder.DOWN],
+                        new TableConfiguration(KIXObjectType.TICKET,
+                            new KIXObjectLoadingOptions(
+                                [
+                                    new FilterCriteria(
+                                        TicketProperty.STATE_ID, SearchOperator.EQUALS,
+                                        FilterDataType.NUMERIC, FilterType.OR, 1
+                                    )
+                                ], 'Ticket.-Age:numeric', 500, [TicketProperty.WATCHERS]
+                            ),
+                            undefined,
+                            [
                                 new DefaultColumnConfiguration(
                                     TicketProperty.PRIORITY_ID, false, true, true, false, 65, true, true, true
                                 ),
@@ -183,16 +192,9 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                                     true, true, false, DataType.DATE_TIME
                                 ),
                             ],
-                            [
-                                new FilterCriteria(
-                                    TicketProperty.STATE_ID, SearchOperator.EQUALS,
-                                    FilterDataType.NUMERIC, FilterType.OR, 1
-                                )
-                            ],
-                            true, true, new ToggleOptions('ticket-article-details', 'article', [], true),
-                            'Ticket.-Age:numeric'
+                            true, true, new ToggleOptions('ticket-article-details', 'article', [], true)
                         )
-                    },
+                    ),
                     false, true, 'kix-icon-ticket', false
                 ),
                 [new UIComponentPermission('tickets', [CRUD.READ])]

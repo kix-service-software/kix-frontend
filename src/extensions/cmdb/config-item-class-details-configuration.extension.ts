@@ -32,8 +32,10 @@ export class Extension implements IConfigurationExtension {
                 [],
                 new TableWidgetSettings(
                     KIXObjectType.PERMISSION, [PermissionProperty.RoleID, SortOrder.UP],
-                    new TableConfiguration(KIXObjectType.PERMISSION, null, null, null, null, null, null, null, null,
-                        TableHeaderHeight.SMALL, TableRowHeight.SMALL), null, false
+                    new TableConfiguration(
+                        KIXObjectType.PERMISSION, null, null, null, null, null, null, null,
+                        TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                    ), null, false
                 ),
                 true, true, null, true
             )
@@ -47,7 +49,7 @@ export class Extension implements IConfigurationExtension {
                 new TableWidgetSettings(
                     KIXObjectType.PERMISSION_DEPENDING_OBJECTS, [PermissionProperty.RoleID, SortOrder.UP],
                     new TableConfiguration(
-                        KIXObjectType.PERMISSION_DEPENDING_OBJECTS, null, null, null, null, null, null, null, null,
+                        KIXObjectType.PERMISSION_DEPENDING_OBJECTS, null, null, null, null, null, null, null,
                         TableHeaderHeight.SMALL, TableRowHeight.SMALL
                     ), null, false
                 ),
@@ -62,7 +64,7 @@ export class Extension implements IConfigurationExtension {
                     KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION,
                     [ConfigItemClassDefinitionProperty.VERSION, SortOrder.DOWN],
                     new TableConfiguration(
-                        KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION, null, null, null, null, null, true,
+                        KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION, null, null, null, null, true,
                         new ToggleOptions('config-item-class-definition', 'definition', [], true), null,
                         TableHeaderHeight.LARGE, TableRowHeight.LARGE
                     ), null, false

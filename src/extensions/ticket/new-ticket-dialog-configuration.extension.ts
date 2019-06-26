@@ -96,7 +96,7 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
                     new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                         new KIXObjectLoadingOptions(
-                            null, [
+                            [
                                 new FilterCriteria(
                                     UserProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
                                     FilterType.AND, 1
@@ -112,7 +112,7 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
                     new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                         new KIXObjectLoadingOptions(
-                            null, [
+                            [
                                 new FilterCriteria(
                                     UserProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
                                     FilterType.AND, 1

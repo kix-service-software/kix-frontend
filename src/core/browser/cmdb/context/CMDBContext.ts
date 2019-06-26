@@ -45,7 +45,7 @@ export class CMDBContext extends Context {
         }
 
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, filterCriteria, null, null, [VersionProperty.DATA, VersionProperty.PREPARED_DATA]
+            filterCriteria, null, null, [VersionProperty.DATA, VersionProperty.PREPARED_DATA]
         );
 
         const timeout = window.setTimeout(() => {

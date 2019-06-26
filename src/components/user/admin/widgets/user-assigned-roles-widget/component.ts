@@ -50,7 +50,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             new DefaultColumnConfiguration(RoleProperty.VALID_ID, true, false, true, false, 100, true, true)
         ];
         const tableConfiguration = new TableConfiguration(
-            KIXObjectType.ROLE, null, null, columns, null, false, false, null, null,
+            KIXObjectType.ROLE, null, null, columns,  false, false, null, null,
             TableHeaderHeight.SMALL, TableRowHeight.SMALL
         );
         const table = await await TableFactoryService.getInstance().createTable(

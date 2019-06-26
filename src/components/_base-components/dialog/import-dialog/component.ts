@@ -216,7 +216,7 @@ class Component {
 
             const configuration = new TableConfiguration(
                 this.objectType, null, null, await this.getColumnConfig(),
-                null, true, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                true, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             );
             const table = await TableFactoryService.getInstance().createTable(
                 `import-dialog-list-${this.objectType}`, this.objectType,

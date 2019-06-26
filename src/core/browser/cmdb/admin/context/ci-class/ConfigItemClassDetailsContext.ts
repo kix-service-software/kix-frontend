@@ -47,7 +47,7 @@ export class ConfigItemClassDetailsContext extends Context {
         const ciClassId = Number(this.objectId);
 
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, null, ['CurrentDefinition', 'Definitions', 'ConfiguredPermissions']
+            null, null, null, ['CurrentDefinition', 'Definitions', 'ConfiguredPermissions']
         );
 
         const timeout = window.setTimeout(() => {

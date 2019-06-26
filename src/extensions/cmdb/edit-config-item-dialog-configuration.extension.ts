@@ -23,7 +23,7 @@ export class EditConfigItemDialogModuleExtension implements IConfigurationExtens
             KIXObjectType.CONFIG_ITEM_CLASS
         );
 
-        const options = new KIXObjectLoadingOptions(null, null, null, null, [
+        const options = new KIXObjectLoadingOptions(null, null, null, [
             'CurrentDefinition'
         ]);
 

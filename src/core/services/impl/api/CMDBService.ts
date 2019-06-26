@@ -43,7 +43,7 @@ export class CMDBService extends KIXObjectService {
     }
 
     public async getDeploymentStates(token: string): Promise<GeneralCatalogItem[]> {
-        const loadingOptions = new KIXObjectLoadingOptions(null, [
+        const loadingOptions = new KIXObjectLoadingOptions([
             new FilterCriteria('Class', SearchOperator.EQUALS, FilterDataType.STRING,
                 FilterType.AND, 'ITSM::ConfigItem::DeploymentState'),
             new FilterCriteria('Functionality', SearchOperator.NOT_EQUALS, FilterDataType.STRING,

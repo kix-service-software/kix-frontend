@@ -21,13 +21,8 @@ export class SysConfigTableFactory extends TableFactory {
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
         const table = new Table(tableKey, tableConfiguration);
 
-        let loadingOptions = null;
-        if (tableConfiguration.filter && tableConfiguration.filter.length) {
-            loadingOptions = new KIXObjectLoadingOptions(null, tableConfiguration.filter);
-        }
-
         table.setContentProvider(new SysConfigTableContentProvider(
-            table, objectIds, loadingOptions, contextId
+            table, objectIds, tableConfiguration.loadingOptions, contextId
         ));
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 
@@ -60,7 +55,7 @@ export class SysConfigTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, null, null, tableColumns, null, true, false, null, null,
+                KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, null, null, tableColumns, true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;

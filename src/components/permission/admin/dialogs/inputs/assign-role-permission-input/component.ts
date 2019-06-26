@@ -90,7 +90,7 @@ class Component extends FormInputComponent<any[], ComponentState> {
                 }
                 const roles = await KIXObjectService.loadObjects<Role>(KIXObjectType.ROLE, null,
                     new KIXObjectLoadingOptions(
-                        null, [
+                        [
                             new FilterCriteria(
                                 RoleProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
                             )

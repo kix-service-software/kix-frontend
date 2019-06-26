@@ -71,7 +71,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 const linkDescriptions = await LinkUtil.getLinkDescriptions(this.state.kixObject, objectLinks);
 
                 const tableConfiguration = new TableConfiguration(
-                    null, null, null, null, null, false, false, null, null,
+                    null, null, null, null,  false, false, null, null,
                     TableHeaderHeight.SMALL, TableRowHeight.SMALL
                 );
 

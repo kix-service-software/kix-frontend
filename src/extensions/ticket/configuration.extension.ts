@@ -5,7 +5,8 @@ import {
     FormContext,
     ContextConfiguration,
     CRUD,
-    TableWidgetSettings
+    TableWidgetSettings,
+    KIXObjectLoadingOptions
 } from '../../core/model';
 import { TicketContext, TicketChartConfiguration } from '../../core/browser/ticket';
 import {
@@ -179,9 +180,12 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
                     ],
                     new TableWidgetSettings(KIXObjectType.TICKET, null,
                         new TableConfiguration(KIXObjectType.TICKET,
-                            1000, 25, null, [new FilterCriteria(
-                                'StateType', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'
-                            )],
+                            new KIXObjectLoadingOptions(
+                                [new FilterCriteria(
+                                    'StateType', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'
+                                )], null, 1000
+                            ),
+                            25, null,
                             true, true,
                             new ToggleOptions('ticket-article-details', 'article', [], true),
                             null, TableHeaderHeight.LARGE, TableRowHeight.LARGE

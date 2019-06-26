@@ -16,7 +16,7 @@ export class ContactSearchDefinition extends SearchDefinition {
     }
 
     public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(null, criteria, null, null, ['Tickets'], null);
+        return new KIXObjectLoadingOptions(criteria, null, null, ['Tickets'], null);
     }
 
     public async getProperties(): Promise<Array<[string, string]>> {
@@ -107,7 +107,7 @@ export class ContactSearchDefinition extends SearchDefinition {
     ): Promise<TreeNode[]> {
         if (property === ContactProperty.PRIMARY_ORGANISATION_ID) {
             const loadingOptions = new KIXObjectLoadingOptions(
-                null, OrganisationService.getInstance().prepareFullTextFilter(searchValue), null, limit
+                OrganisationService.getInstance().prepareFullTextFilter(searchValue), null, limit
             );
             const organisations = await KIXObjectService.loadObjects<Organisation>(
                 KIXObjectType.ORGANISATION, null, loadingOptions, null, false

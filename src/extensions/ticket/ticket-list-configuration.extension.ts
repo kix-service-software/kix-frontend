@@ -1,7 +1,7 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
     ConfiguredWidget, WidgetConfiguration, WidgetSize, FilterCriteria, FilterDataType,
-    FilterType, KIXObjectType, ContextConfiguration
+    FilterType, KIXObjectType, ContextConfiguration, KIXObjectLoadingOptions
 } from '../../core/model';
 import { TicketListContext } from '../../core/browser/ticket';
 import {
@@ -23,10 +23,14 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
                 ],
                 {
                     objectType: KIXObjectType.TICKET,
-                    tableConfiguration: new TableConfiguration(KIXObjectType.TICKET,
-                        2500, 25, null, [new FilterCriteria(
-                            'StateType', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'
-                        )],
+                    tableConfiguration: new TableConfiguration(
+                        KIXObjectType.TICKET,
+                        new KIXObjectLoadingOptions([
+                            new FilterCriteria(
+                                'StateType', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'
+                            )
+                        ]),
+                        25, null,
                         true, true,
                         new ToggleOptions('ticket-article-details', 'article', [], true),
                         null, TableHeaderHeight.LARGE, TableRowHeight.LARGE

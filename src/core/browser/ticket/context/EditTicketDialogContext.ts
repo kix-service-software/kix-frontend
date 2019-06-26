@@ -38,7 +38,7 @@ export class EditTicketDialogContext extends Context implements IFormInstanceLis
             const ticketId = this.getObjectId();
             if (ticketId) {
                 const loadingOptions = new KIXObjectLoadingOptions(
-                    null, null, null, null, [TicketProperty.LINK], [TicketProperty.LINK]
+                    null, null, null, [TicketProperty.LINK], [TicketProperty.LINK]
                 );
                 const objects = await KIXObjectService.loadObjects<Ticket>(
                     KIXObjectType.TICKET, [ticketId], loadingOptions

@@ -3,7 +3,7 @@ import { ContactDetailsContext } from '../../core/browser/contact';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration, OrganisationProperty,
     DataType, KIXObjectType, ObjectinformationWidgetSettings, ContactProperty,
-    KIXObjectProperty, CRUD, TabWidgetSettings
+    KIXObjectProperty, CRUD, TabWidgetSettings, KIXObjectLoadingOptions
 } from '../../core/model';
 import {
     TableConfiguration, TableHeaderHeight, TableRowHeight, DefaultColumnConfiguration
@@ -56,7 +56,8 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
                 'contact-assigned-organisations-widget', 'Translatable#Assigned Organisations', [
                     'contact-edit-action', 'contact-print-action'
                 ], new TableConfiguration(KIXObjectType.ORGANISATION,
-                    null, null,
+                    new KIXObjectLoadingOptions(null, null, null, [OrganisationProperty.TICKET_STATS], null),
+                    null,
                     [
                         new DefaultColumnConfiguration(
                             OrganisationProperty.NUMBER, true, false, true, true, 230, true, true
@@ -85,7 +86,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
                             OrganisationProperty.REMINDER_TICKETS_COUNT, true, false, true, true, 150,
                             true, false, false, DataType.NUMBER
                         ),
-                    ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                    ], null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
                 ),
                 false, true, null, false
             ),

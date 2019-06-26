@@ -36,7 +36,7 @@ export class SysConfigTableContentProvider extends TableContentProvider<SysConfi
                     FilterDataType.NUMERIC, FilterType.OR, null
                 ),
             ];
-            loadingOptions = new KIXObjectLoadingOptions(null, definitionFilter);
+            loadingOptions = new KIXObjectLoadingOptions(definitionFilter);
         }
 
         const sysConfigOptions = await KIXObjectService.loadObjects<SysConfigOptionDefinition>(

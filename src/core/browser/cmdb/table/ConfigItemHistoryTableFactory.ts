@@ -43,7 +43,7 @@ export class ConfigItemHistoryTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.CONFIG_ITEM_HISTORY, null, null, tableColumns, null, null, null, null, null,
+                KIXObjectType.CONFIG_ITEM_HISTORY, null, null, tableColumns,  null, null, null, null,
                 TableHeaderHeight.SMALL
             );
         } else if (!tableConfiguration.tableColumns) {

@@ -21,13 +21,10 @@ export class ContactTableFactory extends TableFactory {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, short);
 
-        const loadingOptions = new KIXObjectLoadingOptions(
-            null, tableConfiguration.filter, tableConfiguration.sortOrder,
-            tableConfiguration.limit, ['TicketStats']
-        );
-
         const table = new Table(tableKey, tableConfiguration);
-        table.setContentProvider(new ContactTableContentProvider(table, objectIds, loadingOptions, contextId));
+        table.setContentProvider(
+            new ContactTableContentProvider(table, objectIds, tableConfiguration.loadingOptions, contextId)
+        );
         table.setColumnConfiguration(tableConfiguration.tableColumns);
         return table;
     }
@@ -64,7 +61,7 @@ export class ContactTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.CONTACT, 1000, null, tableColumns, null, false, false, null, null,
+                KIXObjectType.CONTACT, null, undefined, tableColumns, false, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.SMALL
             );
             tableConfiguration.enableSelection = true;

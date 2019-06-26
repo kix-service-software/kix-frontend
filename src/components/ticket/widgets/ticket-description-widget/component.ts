@@ -78,7 +78,7 @@ class Component {
     }
 
     private async getTicketNotes(): Promise<void> {
-        const loadingOptions = new KIXObjectLoadingOptions(['DynamicField.ID'], [
+        const loadingOptions = new KIXObjectLoadingOptions([
             new FilterCriteria('Name', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'TicketNotes')
         ]);
 

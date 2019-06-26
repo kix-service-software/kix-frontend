@@ -2,7 +2,7 @@ import { IConfigurationExtension } from '../../core/extensions';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration, ContactProperty,
     DataType, KIXObjectType, OrganisationProperty, KIXObjectProperty, ObjectinformationWidgetSettings,
-    CRUD, TabWidgetSettings
+    CRUD, TabWidgetSettings, KIXObjectLoadingOptions
 } from '../../core/model';
 import { TableConfiguration, TableHeaderHeight, TableRowHeight, DefaultColumnConfiguration } from '../../core/browser';
 import { OrganisationDetailsContext } from '../../core/browser/organisation';
@@ -49,8 +49,14 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
             new WidgetConfiguration(
                 'organisation-assigned-contacts-widget', 'Translatable#Assigned Contacts', [
                     'organisation-edit-action', 'organisation-print-action'
-                ], new TableConfiguration(KIXObjectType.CONTACT,
-                    null, null,
+                ],
+                new TableConfiguration(
+                    KIXObjectType.CONTACT,
+                    new KIXObjectLoadingOptions(
+                        null, null, null,
+                        [ContactProperty.TICKET_STATS], null
+                    ),
+                    null,
                     [
                         new DefaultColumnConfiguration(
                             ContactProperty.FIRST_NAME, true, false, true, true, 200, true, true
@@ -80,7 +86,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
                             ContactProperty.CREATE_NEW_TICKET, true, false, false, true, 150,
                             false, false, false, DataType.STRING, false, 'create-new-ticket-cell'
                         )
-                    ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                    ], null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
                 ),
                 false, true, null, false
             ),

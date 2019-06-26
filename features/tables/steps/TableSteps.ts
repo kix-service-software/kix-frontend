@@ -75,10 +75,6 @@ Then('Zeilengröße: {string}', async (type: string) => {
     }
 });
 
-Then('Limit: {int}', async (limit: Number) => {
-    expect(table.getTableConfiguration().limit).equals(limit);
-});
-
 Then('DisplayLimit: {int}', async (displayLimit: Number) => {
     expect(table.getTableConfiguration().displayLimit).equals(displayLimit);
 });

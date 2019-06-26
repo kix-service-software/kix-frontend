@@ -77,8 +77,8 @@ export class ConfigItemTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.CONFIG_ITEM, 1000, null, tableColumns,
-                null, true, true, null, null, null, TableRowHeight.LARGE
+                KIXObjectType.CONFIG_ITEM, null, undefined, tableColumns,
+                true, true, null, null, null, TableRowHeight.LARGE
             );
             defaultToggle = true;
             defaultRouting = true;

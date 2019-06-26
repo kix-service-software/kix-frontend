@@ -141,7 +141,7 @@ export class KIXObjectSearchService {
                     ));
                 }
 
-                const loadingOptions = new KIXObjectLoadingOptions(null, criteria);
+                const loadingOptions = new KIXObjectLoadingOptions(criteria);
                 objects = await this.doSearch(objectType, loadingOptions);
             }
         } else {

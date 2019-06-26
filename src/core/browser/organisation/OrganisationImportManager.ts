@@ -85,7 +85,7 @@ export class OrganisationImportManager extends ImportManager {
                 FilterDataType.STRING, FilterType.AND, organisation.Number
             )
         ];
-        const loadingOptions = new KIXObjectLoadingOptions(null, filter);
+        const loadingOptions = new KIXObjectLoadingOptions(filter);
         const organisations = await KIXObjectService.loadObjects(
             this.objectType, null, loadingOptions, null, true
         );

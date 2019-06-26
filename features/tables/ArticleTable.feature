@@ -6,10 +6,9 @@ Feature: Als Nutzer möchte ich eine korrekte Standardkonfiguration für eine Ta
         Then Toggle: <toggle>
         Then Kopfzeilengröße: <headerHeight>
         Then Zeilengröße: <rowHeight>
-        Then Limit: <limit>
         Examples:
-            | selection | toggle | objectType | headerHeight | rowHeight | limit |
-            | 1         | 1      | 'Article'  | 'l'          | 'l'       | 1000  |
+            | selection | toggle | objectType | headerHeight | rowHeight |
+            | 1         | 1      | 'Article'  | 'l'          | 'l'       |
 
     Scenario Outline: Tabelle mit korrekter Spalte <column>
         Given Tabelle: <objectType>

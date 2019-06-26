@@ -112,7 +112,7 @@ export class TextModuleService extends KIXObjectService {
                 )
             ];
         }
-        const loadingOptions = new KIXObjectLoadingOptions(null, filterCriteria);
+        const loadingOptions = new KIXObjectLoadingOptions(filterCriteria);
         const textModules = await KIXObjectService.loadObjects<TextModule>(KIXObjectType.TEXT_MODULE, null, loadingOptions);
         return textModules;
     }

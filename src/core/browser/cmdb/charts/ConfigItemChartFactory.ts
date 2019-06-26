@@ -38,7 +38,7 @@ export class ConfigItemChartFactory {
     ): Promise<[string[], ChartDataSets[]]> {
         const labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.CONFIG_ITEM);
 
-        const loadingOptions = new KIXObjectLoadingOptions(null, [
+        const loadingOptions = new KIXObjectLoadingOptions([
             new FilterCriteria(
                 'Class', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'ITSM::Core::IncidentState'
             ),

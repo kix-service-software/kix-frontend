@@ -59,7 +59,7 @@ class Component extends FormInputComponent<number, ComponentState> {
 
     private async searchOrganisations(limit: number, searchValue: string): Promise<TreeNode[]> {
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, OrganisationService.getInstance().prepareFullTextFilter(searchValue), null, limit
+            OrganisationService.getInstance().prepareFullTextFilter(searchValue), null, limit
         );
         this.organisations = await KIXObjectService.loadObjects<Organisation>(
             KIXObjectType.ORGANISATION, null, loadingOptions, null, false

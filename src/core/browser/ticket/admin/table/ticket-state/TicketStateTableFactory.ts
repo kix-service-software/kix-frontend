@@ -42,7 +42,7 @@ export class TicketStateTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.TICKET_STATE, null, null, tableColumns, null, true, false, null, null,
+                KIXObjectType.TICKET_STATE, null, undefined, tableColumns, true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;

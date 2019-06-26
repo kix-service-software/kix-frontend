@@ -57,7 +57,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
     ): Promise<ConfigItem[]> {
         const configItems = [];
 
-        const loadingOptionsNumber = new KIXObjectLoadingOptions(null, [
+        const loadingOptionsNumber = new KIXObjectLoadingOptions([
             new FilterCriteria(
                 ConfigItemProperty.CLASS, SearchOperator.IN,
                 FilterDataType.STRING, FilterType.AND, ciClassNames
@@ -72,7 +72,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
             KIXObjectType.CONFIG_ITEM, null, loadingOptionsNumber, null, false
         );
 
-        const loadingOptionsName = new KIXObjectLoadingOptions(null, [
+        const loadingOptionsName = new KIXObjectLoadingOptions([
             new FilterCriteria(
                 ConfigItemProperty.CLASS, SearchOperator.IN,
                 FilterDataType.STRING, FilterType.AND, ciClassNames
@@ -105,7 +105,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
     }
 
     public async getDeploymentStates(): Promise<GeneralCatalogItem[]> {
-        const loadingOptions = new KIXObjectLoadingOptions(null, [
+        const loadingOptions = new KIXObjectLoadingOptions([
             new FilterCriteria('Class', SearchOperator.EQUALS, FilterDataType.STRING,
                 FilterType.AND, 'ITSM::ConfigItem::DeploymentState'),
             new FilterCriteria('Functionality', SearchOperator.NOT_EQUALS, FilterDataType.STRING,
@@ -137,9 +137,11 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                 const classId = property === ConfigItemProperty.CUR_DEPL_STATE_ID
                     ? 'ITSM::ConfigItem::DeploymentState'
                     : 'ITSM::Core::IncidentState';
-                const loadingOptions = new KIXObjectLoadingOptions(null, [new FilterCriteria(
-                    'Class', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, classId
-                )]);
+                const loadingOptions = new KIXObjectLoadingOptions([
+                    new FilterCriteria(
+                        'Class', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, classId
+                    )]
+                );
 
                 const items = await KIXObjectService.loadObjects<GeneralCatalogItem>(
                     KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions, null, false

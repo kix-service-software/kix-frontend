@@ -39,7 +39,7 @@ export class OrganisationDetailsContext extends Context {
 
     private async loadOrganisation(): Promise<Organisation> {
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, null, ['Contacts', 'Tickets', 'TicketStats'],
+            null, null, null, ['Contacts', 'Tickets', 'TicketStats'],
         );
 
         const timeout = window.setTimeout(() => {

@@ -22,12 +22,11 @@ export class TicketQueueTableFactory extends TableFactory {
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
         const table = new Table(tableKey, tableConfiguration);
 
-        let loadingOptions = null;
-        if (tableConfiguration.filter && tableConfiguration.filter.length) {
-            loadingOptions = new KIXObjectLoadingOptions(null, tableConfiguration.filter);
-        }
+        const contentProvider = new TicketQueueTableContentProvider(
+            table, objectIds, tableConfiguration.loadingOptions, contextId
+        );
 
-        table.setContentProvider(new TicketQueueTableContentProvider(table, objectIds, loadingOptions, contextId));
+        table.setContentProvider(contentProvider);
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 
         return table;
@@ -52,7 +51,7 @@ export class TicketQueueTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.QUEUE, null, null, tableColumns, null, true, false, null, null,
+                KIXObjectType.QUEUE, null, undefined, tableColumns, true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;

@@ -76,7 +76,7 @@ class Component {
                     new DefaultColumnConfiguration(
                         TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.DATE_TIME
                     )
-                ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                ], null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             ),
             false, true, null, false)
             ;
@@ -118,7 +118,7 @@ class Component {
                     new DefaultColumnConfiguration(
                         TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.DATE_TIME
                     )
-                ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                ], null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             ),
             false, true, null, false);
 
@@ -152,7 +152,7 @@ class Component {
                     new DefaultColumnConfiguration(
                         TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.DATE_TIME
                     )
-                ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                ], null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             ),
             false, true, null, false);
 
@@ -184,7 +184,7 @@ class Component {
                     new DefaultColumnConfiguration(
                         TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.DATE_TIME
                     )
-                ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                ], null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             ),
             false, true, null, false);
 
@@ -219,7 +219,7 @@ class Component {
                     new DefaultColumnConfiguration(
                         TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.DATE_TIME
                     )
-                ], null, null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                ], null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             ),
             false, true, null, false);
 

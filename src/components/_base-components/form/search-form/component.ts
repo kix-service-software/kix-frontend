@@ -177,7 +177,7 @@ class Component implements ISearchFormListener {
 
     private async createTable(): Promise<ITable> {
         const tableConfiguration = new TableConfiguration(
-            this.objectType, null, null, null, null, false, false, null, null,
+            this.objectType, null, null, null, false, false, null, null,
             TableHeaderHeight.SMALL, TableRowHeight.SMALL
         );
         const table = await TableFactoryService.getInstance().createTable(

@@ -97,7 +97,7 @@ export class TicketBulkManager extends BulkManager {
         switch (property) {
             case TicketProperty.CONTACT_ID:
                 const loadingOptions = new KIXObjectLoadingOptions(
-                    null, ContactService.getInstance().prepareFullTextFilter(searchValue), null, limit
+                    ContactService.getInstance().prepareFullTextFilter(searchValue), null, limit
                 );
                 const contacts = await KIXObjectService.loadObjects<Contact>(
                     KIXObjectType.CONTACT, null, loadingOptions, null, false

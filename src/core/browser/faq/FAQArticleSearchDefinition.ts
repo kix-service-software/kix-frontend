@@ -26,7 +26,7 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
     }
 
     public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(null, criteria, null, null, ['Links'], ['Links']);
+        return new KIXObjectLoadingOptions(criteria, null, null, ['Links'], ['Links']);
     }
 
     public async getProperties(): Promise<Array<[string, string]>> {

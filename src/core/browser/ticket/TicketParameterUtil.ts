@@ -78,7 +78,7 @@ export class TicketParameterUtil {
     public static async getPredefinedParameter(forUpdate: boolean = false): Promise<Array<[string, any]>> {
         const parameter: Array<[string, any]> = [];
 
-        const loadingOptionsSenderType = new KIXObjectLoadingOptions(null, [
+        const loadingOptionsSenderType = new KIXObjectLoadingOptions([
             new FilterCriteria('Name', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'agent')
         ]);
         const senderTypes = await KIXObjectService.loadObjects<SenderType>(
