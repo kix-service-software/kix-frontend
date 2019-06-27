@@ -61,7 +61,7 @@ export class ContactTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.CONTACT, null, undefined, tableColumns, false, false, null, null,
+                KIXObjectType.CONTACT, null, null, tableColumns, false, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.SMALL
             );
             tableConfiguration.enableSelection = true;

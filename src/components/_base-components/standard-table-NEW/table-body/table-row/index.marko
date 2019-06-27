@@ -3,18 +3,9 @@
         <if(state.show)>
             <if(input.selectionEnabled)>
                 <td.check>
-                    <div style={
-                        height: input.height,
-                        "line-height": input.height
-                    }>
+                    <div>
                         <if(state.selectable)>
-                            <input
-                                type="checkbox"
-                                on-click("changeSelect")
-                                checked=state.selected
-                                style={
-                                                                height: input.height
-                                                            }/>
+                            <input type="checkbox" on-click("changeSelect") checked=state.selected/>
                         </if>
                     </div>
                 </td>
@@ -29,12 +20,7 @@
             <td.column-spacer/>
             <if(input.toggleEnabled)>
                 <td.toggle>
-                    <div
-                        on-click("toggleRow")
-                        style={
-                                                height: input.height,
-                                                "line-height": input.height
-                                            }>
+                    <div on-click("toggleRow")>
                         <if(input.row && state.open)>
                             <span.kix-icon-triangle-up>
                                 <span.path1/>

@@ -42,7 +42,7 @@ export class ConfigItemClassTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.CONFIG_ITEM_CLASS, null, undefined, tableColumns, true, false, null, null,
+                KIXObjectType.CONFIG_ITEM_CLASS, null, null, tableColumns, true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;

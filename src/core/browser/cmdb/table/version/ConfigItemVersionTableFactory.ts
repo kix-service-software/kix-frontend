@@ -41,10 +41,9 @@ export class ConfigItemVersionTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.CONFIG_ITEM_VERSION, null, null, tableColumns,  true, true, null, null,
+                KIXObjectType.CONFIG_ITEM_VERSION, null, undefined, tableColumns, true, true, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
-            tableConfiguration.displayLimit = null;
             defaultToggle = true;
         } else if (!tableConfiguration.tableColumns) {
             tableConfiguration.tableColumns = tableColumns;

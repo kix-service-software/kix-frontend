@@ -1,7 +1,7 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
     WidgetConfiguration, ConfiguredWidget, KIXObjectType, ContextConfiguration,
-    ObjectinformationWidgetSettings, OrganisationProperty, ContactProperty, ContextMode, CRUD
+    ObjectinformationWidgetSettings, OrganisationProperty, ContactProperty, ContextMode, CRUD, TableWidgetSettings
 } from '../../core/model/';
 import { RoutingConfiguration } from '../../core/browser/router';
 import { OrganisationDetailsContext } from '../../core/browser/organisation';
@@ -207,10 +207,10 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
         const articleListWidget =
             new ConfiguredWidget('20180921-article-list', new WidgetConfiguration(
                 'table-widget', 'Translatable#Article Overview', ['article-bulk-action', 'article-new-action'],
-                {
-                    objectType: KIXObjectType.ARTICLE,
-                    headerComponents: ['article-attachment-count']
-                },
+                new TableWidgetSettings(
+                    KIXObjectType.ARTICLE, undefined, undefined,
+                    ['article-attachment-count']
+                ),
                 false, true, null, true),
                 [new UIComponentPermission('tickets/*/articles', [CRUD.READ])]
             );

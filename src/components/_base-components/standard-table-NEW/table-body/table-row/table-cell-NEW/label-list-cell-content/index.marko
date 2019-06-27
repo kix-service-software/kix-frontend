@@ -1,5 +1,7 @@
 <if(state.cellLabels && !!state.cellLabels.length)>
-    <for|label| of=state.cellLabels>
-        <label-item label=label removeLabels=false/>
-    </for>
+    <span.label-list-cell>
+        <for|label| of=state.cellLabels>
+            <label-item label=label removeLabels=false/>
+        </for>
+    </span>
 </if>

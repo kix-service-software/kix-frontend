@@ -26,4 +26,5 @@ export { TranslationService } from './TranslationService';
 export { SystemAddressService } from './SystemAddressService';
 export { QueueService } from './QueueService';
 export { MailAccountService } from './MailAccountService';
+export { MailFilterService } from './MailFilterService';
 export { TicketTemplateService } from './TicketTemplateService';

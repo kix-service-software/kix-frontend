@@ -15,19 +15,12 @@ export class MailAccount extends KIXObject {
     public Trusted: number;
     public DispatchingBy: string;
     public QueueID: number;
-    public Comment: string;
 
     public constructor(mailAccount?: MailAccount) {
-        super();
+        super(mailAccount);
         if (mailAccount) {
             this.ID = mailAccount.ID;
             this.ObjectId = this.ID;
-            this.ChangeBy = mailAccount.ChangeBy;
-            this.ChangeTime = mailAccount.ChangeTime;
-            this.CreateBy = mailAccount.CreateBy;
-            this.CreateTime = mailAccount.CreateTime;
-            this.Comment = mailAccount.Comment;
-            this.ValidID = mailAccount.ValidID;
             this.Host = mailAccount.Host;
             this.Login = mailAccount.Login;
             this.Type = mailAccount.Type;
@@ -36,10 +29,6 @@ export class MailAccount extends KIXObject {
             this.DispatchingBy = mailAccount.DispatchingBy;
             this.QueueID = mailAccount.QueueID;
         }
-    }
-
-    public equals(mailAccount: MailAccount): boolean {
-        return this.ID === mailAccount.ID;
     }
 
 }

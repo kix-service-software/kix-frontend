@@ -56,6 +56,12 @@ export enum KIXObjectType {
 
     LINK_TYPE = 'LINK_TYPE',
 
+    MAIL_ACCOUNT = 'MailAccount',
+
+    MAIL_ACCOUNT_TYPE = 'MailAccountType',
+
+    MAIL_FILTER = 'MailFilter',
+
     OBJECT_ICON = 'OBJECT_ICON',
 
     OBJECT_DEFINITION = 'ObjectDefinition',
@@ -116,9 +122,5 @@ export enum KIXObjectType {
 
     ROLE_PERMISSION = 'ROLE_PERMISSION',
 
-    FOLLOW_UP_TYPE = 'FollowUpType',
-
-    MAIL_ACCOUNT = 'MailAccount',
-
-    MAIL_ACCOUNT_TYPE = 'MailAccountType'
+    FOLLOW_UP_TYPE = 'FollowUpType'
 }

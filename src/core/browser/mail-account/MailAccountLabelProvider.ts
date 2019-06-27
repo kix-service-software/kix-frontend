@@ -122,6 +122,7 @@ export class MailAccountLabelProvider extends LabelProvider<MailAccount> {
                         ).catch((error) => [] as User[]);
                         displayValue = users && !!users.length ? users[0].UserFullname : value;
                     }
+                    break;
                 case KIXObjectProperty.CREATE_TIME:
                 case KIXObjectProperty.CHANGE_TIME:
                     displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);

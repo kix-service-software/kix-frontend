@@ -3,7 +3,7 @@
 } style=("height: " + component.getHeaderHeight())>
     <if(component.isSelectable())>
         <th.check>
-            <input type="checkbox" on-click("selectionChanged") key="allCheck"/>
+            <input style=("height: " + component.getHeaderHeight()) type="checkbox" on-click("selectionChanged") key="allCheck"/>
         </th>
     </if>
     <for|column| of=state.columns>

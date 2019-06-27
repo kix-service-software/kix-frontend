@@ -157,32 +157,25 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
     public setTableHeight(): void {
         this.state.tableHeight = 'unset';
-        if (this.state.table) {
+        if (this.state.table && this.state.table.getTableConfiguration().displayLimit) {
             const rows = this.state.table.getRows(false);
+            const displayLimit = this.state.table.getTableConfiguration().displayLimit;
+            if (rows && rows.length > displayLimit) {
+                const headerRowHeight = this.browserFontSize
+                    * Number(this.state.table.getTableConfiguration().headerHeight);
+                const rowHeight = this.browserFontSize * Number(this.state.table.getTableConfiguration().rowHeight);
 
-            const availableRowsCount = this.countRows(rows);
+                let height = ((displayLimit * rowHeight) + headerRowHeight)
+                    + (this.hScrollWillBeVisible() ? rowHeight : rowHeight / 2);
 
-            const limit = this.state.table.getTableConfiguration().displayLimit
-                ? this.state.table.getTableConfiguration().displayLimit
-                : availableRowsCount;
+                rows.forEach((r) => {
+                    if (r.isExpanded()) {
+                        height += (31.5 + 10) / 2 * this.browserFontSize;
+                    }
+                });
 
-            const minElements = availableRowsCount > limit ? limit : availableRowsCount;
-            const rowCount = minElements === 0 ? 1 : minElements;
-
-            const headerRowHeight = this.browserFontSize
-                * Number(this.state.table.getTableConfiguration().headerHeight);
-            const rowHeight = this.browserFontSize * Number(this.state.table.getTableConfiguration().rowHeight);
-
-            let height = ((rowCount * rowHeight) + headerRowHeight)
-                + (this.hScrollWillBeVisible() ? rowHeight : rowHeight / 2);
-
-            rows.forEach((r) => {
-                if (r.isExpanded()) {
-                    height += (31.5 + 10) / 2 * this.browserFontSize;
-                }
-            });
-
-            this.state.tableHeight = height + 'px';
+                this.state.tableHeight = height + 'px';
+            }
         }
     }
 

@@ -230,17 +230,19 @@ class LinkDialogComponent {
 
     private markNotSelectableRows(): void {
         const knownLinkedObjects = this.state.linkDescriptions.map((ld) => ld.linkableObject);
-        this.state.table.setRowObjectValueState(
-            knownLinkedObjects.filter(
-                (ko) => !this.newLinks.some((nl) => nl.linkableObject.equals(ko))
-            ),
-            ValueState.HIGHLIGHT_UNAVAILABLE
-        );
-        this.state.table.setRowObjectValueState(
-            this.newLinks.map((cld) => cld.linkableObject),
-            ValueState.HIGHLIGHT_SUCCESS
-        );
-        this.state.table.setRowsSelectableByObject(knownLinkedObjects, false);
+        if (this.state.table) {
+            this.state.table.setRowObjectValueState(
+                knownLinkedObjects.filter(
+                    (ko) => !this.newLinks.some((nl) => nl.linkableObject.equals(ko))
+                ),
+                ValueState.HIGHLIGHT_UNAVAILABLE
+            );
+            this.state.table.setRowObjectValueState(
+                this.newLinks.map((cld) => cld.linkableObject),
+                ValueState.HIGHLIGHT_SUCCESS
+            );
+            this.state.table.setRowsSelectableByObject(knownLinkedObjects, false);
+        }
     }
 
     private setSubmitState(): void {

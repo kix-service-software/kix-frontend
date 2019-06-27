@@ -18,6 +18,7 @@ export * from './general-catalog';
 export * from './valid';
 export * from './general-catalog';
 export * from './mail-account';
+export * from './mail-filter';
 
 export { ClientRegistration } from './ClientRegistration';
 export { KIXObject } from './KIXObject';

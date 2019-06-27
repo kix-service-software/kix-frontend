@@ -43,11 +43,9 @@ export class OrganisationTableFactory extends TableFactory {
         ];
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.ORGANISATION, null, undefined, tableColumns, false, false, null, null,
+                KIXObjectType.ORGANISATION, null, null, tableColumns, true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.SMALL
             );
-            tableConfiguration.enableSelection = true;
-            tableConfiguration.toggle = false;
             defaultRouting = true;
         } else if (!tableConfiguration.tableColumns) {
             tableConfiguration.tableColumns = tableColumns;

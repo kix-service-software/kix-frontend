@@ -30,6 +30,17 @@ class Extension implements IAdminModuleExtension {
                                         'system/communication/mailaccounts/*', [CRUD.UPDATE], true
                                     )
                                 ]
+                            ),
+                            new AdminModule(
+                                null, 'mail-filter', 'Translatable#Email Filter', null,
+                                KIXObjectType.MAIL_FILTER, 'communication-admin-mail-filters', [
+                                    new UIComponentPermission(
+                                        'system/communication/mailfilters', [CRUD.CREATE], true
+                                    ),
+                                    new UIComponentPermission(
+                                        'system/communication/mailfilters/*', [CRUD.UPDATE], true
+                                    )
+                                ]
                             )
                         ]
                     )
