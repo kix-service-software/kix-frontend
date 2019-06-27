@@ -51,7 +51,7 @@ export class TicketQueueTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.QUEUE, null, undefined, tableColumns, true, false, null, null,
+                KIXObjectType.QUEUE, null, null, tableColumns, true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;

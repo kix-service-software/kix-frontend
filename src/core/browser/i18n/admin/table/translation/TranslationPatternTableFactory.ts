@@ -41,7 +41,7 @@ export class TranslationPatternTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.TRANSLATION_PATTERN, null, undefined, tableColumns, true, false, null, null,
+                KIXObjectType.TRANSLATION_PATTERN, null, null, tableColumns, true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;

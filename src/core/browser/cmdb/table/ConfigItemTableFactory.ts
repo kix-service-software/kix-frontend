@@ -77,7 +77,7 @@ export class ConfigItemTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.CONFIG_ITEM, null, undefined, tableColumns,
+                KIXObjectType.CONFIG_ITEM, null, null, tableColumns,
                 true, true, null, null, null, TableRowHeight.LARGE
             );
             defaultToggle = true;

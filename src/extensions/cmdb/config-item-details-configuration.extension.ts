@@ -1,6 +1,7 @@
 import { IConfigurationExtension } from "../../core/extensions";
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize, KIXObjectType, CRUD, TabWidgetSettings,
+    TableWidgetSettings,
 } from "../../core/model";
 import { ConfigItemDetailsContext } from "../../core/browser/cmdb";
 import { UIComponentPermission } from "../../core/model/UIComponentPermission";
@@ -95,7 +96,7 @@ export class Extension implements IConfigurationExtension {
             new WidgetConfiguration(
                 'table-widget', "Translatable#Version Details",
                 ['config-item-version-compare-action', 'config-item-edit-action'],
-                { objectType: KIXObjectType.CONFIG_ITEM_VERSION }, false, true, WidgetSize.BOTH, true
+                new TableWidgetSettings(KIXObjectType.CONFIG_ITEM_VERSION), false, true, WidgetSize.BOTH, true
             ),
             [new UIComponentPermission('cmdb/configitems/*/versions', [CRUD.READ])]
         );

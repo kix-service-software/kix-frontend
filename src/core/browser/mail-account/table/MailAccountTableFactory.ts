@@ -46,7 +46,7 @@ export class MailAccountTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.MAIL_ACCOUNT, null, undefined, tableColumns, true, false, null, null,
+                KIXObjectType.MAIL_ACCOUNT, null, null, tableColumns, true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;

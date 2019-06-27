@@ -80,10 +80,9 @@ export class FAQArticleTableFactory extends TableFactory {
         }
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(KIXObjectType.FAQ_ARTICLE, null, undefined);
-            tableConfiguration.tableColumns = tableColumns;
-            tableConfiguration.enableSelection = true;
-            tableConfiguration.toggle = false;
+            tableConfiguration = new TableConfiguration(
+                KIXObjectType.FAQ_ARTICLE, null, null, tableColumns, true, false
+            );
             defaultRouting = true;
         } else if (!tableConfiguration.tableColumns) {
             tableConfiguration.tableColumns = tableColumns;

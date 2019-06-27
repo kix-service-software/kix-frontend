@@ -166,7 +166,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                                     )
                                 ], 'Ticket.-Age:numeric', 500, [TicketProperty.WATCHERS]
                             ),
-                            undefined,
+                            null,
                             [
                                 new DefaultColumnConfiguration(
                                     TicketProperty.PRIORITY_ID, false, true, true, false, 65, true, true, true

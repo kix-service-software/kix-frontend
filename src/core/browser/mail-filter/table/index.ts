@@ -1,0 +1,1 @@
+export { MailFilterTableFactory } from './MailFilterTableFactory';

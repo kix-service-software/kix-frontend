@@ -26,8 +26,8 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                         KIXObjectType.FAQ_ARTICLE, null,
                         new TableConfiguration(
                             KIXObjectType.FAQ_ARTICLE,
-                            new KIXObjectLoadingOptions(null, null, null, [FAQArticleProperty.VOTES])
-                            , 25, null, true, null, null, null,
+                            new KIXObjectLoadingOptions(null, null, null, [FAQArticleProperty.VOTES]),
+                            null, null, true, null, null, null,
                             TableHeaderHeight.LARGE, TableRowHeight.LARGE
                         )
                     ),

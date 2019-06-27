@@ -24,6 +24,8 @@ export abstract class KIXObject<T = any> {
 
     public ValidID: number;
 
+    public Comment: string;
+
     public constructor(object?: KIXObject) {
         if (object) {
             this.ConfiguredPermissions = object.ConfiguredPermissions;
@@ -32,6 +34,7 @@ export abstract class KIXObject<T = any> {
             this.CreateTime = object.CreateTime;
             this.ChangeTime = object.ChangeTime;
             this.ValidID = object.ValidID;
+            this.Comment = object.Comment;
         }
     }
 

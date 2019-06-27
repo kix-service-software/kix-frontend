@@ -185,7 +185,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
                                     'StateType', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'
                                 )], null, 1000
                             ),
-                            25, null,
+                            null, null,
                             true, true,
                             new ToggleOptions('ticket-article-details', 'article', [], true),
                             null, TableHeaderHeight.LARGE, TableRowHeight.LARGE

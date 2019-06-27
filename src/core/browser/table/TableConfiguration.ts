@@ -31,7 +31,7 @@ export class TableConfiguration {
             this.rowHeight = TableRowHeight.SMALL;
         }
 
-        if (typeof displayLimit === 'undefined') {
+        if (displayLimit === null) {
             if (this.headerHeight === TableHeaderHeight.SMALL) {
                 this.displayLimit = 5;
             } else {

@@ -72,7 +72,7 @@ export class UserTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.USER, null, undefined, tableColumns, true, false, null, null,
+                KIXObjectType.USER, null, null, tableColumns, true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;

@@ -1,4 +1,3 @@
-import { IObjectFactory } from "./IObjectFactory";
 import { MailAccount, KIXObjectType } from "../../model";
 import { ObjectFactory } from "./ObjectFactory";
 

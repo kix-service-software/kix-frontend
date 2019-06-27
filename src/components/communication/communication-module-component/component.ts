@@ -18,6 +18,9 @@ import {
 import { MailAccountFormService } from '../../../core/browser/mail-account/MailAccountFormService';
 import { MailAccountCreateAction } from '../../../core/browser/mail-account/actions';
 import { MailAccountEditAction } from '../../../core/browser/mail-account/actions/MailAccountEditAction';
+import {
+    MailFilterService, MailFilterBrowserFactory, MailFilterTableFactory, MailFilterLabelProvider
+} from '../../../core/browser/mail-filter';
 import { UIComponentPermission } from '../../../core/model/UIComponentPermission';
 import { AuthenticationSocketClient } from '../../../core/browser/application/AuthenticationSocketClient';
 
@@ -44,8 +47,17 @@ class Component extends AbstractMarkoComponent {
         TableFactoryService.getInstance().registerFactory(new MailAccountTableFactory());
         LabelService.getInstance().registerLabelProvider(new MailAccountLabelProvider());
 
+        ServiceRegistry.registerServiceInstance(MailFilterService.getInstance());
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.MAIL_FILTER, MailFilterBrowserFactory.getInstance()
+        );
+        TableFactoryService.getInstance().registerFactory(new MailFilterTableFactory());
+        LabelService.getInstance().registerLabelProvider(new MailFilterLabelProvider());
+
+        this.registerAdminDialogs();
         this.registerSystemAddresses();
         this.registerMailAccounts();
+        this.registerMailFilters();
     }
 
     private async registerSystemAddresses(): Promise<void> {
@@ -150,6 +162,20 @@ class Component extends AbstractMarkoComponent {
             false, 'object-details-page', ['mail-accounts'], MailAccountDetailsContext
         );
         ContextService.getInstance().registerContext(mailAccountDetailsContext);
+    }
+
+    private async registerMailFilters(): Promise<void> {
+
+        if (await this.checkPermission('system/communication/mailfilters', CRUD.CREATE)) {
+            // ActionFactory.getInstance().registerAction('mail-filter-create', MailFilterCreateAction);
+
+        }
+
+        if (await this.checkPermission('system/communication/mailfilters/*', CRUD.UPDATE)) {
+            // ActionFactory.getInstance().registerAction('mail-filter-edit', MailFilterEditAction);
+
+        }
+
     }
 
     private async checkPermission(resource: string, crud: CRUD): Promise<boolean> {

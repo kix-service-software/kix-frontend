@@ -53,7 +53,7 @@ export class TextModulesTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.TEXT_MODULE, null, undefined, tableColumns, true, false, null, null,
+                KIXObjectType.TEXT_MODULE, null, null, tableColumns, true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
         } else if (!tableConfiguration.tableColumns) {
@@ -70,7 +70,6 @@ export class TextModulesTableFactory extends TableFactory {
         return tableConfiguration;
     }
 
-    // TODO: implementieren
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
         let config;
         switch (property) {
@@ -83,7 +82,7 @@ export class TextModulesTableFactory extends TableFactory {
             case TextModuleProperty.KEYWORDS:
                 config = new DefaultColumnConfiguration(
                     property, true, false, true, false, 250, true, true,
-                    false, DataType.STRING, true, null, null, false
+                    false, DataType.STRING, true, 'label-list-cell-content', null, false
                 );
                 break;
             case TextModuleProperty.LANGUAGE:
