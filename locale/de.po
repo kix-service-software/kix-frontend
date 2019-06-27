@@ -355,6 +355,11 @@ msgstr "Kommunikation: E-Mail"
 msgid "Communication: Email: Email Accounts"
 msgstr "Kommunikation: E-Mail: E-Mail Konten"
 
+#, fuzzy
+#| msgid "Communication: Email: Email Accounts"
+msgid "Communication: Email: Email Filters"
+msgstr "Kommunikation: E-Mail: E-Mail Konten"
+
 msgid "Compare"
 msgstr "Vergleichen"
 
@@ -655,6 +660,19 @@ msgstr "E-Mail Adresse"
 msgid "Email Addresses"
 msgstr "E-Mail Adressen"
 
+msgid "Email Filter"
+msgstr ""
+
+#, fuzzy
+#| msgid "Email Address"
+msgid "Email Filters"
+msgstr "E-Mail Adresse"
+
+#, fuzzy
+#| msgid "Email address"
+msgid "Email Header"
+msgstr "E-Mail Adresse"
+
 msgid "Email Information"
 msgstr "E-Mail Informationen"
 
@@ -750,6 +768,11 @@ msgstr "Fax"
 
 msgid "Field '{0}' has an invalid value ({1})."
 msgstr "Feld '{0}' enthält einen ungültigen Wert ({1})."
+
+#, fuzzy
+#| msgid "Filter in list"
+msgid "Filter Conditions"
+msgstr "Filtern in Liste"
 
 msgid "Filter in list"
 msgstr "Filtern in Liste"
@@ -2284,6 +2307,9 @@ msgstr "Statustyp"
 msgid "State Types"
 msgstr "Statustypen"
 
+msgid "Stop after Match"
+msgstr ""
+
 msgid "Street"
 msgstr "Straße"
 
@@ -2840,9 +2866,6 @@ msgstr "PLZ"
 
 #~ msgid "Update Customer"
 #~ msgstr "Aktualisierung wird durchgeführt"
-
-#~ msgid "Email address"
-#~ msgstr "E-Mail Adresse"
 
 #~ msgid "Required"
 #~ msgstr "Erforderlich"

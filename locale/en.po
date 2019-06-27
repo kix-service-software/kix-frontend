@@ -334,6 +334,9 @@ msgstr ""
 msgid "Communication: Email: Email Accounts"
 msgstr ""
 
+msgid "Communication: Email: Email Filters"
+msgstr ""
+
 msgid "Compare"
 msgstr ""
 
@@ -628,6 +631,15 @@ msgstr ""
 msgid "Email Addresses"
 msgstr ""
 
+msgid "Email Filter"
+msgstr ""
+
+msgid "Email Filters"
+msgstr ""
+
+msgid "Email Header"
+msgstr ""
+
 msgid "Email Information"
 msgstr ""
 
@@ -722,6 +734,9 @@ msgid "Fax"
 msgstr ""
 
 msgid "Field '{0}' has an invalid value ({1})."
+msgstr ""
+
+msgid "Filter Conditions"
 msgstr ""
 
 msgid "Filter in list"
@@ -2158,6 +2173,9 @@ msgid "State Type"
 msgstr ""
 
 msgid "State Types"
+msgstr ""
+
+msgid "Stop after Match"
 msgstr ""
 
 msgid "Street"
