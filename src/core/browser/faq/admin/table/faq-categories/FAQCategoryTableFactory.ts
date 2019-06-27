@@ -21,7 +21,9 @@ export class FAQCategoryTableFactory extends TableFactory {
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
         const table = new Table(tableKey, tableConfiguration);
 
-        table.setContentProvider(new FAQCategoryTableContentProvider(table, objectIds, null, contextId));
+        table.setContentProvider(
+            new FAQCategoryTableContentProvider(table, objectIds, tableConfiguration.loadingOptions, contextId)
+        );
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 
         return table;
