@@ -23,9 +23,27 @@ export class Service extends KIXObject<Service> {
     public IncidentState: IncidentState;
     public SubServices: Service[];
 
-    public constructor() {
-        super();
-        this.ObjectId = this.ServiceID;
+    public constructor(service?: Service) {
+        super(service);
+        if (service) {
+            this.ObjectId = service.ServiceID;
+            this.ServiceID = service.ServiceID;
+            this.Name = service.Name;
+            this.NameShort = service.NameShort;
+            this.Comment = service.Comment;
+            this.TypeID = service.TypeID;
+            this.Criticality = service.Criticality;
+            this.CreateBy = service.CreateBy;
+            this.CreateTime = service.CreateTime;
+            this.ChangeBy = service.ChangeBy;
+            this.ChangeTime = service.ChangeTime;
+            this.ValidID = service.ValidID;
+            this.IncidentState = service.IncidentState;
+
+            this.SubServices = service.SubServices
+                ? service.SubServices.map((s) => new Service(s))
+                : [];
+        }
     }
 
     public equals(object: Service): boolean {

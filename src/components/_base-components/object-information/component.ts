@@ -35,8 +35,16 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public getRoutingObjectId(property: string): string | number {
         const config = this.getRoutingConfiguration(property);
-        return config ? config.replaceObjectId :
-            this.state.object ? this.state.object[property] : undefined;
+        let id: string | number;
+        if (config) {
+            if (config.replaceObjectId) {
+                id = config.replaceObjectId;
+            } else {
+                id = this.state.object ? this.state.object[config.objectIdProperty] : undefined;
+            }
+        }
+
+        return id;
     }
 }
 

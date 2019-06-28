@@ -5,9 +5,6 @@ import { IConfigurationExtension } from "../../core/extensions";
 import {
     CompareConfigItemVersionDialogContext
 } from "../../core/browser/cmdb";
-import {
-    CompareConfigItemVersionDialogContextConfiguration
-} from "../../core/browser/cmdb/context/CompareConfigItemVersionDialogContextConfiguration";
 
 export class Extension implements IConfigurationExtension {
 
@@ -17,7 +14,7 @@ export class Extension implements IConfigurationExtension {
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
         const versionWidget =
-            new ConfiguredWidget('20190213082400-compare-ci-version-widget', new WidgetConfiguration(
+            new ConfiguredWidget('compare-ci-version-widget', new WidgetConfiguration(
                 'table-widget', 'Translatable#Selected Versions', ['switch-column-order-action'],
                 { objectType: KIXObjectType.CONFIG_ITEM_VERSION_COMPARE },
                 false, false, null, true
@@ -28,9 +25,12 @@ export class Extension implements IConfigurationExtension {
                 'config-item-version-compare-legend', 'Translatable#Legend', [], null,
                 false, false, 'kix-icon-legend', false
             ));
-        return new CompareConfigItemVersionDialogContextConfiguration(
+        return new ContextConfiguration(
+            CompareConfigItemVersionDialogContext.CONTEXT_ID,
             ['20190214082400-compare-ci-version-legend'], [legendSidebar],
-            versionWidget
+            [], [],
+            [], [],
+            ['compare-ci-version-widget'], [versionWidget]
         );
     }
 

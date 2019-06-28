@@ -92,7 +92,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
             window.clearTimeout(loadingTimeout);
             this.state.loading = false;
-        }, 10);
+        }, 500);
     }
 
     private async prepareActions(): Promise<void> {

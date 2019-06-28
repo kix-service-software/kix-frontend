@@ -154,6 +154,9 @@ export class CacheService {
                 cacheKeyPrefixes.push(KIXObjectType.TRANSLATION);
                 cacheKeyPrefixes.push(KIXObjectType.TRANSLATION_LANGUAGE);
                 break;
+            case KIXObjectType.CONFIG_ITEM_VERSION:
+                cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
+                break;
             default:
         }
 
