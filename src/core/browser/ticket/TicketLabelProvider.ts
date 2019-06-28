@@ -147,9 +147,9 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case TicketProperty.TICKET_NUMBER:
                 const hookConfig = await KIXObjectService.loadObjects<SysConfigOption>(
                     KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_HOOK], null, null, true
-                ).catch((error) => []);
+                ).catch((error): SysConfigOption[] => []);
                 if (hookConfig && hookConfig.length) {
-                    displayValue = hookConfig[0].Data;
+                    displayValue = hookConfig[0].Value;
                 }
                 break;
             case TicketProperty.ESCALATION_TIME:
@@ -368,17 +368,17 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
 
                 const hookConfig = await KIXObjectService.loadObjects<SysConfigOption>(
                     KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_HOOK]
-                ).catch((error) => []);
+                ).catch((error): SysConfigOption[] => []);
                 const dividerConfig = await KIXObjectService.loadObjects<SysConfigOption>(
                     KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_HOOK_DIVIDER]
-                ).catch((error) => []);
+                ).catch((error): SysConfigOption[] => []);
 
                 if (hookConfig && hookConfig.length) {
-                    ticketHook = hookConfig[0].Data;
+                    ticketHook = hookConfig[0].Value;
                 }
 
                 if (dividerConfig && dividerConfig.length) {
-                    ticketHookDivider = dividerConfig[0].Data;
+                    ticketHookDivider = dividerConfig[0].Value;
                 }
 
                 returnString = ticketHook + ticketHookDivider + ticket.TicketNumber;

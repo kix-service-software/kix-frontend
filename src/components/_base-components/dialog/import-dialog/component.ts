@@ -190,6 +190,7 @@ class Component {
             [formGroup], KIXObjectType.ANY, true, FormContext.NEW
         );
 
+        FormService.getInstance().deleteFormInstance(form.id);
         await FormService.getInstance().addForm(form);
         FormService.getInstance().registerFormInstanceListener(form.id, {
             formListenerId: this.formListenerId,
@@ -221,7 +222,7 @@ class Component {
             const table = await TableFactoryService.getInstance().createTable(
                 `import-dialog-list-${this.objectType}`, this.objectType,
                 configuration, null, this.context.getDescriptor().contextId,
-                false, null, true
+                false, null, true, false, true
             );
             table.sort('CSV_LINE', SortOrder.UP);
 

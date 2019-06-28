@@ -7,7 +7,7 @@ export class ComponentState extends WidgetComponentState {
         public kixObject: KIXObject = null,
         public actions: AbstractAction[] = [],
         public linkedObjectGroups: Array<[string, ITable, number, CreateLinkDescription[]]> = [],
-        public title: string = ''
+        public title: string = 'Linked Objects'
     ) {
         super();
     }

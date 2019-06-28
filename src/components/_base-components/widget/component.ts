@@ -18,7 +18,12 @@ class WidgetComponent implements IEventSubscriber {
     public onInput(input: any): void {
         this.state.instanceId = input.instanceId ? input.instanceId : IdService.generateDateBasedId();
         this.state.explorer = input.explorer;
-        this.state.minimizable = typeof input.minimizable !== 'undefined' ? input.minimizable : true;
+
+        const isSidebar = this.state.widgetType === WidgetType.SIDEBAR;
+        this.state.minimizable = typeof input.minimizable !== 'undefined'
+            ? input.minimizable
+            : !isSidebar;
+
         this.state.closable = typeof input.closable !== 'undefined' ? input.closable : false;
         this.state.isDialog = typeof input.isDialog !== 'undefined' ? input.isDialog : false;
         this.state.contextType = input.contextType;

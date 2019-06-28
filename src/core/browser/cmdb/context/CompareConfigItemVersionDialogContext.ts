@@ -1,29 +1,19 @@
-import {
-    ConfiguredWidget, Version, DataType, ConfigItem, KIXObjectType
-} from "../../../model";
+import { Version, DataType, ConfigItem, KIXObjectType } from "../../../model";
 import { Context } from "../../../model/components/context/Context";
 import { TableConfiguration, IColumnConfiguration, DefaultColumnConfiguration } from "../../table";
 import { ContextService } from "../../context";
 import { ConfigItemDetailsContext } from "./ConfigItemDetailsContext";
-import {
-    CompareConfigItemVersionDialogContextConfiguration
-} from "./CompareConfigItemVersionDialogContextConfiguration";
 
 export class CompareConfigItemVersionDialogContext extends Context {
 
     public static CONTEXT_ID: string = 'compare-config-item-version-dialog-context';
 
-    public getCompareWidget(): ConfiguredWidget {
-        return (this.configuration as CompareConfigItemVersionDialogContextConfiguration).compareWidget;
-    }
-
     public async setObjectList(versions: Version[]) {
         super.setObjectList(versions);
 
-        const config = this.configuration as CompareConfigItemVersionDialogContextConfiguration;
-
-        if (config.compareWidget) {
-            config.compareWidget.configuration.settings.tableConfiguration = new TableConfiguration();
+        const widget = this.getWidget('compare-ci-version-widget');
+        if (widget) {
+            widget.configuration.settings.tableConfiguration = new TableConfiguration();
             const columns: IColumnConfiguration[] = [
                 new DefaultColumnConfiguration(
                     'CONFIG_ITEM_ATTRIBUTE', true, false, true, false, 250, false, false, false, DataType.STRING, true,
@@ -45,7 +35,7 @@ export class CompareConfigItemVersionDialogContext extends Context {
                     )
                 );
             });
-            config.compareWidget.configuration.settings.tableConfiguration.tableColumns = columns;
+            widget.configuration.settings.tableConfiguration.tableColumns = columns;
         }
     }
 

@@ -30,6 +30,7 @@ import {
     TranslationPatternTableFactory, TranslationLanguageTableFactory
 } from '../../../../core/browser/i18n/admin/table';
 import { TranslationPatternLabelProvider, TranslationLanguageLabelProvider } from '../../../../core/browser/i18n';
+import { ServiceBrowserFactory } from '../../../../core/browser/service/ServiceBrowserFactory';
 
 class Component extends AbstractMarkoComponent {
 
@@ -50,6 +51,7 @@ class Component extends AbstractMarkoComponent {
 
         ServiceRegistry.registerServiceInstance(PersonalSettingsFormService.getInstance());
 
+        FactoryService.getInstance().registerFactory(KIXObjectType.SERVICE, ServiceBrowserFactory.getInstance());
         FactoryService.getInstance().registerFactory(
             KIXObjectType.GENERAL_CATALOG_ITEM, GeneralCatalogBrowserFactory.getInstance()
         );

@@ -72,64 +72,68 @@ class OverlayComponent {
         if (this.currentListenerId) {
             this.closeOverlay();
         }
-        this.state.title = title;
-        this.state.icon = this.getWidgetIcon(type);
-        this.state.content = content;
-        this.state.hasCloseButton = closeButton;
-        this.state.type = type;
-        this.position = position;
+        this.state.show = false;
 
-        if (this.position && this.position[0]) {
-            this.position[0] += window.scrollX;
-        }
-        if (this.position && this.position[1]) {
-            this.position[1] += window.scrollY;
-        }
-
-        this.state.overlayClass = this.getOverlayTypeClass(type, large);
-        this.currentListenerId = newListenerId;
-
-        this.applyWidgetConfiguration(widgetInstanceId);
-
-        this.state.show = true;
-        this.keepShow = true;
         setTimeout(() => {
-            this.keepShow = false;
-        }, 100);
+            this.state.title = title;
+            this.state.icon = this.getWidgetIcon(type);
+            this.state.content = content;
+            this.state.hasCloseButton = closeButton;
+            this.state.type = type;
+            this.position = position;
 
-        if (this.isToast()) {
-            if (type && type === OverlayType.SUCCESS_TOAST) {
-                const toastContent = this.state.content.getComponentData() as ToastContent;
-                if (toastContent && typeof toastContent.title === 'undefined') {
-                    toastContent.title = 'Translatable#Success!';
-                }
+            if (this.position && this.position[0]) {
+                this.position[0] += window.scrollX;
             }
-            this.toastTimeout = setTimeout(() => {
-                const toast = (this as any).getEl('overlay');
-                if (toast) {
-                    toast.addEventListener('mouseover', (e) => {
-                        clearTimeout(this.toastTimeout);
-                    });
-                    toast.addEventListener('mouseleave', (e) => {
-                        toast.classList.remove('show-toast');
-                        this.toastTimeout = setTimeout(() => {
-                            this.closeOverlay();
-                        }, 200);
-                    });
-                    toast.classList.add('show-toast');
-                    this.toastTimeout = setTimeout(() => {
-                        toast.classList.remove('show-toast');
-                        this.toastTimeout = setTimeout(() => {
-                            this.closeOverlay();
-                        }, 200);
-                    }, toastTimeoutMillis);
-                }
-            }, 100);
-        }
+            if (this.position && this.position[1]) {
+                this.position[1] += window.scrollY;
+            }
 
-        if (this.currentListenerId) {
-            OverlayService.getInstance().overlayOpened(this.currentListenerId);
-        }
+            this.state.overlayClass = this.getOverlayTypeClass(type, large);
+            this.currentListenerId = newListenerId;
+
+            this.applyWidgetConfiguration(widgetInstanceId);
+
+            this.state.show = true;
+            this.keepShow = true;
+            setTimeout(() => {
+                this.keepShow = false;
+            }, 100);
+
+            if (this.isToast()) {
+                if (type && type === OverlayType.SUCCESS_TOAST) {
+                    const toastContent = this.state.content.getComponentData() as ToastContent;
+                    if (toastContent && typeof toastContent.title === 'undefined') {
+                        toastContent.title = 'Translatable#Success!';
+                    }
+                }
+                this.toastTimeout = setTimeout(() => {
+                    const toast = (this as any).getEl('overlay');
+                    if (toast) {
+                        toast.addEventListener('mouseover', (e) => {
+                            clearTimeout(this.toastTimeout);
+                        });
+                        toast.addEventListener('mouseleave', (e) => {
+                            toast.classList.remove('show-toast');
+                            this.toastTimeout = setTimeout(() => {
+                                this.closeOverlay();
+                            }, 200);
+                        });
+                        toast.classList.add('show-toast');
+                        this.toastTimeout = setTimeout(() => {
+                            toast.classList.remove('show-toast');
+                            this.toastTimeout = setTimeout(() => {
+                                this.closeOverlay();
+                            }, 200);
+                        }, toastTimeoutMillis);
+                    }
+                }, 100);
+            }
+
+            if (this.currentListenerId) {
+                OverlayService.getInstance().overlayOpened(this.currentListenerId);
+            }
+        }, 50);
     }
 
     private async applyWidgetConfiguration(widgetInstanceId: string): Promise<void> {

@@ -78,7 +78,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 const objects = linkDescriptions.map((ld) => ld.linkableObject);
                 const table = await TableFactoryService.getInstance().createTable(
                     `link-objects-${lot[1]}`, lot[1], tableConfiguration,
-                    objects.map((o) => o.ObjectId), null, true, null, true
+                    objects.map((o) => o.ObjectId), null, true, null, true, false, true
                 );
                 table.addColumns([
                     new DefaultColumnConfiguration(
@@ -88,6 +88,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
                 objectsCount += objects.length;
                 const title = `${lot[0]} (${objects.length})`;
+
                 this.state.linkedObjectGroups.push([title, table, objects.length, linkDescriptions]);
             }
 

@@ -91,8 +91,8 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
             case ConfigItemProperty.NUMBER:
                 const hookConfig = await KIXObjectService.loadObjects<SysConfigOption>(
                     KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.CONFIG_ITEM_HOOK]
-                ).catch((error) => []);
-                displayValue = hookConfig && hookConfig.length ? hookConfig[0].Data : 'CI#';
+                ).catch((error): SysConfigOption[] => []);
+                displayValue = hookConfig && hookConfig.length ? hookConfig[0].Value : 'CI#';
                 break;
             case 'LinkedAs':
                 displayValue = 'Translatable#Linked as';
@@ -193,10 +193,10 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
 
                 const hookConfig = await KIXObjectService.loadObjects<SysConfigOption>(
                     KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.CONFIG_ITEM_HOOK]
-                ).catch((error) => []);
+                ).catch((error): SysConfigOption[] => []);
 
                 if (hookConfig && hookConfig.length) {
-                    configItemHook = hookConfig[0].Data;
+                    configItemHook = hookConfig[0].Value;
                 }
 
                 returnString = `${configItemHook}${configItem.Number}`;

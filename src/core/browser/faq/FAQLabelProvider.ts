@@ -98,9 +98,9 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
             case FAQArticleProperty.NUMBER:
                 const hookConfig = await KIXObjectService.loadObjects<SysConfigOption>(
                     KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.FAQ_HOOK]
-                ).catch((error) => []);
+                ).catch((error): SysConfigOption[] => []);
                 if (hookConfig && hookConfig.length) {
-                    displayValue = hookConfig[0].Data;
+                    displayValue = hookConfig[0].Value;
                 }
                 break;
             case FAQArticleProperty.TITLE:
@@ -192,10 +192,10 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
 
                 const hookConfig = await KIXObjectService.loadObjects<SysConfigOption>(
                     KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.FAQ_HOOK]
-                ).catch((error) => []);
+                ).catch((error): SysConfigOption[] => []);
 
                 if (hookConfig && hookConfig.length) {
-                    faqHook = hookConfig[0].Data;
+                    faqHook = hookConfig[0].Value;
                 }
 
                 returnString = `${faqHook}${faqArticle.Number}`;

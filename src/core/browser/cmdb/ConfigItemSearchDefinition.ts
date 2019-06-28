@@ -227,10 +227,9 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         const criteria = [];
         switch (property) {
             case ConfigItemProperty.CLASS_ID:
-                const ciClass = value as ConfigItemClass;
                 criteria.push(
                     new FilterCriteria(
-                        property, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, ciClass.ID
+                        property, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, value
                     )
                 );
                 break;

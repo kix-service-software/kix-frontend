@@ -110,7 +110,7 @@ class Component {
 
         setTimeout(() => {
             RoutingService.getInstance().routeToInitialContext();
-        }, 500);
+        }, 2000);
     }
 
     private async checkAuthentication(): Promise<void> {
