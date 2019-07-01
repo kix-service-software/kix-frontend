@@ -1,6 +1,6 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    ContextConfiguration, WidgetConfiguration, ConfiguredWidget, WidgetSize, TabWidgetSettings
+    ContextConfiguration, WidgetConfiguration, ConfiguredWidget, TabWidgetSettings
 } from '../../core/model';
 import { TicketStateDetailsContext } from '../../core/browser/ticket';
 
@@ -21,15 +21,10 @@ export class Extension implements IConfigurationExtension {
             false, true, null, false
         ));
 
-        const textmodulesWidget = new ConfiguredWidget('ticket-state-assigned-textmodules', new WidgetConfiguration(
-            'ticket-state-assigned-textmodules', 'Translatable#Assigned Text Modules',
-            ['ticket-admin-state-textmodules-edit'], null, false, true, null, false
-        ));
-
         return new ContextConfiguration(
             TicketStateDetailsContext.CONTEXT_ID, [], [], [], [],
-            ['ticket-state-details-tab-widget', 'ticket-state-assigned-textmodules'],
-            [tabLane, textmodulesWidget, ticketStateInfoWidget],
+            ['ticket-state-details-tab-widget'],
+            [tabLane, ticketStateInfoWidget],
             [], [],
             ['ticket-admin-state-create'],
             ['ticket-admin-state-duplication', 'ticket-admin-state-edit', 'ticket-admin-state-delete']

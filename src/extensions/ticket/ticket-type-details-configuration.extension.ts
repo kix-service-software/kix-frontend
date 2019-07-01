@@ -19,17 +19,12 @@ export class Extension implements IConfigurationExtension {
             false, true, null, false
         ));
 
-        const textmodulesWidget = new ConfiguredWidget('ticket-type-assigned-textmodules', new WidgetConfiguration(
-            'ticket-type-assigned-textmodules', 'Translatable#Assigned Text Modules',
-            ['ticket-admin-type-textmodules-edit'], null, true, true, null, false
-        ));
-
         return new ContextConfiguration(
             TicketTypeDetailsContext.CONTEXT_ID,
             [], [],
             [], [],
-            ['ticket-type-details-tab-widget', 'ticket-type-assigned-textmodules'],
-            [tabLane, textmodulesWidget, ticketTypesInfoWidget],
+            ['ticket-type-details-tab-widget'],
+            [tabLane, ticketTypesInfoWidget],
             [], [],
             ['ticket-admin-type-create'],
             ['ticket-admin-type-duplication', 'ticket-admin-type-edit', 'ticket-admin-type-delete']
