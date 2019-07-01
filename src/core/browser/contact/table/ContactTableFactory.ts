@@ -35,8 +35,8 @@ export class ContactTableFactory extends TableFactory {
         let tableColumns;
         if (short) {
             tableColumns = [
-                this.getDefaultColumnConfiguration(ContactProperty.FIRST_NAME),
-                this.getDefaultColumnConfiguration(ContactProperty.LAST_NAME),
+                this.getDefaultColumnConfiguration(ContactProperty.FIRSTNAME),
+                this.getDefaultColumnConfiguration(ContactProperty.LASTNAME),
                 this.getDefaultColumnConfiguration(ContactProperty.EMAIL),
                 this.getDefaultColumnConfiguration(ContactProperty.LOGIN),
                 this.getDefaultColumnConfiguration(ContactProperty.PRIMARY_ORGANISATION_ID),
@@ -46,8 +46,8 @@ export class ContactTableFactory extends TableFactory {
             ];
         } else {
             tableColumns = [
-                this.getDefaultColumnConfiguration(ContactProperty.FIRST_NAME),
-                this.getDefaultColumnConfiguration(ContactProperty.LAST_NAME),
+                this.getDefaultColumnConfiguration(ContactProperty.FIRSTNAME),
+                this.getDefaultColumnConfiguration(ContactProperty.LASTNAME),
                 this.getDefaultColumnConfiguration(ContactProperty.EMAIL),
                 this.getDefaultColumnConfiguration(ContactProperty.LOGIN),
                 this.getDefaultColumnConfiguration(ContactProperty.PRIMARY_ORGANISATION_ID),

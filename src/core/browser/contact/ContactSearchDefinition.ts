@@ -22,8 +22,8 @@ export class ContactSearchDefinition extends SearchDefinition {
     public async getProperties(): Promise<Array<[string, string]>> {
         return [
             [SearchProperty.FULLTEXT, null],
-            [ContactProperty.FIRST_NAME, null],
-            [ContactProperty.LAST_NAME, null],
+            [ContactProperty.FIRSTNAME, null],
+            [ContactProperty.LASTNAME, null],
             [ContactProperty.EMAIL, null],
             [ContactProperty.LOGIN, null],
             [ContactProperty.PRIMARY_ORGANISATION_ID, null],

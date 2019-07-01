@@ -3,7 +3,7 @@ import {
     ConfiguredWidget, FormField, KIXObjectType, Form,
     FormContext, FormFieldValue, FormFieldOption, UserProperty,
     FormFieldOptions, InputFieldTypes, ObjectReferenceOptions, ContextConfiguration, KIXObjectLoadingOptions,
-    FilterCriteria, RoleProperty, FilterDataType, FilterType
+    FilterCriteria, RoleProperty, FilterDataType, FilterType, KIXObjectProperty
 } from '../../core/model';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../core/services';
@@ -72,7 +72,7 @@ export class Extension implements IConfigurationExtension {
                     'Translatable#Insert a comment for the user.', null, null, null, null, null, null, null, 250
                 ),
                 new FormField(
-                    'Translatable#Validity', UserProperty.VALID_ID, 'valid-input', true,
+                    'Translatable#Validity', KIXObjectProperty.VALID_ID, 'valid-input', true,
                     "Translatable#Set the user as „valid“, „invalid (temporarily)“, or „invalid“.",
                     null, new FormFieldValue(1)
                 )

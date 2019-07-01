@@ -10,7 +10,7 @@ export class ComponentState {
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
             'table-widget', 'Translatable#Ticket: Text Modules',
             [
-                'text-module-create', 'csv-export-action'
+                'text-module-create', 'text-module-csv-export-action'
             ],
             new TableWidgetSettings(KIXObjectType.TEXT_MODULE, [TextModuleProperty.NAME, SortOrder.UP]),
             false, false, 'kix-icon-gears')

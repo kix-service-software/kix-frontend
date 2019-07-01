@@ -4,6 +4,8 @@ import { TranslationService } from "../../i18n/TranslationService";
 
 export class RequiredFormFieldValidator implements IFormFieldValidator {
 
+    public validatorId: string = 'ReguiredValidator';
+
     public isValidatorFor(formField: FormField, formId: string): boolean {
         return formField.required;
     }

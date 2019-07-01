@@ -57,8 +57,8 @@ export class ContactImportManager extends ImportManager {
         const attributes = [
             ContactProperty.PASSWORD,
             ContactProperty.PRIMARY_ORGANISATION_ID,
-            ContactProperty.FIRST_NAME,
-            ContactProperty.LAST_NAME,
+            ContactProperty.FIRSTNAME,
+            ContactProperty.LASTNAME,
             ContactProperty.TITLE,
             ContactProperty.EMAIL,
             ContactProperty.PHONE,

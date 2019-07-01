@@ -1,13 +1,14 @@
 import { ComponentState } from './ComponentState';
 import {
-    AbstractMarkoComponent, ServiceRegistry, LabelService, FactoryService, ActionFactory, ContextService
+    AbstractMarkoComponent, ServiceRegistry, LabelService, FactoryService, ActionFactory, ContextService,
+    PlaceholderService
 } from '../../../core/browser';
 import {
     RoleService, RoleTableFactory, RoleBrowserFactory, RoleLabelProvider, UserRoleCreateAction,
     NewUserRoleDialogContext, UserLabelProvider, UserBrowserFactory,
     UserRoleEditAction, RoleDetailsContext, UserTableFactory,
     UserCreateAction, NewUserDialogContext, UserDetailsContext, UserEditAction, UserFormService, EditUserDialogContext,
-    EditUserRoleDialogContext, UserRoleFormService
+    EditUserRoleDialogContext, UserRoleFormService, UserPlaceholderHandler
 } from '../../../core/browser/user';
 import {
     KIXObjectType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration, WidgetSize, ContextDescriptor,
@@ -28,6 +29,8 @@ class Component extends AbstractMarkoComponent {
     }
 
     public async onMount(): Promise<void> {
+        PlaceholderService.getInstance().registerPlaceholderHandler(new UserPlaceholderHandler());
+
         ServiceRegistry.registerServiceInstance(RoleService.getInstance());
         ServiceRegistry.registerServiceInstance(UserFormService.getInstance());
 

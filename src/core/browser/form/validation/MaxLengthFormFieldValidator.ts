@@ -4,6 +4,8 @@ import { TranslationService } from "../../i18n/TranslationService";
 
 export class MaxLengthFormFieldValidator implements IFormFieldValidator {
 
+    public validatorId: string = 'MaxLengthValidator';
+
     public isValidatorFor(formField: FormField, formId: string): boolean {
         return formField.maxLength !== null && typeof formField.maxLength !== 'undefined' && formField.maxLength > 0;
     }

@@ -1,16 +1,17 @@
 import {
     AbstractMarkoComponent, LabelService, ServiceRegistry,
-    FactoryService, ContextService, ActionFactory, TableFactoryService
+    FactoryService, ContextService, ActionFactory, TableFactoryService, PlaceholderService
 } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
     KIXObjectType, ContextDescriptor, ContextType, ContextMode, WidgetConfiguration,
-    ConfiguredDialogWidget, WidgetSize
+    ConfiguredDialogWidget
 } from '../../../../core/model';
 import {
     ContactTableFactory, ContactLabelProvider, ContactService, ContactBrowserFactory, ContactDetailsContext,
     ContactSearchContext, ContactSearchAction, ContactCreateOrganisationAction, ContactPrintAction,
-    ContactCreateTicketAction, ContactCreateCIAction, ContactSearchDefinition, ContactFormService
+    ContactCreateTicketAction, ContactCreateCIAction, ContactSearchDefinition, ContactFormService,
+    ContactPlaceholderHandler
 } from '../../../../core/browser/contact';
 import { DialogService } from '../../../../core/browser/components/dialog';
 import { KIXObjectSearchService } from '../../../../core/browser/kix/search/KIXObjectSearchService';
@@ -22,6 +23,8 @@ class Component extends AbstractMarkoComponent {
     }
 
     public async onMount(): Promise<void> {
+        PlaceholderService.getInstance().registerPlaceholderHandler(new ContactPlaceholderHandler());
+
         ServiceRegistry.registerServiceInstance(ContactService.getInstance());
         ServiceRegistry.registerServiceInstance(ContactFormService.getInstance());
 

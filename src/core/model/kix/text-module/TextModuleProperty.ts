@@ -10,8 +10,6 @@ export enum TextModuleProperty {
 
     COMMENT = 'Comment',
 
-    SUBJECT = 'Subject',
-
     LANGUAGE = 'Language'
 
 }

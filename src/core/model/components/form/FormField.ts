@@ -28,7 +28,8 @@ export class FormField<T = any> {
         public asStructure: boolean = false,
         public readonly: boolean = false,
         public placeholder: string = null,
-        public existingFieldId: string = null
+        public existingFieldId: string = null,
+        public showLabel: boolean = true
     ) {
         this.instanceId = existingFieldId ? existingFieldId : IdService.generateDateBasedId(this.property);
     }

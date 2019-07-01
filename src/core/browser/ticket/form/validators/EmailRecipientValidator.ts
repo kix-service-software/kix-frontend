@@ -10,6 +10,8 @@ import { TranslationService } from "../../../i18n/TranslationService";
 
 export class EmailRecipientValidator implements IFormFieldValidator {
 
+    public validatorId: string = 'EmailRecipientValidator';
+
     public isValidatorFor(formField: FormField, formId: string): boolean {
         return formField.property === ArticleProperty.TO
             || formField.property === ArticleProperty.CC

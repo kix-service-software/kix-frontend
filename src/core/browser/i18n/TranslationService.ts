@@ -78,30 +78,39 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
         return true;
     }
 
+    public static prepareValue(pattern: string = ''): string {
+        if (pattern && pattern.startsWith('Translatable' + '#')) {
+            pattern = pattern.replace('Translatable' + '#', '');
+        }
+        return pattern;
+    }
+
     public static async translate(
-        pattern: string = '', placeholderValues: Array<string | number> = []
+        pattern: string = '', placeholderValues: Array<string | number> = [], language?: string,
+        getOnlyPattern: boolean = false
     ): Promise<string> {
         let translationValue = pattern;
         if (translationValue !== null) {
 
-            if (translationValue.startsWith('Translatable' + '#')) {
-                translationValue = translationValue.replace('Translatable' + '#', '');
-            }
+            translationValue = this.prepareValue(translationValue);
 
-            const translations = await KIXObjectService.loadObjects<Translation>(KIXObjectType.TRANSLATION);
-            const translation = translations.find((t) => t.Pattern === translationValue);
+            if (!getOnlyPattern) {
 
-            if (translation) {
-                const language = await this.getUserLanguage();
-                if (language) {
-                    const translationLanguageValue = translation.Languages[language];
-                    if (translationLanguageValue) {
-                        translationValue = translationLanguageValue;
+                const translations = await KIXObjectService.loadObjects<Translation>(KIXObjectType.TRANSLATION);
+                const translation = translations.find((t) => t.Pattern === translationValue);
+
+                if (translation) {
+                    language = language ? language : await this.getUserLanguage();
+                    if (language) {
+                        const translationLanguageValue = translation.Languages[language];
+                        if (translationLanguageValue) {
+                            translationValue = translationLanguageValue;
+                        }
                     }
                 }
-            }
 
-            translationValue = this.format(translationValue, placeholderValues.map((p) => (p ? p : '').toString()));
+                translationValue = this.format(translationValue, placeholderValues.map((p) => (p ? p : '').toString()));
+            }
         }
         const debug = ClientStorageService.getOption('i18n-debug');
 

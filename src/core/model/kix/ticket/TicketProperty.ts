@@ -8,8 +8,6 @@ export enum TicketProperty {
 
     STATE_ID = 'StateID',
 
-    STATE_TYPE_ID = 'StateTypeID',
-
     PRIORITY_ID = 'PriorityID',
 
     LOCK_ID = 'LockID',
@@ -48,7 +46,7 @@ export enum TicketProperty {
 
     ESCALATION_UPDATE_TIME = 'EscalationUpdateTime',
 
-    ESCALATION_SOLUTIONS_TIME = 'EscalationSolutionTime',
+    ESCALATION_SOLUTION_TIME = 'EscalationSolutionTime',
 
     ESCALATION_DESTINATION_IN = 'EscalationDestinationIn',
 
@@ -134,15 +132,15 @@ export enum TicketProperty {
 
     ARTICLE_FLAG = 'ArticleFlag',
 
-    CREATED_TYPE_ID = 'CreatedTypeID',
+    // CREATED_TYPE_ID = 'CreatedTypeID',
 
-    CREATED_USER_ID = 'CreatedUserID',
+    // CREATED_USER_ID = 'CreatedUserID',
 
-    CREATED_STATE_ID = 'CreatedStateID',
+    // CREATED_STATE_ID = 'CreatedStateID',
 
-    CREATED_QUEUE_ID = 'CreatedQueueID',
+    // CREATED_QUEUE_ID = 'CreatedQueueID',
 
-    CREATED_PRIORITY_ID = 'CreatedPriorityID',
+    // CREATED_PRIORITY_ID = 'CreatedPriorityID',
 
     LINKED_AS = 'LinkedAs',
 
@@ -154,6 +152,21 @@ export enum TicketProperty {
 
     UNSEEN = 'Unseen',
 
-    HISTORY = 'History'
+    HISTORY = 'History',
+
+    // UI properties
+    STATE = 'State',
+    STATE_TYPE = 'StateType',
+    PRIORITY = 'Priority',
+    LOCK = 'Lock',
+    QUEUE = 'Queue',
+    ORGANISATION = 'Organisation',
+    CONTACT = 'Contact',
+    OWNER = 'Owner',
+    TYPE = 'Type',
+    SLA = 'SLA',
+    SERVICE = 'Service',
+    RESPONSIBLE = 'Responsible',
+    UNTIL_TIME = 'UntilTime'
 
 }

@@ -14,7 +14,9 @@ export interface ILabelProvider<T> {
 
     getPropertyText(property: string, short?: boolean, translatable?: boolean): Promise<string>;
 
-    getDisplayText(object: T, property: string, defaultValue?: string, translatable?: boolean): Promise<string>;
+    getDisplayText(
+        object: T, property: string, defaultValue?: string, translatable?: boolean, short?: boolean
+    ): Promise<string>;
 
     getObjectAdditionalText(object: T, translatable?: boolean): string;
 

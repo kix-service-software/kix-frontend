@@ -8,7 +8,7 @@ import { KIXObjectService } from "../../kix";
 import { FormService } from "../../form";
 import { AbstractMarkoComponent } from "../../marko";
 import { BrowserUtil } from "../../BrowserUtil";
-import { ContextService } from "../../context";
+import { ContextService, AdditionalContextInformation } from "../../context";
 import { TranslationService } from "../../i18n/TranslationService";
 import { EventService } from "../../event";
 import { ApplicationEvent } from "../../application";
@@ -35,6 +35,12 @@ export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
         this.state.translations = await TranslationService.createTranslationObject([
             "Translatable#Cancel", "Translatable#Save"
         ]);
+        const dialogContext = await ContextService.getInstance().getContextByTypeAndMode(
+            this.objectType, ContextMode.EDIT
+        );
+        if (dialogContext) {
+            dialogContext.setAdditionalInformation(AdditionalContextInformation.FORM_ID, this.state.formId);
+        }
     }
 
     public async onDestroy(): Promise<void> {

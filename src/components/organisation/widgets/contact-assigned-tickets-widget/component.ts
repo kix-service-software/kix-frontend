@@ -110,7 +110,7 @@ class Component {
                         TicketProperty.ESCALATION_UPDATE_TIME, true, false, true, true, 150, true, true
                     ),
                     new DefaultColumnConfiguration(
-                        TicketProperty.ESCALATION_SOLUTIONS_TIME, true, false, true, true, 150, true, true
+                        TicketProperty.ESCALATION_SOLUTION_TIME, true, false, true, true, 150, true, true
                     ),
                     new DefaultColumnConfiguration(
                         TicketProperty.CHANGED, true, false, true, true, 125, true, true, false, DataType.DATE_TIME

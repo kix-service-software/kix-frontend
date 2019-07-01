@@ -152,8 +152,8 @@ export class TicketService extends KIXObjectService<Ticket> {
                 slas.forEach((s) => values.push(new TreeNode(s.SLAID, s.Name, null)));
                 break;
             case TicketProperty.LOCK_ID:
-                values.push(new TreeNode(1, 'Translatable#unlocked', 'kix-icon-lock-open'));
-                values.push(new TreeNode(2, 'Translatable#locked', 'kix-icon-lock-close'));
+                values.push(new TreeNode(1, 'Translatable#Unlocked', 'kix-icon-lock-open'));
+                values.push(new TreeNode(2, 'Translatable#Locked', 'kix-icon-lock-close'));
                 break;
             case TicketProperty.RESPONSIBLE_ID:
             case TicketProperty.OWNER_ID:

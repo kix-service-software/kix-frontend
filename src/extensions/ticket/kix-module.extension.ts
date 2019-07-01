@@ -56,6 +56,7 @@ class Extension implements IKIXModuleExtension {
         new UIComponent('ticket-input-type', 'ticket/dialogs/inputs/ticket-input-type', []),
         new UIComponent('ticket-input-priority', 'ticket/dialogs/inputs/ticket-input-priority', []),
         new UIComponent('ticket-input-state', 'ticket/dialogs/inputs/ticket-input-state', []),
+        new UIComponent('ticket-input-state-pending', 'ticket/dialogs/inputs/ticket-input-state-pending', []),
         new UIComponent('ticket-input-sla', 'ticket/dialogs/inputs/ticket-input-sla', []),
         new UIComponent('ticket-input-service', 'ticket/dialogs/inputs/ticket-input-service', []),
         new UIComponent('ticket-input-queue', 'ticket/dialogs/inputs/ticket-input-queue', []),

@@ -12,16 +12,6 @@ export enum UserProperty {
 
     USER_LASTNAME = 'UserLastname',
 
-    CHANGE_BY = 'ChangeBy',
-
-    CHANGE_TIME = 'ChangeTime',
-
-    CREATE_BY = 'CreateBy',
-
-    CREATE_TIME = 'CreateTime',
-
-    VALID_ID = 'ValidID',
-
     PREFERENCES = 'Preferences',
 
     USER_EMAIL = 'UserEmail',
@@ -38,6 +28,9 @@ export enum UserProperty {
 
     ROLEIDS = 'RoleIDs',
 
-    USER_LANGUAGE = 'UserLanguage'
+    USER_LANGUAGE = 'UserLanguage',
+
+    // UI properties
+    USER_VALID = 'UserValid'
 
 }

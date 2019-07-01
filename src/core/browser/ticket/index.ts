@@ -28,5 +28,8 @@ export { FollowUpTypeBrowserFactory } from './FollowUpTypeBrowserFactory';
 export { TicketTemplateLabelProvider } from './TicketTemplateLabelProvider';
 export { TicketTemplateBrowserFactory } from './TicketTemplateBrowserFactory';
 export { ArticleFormService } from './ArticleFormService';
+export { TicketPlaceholderHandler } from './TicketPlaceholderHandler';
+export { ArticlePlaceholderHandler } from './ArticlePlaceholderHandler';
+export { QueuePlaceholderHandler } from './QueuePlaceholderHandler';
 export { TicketHistoryBrowserFactory } from './TicketHistoryBrowserFactory';
 export { TicketDialogUtil } from './TicketDialogUtil';

@@ -75,7 +75,8 @@ export class ComponentState {
             readOnly: this.readOnly,
             removeButtons: '',
             removePlugins: 'elementspath' + (this.readOnly ? ',image2' : ''),
-            codeSnippet_theme: 'github'
+            codeSnippet_theme: 'github',
+            // enterMode: CKEDITOR.ENTER_BR
         };
         if (resize || resize === undefined) {
             this.config['resize_dir'] = resizeDir || 'vertical';

@@ -24,6 +24,9 @@ export enum OrganisationProperty {
 
     REMINDER_TICKETS_COUNT = 'REMINDER_TICKETS_COUNT',
 
-    TICKET_STATS = 'TicketStats'
+    TICKET_STATS = 'TicketStats',
+
+    // UI properties
+    VALID = 'Valid'
 
 }

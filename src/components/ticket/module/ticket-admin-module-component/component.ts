@@ -4,7 +4,7 @@ import {
 import { ComponentState } from './ComponentState';
 import {
     KIXObjectType, ContextDescriptor, ContextType, ContextMode, ConfiguredDialogWidget,
-    WidgetConfiguration, WidgetSize, CRUD
+    WidgetConfiguration, CRUD
 } from "../../../../core/model";
 import { AuthenticationSocketClient } from "../../../../core/browser/application/AuthenticationSocketClient";
 import { UIComponentPermission } from "../../../../core/model/UIComponentPermission";
@@ -14,7 +14,8 @@ import {
     TicketStateEditAction, TicketStateDetailsContext, NewTicketStateDialogContext, EditTicketStateDialogContext,
     TicketPriorityCreateAction, TicketPriorityTableDeleteAction, TicketPriorityEditAction, TicketPriorityDetailsContext,
     NewTicketPriorityDialogContext, EditTicketPriorityDialogContext, TicketQueueCreateAction, NewQueueDialogContext,
-    QueueDetailsContext, TicketQueueEditAction, TicketStateFormService, TicketPriorityFormService, TicketTypeFormService
+    QueueDetailsContext, TicketQueueEditAction, TicketStateFormService, TicketPriorityFormService,
+    TicketTypeFormService, EditQueueDialogContext, QueueFormService
 } from "../../../../core/browser/ticket";
 
 class Component extends AbstractMarkoComponent {
@@ -27,6 +28,7 @@ class Component extends AbstractMarkoComponent {
         ServiceRegistry.registerServiceInstance(TicketTypeFormService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketPriorityFormService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketStateFormService.getInstance());
+        ServiceRegistry.registerServiceInstance(QueueFormService.getInstance());
 
         this.registerTicketTypeAdmin();
         this.registerTicketStatesAdmin();
@@ -230,6 +232,23 @@ class Component extends AbstractMarkoComponent {
 
         if (await this.checkPermission('system/ticket/queues/*', CRUD.UPDATE)) {
             ActionFactory.getInstance().registerAction('ticket-admin-queue-edit', TicketQueueEditAction);
+
+            const editTicketQueueContext = new ContextDescriptor(
+                EditQueueDialogContext.CONTEXT_ID, [KIXObjectType.QUEUE],
+                ContextType.DIALOG, ContextMode.EDIT_ADMIN,
+                false, 'edit-ticket-queue-dialog', ['queues'], EditQueueDialogContext
+            );
+            ContextService.getInstance().registerContext(editTicketQueueContext);
+
+            DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+                'edit-ticket-queue-dialog',
+                new WidgetConfiguration(
+                    'edit-ticket-queue-dialog', 'Translatable#Edit Queue', [], {},
+                    false, false, 'kix-icon-edit'
+                ),
+                KIXObjectType.QUEUE,
+                ContextMode.EDIT_ADMIN
+            ));
         }
 
         const ticketQueueDetailsContextDescriptor = new ContextDescriptor(

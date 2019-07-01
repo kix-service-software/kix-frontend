@@ -31,8 +31,10 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
                 displayValue = value;
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';
@@ -93,7 +95,7 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
                 displayValue = 'Translatable#Links';
                 break;
             case FAQArticleProperty.NUMBER:
-                const hookConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+                const hookConfig: SysConfigOption[] = await KIXObjectService.loadObjects<SysConfigOption>(
                     KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.FAQ_HOOK]
                 ).catch((error): SysConfigOption[] => []);
                 if (hookConfig && hookConfig.length) {
@@ -119,8 +121,10 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
                 displayValue = property;
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
@@ -166,11 +170,13 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
                 displayValue = await translationService.getLanguageName(faqArticle.Language);
                 break;
             default:
-                displayValue = await this.getPropertyValueDisplayText(property, displayValue);
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';
@@ -186,7 +192,7 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
             if (id) {
                 let faqHook: string = '';
 
-                const hookConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+                const hookConfig: SysConfigOption[] = await KIXObjectService.loadObjects<SysConfigOption>(
                     KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.FAQ_HOOK]
                 ).catch((error): SysConfigOption[] => []);
 

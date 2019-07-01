@@ -102,10 +102,10 @@ export class ContactService extends KIXObjectService<Contact> {
                 ContactProperty.EMAIL, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
             ),
             new FilterCriteria(
-                ContactProperty.FIRST_NAME, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+                ContactProperty.FIRSTNAME, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
             ),
             new FilterCriteria(
-                ContactProperty.LAST_NAME, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+                ContactProperty.LASTNAME, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
             ),
             new FilterCriteria(
                 ContactProperty.TITLE, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue

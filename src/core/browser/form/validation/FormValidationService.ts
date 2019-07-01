@@ -30,7 +30,9 @@ export class FormValidationService {
     private formFieldValidators: IFormFieldValidator[] = [];
 
     public registerValidator(validator: IFormFieldValidator): void {
-        this.formFieldValidators.push(validator);
+        if (!this.formFieldValidators.some((v) => v.validatorId === validator.validatorId)) {
+            this.formFieldValidators.push(validator);
+        }
     }
 
     public async validate(formField: FormField, formId: string): Promise<ValidationResult[]> {

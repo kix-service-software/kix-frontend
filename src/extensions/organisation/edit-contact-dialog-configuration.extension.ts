@@ -30,11 +30,11 @@ export class Extension implements IConfigurationExtension {
                     'Translatable#Helptext_Organisations_ContactEdit_Title'
                 ),
                 new FormField(
-                    'Translatable#Lastname', ContactProperty.LAST_NAME, null, true,
+                    'Translatable#Lastname', ContactProperty.LASTNAME, null, true,
                     'Translatable#Helptext_Organisations_ContactEdit_Lastname'
                 ),
                 new FormField(
-                    'Translatable#Firstname', ContactProperty.FIRST_NAME, null, true,
+                    'Translatable#Firstname', ContactProperty.FIRSTNAME, null, true,
                     'Translatable#Helptext_Organisations_ContactEdit_Firstname'
                 ),
                 new FormField(

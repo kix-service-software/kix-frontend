@@ -5,7 +5,7 @@ import { IKIXObjectFormService } from "./IKIXObjectFormService";
 import { ServiceType } from "./ServiceType";
 import { LabelService } from "../LabelService";
 import { ContextService } from "../context";
-import { InlineContent, DialogService } from "../components";
+import { InlineContent } from "../components";
 import { AuthenticationSocketClient } from "../application/AuthenticationSocketClient";
 import { UIComponentPermission } from "../../model/UIComponentPermission";
 
@@ -29,6 +29,8 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
         for (const g of form.groups) {
             await this.prepareFormFieldValues(g.formFields, kixObject, formFieldValues, form.formContext);
         }
+
+        this.additionalPreparations(form, formFieldValues, kixObject);
         return formFieldValues;
     }
 
@@ -128,6 +130,12 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
         return newString;
     }
 
+    protected async additionalPreparations(
+        form: Form, formFieldValues: Map<string, FormFieldValue<any>>, kixObject: KIXObject
+    ): Promise<void> {
+        return;
+    }
+
     public async hasPermissions(field: FormField): Promise<boolean> {
         return true;
     }
@@ -141,5 +149,11 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
 
     protected getResource(objectType: KIXObjectType): string {
         return objectType.toLocaleLowerCase();
+    }
+
+    protected async checkPermissions(resource: string, crud: CRUD[] = [CRUD.READ]): Promise<boolean> {
+        return await AuthenticationSocketClient.getInstance().checkPermissions(
+            [new UIComponentPermission(resource, crud)]
+        );
     }
 }

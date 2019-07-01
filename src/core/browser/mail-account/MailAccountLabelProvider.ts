@@ -61,8 +61,10 @@ export class MailAccountLabelProvider extends LabelProvider<MailAccount> {
                 displayValue = property;
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
@@ -92,11 +94,13 @@ export class MailAccountLabelProvider extends LabelProvider<MailAccount> {
                 }
                 break;
             default:
-                displayValue = await this.getPropertyValueDisplayText(property, displayValue);
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
@@ -106,11 +110,15 @@ export class MailAccountLabelProvider extends LabelProvider<MailAccount> {
         property: string, value: string | number, translatable: boolean = true
     ): Promise<string> {
         let displayValue = value;
+
         switch (property) {
             case KIXObjectProperty.VALID_ID:
-                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
-                const valid = validObjects.find((v) => v.ID === value);
-                displayValue = valid ? valid.Name : value;
+                if (value) {
+                    const validObjects = await KIXObjectService.loadObjects<ValidObject>(
+                        KIXObjectType.VALID_OBJECT, [value], null, null, true
+                    ).catch((error) => [] as ValidObject[]);
+                    displayValue = validObjects && !!validObjects.length ? validObjects[0].Name : value;
+                }
                 break;
             case KIXObjectProperty.CREATE_BY:
             case KIXObjectProperty.CHANGE_BY:
@@ -123,7 +131,9 @@ export class MailAccountLabelProvider extends LabelProvider<MailAccount> {
                 break;
             case KIXObjectProperty.CREATE_TIME:
             case KIXObjectProperty.CHANGE_TIME:
-                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
+                if (displayValue) {
+                    displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
+                }
                 break;
             case MailAccountProperty.TRUSTED:
                 displayValue = Boolean(value) ? 'Translatable#Yes' : 'Translatable#No';
@@ -131,8 +141,10 @@ export class MailAccountLabelProvider extends LabelProvider<MailAccount> {
             default:
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';

@@ -4,6 +4,8 @@ import { TranslationService } from "../../i18n/TranslationService";
 
 export class RegExFormFieldValidator implements IFormFieldValidator {
 
+    public validatorId: string = 'RegExValidator';
+
     public isValidatorFor(formField: FormField, formId: string): boolean {
         return formField.regEx !== null
             && typeof formField.regEx !== 'undefined'

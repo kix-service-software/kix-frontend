@@ -2,7 +2,7 @@ import { TranslationService } from "../../browser/i18n/TranslationService";
 
 export class DateTimeUtil {
 
-    public static async getLocalDateString(value: any): Promise<string> {
+    public static async getLocalDateString(value: any, language?: string): Promise<string> {
         let string = '';
         if (value) {
             const date = new Date(value);
@@ -11,13 +11,16 @@ export class DateTimeUtil {
                 month: '2-digit',
                 year: 'numeric'
             };
-            const userLanguage = await TranslationService.getUserLanguage();
-            string = userLanguage ? date.toLocaleDateString(userLanguage, options) : value;
+
+            if (!language) {
+                language = await TranslationService.getUserLanguage();
+            }
+            string = language ? date.toLocaleDateString(language, options) : value;
         }
         return string;
     }
 
-    public static async getLocalDateTimeString(value: any): Promise<string> {
+    public static async getLocalDateTimeString(value: any, language?: string): Promise<string> {
         let string = '';
         if (value) {
             const date = new Date(value);
@@ -29,8 +32,10 @@ export class DateTimeUtil {
                 minute: '2-digit'
             };
 
-            const userLanguage = await TranslationService.getUserLanguage();
-            string = userLanguage ? date.toLocaleDateString(userLanguage, options) : value;
+            if (!language) {
+                language = await TranslationService.getUserLanguage();
+            }
+            string = language ? date.toLocaleString(language, options) : value;
         }
         return string;
     }

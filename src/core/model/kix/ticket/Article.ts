@@ -18,6 +18,8 @@ export class Article extends KIXObject<Article> {
 
     public From: string;
 
+    public FromRealname: string;
+
     public To: string;
 
     public ToRealname: string;
@@ -44,6 +46,8 @@ export class Article extends KIXObject<Article> {
 
     public SenderTypeID: number;
 
+    public SenderType: string;
+
     public ChannelID: number;
 
     public Channel: string;
@@ -64,7 +68,8 @@ export class Article extends KIXObject<Article> {
 
     public CustomerVisible: boolean;
 
-    public ChangeTime: string;
+    public CreatedBy: number;
+    public ChangedBy: number;
 
     // UI Properties
 
@@ -82,6 +87,7 @@ export class Article extends KIXObject<Article> {
             this.ArticleID = article.ArticleID;
             this.ObjectId = this.ArticleID;
             this.From = article.From;
+            this.FromRealname = article.FromRealname;
             this.To = article.To;
             this.ToRealname = article.ToRealname;
             this.Cc = article.Cc;
@@ -95,6 +101,7 @@ export class Article extends KIXObject<Article> {
             this.InReplyTo = article.InReplyTo;
             this.References = article.References;
             this.SenderTypeID = article.SenderTypeID;
+            this.SenderType = article.SenderType;
             this.ContentType = article.ContentType;
             this.Charset = article.Charset;
             this.MimeType = article.MimeType;
@@ -106,6 +113,9 @@ export class Article extends KIXObject<Article> {
             this.ChannelID = article.ChannelID;
             this.CustomerVisible = article.CustomerVisible;
             this.ChangeTime = article.ChangeTime;
+            this.CreateTime = article.CreateTime;
+            this.ChangedBy = article.ChangedBy;
+            this.CreatedBy = article.CreatedBy;
 
             this.bodyAttachment = article.bodyAttachment;
         }

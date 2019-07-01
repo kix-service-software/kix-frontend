@@ -6,17 +6,19 @@ export enum ArticleProperty {
 
     FROM = 'From',
 
+    FROM_REALNAME = 'FromRealname',
+
     TO = 'To',
 
-    TOREALNAME = 'ToRealname',
+    TO_REALNAME = 'ToRealname',
 
     CC = 'Cc',
 
-    CCREALNAME = 'CcRealname',
+    CC_REALNAME = 'CcRealname',
 
     BCC = 'Bcc',
 
-    BCCREALNAME = 'BccRealname',
+    BCC_REALNAME = 'BccRealname',
 
     SUBJECT = 'Subject',
 
@@ -26,11 +28,13 @@ export enum ArticleProperty {
 
     MESSAGE_ID = 'MessageID',
 
-    IN_REPLY_ID = 'InReplyID',
+    IN_REPLY_TO = 'InReplyTo',
 
     REFERENCES = 'References',
 
     SENDER_TYPE_ID = 'SenderTypeID',
+
+    SENDER_TYPE = 'SenderType',
 
     CHANNEL = 'Channel',
 
@@ -46,22 +50,20 @@ export enum ArticleProperty {
 
     TIME_UNITS = 'TimeUnits',
 
-    ARTICLE_INFORMATION = 'ArticleInformation',
-
-    NUMBER = 'Number',
+    CUSTOMER_VISIBLE = 'CustomerVisible',
 
     ATTACHMENTS = 'Attachments',
 
+    CREATED_BY = 'CreatedBy',
+
+    CHANGED_BY = 'ChangedBy',
+
+    ARTICLE_INFORMATION = 'ArticleInformation',
+    NUMBER = 'Number',
     ARTICLE_TAG = 'ArticleTag',
-
-    CUSTOMER_VISIBLE = 'CustomerVisible',
-
     FLAGS = 'Flags',
-
     REFERENCED_ARTICLE_ID = 'ReferencedArticleID',
-
     EXEC_REPLY = 'ExecReply',
-
     EXEC_FORWARD = 'ExecForward',
-
+    BODY_RICHTEXT = 'BodyRichtext'
 }

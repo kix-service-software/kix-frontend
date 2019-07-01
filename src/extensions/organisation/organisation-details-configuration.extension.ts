@@ -59,10 +59,10 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
                     null,
                     [
                         new DefaultColumnConfiguration(
-                            ContactProperty.FIRST_NAME, true, false, true, true, 200, true, true
+                            ContactProperty.FIRSTNAME, true, false, true, true, 200, true, true
                         ),
                         new DefaultColumnConfiguration(
-                            ContactProperty.LAST_NAME, true, false, true, true, 200, true, true
+                            ContactProperty.LASTNAME, true, false, true, true, 200, true, true
                         ),
                         new DefaultColumnConfiguration(
                             ContactProperty.EMAIL, true, false, true, true, 250, true, true

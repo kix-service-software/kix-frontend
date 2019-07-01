@@ -14,11 +14,15 @@ export class OrganisationLabelProvider extends LabelProvider<Organisation> {
         property: string, value: string | number, translatable: boolean = true
     ): Promise<string> {
         let displayValue = value;
+
         switch (property) {
             case KIXObjectProperty.VALID_ID:
-                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
-                const valid = validObjects.find((v) => v.ID === value);
-                displayValue = valid ? valid.Name : value;
+                if (value) {
+                    const validObjects = await KIXObjectService.loadObjects<ValidObject>(
+                        KIXObjectType.VALID_OBJECT, [value], null, null, true
+                    ).catch((error) => [] as ValidObject[]);
+                    displayValue = validObjects && !!validObjects.length ? validObjects[0].Name : value;
+                }
                 break;
             case KIXObjectProperty.CREATE_BY:
             case KIXObjectProperty.CHANGE_BY:
@@ -28,16 +32,20 @@ export class OrganisationLabelProvider extends LabelProvider<Organisation> {
                     ).catch((error) => [] as User[]);
                     displayValue = users && !!users.length ? users[0].UserFullname : value;
                 }
-                break;
             case KIXObjectProperty.CREATE_TIME:
             case KIXObjectProperty.CHANGE_TIME:
-                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
+                if (displayValue) {
+                    displayValue = translatable ?
+                        await DateTimeUtil.getLocalDateTimeString(displayValue) : displayValue;
+                }
                 break;
             default:
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';
@@ -108,8 +116,10 @@ export class OrganisationLabelProvider extends LabelProvider<Organisation> {
                 displayValue = property;
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
@@ -118,16 +128,10 @@ export class OrganisationLabelProvider extends LabelProvider<Organisation> {
     public async getDisplayText(
         organisation: Organisation, property: string, defaultValue?: string, translatable: boolean = true
     ): Promise<string> {
-        let displayValue = organisation[property];
+        let displayValue = typeof defaultValue !== 'undefined' && defaultValue !== null
+            ? defaultValue : organisation[property];
 
         switch (property) {
-            case KIXObjectProperty.VALID_ID:
-                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
-                const valid = validObjects.find(
-                    (v) => v.ID.toString() === organisation[property].toString()
-                );
-                displayValue = valid ? valid.Name : organisation[property].toString();
-                break;
             case OrganisationProperty.OPEN_TICKETS_COUNT:
                 displayValue = organisation.TicketStats.OpenCount.toString();
                 break;
@@ -137,12 +141,19 @@ export class OrganisationLabelProvider extends LabelProvider<Organisation> {
             case OrganisationProperty.REMINDER_TICKETS_COUNT:
                 displayValue = organisation.TicketStats.PendingReminderCount.toString();
                 break;
+            case OrganisationProperty.VALID:
+                displayValue = await this.getPropertyValueDisplayText(
+                    KIXObjectProperty.VALID_ID, organisation.ValidID, translatable
+                );
+                break;
             default:
-                displayValue = await this.getPropertyValueDisplayText(property, displayValue);
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';

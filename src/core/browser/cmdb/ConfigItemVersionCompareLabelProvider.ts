@@ -10,8 +10,10 @@ export class ConfigItemVersionCompareLabelProvider extends LabelProvider<Version
         property: string, value: string | number, translatable: boolean = true
     ): Promise<string> {
         let displayValue = value ? value.toString() : '';
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
         return displayValue;
     }
@@ -26,8 +28,10 @@ export class ConfigItemVersionCompareLabelProvider extends LabelProvider<Version
                 displayValue = property;
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
@@ -45,8 +49,10 @@ export class ConfigItemVersionCompareLabelProvider extends LabelProvider<Version
             default:
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;

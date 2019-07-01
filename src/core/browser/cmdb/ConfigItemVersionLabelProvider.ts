@@ -29,8 +29,10 @@ export class ConfigItemVersionLabelProvider extends LabelProvider<Version> {
             default:
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue.toString();
@@ -55,8 +57,10 @@ export class ConfigItemVersionLabelProvider extends LabelProvider<Version> {
                 displayValue = property;
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
@@ -76,12 +80,14 @@ export class ConfigItemVersionLabelProvider extends LabelProvider<Version> {
                 break;
             default:
                 displayValue = await this.getPropertyValueDisplayText(
-                    property, displayValue ? displayValue : value
+                    property, displayValue ? displayValue : value, translatable
                 );
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;

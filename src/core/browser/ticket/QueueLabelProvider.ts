@@ -69,8 +69,10 @@ export class QueueLabelProvider extends LabelProvider<Queue> {
                 displayValue = property;
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
@@ -81,21 +83,44 @@ export class QueueLabelProvider extends LabelProvider<Queue> {
     }
 
     public async getDisplayText(
-        queue: Queue, property: string, value?: string, translatable: boolean = true
+        queue: Queue, property: string, defaultValue?: string, translatable: boolean = true
     ): Promise<string> {
-        let displayValue = queue[property];
+        let displayValue = typeof defaultValue !== 'undefined' && defaultValue !== null
+            ? defaultValue : queue[property];
 
         switch (property) {
             case QueueProperty.QUEUE_ID:
             case 'ICON':
                 displayValue = queue.Name;
                 break;
+            case QueueProperty.VALID:
+                displayValue = await this.getPropertyValueDisplayText(
+                    KIXObjectProperty.VALID_ID, queue.ValidID, translatable
+                );
+                break;
+            case QueueProperty.PARENT:
+                displayValue = await this.getPropertyValueDisplayText(
+                    QueueProperty.PARENT_ID, queue.ParentID, translatable
+                );
+                break;
+            case QueueProperty.SYSTEM_ADDRESS:
+                displayValue = await this.getPropertyValueDisplayText(
+                    QueueProperty.SYSTEM_ADDRESS_ID, queue.SystemAddressID, translatable
+                );
+                break;
+            case QueueProperty.FOLLOW_UP:
+                displayValue = await this.getPropertyValueDisplayText(
+                    QueueProperty.FOLLOW_UP_ID, queue.FollowUpID, translatable
+                );
+                break;
             default:
-                displayValue = await this.getPropertyValueDisplayText(property, displayValue);
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';
@@ -107,42 +132,54 @@ export class QueueLabelProvider extends LabelProvider<Queue> {
         let displayValue = value;
         switch (property) {
             case KIXObjectProperty.VALID_ID:
-                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
-                const valid = validObjects.find((v) => v.ID.toString() === value.toString());
-                if (valid) {
-                    displayValue = valid.Name;
+                if (value) {
+                    const validObjects = await KIXObjectService.loadObjects<ValidObject>(
+                        KIXObjectType.VALID_OBJECT, [value], null, null, true
+                    ).catch((error) => [] as ValidObject[]);
+                    displayValue = validObjects && !!validObjects.length ? validObjects[0].Name : value;
                 }
                 break;
             case KIXObjectProperty.CREATE_BY:
             case KIXObjectProperty.CHANGE_BY:
-                const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [value], null, null, true
-                ).catch((error) => [] as User[]);
-                displayValue = users && !!users.length ? users[0].UserFullname : value;
+                if (value) {
+                    const users = await KIXObjectService.loadObjects<User>(
+                        KIXObjectType.USER, [value], null, null, true
+                    ).catch((error) => [] as User[]);
+                    displayValue = users && !!users.length ? users[0].UserFullname : value;
+                }
                 break;
             case KIXObjectProperty.CREATE_TIME:
             case KIXObjectProperty.CHANGE_TIME:
-                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
+                if (displayValue && translatable) {
+                    displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
+                }
                 break;
             case QueueProperty.SYSTEM_ADDRESS_ID:
-                const systemAddresses = await KIXObjectService.loadObjects<SystemAddress>(
-                    KIXObjectType.SYSTEM_ADDRESS, [value], null, null, true
-                ).catch((error) => [] as SystemAddress[]);
-                displayValue = systemAddresses && !!systemAddresses.length ?
-                    await LabelService.getInstance().getText(systemAddresses[0]) : value;
+                if (value) {
+                    const systemAddresses = await KIXObjectService.loadObjects<SystemAddress>(
+                        KIXObjectType.SYSTEM_ADDRESS, [value], null, null, true
+                    ).catch((error) => [] as SystemAddress[]);
+                    displayValue = systemAddresses && !!systemAddresses.length ?
+                        await LabelService.getInstance().getText(systemAddresses[0]) : value;
+                }
                 break;
             case QueueProperty.FOLLOW_UP_ID:
-                const follwoUptypes = await KIXObjectService.loadObjects<FollowUpType>(
-                    KIXObjectType.FOLLOW_UP_TYPE, [value], null, null, true
-                ).catch((error) => [] as FollowUpType[]);
-                displayValue = follwoUptypes && !!follwoUptypes.length ? follwoUptypes[0].Name : value;
+                if (value) {
+                    const follwoUptypes = await KIXObjectService.loadObjects<FollowUpType>(
+                        KIXObjectType.FOLLOW_UP_TYPE, [value], null, null, true
+                    ).catch((error) => [] as FollowUpType[]);
+                    displayValue = follwoUptypes && !!follwoUptypes.length ? follwoUptypes[0].Name : value;
+                }
                 break;
             case QueueProperty.FOLLOW_UP_LOCK:
                 displayValue = value === 1 ? 'Translatable#Yes' : 'Translatable#No';
                 break;
             case QueueProperty.UNLOCK_TIMEOUT:
-                const minuteString = await TranslationService.translate('Translatable#Minutes');
-                displayValue = `${value} ${minuteString}`;
+                if (value) {
+                    const minuteString = translatable ?
+                        await TranslationService.translate('Translatable#Minutes') : 'Minutes';
+                    displayValue = `${value} ${minuteString}`;
+                }
                 break;
             case QueueProperty.PARENT_ID:
                 if (value) {
@@ -156,8 +193,10 @@ export class QueueLabelProvider extends LabelProvider<Queue> {
             default:
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';
