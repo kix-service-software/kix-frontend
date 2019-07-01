@@ -1,7 +1,8 @@
-import { OverlayService, FormService, ServiceRegistry, BrowserUtil } from '../../../../core/browser';
+import { OverlayService, FormService, ServiceRegistry, BrowserUtil, KIXObjectService } from '../../../../core/browser';
 import {
     ComponentContent, OverlayType, TreeNode, ValidationResult,
-    ValidationSeverity, ConfigItemClass, KIXObjectType, ContextMode, ConfigItemProperty, Error
+    ValidationSeverity, ConfigItemClass, KIXObjectType, ContextMode, ConfigItemProperty, Error,
+    KIXObjectLoadingOptions, ConfigItemClassProperty
 } from '../../../../core/model';
 import { ComponentState } from './ComponentState';
 import { CMDBService, ConfigItemDetailsContext, ConfigItemFormFactory } from '../../../../core/browser/cmdb';
@@ -41,10 +42,12 @@ class Component {
         this.state.currentClassNode = nodes && nodes.length ? nodes[0] : null;
         FormService.getInstance().deleteFormInstance(this.state.formId);
         this.state.formId = null;
-        let formId;
+        let formId: string;
         if (this.state.currentClassNode) {
-            const ciClass = this.state.currentClassNode.id as ConfigItemClass;
-            formId = ConfigItemFormFactory.getInstance().getFormId(ciClass);
+            const ciClass = await this.getCIClass(this.state.currentClassNode.id);
+            if (ciClass) {
+                formId = ConfigItemFormFactory.getInstance().getFormId(ciClass);
+            }
         } else {
             formId = null;
         }
@@ -69,7 +72,7 @@ class Component {
                 const cmdbService
                     = ServiceRegistry.getServiceInstance<CMDBService>(KIXObjectType.CONFIG_ITEM);
 
-                const ciClass = this.state.currentClassNode.id as ConfigItemClass;
+                const ciClass = await this.getCIClass(this.state.currentClassNode.id);
                 await cmdbService.createConfigItem(this.state.formId, ciClass.ID)
                     .then((configItemId) => {
                         DialogService.getInstance().setMainDialogLoading(false);
@@ -86,6 +89,15 @@ class Component {
                     });
             }
         }
+    }
+
+    private async getCIClass(classId: string): Promise<ConfigItemClass> {
+        const classes = await KIXObjectService.loadObjects<ConfigItemClass>(
+            KIXObjectType.CONFIG_ITEM_CLASS, [classId],
+            new KIXObjectLoadingOptions(null, null, null, [ConfigItemClassProperty.CURRENT_DEFINITION])
+        );
+
+        return classes && classes.length ? classes[0] : null;
     }
 
     private showValidationError(result: ValidationResult[]): void {
