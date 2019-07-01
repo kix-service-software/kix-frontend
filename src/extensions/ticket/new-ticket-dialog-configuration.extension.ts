@@ -1,12 +1,11 @@
 import { IConfigurationExtension } from '../../core/extensions';
+import { NewTicketDialogContext } from '../../core/browser/ticket';
 import {
-    NewTicketDialogContext, PendingTimeFormValue
-} from '../../core/browser/ticket';
-import {
-    ContextConfiguration, ConfiguredWidget, WidgetSize, WidgetConfiguration, TicketProperty,
+    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, TicketProperty,
     FormField, ArticleProperty, KIXObjectType, Form, FormContext, FormFieldValue, FormFieldOption,
     ObjectReferenceOptions, KIXObjectLoadingOptions, FilterCriteria,
-    UserProperty, FilterDataType, FilterType, ObjectinformationWidgetSettings, ContactProperty, OrganisationProperty
+    FilterDataType, FilterType, ObjectinformationWidgetSettings, ContactProperty, OrganisationProperty,
+    KIXObjectProperty
 } from '../../core/model';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../core/services';
@@ -40,8 +39,8 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
                 new ObjectinformationWidgetSettings(KIXObjectType.CONTACT, [
                     ContactProperty.LOGIN,
                     ContactProperty.TITLE,
-                    ContactProperty.LAST_NAME,
-                    ContactProperty.FIRST_NAME,
+                    ContactProperty.LASTNAME,
+                    ContactProperty.FIRSTNAME,
                     ContactProperty.PRIMARY_ORGANISATION_ID,
                     ContactProperty.PHONE,
                     ContactProperty.MOBILE,
@@ -98,7 +97,7 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
                         new KIXObjectLoadingOptions(
                             [
                                 new FilterCriteria(
-                                    UserProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
                                     FilterType.AND, 1
                                 )
                             ]
@@ -114,7 +113,7 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
                         new KIXObjectLoadingOptions(
                             [
                                 new FilterCriteria(
-                                    UserProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
                                     FilterType.AND, 1
                                 )
                             ]
@@ -127,9 +126,9 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
                 true, 'Translatable#Priorities are used to mark a Ticket‘s urgency with different colours, so you can  categorize Tickets.',
                 null, new FormFieldValue(3)
             ));
-            fields.push(new FormField<PendingTimeFormValue>(
+            fields.push(new FormField<number>(
                 'Translatable#State', TicketProperty.STATE_ID, 'ticket-input-state', true, 'Translatable#Ticket status summarizes the tickets processing state.', null,
-                new FormFieldValue(new PendingTimeFormValue(4))
+                new FormFieldValue(4)
             ));
 
             const group = new FormGroup('Translatable#Ticket Data', fields);

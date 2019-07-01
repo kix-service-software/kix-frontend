@@ -1,8 +1,8 @@
 import { KIXObjectFormService } from "../../kix/KIXObjectFormService";
-import { KIXObjectType, Queue, FormField, FormFieldValue, QueueProperty, Form, ContextType } from "../../../model";
+import {
+    KIXObjectType, Queue, FormField, FormFieldValue, QueueProperty, Form, FormContext
+} from "../../../model";
 import { LabelService } from "../../LabelService";
-import { ContextService } from "../../context";
-import { QueueDetailsContext } from "./context";
 
 export class QueueFormService extends KIXObjectFormService<Queue> {
 
@@ -24,15 +24,10 @@ export class QueueFormService extends KIXObjectFormService<Queue> {
         return kixObjectType === KIXObjectType.QUEUE;
     }
 
-    public async initValues(form: Form): Promise<Map<string, FormFieldValue<any>>> {
-        const formFieldValues = await super.initValues(form);
-
-        const context = await ContextService.getInstance().getContext<QueueDetailsContext>(
-            QueueDetailsContext.CONTEXT_ID
-        );
-
-        if (context) {
-            const queue = await context.getObject<Queue>();
+    protected async additionalPreparations(
+        form: Form, formFieldValues: Map<string, FormFieldValue<any>>, queue: Queue
+    ): Promise<void> {
+        if (form && form.formContext === FormContext.EDIT) {
             groupLoop: for (const g of form.groups) {
                 for (const f of g.formFields) {
                     if (f.property === QueueProperty.FOLLOW_UP_ID) {
@@ -44,8 +39,6 @@ export class QueueFormService extends KIXObjectFormService<Queue> {
                 }
             }
         }
-
-        return formFieldValues;
     }
 
     private async setFollowUpLock(

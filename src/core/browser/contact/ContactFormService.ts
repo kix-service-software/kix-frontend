@@ -1,7 +1,5 @@
 import { KIXObjectFormService } from "../kix/KIXObjectFormService";
 import { Contact, KIXObjectType, CRUD, ContactProperty, FormField } from "../../model";
-import { AuthenticationSocketClient } from "../application/AuthenticationSocketClient";
-import { UIComponentPermission } from "../../model/UIComponentPermission";
 
 export class ContactFormService extends KIXObjectFormService<Contact> {
 
@@ -31,11 +29,5 @@ export class ContactFormService extends KIXObjectFormService<Contact> {
             default:
         }
         return hasPermissions;
-    }
-
-    private async checkPermissions(resource: string, crud: CRUD[] = [CRUD.READ]): Promise<boolean> {
-        return await AuthenticationSocketClient.getInstance().checkPermissions(
-            [new UIComponentPermission(resource, crud)]
-        );
     }
 }

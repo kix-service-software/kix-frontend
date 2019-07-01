@@ -113,8 +113,10 @@ export class ContextService {
                 formId = await context.getFormId(contextMode, objectType, objectId);
             }
 
+            if (objectId) {
+                await context.setObjectId(objectId);
+            }
             context.setAdditionalInformation(AdditionalContextInformation.FORM_ID, formId);
-            await context.setObjectId(objectId);
 
             FormService.getInstance().deleteFormInstance(formId);
             await FormService.getInstance().getFormInstance(formId);

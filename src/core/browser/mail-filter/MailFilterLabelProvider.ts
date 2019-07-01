@@ -95,9 +95,12 @@ export class MailFilterLabelProvider extends LabelProvider<MailFilter> {
         let displayValue = value;
         switch (property) {
             case KIXObjectProperty.VALID_ID:
-                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
-                const valid = validObjects.find((v) => v.ID === value);
-                displayValue = valid ? valid.Name : value;
+                if (value) {
+                    const validObjects = await KIXObjectService.loadObjects<ValidObject>(
+                        KIXObjectType.VALID_OBJECT, [value], null, null, true
+                    ).catch((error) => [] as ValidObject[]);
+                    displayValue = validObjects && !!validObjects.length ? validObjects[0].Name : value;
+                }
                 break;
             case KIXObjectProperty.CREATE_BY:
             case KIXObjectProperty.CHANGE_BY:

@@ -20,7 +20,7 @@ export class FactoryService {
         this.fatcories.set(kixObjectType, factory);
     }
 
-    public async create<T extends KIXObject>(kixObjectType: KIXObjectType, object: T): Promise<T> {
+    public async create<T extends KIXObject = any>(kixObjectType: KIXObjectType, object: T): Promise<T> {
         const factory = this.fatcories.get(kixObjectType);
         if (factory) {
             return await factory.create(object);

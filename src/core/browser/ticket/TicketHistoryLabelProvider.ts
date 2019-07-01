@@ -7,7 +7,9 @@ export class TicketHistoryLabelProvider extends LabelProvider<TicketHistory> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.TICKET_HISTORY;
 
-    public async getPropertyValueDisplayText(property: string, value: string | number): Promise<string> {
+    public async getPropertyValueDisplayText(
+        property: string, value: string | number, translatable?: boolean
+    ): Promise<string> {
         return value.toString();
     }
 
@@ -37,8 +39,10 @@ export class TicketHistoryLabelProvider extends LabelProvider<TicketHistory> {
                 displayValue = property;
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
@@ -69,11 +73,13 @@ export class TicketHistoryLabelProvider extends LabelProvider<TicketHistory> {
                 displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
             default:
-                displayValue = await this.getPropertyValueDisplayText(property, displayValue);
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;

@@ -5,7 +5,7 @@ import {
 import { ComponentState } from './ComponentState';
 import {
     KIXObjectType, ContextType, ContextMode, ContextDescriptor, ConfiguredDialogWidget,
-    WidgetConfiguration, WidgetSize
+    WidgetConfiguration
 } from '../../../core/model';
 import {
     FAQArticleTableFactory, FAQArticleHistoryTableFactory, FAQLabelProvider, FAQArticleHistoryLabelProvider,
@@ -13,7 +13,6 @@ import {
     FAQArticleVoteAction, FAQArticlePrintAction, FAQArticleEditAction, FAQArticleDeleteAction,
     FAQArticleCreateAction, FAQArticleBrowserFactory, FAQArticleAttachmentBrowserFactory,
     FAQArticleSearchDefinition, FAQArticleFormService, EditFAQArticleDialogContext, FAQCategoryLabelProvider,
-    FAQCategoryCSVExportAction,
     FAQCategoryFormService
 } from '../../../core/browser/faq';
 import { DialogService } from '../../../core/browser/components/dialog';
@@ -188,7 +187,6 @@ class Component extends AbstractMarkoComponent {
     private registerAdminActions(): void {
         ActionFactory.getInstance().registerAction('faq-admin-category-create-action', FAQCategoryCreateAction);
         ActionFactory.getInstance().registerAction('faq-admin-category-edit-action', FAQCategoryEditAction);
-        ActionFactory.getInstance().registerAction('faq-category-csv-export-action', FAQCategoryCSVExportAction);
     }
 
 }

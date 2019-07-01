@@ -33,8 +33,10 @@ export class SystemAddressLabelProvider extends LabelProvider<SystemAddress> {
             default:
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';
@@ -78,8 +80,10 @@ export class SystemAddressLabelProvider extends LabelProvider<SystemAddress> {
                 displayValue = property;
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
@@ -95,11 +99,13 @@ export class SystemAddressLabelProvider extends LabelProvider<SystemAddress> {
                 displayValue = systemAddress.Name;
                 break;
             default:
-                displayValue = await this.getPropertyValueDisplayText(property, displayValue);
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;

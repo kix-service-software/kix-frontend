@@ -35,7 +35,7 @@ export class TicketSearchDefinition extends SearchDefinition {
             [TicketProperty.ESCALATION_TIME, null],
             [TicketProperty.ESCALATION_RESPONSE_TIME, null],
             [TicketProperty.ESCALATION_UPDATE_TIME, null],
-            [TicketProperty.ESCALATION_SOLUTIONS_TIME, null]
+            [TicketProperty.ESCALATION_SOLUTION_TIME, null]
         ];
 
         if (await this.checkReadPermissions('organisations')) {
@@ -132,7 +132,7 @@ export class TicketSearchDefinition extends SearchDefinition {
             case TicketProperty.ESCALATION_TIME:
             case TicketProperty.ESCALATION_RESPONSE_TIME:
             case TicketProperty.ESCALATION_UPDATE_TIME:
-            case TicketProperty.ESCALATION_SOLUTIONS_TIME:
+            case TicketProperty.ESCALATION_SOLUTION_TIME:
                 operations = dateTimeOperators;
                 break;
             default:
@@ -172,7 +172,7 @@ export class TicketSearchDefinition extends SearchDefinition {
             || property === TicketProperty.LAST_CHANGE_TIME
             || property === TicketProperty.ESCALATION_TIME
             || property === TicketProperty.ESCALATION_RESPONSE_TIME
-            || property === TicketProperty.ESCALATION_SOLUTIONS_TIME
+            || property === TicketProperty.ESCALATION_SOLUTION_TIME
             || property === TicketProperty.ESCALATION_UPDATE_TIME;
     }
 

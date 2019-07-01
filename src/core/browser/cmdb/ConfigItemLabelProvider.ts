@@ -53,8 +53,10 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
                 displayValue = value;
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';
@@ -89,7 +91,7 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
                 displayValue = 'Translatable#Number of version';
                 break;
             case ConfigItemProperty.NUMBER:
-                const hookConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+                const hookConfig: SysConfigOption[] = await KIXObjectService.loadObjects<SysConfigOption>(
                     KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.CONFIG_ITEM_HOOK]
                 ).catch((error): SysConfigOption[] => []);
                 displayValue = hookConfig && hookConfig.length ? hookConfig[0].Value : 'CI#';
@@ -107,8 +109,10 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
                 displayValue = property;
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue.toString();
@@ -159,7 +163,7 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
             case ConfigItemProperty.CHANGE_TIME:
             case ConfigItemProperty.CREATE_BY:
             case ConfigItemProperty.CREATE_TIME:
-                displayValue = await this.getPropertyValueDisplayText(property, displayValue);
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
                 break;
             default:
                 const attributes = configItem.getPreparedData(property);
@@ -170,12 +174,14 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
                         displayValue = attributes[0].DisplayValue;
                     }
                 } else {
-                    displayValue = await this.getPropertyValueDisplayText(property, displayValue);
+                    displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
                 }
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';
@@ -191,7 +197,7 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
             if (id) {
                 let configItemHook: string = '';
 
-                const hookConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+                const hookConfig: SysConfigOption[] = await KIXObjectService.loadObjects<SysConfigOption>(
                     KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.CONFIG_ITEM_HOOK]
                 ).catch((error): SysConfigOption[] => []);
 

@@ -9,7 +9,7 @@ import { FormService } from "../../form";
 import { AbstractMarkoComponent } from "../../marko";
 import { BrowserUtil } from "../../BrowserUtil";
 import { RoutingConfiguration, RoutingService } from "../../router";
-import { ContextService } from "../../context";
+import { ContextService, AdditionalContextInformation } from "../../context";
 import { EventService } from "../../event";
 import { TabContainerEvent } from "./TabContainerEvent";
 import { TabContainerEventData } from "./TabContainerEventData";
@@ -41,6 +41,12 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
         this.state.translations = await TranslationService.createTranslationObject([
             "Translatable#Cancel", "Translatable#Save"
         ]);
+        const dialogContext = await ContextService.getInstance().getContextByTypeAndMode(
+            this.objectType, ContextMode.CREATE
+        );
+        if (dialogContext) {
+            dialogContext.setAdditionalInformation(AdditionalContextInformation.FORM_ID, this.state.formId);
+        }
     }
 
     public async onDestroy(): Promise<void> {

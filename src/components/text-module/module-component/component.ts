@@ -12,6 +12,7 @@ import {
 } from '../../../core/browser/text-modules';
 import { UIComponentPermission } from '../../../core/model/UIComponentPermission';
 import { AuthenticationSocketClient } from '../../../core/browser/application/AuthenticationSocketClient';
+import { TextModuleCSVExportAction } from '../../../core/browser/text-modules/actions/TextModuleCSVExportAction';
 
 class Component extends AbstractMarkoComponent {
 
@@ -24,8 +25,11 @@ class Component extends AbstractMarkoComponent {
         FactoryService.getInstance().registerFactory(
             KIXObjectType.TEXT_MODULE, TextModuleBrowserFactory.getInstance()
         );
+        ServiceRegistry.registerServiceInstance(TextModuleFormService.getInstance());
         TableFactoryService.getInstance().registerFactory(new TextModulesTableFactory());
         LabelService.getInstance().registerLabelProvider(new TextModuleLabelProvider());
+
+        ActionFactory.getInstance().registerAction('text-module-csv-export-action', TextModuleCSVExportAction);
 
         if (await this.checkPermission('system/textmodules', CRUD.CREATE)) {
             ActionFactory.getInstance().registerAction('text-module-create', TextModuleCreateAction);

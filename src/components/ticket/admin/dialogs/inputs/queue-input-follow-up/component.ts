@@ -2,12 +2,12 @@ import { ComponentState } from "./ComponentState";
 import {
     TreeNode, KIXObjectType, QueueProperty, FormField, FormFieldValue
 } from "../../../../../../core/model";
-import { PendingTimeFormValue, QueueService } from "../../../../../../core/browser/ticket";
+import { QueueService } from "../../../../../../core/browser/ticket";
 import { FormInputComponent } from '../../../../../../core/model/components/form/FormInputComponent';
 import { FormService, LabelService } from "../../../../../../core/browser";
 import { TranslationService } from "../../../../../../core/browser/i18n/TranslationService";
 
-class Component extends FormInputComponent<PendingTimeFormValue, ComponentState> {
+class Component extends FormInputComponent<number, ComponentState> {
 
     public onCreate(): void {
         this.state = new ComponentState();

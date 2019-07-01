@@ -3,12 +3,19 @@
         overflow: auto;
         border: none;
     }
+
     &.editor-readonly {
         >.cke {
             >.cke_inner {
+
                 >.cke_top,
                 >.cke_bottom {
                     display: none;
+                }
+
+                >.cke_contents {
+                    border: 1px solid @secondary-4;
+                    border-radius: @border-radius;
                 }
             }
         }

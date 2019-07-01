@@ -1,6 +1,6 @@
 import {
     AbstractMarkoComponent, ServiceRegistry, LabelService, TableFactoryService,
-    TableCSSHandlerRegistry, FactoryService, ContextService, DialogService, ActionFactory
+    TableCSSHandlerRegistry, FactoryService, ContextService, DialogService, ActionFactory, PlaceholderService
 } from "../../../../core/browser";
 import { ComponentState } from './ComponentState';
 import {
@@ -15,13 +15,13 @@ import {
     TicketPrintAction, TicketSearchAction, ShowUserTicketsAction, TicketPriorityTableFactory,
     TicketQueueTableFactory, TicketTypeTableFactory, TicketStateTableFactory, TicketFormService,
     EmailRecipientValidator, PendingTimeValidator, ArticleFormService, TicketHistoryBrowserFactory,
-    TicketWatchAction, TicketLockAction
+    TicketWatchAction, TicketLockAction, TicketPlaceholderHandler
 } from "../../../../core/browser/ticket";
 import { ChannelService } from "../../../../core/browser/channel";
 import { ChannelLabelProvider } from "../../../../core/browser/channel/ChannelLabelProvider";
 import { ArticleTableFactory } from "../../../../core/browser/ticket/table/ArticleTableFactory";
 import {
-    KIXObjectType, ContextDescriptor, ContextType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration, WidgetSize
+    KIXObjectType, ContextDescriptor, ContextType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration
 } from "../../../../core/model";
 import { FormValidationService } from "../../../../core/browser/form/validation";
 import { KIXObjectSearchService } from "../../../../core/browser/kix/search/KIXObjectSearchService";
@@ -33,6 +33,8 @@ class Component extends AbstractMarkoComponent {
     }
 
     public async onMount(): Promise<void> {
+        PlaceholderService.getInstance().registerPlaceholderHandler(new TicketPlaceholderHandler());
+
         ServiceRegistry.registerServiceInstance(TicketService.getInstance());
         ServiceRegistry.registerServiceInstance(ChannelService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketTypeService.getInstance());

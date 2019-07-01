@@ -2,43 +2,42 @@ import {
     IFormFieldValidator, FormField, ValidationResult, TicketProperty, ValidationSeverity
 } from "../../../../model";
 import { FormService } from "../../..";
-import { PendingTimeFormValue } from "..";
 
 export class PendingTimeValidator implements IFormFieldValidator {
 
+    public validatorId: string = 'PendingTimeValidator';
+
     public isValidatorFor(formField: FormField, formId: string): boolean {
-        return formField.property === TicketProperty.STATE_ID;
+        return formField.property === TicketProperty.PENDING_TIME;
     }
 
     public async validate(formField: FormField, formId: string): Promise<ValidationResult> {
         const formInstance = await FormService.getInstance().getFormInstance(formId);
-        const formFieldValue = formInstance.getFormFieldValue<PendingTimeFormValue>(formField.instanceId);
+        const formFieldValue = formInstance.getFormFieldValue<Date>(formField.instanceId);
 
         let result = new ValidationResult(ValidationSeverity.OK, '');
         if (formFieldValue && formFieldValue.value) {
-            const stateValue = formFieldValue.value;
-            if (stateValue.pending) {
-                if (this.hasValidDate(stateValue)) {
-                    const now = new Date();
-                    if (now > stateValue.pendingDate) {
-                        result = new ValidationResult(
-                            ValidationSeverity.ERROR, 'Translatable#Pending date is not in the future.'
-                        );
-                    }
-                } else {
+            const pendingDate = formFieldValue.value;
+            if (this.hasValidDate(pendingDate)) {
+                const now = new Date();
+                if (now > pendingDate) {
                     result = new ValidationResult(
-                        ValidationSeverity.ERROR,
-                        'Translatable#Invalid date.'
+                        ValidationSeverity.ERROR, 'Translatable#Pending date is not in the future.'
                     );
                 }
+            } else {
+                result = new ValidationResult(
+                    ValidationSeverity.ERROR,
+                    'Translatable#Invalid date for pending date.'
+                );
             }
         }
 
         return result;
     }
 
-    private hasValidDate(stateValue: PendingTimeFormValue): boolean {
-        return stateValue.pendingDate && !isNaN(stateValue.pendingDate.getTime());
+    private hasValidDate(date: Date): boolean {
+        return date && !isNaN(date.getTime());
     }
 
 }

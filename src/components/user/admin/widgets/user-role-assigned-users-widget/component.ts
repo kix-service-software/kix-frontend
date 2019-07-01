@@ -3,7 +3,7 @@ import {
     TableConfiguration, TableHeaderHeight, TableRowHeight, DefaultColumnConfiguration
 } from '../../../../../core/browser';
 import { ComponentState } from './ComponentState';
-import { KIXObjectType, Role, UserProperty, DataType } from '../../../../../core/model';
+import { KIXObjectType, Role, UserProperty, DataType, KIXObjectProperty } from '../../../../../core/model';
 import { RoleDetailsContext } from '../../../../../core/browser/user';
 import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
@@ -56,7 +56,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 new DefaultColumnConfiguration(
                     UserProperty.USER_EMAIL, true, false, true, false, 250, true, true, true
                 ),
-                new DefaultColumnConfiguration(UserProperty.VALID_ID, true, false, true, false, 100, true, true)
+                new DefaultColumnConfiguration(KIXObjectProperty.VALID_ID, true, false, true, false, 100, true, true)
             ];
             const tableConfiguration = new TableConfiguration(
                 KIXObjectType.USER, null, 32, columns,  false, false, null, null,

@@ -43,7 +43,7 @@ export class ModuleExtension implements IConfigurationExtension {
                 null,
                 [
                     SearchProperty.FULLTEXT,
-                    ContactProperty.FIRST_NAME, ContactProperty.LAST_NAME,
+                    ContactProperty.FIRSTNAME, ContactProperty.LASTNAME,
                     ContactProperty.EMAIL, ContactProperty.LOGIN
                 ]
             );

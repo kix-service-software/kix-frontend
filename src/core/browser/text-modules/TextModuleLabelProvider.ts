@@ -47,8 +47,10 @@ export class TextModuleLabelProvider extends LabelProvider<TextModule> {
                 displayValue = property;
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
@@ -68,11 +70,13 @@ export class TextModuleLabelProvider extends LabelProvider<TextModule> {
                 displayValue = textModule.Name;
                 break;
             default:
-                displayValue = await this.getPropertyValueDisplayText(property, displayValue);
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
@@ -84,9 +88,12 @@ export class TextModuleLabelProvider extends LabelProvider<TextModule> {
         let displayValue = value;
         switch (property) {
             case KIXObjectProperty.VALID_ID:
-                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
-                const valid = validObjects.find((v) => v.ID === value);
-                displayValue = valid ? valid.Name : value;
+                if (value) {
+                    const validObjects = await KIXObjectService.loadObjects<ValidObject>(
+                        KIXObjectType.VALID_OBJECT, [value], null, null, true
+                    ).catch((error) => [] as ValidObject[]);
+                    displayValue = validObjects && !!validObjects.length ? validObjects[0].Name : value;
+                }
                 break;
             case KIXObjectProperty.CREATE_BY:
             case KIXObjectProperty.CHANGE_BY:
@@ -104,8 +111,10 @@ export class TextModuleLabelProvider extends LabelProvider<TextModule> {
             default:
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';

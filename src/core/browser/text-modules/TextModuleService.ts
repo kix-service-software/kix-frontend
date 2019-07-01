@@ -1,7 +1,7 @@
 import { KIXObjectService } from "../kix";
 import {
     KIXObjectType, KIXObjectLoadingOptions, FilterCriteria,
-    TextModuleProperty, FilterDataType, FilterType, TextModule, CRUD
+    TextModuleProperty, FilterDataType, FilterType, TextModule, CRUD, KIXObjectProperty
 } from "../../model";
 import { IAutofillConfiguration } from "../components";
 import { SearchOperator } from "../SearchOperator";
@@ -102,9 +102,6 @@ export class TextModuleService extends KIXObjectService {
         if (query && query !== '') {
             filterCriteria = [
                 new FilterCriteria(
-                    TextModuleProperty.SUBJECT, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, query
-                ),
-                new FilterCriteria(
                     TextModuleProperty.KEYWORDS, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, query
                 ),
                 new FilterCriteria(
@@ -112,6 +109,9 @@ export class TextModuleService extends KIXObjectService {
                 )
             ];
         }
+        filterCriteria.push(new FilterCriteria(
+            KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
+        ));
         const loadingOptions = new KIXObjectLoadingOptions(filterCriteria);
         const textModules = await KIXObjectService.loadObjects<TextModule>(KIXObjectType.TEXT_MODULE, null, loadingOptions);
         return textModules;

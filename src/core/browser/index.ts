@@ -5,6 +5,7 @@ export * from './components';
 export * from './kix';
 export * from './marko';
 export * from './settings';
+export * from './placeholder';
 
 export { ActionFactory } from './ActionFactory';
 export { AttachmentUtil } from './AttachmentUtil';

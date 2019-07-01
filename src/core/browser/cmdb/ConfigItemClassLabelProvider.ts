@@ -35,8 +35,10 @@ export class ConfigItemClassLabelProvider extends LabelProvider<ConfigItemClass>
             default:
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue.toString();
@@ -76,8 +78,10 @@ export class ConfigItemClassLabelProvider extends LabelProvider<ConfigItemClass>
                 displayValue = property;
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
@@ -94,11 +98,13 @@ export class ConfigItemClassLabelProvider extends LabelProvider<ConfigItemClass>
                 displayValue = ciClass.Name;
                 break;
             default:
-                displayValue = await this.getPropertyValueDisplayText(property, displayValue);
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;

@@ -2,9 +2,9 @@ export enum ContactProperty {
 
     ID = 'ID',
 
-    FIRST_NAME = 'Firstname',
+    FIRSTNAME = 'Firstname',
 
-    LAST_NAME = 'Lastname',
+    LASTNAME = 'Lastname',
 
     LOGIN = 'Login',
 
@@ -42,6 +42,11 @@ export enum ContactProperty {
 
     CREATE_NEW_TICKET = 'CREATE_NEW_TICKET',
 
-    PASSWORD = 'Password'
+    PASSWORD = 'Password',
+
+    // UI properties
+    VALID = 'Valid',
+    PRIMARY_ORGANISATION = 'PrimaryOrganisation',
+    ORGANISATIONS = 'Organisations',
 
 }

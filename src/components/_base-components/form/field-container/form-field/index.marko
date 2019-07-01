@@ -2,13 +2,15 @@
     additionalFieldControlsNeeded: input.additionalFieldControlsNeeded
 }>
     <div.field-label class={
-        "no-label": !state.field.label
+        "no-label": !state.field.label || !state.field.showLabel
     }>
         <span.label-text title=state.translations[state.field.label]>
             <if(state.field.required)>
                 <span.required-field>*</span>
             </if>
-            <translation-string pattern=state.field.label/>
+            <if(state.field.showLabel)>
+                <translation-string pattern=state.field.label/>
+            </if>
         </span>
     </div>
     <div.field-icon>

@@ -12,31 +12,62 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
     public kixObjectType: KIXObjectType = KIXObjectType.CONTACT;
 
     public async getPropertyValueDisplayText(
-        property: string, value: string | number, translatable: boolean = true
+        property: string, value: any, translatable: boolean = true
     ): Promise<string> {
         let displayValue = value;
         switch (property) {
             case KIXObjectProperty.VALID_ID:
-                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
-                const valid = validObjects.find((v) => v.ID === value);
-                displayValue = valid ? valid.Name : value;
+                if (value) {
+                    const validObjects = await KIXObjectService.loadObjects<ValidObject>(
+                        KIXObjectType.VALID_OBJECT, [value], null, null, true
+                    ).catch((error) => [] as ValidObject[]);
+                    displayValue = validObjects && !!validObjects.length ? validObjects[0].Name : value;
+                }
+                break;
+            case ContactProperty.PRIMARY_ORGANISATION_ID:
+                if (value) {
+                    const primaryOrganisations = await KIXObjectService.loadObjects<Organisation>(
+                        KIXObjectType.ORGANISATION, [value], null, null, true
+                    ).catch((error) => console.log(error));
+                    displayValue = primaryOrganisations && primaryOrganisations.length
+                        ? `${primaryOrganisations[0].Name} (${primaryOrganisations[0].Number})`
+                        : '';
+                }
+                break;
+            case ContactProperty.ORGANISATION_IDS:
+                if (value && Array.isArray(value) && value.length) {
+                    const organisations = await KIXObjectService.loadObjects<Organisation>(
+                        KIXObjectType.ORGANISATION, value, null, null, true
+                    ).catch((error) => console.log(error));
+                    const organisationNames = organisations && organisations.length
+                        ? organisations.map((c) => c.Name)
+                        : [];
+                    displayValue = organisationNames.join(', ');
+                }
                 break;
             case KIXObjectProperty.CREATE_BY:
             case KIXObjectProperty.CHANGE_BY:
-                const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [value], null, null, true
-                ).catch((error) => [] as User[]);
-                displayValue = users && !!users.length ? users[0].UserFullname : value;
+                if (value) {
+                    const users = await KIXObjectService.loadObjects<User>(
+                        KIXObjectType.USER, [value], null, null, true
+                    ).catch((error) => [] as User[]);
+                    displayValue = users && !!users.length ? users[0].UserFullname : value;
+                }
                 break;
             case KIXObjectProperty.CREATE_TIME:
             case KIXObjectProperty.CHANGE_TIME:
-                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
+                if (displayValue) {
+                    displayValue = translatable ?
+                        await DateTimeUtil.getLocalDateTimeString(displayValue) : displayValue;
+                }
                 break;
             default:
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';
@@ -55,10 +86,10 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
             case ContactProperty.ID:
                 displayValue = 'Translatable#ID';
                 break;
-            case ContactProperty.FIRST_NAME:
+            case ContactProperty.FIRSTNAME:
                 displayValue = 'Translatable#First Name';
                 break;
-            case ContactProperty.LAST_NAME:
+            case ContactProperty.LASTNAME:
                 displayValue = 'Translatable#Name';
                 break;
             case ContactProperty.EMAIL:
@@ -134,8 +165,10 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 displayValue = property;
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
@@ -151,33 +184,10 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
     public async getDisplayText(
         contact: Contact, property: string, defaultValue?: string, translatable: boolean = true
     ): Promise<string> {
-        let displayValue = contact[property];
+        let displayValue = typeof defaultValue !== 'undefined' && defaultValue !== null
+            ? defaultValue : contact[property];
 
         switch (property) {
-            case KIXObjectProperty.VALID_ID:
-                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
-                const valid = validObjects.find((v) => v.ID.toString() === contact[property].toString());
-                displayValue = valid ? valid.Name : contact[property].toString();
-                break;
-            case ContactProperty.PRIMARY_ORGANISATION_ID:
-                const primaryOrganisations = await KIXObjectService.loadObjects<Organisation>(
-                    KIXObjectType.ORGANISATION, [contact.PrimaryOrganisationID], null, null, true
-                ).catch((error) => console.log(error));
-                displayValue = primaryOrganisations && primaryOrganisations.length
-                    ? `${primaryOrganisations[0].Name} (${primaryOrganisations[0].Number})`
-                    : '';
-                break;
-            case ContactProperty.ORGANISATION_IDS:
-                if (contact.OrganisationIDs && contact.OrganisationIDs.length) {
-                    const organisations = await KIXObjectService.loadObjects<Organisation>(
-                        KIXObjectType.ORGANISATION, contact.OrganisationIDs, null, null, true
-                    ).catch((error) => console.log(error));
-                    const organisationNames = organisations && organisations.length
-                        ? organisations.map((c) => c.Name)
-                        : [];
-                    displayValue = organisationNames.join(', ');
-                }
-                break;
             case ContactProperty.CREATE_NEW_TICKET:
                 if (contact.ValidID === 1) {
                     const newTicketLabel = await TranslationService.translate('Translatable#New Ticket');
@@ -199,12 +209,29 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                     displayValue = contact.TicketStats.PendingReminderCount.toString();
                 }
                 break;
+            case ContactProperty.VALID:
+                displayValue = await this.getPropertyValueDisplayText(
+                    KIXObjectProperty.VALID_ID, contact.ValidID, translatable
+                );
+                break;
+            case ContactProperty.PRIMARY_ORGANISATION:
+                displayValue = await this.getPropertyValueDisplayText(
+                    ContactProperty.PRIMARY_ORGANISATION_ID, contact.PrimaryOrganisationID, translatable
+                );
+                break;
+            case ContactProperty.ORGANISATIONS:
+                displayValue = await this.getPropertyValueDisplayText(
+                    ContactProperty.ORGANISATION_IDS, contact.OrganisationIDs, translatable
+                );
+                break;
             default:
-                displayValue = await this.getPropertyValueDisplayText(property, displayValue);
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';

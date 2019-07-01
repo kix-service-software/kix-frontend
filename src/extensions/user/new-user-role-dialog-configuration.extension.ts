@@ -2,7 +2,7 @@ import { IConfigurationExtension } from '../../core/extensions';
 import {
     ConfiguredWidget, FormField, KIXObjectType, Form,
     FormContext, FormFieldValue, RoleProperty, FormFieldOption, ObjectReferenceOptions, KIXObjectLoadingOptions,
-    FilterCriteria, UserProperty, FilterDataType, FilterType, ContextConfiguration
+    FilterCriteria, FilterDataType, FilterType, ContextConfiguration, KIXObjectProperty
 } from '../../core/model';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../core/services';
@@ -62,7 +62,7 @@ export class Extension implements IConfigurationExtension {
                             new KIXObjectLoadingOptions(
                                 [
                                     new FilterCriteria(
-                                        UserProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                        KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
                                         FilterType.AND, 1
                                     )
                                 ]

@@ -29,8 +29,8 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
                     'contact-edit-action', 'contact-print-action'
                 ], new ObjectinformationWidgetSettings(KIXObjectType.CONTACT, [
                     ContactProperty.TITLE,
-                    ContactProperty.LAST_NAME,
-                    ContactProperty.FIRST_NAME,
+                    ContactProperty.LASTNAME,
+                    ContactProperty.FIRSTNAME,
                     ContactProperty.LOGIN,
                     ContactProperty.PRIMARY_ORGANISATION_ID,
                     ContactProperty.PHONE,

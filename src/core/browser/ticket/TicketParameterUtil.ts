@@ -1,4 +1,3 @@
-import { PendingTimeFormValue } from ".";
 import {
     TicketProperty, ArticleProperty,
     DateTimeUtil, Attachment, Ticket,
@@ -17,15 +16,10 @@ export class TicketParameterUtil {
     ): Promise<Array<[string, any]>> {
         const parameter: Array<[string, any]> = [];
         if (value) {
-            // TODO: value should always be the ID of the object
-            if (property === TicketProperty.STATE_ID) {
-                const pendingValue = (value as PendingTimeFormValue);
-                if (pendingValue) {
-                    parameter.push([property, pendingValue.stateId]);
-                    if (pendingValue.pending) {
-                        const pendingTime = DateTimeUtil.getKIXDateTimeString(pendingValue.pendingDate);
-                        parameter.push([TicketProperty.PENDING_TIME, pendingTime]);
-                    }
+            if (property === TicketProperty.PENDING_TIME) {
+                if (value) {
+                    const pendingTime = DateTimeUtil.getKIXDateTimeString(value);
+                    parameter.push([TicketProperty.PENDING_TIME, pendingTime]);
                 }
             } else if (property === TicketProperty.TITLE) {
                 parameter.push([TicketProperty.TITLE, value]);

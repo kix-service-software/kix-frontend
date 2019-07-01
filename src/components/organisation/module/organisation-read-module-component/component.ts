@@ -1,18 +1,18 @@
 import {
     AbstractMarkoComponent, LabelService, ServiceRegistry,
-    FactoryService, ContextService, ActionFactory, TableFactoryService
+    FactoryService, ContextService, ActionFactory, TableFactoryService, PlaceholderService
 } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
     KIXObjectType, ContextDescriptor, ContextType, ContextMode, WidgetConfiguration,
-    ConfiguredDialogWidget, WidgetSize
+    ConfiguredDialogWidget
 } from '../../../../core/model';
 import { DialogService } from '../../../../core/browser/components/dialog';
 import {
     OrganisationFormService, OrganisationTableFactory, OrganisationLabelProvider, OrganisationService,
     OrganisationBrowserFactory, OrganisationSearchDefinition, OrganisationSearchContext,
-    OrganisationDetailsContext, OrganisationContext, OrganisationSearchAction,
-    OrganisationPrintAction, OrganisationCreateCIAction, OrganisationCreateTicketAction
+    OrganisationDetailsContext, OrganisationSearchAction,
+    OrganisationPrintAction, OrganisationCreateCIAction, OrganisationCreateTicketAction, OrganisationPlaceholderHandler
 } from '../../../../core/browser/organisation';
 import { KIXObjectSearchService } from '../../../../core/browser/kix/search/KIXObjectSearchService';
 
@@ -23,6 +23,8 @@ class Component extends AbstractMarkoComponent {
     }
 
     public async onMount(): Promise<void> {
+        PlaceholderService.getInstance().registerPlaceholderHandler(new OrganisationPlaceholderHandler());
+
         ServiceRegistry.registerServiceInstance(OrganisationService.getInstance());
         ServiceRegistry.registerServiceInstance(OrganisationFormService.getInstance());
 

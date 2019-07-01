@@ -23,8 +23,10 @@ export class LinkObjectLabelProvider extends LabelProvider<LinkObject> {
                 displayValue = value;
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';
@@ -49,8 +51,10 @@ export class LinkObjectLabelProvider extends LabelProvider<LinkObject> {
                 displayValue = property;
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
@@ -64,10 +68,12 @@ export class LinkObjectLabelProvider extends LabelProvider<LinkObject> {
         linkObject: LinkObject, property: string, value?: string, translatable: boolean = true
     ): Promise<string> {
         let displayValue = typeof linkObject[property] !== 'undefined'
-            ? await this.getPropertyValueDisplayText(property, linkObject[property]) : property;
+            ? await this.getPropertyValueDisplayText(property, linkObject[property], translatable) : property;
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';

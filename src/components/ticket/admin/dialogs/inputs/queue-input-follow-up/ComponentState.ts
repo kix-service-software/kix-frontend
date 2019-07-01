@@ -1,7 +1,6 @@
 import { FormInputComponentState, TreeNode } from '../../../../../../core/model';
-import { PendingTimeFormValue } from '../../../../../../core/browser/ticket';
 
-export class ComponentState extends FormInputComponentState<PendingTimeFormValue> {
+export class ComponentState extends FormInputComponentState<number> {
 
     public constructor(
         public nodes: TreeNode[] = [],

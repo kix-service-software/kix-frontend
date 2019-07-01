@@ -41,18 +41,16 @@ class Component {
             if (this.state.property === OrganisationProperty.ID
                 || this.state.property === OrganisationProperty.NAME) {
                 const context = await ContextService.getInstance().getContext(OrganisationDetailsContext.CONTEXT_ID);
-                const contextDescriptor = context.getDescriptor();
                 this.routingConfiguration = new RoutingConfiguration(
                     OrganisationDetailsContext.CONTEXT_ID, KIXObjectType.ORGANISATION,
                     ContextMode.DETAILS, OrganisationProperty.ID, false
                 );
             }
         } else if (this.state.object.KIXObjectType === KIXObjectType.CONTACT) {
-            if (this.state.property === ContactProperty.FIRST_NAME
-                || this.state.property === ContactProperty.LAST_NAME
+            if (this.state.property === ContactProperty.FIRSTNAME
+                || this.state.property === ContactProperty.LASTNAME
                 || this.state.property === ContactProperty.LOGIN) {
                 const context = await ContextService.getInstance().getContext(ContactDetailsContext.CONTEXT_ID);
-                const contextDescriptor = context.getDescriptor();
                 this.routingConfiguration = new RoutingConfiguration(
                     ContactDetailsContext.CONTEXT_ID, KIXObjectType.CONTACT,
                     ContextMode.DETAILS, ContactProperty.ID, false

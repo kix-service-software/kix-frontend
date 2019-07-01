@@ -107,8 +107,8 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                 new ObjectinformationWidgetSettings(
                     KIXObjectType.CONTACT, [
                         ContactProperty.TITLE,
-                        ContactProperty.LAST_NAME,
-                        ContactProperty.FIRST_NAME,
+                        ContactProperty.LASTNAME,
+                        ContactProperty.FIRSTNAME,
                         ContactProperty.LOGIN,
                         ContactProperty.PRIMARY_ORGANISATION_ID,
                         ContactProperty.PHONE,
@@ -116,8 +116,8 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                         ContactProperty.FAX,
                         ContactProperty.EMAIL
                     ], true, [
-                        [ContactProperty.LAST_NAME, contactRouting],
-                        [ContactProperty.FIRST_NAME, contactRouting],
+                        [ContactProperty.LASTNAME, contactRouting],
+                        [ContactProperty.FIRSTNAME, contactRouting],
                         [ContactProperty.LOGIN, contactRouting]
                     ]
                 ),
@@ -149,8 +149,8 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                         OrganisationProperty.CITY,
                         OrganisationProperty.COUNTRY
                     ], true, [
-                        [ContactProperty.LAST_NAME, contactRouting],
-                        [ContactProperty.FIRST_NAME, contactRouting],
+                        [ContactProperty.LASTNAME, contactRouting],
+                        [ContactProperty.FIRSTNAME, contactRouting],
                         [ContactProperty.LOGIN, contactRouting]
                     ]
                 ),
@@ -163,8 +163,8 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                 new ObjectinformationWidgetSettings(KIXObjectType.CONTACT, [
                     ContactProperty.LOGIN,
                     ContactProperty.TITLE,
-                    ContactProperty.LAST_NAME,
-                    ContactProperty.FIRST_NAME,
+                    ContactProperty.LASTNAME,
+                    ContactProperty.FIRSTNAME,
                     ContactProperty.PRIMARY_ORGANISATION_ID,
                     ContactProperty.PHONE,
                     ContactProperty.MOBILE,

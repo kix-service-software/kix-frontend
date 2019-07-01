@@ -3,8 +3,6 @@ import { KIXObjectType, KIXObjectLoadingOptions, FormField, CRUD } from "../../m
 import { FAQArticleProperty, FAQArticle, FAQArticleAttachmentLoadingOptions, Attachment } from "../../model/kix/faq";
 import { InlineContent } from "../components";
 import { KIXObjectService } from "../kix";
-import { AuthenticationSocketClient } from "../application/AuthenticationSocketClient";
-import { UIComponentPermission } from "../../model/UIComponentPermission";
 
 export class FAQArticleFormService extends KIXObjectFormService<FAQArticle> {
 
@@ -91,12 +89,6 @@ export class FAQArticleFormService extends KIXObjectFormService<FAQArticle> {
             default:
         }
         return hasPermissions;
-    }
-
-    private async checkPermissions(resource: string, crud: CRUD[] = [CRUD.READ]): Promise<boolean> {
-        return await AuthenticationSocketClient.getInstance().checkPermissions(
-            [new UIComponentPermission(resource, crud)]
-        );
     }
 
 }

@@ -37,10 +37,6 @@ export class Extension implements IConfigurationExtension {
                     'Translatable#Helptext_Admin_TextModuleEdit_Keywords'
                 ),
                 new FormField(
-                    'Translatable#Subject', TextModuleProperty.SUBJECT, null, false,
-                    'Translatable#Helptext_Admin_TextModuleEdit_Subject'
-                ),
-                new FormField(
                     'Translatable#Text', TextModuleProperty.TEXT, 'rich-text-input', true,
                     'Translatable#Helptext_Admin_TextModuleEdit_Text'
                 ),

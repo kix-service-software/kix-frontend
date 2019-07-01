@@ -1,4 +1,6 @@
-import { User, KIXObjectType, UserProperty, ObjectIcon, DateTimeUtil, ValidObject } from "../../model";
+import {
+    User, KIXObjectType, UserProperty, ObjectIcon, DateTimeUtil, ValidObject, KIXObjectProperty
+} from "../../model";
 import { TranslationService } from "../i18n/TranslationService";
 import { KIXObjectService } from "../kix";
 import { LabelProvider } from "../LabelProvider";
@@ -12,24 +14,39 @@ export class UserLabelProvider extends LabelProvider<User> {
         property: string, value: string | number, translatable: boolean = true
     ): Promise<string> {
         let displayValue = value;
+
         switch (property) {
-            case UserProperty.CREATE_BY:
-            case UserProperty.CHANGE_BY:
-                const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [value], null, null, true
-                ).catch((error) => [] as User[]);
-                displayValue = users && !!users.length ? users[0].UserFullname : value;
+            case KIXObjectProperty.CREATE_TIME:
+            case KIXObjectProperty.CHANGE_TIME:
+                if (value) {
+                    displayValue = translatable ?
+                        await DateTimeUtil.getLocalDateTimeString(displayValue) : displayValue;
+                }
                 break;
-            case UserProperty.VALID_ID:
-                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
-                const valid = validObjects.find((v) => v.ID === value);
-                displayValue = valid ? valid.Name : value;
+            case KIXObjectProperty.CREATE_BY:
+            case KIXObjectProperty.CHANGE_BY:
+                if (value) {
+                    const users = await KIXObjectService.loadObjects<User>(
+                        KIXObjectType.USER, [value], null, null, true
+                    ).catch((error) => [] as User[]);
+                    displayValue = users && !!users.length ? users[0].UserFullname : value;
+                }
+                break;
+            case KIXObjectProperty.VALID_ID:
+                if (value) {
+                    const validObjects = await KIXObjectService.loadObjects<ValidObject>(
+                        KIXObjectType.VALID_OBJECT, [value], null, null, true
+                    ).catch((error) => [] as ValidObject[]);
+                    displayValue = validObjects && !!validObjects.length ? validObjects[0].Name : value;
+                }
                 break;
             default:
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';
@@ -54,7 +71,7 @@ export class UserLabelProvider extends LabelProvider<User> {
             case UserProperty.USER_LOGIN:
                 displayValue = 'Translatable#Login Name';
                 break;
-            case UserProperty.VALID_ID:
+            case KIXObjectProperty.VALID_ID:
                 displayValue = 'Translatable#Validity';
                 break;
             case UserProperty.USER_EMAIL:
@@ -69,16 +86,16 @@ export class UserLabelProvider extends LabelProvider<User> {
             case UserProperty.LAST_LOGIN:
                 displayValue = 'Translatable#Last Login';
                 break;
-            case UserProperty.CREATE_BY:
+            case KIXObjectProperty.CREATE_BY:
                 displayValue = 'Translatable#Created by';
                 break;
-            case UserProperty.CREATE_TIME:
+            case KIXObjectProperty.CREATE_TIME:
                 displayValue = 'Translatable#Created at';
                 break;
-            case UserProperty.CHANGE_BY:
+            case KIXObjectProperty.CHANGE_BY:
                 displayValue = 'Translatable#Changed by';
                 break;
-            case UserProperty.CHANGE_TIME:
+            case KIXObjectProperty.CHANGE_TIME:
                 displayValue = 'Translatable#Changed at';
                 break;
             case UserProperty.USER_COMMENT:
@@ -91,8 +108,10 @@ export class UserLabelProvider extends LabelProvider<User> {
                 displayValue = property;
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
@@ -104,20 +123,13 @@ export class UserLabelProvider extends LabelProvider<User> {
         let displayValue = user[property];
 
         switch (property) {
-            case UserProperty.VALID_ID:
-                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
-                const valid = validObjects.find((v) => v.ID.toString() === user[property].toString());
-                displayValue = valid ? valid.Name : user[property].toString();
-                break;
-            case UserProperty.CREATE_TIME:
-            case UserProperty.CHANGE_TIME:
-                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
-                break;
             case UserProperty.LAST_LOGIN:
                 if (user.Preferences) {
                     const lastLogin = user.Preferences.find((p) => p.ID === UserProperty.LAST_LOGIN);
                     if (lastLogin) {
-                        displayValue = await DateTimeUtil.getLocalDateTimeString(Number(lastLogin.Value) * 1000);
+                        displayValue = translatable
+                            ? await DateTimeUtil.getLocalDateTimeString(Number(lastLogin.Value) * 1000)
+                            : Number(lastLogin.Value) * 1000;
                     }
                 }
                 break;
@@ -129,12 +141,19 @@ export class UserLabelProvider extends LabelProvider<User> {
                     }
                 }
                 break;
+            case UserProperty.USER_VALID:
+                displayValue = await this.getPropertyValueDisplayText(
+                    KIXObjectProperty.VALID_ID, user.ValidID, translatable
+                );
+                break;
             default:
-                displayValue = await this.getPropertyValueDisplayText(property, displayValue);
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';

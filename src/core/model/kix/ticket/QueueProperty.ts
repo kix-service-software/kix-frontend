@@ -20,6 +20,11 @@ export enum QueueProperty {
 
     PARENT_ID = 'ParentID',
 
-    SUB_QUEUES = 'SubQueues'
+    SUB_QUEUES = 'SubQueues',
 
+    // UI properties
+    VALID = 'Valid',
+    PARENT = 'Parent',
+    SYSTEM_ADDRESS = 'SystemAddress',
+    FOLLOW_UP = 'FollowUp'
 }
