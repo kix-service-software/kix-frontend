@@ -24,6 +24,5 @@ export { ClientRegistration } from './ClientRegistration';
 export { KIXObject } from './KIXObject';
 export { KIXObjectType } from './KIXObjectType';
 export { Lock } from './Lock';
-export { ObjectData } from './ObjectData';
 export { AttachmentError } from './AttachmentError';
 export { KIXObjectProperty } from './KIXObjectProperty';

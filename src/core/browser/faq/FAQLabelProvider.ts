@@ -1,12 +1,11 @@
 import {
-    DateTimeUtil, ObjectIcon, KIXObjectType, SysConfigOption, SysConfigKey
+    DateTimeUtil, ObjectIcon, KIXObjectType, SysConfigOption, SysConfigKey, ValidObject
 } from "../../model";
 import { FAQArticleProperty, FAQArticle, FAQCategory } from "../../model/kix/faq";
 import { KIXObjectService, ServiceRegistry } from "../kix";
 import { BrowserUtil } from "../BrowserUtil";
 import { SearchProperty } from "../SearchProperty";
 import { TranslationService } from "../i18n/TranslationService";
-import { ObjectDataService } from "../ObjectDataService";
 import { LabelProvider } from "../LabelProvider";
 
 export class FAQLabelProvider extends LabelProvider<FAQArticle> {
@@ -17,21 +16,19 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
         property: string, value: string | number, translatable: boolean = true
     ): Promise<string> {
         let displayValue = value;
-        const objectData = ObjectDataService.getInstance().getObjectData();
-        if (objectData) {
-            switch (property) {
-                case FAQArticleProperty.CATEGORY_ID:
-                    const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(KIXObjectType.FAQ_CATEGORY);
-                    const category = faqCategories.find((fc) => fc.ID === value);
-                    displayValue = category ? category.Name : value;
-                    break;
-                case FAQArticleProperty.VALID_ID:
-                    const valid = objectData.validObjects.find((v) => v.ID === value);
-                    displayValue = valid ? valid.Name : value;
-                    break;
-                default:
-                    displayValue = value;
-            }
+        switch (property) {
+            case FAQArticleProperty.CATEGORY_ID:
+                const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(KIXObjectType.FAQ_CATEGORY);
+                const category = faqCategories.find((fc) => fc.ID === value);
+                displayValue = category ? category.Name : value;
+                break;
+            case FAQArticleProperty.VALID_ID:
+                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
+                const valid = validObjects.find((v) => v.ID === value);
+                displayValue = valid ? valid.Name : value;
+                break;
+            default:
+                displayValue = value;
         }
 
         if (translatable && displayValue) {
@@ -134,8 +131,6 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
     ): Promise<string> {
         let displayValue = faqArticle[property];
 
-        const objectData = ObjectDataService.getInstance().getObjectData();
-
         switch (property) {
             case FAQArticleProperty.CATEGORY_ID:
                 const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(KIXObjectType.FAQ_CATEGORY);
@@ -160,7 +155,8 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
                 displayValue = faqArticle.changedBy ? faqArticle.changedBy.UserFullname : faqArticle.ChangedBy;
                 break;
             case FAQArticleProperty.VALID_ID:
-                const valid = objectData.validObjects.find((v) => v.ID.toString() === faqArticle.ValidID.toString());
+                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
+                const valid = validObjects.find((v) => v.ID.toString() === faqArticle.ValidID.toString());
                 displayValue = valid ? valid.Name : faqArticle.ValidID;
                 break;
             case FAQArticleProperty.LANGUAGE:

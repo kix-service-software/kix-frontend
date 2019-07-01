@@ -1,7 +1,6 @@
 import { TableFilterCriteria } from "./components";
 import { SearchOperator } from "../browser";
 import { KIXObjectType, KIXObject } from "./kix";
-import { ObjectDataService } from "../browser/ObjectDataService";
 import { AgentService } from "../browser/application/AgentService";
 
 export class FilterUtil {

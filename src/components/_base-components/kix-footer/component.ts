@@ -1,10 +1,10 @@
 import { ComponentState } from './ComponentState';
 import { ReleaseInfo, SysConfigOption, KIXObjectType, SysConfigKey } from '../../../core/model';
-import { ObjectDataService } from '../../../core/browser/ObjectDataService';
 import { KIXObjectService } from '../../../core/browser';
 import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 import { ComponentInput } from './ComponentInput';
 import { AgentService } from '../../../core/browser/application/AgentService';
+import { KIXModulesSocketClient } from '../../../core/browser/modules/KIXModulesSocketClient';
 
 class Component {
 
@@ -22,8 +22,7 @@ class Component {
 
     public async onMount(): Promise<void> {
         if (!this.state.releaseInfo) {
-            const objectData = ObjectDataService.getInstance().getObjectData();
-            this.state.releaseInfo = objectData.releaseInfo;
+            this.state.releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
         }
 
         if (!this.state.unauthorized) {

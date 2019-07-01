@@ -8,8 +8,8 @@ import { ObjectDefinitionUtil, KIXObjectService } from "../kix";
 import { TicketService } from "./TicketService";
 import { ObjectPropertyValue } from "../ObjectPropertyValue";
 import { PropertyOperator } from "../PropertyOperator";
-import { ObjectDataService } from "../ObjectDataService";
 import { ContactService } from "../contact";
+import { KIXModulesSocketClient } from "../modules/KIXModulesSocketClient";
 
 export class TicketBulkManager extends BulkManager {
 
@@ -45,8 +45,8 @@ export class TicketBulkManager extends BulkManager {
     }
 
     public async getInputType(property: string): Promise<InputFieldTypes> {
-        const objectData = ObjectDataService.getInstance().getObjectData();
-        const ticketDefinition = objectData.objectDefinitions.find((od) => od.Object === this.objectType);
+        const objectDefinitions = await KIXModulesSocketClient.getInstance().loadObjectDefinitions();
+        const ticketDefinition = objectDefinitions.find((od) => od.Object === this.objectType);
         if (ticketDefinition) {
             switch (property) {
                 case TicketProperty.CONTACT_ID:
@@ -74,8 +74,8 @@ export class TicketBulkManager extends BulkManager {
 
     public async getProperties(): Promise<Array<[string, string]>> {
         const properties: Array<[string, string]> = [];
-        const objectData = ObjectDataService.getInstance().getObjectData();
-        const ticketDefinition = objectData.objectDefinitions.find((od) => od.Object === this.objectType);
+        const objectDefinitions = await KIXModulesSocketClient.getInstance().loadObjectDefinitions();
+        const ticketDefinition = objectDefinitions.find((od) => od.Object === this.objectType);
         if (ticketDefinition) {
             const labelProvider = LabelService.getInstance().getLabelProviderForType(this.objectType);
             const attributes = ticketDefinition.Attributes.filter((a) =>
@@ -96,9 +96,8 @@ export class TicketBulkManager extends BulkManager {
     public async searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]> {
         switch (property) {
             case TicketProperty.CONTACT_ID:
-                const loadingOptions = new KIXObjectLoadingOptions(
-                    ContactService.getInstance().prepareFullTextFilter(searchValue), null, limit
-                );
+                const filter = await ContactService.getInstance().prepareFullTextFilter(searchValue);
+                const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit);
                 const contacts = await KIXObjectService.loadObjects<Contact>(
                     KIXObjectType.CONTACT, null, loadingOptions, null, false
                 );

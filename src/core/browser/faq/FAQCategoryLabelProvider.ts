@@ -1,8 +1,7 @@
-import { DateTimeUtil, ObjectIcon, KIXObjectType, User } from "../../model";
+import { DateTimeUtil, ObjectIcon, KIXObjectType, User, ValidObject } from "../../model";
 import { FAQCategory, FAQCategoryProperty } from "../../model/kix/faq";
 import { KIXObjectService } from "../kix";
 import { TranslationService } from "../i18n/TranslationService";
-import { ObjectDataService } from "../ObjectDataService";
 import { LabelProvider } from "../LabelProvider";
 
 export class FAQCategoryLabelProvider extends LabelProvider<FAQCategory> {
@@ -83,40 +82,37 @@ export class FAQCategoryLabelProvider extends LabelProvider<FAQCategory> {
         property: string, value: string | number, translatable: boolean = true
     ): Promise<string> {
         let displayValue = value;
-        const objectData = ObjectDataService.getInstance().getObjectData();
-
-        if (objectData) {
-            switch (property) {
-                case FAQCategoryProperty.CHANGE_TIME:
-                case FAQCategoryProperty.CREATE_TIME:
-                    displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
-                    break;
-                case FAQCategoryProperty.CREATE_BY:
-                case FAQCategoryProperty.CHANGE_BY:
-                    if (displayValue) {
-                        const users = await KIXObjectService.loadObjects<User>(
-                            KIXObjectType.USER, [displayValue], null, null, true
-                        ).catch((error) => [] as User[]);
-                        displayValue = users && !!users.length ? users[0].UserFullname : displayValue;
-                    }
-                    break;
-                case FAQCategoryProperty.PARENT_ID:
-                    if (value) {
-                        const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(
-                            KIXObjectType.FAQ_CATEGORY, [value], null, null, true
-                        ).catch((error) => [] as FAQCategory[]);
-                        displayValue = faqCategories && !!faqCategories.length ? faqCategories[0].Name : value;
-                    }
-                    break;
-                case FAQCategoryProperty.VALID_ID:
-                    const valid = objectData.validObjects.find((v) => v.ID.toString() === value.toString());
-                    if (valid) {
-                        displayValue = valid.Name;
-                    }
-                    break;
-                default:
-                    displayValue = value;
-            }
+        switch (property) {
+            case FAQCategoryProperty.CHANGE_TIME:
+            case FAQCategoryProperty.CREATE_TIME:
+                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
+                break;
+            case FAQCategoryProperty.CREATE_BY:
+            case FAQCategoryProperty.CHANGE_BY:
+                if (displayValue) {
+                    const users = await KIXObjectService.loadObjects<User>(
+                        KIXObjectType.USER, [displayValue], null, null, true
+                    ).catch((error) => [] as User[]);
+                    displayValue = users && !!users.length ? users[0].UserFullname : displayValue;
+                }
+                break;
+            case FAQCategoryProperty.PARENT_ID:
+                if (value) {
+                    const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(
+                        KIXObjectType.FAQ_CATEGORY, [value], null, null, true
+                    ).catch((error) => [] as FAQCategory[]);
+                    displayValue = faqCategories && !!faqCategories.length ? faqCategories[0].Name : value;
+                }
+                break;
+            case FAQCategoryProperty.VALID_ID:
+                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
+                const valid = validObjects.find((v) => v.ID.toString() === value.toString());
+                if (valid) {
+                    displayValue = valid.Name;
+                }
+                break;
+            default:
+                displayValue = value;
         }
 
         if (translatable && displayValue) {

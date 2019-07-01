@@ -1,9 +1,8 @@
 import {
     ObjectIcon, KIXObjectType, MailFilter, MailFilterProperty, User, DateTimeUtil,
-    KIXObjectProperty, MailFilterMatch, MailFilterSet
+    KIXObjectProperty, MailFilterMatch, MailFilterSet, ValidObject
 } from '../../model';
 import { TranslationService } from '../i18n/TranslationService';
-import { ObjectDataService } from '../ObjectDataService';
 import { KIXObjectService } from "../kix";
 import { LabelProvider } from '../LabelProvider';
 
@@ -94,45 +93,43 @@ export class MailFilterLabelProvider extends LabelProvider<MailFilter> {
         property: string, value: string | number, translatable: boolean = true
     ): Promise<string> {
         let displayValue = value;
-        const objectData = ObjectDataService.getInstance().getObjectData();
-        if (objectData) {
-            switch (property) {
-                case KIXObjectProperty.VALID_ID:
-                    const valid = objectData.validObjects.find((v) => v.ID === value);
-                    displayValue = valid ? valid.Name : value;
-                    break;
-                case KIXObjectProperty.CREATE_BY:
-                case KIXObjectProperty.CHANGE_BY:
-                    if (value) {
-                        const users = await KIXObjectService.loadObjects<User>(
-                            KIXObjectType.USER, [value], null, null, true
-                        ).catch((error) => [] as User[]);
-                        displayValue = users && !!users.length ? users[0].UserFullname : value;
-                    }
-                    break;
-                case KIXObjectProperty.CREATE_TIME:
-                case KIXObjectProperty.CHANGE_TIME:
-                    displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
-                    break;
-                case MailFilterProperty.STOP_AFTER_MATCH:
-                    displayValue = Boolean(value) ? 'Translatable#Yes' : 'Translatable#No';
-                    break;
-                case MailFilterProperty.MATCH:
-                    if (Array.isArray(value)) {
-                        displayValue = (value as MailFilterMatch[]).map(
-                            (v) => `${v.Key} ${Boolean(v.Not) ? '!~' : '=~'} ${v.Value}`
-                        ).join(', ');
-                    }
-                    break;
-                case MailFilterProperty.SET:
-                    if (Array.isArray(value)) {
-                        displayValue = (value as MailFilterSet[]).map(
-                            (v) => `${v.Key} := ${v.Value}`
-                        ).join(', ');
-                    }
-                    break;
-                default:
-            }
+        switch (property) {
+            case KIXObjectProperty.VALID_ID:
+                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
+                const valid = validObjects.find((v) => v.ID === value);
+                displayValue = valid ? valid.Name : value;
+                break;
+            case KIXObjectProperty.CREATE_BY:
+            case KIXObjectProperty.CHANGE_BY:
+                if (value) {
+                    const users = await KIXObjectService.loadObjects<User>(
+                        KIXObjectType.USER, [value], null, null, true
+                    ).catch((error) => [] as User[]);
+                    displayValue = users && !!users.length ? users[0].UserFullname : value;
+                }
+                break;
+            case KIXObjectProperty.CREATE_TIME:
+            case KIXObjectProperty.CHANGE_TIME:
+                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
+                break;
+            case MailFilterProperty.STOP_AFTER_MATCH:
+                displayValue = Boolean(value) ? 'Translatable#Yes' : 'Translatable#No';
+                break;
+            case MailFilterProperty.MATCH:
+                if (Array.isArray(value)) {
+                    displayValue = (value as MailFilterMatch[]).map(
+                        (v) => `${v.Key} ${Boolean(v.Not) ? '!~' : '=~'} ${v.Value}`
+                    ).join(', ');
+                }
+                break;
+            case MailFilterProperty.SET:
+                if (Array.isArray(value)) {
+                    displayValue = (value as MailFilterSet[]).map(
+                        (v) => `${v.Key} := ${v.Value}`
+                    ).join(', ');
+                }
+                break;
+            default:
         }
 
         if (translatable && displayValue) {

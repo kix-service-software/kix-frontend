@@ -1,5 +1,3 @@
-import { ObjectData } from "../../core/model";
-
 export class ComponentState {
 
     public constructor(

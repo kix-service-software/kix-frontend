@@ -1,11 +1,10 @@
 import {
     ContactProperty, KIXObjectType, Contact, OrganisationProperty, TreeNode, KIXObject,
-    KIXObjectProperty, FilterCriteria, FilterDataType, FilterType
+    KIXObjectProperty, FilterCriteria, FilterDataType, FilterType, ValidObject
 } from "../../model";
 import { ContactDetailsContext } from ".";
 import { ContextService } from "../context";
 import { KIXObjectService } from "../kix";
-import { ObjectDataService } from "../ObjectDataService";
 import { SearchOperator } from "../SearchOperator";
 
 export class ContactService extends KIXObjectService<Contact> {
@@ -77,14 +76,12 @@ export class ContactService extends KIXObjectService<Contact> {
     public async getTreeNodes(property: string): Promise<TreeNode[]> {
         let values: TreeNode[] = [];
 
-        const objectData = ObjectDataService.getInstance().getObjectData();
-        if (objectData) {
-            switch (property) {
-                case KIXObjectProperty.VALID_ID:
-                    values = objectData.validObjects.map((vo) => new TreeNode(Number(vo.ID), vo.Name));
-                    break;
-                default:
-            }
+        switch (property) {
+            case KIXObjectProperty.VALID_ID:
+                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
+                values = validObjects.map((vo) => new TreeNode(Number(vo.ID), vo.Name));
+                break;
+            default:
         }
 
         return values;
@@ -96,7 +93,7 @@ export class ContactService extends KIXObjectService<Contact> {
         return context.getDescriptor().urlPaths[0] + '/' + id;
     }
 
-    public prepareFullTextFilter(searchValue): FilterCriteria[] {
+    public async prepareFullTextFilter(searchValue): Promise<FilterCriteria[]> {
         return [
             new FilterCriteria(
                 ContactProperty.LOGIN, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue

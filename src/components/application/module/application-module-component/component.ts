@@ -31,6 +31,8 @@ import {
 } from '../../../../core/browser/i18n/admin/table';
 import { TranslationPatternLabelProvider, TranslationLanguageLabelProvider } from '../../../../core/browser/i18n';
 import { ServiceBrowserFactory } from '../../../../core/browser/service/ServiceBrowserFactory';
+import { ValidObjectBrowserFactory } from '../../../../core/browser/valid/ValidObjectBrowserFactory';
+import { ValidService } from '../../../../core/browser/valid/ValidService';
 
 class Component extends AbstractMarkoComponent {
 
@@ -46,11 +48,14 @@ class Component extends AbstractMarkoComponent {
         ServiceRegistry.registerServiceInstance(SlaService.getInstance());
         ServiceRegistry.registerServiceInstance(ObjectIconService.getInstance());
         ServiceRegistry.registerServiceInstance(ServiceService.getInstance());
+        ServiceRegistry.registerServiceInstance(ValidService.getInstance());
 
         ServiceRegistry.registerServiceInstance(TranslationFormService.getInstance());
-
         ServiceRegistry.registerServiceInstance(PersonalSettingsFormService.getInstance());
 
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.VALID_OBJECT, ValidObjectBrowserFactory.getInstance()
+        );
         FactoryService.getInstance().registerFactory(KIXObjectType.SERVICE, ServiceBrowserFactory.getInstance());
         FactoryService.getInstance().registerFactory(
             KIXObjectType.GENERAL_CATALOG_ITEM, GeneralCatalogBrowserFactory.getInstance()

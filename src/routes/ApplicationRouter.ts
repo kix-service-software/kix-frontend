@@ -75,41 +75,7 @@ export class ApplicationRouter extends KIXRouter {
 
     private async handleRoute(moduleId: string, objectId: string, req: Request, res: Response): Promise<void> {
         const token: string = req.cookies.token;
-        const user = await UserService.getInstance().getUserByToken(token);
-
-        const themeCSS = await this.getUserThemeCSS(user.UserID);
-        const specificCSS = await this.getSpecificCSS();
-
-        const objectData = await this.getObjectData(token);
-
-        this.prepareMarkoTemplate(
-            res, moduleId, objectId, objectData, themeCSS, specificCSS
-        );
-    }
-
-    private async getUserThemeCSS(userId: number): Promise<string> {
-        // TODO: define context id for personal settings.
-        const configuration =
-            await ConfigurationService.getInstance().getComponentConfiguration("personal-settings", null, userId);
-
-        if (configuration) {
-            return configuration.theme;
-        }
-
-        return null;
-    }
-
-    private async getSpecificCSS(): Promise<string[]> {
-        const cssExtensions = await PluginService.getInstance().getExtensions<ISpecificCSSExtension>(
-            KIXExtensions.SPECIFIC_CSS
-        );
-        let specificCSS = [];
-
-        for (const extension of cssExtensions) {
-            specificCSS = specificCSS.concat(extension.getSpecificCSSPaths());
-        }
-
-        return specificCSS;
+        this.prepareMarkoTemplate(res, moduleId, objectId);
     }
 
 }

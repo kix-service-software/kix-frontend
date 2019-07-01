@@ -3,7 +3,6 @@ import {
     ConfigItemClassDefinitionProperty, User
 } from "../../model";
 import { TranslationService } from "../i18n/TranslationService";
-import { ObjectDataService } from "../ObjectDataService";
 import { KIXObjectService } from "../kix";
 import { LabelProvider } from "../LabelProvider";
 

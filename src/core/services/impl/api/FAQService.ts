@@ -1,5 +1,5 @@
 import {
-    FAQArticleProperty, Attachment, FAQArticleAttachmentLoadingOptions, CreateFAQVoteOptions,
+    FAQArticleProperty, Attachment, FAQArticleAttachmentLoadingOptions, CreateFAQVoteOptions, FAQVisibility,
 } from "../../../model/kix/faq";
 import { KIXObjectService } from "./KIXObjectService";
 import {
@@ -35,7 +35,8 @@ export class FAQService extends KIXObjectService {
             || type === KIXObjectType.FAQ_ARTICLE_ATTACHMENT
             || type === KIXObjectType.FAQ_ARTICLE_HISTORY
             || type === KIXObjectType.FAQ_CATEGORY
-            || type === KIXObjectType.FAQ_VOTE;
+            || type === KIXObjectType.FAQ_VOTE
+            || type === KIXObjectType.FAQ_VISIBILITY;
     }
 
     public async loadObjects<T>(
@@ -57,6 +58,9 @@ export class FAQService extends KIXObjectService {
                 objects = await this.loadAttachment(
                     token, loadingOptions, (objectLoadingOptions as FAQArticleAttachmentLoadingOptions)
                 );
+                break;
+            case KIXObjectType.FAQ_VISIBILITY:
+                objects = await this.getFAQVisibilities();
                 break;
             default:
         }
@@ -94,6 +98,14 @@ export class FAQService extends KIXObjectService {
                 const error = 'No update option for object type ' + objectType;
                 throw error;
         }
+    }
+
+    public async getFAQVisibilities(): Promise<FAQVisibility[]> {
+        return [
+            new FAQVisibility("internal", "Translatable#internal"),
+            new FAQVisibility("external", "Translatable#external"),
+            new FAQVisibility("public", "Translatable#public")
+        ];
     }
 
     private async updateAttachments(

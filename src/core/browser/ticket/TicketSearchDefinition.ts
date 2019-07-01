@@ -298,9 +298,8 @@ export class TicketSearchDefinition extends SearchDefinition {
         property: string, parameter: Array<[string, any]>, searchValue: string, limit: number
     ): Promise<TreeNode[]> {
         if (property === TicketProperty.ORGANISATION_ID) {
-            const loadingOptions = new KIXObjectLoadingOptions(
-                OrganisationService.getInstance().prepareFullTextFilter(searchValue), null, limit
-            );
+            const filter = await OrganisationService.getInstance().prepareFullTextFilter(searchValue);
+            const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit);
             const organisations = await KIXObjectService.loadObjects<Organisation>(
                 KIXObjectType.ORGANISATION, null, loadingOptions, null, false
             );
@@ -311,9 +310,8 @@ export class TicketSearchDefinition extends SearchDefinition {
             }
             return nodes;
         } else if (property === TicketProperty.CONTACT_ID) {
-            const loadingOptions = new KIXObjectLoadingOptions(
-                ContactService.getInstance().prepareFullTextFilter(searchValue), null, limit
-            );
+            const filter = await ContactService.getInstance().prepareFullTextFilter(searchValue);
+            const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit);
             const contacts = await KIXObjectService.loadObjects<Contact>(
                 KIXObjectType.CONTACT, null, loadingOptions, null, false
             );

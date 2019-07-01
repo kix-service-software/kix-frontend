@@ -1,7 +1,7 @@
-import { FormInputComponent, TreeNode } from '../../../../../core/model';
+import { FormInputComponent, TreeNode, ValidObject, KIXObjectType } from '../../../../../core/model';
 import { CompontentState } from './CompontentState';
-import { ObjectDataService } from '../../../../../core/browser/ObjectDataService';
 import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
+import { KIXObjectService } from '../../../../../core/browser';
 
 class Component extends FormInputComponent<number, CompontentState> {
 
@@ -24,10 +24,8 @@ class Component extends FormInputComponent<number, CompontentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        const objectData = ObjectDataService.getInstance().getObjectData();
-        if (objectData) {
-            this.state.nodes = objectData.validObjects.map((vo) => new TreeNode(Number(vo.ID), vo.Name));
-        }
+        const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
+        this.state.nodes = validObjects.map((vo) => new TreeNode(Number(vo.ID), vo.Name));
         this.setCurrentNode();
     }
 

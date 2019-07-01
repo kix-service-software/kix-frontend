@@ -24,7 +24,7 @@ export interface IKIXObjectService<T extends KIXObject = KIXObject> extends IKIX
 
     updateObjectByForm(objectType: KIXObjectType, formId: string, objectId: number | string): Promise<number | string>;
 
-    prepareFullTextFilter(searchValue: string): FilterCriteria[];
+    prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]>;
 
     getTreeNodes(property: string, showInvalid?: boolean, filterIds?: Array<string | number>): Promise<TreeNode[]>;
 

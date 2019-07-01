@@ -284,9 +284,8 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                 (ci) => new TreeNode(ci.ConfigItemID, ci.Name, new ObjectIcon(ci.KIXObjectType, ci.ConfigItemID))
             );
         } else if (input.Type === 'Organisation') {
-            const loadingOptions = new KIXObjectLoadingOptions(
-                OrganisationService.getInstance().prepareFullTextFilter(searchValue), null, limit
-            );
+            const filter = await OrganisationService.getInstance().prepareFullTextFilter(searchValue);
+            const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit);
             const organisations = await KIXObjectService.loadObjects<Organisation>(
                 KIXObjectType.ORGANISATION, null, loadingOptions, null, false
             );
@@ -297,9 +296,8 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
             }
             return nodes;
         } else if (input.Type === 'Contact') {
-            const loadingOptions = new KIXObjectLoadingOptions(
-                ContactService.getInstance().prepareFullTextFilter(searchValue), null, limit
-            );
+            const filter = await ContactService.getInstance().prepareFullTextFilter(searchValue);
+            const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit);
             const contacts = await KIXObjectService.loadObjects<Contact>(
                 KIXObjectType.CONTACT, null, loadingOptions, null, false
             );

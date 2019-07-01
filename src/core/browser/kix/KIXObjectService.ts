@@ -279,7 +279,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return parameter;
     }
 
-    public prepareFullTextFilter(searchValue: string): FilterCriteria[] {
+    public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {
         return [];
     }
 

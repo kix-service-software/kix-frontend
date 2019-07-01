@@ -1,6 +1,5 @@
 import { KIXExtensions, IKIXModuleExtension } from '../core/extensions';
 import jsonfile = require('jsonfile');
-import { ObjectData } from '../core/model';
 import { PluginService } from './PluginService';
 import { ProfilingService, LoggingService } from '../core/services';
 
@@ -77,8 +76,7 @@ export class MarkoService {
             loginTemplate.render(
                 {
                     themeCSS: [],
-                    specificCSS: [],
-                    data: { objectData: new ObjectData() }
+                    specificCSS: []
                 }, (error, result) => {
                     if (error) {
                         ProfilingService.getInstance().stop(profileTaskId, 'Login build error.');
@@ -96,8 +94,7 @@ export class MarkoService {
             appTemplate.render(
                 {
                     themeCSS: [],
-                    specificCSS: [],
-                    data: { objectData: new ObjectData() }
+                    specificCSS: []
                 }, (error, result) => {
                     if (error) {
                         ProfilingService.getInstance().stop(profileTaskId, 'App build error.');

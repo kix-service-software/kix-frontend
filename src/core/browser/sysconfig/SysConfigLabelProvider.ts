@@ -1,8 +1,7 @@
 import {
-    ObjectIcon, KIXObjectType, User, DateTimeUtil, KIXObjectProperty, SysConfigOptionDefinitionProperty
+    ObjectIcon, KIXObjectType, User, DateTimeUtil, KIXObjectProperty, SysConfigOptionDefinitionProperty, ValidObject
 } from '../../model';
 import { TranslationService } from '../i18n/TranslationService';
-import { ObjectDataService } from '../ObjectDataService';
 import { KIXObjectService } from "../kix";
 import { SysConfigOptionDefinition } from '../../model/kix/sysconfig/SysConfigOptionDefinition';
 import { LabelProvider } from '../LabelProvider';
@@ -19,30 +18,28 @@ export class SysConfigLabelProvider extends LabelProvider<SysConfigOptionDefinit
         property: string, value: string | number, translatable: boolean = true
     ): Promise<string> {
         let displayValue = value;
-        const objectData = ObjectDataService.getInstance().getObjectData();
-        if (objectData) {
-            switch (property) {
-                case KIXObjectProperty.VALID_ID:
-                    const valid = objectData.validObjects.find((v) => v.ID === value);
-                    displayValue = valid ? valid.Name : value;
-                    break;
-                case KIXObjectProperty.CHANGE_BY:
-                    const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [value], null, null, true
-                    ).catch((error) => [] as User[]);
-                    displayValue = users && !!users.length ? users[0].UserFullname : value;
-                    break;
-                case KIXObjectProperty.CHANGE_TIME:
-                    displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
-                    break;
-                case SysConfigOptionDefinitionProperty.IS_MODIFIED:
-                    displayValue = value === 1 ? 'Translatable#Modified' : '';
-                    break;
-                case SysConfigOptionDefinitionProperty.VALUE:
-                    displayValue = JSON.stringify(value);
-                    break;
-                default:
-            }
+        switch (property) {
+            case KIXObjectProperty.VALID_ID:
+                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
+                const valid = validObjects.find((v) => v.ID === value);
+                displayValue = valid ? valid.Name : value;
+                break;
+            case KIXObjectProperty.CHANGE_BY:
+                const users = await KIXObjectService.loadObjects<User>(
+                    KIXObjectType.USER, [value], null, null, true
+                ).catch((error) => [] as User[]);
+                displayValue = users && !!users.length ? users[0].UserFullname : value;
+                break;
+            case KIXObjectProperty.CHANGE_TIME:
+                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
+                break;
+            case SysConfigOptionDefinitionProperty.IS_MODIFIED:
+                displayValue = value === 1 ? 'Translatable#Modified' : '';
+                break;
+            case SysConfigOptionDefinitionProperty.VALUE:
+                displayValue = JSON.stringify(value);
+                break;
+            default:
         }
 
         if (translatable && displayValue) {
