@@ -1,5 +1,6 @@
 import {
-    AbstractMarkoComponent, ContextService, DialogService, ActionFactory
+    AbstractMarkoComponent, ContextService, DialogService, ActionFactory,
+    TableFactoryService, LabelService, ServiceRegistry, FactoryService
 } from "../../../../core/browser";
 import { ComponentState } from './ComponentState';
 import {
@@ -7,7 +8,9 @@ import {
 } from "../../../../core/model";
 import {
     ConfigItemClassCreateAction, ConfigItemClassEditAction, ConfigItemClassDetailsContext,
-    NewConfigItemClassDialogContext, EditConfigItemClassDialogContext
+    NewConfigItemClassDialogContext, EditConfigItemClassDialogContext, ConfigItemClassTableFactory,
+    ConfigItemClassDefinitionTableFactory, ConfigItemClassLabelProvider, ConfigItemClassDefinitionLabelProvider,
+    ConfigItemClassService, ConfigItemClassBrowserFactory, ConfigItemClassFormService
 } from "../../../../core/browser/cmdb";
 import { AuthenticationSocketClient } from "../../../../core/browser/application/AuthenticationSocketClient";
 import { UIComponentPermission } from "../../../../core/model/UIComponentPermission";
@@ -19,6 +22,18 @@ class Component extends AbstractMarkoComponent {
     }
 
     public async onMount(): Promise<void> {
+
+        ServiceRegistry.registerServiceInstance(ConfigItemClassService.getInstance());
+        ServiceRegistry.registerServiceInstance(ConfigItemClassFormService.getInstance());
+
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.CONFIG_ITEM_CLASS, ConfigItemClassBrowserFactory.getInstance()
+        );
+
+        TableFactoryService.getInstance().registerFactory(new ConfigItemClassTableFactory());
+        TableFactoryService.getInstance().registerFactory(new ConfigItemClassDefinitionTableFactory());
+        LabelService.getInstance().registerLabelProvider(new ConfigItemClassLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new ConfigItemClassDefinitionLabelProvider());
 
         if (await this.checkPermission('system/cmdb/classes', CRUD.CREATE)) {
             ActionFactory.getInstance().registerAction('cmdb-admin-ci-class-create', ConfigItemClassCreateAction);

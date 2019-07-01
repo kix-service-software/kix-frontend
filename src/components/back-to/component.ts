@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
 import { ContextService, IContextServiceListener } from '../../core/browser';
-import { ContextType, Context } from '../../core/model';
+import { ContextType, Context, ContextDescriptor } from '../../core/model';
 import { ContextHistoryEntry } from '../../core/browser/context/ContextHistoryEntry';
 import { RoutingConfiguration } from '../../core/browser/router';
 
@@ -41,6 +41,10 @@ class Component implements IContextServiceListener {
 
     public contextChanged(contextId: string, context: Context, type: ContextType): void {
         this.state.history = ContextService.getInstance().getHistory();
+    }
+
+    public contextRegistered(descriptor: ContextDescriptor): void {
+        return;
     }
 
     public getRoutingConfiguration(entry: ContextHistoryEntry): RoutingConfiguration {

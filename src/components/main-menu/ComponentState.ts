@@ -8,4 +8,6 @@ export class ComponentState {
 
     public showText: boolean = false;
 
+    public loading: boolean = true;
+
 }

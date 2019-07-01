@@ -59,7 +59,8 @@ class Component {
                 if (type === ContextType.MAIN) {
                     this.setContext(context);
                 }
-            }
+            },
+            contextRegistered: () => { return; }
         });
 
         await this.bootstrapServices();

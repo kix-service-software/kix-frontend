@@ -1,28 +1,30 @@
 <div.main-menu-wrapper>
-    <ul.menu.main-menu class={
-        "image-only": !state.showText
-    }>
-        <for|menuEntry| of=state.primaryMenuEntries>
-            <if(menuEntry.show)>
-                <li key=menuEntry.text class={
-                    active: menuEntry.active
-                }>
-                    <menu-entry entry=menuEntry/>
-                </li>
-            </if>
-        </for>
-    </ul>
-    <ul.menu.user-menu class={
-        "image-only": !state.showText
-    }>
-        <for|menuEntry| of=state.secondaryMenuEntries>
-            <if(menuEntry.show)>
-                <li key=menuEntry.text class={
-                    active: menuEntry.active
-                }>
-                    <menu-entry entry=menuEntry/>
-                </li>
-            </if>
-        </for>
-    </ul>
+    <if(!state.loading)>
+        <ul.menu.main-menu class={
+            "image-only": !state.showText
+        }>
+            <for|menuEntry| of=state.primaryMenuEntries>
+                <if(menuEntry.show)>
+                    <li key=menuEntry.text class={
+                        active: menuEntry.active
+                    }>
+                        <menu-entry entry=menuEntry/>
+                    </li>
+                </if>
+            </for>
+        </ul>
+        <ul.menu.user-menu class={
+            "image-only": !state.showText
+        }>
+            <for|menuEntry| of=state.secondaryMenuEntries>
+                <if(menuEntry.show)>
+                    <li key=menuEntry.text class={
+                        active: menuEntry.active
+                    }>
+                        <menu-entry entry=menuEntry/>
+                    </li>
+                </if>
+            </for>
+        </ul>
+    </if>
 </div>

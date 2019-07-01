@@ -26,7 +26,7 @@ export class ComponentState {
                             )
                         ], null, null,
                         [FAQCategoryProperty.SUB_CATEGORIES], [FAQCategoryProperty.SUB_CATEGORIES]
-                    ), null, null, true, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.LARGE
+                    ), null, null, true, null, null, null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
                 )
             ),
             false, false, 'kix-icon-gears'

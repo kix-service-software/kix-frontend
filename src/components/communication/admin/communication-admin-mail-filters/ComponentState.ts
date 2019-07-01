@@ -8,7 +8,7 @@ export class ComponentState {
         public instanceId: string = IdService.generateDateBasedId('communication-mail-filter-list'),
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
             'table-widget', 'Translatable#Communication: Email: Email Filters',
-            ['mail-filter-create'],
+            ['mail-filter-create', 'csv-export-action'],
             new TableWidgetSettings(KIXObjectType.MAIL_FILTER,
                 [MailFilterProperty.NAME, SortOrder.UP]), false, false, 'kix-icon-gears')
     ) { }

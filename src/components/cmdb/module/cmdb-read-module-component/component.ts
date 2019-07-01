@@ -4,7 +4,7 @@ import {
 } from "../../../../core/browser";
 import { ComponentState } from './ComponentState';
 import {
-    CMDBService, ConfigItemClassService, ConfigItemBrowserFactory, ConfigItemClassBrowserFactory,
+    CMDBService, ConfigItemBrowserFactory, ConfigItemClassBrowserFactory,
     ConfigItemImageBrowserFactory, ConfigItemTableFactory, ConfigItemVersionTableFactory,
     CompareConfigItemVersionTableFactory, ConfigItemClassTableFactory, ConfigItemClassDefinitionTableFactory,
     ConfigItemHistoryTableFactory, ConfigItemLabelProvider, ConfigItemClassLabelProvider,
@@ -26,9 +26,7 @@ class Component extends AbstractMarkoComponent {
 
     public async onMount(): Promise<void> {
         ServiceRegistry.registerServiceInstance(CMDBService.getInstance());
-        ServiceRegistry.registerServiceInstance(ConfigItemClassService.getInstance());
         ServiceRegistry.registerServiceInstance(ConfigItemFormService.getInstance());
-        ServiceRegistry.registerServiceInstance(ConfigItemClassFormService.getInstance());
 
         FactoryService.getInstance().registerFactory(
             KIXObjectType.CONFIG_ITEM, ConfigItemBrowserFactory.getInstance()
@@ -46,15 +44,13 @@ class Component extends AbstractMarkoComponent {
         TableFactoryService.getInstance().registerFactory(new ConfigItemTableFactory());
         TableFactoryService.getInstance().registerFactory(new ConfigItemVersionTableFactory());
         TableFactoryService.getInstance().registerFactory(new CompareConfigItemVersionTableFactory());
-        TableFactoryService.getInstance().registerFactory(new ConfigItemClassTableFactory());
-        TableFactoryService.getInstance().registerFactory(new ConfigItemClassDefinitionTableFactory());
         TableFactoryService.getInstance().registerFactory(new ConfigItemHistoryTableFactory());
 
         LabelService.getInstance().registerLabelProvider(new ConfigItemLabelProvider());
         LabelService.getInstance().registerLabelProvider(new ConfigItemClassLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new ConfigItemClassDefinitionLabelProvider());
         LabelService.getInstance().registerLabelProvider(new ConfigItemHistoryLabelProvider());
         LabelService.getInstance().registerLabelProvider(new ConfigItemVersionLabelProvider());
-        LabelService.getInstance().registerLabelProvider(new ConfigItemClassDefinitionLabelProvider());
         LabelService.getInstance().registerLabelProvider(new ConfigItemVersionCompareLabelProvider());
 
         KIXObjectSearchService.getInstance().registerSearchDefinition(new ConfigItemSearchDefinition());

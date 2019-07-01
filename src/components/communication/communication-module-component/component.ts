@@ -54,7 +54,6 @@ class Component extends AbstractMarkoComponent {
         TableFactoryService.getInstance().registerFactory(new MailFilterTableFactory());
         LabelService.getInstance().registerLabelProvider(new MailFilterLabelProvider());
 
-        this.registerAdminDialogs();
         this.registerSystemAddresses();
         this.registerMailAccounts();
         this.registerMailFilters();
@@ -62,7 +61,7 @@ class Component extends AbstractMarkoComponent {
 
     private async registerSystemAddresses(): Promise<void> {
 
-        if (await this.checkPermission('/system/communication/systemaddresses', CRUD.CREATE)) {
+        if (await this.checkPermission('system/communication/systemaddresses', CRUD.CREATE)) {
             ActionFactory.getInstance().registerAction('system-address-create', SystemAddressCreateAction);
 
             const newSystemAddressDialogContext = new ContextDescriptor(
@@ -83,7 +82,7 @@ class Component extends AbstractMarkoComponent {
             ));
         }
 
-        if (await this.checkPermission('/system/communication/systemaddresses/*', CRUD.UPDATE)) {
+        if (await this.checkPermission('system/communication/systemaddresses/*', CRUD.UPDATE)) {
             ActionFactory.getInstance().registerAction('system-address-edit', SystemAddressEditAction);
 
             const editSystemAddressDialogContext = new ContextDescriptor(
@@ -182,46 +181,6 @@ class Component extends AbstractMarkoComponent {
         return await AuthenticationSocketClient.getInstance().checkPermissions(
             [new UIComponentPermission(resource, [crud])]
         );
-    }
-
-    private registerAdminDialogs(): void {
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'new-system-address-dialog',
-            new WidgetConfiguration(
-                'new-system-address-dialog', 'Translatable#New Address',
-                [], {}, false, false, 'kix-icon-new-gear'
-            ),
-            KIXObjectType.SYSTEM_ADDRESS,
-            ContextMode.CREATE_ADMIN
-        ));
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'edit-system-address-dialog',
-            new WidgetConfiguration(
-                'edit-system-address-dialog', 'Translatable#Edit Address',
-                [], {}, false, false, 'kix-icon-edit'
-            ),
-            KIXObjectType.SYSTEM_ADDRESS,
-            ContextMode.EDIT_ADMIN
-        ));
-
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'new-mail-account-dialog',
-            new WidgetConfiguration(
-                'new-mail-account-dialog', 'Translatable#New Email Account',
-                [], {}, false, false, 'kix-icon-new-gear'
-            ),
-            KIXObjectType.MAIL_ACCOUNT,
-            ContextMode.CREATE_ADMIN
-        ));
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'edit-mail-account-dialog',
-            new WidgetConfiguration(
-                'edit-mail-account-dialog', 'Translatable#Edit Email Account',
-                [], {}, false, false, 'kix-icon-edit'
-            ),
-            KIXObjectType.MAIL_ACCOUNT,
-            ContextMode.EDIT_ADMIN
-        ));
     }
 }
 

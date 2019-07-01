@@ -1,4 +1,7 @@
-import { AbstractMarkoComponent, ContextService, ActionFactory, DialogService } from '../../../core/browser';
+import {
+    AbstractMarkoComponent, ContextService, ActionFactory, DialogService,
+    TableFactoryService, LabelService, ServiceRegistry
+} from '../../../core/browser';
 import { ComponentState } from './ComponentState';
 import { AdminContext, AdministrationSocketClient } from '../../../core/browser/admin';
 import {
@@ -12,6 +15,11 @@ import {
 } from '../../../core/browser/i18n/admin/context';
 import { AuthenticationSocketClient } from '../../../core/browser/application/AuthenticationSocketClient';
 import { UIComponentPermission } from '../../../core/model/UIComponentPermission';
+import {
+    TranslationPatternTableFactory, TranslationLanguageTableFactory
+} from '../../../core/browser/i18n/admin/table';
+import { TranslationPatternLabelProvider, TranslationLanguageLabelProvider } from '../../../core/browser/i18n';
+import { TranslationFormService } from '../../../core/browser/i18n/admin/TranslationFormService';
 
 class Component extends AbstractMarkoComponent {
 
@@ -37,6 +45,13 @@ class Component extends AbstractMarkoComponent {
     private async registerI18N(): Promise<void> {
 
         ActionFactory.getInstance().registerAction('i18n-admin-translation-csv-export', TranslationCSVExportAction);
+
+        TableFactoryService.getInstance().registerFactory(new TranslationPatternTableFactory());
+        TableFactoryService.getInstance().registerFactory(new TranslationLanguageTableFactory());
+        LabelService.getInstance().registerLabelProvider(new TranslationPatternLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new TranslationLanguageLabelProvider());
+
+        ServiceRegistry.registerServiceInstance(TranslationFormService.getInstance());
 
         if (await this.checkPermission('system/i18n/translations', CRUD.CREATE)) {
             ActionFactory.getInstance().registerAction('i18n-admin-translation-create', TranslationCreateAction);

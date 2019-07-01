@@ -66,10 +66,6 @@ class Component extends AbstractMarkoComponent {
         TableFactoryService.getInstance().registerFactory(new TicketTableFactory());
         TableFactoryService.getInstance().registerFactory(new ArticleTableFactory());
         TableFactoryService.getInstance().registerFactory(new TicketHistoryTableFactory());
-        TableFactoryService.getInstance().registerFactory(new TicketPriorityTableFactory());
-        TableFactoryService.getInstance().registerFactory(new TicketQueueTableFactory());
-        TableFactoryService.getInstance().registerFactory(new TicketTypeTableFactory());
-        TableFactoryService.getInstance().registerFactory(new TicketStateTableFactory());
 
         TableCSSHandlerRegistry.getInstance().registerCSSHandler(KIXObjectType.TICKET, new TicketTableCSSHandler());
         TableCSSHandlerRegistry.getInstance().registerCSSHandler(KIXObjectType.ARTICLE, new ArticleTableCSSHandler());

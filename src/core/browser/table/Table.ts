@@ -355,14 +355,10 @@ export class Table implements ITable {
         if (column) {
             column.setSortOrder(sortOrder);
 
-            const start = new Date().getTime();
             const rows = this.getRows(true);
             const cellPromises: Array<Promise<string>> = [];
             rows.forEach((r) => cellPromises.push(r.getCell(columnId).getDisplayValue()));
             await Promise.all(cellPromises);
-            const end = new Date().getTime();
-
-            console.debug('init values for sort: ' + (end - start));
 
             if (this.filteredRows) {
                 this.filteredRows = TableSortUtil.sort(
