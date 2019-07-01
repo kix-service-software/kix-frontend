@@ -19,7 +19,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     );
                     (this as any).setStateDirty('template');
                 }
-            }
+            },
+            contextRegistered: () => { return; }
         });
         const context = await ContextService.getInstance().getContext<AdminContext>(AdminContext.CONTEXT_ID);
         context.registerListener('admin-module-context-listener', {

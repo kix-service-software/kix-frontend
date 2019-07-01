@@ -27,7 +27,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const context = await ContextService.getInstance().getActiveContext(ContextType.MAIN);
         this.contextChanged(null, context, ContextType.MAIN, null, null);
         ContextService.getInstance().registerListener({
-            contextChanged: this.contextChanged.bind(this)
+            contextChanged: this.contextChanged.bind(this),
+            contextRegistered: () => { return; }
         });
     }
 

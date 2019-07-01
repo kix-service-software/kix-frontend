@@ -1,5 +1,6 @@
 import {
-    AbstractMarkoComponent, ContextService, DialogService, ActionFactory, ServiceRegistry
+    AbstractMarkoComponent, ContextService, DialogService, ActionFactory,
+    ServiceRegistry, LabelService, TableFactoryService, FactoryService
 } from "../../../../core/browser";
 import { ComponentState } from './ComponentState';
 import {
@@ -15,8 +16,17 @@ import {
     TicketPriorityCreateAction, TicketPriorityTableDeleteAction, TicketPriorityEditAction, TicketPriorityDetailsContext,
     NewTicketPriorityDialogContext, EditTicketPriorityDialogContext, TicketQueueCreateAction, NewQueueDialogContext,
     QueueDetailsContext, TicketQueueEditAction, TicketStateFormService, TicketPriorityFormService,
-    TicketTypeFormService, EditQueueDialogContext, QueueFormService
+    TicketTypeFormService, TicketTemplateService, QueueService, TicketPriorityService, TicketStateService,
+    TicketTypeService, TicketTypeLabelProvider, TicketPriorityLabelProvider, TicketStateLabelProvider,
+    TicketStateTypeLabelProvider, TicketTemplateLabelProvider, TicketPriorityTableFactory, TicketQueueTableFactory,
+    TicketTypeTableFactory, TicketStateTableFactory, QueueFormService, TicketTemplateBrowserFactory,
+    QueueBrowserFactory, TicketStateTypeBrowserFactory, TicketStateBrowserFactory, TicketPriorityBrowserFactory,
+    TicketTypeBrowserFactory, QueueLabelProvider, EditQueueDialogContext
 } from "../../../../core/browser/ticket";
+import { ChannelLabelProvider } from "../../../../core/browser/channel/ChannelLabelProvider";
+import {
+    TextModuleFormService, TextModuleBrowserFactory
+} from "../../../../core/browser/text-modules";
 
 class Component extends AbstractMarkoComponent {
 
@@ -29,6 +39,42 @@ class Component extends AbstractMarkoComponent {
         ServiceRegistry.registerServiceInstance(TicketPriorityFormService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketStateFormService.getInstance());
         ServiceRegistry.registerServiceInstance(QueueFormService.getInstance());
+        ServiceRegistry.registerServiceInstance(TextModuleFormService.getInstance());
+
+        ServiceRegistry.registerServiceInstance(TicketTypeService.getInstance());
+        ServiceRegistry.registerServiceInstance(TicketStateService.getInstance());
+        ServiceRegistry.registerServiceInstance(TicketPriorityService.getInstance());
+        ServiceRegistry.registerServiceInstance(QueueService.getInstance());
+        ServiceRegistry.registerServiceInstance(TicketTemplateService.getInstance());
+
+        LabelService.getInstance().registerLabelProvider(new TicketTypeLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new TicketPriorityLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new TicketStateLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new TicketStateTypeLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new ChannelLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new TicketTemplateLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new QueueLabelProvider());
+
+        TableFactoryService.getInstance().registerFactory(new TicketPriorityTableFactory());
+        TableFactoryService.getInstance().registerFactory(new TicketQueueTableFactory());
+        TableFactoryService.getInstance().registerFactory(new TicketTypeTableFactory());
+        TableFactoryService.getInstance().registerFactory(new TicketStateTableFactory());
+
+        FactoryService.getInstance().registerFactory(KIXObjectType.TICKET_TYPE, TicketTypeBrowserFactory.getInstance());
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.TICKET_PRIORITY, TicketPriorityBrowserFactory.getInstance()
+        );
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.TICKET_STATE, TicketStateBrowserFactory.getInstance()
+        );
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.TICKET_STATE_TYPE, TicketStateTypeBrowserFactory.getInstance()
+        );
+        FactoryService.getInstance().registerFactory(KIXObjectType.QUEUE, QueueBrowserFactory.getInstance());
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.TICKET_TEMPLATE, TicketTemplateBrowserFactory.getInstance()
+        );
+        FactoryService.getInstance().registerFactory(KIXObjectType.TEXT_MODULE, TextModuleBrowserFactory.getInstance());
 
         this.registerTicketTypeAdmin();
         this.registerTicketStatesAdmin();
@@ -176,7 +222,7 @@ class Component extends AbstractMarkoComponent {
             ActionFactory.getInstance().registerAction('ticket-admin-priority-edit', TicketPriorityEditAction);
 
             const editTicketPriorityContext = new ContextDescriptor(
-                EditTicketTypeDialogContext.CONTEXT_ID, [KIXObjectType.TICKET_PRIORITY],
+                EditTicketPriorityDialogContext.CONTEXT_ID, [KIXObjectType.TICKET_PRIORITY],
                 ContextType.DIALOG, ContextMode.EDIT_ADMIN,
                 false, 'edit-ticket-priority-dialog', ['priorities'], EditTicketPriorityDialogContext
             );
@@ -233,12 +279,12 @@ class Component extends AbstractMarkoComponent {
         if (await this.checkPermission('system/ticket/queues/*', CRUD.UPDATE)) {
             ActionFactory.getInstance().registerAction('ticket-admin-queue-edit', TicketQueueEditAction);
 
-            const editTicketQueueContext = new ContextDescriptor(
+            const editQueueContext = new ContextDescriptor(
                 EditQueueDialogContext.CONTEXT_ID, [KIXObjectType.QUEUE],
                 ContextType.DIALOG, ContextMode.EDIT_ADMIN,
                 false, 'edit-ticket-queue-dialog', ['queues'], EditQueueDialogContext
             );
-            ContextService.getInstance().registerContext(editTicketQueueContext);
+            ContextService.getInstance().registerContext(editQueueContext);
 
             DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
                 'edit-ticket-queue-dialog',

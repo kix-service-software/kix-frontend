@@ -1,4 +1,4 @@
-import { ContextType, Context } from "../../core/model";
+import { ContextType, Context, ContextDescriptor } from "../../core/model";
 import { IContextServiceListener, ContextService } from "../../core/browser";
 import { ComponentState } from './ComponentState';
 import { RoutingConfiguration } from "../../core/browser/router";
@@ -14,6 +14,10 @@ class BreadcrumbComponent implements IContextServiceListener {
     public onMount(): void {
         ContextService.getInstance().registerListener(this);
         this.state.loading = false;
+    }
+
+    public contextRegistered(descriptor: ContextDescriptor): void {
+        return;
     }
 
     public async contextChanged(

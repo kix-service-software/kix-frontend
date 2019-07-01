@@ -26,8 +26,7 @@ export class EditTranslationDialogContext extends Context {
             const patternId = this.getObjectId();
             if (patternId) {
                 const loadingOptions = new KIXObjectLoadingOptions(
-                    null, null, null, null,
-                    [TranslationPatternProperty.LANGUAGES]
+                    null, null, null, [TranslationPatternProperty.LANGUAGES]
                 );
                 const objects = await KIXObjectService.loadObjects<TranslationPattern>(
                     KIXObjectType.TRANSLATION_PATTERN, [patternId], loadingOptions

@@ -45,6 +45,7 @@ export class ContextService {
 
     public registerContext(contextDescriptor: ContextDescriptor): void {
         ContextFactory.getInstance().registerContext(contextDescriptor);
+        this.serviceListener.forEach((l) => l.contextRegistered(contextDescriptor));
     }
 
     public async setContext(

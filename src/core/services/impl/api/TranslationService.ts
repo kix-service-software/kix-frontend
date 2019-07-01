@@ -108,7 +108,7 @@ export class TranslationService extends KIXObjectService {
             );
 
             const loadingOptions = new KIXObjectLoadingOptions(
-                null, null, null, null, [TranslationPatternProperty.LANGUAGES]
+                null, null, null, [TranslationPatternProperty.LANGUAGES]
             );
             const translations = await super.load<TranslationPattern>(
                 token, KIXObjectType.TRANSLATION_PATTERN, uri, loadingOptions, null, 'TranslationPattern'

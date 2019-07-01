@@ -40,7 +40,6 @@ class Component extends AbstractMarkoComponent {
         );
 
         TableFactoryService.getInstance().registerFactory(new FAQArticleTableFactory());
-        TableFactoryService.getInstance().registerFactory(new FAQCategoryTableFactory());
         TableFactoryService.getInstance().registerFactory(new FAQArticleHistoryTableFactory());
 
         LabelService.getInstance().registerLabelProvider(new FAQLabelProvider());
@@ -49,7 +48,6 @@ class Component extends AbstractMarkoComponent {
 
         ServiceRegistry.registerServiceInstance(FAQService.getInstance());
         ServiceRegistry.registerServiceInstance(FAQArticleFormService.getInstance());
-        ServiceRegistry.registerServiceInstance(FAQCategoryFormService.getInstance());
 
         KIXObjectSearchService.getInstance().registerSearchDefinition(new FAQArticleSearchDefinition());
 

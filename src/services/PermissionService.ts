@@ -88,6 +88,10 @@ export class PermissionService {
 
     private async  methodAllowed(token: string, permission: UIComponentPermission): Promise<boolean> {
         if (permission.permissions && permission.permissions.length) {
+            if (permission.target.startsWith('/')) {
+                permission.target = permission.target.substr(1, permission.target.length);
+            }
+
             const response = await HttpService.getInstance().options(token, permission.target)
                 .catch((error) => {
                     console.error(error);

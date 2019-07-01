@@ -1,19 +1,23 @@
-import { AbstractMarkoComponent, ContextService, ActionFactory } from '../../../../core/browser';
+import {
+    AbstractMarkoComponent, ContextService, ActionFactory, ServiceRegistry,
+    FactoryService, TableFactoryService, LabelService
+} from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
     KIXObjectType, ContextType, ContextMode, ContextDescriptor, ConfiguredDialogWidget,
-    WidgetConfiguration, WidgetSize, CRUD
+    WidgetConfiguration, CRUD
 } from '../../../../core/model';
 import {
-    FAQCategoryCSVExportAction
+    FAQCategoryCSVExportAction, FAQService, FAQCategoryLabelProvider, FAQCategoryFormService
 } from '../../../../core/browser/faq';
 import { DialogService } from '../../../../core/browser/components/dialog';
 import {
     FAQCategoryCreateAction, NewFAQCategoryDialogContext, FAQCategoryEditAction,
-    EditFAQCategoryDialogContext, FAQCategoryDetailsContext
+    EditFAQCategoryDialogContext, FAQCategoryDetailsContext, FAQCategoryTableFactory
 } from '../../../../core/browser/faq/admin';
 import { AuthenticationSocketClient } from '../../../../core/browser/application/AuthenticationSocketClient';
 import { UIComponentPermission } from '../../../../core/model/UIComponentPermission';
+import { FAQCategoryBrowserFactory } from '../../../../core/browser/faq/FAQCategoryBrowserFactory';
 
 class Component extends AbstractMarkoComponent {
 
@@ -22,6 +26,14 @@ class Component extends AbstractMarkoComponent {
     }
 
     public async onMount(): Promise<void> {
+
+        ServiceRegistry.registerServiceInstance(FAQService.getInstance());
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.FAQ_CATEGORY, FAQCategoryBrowserFactory.getInstance()
+        );
+        TableFactoryService.getInstance().registerFactory(new FAQCategoryTableFactory());
+        LabelService.getInstance().registerLabelProvider(new FAQCategoryLabelProvider());
+        ServiceRegistry.registerServiceInstance(FAQCategoryFormService.getInstance());
 
         ActionFactory.getInstance().registerAction('faq-category-csv-export-action', FAQCategoryCSVExportAction);
 

@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
 import { ContextService, IContextServiceListener } from "../../../core/browser";
-import { ContextMode, ContextType, Context, CacheState } from "../../../core/model";
+import { ContextMode, ContextType, Context, CacheState, ContextDescriptor } from "../../../core/model";
 import { SearchContext } from '../../../core/browser/search/context/SearchContext';
 import { KIXObjectSearchService } from '../../../core/browser/kix/search/KIXObjectSearchService';
 
@@ -37,6 +37,10 @@ class Component implements IContextServiceListener {
 
             ContextService.getInstance().setDialogContext(null, null, ContextMode.SEARCH);
         }
+    }
+
+    public contextRegistered(descriptor: ContextDescriptor): void {
+        return;
     }
 }
 

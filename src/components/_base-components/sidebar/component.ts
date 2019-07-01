@@ -24,7 +24,8 @@ class Component {
                 if (type === this.state.contextType) {
                     this.setContext(context);
                 }
-            }
+            },
+            contextRegistered: () => { return; }
         });
         this.setContext(ContextService.getInstance().getActiveContext(this.state.contextType));
     }

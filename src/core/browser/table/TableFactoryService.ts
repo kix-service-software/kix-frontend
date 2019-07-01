@@ -19,7 +19,8 @@ export class TableFactoryService {
 
     private constructor() {
         ContextService.getInstance().registerListener({
-            contextChanged: this.contextChanged.bind(this)
+            contextChanged: this.contextChanged.bind(this),
+            contextRegistered: () => { return; }
         });
     }
 
