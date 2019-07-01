@@ -1,4 +1,4 @@
-import { ISocketResponse } from "../../../socket";
+import { ISocketResponse } from "../../ISocketResponse";
 
 export class SetPreferencesResponse implements ISocketResponse {
 

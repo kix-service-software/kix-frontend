@@ -10,5 +10,3 @@ export { ConfiguredDialogWidget } from './ConfiguredDialogWidget';
 export { IWidgetContent } from './IWidgetContent';
 export { ComponentContent } from './ComponentContent';
 export { StringContent } from './StringContent';
-
-export * from './socket';

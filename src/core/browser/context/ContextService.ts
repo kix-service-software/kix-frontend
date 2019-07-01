@@ -1,8 +1,6 @@
 import {
-    Context, WidgetConfiguration,
-    ContextType, KIXObjectType, ContextMode, ContextDescriptor, ObjectUpdatedEventData, FormContext, ObjectIcon
+    Context, ContextType, KIXObjectType, ContextMode, ContextDescriptor, ObjectUpdatedEventData, FormContext, ObjectIcon
 } from '../../model';
-import { ContextSocketClient } from './ContextSocketClient';
 import { IContextServiceListener } from './IContextServiceListener';
 import { ContextHistoryEntry } from './ContextHistoryEntry';
 import { ContextHistory } from './ContextHistory';
@@ -165,13 +163,6 @@ export class ContextService {
             )
             .sort((a, b) => b.lastVisitDate - a.lastVisitDate)
             .slice(0, limit);
-    }
-
-    public async saveWidgetConfiguration<T = any>(
-        instanceId: string, widgetConfiguration: WidgetConfiguration<T>,
-        contextId: string = this.activeMainContext.getDescriptor().contextId
-    ): Promise<void> {
-        await ContextSocketClient.getInstance().saveWidgetConfiguration(instanceId, widgetConfiguration, contextId);
     }
 
     public async handleUpdateNotifications(events: ObjectUpdatedEventData[]): Promise<void> {

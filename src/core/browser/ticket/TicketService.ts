@@ -4,7 +4,7 @@ import {
     Attachment, KIXObjectType, Ticket, TicketProperty, FilterDataType, FilterCriteria, FilterType,
     TreeNode, ObjectIcon, Service, TicketPriority, TicketType,
     TicketState, StateType, KIXObject, Sla, TableFilterCriteria, User, KIXObjectLoadingOptions,
-    KIXObjectSpecificLoadingOptions, Article, ContextMode
+    KIXObjectSpecificLoadingOptions, Article
 } from '../../model';
 import { TicketParameterUtil } from './TicketParameterUtil';
 import { KIXObjectService } from '../kix';
@@ -14,7 +14,6 @@ import { TicketSocketClient } from './TicketSocketClient';
 import { AgentService } from '../application/AgentService';
 import { QueueService } from './admin';
 import { InlineContent } from '../components';
-import { EditTicketDialogContext } from './context';
 
 export class TicketService extends KIXObjectService<Ticket> {
 

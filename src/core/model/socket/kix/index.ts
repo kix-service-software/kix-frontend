@@ -9,3 +9,6 @@ export { DeleteObjectRequest } from './DeleteObjectRequest';
 export { DeleteObjectResponse } from './DeleteObjectResponse';
 export { ISocketObjectRequest } from './ISocketObjectRequest';
 export { PersonalSettingsResponse } from './PersonalSettingsResponse';
+
+export * from './user';
+export * from './ticket';

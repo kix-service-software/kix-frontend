@@ -1,8 +1,6 @@
 import { SocketNameSpace } from './SocketNameSpace';
 import {
-    SaveWidgetRequest, ContextEvent, LoadContextConfigurationRequest, LoadContextConfigurationResponse,
-    SaveContextConfigurationRequest,
-    ContextConfiguration
+    ContextEvent, LoadContextConfigurationRequest, LoadContextConfigurationResponse, ContextConfiguration
 } from '../core/model';
 
 import { SocketResponse, SocketErrorResponse } from '../core/common';
@@ -32,12 +30,6 @@ export class ContextNamespace extends SocketNameSpace {
     protected registerEvents(client: SocketIO.Socket): void {
         this.registerEventHandler(
             client, ContextEvent.LOAD_CONTEXT_CONFIGURATION, this.loadContextConfiguration.bind(this)
-        );
-        this.registerEventHandler(
-            client, ContextEvent.SAVE_CONTEXT_CONFIGURATION, this.saveContextConfiguration.bind(this)
-        );
-        this.registerEventHandler(
-            client, ContextEvent.SAVE_WIDGET_CONFIGURATION, this.saveWidgetConfiguration.bind(this)
         );
     }
 
@@ -77,47 +69,4 @@ export class ContextNamespace extends SocketNameSpace {
 
     }
 
-    private saveContextConfiguration(data: SaveContextConfigurationRequest): Promise<SocketResponse> {
-        return new Promise<SocketResponse>((resolve, reject) => {
-            UserService.getInstance().getUserByToken(data.token).then((user) => {
-                const userId = user && user.UserID;
-
-                ConfigurationService.getInstance()
-                    .saveModuleConfiguration(data.contextId, userId, data.configuration);
-
-                resolve(new SocketResponse(ContextEvent.CONTEXT_CONFIGURATION_SAVED, { requestId: data.requestId }));
-            });
-        });
-    }
-
-    private async saveWidgetConfiguration(data: SaveWidgetRequest): Promise<SocketResponse> {
-        const user = await UserService.getInstance().getUserByToken(data.token);
-        const userId = user && user.UserID;
-
-        const moduleConfiguration = await ConfigurationService.getInstance().getModuleConfiguration(
-            data.contextId,
-            userId
-        );
-
-        if (moduleConfiguration) {
-            let index = moduleConfiguration.contentConfiguredWidgets.findIndex(
-                (cw) => cw.instanceId === data.instanceId
-            );
-            if (index > -1) {
-                moduleConfiguration.contentConfiguredWidgets[index].configuration = data.widgetConfiguration;
-            } else {
-                index = moduleConfiguration.sidebarConfiguredWidgets.findIndex(
-                    (cw) => cw.instanceId === data.instanceId
-                );
-                moduleConfiguration.sidebarConfiguredWidgets[index].configuration = data.widgetConfiguration;
-            }
-
-            ConfigurationService.getInstance().saveModuleConfiguration(
-                data.contextId, userId, moduleConfiguration
-            );
-            return new SocketResponse(ContextEvent.WIDGET_CONFIGURATION_SAVED, { requestId: data.requestId });
-        }
-
-        return null;
-    }
 }

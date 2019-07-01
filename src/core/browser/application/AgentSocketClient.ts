@@ -1,11 +1,10 @@
 import { SocketClient } from '../SocketClient';
-import {
-    GetCurrentUserRequest, User, SetPreferencesResponse, GetCurrentUserResponse,
-    SetPreferencesRequest, PersonalSetting, AgentEvent
-} from '../../model/kix/user';
 import { ClientStorageService } from '../ClientStorageService';
 import { IdService } from '../IdService';
-import { Error, KIXObjectType, PersonalSettingsResponse, ISocketRequest } from '../../model';
+import {
+    Error, KIXObjectType, PersonalSettingsResponse, ISocketRequest, User, GetCurrentUserRequest, AgentEvent,
+    GetCurrentUserResponse, PersonalSetting, SetPreferencesRequest, SetPreferencesResponse
+} from '../../model';
 import { CacheService } from '../cache';
 import { SocketErrorResponse } from '../../common';
 
