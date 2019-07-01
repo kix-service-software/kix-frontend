@@ -190,7 +190,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
                             new ToggleOptions('ticket-article-details', 'article', [], true),
                             null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
                         ),
-                        null, null, null, predefinedTicketFilter
+                        null, true, null, predefinedTicketFilter
                     ),
                     false, false, 'kix-icon-ticket', true
                 ),
