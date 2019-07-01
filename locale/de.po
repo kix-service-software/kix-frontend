@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-06-27 06:23+0000\n"
-"Last-Translator: fwichmann <Felix.Wichmann@cape-it.de>\n"
+"PO-Revision-Date: 2019-07-01 08:49+0000\n"
+"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -355,10 +355,8 @@ msgstr "Kommunikation: E-Mail"
 msgid "Communication: Email: Email Accounts"
 msgstr "Kommunikation: E-Mail: E-Mail Konten"
 
-#, fuzzy
-#| msgid "Communication: Email: Email Accounts"
 msgid "Communication: Email: Email Filters"
-msgstr "Kommunikation: E-Mail: E-Mail Konten"
+msgstr "Kommunikation: E-Mail: E-Mail Filter"
 
 msgid "Compare"
 msgstr "Vergleichen"
@@ -661,7 +659,7 @@ msgid "Email Addresses"
 msgstr "E-Mail Adressen"
 
 msgid "Email Filter"
-msgstr ""
+msgstr "E-Mail Filter"
 
 #, fuzzy
 #| msgid "Email Address"
