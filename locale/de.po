@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-07-01 08:49+0000\n"
+"PO-Revision-Date: 2019-07-01 11:51+0000\n"
 "Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -33,7 +33,7 @@ msgid "Accept KIX Header"
 msgstr "KIX Header akzeptieren"
 
 msgid "Access denied"
-msgstr ""
+msgstr "Zugriff verweigert"
 
 msgid "accounted time"
 msgstr "Erfasste Zeit"
@@ -171,8 +171,6 @@ msgstr "Zugeordnete Queues"
 msgid "Assigned Roles"
 msgstr "Zugeordnete Rollen"
 
-#, fuzzy
-#| msgid "Assign Text Modules"
 msgid "Assigned Text Modules"
 msgstr "Zuordnung zu Textbausteinen"
 
@@ -419,28 +417,28 @@ msgid "Country"
 msgstr "Land"
 
 msgid "Create Account"
-msgstr "Neues Konto"
+msgstr "Konto wird angelegt"
 
 msgid "Create Address"
-msgstr "Neue Adresse"
+msgstr "Adresse wird angelegt"
 
 msgid "Create Agent"
-msgstr "Neuer Agent"
+msgstr "Agent wird angelegt"
 
 msgid "Create Article"
-msgstr "Neuer Artikel"
+msgstr "Artikel wird angelegt"
 
 msgid "Create Category"
-msgstr "Neue Kategorie"
+msgstr "Kategorie wird angelegt"
 
 msgid "Create CI Class"
-msgstr "Neue CI Klasse"
+msgstr "CI Klasse wird angelegt"
 
 msgid "Create Config Item"
-msgstr "Neues Config Item"
+msgstr "Config Item wird angelegt"
 
 msgid "Create Contact"
-msgstr "Neuer Kontakt"
+msgstr "Kontakt wird angelegt"
 
 msgid "Created at"
 msgstr "Erstellt am"
@@ -449,17 +447,16 @@ msgid "Created by"
 msgstr "Erstellt von"
 
 msgid "Create FAQ Article"
-msgstr "Neuer FAQ Artikel"
+msgstr "FAQ Artikel wird angelegt"
 
-#, fuzzy
 msgid "Create Links."
-msgstr "Verknüpfung hinzufügen"
+msgstr "Verknüpfung wird angelegt"
 
 msgid "Create Organisation"
-msgstr "Neuer Kunde"
+msgstr "Kunde wird angelegt"
 
 msgid "Create Priority"
-msgstr "Priorität anlegen"
+msgstr "Priorität wird angelegt"
 
 msgid "Create Queue"
 msgstr "Queue wird angelegt"
@@ -468,21 +465,19 @@ msgid "Create Role"
 msgstr "Rolle wird angelegt"
 
 msgid "Create State"
-msgstr "Status hinzufügen"
+msgstr "Status wird angelegt"
 
-#, fuzzy
-#| msgid "New Text Module"
 msgid "Create Text Module"
-msgstr "Neuer Textbaustein"
+msgstr "Textbaustein wird angelegt"
 
 msgid "Create Ticket"
-msgstr "Neues Ticket"
+msgstr "Ticket wird angelegt"
 
 msgid "Create Translation"
-msgstr "Neue Übersetzung"
+msgstr "Übersetzung wird angelegt"
 
 msgid "Create Type"
-msgstr "Typ hinzufügen"
+msgstr "Typ wird angelegt"
 
 msgid "CSV-Export"
 msgstr "CSV-Export"
@@ -661,15 +656,11 @@ msgstr "E-Mail Adressen"
 msgid "Email Filter"
 msgstr "E-Mail Filter"
 
-#, fuzzy
-#| msgid "Email Address"
 msgid "Email Filters"
-msgstr "E-Mail Adresse"
+msgstr "E-Mail Filter"
 
-#, fuzzy
-#| msgid "Email address"
 msgid "Email Header"
-msgstr "E-Mail Adresse"
+msgstr "E-Mail Header"
 
 msgid "Email Information"
 msgstr "E-Mail Informationen"
@@ -767,10 +758,8 @@ msgstr "Fax"
 msgid "Field '{0}' has an invalid value ({1})."
 msgstr "Feld '{0}' enthält einen ungültigen Wert ({1})."
 
-#, fuzzy
-#| msgid "Filter in list"
 msgid "Filter Conditions"
-msgstr "Filtern in Liste"
+msgstr "Filterbedingungen"
 
 msgid "Filter in list"
 msgstr "Filtern in Liste"
@@ -978,75 +967,47 @@ msgstr "Hilfetext_Admin_SystemAddressCreate_Name"
 msgid "Helptext_Admin_SystemAddressCreate_Validity"
 msgstr "Hilfetext_Admin_SystemAddressCreate_Validity"
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_Comment"
 msgid "Helptext_Admin_TextModuleCreate_Comment"
-msgstr "Hilfetext_Admin_QueueCreate_Comment"
+msgstr "Hilfetext_Admin_TextModuleCreate_Comment"
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_Name"
 msgid "Helptext_Admin_TextModuleCreate_Keywords"
-msgstr "Hilfetext_Admin_QueueCreate_Name"
+msgstr "Hilfetext_Admin_TextModuleCreate_Keywords"
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_Name"
 msgid "Helptext_Admin_TextModuleCreate_Language"
-msgstr "Hilfetext_Admin_QueueCreate_Name"
+msgstr "Hilfetext_Admin_TextModuleCreate_Language"
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_Name"
 msgid "Helptext_Admin_TextModuleCreate_Name"
-msgstr "Hilfetext_Admin_QueueCreate_Name"
+msgstr "Hilfetext_Admin_TextModuleCreate_Name"
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_Signature"
 msgid "Helptext_Admin_TextModuleCreate_Subject"
-msgstr "Hilfetext_Admin_QueueCreate_Signature"
+msgstr "Hilfetext_Admin_TextModuleCreate_Subject"
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_Name"
 msgid "Helptext_Admin_TextModuleCreate_Text"
-msgstr "Hilfetext_Admin_QueueCreate_Name"
+msgstr "Hilfetext_Admin_TextModuleCreate_Text"
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_Validity"
 msgid "Helptext_Admin_TextModuleCreate_Validity"
-msgstr "Hilfetext_Admin_QueueCreate_Validity"
+msgstr "Hilfetext_Admin_TextModuleCreate_Validity"
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_Comment"
 msgid "Helptext_Admin_TextModuleEdit_Comment"
-msgstr "Hilfetext_Admin_QueueEdit_Comment"
+msgstr "Hilfetext_Admin_TextModuleEdit_Comment"
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_Name"
 msgid "Helptext_Admin_TextModuleEdit_Keywords"
-msgstr "Hilfetext_Admin_QueueEdit_Name"
+msgstr "Hilfetext_Admin_TextModuleEdit_Keywords"
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_Name"
 msgid "Helptext_Admin_TextModuleEdit_Language"
-msgstr "Hilfetext_Admin_QueueEdit_Name"
+msgstr "Hilfetext_Admin_TextModuleEdit_Language"
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_Name"
 msgid "Helptext_Admin_TextModuleEdit_Name"
-msgstr "Hilfetext_Admin_QueueEdit_Name"
+msgstr "Hilfetext_Admin_TextModuleEdit_Name"
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_Signature"
 msgid "Helptext_Admin_TextModuleEdit_Subject"
-msgstr "Hilfetext_Admin_QueueEdit_Signature"
+msgstr "Hilfetext_Admin_TextModuleEdit_Subject"
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_Name"
 msgid "Helptext_Admin_TextModuleEdit_Text"
-msgstr "Hilfetext_Admin_QueueEdit_Name"
+msgstr "Hilfetext_Admin_TextModuleEdit_Text"
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_Validity"
 msgid "Helptext_Admin_TextModuleEdit_Validity"
-msgstr "Hilfetext_Admin_QueueEdit_Validity"
+msgstr "Hilfetext_Admin_TextModuleEdit_Validity"
 
 msgid "Helptext_Organisations_ContactCreate_City"
 msgstr "Hilfetext_Organisations_ContactCreate_City"
@@ -1120,10 +1081,8 @@ msgstr "Hilfetext_Organisations_ContactEdit_Lastname"
 msgid "Helptext_Organisations_ContactEdit_Mobile"
 msgstr "Hilfetext_Organisations_ContactEdit_Mobile"
 
-#, fuzzy
-#| msgid "Helptext_Organisations_ContactCreate_Organisation"
 msgid "Helptext_Organisations_ContactEdit_Organisation"
-msgstr "Hilfetext_Organisations_ContactCreate_Organisation"
+msgstr "Hilfetext_Organisations_ContactEdit_Organisation"
 
 msgid "Helptext_Organisations_ContactEdit_Phone"
 msgstr "Hilfetext_Organisations_ContactEdit_Phone"
@@ -1649,10 +1608,8 @@ msgstr "Keine General Catalog Klasse konfiguriert!"
 msgid "No object with ID {0} available."
 msgstr "Kein Objekt mit der ID {0} verfügbar."
 
-#, fuzzy
-#| msgid "Permissions on dependent objects"
 msgid "No permission for this object."
-msgstr "Berechtigungen auf abhängige Objekte"
+msgstr "Keine Berechtigung für dieses Objekt."
 
 msgid "No rating available."
 msgstr "Keine Bewertung verfügbar."
@@ -1702,10 +1659,8 @@ msgstr "Objekt"
 msgid "Object Id"
 msgstr "Objekt ID"
 
-#, fuzzy
-#| msgid "Object"
 msgid "Objects"
-msgstr "Objekt"
+msgstr "Objekte"
 
 msgid "Observer"
 msgstr "Beobachter"
@@ -2306,7 +2261,7 @@ msgid "State Types"
 msgstr "Statustypen"
 
 msgid "Stop after Match"
-msgstr ""
+msgstr "Stoppen nach Treffer"
 
 msgid "Street"
 msgstr "Straße"
@@ -2332,15 +2287,11 @@ msgstr "Wechsel ins Kundenportal."
 msgid "Symptom"
 msgstr "Symptom"
 
-#, fuzzy
-#| msgid "Config Item"
 msgid "SysConfig"
-msgstr "Config Item"
+msgstr "SysConfig"
 
-#, fuzzy
-#| msgid "System Address"
 msgid "System"
-msgstr "Systemadresse"
+msgstr "System"
 
 msgid "System Address"
 msgstr "Systemadresse"
@@ -2349,7 +2300,7 @@ msgid "System Addresses"
 msgstr "Systemadressen"
 
 msgid "System: SysConfig"
-msgstr ""
+msgstr "System: SysConfig"
 
 msgid "-> (tab)"
 msgstr "-> (Tabulator)"
@@ -2370,10 +2321,8 @@ msgstr "Vorlagen"
 msgid "Templates successfully removed."
 msgstr "Vorlagen wurde erfolgreich entfernt."
 
-#, fuzzy
-#| msgid "Full Text"
 msgid "Text"
-msgstr "Volltext"
+msgstr "Text"
 
 msgid "Text Module"
 msgstr "Textbaustein"
@@ -2381,10 +2330,8 @@ msgstr "Textbaustein"
 msgid "Text Modules"
 msgstr "Textbausteine"
 
-#, fuzzy
-#| msgid "Role successfully created."
 msgid "Text Module successfully created."
-msgstr "Rolle wurde erfolgreich angelegt."
+msgstr "Textbaustein wurde erfolgreich angelegt."
 
 msgid "Text separator"
 msgstr "Texttrenner"
@@ -2609,10 +2556,8 @@ msgstr "Aktualisierung wird durchgeführt"
 msgid "Update State"
 msgstr "Aktualisierung wird durchgeführt"
 
-#, fuzzy
-#| msgid "Edit Text Module"
 msgid "Update Text Module"
-msgstr "Textbausteine bearbeiten"
+msgstr "Aktualisierung wird durchgeführt"
 
 msgid "Update time"
 msgstr "Aktualisierung wird durchgeführt"
@@ -2648,7 +2593,7 @@ msgid "Validity"
 msgstr "Gültigkeit"
 
 msgid "Value"
-msgstr ""
+msgstr "Wert"
 
 msgid "Value of field '{0}' is too long (max: {1})."
 msgstr ""
