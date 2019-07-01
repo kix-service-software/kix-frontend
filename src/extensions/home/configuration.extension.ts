@@ -143,7 +143,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                                 )
                             ], 'Ticket.Age:numeric', 500, [TicketProperty.WATCHERS]
                         ), null, null, true, true, new ToggleOptions('ticket-article-details', 'article', [], true)
-                    ), null, null, null, predefinedToDoTableFilter
+                    ), null, true, null, predefinedToDoTableFilter
                 ),
                 false, true, 'kix-icon-ticket', false
             ),
@@ -193,7 +193,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                                 ),
                             ],
                             true, true, new ToggleOptions('ticket-article-details', 'article', [], true)
-                        )
+                        ), null, true
                     ),
                     false, true, 'kix-icon-ticket', false
                 ),
