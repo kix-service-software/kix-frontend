@@ -374,11 +374,11 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 ).catch((error): SysConfigOption[] => []);
 
                 if (hookConfig && hookConfig.length) {
-                    ticketHook = hookConfig[0].Value;
+                    ticketHook = hookConfig[0].Value ? hookConfig[0].Value : '';
                 }
 
                 if (dividerConfig && dividerConfig.length) {
-                    ticketHookDivider = dividerConfig[0].Value;
+                    ticketHookDivider = dividerConfig[0].Value ? dividerConfig[0].Value : '';
                 }
 
                 returnString = ticketHook + ticketHookDivider + ticket.TicketNumber;
