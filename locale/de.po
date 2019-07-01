@@ -35,7 +35,9 @@ msgstr "KIX Header akzeptieren"
 msgid "Access denied"
 msgstr "Zugriff verweigert"
 
-msgid "accounted time"
+#, fuzzy
+#| msgid "accounted time"
+msgid "Accounted time"
 msgstr "Erfasste Zeit"
 
 msgid "Account Information"
@@ -134,6 +136,9 @@ msgstr ""
 "Eine Queue ordnet Anfragen Bearbeitungsteams zu und klassifiziert die "
 "Anfrage. Queues sind vergleichbar mit Verzeichnissen im Dateisystem."
 
+msgid "Archived"
+msgstr ""
+
 msgid "archived tickets"
 msgstr "Archivierte Tickets"
 
@@ -170,9 +175,6 @@ msgstr "Zugeordnete Queues"
 
 msgid "Assigned Roles"
 msgstr "Zugeordnete Rollen"
-
-msgid "Assigned Text Modules"
-msgstr "Zuordnung zu Textbausteinen"
 
 msgid "Assign Link"
 msgstr "Verknüpfung zuordnen"
@@ -502,6 +504,9 @@ msgstr "(aktuelle Version)"
 
 msgid "Current version"
 msgstr "Aktuelle Version"
+
+msgid "Data has been updated."
+msgstr ""
 
 msgid "Default"
 msgstr "Standard"
@@ -979,9 +984,6 @@ msgstr "Hilfetext_Admin_TextModuleCreate_Language"
 msgid "Helptext_Admin_TextModuleCreate_Name"
 msgstr "Hilfetext_Admin_TextModuleCreate_Name"
 
-msgid "Helptext_Admin_TextModuleCreate_Subject"
-msgstr "Hilfetext_Admin_TextModuleCreate_Subject"
-
 msgid "Helptext_Admin_TextModuleCreate_Text"
 msgstr "Hilfetext_Admin_TextModuleCreate_Text"
 
@@ -999,9 +1001,6 @@ msgstr "Hilfetext_Admin_TextModuleEdit_Language"
 
 msgid "Helptext_Admin_TextModuleEdit_Name"
 msgstr "Hilfetext_Admin_TextModuleEdit_Name"
-
-msgid "Helptext_Admin_TextModuleEdit_Subject"
-msgstr "Hilfetext_Admin_TextModuleEdit_Subject"
 
 msgid "Helptext_Admin_TextModuleEdit_Text"
 msgstr "Hilfetext_Admin_TextModuleEdit_Text"
@@ -1321,7 +1320,9 @@ msgstr "Internationalisierung"
 msgid "Internationalisation: Translations"
 msgstr "Internationalisierung: Übersetzungen"
 
-msgid "Invalid date."
+#, fuzzy
+#| msgid "Invalid date."
+msgid "Invalid date for pending date."
 msgstr "Ungültiges Datum."
 
 msgid "Keywords"
@@ -1345,7 +1346,9 @@ msgstr "Sprachen"
 msgid "Large View"
 msgstr "Großansicht"
 
-msgid "last changed time"
+#, fuzzy
+#| msgid "last changed time"
+msgid "Last changed time"
 msgstr "Letzte Änderungszeit"
 
 msgid "Last Login"
@@ -1444,7 +1447,9 @@ msgstr "Lokalisierung"
 msgid "Lock"
 msgstr "Gesperrt"
 
-msgid "locked"
+#, fuzzy
+#| msgid "locked"
+msgid "Locked"
 msgstr "Gesperrt"
 
 msgid "Locked Tickets"
@@ -1754,7 +1759,9 @@ msgstr "\"Warten bis\"-Datum liegt nicht in der Zukunft."
 msgid "Pending Tickets"
 msgstr "Tickets im Warten-Status"
 
-msgid "pending until"
+#, fuzzy
+#| msgid "pending until"
+msgid "Pending until"
 msgstr "Warten bis"
 
 msgid "Permission"
@@ -1861,6 +1868,9 @@ msgstr "Bewerten"
 msgid "Rating"
 msgstr "Bewertung"
 
+msgid "Read"
+msgstr "Read"
+
 msgid "Read file."
 msgstr "Datei lesen."
 
@@ -1872,6 +1882,9 @@ msgstr "Empfänger: Cc"
 
 msgid "Recipient: To"
 msgstr "Empfänger: An"
+
+msgid "Refresh Page"
+msgstr ""
 
 msgid "Relevant Config Items"
 msgstr "Relevante Config Items"
@@ -2493,7 +2506,9 @@ msgstr "Unbekannte Eigenschaften (werden ignoriert):"
 msgid "Unlock"
 msgstr "Freigeben"
 
-msgid "unlocked"
+#, fuzzy
+#| msgid "unlocked"
+msgid "Unlocked"
 msgstr "Freigeben"
 
 msgid "Unlocked Tickets"
@@ -2619,6 +2634,11 @@ msgstr "Warten bis"
 msgid "Watch"
 msgstr "Beobachten"
 
+#, fuzzy
+#| msgid "Watch"
+msgid "Watched"
+msgstr "Beobachten"
+
 msgid "Watched Tickets"
 msgstr "Beobachtete Tickets"
 
@@ -2652,6 +2672,15 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Assigned Text Modules"
+#~ msgstr "Zuordnung zu Textbausteinen"
+
+#~ msgid "Helptext_Admin_TextModuleCreate_Subject"
+#~ msgstr "Hilfetext_Admin_TextModuleCreate_Subject"
+
+#~ msgid "Helptext_Admin_TextModuleEdit_Subject"
+#~ msgstr "Hilfetext_Admin_TextModuleEdit_Subject"
 
 #~ msgid "Duplicate"
 #~ msgstr "Duplizieren"
@@ -2821,9 +2850,6 @@ msgstr "PLZ"
 
 #~ msgid "Path"
 #~ msgstr "Pfad"
-
-#~ msgid "Read"
-#~ msgstr "Read"
 
 #~ msgid "Update"
 #~ msgstr "Aktualisierung"

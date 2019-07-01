@@ -35,7 +35,7 @@ msgstr ""
 msgid "Access denied"
 msgstr ""
 
-msgid "accounted time"
+msgid "Accounted time"
 msgstr ""
 
 msgid "Account Information"
@@ -127,6 +127,9 @@ msgid ""
 "file system."
 msgstr ""
 
+msgid "Archived"
+msgstr ""
+
 msgid "archived tickets"
 msgstr ""
 
@@ -161,9 +164,6 @@ msgid "Assigned Queues"
 msgstr ""
 
 msgid "Assigned Roles"
-msgstr ""
-
-msgid "Assigned Text Modules"
 msgstr ""
 
 msgid "Assign Link"
@@ -482,6 +482,9 @@ msgid "(Current version)"
 msgstr ""
 
 msgid "Current version"
+msgstr ""
+
+msgid "Data has been updated."
 msgstr ""
 
 msgid "Default"
@@ -949,9 +952,6 @@ msgstr ""
 msgid "Helptext_Admin_TextModuleCreate_Name"
 msgstr ""
 
-msgid "Helptext_Admin_TextModuleCreate_Subject"
-msgstr ""
-
 msgid "Helptext_Admin_TextModuleCreate_Text"
 msgstr ""
 
@@ -968,9 +968,6 @@ msgid "Helptext_Admin_TextModuleEdit_Language"
 msgstr ""
 
 msgid "Helptext_Admin_TextModuleEdit_Name"
-msgstr ""
-
-msgid "Helptext_Admin_TextModuleEdit_Subject"
 msgstr ""
 
 msgid "Helptext_Admin_TextModuleEdit_Text"
@@ -1285,7 +1282,7 @@ msgstr ""
 msgid "Internationalisation: Translations"
 msgstr ""
 
-msgid "Invalid date."
+msgid "Invalid date for pending date."
 msgstr ""
 
 msgid "Keywords"
@@ -1309,7 +1306,7 @@ msgstr ""
 msgid "Large View"
 msgstr ""
 
-msgid "last changed time"
+msgid "Last changed time"
 msgstr ""
 
 msgid "Last Login"
@@ -1402,7 +1399,7 @@ msgstr ""
 msgid "Lock"
 msgstr ""
 
-msgid "locked"
+msgid "Locked"
 msgstr ""
 
 msgid "Locked Tickets"
@@ -1708,7 +1705,7 @@ msgstr ""
 msgid "Pending Tickets"
 msgstr ""
 
-msgid "pending until"
+msgid "Pending until"
 msgstr ""
 
 msgid "Permission"
@@ -1808,6 +1805,9 @@ msgstr ""
 msgid "Rating"
 msgstr ""
 
+msgid "Read"
+msgstr ""
+
 msgid "Read file."
 msgstr ""
 
@@ -1818,6 +1818,9 @@ msgid "Recipient: Cc"
 msgstr ""
 
 msgid "Recipient: To"
+msgstr ""
+
+msgid "Refresh Page"
 msgstr ""
 
 msgid "Relevant Config Items"
@@ -2401,7 +2404,7 @@ msgstr ""
 msgid "Unlock"
 msgstr ""
 
-msgid "unlocked"
+msgid "Unlocked"
 msgstr ""
 
 msgid "Unlocked Tickets"
@@ -2525,6 +2528,9 @@ msgid "Wait until"
 msgstr ""
 
 msgid "Watch"
+msgstr ""
+
+msgid "Watched"
 msgstr ""
 
 msgid "Watched Tickets"
