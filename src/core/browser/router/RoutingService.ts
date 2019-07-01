@@ -5,8 +5,8 @@ import { ContextService } from '../context';
 import { ContextFactory } from '../context/ContextFactory';
 import { ClientStorageService } from '../ClientStorageService';
 import { ReleaseContext } from '../release';
-import { ObjectDataService } from '../ObjectDataService';
 import { BrowserUtil } from '../BrowserUtil';
+import { KIXModulesSocketClient } from '../modules/KIXModulesSocketClient';
 
 export class RoutingService {
 
@@ -37,8 +37,9 @@ export class RoutingService {
     public async routeToInitialContext(history: boolean = false): Promise<void> {
         const VISITED_KEY = 'kix-18-site-visited';
         const visitedOption = ClientStorageService.getOption(VISITED_KEY);
-        const objectData = ObjectDataService.getInstance().getObjectData();
-        const buildNumber = objectData.releaseInfo ? objectData.releaseInfo.buildNumber : null;
+
+        const releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
+        const buildNumber = releaseInfo ? releaseInfo.buildNumber : null;
         if (!visitedOption || (buildNumber && visitedOption !== buildNumber.toString())) {
             await ContextService.getInstance().setContext(
                 ReleaseContext.CONTEXT_ID, KIXObjectType.ANY, ContextMode.DASHBOARD

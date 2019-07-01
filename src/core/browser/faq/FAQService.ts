@@ -1,7 +1,7 @@
 import { KIXObjectService, ServiceRegistry } from "../kix";
 import {
     KIXObjectType, FilterCriteria, FilterDataType, FilterType, TreeNode, ObjectIcon, DataType,
-    KIXObject, KIXObjectLoadingOptions
+    KIXObject, KIXObjectLoadingOptions, ValidObject
 } from "../../model";
 import { ContextService } from "../context";
 import {
@@ -11,8 +11,8 @@ import { SearchOperator } from "../SearchOperator";
 import { ObjectDefinitionSearchAttribute } from "../../model/kix/object-definition";
 import { BrowserUtil } from "../BrowserUtil";
 import { TranslationService } from "../i18n/TranslationService";
-import { ObjectDataService } from "../ObjectDataService";
 import { FAQDetailsContext } from "./context/FAQDetailsContext";
+import { KIXModulesSocketClient } from "../modules/KIXModulesSocketClient";
 
 export class FAQService extends KIXObjectService {
 
@@ -36,36 +36,34 @@ export class FAQService extends KIXObjectService {
             || type === KIXObjectType.FAQ_ARTICLE_ATTACHMENT
             || type === KIXObjectType.FAQ_ARTICLE_HISTORY
             || type === KIXObjectType.FAQ_CATEGORY
-            || type === KIXObjectType.FAQ_VOTE;
+            || type === KIXObjectType.FAQ_VOTE
+            || type === KIXObjectType.FAQ_VISIBILITY;
     }
 
     public getLinkObjectName(): string {
         return "FAQArticle";
     }
 
-    public prepareFullTextFilter(searchValue: string): FilterCriteria[] {
+    public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {
         const filter: FilterCriteria[] = [];
 
-        const objectData = ObjectDataService.getInstance().getObjectData();
-        if (objectData) {
-            let faqSearchAttributes: ObjectDefinitionSearchAttribute[];
-            const faqDefinition = objectData.objectDefinitions.find((od) => od.Object === KIXObjectType.FAQ_ARTICLE);
-            if (faqDefinition) {
-                faqSearchAttributes = faqDefinition.SearchAttributes;
-            }
-            if (faqSearchAttributes) {
-                faqSearchAttributes.forEach((sa) => {
-                    if (sa.Datatype === DataType.STRING) {
-                        filter.push(
-                            new FilterCriteria(
-                                sa.CorrespondingAttribute, SearchOperator.CONTAINS,
-                                FilterDataType.STRING, FilterType.OR, searchValue
-                            )
-                        );
-                    }
-                });
-            }
+        const objectDefinitions = await KIXModulesSocketClient.getInstance().loadObjectDefinitions();
+        let attributes: ObjectDefinitionSearchAttribute[] = [];
+        const faqDefinition = objectDefinitions.find((od) => od.Object === KIXObjectType.FAQ_ARTICLE);
+        if (faqDefinition) {
+            attributes = faqDefinition.SearchAttributes;
         }
+
+        attributes.forEach((sa) => {
+            if (sa.Datatype === DataType.STRING) {
+                filter.push(
+                    new FilterCriteria(
+                        sa.CorrespondingAttribute, SearchOperator.CONTAINS,
+                        FilterDataType.STRING, FilterType.OR, searchValue
+                    )
+                );
+            }
+        });
 
         return filter;
     }
@@ -75,50 +73,48 @@ export class FAQService extends KIXObjectService {
     ): Promise<TreeNode[]> {
         let values: TreeNode[] = [];
 
-        const objectData = ObjectDataService.getInstance().getObjectData();
-        if (objectData) {
-            // TODO: im Moment nur für Suche, auch für Create umsetzen, ggf. mit Varible (isSearch) abfragen?
-            let faqSearchAttributes: ObjectDefinitionSearchAttribute[];
-            const faqDefinition = objectData.objectDefinitions.find((od) => od.Object === KIXObjectType.FAQ_ARTICLE);
-            if (faqDefinition) {
-                faqSearchAttributes = faqDefinition.SearchAttributes;
-            }
+        const objectDefinitions = await KIXModulesSocketClient.getInstance().loadObjectDefinitions();
+        let attributes: ObjectDefinitionSearchAttribute[] = [];
+        const faqDefinition = objectDefinitions.find((od) => od.Object === KIXObjectType.FAQ_ARTICLE);
+        if (faqDefinition) {
+            attributes = faqDefinition.SearchAttributes;
+        }
 
-            switch (property) {
-                case FAQArticleProperty.CATEGORY_ID:
-                case FAQCategoryProperty.PARENT_ID:
-                    const loadingOptions = new KIXObjectLoadingOptions([
-                        new FilterCriteria(
-                            FAQCategoryProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.STRING,
-                            FilterType.AND, null
-                        )
-                    ], null, null, [FAQCategoryProperty.SUB_CATEGORIES], [FAQCategoryProperty.SUB_CATEGORIES]);
-                    const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(
-                        KIXObjectType.FAQ_CATEGORY, null, loadingOptions
-                    );
-                    values = this.prepareCategoryTree(
-                        faqCategories, showInvalid,
-                        filterIds ? filterIds.map((fid) => Number(fid)) : null
-                    );
-                    break;
-                case FAQArticleProperty.VISIBILITY:
-                    values = this.preparePossibleValueTree(faqSearchAttributes, FAQArticleProperty.VISIBILITY);
-                    break;
-                case FAQArticleProperty.APPROVED:
-                    values = this.preparePossibleValueTree(faqSearchAttributes, FAQArticleProperty.APPROVED);
-                    break;
-                case FAQArticleProperty.LANGUAGE:
-                    const translationService = ServiceRegistry.getServiceInstance<TranslationService>(
-                        KIXObjectType.TRANSLATION_PATTERN
-                    );
-                    const languages = await translationService.getLanguages();
-                    values = languages.map((l) => new TreeNode(l[0], l[1]));
-                    break;
-                case FAQArticleProperty.VALID_ID:
-                    values = objectData.validObjects.map((vo) => new TreeNode(Number(vo.ID), vo.Name));
-                    break;
-                default:
-            }
+        switch (property) {
+            case FAQArticleProperty.CATEGORY_ID:
+            case FAQCategoryProperty.PARENT_ID:
+                const loadingOptions = new KIXObjectLoadingOptions([
+                    new FilterCriteria(
+                        FAQCategoryProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.STRING,
+                        FilterType.AND, null
+                    )
+                ], null, null, [FAQCategoryProperty.SUB_CATEGORIES], [FAQCategoryProperty.SUB_CATEGORIES]);
+                const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(
+                    KIXObjectType.FAQ_CATEGORY, null, loadingOptions
+                );
+                values = this.prepareCategoryTree(
+                    faqCategories, showInvalid,
+                    filterIds ? filterIds.map((fid) => Number(fid)) : null
+                );
+                break;
+            case FAQArticleProperty.VISIBILITY:
+                values = this.preparePossibleValueTree(attributes, FAQArticleProperty.VISIBILITY);
+                break;
+            case FAQArticleProperty.APPROVED:
+                values = this.preparePossibleValueTree(attributes, FAQArticleProperty.APPROVED);
+                break;
+            case FAQArticleProperty.LANGUAGE:
+                const translationService = ServiceRegistry.getServiceInstance<TranslationService>(
+                    KIXObjectType.TRANSLATION_PATTERN
+                );
+                const languages = await translationService.getLanguages();
+                values = languages.map((l) => new TreeNode(l[0], l[1]));
+                break;
+            case FAQArticleProperty.VALID_ID:
+                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
+                values = validObjects.map((vo) => new TreeNode(Number(vo.ID), vo.Name));
+                break;
+            default:
         }
 
         return values;

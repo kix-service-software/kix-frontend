@@ -1,9 +1,8 @@
 import {
-    TicketState, KIXObjectType, ObjectIcon, TicketStateProperty, DateTimeUtil, User, KIXObjectProperty
+    TicketState, KIXObjectType, ObjectIcon, TicketStateProperty, DateTimeUtil, User, KIXObjectProperty, ValidObject
 } from "../../model";
 import { SearchProperty } from "../SearchProperty";
 import { TranslationService } from "../i18n/TranslationService";
-import { ObjectDataService } from "../ObjectDataService";
 import { KIXObjectService } from "../kix";
 import { LabelProvider } from "../LabelProvider";
 
@@ -91,10 +90,10 @@ export class TicketStateLabelProvider extends LabelProvider<TicketState> {
         property: string, value: string | number, translatable: boolean = true
     ): Promise<string> {
         let displayValue = value;
-        const objectData = ObjectDataService.getInstance().getObjectData();
         switch (property) {
             case KIXObjectProperty.VALID_ID:
-                const valid = objectData.validObjects.find((v) => v.ID.toString() === value.toString());
+                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
+                const valid = validObjects.find((v) => v.ID.toString() === value.toString());
                 if (valid) {
                     displayValue = valid.Name;
                 }

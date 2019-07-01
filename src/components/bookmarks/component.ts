@@ -1,9 +1,9 @@
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../core/browser';
 import { TreeNode, Bookmark } from '../../core/model';
-import { ObjectDataService } from '../../core/browser/ObjectDataService';
 import { TranslationService } from '../../core/browser/i18n/TranslationService';
 import { AuthenticationSocketClient } from '../../core/browser/application/AuthenticationSocketClient';
+import { KIXModulesSocketClient } from '../../core/browser/modules/KIXModulesSocketClient';
 
 class Component {
 
@@ -14,20 +14,16 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const objectData = ObjectDataService.getInstance().getObjectData();
-
         this.state.placeholder = await TranslationService.translate('Translatable#Bookmarks');
 
-        if (objectData) {
-            const availableBookmarks = [];
-            for (const b of objectData.bookmarks) {
-                if (await AuthenticationSocketClient.getInstance().checkPermissions(b.permissions)) {
-                    availableBookmarks.push(new TreeNode(b, b.title, b.icon));
-                }
+        const availableBookmarks = [];
+        const bookmarks = await KIXModulesSocketClient.getInstance().loadBookmarks();
+        for (const b of bookmarks) {
+            if (await AuthenticationSocketClient.getInstance().checkPermissions(b.permissions)) {
+                availableBookmarks.push(new TreeNode(b, b.title, b.icon));
             }
-            this.state.bookmarks = availableBookmarks;
-
         }
+        this.state.bookmarks = availableBookmarks;
     }
 
     public nodesChanged(nodes: TreeNode[]): void {

@@ -2,7 +2,6 @@ import { ChartSettings } from '../ChartSettings';
 import { ChartComplexValue } from './ChartComplexValue';
 import { ChartDataRow } from './ChartDataRow';
 import { ChartSingleValue } from './ChartSingeValue';
-import { ObjectDataService } from '../../../../browser/ObjectDataService';
 
 /**
  * Class to prepare the chart data.
@@ -45,21 +44,18 @@ export class ChartDataPreparer {
                     }
                 });
 
-                const objectData = ObjectDataService.getInstance().getObjectData();
-                if (objectData) {
-                    const attributeList = objectData[ticketAttributeMapping[settings.attributes[0]]] || [];
+                // const attributeList = objectData[ticketAttributeMapping[settings.attributes[0]]] || [];
 
-                    for (const attr in counts) {
-                        if (attr) {
-                            const attributeLabel = attributeList.find((el) => el.ID.toString() === attr.toString());
-                            if (attributeLabel) {
-                                chartData.push(
-                                    new ChartDataRow(attributeLabel.Name, [new ChartSingleValue(counts[attr])])
-                                );
-                            }
-                        }
-                    }
-                }
+                // for (const attr in counts) {
+                //     if (attr) {
+                //         const attributeLabel = attributeList.find((el) => el.ID.toString() === attr.toString());
+                //         if (attributeLabel) {
+                //             chartData.push(
+                //                 new ChartDataRow(attributeLabel.Name, [new ChartSingleValue(counts[attr])])
+                //             );
+                //         }
+                //     }
+                // }
             }
         } else {
             // TODO: nur Beispieldaten

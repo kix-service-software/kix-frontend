@@ -88,7 +88,8 @@ export class OrganisationSearchDefinition extends SearchDefinition {
         if (fulltextCriteriaIndex !== -1) {
             const value = criteria[fulltextCriteriaIndex].value;
             criteria.splice(fulltextCriteriaIndex, 1);
-            criteria = [...criteria, ...OrganisationService.getInstance().prepareFullTextFilter(value.toString())];
+            const filter = await OrganisationService.getInstance().prepareFullTextFilter(value.toString());
+            criteria = [...criteria, ...filter];
         }
         return criteria;
     }

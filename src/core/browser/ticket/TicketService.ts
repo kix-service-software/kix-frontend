@@ -91,7 +91,7 @@ export class TicketService extends KIXObjectService<Ticket> {
         await TicketSocketClient.getInstance().setArticleSeenFlag(ticketId, articleId);
     }
 
-    public prepareFullTextFilter(searchValue: string): FilterCriteria[] {
+    public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {
         return [
             new FilterCriteria(
                 SearchProperty.FULLTEXT, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue

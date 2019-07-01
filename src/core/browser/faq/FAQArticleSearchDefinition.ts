@@ -7,22 +7,12 @@ import { SearchOperator } from "../SearchOperator";
 import { FAQArticleProperty } from "../../model/kix/faq";
 import { ObjectDefinitionSearchAttribute } from "../../model/kix/object-definition";
 import { SearchProperty } from "../SearchProperty";
-import { ObjectDataService } from "../ObjectDataService";
+import { KIXModulesSocketClient } from "../modules/KIXModulesSocketClient";
 
 export class FAQArticleSearchDefinition extends SearchDefinition {
 
-    private searchAttributes: ObjectDefinitionSearchAttribute[];
-
     public constructor() {
         super(KIXObjectType.FAQ_ARTICLE);
-
-        const objectData = ObjectDataService.getInstance().getObjectData();
-        if (objectData && objectData.objectDefinitions) {
-            const faqDef = objectData.objectDefinitions.find((od) => od.Object === KIXObjectType.FAQ_ARTICLE);
-            if (faqDef) {
-                this.searchAttributes = faqDef.SearchAttributes;
-            }
-        }
     }
 
     public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
@@ -31,12 +21,15 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
 
     public async getProperties(): Promise<Array<[string, string]>> {
         let properties: Array<[string, string]>;
-        if (this.searchAttributes && this.searchAttributes.length) {
+
+        const searchAttributes = await this.getSearchAttributes();
+
+        if (searchAttributes && searchAttributes.length) {
             properties = [
                 [SearchProperty.FULLTEXT, null],
             ];
 
-            this.searchAttributes
+            searchAttributes
                 .filter((sa) => sa.Name !== FAQArticleProperty.CONTENT_TYPE
                     && sa.Name !== FAQArticleProperty.FIELD_4
                     && sa.Name !== FAQArticleProperty.FIELD_5
@@ -68,8 +61,9 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
             SearchOperator.EQUALS
         ];
 
-        if (this.searchAttributes && this.searchAttributes.length) {
-            const attribute = this.searchAttributes.find((sa) => sa.CorrespondingAttribute === property);
+        const searchAttributes = await this.getSearchAttributes();
+        if (searchAttributes && searchAttributes.length) {
+            const attribute = searchAttributes.find((sa) => sa.CorrespondingAttribute === property);
             if (attribute) {
                 operations = attribute.Operators;
             }
@@ -85,14 +79,10 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
     }
 
     public async getInputFieldType(property: string, parameter?: Array<[string, any]>): Promise<InputFieldTypes> {
-        const fieldTypes = new Map<string, InputFieldTypes>();
-
-        if (this.searchAttributes && this.searchAttributes.length) {
-            if (this.isDropDown(property)) {
-                return InputFieldTypes.DROPDOWN;
-            } else if (this.isDateTime(property)) {
-                return InputFieldTypes.DATE_TIME;
-            }
+        if (this.isDropDown(property)) {
+            return InputFieldTypes.DROPDOWN;
+        } else if (this.isDateTime(property)) {
+            return InputFieldTypes.DATE_TIME;
         }
         return InputFieldTypes.TEXT;
     }
@@ -135,28 +125,17 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
             const value = criteria[fulltextCriteriaIndex].value;
             criteria.splice(fulltextCriteriaIndex, 1);
 
-            const objectData = ObjectDataService.getInstance().getObjectData();
-            if (objectData) {
-                const faqDefinition = objectData.objectDefinitions.find(
-                    (od) => od.Object === KIXObjectType.FAQ_ARTICLE
-                );
-
-                let faqSearchAttributes: ObjectDefinitionSearchAttribute[] = [];
-                if (faqDefinition) {
-                    faqSearchAttributes = faqDefinition.SearchAttributes;
+            const attributes = await this.getSearchAttributes();
+            attributes.forEach((sa) => {
+                if (sa.Datatype === DataType.STRING) {
+                    criteria.push(
+                        new FilterCriteria(
+                            sa.CorrespondingAttribute, SearchOperator.CONTAINS,
+                            FilterDataType.STRING, FilterType.OR, value
+                        )
+                    );
                 }
-
-                faqSearchAttributes.forEach((sa) => {
-                    if (sa.Datatype === DataType.STRING) {
-                        criteria.push(
-                            new FilterCriteria(
-                                sa.CorrespondingAttribute, SearchOperator.CONTAINS,
-                                FilterDataType.STRING, FilterType.OR, value
-                            )
-                        );
-                    }
-                });
-            }
+            });
         }
         return criteria;
     }
@@ -199,6 +178,16 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
                 );
         }
         return criteria;
+    }
+
+    private async getSearchAttributes(): Promise<ObjectDefinitionSearchAttribute[]> {
+        let searchAttributes = [];
+        const objectDefinitions = await KIXModulesSocketClient.getInstance().loadObjectDefinitions();
+        const faqDef = objectDefinitions.find((od) => od.Object === KIXObjectType.FAQ_ARTICLE);
+        if (faqDef) {
+            searchAttributes = faqDef.SearchAttributes;
+        }
+        return searchAttributes;
     }
 
 }

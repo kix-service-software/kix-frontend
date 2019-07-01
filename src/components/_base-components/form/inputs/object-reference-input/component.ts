@@ -125,7 +125,7 @@ class Component extends FormInputComponent<string | number, ComponentState> {
                 const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(objectType);
                 let filter: FilterCriteria[];
                 if (service) {
-                    filter = service.prepareFullTextFilter(searchValue);
+                    filter = await service.prepareFullTextFilter(searchValue);
                 }
 
                 const loadingOptions = new KIXObjectLoadingOptions(

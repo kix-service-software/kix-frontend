@@ -1,5 +1,4 @@
-import { User, KIXObjectType, UserProperty, ObjectIcon, DateTimeUtil } from "../../model";
-import { ObjectDataService } from "../ObjectDataService";
+import { User, KIXObjectType, UserProperty, ObjectIcon, DateTimeUtil, ValidObject } from "../../model";
 import { TranslationService } from "../i18n/TranslationService";
 import { KIXObjectService } from "../kix";
 import { LabelProvider } from "../LabelProvider";
@@ -13,22 +12,20 @@ export class UserLabelProvider extends LabelProvider<User> {
         property: string, value: string | number, translatable: boolean = true
     ): Promise<string> {
         let displayValue = value;
-        const objectData = ObjectDataService.getInstance().getObjectData();
-        if (objectData) {
-            switch (property) {
-                case UserProperty.CREATE_BY:
-                case UserProperty.CHANGE_BY:
-                    const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [value], null, null, true
-                    ).catch((error) => [] as User[]);
-                    displayValue = users && !!users.length ? users[0].UserFullname : value;
-                    break;
-                case UserProperty.VALID_ID:
-                    const valid = objectData.validObjects.find((v) => v.ID === value);
-                    displayValue = valid ? valid.Name : value;
-                    break;
-                default:
-            }
+        switch (property) {
+            case UserProperty.CREATE_BY:
+            case UserProperty.CHANGE_BY:
+                const users = await KIXObjectService.loadObjects<User>(
+                    KIXObjectType.USER, [value], null, null, true
+                ).catch((error) => [] as User[]);
+                displayValue = users && !!users.length ? users[0].UserFullname : value;
+                break;
+            case UserProperty.VALID_ID:
+                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
+                const valid = validObjects.find((v) => v.ID === value);
+                displayValue = valid ? valid.Name : value;
+                break;
+            default:
         }
 
         if (translatable && displayValue) {
@@ -108,8 +105,8 @@ export class UserLabelProvider extends LabelProvider<User> {
 
         switch (property) {
             case UserProperty.VALID_ID:
-                const objectData = ObjectDataService.getInstance().getObjectData();
-                const valid = objectData.validObjects.find((v) => v.ID.toString() === user[property].toString());
+                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
+                const valid = validObjects.find((v) => v.ID.toString() === user[property].toString());
                 displayValue = valid ? valid.Name : user[property].toString();
                 break;
             case UserProperty.CREATE_TIME:

@@ -1,10 +1,10 @@
 import {
-    ObjectIcon, Contact, ContactProperty, Organisation, KIXObjectType, KIXObjectProperty, DateTimeUtil, User
+    ObjectIcon, Contact, ContactProperty, Organisation, KIXObjectType, KIXObjectProperty,
+    DateTimeUtil, User, ValidObject
 } from '../../model';
 import { KIXObjectService } from '../kix';
 import { SearchProperty } from '../SearchProperty';
 import { TranslationService } from '../i18n/TranslationService';
-import { ObjectDataService } from '../ObjectDataService';
 import { LabelProvider } from '../LabelProvider';
 
 export class ContactLabelProvider extends LabelProvider<Contact> {
@@ -15,26 +15,24 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
         property: string, value: string | number, translatable: boolean = true
     ): Promise<string> {
         let displayValue = value;
-        const objectData = ObjectDataService.getInstance().getObjectData();
-        if (objectData) {
-            switch (property) {
-                case KIXObjectProperty.VALID_ID:
-                    const valid = objectData.validObjects.find((v) => v.ID === value);
-                    displayValue = valid ? valid.Name : value;
-                    break;
-                case KIXObjectProperty.CREATE_BY:
-                case KIXObjectProperty.CHANGE_BY:
-                    const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [value], null, null, true
-                    ).catch((error) => [] as User[]);
-                    displayValue = users && !!users.length ? users[0].UserFullname : value;
-                    break;
-                case KIXObjectProperty.CREATE_TIME:
-                case KIXObjectProperty.CHANGE_TIME:
-                    displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
-                    break;
-                default:
-            }
+        switch (property) {
+            case KIXObjectProperty.VALID_ID:
+                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
+                const valid = validObjects.find((v) => v.ID === value);
+                displayValue = valid ? valid.Name : value;
+                break;
+            case KIXObjectProperty.CREATE_BY:
+            case KIXObjectProperty.CHANGE_BY:
+                const users = await KIXObjectService.loadObjects<User>(
+                    KIXObjectType.USER, [value], null, null, true
+                ).catch((error) => [] as User[]);
+                displayValue = users && !!users.length ? users[0].UserFullname : value;
+                break;
+            case KIXObjectProperty.CREATE_TIME:
+            case KIXObjectProperty.CHANGE_TIME:
+                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
+                break;
+            default:
         }
 
         if (translatable && displayValue) {
@@ -155,11 +153,10 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
     ): Promise<string> {
         let displayValue = contact[property];
 
-        const objectData = ObjectDataService.getInstance().getObjectData();
-
         switch (property) {
             case KIXObjectProperty.VALID_ID:
-                const valid = objectData.validObjects.find((v) => v.ID.toString() === contact[property].toString());
+                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
+                const valid = validObjects.find((v) => v.ID.toString() === contact[property].toString());
                 displayValue = valid ? valid.Name : contact[property].toString();
                 break;
             case ContactProperty.PRIMARY_ORGANISATION_ID:

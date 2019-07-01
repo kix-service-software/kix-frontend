@@ -1,4 +1,4 @@
-import { Context, ContextType, ContextDescriptor, KIXObjectType, ContextMode, ObjectData } from '../../core/model';
+import { Context, ContextType, ContextDescriptor, KIXObjectType, ContextMode } from '../../core/model';
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../core/browser/context';
 import { IdService, ServiceRegistry, FactoryService } from '../../core/browser';
@@ -9,10 +9,8 @@ import { ReleaseContext } from '../../core/browser/release';
 import { KIXModulesService } from '../../core/browser/modules';
 import { TranslationService } from '../../core/browser/i18n/TranslationService';
 import { ApplicationEvent } from '../../core/browser/application';
-import { ObjectDataService } from '../../core/browser/ObjectDataService';
 import { AuthenticationSocketClient } from '../../core/browser/application/AuthenticationSocketClient';
 import { NotificationSocketClient } from '../../core/browser/notifications';
-import { ComponentInput } from './ComponentInput';
 import { AgentService } from '../../core/browser/application/AgentService';
 import { SysConfigService } from '../../core/browser/sysconfig';
 import { TranslationPatternBrowserFactory, TranslationBrowserFactory } from '../../core/browser/i18n';
@@ -23,15 +21,9 @@ class Component {
     public state: ComponentState;
     private contextListernerId: string;
 
-    private objectData: ObjectData;
-
     public onCreate(input: any): void {
         this.state = new ComponentState();
         this.contextListernerId = IdService.generateDateBasedId('base-template-');
-    }
-
-    public onInput(input: ComponentInput): void {
-        this.objectData = input.objectData;
     }
 
     public async onMount(): Promise<void> {
@@ -70,7 +62,6 @@ class Component {
             }
         });
 
-        ObjectDataService.getInstance().setObjectData(this.objectData);
         await this.bootstrapServices();
 
         this.setContext();

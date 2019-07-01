@@ -97,7 +97,8 @@ export class ContactSearchDefinition extends SearchDefinition {
         if (fulltextCriteriaIndex !== -1) {
             const value = criteria[fulltextCriteriaIndex].value;
             criteria.splice(fulltextCriteriaIndex, 1);
-            criteria = [...criteria, ...ContactService.getInstance().prepareFullTextFilter(value.toString())];
+            const filter = await ContactService.getInstance().prepareFullTextFilter(value.toString());
+            criteria = [...criteria, ...filter];
         }
         return criteria;
     }
@@ -106,9 +107,8 @@ export class ContactSearchDefinition extends SearchDefinition {
         property: string, parameter: Array<[string, any]>, searchValue: string, limit: number
     ): Promise<TreeNode[]> {
         if (property === ContactProperty.PRIMARY_ORGANISATION_ID) {
-            const loadingOptions = new KIXObjectLoadingOptions(
-                OrganisationService.getInstance().prepareFullTextFilter(searchValue), null, limit
-            );
+            const filter = await OrganisationService.getInstance().prepareFullTextFilter(searchValue);
+            const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit);
             const organisations = await KIXObjectService.loadObjects<Organisation>(
                 KIXObjectType.ORGANISATION, null, loadingOptions, null, false
             );

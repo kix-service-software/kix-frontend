@@ -1,7 +1,6 @@
 import { TicketProperty, Ticket, KIXObjectType, DateTimeUtil, TicketPriority, TicketState } from "../../../model";
 import { LabelService } from "../../LabelService";
 import { KIXObjectService } from "../../kix";
-import { ObjectDataService } from "../../ObjectDataService";
 
 export class TicketChartFactory {
 
@@ -45,7 +44,6 @@ export class TicketChartFactory {
     }
 
     private async initMap(property: TicketProperty): Promise<Map<string, number>> {
-        const objectData = ObjectDataService.getInstance().getObjectData();
         const map = new Map<string, number>();
         switch (property) {
             case TicketProperty.PRIORITY_ID:

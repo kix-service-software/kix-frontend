@@ -87,7 +87,7 @@ export class ContactImportManager extends ImportManager {
     public async searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]> {
         switch (property) {
             case ContactProperty.PRIMARY_ORGANISATION_ID:
-                const filter = OrganisationService.getInstance().prepareFullTextFilter(searchValue);
+                const filter = await OrganisationService.getInstance().prepareFullTextFilter(searchValue);
                 const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit);
                 const organisations = await KIXObjectService.loadObjects<Organisation>(
                     KIXObjectType.ORGANISATION, null, loadingOptions, null, false

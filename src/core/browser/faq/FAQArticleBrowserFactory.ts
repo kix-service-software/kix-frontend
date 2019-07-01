@@ -1,6 +1,5 @@
 import { IKIXObjectFactory, KIXObjectService } from '../kix';
 import { FAQArticle, FAQArticleFactory } from '../../model/kix/faq';
-import { ObjectDataService } from '../ObjectDataService';
 import { User, KIXObjectType } from '../../model';
 
 export class FAQArticleBrowserFactory implements IKIXObjectFactory<FAQArticle> {

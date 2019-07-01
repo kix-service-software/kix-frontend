@@ -1,7 +1,6 @@
-import { Role, KIXObjectType, ObjectIcon, RoleProperty, DateTimeUtil, User } from "../../model";
+import { Role, KIXObjectType, ObjectIcon, RoleProperty, DateTimeUtil, User, ValidObject } from "../../model";
 import { SearchProperty } from "../SearchProperty";
 import { TranslationService } from "../i18n/TranslationService";
-import { ObjectDataService } from "../ObjectDataService";
 import { KIXObjectService } from "../kix";
 import { LabelProvider } from "../LabelProvider";
 
@@ -78,10 +77,10 @@ export class RoleLabelProvider extends LabelProvider<Role> {
         property: string, value: string | number = '', translatable: boolean = true
     ): Promise<string> {
         let displayValue = value;
-        const objectData = ObjectDataService.getInstance().getObjectData();
         switch (property) {
             case RoleProperty.VALID_ID:
-                const valid = objectData.validObjects.find((v) => v.ID.toString() === value.toString());
+                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
+                const valid = validObjects.find((v) => v.ID.toString() === value.toString());
                 if (valid) {
                     displayValue = valid.Name;
                 }

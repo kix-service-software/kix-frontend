@@ -9,7 +9,6 @@ import {
 import { ClientStorageService } from "../ClientStorageService";
 import { IdService } from "../IdService";
 import { FactoryService } from "./FactoryService";
-import { ObjectDataService } from "../ObjectDataService";
 import { CacheService } from "../cache";
 import { SocketErrorResponse } from "../../common";
 import { PermissionError } from "../../model/PermissionError";
@@ -25,8 +24,8 @@ export class KIXObjectSocketClient extends SocketClient {
             KIXObjectSocketClient.INSTANCE = new KIXObjectSocketClient();
         }
 
-        const objectData = ObjectDataService.getInstance().getObjectData();
-        KIXObjectSocketClient.TIMEOUT = objectData && objectData.socketTimeout ? objectData.socketTimeout : 30000;
+        const socketTimeout = ClientStorageService.getCookie('socketTimeout');
+        KIXObjectSocketClient.TIMEOUT = Number(socketTimeout);
 
         return KIXObjectSocketClient.INSTANCE;
     }

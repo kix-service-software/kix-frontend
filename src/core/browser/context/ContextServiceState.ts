@@ -1,4 +1,4 @@
-import { ObjectData, Context, ContextType } from "../../model";
+import { Context, ContextType } from "../../model";
 
 export class ContextServiceState {
 
@@ -11,7 +11,5 @@ export class ContextServiceState {
     public activeContextType: ContextType = ContextType.MAIN;
 
     public contextStack: string[] = [];
-
-    public objectData: ObjectData = null;
 
 }
