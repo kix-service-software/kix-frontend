@@ -15,6 +15,9 @@ class Component {
     public async onMount(): Promise<void> {
         const context = (await ContextService.getInstance().getContext(FAQContext.CONTEXT_ID) as FAQContext);
         this.state.contentWidgets = context.getContent();
+        if (!context.faqCategory) {
+            context.setFAQCategory(null);
+        }
     }
 
     public getTemplate(widget: ConfiguredWidget): any {
