@@ -1,4 +1,4 @@
-import { ISocketRequest } from "../../../socket";
+import { ISocketRequest } from "../ISocketRequest";
 
 export class SaveContextConfigurationRequest implements ISocketRequest {
 

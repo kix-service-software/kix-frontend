@@ -1,10 +1,6 @@
 import {
-    Attachment,
-    LoadArticleZipAttachmentRequest, LoadArticleAttachmentRequest, LoadArticleAttachmentResponse,
-    TicketEvent,
-    SetArticleSeenFlagRequest,
-    ISocketResponse,
-    KIXObjectType
+    Attachment, LoadArticleZipAttachmentRequest, LoadArticleAttachmentRequest, LoadArticleAttachmentResponse,
+    TicketEvent, SetArticleSeenFlagRequest, ISocketResponse,
 } from '../../model';
 
 import { SocketClient } from '../SocketClient';

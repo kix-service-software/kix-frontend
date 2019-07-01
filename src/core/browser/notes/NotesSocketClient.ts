@@ -1,10 +1,6 @@
 import { SocketClient } from "../SocketClient";
 import {
-    NotesEvent,
-    LoadNotesResponse,
-    LoadNotesRequest,
-    SaveNotesRequest,
-    ISocketResponse
+    NotesEvent, LoadNotesResponse, LoadNotesRequest, SaveNotesRequest, ISocketResponse
 } from "../../model";
 import { ClientStorageService } from "../ClientStorageService";
 import { IdService } from "../IdService";

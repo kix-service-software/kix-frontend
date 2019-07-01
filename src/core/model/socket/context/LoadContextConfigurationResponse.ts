@@ -1,5 +1,5 @@
 import { ContextConfiguration } from '../..';
-import { ISocketResponse } from '../../../socket';
+import { ISocketResponse } from '../ISocketResponse';
 
 export class LoadContextConfigurationResponse<T extends ContextConfiguration> implements ISocketResponse {
 

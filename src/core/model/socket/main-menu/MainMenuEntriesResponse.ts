@@ -1,5 +1,5 @@
-import { MenuEntry } from "..";
-import { ISocketResponse } from "../../../socket";
+import { ISocketResponse } from "../ISocketResponse";
+import { MenuEntry } from "../../components";
 
 export class MainMenuEntriesResponse implements ISocketResponse {
 

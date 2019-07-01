@@ -4,6 +4,8 @@ export * from './kix';
 export * from './notes';
 export * from './notifications';
 export * from './administration';
+export * from './context';
+export * from './main-menu';
 
 export { SocketAuthenticationError } from './SocketAuthenticationError';
 export { SocketEvent } from './SocketEvent';

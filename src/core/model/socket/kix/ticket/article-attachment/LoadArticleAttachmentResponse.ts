@@ -1,4 +1,4 @@
-import { Attachment } from '../../Attachment';
+import { Attachment } from "../../../../kix";
 
 export class LoadArticleAttachmentResponse {
 

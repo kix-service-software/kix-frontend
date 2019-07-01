@@ -1,4 +1,3 @@
-export * from './socket';
 export * from './role';
 
 export { Session } from './Session';
