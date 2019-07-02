@@ -35,7 +35,7 @@ export class ConfigItemVersionLabelProvider extends LabelProvider<Version> {
             );
         }
 
-        return displayValue.toString();
+        return displayValue ? displayValue.toString() : '';
     }
 
     public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
