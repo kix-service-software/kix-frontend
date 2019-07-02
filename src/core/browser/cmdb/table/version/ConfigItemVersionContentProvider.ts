@@ -31,7 +31,8 @@ export class ConfigItemVersionContentProvider extends TableContentProvider<Versi
                             }
                         }
 
-                        values.push(new TableValue(VersionProperty.COUNT_NUMBER, configItem.Versions.length - i));
+                        const versionNumber = (configItem.Versions.length - i).toString();
+                        values.push(new TableValue(VersionProperty.COUNT_NUMBER, versionNumber, versionNumber));
                         values.push(new TableValue(VersionProperty.CURRENT, v.isCurrentVersion));
                         return new RowObject<Version>(values, v);
                     });

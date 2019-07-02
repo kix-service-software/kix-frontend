@@ -65,7 +65,11 @@ class Component {
             const ctx = canvasElement.getContext('2d');
             if (ctx) {
                 if (this.chart) {
-                    this.chart.destroy();
+                    try {
+                        this.chart.destroy();
+                    } catch (e) {
+                        //
+                    }
                 }
                 this.chart = new Chart(ctx, this.config);
 
@@ -84,8 +88,12 @@ class Component {
 
     public onDestroy(): void {
         if (this.chart) {
-            this.chart.destroy();
-            this.chart = null;
+            try {
+                this.chart.destroy();
+                this.chart = null;
+            } catch (e) {
+                //
+            }
         }
         window.removeEventListener('resize', this.createChart.bind(this), false);
         window.removeEventListener('beforeprint', this.beforePrint.bind(this));
