@@ -1,11 +1,13 @@
 import { SearchOperator } from "../../SearchOperator";
 import {
     KIXObjectType, InputFieldTypes, KIXObjectLoadingOptions,
-    FilterCriteria, FilterDataType, FilterType, TreeNode, KIXObject, DataType
+    FilterCriteria, FilterDataType, FilterType, TreeNode, KIXObject, DataType, CRUD
 } from "../../../model";
 import { SearchResultCategory } from "./SearchResultCategory";
 import { LabelService } from "../../LabelService";
 import { IColumnConfiguration, DefaultColumnConfiguration } from "../../table";
+import { AuthenticationSocketClient } from "../../application/AuthenticationSocketClient";
+import { UIComponentPermission } from "../../../model/UIComponentPermission";
 
 export abstract class SearchDefinition {
 
@@ -22,6 +24,8 @@ export abstract class SearchDefinition {
     public abstract getInputComponents(): Promise<Map<string, string>>;
 
     public abstract getSearchResultCategories(): Promise<SearchResultCategory>;
+
+    protected readPermissions: Map<string, boolean> = new Map();
 
     public async getDisplaySearchValue(property: string, parameter: Array<[string, any]>, value: any): Promise<string> {
         const labelProvider = LabelService.getInstance().getLabelProviderForType(this.objectType);
@@ -66,5 +70,16 @@ export abstract class SearchDefinition {
             );
         }
         return columns;
+    }
+
+    protected async checkReadPermissions(resource: string): Promise<boolean> {
+        if (!this.readPermissions.has(resource)) {
+            const permission = await AuthenticationSocketClient.getInstance().checkPermissions(
+                [new UIComponentPermission(resource, [CRUD.READ])]
+            );
+            this.readPermissions.set(resource, permission);
+        }
+
+        return this.readPermissions.get(resource);
     }
 }

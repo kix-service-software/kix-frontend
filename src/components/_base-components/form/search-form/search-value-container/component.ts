@@ -148,10 +148,6 @@ class Component implements IKIXObjectSearchListener {
     }
 
     private async checkFormContent(): Promise<void> {
-        const timeout = window.setTimeout(() => {
-            DialogService.getInstance().setMainDialogLoading(true);
-        }, 500);
-
         const formInstance = await FormService.getInstance().getFormInstance<SearchFormInstance>(this.formId);
         if (formInstance) {
             const searchParameter: Array<[string, any]> = this.getSearchParameter(formInstance);
@@ -159,9 +155,6 @@ class Component implements IKIXObjectSearchListener {
             await this.createPropertyNodes(searchParameter);
             this.updateSearchValues();
         }
-
-        window.clearTimeout(timeout);
-        DialogService.getInstance().setMainDialogLoading(false);
     }
 
     private async setDefaultFormProperties(formInstance: SearchFormInstance): Promise<void> {

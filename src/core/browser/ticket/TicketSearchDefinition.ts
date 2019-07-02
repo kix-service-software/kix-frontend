@@ -8,8 +8,6 @@ import { SearchProperty } from "../SearchProperty";
 import { OrganisationService } from "../organisation";
 import { LabelService } from "../LabelService";
 import { ContactService } from "../contact";
-import { AuthenticationSocketClient } from "../application/AuthenticationSocketClient";
-import { UIComponentPermission } from "../../model/UIComponentPermission";
 
 export class TicketSearchDefinition extends SearchDefinition {
 
@@ -75,12 +73,6 @@ export class TicketSearchDefinition extends SearchDefinition {
         }
 
         return properties;
-    }
-
-    private async checkReadPermissions(resource: string): Promise<boolean> {
-        return await AuthenticationSocketClient.getInstance().checkPermissions(
-            [new UIComponentPermission(resource, [CRUD.READ])]
-        );
     }
 
     public async getOperations(property: string): Promise<SearchOperator[]> {
