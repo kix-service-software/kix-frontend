@@ -25,7 +25,9 @@ export class NotificationNamespace extends SocketNameSpace {
     }
 
     public broadcast(content: any): void {
-        this.namespace.emit(NotificationEvent.MESSAGE, content);
+        if (this.namespace) {
+            this.namespace.emit(NotificationEvent.MESSAGE, content);
+        }
     }
 
 }
