@@ -92,6 +92,8 @@ export class PermissionService {
                 permission.target = permission.target.substr(1, permission.target.length);
             }
 
+            permission.target = permission.target.replace('\*', 'permissioncheck');
+
             const response = await HttpService.getInstance().options(token, permission.target)
                 .catch((error) => {
                     console.error(error);

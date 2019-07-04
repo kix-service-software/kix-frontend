@@ -41,6 +41,9 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         window.addEventListener("resize", this.setWidth.bind(this), false);
         this.eventSubscriberId = this.state.row.getTable().getTableId() + '-' + this.state.row.getRowId();
         EventService.getInstance().subscribe(TableEvent.REFRESH, this);
+
+        await this.setToggleActions();
+        setTimeout(() => this.state.loading = false, 50);
     }
 
     public onDestroy(): void {
@@ -80,7 +83,6 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     public calculateToggleContentMinHeight(index: number): string {
         const minHeight = "10em"; // TODO: echten Wert ermitteln .toggle-row > td >.content
         setTimeout(async () => {
-            await this.setToggleActions();
             if (this.state.actions && this.state.actions.length > 5) {
                 const root = (this as any).getEl();
                 if (root) {
