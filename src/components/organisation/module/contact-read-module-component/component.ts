@@ -1,6 +1,6 @@
 import {
     AbstractMarkoComponent, LabelService, ServiceRegistry,
-    FactoryService, ContextService, ActionFactory, TableFactoryService, PlaceholderService
+    FactoryService, ContextService, ActionFactory, TableFactoryService, PlaceholderService, InitComponent
 } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
@@ -16,13 +16,13 @@ import {
 import { DialogService } from '../../../../core/browser/components/dialog';
 import { KIXObjectSearchService } from '../../../../core/browser/kix/search/KIXObjectSearchService';
 
-class Component extends AbstractMarkoComponent {
+class Component extends AbstractMarkoComponent implements InitComponent {
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
-    public async onMount(): Promise<void> {
+    public async init(): Promise<void> {
         PlaceholderService.getInstance().registerPlaceholderHandler(new ContactPlaceholderHandler());
 
         ServiceRegistry.registerServiceInstance(ContactService.getInstance());

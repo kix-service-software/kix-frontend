@@ -1,6 +1,7 @@
 import { ComponentState } from './ComponentState';
 import {
-    AbstractMarkoComponent, ServiceRegistry, LabelService, FactoryService, ActionFactory, ContextService, DialogService
+    AbstractMarkoComponent, ServiceRegistry, LabelService, FactoryService, ActionFactory,
+    ContextService, DialogService, InitComponent
 } from '../../../core/browser';
 import {
     KIXObjectType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration, ContextDescriptor, ContextType, CRUD
@@ -24,13 +25,13 @@ import {
 import { UIComponentPermission } from '../../../core/model/UIComponentPermission';
 import { AuthenticationSocketClient } from '../../../core/browser/application/AuthenticationSocketClient';
 
-class Component extends AbstractMarkoComponent {
+class Component extends AbstractMarkoComponent implements InitComponent {
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
-    public async onMount(): Promise<void> {
+    public async init(): Promise<void> {
         ServiceRegistry.registerServiceInstance(SystemAddressService.getInstance());
         ServiceRegistry.registerServiceInstance(SystemAddressFormService.getInstance());
         FactoryService.getInstance().registerFactory(
@@ -54,9 +55,9 @@ class Component extends AbstractMarkoComponent {
         TableFactoryService.getInstance().registerFactory(new MailFilterTableFactory());
         LabelService.getInstance().registerLabelProvider(new MailFilterLabelProvider());
 
-        this.registerSystemAddresses();
-        this.registerMailAccounts();
-        this.registerMailFilters();
+        await this.registerSystemAddresses();
+        await this.registerMailAccounts();
+        await this.registerMailFilters();
     }
 
     private async registerSystemAddresses(): Promise<void> {

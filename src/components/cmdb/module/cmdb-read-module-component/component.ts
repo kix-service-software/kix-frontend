@@ -1,6 +1,6 @@
 import {
     AbstractMarkoComponent, ServiceRegistry, FactoryService, LabelService,
-    TableFactoryService, ContextService, DialogService, ActionFactory
+    TableFactoryService, ContextService, DialogService, ActionFactory, InitComponent
 } from "../../../../core/browser";
 import { ComponentState } from './ComponentState';
 import {
@@ -18,13 +18,13 @@ import {
 } from "../../../../core/model";
 import { KIXObjectSearchService } from "../../../../core/browser/kix/search/KIXObjectSearchService";
 
-class Component extends AbstractMarkoComponent {
+class Component extends AbstractMarkoComponent implements InitComponent {
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
-    public async onMount(): Promise<void> {
+    public async init(): Promise<void> {
         ServiceRegistry.registerServiceInstance(CMDBService.getInstance());
         ServiceRegistry.registerServiceInstance(ConfigItemFormService.getInstance());
 

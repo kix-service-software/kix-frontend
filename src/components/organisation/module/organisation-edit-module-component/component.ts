@@ -1,4 +1,4 @@
-import { AbstractMarkoComponent, ContextService, ActionFactory } from '../../../../core/browser';
+import { AbstractMarkoComponent, ContextService, ActionFactory, InitComponent } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
     KIXObjectType, ContextDescriptor, ContextType, ContextMode, WidgetConfiguration,
@@ -11,13 +11,13 @@ import {
     NewOrganisationDialogContext, OrganisationCreateAction, OrganisationEditAction, OrganisationCreateContactAction
 } from '../../../../core/browser/organisation';
 
-class Component extends AbstractMarkoComponent {
+class Component extends AbstractMarkoComponent implements InitComponent {
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
-    public async onMount(): Promise<void> {
+    public async init(): Promise<void> {
         ImportService.getInstance().registerImportManager(new OrganisationImportManager());
 
         this.registerContexts();

@@ -1,18 +1,19 @@
 import { ComponentState } from './ComponentState';
-import { AbstractMarkoComponent, ContextService, ActionFactory, DialogService } from '../../../../core/browser';
-import { NewTicketDialogContext, TicketCreateAction, TicketWatchAction } from '../../../../core/browser/ticket';
 import {
-    ContextDescriptor, KIXObjectType, ContextType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration,
-    WidgetSize
+    AbstractMarkoComponent, ContextService, ActionFactory, DialogService, InitComponent
+} from '../../../../core/browser';
+import { NewTicketDialogContext, TicketCreateAction } from '../../../../core/browser/ticket';
+import {
+    ContextDescriptor, KIXObjectType, ContextType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration
 } from '../../../../core/model';
 
-class Component extends AbstractMarkoComponent {
+class Component extends AbstractMarkoComponent implements InitComponent {
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
-    public async onMount(): Promise<void> {
+    public async init(): Promise<void> {
         this.registerContexts();
         this.registerTicketActions();
         this.registerTicketDialogs();

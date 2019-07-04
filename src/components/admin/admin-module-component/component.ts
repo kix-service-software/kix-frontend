@@ -1,6 +1,6 @@
 import {
     AbstractMarkoComponent, ContextService, ActionFactory, DialogService,
-    TableFactoryService, LabelService, ServiceRegistry
+    TableFactoryService, LabelService, ServiceRegistry, InitComponent
 } from '../../../core/browser';
 import { ComponentState } from './ComponentState';
 import { AdminContext, AdministrationSocketClient } from '../../../core/browser/admin';
@@ -21,13 +21,13 @@ import {
 import { TranslationPatternLabelProvider, TranslationLanguageLabelProvider } from '../../../core/browser/i18n';
 import { TranslationFormService } from '../../../core/browser/i18n/admin/TranslationFormService';
 
-class Component extends AbstractMarkoComponent {
+class Component extends AbstractMarkoComponent implements InitComponent {
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
-    public async onMount(): Promise<void> {
+    public async init(): Promise<void> {
         const adminModules = await AdministrationSocketClient.getInstance().loadAdminCategories();
 
         if (adminModules && adminModules.length) {
@@ -38,7 +38,7 @@ class Component extends AbstractMarkoComponent {
             );
             ContextService.getInstance().registerContext(contextDescriptor);
 
-            this.registerI18N();
+            await this.registerI18N();
         }
     }
 

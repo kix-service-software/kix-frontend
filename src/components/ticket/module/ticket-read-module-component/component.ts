@@ -1,6 +1,7 @@
 import {
     AbstractMarkoComponent, ServiceRegistry, LabelService, TableFactoryService,
-    TableCSSHandlerRegistry, FactoryService, ContextService, DialogService, ActionFactory, PlaceholderService
+    TableCSSHandlerRegistry, FactoryService, ContextService, DialogService, ActionFactory,
+    PlaceholderService, InitComponent
 } from "../../../../core/browser";
 import { ComponentState } from './ComponentState';
 import {
@@ -12,8 +13,7 @@ import {
     ArticleBrowserFactory, TicketTypeBrowserFactory, TicketPriorityBrowserFactory, TicketStateBrowserFactory,
     TicketStateTypeBrowserFactory, QueueBrowserFactory, FollowUpTypeBrowserFactory, TicketTemplateBrowserFactory,
     TicketContext, TicketDetailsContext, TicketSearchContext, TicketListContext, ArticleZipAttachmentDownloadAction,
-    TicketPrintAction, TicketSearchAction, ShowUserTicketsAction, TicketPriorityTableFactory,
-    TicketQueueTableFactory, TicketTypeTableFactory, TicketStateTableFactory, TicketFormService,
+    TicketPrintAction, TicketSearchAction, ShowUserTicketsAction, TicketFormService,
     EmailRecipientValidator, PendingTimeValidator, ArticleFormService, TicketHistoryBrowserFactory,
     TicketWatchAction, TicketLockAction, TicketPlaceholderHandler
 } from "../../../../core/browser/ticket";
@@ -26,13 +26,13 @@ import {
 import { FormValidationService } from "../../../../core/browser/form/validation";
 import { KIXObjectSearchService } from "../../../../core/browser/kix/search/KIXObjectSearchService";
 
-class Component extends AbstractMarkoComponent {
+class Component extends AbstractMarkoComponent implements InitComponent {
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
-    public async onMount(): Promise<void> {
+    public async init(): Promise<void> {
         PlaceholderService.getInstance().registerPlaceholderHandler(new TicketPlaceholderHandler());
 
         ServiceRegistry.registerServiceInstance(TicketService.getInstance());

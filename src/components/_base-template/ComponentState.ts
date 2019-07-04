@@ -5,10 +5,9 @@ export class ComponentState {
         public hasExplorer: boolean = false,
         public showSidebar: boolean = false,
         public loading: boolean = true,
-        public loadingHint: string = 'Loading ...',
+        public loadingHint: string = 'Loading',
         public reload: boolean = false,
-        public initialized: boolean = false,
-        public moduleTemplates: any[] = []
+        public initialized: boolean = false
     ) { }
 
 }

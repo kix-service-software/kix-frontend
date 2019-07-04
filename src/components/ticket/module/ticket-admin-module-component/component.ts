@@ -1,6 +1,6 @@
 import {
     AbstractMarkoComponent, ContextService, DialogService, ActionFactory,
-    ServiceRegistry, LabelService, TableFactoryService, FactoryService
+    ServiceRegistry, LabelService, TableFactoryService, FactoryService, InitComponent
 } from "../../../../core/browser";
 import { ComponentState } from './ComponentState';
 import {
@@ -28,13 +28,13 @@ import {
     TextModuleFormService, TextModuleBrowserFactory
 } from "../../../../core/browser/text-modules";
 
-class Component extends AbstractMarkoComponent {
+class Component extends AbstractMarkoComponent implements InitComponent {
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
-    public async onMount(): Promise<void> {
+    public async init(): Promise<void> {
         ServiceRegistry.registerServiceInstance(TicketTypeFormService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketPriorityFormService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketStateFormService.getInstance());
@@ -76,10 +76,10 @@ class Component extends AbstractMarkoComponent {
         );
         FactoryService.getInstance().registerFactory(KIXObjectType.TEXT_MODULE, TextModuleBrowserFactory.getInstance());
 
-        this.registerTicketTypeAdmin();
-        this.registerTicketStatesAdmin();
-        this.registerTicketPrioritiesAdmin();
-        this.registerTicketQueuesAdmin();
+        await this.registerTicketTypeAdmin();
+        await this.registerTicketStatesAdmin();
+        await this.registerTicketPrioritiesAdmin();
+        await this.registerTicketQueuesAdmin();
     }
 
     private async registerTicketTypeAdmin(): Promise<void> {

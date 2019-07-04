@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
 import {
-    AbstractMarkoComponent, ServiceRegistry, ContextService, ActionFactory, DialogService
+    AbstractMarkoComponent, ServiceRegistry, ContextService, ActionFactory, DialogService, InitComponent
 } from '../../../../core/browser';
 import {
     TicketFormService, EmailRecipientValidator, NewTicketArticleContext, ArticleReplyAction, ArticleForwardAction
@@ -11,13 +11,13 @@ import {
 import { FormValidationService } from '../../../../core/browser/form/validation';
 import { ArticleNewAction } from '../../../../core/browser/ticket/actions/article/ArticleNewAction';
 
-class Component extends AbstractMarkoComponent {
+class Component extends AbstractMarkoComponent implements InitComponent {
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
-    public async onMount(): Promise<void> {
+    public async init(): Promise<void> {
         FormValidationService.getInstance().registerValidator(new EmailRecipientValidator());
 
         TicketFormService.getInstance();

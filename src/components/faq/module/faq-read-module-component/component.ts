@@ -1,32 +1,31 @@
 import {
     AbstractMarkoComponent, FactoryService, LabelService, ServiceRegistry,
-    ContextService, ActionFactory, TableFactoryService
+    ContextService, ActionFactory, TableFactoryService, InitComponent
 } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
     KIXObjectType, ContextType, ContextMode, ContextDescriptor, ConfiguredDialogWidget,
-    WidgetConfiguration, WidgetSize
+    WidgetConfiguration
 } from '../../../../core/model';
 import {
     FAQArticleTableFactory, FAQArticleHistoryTableFactory, FAQLabelProvider, FAQArticleHistoryLabelProvider,
     FAQService, FAQArticleSearchContext, FAQArticleVoteAction, FAQArticlePrintAction,
     FAQArticleBrowserFactory, FAQArticleAttachmentBrowserFactory, FAQArticleSearchDefinition, FAQArticleFormService,
-    FAQCategoryLabelProvider, FAQCategoryFormService
+    FAQCategoryLabelProvider
 } from '../../../../core/browser/faq';
 import { DialogService } from '../../../../core/browser/components/dialog';
-import { FAQCategoryTableFactory } from '../../../../core/browser/faq/admin';
 import { FAQCategoryBrowserFactory } from '../../../../core/browser/faq/FAQCategoryBrowserFactory';
 import { KIXObjectSearchService } from '../../../../core/browser/kix/search/KIXObjectSearchService';
 import { FAQContext } from '../../../../core/browser/faq/context/FAQContext';
 import { FAQDetailsContext } from '../../../../core/browser/faq/context/FAQDetailsContext';
 
-class Component extends AbstractMarkoComponent {
+class Component extends AbstractMarkoComponent implements InitComponent {
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
-    public async onMount(): Promise<void> {
+    public async init(): Promise<void> {
         FactoryService.getInstance().registerFactory(
             KIXObjectType.FAQ_ARTICLE, FAQArticleBrowserFactory.getInstance()
         );
