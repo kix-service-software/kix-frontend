@@ -1,6 +1,6 @@
 import { SocketClient } from "../SocketClient";
 import {
-    ContextConfiguration, ContextEvent, LoadContextConfigurationRequest, LoadContextConfigurationResponse,
+    ContextConfiguration, ContextEvent, LoadContextConfigurationRequest, LoadContextConfigurationResponse, SocketEvent,
 } from "../../model";
 import { ClientStorageService } from "../ClientStorageService";
 import { IdService } from "../IdService";
@@ -48,15 +48,13 @@ export class ContextSocketClient extends SocketClient {
                 )
             );
 
-            this.getInstance().socket.on(ContextEvent.CONTEXT_CONFIGURATION_LOAD_ERROR,
-                (error: SocketErrorResponse) => {
-                    if (error.requestId === requestId) {
-                        window.clearTimeout(timeout);
-                        console.error(error.error);
-                        reject(error.error);
-                    }
+            this.getInstance().socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
+                if (error.requestId === requestId) {
+                    window.clearTimeout(timeout);
+                    console.error(error.error);
+                    reject(error.error);
                 }
-            );
+            });
         });
     }
 }

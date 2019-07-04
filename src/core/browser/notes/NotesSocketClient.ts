@@ -1,6 +1,6 @@
 import { SocketClient } from "../SocketClient";
 import {
-    NotesEvent, LoadNotesResponse, LoadNotesRequest, SaveNotesRequest, ISocketResponse
+    NotesEvent, LoadNotesResponse, LoadNotesRequest, SaveNotesRequest, ISocketResponse, SocketEvent
 } from "../../model";
 import { ClientStorageService } from "../ClientStorageService";
 import { IdService } from "../IdService";
@@ -41,6 +41,14 @@ export class NotesSocketClient extends SocketClient {
                 }
             });
 
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
+                if (error.requestId === requestId) {
+                    window.clearTimeout(timeout);
+                    console.error(error.error);
+                    reject(error.error);
+                }
+            });
+
             this.socket.emit(
                 NotesEvent.LOAD_NOTES, new LoadNotesRequest(token, requestId, contextId)
             );
@@ -67,7 +75,7 @@ export class NotesSocketClient extends SocketClient {
                 }
             });
 
-            this.socket.on(NotesEvent.SAVE_NOTES_ERROR, (error: SocketErrorResponse) => {
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
                 if (error.requestId === requestId) {
                     window.clearTimeout(timeout);
                     console.error(error.error);

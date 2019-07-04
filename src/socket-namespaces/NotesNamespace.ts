@@ -1,6 +1,6 @@
 import { SocketNameSpace } from './SocketNameSpace';
 import {
-    NotesEvent, LoadNotesRequest, LoadNotesResponse, SaveNotesRequest
+    NotesEvent, LoadNotesRequest, LoadNotesResponse, SaveNotesRequest, SocketEvent
 } from '../core/model';
 import { SocketResponse, SocketErrorResponse } from '../core/common';
 import { ConfigurationService } from '../core/services';
@@ -45,30 +45,36 @@ export class NotesNamespace extends SocketNameSpace {
         return new SocketResponse(NotesEvent.NOTES_LOADED, response);
     }
 
-    private async saveNotes(data: SaveNotesRequest): Promise<SocketResponse<void>> {
+    private async saveNotes(data: SaveNotesRequest): Promise<SocketResponse> {
         let userId = null;
         if (data.token) {
-            const user = await UserService.getInstance().getUserByToken(data.token);
-            userId = user.UserID;
+            const user = await UserService.getInstance().getUserByToken(data.token)
+                .catch(() => null);
+            userId = user ? user.UserID : null;
         }
 
-        let notesConfig = await ConfigurationService.getInstance().getModuleConfiguration('notes', userId);
-        if (!notesConfig) {
-            notesConfig = {};
-        }
-        notesConfig[data.contextId] = data.notes;
+        if (userId) {
+            let notesConfig = await ConfigurationService.getInstance().getModuleConfiguration('notes', userId)
+                .catch(() => null);
+            if (!notesConfig) {
+                notesConfig = {};
+            }
+            notesConfig[data.contextId] = data.notes;
 
-        let response;
-        await ConfigurationService.getInstance().saveModuleConfiguration('notes', userId, notesConfig)
-            .then(() => {
-                response = new SocketResponse(NotesEvent.SAVE_NOTES_FINISHED, { requestId: data.requestId });
-            }).catch((error) => {
-                response = new SocketResponse(
-                    NotesEvent.SAVE_NOTES_ERROR, new SocketErrorResponse(data.requestId, error)
+
+            const response = await ConfigurationService.getInstance().saveModuleConfiguration(
+                'notes', userId, notesConfig
+            )
+                .then(() => new SocketResponse(NotesEvent.SAVE_NOTES_FINISHED, { requestId: data.requestId }))
+                .catch((error) =>
+                    new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error))
                 );
-            });
 
-        return response;
-
+            return response;
+        } else {
+            return new SocketResponse(
+                SocketEvent.ERROR, new SocketErrorResponse(data.requestId, 'No user available.')
+            );
+        }
     }
 }

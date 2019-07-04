@@ -1,6 +1,6 @@
 import {
     Attachment, LoadArticleZipAttachmentRequest, LoadArticleAttachmentRequest, LoadArticleAttachmentResponse,
-    TicketEvent, SetArticleSeenFlagRequest, ISocketResponse,
+    TicketEvent, SetArticleSeenFlagRequest, ISocketResponse, SocketEvent,
 } from '../../model';
 
 import { SocketClient } from '../SocketClient';
@@ -56,9 +56,10 @@ export class TicketSocketClient extends SocketClient {
                 }
             });
 
-            this.socket.on(TicketEvent.LOAD_ARTICLE_ATTACHMENT_ERROR, (error: SocketErrorResponse) => {
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
                 if (error.requestId === requestId) {
                     window.clearTimeout(timeout);
+                    console.error(error.error);
                     reject(error);
                 }
             });
@@ -88,10 +89,11 @@ export class TicketSocketClient extends SocketClient {
                 }
             });
 
-            this.socket.on(TicketEvent.LOAD_ARTICLE_ZIP_ATTACHMENT_ERROR, (error: SocketErrorResponse) => {
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
                 if (error.requestId === requestId) {
                     window.clearTimeout(timeout);
-                    reject(error);
+                    console.error(error.error);
+                    reject(error.error);
                 }
             });
 
@@ -115,6 +117,14 @@ export class TicketSocketClient extends SocketClient {
                 if (result.requestId === requestId) {
                     window.clearTimeout(timeout);
                     resolve();
+                }
+            });
+
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
+                if (error.requestId === requestId) {
+                    window.clearTimeout(timeout);
+                    console.error(error.error);
+                    reject(error.error);
                 }
             });
 

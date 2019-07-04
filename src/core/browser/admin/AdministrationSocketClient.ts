@@ -1,7 +1,10 @@
 import { SocketClient } from "../SocketClient";
-import { AdminModuleCategory, AdministrationEvent, AdminCategoriesResponse, ISocketRequest } from "../../model";
+import {
+    AdminModuleCategory, AdministrationEvent, AdminCategoriesResponse, ISocketRequest, SocketEvent
+} from "../../model";
 import { ClientStorageService } from "../ClientStorageService";
 import { IdService } from "../IdService";
+import { SocketErrorResponse } from "../../common";
 
 export class AdministrationSocketClient extends SocketClient {
 
@@ -46,6 +49,14 @@ export class AdministrationSocketClient extends SocketClient {
                     }
                 }
             );
+
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
+                if (error.requestId === requestId) {
+                    window.clearTimeout(timeout);
+                    console.error(error.error);
+                    reject(error.error);
+                }
+            });
 
             const request: ISocketRequest = {
                 token: ClientStorageService.getToken(),
