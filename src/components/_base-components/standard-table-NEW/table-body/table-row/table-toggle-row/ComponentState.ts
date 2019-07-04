@@ -6,7 +6,8 @@ export class ComponentState {
     public constructor(
         public row: IRow = null,
         public width: string = '100%',
-        public actions: IAction[] = null
+        public actions: IAction[] = null,
+        public loading = true
     ) { }
 
 }

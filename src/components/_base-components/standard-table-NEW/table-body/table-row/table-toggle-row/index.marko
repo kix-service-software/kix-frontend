@@ -2,7 +2,7 @@
     opened: state.row && input.open
 }>
     <td colspan=input.columnLength>
-        <if(input.open)>
+        <if(input.open && !state.loading)>
             <div.content style=("width: " + state.width)>
                 <ul.toggle-actions>
                     <for|action| of=state.actions>

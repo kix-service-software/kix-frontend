@@ -1,10 +1,15 @@
 import { AbstractAction } from '../../../../model/components/action/AbstractAction';
-import { Article, ContextMode, KIXObjectType } from '../../../../model';
+import { Article, ContextMode, KIXObjectType, CRUD } from '../../../../model';
 import { ContextService } from '../../../context';
 import { NewTicketArticleContext } from '../../context';
 import { TranslationService } from '../../../i18n/TranslationService';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 
 export class ArticleReplyAction extends AbstractAction {
+
+    public permissions = [
+        new UIComponentPermission('tickets/*/articles', [CRUD.CREATE])
+    ];
 
     private article: Article = null;
 
