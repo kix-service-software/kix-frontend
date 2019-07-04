@@ -10,7 +10,7 @@ class Extension implements IKIXModuleExtension {
     public id = 'ticket-admin-module';
 
     public initComponents: UIComponent[] = [
-        new UIComponent('ticket-admin-module-component', 'ticket/module/ticket-admin-module-component',
+        new UIComponent('ticket-admin-module-component', 'core/browser/modules/ui-modules/TicketAdminUIModule',
             [
                 new UIComponentPermission('system/ticket/queues', [CRUD.CREATE], true),
                 new UIComponentPermission('system/ticket/queues/*', [CRUD.UPDATE], true),

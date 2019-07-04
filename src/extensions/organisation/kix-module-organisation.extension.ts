@@ -13,11 +13,11 @@ class Extension implements IKIXModuleExtension {
 
     public initComponents: UIComponent[] = [
         new UIComponent(
-            'organisation-read-module-component', 'organisation/module/organisation-read-module-component',
+            'organisation-read-module-component', 'core/browser/modules/ui-modules/OrganisationReadUIModule',
             [new UIComponentPermission('organisations', [CRUD.READ])]
         ),
         new UIComponent(
-            'organisation-edit-module-component', 'organisation/module/organisation-edit-module-component',
+            'organisation-edit-module-component', 'core/browser/modules/ui-modules/OrganisationEditUIModule',
             [
                 new UIComponentPermission('organisations', [CRUD.CREATE]),
                 new UIComponentPermission('organisations/*', [CRUD.UPDATE])

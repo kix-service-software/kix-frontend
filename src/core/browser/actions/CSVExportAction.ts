@@ -1,5 +1,4 @@
 import { AbstractAction } from '../../model/components/action/AbstractAction';
-import { LabelService } from '../LabelService';
 import { ITable, TableExportUtil } from '../table';
 
 export class CSVExportAction extends AbstractAction<ITable> {

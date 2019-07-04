@@ -9,6 +9,7 @@ export { FAQArticleFormService } from './FAQArticleFormService';
 export { FAQCategoryLabelProvider } from './FAQCategoryLabelProvider';
 export { FAQCategoryFormService } from './FAQCategoryFormService';
 export { FAQArticleDialogUtil } from './FAQArticleDialogUtil';
+
 export * from './context';
 export * from './table';
 export * from './actions';

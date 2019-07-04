@@ -6,7 +6,11 @@ class KIXModuleExtension implements IKIXModuleExtension {
     public tags: Array<[string, string]>;
 
     public initComponents: UIComponent[] = [
-        new UIComponent('communication-module-component', 'communication/communication-module-component', [])
+        new UIComponent(
+            'communication-module-component',
+            'core/browser/modules/ui-modules/CommunicationUIModule',
+            []
+        )
     ];
 
     public id = 'communication-module';

@@ -10,7 +10,7 @@ class Extension implements IKIXModuleExtension {
     public id = 'cmdb-module';
 
     public initComponents: UIComponent[] = [
-        new UIComponent('cmdb-admin-module-component', 'cmdb/module/cmdb-admin-module-component', [
+        new UIComponent('cmdb-admin-module-component', 'core/browser/modules/ui-modules/CMDBAdminUIModule', [
             new UIComponentPermission('system/cmdb/classes/*', [CRUD.UPDATE], true),
             new UIComponentPermission('system/cmdb/classes', [CRUD.CREATE], true)
         ])

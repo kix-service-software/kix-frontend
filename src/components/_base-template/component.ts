@@ -1,7 +1,7 @@
-import { Context, ContextType, ContextDescriptor, KIXObjectType, ContextMode, InputDefinition } from '../../core/model';
+import { Context, ContextType, ContextDescriptor, KIXObjectType, ContextMode } from '../../core/model';
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../core/browser/context';
-import { IdService, ServiceRegistry, FactoryService, InitComponent } from '../../core/browser';
+import { IdService, ServiceRegistry, FactoryService } from '../../core/browser';
 import { RoutingService } from '../../core/browser/router';
 import { HomeContext } from '../../core/browser/home';
 import { EventService } from '../../core/browser/event';
@@ -14,7 +14,7 @@ import { NotificationSocketClient } from '../../core/browser/notifications';
 import { AgentService } from '../../core/browser/application/AgentService';
 import { SysConfigService } from '../../core/browser/sysconfig';
 import { TranslationPatternBrowserFactory, TranslationBrowserFactory } from '../../core/browser/i18n';
-import { UIComponent } from '../../core/model/UIComponent';
+import { IUIModule } from '../../core/browser/application/IUIModule';
 
 class Component {
 
@@ -165,16 +165,27 @@ class Component {
 
     private async initModules(): Promise<void> {
         const modules = KIXModulesService.getInstance().getModules();
+
+        let uiModules: IUIModule[] = [];
         for (let i = 0; i < modules.length; i++) {
             for (const c of modules[i].initComponents) {
-                const component = require(c.componentPath);
-                if (component && component.Component) {
-                    if (component.Component.prototype.init) {
-                        await component.Component.prototype.init();
-                    } else {
-                        console.warn(c.tagId + ' did not implement init() method.');
+                try {
+                    const component = require(c.componentPath);
+                    if (component && component.UIModule) {
+                        uiModules.push(new component.UIModule());
                     }
+                } catch (error) {
+                    console.error(error);
                 }
+            }
+        }
+
+        uiModules = uiModules.sort((a, b) => a.priority - b.priority);
+        for (let i = 0; i < uiModules.length; i++) {
+            if (uiModules[i].register) {
+                await uiModules[i].register();
+            } else {
+                console.warn(`module with prioritiy ${uiModules[i].priority} did not implement register() method.`);
             }
 
             const percent = Math.round((i / modules.length) * 100);
