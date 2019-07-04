@@ -10,14 +10,14 @@ class Extension implements IKIXModuleExtension {
     public id = 'faq-module';
 
     public initComponents: UIComponent[] = [
-        new UIComponent('faq-read-module-component', 'faq/module/faq-read-module-component', [
+        new UIComponent('faq-read-module-component', 'core/browser/modules/ui-modules/FAQReadUIModule', [
             new UIComponentPermission('faq/articles', [CRUD.READ])
         ]),
-        new UIComponent('faq-edit-module-component', 'faq/module/faq-edit-module-component', [
+        new UIComponent('faq-edit-module-component', 'core/browser/modules/ui-modules/FAQEditUIModule', [
             new UIComponentPermission('faq/articles', [CRUD.CREATE]),
             new UIComponentPermission('faq/articles/*', [CRUD.UPDATE])
         ]),
-        new UIComponent('faq-admin-module-component', 'faq/module/faq-admin-module-component', [
+        new UIComponent('faq-admin-module-component', 'core/browser/modules/ui-modules/FAQAdminUIModule', [
             new UIComponentPermission('system/faq/categories', [CRUD.CREATE], true),
             new UIComponentPermission('system/faq/categories/*', [CRUD.UPDATE], true)
         ]),

@@ -10,8 +10,8 @@ class Extension implements IKIXModuleExtension {
     public id = 'application-module';
 
     public initComponents: UIComponent[] = [
-        new UIComponent('application-module-component', 'application/module/application-module-component', []),
-        new UIComponent('application-links-module-component', 'application/module/application-links-module-component', [
+        new UIComponent('application-module-component', 'core/browser/modules/ui-modules/ApplicationUIModule', []),
+        new UIComponent('application-links-module-component', 'core/browser/modules/ui-modules/LinksUIModule', [
             new UIComponentPermission('links', [CRUD.READ])
         ])
     ];

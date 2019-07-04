@@ -10,10 +10,10 @@ class Extension implements IKIXModuleExtension {
     public id = 'cmdb-module';
 
     public initComponents: UIComponent[] = [
-        new UIComponent('cmdb-module-read-component', 'cmdb/module/cmdb-read-module-component', [
+        new UIComponent('cmdb-module-read-component', 'core/browser/modules/ui-modules/CMDBReadUIModule', [
             new UIComponentPermission('cmdb/configitems', [CRUD.READ])
         ]),
-        new UIComponent('cmdb-module-edit-component', 'cmdb/module/cmdb-edit-module-component', [
+        new UIComponent('cmdb-module-edit-component', 'core/browser/modules/ui-modules/CMDBEditUIModule', [
             new UIComponentPermission('cmdb/configitems/*', [CRUD.UPDATE]),
             new UIComponentPermission('cmdb/configitems/*/versions', [CRUD.CREATE]),
             new UIComponentPermission('system/cmdb/classes', [CRUD.READ])

@@ -13,7 +13,7 @@ class Extension implements IKIXModuleExtension {
 
     public initComponents: UIComponent[] = [
         new UIComponent(
-            'customer-module-component', 'organisation/module/customer-module-component',
+            'customer-module-component', 'core/browser/modules/ui-modules/CustomerUIModule',
             [
                 new UIComponentPermission('organisations', [CRUD.READ], true),
                 new UIComponentPermission('contacts', [CRUD.READ], true)

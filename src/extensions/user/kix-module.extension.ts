@@ -8,7 +8,7 @@ class Extension implements IKIXModuleExtension {
     public id = 'user-module';
 
     public initComponents: UIComponent[] = [
-        new UIComponent('user-module-component', 'user/user-module-component', [])
+        new UIComponent('user-module-component', 'core/browser/modules/ui-modules/UserUIModule', [])
     ];
 
     public external: boolean = false;

@@ -12,10 +12,10 @@ class Extension implements IKIXModuleExtension {
     public external: boolean = false;
 
     public initComponents: UIComponent[] = [
-        new UIComponent('contact-read-module-component', 'organisation/module/contact-read-module-component', [
+        new UIComponent('contact-read-module-component', 'core/browser/modules/ui-modules/ContactReadUIModule', [
             new UIComponentPermission('contacts', [CRUD.READ])
         ]),
-        new UIComponent('contact-edit-module-component', 'organisation/module/contact-edit-module-component', [
+        new UIComponent('contact-edit-module-component', 'core/browser/modules/ui-modules/ContactEditUIModule', [
             new UIComponentPermission('contacts', [CRUD.CREATE]),
             new UIComponentPermission('contacts/*', [CRUD.UPDATE])
         ])

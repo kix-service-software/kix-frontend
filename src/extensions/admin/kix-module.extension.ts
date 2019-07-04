@@ -10,8 +10,8 @@ class Extension implements IKIXModuleExtension {
     public id = 'application-admin-module';
 
     public initComponents: UIComponent[] = [
-        new UIComponent('admin-module-component', 'admin/admin-module-component', []),
-        new UIComponent('system-module-component', 'system/system-module-component', [
+        new UIComponent('admin-module-component', 'core/browser/modules/ui-modules/AdminUIModule', []),
+        new UIComponent('system-module-component', 'core/browser/modules/ui-modules/SystemUIModule', [
             new UIComponentPermission('system/config', [CRUD.CREATE], true),
             new UIComponentPermission('system/config', [CRUD.UPDATE], true)
         ])

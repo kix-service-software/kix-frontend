@@ -10,24 +10,24 @@ class Extension implements IKIXModuleExtension {
     public id = 'ticket-module';
 
     public initComponents: UIComponent[] = [
-        new UIComponent('ticket-read-module-component', 'ticket/module/ticket-read-module-component',
+        new UIComponent('ticket-read-module-component', 'core/browser/modules/ui-modules/TicketReadUIModule',
             [
                 new UIComponentPermission('tickets', [CRUD.READ])
             ]
         ),
-        new UIComponent('ticket-create-module-component', 'ticket/module/ticket-create-module-component',
+        new UIComponent('ticket-create-module-component', 'core/browser/modules/ui-modules/TicketCreateUIModule',
             [
                 new UIComponentPermission('tickets', [CRUD.CREATE])
             ]
         ),
-        new UIComponent('ticket-update-module-component', 'ticket/module/ticket-update-module-component',
+        new UIComponent('ticket-update-module-component', 'core/browser/modules/ui-modules/TicketUpdateUIModule',
             [
                 new UIComponentPermission('tickets/*', [CRUD.UPDATE]),
             ]
         ),
         new UIComponent(
             'ticket-article-create-module-component',
-            'ticket/module/ticket-article-create-module-component',
+            'core/browser/modules/ui-modules/ArticleCreateUIModule',
             [
                 new UIComponentPermission('tickets/*/articles', [CRUD.CREATE])
             ]
