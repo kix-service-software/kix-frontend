@@ -120,10 +120,11 @@ export class HttpService {
             method: RequestMethod.OPTIONS
         };
 
-        let response = await CacheService.getInstance().get(resource, RequestMethod.OPTIONS);
+        const cacheKey = token + resource;
+        let response = await CacheService.getInstance().get(cacheKey, RequestMethod.OPTIONS);
         if (!response) {
             response = await this.executeRequest<Response>(resource, token, null, options, true);
-            await CacheService.getInstance().set(resource, response, RequestMethod.OPTIONS);
+            await CacheService.getInstance().set(cacheKey, response, RequestMethod.OPTIONS);
         }
 
         return new OptionsResponse(response);
