@@ -4,7 +4,7 @@ import {
 } from '../../../model';
 import { KIXObjectService } from './KIXObjectService';
 import { LoggingService } from '../LoggingService';
-import { SetPreferenceOptions, UserPreference, UserProperty } from '../../../model/kix/user';
+import { UserPreference, UserProperty, SetPreferenceOptions } from '../../../model/kix/user';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { UserFactory } from '../../object-factories/UserFactory';
 import { UserPreferenceFactory } from '../../object-factories/UserPreferenceFactory';
@@ -45,15 +45,15 @@ export class UserService extends KIXObjectService {
                 token, KIXObjectType.USER, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.USER
             );
         } else if (objectType === KIXObjectType.USER_PREFERENCE) {
+            let uri = this.buildUri('session', 'user', 'preferences');
             const preferenceOptions = (objectLoadingOptions as PreferencesLoadingOptions);
             if (preferenceOptions.userId) {
-                const uri = this.buildUri(
-                    this.RESOURCE_URI, preferenceOptions.userId, 'preferences'
-                );
-                objects = await super.load(
-                    token, KIXObjectType.USER_PREFERENCE, uri, loadingOptions, objectIds, KIXObjectType.USER_PREFERENCE
-                );
+                uri = this.buildUri(this.RESOURCE_URI, preferenceOptions.userId, 'preferences');
             }
+
+            objects = await super.load(
+                token, KIXObjectType.USER_PREFERENCE, uri, loadingOptions, objectIds, KIXObjectType.USER_PREFERENCE
+            );
         }
 
         return objects;
@@ -91,8 +91,14 @@ export class UserService extends KIXObjectService {
 
             return id;
         } else if (objectType === KIXObjectType.USER_PREFERENCE) {
-            const options = createOptions as SetPreferenceOptions;
-            const uri = this.buildUri(this.RESOURCE_URI, options.userId, 'preferences');
+            let uri = this.buildUri('session', 'user', 'preferences');
+            if (createOptions) {
+                const userId = (createOptions as SetPreferenceOptions).userId;
+                if (userId) {
+                    uri = this.buildUri(this.RESOURCE_URI, userId, 'preferences');
+                }
+            }
+
             const id = await super.executeUpdateOrCreateRequest(
                 token, clientRequestId, parameter, uri, objectType, 'UserPreferenceID', true
             ).catch((error: Error) => {
@@ -141,8 +147,13 @@ export class UserService extends KIXObjectService {
 
             return id;
         } else if (objectType === KIXObjectType.USER_PREFERENCE) {
-            const options = updateOptions as SetPreferenceOptions;
-            const uri = this.buildUri(this.RESOURCE_URI, options.userId, 'preferences', objectId);
+            let uri = this.buildUri('session', 'user', 'preferences', objectId);
+            if (updateOptions) {
+                const userId = (updateOptions as SetPreferenceOptions).userId;
+                if (userId) {
+                    uri = this.buildUri(this.RESOURCE_URI, userId, 'preferences', objectId);
+                }
+            }
             const id = await super.executeUpdateOrCreateRequest(
                 token, clientRequestId, parameter, uri, objectType, 'UserPreferenceID'
             );
@@ -177,12 +188,15 @@ export class UserService extends KIXObjectService {
     }
 
     public async setPreferences(
-        token: string, clientRequestId: string, parameter: Array<[string, any]>, userId: number
+        token: string, clientRequestId: string, parameter: Array<[string, any]>, userId?: number
     ): Promise<void> {
         const currentPreferences = await this.loadObjects<UserPreference>(
             token, null, KIXObjectType.USER_PREFERENCE, null, null, new PreferencesLoadingOptions(userId)
         );
         const errors: Error[] = [];
+
+        const options = userId ? new SetPreferenceOptions(userId) : undefined;
+
         for (const param of parameter) {
             if (currentPreferences.some((p) => p.ID === param[0])) {
                 await this.updateObject(
@@ -191,7 +205,7 @@ export class UserService extends KIXObjectService {
                         ['Value', param[1]]
                     ],
                     param[0],
-                    new SetPreferenceOptions(userId)
+                    options
                 ).catch((error: Error) => {
                     errors.push(error);
                 });
@@ -202,7 +216,7 @@ export class UserService extends KIXObjectService {
                         ['ID', param[0]],
                         ['Value', param[1]]
                     ],
-                    new SetPreferenceOptions(userId)
+                    options
                 ).catch((error: Error) => {
                     errors.push(error);
                 });
@@ -210,7 +224,7 @@ export class UserService extends KIXObjectService {
         }
         // TODO: für Komponente ggf. Fehlerliste übermitteln
         if (!!errors.length) {
-            throw new Error(errors[0].Code, errors.map((e) => e.Message).join("\n"));
+            throw new Error(errors[0].Code, errors.map((e) => e.Message).join("\n"), errors[0].StatusCode);
         }
     }
 
