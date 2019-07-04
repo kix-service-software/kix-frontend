@@ -1,5 +1,5 @@
 import {
-    AbstractMarkoComponent, ContextService, ActionFactory
+    AbstractMarkoComponent, ContextService, ActionFactory, InitComponent
 } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
@@ -15,13 +15,13 @@ import { DialogService } from '../../../../core/browser/components/dialog';
 import { ImportService } from '../../../../core/browser/import';
 import { ContactImportManager } from '../../../../core/browser/contact/ContactImportManager';
 
-class Component extends AbstractMarkoComponent {
+class Component extends AbstractMarkoComponent implements InitComponent {
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
-    public async onMount(): Promise<void> {
+    public async init(): Promise<void> {
         ImportService.getInstance().registerImportManager(new ContactImportManager());
 
         this.registerContexts();

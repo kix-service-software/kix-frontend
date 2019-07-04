@@ -1,10 +1,10 @@
 import {
-    AbstractMarkoComponent, ContextService, ActionFactory
+    AbstractMarkoComponent, ContextService, ActionFactory, InitComponent
 } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
     KIXObjectType, ContextType, ContextMode, ContextDescriptor, ConfiguredDialogWidget,
-    WidgetConfiguration, WidgetSize
+    WidgetConfiguration
 } from '../../../../core/model';
 import {
     NewFAQArticleDialogContext, FAQArticleEditAction, FAQArticleDeleteAction,
@@ -12,13 +12,13 @@ import {
 } from '../../../../core/browser/faq';
 import { DialogService } from '../../../../core/browser/components/dialog';
 
-class Component extends AbstractMarkoComponent {
+class Component extends AbstractMarkoComponent implements InitComponent {
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
-    public async onMount(): Promise<void> {
+    public async init(): Promise<void> {
         this.registerContexts();
         this.registerDialogs();
         this.registerActions();

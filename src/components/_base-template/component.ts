@@ -1,7 +1,7 @@
-import { Context, ContextType, ContextDescriptor, KIXObjectType, ContextMode } from '../../core/model';
+import { Context, ContextType, ContextDescriptor, KIXObjectType, ContextMode, InputDefinition } from '../../core/model';
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../core/browser/context';
-import { IdService, ServiceRegistry, FactoryService } from '../../core/browser';
+import { IdService, ServiceRegistry, FactoryService, InitComponent } from '../../core/browser';
 import { RoutingService } from '../../core/browser/router';
 import { HomeContext } from '../../core/browser/home';
 import { EventService } from '../../core/browser/event';
@@ -41,7 +41,7 @@ class Component {
         ServiceRegistry.registerServiceInstance(SysConfigService.getInstance());
 
         this.state.loading = true;
-        this.state.loadingHint = await TranslationService.translate('Loading ...');
+        this.state.loadingHint = await TranslationService.translate('Translatable#Loading');
 
         await this.checkAuthentication();
 
@@ -49,10 +49,7 @@ class Component {
 
         await KIXModulesService.getInstance().init();
 
-        const modules = KIXModulesService.getInstance().getModules();
-        modules.map((m) => m.initComponents).forEach((ic: UIComponent[]) => {
-            ic.forEach((c) => this.state.moduleTemplates.push(require(c.componentPath)));
-        });
+        await this.initModules();
 
         ContextService.getInstance().registerListener({
             contextChanged: (contextId: string, context: Context, type: ContextType) => {
@@ -164,6 +161,25 @@ class Component {
         gridColumns += ' [sidebar-menu-wrapper] min-content';
 
         this.state.gridColumns = gridColumns;
+    }
+
+    private async initModules(): Promise<void> {
+        const modules = KIXModulesService.getInstance().getModules();
+        for (let i = 0; i < modules.length; i++) {
+            for (const c of modules[i].initComponents) {
+                const component = require(c.componentPath);
+                if (component && component.Component) {
+                    if (component.Component.prototype.init) {
+                        await component.Component.prototype.init();
+                    } else {
+                        console.warn(c.tagId + ' did not implement init() method.');
+                    }
+                }
+            }
+
+            const percent = Math.round((i / modules.length) * 100);
+            this.state.loadingHint = `${percent}%`;
+        }
     }
 }
 

@@ -1,7 +1,8 @@
 import { ComponentState } from './ComponentState';
 import {
     AbstractMarkoComponent, ServiceRegistry, LabelService, FactoryService, ActionFactory, ContextService,
-    PlaceholderService
+    PlaceholderService,
+    InitComponent
 } from '../../../core/browser';
 import {
     RoleService, RoleTableFactory, RoleBrowserFactory, RoleLabelProvider, UserRoleCreateAction,
@@ -22,13 +23,13 @@ import { PermissionTableCSSHandler } from '../../../core/browser/application';
 import { AuthenticationSocketClient } from '../../../core/browser/application/AuthenticationSocketClient';
 import { UIComponentPermission } from '../../../core/model/UIComponentPermission';
 
-class Component extends AbstractMarkoComponent {
+class Component extends AbstractMarkoComponent implements InitComponent {
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
-    public async onMount(): Promise<void> {
+    public async init(): Promise<void> {
         PlaceholderService.getInstance().registerPlaceholderHandler(new UserPlaceholderHandler());
 
         ServiceRegistry.registerServiceInstance(RoleService.getInstance());
@@ -51,8 +52,8 @@ class Component extends AbstractMarkoComponent {
             KIXObjectType.PERMISSION_TYPE, PermissionTypeBrowserFactory.getInstance()
         );
 
-        this.registerUser();
-        this.registerRole();
+        await this.registerUser();
+        await this.registerRole();
     }
 
     private async registerUser(): Promise<void> {

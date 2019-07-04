@@ -1,6 +1,6 @@
 import { ComponentState } from './ComponentState';
 import {
-    AbstractMarkoComponent, ServiceRegistry, ContextService, ActionFactory, DialogService
+    AbstractMarkoComponent, ServiceRegistry, ContextService, ActionFactory, DialogService, InitComponent
 } from '../../../../core/browser';
 import {
     TicketFormService, PendingTimeValidator, EmailRecipientValidator, TicketBulkManager,
@@ -15,13 +15,13 @@ import { FormValidationService } from '../../../../core/browser/form/validation'
 import { AuthenticationSocketClient } from '../../../../core/browser/application/AuthenticationSocketClient';
 import { UIComponentPermission } from '../../../../core/model/UIComponentPermission';
 
-class Component extends AbstractMarkoComponent {
+class Component extends AbstractMarkoComponent implements InitComponent {
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
-    public async onMount(): Promise<void> {
+    public async init(): Promise<void> {
         ServiceRegistry.registerServiceInstance(TicketFormService.getInstance());
         BulkService.getInstance().registerBulkManager(new TicketBulkManager());
 
@@ -34,9 +34,9 @@ class Component extends AbstractMarkoComponent {
             BulkService.getInstance().registerBulkManager(new TicketBulkManager());
         }
 
-        this.registerContexts();
-        this.registerTicketActions();
-        this.registerTicketDialogs();
+        await this.registerContexts();
+        await this.registerTicketActions();
+        await this.registerTicketDialogs();
     }
 
     private async checkPermissions(resource: string, crud: CRUD[]): Promise<boolean> {

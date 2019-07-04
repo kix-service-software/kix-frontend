@@ -1,5 +1,5 @@
 import {
-    AbstractMarkoComponent, ActionFactory, ContextService, LabelService, TableFactoryService
+    AbstractMarkoComponent, ActionFactory, ContextService, LabelService, TableFactoryService, InitComponent
 } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
@@ -11,13 +11,13 @@ import {
 } from '../../../../core/browser/link';
 import { DialogService } from '../../../../core/browser/components/dialog';
 
-class Component extends AbstractMarkoComponent {
+class Component extends AbstractMarkoComponent implements InitComponent {
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
-    public async onMount(): Promise<void> {
+    public async init(): Promise<void> {
         TableFactoryService.getInstance().registerFactory(new LinkObjectTableFactory());
         LabelService.getInstance().registerLabelProvider(new LinkObjectLabelProvider());
         ActionFactory.getInstance().registerAction('linked-objects-edit-action', LinkedObjectsEditAction);

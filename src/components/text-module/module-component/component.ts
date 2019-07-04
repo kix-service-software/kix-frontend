@@ -1,6 +1,7 @@
 import { ComponentState } from './ComponentState';
 import {
-    AbstractMarkoComponent, ServiceRegistry, LabelService, FactoryService, ActionFactory, ContextService, DialogService
+    AbstractMarkoComponent, ServiceRegistry, LabelService, FactoryService,
+    ActionFactory, ContextService, DialogService, InitComponent
 } from '../../../core/browser';
 import {
     KIXObjectType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration, ContextDescriptor, ContextType, CRUD
@@ -14,13 +15,13 @@ import { UIComponentPermission } from '../../../core/model/UIComponentPermission
 import { AuthenticationSocketClient } from '../../../core/browser/application/AuthenticationSocketClient';
 import { TextModuleCSVExportAction } from '../../../core/browser/text-modules/actions/TextModuleCSVExportAction';
 
-class Component extends AbstractMarkoComponent {
+class Component extends AbstractMarkoComponent implements InitComponent {
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
-    public async onMount(): Promise<void> {
+    public async init(): Promise<void> {
         ServiceRegistry.registerServiceInstance(TextModuleService.getInstance());
         FactoryService.getInstance().registerFactory(
             KIXObjectType.TEXT_MODULE, TextModuleBrowserFactory.getInstance()

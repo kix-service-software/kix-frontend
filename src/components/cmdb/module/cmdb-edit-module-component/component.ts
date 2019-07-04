@@ -1,4 +1,6 @@
-import { AbstractMarkoComponent, ContextService, DialogService, ActionFactory } from "../../../../core/browser";
+import {
+    AbstractMarkoComponent, ContextService, DialogService, ActionFactory, InitComponent
+} from "../../../../core/browser";
 import { ComponentState } from './ComponentState';
 import {
     ContextDescriptor, KIXObjectType, ContextType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration
@@ -7,13 +9,13 @@ import {
     NewConfigItemDialogContext, EditConfigItemDialogContext, ConfigItemCreateAction, ConfigItemEditAction
 } from "../../../../core/browser/cmdb";
 
-class Component extends AbstractMarkoComponent {
+class Component extends AbstractMarkoComponent implements InitComponent {
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
-    public async onMount(): Promise<void> {
+    public async init(): Promise<void> {
 
         this.registerContexts();
         this.registerDialogs();

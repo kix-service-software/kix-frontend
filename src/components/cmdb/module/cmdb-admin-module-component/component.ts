@@ -1,6 +1,6 @@
 import {
     AbstractMarkoComponent, ContextService, DialogService, ActionFactory,
-    TableFactoryService, LabelService, ServiceRegistry, FactoryService
+    TableFactoryService, LabelService, ServiceRegistry, FactoryService, InitComponent
 } from "../../../../core/browser";
 import { ComponentState } from './ComponentState';
 import {
@@ -15,13 +15,13 @@ import {
 import { AuthenticationSocketClient } from "../../../../core/browser/application/AuthenticationSocketClient";
 import { UIComponentPermission } from "../../../../core/model/UIComponentPermission";
 
-class Component extends AbstractMarkoComponent {
+class Component extends AbstractMarkoComponent implements InitComponent {
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
-    public async onMount(): Promise<void> {
+    public async init(): Promise<void> {
 
         ServiceRegistry.registerServiceInstance(ConfigItemClassService.getInstance());
         ServiceRegistry.registerServiceInstance(ConfigItemClassFormService.getInstance());

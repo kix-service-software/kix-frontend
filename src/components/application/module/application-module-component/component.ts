@@ -1,7 +1,7 @@
 import {
     AbstractMarkoComponent, ActionFactory, ServiceRegistry, ContextService,
     LabelService, FactoryService, TableFactoryService, TableCSSHandlerRegistry,
-    PersonalSettingsDialogContext, PersonalSettingsFormService
+    PersonalSettingsDialogContext, PersonalSettingsFormService, InitComponent
 } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import { SearchService } from '../../../../core/browser/search';
@@ -27,13 +27,13 @@ import { ValidObjectBrowserFactory } from '../../../../core/browser/valid/ValidO
 import { ValidService } from '../../../../core/browser/valid/ValidService';
 import { TranslationFormService } from '../../../../core/browser/i18n/admin/TranslationFormService';
 
-class Component extends AbstractMarkoComponent {
+class Component extends AbstractMarkoComponent implements InitComponent {
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
-    public async onMount(): Promise<void> {
+    public async init(): Promise<void> {
         ServiceRegistry.registerServiceInstance(SearchService.getInstance());
         ServiceRegistry.registerServiceInstance(LinkService.getInstance());
         ServiceRegistry.registerServiceInstance(GeneralCatalogService.getInstance());
