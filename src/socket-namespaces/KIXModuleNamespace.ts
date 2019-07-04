@@ -1,10 +1,11 @@
 import { SocketNameSpace } from './SocketNameSpace';
 import { Socket } from 'socket.io';
-import { SocketResponse, AppUtil } from '../core/common';
+import { SocketResponse, AppUtil, SocketErrorResponse } from '../core/common';
 import {
     KIXModulesEvent, LoadKIXModulesRequest, LoadKIXModulesResponse,
     LoadFormConfigurationsRequest, LoadFormConfigurationsResponse,
-    LoadBookmarksResponse, ISocketRequest, LoadReleaseInfoResponse, LoadObjectDefinitionsResponse
+    LoadBookmarksResponse, ISocketRequest, LoadReleaseInfoResponse,
+    LoadObjectDefinitionsResponse, SocketEvent, ReleaseInfo
 } from '../core/model';
 import { KIXExtensions, IKIXModuleExtension, KIXModuleFactory } from '../core/extensions';
 import { PluginService } from '../services';
@@ -45,71 +46,65 @@ export class KIXModuleNamespace extends SocketNameSpace {
             this.loadObjectDefinitions.bind(this));
     }
 
-    private loadModules(data: LoadKIXModulesRequest): Promise<SocketResponse<LoadKIXModulesResponse>> {
+    private async loadModules(data: LoadKIXModulesRequest): Promise<SocketResponse> {
+        const response = await PluginService.getInstance().getExtensions<IKIXModuleExtension>(KIXExtensions.MODULES)
+            .then(async (modules) => {
+                const createPromises: Array<Promise<IKIXModuleExtension>> = [];
+                for (const uiModule of modules) {
+                    createPromises.push(KIXModuleFactory.getInstance().create(data.token, uiModule));
+                }
 
-        return new Promise<SocketResponse<LoadKIXModulesResponse>>((resolve, reject) => {
-            PluginService.getInstance().getExtensions<IKIXModuleExtension>(KIXExtensions.MODULES)
-                .then(async (modules) => {
-                    const createPromises: Array<Promise<IKIXModuleExtension>> = [];
-                    for (const uiModule of modules) {
-                        createPromises.push(KIXModuleFactory.getInstance().create(data.token, uiModule));
-                    }
+                const uiModules = await Promise.all(createPromises);
 
-                    const uiModules = await Promise.all(createPromises);
+                return new SocketResponse(
+                    KIXModulesEvent.LOAD_MODULES_FINISHED,
+                    new LoadKIXModulesResponse(data.requestId, uiModules)
+                );
+            })
+            .catch((error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error)));
 
-                    resolve(
-                        new SocketResponse(
-                            KIXModulesEvent.LOAD_MODULES_FINISHED,
-                            new LoadKIXModulesResponse(data.requestId, uiModules)
-                        )
-                    );
-                });
-        });
+        return response;
     }
 
-    private loadFormConfigurations(
+    private async loadFormConfigurations(
         data: LoadFormConfigurationsRequest
-    ): Promise<SocketResponse<LoadFormConfigurationsResponse>> {
-        return new Promise<SocketResponse<LoadFormConfigurationsResponse>>((resolve, reject) => {
-            AppUtil.updateFormConfigurations().then(() => {
+    ): Promise<SocketResponse> {
+        const response = await AppUtil.updateFormConfigurations()
+            .then(() => {
                 const forms = ConfigurationService.getInstance().getRegisteredForms();
                 const formIdsWithContext = ConfigurationService.getInstance().getFormIDsWithContext();
-                const response = new LoadFormConfigurationsResponse(data.requestId, forms, formIdsWithContext);
-                resolve(new SocketResponse(KIXModulesEvent.LOAD_FORM_CONFIGURATIONS_FINISHED, response));
-            });
-        });
+                return new SocketResponse(
+                    KIXModulesEvent.LOAD_FORM_CONFIGURATIONS_FINISHED,
+                    new LoadFormConfigurationsResponse(data.requestId, forms, formIdsWithContext)
+                );
+            })
+            .catch((error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error)));
+
+        return response;
 
     }
 
-    private loadBookmarks(data: ISocketRequest): Promise<SocketResponse<LoadBookmarksResponse>> {
-        return new Promise<SocketResponse<LoadBookmarksResponse>>((resolve, reject) => {
-            const bookmarks = ConfigurationService.getInstance().getBookmarks();
-            resolve(new SocketResponse(
-                KIXModulesEvent.LOAD_BOOKMARKS_FINISHED, new LoadBookmarksResponse(data.requestId, bookmarks)
-            ));
-        });
+    private async loadBookmarks(data: ISocketRequest): Promise<SocketResponse> {
+        const bookmarks = ConfigurationService.getInstance().getBookmarks();
+        return new SocketResponse(
+            KIXModulesEvent.LOAD_BOOKMARKS_FINISHED, new LoadBookmarksResponse(data.requestId, bookmarks)
+        );
     }
 
-    private loadReleaseInfo(data: ISocketRequest): Promise<SocketResponse<LoadReleaseInfoResponse>> {
-        return new Promise<SocketResponse<LoadReleaseInfoResponse>>(async (resolve, reject) => {
-            const releaseInfo = await ConfigurationService.getInstance().getModuleConfiguration('release-info', null);
-            resolve(new SocketResponse(
-                KIXModulesEvent.LOAD_RELEASE_INFO_FINISHED, new LoadReleaseInfoResponse(data.requestId, releaseInfo)
-            ));
-        });
+    private async loadReleaseInfo(data: ISocketRequest): Promise<SocketResponse<LoadReleaseInfoResponse>> {
+        const releaseInfo = ConfigurationService.getInstance().getModuleConfiguration('release-info', null);
+        return new SocketResponse(
+            KIXModulesEvent.LOAD_RELEASE_INFO_FINISHED, new LoadReleaseInfoResponse(data.requestId, releaseInfo)
+        );
     }
 
-    private loadObjectDefinitions(data: ISocketRequest): Promise<SocketResponse<LoadObjectDefinitionsResponse>> {
-        return new Promise<SocketResponse<LoadObjectDefinitionsResponse>>(async (resolve, reject) => {
-            const objectDefinitions = await ObjectDefinitionService.getInstance().getObjectDefinitions(data.token)
-                .catch(() => []);
+    private async loadObjectDefinitions(data: ISocketRequest): Promise<SocketResponse> {
+        const objectDefinitions = await ObjectDefinitionService.getInstance().getObjectDefinitions(data.token)
+            .catch(() => []);
 
-            resolve(
-                new SocketResponse(
-                    KIXModulesEvent.LOAD_OBJECT_DEFINITIONS_FINISHED,
-                    new LoadObjectDefinitionsResponse(data.requestId, objectDefinitions)
-                )
-            );
-        });
+        return new SocketResponse(
+            KIXModulesEvent.LOAD_OBJECT_DEFINITIONS_FINISHED,
+            new LoadObjectDefinitionsResponse(data.requestId, objectDefinitions)
+        );
     }
 }

@@ -1,5 +1,7 @@
-import { MainMenuEntriesRequest, AdministrationEvent, AdminCategoriesResponse } from '../core/model';
-import { SocketResponse } from '../core/common';
+import {
+    MainMenuEntriesRequest, AdministrationEvent, AdminCategoriesResponse, AdminModuleCategory, SocketEvent
+} from '../core/model';
+import { SocketResponse, SocketErrorResponse } from '../core/common';
 import { SocketNameSpace } from './SocketNameSpace';
 import { AdminModuleService } from '../services';
 
@@ -30,10 +32,15 @@ export class AdministrationNamespace extends SocketNameSpace {
 
     private async loadAdminCategories(
         data: MainMenuEntriesRequest
-    ): Promise<SocketResponse<AdminCategoriesResponse>> {
-        const categories = await AdminModuleService.getInstance().getAdminModules(data.token);
-        const response = new AdminCategoriesResponse(data.requestId, categories);
-        return new SocketResponse(AdministrationEvent.ADMIN_CATEGORIES_LOADED, response);
+    ): Promise<SocketResponse> {
+        const response = await AdminModuleService.getInstance().getAdminModules(data.token)
+            .then((categories: AdminModuleCategory[]) =>
+                new SocketResponse(
+                    AdministrationEvent.ADMIN_CATEGORIES_LOADED, new AdminCategoriesResponse(data.requestId, categories)
+                )
+            )
+            .catch((error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error)));
+        return response;
     }
 
 }

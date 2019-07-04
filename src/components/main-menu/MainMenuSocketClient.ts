@@ -3,6 +3,7 @@ import {
 } from '../../core/model';
 import { SocketClient } from '../../core/browser/SocketClient';
 import { ClientStorageService, IdService } from '../../core/browser';
+import { SocketErrorResponse } from '../../core/common';
 
 export class MainMenuSocketClient extends SocketClient {
 
@@ -48,18 +49,25 @@ export class MainMenuSocketClient extends SocketClient {
             const token = ClientStorageService.getToken();
             const requestId = IdService.generateDateBasedId();
 
-            this.socket.emit(
-                MainMenuEvent.LOAD_MENU_ENTRIES, new MainMenuEntriesRequest(
-                    token, requestId, ClientStorageService.getToken()
-                )
-            );
-
             this.socket.on(MainMenuEvent.MENU_ENTRIES_LOADED, (result: MainMenuEntriesResponse) => {
                 if (requestId === result.requestId) {
                     window.clearTimeout(timeout);
                     resolve(result);
                 }
             });
+
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
+                if (error.requestId === requestId) {
+                    window.clearTimeout(timeout);
+                    console.error(error.error);
+                    reject(error.error);
+                }
+            });
+
+            this.socket.emit(
+                MainMenuEvent.LOAD_MENU_ENTRIES,
+                new MainMenuEntriesRequest(token, requestId, ClientStorageService.getToken())
+            );
         });
 
     }

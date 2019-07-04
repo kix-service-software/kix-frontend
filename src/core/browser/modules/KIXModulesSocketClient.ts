@@ -2,7 +2,8 @@ import {
     LoadKIXModulesRequest, KIXModulesEvent, LoadKIXModulesResponse, Form, FormContext,
     KIXObjectType, LoadFormConfigurationsResponse, LoadFormConfigurationsRequest,
     Bookmark, ISocketRequest, LoadBookmarksResponse, LoadReleaseInfoResponse, ReleaseInfo,
-    LoadObjectDefinitionsResponse
+    LoadObjectDefinitionsResponse,
+    SocketEvent
 } from '../../model';
 
 import { SocketClient } from '../SocketClient';
@@ -46,9 +47,10 @@ export class KIXModulesSocketClient extends SocketClient {
                 }
             });
 
-            this.socket.on(KIXModulesEvent.LOAD_MODULES_ERROR, (error: SocketErrorResponse) => {
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
                 if (error.requestId === requestId) {
                     window.clearTimeout(timeout);
+                    console.error(error.error);
                     reject(error.error);
                 }
             });
@@ -78,9 +80,10 @@ export class KIXModulesSocketClient extends SocketClient {
                 }
             );
 
-            this.socket.on(KIXModulesEvent.LOAD_FORM_CONFIGURATIONS_ERROR, (error: SocketErrorResponse) => {
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
                 if (error.requestId === requestId) {
                     window.clearTimeout(timeout);
+                    console.error(error.error);
                     reject(error.error);
                 }
             });
@@ -105,9 +108,10 @@ export class KIXModulesSocketClient extends SocketClient {
                 }
             });
 
-            this.socket.on(KIXModulesEvent.LOAD_BOOKMARKS_ERROR, (error: SocketErrorResponse) => {
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
                 if (error.requestId === requestId) {
                     window.clearTimeout(timeout);
+                    console.error(error.error);
                     reject(error.error);
                 }
             });
@@ -137,9 +141,10 @@ export class KIXModulesSocketClient extends SocketClient {
                 }
             });
 
-            this.socket.on(KIXModulesEvent.LOAD_RELEASE_INFO_ERROR, (error: SocketErrorResponse) => {
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
                 if (error.requestId === requestId) {
                     window.clearTimeout(timeout);
+                    console.error(error.error);
                     reject(error.error);
                 }
             });
@@ -172,9 +177,10 @@ export class KIXModulesSocketClient extends SocketClient {
                 }
             );
 
-            this.socket.on(KIXModulesEvent.LOAD_OBJECT_DEFINITIONS_ERROR, (error: SocketErrorResponse) => {
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
                 if (error.requestId === requestId) {
                     window.clearTimeout(timeout);
+                    console.error(error.error);
                     reject(error.error);
                 }
             });

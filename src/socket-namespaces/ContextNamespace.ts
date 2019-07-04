@@ -1,6 +1,6 @@
 import { SocketNameSpace } from './SocketNameSpace';
 import {
-    ContextEvent, LoadContextConfigurationRequest, LoadContextConfigurationResponse, ContextConfiguration
+    ContextEvent, LoadContextConfigurationRequest, LoadContextConfigurationResponse, ContextConfiguration, SocketEvent
 } from '../core/model';
 
 import { SocketResponse, SocketErrorResponse } from '../core/common';
@@ -36,33 +36,46 @@ export class ContextNamespace extends SocketNameSpace {
     protected async loadContextConfiguration(
         data: LoadContextConfigurationRequest
     ): Promise<SocketResponse<LoadContextConfigurationResponse<any> | SocketErrorResponse>> {
-        const user = await UserService.getInstance().getUserByToken(data.token);
-        const userId = user.UserID;
+        const user = await UserService.getInstance().getUserByToken(data.token)
+            .catch(() => null);
+        const userId = user ? user.UserID : null;
 
-        let configuration = await ConfigurationService.getInstance().getModuleConfiguration<ContextConfiguration>(
+        let configuration = ConfigurationService.getInstance().getModuleConfiguration<ContextConfiguration>(
             data.contextId, userId
         );
 
         if (!configuration) {
-            const configurationExtension = await PluginService.getInstance().getConfigurationExtension(data.contextId);
-            const moduleDefaultConfiguration = await configurationExtension.getDefaultConfiguration(data.token);
-            if (moduleDefaultConfiguration) {
-                ConfigurationService.getInstance().saveModuleConfiguration(
-                    data.contextId, userId, moduleDefaultConfiguration);
+            const configurationExtension = await PluginService.getInstance().getConfigurationExtension(data.contextId)
+                .catch(() => null);
 
-                configuration = moduleDefaultConfiguration;
+            if (configurationExtension) {
+                const moduleDefaultConfiguration = await configurationExtension.getDefaultConfiguration(data.token)
+                    .catch(() => null);
+
+                if (moduleDefaultConfiguration) {
+                    ConfigurationService.getInstance().saveModuleConfiguration(
+                        data.contextId, userId, moduleDefaultConfiguration
+                    );
+                    configuration = moduleDefaultConfiguration;
+                } else {
+                    return new SocketResponse(
+                        SocketEvent.ERROR,
+                        new SocketErrorResponse(
+                            data.requestId,
+                            new Error(`Translatable#No default configuration for context ${data.contextId} given!`)
+                        )
+                    );
+                }
             } else {
-                return new SocketResponse(ContextEvent.CONTEXT_CONFIGURATION_LOAD_ERROR,
-                    new SocketErrorResponse(
-                        data.requestId,
-                        new Error(`Translatable#No default configuration for context ${data.contextId} given!`)
-                    )
-                );
+                return new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(
+                    data.requestId, `No configuration extension for context ${data.contextId} available.`
+                ));
             }
         }
 
         configuration.contextId = data.contextId;
-        configuration = await PermissionService.getInstance().filterContextConfiguration(data.token, configuration);
+        configuration = await PermissionService.getInstance().filterContextConfiguration(data.token, configuration)
+            .catch(() => configuration);
 
         const response = new LoadContextConfigurationResponse(data.requestId, configuration);
         return new SocketResponse(ContextEvent.CONTEXT_CONFIGURATION_LOADED, response);

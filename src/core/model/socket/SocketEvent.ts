@@ -8,6 +8,8 @@ export enum SocketEvent {
 
     CONNECTION = "connection",
 
-    PERMISSION_ERROR = 'PERMISSION_ERROR'
+    PERMISSION_ERROR = 'PERMISSION_ERROR',
+
+    ERROR = 'ERROR'
 
 }

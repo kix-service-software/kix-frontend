@@ -1,10 +1,10 @@
 import {
     LoadArticleAttachmentResponse, LoadArticleAttachmentRequest, SetArticleSeenFlagRequest,
-    TicketEvent, LoadArticleZipAttachmentRequest,
+    TicketEvent, LoadArticleZipAttachmentRequest, SocketEvent,
 } from '../core/model/';
 
 import { SocketNameSpace } from './SocketNameSpace';
-import { SocketResponse } from '../core/common';
+import { SocketResponse, SocketErrorResponse } from '../core/common';
 import { TicketService } from '../core/services';
 
 export class TicketNamespace extends SocketNameSpace {
@@ -34,32 +34,39 @@ export class TicketNamespace extends SocketNameSpace {
         this.registerEventHandler(client, TicketEvent.REMOVE_ARTICLE_SEEN_FLAG, this.removeArticleSeenFlag.bind(this));
     }
 
-    private async loadArticleAttachment(
-        data: LoadArticleAttachmentRequest
-    ): Promise<SocketResponse<LoadArticleAttachmentResponse>> {
-        const attachemnt = await TicketService.getInstance().loadArticleAttachment(
+    private async loadArticleAttachment(data: LoadArticleAttachmentRequest): Promise<SocketResponse> {
+        const response = await TicketService.getInstance().loadArticleAttachment(
             data.token, data.ticketId, data.articleId, data.attachmentId
-        );
+        ).then((attachment) =>
+            new SocketResponse(
+                TicketEvent.ARTICLE_ATTACHMENT_LOADED,
+                new LoadArticleAttachmentResponse(data.requestId, attachment)
+            )
+        ).catch((error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error)));
 
-        const response = new LoadArticleAttachmentResponse(data.requestId, attachemnt);
-        return new SocketResponse(TicketEvent.ARTICLE_ATTACHMENT_LOADED, response);
+        return response;
     }
 
-    private async loadArticleZipAttachment(
-        data: LoadArticleZipAttachmentRequest
-    ): Promise<SocketResponse<LoadArticleAttachmentResponse>> {
-        const attachemnt = await TicketService.getInstance().loadArticleZipAttachment(
+    private async loadArticleZipAttachment(data: LoadArticleZipAttachmentRequest): Promise<SocketResponse> {
+        const response = await TicketService.getInstance().loadArticleZipAttachment(
             data.token, data.ticketId, data.articleId
-        );
+        ).then((attachment) =>
+            new SocketResponse(
+                TicketEvent.ARTICLE_ZIP_ATTACHMENT_LOADED,
+                new LoadArticleAttachmentResponse(data.requestId, attachment)
+            )
+        ).catch((error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error)));
 
-        const response = new LoadArticleAttachmentResponse(data.requestId, attachemnt);
-        return new SocketResponse(TicketEvent.ARTICLE_ZIP_ATTACHMENT_LOADED, response);
+        return response;
     }
 
     private async removeArticleSeenFlag(data: SetArticleSeenFlagRequest): Promise<SocketResponse> {
-        await TicketService.getInstance().setArticleSeenFlag(
+        const response = await TicketService.getInstance().setArticleSeenFlag(
             data.token, null, data.ticketId, data.articleId
-        );
-        return new SocketResponse(TicketEvent.REMOVE_ARTICLE_SEEN_FLAG_DONE, { requestId: data.requestId });
+        ).then(() =>
+            new SocketResponse(TicketEvent.REMOVE_ARTICLE_SEEN_FLAG_DONE, { requestId: data.requestId })
+        ).catch((error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error)));
+
+        return response;
     }
 }

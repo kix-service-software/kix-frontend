@@ -3,7 +3,7 @@ import { ClientStorageService } from '../ClientStorageService';
 import { IdService } from '../IdService';
 import {
     Error, KIXObjectType, PersonalSettingsResponse, ISocketRequest, User, GetCurrentUserRequest, AgentEvent,
-    GetCurrentUserResponse, PersonalSetting, SetPreferencesRequest, SetPreferencesResponse
+    GetCurrentUserResponse, PersonalSetting, SetPreferencesRequest, SetPreferencesResponse, SocketEvent
 } from '../../model';
 import { CacheService } from '../cache';
 import { SocketErrorResponse } from '../../common';
@@ -68,11 +68,11 @@ export class AgentSocketClient extends SocketClient {
                     }
                 });
 
-            this.agentSocket.on(AgentEvent.GET_CURRENT_USER_ERROR, (error: Error) => {
+            this.agentSocket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
                 window.clearTimeout(timeout);
                 console.error('Socket Error: getCurrentUser');
-                console.error(error);
-                reject(error);
+                console.error(error.error);
+                reject(error.error);
             });
 
             this.agentSocket.emit(AgentEvent.GET_CURRENT_USER, currentUserRequest);
@@ -99,11 +99,11 @@ export class AgentSocketClient extends SocketClient {
                     }
                 });
 
-            this.agentSocket.on(AgentEvent.GET_PERSONAL_SETTINGS_ERROR, (error: SocketErrorResponse) => {
+            this.agentSocket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
                 if (error.requestId === requestId) {
                     window.clearTimeout(timeout);
                     console.error('Socket Error: getPersonalSettings');
-                    console.error(error);
+                    console.error(error.error);
                     resolve([]);
                 }
             });
@@ -143,11 +143,11 @@ export class AgentSocketClient extends SocketClient {
                     }
                 });
 
-            this.agentSocket.on(AgentEvent.SET_PREFERENCES_ERROR, (error: SocketErrorResponse) => {
+            this.agentSocket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
                 if (error.requestId === requestId) {
                     window.clearTimeout(timeout);
                     console.error('Socket Error: setPreferences');
-                    console.error(error);
+                    console.error(error.error);
                     reject(error);
                 }
             });

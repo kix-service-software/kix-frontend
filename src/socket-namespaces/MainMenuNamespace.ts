@@ -1,12 +1,12 @@
 import {
     MenuEntry, MainMenuEntriesRequest, MainMenuEntriesResponse,
-    MainMenuConfiguration, MainMenuEvent
+    MainMenuConfiguration, MainMenuEvent, SocketEvent
 } from '../core/model';
 
 import { IMainMenuExtension, KIXExtensions } from '../core/extensions';
-import { SocketResponse } from '../core/common';
+import { SocketResponse, SocketErrorResponse } from '../core/common';
 import { SocketNameSpace } from './SocketNameSpace';
-import { ConfigurationService } from '../core/services';
+import { ConfigurationService, LoggingService } from '../core/services';
 import { PluginService, PermissionService } from '../services';
 import { UserService } from '../core/services/impl/api/UserService';
 
@@ -33,34 +33,42 @@ export class MainMenuNamespace extends SocketNameSpace {
         this.registerEventHandler(client, MainMenuEvent.LOAD_MENU_ENTRIES, this.loadMenuEntries.bind(this));
     }
 
-    private async loadMenuEntries(
-        data: MainMenuEntriesRequest
-    ): Promise<SocketResponse<MainMenuEntriesResponse>> {
+    private async loadMenuEntries(data: MainMenuEntriesRequest): Promise<SocketResponse> {
 
-        const user = await UserService.getInstance().getUserByToken(data.token);
+        const user = await UserService.getInstance().getUserByToken(data.token).catch(() => null);
 
-        const extensions = await PluginService.getInstance().getExtensions<IMainMenuExtension>(KIXExtensions.MAIN_MENU);
+        const extensions = await PluginService.getInstance().getExtensions<IMainMenuExtension>(
+            KIXExtensions.MAIN_MENU
+        ).catch(() => []);
 
-        let configuration: MainMenuConfiguration = await ConfigurationService.getInstance().getComponentConfiguration(
+        let configuration: MainMenuConfiguration = ConfigurationService.getInstance().getComponentConfiguration(
             'personal-settings', 'main-menu', user.UserID
         );
 
         if (!configuration) {
-            configuration = await this.createDefaultConfiguration(extensions, user.UserID);
+            configuration = await this.createDefaultConfiguration(extensions, user.UserID)
+                .catch(() => null);
         }
 
-        const primaryEntries = await this.getMenuEntries(
-            data.token, extensions, configuration.primaryMenuEntryConfigurations
-        );
+        if (configuration) {
+            const primaryEntries = await this.getMenuEntries(
+                data.token, extensions, configuration.primaryMenuEntryConfigurations
+            ).catch(() => []);
 
-        const secondaryEntries = await this.getMenuEntries(
-            data.token, extensions, configuration.secondaryMenuEntryConfigurations
-        );
+            const secondaryEntries = await this.getMenuEntries(
+                data.token, extensions, configuration.secondaryMenuEntryConfigurations
+            ).catch(() => []);
 
-        const response = new MainMenuEntriesResponse(
-            data.requestId, primaryEntries, secondaryEntries, configuration.showText
-        );
-        return new SocketResponse(MainMenuEvent.MENU_ENTRIES_LOADED, response);
+            const response = new MainMenuEntriesResponse(
+                data.requestId, primaryEntries, secondaryEntries, configuration.showText
+            );
+            return new SocketResponse(MainMenuEvent.MENU_ENTRIES_LOADED, response);
+        } else {
+            return new SocketResponse(
+                SocketEvent.ERROR,
+                new SocketErrorResponse(data.requestId, 'No main menu configuration for user available.')
+            );
+        }
     }
 
     private async createDefaultConfiguration(
@@ -83,7 +91,8 @@ export class MainMenuNamespace extends SocketNameSpace {
         const configuration = new MainMenuConfiguration(primaryConfiguration, secondaryConfiguration);
 
         await ConfigurationService.getInstance().saveComponentConfiguration(
-            'personal-settings', 'main-menu', userId, configuration);
+            'personal-settings', 'main-menu', userId, configuration
+        ).catch(() => null);
 
         return configuration;
     }
@@ -97,7 +106,8 @@ export class MainMenuNamespace extends SocketNameSpace {
         for (const ec of entryConfigurations) {
             const menu = extensions.find((me) => me.mainContextId === ec.mainContextId);
             if (menu) {
-                const allowed = await PermissionService.getInstance().checkPermissions(token, menu.permissions);
+                const allowed = await PermissionService.getInstance().checkPermissions(token, menu.permissions)
+                    .catch(() => false);
                 if (allowed) {
                     entries.push(new MenuEntry(menu.icon, menu.text, menu.mainContextId, menu.contextIds));
                 }
