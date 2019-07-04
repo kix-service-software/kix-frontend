@@ -188,7 +188,7 @@ class Component {
                 console.warn(`module with prioritiy ${uiModules[i].priority} did not implement register() method.`);
             }
 
-            const percent = Math.round((i / modules.length) * 100);
+            const percent = Math.round((i / uiModules.length) * 100);
             this.state.loadingHint = `${percent}%`;
         }
     }

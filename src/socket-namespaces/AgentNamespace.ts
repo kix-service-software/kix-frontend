@@ -51,7 +51,7 @@ export class AgentNamespace extends SocketNameSpace {
 
         if (user) {
             const response = await UserService.getInstance().setPreferences(
-                data.token, clientReqeuestId, data.parameter, user.UserID
+                data.token, clientReqeuestId, data.parameter
             ).then(() =>
                 new SocketResponse(AgentEvent.SET_PREFERENCES_FINISHED, new SetPreferencesResponse(data.requestId))
             ).catch((error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error)));

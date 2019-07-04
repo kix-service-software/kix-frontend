@@ -47,7 +47,7 @@ export class UserService extends KIXObjectService {
         } else if (objectType === KIXObjectType.USER_PREFERENCE) {
             let uri = this.buildUri('session', 'user', 'preferences');
             const preferenceOptions = (objectLoadingOptions as PreferencesLoadingOptions);
-            if (preferenceOptions.userId) {
+            if (preferenceOptions && preferenceOptions.userId) {
                 uri = this.buildUri(this.RESOURCE_URI, preferenceOptions.userId, 'preferences');
             }
 
@@ -191,7 +191,8 @@ export class UserService extends KIXObjectService {
         token: string, clientRequestId: string, parameter: Array<[string, any]>, userId?: number
     ): Promise<void> {
         const currentPreferences = await this.loadObjects<UserPreference>(
-            token, null, KIXObjectType.USER_PREFERENCE, null, null, new PreferencesLoadingOptions(userId)
+            token, null, KIXObjectType.USER_PREFERENCE, null, null,
+            userId ? new PreferencesLoadingOptions(userId) : null
         );
         const errors: Error[] = [];
 
