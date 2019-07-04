@@ -88,11 +88,7 @@ export abstract class KIXObjectService implements IKIXObjectService {
         const object = {};
         object[objectType] = new RequestObject(parameter.filter((p) => p[0] !== 'ICON'));
 
-        const response = await this.sendRequest(token, clientRequestId, uri, object, objectType, create)
-            .catch((error: Error) => {
-                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                throw new Error(error.Code, error.Message);
-            });
+        const response = await this.sendRequest(token, clientRequestId, uri, object, objectType, create);
 
         const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
         if (icon) {

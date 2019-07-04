@@ -2,9 +2,7 @@ import { KIXObjectSpecificCreateOptions } from "../../KIXObjectSpecificCreateOpt
 
 export class SetPreferenceOptions extends KIXObjectSpecificCreateOptions {
 
-    public constructor(
-        public userId: number
-    ) {
+    public constructor(public userId: number) {
         super();
     }
 
