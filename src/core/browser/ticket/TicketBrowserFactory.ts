@@ -18,7 +18,7 @@ export class TicketBrowserFactory extends KIXObjectFactory<Ticket> {
     }
 
     public async create(ticket: Ticket): Promise<Ticket> {
-        const newTicket = this.cleanupProperties(new Ticket(ticket), ticket);
+        const newTicket = new Ticket(ticket);
         await this.mapTicketData(newTicket);
         return newTicket;
     }
