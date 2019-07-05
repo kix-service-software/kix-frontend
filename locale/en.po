@@ -430,6 +430,9 @@ msgstr ""
 msgid "Create FAQ Article"
 msgstr ""
 
+msgid "Create Filter"
+msgstr ""
+
 msgid "Create Links."
 msgstr ""
 
@@ -637,6 +640,9 @@ msgstr ""
 msgid "Email Filter"
 msgstr ""
 
+msgid "Email Filter Information"
+msgstr ""
+
 msgid "Email Filters"
 msgstr ""
 
@@ -743,6 +749,9 @@ msgid "Filter Conditions"
 msgstr ""
 
 msgid "Filter in list"
+msgstr ""
+
+msgid "Filter successfully created."
 msgstr ""
 
 msgid "Firstname"
@@ -866,6 +875,39 @@ msgid "Helptext_Admin_MailAccountEdit_UserName"
 msgstr ""
 
 msgid "Helptext_Admin_MailAccountEdit_Validity"
+msgstr ""
+
+msgid "Helptext_Admin_MailFilterCreate_Comment"
+msgstr ""
+
+msgid "Helptext_Admin_MailFilterCreate_FilterConditions"
+msgstr ""
+
+msgid "Helptext_Admin_MailFilterCreate_Name"
+msgstr ""
+
+msgid "Helptext_Admin_MailFilterCreate_SetEmailHeaders"
+msgstr ""
+
+msgid "Helptext_Admin_MailFilterCreate_StopAfterMatch"
+msgstr ""
+
+msgid "Helptext_Admin_MailFilterCreate_Validity"
+msgstr ""
+
+msgid "Helptext_Admin_MailFilter_FilterConditions_EmailHeader"
+msgstr ""
+
+msgid "Helptext_Admin_MailFilter_FilterConditions_Negate"
+msgstr ""
+
+msgid "Helptext_Admin_MailFilter_FilterConditions_Pattern"
+msgstr ""
+
+msgid "Helptext_Admin_MailFilter_SetEmailHeader_EmailHeader"
+msgstr ""
+
+msgid "Helptext_Admin_MailFilter_SetEmailHeader_Value"
 msgstr ""
 
 msgid "Helptext_Admin_QueueCreate_Comment"
@@ -1387,6 +1429,9 @@ msgstr ""
 msgid "Load Contact ..."
 msgstr ""
 
+msgid "Loading"
+msgstr ""
+
 msgid "Load Organisation ..."
 msgstr ""
 
@@ -1459,6 +1504,9 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
+msgid "Negate"
+msgstr ""
+
 msgid "New"
 msgstr ""
 
@@ -1490,6 +1538,9 @@ msgid "New FAQ"
 msgstr ""
 
 msgid "New FAQ Category"
+msgstr ""
+
+msgid "New Filter"
 msgstr ""
 
 msgid "New Object"
@@ -2091,6 +2142,12 @@ msgstr ""
 msgid "Set a password for the user."
 msgstr ""
 
+msgid "Set Email Header"
+msgstr ""
+
+msgid "Set Email Headers"
+msgstr ""
+
 msgid "Set the ci class as „valid“, „invalid (temporarily)“, or „invalid“."
 msgstr ""
 
@@ -2110,6 +2167,9 @@ msgid "Set the type as „valid“, „invalid (temporarily)“, or „invalid�
 msgstr ""
 
 msgid "Set the user as „valid“, „invalid (temporarily)“, or „invalid“."
+msgstr ""
+
+msgid "Set Value"
 msgstr ""
 
 msgid "Show all"
@@ -2178,7 +2238,7 @@ msgstr ""
 msgid "State Types"
 msgstr ""
 
-msgid "Stop after Match"
+msgid "Stop after match"
 msgstr ""
 
 msgid "Street"

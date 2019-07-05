@@ -451,6 +451,11 @@ msgstr "Erstellt von"
 msgid "Create FAQ Article"
 msgstr "FAQ Artikel wird angelegt"
 
+#, fuzzy
+#| msgid "Create Role"
+msgid "Create Filter"
+msgstr "Rolle wird angelegt"
+
 msgid "Create Links."
 msgstr "Verknüpfung wird angelegt"
 
@@ -661,6 +666,11 @@ msgstr "E-Mail Adressen"
 msgid "Email Filter"
 msgstr "E-Mail Filter"
 
+#, fuzzy
+#| msgid "Email Information"
+msgid "Email Filter Information"
+msgstr "E-Mail Informationen"
+
 msgid "Email Filters"
 msgstr "E-Mail Filter"
 
@@ -768,6 +778,11 @@ msgstr "Filterbedingungen"
 
 msgid "Filter in list"
 msgstr "Filtern in Liste"
+
+#, fuzzy
+#| msgid "Role successfully created."
+msgid "Filter successfully created."
+msgstr "Rolle wurde erfolgreich angelegt."
 
 msgid "Firstname"
 msgstr "Vorname"
@@ -895,6 +910,61 @@ msgstr "Hilfetext_Admin_MailAccountEdit_UserName"
 
 msgid "Helptext_Admin_MailAccountEdit_Validity"
 msgstr "Hilfetext_Admin_MailAccountEdit_Validity"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_Comment"
+msgid "Helptext_Admin_MailFilterCreate_Comment"
+msgstr "Hilfetext_Admin_MailAccountCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_Comment"
+msgid "Helptext_Admin_MailFilterCreate_FilterConditions"
+msgstr "Hilfetext_Admin_MailAccountCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryCreate_Name"
+msgid "Helptext_Admin_MailFilterCreate_Name"
+msgstr "Hilfetext_Admin_FAQCategoryCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_AcceptKIXHeader"
+msgid "Helptext_Admin_MailFilterCreate_SetEmailHeaders"
+msgstr "Hilfetext_Admin_MailAccountCreate_AcceptKIXHeader"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_Host"
+msgid "Helptext_Admin_MailFilterCreate_StopAfterMatch"
+msgstr "Hilfetext_Admin_MailAccountCreate_Host"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_Validity"
+msgid "Helptext_Admin_MailFilterCreate_Validity"
+msgstr "Hilfetext_Admin_MailAccountCreate_Validity"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountEdit_AcceptKIXHeader"
+msgid "Helptext_Admin_MailFilter_FilterConditions_EmailHeader"
+msgstr "Hilfetext_Admin_MailAccountEdit_AcceptKIXHeader"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountEdit_Host"
+msgid "Helptext_Admin_MailFilter_FilterConditions_Negate"
+msgstr "Hilfetext_Admin_MailAccountEdit_Host"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountEdit_Host"
+msgid "Helptext_Admin_MailFilter_FilterConditions_Pattern"
+msgstr "Hilfetext_Admin_MailAccountEdit_Host"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_AcceptKIXHeader"
+msgid "Helptext_Admin_MailFilter_SetEmailHeader_EmailHeader"
+msgstr "Hilfetext_Admin_MailAccountCreate_AcceptKIXHeader"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountEdit_AcceptKIXHeader"
+msgid "Helptext_Admin_MailFilter_SetEmailHeader_Value"
+msgstr "Hilfetext_Admin_MailAccountEdit_AcceptKIXHeader"
 
 msgid "Helptext_Admin_QueueCreate_Comment"
 msgstr "Hilfetext_Admin_QueueCreate_Comment"
@@ -1435,6 +1505,9 @@ msgstr "Art der Verknüpfung"
 msgid "Load Contact ..."
 msgstr "Kontak laden..."
 
+msgid "Loading"
+msgstr ""
+
 msgid "Load Organisation ..."
 msgstr "Kunde laden..."
 
@@ -1511,6 +1584,9 @@ msgstr "Meine beobachteten Tickets mit neuen Artikeln"
 msgid "Name"
 msgstr "Name"
 
+msgid "Negate"
+msgstr ""
+
 msgid "New"
 msgstr "Neu"
 
@@ -1543,6 +1619,11 @@ msgstr "Neue FAQ"
 
 msgid "New FAQ Category"
 msgstr "Neue FAQ Kategorie"
+
+#, fuzzy
+#| msgid "New Article"
+msgid "New Filter"
+msgstr "Neuer Artikel"
 
 msgid "New Object"
 msgstr "Neues Objekt"
@@ -2171,6 +2252,16 @@ msgstr ""
 msgid "Set a password for the user."
 msgstr "Legen Sie ein Passwort für den Nutzer fest."
 
+#, fuzzy
+#| msgid "Email Header"
+msgid "Set Email Header"
+msgstr "E-Mail Header"
+
+#, fuzzy
+#| msgid "Email Header"
+msgid "Set Email Headers"
+msgstr "E-Mail Header"
+
 msgid "Set the ci class as „valid“, „invalid (temporarily)“, or „invalid“."
 msgstr ""
 "Setzen Sie die CI Klasse als \"gültig\", \"ungültig (temporär)\" oder "
@@ -2204,6 +2295,11 @@ msgid "Set the user as „valid“, „invalid (temporarily)“, or „invalid�
 msgstr ""
 "Setzen Sie den Nutzer als \"gültig\", \"ungültig (temporär)\" oder \"ungültig"
 "\"."
+
+#, fuzzy
+#| msgid "Value"
+msgid "Set Value"
+msgstr "Wert"
 
 msgid "Show all"
 msgstr "Alle anzeigen"
@@ -2273,7 +2369,9 @@ msgstr "Statustyp"
 msgid "State Types"
 msgstr "Statustypen"
 
-msgid "Stop after Match"
+#, fuzzy
+#| msgid "Stop after Match"
+msgid "Stop after match"
 msgstr "Stoppen nach Treffer"
 
 msgid "Street"
