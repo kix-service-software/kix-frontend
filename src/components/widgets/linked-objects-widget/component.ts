@@ -80,16 +80,18 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     `link-objects-${lot[1]}`, lot[1], tableConfiguration,
                     objects.map((o) => o.ObjectId), null, true, null, true, false, true
                 );
-                table.addColumns([
-                    new DefaultColumnConfiguration(
-                        'LinkedAs', true, false, true, false, 120, true, true, false, DataType.STRING
-                    )
-                ]);
+                if (table) {
+                    table.addColumns([
+                        new DefaultColumnConfiguration(
+                            'LinkedAs', true, false, true, false, 120, true, true, false, DataType.STRING
+                        )
+                    ]);
 
-                objectsCount += objects.length;
-                const title = `${lot[0]} (${objects.length})`;
+                    objectsCount += objects.length;
+                    const title = `${lot[0]} (${objects.length})`;
 
-                this.state.linkedObjectGroups.push([title, table, objects.length, linkDescriptions]);
+                    this.state.linkedObjectGroups.push([title, table, objects.length, linkDescriptions]);
+                }
             }
 
             const text = await TranslationService.translate(this.state.widgetConfiguration.title, []);

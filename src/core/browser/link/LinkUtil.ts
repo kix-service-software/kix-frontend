@@ -93,21 +93,23 @@ export class LinkUtil {
                     (lo) => lo.ObjectId.toString() === linkedKey.toString() && lo.KIXObjectType === linkedObjectType
                 );
 
-                const linkType = linkTypes.find((lt) => {
-                    return lt.Name === link.Type
-                        && (
-                            (lt.Source === rootObject.KIXObjectType && lt.Target === linkedObjectType)
-                            || (lt.Source === linkedObjectType && lt.Target === rootObject.KIXObjectType)
+                if (linkedObject) {
+                    const linkType = linkTypes.find((lt) => {
+                        return lt.Name === link.Type
+                            && (
+                                (lt.Source === rootObject.KIXObjectType && lt.Target === linkedObjectType)
+                                || (lt.Source === linkedObjectType && lt.Target === rootObject.KIXObjectType)
+                            );
+                    });
+
+                    const newLinkedObject = await FactoryService.getInstance().create(linkedObjectType, linkedObject);
+                    newLinkedObject.LinkTypeName = link.Type;
+
+                    if (linkType) {
+                        linkDescriptions.push(
+                            new CreateLinkDescription(newLinkedObject, new LinkTypeDescription(linkType, !rootIsSource))
                         );
-                });
-
-                const newLinkedObject = await FactoryService.getInstance().create(linkedObjectType, linkedObject);
-                newLinkedObject.LinkTypeName = link.Type;
-
-                if (linkType) {
-                    linkDescriptions.push(
-                        new CreateLinkDescription(newLinkedObject, new LinkTypeDescription(linkType, !rootIsSource))
-                    );
+                    }
                 }
             }
         }
