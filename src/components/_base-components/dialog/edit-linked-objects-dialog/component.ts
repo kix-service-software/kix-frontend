@@ -362,7 +362,7 @@ class Component {
 
     private async addLinks(): Promise<boolean> {
         const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(KIXObjectType.LINK_OBJECT);
-        DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Create Links.');
+        DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Create Links');
         let ok = true;
         for (const newLinkObject of this.newLinkObjects) {
             await service.createObject(
