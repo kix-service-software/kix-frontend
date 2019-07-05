@@ -39,7 +39,15 @@ class KIXModuleExtension implements IKIXModuleExtension {
         new UIComponent('mail-account-input-types', 'communication/admin/dialogs/inputs/mail-account-input-types', []),
         new UIComponent('mail-account-info-widget', 'communication/admin/widgets/mail-account-info-widget', []),
         new UIComponent('edit-mail-account-dialog', 'communication/admin/dialogs/edit-mail-account-dialog', []),
-        new UIComponent('communication-admin-mail-filters', 'communication/admin/communication-admin-mail-filters', [])
+        new UIComponent('communication-admin-mail-filters', 'communication/admin/communication-admin-mail-filters', []),
+        new UIComponent('new-mail-filter-dialog', 'communication/admin/dialogs/new-mail-filter-dialog', []),
+        new UIComponent(
+            'mail-filter-match-form-input', 'communication/admin/dialogs/inputs/mail-filter-match-form-input', []
+        ),
+        new UIComponent('mail-filter-match-input', 'communication/admin/dialogs/inputs/mail-filter-match-input', []),
+        new UIComponent(
+            'mail-filter-set-form-input', 'communication/admin/dialogs/inputs/mail-filter-set-form-input', []
+        )
     ];
 
 }

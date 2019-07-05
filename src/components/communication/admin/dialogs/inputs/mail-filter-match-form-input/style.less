@@ -1,0 +1,30 @@
+.mail-filter-match-form-container {
+    display: grid;
+    grid-template-columns: @dynamic-value-columns-no-operation;
+    align-items: center;
+    grid-column-gap: @dynamic-value-gap;
+    margin-bottom: @margin-small;
+    justify-items: start;
+
+    >.mail-filter-match-value-container {
+        display: grid;
+        grid-template-columns: 5rem 1fr;
+        grid-column-gap: @dynamic-value-gap;
+
+        >span:first-child {
+            justify-self: center;
+        }
+    }
+
+    >span,
+    >.mail-filter-match-value-container>span {
+        display: grid;
+        grid-template-columns: auto 1rem;
+        grid-gap: @margin-small / 2;
+
+        >span:first-child {
+            .shorten-text();
+            font-weight: bold;
+        }
+    }
+}

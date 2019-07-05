@@ -1,6 +1,6 @@
 import {
     ObjectIcon, KIXObjectType, MailFilter, MailFilterProperty, User, DateTimeUtil,
-    KIXObjectProperty, MailFilterMatch, MailFilterSet, ValidObject
+    KIXObjectProperty, MailFilterMatch, MailFilterSet, ValidObject, SortUtil, DataType
 } from '../../model';
 import { TranslationService } from '../i18n/TranslationService';
 import { KIXObjectService } from "../kix";
@@ -25,7 +25,7 @@ export class MailFilterLabelProvider extends LabelProvider<MailFilter> {
                 displayValue = 'Translatable#Name';
                 break;
             case MailFilterProperty.STOP_AFTER_MATCH:
-                displayValue = 'Translatable#Stop after Match';
+                displayValue = 'Translatable#Stop after match';
                 break;
             case MailFilterProperty.MATCH:
                 displayValue = 'Translatable#Filter Conditions';
@@ -120,14 +120,16 @@ export class MailFilterLabelProvider extends LabelProvider<MailFilter> {
                 break;
             case MailFilterProperty.MATCH:
                 if (Array.isArray(value)) {
-                    displayValue = (value as MailFilterMatch[]).map(
+                    const matchList: MailFilterMatch[] = SortUtil.sortObjects(value, 'Key', DataType.STRING);
+                    displayValue = matchList.map(
                         (v) => `${v.Key} ${Boolean(v.Not) ? '!~' : '=~'} ${v.Value}`
                     ).join(', ');
                 }
                 break;
             case MailFilterProperty.SET:
                 if (Array.isArray(value)) {
-                    displayValue = (value as MailFilterSet[]).map(
+                    const setList: MailFilterSet[] = SortUtil.sortObjects(value, 'Key', DataType.STRING);
+                    displayValue = setList.map(
                         (v) => `${v.Key} := ${v.Value}`
                     ).join(', ');
                 }

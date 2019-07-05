@@ -24,6 +24,8 @@ export enum SysConfigKey {
 
     IMPRINT_LINK = 'ImprintLink',
 
-    CONFIG_LEVEL = 'ConfigLevel'
+    CONFIG_LEVEL = 'ConfigLevel',
+
+    POSTMASTER_X_HEADER = 'PostmasterX-Header'
 
 }

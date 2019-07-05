@@ -32,7 +32,9 @@ class Component {
 
     public async propertyChanged(value: DynamicFieldValue, nodes: TreeNode[]): Promise<void> {
         await value.setPropertyNode(nodes && nodes.length ? nodes[0] : null);
-        await value.setCurrentValue(null);
+        if (await this.manager.clearValueOnPropertyChange(value.currentPropertyNode.id)) {
+            await value.setCurrentValue(null);
+        }
         await this.provideValue(value);
         await this.addEmptyValue();
         (this as any).setStateDirty();

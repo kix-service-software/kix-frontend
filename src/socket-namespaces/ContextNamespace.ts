@@ -62,7 +62,7 @@ export class ContextNamespace extends SocketNameSpace {
                         SocketEvent.ERROR,
                         new SocketErrorResponse(
                             data.requestId,
-                            new Error(`Translatable#No default configuration for context ${data.contextId} given!`)
+                            new Error(`No default configuration for context ${data.contextId} given!`)
                         )
                     );
                 }

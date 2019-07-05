@@ -2,10 +2,12 @@ import {
     TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../table";
-import { KIXObjectType, DataType, KIXObjectLoadingOptions, KIXObjectProperty } from "../../../model";
+import { KIXObjectType, DataType, KIXObjectProperty, ContextMode } from "../../../model";
 import { MailFilterTableContentProvider } from "./MailFilterTableContentProvider";
 import { MailFilterProperty } from "../../../model";
 import { TableFactory } from "../../table/TableFactory";
+import { RoutingConfiguration } from "../../router";
+import { MailFilterDetailsContext } from "../context";
 
 export class MailFilterTableFactory extends TableFactory {
 
@@ -54,13 +56,15 @@ export class MailFilterTableFactory extends TableFactory {
         }
 
         if (defaultRouting) {
-            //
+            tableConfiguration.routingConfiguration = new RoutingConfiguration(
+                MailFilterDetailsContext.CONTEXT_ID, KIXObjectType.MAIL_FILTER,
+                ContextMode.DETAILS, MailFilterProperty.ID
+            );
         }
 
         return tableConfiguration;
     }
 
-    // TODO: implementieren
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
         let config;
         switch (property) {
