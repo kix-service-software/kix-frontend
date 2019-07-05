@@ -112,7 +112,7 @@ export class TextModuleService extends KIXObjectService {
         filterCriteria.push(new FilterCriteria(
             KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
         ));
-        const loadingOptions = new KIXObjectLoadingOptions(filterCriteria);
+        const loadingOptions = new KIXObjectLoadingOptions(filterCriteria, 'TextModule.Name');
         const textModules = await KIXObjectService.loadObjects<TextModule>(KIXObjectType.TEXT_MODULE, null, loadingOptions);
         return textModules;
     }
