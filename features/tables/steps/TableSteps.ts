@@ -14,7 +14,7 @@ import { MailAccountTableFactory } from '../../../src/core/browser/mail-account'
 import { FAQCategoryTableFactory } from '../../../src/core/browser/faq/admin';
 import { TranslationPatternTableFactory } from '../../../src/core/browser/i18n/admin/table';
 import { TextModulesTableFactory } from '../../../src/core/browser/text-modules';
-import { MailFilterTableFactory } from '../../../src/core/browser/mail-filter';
+import { MailFilterTableFactory, MailFilterMatchTableFactory, MailFilterSetTableFactory } from '../../../src/core/browser/mail-filter';
 
 let table: ITable;
 TableFactoryService.getInstance().registerFactory(new FAQArticleTableFactory());
@@ -35,6 +35,8 @@ TableFactoryService.getInstance().registerFactory(new TranslationPatternTableFac
 TableFactoryService.getInstance().registerFactory(new ConfigItemClassTableFactory());
 TableFactoryService.getInstance().registerFactory(new TextModulesTableFactory());
 TableFactoryService.getInstance().registerFactory(new MailFilterTableFactory());
+TableFactoryService.getInstance().registerFactory(new MailFilterMatchTableFactory());
+TableFactoryService.getInstance().registerFactory(new MailFilterSetTableFactory());
 
 const heights = {
     'l': TableHeaderHeight.LARGE,

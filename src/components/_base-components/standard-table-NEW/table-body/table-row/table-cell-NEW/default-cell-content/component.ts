@@ -36,7 +36,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async loadDisplayValues(): Promise<void> {
         if (this.state.cell) {
             if (this.showIcons) {
-                this.state.icons = await this.state.cell.getDisplayIcons();
+                if (this.state.cell.getValue().displayIcons) {
+                    this.state.icons = this.state.cell.getValue().displayIcons;
+                } else {
+                    this.state.icons = await this.state.cell.getDisplayIcons();
+                }
             }
 
             if (this.state.cell.getValue().displayValue) {

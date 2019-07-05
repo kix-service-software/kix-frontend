@@ -1,0 +1,19 @@
+<if(state.matchManager)>
+    <div.mail-filter-match-form-container>
+        <span title=state.translations.get("HeaderTitle")>
+            <span>${state.translations.get("HeaderTitle")}:</span>
+            <overlay-icon isHint=true content=state.translations.get("HeaderHint")/>
+        </span>
+        <div.mail-filter-match-value-container>
+            <span title=state.translations.get("NegateTitle")>
+                <span>${state.translations.get("NegateTitle")}:</span>
+                <overlay-icon isHint=true content=state.translations.get("NegateHint")/>
+            </span>
+            <span title=state.translations.get("PatternTitle")>
+                <span>${state.translations.get("PatternTitle")}:</span>
+                <overlay-icon isHint=true content=state.translations.get("PatternHint")/>
+            </span>
+        </div>
+    </div>
+    <dynamic-form-field-container manager=state.matchManager/>
+</if>

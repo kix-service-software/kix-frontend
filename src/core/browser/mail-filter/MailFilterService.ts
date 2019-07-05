@@ -1,5 +1,5 @@
 import { KIXObjectService } from "../kix";
-import { MailFilter, KIXObjectType, MailFilterProperty, TreeNode } from "../../model";
+import { MailFilter, KIXObjectType, MailFilterProperty, MailFilterMatch } from "../../model";
 
 export class MailFilterService extends KIXObjectService<MailFilter> {
 
@@ -25,6 +25,13 @@ export class MailFilterService extends KIXObjectService<MailFilter> {
         switch (property) {
             case MailFilterProperty.STOP_AFTER_MATCH:
                 value = Number(value);
+                break;
+            case MailFilterProperty.MATCH:
+                if (Array.isArray(value)) {
+                    (value as MailFilterMatch[]).forEach((m) => {
+                        m.Not = Number(m.Not);
+                    });
+                }
                 break;
             default:
         }

@@ -1,0 +1,19 @@
+.mail-filter-set-form-container {
+    display: grid;
+    grid-template-columns: @dynamic-value-columns-no-operation;
+    align-items: center;
+    grid-column-gap: @dynamic-value-gap;
+    margin-bottom: @margin-small;
+    justify-items: start;
+
+    >span {
+        display: grid;
+        grid-template-columns: auto 1rem;
+        grid-gap: @margin-small / 2;
+
+        >span:first-child {
+            .shorten-text();
+            font-weight: bold;
+        }
+    }
+}

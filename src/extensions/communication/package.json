@@ -19,6 +19,12 @@
             },
             "edit-mail-account-dialog-configuration.extension": {
                 "module": "edit-mail-account-dialog-configuration.extension"
+            },
+            "new-mail-filter-dialog-configuration": {
+                "module": "new-mail-filter-dialog-configuration.extension"
+            },
+            "mail-filter-details-configuration": {
+                "module": "mail-filter-details-configuration.extension"
             }
         },
         "kix:modules": {

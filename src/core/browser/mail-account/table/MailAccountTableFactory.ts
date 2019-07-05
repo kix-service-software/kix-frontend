@@ -64,7 +64,6 @@ export class MailAccountTableFactory extends TableFactory {
         return tableConfiguration;
     }
 
-    // TODO: implementieren
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
         let config;
         switch (property) {

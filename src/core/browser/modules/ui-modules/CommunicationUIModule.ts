@@ -16,14 +16,18 @@ import {
     MailAccountLabelProvider, MailAccountBrowserFactory, MailAccountCreateAction, NewMailAccountDialogContext,
     MailAccountEditAction, EditMailAccountDialogContext, MailAccountDetailsContext
 } from "../../mail-account";
-import {
-    MailFilterService, MailFilterBrowserFactory, MailFilterTableFactory, MailFilterLabelProvider
-} from "../../mail-filter";
 import { ActionFactory } from "../../ActionFactory";
 import { ContextService } from "../../context";
 import { DialogService } from "../../components";
 import { UIComponentPermission } from "../../../model/UIComponentPermission";
 import { AuthenticationSocketClient } from "../../application/AuthenticationSocketClient";
+import {
+    MailFilterService, MailFilterBrowserFactory, MailFilterTableFactory, MailFilterLabelProvider
+} from "../../mail-filter";
+import { MailFilterMatchTableFactory } from "../../mail-filter/table/MailFilterMatchTableFactory";
+import { MailFilterSetTableFactory } from "../../mail-filter/table/MailFilterSetTableFactory";
+import { MailFilterCreateAction } from "../../mail-filter/actions";
+import { NewMailFilterDialogContext, MailFilterDetailsContext } from "../../mail-filter/context";
 
 export class UIModule implements IUIModule {
 
@@ -56,6 +60,8 @@ export class UIModule implements IUIModule {
         );
         TableFactoryService.getInstance().registerFactory(new MailFilterTableFactory());
         LabelService.getInstance().registerLabelProvider(new MailFilterLabelProvider());
+        TableFactoryService.getInstance().registerFactory(new MailFilterMatchTableFactory());
+        TableFactoryService.getInstance().registerFactory(new MailFilterSetTableFactory());
 
         await this.registerSystemAddresses();
         await this.registerMailAccounts();
@@ -169,14 +175,37 @@ export class UIModule implements IUIModule {
     private async registerMailFilters(): Promise<void> {
 
         if (await this.checkPermission('system/communication/mailfilters', CRUD.CREATE)) {
-            // ActionFactory.getInstance().registerAction('mail-filter-create', MailFilterCreateAction);
+            ActionFactory.getInstance().registerAction('mail-filter-create', MailFilterCreateAction);
 
+            const newMailFilterDialogContext = new ContextDescriptor(
+                NewMailFilterDialogContext.CONTEXT_ID, [KIXObjectType.MAIL_FILTER],
+                ContextType.DIALOG, ContextMode.CREATE_ADMIN,
+                false, 'new-mail-account-dialog', ['mail-filters'], NewMailFilterDialogContext
+            );
+            ContextService.getInstance().registerContext(newMailFilterDialogContext);
+
+            DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+                'new-mail-filter-dialog',
+                new WidgetConfiguration(
+                    'new-mail-filter-dialog', 'Translatable#New Filter',
+                    [], {}, false, false, 'kix-icon-new-gear'
+                ),
+                KIXObjectType.MAIL_FILTER,
+                ContextMode.CREATE_ADMIN
+            ));
         }
 
         if (await this.checkPermission('system/communication/mailfilters/*', CRUD.UPDATE)) {
             // ActionFactory.getInstance().registerAction('mail-filter-edit', MailFilterEditAction);
 
         }
+
+        const mailFilterDetailsContext = new ContextDescriptor(
+            MailFilterDetailsContext.CONTEXT_ID, [KIXObjectType.MAIL_FILTER],
+            ContextType.MAIN, ContextMode.DETAILS,
+            false, 'object-details-page', ['mail-filters'], MailFilterDetailsContext
+        );
+        ContextService.getInstance().registerContext(mailFilterDetailsContext);
 
     }
 

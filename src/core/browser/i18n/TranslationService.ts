@@ -153,4 +153,14 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
         return translationObject;
     }
 
+    public static async createTranslationArray(patterns: string[]): Promise<any> {
+        const translatePromises = [];
+        patterns.forEach(
+            (p) => translatePromises.push(TranslationService.translate(p))
+        );
+        const translationList = await Promise.all<boolean>(translatePromises);
+
+        return translationList;
+    }
+
 }

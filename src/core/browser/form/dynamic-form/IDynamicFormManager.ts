@@ -50,4 +50,6 @@ export interface IDynamicFormManager {
     getOperatorDisplayText(o: string): string;
 
     searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]>;
+
+    clearValueOnPropertyChange(property: string): Promise<boolean>;
 }

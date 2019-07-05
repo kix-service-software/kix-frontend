@@ -131,4 +131,8 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     public getEditableValues(): ObjectPropertyValue[] {
         return [...this.values];
     }
+
+    public async clearValueOnPropertyChange(property: string): Promise<boolean> {
+        return true;
+    }
 }
