@@ -19,7 +19,7 @@ class Component extends AbstractMarkoComponent {
     private async update(input): Promise<void> {
         if (input.value && typeof input.value !== 'undefined') {
             this.state.value = input.value[0];
-            this.state.negate = input.value[1];
+            this.state.negate = Boolean(input.value[1]);
         } else {
             this.state.value = '';
         }

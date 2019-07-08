@@ -25,6 +25,9 @@
             },
             "mail-filter-details-configuration": {
                 "module": "mail-filter-details-configuration.extension"
+            },
+            "edit-mail-filter-dialog-configuration.extension": {
+                "module": "edit-mail-filter-dialog-configuration.extension"
             }
         },
         "kix:modules": {

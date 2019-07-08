@@ -1,6 +1,6 @@
 import {
     ObjectIcon, KIXObjectType, MailFilter, MailFilterProperty, User, DateTimeUtil,
-    KIXObjectProperty, MailFilterMatch, MailFilterSet, ValidObject, SortUtil, DataType
+    KIXObjectProperty, MailFilterMatch, MailFilterSet, SortUtil, DataType, ValidObject
 } from '../../model';
 import { TranslationService } from '../i18n/TranslationService';
 import { KIXObjectService } from "../kix";

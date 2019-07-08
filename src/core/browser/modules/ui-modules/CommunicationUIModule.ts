@@ -26,8 +26,11 @@ import {
 } from "../../mail-filter";
 import { MailFilterMatchTableFactory } from "../../mail-filter/table/MailFilterMatchTableFactory";
 import { MailFilterSetTableFactory } from "../../mail-filter/table/MailFilterSetTableFactory";
-import { MailFilterCreateAction } from "../../mail-filter/actions";
-import { NewMailFilterDialogContext, MailFilterDetailsContext } from "../../mail-filter/context";
+import { MailFilterCreateAction, MailFilterEditAction } from "../../mail-filter/actions";
+import {
+    NewMailFilterDialogContext, MailFilterDetailsContext, EditMailFilterDialogContext
+} from "../../mail-filter/context";
+import { MailFilterFormService } from "../../mail-filter/MailFilterFormService";
 
 export class UIModule implements IUIModule {
 
@@ -55,6 +58,7 @@ export class UIModule implements IUIModule {
         LabelService.getInstance().registerLabelProvider(new MailAccountLabelProvider());
 
         ServiceRegistry.registerServiceInstance(MailFilterService.getInstance());
+        ServiceRegistry.registerServiceInstance(MailFilterFormService.getInstance());
         FactoryService.getInstance().registerFactory(
             KIXObjectType.MAIL_FILTER, MailFilterBrowserFactory.getInstance()
         );
@@ -196,8 +200,24 @@ export class UIModule implements IUIModule {
         }
 
         if (await this.checkPermission('system/communication/mailfilters/*', CRUD.UPDATE)) {
-            // ActionFactory.getInstance().registerAction('mail-filter-edit', MailFilterEditAction);
+            ActionFactory.getInstance().registerAction('mail-filter-edit', MailFilterEditAction);
 
+            const editMailFilterDialogContext = new ContextDescriptor(
+                EditMailFilterDialogContext.CONTEXT_ID, [KIXObjectType.MAIL_FILTER],
+                ContextType.DIALOG, ContextMode.EDIT_ADMIN,
+                false, 'edit-mail-filter-dialog', ['mail-filters'], EditMailFilterDialogContext
+            );
+            ContextService.getInstance().registerContext(editMailFilterDialogContext);
+
+            DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+                'edit-mail-filter-dialog',
+                new WidgetConfiguration(
+                    'edit-mail-filter-dialog', 'Translatable#Edit Email Filter',
+                    [], {}, false, false, 'kix-icon-edit'
+                ),
+                KIXObjectType.MAIL_FILTER,
+                ContextMode.EDIT_ADMIN
+            ));
         }
 
         const mailFilterDetailsContext = new ContextDescriptor(

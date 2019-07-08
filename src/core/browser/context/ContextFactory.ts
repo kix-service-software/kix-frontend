@@ -106,9 +106,13 @@ export class ContextFactory {
 
             let context: Context;
             if (descriptor) {
-                const configuration = await ContextSocketClient.loadContextConfiguration(descriptor.contextId);
-                context = new descriptor.contextClass(descriptor, objectId, configuration);
-                await context.initContext();
+                const configuration = await ContextSocketClient.loadContextConfiguration(descriptor.contextId).catch(
+                    (error) => { reject(error); }
+                );
+                if (configuration) {
+                    context = new descriptor.contextClass(descriptor, objectId, configuration);
+                    await context.initContext();
+                }
             }
 
             resolve(context);
