@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-07-04 14:09+0000\n"
+"PO-Revision-Date: 2019-07-08 11:09+0000\n"
 "Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -451,10 +451,8 @@ msgstr "Erstellt von"
 msgid "Create FAQ Article"
 msgstr "FAQ Artikel wird angelegt"
 
-#, fuzzy
-#| msgid "Create Role"
 msgid "Create Filter"
-msgstr "Rolle wird angelegt"
+msgstr "Filter wird angelegt"
 
 msgid "Create Links."
 msgstr "Verknüpfung wird angelegt"
@@ -600,10 +598,8 @@ msgstr "bearbeitet"
 msgid "Edit Email Account"
 msgstr "E-Mail Konto bearbeiten"
 
-#, fuzzy
-#| msgid "Email Filter"
 msgid "Edit Email Filter"
-msgstr "E-Mail Filter"
+msgstr "E-Mail Filter bearbeiten"
 
 msgid "Edit FAQ Article"
 msgstr "FAQ Artikel bearbeiten"
@@ -671,10 +667,8 @@ msgstr "E-Mail Adressen"
 msgid "Email Filter"
 msgstr "E-Mail Filter"
 
-#, fuzzy
-#| msgid "Email Information"
 msgid "Email Filter Information"
-msgstr "E-Mail Informationen"
+msgstr "E-Mail Filter Informationen"
 
 msgid "Email Filters"
 msgstr "E-Mail Filter"
@@ -784,10 +778,8 @@ msgstr "Filterbedingungen"
 msgid "Filter in list"
 msgstr "Filtern in Liste"
 
-#, fuzzy
-#| msgid "Role successfully created."
 msgid "Filter successfully created."
-msgstr "Rolle wurde erfolgreich angelegt."
+msgstr "Filter wurde erfolgreich angelegt."
 
 msgid "Firstname"
 msgstr "Vorname"
@@ -1620,7 +1612,7 @@ msgid "Name"
 msgstr "Name"
 
 msgid "Negate"
-msgstr ""
+msgstr "Negieren"
 
 msgid "New"
 msgstr "Neu"
@@ -1649,10 +1641,8 @@ msgstr "Neuer Kontakt"
 msgid "New Email Account"
 msgstr "Neues E-Mail Konto"
 
-#, fuzzy
-#| msgid "Email Filter"
 msgid "New Email Filter"
-msgstr "E-Mail Filter"
+msgstr "Neuer E-Mail Filter"
 
 msgid "New FAQ"
 msgstr "Neue FAQ"
@@ -1660,10 +1650,8 @@ msgstr "Neue FAQ"
 msgid "New FAQ Category"
 msgstr "Neue FAQ Kategorie"
 
-#, fuzzy
-#| msgid "New Article"
 msgid "New Filter"
-msgstr "Neuer Artikel"
+msgstr "Neuer Filter"
 
 msgid "New Object"
 msgstr "Neues Objekt"
@@ -2292,10 +2280,8 @@ msgstr ""
 msgid "Set a password for the user."
 msgstr "Legen Sie ein Passwort für den Nutzer fest."
 
-#, fuzzy
-#| msgid "Email Header"
 msgid "Set Email Header"
-msgstr "E-Mail Header"
+msgstr "E-Mail Header setzen"
 
 #, fuzzy
 #| msgid "Email Header"
@@ -2336,10 +2322,8 @@ msgstr ""
 "Setzen Sie den Nutzer als \"gültig\", \"ungültig (temporär)\" oder \"ungültig"
 "\"."
 
-#, fuzzy
-#| msgid "Value"
 msgid "Set Value"
-msgstr "Wert"
+msgstr "Wert setzen"
 
 msgid "Show all"
 msgstr "Alle anzeigen"
@@ -2694,10 +2678,8 @@ msgstr "Aktualisierung wird durchgeführt"
 msgid "Update FAQ Category"
 msgstr "Aktualisierung wird durchgeführt"
 
-#, fuzzy
-#| msgid "Create Role"
 msgid "Update Filter"
-msgstr "Rolle wird angelegt"
+msgstr "Aktualisierung wird durchgeführt"
 
 msgid "Update Organisation"
 msgstr "Aktualisierung wird durchgeführt"
