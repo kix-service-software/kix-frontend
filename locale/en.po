@@ -574,6 +574,9 @@ msgstr ""
 msgid "Edit Email Account"
 msgstr ""
 
+msgid "Edit Email Filter"
+msgstr ""
+
 msgid "Edit FAQ Article"
 msgstr ""
 
@@ -893,6 +896,24 @@ msgid "Helptext_Admin_MailFilterCreate_StopAfterMatch"
 msgstr ""
 
 msgid "Helptext_Admin_MailFilterCreate_Validity"
+msgstr ""
+
+msgid "Helptext_Admin_MailFilterEdit_Comment"
+msgstr ""
+
+msgid "Helptext_Admin_MailFilterEdit_FilterConditions"
+msgstr ""
+
+msgid "Helptext_Admin_MailFilterEdit_Name"
+msgstr ""
+
+msgid "Helptext_Admin_MailFilterEdit_SetEmailHeaders"
+msgstr ""
+
+msgid "Helptext_Admin_MailFilterEdit_StopAfterMatch"
+msgstr ""
+
+msgid "Helptext_Admin_MailFilterEdit_Validity"
 msgstr ""
 
 msgid "Helptext_Admin_MailFilter_FilterConditions_EmailHeader"
@@ -1532,6 +1553,9 @@ msgid "New Contact"
 msgstr ""
 
 msgid "New Email Account"
+msgstr ""
+
+msgid "New Email Filter"
 msgstr ""
 
 msgid "New FAQ"
@@ -2510,6 +2534,9 @@ msgid "Update FAQ Artikel"
 msgstr ""
 
 msgid "Update FAQ Category"
+msgstr ""
+
+msgid "Update Filter"
 msgstr ""
 
 msgid "Update Organisation"

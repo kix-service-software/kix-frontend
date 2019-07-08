@@ -600,6 +600,11 @@ msgstr "bearbeitet"
 msgid "Edit Email Account"
 msgstr "E-Mail Konto bearbeiten"
 
+#, fuzzy
+#| msgid "Email Filter"
+msgid "Edit Email Filter"
+msgstr "E-Mail Filter"
+
 msgid "Edit FAQ Article"
 msgstr "FAQ Artikel bearbeiten"
 
@@ -939,6 +944,36 @@ msgstr "Hilfetext_Admin_MailAccountCreate_Host"
 #, fuzzy
 #| msgid "Helptext_Admin_MailAccountCreate_Validity"
 msgid "Helptext_Admin_MailFilterCreate_Validity"
+msgstr "Hilfetext_Admin_MailAccountCreate_Validity"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_Comment"
+msgid "Helptext_Admin_MailFilterEdit_Comment"
+msgstr "Hilfetext_Admin_MailAccountCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_Comment"
+msgid "Helptext_Admin_MailFilterEdit_FilterConditions"
+msgstr "Hilfetext_Admin_MailAccountCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryCreate_Name"
+msgid "Helptext_Admin_MailFilterEdit_Name"
+msgstr "Hilfetext_Admin_FAQCategoryCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_AcceptKIXHeader"
+msgid "Helptext_Admin_MailFilterEdit_SetEmailHeaders"
+msgstr "Hilfetext_Admin_MailAccountCreate_AcceptKIXHeader"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_Host"
+msgid "Helptext_Admin_MailFilterEdit_StopAfterMatch"
+msgstr "Hilfetext_Admin_MailAccountCreate_Host"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_Validity"
+msgid "Helptext_Admin_MailFilterEdit_Validity"
 msgstr "Hilfetext_Admin_MailAccountCreate_Validity"
 
 #, fuzzy
@@ -1613,6 +1648,11 @@ msgstr "Neuer Kontakt"
 
 msgid "New Email Account"
 msgstr "Neues E-Mail Konto"
+
+#, fuzzy
+#| msgid "Email Filter"
+msgid "New Email Filter"
+msgstr "E-Mail Filter"
 
 msgid "New FAQ"
 msgstr "Neue FAQ"
@@ -2653,6 +2693,11 @@ msgstr "Aktualisierung wird durchgeführt"
 
 msgid "Update FAQ Category"
 msgstr "Aktualisierung wird durchgeführt"
+
+#, fuzzy
+#| msgid "Create Role"
+msgid "Update Filter"
+msgstr "Rolle wird angelegt"
 
 msgid "Update Organisation"
 msgstr "Aktualisierung wird durchgeführt"
