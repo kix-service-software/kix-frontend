@@ -26,7 +26,7 @@ export class ComponentState {
                             ),
                         ], null, null,
                         [QueueProperty.SUB_QUEUES], [QueueProperty.SUB_QUEUES]
-                    ), null, null, true, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.LARGE
+                    ), null, null, true, null, null, null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
                 )
             ),
             false, false, 'kix-icon-gears')
