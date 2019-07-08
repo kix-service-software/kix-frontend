@@ -1,6 +1,6 @@
 import { ComponentState } from "./ComponentState";
 import { FormInputComponent, MailFilterSet, } from "../../../../../../core/model";
-import { IdService, IDynamicFormManager } from "../../../../../../core/browser";
+import { IdService, IDynamicFormManager, ObjectPropertyValue } from "../../../../../../core/browser";
 import { MailFilterSetManager } from "../../../../../../core/browser/mail-filter";
 import { TranslationService } from "../../../../../../core/browser/i18n/TranslationService";
 
@@ -58,7 +58,14 @@ class Component extends FormInputComponent<any[], ComponentState> {
     }
 
     public async setCurrentNode(setManager: IDynamicFormManager): Promise<void> {
-        //
+        if (this.state.defaultValue && this.state.defaultValue.value && Array.isArray(this.state.defaultValue.value)) {
+            this.state.defaultValue.value.forEach((set: MailFilterSet) => {
+                setManager.setValue(
+                    new ObjectPropertyValue(set.Key, null, set.Value, null, null, null, set.Key)
+                );
+            });
+            super.provideValue(this.state.defaultValue.value);
+        }
     }
 
     private async prepareTranslations(): Promise<void> {
