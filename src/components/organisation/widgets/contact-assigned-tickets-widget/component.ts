@@ -6,7 +6,8 @@ import {
 } from '../../../../core/browser';
 import {
     WidgetConfiguration, Contact, KIXObjectType, TicketProperty, FilterCriteria,
-    FilterType, FilterDataType, StateType, TicketState, DateTimeUtil, DataType, WidgetSize, WidgetType
+    FilterType, FilterDataType, StateType, TicketState, DateTimeUtil, DataType, WidgetType,
+    KIXObjectLoadingOptions
 } from '../../../../core/model';
 import { IEventSubscriber, EventService } from '../../../../core/browser/event';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
@@ -50,178 +51,28 @@ class Component {
 
         this.state.openTicketsTitle = await TranslationService.translate('Translatable#Open Tickets');
         this.openTicketsConfig = new WidgetConfiguration(
-            'contact-open-tickets-group', this.state.openTicketsTitle, [],
-            new TableConfiguration(KIXObjectType.TICKET,
-                null, null,
-                [
-                    new DefaultColumnConfiguration(
-                        TicketProperty.PRIORITY_ID, false, true, true, true, 65, true, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.TICKET_NUMBER, true, false, true, true, 135, true, true
-                    ),
-                    new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260, true, true),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.STATE_ID, false, true, true, true, 80, true, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.QUEUE_ID, true, false, true, true, 100, true, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.ORGANISATION_ID, true, false, true, true, 150, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.CHANGED, true, false, true, true, 125, true, true, false, DataType.DATE_TIME
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.DATE_TIME
-                    )
-                ], null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
-            ),
-            false, true, null, false)
-            ;
+            'contact-open-tickets-group', this.state.openTicketsTitle, [], null
+        );
 
         this.state.escalatedTicketsTitle = await TranslationService.translate('Translatable#Escalated Tickets');
         this.escalatedTicketsConfig = new WidgetConfiguration(
-            'contact-escalated-tickets-group', this.state.escalatedTicketsTitle, [], new TableConfiguration(
-                KIXObjectType.TICKET,
-                null, null,
-                [
-                    new DefaultColumnConfiguration(
-                        TicketProperty.PRIORITY_ID, false, true, true, true, 65, true, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.TICKET_NUMBER, true, false, true, true, 135, true, true
-                    ),
-                    new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260, true, true),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.STATE_ID, false, true, true, true, 80, true, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.QUEUE_ID, true, false, true, true, 100, true, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.ORGANISATION_ID, true, false, true, true, 150, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.ESCALATION_RESPONSE_TIME, true, false, true, true, 150, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.ESCALATION_UPDATE_TIME, true, false, true, true, 150, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.ESCALATION_SOLUTION_TIME, true, false, true, true, 150, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.CHANGED, true, false, true, true, 125, true, true, false, DataType.DATE_TIME
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.DATE_TIME
-                    )
-                ], null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
-            ),
-            false, true, null, false);
+            'contact-escalated-tickets-group', this.state.escalatedTicketsTitle, [], null
+        );
 
         this.state.reminderTicketsTitle = await TranslationService.translate('Translatable#Reminder Tickets');
         this.reminderTicketsConfig = new WidgetConfiguration(
-            'contact-reminder-tickets-group', this.state.reminderTicketsTitle, [],
-            new TableConfiguration(KIXObjectType.TICKET, null, null,
-                [
-                    new DefaultColumnConfiguration(
-                        TicketProperty.PRIORITY_ID, false, true, true, true, 65, true, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.TICKET_NUMBER, true, false, true, true, 135, true, true
-                    ),
-                    new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260, true, true),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.STATE_ID, false, true, true, true, 80, true, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.QUEUE_ID, true, false, true, true, 100, true, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.ORGANISATION_ID, true, false, true, true, 150, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.PENDING_TIME, true, false, true, true, 150, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.CHANGED, true, false, true, true, 125, true, true, false, DataType.DATE_TIME
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.DATE_TIME
-                    )
-                ], null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
-            ),
-            false, true, null, false);
+            'contact-reminder-tickets-group', this.state.reminderTicketsTitle, [], null
+        );
 
         this.state.newTicketsTitle = await TranslationService.translate('Translatable#New Tickets');
         this.newTicketsConfig = new WidgetConfiguration(
-            'contact-new-tickets-group', this.state.newTicketsTitle, [],
-            new TableConfiguration(KIXObjectType.TICKET,
-                null, null,
-                [
-                    new DefaultColumnConfiguration(
-                        TicketProperty.PRIORITY_ID, false, true, true, true, 65, true, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.TICKET_NUMBER, true, false, true, true, 135, true, true
-                    ),
-                    new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260, true, true),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.STATE_ID, false, true, true, true, 80, true, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.QUEUE_ID, true, false, true, true, 100, true, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.ORGANISATION_ID, true, false, true, true, 150, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.CHANGED, true, false, true, true, 125, true, true, false, DataType.DATE_TIME
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.DATE_TIME
-                    )
-                ], null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
-            ),
-            false, true, null, false);
+            'contact-new-tickets-group', this.state.newTicketsTitle, [], null
+        );
 
         this.state.pendingTicketsTitle = await TranslationService.translate('Translatable#Pending Tickets');
         this.pendingTicketsConfig = new WidgetConfiguration(
-            'contact-pending-tickets-group', this.state.pendingTicketsTitle, [], new TableConfiguration(
-                KIXObjectType.TICKET,
-                null, null,
-                [
-                    new DefaultColumnConfiguration(
-                        TicketProperty.PRIORITY_ID, false, true, true, true, 65, true, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.TICKET_NUMBER, true, false, true, true, 135, true, true
-                    ),
-                    new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260, true, true),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.STATE_ID, false, true, true, true, 80, true, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.QUEUE_ID, true, false, true, true, 100, true, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.ORGANISATION_ID, true, false, true, true, 150, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.PENDING_TIME, true, false, true, true, 150, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.CHANGED, true, false, true, true, 125, true, true, false, DataType.DATE_TIME
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.DATE_TIME
-                    )
-                ], null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
-            ),
-            false, true, null, false);
+            'contact-pending-tickets-group', this.state.pendingTicketsTitle, [], null
+        );
 
         context.registerListener('contact-assigned-tickets-component', {
             explorerBarToggled: () => { return; },
@@ -275,18 +126,6 @@ class Component {
 
     private async configureEscalatedTicketsTable(): Promise<void> {
         if (this.escalatedTicketsConfig) {
-            const filter = [
-                new FilterCriteria(
-                    TicketProperty.CONTACT_ID, SearchOperator.EQUALS, FilterDataType.STRING,
-                    FilterType.AND, this.state.contact.ID
-                ),
-                new FilterCriteria(
-                    TicketProperty.ESCALATION_TIME, SearchOperator.LESS_THAN, FilterDataType.NUMERIC, FilterType.AND, 0
-                )
-            ];
-
-            this.escalatedTicketsConfig.settings.filter = filter;
-
             this.tableEscalatedTicketsSubscriber = {
                 eventSubscriberId: 'contact-escalated-tickets-table',
                 eventPublished: (data: TableEventData, eventId: string) => {
@@ -302,16 +141,59 @@ class Component {
                 }
             };
 
+            const filter = [
+                new FilterCriteria(
+                    TicketProperty.CONTACT_ID, SearchOperator.EQUALS, FilterDataType.STRING,
+                    FilterType.AND, this.state.contact.ID
+                ),
+                new FilterCriteria(
+                    TicketProperty.ESCALATION_TIME, SearchOperator.LESS_THAN, FilterDataType.NUMERIC, FilterType.AND, 0
+                )
+            ];
+
+            const tableConfiguration = new TableConfiguration(
+                KIXObjectType.TICKET,
+                new KIXObjectLoadingOptions(filter), null,
+                [
+                    new DefaultColumnConfiguration(
+                        TicketProperty.PRIORITY_ID, false, true, true, true, 65, true, true, true
+                    ),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.TICKET_NUMBER, true, false, true, true, 135, true, true
+                    ),
+                    new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260, true, true),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.STATE_ID, false, true, true, true, 80, true, true, true
+                    ),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.QUEUE_ID, true, false, true, true, 100, true, true, true
+                    ),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.ORGANISATION_ID, true, false, true, true, 150, true, true
+                    ),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.ESCALATION_RESPONSE_TIME, true, false, true, true, 150, true, true
+                    ),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.ESCALATION_UPDATE_TIME, true, false, true, true, 150, true, true
+                    ),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.ESCALATION_SOLUTION_TIME, true, false, true, true, 150, true, true
+                    ),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.CHANGED, true, false, true, true, 125, true, true, false, DataType.DATE_TIME
+                    ),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.DATE_TIME
+                    )
+                ], false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+            );
+
             const table = await TableFactoryService.getInstance().createTable(
-                'contact-assigned-tickets-escalated', KIXObjectType.TICKET,
-                this.escalatedTicketsConfig.settings, null, null, true
+                'contact-assigned-tickets-escalated', KIXObjectType.TICKET, tableConfiguration, null, null, true
             );
 
             await table.initialize();
-
-            if (table.getRows(true).length === 0) {
-                this.closeGroup('contact-escalated-tickets-group');
-            }
 
             this.state.escalatedTicketsTable = table;
             EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableEscalatedTicketsSubscriber);
@@ -320,19 +202,6 @@ class Component {
 
     private async configureReminderTicketsTable(): Promise<void> {
         if (this.reminderTicketsConfig) {
-            const filter = [
-                new FilterCriteria(
-                    TicketProperty.CONTACT_ID, SearchOperator.EQUALS, FilterDataType.STRING,
-                    FilterType.AND, this.state.contact.ID
-                ),
-                new FilterCriteria(
-                    TicketProperty.PENDING_TIME, SearchOperator.LESS_THAN, FilterDataType.DATETIME, FilterType.AND,
-                    DateTimeUtil.getKIXDateTimeString(new Date())
-                )
-            ];
-
-            this.reminderTicketsConfig.settings.filter = filter;
-
             this.tableReminderTicketsSubscriber = {
                 eventSubscriberId: 'contact-reminder-tickets-table',
                 eventPublished: (data: TableEventData, eventId: string) => {
@@ -348,16 +217,56 @@ class Component {
                 }
             };
 
+            const filter = [
+                new FilterCriteria(
+                    TicketProperty.CONTACT_ID, SearchOperator.EQUALS, FilterDataType.STRING,
+                    FilterType.AND, this.state.contact.ID
+                ),
+                new FilterCriteria(
+                    TicketProperty.PENDING_TIME, SearchOperator.LESS_THAN, FilterDataType.DATETIME, FilterType.AND,
+                    DateTimeUtil.getKIXDateTimeString(new Date())
+                )
+            ];
+
+            const tableConfiguration = new TableConfiguration(
+                KIXObjectType.TICKET,
+                new KIXObjectLoadingOptions(filter), null,
+                [
+                    new DefaultColumnConfiguration(
+                        TicketProperty.PRIORITY_ID, false, true, true, true, 65, true, true, true
+                    ),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.TICKET_NUMBER, true, false, true, true, 135, true, true
+                    ),
+                    new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260, true, true),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.STATE_ID, false, true, true, true, 80, true, true, true
+                    ),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.QUEUE_ID, true, false, true, true, 100, true, true, true
+                    ),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.ORGANISATION_ID, true, false, true, true, 150, true, true
+                    ),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.PENDING_TIME, true, false, true, true, 150, true, true
+                    ),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.CHANGED, true, false, true, true, 125, true, true, false, DataType.DATE_TIME
+                    ),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.DATE_TIME
+                    )
+                ], false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+            );
+
             const table = await TableFactoryService.getInstance().createTable(
-                'contact-assigned-tickets-reminder', KIXObjectType.TICKET,
-                this.reminderTicketsConfig.settings, null, null, true
+                'contact-assigned-tickets-reminder', KIXObjectType.TICKET, tableConfiguration, null, null, true
             );
 
             await table.initialize();
 
-            if (table.getRows(true).length === 0) {
-                this.closeGroup('contact-reminder-tickets-group');
-            }
+            this.closeGroup('contact-reminder-tickets-group');
 
             this.state.reminderTicketsTable = table;
             EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableReminderTicketsSubscriber);
@@ -366,6 +275,21 @@ class Component {
 
     private async configureNewTicketsTable(): Promise<void> {
         if (this.newTicketsConfig) {
+            this.tableNewTicketsSubscriber = {
+                eventSubscriberId: 'contact-new-tickets-group',
+                eventPublished: (data: TableEventData, eventId: string) => {
+                    if (
+                        eventId === TableEvent.TABLE_READY && data
+                        && data.tableId === this.state.newTicketsTable.getTableId()
+                    ) {
+                        this.state.newTicketsCount = this.state.newTicketsTable.getRows().length;
+                        this.state.newTicketsFilterCount = this.state.newTicketsTable.isFiltered()
+                            ? this.state.newTicketsTable.getRows().length
+                            : null;
+                    }
+                }
+            };
+
             const filter = [
                 new FilterCriteria(
                     TicketProperty.CONTACT_ID, SearchOperator.EQUALS, FilterDataType.STRING,
@@ -388,33 +312,43 @@ class Component {
                 TicketProperty.STATE_ID, SearchOperator.IN, FilterDataType.NUMERIC, FilterType.AND, stateIds
             ));
 
-            this.newTicketsConfig.settings.filter = filter;
-
-            this.tableNewTicketsSubscriber = {
-                eventSubscriberId: 'contact-new-tickets-group',
-                eventPublished: (data: TableEventData, eventId: string) => {
-                    if (
-                        eventId === TableEvent.TABLE_READY && data
-                        && data.tableId === this.state.newTicketsTable.getTableId()
-                    ) {
-                        this.state.newTicketsCount = this.state.newTicketsTable.getRows().length;
-                        this.state.newTicketsFilterCount = this.state.newTicketsTable.isFiltered()
-                            ? this.state.newTicketsTable.getRows().length
-                            : null;
-                    }
-                }
-            };
+            const tableConfiguration = new TableConfiguration(
+                KIXObjectType.TICKET,
+                new KIXObjectLoadingOptions(filter), null,
+                [
+                    new DefaultColumnConfiguration(
+                        TicketProperty.PRIORITY_ID, false, true, true, true, 65, true, true, true
+                    ),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.TICKET_NUMBER, true, false, true, true, 135, true, true
+                    ),
+                    new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260, true, true),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.STATE_ID, false, true, true, true, 80, true, true, true
+                    ),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.QUEUE_ID, true, false, true, true, 100, true, true, true
+                    ),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.ORGANISATION_ID, true, false, true, true, 150, true, true
+                    ),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.CHANGED, true, false, true, true, 125, true, true, false, DataType.DATE_TIME
+                    ),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.DATE_TIME
+                    )
+                ], false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+            );
 
             const table = await TableFactoryService.getInstance().createTable(
                 'contact-assigned-tickets-new', KIXObjectType.TICKET,
-                this.newTicketsConfig.settings, null, null, true
+                tableConfiguration, null, null, true
             );
 
             await table.initialize();
 
-            if (table.getRows(true).length === 0) {
-                this.closeGroup('contact-new-tickets-group');
-            }
+            this.closeGroup('contact-new-tickets-group');
 
             this.state.newTicketsTable = table;
             EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableNewTicketsSubscriber);
@@ -423,6 +357,21 @@ class Component {
 
     private async configureOpenTicketsTable(): Promise<void> {
         if (this.openTicketsConfig) {
+            this.tableOpenTicketsSubscriber = {
+                eventSubscriberId: 'contact-open-tickets-group',
+                eventPublished: (data: TableEventData, eventId: string) => {
+                    if (
+                        eventId === TableEvent.TABLE_READY && data
+                        && data.tableId === this.state.openTicketsTable.getTableId()
+                    ) {
+                        this.state.openTicketsCount = this.state.openTicketsTable.getRows().length;
+                        this.state.openTicketsFilterCount = this.state.openTicketsTable.isFiltered()
+                            ? this.state.openTicketsTable.getRows().length
+                            : null;
+                    }
+                }
+            };
+
             const filter = [new FilterCriteria(
                 TicketProperty.CONTACT_ID, SearchOperator.EQUALS, FilterDataType.STRING,
                 FilterType.AND, this.state.contact.ID
@@ -443,33 +392,43 @@ class Component {
                 TicketProperty.STATE_ID, SearchOperator.IN, FilterDataType.NUMERIC, FilterType.AND, stateIds
             ));
 
-            this.openTicketsConfig.settings.filter = filter;
-
-            this.tableOpenTicketsSubscriber = {
-                eventSubscriberId: 'contact-open-tickets-group',
-                eventPublished: (data: TableEventData, eventId: string) => {
-                    if (
-                        eventId === TableEvent.TABLE_READY && data
-                        && data.tableId === this.state.openTicketsTable.getTableId()
-                    ) {
-                        this.state.openTicketsCount = this.state.openTicketsTable.getRows().length;
-                        this.state.openTicketsFilterCount = this.state.openTicketsTable.isFiltered()
-                            ? this.state.openTicketsTable.getRows().length
-                            : null;
-                    }
-                }
-            };
+            const tableConfiguration = new TableConfiguration(
+                KIXObjectType.TICKET,
+                new KIXObjectLoadingOptions(filter), null,
+                [
+                    new DefaultColumnConfiguration(
+                        TicketProperty.PRIORITY_ID, false, true, true, true, 65, true, true, true
+                    ),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.TICKET_NUMBER, true, false, true, true, 135, true, true
+                    ),
+                    new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260, true, true),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.STATE_ID, false, true, true, true, 80, true, true, true
+                    ),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.QUEUE_ID, true, false, true, true, 100, true, true, true
+                    ),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.ORGANISATION_ID, true, false, true, true, 150, true, true
+                    ),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.CHANGED, true, false, true, true, 125, true, true, false, DataType.DATE_TIME
+                    ),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.DATE_TIME
+                    )
+                ], false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+            );
 
             const table = await TableFactoryService.getInstance().createTable(
                 'contact-assigned-tickets-open', KIXObjectType.TICKET,
-                this.openTicketsConfig.settings, null, null, true
+                tableConfiguration, null, null, true
             );
 
             await table.initialize();
 
-            if (table.getRows(true).length === 0) {
-                this.closeGroup('contact-open-tickets-group');
-            }
+            this.closeGroup('contact-open-tickets-group');
 
             this.state.openTicketsTable = table;
             EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableOpenTicketsSubscriber);
@@ -478,6 +437,21 @@ class Component {
 
     private async configurePendingTicketsTable(): Promise<void> {
         if (this.pendingTicketsConfig) {
+            this.tablePendingTicketsSubscriber = {
+                eventSubscriberId: 'contact-pending-tickets-group',
+                eventPublished: (data: TableEventData, eventId: string) => {
+                    if (
+                        eventId === TableEvent.TABLE_READY && data
+                        && data.tableId === this.state.openTicketsTable.getTableId()
+                    ) {
+                        this.state.pendingTicketsCount = this.state.pendingTicketsTable.getRows().length;
+                        this.state.pendingTicketsFilterCount = this.state.pendingTicketsTable.isFiltered()
+                            ? this.state.pendingTicketsTable.getRows().length
+                            : null;
+                    }
+                }
+            };
+
             const filter = [
                 new FilterCriteria(
                     TicketProperty.CONTACT_ID, SearchOperator.EQUALS, FilterDataType.STRING,
@@ -504,33 +478,45 @@ class Component {
                 TicketProperty.STATE_ID, SearchOperator.IN, FilterDataType.NUMERIC, FilterType.AND, stateIds
             ));
 
-            this.pendingTicketsConfig.settings.filter = filter;
-
-            this.tablePendingTicketsSubscriber = {
-                eventSubscriberId: 'contact-pending-tickets-group',
-                eventPublished: (data: TableEventData, eventId: string) => {
-                    if (
-                        eventId === TableEvent.TABLE_READY && data
-                        && data.tableId === this.state.openTicketsTable.getTableId()
-                    ) {
-                        this.state.pendingTicketsCount = this.state.pendingTicketsTable.getRows().length;
-                        this.state.pendingTicketsFilterCount = this.state.pendingTicketsTable.isFiltered()
-                            ? this.state.pendingTicketsTable.getRows().length
-                            : null;
-                    }
-                }
-            };
+            const tableConfiguration = new TableConfiguration(
+                KIXObjectType.TICKET,
+                new KIXObjectLoadingOptions(filter), null,
+                [
+                    new DefaultColumnConfiguration(
+                        TicketProperty.PRIORITY_ID, false, true, true, true, 65, true, true, true
+                    ),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.TICKET_NUMBER, true, false, true, true, 135, true, true
+                    ),
+                    new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260, true, true),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.STATE_ID, false, true, true, true, 80, true, true, true
+                    ),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.QUEUE_ID, true, false, true, true, 100, true, true, true
+                    ),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.ORGANISATION_ID, true, false, true, true, 150, true, true
+                    ),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.PENDING_TIME, true, false, true, true, 150, true, true
+                    ),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.CHANGED, true, false, true, true, 125, true, true, false, DataType.DATE_TIME
+                    ),
+                    new DefaultColumnConfiguration(
+                        TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.DATE_TIME
+                    )
+                ], false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+            );
 
             const table = await TableFactoryService.getInstance().createTable(
-                'contact-assigned-tickets-pending', KIXObjectType.TICKET,
-                this.pendingTicketsConfig.settings, null, null, true
+                'contact-assigned-tickets-pending', KIXObjectType.TICKET, tableConfiguration, null, null, true
             );
 
             await table.initialize();
 
-            if (table.getRows(true).length === 0) {
-                this.closeGroup('contact-pending-tickets-group');
-            }
+            this.closeGroup('contact-pending-tickets-group');
 
             this.state.pendingTicketsTable = table;
             EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tablePendingTicketsSubscriber);
@@ -604,7 +590,7 @@ class Component {
     public getOpenTicketsTitle(): string {
         return this.getTicketTableTitle(
             this.state.openTicketsTable ? this.state.openTicketsTable.getRows(true).length : 0,
-            this.state.reminderTicketsTitle
+            this.state.openTicketsTitle
         );
     }
 
