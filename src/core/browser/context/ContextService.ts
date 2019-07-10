@@ -62,6 +62,8 @@ export class ContextService {
         );
 
         if (context && context.getDescriptor().contextType === ContextType.MAIN) {
+            await ContextHistory.getInstance().addHistoryEntry(oldContext);
+
             if (context.getDescriptor().contextMode === ContextMode.DETAILS) {
                 await context.setObjectId(objectId);
             }
@@ -69,7 +71,6 @@ export class ContextService {
                 context.reset();
             }
             DialogService.getInstance().closeMainDialog();
-            await ContextHistory.getInstance().addHistoryEntry(this.activeMainContext);
             this.activeMainContext = context;
             RoutingService.getInstance().routeTo(
                 'base-router', context.getDescriptor().componentId, { objectId: context.getObjectId(), history }
