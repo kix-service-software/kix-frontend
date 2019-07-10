@@ -31,7 +31,8 @@ export class ArticleTableContentProvider extends TableContentProvider<Article> {
                             }
                         }
 
-                        values.push(new TableValue(ArticleProperty.NUMBER, ticket.Articles.length - i));
+                        const count = ticket.Articles.length - i;
+                        values.push(new TableValue(ArticleProperty.NUMBER, count, count.toString()));
                         values.push(new TableValue(ArticleProperty.ARTICLE_INFORMATION, null));
                         return new RowObject<Article>(values, a);
                     });
