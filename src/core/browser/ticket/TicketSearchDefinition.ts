@@ -228,15 +228,13 @@ export class TicketSearchDefinition extends SearchDefinition {
             case TicketProperty.SERVICE_ID:
             case TicketProperty.PRIORITY_ID:
             case TicketProperty.QUEUE_ID:
-                criteria.push(new FilterCriteria(
-                    property, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, value
-                ));
-                break;
             case TicketProperty.STATE_ID:
-                criteria.push(new FilterCriteria(
-                    property, SearchOperator.EQUALS,
-                    FilterDataType.NUMERIC, FilterType.AND, (value as any).stateId
-                ));
+                if (value) {
+                    criteria.push(new FilterCriteria(
+                        property, SearchOperator.EQUALS,
+                        FilterDataType.NUMERIC, FilterType.AND, value
+                    ));
+                }
                 break;
             case SearchProperty.FULLTEXT:
                 criteria.push(new FilterCriteria(
@@ -257,7 +255,6 @@ export class TicketSearchDefinition extends SearchDefinition {
                 criteria.push(new FilterCriteria(
                     TicketProperty.CC, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
                 ));
-
                 break;
             case TicketProperty.ARCHIVE_FLAG:
                 if (value === ArchiveFlag.ALL) {
@@ -275,8 +272,6 @@ export class TicketSearchDefinition extends SearchDefinition {
                     );
                 }
                 break;
-            case TicketProperty.TICKET_NUMBER:
-            case TicketProperty.TITLE:
             default:
                 criteria.push(
                     new FilterCriteria(property, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.AND, value)
