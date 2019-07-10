@@ -2,7 +2,6 @@ import { SocketNameSpace } from './SocketNameSpace';
 import {
     ContextEvent, LoadContextConfigurationRequest, LoadContextConfigurationResponse, ContextConfiguration, SocketEvent
 } from '../core/model';
-
 import { SocketResponse, SocketErrorResponse } from '../core/common';
 import { ConfigurationService } from '../core/services';
 import { PluginService, PermissionService } from '../services';

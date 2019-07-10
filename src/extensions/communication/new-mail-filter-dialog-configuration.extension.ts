@@ -1,8 +1,7 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
     ConfiguredWidget, FormField, FormFieldValue, MailFilterProperty, Form,
-    KIXObjectType, FormContext, ContextConfiguration, FormFieldOption, FormFieldOptions, InputFieldTypes,
-    KIXObjectProperty
+    KIXObjectType, FormContext, ContextConfiguration, KIXObjectProperty, WidgetConfiguration
 } from '../../core/model';
 import { ConfigurationService } from '../../core/services';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
@@ -16,8 +15,19 @@ export class Extension implements IConfigurationExtension {
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
 
-        const sidebars = [];
-        const sidebarWidgets: Array<ConfiguredWidget<any>> = [];
+        const filterHelpSidebar = new ConfiguredWidget('mail-filter-help-sidebar-widget', new WidgetConfiguration(
+            'help-widget', null, [], {
+                helpText: 'Translatable#Helptext_Admin_MailFilter_Sidebar'
+            },
+            false, false, 'kix-icon-query'
+        ));
+
+        const sidebars = [
+            'mail-filter-help-sidebar-widget'
+        ];
+        const sidebarWidgets: Array<ConfiguredWidget<any>> = [
+            filterHelpSidebar
+        ];
 
         return new ContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
     }
