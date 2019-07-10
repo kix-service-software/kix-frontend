@@ -39,9 +39,11 @@ class Component {
                 scrollInformationChanged: () => { return; },
                 filteredObjectListChanged: this.contextFilteredObjectListChanged.bind(this)
             });
-        }
 
-        this.state.chartConfig = this.ticketChartConfiguration.chartConfiguration;
+            this.contextFilteredObjectListChanged(currentContext.getFilteredObjectList());
+        } else {
+            this.state.chartConfig = this.ticketChartConfiguration.chartConfiguration;
+        }
     }
 
     private async contextFilteredObjectListChanged(objectList: KIXObject[]): Promise<void> {
