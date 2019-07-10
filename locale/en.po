@@ -931,6 +931,9 @@ msgstr ""
 msgid "Helptext_Admin_MailFilter_SetEmailHeader_Value"
 msgstr ""
 
+msgid "Helptext_Admin_MailFilter_Sidebar"
+msgstr ""
+
 msgid "Helptext_Admin_QueueCreate_Comment"
 msgstr ""
 
