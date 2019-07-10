@@ -43,6 +43,8 @@ class Component {
                 scrollInformationChanged: () => { return; },
                 filteredObjectListChanged: this.contextFilteredObjectListChanged.bind(this)
             });
+
+            this.contextFilteredObjectListChanged(currentContext.getFilteredObjectList());
         }
 
         this.state.chartConfig = this.cmdbChartConfiguration.chartConfiguration;
@@ -50,13 +52,15 @@ class Component {
 
     private async contextFilteredObjectListChanged(objectList: KIXObject[]): Promise<void> {
         this.state.chartConfig = null;
-        const data = await ConfigItemChartFactory.getInstance().prepareData(
-            this.cmdbChartConfiguration.property, (objectList as ConfigItem[])
-        );
+        if (objectList.length) {
+            const data = await ConfigItemChartFactory.getInstance().prepareData(
+                this.cmdbChartConfiguration.property, (objectList as ConfigItem[])
+            );
 
-        this.cmdbChartConfiguration.chartConfiguration.data.labels = data[0];
-        this.cmdbChartConfiguration.chartConfiguration.data.datasets = data[1];
-        this.state.chartConfig = this.cmdbChartConfiguration.chartConfiguration;
+            this.cmdbChartConfiguration.chartConfiguration.data.labels = data[0];
+            this.cmdbChartConfiguration.chartConfiguration.data.datasets = data[1];
+            this.state.chartConfig = this.cmdbChartConfiguration.chartConfiguration;
+        }
     }
 
 }
