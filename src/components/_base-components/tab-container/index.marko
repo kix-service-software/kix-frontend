@@ -12,7 +12,7 @@
                         class={
                                                 active: component.isActiveTab(tab.instanceId)
                                             }
-                        on-click("tabClicked", tab)>
+                        on-click("tabClicked", tab, false)>
                         <if(component.getIcon(tab))>
                             <icon icon=component.getIcon(tab) showUnknown=false/>
                         </if>
