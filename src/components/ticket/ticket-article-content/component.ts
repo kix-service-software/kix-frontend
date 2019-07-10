@@ -1,8 +1,6 @@
 import { ComponentState } from './ComponentState';
 import { TicketService } from '../../../core/browser/ticket';
-import { Article, KIXObjectType, KIXObjectLoadingOptions } from '../../../core/model';
-import { KIXObjectService } from "../../../core/browser";
-import { InlineContent } from '../../../core/browser/components';
+import { Article } from '../../../core/model';
 
 class Component {
 
@@ -21,7 +19,6 @@ class Component {
     public onMount(): void {
         this.prepareContent();
     }
-
 
     public async prepareContent(): Promise<void> {
         if (this.article) {

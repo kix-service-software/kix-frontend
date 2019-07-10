@@ -4,7 +4,7 @@ import { KIXObjectService } from "../../kix";
 
 export class EditFAQArticleDialogContext extends Context {
 
-    public static CONTEXT_ID: string = 'edit-contact-dialog-context';
+    public static CONTEXT_ID: string = 'edit-faq-article-dialog-context';
 
     public async getObject<O extends KIXObject>(
         objectType: KIXObjectType = KIXObjectType.FAQ_ARTICLE, reload: boolean = false, changedProperties?: string[]
