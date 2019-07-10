@@ -154,7 +154,7 @@ export class Extension implements IConfigurationExtension {
                 'table-widget', 'Translatable#Overview Config Items', [
                     'bulk-action', 'ticket-create-action', 'config-item-create-action', 'csv-export-action'
                 ],
-                new TableWidgetSettings(KIXObjectType.CONFIG_ITEM, null, null, null, null, null, filter),
+                new TableWidgetSettings(KIXObjectType.CONFIG_ITEM, null, null, null, true, null, filter),
                 false, false, 'kix-icon-ci', true
             ),
             [new UIComponentPermission('cmdb/configitems', [CRUD.READ])],
