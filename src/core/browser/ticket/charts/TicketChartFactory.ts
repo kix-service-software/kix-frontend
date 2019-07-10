@@ -1,6 +1,9 @@
-import { TicketProperty, Ticket, KIXObjectType, DateTimeUtil, TicketPriority, TicketState } from "../../../model";
+import {
+    TicketProperty, Ticket, KIXObjectType, DateTimeUtil, TicketPriority, TicketState, KIXObject
+} from "../../../model";
 import { LabelService } from "../../LabelService";
 import { KIXObjectService } from "../../kix";
+import { TicketLabelProvider } from "../TicketLabelProvider";
 
 export class TicketChartFactory {
 
@@ -29,38 +32,43 @@ export class TicketChartFactory {
 
     private async preparePropertyCountData(property: TicketProperty, tickets: Ticket[]): Promise<Map<string, number>> {
         const labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.TICKET);
-        const data = await this.initMap(property);
-        for (const t of tickets) {
-            if (t[property]) {
-                const label = await labelProvider.getPropertyValueDisplayText(property, t[property]);
-                if (!data.has(label)) {
-                    data.set(label, 0);
-                }
+        const data = await this.initMap(property, labelProvider);
 
-                data.set(label, data.get(label) + 1);
+        const ids = tickets.map((t) => t[property]);
+
+        for (const id of ids) {
+            const label = await labelProvider.getPropertyValueDisplayText(property, id);
+            if (!data.has(label)) {
+                data.set(label, 0);
             }
+
+            data.set(label, data.get(label) + 1);
         }
+
         return data;
     }
 
-    private async initMap(property: TicketProperty): Promise<Map<string, number>> {
+    private async initMap(property: TicketProperty, labelProvider: TicketLabelProvider): Promise<Map<string, number>> {
         const map = new Map<string, number>();
+        let objects: KIXObject[] = [];
         switch (property) {
             case TicketProperty.PRIORITY_ID:
-                const priorities = await KIXObjectService.loadObjects<TicketPriority>(
+                objects = await KIXObjectService.loadObjects<TicketPriority>(
                     KIXObjectType.TICKET_PRIORITY, null
                 );
-                priorities.forEach((p) => map.set(p.Name, 0));
-                return map;
+                break;
             case TicketProperty.STATE_ID:
-                const states = await KIXObjectService.loadObjects<TicketState>(
+                objects = await KIXObjectService.loadObjects<TicketState>(
                     KIXObjectType.TICKET_STATE, null
                 );
-                states.forEach((s) => map.set(s.Name, 0));
-                return map;
             default:
-                return map;
         }
+
+        for (const o of objects) {
+            const label = await labelProvider.getPropertyValueDisplayText(property, o.ObjectId);
+            map.set(label, 0);
+        }
+        return map;
     }
 
     private async prepareCreatedData(property: TicketProperty, tickets: Ticket[]): Promise<Map<string, number>> {
