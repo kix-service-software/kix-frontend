@@ -12,7 +12,6 @@ export class Extension implements IConfigurationExtension {
 
         const helpWidget = new ConfiguredWidget('20190301-organisation-import-help-widget', new WidgetConfiguration(
             'help-widget', null, [], {
-                // tslint:disable-next-line:max-line-length
                 helpText: 'Translatable#Helptext_Organisations_OrganisationImport'
             },
             false, false, 'kix-icon-query'
