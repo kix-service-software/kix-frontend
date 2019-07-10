@@ -1,6 +1,5 @@
 import { IPlaceholderHandler } from "./IPlaceholderHandler";
-import { KIXObject, ContextType } from "../../model";
-import { ContextService, AdditionalContextInformation } from "../context";
+import { KIXObject } from "../../model";
 
 export class PlaceholderService {
 
@@ -47,8 +46,6 @@ export class PlaceholderService {
         const placeholders = this.extractPlaceholders(text);
 
         const replacedPlaceholders: Map<string, string> = new Map();
-
-        object = await this.prepareObject(object);
 
         for (const placeholder of placeholders) {
             if (!replacedPlaceholders.has(placeholder)) {
@@ -100,31 +97,5 @@ export class PlaceholderService {
 
     public translatePlaceholder(placeholder): boolean {
         return Boolean(placeholder.match(/TR_KIX_/));
-    }
-
-    private async prepareObject(givenObject?: KIXObject): Promise<KIXObject> {
-        const newObject = {};
-        if (givenObject && typeof givenObject === 'object') {
-            this.setObject(newObject, givenObject);
-        } else {
-            const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
-            if (dialogContext) {
-                const dialogObject = await dialogContext.getObject();
-                this.setObject(newObject, dialogObject);
-                const formObject = dialogContext.getAdditionalInformation(AdditionalContextInformation.FORM_OBJECT);
-                this.setObject(newObject, formObject);
-            }
-        }
-        return newObject as KIXObject;
-    }
-
-    private setObject(newObject: {}, oldObject: {}) {
-        if (oldObject) {
-            Object.getOwnPropertyNames(oldObject).forEach((attribute) => {
-                if (typeof oldObject[attribute] !== 'undefined') {
-                    newObject[attribute] = oldObject[attribute];
-                }
-            });
-        }
     }
 }

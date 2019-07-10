@@ -20,17 +20,12 @@ export class User extends KIXObject<User> {
     public UserMobile: string;
     public UserComment: string;
 
-    public ValidID: number;
-
-    public CreateTime: string;
-    public ChangeTime: string;
-
     public Preferences: UserPreference[];
     public RoleIDs: number[];
     public Tickets: Tickets;
 
     public constructor(user?: User) {
-        super();
+        super(user);
         if (user) {
             this.UserID = Number(user.UserID);
             this.ObjectId = this.UserID;
@@ -39,9 +34,6 @@ export class User extends KIXObject<User> {
             this.UserFirstname = user.UserFirstname;
             this.UserLastname = user.UserLastname;
             this.UserFullname = user.UserFullname;
-            this.ValidID = user.ValidID;
-            this.CreateTime = user.CreateTime;
-            this.ChangeTime = user.ChangeTime;
             this.Preferences = user.Preferences ? user.Preferences.map((p) => new UserPreference(p)) : [];
             this.Tickets = user.Tickets;
             this.ValidID = user.ValidID;
