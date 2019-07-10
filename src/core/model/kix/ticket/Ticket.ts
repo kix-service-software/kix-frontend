@@ -124,7 +124,7 @@ export class Ticket extends KIXObject<Ticket> {
     public Watchers: Watcher[];
 
     public constructor(ticket?: Ticket) {
-        super();
+        super(ticket);
         if (ticket) {
             this.TicketID = Number(ticket.TicketID);
             this.ObjectId = this.TicketID;
@@ -151,9 +151,7 @@ export class Ticket extends KIXObject<Ticket> {
             this.Age = ticket.Age;
             this.Created = ticket.Created;
             this.CreateTimeUnix = ticket.CreateTimeUnix;
-            this.CreateBy = ticket.CreateBy;
             this.Changed = ticket.Changed;
-            this.ChangeBy = ticket.ChangeBy;
             this.ArchiveFlag = ticket.ArchiveFlag;
             this.PendingTime = ticket.PendingTime;
             this.TimeUnits = ticket.TimeUnits;

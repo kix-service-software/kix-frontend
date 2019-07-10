@@ -1,17 +1,18 @@
 import { IPlaceholderHandler, PlaceholderService } from "../placeholder";
 import {
     Ticket, TicketProperty, DateTimeUtil, ArticleProperty, KIXObjectType, SortUtil, DataType, SortOrder,
-    ContextType, User, KIXObjectLoadingOptions, Contact, Organisation
+    ContextType, User, KIXObjectLoadingOptions, Contact, Organisation, FormContext, KIXObjectProperty
 } from "../../model";
 import { LabelService } from "../LabelService";
 import { TranslationService } from "../i18n/TranslationService";
 import { ArticlePlaceholderHandler } from "./ArticlePlaceholderHandler";
-import { ContextService } from "../context";
+import { ContextService, AdditionalContextInformation } from "../context";
 import { KIXObjectService } from "../kix";
 import { UserPlaceholderHandler } from "../user";
 import { ContactPlaceholderHandler } from "../contact";
 import { OrganisationPlaceholderHandler } from "../organisation";
 import { QueuePlaceholderHandler } from "./QueuePlaceholderHandler";
+import { FormService } from "../form";
 
 export class TicketPlaceholderHandler implements IPlaceholderHandler {
 
@@ -32,6 +33,9 @@ export class TicketPlaceholderHandler implements IPlaceholderHandler {
         let result = '';
         const objectString = PlaceholderService.getInstance().getObjectString(placeholder);
         const optionsString: string = PlaceholderService.getInstance().getOptionsString(placeholder);
+        if (!ticket) {
+            ticket = await this.getTicket();
+        }
         if (ticket && this.isHandlerFor(objectString)) {
             const attribute: string = PlaceholderService.getInstance().getAttributeString(placeholder);
             if (!PlaceholderService.getInstance().translatePlaceholder(placeholder)) {
@@ -199,8 +203,7 @@ export class TicketPlaceholderHandler implements IPlaceholderHandler {
                     }
                     break;
                 case TicketProperty.TITLE:
-                    result = ticket.Title ? ticket.Title :
-                        ticket[ArticleProperty.SUBJECT] ? ticket[ArticleProperty.SUBJECT] : '';
+                    result = typeof ticket.Title !== 'undefined' ? ticket.Title : await this.getArticleSubject();
                     if (optionsString && Number.isInteger(Number(optionsString))) {
                         result = result.substr(0, Number(optionsString));
                     }
@@ -233,5 +236,76 @@ export class TicketPlaceholderHandler implements IPlaceholderHandler {
     private isKnownProperty(property: string): boolean {
         const knownProperties = Object.keys(TicketProperty).map((p) => TicketProperty[p]);
         return knownProperties.some((p) => p === property);
+    }
+
+    public async getTicket(): Promise<Ticket> {
+        let newObject = {};
+        const mainContext = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        if (mainContext) {
+            this.setObject(newObject, await mainContext.getObject());
+        }
+        const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+        if (dialogContext) {
+            const formId = dialogContext.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
+            const form = formId ? await FormService.getInstance().getForm(formId) : null;
+            if (
+                !newObject
+                || (
+                    form
+                    && form.formContext === FormContext.NEW
+                    && form.objectType === KIXObjectType.TICKET
+                )
+            ) {
+                newObject = {};
+                this.setObject(newObject, await dialogContext.getObject());
+            }
+            if (form && form.objectType === KIXObjectType.TICKET) {
+                const formObject = dialogContext.getAdditionalInformation(AdditionalContextInformation.FORM_OBJECT);
+                this.setObject(newObject, formObject, true);
+            }
+        }
+        return newObject as Ticket;
+    }
+
+    private setObject(newObject: {}, oldObject: {}, fromForm: boolean = false) {
+        if (oldObject) {
+            Object.getOwnPropertyNames(oldObject).forEach((property) => {
+                if (
+                    typeof oldObject[property] !== 'undefined'
+                    && !(fromForm && this.ignoreProperty(property))
+                ) {
+                    newObject[property] = oldObject[property];
+                }
+            });
+        }
+    }
+
+    private ignoreProperty(property: string): boolean {
+        switch (property) {
+            case TicketProperty.TICKET_ID:
+            case TicketProperty.UNSEEN:
+            case KIXObjectProperty.OBJECT_ID:
+            case KIXObjectProperty.OBJECT_TYPE:
+            case KIXObjectProperty.CREATE_BY:
+            case KIXObjectProperty.CREATE_TIME:
+            case KIXObjectProperty.CHANGE_BY:
+            case KIXObjectProperty.CHANGE_TIME:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    private async getArticleSubject(): Promise<string> {
+        let subject = '';
+        const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+        if (dialogContext) {
+            const formId = dialogContext.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
+            const formInstance = formId ? await FormService.getInstance().getFormInstance(formId) : null;
+            const subjectValue = formInstance
+                ? await formInstance.getFormFieldValueByProperty(ArticleProperty.SUBJECT) : null;
+            subject = subjectValue && subjectValue.value ? subjectValue.value.toString() : '';
+        }
+        return subject;
     }
 }
