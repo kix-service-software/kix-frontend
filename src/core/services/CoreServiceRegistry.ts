@@ -4,7 +4,7 @@ import {
     TextModuleService, ValidObjectService, TicketTypeService, ObjectIconService,
     TicketStateService, TicketPriorityService, ConfigItemClassService, TranslationService,
     ChannelService, TicketTemplateService, QueueService, MailAccountService, RoleService,
-    SystemAddressService, SlaService, MailFilterService
+    SystemAddressService, SlaService, MailFilterService, NotificationService
 } from "./impl";
 import { CacheService } from "../cache";
 import { UserService } from "./impl/api/UserService";
@@ -59,6 +59,7 @@ export class CoreServiceRegistry {
             MailAccountService.getInstance();
             MailFilterService.getInstance();
             TicketTemplateService.getInstance();
+            NotificationService.getInstance();
 
             registry.initialized = true;
         }

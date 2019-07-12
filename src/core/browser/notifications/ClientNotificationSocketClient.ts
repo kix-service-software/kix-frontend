@@ -4,18 +4,18 @@ import { CacheService } from '../cache';
 import { ClientStorageService } from '../ClientStorageService';
 import { ContextService } from '../context';
 
-export class NotificationSocketClient extends SocketClient {
+export class ClientNotificationSocketClient extends SocketClient {
 
     private notificationsSocket: SocketIO.Server;
 
-    private static INSTANCE: NotificationSocketClient = null;
+    private static INSTANCE: ClientNotificationSocketClient = null;
 
-    public static getInstance(): NotificationSocketClient {
-        if (!NotificationSocketClient.INSTANCE) {
-            NotificationSocketClient.INSTANCE = new NotificationSocketClient();
+    public static getInstance(): ClientNotificationSocketClient {
+        if (!ClientNotificationSocketClient.INSTANCE) {
+            ClientNotificationSocketClient.INSTANCE = new ClientNotificationSocketClient();
         }
 
-        return NotificationSocketClient.INSTANCE;
+        return ClientNotificationSocketClient.INSTANCE;
     }
 
     public constructor() {

@@ -1,5 +1,7 @@
 import { ILabelProvider } from "./ILabelProvider";
-import { KIXObjectType, ObjectIcon } from "../model";
+import { KIXObjectType, ObjectIcon, KIXObjectProperty, DateTimeUtil, User, ValidObject } from "../model";
+import { KIXObjectService } from "./kix";
+import { TranslationService } from "./i18n/TranslationService";
 
 export class LabelProvider<T = any> implements ILabelProvider<T> {
 
@@ -22,13 +24,36 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable?: boolean): Promise<string> {
-        return property;
+        let displayValue = property;
+        switch (property) {
+            case KIXObjectProperty.COMMENT:
+                displayValue = 'Translatable#Comment';
+                break;
+            case KIXObjectProperty.VALID_ID:
+                displayValue = 'Translatable#Validity';
+                break;
+            case KIXObjectProperty.CREATE_BY:
+                displayValue = 'Translatable#Created by';
+                break;
+            case KIXObjectProperty.CREATE_TIME:
+                displayValue = 'Translatable#Created at';
+                break;
+            case KIXObjectProperty.CHANGE_BY:
+                displayValue = 'Translatable#Changed by';
+                break;
+            case KIXObjectProperty.CHANGE_TIME:
+                displayValue = 'Translatable#Changed at';
+                break;
+            default:
+                displayValue = property;
+        }
+        return displayValue;
     }
 
     public async getDisplayText(
         object: T, property: string, defaultValue?: string, translatable?: boolean
     ): Promise<string> {
-        return '';
+        return await this.getPropertyValueDisplayText(property, object[property], translatable);
     }
 
     public getObjectAdditionalText(object: T, translatable?: boolean): string {
@@ -38,7 +63,34 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
     public async getPropertyValueDisplayText(
         property: string, value: string | number, translatable?: boolean
     ): Promise<string> {
-        return value ? value.toString() : '';
+        let displayValue = value;
+        switch (property) {
+            case KIXObjectProperty.VALID_ID:
+                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
+                const valid = validObjects.find((v) => v.ID === value);
+                displayValue = valid ? valid.Name : value;
+                break;
+            case KIXObjectProperty.CREATE_BY:
+            case KIXObjectProperty.CHANGE_BY:
+                const users = await KIXObjectService.loadObjects<User>(
+                    KIXObjectType.USER, [value], null, null, true
+                ).catch((error) => [] as User[]);
+                displayValue = users && !!users.length ? users[0].UserFullname : value;
+                break;
+            case KIXObjectProperty.CREATE_TIME:
+            case KIXObjectProperty.CHANGE_TIME:
+                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
+                break;
+            default:
+        }
+
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
+        }
+
+        return displayValue ? displayValue.toString() : '';
     }
 
     public getObjectTooltip(object: T, translatable?: boolean): string {

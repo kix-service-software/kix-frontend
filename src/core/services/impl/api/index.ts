@@ -28,3 +28,4 @@ export { QueueService } from './QueueService';
 export { MailAccountService } from './MailAccountService';
 export { MailFilterService } from './MailFilterService';
 export { TicketTemplateService } from './TicketTemplateService';
+export { NotificationService } from './NotificationService';

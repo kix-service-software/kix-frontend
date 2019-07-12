@@ -1,7 +1,4 @@
 import { IUIModule } from "../../application/IUIModule";
-import {
-    ContextDescriptor, KIXObjectType, ContextType, ContextMode, CRUD, ConfiguredDialogWidget, WidgetConfiguration
-} from "../../../model";
 import { ContextService } from "../../context";
 import { ActionFactory } from "../../ActionFactory";
 import { TranslationCSVExportAction, TranslationCreateAction, TranslationEditAction } from "../../i18n/admin/actions";
@@ -9,7 +6,7 @@ import { TranslationPatternTableFactory, TranslationLanguageTableFactory } from 
 import { TranslationPatternLabelProvider, TranslationLanguageLabelProvider } from "../../i18n";
 import { LabelService } from "../../LabelService";
 import { TableFactoryService } from "../../table";
-import { ServiceRegistry } from "../../kix";
+import { ServiceRegistry, FactoryService } from "../../kix";
 import { TranslationFormService } from "../../i18n/admin/TranslationFormService";
 import {
     NewTranslationDialogContext, EditTranslationDialogContext, TranslationDetailsContext
@@ -18,6 +15,13 @@ import { DialogService } from "../../components";
 import { AuthenticationSocketClient } from "../../application/AuthenticationSocketClient";
 import { UIComponentPermission } from "../../../model/UIComponentPermission";
 import { AdministrationSocketClient, AdminContext } from "../../admin";
+import {
+    ContextDescriptor, KIXObjectType, ContextMode, ContextType, ConfiguredDialogWidget, WidgetConfiguration, CRUD
+} from "../../../model";
+import { NotificationService } from "../../notifications/NotificationService";
+import { NotificationBrowserFactory } from "../../notifications/NotificationBrowserFactory";
+import { NotifiactionTableFactory } from "../../notifications/table";
+import { NotificationLabelProvider } from "../../notifications/NotificationLabelProvider";
 
 export class UIModule implements IUIModule {
 
@@ -46,13 +50,24 @@ export class UIModule implements IUIModule {
 
         ActionFactory.getInstance().registerAction('i18n-admin-translation-csv-export', TranslationCSVExportAction);
 
+        ServiceRegistry.registerServiceInstance(TranslationFormService.getInstance());
+        ServiceRegistry.registerServiceInstance(NotificationService.getInstance());
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.NOTIFICATION, NotificationBrowserFactory.getInstance()
+        );
+
         TableFactoryService.getInstance().registerFactory(new TranslationPatternTableFactory());
         TableFactoryService.getInstance().registerFactory(new TranslationLanguageTableFactory());
+        TableFactoryService.getInstance().registerFactory(new NotifiactionTableFactory());
+
         LabelService.getInstance().registerLabelProvider(new TranslationPatternLabelProvider());
         LabelService.getInstance().registerLabelProvider(new TranslationLanguageLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new NotificationLabelProvider());
 
-        ServiceRegistry.registerServiceInstance(TranslationFormService.getInstance());
+        this.initTranslation();
+    }
 
+    private async initTranslation(): Promise<void> {
         if (await this.checkPermission('system/i18n/translations', CRUD.CREATE)) {
             ActionFactory.getInstance().registerAction('i18n-admin-translation-create', TranslationCreateAction);
             const newTranslationDialogContext = new ContextDescriptor(
