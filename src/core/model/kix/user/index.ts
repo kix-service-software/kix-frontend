@@ -11,3 +11,4 @@ export { IPersonalSettingsExtension } from './IPersonalSettingsExtension';
 export { PreferencesLoadingOptions } from './PreferencesLoadingOptions';
 export { UserProperty } from './UserProperty';
 export { SetPreferenceOptions } from './SetPreferenceOptions';
+export { PersonalSettingsProperty } from './PersonalSettingsProperty';

@@ -1,5 +1,5 @@
 import { KIXObjectFormService } from "../kix/KIXObjectFormService";
-import { KIXObjectType } from "../../model";
+import { KIXObjectType, PersonalSettingsProperty } from "../../model";
 import { AgentService } from "../application/AgentService";
 
 export class PersonalSettingsFormService extends KIXObjectFormService {
@@ -24,6 +24,13 @@ export class PersonalSettingsFormService extends KIXObjectFormService {
     protected async getValue(property: string, value: any): Promise<any> {
         const user = await AgentService.getInstance().getCurrentUser();
         const preference = user.Preferences ? user.Preferences.find((p) => p.ID === property) : null;
-        return preference ? preference.Value : value;
+
+        value = preference ? preference.Value : value;
+
+        if (property === PersonalSettingsProperty.MY_QUEUES && value && typeof value === 'string') {
+            value = value.split(',').map((v) => Number(v));
+        }
+
+        return value;
     }
 }
