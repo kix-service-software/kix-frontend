@@ -433,7 +433,7 @@ msgstr ""
 msgid "Create Filter"
 msgstr ""
 
-msgid "Create Links."
+msgid "Create Links"
 msgstr ""
 
 msgid "Create Organisation"
@@ -740,6 +740,9 @@ msgid "FAQ rating"
 msgstr ""
 
 msgid "FAQ Search"
+msgstr ""
+
+msgid "Favorites"
 msgstr ""
 
 msgid "Fax"
@@ -1165,6 +1168,12 @@ msgstr ""
 msgid "Helptext_Organisations_OrganisationImport"
 msgstr ""
 
+msgid "Helptext_PersonalSettings_MyQueues_Hint"
+msgstr ""
+
+msgid "Helptext_PersonalSettings_UserLanguage_Hint"
+msgstr ""
+
 msgid "Helptext_Search_Contact"
 msgstr ""
 
@@ -1513,6 +1522,9 @@ msgstr ""
 msgid "My locked tickets with new articles"
 msgstr ""
 
+msgid "My Queues"
+msgstr ""
+
 msgid "My Tickets"
 msgstr ""
 
@@ -1811,11 +1823,6 @@ msgid "Please select a config item class. The form will be completed then."
 msgstr ""
 
 msgid "Please select a contact"
-msgstr ""
-
-msgid ""
-"Please select the language in which you want to use KIX. If not set, the "
-"system will try to choose the language automatically"
 msgstr ""
 
 msgid "Postal Address"

@@ -454,7 +454,9 @@ msgstr "FAQ Artikel wird angelegt"
 msgid "Create Filter"
 msgstr "Filter wird angelegt"
 
-msgid "Create Links."
+#, fuzzy
+#| msgid "Create Links."
+msgid "Create Links"
 msgstr "Verknüpfung wird angelegt"
 
 msgid "Create Organisation"
@@ -765,6 +767,11 @@ msgstr "FAQ Bewertung"
 
 msgid "FAQ Search"
 msgstr "FAQ Suche"
+
+#, fuzzy
+#| msgid "Priorities"
+msgid "Favorites"
+msgstr "Prioritäten"
 
 msgid "Fax"
 msgstr "Fax"
@@ -1233,6 +1240,12 @@ msgstr "HIlfetext_Organisations_OrganisationCreate_Zip"
 msgid "Helptext_Organisations_OrganisationImport"
 msgstr "Hilfetext_Organisations_OrganisationImport"
 
+msgid "Helptext_PersonalSettings_MyQueues_Hint"
+msgstr ""
+
+msgid "Helptext_PersonalSettings_UserLanguage_Hint"
+msgstr ""
+
 msgid "Helptext_Search_Contact"
 msgstr "Hilfetext_Search_Contact"
 
@@ -1601,6 +1614,11 @@ msgstr "Meine gesperrten Tickets"
 msgid "My locked tickets with new articles"
 msgstr "Meine gesperrten Tickets mit neuen Artikeln"
 
+#, fuzzy
+#| msgid "Queues"
+msgid "My Queues"
+msgstr "Queues"
+
 msgid "My Tickets"
 msgstr "Meine Tickets"
 
@@ -1906,13 +1924,6 @@ msgstr ""
 
 msgid "Please select a contact"
 msgstr "Wählen Sie bitte einen Kontakt."
-
-msgid ""
-"Please select the language in which you want to use KIX. If not set, the "
-"system will try to choose the language automatically"
-msgstr ""
-"Bitte wählen Sie die Sprache, in der Sie KIX benutzen wollen. Ist nichts "
-"gesetzt, versucht das System die Sprache automatisch zu wählen."
 
 msgid "Postal Address"
 msgstr "Adresse"
@@ -2802,6 +2813,13 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid ""
+#~ "Please select the language in which you want to use KIX. If not set, the "
+#~ "system will try to choose the language automatically"
+#~ msgstr ""
+#~ "Bitte wählen Sie die Sprache, in der Sie KIX benutzen wollen. Ist nichts "
+#~ "gesetzt, versucht das System die Sprache automatisch zu wählen."
 
 #~ msgid "Assigned Text Modules"
 #~ msgstr "Zuordnung zu Textbausteinen"
