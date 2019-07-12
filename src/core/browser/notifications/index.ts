@@ -1,1 +1,1 @@
-export { NotificationSocketClient } from './NotificationSocketClient';
+export { ClientNotificationSocketClient } from './ClientNotificationSocketClient';

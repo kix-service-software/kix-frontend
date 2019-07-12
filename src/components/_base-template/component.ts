@@ -10,7 +10,7 @@ import { KIXModulesService } from '../../core/browser/modules';
 import { TranslationService } from '../../core/browser/i18n/TranslationService';
 import { ApplicationEvent } from '../../core/browser/application';
 import { AuthenticationSocketClient } from '../../core/browser/application/AuthenticationSocketClient';
-import { NotificationSocketClient } from '../../core/browser/notifications';
+import { ClientNotificationSocketClient } from '../../core/browser/notifications';
 import { AgentService } from '../../core/browser/application/AgentService';
 import { SysConfigService } from '../../core/browser/sysconfig';
 import { TranslationPatternBrowserFactory, TranslationBrowserFactory } from '../../core/browser/i18n';
@@ -45,7 +45,7 @@ class Component {
 
         await this.checkAuthentication();
 
-        NotificationSocketClient.getInstance();
+        ClientNotificationSocketClient.getInstance();
 
         await KIXModulesService.getInstance().init();
 

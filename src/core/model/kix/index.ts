@@ -19,6 +19,7 @@ export * from './valid';
 export * from './general-catalog';
 export * from './mail-account';
 export * from './mail-filter';
+export * from './notification';
 
 export { ClientRegistration } from './ClientRegistration';
 export { KIXObject } from './KIXObject';

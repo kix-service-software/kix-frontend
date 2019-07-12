@@ -37,6 +37,7 @@ class Extension implements IKIXModuleExtension {
         ),
         new UIComponent(
             'i18n-translation-info-widget', 'i18n/admin/widgets/i18n-translation-info-widget', []),
+        new UIComponent('admin-notifications', 'admin/admin-notifications', [])
     ];
 
 }
