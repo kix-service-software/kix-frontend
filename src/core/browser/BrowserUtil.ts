@@ -10,8 +10,10 @@ export class BrowserUtil {
     }
 
     public static async openSuccessOverlay(message: string): Promise<void> {
-        const content = new ComponentContent('toast', new ToastContent('kix-icon-check', message));
-        OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
+        setTimeout(() => {
+            const content = new ComponentContent('toast', new ToastContent('kix-icon-check', message));
+            OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
+        }, 200);
     }
 
     public static openConfirmOverlay(

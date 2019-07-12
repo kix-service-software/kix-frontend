@@ -1,4 +1,7 @@
-import { IPersonalSettingsExtension, PersonalSetting } from "../../core/model";
+import {
+    IPersonalSettingsExtension, PersonalSetting, FormFieldOption, ObjectReferenceOptions,
+    KIXObjectType, PersonalSettingsProperty
+} from "../../core/model";
 
 class Extension implements IPersonalSettingsExtension {
 
@@ -6,11 +9,24 @@ class Extension implements IPersonalSettingsExtension {
         return [
             new PersonalSetting(
                 'Translatable#Localisation',
-                'UserLanguage',
-                'Language',
+                PersonalSettingsProperty.USER_LANGUAGE,
+                'Translatable#Language',
                 // tslint:disable-next-line:max-line-length
-                'Translatable#Please select the language in which you want to use KIX. If not set, the system will try to choose the language automatically',
+                'Translatable#Helptext_PersonalSettings_UserLanguage_Hint',
                 'language-input'
+            ),
+            new PersonalSetting(
+                'Translatable#Favorites',
+                PersonalSettingsProperty.MY_QUEUES,
+                'Translatable#My Queues',
+                'Translatable#Helptext_PersonalSettings_MyQueues_Hint',
+                'object-reference-input',
+                null,
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
+                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
+                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true)
+                ]
             )
         ];
     }

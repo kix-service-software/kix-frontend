@@ -1,6 +1,6 @@
 import { AgentSocketClient } from './AgentSocketClient';
 import { UserType } from '../../model/kix/user/UserType';
-import { PersonalSetting, KIXObjectType, User } from '../../model';
+import { PersonalSetting, KIXObjectType, User, PersonalSettingsProperty } from '../../model';
 import { KIXObjectService } from '../kix';
 import { AuthenticationSocketClient } from './AuthenticationSocketClient';
 
@@ -40,6 +40,12 @@ export class AgentService extends KIXObjectService<User> {
 
     public async setPreferencesByForm(formId: string): Promise<void> {
         const parameter: Array<[string, any]> = await this.prepareFormFields(formId);
+
+        const queuesParameter = parameter.find((p) => p[0] === PersonalSettingsProperty.MY_QUEUES);
+        if (queuesParameter) {
+            queuesParameter[1] = Array.isArray(queuesParameter[1]) ? queuesParameter[1].join(',') : '';
+        }
+
         await AgentSocketClient.getInstance().setPreferences(parameter);
     }
 }

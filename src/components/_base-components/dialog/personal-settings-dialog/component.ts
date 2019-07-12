@@ -41,14 +41,7 @@ class Component {
     }
 
     private async prepareForm(): Promise<Form> {
-        let personalSettings: PersonalSetting[] = [];
-
-        const service = ServiceRegistry.getServiceInstance<AgentService>(
-            KIXObjectType.PERSONAL_SETTINGS, ServiceType.OBJECT
-        );
-        if (service) {
-            personalSettings = await service.getPersonalSettings();
-        }
+        const personalSettings: PersonalSetting[] = await AgentService.getInstance().getPersonalSettings();
 
         const formGroups: FormGroup[] = [];
         personalSettings.forEach((ps) => {
@@ -77,9 +70,6 @@ class Component {
 
     public async submit(): Promise<void> {
         if (this.state.formId) {
-
-            const loadingHint = await TranslationService.translate('Translatable#Save Settings.');
-            DialogService.getInstance().setMainDialogLoading(false, loadingHint);
             setTimeout(async () => {
                 const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
                 const result = await formInstance.validateForm();
@@ -87,23 +77,19 @@ class Component {
                 if (validationError) {
                     this.showValidationError(result);
                 } else {
-                    const service = ServiceRegistry.getServiceInstance<AgentService>(
-                        KIXObjectType.PERSONAL_SETTINGS, ServiceType.OBJECT
-                    );
-                    if (service) {
-                        await service.setPreferencesByForm(this.state.formId)
-                            .then(async () => {
-                                DialogService.getInstance().setMainDialogLoading(false);
-
-                                const toast = await TranslationService.translate('Translatable#Changes saved.');
-                                BrowserUtil.openSuccessOverlay(toast);
-                                DialogService.getInstance().submitMainDialog();
-                                EventService.getInstance().publish(ApplicationEvent.REFRESH);
-                            }).catch((error: Error) => {
-                                DialogService.getInstance().setMainDialogLoading(false);
-                                BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
-                            });
-                    }
+                    const loadingHint = await TranslationService.translate('Translatable#Save Settings.');
+                    DialogService.getInstance().setMainDialogLoading(true, loadingHint);
+                    await AgentService.getInstance().setPreferencesByForm(this.state.formId)
+                        .then(async () => {
+                            DialogService.getInstance().setMainDialogLoading(false);
+                            DialogService.getInstance().submitMainDialog();
+                            EventService.getInstance().publish(ApplicationEvent.REFRESH);
+                            const toast = await TranslationService.translate('Translatable#Changes saved.');
+                            BrowserUtil.openSuccessOverlay(toast);
+                        }).catch((error: Error) => {
+                            DialogService.getInstance().setMainDialogLoading(false);
+                            BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
+                        });
                 }
             });
         }
