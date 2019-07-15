@@ -1,5 +1,5 @@
 import {
-    TicketProperty, Ticket, KIXObjectType, DateTimeUtil, TicketPriority, TicketState, KIXObject
+    TicketProperty, Ticket, KIXObjectType, DateTimeUtil, TicketPriority, TicketState, KIXObject, Queue, TicketType
 } from "../../../model";
 import { LabelService } from "../../LabelService";
 import { KIXObjectService } from "../../kix";
@@ -22,6 +22,9 @@ export class TicketChartFactory {
         switch (property) {
             case TicketProperty.STATE_ID:
             case TicketProperty.PRIORITY_ID:
+            case TicketProperty.QUEUE_ID:
+            case TicketProperty.TYPE_ID:
+            case TicketProperty.SERVICE_ID:
                 return await this.preparePropertyCountData(property, tickets);
             case TicketProperty.CREATED:
                 return await this.prepareCreatedData(property, tickets);
@@ -50,19 +53,28 @@ export class TicketChartFactory {
 
     private async initMap(property: TicketProperty, labelProvider: TicketLabelProvider): Promise<Map<string, number>> {
         const map = new Map<string, number>();
-        let objects: KIXObject[] = [];
+        let objectType: KIXObjectType;
         switch (property) {
             case TicketProperty.PRIORITY_ID:
-                objects = await KIXObjectService.loadObjects<TicketPriority>(
-                    KIXObjectType.TICKET_PRIORITY, null
-                );
+                objectType = KIXObjectType.TICKET_PRIORITY;
                 break;
             case TicketProperty.STATE_ID:
-                objects = await KIXObjectService.loadObjects<TicketState>(
-                    KIXObjectType.TICKET_STATE, null
-                );
+                objectType = KIXObjectType.TICKET_STATE;
+                break;
+            case TicketProperty.QUEUE_ID:
+                objectType = KIXObjectType.QUEUE;
+                break;
+            case TicketProperty.TYPE_ID:
+                objectType = KIXObjectType.TICKET_TYPE;
+                break;
+            case TicketProperty.SERVICE_ID:
+                objectType = KIXObjectType.SERVICE;
+                break;
+
             default:
         }
+
+        const objects = await KIXObjectService.loadObjects(objectType);
 
         for (const o of objects) {
             const label = await labelProvider.getPropertyValueDisplayText(property, o.ObjectId);
