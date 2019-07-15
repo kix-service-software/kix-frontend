@@ -22,7 +22,9 @@ export class EditUserDialogContext extends Context {
         if (kixObjectType === KIXObjectType.USER) {
             const userId = this.getObjectId();
             if (userId) {
-                const loadingOptions = new KIXObjectLoadingOptions(null, null, null, [UserProperty.ROLEIDS]);
+                const loadingOptions = new KIXObjectLoadingOptions(
+                    null, null, null, [UserProperty.PREFERENCES, UserProperty.ROLEIDS]
+                );
                 const objects = await KIXObjectService.loadObjects<User>(KIXObjectType.USER, [userId], loadingOptions);
                 object = objects && objects.length ? objects[0] : null;
             }

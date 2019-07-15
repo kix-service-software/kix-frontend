@@ -6,6 +6,11 @@
         <if(state.user)>
             <div.user-preferences>
                 <object-property-label object=state.user property="UserLanguage" labelProvider=state.labelProvider/>
+                <object-property-label object=state.user property="MyQueues" labelProvider=state.labelProvider>
+                    <@value>
+                        <label-list labels=state.labels removeLabels=false/>
+                    </@value>
+                </object-property-label>
             </div>
         </if>
     </@content>

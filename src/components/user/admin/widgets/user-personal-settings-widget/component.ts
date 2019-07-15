@@ -1,6 +1,8 @@
-import { AbstractMarkoComponent, ActionFactory, ContextService } from '../../../../../core/browser';
+import {
+    AbstractMarkoComponent, ActionFactory, ContextService, Label, KIXObjectService
+} from '../../../../../core/browser';
 import { ComponentState } from './ComponentState';
-import { KIXObjectType, User } from '../../../../../core/model';
+import { KIXObjectType, User, PersonalSettingsProperty, Queue } from '../../../../../core/model';
 import { UserLabelProvider, UserDetailsContext } from '../../../../../core/browser/user';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
@@ -39,6 +41,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async initWidget(user: User): Promise<void> {
         this.state.user = user;
         this.prepareActions(user);
+        this.createMyQueues(user);
     }
 
     private async prepareActions(user: User): Promise<void> {
@@ -46,6 +49,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.actions = await ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, [user]
             );
+        }
+    }
+
+    private async createMyQueues(user: User): Promise<void> {
+        const myQueues = user.Preferences.find((p) => p.ID === PersonalSettingsProperty.MY_QUEUES);
+        if (myQueues && myQueues.Value) {
+            const queueIds = myQueues.Value.split(',').map((v) => Number(v));
+            const queues = await KIXObjectService.loadObjects<Queue>(KIXObjectType.QUEUE, queueIds);
+            this.state.labels = queues.map((q) => new Label(q, null, null, null, null, null, true));
         }
     }
 

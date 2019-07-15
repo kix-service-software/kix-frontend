@@ -1,5 +1,6 @@
 import {
-    User, KIXObjectType, UserProperty, ObjectIcon, DateTimeUtil, ValidObject, KIXObjectProperty
+    User, KIXObjectType, UserProperty, ObjectIcon, DateTimeUtil, ValidObject,
+    KIXObjectProperty, PersonalSettingsProperty
 } from "../../model";
 import { TranslationService } from "../i18n/TranslationService";
 import { KIXObjectService } from "../kix";
@@ -133,9 +134,9 @@ export class UserLabelProvider extends LabelProvider<User> {
                     }
                 }
                 break;
-            case UserProperty.USER_LANGUAGE:
+            case PersonalSettingsProperty.USER_LANGUAGE:
                 if (user.Preferences) {
-                    const language = user.Preferences.find((p) => p.ID === UserProperty.USER_LANGUAGE);
+                    const language = user.Preferences.find((p) => p.ID === PersonalSettingsProperty.USER_LANGUAGE);
                     if (language) {
                         displayValue = await TranslationService.getInstance().getLanguageName(language.Value);
                     }
@@ -145,6 +146,14 @@ export class UserLabelProvider extends LabelProvider<User> {
                 displayValue = await this.getPropertyValueDisplayText(
                     KIXObjectProperty.VALID_ID, user.ValidID, translatable
                 );
+                break;
+            case PersonalSettingsProperty.USER_LANGUAGE:
+                if (user.Preferences) {
+                    const language = user.Preferences.find((p) => p.ID === PersonalSettingsProperty.USER_LANGUAGE);
+                    if (language) {
+                        displayValue = await TranslationService.getInstance().getLanguageName(language.Value);
+                    }
+                }
                 break;
             default:
                 displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
