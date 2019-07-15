@@ -5,7 +5,7 @@ import { TranslationCSVExportAction, TranslationCreateAction, TranslationEditAct
 import { TranslationPatternTableFactory, TranslationLanguageTableFactory } from "../../i18n/admin/table";
 import { TranslationPatternLabelProvider, TranslationLanguageLabelProvider } from "../../i18n";
 import { LabelService } from "../../LabelService";
-import { TableFactoryService } from "../../table";
+import { TableFactoryService, TableCSSHandlerRegistry } from "../../table";
 import { ServiceRegistry, FactoryService } from "../../kix";
 import { TranslationFormService } from "../../i18n/admin/TranslationFormService";
 import {
@@ -22,6 +22,11 @@ import { NotificationService } from "../../notifications/NotificationService";
 import { NotificationBrowserFactory } from "../../notifications/NotificationBrowserFactory";
 import { NotifiactionTableFactory } from "../../notifications/table";
 import { NotificationLabelProvider } from "../../notifications/NotificationLabelProvider";
+import { LogFileService } from "../../log/LogFileService";
+import { LogFileBrowserFactory } from "../../log/LogFileBrowserFactory";
+import { LogFileTableFactory } from "../../log/table/LogFileTableFactory";
+import { LogFileLabelProvider } from "../../log/LogFileLabelProvider";
+import { LogFileTableCSSHandler } from "../../log/table/LogFileTableCSSHandler";
 
 export class UIModule implements IUIModule {
 
@@ -52,14 +57,21 @@ export class UIModule implements IUIModule {
 
         ServiceRegistry.registerServiceInstance(TranslationFormService.getInstance());
         ServiceRegistry.registerServiceInstance(NotificationService.getInstance());
+        ServiceRegistry.registerServiceInstance(LogFileService.getInstance());
+
         FactoryService.getInstance().registerFactory(
             KIXObjectType.NOTIFICATION, NotificationBrowserFactory.getInstance()
         );
+        FactoryService.getInstance().registerFactory(KIXObjectType.LOG_FILE, LogFileBrowserFactory.getInstance());
+
+        TableFactoryService.getInstance().registerFactory(new LogFileTableFactory());
+        TableCSSHandlerRegistry.getInstance().registerCSSHandler(KIXObjectType.LOG_FILE, new LogFileTableCSSHandler());
 
         TableFactoryService.getInstance().registerFactory(new TranslationPatternTableFactory());
         TableFactoryService.getInstance().registerFactory(new TranslationLanguageTableFactory());
         TableFactoryService.getInstance().registerFactory(new NotifiactionTableFactory());
 
+        LabelService.getInstance().registerLabelProvider(new LogFileLabelProvider());
         LabelService.getInstance().registerLabelProvider(new TranslationPatternLabelProvider());
         LabelService.getInstance().registerLabelProvider(new TranslationLanguageLabelProvider());
         LabelService.getInstance().registerLabelProvider(new NotificationLabelProvider());

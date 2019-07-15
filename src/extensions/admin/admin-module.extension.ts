@@ -14,6 +14,13 @@ class Extension implements IAdminModuleExtension {
                             new UIComponentPermission('system/config', [CRUD.CREATE], true),
                             new UIComponentPermission('system/config/*', [CRUD.UPDATE], true)
                         ]
+                    ),
+                    new AdminModule(
+                        null, 'logs', 'Translatable#Logs', null,
+                        KIXObjectType.LOG_FILE, 'system-admin-logs',
+                        [
+                            new UIComponentPermission('system/logs', [CRUD.READ])
+                        ]
                     )
                 ]
             ),

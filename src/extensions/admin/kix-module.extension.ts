@@ -29,6 +29,7 @@ class Extension implements IKIXModuleExtension {
             []
         ),
         new UIComponent('system-admin-sysconfig', 'system/admin/system-admin-sysconfig', []),
+        new UIComponent('system-admin-logs', 'admin/system-admin-logs', []),
         new UIComponent('i18n-admin-translations', 'i18n/admin/i18n-admin-translations', []),
         new UIComponent('new-translation-dialog', 'i18n/admin/dialogs/new-translation-dialog', []),
         new UIComponent('edit-translation-dialog', 'i18n/admin/dialogs/edit-translation-dialog', []),
