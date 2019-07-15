@@ -58,6 +58,8 @@ export enum KIXObjectType {
 
     LINK_TYPE = 'LINK_TYPE',
 
+    LOG_FILE = 'LogFile',
+
     MAIL_ACCOUNT = 'MailAccount',
 
     MAIL_ACCOUNT_TYPE = 'MailAccountType',

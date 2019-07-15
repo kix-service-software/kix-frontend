@@ -1,5 +1,9 @@
 <if(state.row)>
-    <tr id=state.row.getRowId() style=("height: " + input.height) class=(state.show ? component.getRowClasses() : "")>
+    <tr
+        id=state.row.getRowId()
+        on-click("rowClicked")
+        style=("height: " + input.height)
+        class=(state.show ? component.getRowClasses() : "")>
         <if(state.show)>
             <if(input.selectionEnabled)>
                 <td.check>

@@ -158,6 +158,13 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         return stateClass;
     }
 
+    public rowClicked(): void {
+        EventService.getInstance().publish(
+            TableEvent.ROW_CLICKED,
+            new TableEventData(this.state.row.getTable().getTableId(), this.state.row.getRowId())
+        );
+    }
+
 }
 
 module.exports = Component;
