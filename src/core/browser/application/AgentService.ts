@@ -43,9 +43,20 @@ export class AgentService extends KIXObjectService<User> {
 
         const queuesParameter = parameter.find((p) => p[0] === PersonalSettingsProperty.MY_QUEUES);
         if (queuesParameter) {
-            queuesParameter[1] = Array.isArray(queuesParameter[1]) ? queuesParameter[1].join(',') : '';
+            queuesParameter[1] = Array.isArray(queuesParameter[1]) ? queuesParameter[1].join(',') : queuesParameter[1];
         }
 
         await AgentSocketClient.getInstance().setPreferences(parameter);
+    }
+
+    public async prepareFormFields(formId: string, forUpdate: boolean = false): Promise<Array<[string, any]>> {
+        const parameter = await super.prepareFormFields(formId, forUpdate);
+
+        const queuesParameter = parameter.find((p) => p[0] === PersonalSettingsProperty.MY_QUEUES);
+        if (queuesParameter) {
+            queuesParameter[1] = Array.isArray(queuesParameter[1]) ? queuesParameter[1].join(',') : queuesParameter[1];
+        }
+
+        return parameter;
     }
 }

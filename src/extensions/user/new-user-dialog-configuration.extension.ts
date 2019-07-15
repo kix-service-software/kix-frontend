@@ -2,7 +2,7 @@ import { IConfigurationExtension } from '../../core/extensions';
 import {
     ConfiguredWidget, FormField, KIXObjectType, Form, FormContext, FormFieldValue, FormFieldOption, UserProperty,
     FormFieldOptions, InputFieldTypes, ObjectReferenceOptions, ContextConfiguration, KIXObjectLoadingOptions,
-    FilterCriteria, FilterDataType, FilterType, RoleProperty, KIXObjectProperty
+    FilterCriteria, FilterDataType, FilterType, RoleProperty, KIXObjectProperty, PersonalSettingsProperty
 } from '../../core/model';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../core/services';
@@ -100,10 +100,18 @@ export class Extension implements IConfigurationExtension {
             const roleGroup = new FormGroup('Translatable#Role Assignment', [roleField]);
 
             const languageField = new FormField(
-                'Translatable#Language', UserProperty.USER_LANGUAGE, 'language-input',
-                false, 'Translatable#Select a language for the user.', null
+                'Translatable#Language', PersonalSettingsProperty.USER_LANGUAGE, 'language-input',
+                false, 'Translatable#Helptext_Admin_UserCreate_Preferences_UserLanguage', null
             );
-            const settingsGroup = new FormGroup('Translatable#Preferences', [languageField]);
+            const myQueuesField = new FormField(
+                'Translatable#My Queues', PersonalSettingsProperty.MY_QUEUES, 'object-reference-input',
+                false, 'Translatable#Helptext_Admin_UserCreate_Preferences_MyQueues', [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
+                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
+                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true)
+                ]
+            );
+            const settingsGroup = new FormGroup('Translatable#Preferences', [languageField, myQueuesField]);
 
             const form = new Form(
                 formId, 'Translatable#New Agent', [infoGroup, roleGroup, settingsGroup], KIXObjectType.ROLE

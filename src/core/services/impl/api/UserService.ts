@@ -4,7 +4,7 @@ import {
 } from '../../../model';
 import { KIXObjectService } from './KIXObjectService';
 import { LoggingService } from '../LoggingService';
-import { UserPreference, UserProperty, SetPreferenceOptions } from '../../../model/kix/user';
+import { UserPreference, UserProperty, SetPreferenceOptions, PersonalSettingsProperty } from '../../../model/kix/user';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { UserFactory } from '../../object-factories/UserFactory';
 import { UserPreferenceFactory } from '../../object-factories/UserPreferenceFactory';
@@ -73,17 +73,24 @@ export class UserService extends KIXObjectService {
         createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<string | number> {
         if (objectType === KIXObjectType.USER) {
-            const createParameter = parameter.filter((p) => p[0] !== UserProperty.USER_LANGUAGE);
-            const userLanguage = parameter.find((p) => p[0] === UserProperty.USER_LANGUAGE);
+            const preferences = [];
+
+            const createParameter = parameter.filter((p) =>
+                p[0] !== PersonalSettingsProperty.USER_LANGUAGE &&
+                p[0] !== PersonalSettingsProperty.MY_QUEUES
+            );
+
+            const userLanguage = parameter.find((p) => p[0] === PersonalSettingsProperty.USER_LANGUAGE);
             if (userLanguage) {
-                const preferences = [
-                    {
-                        ID: UserProperty.USER_LANGUAGE,
-                        Value: userLanguage[1]
-                    }
-                ];
-                createParameter.push([UserProperty.PREFERENCES, preferences]);
+                preferences.push({ ID: PersonalSettingsProperty.USER_LANGUAGE, Value: userLanguage[1] });
             }
+
+            const myQueues = parameter.find((p) => p[0] === PersonalSettingsProperty.MY_QUEUES);
+            if (myQueues) {
+                preferences.push({ ID: PersonalSettingsProperty.MY_QUEUES, Value: myQueues[1] });
+            }
+
+            createParameter.push([UserProperty.PREFERENCES, preferences]);
 
             const id = await super.executeUpdateOrCreateRequest(
                 token, clientRequestId, createParameter, this.RESOURCE_URI, this.objectType, 'UserID', true
@@ -140,9 +147,14 @@ export class UserService extends KIXObjectService {
             const roleIds = this.getParameterValue(parameter, UserProperty.ROLEIDS);
             await this.updateUserRoles(token, clientRequestId, roleIds, userId);
 
-            const userLanguage = parameter.find((p) => p[0] === UserProperty.USER_LANGUAGE);
+            const userLanguage = parameter.find((p) => p[0] === PersonalSettingsProperty.USER_LANGUAGE);
             if (userLanguage) {
                 await this.setPreferences(token, clientRequestId, [userLanguage], userId);
+            }
+
+            const myQueues = parameter.find((p) => p[0] === PersonalSettingsProperty.MY_QUEUES);
+            if (myQueues) {
+                await this.setPreferences(token, clientRequestId, [myQueues], userId);
             }
 
             return id;

@@ -8,7 +8,10 @@
         </if>
     </div>
     <div.value title=state.propertyDisplayText class=component.getValueClasses()>
-        <if(state.propertyDisplayText)>
+        <if(input.value)>
+            <${input.value}/>
+        </if>
+        <else-if(state.propertyDisplayText)>
             <link-target routingConfiguration=input.routingConfiguration objectId=input.objectId>
                 <@content>
                     <span>
@@ -17,6 +20,6 @@
                     <icon icon=state.propertyIcon/>
                 </@content>
             </link-target>
-        </if>
+        </else-if>
     </div>
 </div>
