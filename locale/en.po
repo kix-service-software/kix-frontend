@@ -1045,6 +1045,18 @@ msgstr ""
 msgid "Helptext_Admin_TextModuleEdit_Validity"
 msgstr ""
 
+msgid "Helptext_Admin_UserCreate_Preferences_MyQueues"
+msgstr ""
+
+msgid "Helptext_Admin_UserCreate_Preferences_UserLanguage"
+msgstr ""
+
+msgid "Helptext_Admin_UserEdit_Preferences_Language"
+msgstr ""
+
+msgid "Helptext_Admin_UserEdit_Preferences_MyQueues"
+msgstr ""
+
 msgid "Helptext_Organisations_ContactCreate_City"
 msgstr ""
 
@@ -2096,9 +2108,6 @@ msgid "Select a deplyoment state."
 msgstr ""
 
 msgid "Select a incident state."
-msgstr ""
-
-msgid "Select a language for the user."
 msgstr ""
 
 msgid "Select a language for this FAQ article."

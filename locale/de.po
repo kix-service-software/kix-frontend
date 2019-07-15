@@ -1069,6 +1069,26 @@ msgstr "Hilfetext_Admin_TextModuleEdit_Text"
 msgid "Helptext_Admin_TextModuleEdit_Validity"
 msgstr "Hilfetext_Admin_TextModuleEdit_Validity"
 
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_ParentQueue"
+msgid "Helptext_Admin_UserCreate_Preferences_MyQueues"
+msgstr "Hilfetext_Admin_QueueCreate_ParentQueue"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleCreate_Language"
+msgid "Helptext_Admin_UserCreate_Preferences_UserLanguage"
+msgstr "Hilfetext_Admin_TextModuleCreate_Language"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleCreate_Language"
+msgid "Helptext_Admin_UserEdit_Preferences_Language"
+msgstr "Hilfetext_Admin_TextModuleCreate_Language"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_ParentQueue"
+msgid "Helptext_Admin_UserEdit_Preferences_MyQueues"
+msgstr "Hilfetext_Admin_QueueEdit_ParentQueue"
+
 msgid "Helptext_Organisations_ContactCreate_City"
 msgstr "Hilfetext_Organisations_ContactCreate_City"
 
@@ -2162,9 +2182,6 @@ msgstr "Wählen Sie einen Verwendungsstatus."
 msgid "Select a incident state."
 msgstr "Wählen Sie einen Vorfallstatus."
 
-msgid "Select a language for the user."
-msgstr "Wählen Sie eine Sprache für den Nutzer."
-
 msgid "Select a language for this FAQ article."
 msgstr "Wählen Sie die Sprache des FAQ-Eintrages aus der Liste."
 
@@ -2759,6 +2776,9 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Select a language for the user."
+#~ msgstr "Wählen Sie eine Sprache für den Nutzer."
 
 #~ msgid ""
 #~ "Please select the language in which you want to use KIX. If not set, the "
