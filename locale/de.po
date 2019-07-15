@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-07-11 15:31+0000\n"
+"PO-Revision-Date: 2019-07-15 06:55+0000\n"
 "Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -454,8 +454,6 @@ msgstr "FAQ Artikel wird angelegt"
 msgid "Create Filter"
 msgstr "Filter wird angelegt"
 
-#, fuzzy
-#| msgid "Create Links."
 msgid "Create Links"
 msgstr "Verknüpfung wird angelegt"
 
@@ -768,10 +766,8 @@ msgstr "FAQ Bewertung"
 msgid "FAQ Search"
 msgstr "FAQ Suche"
 
-#, fuzzy
-#| msgid "Priorities"
 msgid "Favorites"
-msgstr "Prioritäten"
+msgstr "Favoriten"
 
 msgid "Fax"
 msgstr "Fax"
@@ -875,8 +871,6 @@ msgstr "Hilfetext_Admin_MailAccountCreate_IMAPFolder"
 msgid "Helptext_Admin_MailAccountCreate_Password"
 msgstr "Hilfetext_Admin_MailAccountCreate_Password"
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_Name"
 msgid "Helptext_Admin_MailAccountCreate_Type."
 msgstr "Hilfetext_Admin_MailAccountCreate_Type"
 
@@ -904,8 +898,6 @@ msgstr "Hilfetext_Admin_MailAccountEdit_IMAPFolder"
 msgid "Helptext_Admin_MailAccountEdit_Password"
 msgstr "Hilfetext_Admin_MailAccountEdit_Password"
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_Name"
 msgid "Helptext_Admin_MailAccountEdit_Type."
 msgstr "Hilfetext_Admin_MailAccountEdit_Type"
 
@@ -915,95 +907,59 @@ msgstr "Hilfetext_Admin_MailAccountEdit_UserName"
 msgid "Helptext_Admin_MailAccountEdit_Validity"
 msgstr "Hilfetext_Admin_MailAccountEdit_Validity"
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Comment"
 msgid "Helptext_Admin_MailFilterCreate_Comment"
-msgstr "Hilfetext_Admin_MailAccountCreate_Comment"
+msgstr "Hilfetext_Admin_MailFilterCreate_Comment"
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Comment"
 msgid "Helptext_Admin_MailFilterCreate_FilterConditions"
-msgstr "Hilfetext_Admin_MailAccountCreate_Comment"
+msgstr "Hilfetext_Admin_MailFilterCreate_FilterConditions"
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Name"
 msgid "Helptext_Admin_MailFilterCreate_Name"
-msgstr "Hilfetext_Admin_FAQCategoryCreate_Name"
+msgstr "Hilfetext_Admin_MailFilterCreate_Name"
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_AcceptKIXHeader"
 msgid "Helptext_Admin_MailFilterCreate_SetEmailHeaders"
-msgstr "Hilfetext_Admin_MailAccountCreate_AcceptKIXHeader"
+msgstr "Hilfetext_Admin_MailFilterCreate_SetEmailHeaders"
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Host"
 msgid "Helptext_Admin_MailFilterCreate_StopAfterMatch"
-msgstr "Hilfetext_Admin_MailAccountCreate_Host"
+msgstr "Hilfetext_Admin_MailFilterCreate_StopAfterMatch"
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Validity"
 msgid "Helptext_Admin_MailFilterCreate_Validity"
-msgstr "Hilfetext_Admin_MailAccountCreate_Validity"
+msgstr "Hilfetext_Admin_MailFilterCreate_Validity"
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Comment"
 msgid "Helptext_Admin_MailFilterEdit_Comment"
-msgstr "Hilfetext_Admin_MailAccountCreate_Comment"
+msgstr "Hilfetext_Admin_MailFilterEdit_Comment"
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Comment"
 msgid "Helptext_Admin_MailFilterEdit_FilterConditions"
-msgstr "Hilfetext_Admin_MailAccountCreate_Comment"
+msgstr "Hilfetext_Admin_MailFilterEdit_FilterConditions"
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Name"
 msgid "Helptext_Admin_MailFilterEdit_Name"
-msgstr "Hilfetext_Admin_FAQCategoryCreate_Name"
+msgstr "Hilfetext_Admin_MailFilterEdit_Name"
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_AcceptKIXHeader"
 msgid "Helptext_Admin_MailFilterEdit_SetEmailHeaders"
-msgstr "Hilfetext_Admin_MailAccountCreate_AcceptKIXHeader"
+msgstr "Hilfetext_Admin_MailFilterEdit_SetEmailHeaders"
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Host"
 msgid "Helptext_Admin_MailFilterEdit_StopAfterMatch"
-msgstr "Hilfetext_Admin_MailAccountCreate_Host"
+msgstr "Hilfetext_Admin_MailFilterEdit_StopAfterMatch"
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Validity"
 msgid "Helptext_Admin_MailFilterEdit_Validity"
-msgstr "Hilfetext_Admin_MailAccountCreate_Validity"
+msgstr "Hilfetext_Admin_MailFilterEdit_Validity"
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountEdit_AcceptKIXHeader"
 msgid "Helptext_Admin_MailFilter_FilterConditions_EmailHeader"
-msgstr "Hilfetext_Admin_MailAccountEdit_AcceptKIXHeader"
+msgstr "Hilfetext_Admin_MailFilter_FilterConditions_EmailHeader"
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountEdit_Host"
 msgid "Helptext_Admin_MailFilter_FilterConditions_Negate"
-msgstr "Hilfetext_Admin_MailAccountEdit_Host"
+msgstr "Hilfetext_Admin_MailFilter_FilterConditions_Negate"
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountEdit_Host"
 msgid "Helptext_Admin_MailFilter_FilterConditions_Pattern"
-msgstr "Hilfetext_Admin_MailAccountEdit_Host"
+msgstr "Hilfetext_Admin_MailFilter_FilterConditions_Pattern"
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_AcceptKIXHeader"
 msgid "Helptext_Admin_MailFilter_SetEmailHeader_EmailHeader"
-msgstr "Hilfetext_Admin_MailAccountCreate_AcceptKIXHeader"
+msgstr "Hilfetext_Admin_MailFilter_SetEmailHeader_EmailHeader"
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountEdit_AcceptKIXHeader"
 msgid "Helptext_Admin_MailFilter_SetEmailHeader_Value"
-msgstr "Hilfetext_Admin_MailAccountEdit_AcceptKIXHeader"
+msgstr "Hilfetext_Admin_MailFilter_SetEmailHeader_Value"
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Name"
 msgid "Helptext_Admin_MailFilter_Sidebar"
-msgstr "Hilfetext_Admin_FAQCategoryCreate_Name"
+msgstr "Hilfetext_Admin_MailFilter_Sidebar"
 
 msgid "Helptext_Admin_QueueCreate_Comment"
 msgstr "Hilfetext_Admin_QueueCreate_Comment"
@@ -1044,8 +1000,6 @@ msgstr "Hilfetext_Admin_QueueEdit_FollowUp"
 msgid "Helptext_Admin_QueueEdit_FollowUpTicketLock"
 msgstr "Hilfetext_Admin_QueueEdit_FollowUpTicketLock"
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_Icon."
 msgid "Helptext_Admin_QueueEdit_Icon."
 msgstr "Hilfetext_Admin_QueueEdit_Icon"
 
@@ -1055,8 +1009,6 @@ msgstr "Hilfetext_Admin_QueueEdit_Name"
 msgid "Helptext_Admin_QueueEdit_ParentQueue"
 msgstr "Hilfetext_Admin_QueueEdit_ParentQueue"
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_SenderAddress."
 msgid "Helptext_Admin_QueueEdit_SenderAddress."
 msgstr "Hilfetext_Admin_QueueEdit_SenderAddress"
 
@@ -1241,10 +1193,10 @@ msgid "Helptext_Organisations_OrganisationImport"
 msgstr "Hilfetext_Organisations_OrganisationImport"
 
 msgid "Helptext_PersonalSettings_MyQueues_Hint"
-msgstr ""
+msgstr "Hilfetext_PersonalSettings_MyQueues_Hint"
 
 msgid "Helptext_PersonalSettings_UserLanguage_Hint"
-msgstr ""
+msgstr "Hilfetext_PersonalSettings_UserLanguage_Hint"
 
 msgid "Helptext_Search_Contact"
 msgstr "Hilfetext_Search_Contact"
@@ -1614,10 +1566,8 @@ msgstr "Meine gesperrten Tickets"
 msgid "My locked tickets with new articles"
 msgstr "Meine gesperrten Tickets mit neuen Artikeln"
 
-#, fuzzy
-#| msgid "Queues"
 msgid "My Queues"
-msgstr "Queues"
+msgstr "Meine Queues"
 
 msgid "My Tickets"
 msgstr "Meine Tickets"
@@ -2299,10 +2249,8 @@ msgstr "Legen Sie ein Passwort für den Nutzer fest."
 msgid "Set Email Header"
 msgstr "E-Mail Header setzen"
 
-#, fuzzy
-#| msgid "Email Header"
 msgid "Set Email Headers"
-msgstr "E-Mail Header"
+msgstr "E-Mail Header setzen"
 
 msgid "Set the ci class as „valid“, „invalid (temporarily)“, or „invalid“."
 msgstr ""
