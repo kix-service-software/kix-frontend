@@ -3,7 +3,7 @@ import {
     WidgetConfiguration, ConfiguredWidget, WidgetSize, DataType,
     FilterCriteria, FilterDataType, FilterType, KIXObjectPropertyFilter,
     TableFilterCriteria, KIXObjectType, SortOrder, ContextConfiguration, CRUD,
-    TableWidgetSettings, KIXObjectLoadingOptions
+    TableWidgetSettings, KIXObjectLoadingOptions, SysConfigOption
 } from '../../core/model';
 import {
     SearchOperator, ToggleOptions, TableConfiguration, DefaultColumnConfiguration
@@ -12,6 +12,7 @@ import { HomeContext } from '../../core/browser/home';
 import { TicketProperty } from '../../core/model/';
 import { TicketChartConfiguration } from '../../core/browser/ticket';
 import { UIComponentPermission } from '../../core/model/UIComponentPermission';
+import { ConfigurationService, SysConfigService } from '../../core/services';
 
 export class DashboardModuleFactoryExtension implements IConfigurationExtension {
 
@@ -21,20 +22,47 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
 
-        const chartConfig1 = new TicketChartConfiguration(TicketProperty.PRIORITY_ID, {
-            type: 'bar',
-            data: {
-                labels: ["1 very low", "2 low", "3 normal", "4 high", "5 very high"],
-                datasets: [{
-                    data: [0, 3, 15, 25, 4],
-                }]
-            },
-            options: {
-                legend: {
-                    display: false
+        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+        const viewableStateTypes = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
+            serverConfig.BACKEND_API_TOKEN, '', KIXObjectType.SYS_CONFIG_OPTION, ['Ticket::ViewableStateType'],
+            null, null
+        );
+
+        const stateTypeFilterCriteria = new FilterCriteria(
+            'StateType', SearchOperator.IN, FilterDataType.STRING, FilterType.AND,
+            viewableStateTypes && viewableStateTypes.length ? viewableStateTypes[0].Value : []
+        );
+
+        const chartConfig1 = new TicketChartConfiguration(
+            TicketProperty.PRIORITY_ID,
+            {
+                type: 'bar',
+                options: {
+                    legend: {
+                        display: false
+                    }
+                },
+                data: {
+                    datasets: [
+                        {
+                            backgroundColor: [
+                                "rgb(91, 91, 91)",
+                                "rgb(4, 83, 125)",
+                                "rgb(0, 141, 210)",
+                                "rgb(129, 189, 223)",
+                                "rgb(160, 230, 200)",
+                                "rgb(130, 200, 38)",
+                                "rgb(0, 152, 70)",
+                                "rgb(227, 30, 36)",
+                                "rgb(239, 127, 26)",
+                                "rgb(254, 204, 0)"
+                            ]
+                        }
+                    ]
                 }
-            }
-        });
+            },
+            new KIXObjectLoadingOptions([stateTypeFilterCriteria])
+        );
         const chart1 = new ConfiguredWidget(
             '20180813-1-ticket-chart-widget',
             new WidgetConfiguration(
@@ -45,29 +73,38 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
             WidgetSize.SMALL
         );
 
-        const chartConfig2 = new TicketChartConfiguration(TicketProperty.STATE_ID, {
-            type: 'pie',
-            data: {
-                labels: ["new", "open", "pending", "escalated"],
-                datasets: [{
-                    label: "Ticket State",
-                    data: [20, 50, 32, 8],
-                    backgroundColor: [
-                        'rgba(0, 255, 0, 0.8)',
-                        'rgba(54, 162, 235, 0.8)',
-                        'rgba(255, 206, 86, 0.8)',
-                        'rgba(255, 0, 0, 0.8)'
-                    ],
-                    fill: true
-                }]
-            },
-            options: {
-                legend: {
-                    display: true,
-                    position: 'right'
+        const chartConfig2 = new TicketChartConfiguration(
+            TicketProperty.STATE_ID,
+            {
+                type: 'pie',
+                options: {
+                    legend: {
+                        display: true,
+                        position: 'right'
+                    }
+                },
+                data: {
+                    datasets: [
+                        {
+                            fill: true,
+                            backgroundColor: [
+                                "rgb(91, 91, 91)",
+                                "rgb(4, 83, 125)",
+                                "rgb(0, 141, 210)",
+                                "rgb(129, 189, 223)",
+                                "rgb(160, 230, 200)",
+                                "rgb(130, 200, 38)",
+                                "rgb(0, 152, 70)",
+                                "rgb(227, 30, 36)",
+                                "rgb(239, 127, 26)",
+                                "rgb(254, 204, 0)"
+                            ]
+                        }
+                    ]
                 }
-            }
-        });
+            },
+            new KIXObjectLoadingOptions([stateTypeFilterCriteria])
+        );
         const chart2 = new ConfiguredWidget(
             '20180813-2-ticket-chart-widget',
             new WidgetConfiguration(
@@ -78,23 +115,34 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
             WidgetSize.SMALL
         );
 
-        const chartConfig3 = new TicketChartConfiguration(TicketProperty.CREATE_TIME, {
-            type: 'line',
-            data: {
-                labels: ["7", "6", "5", "4", "3", "2", "1 (today)"],
-                datasets: [{
-                    data: [5, 25, 12, 3, 30, 16, 24],
-                    backgroundColor: [
-                        'rgba(255, 0, 0, 0.5)'
-                    ]
-                }]
+        const chartConfig3 = new TicketChartConfiguration(
+            TicketProperty.CREATED,
+            {
+                type: 'line',
+                options: {
+                    legend: {
+                        display: false
+                    }
+                },
+                data: {
+                    datasets: [{
+                        backgroundColor: [
+                            "rgb(91, 91, 91)",
+                            "rgb(4, 83, 125)",
+                            "rgb(0, 141, 210)",
+                            "rgb(129, 189, 223)",
+                            "rgb(160, 230, 200)",
+                            "rgb(130, 200, 38)",
+                            "rgb(0, 152, 70)",
+                            "rgb(227, 30, 36)",
+                            "rgb(239, 127, 26)",
+                            "rgb(254, 204, 0)"
+                        ]
+                    }]
+                },
             },
-            options: {
-                legend: {
-                    display: false
-                }
-            }
-        });
+            new KIXObjectLoadingOptions([stateTypeFilterCriteria])
+        );
         const chart3 = new ConfiguredWidget(
             '20180813-3-ticket-chart-widget',
             new WidgetConfiguration(

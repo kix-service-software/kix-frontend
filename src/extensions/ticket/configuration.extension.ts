@@ -80,10 +80,22 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
         const chartConfig1 = new TicketChartConfiguration(TicketProperty.PRIORITY_ID, {
             type: 'bar',
             data: {
-                labels: ["1 very low", "2 low", "3 normal", "4 high", "5 very high"],
-                datasets: [{
-                    data: [0, 3, 15, 25, 4],
-                }]
+                datasets: [
+                    {
+                        backgroundColor: [
+                            "rgb(91, 91, 91)",
+                            "rgb(4, 83, 125)",
+                            "rgb(0, 141, 210)",
+                            "rgb(129, 189, 223)",
+                            "rgb(160, 230, 200)",
+                            "rgb(130, 200, 38)",
+                            "rgb(0, 152, 70)",
+                            "rgb(227, 30, 36)",
+                            "rgb(239, 127, 26)",
+                            "rgb(254, 204, 0)"
+                        ]
+                    }
+                ]
             },
             options: {
                 legend: {
@@ -107,17 +119,16 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
                     data: [20, 50, 32, 8],
                     fill: true,
                     backgroundColor: [
-                        "rgba(255, 0, 0, 0.8)",
-                        "rgba(255, 0, 0, 0.6)",
-                        "rgba(255, 0, 0, 0.4)",
-                        "rgba(255, 0, 0, 0.2)",
-                        "rgba(0, 0, 255, 0.8)",
-                        "rgba(0, 0, 255, 0.6)",
-                        "rgba(0, 0, 255, 0.4)",
-                        "rgba(0, 0, 255, 0.2)",
-                        "rgba(0, 255, 0, 0.8)",
-                        "rgba(0, 255, 0, 0.6)",
-                        "rgba(0, 255, 0, 0.4)"
+                        "rgb(91, 91, 91)",
+                        "rgb(4, 83, 125)",
+                        "rgb(0, 141, 210)",
+                        "rgb(129, 189, 223)",
+                        "rgb(160, 230, 200)",
+                        "rgb(130, 200, 38)",
+                        "rgb(0, 152, 70)",
+                        "rgb(227, 30, 36)",
+                        "rgb(239, 127, 26)",
+                        "rgb(254, 204, 0)"
                     ]
                 }]
             },
@@ -147,7 +158,16 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
                 datasets: [{
                     data: [5, 25, 12, 3, 30, 16, 24],
                     backgroundColor: [
-                        'rgba(255, 0, 0, 0.5)'
+                        "rgb(91, 91, 91)",
+                        "rgb(4, 83, 125)",
+                        "rgb(0, 141, 210)",
+                        "rgb(129, 189, 223)",
+                        "rgb(160, 230, 200)",
+                        "rgb(130, 200, 38)",
+                        "rgb(0, 152, 70)",
+                        "rgb(227, 30, 36)",
+                        "rgb(239, 127, 26)",
+                        "rgb(254, 204, 0)"
                     ]
                 }]
             },

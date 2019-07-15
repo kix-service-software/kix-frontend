@@ -1,8 +1,8 @@
 import { ComponentState } from './ComponentState';
 import { ContextService } from "../../../../core/browser/context";
 import { TicketChartConfiguration, TicketChartFactory } from '../../../../core/browser/ticket';
-import { IdService } from '../../../../core/browser';
-import { KIXObject, Ticket } from '../../../../core/model';
+import { IdService, KIXObjectService } from '../../../../core/browser';
+import { KIXObject, Ticket, KIXObjectType } from '../../../../core/model';
 
 class Component {
 
@@ -18,7 +18,7 @@ class Component {
         this.state.instanceId = input.instanceId;
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
         const currentContext = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = currentContext
             ? currentContext.getWidgetConfiguration(this.state.instanceId)
@@ -26,6 +26,8 @@ class Component {
 
         this.state.title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : 'Tickets';
         this.ticketChartConfiguration = this.state.widgetConfiguration.settings;
+
+        this.initChartConfig();
 
         if (this.state.widgetConfiguration.contextDependent) {
             this.ticketChartConfiguration.chartConfiguration.data.labels = [];
@@ -42,7 +44,27 @@ class Component {
 
             this.contextFilteredObjectListChanged(currentContext.getFilteredObjectList());
         } else {
-            this.state.chartConfig = this.ticketChartConfiguration.chartConfiguration;
+            const tickets = await KIXObjectService.loadObjects<Ticket>(
+                KIXObjectType.TICKET, null, this.ticketChartConfiguration.loadingOptions
+            );
+            this.contextFilteredObjectListChanged(tickets);
+        }
+    }
+
+    private initChartConfig(): void {
+        if (!this.ticketChartConfiguration.chartConfiguration.data) {
+            this.ticketChartConfiguration.chartConfiguration.data = {
+                datasets: [{ data: [] }],
+                labels: []
+            };
+        }
+
+        if (!this.ticketChartConfiguration.chartConfiguration.data.datasets) {
+            this.ticketChartConfiguration.chartConfiguration.data.datasets = [{ data: [] }];
+        }
+
+        if (!this.ticketChartConfiguration.chartConfiguration.data.labels) {
+            this.ticketChartConfiguration.chartConfiguration.data.labels = [];
         }
     }
 
