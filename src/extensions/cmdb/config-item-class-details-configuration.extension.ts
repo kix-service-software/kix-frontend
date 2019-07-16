@@ -78,7 +78,7 @@ export class Extension implements IConfigurationExtension {
             ['config-item-class-details-tab-widget'], [tabLane, ciClassInfoWidget],
             ['ci-class-versions-widget'], [ciClassVersionsWidget],
             ['cmdb-admin-ci-class-create'],
-            ['cmdb-admin-ci-class-edit']
+            ['cmdb-admin-ci-class-edit', , 'print-action']
         );
     }
 

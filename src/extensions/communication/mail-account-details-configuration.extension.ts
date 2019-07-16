@@ -46,7 +46,7 @@ export class Extension implements IConfigurationExtension {
             ['mail-account-details-tab-widget'], [tabLane, mailAccountInfoLane],
             [], [],
             ['mail-account-create'],
-            ['mail-account-edit']
+            ['mail-account-edit', 'print-action']
         );
     }
 

@@ -26,7 +26,7 @@ export class Extension implements IConfigurationExtension {
 
         // actions
         const generalActions = ['i18n-admin-translation-create'];
-        const translationActions = ['i18n-admin-translation-edit'];
+        const translationActions = ['i18n-admin-translation-edit', 'print-action'];
 
         const languagesListWidget =
             new ConfiguredWidget("20190125104012-languages-list", new WidgetConfiguration(

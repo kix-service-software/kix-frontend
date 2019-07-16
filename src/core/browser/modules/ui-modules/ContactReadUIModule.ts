@@ -8,7 +8,7 @@ import {
 } from '../../../../core/model';
 import {
     ContactTableFactory, ContactLabelProvider, ContactService, ContactBrowserFactory, ContactDetailsContext,
-    ContactSearchContext, ContactSearchAction, ContactCreateOrganisationAction, ContactPrintAction,
+    ContactSearchContext, ContactSearchAction, ContactCreateOrganisationAction,
     ContactCreateTicketAction, ContactCreateCIAction, ContactSearchDefinition, ContactFormService,
     ContactPlaceholderHandler
 } from '../../../../core/browser/contact';
@@ -74,7 +74,6 @@ export class UIModule implements IUIModule {
     private registerActions(): void {
         ActionFactory.getInstance().registerAction('contact-search-action', ContactSearchAction);
         ActionFactory.getInstance().registerAction('contact-create-contact-action', ContactCreateOrganisationAction);
-        ActionFactory.getInstance().registerAction('contact-print-action', ContactPrintAction);
         ActionFactory.getInstance().registerAction('contact-create-ci-action', ContactCreateCIAction);
         ActionFactory.getInstance().registerAction('contact-create-ticket-action', ContactCreateTicketAction);
         ActionFactory.getInstance().registerAction(

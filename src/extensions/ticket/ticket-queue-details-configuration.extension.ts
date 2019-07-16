@@ -33,7 +33,7 @@ export class Extension implements IConfigurationExtension {
             [tabLane, signatureWidget, ticketQueueInfoWidget],
             [], [],
             ['ticket-admin-queue-create'],
-            ['ticket-admin-queue-edit']
+            ['ticket-admin-queue-edit', 'print-action']
         );
     }
 

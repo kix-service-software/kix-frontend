@@ -49,7 +49,7 @@ export class Extension implements IConfigurationExtension {
             [tabLane, assignedPermissionsWidget, assignedUsersWidget, userRoleInfoWidget],
             [], [],
             ['user-admin-role-create-action'],
-            ['user-admin-role-edit-action']
+            ['user-admin-role-edit-action', 'print-action']
         );
     }
 

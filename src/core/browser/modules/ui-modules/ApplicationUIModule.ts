@@ -4,11 +4,10 @@ import {
     PersonalSettingsDialogContext, PersonalSettingsFormService
 } from '../../../../core/browser';
 import { SearchService } from '../../../../core/browser/search';
-import { CSVExportAction, BulkAction, ImportAction } from '../../../../core/browser/actions';
+import { CSVExportAction, BulkAction, ImportAction, PrintAction } from '../../../../core/browser/actions';
 import {
     ContextDescriptor, KIXObjectType, ContextType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration
 } from '../../../../core/model';
-import { SearchResultPrintAction } from '../../../../core/browser/search/actions';
 import { SearchContext } from '../../../../core/browser/search/context/SearchContext';
 import { SwitchColumnOrderAction } from '../../../../core/browser/table/actions';
 import { DialogService } from '../../../../core/browser/components/dialog';
@@ -74,7 +73,7 @@ export class UIModule implements IUIModule {
 
         ActionFactory.getInstance().registerAction('csv-export-action', CSVExportAction);
         ActionFactory.getInstance().registerAction('bulk-action', BulkAction);
-        ActionFactory.getInstance().registerAction('search-result-print-action', SearchResultPrintAction);
+        ActionFactory.getInstance().registerAction('print-action', PrintAction);
         ActionFactory.getInstance().registerAction('switch-column-order-action', SwitchColumnOrderAction);
         ActionFactory.getInstance().registerAction('import-action', ImportAction);
 

@@ -24,7 +24,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
         const organisationInfoLane = new ConfiguredWidget('organisation-information-lane',
             new WidgetConfiguration(
                 'object-information-widget', 'Translatable#Organisation Information', [
-                    'organisation-edit-action', 'organisation-print-action'
+                    'organisation-edit-action'
                 ], new ObjectinformationWidgetSettings(KIXObjectType.ORGANISATION, [
                     OrganisationProperty.NAME,
                     OrganisationProperty.NUMBER,
@@ -48,7 +48,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
         const assignedContactsLane = new ConfiguredWidget('organisation-assigned-contacts-widget',
             new WidgetConfiguration(
                 'organisation-assigned-contacts-widget', 'Translatable#Assigned Contacts', [
-                    'organisation-edit-action', 'organisation-print-action'
+                    'organisation-edit-action'
                 ],
                 new TableConfiguration(
                     KIXObjectType.CONTACT,
@@ -96,7 +96,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
         const assignedTicketsLane = new ConfiguredWidget('organisation-assigned-tickets-widget',
             new WidgetConfiguration(
                 'organisation-assigned-tickets-widget', 'Translatable#Overview Tickets', [
-                    'organisation-create-ticket-action', 'organisation-print-action'
+                    'organisation-create-ticket-action'
                 ], {},
                 false, true, null, false
             ),
@@ -115,7 +115,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
 
         const organisationActions = [
             'organisation-edit-action', 'organisation-create-contact-action', 'organisation-create-ticket-action',
-            'organisation-create-ci-action', 'organisation-print-action'
+            'organisation-create-ci-action', 'print-action'
         ];
 
         return new ContextConfiguration(

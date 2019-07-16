@@ -27,7 +27,7 @@ export class Extension implements IConfigurationExtension {
             [tabLane, ticketTypesInfoWidget],
             [], [],
             ['ticket-admin-type-create'],
-            ['ticket-admin-type-duplication', 'ticket-admin-type-edit', 'ticket-admin-type-delete']
+            ['ticket-admin-type-duplication', 'ticket-admin-type-edit', 'ticket-admin-type-delete', 'print-action']
         );
     }
 

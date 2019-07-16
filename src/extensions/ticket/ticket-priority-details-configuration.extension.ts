@@ -26,7 +26,10 @@ export class Extension implements IConfigurationExtension {
             ['ticket-priority-details-tab-widget'], [tabLane, priorityDetailsWidget],
             [], [],
             ['ticket-admin-priority-create'],
-            ['ticket-admin-priority-duplication', 'ticket-admin-priority-edit', 'ticket-admin-priority-delete']
+            [
+                'ticket-admin-priority-duplication', 'ticket-admin-priority-edit',
+                'ticket-admin-priority-delete', 'print-action'
+            ]
         );
     }
 

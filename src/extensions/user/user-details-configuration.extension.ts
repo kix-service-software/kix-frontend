@@ -38,7 +38,7 @@ export class Extension implements IConfigurationExtension {
             [tabLane, assignedRolesWidget, personalSettingsWidget, userInfoWidget],
             [], [],
             ['user-admin-user-create-action'],
-            ['user-admin-user-edit-action']
+            ['user-admin-user-edit-action', 'print-action']
         );
     }
 

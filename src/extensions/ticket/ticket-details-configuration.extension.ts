@@ -25,20 +25,20 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
         const ticketInfoLane =
             new ConfiguredWidget('ticket-information-lane', new WidgetConfiguration(
                 'ticket-info-widget', 'Translatable#Ticket Information',
-                ['ticket-print-action', 'ticket-edit-action'], {},
+                ['ticket-edit-action'], {},
                 false, true, null, false)
             );
 
         const ticketHistoryLane =
             new ConfiguredWidget('ticket-history-lane', new WidgetConfiguration(
-                'ticket-history-widget', 'Translatable#History', ['ticket-print-action'],
+                'ticket-history-widget', 'Translatable#History', [],
                 null, true, true, null, false),
                 [new UIComponentPermission('tickets/*/history', [CRUD.READ])]
             );
         const descriptionLane =
             new ConfiguredWidget('ticket-description-lane', new WidgetConfiguration(
                 'ticket-description-widget', 'Translatable#Description & Comments',
-                ['ticket-print-action', 'article-edit-action', 'article-maximize-action'], {},
+                ['article-edit-action', 'article-maximize-action'], {},
                 false, true, null, false),
                 [new UIComponentPermission('tickets/*/articles', [CRUD.READ])]
             );
@@ -46,7 +46,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
         const linkedObjectsLane =
             new ConfiguredWidget('ticket-linked-objects-lane', new WidgetConfiguration(
                 'linked-objects-widget', 'Translatable#Linked Objects',
-                ['ticket-print-action', 'linked-objects-edit-action'],
+                ['linked-objects-edit-action'],
                 {
                     linkedObjectTypes: [
                         ['Tickets', KIXObjectType.TICKET],
@@ -132,7 +132,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
         const ticketActions = [
             'ticket-edit-action', 'article-new-action', 'ticket-merge-action', 'linked-objects-edit-action',
             'ticket-lock-action', 'ticket-watch-action', 'ticket-spam-action',
-            'ticket-print-action',
+            'print-action',
         ];
 
         // Overlays

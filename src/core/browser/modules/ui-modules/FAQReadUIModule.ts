@@ -7,7 +7,7 @@ import {
 } from '../../../../core/model';
 import {
     FAQArticleTableFactory, FAQArticleHistoryTableFactory, FAQLabelProvider, FAQArticleHistoryLabelProvider,
-    FAQService, FAQArticleSearchContext, FAQArticleVoteAction, FAQArticlePrintAction,
+    FAQService, FAQArticleSearchContext, FAQArticleVoteAction,
     FAQArticleBrowserFactory, FAQArticleAttachmentBrowserFactory, FAQArticleSearchDefinition, FAQArticleFormService,
     FAQCategoryLabelProvider
 } from '../../../../core/browser/faq';
@@ -91,7 +91,6 @@ export class UIModule implements IUIModule {
     }
 
     private registerActions(): void {
-        ActionFactory.getInstance().registerAction('faq-article-print-action', FAQArticlePrintAction);
         ActionFactory.getInstance().registerAction('faq-article-vote-action', FAQArticleVoteAction);
     }
 

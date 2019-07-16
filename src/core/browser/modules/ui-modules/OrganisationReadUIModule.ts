@@ -10,8 +10,8 @@ import { DialogService } from '../../../../core/browser/components/dialog';
 import {
     OrganisationFormService, OrganisationTableFactory, OrganisationLabelProvider, OrganisationService,
     OrganisationBrowserFactory, OrganisationSearchDefinition, OrganisationSearchContext,
-    OrganisationDetailsContext, OrganisationSearchAction,
-    OrganisationPrintAction, OrganisationCreateCIAction, OrganisationCreateTicketAction, OrganisationPlaceholderHandler
+    OrganisationDetailsContext, OrganisationSearchAction, OrganisationCreateCIAction,
+    OrganisationCreateTicketAction, OrganisationPlaceholderHandler
 } from '../../../../core/browser/organisation';
 import { KIXObjectSearchService } from '../../../../core/browser/kix/search/KIXObjectSearchService';
 import { IUIModule } from '../../application/IUIModule';
@@ -70,7 +70,6 @@ export class UIModule implements IUIModule {
 
     private registerActions(): void {
         ActionFactory.getInstance().registerAction('organisation-search-action', OrganisationSearchAction);
-        ActionFactory.getInstance().registerAction('organisation-print-action', OrganisationPrintAction);
         ActionFactory.getInstance().registerAction('organisation-create-ci-action', OrganisationCreateCIAction);
         ActionFactory.getInstance().registerAction('organisation-create-ticket-action', OrganisationCreateTicketAction);
     }

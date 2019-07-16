@@ -22,7 +22,7 @@ export class Extension implements IConfigurationExtension {
             new ConfiguredWidget('config-item-info-lane',
                 new WidgetConfiguration(
                     'config-item-info-widget', 'Translatable#Config Item Information',
-                    ['config-item-edit-action', 'config-item-print-action'],
+                    ['config-item-edit-action'],
                     {}, false, true, null, false
                 ),
                 [new UIComponentPermission('cmdb/configitems', [CRUD.READ])]
@@ -31,7 +31,7 @@ export class Extension implements IConfigurationExtension {
         const configItemHistoryLane =
             new ConfiguredWidget("config-item-history-widget",
                 new WidgetConfiguration(
-                    "config-item-history-widget", "Translatable#History", ['config-item-print-action'],
+                    "config-item-history-widget", "Translatable#History", [],
                     null, true, true, null, false
                 ),
                 [new UIComponentPermission('cmdb/configitems/*/history', [CRUD.READ])]
@@ -41,7 +41,7 @@ export class Extension implements IConfigurationExtension {
             new ConfiguredWidget('config-item-linked-objects-widget',
                 new WidgetConfiguration(
                     'linked-objects-widget', 'Translatable#Linked Objects',
-                    ['linked-objects-edit-action', 'config-item-print-action'],
+                    ['linked-objects-edit-action'],
                     {
                         linkedObjectTypes: [
                             ["Config Items", KIXObjectType.CONFIG_ITEM],
@@ -58,7 +58,7 @@ export class Extension implements IConfigurationExtension {
             new ConfiguredWidget('config-item-graph-widget',
                 new WidgetConfiguration(
                     'config-item-graph-widget', 'Translatable#Link Graph',
-                    ['config-item-print-action'],
+                    [],
                     null,
                     true, true, null, false
                 ),
@@ -89,7 +89,7 @@ export class Extension implements IConfigurationExtension {
         const actions = ['config-item-create-action'];
         const configItemActions = [
             'ticket-create-action', 'config-item-version-compare-action',
-            'config-item-edit-action', 'linked-objects-edit-action'
+            'config-item-edit-action', 'linked-objects-edit-action', 'print-action'
         ];
 
         const configItemVersionLane = new ConfiguredWidget('config-item-version-widget',
