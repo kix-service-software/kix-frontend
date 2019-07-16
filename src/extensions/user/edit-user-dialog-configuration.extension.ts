@@ -108,7 +108,16 @@ export class Extension implements IConfigurationExtension {
                 false, 'Translatable#Helptext_Admin_UserEdit_Preferences_MyQueues', [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
                     new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
-                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true)
+                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                )
+                            ]
+                        ))
                 ]
             );
             const settingsGroup = new FormGroup('Translatable#Preferences', [languageField, myQueuesField]);

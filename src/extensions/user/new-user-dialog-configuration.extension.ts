@@ -101,14 +101,23 @@ export class Extension implements IConfigurationExtension {
 
             const languageField = new FormField(
                 'Translatable#Language', PersonalSettingsProperty.USER_LANGUAGE, 'language-input',
-                false, 'Translatable#Helptext_Admin_UserCreate_Preferences_UserLanguage', null
+                false, 'Translatable#Helptext_Admin_UserCreate_Preferences_MyQueues', null
             );
             const myQueuesField = new FormField(
                 'Translatable#My Queues', PersonalSettingsProperty.MY_QUEUES, 'object-reference-input',
                 false, 'Translatable#Helptext_Admin_UserCreate_Preferences_MyQueues', [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
                     new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
-                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true)
+                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                )
+                            ]
+                        ))
                 ]
             );
             const settingsGroup = new FormGroup('Translatable#Preferences', [languageField, myQueuesField]);
