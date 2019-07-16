@@ -1,8 +1,9 @@
 import {
-    Organisation, KIXObjectLoadingOptions, KIXObjectType, OrganisationProperty, TicketStats
+    Organisation, KIXObjectLoadingOptions, KIXObjectType, OrganisationProperty
 } from "../../../model";
 import { ITable, IRowObject, TableValue } from "../../table";
 import { TableContentProvider } from "../../table/TableContentProvider";
+import { TicketStats } from "../../../model/kix/organisation/TicketStats";
 
 export class OrganisationTableContentProvider extends TableContentProvider<Organisation> {
 

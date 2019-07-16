@@ -1,6 +1,7 @@
-import { Contact, KIXObjectLoadingOptions, KIXObjectType, ContactProperty, TicketStats } from "../../../model";
+import { Contact, KIXObjectLoadingOptions, KIXObjectType, ContactProperty } from "../../../model";
 import { ITable, IRowObject, TableValue } from "../../table";
 import { TableContentProvider } from "../../table/TableContentProvider";
+import { TicketStats } from "../../../model/kix/organisation/TicketStats";
 
 export class ContactTableContentProvider extends TableContentProvider<Contact> {
 

@@ -26,6 +26,8 @@ export enum SysConfigKey {
 
     CONFIG_LEVEL = 'ConfigLevel',
 
-    POSTMASTER_X_HEADER = 'PostmasterX-Header'
+    POSTMASTER_X_HEADER = 'PostmasterX-Header',
+
+    TICKET_VIEWABLE_STATE_TYPE = 'Ticket::ViewableStateType'
 
 }

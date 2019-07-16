@@ -1,5 +1,6 @@
 import {
-    Queue, KIXObjectType, KIXObjectLoadingOptions, FilterCriteria, FilterDataType, FilterType, TicketProperty, KIXObject
+    KIXObjectType, KIXObjectLoadingOptions, FilterCriteria, FilterDataType,
+    FilterType, TicketProperty, KIXObject, SysConfigOption, SysConfigKey
 } from "../../../model";
 import { Context } from '../../../model/components/context/Context';
 import { KIXObjectService } from "../../kix";
@@ -27,9 +28,18 @@ export class TicketContext extends Context {
     }
 
     private async loadTickets(): Promise<void> {
-        const loadingOptions = new KIXObjectLoadingOptions([
-            new FilterCriteria('StateType', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'),
-        ], null, 1000, ['EscalationTime', 'Watchers']);
+        const viewableStateTypes = await KIXObjectService.loadObjects<SysConfigOption>(
+            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_VIEWABLE_STATE_TYPE]
+        );
+
+        const stateTypeFilterCriteria = new FilterCriteria(
+            'StateType', SearchOperator.IN, FilterDataType.STRING, FilterType.AND,
+            viewableStateTypes && viewableStateTypes.length ? viewableStateTypes[0].Value : []
+        );
+
+        const loadingOptions = new KIXObjectLoadingOptions(
+            [stateTypeFilterCriteria], null, 1000, ['Watchers']
+        );
 
         if (this.queueId) {
             const queueFilter = new FilterCriteria(

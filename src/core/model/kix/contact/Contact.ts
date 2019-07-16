@@ -1,6 +1,7 @@
 import { KIXObject } from "../KIXObject";
 import { KIXObjectType } from "..";
-import { TicketStats, Ticket } from "../ticket";
+import { Ticket } from "../ticket";
+import { TicketStats } from "../organisation/TicketStats";
 
 export class Contact extends KIXObject<Contact> {
 
