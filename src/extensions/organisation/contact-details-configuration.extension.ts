@@ -26,7 +26,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
         const contactInfoLane =
             new ConfiguredWidget('contact-information-lane', new WidgetConfiguration(
                 'object-information-widget', 'Translatable#Contact Information', [
-                    'contact-edit-action', 'contact-print-action'
+                    'contact-edit-action'
                 ], new ObjectinformationWidgetSettings(KIXObjectType.CONTACT, [
                     ContactProperty.TITLE,
                     ContactProperty.LASTNAME,
@@ -54,7 +54,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
         const assignedOrganisationsLane = new ConfiguredWidget('contact-assigned-organisations-widget',
             new WidgetConfiguration(
                 'contact-assigned-organisations-widget', 'Translatable#Assigned Organisations', [
-                    'contact-edit-action', 'contact-print-action'
+                    'contact-edit-action'
                 ], new TableConfiguration(KIXObjectType.ORGANISATION,
                     new KIXObjectLoadingOptions(null, null, null, [OrganisationProperty.TICKET_STATS], null),
                     null,
@@ -96,7 +96,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
         const assignedTicketsLane = new ConfiguredWidget('contact-assigned-tickets-widget',
             new WidgetConfiguration(
                 'contact-assigned-tickets-widget', 'Translatable#Overview Tickets', [
-                    'contact-create-ticket-action', 'contact-print-action'
+                    'contact-create-ticket-action'
                 ], {},
                 false, true, null, false
             ),
@@ -113,7 +113,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
 
         const contactActions = [
             'contact-edit-action', 'contact-create-organisation-action', 'contact-create-ticket-action',
-            'contact-create-ci-action', 'contact-print-action'
+            'contact-create-ci-action', 'print-action'
         ];
 
         return new ContextConfiguration(

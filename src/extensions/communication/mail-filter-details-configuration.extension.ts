@@ -73,7 +73,7 @@ export class Extension implements IConfigurationExtension {
             lanes, laneWidgets,
             [], [],
             ['mail-filter-create'],
-            ['mail-filter-edit']
+            ['mail-filter-edit', 'print-action']
         );
     }
 

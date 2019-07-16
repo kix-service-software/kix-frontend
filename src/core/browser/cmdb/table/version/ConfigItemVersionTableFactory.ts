@@ -52,7 +52,7 @@ export class ConfigItemVersionTableFactory extends TableFactory {
         if (defaultToggle) {
             tableConfiguration.toggle = true;
             tableConfiguration.toggleOptions = new ToggleOptions('config-item-version-details', 'version', [
-                'config-item-version-maximize-action', 'config-item-print-action'
+                'config-item-version-maximize-action'
             ], true);
         }
 

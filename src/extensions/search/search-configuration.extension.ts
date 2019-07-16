@@ -23,14 +23,14 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
         const explorerWidgets: Array<ConfiguredWidget<any>> = [searchResultExplorer];
 
         const searchResultListWidget =
-            new ConfiguredWidget("201800709-search-result-list-widget", new WidgetConfiguration(
+            new ConfiguredWidget("search-result-list-widget", new WidgetConfiguration(
                 "search-result-list-widget", "Hit List", [
-                    'csv-export-action', 'bulk-action'
+                    'csv-export-action', 'bulk-action', 'print-action'
                 ], {},
                 false, true, null, true)
             );
 
-        const content: string[] = ['201800709-search-result-list-widget'];
+        const content: string[] = ['search-result-list-widget'];
         const contentWidgets = [searchResultListWidget];
 
         return new ContextConfiguration(

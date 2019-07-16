@@ -16,7 +16,7 @@ import {
     TicketHistoryTableFactory, TicketTableCSSHandler, TicketBrowserFactory, TicketHistoryBrowserFactory,
     ArticleBrowserFactory, TicketTypeBrowserFactory, TicketPriorityBrowserFactory, TicketStateBrowserFactory,
     TicketStateTypeBrowserFactory, ArticleTableCSSHandler, QueueBrowserFactory, FollowUpTypeBrowserFactory,
-    TicketTemplateBrowserFactory, ArticleZipAttachmentDownloadAction, TicketPrintAction, TicketSearchAction,
+    TicketTemplateBrowserFactory, ArticleZipAttachmentDownloadAction, TicketSearchAction,
     TicketWatchAction, ShowUserTicketsAction, TicketLockAction, TicketContext, TicketDetailsContext,
     TicketSearchContext, TicketListContext
 } from "../../ticket";
@@ -107,7 +107,6 @@ export class UIModule implements IUIModule {
     private registerTicketActions(): void {
         ActionFactory.getInstance()
             .registerAction('article-attachment-zip-download', ArticleZipAttachmentDownloadAction);
-        ActionFactory.getInstance().registerAction('ticket-print-action', TicketPrintAction);
         ActionFactory.getInstance().registerAction('ticket-search-action', TicketSearchAction);
         ActionFactory.getInstance().registerAction('show-user-tickets', ShowUserTicketsAction);
         ActionFactory.getInstance().registerAction('ticket-watch-action', TicketWatchAction);

@@ -9,7 +9,7 @@ import {
     ConfigItemHistoryTableFactory, ConfigItemLabelProvider, ConfigItemClassLabelProvider,
     ConfigItemHistoryLabelProvider, ConfigItemVersionLabelProvider, ConfigItemClassDefinitionLabelProvider,
     ConfigItemVersionCompareLabelProvider, ConfigItemSearchDefinition, CMDBContext, ConfigItemDetailsContext,
-    ConfigItemSearchContext, CompareConfigItemVersionDialogContext, ConfigItemPrintAction,
+    ConfigItemSearchContext, CompareConfigItemVersionDialogContext,
     ConfigItemVersionCompareAction, ConfigItemFormService, ConfigItemHistoryBrowserFactory
 } from "../../../../core/browser/cmdb";
 import {
@@ -112,7 +112,6 @@ export class UIModule implements IUIModule {
     }
 
     private registerActions(): void {
-        ActionFactory.getInstance().registerAction('config-item-print-action', ConfigItemPrintAction);
         ActionFactory.getInstance().registerAction(
             'config-item-version-compare-action', ConfigItemVersionCompareAction
         );

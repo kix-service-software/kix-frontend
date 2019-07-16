@@ -22,7 +22,7 @@ export class Extension implements IConfigurationExtension {
             new ConfiguredWidget('faq-article-info-lane',
                 new WidgetConfiguration(
                     'faq-article-info-widget', 'Translatable#FAQ Information',
-                    ['faq-article-edit-action', 'faq-article-print-action'],
+                    ['faq-article-edit-action'],
                     {}, false, true, null, false
                 )
             );
@@ -30,7 +30,7 @@ export class Extension implements IConfigurationExtension {
             new ConfiguredWidget('faq-article-linked-objects-widget',
                 new WidgetConfiguration(
                     'linked-objects-widget', 'Translatable#Linked Objects',
-                    ['linked-objects-edit-action', 'faq-article-print-action'],
+                    ['linked-objects-edit-action'],
                     {
                         linkedObjectTypes: [
                             ["Tickets", KIXObjectType.TICKET],
@@ -46,7 +46,7 @@ export class Extension implements IConfigurationExtension {
         const faqHistoryLane =
             new ConfiguredWidget('faq-article-history-widget',
                 new WidgetConfiguration(
-                    'faq-article-history-widget', 'Translatable#History', ['faq-article-print-action'], {},
+                    'faq-article-history-widget', 'Translatable#History', [], {},
                     true, true, null, false
                 ),
                 [new UIComponentPermission('faq/articles/*/history', [CRUD.READ])]
@@ -56,7 +56,7 @@ export class Extension implements IConfigurationExtension {
             new ConfiguredWidget('20181017-faq-article-content-widget',
                 new WidgetConfiguration(
                     'faq-article-content-widget', 'Translatable#FAQ Article',
-                    ['faq-article-vote-action', 'faq-article-edit-action', 'faq-article-print-action'],
+                    ['faq-article-vote-action', 'faq-article-edit-action'],
                     {},
                     false, true, null, false
                 )
@@ -64,8 +64,7 @@ export class Extension implements IConfigurationExtension {
 
         const actions = ['faq-article-create-action'];
         const faqActions = [
-            'linked-objects-edit-action', 'faq-article-delete-action',
-            'faq-article-print-action', 'faq-article-edit-action'
+            'linked-objects-edit-action', 'faq-article-delete-action', 'faq-article-edit-action', 'print-action'
         ];
 
         return new ContextConfiguration(

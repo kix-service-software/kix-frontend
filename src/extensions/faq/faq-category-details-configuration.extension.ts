@@ -23,7 +23,7 @@ export class Extension implements IConfigurationExtension {
             );
 
         const actions = ['faq-admin-category-create-action'];
-        const faqActions = ['faq-admin-category-edit-action'];
+        const faqActions = ['faq-admin-category-edit-action', 'print-action'];
 
         return new ContextConfiguration(
             this.getModuleId(),

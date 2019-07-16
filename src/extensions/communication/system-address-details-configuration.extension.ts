@@ -38,7 +38,7 @@ export class Extension implements IConfigurationExtension {
             [tabLane, systemAddressAssignedQueuesWidget, systemAddressInfoWidget],
             [], [],
             ['system-address-create'],
-            ['system-address-edit']
+            ['system-address-edit', 'print-action']
         );
     }
 
