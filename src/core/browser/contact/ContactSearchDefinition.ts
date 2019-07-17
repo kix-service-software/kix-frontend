@@ -20,43 +20,39 @@ export class ContactSearchDefinition extends SearchDefinition {
     }
 
     public async getProperties(): Promise<Array<[string, string]>> {
-        return [
+        const properties: Array<[string, string]> = [
             [SearchProperty.FULLTEXT, null],
             [ContactProperty.FIRSTNAME, null],
             [ContactProperty.LASTNAME, null],
             [ContactProperty.EMAIL, null],
             [ContactProperty.LOGIN, null],
-            [ContactProperty.PRIMARY_ORGANISATION_ID, null],
             [ContactProperty.COUNTRY, null],
             [ContactProperty.STREET, null],
             [ContactProperty.ZIP, null],
             [ContactProperty.CITY, null],
             [ContactProperty.FAX, null],
             [ContactProperty.PHONE, null],
-            [ContactProperty.MOBILE, null],
+            [ContactProperty.MOBILE, null]
         ];
+
+        if (await this.checkReadPermissions('organisations')) {
+            properties.push([ContactProperty.PRIMARY_ORGANISATION_ID, 'Translatable#Assigned Organsiation']);
+        }
+
+        if (await this.checkReadPermissions('system/valid')) {
+            properties.push([KIXObjectProperty.VALID_ID, null]);
+        }
+
+        return properties;
     }
 
     public async getOperations(property: string): Promise<SearchOperator[]> {
         let operations: SearchOperator[] = [];
 
-        const stringOperators = [
-            SearchOperator.EQUALS,
-            SearchOperator.STARTS_WITH,
-            SearchOperator.ENDS_WITH,
-            SearchOperator.CONTAINS,
-            SearchOperator.LIKE
-        ];
-        const numberOperators = [
-            SearchOperator.EQUALS,
-            SearchOperator.IN
-        ];
-
-        const properties = await this.getProperties();
         if (this.isDropDown(property)) {
-            operations = numberOperators;
+            operations = [SearchOperator.IN];
         } else {
-            operations = stringOperators;
+            operations = this.getStringOperators();
         }
 
         return operations;
@@ -73,7 +69,8 @@ export class ContactSearchDefinition extends SearchDefinition {
     }
 
     private isDropDown(property: string): boolean {
-        return property === KIXObjectProperty.VALID_ID;
+        return property === KIXObjectProperty.VALID_ID
+            || property === ContactProperty.PRIMARY_ORGANISATION_ID;
     }
 
     public async getInputComponents(): Promise<Map<string, string>> {
@@ -83,12 +80,19 @@ export class ContactSearchDefinition extends SearchDefinition {
     }
 
     public async getSearchResultCategories(): Promise<SearchResultCategory> {
-        const organisationCategory = new SearchResultCategory('Translatable#Organisations', KIXObjectType.ORGANISATION);
-        const ticketCategory = new SearchResultCategory('Translatable#Tickets', KIXObjectType.TICKET);
+        const categories: SearchResultCategory[] = [];
 
-        return new SearchResultCategory(
-            'Translatable#Contacts', KIXObjectType.CONTACT, [organisationCategory, ticketCategory]
-        );
+        if (await this.checkReadPermissions('organisations')) {
+            categories.push(
+                new SearchResultCategory('Translatable#Organisations', KIXObjectType.ORGANISATION)
+            );
+        }
+        if (await this.checkReadPermissions('tickets')) {
+            categories.push(
+                new SearchResultCategory('Translatable#Tickets', KIXObjectType.TICKET)
+            );
+        }
+        return new SearchResultCategory('Translatable#Contacts', KIXObjectType.CONTACT, categories);
     }
 
     public async prepareFormFilterCriteria(criteria: FilterCriteria[]): Promise<FilterCriteria[]> {

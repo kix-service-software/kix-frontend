@@ -12,7 +12,7 @@ import { FAQCategoryFactory } from "../../object-factories/FAQCategoryFactory";
 
 export class FAQService extends KIXObjectService {
 
-    protected RESOURCE_URI: string = 'faq';
+    protected RESOURCE_URI: string = 'faq/articles';
 
     protected objectType: KIXObjectType = KIXObjectType.FAQ_ARTICLE;
 
@@ -36,7 +36,8 @@ export class FAQService extends KIXObjectService {
             || type === KIXObjectType.FAQ_ARTICLE_HISTORY
             || type === KIXObjectType.FAQ_CATEGORY
             || type === KIXObjectType.FAQ_VOTE
-            || type === KIXObjectType.FAQ_VISIBILITY;
+            || type === KIXObjectType.FAQ_VISIBILITY
+            || type === KIXObjectType.FAQ_KEYWORD;
     }
 
     public async loadObjects<T>(
@@ -47,8 +48,9 @@ export class FAQService extends KIXObjectService {
 
         switch (objectType) {
             case KIXObjectType.FAQ_ARTICLE:
-                const articlesUri = this.buildUri('faq', 'articles');
-                objects = await super.load(token, objectType, articlesUri, loadingOptions, objectIds, 'FAQArticle');
+                objects = await super.load(
+                    token, objectType, this.RESOURCE_URI, loadingOptions, objectIds, 'FAQArticle'
+                );
                 break;
             case KIXObjectType.FAQ_CATEGORY:
                 const categoryUri = this.buildUri('system', 'faq', 'categories');
@@ -61,6 +63,10 @@ export class FAQService extends KIXObjectService {
                 break;
             case KIXObjectType.FAQ_VISIBILITY:
                 objects = await this.getFAQVisibilities();
+                break;
+            case KIXObjectType.FAQ_KEYWORD:
+                const uri = this.buildUri(this.RESOURCE_URI, 'keywords');
+                objects = await super.load<string>(token, KIXObjectType.FAQ_KEYWORD, uri, null, null, 'FAQKeyword');
                 break;
             default:
         }
@@ -111,7 +117,7 @@ export class FAQService extends KIXObjectService {
     private async updateAttachments(
         token: string, clientRequestId: string, objectId: number, attachments: Attachment[]
     ): Promise<void> {
-        const uri = this.buildUri('faq', 'articles', objectId, 'attachments');
+        const uri = this.buildUri(this.RESOURCE_URI, objectId, 'attachments');
 
         const existingAttachments = await super.load<Attachment>(
             token, KIXObjectType.FAQ_ARTICLE_ATTACHMENT, uri, null, null, 'Attachment'
@@ -122,7 +128,7 @@ export class FAQService extends KIXObjectService {
             : [];
 
         for (const attachment of deletableAttachments) {
-            const attachmentUri = this.buildUri('faq', 'articles', objectId, 'attachments', attachment.ID);
+            const attachmentUri = this.buildUri(this.RESOURCE_URI, objectId, 'attachments', attachment.ID);
             await this.sendDeleteRequest(token, clientRequestId, attachmentUri, this.objectType);
         }
 
@@ -148,10 +154,9 @@ export class FAQService extends KIXObjectService {
         token: string, clientRequestId: string, parameter: Array<[string, any]>
     ): Promise<number> {
         const createParameter = parameter.filter((p) => p[0] !== FAQArticleProperty.LINK);
-        const uri = this.buildUri('faq', 'articles');
 
         const id = await super.executeUpdateOrCreateRequest(
-            token, clientRequestId, createParameter, uri, this.objectType, 'FAQArticleID', true
+            token, clientRequestId, createParameter, this.RESOURCE_URI, this.objectType, 'FAQArticleID', true
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
@@ -171,7 +176,7 @@ export class FAQService extends KIXObjectService {
             (p) => p[0] !== FAQArticleProperty.LINK && p[0] !== FAQArticleProperty.ATTACHMENTS
         );
 
-        const uri = this.buildUri('faq', 'articles', objectId);
+        const uri = this.buildUri(this.RESOURCE_URI, objectId);
         const id = await super.executeUpdateOrCreateRequest(
             token, clientRequestId, updateParameter, uri, this.objectType, 'FAQArticleID'
         );
@@ -203,7 +208,7 @@ export class FAQService extends KIXObjectService {
     private async createFAQVote(
         token: string, clientRequestId: string, parameter: Array<[string, any]>, createOptions: CreateFAQVoteOptions
     ): Promise<number> {
-        const uri = this.buildUri('faq', 'articles', createOptions.faqArticleId, 'votes');
+        const uri = this.buildUri(this.RESOURCE_URI, createOptions.faqArticleId, 'votes');
 
         const id = await super.executeUpdateOrCreateRequest(
             token, clientRequestId, parameter, uri, KIXObjectType.FAQ_VOTE, 'FAQVoteID', true
@@ -235,8 +240,7 @@ export class FAQService extends KIXObjectService {
     ): Promise<Attachment[]> {
         if (objectLoadingOptions) {
             const uri = this.buildUri(
-                'faq',
-                'articles', objectLoadingOptions.faqArticleId,
+                this.RESOURCE_URI, objectLoadingOptions.faqArticleId,
                 'attachments', objectLoadingOptions.attachmentId
             );
 

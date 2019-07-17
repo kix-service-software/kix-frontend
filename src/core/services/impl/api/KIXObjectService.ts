@@ -454,5 +454,4 @@ export abstract class KIXObjectService implements IKIXObjectService {
         query.filter = JSON.stringify(apiFilter);
         query.search = JSON.stringify(apiFilter);
     }
-
 }

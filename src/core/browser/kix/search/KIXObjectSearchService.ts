@@ -99,7 +99,8 @@ export class KIXObjectSearchService {
                     (c) => typeof c.value !== 'undefined' && c.value !== null && c.value !== ''
                 );
 
-                const preparedCriteria = await searchDefinition.prepareFormFilterCriteria(criteria);
+                let preparedCriteria = await searchDefinition.prepareFormFilterCriteria(criteria);
+                preparedCriteria = this.prepareCriteria(preparedCriteria);
                 const searchLoadingOptions = searchDefinition.getLoadingOptions(preparedCriteria);
 
                 objects = await this.doSearch(formInstance.getObjectType(), searchLoadingOptions);
@@ -260,6 +261,28 @@ export class KIXObjectSearchService {
 
     public getSearchDefinition(objectType: KIXObjectType): SearchDefinition {
         return this.searchDefinitions.find((sd) => sd.objectType === objectType);
+    }
+
+    private prepareCriteria(criteria: FilterCriteria[]): FilterCriteria[] {
+        const prepareCriteria: FilterCriteria[] = [];
+
+        criteria.forEach((c) => {
+            switch (c.operator) {
+                case SearchOperator.BETWEEN:
+                    if (c.value) {
+                        prepareCriteria.push(new FilterCriteria(
+                            c.property, SearchOperator.GREATER_THAN_OR_EQUAL, c.type, c.filterType, c.value[0]
+                        ));
+                        prepareCriteria.push(new FilterCriteria(
+                            c.property, SearchOperator.LESS_THAN_OR_EQUAL, c.type, c.filterType, c.value[1]
+                        ));
+                    }
+                    break;
+                default:
+                    prepareCriteria.push(c);
+            }
+        });
+        return prepareCriteria;
     }
 
 }

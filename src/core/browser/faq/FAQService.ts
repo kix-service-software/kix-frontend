@@ -1,7 +1,7 @@
 import { KIXObjectService, ServiceRegistry } from "../kix";
 import {
     KIXObjectType, FilterCriteria, FilterDataType, FilterType, TreeNode, ObjectIcon, DataType,
-    KIXObject, KIXObjectLoadingOptions, ValidObject
+    KIXObject, KIXObjectLoadingOptions, KIXObjectProperty
 } from "../../model";
 import { ContextService } from "../context";
 import {
@@ -38,7 +38,8 @@ export class FAQService extends KIXObjectService {
             || type === KIXObjectType.FAQ_ARTICLE_HISTORY
             || type === KIXObjectType.FAQ_CATEGORY
             || type === KIXObjectType.FAQ_VOTE
-            || type === KIXObjectType.FAQ_VISIBILITY;
+            || type === KIXObjectType.FAQ_VISIBILITY
+            || type === KIXObjectType.FAQ_KEYWORD;
     }
 
     public getLinkObjectName(): string {
@@ -72,7 +73,7 @@ export class FAQService extends KIXObjectService {
     public async getTreeNodes(
         property: string, showInvalid: boolean = false, filterIds?: Array<string | number>
     ): Promise<TreeNode[]> {
-        let values: TreeNode[] = [];
+        let nodes: TreeNode[] = [];
 
         const objectDefinitions = await KIXModulesSocketClient.getInstance().loadObjectDefinitions();
         let attributes: ObjectDefinitionSearchAttribute[] = [];
@@ -93,32 +94,39 @@ export class FAQService extends KIXObjectService {
                 const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(
                     KIXObjectType.FAQ_CATEGORY, null, loadingOptions
                 );
-                values = this.prepareCategoryTree(
+                nodes = this.prepareCategoryTree(
                     faqCategories, showInvalid,
                     filterIds ? filterIds.map((fid) => Number(fid)) : null
                 );
                 break;
             case FAQArticleProperty.VISIBILITY:
-                values = this.preparePossibleValueTree(attributes, FAQArticleProperty.VISIBILITY);
+                nodes = this.preparePossibleValueTree(attributes, FAQArticleProperty.VISIBILITY);
                 break;
             case FAQArticleProperty.APPROVED:
-                values = this.preparePossibleValueTree(attributes, FAQArticleProperty.APPROVED);
+                nodes = this.preparePossibleValueTree(attributes, FAQArticleProperty.APPROVED);
                 break;
             case FAQArticleProperty.LANGUAGE:
                 const translationService = ServiceRegistry.getServiceInstance<TranslationService>(
                     KIXObjectType.TRANSLATION_PATTERN
                 );
                 const languages = await translationService.getLanguages();
-                values = languages.map((l) => new TreeNode(l[0], l[1]));
+                nodes = languages.map((l) => new TreeNode(l[0], l[1]));
                 break;
-            case FAQArticleProperty.VALID_ID:
-                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
-                values = validObjects.map((vo) => new TreeNode(Number(vo.ID), vo.Name));
+            case FAQArticleProperty.KEYWORDS:
+                const keywords = await this.loadObjects(KIXObjectType.FAQ_KEYWORD, null);
+                nodes = keywords ? keywords.map((k) => new TreeNode(k, k.toString())) : [];
+                break;
+            case FAQArticleProperty.CREATED_BY:
+                nodes = await super.getTreeNodes(KIXObjectProperty.CREATE_BY, showInvalid, filterIds);
+                break;
+            case FAQArticleProperty.CHANGED_BY:
+                nodes = await super.getTreeNodes(KIXObjectProperty.CHANGE_BY, showInvalid, filterIds);
                 break;
             default:
+                nodes = await super.getTreeNodes(property, showInvalid, filterIds);
         }
 
-        return values;
+        return nodes;
     }
 
     private prepareCategoryTree(

@@ -1,5 +1,5 @@
 import {
-    KIXObjectType, KIXObjectLoadingOptions, FilterCriteria, FilterType, FilterDataType
+    KIXObjectType, KIXObjectLoadingOptions, FilterCriteria, FilterType, FilterDataType, KIXObjectProperty
 } from "../../../model";
 import { Context } from '../../../model/components/context/Context';
 import { FAQCategory, FAQArticleProperty } from "../../../model/kix/faq";
@@ -34,12 +34,21 @@ export class FAQContext extends Context {
     }
 
     private async loadFAQArticles(): Promise<void> {
-        const loadingOptions = new KIXObjectLoadingOptions(null, null, 1000, ['Votes'], ['Votes']);
+        const loadingOptions = new KIXObjectLoadingOptions(
+            [
+                new FilterCriteria(
+                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                    FilterType.AND, 1
+                )
+            ], null, 1000, [FAQArticleProperty.VOTES], [FAQArticleProperty.VOTES]
+        );
         if (this.faqCategory) {
-            loadingOptions.filter = [new FilterCriteria(
-                FAQArticleProperty.CATEGORY_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                FilterType.AND, this.faqCategory.ID
-            )];
+            loadingOptions.filter.push(
+                new FilterCriteria(
+                    FAQArticleProperty.CATEGORY_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                    FilterType.AND, this.faqCategory.ID
+                )
+            );
         }
 
         const timeout = window.setTimeout(() => {

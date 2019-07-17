@@ -234,7 +234,8 @@ export class TicketPlaceholderHandler implements IPlaceholderHandler {
     }
 
     private isKnownProperty(property: string): boolean {
-        const knownProperties = Object.keys(TicketProperty).map((p) => TicketProperty[p]);
+        let knownProperties = Object.keys(TicketProperty).map((p) => TicketProperty[p]);
+        knownProperties = [...knownProperties, ...Object.keys(KIXObjectProperty).map((p) => KIXObjectProperty[p])];
         return knownProperties.some((p) => p === property);
     }
 

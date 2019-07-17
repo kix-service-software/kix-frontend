@@ -202,7 +202,8 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
                         new TableConfiguration(KIXObjectType.TICKET,
                             new KIXObjectLoadingOptions(
                                 [new FilterCriteria(
-                                    'StateType', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'
+                                    TicketProperty.STATE_TYPE, SearchOperator.EQUALS, FilterDataType.STRING,
+                                    FilterType.AND, 'Open'
                                 )], null, 1000
                             ),
                             null, null,

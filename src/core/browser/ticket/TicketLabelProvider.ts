@@ -2,7 +2,7 @@ import { ILabelProvider } from "..";
 import {
     Ticket, TicketProperty, DateTimeUtil, ObjectIcon,
     Organisation, KIXObjectType, Contact, TicketPriority, TicketType,
-    TicketState, Queue, SysConfigOption, SysConfigKey, Sla, User, Service
+    TicketState, Queue, SysConfigOption, SysConfigKey, Sla, User, Service, KIXObjectProperty
 } from "../../model";
 import { KIXObjectService } from "../kix";
 import { SearchProperty } from "../SearchProperty";
@@ -131,8 +131,8 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 break;
             case TicketProperty.OWNER_ID:
             case TicketProperty.RESPONSIBLE_ID:
-            case TicketProperty.CREATED_BY:
-            case TicketProperty.CHANGED_BY:
+            case KIXObjectProperty.CREATE_BY:
+            case KIXObjectProperty.CHANGE_BY:
                 if (value) {
                     const users = await KIXObjectService.loadObjects<User>(
                         KIXObjectType.USER, [value], null, null, true
@@ -216,7 +216,6 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 displayValue = 'Translatable#Accounted time';
                 break;
             case TicketProperty.CREATED:
-            case TicketProperty.CREATE_TIME:
                 displayValue = 'Translatable#Created at';
                 break;
             case TicketProperty.LOCK_ID:
@@ -284,7 +283,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case TicketProperty.CLOSE_TIME:
                 displayValue = 'Translatable#Closing time';
                 break;
-            case TicketProperty.CHANGE_TIME:
+            case TicketProperty.CHANGED:
                 displayValue = 'Translatable#Changed at';
                 break;
             case TicketProperty.LAST_CHANGE_TIME:
@@ -300,7 +299,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 displayValue = 'Translatable#Linked as';
                 break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property);
         }
 
         if (displayValue) {

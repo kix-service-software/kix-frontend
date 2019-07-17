@@ -122,7 +122,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
     public async getTreeNodes(
         property: string, showInvalid?: boolean, filterIds?: Array<string | number>
     ): Promise<TreeNode[]> {
-        let values: TreeNode[] = [];
+        let nodes: TreeNode[] = [];
 
         switch (property) {
             case ConfigItemProperty.CLASS_ID:
@@ -130,7 +130,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                     KIXObjectType.CONFIG_ITEM_CLASS
                 );
                 classes = showInvalid ? classes : classes.filter((c) => c.ValidID === 1);
-                values = classes.map((c) => new TreeNode(c.ID, c.Name));
+                nodes = classes.map((c) => new TreeNode(c.ID, c.Name));
                 break;
             case ConfigItemProperty.CUR_INCI_STATE_ID:
             case ConfigItemProperty.CUR_DEPL_STATE_ID:
@@ -148,15 +148,16 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                 );
 
                 items.forEach(
-                    (i) => values.push(new TreeNode(
+                    (i) => nodes.push(new TreeNode(
                         i.ItemID, i.Name, new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, i.ItemID)
                     ))
                 );
                 break;
             default:
+                nodes = await super.getTreeNodes(property, showInvalid, filterIds);
         }
 
-        return values;
+        return nodes;
     }
 
     public determineDependendObjects(configItems: ConfigItem[], targetObjectType: KIXObjectType): string[] | number[] {

@@ -1,9 +1,11 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize,
-    FormField, Form, FormContext, KIXObjectType, TableWidgetSettings, CRUD, KIXObjectLoadingOptions
+    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, FormField, Form, FormContext, KIXObjectType,
+    TableWidgetSettings, CRUD, KIXObjectLoadingOptions, FilterCriteria, KIXObjectProperty, FilterDataType, FilterType
 } from '../../core/model';
-import { SearchProperty, TableConfiguration, TableHeaderHeight, TableRowHeight } from '../../core/browser';
+import {
+    SearchProperty, TableConfiguration, TableHeaderHeight, TableRowHeight, SearchOperator
+} from '../../core/browser';
 import { FAQArticleProperty } from '../../core/model/kix/faq';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../core/services';
@@ -25,8 +27,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                     new TableWidgetSettings(
                         KIXObjectType.FAQ_ARTICLE, null,
                         new TableConfiguration(
-                            KIXObjectType.FAQ_ARTICLE,
-                            new KIXObjectLoadingOptions(null, null, null, [FAQArticleProperty.VOTES]),
+                            KIXObjectType.FAQ_ARTICLE, null,
                             null, null, true, null, null, null,
                             TableHeaderHeight.LARGE, TableRowHeight.LARGE
                         )

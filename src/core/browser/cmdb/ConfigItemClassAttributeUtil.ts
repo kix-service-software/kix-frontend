@@ -7,11 +7,13 @@ import { KIXObjectService } from "../kix";
 export class ConfigItemClassAttributeUtil {
 
 
-    public static async getMergedClassAttributeIds(classIds?: number | number[]): Promise<Array<[string, string]>> {
+    public static async getMergedClassAttributeIds(
+        classIds?: number | number[]
+    ): Promise<Array<[string, string, string]>> {
         const attributes = await this.getAttributeDefinitions(classIds);
-        const result: Array<[string, string]> = [];
+        const result: Array<[string, string, string]> = [];
         attributes.filter((a) => a.Input.Type !== 'Attachment' && a.Searchable)
-            .forEach((a) => result.push([a.Key, a.Name]));
+            .forEach((a) => result.push([a.Key, a.Name, a.Input.Type]));
         return result;
     }
 

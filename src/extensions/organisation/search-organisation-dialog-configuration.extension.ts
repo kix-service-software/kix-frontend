@@ -1,7 +1,7 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
     ContextConfiguration, KIXObjectType,
-    FormContext, SearchForm, OrganisationProperty, WidgetSize, ConfiguredWidget, WidgetConfiguration, CRUD
+    FormContext, SearchForm, OrganisationProperty, ConfiguredWidget, WidgetConfiguration, CRUD
 } from '../../core/model';
 import { ConfigurationService } from '../../core/services';
 import { SearchProperty } from '../../core/browser';
@@ -41,7 +41,7 @@ export class ModuleExtension implements IConfigurationExtension {
                 KIXObjectType.ORGANISATION,
                 FormContext.SEARCH,
                 null,
-                [SearchProperty.FULLTEXT, OrganisationProperty.NAME, OrganisationProperty.ID]
+                [SearchProperty.FULLTEXT, OrganisationProperty.NAME, OrganisationProperty.NUMBER]
             );
             await configurationService.saveConfiguration(form.id, form);
         }

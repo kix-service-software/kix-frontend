@@ -34,11 +34,7 @@ export enum TicketProperty {
 
     CREATED_TIME_UNIX = 'CreateTimeUnix',
 
-    CREATED_BY = 'CreateBy',
-
     CHANGED = 'Changed',
-
-    CHANGED_BY = 'ChangeBy',
 
     ARCHIVE_FLAG = 'ArchiveFlag',
 
@@ -98,11 +94,7 @@ export enum TicketProperty {
 
     WATCH_USER_ID = 'WatchUserID',
 
-    CREATE_TIME = 'CreateTime',
-
     CLOSE_TIME = 'CloseTime',
-
-    CHANGE_TIME = 'ChangeTime',
 
     PENDING_TIME = 'PendingTime',
 

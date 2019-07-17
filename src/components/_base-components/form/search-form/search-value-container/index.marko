@@ -25,14 +25,35 @@
                         searchCallback=searchValue.autoCompleteCallback/>
                 </if>
                 <else-if(searchValue.isDate)>
-                    <input.input-style type="date" on-change("dateValueChanged", searchValue) value=searchValue.date/>
+                    <span.search-date-input class={
+                        between: searchValue.isBetweenDate
+                    }>
+                        <input.input-style type="date" on-change("dateValueChanged", searchValue) value=searchValue.date/>
+                        <if(searchValue.isBetweenDate)>
+                            <div.between-space>
+                                <translation-string pattern="Translatable#and"/>
+                            </div>
+                            <input.input-style type="date" on-change("betweenEndDateValueChanged", searchValue) value=searchValue.betweenEndDate/>
+                        </if>
+                    </span>
                 </else-if>
                 <else-if(searchValue.isDateTime)>
-                    <input.input-style type="date" on-change("dateValueChanged", searchValue) value=searchValue.date/>
-                    <input.input-style type="time" on-change("timeValueChanged", searchValue) value=searchValue.time/>
+                    <span.search-date-time-input class={
+                        between: searchValue.isBetweenDate
+                    }>
+                        <input.input-style type="date" on-change("dateValueChanged", searchValue) value=searchValue.date/>
+                        <input.input-style type="time" on-change("timeValueChanged", searchValue) value=searchValue.time/>
+                        <if(searchValue.isBetweenDate)>
+                            <div.between-space>
+                                <translation-string pattern="Translatable#and"/>
+                            </div>
+                            <input.input-style type="date" on-change("betweenEndDateValueChanged", searchValue) value=searchValue.betweenEndDate/>
+                            <input.input-style type="time" on-change("betweenEndTimeValueChanged", searchValue) value=searchValue.betweenEndTime/>
+                        </if>
+                    </span>
                 </else-if>
                 <else>
-                    <input.input-style value=searchValue.currentValue type="text" on-keydown("textValueChanged", searchValue)/>
+                    <input.input-style value=searchValue.currentValue type="text" on-input("textValueChanged", searchValue)/>
                 </else>
             </if>
         </div>
