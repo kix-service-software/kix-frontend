@@ -2,7 +2,7 @@ import { IConfigurationExtension } from '../../core/extensions';
 import {
     ConfiguredWidget, FormField, KIXObjectType, Form, FormContext, FormFieldValue, FormFieldOption, UserProperty,
     FormFieldOptions, InputFieldTypes, ObjectReferenceOptions, ContextConfiguration, KIXObjectLoadingOptions,
-    FilterCriteria, FilterDataType, FilterType, RoleProperty, KIXObjectProperty, PersonalSettingsProperty
+    FilterCriteria, FilterDataType, FilterType, RoleProperty, KIXObjectProperty, PersonalSettingsProperty, QueueProperty
 } from '../../core/model';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../core/services';
@@ -101,7 +101,7 @@ export class Extension implements IConfigurationExtension {
 
             const languageField = new FormField(
                 'Translatable#Language', PersonalSettingsProperty.USER_LANGUAGE, 'language-input',
-                false, 'Translatable#Helptext_Admin_UserCreate_Preferences_MyQueues', null
+                false, 'Translatable#Helptext_Admin_UserCreate_Preferences_UserLanguage', null
             );
             const myQueuesField = new FormField(
                 'Translatable#My Queues', PersonalSettingsProperty.MY_QUEUES, 'object-reference-input',
@@ -109,15 +109,17 @@ export class Extension implements IConfigurationExtension {
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
                     new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
+                    new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, true),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                         new KIXObjectLoadingOptions(
                             [
                                 new FilterCriteria(
-                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                                    FilterType.AND, 1
+                                    QueueProperty.PARENT_ID, SearchOperator.EQUALS,
+                                    FilterDataType.STRING, FilterType.AND, null
                                 )
-                            ]
-                        ))
+                            ], undefined, undefined, [QueueProperty.SUB_QUEUES], [QueueProperty.SUB_QUEUES]
+                        )
+                    )
                 ]
             );
             const settingsGroup = new FormGroup('Translatable#Preferences', [languageField, myQueuesField]);

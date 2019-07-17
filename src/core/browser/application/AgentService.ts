@@ -54,7 +54,7 @@ export class AgentService extends KIXObjectService<User> {
 
         const queuesParameter = parameter.find((p) => p[0] === PersonalSettingsProperty.MY_QUEUES);
         if (queuesParameter) {
-            queuesParameter[1] = Array.isArray(queuesParameter[1]) ? queuesParameter[1].join(',') : queuesParameter[1];
+            queuesParameter[1] = Array.isArray(queuesParameter[1]) ? queuesParameter[1].join(',') : '';
         }
 
         return parameter;

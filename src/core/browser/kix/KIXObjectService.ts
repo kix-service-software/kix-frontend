@@ -348,6 +348,28 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return objectType.toLocaleLowerCase();
     }
 
+    public static async prepareObjectTree(
+        objects: KIXObject[], showInvalid?: boolean, filterIds?: Array<string | number>
+    ): Promise<TreeNode[]> {
+        let nodes: TreeNode[] = [];
+        if (objects && !!objects.length) {
+            const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objects[0].KIXObjectType);
+            nodes = await service.prepareObjectTree(objects, showInvalid, filterIds);
+        }
+        return nodes;
+    }
+
+    public async prepareObjectTree(
+        objects: KIXObject[], showInvalid?: boolean, filterIds?: Array<string | number>
+    ): Promise<TreeNode[]> {
+        const nodes: TreeNode[] = [];
+        if (objects && !!objects.length) {
+            for (const o of objects) {
+                nodes.push(new TreeNode(o.ObjectId, await LabelService.getInstance().getText(o)));
+            }
+        }
+        return nodes;
+    }
     public static async search(
         objectType: KIXObjectType, searchValue: string, limit: number = 10
     ): Promise<KIXObject[]> {

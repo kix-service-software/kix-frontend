@@ -28,7 +28,7 @@ export class Component {
     private async loadQueues(context: TicketContext): Promise<void> {
         this.state.nodes = null;
         const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy();
-        this.state.nodes = await QueueService.getInstance().prepareQueueTree(queuesHierarchy, false, null, true);
+        this.state.nodes = await QueueService.getInstance().prepareObjectTree(queuesHierarchy, false, null, true);
         this.setActiveNode(context.queueId);
     }
 

@@ -44,4 +44,8 @@ export interface IKIXObjectService<T extends KIXObject = KIXObject> extends IKIX
 
     getObjectUrl(object?: KIXObject, objectId?: string | number): Promise<string>;
 
+    prepareObjectTree(
+        objects: KIXObject[], showInvalid?: boolean, filterIds?: Array<string | number>
+    ): Promise<TreeNode[]>;
+
 }
