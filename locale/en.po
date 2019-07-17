@@ -195,13 +195,16 @@ msgstr ""
 msgid "attributes to change:"
 msgstr ""
 
+msgid "Automation"
+msgstr ""
+
+msgid "Automation: Notifications"
+msgstr ""
+
 msgid "back to"
 msgstr ""
 
 msgid "Bcc"
-msgstr ""
-
-msgid "Benutzer"
 msgstr ""
 
 msgid ""
@@ -1687,6 +1690,9 @@ msgstr ""
 msgid "Notes"
 msgstr ""
 
+msgid "Notifications"
+msgstr ""
+
 msgid "not modified"
 msgstr "********"
 
@@ -2665,8 +2671,8 @@ msgid ""
 "You may attach images to this config item. Possible file types are *.png, *."
 "jpg, *.gif, *.bmp."
 msgstr ""
-"You may attach images to this asset. Possible file types are *.png, *.jpg, *"
-".gif, *.bmp."
+"You may attach images to this asset. Possible file types are *.png, *.jpg, *."
+"gif, *.bmp."
 
 msgid "Your rating"
 msgstr ""

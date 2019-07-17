@@ -209,14 +209,19 @@ msgstr "Attribute"
 msgid "attributes to change:"
 msgstr "zu ändernde Attribute:"
 
+#, fuzzy
+#| msgid "Account Information"
+msgid "Automation"
+msgstr "Konto Information"
+
+msgid "Automation: Notifications"
+msgstr ""
+
 msgid "back to"
 msgstr "Zurück zu"
 
 msgid "Bcc"
 msgstr "Bcc"
-
-msgid "Benutzer"
-msgstr "User"
 
 msgid ""
 "<b>-- KIX Professional Feature--</b><p>To use the text modules available in "
@@ -1737,6 +1742,11 @@ msgstr "Notiz"
 msgid "Notes"
 msgstr "Notizen"
 
+#, fuzzy
+#| msgid "Communication"
+msgid "Notifications"
+msgstr "Kommunikation"
+
 msgid "not modified"
 msgstr "********"
 
@@ -2269,8 +2279,8 @@ msgstr "E-Mail Header setzen"
 
 msgid "Set the ci class as „valid“, „invalid (temporarily)“, or „invalid“."
 msgstr ""
-"Setzen Sie die Asset Klasse als \"gültig\", \"ungültig (temporär)\" oder \""
-"ungültig\"."
+"Setzen Sie die Asset Klasse als \"gültig\", \"ungültig (temporär)\" oder "
+"\"ungültig\"."
 
 msgid "Set the FAQ article as „valid“, „invalid (temporarily)“, or „invalid“."
 msgstr ""
@@ -2776,6 +2786,9 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Benutzer"
+#~ msgstr "User"
 
 #~ msgid "Select a language for the user."
 #~ msgstr "Wählen Sie eine Sprache für den Nutzer."
