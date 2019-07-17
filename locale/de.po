@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-07-15 13:31+0000\n"
-"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
+"PO-Revision-Date: 2019-07-17 07:31+0000\n"
+"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -62,7 +62,7 @@ msgid "Add"
 msgstr "Hinzufügen"
 
 msgid "Add CI Class"
-msgstr "CI-Klasse Hinzufügen"
+msgstr "Asset Klasse Hinzufügen"
 
 msgid "add notes here"
 msgstr "Notizen hinzufügen"
@@ -133,8 +133,8 @@ msgid ""
 "A queue is a classification system for requests, comparable to folders in a "
 "file system."
 msgstr ""
-"Eine Queue ordnet Anfragen Bearbeitungsteams zu und klassifiziert die "
-"Anfrage. Queues sind vergleichbar mit Verzeichnissen im Dateisystem."
+"Ein Team ordnet Anfragen Bearbeitungsteams zu und klassifiziert die Anfrage. "
+"Teams sind vergleichbar mit Verzeichnissen im Dateisystem."
 
 msgid "Archived"
 msgstr "Archiviert"
@@ -171,7 +171,7 @@ msgid "Assigned Organisations"
 msgstr "Zugeordnete Kunden"
 
 msgid "Assigned Queues"
-msgstr "Zugeordnete Queues"
+msgstr "Zugeordnete Teams"
 
 msgid "Assigned Roles"
 msgstr "Zugeordnete Rollen"
@@ -183,7 +183,7 @@ msgid "Assign Links"
 msgstr "Verknüpfung zuordnen"
 
 msgid "Assign Team / Queue"
-msgstr "Zuordnung zu Team / Queue"
+msgstr "Zuordnung zu Team"
 
 msgid "Assign the roles for the user."
 msgstr "Dem Nutzer Rollen zuordnen."
@@ -293,22 +293,22 @@ msgstr ""
 "möglich."
 
 msgid "CI Class"
-msgstr "CI Klasse"
+msgstr "Asset Klasse"
 
 msgid "CI Class Definition"
-msgstr "CI Klassendefinition"
+msgstr "Asset Klassendefinition"
 
 msgid "CI Class Definitions"
-msgstr "CI Klassen Definitionen"
+msgstr "Asset Klassen Definitionen"
 
 msgid "CI Classes"
-msgstr "CI Klassen"
+msgstr "Asset Klassen"
 
 msgid "CI Class Information"
-msgstr "CI Klassen Informationen"
+msgstr "Asset Klassen Informationen"
 
 msgid "CI Class successfully created."
-msgstr "CI Klasse wurde erfolgreich angelegt."
+msgstr "Asset Klasse wurde erfolgreich angelegt."
 
 msgid "City"
 msgstr "Stadt"
@@ -329,13 +329,13 @@ msgid "Closing time"
 msgstr "Geschlossen am"
 
 msgid "CMDB"
-msgstr "CMDB"
+msgstr "Assets"
 
 msgid "CMDB: CI Classes"
-msgstr "CMDB: CI Klassen"
+msgstr "Assets: Asset Klassen"
 
 msgid "CMDB Explorer"
-msgstr "CMDB Explorer"
+msgstr "Asset Explorer"
 
 msgid ": (colon)"
 msgstr ": (Doppelpunkt)"
@@ -365,37 +365,37 @@ msgid "Compare Versions"
 msgstr "Versionen vergleichen"
 
 msgid "Config Item"
-msgstr "Config Item"
+msgstr "Asset"
 
 msgid "Config Item Class"
-msgstr "Config Item Klasse"
+msgstr "Asset Klasse"
 
 msgid "Config Item class. Can not be changed."
-msgstr "Klasse des Config Items. Nicht änderbar."
+msgstr "Klasse des Assets. Nicht änderbar."
 
 msgid "Config Item Data"
 msgstr "Stammdaten"
 
 msgid "Config Item History"
-msgstr "Config Item Historie"
+msgstr "Asset Historie"
 
 msgid "Config Item Information"
-msgstr "Config Item Informationen"
+msgstr "Asset Informationen"
 
 msgid "Config Items"
-msgstr "Config Items"
+msgstr "Assets"
 
 msgid "Config Items Count: {0}"
-msgstr "Anzahl Config Items: {0}"
+msgstr "Anzahl Assets: {0}"
 
 msgid "Config Item Search"
-msgstr "Config Item Suche"
+msgstr "Asset Suche"
 
 msgid "Config Item successfully created."
-msgstr "Config Item wurde erfolgreich angelegt."
+msgstr "Asset wurde erfolgreich angelegt."
 
 msgid "Config Item Version Compare"
-msgstr "Config Item Versionsvergleich"
+msgstr "Asset Versionsvergleich"
 
 msgid "Contact"
 msgstr "Kontakt"
@@ -434,10 +434,10 @@ msgid "Create Category"
 msgstr "Kategorie wird angelegt"
 
 msgid "Create CI Class"
-msgstr "CI Klasse wird angelegt"
+msgstr "Asset Klasse wird angelegt"
 
 msgid "Create Config Item"
-msgstr "Config Item wird angelegt"
+msgstr "Asset wird angelegt"
 
 msgid "Create Contact"
 msgstr "Kontakt wird angelegt"
@@ -464,7 +464,7 @@ msgid "Create Priority"
 msgstr "Priorität wird angelegt"
 
 msgid "Create Queue"
-msgstr "Queue wird angelegt"
+msgstr "Team wird angelegt"
 
 msgid "Create Role"
 msgstr "Rolle wird angelegt"
@@ -584,7 +584,7 @@ msgid "Edit Class"
 msgstr "Klasse bearbeiten"
 
 msgid "Edit Config Item"
-msgstr "Config Item bearbeiten"
+msgstr "Asset bearbeiten"
 
 msgid "Edit Contact"
 msgstr "Kontakt bearbeiten"
@@ -626,7 +626,7 @@ msgid "Edit Priority"
 msgstr "Priorität bearbeiten"
 
 msgid "Edit Queue"
-msgstr "Queue bearbeiten"
+msgstr "Team bearbeiten"
 
 msgid "Edit Role"
 msgstr "Rolle bearbeiten"
@@ -1303,7 +1303,7 @@ msgid "Incident State"
 msgstr "Vorfallstatus"
 
 msgid "Insert a comment for the CI class."
-msgstr "Geben Sie einen Kommentar zur CI Klasse ein."
+msgstr "Geben Sie einen Kommentar zur Asset Klasse ein."
 
 msgid "Insert a comment for the priority."
 msgstr "Geben Sie einen Kommentar für die Priorität ein."
@@ -1321,7 +1321,7 @@ msgid "Insert a comment for the user."
 msgstr "Geben Sie einen Kommentar zu dem Nutzer ein."
 
 msgid "Insert a config item class name."
-msgstr "Geben Sie einen Namen für die Config Item Klasse ein."
+msgstr "Geben Sie einen Namen für die Asset Klasse ein."
 
 msgid "Insert additional information for this FAQ article."
 msgstr "Geben Sie zusätzliche Informationen zu diesem FAQ Artikel an."
@@ -1333,7 +1333,7 @@ msgid "Insert a mobile number for the user."
 msgstr "Geben Sie eine Mobilfunknummer für den Nutzer ein."
 
 msgid "Insert a name for the Config Item."
-msgstr "Geben Sie einen Name für das Config Item ein."
+msgstr "Geben Sie einen Name für das Asset ein."
 
 msgid "Insert a name for the FAQ article."
 msgstr "Geben Sie einen Titel für den FAQ Artikel ein."
@@ -1382,7 +1382,7 @@ msgid "Insert the complete ticket title or a part of the title."
 msgstr "Geben Sie den Titel oder Teile eines Tickettitels ein."
 
 msgid "Insert the definition for the Config Item Class."
-msgstr "Geben Sie die Definition für die CI Klasse ein."
+msgstr "Geben Sie die Definition für die Asset Klasse ein."
 
 msgid "Insert the email address for the user."
 msgstr "Geben Sie eine E-Mail-Adresse für den Nutzer ein."
@@ -1461,7 +1461,7 @@ msgid "link {0}"
 msgstr "Link {0}"
 
 msgid "Link Config Item with"
-msgstr "Config Item verknüpfen mit"
+msgstr "Asset verknüpfen mit"
 
 msgid "Linked as"
 msgstr "Verknüpft als"
@@ -1490,20 +1490,20 @@ msgstr "Verknüpfungen werden entfernt."
 msgid ""
 "Link this config item to a ticket, an FAQ article or another config item."
 msgstr ""
-"Verknüpfen Sie dieses Config Item mit einem Ticket, einem FAQ Artikel oder "
-"einem anderen Config Item."
+"Verknüpfen Sie dieses Asset mit einem Ticket, einem FAQ Artikel oder einem "
+"anderen Asset."
 
 msgid ""
 "Link this FAQ article to a ticket, a config item or another FAQ article."
 msgstr ""
-"Verknüpfen Sie diesen FAQ Artikel mit einem Ticket, einem Config Item oder "
-"einem anderen FAQ Artikel."
+"Verknüpfen Sie diesen FAQ Artikel mit einem Ticket, einem Asset oder einem "
+"anderen FAQ Artikel."
 
 msgid ""
 "Link this ticket item to an config item, an FAQ article or another ticket."
 msgstr ""
-"Verknüpfen Sie dieses Ticket mit einem Config Item, einem FAQ Artikel oder "
-"einem anderen Ticket."
+"Verknüpfen Sie dieses Ticket mit einem Asset, einem FAQ Artikel oder einem "
+"anderen Ticket."
 
 msgid "Link Ticket with"
 msgstr "Ticket verknüpfen mit"
@@ -1585,7 +1585,7 @@ msgid "My locked tickets with new articles"
 msgstr "Meine gesperrten Tickets mit neuen Artikeln"
 
 msgid "My Queues"
-msgstr "Meine Queues"
+msgstr "Meine Teams"
 
 msgid "My Tickets"
 msgstr "Meine Tickets"
@@ -1624,7 +1624,7 @@ msgid "New Class"
 msgstr "Neue Klasse"
 
 msgid "New Config Item"
-msgstr "Neues Config Item"
+msgstr "Neues Asset"
 
 msgid "New Contact"
 msgstr "Neuer Kontakt"
@@ -1654,7 +1654,7 @@ msgid "New Priority"
 msgstr "Neue Priorität"
 
 msgid "New Queue"
-msgstr "Neue Queue"
+msgstr "Neues Team"
 
 msgid "New Role"
 msgstr "Neue Rolle"
@@ -1747,10 +1747,10 @@ msgid "Number"
 msgstr "Nummer"
 
 msgid "Number of Config Items"
-msgstr "Anzahl Config Items"
+msgstr "Anzahl Assets"
 
 msgid "Number of Config Items in critical incident state"
-msgstr "Anzahl Config Items mit kritischem Vorfallstatus"
+msgstr "Anzahl Assets mit kritischem Vorfallstatus"
 
 msgid "Number of ratings"
 msgstr "Anzahl Bewertungen"
@@ -1804,10 +1804,10 @@ msgid "Overall"
 msgstr "Gesamt"
 
 msgid "Overview Config Items"
-msgstr "Übersicht Config Items"
+msgstr "Übersicht Assets"
 
 msgid "Overview Config Items Deployment State"
-msgstr "Übersicht Config Items Verwendungsstatus"
+msgstr "Übersicht Assets Verwendungsstatus"
 
 msgid "Overview Contacts"
 msgstr "Übersicht Kontakte"
@@ -1842,7 +1842,7 @@ msgid "Parent Category"
 msgstr "Übergeordnete Kategorie"
 
 msgid "Parent Queue"
-msgstr "Übergeordnete Queue"
+msgstr "Übergeordnetes Team"
 
 msgid "Password"
 msgstr "Passwort"
@@ -1887,8 +1887,8 @@ msgstr "Geben Sie die Basiszeichenkette für die Übersetzung ein."
 
 msgid "Please select a config item class. The form will be completed then."
 msgstr ""
-"Bitte wählen Sie zunächst eine Config Item-Klasse aus der Liste. "
-"Anschließend wird das vollständige Eingabe-Formular geladen."
+"Bitte wählen Sie zunächst eine Asset-Klasse aus der Liste. Anschließend wird "
+"das vollständige Eingabe-Formular geladen."
 
 msgid "Please select a contact"
 msgstr "Wählen Sie bitte einen Kontakt."
@@ -1941,16 +1941,16 @@ msgid "public"
 msgstr "öffentlich"
 
 msgid "Queue"
-msgstr "Queue"
+msgstr "Team"
 
 msgid "Queue Information"
-msgstr "Queue Informationen"
+msgstr "Team Informationen"
 
 msgid "Queues"
-msgstr "Queues"
+msgstr "Teams"
 
 msgid "Queue successfully created."
-msgstr "Queue wurde erfolgreich angelegt."
+msgstr "Team wurde erfolgreich angelegt."
 
 msgid "Quick search (Tickets)"
 msgstr "Schnellsuche (Tickets)"
@@ -1980,7 +1980,7 @@ msgid "Refresh Page"
 msgstr "Seite neu laden"
 
 msgid "Relevant Config Items"
-msgstr "Relevante Config Items"
+msgstr "Relevante Assets"
 
 msgid "Reminder Tickets"
 msgstr "Erinnerungstickets"
@@ -2114,19 +2114,19 @@ msgstr ""
 "An, CC"
 
 msgid "Search for config items within the choosen class."
-msgstr "Suche nach Config Items innerhalb der gewählten Klasse."
+msgstr "Suche nach Assets innerhalb der gewählten Klasse."
 
 msgid "Search for config items with the same deployment state."
-msgstr "Suche nach Config Items mit diesem Verwendungsstatus."
+msgstr "Suche nach Assets mit diesem Verwendungsstatus."
 
 msgid "Search for config items with the same incident state."
-msgstr "Suche nach Config Items mit diesem Vorfallsstatus."
+msgstr "Suche nach Assets mit diesem Vorfallsstatus."
 
 msgid ""
 "Search for config items with the same name or part of the same name (min. 1 "
 "character)."
 msgstr ""
-"Suche nach Config Items mit diesem Name oder Teilen des Namens (mindestens 1 "
+"Suche nach Assets mit diesem Name oder Teilen des Namens (mindestens 1 "
 "Zeichen)."
 
 msgid "Search for FAQ articles within the choosen category."
@@ -2153,7 +2153,7 @@ msgid "Search for tickets with selected priority."
 msgstr "Suche nach Tickets mit der gewählten Priorität."
 
 msgid "Search for tickets with selected queue."
-msgstr "Suche nach Tickets mit der gewählten Queue."
+msgstr "Suche nach Tickets mit dem gewählten Team."
 
 msgid "Search for tickets with selected SLA."
 msgstr "Suche nach Tickets mit dem gewählten SLA."
@@ -2192,7 +2192,7 @@ msgid "Select an FAQ category."
 msgstr "Wählen Sie eine FAQ-Kategorie aus der Liste."
 
 msgid "Select an icon for this config item class."
-msgstr "Wählen Sie ein Icon für die CMDB Klasse."
+msgstr "Wählen Sie ein Icon für die Asset Klasse."
 
 msgid "Select an icon for this priority."
 msgstr "Wählen Sie ein Icon für die Priorität aus."
@@ -2213,7 +2213,7 @@ msgid "Select a value separator."
 msgstr "Wählen Sie einen Werttrenner."
 
 msgid "Select Config Item Class"
-msgstr "Wählen Sie eine Config Item Klasse aus der Liste."
+msgstr "Wählen Sie eine Asset Klasse aus der Liste."
 
 msgid "Selected Search Criteria"
 msgstr "Gewählte Suchkriterien"
@@ -2246,8 +2246,8 @@ msgid ""
 "Serach for config items with the same number or part of the same number "
 "(min. 1 character)."
 msgstr ""
-"Suche nach Config Items mit dieser Nummer oder Teilen der Nummer (mindestens "
-"1 Zeichen)."
+"Suche nach Assets mit dieser Nummer oder Teilen der Nummer (mindestens 1 "
+"Zeichen)."
 
 msgid "Service"
 msgstr "Service"
@@ -2269,8 +2269,8 @@ msgstr "E-Mail Header setzen"
 
 msgid "Set the ci class as „valid“, „invalid (temporarily)“, or „invalid“."
 msgstr ""
-"Setzen Sie die CI Klasse als \"gültig\", \"ungültig (temporär)\" oder "
-"\"ungültig\"."
+"Setzen Sie die Asset Klasse als \"gültig\", \"ungültig (temporär)\" oder \""
+"ungültig\"."
 
 msgid "Set the FAQ article as „valid“, „invalid (temporarily)“, or „invalid“."
 msgstr ""
@@ -2503,7 +2503,7 @@ msgid "Ticket: Priorities"
 msgstr "Ticket: Prioritäten"
 
 msgid "Ticket: Queues"
-msgstr "Ticket: Queues"
+msgstr "Ticket: Teams"
 
 msgid "Tickets"
 msgstr "Tickets"
@@ -2765,8 +2765,8 @@ msgid ""
 "You may attach images to this config item. Possible file types are *.png, *."
 "jpg, *.gif, *.bmp."
 msgstr ""
-"Möglichkeit der Anlage von Bilddateien für das Config Item. Erlaubte "
-"Dateiformate sind: *.png, *.jpg, *.gif, *.bmp."
+"Möglichkeit der Anlage von Bilddateien für das Asset. Erlaubte Dateiformate "
+"sind: *.png, *.jpg, *.gif, *.bmp."
 
 msgid "Your rating"
 msgstr "Ihre Bewertung"
