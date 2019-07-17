@@ -14,38 +14,31 @@ export class OrganisationSearchDefinition extends SearchDefinition {
     }
 
     public async getProperties(): Promise<Array<[string, string]>> {
-        return [
+        const properties: Array<[string, string]> = [
             [SearchProperty.FULLTEXT, null],
             [OrganisationProperty.NAME, null],
             [OrganisationProperty.NUMBER, null],
             [OrganisationProperty.CITY, null],
             [OrganisationProperty.COUNTRY, null],
-            [OrganisationProperty.NUMBER, null],
             [OrganisationProperty.STREET, null],
             [OrganisationProperty.URL, null],
             [OrganisationProperty.ZIP, null]
         ];
+
+        if (await this.checkReadPermissions('system/valid')) {
+            properties.push([KIXObjectProperty.VALID_ID, null]);
+        }
+
+        return properties;
     }
 
     public async getOperations(property: string): Promise<SearchOperator[]> {
         let operations: SearchOperator[] = [];
 
-        const stringOperators = [
-            SearchOperator.EQUALS,
-            SearchOperator.STARTS_WITH,
-            SearchOperator.ENDS_WITH,
-            SearchOperator.CONTAINS,
-            SearchOperator.LIKE
-        ];
-        const numberOperators = [
-            SearchOperator.EQUALS,
-            SearchOperator.IN
-        ];
-
         if (this.isDropDown(property)) {
-            operations = numberOperators;
+            operations = [SearchOperator.IN];
         } else {
-            operations = stringOperators;
+            operations = this.getStringOperators();
         }
 
         return operations;
@@ -70,12 +63,20 @@ export class OrganisationSearchDefinition extends SearchDefinition {
     }
 
     public async getSearchResultCategories(): Promise<SearchResultCategory> {
-        const contactCategory = new SearchResultCategory('Translatable#Contacts', KIXObjectType.CONTACT);
-        const ticketCategory = new SearchResultCategory('Translatable#Tickets', KIXObjectType.TICKET);
+        const categories: SearchResultCategory[] = [];
 
-        return new SearchResultCategory(
-            'Translatable#Organisations', KIXObjectType.ORGANISATION, [contactCategory, ticketCategory]
-        );
+        if (await this.checkReadPermissions('contacts')) {
+            categories.push(
+                new SearchResultCategory('Translatable#Contacts', KIXObjectType.CONTACT)
+            );
+        }
+        if (await this.checkReadPermissions('tickets')) {
+            categories.push(
+                new SearchResultCategory('Translatable#Tickets', KIXObjectType.TICKET)
+            );
+        }
+
+        return new SearchResultCategory('Translatable#Organisations', KIXObjectType.ORGANISATION, categories);
     }
 
     public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {

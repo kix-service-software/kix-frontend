@@ -8,7 +8,7 @@ import {
     Article, Attachment, ArticleProperty, FilterCriteria, TicketProperty,
     KIXObjectType, FilterType, User, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions, CreateTicketArticleOptions, CreateTicketWatcherOptions,
-    KIXObjectSpecificDeleteOptions, DeleteTicketWatcherOptions, Error, Queue, Contact, Channel
+    KIXObjectSpecificDeleteOptions, DeleteTicketWatcherOptions, Error, Queue, Contact, Channel, KIXObjectProperty
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
@@ -374,7 +374,12 @@ export class TicketService extends KIXObjectService {
         const user = await UserService.getInstance().getUserByToken(token);
 
         const andFilter = filter.filter(
-            (f) => f.filterType === FilterType.AND && f.property !== 'StateType'
+            (f) => f.filterType === FilterType.AND
+                && f.property !== TicketProperty.STATE_TYPE
+                && f.property !== TicketProperty.CREATED
+                && f.property !== KIXObjectProperty.CREATE_TIME
+                && f.property !== TicketProperty.CHANGED
+                && f.property !== KIXObjectProperty.CHANGE_TIME
         ).map((f) => {
             this.setUserID(f, user);
             return { Field: f.property, Operator: f.operator, Type: f.type, Value: f.value };
@@ -383,6 +388,12 @@ export class TicketService extends KIXObjectService {
             (f) => f.filterType === FilterType.AND && f.operator !== SearchOperator.NOT_EQUALS
         ).map((f) => {
             this.setUserID(f, user);
+            if (f.property === TicketProperty.CREATED) {
+                f.property = KIXObjectProperty.CREATE_TIME;
+            }
+            if (f.property === TicketProperty.CHANGED) {
+                f.property = KIXObjectProperty.CHANGE_TIME;
+            }
             return { Field: f.property, Operator: f.operator, Type: f.type, Value: f.value };
         });
 
@@ -398,7 +409,12 @@ export class TicketService extends KIXObjectService {
         }
 
         const orFilter = filter.filter(
-            (f) => f.filterType === FilterType.OR && f.property !== 'StateType'
+            (f) => f.filterType === FilterType.OR
+                && f.property !== TicketProperty.STATE_TYPE
+                && f.property !== TicketProperty.CREATED
+                && f.property !== KIXObjectProperty.CREATE_TIME
+                && f.property !== TicketProperty.CHANGED
+                && f.property !== KIXObjectProperty.CHANGE_TIME
         ).map((f) => {
             this.setUserID(f, user);
             return { Field: f.property, Operator: f.operator, Type: f.type, Value: f.value };
@@ -407,6 +423,12 @@ export class TicketService extends KIXObjectService {
             (f) => f.filterType === FilterType.OR && f.operator !== SearchOperator.NOT_EQUALS
         ).map((f) => {
             this.setUserID(f, user);
+            if (f.property === TicketProperty.CREATED) {
+                f.property = KIXObjectProperty.CREATE_TIME;
+            }
+            if (f.property === TicketProperty.CHANGED) {
+                f.property = KIXObjectProperty.CHANGE_TIME;
+            }
             return { Field: f.property, Operator: f.operator, Type: f.type, Value: f.value };
         });
 

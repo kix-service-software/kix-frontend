@@ -73,18 +73,17 @@ export class ContactService extends KIXObjectService<Contact> {
         return ids;
     }
 
-    public async getTreeNodes(property: string): Promise<TreeNode[]> {
-        let values: TreeNode[] = [];
+    public async getTreeNodes(
+        property: string, showInvalid?: boolean, filterIds?: Array<string | number>
+    ): Promise<TreeNode[]> {
+        let nodes: TreeNode[] = [];
 
         switch (property) {
-            case KIXObjectProperty.VALID_ID:
-                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
-                values = validObjects.map((vo) => new TreeNode(Number(vo.ID), vo.Name));
-                break;
             default:
+                nodes = await super.getTreeNodes(property, showInvalid, filterIds);
         }
 
-        return values;
+        return nodes;
     }
 
     public async getObjectUrl(object?: KIXObject, objectId?: string | number): Promise<string> {

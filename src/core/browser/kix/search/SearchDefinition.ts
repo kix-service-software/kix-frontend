@@ -27,7 +27,9 @@ export abstract class SearchDefinition {
 
     protected readPermissions: Map<string, boolean> = new Map();
 
-    public async getDisplaySearchValue(property: string, parameter: Array<[string, any]>, value: any): Promise<string> {
+    public async getDisplaySearchValue(
+        property: string, parameter: Array<[string, any]>, value: any, type: FilterDataType
+    ): Promise<string> {
         const labelProvider = LabelService.getInstance().getLabelProviderForType(this.objectType);
         return await labelProvider.getPropertyValueDisplayText(property, value);
     }
@@ -81,5 +83,25 @@ export abstract class SearchDefinition {
         }
 
         return this.readPermissions.get(resource);
+    }
+
+    protected getStringOperators(): SearchOperator[] {
+        return [
+            SearchOperator.CONTAINS,
+            SearchOperator.STARTS_WITH,
+            SearchOperator.ENDS_WITH,
+            SearchOperator.EQUALS,
+            SearchOperator.LIKE
+        ];
+    }
+
+    protected getDateTimeOperators(): SearchOperator[] {
+        return [
+            SearchOperator.LESS_THAN,
+            SearchOperator.GREATER_THAN,
+            SearchOperator.LESS_THAN_OR_EQUAL,
+            SearchOperator.GREATER_THAN_OR_EQUAL,
+            SearchOperator.BETWEEN
+        ];
     }
 }

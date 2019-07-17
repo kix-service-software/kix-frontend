@@ -50,6 +50,8 @@ export enum KIXObjectType {
 
     FAQ_VISIBILITY = 'FAQVisibility',
 
+    FAQ_KEYWORD = 'FAQKeyword',
+
     GENERAL_CATALOG_ITEM = 'GeneralCatalogItem',
 
     LINK = 'Link',

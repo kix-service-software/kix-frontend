@@ -1,7 +1,7 @@
 import { ComponentState } from './ComponentState';
 import { FormService, LabelService, IKIXObjectSearchListener, IdService } from '../../../../../core/browser';
 import {
-    TreeNode, SearchFormInstance, CacheState, ISearchFormListener, KIXObjectType
+    TreeNode, SearchFormInstance, CacheState, ISearchFormListener, KIXObjectType, SortUtil, DataType
 } from '../../../../../core/model';
 import { FormSearchValue } from './FormSearchValue';
 import { DialogService } from '../../../../../core/browser/components/dialog';
@@ -107,12 +107,10 @@ class Component implements IKIXObjectSearchListener {
         await this.provideFilterCriteria(searchValue);
     }
 
-    public textValueChanged(searchValue: FormSearchValue, event: any): void {
-        setTimeout(async () => {
-            const value = event.target.value;
-            searchValue.setTextValue(value);
-            await this.provideFilterCriteria(searchValue);
-        }, 100);
+    public async textValueChanged(searchValue: FormSearchValue, event: any): Promise<void> {
+        const value = event.target.value;
+        searchValue.setTextValue(value);
+        await this.provideFilterCriteria(searchValue);
     }
 
     public async dateValueChanged(searchValue: FormSearchValue, event: any): Promise<void> {
@@ -124,6 +122,18 @@ class Component implements IKIXObjectSearchListener {
     public async timeValueChanged(searchValue: FormSearchValue, event: any): Promise<void> {
         const value = event.target.value;
         searchValue.setTimeValue(value);
+        await this.provideFilterCriteria(searchValue);
+    }
+
+    public async betweenEndDateValueChanged(searchValue: FormSearchValue, event: any): Promise<void> {
+        const value = event.target.value;
+        searchValue.setBetweenEndDateValue(value);
+        await this.provideFilterCriteria(searchValue);
+    }
+
+    public async betweenEndTimeValueChanged(searchValue: FormSearchValue, event: any): Promise<void> {
+        const value = event.target.value;
+        searchValue.setBetweenEndTimeValue(value);
         await this.provideFilterCriteria(searchValue);
     }
 
@@ -197,7 +207,7 @@ class Component implements IKIXObjectSearchListener {
         );
         if (properties && !!properties.length) {
             const labelProvider = LabelService.getInstance().getLabelProviderForType(this.objectType);
-            const nodes = [];
+            const nodes: TreeNode[] = [];
             for (const p of properties) {
                 let displayText = p[1];
                 if (!displayText) {
@@ -205,7 +215,7 @@ class Component implements IKIXObjectSearchListener {
                 }
                 nodes.push(new TreeNode(p[0], displayText || p[0]));
             }
-            this.initialPropertyNodes = nodes;
+            this.initialPropertyNodes = SortUtil.sortObjects(nodes, 'label', DataType.STRING);
             this.state.propertyNodes = [...this.initialPropertyNodes];
         }
     }

@@ -15,8 +15,7 @@ export class FAQArticleTableFactory extends TableFactory {
 
     public createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
-        defaultRouting?: boolean, defaultToggle?: boolean,
-        short?: boolean
+        defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
     ): ITable {
 
         tableConfiguration = this.setDefaultTableConfiguration(
@@ -24,7 +23,9 @@ export class FAQArticleTableFactory extends TableFactory {
         );
 
         const table = new Table(tableKey, tableConfiguration);
-        const contentProvider = new FAQArticleTableContentProvider(table, objectIds, null, contextId);
+        const contentProvider = new FAQArticleTableContentProvider(
+            table, objectIds, tableConfiguration.loadingOptions, contextId
+        );
 
         table.setContentProvider(contentProvider);
         table.setColumnConfiguration(tableConfiguration.tableColumns);

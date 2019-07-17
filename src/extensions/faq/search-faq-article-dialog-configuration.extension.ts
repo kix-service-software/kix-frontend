@@ -1,7 +1,7 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
     ContextConfiguration, KIXObjectType,
-    FormContext, SearchForm, WidgetSize, ConfiguredWidget, WidgetConfiguration, CRUD
+    FormContext, SearchForm, ConfiguredWidget, WidgetConfiguration, CRUD, KIXObjectProperty
 } from '../../core/model';
 import { FAQArticleSearchContext } from '../../core/browser/faq';
 import { FAQArticleProperty } from '../../core/model/kix/faq';
@@ -20,7 +20,7 @@ export class ModuleExtension implements IConfigurationExtension {
             new WidgetConfiguration(
                 'help-widget', 'Translatable#Help', [], {
                     // tslint:disable-next-line:max-line-length
-                    helpText: 'The FAQ article <a href=\"faqarticles/2\" target=\"_blank\">How to search in KIX 18?</a> offers a detailed <b>explanation for the search operators<b>'
+                    helpText: 'Translatable#The FAQ article <a href=\"faqarticles/2\" target=\"_blank\">How to search in KIX 18?</a> offers a detailed <b>explanation for the search operators<b>'
                 }, false, false, 'kix-icon-query', false
             ),
             [new UIComponentPermission('faq/articles', [CRUD.READ])]
@@ -47,7 +47,8 @@ export class ModuleExtension implements IConfigurationExtension {
                 null,
                 [
                     SearchProperty.FULLTEXT,
-                    FAQArticleProperty.TITLE, FAQArticleProperty.CATEGORY_ID
+                    FAQArticleProperty.TITLE, FAQArticleProperty.CATEGORY_ID,
+                    KIXObjectProperty.VALID_ID
                 ]
             );
             await configurationService.saveConfiguration(form.id, form);

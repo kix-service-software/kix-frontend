@@ -5,7 +5,7 @@ import chaiAsPromised = require('chai-as-promised');
 import { Ticket, TicketProperty } from '../../../src/core/model/kix/ticket';
 import { TicketPlaceholderHandler, TicketLabelProvider } from '../../../src/core/browser/ticket';
 import { LabelService } from '../../../src/core/browser';
-import { DateTimeUtil } from '../../../src/core/model';
+import { DateTimeUtil, KIXObjectProperty } from '../../../src/core/model';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -175,13 +175,13 @@ describe('Placeholder replacement for ticket', () => {
         });
 
         it('Should replace ticket created by placeholder', async () => {
-            const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.CREATED_BY}>`, ticket);
-            expect(text).equal(`${TicketProperty.CREATED_BY}_Name`);
+            const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${KIXObjectProperty.CREATE_BY}>`, ticket);
+            expect(text).equal(`${KIXObjectProperty.CREATE_BY}_Name`);
         });
 
         it('Should replace ticket changed by placeholder', async () => {
-            const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.CHANGED_BY}>`, ticket);
-            expect(text).equal(`${TicketProperty.CHANGED_BY}_Name`);
+            const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${KIXObjectProperty.CHANGE_BY}>`, ticket);
+            expect(text).equal(`${KIXObjectProperty.CHANGE_BY}_Name`);
         });
     });
 
@@ -424,8 +424,8 @@ class someTestFunctions {
             case TicketProperty.SLA:
             case TicketProperty.SERVICE:
             case TicketProperty.RESPONSIBLE:
-            case TicketProperty.CHANGED_BY:
-            case TicketProperty.CREATED_BY:
+            case KIXObjectProperty.CHANGE_BY:
+            case KIXObjectProperty.CREATE_BY:
                 displayValue = `${property}_Name`;
                 break;
             case TicketProperty.AGE:

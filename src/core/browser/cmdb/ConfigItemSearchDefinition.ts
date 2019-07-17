@@ -2,7 +2,8 @@ import { SearchDefinition, SearchResultCategory, KIXObjectService } from "../kix
 import {
     KIXObjectType, ConfigItemProperty, FilterCriteria, ConfigItemClass, FilterDataType,
     FilterType, GeneralCatalogItem, VersionProperty, KIXObjectLoadingOptions, InputFieldTypes,
-    TreeNode, ObjectIcon, DataType, AttributeDefinition, Organisation, Contact, InputDefinition, ConfigItem
+    TreeNode, ObjectIcon, DataType, AttributeDefinition, Organisation, Contact, InputDefinition, ConfigItem,
+    KIXObjectProperty, DateTimeUtil
 } from "../../model";
 import { SearchOperator } from "../SearchOperator";
 import { SearchProperty } from "../SearchProperty";
@@ -32,17 +33,43 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
             [SearchProperty.FULLTEXT, null],
             [VersionProperty.NAME, null],
             [VersionProperty.NUMBER, null],
-            [ConfigItemProperty.CLASS_ID, null],
-            [ConfigItemProperty.CUR_DEPL_STATE_ID, null],
-            [ConfigItemProperty.CUR_INCI_STATE_ID, null]
+            [KIXObjectProperty.CHANGE_TIME, null]
         ];
+
+        const canContact = await this.checkReadPermissions('contacts');
+        const canOrganisation = await this.checkReadPermissions('organisations');
+        const canGeneralCatalog = await this.checkReadPermissions('system/generalcatalog');
+
+        if (await this.checkReadPermissions('system/cmdb/classes')) {
+            properties.push([ConfigItemProperty.CLASS_ID, null]);
+        }
+
+        if (canGeneralCatalog) {
+            properties.push([ConfigItemProperty.CUR_DEPL_STATE_ID, null]);
+            properties.push([ConfigItemProperty.CUR_INCI_STATE_ID, null]);
+        }
+
+        if (await this.checkReadPermissions('system/users')) {
+            properties.push([KIXObjectProperty.CHANGE_BY, null]);
+        }
 
         if (parameter) {
             const classParameter = parameter.find((p) => p[0] === ConfigItemProperty.CLASS_ID);
             const classAttributes = await ConfigItemClassAttributeUtil.getMergedClassAttributeIds(
                 classParameter ? classParameter[1] : null
             );
-            classAttributes.forEach((ca) => properties.push(ca));
+            classAttributes.filter((ca) => {
+                switch (ca[2]) {
+                    case 'GeneralCatalog':
+                        return canGeneralCatalog;
+                    case 'Organisation':
+                        return canOrganisation;
+                    case 'Contact':
+                        return canContact;
+                    default:
+                        return true;
+                }
+            }).forEach((ca) => properties.push([ca[0], ca[1]]));
         }
 
         return properties;
@@ -52,54 +79,37 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         let operations: SearchOperator[] = [];
 
         const numberOperators = [
-            SearchOperator.EQUALS,
             SearchOperator.IN
         ];
 
-        const stringOperators = [
-            SearchOperator.EQUALS,
-            SearchOperator.STARTS_WITH,
-            SearchOperator.ENDS_WITH,
-            SearchOperator.CONTAINS,
-            SearchOperator.LIKE
-        ];
+        const stringOperators = this.getStringOperators();
 
-        const dateTimeOperators = [
-            SearchOperator.EQUALS,
-            SearchOperator.LESS_THAN,
-            SearchOperator.LESS_THAN_OR_EQUAL,
-            SearchOperator.GREATER_THAN,
-            SearchOperator.GREATER_THAN_OR_EQUAL
-        ];
+        const dateTimeOperators = this.getDateTimeOperators();
 
-        switch (property) {
-            case VersionProperty.NAME:
-            case VersionProperty.NUMBER:
+        if (property === VersionProperty.NAME || property === VersionProperty.NUMBER) {
+            operations = stringOperators;
+        } else if (this.isDropDown(property)) {
+            operations = numberOperators;
+        } else if (this.isDateTime(property)) {
+            operations = dateTimeOperators;
+        } else {
+            const classParameter = parameter.find((p) => p[0] === ConfigItemProperty.CLASS_ID);
+            const type = await ConfigItemClassAttributeUtil.getAttributeType(
+                property, classParameter ? classParameter[1] : null
+            );
+            if (type === 'Date') {
+                operations = dateTimeOperators;
+            } else if (type === 'DateTime') {
+                operations = dateTimeOperators;
+            } else if (type === 'Text' || type === 'TextArea') {
                 operations = stringOperators;
-                break;
-            case ConfigItemProperty.CLASS_ID:
-            case ConfigItemProperty.CUR_DEPL_STATE_ID:
-            case ConfigItemProperty.CUR_INCI_STATE_ID:
+            } else if (type === 'GeneralCatalog'
+                || type === 'CIClassReference'
+                || type === 'Organisation'
+                || type === 'Contact'
+            ) {
                 operations = numberOperators;
-                break;
-            default:
-                const classParameter = parameter.find((p) => p[0] === ConfigItemProperty.CLASS_ID);
-                const type = await ConfigItemClassAttributeUtil.getAttributeType(
-                    property, classParameter ? classParameter[1] : null
-                );
-                if (type === 'Date') {
-                    operations = dateTimeOperators;
-                } else if (type === 'DateTime') {
-                    operations = dateTimeOperators;
-                } else if (type === 'Text' || type === 'TextArea') {
-                    operations = stringOperators;
-                } else if (type === 'GeneralCatalog'
-                    || type === 'CIClassReference'
-                    || type === 'Organisation'
-                    || type === 'Contact'
-                ) {
-                    operations = numberOperators;
-                }
+            }
         }
 
         return operations;
@@ -109,8 +119,10 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         property: string, parameter?: Array<[string, any]>
     ): Promise<InputFieldTypes> {
 
-        if (ConfigItemSearchDefinition.isDropDown(property)) {
+        if (this.isDropDown(property)) {
             return InputFieldTypes.DROPDOWN;
+        } else if (this.isDateTime(property)) {
+            return InputFieldTypes.DATE_TIME;
         } else {
             const classParameter = parameter.find((p) => p[0] === ConfigItemProperty.CLASS_ID);
             const type = await ConfigItemClassAttributeUtil.getAttributeType(
@@ -155,10 +167,17 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         return [];
     }
 
-    private static isDropDown(property: string): boolean {
+    private isDropDown(property: string): boolean {
         return property === ConfigItemProperty.CUR_DEPL_STATE_ID
             || property === ConfigItemProperty.CUR_INCI_STATE_ID
-            || property === ConfigItemProperty.CLASS_ID;
+            || property === ConfigItemProperty.CLASS_ID
+            || property === KIXObjectProperty.CREATE_BY
+            || property === KIXObjectProperty.CHANGE_BY;
+    }
+
+    private isDateTime(property: string): boolean {
+        return property === KIXObjectProperty.CREATE_TIME
+            || property === KIXObjectProperty.CHANGE_TIME;
     }
 
     public async getInputComponents(): Promise<Map<string, string>> {
@@ -166,9 +185,19 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
     }
 
     public async getSearchResultCategories(): Promise<SearchResultCategory> {
-        const ticketCategory = new SearchResultCategory('Tickets', KIXObjectType.TICKET);
-        const faqCategory = new SearchResultCategory('FAQs', KIXObjectType.FAQ_ARTICLE);
-        return new SearchResultCategory('Config Items', KIXObjectType.CONFIG_ITEM, [ticketCategory, faqCategory]);
+        const categories: SearchResultCategory[] = [];
+
+        if (await this.checkReadPermissions('tickets')) {
+            categories.push(
+                new SearchResultCategory('Translatable#Tickets', KIXObjectType.TICKET)
+            );
+        }
+        if (await this.checkReadPermissions('faq/articles')) {
+            categories.push(
+                new SearchResultCategory('FAQs', KIXObjectType.FAQ_ARTICLE)
+            );
+        }
+        return new SearchResultCategory('Config Items', KIXObjectType.CONFIG_ITEM, categories);
     }
 
     public async prepareFormFilterCriteria(criteria: FilterCriteria[]): Promise<FilterCriteria[]> {
@@ -204,6 +233,10 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                 case ConfigItemProperty.CLASS_ID:
                 case ConfigItemProperty.CUR_DEPL_STATE_ID:
                 case ConfigItemProperty.CUR_INCI_STATE_ID:
+                case KIXObjectProperty.CREATE_BY:
+                case KIXObjectProperty.CREATE_TIME:
+                case KIXObjectProperty.CHANGE_BY:
+                case KIXObjectProperty.CHANGE_TIME:
                     newCriteria.push(searchCriteria);
                     break;
                 default:
@@ -367,8 +400,10 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         return column;
     }
 
-    public async getDisplaySearchValue(property: string, parameter: Array<[string, any]>, value: any): Promise<string> {
-        let displayValue = await super.getDisplaySearchValue(property, parameter, value);
+    public async getDisplaySearchValue(
+        property: string, parameter: Array<[string, any]>, value: any, type: FilterDataType
+    ): Promise<string> {
+        let displayValue = await super.getDisplaySearchValue(property, parameter, value, type);
         const classParameter = parameter.find((p) => p[0] === ConfigItemProperty.CLASS_ID);
         const input = await ConfigItemClassAttributeUtil.getAttributeInput(
             property, classParameter ? classParameter[1] : null
@@ -402,6 +437,10 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                 if (contacts && contacts.length) {
                     displayValue = await LabelService.getInstance().getText(contacts[0]);
                 }
+            } else if (input.Type === 'Date') {
+                displayValue = await DateTimeUtil.getLocalDateString(displayValue);
+            } else if (input.Type === 'DateTime') {
+                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
             }
         }
 

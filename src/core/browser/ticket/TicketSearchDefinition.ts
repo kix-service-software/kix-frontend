@@ -1,7 +1,8 @@
 import { SearchDefinition, SearchResultCategory, KIXObjectService } from "../kix";
 import {
     KIXObjectType, TicketProperty, InputFieldTypes, FilterCriteria,
-    KIXObjectLoadingOptions, FilterDataType, FilterType, ArchiveFlag, TreeNode, Organisation, ObjectIcon, Contact, CRUD
+    KIXObjectLoadingOptions, FilterDataType, FilterType, ArchiveFlag, TreeNode, Organisation,
+    ObjectIcon, Contact, KIXObjectProperty
 } from "../../model";
 import { SearchOperator } from "../SearchOperator";
 import { SearchProperty } from "../SearchProperty";
@@ -24,16 +25,11 @@ export class TicketSearchDefinition extends SearchDefinition {
             [SearchProperty.FULLTEXT, null],
             [TicketProperty.TICKET_NUMBER, null],
             [TicketProperty.TITLE, null],
-            [TicketProperty.AGE, null],
-            [TicketProperty.CREATE_TIME, null],
+            [TicketProperty.CREATED, null],
             [TicketProperty.CLOSE_TIME, null],
-            [TicketProperty.CHANGE_TIME, null],
+            [TicketProperty.CHANGED, null],
             [TicketProperty.PENDING_TIME, null],
-            [TicketProperty.LAST_CHANGE_TIME, null],
-            [TicketProperty.ESCALATION_TIME, null],
-            [TicketProperty.ESCALATION_RESPONSE_TIME, null],
-            [TicketProperty.ESCALATION_UPDATE_TIME, null],
-            [TicketProperty.ESCALATION_SOLUTION_TIME, null]
+            [TicketProperty.LAST_CHANGE_TIME, null]
         ];
 
         if (await this.checkReadPermissions('organisations')) {
@@ -56,14 +52,6 @@ export class TicketSearchDefinition extends SearchDefinition {
             properties.push([TicketProperty.QUEUE_ID, null]);
         }
 
-        if (await this.checkReadPermissions('system/services')) {
-            properties.push([TicketProperty.SERVICE_ID, null]);
-        }
-
-        if (await this.checkReadPermissions('system/slas')) {
-            properties.push([TicketProperty.SLA_ID, null]);
-        }
-
         if (await this.checkReadPermissions('system/ticket/priorities')) {
             properties.push([TicketProperty.PRIORITY_ID, null]);
         }
@@ -72,37 +60,23 @@ export class TicketSearchDefinition extends SearchDefinition {
             properties.push([TicketProperty.LOCK_ID, null]);
         }
 
+        if (await this.checkReadPermissions('system/users')) {
+            properties.push([TicketProperty.OWNER_ID, null]);
+            properties.push([TicketProperty.RESPONSIBLE_ID, null]);
+            properties.push([KIXObjectProperty.CREATE_BY, null]);
+            properties.push([KIXObjectProperty.CHANGE_BY, null]);
+        }
+
         return properties;
     }
 
     public async getOperations(property: string): Promise<SearchOperator[]> {
         let operations: SearchOperator[] = [];
 
-        const numberOperators = [
-            SearchOperator.EQUALS,
-            SearchOperator.IN
-        ];
-
-        const stringOperators = [
-            SearchOperator.EQUALS,
-            SearchOperator.STARTS_WITH,
-            SearchOperator.ENDS_WITH,
-            SearchOperator.CONTAINS,
-            SearchOperator.LIKE
-        ];
-
-        const dateTimeOperators = [
-            SearchOperator.EQUALS,
-            SearchOperator.LESS_THAN,
-            SearchOperator.LESS_THAN_OR_EQUAL,
-            SearchOperator.GREATER_THAN,
-            SearchOperator.GREATER_THAN_OR_EQUAL
-        ];
-
         switch (property) {
             case TicketProperty.TICKET_NUMBER:
             case TicketProperty.TITLE:
-                operations = stringOperators;
+                operations = this.getStringOperators();
                 break;
             case TicketProperty.TYPE_ID:
             case TicketProperty.STATE_ID:
@@ -110,22 +84,28 @@ export class TicketSearchDefinition extends SearchDefinition {
             case TicketProperty.SERVICE_ID:
             case TicketProperty.SLA_ID:
             case TicketProperty.PRIORITY_ID:
-            case TicketProperty.LOCK_ID:
             case TicketProperty.ORGANISATION_ID:
             case TicketProperty.CONTACT_ID:
-                operations = numberOperators;
+            case TicketProperty.OWNER_ID:
+            case TicketProperty.RESPONSIBLE_ID:
+            case KIXObjectProperty.CREATE_BY:
+            case KIXObjectProperty.CHANGE_BY:
+                operations = [SearchOperator.IN];
+                break;
+            case TicketProperty.LOCK_ID:
+                operations = [SearchOperator.EQUALS];
                 break;
             case TicketProperty.AGE:
-            case TicketProperty.CREATE_TIME:
+            case TicketProperty.CREATED:
             case TicketProperty.CLOSE_TIME:
-            case TicketProperty.CHANGE_TIME:
+            case TicketProperty.CHANGED:
             case TicketProperty.PENDING_TIME:
             case TicketProperty.LAST_CHANGE_TIME:
             case TicketProperty.ESCALATION_TIME:
             case TicketProperty.ESCALATION_RESPONSE_TIME:
             case TicketProperty.ESCALATION_UPDATE_TIME:
             case TicketProperty.ESCALATION_SOLUTION_TIME:
-                operations = dateTimeOperators;
+                operations = this.getDateTimeOperators();
                 break;
             default:
                 operations = [];
@@ -135,9 +115,9 @@ export class TicketSearchDefinition extends SearchDefinition {
     }
 
     public async getInputFieldType(property: string, parameter?: Array<[string, any]>): Promise<InputFieldTypes> {
-        if (TicketSearchDefinition.isDropDown(property)) {
+        if (this.isDropDown(property)) {
             return InputFieldTypes.DROPDOWN;
-        } else if (TicketSearchDefinition.isDateTime(property)) {
+        } else if (this.isDateTime(property)) {
             return InputFieldTypes.DATE_TIME;
         } else if (property === TicketProperty.ORGANISATION_ID || property === TicketProperty.CONTACT_ID) {
             return InputFieldTypes.OBJECT_REFERENCE;
@@ -146,20 +126,25 @@ export class TicketSearchDefinition extends SearchDefinition {
         return InputFieldTypes.TEXT;
     }
 
-    private static isDropDown(property: string): boolean {
+    private isDropDown(property: string): boolean {
         return property === TicketProperty.QUEUE_ID
             || property === TicketProperty.STATE_ID
             || property === TicketProperty.PRIORITY_ID
             || property === TicketProperty.TYPE_ID
             || property === TicketProperty.SERVICE_ID
-            || property === TicketProperty.SLA_ID;
+            || property === TicketProperty.SLA_ID
+            || property === TicketProperty.OWNER_ID
+            || property === TicketProperty.RESPONSIBLE_ID
+            || property === TicketProperty.LOCK_ID
+            || property === KIXObjectProperty.CREATE_BY
+            || property === KIXObjectProperty.CHANGE_BY;
     }
 
-    private static isDateTime(property: string): boolean {
+    private isDateTime(property: string): boolean {
         return property === TicketProperty.AGE
-            || property === TicketProperty.CREATE_TIME
+            || property === TicketProperty.CREATED
             || property === TicketProperty.CLOSE_TIME
-            || property === TicketProperty.CHANGE_TIME
+            || property === TicketProperty.CHANGED
             || property === TicketProperty.PENDING_TIME
             || property === TicketProperty.LAST_CHANGE_TIME
             || property === TicketProperty.ESCALATION_TIME
@@ -182,13 +167,25 @@ export class TicketSearchDefinition extends SearchDefinition {
     }
 
     public async getSearchResultCategories(): Promise<SearchResultCategory> {
-        const contactCategory = new SearchResultCategory('Translatable#Contacts', KIXObjectType.CONTACT);
-        const organisationCategory = new SearchResultCategory('Translatable#Organisation', KIXObjectType.ORGANISATION);
-        const ciCategory = new SearchResultCategory('Translatable#Config Items', KIXObjectType.CONFIG_ITEM);
+        const categories: SearchResultCategory[] = [];
 
-        return new SearchResultCategory(
-            'Translatable#Tickets', KIXObjectType.TICKET, [contactCategory, organisationCategory, ciCategory]
-        );
+        if (await this.checkReadPermissions('contacts')) {
+            categories.push(
+                new SearchResultCategory('Translatable#Contacts', KIXObjectType.CONTACT)
+            );
+        }
+        if (await this.checkReadPermissions('organisations')) {
+            categories.push(
+                new SearchResultCategory('Translatable#Organisations', KIXObjectType.ORGANISATION)
+            );
+        }
+        if (await this.checkReadPermissions('cmdb/configitems')) {
+            categories.push(
+                new SearchResultCategory('Translatable#Config Items', KIXObjectType.CONFIG_ITEM)
+            );
+        }
+
+        return new SearchResultCategory('Translatable#Tickets', KIXObjectType.TICKET, categories);
     }
 
     public async prepareFormFilterCriteria(criteria: FilterCriteria[]): Promise<FilterCriteria[]> {
@@ -198,30 +195,13 @@ export class TicketSearchDefinition extends SearchDefinition {
             const value = criteria[fulltextCriteriaIndex].value;
             criteria.splice(fulltextCriteriaIndex, 1);
 
-            criteria.push(new FilterCriteria(
-                TicketProperty.TICKET_NUMBER, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
-            ));
-            criteria.push(new FilterCriteria(
-                TicketProperty.TITLE, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
-            ));
-            criteria.push(new FilterCriteria(
-                TicketProperty.BODY, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
-            ));
-            criteria.push(new FilterCriteria(
-                TicketProperty.FROM, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
-            ));
-            criteria.push(new FilterCriteria(
-                TicketProperty.TO, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
-            ));
-            criteria.push(new FilterCriteria(
-                TicketProperty.CC, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
-            ));
+            criteria = [...criteria, ...this.getFulltextCriteria(value as string)];
         }
         return criteria;
     }
 
     public prepareSearchFormValue(property: string, value: any): FilterCriteria[] {
-        const criteria = [];
+        let criteria = [];
         switch (property) {
             case TicketProperty.SLA_ID:
             case TicketProperty.TYPE_ID:
@@ -237,24 +217,7 @@ export class TicketSearchDefinition extends SearchDefinition {
                 }
                 break;
             case SearchProperty.FULLTEXT:
-                criteria.push(new FilterCriteria(
-                    TicketProperty.TICKET_NUMBER, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
-                ));
-                criteria.push(new FilterCriteria(
-                    TicketProperty.TITLE, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
-                ));
-                criteria.push(new FilterCriteria(
-                    TicketProperty.BODY, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
-                ));
-                criteria.push(new FilterCriteria(
-                    TicketProperty.FROM, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
-                ));
-                criteria.push(new FilterCriteria(
-                    TicketProperty.TO, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
-                ));
-                criteria.push(new FilterCriteria(
-                    TicketProperty.CC, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
-                ));
+                criteria = [...criteria, ...this.getFulltextCriteria(value)];
                 break;
             case TicketProperty.ARCHIVE_FLAG:
                 if (value === ArchiveFlag.ALL) {
@@ -309,5 +272,30 @@ export class TicketSearchDefinition extends SearchDefinition {
             }
             return nodes;
         }
+    }
+
+    private getFulltextCriteria(value: string): FilterCriteria[] {
+        const criteria: FilterCriteria[] = [];
+        if (value) {
+            criteria.push(new FilterCriteria(
+                TicketProperty.TICKET_NUMBER, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
+            ));
+            criteria.push(new FilterCriteria(
+                TicketProperty.TITLE, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
+            ));
+            criteria.push(new FilterCriteria(
+                TicketProperty.BODY, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
+            ));
+            criteria.push(new FilterCriteria(
+                TicketProperty.FROM, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
+            ));
+            criteria.push(new FilterCriteria(
+                TicketProperty.TO, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
+            ));
+            criteria.push(new FilterCriteria(
+                TicketProperty.CC, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
+            ));
+        }
+        return criteria;
     }
 }

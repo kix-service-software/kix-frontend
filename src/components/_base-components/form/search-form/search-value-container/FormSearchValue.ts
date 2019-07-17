@@ -14,6 +14,7 @@ export class FormSearchValue {
     public isMultiselect: boolean = false;
     public isDate: boolean = false;
     public isDateTime: boolean = false;
+    public isBetweenDate: boolean = false;
     public isAutocomplete: boolean = false;
 
     public nodes: TreeNode[] = [];
@@ -22,6 +23,8 @@ export class FormSearchValue {
     private currentValue: any;
     private date: string;
     private time: string = '';
+    private betweenEndDate: string;
+    private betweenEndTime: string = '';
 
     private searchParameter: Array<[string, any]>;
 
@@ -84,7 +87,7 @@ export class FormSearchValue {
             if (this.isDropdown) {
                 this.nodes = await KIXObjectSearchService.getInstance().getTreeNodes(
                     this.objectType, this.currentPropertyNode.id, parameter
-                );
+                ).catch(() => []);
             }
         }
     }
@@ -103,6 +106,10 @@ export class FormSearchValue {
         this.isMultiselect = this.currentOperationNode
             ? this.currentOperationNode.id === SearchOperator.IN
             : false;
+
+        this.isBetweenDate = this.currentOperationNode
+            ? this.currentOperationNode.id === SearchOperator.BETWEEN
+            : false;
     }
 
     public setCurrentValue(value: any): void {
@@ -120,6 +127,41 @@ export class FormSearchValue {
                 this.currentValueNodes = valueNodes;
             } else {
                 this.currentValueNodes = [this.nodes.find((n) => n.id === value)];
+            }
+        } else if (this.isDate) {
+            if (this.isBetweenDate) {
+                const date = new Date(value[0]);
+                if (!isNaN(date.getTime())) {
+                    this.date = DateTimeUtil.getKIXDateString(date);
+                }
+                const endDate = new Date(value[1]);
+                if (!isNaN(endDate.getTime())) {
+                    this.betweenEndDate = DateTimeUtil.getKIXDateString(endDate);
+                }
+            } else {
+                const date = new Date(value[0]);
+                if (!isNaN(date.getTime())) {
+                    this.date = DateTimeUtil.getKIXDateString(date);
+                }
+            }
+        } else if (this.isDateTime) {
+            if (this.isBetweenDate) {
+                const date = new Date(value[0]);
+                if (!isNaN(date.getTime())) {
+                    this.date = DateTimeUtil.getKIXDateString(date);
+                    this.time = DateTimeUtil.getKIXTimeString(date);
+                }
+                const endDate = new Date(value[1]);
+                if (!isNaN(endDate.getTime())) {
+                    this.betweenEndDate = DateTimeUtil.getKIXDateString(endDate);
+                    this.betweenEndTime = DateTimeUtil.getKIXTimeString(endDate);
+                }
+            } else {
+                const date = new Date(value);
+                if (!isNaN(date.getTime())) {
+                    this.date = DateTimeUtil.getKIXDateString(date);
+                    this.time = DateTimeUtil.getKIXTimeString(date);
+                }
             }
         }
     }
@@ -158,6 +200,14 @@ export class FormSearchValue {
         this.time = value;
     }
 
+    public setBetweenEndDateValue(value: string): void {
+        this.betweenEndDate = value;
+    }
+
+    public setBetweenEndTimeValue(value: string): void {
+        this.betweenEndTime = value;
+    }
+
     public getFilterCriteria(): FilterCriteria {
         const property = this.currentPropertyNode
             ? this.currentPropertyNode.id
@@ -174,10 +224,18 @@ export class FormSearchValue {
             filterDataType = FilterDataType.DATE;
             const date = new Date(this.date);
             value = isNaN(date.getTime()) ? null : DateTimeUtil.getKIXDateTimeString(date);
+            if (this.isBetweenDate && value) {
+                const endDate = new Date(this.betweenEndDate);
+                value = isNaN(endDate.getTime()) ? null : [value, DateTimeUtil.getKIXDateTimeString(endDate)];
+            }
         } else if (this.isDateTime) {
             filterDataType = FilterDataType.DATETIME;
             const date = new Date(`${this.date} ${this.time}`);
             value = isNaN(date.getTime()) ? null : DateTimeUtil.getKIXDateTimeString(date);
+            if (this.isBetweenDate && value) {
+                const endDate = new Date(`${this.betweenEndDate} ${this.betweenEndTime}`);
+                value = isNaN(endDate.getTime()) ? null : [value, DateTimeUtil.getKIXDateTimeString(endDate)];
+            }
         }
 
         return new FilterCriteria(property, operator, filterDataType, FilterType.AND, value);

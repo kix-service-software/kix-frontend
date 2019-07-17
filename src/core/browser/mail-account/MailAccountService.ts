@@ -38,9 +38,7 @@ export class MailAccountService extends KIXObjectService<MailAccount> {
         switch (property) {
             case MailAccountProperty.TYPE:
                 const types = await this.loadObjects(KIXObjectType.MAIL_ACCOUNT_TYPE, null);
-                nodes = types
-                    ? types.map((t) => new TreeNode(t, t.toString()))
-                    : [];
+                nodes = types ? types.map((t) => new TreeNode(t, t.toString())) : [];
                 break;
             default:
         }

@@ -12,6 +12,8 @@ export enum SearchOperator {
 
     GREATER_THAN_OR_EQUAL = 'GTE',
 
+    BETWEEN = 'BETWEEN',
+
     IN = 'IN',
 
     CONTAINS = 'CONTAINS',

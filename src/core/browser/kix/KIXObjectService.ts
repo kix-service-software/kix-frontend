@@ -3,7 +3,7 @@ import {
     KIXObject, KIXObjectType, FilterCriteria, TreeNode,
     KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions, OverlayType, KIXObjectSpecificDeleteOptions,
-    ComponentContent, Error, TableFilterCriteria, CRUD
+    ComponentContent, Error, TableFilterCriteria, CRUD, KIXObjectProperty, User, ValidObject
 } from "../../model";
 import { KIXObjectSocketClient } from "./KIXObjectSocketClient";
 import { FormService } from "../form";
@@ -287,7 +287,22 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     public async getTreeNodes(
         property: string, showInvalid?: boolean, filterIds?: Array<string | number>
     ): Promise<TreeNode[]> {
-        return [];
+        let nodes: TreeNode[] = [];
+        switch (property) {
+            case KIXObjectProperty.CREATE_BY:
+            case KIXObjectProperty.CHANGE_BY:
+                const users = await KIXObjectService.loadObjects<User>(
+                    KIXObjectType.USER, null, null, null, true
+                ).catch((error) => [] as User[]);
+                users.forEach((u) => nodes.push(new TreeNode(u.UserID, u.UserFullname, 'kix-icon-man')));
+                break;
+            case KIXObjectProperty.VALID_ID:
+                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
+                nodes = validObjects.map((vo) => new TreeNode(Number(vo.ID), vo.Name));
+                break;
+            default:
+        }
+        return nodes;
     }
 
     public static async checkFilterValue(

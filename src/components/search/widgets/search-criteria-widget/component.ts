@@ -2,7 +2,7 @@ import { ComponentState } from './ComponentState';
 import {
     IKIXObjectSearchListener, LabelService, ContextService, SearchOperatorUtil
 } from '../../../../core/browser';
-import { KIXObject, ContextMode, CacheState } from '../../../../core/model';
+import { KIXObject, ContextMode, CacheState, SortUtil } from '../../../../core/model';
 import { Label } from '../../../../core/browser/components';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 import { KIXObjectSearchService } from '../../../../core/browser/kix/search/KIXObjectSearchService';
@@ -66,12 +66,15 @@ class Component implements IKIXObjectSearchListener {
                 cache.objectType, parameter
             );
 
-            for (const criteria of cache.criteria) {
+            const criterias = cache.criteria.filter(
+                (c) => typeof c.value !== 'undefined' && c.value !== null && c.value !== ''
+            );
+            for (const criteria of criterias) {
                 const labels: Label[] = [];
                 if (Array.isArray(criteria.value)) {
                     for (const v of criteria.value) {
                         const value = await searchDefinition.getDisplaySearchValue(
-                            criteria.property, parameter, v
+                            criteria.property, parameter, v, criteria.type
                         );
                         const icons = await labelProvider.getIcons(null, criteria.property, v);
                         labels.push(new Label(null, value, icons ? icons[0] : null, value, null, value, false));
@@ -83,7 +86,7 @@ class Component implements IKIXObjectSearchListener {
                     ));
                 } else {
                     const value = await searchDefinition.getDisplaySearchValue(
-                        criteria.property, parameter, criteria.value
+                        criteria.property, parameter, criteria.value, criteria.type
                     );
                     const icons = await labelProvider.getIcons(null, criteria.property, criteria.value);
                     labels.push(new Label(null, value, icons ? icons[0] : null, value, null, value, false));
@@ -93,12 +96,16 @@ class Component implements IKIXObjectSearchListener {
                 let displayProperty = searchProperty[1];
                 if (!displayProperty) {
                     displayProperty = await labelProvider.getPropertyText(criteria.property);
+                } else {
+                    displayProperty = await TranslationService.translate(displayProperty);
                 }
 
                 const label = await SearchOperatorUtil.getText(criteria.operator);
                 displayCriteria.push([displayProperty, label, labels]);
             }
-            setTimeout(() => this.state.displayCriteria = displayCriteria, 100);
+            setTimeout(() => this.state.displayCriteria = displayCriteria.sort(
+                (a, b) => SortUtil.compareString(a[0], b[0])
+            ), 100);
         } else {
             this.state.title = `${titleLabel}:`;
         }

@@ -1,8 +1,9 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize, KIXObjectType, CRUD, TableWidgetSettings
+    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, KIXObjectType, CRUD,
+    TableWidgetSettings, KIXObjectLoadingOptions, FilterCriteria, KIXObjectProperty, FilterDataType, FilterType
 } from '../../core/model';
-import { TableConfiguration } from '../../core/browser';
+import { TableConfiguration, SearchOperator } from '../../core/browser';
 import { OrganisationContext } from '../../core/browser/organisation';
 import { UIComponentPermission } from '../../core/model/UIComponentPermission';
 
@@ -23,8 +24,9 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                 ],
                 new TableWidgetSettings(
                     KIXObjectType.ORGANISATION, null,
-                    new TableConfiguration(KIXObjectType.ORGANISATION,
-                        null, null, null, true
+                    new TableConfiguration(
+                        KIXObjectType.ORGANISATION, null,
+                        null, null, true
                     )
                 ),
                 false, true, 'kix-icon-man-house', false
@@ -42,8 +44,9 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                         'csv-export-action'
                     ], new TableWidgetSettings(
                         KIXObjectType.CONTACT, null,
-                        new TableConfiguration(KIXObjectType.CONTACT,
-                            null, null, null, true
+                        new TableConfiguration(
+                            KIXObjectType.CONTACT, null,
+                            null, null, true
                         )
                     ),
                     false, true, 'kix-icon-man-bubble', false
