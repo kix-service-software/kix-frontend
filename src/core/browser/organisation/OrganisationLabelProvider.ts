@@ -1,61 +1,17 @@
-import {
-    Organisation, OrganisationProperty, ObjectIcon, KIXObjectType, KIXObjectProperty, User, DateTimeUtil, ValidObject
-} from '../../model';
+import { Organisation, OrganisationProperty, ObjectIcon, KIXObjectType, KIXObjectProperty } from '../../model';
 import { SearchProperty } from '../SearchProperty';
 import { TranslationService } from '../i18n/TranslationService';
-import { KIXObjectService } from '../kix';
 import { LabelProvider } from '../LabelProvider';
 
 export class OrganisationLabelProvider extends LabelProvider<Organisation> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.ORGANISATION;
 
-    public async getPropertyValueDisplayText(
-        property: string, value: string | number, translatable: boolean = true
-    ): Promise<string> {
-        let displayValue = value;
-
-        switch (property) {
-            case KIXObjectProperty.VALID_ID:
-                if (value) {
-                    const validObjects = await KIXObjectService.loadObjects<ValidObject>(
-                        KIXObjectType.VALID_OBJECT, [value], null, null, true
-                    ).catch((error) => [] as ValidObject[]);
-                    displayValue = validObjects && !!validObjects.length ? validObjects[0].Name : value;
-                }
-                break;
-            case KIXObjectProperty.CREATE_BY:
-            case KIXObjectProperty.CHANGE_BY:
-                if (value) {
-                    const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [value], null, null, true
-                    ).catch((error) => [] as User[]);
-                    displayValue = users && !!users.length ? users[0].UserFullname : value;
-                }
-            case KIXObjectProperty.CREATE_TIME:
-            case KIXObjectProperty.CHANGE_TIME:
-                if (displayValue) {
-                    displayValue = translatable ?
-                        await DateTimeUtil.getLocalDateTimeString(displayValue) : displayValue;
-                }
-                break;
-            default:
-        }
-
-        if (displayValue) {
-            displayValue = await TranslationService.translate(
-                displayValue.toString(), undefined, undefined, !translatable
-            );
-        }
-
-        return displayValue ? displayValue.toString() : '';
-    }
-
     public isLabelProviderFor(object: Organisation): boolean {
         return object instanceof Organisation;
     }
 
-    public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
             case SearchProperty.FULLTEXT:
@@ -66,9 +22,6 @@ export class OrganisationLabelProvider extends LabelProvider<Organisation> {
                 break;
             case OrganisationProperty.CITY:
                 displayValue = 'Translatable#City';
-                break;
-            case OrganisationProperty.COMMENT:
-                displayValue = 'Translatable#Comment';
                 break;
             case OrganisationProperty.COUNTRY:
                 displayValue = 'Translatable#Country';
@@ -88,21 +41,6 @@ export class OrganisationLabelProvider extends LabelProvider<Organisation> {
             case OrganisationProperty.ID:
                 displayValue = 'Translatable#Organisation ID';
                 break;
-            case KIXObjectProperty.CREATE_BY:
-                displayValue = 'Translatable#Created by';
-                break;
-            case KIXObjectProperty.CREATE_TIME:
-                displayValue = 'Translatable#Created at';
-                break;
-            case KIXObjectProperty.CHANGE_BY:
-                displayValue = 'Translatable#Changed by';
-                break;
-            case KIXObjectProperty.CHANGE_TIME:
-                displayValue = 'Translatable#Changed at';
-                break;
-            case KIXObjectProperty.VALID_ID:
-                displayValue = 'Translatable#Validity';
-                break;
             case OrganisationProperty.OPEN_TICKETS_COUNT:
                 displayValue = 'Translatable#Open Tickets';
                 break;
@@ -113,7 +51,7 @@ export class OrganisationLabelProvider extends LabelProvider<Organisation> {
                 displayValue = 'Translatable#Reminder Tickets';
                 break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
         if (displayValue) {

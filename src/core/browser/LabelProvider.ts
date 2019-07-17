@@ -44,6 +44,12 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
             case KIXObjectProperty.CHANGE_TIME:
                 displayValue = 'Translatable#Changed at';
                 break;
+            case 'ICON':
+                displayValue = 'Translatable#Icon';
+                break;
+            case 'LinkedAs':
+                displayValue = 'Translatable#Linked as';
+                break;
             default:
                 displayValue = property;
         }
@@ -66,16 +72,21 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
         let displayValue = value;
         switch (property) {
             case KIXObjectProperty.VALID_ID:
-                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
-                const valid = validObjects.find((v) => v.ID === value);
-                displayValue = valid ? valid.Name : value;
+                if (value) {
+                    const validObjects = await KIXObjectService.loadObjects<ValidObject>(
+                        KIXObjectType.VALID_OBJECT, [value], null, null, true
+                    ).catch((error) => [] as ValidObject[]);
+                    displayValue = validObjects && !!validObjects.length ? validObjects[0].Name : value;
+                }
                 break;
             case KIXObjectProperty.CREATE_BY:
             case KIXObjectProperty.CHANGE_BY:
-                const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [value], null, null, true
-                ).catch((error) => [] as User[]);
-                displayValue = users && !!users.length ? users[0].UserFullname : value;
+                if (value) {
+                    const users = await KIXObjectService.loadObjects<User>(
+                        KIXObjectType.USER, [value], null, null, true
+                    ).catch((error) => [] as User[]);
+                    displayValue = users && !!users.length ? users[0].UserFullname : value;
+                }
                 break;
             case KIXObjectProperty.CREATE_TIME:
             case KIXObjectProperty.CHANGE_TIME:

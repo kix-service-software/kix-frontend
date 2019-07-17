@@ -75,18 +75,6 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
             case ConfigItemProperty.CUR_INCI_STATE_ID:
                 displayValue = 'Translatable#Current incident state';
                 break;
-            case ConfigItemProperty.CHANGE_TIME:
-                displayValue = 'Translatable#Changed at';
-                break;
-            case ConfigItemProperty.CHANGE_BY:
-                displayValue = 'Translatable#Changed by';
-                break;
-            case ConfigItemProperty.CREATE_TIME:
-                displayValue = 'Translatable#Created at';
-                break;
-            case ConfigItemProperty.CREATE_BY:
-                displayValue = 'Translatable#Created by';
-                break;
             case ConfigItemProperty.VERSIONS:
                 displayValue = 'Translatable#Number of version';
                 break;
@@ -106,7 +94,7 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
                 displayValue = 'Translatable#Name';
                 break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
         if (displayValue) {

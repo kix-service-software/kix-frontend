@@ -7,17 +7,11 @@ export class TicketHistoryLabelProvider extends LabelProvider<TicketHistory> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.TICKET_HISTORY;
 
-    public async getPropertyValueDisplayText(
-        property: string, value: string | number, translatable?: boolean
-    ): Promise<string> {
-        return value.toString();
-    }
-
     public isLabelProviderForType(objectType: KIXObjectType): boolean {
         return objectType === this.kixObjectType;
     }
 
-    public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
             case TicketHistoryProperty.HISTORY_TYPE:
@@ -29,14 +23,8 @@ export class TicketHistoryLabelProvider extends LabelProvider<TicketHistory> {
             case TicketHistoryProperty.ARTICLE_ID:
                 displayValue = 'Translatable#to Article';
                 break;
-            case TicketHistoryProperty.CREATE_BY:
-                displayValue = 'Translatable#User';
-                break;
-            case TicketHistoryProperty.CREATE_TIME:
-                displayValue = 'Translatable#Created at';
-                break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
         if (displayValue) {

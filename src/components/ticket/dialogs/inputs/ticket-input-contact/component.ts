@@ -115,7 +115,7 @@ class Component extends FormInputComponent<number | string, ComponentState> {
         const filter = await ContactService.getInstance().prepareFullTextFilter(searchValue);
         const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit);
         this.contacts = await KIXObjectService.loadObjects<Contact>(
-            KIXObjectType.CONTACT, null, loadingOptions, null, false
+            KIXObjectType.CONTACT, null, loadingOptions, null, true
         );
 
         this.state.nodes = [];

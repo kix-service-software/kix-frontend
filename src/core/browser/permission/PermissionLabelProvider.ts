@@ -1,7 +1,4 @@
-import {
-    Permission, KIXObjectType, PermissionProperty, ObjectIcon, User,
-    DateTimeUtil, PermissionType, Role
-} from "../../model";
+import { Permission, KIXObjectType, PermissionProperty, ObjectIcon, PermissionType, Role } from "../../model";
 import { TranslationService } from "../i18n/TranslationService";
 import { KIXObjectService } from "../kix";
 import { LabelProvider } from "../LabelProvider";
@@ -29,21 +26,6 @@ export class PermissionLabelProvider extends LabelProvider<Permission> {
             case PermissionProperty.RoleID:
                 displayValue = 'Translatable#Role';
                 break;
-            case PermissionProperty.COMMENT:
-                displayValue = 'Translatable#Comment';
-                break;
-            case PermissionProperty.CREATE_BY:
-                displayValue = 'Translatable#Created by';
-                break;
-            case PermissionProperty.CREATE_TIME:
-                displayValue = 'Translatable#Created at';
-                break;
-            case PermissionProperty.CHANGE_BY:
-                displayValue = 'Translatable#Changed by';
-                break;
-            case PermissionProperty.CHANGE_TIME:
-                displayValue = 'Translatable#Changed at';
-                break;
             case PermissionProperty.IS_REQUIRED:
                 return 'Required';
             case PermissionProperty.TARGET:
@@ -51,6 +33,7 @@ export class PermissionLabelProvider extends LabelProvider<Permission> {
                 break;
             case PermissionProperty.ID:
                 displayValue = 'Translatable#Icon';
+                break;
             case PermissionProperty.VALUE:
                 displayValue = 'Translatable#Permission';
                 break;
@@ -70,7 +53,7 @@ export class PermissionLabelProvider extends LabelProvider<Permission> {
                 displayValue = 'Deny';
                 break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
         if (displayValue) {
@@ -123,17 +106,6 @@ export class PermissionLabelProvider extends LabelProvider<Permission> {
     ): Promise<string> {
         let displayValue = value;
         switch (property) {
-            case PermissionProperty.CREATE_BY:
-            case PermissionProperty.CHANGE_BY:
-                const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [value], null, null, true
-                ).catch((error) => [] as User[]);
-                displayValue = users && !!users.length ? users[0].UserFullname : value;
-                break;
-            case PermissionProperty.CREATE_TIME:
-            case PermissionProperty.CHANGE_TIME:
-                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
-                break;
             case PermissionProperty.TYPE_ID:
                 const types = await KIXObjectService.loadObjects<PermissionType>(
                     KIXObjectType.PERMISSION_TYPE, null, null, null, true
@@ -144,6 +116,7 @@ export class PermissionLabelProvider extends LabelProvider<Permission> {
                 }
                 break;
             default:
+                displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
         }
 
         if (displayValue) {

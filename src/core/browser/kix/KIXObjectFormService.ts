@@ -30,7 +30,7 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
             await this.prepareFormFieldValues(g.formFields, kixObject, formFieldValues, form.formContext);
         }
 
-        this.additionalPreparations(form, formFieldValues, kixObject);
+        await this.additionalPreparations(form, formFieldValues, kixObject);
         return formFieldValues;
     }
 

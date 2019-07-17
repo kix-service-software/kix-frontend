@@ -1,5 +1,5 @@
 import { ComponentState } from './ComponentState';
-import { AbstractMarkoComponent } from '../../../core/browser';
+import { AbstractMarkoComponent } from '../../../../core/browser';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 

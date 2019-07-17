@@ -1,7 +1,6 @@
-import { Role, KIXObjectType, ObjectIcon, RoleProperty, DateTimeUtil, User, ValidObject } from "../../model";
+import { Role, KIXObjectType, ObjectIcon, RoleProperty } from "../../model";
 import { SearchProperty } from "../SearchProperty";
 import { TranslationService } from "../i18n/TranslationService";
-import { KIXObjectService } from "../kix";
 import { LabelProvider } from "../LabelProvider";
 
 export class RoleLabelProvider extends LabelProvider<Role> {
@@ -21,29 +20,11 @@ export class RoleLabelProvider extends LabelProvider<Role> {
             case RoleProperty.NAME:
                 displayValue = 'Translatable#Name';
                 break;
-            case RoleProperty.COMMENT:
-                displayValue = 'Translatable#Comment';
-                break;
-            case RoleProperty.CREATE_BY:
-                displayValue = 'Translatable#Created by';
-                break;
-            case RoleProperty.CREATE_TIME:
-                displayValue = 'Translatable#Created at';
-                break;
-            case RoleProperty.CHANGE_BY:
-                displayValue = 'Translatable#Changed by';
-                break;
-            case RoleProperty.CHANGE_TIME:
-                displayValue = 'Translatable#Changed at';
-                break;
-            case RoleProperty.VALID_ID:
-                displayValue = 'Translatable#Validity';
-                break;
             case RoleProperty.ID:
                 displayValue = 'Translatable#Icon';
                 break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
         if (displayValue) {
@@ -65,7 +46,7 @@ export class RoleLabelProvider extends LabelProvider<Role> {
                 displayValue = role.Name;
                 break;
             default:
-                displayValue = await this.getPropertyValueDisplayText(property, displayValue,  translatable);
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
         }
 
         if (displayValue) {
@@ -75,41 +56,6 @@ export class RoleLabelProvider extends LabelProvider<Role> {
         }
 
         return displayValue;
-    }
-
-    public async getPropertyValueDisplayText(
-        property: string, value: string | number = '', translatable: boolean = true
-    ): Promise<string> {
-        let displayValue = value;
-        switch (property) {
-            case RoleProperty.VALID_ID:
-                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
-                const valid = validObjects.find((v) => v.ID.toString() === value.toString());
-                if (valid) {
-                    displayValue = valid.Name;
-                }
-                break;
-            case RoleProperty.CREATE_BY:
-            case RoleProperty.CHANGE_BY:
-                const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [value], null, null, true
-                ).catch((error) => [] as User[]);
-                displayValue = users && !!users.length ? users[0].UserFullname : value;
-                break;
-            case RoleProperty.CREATE_TIME:
-            case RoleProperty.CHANGE_TIME:
-                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
-                break;
-            default:
-        }
-
-        if (displayValue) {
-            displayValue = await TranslationService.translate(
-                displayValue.toString(), undefined, undefined, !translatable
-            );
-        }
-
-        return displayValue ? displayValue.toString() : '';
     }
 
     public async getObjectText(role: Role, id?: boolean, title?: boolean, translatable?: boolean): Promise<string> {

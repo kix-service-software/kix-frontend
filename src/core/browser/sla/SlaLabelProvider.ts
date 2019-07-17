@@ -1,5 +1,4 @@
-import { KIXObjectType, Sla, ObjectIcon } from "../../model";
-import { TranslationService } from "../i18n/TranslationService";
+import { KIXObjectType, Sla } from "../../model";
 import { LabelProvider } from "../LabelProvider";
 
 export class SlaLabelProvider extends LabelProvider<Sla> {
@@ -12,22 +11,6 @@ export class SlaLabelProvider extends LabelProvider<Sla> {
 
     public isLabelProviderFor(sla: Sla): boolean {
         return sla instanceof Sla;
-    }
-
-    public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
-        let displayValue;
-        switch (property) {
-            default:
-                displayValue = property;
-        }
-
-        if (displayValue) {
-            displayValue = await TranslationService.translate(
-                displayValue.toString(), undefined, undefined, !translatable
-            );
-        }
-
-        return displayValue;
     }
 
     public getDisplayText(sla: Sla, property: string): Promise<string> {

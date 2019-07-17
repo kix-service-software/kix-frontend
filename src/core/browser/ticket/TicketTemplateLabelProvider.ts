@@ -1,8 +1,5 @@
-import {
-    KIXObjectType, ObjectIcon, TicketTemplate, TicketTemplateProperty, User, DateTimeUtil, ValidObject
-} from "../../model";
+import { KIXObjectType, ObjectIcon, TicketTemplate, TicketTemplateProperty } from "../../model";
 import { TranslationService } from "../i18n/TranslationService";
-import { KIXObjectService } from "../kix";
 import { LabelProvider } from "../LabelProvider";
 
 export class TicketTemplateLabelProvider extends LabelProvider<TicketTemplate> {
@@ -20,37 +17,17 @@ export class TicketTemplateLabelProvider extends LabelProvider<TicketTemplate> {
                 displayValue = 'Translatable#Name';
                 break;
             case TicketTemplateProperty.ID:
-                displayValue = 'Translatable#Icon';
-                break;
             case 'ICON':
                 displayValue = 'Translatable#Icon';
                 break;
             case TicketTemplateProperty.TYPE_ID:
                 displayValue = 'Translatable#Type';
                 break;
-            case TicketTemplateProperty.COMMENT:
-                displayValue = 'Translatable#Comment';
-                break;
             case TicketTemplateProperty.CHANNEL_ID:
                 displayValue = 'Translatable#Channel';
                 break;
-            case TicketTemplateProperty.CREATE_BY:
-                displayValue = 'Translatable#Created by';
-                break;
-            case TicketTemplateProperty.CREATE_TIME:
-                displayValue = 'Translatable#Created at';
-                break;
-            case TicketTemplateProperty.CHANGE_BY:
-                displayValue = 'Translatable#Changed by';
-                break;
-            case TicketTemplateProperty.CHANGE_TIME:
-                displayValue = 'Translatable#Changed at';
-                break;
-            case TicketTemplateProperty.VALID_ID:
-                displayValue = 'Translatable#Validity';
-                break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
         if (displayValue) {
@@ -90,25 +67,8 @@ export class TicketTemplateLabelProvider extends LabelProvider<TicketTemplate> {
         let displayValue = value;
         switch (property) {
             // TODO: ChannelID und TypeID auflösen
-            case TicketTemplateProperty.VALID_ID:
-                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
-                const valid = validObjects.find((v) => v.ID.toString() === value.toString());
-                if (valid) {
-                    displayValue = valid.Name;
-                }
-                break;
-            case TicketTemplateProperty.CREATE_BY:
-            case TicketTemplateProperty.CHANGE_BY:
-                const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [value], null, null, true
-                ).catch((error) => [] as User[]);
-                displayValue = users && !!users.length ? users[0].UserFullname : value;
-                break;
-            case TicketTemplateProperty.CREATE_TIME:
-            case TicketTemplateProperty.CHANGE_TIME:
-                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
-                break;
             default:
+                displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
         }
 
         if (displayValue) {

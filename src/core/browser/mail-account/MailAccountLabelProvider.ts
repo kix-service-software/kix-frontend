@@ -18,7 +18,7 @@ export class MailAccountLabelProvider extends LabelProvider<MailAccount> {
         return object instanceof MailAccount;
     }
 
-    public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
             case MailAccountProperty.HOST:
@@ -39,26 +39,11 @@ export class MailAccountLabelProvider extends LabelProvider<MailAccount> {
             case MailAccountProperty.DISPATCHING_BY:
                 displayValue = 'Translatable#Dispatching';
                 break;
-            case KIXObjectProperty.VALID_ID:
-                displayValue = 'Translatable#Validity';
-                break;
-            case KIXObjectProperty.CREATE_BY:
-                displayValue = 'Translatable#Created by';
-                break;
-            case KIXObjectProperty.CREATE_TIME:
-                displayValue = 'Translatable#Created at';
-                break;
-            case KIXObjectProperty.CHANGE_BY:
-                displayValue = 'Translatable#Changed by';
-                break;
-            case KIXObjectProperty.CHANGE_TIME:
-                displayValue = 'Translatable#Changed at';
-                break;
             case MailAccountProperty.ID:
                 displayValue = 'Translatable#Id';
                 break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
         if (displayValue) {
@@ -112,33 +97,11 @@ export class MailAccountLabelProvider extends LabelProvider<MailAccount> {
         let displayValue = value;
 
         switch (property) {
-            case KIXObjectProperty.VALID_ID:
-                if (value) {
-                    const validObjects = await KIXObjectService.loadObjects<ValidObject>(
-                        KIXObjectType.VALID_OBJECT, [value], null, null, true
-                    ).catch((error) => [] as ValidObject[]);
-                    displayValue = validObjects && !!validObjects.length ? validObjects[0].Name : value;
-                }
-                break;
-            case KIXObjectProperty.CREATE_BY:
-            case KIXObjectProperty.CHANGE_BY:
-                if (value) {
-                    const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [value], null, null, true
-                    ).catch((error) => [] as User[]);
-                    displayValue = users && !!users.length ? users[0].UserFullname : value;
-                }
-                break;
-            case KIXObjectProperty.CREATE_TIME:
-            case KIXObjectProperty.CHANGE_TIME:
-                if (displayValue) {
-                    displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
-                }
-                break;
             case MailAccountProperty.TRUSTED:
                 displayValue = Boolean(value) ? 'Translatable#Yes' : 'Translatable#No';
                 break;
             default:
+                displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
         }
 
         if (displayValue) {

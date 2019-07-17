@@ -34,11 +34,6 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             );
             this.state.nodes = nodesOption ? nodesOption.value : [];
 
-            const selectedNodesOption = this.state.field.options.find(
-                (o) => o.option === DefaultSelectInputFormOption.NODES
-            );
-            this.state.selectedNodes = selectedNodesOption ? selectedNodesOption.value : null;
-
             const asMultiselectOption = this.state.field.options.find(
                 (o) => o.option === DefaultSelectInputFormOption.MULTI
             );
@@ -54,7 +49,8 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                     (n) => (this.state.defaultValue.value as Array<string | number>).some((dv) => dv === n.id)
                 );
             } else {
-                this.state.selectedNodes = [this.state.nodes.find((n) => n.id === this.state.defaultValue.value)];
+                const node = this.state.nodes.find((n) => n.id === this.state.defaultValue.value);
+                this.state.selectedNodes = node ? [node] : [];
             }
             super.provideValue(
                 this.state.selectedNodes && !!this.state.selectedNodes.length

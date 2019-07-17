@@ -25,10 +25,6 @@
                     selectedNodes=[dynamicValue.currentOperationNode]
                     removeNode=false
                     readonly=dynamicValue.readonly
-                    autocomplete=dynamicValue.opertationIsAutocomplete
-                    searchCallback=(dynamicValue.opertationIsAutocompete ? dynamicValue.operationAutoCompleteData.searchCallback : null)
-                    autoCompleteConfiguration=(dynamicValue.opertationIsAutocompete ? dynamicValue.operationAutoCompleteData.configuration : null)
-                    freeText=(dynamicValue.opertationIsAutocomplete ? dynamicValue.operationAutoCompleteData.isFreeText : null)
                     placeholder=dynamicValue.operationsPlaceholder
                     on-nodesChanged("operationChanged", dynamicValue)/>
             </else>

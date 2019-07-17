@@ -1,6 +1,6 @@
 import { AutoCompleteConfiguration, TreeNode } from "../../../model";
 
-export class DynamicFormAutocompleteDefinition {
+export class DynamicFormAutocompleteConfiguration {
 
     public constructor(
         public searchCallback: (limit: number, searchValue: string) => Promise<TreeNode[]>,

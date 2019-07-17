@@ -1,5 +1,5 @@
 import {
-    ObjectIcon, KIXObjectType, ConfigItemClassDefinition, ConfigItemClassProperty, DateTimeUtil,
+    ObjectIcon, KIXObjectType, ConfigItemClassDefinition, DateTimeUtil,
     ConfigItemClassDefinitionProperty, User
 } from "../../model";
 import { TranslationService } from "../i18n/TranslationService";
@@ -16,20 +16,11 @@ export class ConfigItemClassDefinitionLabelProvider extends LabelProvider<Config
             case ConfigItemClassDefinitionProperty.VERSION:
                 displayValue = 'Translatable#Version';
                 break;
-            case ConfigItemClassProperty.CHANGE_BY:
-                displayValue = 'Translatable#Changed by';
-                break;
-            case ConfigItemClassProperty.CREATE_TIME:
-                displayValue = 'Translatable#Created at';
-                break;
-            case ConfigItemClassProperty.CREATE_BY:
-                displayValue = 'Translatable#Created by';
-                break;
             case ConfigItemClassDefinitionProperty.CURRENT:
                 displayValue = 'Translatable#Current Definition';
                 break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
         if (displayValue) {

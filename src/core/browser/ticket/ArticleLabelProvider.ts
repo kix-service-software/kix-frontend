@@ -1,6 +1,4 @@
-import {
-    Article, ArticleProperty, DateTimeUtil, ObjectIcon, KIXObjectType, Channel, KIXObjectProperty, User
-} from '../../model';
+import { Article, ArticleProperty, DateTimeUtil, ObjectIcon, KIXObjectType, Channel, User } from '../../model';
 import { KIXObjectService } from '../kix';
 import { TranslationService } from '../i18n/TranslationService';
 import { LabelProvider } from '../LabelProvider';
@@ -164,13 +162,6 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
                     displayValue = DateTimeUtil.calculateAge(Number(displayValue));
                 }
                 break;
-            case KIXObjectProperty.CREATE_TIME:
-            case KIXObjectProperty.CHANGE_TIME:
-                if (displayValue) {
-                    displayValue = translatable ?
-                        await DateTimeUtil.getLocalDateTimeString(displayValue) : displayValue;
-                }
-                break;
             case ArticleProperty.CREATED_BY:
             case ArticleProperty.CHANGED_BY:
                 if (value) {
@@ -181,6 +172,7 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
                 }
                 break;
             default:
+                displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
         }
 
         if (displayValue) {

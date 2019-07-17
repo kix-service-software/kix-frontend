@@ -1,6 +1,6 @@
 // tslint:disable
 import { expect } from 'chai';
-import { Given, When, Then } from 'cucumber';
+import { Given, Then } from 'cucumber';
 import { ITable, TableFactoryService, TableHeaderHeight } from '../../../src/core/browser/table';
 import { KIXObjectType } from '../../../src/core/model';
 import { FAQArticleTableFactory } from '../../../src/core/browser/faq';
@@ -15,6 +15,7 @@ import { FAQCategoryTableFactory } from '../../../src/core/browser/faq/admin';
 import { TranslationPatternTableFactory } from '../../../src/core/browser/i18n/admin/table';
 import { TextModulesTableFactory } from '../../../src/core/browser/text-modules';
 import { MailFilterTableFactory, MailFilterMatchTableFactory, MailFilterSetTableFactory } from '../../../src/core/browser/mail-filter';
+import { NotificationTableFactory } from '../../../src/core/browser/notification';
 
 let table: ITable;
 TableFactoryService.getInstance().registerFactory(new FAQArticleTableFactory());
@@ -35,6 +36,7 @@ TableFactoryService.getInstance().registerFactory(new TranslationPatternTableFac
 TableFactoryService.getInstance().registerFactory(new ConfigItemClassTableFactory());
 TableFactoryService.getInstance().registerFactory(new TextModulesTableFactory());
 TableFactoryService.getInstance().registerFactory(new MailFilterTableFactory());
+TableFactoryService.getInstance().registerFactory(new NotificationTableFactory());
 TableFactoryService.getInstance().registerFactory(new MailFilterMatchTableFactory());
 TableFactoryService.getInstance().registerFactory(new MailFilterSetTableFactory());
 

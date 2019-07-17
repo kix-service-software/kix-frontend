@@ -1,48 +1,10 @@
-import {
-    ObjectIcon, KIXObjectType, ConfigItemClass, ConfigItemClassProperty, DateTimeUtil, User, ValidObject
-} from "../../model";
+import { ObjectIcon, KIXObjectType, ConfigItemClass, ConfigItemClassProperty } from "../../model";
 import { TranslationService } from "../i18n/TranslationService";
-import { KIXObjectService } from "../kix";
 import { LabelProvider } from "../LabelProvider";
 
 export class ConfigItemClassLabelProvider extends LabelProvider<ConfigItemClass> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_CLASS;
-
-    public async getPropertyValueDisplayText(
-        property: string, value: string | number | any = '', translatable: boolean = true
-    ): Promise<string> {
-        let displayValue = value;
-        switch (property) {
-            case ConfigItemClassProperty.VALID_ID:
-                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
-                const valid = validObjects.find((v) => v.ID.toString() === value.toString());
-                if (valid) {
-                    displayValue = valid.Name;
-                }
-                break;
-            case ConfigItemClassProperty.CREATE_BY:
-            case ConfigItemClassProperty.CHANGE_BY:
-                const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [value], null, null, true
-                ).catch((error) => [] as User[]);
-                displayValue = users && !!users.length ? users[0].UserFullname : value;
-                break;
-            case ConfigItemClassProperty.CREATE_TIME:
-            case ConfigItemClassProperty.CHANGE_TIME:
-                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
-                break;
-            default:
-        }
-
-        if (displayValue) {
-            displayValue = await TranslationService.translate(
-                displayValue.toString(), undefined, undefined, !translatable
-            );
-        }
-
-        return displayValue.toString();
-    }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
@@ -50,32 +12,11 @@ export class ConfigItemClassLabelProvider extends LabelProvider<ConfigItemClass>
             case ConfigItemClassProperty.NAME:
                 displayValue = 'Translatable#Name';
                 break;
-            case ConfigItemClassProperty.CHANGE_TIME:
-                displayValue = 'Translatable#Changed at';
-                break;
-            case ConfigItemClassProperty.CHANGE_BY:
-                displayValue = 'Translatable#Changed by';
-                break;
-            case ConfigItemClassProperty.CREATE_TIME:
-                displayValue = 'Translatable#Created at';
-                break;
-            case ConfigItemClassProperty.CREATE_BY:
-                displayValue = 'Translatable#Created by';
-                break;
-            case ConfigItemClassProperty.COMMENT:
-                displayValue = 'Translatable#Comment';
-                break;
-            case ConfigItemClassProperty.VALID_ID:
-                displayValue = 'Translatable#Validity';
-                break;
             case ConfigItemClassProperty.ID:
                 displayValue = 'Translatable#Icon';
                 break;
-            case 'ICON':
-                displayValue = 'Translatable#Icon';
-                break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
         if (displayValue) {

@@ -1,4 +1,4 @@
-import { Version, ObjectIcon, KIXObjectType } from '../../model';
+import { Version, KIXObjectType } from '../../model';
 import { TranslationService } from '../i18n/TranslationService';
 import { LabelProvider } from '../LabelProvider';
 

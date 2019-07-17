@@ -1,6 +1,4 @@
-import {
-    DateTimeUtil, ObjectIcon, KIXObjectType, SysConfigOption, SysConfigKey, ValidObject
-} from "../../model";
+import { DateTimeUtil, ObjectIcon, KIXObjectType, SysConfigOption, SysConfigKey } from "../../model";
 import { FAQArticleProperty, FAQArticle, FAQCategory } from "../../model/kix/faq";
 import { KIXObjectService, ServiceRegistry } from "../kix";
 import { BrowserUtil } from "../BrowserUtil";
@@ -22,13 +20,8 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
                 const category = faqCategories.find((fc) => fc.ID === value);
                 displayValue = category ? category.Name : value;
                 break;
-            case FAQArticleProperty.VALID_ID:
-                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
-                const valid = validObjects.find((v) => v.ID === value);
-                displayValue = valid ? valid.Name : value;
-                break;
             default:
-                displayValue = value;
+                displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
         }
 
         if (displayValue) {
@@ -40,7 +33,7 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
             case SearchProperty.FULLTEXT:
@@ -157,11 +150,6 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
                 break;
             case FAQArticleProperty.CHANGED_BY:
                 displayValue = faqArticle.changedBy ? faqArticle.changedBy.UserFullname : faqArticle.ChangedBy;
-                break;
-            case FAQArticleProperty.VALID_ID:
-                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
-                const valid = validObjects.find((v) => v.ID.toString() === faqArticle.ValidID.toString());
-                displayValue = valid ? valid.Name : faqArticle.ValidID;
                 break;
             case FAQArticleProperty.LANGUAGE:
                 const translationService = ServiceRegistry.getServiceInstance<TranslationService>(

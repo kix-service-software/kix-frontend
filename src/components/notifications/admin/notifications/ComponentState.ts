@@ -1,14 +1,14 @@
-import { IdService, TableConfiguration, TableHeaderHeight, TableRowHeight } from "../../../core/browser";
+import { IdService, TableConfiguration, TableHeaderHeight, TableRowHeight } from "../../../../core/browser";
 import {
     WidgetConfiguration, TableWidgetSettings, KIXObjectType, SortOrder, NotificationProperty
-} from "../../../core/model";
+} from "../../../../core/model";
 
 export class ComponentState {
 
     public constructor(
         public instanceId: string = IdService.generateDateBasedId('admin-notifications-list'),
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
-            'table-widget', 'Translatable#Automation: Notifications', ['csv-export-action'],
+            'table-widget', 'Translatable#Automation: Notifications', ['notification-create', 'csv-export-action'],
             new TableWidgetSettings(
                 KIXObjectType.NOTIFICATION, [NotificationProperty.NAME, SortOrder.UP],
                 new TableConfiguration(

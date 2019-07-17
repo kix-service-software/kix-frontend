@@ -1,4 +1,4 @@
-import { KIXObjectType, ObjectIcon, TicketStateProperty, DateTimeUtil, TicketStateType } from "../../model";
+import { KIXObjectType, ObjectIcon, TicketStateProperty, TicketStateType } from "../../model";
 import { TranslationService } from "../i18n/TranslationService";
 import { LabelProvider } from "../LabelProvider";
 
@@ -14,13 +14,11 @@ export class TicketStateTypeLabelProvider extends LabelProvider<TicketStateType>
         let displayValue = property;
         switch (property) {
             case TicketStateProperty.NAME:
-                displayValue = 'Translatable#Name';
-                break;
             case TicketStateProperty.ID:
                 displayValue = 'Translatable#Icon';
                 break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
         if (displayValue) {
@@ -51,10 +49,6 @@ export class TicketStateTypeLabelProvider extends LabelProvider<TicketStateType>
         }
 
         return displayValue ? displayValue.toString() : '';
-    }
-
-    public async getPropertyValueDisplayText(property: string, value: string | number): Promise<string> {
-        return value.toString();
     }
 
     public async getObjectText(ticketStateType: TicketStateType, id?: boolean, title?: boolean): Promise<string> {

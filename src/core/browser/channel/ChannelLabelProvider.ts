@@ -24,20 +24,8 @@ export class ChannelLabelProvider extends LabelProvider<Channel> {
             case ChannelProperty.ID:
                 displayValue = 'Translatable#Id';
                 break;
-            case ChannelProperty.CREATE_BY:
-                displayValue = 'Translatable#Created by';
-                break;
-            case ChannelProperty.CREATE_TIME:
-                displayValue = 'Translatable#Created at';
-                break;
-            case ChannelProperty.CHANGED_BY:
-                displayValue = 'Translatable#Changed by';
-                break;
-            case ChannelProperty.CHANGE_TIME:
-                displayValue = 'Translatable#Changed at';
-                break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
         if (displayValue) {

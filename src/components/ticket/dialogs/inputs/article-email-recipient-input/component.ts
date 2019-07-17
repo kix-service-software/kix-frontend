@@ -218,8 +218,8 @@ class Component extends FormInputComponent<string[], ComponentState> {
     }
 
     public contactChanged(nodes: TreeNode[]): void {
-        this.state.currentNodes = nodes;
-        super.provideValue(nodes.map((n) => n.id));
+        this.state.currentNodes = nodes ? nodes : [];
+        super.provideValue(this.state.currentNodes.map((n) => n.id));
     }
 
     private async searchContacts(limit: number, searchValue: string): Promise<TreeNode[]> {

@@ -14,26 +14,20 @@ export class ConfigItemHistoryLabelProvider extends LabelProvider<ConfigItemHist
         return object instanceof ConfigItemHistory;
     }
 
-    public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
             case ConfigItemHistoryProperty.HISTORY_TYPE:
                 displayValue = 'Translatable#Action';
                 break;
-            case ConfigItemHistoryProperty.COMMENT:
-                displayValue = 'Translatable#Comment';
-                break;
             case ConfigItemHistoryProperty.CREATE_BY:
-                displayValue = 'Translatable#Benutzer';
-                break;
-            case ConfigItemHistoryProperty.CREATE_TIME:
-                displayValue = 'Translatable#Created at';
+                displayValue = 'Translatable#User';
                 break;
             case ConfigItemHistoryProperty.VERSION_ID:
                 displayValue = 'Translatable#to version';
                 break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
         if (displayValue) {
