@@ -45,18 +45,22 @@ class Component extends FormInputComponent<string | number, ComponentState> {
 
             const objectOption = this.state.field.options.find((o) => o.option === ObjectReferenceOptions.OBJECT);
             if (objectOption) {
-                const objects = await KIXObjectService.loadObjects(objectOption.value, objectIds);
-                if (objects && !!objects.length) {
-                    if (this.state.nodes && !!this.state.nodes.length) {
-                        const nodes = this.state.nodes.filter(
-                            (n) => objectIds.some((oid) => n.id.toString() === oid.toString())
-                        );
-                        if (nodes && !!nodes.length) {
-                            this.state.currentNodes = nodes;
+                if (this.state.nodes && !!this.state.nodes.length) {
+                    const nodes: TreeNode[] = [];
+                    objectIds.forEach((oid) => {
+                        const node = this.findNode(oid);
+                        if (node) {
+                            nodes.push(node);
                         }
+                    });
+                    if (nodes && !!nodes.length) {
+                        this.state.currentNodes = nodes;
                     }
+                }
 
-                    if (this.state.autocomplete) {
+                if (this.state.autocomplete) {
+                    const objects = await KIXObjectService.loadObjects(objectOption.value, objectIds);
+                    if (objects && !!objects.length) {
                         const nodes = [];
                         for (const object of objects) {
                             nodes.push(await this.createTreeNode(object));
@@ -69,6 +73,24 @@ class Component extends FormInputComponent<string | number, ComponentState> {
 
             this.objectChanged(this.state.currentNodes);
         }
+    }
+
+    private findNode(id: any, nodes: TreeNode[] = this.state.nodes): TreeNode {
+        let returnNode: TreeNode;
+        if (Array.isArray(nodes)) {
+            returnNode = nodes.find((n) => n.id === id);
+            if (!returnNode) {
+                for (const node of nodes) {
+                    if (node.children && Array.isArray(node.children)) {
+                        returnNode = this.findNode(id, node.children);
+                        if (returnNode) {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return returnNode;
     }
 
     public objectChanged(nodes: TreeNode[]): void {
@@ -93,10 +115,18 @@ class Component extends FormInputComponent<string | number, ComponentState> {
                 this.objects = await KIXObjectService.loadObjects(
                     objectOption.value, null, loadingOptions ? loadingOptions.value : null
                 );
-                const nodes = [];
-                for (const o of this.objects) {
-                    const node = await this.createTreeNode(o);
-                    nodes.push(node);
+                const structureOption = this.state.field.options.find(
+                    (o) => o.option === ObjectReferenceOptions.AS_STRUCTURE
+                );
+                let nodes = [];
+                if (structureOption && structureOption.value) {
+                    nodes = await KIXObjectService.prepareObjectTree(this.objects);
+                } else {
+                    for (const o of this.objects) {
+                        const node = await this.createTreeNode(o);
+                        nodes.push(node);
+                    }
+
                 }
                 this.state.nodes = SortUtil.sortObjects(nodes, 'label', DataType.STRING);
             }
@@ -129,19 +159,34 @@ class Component extends FormInputComponent<string | number, ComponentState> {
                 if (service) {
                     filter = await service.prepareFullTextFilter(searchValue);
                 }
-
-                const loadingOptions = new KIXObjectLoadingOptions(
-                    filter, null, limit
+                const fieldLoadingOptions = this.state.field.options.find(
+                    (o) => o.option === ObjectReferenceOptions.LOADINGOPTIONS
                 );
+                const loadingOptions = fieldLoadingOptions ? fieldLoadingOptions.value : new KIXObjectLoadingOptions();
+
+                if (loadingOptions.filter) {
+                    loadingOptions.filter = [...loadingOptions.filter, ...filter];
+                } else {
+                    loadingOptions.filter = filter;
+                }
+                loadingOptions.limit = limit;
+
                 this.objects = await KIXObjectService.loadObjects<KIXObject>(
                     objectType, null, loadingOptions, null, false
                 );
 
                 if (searchValue && searchValue !== '') {
-                    const nodes = [];
-                    for (const o of this.objects) {
-                        const node = await this.createTreeNode(o);
-                        nodes.push(node);
+                    let nodes = [];
+                    const structureOption = this.state.field.options.find(
+                        (o) => o.option === ObjectReferenceOptions.AS_STRUCTURE
+                    );
+                    if (structureOption && structureOption.value) {
+                        nodes = await KIXObjectService.prepareObjectTree(this.objects);
+                    } else {
+                        for (const o of this.objects) {
+                            const node = await this.createTreeNode(o);
+                            nodes.push(node);
+                        }
                     }
                     this.state.nodes = SortUtil.sortObjects(nodes, 'label', DataType.STRING);
                 }

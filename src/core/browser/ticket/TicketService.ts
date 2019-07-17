@@ -109,7 +109,7 @@ export class TicketService extends KIXObjectService<Ticket> {
         switch (property) {
             case TicketProperty.QUEUE_ID:
                 const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy();
-                values = await QueueService.getInstance().prepareQueueTree(
+                values = await QueueService.getInstance().prepareObjectTree(
                     queuesHierarchy, showInvalid, filterIds ? filterIds.map((fid) => Number(fid)) : null
                 );
                 break;
