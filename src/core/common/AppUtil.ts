@@ -1,5 +1,6 @@
 import { PluginService } from "../../services";
 import { IConfigurationExtension, KIXExtensions } from "../extensions";
+import { Environment } from "./Environment";
 
 export class AppUtil {
 
@@ -11,6 +12,29 @@ export class AppUtil {
         for (const mf of moduleFactories) {
             await mf.createFormDefinitions(overwrite);
         }
+    }
+
+    public static isProductionMode(): boolean {
+        const environment = this.getEnvironment();
+        return environment === Environment.PRODUCTION ||
+            (environment !== Environment.DEVELOPMENT && environment !== Environment.TEST);
+    }
+
+    public static isDevelopmentMode(): boolean {
+        return this.getEnvironment() === Environment.DEVELOPMENT;
+    }
+
+    public static isTestMode(): boolean {
+        return this.getEnvironment() === Environment.TEST;
+    }
+
+    private static getEnvironment(): string {
+        let nodeEnv = process.env.NODE_ENV;
+        if (!nodeEnv) {
+            nodeEnv = Environment.PRODUCTION;
+        }
+
+        return nodeEnv.toLocaleLowerCase();
     }
 
 }

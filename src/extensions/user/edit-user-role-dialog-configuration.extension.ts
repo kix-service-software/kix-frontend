@@ -27,7 +27,7 @@ export class Extension implements IConfigurationExtension {
         const configurationService = ConfigurationService.getInstance();
 
         const formId = 'edit-user-role-form';
-        const existing = configurationService.getModuleConfiguration(formId, null);
+        const existing = configurationService.getConfiguration(formId);
         if (!existing || overwrite) {
             const infoGroup = new FormGroup('Translatable#Role Information', [
                 new FormField(
@@ -79,7 +79,7 @@ export class Extension implements IConfigurationExtension {
                     agentGroup
                 ], KIXObjectType.ROLE, true, FormContext.EDIT
             );
-            await configurationService.saveModuleConfiguration(form.id, null, form);
+            await configurationService.saveConfiguration(form.id, form);
         }
         configurationService.registerForm([FormContext.EDIT], KIXObjectType.ROLE, formId);
     }

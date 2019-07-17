@@ -28,7 +28,7 @@ export class Extension implements IConfigurationExtension {
         const configurationService = ConfigurationService.getInstance();
 
         const formId = 'edit-user-form';
-        const existing = configurationService.getModuleConfiguration(formId, null);
+        const existing = configurationService.getConfiguration(formId);
         if (!existing) {
             const infoFields: FormField[] = [
                 new FormField(
@@ -126,7 +126,7 @@ export class Extension implements IConfigurationExtension {
                 formId, 'Translatable#New Agent', [infoGroup, roleGroup, settingsGroup], KIXObjectType.USER,
                 true, FormContext.EDIT
             );
-            await configurationService.saveModuleConfiguration(form.id, null, form);
+            await configurationService.saveConfiguration(form.id, form);
         }
         configurationService.registerForm([FormContext.EDIT], KIXObjectType.USER, formId);
     }

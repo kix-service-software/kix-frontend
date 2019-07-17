@@ -76,8 +76,8 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
     public async createFormDefinitions(overwrite: boolean): Promise<void> {
         const configurationService = ConfigurationService.getInstance();
 
-        const formIdEditTicket = 'edit-ticket-form';
-        const existingFormEditTicket = configurationService.getModuleConfiguration(formIdEditTicket, null);
+        const formId = 'edit-ticket-form';
+        const existingFormEditTicket = configurationService.getConfiguration(formId);
         if (!existingFormEditTicket) {
             const fields: FormField[] = [];
             fields.push(new FormField('Translatable#Title', TicketProperty.TITLE, null, true, 'Translatable#Insert a ticket title.'));
@@ -146,11 +146,11 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
             const group = new FormGroup('Translatable#Ticket Data', fields);
 
             const form = new Form(
-                formIdEditTicket, 'Translatable#Edit Ticket', [group],
+                formId, 'Translatable#Edit Ticket', [group],
                 KIXObjectType.TICKET, true, FormContext.EDIT);
-            await configurationService.saveModuleConfiguration(form.id, null, form);
+            await configurationService.saveConfiguration(form.id, form);
         }
-        configurationService.registerForm([FormContext.EDIT], KIXObjectType.TICKET, formIdEditTicket);
+        configurationService.registerForm([FormContext.EDIT], KIXObjectType.TICKET, formId);
     }
 
 }

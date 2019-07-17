@@ -73,7 +73,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
     public async createFormDefinitions(overwrite: boolean): Promise<void> {
         const configurationService = ConfigurationService.getInstance();
         const linkFormId = 'link-faq-search-form';
-        const existingLinkForm = configurationService.getModuleConfiguration(linkFormId, null);
+        const existingLinkForm = configurationService.getConfiguration(linkFormId);
         if (!existingLinkForm) {
             const fields: FormField[] = [];
             fields.push(new FormField("Translatable#Full Text", SearchProperty.FULLTEXT, null, false, "Translatable#Searchable FAQ attributes: FAQ#, Title, Symptom, Cause, Solution, Comment, Changed by, Created by, Keywords, Language, Validity"));
@@ -90,7 +90,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                 linkFormId, 'Translatable#Link FAQ with', [attributeGroup],
                 KIXObjectType.FAQ_ARTICLE, false, FormContext.LINK, null, true
             );
-            await configurationService.saveModuleConfiguration(form.id, null, form);
+            await configurationService.saveConfiguration(form.id, form);
         }
 
         configurationService.registerForm(

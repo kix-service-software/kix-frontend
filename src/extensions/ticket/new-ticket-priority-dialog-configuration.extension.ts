@@ -25,7 +25,7 @@ export class Extension implements IConfigurationExtension {
         const configurationService = ConfigurationService.getInstance();
 
         const formId = 'new-ticket-priority-form';
-        const existing = configurationService.getModuleConfiguration(formId, null);
+        const existing = configurationService.getConfiguration(formId);
         if (!existing) {
             const fields: FormField[] = [];
             fields.push(new FormField(
@@ -50,7 +50,7 @@ export class Extension implements IConfigurationExtension {
             const group = new FormGroup('Translatable#Priority Data', fields);
 
             const form = new Form(formId, 'Translatable#Create Priority', [group], KIXObjectType.TICKET_PRIORITY);
-            await configurationService.saveModuleConfiguration(form.id, null, form);
+            await configurationService.saveConfiguration(form.id, form);
         }
         configurationService.registerForm([FormContext.NEW], KIXObjectType.TICKET_PRIORITY, formId);
     }

@@ -202,7 +202,7 @@ export class Extension implements IConfigurationExtension {
         const configurationService = ConfigurationService.getInstance();
 
         const linkFormId = 'link-config-item-search-form';
-        const existingForm = configurationService.getModuleConfiguration(linkFormId, null);
+        const existingForm = configurationService.getConfiguration(linkFormId);
         if (!existingForm || overwrite) {
             const fields: FormField[] = [];
             fields.push(
@@ -232,7 +232,7 @@ export class Extension implements IConfigurationExtension {
             const form = new Form(
                 linkFormId, 'Translatable#Link Config Item with', [group], KIXObjectType.CONFIG_ITEM, false, FormContext.LINK
             );
-            await configurationService.saveModuleConfiguration(form.id, null, form);
+            await configurationService.saveConfiguration(form.id, form);
         }
         configurationService.registerForm(
             [FormContext.LINK], KIXObjectType.CONFIG_ITEM, linkFormId

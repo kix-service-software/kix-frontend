@@ -33,7 +33,7 @@ export class ModuleExtension implements IConfigurationExtension {
 
     public async createFormDefinitions(overwrite: boolean): Promise<void> {
         const formId = 'search-ticket-form';
-        const existingForm = ConfigurationService.getInstance().getModuleConfiguration(formId, null);
+        const existingForm = ConfigurationService.getInstance().getConfiguration(formId);
         if (!existingForm || overwrite) {
             const form = new SearchForm(
                 formId,
@@ -43,7 +43,7 @@ export class ModuleExtension implements IConfigurationExtension {
                 null,
                 [SearchProperty.FULLTEXT, TicketProperty.TITLE, TicketProperty.QUEUE_ID]
             );
-            await ConfigurationService.getInstance().saveModuleConfiguration(form.id, null, form);
+            await ConfigurationService.getInstance().saveConfiguration(form.id, form);
         }
         ConfigurationService.getInstance().registerForm([FormContext.SEARCH], KIXObjectType.TICKET, formId);
     }

@@ -31,10 +31,10 @@ export class Extension implements IConfigurationExtension {
 
         for (const ciClass of ciClasses) {
             const formId = ConfigItemFormFactory.getInstance().getFormId(ciClass);
-            const existingForm = configurationService.getModuleConfiguration(formId, null);
+            const existingForm = configurationService.getConfiguration(formId);
             if (formId && !existingForm || overwrite) {
                 const form = await ConfigItemFormFactory.getInstance().createCIForm(ciClass, formId);
-                await configurationService.saveModuleConfiguration(formId, null, form);
+                await configurationService.saveConfiguration(formId, form);
             }
             configurationService.registerFormId(formId);
         }

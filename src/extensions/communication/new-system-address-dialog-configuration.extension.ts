@@ -26,7 +26,7 @@ export class Extension implements IConfigurationExtension {
         const configurationService = ConfigurationService.getInstance();
 
         const formId = 'new-system-address-form';
-        const existing = configurationService.getModuleConfiguration(formId, null);
+        const existing = configurationService.getConfiguration(formId);
         if (!existing) {
             const fields: FormField[] = [
                 new FormField(
@@ -53,7 +53,7 @@ export class Extension implements IConfigurationExtension {
             const group = new FormGroup('Translatable#System Addresses', fields);
 
             const form = new Form(formId, 'Translatable#New Address', [group], KIXObjectType.SYSTEM_ADDRESS);
-            await configurationService.saveModuleConfiguration(form.id, null, form);
+            await configurationService.saveConfiguration(form.id, form);
         }
         configurationService.registerForm([FormContext.NEW], KIXObjectType.SYSTEM_ADDRESS, formId);
     }

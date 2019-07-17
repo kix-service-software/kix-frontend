@@ -22,7 +22,7 @@ export class Extension implements IConfigurationExtension {
         const configurationService = ConfigurationService.getInstance();
 
         const formId = 'new-faq-article-form';
-        const existingForm = configurationService.getModuleConfiguration(formId, null);
+        const existingForm = configurationService.getConfiguration(formId);
         if (!existingForm || overwrite) {
             const fields: FormField[] = [];
             fields.push(new FormField('Translatable#Title', FAQArticleProperty.TITLE, null, true, 'Translatable#Insert a name for the FAQ article.'));
@@ -54,7 +54,7 @@ export class Extension implements IConfigurationExtension {
             const group = new FormGroup('Translatable#FAQ Data', fields);
 
             const form = new Form(formId, 'Translatable#New FAQ', [group], KIXObjectType.FAQ_ARTICLE);
-            await configurationService.saveModuleConfiguration(form.id, null, form);
+            await configurationService.saveConfiguration(form.id, form);
         }
         configurationService.registerForm([FormContext.NEW], KIXObjectType.FAQ_ARTICLE, formId);
     }

@@ -37,7 +37,7 @@ export class ModuleExtension implements IConfigurationExtension {
         const configurationService = ConfigurationService.getInstance();
 
         const formId = 'search-faq-article-form';
-        const existingForm = configurationService.getModuleConfiguration(formId, null);
+        const existingForm = configurationService.getConfiguration(formId);
         if (!existingForm || overwrite) {
             const form = new SearchForm(
                 formId,
@@ -50,7 +50,7 @@ export class ModuleExtension implements IConfigurationExtension {
                     FAQArticleProperty.TITLE, FAQArticleProperty.CATEGORY_ID
                 ]
             );
-            await configurationService.saveModuleConfiguration(form.id, null, form);
+            await configurationService.saveConfiguration(form.id, form);
         }
         configurationService.registerForm([FormContext.SEARCH], KIXObjectType.FAQ_ARTICLE, formId);
     }

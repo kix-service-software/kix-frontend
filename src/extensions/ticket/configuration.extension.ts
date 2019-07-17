@@ -235,8 +235,8 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
 
     public async createFormDefinitions(overwrite: boolean): Promise<void> {
         // tslint:disable:max-line-length
-        const formIdLinkWithTicket = 'link-ticket-search-form';
-        const existingFormLinkWithTicket = ConfigurationService.getInstance().getModuleConfiguration(formIdLinkWithTicket, null);
+        const formId = 'link-ticket-search-form';
+        const existingFormLinkWithTicket = ConfigurationService.getInstance().getConfiguration(formId);
         if (!existingFormLinkWithTicket) {
 
             const fields: FormField[] = [];
@@ -257,13 +257,13 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
             const attributeGroup = new FormGroup('Translatable#Ticket Attributes', fields);
 
             const form = new Form(
-                formIdLinkWithTicket, 'Translatable#Link to ticket', [attributeGroup],
+                formId, 'Translatable#Link to ticket', [attributeGroup],
                 KIXObjectType.TICKET, false, FormContext.LINK, null, true
             );
-            await ConfigurationService.getInstance().saveModuleConfiguration(form.id, null, form);
+            await ConfigurationService.getInstance().saveConfiguration(form.id, form);
         }
         ConfigurationService.getInstance().registerForm(
-            [FormContext.LINK], KIXObjectType.TICKET, formIdLinkWithTicket
+            [FormContext.LINK], KIXObjectType.TICKET, formId
         );
     }
 

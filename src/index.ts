@@ -2,6 +2,8 @@ import { Server } from './Server';
 import { CoreServiceRegistry, ConfigurationService } from './core/services';
 import { PluginService } from './services';
 
+import path = require('path');
+
 process.setMaxListeners(0);
 
 class Startup {
@@ -13,8 +15,8 @@ class Startup {
     }
 
     private async initApplication(): Promise<void> {
-        const configDir = __dirname + '/../config/';
-        const certDir = __dirname + '/../cert/';
+        const configDir = path.join(__dirname, '..', 'config');
+        const certDir = path.join(__dirname, '..', 'cert');
         ConfigurationService.getInstance().init(configDir, certDir);
 
         PluginService.getInstance().init(['extensions']);

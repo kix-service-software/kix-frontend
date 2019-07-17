@@ -25,7 +25,7 @@ export class Extension implements IConfigurationExtension {
         const configurationService = ConfigurationService.getInstance();
 
         const formId = 'edit-text-module-form';
-        const existing = configurationService.getModuleConfiguration(formId, null);
+        const existing = configurationService.getConfiguration(formId);
         if (!existing) {
             const group = new FormGroup('Translatable#Text Module', [
                 new FormField(
@@ -59,7 +59,7 @@ export class Extension implements IConfigurationExtension {
             const form = new Form(
                 formId, 'Translatable#Edit Text Module', [group], KIXObjectType.TEXT_MODULE, true, FormContext.EDIT
             );
-            await configurationService.saveModuleConfiguration(form.id, null, form);
+            await configurationService.saveConfiguration(form.id, form);
         }
         configurationService.registerForm([FormContext.EDIT], KIXObjectType.TEXT_MODULE, formId);
     }
