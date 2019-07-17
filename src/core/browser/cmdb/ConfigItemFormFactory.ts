@@ -91,7 +91,7 @@ export class ConfigItemFormFactory {
         return form;
     }
 
-    private getFormField(ad: AttributeDefinition, parentInstanceId?: string): FormField {
+    private getFormField(ad: AttributeDefinition, parentInstanceId?: string, parent?: FormField): FormField {
         let formField: FormField;
         if (typeof ad.CountDefault === 'undefined' || ad.CountDefault === null) {
             ad.CountDefault = 1;
@@ -122,12 +122,12 @@ export class ConfigItemFormFactory {
             formField = this.getDefaultFormField(ad, parentInstanceId);
         }
 
-        if (formField.countDefault === 0) {
+        if (formField.countDefault === 0 || (parent && !parent.asStructure && parent.empty)) {
             formField.empty = true;
         }
 
         if (ad.Sub) {
-            formField.children = ad.Sub.map((subField) => this.getFormField(subField, formField.instanceId));
+            formField.children = ad.Sub.map((subField) => this.getFormField(subField, formField.instanceId, formField));
         }
 
         return formField;
