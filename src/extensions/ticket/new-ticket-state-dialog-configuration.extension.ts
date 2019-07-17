@@ -25,7 +25,7 @@ export class Extension implements IConfigurationExtension {
         const configurationService = ConfigurationService.getInstance();
 
         const formId = 'new-ticket-state-form';
-        const existing = configurationService.getModuleConfiguration(formId, null);
+        const existing = configurationService.getConfiguration(formId);
         if (!existing) {
             const fields: FormField[] = [];
             fields.push(new FormField(
@@ -56,7 +56,7 @@ export class Extension implements IConfigurationExtension {
             const group = new FormGroup('Translatable#State Data', fields);
 
             const form = new Form(formId, 'Translatable#Create State', [group], KIXObjectType.TICKET_STATE);
-            await configurationService.saveModuleConfiguration(form.id, null, form);
+            await configurationService.saveConfiguration(form.id, form);
         }
         configurationService.registerForm([FormContext.NEW], KIXObjectType.TICKET_STATE, formId);
     }

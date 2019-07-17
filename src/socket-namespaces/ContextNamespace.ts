@@ -5,7 +5,6 @@ import {
 import { SocketResponse, SocketErrorResponse } from '../core/common';
 import { ConfigurationService } from '../core/services';
 import { PluginService, PermissionService } from '../services';
-import { UserService } from '../core/services/impl/api/UserService';
 
 export class ContextNamespace extends SocketNameSpace {
 
@@ -35,13 +34,7 @@ export class ContextNamespace extends SocketNameSpace {
     protected async loadContextConfiguration(
         data: LoadContextConfigurationRequest
     ): Promise<SocketResponse<LoadContextConfigurationResponse<any> | SocketErrorResponse>> {
-        const user = await UserService.getInstance().getUserByToken(data.token)
-            .catch(() => null);
-        const userId = user ? user.UserID : null;
-
-        let configuration = ConfigurationService.getInstance().getModuleConfiguration<ContextConfiguration>(
-            data.contextId, userId
-        );
+        let configuration = ConfigurationService.getInstance().getConfiguration<ContextConfiguration>(data.contextId);
 
         if (!configuration) {
             const configurationExtension = await PluginService.getInstance().getConfigurationExtension(data.contextId)
@@ -52,9 +45,7 @@ export class ContextNamespace extends SocketNameSpace {
                     .catch(() => null);
 
                 if (moduleDefaultConfiguration) {
-                    ConfigurationService.getInstance().saveModuleConfiguration(
-                        data.contextId, userId, moduleDefaultConfiguration
-                    );
+                    ConfigurationService.getInstance().saveConfiguration(data.contextId, moduleDefaultConfiguration);
                     configuration = moduleDefaultConfiguration;
                 } else {
                     return new SocketResponse(

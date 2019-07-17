@@ -1,4 +1,4 @@
-import { IServerConfiguration } from '../../common';
+import { IServerConfiguration, AppUtil } from '../../common';
 import { ConfigurationService } from './ConfigurationService';
 import { LoggingService } from './LoggingService';
 
@@ -24,7 +24,7 @@ export class ProfilingService {
         this.active = serverConfig ? serverConfig.ENABLE_PROFILING || false : false;
 
         // deactivate in test mode
-        if (ConfigurationService.getInstance().isTestMode()) {
+        if (AppUtil.isTestMode()) {
             this.active = false;
         }
     }

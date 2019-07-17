@@ -21,7 +21,7 @@ export class Extension implements IConfigurationExtension {
         const configurationService = ConfigurationService.getInstance();
 
         const formId = 'edit-faq-category-form';
-        const existingForm = configurationService.getModuleConfiguration(formId, null);
+        const existingForm = configurationService.getConfiguration(formId);
         if (!existingForm || overwrite) {
             const fields: FormField[] = [];
             fields.push(
@@ -63,7 +63,7 @@ export class Extension implements IConfigurationExtension {
             const form = new Form(
                 formId, 'Translatable#Edit FAQ Category', [group], KIXObjectType.FAQ_CATEGORY, true, FormContext.EDIT
             );
-            await configurationService.saveModuleConfiguration(form.id, null, form);
+            await configurationService.saveConfiguration(form.id, form);
         }
         configurationService.registerForm([FormContext.EDIT], KIXObjectType.FAQ_CATEGORY, formId);
     }

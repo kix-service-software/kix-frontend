@@ -65,8 +65,8 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
 
     public async createFormDefinitions(overwrite: boolean): Promise<void> {
         // tslint:disable:max-line-length
-        const formIdNewTicket = 'new-ticket-form';
-        const existingFormNewTicket = ConfigurationService.getInstance().getModuleConfiguration(formIdNewTicket, null);
+        const formId = 'new-ticket-form';
+        const existingFormNewTicket = ConfigurationService.getInstance().getConfiguration(formId);
         if (!existingFormNewTicket) {
             const fields: FormField[] = [];
             fields.push(new FormField(
@@ -133,10 +133,10 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
 
             const group = new FormGroup('Translatable#Ticket Data', fields);
 
-            const form = new Form(formIdNewTicket, 'Translatable#New Ticket', [group], KIXObjectType.TICKET);
-            await ConfigurationService.getInstance().saveModuleConfiguration(form.id, null, form);
+            const form = new Form(formId, 'Translatable#New Ticket', [group], KIXObjectType.TICKET);
+            await ConfigurationService.getInstance().saveConfiguration(form.id, form);
         }
-        ConfigurationService.getInstance().registerForm([FormContext.NEW], KIXObjectType.TICKET, formIdNewTicket);
+        ConfigurationService.getInstance().registerForm([FormContext.NEW], KIXObjectType.TICKET, formId);
     }
 
 }

@@ -26,7 +26,7 @@ export class Extension implements IConfigurationExtension {
         const configurationService = ConfigurationService.getInstance();
 
         const formId = 'edit-mail-account-form';
-        const existing = configurationService.getModuleConfiguration(formId, null);
+        const existing = configurationService.getConfiguration(formId);
         if (!existing) {
             const group = new FormGroup('Translatable#Email Account', [
                 new FormField(
@@ -75,7 +75,7 @@ export class Extension implements IConfigurationExtension {
             const form = new Form(
                 formId, 'Translatable#Edit Email Account', [group], KIXObjectType.MAIL_ACCOUNT, true, FormContext.EDIT
             );
-            await configurationService.saveModuleConfiguration(form.id, null, form);
+            await configurationService.saveConfiguration(form.id, form);
         }
         configurationService.registerForm([FormContext.EDIT], KIXObjectType.MAIL_ACCOUNT, formId);
     }

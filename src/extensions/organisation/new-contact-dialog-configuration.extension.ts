@@ -22,7 +22,7 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
         const configurationService = ConfigurationService.getInstance();
 
         const formId = 'new-contact-form';
-        const existingForm = configurationService.getModuleConfiguration(formId, null);
+        const existingForm = configurationService.getConfiguration(formId);
         if (!existingForm || overwrite) {
             const groups: FormGroup[] = [];
 
@@ -106,7 +106,7 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
 
 
             const form = new Form(formId, 'New Contact', groups, KIXObjectType.CONTACT);
-            await configurationService.saveModuleConfiguration(form.id, null, form);
+            await configurationService.saveConfiguration(form.id, form);
         }
         configurationService.registerForm([FormContext.NEW], KIXObjectType.CONTACT, formId);
     }

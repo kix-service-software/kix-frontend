@@ -1,4 +1,5 @@
-config/components/*.json
+config/defaults/*.config.json
+config/user/**/*.config.json
 .cache
 package-lock.json
 package-lock.json

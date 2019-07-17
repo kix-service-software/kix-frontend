@@ -36,7 +36,7 @@ export class Extension implements IConfigurationExtension {
         const configurationService = ConfigurationService.getInstance();
 
         const formId = 'new-mail-filter-form';
-        const existing = configurationService.getModuleConfiguration(formId, null);
+        const existing = configurationService.getConfiguration(formId);
         if (!existing) {
             const infoGroup = new FormGroup('Translatable#Email Filter Information', [
                 new FormField(
@@ -81,7 +81,7 @@ export class Extension implements IConfigurationExtension {
             const form = new Form(formId, 'Translatable#New Email Filter', [
                 infoGroup, matchGroup, setGroup
             ], KIXObjectType.MAIL_FILTER);
-            await configurationService.saveModuleConfiguration(form.id, null, form);
+            await configurationService.saveConfiguration(form.id, form);
         }
         configurationService.registerForm([FormContext.NEW], KIXObjectType.MAIL_FILTER, formId);
     }

@@ -33,10 +33,10 @@ export class EditConfigItemDialogModuleExtension implements IConfigurationExtens
 
         for (const ciClass of ciClasses) {
             const formId = ConfigItemFormFactory.getInstance().getFormId(ciClass, true);
-            const existingForm = configurationService.getModuleConfiguration(formId, null);
+            const existingForm = configurationService.getConfiguration(formId);
             if (formId && !existingForm || overwrite) {
                 const form = await ConfigItemFormFactory.getInstance().createCIForm(ciClass, formId, true);
-                await configurationService.saveModuleConfiguration(formId, null, form);
+                await configurationService.saveConfiguration(formId, form);
             }
             configurationService.registerFormId(formId);
         }

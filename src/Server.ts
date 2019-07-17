@@ -109,7 +109,7 @@ export class Server {
     private async createReleaseInformation(systemInfo: SystemInfo): Promise<void> {
         const releaseInfo = await ReleaseInfoUtil.getReleaseInfo();
         releaseInfo.backendSystemInfo = systemInfo;
-        ConfigurationService.getInstance().saveModuleConfiguration('release-info', null, releaseInfo);
+        ConfigurationService.getInstance().saveConfiguration('release-info', releaseInfo);
     }
 
     public async initHttpServer(): Promise<void> {

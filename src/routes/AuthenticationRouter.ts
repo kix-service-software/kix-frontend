@@ -41,7 +41,7 @@ export class AuthenticationRouter extends KIXRouter {
 
             const logout = req.query.logout !== undefined;
 
-            const releaseInfo = ConfigurationService.getInstance().getModuleConfiguration('release-info', null);
+            const releaseInfo = ConfigurationService.getInstance().getConfiguration('release-info');
 
             const imprintLink = await this.getImprintLink()
                 .catch((e) => '');

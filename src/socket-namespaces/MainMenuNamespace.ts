@@ -41,9 +41,7 @@ export class MainMenuNamespace extends SocketNameSpace {
             KIXExtensions.MAIN_MENU
         ).catch(() => []);
 
-        let configuration: MainMenuConfiguration = ConfigurationService.getInstance().getComponentConfiguration(
-            'personal-settings', 'main-menu', user.UserID
-        );
+        let configuration: MainMenuConfiguration = ConfigurationService.getInstance().getConfiguration('main-menu');
 
         if (!configuration) {
             configuration = await this.createDefaultConfiguration(extensions, user.UserID)
@@ -90,9 +88,8 @@ export class MainMenuNamespace extends SocketNameSpace {
             );
         const configuration = new MainMenuConfiguration(primaryConfiguration, secondaryConfiguration);
 
-        await ConfigurationService.getInstance().saveComponentConfiguration(
-            'personal-settings', 'main-menu', userId, configuration
-        ).catch(() => null);
+        await ConfigurationService.getInstance().saveConfiguration('main-menu', configuration)
+            .catch(() => null);
 
         return configuration;
     }

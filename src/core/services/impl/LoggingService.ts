@@ -1,4 +1,4 @@
-import { LogLevel, IServerConfiguration } from '../../common';
+import { LogLevel, IServerConfiguration, AppUtil } from '../../common';
 import winston = require('winston');
 import path = require('path');
 import fs = require('fs');
@@ -28,7 +28,7 @@ export class LoggingService {
         this.trace = serverConfig.LOG_TRACE || true;
 
         // do not log in test mode
-        if (!ConfigurationService.getInstance().isTestMode()) {
+        if (!AppUtil.isTestMode()) {
             const logDirectory = this.createLogDirectory(serverConfig);
             try {
                 this.createLogger(logDirectory);

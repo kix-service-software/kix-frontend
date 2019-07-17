@@ -33,7 +33,7 @@ export class ModuleExtension implements IConfigurationExtension {
         const configurationService = ConfigurationService.getInstance();
 
         const formId = 'search-contact-form';
-        const existingForm = configurationService.getModuleConfiguration(formId, null);
+        const existingForm = configurationService.getConfiguration(formId);
         if (!existingForm || overwrite) {
             const form = new SearchForm(
                 formId,
@@ -47,7 +47,7 @@ export class ModuleExtension implements IConfigurationExtension {
                     ContactProperty.EMAIL, ContactProperty.LOGIN
                 ]
             );
-            await configurationService.saveModuleConfiguration(form.id, null, form);
+            await configurationService.saveConfiguration(form.id, form);
         }
         configurationService.registerForm([FormContext.SEARCH], KIXObjectType.CONTACT, formId);
     }

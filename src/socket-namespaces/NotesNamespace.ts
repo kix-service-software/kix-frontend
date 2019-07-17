@@ -37,9 +37,7 @@ export class NotesNamespace extends SocketNameSpace {
             userId = user.UserID;
         }
 
-        const notes = await ConfigurationService.getInstance().getComponentConfiguration(
-            'notes', data.contextId, userId
-        );
+        const notes = await ConfigurationService.getInstance().getConfiguration('notes', userId);
 
         const response = new LoadNotesResponse(data.requestId, notes);
         return new SocketResponse(NotesEvent.NOTES_LOADED, response);
@@ -54,17 +52,14 @@ export class NotesNamespace extends SocketNameSpace {
         }
 
         if (userId) {
-            let notesConfig = await ConfigurationService.getInstance().getModuleConfiguration('notes', userId)
-                .catch(() => null);
+            let notesConfig = ConfigurationService.getInstance().getConfiguration('notes', userId);
             if (!notesConfig) {
                 notesConfig = {};
             }
             notesConfig[data.contextId] = data.notes;
 
 
-            const response = await ConfigurationService.getInstance().saveModuleConfiguration(
-                'notes', userId, notesConfig
-            )
+            const response = await ConfigurationService.getInstance().saveConfiguration('notes', notesConfig, userId)
                 .then(() => new SocketResponse(NotesEvent.SAVE_NOTES_FINISHED, { requestId: data.requestId }))
                 .catch((error) =>
                     new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error))

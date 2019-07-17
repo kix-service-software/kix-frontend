@@ -20,7 +20,7 @@ export class Extension implements IConfigurationExtension {
         const configurationService = ConfigurationService.getInstance();
 
         const formId = 'edit-organisation-form';
-        const existingForm = configurationService.getModuleConfiguration(formId, null);
+        const existingForm = configurationService.getConfiguration(formId);
         if (!existingForm || overwrite) {
             const groups: FormGroup[] = [];
 
@@ -69,7 +69,7 @@ export class Extension implements IConfigurationExtension {
             const form = new Form(
                 formId, 'Edit Organisation', groups, KIXObjectType.ORGANISATION, undefined, FormContext.EDIT
             );
-            await configurationService.saveModuleConfiguration(form.id, null, form);
+            await configurationService.saveConfiguration(form.id, form);
         }
         configurationService.registerForm([FormContext.EDIT], KIXObjectType.ORGANISATION, formId);
     }

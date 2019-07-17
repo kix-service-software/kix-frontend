@@ -28,7 +28,7 @@ export class Extension implements IConfigurationExtension {
         const configurationService = ConfigurationService.getInstance();
 
         const formId = 'edit-ticket-queue-form';
-        const existing = configurationService.getModuleConfiguration(formId, null);
+        const existing = configurationService.getConfiguration(formId);
         if (!existing) {
             const infoGroup = new FormGroup('Translatable#Queue Information', [
                 new FormField(
@@ -95,7 +95,7 @@ export class Extension implements IConfigurationExtension {
                 formId, 'Translatable#Edit Queue', [infoGroup, signatureGroup], KIXObjectType.QUEUE,
                 true, FormContext.EDIT
             );
-            await configurationService.saveModuleConfiguration(form.id, null, form);
+            await configurationService.saveConfiguration(form.id, form);
         }
         configurationService.registerForm([FormContext.EDIT], KIXObjectType.QUEUE, formId);
     }

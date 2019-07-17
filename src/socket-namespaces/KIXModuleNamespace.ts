@@ -92,7 +92,7 @@ export class KIXModuleNamespace extends SocketNameSpace {
     }
 
     private async loadReleaseInfo(data: ISocketRequest): Promise<SocketResponse<LoadReleaseInfoResponse>> {
-        const releaseInfo = ConfigurationService.getInstance().getModuleConfiguration('release-info', null);
+        const releaseInfo = ConfigurationService.getInstance().getConfiguration('release-info');
         return new SocketResponse(
             KIXModulesEvent.LOAD_RELEASE_INFO_FINISHED, new LoadReleaseInfoResponse(data.requestId, releaseInfo)
         );
