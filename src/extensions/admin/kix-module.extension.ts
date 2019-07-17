@@ -38,7 +38,23 @@ class Extension implements IKIXModuleExtension {
         ),
         new UIComponent(
             'i18n-translation-info-widget', 'i18n/admin/widgets/i18n-translation-info-widget', []),
-        new UIComponent('admin-notifications', 'admin/admin-notifications', [])
+        new UIComponent('admin-notifications', 'notifications/admin/notifications', []),
+        new UIComponent('new-notification-dialog', 'notifications/admin/dialogs/new-notification-dialog', []),
+        new UIComponent(
+            'notification-input-events',
+            'notifications/admin/dialogs/inputs/notification-input-events',
+            []
+        ),
+        new UIComponent(
+            'notification-input-email-recipient',
+            'notifications/admin/dialogs/inputs/notification-input-email-recipient',
+            []
+        ),
+        new UIComponent(
+            'notification-input-filter',
+            'notifications/admin/dialogs/inputs/notification-input-filter',
+            []
+        )
     ];
 
 }

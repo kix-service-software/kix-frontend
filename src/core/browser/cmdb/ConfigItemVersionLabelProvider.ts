@@ -1,6 +1,5 @@
-import { Version, DateTimeUtil, ObjectIcon, KIXObjectType, VersionProperty, User } from '../../model';
+import { Version, DateTimeUtil, KIXObjectType, VersionProperty } from '../../model';
 import { TranslationService } from '../i18n/TranslationService';
-import { KIXObjectService } from '../kix';
 import { LabelProvider } from '../LabelProvider';
 
 export class ConfigItemVersionLabelProvider extends LabelProvider<Version> {
@@ -17,16 +16,11 @@ export class ConfigItemVersionLabelProvider extends LabelProvider<Version> {
         let displayValue = value;
 
         switch (property) {
-            case VersionProperty.CREATE_BY:
-                const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [value], null, null, true
-                ).catch((error) => [] as User[]);
-                displayValue = users && !!users.length ? users[0].UserFullname : value;
-                break;
             case VersionProperty.CURRENT:
                 displayValue = value ? 'Translatable#(Current version)' : '';
                 break;
             default:
+                displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
         }
 
         if (displayValue) {
@@ -38,23 +32,17 @@ export class ConfigItemVersionLabelProvider extends LabelProvider<Version> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
             case VersionProperty.COUNT_NUMBER:
                 displayValue = 'Translatable#No.';
                 break;
-            case VersionProperty.CREATE_BY:
-                displayValue = 'Translatable#Created by';
-                break;
-            case VersionProperty.CREATE_TIME:
-                displayValue = 'Translatable#Created at';
-                break;
             case VersionProperty.CURRENT:
                 displayValue = 'Translatable#Current version';
                 break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
         if (displayValue) {

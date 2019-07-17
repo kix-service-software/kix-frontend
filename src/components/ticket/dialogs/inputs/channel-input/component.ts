@@ -3,7 +3,7 @@ import { FormInputComponent, Channel, KIXObjectType, ChannelProperty, ObjectIcon
 import {
     KIXObjectService, LabelService, ILabelProvider, FormService, ServiceRegistry, ServiceType
 } from '../../../../../core/browser';
-import { TicketFormService, ArticleFormService } from '../../../../../core/browser/ticket';
+import { ArticleFormService } from '../../../../../core/browser/ticket';
 import { isArray } from 'util';
 import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 

@@ -1,8 +1,5 @@
-import {
-    TextModule, KIXObjectType, TextModuleProperty, KIXObjectProperty, User, DateTimeUtil, ObjectIcon, ValidObject
-} from "../../model";
+import { TextModule, KIXObjectType, TextModuleProperty, ObjectIcon } from "../../model";
 import { TranslationService } from "../i18n/TranslationService";
-import { KIXObjectService } from "../kix";
 import { LabelProvider } from "../LabelProvider";
 
 export class TextModuleLabelProvider extends LabelProvider<TextModule> {
@@ -25,26 +22,8 @@ export class TextModuleLabelProvider extends LabelProvider<TextModule> {
             case TextModuleProperty.KEYWORDS:
                 displayValue = 'Translatable#Tags';
                 break;
-            case TextModuleProperty.COMMENT:
-                displayValue = 'Translatable#Comment';
-                break;
-            case KIXObjectProperty.CREATE_BY:
-                displayValue = 'Translatable#Created by';
-                break;
-            case KIXObjectProperty.CREATE_TIME:
-                displayValue = 'Translatable#Created at';
-                break;
-            case KIXObjectProperty.CHANGE_BY:
-                displayValue = 'Translatable#Changed by';
-                break;
-            case KIXObjectProperty.CHANGE_TIME:
-                displayValue = 'Translatable#Changed at';
-                break;
-            case KIXObjectProperty.VALID_ID:
-                displayValue = 'Translatable#Validity';
-                break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
         if (displayValue) {
@@ -80,44 +59,6 @@ export class TextModuleLabelProvider extends LabelProvider<TextModule> {
         }
 
         return displayValue;
-    }
-
-    public async getPropertyValueDisplayText(
-        property: string, value: string | number, translatable: boolean = true
-    ): Promise<string> {
-        let displayValue = value;
-        switch (property) {
-            case KIXObjectProperty.VALID_ID:
-                if (value) {
-                    const validObjects = await KIXObjectService.loadObjects<ValidObject>(
-                        KIXObjectType.VALID_OBJECT, [value], null, null, true
-                    ).catch((error) => [] as ValidObject[]);
-                    displayValue = validObjects && !!validObjects.length ? validObjects[0].Name : value;
-                }
-                break;
-            case KIXObjectProperty.CREATE_BY:
-            case KIXObjectProperty.CHANGE_BY:
-                if (value) {
-                    const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [value], null, null, true
-                    ).catch((error) => [] as User[]);
-                    displayValue = users && !!users.length ? users[0].UserFullname : value;
-                }
-                break;
-            case KIXObjectProperty.CREATE_TIME:
-            case KIXObjectProperty.CHANGE_TIME:
-                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
-                break;
-            default:
-        }
-
-        if (displayValue) {
-            displayValue = await TranslationService.translate(
-                displayValue.toString(), undefined, undefined, !translatable
-            );
-        }
-
-        return displayValue ? displayValue.toString() : '';
     }
 
     public async getObjectText(

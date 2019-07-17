@@ -1,0 +1,9 @@
+<form-list
+    nodes=state.nodes
+    placeholder=state.placeholder
+    selectedNodes=state.currentNodes
+    required=state.field.required
+    on-focusLost("focusLost")
+    on-nodesChanged("eventChanged")
+    invalid=state.invalid
+    multiselect=true/>

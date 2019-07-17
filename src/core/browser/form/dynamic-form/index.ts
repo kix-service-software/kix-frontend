@@ -1,4 +1,4 @@
 export { IDynamicFormManager } from './IDynamicFormManager';
-export { DynamicFormAutocompleteDefinition } from './DynamicFormAutocompleteDefinition';
+export { DynamicFormAutocompleteConfiguration } from './DynamicFormAutocompleteConfiguration';
 export { DynamicFormOperationsType } from './DynamicFormOperationsType';
 export { AbstractDynamicFormManager } from './AbstractDynamicFormManager';

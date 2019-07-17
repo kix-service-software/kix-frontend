@@ -15,17 +15,18 @@ import { DialogService } from "../../components";
 import { AuthenticationSocketClient } from "../../application/AuthenticationSocketClient";
 import { UIComponentPermission } from "../../../model/UIComponentPermission";
 import { AdministrationSocketClient, AdminContext } from "../../admin";
+import { FormValidationService } from "../../form/validation";
 import {
-    ContextDescriptor, KIXObjectType, ContextMode, ContextType, ConfiguredDialogWidget, WidgetConfiguration, CRUD
+    NotificationEmailRecipientValidator, NotificationService, NotificationBrowserFactory, NotificationTableFactory,
+    NotificationFormService, NotificationLabelProvider, NotificationCreateAction, NewNotificationDialogContext
+} from "../../notification";
+import {
+    ContextType, ContextMode, ContextDescriptor, KIXObjectType, ConfiguredDialogWidget, WidgetConfiguration, CRUD
 } from "../../../model";
-import { NotificationService } from "../../notifications/NotificationService";
-import { NotificationBrowserFactory } from "../../notifications/NotificationBrowserFactory";
-import { NotifiactionTableFactory } from "../../notifications/table";
-import { NotificationLabelProvider } from "../../notifications/NotificationLabelProvider";
+import { LogFileLabelProvider } from "../../log/LogFileLabelProvider";
 import { LogFileService } from "../../log/LogFileService";
 import { LogFileBrowserFactory } from "../../log/LogFileBrowserFactory";
 import { LogFileTableFactory } from "../../log/table/LogFileTableFactory";
-import { LogFileLabelProvider } from "../../log/LogFileLabelProvider";
 import { LogFileTableCSSHandler } from "../../log/table/LogFileTableCSSHandler";
 
 export class UIModule implements IUIModule {
@@ -48,11 +49,11 @@ export class UIModule implements IUIModule {
             ContextService.getInstance().registerContext(contextDescriptor);
 
             await this.registerI18N();
+            await this.registerNotifications();
         }
     }
 
     private async registerI18N(): Promise<void> {
-
         ActionFactory.getInstance().registerAction('i18n-admin-translation-csv-export', TranslationCSVExportAction);
 
         ServiceRegistry.registerServiceInstance(TranslationFormService.getInstance());
@@ -69,14 +70,13 @@ export class UIModule implements IUIModule {
 
         TableFactoryService.getInstance().registerFactory(new TranslationPatternTableFactory());
         TableFactoryService.getInstance().registerFactory(new TranslationLanguageTableFactory());
-        TableFactoryService.getInstance().registerFactory(new NotifiactionTableFactory());
 
         LabelService.getInstance().registerLabelProvider(new LogFileLabelProvider());
         LabelService.getInstance().registerLabelProvider(new TranslationPatternLabelProvider());
         LabelService.getInstance().registerLabelProvider(new TranslationLanguageLabelProvider());
         LabelService.getInstance().registerLabelProvider(new NotificationLabelProvider());
 
-        this.initTranslation();
+        await this.initTranslation();
     }
 
     private async initTranslation(): Promise<void> {
@@ -126,6 +126,44 @@ export class UIModule implements IUIModule {
             false, 'object-details-page', ['translations'], TranslationDetailsContext
         );
         ContextService.getInstance().registerContext(translationDetailsContext);
+    }
+
+    private async registerNotifications(): Promise<void> {
+        FormValidationService.getInstance().registerValidator(new NotificationEmailRecipientValidator());
+
+        ServiceRegistry.registerServiceInstance(NotificationService.getInstance());
+        ServiceRegistry.registerServiceInstance(NotificationFormService.getInstance());
+
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.NOTIFICATION, NotificationBrowserFactory.getInstance()
+        );
+
+        TableFactoryService.getInstance().registerFactory(new NotificationTableFactory());
+        LabelService.getInstance().registerLabelProvider(new NotificationLabelProvider());
+
+        await this.initNotification();
+    }
+
+    private async initNotification(): Promise<void> {
+        if (await this.checkPermission('system/communication/notifications', CRUD.CREATE)) {
+            ActionFactory.getInstance().registerAction('notification-create', NotificationCreateAction);
+            const newNotificationDialogContext = new ContextDescriptor(
+                NewNotificationDialogContext.CONTEXT_ID, [KIXObjectType.NOTIFICATION],
+                ContextType.DIALOG, ContextMode.CREATE_ADMIN,
+                false, 'new-notification-dialog', ['notifications'], NewNotificationDialogContext
+            );
+            ContextService.getInstance().registerContext(newNotificationDialogContext);
+
+            DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+                'new-notification-dialog',
+                new WidgetConfiguration(
+                    'new-notification-dialog', 'Translatable#New Notification', [], {},
+                    false, false, 'kix-icon-new-gear'
+                ),
+                KIXObjectType.NOTIFICATION,
+                ContextMode.CREATE_ADMIN
+            ));
+        }
     }
 
     private async checkPermission(resource: string, crud: CRUD): Promise<boolean> {

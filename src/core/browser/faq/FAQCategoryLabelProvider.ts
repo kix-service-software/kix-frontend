@@ -1,4 +1,4 @@
-import { DateTimeUtil, ObjectIcon, KIXObjectType, User, ValidObject } from "../../model";
+import { ObjectIcon, KIXObjectType } from "../../model";
 import { FAQCategory, FAQCategoryProperty } from "../../model/kix/faq";
 import { KIXObjectService } from "../kix";
 import { TranslationService } from "../i18n/TranslationService";
@@ -22,24 +22,6 @@ export class FAQCategoryLabelProvider extends LabelProvider<FAQCategory> {
             case FAQCategoryProperty.PARENT_ID:
                 displayValue = 'Translatable#Parent Category';
                 break;
-            case FAQCategoryProperty.COMMENT:
-                displayValue = 'Translatable#Comment';
-                break;
-            case FAQCategoryProperty.VALID_ID:
-                displayValue = 'Translatable#Validity';
-                break;
-            case FAQCategoryProperty.CHANGE_TIME:
-                displayValue = 'Translatable#Changed at';
-                break;
-            case FAQCategoryProperty.CHANGE_BY:
-                displayValue = 'Translatable#Changed by';
-                break;
-            case FAQCategoryProperty.CREATE_TIME:
-                displayValue = 'Translatable#Created at';
-                break;
-            case FAQCategoryProperty.CREATE_BY:
-                displayValue = 'Translatable#Created by';
-                break;
             case FAQCategoryProperty.ID:
                 displayValue = 'Translatable#Id';
                 break;
@@ -47,7 +29,7 @@ export class FAQCategoryLabelProvider extends LabelProvider<FAQCategory> {
                 displayValue = 'Translatable#Icon';
                 break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
         if (displayValue) {
@@ -87,19 +69,6 @@ export class FAQCategoryLabelProvider extends LabelProvider<FAQCategory> {
     ): Promise<string> {
         let displayValue = value;
         switch (property) {
-            case FAQCategoryProperty.CHANGE_TIME:
-            case FAQCategoryProperty.CREATE_TIME:
-                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
-                break;
-            case FAQCategoryProperty.CREATE_BY:
-            case FAQCategoryProperty.CHANGE_BY:
-                if (displayValue) {
-                    const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [displayValue], null, null, true
-                    ).catch((error) => [] as User[]);
-                    displayValue = users && !!users.length ? users[0].UserFullname : displayValue;
-                }
-                break;
             case FAQCategoryProperty.PARENT_ID:
                 if (value) {
                     const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(
@@ -108,15 +77,8 @@ export class FAQCategoryLabelProvider extends LabelProvider<FAQCategory> {
                     displayValue = faqCategories && !!faqCategories.length ? faqCategories[0].Name : value;
                 }
                 break;
-            case FAQCategoryProperty.VALID_ID:
-                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
-                const valid = validObjects.find((v) => v.ID.toString() === value.toString());
-                if (valid) {
-                    displayValue = valid.Name;
-                }
-                break;
             default:
-                displayValue = value;
+                displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
         }
 
         if (displayValue) {

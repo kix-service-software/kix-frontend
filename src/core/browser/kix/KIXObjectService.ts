@@ -13,6 +13,7 @@ import { ServiceRegistry } from "./ServiceRegistry";
 import { OverlayService } from "../OverlayService";
 import { AuthenticationSocketClient } from "../application/AuthenticationSocketClient";
 import { UIComponentPermission } from "../../model/UIComponentPermission";
+import { LabelService } from "../LabelService";
 
 export abstract class KIXObjectService<T extends KIXObject = KIXObject> implements IKIXObjectService<T> {
 
@@ -345,6 +346,31 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
     protected getResource(objectType: KIXObjectType): string {
         return objectType.toLocaleLowerCase();
+    }
+
+    public static async search(
+        objectType: KIXObjectType, searchValue: string, limit: number = 10
+    ): Promise<KIXObject[]> {
+        let result = [];
+        const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
+        if (service) {
+            const filter = await service.prepareFullTextFilter(searchValue);
+            const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit);
+            result = await service.loadObjects(objectType, null, loadingOptions);
+        }
+        return result;
+    }
+
+    public static async prepareTree(objects: KIXObject[]): Promise<TreeNode[]> {
+        const nodes = [];
+
+        for (const o of objects) {
+            const icon = await LabelService.getInstance().getIcon(o);
+            const text = await LabelService.getInstance().getText(o);
+            nodes.push(new TreeNode(o.ObjectId, text, icon));
+        }
+
+        return nodes;
     }
 
 }

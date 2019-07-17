@@ -1,6 +1,6 @@
 import { KIXObjectType, InputFieldTypes, TreeNode } from "../../../model";
 import { ObjectPropertyValue } from "../../ObjectPropertyValue";
-import { IDynamicFormManager, DynamicFormAutocompleteDefinition, DynamicFormOperationsType } from "../../form";
+import { IDynamicFormManager, DynamicFormAutocompleteConfiguration, DynamicFormOperationsType } from "../../form";
 
 export abstract class AbstractDynamicFormManager implements IDynamicFormManager {
 
@@ -116,10 +116,6 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return;
     }
 
-    public async getOperationsAutoCompleteData(): Promise<DynamicFormAutocompleteDefinition> {
-        return null;
-    }
-
     public getOperatorDisplayText(operator: string): string {
         return operator;
     }
@@ -135,4 +131,9 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     public async clearValueOnPropertyChange(property: string): Promise<boolean> {
         return true;
     }
+
+    public isMultiselect(property: string): boolean {
+        return false;
+    }
+
 }

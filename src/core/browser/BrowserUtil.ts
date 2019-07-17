@@ -13,7 +13,7 @@ export class BrowserUtil {
         setTimeout(() => {
             const content = new ComponentContent('toast', new ToastContent('kix-icon-check', message));
             OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
-        }, 200);
+        }, 500);
     }
 
     public static openConfirmOverlay(

@@ -28,20 +28,8 @@ export class TranslationPatternLabelProvider extends LabelProvider<TranslationPa
             case TranslationPatternProperty.AVAILABLE_LANGUAGES:
                 displayValue = 'Translatable#Languages';
                 break;
-            case TranslationPatternProperty.CREATE_BY:
-                displayValue = 'Translatable#Created by';
-                break;
-            case TranslationPatternProperty.CREATE_TIME:
-                displayValue = 'Translatable#Created at';
-                break;
-            case TranslationPatternProperty.CHANGE_BY:
-                displayValue = 'Translatable#Changed by';
-                break;
-            case TranslationPatternProperty.CHANGE_TIME:
-                displayValue = 'Translatable#Changed at';
-                break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
         if (displayValue) {

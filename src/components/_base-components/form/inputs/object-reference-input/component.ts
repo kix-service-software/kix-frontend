@@ -1,7 +1,7 @@
 import { ComponentState } from './ComponentState';
 import {
     FormInputComponent, KIXObjectType,
-    TreeNode, KIXObjectLoadingOptions, KIXObject, ObjectReferenceOptions, FilterCriteria
+    TreeNode, KIXObjectLoadingOptions, KIXObject, ObjectReferenceOptions, FilterCriteria, SortUtil, DataType
 } from '../../../../../core/model';
 import { FormService } from '../../../../../core/browser/form';
 import { LabelService, KIXObjectService, ServiceRegistry, IKIXObjectService } from '../../../../../core/browser';
@@ -93,10 +93,12 @@ class Component extends FormInputComponent<string | number, ComponentState> {
                 this.objects = await KIXObjectService.loadObjects(
                     objectOption.value, null, loadingOptions ? loadingOptions.value : null
                 );
+                const nodes = [];
                 for (const o of this.objects) {
                     const node = await this.createTreeNode(o);
-                    this.state.nodes.push(node);
+                    nodes.push(node);
                 }
+                this.state.nodes = SortUtil.sortObjects(nodes, 'label', DataType.STRING);
             }
         }
     }
@@ -136,11 +138,12 @@ class Component extends FormInputComponent<string | number, ComponentState> {
                 );
 
                 if (searchValue && searchValue !== '') {
-                    this.state.nodes = [];
+                    const nodes = [];
                     for (const o of this.objects) {
                         const node = await this.createTreeNode(o);
-                        this.state.nodes.push(node);
+                        nodes.push(node);
                     }
+                    this.state.nodes = SortUtil.sortObjects(nodes, 'label', DataType.STRING);
                 }
             }
         }

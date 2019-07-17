@@ -1,52 +1,16 @@
-import {
-    ObjectIcon, KIXObjectType, SystemAddress, SystemAddressProperty, User, DateTimeUtil, ValidObject
-} from '../../model';
+import { ObjectIcon, KIXObjectType, SystemAddress, SystemAddressProperty } from '../../model';
 import { TranslationService } from '../i18n/TranslationService';
-import { KIXObjectService } from "../kix";
 import { LabelProvider } from '../LabelProvider';
 
 export class SystemAddressLabelProvider extends LabelProvider<SystemAddress> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.SYSTEM_ADDRESS;
 
-    public async getPropertyValueDisplayText(
-        property: string, value: string | number, translatable: boolean = true
-    ): Promise<string> {
-        let displayValue = value;
-        switch (property) {
-            case SystemAddressProperty.VALID_ID:
-                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
-                const valid = validObjects.find((v) => v.ID === value);
-                displayValue = valid ? valid.Name : value;
-                break;
-            case SystemAddressProperty.CREATE_BY:
-            case SystemAddressProperty.CHANGE_BY:
-                const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [value], null, null, true
-                ).catch((error) => [] as User[]);
-                displayValue = users && !!users.length ? users[0].UserFullname : value;
-                break;
-            case SystemAddressProperty.CREATE_TIME:
-            case SystemAddressProperty.CHANGE_TIME:
-                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
-                break;
-            default:
-        }
-
-        if (displayValue) {
-            displayValue = await TranslationService.translate(
-                displayValue.toString(), undefined, undefined, !translatable
-            );
-        }
-
-        return displayValue ? displayValue.toString() : '';
-    }
-
     public isLabelProviderFor(object: SystemAddress): boolean {
         return object instanceof SystemAddress;
     }
 
-    public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
             case SystemAddressProperty.NAME:
@@ -58,26 +22,11 @@ export class SystemAddressLabelProvider extends LabelProvider<SystemAddress> {
             case SystemAddressProperty.COMMENT:
                 displayValue = 'Translatable#Comment';
                 break;
-            case SystemAddressProperty.VALID_ID:
-                displayValue = 'Translatable#Validity';
-                break;
-            case SystemAddressProperty.CREATE_BY:
-                displayValue = 'Translatable#Created by';
-                break;
-            case SystemAddressProperty.CREATE_TIME:
-                displayValue = 'Translatable#Created at';
-                break;
-            case SystemAddressProperty.CHANGE_BY:
-                displayValue = 'Translatable#Changed by';
-                break;
-            case SystemAddressProperty.CHANGE_TIME:
-                displayValue = 'Translatable#Changed at';
-                break;
             case SystemAddressProperty.ID:
                 displayValue = 'Translatable#Id';
                 break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
         if (displayValue) {
