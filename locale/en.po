@@ -80,6 +80,9 @@ msgstr ""
 msgid "Affected Service"
 msgstr ""
 
+msgid "after"
+msgstr ""
+
 msgid "Age"
 msgstr ""
 
@@ -108,6 +111,9 @@ msgid "All Objects"
 msgstr ""
 
 msgid "All Tickets"
+msgstr ""
+
+msgid "and"
 msgstr ""
 
 msgid "AND"
@@ -160,6 +166,9 @@ msgstr ""
 msgid "Assigned Organisations"
 msgstr ""
 
+msgid "Assigned Organsiation"
+msgstr ""
+
 msgid "Assigned Queues"
 msgstr "Assigned Teams"
 
@@ -205,6 +214,15 @@ msgid "back to"
 msgstr ""
 
 msgid "Bcc"
+msgstr ""
+
+msgid "before"
+msgstr ""
+
+msgid "Benutzer"
+msgstr ""
+
+msgid "between"
 msgstr ""
 
 msgid ""
@@ -392,6 +410,9 @@ msgid "Contact Search"
 msgstr ""
 
 msgid "Contact successfully created."
+msgstr ""
+
+msgid "contained in"
 msgstr ""
 
 msgid "contains"
@@ -791,12 +812,6 @@ msgid "Fullname"
 msgstr ""
 
 msgid "Full Text"
-msgstr ""
-
-msgid "greater or equal"
-msgstr ""
-
-msgid "greater than"
 msgstr ""
 
 msgid "Help"
@@ -1264,9 +1279,6 @@ msgstr ""
 msgid "Imprint"
 msgstr ""
 
-msgid "in"
-msgstr ""
-
 msgid "Incident state"
 msgstr ""
 
@@ -1409,15 +1421,6 @@ msgid "Last Name"
 msgstr ""
 
 msgid "Legend"
-msgstr ""
-
-msgid "less or equal"
-msgstr ""
-
-msgid "less than"
-msgstr ""
-
-msgid "like"
 msgstr ""
 
 msgid "link {0}"
@@ -2231,6 +2234,9 @@ msgstr ""
 msgid "Signature"
 msgstr ""
 
+msgid "since"
+msgstr ""
+
 msgid "SINGLE_QUOTES"
 msgstr "' (Single Quotes)"
 
@@ -2364,6 +2370,11 @@ msgid "Text Module successfully created."
 msgstr ""
 
 msgid "Text separator"
+msgstr ""
+
+msgid ""
+"The FAQ article <a href=\"faqarticles/2\" target=\"_blank\">How to search in "
+"KIX 18?</a> offers a detailed <b>explanation for the search operators<b>"
 msgstr ""
 
 msgid "The following {0} entries will be deleted. Are you sure?"
@@ -2535,6 +2546,9 @@ msgstr ""
 msgid "Unread Articles"
 msgstr ""
 
+msgid "until"
+msgstr ""
+
 msgid "Unwatch"
 msgstr ""
 
@@ -2659,6 +2673,9 @@ msgid "We are working on this functionality."
 msgstr ""
 
 msgid "Welcome to KIX"
+msgstr ""
+
+msgid "Wildcard Search"
 msgstr ""
 
 msgid "Yes"

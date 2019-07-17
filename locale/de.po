@@ -85,6 +85,9 @@ msgstr "Komplexsuche"
 msgid "Affected Service"
 msgstr "Betroffener Service"
 
+msgid "after"
+msgstr ""
+
 msgid "Age"
 msgstr "Alter"
 
@@ -116,6 +119,9 @@ msgstr "Alle Objekte"
 
 msgid "All Tickets"
 msgstr "Alle Tickets"
+
+msgid "and"
+msgstr ""
 
 msgid "AND"
 msgstr "UND"
@@ -170,6 +176,11 @@ msgstr "Zugeordnete Kontakte"
 msgid "Assigned Organisations"
 msgstr "Zugeordnete Kunden"
 
+#, fuzzy
+#| msgid "Assigned Organisations"
+msgid "Assigned Organsiation"
+msgstr "Zugeordnete Kunden"
+
 msgid "Assigned Queues"
 msgstr "Zugeordnete Teams"
 
@@ -222,6 +233,15 @@ msgstr "Zurück zu"
 
 msgid "Bcc"
 msgstr "Bcc"
+
+msgid "before"
+msgstr ""
+
+msgid "Benutzer"
+msgstr "User"
+
+msgid "between"
+msgstr ""
 
 msgid ""
 "<b>-- KIX Professional Feature--</b><p>To use the text modules available in "
@@ -416,6 +436,11 @@ msgstr "Kontakt Suche"
 
 msgid "Contact successfully created."
 msgstr "Kontakt wurde erfolgreich angelegt."
+
+#, fuzzy
+#| msgid "contains"
+msgid "contained in"
+msgstr "enthält"
 
 msgid "contains"
 msgstr "enthält"
@@ -818,12 +843,6 @@ msgstr "Vollständiger Name"
 
 msgid "Full Text"
 msgstr "Volltext"
-
-msgid "greater or equal"
-msgstr "größer oder gleich"
-
-msgid "greater than"
-msgstr "größer als"
 
 msgid "Help"
 msgstr "Hilfe"
@@ -1298,9 +1317,6 @@ msgstr "Kunden importieren"
 msgid "Imprint"
 msgstr "Impressum"
 
-msgid "in"
-msgstr "in"
-
 msgid "Incident state"
 msgstr "Vorfallstatus"
 
@@ -1452,15 +1468,6 @@ msgstr "Name"
 
 msgid "Legend"
 msgstr "Legende"
-
-msgid "less or equal"
-msgstr "kleiner oder gleich"
-
-msgid "less than"
-msgstr "kleiner als"
-
-msgid "like"
-msgstr "entspricht"
 
 msgid "link {0}"
 msgstr "Link {0}"
@@ -2320,6 +2327,9 @@ msgstr "Alle anzeigen"
 msgid "Signature"
 msgstr "Signatur"
 
+msgid "since"
+msgstr ""
+
 msgid "SINGLE_QUOTES"
 msgstr "' (Einfaches Hochkomma)"
 
@@ -2459,6 +2469,11 @@ msgstr "Textbaustein wurde erfolgreich angelegt."
 
 msgid "Text separator"
 msgstr "Texttrenner"
+
+msgid ""
+"The FAQ article <a href=\"faqarticles/2\" target=\"_blank\">How to search in "
+"KIX 18?</a> offers a detailed <b>explanation for the search operators<b>"
+msgstr ""
 
 msgid "The following {0} entries will be deleted. Are you sure?"
 msgstr "Die ausgewählten {0} Einträge werden gelöscht. Sind Sie sicher?"
@@ -2637,6 +2652,11 @@ msgstr "Entsperrzeit (min)"
 msgid "Unread Articles"
 msgstr "Ungelesene Artikel"
 
+#, fuzzy
+#| msgid "Wait until"
+msgid "until"
+msgstr "Warten bis"
+
 msgid "Unwatch"
 msgstr "Nicht beobachten"
 
@@ -2765,6 +2785,11 @@ msgstr "Funktionalität ist in Arbeit."
 msgid "Welcome to KIX"
 msgstr "Willkommen bei KIX"
 
+#, fuzzy
+#| msgid "Advanced Search"
+msgid "Wildcard Search"
+msgstr "Komplexsuche"
+
 msgid "Yes"
 msgstr "Ja"
 
@@ -2787,8 +2812,23 @@ msgstr "PLZ"
 msgid "ZIP"
 msgstr "PLZ"
 
-#~ msgid "Benutzer"
-#~ msgstr "User"
+#~ msgid "greater or equal"
+#~ msgstr "größer oder gleich"
+
+#~ msgid "greater than"
+#~ msgstr "größer als"
+
+#~ msgid "in"
+#~ msgstr "in"
+
+#~ msgid "less or equal"
+#~ msgstr "kleiner oder gleich"
+
+#~ msgid "less than"
+#~ msgstr "kleiner als"
+
+#~ msgid "like"
+#~ msgstr "entspricht"
 
 #~ msgid "Select a language for the user."
 #~ msgstr "Wählen Sie eine Sprache für den Nutzer."
