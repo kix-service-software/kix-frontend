@@ -7,6 +7,8 @@ const tslint = require("gulp-tslint");
 const less = require("gulp-less");
 const path = require('path');
 const uglify = require('gulp-uglify-es').default;
+const license = require('gulp-header-license');
+const fs = require('fs');
 
 const tslintConfig = require('./tslint.json');
 const orgEnv = process.env.NODE_ENV;
@@ -40,10 +42,10 @@ const prodTSCConfig = {
 gulp.task('default', (cb) => {
     if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test") {
         console.log("Build app for development.");
-        runseq('clean', 'tslint', 'compile-src', 'test', 'copy-extensions', 'compile-themes', 'copy-component-templates', 'copy-static', cb);
+        runseq('clean', 'tslint', 'license-header-ts', 'license-header-marko', 'license-header-less', 'compile-src', 'test', 'copy-extensions', 'compile-themes', 'copy-component-templates', 'copy-static', cb);
     } else {
         console.log("Build app for production.");
-        runseq('clean', 'tslint', 'compile-src', 'test', 'copy-extensions', 'compile-themes', 'copy-component-templates', 'uglify', 'copy-static', cb);
+        runseq('clean', 'tslint', 'license-header-ts', 'license-header-marko', 'license-header-less', 'compile-src', 'test', 'copy-extensions', 'compile-themes', 'copy-component-templates', 'uglify', 'copy-static', cb);
     }
 });
 
@@ -58,6 +60,24 @@ gulp.task('tslint', () => {
     gulp.src(['src/**/*.ts'])
         .pipe(tslint(tslintConfig))
         .pipe(tslint.report());
+});
+
+gulp.task('license-header-ts', () => {
+    gulp.src('src/**/*.ts')
+        .pipe(license(fs.readFileSync('license-ts-header.txt', 'utf8')))
+        .pipe(gulp.dest('src/'));
+});
+
+gulp.task('license-header-marko', () => {
+    gulp.src('src/**/*.marko')
+        .pipe(license(fs.readFileSync('license-html-header.txt', 'utf8')))
+        .pipe(gulp.dest('src/'));
+});
+
+gulp.task('license-header-less', () => {
+    gulp.src('src/**/*.less')
+        .pipe(license(fs.readFileSync('license-ts-header.txt', 'utf8')))
+        .pipe(gulp.dest('src/'));
 });
 
 gulp.task('compile-src', () => {
