@@ -147,10 +147,12 @@ export class Extension implements IConfigurationExtension {
                 new FormField(
                     'Translatable#Email', null, null, false, null, null, null, [
                         new FormField(
-                            'Translatable#Additional recipient email addresses',
+                            'Translatable#Additional recipients',
                             NotificationProperty.DATA_RECIPIENT_EMAIL,
                             'notification-input-email-recipient', false,
-                            'Translatable#Helptext_Admin_NotificationCreate_AdditionalRecipient'
+                            'Translatable#Helptext_Admin_NotificationCreate_AdditionalRecipient',
+                            null, null, null, null, null, null, null, null, null, null, null, null, null,
+                            'Translatable#Email Addresses'
                         ),
                         new FormField(
                             'Translatable#Subject', NotificationProperty.DATA_RECIPIENT_SUBJECT,
