@@ -42,10 +42,39 @@ const prodTSCConfig = {
 gulp.task('default', (cb) => {
     if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test") {
         console.log("Build app for development.");
-        runseq('clean', 'tslint', 'license-header-ts', 'license-header-marko', 'license-header-less', 'compile-src', 'test', 'copy-extensions', 'compile-themes', 'copy-component-templates', 'copy-static', cb);
+        runseq(
+            'clean',
+            'tslint',
+            'license-header-ts',
+            'license-header-marko',
+            'license-header-less',
+            'license-header-tests',
+            'license-header-cucumber',
+            'compile-src',
+            'test', 'copy-extensions',
+            'compile-themes',
+            'copy-component-templates',
+            'copy-static',
+            cb
+        );
     } else {
         console.log("Build app for production.");
-        runseq('clean', 'tslint', 'license-header-ts', 'license-header-marko', 'license-header-less', 'compile-src', 'test', 'copy-extensions', 'compile-themes', 'copy-component-templates', 'uglify', 'copy-static', cb);
+        runseq(
+            'clean',
+            'tslint',
+            'license-header-ts',
+            'license-header-marko',
+            'license-header-less',
+            'license-header-tests',
+            'license-header-cucumber',
+            'compile-src',
+            'test',
+            'copy-extensions',
+            'compile-themes',
+            'copy-component-templates',
+            'uglify',
+            'copy-static',
+            cb);
     }
 });
 
@@ -78,6 +107,18 @@ gulp.task('license-header-less', () => {
     gulp.src('src/**/*.less')
         .pipe(license(fs.readFileSync('license-ts-header.txt', 'utf8')))
         .pipe(gulp.dest('src/'));
+});
+
+gulp.task('license-header-tests', () => {
+    gulp.src('tests/**/*.ts')
+        .pipe(license(fs.readFileSync('license-ts-header.txt', 'utf8')))
+        .pipe(gulp.dest('tests/'));
+});
+
+gulp.task('license-header-cucumber', () => {
+    gulp.src('features/**/*.feature')
+        .pipe(license(fs.readFileSync('license-feature-header.txt', 'utf8')))
+        .pipe(gulp.dest('features/'));
 });
 
 gulp.task('compile-src', () => {
