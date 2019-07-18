@@ -70,7 +70,7 @@ export class RoutingService {
                 if (context) {
                     await ContextService.getInstance().setContext(
                         context.getDescriptor().contextId, null,
-                        context.getDescriptor().contextMode, objectId, undefined, history
+                        context.getDescriptor().contextMode, objectId, undefined, history, false, true
                     );
                 } else {
                     BrowserUtil.openAccessDeniedOverlay();
@@ -85,7 +85,9 @@ export class RoutingService {
     }
 
     private async setHomeContext(): Promise<void> {
-        await ContextService.getInstance().setContext('home', KIXObjectType.ANY, ContextMode.DASHBOARD);
+        await ContextService.getInstance().setContext(
+            'home', KIXObjectType.ANY, ContextMode.DASHBOARD, null, null, null, false, true
+        );
     }
 
     private async handleDialogRequest(path: string[], params: URLSearchParams): Promise<void> {
@@ -126,18 +128,17 @@ export class RoutingService {
         }
     }
 
-    public async routeToContext(routingConfiguration: RoutingConfiguration, objectId: string | number): Promise<void> {
+    public async routeToContext(
+        routingConfiguration: RoutingConfiguration, objectId: string | number, addHistory: boolean = true
+    ): Promise<void> {
         if (routingConfiguration) {
             ContextService.getInstance().setContext(
                 routingConfiguration.contextId,
                 routingConfiguration.objectType,
                 routingConfiguration.contextMode,
-                objectId, true, routingConfiguration.history
+                objectId, true, routingConfiguration.history,
+                addHistory
             );
-
-            const url = await this.buildUrl(routingConfiguration, objectId);
-
-            history.replaceState(null, null, `/${url}`);
         }
     }
 

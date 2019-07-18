@@ -18,6 +18,7 @@ import { ApplicationEvent } from '../../../core/browser/application';
 import { EventService } from '../../../core/browser/event';
 import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../core/browser/i18n/TranslationService';
+import { ContextHistory } from '../../../core/browser/context/ContextHistory';
 
 class KIXHeaderComponent {
 
@@ -64,6 +65,7 @@ class KIXHeaderComponent {
     }
 
     public async logout(): Promise<void> {
+        ContextHistory.getInstance().removeBrowserListener();
         EventService.getInstance().publish(
             ApplicationEvent.APP_LOADING, { loading: true, hint: 'Logout ...' }
         );
