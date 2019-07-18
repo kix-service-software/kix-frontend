@@ -8,11 +8,14 @@
  */
 
 import {
-    TicketProperty, Ticket, KIXObjectType, DateTimeUtil, TicketPriority, TicketState, KIXObject, Queue, TicketType
+    TicketProperty, Ticket, KIXObjectType, DateTimeUtil, KIXObjectLoadingOptions, FilterCriteria,
+    TicketStateProperty, FilterType, FilterDataType, SysConfigKey, SysConfigOption
 } from "../../../model";
 import { LabelService } from "../../LabelService";
 import { KIXObjectService } from "../../kix";
 import { TicketLabelProvider } from "../TicketLabelProvider";
+import { SearchOperator } from "../../SearchOperator";
+import { ConfigurationService } from "../../../services";
 
 export class TicketChartFactory {
 
@@ -63,12 +66,24 @@ export class TicketChartFactory {
     private async initMap(property: TicketProperty, labelProvider: TicketLabelProvider): Promise<Map<string, number>> {
         const map = new Map<string, number>();
         let objectType: KIXObjectType;
+        let filter = [];
         switch (property) {
             case TicketProperty.PRIORITY_ID:
                 objectType = KIXObjectType.TICKET_PRIORITY;
                 break;
             case TicketProperty.STATE_ID:
                 objectType = KIXObjectType.TICKET_STATE;
+
+                const viewAbleTypesConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+                    KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_VIEWABLE_STATE_TYPE]
+                );
+
+                if (viewAbleTypesConfig && viewAbleTypesConfig.length) {
+                    const types = viewAbleTypesConfig[0].Value;
+                    filter = [new FilterCriteria(
+                        TicketStateProperty.TYPE_NAME, SearchOperator.IN, FilterDataType.NUMERIC, FilterType.AND, types
+                    )];
+                }
                 break;
             case TicketProperty.QUEUE_ID:
                 objectType = KIXObjectType.QUEUE;
@@ -83,7 +98,7 @@ export class TicketChartFactory {
             default:
         }
 
-        const objects = await KIXObjectService.loadObjects(objectType);
+        const objects = await KIXObjectService.loadObjects(objectType, null, new KIXObjectLoadingOptions(filter));
 
         for (const o of objects) {
             const label = await labelProvider.getPropertyValueDisplayText(property, o.ObjectId);
