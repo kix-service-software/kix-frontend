@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-07-18 08:31+0000\n"
+"PO-Revision-Date: 2019-07-18 09:34+0000\n"
 "Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -86,7 +86,7 @@ msgid "Affected Service"
 msgstr "Betroffener Service"
 
 msgid "after"
-msgstr ""
+msgstr "nach"
 
 msgid "Age"
 msgstr "Alter"
@@ -121,7 +121,7 @@ msgid "All Tickets"
 msgstr "Alle Tickets"
 
 msgid "and"
-msgstr ""
+msgstr "und"
 
 msgid "AND"
 msgstr "UND"
@@ -220,13 +220,11 @@ msgstr "Attribute"
 msgid "attributes to change:"
 msgstr "zu ändernde Attribute:"
 
-#, fuzzy
-#| msgid "Account Information"
 msgid "Automation"
-msgstr "Konto Information"
+msgstr "Automatisierung"
 
 msgid "Automation: Notifications"
-msgstr ""
+msgstr "Automatisierung: Benachrichtigungen"
 
 msgid "back to"
 msgstr "Zurück zu"
@@ -235,13 +233,13 @@ msgid "Bcc"
 msgstr "Bcc"
 
 msgid "before"
-msgstr ""
+msgstr "vor"
 
 msgid "Benutzer"
 msgstr "User"
 
 msgid "between"
-msgstr ""
+msgstr "zwischen"
 
 msgid ""
 "<b>-- KIX Professional Feature--</b><p>To use the text modules available in "
@@ -437,10 +435,8 @@ msgstr "Kontakt Suche"
 msgid "Contact successfully created."
 msgstr "Kontakt wurde erfolgreich angelegt."
 
-#, fuzzy
-#| msgid "contains"
 msgid "contained in"
-msgstr "enthält"
+msgstr "enthalten in"
 
 msgid "contains"
 msgstr "enthält"
@@ -1093,25 +1089,17 @@ msgstr "Hilfetext_Admin_TextModuleEdit_Text"
 msgid "Helptext_Admin_TextModuleEdit_Validity"
 msgstr "Hilfetext_Admin_TextModuleEdit_Validity"
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_ParentQueue"
 msgid "Helptext_Admin_UserCreate_Preferences_MyQueues"
-msgstr "Hilfetext_Admin_QueueCreate_ParentQueue"
+msgstr "Hilfetext_Admin_UserCreate_Preferences_MyQueues"
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleCreate_Language"
 msgid "Helptext_Admin_UserCreate_Preferences_UserLanguage"
-msgstr "Hilfetext_Admin_TextModuleCreate_Language"
+msgstr "Hilfetext_Admin_UserCreate_Preferences_UserLanguage"
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleCreate_Language"
 msgid "Helptext_Admin_UserEdit_Preferences_Language"
-msgstr "Hilfetext_Admin_TextModuleCreate_Language"
+msgstr "Hilfetext_Admin_UserEdit_Preferences_Language"
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_ParentQueue"
 msgid "Helptext_Admin_UserEdit_Preferences_MyQueues"
-msgstr "Hilfetext_Admin_QueueEdit_ParentQueue"
+msgstr "Hilfetext_Admin_UserEdit_Preferences_MyQueues"
 
 msgid "Helptext_Organisations_ContactCreate_City"
 msgstr "Hilfetext_Organisations_ContactCreate_City"
@@ -1585,10 +1573,8 @@ msgstr "Minuten"
 msgid "Mobile"
 msgstr "Mobil"
 
-#, fuzzy
-#| msgid "not modified"
 msgid "Modified"
-msgstr "unverändert"
+msgstr "Geändert"
 
 msgid "My locked tickets"
 msgstr "Meine gesperrten Tickets"
@@ -1749,10 +1735,8 @@ msgstr "Notiz"
 msgid "Notes"
 msgstr "Notizen"
 
-#, fuzzy
-#| msgid "Communication"
 msgid "Notifications"
-msgstr "Kommunikation"
+msgstr "Benachrichtigungen"
 
 msgid "not modified"
 msgstr "********"
@@ -1979,7 +1963,7 @@ msgid "Rating"
 msgstr "Bewertung"
 
 msgid "Read"
-msgstr "Read"
+msgstr "Lesen"
 
 msgid "Read file."
 msgstr "Datei lesen."
@@ -2328,7 +2312,7 @@ msgid "Signature"
 msgstr "Signatur"
 
 msgid "since"
-msgstr ""
+msgstr "seit"
 
 msgid "SINGLE_QUOTES"
 msgstr "' (Einfaches Hochkomma)"
@@ -2439,7 +2423,6 @@ msgstr "System: SysConfig"
 msgid "-> (tab)"
 msgstr "-> (Tabulator)"
 
-#, fuzzy
 msgid "Tags"
 msgstr "Schlagworte"
 
@@ -2632,10 +2615,8 @@ msgstr "Unbekannte Eigenschaften (werden ignoriert):"
 msgid "Unlock"
 msgstr "Freigeben"
 
-#, fuzzy
-#| msgid "unlocked"
 msgid "Unlocked"
-msgstr "Freigeben"
+msgstr "Frei"
 
 msgid "Unlocked Tickets"
 msgstr "Freie Tickets"
@@ -2652,10 +2633,8 @@ msgstr "Entsperrzeit (min)"
 msgid "Unread Articles"
 msgstr "Ungelesene Artikel"
 
-#, fuzzy
-#| msgid "Wait until"
 msgid "until"
-msgstr "Warten bis"
+msgstr "bis"
 
 msgid "Unwatch"
 msgstr "Nicht beobachten"
@@ -2768,10 +2747,8 @@ msgstr "Warten bis"
 msgid "Watch"
 msgstr "Beobachten"
 
-#, fuzzy
-#| msgid "Watch"
 msgid "Watched"
-msgstr "Beobachten"
+msgstr "Beobachtet"
 
 msgid "Watched Tickets"
 msgstr "Beobachtete Tickets"
