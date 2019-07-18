@@ -17,7 +17,7 @@ export class ContextHistoryEntry {
         public contextId: string,
         public objectId: string | number,
         public descriptor: ContextDescriptor,
-        public lastVisitDate: number
+        public lastVisitDate: number,
     ) { }
 
 }

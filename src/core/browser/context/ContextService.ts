@@ -13,7 +13,7 @@ import {
 import { IContextServiceListener } from './IContextServiceListener';
 import { ContextHistoryEntry } from './ContextHistoryEntry';
 import { ContextHistory } from './ContextHistory';
-import { RoutingService } from '../router';
+import { RoutingService, RoutingConfiguration } from '../router';
 import { ContextFactory } from './ContextFactory';
 import { DialogService } from '../components/dialog/DialogService';
 import { BrowserUtil } from '../BrowserUtil';
@@ -21,6 +21,7 @@ import { EventService } from '../event';
 import { ApplicationEvent } from '../application';
 import { FormService } from '../form';
 import { AdditionalContextInformation } from './AdditionalContextInformation';
+import { BrowserHistoryState } from './BrowserHistoryState';
 
 export class ContextService {
 
@@ -59,7 +60,8 @@ export class ContextService {
 
     public async setContext(
         contextId: string, kixObjectType: KIXObjectType, contextMode: ContextMode,
-        objectId?: string | number, reset?: boolean, history: boolean = false
+        objectId?: string | number, reset?: boolean, history: boolean = false,
+        addHistory: boolean = true, replaceHistory: boolean = false
     ): Promise<void> {
 
         this.resetRefreshTimer();
@@ -71,7 +73,20 @@ export class ContextService {
         );
 
         if (context && context.getDescriptor().contextType === ContextType.MAIN) {
-            await ContextHistory.getInstance().addHistoryEntry(oldContext);
+            const state = new BrowserHistoryState(contextId, objectId);
+            const displayText = await context.getDisplayText();
+
+            const routingConfiguration = new RoutingConfiguration(
+                contextId, null, null, null
+            );
+            const url = await RoutingService.getInstance().buildUrl(routingConfiguration, objectId);
+
+            if (addHistory && oldContext && window && window.history) {
+                window.history.pushState(state, displayText, '/' + url);
+                await ContextHistory.getInstance().addHistoryEntry(oldContext);
+            } else if (replaceHistory) {
+                window.history.replaceState(state, displayText, '/' + url);
+            }
 
             if (context.getDescriptor().contextMode === ContextMode.DETAILS) {
                 await context.setObjectId(objectId);
@@ -81,16 +96,22 @@ export class ContextService {
             }
             DialogService.getInstance().closeMainDialog();
             this.activeMainContext = context;
+
+            if (document) {
+                const documentTitle = await context.getDisplayText();
+                document.title = documentTitle;
+            }
+
             RoutingService.getInstance().routeTo(
                 'base-router', context.getDescriptor().componentId, { objectId: context.getObjectId(), history }
             );
-        }
 
-        this.serviceListener.forEach(
-            (sl) => sl.contextChanged(
-                context.getDescriptor().contextId, context, context.getDescriptor().contextType, history, oldContext
-            )
-        );
+            this.serviceListener.forEach(
+                (sl) => sl.contextChanged(
+                    context.getDescriptor().contextId, context, context.getDescriptor().contextType, history, oldContext
+                )
+            );
+        }
     }
 
     public async setDialogContext(
