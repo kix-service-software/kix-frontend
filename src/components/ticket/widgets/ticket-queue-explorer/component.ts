@@ -72,8 +72,7 @@ export class Component {
     }
 
     private getStructureInformation(node: TreeNode = this.state.activeNode): string[] {
-        const queue = (node.id as Queue);
-        let info = [queue.Name];
+        let info = [node.label];
 
         if (node.parent) {
             info = [...this.getStructureInformation(node.parent), ...info];
