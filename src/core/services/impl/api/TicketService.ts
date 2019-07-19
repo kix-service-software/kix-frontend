@@ -148,7 +148,7 @@ export class TicketService extends KIXObjectService {
             const createArticle = await this.prepareArticleData(token, clientRequestId, parameter, queueId);
             const uri = this.buildUri(this.RESOURCE_URI, options.ticketId, 'articles');
             const response = await this.sendCreateRequest<CreateArticleResponse, CreateArticleRequest>(
-                token, clientRequestId, uri, new CreateArticleRequest(createArticle), this.objectType
+                token, clientRequestId, uri, new CreateArticleRequest(createArticle), KIXObjectType.ARTICLE
             );
             return response.ArticleID;
         } else if (objectType === KIXObjectType.WATCHER) {
