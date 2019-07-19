@@ -56,16 +56,14 @@ export class BrowserUtil {
     public static startBrowserDownload(fileName: string, content: string, contentType: string): void {
         content = content.replace(/\r?\n|\r/, '\n');
 
+        const FileSaver = require('file-saver');
         if (window.navigator.msSaveOrOpenBlob) {
             const blob = this.b64toBlob(content, contentType);
-            window.navigator.msSaveBlob(blob, fileName);
+            FileSaver.saveAs(blob, fileName);
         } else {
-            const a = window.document.createElement('a');
-            a.href = 'data:' + contentType + ';base64,' + content;
-            a.download = fileName;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            const blob = this.b64toBlob(content, contentType);
+            const file = new File([blob], fileName, { type: contentType });
+            FileSaver.saveAs(file);
         }
     }
 
