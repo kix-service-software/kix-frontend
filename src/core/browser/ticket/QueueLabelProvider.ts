@@ -43,7 +43,7 @@ export class QueueLabelProvider extends LabelProvider<Queue> {
                 displayValue = short ? 'Translatable#Unlock Timeout (min)' : 'Translatable#Unlock Timeout';
                 break;
             case QueueProperty.FOLLOW_UP_ID:
-                displayValue = 'Translatable#Follow Up on Tickets possible';
+                displayValue = 'Translatable#Follow Up on Tickets';
                 break;
             case QueueProperty.FOLLOW_UP_LOCK:
                 displayValue = 'Translatable#Follow Up Ticket Lock';

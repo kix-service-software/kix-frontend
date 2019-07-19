@@ -52,11 +52,11 @@ export class UserTableFactory extends TableFactory {
                 DataType.STRING, true, null, null, false
             ),
             new DefaultColumnConfiguration(
-                UserProperty.USER_LASTNAME, true, false, true, false, 250, true, true, false,
-                DataType.STRING, true, null, null, false
+                UserProperty.USER_FIRSTNAME, true, false, true, false, 250, true, true
             ),
             new DefaultColumnConfiguration(
-                UserProperty.USER_FIRSTNAME, true, false, true, false, 250, true, true
+                UserProperty.USER_LASTNAME, true, false, true, false, 250, true, true, false,
+                DataType.STRING, true, null, null, false
             ),
             new DefaultColumnConfiguration(
                 UserProperty.USER_EMAIL, true, false, true, false, 200, true, true

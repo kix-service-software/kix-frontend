@@ -73,7 +73,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 displayValue = 'Translatable#First Name';
                 break;
             case ContactProperty.LASTNAME:
-                displayValue = 'Translatable#Name';
+                displayValue = 'Translatable#Last Name';
                 break;
             case ContactProperty.EMAIL:
                 displayValue = 'Translatable#Email';

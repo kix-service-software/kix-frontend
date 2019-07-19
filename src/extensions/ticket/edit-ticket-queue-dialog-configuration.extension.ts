@@ -55,7 +55,7 @@ export class Extension implements IConfigurationExtension {
                     ]
                 ),
                 new FormField(
-                    'Translatable#Follow Up on Tickets possible', QueueProperty.FOLLOW_UP_ID, 'queue-input-follow-up',
+                    'Translatable#Follow Up on Tickets', QueueProperty.FOLLOW_UP_ID, 'queue-input-follow-up',
                     true, 'Translatable#Helptext_Admin_QueueEdit_FollowUp'
                 ),
                 new FormField(
