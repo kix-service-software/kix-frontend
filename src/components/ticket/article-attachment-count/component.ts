@@ -44,12 +44,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async attachmentsClicked(): Promise<void> {
-        const text = await TranslationService.translate('Translatable#We are working on this functionality.');
-        const content = new ComponentContent(
-            'toast',
-            new ToastContent('kix-icon-magicwand', text, 'Coming Soon')
-        );
-        OverlayService.getInstance().openOverlay(OverlayType.HINT_TOAST, null, content, '');
+        return;
     }
 
 

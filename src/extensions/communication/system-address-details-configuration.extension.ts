@@ -27,7 +27,7 @@ export class Extension implements IConfigurationExtension {
 
         const systemAddressInfoWidget = new ConfiguredWidget('system-address-info-widget',
             new WidgetConfiguration(
-                'system-address-info-widget', 'Translatable#Email Information', ['system-address-edit'], null,
+                'system-address-info-widget', 'Translatable#Email Information', [], null,
                 false, true, null, false
             )
         );

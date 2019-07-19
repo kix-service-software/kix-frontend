@@ -26,7 +26,7 @@ export class Extension implements IConfigurationExtension {
         );
 
         const ticketQueueInfoWidget = new ConfiguredWidget('ticket-queue-details-widget', new WidgetConfiguration(
-            'ticket-queue-info-widget', 'Translatable#Queue Information', ['ticket-admin-queue-edit'], null,
+            'ticket-queue-info-widget', 'Translatable#Queue Information', [], null,
             false, true, WidgetSize.BOTH, false
         ));
 

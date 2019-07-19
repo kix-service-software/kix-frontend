@@ -31,7 +31,7 @@ export class Extension implements IConfigurationExtension {
             new ConfiguredWidget('config-item-info-lane',
                 new WidgetConfiguration(
                     'config-item-info-widget', 'Translatable#Config Item Information',
-                    ['config-item-edit-action'],
+                    [],
                     {}, false, true, null, false
                 ),
                 [new UIComponentPermission('cmdb/configitems', [CRUD.READ])]
@@ -86,19 +86,15 @@ export class Extension implements IConfigurationExtension {
             );
 
         const lanes = [
-            'config-item-details-tab-widget',
-            'config-item-linked-objects-widget', 'config-item-graph-widget',
-            'config-item-images-widget', 'config-item-history-widget'
+            'config-item-details-tab-widget', 'config-item-linked-objects-widget', 'config-item-history-widget'
         ];
         const laneWidgets: Array<ConfiguredWidget<any>> = [
-            tabLane, configItemInfoLaneTab, configItemLinkedObjectsLane, configItemGraphLane,
-            configItemImagesLane, configItemHistoryLane
+            tabLane, configItemInfoLaneTab, configItemLinkedObjectsLane, configItemHistoryLane
         ];
 
         const actions = ['config-item-create-action'];
         const configItemActions = [
-            'ticket-create-action', 'config-item-version-compare-action',
-            'config-item-edit-action', 'linked-objects-edit-action', 'print-action'
+            'ticket-create-action', 'config-item-edit-action', 'linked-objects-edit-action', 'print-action'
         ];
 
         const configItemVersionLane = new ConfiguredWidget('config-item-version-widget',

@@ -90,8 +90,6 @@ export class TicketSearchDefinition extends SearchDefinition {
             case TicketProperty.TYPE_ID:
             case TicketProperty.STATE_ID:
             case TicketProperty.QUEUE_ID:
-            case TicketProperty.SERVICE_ID:
-            case TicketProperty.SLA_ID:
             case TicketProperty.PRIORITY_ID:
             case TicketProperty.ORGANISATION_ID:
             case TicketProperty.CONTACT_ID:
@@ -139,14 +137,7 @@ export class TicketSearchDefinition extends SearchDefinition {
         return property === TicketProperty.QUEUE_ID
             || property === TicketProperty.STATE_ID
             || property === TicketProperty.PRIORITY_ID
-            || property === TicketProperty.TYPE_ID
-            || property === TicketProperty.SERVICE_ID
-            || property === TicketProperty.SLA_ID
-            || property === TicketProperty.OWNER_ID
-            || property === TicketProperty.RESPONSIBLE_ID
-            || property === TicketProperty.LOCK_ID
-            || property === KIXObjectProperty.CREATE_BY
-            || property === KIXObjectProperty.CHANGE_BY;
+            || property === TicketProperty.TYPE_ID;
     }
 
     private isDateTime(property: string): boolean {
@@ -167,8 +158,6 @@ export class TicketSearchDefinition extends SearchDefinition {
         components.set(TicketProperty.TYPE_ID, 'ticket-input-type');
         components.set(TicketProperty.PRIORITY_ID, 'ticket-input-priority');
         components.set(TicketProperty.STATE_ID, 'ticket-input-state');
-        components.set(TicketProperty.SLA_ID, 'ticket-input-sla');
-        components.set(TicketProperty.SERVICE_ID, 'ticket-input-service');
         components.set(TicketProperty.QUEUE_ID, 'ticket-input-queue');
         components.set(TicketProperty.ARCHIVE_FLAG, 'ticket-input-archive-search');
 

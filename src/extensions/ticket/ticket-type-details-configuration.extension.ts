@@ -24,7 +24,7 @@ export class Extension implements IConfigurationExtension {
         );
 
         const ticketTypesInfoWidget = new ConfiguredWidget('ticket-type-details-widget', new WidgetConfiguration(
-            'ticket-type-info-widget', 'Translatable#Type Information', ['ticket-admin-type-edit'], null,
+            'ticket-type-info-widget', 'Translatable#Type Information', [], null,
             false, true, null, false
         ));
 
@@ -36,7 +36,7 @@ export class Extension implements IConfigurationExtension {
             [tabLane, ticketTypesInfoWidget],
             [], [],
             ['ticket-admin-type-create'],
-            ['ticket-admin-type-duplication', 'ticket-admin-type-edit', 'ticket-admin-type-delete', 'print-action']
+            ['ticket-admin-type-edit', 'print-action']
         );
     }
 

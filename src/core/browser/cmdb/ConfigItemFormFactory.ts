@@ -71,11 +71,6 @@ export class ConfigItemFormFactory {
 
         if (!forEdit) {
             fields.push(new FormField(
-                'Translatable#Images', ConfigItemProperty.IMAGES, 'attachment-input', false, 'Translatable#You may attach images to this config item. Possible file types are *.png, *.jpg, *.gif, *.bmp.',
-                [new FormFieldOption('MimeTypes', ['image/png', 'image/jpeg', 'image/gif', 'image/bmp'])],
-                null, null, null, 1, 1, 1, null, null, null, false, false
-            ));
-            fields.push(new FormField(
                 'Translatable#Link Config Item with', ConfigItemProperty.LINKS, 'link-input', false, 'Translatable#Link this config item to a ticket, an FAQ article or another config item.',
                 null, null, null, null, 1, 1, 1, null, null, null, false, false
             ));

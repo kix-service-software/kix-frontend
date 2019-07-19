@@ -32,9 +32,8 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
 
         const organisationInfoLane = new ConfiguredWidget('organisation-information-lane',
             new WidgetConfiguration(
-                'object-information-widget', 'Translatable#Organisation Information', [
-                    'organisation-edit-action'
-                ], new ObjectinformationWidgetSettings(KIXObjectType.ORGANISATION, [
+                'object-information-widget', 'Translatable#Organisation Information', [],
+                new ObjectinformationWidgetSettings(KIXObjectType.ORGANISATION, [
                     OrganisationProperty.NAME,
                     OrganisationProperty.NUMBER,
                     OrganisationProperty.URL,
@@ -56,9 +55,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
 
         const assignedContactsLane = new ConfiguredWidget('organisation-assigned-contacts-widget',
             new WidgetConfiguration(
-                'organisation-assigned-contacts-widget', 'Translatable#Assigned Contacts', [
-                    'organisation-edit-action'
-                ],
+                'organisation-assigned-contacts-widget', 'Translatable#Assigned Contacts', [],
                 new TableConfiguration(
                     KIXObjectType.CONTACT,
                     new KIXObjectLoadingOptions(

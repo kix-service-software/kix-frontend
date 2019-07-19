@@ -26,7 +26,7 @@ export class Extension implements IConfigurationExtension {
         );
 
         const ticketStateInfoWidget = new ConfiguredWidget('ticket-state-details-widget', new WidgetConfiguration(
-            'ticket-state-info-widget', 'Translatable#State Information', ['ticket-admin-state-edit'], null,
+            'ticket-state-info-widget', 'Translatable#State Information', [], null,
             false, true, null, false
         ));
 
@@ -36,7 +36,7 @@ export class Extension implements IConfigurationExtension {
             [tabLane, ticketStateInfoWidget],
             [], [],
             ['ticket-admin-state-create'],
-            ['ticket-admin-state-duplication', 'ticket-admin-state-edit', 'ticket-admin-state-delete', 'print-action']
+            ['ticket-admin-state-edit', 'print-action']
         );
     }
 

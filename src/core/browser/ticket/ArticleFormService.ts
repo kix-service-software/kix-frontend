@@ -97,12 +97,10 @@ export class ArticleFormService extends KIXObjectFormService<Article> {
         const formInstance = await FormService.getInstance().getFormInstance(formId);
 
         if (channel.Name === 'note') {
-            fields.push(await this.getVisibleField(formInstance, clear));
             fields.push(await this.getSubjectField(formInstance, clear));
             fields.push(await this.getBodyField(formInstance, clear));
             fields.push(await this.getAttachmentField(formInstance, clear));
         } else if (channel.Name === 'email') {
-            fields.push(await this.getVisibleField(formInstance, clear));
             fields.push(await this.getFromField(formInstance, clear));
             fields.push(await this.getToOrCcField(formInstance, clear));
             fields.push(await this.getSubjectField(formInstance, clear));
@@ -111,30 +109,6 @@ export class ArticleFormService extends KIXObjectFormService<Article> {
         }
 
         return fields;
-    }
-
-    private async getVisibleField(formInstance: IFormInstance, clear: boolean): Promise<FormField> {
-        const customerVisibleReadonly = formInstance && formInstance.getFormContext() === FormContext.NEW
-            && formInstance.getObjectType() !== KIXObjectType.ARTICLE;
-        const customerVisibleValue = new FormFieldValue(customerVisibleReadonly ? true : false, true);
-
-        let field = new FormField(
-            "Translatable#Visible in customer portal", ArticleProperty.CUSTOMER_VISIBLE, 'checkbox-input',
-            false, "Translatable#Visible in customer portal", undefined, customerVisibleValue,
-            undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
-            undefined, undefined, customerVisibleReadonly
-        );
-        if (!clear && formInstance) {
-            const existingField = await formInstance.getFormFieldByProperty(ArticleProperty.CUSTOMER_VISIBLE);
-            if (existingField) {
-                field = existingField;
-                const value = await formInstance.getFormFieldValue<boolean>(existingField.instanceId);
-                if (value) {
-                    field.defaultValue = value;
-                }
-            }
-        }
-        return field;
     }
 
     private async getSubjectField(formInstance: IFormInstance, clear: boolean): Promise<FormField> {

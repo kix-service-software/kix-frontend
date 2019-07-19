@@ -19,8 +19,7 @@ export class ComponentState {
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
             'table-widget', 'Translatable#Ticket: Priorities',
             [
-                'ticket-admin-priority-create', 'ticket-admin-priority-table-delete',
-                'ticket-admin-priority-import', 'csv-export-action'
+                'ticket-admin-priority-create', 'csv-export-action'
             ],
             new TableWidgetSettings(KIXObjectType.TICKET_PRIORITY,
                 [TicketPriorityProperty.NAME, SortOrder.UP]), false, false, 'kix-icon-gears')
