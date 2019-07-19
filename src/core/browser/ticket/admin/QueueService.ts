@@ -148,8 +148,6 @@ export class QueueService extends KIXObjectService<Queue> {
     public async getTreeNodes(property: string, showInvalid?: boolean): Promise<TreeNode[]> {
         const values: TreeNode[] = [];
 
-        const labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.QUEUE);
-
         switch (property) {
             case QueueProperty.FOLLOW_UP_ID:
                 let followUpTypes = await KIXObjectService.loadObjects<FollowUpType>(KIXObjectType.FOLLOW_UP_TYPE);
@@ -157,8 +155,7 @@ export class QueueService extends KIXObjectService<Queue> {
                     followUpTypes = followUpTypes.filter((q) => q.ValidID === 1);
                 }
                 for (const type of followUpTypes) {
-                    const icons = await labelProvider.getIcons(null, property, type.ID);
-                    values.push(new TreeNode(type.ID, type.Name, (icons && icons.length) ? icons[0] : null));
+                    values.push(new TreeNode(type.ID, type.Name));
                 }
                 break;
             default:

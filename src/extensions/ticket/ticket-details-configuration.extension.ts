@@ -116,8 +116,8 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                 new ObjectinformationWidgetSettings(
                     KIXObjectType.CONTACT, [
                         ContactProperty.TITLE,
-                        ContactProperty.LASTNAME,
                         ContactProperty.FIRSTNAME,
+                        ContactProperty.LASTNAME,
                         ContactProperty.LOGIN,
                         ContactProperty.PRIMARY_ORGANISATION_ID,
                         ContactProperty.PHONE,
@@ -172,8 +172,8 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                 new ObjectinformationWidgetSettings(KIXObjectType.CONTACT, [
                     ContactProperty.LOGIN,
                     ContactProperty.TITLE,
-                    ContactProperty.LASTNAME,
                     ContactProperty.FIRSTNAME,
+                    ContactProperty.LASTNAME,
                     ContactProperty.PRIMARY_ORGANISATION_ID,
                     ContactProperty.PHONE,
                     ContactProperty.MOBILE,

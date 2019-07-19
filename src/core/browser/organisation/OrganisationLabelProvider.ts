@@ -27,7 +27,7 @@ export class OrganisationLabelProvider extends LabelProvider<Organisation> {
                 displayValue = 'Translatable#Full Text';
                 break;
             case OrganisationProperty.NUMBER:
-                displayValue = 'Translatable#Number';
+                displayValue = 'Translatable#CNO';
                 break;
             case OrganisationProperty.CITY:
                 displayValue = 'Translatable#City';

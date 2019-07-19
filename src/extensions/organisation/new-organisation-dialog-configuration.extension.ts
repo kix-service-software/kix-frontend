@@ -36,7 +36,7 @@ export class Extension implements IConfigurationExtension {
 
             groups.push(new FormGroup('Translatable#Organisation Information', [
                 new FormField(
-                    'Translatable#Number', OrganisationProperty.NUMBER, null, true,
+                    'Translatable#CNO', OrganisationProperty.NUMBER, null, true,
                     'Translatable#Helptext_Organisations_OrganisationCreate_Number'
                 ),
                 new FormField(

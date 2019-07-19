@@ -41,12 +41,12 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
                     'Translatable#Helptext_Organisations_ContactCreate_Title'
                 ),
                 new FormField(
-                    'Translatable#Lastname', ContactProperty.LASTNAME, null, true,
-                    'Translatable#Helptext_Organisations_ContactCreate_Lastname'
+                    'Translatable#First Name', ContactProperty.FIRSTNAME, null, true,
+                    'Translatable#Helptext_Organisations_ContactCreate_Firstname'
                 ),
                 new FormField(
-                    'Translatable#Firstname', ContactProperty.FIRSTNAME, null, true,
-                    'Translatable#Helptext_Organisations_ContactCreate_Firstname'
+                    'Translatable#Last Name', ContactProperty.LASTNAME, null, true,
+                    'Translatable#Helptext_Organisations_ContactCreate_Lastname'
                 ),
                 new FormField(
                     'Translatable#Login Name', ContactProperty.LOGIN, null, true,
