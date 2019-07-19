@@ -26,7 +26,7 @@ export class Extension implements IConfigurationExtension {
         );
 
         const priorityDetailsWidget = new ConfiguredWidget('ticket-priority-details-widget', new WidgetConfiguration(
-            'ticket-priority-info-widget', 'Translatable#Priority Information', ['ticket-admin-priority-edit'], null,
+            'ticket-priority-info-widget', 'Translatable#Priority Information', [], null,
             false, true, null, false
         ));
 
@@ -36,8 +36,7 @@ export class Extension implements IConfigurationExtension {
             [], [],
             ['ticket-admin-priority-create'],
             [
-                'ticket-admin-priority-duplication', 'ticket-admin-priority-edit',
-                'ticket-admin-priority-delete', 'print-action'
+                'ticket-admin-priority-edit', 'print-action'
             ]
         );
     }

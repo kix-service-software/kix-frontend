@@ -29,7 +29,7 @@ export class Extension implements IConfigurationExtension {
         );
 
         const userRoleInfoWidget = new ConfiguredWidget('user-role-info-widget', new WidgetConfiguration(
-            'user-role-info-widget', 'Translatable#Role Information', ['user-admin-role-edit-action'], null,
+            'user-role-info-widget', 'Translatable#Role Information', [], null,
             false, true, WidgetSize.BOTH, false
         ));
 

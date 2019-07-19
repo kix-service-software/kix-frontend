@@ -19,8 +19,7 @@ export class ComponentState {
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
             'table-widget', 'Translatable#Ticket: Types',
             [
-                'ticket-admin-type-create', 'ticket-admin-type-table-delete',
-                'ticket-admin-type-import', 'csv-export-action'
+                'ticket-admin-type-create', 'csv-export-action'
             ],
             new TableWidgetSettings(KIXObjectType.TICKET_TYPE,
                 [TicketTypeProperty.NAME, SortOrder.UP]), false, false, 'kix-icon-gears')

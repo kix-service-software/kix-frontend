@@ -261,8 +261,6 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
             fields.push(new FormField<number>(
                 'Translatable#State', TicketProperty.STATE_ID, 'ticket-input-state', false, 'Translatable#Search for tickets with selected state.')
             );
-            fields.push(new FormField('Translatable#Service', TicketProperty.SERVICE_ID, 'ticket-input-service', false, 'Translatable#Search for tickets with the selected service.'));
-            fields.push(new FormField('Translatable#SLA', TicketProperty.SLA_ID, 'ticket-input-sla', false, 'Translatable#Search for tickets with selected SLA.'));
 
             const attributeGroup = new FormGroup('Translatable#Ticket Attributes', fields);
 

@@ -27,7 +27,7 @@ export class Extension implements IConfigurationExtension {
         );
 
         const userInfoWidget = new ConfiguredWidget('user-info-widget', new WidgetConfiguration(
-            'user-info-widget', 'Translatable#Agent Information', ['user-admin-user-edit-action'], null,
+            'user-info-widget', 'Translatable#Agent Information', [], null,
             false, true, null, false
         ));
 

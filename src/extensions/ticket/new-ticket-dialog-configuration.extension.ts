@@ -90,10 +90,6 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
             fields.push(new FormField(
                 'Translatable#Assign Team / Queue', TicketProperty.QUEUE_ID, 'ticket-input-queue', true, 'Translatable#A queue is a classification system for requests, comparable to folders in a file system.')
             );
-            fields.push(new FormField(
-                'Translatable#Affected Service', TicketProperty.SERVICE_ID, 'ticket-input-service', false, 'Translatable#Service defines which content of the service catalog is being requested.')
-            );
-            fields.push(new FormField('Translatable#SLA / Service Level Agreement', TicketProperty.SLA_ID, 'ticket-input-sla', false, 'Translatable#SLA defines which target times are set for processing this ticket.'));
             fields.push(new FormField('Translatable#Channel', ArticleProperty.CHANNEL_ID, 'channel-input', true, 'Translatable#Channel'));
             fields.push(new FormField(
                 'Translatable#Link Ticket with', TicketProperty.LINK, 'link-input', false, 'Translatable#Link this ticket item to an config item, an FAQ article or another ticket.')

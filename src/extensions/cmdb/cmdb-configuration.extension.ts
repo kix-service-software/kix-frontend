@@ -186,7 +186,7 @@ export class Extension implements IConfigurationExtension {
         const ciListWidget = new ConfiguredWidget('20180905-ci-list-widget',
             new WidgetConfiguration(
                 'table-widget', 'Translatable#Overview Config Items', [
-                    'bulk-action', 'ticket-create-action', 'config-item-create-action', 'csv-export-action'
+                    'ticket-create-action', 'config-item-create-action', 'csv-export-action'
                 ],
                 new TableWidgetSettings(KIXObjectType.CONFIG_ITEM, null, null, null, true, null, filter),
                 false, false, 'kix-icon-ci', true

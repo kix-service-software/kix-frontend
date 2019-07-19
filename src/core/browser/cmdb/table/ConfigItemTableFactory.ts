@@ -97,9 +97,9 @@ export class ConfigItemTableFactory extends TableFactory {
 
         if (defaultToggle) {
             tableConfiguration.toggle = true;
-            tableConfiguration.toggleOptions = new ToggleOptions('config-item-version-details', 'configItem', [
-                'config-item-version-maximize-action'
-            ], false);
+            tableConfiguration.toggleOptions = new ToggleOptions(
+                'config-item-version-details', 'configItem', [], false
+            );
         }
 
         if (defaultRouting) {

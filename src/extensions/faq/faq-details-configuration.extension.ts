@@ -31,7 +31,7 @@ export class Extension implements IConfigurationExtension {
             new ConfiguredWidget('faq-article-info-lane',
                 new WidgetConfiguration(
                     'faq-article-info-widget', 'Translatable#FAQ Information',
-                    ['faq-article-edit-action'],
+                    [],
                     {}, false, true, null, false
                 )
             );
@@ -73,7 +73,7 @@ export class Extension implements IConfigurationExtension {
 
         const actions = ['faq-article-create-action'];
         const faqActions = [
-            'linked-objects-edit-action', 'faq-article-delete-action', 'faq-article-edit-action', 'print-action'
+            'linked-objects-edit-action', 'faq-article-edit-action', 'print-action'
         ];
 
         return new ContextConfiguration(

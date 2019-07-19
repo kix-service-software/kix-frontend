@@ -34,7 +34,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
         const ticketInfoLane =
             new ConfiguredWidget('ticket-information-lane', new WidgetConfiguration(
                 'ticket-info-widget', 'Translatable#Ticket Information',
-                ['ticket-edit-action'], {},
+                [], {},
                 false, true, null, false)
             );
 
@@ -47,7 +47,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
         const descriptionLane =
             new ConfiguredWidget('ticket-description-lane', new WidgetConfiguration(
                 'ticket-description-widget', 'Translatable#Description & Comments',
-                ['article-edit-action', 'article-maximize-action'], {},
+                [], {},
                 false, true, null, false),
                 [new UIComponentPermission('tickets/*/articles', [CRUD.READ])]
             );
@@ -139,9 +139,8 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
         // actions
         const generalActions = ['ticket-create-action'];
         const ticketActions = [
-            'ticket-edit-action', 'article-new-action', 'ticket-merge-action', 'linked-objects-edit-action',
-            'ticket-lock-action', 'ticket-watch-action', 'ticket-spam-action',
-            'print-action',
+            'ticket-edit-action', 'article-new-action', 'linked-objects-edit-action',
+            'ticket-lock-action', 'ticket-watch-action', 'print-action',
         ];
 
         // Overlays
@@ -215,7 +214,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
 
         const articleListWidget =
             new ConfiguredWidget('20180921-article-list', new WidgetConfiguration(
-                'table-widget', 'Translatable#Article Overview', ['article-bulk-action', 'article-new-action'],
+                'table-widget', 'Translatable#Article Overview', ['article-new-action'],
                 new TableWidgetSettings(
                     KIXObjectType.ARTICLE, undefined, undefined,
                     ['article-attachment-count']

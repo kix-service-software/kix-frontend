@@ -19,7 +19,7 @@ export class ComponentState {
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
             'table-widget', 'Translatable#CMDB: CI Classes',
             [
-                'cmdb-admin-ci-class-create', 'cmdb-admin-ci-class-import', 'csv-export-action'
+                'cmdb-admin-ci-class-create', 'csv-export-action'
             ],
             new TableWidgetSettings(KIXObjectType.CONFIG_ITEM_CLASS,
                 [ConfigItemClassProperty.NAME, SortOrder.UP]), false, false, 'kix-icon-gears')
