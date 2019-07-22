@@ -60,7 +60,7 @@ export class RoleDetailsContext extends Context {
 
         const timeout = window.setTimeout(() => {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: `Translatable#Load Role ...`
+                loading: true, hint: 'Translatable#Load Role'
             });
         }, 500);
 

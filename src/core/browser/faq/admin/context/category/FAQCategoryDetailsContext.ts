@@ -56,7 +56,7 @@ export class FAQCategoryDetailsContext extends Context {
 
         const timeout = window.setTimeout(() => {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: `Translatable#Load FAQ Category ...`
+                loading: true, hint: 'Translatable#Load FAQ Category'
             });
         }, 500);
 

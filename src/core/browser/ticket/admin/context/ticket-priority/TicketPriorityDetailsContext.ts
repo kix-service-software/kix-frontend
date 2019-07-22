@@ -55,7 +55,7 @@ export class TicketPriorityDetailsContext extends Context {
 
         const timeout = window.setTimeout(() => {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: `Translatable#Load Ticket Priority ...`
+                loading: true, hint: 'Translatable#Load Ticket Priority'
             });
         }, 500);
 

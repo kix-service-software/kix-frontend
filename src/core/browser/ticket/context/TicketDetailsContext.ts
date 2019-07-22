@@ -87,7 +87,7 @@ export class TicketDetailsContext extends Context {
 
         const timeout = window.setTimeout(() => {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: `Translatable#Load Ticket ...`
+                loading: true, hint: 'Translatable#Load Ticket'
             });
         }, 500);
 

@@ -59,7 +59,7 @@ export class TranslationDetailsContext extends Context {
 
         const timeout = window.setTimeout(() => {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: `Translatable#Load Translation ...`
+                loading: true, hint: 'Translatable#Load Translation'
             });
         }, 500);
 

@@ -60,7 +60,7 @@ export class ConfigItemDetailsContext extends Context {
 
         const timeout = window.setTimeout(() => {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: `Translatable#Load Config Item ...`
+                loading: true, hint: 'Translatable#Load Config Item'
             });
         }, 500);
 

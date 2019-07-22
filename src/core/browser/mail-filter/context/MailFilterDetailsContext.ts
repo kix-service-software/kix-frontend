@@ -57,7 +57,7 @@ export class MailFilterDetailsContext extends Context {
 
         const timeout = window.setTimeout(() => {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: `Translatable#Load Email Filter ...`
+                loading: true, hint: 'Translatable#Load Email Filter'
             });
         }, 500);
 

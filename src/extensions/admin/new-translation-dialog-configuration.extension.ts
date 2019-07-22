@@ -47,7 +47,7 @@ export class Extension implements IConfigurationExtension {
             languages.sort((a, b) => SortUtil.compareString(a[1], b[1])).forEach((l) => {
                 const languageField = new FormField(
                     l[1], l[0], 'text-area-input', false,
-                    `Translatable#Select a language for the translation.`
+                    'Translatable#Select a language for the translation.'
                 );
                 languageField.placeholder = 'Translation';
                 fields.push(languageField);

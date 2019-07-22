@@ -57,7 +57,7 @@ export class MailAccountDetailsContext extends Context {
 
         const timeout = window.setTimeout(() => {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: `Translatable#Load Email Account ...`
+                loading: true, hint: 'Translatable#Load Email Account'
             });
         }, 500);
 

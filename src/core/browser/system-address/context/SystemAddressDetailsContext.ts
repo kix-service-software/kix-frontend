@@ -57,7 +57,7 @@ export class SystemAddressDetailsContext extends Context {
 
         const timeout = window.setTimeout(() => {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: `Translatable#Load System Address ...`
+                loading: true, hint: 'Translatable#Load System Address'
             });
         }, 500);
 
