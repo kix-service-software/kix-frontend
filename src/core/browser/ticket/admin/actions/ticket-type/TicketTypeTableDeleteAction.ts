@@ -59,7 +59,7 @@ export class TicketTypeTableDeleteAction extends AbstractAction<ITable> {
         const selectedRows = this.data.getSelectedRows();
         if (selectedRows && !!selectedRows.length) {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Remove Types ...'
+                loading: true, hint: 'Translatable#Remove Types'
             });
             const failIds = await KIXObjectService.deleteObject(
                 KIXObjectType.TICKET_TYPE, selectedRows.map((sR) => sR.getRowObject().getObject().ObjectId)

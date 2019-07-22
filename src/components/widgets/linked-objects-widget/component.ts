@@ -97,7 +97,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     ]);
 
                     objectsCount += objects.length;
-                    const title = `${lot[0]} (${objects.length})`;
+                    const groupTitle = await TranslationService.translate(lot[0]);
+                    const title = `${groupTitle} (${objects.length})`;
 
                     this.state.linkedObjectGroups.push([title, table, objects.length, linkDescriptions]);
                 }

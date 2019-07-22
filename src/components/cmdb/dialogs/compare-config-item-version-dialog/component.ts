@@ -37,7 +37,8 @@ class Component {
 
         const versions = await this.context.getObjectList();
         if (versions) {
-            this.state.title = `Gewählte Versionen (${versions.length})`;
+            const text = await TranslationService.translate('Translatable#Selected Versions', []);
+            this.state.title = `${text} (${versions.length})`;
         }
     }
 

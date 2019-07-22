@@ -67,7 +67,7 @@ class KIXHeaderComponent {
     public async logout(): Promise<void> {
         ContextHistory.getInstance().removeBrowserListener();
         EventService.getInstance().publish(
-            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Logout ...' }
+            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Logout' }
         );
         await AuthenticationSocketClient.getInstance().logout();
     }

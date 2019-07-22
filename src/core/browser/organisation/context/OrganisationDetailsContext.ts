@@ -53,7 +53,7 @@ export class OrganisationDetailsContext extends Context {
 
         const timeout = window.setTimeout(() => {
             EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load Organisation ...' }
+                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load Organisation' }
             );
         }, 500);
 

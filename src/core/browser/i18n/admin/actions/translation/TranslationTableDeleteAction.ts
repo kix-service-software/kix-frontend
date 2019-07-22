@@ -64,7 +64,7 @@ export class TranslationTableDeleteAction extends AbstractAction<ITable> {
         const selectedRows = this.data.getSelectedRows();
         if (selectedRows && !!selectedRows.length) {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Remove translations ...'
+                loading: true, hint: 'Translatable#Remove translations'
             });
             const failIds = await KIXObjectService.deleteObject(
                 KIXObjectType.TRANSLATION_PATTERN, selectedRows.map((sR) => sR.getRowObject().getObject().ObjectId)
