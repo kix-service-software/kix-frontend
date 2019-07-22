@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2019-07-22 10:45+0000\n"
+"PO-Revision-Date: 2019-07-22 13:08+0000\n"
 "Last-Translator: fuhlig <Frank.Uhlig@cape-it.de>\n"
 "Language-Team: English <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/en/>\n"
@@ -1546,88 +1546,68 @@ msgstr ""
 msgid "Link Type"
 msgstr ""
 
-#, fuzzy
-#| msgid "Config Item"
 msgid "Load Config Item"
-msgstr "Asset"
+msgstr "Loading Assets"
 
-#, fuzzy
-#| msgid "Config Item Class"
 msgid "Load Config Item Class"
-msgstr "Asset Class"
+msgstr "Loading Asset Class"
 
-#, fuzzy
-#| msgid "Config Items"
 msgid "Load Config Items"
-msgstr "Assets"
+msgstr "Loading Assets"
 
 msgid "Load Contact"
-msgstr ""
+msgstr "Loading Contact"
 
-#, fuzzy
-#| msgid "Edit Account"
 msgid "Load Email Account"
-msgstr "Edit Email Account"
+msgstr "Loading Email Account"
 
 msgid "Load Email Filter"
-msgstr ""
+msgstr "Loading Email Filter"
 
 msgid "Load FAQ Article"
-msgstr ""
+msgstr "Loading FAQ Article"
 
 msgid "Load FAQ Articles"
-msgstr ""
+msgstr "Loading FAQ Articles"
 
 msgid "Load FAQ Category"
-msgstr ""
+msgstr "Loading FAQ Category"
 
 msgid "Loading"
 msgstr ""
 
 msgid "Load Organisation"
-msgstr ""
+msgstr "Loading Organisation"
 
-#, fuzzy
-#| msgid "Edit Queue"
 msgid "Load Queue"
-msgstr "Edit Team"
+msgstr "Loading Team"
 
 msgid "Load Role"
-msgstr ""
+msgstr "Loading Role"
 
 msgid "Load System Address"
-msgstr ""
+msgstr "Loading System Address"
 
-#, fuzzy
-#| msgid "Overview Ticket States"
 msgid "Load Ticket"
-msgstr "Tickets by States"
+msgstr "Loading Ticket"
 
-#, fuzzy
-#| msgid "Overview Ticket States"
 msgid "Load Ticket Priority"
-msgstr "Tickets by States"
+msgstr "Loading Ticket Priority"
 
-#, fuzzy
-#| msgid "Overview Ticket States"
 msgid "Load Tickets"
-msgstr "Tickets by States"
+msgstr "Loading Tickets"
 
-#, fuzzy
-#| msgid "Overview Ticket States"
 msgid "Load Ticket State"
-msgstr "Tickets by States"
+msgstr "Loading Ticket State"
 
-#, fuzzy
-#| msgid "Overview Ticket States"
 msgid "Load Ticket Type"
-msgstr "Tickets by States"
+msgstr "Loading Ticket Type"
 
 msgid "Load Translation"
-msgstr ""
+msgstr "Loading Translation"
 
 msgid "Load User"
-msgstr ""
+msgstr "Loading User"
 
 msgid "Localisation"
 msgstr ""
