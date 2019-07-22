@@ -22,8 +22,7 @@ import { CacheService } from '../../cache';
 export class TicketWatchAction extends AbstractAction<Ticket> {
 
     public permissions = [
-        new UIComponentPermission('tickets/*/watchers', [CRUD.CREATE]),
-        new UIComponentPermission('tickets/*/watchers/*', [CRUD.DELETE])
+        new UIComponentPermission('tickets', [CRUD.CREATE])
     ];
 
     private isWatching: boolean = false;
