@@ -1546,7 +1546,39 @@ msgstr ""
 msgid "Link Type"
 msgstr ""
 
+#, fuzzy
+#| msgid "Config Item"
+msgid "Load Config Item"
+msgstr "Asset"
+
+#, fuzzy
+#| msgid "Config Item Class"
+msgid "Load Config Item Class"
+msgstr "Asset Class"
+
+#, fuzzy
+#| msgid "Config Items"
+msgid "Load Config Items"
+msgstr "Assets"
+
 msgid "Load Contact"
+msgstr ""
+
+#, fuzzy
+#| msgid "Edit Account"
+msgid "Load Email Account"
+msgstr "Edit Email Account"
+
+msgid "Load Email Filter"
+msgstr ""
+
+msgid "Load FAQ Article"
+msgstr ""
+
+msgid "Load FAQ Articles"
+msgstr ""
+
+msgid "Load FAQ Category"
 msgstr ""
 
 msgid "Loading"
@@ -1556,9 +1588,46 @@ msgid "Load Organisation"
 msgstr ""
 
 #, fuzzy
+#| msgid "Edit Queue"
+msgid "Load Queue"
+msgstr "Edit Team"
+
+msgid "Load Role"
+msgstr ""
+
+msgid "Load System Address"
+msgstr ""
+
+#, fuzzy
+#| msgid "Overview Ticket States"
+msgid "Load Ticket"
+msgstr "Tickets by States"
+
+#, fuzzy
+#| msgid "Overview Ticket States"
+msgid "Load Ticket Priority"
+msgstr "Tickets by States"
+
+#, fuzzy
+#| msgid "Overview Ticket States"
+msgid "Load Tickets"
+msgstr "Tickets by States"
+
+#, fuzzy
 #| msgid "Overview Ticket States"
 msgid "Load Ticket State"
 msgstr "Tickets by States"
+
+#, fuzzy
+#| msgid "Overview Ticket States"
+msgid "Load Ticket Type"
+msgstr "Tickets by States"
+
+msgid "Load Translation"
+msgstr ""
+
+msgid "Load User"
+msgstr ""
 
 msgid "Localisation"
 msgstr ""
@@ -1594,9 +1663,6 @@ msgid "Logout"
 msgstr ""
 
 msgid "Logs"
-msgstr ""
-
-msgid "Merge"
 msgstr ""
 
 msgid "Minutes"
@@ -1945,6 +2011,9 @@ msgstr "Please select an asset class. The form will be completed then."
 msgid "Please select a contact"
 msgstr ""
 
+msgid "Please select a language for the translation."
+msgstr ""
+
 msgid "Postal Address"
 msgstr ""
 
@@ -2199,6 +2268,9 @@ msgstr ""
 msgid "Select a incident state."
 msgstr ""
 
+msgid "Select a language for the translation."
+msgstr ""
+
 msgid "Select a language for this FAQ article."
 msgstr ""
 
@@ -2327,9 +2399,6 @@ msgid "SINGLE_QUOTES"
 msgstr "' (Single Quotes)"
 
 msgid "Size"
-msgstr ""
-
-msgid "SLA defines which target times are set for processing this ticket."
 msgstr ""
 
 msgid "SLA"

@@ -1633,9 +1633,49 @@ msgid "Link Type"
 msgstr "Art der Verknüpfung"
 
 #, fuzzy
+#| msgid "Config Item"
+msgid "Load Config Item"
+msgstr "Asset"
+
+#, fuzzy
+#| msgid "Config Item Class"
+msgid "Load Config Item Class"
+msgstr "Asset Klasse"
+
+#, fuzzy
+#| msgid "Config Items"
+msgid "Load Config Items"
+msgstr "Assets"
+
+#, fuzzy
 #| msgid "Load Contact ..."
 msgid "Load Contact"
 msgstr "Kontak laden..."
+
+#, fuzzy
+#| msgid "Email Account"
+msgid "Load Email Account"
+msgstr "E-Mail Konto"
+
+#, fuzzy
+#| msgid "Email Filter"
+msgid "Load Email Filter"
+msgstr "E-Mail Filter"
+
+#, fuzzy
+#| msgid "FAQ Article"
+msgid "Load FAQ Article"
+msgstr "FAQ Artikel"
+
+#, fuzzy
+#| msgid "Edit FAQ Article"
+msgid "Load FAQ Articles"
+msgstr "FAQ Artikel bearbeiten"
+
+#, fuzzy
+#| msgid "FAQ Category"
+msgid "Load FAQ Category"
+msgstr "FAQ Kategorie"
 
 msgid "Loading"
 msgstr "Wird geladen"
@@ -1646,9 +1686,54 @@ msgid "Load Organisation"
 msgstr "Kunde laden..."
 
 #, fuzzy
+#| msgid "Edit Queue"
+msgid "Load Queue"
+msgstr "Team bearbeiten"
+
+#, fuzzy
+#| msgid "Edit Role"
+msgid "Load Role"
+msgstr "Rolle bearbeiten"
+
+#, fuzzy
+#| msgid "System Address"
+msgid "Load System Address"
+msgstr "Systemadresse"
+
+#, fuzzy
+#| msgid "Locked Tickets"
+msgid "Load Ticket"
+msgstr "Gesperrte Tickets"
+
+#, fuzzy
+#| msgid "Ticket: Priorities"
+msgid "Load Ticket Priority"
+msgstr "Ticket: Prioritäten"
+
+#, fuzzy
+#| msgid "Locked Tickets"
+msgid "Load Tickets"
+msgstr "Gesperrte Tickets"
+
+#, fuzzy
 #| msgid "Load Ticket State ..."
 msgid "Load Ticket State"
 msgstr "Ticket Status laden..."
+
+#, fuzzy
+#| msgid "Load Ticket State ..."
+msgid "Load Ticket Type"
+msgstr "Ticket Status laden..."
+
+#, fuzzy
+#| msgid "Load Organisation ..."
+msgid "Load Translation"
+msgstr "Kunde laden..."
+
+#, fuzzy
+#| msgid "Load Customer ..."
+msgid "Load User"
+msgstr "Kunde laden..."
 
 msgid "Localisation"
 msgstr "Lokalisierung"
@@ -1689,9 +1774,6 @@ msgstr "Abmelden"
 
 msgid "Logs"
 msgstr ""
-
-msgid "Merge"
-msgstr "Zusammenfassen"
 
 msgid "Minutes"
 msgstr "Minuten"
@@ -2053,6 +2135,11 @@ msgstr ""
 msgid "Please select a contact"
 msgstr "Wählen Sie bitte einen Kontakt."
 
+#, fuzzy
+#| msgid "Please insert a base string for the translation."
+msgid "Please select a language for the translation."
+msgstr "Geben Sie die Basiszeichenkette für die Übersetzung ein."
+
 msgid "Postal Address"
 msgstr "Adresse"
 
@@ -2325,6 +2412,11 @@ msgstr "Wählen Sie einen Verwendungsstatus."
 msgid "Select a incident state."
 msgstr "Wählen Sie einen Vorfallstatus."
 
+#, fuzzy
+#| msgid "Select a language for the user."
+msgid "Select a language for the translation."
+msgstr "Wählen Sie eine Sprache für den Nutzer."
+
 msgid "Select a language for this FAQ article."
 msgstr "Wählen Sie die Sprache des FAQ-Eintrages aus der Liste."
 
@@ -2471,11 +2563,6 @@ msgstr "' (Einfaches Hochkomma)"
 
 msgid "Size"
 msgstr ""
-
-msgid "SLA defines which target times are set for processing this ticket."
-msgstr ""
-"Die Servicevereinbarung (auch SLA), beschreibt welche Erfüllungszielzeiten "
-"für die Abarbeitung des Tickets gelten."
 
 msgid "SLA"
 msgstr "SLA"
@@ -2960,6 +3047,14 @@ msgstr "PLZ"
 msgid "ZIP"
 msgstr "PLZ"
 
+#~ msgid "Merge"
+#~ msgstr "Zusammenfassen"
+
+#~ msgid "SLA defines which target times are set for processing this ticket."
+#~ msgstr ""
+#~ "Die Servicevereinbarung (auch SLA), beschreibt welche "
+#~ "Erfüllungszielzeiten für die Abarbeitung des Tickets gelten."
+
 #~ msgid "Affected Service"
 #~ msgstr "Betroffener Service"
 
@@ -3050,9 +3145,6 @@ msgstr "PLZ"
 
 #~ msgid "like"
 #~ msgstr "entspricht"
-
-#~ msgid "Select a language for the user."
-#~ msgstr "Wählen Sie eine Sprache für den Nutzer."
 
 #~ msgid ""
 #~ "Please select the language in which you want to use KIX. If not set, the "
@@ -3161,9 +3253,6 @@ msgstr "PLZ"
 
 #~ msgid "Insert a password for the contact."
 #~ msgstr "Legen Sie ein Passwort für den Kontakt fest."
-
-#~ msgid "Load Customer ..."
-#~ msgstr "Kunde laden..."
 
 #~ msgid "New Customer"
 #~ msgstr "Neuer Kunde"
