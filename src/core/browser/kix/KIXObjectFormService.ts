@@ -71,7 +71,7 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
 
                 if (f.property === 'ICON') {
                     if (kixObject && formContext === FormContext.EDIT) {
-                        const icon = LabelService.getInstance().getIcon(kixObject);
+                        const icon = LabelService.getInstance().getObjectIcon(kixObject);
                         if (icon instanceof ObjectIcon) {
                             value = icon;
                         }

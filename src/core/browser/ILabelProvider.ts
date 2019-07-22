@@ -41,6 +41,8 @@ export interface ILabelProvider<T> {
 
     getObjectIcon(object?: T): string | ObjectIcon;
 
+    getObjectTypeIcon(): string | ObjectIcon;
+
     getIcons(object: T, property: string, value?: string | number): Promise<Array<string | ObjectIcon>>;
 
     canShow(property: string, object: T): boolean;

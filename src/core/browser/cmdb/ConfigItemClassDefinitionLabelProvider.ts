@@ -83,7 +83,7 @@ export class ConfigItemClassDefinitionLabelProvider extends LabelProvider<Config
         return translatable ? await TranslationService.translate(ciClassDefinition.Class) : ciClassDefinition.Class;
     }
 
-    public getObjectIcon(ciClassDefinition: ConfigItemClassDefinition): string | ObjectIcon {
+    public getObjectTypeIcon(): string | ObjectIcon {
         return 'kix-icon-ci';
     }
 

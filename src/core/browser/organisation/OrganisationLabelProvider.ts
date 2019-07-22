@@ -127,7 +127,7 @@ export class OrganisationLabelProvider extends LabelProvider<Organisation> {
         return returnString;
     }
 
-    public getObjectIcon(object: Organisation): string | ObjectIcon {
+    public getObjectTypeIcon(): string | ObjectIcon {
         return 'kix-icon-man-house';
     }
 

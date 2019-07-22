@@ -96,7 +96,7 @@ export class LinkObjectLabelProvider extends LabelProvider<LinkObject> {
         return linkObject.title;
     }
 
-    public getObjectIcon(linkObject: LinkObject): string | ObjectIcon {
+    public getObjectTypeIcon(): string | ObjectIcon {
         return 'kix-icon-link';
     }
 

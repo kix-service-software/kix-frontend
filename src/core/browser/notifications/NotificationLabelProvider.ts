@@ -13,12 +13,10 @@ import { TranslationService } from "../i18n/TranslationService";
 
 export class NotificationLabelProvider extends LabelProvider {
 
+    public kixObjectType: KIXObjectType = KIXObjectType.NOTIFICATION;
+
     public isLabelProviderFor(notification: Notification): boolean {
         return notification instanceof Notification;
-    }
-
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === KIXObjectType.NOTIFICATION;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

@@ -29,10 +29,18 @@ export class LabelService {
         this.labelProviders.push(labelProvider);
     }
 
-    public getIcon<T extends KIXObject>(object: T): string | ObjectIcon {
-        const labelProvider = this.getLabelProvider(object);
+    public getObjectIcon<T extends KIXObject>(object: T): string | ObjectIcon {
+        const labelProvider = object ? this.getLabelProvider(object) : null;
         if (labelProvider) {
             return labelProvider.getObjectIcon(object);
+        }
+        return null;
+    }
+
+    public getObjectTypeIcon<T extends KIXObject>(objectType?: KIXObjectType): string | ObjectIcon {
+        const labelProvider = objectType ? this.getLabelProviderForType(objectType) : null;
+        if (labelProvider) {
+            return labelProvider.getObjectTypeIcon();
         }
         return null;
     }

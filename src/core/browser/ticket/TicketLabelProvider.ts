@@ -23,8 +23,8 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.TICKET;
 
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
+    public isLabelProviderFor(ticket: Ticket): boolean {
+        return ticket instanceof Ticket;
     }
 
     public async getPropertyValueDisplayText(
@@ -442,10 +442,6 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
         return classes;
     }
 
-    public isLabelProviderFor(ticket: Ticket): boolean {
-        return ticket instanceof Ticket;
-    }
-
     public async getObjectText(
         ticket: Ticket, id: boolean = true, title: boolean = true, translatable: boolean = true
     ): Promise<string> {
@@ -487,7 +483,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
         return null;
     }
 
-    public getObjectIcon(ticket: Ticket): string | ObjectIcon {
+    public getObjectTypeIcon(): string | ObjectIcon {
         return 'kix-icon-ticket';
     }
 

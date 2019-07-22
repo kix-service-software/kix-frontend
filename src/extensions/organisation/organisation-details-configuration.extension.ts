@@ -120,8 +120,8 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
         ];
 
         const organisationActions = [
-            'organisation-edit-action', 'organisation-create-contact-action', 'organisation-create-ticket-action',
-            'organisation-create-ci-action', 'print-action'
+            'organisation-edit-action', 'contact-create-action', 'ticket-create-action',
+            'config-item-create-action', 'print-action'
         ];
 
         return new ContextConfiguration(

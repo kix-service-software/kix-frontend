@@ -213,7 +213,7 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
         return returnString;
     }
 
-    public getObjectIcon(configItem: ConfigItem): string | ObjectIcon {
+    public getObjectTypeIcon(): string | ObjectIcon {
         return 'kix-icon-ci';
     }
 

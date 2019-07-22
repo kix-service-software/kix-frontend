@@ -16,6 +16,7 @@ export class ConfigItemCreateAction extends AbstractAction {
 
     public permissions: UIComponentPermission[] = [
         new UIComponentPermission('cmdb/configitems', [CRUD.CREATE]),
+        new UIComponentPermission('cmdb/configitems/*/versions', [CRUD.CREATE]),
         new UIComponentPermission('system/cmdb/classes', [CRUD.READ])
     ];
 

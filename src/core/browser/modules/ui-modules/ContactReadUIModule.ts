@@ -17,9 +17,7 @@ import {
 } from '../../../../core/model';
 import {
     ContactTableFactory, ContactLabelProvider, ContactService, ContactBrowserFactory, ContactDetailsContext,
-    ContactSearchContext, ContactSearchAction, ContactCreateOrganisationAction,
-    ContactCreateTicketAction, ContactCreateCIAction, ContactSearchDefinition, ContactFormService,
-    ContactPlaceholderHandler
+    ContactSearchContext, ContactSearchAction, ContactSearchDefinition, ContactFormService, ContactPlaceholderHandler
 } from '../../../../core/browser/contact';
 import { DialogService } from '../../../../core/browser/components/dialog';
 import { KIXObjectSearchService } from '../../../../core/browser/kix/search/KIXObjectSearchService';
@@ -82,12 +80,6 @@ export class UIModule implements IUIModule {
 
     private registerActions(): void {
         ActionFactory.getInstance().registerAction('contact-search-action', ContactSearchAction);
-        ActionFactory.getInstance().registerAction('contact-create-contact-action', ContactCreateOrganisationAction);
-        ActionFactory.getInstance().registerAction('contact-create-ci-action', ContactCreateCIAction);
-        ActionFactory.getInstance().registerAction('contact-create-ticket-action', ContactCreateTicketAction);
-        ActionFactory.getInstance().registerAction(
-            'contact-create-organisation-action', ContactCreateOrganisationAction
-        );
     }
 
 }

@@ -130,6 +130,10 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
     }
 
     public getObjectIcon(object?: T): string | ObjectIcon {
+        return this.getObjectTypeIcon();
+    }
+
+    public getObjectTypeIcon(): string | ObjectIcon {
         return null;
     }
 
