@@ -11,19 +11,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     <@content>
         <div.assigned-tickets-container>
             <widget
-                key="organisation-escalated-tickets-group"
-                instanceId="organisation-escalated-tickets-group"
-                title=component.getEscalatedTicketsTitle()>
-                <@content>
-                    <if(state.escalatedTicketsTable)>
-                        <div.ticket-filter>
-                            <filter filterCount=state.escalatedTicketsFilterCount on-filter("filterEscalated")/>
-                        </div>
-                        <standard-table-NEW table=state.escalatedTicketsTable/>
-                    </if>
-                </@content>
-            </widget>
-            <widget
                 key="organisation-reminder-tickets-group"
                 instanceId="organisation-reminder-tickets-group"
                 title=component.getReminderTicketsTitle()>

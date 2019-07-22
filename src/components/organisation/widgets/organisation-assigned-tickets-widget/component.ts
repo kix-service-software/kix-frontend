@@ -25,21 +25,18 @@ class Component {
     private state: ComponentState;
 
     private tableOpenTicketsSubscriber: IEventSubscriber;
-    private tableEscalatedTicketsSubscriber: IEventSubscriber;
     private tableReminderTicketsSubscriber: IEventSubscriber;
     private tableNewTicketsSubscriber: IEventSubscriber;
     private tablePendingTicketsSubscriber: IEventSubscriber;
 
     private openTicketsConfig: WidgetConfiguration;
     private newTicketsConfig: WidgetConfiguration;
-    private escalatedTicketsConfig: WidgetConfiguration;
     private reminderTicketsConfig: WidgetConfiguration;
     private pendingTicketsConfig: WidgetConfiguration;
 
     public onCreate(): void {
         this.state = new ComponentState();
 
-        WidgetService.getInstance().setWidgetType('organisation-escalated-tickets-group', WidgetType.GROUP);
         WidgetService.getInstance().setWidgetType('organisation-reminder-tickets-group', WidgetType.GROUP);
         WidgetService.getInstance().setWidgetType('organisation-new-tickets-group', WidgetType.GROUP);
         WidgetService.getInstance().setWidgetType('organisation-open-tickets-group', WidgetType.GROUP);
@@ -61,11 +58,6 @@ class Component {
         this.state.openTicketsTitle = await TranslationService.translate('Translatable#Open Tickets');
         this.openTicketsConfig = new WidgetConfiguration(
             'organisation-open-tickets-group', this.state.openTicketsTitle, [], null
-        );
-
-        this.state.escalatedTicketsTitle = await TranslationService.translate('Translatable#Escalated Tickets');
-        this.escalatedTicketsConfig = new WidgetConfiguration(
-            'organisation-escalated-tickets-group', this.state.escalatedTicketsTitle, [], null,
         );
 
         this.state.reminderTicketsTitle = await TranslationService.translate('Translatable#Reminder Tickets');
@@ -102,7 +94,6 @@ class Component {
     }
 
     public onDestroy(): void {
-        EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableEscalatedTicketsSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableReminderTicketsSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableNewTicketsSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableOpenTicketsSubscriber);
@@ -125,86 +116,10 @@ class Component {
 
     private async createTables(): Promise<void> {
         if (this.state.organisation) {
-            await this.configureEscalatedTicketsTable();
             await this.configureReminderTicketsTable();
             await this.configureNewTicketsTable();
             await this.configureOpenTicketsTable();
             await this.configurePendingTicketsTable();
-        }
-    }
-
-    private async configureEscalatedTicketsTable(): Promise<void> {
-        if (this.escalatedTicketsConfig) {
-            this.tableEscalatedTicketsSubscriber = {
-                eventSubscriberId: 'organisation-escalated-tickets-table',
-                eventPublished: (data: TableEventData, eventId: string) => {
-                    if (
-                        eventId === TableEvent.TABLE_READY && data
-                        && data.tableId === this.state.escalatedTicketsTable.getTableId()
-                    ) {
-                        this.state.escalatedTicketsCount = this.state.escalatedTicketsTable.getRows().length;
-                        this.state.escalatedTicketsFilterCount = this.state.escalatedTicketsTable.isFiltered()
-                            ? this.state.escalatedTicketsTable.getRows().length
-                            : null;
-                    }
-                }
-            };
-
-            const filter = [
-                new FilterCriteria(
-                    TicketProperty.ORGANISATION_ID, SearchOperator.EQUALS, FilterDataType.STRING,
-                    FilterType.AND, this.state.organisation.ID
-                ),
-                new FilterCriteria(
-                    TicketProperty.ESCALATION_TIME, SearchOperator.LESS_THAN, FilterDataType.NUMERIC, FilterType.AND, 0
-                )
-            ];
-
-            const tableConfiguration = new TableConfiguration(
-                KIXObjectType.TICKET,
-                new KIXObjectLoadingOptions(filter), null,
-                [
-                    new DefaultColumnConfiguration(
-                        TicketProperty.PRIORITY_ID, false, true, true, true, 65, true, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.TICKET_NUMBER, true, false, true, true, 135, true, true
-                    ),
-                    new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260, true, true),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.STATE_ID, false, true, true, true, 80, true, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.QUEUE_ID, true, false, true, true, 100, true, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.CONTACT_ID, true, false, true, true, 150, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.ESCALATION_RESPONSE_TIME, true, false, true, true, 150, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.ESCALATION_UPDATE_TIME, true, false, true, true, 150, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.ESCALATION_SOLUTION_TIME, true, false, true, true, 150, true, true
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.CHANGED, true, false, true, true, 125, true, true, false, DataType.DATE_TIME
-                    ),
-                    new DefaultColumnConfiguration(
-                        TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.DATE_TIME
-                    )
-                ], false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
-            );
-            const table = await TableFactoryService.getInstance().createTable(
-                'organisation-assigned-tickets-escalated', KIXObjectType.TICKET, tableConfiguration, null, null, true
-            );
-
-            await table.initialize();
-
-            this.state.escalatedTicketsTable = table;
-            EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableEscalatedTicketsSubscriber);
         }
     }
 
@@ -248,7 +163,7 @@ class Component {
                     ),
                     new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260, true, true),
                     new DefaultColumnConfiguration(
-                        TicketProperty.STATE_ID, false, true, true, true, 80, true, true, true
+                        TicketProperty.STATE_ID, true, true, true, true, 150, true, true, true
                     ),
                     new DefaultColumnConfiguration(
                         TicketProperty.QUEUE_ID, true, false, true, true, 100, true, true, true
@@ -332,7 +247,7 @@ class Component {
                     ),
                     new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260, true, true),
                     new DefaultColumnConfiguration(
-                        TicketProperty.STATE_ID, false, true, true, true, 80, true, true, true
+                        TicketProperty.STATE_ID, true, true, true, true, 150, true, true, true
                     ),
                     new DefaultColumnConfiguration(
                         TicketProperty.QUEUE_ID, true, false, true, true, 100, true, true, true
@@ -410,7 +325,7 @@ class Component {
                     ),
                     new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260, true, true),
                     new DefaultColumnConfiguration(
-                        TicketProperty.STATE_ID, false, true, true, true, 80, true, true, true
+                        TicketProperty.STATE_ID, true, true, true, true, 150, true, true, true
                     ),
                     new DefaultColumnConfiguration(
                         TicketProperty.QUEUE_ID, true, false, true, true, 100, true, true, true
@@ -495,7 +410,7 @@ class Component {
                     ),
                     new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260, true, true),
                     new DefaultColumnConfiguration(
-                        TicketProperty.STATE_ID, false, true, true, true, 80, true, true, true
+                        TicketProperty.STATE_ID, true, true, true, true, 150, true, true, true
                     ),
                     new DefaultColumnConfiguration(
                         TicketProperty.QUEUE_ID, true, false, true, true, 100, true, true, true
@@ -548,7 +463,6 @@ class Component {
         const ids = [];
 
         let allIds = [];
-        allIds = [...allIds, ...this.getTicketIds(this.state.escalatedTicketsTable)];
         allIds = [...allIds, ...this.getTicketIds(this.state.reminderTicketsTable)];
         allIds = [...allIds, ...this.getTicketIds(this.state.newTicketsTable)];
         allIds = [...allIds, ...this.getTicketIds(this.state.openTicketsTable)];
@@ -571,13 +485,6 @@ class Component {
         }
         return [];
 
-    }
-
-    public getEscalatedTicketsTitle(): string {
-        return this.getTicketTableTitle(
-            this.state.escalatedTicketsTable ? this.state.escalatedTicketsTable.getRows(true).length : 0,
-            this.state.escalatedTicketsTitle
-        );
     }
 
     public getReminderTicketsTitle(): string {
@@ -614,11 +521,6 @@ class Component {
         title: string = 'Tickets'
     ): string {
         return `${title} (${count})`;
-    }
-
-    public filterEscalated(filterValue: string): void {
-        this.state.escalatedFilterValue = filterValue;
-        this.filter(this.state.escalatedTicketsTable, filterValue);
     }
 
     public filterReminder(filterValue: string): void {
