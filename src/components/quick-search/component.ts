@@ -37,7 +37,7 @@ export class Component {
     public async search(textValue: string): Promise<void> {
         if (textValue && textValue !== '') {
             EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Search Tickets ...' }
+                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Search Tickets' }
             );
 
             await KIXObjectSearchService.getInstance().executeFullTextSearch<Ticket>(

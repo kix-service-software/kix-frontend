@@ -46,11 +46,11 @@ export class TicketLockAction extends AbstractAction<Ticket> {
         if (this.currentLockId === 1) {
             newLockId = 2;
             EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Lock Ticket ...' }
+                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Lock Ticket' }
             );
         } else {
             EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Unlock Ticket ...' }
+                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Unlock Ticket' }
             );
             successHint = 'Translatable#Ticket unlocked.';
         }

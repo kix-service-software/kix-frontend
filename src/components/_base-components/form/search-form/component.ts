@@ -128,7 +128,7 @@ class Component implements ISearchFormListener {
     }
 
     public async search(): Promise<void> {
-        const hint = await TranslationService.translate('Translatable#Search ...');
+        const hint = await TranslationService.translate('Translatable#Search');
         DialogService.getInstance().setMainDialogLoading(true, hint, true);
 
         const result = await KIXObjectSearchService.getInstance().executeSearch<KIXObject>(this.formId)

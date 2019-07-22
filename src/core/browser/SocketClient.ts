@@ -31,7 +31,7 @@ export abstract class SocketClient {
         });
 
         socket.on('disconnect', () => {
-            console.warn('Disconnected from frontend server. Reconnect ...');
+            console.warn('Disconnected from frontend server. Reconnect');
             socket.open();
         });
 

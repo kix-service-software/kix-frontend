@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <li.tree-node
     class={
         active: component.isNodeActive(),
@@ -25,7 +24,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             ${state.node.label}<if(state.node.properties)>
                 (<for|prop, index| of=state.node.properties>
                     <if(index != 0)>|</if>
-                    <span title=prop.title class=(prop.cssClass ? prop.cssClass : "")>${prop.value}</span>
+                    <span title=prop.title class=(prop.cssClass ? prop.cssClass : "")>
+                        <translation-string pattern=prop.value/>
+                    </span>
                 </for>)
             </if>
         </span>

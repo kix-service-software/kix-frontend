@@ -55,7 +55,7 @@ export class TicketWatchAction extends AbstractAction<Ticket> {
 
         if (this.isWatching) {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Unwatch Ticket ...'
+                loading: true, hint: 'Translatable#Unwatch Ticket'
             });
 
             const failIds = await KIXObjectService.deleteObject(
@@ -66,7 +66,7 @@ export class TicketWatchAction extends AbstractAction<Ticket> {
             }
         } else {
             EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Watch Ticket ...' }
+                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Watch Ticket' }
             );
 
             const watcherId = await KIXObjectService.createObject(

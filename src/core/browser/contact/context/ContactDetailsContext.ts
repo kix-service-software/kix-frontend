@@ -49,7 +49,7 @@ export class ContactDetailsContext extends Context {
     private async loadContact(): Promise<Contact> {
         const timeout = window.setTimeout(() => {
             EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load Contact ...' }
+                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load Contact' }
             );
         }, 500);
 

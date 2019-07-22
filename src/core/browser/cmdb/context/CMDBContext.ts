@@ -16,6 +16,7 @@ import { SearchOperator } from "../../SearchOperator";
 import { CMDBService } from "../CMDBService";
 import { EventService } from "../../event";
 import { ApplicationEvent } from "../../application";
+import { TranslationService } from "../../i18n/TranslationService";
 
 export class CMDBContext extends Context {
 
@@ -28,7 +29,8 @@ export class CMDBContext extends Context {
     }
 
     public async getDisplayText(): Promise<string> {
-        return 'CMDB Dashboard';
+        const title = await TranslationService.translate('Translatable#CMDB Dashboard');
+        return title;
     }
 
     public async setCIClass(ciClass: ConfigItemClass): Promise<void> {

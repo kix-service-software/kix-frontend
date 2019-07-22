@@ -54,7 +54,7 @@ export class TicketStateDetailsContext extends Context {
 
     private async loadTicketState(changedProperties: string[] = [], cache: boolean = true): Promise<TicketState> {
         EventService.getInstance().publish(
-            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load Ticket State ...' }
+            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load Ticket State' }
         );
 
         const ticketStateId = Number(this.objectId);

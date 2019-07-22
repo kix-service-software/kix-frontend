@@ -93,7 +93,7 @@ export class Server {
 
         const updateTranslations = serverConfig.UPDATE_TRANSLATIONS;
         if (updateTranslations) {
-            LoggingService.getInstance().info('Update translations ...');
+            LoggingService.getInstance().info('Update translations');
             poDefinitions = await TranslationService.getInstance().getPODefinitions();
         }
 

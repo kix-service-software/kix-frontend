@@ -131,7 +131,7 @@ export class MarkoService {
     private async waitForReadyState(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             setTimeout(() => {
-                LoggingService.getInstance().info('App build in progress ...');
+                LoggingService.getInstance().info('App build in progress');
                 resolve();
             }, 6000);
         });
