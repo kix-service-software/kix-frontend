@@ -59,6 +59,9 @@ msgstr ""
 msgid "Add CI Class"
 msgstr "Add Asset Class"
 
+msgid "Additional recipients"
+msgstr ""
+
 msgid "add notes here"
 msgstr ""
 
@@ -75,9 +78,6 @@ msgid "Administration"
 msgstr ""
 
 msgid "Advanced Search"
-msgstr ""
-
-msgid "Affected Service"
 msgstr ""
 
 msgid "after"
@@ -104,10 +104,25 @@ msgstr ""
 msgid "All"
 msgstr ""
 
+msgid "All agents subscribed to the ticket's queue"
+msgstr ""
+
+msgid "All agents with read permissions for the ticket"
+msgstr ""
+
+msgid "All agents with update permission for the ticket"
+msgstr ""
+
 msgid "All form fields marked by * are required fields."
 msgstr ""
 
+msgid "All free tickets"
+msgstr ""
+
 msgid "All Objects"
+msgstr ""
+
+msgid "All tickets"
 msgstr ""
 
 msgid "All Tickets"
@@ -207,6 +222,9 @@ msgstr ""
 msgid "Automation"
 msgstr ""
 
+msgid "Automation: Notification"
+msgstr ""
+
 msgid "Automation: Notifications"
 msgstr ""
 
@@ -217,9 +235,6 @@ msgid "Bcc"
 msgstr ""
 
 msgid "before"
-msgstr ""
-
-msgid "Benutzer"
 msgstr ""
 
 msgid "between"
@@ -266,6 +281,9 @@ msgid "Cause"
 msgstr ""
 
 msgid "Cc"
+msgstr ""
+
+msgid "Changed"
 msgstr ""
 
 msgid "Changed at"
@@ -334,8 +352,14 @@ msgstr "Assets"
 msgid "CMDB: CI Classes"
 msgstr "Assets: Asset Classes"
 
+msgid "CMDB Dashboard"
+msgstr ""
+
 msgid "CMDB Explorer"
 msgstr "Asset Explorer"
+
+msgid "CNO"
+msgstr ""
 
 msgid ": (colon)"
 msgstr ""
@@ -460,6 +484,9 @@ msgstr ""
 msgid "Create Links"
 msgstr ""
 
+msgid "Create Notification"
+msgstr ""
+
 msgid "Create Organisation"
 msgstr ""
 
@@ -525,6 +552,9 @@ msgid ""
 msgstr ""
 
 msgid "Delete"
+msgstr ""
+
+msgid "Deleted"
 msgstr ""
 
 msgid "Delete Link"
@@ -706,10 +736,13 @@ msgstr ""
 msgid "Escalated Tickets"
 msgstr ""
 
-msgid "escalated tickets: {0}"
+msgid "Escalation time"
 msgstr ""
 
-msgid "Escalation time"
+msgid "Event"
+msgstr ""
+
+msgid "Events"
 msgstr ""
 
 msgid "Execute now!"
@@ -775,6 +808,9 @@ msgstr ""
 msgid "Field '{0}' has an invalid value ({1})."
 msgstr ""
 
+msgid "Filter"
+msgstr ""
+
 msgid "Filter Conditions"
 msgstr ""
 
@@ -784,13 +820,10 @@ msgstr ""
 msgid "Filter successfully created."
 msgstr ""
 
-msgid "Firstname"
-msgstr ""
-
 msgid "First Name"
 msgstr ""
 
-msgid "Follow Up on Tickets possible"
+msgid "Follow Up on Tickets"
 msgstr ""
 
 msgid "Follow Up Ticket Lock"
@@ -800,9 +833,6 @@ msgid "Force"
 msgstr ""
 
 msgid "Forward"
-msgstr ""
-
-msgid "free tickets: {0}"
 msgstr ""
 
 msgid "From"
@@ -953,6 +983,48 @@ msgid "Helptext_Admin_MailFilter_SetEmailHeader_Value"
 msgstr ""
 
 msgid "Helptext_Admin_MailFilter_Sidebar"
+msgstr ""
+
+msgid "Helptext_Admin_NotificationCreate_AdditionalRecipient"
+msgstr ""
+
+msgid "Helptext_Admin_NotificationCreate_Comment"
+msgstr ""
+
+msgid "Helptext_Admin_NotificationCreate_Event"
+msgstr ""
+
+msgid "Helptext_Admin_NotificationCreate_Filter"
+msgstr ""
+
+msgid "Helptext_Admin_NotificationCreate_MessageSubject"
+msgstr ""
+
+msgid "Helptext_Admin_NotificationCreate_MessageText"
+msgstr ""
+
+msgid "Helptext_Admin_NotificationCreate_Name"
+msgstr ""
+
+msgid "Helptext_Admin_NotificationCreate_SendDespiteOutOfOffice"
+msgstr ""
+
+msgid "Helptext_Admin_NotificationCreate_SendOnceADay"
+msgstr ""
+
+msgid "Helptext_Admin_NotificationCreate_SendTo"
+msgstr ""
+
+msgid "Helptext_Admin_NotificationCreate_SendToAgents"
+msgstr ""
+
+msgid "Helptext_Admin_NotificationCreate_SendToRoleMembers"
+msgstr ""
+
+msgid "Helptext_Admin_NotificationCreate_SubjectWithTicketNumber"
+msgstr ""
+
+msgid "Helptext_Admin_NotificationCreate_Validity"
 msgstr ""
 
 msgid "Helptext_Admin_QueueCreate_Comment"
@@ -1414,9 +1486,6 @@ msgstr ""
 msgid "Last Login"
 msgstr ""
 
-msgid "Lastname"
-msgstr ""
-
 msgid "Last Name"
 msgstr ""
 
@@ -1477,17 +1546,19 @@ msgstr ""
 msgid "Link Type"
 msgstr ""
 
-msgid "Load Contact ..."
+msgid "Load Contact"
 msgstr ""
 
 msgid "Loading"
 msgstr ""
 
-msgid "Load Organisation ..."
+msgid "Load Organisation"
 msgstr ""
 
-msgid "Load Ticket State ..."
-msgstr ""
+#, fuzzy
+#| msgid "Overview Ticket States"
+msgid "Load Ticket State"
+msgstr "Tickets by States"
 
 msgid "Localisation"
 msgstr ""
@@ -1504,7 +1575,7 @@ msgstr ""
 msgid "Lock State"
 msgstr ""
 
-msgid "Lock Ticket ..."
+msgid "Lock Ticket"
 msgstr ""
 
 msgid "Logged in"
@@ -1522,13 +1593,16 @@ msgstr ""
 msgid "Logout"
 msgstr ""
 
-msgid "Merge"
+msgid "Logs"
 msgstr ""
 
 msgid "Minutes"
 msgstr ""
 
 msgid "Mobile"
+msgstr ""
+
+msgid "Modification Time"
 msgstr ""
 
 msgid "Modified"
@@ -1598,6 +1672,9 @@ msgid "New FAQ Category"
 msgstr ""
 
 msgid "New Filter"
+msgstr ""
+
+msgid "New Notification"
 msgstr ""
 
 msgid "New Object"
@@ -1687,13 +1764,32 @@ msgstr ""
 msgid "not archived tickets"
 msgstr ""
 
+msgid "Not available (not more or not yet)"
+msgstr ""
+
 msgid "Note"
 msgstr ""
 
 msgid "Notes"
 msgstr ""
 
+#, fuzzy
+#| msgid "Config Item Information"
+msgid "Notification Information"
+msgstr "Asset Information"
+
+msgid "Notification Methods"
+msgstr ""
+
 msgid "Notifications"
+msgstr ""
+
+#, fuzzy
+#| msgid "Config Item successfully created."
+msgid "Notification successfully created."
+msgstr "Asset successfully created."
+
+msgid "Notification Text"
 msgstr ""
 
 msgid "not modified"
@@ -1729,10 +1825,10 @@ msgstr ""
 msgid "Observer"
 msgstr ""
 
-msgid "Open Tickets"
+msgid "Once a day"
 msgstr ""
 
-msgid "open tickets: {0}"
+msgid "Open Tickets"
 msgstr ""
 
 msgid "Organisation"
@@ -1923,6 +2019,9 @@ msgstr ""
 msgid "Recipient: Cc"
 msgstr ""
 
+msgid "Recipients"
+msgstr ""
+
 msgid "Recipient: To"
 msgstr ""
 
@@ -1941,34 +2040,19 @@ msgstr ""
 msgid "Remove Priorities"
 msgstr ""
 
-msgid "Remove Priorities ..."
-msgstr ""
-
 msgid "Remove Search Criteria"
 msgstr ""
 
 msgid "Remove States"
 msgstr ""
 
-msgid "Remove States ..."
-msgstr ""
-
 msgid "Remove Templates"
-msgstr ""
-
-msgid "Remove Templates ..."
 msgstr ""
 
 msgid "Remove translations"
 msgstr ""
 
-msgid "Remove translations ..."
-msgstr ""
-
 msgid "Remove Types"
-msgstr ""
-
-msgid "Remove Types ..."
 msgstr ""
 
 msgid "Replace empty value"
@@ -2043,9 +2127,6 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-msgid "Search ..."
-msgstr ""
-
 msgid ""
 "Searchable FAQ attributes: FAQ#, Title, Symptom, Cause, Solution, Comment, "
 "Changed by, Created by, Keywords, Language, Validity"
@@ -2094,22 +2175,16 @@ msgstr ""
 msgid "Search for tickets with selected queue."
 msgstr "Search for tickets with selected team."
 
-msgid "Search for tickets with selected SLA."
-msgstr ""
-
 msgid "Search for tickets with selected state."
 msgstr ""
 
 msgid "Search for tickets with selected type."
 msgstr ""
 
-msgid "Search for tickets with the selected service."
-msgstr ""
-
 msgid "Search Results"
 msgstr ""
 
-msgid "Search Tickets ..."
+msgid "Search Tickets"
 msgstr ""
 
 msgid "Select a character set."
@@ -2175,10 +2250,22 @@ msgstr ""
 msgid "; (semicolon)"
 msgstr ""
 
+msgid "Send despite out of office"
+msgstr ""
+
 msgid "Sender"
 msgstr ""
 
 msgid "Sender Address (Email)"
+msgstr ""
+
+msgid "Send to"
+msgstr ""
+
+msgid "Send to all role members"
+msgstr ""
+
+msgid "Send to these agents"
 msgstr ""
 
 msgid ""
@@ -2189,10 +2276,6 @@ msgstr ""
 "character)."
 
 msgid "Service"
-msgstr ""
-
-msgid ""
-"Service defines which content of the service catalog is being requested."
 msgstr ""
 
 msgid "Set a password for the user."
@@ -2240,13 +2323,10 @@ msgstr ""
 msgid "SINGLE_QUOTES"
 msgstr "' (Single Quotes)"
 
+msgid "Size"
+msgstr ""
+
 msgid "SLA"
-msgstr ""
-
-msgid "SLA defines which target times are set for processing this ticket."
-msgstr ""
-
-msgid "SLA / Service Level Agreement"
 msgstr ""
 
 msgid "Solution"
@@ -2256,9 +2336,6 @@ msgid "Solution time"
 msgstr ""
 
 msgid "Source"
-msgstr ""
-
-msgid "Spam"
 msgstr ""
 
 msgid "Split Option"
@@ -2334,6 +2411,9 @@ msgid "System Address"
 msgstr ""
 
 msgid "System Addresses"
+msgstr ""
+
+msgid "System: Logs"
 msgstr ""
 
 msgid "System: SysConfig"
@@ -2423,11 +2503,17 @@ msgstr ""
 msgid "Ticket Number"
 msgstr ""
 
+msgid "TicketOwner"
+msgstr ""
+
 msgid "Ticket: Priorities"
 msgstr ""
 
 msgid "Ticket: Queues"
 msgstr "Ticket: Teams"
+
+msgid "TicketResponsible"
+msgstr ""
 
 msgid "Tickets"
 msgstr ""
@@ -2534,7 +2620,7 @@ msgstr ""
 msgid "Unlocked Tickets"
 msgstr ""
 
-msgid "Unlock Ticket ..."
+msgid "Unlock Ticket"
 msgstr ""
 
 msgid "Unlock Timeout"
@@ -2552,7 +2638,7 @@ msgstr ""
 msgid "Unwatch"
 msgstr ""
 
-msgid "Unwatch Ticket ..."
+msgid "Unwatch Ticket"
 msgstr ""
 
 msgid "Update Account"
@@ -2666,7 +2752,7 @@ msgstr ""
 msgid "Watched Tickets"
 msgstr ""
 
-msgid "Watch Ticket ..."
+msgid "Watch Ticket"
 msgstr ""
 
 msgid "We are working on this functionality."
@@ -2678,18 +2764,17 @@ msgstr ""
 msgid "Wildcard Search"
 msgstr ""
 
+msgid "Without Ticketnumber"
+msgstr ""
+
+msgid "With Ticketnumber"
+msgstr ""
+
 msgid "Yes"
 msgstr ""
 
 msgid "You have successfully logged out."
 msgstr ""
-
-msgid ""
-"You may attach images to this config item. Possible file types are *.png, *."
-"jpg, *.gif, *.bmp."
-msgstr ""
-"You may attach images to this asset. Possible file types are *.png, *.jpg, *."
-"gif, *.bmp."
 
 msgid "Your rating"
 msgstr ""
@@ -2699,3 +2784,10 @@ msgstr ""
 
 msgid "ZIP"
 msgstr ""
+
+#~ msgid ""
+#~ "You may attach images to this config item. Possible file types are *.png, "
+#~ "*.jpg, *.gif, *.bmp."
+#~ msgstr ""
+#~ "You may attach images to this asset. Possible file types are *.png, *."
+#~ "jpg, *.gif, *.bmp."

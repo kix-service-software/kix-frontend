@@ -64,6 +64,9 @@ msgstr "Hinzufügen"
 msgid "Add CI Class"
 msgstr "Asset Klasse Hinzufügen"
 
+msgid "Additional recipients"
+msgstr ""
+
 msgid "add notes here"
 msgstr "Notizen hinzufügen"
 
@@ -81,9 +84,6 @@ msgstr "Administration"
 
 msgid "Advanced Search"
 msgstr "Komplexsuche"
-
-msgid "Affected Service"
-msgstr "Betroffener Service"
 
 msgid "after"
 msgstr "nach"
@@ -109,13 +109,32 @@ msgstr "Agent wurde erfolgreich angelegt."
 msgid "All"
 msgstr "Alle"
 
+msgid "All agents subscribed to the ticket's queue"
+msgstr ""
+
+msgid "All agents with read permissions for the ticket"
+msgstr ""
+
+msgid "All agents with update permission for the ticket"
+msgstr ""
+
 msgid "All form fields marked by * are required fields."
 msgstr ""
 "Alle Eingabefelder, welche mit \"*\" gekennzeichnet sind, sind "
 "Pflichtangaben."
 
+#, fuzzy
+#| msgid "All Tickets"
+msgid "All free tickets"
+msgstr "Alle Tickets"
+
 msgid "All Objects"
 msgstr "Alle Objekte"
+
+#, fuzzy
+#| msgid "All Tickets"
+msgid "All tickets"
+msgstr "Alle Tickets"
 
 msgid "All Tickets"
 msgstr "Alle Tickets"
@@ -223,6 +242,11 @@ msgstr "zu ändernde Attribute:"
 msgid "Automation"
 msgstr "Automatisierung"
 
+#, fuzzy
+#| msgid "Automation: Notifications"
+msgid "Automation: Notification"
+msgstr "Automatisierung: Benachrichtigungen"
+
 msgid "Automation: Notifications"
 msgstr "Automatisierung: Benachrichtigungen"
 
@@ -234,9 +258,6 @@ msgstr "Bcc"
 
 msgid "before"
 msgstr "vor"
-
-msgid "Benutzer"
-msgstr "User"
 
 msgid "between"
 msgstr "zwischen"
@@ -288,6 +309,11 @@ msgstr "Ursache"
 
 msgid "Cc"
 msgstr "Cc"
+
+#, fuzzy
+#| msgid "Changed at"
+msgid "Changed"
+msgstr "Geändert am"
 
 msgid "Changed at"
 msgstr "Geändert am"
@@ -357,8 +383,14 @@ msgstr "Assets"
 msgid "CMDB: CI Classes"
 msgstr "Assets: Asset Klassen"
 
+msgid "CMDB Dashboard"
+msgstr ""
+
 msgid "CMDB Explorer"
 msgstr "Asset Explorer"
+
+msgid "CNO"
+msgstr ""
 
 msgid ": (colon)"
 msgstr ": (Doppelpunkt)"
@@ -483,6 +515,11 @@ msgstr "Filter wird angelegt"
 msgid "Create Links"
 msgstr "Verknüpfung wird angelegt"
 
+#, fuzzy
+#| msgid "Notifications"
+msgid "Create Notification"
+msgstr "Benachrichtigungen"
+
 msgid "Create Organisation"
 msgstr "Kunde wird angelegt"
 
@@ -552,6 +589,11 @@ msgstr ""
 "Nutzer)."
 
 msgid "Delete"
+msgstr "Löschen"
+
+#, fuzzy
+#| msgid "Delete"
+msgid "Deleted"
 msgstr "Löschen"
 
 msgid "Delete Link"
@@ -732,11 +774,16 @@ msgstr "Fehler beim Hinzufügen des Bildes:"
 msgid "Escalated Tickets"
 msgstr "Eskalierte Tickets"
 
-msgid "escalated tickets: {0}"
-msgstr "Eskalierte Tickets: {0}"
-
 msgid "Escalation time"
 msgstr "Eskalationszeit"
+
+msgid "Event"
+msgstr ""
+
+#, fuzzy
+#| msgid "Agents"
+msgid "Events"
+msgstr "Agenten"
 
 msgid "Execute now!"
 msgstr "Jetzt ausführen!"
@@ -801,6 +848,11 @@ msgstr "Fax"
 msgid "Field '{0}' has an invalid value ({1})."
 msgstr "Feld '{0}' enthält einen ungültigen Wert ({1})."
 
+#, fuzzy
+#| msgid "New Filter"
+msgid "Filter"
+msgstr "Neuer Filter"
+
 msgid "Filter Conditions"
 msgstr "Filterbedingungen"
 
@@ -810,13 +862,12 @@ msgstr "Filtern in Liste"
 msgid "Filter successfully created."
 msgstr "Filter wurde erfolgreich angelegt."
 
-msgid "Firstname"
-msgstr "Vorname"
-
 msgid "First Name"
 msgstr "Vorname"
 
-msgid "Follow Up on Tickets possible"
+#, fuzzy
+#| msgid "Follow Up on Tickets possible"
+msgid "Follow Up on Tickets"
 msgstr "Nachfrage an Tickets"
 
 msgid "Follow Up Ticket Lock"
@@ -827,9 +878,6 @@ msgstr "Erzwingen"
 
 msgid "Forward"
 msgstr "Weiterleiten"
-
-msgid "free tickets: {0}"
-msgstr "Freie Tickets: {0}"
 
 msgid "From"
 msgstr "Von"
@@ -980,6 +1028,76 @@ msgstr "Hilfetext_Admin_MailFilter_SetEmailHeader_Value"
 
 msgid "Helptext_Admin_MailFilter_Sidebar"
 msgstr "Hilfetext_Admin_MailFilter_Sidebar"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_Validity"
+msgid "Helptext_Admin_NotificationCreate_AdditionalRecipient"
+msgstr "Hilfetext_Admin_MailAccountCreate_Validity"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_Comment"
+msgid "Helptext_Admin_NotificationCreate_Comment"
+msgstr "Hilfetext_Admin_MailAccountCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_Comment"
+msgid "Helptext_Admin_NotificationCreate_Event"
+msgstr "Hilfetext_Admin_MailAccountCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_IMAPFolder"
+msgid "Helptext_Admin_NotificationCreate_Filter"
+msgstr "Hilfetext_Admin_MailAccountCreate_IMAPFolder"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleCreate_Subject"
+msgid "Helptext_Admin_NotificationCreate_MessageSubject"
+msgstr "Hilfetext_Admin_TextModuleCreate_Subject"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleCreate_Text"
+msgid "Helptext_Admin_NotificationCreate_MessageText"
+msgstr "Hilfetext_Admin_TextModuleCreate_Text"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailFilterCreate_Name"
+msgid "Helptext_Admin_NotificationCreate_Name"
+msgstr "Hilfetext_Admin_MailFilterCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_Dispachting"
+msgid "Helptext_Admin_NotificationCreate_SendDespiteOutOfOffice"
+msgstr "Hilfetext_Admin_MailAccountCreate_Dispachting"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_Comment"
+msgid "Helptext_Admin_NotificationCreate_SendOnceADay"
+msgstr "Hilfetext_Admin_MailAccountCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_Host"
+msgid "Helptext_Admin_NotificationCreate_SendTo"
+msgstr "Hilfetext_Admin_MailAccountCreate_Host"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_Comment"
+msgid "Helptext_Admin_NotificationCreate_SendToAgents"
+msgstr "Hilfetext_Admin_MailAccountCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailFilterCreate_SetEmailHeaders"
+msgid "Helptext_Admin_NotificationCreate_SendToRoleMembers"
+msgstr "Hilfetext_Admin_MailFilterCreate_SetEmailHeaders"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleCreate_Subject"
+msgid "Helptext_Admin_NotificationCreate_SubjectWithTicketNumber"
+msgstr "Hilfetext_Admin_TextModuleCreate_Subject"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_Validity"
+msgid "Helptext_Admin_NotificationCreate_Validity"
+msgstr "Hilfetext_Admin_MailAccountCreate_Validity"
 
 msgid "Helptext_Admin_QueueCreate_Comment"
 msgstr "Hilfetext_Admin_QueueCreate_Comment"
@@ -1448,9 +1566,6 @@ msgstr "zuletzt geändert am"
 msgid "Last Login"
 msgstr "Letzte Anmeldung"
 
-msgid "Lastname"
-msgstr "Nachname"
-
 msgid "Last Name"
 msgstr "Nachname"
 
@@ -1517,16 +1632,22 @@ msgstr "Verknüpfen mit Ticket"
 msgid "Link Type"
 msgstr "Art der Verknüpfung"
 
-msgid "Load Contact ..."
+#, fuzzy
+#| msgid "Load Contact ..."
+msgid "Load Contact"
 msgstr "Kontak laden..."
 
 msgid "Loading"
 msgstr "Wird geladen"
 
-msgid "Load Organisation ..."
+#, fuzzy
+#| msgid "Load Organisation ..."
+msgid "Load Organisation"
 msgstr "Kunde laden..."
 
-msgid "Load Ticket State ..."
+#, fuzzy
+#| msgid "Load Ticket State ..."
+msgid "Load Ticket State"
 msgstr "Ticket Status laden..."
 
 msgid "Localisation"
@@ -1546,8 +1667,10 @@ msgstr "Gesperrte Tickets"
 msgid "Lock State"
 msgstr "Sperrstatus"
 
-msgid "Lock Ticket ..."
-msgstr "Ticket wird gesperrt..."
+#, fuzzy
+#| msgid "Locked Tickets"
+msgid "Lock Ticket"
+msgstr "Gesperrte Tickets"
 
 msgid "Logged in"
 msgstr "Angemeldet"
@@ -1564,14 +1687,19 @@ msgstr "Nutzername"
 msgid "Logout"
 msgstr "Abmelden"
 
-msgid "Merge"
-msgstr "Zusammenfassen"
+msgid "Logs"
+msgstr ""
 
 msgid "Minutes"
 msgstr "Minuten"
 
 msgid "Mobile"
 msgstr "Mobil"
+
+#, fuzzy
+#| msgid "Notifications"
+msgid "Modification Time"
+msgstr "Benachrichtigungen"
 
 msgid "Modified"
 msgstr "Geändert"
@@ -1641,6 +1769,11 @@ msgstr "Neue FAQ Kategorie"
 
 msgid "New Filter"
 msgstr "Neuer Filter"
+
+#, fuzzy
+#| msgid "Notifications"
+msgid "New Notification"
+msgstr "Benachrichtigungen"
 
 msgid "New Object"
 msgstr "Neues Objekt"
@@ -1729,13 +1862,36 @@ msgstr "Keine Signatur definiert."
 msgid "not archived tickets"
 msgstr "Nicht archivierte Tickets"
 
+msgid "Not available (not more or not yet)"
+msgstr ""
+
 msgid "Note"
 msgstr "Notiz"
 
 msgid "Notes"
 msgstr "Notizen"
 
+#, fuzzy
+#| msgid "Organisation Information"
+msgid "Notification Information"
+msgstr "Kundeninformationen"
+
+#, fuzzy
+#| msgid "Notifications"
+msgid "Notification Methods"
+msgstr "Benachrichtigungen"
+
 msgid "Notifications"
+msgstr "Benachrichtigungen"
+
+#, fuzzy
+#| msgid "Contact successfully created."
+msgid "Notification successfully created."
+msgstr "Kontakt wurde erfolgreich angelegt."
+
+#, fuzzy
+#| msgid "Notifications"
+msgid "Notification Text"
 msgstr "Benachrichtigungen"
 
 msgid "not modified"
@@ -1771,11 +1927,11 @@ msgstr "Objekte"
 msgid "Observer"
 msgstr "Beobachter"
 
+msgid "Once a day"
+msgstr ""
+
 msgid "Open Tickets"
 msgstr "Offene Tickets"
-
-msgid "open tickets: {0}"
-msgstr "Offene Tickets: {0}"
 
 msgid "Organisation"
 msgstr "Kunde"
@@ -1974,6 +2130,11 @@ msgstr "Empfänger: Bcc"
 msgid "Recipient: Cc"
 msgstr "Empfänger: Cc"
 
+#, fuzzy
+#| msgid "Recipient: Cc"
+msgid "Recipients"
+msgstr "Empfänger: Cc"
+
 msgid "Recipient: To"
 msgstr "Empfänger: An"
 
@@ -1992,35 +2153,20 @@ msgstr "Parameter entfernen"
 msgid "Remove Priorities"
 msgstr "Prioritäten werden entfernt"
 
-msgid "Remove Priorities ..."
-msgstr "Prioritäten werden entfernt..."
-
 msgid "Remove Search Criteria"
 msgstr "Suchkriterien entfernen"
 
 msgid "Remove States"
 msgstr "Status entfernen"
 
-msgid "Remove States ..."
-msgstr "Status wird entfernt..."
-
 msgid "Remove Templates"
 msgstr "Vorlagen entfernen"
-
-msgid "Remove Templates ..."
-msgstr "Vorlage wird entfernt..."
 
 msgid "Remove translations"
 msgstr "Übersetzungen entfernen"
 
-msgid "Remove translations ..."
-msgstr "Übersetzungen werden entfernt..."
-
 msgid "Remove Types"
 msgstr "Typen entfernen"
-
-msgid "Remove Types ..."
-msgstr "Typen werden entfernt..."
 
 msgid "Replace empty value"
 msgstr "Leerwert ersetzen"
@@ -2097,9 +2243,6 @@ msgstr "Einstellungen werden gespeichert."
 msgid "Search"
 msgstr "Suche"
 
-msgid "Search ..."
-msgstr "Suche ..."
-
 msgid ""
 "Searchable FAQ attributes: FAQ#, Title, Symptom, Cause, Solution, Comment, "
 "Changed by, Created by, Keywords, Language, Validity"
@@ -2156,22 +2299,18 @@ msgstr "Suche nach Tickets mit der gewählten Priorität."
 msgid "Search for tickets with selected queue."
 msgstr "Suche nach Tickets mit dem gewählten Team."
 
-msgid "Search for tickets with selected SLA."
-msgstr "Suche nach Tickets mit dem gewählten SLA."
-
 msgid "Search for tickets with selected state."
 msgstr "Suche nach Tickets mit dem gewählten Status."
 
 msgid "Search for tickets with selected type."
 msgstr "Suche nach Tickets mit dem gewählten Typ."
 
-msgid "Search for tickets with the selected service."
-msgstr "Suche nach Tickets mit dem gewählten Status."
-
 msgid "Search Results"
 msgstr "Suchergebnisse"
 
-msgid "Search Tickets ..."
+#, fuzzy
+#| msgid "Search Tickets ..."
+msgid "Search Tickets"
 msgstr "Suche Tickets..."
 
 msgid "Select a character set."
@@ -2237,11 +2376,25 @@ msgstr "Wählen Sie, welche Agenten zu dieser Rolle zugeordnet werden sollen."
 msgid "; (semicolon)"
 msgstr "; (Semikolon)"
 
+msgid "Send despite out of office"
+msgstr ""
+
 msgid "Sender"
 msgstr "Absender"
 
 msgid "Sender Address (Email)"
 msgstr "Absender E-Mail"
+
+#, fuzzy
+#| msgid "Sender"
+msgid "Send to"
+msgstr "Absender"
+
+msgid "Send to all role members"
+msgstr ""
+
+msgid "Send to these agents"
+msgstr ""
 
 msgid ""
 "Serach for config items with the same number or part of the same number "
@@ -2252,12 +2405,6 @@ msgstr ""
 
 msgid "Service"
 msgstr "Service"
-
-msgid ""
-"Service defines which content of the service catalog is being requested."
-msgstr ""
-"Ein Service definiert, welche Leistung im Geschäftsprozess für das Ticket "
-"angefragt wird."
 
 msgid "Set a password for the user."
 msgstr "Legen Sie ein Passwort für den Nutzer fest."
@@ -2317,16 +2464,11 @@ msgstr "seit"
 msgid "SINGLE_QUOTES"
 msgstr "' (Einfaches Hochkomma)"
 
+msgid "Size"
+msgstr ""
+
 msgid "SLA"
 msgstr "SLA"
-
-msgid "SLA defines which target times are set for processing this ticket."
-msgstr ""
-"Die Servicevereinbarung (auch SLA), beschreibt welche Erfüllungszielzeiten "
-"für die Abarbeitung des Tickets gelten."
-
-msgid "SLA / Service Level Agreement"
-msgstr "SLA / Servicevereinbarung"
 
 msgid "Solution"
 msgstr "Lösung"
@@ -2336,9 +2478,6 @@ msgstr "Lösungszeit"
 
 msgid "Source"
 msgstr "Quelle"
-
-msgid "Spam"
-msgstr "Spam"
 
 msgid "Split Option"
 msgstr "Trennoptionen"
@@ -2416,6 +2555,11 @@ msgstr "Systemadresse"
 
 msgid "System Addresses"
 msgstr "Systemadressen"
+
+#, fuzzy
+#| msgid "System: SysConfig"
+msgid "System: Logs"
+msgstr "System: SysConfig"
 
 msgid "System: SysConfig"
 msgstr "System: SysConfig"
@@ -2507,11 +2651,21 @@ msgstr "Ticket gesperrt."
 msgid "Ticket Number"
 msgstr "Ticket Nummer"
 
+#, fuzzy
+#| msgid "Ticket"
+msgid "TicketOwner"
+msgstr "Ticket"
+
 msgid "Ticket: Priorities"
 msgstr "Ticket: Prioritäten"
 
 msgid "Ticket: Queues"
 msgstr "Ticket: Teams"
+
+#, fuzzy
+#| msgid "Responsible"
+msgid "TicketResponsible"
+msgstr "Verantwortlicher"
 
 msgid "Tickets"
 msgstr "Tickets"
@@ -2621,8 +2775,10 @@ msgstr "Frei"
 msgid "Unlocked Tickets"
 msgstr "Freie Tickets"
 
-msgid "Unlock Ticket ..."
-msgstr "Tickets entsperren..."
+#, fuzzy
+#| msgid "Unlocked Tickets"
+msgid "Unlock Ticket"
+msgstr "Freie Tickets"
 
 msgid "Unlock Timeout"
 msgstr "Entsperrzeit"
@@ -2639,7 +2795,9 @@ msgstr "bis"
 msgid "Unwatch"
 msgstr "Nicht beobachten"
 
-msgid "Unwatch Ticket ..."
+#, fuzzy
+#| msgid "Unwatch Ticket ..."
+msgid "Unwatch Ticket"
 msgstr "Ticket nicht mehr beobachten..."
 
 msgid "Update Account"
@@ -2753,8 +2911,10 @@ msgstr "Beobachtet"
 msgid "Watched Tickets"
 msgstr "Beobachtete Tickets"
 
-msgid "Watch Ticket ..."
-msgstr "Ticket beobachten..."
+#, fuzzy
+#| msgid "Watched Tickets"
+msgid "Watch Ticket"
+msgstr "Beobachtete Tickets"
 
 msgid "We are working on this functionality."
 msgstr "Funktionalität ist in Arbeit."
@@ -2765,18 +2925,21 @@ msgstr "Willkommen bei KIX"
 msgid "Wildcard Search"
 msgstr "Wildcard-Suche"
 
+#, fuzzy
+#| msgid "Ticket Number"
+msgid "Without Ticketnumber"
+msgstr "Ticket Nummer"
+
+#, fuzzy
+#| msgid "Ticket Number"
+msgid "With Ticketnumber"
+msgstr "Ticket Nummer"
+
 msgid "Yes"
 msgstr "Ja"
 
 msgid "You have successfully logged out."
 msgstr "Sie haben sich erfolgreich abgemeldet."
-
-msgid ""
-"You may attach images to this config item. Possible file types are *.png, *."
-"jpg, *.gif, *.bmp."
-msgstr ""
-"Möglichkeit der Anlage von Bilddateien für das Asset. Erlaubte Dateiformate "
-"sind: *.png, *.jpg, *.gif, *.bmp."
 
 msgid "Your rating"
 msgstr "Ihre Bewertung"
@@ -2786,6 +2949,87 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Affected Service"
+#~ msgstr "Betroffener Service"
+
+#~ msgid "Benutzer"
+#~ msgstr "User"
+
+#~ msgid "escalated tickets: {0}"
+#~ msgstr "Eskalierte Tickets: {0}"
+
+#~ msgid "Firstname"
+#~ msgstr "Vorname"
+
+#~ msgid "free tickets: {0}"
+#~ msgstr "Freie Tickets: {0}"
+
+#~ msgid "Lastname"
+#~ msgstr "Nachname"
+
+#~ msgid "Lock Ticket ..."
+#~ msgstr "Ticket wird gesperrt..."
+
+#~ msgid "Merge"
+#~ msgstr "Zusammenfassen"
+
+#~ msgid "open tickets: {0}"
+#~ msgstr "Offene Tickets: {0}"
+
+#~ msgid "Remove Priorities ..."
+#~ msgstr "Prioritäten werden entfernt..."
+
+#~ msgid "Remove States ..."
+#~ msgstr "Status wird entfernt..."
+
+#~ msgid "Remove Templates ..."
+#~ msgstr "Vorlage wird entfernt..."
+
+#~ msgid "Remove translations ..."
+#~ msgstr "Übersetzungen werden entfernt..."
+
+#~ msgid "Remove Types ..."
+#~ msgstr "Typen werden entfernt..."
+
+#~ msgid "Search ..."
+#~ msgstr "Suche ..."
+
+#~ msgid "Search for tickets with selected SLA."
+#~ msgstr "Suche nach Tickets mit dem gewählten SLA."
+
+#~ msgid "Search for tickets with the selected service."
+#~ msgstr "Suche nach Tickets mit dem gewählten Status."
+
+#~ msgid ""
+#~ "Service defines which content of the service catalog is being requested."
+#~ msgstr ""
+#~ "Ein Service definiert, welche Leistung im Geschäftsprozess für das Ticket "
+#~ "angefragt wird."
+
+#~ msgid "SLA defines which target times are set for processing this ticket."
+#~ msgstr ""
+#~ "Die Servicevereinbarung (auch SLA), beschreibt welche "
+#~ "Erfüllungszielzeiten für die Abarbeitung des Tickets gelten."
+
+#~ msgid "SLA / Service Level Agreement"
+#~ msgstr "SLA / Servicevereinbarung"
+
+#~ msgid "Spam"
+#~ msgstr "Spam"
+
+#~ msgid "Unlock Ticket ..."
+#~ msgstr "Tickets entsperren..."
+
+#~ msgid "Watch Ticket ..."
+#~ msgstr "Ticket beobachten..."
+
+#~ msgid ""
+#~ "You may attach images to this config item. Possible file types are *.png, "
+#~ "*.jpg, *.gif, *.bmp."
+#~ msgstr ""
+#~ "Möglichkeit der Anlage von Bilddateien für das Asset. Erlaubte "
+#~ "Dateiformate sind: *.png, *.jpg, *.gif, *.bmp."
 
 #~ msgid "greater or equal"
 #~ msgstr "größer oder gleich"
@@ -2817,9 +3061,6 @@ msgstr "PLZ"
 
 #~ msgid "Assigned Text Modules"
 #~ msgstr "Zuordnung zu Textbausteinen"
-
-#~ msgid "Helptext_Admin_TextModuleCreate_Subject"
-#~ msgstr "Hilfetext_Admin_TextModuleCreate_Subject"
 
 #~ msgid "Helptext_Admin_TextModuleEdit_Subject"
 #~ msgstr "Hilfetext_Admin_TextModuleEdit_Subject"
