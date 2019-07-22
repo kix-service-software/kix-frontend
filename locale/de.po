@@ -1690,6 +1690,9 @@ msgstr "Abmelden"
 msgid "Logs"
 msgstr ""
 
+msgid "Merge"
+msgstr "Zusammenfassen"
+
 msgid "Minutes"
 msgstr "Minuten"
 
@@ -2367,7 +2370,9 @@ msgstr "Gewählte Versionen"
 msgid "Select file"
 msgstr "Datei wählen"
 
-msgid "select image file"
+#, fuzzy
+#| msgid "select image file"
+msgid "Select image file"
 msgstr "Bilddatei wählen"
 
 msgid "Select which agents should be assigned to this role."
@@ -2466,6 +2471,11 @@ msgstr "' (Einfaches Hochkomma)"
 
 msgid "Size"
 msgstr ""
+
+msgid "SLA defines which target times are set for processing this ticket."
+msgstr ""
+"Die Servicevereinbarung (auch SLA), beschreibt welche Erfüllungszielzeiten "
+"für die Abarbeitung des Tickets gelten."
 
 msgid "SLA"
 msgstr "SLA"
@@ -2971,9 +2981,6 @@ msgstr "PLZ"
 #~ msgid "Lock Ticket ..."
 #~ msgstr "Ticket wird gesperrt..."
 
-#~ msgid "Merge"
-#~ msgstr "Zusammenfassen"
-
 #~ msgid "open tickets: {0}"
 #~ msgstr "Offene Tickets: {0}"
 
@@ -3006,11 +3013,6 @@ msgstr "PLZ"
 #~ msgstr ""
 #~ "Ein Service definiert, welche Leistung im Geschäftsprozess für das Ticket "
 #~ "angefragt wird."
-
-#~ msgid "SLA defines which target times are set for processing this ticket."
-#~ msgstr ""
-#~ "Die Servicevereinbarung (auch SLA), beschreibt welche "
-#~ "Erfüllungszielzeiten für die Abarbeitung des Tickets gelten."
 
 #~ msgid "SLA / Service Level Agreement"
 #~ msgstr "SLA / Servicevereinbarung"

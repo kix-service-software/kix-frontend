@@ -1596,6 +1596,9 @@ msgstr ""
 msgid "Logs"
 msgstr ""
 
+msgid "Merge"
+msgstr ""
+
 msgid "Minutes"
 msgstr ""
 
@@ -2241,7 +2244,7 @@ msgstr ""
 msgid "Select file"
 msgstr ""
 
-msgid "select image file"
+msgid "Select image file"
 msgstr ""
 
 msgid "Select which agents should be assigned to this role."
@@ -2324,6 +2327,9 @@ msgid "SINGLE_QUOTES"
 msgstr "' (Single Quotes)"
 
 msgid "Size"
+msgstr ""
+
+msgid "SLA defines which target times are set for processing this ticket."
 msgstr ""
 
 msgid "SLA"
