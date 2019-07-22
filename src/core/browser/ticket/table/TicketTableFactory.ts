@@ -53,7 +53,7 @@ export class TicketTableFactory extends TableFactory {
                 ),
                 new DefaultColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, false, 135, true, true),
                 new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, false, 160, true, true),
-                new DefaultColumnConfiguration(TicketProperty.STATE_ID, false, true, true, false, 80, true, true, true),
+                new DefaultColumnConfiguration(TicketProperty.STATE_ID, true, true, true, false, 150, true, true, true),
                 new DefaultColumnConfiguration(
                     TicketProperty.QUEUE_ID, true, false, true, false, 100, true, true, true
                 ),
@@ -80,7 +80,7 @@ export class TicketTableFactory extends TableFactory {
                 ),
                 new DefaultColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, false, 135, true, true),
                 new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, false, 260, true, true),
-                new DefaultColumnConfiguration(TicketProperty.STATE_ID, false, true, true, false, 80, true, true, true),
+                new DefaultColumnConfiguration(TicketProperty.STATE_ID, true, true, true, false, 150, true, true, true),
                 new DefaultColumnConfiguration(TicketProperty.LOCK_ID, false, true, false, false, 41, true, true, true),
                 new DefaultColumnConfiguration(
                     TicketProperty.QUEUE_ID, true, false, true, false, 100, true, true, true

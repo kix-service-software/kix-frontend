@@ -39,7 +39,7 @@ Feature: Als Nutzer möchte ich eine korrekte Standardkonfiguration für eine Ta
             | 'Watchers'       | 1        | 0          | 0          | 41    | 0        | 0        | 1        | 'STRING'   | 0           | 0          | 'Ticket'   |
             | 'TicketNumber'   | 1        | 1          | 0          | 135   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Ticket'   |
             | 'Title'          | 1        | 1          | 0          | 260   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Ticket'   |
-            | 'StateID'        | 1        | 1          | 1          | 80    | 1        | 0        | 1        | 'STRING'   | 1           | 0          | 'Ticket'   |
+            | 'StateID'        | 1        | 1          | 1          | 150   | 1        | 1        | 1        | 'STRING'   | 1           | 0          | 'Ticket'   |
             | 'LockID'         | 1        | 1          | 1          | 41    | 1        | 0        | 1        | 'STRING'   | 0           | 0          | 'Ticket'   |
             | 'QueueID'        | 1        | 1          | 1          | 100   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Ticket'   |
             | 'ResponsibleID'  | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Ticket'   |
@@ -65,7 +65,7 @@ Feature: Als Nutzer möchte ich eine korrekte Standardkonfiguration für eine Ta
             | 'PriorityID'     | 1        | 1          | 1          | 65    | 0        | 0        | 1        | 'STRING'   | 1           | 0          | 'Ticket'   |
             | 'TicketNumber'   | 1        | 1          | 0          | 135   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Ticket'   |
             | 'Title'          | 1        | 1          | 0          | 160   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Ticket'   |
-            | 'StateID'        | 1        | 1          | 1          | 80    | 1        | 0        | 1        | 'STRING'   | 1           | 0          | 'Ticket'   |
+            | 'StateID'        | 1        | 1          | 1          | 150   | 1        | 1        | 1        | 'STRING'   | 1           | 0          | 'Ticket'   |
             | 'QueueID'        | 1        | 1          | 1          | 100   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Ticket'   |
             | 'OwnerID'        | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Ticket'   |
             | 'OrganisationID' | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Ticket'   |
