@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-07-19 11:31+0000\n"
-"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
+"PO-Revision-Date: 2019-07-22 13:08+0000\n"
+"Last-Translator: fuhlig <Frank.Uhlig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -1632,108 +1632,68 @@ msgstr "Verknüpfen mit Ticket"
 msgid "Link Type"
 msgstr "Art der Verknüpfung"
 
-#, fuzzy
-#| msgid "Config Item"
 msgid "Load Config Item"
-msgstr "Asset"
+msgstr "Lade Asset"
 
-#, fuzzy
-#| msgid "Config Item Class"
 msgid "Load Config Item Class"
-msgstr "Asset Klasse"
+msgstr "Lade Asset Klasse"
 
-#, fuzzy
-#| msgid "Config Items"
 msgid "Load Config Items"
-msgstr "Assets"
+msgstr "Lade Assets"
 
-#, fuzzy
-#| msgid "Load Contact ..."
 msgid "Load Contact"
-msgstr "Kontak laden..."
+msgstr "Lade Kontakt"
 
-#, fuzzy
-#| msgid "Email Account"
 msgid "Load Email Account"
-msgstr "E-Mail Konto"
+msgstr "Lade E-Mail Konto"
 
-#, fuzzy
-#| msgid "Email Filter"
 msgid "Load Email Filter"
-msgstr "E-Mail Filter"
+msgstr "Lade E-Mail Filter"
 
-#, fuzzy
-#| msgid "FAQ Article"
 msgid "Load FAQ Article"
-msgstr "FAQ Artikel"
+msgstr "Lade FAQ Artikel"
 
-#, fuzzy
-#| msgid "Edit FAQ Article"
 msgid "Load FAQ Articles"
-msgstr "FAQ Artikel bearbeiten"
+msgstr "Lade FAQ Artikel"
 
-#, fuzzy
-#| msgid "FAQ Category"
 msgid "Load FAQ Category"
-msgstr "FAQ Kategorie"
+msgstr "Lade FAQ Kategorie"
 
 msgid "Loading"
 msgstr "Wird geladen"
 
-#, fuzzy
-#| msgid "Load Organisation ..."
 msgid "Load Organisation"
-msgstr "Kunde laden..."
+msgstr "Lade Kunde"
 
-#, fuzzy
-#| msgid "Edit Queue"
 msgid "Load Queue"
-msgstr "Team bearbeiten"
+msgstr "Lade Team"
 
-#, fuzzy
-#| msgid "Edit Role"
 msgid "Load Role"
-msgstr "Rolle bearbeiten"
+msgstr "Lade Rolle"
 
-#, fuzzy
-#| msgid "System Address"
 msgid "Load System Address"
-msgstr "Systemadresse"
+msgstr "Lade Systemadresse"
 
-#, fuzzy
-#| msgid "Locked Tickets"
 msgid "Load Ticket"
-msgstr "Gesperrte Tickets"
+msgstr "Lade Ticket"
 
-#, fuzzy
-#| msgid "Ticket: Priorities"
 msgid "Load Ticket Priority"
-msgstr "Ticket: Prioritäten"
+msgstr "Lade Ticket Priorität"
 
-#, fuzzy
-#| msgid "Locked Tickets"
 msgid "Load Tickets"
-msgstr "Gesperrte Tickets"
+msgstr "Lade Tickets"
 
-#, fuzzy
-#| msgid "Load Ticket State ..."
 msgid "Load Ticket State"
-msgstr "Ticket Status laden..."
+msgstr "Lade Ticket Status"
 
-#, fuzzy
-#| msgid "Load Ticket State ..."
 msgid "Load Ticket Type"
-msgstr "Ticket Status laden..."
+msgstr "Lade Ticket Typ"
 
-#, fuzzy
-#| msgid "Load Organisation ..."
 msgid "Load Translation"
-msgstr "Kunde laden..."
+msgstr "Lade Übersetzung"
 
-#, fuzzy
-#| msgid "Load Customer ..."
 msgid "Load User"
-msgstr "Kunde laden..."
+msgstr "Lade Benutzer"
 
 msgid "Localisation"
 msgstr "Lokalisierung"
@@ -1948,7 +1908,7 @@ msgid "not archived tickets"
 msgstr "Nicht archivierte Tickets"
 
 msgid "Not available (not more or not yet)"
-msgstr ""
+msgstr "Noch nicht verfügbar / nicht mehr verfügbar"
 
 msgid "Note"
 msgstr "Notiz"
