@@ -14,7 +14,7 @@ import { UIComponentPermission } from '../../../model/UIComponentPermission';
 export class FAQArticleVoteAction extends AbstractAction {
 
     public permissions: UIComponentPermission[] = [
-        new UIComponentPermission('faq/articles/*/votes', [CRUD.CREATE])
+        new UIComponentPermission('faq/articles', [CRUD.CREATE])
     ];
 
     public async initAction(): Promise<void> {
