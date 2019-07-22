@@ -411,7 +411,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         const nodes = [];
 
         for (const o of objects) {
-            const icon = await LabelService.getInstance().getIcon(o);
+            const icon = await LabelService.getInstance().getObjectIcon(o);
             const text = await LabelService.getInstance().getText(o);
             nodes.push(new TreeNode(o.ObjectId, text, icon));
         }

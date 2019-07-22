@@ -14,12 +14,10 @@ import { LogFile, LogFileProperty } from "../../model/kix/log";
 
 export class LogFileLabelProvider extends LabelProvider {
 
+    public kixObjectType: KIXObjectType = KIXObjectType.LOG_FILE;
+
     public isLabelProviderFor(logFile: LogFile): boolean {
         return logFile instanceof LogFile;
-    }
-
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === KIXObjectType.LOG_FILE;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {

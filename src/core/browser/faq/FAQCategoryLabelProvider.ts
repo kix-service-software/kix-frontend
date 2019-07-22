@@ -108,7 +108,7 @@ export class FAQCategoryLabelProvider extends LabelProvider<FAQCategory> {
     }
 
     public getObjectIcon(faqCategory: FAQCategory): string | ObjectIcon {
-        return new ObjectIcon('FAQCategory', faqCategory.ID);
+        return faqCategory ? new ObjectIcon('FAQCategory', faqCategory.ID) : null;
     }
 
     public getObjectTooltip(faqCategory: FAQCategory): string {

@@ -123,7 +123,7 @@ export class UserLabelProvider extends LabelProvider<User> {
         return `${user.UserFirstname} ${user.UserLastname} ${email}`;
     }
 
-    public getObjectIcon(object: User): string | ObjectIcon {
+    public getObjectTypeIcon(): string | ObjectIcon {
         return 'kix-icon-man';
     }
 

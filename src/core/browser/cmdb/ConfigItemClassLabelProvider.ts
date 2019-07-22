@@ -70,7 +70,7 @@ export class ConfigItemClassLabelProvider extends LabelProvider<ConfigItemClass>
         return ciClass.Name;
     }
 
-    public getObjectIcon(ciClass: ConfigItemClass): string | ObjectIcon {
+    public getObjectTypeIcon(): string | ObjectIcon {
         return 'kix-icon-ci';
     }
 

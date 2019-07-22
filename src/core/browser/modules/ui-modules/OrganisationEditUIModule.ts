@@ -16,7 +16,7 @@ import { ImportService } from '../../../../core/browser/import';
 import { DialogService } from '../../../../core/browser/components/dialog';
 import {
     OrganisationImportManager, OrganisationImportDialogContext, EditOrganisationDialogContext,
-    NewOrganisationDialogContext, OrganisationCreateAction, OrganisationEditAction, OrganisationCreateContactAction
+    NewOrganisationDialogContext, OrganisationCreateAction, OrganisationEditAction
 } from '../../../../core/browser/organisation';
 import { IUIModule } from '../../application/IUIModule';
 
@@ -94,9 +94,6 @@ export class UIModule implements IUIModule {
     private registerActions(): void {
         ActionFactory.getInstance().registerAction('organisation-create-action', OrganisationCreateAction);
         ActionFactory.getInstance().registerAction('organisation-edit-action', OrganisationEditAction);
-        ActionFactory.getInstance().registerAction(
-            'organisation-create-contact-action', OrganisationCreateContactAction
-        );
     }
 
 }

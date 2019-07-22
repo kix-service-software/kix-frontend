@@ -207,7 +207,7 @@ class Component extends FormInputComponent<string | number, ComponentState> {
 
     private async createTreeNode(o: KIXObject): Promise<TreeNode> {
         const text = await LabelService.getInstance().getText(o);
-        const icon = LabelService.getInstance().getIcon(o);
+        const icon = LabelService.getInstance().getObjectIcon(o);
         return new TreeNode(o.ObjectId, text ? text : `${o.KIXObjectType}: ${o.ObjectId}`, icon);
     }
 

@@ -209,7 +209,7 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
         return returnString;
     }
 
-    public getObjectIcon(faqArticle: FAQArticle): string | ObjectIcon {
+    public getObjectTypeIcon(): string | ObjectIcon {
         return 'kix-icon-faq';
     }
 

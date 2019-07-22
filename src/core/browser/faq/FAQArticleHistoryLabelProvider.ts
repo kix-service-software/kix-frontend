@@ -84,7 +84,7 @@ export class FAQArticleHistoryLabelProvider extends LabelProvider<FAQHistory> {
         return history.ID.toString();
     }
 
-    public getObjectIcon(history: FAQHistory): string | ObjectIcon {
+    public getObjectTypeIcon(): string | ObjectIcon {
         return 'kix-icon-faq';
     }
 

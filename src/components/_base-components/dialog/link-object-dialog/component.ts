@@ -10,7 +10,8 @@
 import {
     WidgetService, TableConfiguration, TableRowHeight,
     TableHeaderHeight, KIXObjectService, SearchOperator, BrowserUtil,
-    TableFactoryService, ContextService, TableEvent, DefaultColumnConfiguration, ValueState, TableEventData
+    TableFactoryService, ContextService, TableEvent, DefaultColumnConfiguration, ValueState,
+    TableEventData, LabelService
 } from '../../../../core/browser';
 import { FormService } from '../../../../core/browser/form';
 import {
@@ -88,8 +89,9 @@ class LinkDialogComponent {
 
         for (const lp of this.linkPartners) {
             const formId = await FormService.getInstance().getFormIdByContext(FormContext.LINK, lp[1]);
+            const icon = await LabelService.getInstance().getObjectTypeIcon(lp[1]);
             if (formId) {
-                this.state.linkableObjectNodes.push(new TreeNode(formId, lp[0]));
+                this.state.linkableObjectNodes.push(new TreeNode(formId, lp[0], icon));
             }
         }
 

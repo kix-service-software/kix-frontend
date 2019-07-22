@@ -83,11 +83,13 @@ export class ChannelLabelProvider extends LabelProvider<Channel> {
     }
 
     public getObjectIcon(channel?: Channel): string | ObjectIcon {
-        if (channel.Name === 'note') {
-            return 'kix-icon-new-note';
-        }
-        if (channel.Name === 'email') {
-            return 'kix-icon-new-mail';
+        if (channel) {
+            if (channel.Name === 'note') {
+                return 'kix-icon-new-note';
+            }
+            if (channel.Name === 'email') {
+                return 'kix-icon-new-mail';
+            }
         }
         return null;
     }

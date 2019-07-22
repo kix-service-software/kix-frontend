@@ -226,7 +226,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
         return returnString;
     }
 
-    public getObjectIcon(object: Contact): string | ObjectIcon {
+    public getObjectTypeIcon(): string | ObjectIcon {
         return 'kix-icon-man-bubble';
     }
 

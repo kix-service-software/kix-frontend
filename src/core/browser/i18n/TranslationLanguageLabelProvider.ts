@@ -70,7 +70,7 @@ export class TranslationLanguageLabelProvider extends LabelProvider<TranslationL
     }
 
     public getObjectIcon(language?: TranslationLanguage): string | ObjectIcon {
-        return new ObjectIcon('TranslationLanguage', language.ObjectId);
+        return language ? new ObjectIcon('TranslationLanguage', language.ObjectId) : null;
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
