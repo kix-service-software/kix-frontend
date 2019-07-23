@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
 "PO-Revision-Date: 2019-07-23 16:31+0000\n"
-"Last-Translator: fuhlig <Frank.Uhlig@cape-it.de>\n"
+"Last-Translator: ssuender <Silke.Suender@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -129,8 +129,6 @@ msgstr "Alle freien Tickets"
 msgid "All Objects"
 msgstr "Alle Objekte"
 
-#, fuzzy
-#| msgid "All Tickets"
 msgid "All tickets"
 msgstr "Alle Tickets"
 
@@ -193,10 +191,8 @@ msgstr "Zugeordnete Kontakte"
 msgid "Assigned Organisations"
 msgstr "Zugeordnete Kunden"
 
-#, fuzzy
-#| msgid "Assigned Organisations"
 msgid "Assigned Organsiation"
-msgstr "Zugeordnete Kunden"
+msgstr "Zugeordneter Kunde"
 
 msgid "Assigned Queues"
 msgstr "Zugeordnete Teams"
@@ -240,10 +236,8 @@ msgstr "zu ändernde Attribute:"
 msgid "Automation"
 msgstr "Automatisierung"
 
-#, fuzzy
-#| msgid "Automation: Notifications"
 msgid "Automation: Notification"
-msgstr "Automatisierung: Benachrichtigungen"
+msgstr "Automatisierung: Benachrichtigung"
 
 msgid "Automation: Notifications"
 msgstr "Automatisierung: Benachrichtigungen"
@@ -308,10 +302,8 @@ msgstr "Ursache"
 msgid "Cc"
 msgstr "Cc"
 
-#, fuzzy
-#| msgid "Changed at"
 msgid "Changed"
-msgstr "Geändert am"
+msgstr "Geändert"
 
 msgid "Changed at"
 msgstr "Geändert am"
@@ -589,10 +581,8 @@ msgstr ""
 msgid "Delete"
 msgstr "Löschen"
 
-#, fuzzy
-#| msgid "Delete"
 msgid "Deleted"
-msgstr "Löschen"
+msgstr "Gelöscht"
 
 msgid "Delete Link"
 msgstr "Verknüpfung löschen"
@@ -776,12 +766,10 @@ msgid "Escalation time"
 msgstr "Eskalationszeit"
 
 msgid "Event"
-msgstr ""
+msgstr "Event"
 
-#, fuzzy
-#| msgid "Agents"
 msgid "Events"
-msgstr "Agenten"
+msgstr "Events"
 
 msgid "Execute now!"
 msgstr "Jetzt ausführen!"
@@ -1731,7 +1719,7 @@ msgid "Logout"
 msgstr "Abmelden"
 
 msgid "Logs"
-msgstr ""
+msgstr "Logs"
 
 msgid "Minutes"
 msgstr "Minuten"
@@ -1739,10 +1727,8 @@ msgstr "Minuten"
 msgid "Mobile"
 msgstr "Mobil"
 
-#, fuzzy
-#| msgid "Notifications"
 msgid "Modification Time"
-msgstr "Benachrichtigungen"
+msgstr "Änderungsdatum"
 
 msgid "Modified"
 msgstr "Geändert"
@@ -2572,10 +2558,8 @@ msgstr "Statustyp"
 msgid "State Types"
 msgstr "Statustypen"
 
-#, fuzzy
-#| msgid "Stop after Match"
 msgid "Stop after match"
-msgstr "Stoppen nach Treffer"
+msgstr "Stopp nach Treffer"
 
 msgid "Street"
 msgstr "Straße"
@@ -2613,10 +2597,8 @@ msgstr "Systemadresse"
 msgid "System Addresses"
 msgstr "Systemadressen"
 
-#, fuzzy
-#| msgid "System: SysConfig"
 msgid "System: Logs"
-msgstr "System: SysConfig"
+msgstr "System: Logs"
 
 msgid "System: SysConfig"
 msgstr "System: SysConfig"
@@ -2708,10 +2690,8 @@ msgstr "Ticket gesperrt."
 msgid "Ticket Number"
 msgstr "Ticket Nummer"
 
-#, fuzzy
-#| msgid "Ticket"
 msgid "TicketOwner"
-msgstr "Ticket"
+msgstr "Bearbeiter"
 
 msgid "Ticket: Priorities"
 msgstr "Ticket: Prioritäten"
@@ -2719,8 +2699,6 @@ msgstr "Ticket: Prioritäten"
 msgid "Ticket: Queues"
 msgstr "Ticket: Teams"
 
-#, fuzzy
-#| msgid "Responsible"
 msgid "TicketResponsible"
 msgstr "Verantwortlicher"
 
@@ -2832,10 +2810,8 @@ msgstr "Frei"
 msgid "Unlocked Tickets"
 msgstr "Freie Tickets"
 
-#, fuzzy
-#| msgid "Unlocked Tickets"
 msgid "Unlock Ticket"
-msgstr "Freie Tickets"
+msgstr "Freies Ticket"
 
 msgid "Unlock Timeout"
 msgstr "Entsperrzeit"
@@ -2852,10 +2828,8 @@ msgstr "bis"
 msgid "Unwatch"
 msgstr "Nicht beobachten"
 
-#, fuzzy
-#| msgid "Unwatch Ticket ..."
 msgid "Unwatch Ticket"
-msgstr "Ticket nicht mehr beobachten..."
+msgstr "Ticket nicht mehr beobachten"
 
 msgid "Update Account"
 msgstr "Aktualisierung wird durchgeführt"
@@ -2968,10 +2942,8 @@ msgstr "Beobachtet"
 msgid "Watched Tickets"
 msgstr "Beobachtete Tickets"
 
-#, fuzzy
-#| msgid "Watched Tickets"
 msgid "Watch Ticket"
-msgstr "Beobachtete Tickets"
+msgstr "Ticket beobachten"
 
 msgid "We are working on this functionality."
 msgstr "Funktionalität ist in Arbeit."
@@ -2982,15 +2954,11 @@ msgstr "Willkommen bei KIX"
 msgid "Wildcard Search"
 msgstr "Wildcard-Suche"
 
-#, fuzzy
-#| msgid "Ticket Number"
 msgid "Without Ticketnumber"
-msgstr "Ticket Nummer"
+msgstr "ohne Ticket-Nummer"
 
-#, fuzzy
-#| msgid "Ticket Number"
 msgid "With Ticketnumber"
-msgstr "Ticket Nummer"
+msgstr "mit Ticket-Nummer"
 
 msgid "Yes"
 msgstr "Ja"
