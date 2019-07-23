@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-07-22 13:08+0000\n"
+"PO-Revision-Date: 2019-07-23 07:15+0000\n"
 "Last-Translator: fuhlig <Frank.Uhlig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -65,7 +65,7 @@ msgid "Add CI Class"
 msgstr "Asset Klasse Hinzufügen"
 
 msgid "Additional recipients"
-msgstr ""
+msgstr "Weitere Empfänger"
 
 msgid "add notes here"
 msgstr "Notizen hinzufügen"
@@ -384,13 +384,13 @@ msgid "CMDB: CI Classes"
 msgstr "Assets: Asset Klassen"
 
 msgid "CMDB Dashboard"
-msgstr ""
+msgstr "Asset Dashboard"
 
 msgid "CMDB Explorer"
 msgstr "Asset Explorer"
 
 msgid "CNO"
-msgstr ""
+msgstr "KNR"
 
 msgid ": (colon)"
 msgstr ": (Doppelpunkt)"
@@ -1973,7 +1973,7 @@ msgid "Observer"
 msgstr "Beobachter"
 
 msgid "Once a day"
-msgstr ""
+msgstr "Einmal pro Tag"
 
 msgid "Open Tickets"
 msgstr "Offene Tickets"
@@ -2277,6 +2277,8 @@ msgstr "Rolle wurde erfolgreich angelegt."
 
 msgid "Row {0} of the file with {1} {2}: could not import{3}. How to continue?"
 msgstr ""
+"Zeile {0} der Datei {1} {2}: kann nicht importiert werden{3}. Wie möchten "
+"Sie fortfahren?"
 
 msgid "Row Number"
 msgstr "Zeilennummer"
@@ -2448,10 +2450,10 @@ msgid "Send to"
 msgstr "Absender"
 
 msgid "Send to all role members"
-msgstr ""
+msgstr "An alle Rollen-Mitglieder senden"
 
 msgid "Send to these agents"
-msgstr ""
+msgstr "An diese Agenten senden"
 
 msgid ""
 "Serach for config items with the same number or part of the same number "
@@ -2522,7 +2524,7 @@ msgid "SINGLE_QUOTES"
 msgstr "' (Einfaches Hochkomma)"
 
 msgid "Size"
-msgstr ""
+msgstr "Größe"
 
 msgid "SLA"
 msgstr "SLA"
@@ -2939,7 +2941,7 @@ msgid "Value"
 msgstr "Wert"
 
 msgid "Value of field '{0}' is too long (max: {1})."
-msgstr ""
+msgstr "Wert des Feldes '{0}' ist zu  lang (max: {1})."
 
 msgid "Version"
 msgstr "Version"
