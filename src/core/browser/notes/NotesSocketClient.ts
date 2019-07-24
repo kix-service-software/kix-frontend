@@ -9,7 +9,7 @@
 
 import { SocketClient } from "../SocketClient";
 import {
-    NotesEvent, LoadNotesResponse, LoadNotesRequest, SaveNotesRequest, ISocketResponse, SocketEvent
+    NotesEvent, LoadNotesResponse, SaveNotesRequest, ISocketResponse, SocketEvent, ISocketRequest
 } from "../../model";
 import { ClientStorageService } from "../ClientStorageService";
 import { IdService } from "../IdService";
@@ -32,7 +32,7 @@ export class NotesSocketClient extends SocketClient {
         this.socket = this.createSocket('notes', true);
     }
 
-    public loadNotes(contextId: string): Promise<string> {
+    public loadNotes(): Promise<string> {
         return new Promise<string>((resolve, reject) => {
 
             const token = ClientStorageService.getToken();
@@ -58,9 +58,13 @@ export class NotesSocketClient extends SocketClient {
                 }
             });
 
-            this.socket.emit(
-                NotesEvent.LOAD_NOTES, new LoadNotesRequest(token, requestId, contextId)
-            );
+            const request: ISocketRequest = {
+                token,
+                requestId,
+                clientRequestId: ClientStorageService.getClientRequestId()
+            };
+
+            this.socket.emit(NotesEvent.LOAD_NOTES, request);
         });
     }
 
