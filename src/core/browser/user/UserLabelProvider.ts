@@ -55,6 +55,9 @@ export class UserLabelProvider extends LabelProvider<User> {
             case UserProperty.USER_LANGUAGE:
                 displayValue = 'Translatable#Language';
                 break;
+            case UserProperty.MY_QUEUES:
+                displayValue = 'Translatable#My Queues';
+                break;
             default:
                 displayValue = await super.getPropertyText(property, short, translatable);
         }
