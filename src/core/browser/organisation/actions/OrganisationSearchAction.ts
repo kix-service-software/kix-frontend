@@ -9,7 +9,8 @@
 
 import { AbstractAction } from '../../../model/components/action/AbstractAction';
 import { UIComponentPermission } from '../../../model/UIComponentPermission';
-import { CRUD } from '../../../model';
+import { CRUD, KIXObjectType, ContextMode } from '../../../model';
+import { ContextService } from '../../context';
 
 export class OrganisationSearchAction extends AbstractAction {
 
@@ -20,6 +21,10 @@ export class OrganisationSearchAction extends AbstractAction {
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Search';
         this.icon = 'kix-icon-search';
+    }
+
+    public async run(event: any): Promise<void> {
+        ContextService.getInstance().setDialogContext(null, KIXObjectType.ORGANISATION, ContextMode.SEARCH, null, true);
     }
 
 }
