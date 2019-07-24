@@ -7,17 +7,15 @@
  * --
  */
 
-import { ObjectIcon } from "../kix";
-import { UIComponentPermission } from "../UIComponentPermission";
+import { ISocketRequest } from "../ISocketRequest";
 
-export class Bookmark {
+export class DeleteSearchRequest implements ISocketRequest {
 
     public constructor(
-        public title: string,
-        public icon: string | ObjectIcon,
-        public actionId: string,
-        public actionData: any = null,
-        public permissions: UIComponentPermission[] = []
+        public token: string,
+        public requestId: string,
+        public clientRequestId: string,
+        public name: string,
     ) { }
 
 }

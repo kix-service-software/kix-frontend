@@ -6,32 +6,19 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<widget title=state.title>
-    <@content>
-        <div.search-criteria-widget>
-            <div.search-criteria-list>
-                <for|criteria| of=state.displayCriteria>
-                    <div.search-criteria-list-item>
-                        <div.key title=(criteria[0] + " (" + criteria[1] + ")")>${criteria[0]} (${criteria[1]}):</div>
-                        <label-list labels=criteria[2] removeLabels=false/>
-                    </div>
-                </for>
+<if(!state.loading)>
+    <widget title=state.title instanceId=state.instanceId contentActions=state.contentActions>
+        <@content>
+            <div.criteria-container>
+                <div.search-criteria-list>
+                    <for|criteria| of=state.displayCriteria>
+                        <div.search-criteria-list-item>
+                            <div.key title=(criteria[0] + " (" + criteria[1] + ")")>${criteria[0]} (${criteria[1]}):</div>
+                            <label-list labels=criteria[2] removeLabels=false/>
+                        </div>
+                    </for>
+                </div>
             </div>
-            <div.search-criteria-buttons>
-                <button.form-button type="button" on-click("openNewSearchDialog") title=state.translations["Translatable#New Search"]>
-                    <span.kix-icon-search/>
-                    <translation-string pattern="Translatable#New Search"/>
-                </button>
-                <button.form-button
-                    type="button"
-                    on-click("openEditSearchDialog")
-                    title=state.translations["Translatable#Edit Search"]
-                    disabled=(state.displayCriteria.length === 0)>
-                    <span.kix-icon-edit/>
-                    <translation-string pattern="Translatable#Edit Search"/>
-                </button>
-            </div>
-        </div>
-    </@content>
-</widget>
+        </@content>
+    </widget>
+</if>

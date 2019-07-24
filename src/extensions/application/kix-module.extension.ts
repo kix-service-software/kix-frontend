@@ -32,6 +32,7 @@ class Extension implements IKIXModuleExtension {
         new UIComponent('release', 'release/release-module', []),
         new UIComponent('search', 'search/search-module', []),
         new UIComponent('search-result-explorer', 'search/widgets/search-result-explorer', []),
+        new UIComponent('save-search-template-overlay', 'search/save-search-template-overlay', []),
         new UIComponent('icon', '_base-components/icon', []),
         new UIComponent('list-with-title', '_base-components/base-html-components/list-with-title', []),
         new UIComponent('link-object-dialog', '_base-components/dialog/link-object-dialog', []),

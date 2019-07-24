@@ -7,4 +7,7 @@
  * --
  */
 
-export { SearchService } from './SearchService';
+export { SaveSearchRequest } from './SaveSearchRequest';
+export { LoadSearchResponse } from './LoadSearchResponse';
+export { DeleteSearchRequest } from './DeleteSearchRequest';
+export { SearchEvent } from './SearchEvent';

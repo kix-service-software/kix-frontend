@@ -12,20 +12,25 @@ import {
 } from '../../../../core/browser';
 import {
     KIXObjectType, ContextType, ContextMode, ContextDescriptor, ConfiguredDialogWidget,
-    WidgetConfiguration
+    WidgetConfiguration,
+    Bookmark,
+    CRUD
 } from '../../../../core/model';
 import {
     FAQArticleTableFactory, FAQArticleHistoryTableFactory, FAQLabelProvider, FAQArticleHistoryLabelProvider,
     FAQService, FAQArticleSearchContext, FAQArticleVoteAction,
     FAQArticleBrowserFactory, FAQArticleAttachmentBrowserFactory, FAQArticleSearchDefinition, FAQArticleFormService,
-    FAQCategoryLabelProvider
+    FAQCategoryLabelProvider,
+    LoadFAQAricleAction
 } from '../../../../core/browser/faq';
 import { DialogService } from '../../../../core/browser/components/dialog';
 import { FAQCategoryBrowserFactory } from '../../../../core/browser/faq/FAQCategoryBrowserFactory';
-import { KIXObjectSearchService } from '../../../../core/browser/kix/search/KIXObjectSearchService';
+import { SearchService } from '../../../../core/browser/kix/search/SearchService';
 import { FAQContext } from '../../../../core/browser/faq/context/FAQContext';
 import { FAQDetailsContext } from '../../../../core/browser/faq/context/FAQDetailsContext';
 import { IUIModule } from '../../application/IUIModule';
+import { UIComponentPermission } from '../../../model/UIComponentPermission';
+import { BookmarkService } from '../../bookmark/BookmarkService';
 
 export class UIModule implements IUIModule {
 
@@ -58,11 +63,12 @@ export class UIModule implements IUIModule {
         ServiceRegistry.registerServiceInstance(FAQService.getInstance());
         ServiceRegistry.registerServiceInstance(FAQArticleFormService.getInstance());
 
-        KIXObjectSearchService.getInstance().registerSearchDefinition(new FAQArticleSearchDefinition());
+        SearchService.getInstance().registerSearchDefinition(new FAQArticleSearchDefinition());
 
         this.registerContexts();
         this.registerDialogs();
         this.registerActions();
+        this.registerBookmarks();
     }
 
     private registerContexts(): void {
@@ -101,6 +107,30 @@ export class UIModule implements IUIModule {
 
     private registerActions(): void {
         ActionFactory.getInstance().registerAction('faq-article-vote-action', FAQArticleVoteAction);
+        ActionFactory.getInstance().registerAction('load-faq-article-action', LoadFAQAricleAction);
+    }
+
+    private registerBookmarks(): void {
+        const bookmarks = [
+            new Bookmark(
+                'Translatable#How to use KIX 18 – Some general notes', 'kix-icon-faq', 'load-faq-article-action', 1,
+                [new UIComponentPermission('faq/articles', [CRUD.READ])]
+            ),
+            new Bookmark(
+                'Translatable#How to search in KIX 18?', 'kix-icon-faq', 'load-faq-article-action', 2,
+                [new UIComponentPermission('faq/articles', [CRUD.READ])]
+            ),
+            new Bookmark(
+                'Translatable#How to create a new ticket?', 'kix-icon-faq', 'load-faq-article-action', 3,
+                [new UIComponentPermission('faq/articles', [CRUD.READ])]
+            ),
+            new Bookmark(
+                'Translatable#selected ticket features', 'kix-icon-faq', 'load-faq-article-action', 4,
+                [new UIComponentPermission('faq/articles', [CRUD.READ])]
+            )
+        ];
+
+        BookmarkService.getInstance().publishBookmarks('faq', bookmarks);
     }
 
 }

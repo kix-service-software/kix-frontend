@@ -10,8 +10,7 @@
 import {
     LoadKIXModulesRequest, KIXModulesEvent, LoadKIXModulesResponse, Form, FormContext,
     KIXObjectType, LoadFormConfigurationsResponse, LoadFormConfigurationsRequest,
-    Bookmark, ISocketRequest, LoadBookmarksResponse, LoadReleaseInfoResponse, ReleaseInfo,
-    LoadObjectDefinitionsResponse,
+    ISocketRequest, LoadReleaseInfoResponse, ReleaseInfo, LoadObjectDefinitionsResponse,
     SocketEvent
 } from '../../model';
 
@@ -98,39 +97,6 @@ export class KIXModulesSocketClient extends SocketClient {
             });
 
             this.socket.emit(KIXModulesEvent.LOAD_FORM_CONFIGURATIONS, request);
-        });
-    }
-
-    public async loadBookmarks(): Promise<Bookmark[]> {
-        return new Promise<Bookmark[]>((resolve, reject) => {
-            const token = ClientStorageService.getToken();
-            const requestId = IdService.generateDateBasedId();
-
-            const timeout = window.setTimeout(() => {
-                reject('Timeout: ' + KIXModulesEvent.LOAD_MODULES);
-            }, 30000);
-
-            this.socket.on(KIXModulesEvent.LOAD_BOOKMARKS_FINISHED, (result: LoadBookmarksResponse) => {
-                if (requestId === result.requestId) {
-                    window.clearTimeout(timeout);
-                    resolve(result.bookmarks);
-                }
-            });
-
-            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
-                if (error.requestId === requestId) {
-                    window.clearTimeout(timeout);
-                    console.error(error.error);
-                    reject(error.error);
-                }
-            });
-
-            const request: ISocketRequest = {
-                token,
-                requestId,
-                clientRequestId: ClientStorageService.getClientRequestId()
-            };
-            this.socket.emit(KIXModulesEvent.LOAD_BOOKMARKS, request);
         });
     }
 

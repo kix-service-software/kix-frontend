@@ -24,7 +24,7 @@ import {
 import {
     KIXObjectType, ContextDescriptor, ContextType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration, WidgetSize
 } from "../../../../core/model";
-import { KIXObjectSearchService } from "../../../../core/browser/kix/search/KIXObjectSearchService";
+import { SearchService } from "../../../../core/browser/kix/search/SearchService";
 import { IUIModule } from "../../application/IUIModule";
 
 export class UIModule implements IUIModule {
@@ -64,7 +64,7 @@ export class UIModule implements IUIModule {
         LabelService.getInstance().registerLabelProvider(new ConfigItemVersionLabelProvider());
         LabelService.getInstance().registerLabelProvider(new ConfigItemVersionCompareLabelProvider());
 
-        KIXObjectSearchService.getInstance().registerSearchDefinition(new ConfigItemSearchDefinition());
+        SearchService.getInstance().registerSearchDefinition(new ConfigItemSearchDefinition());
 
         this.registerContexts();
         this.registerDialogs();

@@ -7,6 +7,15 @@
  * --
  */
 
-export { IKIXObjectSearchListener } from './IKIXObjectSearchListener';
-export { SearchDefinition } from './SearchDefinition';
-export { SearchResultCategory } from './SearchResultCategory';
+export enum SearchEvent {
+
+    SAVE_SEARCH = 'SAVE_SEARCH',
+    SAVE_SEARCH_FINISHED = 'SAVE_SEARCH_FINISHED',
+
+    LOAD_SEARCH = 'LOAD_SEARCH',
+    SEARCH_LOADED = 'SEARCH_LOADED',
+
+    DELETE_SEARCH = 'DELETE_SEARCH',
+    SEARCH_DELETED = 'SEARCH_DELETED'
+
+}

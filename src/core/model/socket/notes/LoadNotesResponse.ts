@@ -6,8 +6,9 @@
  * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
  * --
  */
+import { ISocketResponse } from "../ISocketResponse";
 
-export class LoadNotesResponse {
+export class LoadNotesResponse implements ISocketResponse {
 
     public constructor(
         public requestId: string,

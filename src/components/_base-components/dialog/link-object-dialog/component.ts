@@ -7,6 +7,15 @@
  * --
  */
 
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     WidgetService, TableConfiguration, TableRowHeight,
     TableHeaderHeight, KIXObjectService, SearchOperator, BrowserUtil,
@@ -23,7 +32,7 @@ import { LinkUtil, LinkObjectDialogContext } from '../../../../core/browser/link
 import { EventService, IEventSubscriber } from '../../../../core/browser/event';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 import { DialogService } from '../../../../core/browser/components/dialog';
-import { KIXObjectSearchService } from '../../../../core/browser/kix/search/KIXObjectSearchService';
+import { SearchService } from '../../../../core/browser/kix/search/SearchService';
 
 class LinkDialogComponent {
 
@@ -163,7 +172,7 @@ class LinkDialogComponent {
         DialogService.getInstance().setOverlayDialogLoading(true);
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         if (this.state.currentLinkableObjectNode && formInstance.hasValues()) {
-            const objects = await KIXObjectSearchService.getInstance().executeSearch(
+            const objects = await SearchService.getInstance().executeSearch(
                 this.state.currentLinkableObjectNode.id,
                 this.rootObject && formInstance.getObjectType() === this.rootObject.KIXObjectType
                     ? [this.rootObject] : null

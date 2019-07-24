@@ -16,7 +16,7 @@ import { SearchContext } from '../../core/browser/search/context/SearchContext';
 import { TranslationService } from '../../core/browser/i18n/TranslationService';
 import { AuthenticationSocketClient } from '../../core/browser/application/AuthenticationSocketClient';
 import { UIComponentPermission } from '../../core/model/UIComponentPermission';
-import { KIXObjectSearchService } from '../../core/browser/kix/search/KIXObjectSearchService';
+import { SearchService } from '../../core/browser/kix/search/SearchService';
 
 export class Component {
 
@@ -40,7 +40,7 @@ export class Component {
                 ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Search Tickets' }
             );
 
-            await KIXObjectSearchService.getInstance().executeFullTextSearch<Ticket>(
+            await SearchService.getInstance().executeFullTextSearch<Ticket>(
                 KIXObjectType.TICKET, textValue
             ).catch((error) => {
                 OverlayService.getInstance().openOverlay(

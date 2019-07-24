@@ -13,8 +13,7 @@ import { SocketResponse, AppUtil, SocketErrorResponse } from '../core/common';
 import {
     KIXModulesEvent, LoadKIXModulesRequest, LoadKIXModulesResponse,
     LoadFormConfigurationsRequest, LoadFormConfigurationsResponse,
-    LoadBookmarksResponse, ISocketRequest, LoadReleaseInfoResponse,
-    LoadObjectDefinitionsResponse, SocketEvent, ReleaseInfo
+    ISocketRequest, LoadReleaseInfoResponse, LoadObjectDefinitionsResponse, SocketEvent
 } from '../core/model';
 import { KIXExtensions, IKIXModuleExtension, KIXModuleFactory } from '../core/extensions';
 import { PluginService } from '../services';
@@ -44,9 +43,6 @@ export class KIXModuleNamespace extends SocketNameSpace {
 
         this.registerEventHandler(client, KIXModulesEvent.LOAD_FORM_CONFIGURATIONS,
             this.loadFormConfigurations.bind(this));
-
-        this.registerEventHandler(client, KIXModulesEvent.LOAD_BOOKMARKS,
-            this.loadBookmarks.bind(this));
 
         this.registerEventHandler(client, KIXModulesEvent.LOAD_RELEASE_INFO,
             this.loadReleaseInfo.bind(this));
@@ -91,13 +87,6 @@ export class KIXModuleNamespace extends SocketNameSpace {
 
         return response;
 
-    }
-
-    private async loadBookmarks(data: ISocketRequest): Promise<SocketResponse> {
-        const bookmarks = ConfigurationService.getInstance().getBookmarks();
-        return new SocketResponse(
-            KIXModulesEvent.LOAD_BOOKMARKS_FINISHED, new LoadBookmarksResponse(data.requestId, bookmarks)
-        );
     }
 
     private async loadReleaseInfo(data: ISocketRequest): Promise<SocketResponse<LoadReleaseInfoResponse>> {

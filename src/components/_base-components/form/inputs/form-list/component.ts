@@ -261,10 +261,14 @@ class Component {
                 && container.parentNode.className !== 'lane-widget') {
                 container = container.parentNode;
             }
-            const containerEnd = container.getBoundingClientRect().top + container.getBoundingClientRect().height;
+
             const dropdownListEnd = formListInputContainer.getBoundingClientRect().top
                 + formListInputContainer.getBoundingClientRect().height
                 + valueList.getBoundingClientRect().height;
+
+            const containerEnd = container
+                ? container.getBoundingClientRect().top + container.getBoundingClientRect().height
+                : dropdownListEnd;
 
             const input = (this as any).getEl('form-list-input-' + this.state.listId);
             const list = (this as any).getEl(this.state.treeId);

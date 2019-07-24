@@ -15,7 +15,7 @@ import {
     FilterType, KIXObjectType, InputFieldTypes, DateTimeUtil
 } from '../../../../../core/model';
 import { isArray } from 'util';
-import { KIXObjectSearchService } from '../../../../../core/browser/kix/search/KIXObjectSearchService';
+import { SearchService } from '../../../../../core/browser/kix/search/SearchService';
 
 export class FormSearchValue {
 
@@ -65,7 +65,7 @@ export class FormSearchValue {
             if (this.currentPropertyNode.id === SearchProperty.FULLTEXT) {
                 operations = [SearchOperator.CONTAINS];
             } else {
-                operations = await KIXObjectSearchService.getInstance().getSearchOperations(
+                operations = await SearchService.getInstance().getSearchOperations(
                     this.objectType, propertyNode.id, parameter
                 );
             }
@@ -79,7 +79,7 @@ export class FormSearchValue {
                 this.setOperationNode(this.operationNodes[0]);
             }
 
-            const inputType = await KIXObjectSearchService.getInstance().getSearchInputType(
+            const inputType = await SearchService.getInstance().getSearchInputType(
                 this.objectType, this.currentPropertyNode.id, parameter
             );
 
@@ -94,7 +94,7 @@ export class FormSearchValue {
                 || inputType === InputFieldTypes.CI_REFERENCE;
 
             if (this.isDropdown) {
-                this.nodes = await KIXObjectSearchService.getInstance().getTreeNodes(
+                this.nodes = await SearchService.getInstance().getTreeNodes(
                     this.objectType, this.currentPropertyNode.id, parameter
                 ).catch(() => []);
             }

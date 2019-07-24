@@ -7,17 +7,14 @@
  * --
  */
 
-import { ObjectIcon } from "../kix";
-import { UIComponentPermission } from "../UIComponentPermission";
+import { SearchCache } from "../../kix";
+import { ISocketResponse } from "../ISocketResponse";
 
-export class Bookmark {
+export class LoadSearchResponse implements ISocketResponse {
 
     public constructor(
-        public title: string,
-        public icon: string | ObjectIcon,
-        public actionId: string,
-        public actionData: any = null,
-        public permissions: UIComponentPermission[] = []
+        public requestId: string,
+        public search: SearchCache[]
     ) { }
 
 }

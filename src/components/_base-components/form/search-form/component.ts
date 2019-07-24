@@ -20,7 +20,7 @@ import { SearchContext } from '../../../../core/browser/search/context/SearchCon
 import { EventService, IEventSubscriber } from '../../../../core/browser/event';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 import { DialogService } from '../../../../core/browser/components/dialog';
-import { KIXObjectSearchService } from '../../../../core/browser/kix/search/KIXObjectSearchService';
+import { SearchService } from '../../../../core/browser/kix/search/SearchService';
 
 class Component implements ISearchFormListener {
 
@@ -57,10 +57,10 @@ class Component implements ISearchFormListener {
             formInstance.registerSearchFormListener(this);
         }
 
-        if (KIXObjectSearchService.getInstance().getSearchCache()) {
-            const cache = KIXObjectSearchService.getInstance().getSearchCache();
+        if (SearchService.getInstance().getSearchCache()) {
+            const cache = SearchService.getInstance().getSearchCache();
             if (cache.status === CacheState.VALID && cache.objectType === this.objectType) {
-                KIXObjectSearchService.getInstance().provideResult();
+                SearchService.getInstance().provideResult();
                 await this.setCanSearch();
             } else {
                 this.reset();
@@ -90,7 +90,7 @@ class Component implements ISearchFormListener {
         if (formInstance) {
             formInstance.removeSearchFormListener(this.listenerId);
         }
-        const cache = KIXObjectSearchService.getInstance().getSearchCache();
+        const cache = SearchService.getInstance().getSearchCache();
         if (cache) {
             cache.status = CacheState.VALID;
         }
@@ -110,12 +110,12 @@ class Component implements ISearchFormListener {
     }
 
     public async reset(): Promise<void> {
-        const cache = KIXObjectSearchService.getInstance().getSearchCache();
+        const cache = SearchService.getInstance().getSearchCache();
         if (cache) {
             cache.status = CacheState.INVALID;
         }
 
-        KIXObjectSearchService.getInstance().provideResult([]);
+        SearchService.getInstance().provideResult([]);
 
         const formInstance = await FormService.getInstance().getFormInstance<SearchFormInstance>(this.formId);
         if (formInstance) {
@@ -131,7 +131,7 @@ class Component implements ISearchFormListener {
         const hint = await TranslationService.translate('Translatable#Search');
         DialogService.getInstance().setMainDialogLoading(true, hint, true);
 
-        const result = await KIXObjectSearchService.getInstance().executeSearch<KIXObject>(this.formId)
+        const result = await SearchService.getInstance().executeSearch<KIXObject>(this.formId)
             .catch((error: Error) => {
                 BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
             });
@@ -145,7 +145,7 @@ class Component implements ISearchFormListener {
     }
 
     private async setAdditionalColumns(): Promise<void> {
-        const searchCache = KIXObjectSearchService.getInstance().getSearchCache();
+        const searchCache = SearchService.getInstance().getSearchCache();
         const parameter: Array<[string, any]> = [];
         if (searchCache && searchCache.status === CacheState.VALID && searchCache.objectType === this.objectType) {
             for (const c of searchCache.criteria) {
@@ -155,7 +155,7 @@ class Component implements ISearchFormListener {
             }
         }
 
-        const searchDefinition = KIXObjectSearchService.getInstance().getSearchDefinition(this.objectType);
+        const searchDefinition = SearchService.getInstance().getSearchDefinition(this.objectType);
         const columns = await searchDefinition.getTableColumnConfiguration(parameter);
         this.state.table.addColumns(columns);
     }
@@ -194,7 +194,7 @@ class Component implements ISearchFormListener {
             null, SearchContext.CONTEXT_ID, true, false, true
         );
 
-        KIXObjectSearchService.getInstance().provideResult();
+        SearchService.getInstance().provideResult();
 
         return table;
     }

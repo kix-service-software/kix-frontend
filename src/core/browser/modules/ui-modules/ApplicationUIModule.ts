@@ -12,7 +12,6 @@ import {
     LabelService, FactoryService, TableFactoryService, TableCSSHandlerRegistry,
     PersonalSettingsDialogContext, PersonalSettingsFormService
 } from '../../../../core/browser';
-import { SearchService } from '../../../../core/browser/search';
 import { CSVExportAction, BulkAction, ImportAction, PrintAction } from '../../../../core/browser/actions';
 import {
     ContextDescriptor, KIXObjectType, ContextType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration
@@ -34,6 +33,10 @@ import { ValidObjectBrowserFactory } from '../../../../core/browser/valid/ValidO
 import { ValidService } from '../../../../core/browser/valid/ValidService';
 import { TranslationFormService } from '../../../../core/browser/i18n/admin/TranslationFormService';
 import { IUIModule } from '../../application/IUIModule';
+import { NewSearchAction, EditSearchAction, SaveSearchAction, DeleteSearchAction } from '../../search/actions';
+import { LoadSearchAction } from '../../kix/search/actions';
+import { SearchService } from '../../kix/search/SearchService';
+import { BookmarkService } from '../../bookmark/BookmarkService';
 
 export class UIModule implements IUIModule {
 
@@ -44,7 +47,6 @@ export class UIModule implements IUIModule {
     }
 
     public async register(): Promise<void> {
-        ServiceRegistry.registerServiceInstance(SearchService.getInstance());
         ServiceRegistry.registerServiceInstance(LinkService.getInstance());
         ServiceRegistry.registerServiceInstance(GeneralCatalogService.getInstance());
         ServiceRegistry.registerServiceInstance(DynamicFieldService.getInstance());
@@ -86,8 +88,15 @@ export class UIModule implements IUIModule {
         ActionFactory.getInstance().registerAction('switch-column-order-action', SwitchColumnOrderAction);
         ActionFactory.getInstance().registerAction('import-action', ImportAction);
 
+        ActionFactory.getInstance().registerAction('new-search-action', NewSearchAction);
+        ActionFactory.getInstance().registerAction('edit-search-action', EditSearchAction);
+        ActionFactory.getInstance().registerAction('save-search-action', SaveSearchAction);
+        ActionFactory.getInstance().registerAction('delete-search-action', DeleteSearchAction);
+        ActionFactory.getInstance().registerAction('load-search-action', LoadSearchAction);
+
         this.registerContexts();
         this.registerDialogs();
+        await this.registerBookmarks();
     }
 
     public registerContexts(): void {
@@ -153,6 +162,10 @@ export class UIModule implements IUIModule {
             KIXObjectType.TRANSLATION_PATTERN,
             ContextMode.EDIT_ADMIN
         ));
+    }
+
+    private async registerBookmarks(): Promise<void> {
+        await SearchService.getInstance().getSearchBookmarks(true);
     }
 
 }

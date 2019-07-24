@@ -7,6 +7,7 @@
  * --
  */
 
-export { IKIXObjectSearchListener } from './IKIXObjectSearchListener';
-export { SearchDefinition } from './SearchDefinition';
-export { SearchResultCategory } from './SearchResultCategory';
+export { NewSearchAction } from './NewSearchAction';
+export { EditSearchAction } from './EditSearchAction';
+export { DeleteSearchAction } from './DeleteSearchAction';
+export { SaveSearchAction } from './SaveSearchAction';

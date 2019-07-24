@@ -13,7 +13,7 @@ import {
 } from '../../../../core/browser';
 import { TreeNode, KIXObjectType } from '../../../../core/model';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
-import { KIXObjectSearchService } from '../../../../core/browser/kix/search/KIXObjectSearchService';
+import { SearchService } from '../../../../core/browser/kix/search/SearchService';
 
 export class Component implements IKIXObjectSearchListener {
 
@@ -32,19 +32,19 @@ export class Component implements IKIXObjectSearchListener {
     }
 
     public async onMount(): Promise<void> {
-        KIXObjectSearchService.getInstance().registerListener(this);
+        SearchService.getInstance().registerListener(this);
         const context = ContextService.getInstance().getActiveContext(this.state.contextType);
         this.state.contextId = context.getDescriptor().contextId;
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
         this.prepareTree();
-        const activeCategory = KIXObjectSearchService.getInstance().getActiveSearchResultExplorerCategory();
+        const activeCategory = SearchService.getInstance().getActiveSearchResultExplorerCategory();
         if (activeCategory) {
             this.state.activeNode = this.getActiveNode(activeCategory.objectType);
         }
     }
 
     public searchCleared(): void {
-        KIXObjectSearchService.getInstance().setActiveSearchResultExplorerCategory(null);
+        SearchService.getInstance().setActiveSearchResultExplorerCategory(null);
         this.state.nodes = null;
     }
 
@@ -58,13 +58,13 @@ export class Component implements IKIXObjectSearchListener {
     }
 
     private async prepareTree(): Promise<void> {
-        this.rootCategory = await KIXObjectSearchService.getInstance().getSearchResultCategories();
+        this.rootCategory = await SearchService.getInstance().getSearchResultCategories();
         this.state.nodes = this.rootCategory ? await this.prepareTreeNodes([this.rootCategory], true) : [];
     }
 
     private async prepareTreeNodes(categories: SearchResultCategory[], isRoot: boolean = false): Promise<TreeNode[]> {
         const nodes: TreeNode[] = [];
-        const searchCache = KIXObjectSearchService.getInstance().getSearchCache();
+        const searchCache = SearchService.getInstance().getSearchCache();
         if (searchCache && categories) {
             const objectService
                 = ServiceRegistry.getServiceInstance<IKIXObjectService>(searchCache.objectType);
@@ -94,9 +94,9 @@ export class Component implements IKIXObjectSearchListener {
         this.state.activeNode = node;
         if (this.state.activeNode) {
             const newActiveCategory = this.getActiveCategory(this.state.activeNode.id);
-            const activeCategory = KIXObjectSearchService.getInstance().getActiveSearchResultExplorerCategory();
+            const activeCategory = SearchService.getInstance().getActiveSearchResultExplorerCategory();
             if (!activeCategory || newActiveCategory.label !== activeCategory.label) {
-                KIXObjectSearchService.getInstance().setActiveSearchResultExplorerCategory(newActiveCategory);
+                SearchService.getInstance().setActiveSearchResultExplorerCategory(newActiveCategory);
             }
         }
     }

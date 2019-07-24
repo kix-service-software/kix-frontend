@@ -19,7 +19,7 @@ import { FormContext } from "./FormContext";
 import { SearchForm } from "./SearchForm";
 import { ISearchFormListener } from "./ISearchFormListener";
 import { Form } from "./Form";
-import { KIXObjectSearchService } from "../../../browser/kix/search/KIXObjectSearchService";
+import { SearchService } from "../../../browser/kix/search/SearchService";
 
 export class SearchFormInstance implements IFormInstance {
 
@@ -96,7 +96,7 @@ export class SearchFormInstance implements IFormInstance {
     }
 
     public async getFormField(fieldId: string): Promise<FormField> {
-        const componentId = await KIXObjectSearchService.getInstance().getInputComponentId(
+        const componentId = await SearchService.getInstance().getInputComponentId(
             this.getObjectType(), fieldId
         );
         return new FormField(fieldId, fieldId, componentId);

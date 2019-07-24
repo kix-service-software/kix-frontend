@@ -29,7 +29,7 @@ ContextService.getInstance().registerContext(searchContactContext);
 - `SearchDefinition` implementieren (`ContactSearchDefinition`)
 - `SearchDefinition` registrieren
 ```
-KIXObjectSearchService.getInstance().registerSearchDefinition(new ContactSearchDefinition());
+SearchService.getInstance().registerSearchDefinition(new ContactSearchDefinition());
 ```
 - Funktion `getTreeNodes` implementieren (`FAQService` - für Werte der Dropdown-Felder)
 - Funktion `prepareFullTextFilter` implementieren (`FAQService`)
