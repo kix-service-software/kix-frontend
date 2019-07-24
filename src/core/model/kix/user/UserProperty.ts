@@ -39,6 +39,8 @@ export enum UserProperty {
 
     USER_LANGUAGE = 'UserLanguage',
 
+    MY_QUEUES = 'MyQueues',
+
     // UI properties
     USER_VALID = 'UserValid'
 
