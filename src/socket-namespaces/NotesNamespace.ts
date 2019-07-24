@@ -9,7 +9,7 @@
 
 import { SocketNameSpace } from './SocketNameSpace';
 import {
-    NotesEvent, LoadNotesRequest, LoadNotesResponse, SaveNotesRequest, SocketEvent
+    NotesEvent, LoadNotesResponse, SaveNotesRequest, SocketEvent, ISocketRequest
 } from '../core/model';
 import { SocketResponse, SocketErrorResponse } from '../core/common';
 import { ConfigurationService } from '../core/services';
@@ -39,7 +39,7 @@ export class NotesNamespace extends SocketNameSpace {
         this.registerEventHandler(client, NotesEvent.SAVE_NOTES, this.saveNotes.bind(this));
     }
 
-    private async loadNotes(data: LoadNotesRequest): Promise<SocketResponse<LoadNotesResponse>> {
+    private async loadNotes(data: ISocketRequest): Promise<SocketResponse<LoadNotesResponse>> {
         let userId = null;
         if (data.token) {
             const user = await UserService.getInstance().getUserByToken(data.token);
