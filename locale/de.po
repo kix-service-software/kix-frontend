@@ -587,6 +587,11 @@ msgstr "Gelöscht"
 msgid "Delete Link"
 msgstr "Verknüpfung löschen"
 
+#, fuzzy
+#| msgid "New Search"
+msgid "Delete Search"
+msgstr "Neue Suche"
+
 msgid "Deployment State"
 msgstr "Verwendungsstatus"
 
@@ -847,6 +852,11 @@ msgstr "Filtern in Liste"
 
 msgid "Filter successfully created."
 msgstr "Filter wurde erfolgreich angelegt."
+
+msgid ""
+"Find this saved search within the Dropdown Bookmarks, located in the header "
+"menu right besides the New-button"
+msgstr ""
 
 msgid "First Name"
 msgstr "Vorname"
@@ -1339,6 +1349,16 @@ msgstr "Hilfetext_Search_Contact"
 
 msgid "Helptext_Search_Organisation"
 msgstr "Hilfetext_Search_Organisation"
+
+#, fuzzy
+#| msgid "Helptext_Search_Contact"
+msgid "Helptext_Search_Save_AvailableSearch"
+msgstr "Hilfetext_Search_Contact"
+
+#, fuzzy
+#| msgid "Helptext_Search_Contact"
+msgid "Helptext_Search_Save_Title"
+msgstr "Hilfetext_Search_Contact"
 
 msgid "Helptext_Textmodules_TicketCreate"
 msgstr ""
@@ -2273,11 +2293,21 @@ msgstr "Zeilen mit zu wenigen Werten"
 msgid "Save"
 msgstr "Speichern"
 
+#, fuzzy
+#| msgid "New Search"
+msgid "Save Search"
+msgstr "Neue Suche"
+
 msgid "Save Settings."
 msgstr "Einstellungen werden gespeichert."
 
 msgid "Search"
 msgstr "Suche"
+
+#, fuzzy
+#| msgid "The following {0} entries will be deleted. Are you sure?"
+msgid "Search {0} will be deleted. Are you sure?"
+msgstr "Die ausgewählten {0} Einträge werden gelöscht. Sind Sie sicher?"
 
 msgid ""
 "Searchable FAQ attributes: FAQ#, Title, Symptom, Cause, Solution, Comment, "
@@ -2345,8 +2375,23 @@ msgid "Search Results"
 msgstr "Suchergebnisse"
 
 #, fuzzy
+#| msgid "Successfully rated."
+msgid "Search successfully saved."
+msgstr "Bewertung erfolgreich."
+
+#, fuzzy
+#| msgid "Templates successfully removed."
+msgid "Search template successfully removed."
+msgstr "Vorlagen wurde erfolgreich entfernt."
+
+#, fuzzy
 #| msgid "Search Tickets ..."
 msgid "Search Tickets"
+msgstr "Suche Tickets..."
+
+#, fuzzy
+#| msgid "Search Tickets ..."
+msgid "Search Title"
 msgstr "Suche Tickets..."
 
 msgid "Select a character set."
