@@ -8,7 +8,7 @@
  */
 
 import {
-    ContextConfiguration, WidgetSize, ConfiguredWidget, WidgetConfiguration, KIXObjectType
+    ContextConfiguration, WidgetSize, ConfiguredWidget, WidgetConfiguration, KIXObjectType, TableWidgetSettings
 } from "../../core/model";
 import { IConfigurationExtension } from "../../core/extensions";
 import {
@@ -25,7 +25,9 @@ export class Extension implements IConfigurationExtension {
         const versionWidget =
             new ConfiguredWidget('compare-ci-version-widget', new WidgetConfiguration(
                 'table-widget', 'Translatable#Selected Versions', ['switch-column-order-action'],
-                { objectType: KIXObjectType.CONFIG_ITEM_VERSION_COMPARE },
+                new TableWidgetSettings(
+                    KIXObjectType.CONFIG_ITEM_VERSION_COMPARE, null, null, null, null, null, null, false
+                ),
                 false, false, null, true
             ));
 

@@ -76,7 +76,7 @@ export class TableFactoryService {
     public async createTable(
         tableKey: string, objectType: KIXObjectType, tableConfiguration?: TableConfiguration,
         objectIds?: Array<number | string>, contextId?: string, defaultRouting?: boolean,
-        defaultToggle?: boolean, short: boolean = false, reload: boolean = true, recreate: boolean = false
+        defaultToggle?: boolean, short: boolean = false, reload: boolean = true, recreate: boolean = true
     ): Promise<ITable> {
         let table: ITable;
 

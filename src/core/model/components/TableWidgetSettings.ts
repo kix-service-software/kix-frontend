@@ -21,7 +21,8 @@ export class TableWidgetSettings {
         public headerComponents?: string[],
         public showFilter: boolean = true,
         public shortTable: boolean = false,
-        public predefinedTableFilters: KIXObjectPropertyFilter[] = []
+        public predefinedTableFilters: KIXObjectPropertyFilter[] = [],
+        public cache: boolean = false
     ) { }
 
 }
