@@ -32,7 +32,7 @@ import {
 import { ChannelService } from "../../channel";
 import { ServiceRegistry, FactoryService } from "../../kix";
 import { FormValidationService } from "../../form/validation";
-import { KIXObjectSearchService } from "../../kix/search/KIXObjectSearchService";
+import { SearchService } from "../../kix/search/SearchService";
 import { LabelService } from "../../LabelService";
 import { ChannelLabelProvider } from "../../channel/ChannelLabelProvider";
 import { ArticleTableFactory } from "../../ticket/table/ArticleTableFactory";
@@ -63,7 +63,7 @@ export class UIModule implements IUIModule {
 
         TicketFormService.getInstance();
 
-        KIXObjectSearchService.getInstance().registerSearchDefinition(new TicketSearchDefinition());
+        SearchService.getInstance().registerSearchDefinition(new TicketSearchDefinition());
 
         LabelService.getInstance().registerLabelProvider(new TicketLabelProvider());
         LabelService.getInstance().registerLabelProvider(new ArticleLabelProvider());

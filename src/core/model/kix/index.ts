@@ -36,3 +36,4 @@ export { KIXObjectType } from './KIXObjectType';
 export { Lock } from './Lock';
 export { AttachmentError } from './AttachmentError';
 export { KIXObjectProperty } from './KIXObjectProperty';
+export { SearchCache } from './SearchCache';

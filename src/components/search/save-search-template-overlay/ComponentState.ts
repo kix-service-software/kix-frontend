@@ -7,17 +7,16 @@
  * --
  */
 
-import { Label, AbstractComponentState } from "../../../../core/browser/components";
-import { IAction } from "../../../../core/model";
+import { TreeNode } from "../../../core/model";
+import { AbstractComponentState } from "../../../core/browser";
 
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public instanceId: string = 'search-criteria-widget',
-        public displayCriteria: Array<[string, string, Label[]]> = [],
-        public title: string = null,
-        public contentActions: IAction[] = [],
-        public loading: boolean = true
+        public nodes: TreeNode[] = [],
+        public currentNodes: TreeNode[] = [],
+        public name: string = '',
+        public nameInvalid: boolean = false
     ) {
         super();
     }

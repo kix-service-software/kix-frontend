@@ -8,17 +8,17 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { KIXObjectPropertyFilter, KIXObject, KIXObjectType, } from '../../../../core/model/';
+import { KIXObjectPropertyFilter, KIXObject, KIXObjectType, SearchCache, } from '../../../../core/model/';
 import { ContextService } from "../../../../core/browser/context";
 import {
     ActionFactory, IKIXObjectSearchListener, LabelService, WidgetService,
     TableConfiguration, TableHeaderHeight, TableRowHeight, SearchResultCategory,
-    KIXObjectSearchCache, KIXObjectService, SearchProperty, TableFactoryService, TableEvent, TableEventData, ITable
+    KIXObjectService, SearchProperty, TableFactoryService, TableEvent, TableEventData, ITable
 } from '../../../../core/browser';
 import { SearchContext } from '../../../../core/browser/search/context/SearchContext';
 import { EventService, IEventSubscriber } from '../../../../core/browser/event';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
-import { KIXObjectSearchService } from '../../../../core/browser/kix/search/KIXObjectSearchService';
+import { SearchService } from '../../../../core/browser/kix/search/SearchService';
 
 class Component implements IKIXObjectSearchListener {
 
@@ -41,7 +41,7 @@ class Component implements IKIXObjectSearchListener {
             ? currentContext.getWidgetConfiguration(this.state.instanceId)
             : undefined;
 
-        KIXObjectSearchService.getInstance().registerListener(this);
+        SearchService.getInstance().registerListener(this);
         this.searchFinished();
     }
 
@@ -60,10 +60,10 @@ class Component implements IKIXObjectSearchListener {
         this.state.table = null;
 
         setTimeout(() => {
-            const cache = KIXObjectSearchService.getInstance().getSearchCache();
+            const cache = SearchService.getInstance().getSearchCache();
             if (cache) {
                 this.state.noSearch = false;
-                const category = KIXObjectSearchService.getInstance().getActiveSearchResultExplorerCategory();
+                const category = SearchService.getInstance().getActiveSearchResultExplorerCategory();
                 this.initWidget(category ? category.objectType : cache.objectType, cache);
             } else {
                 this.state.noSearch = true;
@@ -72,8 +72,7 @@ class Component implements IKIXObjectSearchListener {
     }
 
     private async initWidget(
-        objectType: KIXObjectType,
-        cache: KIXObjectSearchCache<KIXObject> = KIXObjectSearchService.getInstance().getSearchCache()
+        objectType: KIXObjectType, cache: SearchCache<KIXObject> = SearchService.getInstance().getSearchCache()
     ): Promise<void> {
         if (objectType) {
             this.state.loading = true;
@@ -85,15 +84,15 @@ class Component implements IKIXObjectSearchListener {
 
             if (isSearchMainObject) {
                 resultCount = cache.result.length;
-                KIXObjectSearchService.getInstance().provideResult(null);
+                SearchService.getInstance().provideResult(null);
             } else {
-                const activeCategory = KIXObjectSearchService.getInstance().getActiveSearchResultExplorerCategory();
+                const activeCategory = SearchService.getInstance().getActiveSearchResultExplorerCategory();
                 if (activeCategory) {
                     resultCount = activeCategory ? activeCategory.objectIds.length : 0;
                     const resultObjects = await KIXObjectService.loadObjects(
                         objectType, [...activeCategory.objectIds]
                     );
-                    KIXObjectSearchService.getInstance().provideResult(resultObjects);
+                    SearchService.getInstance().provideResult(resultObjects);
                 }
             }
 
@@ -129,7 +128,7 @@ class Component implements IKIXObjectSearchListener {
                                     parameter.push([c.property, c.value]);
                                 }
                             }
-                            const searchDefinition = KIXObjectSearchService.getInstance().getSearchDefinition(
+                            const searchDefinition = SearchService.getInstance().getSearchDefinition(
                                 objectType
                             );
                             const columns = await searchDefinition.getTableColumnConfiguration(parameter);

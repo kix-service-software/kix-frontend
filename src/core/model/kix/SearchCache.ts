@@ -6,17 +6,20 @@
  * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
  * --
  */
+import { KIXObjectType } from "./KIXObjectType";
+import { FilterCriteria } from "../FilterCriteria";
+import { CacheState } from "../CacheState";
+import { KIXObject } from "./KIXObject";
 
-import { KIXObjectType, FilterCriteria, KIXObject, CacheState } from "../../../model";
-
-export class KIXObjectSearchCache<T extends KIXObject> {
+export class SearchCache<T extends KIXObject = KIXObject> {
 
     public constructor(
         public objectType: KIXObjectType,
         public criteria: FilterCriteria[],
         public result: T[],
         public fulltextValue: string = null,
-        public status: CacheState = CacheState.VALID
+        public status: CacheState = CacheState.VALID,
+        public name: string = ''
     ) { }
 
 }

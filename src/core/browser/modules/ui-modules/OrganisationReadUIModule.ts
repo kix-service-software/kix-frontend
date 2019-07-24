@@ -21,7 +21,7 @@ import {
     OrganisationBrowserFactory, OrganisationSearchDefinition, OrganisationSearchContext,
     OrganisationDetailsContext, OrganisationSearchAction, OrganisationPlaceholderHandler
 } from '../../../../core/browser/organisation';
-import { KIXObjectSearchService } from '../../../../core/browser/kix/search/KIXObjectSearchService';
+import { SearchService } from '../../../../core/browser/kix/search/SearchService';
 import { IUIModule } from '../../application/IUIModule';
 
 export class UIModule implements IUIModule {
@@ -43,7 +43,7 @@ export class UIModule implements IUIModule {
         FactoryService.getInstance().registerFactory(
             KIXObjectType.ORGANISATION, OrganisationBrowserFactory.getInstance()
         );
-        KIXObjectSearchService.getInstance().registerSearchDefinition(new OrganisationSearchDefinition());
+        SearchService.getInstance().registerSearchDefinition(new OrganisationSearchDefinition());
 
         this.registerContexts();
         this.registerDialogs();

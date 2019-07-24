@@ -18,6 +18,7 @@ import { TicketNamespace } from "../../socket-namespaces/TicketNamespace";
 import { KIXModuleNamespace } from "../../socket-namespaces/KIXModuleNamespace";
 import { NotesNamespace } from "../../socket-namespaces/NotesNamespace";
 import { AdministrationNamespace } from "../../socket-namespaces/AdministrationNamespace";
+import { SearchNamespace } from "../../socket-namespaces/SearchNamespace";
 
 export class NamespaceRegistry implements ISocketNamespaceRegistryExtension {
 
@@ -32,7 +33,8 @@ export class NamespaceRegistry implements ISocketNamespaceRegistryExtension {
             TicketNamespace.getInstance(),
             NotesNamespace.getInstance(),
             KIXModuleNamespace.getInstance(),
-            AdministrationNamespace.getInstance()
+            AdministrationNamespace.getInstance(),
+            SearchNamespace.getInstance()
         ];
     }
 

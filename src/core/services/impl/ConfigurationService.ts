@@ -8,15 +8,13 @@
  */
 
 import { IServerConfiguration, AppUtil } from '../../common';
-import { Form, FormContext, KIXObjectType, Bookmark, CRUD } from '../../model';
+import { Form, FormContext, KIXObjectType } from '../../model';
 
 import jsonfile = require('jsonfile');
 import fs = require('fs');
 import path = require('path');
 
 import { LoggingService } from './LoggingService';
-import { UIComponentPermission } from '../../model/UIComponentPermission';
-import { FAQDetailsContext } from '../../browser/faq/context/FAQDetailsContext';
 
 export class ConfigurationService {
 
@@ -228,38 +226,6 @@ export class ConfigurationService {
 
     public getFormIDsWithContext(): Array<[FormContext, KIXObjectType, string]> {
         return this.formIDsWithContext;
-    }
-
-    public getBookmarks(): Bookmark[] {
-        let configuration: Bookmark[] = this.getConfiguration('bookmarks');
-
-        if (!configuration) {
-            configuration = [
-                new Bookmark(
-                    'Translatable#How to use KIX 18 – Some general notes', 'kix-icon-faq', 1,
-                    KIXObjectType.FAQ_ARTICLE, FAQDetailsContext.CONTEXT_ID,
-                    [new UIComponentPermission('faq/articles', [CRUD.READ])]
-                ),
-                new Bookmark(
-                    'Translatable#How to search in KIX 18?', 'kix-icon-faq', 2,
-                    KIXObjectType.FAQ_ARTICLE, FAQDetailsContext.CONTEXT_ID,
-                    [new UIComponentPermission('faq/articles', [CRUD.READ])]
-                ),
-                new Bookmark(
-                    'Translatable#How to create a new ticket?', 'kix-icon-faq', 3,
-                    KIXObjectType.FAQ_ARTICLE, FAQDetailsContext.CONTEXT_ID,
-                    [new UIComponentPermission('faq/articles', [CRUD.READ])]
-                ),
-                new Bookmark(
-                    'Translatable#selected ticket features', 'kix-icon-faq', 4,
-                    KIXObjectType.FAQ_ARTICLE, FAQDetailsContext.CONTEXT_ID,
-                    [new UIComponentPermission('faq/articles', [CRUD.READ])]
-                )
-            ];
-            this.saveConfiguration("bookmarks", configuration);
-        }
-
-        return configuration;
     }
 
 }

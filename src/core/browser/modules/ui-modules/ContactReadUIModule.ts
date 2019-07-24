@@ -20,7 +20,7 @@ import {
     ContactSearchContext, ContactSearchAction, ContactSearchDefinition, ContactFormService, ContactPlaceholderHandler
 } from '../../../../core/browser/contact';
 import { DialogService } from '../../../../core/browser/components/dialog';
-import { KIXObjectSearchService } from '../../../../core/browser/kix/search/KIXObjectSearchService';
+import { SearchService } from '../../../../core/browser/kix/search/SearchService';
 import { IUIModule } from '../../application/IUIModule';
 
 export class UIModule implements IUIModule {
@@ -40,7 +40,7 @@ export class UIModule implements IUIModule {
         TableFactoryService.getInstance().registerFactory(new ContactTableFactory());
         LabelService.getInstance().registerLabelProvider(new ContactLabelProvider());
         FactoryService.getInstance().registerFactory(KIXObjectType.CONTACT, ContactBrowserFactory.getInstance());
-        KIXObjectSearchService.getInstance().registerSearchDefinition(new ContactSearchDefinition());
+        SearchService.getInstance().registerSearchDefinition(new ContactSearchDefinition());
 
         this.registerContexts();
         this.registerDialogs();

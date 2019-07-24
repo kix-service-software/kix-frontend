@@ -9,12 +9,12 @@
 
 import {
     KIXObjectType, KIXObject, SearchFormInstance,
-    InputFieldTypes, TreeNode, KIXObjectLoadingOptions, FilterCriteria, FilterDataType, FilterType
+    InputFieldTypes, TreeNode, KIXObjectLoadingOptions, FilterCriteria,
+    FilterDataType, FilterType, CacheState, SearchCache, Bookmark, SortUtil
 } from "../../../model";
 import { SearchDefinition } from "./SearchDefinition";
 import { SearchOperator } from "../../SearchOperator";
 import { FormService } from "../../form";
-import { KIXObjectSearchCache } from "./KIXObjectSearchCache";
 import { IKIXObjectSearchListener } from "./IKIXObjectSearchListener";
 import { SearchResultCategory } from "./SearchResultCategory";
 import { KIXObjectService } from "../KIXObjectService";
@@ -23,22 +23,25 @@ import { SearchProperty } from "../../SearchProperty";
 import { ITable } from "../../table";
 import { ContextService } from "../../context";
 import { SearchContext } from "../../search/context/SearchContext";
+import { SearchSocketClient } from "./SearchSocketClient";
+import { BrowserUtil } from "../../BrowserUtil";
+import { BookmarkService } from "../../bookmark/BookmarkService";
 
-export class KIXObjectSearchService {
+export class SearchService {
 
-    private static INSTANCE: KIXObjectSearchService;
+    private static INSTANCE: SearchService;
 
-    public static getInstance(): KIXObjectSearchService {
-        if (!KIXObjectSearchService.INSTANCE) {
-            KIXObjectSearchService.INSTANCE = new KIXObjectSearchService();
+    public static getInstance(): SearchService {
+        if (!SearchService.INSTANCE) {
+            SearchService.INSTANCE = new SearchService();
         }
 
-        return KIXObjectSearchService.INSTANCE;
+        return SearchService.INSTANCE;
     }
 
     private constructor() { }
 
-    private searchCache: KIXObjectSearchCache<KIXObject>;
+    private searchCache: SearchCache<KIXObject>;
     private formSearches: Map<KIXObjectType, (formId: string) => Promise<any[]>> = new Map();
     private formTableConfigs: Map<KIXObjectType, ITable> = new Map();
     private searchDefinitions: SearchDefinition[] = [];
@@ -110,14 +113,11 @@ export class KIXObjectSearchService {
 
                 let preparedCriteria = await searchDefinition.prepareFormFilterCriteria(criteria);
                 preparedCriteria = this.prepareCriteria(preparedCriteria);
-                const searchLoadingOptions = searchDefinition.getLoadingOptions(preparedCriteria);
 
-                objects = await this.doSearch(formInstance.getObjectType(), searchLoadingOptions);
-                this.searchCache = new KIXObjectSearchCache<T>(objectType, criteria, (objects as any));
-
+                const cacheName = this.searchCache ? this.searchCache.name : null;
+                this.searchCache = new SearchCache<T>(objectType, criteria, [], null, CacheState.VALID, cacheName);
+                objects = await this.doSearch();
                 this.provideResult();
-
-                this.listeners.forEach((l) => l.searchFinished());
             } else {
                 const formFieldValues = formInstance.getAllFormFieldValues();
                 let criteria = [];
@@ -152,7 +152,7 @@ export class KIXObjectSearchService {
                 }
 
                 const loadingOptions = new KIXObjectLoadingOptions(criteria);
-                objects = await this.doSearch(objectType, loadingOptions);
+                objects = await KIXObjectService.loadObjects(objectType, null, loadingOptions, null, false);
             }
         } else {
             throw new Error("No form found: " + formId);
@@ -161,8 +161,14 @@ export class KIXObjectSearchService {
         return (objects as any);
     }
 
-    private async doSearch(objectType: KIXObjectType, loadingOptions: KIXObjectLoadingOptions): Promise<KIXObject[]> {
-        const objects = await KIXObjectService.loadObjects(objectType, null, loadingOptions, null, false);
+    private async doSearch(): Promise<KIXObject[]> {
+        const searchDefinition = this.getSearchDefinition(this.searchCache.objectType);
+        const loadingOptions = searchDefinition.getLoadingOptions(this.searchCache.criteria);
+        const objects = await KIXObjectService.loadObjects(
+            this.searchCache.objectType, null, loadingOptions, null, false
+        );
+        this.searchCache.result = objects;
+        this.listeners.forEach((l) => l.searchFinished());
         return objects;
     }
 
@@ -172,21 +178,18 @@ export class KIXObjectSearchService {
 
         const searchDefinition = this.getSearchDefinition(objectType);
         const criteria = searchDefinition.prepareSearchFormValue(SearchProperty.FULLTEXT, searchValue);
-        const loadingOptions = searchDefinition.getLoadingOptions(criteria);
 
-        const objects = await this.doSearch(objectType, loadingOptions);
-
-        this.searchCache = new KIXObjectSearchCache<T>(objectType,
-            [
-                new FilterCriteria(
-                    SearchProperty.FULLTEXT, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
-                )
-            ], (objects as T[]));
+        this.searchCache = new SearchCache<T>(
+            objectType,
+            [new FilterCriteria(
+                SearchProperty.FULLTEXT, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+            )],
+            []
+        );
 
         this.searchCache.fulltextValue = searchValue;
 
-        this.listeners.forEach((l) => l.searchFinished());
-
+        const objects = await this.doSearch();
         return (objects as any);
     }
 
@@ -240,7 +243,7 @@ export class KIXObjectSearchService {
         return nodes;
     }
 
-    public getSearchCache(): KIXObjectSearchCache<KIXObject> {
+    public getSearchCache(): SearchCache<KIXObject> {
         return this.searchCache;
     }
 
@@ -292,6 +295,72 @@ export class KIXObjectSearchService {
             }
         });
         return prepareCriteria;
+    }
+
+    public async saveCache(name: string, existingName: string): Promise<void> {
+        if (this.searchCache) {
+            const search = new SearchCache(
+                this.searchCache.objectType, [...this.searchCache.criteria], [],
+                this.searchCache.fulltextValue, CacheState.VALID, name
+            );
+
+            await SearchSocketClient.getInstance().saveSearch(search, existingName)
+                .then(async () => {
+                    this.searchCache.name = name;
+                    this.getSearchBookmarks(true);
+                    this.listeners.forEach((l) => l.searchFinished());
+                }).catch((error: Error) => BrowserUtil.openErrorOverlay(error.message));
+        }
+    }
+
+    public async getSearchBookmarks(publish?: boolean): Promise<Bookmark[]> {
+        const search = await SearchSocketClient.getInstance().loadSearch();
+        const bookmarks = search
+            .sort((s1, s2) => SortUtil.compareString(s1.name, s2.name))
+            .map((s) => new Bookmark(
+                s.name, this.getSearchIcon(s.objectType), 'load-search-action', s.name)
+            );
+
+        if (publish) {
+            BookmarkService.getInstance().publishBookmarks('search', bookmarks);
+        }
+        return bookmarks;
+    }
+
+    private getSearchIcon(objectType: KIXObjectType): string {
+        switch (objectType) {
+            case KIXObjectType.TICKET:
+                return 'kix-icon-searchtemplate-ticket';
+            case KIXObjectType.CONFIG_ITEM:
+                return 'kix-icon-searchtemplate-ci';
+            case KIXObjectType.CONTACT:
+                return 'kix-icon-searchtemplate-contact';
+            case KIXObjectType.ORGANISATION:
+                return 'kix-icon-searchtemplate-organisation';
+            case KIXObjectType.FAQ_ARTICLE:
+                return 'kix-icon-searchtemplate-faq';
+            default:
+                return 'kix-icon-unknown';
+        }
+    }
+
+    public async deleteSearch(): Promise<void> {
+        if (this.searchCache && this.searchCache.name !== null) {
+            await SearchSocketClient.getInstance().deleteSearch(this.searchCache.name);
+            this.getSearchBookmarks(true);
+            this.clearSearchCache();
+        }
+    }
+
+    public async loadSearch(name: string): Promise<void> {
+        const search = await SearchSocketClient.getInstance().loadSearch();
+        const searchCache = search.find((s) => s.name === name);
+        if (searchCache) {
+            this.searchCache = new SearchCache(
+                searchCache.objectType, searchCache.criteria, [], searchCache.fulltextValue, CacheState.VALID, name
+            );
+            this.doSearch();
+        }
     }
 
 }
