@@ -13,7 +13,8 @@ export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public formId: string = 'new-ticket-form',
-        public loading: boolean = false
+        public loading: boolean = false,
+        public buttonLabel: string = 'Translatable#Save'
     ) {
         super();
     }
