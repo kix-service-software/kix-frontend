@@ -167,5 +167,10 @@ export class BrowserUtil {
         return blob;
     }
 
+    public static scrollIntoViewIfNeeded(element: any) {
+        const scrollIntoView = require('scroll-into-view-if-needed');
+        scrollIntoView(element, { behavior: 'smooth', scrollMode: 'if-needed' });
+    }
+
 
 }

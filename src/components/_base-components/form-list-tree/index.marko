@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <ul.form-list-tree key=state.treeId style=state.treeStyle>
     <for|node| of=state.nodes>
         <if(node.visible)>
@@ -15,7 +14,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 node=node
                 activeNodes=state.activeNodes
                 filterValue=state.filterValue
-                treeParent=state.treeParent
                 on-nodeToggled("nodeToggled")
                 on-nodeClicked("nodeClicked")
                 on-nodeHovered("nodeHovered")/>

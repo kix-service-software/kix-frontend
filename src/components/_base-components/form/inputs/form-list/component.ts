@@ -8,7 +8,7 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { TreeNode, AutoCompleteConfiguration } from '../../../../../core/model';
+import { TreeNode, AutoCompleteConfiguration, TreeNavigationUtil } from '../../../../../core/model';
 import { FormInputAction } from '../../../../../core/browser';
 import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 import { ComponentInput } from './ComponentInput';
@@ -71,6 +71,8 @@ class Component {
             ...this.state.nodes.map((n) => n.tooltip)
         ]);
 
+        this.state.containerElement = (this as any).getEl();
+
         document.addEventListener('click', (event) => {
             if (this.state.expanded) {
                 if (this.keepExpanded) {
@@ -110,6 +112,7 @@ class Component {
                 if (this.state.asAutocomplete) {
                     this.state.nodes = [];
                 }
+                window.clearTimeout(this.autocompleteTimeout);
             } else if (!this.state.readonly) {
                 this.state.expanded = true;
                 setTimeout(() => {
@@ -132,7 +135,6 @@ class Component {
         const input = (this as any).getEl('form-list-input-' + this.state.listId);
         if (input) {
             input.focus();
-            input.select();
         }
     }
 
@@ -140,6 +142,17 @@ class Component {
         if (this.state.expanded) {
             if (event.key === 'Escape' || event.key === 'Tab') {
                 this.toggleList();
+            } else if (this.navigationKeyPressed(event, false)) {
+                this.toggleList(false);
+            } else if (event.key === 'Enter' && this.freeText) {
+                const navigationNode = TreeNavigationUtil.findNavigationNode(this.state.nodes);
+                if (!navigationNode) {
+                    const value = event.target.value;
+                    if (value && value !== '') {
+                        const freeTextNode = new TreeNode(value, value);
+                        this.nodeClicked(freeTextNode, false);
+                    }
+                }
             }
         }
     }
@@ -156,28 +169,20 @@ class Component {
                     this.setCheckState();
                 }, 50);
             }
-        } else if (event.key === 'Enter' && this.freeText) {
-            const value = event.target.value;
-            if (value && value !== '') {
-                const freeTextNode = new TreeNode(value, value);
-                this.nodeClicked(freeTextNode);
-            }
         }
     }
 
-    private navigationKeyPressed(event: any): boolean {
+    private navigationKeyPressed(event: any, controlKeys: boolean = true): boolean {
         return event.key === 'ArrowLeft'
             || event.key === 'ArrowRight'
             || event.key === 'ArrowUp'
             || event.key === 'ArrowDown'
-            || event.key === 'Tab'
-            || event.key === 'Escape'
-            || event.key === 'Enter';
+            || (controlKeys && (event.key === 'Tab' || event.key === 'Escape' || event.key === 'Enter'));
     }
 
-    public nodeClicked(node: TreeNode): void {
+    public nodeClicked(node: TreeNode, removeNode: boolean = true): void {
         if (this.state.asMultiselect) {
-            this.handleMultiselect(node);
+            this.handleMultiselect(node, removeNode);
         } else {
             this.handleSingleselect(node);
         }
@@ -191,10 +196,12 @@ class Component {
         (this as any).emit('nodesChanged', this.state.selectedNodes);
     }
 
-    private handleMultiselect(node: TreeNode): void {
+    private handleMultiselect(node: TreeNode, removeNode: boolean): void {
         const nodeIndex = this.state.selectedNodes.findIndex((n) => n.id === node.id);
         if (nodeIndex !== -1) {
-            this.state.selectedNodes.splice(nodeIndex, 1);
+            if (removeNode) {
+                this.state.selectedNodes.splice(nodeIndex, 1);
+            }
         } else {
             this.state.selectedNodes.push(node);
         }
@@ -206,7 +213,7 @@ class Component {
         this.toggleList();
     }
 
-    public removeSelectedItem(node: TreeNode): void {
+    public removeSelectedItem(node: TreeNode, removeNode: boolean): void {
         const nodeIndex = this.state.selectedNodes.findIndex((n) => n.id === node.id);
         if (nodeIndex !== -1) {
             this.state.selectedNodes.splice(nodeIndex, 1);
@@ -231,7 +238,6 @@ class Component {
 
     private async loadData(): Promise<void> {
         this.state.isLoading = true;
-        this.state.expanded = true;
         this.state.nodes = await this.state.searchCallback(
             this.state.autoCompleteConfiguration.limit, this.state.autocompleteSearchValue
         );

@@ -133,10 +133,10 @@ export class SysConfigLabelProvider extends LabelProvider<SysConfigOptionDefinit
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
         if (translatable) {
             return await TranslationService.translate(
-                plural ? 'Translatable#' : 'Translatable#'
+                plural ? 'Translatable#Sysconfig' : 'Translatable#Sysconfig'
             );
         }
-        return plural ? '' : '';
+        return plural ? 'Sysconfig' : 'Sysconfig';
     }
 
 

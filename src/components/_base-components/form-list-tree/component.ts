@@ -8,13 +8,17 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { TreeUtil, TreeNode } from '../../../core/model';
+import { TreeUtil, TreeNode, TreeNavigationUtil } from '../../../core/model';
 import { IdService } from '../../../core/browser/IdService';
 import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 
 class TreeComponent {
 
     private state: ComponentState;
+
+    private containerElement: any;
+
+    private navigationHandler: (event: any) => void;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -23,6 +27,47 @@ class TreeComponent {
 
     public onInput(input: any): void {
         this.update(input);
+
+        if (input.containerElement && !this.containerElement) {
+
+            this.navigationHandler = (event: any): void => {
+                switch (event.key) {
+                    case 'ArrowUp':
+                        TreeNavigationUtil.navigateUp(this.state.nodes);
+                        (this as any).setStateDirty();
+                        break;
+                    case 'ArrowDown':
+                        TreeNavigationUtil.navigateDown(this.state.nodes);
+                        (this as any).setStateDirty();
+                        break;
+                    case 'ArrowLeft':
+                        TreeNavigationUtil.toggleNode(this.state.nodes, false, this.state.filterValue);
+                        (this as any).setStateDirty();
+                        break;
+                    case 'ArrowRight':
+                        TreeNavigationUtil.toggleNode(this.state.nodes, true, this.state.filterValue);
+                        (this as any).setStateDirty();
+                        break;
+                    case 'Enter':
+                        const navigationNode = TreeNavigationUtil.findNavigationNode(this.state.nodes);
+                        if (navigationNode) {
+                            this.nodeClicked(navigationNode);
+                        }
+                        break;
+                    default:
+                }
+            };
+
+            this.containerElement = input.containerElement;
+            this.containerElement.addEventListener('keydown', this.navigationHandler);
+        }
+    }
+
+    public onDestroy(): void {
+        if (this.containerElement) {
+            this.containerElement.removeEventListener('keydown', this.navigationHandler);
+            this.containerElement = null;
+        }
     }
 
     private async update(input: any): Promise<void> {
@@ -41,10 +86,6 @@ class TreeComponent {
         this.state.treeStyle = input.treeStyle;
     }
 
-    public onMount(): void {
-        this.state.treeParent = (this as any).getEl().parentElement;
-    }
-
     public nodeToggled(node: TreeNode): void {
         TreeUtil.linkTreeNodes(this.state.nodes, this.state.filterValue);
         (this as any).emit('nodeToggled', node);
@@ -55,7 +96,8 @@ class TreeComponent {
     }
 
     public nodeHovered(node: TreeNode): void {
-        (this as any).emit('nodeHovered', node);
+        TreeNavigationUtil.setNavigationNode(this.state.nodes, node);
+        (this as any).setStateDirty();
     }
 
     public getFilteredNodes(): any {

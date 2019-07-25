@@ -34,7 +34,8 @@ export class ComponentState extends AbstractComponentState {
         public placeholder: string = null,
         public autocompleteNotFoundText: string = null,
         public autoCompletePlaceholder: string = '',
-        public disabled: boolean = false
+        public disabled: boolean = false,
+        public containerElement: any = null
     ) {
         super();
     }

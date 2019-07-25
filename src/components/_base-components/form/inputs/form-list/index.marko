@@ -6,7 +6,7 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-<div.form-list on-click("setKeepExpanded") key=state.listId>
+<div.form-list on-click("setKeepExpanded") on-keydown("keyDown") key=state.listId>
     <div.form-list-input-container.input-style
         class={
                 "list-shown": state.expanded,
@@ -16,18 +16,19 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             }
         key=("form-list-input-container-" + state.listId)
         title=state.placeholder>
-        <if(state.selectedNodes.length === 0)>
-            <input.input-style
-                type="text"
-                class={
-                                invalid: state.invalid
-                            }
-                readonly=state.readonly
-                placeholder=state.placeholder
-                disabled=(state.readonly || state.disabled)
-                on-click("toggleList", false)/>
-        </if>
-        <else>
+        <input
+            type="text"
+            class={
+                        invalid: state.invalid,
+                        "hidden-input": state.selectedNodes.length > 0,
+                        "input-style": state.selectedNodes.length === 0
+                    }
+            readonly=state.readonly
+            placeholder=state.placeholder
+            disabled=(state.readonly || state.disabled)
+            on-click("toggleList", false)
+            on-focus("toggleList", false)/>
+        <if(state.selectedNodes.length > 0)>
             <div.selected-nodes key=("form-list-selected-nodes-" + state.listId) on-click("toggleList", false)>
                 <for|node| of=state.selectedNodes>
                     <div.selected-node
@@ -46,7 +47,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </div>
                 </for>
             </div>
-        </else>
+        </if>
         <div.form-input-control-list>
             <div.input-action-list>
                 <for|action| of=state.actions>
@@ -63,49 +64,47 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         </div>
     </div>
     <if(state.expanded)>
-        <if(state.isLoading)>
-            <div.form-list-loading>
-                <loading-spinner/>
-            </div>
-        </if>
-        <else-if(state.nodes)>
-            <div.value-list style=state.treeStyle key=("value-list-" + state.treeId)>
-                <if(state.asAutocomplete || state.nodes.length > 7)>
-                    <input.input-style
-                        type="text"
-                        placeholder=state.autoCompletePlaceholder
-                        value=(state.asAutocomplete ? state.autocompleteSearchValue : state.filterValue)
-                        key=("form-list-input-" + state.listId)
-                        on-keydown("keyDown")
-                        on-keyup("keyUp")/>
-                </if>
-                <if(state.asAutocomplete && state.nodes.length === 0)>
-                    <div.form-list-autocomplete-no-results>
-                        <span>${state.autocompleteNotFoundText}</span>
+        <div.value-list style=state.treeStyle key=("value-list-" + state.treeId)>
+            <if(state.asAutocomplete || state.nodes.length > 7)>
+                <input.input-style
+                    type="text"
+                    placeholder=state.autoCompletePlaceholder
+                    value=(state.asAutocomplete ? state.autocompleteSearchValue : state.filterValue)
+                    key=("form-list-input-" + state.listId)
+                    on-keyup("keyUp")/>
+            </if>
+            <if(state.isLoading)>
+                <div.form-list-loading>
+                    <loading-spinner/>
+                </div>
+            </if>
+            <else-if(state.asAutocomplete && state.nodes.length === 0)>
+                <div.form-list-autocomplete-no-results>
+                    <span>${state.autocompleteNotFoundText}</span>
+                </div>
+            </else-if>
+            <else>
+                <form-list-tree
+                    key=state.treeId
+                    nodes=state.nodes
+                    filterValue=state.filterValue
+                    activeNodes=state.selectedNodes
+                    containerElement=state.containerElement
+                    on-nodeToggled("nodeToggled")
+                    on-nodeClicked("nodeClicked")/>
+                <if(state.asMultiselect)>
+                    <div.button-bar key="buttonbar">
+                        <span on-click("selectAll")>
+                            <input.select-all-Checkbox type="checkbox" key="selectAllCheckbox"/>
+                            <translation-string pattern="Translatable#Select all"/>
+                        </span>
+                        <button.submit-button type="button" on-click("submit") title=state.translations["Translatable#Submit"]>
+                            <span.kix-icon-check/>
+                            <translation-string pattern="Translatable#Submit"/>
+                        </button>
                     </div>
                 </if>
-                <else>
-                    <form-list-tree
-                        key=state.treeId
-                        nodes=state.nodes
-                        filterValue=state.filterValue
-                        activeNodes=state.selectedNodes
-                        on-nodeToggled("nodeToggled")
-                        on-nodeClicked("nodeClicked")/>
-                    <if(state.asMultiselect)>
-                        <div.button-bar key="buttonbar">
-                            <span on-click("selectAll")>
-                                <input.select-all-Checkbox type="checkbox" key="selectAllCheckbox"/>
-                                <translation-string pattern="Translatable#Select all"/>
-                            </span>
-                            <button.submit-button type="button" on-click("submit") title=state.translations["Translatable#Submit"]>
-                                <span.kix-icon-check/>
-                                <translation-string pattern="Translatable#Submit"/>
-                            </button>
-                        </div>
-                    </if>
-                </else>
-            </div>
-        </else-if>
+            </else>
+        </div>
     </if>
 </div>
