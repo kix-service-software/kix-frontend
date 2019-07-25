@@ -190,7 +190,7 @@ class Component {
 
         const table = await TableFactoryService.getInstance().createTable(
             'edit-linked-objects-dialog', KIXObjectType.LINK_OBJECT,
-            null, null, EditLinkedObjectsDialogContext.CONTEXT_ID
+            null, null, EditLinkedObjectsDialogContext.CONTEXT_ID, null, null, null, null, true
         );
 
         this.tableSubscriber = {
