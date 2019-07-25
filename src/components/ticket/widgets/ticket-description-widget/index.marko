@@ -16,7 +16,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <loading-spinner/>
         </if>
         <else>
-            <div.description-container>
+            <div.description-container key="description-container">
                 <if(state.ticket && state.firstArticle)>
                     <widget instanceId="ticket-description-widget" title=state.translations["Translatable#Description"]>
                         <@content>
