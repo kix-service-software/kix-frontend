@@ -108,12 +108,7 @@ export class Extension implements IConfigurationExtension {
             options: {
                 legend: {
                     display: true,
-                    position: 'right',
-                    labels: {
-                        boxWidth: 10,
-                        padding: 2,
-                        fontSize: 10
-                    }
+                    position: 'right'
                 }
             }
         });
@@ -129,7 +124,6 @@ export class Extension implements IConfigurationExtension {
         const chartConfig3 = new ConfigItemChartConfiguration(ConfigItemProperty.CUR_INCI_STATE_ID, {
             type: 'bar',
             data: {
-                labels: [],
                 datasets: [{
                     backgroundColor: [
                         "rgb(91, 91, 91)",
@@ -155,7 +149,11 @@ export class Extension implements IConfigurationExtension {
                         stacked: true
                     }],
                     yAxes: [{
-                        stacked: true
+                        stacked: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+
                     }]
                 }
             }

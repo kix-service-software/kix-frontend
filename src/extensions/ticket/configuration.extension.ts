@@ -122,10 +122,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
         const chartConfig2 = new TicketChartConfiguration(TicketProperty.STATE_ID, {
             type: 'pie',
             data: {
-                labels: ["new", "open", "pending", "escalated"],
                 datasets: [{
-                    label: "Translatable#Ticket States",
-                    data: [20, 50, 32, 8],
                     fill: true,
                     backgroundColor: [
                         "rgb(91, 91, 91)",
@@ -144,12 +141,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
             options: {
                 legend: {
                     display: true,
-                    position: 'right',
-                    labels: {
-                        boxWidth: 10,
-                        padding: 2,
-                        fontSize: 10
-                    }
+                    position: 'right'
                 }
             }
         });
@@ -163,9 +155,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
         const chartConfig3 = new TicketChartConfiguration(TicketProperty.CREATED, {
             type: 'line',
             data: {
-                labels: ["1", "2", "3", "4", "5", "6", "7"],
                 datasets: [{
-                    data: [5, 25, 12, 3, 30, 16, 24],
                     backgroundColor: [
                         "rgb(91, 91, 91)",
                         "rgb(4, 83, 125)",
@@ -187,8 +177,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
                 scales: {
                     yAxes: [{
                         ticks: {
-                            beginAtZero: true,
-                            stepSize: 1
+                            beginAtZero: true
                         }
                     }]
                 }
