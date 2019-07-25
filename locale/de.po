@@ -841,6 +841,9 @@ msgstr "Favoriten"
 msgid "Fax"
 msgstr "Fax"
 
+msgid "Field"
+msgstr ""
+
 msgid "Field '{0}' has an invalid value ({1})."
 msgstr "Feld '{0}' enthält einen ungültigen Wert ({1})."
 
@@ -1926,6 +1929,11 @@ msgid "Notes"
 msgstr "Notizen"
 
 #, fuzzy
+#| msgid "Notifications"
+msgid "Notification"
+msgstr "Benachrichtigungen"
+
+#, fuzzy
 #| msgid "Organisation Information"
 msgid "Notification Information"
 msgstr "Kundeninformationen"
@@ -1933,6 +1941,11 @@ msgstr "Kundeninformationen"
 #, fuzzy
 #| msgid "Notifications"
 msgid "Notification Methods"
+msgstr "Benachrichtigungen"
+
+#, fuzzy
+#| msgid "Notifications"
+msgid "Notification Options"
 msgstr "Benachrichtigungen"
 
 msgid "Notifications"
@@ -1982,6 +1995,11 @@ msgid "Observer"
 msgstr "Beobachter"
 
 msgid "Once a day"
+msgstr "Einmal pro Tag"
+
+#, fuzzy
+#| msgid "Once a day"
+msgid "Once per day"
 msgstr "Einmal pro Tag"
 
 msgid "Open Tickets"

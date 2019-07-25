@@ -811,6 +811,9 @@ msgstr ""
 msgid "Fax"
 msgstr ""
 
+msgid "Field"
+msgstr ""
+
 msgid "Field '{0}' has an invalid value ({1})."
 msgstr ""
 
@@ -1841,11 +1844,21 @@ msgstr ""
 
 #, fuzzy
 #| msgid "Config Item Information"
+msgid "Notification"
+msgstr "Asset Information"
+
+#, fuzzy
+#| msgid "Config Item Information"
 msgid "Notification Information"
 msgstr "Asset Information"
 
 msgid "Notification Methods"
 msgstr ""
+
+#, fuzzy
+#| msgid "Config Item Information"
+msgid "Notification Options"
+msgstr "Asset Information"
 
 msgid "Notifications"
 msgstr ""
@@ -1892,6 +1905,9 @@ msgid "Observer"
 msgstr ""
 
 msgid "Once a day"
+msgstr ""
+
+msgid "Once per day"
 msgstr ""
 
 msgid "Open Tickets"
