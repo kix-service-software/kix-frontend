@@ -178,6 +178,8 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                 )
             ]),
         ];
+
+
         const todoTicketList = new ConfiguredWidget(
             '20180612-to-do-widget',
             new WidgetConfiguration(
@@ -197,8 +199,9 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                                 ),
                                 new FilterCriteria(
                                     TicketProperty.LOCK_ID, SearchOperator.EQUALS,
-                                    FilterDataType.NUMERIC, FilterType.OR, 2
-                                )
+                                    FilterDataType.NUMERIC, FilterType.AND, 2
+                                ),
+                                stateTypeFilterCriteria
                             ], 'Ticket.Age:numeric', 500, [TicketProperty.WATCHERS]
                         ), null, null, true, true, new ToggleOptions('ticket-article-details', 'article', [], true)
                     ), null, true, null, predefinedToDoTableFilter
