@@ -9,7 +9,7 @@
 
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    WidgetConfiguration, ConfiguredWidget, ContextConfiguration, ObjectinformationWidgetSettings,
+    WidgetConfiguration, ConfiguredWidget, ContextConfiguration, ObjectInformationWidgetSettings,
     KIXObjectType, MailFilterProperty, KIXObjectProperty, TableWidgetSettings, SortOrder, TabWidgetSettings, CRUD
 } from '../../core/model';
 import { MailFilterDetailsContext } from '../../core/browser/mail-filter/context';
@@ -31,7 +31,7 @@ export class Extension implements IConfigurationExtension {
             new WidgetConfiguration(
                 'object-information-widget', 'Translatable#Email Filter Information',
                 ['mail-filter-edit'],
-                new ObjectinformationWidgetSettings(
+                new ObjectInformationWidgetSettings(
                     KIXObjectType.MAIL_FILTER,
                     [
                         MailFilterProperty.NAME,

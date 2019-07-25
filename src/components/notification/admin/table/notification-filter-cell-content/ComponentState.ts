@@ -7,10 +7,10 @@
  * --
  */
 
-export class NotificationData {
+import { ICell } from "../../../../../core/browser";
 
-    public Events: string[] = [];
+export class ComponentState {
 
-    public Queues: string[] = [];
-
+    public cell: ICell = null;
+    public isLabelCell: boolean = true;
 }

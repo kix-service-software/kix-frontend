@@ -10,7 +10,7 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
     WidgetConfiguration, ConfiguredWidget, KIXObjectType, ContextConfiguration,
-    ObjectinformationWidgetSettings, OrganisationProperty, ContactProperty, ContextMode, CRUD, TableWidgetSettings
+    ObjectInformationWidgetSettings, OrganisationProperty, ContactProperty, ContextMode, CRUD, TableWidgetSettings
 } from '../../core/model/';
 import { RoutingConfiguration } from '../../core/browser/router';
 import { OrganisationDetailsContext } from '../../core/browser/organisation';
@@ -93,7 +93,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
         const organisationInfoSidebar =
             new ConfiguredWidget('20180116143215', new WidgetConfiguration(
                 'object-information-widget', 'Translatable#Organisation', [],
-                new ObjectinformationWidgetSettings(
+                new ObjectInformationWidgetSettings(
                     KIXObjectType.ORGANISATION, [
                         OrganisationProperty.NUMBER,
                         OrganisationProperty.NAME,
@@ -113,7 +113,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
         const contactInfoSidebar =
             new ConfiguredWidget('20180116143216', new WidgetConfiguration(
                 'object-information-widget', 'Translatable#Contact', [],
-                new ObjectinformationWidgetSettings(
+                new ObjectInformationWidgetSettings(
                     KIXObjectType.CONTACT, [
                         ContactProperty.TITLE,
                         ContactProperty.FIRSTNAME,
@@ -147,7 +147,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
         const organisationInfoOverlay =
             new ConfiguredWidget('organisation-info-overlay', new WidgetConfiguration(
                 'object-information', 'Translatable#Organisation', [],
-                new ObjectinformationWidgetSettings(
+                new ObjectInformationWidgetSettings(
                     KIXObjectType.ORGANISATION, [
                         OrganisationProperty.NUMBER,
                         OrganisationProperty.NAME,
@@ -168,7 +168,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
         const contactInfoOverlay =
             new ConfiguredWidget('contact-info-overlay', new WidgetConfiguration(
                 'object-information', 'Translatable#Contact', [],
-                new ObjectinformationWidgetSettings(KIXObjectType.CONTACT, [
+                new ObjectInformationWidgetSettings(KIXObjectType.CONTACT, [
                     ContactProperty.LOGIN,
                     ContactProperty.TITLE,
                     ContactProperty.FIRSTNAME,

@@ -28,6 +28,7 @@ class EditorComponent {
             input.simple,
             input.readOnly,
             input.invalid,
+            input.noImages,
             input.resize,
             input.resizeDir
         );
@@ -78,25 +79,27 @@ class EditorComponent {
                 const fileSize = event.data.dataTransfer.getFilesCount();
                 if (fileSize > 0) {
                     event.stop();
-                    for (let i = 0; i < fileSize; i++) {
-                        const file = event.data.dataTransfer.getFile(i);
-                        const valid = AttachmentUtil.checkMimeType(
-                            file, ['image/png', 'image/jpg', 'image/jpeg', 'image/bmp', 'image/svg+xml']
-                        );
-                        if (valid) {
-                            const reader = new FileReader();
-                            reader.onload = (evt: any) => {
-                                const element = this.editor.document.createElement('img', {
-                                    attributes: {
-                                        src: evt.target.result
-                                    }
-                                });
+                    if (!this.state.noImages) {
+                        for (let i = 0; i < fileSize; i++) {
+                            const file = event.data.dataTransfer.getFile(i);
+                            const valid = AttachmentUtil.checkMimeType(
+                                file, ['image/png', 'image/jpg', 'image/jpeg', 'image/bmp', 'image/svg+xml']
+                            );
+                            if (valid) {
+                                const reader = new FileReader();
+                                reader.onload = (evt: any) => {
+                                    const element = this.editor.document.createElement('img', {
+                                        attributes: {
+                                            src: evt.target.result
+                                        }
+                                    });
 
-                                setTimeout(() => {
-                                    this.editor.insertElement(element);
-                                }, 0);
-                            };
-                            reader.readAsDataURL(file);
+                                    setTimeout(() => {
+                                        this.editor.insertElement(element);
+                                    }, 0);
+                                };
+                                reader.readAsDataURL(file);
+                            }
                         }
                     }
                 }
@@ -133,6 +136,12 @@ class EditorComponent {
                             }
                         }, 500);
                     }
+                }
+            }
+
+            if (await this.isEditorReady()) {
+                if (this.state.noImages) {
+                    this.editor.pasteFilter.disallow('img');
                 }
             }
         }

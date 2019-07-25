@@ -10,7 +10,7 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration, ContactProperty,
-    DataType, KIXObjectType, OrganisationProperty, KIXObjectProperty, ObjectinformationWidgetSettings,
+    DataType, KIXObjectType, OrganisationProperty, KIXObjectProperty, ObjectInformationWidgetSettings,
     CRUD, TabWidgetSettings, KIXObjectLoadingOptions
 } from '../../core/model';
 import { TableConfiguration, TableHeaderHeight, TableRowHeight, DefaultColumnConfiguration } from '../../core/browser';
@@ -33,7 +33,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
         const organisationInfoLane = new ConfiguredWidget('organisation-information-lane',
             new WidgetConfiguration(
                 'object-information-widget', 'Translatable#Organisation Information', [],
-                new ObjectinformationWidgetSettings(KIXObjectType.ORGANISATION, [
+                new ObjectInformationWidgetSettings(KIXObjectType.ORGANISATION, [
                     OrganisationProperty.NAME,
                     OrganisationProperty.NUMBER,
                     OrganisationProperty.URL,

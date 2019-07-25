@@ -11,7 +11,7 @@ import { IConfigurationExtension } from '../../core/extensions';
 import { ContactDetailsContext } from '../../core/browser/contact';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration, OrganisationProperty,
-    DataType, KIXObjectType, ObjectinformationWidgetSettings, ContactProperty,
+    DataType, KIXObjectType, ObjectInformationWidgetSettings, ContactProperty,
     KIXObjectProperty, CRUD, TabWidgetSettings, KIXObjectLoadingOptions
 } from '../../core/model';
 import {
@@ -35,7 +35,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
         const contactInfoLane =
             new ConfiguredWidget('contact-information-lane', new WidgetConfiguration(
                 'object-information-widget', 'Translatable#Contact Information', [],
-                new ObjectinformationWidgetSettings(KIXObjectType.CONTACT, [
+                new ObjectInformationWidgetSettings(KIXObjectType.CONTACT, [
                     ContactProperty.TITLE,
                     ContactProperty.FIRSTNAME,
                     ContactProperty.LASTNAME,

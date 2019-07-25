@@ -12,7 +12,7 @@ import { TicketLabelProvider, TicketService, TicketDetailsContext } from "../../
 import { ContextService } from '../../../../core/browser/context';
 import {
     ObjectIcon, KIXObjectType, Ticket, SysconfigUtil, ContextMode, OrganisationProperty,
-    ContactProperty, Service, ObjectinformationWidgetSettings, Contact, Organisation, Context
+    ContactProperty, Service, ObjectInformationWidgetSettings, Contact, Organisation, Context
 } from '../../../../core/model';
 import { ActionFactory, IdService, KIXObjectService } from '../../../../core/browser';
 import { RoutingConfiguration } from '../../../../core/browser/router';
@@ -110,7 +110,7 @@ class Component {
             );
             this.state.contact = contacts && contacts.length ? contacts[0] : null;
 
-            const settings = config.settings as ObjectinformationWidgetSettings;
+            const settings = config.settings as ObjectInformationWidgetSettings;
             this.state.contactProperties = settings.properties;
 
             this.contactRoutingConfiguration = await this.getContactRoutingConfiguration();
@@ -126,7 +126,7 @@ class Component {
             );
             this.state.organisation = organisation && organisation.length ? organisation[0] : null;
 
-            const settings = config.settings as ObjectinformationWidgetSettings;
+            const settings = config.settings as ObjectInformationWidgetSettings;
             this.state.organisationProperties = settings.properties;
 
             this.organisationRoutingConfiguration = await this.getOrganisationRoutingConfiguration();

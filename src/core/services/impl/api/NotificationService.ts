@@ -9,7 +9,7 @@
 
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, Error, Notification, NotificationProperty, KIXObjectProperty
+    KIXObjectSpecificCreateOptions, Error, Notification, NotificationProperty, KIXObjectProperty, NotificationMessage
 } from '../../../model';
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
@@ -105,22 +105,24 @@ export class NotificationService extends KIXObjectService {
                 const property = p[0].replace(messageRegEx, '$1');
                 const language = p[0].replace(messageRegEx, '$2');
                 if (!messageProperties[language]) {
-                    messageProperties[language] = {
-                        Subject: '',
-                        Message: '',
-                        ContentType: 'text/plain'
-                    };
+                    messageProperties[language] = new NotificationMessage();
                 }
                 messageProperties[language][property] = p[1];
             } else if (p[0] === NotificationProperty.DATA_FILTER) {
                 if (Array.isArray(p[1])) {
-                    p[1].forEach((df) => dataProperties[df[0]] = df[1]);
+                    p[1].forEach((df) => {
+                        if (Array.isArray(df[1])) {
+                            dataProperties[df[0]] = df[1];
+                        } else if (typeof df[1] !== 'undefined' && df[1] !== null) {
+                            dataProperties[df[0]] = [df[1]];
+                        }
+                    });
                 }
             } else {
                 // handle Data properties
-                if (p[1] && Array.isArray(p[1])) {
+                if (Array.isArray(p[1])) {
                     dataProperties[p[0]] = p[1].filter((v) => v !== null);
-                } else {
+                } else if (typeof p[1] !== 'undefined' && p[1] !== null) {
                     dataProperties[p[0]] = [p[1]];
                 }
             }

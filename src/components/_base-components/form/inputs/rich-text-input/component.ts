@@ -8,8 +8,8 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { FormInputComponent, KIXObjectType, FormFieldOptions } from '../../../../../core/model';
-import { IAutofillConfiguration, AutocompleteFormFieldOption } from '../../../../../core/browser/components';
+import { FormInputComponent, FormFieldOptions } from '../../../../../core/model';
+import { AutocompleteFormFieldOption } from '../../../../../core/browser/components';
 
 class Component extends FormInputComponent<string, ComponentState> {
 
@@ -19,6 +19,13 @@ class Component extends FormInputComponent<string, ComponentState> {
 
     public onInput(input: any): void {
         super.onInput(input);
+
+        if (!this.state.noImages) {
+            const noImagesOption = this.state.field.options.find((o) => o.option === 'NO_IMAGES');
+            if (noImagesOption) {
+                this.state.noImages = Boolean(noImagesOption.value);
+            }
+        }
     }
 
     public async onMount(): Promise<void> {

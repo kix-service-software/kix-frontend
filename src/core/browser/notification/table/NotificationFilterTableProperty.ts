@@ -7,4 +7,9 @@
  * --
  */
 
-export { NotifiactionTableFactory } from './NotifiactionTableFactory';
+export enum NotificationFilterTableProperty {
+
+    FIELD = 'FIELD',
+
+    VALUE = 'VALUE'
+}

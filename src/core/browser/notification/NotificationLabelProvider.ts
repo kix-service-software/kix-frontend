@@ -8,17 +8,27 @@
  */
 
 import { LabelProvider } from "../LabelProvider";
-import { NotificationProperty, Notification, KIXObjectType } from "../../model";
+import {
+    NotificationProperty, Notification, KIXObjectType, User, Role, NotificationRecipientTypes,
+    Contact, KIXObjectLoadingOptions, FilterCriteria, ContactProperty, FilterDataType, FilterType, ObjectIcon
+} from "../../model";
 import { TranslationService } from "../i18n/TranslationService";
+import { KIXObjectService } from "../kix";
+import { SearchOperator } from "../SearchOperator";
+import { LabelService } from "../LabelService";
 
 export class NotificationLabelProvider extends LabelProvider {
+
+    public kixObjectType: KIXObjectType = KIXObjectType.NOTIFICATION;
 
     public isLabelProviderFor(notification: Notification): boolean {
         return notification instanceof Notification;
     }
 
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === KIXObjectType.NOTIFICATION;
+    public async getObjectText(
+        notification: Notification, id?: boolean, title?: boolean, translatable?: boolean
+    ): Promise<string> {
+        return notification.Name;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
@@ -26,6 +36,31 @@ export class NotificationLabelProvider extends LabelProvider {
         switch (property) {
             case NotificationProperty.NAME:
                 displayValue = 'Translatable#Name';
+                break;
+            case NotificationProperty.MESSAGE_SUBJECT:
+            case NotificationProperty.DATA_RECIPIENT_SUBJECT:
+                displayValue = 'Translatable#Subject';
+                break;
+            case NotificationProperty.MESSAGE_BODY:
+                displayValue = 'Translatable#Text';
+                break;
+            case NotificationProperty.DATA_RECIPIENTS:
+                displayValue = 'Translatable#Send to';
+                break;
+            case NotificationProperty.DATA_RECIPIENT_AGENTS:
+                displayValue = 'Translatable#Send to these agents';
+                break;
+            case NotificationProperty.DATA_RECIPIENT_ROLES:
+                displayValue = 'Translatable#Send to all role members';
+                break;
+            case NotificationProperty.DATA_SEND_DESPITE_OOO:
+                displayValue = 'Translatable#Send despite out of office';
+                break;
+            case NotificationProperty.DATA_SEND_ONCE_A_DAY:
+                displayValue = 'Translatable#Once per day';
+                break;
+            case NotificationProperty.DATA_RECIPIENT_EMAIL:
+                displayValue = 'Translatable#Additional recipients';
                 break;
             default:
                 displayValue = await super.getPropertyText(property, false, translatable);
@@ -40,4 +75,172 @@ export class NotificationLabelProvider extends LabelProvider {
         return displayValue;
     }
 
+    public async getPropertyValueDisplayText(
+        property: string, value: any, translatable: boolean = true
+    ): Promise<string> {
+        let displayValue = value;
+        switch (property) {
+            case NotificationProperty.DATA_RECIPIENTS:
+                if (value && Array.isArray(value)) {
+                    const values: string[] = await this.getRecipientStrings(value, translatable);
+                    displayValue = values.join(', ');
+                }
+                break;
+            case NotificationProperty.DATA_RECIPIENT_EMAIL:
+                if (value && Array.isArray(value)) {
+                    const mailAddresses: string[] = [];
+                    const contactEmails = value[0].split(/,\s?/);
+                    for (const email of contactEmails) {
+                        const contact = await this.getContactForEmail(email);
+                        if (contact) {
+                            mailAddresses.push(
+                                `"${contact.Firstname} ${contact.Lastname}" <${contact.Email}>`
+                            );
+                        } else {
+                            mailAddresses.push(email);
+                        }
+                    }
+                    displayValue = mailAddresses.join(', ');
+                    translatable = false;
+                }
+                break;
+            case NotificationProperty.DATA_EVENTS:
+                if (value && Array.isArray(value)) {
+                    displayValue = value.join(', ');
+                    translatable = false;
+                }
+                break;
+            case NotificationProperty.DATA_RECIPIENT_AGENTS:
+                if (value && Array.isArray(value)) {
+                    const users = await KIXObjectService.loadObjects<User>(
+                        KIXObjectType.USER, value, null, null, true
+                    ).catch((error) => [] as User[]);
+                    displayValue = users && !!users.length ? users.map((u) => u.UserFullname).join(', ') : value;
+                    translatable = false;
+                }
+                break;
+            case NotificationProperty.DATA_RECIPIENT_ROLES:
+                if (value && Array.isArray(value)) {
+                    const roles = await KIXObjectService.loadObjects<Role>(
+                        KIXObjectType.ROLE, value, null, null, true
+                    ).catch((error) => [] as Role[]);
+                    displayValue = roles && !!roles.length ? roles.map((r) => r.Name).join(', ') : value;
+                    translatable = false;
+                }
+                break;
+            case NotificationProperty.DATA_RECIPIENT_SUBJECT:
+            case NotificationProperty.DATA_SEND_DESPITE_OOO:
+            case NotificationProperty.DATA_SEND_ONCE_A_DAY:
+            case NotificationProperty.DATA_VISIBLE_FOR_AGENT:
+                displayValue = value ? 'Translatable#Yes' : 'Translatable#No';
+                break;
+            case NotificationProperty.NAME:
+                displayValue = value;
+                translatable = false;
+                break;
+            default:
+                displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
+        }
+
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
+        }
+        return displayValue ? displayValue.toString() : '';
+    }
+
+    private async getRecipientStrings(value: any, translatable?: boolean): Promise<string[]> {
+        const values: string[] = [];
+        for (const v of value) {
+            let displayString = '';
+            switch (v) {
+                case NotificationRecipientTypes.AGENT_RESPONSIBLE:
+                    displayString = 'Translatable#TicketResponsible';
+                    break;
+                case NotificationRecipientTypes.AGENT_READ_PERMISSIONS:
+                    displayString = 'Translatable#All agents with read permissions for the ticket';
+                    break;
+                case NotificationRecipientTypes.AGENT_WRITE_PERMISSIONS:
+                    displayString = 'Translatable#All agents with update permission for the ticket';
+                    break;
+                case NotificationRecipientTypes.AGENT_MY_QUEUES:
+                    displayString = "Translatable#All agents subscribed to the ticket's queue";
+                    break;
+                case NotificationRecipientTypes.CUSTOMER:
+                    displayString = 'Translatable#Contact';
+                    break;
+                default:
+            }
+            if (displayString) {
+                displayString = await TranslationService.translate(
+                    displayString, undefined, undefined, !translatable
+                );
+                values.push(displayString);
+            }
+        }
+        return values;
+    }
+
+    private async getContactForEmail(email): Promise<Contact> {
+        let contacts;
+        if (email) {
+            const plainMail = email.replace(/.+ <(.+)>/, '$1');
+            contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, null,
+                new KIXObjectLoadingOptions(
+                    [
+                        new FilterCriteria(
+                            ContactProperty.EMAIL, SearchOperator.EQUALS, FilterDataType.STRING,
+                            FilterType.OR, plainMail
+                        )
+                    ]
+
+                ), null, true
+            );
+        }
+        return contacts && !!contacts.length ? contacts[0] : null;
+    }
+
+    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
+        let icon;
+
+        switch (property) {
+            case NotificationProperty.DATA_RECIPIENT_ROLES:
+                icon = LabelService.getInstance().getObjectTypeIcon(KIXObjectType.ROLE);
+                break;
+            case NotificationProperty.DATA_RECIPIENT_AGENTS:
+                icon = LabelService.getInstance().getObjectTypeIcon(KIXObjectType.USER);
+                break;
+            default:
+        }
+
+        return icon;
+    }
+
+    public async getIcons(
+        notification: Notification, property: string, value?: string | number
+    ): Promise<Array<string | ObjectIcon>> {
+        if (notification) {
+            value = notification[property];
+        }
+        const icons = [];
+
+        switch (property) {
+            case NotificationProperty.DATA_RECIPIENT_ROLES:
+                icons.push(LabelService.getInstance().getObjectTypeIcon(KIXObjectType.ROLE));
+                break;
+            case NotificationProperty.DATA_RECIPIENT_AGENTS:
+                icons.push(LabelService.getInstance().getObjectTypeIcon(KIXObjectType.USER));
+                break;
+            case NotificationProperty.DATA_RECIPIENT_EMAIL:
+                const contact = await this.getContactForEmail(Array.isArray(value) ? value[0] : value);
+                if (contact) {
+                    icons.push(LabelService.getInstance().getObjectTypeIcon(KIXObjectType.CONTACT));
+                }
+                break;
+            default:
+        }
+
+        return icons;
+    }
 }

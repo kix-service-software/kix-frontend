@@ -7,7 +7,6 @@
  * --
  */
 
-import { ILabelProvider } from "..";
 import {
     Ticket, TicketProperty, DateTimeUtil, ObjectIcon,
     Organisation, KIXObjectType, Contact, TicketPriority, TicketType,
@@ -18,6 +17,7 @@ import { SearchProperty } from "../SearchProperty";
 import { TranslationService } from "../i18n/TranslationService";
 import { AgentService } from "../application/AgentService";
 import { LabelProvider } from "../LabelProvider";
+import { LabelService } from "../LabelService";
 
 export class TicketLabelProvider extends LabelProvider<Ticket> {
 
@@ -520,6 +520,20 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 break;
             case TicketProperty.TYPE_ID:
                 icons.push(new ObjectIcon('TicketType', value));
+                break;
+            case TicketProperty.CONTACT_ID:
+            case TicketProperty.CONTACT:
+                icons.push(LabelService.getInstance().getObjectTypeIcon(KIXObjectType.CONTACT));
+                break;
+            case TicketProperty.ORGANISATION_ID:
+            case TicketProperty.ORGANISATION:
+                icons.push(LabelService.getInstance().getObjectTypeIcon(KIXObjectType.ORGANISATION));
+                break;
+            case TicketProperty.OWNER_ID:
+            case TicketProperty.OWNER:
+            case TicketProperty.RESPONSIBLE_ID:
+            case TicketProperty.RESPONSIBLE:
+                icons.push(LabelService.getInstance().getObjectTypeIcon(KIXObjectType.USER));
                 break;
             case TicketProperty.QUEUE_ID:
                 icons.push(new ObjectIcon('Queue', value));

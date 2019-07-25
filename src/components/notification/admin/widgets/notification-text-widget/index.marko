@@ -1,0 +1,32 @@
+<!--
+Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
+<widget
+    instanceId=state.instanceId
+    title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
+    contentActions=state.actions>
+    <@content>
+        <if(state.notification)>
+            <for|group, index| of=state.messageGroups>
+                <widget instanceId="notification-message-group" key=("notification-message-group-" + index) title=group[0]>
+                    <@content>
+                        <div.notification-message>
+                            <object-property-label object=group[1] property="Subject" labelProvider=state.labelProvider/>
+                            <object-property-label object=group[1] property="Body" labelProvider=state.labelProvider>
+                                <@value>
+                                    <editor readOnly=true value=group[1].Body useReadonlyStyle=true/>
+                                </@value>
+                            </object-property-label>
+                        </div>
+                    </@content>
+                </widget>
+            </for>
+        </if>
+    </@content>
+</widget>

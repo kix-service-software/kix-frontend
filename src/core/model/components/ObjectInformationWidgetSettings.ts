@@ -10,7 +10,7 @@
 import { KIXObjectType } from "../kix";
 import { RoutingConfiguration } from "../../browser/router";
 
-export class ObjectinformationWidgetSettings {
+export class ObjectInformationWidgetSettings {
 
     public constructor(
         public objectType: KIXObjectType,

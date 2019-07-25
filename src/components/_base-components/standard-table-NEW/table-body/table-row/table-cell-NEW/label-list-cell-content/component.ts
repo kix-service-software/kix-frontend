@@ -9,6 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent, Label, ICell } from '../../../../../../../core/browser';
+import { ObjectIcon } from '../../../../../../../core/model';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -25,6 +26,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async setLabels(cell: ICell): Promise<void> {
         let values = [];
+        let icons: Array<string | ObjectIcon> = [];
         const value = cell.getValue();
         if (Array.isArray(value.objectValue)) {
             if (typeof value.objectValue[0] === 'object') {
@@ -32,12 +34,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 values = stringValue.split(',').map((v) => v.trim());
             } else {
                 values = value.objectValue;
+                icons = value.displayIcons;
             }
         } else {
             values = [value.objectValue];
         }
 
-        this.state.cellLabels = values.map((v) => new Label(null, v, null, v, null, v, false));
+        this.state.cellLabels = values.map((v, index) => new Label(
+            null, v,
+            icons[index] ? icons[index] : null,
+            v, null, v, false
+        ));
     }
 
 }

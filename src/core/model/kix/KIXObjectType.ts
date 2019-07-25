@@ -77,11 +77,13 @@ export enum KIXObjectType {
 
     MAIL_FILTER = 'MailFilter',
 
-    NOTIFICATION = 'Notification',
-
     MAIL_FILTER_MATCH = 'MAIL_FILTER_MATCH',
 
     MAIL_FILTER_SET = 'MAIL_FILTER_SET',
+
+    NOTIFICATION = 'Notification',
+
+    NOTIFICATION_FILTER = 'NOTIFICATION_FILTER',
 
     OBJECT_ICON = 'OBJECT_ICON',
 

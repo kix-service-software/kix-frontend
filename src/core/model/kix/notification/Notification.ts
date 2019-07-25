@@ -9,7 +9,6 @@
 
 import { KIXObject } from "../KIXObject";
 import { KIXObjectType } from "../KIXObjectType";
-import { NotificationData } from "./NotificationData";
 
 export class Notification extends KIXObject<Notification> {
 
@@ -17,13 +16,26 @@ export class Notification extends KIXObject<Notification> {
 
     public KIXObjectType: KIXObjectType = KIXObjectType.NOTIFICATION;
 
-    public Data: NotificationData;
+    public Data: {};
 
     public ID: number;
 
-    public Message: any;
+    public Message: {};
 
     public Name: string;
+
+    // data properties
+    public Filter: Map<string, string>;
+    public Events: string[];
+    public VisibleForAgent: boolean;
+    public VisibleForAgentTooltip: string;
+    public Recipients: string[];
+    public RecipientAgents: number[];
+    public RecipientEmail: string[];
+    public RecipientRoles: number[];
+    public RecipientSubject: boolean;
+    public SendOnOutOfOffice: boolean;
+    public OncePerDay: boolean;
 
     public constructor(notification?: Notification) {
         super(notification);
