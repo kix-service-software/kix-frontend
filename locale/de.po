@@ -1944,7 +1944,9 @@ msgstr "Keine Signatur definiert."
 msgid "not archived tickets"
 msgstr "Nicht archivierte Tickets"
 
-msgid "Not available (not more or not yet)"
+#, fuzzy
+#| msgid "Not available (not more or not yet)"
+msgid "Not available (not any more or not yet)"
 msgstr "Noch nicht verfügbar / nicht mehr verfügbar"
 
 msgid "Note"

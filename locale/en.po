@@ -1850,7 +1850,7 @@ msgstr ""
 msgid "not archived tickets"
 msgstr ""
 
-msgid "Not available (not more or not yet)"
+msgid "Not available (not any more or not yet)"
 msgstr ""
 
 msgid "Note"
