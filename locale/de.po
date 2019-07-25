@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-07-23 16:31+0000\n"
-"Last-Translator: ssuender <Silke.Suender@cape-it.de>\n"
+"PO-Revision-Date: 2019-07-25 12:26+0000\n"
+"Last-Translator: fuhlig <Frank.Uhlig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -29,10 +29,8 @@ msgstr "{0} importiert"
 msgid "{0} Link created"
 msgstr "{0} Verknüpfung(en) angelegt"
 
-#, fuzzy
-#| msgid "{0} File(s) added"
 msgid "{0} link(s) assigned."
-msgstr "{0} Datei(en) angehangen"
+msgstr "{0} Verknüpfung(en) erstellt."
 
 msgid "Accept KIX Header"
 msgstr "KIX Header akzeptieren"
@@ -40,8 +38,6 @@ msgstr "KIX Header akzeptieren"
 msgid "Access denied"
 msgstr "Zugriff verweigert"
 
-#, fuzzy
-#| msgid "accounted time"
 msgid "Accounted time"
 msgstr "Erfasste Zeit"
 
@@ -115,13 +111,13 @@ msgid "All"
 msgstr "Alle"
 
 msgid "All agents subscribed to the ticket's queue"
-msgstr ""
+msgstr "Alle Agenten, die das Team des Tickets abonniert haben"
 
 msgid "All agents with read permissions for the ticket"
-msgstr ""
+msgstr "Alle Agenten, die Leseberechtigungen auf das Ticket haben"
 
 msgid "All agents with update permission for the ticket"
-msgstr ""
+msgstr "Alle Agenten, die Update-Berechtigungen auf das Ticket haben"
 
 msgid "All form fields marked by * are required fields."
 msgstr ""
@@ -171,9 +167,8 @@ msgstr "Archivierte Tickets"
 msgid "Article"
 msgstr "Artikel"
 
-#, fuzzy
 msgid "Article Data"
-msgstr "Stammdaten"
+msgstr "Artikeldaten"
 
 msgid "Article Id"
 msgstr "Artikel ID"
@@ -510,10 +505,8 @@ msgstr "Filter wird angelegt"
 msgid "Create Links"
 msgstr "Verknüpfung wird angelegt"
 
-#, fuzzy
-#| msgid "Notifications"
 msgid "Create Notification"
-msgstr "Benachrichtigungen"
+msgstr "Benachrichtigung erstellen"
 
 msgid "Create Organisation"
 msgstr "Kunde wird angelegt"
@@ -572,10 +565,8 @@ msgstr "Daten wurden aktualisiert."
 msgid "Default"
 msgstr "Standard"
 
-#, fuzzy
-#| msgid "Set Value"
 msgid "Default Value"
-msgstr "Wert setzen"
+msgstr "Standardwert"
 
 msgid ""
 "Define where this FAQ article will be shown (internal= only Agent Portal, "
@@ -597,10 +588,8 @@ msgstr "Gelöscht"
 msgid "Delete Link"
 msgstr "Verknüpfung löschen"
 
-#, fuzzy
-#| msgid "New Search"
 msgid "Delete Search"
-msgstr "Neue Suche"
+msgstr "Suche löschen"
 
 msgid "Deployment State"
 msgstr "Verwendungsstatus"
@@ -678,10 +667,8 @@ msgstr "FAQ Artikel bearbeiten"
 msgid "Edit FAQ Category"
 msgstr "FAQ Kategorie bearbeiten"
 
-#, fuzzy
-#| msgid "Edit Role"
 msgid "Edit Key"
-msgstr "Rolle bearbeiten"
+msgstr "Schlüssel bearbeiten"
 
 msgid "Edit Links"
 msgstr "Links bearbeiten"
