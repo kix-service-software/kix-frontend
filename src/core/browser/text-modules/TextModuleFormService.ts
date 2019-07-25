@@ -47,4 +47,5 @@ export class TextModuleFormService extends KIXObjectFormService<TextModule> {
         return value;
     }
 
+
 }

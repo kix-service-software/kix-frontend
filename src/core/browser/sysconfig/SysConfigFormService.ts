@@ -8,8 +8,15 @@
  */
 
 import { KIXObjectFormService } from "../kix/KIXObjectFormService";
-import { KIXObjectType } from "../../model";
+import {
+    KIXObjectType, SysConfigOptionDefinition, Form, FormFieldValue,
+    SysConfigOptionDefinitionProperty,
+    FormField,
+    KIXObjectProperty
+} from "../../model";
 import { SysConfigOption } from "../../model/kix/sysconfig/SysConfigOption";
+import { ContextService, KIXObjectService } from "..";
+import { EditSysConfigDialogContext } from ".";
 
 export class SysConfigFormService extends KIXObjectFormService<SysConfigOption> {
 
@@ -28,6 +35,53 @@ export class SysConfigFormService extends KIXObjectFormService<SysConfigOption> 
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {
-        return kixObjectType === KIXObjectType.SYS_CONFIG_OPTION;
+        return kixObjectType === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION;
+    }
+
+    public async initValues(form: Form): Promise<Map<string, FormFieldValue<any>>> {
+        const context = await ContextService.getInstance().getContext<EditSysConfigDialogContext>(
+            EditSysConfigDialogContext.CONTEXT_ID
+        );
+        const sysConfigId = context ? context.getObjectId() : null;
+        const sysConfigValues = sysConfigId
+            ? await KIXObjectService.loadObjects<SysConfigOptionDefinition>(
+                KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, [sysConfigId]) : null;
+        return await super.initValues(form, sysConfigValues ? sysConfigValues[0] : null);
+    }
+
+    protected async getValue(
+        property: string, value: any, sysConfig: SysConfigOptionDefinition, formField: FormField
+    ): Promise<any> {
+        let newValue = value;
+        switch (property) {
+            case SysConfigOptionDefinitionProperty.SETTING:
+                if (value && Array.isArray(value)) {
+                    newValue = value.join(',');
+                } else {
+                    newValue = value;
+                }
+                break;
+            case SysConfigOptionDefinitionProperty.DEFAULT:
+                if (typeof newValue !== 'string' && typeof newValue !== 'number') {
+                    newValue = JSON.stringify(value);
+                }
+                break;
+            case SysConfigOptionDefinitionProperty.VALUE:
+                if (sysConfig.IsModified !== 1) {
+                    newValue = sysConfig.Default;
+                }
+
+                if (typeof newValue !== 'string' && typeof newValue !== 'number') {
+                    newValue = JSON.stringify(newValue);
+                }
+                break;
+            case KIXObjectProperty.VALID_ID:
+                if (sysConfig.IsRequired) {
+                    formField.readonly = true;
+                }
+                break;
+            default:
+        }
+        return newValue;
     }
 }

@@ -19,6 +19,9 @@
             "i18n-translation-details-configuration": {
                 "module": "i18n-translation-details.extension"
             },
+            "edit-sysconfig-dialog-configuration": {
+                "module": "edit-sysconfig-dialog-configuration.extension"
+            },
             "new-notification-dialog-configuration": {
                 "module": "new-notification-dialog-configuration.extension"
             }
