@@ -572,6 +572,11 @@ msgstr "Daten wurden aktualisiert."
 msgid "Default"
 msgstr "Standard"
 
+#, fuzzy
+#| msgid "Set Value"
+msgid "Default Value"
+msgstr "Wert setzen"
+
 msgid ""
 "Define where this FAQ article will be shown (internal= only Agent Portal, "
 "external = KIX Agent and Organisation Portal for authenticated users only, "
@@ -672,6 +677,11 @@ msgstr "FAQ Artikel bearbeiten"
 
 msgid "Edit FAQ Category"
 msgstr "FAQ Kategorie bearbeiten"
+
+#, fuzzy
+#| msgid "Edit Role"
+msgid "Edit Key"
+msgstr "Rolle bearbeiten"
 
 msgid "Edit Links"
 msgstr "Links bearbeiten"
@@ -1163,6 +1173,31 @@ msgstr "Hilfetext_Admin_QueueEdit_UnlockTimeout"
 msgid "Helptext_Admin_QueueEdit_Validity"
 msgstr "Hilfetext_Admin_QueueEdit_Validity"
 
+#, fuzzy
+#| msgid "Helptext_Admin_MailFilter_SetEmailHeader_Value"
+msgid "Helptext_Admin_SysConfigEdit_Default_Value"
+msgstr "Hilfetext_Admin_MailFilter_SetEmailHeader_Value"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountEdit_Dispachting"
+msgid "Helptext_Admin_SysConfigEdit_Description"
+msgstr "Hilfetext_Admin_MailAccountEdit_Dispachting"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_Name"
+msgid "Helptext_Admin_SysConfigEdit_Name"
+msgstr "Hilfetext_Admin_QueueEdit_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_Validity"
+msgid "Helptext_Admin_SysConfigEdit_Validity"
+msgstr "Hilfetext_Admin_QueueEdit_Validity"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_Name"
+msgid "Helptext_Admin_SysConfigEdit_Value"
+msgstr "Hilfetext_Admin_QueueEdit_Name"
+
 msgid "Helptext_Admin_SystemAddressCreate_Comment"
 msgstr "Hilfetext_Admin_SystemAddressCreate_Comment"
 
@@ -1357,16 +1392,6 @@ msgstr "Hilfetext_Search_Contact"
 
 msgid "Helptext_Search_Organisation"
 msgstr "Hilfetext_Search_Organisation"
-
-#, fuzzy
-#| msgid "Helptext_Search_Contact"
-msgid "Helptext_Search_Save_AvailableSearch"
-msgstr "Hilfetext_Search_Contact"
-
-#, fuzzy
-#| msgid "Helptext_Search_Contact"
-msgid "Helptext_Search_Save_Title"
-msgstr "Hilfetext_Search_Contact"
 
 msgid "Helptext_Textmodules_TicketCreate"
 msgstr ""
@@ -2260,7 +2285,17 @@ msgstr "Allen antworten"
 msgid "Required field '{0}' has no value."
 msgstr "Benötigtes Feld '{0}' hat keinen Wert."
 
+#, fuzzy
+#| msgid "Required field '{0}' has no value."
+msgid "Required field '{0}' is no JSON."
+msgstr "Benötigtes Feld '{0}' hat keinen Wert."
+
 msgid "Reset data"
+msgstr "Daten zurücksetzen"
+
+#, fuzzy
+#| msgid "Reset data"
+msgid "Reset to Default"
 msgstr "Daten zurücksetzen"
 
 msgid "Response time"
@@ -2926,6 +2961,11 @@ msgstr "Aktualisierung wird durchgeführt"
 msgid "Update Filter"
 msgstr "Aktualisierung wird durchgeführt"
 
+#, fuzzy
+#| msgid "Update Role"
+msgid "Update Key"
+msgstr "Aktualisierung wird durchgeführt"
+
 msgid "Update Organisation"
 msgstr "Aktualisierung wird durchgeführt"
 
@@ -3042,6 +3082,16 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#, fuzzy
+#~| msgid "Helptext_Search_Contact"
+#~ msgid "Helptext_Search_Save_AvailableSearch"
+#~ msgstr "Hilfetext_Search_Contact"
+
+#, fuzzy
+#~| msgid "Helptext_Search_Contact"
+#~ msgid "Helptext_Search_Save_Title"
+#~ msgstr "Hilfetext_Search_Contact"
 
 #~ msgid "Merge"
 #~ msgstr "Zusammenfassen"

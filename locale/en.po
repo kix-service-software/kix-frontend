@@ -547,6 +547,9 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
+msgid "Default Value"
+msgstr ""
+
 msgid ""
 "Define where this FAQ article will be shown (internal= only Agent Portal, "
 "external = KIX Agent and Organisation Portal for authenticated users only, "
@@ -642,6 +645,11 @@ msgstr ""
 
 msgid "Edit FAQ Category"
 msgstr ""
+
+#, fuzzy
+#| msgid "Edit Queue"
+msgid "Edit Key"
+msgstr "Edit Team"
 
 msgid "Edit Links"
 msgstr ""
@@ -1101,6 +1109,21 @@ msgstr ""
 msgid "Helptext_Admin_QueueEdit_Validity"
 msgstr ""
 
+msgid "Helptext_Admin_SysConfigEdit_Default_Value"
+msgstr ""
+
+msgid "Helptext_Admin_SysConfigEdit_Description"
+msgstr ""
+
+msgid "Helptext_Admin_SysConfigEdit_Name"
+msgstr ""
+
+msgid "Helptext_Admin_SysConfigEdit_Validity"
+msgstr ""
+
+msgid "Helptext_Admin_SysConfigEdit_Value"
+msgstr ""
+
 msgid "Helptext_Admin_SystemAddressCreate_Comment"
 msgstr ""
 
@@ -1294,12 +1317,6 @@ msgid "Helptext_Search_Contact"
 msgstr ""
 
 msgid "Helptext_Search_Organisation"
-msgstr ""
-
-msgid "Helptext_Search_Save_AvailableSearch"
-msgstr ""
-
-msgid "Helptext_Search_Save_Title"
 msgstr ""
 
 msgid "Helptext_Textmodules_TicketCreate"
@@ -2155,7 +2172,13 @@ msgstr ""
 msgid "Required field '{0}' has no value."
 msgstr ""
 
+msgid "Required field '{0}' is no JSON."
+msgstr ""
+
 msgid "Reset data"
+msgstr ""
+
+msgid "Reset to Default"
 msgstr ""
 
 msgid "Response time"
@@ -2774,6 +2797,11 @@ msgstr ""
 
 msgid "Update Filter"
 msgstr ""
+
+#, fuzzy
+#| msgid "Update Queue"
+msgid "Update Key"
+msgstr "Update Team"
 
 msgid "Update Organisation"
 msgstr ""
