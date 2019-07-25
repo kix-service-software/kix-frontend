@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-07-25 12:29+0000\n"
+"PO-Revision-Date: 2019-07-25 12:33+0000\n"
 "Last-Translator: fuhlig <Frank.Uhlig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -1516,10 +1516,8 @@ msgstr "Geben Sie einen Name für den Typ ein."
 msgid "Inserted email address is invalid"
 msgstr "Die eingegebene E-Mail Adresse ist ungültig"
 
-#, fuzzy
-#| msgid "Inserted email address must not be a system address."
 msgid "Inserted email address must not be a system address ({0})."
-msgstr "Die eingegebene E-Mail-Adresse darf keine Systemadresse sein."
+msgstr "Die eingegebene E-Mail-Adresse darf keine Systemadresse sein ({0})."
 
 msgid "insert filter value"
 msgstr "Filterwert eingeben"
@@ -1558,10 +1556,8 @@ msgstr "Internationalisierung"
 msgid "Internationalisation: Translations"
 msgstr "Internationalisierung: Übersetzungen"
 
-#, fuzzy
-#| msgid "Invalid date."
 msgid "Invalid date for pending date."
-msgstr "Ungültiges Datum."
+msgstr "Ungültiges Datum bei 'Warten bis'"
 
 msgid "Keywords"
 msgstr "Schlagworte"
@@ -1725,8 +1721,6 @@ msgstr "Lokalisierung"
 msgid "Lock"
 msgstr "Gesperrt"
 
-#, fuzzy
-#| msgid "locked"
 msgid "Locked"
 msgstr "Gesperrt"
 
@@ -1736,10 +1730,8 @@ msgstr "Gesperrte Tickets"
 msgid "Lock State"
 msgstr "Sperrstatus"
 
-#, fuzzy
-#| msgid "Locked Tickets"
 msgid "Lock Ticket"
-msgstr "Gesperrte Tickets"
+msgstr "Ticket sperren"
 
 msgid "Logged in"
 msgstr "Angemeldet"
