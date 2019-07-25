@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-07-25 12:33+0000\n"
+"PO-Revision-Date: 2019-07-25 12:36+0000\n"
 "Last-Translator: fuhlig <Frank.Uhlig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -1829,10 +1829,8 @@ msgstr "Neue FAQ Kategorie"
 msgid "New Filter"
 msgstr "Neuer Filter"
 
-#, fuzzy
-#| msgid "Notifications"
 msgid "New Notification"
-msgstr "Benachrichtigungen"
+msgstr "Benachrichtigung erstellen"
 
 msgid "New Object"
 msgstr "Neues Objekt"
@@ -1921,8 +1919,6 @@ msgstr "Keine Signatur definiert."
 msgid "not archived tickets"
 msgstr "Nicht archivierte Tickets"
 
-#, fuzzy
-#| msgid "Not available (not more or not yet)"
 msgid "Not available (not any more or not yet)"
 msgstr "Noch nicht verfügbar / nicht mehr verfügbar"
 
@@ -1932,38 +1928,26 @@ msgstr "Notiz"
 msgid "Notes"
 msgstr "Notizen"
 
-#, fuzzy
-#| msgid "Notifications"
 msgid "Notification"
-msgstr "Benachrichtigungen"
+msgstr "Benachrichtigung"
 
-#, fuzzy
-#| msgid "Organisation Information"
 msgid "Notification Information"
-msgstr "Kundeninformationen"
+msgstr "Benachrichtigungsinformation"
 
-#, fuzzy
-#| msgid "Notifications"
 msgid "Notification Methods"
-msgstr "Benachrichtigungen"
+msgstr "Benachrichtigungsmethoden"
 
-#, fuzzy
-#| msgid "Notifications"
 msgid "Notification Options"
-msgstr "Benachrichtigungen"
+msgstr "Benachrichtigungsoptionen"
 
 msgid "Notifications"
 msgstr "Benachrichtigungen"
 
-#, fuzzy
-#| msgid "Contact successfully created."
 msgid "Notification successfully created."
-msgstr "Kontakt wurde erfolgreich angelegt."
+msgstr "Benachrichtigung wurde erfolgreich angelegt"
 
-#, fuzzy
-#| msgid "Notifications"
 msgid "Notification Text"
-msgstr "Benachrichtigungen"
+msgstr "Benachrichtigungstext"
 
 msgid "not modified"
 msgstr "********"
@@ -2001,8 +1985,6 @@ msgstr "Beobachter"
 msgid "Once a day"
 msgstr "Einmal pro Tag"
 
-#, fuzzy
-#| msgid "Once a day"
 msgid "Once per day"
 msgstr "Einmal pro Tag"
 
@@ -2092,8 +2074,6 @@ msgstr "\"Warten bis\"-Datum liegt nicht in der Zukunft."
 msgid "Pending Tickets"
 msgstr "Tickets im Warten-Status"
 
-#, fuzzy
-#| msgid "pending until"
 msgid "Pending until"
 msgstr "Warten bis"
 
@@ -2126,10 +2106,8 @@ msgstr ""
 msgid "Please select a contact"
 msgstr "Wählen Sie bitte einen Kontakt."
 
-#, fuzzy
-#| msgid "Please insert a base string for the translation."
 msgid "Please select a language for the translation."
-msgstr "Geben Sie die Basiszeichenkette für die Übersetzung ein."
+msgstr "Wählen Sie eine Sprache für die Übersetzung."
 
 msgid "Postal Address"
 msgstr "Adresse"
@@ -2165,9 +2143,8 @@ msgstr "Prioritäen wurden erfolgreich entfernt."
 msgid "Priority"
 msgstr "Priorität"
 
-#, fuzzy
 msgid "Priority Data"
-msgstr "Stammdaten"
+msgstr "Prioritätsdaten"
 
 msgid "Priority Information"
 msgstr "Prioritäten Informationen"
@@ -2211,10 +2188,8 @@ msgstr "Empfänger: Bcc"
 msgid "Recipient: Cc"
 msgstr "Empfänger: Cc"
 
-#, fuzzy
-#| msgid "Recipient: Cc"
 msgid "Recipients"
-msgstr "Empfänger: Cc"
+msgstr "Empfänger"
 
 msgid "Recipient: To"
 msgstr "Empfänger: An"
