@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-07-25 12:36+0000\n"
+"PO-Revision-Date: 2019-07-25 12:40+0000\n"
 "Last-Translator: fuhlig <Frank.Uhlig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -2239,18 +2239,14 @@ msgstr "Allen antworten"
 msgid "Required field '{0}' has no value."
 msgstr "Benötigtes Feld '{0}' hat keinen Wert."
 
-#, fuzzy
-#| msgid "Required field '{0}' has no value."
 msgid "Required field '{0}' is no JSON."
-msgstr "Benötigtes Feld '{0}' hat keinen Wert."
+msgstr "Benötigtes Feld '{0}' ist kein gültiges JSON-Format"
 
 msgid "Reset data"
 msgstr "Daten zurücksetzen"
 
-#, fuzzy
-#| msgid "Reset data"
 msgid "Reset to Default"
-msgstr "Daten zurücksetzen"
+msgstr "Zurücksetzen"
 
 msgid "Response time"
 msgstr "Reaktionszeit"
@@ -2305,10 +2301,8 @@ msgstr "Zeilen mit zu wenigen Werten"
 msgid "Save"
 msgstr "Speichern"
 
-#, fuzzy
-#| msgid "New Search"
 msgid "Save Search"
-msgstr "Neue Suche"
+msgstr "Suche speichern"
 
 msgid "Save Settings."
 msgstr "Einstellungen werden gespeichert."
@@ -2316,10 +2310,8 @@ msgstr "Einstellungen werden gespeichert."
 msgid "Search"
 msgstr "Suche"
 
-#, fuzzy
-#| msgid "The following {0} entries will be deleted. Are you sure?"
 msgid "Search {0} will be deleted. Are you sure?"
-msgstr "Die ausgewählten {0} Einträge werden gelöscht. Sind Sie sicher?"
+msgstr "Suche {0} wird gelöscht. Sind Sie sicher?"
 
 msgid ""
 "Searchable FAQ attributes: FAQ#, Title, Symptom, Cause, Solution, Comment, "
@@ -2386,25 +2378,17 @@ msgstr "Suche nach Tickets mit dem gewählten Typ."
 msgid "Search Results"
 msgstr "Suchergebnisse"
 
-#, fuzzy
-#| msgid "Successfully rated."
 msgid "Search successfully saved."
-msgstr "Bewertung erfolgreich."
+msgstr "Suche erfolgreich gelöscht"
 
-#, fuzzy
-#| msgid "Templates successfully removed."
 msgid "Search template successfully removed."
-msgstr "Vorlagen wurde erfolgreich entfernt."
+msgstr "Suchvorlage wurde erfolgreich entfernt"
 
-#, fuzzy
-#| msgid "Search Tickets ..."
 msgid "Search Tickets"
-msgstr "Suche Tickets..."
+msgstr "Suche Tickets"
 
-#, fuzzy
-#| msgid "Search Tickets ..."
 msgid "Search Title"
-msgstr "Suche Tickets..."
+msgstr "Suche Titel"
 
 msgid "Select a character set."
 msgstr "Wählen Sie einen Zeichensatz."
@@ -2415,10 +2399,8 @@ msgstr "Wählen Sie einen Verwendungsstatus."
 msgid "Select a incident state."
 msgstr "Wählen Sie einen Vorfallstatus."
 
-#, fuzzy
-#| msgid "Select a language for the user."
 msgid "Select a language for the translation."
-msgstr "Wählen Sie eine Sprache für den Nutzer."
+msgstr "Wählen Sie eine Sprache für die Übersetzung."
 
 msgid "Select a language for this FAQ article."
 msgstr "Wählen Sie die Sprache des FAQ-Eintrages aus der Liste."
@@ -2465,8 +2447,6 @@ msgstr "Gewählte Versionen"
 msgid "Select file"
 msgstr "Datei wählen"
 
-#, fuzzy
-#| msgid "select image file"
 msgid "Select image file"
 msgstr "Bilddatei wählen"
 
@@ -2477,7 +2457,7 @@ msgid "; (semicolon)"
 msgstr "; (Semikolon)"
 
 msgid "Send despite out of office"
-msgstr ""
+msgstr "Trotz „nicht im Büro“ senden"
 
 msgid "Sender"
 msgstr "Absender"
@@ -2485,10 +2465,8 @@ msgstr "Absender"
 msgid "Sender Address (Email)"
 msgstr "Absender E-Mail"
 
-#, fuzzy
-#| msgid "Sender"
 msgid "Send to"
-msgstr "Absender"
+msgstr "Empfänger"
 
 msgid "Send to all role members"
 msgstr "An alle Rollen-Mitglieder senden"
