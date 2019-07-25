@@ -29,6 +29,11 @@ msgstr "{0} importiert"
 msgid "{0} Link created"
 msgstr "{0} Verknüpfung(en) angelegt"
 
+#, fuzzy
+#| msgid "{0} File(s) added"
+msgid "{0} link(s) assigned."
+msgstr "{0} Datei(en) angehangen"
+
 msgid "Accept KIX Header"
 msgstr "KIX Header akzeptieren"
 

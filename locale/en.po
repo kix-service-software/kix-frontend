@@ -29,6 +29,9 @@ msgstr ""
 msgid "{0} Link created"
 msgstr ""
 
+msgid "{0} link(s) assigned."
+msgstr ""
+
 msgid "Accept KIX Header"
 msgstr ""
 
