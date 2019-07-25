@@ -9,6 +9,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 <li.tree-node
     class={
         active: component.isNodeActive(),
+        "navigation-node": state.node.navigationNode,
         "not-clickable": !state.node.clickable
     }
     id=state.nodeId
@@ -42,7 +43,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         node=node
                         filterValue=state.filterValue
                         activeNodes=state.activeNodes
-                        treeParent=input.treeParent
                         treeId=state.treeId
                         on-nodeToggled("childNodeToggled")
                         on-nodeClicked("childNodeClicked")
