@@ -77,16 +77,20 @@ export class ComponentState {
             language: navigator.language || 'de',
             toolbar,
             resize_minWidth: 200,
-            resize_minHeight: 122,
+            resize_minHeight: 125,
             resize_maxWidth: 1200,
-            resize_maxHeight: 1000,
+            resize_maxHeight: 2000,
+            autoGrow_minHeight: 125,
+            autoGrow_maxHeight: 2000,
+            autoGrow_onStartup: true,
             extraAllowedContent: 'b; h1 h2 h3 ul li; div[type]{*}; img[*]; col[width]; style[*]{*}; *[id](*)',
             toolbarCanCollapse: this.simple ? false : true,
             readOnly: this.readOnly,
             removeButtons: '',
-            removePlugins: 'elementspath' + (this.readOnly || this.noImages ? ',image2' : ''),
-            codeSnippet_theme: 'github',
-            // enterMode: CKEDITOR.ENTER_BR
+            removePlugins: 'elementspath'
+                + (this.readOnly || this.noImages ? ',image2' : '')
+                + (this.readOnly ? '' : ',autogrow'),
+            codeSnippet_theme: 'github'
         };
         if (resize || resize === undefined) {
             this.config['resize_dir'] = resizeDir || 'vertical';

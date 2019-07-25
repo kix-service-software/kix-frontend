@@ -26,6 +26,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         this.state.definitionString = this.definition ? this.definition.DefinitionString : '';
+        const area = (this as any).getEl();
+        if (area) {
+            setTimeout(() => {
+                area.style.cssText = 'height:auto; padding:0';
+                area.style.cssText = 'height:' + (area.scrollHeight + 10) + 'px';
+            }, 10);
+        }
     }
 
 }
