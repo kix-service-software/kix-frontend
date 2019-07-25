@@ -7,14 +7,14 @@
  * --
  */
 
-export enum FormFieldOptions {
+import { AbstractComponentState } from "../../../../../core/browser";
 
-    INPUT_FIELD_TYPE = 'INPUT_FIELD_TYPE',
+export class ComponentState extends AbstractComponentState {
 
-    AUTO_COMPLETE = 'Autocomplete',
-
-    SHOW_INVALID = 'SHOW_INVALID',
-
-    IS_JSON = 'isJSON'
+    public constructor(
+        public formId: string = 'edit-sysconfig-form'
+    ) {
+        super();
+    }
 
 }

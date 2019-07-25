@@ -9,12 +9,13 @@
 
 import { KIXObjectService } from './KIXObjectService';
 import {
-    KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, SysConfigOption
+    KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, SysConfigOption, Error
 } from '../../../model';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { SysConfigOptionFactory } from '../../object-factories/SysConfigOptionFactory';
 import { SysConfigOptionDefinition } from '../../../model/kix/sysconfig/SysConfigOptionDefinition';
 import { SysConfigOptionDefinitionFactory } from '../../object-factories/SysConfigOptionDefinitionFactory';
+import { LoggingService } from '..';
 
 export class SysConfigService extends KIXObjectService {
 
@@ -60,6 +61,19 @@ export class SysConfigService extends KIXObjectService {
         }
 
         return objects;
+    }
+    public async updateObject(
+        token: string, clientRequestId: string, objectType: KIXObjectType,
+        parameter: Array<[string, any]>, objectId: number | string
+    ): Promise<number> {
+        const uri = this.buildUri(this.RESOURCE_URI, objectId);
+        const id = await super.executeUpdateOrCreateRequest<number>(
+            token, clientRequestId, parameter, uri, this.objectType, 'Name'
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
+        });
+        return id;
     }
 
 }

@@ -115,7 +115,7 @@ export class SysConfigLabelProvider extends LabelProvider<SysConfigOptionDefinit
     public async getObjectText(
         sysConfig: SysConfigOptionDefinition, id?: boolean, title?: boolean, translatable?: boolean
     ): Promise<string> {
-        return `${sysConfig.Name} (${sysConfig.ObjectId})`;
+        return `${sysConfig.Name}`;
     }
 
     public getObjectAdditionalText(object: SysConfigOptionDefinition, translatable: boolean = true): string {

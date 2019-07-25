@@ -8,7 +8,9 @@
  */
 
 import { IFormFieldValidator, ValidationResult, FormField } from "../../../model";
-import { RequiredFormFieldValidator, MaxLengthFormFieldValidator, RegExFormFieldValidator } from ".";
+import {
+    RequiredFormFieldValidator, MaxLengthFormFieldValidator, RegExFormFieldValidator, JSONFormFieldValidator
+} from ".";
 import addrparser = require('address-rfc2822');
 
 export class FormValidationService {
@@ -34,6 +36,7 @@ export class FormValidationService {
         this.registerValidator(new RequiredFormFieldValidator());
         this.registerValidator(new MaxLengthFormFieldValidator());
         this.registerValidator(new RegExFormFieldValidator());
+        this.registerValidator(new JSONFormFieldValidator());
     }
 
     private formFieldValidators: IFormFieldValidator[] = [];

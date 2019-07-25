@@ -66,7 +66,8 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
                     f.property,
                     kixObject && formContext === FormContext.EDIT ? kixObject[f.property] :
                         f.defaultValue ? f.defaultValue.value : null,
-                    kixObject
+                    kixObject,
+                    f
                 );
 
                 if (f.property === 'ICON') {
@@ -121,7 +122,7 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
         return newField;
     }
 
-    protected async getValue(property: string, value: any, object: KIXObject): Promise<any> {
+    protected async getValue(property: string, value: any, object: KIXObject, formField: FormField): Promise<any> {
         return value;
     }
 

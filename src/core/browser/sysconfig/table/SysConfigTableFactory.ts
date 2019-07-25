@@ -7,13 +7,13 @@
  * --
  */
 
-import { RoutingConfiguration } from "../../router";
+import { RoutingConfiguration, DialogRoutingConfiguration } from "../../router";
 import {
     TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../table";
 import {
-    KIXObjectType, DataType, KIXObjectLoadingOptions, KIXObjectProperty, SysConfigOptionDefinitionProperty
+    KIXObjectType, DataType, KIXObjectProperty, SysConfigOptionDefinitionProperty, ContextMode
 } from "../../../model";
 import { TableFactory } from "../../table/TableFactory";
 import { SysConfigTableContentProvider } from "./SysConfigTableContentProvider";
@@ -72,8 +72,13 @@ export class SysConfigTableFactory extends TableFactory {
             tableConfiguration.tableColumns = tableColumns;
         }
 
-        // tslint:disable-next-line:no-empty
         if (defaultRouting) {
+
+            tableConfiguration.routingConfiguration = new DialogRoutingConfiguration(
+                null, KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, ContextMode.EDIT_ADMIN,
+                SysConfigOptionDefinitionProperty.NAME, null, true,
+                undefined, true, 'edit-sysconfig-form'
+            );
         }
 
         return tableConfiguration;

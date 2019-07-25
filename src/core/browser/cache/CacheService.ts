@@ -166,6 +166,9 @@ export class CacheService {
             case KIXObjectType.CONFIG_ITEM_VERSION:
                 cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
                 break;
+            case KIXObjectType.SYS_CONFIG_OPTION:
+                cacheKeyPrefixes.push(KIXObjectType.SYS_CONFIG_OPTION_DEFINITION);
+                break;
             default:
         }
 

@@ -6,6 +6,8 @@
  * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
  * --
  */
+export * from './table';
+export * from './context';
 
 export { SysConfigService } from './SysConfigService';
 export { SysConfigFormService } from './SysConfigFormService';

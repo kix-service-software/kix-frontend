@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.form-list on-click("setKeepExpanded") key=state.listId>
     <div.form-list-input-container.input-style
         class={
@@ -41,7 +40,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         <if(node.secondaryIcon)>
                             <icon icon=node.secondaryIcon showUnknown=true/>
                         </if>
-                        <if(state.removeNode)>
+                        <if(state.removeNode && !state.readonly)>
                             <span.kix-icon-close on-click("removeSelectedItem", node)/>
                         </if>
                     </div>
