@@ -12,7 +12,8 @@ import { AbstractComponentState } from "../../../../core/browser";
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public formId: string = 'edit-ticket-form'
+        public formId: string = 'edit-ticket-form',
+        public buttonLabel: string = 'Translatable#Save'
     ) {
         super();
     }

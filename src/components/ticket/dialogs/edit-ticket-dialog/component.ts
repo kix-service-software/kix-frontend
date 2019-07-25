@@ -12,7 +12,7 @@ import {
 } from "../../../../core/browser";
 import {
     ValidationSeverity, OverlayType, ComponentContent, ValidationResult,
-    KIXObjectType, TicketProperty, Error, Ticket
+    KIXObjectType, TicketProperty, Error, Ticket, FormField, FormFieldValue, ArticleProperty
 } from "../../../../core/model";
 import { ComponentState } from "./ComponentState";
 import { TicketDetailsContext } from "../../../../core/browser/ticket";
@@ -33,6 +33,23 @@ class Component {
         this.state.translations = await TranslationService.createTranslationObject([
             "Translatable#Cancel", "Translatable#Save"
         ]);
+
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        if (formInstance) {
+            formInstance.registerListener({
+                formListenerId: 'new-article-dialog-listener',
+                formValueChanged: async (formField: FormField, value: FormFieldValue<any>, oldValue: any) => {
+                    if (formField.property === ArticleProperty.CHANNEL_ID) {
+                        if (value && value.value === 2) {
+                            this.state.buttonLabel = 'Translatable#Send';
+                        } else {
+                            this.state.buttonLabel = 'Translatable#Save';
+                        }
+                    }
+                },
+                updateForm: () => { return; }
+            });
+        }
     }
 
     public async cancel(): Promise<void> {

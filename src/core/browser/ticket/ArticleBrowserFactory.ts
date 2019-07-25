@@ -46,12 +46,37 @@ export class ArticleBrowserFactory implements IKIXObjectFactory<Article> {
     }
 
     private prepareReceiverLists(article: Article): void {
-        const toStringList = article.To ? article.To.split(/,\s*/) : [];
-        const ccStringList = article.Cc ? article.Cc.split(/,\s*/) : [];
-        const bccStringList = article.Bcc ? article.Bcc.split(/,\s*/) : [];
-        const toRealNameStringList = article.ToRealname ? article.ToRealname.split(/,\s*/) : [];
-        const ccRealNameStringList = article.CcRealname ? article.CcRealname.split(/,\s*/) : [];
-        const bccRealNameStringList = article.BccRealname ? article.BccRealname.split(/,\s*/) : [];
+        let toStringList = [];
+        if (!Array.isArray(article.To)) {
+            toStringList = article.To ? article.To.split(/,\s*/) : [];
+        }
+
+        let ccStringList = [];
+        if (!Array.isArray(article.Cc)) {
+            ccStringList = article.Cc ? article.Cc.split(/,\s*/) : [];
+        }
+
+        let bccStringList = [];
+        if (!Array.isArray(article.Bcc)) {
+            bccStringList = article.Bcc ? article.Bcc.split(/,\s*/) : [];
+        }
+
+
+        let toRealNameStringList = [];
+        if (!Array.isArray(article.ToRealname)) {
+            toRealNameStringList = article.ToRealname ? article.ToRealname.split(/,\s*/) : [];
+        }
+
+        let ccRealNameStringList = [];
+        if (!Array.isArray(article.CcRealname)) {
+            ccRealNameStringList = article.CcRealname ? article.CcRealname.split(/,\s*/) : [];
+        }
+
+        let bccRealNameStringList = [];
+        if (!Array.isArray(article.BccRealname)) {
+            bccRealNameStringList = article.BccRealname ? article.BccRealname.split(/,\s*/) : [];
+        }
+
         article.toList = toStringList.map((t, index) => new ArticleReceiver(t, toRealNameStringList[index]));
         article.ccList = ccStringList.map(
             (cc, index) => new ArticleReceiver(cc, ccRealNameStringList[index], ArticleProperty.CC)

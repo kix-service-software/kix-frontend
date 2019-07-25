@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <widget instanceId="edit-ticket-dialog">
     <@content>
         <if(state.formId)>
@@ -20,7 +19,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <if(state.formId)>
                 <button.submit-button type="button" on-click("submit") title=state.translations["Translatable#Save"]>
                     <span.kix-icon-check/>
-                    <translation-string pattern="Translatable#Save"/>
+                    <translation-string pattern=state.buttonLabel/>
                 </button>
             </if>
         </div>
