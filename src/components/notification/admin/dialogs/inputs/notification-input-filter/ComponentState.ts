@@ -7,7 +7,7 @@
  * --
  */
 
-import { NotificationFilterManager } from "./NotificationFilterManager";
+import { NotificationFilterManager } from "../../../../../../core/browser/notification";
 import { FormInputComponentState } from "../../../../../../core/model";
 
 export class ComponentState extends FormInputComponentState<Array<[string, string[] | number[]]>> {

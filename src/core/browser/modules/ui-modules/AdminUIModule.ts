@@ -27,7 +27,8 @@ import { AdministrationSocketClient, AdminContext } from "../../admin";
 import { FormValidationService } from "../../form/validation";
 import {
     NotificationEmailRecipientValidator, NotificationService, NotificationBrowserFactory, NotificationTableFactory,
-    NotificationFormService, NotificationLabelProvider, NotificationCreateAction, NewNotificationDialogContext
+    NotificationFormService, NotificationLabelProvider, NotificationCreateAction, NewNotificationDialogContext,
+    NotificationFilterTableFactory, NotificationDetailsContext
 } from "../../notification";
 import {
     ContextType, ContextMode, ContextDescriptor, KIXObjectType, ConfiguredDialogWidget, WidgetConfiguration, CRUD
@@ -149,6 +150,7 @@ export class UIModule implements IUIModule {
 
         TableFactoryService.getInstance().registerFactory(new NotificationTableFactory());
         LabelService.getInstance().registerLabelProvider(new NotificationLabelProvider());
+        TableFactoryService.getInstance().registerFactory(new NotificationFilterTableFactory());
 
         await this.initNotification();
     }
@@ -173,6 +175,13 @@ export class UIModule implements IUIModule {
                 ContextMode.CREATE_ADMIN
             ));
         }
+
+        const notificationDetailsContext = new ContextDescriptor(
+            NotificationDetailsContext.CONTEXT_ID, [KIXObjectType.NOTIFICATION],
+            ContextType.MAIN, ContextMode.DETAILS,
+            false, 'object-details-page', ['notifications'], NotificationDetailsContext
+        );
+        ContextService.getInstance().registerContext(notificationDetailsContext);
     }
 
     private async checkPermission(resource: string, crud: CRUD): Promise<boolean> {

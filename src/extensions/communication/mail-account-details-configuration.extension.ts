@@ -9,7 +9,7 @@
 
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    WidgetConfiguration, ConfiguredWidget, ContextConfiguration, ObjectinformationWidgetSettings,
+    WidgetConfiguration, ConfiguredWidget, ContextConfiguration, ObjectInformationWidgetSettings,
     KIXObjectType, MailAccountProperty, KIXObjectProperty
 } from '../../core/model';
 import { MailAccountDetailsContext } from '../../core/browser/mail-account/context';
@@ -31,7 +31,7 @@ export class Extension implements IConfigurationExtension {
             new ConfiguredWidget('mail-account-information-lane', new WidgetConfiguration(
                 'mail-account-info-widget', 'Translatable#Account Information',
                 [],
-                new ObjectinformationWidgetSettings(KIXObjectType.MAIL_ACCOUNT, [
+                new ObjectInformationWidgetSettings(KIXObjectType.MAIL_ACCOUNT, [
                     MailAccountProperty.LOGIN,
                     MailAccountProperty.HOST,
                     MailAccountProperty.TYPE,

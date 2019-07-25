@@ -7,9 +7,11 @@
  * --
  */
 
-import { KIXObjectType } from "../../../../../core/model";
+import { KIXObjectType, ContextMode, NotificationProperty } from "../../../../../core/model";
 import { ComponentState } from "./ComponentState";
 import { AbstractNewDialog } from "../../../../../core/browser/components/dialog";
+import { NotificationDetailsContext } from "../../../../../core/browser/notification";
+import { RoutingConfiguration } from "../../../../../core/browser/router";
 
 class Component extends AbstractNewDialog {
 
@@ -19,11 +21,10 @@ class Component extends AbstractNewDialog {
             'Translatable#Create Notification',
             'Translatable#Notification successfully created.',
             KIXObjectType.NOTIFICATION,
-            null
-            // new RoutingConfiguration(
-            //     MailAccountDetailsContext.CONTEXT_ID, KIXObjectType.NOTIFICATION,
-            //     ContextMode.DETAILS, NotificationProperty.ID, true
-            // )
+            new RoutingConfiguration(
+                NotificationDetailsContext.CONTEXT_ID, KIXObjectType.NOTIFICATION,
+                ContextMode.DETAILS, NotificationProperty.ID, true
+            )
         );
     }
 

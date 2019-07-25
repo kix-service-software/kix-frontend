@@ -22,5 +22,5 @@ export * from './label-value-group';
 
 export { Bookmark } from './Bookmark';
 export { TableWidgetSettings } from './TableWidgetSettings';
-export { ObjectinformationWidgetSettings } from './ObjectinformationWidgetSettings';
+export { ObjectInformationWidgetSettings } from './ObjectInformationWidgetSettings';
 export { TabWidgetSettings } from './TabWidgetSettings';

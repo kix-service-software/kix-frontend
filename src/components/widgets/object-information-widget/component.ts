@@ -9,7 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { ContextService, LabelService, ActionFactory, IdService } from '../../../core/browser';
-import { KIXObjectType, KIXObject, ObjectinformationWidgetSettings } from '../../../core/model';
+import { KIXObjectType, KIXObject, ObjectInformationWidgetSettings } from '../../../core/model';
 import { ComponentInput } from './ComponentInput';
 
 class Component {
@@ -30,7 +30,7 @@ class Component {
         const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        const settings: ObjectinformationWidgetSettings = this.state.widgetConfiguration.settings;
+        const settings: ObjectInformationWidgetSettings = this.state.widgetConfiguration.settings;
         if (settings) {
             this.state.properties = settings.properties;
             this.state.flat = settings.displayFlatList;
@@ -57,7 +57,7 @@ class Component {
         context.unregisterListener(this.contextListenerId);
     }
 
-    private async initWidget(settings: ObjectinformationWidgetSettings): Promise<void> {
+    private async initWidget(settings: ObjectInformationWidgetSettings): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         const object = await context.getObject(settings.objectType);
         this.state.object = null;

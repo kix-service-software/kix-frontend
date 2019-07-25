@@ -6,8 +6,15 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<div.article-body.input-style class={invalid: state.invalid}>
-    <editor resize=true value=state.currentValue on-valueChanged('valueChanged') required=state.field.required
-        invalid=state.invalid key=state.field.instanceId/>
+<div.article-body.input-style class={
+    invalid: state.invalid
+}>
+    <editor
+        resize=true
+        value=state.currentValue
+        on-valueChanged("valueChanged")
+        required=state.field.required
+        invalid=state.invalid
+        noImages=state.noImages
+        key=state.field.instanceId/>
 </div>

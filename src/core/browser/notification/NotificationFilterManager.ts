@@ -9,11 +9,11 @@
 
 import {
     AbstractDynamicFormManager, LabelService, ObjectPropertyValue, DynamicFormOperationsType, KIXObjectService
-} from "../../../../../../core/browser";
+} from "..";
 import {
     KIXObjectType, TicketProperty, ArticleProperty, InputFieldTypes, TreeNode
-} from "../../../../../../core/model";
-import { TicketService } from "../../../../../../core/browser/ticket";
+} from "../../model";
+import { TicketService } from "../ticket";
 
 export class NotificationFilterManager extends AbstractDynamicFormManager {
 

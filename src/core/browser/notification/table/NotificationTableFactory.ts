@@ -11,9 +11,11 @@ import {
     TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../table";
-import { KIXObjectType, DataType, NotificationProperty, KIXObjectProperty } from "../../../model";
+import { KIXObjectType, DataType, NotificationProperty, KIXObjectProperty, ContextMode } from "../../../model";
 import { TableFactory } from "../../table/TableFactory";
 import { NotificationTableContentProvider } from "./NotificationTableContentProvider";
+import { RoutingConfiguration } from "../../router";
+import { NotificationDetailsContext } from "../context";
 
 export class NotificationTableFactory extends TableFactory {
 
@@ -50,7 +52,7 @@ export class NotificationTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.SYSTEM_ADDRESS, null, null, tableColumns, true, false, null, null,
+                KIXObjectType.NOTIFICATION, null, null, tableColumns, true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;
@@ -59,10 +61,10 @@ export class NotificationTableFactory extends TableFactory {
         }
 
         if (defaultRouting) {
-            // tableConfiguration.routingConfiguration = new RoutingConfiguration(
-            //     NotificationDetailsContext.CONTEXT_ID, KIXObjectType.NOTIFICATION,
-            //     ContextMode.DETAILS, NotificationProperty.ID
-            // );
+            tableConfiguration.routingConfiguration = new RoutingConfiguration(
+                NotificationDetailsContext.CONTEXT_ID, KIXObjectType.NOTIFICATION,
+                ContextMode.DETAILS, NotificationProperty.ID
+            );
         }
 
         return tableConfiguration;

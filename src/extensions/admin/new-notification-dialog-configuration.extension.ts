@@ -81,7 +81,7 @@ export class Extension implements IConfigurationExtension {
                                 'Translatable#TicketResponsible'
                             ),
                             new TreeNode(
-                                NotificationRecipientTypes.AGET_READ_PERMISSIONS,
+                                NotificationRecipientTypes.AGENT_READ_PERMISSIONS,
                                 'Translatable#All agents with read permissions for the ticket'
                             ),
                             new TreeNode(

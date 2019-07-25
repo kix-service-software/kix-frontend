@@ -8,3 +8,4 @@
  */
 
 export { NewNotificationDialogContext } from './NewNotificationDialogContext';
+export { NotificationDetailsContext } from './NotificationDetailsContext';

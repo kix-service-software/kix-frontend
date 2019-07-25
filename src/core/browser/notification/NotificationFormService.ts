@@ -8,7 +8,9 @@
  */
 
 import { KIXObjectFormService } from "../kix/KIXObjectFormService";
-import { KIXObjectType, Notification, NotificationProperty, FormField, Form, FormFieldValue } from "../../model";
+import {
+    KIXObjectType, Notification, NotificationProperty, FormField, Form, FormFieldValue, FormFieldOption
+} from "../../model";
 import { FormGroup } from "../../model/components/form/FormGroup";
 import { ServiceRegistry } from "../kix";
 import { TranslationService } from "../i18n/TranslationService";
@@ -53,7 +55,9 @@ export class NotificationFormService extends KIXObjectFormService<Notification> 
                     );
                     const bodyField = new FormField(
                         'Translatable#Text', `${NotificationProperty.MESSAGE_BODY}###${l[0]}`, 'rich-text-input', true,
-                        'Translatable#Helptext_Admin_NotificationCreate_MessageText'
+                        'Translatable#Helptext_Admin_NotificationCreate_MessageText', [
+                            new FormFieldOption('NO_IMAGES', true)
+                        ]
                     );
                     const languagField = new FormField(
                         l[1], null, null, null, null, null, null, [subjectField, bodyField],

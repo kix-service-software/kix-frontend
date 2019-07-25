@@ -13,7 +13,7 @@ import {
     ContextConfiguration, FormField, TicketProperty, ArticleProperty,
     Form, KIXObjectType, FormContext, ConfiguredWidget, WidgetConfiguration,
     FormFieldOption, ObjectReferenceOptions, KIXObjectLoadingOptions,
-    FilterCriteria, FilterDataType, FilterType, ObjectinformationWidgetSettings,
+    FilterCriteria, FilterDataType, FilterType, ObjectInformationWidgetSettings,
     OrganisationProperty, ContactProperty, CRUD, KIXObjectProperty
 } from '../../core/model';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
@@ -33,7 +33,7 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
             new ConfiguredWidget('20180524110915',
                 new WidgetConfiguration(
                     'object-information-widget', 'Translatable#Organisation', [],
-                    new ObjectinformationWidgetSettings(KIXObjectType.ORGANISATION, [
+                    new ObjectInformationWidgetSettings(KIXObjectType.ORGANISATION, [
                         OrganisationProperty.NUMBER,
                         OrganisationProperty.NAME,
                         OrganisationProperty.URL,
@@ -50,7 +50,7 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
             new ConfiguredWidget('20180524110920',
                 new WidgetConfiguration(
                     'object-information-widget', 'Translatable#Contact', [],
-                    new ObjectinformationWidgetSettings(KIXObjectType.CONTACT, [
+                    new ObjectInformationWidgetSettings(KIXObjectType.CONTACT, [
                         ContactProperty.LOGIN,
                         ContactProperty.TITLE,
                         ContactProperty.LASTNAME,

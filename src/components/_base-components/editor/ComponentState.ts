@@ -27,6 +27,7 @@ export class ComponentState {
         public simple: boolean = false,
         public readOnly: boolean = false,
         public invalid: boolean = false,
+        public noImages: boolean = false,
         resize?: boolean,
         resizeDir?: string
     ) {
@@ -83,7 +84,7 @@ export class ComponentState {
             toolbarCanCollapse: this.simple ? false : true,
             readOnly: this.readOnly,
             removeButtons: '',
-            removePlugins: 'elementspath' + (this.readOnly ? ',image2' : ''),
+            removePlugins: 'elementspath' + (this.readOnly || this.noImages ? ',image2' : ''),
             codeSnippet_theme: 'github',
             // enterMode: CKEDITOR.ENTER_BR
         };

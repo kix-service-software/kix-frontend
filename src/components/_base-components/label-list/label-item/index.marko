@@ -12,19 +12,25 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <div.label-item class={
             toggled: state.toggled
         }>
-            <icon icon=input.label.icon showUnknown=input.label.showUnknownIcon/>
+            <if(input.label.icon || input.label.showUnknownIcon)>
+                <icon icon=input.label.icon showUnknown=input.label.showUnknownIcon/>
+            </if>
             <if(input.label.text)>
                 <if(input.translatable)>
                     <span.label-text>
                         <translation-string pattern=input.label.text/>
                     </span>
-                    <span>
-                        <translation-string pattern=input.label.additionalText/>
-                    </span>
+                    <if(input.label.additionalText)>
+                        <span>
+                            <translation-string pattern=input.label.additionalText/>
+                        </span>
+                    </if>
                 </if>
                 <else>
                     <span.label-text>${input.label.text}</span>
-                    <span>${input.label.additionalText}</span>
+                    <if(input.label.additionalText)>
+                        <span>${input.label.additionalText}</span>
+                    </if>
                 </else>
             </if>
             <if(input.removeLabels)>

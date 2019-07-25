@@ -16,7 +16,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <${input.info}/>
         </if>
     </div>
-    <div.value title=state.propertyDisplayText class=component.getValueClasses()>
+    <div.value title=(!input.noValueTitle ? state.propertyDisplayText : "") class=component.getValueClasses()>
         <if(input.value)>
             <${input.value}/>
         </if>
@@ -26,7 +26,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <span>
                         <if(state.hasText)>${state.propertyDisplayText}</if>
                     </span>
-                    <icon icon=state.propertyIcon/>
+                    <if(state.propertyIcon)>
+                        <icon icon=state.propertyIcon/>
+                    </if>
                 </@content>
             </link-target>
         </else-if>

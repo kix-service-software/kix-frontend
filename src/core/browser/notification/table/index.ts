@@ -8,3 +8,5 @@
  */
 
 export { NotificationTableFactory } from './NotificationTableFactory';
+export { NotificationFilterTableFactory } from './NotificationFilterTableFactory';
+export { NotificationFilterTableProperty } from './NotificationFilterTableProperty';
