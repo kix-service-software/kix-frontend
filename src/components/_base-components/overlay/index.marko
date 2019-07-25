@@ -6,13 +6,12 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <if(state.show)>
     <if(component.showShield())>
         <div.shield.overlay-shield/>
     </if>
     <div.overlay key=state.overlayId>
-        <div.overlay-content class=state.overlayClass on-click("overlayClicked") key="overlay">
+        <div.overlay-content class=state.overlayClass on-click("overlayClicked") on-mousedown("overlayClicked") key="overlay">
             <widget
                 instanceId=state.overlayInstanceId
                 title=state.title
