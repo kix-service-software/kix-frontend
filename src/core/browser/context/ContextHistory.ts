@@ -49,6 +49,7 @@ export class ContextHistory {
         const activeContext = ContextService.getInstance().getActiveContext();
         if (activeContext && activeContext.getDescriptor().contextType === ContextType.DIALOG) {
             DialogService.getInstance().closeMainDialog();
+            window.history.forward();
         } else {
             if (event && event.state) {
                 const state: BrowserHistoryState = event.state;
