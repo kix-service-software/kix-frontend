@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-07-25 12:26+0000\n"
+"PO-Revision-Date: 2019-07-25 12:29+0000\n"
 "Last-Translator: fuhlig <Frank.Uhlig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -839,15 +839,13 @@ msgid "Fax"
 msgstr "Fax"
 
 msgid "Field"
-msgstr ""
+msgstr "Feld"
 
 msgid "Field '{0}' has an invalid value ({1})."
 msgstr "Feld '{0}' enthält einen ungültigen Wert ({1})."
 
-#, fuzzy
-#| msgid "New Filter"
 msgid "Filter"
-msgstr "Neuer Filter"
+msgstr "Filter"
 
 msgid "Filter Conditions"
 msgstr "Filterbedingungen"
@@ -862,12 +860,12 @@ msgid ""
 "Find this saved search within the Dropdown Bookmarks, located in the header "
 "menu right besides the New-button"
 msgstr ""
+"Gespeicherte Suchen befinden sich innerhalb der Lesezeichen im Kopfmenü ("
+"direkt neben der Schaltfläche \"Neu\")."
 
 msgid "First Name"
 msgstr "Vorname"
 
-#, fuzzy
-#| msgid "Follow Up on Tickets possible"
 msgid "Follow Up on Tickets"
 msgstr "Nachfrage an Tickets"
 
@@ -2950,10 +2948,8 @@ msgstr "Aktualisierung wird durchgeführt"
 msgid "Update Filter"
 msgstr "Aktualisierung wird durchgeführt"
 
-#, fuzzy
-#| msgid "Update Role"
 msgid "Update Key"
-msgstr "Aktualisierung wird durchgeführt"
+msgstr "Schlüssel wird aktualisiert"
 
 msgid "Update Organisation"
 msgstr "Aktualisierung wird durchgeführt"
