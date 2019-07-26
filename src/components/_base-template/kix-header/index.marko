@@ -12,10 +12,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     <div>
         <!-- Neues Objekt -->
         <if(state.allowNew)>
-            <button.special-button type="button" on-click("openDialog")>
-                <span.kix-icon-plus-blank/>
-                <translation-string pattern="Translatable#New"/>
-            </button>
+            <a href="?new" on-click("openDialog")>
+                <button.special-button type="button">
+                    <span.kix-icon-plus-blank/>
+                    <translation-string pattern="Translatable#New"/>
+                </button>
+            </a>
             <div.header-separator/>
         </if>
         <!-- Lesezeichen & Suchvorlagen -->

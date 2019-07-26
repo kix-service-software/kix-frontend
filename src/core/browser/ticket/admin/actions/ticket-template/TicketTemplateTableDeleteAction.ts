@@ -20,6 +20,8 @@ import { TranslationService } from "../../../../i18n/TranslationService";
 
 export class TicketTemplateTableDeleteAction extends AbstractAction<ITable> {
 
+    public hasLink: boolean = false;
+
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Delete';
         this.icon = "kix-icon-trash";

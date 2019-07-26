@@ -16,6 +16,7 @@ import { ClientStorageService } from '../ClientStorageService';
 import { ReleaseContext } from '../release';
 import { BrowserUtil } from '../BrowserUtil';
 import { KIXModulesSocketClient } from '../modules/KIXModulesSocketClient';
+import { ActionFactory } from '../ActionFactory';
 
 export class RoutingService {
 
@@ -80,7 +81,7 @@ export class RoutingService {
                 await this.setHomeContext();
             }
 
-            this.handleDialogRequest(path, parsedUrl.searchParams);
+            this.handleRequest(parsedUrl.searchParams);
         }
     }
 
@@ -90,42 +91,19 @@ export class RoutingService {
         );
     }
 
-    private async handleDialogRequest(path: string[], params: URLSearchParams): Promise<void> {
-        let context = null;
-
-        const contextUrl = path[1];
-
-        let needDialog = false;
-        if (params.has('new')) {
-            needDialog = true;
-            const url = path.length === 4 ? path[3] : contextUrl;
-            const mode = path.length === 4 ? ContextMode.CREATE_SUB : ContextMode.CREATE;
-            context = await ContextFactory.getContextForUrl(url, undefined, mode);
-            if (!context && mode === ContextMode.CREATE) {
-                await ContextService.getInstance().setDialogContext(
-                    null, null, mode, null, true
-                );
+    private handleRequest(params: URLSearchParams): void {
+        setTimeout(async () => {
+            if (params.has('new')) {
+                await ContextService.getInstance().setDialogContext(null, null, ContextMode.CREATE, null, true);
+            } else if (params.has('actionId')) {
+                const actionId = params.get('actionId');
+                const data = params.get('data');
+                const actions = await ActionFactory.getInstance().generateActions([actionId], data);
+                if (actions && actions.length) {
+                    actions[0].run(null);
+                }
             }
-        } else if (params.has('edit')) {
-            needDialog = true;
-            context = contextUrl
-                ? await ContextFactory.getContextForUrl(contextUrl, undefined, ContextMode.EDIT)
-                : null;
-        } else if (params.has('editLinks')) {
-            needDialog = true;
-            context = contextUrl
-                ? await ContextFactory.getContextForUrl('links', undefined, ContextMode.EDIT_LINKS)
-                : null;
-        }
-
-        if (context) {
-            const descriptor = context.getDescriptor();
-            await ContextService.getInstance().setDialogContext(
-                descriptor.contextId, descriptor.kixObjectTypes[0], descriptor.contextMode, null, true
-            );
-        } else if (needDialog) {
-            BrowserUtil.openAccessDeniedOverlay();
-        }
+        }, 2500);
     }
 
     public async routeToContext(

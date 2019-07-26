@@ -11,6 +11,8 @@ import { AbstractAction } from "../../model";
 
 export class PrintAction extends AbstractAction {
 
+    public hasLink: boolean = false;
+
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Print';
         this.icon = "kix-icon-print";

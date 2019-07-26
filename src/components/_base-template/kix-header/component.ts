@@ -38,7 +38,9 @@ class KIXHeaderComponent {
         this.state.allowNew = dialogs && (dialogs.length > 0);
     }
 
-    public openDialog(): void {
+    public openDialog(event: any): void {
+        event.stopPropagation();
+        event.preventDefault();
         ContextService.getInstance().setDialogContext(null, null, ContextMode.CREATE, null, true);
     }
 

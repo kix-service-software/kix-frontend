@@ -21,6 +21,8 @@ import { CacheService } from '../../cache';
 
 export class TicketWatchAction extends AbstractAction<Ticket> {
 
+    public hasLink: boolean = false;
+
     public permissions = [
         new UIComponentPermission('tickets', [CRUD.CREATE])
     ];

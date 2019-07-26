@@ -13,6 +13,8 @@ import { UIComponentPermission } from '../../../model/UIComponentPermission';
 
 export class FAQArticleVoteAction extends AbstractAction {
 
+    public hasLink: boolean = false;
+
     public permissions: UIComponentPermission[] = [
         new UIComponentPermission('faq/articles', [CRUD.CREATE])
     ];

@@ -25,10 +25,17 @@ class ActionComponent {
 
     public async onMount(): Promise<void> {
         this.state.text = await TranslationService.translate(this.state.action.text);
+        this.state.actionData = await this.state.action.getLinkData();
     }
 
     public doAction(event: any): void {
         this.state.action.run(event);
+    }
+
+    public linkClicked(event: any): void {
+        event.stopPropagation();
+        event.preventDefault();
+        this.doAction(event);
     }
 
 }

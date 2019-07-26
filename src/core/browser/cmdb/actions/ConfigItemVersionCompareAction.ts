@@ -14,6 +14,8 @@ import { CompareConfigItemVersionDialogContext } from '../context';
 
 export class ConfigItemVersionCompareAction extends AbstractAction<ITable> {
 
+    public hasLink: boolean = false;
+
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Compare';
         this.icon = 'kix-icon-comparison-version';
