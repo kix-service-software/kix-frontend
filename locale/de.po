@@ -559,6 +559,9 @@ msgstr "(aktuelle Version)"
 msgid "Current version"
 msgstr "Aktuelle Version"
 
+msgid "Customer"
+msgstr "Kunde"
+
 msgid "Data has been updated."
 msgstr "Daten wurden aktualisiert."
 
@@ -860,8 +863,8 @@ msgid ""
 "Find this saved search within the Dropdown Bookmarks, located in the header "
 "menu right besides the New-button"
 msgstr ""
-"Gespeicherte Suchen befinden sich innerhalb der Lesezeichen im Kopfmenü ("
-"direkt neben der Schaltfläche \"Neu\")."
+"Gespeicherte Suchen befinden sich innerhalb der Lesezeichen im Kopfmenü "
+"(direkt neben der Schaltfläche \"Neu\")."
 
 msgid "First Name"
 msgstr "Vorname"
@@ -1895,8 +1898,28 @@ msgstr "Kein Artikel"
 msgid "No article available."
 msgstr "Kein Artikel verfügbar."
 
+#, fuzzy
+#| msgid "No rating available."
+msgid "No data available."
+msgstr "Keine Bewertung verfügbar."
+
 msgid "No general catalog class configured!"
 msgstr "Keine General Catalog Klasse konfiguriert!"
+
+#, fuzzy
+#| msgid "No object available"
+msgid "No linked objects available."
+msgstr "Kein Objekt verfügbar"
+
+#, fuzzy
+#| msgid "No rating available."
+msgid "No link types available."
+msgstr "Keine Bewertung verfügbar."
+
+#, fuzzy
+#| msgid "No object available"
+msgid "No objects available."
+msgstr "Kein Objekt verfügbar"
 
 msgid "No object with ID {0} available."
 msgstr "Kein Objekt mit der ID {0} verfügbar."
@@ -2678,6 +2701,14 @@ msgstr ""
 "Der FAQ-Artikel <a href=\"faqarticles/2\" target=\"_blank\">How to search in "
 "KIX 18?</a> <b>erklärt die möglichen Such-Operatoren<b>"
 
+#, fuzzy
+#| msgid "Required field '{0}' has no value."
+msgid "The file {0} has no valid MIME-TYPE."
+msgstr "Benötigtes Feld '{0}' hat keinen Wert."
+
+msgid "The file size of {0} is too large ({1}). Max.: {2}"
+msgstr ""
+
 msgid "The following {0} entries will be deleted. Are you sure?"
 msgstr "Die ausgewählten {0} Einträge werden gelöscht. Sind Sie sicher?"
 
@@ -3169,9 +3200,6 @@ msgstr "PLZ"
 #~ msgid "No contact available"
 #~ msgstr "Kein Kontakt verfügbar"
 
-#~ msgid "No object available"
-#~ msgstr "Kein Objekt verfügbar"
-
 #~ msgid "No organisation available"
 #~ msgstr "Kein Kunde verfügbar"
 
@@ -3197,9 +3225,6 @@ msgstr "PLZ"
 
 #~ msgid "Create Customer"
 #~ msgstr "Kunde anlegen"
-
-#~ msgid "Customer"
-#~ msgstr "Kunde"
 
 #~ msgid "Customer Details"
 #~ msgstr "Kunden Details"
