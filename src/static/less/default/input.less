@@ -85,13 +85,28 @@ textarea.input-style {
         }
 
         .button-bar {
-            margin: 1rem @margin-small @margin-small @margin-small;
+            margin: 1rem @margin-small;
             display: grid;
             grid-template-columns: 1fr 1fr;
             align-items: center;
 
             .select-all-Checkbox {
                 margin-right: .5rem;
+            }
+
+            button {
+                justify-self: end;
+                margin-right: 1rem;
+            }
+
+            span {
+                input {
+                    padding: 0;
+                    vertical-align: middle;
+                    position: relative;
+                    top: -1px;
+                    margin-right: 0.5rem;
+                }
             }
         }
     }
