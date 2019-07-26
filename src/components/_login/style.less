@@ -110,17 +110,12 @@
                     }
 
                     &.message-hint {
-                        border-color: @tertiary-1;
-
-                        &::before {
-                            border-right-color: @tertiary-1;
-                            color: @tertiary-1;
-                        }
-
-                        & [class^="kix-icon-"],
-                        & [class*=" kix-icon-"] {
-                            color: @tertiary-1;
-                        }
+                        border: 0;
+                        overflow: unset;
+                        line-height: 1.5rem;
+                        height: unset;
+                        padding: 0;
+                        font-size: 0.9rem;
                     }
 
                     &.message-error {
