@@ -1948,6 +1948,11 @@ msgstr "Noch nicht verfügbar / nicht mehr verfügbar"
 msgid "Note"
 msgstr "Notiz"
 
+msgid ""
+"Note: For optimal use of KIX, we recommend alternative browsers such as "
+"Chromium or Firefox."
+msgstr ""
+
 msgid "Notes"
 msgstr "Notizen"
 
@@ -2479,6 +2484,11 @@ msgstr "Wählen Sie, welche Agenten zu dieser Rolle zugeordnet werden sollen."
 msgid "; (semicolon)"
 msgstr "; (Semikolon)"
 
+#, fuzzy
+#| msgid "Sender"
+msgid "Send"
+msgstr "Absender"
+
 msgid "Send despite out of office"
 msgstr "Trotz „nicht im Büro“ senden"
 
@@ -2643,6 +2653,11 @@ msgstr "Wechsel ins Kundenportal."
 msgid "Symptom"
 msgstr "Symptom"
 
+#, fuzzy
+#| msgid "SysConfig"
+msgid "Sysconfig"
+msgstr "SysConfig"
+
 msgid "SysConfig"
 msgstr "SysConfig"
 
@@ -2715,10 +2730,6 @@ msgstr "Die ausgewählten {0} Einträge werden gelöscht. Sind Sie sicher?"
 msgid "The search only includes current versions."
 msgstr "Es werden nur aktuelle Versionen durchsucht."
 
-msgid "This browser is not supported. You may encounter malfunctions."
-msgstr ""
-"Dieser Browser wird nicht unterstützt. Es können Fehlfunktionen auftreten."
-
 msgid ""
 "This is the administration panel. Please select a module from the explorer."
 msgstr ""
@@ -2778,9 +2789,6 @@ msgstr "Ticket Suche"
 
 msgid "Ticket search error!"
 msgstr "Fehler bei der Ticketsuche!"
-
-msgid "Ticket States"
-msgstr "Ticketstatus"
 
 msgid "Ticket: States"
 msgstr "Ticket: Status"
@@ -3044,6 +3052,13 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "This browser is not supported. You may encounter malfunctions."
+#~ msgstr ""
+#~ "Dieser Browser wird nicht unterstützt. Es können Fehlfunktionen auftreten."
+
+#~ msgid "Ticket States"
+#~ msgstr "Ticketstatus"
 
 #, fuzzy
 #~| msgid "Helptext_Search_Contact"

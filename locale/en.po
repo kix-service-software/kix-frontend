@@ -1871,6 +1871,11 @@ msgstr ""
 msgid "Note"
 msgstr ""
 
+msgid ""
+"Note: For optimal use of KIX, we recommend alternative browsers such as "
+"Chromium or Firefox."
+msgstr ""
+
 msgid "Notes"
 msgstr ""
 
@@ -2395,6 +2400,9 @@ msgstr ""
 msgid "; (semicolon)"
 msgstr ""
 
+msgid "Send"
+msgstr ""
+
 msgid "Send despite out of office"
 msgstr ""
 
@@ -2546,6 +2554,9 @@ msgstr ""
 msgid "Symptom"
 msgstr ""
 
+msgid "Sysconfig"
+msgstr ""
+
 msgid "SysConfig"
 msgstr ""
 
@@ -2614,9 +2625,6 @@ msgstr ""
 msgid "The search only includes current versions."
 msgstr ""
 
-msgid "This browser is not supported. You may encounter malfunctions."
-msgstr ""
-
 msgid ""
 "This is the administration panel. Please select a module from the explorer."
 msgstr ""
@@ -2673,9 +2681,6 @@ msgid "Ticket Search"
 msgstr ""
 
 msgid "Ticket search error!"
-msgstr ""
-
-msgid "Ticket States"
 msgstr ""
 
 msgid "Ticket: States"
