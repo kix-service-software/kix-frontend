@@ -18,6 +18,8 @@ import { DialogEvents, DialogEventData } from '../components/dialog';
 
 export class ImportAction extends AbstractAction<ITable> {
 
+    public hasLink: boolean = false;
+
     public eventSubscriberId: string;
     public objectType: KIXObjectType;
 

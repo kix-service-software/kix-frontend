@@ -20,6 +20,7 @@ export abstract class AbstractAction<T = any> implements IAction<T> {
     public text: string;
     public icon: string;
     public data: T;
+    public hasLink: boolean = true;
 
     public permissions: UIComponentPermission[] = [];
 
@@ -35,6 +36,10 @@ export abstract class AbstractAction<T = any> implements IAction<T> {
 
     public canShow(): boolean {
         return true;
+    }
+
+    public async getLinkData(): Promise<string> {
+        return '';
     }
 
     public async run(event: any): Promise<void> {

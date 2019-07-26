@@ -19,6 +19,8 @@ export interface IAction<T = any> {
 
     data: T;
 
+    hasLink: boolean;
+
     initAction(): Promise<void>;
 
     setData(data: T): Promise<void>;
@@ -28,6 +30,8 @@ export interface IAction<T = any> {
     canShow(): boolean;
 
     run(event: any): void;
+
+    getLinkData(): Promise<string>;
 
     permissions: UIComponentPermission[];
 

@@ -12,6 +12,8 @@ import { Component } from './component';
 
 export class NotesEditAction extends AbstractAction {
 
+    public hasLink: boolean = false;
+
     public constructor(public component: Component) {
         super();
         this.initAction();

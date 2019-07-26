@@ -42,6 +42,7 @@ export class ActionFactory<T extends AbstractAction> {
             if (this.actions.has(actionId)) {
                 const actionPrototype = this.actions.get(actionId);
                 let action: IAction = new actionPrototype();
+                action.id = actionId;
 
                 let allowed = true;
                 if (action.permissions && action.permissions.length) {
