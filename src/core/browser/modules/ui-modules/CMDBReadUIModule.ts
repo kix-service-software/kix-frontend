@@ -26,6 +26,8 @@ import {
 } from "../../../../core/model";
 import { SearchService } from "../../../../core/browser/kix/search/SearchService";
 import { IUIModule } from "../../application/IUIModule";
+import { TableCSSHandlerRegistry } from "../../table";
+import { PostproductivCSSHandler } from "../../cmdb/table/PostproductivCSSHandler";
 
 export class UIModule implements IUIModule {
 
@@ -65,6 +67,10 @@ export class UIModule implements IUIModule {
         LabelService.getInstance().registerLabelProvider(new ConfigItemVersionCompareLabelProvider());
 
         SearchService.getInstance().registerSearchDefinition(new ConfigItemSearchDefinition());
+
+        TableCSSHandlerRegistry.getInstance().registerObjectCSSHandler(
+            KIXObjectType.CONFIG_ITEM, new PostproductivCSSHandler()
+        );
 
         this.registerContexts();
         this.registerDialogs();

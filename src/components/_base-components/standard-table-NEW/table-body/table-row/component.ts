@@ -31,6 +31,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             this.state.selectable = this.state.row.isSelectable();
             this.state.open = this.state.row.isExpanded();
             this.state.children = this.state.row.getChildren();
+            this.setRowClasses();
         }
     }
 
@@ -143,9 +144,9 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         return this.state.row.getTable().getTableConfiguration().fixedFirstColumn;
     }
 
-    public getRowClasses(): string[] {
+    private async setRowClasses(): Promise<void> {
         const object = this.state.row.getRowObject().getObject();
-        const stateClass = [];
+        let stateClass = [];
 
         if (this.state.open) {
             stateClass.push('opened');
@@ -157,14 +158,20 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
         if (object) {
             const objectType = this.state.row.getTable().getObjectType();
-            const cssHandler = TableCSSHandlerRegistry.getCSSHandler(objectType);
+            const cssHandler = TableCSSHandlerRegistry.getObjectCSSHandler(objectType);
             if (cssHandler) {
-                const classes = cssHandler.getRowCSSClasses(object);
+                const classes = await cssHandler.getRowCSSClasses(object);
                 classes.forEach((c) => stateClass.push(c));
+            }
+
+            const commonHandler = TableCSSHandlerRegistry.getCommonCSSHandler();
+            for (const h of commonHandler) {
+                const rowClasses = await h.getRowCSSClasses(object);
+                stateClass = [...stateClass, ...rowClasses];
             }
         }
 
-        return stateClass;
+        this.state.rowClasses = stateClass;
     }
 
     public rowClicked(): void {

@@ -104,6 +104,8 @@ export class Ticket extends KIXObject<Ticket> {
 
     // Object References
 
+    public StateType: string;
+
     public StateID: number;
 
     public PriorityID: number;
@@ -140,6 +142,7 @@ export class Ticket extends KIXObject<Ticket> {
             this.TicketNumber = ticket.TicketNumber;
             this.Title = ticket.Title;
             this.StateID = ticket.StateID;
+            this.StateType = ticket.StateType;
             this.PriorityID = ticket.PriorityID;
             this.LockID = ticket.LockID;
             this.QueueID = ticket.QueueID;

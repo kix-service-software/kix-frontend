@@ -76,7 +76,9 @@ export class UIModule implements IUIModule {
         FactoryService.getInstance().registerFactory(KIXObjectType.LOG_FILE, LogFileBrowserFactory.getInstance());
 
         TableFactoryService.getInstance().registerFactory(new LogFileTableFactory());
-        TableCSSHandlerRegistry.getInstance().registerCSSHandler(KIXObjectType.LOG_FILE, new LogFileTableCSSHandler());
+        TableCSSHandlerRegistry.getInstance().registerObjectCSSHandler(
+            KIXObjectType.LOG_FILE, new LogFileTableCSSHandler()
+        );
 
         TableFactoryService.getInstance().registerFactory(new TranslationPatternTableFactory());
         TableFactoryService.getInstance().registerFactory(new TranslationLanguageTableFactory());

@@ -12,11 +12,11 @@ import { LogFile } from "../../../model/kix/log";
 
 export class LogFileTableCSSHandler implements ITableCSSHandler<LogFile> {
 
-    public getRowCSSClasses(logFile: LogFile): string[] {
+    public async getRowCSSClasses(logFile: LogFile): Promise<string[]> {
         return ['linked-row'];
     }
 
-    public getValueCSSClasses(logFile: LogFile, value: TableValue): string[] {
+    public async getValueCSSClasses(logFile: LogFile, value: TableValue): Promise<string[]> {
         return [];
     }
 

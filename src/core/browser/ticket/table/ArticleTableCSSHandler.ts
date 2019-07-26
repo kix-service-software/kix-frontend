@@ -12,7 +12,7 @@ import { Article, ArticleProperty } from "../../../model";
 
 export class ArticleTableCSSHandler implements ITableCSSHandler<Article> {
 
-    public getRowCSSClasses(article: Article): string[] {
+    public async getRowCSSClasses(article: Article): Promise<string[]> {
         const classes = [];
 
         if (article) {
@@ -24,7 +24,7 @@ export class ArticleTableCSSHandler implements ITableCSSHandler<Article> {
         return classes;
     }
 
-    public getValueCSSClasses(article: Article, value: TableValue): string[] {
+    public async getValueCSSClasses(article: Article, value: TableValue): Promise<string[]> {
         const classes = [];
         switch (value.property) {
             case ArticleProperty.ARTICLE_INFORMATION:

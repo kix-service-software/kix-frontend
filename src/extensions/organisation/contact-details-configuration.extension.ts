@@ -86,10 +86,6 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
                             true, false, false, DataType.NUMBER
                         ),
                         new DefaultColumnConfiguration(
-                            OrganisationProperty.ESCALATED_TICKETS_COUNT, true, false, true, true, 150,
-                            true, false, false, DataType.NUMBER
-                        ),
-                        new DefaultColumnConfiguration(
                             OrganisationProperty.REMINDER_TICKETS_COUNT, true, false, true, true, 150,
                             true, false, false, DataType.NUMBER
                         ),

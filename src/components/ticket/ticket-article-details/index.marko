@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <if(state.loading)>
     <loading-spinner/>
 </if>
@@ -21,5 +20,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     </div>
 </else-if>
 <else>
-    <span.error>Keine Daten verfügbar</span>
+    <span.error>
+        <translation-string pattern="Translatable#No data available."/>
+    </span>
 </else>

@@ -80,8 +80,12 @@ export class UIModule implements IUIModule {
         TableFactoryService.getInstance().registerFactory(new ArticleTableFactory());
         TableFactoryService.getInstance().registerFactory(new TicketHistoryTableFactory());
 
-        TableCSSHandlerRegistry.getInstance().registerCSSHandler(KIXObjectType.TICKET, new TicketTableCSSHandler());
-        TableCSSHandlerRegistry.getInstance().registerCSSHandler(KIXObjectType.ARTICLE, new ArticleTableCSSHandler());
+        TableCSSHandlerRegistry.getInstance().registerObjectCSSHandler(
+            KIXObjectType.TICKET, new TicketTableCSSHandler()
+        );
+        TableCSSHandlerRegistry.getInstance().registerObjectCSSHandler(
+            KIXObjectType.ARTICLE, new ArticleTableCSSHandler()
+        );
 
         FactoryService.getInstance().registerFactory(KIXObjectType.TICKET, TicketBrowserFactory.getInstance());
         FactoryService.getInstance().registerFactory(
