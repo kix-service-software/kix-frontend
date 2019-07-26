@@ -39,7 +39,6 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     private async init(table: ITable): Promise<void> {
         this.state.table = null;
 
-        this.state.loading = true;
         this.state.table = table;
 
         this.eventSubscriberId = this.state.table.getTableId();
@@ -50,7 +49,6 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             this.state.columns = this.state.table.getColumns();
             this.setTableHeight();
 
-            this.state.loading = false;
             EventService.getInstance().publish(
                 TableEvent.TABLE_INITIALIZED,
                 new TableEventData(this.state.table.getTableId())
@@ -100,16 +98,10 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             }
 
             if (eventId === TableEvent.RERENDER_TABLE) {
-                this.state.loading = true;
-
                 this.state.columns = this.state.table.getColumns();
                 this.state.rows = this.state.table.getRows();
 
                 this.setTableHeight();
-
-                setTimeout(() => {
-                    this.state.loading = false;
-                }, 50);
             }
 
             if (eventId === TableEvent.ROW_TOGGLED) {

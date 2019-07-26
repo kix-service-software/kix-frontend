@@ -55,9 +55,7 @@ export class CMDBContext extends Context {
             ));
         }
 
-        const loadingOptions = new KIXObjectLoadingOptions(
-            filterCriteria, null, null, [VersionProperty.DATA, VersionProperty.PREPARED_DATA]
-        );
+        const loadingOptions = new KIXObjectLoadingOptions(filterCriteria);
 
         const timeout = window.setTimeout(() => {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {

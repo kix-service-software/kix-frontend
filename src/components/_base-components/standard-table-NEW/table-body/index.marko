@@ -6,26 +6,30 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <tbody class={
     "with-toggle": component.toggleEnabled
 }>
-    <if(state.rows && !!state.rows.length)>
-        <for|row| of=state.rows>
-            <table-row
-                row=row
-                columnLength=component.getFullColumnLength()
-                height=component.getRowHeight()
-                selectionEnabled=component.selectionEnabled
-                toggleEnabled=component.toggleEnabled
-                level=0/>
-        </for>
+    <if(state.rows)>
+        <if(!!state.rows.length)>
+            <for|row| of=state.rows>
+                <table-row
+                    row=row
+                    columnLength=component.getFullColumnLength()
+                    height=component.getRowHeight()
+                    selectionEnabled=component.selectionEnabled
+                    toggleEnabled=component.toggleEnabled
+                    level=0/>
+            </for>
+        </if>
+        <else>
+            <tr.empty-row style=("height: " + component.getRowHeight())>
+                <td colspan=component.getFullColumnLength()>
+                    <translation-string pattern=component.getEmptyString()/>
+                </td>
+            </tr>
+        </else>
     </if>
     <else>
-        <tr.empty-row style=("height: " + component.getRowHeight())>
-            <td colspan=component.getFullColumnLength()>
-                <translation-string pattern=component.getEmptyString()/>
-            </td>
-        </tr>
+        <loading-spinner/>
     </else>
 </tbody>

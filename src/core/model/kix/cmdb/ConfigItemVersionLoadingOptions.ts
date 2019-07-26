@@ -7,15 +7,16 @@
  * --
  */
 
-import { ObjectIcon } from "../../../../../../../core/model";
-import { ICell } from "../../../../../../../core/browser";
+import { KIXObjectSpecificLoadingOptions } from "../../KIXObjectSpecificLoadingOptions";
 
-export class ComponentState {
+export class ConfigItemVersionLoadingOptions extends KIXObjectSpecificLoadingOptions {
+
+    public static id = 'ConfigItemVersionLoadingOptions';
 
     public constructor(
-        public icons: Array<string | ObjectIcon> = null,
-        public displayText: string = '',
-        public cell: ICell = null
-    ) { }
+        public configItemId: string | number
+    ) {
+        super();
+    }
 
 }

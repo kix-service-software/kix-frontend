@@ -77,18 +77,27 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
             }
         }
 
-        const rowObjects = objects.map((t) => {
-            const values: TableValue[] = [];
+        const rowObjectPromises: Array<Promise<RowObject<T>>> = [];
+        for (const o of objects) {
+            rowObjectPromises.push(new Promise<RowObject<T>>(async (resolve, reject) => {
+                const values: TableValue[] = [];
 
-            for (const property in t) {
-                if (t.hasOwnProperty(property)) {
-                    values.push(new TableValue(property, t[property]));
+                for (const property in o) {
+                    if (o.hasOwnProperty(property)) {
+                        const value = await this.getTableValue(o, property);
+                        values.push(value);
+                    }
                 }
-            }
 
-            return new RowObject<T>(values, t);
-        });
+                resolve(new RowObject<T>(values, o));
+            }));
+        }
 
+        const rowObjects = await Promise.all(rowObjectPromises);
         return rowObjects;
+    }
+
+    protected async getTableValue(object: any, property: string): Promise<TableValue> {
+        return new TableValue(property, object[property]);
     }
 }

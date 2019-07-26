@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <widget instanceId=state.instanceId title=state.title actions=state.actions icon=state.icon>
     <@header-content>
         <for|componentId| of=state.headerTitleComponents>
@@ -25,7 +24,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         </if>
     </@headerFilter>
     <@content>
-        <if(state.table && !state.loading)>
+        <if(state.table)>
             <standard-table-NEW table=state.table key=state.table.getTableId()/>
         </if>
     </@content>

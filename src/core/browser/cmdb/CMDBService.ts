@@ -38,6 +38,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
 
     public isServiceFor(kixObjectType: KIXObjectType) {
         return kixObjectType === KIXObjectType.CONFIG_ITEM
+            || kixObjectType === KIXObjectType.CONFIG_ITEM_VERSION
             || kixObjectType === KIXObjectType.CONFIG_ITEM_IMAGE
             || kixObjectType === KIXObjectType.CONFIG_ITEM_CLASS
             || kixObjectType === KIXObjectType.CONFIG_ITEM_ATTACHMENT;
