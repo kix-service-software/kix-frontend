@@ -27,3 +27,4 @@ export { ConfigItemStats } from './ConfigItemStats';
 export { ConfigItemAttachment } from './ConfigItemAttachment';
 export { CreateConfigItemVersionOptions } from './CreateConfigItemVersionOptions';
 export { ConfigItemClassDefinitionProperty } from './ConfigItemClassDefinitionProperty';
+export { ConfigItemVersionLoadingOptions } from './ConfigItemVersionLoadingOptions';

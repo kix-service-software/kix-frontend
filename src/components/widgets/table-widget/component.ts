@@ -53,7 +53,6 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        this.state.loading = true;
         this.state.filterPlaceHolder = await TranslationService.translate(this.state.filterPlaceHolder);
         this.additionalFilterCriteria = [];
         const context = ContextService.getInstance().getActiveContext(this.contextType);
@@ -77,7 +76,6 @@ class Component {
                 eventPublished: async (data: TableEventData, eventId: string) => {
                     if (data && this.state.table && data.tableId === this.state.table.getTableId()) {
                         if (eventId === TableEvent.TABLE_READY) {
-                            await this.prepareTitle();
                             this.state.filterCount = this.state.table.isFiltered()
                                 ? this.state.table.getRowCount()
                                 : null;
@@ -93,16 +91,17 @@ class Component {
             EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
 
             this.prepareHeader();
-            await this.prepareTable();
-            this.prepareTitle();
+            this.prepareTable().then(() => this.prepareTitle());
 
             if (this.state.widgetConfiguration.contextDependent) {
-                context.registerListener('table-widget-' + this.state.table.getTableId(), {
+                context.registerListener('table-widget-' + this.state.instanceId, {
                     explorerBarToggled: () => { return; },
                     filteredObjectListChanged: () => { return; },
                     objectChanged: () => { return; },
                     objectListChanged: () => {
-                        this.state.table.resetFilter();
+                        if (this.state.table) {
+                            this.state.table.resetFilter();
+                        }
                         const filterComponent = (this as any).getComponent('table-widget-filter');
                         if (filterComponent) {
                             filterComponent.reset();
@@ -114,10 +113,6 @@ class Component {
                     }
                 });
             }
-
-            setTimeout(() => {
-                this.state.loading = false;
-            }, 20);
         }
     }
 

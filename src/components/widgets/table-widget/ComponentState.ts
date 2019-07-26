@@ -23,7 +23,6 @@ export class ComponentState extends WidgetComponentState {
         public filterPlaceHolder: string = 'Translatable#All Objects',
         public showFilter: boolean = true,
         public isFiltering: boolean = false,
-        public loading: boolean = true
     ) {
         super();
     }

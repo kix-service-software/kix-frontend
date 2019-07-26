@@ -20,7 +20,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onInput(input: any): void {
-        this.state.loading = true;
         this.state.cell = input.cell;
         this.update();
     }
@@ -32,14 +31,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 this.showIcons = config.showIcon;
                 this.showText = config.showText;
             }
-            await this.loadDisplayValues();
+            this.loadDisplayValues();
         }
-        this.state.loading = false;
     }
 
     public async onMount(): Promise<void> {
-        await this.loadDisplayValues();
-        this.state.loading = false;
+        this.loadDisplayValues();
     }
 
     private async loadDisplayValues(): Promise<void> {
@@ -48,14 +45,18 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 if (this.state.cell.getValue().displayIcons) {
                     this.state.icons = this.state.cell.getValue().displayIcons;
                 } else {
-                    this.state.icons = await this.state.cell.getDisplayIcons();
+                    this.state.cell.getDisplayIcons().then((icons) => {
+                        this.state.icons = icons;
+                    });
                 }
             }
 
             if (this.state.cell.getValue().displayValue) {
                 this.state.displayText = this.state.cell.getValue().displayValue;
             } else {
-                this.state.displayText = await this.state.cell.getDisplayValue();
+                this.state.cell.getDisplayValue().then((text) => {
+                    this.state.displayText = text;
+                });
             }
         }
     }

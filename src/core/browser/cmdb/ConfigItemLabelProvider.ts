@@ -9,7 +9,7 @@
 
 import {
     ObjectIcon, KIXObjectType, ConfigItemProperty, ConfigItem,
-    DateTimeUtil, ConfigItemClass, GeneralCatalogItem, KIXObject, SysConfigOption, SysConfigKey, VersionProperty
+    DateTimeUtil, ConfigItemClass, GeneralCatalogItem, SysConfigOption, SysConfigKey, VersionProperty
 } from '../../model';
 import { KIXObjectService } from '../kix';
 import { SearchProperty } from '../SearchProperty';

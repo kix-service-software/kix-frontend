@@ -23,6 +23,7 @@ import {
 import { KIXObjectServiceRegistry } from "../../KIXObjectServiceRegistry";
 import { SearchOperator } from "../../../browser";
 import { LoggingService } from "../LoggingService";
+import { ConfigItemVersionLoadingOptions } from "../../../model/kix/cmdb/ConfigItemVersionLoadingOptions";
 
 export class CMDBService extends KIXObjectService {
 
@@ -74,7 +75,29 @@ export class CMDBService extends KIXObjectService {
 
         switch (objectType) {
             case KIXObjectType.CONFIG_ITEM:
+                if (!loadingOptions) {
+                    loadingOptions = new KIXObjectLoadingOptions(
+                        null, null, null, [ConfigItemProperty.CURRENT_VERSION]
+                    );
+                } else if (loadingOptions.includes) {
+                    loadingOptions.includes.push(ConfigItemProperty.CURRENT_VERSION);
+                } else {
+                    loadingOptions.includes = [ConfigItemProperty.CURRENT_VERSION];
+                }
                 objects = await this.getConfigItems(token, objectIds, loadingOptions);
+                break;
+            case KIXObjectType.CONFIG_ITEM_VERSION:
+                if (objectLoadingOptions) {
+                    const uri = this.buildUri(
+                        this.RESOURCE_URI,
+                        'configitems',
+                        (objectLoadingOptions as ConfigItemVersionLoadingOptions).configItemId,
+                        'versions'
+                    );
+                    objects = await super.load(
+                        token, KIXObjectType.CONFIG_ITEM_VERSION, uri, loadingOptions, objectIds, 'ConfigItemVersion'
+                    );
+                }
                 break;
             case KIXObjectType.CONFIG_ITEM_IMAGE:
                 objects = await this.getImages(
