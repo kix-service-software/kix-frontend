@@ -9,7 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { ContextService, ActionFactory, TableFactoryService } from '../../../../core/browser';
-import { KIXObjectType, Contact, KIXObjectLoadingOptions, OrganisationProperty } from '../../../../core/model';
+import { KIXObjectType, Contact } from '../../../../core/model';
 
 class Component {
 

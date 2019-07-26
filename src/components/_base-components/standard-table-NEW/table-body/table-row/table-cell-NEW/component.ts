@@ -56,8 +56,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         return undefined;
     }
 
-    private setValueStateClass(cell: ICell): void {
-        const classes = [];
+    private async setValueStateClass(cell: ICell): Promise<void> {
+        let classes = [];
         const state = cell.getValue().state && cell.getValue().state !== ValueState.NONE
             ? cell.getValue().state : cell.getRow().getRowObject().getValueState();
         if (state) {
@@ -93,10 +93,16 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const object = cell.getRow().getRowObject().getObject();
         if (object) {
             const objectType = cell.getRow().getTable().getObjectType();
-            const cssHandler = TableCSSHandlerRegistry.getCSSHandler(objectType);
+            const cssHandler = TableCSSHandlerRegistry.getObjectCSSHandler(objectType);
             if (cssHandler) {
-                const valueClasses = cssHandler.getValueCSSClasses(object, cell.getValue());
+                const valueClasses = await cssHandler.getValueCSSClasses(object, cell.getValue());
                 valueClasses.forEach((c) => classes.push(c));
+            }
+
+            const commonHandler = TableCSSHandlerRegistry.getCommonCSSHandler();
+            for (const h of commonHandler) {
+                const valueClasses = await h.getValueCSSClasses(object, cell.getValue());
+                classes = [...classes, ...valueClasses];
             }
         }
 

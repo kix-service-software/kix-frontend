@@ -36,6 +36,8 @@ export class ConfigItem extends KIXObject<ConfigItem> {
 
     public CurDeplStateID: number;
 
+    public CurDeplStateType: string;
+
     public Number: string;
 
     public CreateBy: number;
@@ -68,6 +70,7 @@ export class ConfigItem extends KIXObject<ConfigItem> {
             this.CurInciStateID = configItem.CurInciStateID;
             this.ClassID = Number(configItem.ClassID);
             this.CurDeplStateID = configItem.CurDeplStateID;
+            this.CurDeplStateType = configItem.CurDeplStateType;
             this.Number = configItem.Number;
             this.CreateBy = configItem.CreateBy;
             this.LastVersionID = configItem.LastVersionID;

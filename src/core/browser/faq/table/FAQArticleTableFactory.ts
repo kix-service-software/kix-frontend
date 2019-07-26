@@ -55,10 +55,6 @@ export class FAQArticleTableFactory extends TableFactory {
                     FAQArticleProperty.LANGUAGE, true, false, true, false, 125, true, true, true
                 ),
                 new DefaultColumnConfiguration(
-                    FAQArticleProperty.VISIBILITY, true, true, true, false, 125,
-                    true, true, true, DataType.STRING, false
-                ),
-                new DefaultColumnConfiguration(
                     FAQArticleProperty.VOTES, true, true, true, false, 120, true, true, true, DataType.STRING, false
                 ),
                 new DefaultColumnConfiguration(

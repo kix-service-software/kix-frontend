@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <widget instanceId=state.instanceId contextType="MAIN" title=state.title contentActions=state.actions>
     <@content>
         <if(state.linkedObjectGroups.length)>
@@ -20,7 +19,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             $ component.setGroupMinimizedStates();
         </if>
         <else>
-            <span>Es sind keine verknüpften Objekte vorhanden.</span>
+            <translation-string pattern="Translatable#No linked objects available."/>
         </else>
     </@content>
 </widget>

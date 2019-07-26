@@ -23,16 +23,25 @@ export class TableCSSHandlerRegistry {
 
     private constructor() { }
 
-    private handler: Map<KIXObjectType, ITableCSSHandler<any>> = new Map();
+    private commonHandler: ITableCSSHandler[] = [];
+    private objectHandler: Map<KIXObjectType, ITableCSSHandler<any>> = new Map();
 
-    public registerCSSHandler<T>(objectType: KIXObjectType, handler: ITableCSSHandler<T>): void {
-        if (!this.handler.has(objectType)) {
-            this.handler.set(objectType, handler);
+    public registerCommonCSSHandler(handler: ITableCSSHandler): void {
+        this.commonHandler.push(handler);
+    }
+
+    public registerObjectCSSHandler<T>(objectType: KIXObjectType, handler: ITableCSSHandler<T>): void {
+        if (!this.objectHandler.has(objectType)) {
+            this.objectHandler.set(objectType, handler);
         }
     }
 
-    public static getCSSHandler<T>(objectType: KIXObjectType): ITableCSSHandler<T> {
-        return TableCSSHandlerRegistry.getInstance().handler.get(objectType);
+    public static getCommonCSSHandler(): ITableCSSHandler[] {
+        return TableCSSHandlerRegistry.getInstance().commonHandler;
+    }
+
+    public static getObjectCSSHandler<T>(objectType: KIXObjectType): ITableCSSHandler<T> {
+        return TableCSSHandlerRegistry.getInstance().objectHandler.get(objectType);
     }
 
 }

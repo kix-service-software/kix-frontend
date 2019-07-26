@@ -9,6 +9,7 @@
 
 import { AttachmentError, KIXObjectType, SysConfigKey, SysConfigOption } from "../model";
 import { KIXObjectService } from "./kix";
+import { TranslationService } from "./i18n/TranslationService";
 
 export class AttachmentUtil {
 
@@ -58,22 +59,22 @@ export class AttachmentUtil {
         const errorMessages = [];
         const maxFileSize = await AttachmentUtil.getMaxUploadFileSize();
         const maxFileSizeString = AttachmentUtil.getFileSize(maxFileSize, 0);
-        fileErrors.forEach((fe) => {
+        for (const fe of fileErrors) {
             switch (fe[1]) {
                 case AttachmentError.MAX_FILE_SIZE_EXCEEDED:
-                    errorMessages.push(
-                        `Die Datei ${fe[0].name} ist zu groß (${AttachmentUtil.getFileSize(fe[0].size)}). Maximal mögliche Dateigröße: ${maxFileSizeString}.`
-                    );
+                    const fileSizeError = await TranslationService.translate('Translatable#The file size of {0} is too large ({1}). Max.: {2}', [
+                        fe[0].name, AttachmentUtil.getFileSize(fe[0].size), maxFileSizeString
+                    ]);
+                    errorMessages.push(fileSizeError);
                     break;
                 case AttachmentError.INVALID_MIMETYPE:
-                    errorMessages.push(
-                        `Die Datei ${fe[0].name} hat keinen gültigen MIME-TYPE.`
-                    );
+                    const typeError = await TranslationService.translate('Translatable#The file {0} has no valid MIME-TYPE.', [fe[0].name]);
+                    errorMessages.push(typeError);
                     break;
                 default:
                     errorMessages.push(fe[1] + ": " + fe[0]);
             }
-        });
+        }
         return errorMessages;
     }
     // tslint:enable:max-line-length

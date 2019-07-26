@@ -25,7 +25,7 @@ export class Extension implements IMainMenuExtension {
 
     public icon: string = "kix-icon-organisation";
 
-    public text: string = "Translatable#Organisations";
+    public text: string = "Translatable#Customer";
 
     public permissions: UIComponentPermission[] = [
         new UIComponentPermission('organisations', [CRUD.READ]),

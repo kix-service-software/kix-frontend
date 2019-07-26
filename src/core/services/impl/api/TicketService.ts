@@ -73,6 +73,14 @@ export class TicketService extends KIXObjectService {
 
         let objects = [];
         if (objectType === KIXObjectType.TICKET) {
+            if (!loadingOptions) {
+                loadingOptions = new KIXObjectLoadingOptions(null, null, null, [TicketProperty.STATE_TYPE]);
+            } else if (loadingOptions.includes) {
+                loadingOptions.includes.push(TicketProperty.STATE_TYPE);
+            } else {
+                loadingOptions.includes = [TicketProperty.STATE_TYPE];
+            }
+
             objects = await super.load(
                 token, KIXObjectType.TICKET, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.TICKET
             );

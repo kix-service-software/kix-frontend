@@ -51,7 +51,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public getEmptyString(): string {
-        return this.tableConfig ? this.tableConfig.emptyResultHint : 'Keine Elemente vorhanden.';
+        return this.tableConfig ? this.tableConfig.emptyResultHint : 'Translatable#No objects available.';
     }
 
     public getRowHeight(): string {
