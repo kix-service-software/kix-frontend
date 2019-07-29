@@ -11,4 +11,3 @@ export { Notification } from './Notification';
 export { NotificationMessage } from './NotificationMessage';
 export { NotificationProperty } from './NotificationProperty';
 export { NotificationRecipientTypes } from './NotificationRecipientTypes';
-export { NotificationTicketNumberType } from './NotificationTicketNumberType';

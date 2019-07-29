@@ -8,3 +8,4 @@
  */
 
 export { NotificationCreateAction } from './NotificationCreateAction';
+export { NotificationEditAction } from './NotificationEditAction';

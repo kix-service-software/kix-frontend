@@ -70,6 +70,16 @@ export class NotificationFilterManager extends AbstractDynamicFormManager {
         }
     }
 
+    public async getObjectReferenceObjectType(property: string): Promise<KIXObjectType> {
+        switch (property) {
+            case TicketProperty.ORGANISATION_ID:
+                return KIXObjectType.ORGANISATION;
+            case TicketProperty.CONTACT_ID:
+                return KIXObjectType.CONTACT;
+            default:
+        }
+    }
+
     public async getTreeNodes(property: string): Promise<TreeNode[]> {
         switch (property) {
             case TicketProperty.TYPE_ID:
@@ -78,8 +88,6 @@ export class NotificationFilterManager extends AbstractDynamicFormManager {
             case TicketProperty.QUEUE_ID:
             case TicketProperty.SERVICE:
             case TicketProperty.SLA:
-            case TicketProperty.ORGANISATION_ID:
-            case TicketProperty.CONTACT_ID:
             case TicketProperty.OWNER_ID:
             case TicketProperty.RESPONSIBLE_ID:
             case TicketProperty.LOCK_ID:

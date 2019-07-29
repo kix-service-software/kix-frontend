@@ -9,7 +9,8 @@
 
 import { KIXObjectFormService } from "../kix/KIXObjectFormService";
 import {
-    KIXObjectType, Notification, NotificationProperty, FormField, Form, FormFieldValue, FormFieldOption
+    KIXObjectType, Notification, NotificationProperty, FormField, Form, FormFieldValue,
+    FormFieldOption, FormContext, NotificationMessage
 } from "../../model";
 import { FormGroup } from "../../model/components/form/FormGroup";
 import { ServiceRegistry } from "../kix";
@@ -46,25 +47,15 @@ export class NotificationFormService extends KIXObjectFormService<Notification> 
             const languageFields: FormField[] = [];
             if (languages) {
                 languages.forEach((l) => {
-                    // TODO: get relevant value for edit mode
-                    // const subjectValue = this.getDefaultValue(l, NotificationProperty.MESSAGE_SUBJECT);
-                    // const bodyValue = this.getDefaultValue(l, NotificationProperty.MESSAGE_BODY);
-                    const subjectField = new FormField(
-                        'Translatable#Subject', `${NotificationProperty.MESSAGE_SUBJECT}###${l[0]}`, null, true,
-                        'Translatable#Helptext_Admin_NotificationCreate_MessageSubject'
-                    );
-                    const bodyField = new FormField(
-                        'Translatable#Text', `${NotificationProperty.MESSAGE_BODY}###${l[0]}`, 'rich-text-input', true,
-                        'Translatable#Helptext_Admin_NotificationCreate_MessageText', [
-                            new FormFieldOption('NO_IMAGES', true)
-                        ]
-                    );
-                    const languagField = new FormField(
-                        l[1], null, null, null, null, null, null, [subjectField, bodyField],
-                        undefined, undefined, undefined, undefined, undefined, undefined, undefined,
-                        true, true
-                    );
+                    const languagField = this.getLanguageField(form, l);
                     languageFields.push(languagField);
+
+                    if (
+                        form.formContext === FormContext.EDIT &&
+                        notification && notification.Message && notification.Message[l[0]]
+                    ) {
+                        this.setTextValue(languagField.children, formFieldValues, notification.Message[l[0]]);
+                    }
                 });
             }
             if (!!languageFields.length) {
@@ -75,8 +66,18 @@ export class NotificationFormService extends KIXObjectFormService<Notification> 
         }
     }
 
-    protected async getValue(property: string, value: any, notification: Notification): Promise<any> {
+    protected async getValue(
+        property: string, value: any, notification: Notification, formField: FormField
+    ): Promise<any> {
         switch (property) {
+            case NotificationProperty.DATA_FILTER:
+                if (notification.Filter) {
+                    value = [];
+                    notification.Filter.forEach((v, k) => {
+                        value.push([k, v]);
+                    });
+                }
+                break;
             default:
         }
         return value;
@@ -96,4 +97,46 @@ export class NotificationFormService extends KIXObjectFormService<Notification> 
         return hasPermissions;
     }
 
+    private getLanguageField(form: Form, language: [string, string]): FormField {
+        const subjectField = new FormField(
+            'Translatable#Subject', `${NotificationProperty.MESSAGE_SUBJECT}###${language[0]}`, null, true,
+            form && form.formContext === FormContext.EDIT ?
+                'Translatable#Helptext_Admin_NotificationEdit_MessageSubject' :
+                'Translatable#Helptext_Admin_NotificationCreate_MessageSubject'
+        );
+        const bodyField = new FormField(
+            'Translatable#Text', `${NotificationProperty.MESSAGE_BODY}###${language[0]}`, 'rich-text-input', true,
+            form && form.formContext === FormContext.EDIT ?
+                'Translatable#Helptext_Admin_NotificationEdit_MessageText' :
+                'Translatable#Helptext_Admin_NotificationCreate_MessageText',
+            [new FormFieldOption('NO_IMAGES', true)]
+        );
+        const languagField = new FormField(
+            language[1], null, null, null, null, null, null, [subjectField, bodyField],
+            undefined, undefined, undefined, undefined, undefined, undefined, undefined,
+            true, true
+        );
+        return languagField;
+    }
+
+    private setTextValue(
+        fields: FormField[], formFieldValues: Map<string, FormFieldValue<any>>, message: NotificationMessage
+    ): void {
+        let subjectValue;
+        let bodyValue;
+        if (message) {
+            if (message.Subject) {
+                subjectValue = new FormFieldValue(message.Subject);
+            }
+            if (message.Body) {
+                bodyValue = new FormFieldValue(message.Body);
+            }
+        }
+        if (subjectValue) {
+            formFieldValues.set(fields[0].instanceId, subjectValue);
+        }
+        if (bodyValue) {
+            formFieldValues.set(fields[1].instanceId, bodyValue);
+        }
+    }
 }

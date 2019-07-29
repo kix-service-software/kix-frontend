@@ -9,7 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent, Label, ICell } from '../../../../../../../core/browser';
-import { ObjectIcon } from '../../../../../../../core/model';
+import { ObjectIcon, SortUtil, DataType } from '../../../../../../../core/model';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -40,11 +40,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             values = [value.objectValue];
         }
 
-        this.state.cellLabels = values.map((v, index) => new Label(
-            null, v,
-            icons[index] ? icons[index] : null,
-            v, null, v, false
-        ));
+        this.state.cellLabels = SortUtil.sortObjects(
+            values.map((v, index) => new Label(
+                null, v,
+                icons[index] ? icons[index] : null,
+                v, null, v, false
+            )),
+            'text', DataType.STRING
+        );
     }
 
 }

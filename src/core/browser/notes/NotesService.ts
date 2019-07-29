@@ -25,7 +25,7 @@ export class NotesService {
 
     public async loadNotes(contextId: string): Promise<string> {
         const notes = await NotesSocketClient.getInstance().loadNotes();
-        return notes[contextId];
+        return notes ? notes[contextId] : null;
     }
 
     public async saveNotes(contextId: string, notes: string): Promise<void> {

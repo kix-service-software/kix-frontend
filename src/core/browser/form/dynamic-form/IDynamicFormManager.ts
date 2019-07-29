@@ -33,6 +33,8 @@ export interface IDynamicFormManager {
 
     getInputType(property: string): Promise<InputFieldTypes | string>;
 
+    getObjectReferenceObjectType(property: string): Promise<KIXObjectType>;
+
     getSpecificInput(): string;
 
     getInputTypeOptions(property: string, operator: string): Promise<Array<[string, any]>>;

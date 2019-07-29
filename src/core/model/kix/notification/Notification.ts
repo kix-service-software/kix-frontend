@@ -25,7 +25,7 @@ export class Notification extends KIXObject<Notification> {
     public Name: string;
 
     // data properties
-    public Filter: Map<string, string>;
+    public Filter: Map<string, string[] | number[]>;
     public Events: string[];
     public VisibleForAgent: boolean;
     public VisibleForAgentTooltip: string;
