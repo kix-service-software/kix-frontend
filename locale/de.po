@@ -323,8 +323,13 @@ msgstr "Klassendefinition"
 msgid "Close Dialog"
 msgstr "Dialog schließen"
 
-msgid "Close window"
-msgstr "Fenster schließen"
+msgid "Close Overlay"
+msgstr ""
+
+#, fuzzy
+#| msgid "Close Dialog"
+msgid "Close Sidebars"
+msgstr "Dialog schließen"
 
 msgid "Closing time"
 msgstr "Geschlossen am"
@@ -3544,6 +3549,9 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Close window"
+#~ msgstr "Fenster schließen"
 
 #~ msgid "Organisations Dashboard"
 #~ msgstr "Kunden Dashboard"

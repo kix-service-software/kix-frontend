@@ -317,7 +317,10 @@ msgstr ""
 msgid "Close Dialog"
 msgstr ""
 
-msgid "Close window"
+msgid "Close Overlay"
+msgstr ""
+
+msgid "Close Sidebars"
 msgstr ""
 
 msgid "Closing time"
