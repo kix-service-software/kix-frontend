@@ -521,6 +521,11 @@ msgstr "Aktuelle Version"
 msgid "Customer"
 msgstr "Kunde"
 
+#, fuzzy
+#| msgid "Customer Details"
+msgid "Customer Dashboard"
+msgstr "Kunden Details"
+
 msgid "Data has been updated."
 msgstr "Daten wurden aktualisiert."
 
@@ -2642,9 +2647,6 @@ msgstr "Kundeninformationen"
 msgid "Organisations"
 msgstr "Kunden"
 
-msgid "Organisations Dashboard"
-msgstr "Kunden Dashboard"
-
 msgid "Organisation Search"
 msgstr "Kunden Suche"
 
@@ -3543,6 +3545,9 @@ msgstr "PLZ"
 msgid "ZIP"
 msgstr "PLZ"
 
+#~ msgid "Organisations Dashboard"
+#~ msgstr "Kunden Dashboard"
+
 #~ msgid ""
 #~ "A contact is a person, filing a request for the customer. Enter at least "
 #~ "3 characters in order to get a suggestion list of already registered "
@@ -4016,9 +4021,6 @@ msgstr "PLZ"
 
 #~ msgid "Create Customer"
 #~ msgstr "Kunde anlegen"
-
-#~ msgid "Customer Details"
-#~ msgstr "Kunden Details"
 
 #~ msgid "Customer ID"
 #~ msgstr "Kunden ID"
