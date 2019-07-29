@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <if(!state.loading)>
     <widget instanceId="new-config-item-dialog">
         <@content>
@@ -18,10 +17,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         </span>
                     </div>
                     <div.field-icon>
-                        <overlay-icon
-                            isHint=true
-                            content="Translatable#Please select a config item class. The form will be completed then."
-                            title=state.translations["Translatable#Config Item Class"]/>
+                        <if(state.hint)>
+                            <overlay-icon isHint=true content=state.hint title=state.translations["Translatable#Config Item Class"]/>
+                        </if>
                     </div>
                     <div.field-input>
                         <form-list

@@ -21,7 +21,7 @@ export class Extension implements IConfigurationExtension {
 
         const helpWidget = new ConfiguredWidget('20190301-organisation-import-help-widget', new WidgetConfiguration(
             'help-widget', null, [], {
-                helpText: 'Translatable#Helptext_Organisations_OrganisationImport'
+                helpText: 'Translatable#Helptext_Customers_OrganisationImport'
             },
             false, false, 'kix-icon-query'
         ));

@@ -28,7 +28,7 @@ export class Extension implements IConfigurationExtension {
         const helpWidget = new ConfiguredWidget('20180919-help-widget', new WidgetConfiguration(
             'help-widget', 'Translatable#Text Modules', [], {
                 // tslint:disable-next-line:max-line-length
-                helpText: 'Translatable#<b>-- KIX Professional Feature--</b><p>To use the text modules available in your system, enter „::“ (colon colon). Then choose the text modules you want to use in the context menu. You can narrow down the key word selection manually by entering more text.</p>'
+                helpText: 'Translatable#Helptext_Textmodules_ArticleCreate'
             },
             false, false, 'kix-icon-textblocks'
         ));
@@ -47,8 +47,9 @@ export class Extension implements IConfigurationExtension {
         if (!existing) {
             const fields: FormField[] = [];
             fields.push(new FormField(
-                'Translatable#Channel', ArticleProperty.CHANNEL_ID, 'channel-input', true, 'Translatable#Channel')
-            );
+                'Translatable#Channel', ArticleProperty.CHANNEL_ID, 'channel-input', true,
+                'Translatable#Helptext_Tickets_ArticleCreate_Channel'
+            ));
 
             const group = new FormGroup('Translatable#Article Data', fields);
 

@@ -39,19 +39,19 @@ export class Extension implements IConfigurationExtension {
             const fields: FormField[] = [];
             fields.push(new FormField(
                 'Translatable#Name', TicketTypeProperty.NAME, null, true,
-                'Translatable#Insert a type name.'
+                'Translatable#Helptext_Admin_Tickets_TypeEdit_Name'
             ));
             fields.push(new FormField(
                 'Translatable#Icon', 'ICON', 'icon-input', false,
-                'Translatable#Select an icon for this type.'
+                'Translatable#Helptext_Admin_Tickets_TypeEdit_Icon'
             ));
             fields.push(new FormField(
                 'Translatable#Comment', TicketTypeProperty.COMMENT, 'text-area-input',
-                false, 'Translatable#Insert a comment for the type.'
+                false, 'Translatable#Helptext_Admin_Tickets_TypeEdit_Comment'
             ));
             fields.push(new FormField(
                 'Translatable#Validity', TicketTypeProperty.VALID_ID, 'valid-input', true,
-                'Translatable#Set the type as „valid“, „invalid (temporarily)“, or „invalid“.',
+                'Translatable#Helptext_Admin_Tickets_TypeEdit_Valid',
                 null, new FormFieldValue(1)
             ));
 

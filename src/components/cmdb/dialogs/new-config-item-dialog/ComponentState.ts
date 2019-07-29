@@ -17,7 +17,8 @@ export class ComponentState extends AbstractComponentState {
         public classNodes: TreeNode[] = [],
         public currentClassNode: TreeNode = null,
         public formId: string = null,
-        public placeholder: string = ''
+        public placeholder: string = '',
+        public hint: string = null
     ) {
         super();
     }

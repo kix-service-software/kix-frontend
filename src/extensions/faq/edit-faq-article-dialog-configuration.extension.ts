@@ -34,26 +34,26 @@ export class Extension implements IConfigurationExtension {
         const existingForm = configurationService.getConfiguration(formId);
         if (!existingForm || overwrite) {
             const fields: FormField[] = [];
-            fields.push(new FormField('Translatable#Title', FAQArticleProperty.TITLE, null, true, 'Translatable#Insert a name for the FAQ article.'));
+            fields.push(new FormField('Translatable#Title', FAQArticleProperty.TITLE, null, true, 'Translatable#Helptext_FAQ_ArticleEdit_Title'));
             fields.push(new FormField(
-                'Translatable#Category', FAQArticleProperty.CATEGORY_ID, 'faq-category-input', true, 'Translatable#Select an FAQ category.')
+                'Translatable#Category', FAQArticleProperty.CATEGORY_ID, 'faq-category-input', true, 'Translatable#Helptext_FAQ_ArticleEdit_Category')
             );
             fields.push(new FormField(
-                'Translatable#Language', FAQArticleProperty.LANGUAGE, 'language-input', true, 'Translatable#Select a language for this FAQ article.',
+                'Translatable#Language', FAQArticleProperty.LANGUAGE, 'language-input', true, 'Translatable#Helptext_FAQ_ArticleEdit_Language',
                 null, new FormFieldValue('de')
             ));
-            fields.push(new FormField('Translatable#Tags', FAQArticleProperty.KEYWORDS, null, false, 'Translatable#Insert key words for the FAQ article to find them more quickly.'));
+            fields.push(new FormField('Translatable#Tags', FAQArticleProperty.KEYWORDS, null, false, 'Translatable#Helptext_FAQ_ArticleEdit_Tags'));
             fields.push(new FormField(
-                'Translatable#Visibility', FAQArticleProperty.VISIBILITY, 'faq-visibility-input', true, 'Translatable#Define where this FAQ article will be shown (internal= only Agent Portal, external = KIX Agent and Organisation Portal for authenticated users only, public=KIX Agent- and Organisation Portal for both, authenticated and unauthenticated users).',
+                'Translatable#Visibility', FAQArticleProperty.VISIBILITY, 'faq-visibility-input', true, 'Translatable#Helptext_FAQ_ArticleEdit_Visibility',
                 null, new FormFieldValue('internal')
             ));
-            fields.push(new FormField('Translatable#Attachments', FAQArticleProperty.ATTACHMENTS, 'attachment-input', false, 'Translatable#Attach additional files to the FAQ article. Drag & Drop is possible. Max. file size is 25 MB.'));
-            fields.push(new FormField('Translatable#Symptom', FAQArticleProperty.FIELD_1, 'rich-text-input', false, 'Translatable#Describe sympton as precisely as possible'));
-            fields.push(new FormField('Translatable#Cause', FAQArticleProperty.FIELD_2, 'rich-text-input', false, 'Translatable#Please describe the reason as detailed as possible.'));
-            fields.push(new FormField('Translatable#Solution', FAQArticleProperty.FIELD_3, 'rich-text-input', false, 'Translatable#Describe the solution for the symptons reasons as precisely as possible'));
-            fields.push(new FormField('Translatable#Comment', FAQArticleProperty.FIELD_6, 'rich-text-input', false, 'Translatable#Insert additional information for this FAQ article.'));
+            fields.push(new FormField('Translatable#Attachments', FAQArticleProperty.ATTACHMENTS, 'attachment-input', false, 'Translatable#Helptext_FAQ_ArticleEdit_Attachments'));
+            fields.push(new FormField('Translatable#Symptom', FAQArticleProperty.FIELD_1, 'rich-text-input', false, 'Translatable#Helptext_FAQ_ArticleEdit_Symptom'));
+            fields.push(new FormField('Translatable#Cause', FAQArticleProperty.FIELD_2, 'rich-text-input', false, 'Translatable#Helptext_FAQ_ArticleEdit_Cause'));
+            fields.push(new FormField('Translatable#Solution', FAQArticleProperty.FIELD_3, 'rich-text-input', false, 'Translatable#Helptext_FAQ_ArticleEdit_Solution'));
+            fields.push(new FormField('Translatable#Comment', FAQArticleProperty.FIELD_6, 'rich-text-input', false, 'Translatable#Helptext_FAQ_ArticleEdit_Comment'));
             fields.push(new FormField(
-                'Translatable#Validity', FAQArticleProperty.VALID_ID, 'valid-input', true, 'Translatable#Set the FAQ article as „valid“, „invalid (temporarily)“, or „invalid“.',
+                'Translatable#Validity', FAQArticleProperty.VALID_ID, 'valid-input', true, 'Translatable#Helptext_FAQ_ArticleEdit_Valid',
                 null, new FormFieldValue(1)
             ));
 

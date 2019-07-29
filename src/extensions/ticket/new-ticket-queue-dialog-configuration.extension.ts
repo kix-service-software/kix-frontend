@@ -42,32 +42,32 @@ export class Extension implements IConfigurationExtension {
             const infoGroup = new FormGroup('Translatable#Queue Information', [
                 new FormField(
                     'Translatable#Name', QueueProperty.NAME, null, true,
-                    'Translatable#Helptext_Admin_QueueCreate_Name'
+                    'Translatable#Helptext_Admin_Tickets_QueueCreate_Name'
                 ),
                 new FormField(
                     'Translatable#Icon', 'ICON', 'icon-input', false,
-                    'Translatable#Helptext_Admin_QueueCreate_Icon.'
+                    'Translatable#Helptext_Admin_Tickets_QueueCreate_Icon.'
                 ),
                 new FormField(
                     'Translatable#Parent Queue', QueueProperty.PARENT_ID, 'ticket-input-queue', false,
-                    'Translatable#Helptext_Admin_QueueCreate_ParentQueue', [
+                    'Translatable#Helptext_Admin_Tickets_QueueCreate_ParentQueue', [
                         new FormFieldOption(FormFieldOptions.SHOW_INVALID, true)
                     ]
                 ),
                 new FormField(
                     'Translatable#Follow Up on Tickets', QueueProperty.FOLLOW_UP_ID, 'queue-input-follow-up',
-                    true, 'Translatable#Helptext_Admin_QueueCreate_FollowUp', null, new FormFieldValue(3)
+                    true, 'Translatable#Helptext_Admin_Tickets_QueueCreate_FollowUp', null, new FormFieldValue(3)
                 ),
                 new FormField(
                     'Translatable#Unlock Timeout', QueueProperty.UNLOCK_TIMEOUT, 'number-input',
-                    false, 'Translatable#Helptext_Admin_QueueCreate_UnlockTimeout', [
+                    false, 'Translatable#Helptext_Admin_Tickets_QueueCreate_UnlockTimeout', [
                         new FormFieldOption(NumberInputOptions.MIN, 0),
                         new FormFieldOption(NumberInputOptions.UNIT_STRING, 'Translatable#Minutes')
                     ]
                 ),
                 new FormField(
                     'Translatable#Sender Address (Email)', QueueProperty.SYSTEM_ADDRESS_ID, 'object-reference-input',
-                    true, 'Translatable#Helptext_Admin_QueueCreate_SenderAddress.', [
+                    true, 'Translatable#Helptext_Admin_Tickets_QueueCreate_SenderAddress.', [
                         new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.SYSTEM_ADDRESS),
                         new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
                         new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
@@ -84,19 +84,19 @@ export class Extension implements IConfigurationExtension {
                 ),
                 new FormField(
                     'Translatable#Comment', QueueProperty.COMMENT, 'text-area-input', false,
-                    'Translatable#Helptext_Admin_QueueCreate_Comment',
+                    'Translatable#Helptext_Admin_Tickets_QueueCreate_Comment',
                     null, null, null, null, null, null, null, 250
                 ),
                 new FormField(
                     'Translatable#Validity', KIXObjectProperty.VALID_ID, 'valid-input', true,
-                    'Translatable#Helptext_Admin_QueueCreate_Validity',
+                    'Translatable#Helptext_Admin_Tickets_QueueCreate_Validity',
                     null, new FormFieldValue(1)
                 )
             ]);
             const signatureGroup = new FormGroup('Translatable#Signature', [
                 new FormField(
                     'Translatable#Signature', QueueProperty.SIGNATURE, 'rich-text-input', false,
-                    'Translatable#Helptext_Admin_QueueCreate_Signature'
+                    'Translatable#Helptext_Admin_Tickets_QueueCreate_Signature'
                 )
             ]);
 

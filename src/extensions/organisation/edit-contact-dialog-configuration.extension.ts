@@ -36,69 +36,69 @@ export class Extension implements IConfigurationExtension {
             groups.push(new FormGroup('Translatable#Contact Information', [
                 new FormField(
                     'Translatable#Title', ContactProperty.TITLE, null, false,
-                    'Translatable#Helptext_Organisations_ContactEdit_Title'
+                    'Translatable#Helptext_Customers_ContactEdit_Title'
                 ),
                 new FormField(
                     'Translatable#First Name', ContactProperty.FIRSTNAME, null, true,
-                    'Translatable#Helptext_Organisations_ContactEdit_Firstname'
+                    'Translatable#Helptext_Customers_ContactEdit_Firstname'
                 ),
                 new FormField(
                     'Translatable#Last Name', ContactProperty.LASTNAME, null, true,
-                    'Translatable#Helptext_Organisations_ContactEdit_Lastname'
+                    'Translatable#Helptext_Customers_ContactEdit_Lastname'
                 ),
                 new FormField(
                     'Translatable#Organisation', ContactProperty.PRIMARY_ORGANISATION_ID, 'contact-input-organisation',
-                    true, 'Translatable#Helptext_Organisations_ContactEdit_Organisation'
+                    true, 'Translatable#Helptext_Customers_ContactEdit_Organisation'
                 )
             ]));
 
             groups.push(new FormGroup('Translatable#Communication', [
                 new FormField(
                     'Translatable#Phone', ContactProperty.PHONE, null, false,
-                    'Translatable#Helptext_Organisations_ContactEdit_Phone'
+                    'Translatable#Helptext_Customers_ContactEdit_Phone'
                 ),
                 new FormField(
                     'Translatable#Mobile', ContactProperty.MOBILE, null, false,
-                    'Translatable#Helptext_Organisations_ContactEdit_Mobile'
+                    'Translatable#Helptext_Customers_ContactEdit_Mobile'
                 ),
                 new FormField(
                     'Translatable#Fax', ContactProperty.FAX, null, false,
-                    'Translatable#Helptext_Organisations_ContactEdit_Fax'
+                    'Translatable#Helptext_Customers_ContactEdit_Fax'
                 ),
                 new FormField(
                     'Translatable#Email', ContactProperty.EMAIL, null, true,
-                    'Translatable#Helptext_Organisations_ContactEdit_Email'
+                    'Translatable#Helptext_Customers_ContactEdit_Email'
                 ),
             ]));
 
             groups.push(new FormGroup('Translatable#Postal Address', [
                 new FormField(
                     'Translatable#Street', ContactProperty.STREET, null, false,
-                    'Translatable#Helptext_Organisations_ContactEdit_Street'
+                    'Translatable#Helptext_Customers_ContactEdit_Street'
                 ),
                 new FormField(
                     'Translatable#Zip', ContactProperty.ZIP, null, false,
-                    'Translatable#Helptext_Organisations_ContactEdit_Zip'
+                    'Translatable#Helptext_Customers_ContactEdit_Zip'
                 ),
                 new FormField(
                     'Translatable#City', ContactProperty.CITY, null, false,
-                    'Translatable#Helptext_Organisations_ContactEdit_City'
+                    'Translatable#Helptext_Customers_ContactEdit_City'
                 ),
                 new FormField(
                     'Translatable#Country', ContactProperty.COUNTRY, null, false,
-                    'Translatable#Helptext_Organisations_ContactEdit_Country'
+                    'Translatable#Helptext_Customers_ContactEdit_Country'
                 )
             ]));
 
             groups.push(new FormGroup('Translatable#Other', [
                 new FormField(
                     'Translatable#Comment', ContactProperty.COMMENT, 'text-area-input', false,
-                    'Translatable#Helptext_Organisations_ContactEdit_Comment', null, null, null, null,
+                    'Translatable#Helptext_Customers_ContactEdit_Comment', null, null, null, null,
                     null, null, null, 250
                 ),
                 new FormField(
                     'Translatable#Validity', KIXObjectProperty.VALID_ID, 'valid-input', false,
-                    'Translatable#Helptext_Organisations_ContactEdit_Validity'
+                    'Translatable#Helptext_Customers_ContactEdit_Validity'
                 )
             ]));
 

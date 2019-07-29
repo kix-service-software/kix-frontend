@@ -36,6 +36,8 @@ class Component {
 
     private async update(): Promise<void> {
         this.state.translations = await TranslationService.createTranslationObject([this.state.field.label]);
+        const hint = await TranslationService.translate(this.state.field.hint);
+        this.state.hint = hint.startsWith('Helptext_') ? null : hint;
     }
 
     public async onMount(): Promise<void> {
