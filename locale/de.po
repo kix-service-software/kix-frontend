@@ -47,15 +47,6 @@ msgstr "Konto Information"
 msgid "Account successfully created."
 msgstr "Konto wurde erfolgreich angelegt."
 
-msgid ""
-"A contact is a person, filing a request for the customer. Enter at least 3 "
-"characters in order to get a suggestion list of already registered contacts. "
-"You may use „*“ as wildcard."
-msgstr ""
-"Ein Kontakt ist eine Person, die eine Anfrage im Kontext eines Kunden "
-"stellt. Geben Sie mind. 3 Zeichen ein um eine Liste von bekannten Kontakten "
-"vorgeschlagen zu bekommen. \"*\" kann als Platzhalter verwendet werden."
-
 msgid "Action"
 msgstr "Aktion"
 
@@ -151,13 +142,6 @@ msgstr "Genehmigt"
 msgid "A product by c.a.p.e. IT GmbH"
 msgstr "Ein Produkt der c.a.p.e. IT GmbH"
 
-msgid ""
-"A queue is a classification system for requests, comparable to folders in a "
-"file system."
-msgstr ""
-"Ein Team ordnet Anfragen Bearbeitungsteams zu und klassifiziert die Anfrage. "
-"Teams sind vergleichbar mit Verzeichnissen im Dateisystem."
-
 msgid "Archived"
 msgstr "Archiviert"
 
@@ -217,13 +201,6 @@ msgstr ""
 "Mindestens eins der Felder  'An', 'Cc' oder 'Bcc' muss einen Eintrag "
 "enthalten."
 
-msgid ""
-"Attach additional files to the FAQ article. Drag & Drop is possible. Max. "
-"file size is 25 MB."
-msgstr ""
-"Hier können Sie zusätzliche Dateien an den FAQ Artikel hängen. Drag & Drop "
-"ist möglich. Die maximale Dateigröße beträgt 25 MB."
-
 msgid "Attachments"
 msgstr "Anhänge"
 
@@ -253,18 +230,6 @@ msgstr "vor"
 
 msgid "between"
 msgstr "zwischen"
-
-msgid ""
-"<b>-- KIX Professional Feature--</b><p>To use the text modules available in "
-"your system, enter „::“ (colon colon). Then choose the text modules you want "
-"to use in the context menu. You can narrow down the key word selection "
-"manually by entering more text.</p>"
-msgstr ""
-"<b>-- KIX Professional Feature --</b><p>Um die in Ihrem System verfügbaren "
-"Textbausteine zu nutzen, geben Sie \"::\" (Doppelpunkt Doppelpunkt) ein. "
-"Wählen Sie anschließend im Kontextmenü den gewünschten Textbaustein aus. Sie "
-"können die Auswahl anhand der Schlüsselworte manuell einschränken, in dem "
-"sie weiteren Text eingeben.</p>"
 
 msgid "Bookmarks"
 msgstr "Lesezeichen"
@@ -322,9 +287,6 @@ msgstr "Kanäle"
 
 msgid "Charset"
 msgstr "Zeichensatz"
-
-msgid "Choose a contact, customers will be assigned automatically."
-msgstr "Kunden werden nach Auswahl eines Kontaktes automatisch zugewiesen."
 
 msgid "Choose CSV-File with data sets for import. Drag & Drop is possible."
 msgstr ""
@@ -414,9 +376,6 @@ msgstr "Asset"
 
 msgid "Config Item Class"
 msgstr "Asset Klasse"
-
-msgid "Config Item class. Can not be changed."
-msgstr "Klasse des Assets. Nicht änderbar."
 
 msgid "Config Item Data"
 msgstr "Stammdaten"
@@ -571,17 +530,6 @@ msgstr "Standard"
 msgid "Default Value"
 msgstr "Standardwert"
 
-msgid ""
-"Define where this FAQ article will be shown (internal= only Agent Portal, "
-"external = KIX Agent and Organisation Portal for authenticated users only, "
-"public=KIX Agent- and Organisation Portal for both, authenticated and "
-"unauthenticated users)."
-msgstr ""
-"Legen Sie fest, wo der FAQ-Artikel angezeigt werden darf.  (intern = nur im "
-"KIX Agentenportal, extern = KIX Agenten- und Kundenportal für auth. Nutzer, "
-"öffentlich = KIX Agenten- und Kundenportal sowohl für unauth. als auch auth. "
-"Nutzer)."
-
 msgid "Delete"
 msgstr "Löschen"
 
@@ -596,13 +544,6 @@ msgstr "Suche löschen"
 
 msgid "Deployment State"
 msgstr "Verwendungsstatus"
-
-msgid "Describe sympton as precisely as possible"
-msgstr "Beschreiben Sie das Symptom so genau wie möglich."
-
-msgid "Describe the solution for the symptons reasons as precisely as possible"
-msgstr ""
-"Beschreiben Sie die Lösung für die Ursache des Symptoms so genau wie möglich."
 
 msgid "Description"
 msgstr "Beschreibung"
@@ -1176,65 +1117,11 @@ msgstr "Hilfetext_Admin_TextModuleCreate_Subject"
 msgid "Helptext_Admin_NotificationEdit_Validity"
 msgstr "Hilfetext_Admin_MailAccountCreate_Validity"
 
-msgid "Helptext_Admin_QueueCreate_Comment"
-msgstr "Hilfetext_Admin_QueueCreate_Comment"
-
-msgid "Helptext_Admin_QueueCreate_FollowUp"
-msgstr "Hilfetext_Admin_QueueCreate_FollowUp"
-
 msgid "Helptext_Admin_QueueCreate_FollowUpTicketLock"
 msgstr "Hilfetext_Admin_QueueCreate_FollowUpTicketLock"
 
-msgid "Helptext_Admin_QueueCreate_Icon."
-msgstr "Hilfetext_Admin_QueueCreate_Icon."
-
-msgid "Helptext_Admin_QueueCreate_Name"
-msgstr "Hilfetext_Admin_QueueCreate_Name"
-
-msgid "Helptext_Admin_QueueCreate_ParentQueue"
-msgstr "Hilfetext_Admin_QueueCreate_ParentQueue"
-
-msgid "Helptext_Admin_QueueCreate_SenderAddress."
-msgstr "Hilfetext_Admin_QueueCreate_SenderAddress."
-
-msgid "Helptext_Admin_QueueCreate_Signature"
-msgstr "Hilfetext_Admin_QueueCreate_Signature"
-
-msgid "Helptext_Admin_QueueCreate_UnlockTimeout"
-msgstr "Hilfetext_Admin_QueueCreate_UnlockTimeout"
-
-msgid "Helptext_Admin_QueueCreate_Validity"
-msgstr "Hilfetext_Admin_QueueCreate_Validity"
-
-msgid "Helptext_Admin_QueueEdit_Comment"
-msgstr "Hilfetext_Admin_QueueEdit_Comment"
-
-msgid "Helptext_Admin_QueueEdit_FollowUp"
-msgstr "Hilfetext_Admin_QueueEdit_FollowUp"
-
 msgid "Helptext_Admin_QueueEdit_FollowUpTicketLock"
 msgstr "Hilfetext_Admin_QueueEdit_FollowUpTicketLock"
-
-msgid "Helptext_Admin_QueueEdit_Icon."
-msgstr "Hilfetext_Admin_QueueEdit_Icon"
-
-msgid "Helptext_Admin_QueueEdit_Name"
-msgstr "Hilfetext_Admin_QueueEdit_Name"
-
-msgid "Helptext_Admin_QueueEdit_ParentQueue"
-msgstr "Hilfetext_Admin_QueueEdit_ParentQueue"
-
-msgid "Helptext_Admin_QueueEdit_SenderAddress."
-msgstr "Hilfetext_Admin_QueueEdit_SenderAddress"
-
-msgid "Helptext_Admin_QueueEdit_Signature"
-msgstr "Hilfetext_Admin_QueueEdit_Signature"
-
-msgid "Helptext_Admin_QueueEdit_UnlockTimeout"
-msgstr "Hilfetext_Admin_QueueEdit_UnlockTimeout"
-
-msgid "Helptext_Admin_QueueEdit_Validity"
-msgstr "Hilfetext_Admin_QueueEdit_Validity"
 
 #, fuzzy
 #| msgid "Helptext_Admin_MailFilter_SetEmailHeader_Value"
@@ -1309,6 +1196,226 @@ msgstr "Hilfetext_Admin_TextModuleEdit_Text"
 msgid "Helptext_Admin_TextModuleEdit_Validity"
 msgstr "Hilfetext_Admin_TextModuleEdit_Validity"
 
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_Comment"
+msgid "Helptext_Admin_Tickets_PriorityCreate_Comment"
+msgstr "Hilfetext_Admin_MailAccountCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
+msgid "Helptext_Admin_Tickets_PriorityCreate_Icon"
+msgstr "Hilfetext_Admin_FAQCategoryCreate_Icon"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailFilterCreate_Name"
+msgid "Helptext_Admin_Tickets_PriorityCreate_Name"
+msgstr "Hilfetext_Admin_MailFilterCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_Validity"
+msgid "Helptext_Admin_Tickets_PriorityCreate_Valid"
+msgstr "Hilfetext_Admin_MailAccountCreate_Validity"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_Comment"
+msgid "Helptext_Admin_Tickets_PriorityEdit_Comment"
+msgstr "Hilfetext_Admin_MailAccountCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryEdit_Icon"
+msgid "Helptext_Admin_Tickets_PriorityEdit_Icon"
+msgstr "Hilfetext_Admin_FAQCategoryEdit_Icon"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailFilterCreate_Name"
+msgid "Helptext_Admin_Tickets_PriorityEdit_Name"
+msgstr "Hilfetext_Admin_MailFilterCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_Validity"
+msgid "Helptext_Admin_Tickets_PriorityEdit_Valid"
+msgstr "Hilfetext_Admin_MailAccountCreate_Validity"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Comment"
+msgid "Helptext_Admin_Tickets_QueueCreate_Comment"
+msgstr "Hilfetext_Admin_QueueCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_FollowUp"
+msgid "Helptext_Admin_Tickets_QueueCreate_FollowUp"
+msgstr "Hilfetext_Admin_QueueCreate_FollowUp"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Icon."
+msgid "Helptext_Admin_Tickets_QueueCreate_Icon."
+msgstr "Hilfetext_Admin_QueueCreate_Icon."
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Name"
+msgid "Helptext_Admin_Tickets_QueueCreate_Name"
+msgstr "Hilfetext_Admin_QueueCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_ParentQueue"
+msgid "Helptext_Admin_Tickets_QueueCreate_ParentQueue"
+msgstr "Hilfetext_Admin_QueueCreate_ParentQueue"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_SenderAddress."
+msgid "Helptext_Admin_Tickets_QueueCreate_SenderAddress."
+msgstr "Hilfetext_Admin_QueueCreate_SenderAddress."
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Signature"
+msgid "Helptext_Admin_Tickets_QueueCreate_Signature"
+msgstr "Hilfetext_Admin_QueueCreate_Signature"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_UnlockTimeout"
+msgid "Helptext_Admin_Tickets_QueueCreate_UnlockTimeout"
+msgstr "Hilfetext_Admin_QueueCreate_UnlockTimeout"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Validity"
+msgid "Helptext_Admin_Tickets_QueueCreate_Validity"
+msgstr "Hilfetext_Admin_QueueCreate_Validity"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_Comment"
+msgid "Helptext_Admin_Tickets_QueueEdit_Comment"
+msgstr "Hilfetext_Admin_QueueEdit_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_FollowUp"
+msgid "Helptext_Admin_Tickets_QueueEdit_FollowUp"
+msgstr "Hilfetext_Admin_QueueEdit_FollowUp"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_Icon."
+msgid "Helptext_Admin_Tickets_QueueEdit_Icon."
+msgstr "Hilfetext_Admin_QueueEdit_Icon"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_ParentQueue"
+msgid "Helptext_Admin_Tickets_QueueEdit_ParentQueue"
+msgstr "Hilfetext_Admin_QueueEdit_ParentQueue"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_SenderAddress."
+msgid "Helptext_Admin_Tickets_QueueEdit_SenderAddress."
+msgstr "Hilfetext_Admin_QueueEdit_SenderAddress"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_Signature"
+msgid "Helptext_Admin_Tickets_QueueEdit_Signature"
+msgstr "Hilfetext_Admin_QueueEdit_Signature"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_UnlockTimeout"
+msgid "Helptext_Admin_Tickets_QueueEdit_UnlockTimeout"
+msgstr "Hilfetext_Admin_QueueEdit_UnlockTimeout"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_Validity"
+msgid "Helptext_Admin_Tickets_QueueEdit_Validity"
+msgstr "Hilfetext_Admin_QueueEdit_Validity"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Comment"
+msgid "Helptext_Admin_Tickets_StateCreate_Comment"
+msgstr "Hilfetext_Admin_QueueCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Icon."
+msgid "Helptext_Admin_Tickets_StateCreate_Icon"
+msgstr "Hilfetext_Admin_QueueCreate_Icon."
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleCreate_Name"
+msgid "Helptext_Admin_Tickets_StateCreate_Name"
+msgstr "Hilfetext_Admin_TextModuleCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_Type."
+msgid "Helptext_Admin_Tickets_StateCreate_Type"
+msgstr "Hilfetext_Admin_MailAccountCreate_Type"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleCreate_Validity"
+msgid "Helptext_Admin_Tickets_StateCreate_Valid"
+msgstr "Hilfetext_Admin_TextModuleCreate_Validity"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_Comment"
+msgid "Helptext_Admin_Tickets_StateEdit_Comment"
+msgstr "Hilfetext_Admin_QueueEdit_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_Icon."
+msgid "Helptext_Admin_Tickets_StateEdit_Icon"
+msgstr "Hilfetext_Admin_QueueEdit_Icon"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleEdit_Name"
+msgid "Helptext_Admin_Tickets_StateEdit_Name"
+msgstr "Hilfetext_Admin_TextModuleEdit_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountEdit_Type."
+msgid "Helptext_Admin_Tickets_StateEdit_Type"
+msgstr "Hilfetext_Admin_MailAccountEdit_Type"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleEdit_Validity"
+msgid "Helptext_Admin_Tickets_StateEdit_Valid"
+msgstr "Hilfetext_Admin_TextModuleEdit_Validity"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_Name"
+msgid "Helptext_Admin_Tickets_Tickets_QueueEdit_Name"
+msgstr "Hilfetext_Admin_QueueEdit_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Comment"
+msgid "Helptext_Admin_Tickets_TypeCreate_Comment"
+msgstr "Hilfetext_Admin_QueueCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Icon."
+msgid "Helptext_Admin_Tickets_TypeCreate_Icon"
+msgstr "Hilfetext_Admin_QueueCreate_Icon."
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Name"
+msgid "Helptext_Admin_Tickets_TypeCreate_Name"
+msgstr "Hilfetext_Admin_QueueCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleCreate_Validity"
+msgid "Helptext_Admin_Tickets_TypeCreate_Valid"
+msgstr "Hilfetext_Admin_TextModuleCreate_Validity"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_Comment"
+msgid "Helptext_Admin_Tickets_TypeEdit_Comment"
+msgstr "Hilfetext_Admin_QueueEdit_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_Icon."
+msgid "Helptext_Admin_Tickets_TypeEdit_Icon"
+msgstr "Hilfetext_Admin_QueueEdit_Icon"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleEdit_Name"
+msgid "Helptext_Admin_Tickets_TypeEdit_Name"
+msgstr "Hilfetext_Admin_TextModuleEdit_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleEdit_Validity"
+msgid "Helptext_Admin_Tickets_TypeEdit_Valid"
+msgstr "Hilfetext_Admin_TextModuleEdit_Validity"
+
 msgid "Helptext_Admin_UserCreate_Preferences_MyQueues"
 msgstr "Hilfetext_Admin_UserCreate_Preferences_MyQueues"
 
@@ -1320,6 +1427,219 @@ msgstr "Hilfetext_Admin_UserEdit_Preferences_Language"
 
 msgid "Helptext_Admin_UserEdit_Preferences_MyQueues"
 msgstr "Hilfetext_Admin_UserEdit_Preferences_MyQueues"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Comment"
+msgid "Helptext_Admin_Users_RoleCreate_Comment"
+msgstr "Hilfetext_Admin_QueueCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Name"
+msgid "Helptext_Admin_Users_RoleCreate_Name"
+msgstr "Hilfetext_Admin_QueueCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleCreate_Name"
+msgid "Helptext_Admin_Users_RoleCreate_User"
+msgstr "Hilfetext_Admin_TextModuleCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Validity"
+msgid "Helptext_Admin_Users_RoleCreate_Valid"
+msgstr "Hilfetext_Admin_QueueCreate_Validity"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_Comment"
+msgid "Helptext_Admin_Users_RoleEdit_Comment"
+msgstr "Hilfetext_Admin_QueueEdit_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_Name"
+msgid "Helptext_Admin_Users_RoleEdit_Name"
+msgstr "Hilfetext_Admin_QueueEdit_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleEdit_Name"
+msgid "Helptext_Admin_Users_RoleEdit_User"
+msgstr "Hilfetext_Admin_TextModuleEdit_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleEdit_Validity"
+msgid "Helptext_Admin_Users_RoleEdit_Valid"
+msgstr "Hilfetext_Admin_TextModuleEdit_Validity"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Comment"
+msgid "Helptext_Admin_Users_UserCreate_Comment"
+msgstr "Hilfetext_Admin_QueueCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_SystemAddressCreate_Name"
+msgid "Helptext_Admin_Users_UserCreate_Email"
+msgstr "Hilfetext_Admin_SystemAddressCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Name"
+msgid "Helptext_Admin_Users_UserCreate_FirstName"
+msgstr "Hilfetext_Admin_QueueCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Name"
+msgid "Helptext_Admin_Users_UserCreate_LastName"
+msgstr "Hilfetext_Admin_QueueCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Icon."
+msgid "Helptext_Admin_Users_UserCreate_Login"
+msgstr "Hilfetext_Admin_QueueCreate_Icon."
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_Password"
+msgid "Helptext_Admin_Users_UserCreate_Password"
+msgstr "Hilfetext_Admin_MailAccountCreate_Password"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Icon."
+msgid "Helptext_Admin_Users_UserCreate_Phone"
+msgstr "Hilfetext_Admin_QueueCreate_Icon."
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Signature"
+msgid "Helptext_Admin_Users_UserCreate_Title"
+msgstr "Hilfetext_Admin_QueueCreate_Signature"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueCreate_Validity"
+msgid "Helptext_Admin_Users_UserCreate_Valid"
+msgstr "Hilfetext_Admin_QueueCreate_Validity"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_Comment"
+msgid "Helptext_Admin_Users_UserEdit_Comment"
+msgstr "Hilfetext_Admin_QueueEdit_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_Name"
+msgid "Helptext_Admin_Users_UserEdit_Email"
+msgstr "Hilfetext_Admin_QueueEdit_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_Name"
+msgid "Helptext_Admin_Users_UserEdit_FirstName"
+msgstr "Hilfetext_Admin_QueueEdit_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_Name"
+msgid "Helptext_Admin_Users_UserEdit_LastName"
+msgstr "Hilfetext_Admin_QueueEdit_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_Icon."
+msgid "Helptext_Admin_Users_UserEdit_Login"
+msgstr "Hilfetext_Admin_QueueEdit_Icon"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_Name"
+msgid "Helptext_Admin_Users_UserEdit_Mobile"
+msgstr "Hilfetext_Admin_QueueEdit_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountEdit_Password"
+msgid "Helptext_Admin_Users_UserEdit_Password"
+msgstr "Hilfetext_Admin_MailAccountEdit_Password"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_Icon."
+msgid "Helptext_Admin_Users_UserEdit_Phone"
+msgstr "Hilfetext_Admin_QueueEdit_Icon"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_Signature"
+msgid "Helptext_Admin_Users_UserEdit_Title"
+msgstr "Hilfetext_Admin_QueueEdit_Signature"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_Validity"
+msgid "Helptext_Admin_Users_UserEdit_Valid"
+msgstr "Hilfetext_Admin_QueueEdit_Validity"
+
+#, fuzzy
+#| msgid "Helptext_Customers_ContactCreate_Comment"
+msgid "Helptext_CMDB_ConfigItemClassCreate_Comment"
+msgstr "Hilfetext_Organisations_ContactCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Customers_ContactCreate_Organisation"
+msgid "Helptext_CMDB_ConfigItemClassCreate_Definition"
+msgstr "Hilfetext_Organisations_ContactCreate_Organisation"
+
+#, fuzzy
+#| msgid "Helptext_Customers_ContactCreate_Login"
+msgid "Helptext_CMDB_ConfigItemClassCreate_Icon"
+msgstr "Hilfetext_Organisations_ContactCreate_Login"
+
+#, fuzzy
+#| msgid "Helptext_Admin_SystemAddressCreate_Name"
+msgid "Helptext_CMDB_ConfigItemClassCreate_Name"
+msgstr "Hilfetext_Admin_SystemAddressCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Customers_ContactCreate_Validity"
+msgid "Helptext_CMDB_ConfigItemClassCreate_Valid"
+msgstr "Hilfetext_Organisations_ContactCreate_Validity"
+
+#, fuzzy
+#| msgid "Helptext_Customers_ContactEdit_Comment"
+msgid "Helptext_CMDB_ConfigItemClassEdit_Comment"
+msgstr "Hilfetext_Organisations_ContactEdit_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountEdit_Dispachting"
+msgid "Helptext_CMDB_ConfigItemClassEdit_Definition"
+msgstr "Hilfetext_Admin_MailAccountEdit_Dispachting"
+
+#, fuzzy
+#| msgid "Helptext_Customers_ContactEdit_Phone"
+msgid "Helptext_CMDB_ConfigItemClassEdit_Icon"
+msgstr "Hilfetext_Organisations_ContactEdit_Phone"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_Name"
+msgid "Helptext_CMDB_ConfigItemClassEdit_Name"
+msgstr "Hilfetext_Admin_QueueEdit_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_Validity"
+msgid "Helptext_CMDB_ConfigItemClassEdit_Valid"
+msgstr "Hilfetext_Admin_QueueEdit_Validity"
+
+#, fuzzy
+#| msgid "Helptext_Customers_ContactCreate_Password"
+msgid "Helptext_CMDB_COnfigItemCreate_Class"
+msgstr "Hilfetext_Organisations_ContactCreate_Password"
+
+#, fuzzy
+#| msgid "Helptext_Customers_ContactEdit_Fax"
+msgid "Helptext_CMDB_ConfigItemCreateEdit_Class"
+msgstr "Hilfetext_Organisations_ContactEdit_Fax"
+
+#, fuzzy
+#| msgid "Overview Config Items Deployment State"
+msgid "Helptext_CMDB_ConfigItemCreateEdit_DeploymentState"
+msgstr "Übersicht Assets Verwendungsstatus"
+
+msgid "Helptext_CMDB_ConfigItemCreateEdit_IncidentState"
+msgstr ""
+
+#, fuzzy
+#| msgid "Helptext_Customers_ContactCreate_Login"
+msgid "Helptext_CMDB_ConfigItemCreateEdit_Links"
+msgstr "Hilfetext_Organisations_ContactCreate_Login"
+
+#, fuzzy
+#| msgid "Helptext_Admin_QueueEdit_Name"
+msgid "Helptext_CMDB_ConfigItemCreateEdit_Name"
+msgstr "Hilfetext_Admin_QueueEdit_Name"
 
 msgid "Helptext_Customers_ContactCreate_City"
 msgstr "Hilfetext_Organisations_ContactCreate_City"
@@ -1444,17 +1764,175 @@ msgstr "HIlfetext_Organisations_OrganisationCreate_Zip"
 msgid "Helptext_Customers_OrganisationImport"
 msgstr "Hilfetext_Organisations_OrganisationImport"
 
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleCreate_Comment"
+msgid "Helptext_FAQ_ArticleCreate_Attachments"
+msgstr "Hilfetext_Admin_TextModuleCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryCreate_ParentCategory"
+msgid "Helptext_FAQ_ArticleCreate_Category"
+msgstr "Hilfetext_Admin_FAQCategoryCreate_ParentQueue"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleCreate_Name"
+msgid "Helptext_FAQ_ArticleCreate_Cause"
+msgstr "Hilfetext_Admin_TextModuleCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleCreate_Comment"
+msgid "Helptext_FAQ_ArticleCreate_Comment"
+msgstr "Hilfetext_Admin_TextModuleCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleCreate_Language"
+msgid "Helptext_FAQ_ArticleCreate_Language"
+msgstr "Hilfetext_Admin_TextModuleCreate_Language"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleCreate_Language"
+msgid "Helptext_FAQ_ArticleCreate_Links"
+msgstr "Hilfetext_Admin_TextModuleCreate_Language"
+
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
+msgid "Helptext_FAQ_ArticleCreate_Solution"
+msgstr "Hilfetext_Admin_FAQCategoryCreate_Icon"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleCreate_Comment"
+msgid "Helptext_FAQ_ArticleCreate_Symptom"
+msgstr "Hilfetext_Admin_TextModuleCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleCreate_Text"
+msgid "Helptext_FAQ_ArticleCreate_Tags"
+msgstr "Hilfetext_Admin_TextModuleCreate_Text"
+
+#, fuzzy
+#| msgid "Helptext_Customers_ContactCreate_Title"
+msgid "Helptext_FAQ_ArticleCreate_Title"
+msgstr "Hilfetext_Organisations_ContactCreate_Title"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleCreate_Validity"
+msgid "Helptext_FAQ_ArticleCreate_Valid"
+msgstr "Hilfetext_Admin_TextModuleCreate_Validity"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleCreate_Validity"
+msgid "Helptext_FAQ_ArticleCreate_Visibility"
+msgstr "Hilfetext_Admin_TextModuleCreate_Validity"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleEdit_Comment"
+msgid "Helptext_FAQ_ArticleEdit_Attachments"
+msgstr "Hilfetext_Admin_TextModuleEdit_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryEdit_ParentCategory"
+msgid "Helptext_FAQ_ArticleEdit_Category"
+msgstr "Hilfetext_Admin_FAQCategoryEdit_ParentQueue"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleEdit_Name"
+msgid "Helptext_FAQ_ArticleEdit_Cause"
+msgstr "Hilfetext_Admin_TextModuleEdit_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleEdit_Comment"
+msgid "Helptext_FAQ_ArticleEdit_Comment"
+msgstr "Hilfetext_Admin_TextModuleEdit_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleEdit_Language"
+msgid "Helptext_FAQ_ArticleEdit_Language"
+msgstr "Hilfetext_Admin_TextModuleEdit_Language"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleEdit_Subject"
+msgid "Helptext_FAQ_ArticleEdit_Solution"
+msgstr "Hilfetext_Admin_TextModuleEdit_Subject"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleEdit_Subject"
+msgid "Helptext_FAQ_ArticleEdit_Symptom"
+msgstr "Hilfetext_Admin_TextModuleEdit_Subject"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleEdit_Text"
+msgid "Helptext_FAQ_ArticleEdit_Tags"
+msgstr "Hilfetext_Admin_TextModuleEdit_Text"
+
+#, fuzzy
+#| msgid "Helptext_Customers_ContactEdit_Title"
+msgid "Helptext_FAQ_ArticleEdit_Title"
+msgstr "Hilfetext_Organisations_ContactEdit_Title"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleEdit_Validity"
+msgid "Helptext_FAQ_ArticleEdit_Valid"
+msgstr "Hilfetext_Admin_TextModuleEdit_Validity"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleEdit_Validity"
+msgid "Helptext_FAQ_ArticleEdit_Visibility"
+msgstr "Hilfetext_Admin_TextModuleEdit_Validity"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailFilterCreate_Name"
+msgid "Helptext_i18n_TranslationPatternCreate_Pattern"
+msgstr "Hilfetext_Admin_MailFilterCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Customers_ContactCreate_Organisation"
+msgid "Helptext_i18n_TranslationPatternCreate_Translation"
+msgstr "Hilfetext_Organisations_ContactCreate_Organisation"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailFilter_FilterConditions_Pattern"
+msgid "Helptext_i18n_TranslationPatternEdit_Pattern"
+msgstr "Hilfetext_Admin_MailFilter_FilterConditions_Pattern"
+
+#, fuzzy
+#| msgid "Helptext_Customers_ContactEdit_Organisation"
+msgid "Helptext_i18n_TranslationPatternEdit_Translation"
+msgstr "Hilfetext_Organisations_ContactEdit_Organisation"
+
 msgid "Helptext_PersonalSettings_MyQueues_Hint"
 msgstr "Hilfetext_PersonalSettings_MyQueues_Hint"
 
 msgid "Helptext_PersonalSettings_UserLanguage_Hint"
 msgstr "Hilfetext_PersonalSettings_UserLanguage_Hint"
 
+#, fuzzy
+#| msgid "Helptext_Search_Contact"
+msgid "Helptext_Search_ConfigItem"
+msgstr "Hilfetext_Search_Contact"
+
 msgid "Helptext_Search_Contact"
+msgstr "Hilfetext_Search_Contact"
+
+#, fuzzy
+#| msgid "Helptext_Search_Contact"
+msgid "Helptext_Search_FAQArticle"
 msgstr "Hilfetext_Search_Contact"
 
 msgid "Helptext_Search_Organisation"
 msgstr "Hilfetext_Search_Organisation"
+
+#, fuzzy
+#| msgid "Helptext_Search_Contact"
+msgid "Helptext_Search_Ticket"
+msgstr "Hilfetext_Search_Contact"
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketCreate"
+msgid "Helptext_Textmodules_ArticleCreate"
+msgstr ""
+"Um die Textbausteine zu nutzen, geben Sie \"::\" (Doppelpunkt Doppelpunkt) "
+"ein. Wählen Sie den gewünschten Textbaustein aus dem Kontext-Menü. Durch "
+"weiter Texteingabe können Sie die Auswahl weiter einschränken."
 
 msgid "Helptext_Textmodules_TicketCreate"
 msgstr ""
@@ -1463,6 +1941,159 @@ msgstr ""
 "weiter Texteingabe können Sie die Auswahl weiter einschränken."
 
 msgid "Helptext_Textmodules_TicketEdit"
+msgstr "Hilfetext_Textmodules_TicketEdit"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleCreate_Comment"
+msgid "Helptext_Ticket_ArticleCreate_Attachments"
+msgstr "Hilfetext_Admin_TextModuleCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleEdit_Subject"
+msgid "Helptext_Ticket_ArticleCreateEdit_Subject"
+msgstr "Hilfetext_Admin_TextModuleEdit_Subject"
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketCreate"
+msgid "HelpText_Ticket_ArticleCreate_From"
+msgstr ""
+"Um die Textbausteine zu nutzen, geben Sie \"::\" (Doppelpunkt Doppelpunkt) "
+"ein. Wählen Sie den gewünschten Textbaustein aus dem Kontext-Menü. Durch "
+"weiter Texteingabe können Sie die Auswahl weiter einschränken."
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketCreate"
+msgid "Helptext_Tickets_ArticleCreate_Channel"
+msgstr ""
+"Um die Textbausteine zu nutzen, geben Sie \"::\" (Doppelpunkt Doppelpunkt) "
+"ein. Wählen Sie den gewünschten Textbaustein aus dem Kontext-Menü. Durch "
+"weiter Texteingabe können Sie die Auswahl weiter einschränken."
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketCreate"
+msgid "Helptext_Tickets_TicketCreate_Channel"
+msgstr ""
+"Um die Textbausteine zu nutzen, geben Sie \"::\" (Doppelpunkt Doppelpunkt) "
+"ein. Wählen Sie den gewünschten Textbaustein aus dem Kontext-Menü. Durch "
+"weiter Texteingabe können Sie die Auswahl weiter einschränken."
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketCreate"
+msgid "Helptext_Tickets_TicketCreate_Contact"
+msgstr ""
+"Um die Textbausteine zu nutzen, geben Sie \"::\" (Doppelpunkt Doppelpunkt) "
+"ein. Wählen Sie den gewünschten Textbaustein aus dem Kontext-Menü. Durch "
+"weiter Texteingabe können Sie die Auswahl weiter einschränken."
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketCreate"
+msgid "Helptext_Tickets_TicketCreate_Links"
+msgstr ""
+"Um die Textbausteine zu nutzen, geben Sie \"::\" (Doppelpunkt Doppelpunkt) "
+"ein. Wählen Sie den gewünschten Textbaustein aus dem Kontext-Menü. Durch "
+"weiter Texteingabe können Sie die Auswahl weiter einschränken."
+
+#, fuzzy
+#| msgid "Helptext_Customers_ContactCreate_Organisation"
+msgid "Helptext_Tickets_TicketCreate_Organisation"
+msgstr "Hilfetext_Organisations_ContactCreate_Organisation"
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketCreate"
+msgid "Helptext_Tickets_TicketCreate_Owner"
+msgstr ""
+"Um die Textbausteine zu nutzen, geben Sie \"::\" (Doppelpunkt Doppelpunkt) "
+"ein. Wählen Sie den gewünschten Textbaustein aus dem Kontext-Menü. Durch "
+"weiter Texteingabe können Sie die Auswahl weiter einschränken."
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketCreate"
+msgid "Helptext_Tickets_TicketCreate_Priority"
+msgstr ""
+"Um die Textbausteine zu nutzen, geben Sie \"::\" (Doppelpunkt Doppelpunkt) "
+"ein. Wählen Sie den gewünschten Textbaustein aus dem Kontext-Menü. Durch "
+"weiter Texteingabe können Sie die Auswahl weiter einschränken."
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketCreate"
+msgid "Helptext_Tickets_TicketCreate_Queue"
+msgstr ""
+"Um die Textbausteine zu nutzen, geben Sie \"::\" (Doppelpunkt Doppelpunkt) "
+"ein. Wählen Sie den gewünschten Textbaustein aus dem Kontext-Menü. Durch "
+"weiter Texteingabe können Sie die Auswahl weiter einschränken."
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketCreate"
+msgid "Helptext_Tickets_TicketCreate_Responsible"
+msgstr ""
+"Um die Textbausteine zu nutzen, geben Sie \"::\" (Doppelpunkt Doppelpunkt) "
+"ein. Wählen Sie den gewünschten Textbaustein aus dem Kontext-Menü. Durch "
+"weiter Texteingabe können Sie die Auswahl weiter einschränken."
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketCreate"
+msgid "Helptext_Tickets_TicketCreate_State"
+msgstr ""
+"Um die Textbausteine zu nutzen, geben Sie \"::\" (Doppelpunkt Doppelpunkt) "
+"ein. Wählen Sie den gewünschten Textbaustein aus dem Kontext-Menü. Durch "
+"weiter Texteingabe können Sie die Auswahl weiter einschränken."
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketCreate"
+msgid "Helptext_Tickets_TicketCreate_Type"
+msgstr ""
+"Um die Textbausteine zu nutzen, geben Sie \"::\" (Doppelpunkt Doppelpunkt) "
+"ein. Wählen Sie den gewünschten Textbaustein aus dem Kontext-Menü. Durch "
+"weiter Texteingabe können Sie die Auswahl weiter einschränken."
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketEdit"
+msgid "Helptext_Tickets_TicketEdit_Channel"
+msgstr "Hilfetext_Textmodules_TicketEdit"
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketEdit"
+msgid "Helptext_Tickets_TicketEdit_Contact"
+msgstr "Hilfetext_Textmodules_TicketEdit"
+
+#, fuzzy
+#| msgid "Helptext_Customers_ContactEdit_Organisation"
+msgid "Helptext_Tickets_TicketEdit_Organisation"
+msgstr "Hilfetext_Organisations_ContactEdit_Organisation"
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketEdit"
+msgid "Helptext_Tickets_TicketEdit_Owner"
+msgstr "Hilfetext_Textmodules_TicketEdit"
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketEdit"
+msgid "Helptext_Tickets_TicketEdit_Priority"
+msgstr "Hilfetext_Textmodules_TicketEdit"
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketEdit"
+msgid "Helptext_Tickets_TicketEdit_Queue"
+msgstr "Hilfetext_Textmodules_TicketEdit"
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketEdit"
+msgid "Helptext_Tickets_TicketEdit_Responsible"
+msgstr "Hilfetext_Textmodules_TicketEdit"
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketEdit"
+msgid "Helptext_Tickets_TicketEdit_State"
+msgstr "Hilfetext_Textmodules_TicketEdit"
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketEdit"
+msgid "Helptext_Tickets_TicketEdit_Title"
+msgstr "Hilfetext_Textmodules_TicketEdit"
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketEdit"
+msgid "Helptext_Tickets_TicketEdit_Type"
 msgstr "Hilfetext_Textmodules_TicketEdit"
 
 msgid "History"
@@ -1531,66 +2162,6 @@ msgstr "Vorfallstatus"
 msgid "Incident State"
 msgstr "Vorfallstatus"
 
-msgid "Insert a comment for the CI class."
-msgstr "Geben Sie einen Kommentar zur Asset Klasse ein."
-
-msgid "Insert a comment for the priority."
-msgstr "Geben Sie einen Kommentar für die Priorität ein."
-
-msgid "Insert a comment for the role."
-msgstr "Geben Sie einen Kommentar zu der Rolle ein."
-
-msgid "Insert a comment for the state."
-msgstr "Geben Sie einen Kommentar zu dem Status ein."
-
-msgid "Insert a comment for the type."
-msgstr "Geben Sie einen Kommentar für den Typ ein."
-
-msgid "Insert a comment for the user."
-msgstr "Geben Sie einen Kommentar zu dem Nutzer ein."
-
-msgid "Insert a config item class name."
-msgstr "Geben Sie einen Namen für die Asset Klasse ein."
-
-msgid "Insert additional information for this FAQ article."
-msgstr "Geben Sie zusätzliche Informationen zu diesem FAQ Artikel an."
-
-msgid "Insert a login for the user."
-msgstr "Geben Sie den Login (Nutzername) des Kontaktes ein."
-
-msgid "Insert a mobile number for the user."
-msgstr "Geben Sie eine Mobilfunknummer für den Nutzer ein."
-
-msgid "Insert a name for the Config Item."
-msgstr "Geben Sie einen Name für das Asset ein."
-
-msgid "Insert a name for the FAQ article."
-msgstr "Geben Sie einen Titel für den FAQ Artikel ein."
-
-msgid "Insert a pattern for the translation."
-msgstr "Geben Sie ein Pattern für die Übersetzung ein."
-
-msgid "Insert a phone number for the user."
-msgstr "Geben Sie eine Telefonnummer für den Nutzer ein."
-
-msgid "Insert a priority name."
-msgstr "Geben Sie einen Name für die Priorität ein."
-
-msgid "Insert a role name."
-msgstr "Geben Sie einen Name für die Rolle ein."
-
-msgid "Insert a state name."
-msgstr "Geben Sie einen Name für den Status ein."
-
-msgid "Insert a ticket title."
-msgstr "Geben Sie einen Titel für das Ticket ein."
-
-msgid "Insert a title for the user."
-msgstr "Geben Sie einen Titel für den Nutzer ein."
-
-msgid "Insert a type name."
-msgstr "Geben Sie einen Name für den Typ ein."
-
 msgid "Inserted email address is invalid"
 msgstr "Die eingegebene E-Mail Adresse ist ungültig"
 
@@ -1600,25 +2171,8 @@ msgstr "Die eingegebene E-Mail-Adresse darf keine Systemadresse sein ({0})."
 msgid "insert filter value"
 msgstr "Filterwert eingeben"
 
-msgid "Insert key words for the FAQ article to find them more quickly."
-msgstr ""
-"Vergeben Sie Schlagworte für den FAQ Artikel, um ihn später schneller wieder "
-"zu finden."
-
 msgid "Insert the complete ticket title or a part of the title."
 msgstr "Geben Sie den Titel oder Teile eines Tickettitels ein."
-
-msgid "Insert the definition for the Config Item Class."
-msgstr "Geben Sie die Definition für die Asset Klasse ein."
-
-msgid "Insert the email address for the user."
-msgstr "Geben Sie eine E-Mail-Adresse für den Nutzer ein."
-
-msgid "Insert the firstname of the user."
-msgstr "Geben Sie den Vorname des Nutzers ein."
-
-msgid "Insert the lastname of the user."
-msgstr "Geben Sie den Nachname des Nutzers ein."
 
 msgid "Insert the ticket number or a part of the number (min. 1 character)."
 msgstr ""
@@ -1699,24 +2253,6 @@ msgstr "Verknüpfungen aktualisiert."
 
 msgid "Links will be removed."
 msgstr "Verknüpfungen werden entfernt."
-
-msgid ""
-"Link this config item to a ticket, an FAQ article or another config item."
-msgstr ""
-"Verknüpfen Sie dieses Asset mit einem Ticket, einem FAQ Artikel oder einem "
-"anderen Asset."
-
-msgid ""
-"Link this FAQ article to a ticket, a config item or another FAQ article."
-msgstr ""
-"Verknüpfen Sie diesen FAQ Artikel mit einem Ticket, einem Asset oder einem "
-"anderen FAQ Artikel."
-
-msgid ""
-"Link this ticket item to an config item, an FAQ article or another ticket."
-msgstr ""
-"Verknüpfen Sie dieses Ticket mit einem Asset, einem FAQ Artikel oder einem "
-"anderen Ticket."
 
 msgid "Link Ticket with"
 msgstr "Ticket verknüpfen mit"
@@ -2151,11 +2687,6 @@ msgstr "Tickets nach Status"
 msgid "Owner"
 msgstr "Bearbeiter"
 
-msgid "Owner is the user to which the ticket is assigned for processing."
-msgstr ""
-"Der Bearbeiter ist die Person, die für die Bearbeitung des Ticket zuständig "
-"sein soll."
-
 msgid "Parent Category"
 msgstr "Übergeordnete Kategorie"
 
@@ -2195,22 +2726,8 @@ msgstr "Persönliche Einstellungen"
 msgid "Phone"
 msgstr "Telefon"
 
-msgid "Please describe the reason as detailed as possible."
-msgstr "Beschreiben Sie die Ursache so genau wie möglich."
-
-msgid "Please insert a base string for the translation."
-msgstr "Geben Sie die Basiszeichenkette für die Übersetzung ein."
-
-msgid "Please select a config item class. The form will be completed then."
-msgstr ""
-"Bitte wählen Sie zunächst eine Asset-Klasse aus der Liste. Anschließend wird "
-"das vollständige Eingabe-Formular geladen."
-
 msgid "Please select a contact"
 msgstr "Wählen Sie bitte einen Kontakt."
-
-msgid "Please select a language for the translation."
-msgstr "Wählen Sie eine Sprache für die Übersetzung."
 
 msgid "Postal Address"
 msgstr "Adresse"
@@ -2232,13 +2749,6 @@ msgstr "Prio"
 
 msgid "Priorities"
 msgstr "Prioritäten"
-
-msgid ""
-"Priorities are used to mark a Ticket‘s urgency with different colours, so "
-"you can  categorize Tickets."
-msgstr ""
-"Prioritäten kennzeichnen farblich unterschiedliche Dringlichkeiten und "
-"können zur Kategorisierung von Tickets genutzt werden."
 
 msgid "Priorities successfully removed."
 msgstr "Prioritäen wurden erfolgreich entfernt."
@@ -2356,15 +2866,6 @@ msgstr "Reaktionszeit"
 
 msgid "Responsible"
 msgstr "Verantwortlicher"
-
-msgid ""
-"Responsible is the person in charge for this tickets processing, e.g. "
-"Service Owner, Key Account Manager. It does not need to be identical with "
-"the assigned ticket owner."
-msgstr ""
-"Der Verantwortliche ist die für die Ticketbearbeitung verantwortliche "
-"Person, z.B. der Service Owner, Key Account Manager. Er ist nicht zwingend "
-"identisch mit dem Ticketbearbeiter."
 
 msgid "Responsible Tickets"
 msgstr "Verantwortliche Tickets"
@@ -2496,38 +2997,8 @@ msgstr "Suche Titel"
 msgid "Select a character set."
 msgstr "Wählen Sie einen Zeichensatz."
 
-msgid "Select a deplyoment state."
-msgstr "Wählen Sie einen Verwendungsstatus."
-
-msgid "Select a incident state."
-msgstr "Wählen Sie einen Vorfallstatus."
-
-msgid "Select a language for the translation."
-msgstr "Wählen Sie eine Sprache für die Übersetzung."
-
-msgid "Select a language for this FAQ article."
-msgstr "Wählen Sie die Sprache des FAQ-Eintrages aus der Liste."
-
 msgid "Select all"
 msgstr "Alle auswählen"
-
-msgid "Select an FAQ category."
-msgstr "Wählen Sie eine FAQ-Kategorie aus der Liste."
-
-msgid "Select an icon for this config item class."
-msgstr "Wählen Sie ein Icon für die Asset Klasse."
-
-msgid "Select an icon for this priority."
-msgstr "Wählen Sie ein Icon für die Priorität aus."
-
-msgid "Select an icon for this state."
-msgstr "Wählen Sie ein Icon für den Status aus."
-
-msgid "Select an icon for this type."
-msgstr "Wählen Sie ein Icon für den Typ aus."
-
-msgid "Select a state type for this state."
-msgstr "Wählen Sie den Statustyp für den Status aus."
 
 msgid "Select a text separator."
 msgstr "Wählen Sie einen Texttrenner."
@@ -2552,9 +3023,6 @@ msgstr "Datei wählen"
 
 msgid "Select image file"
 msgstr "Bilddatei wählen"
-
-msgid "Select which agents should be assigned to this role."
-msgstr "Wählen Sie, welche Agenten zu dieser Rolle zugeordnet werden sollen."
 
 msgid "; (semicolon)"
 msgstr "; (Semikolon)"
@@ -2592,48 +3060,11 @@ msgstr ""
 msgid "Service"
 msgstr "Service"
 
-msgid "Set a password for the user."
-msgstr "Legen Sie ein Passwort für den Nutzer fest."
-
 msgid "Set Email Header"
 msgstr "E-Mail Header setzen"
 
 msgid "Set Email Headers"
 msgstr "E-Mail Header setzen"
-
-msgid "Set the ci class as „valid“, „invalid (temporarily)“, or „invalid“."
-msgstr ""
-"Setzen Sie die Asset Klasse als \"gültig\", \"ungültig (temporär)\" oder "
-"\"ungültig\"."
-
-msgid "Set the FAQ article as „valid“, „invalid (temporarily)“, or „invalid“."
-msgstr ""
-"Setzen Sie den FAQ Artikel als \"gültig\", \"ungültig (temporär)\" oder "
-"\"ungültig\"."
-
-msgid "Set the priority as „valid“, „invalid (temporarily)“, or „invalid“."
-msgstr ""
-"Setzen Sie die Priorität als \"gültig\", \"ungültig (temporär)\" oder "
-"\"ungültig\"."
-
-msgid "Set the role as „valid“, „invalid (temporarily)“, or „invalid“."
-msgstr ""
-"Setzen Sie die Rolle als \"gültig\", \"ungültig (temporär)\" oder \"ungültig"
-"\"."
-
-msgid "Set the state as „valid“, „invalid (temporarily)“, or „invalid“."
-msgstr ""
-"Setzen Sie den Status als \"gültig\", \"ungültig (temporär)\" oder \"ungültig"
-"\"."
-
-msgid "Set the type as „valid“, „invalid (temporarily)“, or „invalid“."
-msgstr ""
-"Setzen Sie den Typ als \"gültig\", \"ungültig (temporär)\" oder \"ungültig\"."
-
-msgid "Set the user as „valid“, „invalid (temporarily)“, or „invalid“."
-msgstr ""
-"Setzen Sie den Nutzer als \"gültig\", \"ungültig (temporär)\" oder \"ungültig"
-"\"."
 
 msgid "Set Value"
 msgstr "Wert setzen"
@@ -2733,11 +3164,6 @@ msgstr "Wechsel ins Kundenportal."
 msgid "Symptom"
 msgstr "Symptom"
 
-#, fuzzy
-#| msgid "SysConfig"
-msgid "Sysconfig"
-msgstr "SysConfig"
-
 msgid "SysConfig"
 msgstr "SysConfig"
 
@@ -2788,13 +3214,6 @@ msgstr "Textbaustein wurde erfolgreich angelegt."
 
 msgid "Text separator"
 msgstr "Texttrenner"
-
-msgid ""
-"The FAQ article <a href=\"faqarticles/2\" target=\"_blank\">How to search in "
-"KIX 18?</a> offers a detailed <b>explanation for the search operators<b>"
-msgstr ""
-"Der FAQ-Artikel <a href=\"faqarticles/2\" target=\"_blank\">How to search in "
-"KIX 18?</a> <b>erklärt die möglichen Such-Operatoren<b>"
 
 #, fuzzy
 #| msgid "Required field '{0}' has no value."
@@ -2873,11 +3292,6 @@ msgstr "Fehler bei der Ticketsuche!"
 msgid "Ticket: States"
 msgstr "Ticket: Status"
 
-msgid "Ticket status summarizes the tickets processing state."
-msgstr ""
-"Der Status definiert, in welchem Bearbeitungszustand sich ein Ticket "
-"befindet."
-
 msgid "Ticket successfully created."
 msgstr "Ticket wurde erfolgreich angelegt."
 
@@ -2886,9 +3300,6 @@ msgstr "Ticket: Vorlagen"
 
 msgid "Ticket: Text Modules"
 msgstr "Ticket: Textbausteine"
-
-msgid "Ticket type is part of the classification of a ticket."
-msgstr "Der Ticket-Typ dient zur Klassifizierung von Anfragen."
 
 msgid "Ticket: Types"
 msgstr "Ticket: Typen"
@@ -3132,6 +3543,292 @@ msgstr "PLZ"
 msgid "ZIP"
 msgstr "PLZ"
 
+#~ msgid ""
+#~ "A contact is a person, filing a request for the customer. Enter at least "
+#~ "3 characters in order to get a suggestion list of already registered "
+#~ "contacts. You may use „*“ as wildcard."
+#~ msgstr ""
+#~ "Ein Kontakt ist eine Person, die eine Anfrage im Kontext eines Kunden "
+#~ "stellt. Geben Sie mind. 3 Zeichen ein um eine Liste von bekannten "
+#~ "Kontakten vorgeschlagen zu bekommen. \"*\" kann als Platzhalter verwendet "
+#~ "werden."
+
+#~ msgid ""
+#~ "A queue is a classification system for requests, comparable to folders in "
+#~ "a file system."
+#~ msgstr ""
+#~ "Ein Team ordnet Anfragen Bearbeitungsteams zu und klassifiziert die "
+#~ "Anfrage. Teams sind vergleichbar mit Verzeichnissen im Dateisystem."
+
+#~ msgid ""
+#~ "Attach additional files to the FAQ article. Drag & Drop is possible. Max. "
+#~ "file size is 25 MB."
+#~ msgstr ""
+#~ "Hier können Sie zusätzliche Dateien an den FAQ Artikel hängen. Drag & "
+#~ "Drop ist möglich. Die maximale Dateigröße beträgt 25 MB."
+
+#~ msgid ""
+#~ "<b>-- KIX Professional Feature--</b><p>To use the text modules available "
+#~ "in your system, enter „::“ (colon colon). Then choose the text modules "
+#~ "you want to use in the context menu. You can narrow down the key word "
+#~ "selection manually by entering more text.</p>"
+#~ msgstr ""
+#~ "<b>-- KIX Professional Feature --</b><p>Um die in Ihrem System "
+#~ "verfügbaren Textbausteine zu nutzen, geben Sie \"::\" (Doppelpunkt "
+#~ "Doppelpunkt) ein. Wählen Sie anschließend im Kontextmenü den gewünschten "
+#~ "Textbaustein aus. Sie können die Auswahl anhand der Schlüsselworte "
+#~ "manuell einschränken, in dem sie weiteren Text eingeben.</p>"
+
+#~ msgid "Choose a contact, customers will be assigned automatically."
+#~ msgstr "Kunden werden nach Auswahl eines Kontaktes automatisch zugewiesen."
+
+#~ msgid "Config Item class. Can not be changed."
+#~ msgstr "Klasse des Assets. Nicht änderbar."
+
+#~ msgid ""
+#~ "Define where this FAQ article will be shown (internal= only Agent Portal, "
+#~ "external = KIX Agent and Organisation Portal for authenticated users "
+#~ "only, public=KIX Agent- and Organisation Portal for both, authenticated "
+#~ "and unauthenticated users)."
+#~ msgstr ""
+#~ "Legen Sie fest, wo der FAQ-Artikel angezeigt werden darf.  (intern = nur "
+#~ "im KIX Agentenportal, extern = KIX Agenten- und Kundenportal für auth. "
+#~ "Nutzer, öffentlich = KIX Agenten- und Kundenportal sowohl für unauth. als "
+#~ "auch auth. Nutzer)."
+
+#~ msgid "Describe sympton as precisely as possible"
+#~ msgstr "Beschreiben Sie das Symptom so genau wie möglich."
+
+#~ msgid ""
+#~ "Describe the solution for the symptons reasons as precisely as possible"
+#~ msgstr ""
+#~ "Beschreiben Sie die Lösung für die Ursache des Symptoms so genau wie "
+#~ "möglich."
+
+#~ msgid "Insert a comment for the CI class."
+#~ msgstr "Geben Sie einen Kommentar zur Asset Klasse ein."
+
+#~ msgid "Insert a comment for the priority."
+#~ msgstr "Geben Sie einen Kommentar für die Priorität ein."
+
+#~ msgid "Insert a comment for the role."
+#~ msgstr "Geben Sie einen Kommentar zu der Rolle ein."
+
+#~ msgid "Insert a comment for the state."
+#~ msgstr "Geben Sie einen Kommentar zu dem Status ein."
+
+#~ msgid "Insert a comment for the type."
+#~ msgstr "Geben Sie einen Kommentar für den Typ ein."
+
+#~ msgid "Insert a comment for the user."
+#~ msgstr "Geben Sie einen Kommentar zu dem Nutzer ein."
+
+#~ msgid "Insert a config item class name."
+#~ msgstr "Geben Sie einen Namen für die Asset Klasse ein."
+
+#~ msgid "Insert additional information for this FAQ article."
+#~ msgstr "Geben Sie zusätzliche Informationen zu diesem FAQ Artikel an."
+
+#~ msgid "Insert a login for the user."
+#~ msgstr "Geben Sie den Login (Nutzername) des Kontaktes ein."
+
+#~ msgid "Insert a mobile number for the user."
+#~ msgstr "Geben Sie eine Mobilfunknummer für den Nutzer ein."
+
+#~ msgid "Insert a name for the Config Item."
+#~ msgstr "Geben Sie einen Name für das Asset ein."
+
+#~ msgid "Insert a name for the FAQ article."
+#~ msgstr "Geben Sie einen Titel für den FAQ Artikel ein."
+
+#~ msgid "Insert a pattern for the translation."
+#~ msgstr "Geben Sie ein Pattern für die Übersetzung ein."
+
+#~ msgid "Insert a phone number for the user."
+#~ msgstr "Geben Sie eine Telefonnummer für den Nutzer ein."
+
+#~ msgid "Insert a priority name."
+#~ msgstr "Geben Sie einen Name für die Priorität ein."
+
+#~ msgid "Insert a role name."
+#~ msgstr "Geben Sie einen Name für die Rolle ein."
+
+#~ msgid "Insert a state name."
+#~ msgstr "Geben Sie einen Name für den Status ein."
+
+#~ msgid "Insert a ticket title."
+#~ msgstr "Geben Sie einen Titel für das Ticket ein."
+
+#~ msgid "Insert a title for the user."
+#~ msgstr "Geben Sie einen Titel für den Nutzer ein."
+
+#~ msgid "Insert a type name."
+#~ msgstr "Geben Sie einen Name für den Typ ein."
+
+#~ msgid "Insert key words for the FAQ article to find them more quickly."
+#~ msgstr ""
+#~ "Vergeben Sie Schlagworte für den FAQ Artikel, um ihn später schneller "
+#~ "wieder zu finden."
+
+#~ msgid "Insert the definition for the Config Item Class."
+#~ msgstr "Geben Sie die Definition für die Asset Klasse ein."
+
+#~ msgid "Insert the email address for the user."
+#~ msgstr "Geben Sie eine E-Mail-Adresse für den Nutzer ein."
+
+#~ msgid "Insert the firstname of the user."
+#~ msgstr "Geben Sie den Vorname des Nutzers ein."
+
+#~ msgid "Insert the lastname of the user."
+#~ msgstr "Geben Sie den Nachname des Nutzers ein."
+
+#~ msgid ""
+#~ "Link this config item to a ticket, an FAQ article or another config item."
+#~ msgstr ""
+#~ "Verknüpfen Sie dieses Asset mit einem Ticket, einem FAQ Artikel oder "
+#~ "einem anderen Asset."
+
+#~ msgid ""
+#~ "Link this FAQ article to a ticket, a config item or another FAQ article."
+#~ msgstr ""
+#~ "Verknüpfen Sie diesen FAQ Artikel mit einem Ticket, einem Asset oder "
+#~ "einem anderen FAQ Artikel."
+
+#~ msgid ""
+#~ "Link this ticket item to an config item, an FAQ article or another ticket."
+#~ msgstr ""
+#~ "Verknüpfen Sie dieses Ticket mit einem Asset, einem FAQ Artikel oder "
+#~ "einem anderen Ticket."
+
+#~ msgid "Owner is the user to which the ticket is assigned for processing."
+#~ msgstr ""
+#~ "Der Bearbeiter ist die Person, die für die Bearbeitung des Ticket "
+#~ "zuständig sein soll."
+
+#~ msgid "Please describe the reason as detailed as possible."
+#~ msgstr "Beschreiben Sie die Ursache so genau wie möglich."
+
+#~ msgid "Please insert a base string for the translation."
+#~ msgstr "Geben Sie die Basiszeichenkette für die Übersetzung ein."
+
+#~ msgid "Please select a config item class. The form will be completed then."
+#~ msgstr ""
+#~ "Bitte wählen Sie zunächst eine Asset-Klasse aus der Liste. Anschließend "
+#~ "wird das vollständige Eingabe-Formular geladen."
+
+#~ msgid "Please select a language for the translation."
+#~ msgstr "Wählen Sie eine Sprache für die Übersetzung."
+
+#~ msgid ""
+#~ "Priorities are used to mark a Ticket‘s urgency with different colours, so "
+#~ "you can  categorize Tickets."
+#~ msgstr ""
+#~ "Prioritäten kennzeichnen farblich unterschiedliche Dringlichkeiten und "
+#~ "können zur Kategorisierung von Tickets genutzt werden."
+
+#~ msgid ""
+#~ "Responsible is the person in charge for this tickets processing, e.g. "
+#~ "Service Owner, Key Account Manager. It does not need to be identical with "
+#~ "the assigned ticket owner."
+#~ msgstr ""
+#~ "Der Verantwortliche ist die für die Ticketbearbeitung verantwortliche "
+#~ "Person, z.B. der Service Owner, Key Account Manager. Er ist nicht "
+#~ "zwingend identisch mit dem Ticketbearbeiter."
+
+#~ msgid "Select a deplyoment state."
+#~ msgstr "Wählen Sie einen Verwendungsstatus."
+
+#~ msgid "Select a incident state."
+#~ msgstr "Wählen Sie einen Vorfallstatus."
+
+#~ msgid "Select a language for the translation."
+#~ msgstr "Wählen Sie eine Sprache für die Übersetzung."
+
+#~ msgid "Select a language for this FAQ article."
+#~ msgstr "Wählen Sie die Sprache des FAQ-Eintrages aus der Liste."
+
+#~ msgid "Select an FAQ category."
+#~ msgstr "Wählen Sie eine FAQ-Kategorie aus der Liste."
+
+#~ msgid "Select an icon for this config item class."
+#~ msgstr "Wählen Sie ein Icon für die Asset Klasse."
+
+#~ msgid "Select an icon for this priority."
+#~ msgstr "Wählen Sie ein Icon für die Priorität aus."
+
+#~ msgid "Select an icon for this state."
+#~ msgstr "Wählen Sie ein Icon für den Status aus."
+
+#~ msgid "Select an icon for this type."
+#~ msgstr "Wählen Sie ein Icon für den Typ aus."
+
+#~ msgid "Select a state type for this state."
+#~ msgstr "Wählen Sie den Statustyp für den Status aus."
+
+#~ msgid "Select which agents should be assigned to this role."
+#~ msgstr ""
+#~ "Wählen Sie, welche Agenten zu dieser Rolle zugeordnet werden sollen."
+
+#~ msgid "Set a password for the user."
+#~ msgstr "Legen Sie ein Passwort für den Nutzer fest."
+
+#~ msgid "Set the ci class as „valid“, „invalid (temporarily)“, or „invalid“."
+#~ msgstr ""
+#~ "Setzen Sie die Asset Klasse als \"gültig\", \"ungültig (temporär)\" oder "
+#~ "\"ungültig\"."
+
+#~ msgid ""
+#~ "Set the FAQ article as „valid“, „invalid (temporarily)“, or „invalid“."
+#~ msgstr ""
+#~ "Setzen Sie den FAQ Artikel als \"gültig\", \"ungültig (temporär)\" oder "
+#~ "\"ungültig\"."
+
+#~ msgid "Set the priority as „valid“, „invalid (temporarily)“, or „invalid“."
+#~ msgstr ""
+#~ "Setzen Sie die Priorität als \"gültig\", \"ungültig (temporär)\" oder "
+#~ "\"ungültig\"."
+
+#~ msgid "Set the role as „valid“, „invalid (temporarily)“, or „invalid“."
+#~ msgstr ""
+#~ "Setzen Sie die Rolle als \"gültig\", \"ungültig (temporär)\" oder "
+#~ "\"ungültig\"."
+
+#~ msgid "Set the state as „valid“, „invalid (temporarily)“, or „invalid“."
+#~ msgstr ""
+#~ "Setzen Sie den Status als \"gültig\", \"ungültig (temporär)\" oder "
+#~ "\"ungültig\"."
+
+#~ msgid "Set the type as „valid“, „invalid (temporarily)“, or „invalid“."
+#~ msgstr ""
+#~ "Setzen Sie den Typ als \"gültig\", \"ungültig (temporär)\" oder \"ungültig"
+#~ "\"."
+
+#~ msgid "Set the user as „valid“, „invalid (temporarily)“, or „invalid“."
+#~ msgstr ""
+#~ "Setzen Sie den Nutzer als \"gültig\", \"ungültig (temporär)\" oder "
+#~ "\"ungültig\"."
+
+#, fuzzy
+#~| msgid "SysConfig"
+#~ msgid "Sysconfig"
+#~ msgstr "SysConfig"
+
+#~ msgid ""
+#~ "The FAQ article <a href=\"faqarticles/2\" target=\"_blank\">How to search "
+#~ "in KIX 18?</a> offers a detailed <b>explanation for the search "
+#~ "operators<b>"
+#~ msgstr ""
+#~ "Der FAQ-Artikel <a href=\"faqarticles/2\" target=\"_blank\">How to search "
+#~ "in KIX 18?</a> <b>erklärt die möglichen Such-Operatoren<b>"
+
+#~ msgid "Ticket status summarizes the tickets processing state."
+#~ msgstr ""
+#~ "Der Status definiert, in welchem Bearbeitungszustand sich ein Ticket "
+#~ "befindet."
+
+#~ msgid "Ticket type is part of the classification of a ticket."
+#~ msgstr "Der Ticket-Typ dient zur Klassifizierung von Anfragen."
+
 #~ msgid "Without Ticketnumber"
 #~ msgstr "ohne Ticket-Nummer"
 
@@ -3260,9 +3957,6 @@ msgstr "PLZ"
 
 #~ msgid "Assigned Text Modules"
 #~ msgstr "Zuordnung zu Textbausteinen"
-
-#~ msgid "Helptext_Admin_TextModuleEdit_Subject"
-#~ msgstr "Hilfetext_Admin_TextModuleEdit_Subject"
 
 #~ msgid "Duplicate"
 #~ msgstr "Duplizieren"
