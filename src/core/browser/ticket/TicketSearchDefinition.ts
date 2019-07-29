@@ -137,7 +137,9 @@ export class TicketSearchDefinition extends SearchDefinition {
         return property === TicketProperty.QUEUE_ID
             || property === TicketProperty.STATE_ID
             || property === TicketProperty.PRIORITY_ID
-            || property === TicketProperty.TYPE_ID;
+            || property === TicketProperty.TYPE_ID
+            || property === TicketProperty.OWNER_ID
+            || property === TicketProperty.RESPONSIBLE_ID;
     }
 
     private isDateTime(property: string): boolean {
