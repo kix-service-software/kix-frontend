@@ -12,7 +12,7 @@ import {
 } from '../../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
-    KIXObjectType, Notification, ContextType, ObjectInformationWidgetSettings, NotificationProperty
+    KIXObjectType, Notification, ContextType, ObjectInformationWidgetSettings, NotificationProperty, SortUtil, DataType
 } from '../../../../../core/model';
 import { NotificationLabelProvider } from '../../../../../core/browser/notification';
 
@@ -117,7 +117,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 }
             }
         }
-        return labels;
+        return SortUtil.sortObjects(labels, 'text', DataType.STRING);
     }
 
     public getLabelList(property: string): Label[] {

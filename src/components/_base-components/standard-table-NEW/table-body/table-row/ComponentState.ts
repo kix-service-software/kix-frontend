@@ -17,6 +17,7 @@ export class ComponentState {
         public open: boolean = false,
         public selected: boolean = false,
         public selectable: boolean = true,
-        public show: boolean = false
+        public show: boolean = false,
+        public rowClasses: string[] = []
     ) { }
 }

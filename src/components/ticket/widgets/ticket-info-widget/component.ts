@@ -11,7 +11,7 @@ import { ComponentState } from './ComponentState';
 import { TicketLabelProvider, TicketService, TicketDetailsContext } from "../../../../core/browser/ticket";
 import { ContextService } from '../../../../core/browser/context';
 import {
-    ObjectIcon, KIXObjectType, Ticket, SysconfigUtil, ContextMode, OrganisationProperty,
+    ObjectIcon, KIXObjectType, Ticket, SysConfigUtil, ContextMode, OrganisationProperty,
     ContactProperty, Service, ObjectInformationWidgetSettings, Contact, Organisation, Context
 } from '../../../../core/model';
 import { ActionFactory, IdService, KIXObjectService } from '../../../../core/browser';
@@ -64,7 +64,7 @@ class Component {
         this.state.ticket = ticket;
         if (this.state.ticket) {
             this.state.isPending = await TicketService.getInstance().hasPendingState(this.state.ticket);
-            this.state.isAccountTimeEnabled = await SysconfigUtil.isTimeAccountingEnabled();
+            this.state.isAccountTimeEnabled = await SysConfigUtil.isTimeAccountingEnabled();
 
             const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
                 TicketDetailsContext.CONTEXT_ID

@@ -8,4 +8,4 @@
  */
 
 export { DateTimeUtil } from './DateTimeUtil';
-export { SysconfigUtil } from './SysconfigUtil';
+export { SysConfigUtil } from './SysConfigUtil';

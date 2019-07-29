@@ -12,7 +12,7 @@ import { ITableCSSHandler, TableValue } from "../../../table";
 
 export class PermissionTableCSSHandler implements ITableCSSHandler<Permission> {
 
-    public getRowCSSClasses(permission: Permission): string[] {
+    public async getRowCSSClasses(permission: Permission): Promise<string[]> {
         const classes = [];
         if (permission.Value & CRUD.DENY) {
             classes.push('error');
@@ -21,7 +21,7 @@ export class PermissionTableCSSHandler implements ITableCSSHandler<Permission> {
         return classes;
     }
 
-    public getValueCSSClasses(object: Permission, value: TableValue): string[] {
+    public async getValueCSSClasses(object: Permission, value: TableValue): Promise<string[]> {
         return [];
     }
 

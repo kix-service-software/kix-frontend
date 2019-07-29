@@ -28,7 +28,7 @@ import { FormValidationService } from "../../form/validation";
 import {
     NotificationEmailRecipientValidator, NotificationService, NotificationBrowserFactory, NotificationTableFactory,
     NotificationFormService, NotificationLabelProvider, NotificationCreateAction, NewNotificationDialogContext,
-    NotificationFilterTableFactory, NotificationDetailsContext
+    NotificationFilterTableFactory, NotificationDetailsContext, NotificationEditAction, EditNotificationDialogContext
 } from "../../notification";
 import {
     ContextType, ContextMode, ContextDescriptor, KIXObjectType, ConfiguredDialogWidget, WidgetConfiguration, CRUD
@@ -76,7 +76,9 @@ export class UIModule implements IUIModule {
         FactoryService.getInstance().registerFactory(KIXObjectType.LOG_FILE, LogFileBrowserFactory.getInstance());
 
         TableFactoryService.getInstance().registerFactory(new LogFileTableFactory());
-        TableCSSHandlerRegistry.getInstance().registerCSSHandler(KIXObjectType.LOG_FILE, new LogFileTableCSSHandler());
+        TableCSSHandlerRegistry.getInstance().registerObjectCSSHandler(
+            KIXObjectType.LOG_FILE, new LogFileTableCSSHandler()
+        );
 
         TableFactoryService.getInstance().registerFactory(new TranslationPatternTableFactory());
         TableFactoryService.getInstance().registerFactory(new TranslationLanguageTableFactory());
@@ -173,6 +175,26 @@ export class UIModule implements IUIModule {
                 ),
                 KIXObjectType.NOTIFICATION,
                 ContextMode.CREATE_ADMIN
+            ));
+        }
+
+        if (await this.checkPermission('system/communication/notifications/*', CRUD.UPDATE)) {
+            ActionFactory.getInstance().registerAction('notification-edit', NotificationEditAction);
+            const editNotificationDialogContext = new ContextDescriptor(
+                EditNotificationDialogContext.CONTEXT_ID, [KIXObjectType.NOTIFICATION],
+                ContextType.DIALOG, ContextMode.EDIT_ADMIN,
+                false, 'edit-notification-dialog', ['notifications'], EditNotificationDialogContext
+            );
+            ContextService.getInstance().registerContext(editNotificationDialogContext);
+
+            DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+                'edit-notification-dialog',
+                new WidgetConfiguration(
+                    'edit-notification-dialog', 'Translatable#Edit Notification', [], {},
+                    false, false, 'kix-icon-edit'
+                ),
+                KIXObjectType.NOTIFICATION,
+                ContextMode.EDIT_ADMIN
             ));
         }
 

@@ -13,6 +13,8 @@ import { TextModuleProperty } from "../../../model";
 
 export class TextModuleCSVExportAction extends CSVExportAction {
 
+    public hasLink: boolean = false;
+
     public async run(): Promise<void> {
         if (this.canRun()) {
             TableExportUtil.export(this.data, [TextModuleProperty.TEXT]);

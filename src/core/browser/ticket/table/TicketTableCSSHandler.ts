@@ -8,23 +8,35 @@
  */
 
 import { ITableCSSHandler, TableValue } from "../../table";
-import { Ticket, TicketProperty } from "../../../model";
+import { Ticket, TicketProperty, SysConfigKey, KIXObjectType, SysConfigOption } from "../../../model";
+import { KIXObjectService } from "../../kix";
 
 export class TicketTableCSSHandler implements ITableCSSHandler<Ticket> {
 
-    public getRowCSSClasses(ticket: Ticket): string[] {
+    public async getRowCSSClasses(ticket: Ticket): Promise<string[]> {
         const classes = [];
 
         if (ticket) {
             if (ticket.Unseen) {
                 classes.push("article-unread");
             }
+
+            const viewAbleTypesConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+                KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_VIEWABLE_STATE_TYPE]
+            );
+
+            if (viewAbleTypesConfig && viewAbleTypesConfig.length) {
+                const types = viewAbleTypesConfig[0].Value;
+                if (!types.some((t) => t === ticket.StateType)) {
+                    classes.push('invlaid-object');
+                }
+            }
         }
 
         return classes;
     }
 
-    public getValueCSSClasses(ticket: Ticket, value: TableValue): string[] {
+    public async getValueCSSClasses(ticket: Ticket, value: TableValue): Promise<string[]> {
         const classes = [];
         switch (value.property) {
             case TicketProperty.UNSEEN:

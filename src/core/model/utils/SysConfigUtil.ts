@@ -10,7 +10,7 @@
 import { SysConfigOption, KIXObjectType, SysConfigKey } from '../kix';
 import { KIXObjectService } from '../../browser';
 
-export class SysconfigUtil {
+export class SysConfigUtil {
 
     public static async isTimeAccountingEnabled(): Promise<boolean> {
         let enabled = false;

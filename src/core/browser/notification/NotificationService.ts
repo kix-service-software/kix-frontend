@@ -9,8 +9,7 @@
 
 import { KIXObjectService } from "../kix";
 import {
-    SystemAddress, KIXObjectType, TreeNode, NotificationProperty, SysConfigOption, SysConfigKey,
-    SortUtil, DataType, NotificationTicketNumberType
+    SystemAddress, KIXObjectType, TreeNode, NotificationProperty, SysConfigOption, SysConfigKey, SortUtil, DataType
 } from "../../model";
 
 export class NotificationService extends KIXObjectService<SystemAddress> {
@@ -38,10 +37,8 @@ export class NotificationService extends KIXObjectService<SystemAddress> {
             case NotificationProperty.DATA_VISIBLE_FOR_AGENT:
             case NotificationProperty.DATA_SEND_ONCE_A_DAY:
             case NotificationProperty.DATA_SEND_DESPITE_OOO:
-                value = Number(value);
-                break;
             case NotificationProperty.DATA_RECIPIENT_SUBJECT:
-                value = value === NotificationTicketNumberType.WITH ? 1 : 0;
+                value = Number(value);
                 break;
             case NotificationProperty.DATA_RECIPIENT_EMAIL:
                 value = Array.isArray(value) ? value.join(',') : value;

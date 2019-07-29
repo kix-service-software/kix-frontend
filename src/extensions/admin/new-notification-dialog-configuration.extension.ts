@@ -13,11 +13,11 @@ import {
     ConfiguredWidget, FormField, FormFieldValue, NotificationProperty, Form,
     KIXObjectType, FormContext, ContextConfiguration, KIXObjectProperty, FormFieldOption, ObjectReferenceOptions,
     KIXObjectLoadingOptions, FilterCriteria, FilterDataType, FilterType, DefaultSelectInputFormOption, TreeNode,
-    NotificationRecipientTypes, NotificationTicketNumberType, FormFieldOptions
+    NotificationRecipientTypes
 } from '../../core/model';
 import { ConfigurationService } from '../../core/services';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
-import { SearchOperator, AutocompleteOption } from '../../core/browser';
+import { SearchOperator } from '../../core/browser';
 
 export class Extension implements IConfigurationExtension {
 
@@ -155,17 +155,10 @@ export class Extension implements IConfigurationExtension {
                             'Translatable#Email Addresses'
                         ),
                         new FormField(
-                            'Translatable#Subject', NotificationProperty.DATA_RECIPIENT_SUBJECT,
-                            'default-select-input', false,
-                            'Translatable#Helptext_Admin_NotificationCreate_SubjectWithTicketNumber', [
-                                new FormFieldOption(DefaultSelectInputFormOption.NODES, [
-                                    new TreeNode(NotificationTicketNumberType.WITH, 'Translatable#With Ticketnumber'),
-                                    new TreeNode(
-                                        NotificationTicketNumberType.WITHOUT,
-                                        'Translatable#Without Ticketnumber'
-                                    )
-                                ])
-                            ], new FormFieldValue(NotificationTicketNumberType.WITH)
+                            'Translatable#Subject with Ticketnumber', NotificationProperty.DATA_RECIPIENT_SUBJECT,
+                            'checkbox-input', false,
+                            'Translatable#Helptext_Admin_NotificationCreate_SubjectWithTicketNumber',
+                            undefined, new FormFieldValue(true)
                         )
                     ], null, null, null, null, null, null, null, true, true
                 )

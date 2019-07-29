@@ -8,11 +8,13 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { FormInputComponent } from '../../../../../../core/model';
+import { FormInputComponent, InputFieldTypes } from '../../../../../../core/model';
+import { ObjectPropertyValue } from '../../../../../../core/browser';
 
 class Component extends FormInputComponent<Array<[string, string[] | number[]]>, ComponentState> {
 
     private listenerId: string;
+    private formTimeout: any;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -25,21 +27,46 @@ class Component extends FormInputComponent<Array<[string, string[] | number[]]>,
     public async onMount(): Promise<void> {
         this.listenerId = 'notification-input-filter-manager-listener';
         await super.onMount();
+        this.state.manager.init();
+        await this.setCurrentNode();
         this.state.manager.registerListener(this.listenerId, () => {
-            const filterValues: Array<[string, string[] | number[]]> = [];
-            const values = this.state.manager.getValues();
-            values.forEach((v) => {
-                if (v.value !== null) {
-                    filterValues.push([v.property, v.value]);
+            if (this.formTimeout) {
+                clearTimeout(this.formTimeout);
+            }
+            this.formTimeout = setTimeout(async () => {
+                const filterValues: Array<[string, string[] | number[]]> = [];
+                if (this.state.manager.hasDefinedValues()) {
+                    const values = this.state.manager.getEditableValues();
+                    values.forEach((v) => {
+                        if (v.value !== null) {
+                            filterValues.push([v.property, v.value]);
+                        }
+                    });
                 }
-            });
-            super.provideValue(filterValues);
+                super.provideValue(filterValues);
+            }, 200);
         });
     }
 
     public async onDestroy(): Promise<void> {
         if (this.state.manager) {
             this.state.manager.unregisterListener(this.listenerId);
+        }
+    }
+
+    public async setCurrentNode(): Promise<void> {
+        if (this.state.defaultValue && this.state.defaultValue.value) {
+            for (const value of this.state.defaultValue.value) {
+                let objectType;
+                const inputType = await this.state.manager.getInputType(value[0]);
+                if (inputType && inputType === InputFieldTypes.OBJECT_REFERENCE) {
+                    objectType = await this.state.manager.getObjectReferenceObjectType(value[0]);
+                }
+                this.state.manager.setValue(
+                    new ObjectPropertyValue(value[0], null, value[1], objectType, null, null, value[0])
+                );
+            }
+            super.provideValue(this.state.defaultValue.value);
         }
     }
 

@@ -14,6 +14,8 @@ import { TicketDialogUtil } from '../TicketDialogUtil';
 
 export class TicketCreateAction extends AbstractAction {
 
+    public hasLink: boolean = true;
+
     public permissions = [
         new UIComponentPermission('tickets', [CRUD.CREATE])
     ];

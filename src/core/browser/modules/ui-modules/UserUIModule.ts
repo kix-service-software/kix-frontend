@@ -51,7 +51,7 @@ export class UIModule implements IUIModule {
 
         TableFactoryService.getInstance().registerFactory(new RoleTableFactory());
         TableFactoryService.getInstance().registerFactory(new UserTableFactory());
-        TableCSSHandlerRegistry.getInstance().registerCSSHandler(
+        TableCSSHandlerRegistry.getInstance().registerObjectCSSHandler(
             KIXObjectType.PERMISSION, new PermissionTableCSSHandler()
         );
 

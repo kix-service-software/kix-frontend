@@ -28,6 +28,6 @@ export class SysConfigService extends KIXObjectService<SysConfigOption> {
     }
 
     public getLinkObjectName(): string {
-        return 'Sysconfig';
+        return 'SysConfig';
     }
 }

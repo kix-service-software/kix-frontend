@@ -36,7 +36,7 @@ import { IUIModule } from '../../application/IUIModule';
 import { NewSearchAction, EditSearchAction, SaveSearchAction, DeleteSearchAction } from '../../search/actions';
 import { LoadSearchAction } from '../../kix/search/actions';
 import { SearchService } from '../../kix/search/SearchService';
-import { BookmarkService } from '../../bookmark/BookmarkService';
+import { InvalidObjectCSSHandler } from '../../table/InvalidObjectCSSHandler';
 
 export class UIModule implements IUIModule {
 
@@ -78,9 +78,11 @@ export class UIModule implements IUIModule {
         LabelService.getInstance().registerLabelProvider(new SlaLabelProvider());
 
         TableFactoryService.getInstance().registerFactory(new PermissionsTableFactory());
-        TableCSSHandlerRegistry.getInstance().registerCSSHandler(
+        TableCSSHandlerRegistry.getInstance().registerObjectCSSHandler(
             KIXObjectType.PERMISSION, new PermissionTableCSSHandler()
         );
+
+        TableCSSHandlerRegistry.getInstance().registerCommonCSSHandler(new InvalidObjectCSSHandler());
 
         ActionFactory.getInstance().registerAction('csv-export-action', CSVExportAction);
         ActionFactory.getInstance().registerAction('bulk-action', BulkAction);

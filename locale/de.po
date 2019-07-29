@@ -559,6 +559,9 @@ msgstr "(aktuelle Version)"
 msgid "Current version"
 msgstr "Aktuelle Version"
 
+msgid "Customer"
+msgstr "Kunde"
+
 msgid "Data has been updated."
 msgstr "Daten wurden aktualisiert."
 
@@ -672,6 +675,11 @@ msgstr "Schlüssel bearbeiten"
 
 msgid "Edit Links"
 msgstr "Links bearbeiten"
+
+#, fuzzy
+#| msgid "Notification"
+msgid "Edit Notification"
+msgstr "Benachrichtigung"
 
 msgid "Edit Object"
 msgstr "Objekt bearbeiten"
@@ -860,8 +868,8 @@ msgid ""
 "Find this saved search within the Dropdown Bookmarks, located in the header "
 "menu right besides the New-button"
 msgstr ""
-"Gespeicherte Suchen befinden sich innerhalb der Lesezeichen im Kopfmenü ("
-"direkt neben der Schaltfläche \"Neu\")."
+"Gespeicherte Suchen befinden sich innerhalb der Lesezeichen im Kopfmenü "
+"(direkt neben der Schaltfläche \"Neu\")."
 
 msgid "First Name"
 msgstr "Vorname"
@@ -1096,6 +1104,76 @@ msgstr "Hilfetext_Admin_TextModuleCreate_Subject"
 #, fuzzy
 #| msgid "Helptext_Admin_MailAccountCreate_Validity"
 msgid "Helptext_Admin_NotificationCreate_Validity"
+msgstr "Hilfetext_Admin_MailAccountCreate_Validity"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_Validity"
+msgid "Helptext_Admin_NotificationEdit_AdditionalRecipient"
+msgstr "Hilfetext_Admin_MailAccountCreate_Validity"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_Comment"
+msgid "Helptext_Admin_NotificationEdit_Comment"
+msgstr "Hilfetext_Admin_MailAccountCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_Comment"
+msgid "Helptext_Admin_NotificationEdit_Event"
+msgstr "Hilfetext_Admin_MailAccountCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_IMAPFolder"
+msgid "Helptext_Admin_NotificationEdit_Filter"
+msgstr "Hilfetext_Admin_MailAccountCreate_IMAPFolder"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleCreate_Subject"
+msgid "Helptext_Admin_NotificationEdit_MessageSubject"
+msgstr "Hilfetext_Admin_TextModuleCreate_Subject"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleCreate_Text"
+msgid "Helptext_Admin_NotificationEdit_MessageText"
+msgstr "Hilfetext_Admin_TextModuleCreate_Text"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailFilterCreate_Name"
+msgid "Helptext_Admin_NotificationEdit_Name"
+msgstr "Hilfetext_Admin_MailFilterCreate_Name"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_Dispachting"
+msgid "Helptext_Admin_NotificationEdit_SendDespiteOutOfOffice"
+msgstr "Hilfetext_Admin_MailAccountCreate_Dispachting"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_Comment"
+msgid "Helptext_Admin_NotificationEdit_SendOnceADay"
+msgstr "Hilfetext_Admin_MailAccountCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_Host"
+msgid "Helptext_Admin_NotificationEdit_SendTo"
+msgstr "Hilfetext_Admin_MailAccountCreate_Host"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_Comment"
+msgid "Helptext_Admin_NotificationEdit_SendToAgents"
+msgstr "Hilfetext_Admin_MailAccountCreate_Comment"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailFilterCreate_SetEmailHeaders"
+msgid "Helptext_Admin_NotificationEdit_SendToRoleMembers"
+msgstr "Hilfetext_Admin_MailFilterCreate_SetEmailHeaders"
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleCreate_Subject"
+msgid "Helptext_Admin_NotificationEdit_SubjectWithTicketNumber"
+msgstr "Hilfetext_Admin_TextModuleCreate_Subject"
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_Validity"
+msgid "Helptext_Admin_NotificationEdit_Validity"
 msgstr "Hilfetext_Admin_MailAccountCreate_Validity"
 
 msgid "Helptext_Admin_QueueCreate_Comment"
@@ -1895,8 +1973,28 @@ msgstr "Kein Artikel"
 msgid "No article available."
 msgstr "Kein Artikel verfügbar."
 
+#, fuzzy
+#| msgid "No rating available."
+msgid "No data available."
+msgstr "Keine Bewertung verfügbar."
+
 msgid "No general catalog class configured!"
 msgstr "Keine General Catalog Klasse konfiguriert!"
+
+#, fuzzy
+#| msgid "No object available"
+msgid "No linked objects available."
+msgstr "Kein Objekt verfügbar"
+
+#, fuzzy
+#| msgid "No rating available."
+msgid "No link types available."
+msgstr "Keine Bewertung verfügbar."
+
+#, fuzzy
+#| msgid "No object available"
+msgid "No objects available."
+msgstr "Kein Objekt verfügbar"
 
 msgid "No object with ID {0} available."
 msgstr "Kein Objekt mit der ID {0} verfügbar."
@@ -1924,6 +2022,11 @@ msgstr "Noch nicht verfügbar / nicht mehr verfügbar"
 
 msgid "Note"
 msgstr "Notiz"
+
+msgid ""
+"Note: For optimal use of KIX, we recommend alternative browsers such as "
+"Chromium or Firefox."
+msgstr ""
 
 msgid "Notes"
 msgstr "Notizen"
@@ -2456,6 +2559,11 @@ msgstr "Wählen Sie, welche Agenten zu dieser Rolle zugeordnet werden sollen."
 msgid "; (semicolon)"
 msgstr "; (Semikolon)"
 
+#, fuzzy
+#| msgid "Sender"
+msgid "Send"
+msgstr "Absender"
+
 msgid "Send despite out of office"
 msgstr "Trotz „nicht im Büro“ senden"
 
@@ -2602,6 +2710,11 @@ msgstr "Straße"
 msgid "Subject"
 msgstr "Betreff"
 
+#, fuzzy
+#| msgid "With Ticketnumber"
+msgid "Subject with Ticketnumber"
+msgstr "mit Ticket-Nummer"
+
 msgid "Submit"
 msgstr "Übernehmen"
 
@@ -2619,6 +2732,11 @@ msgstr "Wechsel ins Kundenportal."
 
 msgid "Symptom"
 msgstr "Symptom"
+
+#, fuzzy
+#| msgid "SysConfig"
+msgid "Sysconfig"
+msgstr "SysConfig"
 
 msgid "SysConfig"
 msgstr "SysConfig"
@@ -2678,15 +2796,19 @@ msgstr ""
 "Der FAQ-Artikel <a href=\"faqarticles/2\" target=\"_blank\">How to search in "
 "KIX 18?</a> <b>erklärt die möglichen Such-Operatoren<b>"
 
+#, fuzzy
+#| msgid "Required field '{0}' has no value."
+msgid "The file {0} has no valid MIME-TYPE."
+msgstr "Benötigtes Feld '{0}' hat keinen Wert."
+
+msgid "The file size of {0} is too large ({1}). Max.: {2}"
+msgstr ""
+
 msgid "The following {0} entries will be deleted. Are you sure?"
 msgstr "Die ausgewählten {0} Einträge werden gelöscht. Sind Sie sicher?"
 
 msgid "The search only includes current versions."
 msgstr "Es werden nur aktuelle Versionen durchsucht."
-
-msgid "This browser is not supported. You may encounter malfunctions."
-msgstr ""
-"Dieser Browser wird nicht unterstützt. Es können Fehlfunktionen auftreten."
 
 msgid ""
 "This is the administration panel. Please select a module from the explorer."
@@ -2747,9 +2869,6 @@ msgstr "Ticket Suche"
 
 msgid "Ticket search error!"
 msgstr "Fehler bei der Ticketsuche!"
-
-msgid "Ticket States"
-msgstr "Ticketstatus"
 
 msgid "Ticket: States"
 msgstr "Ticket: Status"
@@ -2897,6 +3016,11 @@ msgstr "Aktualisierung wird durchgeführt"
 msgid "Update Key"
 msgstr "Schlüssel wird aktualisiert"
 
+#, fuzzy
+#| msgid "Create Notification"
+msgid "Update Notification"
+msgstr "Benachrichtigung erstellen"
+
 msgid "Update Organisation"
 msgstr "Aktualisierung wird durchgeführt"
 
@@ -2993,12 +3117,6 @@ msgstr "Willkommen bei KIX"
 msgid "Wildcard Search"
 msgstr "Wildcard-Suche"
 
-msgid "Without Ticketnumber"
-msgstr "ohne Ticket-Nummer"
-
-msgid "With Ticketnumber"
-msgstr "mit Ticket-Nummer"
-
 msgid "Yes"
 msgstr "Ja"
 
@@ -3013,6 +3131,16 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Without Ticketnumber"
+#~ msgstr "ohne Ticket-Nummer"
+
+#~ msgid "This browser is not supported. You may encounter malfunctions."
+#~ msgstr ""
+#~ "Dieser Browser wird nicht unterstützt. Es können Fehlfunktionen auftreten."
+
+#~ msgid "Ticket States"
+#~ msgstr "Ticketstatus"
 
 #, fuzzy
 #~| msgid "Helptext_Search_Contact"
@@ -3169,9 +3297,6 @@ msgstr "PLZ"
 #~ msgid "No contact available"
 #~ msgstr "Kein Kontakt verfügbar"
 
-#~ msgid "No object available"
-#~ msgstr "Kein Objekt verfügbar"
-
 #~ msgid "No organisation available"
 #~ msgstr "Kein Kunde verfügbar"
 
@@ -3197,9 +3322,6 @@ msgstr "PLZ"
 
 #~ msgid "Create Customer"
 #~ msgstr "Kunde anlegen"
-
-#~ msgid "Customer"
-#~ msgstr "Kunde"
 
 #~ msgid "Customer Details"
 #~ msgstr "Kunden Details"

@@ -18,6 +18,8 @@ import { DialogEvents, DialogEventData } from '../components/dialog';
 
 export class BulkAction extends AbstractAction<ITable> implements IEventSubscriber {
 
+    public hasLink: boolean = false;
+
     public eventSubscriberId: string;
     public objectType: KIXObjectType;
 

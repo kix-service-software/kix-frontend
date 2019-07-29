@@ -6,13 +6,12 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <if(state.row)>
     <tr
         id=state.row.getRowId()
         on-click("rowClicked")
         style=("height: " + input.height)
-        class=(state.show ? component.getRowClasses() : "")>
+        class=(state.show ? state.rowClasses : "")>
         <if(state.show)>
             <if(input.selectionEnabled)>
                 <td.check>

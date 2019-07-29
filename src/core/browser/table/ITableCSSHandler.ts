@@ -8,11 +8,12 @@
  */
 
 import { TableValue } from "./TableValue";
+import { KIXObject } from "../../model";
 
-export interface ITableCSSHandler<T> {
+export interface ITableCSSHandler<T = KIXObject> {
 
-    getRowCSSClasses(object: T): string[];
+    getRowCSSClasses(object: T): Promise<string[]>;
 
-    getValueCSSClasses(object: T, value: TableValue): string[];
+    getValueCSSClasses(object: T, value: TableValue): Promise<string[]>;
 
 }

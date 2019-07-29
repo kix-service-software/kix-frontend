@@ -21,6 +21,8 @@ import { UIComponentPermission } from '../../../../../model/UIComponentPermissio
 
 export class TranslationTableDeleteAction extends AbstractAction<ITable> {
 
+    public hasLink: boolean = false;
+
     public permissions: UIComponentPermission[] = [
         new UIComponentPermission('system/i18n/translations/*', [CRUD.DELETE])
     ];
