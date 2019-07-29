@@ -90,7 +90,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
                         || !!!systemAddresses.length
                         || !systemAddresses.map((sa) => sa.Name).some((f) => f === plainMail)
                     ) {
-                        nodes.push(new TreeNode(plainMail, email, 'kix-icon-man-bubble'));
+                        nodes.push(new TreeNode(plainMail, email));
                     }
                 }
             }

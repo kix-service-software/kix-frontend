@@ -11,7 +11,7 @@ import { ComponentState } from "./ComponentState";
 import {
     Contact, FormInputComponent, KIXObjectType, TreeNode, KIXObjectLoadingOptions,
     AutoCompleteConfiguration, FilterCriteria, ContactProperty, FilterDataType, FilterType,
-    SystemAddress, ArticleReceiver
+    SystemAddress
 } from "../../../../../../core/model";
 import { KIXObjectService, LabelService, SearchOperator } from "../../../../../../core/browser";
 import { ContactService } from "../../../../../../core/browser/contact";
@@ -67,7 +67,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
                         || !!!systemAddresses.length
                         || !systemAddresses.map((sa) => sa.Name).some((f) => f === plainMail)
                     ) {
-                        nodes.push(new TreeNode(plainMail, email, 'kix-icon-man-bubble'));
+                        nodes.push(new TreeNode(plainMail, email));
                     }
                 }
             }

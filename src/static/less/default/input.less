@@ -74,6 +74,7 @@ textarea.input-style {
         border-bottom-left-radius: @border-radius;
         border-bottom-right-radius: @border-radius;
         display: grid;
+        min-width: @button-min-width + 2rem;
 
         >input {
             margin-bottom: @margin-small;
@@ -87,11 +88,14 @@ textarea.input-style {
         .button-bar {
             margin: 1rem @margin-small;
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
             align-items: center;
 
             .select-all-Checkbox {
-                margin-right: .5rem;
+                display: inline-grid;
+                grid-template-columns: min-content 1fr;
+                align-items: center;
+                margin-right: @margin-small;
             }
 
             button {

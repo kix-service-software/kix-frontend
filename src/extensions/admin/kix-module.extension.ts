@@ -72,6 +72,7 @@ class Extension implements IKIXModuleExtension {
             'notification/admin/table/notification-filter-cell-content',
             []
         ),
+        new UIComponent('edit-notification-dialog', 'notification/admin/dialogs/edit-notification-dialog', [])
     ];
 
 }

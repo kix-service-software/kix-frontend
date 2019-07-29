@@ -9,7 +9,7 @@
 
 import { KIXObjectType, InputFieldTypes, TreeNode } from "../../../model";
 import { ObjectPropertyValue } from "../../ObjectPropertyValue";
-import { IDynamicFormManager, DynamicFormAutocompleteConfiguration, DynamicFormOperationsType } from "../../form";
+import { IDynamicFormManager, DynamicFormOperationsType } from "../../form";
 
 export abstract class AbstractDynamicFormManager implements IDynamicFormManager {
 
@@ -86,6 +86,10 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     }
 
     public async getInputType(property: string): Promise<InputFieldTypes | string> {
+        return;
+    }
+
+    public async getObjectReferenceObjectType(property: string): Promise<KIXObjectType> {
         return;
     }
 

@@ -71,15 +71,13 @@ export class NotificationFilterTableContentProvider extends TableContentProvider
     }
 
     private async getValue(
-        property: string, value: string | number, labelProvider: LabelProvider
+        property: string, value: string[] | number[], labelProvider: LabelProvider
     ): Promise<[string[], Array<string | ObjectIcon>]> {
         const displayValues: string[] = [];
         const displayIcons: Array<string | ObjectIcon> = [];
         if (Array.isArray(value)) {
             for (const v of value) {
-                const string = await labelProvider.getPropertyValueDisplayText(
-                    property, isNaN(Number(v)) ? v : Number(v)
-                );
+                const string = await labelProvider.getPropertyValueDisplayText(property, v);
                 if (string) {
                     displayValues.push(string);
                     const icons = await labelProvider.getIcons(null, property, v);

@@ -52,7 +52,7 @@ export class NotificationBrowserFactory extends KIXObjectFactory<Notification> {
                             newNotification.RecipientAgents = value.map((v) => Number(v));
                             break;
                         case NotificationProperty.DATA_RECIPIENT_EMAIL:
-                            newNotification.RecipientEmail = value;
+                            newNotification.RecipientEmail = value[0].split(/,\s?/);
                             break;
                         case NotificationProperty.DATA_RECIPIENT_ROLES:
                             newNotification.RecipientRoles = value.map((v) => Number(v));
@@ -68,7 +68,7 @@ export class NotificationBrowserFactory extends KIXObjectFactory<Notification> {
                             break;
                         default:
                             if (filterProperties.some((p) => p[0] === key)) {
-                                newNotification.Filter.set(key, value);
+                                newNotification.Filter.set(key, value.map((v) => !isNaN(Number(v)) ? Number(v) : v));
                             }
                     }
                 }

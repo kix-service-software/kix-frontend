@@ -38,7 +38,6 @@ export class NotificationLabelProvider extends LabelProvider {
                 displayValue = 'Translatable#Name';
                 break;
             case NotificationProperty.MESSAGE_SUBJECT:
-            case NotificationProperty.DATA_RECIPIENT_SUBJECT:
                 displayValue = 'Translatable#Subject';
                 break;
             case NotificationProperty.MESSAGE_BODY:
@@ -61,6 +60,9 @@ export class NotificationLabelProvider extends LabelProvider {
                 break;
             case NotificationProperty.DATA_RECIPIENT_EMAIL:
                 displayValue = 'Translatable#Additional recipients';
+                break;
+            case NotificationProperty.DATA_RECIPIENT_SUBJECT:
+                displayValue = 'Translatable#Subject with Ticketnumber';
                 break;
             default:
                 displayValue = await super.getPropertyText(property, false, translatable);
@@ -89,12 +91,11 @@ export class NotificationLabelProvider extends LabelProvider {
             case NotificationProperty.DATA_RECIPIENT_EMAIL:
                 if (value && Array.isArray(value)) {
                     const mailAddresses: string[] = [];
-                    const contactEmails = value[0].split(/,\s?/);
-                    for (const email of contactEmails) {
+                    for (const email of value) {
                         const contact = await this.getContactForEmail(email);
                         if (contact) {
                             mailAddresses.push(
-                                `"${contact.Firstname} ${contact.Lastname}" <${contact.Email}>`
+                                `${contact.Firstname} ${contact.Lastname} (${contact.Email})`
                             );
                         } else {
                             mailAddresses.push(email);
@@ -115,7 +116,14 @@ export class NotificationLabelProvider extends LabelProvider {
                     const users = await KIXObjectService.loadObjects<User>(
                         KIXObjectType.USER, value, null, null, true
                     ).catch((error) => [] as User[]);
-                    displayValue = users && !!users.length ? users.map((u) => u.UserFullname).join(', ') : value;
+                    const displayTexts = [];
+                    if (users && !!users.length) {
+                        for (const user of users) {
+                            const text = await LabelService.getInstance().getText(user);
+                            displayTexts.push(text);
+                        }
+                    }
+                    displayValue = !!displayTexts.length ? displayTexts.join(', ') : value;
                     translatable = false;
                 }
                 break;
@@ -124,7 +132,14 @@ export class NotificationLabelProvider extends LabelProvider {
                     const roles = await KIXObjectService.loadObjects<Role>(
                         KIXObjectType.ROLE, value, null, null, true
                     ).catch((error) => [] as Role[]);
-                    displayValue = roles && !!roles.length ? roles.map((r) => r.Name).join(', ') : value;
+                    const displayTexts = [];
+                    if (roles && !!roles.length) {
+                        for (const role of roles) {
+                            const text = await LabelService.getInstance().getText(role);
+                            displayTexts.push(text);
+                        }
+                    }
+                    displayValue = !!displayTexts.length ? displayTexts.join(', ') : value;
                     translatable = false;
                 }
                 break;
@@ -185,7 +200,7 @@ export class NotificationLabelProvider extends LabelProvider {
     private async getContactForEmail(email): Promise<Contact> {
         let contacts;
         if (email) {
-            const plainMail = email.replace(/.+ <(.+)>/, '$1');
+            const plainMail = email.replace(/.+ [<\(](.+)[>\)]/, '$1');
             contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, null,
                 new KIXObjectLoadingOptions(
                     [

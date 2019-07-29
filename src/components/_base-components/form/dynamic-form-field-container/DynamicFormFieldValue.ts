@@ -158,13 +158,21 @@ export class DynamicFieldValue {
     public async setCurrentValue(value: any): Promise<void> {
         this.currentValue = value;
         if (this.value.objectType && value) {
-            const objects = await KIXObjectService.loadObjects(this.value.objectType, [value]);
+            const objects = await KIXObjectService.loadObjects(
+                this.value.objectType, Array.isArray(value) ? value : [value]
+            );
             let label = value;
+            let icon;
+            const current: TreeNode[] = [];
             if (objects && objects.length) {
                 const labelProvider = LabelService.getInstance().getLabelProviderForType(this.value.objectType);
-                label = await labelProvider.getObjectText(objects[0]);
+                for (const object of objects) {
+                    label = await labelProvider.getObjectText(objects[0]);
+                    icon = labelProvider.getObjectTypeIcon();
+                    current.push(new TreeNode(object.ObjectId, label, icon));
+                }
             }
-            this.currentValueNodes = [new TreeNode(value, label)];
+            this.currentValueNodes = current;
         } else if (this.isDropdown && this.nodes && this.nodes.length) {
             const current: TreeNode[] = [];
             if (Array.isArray(value)) {

@@ -7,9 +7,14 @@
  * --
  */
 
-export enum NotificationTicketNumberType {
+import { AbstractComponentState } from "../../../../../core/browser";
 
-    WITH = 'WITH',
+export class ComponentState extends AbstractComponentState {
 
-    WITHOUT = 'WITHOUT'
+    public constructor(
+        public formId: string = 'edit-notification-form'
+    ) {
+        super();
+    }
+
 }

@@ -27,6 +27,9 @@
             },
             "notification-details-configuration": {
                 "module": "notification-details-configuration.extension"
+            },
+            "edit-notification-dialog-configuration": {
+                "module": "edit-notification-dialog-configuration.extension"
             }
         },
         "kix:modules": {

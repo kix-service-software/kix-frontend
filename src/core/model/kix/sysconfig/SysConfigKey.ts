@@ -35,9 +35,9 @@ export enum SysConfigKey {
 
     CONFIG_LEVEL = 'ConfigLevel',
 
-    TICKET_EVENTS = 'Events%23%23%23Ticket',
+    TICKET_EVENTS = 'Events###Ticket',
 
-    ARTICLE_EVENTS = 'Events%23%23%23Article',
+    ARTICLE_EVENTS = 'Events###Article',
 
     POSTMASTER_X_HEADER = 'PostmasterX-Header',
 
