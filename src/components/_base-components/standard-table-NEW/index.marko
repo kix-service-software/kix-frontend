@@ -15,11 +15,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <thead>
                 <table-head-row table=state.table/>
             </thead>
-            <table-body
-                rows=state.rows
-                columnLength=state.columns.length
-                tableConfig=state.table.getTableConfiguration()
-                key=(state.table.getTableId() + "table-body")/>
+            <if(state.rows)>
+                <table-body
+                    rows=state.rows
+                    columnLength=state.columns.length
+                    tableConfig=state.table.getTableConfiguration()
+                    key=(state.table.getTableId() + "table-body")/>
+            </if>
         </table>
     </if>
     <else>

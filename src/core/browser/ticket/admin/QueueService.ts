@@ -47,8 +47,12 @@ export class QueueService extends KIXObjectService<Queue> {
         if (objectType === KIXObjectType.FOLLOW_UP_TYPE) {
             objects = await super.loadObjects<O>(KIXObjectType.FOLLOW_UP_TYPE, null, loadingOptions);
         } else {
-            superLoad = true;
-            objects = await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions);
+            if (!loadingOptions) {
+                objects = await super.loadObjects<O>(objectType, null);
+            } else {
+                superLoad = true;
+                objects = await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions);
+            }
         }
 
         if (objectIds && !superLoad) {

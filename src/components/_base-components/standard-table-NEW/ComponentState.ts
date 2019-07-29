@@ -11,9 +11,11 @@ import { ITable, IRow, IColumn } from "../../../core/browser/table";
 
 export class ComponentState {
 
-    public table: ITable = null;
-    public rows: IRow[] = null;
-    public columns: IColumn[] = [];
-    public tableHeight: string = 'unset';
+    public constructor(
+        public table: ITable = null,
+        public rows: IRow[] = null,
+        public columns: IColumn[] = [],
+        public tableHeight: string = 'unset'
+    ) { }
 
 }
