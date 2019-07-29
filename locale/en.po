@@ -657,6 +657,11 @@ msgstr "Edit Team"
 msgid "Edit Links"
 msgstr ""
 
+#, fuzzy
+#| msgid "Config Item Information"
+msgid "Edit Notification"
+msgstr "Asset Information"
+
 msgid "Edit Object"
 msgstr ""
 
@@ -1050,6 +1055,48 @@ msgid "Helptext_Admin_NotificationCreate_SubjectWithTicketNumber"
 msgstr ""
 
 msgid "Helptext_Admin_NotificationCreate_Validity"
+msgstr ""
+
+msgid "Helptext_Admin_NotificationEdit_AdditionalRecipient"
+msgstr ""
+
+msgid "Helptext_Admin_NotificationEdit_Comment"
+msgstr ""
+
+msgid "Helptext_Admin_NotificationEdit_Event"
+msgstr ""
+
+msgid "Helptext_Admin_NotificationEdit_Filter"
+msgstr ""
+
+msgid "Helptext_Admin_NotificationEdit_MessageSubject"
+msgstr ""
+
+msgid "Helptext_Admin_NotificationEdit_MessageText"
+msgstr ""
+
+msgid "Helptext_Admin_NotificationEdit_Name"
+msgstr ""
+
+msgid "Helptext_Admin_NotificationEdit_SendDespiteOutOfOffice"
+msgstr ""
+
+msgid "Helptext_Admin_NotificationEdit_SendOnceADay"
+msgstr ""
+
+msgid "Helptext_Admin_NotificationEdit_SendTo"
+msgstr ""
+
+msgid "Helptext_Admin_NotificationEdit_SendToAgents"
+msgstr ""
+
+msgid "Helptext_Admin_NotificationEdit_SendToRoleMembers"
+msgstr ""
+
+msgid "Helptext_Admin_NotificationEdit_SubjectWithTicketNumber"
+msgstr ""
+
+msgid "Helptext_Admin_NotificationEdit_Validity"
 msgstr ""
 
 msgid "Helptext_Admin_QueueCreate_Comment"
@@ -2536,6 +2583,9 @@ msgstr ""
 msgid "Subject"
 msgstr ""
 
+msgid "Subject with Ticketnumber"
+msgstr ""
+
 msgid "Submit"
 msgstr ""
 
@@ -2829,6 +2879,11 @@ msgstr ""
 msgid "Update Key"
 msgstr "Update Team"
 
+#, fuzzy
+#| msgid "Config Item Information"
+msgid "Update Notification"
+msgstr "Asset Information"
+
 msgid "Update Organisation"
 msgstr ""
 
@@ -2923,12 +2978,6 @@ msgid "Welcome to KIX"
 msgstr ""
 
 msgid "Wildcard Search"
-msgstr ""
-
-msgid "Without Ticketnumber"
-msgstr ""
-
-msgid "With Ticketnumber"
 msgstr ""
 
 msgid "Yes"
