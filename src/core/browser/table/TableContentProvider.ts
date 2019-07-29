@@ -15,6 +15,7 @@ import { IRowObject } from "./IRowObject";
 import { KIXObjectService } from "../kix";
 import { RowObject } from "./RowObject";
 import { TableValue } from "./TableValue";
+import { TranslationService } from "../i18n/TranslationService";
 
 export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
@@ -103,7 +104,8 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
             const kixObject = object as KIXObject;
             const value = kixObject.displayValues.find((dv) => dv[0] === property);
             if (value) {
-                displayValue = value[1];
+                const text = await TranslationService.translate(value[1]);
+                displayValue = text;
             }
 
         }

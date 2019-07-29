@@ -50,20 +50,14 @@ class Component {
         ServiceRegistry.registerServiceInstance(SysConfigService.getInstance());
 
         this.state.loading = true;
-        const startTranslation = Date.now();
         this.state.loadingHint = await TranslationService.translate('Translatable#Loading');
-        const endTranslation = Date.now();
-        console.debug(`Init first translation: ${endTranslation - startTranslation}ms`);
 
         await this.checkAuthentication();
 
         ClientNotificationSocketClient.getInstance();
 
-        const startModules = Date.now();
         await KIXModulesService.getInstance().init();
         await this.initModules();
-        const endModules = Date.now();
-        console.debug(`Init Modules: ${endModules - startModules}ms`);
 
         ContextService.getInstance().registerListener({
             contextChanged: (contextId: string, context: Context, type: ContextType) => {

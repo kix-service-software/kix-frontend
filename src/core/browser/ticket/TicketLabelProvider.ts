@@ -332,84 +332,85 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
 
         const existingValue = ticket.displayValues.find((dv) => dv[0] === property);
         if (existingValue) {
-            return existingValue[1];
-        }
+            displayValue = existingValue[1];
+        } else {
 
-        switch (property) {
-            case TicketProperty.QUEUE:
-                displayValue = await this.getPropertyValueDisplayText(
-                    TicketProperty.QUEUE_ID, ticket.QueueID, translatable
-                );
-                break;
-            case TicketProperty.STATE:
-                displayValue = await this.getPropertyValueDisplayText(
-                    TicketProperty.STATE_ID, ticket.StateID, translatable
-                );
-                break;
-            case TicketProperty.STATE_TYPE:
-                if (ticket.StateID) {
-                    const states: TicketState[] = await KIXObjectService.loadObjects<TicketState>(
-                        KIXObjectType.TICKET_STATE, [ticket.StateID], null, null, true
-                    ).catch((error) => []);
-                    displayValue = states && !!states.length ? states[0].TypeName : '';
-                }
-                break;
-            case TicketProperty.PRIORITY:
-                displayValue = await this.getPropertyValueDisplayText(
-                    TicketProperty.PRIORITY_ID, ticket.PriorityID, translatable
-                );
-                break;
-            case TicketProperty.TYPE:
-                displayValue = await this.getPropertyValueDisplayText(
-                    TicketProperty.TYPE_ID, ticket.TypeID, translatable
-                );
-                break;
-            case TicketProperty.SERVICE:
-                displayValue = await this.getPropertyValueDisplayText(
-                    TicketProperty.SERVICE_ID, ticket.ServiceID, translatable
-                );
-                break;
-            case TicketProperty.SLA:
-                displayValue = await this.getPropertyValueDisplayText(
-                    TicketProperty.SLA_ID, ticket.SLAID, translatable
-                );
-                break;
-            // TODO: still necessary?
-            case 'UserID':
-                if (displayValue) {
-                    const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [displayValue], null, null, true
-                    ).catch((error) => [] as User[]);
-                    displayValue = users && !!users.length ? users[0].UserFullname : displayValue;
-                }
-                break;
-            case TicketProperty.OWNER:
-                displayValue = await this.getPropertyValueDisplayText(
-                    TicketProperty.OWNER_ID, ticket.OwnerID, translatable
-                );
-                break;
-            case TicketProperty.RESPONSIBLE:
-                displayValue = await this.getPropertyValueDisplayText(
-                    TicketProperty.RESPONSIBLE_ID, ticket.ResponsibleID, translatable
-                );
-                break;
-            case TicketProperty.ORGANISATION:
-                displayValue = await this.getPropertyValueDisplayText(
-                    TicketProperty.ORGANISATION_ID, ticket.OrganisationID, translatable
-                );
-                break;
-            case TicketProperty.CONTACT:
-                displayValue = await this.getPropertyValueDisplayText(
-                    TicketProperty.CONTACT_ID, ticket.ContactID, translatable
-                );
-                break;
-            case TicketProperty.LOCK:
-                displayValue = await this.getPropertyValueDisplayText(
-                    TicketProperty.LOCK_ID, ticket.LockID, translatable
-                );
-                break;
-            default:
-                displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
+            switch (property) {
+                case TicketProperty.QUEUE:
+                    displayValue = await this.getPropertyValueDisplayText(
+                        TicketProperty.QUEUE_ID, ticket.QueueID, translatable
+                    );
+                    break;
+                case TicketProperty.STATE:
+                    displayValue = await this.getPropertyValueDisplayText(
+                        TicketProperty.STATE_ID, ticket.StateID, translatable
+                    );
+                    break;
+                case TicketProperty.STATE_TYPE:
+                    if (ticket.StateID) {
+                        const states: TicketState[] = await KIXObjectService.loadObjects<TicketState>(
+                            KIXObjectType.TICKET_STATE, [ticket.StateID], null, null, true
+                        ).catch((error) => []);
+                        displayValue = states && !!states.length ? states[0].TypeName : '';
+                    }
+                    break;
+                case TicketProperty.PRIORITY:
+                    displayValue = await this.getPropertyValueDisplayText(
+                        TicketProperty.PRIORITY_ID, ticket.PriorityID, translatable
+                    );
+                    break;
+                case TicketProperty.TYPE:
+                    displayValue = await this.getPropertyValueDisplayText(
+                        TicketProperty.TYPE_ID, ticket.TypeID, translatable
+                    );
+                    break;
+                case TicketProperty.SERVICE:
+                    displayValue = await this.getPropertyValueDisplayText(
+                        TicketProperty.SERVICE_ID, ticket.ServiceID, translatable
+                    );
+                    break;
+                case TicketProperty.SLA:
+                    displayValue = await this.getPropertyValueDisplayText(
+                        TicketProperty.SLA_ID, ticket.SLAID, translatable
+                    );
+                    break;
+                // TODO: still necessary?
+                case 'UserID':
+                    if (displayValue) {
+                        const users = await KIXObjectService.loadObjects<User>(
+                            KIXObjectType.USER, [displayValue], null, null, true
+                        ).catch((error) => [] as User[]);
+                        displayValue = users && !!users.length ? users[0].UserFullname : displayValue;
+                    }
+                    break;
+                case TicketProperty.OWNER:
+                    displayValue = await this.getPropertyValueDisplayText(
+                        TicketProperty.OWNER_ID, ticket.OwnerID, translatable
+                    );
+                    break;
+                case TicketProperty.RESPONSIBLE:
+                    displayValue = await this.getPropertyValueDisplayText(
+                        TicketProperty.RESPONSIBLE_ID, ticket.ResponsibleID, translatable
+                    );
+                    break;
+                case TicketProperty.ORGANISATION:
+                    displayValue = await this.getPropertyValueDisplayText(
+                        TicketProperty.ORGANISATION_ID, ticket.OrganisationID, translatable
+                    );
+                    break;
+                case TicketProperty.CONTACT:
+                    displayValue = await this.getPropertyValueDisplayText(
+                        TicketProperty.CONTACT_ID, ticket.ContactID, translatable
+                    );
+                    break;
+                case TicketProperty.LOCK:
+                    displayValue = await this.getPropertyValueDisplayText(
+                        TicketProperty.LOCK_ID, ticket.LockID, translatable
+                    );
+                    break;
+                default:
+                    displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
+            }
         }
 
         if (displayValue) {
