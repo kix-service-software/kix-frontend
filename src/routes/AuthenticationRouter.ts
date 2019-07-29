@@ -55,11 +55,17 @@ export class AuthenticationRouter extends KIXRouter {
             const imprintLink = await this.getImprintLink()
                 .catch((e) => '');
 
+            let redirectUrl = '/';
+            if (req.url !== '/auth') {
+                redirectUrl = req.url;
+            }
+
             res.marko(template, {
                 login: true,
                 logout,
                 releaseInfo,
-                imprintLink
+                imprintLink,
+                redirectUrl
             });
         }
     }

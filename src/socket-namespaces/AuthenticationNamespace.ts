@@ -54,7 +54,7 @@ export class AuthenticationNamespace extends SocketNameSpace {
             .then((token: string) =>
                 new SocketResponse(
                     AuthenticationEvent.AUTHORIZED,
-                    new AuthenticationResult(token, data.requestId, '/')
+                    new AuthenticationResult(token, data.requestId, data.redirectUrl)
                 )
             ).catch((error: Error) =>
                 new SocketResponse(

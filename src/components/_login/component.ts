@@ -15,15 +15,21 @@ class Component {
 
     public state: ComponentState;
 
+    private redirectUrl: string;
+
+    private translations: Array<[string, string]>;
+
     public onCreate(input: any): void {
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
         this.state.logout = input.logout;
+        this.redirectUrl = input.redirectUrl;
     }
 
     public onMount(): void {
+        this.initTranslations();
         this.checkBrowser();
         this.state.loading = false;
         setTimeout(() => {
@@ -32,6 +38,23 @@ class Component {
                 userElement.focus();
             }
         }, 200);
+    }
+
+    private initTranslations(): void {
+        this.translations = [
+            ["Welcome to KIX", "Willkommen bei KIX"],
+            [
+                "Note: For optimal use of KIX, we recommend alternative browsers such as Chromium or Firefox.",
+                // tslint:disable-next-line:max-line-length
+                "Hinweis: Für die optimale Nutzung von KIX  empfehlen wir alternative Browser wie Chromium oder Firefox."
+            ]
+            ,
+            ["Login failed", "Anmeldung fehlgeschlagen"],
+            ["You have successfully logged out.", "Sie haben sich erfolgreich abgemeldet."],
+            ["Login Name", "Nutzername"],
+            ["Password", "Passwort"],
+            ["Login", "Anmelden"]
+        ];
     }
 
     private checkBrowser(): void {
@@ -62,10 +85,8 @@ class Component {
 
         if (userName && userName !== '' && password && password !== '') {
             this.state.error = false;
-            const login = await AgentService.getInstance().login(userName, password);
-            if (login) {
-                window.location.replace('/');
-            } else {
+            const login = await AgentService.getInstance().login(userName, password, this.redirectUrl);
+            if (!login) {
                 this.state.error = true;
             }
         } else {
@@ -78,6 +99,17 @@ class Component {
         if (event.keyCode === 13 || event.key === 'Enter') {
             this.login(event);
         }
+    }
+
+    public getString(pattern: string): string {
+        if (window.navigator) {
+            const userLang = window.navigator.language;
+            if (userLang.indexOf('de') >= 0 && this.translations.some((t) => t[0] === pattern)) {
+                const translation = this.translations.find((t) => t[0] === pattern);
+                return translation[1];
+            }
+        }
+        return pattern;
     }
 }
 

@@ -64,7 +64,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
             });
         } else {
             const errorMessage = `No service registered for object type ${objectType}`;
-            console.error(errorMessage);
+            console.warn(errorMessage);
         }
         return objects;
     }
