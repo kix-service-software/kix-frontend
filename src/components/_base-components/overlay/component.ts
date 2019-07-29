@@ -33,7 +33,7 @@ class OverlayComponent {
     public async onMount(): Promise<void> {
 
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Close window"
+            "Translatable#Close Overlay"
         ]);
 
         OverlayService.getInstance().registerOverlayComponentListener(this.openOverlay.bind(this));

@@ -39,7 +39,7 @@ class Component {
         const start = Date.now();
 
         FactoryService.getInstance().registerFactory(
-            KIXObjectType.TRANSLATION_PATTERN, TranslationBrowserFactory.getInstance()
+            KIXObjectType.TRANSLATION, TranslationBrowserFactory.getInstance()
         );
         FactoryService.getInstance().registerFactory(
             KIXObjectType.TRANSLATION_PATTERN, TranslationPatternBrowserFactory.getInstance()
@@ -51,6 +51,7 @@ class Component {
 
         this.state.loading = true;
         this.state.loadingHint = await TranslationService.translate('Translatable#Loading');
+        this.state.translations = await TranslationService.createTranslationObject(['Translatable#Close Sidebars']);
 
         await this.checkAuthentication();
 
@@ -60,6 +61,7 @@ class Component {
         await this.initModules();
 
         ContextService.getInstance().registerListener({
+            constexServiceListenerId: 'BASE-TEMPLATE',
             contextChanged: (contextId: string, context: Context, type: ContextType) => {
                 if (type === ContextType.MAIN) {
                     this.setContext(context);
@@ -98,6 +100,8 @@ class Component {
             }
         });
 
+        window.addEventListener('resize', this.hideSidebarIfNeeded.bind(this), false);
+
         this.state.initialized = true;
         this.state.loading = false;
 
@@ -108,6 +112,11 @@ class Component {
         setTimeout(() => {
             RoutingService.getInstance().routeToInitialContext();
         }, 2000);
+    }
+
+    public onDestroy(): void {
+        window.removeEventListener('resize', this.hideSidebarIfNeeded.bind(this), false);
+        ContextService.getInstance().unregisterListener('BASE-TEMPLATE');
     }
 
     private async checkAuthentication(): Promise<void> {
@@ -132,13 +141,14 @@ class Component {
     private setContext(context: Context = ContextService.getInstance().getActiveContext()): void {
         if (context) {
             this.state.hasExplorer = context.isExplorerBarShown();
+            this.hideSidebarIfNeeded();
+            this.state.showSidebar = context.isSidebarShown();
             context.registerListener(this.contextListernerId, {
                 sidebarToggled: () => {
-                    this.setGridColumns();
+                    this.state.showSidebar = context.isSidebarShown();
                 },
                 explorerBarToggled: () => {
                     this.state.hasExplorer = context.isExplorerBarShown();
-                    this.setGridColumns();
                 },
                 objectChanged: () => { return; },
                 objectListChanged: () => { return; },
@@ -146,29 +156,19 @@ class Component {
                 scrollInformationChanged: () => { return; }
             });
         }
-        this.setGridColumns();
     }
 
-    private setGridColumns(): void {
-        let gridColumns = '[main-menu-wrapper] 4.5rem';
-
-        if (this.state.hasExplorer) {
-            gridColumns += ' [explorer-bar] min-content';
+    public hideSidebarIfNeeded(): void {
+        const context: Context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        if (context &&
+            context.isSidebarShown() &&
+            (
+                (!this.state.hasExplorer && window.innerWidth <= 1475) ||
+                (this.state.hasExplorer && window.innerWidth <= 1700)
+            )
+        ) {
+            context.closeSidebar();
         }
-
-        gridColumns += ' [content] minmax(40rem, auto)';
-
-        const context = ContextService.getInstance().getActiveContext();
-        if ((context && context.isSidebarShown())) {
-            gridColumns += ' [sidebar-area] min-content';
-            this.state.showSidebar = true;
-        } else {
-            this.state.showSidebar = false;
-        }
-
-        gridColumns += ' [sidebar-menu-wrapper] min-content';
-
-        this.state.gridColumns = gridColumns;
     }
 
     private async initModules(): Promise<void> {

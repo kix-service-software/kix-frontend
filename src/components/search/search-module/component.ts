@@ -8,7 +8,7 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { ContextService, IContextServiceListener } from "../../../core/browser";
+import { ContextService, IContextServiceListener, IdService } from "../../../core/browser";
 import { ContextMode, ContextType, Context, CacheState, ContextDescriptor } from "../../../core/model";
 import { SearchContext } from '../../../core/browser/search/context/SearchContext';
 import { SearchService } from '../../../core/browser/kix/search/SearchService';
@@ -16,12 +16,14 @@ import { SearchService } from '../../../core/browser/kix/search/SearchService';
 class Component implements IContextServiceListener {
 
     public listenerId: string;
+    public constexServiceListenerId: string;
 
     private state: ComponentState;
 
     public onCreate(): void {
         this.state = new ComponentState();
         this.listenerId = 'kix-search-module-listener';
+        this.constexServiceListenerId = IdService.generateDateBasedId('search-module-');
     }
 
     public onInput(input: any): void {
@@ -33,6 +35,10 @@ class Component implements IContextServiceListener {
             ContextService.getInstance().setDialogContext(null, null, ContextMode.SEARCH);
         }
         ContextService.getInstance().registerListener(this);
+    }
+
+    public onDestroy(): void {
+        ContextService.getInstance().unregisterListener(this.constexServiceListenerId);
     }
 
     public contextChanged(

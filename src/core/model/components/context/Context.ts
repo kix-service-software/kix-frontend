@@ -176,7 +176,7 @@ export abstract class Context {
         return sidebars;
     }
 
-    public toggleSidebar(instanceId: string): void {
+    public toggleSidebarWidget(instanceId: string): void {
         const sidebar = this.configuration.sidebars.find((s) => s === instanceId);
         if (sidebar) {
 
@@ -189,6 +189,11 @@ export abstract class Context {
 
             this.listeners.forEach((l) => l.sidebarToggled());
         }
+    }
+
+    public closeSidebar(): void {
+        this.shownSidebars = [];
+        this.listeners.forEach((l) => l.sidebarToggled());
     }
 
     public toggleExplorerBar(): void {

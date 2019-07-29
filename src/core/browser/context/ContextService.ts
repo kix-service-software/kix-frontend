@@ -37,7 +37,7 @@ export class ContextService {
         return ContextService.INSTANCE;
     }
 
-    private serviceListener: IContextServiceListener[] = [];
+    private serviceListener: Map<string, IContextServiceListener> = new Map();
     private activeMainContext: Context;
     private activeDialogContext: Context;
     private activeContextType: ContextType = ContextType.MAIN;
@@ -50,7 +50,11 @@ export class ContextService {
     }
 
     public registerListener(listener: IContextServiceListener): void {
-        this.serviceListener.push(listener);
+        this.serviceListener.set(listener.constexServiceListenerId, listener);
+    }
+
+    public unregisterListener(listenerId: string): void {
+        this.serviceListener.delete(listenerId);
     }
 
     public registerContext(contextDescriptor: ContextDescriptor): void {

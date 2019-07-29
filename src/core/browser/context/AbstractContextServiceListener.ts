@@ -9,8 +9,11 @@
 
 import { IContextServiceListener } from "./IContextServiceListener";
 import { Context, ContextDescriptor } from "../../model";
+import { IdService } from "../IdService";
 
 export abstract class AbstractContextServiceListener implements IContextServiceListener {
+
+    public constexServiceListenerId: string = IdService.generateDateBasedId('context-service-listener-');
 
     public contextChanged(contextId: string, context: Context): void {
         // do nothing

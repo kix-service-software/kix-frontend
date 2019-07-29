@@ -28,6 +28,7 @@ export class TableFactoryService {
 
     private constructor() {
         ContextService.getInstance().registerListener({
+            constexServiceListenerId: 'table-factory-service-listener',
             contextChanged: this.contextChanged.bind(this),
             contextRegistered: () => { return; }
         });
