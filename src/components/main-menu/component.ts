@@ -22,6 +22,7 @@ class KIXMenuComponent {
 
     public async onMount(): Promise<void> {
         ContextService.getInstance().registerListener({
+            constexServiceListenerId: 'main-menu-listener',
             contextChanged: (contextId: string, newContext: Context, type: ContextType) => {
                 if (type === ContextType.MAIN) {
                     this.setActiveMenuEntry(newContext);
@@ -36,6 +37,10 @@ class KIXMenuComponent {
         const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
         this.setActiveMenuEntry(context);
         this.state.loading = false;
+    }
+
+    public onDestroy(): void {
+        ContextService.getInstance().unregisterListener('main-menu-listener');
     }
 
     private async loadEntries(): Promise<void> {

@@ -27,7 +27,7 @@ class Component {
     public async onMount(): Promise<void> {
 
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Close window"
+            "Translatable#Close Dialog"
         ]);
 
         this.context = await ContextService.getInstance().getContext<CompareConfigItemVersionDialogContext>(

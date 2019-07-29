@@ -21,6 +21,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         ContextService.getInstance().registerListener({
+            constexServiceListenerId: 'admin-module-context-service-listener',
             contextChanged: (contextId: string, c: AdminContext, type: ContextType, history: boolean) => {
                 if (contextId === AdminContext.CONTEXT_ID && c.adminModule) {
                     this.state.template = KIXModulesService.getComponentTemplate(
@@ -40,6 +41,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             filteredObjectListChanged: () => { return; },
             scrollInformationChanged: () => { return; }
         });
+    }
+
+    public onDestroy(): void {
+        ContextService.getInstance().unregisterListener('admin-module-context-service-listener');
     }
 
     public moduleChanged(

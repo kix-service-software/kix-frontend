@@ -65,13 +65,44 @@
                                 top: @margin-default;
                                 bottom: @margin-default;
                                 display: grid;
-                                grid-template-columns: minmax(@default-widget-width, auto) @sidebar-width @margin-default;
+                                grid-template-columns: minmax(@default-widget-width, auto) min-content;
                                 grid-column-gap: @margin-default;
                                 overflow: auto;
+
+                                &.has-sidebar {
+
+                                    &.show-sidebar {
+                                        grid-template-columns: minmax(@default-widget-width, auto) @sidebar-width min-content;
+
+                                        // hide sidebar
+                                        @media only screen and (max-width: 1400px) {
+                                            grid-template-columns: minmax(@default-widget-width, auto) min-content;
+
+                                            >.tab-content {
+                                                z-index: 1;
+
+                                                >.dialog-sidebar-shield {
+                                                    display: block;
+                                                }
+                                            }
+
+                                            >.sidebar-area {
+                                                position: absolute;
+                                                right: 4.5rem;
+                                                z-index: 1;
+                                            }
+
+                                            >.site-menu-wrapper {
+                                                z-index: 1;
+                                            }
+                                        }
+                                    }
+                                }
 
                                 >.tab-content {
                                     margin: 0;
                                     height: 100%;
+                                    position: relative;
 
                                     >.lane-widget {
                                         height: 100%;
@@ -80,10 +111,17 @@
                                             background-color: @secondary-5;
                                         }
                                     }
-                                }
 
-                                >.site-menu-wrapper {
-                                    width: 2.25rem
+                                    .dialog-sidebar-shield {
+                                        background-color: rgba(255, 255, 255, 0.8);
+                                        width: 21.5rem;
+                                        top: 0;
+                                        right: -4.5rem;
+                                        bottom: 0;
+                                        position: absolute;
+                                        display: none;
+                                        z-index: 10;
+                                    }
                                 }
                             }
                         }

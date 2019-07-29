@@ -17,10 +17,12 @@ class Component {
 
     private state: ComponentState;
     private contextListernerId: string;
+    private contextServiceListernerId: string;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
         this.contextListernerId = IdService.generateDateBasedId('sidebar-');
+        this.contextServiceListernerId = IdService.generateDateBasedId('sidebar-');
     }
 
     public onInput(input: any): void {
@@ -29,6 +31,7 @@ class Component {
 
     public onMount(): void {
         ContextService.getInstance().registerListener({
+            constexServiceListenerId: this.contextServiceListernerId,
             contextChanged: (contextId: string, context: Context, type: ContextType) => {
                 if (type === this.state.contextType) {
                     this.setContext(context);
@@ -37,6 +40,10 @@ class Component {
             contextRegistered: () => { return; }
         });
         this.setContext(ContextService.getInstance().getActiveContext(this.state.contextType));
+    }
+
+    public onDestroy(): void {
+        ContextService.getInstance().unregisterListener(this.contextServiceListernerId);
     }
 
     private setContext(context: Context): void {

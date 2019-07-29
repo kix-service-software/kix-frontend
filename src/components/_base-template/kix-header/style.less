@@ -61,6 +61,16 @@
                 font-weight: bold;
                 box-shadow: none;
             }
+
+            @media (max-width: 1201px) {
+                .quick-search-input {
+                    display: none;
+
+                    &+.header-separator {
+                        display: none;
+                    }
+                }
+            }
         }
     }
 }

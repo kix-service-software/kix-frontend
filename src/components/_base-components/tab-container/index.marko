@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.tab-container>
     <widget
         instanceId="tab-widget"
@@ -31,20 +30,31 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </ul>
         </@headerContent>
         <@content>
-            <div.tab-sidebar-grid>
+            <div.tab-sidebar-grid class={
+                "has-sidebar": state.hasSidebars,
+                "show-sidebar": state.showSidebar
+            }>
                 <div.tab-content>
                     <if(state.activeTab)>
                         <${component.getWidgetTemplate()} ...{
                             instanceId: state.activeTab.instanceId
                         }/>
-                    </if>
-                </div>
-                <div>
-                    <if(state.hasSidebars)>
-                        <sidebar contextType=state.contextType showEmpty=true/>
+                        <if(state.showSidebar)>
+                            <div.dialog-sidebar-shield>
+                                <div.sidebar-close-bar on-click("hideSidebarIfNeeded") title=state.translations["Translatable#Close Sidebars"]>
+                                    <span.kix-icon-triangle-right>
+                                        <span.path1/>
+                                        <span.path2/>
+                                    </span>
+                                </div>
+                            </div>
+                        </if>
                     </if>
                 </div>
                 <if(state.hasSidebars)>
+                    <if(state.showSidebar)>
+                        <sidebar contextType=state.contextType/>
+                    </if>
                     <div.site-menu-wrapper>
                         <sidebar-menu contextType=state.contextType/>
                     </div>

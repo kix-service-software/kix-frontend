@@ -36,6 +36,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const context = await ContextService.getInstance().getActiveContext(ContextType.MAIN);
         this.contextChanged(null, context, ContextType.MAIN, null, null);
         ContextService.getInstance().registerListener({
+            constexServiceListenerId: 'object-details-component',
             contextChanged: this.contextChanged.bind(this),
             contextRegistered: () => { return; }
         });
@@ -72,6 +73,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onDestroy(): void {
         WidgetService.getInstance().unregisterActions(this.state.instanceId);
+        ContextService.getInstance().unregisterListener('object-details-component');
     }
 
     private async initWidget(context: Context, object?: KIXObject): Promise<void> {

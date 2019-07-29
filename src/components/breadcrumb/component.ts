@@ -8,21 +8,27 @@
  */
 
 import { ContextType, Context, ContextDescriptor } from "../../core/model";
-import { IContextServiceListener, ContextService } from "../../core/browser";
+import { IContextServiceListener, ContextService, IdService } from "../../core/browser";
 import { ComponentState } from './ComponentState';
 import { RoutingConfiguration } from "../../core/browser/router";
 
 class BreadcrumbComponent implements IContextServiceListener {
 
     public state: ComponentState;
+    public constexServiceListenerId: string;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
+        this.constexServiceListenerId = IdService.generateDateBasedId('breadcrumb-');
     }
 
     public onMount(): void {
         ContextService.getInstance().registerListener(this);
         this.state.loading = false;
+    }
+
+    public onDestroy(): void {
+        ContextService.getInstance().unregisterListener(this.constexServiceListenerId);
     }
 
     public contextRegistered(descriptor: ContextDescriptor): void {

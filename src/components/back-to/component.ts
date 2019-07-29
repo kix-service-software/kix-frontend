@@ -8,7 +8,7 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { ContextService, IContextServiceListener } from '../../core/browser';
+import { ContextService, IContextServiceListener, IdService } from '../../core/browser';
 import { ContextType, Context, ContextDescriptor } from '../../core/model';
 import { ContextHistoryEntry } from '../../core/browser/context/ContextHistoryEntry';
 import { RoutingConfiguration } from '../../core/browser/router';
@@ -16,9 +16,11 @@ import { RoutingConfiguration } from '../../core/browser/router';
 class Component implements IContextServiceListener {
 
     public state: ComponentState;
+    public constexServiceListenerId: string;
 
     public onCreate(): void {
         this.state = new ComponentState();
+        this.constexServiceListenerId = IdService.generateDateBasedId('back-to-');
     }
 
     public onMount(): void {
@@ -33,6 +35,10 @@ class Component implements IContextServiceListener {
                 }
             }
         }, false);
+    }
+
+    public onDestroy(): void {
+        ContextService.getInstance().unregisterListener(this.constexServiceListenerId);
     }
 
     public listClicked(): void {
