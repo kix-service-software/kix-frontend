@@ -35,7 +35,9 @@ export class AuthenticationSocketClient extends SocketClient {
         this.authenticationSocket = this.createSocket('authentication', false);
     }
 
-    public login(userName: string, password: string, userType: UserType = UserType.AGENT): Promise<boolean> {
+    public login(
+        userName: string, password: string, redirectUrl: string, userType: UserType = UserType.AGENT
+    ): Promise<boolean> {
         return new Promise((resolve, reject) => {
 
             const timeout = window.setTimeout(() => {
@@ -48,6 +50,7 @@ export class AuthenticationSocketClient extends SocketClient {
                 if (result.requestId === requestId) {
                     window.clearTimeout(timeout);
                     document.cookie = 'token=' + result.token;
+                    window.location.replace(result.redirectUrl);
                     resolve(true);
                 }
             });
@@ -60,7 +63,7 @@ export class AuthenticationSocketClient extends SocketClient {
             });
 
             const request = new LoginRequest(
-                userName, password, userType, requestId, ClientStorageService.getClientRequestId()
+                userName, password, redirectUrl, userType, requestId, ClientStorageService.getClientRequestId()
             );
             this.authenticationSocket.emit(AuthenticationEvent.LOGIN, request);
         });

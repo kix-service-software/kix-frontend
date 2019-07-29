@@ -12,6 +12,7 @@ import { SocketAuthenticationError, UserType, UserLogin } from '../../../model';
 import { LoginResponse, SessionResponse } from '../../../api';
 import { HttpService } from './HttpService';
 import { ConfigurationService } from '../ConfigurationService';
+import { AuthenticationRouter } from '../../../../routes';
 
 export class AuthenticationService {
 
@@ -48,14 +49,14 @@ export class AuthenticationService {
 
     public async isAuthenticated(req: Request, res: Response, next: () => void): Promise<void> {
         const token: string = req.cookies.token;
-        if (!token) {
-            res.redirect('/auth');
-        } else {
+        if (token) {
             this.validateToken(token).then((valid) => {
-                valid ? next() : res.redirect('/auth');
+                valid ? next() : AuthenticationRouter.getInstance().login(req, res);
             }).catch((error) => {
-                return false;
+                AuthenticationRouter.getInstance().login(req, res);
             });
+        } else {
+            AuthenticationRouter.getInstance().login(req, res);
         }
     }
 

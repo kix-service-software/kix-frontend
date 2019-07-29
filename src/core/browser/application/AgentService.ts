@@ -34,8 +34,10 @@ export class AgentService extends KIXObjectService<User> {
             kixObjectType === KIXObjectType.PERSONAL_SETTINGS;
     }
 
-    public async login(userName: string, password: string, userType: UserType = UserType.AGENT): Promise<boolean> {
-        return await AuthenticationSocketClient.getInstance().login(userName, password, userType);
+    public async login(
+        userName: string, password: string, redirectUrl: string, userType: UserType = UserType.AGENT
+    ): Promise<boolean> {
+        return await AuthenticationSocketClient.getInstance().login(userName, password, redirectUrl, userType);
     }
 
     public async getPersonalSettings(): Promise<PersonalSetting[]> {
