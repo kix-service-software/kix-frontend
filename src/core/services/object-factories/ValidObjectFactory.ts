@@ -16,7 +16,7 @@ export class ValidObjectFactory extends ObjectFactory<ValidObject> {
         return objectType === KIXObjectType.VALID_OBJECT;
     }
 
-    public create(valid?: ValidObject): ValidObject {
+    public async create(valid?: ValidObject): Promise<ValidObject> {
         return new ValidObject(valid);
     }
 

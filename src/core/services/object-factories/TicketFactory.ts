@@ -7,8 +7,12 @@
  * --
  */
 
-import { Ticket, KIXObjectType, Article, DynamicField, Link, TicketHistory, CRUD } from "../../model";
+import {
+    Ticket, KIXObjectType, Article, DynamicField, Link, TicketHistory, TicketProperty, KIXObjectProperty
+} from "../../model";
 import { ObjectFactory } from "./ObjectFactory";
+import { KIXObjectServiceRegistry } from "../KIXObjectServiceRegistry";
+import { UserService } from "../impl/api/UserService";
 
 export class TicketFactory extends ObjectFactory<Ticket> {
 
@@ -16,7 +20,7 @@ export class TicketFactory extends ObjectFactory<Ticket> {
         return objectType === KIXObjectType.TICKET;
     }
 
-    public create(ticket: Ticket): Ticket {
+    public async create(ticket: Ticket, token: string): Promise<Ticket> {
         const newTicket = new Ticket(ticket);
 
         newTicket.Articles = ticket.Articles
@@ -35,65 +39,62 @@ export class TicketFactory extends ObjectFactory<Ticket> {
             ? ticket.History.map((th) => new TicketHistory(th))
             : [];
 
+        await this.initDisplayValues(newTicket, token);
+
         return newTicket;
     }
 
-    // public async applyPermissions(token: string, ticket: Ticket): Promise<Ticket> {
+    public async initDisplayValues(ticket: Ticket, token: string): Promise<void> {
+        await this.getDisplayValue(
+            ticket, TicketProperty.QUEUE_ID, token, KIXObjectType.QUEUE, ticket.QueueID, 'Name'
+        );
+        await this.getDisplayValue(
+            ticket, TicketProperty.STATE_ID, token, KIXObjectType.TICKET_STATE, ticket.StateID, 'Name'
+        );
+        await this.getDisplayValue(
+            ticket, TicketProperty.TYPE_ID, token, KIXObjectType.TICKET_TYPE, ticket.TypeID, 'Name'
+        );
+        await this.getDisplayValue(
+            ticket, TicketProperty.ORGANISATION_ID, token, KIXObjectType.ORGANISATION, ticket.OrganisationID, 'Name'
+        );
+        await this.getDisplayValue(
+            ticket, TicketProperty.PRIORITY_ID, token, KIXObjectType.TICKET_PRIORITY, ticket.PriorityID, 'Name'
+        );
 
-    //     if (await this.readAccessDenied(token, 'system/ticket/states')) {
-    //         delete ticket.StateID;
-    //     }
+        await this.getDisplayValue(
+            ticket, TicketProperty.OWNER_ID, token, KIXObjectType.USER, ticket.OwnerID, 'UserFullname'
+        );
 
-    //     if (await this.readAccessDenied(token, 'priorities')) {
-    //         delete ticket.PriorityID;
-    //     }
+        await this.getDisplayValue(
+            ticket, TicketProperty.RESPONSIBLE_ID, token, KIXObjectType.USER, ticket.ResponsibleID, 'UserFullname'
+        );
 
-    //     if (await this.readAccessDenied(token, 'ticketlocks')) {
-    //         delete ticket.LockID;
-    //     }
+        await this.getDisplayValue(
+            ticket, KIXObjectProperty.CREATE_BY, token, KIXObjectType.USER, ticket.CreateBy, 'UserFullname'
+        );
 
-    //     if (await this.readAccessDenied(token, 'queues')) {
-    //         delete ticket.QueueID;
-    //     }
+        await this.getDisplayValue(
+            ticket, KIXObjectProperty.CHANGE_BY, token, KIXObjectType.USER, ticket.ChangeBy, 'UserFullname'
+        );
+    }
 
-    //     if (await this.readAccessDenied(token, 'organisations')) {
-    //         delete ticket.OrganisationID;
-    //     }
-
-    //     if (await this.readAccessDenied(token, 'contacts')) {
-    //         delete ticket.ContactID;
-    //     }
-
-    //     if (await this.readAccessDenied(token, 'system/users')) {
-    //         delete ticket.OwnerID;
-    //         delete ticket.ResponsibleID;
-    //     }
-
-    //     if (await this.readAccessDenied(token, 'system/ticket/types')) {
-    //         delete ticket.TypeID;
-    //     }
-
-    //     if (await this.readAccessDenied(token, 'slas')) {
-    //         delete ticket.SLAID;
-    //     }
-
-    //     if (await this.readAccessDenied(token, 'services')) {
-    //         delete ticket.ServiceID;
-    //     }
-
-    //     if (await this.readAccessDenied(token, 'tickets/*/articles')) {
-    //         delete ticket.Articles;
-    //     }
-
-    //     if (await this.readAccessDenied(token, 'tickets/*/history')) {
-    //         delete ticket.History;
-    //     }
-
-    //     if (await this.readAccessDenied(token, 'tickets/*/watchers')) {
-    //         delete ticket.Watchers;
-    //     }
-
-    //     return ticket;
-    // }
+    private async getDisplayValue(
+        ticket: Ticket, property: string, token: string, objectType: KIXObjectType,
+        id: string | number, displayProperty: string
+    ): Promise<void> {
+        const service = KIXObjectServiceRegistry.getServiceInstance(objectType);
+        if (service) {
+            await service.loadObjects(token, '', objectType, [id], null, null)
+                .then((objects) => {
+                    if (objects && objects.length) {
+                        if (objects[0][displayProperty]) {
+                            const value = objects[0][displayProperty];
+                            ticket.displayValues.push([property, value]);
+                        }
+                    }
+                })
+                .catch(() => null);
+        }
+    }
 
 }

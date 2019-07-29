@@ -17,7 +17,7 @@ export class FAQCategoryFactory extends ObjectFactory<FAQCategory> {
         return objectType === KIXObjectType.FAQ_CATEGORY;
     }
 
-    public create(category?: FAQCategory): FAQCategory {
+    public async create(category?: FAQCategory): Promise<FAQCategory> {
         return new FAQCategory(category);
     }
 

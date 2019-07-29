@@ -22,7 +22,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </for>
         </span>
     </if>
-    <if(component.showText)>
-        <span.text>${state.displayText}</span>
+    <if(component.showText && state.displayText)>
+        <span.text.cell-display-text class={
+            "show-cell-display-text": state.displayText
+        }>${state.displayText}</span>
     </if>
 </div>

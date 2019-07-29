@@ -16,7 +16,7 @@ export class ObjectIconFactory extends ObjectFactory<ObjectIcon> {
         return objectType === KIXObjectType.OBJECT_ICON;
     }
 
-    public create(icon?: ObjectIcon): ObjectIcon {
+    public async create(icon?: ObjectIcon): Promise<ObjectIcon> {
         return new ObjectIcon(undefined, undefined, undefined, undefined, icon);
     }
 

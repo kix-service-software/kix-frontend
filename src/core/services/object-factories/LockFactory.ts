@@ -16,7 +16,7 @@ export class LockFactory extends ObjectFactory<Lock> {
         return objectType === KIXObjectType.LOCK;
     }
 
-    public create(lock?: Lock): Lock {
+    public async create(lock?: Lock): Promise<Lock> {
         return new Lock(lock);
     }
 

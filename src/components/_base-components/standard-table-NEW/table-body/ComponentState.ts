@@ -11,5 +11,8 @@ import { IRow } from "../../../../core/browser";
 
 export class ComponentState {
 
-    public rows: IRow[] = [];
+    public constructor(
+        public rows: IRow[] = [],
+        public ready: boolean = false
+    ) { }
 }

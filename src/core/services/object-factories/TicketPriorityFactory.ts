@@ -16,7 +16,7 @@ export class TicketPriorityFactory extends ObjectFactory<TicketPriority> {
         return objectType === KIXObjectType.TICKET_PRIORITY;
     }
 
-    public create(priority?: TicketPriority): TicketPriority {
+    public async create(priority?: TicketPriority): Promise<TicketPriority> {
         return new TicketPriority(priority);
     }
 

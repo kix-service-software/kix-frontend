@@ -16,7 +16,7 @@ export class FollowUpTypeFactory extends ObjectFactory<FollowUpType> {
         return objectType === KIXObjectType.FOLLOW_UP_TYPE;
     }
 
-    public create(followUpType?: FollowUpType): FollowUpType {
+    public async create(followUpType?: FollowUpType): Promise<FollowUpType> {
         return new FollowUpType(followUpType);
     }
 

@@ -16,7 +16,7 @@ export class SlaFactory extends ObjectFactory<Sla> {
         return objectType === KIXObjectType.SLA;
     }
 
-    public create(sla?: Sla): Sla {
+    public async create(sla?: Sla): Promise<Sla> {
         return new Sla(sla);
     }
 

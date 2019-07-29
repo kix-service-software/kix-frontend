@@ -16,7 +16,7 @@ export class TicketStateFactory extends ObjectFactory<TicketState> {
         return objectType === KIXObjectType.TICKET_STATE;
     }
 
-    public create(state?: TicketState): TicketState {
+    public async create(state?: TicketState): Promise<TicketState> {
         return new TicketState(state);
     }
 

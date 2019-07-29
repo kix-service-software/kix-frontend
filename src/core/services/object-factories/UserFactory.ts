@@ -17,7 +17,7 @@ export class UserFactory extends ObjectFactory<User> {
         return objectType === KIXObjectType.USER;
     }
 
-    public create(user: User): User {
+    public async create(user: User): Promise<User> {
         return new User(user);
     }
 

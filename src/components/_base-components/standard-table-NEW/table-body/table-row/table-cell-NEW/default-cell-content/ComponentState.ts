@@ -14,7 +14,7 @@ export class ComponentState {
 
     public constructor(
         public icons: Array<string | ObjectIcon> = null,
-        public displayText: string = '',
+        public displayText: string = null,
         public cell: ICell = null
     ) { }
 

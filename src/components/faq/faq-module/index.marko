@@ -6,12 +6,9 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<div.faq-dashboard>
-    <for|kixWidget| of=state.contentWidgets>
-        <${component.getTemplate(kixWidget)} ...{
-            instanceId: kixWidget.instanceId,
-            contextType: "MAIN"
-        }/>
-    </for>
-</div>
+<for|kixWidget| of=state.contentWidgets>
+    <${component.getTemplate(kixWidget)} ...{
+        instanceId: kixWidget.instanceId,
+        contextType: "MAIN"
+    }/>
+</for>

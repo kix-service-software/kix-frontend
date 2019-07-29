@@ -16,7 +16,7 @@ export class TicketTypeFactory extends ObjectFactory<TicketType> {
         return objectType === KIXObjectType.TICKET_TYPE;
     }
 
-    public create(type?: TicketType): TicketType {
+    public async create(type?: TicketType): Promise<TicketType> {
         return new TicketType(type);
     }
 

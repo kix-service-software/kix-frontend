@@ -8,7 +8,7 @@
  */
 
 import { ITableContentProvider } from "./ITableContentProvider";
-import { KIXObjectType, KIXObjectLoadingOptions, KIXObject } from "../../model";
+import { KIXObjectType, KIXObjectLoadingOptions, KIXObject, KIXObjectProperty } from "../../model";
 import { ITable } from "./ITable";
 import { ContextService } from "../context";
 import { IRowObject } from "./IRowObject";
@@ -98,6 +98,15 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
     }
 
     protected async getTableValue(object: any, property: string): Promise<TableValue> {
-        return new TableValue(property, object[property]);
+        let displayValue = null;
+        if (object[KIXObjectProperty.DISPLAY_VALUES]) {
+            const kixObject = object as KIXObject;
+            const value = kixObject.displayValues.find((dv) => dv[0] === property);
+            if (value) {
+                displayValue = value[1];
+            }
+
+        }
+        return new TableValue(property, object[property], displayValue);
     }
 }

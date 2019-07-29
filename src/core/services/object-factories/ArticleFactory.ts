@@ -16,7 +16,7 @@ export class ArticleFactory extends ObjectFactory<Article> {
         return objectType === KIXObjectType.ARTICLE;
     }
 
-    public create(article: Article): Article {
+    public async create(article: Article): Promise<Article> {
         return new Article(article);
     }
 

@@ -32,7 +32,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        // nothing
+        setTimeout(() => {
+            this.state.ready = true;
+        }, 100);
     }
 
     public onDestroy(): void {

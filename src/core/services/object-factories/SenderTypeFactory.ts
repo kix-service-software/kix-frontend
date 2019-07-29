@@ -16,7 +16,7 @@ export class SenderTypeFactory extends ObjectFactory<SenderType> {
         return objectType === KIXObjectType.SENDER_TYPE;
     }
 
-    public create(senderType?: SenderType): SenderType {
+    public async create(senderType?: SenderType): Promise<SenderType> {
         return new SenderType(senderType);
     }
 
