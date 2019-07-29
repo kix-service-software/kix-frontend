@@ -40,19 +40,19 @@ export class ConfigItemFormFactory {
 
         if (forEdit) {
             fields.push(new FormField(
-                'Translatable#Config Item Class', VersionProperty.CLASS_ID, null, false, 'Translatable#Config Item class. Can not be changed.',
+                'Translatable#Config Item Class', VersionProperty.CLASS_ID, null, false, 'Translatable#Helptext_CMDB_ConfigItemCreateEdit_Class',
                 null, null, null, null, 1, 1, 1,
                 null, null, null, false, false, true
             ));
         }
         fields.push(new FormField(
-            'Translatable#Name', VersionProperty.NAME, null, true, 'Translatable#Insert a name for the Config Item.',
+            'Translatable#Name', VersionProperty.NAME, null, true, 'Translatable#Helptext_CMDB_ConfigItemCreateEdit_Name',
             null, null, null, null, 1, 1, 1,
             null, null, null, false, false
         ));
         fields.push(new FormField(
             'Translatable#Deployment State', VersionProperty.DEPL_STATE_ID, 'general-catalog-input',
-            true, 'Translatable#Select a deplyoment state.',
+            true, 'Translatable#Helptext_CMDB_ConfigItemCreateEdit_DeploymentState',
             [
                 new FormFieldOption('GC_CLASS', 'ITSM::ConfigItem::DeploymentState'),
                 new FormFieldOption('ICON', false)
@@ -61,7 +61,7 @@ export class ConfigItemFormFactory {
         ));
         fields.push(new FormField(
             'Translatable#Incident state', VersionProperty.INCI_STATE_ID, 'general-catalog-input',
-            true, 'Translatable#Select a incident state.',
+            true, 'Translatable#Helptext_CMDB_ConfigItemCreateEdit_IncidentState',
             [
                 new FormFieldOption('GC_CLASS', 'ITSM::Core::IncidentState'),
                 new FormFieldOption('ICON', true)
@@ -71,7 +71,7 @@ export class ConfigItemFormFactory {
 
         if (!forEdit) {
             fields.push(new FormField(
-                'Translatable#Link Config Item with', ConfigItemProperty.LINKS, 'link-input', false, 'Translatable#Link this config item to a ticket, an FAQ article or another config item.',
+                'Translatable#Link Config Item with', ConfigItemProperty.LINKS, 'link-input', false, 'Translatable#Helptext_CMDB_ConfigItemCreateEdit_Links',
                 null, null, null, null, 1, 1, 1, null, null, null, false, false
             ));
         }

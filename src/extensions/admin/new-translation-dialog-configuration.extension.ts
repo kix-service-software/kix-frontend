@@ -40,14 +40,14 @@ export class Extension implements IConfigurationExtension {
 
             fields.push(new FormField(
                 // tslint:disable-next-line:max-line-length
-                'Translatable#Pattern', TranslationPatternProperty.VALUE, 'text-area-input', true, 'Translatable#Insert a pattern for the translation.'
+                'Translatable#Pattern', TranslationPatternProperty.VALUE, 'text-area-input', true, 'Translatable#Helptext_i18n_TranslationPatternCreate_Pattern'
             ));
 
             const languages = await this.getLanguages();
             languages.sort((a, b) => SortUtil.compareString(a[1], b[1])).forEach((l) => {
                 const languageField = new FormField(
                     l[1], l[0], 'text-area-input', false,
-                    'Translatable#Select a language for the translation.'
+                    'Translatable#Helptext_i18n_TranslationPatternCreate_Translation'
                 );
                 languageField.placeholder = 'Translation';
                 fields.push(languageField);

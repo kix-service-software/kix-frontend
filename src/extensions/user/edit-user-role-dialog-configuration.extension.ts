@@ -41,15 +41,15 @@ export class Extension implements IConfigurationExtension {
             const infoGroup = new FormGroup('Translatable#Role Information', [
                 new FormField(
                     'Translatable#Name', RoleProperty.NAME, null, true,
-                    'Translatable#Insert a role name.'
+                    'Translatable#Helptext_Admin_Users_RoleEdit_Name'
                 ),
                 new FormField(
                     'Translatable#Comment', RoleProperty.COMMENT, 'text-area-input', false,
-                    'Translatable#Insert a comment for the role.', null, null, null, null, null, null, null, 250
+                    'Translatable#Helptext_Admin_Users_RoleEdit_Comment', null, null, null, null, null, null, null, 250
                 ),
                 new FormField(
                     'Translatable#Validity', RoleProperty.VALID_ID, 'valid-input', true,
-                    "Translatable#Set the role as „valid“, „invalid (temporarily)“, or „invalid“.",
+                    "Translatable#Helptext_Admin_Users_RoleEdit_Valid",
                     null, new FormFieldValue(1)
                 )
             ]);
@@ -63,7 +63,7 @@ export class Extension implements IConfigurationExtension {
             const agentGroup = new FormGroup('Translatable#Agent Assignment', [
                 new FormField(
                     'Translatable#Agents', RoleProperty.USER_IDS, 'object-reference-input', false,
-                    'Translatable#Select which agents should be assigned to this role.', [
+                    'Translatable#Helptext_Admin_Users_RoleEdit_User', [
                         new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
                         new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
                         new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),

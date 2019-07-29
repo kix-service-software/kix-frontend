@@ -42,47 +42,48 @@ export class Extension implements IConfigurationExtension {
             const infoFields: FormField[] = [
                 new FormField(
                     'Translatable#Title', UserProperty.USER_TITLE, null, false,
-                    'Translatable#Insert a title for the user.'
+                    'Translatable#Helptext_Admin_Users_UserCreate_Title'
                 ),
                 new FormField(
                     'Translatable#First Name', UserProperty.USER_FIRSTNAME, null, true,
-                    'Translatable#Insert the firstname of the user.'
+                    'Translatable#Helptext_Admin_Users_UserCreate_FirstName'
                 ),
                 new FormField(
                     'Translatable#Last Name', UserProperty.USER_LASTNAME, null, true,
-                    'Translatable#Insert the lastname of the user.'
+                    'Translatable#Helptext_Admin_Users_UserCreate_LastName'
                 ),
                 new FormField(
                     'Translatable#Login Name', UserProperty.USER_LOGIN, null, true,
-                    'Translatable#Insert a login for the user.'
+                    'Translatable#Helptext_Admin_Users_UserCreate_Login'
                 ),
                 new FormField(
                     'Translatable#Password', UserProperty.USER_PASSWORD, null, true,
-                    'Translatable#Set a password for the user.',
+                    'Translatable#Helptext_Admin_Users_UserCreate_Password',
                     [
                         new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)
                     ]),
                 new FormField(
                     'Translatable#Phone', UserProperty.USER_PHONE, null, false,
-                    'Translatable#Insert a phone number for the user.'
+                    'Translatable#Helptext_Admin_Users_UserCreate_Phone'
                 ),
                 new FormField(
                     'Translatable#Mobile', UserProperty.USER_MOBILE, null, false,
-                    'Translatable#Insert a mobile number for the user.'
+                    'Translatable#Mobile'
                 ),
                 new FormField(
                     'Translatable#Email', UserProperty.USER_EMAIL, null, true,
-                    'Translatable#Insert the email address for the user.',
+                    'Translatable#Helptext_Admin_Users_UserCreate_Email',
                     null, null, null, null, null, null, null, null,
                     FormValidationService.EMAIL_REGEX, FormValidationService.EMAIL_REGEX_ERROR_MESSAGE
                 ),
                 new FormField(
                     'Translatable#Comment', UserProperty.USER_COMMENT, 'text-area-input', false,
-                    'Translatable#Insert a comment for the user.', null, null, null, null, null, null, null, 250
+                    'Translatable#Helptext_Admin_Users_UserCreate_Comment',
+                    null, null, null, null, null, null, null, 250
                 ),
                 new FormField(
                     'Translatable#Validity', KIXObjectProperty.VALID_ID, 'valid-input', true,
-                    "Translatable#Set the user as „valid“, „invalid (temporarily)“, or „invalid“.",
+                    "Translatable#Helptext_Admin_Users_UserCreate_Valid",
                     null, new FormFieldValue(1)
                 )
             ];

@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.form-field class={
     additionalFieldControlsNeeded: input.additionalFieldControlsNeeded
 }>
@@ -23,8 +22,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         </span>
     </div>
     <div.field-icon>
-        <if(state.field.hint)>
-            <overlay-icon isHint=true content=state.field.hint title=state.translations[state.field.label]/>
+        <if(state.hint)>
+            <overlay-icon isHint=true content=state.hint title=state.translations[state.field.label]/>
         </if>
     </div>
     <div.field-input style={

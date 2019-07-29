@@ -30,11 +30,14 @@ class Component {
     public async onMount(): Promise<void> {
 
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Cancel", "Translatable#Config Item Class", "Translatable#Save"
+            'Translatable#Cancel', 'Translatable#Config Item Class', 'Translatable#Save'
         ]);
 
-        this.state.placeholder = await TranslationService.translate("Translatable#Select Config Item Class");
+        this.state.placeholder = await TranslationService.translate('Translatable#Select Config Item Class');
         this.state.classNodes = await CMDBService.getInstance().getTreeNodes(ConfigItemProperty.CLASS_ID);
+
+        const hint = await TranslationService.translate('Translatable#Helptext_CMDB_COnfigItemCreate_Class');
+        this.state.hint = hint.startsWith('Helptext_') ? null : hint;
     }
 
     public async onDestroy(): Promise<void> {

@@ -89,25 +89,25 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
         const existingFormEditTicket = configurationService.getConfiguration(formId);
         if (!existingFormEditTicket) {
             const fields: FormField[] = [];
-            fields.push(new FormField('Translatable#Title', TicketProperty.TITLE, null, true, 'Translatable#Insert a ticket title.'));
+            fields.push(new FormField('Translatable#Title', TicketProperty.TITLE, null, true, 'Translatable#Helptext_Tickets_TicketEdit_Title'));
             fields.push(new FormField(
-                'Translatable#Contact', TicketProperty.CONTACT_ID, 'ticket-input-contact', true, 'Translatable#A contact is a person, filing a request for the customer. Enter at least 3 characters in order to get a suggestion list of already registered contacts. You may use „*“ as wildcard.'
+                'Translatable#Contact', TicketProperty.CONTACT_ID, 'ticket-input-contact', true, 'Translatable#Helptext_Tickets_TicketEdit_Contact'
             ));
-            fields.push(new FormField('Translatable#Organisation', TicketProperty.ORGANISATION_ID, 'ticket-input-organisation', true, 'Translatable#Choose a contact, customers will be assigned automatically.'));
-            fields.push(new FormField('Translatable#Type', TicketProperty.TYPE_ID, 'ticket-input-type', true, 'Translatable#Ticket type is part of the classification of a ticket.'));
+            fields.push(new FormField('Translatable#Organisation', TicketProperty.ORGANISATION_ID, 'ticket-input-organisation', true, 'Translatable#Helptext_Tickets_TicketEdit_Organisation'));
+            fields.push(new FormField('Translatable#Type', TicketProperty.TYPE_ID, 'ticket-input-type', true, 'Translatable#Helptext_Tickets_TicketEdit_Type'));
             fields.push(new FormField(
-                'Translatable#Assign Team / Queue', TicketProperty.QUEUE_ID, 'ticket-input-queue', true, 'Translatable#A queue is a classification system for requests, comparable to folders in a file system.'
+                'Translatable#Assign Team / Queue', TicketProperty.QUEUE_ID, 'ticket-input-queue', true, 'Translatable#Helptext_Tickets_TicketEdit_Queue'
             ));
 
             fields.push(new FormField(
-                'Translatable#Channel', ArticleProperty.CHANNEL_ID, 'channel-input', false, 'Translatable#Channel', [
+                'Translatable#Channel', ArticleProperty.CHANNEL_ID, 'channel-input', false, 'Translatable#Helptext_Tickets_TicketEdit_Channel', [
                     new FormFieldOption('NO_CHANNEL', true),
                 ])
             );
 
             fields.push(new FormField(
                 'Translatable#Owner', TicketProperty.OWNER_ID, 'object-reference-input', false,
-                'Translatable#Owner is the user to which the ticket is assigned for processing.', [
+                'Translatable#Helptext_Tickets_TicketEdit_Owner', [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
                     new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
@@ -124,7 +124,7 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
             ));
             fields.push(new FormField(
                 'Translatable#Responsible', TicketProperty.RESPONSIBLE_ID, 'object-reference-input', false,
-                'Translatable#Responsible is the person in charge for this tickets processing, e.g. Service Owner, Key Account Manager. It does not need to be identical with the assigned ticket owner.', [
+                'Translatable#Helptext_Tickets_TicketEdit_Responsible', [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
                     new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
@@ -141,11 +141,11 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
             ));
             fields.push(new FormField<number>(
                 'Translatable#Priority', TicketProperty.PRIORITY_ID, 'ticket-input-priority', true,
-                'Translatable#Priorities are used to mark a Ticket‘s urgency with different colours, so you can  categorize Tickets.'
+                'Translatable#Helptext_Tickets_TicketEdit_Priority'
             ));
             fields.push(new FormField<number>(
                 'Translatable#State', TicketProperty.STATE_ID, 'ticket-input-state', true,
-                'Translatable#Ticket status summarizes the tickets processing state.'
+                'Translatable#Helptext_Tickets_TicketEdit_State'
             ));
 
             const group = new FormGroup('Translatable#Ticket Data', fields);

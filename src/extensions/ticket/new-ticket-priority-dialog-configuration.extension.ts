@@ -39,20 +39,20 @@ export class Extension implements IConfigurationExtension {
             const fields: FormField[] = [];
             fields.push(new FormField(
                 'Translatable#Name', TicketPriorityProperty.NAME, null, true,
-                'Translatable#Insert a priority name.'
+                'Translatable#Helptext_Admin_Tickets_PriorityCreate_Name'
             ));
             fields.push(new FormField(
                 'Translatable#Icon', 'ICON', 'icon-input', false,
-                'Translatable#Select an icon for this priority.'
+                'Translatable#Helptext_Admin_Tickets_PriorityCreate_Icon'
             ));
             fields.push(new FormField(
                 'Translatable#Comment', TicketPriorityProperty.COMMENT, 'text-area-input', false,
-                'Translatable#Insert a comment for the priority.',
+                'Translatable#Helptext_Admin_Tickets_PriorityCreate_Comment',
                 null, null, null, null, null, null, null, 250
             ));
             fields.push(new FormField(
                 'Translatable#Validity', KIXObjectProperty.VALID_ID, 'valid-input', true,
-                'Translatable#Set the priority as „valid“, „invalid (temporarily)“, or „invalid“.',
+                'Translatable#Helptext_Admin_Tickets_PriorityCreate_Valid',
                 null, new FormFieldValue(1)
             ));
 

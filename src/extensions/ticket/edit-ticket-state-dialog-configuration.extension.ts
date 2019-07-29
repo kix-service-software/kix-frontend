@@ -39,26 +39,26 @@ export class Extension implements IConfigurationExtension {
             const fields: FormField[] = [];
             fields.push(new FormField(
                 'Translatable#Name', TicketStateProperty.NAME, null, true,
-                'Translatable#Insert a state name.'
+                'Translatable#Helptext_Admin_Tickets_StateEdit_Name'
             ));
             fields.push(new FormField(
                 'Translatable#State Type', TicketStateProperty.TYPE_ID, 'object-reference-input',
-                true, 'Translatable#Select a state type for this state.', [
+                true, 'Translatable#Helptext_Admin_Tickets_StateEdit_Type', [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.TICKET_STATE_TYPE),
                     new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false)
                 ]
             ));
             fields.push(new FormField(
                 'Translatable#Icon', 'ICON', 'icon-input', false,
-                'Translatable#Select an icon for this state.'
+                'Translatable#Helptext_Admin_Tickets_StateEdit_Icon'
             ));
             fields.push(new FormField(
                 'Translatable#Comment', TicketStateProperty.COMMENT, 'text-area-input', false,
-                'Translatable#Insert a comment for the state.', null, null, null, null, null, null, null, 250
+                'Translatable#Helptext_Admin_Tickets_StateEdit_Comment', null, null, null, null, null, null, null, 250
             ));
             fields.push(new FormField(
                 'Translatable#Validity', KIXObjectProperty.VALID_ID, 'valid-input', true,
-                'Translatable#Set the state as „valid“, „invalid (temporarily)“, or „invalid“.',
+                'Translatable#Helptext_Admin_Tickets_StateEdit_Valid',
                 null, new FormFieldValue(1)
             ));
 

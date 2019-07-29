@@ -29,7 +29,7 @@ export class ModuleExtension implements IConfigurationExtension {
             new WidgetConfiguration(
                 'help-widget', 'Translatable#Help', [], {
                     // tslint:disable-next-line:max-line-length
-                    helpText: 'Translatable#The FAQ article <a href=\"faqarticles/2\" target=\"_blank\">How to search in KIX 18?</a> offers a detailed <b>explanation for the search operators<b>'
+                    helpText: 'Translatable#Helptext_Search_FAQArticle'
                 }, false, false, 'kix-icon-query', false
             ),
             [new UIComponentPermission('faq/articles', [CRUD.READ])]

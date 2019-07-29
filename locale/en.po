@@ -1234,127 +1234,127 @@ msgstr ""
 msgid "Helptext_Admin_UserEdit_Preferences_MyQueues"
 msgstr ""
 
-msgid "Helptext_Organisations_ContactCreate_City"
+msgid "Helptext_Customers_ContactCreate_City"
 msgstr ""
 
-msgid "Helptext_Organisations_ContactCreate_Comment"
+msgid "Helptext_Customers_ContactCreate_Comment"
 msgstr ""
 
-msgid "Helptext_Organisations_ContactCreate_Country"
+msgid "Helptext_Customers_ContactCreate_Country"
 msgstr ""
 
-msgid "Helptext_Organisations_ContactCreate_Email"
+msgid "Helptext_Customers_ContactCreate_Email"
 msgstr ""
 
-msgid "Helptext_Organisations_ContactCreate_Fax"
+msgid "Helptext_Customers_ContactCreate_Fax"
 msgstr ""
 
-msgid "Helptext_Organisations_ContactCreate_Firstname"
+msgid "Helptext_Customers_ContactCreate_Firstname"
 msgstr ""
 
-msgid "Helptext_Organisations_ContactCreate_Lastname"
+msgid "Helptext_Customers_ContactCreate_Lastname"
 msgstr ""
 
-msgid "Helptext_Organisations_ContactCreate_Login"
+msgid "Helptext_Customers_ContactCreate_Login"
 msgstr ""
 
-msgid "Helptext_Organisations_ContactCreate_Mobile"
+msgid "Helptext_Customers_ContactCreate_Mobile"
 msgstr ""
 
-msgid "Helptext_Organisations_ContactCreate_Organisation"
+msgid "Helptext_Customers_ContactCreate_Organisation"
 msgstr ""
 
-msgid "Helptext_Organisations_ContactCreate_Password"
+msgid "Helptext_Customers_ContactCreate_Password"
 msgstr ""
 
-msgid "Helptext_Organisations_ContactCreate_Phone"
+msgid "Helptext_Customers_ContactCreate_Phone"
 msgstr ""
 
-msgid "Helptext_Organisations_ContactCreate_Street"
+msgid "Helptext_Customers_ContactCreate_Street"
 msgstr ""
 
-msgid "Helptext_Organisations_ContactCreate_Title"
+msgid "Helptext_Customers_ContactCreate_Title"
 msgstr ""
 
-msgid "Helptext_Organisations_ContactCreate_Validity"
+msgid "Helptext_Customers_ContactCreate_Validity"
 msgstr ""
 
-msgid "Helptext_Organisations_ContactCreate_Zip"
+msgid "Helptext_Customers_ContactCreate_Zip"
 msgstr ""
 
-msgid "Helptext_Organisations_ContactEdit_City"
+msgid "Helptext_Customers_ContactEdit_City"
 msgstr ""
 
-msgid "Helptext_Organisations_ContactEdit_Comment"
+msgid "Helptext_Customers_ContactEdit_Comment"
 msgstr ""
 
-msgid "Helptext_Organisations_ContactEdit_Country"
+msgid "Helptext_Customers_ContactEdit_Country"
 msgstr ""
 
-msgid "Helptext_Organisations_ContactEdit_Email"
+msgid "Helptext_Customers_ContactEdit_Email"
 msgstr ""
 
-msgid "Helptext_Organisations_ContactEdit_Fax"
+msgid "Helptext_Customers_ContactEdit_Fax"
 msgstr ""
 
-msgid "Helptext_Organisations_ContactEdit_Firstname"
+msgid "Helptext_Customers_ContactEdit_Firstname"
 msgstr ""
 
-msgid "Helptext_Organisations_ContactEdit_Lastname"
+msgid "Helptext_Customers_ContactEdit_Lastname"
 msgstr ""
 
-msgid "Helptext_Organisations_ContactEdit_Mobile"
+msgid "Helptext_Customers_ContactEdit_Mobile"
 msgstr ""
 
-msgid "Helptext_Organisations_ContactEdit_Organisation"
+msgid "Helptext_Customers_ContactEdit_Organisation"
 msgstr ""
 
-msgid "Helptext_Organisations_ContactEdit_Phone"
+msgid "Helptext_Customers_ContactEdit_Phone"
 msgstr ""
 
-msgid "Helptext_Organisations_ContactEdit_Street"
+msgid "Helptext_Customers_ContactEdit_Street"
 msgstr ""
 
-msgid "Helptext_Organisations_ContactEdit_Title"
+msgid "Helptext_Customers_ContactEdit_Title"
 msgstr ""
 
-msgid "Helptext_Organisations_ContactEdit_Validity"
+msgid "Helptext_Customers_ContactEdit_Validity"
 msgstr ""
 
-msgid "Helptext_Organisations_ContactEdit_Zip"
+msgid "Helptext_Customers_ContactEdit_Zip"
 msgstr ""
 
-msgid "Helptext_Organisations_ContactImport"
+msgid "Helptext_Customers_ContactImport"
 msgstr ""
 
-msgid "Helptext_Organisations_OrganisationCreate_City"
+msgid "Helptext_Customers_OrganisationCreate_City"
 msgstr ""
 
-msgid "Helptext_Organisations_OrganisationCreate_Comment"
+msgid "Helptext_Customers_OrganisationCreate_Comment"
 msgstr ""
 
-msgid "Helptext_Organisations_OrganisationCreate_Country"
+msgid "Helptext_Customers_OrganisationCreate_Country"
 msgstr ""
 
-msgid "Helptext_Organisations_OrganisationCreate_Name"
+msgid "Helptext_Customers_OrganisationCreate_Name"
 msgstr ""
 
-msgid "Helptext_Organisations_OrganisationCreate_Number"
+msgid "Helptext_Customers_OrganisationCreate_Number"
 msgstr ""
 
-msgid "Helptext_Organisations_OrganisationCreate_Street"
+msgid "Helptext_Customers_OrganisationCreate_Street"
 msgstr ""
 
-msgid "Helptext_Organisations_OrganisationCreate_URL"
+msgid "Helptext_Customers_OrganisationCreate_URL"
 msgstr ""
 
-msgid "Helptext_Organisations_OrganisationCreate_Validity"
+msgid "Helptext_Customers_OrganisationCreate_Validity"
 msgstr ""
 
-msgid "Helptext_Organisations_OrganisationCreate_Zip"
+msgid "Helptext_Customers_OrganisationCreate_Zip"
 msgstr ""
 
-msgid "Helptext_Organisations_OrganisationImport"
+msgid "Helptext_Customers_OrganisationImport"
 msgstr ""
 
 msgid "Helptext_PersonalSettings_MyQueues_Hint"

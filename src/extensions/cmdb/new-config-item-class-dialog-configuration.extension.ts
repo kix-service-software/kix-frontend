@@ -39,25 +39,25 @@ export class Extension implements IConfigurationExtension {
             const infoGroup = new FormGroup('Translatable#CI Class Information', [
                 new FormField(
                     'Translatable#Name', ConfigItemClassProperty.NAME, null, true,
-                    'Translatable#Insert a config item class name.'
+                    'Translatable#Helptext_CMDB_ConfigItemClassCreate_Name'
                 ),
                 new FormField(
                     'Translatable#Icon', ConfigItemClassProperty.ICON, 'icon-input', false,
-                    'Translatable#Select an icon for this config item class.'
+                    'Translatable#Helptext_CMDB_ConfigItemClassCreate_Icon'
                 ),
                 new FormField(
                     'Translatable#Class Definition', ConfigItemClassProperty.DEFINITION_STRING, 'text-area-input', true,
-                    'Translatable#Insert the definition for the Config Item Class.',
+                    'Translatable#Helptext_CMDB_ConfigItemClassCreate_Definition',
                     null, null, null, null, null, null, null
                 ),
                 new FormField(
                     'Translatable#Comment', ConfigItemClassProperty.COMMENT, 'text-area-input', false,
-                    'Translatable#Insert a comment for the CI class.',
+                    'Translatable#Helptext_CMDB_ConfigItemClassCreate_Comment',
                     null, null, null, null, null, null, null, 200
                 ),
                 new FormField(
                     'Translatable#Validity', ConfigItemClassProperty.VALID_ID, 'valid-input', true,
-                    'Translatable#Set the ci class as „valid“, „invalid (temporarily)“, or „invalid“.',
+                    'Translatable#Helptext_CMDB_ConfigItemClassCreate_Valid',
                     null, new FormFieldValue(1)
                 )
             ]);
