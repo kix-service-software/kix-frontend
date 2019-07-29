@@ -13,6 +13,8 @@ import { ConfiguredPermissions } from "./permission";
 
 export abstract class KIXObject<T = any> {
 
+    public displayValues: Array<[string, string]>;
+
     public abstract ObjectId: string | number;
 
     public abstract KIXObjectType: KIXObjectType;
@@ -36,7 +38,9 @@ export abstract class KIXObject<T = any> {
     public Comment: string;
 
     public constructor(object?: KIXObject) {
+        this.displayValues = [];
         if (object) {
+            this.displayValues = object.displayValues ? object.displayValues : [];
             this.ConfiguredPermissions = object.ConfiguredPermissions;
             this.CreateBy = object.CreateBy;
             this.ChangeBy = object.ChangeBy;

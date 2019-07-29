@@ -16,7 +16,7 @@ export class RoleFactory extends ObjectFactory<Role> {
         return objectType === KIXObjectType.ROLE;
     }
 
-    public create(role?: Role): Role {
+    public async create(role?: Role): Promise<Role> {
         return new Role(role);
     }
 

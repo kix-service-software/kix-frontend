@@ -16,7 +16,7 @@ export class SystemAddressFactory extends ObjectFactory<SystemAddress> {
         return objectType === KIXObjectType.SYSTEM_ADDRESS;
     }
 
-    public create(systemaddress?: SystemAddress): SystemAddress {
+    public async create(systemaddress?: SystemAddress): Promise<SystemAddress> {
         return new SystemAddress(systemaddress);
     }
 

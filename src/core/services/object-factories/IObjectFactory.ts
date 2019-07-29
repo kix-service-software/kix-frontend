@@ -13,7 +13,7 @@ export interface IObjectFactory<T extends KIXObject = any> {
 
     isFactoryFor(objectType: KIXObjectType): boolean;
 
-    create(object?: T): T;
+    create(object?: T, token?: string): Promise<T>;
 
     applyPermissions(token: string, object: T): Promise<T>;
 

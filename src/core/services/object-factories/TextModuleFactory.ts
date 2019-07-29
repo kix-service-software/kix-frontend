@@ -16,7 +16,7 @@ export class TextModuleFactory extends ObjectFactory<TextModule> {
         return objectType === KIXObjectType.TEXT_MODULE;
     }
 
-    public create(textModule?: TextModule): TextModule {
+    public async create(textModule?: TextModule): Promise<TextModule> {
         return new TextModule(textModule);
     }
 

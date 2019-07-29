@@ -169,6 +169,12 @@ export class CacheService {
             case KIXObjectType.SYS_CONFIG_OPTION:
                 cacheKeyPrefixes.push(KIXObjectType.SYS_CONFIG_OPTION_DEFINITION);
                 break;
+            case KIXObjectType.QUEUE:
+            case KIXObjectType.TICKET_STATE:
+            case KIXObjectType.TICKET_TYPE:
+            case KIXObjectType.TICKET_PRIORITY:
+                cacheKeyPrefixes.push(KIXObjectType.TICKET);
+                break;
             default:
         }
 

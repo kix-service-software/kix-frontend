@@ -35,10 +35,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    public async onMount(): Promise<void> {
-        this.loadDisplayValues();
-    }
-
     private async loadDisplayValues(): Promise<void> {
         if (this.state.cell) {
             if (this.showIcons) {

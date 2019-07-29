@@ -16,7 +16,7 @@ export class SysConfigOptionFactory extends ObjectFactory<SysConfigOption> {
         return objectType === KIXObjectType.SYS_CONFIG_OPTION;
     }
 
-    public create(sysConfigOption?: SysConfigOption): SysConfigOption {
+    public async create(sysConfigOption?: SysConfigOption): Promise<SysConfigOption> {
         return new SysConfigOption(sysConfigOption);
     }
 

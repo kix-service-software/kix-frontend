@@ -16,7 +16,7 @@ export class ChannelFactory extends ObjectFactory<Channel> {
         return objectType === KIXObjectType.CHANNEL;
     }
 
-    public create(channel?: Channel): Channel {
+    public async create(channel?: Channel): Promise<Channel> {
         return new Channel(channel);
     }
 

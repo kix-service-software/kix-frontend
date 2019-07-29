@@ -16,7 +16,7 @@ export class PermissionTypeFactory extends ObjectFactory<PermissionType> {
         return objectType === KIXObjectType.PERMISSION_TYPE;
     }
 
-    public create(permissionType?: PermissionType): PermissionType {
+    public async create(permissionType?: PermissionType): Promise<PermissionType> {
         return new PermissionType(permissionType);
     }
 

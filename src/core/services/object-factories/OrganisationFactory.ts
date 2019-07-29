@@ -16,7 +16,7 @@ export class OrganisationFactory extends ObjectFactory<Organisation> {
         return objectType === KIXObjectType.ORGANISATION;
     }
 
-    public create(organisation?: Organisation): Organisation {
+    public async create(organisation?: Organisation): Promise<Organisation> {
         const newOrganisation = new Organisation(organisation);
         return newOrganisation;
     }

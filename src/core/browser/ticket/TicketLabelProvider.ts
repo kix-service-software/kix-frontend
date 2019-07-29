@@ -330,6 +330,11 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
         let displayValue = typeof defaultValue !== 'undefined' && defaultValue !== null
             ? defaultValue : ticket[property];
 
+        const existingValue = ticket.displayValues.find((dv) => dv[0] === property);
+        if (existingValue) {
+            return existingValue[1];
+        }
+
         switch (property) {
             case TicketProperty.QUEUE:
                 displayValue = await this.getPropertyValueDisplayText(

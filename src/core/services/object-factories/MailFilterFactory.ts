@@ -16,7 +16,7 @@ export class MailFilterFactory extends ObjectFactory<MailFilter> {
         return objectType === KIXObjectType.MAIL_FILTER;
     }
 
-    public create(mailFilter?: MailFilter): MailFilter {
+    public async create(mailFilter?: MailFilter): Promise<MailFilter> {
         return new MailFilter(mailFilter);
     }
 

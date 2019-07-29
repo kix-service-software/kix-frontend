@@ -16,7 +16,7 @@ export class ContactFactory extends ObjectFactory<Contact> {
         return objectType === KIXObjectType.CONTACT;
     }
 
-    public create(contact?: Contact): Contact {
+    public async create(contact?: Contact): Promise<Contact> {
         const newContact = new Contact(contact);
         return newContact;
     }

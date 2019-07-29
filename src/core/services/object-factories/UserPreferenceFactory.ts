@@ -16,7 +16,7 @@ export class UserPreferenceFactory extends ObjectFactory<UserPreference> {
         return objectType === KIXObjectType.USER_PREFERENCE;
     }
 
-    public create(userPreference: UserPreference): UserPreference {
+    public async create(userPreference: UserPreference): Promise<UserPreference> {
         return new UserPreference(userPreference);
     }
 

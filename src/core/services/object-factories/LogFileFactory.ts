@@ -17,7 +17,7 @@ export class LogFileFactory extends ObjectFactory<LogFile> {
         return objectType === KIXObjectType.LOG_FILE;
     }
 
-    public create(logFile?: LogFile): LogFile {
+    public async create(logFile?: LogFile): Promise<LogFile> {
         return new LogFile(logFile);
     }
 

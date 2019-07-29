@@ -16,7 +16,7 @@ export class MailAccountFactory extends ObjectFactory<MailAccount> {
         return objectType === KIXObjectType.MAIL_ACCOUNT;
     }
 
-    public create(mailAccount?: MailAccount): MailAccount {
+    public async create(mailAccount?: MailAccount): Promise<MailAccount> {
         return new MailAccount(mailAccount);
     }
 

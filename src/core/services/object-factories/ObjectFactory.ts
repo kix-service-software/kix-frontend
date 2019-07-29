@@ -16,7 +16,7 @@ export abstract class ObjectFactory<T extends KIXObject = any> implements IObjec
 
     public abstract isFactoryFor(objectType: KIXObjectType): boolean;
 
-    public abstract create(object?: T): T;
+    public abstract create(object?: T, token?: string): Promise<T>;
 
     public async applyPermissions(token: string, object: T): Promise<T> {
         return object;

@@ -17,6 +17,7 @@ import { UserPreference, UserProperty, SetPreferenceOptions, PersonalSettingsPro
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { UserFactory } from '../../object-factories/UserFactory';
 import { UserPreferenceFactory } from '../../object-factories/UserPreferenceFactory';
+import { HttpService } from './HttpService';
 
 export class UserService extends KIXObjectService {
 
@@ -69,12 +70,8 @@ export class UserService extends KIXObjectService {
     }
 
     public async getUserByToken(token: string): Promise<User> {
-        const loadingOptions = new KIXObjectLoadingOptions(null, null, null, ['Tickets', 'Preferences']);
-        const users = await super.load<User>(
-            token, KIXObjectType.USER, this.buildUri('session', 'user'), loadingOptions, null, KIXObjectType.USER, false
-        );
-
-        return users && users.length ? users[0] : null;
+        const user = await HttpService.getInstance().getUserByToken(token);
+        return user;
     }
 
     public async createObject(

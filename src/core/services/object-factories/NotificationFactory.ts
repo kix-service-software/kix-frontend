@@ -16,7 +16,7 @@ export class NotificationFactory extends ObjectFactory<Notification> {
         return objectType === KIXObjectType.NOTIFICATION;
     }
 
-    public create(notification: Notification): Notification {
+    public async create(notification: Notification): Promise<Notification> {
         return new Notification(notification);
     }
 

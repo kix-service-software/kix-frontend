@@ -34,7 +34,7 @@ export class ObjectFactoryService {
     ): Promise<T> {
         const factory = this.getInstance().factories.find((f) => f.isFactoryFor(objectType));
         if (factory) {
-            object = factory.create(object);
+            object = await factory.create(object, token);
             object = await factory.applyPermissions(token, object);
         }
         return object;

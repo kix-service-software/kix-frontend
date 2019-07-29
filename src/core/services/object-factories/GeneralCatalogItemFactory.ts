@@ -16,7 +16,7 @@ export class GeneralCatalogItemFactory extends ObjectFactory<GeneralCatalogItem>
         return objectType === KIXObjectType.GENERAL_CATALOG_ITEM;
     }
 
-    public create(gcItem?: GeneralCatalogItem): GeneralCatalogItem {
+    public async create(gcItem?: GeneralCatalogItem): Promise<GeneralCatalogItem> {
         return new GeneralCatalogItem(gcItem);
     }
 

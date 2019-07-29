@@ -16,7 +16,7 @@ export class QueueFactory extends ObjectFactory<Queue> {
         return objectType === KIXObjectType.QUEUE;
     }
 
-    public create(queue?: Queue): Queue {
+    public async create(queue?: Queue): Promise<Queue> {
         return new Queue(queue);
     }
 

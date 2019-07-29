@@ -13,7 +13,7 @@ import fs = require('fs');
 import { ConfigurationService } from '../ConfigurationService';
 import { LoggingService } from '../LoggingService';
 import { ProfilingService } from '../ProfilingService';
-import { Error } from '../../../model';
+import { Error, User, KIXObjectType } from '../../../model';
 import { AuthenticationService } from './AuthenticationService';
 import { CacheService } from '../../../cache';
 import { PermissionError } from '../../../model/PermissionError';
@@ -219,7 +219,7 @@ export class HttpService {
     private async buildCacheKey(resource: string, query: any, token: string, useToken?: boolean): Promise<string> {
         let cacheId = token;
         if (!useToken) {
-            const user = await UserService.getInstance().getUserByToken(token);
+            const user = await this.getUserByToken(token);
             cacheId = user.UserID.toString();
         }
         const ordered = {};
@@ -234,6 +234,57 @@ export class HttpService {
         const key = `${cacheId};${resource};${queryString}`;
 
         return key;
+    }
+
+    public async getUserByToken(token: string): Promise<User> {
+        const backendToken = AuthenticationService.getInstance().getBackendToken(token);
+
+        const user = await CacheService.getInstance().get(backendToken, KIXObjectType.CURRENT_USER);
+        if (user) {
+            return user;
+        }
+        const options: any = {
+            method: RequestMethod.GET,
+            qs: {
+                include: 'Tickets,Preferences'
+            }
+        };
+
+        const uri = 'session/user';
+        options.uri = this.buildRequestUrl(uri);
+        options.headers = {
+            'Authorization': 'Token ' + backendToken,
+            'KIX-Request-ID': ''
+        };
+        options.json = true;
+        options.ca = this.backendCertificate;
+
+        // start profiling
+        const profileTaskId = ProfilingService.getInstance().start(
+            'HttpService',
+            options.method + ' ' + uri,
+            {
+                a: options
+            });
+
+        return new Promise<User>((resolve, reject) => {
+            this.request(options)
+                .then(async (response) => {
+                    await CacheService.getInstance().set(backendToken, response['User'], KIXObjectType.CURRENT_USER);
+                    resolve(response['User']);
+                    ProfilingService.getInstance().stop(profileTaskId, response);
+                }).catch((error) => {
+                    LoggingService.getInstance().error(
+                        `Error during HTTP (${uri}) ${options.method} request.`, error
+                    );
+                    ProfilingService.getInstance().stop(profileTaskId, 'Error');
+                    if (error.statusCode === 403) {
+                        reject(new PermissionError(this.createError(error), uri, options.method));
+                    } else {
+                        reject(this.createError(error));
+                    }
+                });
+        });
     }
 
 }
