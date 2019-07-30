@@ -8,6 +8,7 @@
  */
 
 import { ComponentState } from './ComponentState';
+import { ArticleReceiver } from '../../../core/model';
 
 class Component {
 
@@ -19,6 +20,12 @@ class Component {
 
     public onInput(input: any): void {
         this.state.receiverList = input.receiver;
+    }
+
+    public getReceiverString(receiver: ArticleReceiver): string {
+        const email = receiver.email;
+        const realName = receiver.realName;
+        return realName === email ? email : `${realName} ${email}`;
     }
 
 }

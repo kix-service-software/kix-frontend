@@ -6,9 +6,8 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <ul.receiver-list-container>
     <for|receiver| of=state.receiverList>
-        <li title=receiver.email>${receiver.realName}</li>
+        <li title=receiver.email>${component.getReceiverString(receiver)}</li>
     </for>
 </ul>
