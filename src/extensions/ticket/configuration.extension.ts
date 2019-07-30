@@ -67,9 +67,6 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
                     TicketProperty.WATCHERS, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER, true
                 )
             ]),
-            new KIXObjectPropertyFilter('Translatable#Escalated Tickets', [
-                new TableFilterCriteria(TicketProperty.ESCALATION_TIME, SearchOperator.LESS_THAN, 0)
-            ]),
             new KIXObjectPropertyFilter('Translatable#Unlocked Tickets', [
                 new TableFilterCriteria(TicketProperty.LOCK_ID, SearchOperator.EQUALS, 1)
             ]),
