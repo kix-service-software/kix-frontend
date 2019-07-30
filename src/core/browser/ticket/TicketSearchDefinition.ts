@@ -138,6 +138,7 @@ export class TicketSearchDefinition extends SearchDefinition {
             || property === TicketProperty.STATE_ID
             || property === TicketProperty.PRIORITY_ID
             || property === TicketProperty.TYPE_ID
+            || property === TicketProperty.LOCK_ID
             || property === TicketProperty.OWNER_ID
             || property === TicketProperty.RESPONSIBLE_ID;
     }
