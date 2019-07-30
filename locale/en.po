@@ -131,6 +131,9 @@ msgstr ""
 msgid "AND"
 msgstr ""
 
+msgid "and further"
+msgstr ""
+
 msgid "An error occurred."
 msgstr ""
 
@@ -2982,6 +2985,9 @@ msgid "Switch to customer portal."
 msgstr ""
 
 msgid "Symptom"
+msgstr ""
+
+msgid "Sysconfig"
 msgstr ""
 
 msgid "SysConfig"

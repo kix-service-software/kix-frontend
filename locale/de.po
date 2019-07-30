@@ -133,6 +133,9 @@ msgstr "und"
 msgid "AND"
 msgstr "UND"
 
+msgid "and further"
+msgstr ""
+
 msgid "An error occurred."
 msgstr "Es ist ein Fehler aufgetreten."
 
@@ -3171,6 +3174,11 @@ msgstr "Wechsel ins Kundenportal."
 msgid "Symptom"
 msgstr "Symptom"
 
+#, fuzzy
+#| msgid "SysConfig"
+msgid "Sysconfig"
+msgstr "SysConfig"
+
 msgid "SysConfig"
 msgstr "SysConfig"
 
@@ -3820,11 +3828,6 @@ msgstr "PLZ"
 #~ msgstr ""
 #~ "Setzen Sie den Nutzer als \"gültig\", \"ungültig (temporär)\" oder "
 #~ "\"ungültig\"."
-
-#, fuzzy
-#~| msgid "SysConfig"
-#~ msgid "Sysconfig"
-#~ msgstr "SysConfig"
 
 #~ msgid ""
 #~ "The FAQ article <a href=\"faqarticles/2\" target=\"_blank\">How to search "
