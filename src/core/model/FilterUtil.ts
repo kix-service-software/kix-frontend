@@ -52,11 +52,9 @@ export class FilterUtil {
                     if (v instanceof KIXObject) {
                         if (Array.isArray(value)) {
                             return value.some((sv) => sv.equals(v));
-                        } else {
-                            return v.equals(value);
                         }
                     }
-                    return v.toString() === value.toString();
+                    return value.indexOf(v.toString()) !== -1;
                 });
             default:
         }

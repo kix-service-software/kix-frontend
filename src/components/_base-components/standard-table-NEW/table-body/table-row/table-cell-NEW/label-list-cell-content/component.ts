@@ -34,7 +34,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 values = stringValue.split(',').map((v) => v.trim());
             } else {
                 values = value.objectValue;
-                icons = value.displayIcons;
+                icons = value.displayIcons ? value.displayIcons : [];
             }
         } else {
             values = [value.objectValue];
