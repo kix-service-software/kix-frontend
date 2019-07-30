@@ -106,11 +106,13 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             ) {
                 (this as any).setStateDirty('row');
             }
+            this.setRowClasses();
         }
     }
 
     public toggleRow(): void {
         this.state.row.expand(!this.state.open);
+        this.setRowClasses();
     }
 
     public changeSelect(event: any): void {
