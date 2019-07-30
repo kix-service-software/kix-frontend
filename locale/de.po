@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-07-25 12:44+0000\n"
+"PO-Revision-Date: 2019-07-30 15:09+0000\n"
 "Last-Translator: fuhlig <Frank.Uhlig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -134,7 +134,7 @@ msgid "AND"
 msgstr "UND"
 
 msgid "and further"
-msgstr ""
+msgstr "und weitere"
 
 msgid "An error occurred."
 msgstr "Es ist ein Fehler aufgetreten."
@@ -327,12 +327,10 @@ msgid "Close Dialog"
 msgstr "Dialog schließen"
 
 msgid "Close Overlay"
-msgstr ""
+msgstr "Overlay schließen"
 
-#, fuzzy
-#| msgid "Close Dialog"
 msgid "Close Sidebars"
-msgstr "Dialog schließen"
+msgstr "Sidebars schließen"
 
 msgid "Closing time"
 msgstr "Geschlossen am"
@@ -529,10 +527,8 @@ msgstr "Aktuelle Version"
 msgid "Customer"
 msgstr "Kunde"
 
-#, fuzzy
-#| msgid "Customer Details"
 msgid "Customer Dashboard"
-msgstr "Kunden Details"
+msgstr "Kunden Dashboard"
 
 msgid "Data has been updated."
 msgstr "Daten wurden aktualisiert."
@@ -630,10 +626,8 @@ msgstr "Schlüssel bearbeiten"
 msgid "Edit Links"
 msgstr "Links bearbeiten"
 
-#, fuzzy
-#| msgid "Notification"
 msgid "Edit Notification"
-msgstr "Benachrichtigung"
+msgstr "Benachrichtigung bearbeiten"
 
 msgid "Edit Object"
 msgstr "Objekt bearbeiten"
@@ -2522,28 +2516,20 @@ msgstr "Kein Artikel"
 msgid "No article available."
 msgstr "Kein Artikel verfügbar."
 
-#, fuzzy
-#| msgid "No rating available."
 msgid "No data available."
-msgstr "Keine Bewertung verfügbar."
+msgstr "Keine Daten verfügbar."
 
 msgid "No general catalog class configured!"
 msgstr "Keine General Catalog Klasse konfiguriert!"
 
-#, fuzzy
-#| msgid "No object available"
 msgid "No linked objects available."
-msgstr "Kein Objekt verfügbar"
+msgstr "Keine verknüpften Objekte verfügbar."
 
-#, fuzzy
-#| msgid "No rating available."
 msgid "No link types available."
-msgstr "Keine Bewertung verfügbar."
+msgstr "Keine Linktypen verfügbar."
 
-#, fuzzy
-#| msgid "No object available"
 msgid "No objects available."
-msgstr "Kein Objekt verfügbar"
+msgstr "Keine Objekte verfügbar."
 
 msgid "No object with ID {0} available."
 msgstr "Kein Objekt mit der ID {0} verfügbar."
@@ -2576,6 +2562,8 @@ msgid ""
 "Note: For optimal use of KIX, we recommend alternative browsers such as "
 "Chromium or Firefox."
 msgstr ""
+"Hinweis: Für die optimale Nutzung von KIX empfehlen wir alternative Browser "
+"wie Chromium oder Firefox."
 
 msgid "Notes"
 msgstr "Notizen"
@@ -3037,10 +3025,8 @@ msgstr "Bilddatei wählen"
 msgid "; (semicolon)"
 msgstr "; (Semikolon)"
 
-#, fuzzy
-#| msgid "Sender"
 msgid "Send"
-msgstr "Absender"
+msgstr "Senden"
 
 msgid "Send despite out of office"
 msgstr "Trotz „nicht im Büro“ senden"
@@ -3151,10 +3137,8 @@ msgstr "Straße"
 msgid "Subject"
 msgstr "Betreff"
 
-#, fuzzy
-#| msgid "With Ticketnumber"
 msgid "Subject with Ticketnumber"
-msgstr "mit Ticket-Nummer"
+msgstr "Betreff mit Ticketnummer"
 
 msgid "Submit"
 msgstr "Übernehmen"
@@ -3174,10 +3158,8 @@ msgstr "Wechsel ins Kundenportal."
 msgid "Symptom"
 msgstr "Symptom"
 
-#, fuzzy
-#| msgid "SysConfig"
 msgid "Sysconfig"
-msgstr "SysConfig"
+msgstr "Sysconfig"
 
 msgid "SysConfig"
 msgstr "SysConfig"
@@ -3230,13 +3212,11 @@ msgstr "Textbaustein wurde erfolgreich angelegt."
 msgid "Text separator"
 msgstr "Texttrenner"
 
-#, fuzzy
-#| msgid "Required field '{0}' has no value."
 msgid "The file {0} has no valid MIME-TYPE."
-msgstr "Benötigtes Feld '{0}' hat keinen Wert."
+msgstr "Die Datei '{0}' hat keinen gültigen MIME-Typ."
 
 msgid "The file size of {0} is too large ({1}). Max.: {2}"
-msgstr ""
+msgstr "Die Datei ist zu groß {0} ({1}). Max.: {2}"
 
 msgid "The following {0} entries will be deleted. Are you sure?"
 msgstr "Die ausgewählten {0} Einträge werden gelöscht. Sind Sie sicher?"
@@ -3442,10 +3422,8 @@ msgstr "Aktualisierung wird durchgeführt"
 msgid "Update Key"
 msgstr "Schlüssel wird aktualisiert"
 
-#, fuzzy
-#| msgid "Create Notification"
 msgid "Update Notification"
-msgstr "Benachrichtigung erstellen"
+msgstr "Benachrichtigung aktualisieren"
 
 msgid "Update Organisation"
 msgstr "Aktualisierung wird durchgeführt"
