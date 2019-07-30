@@ -21,9 +21,14 @@ class ActionComponent {
     public onInput(input: any): void {
         this.state.action = input.action;
         this.state.displayText = typeof input.displayText !== 'undefined' ? input.displayText : true;
+        this.update();
     }
 
     public async onMount(): Promise<void> {
+        this.update();
+    }
+
+    private async update(): Promise<void> {
         this.state.text = await TranslationService.translate(this.state.action.text);
         this.state.actionData = await this.state.action.getLinkData();
     }
