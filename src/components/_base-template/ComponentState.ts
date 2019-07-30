@@ -24,7 +24,7 @@ export class ComponentState extends AbstractComponentState {
         public hasExplorer: boolean = false,
         public showSidebar: boolean = false,
         public loading: boolean = true,
-        public loadingHint: string = 'Loading',
+        public loadingHint: string = '',
         public reload: boolean = false,
         public initialized: boolean = false
     ) {

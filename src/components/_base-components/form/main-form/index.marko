@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <form.form autocomplete="off">
     <input id="username" style="display:none" type="text" name="fakeusernameremembered"/>
     <input id="password" style="display:none" type="password" name="fakepasswordremembered"/>
@@ -16,10 +15,15 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     <else-if(state.formInstance && state.formInstance.form && state.formId)>
         <for|group| of=state.formInstance.form.groups>
             <if(state.formInstance.form.groups.length > 1 || state.formInstance.form.showSingleGroup)>
-                <widget instanceId="form-group" title=group.name on-minimizedChanged('handleFormGroupMinimizeState', group.name)
+                <widget
+                    instanceId="form-group"
+                    title=group.name
+                    on-minimizedChanged("handleFormGroupMinimizeState", group.name)
                     key=group.name>
                     <@content>
-                        <field-container fields=group.formFields formId=state.formId
+                        <field-container
+                            fields=group.formFields
+                            formId=state.formId
                             additionalFieldControlsNeeded=state.additionalFieldControlsNeeded/>
                     </@content>
                 </widget>
@@ -28,7 +32,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </if>
             </if>
             <else>
-                <field-container fields=group.formFields formId=state.formId
+                <field-container
+                    fields=group.formFields
+                    formId=state.formId
                     additionalFieldControlsNeeded=state.additionalFieldControlsNeeded/>
             </else>
         </for>

@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <widget
     instanceId=state.instanceId
     contextType="MAIN"
@@ -20,7 +19,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <span.error>No FAQ Article available.</span>
         </else-if>
         <else>
-            <div.faq-article-information-container>
+            <div.faq-article-information-container class={
+                "show-object": state.faqArticle
+            }>
                 <div.information-list>
                     <div>
                         <object-property-label

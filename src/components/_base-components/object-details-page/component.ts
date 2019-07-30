@@ -9,11 +9,11 @@
 
 
 import {
-    AbstractMarkoComponent, ContextService, WidgetService, LabelService, ActionFactory
+    AbstractMarkoComponent, ContextService, WidgetService, ActionFactory
 } from "../../../core/browser";
 import { ComponentState } from './ComponentState';
 import {
-    ContextConfiguration, KIXObject, KIXObjectType, Context, WidgetType, ContextType, ContextMode
+    ContextConfiguration, KIXObject, Context, WidgetType, ContextType, ContextMode
 } from "../../../core/model";
 import { TranslationService } from "../../../core/browser/i18n/TranslationService";
 import { EventService } from "../../../core/browser/event";
@@ -52,20 +52,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 this.state.error = 'No details context available.';
                 this.state.loading = false;
             } else {
+                this.state.loading = true;
                 this.state.instanceId = this.context.getDescriptor().contextId;
-
-                this.context.registerListener('object-details-component', {
-                    explorerBarToggled: () => { return; },
-                    filteredObjectListChanged: () => { return; },
-                    objectListChanged: () => { return; },
-                    sidebarToggled: () => { return; },
-                    scrollInformationChanged: () => { return; },
-                    objectChanged: (
-                        objectId: string, object: KIXObject, objectType: KIXObjectType, changedProperties: string[]
-                    ) => {
-                        this.initWidget(this.context, object);
-                    }
-                });
                 await this.initWidget(this.context);
             }
         }
@@ -109,6 +97,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async prepareActions(): Promise<void> {
         const config = this.configuration;
+        this.state.actions = [];
         if (config && this.object) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
                 config.actions, this.object

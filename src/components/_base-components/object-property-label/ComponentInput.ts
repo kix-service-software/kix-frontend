@@ -10,7 +10,7 @@
 import { ILabelProvider } from '../../../core/browser';
 import { RoutingConfiguration } from '../../../core/browser/router';
 
-export class ObjectPropertyLabelInput<T> {
+export class ComponentInput<T> {
 
     public object: any;
 

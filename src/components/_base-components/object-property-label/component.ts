@@ -8,7 +8,7 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { ObjectPropertyLabelInput } from './ObjectPropertyLabelInput';
+import { ComponentInput } from './ComponentInput';
 import { ObjectIcon } from '../../../core/model';
 import { ILabelProvider } from '../../../core/browser';
 
@@ -24,7 +24,7 @@ export class ObjectPropertyLabelComponent<T> {
         this.state = new ComponentState();
     }
 
-    public onInput(input: ObjectPropertyLabelInput<T>): void {
+    public onInput(input: ComponentInput<T>): void {
         this.object = input.object;
         this.property = input.property;
         this.labelProvider = input.labelProvider;

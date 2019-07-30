@@ -9,22 +9,22 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 <div.table-cell-content
     class={
         "with-icons": component.showIcons,
-        "with-text": component.showText && state.displayText
+        "with-text": component.showText
     }
     style={
         height: input.height
     }
     title=state.displayText>
-    <if(component.showIcons)>
+    <if(component.showIcons && state.icons)>
         <span>
             <for|icon| of=state.icons>
                 <icon icon=icon showUnknown=true/>
             </for>
         </span>
     </if>
-    <if(component.showText && state.displayText)>
+    <if(component.showText)>
         <span.text.cell-display-text class={
-            "show-cell-display-text": state.displayText
+            "show-object": state.displayText !== null
         }>${state.displayText}</span>
     </if>
 </div>

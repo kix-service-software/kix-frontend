@@ -15,8 +15,9 @@ export class ComponentState extends WidgetComponentState {
     public constructor(
         public kixObject: KIXObject = null,
         public actions: AbstractAction[] = [],
-        public linkedObjectGroups: Array<[string, ITable, number, CreateLinkDescription[]]> = [],
-        public title: string = 'Linked Objects'
+        public linkedObjectGroups: Array<[string, ITable, number, CreateLinkDescription[]]> = null,
+        public title: string = 'Linked Objects',
+        public setMinimizedState: boolean = true
     ) {
         super();
     }
