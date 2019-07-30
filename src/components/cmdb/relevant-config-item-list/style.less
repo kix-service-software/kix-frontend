@@ -13,19 +13,24 @@ ul.ci-list-content {
     list-style: none;
     padding-right: @margin-small;
     overflow: auto;
+    opacity: 0;
+
     >li {
         display: grid;
         grid-template-columns: 1rem auto;
         align-items: center;
         grid-column-gap: 0.5rem;
+
         >span.overlay-icon {
             font-size: 1rem;
         }
+
         >span.ci-name {
             text-overflow: ellipsis;
             overflow: hidden;
             white-space: nowrap;
         }
+
         &:hover {
             cursor: pointer;
         }

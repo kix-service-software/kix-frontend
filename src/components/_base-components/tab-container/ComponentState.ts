@@ -21,7 +21,8 @@ export class ComponentState extends AbstractComponentState {
         public hasSidebars: boolean = false,
         public contextType: ContextType = null,
         public showSidebar: boolean = false,
-        public contentActions: IAction[] = []
+        public contentActions: IAction[] = [],
+        public loading: boolean = true
     ) {
         super();
     }

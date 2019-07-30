@@ -7,7 +7,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 <if(state.object)>
-    <div.object-information>
+    <div.object-information class={
+        "show-object": state.properties
+    }>
         <div.information-list class={
             "flat-list": state.flat
         }>

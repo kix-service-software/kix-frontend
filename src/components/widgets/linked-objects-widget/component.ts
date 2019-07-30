@@ -56,6 +56,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async initWidget(kixObject?: KIXObject): Promise<void> {
         this.state.kixObject = kixObject;
         this.setActions();
+        this.state.linkedObjectGroups = null;
         await this.prepareLinkedObjectsGroups();
     }
 
@@ -68,7 +69,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async prepareLinkedObjectsGroups(): Promise<void> {
-        this.state.linkedObjectGroups = [];
+        const linkedObjectGroups = [];
         if (this.state.widgetConfiguration.settings) {
             const linkedObjectTypes: Array<[string, KIXObjectType]> =
                 this.state.widgetConfiguration.settings.linkedObjectTypes;
@@ -100,9 +101,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     const groupTitle = await TranslationService.translate(lot[0]);
                     const title = `${groupTitle} (${objects.length})`;
 
-                    this.state.linkedObjectGroups.push([title, table, objects.length, linkDescriptions]);
+                    linkedObjectGroups.push([title, table, objects.length, linkDescriptions]);
                 }
             }
+
+            this.state.linkedObjectGroups = linkedObjectGroups;
 
             const text = await TranslationService.translate(this.state.widgetConfiguration.title, []);
             this.state.title = `${text} (${objectsCount})`;
@@ -146,6 +149,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     widgetComponent.setMinizedState(true);
                 }
             });
+
+            setTimeout(() => this.state.setMinimizedState = false, 100);
         }, 100);
     }
 

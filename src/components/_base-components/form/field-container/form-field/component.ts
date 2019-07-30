@@ -37,7 +37,10 @@ class Component {
     private async update(): Promise<void> {
         this.state.translations = await TranslationService.createTranslationObject([this.state.field.label]);
         const hint = await TranslationService.translate(this.state.field.hint);
-        this.state.hint = hint.startsWith('Helptext_') ? null : hint;
+        this.state.hint = hint
+            ? (hint.startsWith('Helptext_') ? null : hint)
+            : null;
+        this.state.show = true;
     }
 
     public async onMount(): Promise<void> {
@@ -51,6 +54,7 @@ class Component {
                 }
             }
         });
+        this.update();
     }
 
     public async onDestroy(): Promise<void> {

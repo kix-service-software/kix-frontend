@@ -17,7 +17,8 @@ export class ComponentState extends AbstractComponentState {
         public formId: string = null,
         public minimized: boolean = false,
         public level: number = 0,
-        public hint: string = ''
+        public hint: string = '',
+        public show: boolean = false
     ) {
         super();
     }

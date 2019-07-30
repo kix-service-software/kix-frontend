@@ -52,7 +52,6 @@ class TabLaneComponent implements IEventSubscriber {
 
     public async onMount(): Promise<void> {
         if (this.state.tabWidgets.length) {
-
             this.state.translations = await TranslationService.createTranslationObject(
                 this.state.tabWidgets.map((t) => t.configuration.title)
             );
@@ -82,7 +81,10 @@ class TabLaneComponent implements IEventSubscriber {
             });
             this.prepareContext();
             window.addEventListener('resize', this.hideSidebarIfNeeded.bind(this), false);
-            this.state.translations = await TranslationService.createTranslationObject(['Translatable#Close Sidebars']);
+            const sidebarTranslations = await TranslationService.createTranslationObject(
+                ['Translatable#Close Sidebars']
+            );
+            this.state.translations = { ...this.state.translations, ...sidebarTranslations };
         }
 
         if (this.state.tabWidgets.length && this.state.activeTab && this.state.tabId) {
@@ -91,6 +93,8 @@ class TabLaneComponent implements IEventSubscriber {
                 this.state.activeTab = tab;
             }
         }
+
+        this.state.loading = false;
     }
 
     public onDestroy(): void {
@@ -187,11 +191,6 @@ class TabLaneComponent implements IEventSubscriber {
                 this.tabClicked(tab);
             }
         }
-    }
-
-    public getTitle(tab: ConfiguredWidget): string {
-        return this.tabTitles.has(tab.instanceId) ?
-            this.tabTitles.get(tab.instanceId) : this.state.translations[tab.configuration.title];
     }
 
     public getIcon(tab: ConfiguredWidget): string | ObjectIcon {

@@ -6,8 +6,9 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<div.key-value-pair>
+<div.key-value-pair class={
+    "show-object": state.propertyDisplayText !== null || !state.hasText
+}>
     <div.key title=state.propertyName>
         <span.property-name>${state.propertyName}</span>
     </div>

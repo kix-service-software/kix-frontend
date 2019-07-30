@@ -6,12 +6,10 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<ul.ci-list-content>
-    <if(state.loading)>
-        <loading-spinner/>
-    </if>
-    <else>
+<ul.ci-list-content class={
+    "show-object": state.configItems
+}>
+    <if(state.configItems)>
         <for|configItem| of=state.configItems>
             <li>
                 <overlay-icon
@@ -29,5 +27,5 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </span>
             </li>
         </for>
-    </else>
+    </if>
 </ul>

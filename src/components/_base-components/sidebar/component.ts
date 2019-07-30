@@ -63,13 +63,9 @@ class Component {
     }
 
     private updateSidebars(context: Context): void {
-        this.state.loading = true;
-        this.state.sidebars = null;
-
         setTimeout(() => {
-            this.state.sidebars = context ? (context.getSidebars(true) || []) : [];
+            this.state.sidebars = context ? ([...context.getSidebars(true)] || []) : [];
             this.state.showSidebar = context ? context.isSidebarShown() : false;
-            this.state.loading = false;
         }, 100);
     }
 

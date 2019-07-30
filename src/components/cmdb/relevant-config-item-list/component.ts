@@ -24,8 +24,6 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        this.state.loading = true;
-
         const object = await ContextService.getInstance().getActiveContext(ContextType.MAIN).getObject();
         if (object) {
             const linkedConfigItemIds = object.Links.filter(
@@ -50,10 +48,6 @@ class Component {
                 this.state.configItems = [];
             }
         }
-
-        setTimeout(() => {
-            this.state.loading = false;
-        }, 200);
     }
 
     public getRoutingConfiguration(configItem: ConfigItem): RoutingConfiguration {
