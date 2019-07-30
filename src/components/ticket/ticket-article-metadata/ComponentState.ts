@@ -10,10 +10,15 @@
 import { Article } from '../../../core/model';
 import { ArticleLabelProvider } from '../../../core/browser/ticket';
 
-export class TicketArticleMetadataComponentState {
+export class ComponentState {
 
-    public article: Article = null;
-
-    public labelProvider: ArticleLabelProvider = null;
+    public constructor(
+        public article: Article = null,
+        public labelProvider: ArticleLabelProvider = null,
+        public receiverToString: string = '',
+        public receiverCcString: string = '',
+        public receiverBccString: string = '',
+        public fromString: string = ''
+    ) { }
 
 }
