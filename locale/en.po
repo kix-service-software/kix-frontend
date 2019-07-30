@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2019-07-23 16:31+0000\n"
+"PO-Revision-Date: 2019-07-30 15:09+0000\n"
 "Last-Translator: fuhlig <Frank.Uhlig@cape-it.de>\n"
 "Language-Team: English <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/en/>\n"
@@ -521,10 +521,8 @@ msgstr ""
 msgid "Customer"
 msgstr ""
 
-#, fuzzy
-#| msgid "CMDB Dashboard"
 msgid "Customer Dashboard"
-msgstr "Asset Dashboard"
+msgstr ""
 
 msgid "Data has been updated."
 msgstr ""
@@ -618,10 +616,8 @@ msgstr ""
 msgid "Edit FAQ Category"
 msgstr ""
 
-#, fuzzy
-#| msgid "Edit Queue"
 msgid "Edit Key"
-msgstr "Edit Team"
+msgstr ""
 
 msgid "Edit Links"
 msgstr ""
