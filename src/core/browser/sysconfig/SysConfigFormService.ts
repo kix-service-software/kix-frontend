@@ -52,27 +52,31 @@ export class SysConfigFormService extends KIXObjectFormService<SysConfigOption> 
     protected async getValue(
         property: string, value: any, sysConfig: SysConfigOptionDefinition, formField: FormField
     ): Promise<any> {
-        let newValue = value;
+        let formValue = value;
         switch (property) {
             case SysConfigOptionDefinitionProperty.SETTING:
                 if (value && Array.isArray(value)) {
-                    newValue = value.join(',');
+                    formValue = value.join(',');
                 } else {
-                    newValue = value;
+                    formValue = value;
                 }
                 break;
             case SysConfigOptionDefinitionProperty.DEFAULT:
-                if (typeof newValue !== 'string' && typeof newValue !== 'number') {
-                    newValue = JSON.stringify(value);
+                if (typeof formValue !== 'string' && typeof formValue !== 'number') {
+                    formValue = JSON.stringify(value);
                 }
                 break;
             case SysConfigOptionDefinitionProperty.VALUE:
                 if (sysConfig.IsModified !== 1) {
-                    newValue = sysConfig.Default;
+                    formValue = sysConfig.Default;
                 }
 
-                if (typeof newValue !== 'string' && typeof newValue !== 'number') {
-                    newValue = JSON.stringify(newValue);
+                if (typeof formValue !== 'string' && typeof formValue !== 'number') {
+                    formValue = JSON.stringify(formValue);
+                }
+
+                if (formValue === null) {
+                    formValue = '';
                 }
                 break;
             case KIXObjectProperty.VALID_ID:
@@ -82,6 +86,6 @@ export class SysConfigFormService extends KIXObjectFormService<SysConfigOption> 
                 break;
             default:
         }
-        return newValue;
+        return formValue;
     }
 }

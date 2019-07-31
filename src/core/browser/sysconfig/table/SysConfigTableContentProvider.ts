@@ -10,7 +10,7 @@
 import { TableContentProvider } from "../../table/TableContentProvider";
 import {
     KIXObjectType, KIXObjectLoadingOptions, SysConfigOption, SysConfigKey,
-    FilterCriteria, SysConfigOptionDefinitionProperty, FilterDataType, FilterType, KIXObject
+    FilterCriteria, SysConfigOptionDefinitionProperty, FilterDataType, FilterType, KIXObject, SysConfigOptionProperty
 } from "../../../model";
 import { ITable, IRowObject, TableValue, RowObject } from "../../table";
 import { SysConfigOptionDefinition } from "../../../model/kix/sysconfig/SysConfigOptionDefinition";
@@ -60,16 +60,20 @@ export class SysConfigTableContentProvider extends TableContentProvider<SysConfi
         return rowObjects;
     }
 
-    private createRowObject(sysConfigOption: SysConfigOptionDefinition): RowObject {
+    private createRowObject(definition: SysConfigOptionDefinition): RowObject {
         const values: TableValue[] = [];
 
-        for (const property in sysConfigOption) {
-            if (sysConfigOption.hasOwnProperty(property)) {
-                values.push(new TableValue(property, sysConfigOption[property]));
+        for (const property in definition) {
+            if (definition.hasOwnProperty(property)) {
+                if (property === SysConfigOptionDefinitionProperty.NAME) {
+                    values.push(new TableValue(property, definition[property], definition[property]));
+                } else {
+                    values.push(new TableValue(property, definition[property]));
+                }
             }
         }
 
-        const rowObject = new RowObject<SysConfigOptionDefinition>(values, sysConfigOption);
+        const rowObject = new RowObject<SysConfigOptionDefinition>(values, definition);
 
         return rowObject;
     }

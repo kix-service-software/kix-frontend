@@ -79,7 +79,7 @@ export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
                     if (this.contextId) {
                         context = await ContextService.getInstance().getContext(this.contextId);
                     } else {
-                        context = await ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+                        context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
                     }
                     if (context && context.getObjectId()) {
                         KIXObjectService.updateObjectByForm(this.objectType, this.state.formId, context.getObjectId())
