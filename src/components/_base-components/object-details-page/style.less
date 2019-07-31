@@ -58,14 +58,26 @@
                 .action-list-wrapper {
                     >.action-list {
                         >li {
+                            a {
+                                color: @secondary-6
+                            }
+
                             color: @secondary-6;
 
                             &.inactive {
                                 color: @primary-2;
+
+                                a {
+                                    color: @primary-2
+                                }
                             }
 
                             &:hover:not(.list-button):not(.inactive) {
                                 color: @primary-5;
+
+                                a {
+                                    color: @primary-5
+                                }
                             }
                         }
                     }
@@ -78,12 +90,24 @@
                                 color: @secondary-6;
                                 border-color: @secondary-6;
 
-                                &.inactive {
-                                    color: @primary-2;
+                                a {
+                                    color: @secondary-6
                                 }
 
-                                &:hover:not(.inactive) {
+                                &.inactive {
+                                    color: @primary-2;
+
+                                    a {
+                                        color: @primary-2
+                                    }
+                                }
+
+                                &:hover:not(.list-button):not(.inactive) {
                                     color: @primary-5;
+
+                                    a {
+                                        color: @primary-5
+                                    }
                                 }
                             }
                         }
