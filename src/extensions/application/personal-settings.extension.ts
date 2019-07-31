@@ -10,7 +10,7 @@
 import {
     IPersonalSettingsExtension, PersonalSetting, FormFieldOption, ObjectReferenceOptions,
     KIXObjectType, PersonalSettingsProperty, KIXObjectLoadingOptions, KIXObjectProperty,
-    FilterCriteria, FilterType, FilterDataType, QueueProperty
+    FilterCriteria, FilterType, FilterDataType, QueueProperty, FormFieldOptions, InputFieldTypes
 } from "../../core/model";
 import { SearchOperator } from "../../core/browser";
 
@@ -18,6 +18,36 @@ class Extension implements IPersonalSettingsExtension {
 
     public getPersonalSettings(): PersonalSetting[] {
         return [
+            new PersonalSetting(
+                'Translatable#Change Password',
+                PersonalSettingsProperty.CURRENT_PASSWORD,
+                'Translatable#Current Password',
+                'Translatable#Helptext_PersonalSettings_UserPassword_Hint',
+                null, null,
+                [
+                    new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)
+                ]
+            ),
+            new PersonalSetting(
+                'Translatable#Change Password',
+                PersonalSettingsProperty.USER_PASSWORD,
+                'Translatable#New Password',
+                'Translatable#Helptext_PersonalSettings_UserNewPassword_Hint',
+                null, null,
+                [
+                    new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)
+                ]
+            ),
+            new PersonalSetting(
+                'Translatable#Change Password',
+                PersonalSettingsProperty.USER_PASSWORD_CONFIRM,
+                'Translatable#Confirm New Password',
+                'Translatable#Helptext_PersonalSettings_UserNewPasswordConfirm_Hint',
+                null, null,
+                [
+                    new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)
+                ]
+            ),
             new PersonalSetting(
                 'Translatable#Localisation',
                 PersonalSettingsProperty.USER_LANGUAGE,

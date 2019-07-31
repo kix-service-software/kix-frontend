@@ -91,12 +91,14 @@ export class AuthenticationService {
         }
     }
 
-    public async login(user: string, password: string, type: UserType, clientRequestId: string): Promise<string> {
-        const userLogin = new UserLogin(user, password, type);
+    public async login(
+        user: string, password: string, clientRequestId: string, fakeLogin?: boolean
+    ): Promise<string> {
+        const userLogin = new UserLogin(user, password, UserType.AGENT);
         const response = await HttpService.getInstance().post<LoginResponse>(
             'auth', userLogin, null, clientRequestId
         );
-        const token = this.createToken(user, response.Token);
+        const token = fakeLogin ? response.Token : this.createToken(user, response.Token);
         return token;
     }
 

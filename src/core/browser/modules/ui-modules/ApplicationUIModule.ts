@@ -37,6 +37,8 @@ import { NewSearchAction, EditSearchAction, SaveSearchAction, DeleteSearchAction
 import { LoadSearchAction } from '../../kix/search/actions';
 import { SearchService } from '../../kix/search/SearchService';
 import { InvalidObjectCSSHandler } from '../../table/InvalidObjectCSSHandler';
+import { FormValidationService } from '../../form/validation';
+import { UserPasswordValidator } from '../../user/UserPasswordValidator';
 
 export class UIModule implements IUIModule {
 
@@ -95,6 +97,8 @@ export class UIModule implements IUIModule {
         ActionFactory.getInstance().registerAction('save-search-action', SaveSearchAction);
         ActionFactory.getInstance().registerAction('delete-search-action', DeleteSearchAction);
         ActionFactory.getInstance().registerAction('load-search-action', LoadSearchAction);
+
+        FormValidationService.getInstance().registerValidator(new UserPasswordValidator());
 
         this.registerContexts();
         this.registerDialogs();

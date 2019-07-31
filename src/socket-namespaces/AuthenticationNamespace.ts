@@ -50,7 +50,7 @@ export class AuthenticationNamespace extends SocketNameSpace {
 
     private async login(data: LoginRequest): Promise<SocketResponse> {
         const response = await AuthenticationService.getInstance()
-            .login(data.userName, data.password, data.userType, data.clientRequestId)
+            .login(data.userName, data.password, data.clientRequestId)
             .then((token: string) =>
                 new SocketResponse(
                     AuthenticationEvent.AUTHORIZED,

@@ -34,10 +34,8 @@ export class AgentService extends KIXObjectService<User> {
             kixObjectType === KIXObjectType.PERSONAL_SETTINGS;
     }
 
-    public async login(
-        userName: string, password: string, redirectUrl: string, userType: UserType = UserType.AGENT
-    ): Promise<boolean> {
-        return await AuthenticationSocketClient.getInstance().login(userName, password, redirectUrl, userType);
+    public async login(userName: string, password: string, redirectUrl: string): Promise<boolean> {
+        return await AuthenticationSocketClient.getInstance().login(userName, password, redirectUrl);
     }
 
     public async getPersonalSettings(): Promise<PersonalSetting[]> {
@@ -69,5 +67,10 @@ export class AgentService extends KIXObjectService<User> {
         }
 
         return parameter;
+    }
+
+    public async checkPassword(password: string): Promise<boolean> {
+        const user = await this.getCurrentUser();
+        return await AuthenticationSocketClient.getInstance().login(user.UserLogin, password, null, true);
     }
 }
