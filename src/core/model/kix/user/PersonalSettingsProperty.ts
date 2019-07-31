@@ -11,6 +11,12 @@ export enum PersonalSettingsProperty {
 
     USER_LANGUAGE = 'UserLanguage',
 
-    MY_QUEUES = 'MyQueues'
+    MY_QUEUES = 'MyQueues',
+
+    CURRENT_PASSWORD = 'CURRENT_PASSWORD',
+
+    USER_PASSWORD = 'UserPassword',
+
+    USER_PASSWORD_CONFIRM = 'UserPasswordConfirm',
 
 }

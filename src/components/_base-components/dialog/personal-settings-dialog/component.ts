@@ -8,9 +8,7 @@
  */
 
 import { ComponentState } from './ComponentState';
-import {
-    FormService, ServiceRegistry, ServiceType, OverlayService, BrowserUtil, ContextService
-} from '../../../../core/browser';
+import { FormService, OverlayService, BrowserUtil } from '../../../../core/browser';
 import {
     KIXObjectType, FormField, FormFieldValue, PersonalSetting, Form, FormContext,
     ValidationSeverity, OverlayType, ComponentContent, ValidationResult, Error
@@ -56,7 +54,8 @@ class Component {
         personalSettings.forEach((ps) => {
             const group = formGroups.find((g) => g.name === ps.group);
             const formField = new FormField(
-                ps.label, ps.property, ps.inputType, false, ps.hint, ps.options, new FormFieldValue(ps.defaultValue)
+                ps.label, ps.property, ps.inputComponent, false, ps.hint,
+                ps.options, new FormFieldValue(ps.defaultValue)
             );
             if (group) {
                 group.formFields.push(formField);
@@ -68,7 +67,7 @@ class Component {
         const formName = await TranslationService.translate('Translatable#Personal Settings');
         return new Form(
             'personal-settings', formName,
-            formGroups, KIXObjectType.PERSONAL_SETTINGS, true, FormContext.EDIT,
+            formGroups, KIXObjectType.PERSONAL_SETTINGS, false, FormContext.EDIT,
             null, null, true
         );
     }
@@ -105,10 +104,15 @@ class Component {
     }
 
     public async showValidationError(result: ValidationResult[]): Promise<void> {
-        const errorMessages = result.filter((r) => r.severity === ValidationSeverity.ERROR).map((r) => r.message);
+        const errorMessages = [];
+
+        result.filter((r) => r.severity === ValidationSeverity.ERROR).map((r) => r.message).forEach((m) => {
+            if (!errorMessages.some((em) => em === m)) {
+                errorMessages.push(m);
+            }
+        });
 
         const title = await TranslationService.translate('Translatable#Error on form validation:');
-
         const content = new ComponentContent('list-with-title',
             {
                 title,
@@ -117,7 +121,6 @@ class Component {
         );
 
         const toastTitle = await TranslationService.translate('Translatable#Validation error');
-
         OverlayService.getInstance().openOverlay(
             OverlayType.WARNING, null, content, toastTitle, true
         );

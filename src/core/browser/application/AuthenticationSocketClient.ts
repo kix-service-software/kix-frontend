@@ -36,7 +36,7 @@ export class AuthenticationSocketClient extends SocketClient {
     }
 
     public login(
-        userName: string, password: string, redirectUrl: string, userType: UserType = UserType.AGENT
+        userName: string, password: string, redirectUrl: string, fakeLogin?: boolean
     ): Promise<boolean> {
         return new Promise((resolve, reject) => {
 
@@ -49,8 +49,10 @@ export class AuthenticationSocketClient extends SocketClient {
             this.authenticationSocket.on(AuthenticationEvent.AUTHORIZED, (result: AuthenticationResult) => {
                 if (result.requestId === requestId) {
                     window.clearTimeout(timeout);
-                    document.cookie = 'token=' + result.token;
-                    window.location.replace(result.redirectUrl);
+                    if (!fakeLogin) {
+                        document.cookie = 'token=' + result.token;
+                        window.location.replace(result.redirectUrl);
+                    }
                     resolve(true);
                 }
             });
@@ -63,7 +65,8 @@ export class AuthenticationSocketClient extends SocketClient {
             });
 
             const request = new LoginRequest(
-                userName, password, redirectUrl, userType, requestId, ClientStorageService.getClientRequestId()
+                userName, password, redirectUrl, requestId,
+                ClientStorageService.getClientRequestId(), fakeLogin
             );
             this.authenticationSocket.emit(AuthenticationEvent.LOGIN, request);
         });

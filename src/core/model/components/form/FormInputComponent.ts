@@ -73,7 +73,7 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState<T>
 
     public async focusLost(event?: any): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        if (formInstance) {
+        if (formInstance && formInstance.getForm().validation) {
             await formInstance.validateField(this.state.field);
             FormInputComponent.prototype.setInvalidState.call(this);
         }

@@ -216,8 +216,20 @@ export class UserService extends KIXObjectService {
 
         const options = userId ? new SetPreferenceOptions(userId) : undefined;
 
+        parameter = parameter.filter((p) =>
+            p[0] !== PersonalSettingsProperty.CURRENT_PASSWORD &&
+            p[0] !== PersonalSettingsProperty.USER_PASSWORD_CONFIRM
+        );
+
         for (const param of parameter) {
-            if (currentPreferences.some((p) => p.ID === param[0])) {
+            if (param[0] === PersonalSettingsProperty.USER_PASSWORD) {
+                if (param[1] !== null && param[1] !== '') {
+                    await this.executeUpdateOrCreateRequest(
+                        token, clientRequestId, [[UserProperty.USER_PASSWORD, param[1]]],
+                        this.buildUri('session', 'user'), KIXObjectType.USER, 'User'
+                    );
+                }
+            } else if (currentPreferences.some((p) => p.ID === param[0])) {
                 await this.updateObject(
                     token, clientRequestId, KIXObjectType.USER_PREFERENCE,
                     [
