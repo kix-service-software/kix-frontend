@@ -9,6 +9,7 @@
 
 import { ObjectIcon } from "../../../model";
 import { Context } from '../../../model/components/context/Context';
+import { TranslationService } from "../../i18n/TranslationService";
 
 export class SearchContext extends Context {
 
@@ -19,7 +20,8 @@ export class SearchContext extends Context {
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {
-        return short ? 'Translatable#Results advanced search' : 'Translatable#Advanced Search';
+        const title = await TranslationService.translate('Translatable#Results advanced search');
+        return title;
     }
 
 }

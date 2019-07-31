@@ -7,7 +7,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 <div.form.search-template-form>
-    <div.form-field title=state.translations["Translatable#Search"]>
+    <div.form-field.show-object() title=state.translations["Translatable#Search"]>
         <div.field-label>
             <span.label-text>
                 <translation-string pattern="Translatable#Search"/>
@@ -18,7 +18,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <form-list nodes=state.nodes selectedNodes=state.currentNodes on-nodesChanged("searchChanged") multiselect=false/>
         </div>
     </div>
-    <div.form-field title=state.translations["Translatable#Title"]>
+    <div.form-field.show-object() title=state.translations["Translatable#Title"]>
         <div.field-label>
             <span.label-text>
                 <translation-string pattern="Translatable#Title"/>
