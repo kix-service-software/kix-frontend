@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-07-31 11:59+0000\n"
+"PO-Revision-Date: 2019-07-31 15:32+0000\n"
 "Last-Translator: fuhlig <Frank.Uhlig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -1548,73 +1548,63 @@ msgstr ""
 "Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
 "Bereich angezeigt werden."
 
-#, fuzzy
-#| msgid "Helptext_Customers_ContactCreate_Organisation"
 msgid "Helptext_CMDB_ConfigItemClassCreate_Definition"
-msgstr "Hilfetext_Organisations_ContactCreate_Organisation"
+msgstr "Geben Sie hier die Asset-Klassendefinition ein."
 
-#, fuzzy
-#| msgid "Helptext_Customers_ContactCreate_Login"
 msgid "Helptext_CMDB_ConfigItemClassCreate_Icon"
-msgstr "Hilfetext_Organisations_ContactCreate_Login"
+msgstr ""
+"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
+"der Asset-Klasse angezeigt wird."
 
-#, fuzzy
-#| msgid "Helptext_Admin_SystemAddressCreate_Name"
 msgid "Helptext_CMDB_ConfigItemClassCreate_Name"
-msgstr "Hilfetext_Admin_SystemAddressCreate_Name"
+msgstr "Der Name einer Asset-Klasse kann nicht mehrmals verwendet werden."
 
-#, fuzzy
-#| msgid "Helptext_Customers_ContactCreate_Validity"
 msgid "Helptext_CMDB_ConfigItemClassCreate_Valid"
-msgstr "Hilfetext_Organisations_ContactCreate_Validity"
+msgstr ""
+"Die Asset-Klasse kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
-#, fuzzy
-#| msgid "Helptext_Customers_ContactEdit_Comment"
 msgid "Helptext_CMDB_ConfigItemClassEdit_Comment"
-msgstr "Hilfetext_Organisations_ContactEdit_Comment"
+msgstr ""
+"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+"Bereich angezeigt werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountEdit_Dispachting"
 msgid "Helptext_CMDB_ConfigItemClassEdit_Definition"
-msgstr "Hilfetext_Admin_MailAccountEdit_Dispachting"
+msgstr "Geben Sie hier die Asset-Klassendefinition ein."
 
-#, fuzzy
-#| msgid "Helptext_Customers_ContactEdit_Phone"
 msgid "Helptext_CMDB_ConfigItemClassEdit_Icon"
-msgstr "Hilfetext_Organisations_ContactEdit_Phone"
+msgstr ""
+"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
+"der  Asset-Klasse angezeigt wird."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_Name"
 msgid "Helptext_CMDB_ConfigItemClassEdit_Name"
-msgstr "Hilfetext_Admin_QueueEdit_Name"
+msgstr "Der Name einer Asset-Klasse kann nicht mehrmals verwendet werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_Validity"
 msgid "Helptext_CMDB_ConfigItemClassEdit_Valid"
-msgstr "Hilfetext_Admin_QueueEdit_Validity"
+msgstr ""
+"Die Asset-Klasse kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
-#, fuzzy
-#| msgid "Helptext_Customers_ContactCreate_Password"
 msgid "Helptext_CMDB_COnfigItemCreate_Class"
-msgstr "Hilfetext_Organisations_ContactCreate_Password"
+msgstr ""
+"Bitte wählen Sie zunächst eine Asset-Klasse aus der Liste. Anschließend wird "
+"das vollständige Eingabe-Formular geladen."
 
-#, fuzzy
-#| msgid "Helptext_Customers_ContactEdit_Fax"
 msgid "Helptext_CMDB_ConfigItemCreateEdit_Class"
-msgstr "Hilfetext_Organisations_ContactEdit_Fax"
+msgstr ""
+"Bitte wählen Sie zunächst eine Asset-Klasse aus der Liste. Anschließend wird "
+"das vollständige Eingabe-Formular geladen."
 
-#, fuzzy
-#| msgid "Overview Config Items Deployment State"
 msgid "Helptext_CMDB_ConfigItemCreateEdit_DeploymentState"
-msgstr "Übersicht Assets Verwendungsstatus"
+msgstr ""
+"Der Verwendungsstatus beschreibt die Position des Assets innerhalb seines "
+"Lebenszyklus."
 
 msgid "Helptext_CMDB_ConfigItemCreateEdit_IncidentState"
 msgstr "Der Vorfallsstatus beschreibt den aktuellen Zustand des Assets."
 
-#, fuzzy
-#| msgid "Helptext_Customers_ContactCreate_Login"
 msgid "Helptext_CMDB_ConfigItemCreateEdit_Links"
-msgstr "Hilfetext_Organisations_ContactCreate_Login"
+msgstr ""
+"Verknüpfen Sie dieses Asset mit einem Ticket, einem FAQ-Artikel oder einem "
+"anderen Asset."
 
 #, fuzzy
 #| msgid "Helptext_Admin_QueueEdit_Name"
