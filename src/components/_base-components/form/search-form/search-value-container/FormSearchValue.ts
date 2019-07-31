@@ -98,6 +98,19 @@ export class FormSearchValue {
                     this.objectType, this.currentPropertyNode.id, parameter
                 ).catch(() => []);
             }
+
+            if (this.isDate && !this.date) {
+                const now = new Date(Date.now());
+                this.setDateValue(DateTimeUtil.getKIXDateString(now));
+            } else if (this.isDateTime) {
+                const now = new Date(Date.now());
+                if (!this.time) {
+                    this.setTimeValue(DateTimeUtil.getKIXTimeString(now));
+                }
+                if (!this.date) {
+                    this.setDateValue(DateTimeUtil.getKIXDateString(now));
+                }
+            }
         }
     }
 
@@ -119,6 +132,9 @@ export class FormSearchValue {
         this.isBetweenDate = this.currentOperationNode
             ? this.currentOperationNode.id === SearchOperator.BETWEEN
             : false;
+        if (this.isBetweenDate && this.date) {
+            this.setDateValue(this.date);
+        }
     }
 
     public setCurrentValue(value: any): void {
@@ -203,10 +219,28 @@ export class FormSearchValue {
 
     public setDateValue(value: string): void {
         this.date = value;
+        if (this.isDateTime) {
+            if (!this.time) {
+                this.time = '00:00:00';
+            }
+            if (this.isBetweenDate) {
+                if (!this.betweenEndDate) {
+                    this.betweenEndDate = this.date;
+                }
+                if (!this.betweenEndTime) {
+                    this.betweenEndTime = this.time;
+                }
+            }
+        } else if (this.isBetweenDate && !this.betweenEndDate) {
+            this.betweenEndDate = this.date;
+        }
     }
 
     public setTimeValue(value: string): void {
         this.time = value;
+        if (this.isBetweenDate && !this.betweenEndTime) {
+            this.betweenEndTime = this.time;
+        }
     }
 
     public setBetweenEndDateValue(value: string): void {
