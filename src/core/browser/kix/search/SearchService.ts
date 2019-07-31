@@ -111,9 +111,6 @@ export class SearchService {
                     (c) => typeof c.value !== 'undefined' && c.value !== null && c.value !== ''
                 );
 
-                let preparedCriteria = await searchDefinition.prepareFormFilterCriteria(criteria);
-                preparedCriteria = this.prepareCriteria(preparedCriteria);
-
                 const cacheName = this.searchCache ? this.searchCache.name : null;
                 this.searchCache = new SearchCache<T>(objectType, criteria, [], null, CacheState.VALID, cacheName);
                 objects = await this.doSearch();
@@ -163,7 +160,11 @@ export class SearchService {
 
     private async doSearch(): Promise<KIXObject[]> {
         const searchDefinition = this.getSearchDefinition(this.searchCache.objectType);
-        const loadingOptions = searchDefinition.getLoadingOptions(this.searchCache.criteria);
+
+        let preparedCriteria = await searchDefinition.prepareFormFilterCriteria(this.searchCache.criteria);
+        preparedCriteria = this.prepareCriteria(preparedCriteria);
+
+        const loadingOptions = searchDefinition.getLoadingOptions(preparedCriteria);
         const objects = await KIXObjectService.loadObjects(
             this.searchCache.objectType, null, loadingOptions, null, false
         );
@@ -175,16 +176,13 @@ export class SearchService {
     public async executeFullTextSearch<T extends KIXObject>(
         objectType: KIXObjectType, searchValue: string
     ): Promise<T[]> {
-
-        const searchDefinition = this.getSearchDefinition(objectType);
-        const criteria = searchDefinition.prepareSearchFormValue(SearchProperty.FULLTEXT, searchValue);
-
         this.searchCache = new SearchCache<T>(
             objectType,
-            [new FilterCriteria(
-                SearchProperty.FULLTEXT, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
-            )],
-            []
+            [
+                new FilterCriteria(
+                    SearchProperty.FULLTEXT, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+                )
+            ], []
         );
 
         this.searchCache.fulltextValue = searchValue;
