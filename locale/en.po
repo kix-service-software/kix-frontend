@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2019-07-30 15:09+0000\n"
-"Last-Translator: fuhlig <Frank.Uhlig@cape-it.de>\n"
+"PO-Revision-Date: 2019-07-31 15:32+0000\n"
+"Last-Translator: fwichmann <Felix.Wichmann@cape-it.de>\n"
 "Language-Team: English <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/en/>\n"
 "Language: en\n"
@@ -852,133 +852,178 @@ msgid "Help"
 msgstr ""
 
 msgid "Helptext_Admin_FAQCategoryCreate_Comment"
-msgstr ""
+msgstr "Insert additional information (only displayed within the admin module)"
 
 msgid "Helptext_Admin_FAQCategoryCreate_Icon"
 msgstr ""
+"Upload an icon, which will be shown together with the category name within "
+"the application"
 
 msgid "Helptext_Admin_FAQCategoryCreate_Name"
-msgstr ""
+msgstr "The name set here will be shown in the application"
 
 msgid "Helptext_Admin_FAQCategoryCreate_ParentCategory"
 msgstr ""
+"If you want to subordinate the new category to an already existing category, "
+"you can choose this here"
 
 msgid "Helptext_Admin_FAQCategoryCreate_Validity"
-msgstr ""
+msgstr "The FAQ category can only be used within the system if set “valid”"
 
 msgid "Helptext_Admin_FAQCategoryEdit_Comment"
-msgstr ""
+msgstr "Insert additional information (only displayed within the admin module)"
 
 msgid "Helptext_Admin_FAQCategoryEdit_Icon"
 msgstr ""
+"Upload an icon, which will be shown together with the category name within "
+"the application"
 
 msgid "Helptext_Admin_FAQCategoryEdit_Name"
-msgstr ""
+msgstr "The name set here will be shown in the application"
 
 msgid "Helptext_Admin_FAQCategoryEdit_ParentCategory"
 msgstr ""
+"If you want to subordinate the new category to an already existing category, "
+"you can choose this here"
 
 msgid "Helptext_Admin_FAQCategoryEdit_Validity"
-msgstr ""
+msgstr "The FAQ category can only be used within the system if set “valid”"
 
 msgid "Helptext_Admin_MailAccountCreate_AcceptKIXHeader"
 msgstr ""
+"Sometimes incoming emails already contain KIX Header. If this option is set, "
+"the KIX Header can already be interpreted, whether or not any specific "
+"options are configured"
 
 msgid "Helptext_Admin_MailAccountCreate_Comment"
-msgstr ""
+msgstr "Insert additional information (only displayed within the admin module)"
 
 msgid "Helptext_Admin_MailAccountCreate_Dispachting"
 msgstr ""
+"Choose the team, which is supposed to receive incoming emails from this "
+"account. It is defined within the SysConfig which team is set as “default”"
 
 msgid "Helptext_Admin_MailAccountCreate_Host"
-msgstr ""
+msgstr "Insert the host name, holding the account. Example: mail.example.com"
 
 msgid "Helptext_Admin_MailAccountCreate_IMAPFolder"
 msgstr ""
+"Only modify this if you need to fetch mail from a different folder than INBOX"
 
 msgid "Helptext_Admin_MailAccountCreate_Password"
-msgstr ""
+msgstr "Insert the password for the account to enable connection with the host"
 
 msgid "Helptext_Admin_MailAccountCreate_Type."
 msgstr ""
+"IMAP/=Messages are only copied to KIX – the originals stay at the server\n"
+"POP/=Messages are downloaded from the server\n"
+"/S=Connection is SSL encrypted\n"
+"/TLS=Connection is TLS encrpyted"
 
 msgid "Helptext_Admin_MailAccountCreate_UserName"
 msgstr ""
+"Insert the user name for the account you want to configure in KIX, to enable "
+"connection with the host"
 
 msgid "Helptext_Admin_MailAccountCreate_Validity"
-msgstr ""
+msgstr "The email account can only be used within the system if set “valid”"
 
 msgid "Helptext_Admin_MailAccountEdit_AcceptKIXHeader"
 msgstr ""
+"Sometimes incoming emails already contain KIX Header. If this option is set, "
+"the KIX Header can already be interpreted, whether or not any specific "
+"options are configured"
 
 msgid "Helptext_Admin_MailAccountEdit_Comment"
-msgstr ""
+msgstr "Insert additional information (only displayed within the admin module)"
 
 msgid "Helptext_Admin_MailAccountEdit_Dispachting"
 msgstr ""
+"Choose the team, which is supposed to receive incoming emails from this "
+"account. It is defined within the SysConfig which team is set as “default”"
 
 msgid "Helptext_Admin_MailAccountEdit_Host"
-msgstr ""
+msgstr "Insert the host name, holding the account. Example: mail.example.com"
 
 msgid "Helptext_Admin_MailAccountEdit_IMAPFolder"
 msgstr ""
+"Only modify this if you need to fetch mail from a different folder than INBOX"
 
 msgid "Helptext_Admin_MailAccountEdit_Password"
-msgstr ""
+msgstr "Insert the password for the account to enable connection with the host"
 
 msgid "Helptext_Admin_MailAccountEdit_Type."
 msgstr ""
+"IMAP/=Messages are only copied to KIX – the originals stay at the server\n"
+"POP/=Messages are downloaded from the server\n"
+"/S=Connection is SSL encrypted\n"
+"/TLS=Connection is TLS encrpyted"
 
 msgid "Helptext_Admin_MailAccountEdit_UserName"
 msgstr ""
+"Insert the user name for the account you want to configure in KIX, to enable "
+"connection with the host"
 
 msgid "Helptext_Admin_MailAccountEdit_Validity"
-msgstr ""
+msgstr "The email account can only be used within the system if set “valid”"
 
 msgid "Helptext_Admin_MailFilterCreate_Comment"
-msgstr ""
+msgstr "Insert additional information (only displayed within the admin module)"
 
 msgid "Helptext_Admin_MailFilterCreate_FilterConditions"
 msgstr ""
 
 msgid "Helptext_Admin_MailFilterCreate_Name"
-msgstr ""
+msgstr "Insert a name for the email filter"
 
 msgid "Helptext_Admin_MailFilterCreate_SetEmailHeaders"
 msgstr ""
+"Choose which email header of incoming emails should be examined (one "
+"attribute per line). Available are all header configured in the SysConfig"
 
 msgid "Helptext_Admin_MailFilterCreate_StopAfterMatch"
 msgstr ""
+"If this option is set, and the conditions defined here match with an "
+"incoming email, no more other filters will be applied to this email"
 
 msgid "Helptext_Admin_MailFilterCreate_Validity"
-msgstr ""
+msgstr "The email filter can only be used within the system if set “valid”"
 
 msgid "Helptext_Admin_MailFilterEdit_Comment"
-msgstr ""
+msgstr "Insert additional information (only displayed within the admin module)"
 
 msgid "Helptext_Admin_MailFilterEdit_FilterConditions"
 msgstr ""
 
 msgid "Helptext_Admin_MailFilterEdit_Name"
-msgstr ""
+msgstr "Insert a name for the email filter"
 
 msgid "Helptext_Admin_MailFilterEdit_SetEmailHeaders"
 msgstr ""
+"Choose which email header of incoming emails should be examined (one "
+"attribute per line). Available are all header configured in the SysConfig"
 
 msgid "Helptext_Admin_MailFilterEdit_StopAfterMatch"
 msgstr ""
+"If this option is set, and the conditions defined here match with an "
+"incoming email, no more other filters will be applied to this email"
 
 msgid "Helptext_Admin_MailFilterEdit_Validity"
-msgstr ""
+msgstr "The email filter can only be used within the system if set “valid”"
 
 msgid "Helptext_Admin_MailFilter_FilterConditions_EmailHeader"
 msgstr ""
+"Choose which email header of incoming emails should be examined (one "
+"attribute per line). Available are all header configured in the SysConfig"
 
 msgid "Helptext_Admin_MailFilter_FilterConditions_Negate"
 msgstr ""
+"Set this option if the chosen header should not contain the following pattern"
 
 msgid "Helptext_Admin_MailFilter_FilterConditions_Pattern"
 msgstr ""
+"Insert the value/pattern, the chosen header is supposed to match, to trigger "
+"the filter. It is possible to use RegEx"
 
 msgid "Helptext_Admin_MailFilter_SetEmailHeader_EmailHeader"
 msgstr ""
@@ -991,87 +1036,125 @@ msgstr ""
 
 msgid "Helptext_Admin_NotificationCreate_AdditionalRecipient"
 msgstr ""
+"Insert a syntactically correct email address to send this notification to "
+"further recipients, additionally to the criteria defined above"
 
 msgid "Helptext_Admin_NotificationCreate_Comment"
-msgstr ""
+msgstr "Insert additional information (only displayed within the admin module)"
 
 msgid "Helptext_Admin_NotificationCreate_Event"
 msgstr ""
+"Choose from the list which ticket or article events are supposed to trigger "
+"this notification"
 
 msgid "Helptext_Admin_NotificationCreate_Filter"
 msgstr ""
 
 msgid "Helptext_Admin_NotificationCreate_MessageSubject"
 msgstr ""
+"Insert the subject you want to show in the email send out by this "
+"notification. Keep in mind the chosen language"
 
 msgid "Helptext_Admin_NotificationCreate_MessageText"
 msgstr ""
+"Insert the text you want to show in the email send out by this notification. "
+"Keep in mind the chosen language"
 
 msgid "Helptext_Admin_NotificationCreate_Name"
-msgstr ""
+msgstr "Set a notification name"
 
 msgid "Helptext_Admin_NotificationCreate_SendDespiteOutOfOffice"
 msgstr ""
+"If this option is active the notification will be send to absent agents, too"
 
 msgid "Helptext_Admin_NotificationCreate_SendOnceADay"
 msgstr ""
 
 msgid "Helptext_Admin_NotificationCreate_SendTo"
 msgstr ""
+"Choose from the drop down list general functions the agent should comply "
+"with to receive this notification"
 
 msgid "Helptext_Admin_NotificationCreate_SendToAgents"
 msgstr ""
+"Insert specific agents who are supposed to receive this notification. You "
+"can choose from all valid agents available in the system"
 
 msgid "Helptext_Admin_NotificationCreate_SendToRoleMembers"
 msgstr ""
+"Choose from the drop down list roles the agent should hold to receive this "
+"notification. You can choose from all valid roles available in the system"
 
 msgid "Helptext_Admin_NotificationCreate_SubjectWithTicketNumber"
 msgstr ""
+"Choose if You want the ticket number shown with the subject of the email "
+"send out by this notification"
 
 msgid "Helptext_Admin_NotificationCreate_Validity"
 msgstr ""
+"Notifications as defined here will only be send if the notification is set "
+"“valid”"
 
 msgid "Helptext_Admin_NotificationEdit_AdditionalRecipient"
 msgstr ""
+"Insert a syntactically correct email address to send this notification to "
+"further recipients, additionally to the criteria defined above"
 
 msgid "Helptext_Admin_NotificationEdit_Comment"
-msgstr ""
+msgstr "Insert additional information (only displayed within the admin module)"
 
 msgid "Helptext_Admin_NotificationEdit_Event"
 msgstr ""
+"Choose from the list which ticket or article events are supposed to trigger "
+"this notification"
 
 msgid "Helptext_Admin_NotificationEdit_Filter"
 msgstr ""
 
 msgid "Helptext_Admin_NotificationEdit_MessageSubject"
 msgstr ""
+"Insert the subject you want to show in the email send out by this "
+"notification. Keep in mind the chosen language"
 
 msgid "Helptext_Admin_NotificationEdit_MessageText"
 msgstr ""
+"Insert the text you want to show in the email send out by this notification. "
+"Keep in mind the chosen language"
 
 msgid "Helptext_Admin_NotificationEdit_Name"
-msgstr ""
+msgstr "Set a notification name"
 
 msgid "Helptext_Admin_NotificationEdit_SendDespiteOutOfOffice"
 msgstr ""
+"If this option is active the notification will be send to absent agents, too"
 
 msgid "Helptext_Admin_NotificationEdit_SendOnceADay"
 msgstr ""
 
 msgid "Helptext_Admin_NotificationEdit_SendTo"
 msgstr ""
+"Choose from the drop down list general functions the agent should comply "
+"with to receive this notification"
 
 msgid "Helptext_Admin_NotificationEdit_SendToAgents"
 msgstr ""
+"Insert specific agents who are supposed to receive this notification. You "
+"can choose from all valid agents available in the system"
 
 msgid "Helptext_Admin_NotificationEdit_SendToRoleMembers"
 msgstr ""
+"Choose from the drop down list roles the agent should hold to receive this "
+"notification. You can choose from all valid roles available in the system"
 
 msgid "Helptext_Admin_NotificationEdit_SubjectWithTicketNumber"
 msgstr ""
+"Choose if You want the ticket number shown with the subject of the email "
+"send out by this notification"
 
 msgid "Helptext_Admin_NotificationEdit_Validity"
 msgstr ""
+"Notifications as defined here will only be send if the notification is set "
+"“valid”"
 
 msgid "Helptext_Admin_QueueCreate_FollowUpTicketLock"
 msgstr ""
@@ -1080,19 +1163,21 @@ msgid "Helptext_Admin_QueueEdit_FollowUpTicketLock"
 msgstr ""
 
 msgid "Helptext_Admin_SysConfigEdit_Default_Value"
-msgstr ""
+msgstr "Shows the options for this SysConfig key"
 
 msgid "Helptext_Admin_SysConfigEdit_Description"
-msgstr ""
+msgstr "Explains what is controlled by this SysConfig key"
 
 msgid "Helptext_Admin_SysConfigEdit_Name"
-msgstr ""
+msgstr "The SysConfig key name cannot be changed"
 
 msgid "Helptext_Admin_SysConfigEdit_Validity"
 msgstr ""
+"The SysConfig key needs to be set “valid”, for the settings to be activated. "
+"Option is not available for all keys"
 
 msgid "Helptext_Admin_SysConfigEdit_Value"
-msgstr ""
+msgstr "Shows the options for this SysConfig key"
 
 msgid "Helptext_Admin_SystemAddressCreate_Comment"
 msgstr ""
