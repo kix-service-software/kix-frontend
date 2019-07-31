@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-07-31 07:32+0000\n"
+"PO-Revision-Date: 2019-07-31 10:31+0000\n"
 "Last-Translator: fuhlig <Frank.Uhlig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -279,10 +279,8 @@ msgstr "Geändert am"
 msgid "Changed by"
 msgstr "Geändert von"
 
-#, fuzzy
-#| msgid "Password"
 msgid "Change Password"
-msgstr "Passwort"
+msgstr "Passwort ändern"
 
 msgid "Changes saved."
 msgstr "Änderungen wurden gespeichert."
@@ -413,7 +411,7 @@ msgid "Config Item Version Compare"
 msgstr "Asset Versionsvergleich"
 
 msgid "Confirm New Password"
-msgstr ""
+msgstr "Neues Passwort bestätigen"
 
 msgid "Contact"
 msgstr "Kontakt"
@@ -523,10 +521,8 @@ msgstr "Aktueller Verwendungsstatus"
 msgid "Current incident state"
 msgstr "Aktueller Vorfallstatus"
 
-#, fuzzy
-#| msgid "Password"
 msgid "Current Password"
-msgstr "Passwort"
+msgstr "Aktuelles Passwort"
 
 msgid "(current version)"
 msgstr "(aktuelle Version)"
@@ -1039,25 +1035,24 @@ msgstr ""
 "info@example.com in From, To oder Cc. </br>\n"
 "Wenn Sie reguläre Ausdrücke verwenden, können Sie die unter „Filterbedin"
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Validity"
 msgid "Helptext_Admin_NotificationCreate_AdditionalRecipient"
-msgstr "Hilfetext_Admin_MailAccountCreate_Validity"
+msgstr ""
+"Tragen Sie eine syntaktisch korrekte E-Mail-Adresse ein, an die die "
+"Benachrichtigung zusätzlich zu den oben definierten Empfängern versendet "
+"werden soll."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Comment"
 msgid "Helptext_Admin_NotificationCreate_Comment"
-msgstr "Hilfetext_Admin_MailAccountCreate_Comment"
+msgstr ""
+"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+"Bereich angezeigt werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Comment"
 msgid "Helptext_Admin_NotificationCreate_Event"
-msgstr "Hilfetext_Admin_MailAccountCreate_Comment"
+msgstr ""
+"Wählen Sie aus, welche Ereignisse an Tickets oder Artikeln diese "
+"Benachrichtigung auslösen."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_IMAPFolder"
 msgid "Helptext_Admin_NotificationCreate_Filter"
-msgstr "Hilfetext_Admin_MailAccountCreate_IMAPFolder"
+msgstr ""
 
 msgid "Helptext_Admin_NotificationCreate_MessageSubject"
 msgstr ""
@@ -1078,10 +1073,8 @@ msgstr ""
 "Ist diese Option aktiviert, wird die Benachrichtigung auch an abwesende "
 "Agenten versendet."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Comment"
 msgid "Helptext_Admin_NotificationCreate_SendOnceADay"
-msgstr "Hilfetext_Admin_MailAccountCreate_Comment"
+msgstr ""
 
 msgid "Helptext_Admin_NotificationCreate_SendTo"
 msgstr ""
@@ -1253,225 +1246,185 @@ msgstr "Hilfetext_Admin_TextModuleEdit_Text"
 msgid "Helptext_Admin_TextModuleEdit_Validity"
 msgstr "Hilfetext_Admin_TextModuleEdit_Validity"
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Comment"
 msgid "Helptext_Admin_Tickets_PriorityCreate_Comment"
-msgstr "Hilfetext_Admin_MailAccountCreate_Comment"
+msgstr ""
+"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+"Bereich angezeigt werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
 msgid "Helptext_Admin_Tickets_PriorityCreate_Icon"
-msgstr "Hilfetext_Admin_FAQCategoryCreate_Icon"
+msgstr ""
+"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
+"der Priorität angezeigt wird."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailFilterCreate_Name"
 msgid "Helptext_Admin_Tickets_PriorityCreate_Name"
-msgstr "Hilfetext_Admin_MailFilterCreate_Name"
+msgstr "Der hier festgelegte Name wird in der Oberfläche angezeigt."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Validity"
 msgid "Helptext_Admin_Tickets_PriorityCreate_Valid"
-msgstr "Hilfetext_Admin_MailAccountCreate_Validity"
+msgstr "Die Priorität kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Comment"
 msgid "Helptext_Admin_Tickets_PriorityEdit_Comment"
-msgstr "Hilfetext_Admin_MailAccountCreate_Comment"
+msgstr ""
+"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+"Bereich angezeigt werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryEdit_Icon"
 msgid "Helptext_Admin_Tickets_PriorityEdit_Icon"
-msgstr "Hilfetext_Admin_FAQCategoryEdit_Icon"
+msgstr ""
+"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
+"der Priorität angezeigt wird."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailFilterCreate_Name"
 msgid "Helptext_Admin_Tickets_PriorityEdit_Name"
-msgstr "Hilfetext_Admin_MailFilterCreate_Name"
+msgstr "Der hier festgelegte Name wird in der Oberfläche angezeigt."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Validity"
 msgid "Helptext_Admin_Tickets_PriorityEdit_Valid"
-msgstr "Hilfetext_Admin_MailAccountCreate_Validity"
+msgstr "Die Priorität kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_Comment"
 msgid "Helptext_Admin_Tickets_QueueCreate_Comment"
-msgstr "Hilfetext_Admin_QueueCreate_Comment"
+msgstr ""
+"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+"Bereich angezeigt werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_FollowUp"
 msgid "Helptext_Admin_Tickets_QueueCreate_FollowUp"
-msgstr "Hilfetext_Admin_QueueCreate_FollowUp"
+msgstr ""
+"Gibt an, ob bei einer Rückmeldung zu einem bereits geschlossenen Ticket in "
+"diesem Team dieses Ticket erneut geöffnet wird."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_Icon."
 msgid "Helptext_Admin_Tickets_QueueCreate_Icon."
-msgstr "Hilfetext_Admin_QueueCreate_Icon."
+msgstr ""
+"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
+"des Teams angezeigt wird."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_Name"
 msgid "Helptext_Admin_Tickets_QueueCreate_Name"
-msgstr "Hilfetext_Admin_QueueCreate_Name"
+msgstr "Der hier festgelegte Name wird in der Oberfläche angezeigt."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_ParentQueue"
 msgid "Helptext_Admin_Tickets_QueueCreate_ParentQueue"
-msgstr "Hilfetext_Admin_QueueCreate_ParentQueue"
+msgstr ""
+"Wenn Sie dieses Team einem bereits existierenden Team unterordnen wollen, "
+"wählen Sie das hier aus."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_SenderAddress."
 msgid "Helptext_Admin_Tickets_QueueCreate_SenderAddress."
-msgstr "Hilfetext_Admin_QueueCreate_SenderAddress."
+msgstr "Absenderadresse für E-Mails aus diesem Team."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_Signature"
 msgid "Helptext_Admin_Tickets_QueueCreate_Signature"
-msgstr "Hilfetext_Admin_QueueCreate_Signature"
+msgstr ""
+"Signatur für E-Mails aus diesem Team. Es ist nicht möglich, Bilder "
+"einzufügen. Textbausteine können verwendet werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_UnlockTimeout"
 msgid "Helptext_Admin_Tickets_QueueCreate_UnlockTimeout"
-msgstr "Hilfetext_Admin_QueueCreate_UnlockTimeout"
+msgstr ""
+"Wenn ein Agent ein Ticket sperrt und es vor Ablauf der Entsperrzeit nicht "
+"schließt, wird es entsperrt und wieder für andere Agenten verfügbar gemacht."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_Validity"
 msgid "Helptext_Admin_Tickets_QueueCreate_Validity"
-msgstr "Hilfetext_Admin_QueueCreate_Validity"
+msgstr "Das Team kann nur verwendet werden, wenn es „gültig“ gesetzt ist."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_Comment"
 msgid "Helptext_Admin_Tickets_QueueEdit_Comment"
-msgstr "Hilfetext_Admin_QueueEdit_Comment"
+msgstr ""
+"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+"Bereich angezeigt werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_FollowUp"
 msgid "Helptext_Admin_Tickets_QueueEdit_FollowUp"
-msgstr "Hilfetext_Admin_QueueEdit_FollowUp"
+msgstr ""
+"Gibt an, ob bei einer Rückmeldung zu einem bereits geschlossenen Ticket in "
+"diesem Team dieses Ticket erneut geöffnet wird."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_Icon."
 msgid "Helptext_Admin_Tickets_QueueEdit_Icon."
-msgstr "Hilfetext_Admin_QueueEdit_Icon"
+msgstr ""
+"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
+"des Teams angezeigt wird."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_ParentQueue"
 msgid "Helptext_Admin_Tickets_QueueEdit_ParentQueue"
-msgstr "Hilfetext_Admin_QueueEdit_ParentQueue"
+msgstr ""
+"Wenn Sie dieses Team einem bereits existierenden Team unterordnen wollen, "
+"wählen Sie das hier aus."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_SenderAddress."
 msgid "Helptext_Admin_Tickets_QueueEdit_SenderAddress."
-msgstr "Hilfetext_Admin_QueueEdit_SenderAddress"
+msgstr "Absenderadresse für E-Mails aus diesem Team."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_Signature"
 msgid "Helptext_Admin_Tickets_QueueEdit_Signature"
-msgstr "Hilfetext_Admin_QueueEdit_Signature"
+msgstr ""
+"Signatur für E-Mails aus diesem Team. Es ist nicht möglich, Bilder "
+"einzufügen. Textbausteine können verwendet werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_UnlockTimeout"
 msgid "Helptext_Admin_Tickets_QueueEdit_UnlockTimeout"
-msgstr "Hilfetext_Admin_QueueEdit_UnlockTimeout"
+msgstr ""
+"Wenn ein Agent ein Ticket sperrt und es vor Ablauf der Entsperrzeit nicht "
+"schließt, wird es entsperrt und wieder für andere Agenten verfügbar gemacht."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_Validity"
 msgid "Helptext_Admin_Tickets_QueueEdit_Validity"
-msgstr "Hilfetext_Admin_QueueEdit_Validity"
+msgstr "Das Team kann nur verwendet werden, wenn es „gültig“ gesetzt ist."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_Comment"
 msgid "Helptext_Admin_Tickets_StateCreate_Comment"
-msgstr "Hilfetext_Admin_QueueCreate_Comment"
+msgstr ""
+"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+"Bereich angezeigt werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_Icon."
 msgid "Helptext_Admin_Tickets_StateCreate_Icon"
-msgstr "Hilfetext_Admin_QueueCreate_Icon."
+msgstr ""
+"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
+"des Status angezeigt wird."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleCreate_Name"
 msgid "Helptext_Admin_Tickets_StateCreate_Name"
-msgstr "Hilfetext_Admin_TextModuleCreate_Name"
+msgstr "Der hier festgelegte Name wird in der Oberfläche angezeigt."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Type."
 msgid "Helptext_Admin_Tickets_StateCreate_Type"
-msgstr "Hilfetext_Admin_MailAccountCreate_Type"
+msgstr "Ordnen Sie den neuen Status einer Gruppierung zu."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleCreate_Validity"
 msgid "Helptext_Admin_Tickets_StateCreate_Valid"
-msgstr "Hilfetext_Admin_TextModuleCreate_Validity"
+msgstr "Der Status kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_Comment"
 msgid "Helptext_Admin_Tickets_StateEdit_Comment"
-msgstr "Hilfetext_Admin_QueueEdit_Comment"
+msgstr ""
+"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+"Bereich angezeigt werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_Icon."
 msgid "Helptext_Admin_Tickets_StateEdit_Icon"
-msgstr "Hilfetext_Admin_QueueEdit_Icon"
+msgstr ""
+"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
+"des Status angezeigt wird."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleEdit_Name"
 msgid "Helptext_Admin_Tickets_StateEdit_Name"
-msgstr "Hilfetext_Admin_TextModuleEdit_Name"
+msgstr "Der hier festgelegte Name wird in der Oberfläche angezeigt."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountEdit_Type."
 msgid "Helptext_Admin_Tickets_StateEdit_Type"
-msgstr "Hilfetext_Admin_MailAccountEdit_Type"
+msgstr "Ordnen Sie den neuen Status einer Gruppierung zu."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleEdit_Validity"
 msgid "Helptext_Admin_Tickets_StateEdit_Valid"
-msgstr "Hilfetext_Admin_TextModuleEdit_Validity"
+msgstr "Der Status kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_Name"
 msgid "Helptext_Admin_Tickets_Tickets_QueueEdit_Name"
-msgstr "Hilfetext_Admin_QueueEdit_Name"
+msgstr "Der hier festgelegte Name wird in der Oberfläche angezeigt."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_Comment"
 msgid "Helptext_Admin_Tickets_TypeCreate_Comment"
-msgstr "Hilfetext_Admin_QueueCreate_Comment"
+msgstr ""
+"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+"Bereich angezeigt werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_Icon."
 msgid "Helptext_Admin_Tickets_TypeCreate_Icon"
-msgstr "Hilfetext_Admin_QueueCreate_Icon."
+msgstr ""
+"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
+"des Typs angezeigt wird."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_Name"
 msgid "Helptext_Admin_Tickets_TypeCreate_Name"
-msgstr "Hilfetext_Admin_QueueCreate_Name"
+msgstr "Der hier festgelegte Name wird in der Oberfläche angezeigt."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleCreate_Validity"
 msgid "Helptext_Admin_Tickets_TypeCreate_Valid"
-msgstr "Hilfetext_Admin_TextModuleCreate_Validity"
+msgstr "Der Typ kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_Comment"
 msgid "Helptext_Admin_Tickets_TypeEdit_Comment"
-msgstr "Hilfetext_Admin_QueueEdit_Comment"
+msgstr ""
+"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+"Bereich angezeigt werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_Icon."
 msgid "Helptext_Admin_Tickets_TypeEdit_Icon"
-msgstr "Hilfetext_Admin_QueueEdit_Icon"
+msgstr ""
+"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
+"des Typs angezeigt wird."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleEdit_Name"
 msgid "Helptext_Admin_Tickets_TypeEdit_Name"
-msgstr "Hilfetext_Admin_TextModuleEdit_Name"
+msgstr "Der hier festgelegte Name wird in der Oberfläche angezeigt."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleEdit_Validity"
 msgid "Helptext_Admin_Tickets_TypeEdit_Valid"
-msgstr "Hilfetext_Admin_TextModuleEdit_Validity"
+msgstr "Der Typ kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
 msgid "Helptext_Admin_UserCreate_Preferences_MyQueues"
 msgstr "Hilfetext_Admin_UserCreate_Preferences_MyQueues"
@@ -1485,140 +1438,110 @@ msgstr "Hilfetext_Admin_UserEdit_Preferences_Language"
 msgid "Helptext_Admin_UserEdit_Preferences_MyQueues"
 msgstr "Hilfetext_Admin_UserEdit_Preferences_MyQueues"
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_Comment"
 msgid "Helptext_Admin_Users_RoleCreate_Comment"
-msgstr "Hilfetext_Admin_QueueCreate_Comment"
+msgstr ""
+"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+"Bereich angezeigt werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_Name"
 msgid "Helptext_Admin_Users_RoleCreate_Name"
-msgstr "Hilfetext_Admin_QueueCreate_Name"
+msgstr "Legen Sie einen Namen für die Rolle fest."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleCreate_Name"
 msgid "Helptext_Admin_Users_RoleCreate_User"
-msgstr "Hilfetext_Admin_TextModuleCreate_Name"
+msgstr ""
+"Zuweisung dieser Rolle an Agenten. Es werden nur gültige Agenten in der "
+"Auswahl angezeigt."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_Validity"
 msgid "Helptext_Admin_Users_RoleCreate_Valid"
-msgstr "Hilfetext_Admin_QueueCreate_Validity"
+msgstr "Die Rolle kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_Comment"
 msgid "Helptext_Admin_Users_RoleEdit_Comment"
-msgstr "Hilfetext_Admin_QueueEdit_Comment"
+msgstr ""
+"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+"Bereich angezeigt werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_Name"
 msgid "Helptext_Admin_Users_RoleEdit_Name"
-msgstr "Hilfetext_Admin_QueueEdit_Name"
+msgstr "Legen Sie einen Namen für die Rolle fest."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleEdit_Name"
 msgid "Helptext_Admin_Users_RoleEdit_User"
-msgstr "Hilfetext_Admin_TextModuleEdit_Name"
+msgstr ""
+"Zuweisung dieser Rolle an Agenten. Es werden nur gültige Agenten in der "
+"Auswahl angezeigt."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleEdit_Validity"
 msgid "Helptext_Admin_Users_RoleEdit_Valid"
-msgstr "Hilfetext_Admin_TextModuleEdit_Validity"
+msgstr "Die Rolle kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_Comment"
 msgid "Helptext_Admin_Users_UserCreate_Comment"
-msgstr "Hilfetext_Admin_QueueCreate_Comment"
+msgstr ""
+"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+"Bereich angezeigt werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_SystemAddressCreate_Name"
 msgid "Helptext_Admin_Users_UserCreate_Email"
-msgstr "Hilfetext_Admin_SystemAddressCreate_Name"
+msgstr "Geben Sie die E-Mail-Adresse ein, unter der der Agent erreichbar ist."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_Name"
 msgid "Helptext_Admin_Users_UserCreate_FirstName"
-msgstr "Hilfetext_Admin_QueueCreate_Name"
+msgstr "Geben Sie einen oder mehrere Vornamen des Agenten ein."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_Name"
 msgid "Helptext_Admin_Users_UserCreate_LastName"
-msgstr "Hilfetext_Admin_QueueCreate_Name"
+msgstr "Geben Sie den Nachnamen des Agenten ein."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_Icon."
 msgid "Helptext_Admin_Users_UserCreate_Login"
-msgstr "Hilfetext_Admin_QueueCreate_Icon."
+msgstr ""
+"Geben Sie den Nutzernamen des Agenten ein. Dieser muss eineindeutig sein und "
+"kann nach der Erstellung nicht bearbeitet werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Password"
 msgid "Helptext_Admin_Users_UserCreate_Password"
-msgstr "Hilfetext_Admin_MailAccountCreate_Password"
+msgstr ""
+"Geben Sie das Passwort des Agenten ein. Dieses ist nach der Speicherung "
+"gültig. Wird kein Passwort eingeben, ist das bisherige Passwort gültig."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_Icon."
 msgid "Helptext_Admin_Users_UserCreate_Phone"
-msgstr "Hilfetext_Admin_QueueCreate_Icon."
+msgstr "Geben Sie die Telefonnummer des Agenten ein."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_Signature"
 msgid "Helptext_Admin_Users_UserCreate_Title"
-msgstr "Hilfetext_Admin_QueueCreate_Signature"
+msgstr "Wählen Sie den Titel des Agenten aus."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueCreate_Validity"
 msgid "Helptext_Admin_Users_UserCreate_Valid"
-msgstr "Hilfetext_Admin_QueueCreate_Validity"
+msgstr ""
+"Der Agent kann sich mit den hier festgelegten Nutzerdaten nur einloggen, "
+"wenn „gültig“ gesetzt ist."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_Comment"
 msgid "Helptext_Admin_Users_UserEdit_Comment"
-msgstr "Hilfetext_Admin_QueueEdit_Comment"
+msgstr ""
+"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+"Bereich angezeigt werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_Name"
 msgid "Helptext_Admin_Users_UserEdit_Email"
-msgstr "Hilfetext_Admin_QueueEdit_Name"
+msgstr "Geben Sie die E-Mail-Adresse ein, unter der der Agent erreichbar ist."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_Name"
 msgid "Helptext_Admin_Users_UserEdit_FirstName"
-msgstr "Hilfetext_Admin_QueueEdit_Name"
+msgstr "Geben Sie einen oder mehrere Vornamen des Agenten ein."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_Name"
 msgid "Helptext_Admin_Users_UserEdit_LastName"
-msgstr "Hilfetext_Admin_QueueEdit_Name"
+msgstr "Geben Sie den Nachnamen des Agenten ein."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_Icon."
 msgid "Helptext_Admin_Users_UserEdit_Login"
-msgstr "Hilfetext_Admin_QueueEdit_Icon"
+msgstr ""
+"Der Nutzername kann nur beim Erstellen eines Agenten festgelegt werden und "
+"ist anschließend nicht bearbeitbar."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_Name"
 msgid "Helptext_Admin_Users_UserEdit_Mobile"
-msgstr "Hilfetext_Admin_QueueEdit_Name"
+msgstr "Geben Sie die Mobilfunk-Nummer des Agenten ein."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountEdit_Password"
 msgid "Helptext_Admin_Users_UserEdit_Password"
-msgstr "Hilfetext_Admin_MailAccountEdit_Password"
+msgstr ""
+"Geben Sie das Passwort des Agenten ein. Dieses ist nach der Speicherung "
+"gültig. Wird kein Passwort eingeben, ist das bisherige Passwort gültig."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_Icon."
 msgid "Helptext_Admin_Users_UserEdit_Phone"
-msgstr "Hilfetext_Admin_QueueEdit_Icon"
+msgstr "Geben Sie die Telefonnummer des Agenten ein."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_Signature"
 msgid "Helptext_Admin_Users_UserEdit_Title"
-msgstr "Hilfetext_Admin_QueueEdit_Signature"
+msgstr "Wählen Sie den Titel des Agenten aus."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_Validity"
 msgid "Helptext_Admin_Users_UserEdit_Valid"
-msgstr "Hilfetext_Admin_QueueEdit_Validity"
+msgstr ""
+"Der Agent kann sich mit den hier festgelegten Nutzerdaten nur einloggen, "
+"wenn „gültig“ gesetzt ist."
 
 #, fuzzy
 #| msgid "Helptext_Customers_ContactCreate_Comment"
@@ -1686,7 +1609,7 @@ msgid "Helptext_CMDB_ConfigItemCreateEdit_DeploymentState"
 msgstr "Übersicht Assets Verwendungsstatus"
 
 msgid "Helptext_CMDB_ConfigItemCreateEdit_IncidentState"
-msgstr ""
+msgstr "Der Vorfallsstatus beschreibt den aktuellen Zustand des Assets."
 
 #, fuzzy
 #| msgid "Helptext_Customers_ContactCreate_Login"
@@ -2752,7 +2675,7 @@ msgid "Password"
 msgstr "Passwort"
 
 msgid "Passwords do not match."
-msgstr ""
+msgstr "Passwörter stimmen nicht überein."
 
 msgid "Pattern"
 msgstr "Muster"
@@ -3582,13 +3505,13 @@ msgid "Yes"
 msgstr "Ja"
 
 msgid "You have to confirm your current password."
-msgstr ""
+msgstr "Bitte geben Sie das aktuelle Passwort ein."
 
 msgid "You have to confirm your password."
-msgstr ""
+msgstr "Bitte bestätigen Sie das neue Passwort."
 
 msgid "Your current password is wrong."
-msgstr ""
+msgstr "Das aktuelle Passwort ist falsch."
 
 msgid "Your rating"
 msgstr "Ihre Bewertung"
