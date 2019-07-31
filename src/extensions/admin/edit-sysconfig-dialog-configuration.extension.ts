@@ -70,7 +70,7 @@ export class Extension implements IConfigurationExtension {
 
             const form = new Form(
                 formId, 'Translatable#Edit Key', [group],
-                KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, true, FormContext.EDIT
+                KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, false, FormContext.EDIT
             );
             await configurationService.saveConfiguration(form.id, form);
         }

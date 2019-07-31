@@ -23,7 +23,7 @@ export class SysConfigLabelProvider extends LabelProvider<SysConfigOptionDefinit
     public async getPropertyValueDisplayText(
         property: string, value: string | number, translatable: boolean = true
     ): Promise<string> {
-        let displayValue = value;
+        let displayValue: string;
         switch (property) {
             case SysConfigOptionDefinitionProperty.IS_MODIFIED:
                 displayValue = value === 1 ? 'Translatable#Modified' : '';
@@ -49,7 +49,7 @@ export class SysConfigLabelProvider extends LabelProvider<SysConfigOptionDefinit
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
-        let displayValue = property;
+        let displayValue: string;
         switch (property) {
             case SysConfigOptionDefinitionProperty.NAME:
                 displayValue = 'Translatable#Name';
@@ -132,11 +132,9 @@ export class SysConfigLabelProvider extends LabelProvider<SysConfigOptionDefinit
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
         if (translatable) {
-            return await TranslationService.translate(
-                plural ? 'Translatable#SysConfig' : 'Translatable#SysConfig'
-            );
+            return await TranslationService.translate('Translatable#SysConfig');
         }
-        return plural ? 'SysConfig' : 'SysConfig';
+        return 'SysConfig';
     }
 
 

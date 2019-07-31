@@ -29,7 +29,7 @@ export class JSONFormFieldValidator implements IFormFieldValidator {
         const formInstance = await FormService.getInstance().getFormInstance(formId);
         const formFieldValue = formInstance.getFormFieldValue(formField.instanceId);
 
-        if (this.IsValidJSONString(formFieldValue.value)) {
+        if (formFieldValue.value === null || this.IsValidJSONString(formFieldValue.value)) {
             return new ValidationResult(ValidationSeverity.OK, '');
         } else {
             const fieldLabel = await TranslationService.translate(formField.label);
