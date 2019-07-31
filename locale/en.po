@@ -275,6 +275,9 @@ msgstr ""
 msgid "Changed by"
 msgstr ""
 
+msgid "Change Password"
+msgstr ""
+
 msgid "Changes saved."
 msgstr ""
 
@@ -401,6 +404,9 @@ msgstr "Asset successfully created."
 msgid "Config Item Version Compare"
 msgstr "Asset Version Compare"
 
+msgid "Confirm New Password"
+msgstr ""
+
 msgid "Contact"
 msgstr ""
 
@@ -507,6 +513,9 @@ msgid "Current deployment state"
 msgstr ""
 
 msgid "Current incident state"
+msgstr ""
+
+msgid "Current Password"
 msgstr ""
 
 msgid "(current version)"
@@ -1711,6 +1720,15 @@ msgstr ""
 msgid "Helptext_PersonalSettings_UserLanguage_Hint"
 msgstr ""
 
+msgid "Helptext_PersonalSettings_UserNewPasswordConfirm_Hint"
+msgstr ""
+
+msgid "Helptext_PersonalSettings_UserNewPassword_Hint"
+msgstr ""
+
+msgid "Helptext_PersonalSettings_UserPassword_Hint"
+msgstr ""
+
 msgid "Helptext_Search_ConfigItem"
 msgstr ""
 
@@ -2182,12 +2200,6 @@ msgstr ""
 msgid "Logged in"
 msgstr ""
 
-msgid "Login"
-msgstr ""
-
-msgid "Login failed"
-msgstr ""
-
 msgid "Login Name"
 msgstr ""
 
@@ -2282,6 +2294,9 @@ msgid "New Object"
 msgstr ""
 
 msgid "New Organisation"
+msgstr ""
+
+msgid "New Password"
 msgstr ""
 
 msgid "New Priority"
@@ -2381,11 +2396,6 @@ msgid "Not available (not any more or not yet)"
 msgstr ""
 
 msgid "Note"
-msgstr ""
-
-msgid ""
-"Note: For optimal use of KIX, we recommend alternative browsers such as "
-"Chromium or Firefox."
 msgstr ""
 
 msgid "Notes"
@@ -2523,6 +2533,9 @@ msgid "Parent Queue"
 msgstr "Superior Team"
 
 msgid "Password"
+msgstr ""
+
+msgid "Passwords do not match."
 msgstr ""
 
 msgid "Pattern"
@@ -3342,16 +3355,19 @@ msgstr ""
 msgid "We are working on this functionality."
 msgstr ""
 
-msgid "Welcome to KIX"
-msgstr ""
-
 msgid "Wildcard Search"
 msgstr ""
 
 msgid "Yes"
 msgstr ""
 
-msgid "You have successfully logged out."
+msgid "You have to confirm your current password."
+msgstr ""
+
+msgid "You have to confirm your password."
+msgstr ""
+
+msgid "Your current password is wrong."
 msgstr ""
 
 msgid "Your rating"

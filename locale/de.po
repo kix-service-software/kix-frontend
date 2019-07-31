@@ -279,6 +279,11 @@ msgstr "Geändert am"
 msgid "Changed by"
 msgstr "Geändert von"
 
+#, fuzzy
+#| msgid "Password"
+msgid "Change Password"
+msgstr "Passwort"
+
 msgid "Changes saved."
 msgstr "Änderungen wurden gespeichert."
 
@@ -407,6 +412,9 @@ msgstr "Asset wurde erfolgreich angelegt."
 msgid "Config Item Version Compare"
 msgstr "Asset Versionsvergleich"
 
+msgid "Confirm New Password"
+msgstr ""
+
 msgid "Contact"
 msgstr "Kontakt"
 
@@ -514,6 +522,11 @@ msgstr "Aktueller Verwendungsstatus"
 
 msgid "Current incident state"
 msgstr "Aktueller Vorfallstatus"
+
+#, fuzzy
+#| msgid "Password"
+msgid "Current Password"
+msgstr "Passwort"
 
 msgid "(current version)"
 msgstr "(aktuelle Version)"
@@ -865,7 +878,8 @@ msgstr ""
 "wollen, wählen Sie das hier aus."
 
 msgid "Helptext_Admin_FAQCategoryCreate_Validity"
-msgstr "Die Kategorie kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
+msgstr ""
+"Die Kategorie kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
 msgid "Helptext_Admin_FAQCategoryEdit_Comment"
 msgstr ""
@@ -886,7 +900,8 @@ msgstr ""
 "wollen, wählen Sie das hier aus."
 
 msgid "Helptext_Admin_FAQCategoryEdit_Validity"
-msgstr "Die Kategorie kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
+msgstr ""
+"Die Kategorie kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
 msgid "Helptext_Admin_MailAccountCreate_AcceptKIXHeader"
 msgstr "Hilfetext_Admin_MailAccountCreate_AcceptKIXHeader"
@@ -1020,8 +1035,8 @@ msgid "Helptext_Admin_MailFilter_Sidebar"
 msgstr ""
 "Einkommende Mails können anhand von E-Mail-Kopfzeilen verteilt oder "
 "gefiltert werden. Für die Suche sind reguläre Ausdrücke zulässig.\n"
-"Wenn nur eine E-Mail-Adresse gesucht wird, dann benutzen Sie "
-"EMAILADDRESS:info@example.com in From, To oder Cc. </br>\n"
+"Wenn nur eine E-Mail-Adresse gesucht wird, dann benutzen Sie EMAILADDRESS:"
+"info@example.com in From, To oder Cc. </br>\n"
 "Wenn Sie reguläre Ausdrücke verwenden, können Sie die unter „Filterbedin"
 
 #, fuzzy
@@ -1948,6 +1963,21 @@ msgid "Helptext_PersonalSettings_UserLanguage_Hint"
 msgstr "Hilfetext_PersonalSettings_UserLanguage_Hint"
 
 #, fuzzy
+#| msgid "Helptext_PersonalSettings_UserLanguage_Hint"
+msgid "Helptext_PersonalSettings_UserNewPasswordConfirm_Hint"
+msgstr "Hilfetext_PersonalSettings_UserLanguage_Hint"
+
+#, fuzzy
+#| msgid "Helptext_PersonalSettings_UserLanguage_Hint"
+msgid "Helptext_PersonalSettings_UserNewPassword_Hint"
+msgstr "Hilfetext_PersonalSettings_UserLanguage_Hint"
+
+#, fuzzy
+#| msgid "Helptext_PersonalSettings_UserLanguage_Hint"
+msgid "Helptext_PersonalSettings_UserPassword_Hint"
+msgstr "Hilfetext_PersonalSettings_UserLanguage_Hint"
+
+#, fuzzy
 #| msgid "Helptext_Search_Contact"
 msgid "Helptext_Search_ConfigItem"
 msgstr "Hilfetext_Search_Contact"
@@ -2392,12 +2422,6 @@ msgstr "Ticket sperren"
 msgid "Logged in"
 msgstr "Angemeldet"
 
-msgid "Login"
-msgstr "Anmelden"
-
-msgid "Login failed"
-msgstr "Anmeldung fehlgeschlagen"
-
 msgid "Login Name"
 msgstr "Nutzername"
 
@@ -2493,6 +2517,11 @@ msgstr "Neues Objekt"
 
 msgid "New Organisation"
 msgstr "Neuer Kunde"
+
+#, fuzzy
+#| msgid "Password"
+msgid "New Password"
+msgstr "Passwort"
 
 msgid "New Priority"
 msgstr "Neue Priorität"
@@ -2592,13 +2621,6 @@ msgstr "Noch nicht verfügbar / nicht mehr verfügbar"
 
 msgid "Note"
 msgstr "Notiz"
-
-msgid ""
-"Note: For optimal use of KIX, we recommend alternative browsers such as "
-"Chromium or Firefox."
-msgstr ""
-"Hinweis: Für die optimale Nutzung von KIX empfehlen wir alternative Browser "
-"wie Chromium oder Firefox."
 
 msgid "Notes"
 msgstr "Notizen"
@@ -2728,6 +2750,9 @@ msgstr "Übergeordnetes Team"
 
 msgid "Password"
 msgstr "Passwort"
+
+msgid "Passwords do not match."
+msgstr ""
 
 msgid "Pattern"
 msgstr "Muster"
@@ -3550,17 +3575,20 @@ msgstr "Ticket beobachten"
 msgid "We are working on this functionality."
 msgstr "Funktionalität ist in Arbeit."
 
-msgid "Welcome to KIX"
-msgstr "Willkommen bei KIX"
-
 msgid "Wildcard Search"
 msgstr "Wildcard-Suche"
 
 msgid "Yes"
 msgstr "Ja"
 
-msgid "You have successfully logged out."
-msgstr "Sie haben sich erfolgreich abgemeldet."
+msgid "You have to confirm your current password."
+msgstr ""
+
+msgid "You have to confirm your password."
+msgstr ""
+
+msgid "Your current password is wrong."
+msgstr ""
 
 msgid "Your rating"
 msgstr "Ihre Bewertung"
@@ -3570,6 +3598,25 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Login"
+#~ msgstr "Anmelden"
+
+#~ msgid "Login failed"
+#~ msgstr "Anmeldung fehlgeschlagen"
+
+#~ msgid ""
+#~ "Note: For optimal use of KIX, we recommend alternative browsers such as "
+#~ "Chromium or Firefox."
+#~ msgstr ""
+#~ "Hinweis: Für die optimale Nutzung von KIX empfehlen wir alternative "
+#~ "Browser wie Chromium oder Firefox."
+
+#~ msgid "Welcome to KIX"
+#~ msgstr "Willkommen bei KIX"
+
+#~ msgid "You have successfully logged out."
+#~ msgstr "Sie haben sich erfolgreich abgemeldet."
 
 #~ msgid "Close window"
 #~ msgstr "Fenster schließen"
