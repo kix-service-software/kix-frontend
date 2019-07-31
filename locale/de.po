@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-07-31 10:31+0000\n"
+"PO-Revision-Date: 2019-07-31 11:59+0000\n"
 "Last-Translator: fuhlig <Frank.Uhlig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -1543,10 +1543,10 @@ msgstr ""
 "Der Agent kann sich mit den hier festgelegten Nutzerdaten nur einloggen, "
 "wenn „gültig“ gesetzt ist."
 
-#, fuzzy
-#| msgid "Helptext_Customers_ContactCreate_Comment"
 msgid "Helptext_CMDB_ConfigItemClassCreate_Comment"
-msgstr "Hilfetext_Organisations_ContactCreate_Comment"
+msgstr ""
+"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+"Bereich angezeigt werden."
 
 #, fuzzy
 #| msgid "Helptext_Customers_ContactCreate_Organisation"
