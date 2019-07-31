@@ -246,7 +246,7 @@ export class HttpService {
         const options: any = {
             method: RequestMethod.GET,
             qs: {
-                include: 'Tickets,Preferences'
+                include: 'Tickets,Preferences,RoleIDs'
             }
         };
 

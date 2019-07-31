@@ -7,10 +7,11 @@
  * --
  */
 
-export enum NotificationEvent {
+export class RefreshToastSettings {
 
-    UPDATE_EVENTS = 'UpdateEvent',
-
-    UPDATE_FORMS = 'UpdateForms'
+    public constructor(
+        public message: string,
+        public reloadApp: boolean
+    ) { }
 
 }

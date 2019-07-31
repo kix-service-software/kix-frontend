@@ -11,7 +11,8 @@ import { SocketClient } from '../SocketClient';
 import { NotificationEvent, ObjectUpdatedEventData } from '../../model';
 import { CacheService } from '../cache';
 import { ClientStorageService } from '../ClientStorageService';
-import { ContextService } from '../context';
+import { NotificationHandler } from '../NotificationHandler';
+import { FormService } from '../form';
 
 export class ClientNotificationSocketClient extends SocketClient {
 
@@ -32,10 +33,21 @@ export class ClientNotificationSocketClient extends SocketClient {
         this.notificationsSocket = this.createSocket('notifications');
 
         this.notificationsSocket.on(
-            NotificationEvent.MESSAGE, (events: ObjectUpdatedEventData[]) => {
+            NotificationEvent.UPDATE_EVENTS, (events: ObjectUpdatedEventData[]) => {
                 CacheService.getInstance().updateCaches(events);
-                events = events.filter((e) => e.RequestID !== ClientStorageService.getClientRequestId());
-                ContextService.getInstance().handleUpdateNotifications(events);
+                events = events
+                    .filter((e) => e.RequestID !== ClientStorageService.getClientRequestId())
+                    .filter((e) => e.Namespace !== 'Ticket.Article.Flag')
+                    .filter((e) => e.Namespace !== 'Ticket.Watcher')
+                    .filter((e) => e.Namespace !== 'Ticket.History');
+                NotificationHandler.handleUpdateNotifications(events);
+            });
+
+        this.notificationsSocket.on(
+            NotificationEvent.UPDATE_FORMS, (clientRequestId: string) => {
+                if (clientRequestId !== ClientStorageService.getClientRequestId()) {
+                    FormService.getInstance().loadFormConfigurations();
+                }
             });
     }
 

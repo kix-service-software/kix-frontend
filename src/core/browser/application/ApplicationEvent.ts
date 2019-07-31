@@ -13,6 +13,8 @@ export enum ApplicationEvent {
 
     REFRESH = 'APP_REFRESH',
 
-    REFRESH_TOOLBAR = 'REFRESH_TOOLBAR'
+    REFRESH_TOOLBAR = 'REFRESH_TOOLBAR',
+
+    CLOSE_OVERLAY = 'CLOSE_OVERLAY'
 
 }

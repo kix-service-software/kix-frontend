@@ -15,6 +15,8 @@ import {
 import { ContextService } from "../../../core/browser/context";
 import { TranslationService } from "../../../core/browser/i18n/TranslationService";
 import { KIXModulesService } from "../../../core/browser/modules";
+import { EventService } from "../../../core/browser/event";
+import { ApplicationEvent } from "../../../core/browser/application";
 
 class OverlayComponent {
 
@@ -40,11 +42,15 @@ class OverlayComponent {
 
         WidgetService.getInstance().setWidgetType(this.state.overlayInstanceId, WidgetType.OVERLAY);
 
-        document.addEventListener("click", (event: any) => {
-            this.closeOverlayEventHandler(event);
-        }, false);
         document.addEventListener('mousemove', this.mouseMove.bind(this));
         document.addEventListener('mouseup', this.mouseUp.bind(this));
+
+        EventService.getInstance().subscribe(ApplicationEvent.CLOSE_OVERLAY, {
+            eventSubscriberId: 'overlay',
+            eventPublished: () => {
+                this.closeOverlay();
+            }
+        });
     }
 
     public onUpdate(): void {
@@ -82,6 +88,12 @@ class OverlayComponent {
             this.closeOverlay();
         }
         this.state.show = false;
+
+        if (type !== OverlayType.HINT_TOAST) {
+            document.addEventListener("click", (event: any) => {
+                this.closeOverlayEventHandler(event);
+            }, false);
+        }
 
         setTimeout(() => {
             this.state.title = title;
@@ -176,14 +188,21 @@ class OverlayComponent {
     }
 
     private setOverlayPosition(): void {
-        if (!this.position || !!!this.position.length) {
-            this.position = [null, null];
-        }
         const overlay = (this as any).getEl('overlay');
         if (overlay) {
-            this.setLeftPosition(overlay);
-            if (!this.isToast()) {
-                this.setTopPosition(overlay);
+            if (this.state.type === OverlayType.HINT_TOAST) {
+                overlay.style.top = '8rem';
+                overlay.style.right = '3rem';
+                overlay.style.opacity = 1;
+            } else {
+                if (!this.position || !!!this.position.length) {
+                    this.position = [null, null];
+                }
+
+                this.setLeftPosition(overlay);
+                if (!this.isToast()) {
+                    this.setTopPosition(overlay);
+                }
             }
         }
     }
@@ -241,7 +260,7 @@ class OverlayComponent {
             case OverlayType.SUCCESS_TOAST:
                 return 'toast-overlay success-toast';
             case OverlayType.HINT_TOAST:
-                return 'toast-overlay';
+                return 'toast-overlay reload-toast';
             case OverlayType.ERROR_TOAST:
                 return 'toast-overlay error-toast';
             case OverlayType.CONTENT_OVERLAY:
@@ -291,8 +310,7 @@ class OverlayComponent {
     }
 
     public isToast(): boolean {
-        return this.state.type === OverlayType.SUCCESS_TOAST
-            || this.state.type === OverlayType.HINT_TOAST;
+        return this.state.type === OverlayType.SUCCESS_TOAST;
     }
 
     public canResize(): boolean {

@@ -7,4 +7,11 @@
  * --
  */
 
-export { ClientNotificationSocketClient } from './ClientNotificationSocketClient';
+export class ComponentState {
+
+    public constructor(
+        public message: string = '',
+        public reloadApp: boolean = false
+    ) { }
+
+}

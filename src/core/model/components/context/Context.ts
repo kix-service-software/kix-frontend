@@ -48,6 +48,13 @@ export abstract class Context {
         return;
     }
 
+    public addObjectDependency(objectType: KIXObjectType): void {
+        const type = this.descriptor.kixObjectTypes.find((ot) => ot === objectType);
+        if (!type) {
+            this.descriptor.kixObjectTypes.push(objectType);
+        }
+    }
+
     public getIcon(): string | ObjectIcon {
         return "kix-icon-unknown";
     }

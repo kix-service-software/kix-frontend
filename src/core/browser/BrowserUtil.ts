@@ -9,6 +9,7 @@
 
 import { OverlayService } from "./OverlayService";
 import { OverlayType, StringContent, ComponentContent, ToastContent, ConfirmOverlayContent } from "../model";
+import { RefreshToastSettings } from "./RefreshToastSettings";
 
 export class BrowserUtil {
 
@@ -36,11 +37,10 @@ export class BrowserUtil {
         OverlayService.getInstance().openOverlay(OverlayType.CONFIRM, null, content, title, false);
     }
 
-    public static openAppRefreshOverlay(): void {
-        const componentContent = new ComponentContent('refresh-app-toast', {});
-        OverlayService.getInstance().openOverlay(
-            OverlayType.HINT_TOAST, null, componentContent, 'Update', null, null, null, null, 15000
-        );
+    public static openAppRefreshOverlay(message: string, reloadApp?: boolean): void {
+        const settings = new RefreshToastSettings(message, reloadApp);
+        const componentContent = new ComponentContent('refresh-app-toast', settings);
+        OverlayService.getInstance().openOverlay(OverlayType.HINT_TOAST, null, componentContent, '');
     }
 
     public static async openAccessDeniedOverlay(): Promise<void> {

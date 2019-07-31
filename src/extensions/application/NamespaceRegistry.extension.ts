@@ -8,11 +8,10 @@
  */
 
 import { ISocketNamespaceRegistryExtension } from "../../core/extensions";
-import { NotificationNamespace } from "../../socket-namespaces/Namespace";
 import { AuthenticationNamespace } from "../../socket-namespaces/AuthenticationNamespace";
 import { KIXObjectNamespace } from "../../socket-namespaces/KIXObjectNamespace";
 import { MainMenuNamespace } from "../../socket-namespaces/MainMenuNamespace";
-import { AgentNamespace } from "../../socket-namespaces";
+import { AgentNamespace, NotificationNamespace } from "../../socket-namespaces";
 import { ContextNamespace } from "../../socket-namespaces/ContextNamespace";
 import { TicketNamespace } from "../../socket-namespaces/TicketNamespace";
 import { KIXModuleNamespace } from "../../socket-namespaces/KIXModuleNamespace";
