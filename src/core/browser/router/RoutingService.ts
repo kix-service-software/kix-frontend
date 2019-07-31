@@ -16,6 +16,8 @@ import { ClientStorageService } from '../ClientStorageService';
 import { ReleaseContext } from '../release';
 import { BrowserUtil } from '../BrowserUtil';
 import { KIXModulesSocketClient } from '../modules/KIXModulesSocketClient';
+import { ApplicationEvent } from '../application';
+import { EventService } from '../event';
 import { ActionFactory } from '../ActionFactory';
 
 export class RoutingService {
@@ -110,6 +112,7 @@ export class RoutingService {
         routingConfiguration: RoutingConfiguration, objectId: string | number, addHistory: boolean = true
     ): Promise<void> {
         if (routingConfiguration) {
+            EventService.getInstance().publish(ApplicationEvent.CLOSE_OVERLAY);
             ContextService.getInstance().setContext(
                 routingConfiguration.contextId,
                 routingConfiguration.objectType,

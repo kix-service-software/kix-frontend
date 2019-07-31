@@ -140,32 +140,7 @@ export class ConfigItemClassService extends KIXObjectService {
                 await this.createIcons(token, clientRequestId, icon);
             }
 
-            const objectPermissions: CreatePermissionDescription[] = this.getParameterValue(
-                parameter, 'OBJECT_PERMISSION'
-            );
-            // if (response.ConfigItemClassID && objectPermissions) {
-            //     super.setObjectPermissions(
-            //         token, clientRequestId,
-            //         objectPermissions,
-            //         'system/cmdb/classes',
-            //         KIXObjectType.CONFIG_ITEM_CLASS, response.ConfigItemClassID
-            //     );
-            // }
-
-            const propertyValuePermissions: CreatePermissionDescription[] = this.getParameterValue(
-                parameter, 'PROPERTY_VALUE_PERMISSION'
-            );
-            // if (response.ConfigItemClassID && propertyValuePermissions) {
-            //     super.setPropertyValuePermissions(
-            //         token, clientRequestId,
-            //         propertyValuePermissions,
-            //         // TODO: ggf. aus SysConfig relevanten String ermitteln
-            //         `${KIXObjectType.CONFIG_ITEM}.${ConfigItemProperty.CLASS_ID}`,
-            //         KIXObjectType.CONFIG_ITEM_CLASS, response.ConfigItemClassID
-            //     );
-            // }
-
-            await AppUtil.updateFormConfigurations(true);
+            await AppUtil.updateFormConfigurations(true, clientRequestId, true);
 
             return response.ConfigItemClassID;
         }
@@ -215,34 +190,7 @@ export class ConfigItemClassService extends KIXObjectService {
                 });
             }
 
-            const objectPermissions: CreatePermissionDescription[] = this.getParameterValue(
-                parameter, 'OBJECT_PERMISSION'
-            );
-            // if (response.ConfigItemClassID && objectPermissions) {
-            //     super.setObjectPermissions(
-            //         token, clientRequestId,
-            //         objectPermissions,
-            //         'system/cmdb/classes',
-            //         KIXObjectType.CONFIG_ITEM_CLASS, response.ConfigItemClassID,
-            //         true
-            //     );
-            // }
-
-            const propertyValuePermissions: CreatePermissionDescription[] = this.getParameterValue(
-                parameter, 'PROPERTY_VALUE_PERMISSION'
-            );
-            // if (response.ConfigItemClassID && propertyValuePermissions) {
-            //     super.setPropertyValuePermissions(
-            //         token, clientRequestId,
-            //         propertyValuePermissions,
-            //         // TODO: ggf. aus SysConfig relevanten String ermitteln
-            //         `${KIXObjectType.CONFIG_ITEM}.${ConfigItemProperty.CLASS_ID}`,
-            //         KIXObjectType.CONFIG_ITEM_CLASS, response.ConfigItemClassID,
-            //         true
-            //     );
-            // }
-
-            await AppUtil.updateFormConfigurations(true);
+            await AppUtil.updateFormConfigurations(true, clientRequestId, true);
 
             return response.ConfigItemClassID;
         }

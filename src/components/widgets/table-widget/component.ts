@@ -65,6 +65,9 @@ class Component {
 
         if (this.state.widgetConfiguration) {
             const settings: TableWidgetSettings = this.state.widgetConfiguration.settings;
+
+            context.addObjectDependency(settings.objectType);
+
             this.state.showFilter = typeof settings.showFilter !== 'undefined' ? settings.showFilter : true;
 
             this.state.icon = this.state.widgetConfiguration.icon;

@@ -10,16 +10,24 @@
 import { PluginService } from "../../services";
 import { IConfigurationExtension, KIXExtensions } from "../extensions";
 import { Environment } from "./Environment";
+import { NotificationEvent } from "../model";
+import { NotificationNamespace } from "../../socket-namespaces";
 
 export class AppUtil {
 
-    public static async updateFormConfigurations(overwrite: boolean = false): Promise<void> {
+    public static async updateFormConfigurations(
+        overwrite?: boolean, clientRequestId?: string, notify?: boolean
+    ): Promise<void> {
         const moduleFactories = await PluginService.getInstance().getExtensions<IConfigurationExtension>(
             KIXExtensions.CONFIGURATION
         );
 
         for (const mf of moduleFactories) {
             await mf.createFormDefinitions(overwrite);
+        }
+
+        if (notify) {
+            NotificationNamespace.getInstance().broadcast(NotificationEvent.UPDATE_FORMS, clientRequestId);
         }
     }
 

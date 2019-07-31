@@ -19,11 +19,11 @@ import { KIXModulesService } from '../../core/browser/modules';
 import { TranslationService } from '../../core/browser/i18n/TranslationService';
 import { ApplicationEvent } from '../../core/browser/application';
 import { AuthenticationSocketClient } from '../../core/browser/application/AuthenticationSocketClient';
-import { ClientNotificationSocketClient } from '../../core/browser/client-notification';
 import { AgentService } from '../../core/browser/application/AgentService';
 import { SysConfigService } from '../../core/browser/sysconfig';
 import { TranslationPatternBrowserFactory, TranslationBrowserFactory } from '../../core/browser/i18n';
 import { IUIModule } from '../../core/browser/application/IUIModule';
+import { ClientNotificationSocketClient } from '../../core/browser/notification/ClientNotificationSocketClient';
 
 class Component {
 

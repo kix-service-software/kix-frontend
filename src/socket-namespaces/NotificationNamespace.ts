@@ -7,7 +7,7 @@
  * --
  */
 
-import { NotificationEvent } from '../core/model';
+import { NotificationEvent, ObjectUpdatedEventData } from '../core/model';
 import { SocketNameSpace } from './SocketNameSpace';
 
 export class NotificationNamespace extends SocketNameSpace {
@@ -33,9 +33,9 @@ export class NotificationNamespace extends SocketNameSpace {
         return;
     }
 
-    public broadcast(content: any): void {
+    public broadcast(event: NotificationEvent, content: any): void {
         if (this.namespace) {
-            this.namespace.emit(NotificationEvent.MESSAGE, content);
+            this.namespace.emit(event, content);
         }
     }
 

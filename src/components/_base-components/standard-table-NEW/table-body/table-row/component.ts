@@ -105,6 +105,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
                 && data.rowId === this.state.row.getRowId()
             ) {
                 (this as any).setStateDirty('row');
+                this.setRowClasses();
             }
             this.setRowClasses();
         }

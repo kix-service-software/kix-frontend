@@ -67,8 +67,8 @@ export class TicketLockAction extends AbstractAction<Ticket> {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
             BrowserUtil.openSuccessOverlay(successHint);
 
-            await CacheService.getInstance().deleteKeys(KIXObjectType.CURRENT_USER);
-            EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
+            CacheService.getInstance().deleteKeys(KIXObjectType.CURRENT_USER);
+            EventService.getInstance().publish(ApplicationEvent.REFRESH);
         }, 500);
     }
 

@@ -276,6 +276,21 @@
                 }
             }
 
+            &.reload-toast {
+                >.overlay-widget {
+                    .shadow-2(darken(@tertiary-0, 20%));
+                    border-color: @tertiary-0;
+
+                    .widget-content {
+                        .toast-content {
+                            .toast-icon {
+                                background-color: lighten(@tertiary-0, 10%);
+                            }
+                        }
+                    }
+                }
+            }
+
             &.success-toast {
                 >.overlay-widget {
                     .shadow-2(darken(@primary-6, 20%));
