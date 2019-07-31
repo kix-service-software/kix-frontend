@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-07-30 15:09+0000\n"
+"PO-Revision-Date: 2019-07-31 07:32+0000\n"
 "Last-Translator: fuhlig <Frank.Uhlig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -847,34 +847,46 @@ msgid "Help"
 msgstr "Hilfe"
 
 msgid "Helptext_Admin_FAQCategoryCreate_Comment"
-msgstr "Hilfetext_Admin_FAQCategoryCreate_Comment"
+msgstr ""
+"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+"Bereich angezeigt werden."
 
 msgid "Helptext_Admin_FAQCategoryCreate_Icon"
-msgstr "Hilfetext_Admin_FAQCategoryCreate_Icon"
+msgstr ""
+"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
+"der Kategorie angezeigt wird."
 
 msgid "Helptext_Admin_FAQCategoryCreate_Name"
-msgstr "Hilfetext_Admin_FAQCategoryCreate_Name"
+msgstr "Der hier festgelegte Name wird in der Oberfläche angezeigt."
 
 msgid "Helptext_Admin_FAQCategoryCreate_ParentCategory"
-msgstr "Hilfetext_Admin_FAQCategoryCreate_ParentQueue"
+msgstr ""
+"Wenn Sie diese Kategorie einer bereits existierenden Kategorie unterordnen "
+"wollen, wählen Sie das hier aus."
 
 msgid "Helptext_Admin_FAQCategoryCreate_Validity"
-msgstr "Hilfetext_Admin_FAQCategoryCreate_Validity"
+msgstr "Die Kategorie kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
 msgid "Helptext_Admin_FAQCategoryEdit_Comment"
-msgstr "Hilfetext_Admin_FAQCategoryEdit_Comment"
+msgstr ""
+"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+"Bereich angezeigt werden."
 
 msgid "Helptext_Admin_FAQCategoryEdit_Icon"
-msgstr "Hilfetext_Admin_FAQCategoryEdit_Icon"
+msgstr ""
+"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
+"der Kategorie angezeigt wird."
 
 msgid "Helptext_Admin_FAQCategoryEdit_Name"
-msgstr "Hilfetext_Admin_FAQCategoryEdit_Name"
+msgstr "Der hier festgelegte Name wird in der Oberfläche angezeigt."
 
 msgid "Helptext_Admin_FAQCategoryEdit_ParentCategory"
-msgstr "Hilfetext_Admin_FAQCategoryEdit_ParentQueue"
+msgstr ""
+"Wenn Sie diese Kategorie einer bereits existierenden Kategorie unterordnen "
+"wollen, wählen Sie das hier aus."
 
 msgid "Helptext_Admin_FAQCategoryEdit_Validity"
-msgstr "Hilfetext_Admin_FAQCategoryEdit_Validity"
+msgstr "Die Kategorie kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
 msgid "Helptext_Admin_MailAccountCreate_AcceptKIXHeader"
 msgstr "Hilfetext_Admin_MailAccountCreate_AcceptKIXHeader"
@@ -931,58 +943,86 @@ msgid "Helptext_Admin_MailAccountEdit_Validity"
 msgstr "Hilfetext_Admin_MailAccountEdit_Validity"
 
 msgid "Helptext_Admin_MailFilterCreate_Comment"
-msgstr "Hilfetext_Admin_MailFilterCreate_Comment"
+msgstr ""
+"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+"Bereich angezeigt werden."
 
 msgid "Helptext_Admin_MailFilterCreate_FilterConditions"
 msgstr "Hilfetext_Admin_MailFilterCreate_FilterConditions"
 
 msgid "Helptext_Admin_MailFilterCreate_Name"
-msgstr "Hilfetext_Admin_MailFilterCreate_Name"
+msgstr "Legen Sie einen Namen für den E-Mail Filter fest."
 
 msgid "Helptext_Admin_MailFilterCreate_SetEmailHeaders"
-msgstr "Hilfetext_Admin_MailFilterCreate_SetEmailHeaders"
+msgstr ""
+"Wählen Sie aus, welche E-Mail Header bei einkommenden E-Mails gesetzt werden "
+"sollen. Betrifft E-Mails, die den eben definierten Filterbedingungen "
+"entsprechen. Verfügbar sind alle in der SysConfig definierten Header."
 
 msgid "Helptext_Admin_MailFilterCreate_StopAfterMatch"
-msgstr "Hilfetext_Admin_MailFilterCreate_StopAfterMatch"
+msgstr ""
+"Ist der Haken gesetzt, und die hier definierten Bedingungen treffen auf eine "
+"einkommende Nachricht zu, werden auf diese keine weiteren Filter angewendet."
 
 msgid "Helptext_Admin_MailFilterCreate_Validity"
-msgstr "Hilfetext_Admin_MailFilterCreate_Validity"
+msgstr ""
+"Der E-Mail-Filter kann nur verwendet werden, wenn er „gültig“ gesetzt ist."
 
 msgid "Helptext_Admin_MailFilterEdit_Comment"
-msgstr "Hilfetext_Admin_MailFilterEdit_Comment"
+msgstr ""
+"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+"Bereich angezeigt werden."
 
 msgid "Helptext_Admin_MailFilterEdit_FilterConditions"
 msgstr "Hilfetext_Admin_MailFilterEdit_FilterConditions"
 
 msgid "Helptext_Admin_MailFilterEdit_Name"
-msgstr "Hilfetext_Admin_MailFilterEdit_Name"
+msgstr "Legen Sie einen Namen für den E-Mail Filter fest."
 
 msgid "Helptext_Admin_MailFilterEdit_SetEmailHeaders"
-msgstr "Hilfetext_Admin_MailFilterEdit_SetEmailHeaders"
+msgstr ""
+"Wählen Sie aus, welche E-Mail Header bei einkommenden E-Mails geprüft werden "
+"(ein Attribut pro Zeile). Verfügbar sind alle in der SysConfig definierten "
+"Header."
 
 msgid "Helptext_Admin_MailFilterEdit_StopAfterMatch"
-msgstr "Hilfetext_Admin_MailFilterEdit_StopAfterMatch"
+msgstr ""
+"Ist der Haken gesetzt, und die hier definierten Bedingungen treffen auf eine "
+"einkommende Nachricht zu, werden auf diese keine weiteren Filter angewendet."
 
 msgid "Helptext_Admin_MailFilterEdit_Validity"
-msgstr "Hilfetext_Admin_MailFilterEdit_Validity"
+msgstr ""
+"Der E-Mail-Filter kann nur verwendet werden, wenn er „gültig“ gesetzt ist."
 
 msgid "Helptext_Admin_MailFilter_FilterConditions_EmailHeader"
 msgstr "Hilfetext_Admin_MailFilter_FilterConditions_EmailHeader"
 
 msgid "Helptext_Admin_MailFilter_FilterConditions_Negate"
-msgstr "Hilfetext_Admin_MailFilter_FilterConditions_Negate"
+msgstr ""
+"Setzen Sie hier einen Haken, wenn das gewählte Header-Attribut das folgende "
+"Muster nicht enthalten soll."
 
 msgid "Helptext_Admin_MailFilter_FilterConditions_Pattern"
 msgstr "Hilfetext_Admin_MailFilter_FilterConditions_Pattern"
 
 msgid "Helptext_Admin_MailFilter_SetEmailHeader_EmailHeader"
-msgstr "Hilfetext_Admin_MailFilter_SetEmailHeader_EmailHeader"
+msgstr ""
+"Wählen Sie aus, welche E-Mail Header bei einkommenden E-Mails gesetzt werden "
+"sollen. Betrifft E-Mails, die den eben definierten Filterbedingungen "
+"entsprechen. Verfügbar sind alle in der SysConfig definierten Header."
 
 msgid "Helptext_Admin_MailFilter_SetEmailHeader_Value"
-msgstr "Hilfetext_Admin_MailFilter_SetEmailHeader_Value"
+msgstr ""
+"Geben Sie den Wert ein, welchen das vorn gewählte Kopfzeilen-Attribut "
+"annehmen soll."
 
 msgid "Helptext_Admin_MailFilter_Sidebar"
-msgstr "Hilfetext_Admin_MailFilter_Sidebar"
+msgstr ""
+"Einkommende Mails können anhand von E-Mail-Kopfzeilen verteilt oder "
+"gefiltert werden. Für die Suche sind reguläre Ausdrücke zulässig.\n"
+"Wenn nur eine E-Mail-Adresse gesucht wird, dann benutzen Sie "
+"EMAILADDRESS:info@example.com in From, To oder Cc. </br>\n"
+"Wenn Sie reguläre Ausdrücke verwenden, können Sie die unter „Filterbedin"
 
 #, fuzzy
 #| msgid "Helptext_Admin_MailAccountCreate_Validity"
@@ -1004,125 +1044,122 @@ msgstr "Hilfetext_Admin_MailAccountCreate_Comment"
 msgid "Helptext_Admin_NotificationCreate_Filter"
 msgstr "Hilfetext_Admin_MailAccountCreate_IMAPFolder"
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleCreate_Subject"
 msgid "Helptext_Admin_NotificationCreate_MessageSubject"
-msgstr "Hilfetext_Admin_TextModuleCreate_Subject"
+msgstr ""
+"Geben Sie den Betreff ein, der in der E-Mail angezeigt werden soll, die "
+"durch diese Benachrichtigung versendet wird. Beachten Sie die gewählte "
+"Sprache."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleCreate_Text"
 msgid "Helptext_Admin_NotificationCreate_MessageText"
-msgstr "Hilfetext_Admin_TextModuleCreate_Text"
+msgstr ""
+"Geben Sie den Text ein, der in der E-Mail angezeigt werden soll, durch die "
+"diese Benachrichtigung versendet wird. Beachten Sie die gewählte Sprache."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailFilterCreate_Name"
 msgid "Helptext_Admin_NotificationCreate_Name"
-msgstr "Hilfetext_Admin_MailFilterCreate_Name"
+msgstr "Legen Sie einen Namen für den E-Mail Filter fest."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Dispachting"
 msgid "Helptext_Admin_NotificationCreate_SendDespiteOutOfOffice"
-msgstr "Hilfetext_Admin_MailAccountCreate_Dispachting"
+msgstr ""
+"Ist diese Option aktiviert, wird die Benachrichtigung auch an abwesende "
+"Agenten versendet."
 
 #, fuzzy
 #| msgid "Helptext_Admin_MailAccountCreate_Comment"
 msgid "Helptext_Admin_NotificationCreate_SendOnceADay"
 msgstr "Hilfetext_Admin_MailAccountCreate_Comment"
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Host"
 msgid "Helptext_Admin_NotificationCreate_SendTo"
-msgstr "Hilfetext_Admin_MailAccountCreate_Host"
+msgstr ""
+"Wählen Sie aus der Dropdown-Liste allgemeine Funktionen aus, die Agenten "
+"erfüllen sollen, um diese Benachrichtigung zu erhalten."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Comment"
 msgid "Helptext_Admin_NotificationCreate_SendToAgents"
-msgstr "Hilfetext_Admin_MailAccountCreate_Comment"
+msgstr ""
+"Tragen Sie konkrete Agenten ein, die diese Benachrichtigung erhalten sollen. "
+"Zur Auswahl stehen alle im System verfügbaren, gültigen Agenten."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailFilterCreate_SetEmailHeaders"
 msgid "Helptext_Admin_NotificationCreate_SendToRoleMembers"
-msgstr "Hilfetext_Admin_MailFilterCreate_SetEmailHeaders"
+msgstr ""
+"Wählen Sie aus der Dropdown-Liste Rollen aus. Die Benachrichtigung wird an "
+"alle die Agenten verschickt, denen diese Rollen zugeordnet sind. Zur Auswahl "
+"stehen alle im System verfügbaren, gültigen Rollen."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleCreate_Subject"
 msgid "Helptext_Admin_NotificationCreate_SubjectWithTicketNumber"
-msgstr "Hilfetext_Admin_TextModuleCreate_Subject"
+msgstr ""
+"Wählen Sie aus, ob die Ticketnummer im Betreff der E-Mail, die durch die "
+"Benachrichtigung versendet wird, angezeigt werden soll oder nicht."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Validity"
 msgid "Helptext_Admin_NotificationCreate_Validity"
-msgstr "Hilfetext_Admin_MailAccountCreate_Validity"
+msgstr ""
+"Benachrichtigungen nach den hier festgelegten Kriterien werden nur "
+"versendet, wenn die Benachrichtigung „gültig“ gesetzt ist."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Validity"
 msgid "Helptext_Admin_NotificationEdit_AdditionalRecipient"
-msgstr "Hilfetext_Admin_MailAccountCreate_Validity"
+msgstr ""
+"Tragen Sie eine syntaktisch korrekte E-Mail-Adresse ein, an die die "
+"Benachrichtigung zusätzlich zu den oben definierten Empfängern versendet "
+"werden soll."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Comment"
 msgid "Helptext_Admin_NotificationEdit_Comment"
-msgstr "Hilfetext_Admin_MailAccountCreate_Comment"
+msgstr ""
+"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+"Bereich angezeigt werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Comment"
 msgid "Helptext_Admin_NotificationEdit_Event"
-msgstr "Hilfetext_Admin_MailAccountCreate_Comment"
+msgstr ""
+"Wählen Sie aus, welche Ereignisse an Tickets oder Artikeln diese "
+"Benachrichtigung auslösen"
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_IMAPFolder"
 msgid "Helptext_Admin_NotificationEdit_Filter"
-msgstr "Hilfetext_Admin_MailAccountCreate_IMAPFolder"
+msgstr ""
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleCreate_Subject"
 msgid "Helptext_Admin_NotificationEdit_MessageSubject"
-msgstr "Hilfetext_Admin_TextModuleCreate_Subject"
+msgstr ""
+"Geben Sie den Betreff ein, der in der E-Mail angezeigt werden soll, die "
+"durch diese Benachrichtigung versendet wird. Beachten Sie die gewählte "
+"Sprache."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleCreate_Text"
 msgid "Helptext_Admin_NotificationEdit_MessageText"
-msgstr "Hilfetext_Admin_TextModuleCreate_Text"
+msgstr ""
+"Geben Sie den Text ein, der in der E-Mail angezeigt werden soll, durch die "
+"diese Benachrichtigung versendet wird. Beachten Sie die gewählte Sprache."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailFilterCreate_Name"
 msgid "Helptext_Admin_NotificationEdit_Name"
-msgstr "Hilfetext_Admin_MailFilterCreate_Name"
+msgstr "Legen Sie einen Namen für die Benachrichtigung fest."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Dispachting"
 msgid "Helptext_Admin_NotificationEdit_SendDespiteOutOfOffice"
-msgstr "Hilfetext_Admin_MailAccountCreate_Dispachting"
+msgstr ""
+"Ist diese Option aktiviert, wird die Benachrichtigung auch an abwesende "
+"Agenten versendet."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Comment"
 msgid "Helptext_Admin_NotificationEdit_SendOnceADay"
-msgstr "Hilfetext_Admin_MailAccountCreate_Comment"
+msgstr ""
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Host"
 msgid "Helptext_Admin_NotificationEdit_SendTo"
-msgstr "Hilfetext_Admin_MailAccountCreate_Host"
+msgstr ""
+"Wählen Sie aus der Dropdown-Liste allgemeine Funktionen aus, die Agenten "
+"erfüllen sollen, um diese Benachrichtigung zu erhalten."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Comment"
 msgid "Helptext_Admin_NotificationEdit_SendToAgents"
-msgstr "Hilfetext_Admin_MailAccountCreate_Comment"
+msgstr ""
+"Tragen Sie konkrete Agenten ein, die diese Benachrichtigung erhalten sollen. "
+"Zur Auswahl stehen alle im System verfügbaren, gültigen Agenten."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailFilterCreate_SetEmailHeaders"
 msgid "Helptext_Admin_NotificationEdit_SendToRoleMembers"
-msgstr "Hilfetext_Admin_MailFilterCreate_SetEmailHeaders"
+msgstr ""
+"Wählen Sie aus der Dropdown-Liste Rollen aus. Die Benachrichtigung wird an "
+"alle die Agenten verschickt, denen diese Rollen zugeordnet sind. Zur Auswahl "
+"stehen alle im System verfügbaren, gültigen Rollen."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleCreate_Subject"
 msgid "Helptext_Admin_NotificationEdit_SubjectWithTicketNumber"
-msgstr "Hilfetext_Admin_TextModuleCreate_Subject"
+msgstr ""
+"Wählen Sie aus, ob die Ticketnummer im Betreff der E-Mail, die durch die "
+"Benachrichtigung versendet wird, angezeigt werden soll oder nicht."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Validity"
 msgid "Helptext_Admin_NotificationEdit_Validity"
-msgstr "Hilfetext_Admin_MailAccountCreate_Validity"
+msgstr ""
+"Benachrichtigungen nach den hier festgelegten Kriterien werden nur "
+"versendet, wenn die Benachrichtigung „gültig“ gesetzt ist."
 
 msgid "Helptext_Admin_QueueCreate_FollowUpTicketLock"
 msgstr "Hilfetext_Admin_QueueCreate_FollowUpTicketLock"
@@ -1130,30 +1167,28 @@ msgstr "Hilfetext_Admin_QueueCreate_FollowUpTicketLock"
 msgid "Helptext_Admin_QueueEdit_FollowUpTicketLock"
 msgstr "Hilfetext_Admin_QueueEdit_FollowUpTicketLock"
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailFilter_SetEmailHeader_Value"
 msgid "Helptext_Admin_SysConfigEdit_Default_Value"
-msgstr "Hilfetext_Admin_MailFilter_SetEmailHeader_Value"
+msgstr ""
+"Anzeige des initialen Standardwertes des SysConfig-Schlüssels. Dieser kann "
+"nicht verändert werden. Über denn Button „Auf Standard zurücksetzen“ können "
+"Sie den Standardwert wiederherstellen."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountEdit_Dispachting"
 msgid "Helptext_Admin_SysConfigEdit_Description"
-msgstr "Hilfetext_Admin_MailAccountEdit_Dispachting"
+msgstr "Beschreibung der Funktionsweise dieses SysConfig-Schlüssels"
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_Name"
 msgid "Helptext_Admin_SysConfigEdit_Name"
-msgstr "Hilfetext_Admin_QueueEdit_Name"
+msgstr "Der Name des SysConfig-Schlüssels kann nicht bearbeitet werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_Validity"
 msgid "Helptext_Admin_SysConfigEdit_Validity"
-msgstr "Hilfetext_Admin_QueueEdit_Validity"
+msgstr ""
+"Der SysConfig-Schlüssel muss „gültig“ gesetzt sein, damit die Einstellungen "
+"im System wirksam werden. Diese Option ist nur für SysConfig-Schlüssel "
+"verfügbar, die im Backend nicht als \"required\" gekennzeichnet sind."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_Name"
 msgid "Helptext_Admin_SysConfigEdit_Value"
-msgstr "Hilfetext_Admin_QueueEdit_Name"
+msgstr ""
+"Wert des SysConfig-Schlüssels. Dieser muss in einem gültigen JSON-Format "
+"angegeben werden."
 
 msgid "Helptext_Admin_SystemAddressCreate_Comment"
 msgstr "Hilfetext_Admin_SystemAddressCreate_Comment"
