@@ -7,13 +7,6 @@
  * --
  */
 
-import { ISocketResponse } from "../ISocketResponse";
-
-export class CreateObjectResponse implements ISocketResponse {
-
-    public constructor(
-        public requestId: string,
-        public result: any
-    ) { }
-
-}
+export { ConsoleCommand } from './ConsoleCommand';
+export { ConsoleParameter } from './ConsoleParameter';
+export { ConsoleExecuteResult } from './ConsoleExecuteResult';

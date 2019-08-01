@@ -117,9 +117,9 @@ export class KIXObjectSocketClient extends SocketClient {
             KIXObjectEvent.CREATE_OBJECT, KIXObjectEvent.CREATE_OBJECT_FINISHED, KIXObjectEvent.CREATE_OBJECT_ERROR
         );
 
-        await CacheService.getInstance().deleteKeys(cacheKeyPrefix);
+        CacheService.getInstance().deleteKeys(cacheKeyPrefix);
 
-        return response.objectId;
+        return response.result;
     }
 
     public async updateObject(

@@ -38,6 +38,8 @@ import { LogFileService } from "../../log/LogFileService";
 import { LogFileBrowserFactory } from "../../log/LogFileBrowserFactory";
 import { LogFileTableFactory } from "../../log/table/LogFileTableFactory";
 import { LogFileTableCSSHandler } from "../../log/table/LogFileTableCSSHandler";
+import { ConsoleCommandService } from "../../console/ConsoleCommandService";
+import { ConsoleCommandBrowserFactory } from "../../console/ConsoleCommandBrowserFactory";
 
 export class UIModule implements IUIModule {
 
@@ -69,11 +71,15 @@ export class UIModule implements IUIModule {
         ServiceRegistry.registerServiceInstance(TranslationFormService.getInstance());
         ServiceRegistry.registerServiceInstance(NotificationService.getInstance());
         ServiceRegistry.registerServiceInstance(LogFileService.getInstance());
+        ServiceRegistry.registerServiceInstance(ConsoleCommandService.getInstance());
 
         FactoryService.getInstance().registerFactory(
             KIXObjectType.NOTIFICATION, NotificationBrowserFactory.getInstance()
         );
         FactoryService.getInstance().registerFactory(KIXObjectType.LOG_FILE, LogFileBrowserFactory.getInstance());
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.CONSOLE_COMMAND, ConsoleCommandBrowserFactory.getInstance()
+        );
 
         TableFactoryService.getInstance().registerFactory(new LogFileTableFactory());
         TableCSSHandlerRegistry.getInstance().registerObjectCSSHandler(

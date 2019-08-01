@@ -30,6 +30,13 @@ class Extension implements IAdminModuleExtension {
                         [
                             new UIComponentPermission('system/logs', [CRUD.READ])
                         ]
+                    ),
+                    new AdminModule(
+                        null, 'console', 'Translatable#Console', null,
+                        KIXObjectType.CONSOLE_COMMAND, 'system-admin-console',
+                        [
+                            new UIComponentPermission('system/console', [CRUD.READ, CRUD.CREATE])
+                        ]
                     )
                 ]
             ),

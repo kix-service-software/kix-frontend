@@ -7,13 +7,11 @@
  * --
  */
 
-import { ISocketResponse } from "../ISocketResponse";
+export class ConsoleParameter {
 
-export class CreateObjectResponse implements ISocketResponse {
-
-    public constructor(
-        public requestId: string,
-        public result: any
-    ) { }
+    public Description: string;
+    public HasValue: boolean;
+    public Name: string;
+    public Required: boolean;
 
 }

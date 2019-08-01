@@ -93,7 +93,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     public static async createObject(
         objectType: KIXObjectType, parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions,
         catchError: boolean = true, cacheKeyPrefix: string = objectType
-    ): Promise<string | number> {
+    ): Promise<any> {
         const objectId = await KIXObjectSocketClient.getInstance().createObject(
             objectType, parameter, createOptions, cacheKeyPrefix
         ).catch(async (error: Error) => {

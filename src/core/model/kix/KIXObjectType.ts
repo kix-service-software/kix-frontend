@@ -17,6 +17,8 @@ export enum KIXObjectType {
 
     CHANNEL = 'Channel',
 
+    CONSOLE_COMMAND = 'ConsoleCommand',
+
     SENDER_TYPE = 'SENDER_TYPE',
 
     LOCK = 'LOCK',
