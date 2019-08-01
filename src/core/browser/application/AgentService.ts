@@ -58,6 +58,14 @@ export class AgentService extends KIXObjectService<User> {
         await AgentSocketClient.getInstance().setPreferences(parameter);
     }
 
+    public async setPreferences(preferences: Array<[string, any]>): Promise<void> {
+        const parameter: Array<[string, any]> = Array.isArray(preferences) ? preferences : [];
+
+        if (!!parameter.length) {
+            await AgentSocketClient.getInstance().setPreferences(parameter);
+        }
+    }
+
     public async prepareFormFields(formId: string, forUpdate: boolean = false): Promise<Array<[string, any]>> {
         const parameter = await super.prepareFormFields(formId, forUpdate);
 

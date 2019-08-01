@@ -7,6 +7,12 @@
  * --
  */
 
-export { ReleaseContext } from './ReleaseContext';
-export { SliderContent } from './SliderContent';
-export { SliderWidgetSettings } from './SliderWidgetSettings';
+export class SliderContent {
+
+    public constructor(
+        public title: string,
+        public text: string,
+        public image: string,
+        public imageIsBase64: boolean = false
+    ) { }
+}

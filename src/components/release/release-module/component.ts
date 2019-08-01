@@ -7,6 +7,20 @@
  * --
  */
 
-class Component { }
+import { AbstractMarkoComponent, ContextService } from "../../../core/browser";
+import { ComponentState } from './ComponentState';
+import { ReleaseContext } from "../../../core/browser/release";
+
+class Component extends AbstractMarkoComponent<ComponentState> {
+
+    public onCreate(input: any): void {
+        this.state = new ComponentState();
+    }
+
+    public async onMount(): Promise<void> {
+        const context = await ContextService.getInstance().getContext<ReleaseContext>(ReleaseContext.CONTEXT_ID);
+        this.state.contentWidgets = context.getContent();
+    }
+}
 
 module.exports = Component;

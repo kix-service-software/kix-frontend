@@ -63,6 +63,10 @@ export class ContextService {
         );
 
         if (context && context.getDescriptor().contextType === ContextType.MAIN) {
+            if (context.getDescriptor().contextMode === ContextMode.DETAILS) {
+                await context.setObjectId(objectId);
+            }
+
             const state = new BrowserHistoryState(contextId, objectId);
             const displayText = await context.getDisplayText();
 
@@ -76,10 +80,6 @@ export class ContextService {
                 await ContextHistory.getInstance().addHistoryEntry(oldContext);
             } else if (replaceHistory) {
                 window.history.replaceState(state, displayText, '/' + url);
-            }
-
-            if (context.getDescriptor().contextMode === ContextMode.DETAILS) {
-                await context.setObjectId(objectId);
             }
             if (!history) {
                 context.reset();
