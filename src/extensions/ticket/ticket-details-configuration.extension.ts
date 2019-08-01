@@ -71,12 +71,11 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
             [
                 'ticket-details-tab-widget',
                 'ticket-history-lane',
-                'ticket-description-lane',
                 'ticket-linked-objects-lane'
             ];
 
         const laneWidgets: Array<ConfiguredWidget<any>> = [
-            tabwidget, ticketInfoLane, descriptionLane, linkedObjectsLane, ticketHistoryLane
+            tabwidget, ticketInfoLane, linkedObjectsLane, ticketHistoryLane
         ];
 
         const organisationRouting = new RoutingConfiguration(
