@@ -14,7 +14,6 @@ import {
     ConfigItemClassProperty, ObjectIcon, Error, CreatePermissionDescription
 } from "../../../model";
 import {
-    ConfigItemClassesResponse, ConfigItemClassResponse,
     CreateConfigItemClass, CreateConfigItemClassResponse, CreateConfigItemClassRequest,
     UpdateConfigItemClassResponse, UpdateConfigItemClassRequest, UpdateConfigItemClass
 } from "../../../api";
@@ -52,66 +51,13 @@ export class ConfigItemClassService extends KIXObjectService {
     ): Promise<T[]> {
         let objects = [];
 
-        switch (objectType) {
-            case KIXObjectType.CONFIG_ITEM_CLASS:
-                objects = await this.getConfigItemClasses(token, objectIds, loadingOptions);
-                break;
-            default:
+        if (objectType === KIXObjectType.CONFIG_ITEM_CLASS) {
+            objects = await super.load(
+                token, objectType, this.RESOURCE_URI, loadingOptions, objectIds, 'ConfigItemClass'
+            );
         }
+
         return objects;
-    }
-
-    private async getConfigItemClasses(
-        token: string, configItemClassIds: Array<number | string>, loadingOptions: KIXObjectLoadingOptions
-    ): Promise<ConfigItemClass[]> {
-        if (loadingOptions) {
-            if (loadingOptions.includes) {
-                if (!loadingOptions.includes.some((i) => i === ConfigItemClassProperty.CURRENT_DEFINITION)) {
-                    loadingOptions.includes.push(ConfigItemClassProperty.CURRENT_DEFINITION);
-                }
-            } else {
-                loadingOptions.includes = [ConfigItemClassProperty.CURRENT_DEFINITION];
-            }
-        } else {
-            loadingOptions = new KIXObjectLoadingOptions(null, null, null, [
-                ConfigItemClassProperty.CURRENT_DEFINITION
-            ]);
-        }
-
-        loadingOptions.sortOrder = 'ConfigItemClass.Name';
-
-        const query = this.prepareQuery(loadingOptions);
-
-        let configItemClasses: ConfigItemClass[] = [];
-
-        if (configItemClassIds && configItemClassIds.length) {
-            configItemClassIds = configItemClassIds.filter(
-                (id) => typeof id !== 'undefined' && id.toString() !== '' && id !== null
-            );
-
-            const uri = this.buildUri('system', 'cmdb', 'classes', configItemClassIds.join(','));
-            const response = await this.getObjectByUri<ConfigItemClassesResponse | ConfigItemClassResponse>(
-                token, uri, query
-            );
-
-            if (configItemClassIds.length === 1) {
-                configItemClasses = [(response as ConfigItemClassResponse).ConfigItemClass];
-            } else {
-                configItemClasses = (response as ConfigItemClassesResponse).ConfigItemClass;
-            }
-
-        } else if (loadingOptions.filter) {
-            const uri = this.buildUri('system', 'cmdb', 'classes');
-            await this.buildFilter(loadingOptions.filter, 'ConfigItemClass', token, query);
-            const response = await this.getObjectByUri<ConfigItemClassesResponse>(token, uri, query);
-            configItemClasses = response.ConfigItemClass;
-        } else {
-            const uri = this.buildUri('system', 'cmdb', 'classes');
-            const response = await this.getObjectByUri<ConfigItemClassesResponse>(token, uri, query);
-            configItemClasses = response.ConfigItemClass;
-        }
-
-        return configItemClasses.map((configItemClass) => ConfigItemClassFactory.create(configItemClass));
     }
 
     public async createObject(

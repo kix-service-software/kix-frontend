@@ -8,7 +8,10 @@
  */
 
 import { Context } from "../../../../../model/components/context/Context";
-import { ContextDescriptor, ContextConfiguration } from "../../../../../model";
+import {
+    ContextDescriptor, ContextConfiguration, KIXObject, KIXObjectType, KIXObjectLoadingOptions, ConfigItemClass
+} from "../../../../../model";
+import { KIXObjectService } from "../../../../kix";
 
 export class EditConfigItemClassDialogContext extends Context {
 
@@ -21,5 +24,21 @@ export class EditConfigItemClassDialogContext extends Context {
         configuration: ContextConfiguration = null
     ) {
         super(descriptor, objectId, configuration);
+    }
+
+    public async getObject<O extends KIXObject>(
+        objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_CLASS
+    ): Promise<O> {
+        let object;
+        const classId = this.getObjectId();
+        if (classId) {
+            const loadingOptions = new KIXObjectLoadingOptions(null, null, null, ['CurrentDefinition']);
+
+            const objects = await KIXObjectService.loadObjects<ConfigItemClass>(
+                KIXObjectType.CONFIG_ITEM_CLASS, [classId], loadingOptions
+            );
+            object = objects && objects.length ? objects[0] : null;
+        }
+        return object;
     }
 }

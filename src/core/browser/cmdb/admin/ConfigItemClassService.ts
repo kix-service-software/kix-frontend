@@ -34,8 +34,4 @@ export class ConfigItemClassService extends KIXObjectService<ConfigItemClass> {
         return 'ConfigItemClass';
     }
 
-    public async init(): Promise<void> {
-        this.loadObjects(KIXObjectType.CONFIG_ITEM_CLASS, null);
-    }
-
 }

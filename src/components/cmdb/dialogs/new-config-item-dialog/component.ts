@@ -106,7 +106,9 @@ class Component {
     private async getCIClass(classId: string): Promise<ConfigItemClass> {
         const classes = await KIXObjectService.loadObjects<ConfigItemClass>(
             KIXObjectType.CONFIG_ITEM_CLASS, [classId],
-            new KIXObjectLoadingOptions(null, null, null, [ConfigItemClassProperty.CURRENT_DEFINITION])
+            new KIXObjectLoadingOptions(
+                null, 'ConfigItemClass.Name', null, [ConfigItemClassProperty.CURRENT_DEFINITION]
+            )
         );
 
         return classes && classes.length ? classes[0] : null;

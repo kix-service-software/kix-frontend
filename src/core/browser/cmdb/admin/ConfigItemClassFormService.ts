@@ -31,13 +31,8 @@ export class ConfigItemClassFormService extends KIXObjectFormService<ConfigItemC
     }
 
     protected async getValue(property: string, value: any, ciClass: ConfigItemClass): Promise<any> {
-        switch (property) {
-            case ConfigItemClassProperty.DEFINITION_STRING:
-                if (ciClass && ciClass.CurrentDefinition) {
-                    value = ciClass.CurrentDefinition.DefinitionString;
-                }
-                break;
-            default:
+        if (property === ConfigItemClassProperty.DEFINITION_STRING && ciClass && ciClass.CurrentDefinition) {
+            value = ciClass.CurrentDefinition.DefinitionString;
         }
         return value;
     }
