@@ -39,3 +39,4 @@ export { MailFilterService } from './MailFilterService';
 export { TicketTemplateService } from './TicketTemplateService';
 export { NotificationService } from './NotificationService';
 export { LogFileService } from './LogFileService';
+export { ConsoleCommandService } from './ConsoleCommandService';

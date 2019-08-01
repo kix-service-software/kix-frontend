@@ -7,13 +7,16 @@
  * --
  */
 
-import { ISocketResponse } from "../ISocketResponse";
+export enum ConsoleCommandProperty {
 
-export class CreateObjectResponse implements ISocketResponse {
+    ADDITIONAL_HELP = 'AdditionalHelp',
 
-    public constructor(
-        public requestId: string,
-        public result: any
-    ) { }
+    ARGUMENTS = 'Arguments',
+
+    COMMAND = 'Command',
+
+    DESCRIPTION = 'Description',
+
+    PARAMETERS = 'Parameters'
 
 }

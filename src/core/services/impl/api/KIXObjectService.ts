@@ -92,7 +92,7 @@ export abstract class KIXObjectService implements IKIXObjectService {
 
     protected async executeUpdateOrCreateRequest<R = number>(
         token: string, clientRequestId: string, parameter: Array<[string, any]>, uri: string,
-        objectType: KIXObjectType, responseProperty: string, create: boolean = false
+        objectType: KIXObjectType | string, responseProperty: string, create: boolean = false
     ): Promise<R> {
         const object = {};
         object[objectType] = new RequestObject(parameter.filter((p) => p[0] !== 'ICON'));
@@ -112,7 +112,7 @@ export abstract class KIXObjectService implements IKIXObjectService {
             }
         }
 
-        return response[responseProperty];
+        return responseProperty ? response[responseProperty] : response;
     }
 
     public createObject(
