@@ -168,8 +168,8 @@ export class DialogService {
         ContextService.getInstance().closeDialogContext();
 
         setTimeout(async () => {
-            await CacheService.getInstance().deleteKeys(KIXObjectType.CURRENT_USER);
-            EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
+            CacheService.getInstance().deleteKeys(KIXObjectType.CURRENT_USER);
+            EventService.getInstance().publish(ApplicationEvent.REFRESH);
         }, 500);
     }
 
