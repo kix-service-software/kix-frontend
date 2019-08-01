@@ -96,7 +96,7 @@ export class Table implements ITable {
             }
 
             if (this.sortColumnId && this.sortOrder) {
-                this.sort(this.sortColumnId, this.sortOrder);
+                await this.sort(this.sortColumnId, this.sortOrder);
             }
 
             if (this.tableConfiguration &&

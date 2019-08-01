@@ -55,7 +55,7 @@ export class ConfigItemClassDefinitionTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION, null, null, tableColumns,  false, true,
+                KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION, null, null, tableColumns, false, true,
                 new ToggleOptions(
                     'config-item-class-definition', 'definition', [], true
                 ), null,
