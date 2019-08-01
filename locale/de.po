@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-08-01 07:00+0000\n"
+"PO-Revision-Date: 2019-08-01 13:01+0000\n"
 "Last-Translator: fuhlig <Frank.Uhlig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -74,10 +74,8 @@ msgstr "Admin"
 msgid "Administration"
 msgstr "Administration"
 
-#, fuzzy
-#| msgid "Administration"
 msgid "Administrator's Guide"
-msgstr "Administration"
+msgstr "Administratorhandbuch"
 
 msgid "Advanced Search"
 msgstr "Komplexsuche"
@@ -246,7 +244,7 @@ msgid "Bulk Action"
 msgstr "Sammelaktion"
 
 msgid "Button with 3 points = Here you can find further actions"
-msgstr ""
+msgstr "Button mit 3 Punkten  =  Hier befinden sich weitere Aktionen"
 
 msgid "Cancel"
 msgstr "Abbrechen"
@@ -338,6 +336,7 @@ msgid ""
 "Click on the middle or right mouse button (context menu) = open window in a "
 "new tab"
 msgstr ""
+"Klick der mittleren oder rechten Maustaste  =  Fenster in neuem Tab öffnen"
 
 msgid "Close Dialog"
 msgstr "Dialog schließen"
@@ -768,10 +767,8 @@ msgstr "Vorhandene Verknüpfungen ({0})"
 msgid "expected time required:"
 msgstr "voraussichtlich benötigte Zeit:"
 
-#, fuzzy
-#| msgid "CMDB Explorer"
 msgid "Explorer"
-msgstr "Asset-Explorer"
+msgstr "Explorer"
 
 msgid "external"
 msgstr "extern"
@@ -871,22 +868,23 @@ msgid "Full Text"
 msgstr "Volltext"
 
 msgid "General information on working with KIX 18"
-msgstr ""
+msgstr "Allgemeine Hinweise zum Arbeiten mit KIX 18"
 
 msgid "Green button 'Back to' = history of your last visited pages"
 msgstr ""
+"Grüner Button „Zurück zu“  =  Historie Ihrer zuletzt aufgerufenen Seiten"
 
 msgid "Hello"
-msgstr ""
+msgstr "Hallo"
 
 msgid "Help"
 msgstr "Hilfe"
 
 msgid "Help, hints & tricks"
-msgstr ""
+msgstr "Hilfe, Tipps und Tricks"
 
 msgid "Helping FAQ Contributions"
-msgstr ""
+msgstr "Helfende FAQ-Beiträge"
 
 msgid "Helptext_Admin_FAQCategoryCreate_Comment"
 msgstr ""
@@ -2117,7 +2115,7 @@ msgid "Helptext_Tickets_TicketEdit_Type"
 msgstr "Hilfetext_Textmodules_TicketEdit"
 
 msgid "Here you will find the KIX 18 manuals for users and administrators"
-msgstr ""
+msgstr "Hier finden Sie die KIX 18 Handbücher für Anwender und Administratoren:"
 
 msgid "History"
 msgstr "Historie"
@@ -2134,13 +2132,9 @@ msgstr "Home"
 msgid "Host"
 msgstr "Host"
 
-#, fuzzy
-#| msgid "How to create a new ticket?"
 msgid "How do I create a new ticket?"
 msgstr "Wie lege ich ein neues Ticket an?"
 
-#, fuzzy
-#| msgid "How to search in KIX 18?"
 msgid "How do I search in KIX 18?"
 msgstr "Wie suche ich in KIX 18?"
 
@@ -2178,7 +2172,7 @@ msgid "Import {0} {1}. Execute?"
 msgstr "{0} {1} importieren. Ausführen?"
 
 msgid "Important functional elements briefly explained"
-msgstr ""
+msgstr "Wichtige Funktionselemente kurz erklärt"
 
 msgid "Import Contacts"
 msgstr "Kontakte importieren"
@@ -2202,6 +2196,8 @@ msgid ""
 "Input of 3 stars '***' in autocomplete form fields = listing of the first 10 "
 "found records"
 msgstr ""
+"Eingabe von 3 Sternen „***“ in Autocomplete-Formularfeldern  =  Auflistung "
+"der ersten 10 gefundenen Datensätze"
 
 msgid "Inserted email address is invalid"
 msgstr "Die eingegebene E-Mail Adresse ist ungültig"
@@ -2245,7 +2241,7 @@ msgid "Label"
 msgstr "Beschriftung"
 
 msgid "Lanes"
-msgstr ""
+msgstr "Lanes"
 
 msgid "Language"
 msgstr "Sprache"
@@ -2269,7 +2265,7 @@ msgid "Legend"
 msgstr "Legende"
 
 msgid "Let´s go"
-msgstr ""
+msgstr "Los geht's"
 
 msgid "link {0}"
 msgstr "Link {0}"
@@ -2295,10 +2291,8 @@ msgstr "Objekte verknüpfen"
 msgid "Links"
 msgstr "Verknüpfungen"
 
-#, fuzzy
-#| msgid "Link to"
 msgid "Links to manuals"
-msgstr "Verknüpfen mit"
+msgstr "Links zu Handbüchern"
 
 msgid "Links updated."
 msgstr "Verknüpfungen aktualisiert."
@@ -2412,7 +2406,7 @@ msgid "Logs"
 msgstr "Logs"
 
 msgid "Menu"
-msgstr ""
+msgstr "Modulmenü"
 
 msgid "Minutes"
 msgstr "Minuten"
@@ -2501,10 +2495,8 @@ msgstr "Neues Objekt"
 msgid "New Organisation"
 msgstr "Neuer Kunde"
 
-#, fuzzy
-#| msgid "Password"
 msgid "New Password"
-msgstr "Passwort"
+msgstr "Neues Passwort"
 
 msgid "New Priority"
 msgstr "Neue Priorität"
@@ -2546,7 +2538,7 @@ msgid "New Version created"
 msgstr "Neue Version wurde angelegt."
 
 msgid "next"
-msgstr ""
+msgstr "weiter"
 
 msgid "Next Image"
 msgstr "Nächstes Bild"
@@ -2612,7 +2604,7 @@ msgid "Notes"
 msgstr "Notizen"
 
 msgid "No, thank you"
-msgstr ""
+msgstr "Nein, danke"
 
 msgid "Notification"
 msgstr "Benachrichtigung"
@@ -2675,7 +2667,7 @@ msgid "Once per day"
 msgstr "Einmal pro Tag"
 
 msgid "Open/close at line ends = open and close elements"
-msgstr ""
+msgstr "Auf-/Zuklappen an Zeilenenden  =  Öffnen und Schließen von Elementen"
 
 msgid "Open Tickets"
 msgstr "Offene Tickets"
@@ -2770,10 +2762,8 @@ msgstr "Berechtigungen"
 msgid "Permissions on dependent objects"
 msgstr "Berechtigungen auf abhängige Objekte"
 
-#, fuzzy
-#| msgid "Customer Dashboard"
 msgid "Personal Home Dashboard"
-msgstr "Kunden Dashboard"
+msgstr "Persönliches Home Dashboard"
 
 msgid "Personal Settings"
 msgstr "Persönliche Einstellungen"
@@ -2793,10 +2783,8 @@ msgstr "Persönliche Einstellungen"
 msgid "Preview ({0})"
 msgstr "Treffervorschau ({0})"
 
-#, fuzzy
-#| msgid "Previous Image"
 msgid "previous"
-msgstr "Vorheriges Bild"
+msgstr "zurück"
 
 msgid "Previous Image"
 msgstr "Vorheriges Bild"
@@ -2845,32 +2833,57 @@ msgstr "Schnellsuche (Tickets)"
 
 msgid "QuickstartGuide_Text_End"
 msgstr ""
+"Nun sind Sie bereit, mit KIX 18 zu starten.\n"
+"\n"
+"Viel Freude!"
 
 msgid "QuickstartGuide_Text_Explorer"
 msgstr ""
+"Auf Dashboards hilft Ihnen der Explorer die Übersicht zu behalten. Dieser "
+"hat die gewohnte Baumstruktur und garantiert selbst in umfangreichen "
+"Strukturen eine einfache Navigation."
 
 msgid "QuickstartGuide_Text_Lanes"
 msgstr ""
+"Auf den Detailseiten der einzelnen Objekte (beispielsweise Ticket, Asset) "
+"finden Sie viele Informationen, welche aufgeräumt und platzsparend in "
+"mehreren Lanes untergebracht sind."
 
 msgid "QuickstartGuide_Text_Menu"
 msgstr ""
+"Alle verfügbaren Module (beispielsweise Tickets, Assets, FAQ) erreichen Sie "
+"über das Modulmenü bequem mit nur einem Klick von jeder Seite aus."
 
 msgid "QuickstartGuide_Text_Personal_Home_Dashboard"
 msgstr ""
+"Auf dem persönlichen Home Dashboard erhalten Sie eine schnelle Übersicht "
+"aller Ereignisse."
 
-#, fuzzy
-#| msgid "Edit Personal Settings"
 msgid "QuickstartGuide_Text_Personal_Settings"
-msgstr "Persönliche Einstellungen bearbeiten"
+msgstr ""
+"Hier haben Sie jederzeit und komfortabel Zugriff auf Ihre eigenen Aufgaben, "
+"Suchvorlagen sowie persönlichen Einstellungen. Über das Fragezeichen ist "
+"auch dieser kleine Quickstart Guide aufrufbar."
 
 msgid "QuickstartGuide_Text_Sidebars"
 msgstr ""
+"Diverse Zusatzinformationen (beispielsweise Kontaktdaten) befinden sich "
+"dezent in Sidebars, die Sie bequem ein- und ausblenden können."
 
 msgid "QuickstartGuide_Text_Start"
 msgstr ""
+"Herzlich Willkommen im KIX 18 -\n"
+"\n"
+"Vielen Dank für Ihr Interesse an unsere neuen Service Management System. \n"
+"Überzeugen Sie sich, wie einfach es ist, Ihre Serviceprozesse mit der neuen "
+"intuitiven und modernen Oberfläche zu optimieren.\n"
+"\n"
+"Dürfen wir Sie auf eine kleine Führung einladen?"
 
 msgid "QuickstartGuide_Text_Tables"
 msgstr ""
+"Übersichtliche Tabellen, die Sie ganz nach Ihren Bedürfnissen sortieren und "
+"filtern können, helfen Ihnen optimal bei Ihren täglichen Arbeitsprozessen."
 
 msgid "Rate"
 msgstr "Bewerten"
@@ -3104,8 +3117,6 @@ msgstr "Gewählte Suchkriterien"
 msgid "selected ticket features"
 msgstr "Ausgewählte Ticketfunktionen"
 
-#, fuzzy
-#| msgid "selected ticket features"
 msgid "Selected ticket functions"
 msgstr "Ausgewählte Ticketfunktionen"
 
@@ -3164,10 +3175,8 @@ msgstr "Wert setzen"
 msgid "Show all"
 msgstr "Alle anzeigen"
 
-#, fuzzy
-#| msgid "Close Sidebars"
 msgid "Sidebars"
-msgstr "Sidebars schließen"
+msgstr "Sidebars"
 
 msgid "Signature"
 msgstr "Signatur"
@@ -3281,7 +3290,7 @@ msgid "-> (tab)"
 msgstr "-> (Tabulator)"
 
 msgid "Tables"
-msgstr ""
+msgstr "Tabellen"
 
 msgid "Tags"
 msgstr "Schlagworte"
@@ -3326,6 +3335,8 @@ msgid ""
 "The following FAQ entries will provide you with a basic overview of how KIX "
 "18 works"
 msgstr ""
+"Um einen grundlegenden Überblick über die Funktionsweise von KIX 18 zu "
+"erhalten, helfen Ihnen folgende FAQ-Einträge:"
 
 msgid "The search only includes current versions."
 msgstr "Es werden nur aktuelle Versionen durchsucht."
@@ -3621,10 +3632,8 @@ msgstr "Ticket beobachten"
 msgid "We are working on this functionality."
 msgstr "Funktionalität ist in Arbeit."
 
-#, fuzzy
-#| msgid "Welcome to KIX"
 msgid "Welcome to KIX 18"
-msgstr "Willkommen bei KIX"
+msgstr "Willkommen bei KIX 18"
 
 msgid "Wildcard Search"
 msgstr "Wildcard-Suche"
@@ -3633,10 +3642,10 @@ msgid "Yes"
 msgstr "Ja"
 
 msgid "Yes, please"
-msgstr ""
+msgstr "Ja, gerne"
 
 msgid "You did it!"
-msgstr ""
+msgstr "Geschafft!"
 
 msgid "You have to confirm your current password."
 msgstr "Bitte geben Sie das aktuelle Passwort ein."
@@ -3648,7 +3657,7 @@ msgid "Your current password is wrong."
 msgstr "Das aktuelle Passwort ist falsch."
 
 msgid "Your Permissions have been updated."
-msgstr ""
+msgstr "Ihre Berechtigungen wurden aktualisiert."
 
 msgid "Your rating"
 msgstr "Ihre Bewertung"
