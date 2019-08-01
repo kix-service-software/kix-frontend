@@ -74,6 +74,9 @@ msgstr ""
 msgid "Administration"
 msgstr ""
 
+msgid "Administrator's Guide"
+msgstr ""
+
 msgid "Advanced Search"
 msgstr ""
 
@@ -236,6 +239,9 @@ msgstr ""
 msgid "Bulk Action"
 msgstr ""
 
+msgid "Button with 3 points = Here you can find further actions"
+msgstr ""
+
 msgid "Cancel"
 msgstr ""
 
@@ -318,6 +324,11 @@ msgid "Class"
 msgstr ""
 
 msgid "Class Definition"
+msgstr ""
+
+msgid ""
+"Click on the middle or right mouse button (context menu) = open window in a "
+"new tab"
 msgstr ""
 
 msgid "Close Dialog"
@@ -753,6 +764,11 @@ msgstr ""
 msgid "expected time required:"
 msgstr ""
 
+#, fuzzy
+#| msgid "CMDB Explorer"
+msgid "Explorer"
+msgstr "Asset Explorer"
+
 msgid "external"
 msgstr ""
 
@@ -848,7 +864,22 @@ msgstr ""
 msgid "Full Text"
 msgstr ""
 
+msgid "General information on working with KIX 18"
+msgstr ""
+
+msgid "Green button 'Back to' = history of your last visited pages"
+msgstr ""
+
+msgid "Hello"
+msgstr ""
+
 msgid "Help"
+msgstr ""
+
+msgid "Help, hints & tricks"
+msgstr ""
+
+msgid "Helping FAQ Contributions"
 msgstr ""
 
 msgid "Helptext_Admin_FAQCategoryCreate_Comment"
@@ -2033,6 +2064,9 @@ msgstr ""
 "Then choose the text modules you want to use in the context menu. You can "
 "narrow down the key word selection manually by entering more text."
 
+msgid "Here you will find the KIX 18 manuals for users and administrators"
+msgstr ""
+
 msgid "History"
 msgstr ""
 
@@ -2046,6 +2080,12 @@ msgid "Home"
 msgstr ""
 
 msgid "Host"
+msgstr ""
+
+msgid "How do I create a new ticket?"
+msgstr ""
+
+msgid "How do I search in KIX 18?"
 msgstr ""
 
 msgid "How to create a new ticket?"
@@ -2081,6 +2121,9 @@ msgstr ""
 msgid "Import {0} {1}. Execute?"
 msgstr ""
 
+msgid "Important functional elements briefly explained"
+msgstr ""
+
 msgid "Import Contacts"
 msgstr ""
 
@@ -2097,6 +2140,11 @@ msgid "Incident state"
 msgstr ""
 
 msgid "Incident State"
+msgstr ""
+
+msgid ""
+"Input of 3 stars '***' in autocomplete form fields = listing of the first 10 "
+"found records"
 msgstr ""
 
 msgid "Inserted email address is invalid"
@@ -2138,6 +2186,9 @@ msgstr ""
 msgid "Label"
 msgstr ""
 
+msgid "Lanes"
+msgstr ""
+
 msgid "Language"
 msgstr ""
 
@@ -2157,6 +2208,9 @@ msgid "Last Name"
 msgstr ""
 
 msgid "Legend"
+msgstr ""
+
+msgid "Let´s go"
 msgstr ""
 
 msgid "link {0}"
@@ -2181,6 +2235,9 @@ msgid "Link Objects"
 msgstr ""
 
 msgid "Links"
+msgstr ""
+
+msgid "Links to manuals"
 msgstr ""
 
 msgid "Links updated."
@@ -2292,6 +2349,9 @@ msgid "Logout"
 msgstr ""
 
 msgid "Logs"
+msgstr ""
+
+msgid "Menu"
 msgstr ""
 
 msgid "Minutes"
@@ -2423,6 +2483,9 @@ msgstr ""
 msgid "New Version created"
 msgstr ""
 
+msgid "next"
+msgstr ""
+
 msgid "Next Image"
 msgstr ""
 
@@ -2484,6 +2547,9 @@ msgid "Note"
 msgstr ""
 
 msgid "Notes"
+msgstr ""
+
+msgid "No, thank you"
 msgstr ""
 
 #, fuzzy
@@ -2552,6 +2618,9 @@ msgid "Once a day"
 msgstr ""
 
 msgid "Once per day"
+msgstr ""
+
+msgid "Open/close at line ends = open and close elements"
 msgstr ""
 
 msgid "Open Tickets"
@@ -2647,6 +2716,9 @@ msgstr ""
 msgid "Permissions on dependent objects"
 msgstr ""
 
+msgid "Personal Home Dashboard"
+msgstr ""
+
 msgid "Personal Settings"
 msgstr ""
 
@@ -2663,6 +2735,9 @@ msgid "Preferences"
 msgstr ""
 
 msgid "Preview ({0})"
+msgstr ""
+
+msgid "previous"
 msgstr ""
 
 msgid "Previous Image"
@@ -2708,6 +2783,33 @@ msgid "Queue successfully created."
 msgstr "Team successfully created."
 
 msgid "Quick search (Tickets)"
+msgstr ""
+
+msgid "QuickstartGuide_Text_End"
+msgstr ""
+
+msgid "QuickstartGuide_Text_Explorer"
+msgstr ""
+
+msgid "QuickstartGuide_Text_Lanes"
+msgstr ""
+
+msgid "QuickstartGuide_Text_Menu"
+msgstr ""
+
+msgid "QuickstartGuide_Text_Personal_Home_Dashboard"
+msgstr ""
+
+msgid "QuickstartGuide_Text_Personal_Settings"
+msgstr ""
+
+msgid "QuickstartGuide_Text_Sidebars"
+msgstr ""
+
+msgid "QuickstartGuide_Text_Start"
+msgstr ""
+
+msgid "QuickstartGuide_Text_Tables"
 msgstr ""
 
 msgid "Rate"
@@ -2936,6 +3038,9 @@ msgstr ""
 msgid "selected ticket features"
 msgstr ""
 
+msgid "Selected ticket functions"
+msgstr ""
+
 msgid "Selected Versions"
 msgstr ""
 
@@ -2989,6 +3094,9 @@ msgid "Set Value"
 msgstr ""
 
 msgid "Show all"
+msgstr ""
+
+msgid "Sidebars"
 msgstr ""
 
 msgid "Signature"
@@ -3081,9 +3189,6 @@ msgstr ""
 msgid "Symptom"
 msgstr ""
 
-msgid "Sysconfig"
-msgstr ""
-
 msgid "SysConfig"
 msgstr ""
 
@@ -3103,6 +3208,9 @@ msgid "System: SysConfig"
 msgstr ""
 
 msgid "-> (tab)"
+msgstr ""
+
+msgid "Tables"
 msgstr ""
 
 msgid "Tags"
@@ -3142,6 +3250,11 @@ msgid "The file size of {0} is too large ({1}). Max.: {2}"
 msgstr ""
 
 msgid "The following {0} entries will be deleted. Are you sure?"
+msgstr ""
+
+msgid ""
+"The following FAQ entries will provide you with a basic overview of how KIX "
+"18 works"
 msgstr ""
 
 msgid "The search only includes current versions."
@@ -3440,10 +3553,19 @@ msgstr ""
 msgid "We are working on this functionality."
 msgstr ""
 
+msgid "Welcome to KIX 18"
+msgstr ""
+
 msgid "Wildcard Search"
 msgstr ""
 
 msgid "Yes"
+msgstr ""
+
+msgid "Yes, please"
+msgstr ""
+
+msgid "You did it!"
 msgstr ""
 
 msgid "You have to confirm your current password."
@@ -3453,6 +3575,9 @@ msgid "You have to confirm your password."
 msgstr ""
 
 msgid "Your current password is wrong."
+msgstr ""
+
+msgid "Your Permissions have been updated."
 msgstr ""
 
 msgid "Your rating"

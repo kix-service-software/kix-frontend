@@ -74,6 +74,11 @@ msgstr "Admin"
 msgid "Administration"
 msgstr "Administration"
 
+#, fuzzy
+#| msgid "Administration"
+msgid "Administrator's Guide"
+msgstr "Administration"
+
 msgid "Advanced Search"
 msgstr "Komplexsuche"
 
@@ -240,6 +245,9 @@ msgstr "Lesezeichen"
 msgid "Bulk Action"
 msgstr "Sammelaktion"
 
+msgid "Button with 3 points = Here you can find further actions"
+msgstr ""
+
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -325,6 +333,11 @@ msgstr "Klasse"
 
 msgid "Class Definition"
 msgstr "Klassendefinition"
+
+msgid ""
+"Click on the middle or right mouse button (context menu) = open window in a "
+"new tab"
+msgstr ""
 
 msgid "Close Dialog"
 msgstr "Dialog schließen"
@@ -755,6 +768,11 @@ msgstr "Vorhandene Verknüpfungen ({0})"
 msgid "expected time required:"
 msgstr "voraussichtlich benötigte Zeit:"
 
+#, fuzzy
+#| msgid "CMDB Explorer"
+msgid "Explorer"
+msgstr "Asset-Explorer"
+
 msgid "external"
 msgstr "extern"
 
@@ -852,8 +870,23 @@ msgstr "Vollständiger Name"
 msgid "Full Text"
 msgstr "Volltext"
 
+msgid "General information on working with KIX 18"
+msgstr ""
+
+msgid "Green button 'Back to' = history of your last visited pages"
+msgstr ""
+
+msgid "Hello"
+msgstr ""
+
 msgid "Help"
 msgstr "Hilfe"
+
+msgid "Help, hints & tricks"
+msgstr ""
+
+msgid "Helping FAQ Contributions"
+msgstr ""
 
 msgid "Helptext_Admin_FAQCategoryCreate_Comment"
 msgstr ""
@@ -1260,7 +1293,8 @@ msgid "Helptext_Admin_Tickets_PriorityCreate_Name"
 msgstr "Der hier festgelegte Name wird in der Oberfläche angezeigt."
 
 msgid "Helptext_Admin_Tickets_PriorityCreate_Valid"
-msgstr "Die Priorität kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
+msgstr ""
+"Die Priorität kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
 msgid "Helptext_Admin_Tickets_PriorityEdit_Comment"
 msgstr ""
@@ -1276,7 +1310,8 @@ msgid "Helptext_Admin_Tickets_PriorityEdit_Name"
 msgstr "Der hier festgelegte Name wird in der Oberfläche angezeigt."
 
 msgid "Helptext_Admin_Tickets_PriorityEdit_Valid"
-msgstr "Die Priorität kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
+msgstr ""
+"Die Priorität kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
 msgid "Helptext_Admin_Tickets_QueueCreate_Comment"
 msgstr ""
@@ -2081,6 +2116,9 @@ msgstr "Hilfetext_Textmodules_TicketEdit"
 msgid "Helptext_Tickets_TicketEdit_Type"
 msgstr "Hilfetext_Textmodules_TicketEdit"
 
+msgid "Here you will find the KIX 18 manuals for users and administrators"
+msgstr ""
+
 msgid "History"
 msgstr "Historie"
 
@@ -2095,6 +2133,16 @@ msgstr "Home"
 
 msgid "Host"
 msgstr "Host"
+
+#, fuzzy
+#| msgid "How to create a new ticket?"
+msgid "How do I create a new ticket?"
+msgstr "Wie lege ich ein neues Ticket an?"
+
+#, fuzzy
+#| msgid "How to search in KIX 18?"
+msgid "How do I search in KIX 18?"
+msgstr "Wie suche ich in KIX 18?"
 
 msgid "How to create a new ticket?"
 msgstr "Wie lege ich ein neues Ticket an?"
@@ -2129,6 +2177,9 @@ msgstr "Import"
 msgid "Import {0} {1}. Execute?"
 msgstr "{0} {1} importieren. Ausführen?"
 
+msgid "Important functional elements briefly explained"
+msgstr ""
+
 msgid "Import Contacts"
 msgstr "Kontakte importieren"
 
@@ -2146,6 +2197,11 @@ msgstr "Vorfallstatus"
 
 msgid "Incident State"
 msgstr "Vorfallstatus"
+
+msgid ""
+"Input of 3 stars '***' in autocomplete form fields = listing of the first 10 "
+"found records"
+msgstr ""
 
 msgid "Inserted email address is invalid"
 msgstr "Die eingegebene E-Mail Adresse ist ungültig"
@@ -2188,6 +2244,9 @@ msgstr "Wissensdatenbank: FAQ Kategorien"
 msgid "Label"
 msgstr "Beschriftung"
 
+msgid "Lanes"
+msgstr ""
+
 msgid "Language"
 msgstr "Sprache"
 
@@ -2208,6 +2267,9 @@ msgstr "Nachname"
 
 msgid "Legend"
 msgstr "Legende"
+
+msgid "Let´s go"
+msgstr ""
 
 msgid "link {0}"
 msgstr "Link {0}"
@@ -2232,6 +2294,11 @@ msgstr "Objekte verknüpfen"
 
 msgid "Links"
 msgstr "Verknüpfungen"
+
+#, fuzzy
+#| msgid "Link to"
+msgid "Links to manuals"
+msgstr "Verknüpfen mit"
 
 msgid "Links updated."
 msgstr "Verknüpfungen aktualisiert."
@@ -2343,6 +2410,9 @@ msgstr "Abmelden"
 
 msgid "Logs"
 msgstr "Logs"
+
+msgid "Menu"
+msgstr ""
 
 msgid "Minutes"
 msgstr "Minuten"
@@ -2475,6 +2545,9 @@ msgstr "Neuer Typ"
 msgid "New Version created"
 msgstr "Neue Version wurde angelegt."
 
+msgid "next"
+msgstr ""
+
 msgid "Next Image"
 msgstr "Nächstes Bild"
 
@@ -2538,6 +2611,9 @@ msgstr "Notiz"
 msgid "Notes"
 msgstr "Notizen"
 
+msgid "No, thank you"
+msgstr ""
+
 msgid "Notification"
 msgstr "Benachrichtigung"
 
@@ -2597,6 +2673,9 @@ msgstr "Einmal pro Tag"
 
 msgid "Once per day"
 msgstr "Einmal pro Tag"
+
+msgid "Open/close at line ends = open and close elements"
+msgstr ""
 
 msgid "Open Tickets"
 msgstr "Offene Tickets"
@@ -2691,6 +2770,11 @@ msgstr "Berechtigungen"
 msgid "Permissions on dependent objects"
 msgstr "Berechtigungen auf abhängige Objekte"
 
+#, fuzzy
+#| msgid "Customer Dashboard"
+msgid "Personal Home Dashboard"
+msgstr "Kunden Dashboard"
+
 msgid "Personal Settings"
 msgstr "Persönliche Einstellungen"
 
@@ -2708,6 +2792,11 @@ msgstr "Persönliche Einstellungen"
 
 msgid "Preview ({0})"
 msgstr "Treffervorschau ({0})"
+
+#, fuzzy
+#| msgid "Previous Image"
+msgid "previous"
+msgstr "Vorheriges Bild"
 
 msgid "Previous Image"
 msgstr "Vorheriges Bild"
@@ -2753,6 +2842,35 @@ msgstr "Team wurde erfolgreich angelegt."
 
 msgid "Quick search (Tickets)"
 msgstr "Schnellsuche (Tickets)"
+
+msgid "QuickstartGuide_Text_End"
+msgstr ""
+
+msgid "QuickstartGuide_Text_Explorer"
+msgstr ""
+
+msgid "QuickstartGuide_Text_Lanes"
+msgstr ""
+
+msgid "QuickstartGuide_Text_Menu"
+msgstr ""
+
+msgid "QuickstartGuide_Text_Personal_Home_Dashboard"
+msgstr ""
+
+#, fuzzy
+#| msgid "Edit Personal Settings"
+msgid "QuickstartGuide_Text_Personal_Settings"
+msgstr "Persönliche Einstellungen bearbeiten"
+
+msgid "QuickstartGuide_Text_Sidebars"
+msgstr ""
+
+msgid "QuickstartGuide_Text_Start"
+msgstr ""
+
+msgid "QuickstartGuide_Text_Tables"
+msgstr ""
 
 msgid "Rate"
 msgstr "Bewerten"
@@ -2986,6 +3104,11 @@ msgstr "Gewählte Suchkriterien"
 msgid "selected ticket features"
 msgstr "Ausgewählte Ticketfunktionen"
 
+#, fuzzy
+#| msgid "selected ticket features"
+msgid "Selected ticket functions"
+msgstr "Ausgewählte Ticketfunktionen"
+
 msgid "Selected Versions"
 msgstr "Gewählte Versionen"
 
@@ -3040,6 +3163,11 @@ msgstr "Wert setzen"
 
 msgid "Show all"
 msgstr "Alle anzeigen"
+
+#, fuzzy
+#| msgid "Close Sidebars"
+msgid "Sidebars"
+msgstr "Sidebars schließen"
 
 msgid "Signature"
 msgstr "Signatur"
@@ -3131,9 +3259,6 @@ msgstr "Wechsel ins Kundenportal."
 msgid "Symptom"
 msgstr "Symptom"
 
-msgid "Sysconfig"
-msgstr "Sysconfig"
-
 msgid "SysConfig"
 msgstr "SysConfig"
 
@@ -3154,6 +3279,9 @@ msgstr "System: SysConfig"
 
 msgid "-> (tab)"
 msgstr "-> (Tabulator)"
+
+msgid "Tables"
+msgstr ""
 
 msgid "Tags"
 msgstr "Schlagworte"
@@ -3193,6 +3321,11 @@ msgstr "Die Datei ist zu groß {0} ({1}). Max.: {2}"
 
 msgid "The following {0} entries will be deleted. Are you sure?"
 msgstr "Die ausgewählten {0} Einträge werden gelöscht. Sind Sie sicher?"
+
+msgid ""
+"The following FAQ entries will provide you with a basic overview of how KIX "
+"18 works"
+msgstr ""
 
 msgid "The search only includes current versions."
 msgstr "Es werden nur aktuelle Versionen durchsucht."
@@ -3488,11 +3621,22 @@ msgstr "Ticket beobachten"
 msgid "We are working on this functionality."
 msgstr "Funktionalität ist in Arbeit."
 
+#, fuzzy
+#| msgid "Welcome to KIX"
+msgid "Welcome to KIX 18"
+msgstr "Willkommen bei KIX"
+
 msgid "Wildcard Search"
 msgstr "Wildcard-Suche"
 
 msgid "Yes"
 msgstr "Ja"
+
+msgid "Yes, please"
+msgstr ""
+
+msgid "You did it!"
+msgstr ""
 
 msgid "You have to confirm your current password."
 msgstr "Bitte geben Sie das aktuelle Passwort ein."
@@ -3503,6 +3647,9 @@ msgstr "Bitte bestätigen Sie das neue Passwort."
 msgid "Your current password is wrong."
 msgstr "Das aktuelle Passwort ist falsch."
 
+msgid "Your Permissions have been updated."
+msgstr ""
+
 msgid "Your rating"
 msgstr "Ihre Bewertung"
 
@@ -3511,6 +3658,9 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Sysconfig"
+#~ msgstr "Sysconfig"
 
 #~ msgid "Login"
 #~ msgstr "Anmelden"
@@ -3524,9 +3674,6 @@ msgstr "PLZ"
 #~ msgstr ""
 #~ "Hinweis: Für die optimale Nutzung von KIX empfehlen wir alternative "
 #~ "Browser wie Chromium oder Firefox."
-
-#~ msgid "Welcome to KIX"
-#~ msgstr "Willkommen bei KIX"
 
 #~ msgid "You have successfully logged out."
 #~ msgstr "Sie haben sich erfolgreich abgemeldet."
