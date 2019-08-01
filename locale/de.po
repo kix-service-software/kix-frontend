@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-07-31 15:32+0000\n"
-"Last-Translator: fwichmann <Felix.Wichmann@cape-it.de>\n"
+"PO-Revision-Date: 2019-08-01 06:24+0000\n"
+"Last-Translator: fuhlig <Frank.Uhlig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -54,7 +54,7 @@ msgid "Add"
 msgstr "Hinzufügen"
 
 msgid "Add CI Class"
-msgstr "Asset Klasse hinzufügen"
+msgstr "Asset-Klasse hinzufügen"
 
 msgid "Additional recipients"
 msgstr "Weitere Empfänger"
@@ -90,7 +90,7 @@ msgid "Agent Assignment"
 msgstr "Agentenzuordnung"
 
 msgid "Agent Information"
-msgstr "Agenten Informationen"
+msgstr "Agenten-Informationen"
 
 msgid "Agents"
 msgstr "Agenten"
@@ -300,22 +300,22 @@ msgstr ""
 "möglich."
 
 msgid "CI Class"
-msgstr "Asset Klasse"
+msgstr "Asset-Klasse"
 
 msgid "CI Class Definition"
-msgstr "Asset Klassendefinition"
+msgstr "Asset-Klassendefinition"
 
 msgid "CI Class Definitions"
-msgstr "Asset Klassen Definitionen"
+msgstr "Asset-Klassendefinitionen"
 
 msgid "CI Classes"
-msgstr "Asset Klassen"
+msgstr "Asset-Klassen"
 
 msgid "CI Class Information"
-msgstr "Asset Klassen Informationen"
+msgstr "Asset-Klasseninformationen"
 
 msgid "CI Class successfully created."
-msgstr "Asset Klasse wurde erfolgreich angelegt."
+msgstr "Asset-Klasse wurde erfolgreich angelegt."
 
 msgid "City"
 msgstr "Stadt"
@@ -342,13 +342,13 @@ msgid "CMDB"
 msgstr "Assets"
 
 msgid "CMDB: CI Classes"
-msgstr "Assets: Asset Klassen"
+msgstr "Assets: Asset-Klassen"
 
 msgid "CMDB Dashboard"
-msgstr "Asset Dashboard"
+msgstr "Asset-Dashboard"
 
 msgid "CMDB Explorer"
-msgstr "Asset Explorer"
+msgstr "Asset-Explorer"
 
 msgid "CNO"
 msgstr "KNR"
@@ -384,16 +384,16 @@ msgid "Config Item"
 msgstr "Asset"
 
 msgid "Config Item Class"
-msgstr "Asset Klasse"
+msgstr "Asset-Klasse"
 
 msgid "Config Item Data"
 msgstr "Stammdaten"
 
 msgid "Config Item History"
-msgstr "Asset Historie"
+msgstr "Asset-Historie"
 
 msgid "Config Item Information"
-msgstr "Asset Informationen"
+msgstr "Asset-Informationen"
 
 msgid "Config Items"
 msgstr "Assets"
@@ -402,13 +402,13 @@ msgid "Config Items Count: {0}"
 msgstr "Anzahl Assets: {0}"
 
 msgid "Config Item Search"
-msgstr "Asset Suche"
+msgstr "Asset-Suche"
 
 msgid "Config Item successfully created."
 msgstr "Asset wurde erfolgreich angelegt."
 
 msgid "Config Item Version Compare"
-msgstr "Asset Versionsvergleich"
+msgstr "Asset-Versionsvergleich"
 
 msgid "Confirm New Password"
 msgstr "Neues Passwort bestätigen"
@@ -417,7 +417,7 @@ msgid "Contact"
 msgstr "Kontakt"
 
 msgid "Contact Information"
-msgstr "Kontakt Informationen"
+msgstr "Kontakt-Informationen"
 
 msgid "Contacts"
 msgstr "Kontakte"
@@ -453,7 +453,7 @@ msgid "Create Category"
 msgstr "Kategorie wird angelegt"
 
 msgid "Create CI Class"
-msgstr "Asset Klasse wird angelegt"
+msgstr "Asset-Klasse wird angelegt"
 
 msgid "Create Config Item"
 msgstr "Asset wird angelegt"
@@ -696,7 +696,7 @@ msgid "Email Filter"
 msgstr "E-Mail Filter"
 
 msgid "Email Filter Information"
-msgstr "E-Mail Filter Informationen"
+msgstr "E-Mail-Filter-Informationen"
 
 msgid "Email Filters"
 msgstr "E-Mail Filter"
@@ -705,7 +705,7 @@ msgid "Email Header"
 msgstr "E-Mail Header"
 
 msgid "Email Information"
-msgstr "E-Mail Informationen"
+msgstr "E-Mail-Informationen"
 
 msgid "ends with"
 msgstr "endet mit"
@@ -783,13 +783,13 @@ msgid "FAQ Category"
 msgstr "FAQ Kategorie"
 
 msgid "FAQ Category Information"
-msgstr "FAQ Kategorie Informationen"
+msgstr "FAQ-Kategorie-Informationen"
 
 msgid "FAQ Data"
 msgstr "FAQ Daten"
 
 msgid "FAQ Information"
-msgstr "FAQ Informationen"
+msgstr "FAQ-Informationen"
 
 msgid "FAQ rating"
 msgstr "FAQ Bewertung"
@@ -2255,7 +2255,7 @@ msgid "Load Config Item"
 msgstr "Lade Asset"
 
 msgid "Load Config Item Class"
-msgstr "Lade Asset Klasse"
+msgstr "Lade Asset-Klasse"
 
 msgid "Load Config Items"
 msgstr "Lade Assets"
@@ -2608,7 +2608,7 @@ msgid "Organisation ID"
 msgstr "Kunden ID"
 
 msgid "Organisation Information"
-msgstr "Kundeninformationen"
+msgstr "Kunden-Informationen"
 
 msgid "Organisations"
 msgstr "Kunden"
@@ -2671,7 +2671,7 @@ msgid "Pattern"
 msgstr "Muster"
 
 msgid "Pattern Information"
-msgstr "Pattern Informationen"
+msgstr "Pattern-Informationen"
 
 msgid "Pending date is not in the future."
 msgstr "\"Warten bis\"-Datum liegt nicht in der Zukunft."
@@ -2731,7 +2731,7 @@ msgid "Priority Data"
 msgstr "Prioritätsdaten"
 
 msgid "Priority Information"
-msgstr "Prioritäten Informationen"
+msgstr "Prioritäten-Informationen"
 
 msgid "Priority successfully created."
 msgstr "Priorität wurde erfolgreich angelegt."
@@ -2743,7 +2743,7 @@ msgid "Queue"
 msgstr "Team"
 
 msgid "Queue Information"
-msgstr "Team Informationen"
+msgstr "Team-Informationen"
 
 msgid "Queues"
 msgstr "Teams"
@@ -2851,7 +2851,7 @@ msgid "Role Assignment"
 msgstr "Rollenzuordnung"
 
 msgid "Role Information"
-msgstr "Rollen Informationen"
+msgstr "Rollen-Informationen"
 
 msgid "Roles"
 msgstr "Rollen"
@@ -2978,7 +2978,7 @@ msgid "Select a value separator."
 msgstr "Wählen Sie einen Werttrenner."
 
 msgid "Select Config Item Class"
-msgstr "Wählen Sie eine Asset Klasse aus der Liste."
+msgstr "Wählen Sie eine Asset-Klasse aus der Liste."
 
 msgid "Selected Search Criteria"
 msgstr "Gewählte Suchkriterien"
@@ -3084,7 +3084,7 @@ msgid "State Data"
 msgstr "Stammdaten"
 
 msgid "State Information"
-msgstr "Status Informationen"
+msgstr "Status-Informationen"
 
 msgid "States"
 msgstr "Status"
@@ -3222,7 +3222,7 @@ msgid "Ticket History"
 msgstr "Ticket Historie"
 
 msgid "Ticket Information"
-msgstr "Ticket Informationen"
+msgstr "Ticket-Informationen"
 
 msgid "Ticket is being watched."
 msgstr "Ticket wird beobachtet."
@@ -3252,7 +3252,7 @@ msgid "Tickets"
 msgstr "Tickets"
 
 msgid "Ticket Search"
-msgstr "Ticket Suche"
+msgstr "Ticket-Suche"
 
 msgid "Ticket search error!"
 msgstr "Fehler bei der Ticketsuche!"
@@ -3318,7 +3318,7 @@ msgid "Type Data"
 msgstr "Typdaten"
 
 msgid "Type Information"
-msgstr "Typ Informationen"
+msgstr "Typ-Informationen"
 
 msgid "Types"
 msgstr "Typen"
