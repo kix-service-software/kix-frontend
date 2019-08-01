@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2019-07-31 15:32+0000\n"
+"PO-Revision-Date: 2019-08-01 13:01+0000\n"
 "Last-Translator: fwichmann <Felix.Wichmann@cape-it.de>\n"
 "Language-Team: English <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/en/>\n"
@@ -1211,7 +1211,7 @@ msgid "Helptext_Admin_SysConfigEdit_Value"
 msgstr "Shows the options for this SysConfig key"
 
 msgid "Helptext_Admin_SystemAddressCreate_Comment"
-msgstr ""
+msgstr "Insert additional information (only displayed within the admin module)"
 
 msgid "Helptext_Admin_SystemAddressCreate_DisplayName"
 msgstr ""
@@ -1259,314 +1259,271 @@ msgid "Helptext_Admin_TextModuleEdit_Validity"
 msgstr ""
 
 msgid "Helptext_Admin_Tickets_PriorityCreate_Comment"
-msgstr ""
+msgstr "Insert additional information (only displayed within the admin module)"
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Admin_Tickets_PriorityCreate_Icon"
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+"Upload an icon, which will be shown together with the priority name within "
+"the application"
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Admin_Tickets_PriorityCreate_Name"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "The name set here will be shown in the application"
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Admin_Tickets_PriorityCreate_Valid"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "The priority can only be used within the system if set “valid”"
 
 msgid "Helptext_Admin_Tickets_PriorityEdit_Comment"
-msgstr ""
+msgstr "Insert additional information (only displayed within the admin module)"
 
 msgid "Helptext_Admin_Tickets_PriorityEdit_Icon"
 msgstr ""
+"Upload an icon, which will be shown together with the priority name within "
+"the application"
 
 msgid "Helptext_Admin_Tickets_PriorityEdit_Name"
-msgstr ""
+msgstr "The name set here will be shown in the application"
 
 msgid "Helptext_Admin_Tickets_PriorityEdit_Valid"
-msgstr ""
+msgstr "The priority can only be used within the system if set “valid”"
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Admin_Tickets_QueueCreate_Comment"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "Insert additional information (only displayed within the admin module)"
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Admin_Tickets_QueueCreate_FollowUp"
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+"States if an answer to the same ticket will lock this ticket for the last "
+"owner"
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Admin_Tickets_QueueCreate_Icon."
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+"Upload an icon, which will be shown together with the team name within the "
+"application"
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Admin_Tickets_QueueCreate_Name"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "The name set here will be shown in the application"
 
 msgid "Helptext_Admin_Tickets_QueueCreate_ParentQueue"
 msgstr ""
+"If you want to subordinate the new team to an already existing team, you can "
+"choose this here"
 
 msgid "Helptext_Admin_Tickets_QueueCreate_SenderAddress."
-msgstr ""
+msgstr "Sender address for emails send by this team"
 
 msgid "Helptext_Admin_Tickets_QueueCreate_Signature"
 msgstr ""
+"Signature for emails send by this team. It is not possible to insert "
+"pictures. You can use text modules"
 
 msgid "Helptext_Admin_Tickets_QueueCreate_UnlockTimeout"
 msgstr ""
+"If an agent locks a ticket, but does not close the ticket before expiry of "
+"the unlock timeout, the ticket will be opened again and available for other "
+"agents"
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Admin_Tickets_QueueCreate_Validity"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "The team can only be used within the system if set “valid”"
 
 msgid "Helptext_Admin_Tickets_QueueEdit_Comment"
-msgstr ""
+msgstr "Insert additional information (only displayed within the admin module)"
 
 msgid "Helptext_Admin_Tickets_QueueEdit_FollowUp"
 msgstr ""
+"States if an answer to the same ticket will lock this ticket for the last "
+"owner"
 
 msgid "Helptext_Admin_Tickets_QueueEdit_Icon."
 msgstr ""
+"Upload an icon, which will be shown together with the team name within the "
+"application"
 
 msgid "Helptext_Admin_Tickets_QueueEdit_ParentQueue"
 msgstr ""
+"If you want to subordinate the new team to an already existing team, you can "
+"choose this here"
 
 msgid "Helptext_Admin_Tickets_QueueEdit_SenderAddress."
-msgstr ""
+msgstr "Sender address for emails send by this team"
 
 msgid "Helptext_Admin_Tickets_QueueEdit_Signature"
 msgstr ""
+"Signature for emails send by this team. It is not possible to insert "
+"pictures. You can use text modules"
 
 msgid "Helptext_Admin_Tickets_QueueEdit_UnlockTimeout"
 msgstr ""
+"If an agent locks a ticket, but does not close the ticket before expiry of "
+"the unlock timeout, the ticket will be opened again and available for other "
+"agents"
 
 msgid "Helptext_Admin_Tickets_QueueEdit_Validity"
-msgstr ""
+msgstr "The team can only be used within the system if set “valid”"
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Admin_Tickets_StateCreate_Comment"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "Insert additional information (only displayed within the admin module)"
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Admin_Tickets_StateCreate_Icon"
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+"Upload an icon, which will be shown together with the state name within the "
+"application"
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Admin_Tickets_StateCreate_Name"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "The name set here will be shown in the application"
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Admin_Tickets_StateCreate_Type"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "Assign the new State to a group"
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Admin_Tickets_StateCreate_Valid"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "The state can only be used within the system if set “valid”"
 
 msgid "Helptext_Admin_Tickets_StateEdit_Comment"
-msgstr ""
+msgstr "Insert additional information (only displayed within the admin module)"
 
 msgid "Helptext_Admin_Tickets_StateEdit_Icon"
 msgstr ""
+"Upload an icon, which will be shown together with the state name within the "
+"application"
 
 msgid "Helptext_Admin_Tickets_StateEdit_Name"
-msgstr ""
+msgstr "The name set here will be shown in the application"
 
 msgid "Helptext_Admin_Tickets_StateEdit_Type"
-msgstr ""
+msgstr "Assign the new State to a group"
 
 msgid "Helptext_Admin_Tickets_StateEdit_Valid"
-msgstr ""
+msgstr "The state can only be used within the system if set “valid”"
 
 msgid "Helptext_Admin_Tickets_Tickets_QueueEdit_Name"
-msgstr ""
+msgstr "The name set here will be shown in the application"
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Admin_Tickets_TypeCreate_Comment"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "Insert additional information (only displayed within the admin module)"
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Admin_Tickets_TypeCreate_Icon"
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+"Upload an icon, which will be shown together with the type name within the "
+"application"
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Admin_Tickets_TypeCreate_Name"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "The name set here will be shown in the application"
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Admin_Tickets_TypeCreate_Valid"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "The type can only be used within the system if set “valid”"
 
 msgid "Helptext_Admin_Tickets_TypeEdit_Comment"
-msgstr ""
+msgstr "Insert additional information (only displayed within the admin module)"
 
 msgid "Helptext_Admin_Tickets_TypeEdit_Icon"
 msgstr ""
+"Upload an icon, which will be shown together with the type name within the "
+"application"
 
 msgid "Helptext_Admin_Tickets_TypeEdit_Name"
-msgstr ""
+msgstr "The name set here will be shown in the application"
 
 msgid "Helptext_Admin_Tickets_TypeEdit_Valid"
-msgstr ""
+msgstr "The type can only be used within the system if set “valid”"
 
 msgid "Helptext_Admin_UserCreate_Preferences_MyQueues"
 msgstr ""
+"Set the default teams, the agent will receive notifications for. An agent "
+"can change this setting in their preferences"
 
 msgid "Helptext_Admin_UserCreate_Preferences_UserLanguage"
 msgstr ""
+"Set the default language for the agent, when they log in KIX the first time. "
+"An agent can change their language settings in their preferences"
 
 msgid "Helptext_Admin_UserEdit_Preferences_Language"
 msgstr ""
+"Set the default language for the agent, when they log in KIX the first time. "
+"An agent can change their language settings in their preferences"
 
 msgid "Helptext_Admin_UserEdit_Preferences_MyQueues"
 msgstr ""
+"Set the default teams, the agent will receive notifications for. An agent "
+"can change this setting in their preferences"
 
 msgid "Helptext_Admin_Users_RoleCreate_Comment"
-msgstr ""
+msgstr "Insert additional information (only displayed within the admin module)"
 
 msgid "Helptext_Admin_Users_RoleCreate_Name"
-msgstr ""
+msgstr "Insert a name for the role"
 
 msgid "Helptext_Admin_Users_RoleCreate_User"
-msgstr ""
+msgstr "There are only valid agents available"
 
 msgid "Helptext_Admin_Users_RoleCreate_Valid"
-msgstr ""
+msgstr "The role can only be used within the system if set “valid”"
 
 msgid "Helptext_Admin_Users_RoleEdit_Comment"
-msgstr ""
+msgstr "Insert additional information (only displayed within the admin module)"
 
 msgid "Helptext_Admin_Users_RoleEdit_Name"
-msgstr ""
+msgstr "Insert a name for the role"
 
 msgid "Helptext_Admin_Users_RoleEdit_User"
-msgstr ""
+msgstr "There are only valid agents available"
 
 msgid "Helptext_Admin_Users_RoleEdit_Valid"
-msgstr ""
+msgstr "The role can only be used within the system if set “valid”"
 
 msgid "Helptext_Admin_Users_UserCreate_Comment"
-msgstr ""
+msgstr "Insert additional information (only displayed within the admin module)"
 
 msgid "Helptext_Admin_Users_UserCreate_Email"
-msgstr ""
+msgstr "Insert the agents email address"
 
 msgid "Helptext_Admin_Users_UserCreate_FirstName"
-msgstr ""
+msgstr "Insert one or various first names for the agent"
 
 msgid "Helptext_Admin_Users_UserCreate_LastName"
-msgstr ""
+msgstr "Insert a last name for the agent"
 
 msgid "Helptext_Admin_Users_UserCreate_Login"
-msgstr ""
+msgstr "The login name must be unique and cannot be changed afterwards"
 
 msgid "Helptext_Admin_Users_UserCreate_Password"
-msgstr ""
+msgstr "The password can be changed/modified afterwards"
 
 msgid "Helptext_Admin_Users_UserCreate_Phone"
-msgstr ""
+msgstr "Insert the agents phone number"
 
 msgid "Helptext_Admin_Users_UserCreate_Title"
-msgstr ""
+msgstr "If available, insert a title for the agent"
 
 msgid "Helptext_Admin_Users_UserCreate_Valid"
-msgstr ""
+msgstr "The agent can only login with the user data set here if set “valid”"
 
 msgid "Helptext_Admin_Users_UserEdit_Comment"
-msgstr ""
+msgstr "Insert additional information (only displayed within the admin module)"
 
 msgid "Helptext_Admin_Users_UserEdit_Email"
-msgstr ""
+msgstr "Insert the agents email address"
 
 msgid "Helptext_Admin_Users_UserEdit_FirstName"
-msgstr ""
+msgstr "Insert one or various first names for the agent"
 
 msgid "Helptext_Admin_Users_UserEdit_LastName"
-msgstr ""
+msgstr "Insert a last name for the agent"
 
 msgid "Helptext_Admin_Users_UserEdit_Login"
-msgstr ""
+msgstr "The login cannot be changed"
 
 msgid "Helptext_Admin_Users_UserEdit_Mobile"
-msgstr ""
+msgstr "Insert the agents mobile phone number"
 
 msgid "Helptext_Admin_Users_UserEdit_Password"
-msgstr ""
+msgstr "The password can be changed."
 
 msgid "Helptext_Admin_Users_UserEdit_Phone"
-msgstr ""
+msgstr "Insert the agents phone number."
 
 msgid "Helptext_Admin_Users_UserEdit_Title"
-msgstr ""
+msgstr "If available, insert a title for the agent."
 
 msgid "Helptext_Admin_Users_UserEdit_Valid"
-msgstr ""
+msgstr "The agent can only login with the user data set here if set “valid”."
 
 msgid "Helptext_CMDB_ConfigItemClassCreate_Comment"
 msgstr ""
