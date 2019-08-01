@@ -39,7 +39,7 @@ export class ConfigItemClassDetailsContext extends Context {
         objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_CLASS,
         reload: boolean = false, changedProperties: string[] = []
     ): Promise<O> {
-        const object = await this.loadCIClass(changedProperties);
+        const object = await this.loadCIClass();
 
         if (reload) {
             this.listeners.forEach(
@@ -52,7 +52,7 @@ export class ConfigItemClassDetailsContext extends Context {
         return object as any;
     }
 
-    private async loadCIClass(changedProperties: string[] = [], cache: boolean = true): Promise<ConfigItemClass> {
+    private async loadCIClass(): Promise<ConfigItemClass> {
         const ciClassId = Number(this.objectId);
 
         const loadingOptions = new KIXObjectLoadingOptions(
@@ -66,7 +66,7 @@ export class ConfigItemClassDetailsContext extends Context {
         }, 500);
 
         const ciClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
-            KIXObjectType.CONFIG_ITEM_CLASS, [ciClassId], loadingOptions, null, cache
+            KIXObjectType.CONFIG_ITEM_CLASS, [ciClassId], loadingOptions
         ).catch((error) => {
             console.error(error);
             return null;

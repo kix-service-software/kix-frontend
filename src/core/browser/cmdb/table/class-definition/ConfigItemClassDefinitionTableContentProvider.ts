@@ -15,6 +15,7 @@ import {
 import { ITable, IRowObject, RowObject, TableValue } from "../../../table";
 import { ContextService } from "../../../context";
 import { ConfigItemClassDetailsContext } from "../../admin";
+import { TranslationService } from "../../../i18n/TranslationService";
 
 export class ConfigItemClassDefinitionTableContentProvider extends TableContentProvider<ConfigItemClassDefinition> {
 
@@ -29,6 +30,9 @@ export class ConfigItemClassDefinitionTableContentProvider extends TableContentP
 
     public async loadData(): Promise<Array<IRowObject<ConfigItemClassDefinition>>> {
         let rowObjects = [];
+
+        const isCurrentText = await TranslationService.translate('Translatable#(Current definition)');
+
         const context = await ContextService.getInstance().getContext(ConfigItemClassDetailsContext.CONTEXT_ID);
         const configItemClass = await context.getObject<ConfigItemClass>();
         if (configItemClass && configItemClass.Definitions && !!configItemClass.Definitions.length) {
@@ -41,7 +45,12 @@ export class ConfigItemClassDefinitionTableContentProvider extends TableContentP
                     }
                 }
 
-                values.push(new TableValue(ConfigItemClassDefinitionProperty.CURRENT, d.isCurrentDefinition));
+                values.push(
+                    new TableValue(
+                        ConfigItemClassDefinitionProperty.CURRENT, d.isCurrentDefinition,
+                        d.isCurrentDefinition ? isCurrentText : ''
+                    )
+                );
 
                 return new RowObject<ConfigItemClassDefinition>(values, d);
             });

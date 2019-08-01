@@ -20,7 +20,7 @@ export class ConfigItemClassDefinitionLabelProvider extends LabelProvider<Config
     public kixObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION;
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
-        let displayValue = property;
+        let displayValue: string;
         switch (property) {
             case ConfigItemClassDefinitionProperty.VERSION:
                 displayValue = 'Translatable#Version';

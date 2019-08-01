@@ -7,8 +7,6 @@
  * --
  */
 
-export { ConfigItemClassResponse } from './ConfigItemClassResponse';
-export { ConfigItemClassesResponse } from './ConfigItemClassesResponse';
 export { CreateConfigItem } from './CreateConfigItem';
 export { CreateConfigItemResponse } from './CreateConfigItemResponse';
 export { CreateConfigItemRequest } from './CreateConfigItemRequest';
