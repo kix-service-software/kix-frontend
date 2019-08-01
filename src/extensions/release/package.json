@@ -5,6 +5,11 @@
             "release-configuration": {
                 "module": "configuration.extension"
             }
+        },
+        "kix:modules": {
+            "release-module": {
+                "module": "kix-module.extension"
+            }
         }
     }
 }

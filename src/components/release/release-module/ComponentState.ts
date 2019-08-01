@@ -7,6 +7,15 @@
  * --
  */
 
-export { ReleaseContext } from './ReleaseContext';
-export { SliderContent } from './SliderContent';
-export { SliderWidgetSettings } from './SliderWidgetSettings';
+import { AbstractComponentState } from "../../../core/browser";
+import { ConfiguredWidget } from "../../../core/model";
+
+export class ComponentState extends AbstractComponentState {
+
+    public constructor(
+        public contentWidgets: ConfiguredWidget[] = []
+    ) {
+        super();
+    }
+
+}

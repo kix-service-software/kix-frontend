@@ -7,6 +7,11 @@
  * --
  */
 
-export { ReleaseContext } from './ReleaseContext';
-export { SliderContent } from './SliderContent';
-export { SliderWidgetSettings } from './SliderWidgetSettings';
+import { SliderContent } from "./SliderContent";
+
+export class SliderWidgetSettings {
+
+    public constructor(
+        public sliderList: SliderContent[] = []
+    ) { }
+}

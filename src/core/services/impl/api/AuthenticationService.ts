@@ -105,7 +105,7 @@ export class AuthenticationService {
     public async logout(token: string): Promise<boolean> {
         if (this.frontendTokenCache.has(token)) {
             const backendToken = this.frontendTokenCache.get(token);
-            await HttpService.getInstance().delete('system/sessions/' + backendToken, token, null);
+            await HttpService.getInstance().delete('session', token, null);
             this.frontendTokenCache.delete(token);
         }
         return true;

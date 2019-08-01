@@ -12,13 +12,13 @@ import { IRoutingServiceListener } from './IRoutingServiceListener';
 import { RoutingConfiguration } from './RoutingConfiguration';
 import { ContextService } from '../context';
 import { ContextFactory } from '../context/ContextFactory';
-import { ClientStorageService } from '../ClientStorageService';
 import { ReleaseContext } from '../release';
 import { BrowserUtil } from '../BrowserUtil';
 import { KIXModulesSocketClient } from '../modules/KIXModulesSocketClient';
 import { ApplicationEvent } from '../application';
 import { EventService } from '../event';
 import { ActionFactory } from '../ActionFactory';
+import { AgentService } from '../application/AgentService';
 
 export class RoutingService {
 
@@ -47,16 +47,24 @@ export class RoutingService {
     }
 
     public async routeToInitialContext(history: boolean = false): Promise<void> {
-        const VISITED_KEY = 'kix-18-site-visited';
-        const visitedOption = ClientStorageService.getOption(VISITED_KEY);
+        const VISITED_KEY = 'KIXWebFrontendVisitedVersion';
+
+        let visited: string;
+        const currentUser = await AgentService.getInstance().getCurrentUser();
+        if (currentUser && currentUser.Preferences) {
+            const vistedVersion = currentUser.Preferences.find((p) => p.ID === VISITED_KEY);
+            visited = vistedVersion ? vistedVersion.Value : null;
+        }
 
         const releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
         const buildNumber = releaseInfo ? releaseInfo.buildNumber : null;
-        if (!visitedOption || (buildNumber && visitedOption !== buildNumber.toString())) {
+        if (!visited || (buildNumber && visited !== buildNumber.toString())) {
             await ContextService.getInstance().setContext(
                 ReleaseContext.CONTEXT_ID, KIXObjectType.ANY, ContextMode.DASHBOARD
             );
-            ClientStorageService.setOption(VISITED_KEY, buildNumber.toString());
+            AgentService.getInstance().setPreferences([
+                [VISITED_KEY, buildNumber.toString()]
+            ]);
         } else {
             const parsedUrl = new URL(window.location.href);
             const path = parsedUrl.pathname === '/' ? [] : parsedUrl.pathname.split('/');

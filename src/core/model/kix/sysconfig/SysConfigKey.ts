@@ -41,6 +41,10 @@ export enum SysConfigKey {
 
     POSTMASTER_X_HEADER = 'PostmasterX-Header',
 
-    TICKET_VIEWABLE_STATE_TYPE = 'Ticket::ViewableStateType'
+    TICKET_VIEWABLE_STATE_TYPE = 'Ticket::ViewableStateType',
+
+    USER_MANUAL = 'KIX::UserManual',
+
+    ADMIN_MANUAL = 'KIX::AdminManual'
 
 }
