@@ -288,7 +288,7 @@ class Component {
                 this.state.treeStyle = { transform: `translate(0px, -${transformValue}px)` };
 
                 if (input) {
-                    input.style = 'grid-row: 3';
+                    input.style = `grid-row: ${buttons ? 3 : 2}`;
                 }
                 if (list) {
                     list.style = 'grid-row: 1';
