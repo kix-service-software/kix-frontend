@@ -26,7 +26,8 @@ class OverlayComponent {
     private startMoveOffset: [number, number] = null;
     private startResizeOffset: [number, number] = null;
     private position: [number, number] = null;
-    private keepShow: boolean;
+    private keepShow = true;
+    private clickListener: any;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -42,8 +43,8 @@ class OverlayComponent {
 
         WidgetService.getInstance().setWidgetType(this.state.overlayInstanceId, WidgetType.OVERLAY);
 
-        document.addEventListener('mousemove', this.mouseMove.bind(this));
-        document.addEventListener('mouseup', this.mouseUp.bind(this));
+        document.addEventListener('mousemove', this.mouseMove.bind(this), false);
+        document.addEventListener('mouseup', this.mouseUp.bind(this), false);
 
         EventService.getInstance().subscribe(ApplicationEvent.CLOSE_OVERLAY, {
             eventSubscriberId: 'overlay',
@@ -57,42 +58,30 @@ class OverlayComponent {
         this.setOverlayPosition();
     }
 
-    public onDestroy(): void {
-        document.removeEventListener("click", (event: any) => {
-            this.closeOverlayEventHandler(event);
-        }, false);
-        document.removeEventListener('mousemove', this.mouseMove.bind(this));
-        document.removeEventListener('mouseup', this.mouseUp.bind(this));
-    }
-
-    private closeOverlayEventHandler(event: any): void {
-        if (this.state.show && !this.showShield() && event.button === 0) {
-            if (this.keepShow) {
-                this.keepShow = false;
-            } else {
-                this.closeOverlay();
-            }
-        }
-    }
-
-    public overlayClicked(): void {
+    public overlayClicked(event: any): void {
         this.keepShow = true;
     }
 
     private openOverlay<T extends KIXObject<T>>(
         type: OverlayType, widgetInstanceId: string, content: ComponentContent<T>, title: string,
         closeButton: boolean, position: [number, number], newListenerId: string, large: boolean,
-        toastTimeoutMillis: number = 2000
+        toastTimeoutMillis: number = 2000, autoClose: boolean = true
     ): void {
         if (this.currentListenerId) {
             this.closeOverlay();
         }
         this.state.show = false;
 
-        if (type !== OverlayType.HINT_TOAST) {
-            document.addEventListener("click", (event: any) => {
-                this.closeOverlayEventHandler(event);
-            }, false);
+        if (autoClose) {
+            let firstClick = true;
+            this.clickListener = (event: any) => {
+                if (!firstClick && !this.keepShow && !this.showShield() && event.button === 0) {
+                    this.closeOverlay();
+                }
+                firstClick = false;
+                this.keepShow = false;
+            };
+            document.addEventListener("click", this.clickListener, false);
         }
 
         setTimeout(() => {
@@ -116,10 +105,6 @@ class OverlayComponent {
             this.applyWidgetConfiguration(widgetInstanceId);
 
             this.state.show = true;
-            this.keepShow = true;
-            setTimeout(() => {
-                this.keepShow = false;
-            }, 100);
 
             if (this.isToast()) {
                 if (type && type === OverlayType.SUCCESS_TOAST) {
@@ -174,6 +159,9 @@ class OverlayComponent {
 
     private closeOverlay(): void {
         this.state.show = false;
+        document.removeEventListener("click", this.clickListener, false);
+        document.removeEventListener('mouseup', this.mouseUp.bind(this), false);
+        document.removeEventListener('mousemove', this.mouseMove.bind(this), false);
         if (this.toastTimeout) {
             clearTimeout(this.toastTimeout);
         }

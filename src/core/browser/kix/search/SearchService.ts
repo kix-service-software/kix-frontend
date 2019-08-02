@@ -111,7 +111,9 @@ export class SearchService {
                     (c) => typeof c.value !== 'undefined' && c.value !== null && c.value !== ''
                 );
 
-                const cacheName = this.searchCache ? this.searchCache.name : null;
+                const cacheName = this.searchCache && this.searchCache.status === CacheState.VALID
+                    ? this.searchCache.name
+                    : null;
                 this.searchCache = new SearchCache<T>(objectType, criteria, [], null, CacheState.VALID, cacheName);
                 objects = await this.doSearch();
                 this.provideResult();
@@ -305,7 +307,7 @@ export class SearchService {
             await SearchSocketClient.getInstance().saveSearch(search, existingName)
                 .then(async () => {
                     this.searchCache.name = name;
-                    this.getSearchBookmarks(true);
+                    await this.getSearchBookmarks(true);
                     this.listeners.forEach((l) => l.searchFinished());
                 }).catch((error: Error) => BrowserUtil.openErrorOverlay(error.message));
         }
@@ -313,11 +315,10 @@ export class SearchService {
 
     public async getSearchBookmarks(publish?: boolean): Promise<Bookmark[]> {
         const search = await SearchSocketClient.getInstance().loadSearch();
-        const bookmarks = search
-            .sort((s1, s2) => SortUtil.compareString(s1.name, s2.name))
-            .map((s) => new Bookmark(
-                s.name, this.getSearchIcon(s.objectType), 'load-search-action', s.name)
-            );
+        search.sort((s1, s2) => SortUtil.compareString(s1.name, s2.name));
+        const bookmarks = search.map((s) => new Bookmark(
+            s.name, this.getSearchIcon(s.objectType), 'load-search-action', s.name)
+        );
 
         if (publish) {
             BookmarkService.getInstance().publishBookmarks('search', bookmarks);

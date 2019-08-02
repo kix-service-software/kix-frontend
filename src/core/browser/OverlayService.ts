@@ -28,7 +28,7 @@ export class OverlayService {
         <T extends KIXObject<T>>(
             type: OverlayType, instanceId: string, content: IWidgetContent<T>, title: string,
             closeButton: boolean, position: [number, number], listenerId: string, large: boolean,
-            toastTimeoutMillis?: number
+            toastTimeoutMillis?: number, autoClose?: boolean
         ) => void;
 
     public registerOverlayComponentListener(
@@ -36,7 +36,7 @@ export class OverlayService {
             <T extends KIXObject<T>>(
                 type: OverlayType, instanceId: string, content: IWidgetContent<T>, title: string,
                 closeButton: boolean, position: [number, number], listenerId: string, large: boolean,
-                toastTimeoutMillis?: number
+                toastTimeoutMillis?: number, autoClose?: boolean
             ) => void
     ): void {
         this.overlayComponentListener = listener;
@@ -53,11 +53,12 @@ export class OverlayService {
     public openOverlay<T extends KIXObject<T>>(
         type: OverlayType, instanceId: string, content: IWidgetContent<T>, title: string,
         closeButton: boolean = false, position?: [number, number], listenerId?: string, large?: boolean,
-        toastTimeoutMillis?: number
+        toastTimeoutMillis?: number, autoClose: boolean = true
     ): void {
         if (this.overlayComponentListener) {
             this.overlayComponentListener(
-                type, instanceId, content, title, closeButton, position, listenerId, large, toastTimeoutMillis
+                type, instanceId, content, title, closeButton, position, listenerId,
+                large, toastTimeoutMillis, autoClose
             );
         }
     }

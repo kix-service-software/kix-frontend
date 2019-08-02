@@ -28,7 +28,7 @@ export class SaveSearchAction extends AbstractAction {
             const content = new ComponentContent('save-search-template-overlay', null);
             OverlayService.getInstance().openOverlay(
                 OverlayType.CONTENT_OVERLAY, 'save-search-template', content, 'Translatable#Save Search',
-                false, null, null, true
+                false, null, null, true, null, false
             );
         }
     }

@@ -40,7 +40,9 @@ export class BrowserUtil {
     public static openAppRefreshOverlay(message: string, reloadApp?: boolean): void {
         const settings = new RefreshToastSettings(message, reloadApp);
         const componentContent = new ComponentContent('refresh-app-toast', settings);
-        OverlayService.getInstance().openOverlay(OverlayType.HINT_TOAST, null, componentContent, '');
+        OverlayService.getInstance().openOverlay(
+            OverlayType.HINT_TOAST, null, componentContent, '', false, null, null, null, null, false
+        );
     }
 
     public static async openAccessDeniedOverlay(): Promise<void> {
