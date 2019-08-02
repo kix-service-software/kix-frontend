@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-08-01 13:38+0000\n"
-"Last-Translator: fuhlig <Frank.Uhlig@cape-it.de>\n"
+"PO-Revision-Date: 2019-08-02 11:53+0000\n"
+"Last-Translator: fwichmann <Felix.Wichmann@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -1639,10 +1639,8 @@ msgstr ""
 "Verknüpfen Sie dieses Asset mit einem Ticket, einem FAQ-Artikel oder einem "
 "anderen Asset."
 
-#, fuzzy
-#| msgid "Helptext_Admin_QueueEdit_Name"
 msgid "Helptext_CMDB_ConfigItemCreateEdit_Name"
-msgstr "Hilfetext_Admin_QueueEdit_Name"
+msgstr ""
 
 msgid "Helptext_Customers_ContactCreate_City"
 msgstr "Hilfetext_Organisations_ContactCreate_City"
@@ -1767,75 +1765,51 @@ msgstr "HIlfetext_Organisations_OrganisationCreate_Zip"
 msgid "Helptext_Customers_OrganisationImport"
 msgstr "Hilfetext_Organisations_OrganisationImport"
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleCreate_Comment"
 msgid "Helptext_FAQ_ArticleCreate_Attachments"
-msgstr "Hilfetext_Admin_TextModuleCreate_Comment"
+msgstr ""
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_ParentCategory"
 msgid "Helptext_FAQ_ArticleCreate_Category"
-msgstr "Hilfetext_Admin_FAQCategoryCreate_ParentQueue"
+msgstr "Organize FAQ articles by categories to sort them by topics."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleCreate_Name"
 msgid "Helptext_FAQ_ArticleCreate_Cause"
-msgstr "Hilfetext_Admin_TextModuleCreate_Name"
+msgstr ""
+"Describe the cause behind the occurring phenomenon as exactly as possible."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleCreate_Comment"
 msgid "Helptext_FAQ_ArticleCreate_Comment"
-msgstr "Hilfetext_Admin_TextModuleCreate_Comment"
+msgstr "Insert additional information for the FAQ article."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleCreate_Language"
 msgid "Helptext_FAQ_ArticleCreate_Language"
-msgstr "Hilfetext_Admin_TextModuleCreate_Language"
+msgstr "Insert the FAQ article language."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleCreate_Language"
 msgid "Helptext_FAQ_ArticleCreate_Links"
-msgstr "Hilfetext_Admin_TextModuleCreate_Language"
+msgstr "Link this FAQ article with a ticket, an asset or another FAQ article."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
 msgid "Helptext_FAQ_ArticleCreate_Solution"
-msgstr "Hilfetext_Admin_FAQCategoryCreate_Icon"
+msgstr ""
+"Describe the solution for the occuring phenomenon as exactly as possible."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleCreate_Comment"
 msgid "Helptext_FAQ_ArticleCreate_Symptom"
-msgstr "Hilfetext_Admin_TextModuleCreate_Comment"
+msgstr "Describe the occurring phenomenon as exactly as possible."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleCreate_Text"
 msgid "Helptext_FAQ_ArticleCreate_Tags"
-msgstr "Hilfetext_Admin_TextModuleCreate_Text"
+msgstr "Key words help to quickly find FAQ articles"
 
-#, fuzzy
-#| msgid "Helptext_Customers_ContactCreate_Title"
 msgid "Helptext_FAQ_ArticleCreate_Title"
-msgstr "Hilfetext_Organisations_ContactCreate_Title"
+msgstr "Briefly summarize the FAQ article topic."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleCreate_Validity"
 msgid "Helptext_FAQ_ArticleCreate_Valid"
-msgstr "Hilfetext_Admin_TextModuleCreate_Validity"
+msgstr ""
+"FAQ articles can only be used if they are set “valid”. Invalid FAQ articles "
+"can only be found with the advanced search."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleCreate_Validity"
 msgid "Helptext_FAQ_ArticleCreate_Visibility"
-msgstr "Hilfetext_Admin_TextModuleCreate_Validity"
+msgstr ""
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleEdit_Comment"
 msgid "Helptext_FAQ_ArticleEdit_Attachments"
-msgstr "Hilfetext_Admin_TextModuleEdit_Comment"
+msgstr ""
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryEdit_ParentCategory"
 msgid "Helptext_FAQ_ArticleEdit_Category"
-msgstr "Hilfetext_Admin_FAQCategoryEdit_ParentQueue"
+msgstr "Organize FAQ articles by categories to sort them by topics."
 
 #, fuzzy
 #| msgid "Helptext_Admin_TextModuleEdit_Name"
