@@ -27,7 +27,7 @@ export class JSONFormFieldValidator implements IFormFieldValidator {
 
     public async  validate(formField: FormField, formId: string): Promise<ValidationResult> {
         const formInstance = await FormService.getInstance().getFormInstance(formId);
-        const formFieldValue = formInstance.getFormFieldValue(formField.instanceId);
+        const formFieldValue = formInstance.getFormFieldValue<string>(formField.instanceId);
 
         if (formFieldValue.value === null || this.IsValidJSONString(formFieldValue.value)) {
             return new ValidationResult(ValidationSeverity.OK, '');
@@ -39,17 +39,13 @@ export class JSONFormFieldValidator implements IFormFieldValidator {
             return new ValidationResult(ValidationSeverity.ERROR, errorString);
         }
     }
-    private IsValidJSONString(json: any): boolean {
+    private IsValidJSONString(json: string): boolean {
         try {
-            if (/^[\],:{}\s]*$/.test(json.replace(/\\["\\\/bfnrtu]/g, '@').
-                replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
-                replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
-                JSON.parse(json);
-            } else {
-                return true;
-            }
+            JSON.parse(json);
         } catch (e) {
-            return false;
+            if (json.indexOf('{') !== -1 || json.indexOf('[') !== -1) {
+                return false;
+            }
         }
         return true;
     }
