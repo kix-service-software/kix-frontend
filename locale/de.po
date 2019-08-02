@@ -300,6 +300,9 @@ msgstr "Kanäle"
 msgid "Charset"
 msgstr "Zeichensatz"
 
+msgid "Choose a command"
+msgstr ""
+
 msgid "Choose CSV-File with data sets for import. Drag & Drop is possible."
 msgstr ""
 "Wählen Sie eine CSV-Datei mit zu importierenden Datensätzen. Drag & Drop ist "
@@ -424,6 +427,9 @@ msgstr "Asset-Versionsvergleich"
 
 msgid "Confirm New Password"
 msgstr "Neues Passwort bestätigen"
+
+msgid "Console"
+msgstr ""
 
 msgid "Contact"
 msgstr "Kontakt"
@@ -754,6 +760,14 @@ msgstr "Event"
 
 msgid "Events"
 msgstr "Events"
+
+#, fuzzy
+#| msgid "Execute now!"
+msgid "Execute"
+msgstr "Jetzt ausführen!"
+
+msgid "Execute console command"
+msgstr ""
 
 msgid "Execute now!"
 msgstr "Jetzt ausführen!"
@@ -2089,7 +2103,8 @@ msgid "Helptext_Tickets_TicketEdit_Type"
 msgstr "Hilfetext_Textmodules_TicketEdit"
 
 msgid "Here you will find the KIX 18 manuals for users and administrators"
-msgstr "Hier finden Sie die KIX 18 Handbücher für Anwender und Administratoren:"
+msgstr ""
+"Hier finden Sie die KIX 18 Handbücher für Anwender und Administratoren:"
 
 msgid "History"
 msgstr "Historie"
@@ -2238,7 +2253,9 @@ msgstr "Nachname"
 msgid "Legend"
 msgstr "Legende"
 
-msgid "Let´s go"
+#, fuzzy
+#| msgid "Let´s go"
+msgid "Let's go"
 msgstr "Los geht's"
 
 msgid "link {0}"

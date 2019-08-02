@@ -296,6 +296,9 @@ msgstr ""
 msgid "Charset"
 msgstr ""
 
+msgid "Choose a command"
+msgstr ""
+
 msgid "Choose CSV-File with data sets for import. Drag & Drop is possible."
 msgstr ""
 
@@ -416,6 +419,9 @@ msgid "Config Item Version Compare"
 msgstr "Asset Version Compare"
 
 msgid "Confirm New Password"
+msgstr ""
+
+msgid "Console"
 msgstr ""
 
 msgid "Contact"
@@ -750,6 +756,12 @@ msgid "Event"
 msgstr ""
 
 msgid "Events"
+msgstr ""
+
+msgid "Execute"
+msgstr ""
+
+msgid "Execute console command"
 msgstr ""
 
 msgid "Execute now!"
@@ -2167,7 +2179,9 @@ msgstr ""
 msgid "Legend"
 msgstr ""
 
-msgid "Let´s go"
+#, fuzzy
+#| msgid "Let´s go"
+msgid "Let's go"
 msgstr "Let's go"
 
 msgid "link {0}"
