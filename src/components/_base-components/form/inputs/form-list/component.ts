@@ -272,7 +272,7 @@ class Component {
                 + formListInputContainer.getBoundingClientRect().height
                 + valueList.getBoundingClientRect().height;
 
-            const containerEnd = container
+            const containerEnd = container && container.getBoundingClientRect()
                 ? container.getBoundingClientRect().top + container.getBoundingClientRect().height
                 : dropdownListEnd;
 

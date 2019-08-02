@@ -33,6 +33,10 @@ class Component {
         this.bookmarksChanged();
     }
 
+    public onDestroy(): void {
+        BookmarkService.getInstance().removeListener('bookmark-dropdown');
+    }
+
     private async bookmarksChanged(): Promise<void> {
         const availableBookmarks = [];
         const bookmarks = BookmarkService.getInstance().getBookmarks();
@@ -41,7 +45,8 @@ class Component {
                 availableBookmarks.push(new TreeNode(b, b.title, b.icon));
             }
         }
-        this.state.bookmarks = availableBookmarks.sort((a, b) => SortUtil.compareString(a, b, SortOrder.UP));
+        availableBookmarks.sort((a, b) => SortUtil.compareString(a, b, SortOrder.UP));
+        this.state.bookmarks = availableBookmarks;
     }
 
     public async nodesChanged(nodes: TreeNode[]): Promise<void> {
