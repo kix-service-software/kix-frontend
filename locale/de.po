@@ -3569,6 +3569,11 @@ msgstr "Nutzerverwaltung: Agenten"
 msgid "User Management: Roles"
 msgstr "Nutzerverwaltung: Rollen"
 
+#, fuzzy
+#| msgid "User Management"
+msgid "User manual"
+msgstr "Nutzerverwaltung"
+
 msgid "User Name"
 msgstr "Benutzername"
 

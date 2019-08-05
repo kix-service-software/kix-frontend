@@ -3494,6 +3494,9 @@ msgstr ""
 msgid "User Management: Roles"
 msgstr ""
 
+msgid "User manual"
+msgstr ""
+
 msgid "User Name"
 msgstr ""
 
