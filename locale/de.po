@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-08-05 06:38+0000\n"
+"PO-Revision-Date: 2019-08-05 06:42+0000\n"
 "Last-Translator: fuhlig <Frank.Uhlig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -301,7 +301,7 @@ msgid "Charset"
 msgstr "Zeichensatz"
 
 msgid "Choose a command"
-msgstr ""
+msgstr "Wählen Sie ein Kommando"
 
 msgid "Choose CSV-File with data sets for import. Drag & Drop is possible."
 msgstr ""
@@ -429,7 +429,7 @@ msgid "Confirm New Password"
 msgstr "Neues Passwort bestätigen"
 
 msgid "Console"
-msgstr ""
+msgstr "Konsole"
 
 msgid "Contact"
 msgstr "Kontakt"
@@ -761,13 +761,11 @@ msgstr "Event"
 msgid "Events"
 msgstr "Events"
 
-#, fuzzy
-#| msgid "Execute now!"
 msgid "Execute"
-msgstr "Jetzt ausführen!"
+msgstr "Ausführen"
 
 msgid "Execute console command"
-msgstr ""
+msgstr "Kommando ausführen"
 
 msgid "Execute now!"
 msgstr "Jetzt ausführen!"
