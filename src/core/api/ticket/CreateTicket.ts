@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { CreateArticle } from '..';
 import { RequestObject } from '../RequestObject';
 import { DynamicField, TicketProperty } from '../../model';
@@ -5,15 +14,15 @@ import { DynamicField, TicketProperty } from '../../model';
 export class CreateTicket extends RequestObject {
 
     public constructor(
-        title: string, customerUser: string, customerId: string, stateId: number, priorityId: number, queueId: number,
+        title: string, contactId: string, organisationId: string, stateId: number, priorityId: number, queueId: number,
         lockId: number, typeId: number, serviceId: number, slaId: number, ownerId: number, responsibleId: number,
         pendingTime: number, dynamicFields: DynamicField[], articles: CreateArticle[]
     ) {
         super();
 
         this.applyProperty(TicketProperty.TITLE, title);
-        this.applyProperty(TicketProperty.CUSTOMER_USER_ID, customerUser);
-        this.applyProperty(TicketProperty.CUSTOMER_ID, customerId);
+        this.applyProperty(TicketProperty.CONTACT_ID, contactId);
+        this.applyProperty(TicketProperty.ORGANISATION_ID, organisationId);
         this.applyProperty(TicketProperty.STATE_ID, stateId);
         this.applyProperty(TicketProperty.PRIORITY_ID, priorityId);
         this.applyProperty(TicketProperty.QUEUE_ID, queueId);

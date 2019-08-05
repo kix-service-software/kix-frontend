@@ -1,14 +1,23 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { OverlayService, FormService, ServiceRegistry, BrowserUtil, KIXObjectService } from '../../../../core/browser';
 import {
-    DialogService, OverlayService, FormService, ServiceRegistry, SearchOperator, KIXObjectService, BrowserUtil
-} from '../../../../core/browser';
-import {
-    ComponentContent, OverlayType, StringContent, TreeNode, ValidationResult,
-    ValidationSeverity, ConfigItemClass, KIXObjectType, ContextMode, ToastContent, KIXObjectLoadingOptions,
-    FilterCriteria, ConfigItemClassProperty, FilterDataType, FilterType, ConfigItemProperty, Error
+    ComponentContent, OverlayType, TreeNode, ValidationResult,
+    ValidationSeverity, ConfigItemClass, KIXObjectType, ContextMode, ConfigItemProperty, Error,
+    KIXObjectLoadingOptions, ConfigItemClassProperty
 } from '../../../../core/model';
 import { ComponentState } from './ComponentState';
 import { CMDBService, ConfigItemDetailsContext, ConfigItemFormFactory } from '../../../../core/browser/cmdb';
 import { RoutingService, RoutingConfiguration } from '../../../../core/browser/router';
+import { DialogService } from '../../../../core/browser/components/dialog';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component {
 
@@ -19,20 +28,16 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const configItemClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
-            KIXObjectType.CONFIG_ITEM_CLASS, null,
-            new KIXObjectLoadingOptions(null, [
-                new FilterCriteria(
-                    ConfigItemClassProperty.CURRENT_DEFINITION, SearchOperator.NOT_EQUALS,
-                    FilterDataType.STRING, FilterType.AND, null
-                )], null, null, null,
-                ['CurrentDefinition,Definitions']),
-            null, false
-        );
 
-        this.state.classNodes = configItemClasses.map(
-            (ci) => new TreeNode(ci, ci.Name)
-        );
+        this.state.translations = await TranslationService.createTranslationObject([
+            'Translatable#Cancel', 'Translatable#Config Item Class', 'Translatable#Save'
+        ]);
+
+        this.state.placeholder = await TranslationService.translate('Translatable#Select Config Item Class');
+        this.state.classNodes = await CMDBService.getInstance().getTreeNodes(ConfigItemProperty.CLASS_ID);
+
+        const hint = await TranslationService.translate('Translatable#Helptext_CMDB_COnfigItemCreate_Class');
+        this.state.hint = hint.startsWith('Helptext_') ? null : hint;
     }
 
     public async onDestroy(): Promise<void> {
@@ -49,10 +54,12 @@ class Component {
         this.state.currentClassNode = nodes && nodes.length ? nodes[0] : null;
         FormService.getInstance().deleteFormInstance(this.state.formId);
         this.state.formId = null;
-        let formId;
+        let formId: string;
         if (this.state.currentClassNode) {
-            const ciClass = this.state.currentClassNode.id as ConfigItemClass;
-            formId = ConfigItemFormFactory.getInstance().getFormId(ciClass);
+            const ciClass = await this.getCIClass(this.state.currentClassNode.id);
+            if (ciClass) {
+                formId = ConfigItemFormFactory.getInstance().getFormId(ciClass);
+            }
         } else {
             formId = null;
         }
@@ -73,18 +80,18 @@ class Component {
             if (validationError) {
                 this.showValidationError(result);
             } else {
-                DialogService.getInstance().setMainDialogLoading(true, 'Config Item wird angelegt');
+                DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Create Config Item');
                 const cmdbService
                     = ServiceRegistry.getServiceInstance<CMDBService>(KIXObjectType.CONFIG_ITEM);
 
-                const ciClass = this.state.currentClassNode.id as ConfigItemClass;
+                const ciClass = await this.getCIClass(this.state.currentClassNode.id);
                 await cmdbService.createConfigItem(this.state.formId, ciClass.ID)
                     .then((configItemId) => {
                         DialogService.getInstance().setMainDialogLoading(false);
-                        BrowserUtil.openSuccessOverlay('Config Item wurde erfolgreich angelegt.');
+                        BrowserUtil.openSuccessOverlay('Translatable#Config Item successfully created.');
                         DialogService.getInstance().submitMainDialog();
                         const routingConfiguration = new RoutingConfiguration(
-                            null, ConfigItemDetailsContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM,
+                            ConfigItemDetailsContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM,
                             ContextMode.DETAILS, ConfigItemProperty.CONFIG_ITEM_ID, true
                         );
                         RoutingService.getInstance().routeToContext(routingConfiguration, configItemId);
@@ -96,17 +103,28 @@ class Component {
         }
     }
 
+    private async getCIClass(classId: string): Promise<ConfigItemClass> {
+        const classes = await KIXObjectService.loadObjects<ConfigItemClass>(
+            KIXObjectType.CONFIG_ITEM_CLASS, [classId],
+            new KIXObjectLoadingOptions(
+                null, 'ConfigItemClass.Name', null, [ConfigItemClassProperty.CURRENT_DEFINITION]
+            )
+        );
+
+        return classes && classes.length ? classes[0] : null;
+    }
+
     private showValidationError(result: ValidationResult[]): void {
         const errorMessages = result.filter((r) => r.severity === ValidationSeverity.ERROR).map((r) => r.message);
         const content = new ComponentContent('list-with-title',
             {
-                title: 'Fehler beim Validieren des Formulars:',
+                title: 'Translatable#Error on form validation:',
                 list: errorMessages
             }
         );
 
         OverlayService.getInstance().openOverlay(
-            OverlayType.WARNING, null, content, 'Validierungsfehler', true
+            OverlayType.WARNING, null, content, 'Translatable#Validation error', true
         );
     }
 

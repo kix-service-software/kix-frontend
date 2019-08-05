@@ -1,20 +1,40 @@
+<!--
+Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
 <if(state.show)>
     <div.main-dialog-container>
         <div.shield/>
         <div.main-dialog>
-            <widget key="main-dialog-tab-container-widget" isDialog=true title=state.dialogTitle minimizable=false
-                icon=state.dialogIcon>
-                <@content>
-                    <tab-container key="main-dialog-tab-container" tabWidgets=state.dialogWidgets tabId=state.dialogId minimizable=false
-                        contextType="DIALOG" on-tabChanged('tabChanged')/>
-                    <kix-footer leftText=state.dialogHint/>
-                </@content>
-            </widget>
+            <div no-update>
+                <widget
+                    key="main-dialog-tab-container-widget"
+                    isDialog=true
+                    title=component.dialogTitle
+                    minimizable=false
+                    icon=component.dialogIcon>
+                    <@content>
+                        <tab-container
+                            key="main-dialog-tab-container"
+                            tabWidgets=component.dialogWidgets
+                            tabId=component.dialogId
+                            minimizable=false
+                            contextType="DIALOG"
+                            on-tabChanged("tabChanged")/>
+                        <kix-footer leftText=state.dialogHint/>
+                    </@content>
+                </widget>
+            </div>
             <if(state.isLoading)>
                 <loading-shield loadingHint=state.loadingHint cancelCallback=state.cancelCallback time=state.time/>
             </if>
             <if(!state.isLoading || state.showClose)>
-                <span.kix-icon-close.close-button on-click('close', {byX: true})/>
+                <span.kix-icon-close.close-button on-click("close", { byX: true })/>
             </if>
         </div>
     </div>

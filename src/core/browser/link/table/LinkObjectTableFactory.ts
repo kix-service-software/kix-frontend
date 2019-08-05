@@ -1,11 +1,21 @@
-import { KIXObjectType, LinkObject, LinkObjectProperty } from "../../../model";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { KIXObjectType, LinkObjectProperty } from "../../../model";
 import {
-    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
+    TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../table";
 import { LinkObjectTableContentProvider } from "./LinkObjectTableContentProvider";
+import { TableFactory } from "../../table/TableFactory";
 
-export class LinkObjectTableFactory implements ITableFactory {
+export class LinkObjectTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.LINK_OBJECT;
 
@@ -41,7 +51,7 @@ export class LinkObjectTableFactory implements ITableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(KIXObjectType.LINK_OBJECT,
-                null, 10, tableColumns, null, true, false, null,
+                null, 10, tableColumns,  true, false, null,
                 null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             );
         } else if (!tableConfiguration.tableColumns) {

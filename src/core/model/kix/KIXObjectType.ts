@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 export enum KIXObjectType {
 
     ANY = 'ANY',
@@ -7,6 +16,8 @@ export enum KIXObjectType {
     ARTICLE_TYPE = 'ARTICLE_TYPE',
 
     CHANNEL = 'Channel',
+
+    CONSOLE_COMMAND = 'ConsoleCommand',
 
     SENDER_TYPE = 'SENDER_TYPE',
 
@@ -18,9 +29,9 @@ export enum KIXObjectType {
 
     CONFIG_ITEM_VERSION = 'ConfigItemVersion',
 
-    CONFIG_ITEM_CLASS = 'ConfigItemClass',
+    CONFIG_ITEM_CLASS = 'Class',
 
-    CONFIG_ITEM_CLASS_DEFINITION = 'ConfigItemClassDefinition',
+    CONFIG_ITEM_CLASS_DEFINITION = 'Definition',
 
     CONFIG_ITEM_IMAGE = 'CONFIG_ITEM_IMAGE',
 
@@ -34,21 +45,23 @@ export enum KIXObjectType {
 
     CURRENT_USER = 'CURRENT_USER',
 
-    CUSTOMER = 'Customer',
+    ORGANISATION = 'Organisation',
 
     DYNAMIC_FIELD = 'DynamicField',
 
     FAQ_ARTICLE = 'FAQArticle',
 
-    FAQ_ARTICLE_ATTACHMENT = 'FAQ_ARTICLE_ATTACHMENT',
+    FAQ_ARTICLE_ATTACHMENT = 'Attachment',
 
-    FAQ_ARTICLE_HISTORY = 'FAQ_ARTICLE_HISTORY',
+    FAQ_ARTICLE_HISTORY = 'FAQHistory',
 
-    FAQ_CATEGORY = 'FAQ_CATEGORY',
+    FAQ_CATEGORY = 'FAQCategory',
 
-    FAQ_CATEGORY_HIERARCHY = 'FAQ_CATEGORY_HIERARCHY',
+    FAQ_VOTE = 'FAQVote',
 
-    FAQ_VOTE = 'FAQ_VOTE',
+    FAQ_VISIBILITY = 'FAQVisibility',
+
+    FAQ_KEYWORD = 'FAQKeyword',
 
     GENERAL_CATALOG_ITEM = 'GeneralCatalogItem',
 
@@ -58,19 +71,37 @@ export enum KIXObjectType {
 
     LINK_TYPE = 'LINK_TYPE',
 
+    LOG_FILE = 'LogFile',
+
+    MAIL_ACCOUNT = 'MailAccount',
+
+    MAIL_ACCOUNT_TYPE = 'MailAccountType',
+
+    MAIL_FILTER = 'MailFilter',
+
+    MAIL_FILTER_MATCH = 'MAIL_FILTER_MATCH',
+
+    MAIL_FILTER_SET = 'MAIL_FILTER_SET',
+
+    NOTIFICATION = 'Notification',
+
+    NOTIFICATION_FILTER = 'NOTIFICATION_FILTER',
+
     OBJECT_ICON = 'OBJECT_ICON',
 
     OBJECT_DEFINITION = 'ObjectDefinition',
 
     QUEUE = 'Queue',
 
-    QUEUE_HIERARCHY = 'QUEUE_HIERARCHY',
+    ROLE = 'Role',
 
     SERVICE = 'Service',
 
     SLA = 'SLA',
 
-    SYS_CONFIG_ITEM = 'SysConfigItem',
+    SYS_CONFIG_OPTION = 'SysConfigOption',
+
+    SYS_CONFIG_OPTION_DEFINITION = 'SysConfigOptionDefinition',
 
     SYSTEM_ADDRESS = 'SystemAddress',
 
@@ -78,27 +109,43 @@ export enum KIXObjectType {
 
     TICKET = 'Ticket',
 
-    TICKET_HISTORY = 'TICKET_HISTORY',
+    TICKET_HISTORY = 'History',
 
-    TICKET_PRIORITY = 'TICKET_PRIORITY',
+    TICKET_PRIORITY = 'Priority',
 
-    TICKET_TYPE = 'TICKET_TYPE',
+    TICKET_TYPE = 'TicketType',
 
-    TICKET_STATE = 'TICKET_STATE',
+    TICKET_STATE = 'TicketState',
 
-    TICKET_STATE_TYPE = 'TICKET_STATE_TYPE',
+    TICKET_STATE_TYPE = 'StateType',
+
+    TICKET_TEMPLATE = 'TICKET_TEMPLATE',
 
     TRANSLATION = 'Translation',
+
+    TRANSLATION_PATTERN = 'TranslationPattern',
 
     TRANSLATION_LANGUAGE = 'TranslationLanguage',
 
     USER = 'User',
 
-    USER_PREFERENCE = 'USER_PREFERENCE',
+    USER_PREFERENCE = 'UserPreference',
 
     VALID_OBJECT = 'ValidObject',
 
     WATCHER = 'Watcher',
 
-    PERSONAL_SETTINGS = 'PERSONAL_SETTINGS'
+    PERSONAL_SETTINGS = 'PERSONAL_SETTINGS',
+
+    IMPORT_OBJECT = 'IMPORT_OBJECT',
+
+    PERMISSION = 'Permission',
+
+    PERMISSION_TYPE = 'PermissionType',
+
+    PERMISSION_DEPENDING_OBJECTS = 'PERMISSION_DEPENDING_OBJECTS',
+
+    ROLE_PERMISSION = 'ROLE_PERMISSION',
+
+    FOLLOW_UP_TYPE = 'FollowUpType'
 }

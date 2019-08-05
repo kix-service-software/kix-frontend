@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     AbstractAction, ComponentContent, ConfirmOverlayContent,
     OverlayType, KIXObjectType, ToastContent
@@ -7,11 +16,14 @@ import { EventService } from "../../../../event";
 import { KIXObjectService } from "../../../../kix";
 import { ApplicationEvent } from "../../../../application";
 import { ITable } from "../../../../table";
+import { TranslationService } from "../../../../i18n/TranslationService";
 
 export class TicketPriorityTableDeleteAction extends AbstractAction<ITable> {
 
-    public initAction(): void {
-        this.text = "Löschen";
+    public hasLink: boolean = false;
+
+    public async initAction(): Promise<void> {
+        this.text = 'Translatable#Delete';
         this.icon = "kix-icon-trash";
     }
 
@@ -24,22 +36,21 @@ export class TicketPriorityTableDeleteAction extends AbstractAction<ITable> {
         return canRun;
     }
 
-    public run(): void {
+    public async run(): Promise<void> {
         if (this.canRun()) {
             const selectedRows = this.data.getSelectedRows();
+            const question = await TranslationService.translate(
+                'Translatable#The following {0} entries will be deleted. Are you sure?', [selectedRows.length]
+            );
             const content = new ComponentContent(
-                'confirm-overlay',
-                new ConfirmOverlayContent(
-                    `Die ausgewählten ${selectedRows.length} Einträge werden gelöscht. Sind Sie sicher?`,
-                    this.deletePriorities.bind(this)
-                )
+                'confirm-overlay', new ConfirmOverlayContent(question, this.deletePriorities.bind(this))
             );
 
             OverlayService.getInstance().openOverlay(
                 OverlayType.CONFIRM,
                 null,
                 content,
-                'Prioritäten entfernen',
+                'Translatable#Remove Priorities',
                 false
             );
         }
@@ -49,7 +60,7 @@ export class TicketPriorityTableDeleteAction extends AbstractAction<ITable> {
         const selectedRows = this.data.getSelectedRows();
         if (selectedRows && !!selectedRows.length) {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Entferne Prioritäten ...'
+                loading: true, hint: 'Translatable#Remove Priorities'
             });
             const failIds = await KIXObjectService.deleteObject(
                 KIXObjectType.TICKET_PRIORITY, selectedRows.map((sR) => sR.getRowObject().getObject().ObjectId)
@@ -60,7 +71,7 @@ export class TicketPriorityTableDeleteAction extends AbstractAction<ITable> {
             if (!failIds || !!!failIds.length) {
                 const content = new ComponentContent(
                     'toast',
-                    new ToastContent('kix-icon-check', 'Prioritäten wurden entfernt.')
+                    new ToastContent('kix-icon-check', 'Translatable#Priorities successfully removed.')
                 );
                 OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
             }

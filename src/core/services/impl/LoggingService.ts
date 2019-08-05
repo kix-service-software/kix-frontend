@@ -1,5 +1,13 @@
-import { validate, required } from '../../decorators';
-import { LogLevel, IServerConfiguration } from '../../common';
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { LogLevel, IServerConfiguration, AppUtil } from '../../common';
 import winston = require('winston');
 import path = require('path');
 import fs = require('fs');
@@ -29,7 +37,7 @@ export class LoggingService {
         this.trace = serverConfig.LOG_TRACE || true;
 
         // do not log in test mode
-        if (!ConfigurationService.getInstance().isTestMode()) {
+        if (!AppUtil.isTestMode()) {
             const logDirectory = this.createLogDirectory(serverConfig);
             try {
                 this.createLogger(logDirectory);
@@ -41,52 +49,50 @@ export class LoggingService {
 
     }
 
-    public initCache(): Promise<void> {
-        return;
-    }
-
-    @validate
-    public error(@required message: string, meta?: any): void {
-        if (this.checkLogLevel(LogLevel.ERROR) && this.kixLogger) {
-
-            // get stack trace
-            const winstonMeta = { ...meta };
-            if (this.trace) {
-                winstonMeta.stackTrace = this.getStackTrace();
+    public error(message: string, meta?: any): void {
+        if (this.checkLogLevel(LogLevel.ERROR)) {
+            if (this.kixLogger) {
+                const winstonMeta = { ...meta };
+                if (this.trace) {
+                    winstonMeta.stackTrace = this.getStackTrace();
+                }
+                this.kixLogger.error(message, winstonMeta);
+            } else {
+                console.error(message);
             }
-            this.kixLogger.error(message, winstonMeta);
-        } else {
-            console.error(message);
         }
     }
 
-    @validate
-    public warning(@required message: string, meta?: any): void {
-        if (this.checkLogLevel(LogLevel.WARNING) && this.kixLogger) {
-            const winstonMeta = { ...meta };
-            this.kixLogger.warn(message, winstonMeta);
-        } else {
-            console.warn(message);
+    public warning(message: string, meta?: any): void {
+        if (this.checkLogLevel(LogLevel.WARNING)) {
+            if (this.kixLogger) {
+                const winstonMeta = { ...meta };
+                this.kixLogger.warn(message, winstonMeta);
+            } else {
+                console.warn(message);
+            }
         }
     }
 
-    @validate
-    public info(@required message: string, meta?: any): void {
-        if (this.checkLogLevel(LogLevel.INFO) && this.kixLogger) {
-            const winstonMeta = { ...meta };
-            this.kixLogger.info(message, winstonMeta);
-        } else {
-            console.log(message);
+    public info(message: string, meta?: any): void {
+        if (this.checkLogLevel(LogLevel.INFO)) {
+            if (this.kixLogger) {
+                const winstonMeta = { ...meta };
+                this.kixLogger.info(message, winstonMeta);
+            } else {
+                console.log(message);
+            }
         }
     }
 
-    @validate
-    public debug(@required message: string, meta?: any): void {
-        if (this.checkLogLevel(LogLevel.DEBUG) && this.kixLogger) {
-            const winstonMeta = { ...meta };
-            this.kixLogger.debug(message, winstonMeta);
-        } else {
-            console.log(message);
+    public debug(message: string, meta?: any): void {
+        if (this.checkLogLevel(LogLevel.DEBUG)) {
+            if (this.kixLogger) {
+                const winstonMeta = { ...meta };
+                this.kixLogger.debug(message, winstonMeta);
+            } else {
+                console.log(message);
+            }
         }
     }
 
@@ -141,8 +147,7 @@ export class LoggingService {
                                 timestamp, level, message, ...args
                             } = info;
 
-                            return `${timestamp} - ${level}: ${message} ` +
-                                `${Object.keys(args).length ? JSON.stringify(args, null, 2) : ''}`;
+                            return `${timestamp} - ${level}: ${message}`;
                         }),
                     )
                 }),

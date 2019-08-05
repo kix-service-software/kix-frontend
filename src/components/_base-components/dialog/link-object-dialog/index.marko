@@ -1,11 +1,24 @@
+<!--
+Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
 <div.linkable-objects-dialog>
-    <if(state.loading || !state.linkableObjectNodes || !state.linkableObjectNodes.length)>
-        <span>Keine Linktypen verfügbar.</span>
+    <if(state.loading)>
+        <loading-spinner/>
     </if>
+    <else-if(!state.linkableObjectNodes || !state.linkableObjectNodes.length)>
+        <translation-string pattern="Translatable#No link types available."/>
+    </else-if>
     <else>
-        <div.linkable-objects-selection title="Verknüpfen mit">
+        <div.linkable-objects-selection title=state.translations["Translatable#Link to"]>
             <div.linkable-objects-selection-label>
-                <span>Verknüpfen mit</span>
+                <span>
+                    <translation-string pattern="Translatable#Link to"/>
+                </span>
             </div>
             <form-list
                 nodes=state.linkableObjectNodes
@@ -13,7 +26,10 @@
                 selectedNodes=[state.currentLinkableObjectNode]/>
         </div>
         <div.linkable-objects-form on-keydown("keyPressed")>
-            <widget instanceId="link-object-dialog-form-widget" title="Suche" key="link-object-form-widget">
+            <widget
+                instanceId="link-object-dialog-form-widget"
+                title=state.translations["Translatable#Search"]
+                key="link-object-form-widget">
                 <@content>
                     <if(state.formId)>
                         <main-form formId=state.formId key="link-object-form-widget-form"/>
@@ -25,7 +41,9 @@
         <div.linkable-objects-result>
             <if(state.currentLinkableObjectNode)>
                 <div.result-table-head>
-                    <span>Trefferliste (${state.resultCount})</span>
+                    <span>
+                        <translation-string pattern="Translatable#Hit List ({0})" placeholders=[state.resultCount]/>
+                    </span>
                     <filter filterCount=state.filterCount on-filter("filter")/>
                 </div>
                 <if(state.table)>
@@ -36,17 +54,19 @@
         <div.linkable-objects-submit>
             <div.linkable-objects-link-type-selection>
                 <div.linkable-objects-selection-label>
-                    <span>Art der Verknüpfung</span>
+                    <span>
+                        <translation-string pattern="Translatable#Link Type"/>
+                    </span>
                 </div>
                 <form-list
                     nodes=state.linkTypeNodes
                     on-nodesChanged("linkTypeChanged")
                     selectedNodes=[state.currentLinkTypeNode]
-                    placeholder="Art der Verknüpfung"/>
+                    placeholder="Translatable#Link Type"/>
             </div>
             <button.submit-button disabled=!state.canSubmit on-click("submitClicked")>
                 <span.kix-icon-check/>
-                Übernehmen
+                <translation-string pattern="Translatable#Submit"/>
             </button>
         </div>
     </else>

@@ -1,8 +1,16 @@
-import { Context } from "../../../../../model/components/context/Context";
-import { WidgetConfiguration, WidgetType, ContextDescriptor } from "../../../../../model";
-import { NewConfigItemClassDialogContextConfiguration } from "./NewConfigItemClassDialogContextConfiguration";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
 
-export class NewConfigItemClassDialogContext extends Context<NewConfigItemClassDialogContextConfiguration> {
+import { Context } from "../../../../../model/components/context/Context";
+import { ContextDescriptor, ContextConfiguration } from "../../../../../model";
+
+export class NewConfigItemClassDialogContext extends Context {
 
     public static CONTEXT_ID: string = 'new-config-item-class-dialog-context';
     public formListenerId: string;
@@ -10,17 +18,9 @@ export class NewConfigItemClassDialogContext extends Context<NewConfigItemClassD
     public constructor(
         descriptor: ContextDescriptor,
         objectId: string | number = null,
-        configuration: NewConfigItemClassDialogContextConfiguration = null
+        configuration: ContextConfiguration = null
     ) {
         super(descriptor, objectId, configuration);
     }
 
-
-    protected getSpecificWidgetConfiguration<WS = any>(instanceId: string): WidgetConfiguration<WS> {
-        return undefined;
-    }
-
-    protected getSpecificWidgetType(instanceId: string): WidgetType {
-        return undefined;
-    }
 }

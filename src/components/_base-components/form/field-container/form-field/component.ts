@@ -1,7 +1,17 @@
-import { ComponentsService } from "../../../../../core/browser/components";
-import { ComponentState } from "./ComponentState";
-import { FormService, IdService } from "../../../../../core/browser";
-import { FormField } from "../../../../../core/model";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { ComponentState } from './ComponentState';
+import { FormService, IdService } from '../../../../../core/browser';
+import { FormField } from '../../../../../core/model';
+import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
+import { KIXModulesService } from '../../../../../core/browser/modules';
 
 class Component {
 
@@ -14,11 +24,23 @@ class Component {
 
     public onInput(input: any): void {
         this.state.field = input.field;
+
         this.state.formId = input.formId;
         this.state.level = typeof input.level !== 'undefined' ? input.level : 0;
         if (this.state.level > 14) {
             this.state.level = 14;
         }
+
+        this.update();
+    }
+
+    private async update(): Promise<void> {
+        this.state.translations = await TranslationService.createTranslationObject([this.state.field.label]);
+        const hint = await TranslationService.translate(this.state.field.hint);
+        this.state.hint = hint
+            ? (hint.startsWith('Helptext_') ? null : hint)
+            : null;
+        this.state.show = true;
     }
 
     public async onMount(): Promise<void> {
@@ -32,6 +54,7 @@ class Component {
                 }
             }
         });
+        this.update();
     }
 
     public async onDestroy(): Promise<void> {
@@ -55,7 +78,7 @@ class Component {
 
     public getInputComponent(): any {
         const componentId = this.state.field.inputComponent ? this.state.field.inputComponent : 'default-text-input';
-        return ComponentsService.getInstance().getComponentTemplate(componentId);
+        return KIXModulesService.getComponentTemplate(componentId);
     }
 
     public minimize(): void {
@@ -67,14 +90,14 @@ class Component {
     }
 
     public getPaddingLeft(): string {
-        return (this.state.level * 2) + "rem";
+        return (this.state.level * 2) + 'rem';
     }
 
     public getPaddingRight(): string {
         if (this.state.level > 1) {
-            return "1.75rem";
+            return '1.75rem';
         } else {
-            return "0";
+            return '0';
         }
     }
 

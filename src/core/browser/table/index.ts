@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 export { ITable } from './ITable';
 export { Table } from './Table';
 export { IRow } from './IRow';
@@ -23,4 +32,5 @@ export { TableEventData } from './TableEventData';
 export { ValueState } from './ValueState';
 export { TableValue } from './TableValue';
 export { ITableCSSHandler } from './ITableCSSHandler';
-export { TableCSSHandlerRegsitry } from './TableCSSHandlerRegsitry';
+export { TableCSSHandlerRegistry } from './TableCSSHandlerRegistry';
+export { TableExportUtil } from './TableExportUtil';

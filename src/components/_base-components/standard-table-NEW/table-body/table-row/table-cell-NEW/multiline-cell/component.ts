@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../../../core/browser';
 
@@ -7,8 +16,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state = new ComponentState();
     }
 
-    public async onInput(input: any): Promise<void> {
+    public onInput(input: any): void {
         this.state.cell = input.cell;
+        this.update();
+    }
+
+    private async update(): Promise<void> {
         if (this.state.cell) {
             const value = await this.state.cell.getDisplayValue();
             this.state.text = value;

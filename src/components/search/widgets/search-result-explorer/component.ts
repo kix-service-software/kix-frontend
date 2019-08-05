@@ -1,14 +1,19 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import {
-    ContextService,
-    IdService,
-    IKIXObjectSearchListener,
-    KIXObjectSearchService,
-    SearchResultCategory,
-    ServiceRegistry,
-    IKIXObjectService
+    ContextService, IdService, IKIXObjectSearchListener, SearchResultCategory, ServiceRegistry, IKIXObjectService
 } from '../../../../core/browser';
 import { TreeNode, KIXObjectType } from '../../../../core/model';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
+import { SearchService } from '../../../../core/browser/kix/search/SearchService';
 
 export class Component implements IKIXObjectSearchListener {
 
@@ -27,19 +32,19 @@ export class Component implements IKIXObjectSearchListener {
     }
 
     public async onMount(): Promise<void> {
-        KIXObjectSearchService.getInstance().registerListener(this);
+        SearchService.getInstance().registerListener(this);
         const context = ContextService.getInstance().getActiveContext(this.state.contextType);
         this.state.contextId = context.getDescriptor().contextId;
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
         this.prepareTree();
-        const activeCategory = KIXObjectSearchService.getInstance().getActiveSearchResultExplorerCategory();
+        const activeCategory = SearchService.getInstance().getActiveSearchResultExplorerCategory();
         if (activeCategory) {
             this.state.activeNode = this.getActiveNode(activeCategory.objectType);
         }
     }
 
     public searchCleared(): void {
-        KIXObjectSearchService.getInstance().setActiveSearchResultExplorerCategory(null);
+        SearchService.getInstance().setActiveSearchResultExplorerCategory(null);
         this.state.nodes = null;
     }
 
@@ -53,30 +58,33 @@ export class Component implements IKIXObjectSearchListener {
     }
 
     private async prepareTree(): Promise<void> {
-        this.rootCategory = await KIXObjectSearchService.getInstance().getSearchResultCategories();
-        this.state.nodes = this.rootCategory ?
-            this.prepareTreeNodes([this.rootCategory], true) : [];
+        this.rootCategory = await SearchService.getInstance().getSearchResultCategories();
+        this.state.nodes = this.rootCategory ? await this.prepareTreeNodes([this.rootCategory], true) : [];
     }
 
-    private prepareTreeNodes(categories: SearchResultCategory[], isRoot: boolean = false): TreeNode[] {
-        let nodes: TreeNode[] = [];
-        const searchCache = KIXObjectSearchService.getInstance().getSearchCache();
+    private async prepareTreeNodes(categories: SearchResultCategory[], isRoot: boolean = false): Promise<TreeNode[]> {
+        const nodes: TreeNode[] = [];
+        const searchCache = SearchService.getInstance().getSearchCache();
         if (searchCache && categories) {
             const objectService
                 = ServiceRegistry.getServiceInstance<IKIXObjectService>(searchCache.objectType);
             if (objectService) {
-                nodes = categories.map((category: SearchResultCategory) => {
+                for (const category of categories) {
                     category.objectIds = objectService.determineDependendObjects(
                         searchCache.result, category.objectType
                     ) || [];
-                    return new TreeNode(
+
+                    const label = await TranslationService.translate(category.label);
+                    const children = await this.prepareTreeNodes(category.children);
+
+                    nodes.push(new TreeNode(
                         category.objectType,
-                        category.label + ` (${isRoot ? searchCache.result.length : category.objectIds.length})`,
+                        label + ` (${isRoot ? searchCache.result.length : category.objectIds.length})`,
                         null, null,
-                        this.prepareTreeNodes(category.children),
+                        children,
                         null, null, null, null, isRoot
-                    );
-                });
+                    ));
+                }
             }
         }
         return nodes;
@@ -86,9 +94,9 @@ export class Component implements IKIXObjectSearchListener {
         this.state.activeNode = node;
         if (this.state.activeNode) {
             const newActiveCategory = this.getActiveCategory(this.state.activeNode.id);
-            const activeCategory = KIXObjectSearchService.getInstance().getActiveSearchResultExplorerCategory();
+            const activeCategory = SearchService.getInstance().getActiveSearchResultExplorerCategory();
             if (!activeCategory || newActiveCategory.label !== activeCategory.label) {
-                KIXObjectSearchService.getInstance().setActiveSearchResultExplorerCategory(newActiveCategory);
+                SearchService.getInstance().setActiveSearchResultExplorerCategory(newActiveCategory);
             }
         }
     }

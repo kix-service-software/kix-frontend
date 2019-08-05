@@ -1,7 +1,18 @@
-import { IWidget, WidgetConfiguration } from '../..';
-import { ContextType } from '../context';
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
 
-export abstract class WidgetComponentState<T = any> {
+import { WidgetConfiguration } from '../..';
+import { ContextType } from '../context';
+import { AbstractComponentState } from '../../../browser/components/AbstractComponentState';
+import { ObjectIcon } from '../../kix';
+
+export abstract class WidgetComponentState<T = any> extends AbstractComponentState {
 
     public constructor(
         public widgetConfiguration: WidgetConfiguration<T> = null,
@@ -12,7 +23,10 @@ export abstract class WidgetComponentState<T = any> {
         public explorer: boolean = false,
         public minimized: boolean = false,
         public minimizable: boolean = true,
-        public closable: boolean = false
-    ) { }
+        public closable: boolean = false,
+        public icon: string | ObjectIcon = null
+    ) {
+        super();
+    }
 
 }

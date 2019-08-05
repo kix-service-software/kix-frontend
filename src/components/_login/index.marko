@@ -1,3 +1,11 @@
+<!--
+Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
 <div class="login-wrapper">
     <div class="login-page clearfix">
         <div class="login-background"/>
@@ -8,44 +16,53 @@
             <div class="login-dialog">
                 <div class="dialog-header">
                     <div#kix-logo>
-                        <img alt="kix-logo" src="static/img/kix-logo.png"/>
+                        <img alt="kix-logo" src="/static/img/kixpro-logo.png"/>
                     </div>
-                    <h1>Willkommen bei KIX</h1>
+                    <h1>${component.getString("Welcome to KIX")}</h1>
                 </div>
-                <if(state.error || state.logout)>
+                <if(state.error || state.logout || state.unsupportedBrowser)>
                     <div class="dialog-message-area">
+                        <if(state.unsupportedBrowser)>
+                            <div class="message message-hint">
+                                ${component.getString(
+                                "Note: For optimal use of KIX, we recommend alternative browsers such as Chromium or Firefox."
+                                )}
+                            </div>
+                        </if>
                         <if(state.error)>
                             <div class="message message-error">
                                 <span.kix-icon-warnsign/>
-                                Login fehlgeschlagen
+                                ${component.getString("Login failed")}
                             </div>
                         </if>
                         <else-if(state.logout)>
                             <div class="message message-success">
                                 <span.kix-icon-icircle/>
-                                Sie haben sich erfolgreich abgemeldet.
+                                ${component.getString("You have successfully logged out.")}
                             </div>
                         </else-if>
                     </div>
                 </if>
-                <div class="dialog-content" on-keydown('keyDown')>
+                <div class="dialog-content" on-keydown("keyDown")>
                     <label>
-                        <span>Benutzername:</span>
+                        <span>${component.getString("Login Name")}:</span>
                         <input.input-style type="text" name="username" tabindex="1" key="login-user-name"/>
                     </label>
                     <label>
-                        <span>Passwort:</span>
+                        <span>${component.getString("Password")}:</span>
                         <input.input-style type="password" name="password" tabindex="2" key="login-user-password"/>
                     </label>
                     <div class="dialog-buttons">
-                        <button.special-button type="button" on-click('login') tabindex="3">
+                        <button.special-button type="button" on-click("login") tabindex="3">
                             <span.kix-icon-check/>
-                            Anmelden
+                            ${component.getString("Login")}
                         </button>
                     </div>
                 </div>
             </div>
         </else>
-        <kix-footer releaseInfo=state.releaseInfo/>
+        <if(input.releaseInfo)>
+            <login-footer releaseInfo=input.releaseInfo imprintLink=input.imprintLink unauthorized=true/>
+        </if>
     </div>
 </div>

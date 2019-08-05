@@ -1,8 +1,15 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import { TicketService } from '../../../core/browser/ticket';
-import { Article, KIXObjectType, KIXObjectLoadingOptions } from '../../../core/model';
-import { KIXObjectService } from "../../../core/browser";
-import { InlineContent } from '../../../core/browser/components';
+import { Article } from '../../../core/model';
 
 class Component {
 
@@ -16,36 +23,17 @@ class Component {
 
     public onInput(input: any): void {
         this.article = input.article;
+    }
+
+    public onMount(): void {
         this.prepareContent();
     }
 
-
     public async prepareContent(): Promise<void> {
         if (this.article) {
-            if (this.article.bodyAttachment) {
-                const AttachmentWithContent = await TicketService.getInstance().loadArticleAttachment(
-                    this.article.TicketID, this.article.ArticleID, this.article.bodyAttachment.ID
-                );
-
-                const inlineAttachments = this.article.Attachments.filter((a) => a.Disposition === 'inline');
-                for (const inlineAttachment of inlineAttachments) {
-                    const attachment = await TicketService.getInstance().loadArticleAttachment(
-                        this.article.TicketID, this.article.ArticleID, inlineAttachment.ID
-                    );
-                    if (attachment) {
-                        inlineAttachment.Content = attachment.Content;
-                    }
-                }
-
-                const inlineContent: InlineContent[] = [];
-                inlineAttachments.forEach(
-                    (a) => inlineContent.push(new InlineContent(a.ContentID, a.Content, a.ContentType))
-                );
-                this.state.inlineContent = inlineContent;
-                this.state.content = new Buffer(AttachmentWithContent.Content, 'base64').toString('utf8');
-            } else {
-                this.state.content = this.article.Body;
-            }
+            const prepareContent = await TicketService.getInstance().getPreparedArticleBodyContent(this.article);
+            this.state.inlineContent = prepareContent[1];
+            this.state.content = prepareContent[0];
         }
     }
 }

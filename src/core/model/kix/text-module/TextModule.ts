@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObject } from "../KIXObject";
 import { KIXObjectType } from "../KIXObjectType";
 
@@ -21,24 +30,6 @@ export class TextModule extends KIXObject<TextModule> {
 
     public Language: string;
 
-    public Category: string;
-
-    public AgentFrontend: number;
-
-    public CustomerFrontend: number;
-
-    public PublicFrontend: number;
-
-    public ValidID: number;
-
-    public CreatedBy: number;
-
-    public CreateTime: string;
-
-    public ChangedBy: number;
-
-    public ChangeTime: string;
-
     public equals(textModule: TextModule): boolean {
         return this.ID === textModule.ID;
     }
@@ -54,11 +45,11 @@ export class TextModule extends KIXObject<TextModule> {
             this.Comment = textModule.Comment;
             this.Subject = textModule.Subject;
             this.Language = textModule.Language;
-            this.Category = textModule.Category;
-            this.AgentFrontend = textModule.AgentFrontend;
-            this.CustomerFrontend = textModule.CustomerFrontend;
-            this.PublicFrontend = textModule.PublicFrontend;
             this.ValidID = textModule.ValidID;
+            this.CreateBy = textModule.CreateBy;
+            this.CreateTime = textModule.CreateTime;
+            this.ChangeBy = textModule.ChangeBy;
+            this.ChangeTime = textModule.ChangeTime;
         }
     }
 

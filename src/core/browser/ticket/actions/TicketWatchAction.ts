@@ -1,63 +1,82 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { AbstractAction } from '../../../model/components/action/AbstractAction';
-import { Ticket, KIXObjectType, CreateTicketWatcherOptions, DeleteTicketWatcherOptions } from '../../../model';
+import { Ticket, KIXObjectType, CreateTicketWatcherOptions, DeleteTicketWatcherOptions, CRUD } from '../../../model';
 import { ContextService } from '../../context';
 import { KIXObjectService } from '../../kix';
 import { EventService } from '../../event';
 import { TicketDetailsContext } from '../context';
 import { BrowserUtil } from '../../BrowserUtil';
 import { ApplicationEvent } from '../../application';
+import { AgentService } from '../../application/AgentService';
+import { UIComponentPermission } from '../../../model/UIComponentPermission';
+import { CacheService } from '../../cache';
 
 export class TicketWatchAction extends AbstractAction<Ticket> {
 
+    public hasLink: boolean = false;
+
+    public permissions = [
+        new UIComponentPermission('tickets', [CRUD.CREATE])
+    ];
+
     private isWatching: boolean = false;
-    private userId: number = null;
 
-    public initAction(): void {
-        this.text = "Beobachten";
-        this.icon = "kix-icon-eye";
-
-        const objectData = ContextService.getInstance().getObjectData();
-        this.userId = objectData.currentUser.UserID;
+    public async initAction(): Promise<void> {
+        this.text = 'Translatable#Watch';
+        this.icon = 'kix-icon-eye';
     }
 
-    public setData(ticket: Ticket): void {
+    public async setData(ticket: Ticket): Promise<void> {
         this.data = ticket;
 
-        if (ticket.Watchers && ticket.Watchers.some((w) => w.UserID === this.userId)) {
+        const currentUser = await AgentService.getInstance().getCurrentUser();
+
+        if (ticket.Watchers && ticket.Watchers.some((w) => w.UserID === currentUser.UserID)) {
             this.isWatching = true;
-            this.text = 'Beobachten Aus';
+            this.text = 'Translatable#Unwatch';
             this.icon = 'kix-icon-eye-off';
         } else {
             this.isWatching = false;
-            this.text = 'Beobachten';
+            this.text = 'Translatable#Watch';
             this.icon = 'kix-icon-eye';
         }
     }
 
     public async run(): Promise<void> {
         let successHint: string;
+
+        const currentUser = await AgentService.getInstance().getCurrentUser();
+
         if (this.isWatching) {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Entferne Ticketbeobachtung ...'
+                loading: true, hint: 'Translatable#Unwatch Ticket'
             });
 
             const failIds = await KIXObjectService.deleteObject(
-                KIXObjectType.WATCHER, [this.data.TicketID], new DeleteTicketWatcherOptions(this.userId)
+                KIXObjectType.WATCHER, [this.data.TicketID], new DeleteTicketWatcherOptions(currentUser.UserID)
             );
             if (!failIds || !!!failIds.length) {
-                successHint = 'Ticket wird nicht mehr beobachtet.';
+                successHint = 'Translatable#Ticket is no longer watched.';
             }
         } else {
             EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Ticket wird beobachtet ...' }
+                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Watch Ticket' }
             );
 
             const watcherId = await KIXObjectService.createObject(
-                KIXObjectType.WATCHER, [['UserID', this.userId]],
-                new CreateTicketWatcherOptions(this.data.TicketID, this.userId)
+                KIXObjectType.WATCHER, [['UserID', currentUser.UserID]],
+                new CreateTicketWatcherOptions(this.data.TicketID, currentUser.UserID)
             );
             if (watcherId) {
-                successHint = 'Ticket wird beobachtet.';
+                successHint = 'Translatable#Ticket is being watched.';
             }
         }
 
@@ -69,6 +88,9 @@ export class TicketWatchAction extends AbstractAction<Ticket> {
             }
 
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
+
+            CacheService.getInstance().deleteKeys(KIXObjectType.CURRENT_USER);
+            EventService.getInstance().publish(ApplicationEvent.REFRESH);
 
         }, 1000);
     }

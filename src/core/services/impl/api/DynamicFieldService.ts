@@ -1,6 +1,15 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObjectService } from './KIXObjectService';
 import {
-    DynamicField, KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, Error
+    DynamicField, KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions
 } from '../../../model';
 import { DynamicFieldsResponse, DynamicFieldResponse } from '../../../api';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
@@ -16,9 +25,9 @@ export class DynamicFieldService extends KIXObjectService {
         return DynamicFieldService.INSTANCE;
     }
 
-    protected RESOURCE_URI: string = "dynamicfields";
+    protected RESOURCE_URI: string = this.buildUri('system', 'dynamicfields');
 
-    public kixObjectType: KIXObjectType = KIXObjectType.DYNAMIC_FIELD;
+    public objectType: KIXObjectType = KIXObjectType.DYNAMIC_FIELD;
 
     private constructor() {
         super();
@@ -30,7 +39,7 @@ export class DynamicFieldService extends KIXObjectService {
     }
 
     public async loadObjects<O>(
-        token: string, objectType: KIXObjectType, objectIds: Array<number | string>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<O[]> {
         let objects = [];
@@ -66,18 +75,6 @@ export class DynamicFieldService extends KIXObjectService {
         }
 
         return result.map((df) => new DynamicField(df));
-    }
-
-    public createObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, string]>
-    ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
-    }
-
-    public async updateObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
-    ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
     }
 
 }

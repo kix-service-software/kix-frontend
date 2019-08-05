@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 export enum ArticleProperty {
 
     ARTICLE_ID = 'ArticleID',
@@ -6,17 +15,19 @@ export enum ArticleProperty {
 
     FROM = 'From',
 
+    FROM_REALNAME = 'FromRealname',
+
     TO = 'To',
 
-    TOREALNAME = 'ToRealname',
+    TO_REALNAME = 'ToRealname',
 
     CC = 'Cc',
 
-    CCREALNAME = 'CcRealname',
+    CC_REALNAME = 'CcRealname',
 
     BCC = 'Bcc',
 
-    BCCREALNAME = 'BccRealname',
+    BCC_REALNAME = 'BccRealname',
 
     SUBJECT = 'Subject',
 
@@ -26,11 +37,13 @@ export enum ArticleProperty {
 
     MESSAGE_ID = 'MessageID',
 
-    IN_REPLY_ID = 'InReplyID',
+    IN_REPLY_TO = 'InReplyTo',
 
     REFERENCES = 'References',
 
     SENDER_TYPE_ID = 'SenderTypeID',
+
+    SENDER_TYPE = 'SenderType',
 
     CHANNEL = 'Channel',
 
@@ -46,14 +59,20 @@ export enum ArticleProperty {
 
     TIME_UNITS = 'TimeUnits',
 
-    ARTICLE_INFORMATION = 'ArticleInformation',
-
-    NUMBER = 'Number',
+    CUSTOMER_VISIBLE = 'CustomerVisible',
 
     ATTACHMENTS = 'Attachments',
 
+    CREATED_BY = 'CreatedBy',
+
+    CHANGED_BY = 'ChangedBy',
+
+    ARTICLE_INFORMATION = 'ArticleInformation',
+    NUMBER = 'Number',
     ARTICLE_TAG = 'ArticleTag',
-
-    CUSTOMER_VISIBLE = 'CustomerVisible'
-
+    FLAGS = 'Flags',
+    REFERENCED_ARTICLE_ID = 'ReferencedArticleID',
+    EXEC_REPLY = 'ExecReply',
+    EXEC_FORWARD = 'ExecForward',
+    BODY_RICHTEXT = 'BodyRichtext'
 }

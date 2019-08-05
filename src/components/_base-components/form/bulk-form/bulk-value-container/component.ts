@@ -1,8 +1,19 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
-import { DialogService, PropertyOperator } from '../../../../../core/browser';
+import { PropertyOperator } from '../../../../../core/browser';
 import { TreeNode } from '../../../../../core/model';
 import { BulkValue } from './BulkValue';
 import { BulkManager } from '../../../../../core/browser/bulk';
+import { DialogService } from '../../../../../core/browser/components/dialog';
+import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
 class Component {
 
@@ -22,9 +33,10 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        DialogService.getInstance().setMainDialogLoading(true);
+        this.state.translations = await TranslationService.createTranslationObject(
+            ["Translatable#Remove parameter"]
+        );
         await this.updateValues();
-        DialogService.getInstance().setMainDialogLoading(false);
     }
 
     public async propertyChanged(bulkValue: BulkValue, nodes: TreeNode[]): Promise<void> {
@@ -45,12 +57,10 @@ class Component {
         await this.provideBulkValue(bulkValue);
     }
 
-    public textValueChanged(bulkValue: BulkValue, event: any): void {
-        setTimeout(async () => {
-            const value = event.target.value;
-            bulkValue.setTextValue(value);
-            await this.provideBulkValue(bulkValue);
-        }, 100);
+    public async textValueChanged(bulkValue: BulkValue, event: any): Promise<void> {
+        const value = event.target.value;
+        bulkValue.setTextValue(value);
+        await this.provideBulkValue(bulkValue);
     }
 
     public async dateValueChanged(bulkValue: BulkValue, event: any): Promise<void> {

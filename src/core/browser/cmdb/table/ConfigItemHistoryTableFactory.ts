@@ -1,11 +1,21 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObjectType, DataType, ConfigItemHistoryProperty } from "../../../model";
 import {
-    ITableFactory, ITable, TableConfiguration, Table, DefaultColumnConfiguration,
+    ITable, TableConfiguration, Table, DefaultColumnConfiguration,
     TableHeaderHeight, IColumnConfiguration
 } from "../../table";
 import { ConfigItemHistoryContentProvider } from "./ConfigItemHistoryContentProvider";
+import { TableFactory } from "../../table/TableFactory";
 
-export class ConfigItemHistoryTableFactory implements ITableFactory {
+export class ConfigItemHistoryTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_HISTORY;
 
@@ -42,7 +52,7 @@ export class ConfigItemHistoryTableFactory implements ITableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.CONFIG_ITEM_HISTORY, null, null, tableColumns, null, null, null, null, null,
+                KIXObjectType.CONFIG_ITEM_HISTORY, null, null, tableColumns,  null, null, null, null,
                 TableHeaderHeight.SMALL
             );
         } else if (!tableConfiguration.tableColumns) {

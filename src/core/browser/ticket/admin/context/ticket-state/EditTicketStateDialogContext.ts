@@ -1,8 +1,16 @@
-import { Context } from "../../../../../model/components/context/Context";
-import { WidgetConfiguration, WidgetType, ContextDescriptor } from "../../../../../model";
-import { EditTicketStateDialogContextConfiguration } from "./EditTicketStateDialogContextConfiguration";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
 
-export class EditTicketStateDialogContext extends Context<EditTicketStateDialogContextConfiguration> {
+import { Context } from "../../../../../model/components/context/Context";
+import { ContextDescriptor, ContextConfiguration } from "../../../../../model";
+
+export class EditTicketStateDialogContext extends Context {
 
     public static CONTEXT_ID: string = 'edit-ticket-state-dialog-context';
     public formListenerId: string;
@@ -10,17 +18,8 @@ export class EditTicketStateDialogContext extends Context<EditTicketStateDialogC
     public constructor(
         descriptor: ContextDescriptor,
         objectId: string | number = null,
-        configuration: EditTicketStateDialogContextConfiguration = null
+        configuration: ContextConfiguration = null
     ) {
         super(descriptor, objectId, configuration);
-    }
-
-
-    protected getSpecificWidgetConfiguration<WS = any>(instanceId: string): WidgetConfiguration<WS> {
-        return undefined;
-    }
-
-    protected getSpecificWidgetType(instanceId: string): WidgetType {
-        return undefined;
     }
 }

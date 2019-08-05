@@ -1,57 +1,75 @@
-import { ILabelProvider } from "..";
-import { Article, ArticleProperty, DateTimeUtil, ObjectIcon, KIXObjectType, Channel } from "../../model";
-import { KIXObjectService } from "../kix";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
 
-export class ArticleLabelProvider implements ILabelProvider<Article> {
+import { Article, ArticleProperty, DateTimeUtil, ObjectIcon, KIXObjectType, Channel, User } from '../../model';
+import { KIXObjectService } from '../kix';
+import { TranslationService } from '../i18n/TranslationService';
+import { LabelProvider } from '../LabelProvider';
+import { TicketService } from './TicketService';
+
+export class ArticleLabelProvider extends LabelProvider<Article> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.ARTICLE;
 
-    public async getPropertyValueDisplayText(property: string, value: string | number): Promise<string> {
-        return value.toString();
+    public isLabelProviderForType(objectType: KIXObjectType): boolean {
+        return objectType === this.kixObjectType;
     }
 
-    public async getPropertyText(property: string): Promise<string> {
+    public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
             case ArticleProperty.TO:
-                displayValue = 'An';
+                displayValue = 'Translatable#To';
                 break;
             case ArticleProperty.CC:
-                displayValue = 'Cc';
+                displayValue = 'Translatable#Cc';
                 break;
             case ArticleProperty.BCC:
-                displayValue = 'Bcc';
+                displayValue = 'Translatable#Bcc';
                 break;
             case ArticleProperty.ARTICLE_INFORMATION:
-                displayValue = 'Neu';
+                displayValue = 'Translatable#New';
                 break;
             case ArticleProperty.NUMBER:
-                displayValue = 'Nr.';
+                displayValue = 'Translatable#No.';
                 break;
             case ArticleProperty.CUSTOMER_VISIBLE:
-                displayValue = 'Sichtbar in Kundenportal';
+                displayValue = 'Translatable#Visible in customer portal';
                 break;
             case ArticleProperty.SENDER_TYPE_ID:
-                displayValue = 'Sender';
+                displayValue = 'Translatable#Sender';
                 break;
             case ArticleProperty.FROM:
-                displayValue = 'Von';
+                displayValue = 'Translatable#From';
                 break;
             case ArticleProperty.SUBJECT:
-                displayValue = 'Betreff';
+                displayValue = 'Translatable#Subject';
                 break;
             case ArticleProperty.INCOMING_TIME:
-                displayValue = 'Erstellt am';
+                displayValue = 'Translatable#Created at';
                 break;
             case ArticleProperty.ATTACHMENTS:
-                displayValue = 'Anlagen';
+                displayValue = 'Translatable#Attachments';
                 break;
             case ArticleProperty.CHANNEL_ID:
-                displayValue = 'Typ';
+                displayValue = 'Translatable#Channel';
                 break;
             default:
                 displayValue = property;
         }
+
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
+        }
+
         return displayValue;
     }
 
@@ -62,75 +80,117 @@ export class ArticleLabelProvider implements ILabelProvider<Article> {
         return;
     }
 
-    public async getDisplayText(article: Article, property: string, defaultValue?: string): Promise<string> {
-        let displayValue;
+    public async getDisplayText(
+        article: Article, property: string, defaultValue?: string, translatable: boolean = true, short: boolean = true
+    ): Promise<string> {
+        let displayValue = typeof defaultValue !== 'undefined' && defaultValue !== null
+            ? defaultValue : article[property];
         switch (property) {
-            case ArticleProperty.FROM:
-            case ArticleProperty.SUBJECT:
-                displayValue = article[property];
-                break;
-
             case ArticleProperty.SENDER_TYPE_ID:
                 if (article.senderType) {
                     displayValue = article.senderType.Name;
                 }
                 break;
+            case ArticleProperty.TO:
+                displayValue = article.toList.length ? short
+                    ? article.toList[0].email : article.toList.map((to) => to.email).join(', ') : '';
+                break;
+            case ArticleProperty.CC:
+                displayValue = article.ccList.length ? short
+                    ? article.ccList[0].email : article.ccList.map((cc) => cc.email).join(', ') : '';
+                break;
+            case ArticleProperty.BCC:
+                displayValue = article.bccList.length ? short
+                    ? article.bccList[0].email : article.bccList.map((bcc) => bcc.email).join(', ') : '';
+                break;
+            case ArticleProperty.ARTICLE_INFORMATION:
+                displayValue = article.isUnread() ? 'Transaltable#Unread' : 'Translatable#Read';
+                break;
+            case ArticleProperty.BODY_RICHTEXT:
+                if (article) {
+                    displayValue = await TicketService.getInstance().getPreparedArticleBodyContent(article);
+                }
+                break;
+            default:
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
+        }
 
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
+        }
+
+        return displayValue;
+    }
+
+    public async getPropertyValueDisplayText(
+        property: string, value: any, translatable: boolean = true
+    ): Promise<string> {
+        let displayValue = value;
+        switch (property) {
             case ArticleProperty.ARTICLE_TAG:
                 displayValue = '';
                 break;
-
             case ArticleProperty.INCOMING_TIME:
-                displayValue = DateTimeUtil.getLocalDateTimeString(article[property] * 1000);
+                if (displayValue) {
+                    displayValue = translatable
+                        ? await DateTimeUtil.getLocalDateTimeString(Number(displayValue) * 1000)
+                        : Number(displayValue) * 1000;
+                }
                 break;
-
             case ArticleProperty.ATTACHMENTS:
-                displayValue = '';
-                if (article.Attachments) {
-                    const attachments = article.Attachments.filter((a) => a.Disposition !== 'inline');
+                if (displayValue) {
+                    const attachments = displayValue.filter((a) => a.Disposition !== 'inline');
                     if (attachments.length > 0) {
                         displayValue = '(' + attachments.length + ')';
                     }
+                } else {
+                    displayValue = '';
                 }
                 break;
-
-            case ArticleProperty.TO:
-                displayValue = article.toList.length ? article.toList[0].email : '';
-                break;
-
-            case ArticleProperty.CC:
-                displayValue = article.ccList.length ? article.ccList[0].email : '';
-                break;
-
-            case ArticleProperty.BCC:
-                displayValue = article.bccList.length ? article.bccList[0].email : '';
-                break;
-
-            case ArticleProperty.ARTICLE_INFORMATION:
-                displayValue = article.isUnread() ? 'ungelesen' : 'gelesen';
-                break;
-
             case ArticleProperty.CHANNEL_ID:
-                const channels = await KIXObjectService.loadObjects<Channel>(KIXObjectType.CHANNEL, null);
-                if (channels) {
-                    const channel = channels.find((c) => c.ID === article.ChannelID);
-                    displayValue = channel ? channel.Name : article[property];
-                    if (displayValue === 'email') {
-                        displayValue = 'E-Mail';
-                    } else if (displayValue === 'note') {
-                        displayValue = 'Notiz';
+                if (displayValue) {
+                    const channels = await KIXObjectService.loadObjects<Channel>(KIXObjectType.CHANNEL, null);
+                    if (channels) {
+                        const channel = channels.find((c) => c.ID.toString() === displayValue.toString());
+                        displayValue = channel ? channel.Name : displayValue;
+                        if (displayValue === 'email') {
+                            displayValue = 'Translatable#Email';
+                        } else if (displayValue === 'note') {
+                            displayValue = 'Translatable#Note';
+                        }
                     }
                 }
                 break;
-
             case ArticleProperty.CUSTOMER_VISIBLE:
-                displayValue = 'Sichtbar in Kundenportal';
+                displayValue = 'Translatable#Visible in customer portal';
                 break;
-
+            case ArticleProperty.INCOMING_TIME:
+                if (displayValue) {
+                    displayValue = DateTimeUtil.calculateAge(Number(displayValue));
+                }
+                break;
+            case ArticleProperty.CREATED_BY:
+            case ArticleProperty.CHANGED_BY:
+                if (value) {
+                    const users = await KIXObjectService.loadObjects<User>(
+                        KIXObjectType.USER, [value], null, null, true
+                    ).catch((error) => [] as User[]);
+                    displayValue = users && !!users.length ? users[0].UserFullname : value;
+                }
+                break;
             default:
-                displayValue = defaultValue ? defaultValue : article[property];
+                displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
         }
-        return displayValue;
+
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
+        }
+
+        return displayValue ? displayValue.toString() : '';
     }
 
     public getDisplayTextClasses(article: Article, property: string): string[] {
@@ -158,7 +218,7 @@ export class ArticleLabelProvider implements ILabelProvider<Article> {
     }
 
     public getObjectAdditionalText(article: Article): string {
-        return "";
+        return '';
     }
 
     public getObjectIcon(article: Article): string | ObjectIcon {
@@ -169,8 +229,8 @@ export class ArticleLabelProvider implements ILabelProvider<Article> {
         return article.Subject;
     }
 
-    public getObjectName(): string {
-        return "Artikel";
+    public async getObjectName(): Promise<string> {
+        return await TranslationService.translate('Translatable#Article');
     }
 
     public async getIcons(article: Article, property: string): Promise<Array<string | ObjectIcon>> {

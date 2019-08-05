@@ -1,98 +1,92 @@
-import { ILabelProvider } from "..";
-import { ConfigItemHistory, DateTimeUtil, ObjectIcon, KIXObjectType, ConfigItemHistoryProperty } from "../../model";
-import { ContextService } from "../context";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
 
-export class ConfigItemHistoryLabelProvider implements ILabelProvider<ConfigItemHistory> {
+import {
+    ConfigItemHistory, DateTimeUtil, ObjectIcon, KIXObjectType,
+    ConfigItemHistoryProperty, User
+} from '../../model';
+import { TranslationService } from '../i18n/TranslationService';
+import { KIXObjectService } from '../kix';
+import { LabelProvider } from '../LabelProvider';
+
+export class ConfigItemHistoryLabelProvider extends LabelProvider<ConfigItemHistory> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_HISTORY;
-
-    public async getPropertyValueDisplayText(property: string, value: string | number): Promise<string> {
-        return value.toString();
-    }
-
-    public async getPropertyText(property: string): Promise<string> {
-        let text = property;
-        switch (property) {
-            case ConfigItemHistoryProperty.HISTORY_TYPE:
-                text = 'Aktion';
-                break;
-            case ConfigItemHistoryProperty.COMMENT:
-                text = 'Kommentar';
-                break;
-            case ConfigItemHistoryProperty.CREATE_BY:
-                text = 'Benutzer';
-                break;
-            case ConfigItemHistoryProperty.CREATE_TIME:
-                text = 'Erstellt am';
-                break;
-            case ConfigItemHistoryProperty.VERSION_ID:
-                text = 'Zur Version';
-                break;
-            default:
-                text = property;
-        }
-        return text;
-    }
-
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
-    }
-
-    public async getDisplayText(historyEntry: ConfigItemHistory, property: string): Promise<string> {
-        let displayValue = property.toString();
-
-        const objectData = ContextService.getInstance().getObjectData();
-
-        switch (property) {
-            case ConfigItemHistoryProperty.CREATE_BY:
-                const user = objectData.users.find((u) => u.UserID === historyEntry[property]);
-                if (user) {
-                    displayValue = user.UserFullname;
-                }
-                break;
-            case ConfigItemHistoryProperty.CREATE_TIME:
-                displayValue = DateTimeUtil.getLocalDateTimeString(historyEntry[property]);
-                break;
-            case ConfigItemHistoryProperty.VERSION_ID:
-                displayValue = historyEntry.VersionID ? 'Zur Version' : '';
-                break;
-            default:
-                displayValue = historyEntry[property];
-        }
-
-        return displayValue;
-    }
-
-    public getDisplayTextClasses(object: ConfigItemHistory, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(object: ConfigItemHistory): string[] {
-        return [];
-    }
 
     public isLabelProviderFor(object: ConfigItemHistory): boolean {
         return object instanceof ConfigItemHistory;
     }
 
-    public async getObjectText(object: ConfigItemHistory): Promise<string> {
-        throw new Error("Method not implemented.");
+    public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
+        let displayValue = property;
+        switch (property) {
+            case ConfigItemHistoryProperty.HISTORY_TYPE:
+                displayValue = 'Translatable#Action';
+                break;
+            case ConfigItemHistoryProperty.CREATE_BY:
+                displayValue = 'Translatable#User';
+                break;
+            case ConfigItemHistoryProperty.VERSION_ID:
+                displayValue = 'Translatable#to version';
+                break;
+            default:
+                displayValue = await super.getPropertyText(property, short, translatable);
+        }
+
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
+        }
+
+        return displayValue;
     }
 
-    public getObjectAdditionalText(object: ConfigItemHistory): string {
-        throw new Error("Method not implemented.");
+    public async getDisplayText(
+        historyEntry: ConfigItemHistory, property: string, value?: string, translatable: boolean = true
+    ): Promise<string> {
+        let displayValue = historyEntry[property];
+
+        switch (property) {
+            case ConfigItemHistoryProperty.CREATE_BY:
+                const users = await KIXObjectService.loadObjects<User>(
+                    KIXObjectType.USER, [displayValue], null, null, true
+                ).catch((error) => [] as User[]);
+                displayValue = users && !!users.length ? users[0].UserFullname : displayValue;
+                break;
+            case ConfigItemHistoryProperty.CREATE_TIME:
+                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
+                break;
+            case ConfigItemHistoryProperty.VERSION_ID:
+                displayValue = historyEntry.VersionID
+                    ? await TranslationService.translate('Translatable#to Version')
+                    : '';
+                break;
+            default:
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
+        }
+
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
+        }
+
+        return displayValue;
     }
 
-    public getObjectIcon(object: ConfigItemHistory): string | ObjectIcon {
-        throw new Error("Method not implemented.");
-    }
-
-    public getObjectTooltip(object: ConfigItemHistory): string {
-        throw new Error("Method not implemented.");
-    }
-
-    public getObjectName(): string {
-        return "Config Item Historie";
+    public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
+        let displayValue = plural ? 'Translatable#Config Item History' : 'Translatable#Config Item History';
+        if (translatable) {
+            displayValue = await TranslationService.translate(displayValue, []);
+        }
+        return displayValue;
     }
 
     public async getIcons(object: ConfigItemHistory, property: string): Promise<Array<string | ObjectIcon>> {

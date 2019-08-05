@@ -1,14 +1,28 @@
-import { ComponentState } from "./ComponentState";
-import { FormService, DialogService, AbstractMarkoComponent } from "../../../../core/browser";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
 
-class Component extends AbstractMarkoComponent {
+import { ComponentState } from "./ComponentState";
+import { FormService, AbstractMarkoComponent } from "../../../../core/browser";
+import { DialogService } from "../../../../core/browser/components/dialog";
+import { KIXObjectType, FormContext } from "../../../../core/model";
+
+class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
-        DialogService.getInstance().setMainDialogHint('Es werden nur aktuelle Versionen durchsucht.');
+        this.state.formId = await FormService.getInstance().getFormIdByContext(
+            FormContext.SEARCH, KIXObjectType.CONFIG_ITEM
+        );
+        DialogService.getInstance().setMainDialogHint('Translatable#The search only includes current versions.');
     }
 
     public async cancel(): Promise<void> {

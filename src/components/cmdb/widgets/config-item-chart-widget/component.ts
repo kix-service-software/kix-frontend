@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import { ContextService } from "../../../../core/browser/context";
 import { IdService } from '../../../../core/browser';
@@ -27,13 +36,11 @@ class Component {
         this.state.title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : 'CMDB';
         this.cmdbChartConfiguration = this.state.widgetConfiguration.settings;
 
+        this.initChartConfig();
+
         if (this.state.widgetConfiguration.contextDependent) {
             this.cmdbChartConfiguration.chartConfiguration.data.labels = [];
-            if (this.cmdbChartConfiguration.chartConfiguration.data.datasets.length) {
-                this.cmdbChartConfiguration.chartConfiguration.data.datasets[0].data = [];
-            } else {
-                this.cmdbChartConfiguration.chartConfiguration.data.datasets.push({ data: [] });
-            }
+            this.cmdbChartConfiguration.chartConfiguration.data.datasets[0].data = [];
 
             currentContext.registerListener('CMDBChartComponent' + IdService.generateDateBasedId(), {
                 explorerBarToggled: () => { return; },
@@ -43,9 +50,28 @@ class Component {
                 scrollInformationChanged: () => { return; },
                 filteredObjectListChanged: this.contextFilteredObjectListChanged.bind(this)
             });
+
+            this.contextFilteredObjectListChanged(currentContext.getFilteredObjectList());
         }
 
         this.state.chartConfig = this.cmdbChartConfiguration.chartConfiguration;
+    }
+
+    private initChartConfig(): void {
+        if (!this.cmdbChartConfiguration.chartConfiguration.data) {
+            this.cmdbChartConfiguration.chartConfiguration.data = {
+                datasets: [{ data: [] }],
+                labels: []
+            };
+        }
+
+        if (!this.cmdbChartConfiguration.chartConfiguration.data.datasets) {
+            this.cmdbChartConfiguration.chartConfiguration.data.datasets = [{ data: [] }];
+        }
+
+        if (!this.cmdbChartConfiguration.chartConfiguration.data.labels) {
+            this.cmdbChartConfiguration.chartConfiguration.data.labels = [];
+        }
     }
 
     private async contextFilteredObjectListChanged(objectList: KIXObject[]): Promise<void> {

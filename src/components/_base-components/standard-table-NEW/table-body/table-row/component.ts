@@ -1,7 +1,16 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../core/browser';
 import {
-    IColumn, ICell, TableEvent, TableEventData, TableCSSHandlerRegsitry
+    IColumn, ICell, TableEvent, TableEventData, TableCSSHandlerRegistry
 } from '../../../../../core/browser/table';
 import { IEventSubscriber, EventService } from '../../../../../core/browser/event';
 
@@ -22,7 +31,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             this.state.selectable = this.state.row.isSelectable();
             this.state.open = this.state.row.isExpanded();
             this.state.children = this.state.row.getChildren();
-            this.prepareObserver();
+            this.setRowClasses();
         }
     }
 
@@ -51,16 +60,13 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     private prepareObserver(): void {
-        if (this.supportsIntersectionObserver()) {
-            this.state.show = false;
+        if (!this.state.show && this.supportsIntersectionObserver()) {
             const row = (this as any).getEl();
             if (row) {
                 if (this.observer) {
                     this.observer.disconnect();
                 }
-                this.observer = new IntersectionObserver(this.intersectionCallback.bind(this), {
-                    threshold: [0, 1]
-                });
+                this.observer = new IntersectionObserver(this.intersectionCallback.bind(this));
                 this.observer.observe(row);
             }
         } else {
@@ -76,7 +82,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
     private intersectionCallback(entries, observer): void {
         entries.forEach((entry) => {
-            if (entry.isIntersecting) {
+            if (entry.isIntersecting && entry.intersectionRatio > 0) {
                 this.state.show = true;
                 this.observer.disconnect();
             }
@@ -99,12 +105,15 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
                 && data.rowId === this.state.row.getRowId()
             ) {
                 (this as any).setStateDirty('row');
+                this.setRowClasses();
             }
+            this.setRowClasses();
         }
     }
 
     public toggleRow(): void {
         this.state.row.expand(!this.state.open);
+        this.setRowClasses();
     }
 
     public changeSelect(event: any): void {
@@ -138,9 +147,9 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         return this.state.row.getTable().getTableConfiguration().fixedFirstColumn;
     }
 
-    public getRowClasses(): string[] {
+    private async setRowClasses(): Promise<void> {
         const object = this.state.row.getRowObject().getObject();
-        const stateClass = [];
+        let stateClass = [];
 
         if (this.state.open) {
             stateClass.push('opened');
@@ -152,14 +161,27 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
         if (object) {
             const objectType = this.state.row.getTable().getObjectType();
-            const cssHandler = TableCSSHandlerRegsitry.getCSSHandler(objectType);
+            const cssHandler = TableCSSHandlerRegistry.getObjectCSSHandler(objectType);
             if (cssHandler) {
-                const classes = cssHandler.getRowCSSClasses(object);
+                const classes = await cssHandler.getRowCSSClasses(object);
                 classes.forEach((c) => stateClass.push(c));
+            }
+
+            const commonHandler = TableCSSHandlerRegistry.getCommonCSSHandler();
+            for (const h of commonHandler) {
+                const rowClasses = await h.getRowCSSClasses(object);
+                stateClass = [...stateClass, ...rowClasses];
             }
         }
 
-        return stateClass;
+        this.state.rowClasses = stateClass;
+    }
+
+    public rowClicked(): void {
+        EventService.getInstance().publish(
+            TableEvent.ROW_CLICKED,
+            new TableEventData(this.state.row.getTable().getTableId(), this.state.row.getRowId())
+        );
     }
 
 }

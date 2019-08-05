@@ -1,5 +1,14 @@
-import { ComponentState } from "./ComponentState";
-import { FormInputComponent } from "../../../../../core/model";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { ComponentState } from './ComponentState';
+import { FormInputComponent } from '../../../../../core/model';
 
 class Component extends FormInputComponent<any, ComponentState> {
 
@@ -7,8 +16,8 @@ class Component extends FormInputComponent<any, ComponentState> {
         this.state = new ComponentState();
     }
 
-    public async onInput(input: any): Promise<void> {
-        await super.onInput(input);
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 
     public async onMount(): Promise<void> {
@@ -17,8 +26,8 @@ class Component extends FormInputComponent<any, ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        if (this.state.defaultValue && this.state.defaultValue.value) {
-            this.state.checked = this.state.defaultValue.value;
+        if (this.state.defaultValue && typeof this.state.defaultValue.value !== 'undefined') {
+            this.state.checked = Boolean(this.state.defaultValue.value);
             super.provideValue(this.state.checked);
         }
     }

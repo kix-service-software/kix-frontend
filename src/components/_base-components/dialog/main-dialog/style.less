@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 .main-dialog {
     position: fixed;
     left: @margin-large - @margin-default;
@@ -8,59 +17,113 @@
     justify-content: center;
     align-content: center;
     box-shadow: @shadow-3;
-    >.dialog-widget {
-        >.widget-content {
-            >.tab-container {
-                height: 100%;
-                >.lane-widget {
+
+    >div {
+        >.dialog-widget {
+            >.widget-content {
+                >.tab-container {
                     height: 100%;
-                    margin-bottom: 0;
-                    >.widget-header {
-                        border-bottom-right-radius: 0;
-                        border-bottom-left-radius: 0;
-                        padding-left: 0;
-                        height: @default-widget-header-height;
-                        >.header-left {
-                            padding-left: 2px;
-                            >.tab-list {
-                                margin-top: .5em;
-                                >li {
-                                    height: 1.75em;
-                                    &.active {
-                                        background-color: @secondary-5;
+
+                    >.lane-widget {
+                        height: 100%;
+                        margin-bottom: 0;
+
+                        >.widget-header {
+                            border-bottom-right-radius: 0;
+                            border-bottom-left-radius: 0;
+                            padding-left: 0;
+                            height: @default-widget-header-height;
+
+                            >.header-left {
+                                padding-left: 2px;
+
+                                >.tab-list {
+                                    margin-top: .5em;
+
+                                    >li {
+                                        height: 1.75em;
+
+                                        &.active {
+                                            background-color: @secondary-5;
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
-                    >.widget-content {
-                        .full-size();
-                        top: @default-widget-header-height;
-                        background-color: @secondary-5;
-                        border-width: 2px;
-                        margin: 0;
-                        padding: 0;
-                        overflow: hidden;
-                        >div.tab-sidebar-grid {
+
+                        >.widget-content {
                             .full-size();
-                            top: @margin-default;
-                            bottom: @margin-default;
-                            display: grid;
-                            grid-template-columns: minmax(@default-widget-width, auto) @sidebar-width @margin-default;
-                            grid-column-gap: @margin-default;
-                            overflow: auto;
-                            >.tab-content {
-                                margin: 0;
-                                height: 100%;
-                                >.lane-tab-widget {
-                                    height: 100%;
-                                    >.widget-content {
-                                        background-color: @secondary-5;
+                            top: @default-widget-header-height;
+                            background-color: @secondary-5;
+                            border-width: 2px;
+                            margin: 0;
+                            padding: 0;
+                            overflow: hidden;
+
+                            >div.tab-sidebar-grid {
+                                .full-size();
+                                opacity: 0;
+                                top: @margin-default;
+                                bottom: @margin-default;
+                                display: grid;
+                                grid-template-columns: minmax(@default-widget-width, auto) min-content;
+                                grid-column-gap: @margin-default;
+                                overflow: auto;
+
+                                &.has-sidebar {
+
+                                    &.show-sidebar {
+                                        grid-template-columns: minmax(@default-widget-width, auto) @sidebar-width min-content;
+
+                                        // hide sidebar
+                                        @media only screen and (max-width: 1400px) {
+                                            grid-template-columns: minmax(@default-widget-width, auto) min-content;
+
+                                            >.tab-content {
+                                                z-index: 1;
+
+                                                >.dialog-sidebar-shield {
+                                                    display: block;
+                                                }
+                                            }
+
+                                            >.sidebar-area {
+                                                position: absolute;
+                                                right: 4.5rem;
+                                                z-index: 1;
+                                            }
+
+                                            >.site-menu-wrapper {
+                                                z-index: 1;
+                                            }
+                                        }
                                     }
                                 }
-                            }
-                            >.site-menu-wrapper {
-                                width: 2.25rem
+
+                                >.tab-content {
+                                    margin: 0;
+                                    height: 100%;
+                                    position: relative;
+
+                                    >.lane-widget {
+                                        height: 100%;
+
+                                        >.widget-content {
+                                            background-color: @secondary-5;
+                                        }
+                                    }
+
+                                    .dialog-sidebar-shield {
+                                        background-color: rgba(255, 255, 255, 0.8);
+                                        width: 21.5rem;
+                                        top: 0;
+                                        right: -4.5rem;
+                                        bottom: 0;
+                                        position: absolute;
+                                        display: none;
+                                        z-index: 10;
+                                    }
+                                }
                             }
                         }
                     }
@@ -68,6 +131,7 @@
             }
         }
     }
+
     >.close-button {
         font-size: 3.5em;
         position: absolute;
@@ -76,6 +140,7 @@
         color: @primary-3;
         text-shadow: -3px 0 @secondary-6, 0 3px @secondary-6, 3px 0 @secondary-6, 0 -3px @secondary-6;
         cursor: pointer;
+
         &:hover {
             color: darken(@primary-3, 10%);
         }

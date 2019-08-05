@@ -1,48 +1,57 @@
-import {
-    KIXObjectType, InputFieldTypes, TreeNode, KIXObject
-} from "../../model";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { InputFieldTypes, KIXObject, Error } from "../../model";
 import { ObjectPropertyValue } from "../ObjectPropertyValue";
 import { ImportPropertyOperator } from "./ImportPropertyOperator";
+import { KIXObjectService } from "../kix";
+import { LabelService } from "../LabelService";
+import { IColumn } from "../table";
+import { AbstractDynamicFormManager } from "../form";
+import { ImportPropertyOperatorUtil } from "./ImportPropertyOperatorUtil";
 
-export abstract class ImportManager {
+export abstract class ImportManager extends AbstractDynamicFormManager {
 
-    public abstract objectType: KIXObjectType = KIXObjectType.ANY;
     public objects: KIXObject[] = [];
 
-    protected importValues: ObjectPropertyValue[] = [];
+    private importRun: boolean = false;
 
-    protected listeners: Map<string, () => void> = new Map();
-
-    public registerListener(listenerId: string, callback: () => void): void {
-        this.listeners.set(listenerId, callback);
-    }
-
-    protected notifyListeners(): void {
-        this.listeners.forEach((listener: () => void) => listener());
-    }
+    protected abstract getSpecificObject(object: {}): KIXObject;
 
     public init(): void {
         this.reset();
+        this.importRun = false;
     }
 
-    public reset(): void {
-        this.importValues = [];
+    public getObject(object: {}): KIXObject {
+        const specificObject = this.getSpecificObject(object);
+        specificObject['CSV_LINE'] = object['CSV_LINE'];
+        specificObject.equals = (tableObject: KIXObject) => {
+            return tableObject && tableObject['CSV_LINE'] === specificObject['CSV_LINE'];
+        };
+        return specificObject;
     }
 
-    public getValues(): ObjectPropertyValue[] {
-        return this.importValues;
-    }
-
-    public hasDefinedValues(): boolean {
-        return !!this.getEditableValues().length;
-    }
-
-    public async getProperties(): Promise<Array<[string, string]>> {
-        return [];
+    public getImportRunState(): boolean {
+        return this.importRun;
     }
 
     public async getRequiredProperties(): Promise<string[]> {
         return [];
+    }
+
+    public async getKnownProperties(): Promise<string[]> {
+        const requiredProperties = await this.getRequiredProperties();
+        return [
+            ...requiredProperties,
+            ...(await this.getProperties()).map((p) => p[0]).filter((p) => !requiredProperties.some((rp) => rp === p))
+        ];
     }
 
     public async getOperations(property: string): Promise<ImportPropertyOperator[]> {
@@ -53,59 +62,72 @@ export abstract class ImportManager {
         ];
     }
 
+    public getOperatorDisplayText(operator: ImportPropertyOperator): string {
+        return ImportPropertyOperatorUtil.getText(operator);
+    }
+
     public async getInputType(property: string): Promise<InputFieldTypes> {
         return InputFieldTypes.TEXT;
     }
 
-    public async getInputTypeOptions(property: string): Promise<Array<[string, string | number]>> {
-        return [];
-    }
-
-    public hasValueForProperty(property: string): boolean {
-        return this.importValues.some((bv) => bv.property === property);
-    }
-
-    public async setValue(importValue: ObjectPropertyValue): Promise<void> {
-        const index = this.importValues.findIndex((bv) => bv.id === importValue.id);
-        if (index !== -1) {
-            this.importValues[index].property = importValue.property;
-            this.importValues[index].operator = importValue.operator;
-            this.importValues[index].value = importValue.value;
-        } else {
-            this.importValues.push(importValue);
-        }
-
-        await this.checkProperties();
-        this.notifyListeners();
-    }
-
-    public async removeValue(importValue: ObjectPropertyValue): Promise<void> {
-        const index = this.importValues.findIndex((bv) => bv.property === importValue.property);
-        if (index !== -1) {
-            this.importValues.splice(index, 1);
-        }
-
-        await this.checkProperties();
-        this.notifyListeners();
-    }
-
-    protected async checkProperties(): Promise<void> {
-        return;
-    }
-
-    public async searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]> {
-        return [];
-    }
-
-    public async getTreeNodes(property: string): Promise<TreeNode[]> {
-        return [];
+    public showValueInput(value: ObjectPropertyValue): boolean {
+        return value.property && value.operator && value.operator !== ImportPropertyOperator.IGNORE;
     }
 
     public getEditableValues(): ObjectPropertyValue[] {
-        return [...this.importValues.filter(
+        return [...this.values.filter(
             (bv) => bv.operator === ImportPropertyOperator.IGNORE
-                || bv.property !== null && bv.value !== null && bv.value !== undefined
+                || bv.property !== null
         )];
     }
 
+    public async execute(object: KIXObject, columns: IColumn[]): Promise<void> {
+        this.importRun = true;
+
+        await this.checkObject(object).then(async () => {
+            const existingObject = await this.getExisting(object);
+            const parameter: Array<[string, any]> = await this.prepareParameter(object, columns);
+
+            if (existingObject) {
+                await KIXObjectService.updateObject(this.objectType, parameter, existingObject.ObjectId, false);
+            } else {
+                await KIXObjectService.createObject(this.objectType, parameter, null, false);
+            }
+        });
+    }
+
+    protected async checkObject(object: KIXObject): Promise<void> {
+        const requiredProperties = await this.getRequiredProperties();
+        for (const rp of requiredProperties) {
+            if (typeof object[rp] === 'undefined' || object[rp] === null || object[rp] === '') {
+                throw new Error(null, `Missing value for ${rp}`);
+            }
+        }
+        return;
+    }
+
+    protected async getExisting(object: KIXObject): Promise<KIXObject> {
+        const existingObjects = await KIXObjectService.loadObjects(
+            this.objectType, [object.ObjectId], null, null, true
+        );
+        return existingObjects && !!existingObjects.length ? existingObjects[0] : null;
+    }
+
+    protected async prepareParameter(object: KIXObject, columns: IColumn[]): Promise<Array<[string, any]>> {
+        const parameter: Array<[string, any]> = [];
+        const knownProperties = await this.getKnownProperties();
+        for (const prop in object) {
+            if (
+                prop && knownProperties.some((kp) => kp === prop)
+                && columns.some((c) => c.getColumnId() === prop)
+            ) {
+                parameter.push([prop, object[prop]]);
+            }
+        }
+        return parameter;
+    }
+
+    public async getIdentifierText(object: KIXObject): Promise<string> {
+        return await LabelService.getInstance().getText(object);
+    }
 }

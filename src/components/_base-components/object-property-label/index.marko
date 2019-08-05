@@ -1,20 +1,37 @@
-<div.key-value-pair>
+<!--
+Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+<div.key-value-pair class={
+    "show-object": state.propertyDisplayText !== null || !state.hasText
+}>
     <div.key title=state.propertyName>
         <span.property-name>${state.propertyName}</span>
     </div>
     <div.info>
-        <if(input.info)>
+        <if(input.info && state.propertyDisplayText)>
             <${input.info}/>
         </if>
     </div>
-    <div.value title=state.propertyDisplayText class=component.getValueClasses()>
-        <link-target routingConfiguration=input.routingConfiguration objectId=input.objectId>
-            <@content>
-                <span>
-                    <if(state.hasText)>${state.propertyDisplayText}</if>
-                </span>
-                <icon icon=state.propertyIcon/>
-            </@content>
-        </link-target>
+    <div.value title=(!input.noValueTitle ? state.propertyDisplayText : "") class=component.getValueClasses()>
+        <if(input.value)>
+            <${input.value}/>
+        </if>
+        <else-if(state.propertyDisplayText)>
+            <link-target routingConfiguration=input.routingConfiguration objectId=input.objectId>
+                <@content>
+                    <span>
+                        <if(state.hasText)>${state.propertyDisplayText}</if>
+                    </span>
+                    <if(state.propertyIcon)>
+                        <icon icon=state.propertyIcon/>
+                    </if>
+                </@content>
+            </link-target>
+        </else-if>
     </div>
 </div>

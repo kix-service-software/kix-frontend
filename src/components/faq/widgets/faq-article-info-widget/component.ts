@@ -1,9 +1,19 @@
-import { ComponentState } from "./ComponentState";
-import { ContextService, ActionFactory, IdService } from "../../../../core/browser";
-import { KIXObjectType, Customer, ContextMode, Context } from "../../../../core/model";
-import { FAQArticle, FAQArticleProperty } from "../../../../core/model/kix/faq";
-import { FAQLabelProvider, FAQDetailsContext } from "../../../../core/browser/faq";
-import { Label } from "../../../../core/browser/components";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { ComponentState } from './ComponentState';
+import { ContextService, ActionFactory, IdService } from '../../../../core/browser';
+import { KIXObjectType, Context } from '../../../../core/model';
+import { FAQArticle, FAQArticleProperty } from '../../../../core/model/kix/faq';
+import { FAQLabelProvider } from '../../../../core/browser/faq';
+import { Label } from '../../../../core/browser/components';
+import { FAQDetailsContext } from '../../../../core/browser/faq/context/FAQDetailsContext';
 
 class Component {
 
@@ -49,7 +59,7 @@ class Component {
         this.state.loading = true;
 
         this.state.faqArticle = faqArticle ? faqArticle : await context.getObject<FAQArticle>();
-        this.setActions();
+        this.prepareActions();
         this.createLabels();
 
         setTimeout(() => {
@@ -57,9 +67,9 @@ class Component {
         }, 50);
     }
 
-    private setActions(): void {
+    private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.faqArticle) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.actions = await ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, [this.state.faqArticle]
             );
         }

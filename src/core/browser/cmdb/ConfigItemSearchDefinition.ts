@@ -1,14 +1,27 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { SearchDefinition, SearchResultCategory, KIXObjectService } from "../kix";
 import {
     KIXObjectType, ConfigItemProperty, FilterCriteria, ConfigItemClass, FilterDataType,
     FilterType, GeneralCatalogItem, VersionProperty, KIXObjectLoadingOptions, InputFieldTypes,
-    TreeNode, ObjectIcon, DataType, AttributeDefinition, Customer, Contact, InputDefinition, ConfigItem
+    TreeNode, ObjectIcon, DataType, AttributeDefinition, Organisation, Contact, InputDefinition, ConfigItem,
+    KIXObjectProperty, DateTimeUtil
 } from "../../model";
 import { SearchOperator } from "../SearchOperator";
 import { SearchProperty } from "../SearchProperty";
 import { ConfigItemClassAttributeUtil } from "./ConfigItemClassAttributeUtil";
 import { CMDBService } from "./CMDBService";
 import { IColumnConfiguration, DefaultColumnConfiguration } from "../table";
+import { ContactService } from "../contact";
+import { LabelService } from "../LabelService";
+import { OrganisationService } from "../organisation";
 
 export class ConfigItemSearchDefinition extends SearchDefinition {
 
@@ -18,7 +31,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
 
     public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
         return new KIXObjectLoadingOptions(
-            null, criteria, null, null, null,
+            criteria, null, null,
             [VersionProperty.DATA, VersionProperty.PREPARED_DATA, 'Links', ConfigItemProperty.CURRENT_VERSION],
             [VersionProperty.DATA, VersionProperty.PREPARED_DATA, 'Links']
         );
@@ -29,17 +42,43 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
             [SearchProperty.FULLTEXT, null],
             [VersionProperty.NAME, null],
             [VersionProperty.NUMBER, null],
-            [ConfigItemProperty.CLASS_ID, null],
-            [ConfigItemProperty.CUR_DEPL_STATE_ID, null],
-            [ConfigItemProperty.CUR_INCI_STATE_ID, null]
+            [KIXObjectProperty.CHANGE_TIME, null]
         ];
+
+        const canContact = await this.checkReadPermissions('contacts');
+        const canOrganisation = await this.checkReadPermissions('organisations');
+        const canGeneralCatalog = await this.checkReadPermissions('system/generalcatalog');
+
+        if (await this.checkReadPermissions('system/cmdb/classes')) {
+            properties.push([ConfigItemProperty.CLASS_ID, null]);
+        }
+
+        if (canGeneralCatalog) {
+            properties.push([ConfigItemProperty.CUR_DEPL_STATE_ID, null]);
+            properties.push([ConfigItemProperty.CUR_INCI_STATE_ID, null]);
+        }
+
+        if (await this.checkReadPermissions('system/users')) {
+            properties.push([KIXObjectProperty.CHANGE_BY, null]);
+        }
 
         if (parameter) {
             const classParameter = parameter.find((p) => p[0] === ConfigItemProperty.CLASS_ID);
             const classAttributes = await ConfigItemClassAttributeUtil.getMergedClassAttributeIds(
                 classParameter ? classParameter[1] : null
             );
-            classAttributes.forEach((ca) => properties.push(ca));
+            classAttributes.filter((ca) => {
+                switch (ca[2]) {
+                    case 'GeneralCatalog':
+                        return canGeneralCatalog;
+                    case 'Organisation':
+                        return canOrganisation;
+                    case 'Contact':
+                        return canContact;
+                    default:
+                        return true;
+                }
+            }).forEach((ca) => properties.push([ca[0], ca[1]]));
         }
 
         return properties;
@@ -49,54 +88,37 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         let operations: SearchOperator[] = [];
 
         const numberOperators = [
-            SearchOperator.EQUALS,
             SearchOperator.IN
         ];
 
-        const stringOperators = [
-            SearchOperator.EQUALS,
-            SearchOperator.STARTS_WITH,
-            SearchOperator.ENDS_WITH,
-            SearchOperator.CONTAINS,
-            SearchOperator.LIKE
-        ];
+        const stringOperators = this.getStringOperators();
 
-        const dateTimeOperators = [
-            SearchOperator.EQUALS,
-            SearchOperator.LESS_THAN,
-            SearchOperator.LESS_THAN_OR_EQUAL,
-            SearchOperator.GREATER_THAN,
-            SearchOperator.GREATER_THAN_OR_EQUAL
-        ];
+        const dateTimeOperators = this.getDateTimeOperators();
 
-        switch (property) {
-            case VersionProperty.NAME:
-            case VersionProperty.NUMBER:
+        if (property === VersionProperty.NAME || property === VersionProperty.NUMBER) {
+            operations = stringOperators;
+        } else if (this.isDropDown(property)) {
+            operations = numberOperators;
+        } else if (this.isDateTime(property)) {
+            operations = dateTimeOperators;
+        } else {
+            const classParameter = parameter.find((p) => p[0] === ConfigItemProperty.CLASS_ID);
+            const type = await ConfigItemClassAttributeUtil.getAttributeType(
+                property, classParameter ? classParameter[1] : null
+            );
+            if (type === 'Date') {
+                operations = dateTimeOperators;
+            } else if (type === 'DateTime') {
+                operations = dateTimeOperators;
+            } else if (type === 'Text' || type === 'TextArea') {
                 operations = stringOperators;
-                break;
-            case ConfigItemProperty.CLASS_ID:
-            case ConfigItemProperty.CUR_DEPL_STATE_ID:
-            case ConfigItemProperty.CUR_INCI_STATE_ID:
+            } else if (type === 'GeneralCatalog'
+                || type === 'CIClassReference'
+                || type === 'Organisation'
+                || type === 'Contact'
+            ) {
                 operations = numberOperators;
-                break;
-            default:
-                const classParameter = parameter.find((p) => p[0] === ConfigItemProperty.CLASS_ID);
-                const type = await ConfigItemClassAttributeUtil.getAttributeType(
-                    property, classParameter ? classParameter[1] : null
-                );
-                if (type === 'Date') {
-                    operations = dateTimeOperators;
-                } else if (type === 'DateTime') {
-                    operations = dateTimeOperators;
-                } else if (type === 'Text' || type === 'TextArea') {
-                    operations = stringOperators;
-                } else if (type === 'GeneralCatalog'
-                    || type === 'CIClassReference'
-                    || type === 'Customer'
-                    || type === 'Contact'
-                ) {
-                    operations = numberOperators;
-                }
+            }
         }
 
         return operations;
@@ -106,8 +128,10 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         property: string, parameter?: Array<[string, any]>
     ): Promise<InputFieldTypes> {
 
-        if (ConfigItemSearchDefinition.isDropDown(property)) {
+        if (this.isDropDown(property)) {
             return InputFieldTypes.DROPDOWN;
+        } else if (this.isDateTime(property)) {
+            return InputFieldTypes.DATE_TIME;
         } else {
             const classParameter = parameter.find((p) => p[0] === ConfigItemProperty.CLASS_ID);
             const type = await ConfigItemClassAttributeUtil.getAttributeType(
@@ -126,7 +150,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                 return InputFieldTypes.DROPDOWN;
             } else if (type === 'CIClassReference') {
                 return InputFieldTypes.CI_REFERENCE;
-            } else if (type === 'Customer' || type === 'Contact') {
+            } else if (type === 'Organisation' || type === 'Contact') {
                 return InputFieldTypes.OBJECT_REFERENCE;
             }
         }
@@ -152,10 +176,17 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         return [];
     }
 
-    private static isDropDown(property: string): boolean {
+    private isDropDown(property: string): boolean {
         return property === ConfigItemProperty.CUR_DEPL_STATE_ID
             || property === ConfigItemProperty.CUR_INCI_STATE_ID
-            || property === ConfigItemProperty.CLASS_ID;
+            || property === ConfigItemProperty.CLASS_ID
+            || property === KIXObjectProperty.CREATE_BY
+            || property === KIXObjectProperty.CHANGE_BY;
+    }
+
+    private isDateTime(property: string): boolean {
+        return property === KIXObjectProperty.CREATE_TIME
+            || property === KIXObjectProperty.CHANGE_TIME;
     }
 
     public async getInputComponents(): Promise<Map<string, string>> {
@@ -163,9 +194,19 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
     }
 
     public async getSearchResultCategories(): Promise<SearchResultCategory> {
-        const ticketCategory = new SearchResultCategory('Tickets', KIXObjectType.TICKET);
-        const faqCategory = new SearchResultCategory('FAQs', KIXObjectType.FAQ_ARTICLE);
-        return new SearchResultCategory('Config Items', KIXObjectType.CONFIG_ITEM, [ticketCategory, faqCategory]);
+        const categories: SearchResultCategory[] = [];
+
+        if (await this.checkReadPermissions('tickets')) {
+            categories.push(
+                new SearchResultCategory('Translatable#Tickets', KIXObjectType.TICKET)
+            );
+        }
+        if (await this.checkReadPermissions('faq/articles')) {
+            categories.push(
+                new SearchResultCategory('FAQs', KIXObjectType.FAQ_ARTICLE)
+            );
+        }
+        return new SearchResultCategory('Config Items', KIXObjectType.CONFIG_ITEM, categories);
     }
 
     public async prepareFormFilterCriteria(criteria: FilterCriteria[]): Promise<FilterCriteria[]> {
@@ -201,6 +242,10 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                 case ConfigItemProperty.CLASS_ID:
                 case ConfigItemProperty.CUR_DEPL_STATE_ID:
                 case ConfigItemProperty.CUR_INCI_STATE_ID:
+                case KIXObjectProperty.CREATE_BY:
+                case KIXObjectProperty.CREATE_TIME:
+                case KIXObjectProperty.CHANGE_BY:
+                case KIXObjectProperty.CHANGE_TIME:
                     newCriteria.push(searchCriteria);
                     break;
                 default:
@@ -224,10 +269,9 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         const criteria = [];
         switch (property) {
             case ConfigItemProperty.CLASS_ID:
-                const ciClass = value as ConfigItemClass;
                 criteria.push(
                     new FilterCriteria(
-                        property, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, ciClass.ID
+                        property, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, value
                     )
                 );
                 break;
@@ -281,22 +325,30 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
             return configItems.map(
                 (ci) => new TreeNode(ci.ConfigItemID, ci.Name, new ObjectIcon(ci.KIXObjectType, ci.ConfigItemID))
             );
-        } else if (input.Type === 'Customer') {
-            const loadingOptions = new KIXObjectLoadingOptions(null, null, null, searchValue, limit);
-            const customers = await KIXObjectService.loadObjects<Customer>(
-                KIXObjectType.CUSTOMER, null, loadingOptions, null, false
+        } else if (input.Type === 'Organisation') {
+            const filter = await OrganisationService.getInstance().prepareFullTextFilter(searchValue);
+            const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit);
+            const organisations = await KIXObjectService.loadObjects<Organisation>(
+                KIXObjectType.ORGANISATION, null, loadingOptions, null, false
             );
-            return customers.map(
-                (c) => new TreeNode(c.CustomerID, c.DisplayValue, new ObjectIcon(c.KIXObjectType, c.CustomerID))
-            );
+            const nodes = [];
+            for (const c of organisations) {
+                const displayValue = await LabelService.getInstance().getText(c);
+                nodes.push(new TreeNode(c.ID, displayValue, new ObjectIcon(c.KIXObjectType, c.ID)));
+            }
+            return nodes;
         } else if (input.Type === 'Contact') {
-            const loadingOptions = new KIXObjectLoadingOptions(null, null, null, searchValue, limit);
+            const filter = await ContactService.getInstance().prepareFullTextFilter(searchValue);
+            const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit);
             const contacts = await KIXObjectService.loadObjects<Contact>(
                 KIXObjectType.CONTACT, null, loadingOptions, null, false
             );
-            return contacts.map(
-                (c) => new TreeNode(c.ContactID, c.DisplayValue, new ObjectIcon(c.KIXObjectType, c.ContactID))
-            );
+            const nodes = [];
+            for (const c of contacts) {
+                const displayValue = await LabelService.getInstance().getText(c);
+                nodes.push(new TreeNode(c.ID, displayValue, new ObjectIcon(c.KIXObjectType, c.ID)));
+            }
+            return nodes;
         }
         return [];
     }
@@ -357,8 +409,10 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         return column;
     }
 
-    public async getDisplaySearchValue(property: string, parameter: Array<[string, any]>, value: any): Promise<string> {
-        let displayValue = await super.getDisplaySearchValue(property, parameter, value);
+    public async getDisplaySearchValue(
+        property: string, parameter: Array<[string, any]>, value: any, type: FilterDataType
+    ): Promise<string> {
+        let displayValue = await super.getDisplaySearchValue(property, parameter, value, type);
         const classParameter = parameter.find((p) => p[0] === ConfigItemProperty.CLASS_ID);
         const input = await ConfigItemClassAttributeUtil.getAttributeInput(
             property, classParameter ? classParameter[1] : null
@@ -376,13 +430,13 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                 if (configItems && configItems.length) {
                     displayValue = configItems[0].Name;
                 }
-            } else if (input.Type === 'Customer') {
-                const customers = await KIXObjectService.loadObjects<Customer>(
-                    KIXObjectType.CUSTOMER, [value], null, null, false
+            } else if (input.Type === 'Organisation') {
+                const organisations = await KIXObjectService.loadObjects<Organisation>(
+                    KIXObjectType.ORGANISATION, [value], null, null, false
                 );
 
-                if (customers && customers.length) {
-                    displayValue = customers[0].DisplayValue;
+                if (organisations && organisations.length) {
+                    displayValue = await LabelService.getInstance().getText(organisations[0]);
                 }
             } else if (input.Type === 'Contact') {
                 const contacts = await KIXObjectService.loadObjects<Contact>(
@@ -390,8 +444,12 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                 );
 
                 if (contacts && contacts.length) {
-                    displayValue = contacts[0].DisplayValue;
+                    displayValue = await LabelService.getInstance().getText(contacts[0]);
                 }
+            } else if (input.Type === 'Date') {
+                displayValue = await DateTimeUtil.getLocalDateString(displayValue);
+            } else if (input.Type === 'DateTime') {
+                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
             }
         }
 
@@ -399,10 +457,12 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
     }
 
     private async getGeneralCatalogItems(input: InputDefinition): Promise<GeneralCatalogItem[]> {
-        const loadingOptions = new KIXObjectLoadingOptions(null, [new FilterCriteria(
-            'Class', SearchOperator.EQUALS, FilterDataType.STRING,
-            FilterType.AND, input['Class']
-        )]);
+        const loadingOptions = new KIXObjectLoadingOptions([
+            new FilterCriteria(
+                'Class', SearchOperator.EQUALS, FilterDataType.STRING,
+                FilterType.AND, input['Class']
+            )
+        ]);
 
         const items = await KIXObjectService.loadObjects<GeneralCatalogItem>(
             KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions, null, false

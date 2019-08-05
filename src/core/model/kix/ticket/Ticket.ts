@@ -1,9 +1,17 @@
-import { Article, StateType, TicketHistory, TicketPriority, TicketState, TicketType } from '.';
-import { Contact, Customer, Lock, Queue, Service, User, KIXObjectType } from '..';
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { Article, TicketHistory } from '.';
+import { KIXObjectType } from '..';
 import { KIXObject } from '../KIXObject';
 import { Watcher } from './Watcher';
 import { DynamicField } from '../dynamic-field';
-import { Sla } from '../sla';
 import { SortUtil, SortOrder } from '../../sort';
 import { ArticleProperty } from './ArticleProperty';
 import { DataType } from '../../DataType';
@@ -19,28 +27,6 @@ export class Ticket extends KIXObject<Ticket> {
     public Title: string;
 
     public TicketID: number;
-
-    public StateID: number;
-
-    public PriorityID: number;
-
-    public LockID: number;
-
-    public QueueID: number;
-
-    public CustomerID: string;
-
-    public CustomerUserID: string;
-
-    public OwnerID: number;
-
-    public TypeID: number;
-
-    public SLAID?: number | string;
-
-    public ServiceID?: number;
-
-    public ResponsibleID: number;
 
     public Age: number;
 
@@ -114,41 +100,54 @@ export class Ticket extends KIXObject<Ticket> {
 
     public DynamicFields: DynamicField[];
 
+    public Unseen: number;
+
+    // Object References
+
+    public StateType: string;
+
+    public StateID: number;
+
+    public PriorityID: number;
+
+    public LockID: number;
+
+    public QueueID: number;
+
+    public OrganisationID: string;
+
+    public ContactID: string;
+
+    public OwnerID: number;
+
+    public TypeID: number;
+
+    public SLAID?: number | string;
+
+    public ServiceID?: number;
+
+    public ResponsibleID: number;
+
     public Articles: Article[];
 
     public History: TicketHistory[];
 
     public Watchers: Watcher[];
 
-    public Unseen: number;
-
-    // UI Properties
-
-    public owner: User;
-    public priority: TicketPriority;
-    public queue: Queue;
-    public responsible: User;
-    public service: Service;
-    public sla: Sla;
-    public state: TicketState;
-    public stateType: StateType;
-    public type: TicketType;
-    public customer: Customer;
-    public contact: Contact;
-
     public constructor(ticket?: Ticket) {
-        super();
+        super(ticket);
         if (ticket) {
             this.TicketID = Number(ticket.TicketID);
             this.ObjectId = this.TicketID;
             this.TicketNumber = ticket.TicketNumber;
             this.Title = ticket.Title;
             this.StateID = ticket.StateID;
+            this.StateType = ticket.StateType;
             this.PriorityID = ticket.PriorityID;
             this.LockID = ticket.LockID;
             this.QueueID = ticket.QueueID;
-            this.CustomerID = ticket.CustomerID;
-            this.CustomerUserID = ticket.CustomerUserID;
+            this.OrganisationID = ticket.OrganisationID;
+            this.ContactID = ticket.ContactID;
             this.OwnerID = ticket.OwnerID;
             this.TypeID = ticket.TypeID;
 
@@ -164,9 +163,7 @@ export class Ticket extends KIXObject<Ticket> {
             this.Age = ticket.Age;
             this.Created = ticket.Created;
             this.CreateTimeUnix = ticket.CreateTimeUnix;
-            this.CreateBy = ticket.CreateBy;
             this.Changed = ticket.Changed;
-            this.ChangeBy = ticket.ChangeBy;
             this.ArchiveFlag = ticket.ArchiveFlag;
             this.PendingTime = ticket.PendingTime;
             this.TimeUnits = ticket.TimeUnits;
@@ -201,18 +198,6 @@ export class Ticket extends KIXObject<Ticket> {
             this.Watchers = ticket.Watchers;
             this.Unseen = Number(ticket.Unseen);
 
-            this.owner = ticket.owner;
-            this.priority = ticket.priority;
-            this.queue = ticket.queue;
-            this.responsible = ticket.responsible;
-            this.service = ticket.service;
-            this.sla = ticket.sla;
-            this.state = ticket.state;
-            this.stateType = ticket.stateType;
-            this.type = ticket.type;
-            this.customer = ticket.customer;
-            this.contact = ticket.contact;
-
             this.Articles = ticket.Articles;
             this.Links = ticket.Links;
             this.DynamicFields = ticket.DynamicFields;
@@ -230,9 +215,9 @@ export class Ticket extends KIXObject<Ticket> {
     public getFirstArticle(): Article {
         if (this.Articles && this.Articles.length) {
             const sortedArticles = SortUtil.sortObjects(
-                this.Articles, ArticleProperty.ARTICLE_ID, DataType.NUMBER, SortOrder.DOWN
+                this.Articles, ArticleProperty.ARTICLE_ID, DataType.NUMBER, SortOrder.UP
             );
-            return sortedArticles[sortedArticles.length - 1];
+            return sortedArticles[0];
         }
 
         return null;

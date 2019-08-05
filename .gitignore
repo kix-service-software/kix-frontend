@@ -1,5 +1,9 @@
-config/components/*.json
+config/defaults/*.config.json
+config/user/**/*.config.json
+features/report
 .cache
+package-lock.json
+package-lock.json
 gulp-*
 dist
 node_modules
@@ -9,3 +13,6 @@ npm-debug.log
 src/log/**/*
 src/logs/**/*
 src/**/.gulp-*
+
+coverage
+.nyc_output

@@ -1,16 +1,26 @@
-import { KIXObject } from "../../../../core/model";
-import { BulkManager } from "../../../../core/browser/bulk";
-import { ITable } from "../../../../core/browser";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
 
-export class ComponentState {
+import { BulkManager } from '../../../../core/browser/bulk';
+import { ITable, AbstractComponentState } from '../../../../core/browser';
+
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public objectCount: number = 0,
         public table: ITable = null,
         public bulkManager: BulkManager = null,
-        public tableTitle: string = 'Ausgewählte Objekte',
+        public tableTitle: string = '',
         public canRun: boolean = false,
         public run: boolean = false
-    ) { }
+    ) {
+        super();
+    }
 
 }

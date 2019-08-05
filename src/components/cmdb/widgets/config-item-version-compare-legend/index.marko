@@ -1,15 +1,31 @@
-<widget instanceId=input.instanceId title="Legende" icon="kix-icon-legend">
+<!--
+Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+<widget instanceId=input.instanceId title="Translatable#Legend" icon="kix-icon-legend">
     <@content>
         <if(state.show)>
             <div.legend>
                 <div.legend-item.yellow/>
-                <span>Geändert</span>
+                <span>
+                    <translation-string pattern="Translatable#Changed"/>
+                </span>
                 <div.legend-item.red/>
-                <span>Gelöscht</span>
+                <span>
+                    <translation-string pattern="Translatable#Deleted"/>
+                </span>
                 <div.legend-item.green/>
-                <span>Neu</span>
+                <span>
+                    <translation-string pattern="Translatable#New"/>
+                </span>
                 <div.legend-item.gray/>
-                <span>Nicht vorhanden (nicht mehr oder noch nicht)</span>
+                <span>
+                    <translation-string pattern="Translatable#Not available (not any more or not yet)"/>
+                </span>
             </div>
         </if>
     </@content>

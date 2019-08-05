@@ -1,10 +1,17 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
-import { ContextService, IdService, SearchOperator, KIXObjectService } from '../../../../core/browser';
-import {
-    TreeNode, Queue, TreeNodeProperty, FilterCriteria,
-    TicketProperty, FilterDataType, FilterType, KIXObjectType, KIXObjectLoadingOptions, KIXObjectCache
-} from '../../../../core/model';
-import { TicketContext } from '../../../../core/browser/ticket';
+import { ContextService, IdService } from '../../../../core/browser';
+import { TreeNode, Queue, TreeNodeProperty } from '../../../../core/model';
+import { TicketContext, QueueService } from '../../../../core/browser/ticket';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 export class Component {
 
@@ -25,45 +32,28 @@ export class Component {
         const context = await ContextService.getInstance().getContext<TicketContext>(TicketContext.CONTEXT_ID);
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
         await this.loadQueues(context);
-
-        KIXObjectCache.registerCacheListener({
-            objectAdded: () => { return; },
-            objectRemoved: () => { return; },
-            cacheCleared: (objectType: KIXObjectType) => {
-                if (objectType === KIXObjectType.QUEUE_HIERARCHY) {
-                    this.loadQueues(context);
-                }
-            }
-        });
     }
 
     private async loadQueues(context: TicketContext): Promise<void> {
         this.state.nodes = null;
-
-        const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, null, null, null, null, [['TicketStats.StateType', 'Open']]
-        );
-        const queuesHierarchy = await KIXObjectService.loadObjects<Queue>(
-            KIXObjectType.QUEUE_HIERARCHY, null, loadingOptions
-        );
-
-        this.state.nodes = this.prepareTreeNodes(queuesHierarchy);
-        this.setActiveNode(context.queue);
+        const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy();
+        this.state.nodes = await QueueService.getInstance().prepareObjectTree(queuesHierarchy, false, null, true);
+        this.setActiveNode(context.queueId);
     }
 
-    private setActiveNode(queue: Queue): void {
-        if (queue) {
-            this.activeNodeChanged(this.getActiveNode(queue));
+    private setActiveNode(queueId: number): void {
+        if (queueId) {
+            this.activeNodeChanged(this.getActiveNode(queueId));
         } else {
             this.showAll();
         }
     }
 
-    private getActiveNode(queue: Queue, nodes: TreeNode[] = this.state.nodes): TreeNode {
-        let activeNode = nodes.find((n) => n.id.QueueID === queue.QueueID);
+    private getActiveNode(queueId: number, nodes: TreeNode[] = this.state.nodes): TreeNode {
+        let activeNode = nodes.find((n) => n.id === queueId);
         if (!activeNode) {
             for (let index = 0; index < nodes.length; index++) {
-                activeNode = this.getActiveNode(queue, nodes[index].children);
+                activeNode = this.getActiveNode(queueId, nodes[index].children);
                 if (activeNode) {
                     nodes[index].expanded = true;
                     break;
@@ -73,46 +63,16 @@ export class Component {
         return activeNode;
     }
 
-    private prepareTreeNodes(categories: Queue[]): TreeNode[] {
-        return categories
-            ? categories.map((q) => new TreeNode(
-                q, q.Name, null, null, this.prepareTreeNodes(q.SubQueues), null, null, null, this.getTicketStats(q))
-            )
-            : [];
-    }
-
-    private getTicketStats(queue: Queue): TreeNodeProperty[] {
-        const properties: TreeNodeProperty[] = [];
-        if (queue.TicketStats) {
-            const openCount = queue.TicketStats.OpenCount;
-            properties.push(new TreeNodeProperty(openCount, `offene Tickets: ${openCount}`));
-
-            const lockCount = openCount - queue.TicketStats.LockCount;
-            properties.push(new TreeNodeProperty(lockCount, `nicht gesperrte Tickets: ${lockCount}`));
-
-            const escalatedCount = queue.TicketStats.EscalatedCount;
-            if (escalatedCount > 0) {
-                properties.push(
-                    new TreeNodeProperty(escalatedCount, `eskalierte Tickets: ${escalatedCount}`, 'escalated')
-                );
-            }
-        }
-
-        return properties;
-    }
-
     public async activeNodeChanged(node: TreeNode): Promise<void> {
         this.state.activeNode = node;
 
-        const queue = node.id as Queue;
         const context = await ContextService.getInstance().getContext<TicketContext>(TicketContext.CONTEXT_ID);
-        context.setQueue(queue);
-        context.setAdditionalInformation(this.getStructureInformation());
+        context.setQueue(node.id);
+        context.setAdditionalInformation('STRUCTURE', this.getStructureInformation());
     }
 
     private getStructureInformation(node: TreeNode = this.state.activeNode): string[] {
-        const queue = (node.id as Queue);
-        let info = [queue.Name];
+        let info = [node.label];
 
         if (node.parent) {
             info = [...this.getStructureInformation(node.parent), ...info];
@@ -124,8 +84,11 @@ export class Component {
     public async showAll(): Promise<void> {
         const context = await ContextService.getInstance().getContext<TicketContext>(TicketContext.CONTEXT_ID);
         this.state.activeNode = null;
+
+        const allText = await TranslationService.translate('Translatable#All');
+
         context.setQueue(null);
-        context.setAdditionalInformation(['Alle']);
+        context.setAdditionalInformation('STRUCTURE', [allText]);
     }
 
 }

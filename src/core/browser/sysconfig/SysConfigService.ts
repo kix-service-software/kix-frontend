@@ -1,9 +1,16 @@
-import { KIXObjectService } from "../kix";
-import {
-    SysConfigItem, KIXObjectType, KIXObject, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, KIXObjectCache
-} from "../../model";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
 
-export class SysConfigService extends KIXObjectService<SysConfigItem> {
+import { KIXObjectService } from "../kix";
+import { SysConfigOption, KIXObjectType } from "../../model";
+
+export class SysConfigService extends KIXObjectService<SysConfigOption> {
 
     private static INSTANCE: SysConfigService = null;
 
@@ -15,41 +22,12 @@ export class SysConfigService extends KIXObjectService<SysConfigItem> {
         return SysConfigService.INSTANCE;
     }
 
-    public async init(): Promise<void> {
-        await this.loadObjects(KIXObjectType.SYS_CONFIG_ITEM, null);
-    }
-
-    public async loadObjects<O extends KIXObject>(
-        kixObjectType: KIXObjectType, objectIds: Array<string | number>,
-        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
-        cache: boolean = true
-    ): Promise<O[]> {
-
-        if (kixObjectType === KIXObjectType.SYS_CONFIG_ITEM) {
-            if (!KIXObjectCache.hasObjectCache(kixObjectType)) {
-                const objects = await super.loadObjects(
-                    kixObjectType, null, loadingOptions, objectLoadingOptions, cache
-                );
-                objects.forEach((o) => KIXObjectCache.addObject(kixObjectType, o));
-            }
-
-            if (!objectIds) {
-                return KIXObjectCache.getObjectCache(kixObjectType);
-            }
-        }
-
-        return await super.loadObjects<O>(kixObjectType, objectIds, loadingOptions, objectLoadingOptions, cache);
-    }
-
     public isServiceFor(kixObjectType: KIXObjectType) {
-        return kixObjectType === KIXObjectType.SYS_CONFIG_ITEM;
+        return kixObjectType === KIXObjectType.SYS_CONFIG_OPTION
+            || kixObjectType === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION;
     }
 
     public getLinkObjectName(): string {
-        return 'Sysconfig';
-    }
-
-    protected async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
-        return [];
+        return 'SysConfig';
     }
 }

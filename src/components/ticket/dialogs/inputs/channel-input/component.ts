@@ -1,10 +1,20 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import { FormInputComponent, Channel, KIXObjectType, ChannelProperty, ObjectIcon } from '../../../../../core/model';
 import {
     KIXObjectService, LabelService, ILabelProvider, FormService, ServiceRegistry, ServiceType
 } from '../../../../../core/browser';
-import { TicketFormService } from '../../../../../core/browser/ticket';
+import { ArticleFormService } from '../../../../../core/browser/ticket';
 import { isArray } from 'util';
+import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
 class Component extends FormInputComponent<number, ComponentState> {
 
@@ -14,14 +24,20 @@ class Component extends FormInputComponent<number, ComponentState> {
         this.state = new ComponentState();
     }
 
-    public async onInput(input: any): Promise<void> {
-        await super.onInput(input);
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 
     public async onMount(): Promise<void> {
         await super.onMount();
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#No Article"
+        ]);
+
         this.labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.CHANNEL);
-        const channels = await KIXObjectService.loadObjects<Channel>(KIXObjectType.CHANNEL);
+        let channels = await KIXObjectService.loadObjects<Channel>(KIXObjectType.CHANNEL);
+        channels = channels.filter((c) => c.ValidID.toString() === "1");
 
         const channelsOption = this.state.field.options.find((o) => o.option === 'CHANNELS');
         if (channelsOption && channelsOption.value && isArray(channelsOption.value) && channelsOption.value.length) {
@@ -36,13 +52,10 @@ class Component extends FormInputComponent<number, ComponentState> {
         }
 
         if (this.state.channels) {
-
             for (const channel of this.state.channels) {
                 const name = await this.labelProvider.getDisplayText(channel, ChannelProperty.NAME);
                 this.state.channelNames.push([channel.ID, name]);
             }
-
-
         }
 
         const noChannelOption = this.state.field.options.find((o) => o.option === 'NO_CHANNEL');
@@ -50,17 +63,23 @@ class Component extends FormInputComponent<number, ComponentState> {
             this.state.noChannel = noChannelOption.value;
         }
 
-        const defaultChannelOption = this.state.field.options.find((o) => o.option === 'CHANNEL_ID');
-        if (defaultChannelOption && defaultChannelOption.value) {
-            const defaultChannel = this.state.channels.find((c) => c.ID === defaultChannelOption.value);
-            if (defaultChannel) {
-                this.channelClicked(defaultChannel);
-            }
-        }
+        this.setCurrentChannel();
 
         if (this.state.noChannel && !this.state.currentChannel) {
-            this.channelClicked(null);
+            super.provideValue(null);
         } else if (!this.state.noChannel && !this.state.currentChannel && this.state.channels.length) {
+            this.state.currentChannel = this.state.channels[0];
+            super.provideValue(this.state.currentChannel.ID);
+        }
+
+        this.setFields();
+    }
+
+    public setCurrentChannel(): void {
+        if (this.state.defaultValue && this.state.defaultValue.value) {
+            const channel = this.state.channels.find((ch) => ch.ID === this.state.defaultValue.value);
+            this.channelClicked(channel);
+        } else if (this.state.channels.length === 1) {
             this.channelClicked(this.state.channels[0]);
         }
     }
@@ -88,23 +107,27 @@ class Component extends FormInputComponent<number, ComponentState> {
     }
 
     public async channelClicked(channel: Channel): Promise<void> {
-        this.state.currentChannel = channel;
+        if (!this.isActive(channel)) {
+            this.state.currentChannel = channel;
+            super.provideValue(this.state.currentChannel ? this.state.currentChannel.ID : null);
+            this.setFields(true);
+        }
+    }
 
-        const formService = ServiceRegistry.getServiceInstance<TicketFormService>(
-            KIXObjectType.TICKET, ServiceType.FORM
+    private async setFields(clear?: boolean): Promise<void> {
+        const formService = ServiceRegistry.getServiceInstance<ArticleFormService>(
+            KIXObjectType.ARTICLE, ServiceType.FORM
         );
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
 
         if (this.state.currentChannel) {
             const channelFields = await formService.getFormFieldsForChannel(
-                this.state.currentChannel, this.state.formId
+                this.state.currentChannel, this.state.formId, clear
             );
             formInstance.addNewFormField(this.state.field, channelFields, true);
         } else {
             formInstance.addNewFormField(this.state.field, [], true);
         }
-
-        super.provideValue(this.state.currentChannel ? this.state.currentChannel.ID : null);
     }
 
 }

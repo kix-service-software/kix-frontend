@@ -1,20 +1,29 @@
-import { AbstractNewDialog } from "../../../../../core/browser";
-import { KIXObjectType, ContextMode, TranslationProperty } from "../../../../../core/model";
-import { ComponentState } from "./ComponentState";
-import { RoutingConfiguration } from "../../../../../core/browser/router";
-import { TranslationDetailsContext } from "../../../../../core/browser/i18n/admin/context";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { KIXObjectType, ContextMode, TranslationPatternProperty } from '../../../../../core/model';
+import { ComponentState } from './ComponentState';
+import { RoutingConfiguration } from '../../../../../core/browser/router';
+import { TranslationDetailsContext } from '../../../../../core/browser/i18n/admin/context';
+import { AbstractNewDialog } from '../../../../../core/browser/components/dialog';
 
 class Component extends AbstractNewDialog {
 
     public onCreate(): void {
         this.state = new ComponentState();
         super.init(
-            'Übersetzung wird angelegt',
-            'Übersetzung wurde erfolgreich angelegt.',
-            KIXObjectType.TRANSLATION,
+            'Translatable#Create Translation',
+            'Translatable#Translation successfully created.',
+            KIXObjectType.TRANSLATION_PATTERN,
             new RoutingConfiguration(
-                null, TranslationDetailsContext.CONTEXT_ID, KIXObjectType.TRANSLATION,
-                ContextMode.DETAILS, TranslationProperty.ID, true
+                TranslationDetailsContext.CONTEXT_ID, KIXObjectType.TRANSLATION_PATTERN,
+                ContextMode.DETAILS, TranslationPatternProperty.ID, true
             )
         );
     }

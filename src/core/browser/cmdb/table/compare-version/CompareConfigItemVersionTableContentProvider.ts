@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { IRowObject, RowObject, ITable, TableValue, ValueState } from "../../../table";
 import {
     KIXObjectType, KIXObjectLoadingOptions, Version, AttributeDefinition
@@ -5,6 +14,7 @@ import {
 import { ContextService } from "../../../context";
 import { TableContentProvider } from "../../../table/TableContentProvider";
 import { PreparedData } from "../../../../model/kix/cmdb/PreparedData";
+import { TranslationService } from "../../../i18n/TranslationService";
 
 export class CompareConfigItemVersionTableContentProvider extends TableContentProvider<Version> {
 
@@ -49,19 +59,18 @@ export class CompareConfigItemVersionTableContentProvider extends TableContentPr
         }
 
         if (attributes) {
-            rows = this.createRows(versions, attributes, null, []);
+            rows = await this.createRows(versions, attributes, null, []);
         }
 
         return rows;
     }
 
-    private createRows(
+    private async createRows(
         versions: Version[], attributes: AttributeDefinition[],
         parentRow: RowObject, parentKeys: Array<[string, number]>
-    ): RowObject[] {
+    ): Promise<RowObject[]> {
         const rows = [];
-        attributes.forEach((a, index) => {
-
+        for (const a of attributes) {
             let maxCount = 0;
             const versionValues: Array<[number, TableValue[]]> = [];
             versions.forEach((v) => {
@@ -71,7 +80,8 @@ export class CompareConfigItemVersionTableContentProvider extends TableContentPr
             });
 
             for (let i = 0; i < maxCount; i++) {
-                const rowObject = new RowObject([new TableValue('CONFIG_ITEM_ATTRIBUTE', a.Key, a.Name)]);
+                const text = await TranslationService.translate(a.Name);
+                const rowObject = new RowObject([new TableValue('CONFIG_ITEM_ATTRIBUTE', a.Key, text)]);
                 if (parentRow) {
                     parentRow.addChild(rowObject);
                 } else {
@@ -106,7 +116,7 @@ export class CompareConfigItemVersionTableContentProvider extends TableContentPr
                     this.createRows(versions, a.Sub, rowObject, [...parentKeys, [a.Key, i]]);
                 }
             }
-        });
+        }
         return rows;
     }
 

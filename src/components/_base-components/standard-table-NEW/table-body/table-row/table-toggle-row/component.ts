@@ -1,10 +1,19 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import {
-    ToggleOptions, ComponentsService, AbstractMarkoComponent, BrowserUtil, ActionFactory, ContextService
+    ToggleOptions, AbstractMarkoComponent, BrowserUtil, ActionFactory, ContextService
 } from '../../../../../../core/browser';
-import { IAction } from '../../../../../../core/model';
 import { TableEvent, TableEventData } from '../../../../../../core/browser/table';
 import { IEventSubscriber, EventService } from '../../../../../../core/browser/event';
+import { KIXModulesService } from '../../../../../../core/browser/modules';
 
 class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
 
@@ -20,6 +29,9 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         this.state.row = input.row;
         if (this.state.row) {
             this.toggleOptions = this.state.row.getTable().getTableConfiguration().toggleOptions;
+            if (this.toggleOptions) {
+                this.setToggleActions();
+            }
             this.setWidth();
         }
     }
@@ -38,6 +50,9 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         window.addEventListener("resize", this.setWidth.bind(this), false);
         this.eventSubscriberId = this.state.row.getTable().getTableId() + '-' + this.state.row.getRowId();
         EventService.getInstance().subscribe(TableEvent.REFRESH, this);
+
+        await this.setToggleActions();
+        setTimeout(() => this.state.loading = false, 50);
     }
 
     public onDestroy(): void {
@@ -68,24 +83,27 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         }, 70);
     }
 
-    public getToggleActions(): IAction[] {
-        const actions = this.toggleOptions && this.state.row ? ActionFactory.getInstance().generateActions(
-            this.toggleOptions.actions, [this.state.row.getRowObject().getObject()]
-        ) : [];
-        return actions;
+    public async setToggleActions(): Promise<void> {
+        this.state.actions = this.toggleOptions && this.state.row
+            ? await ActionFactory.getInstance().generateActions(
+                this.toggleOptions.actions, [this.state.row.getRowObject().getObject()]
+            )
+            : [];
     }
 
     public calculateToggleContentMinHeight(index: number): string {
         const minHeight = "10em"; // TODO: echten Wert ermitteln .toggle-row > td >.content
-        setTimeout(() => {
-            const actions = this.getToggleActions();
-            if (actions && actions.length > 5) {
-                const actionList = (this as any).getEl().querySelector('ul.toggle-actions');
-                if (actionList) {
-                    const computedHeight = getComputedStyle(actionList).height;
-                    const rowContent = (this as any).getEl("row-toggle-content");
-                    if (rowContent && computedHeight) {
-                        rowContent.style.minHeight = computedHeight;
+        setTimeout(async () => {
+            if (this.state.actions && this.state.actions.length > 5) {
+                const root = (this as any).getEl();
+                if (root) {
+                    const actionList = root.querySelector('ul.toggle-actions');
+                    if (actionList) {
+                        const computedHeight = getComputedStyle(actionList).height;
+                        const rowContent = (this as any).getEl("row-toggle-content");
+                        if (rowContent && computedHeight) {
+                            rowContent.style.minHeight = computedHeight;
+                        }
                     }
                 }
             }
@@ -96,7 +114,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
     public getToggleTemplate(): any {
         return this.toggleOptions && this.toggleOptions.componentId ?
-            ComponentsService.getInstance().getComponentTemplate(this.toggleOptions.componentId) : undefined;
+            KIXModulesService.getComponentTemplate(this.toggleOptions.componentId) : undefined;
     }
 
     public getToggleInput(): any {

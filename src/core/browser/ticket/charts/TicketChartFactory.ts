@@ -1,7 +1,21 @@
-import { TicketProperty, Ticket, KIXObjectType, DateTimeUtil, TicketPriority, TicketState } from "../../../model";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import {
+    TicketProperty, Ticket, KIXObjectType, DateTimeUtil, KIXObjectLoadingOptions, FilterCriteria,
+    TicketStateProperty, FilterType, FilterDataType, SysConfigKey, SysConfigOption
+} from "../../../model";
 import { LabelService } from "../../LabelService";
-import { ContextService } from "../../context";
 import { KIXObjectService } from "../../kix";
+import { TicketLabelProvider } from "../TicketLabelProvider";
+import { SearchOperator } from "../../SearchOperator";
+import { ConfigurationService } from "../../../services";
 
 export class TicketChartFactory {
 
@@ -20,9 +34,12 @@ export class TicketChartFactory {
         switch (property) {
             case TicketProperty.STATE_ID:
             case TicketProperty.PRIORITY_ID:
+            case TicketProperty.QUEUE_ID:
+            case TicketProperty.TYPE_ID:
+            case TicketProperty.SERVICE_ID:
                 return await this.preparePropertyCountData(property, tickets);
             case TicketProperty.CREATED:
-                return this.prepareCreatedData(property, tickets);
+                return await this.prepareCreatedData(property, tickets);
             default:
                 return new Map();
         }
@@ -30,48 +47,73 @@ export class TicketChartFactory {
 
     private async preparePropertyCountData(property: TicketProperty, tickets: Ticket[]): Promise<Map<string, number>> {
         const labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.TICKET);
-        const data = await this.initMap(property);
-        for (const t of tickets) {
-            if (t[property]) {
-                const label = await labelProvider.getPropertyValueDisplayText(property, t[property]);
-                if (!data.has(label)) {
-                    data.set(label, 0);
-                }
+        const data = await this.initMap(property, labelProvider);
 
-                data.set(label, data.get(label) + 1);
+        const ids = tickets.map((t) => t[property]);
+
+        for (const id of ids) {
+            const label = await labelProvider.getPropertyValueDisplayText(property, id);
+            if (!data.has(label)) {
+                data.set(label, 0);
             }
+
+            data.set(label, data.get(label) + 1);
         }
+
         return data;
     }
 
-    private async initMap(property: TicketProperty): Promise<Map<string, number>> {
-        const objectData = ContextService.getInstance().getObjectData();
+    private async initMap(property: TicketProperty, labelProvider: TicketLabelProvider): Promise<Map<string, number>> {
         const map = new Map<string, number>();
+        let objectType: KIXObjectType;
+        let filter = [];
         switch (property) {
             case TicketProperty.PRIORITY_ID:
-                const priorities = await KIXObjectService.loadObjects<TicketPriority>(
-                    KIXObjectType.TICKET_PRIORITY, null
-                );
-                priorities.forEach((p) => map.set(p.Name, 0));
-                return map;
+                objectType = KIXObjectType.TICKET_PRIORITY;
+                break;
             case TicketProperty.STATE_ID:
-                const states = await KIXObjectService.loadObjects<TicketState>(
-                    KIXObjectType.TICKET_STATE, null
+                objectType = KIXObjectType.TICKET_STATE;
+
+                const viewAbleTypesConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+                    KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_VIEWABLE_STATE_TYPE]
                 );
-                states.forEach((s) => map.set(s.Name, 0));
-                return map;
+
+                if (viewAbleTypesConfig && viewAbleTypesConfig.length) {
+                    const types = viewAbleTypesConfig[0].Value;
+                    filter = [new FilterCriteria(
+                        TicketStateProperty.TYPE_NAME, SearchOperator.IN, FilterDataType.NUMERIC, FilterType.AND, types
+                    )];
+                }
+                break;
+            case TicketProperty.QUEUE_ID:
+                objectType = KIXObjectType.QUEUE;
+                break;
+            case TicketProperty.TYPE_ID:
+                objectType = KIXObjectType.TICKET_TYPE;
+                break;
+            case TicketProperty.SERVICE_ID:
+                objectType = KIXObjectType.SERVICE;
+                break;
+
             default:
-                return map;
         }
+
+        const objects = await KIXObjectService.loadObjects(objectType, null, new KIXObjectLoadingOptions(filter));
+
+        for (const o of objects) {
+            const label = await labelProvider.getPropertyValueDisplayText(property, o.ObjectId);
+            map.set(label, 0);
+        }
+        return map;
     }
 
-    private prepareCreatedData(property: TicketProperty, tickets: Ticket[]): Map<string, number> {
+    private async prepareCreatedData(property: TicketProperty, tickets: Ticket[]): Promise<Map<string, number>> {
         const data = new Map<string, number>();
         const currentDate = new Date();
         currentDate.setDate(currentDate.getDate() - 8);
         for (let i = 1; i <= 8; i++) {
             currentDate.setDate(currentDate.getDate() + 1);
-            const label = DateTimeUtil.getLocalDateString(currentDate);
+            const label = await DateTimeUtil.getLocalDateString(currentDate);
             const createdTickets = tickets.filter((t) => DateTimeUtil.sameDay(currentDate, new Date(t.Created)));
             data.set(label, createdTickets.length);
         }

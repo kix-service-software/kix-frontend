@@ -1,9 +1,19 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObjectService } from './KIXObjectService';
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, TextModule, Error
 } from '../../../model';
-import { TextModuleResponse, TextModulesResponse } from '../../../api';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
+import { LoggingService } from '../LoggingService';
+import { TextModuleFactory } from '../../object-factories/TextModuleFactory';
 
 export class TextModuleService extends KIXObjectService {
 
@@ -16,12 +26,12 @@ export class TextModuleService extends KIXObjectService {
         return TextModuleService.INSTANCE;
     }
 
-    protected RESOURCE_URI: string = 'textmodules';
+    protected RESOURCE_URI: string = this.buildUri('system', 'textmodules');
 
-    public kixObjectType: KIXObjectType = KIXObjectType.TEXT_MODULE;
+    public objectType: KIXObjectType = KIXObjectType.TEXT_MODULE;
 
     private constructor() {
-        super();
+        super([new TextModuleFactory()]);
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -30,67 +40,48 @@ export class TextModuleService extends KIXObjectService {
     }
 
     public async loadObjects<T>(
-        token: string, objectType: KIXObjectType, objectIds: Array<number | string>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<T[]> {
         let objects = [];
 
         switch (objectType) {
             case KIXObjectType.TEXT_MODULE:
-                objects = await this.getTextModules(token, objectIds, loadingOptions);
+                objects = await super.load<TextModule>(
+                    token, KIXObjectType.TEXT_MODULE, this.RESOURCE_URI, loadingOptions, objectIds, 'TextModule');
                 break;
             default:
         }
         return objects;
     }
 
-    private async getTextModules(
-        token: string, textModuleIds: Array<number | string>, loadingOptions: KIXObjectLoadingOptions
-    ): Promise<TextModule[]> {
-        const query = this.prepareQuery(loadingOptions);
-
-        let textModules: TextModule[] = [];
-
-        if (textModuleIds && textModuleIds.length) {
-            textModuleIds = textModuleIds.filter(
-                (id) => typeof id !== 'undefined' && id.toString() !== '' && id !== null
-            );
-
-            const uri = this.buildUri(this.RESOURCE_URI, textModuleIds.join(','));
-            const response = await this.getObjectByUri<TextModuleResponse | TextModulesResponse>(
-                token, uri, query
-            );
-
-            if (textModuleIds.length === 1) {
-                textModules = [(response as TextModuleResponse).TextModule];
-            } else {
-                textModules = (response as TextModulesResponse).TextModule;
-            }
-
-        } else if (loadingOptions.filter) {
-            await this.buildFilter(loadingOptions.filter, 'TextModule', token, query);
-            const uri = this.buildUri(this.RESOURCE_URI);
-            const response = await this.getObjectByUri<TextModulesResponse>(token, uri, query);
-            textModules = response.TextModule;
-        } else {
-            const uri = this.buildUri(this.RESOURCE_URI);
-            const response = await this.getObjectByUri<TextModulesResponse>(token, uri, query);
-            textModules = response.TextModule;
-        }
-
-        return textModules;
-    }
-
     public createObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, string]>
+        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>
     ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
+        const id = super.executeUpdateOrCreateRequest(
+            token, clientRequestId, parameter, this.RESOURCE_URI, KIXObjectType.TEXT_MODULE, 'TextModuleID', true
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
+        });
+
+        return id;
     }
 
     public async updateObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
+        token: string, clientRequestId: string, objectType: KIXObjectType,
+        parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
+        const uri = this.buildUri(this.RESOURCE_URI, objectId);
+
+        const id = super.executeUpdateOrCreateRequest(
+            token, clientRequestId, parameter, uri, KIXObjectType.TEXT_MODULE, 'TextModuleID'
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
+        });
+
+        return id;
     }
 
 }

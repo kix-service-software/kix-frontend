@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     AbstractMarkoComponent, ActionFactory, ContextService, WidgetService,
     TableEvent, TableFactoryService, TableEventData
@@ -41,7 +50,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async initWidget(ciClass: ConfigItemClass): Promise<void> {
-        this.prepareActions(ciClass);
+        await this.prepareActions(ciClass);
         this.prepareTable();
     }
 
@@ -52,7 +61,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async prepareTable(): Promise<void> {
-        const table = TableFactoryService.getInstance().createTable(
+        const table = await TableFactoryService.getInstance().createTable(
             'config-item-class-definitions', KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION,
             null, null, ConfigItemClassDetailsContext.CONTEXT_ID, true
         );
@@ -73,9 +82,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.table = table;
     }
 
-    private prepareActions(ciClass: ConfigItemClass): void {
+    private async prepareActions(ciClass: ConfigItemClass): Promise<void> {
         if (this.state.widgetConfiguration && ciClass) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.actions = await ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, [ciClass]
             );
         }

@@ -1,6 +1,17 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { TranslationService } from "../../browser/i18n/TranslationService";
+
 export class DateTimeUtil {
 
-    public static getLocalDateString(value: any, locale: string = 'de-DE', weekday: boolean = false): string {
+    public static async getLocalDateString(value: any, language?: string): Promise<string> {
         let string = '';
         if (value) {
             const date = new Date(value);
@@ -9,15 +20,16 @@ export class DateTimeUtil {
                 month: '2-digit',
                 year: 'numeric'
             };
-            if (weekday) {
-                options['weekday'] = 'long';
+
+            if (!language) {
+                language = await TranslationService.getUserLanguage();
             }
-            string = date.toLocaleDateString(locale, options);
+            string = language ? date.toLocaleDateString(language, options) : value;
         }
         return string;
     }
 
-    public static getLocalDateTimeString(value: any, locale: string = 'de-DE', weekday: boolean = false): string {
+    public static async getLocalDateTimeString(value: any, language?: string): Promise<string> {
         let string = '';
         if (value) {
             const date = new Date(value);
@@ -28,10 +40,11 @@ export class DateTimeUtil {
                 hour: '2-digit',
                 minute: '2-digit'
             };
-            if (weekday) {
-                options['weekday'] = 'long';
+
+            if (!language) {
+                language = await TranslationService.getUserLanguage();
             }
-            string = date.toLocaleString(locale, options);
+            string = language ? date.toLocaleString(language, options) : value;
         }
         return string;
     }

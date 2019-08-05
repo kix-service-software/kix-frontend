@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../core/browser';
 import { ITable, SelectionState, TableEvent, TableEventData } from '../../../../core/browser/table';
@@ -13,9 +22,11 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         this.state = new ComponentState();
     }
 
-    public async onInput(input: any): Promise<void> {
+    public onInput(input: any): void {
         this.table = input.table;
         this.state.columns = this.table.getColumns();
+
+        return input;
     }
 
     public async onMount(): Promise<void> {

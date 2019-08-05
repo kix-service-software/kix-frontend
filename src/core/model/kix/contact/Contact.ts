@@ -1,7 +1,16 @@
-import { ContactSource } from "./ContactSource";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObject } from "../KIXObject";
 import { KIXObjectType } from "..";
-import { Ticket, TicketStats } from "../ticket";
+import { Ticket } from "../ticket";
+import { TicketStats } from "../organisation/TicketStats";
 
 export class Contact extends KIXObject<Contact> {
 
@@ -9,114 +18,69 @@ export class Contact extends KIXObject<Contact> {
 
     public KIXObjectType: KIXObjectType = KIXObjectType.CONTACT;
 
-    public ContactID: string;
+    public ID: number;
 
-    public SourceID: string;
+    public Firstname: string;
 
-    public UserLogin: string;
+    public Lastname: string;
 
-    public UserPhone: string;
+    public Login: string;
 
-    public UserCustomerID: string;
+    public City: string;
 
-    public UserCountry: string;
+    public Street: string;
 
-    public UserLastname: string;
+    public Comment: string;
 
-    public UserFirstname: string;
+    public Country: string;
 
-    public UserTitle: string;
+    public Email: string;
 
-    public UserFax: string;
+    public Fax: string;
 
-    public UserMobile: string;
+    public Mobile: string;
 
-    public UserComment: string;
+    public Phone: string;
 
-    public UserStreet: string;
+    public PrimaryOrganisationID: number;
 
-    public UserEmail: string;
+    public OrganisationIDs: number[];
 
-    public UserCity: string;
+    public Title: string;
 
-    public UserZip: string;
-
-    public ValidID: number;
-
-    public CreateBy: number;
-
-    public CreateTime: string;
-
-    public ChangeBy: number;
-
-    public ChangeTime: string;
-
-    public DisplayValue: string;
-
-    public UserCustomerIDs: string[];
-
-    public Tickets: Array<number | Ticket>;
+    public Zip: string;
 
     public TicketStats: TicketStats;
 
-    // UI Properties
-
-    public contactSourceMap: Array<[string, Array<[string, string]>]> = [];
+    public Tickets: Ticket[];
 
     public constructor(contact?: Contact) {
-        super();
+        super(contact);
 
         if (contact) {
-            this.ContactID = contact.ContactID;
-            this.ObjectId = this.ContactID;
-            this.SourceID = contact.SourceID;
-            this.UserLogin = contact.UserLogin;
-            this.UserPhone = contact.UserPhone;
-            this.UserCustomerID = contact.UserCustomerID;
-            this.UserCountry = contact.UserCountry;
-            this.UserLastname = contact.UserLastname;
-            this.UserFirstname = contact.UserFirstname;
-            this.UserTitle = contact.UserTitle;
-            this.UserFax = contact.UserFax;
-            this.UserMobile = contact.UserMobile;
-            this.UserComment = contact.UserComment;
-            this.UserStreet = contact.UserStreet;
-            this.UserEmail = contact.UserEmail;
-            this.UserCity = contact.UserCity;
-            this.UserZip = contact.UserZip;
-            this.ValidID = contact.ValidID;
-            this.CreateBy = contact.CreateBy;
-            this.CreateTime = contact.CreateTime;
-            this.ChangeBy = contact.ChangeBy;
-            this.ChangeTime = contact.ChangeTime;
-            this.DisplayValue = contact.DisplayValue;
-            this.UserCustomerIDs = contact.UserCustomerIDs;
-            this.Tickets = contact.Tickets;
+            this.ID = contact.ID;
+            this.ObjectId = this.ID;
+            this.Firstname = contact.Firstname;
+            this.Lastname = contact.Lastname;
+            this.Login = contact.Login;
+            this.City = contact.City;
+            this.Street = contact.Street;
+            this.Comment = contact.Comment;
+            this.Country = contact.Country;
+            this.Email = contact.Email;
+            this.Fax = contact.Fax;
+            this.Mobile = contact.Mobile;
+            this.Phone = contact.Phone;
+            this.PrimaryOrganisationID = contact.PrimaryOrganisationID;
+            this.OrganisationIDs = contact.OrganisationIDs;
+            this.Title = contact.Title;
+            this.Zip = contact.Zip;
             this.TicketStats = contact.TicketStats;
-            this.contactSourceMap = contact.contactSourceMap;
+
+            this.Tickets = contact.Tickets
+                ? contact.Tickets.map((t) => new Ticket(t))
+                : [];
         }
-    }
-
-    public getContactInfoData(): Array<[string, Array<[string, string]>]> {
-        const contactInfoValue = [];
-        if (this.contactSourceMap) {
-            this.contactSourceMap.forEach((groupTuple) => {
-                const attributes = [];
-                groupTuple[1].forEach((attributeTuple) => {
-                    attributes.push([attributeTuple[1], this[attributeTuple[1]]]);
-                });
-                contactInfoValue.push([groupTuple[0], attributes]);
-            });
-        }
-        return contactInfoValue;
-    }
-
-    public equals(contact: Contact): boolean {
-        return contact && contact.ContactID === this.ContactID;
-    }
-
-    public getIdPropertyName(): string {
-        return 'ContactID';
     }
 
 }

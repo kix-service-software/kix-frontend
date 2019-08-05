@@ -1,7 +1,15 @@
-import { Context, ConfiguredWidget, WidgetConfiguration, WidgetType } from "../../model";
-import { HomeContextConfiguration } from ".";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
 
-export class HomeContext extends Context<HomeContextConfiguration> {
+import { Context } from "../../model";
+
+export class HomeContext extends Context {
 
     public static CONTEXT_ID: string = 'home';
 
@@ -11,32 +19,6 @@ export class HomeContext extends Context<HomeContextConfiguration> {
 
     public async getDisplayText(): Promise<string> {
         return 'Home Dashboard';
-    }
-
-    public getContent(show: boolean = false): ConfiguredWidget[] {
-        let content = this.configuration.contentWidgets;
-
-        if (show) {
-            content = content.filter(
-                (c) => this.configuration.content.findIndex((cid) => c.instanceId === cid) !== -1
-            );
-        }
-
-        return content;
-    }
-
-    protected getSpecificWidgetConfiguration<WS = any>(instanceId: string): WidgetConfiguration<WS> {
-        const widget = this.configuration.contentWidgets.find((cw) => cw.instanceId === instanceId);
-        return widget ? widget.configuration : undefined;
-    }
-
-    protected getSpecificWidgetType(instanceId: string): WidgetType {
-        let widgetType: WidgetType;
-
-        const contentWidget = this.configuration.contentWidgets.find((lw) => lw.instanceId === instanceId);
-        widgetType = contentWidget ? WidgetType.CONTENT : undefined;
-
-        return widgetType;
     }
 
 }

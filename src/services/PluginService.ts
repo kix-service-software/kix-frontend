@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import Plugins = require('js-plugins');
 
 import { IConfigurationExtension, KIXExtensions } from '../core/extensions';
@@ -18,29 +27,19 @@ export class PluginService {
 
     public pluginManager: any;
 
-    private constructor() {
+    private constructor() { }
+
+    public init(extensionFolder: string[]): void {
         this.pluginManager = new Plugins();
 
-        const pluginDirs = [];
-        const fs = require('fs');
+        extensionFolder = extensionFolder.map((ef) => __dirname + '/../' + ef);
 
-        // FIXME: use Plugin folders from configuration service
-        const PLUGIN_FOLDERS = ["node_modules/@kix", "extensions"];
-        for (const dir of PLUGIN_FOLDERS) {
-            const path = __dirname + '/../../' + dir;
-            pluginDirs.push(path);
-        }
-
-        this.pluginManager.scanSubdirs(pluginDirs);
+        this.pluginManager.scanSubdirs(extensionFolder);
         this.pluginManager.scan();
     }
 
-    public initCache(): Promise<void> {
-        return;
-    }
-
-    public async getExtensions<T>(extensionId: string): Promise<T[]> {
-        return await new Promise<T[]>((resolve, reject) => {
+    public getExtensions<T>(extensionId: string): Promise<T[]> {
+        return new Promise<T[]>((resolve, reject) => {
             const config = { multi: true };
             this.pluginManager.connect(host, extensionId, config,
                 (error, extensions: T[], names) => {

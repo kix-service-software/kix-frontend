@@ -1,79 +1,81 @@
-import { ILabelProvider } from "../ILabelProvider";
-import { Channel, KIXObjectType, ObjectIcon, ChannelProperty, DateTimeUtil } from "../../model";
-import { ContextService } from "../context";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
 
-export class ChannelLabelProvider implements ILabelProvider<Channel> {
+import { Channel, KIXObjectType, ObjectIcon, ChannelProperty } from '../../model';
+import { TranslationService } from '../i18n/TranslationService';
+import { LabelProvider } from '../LabelProvider';
+
+export class ChannelLabelProvider extends LabelProvider<Channel> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CHANNEL;
+
+    public isLabelProviderForType(objectType: KIXObjectType): boolean {
+        return objectType === this.kixObjectType;
+    }
 
     public isLabelProviderFor(channel: Channel): boolean {
         return channel instanceof Channel;
     }
 
-    public async getPropertyText(property: string, short?: boolean): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
 
         switch (property) {
             case ChannelProperty.NAME:
-                displayValue = 'Name';
+                displayValue = 'Translatable#Name';
                 break;
             case ChannelProperty.ID:
-                displayValue = 'Id';
-                break;
-            case ChannelProperty.CREATE_BY:
-                displayValue = 'Erstellt von';
-                break;
-            case ChannelProperty.CREATE_TIME:
-                displayValue = 'Erstellt am';
-                break;
-            case ChannelProperty.CHANGED_BY:
-                displayValue = 'Geändert von';
-                break;
-            case ChannelProperty.CHANGE_TIME:
-                displayValue = 'Geändert am';
+                displayValue = 'Translatable#Id';
                 break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
+
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
+        }
+
         return displayValue;
     }
 
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
-    }
-
-    public async getDisplayText(channel: Channel, property: string): Promise<string> {
+    public async getDisplayText(
+        channel: Channel, property: string, value?: string, translatable: boolean = true
+    ): Promise<string> {
         let displayValue = channel[property];
 
         switch (property) {
             case ChannelProperty.NAME:
                 if (channel.Name === 'note') {
-                    displayValue = 'Notiz';
+                    displayValue = await TranslationService.translate('Translatable#Note', []);
                 }
                 if (channel.Name === 'email') {
-                    displayValue = 'E-Mail';
+                    displayValue = await TranslationService.translate('Translatable#Email', []);
                 }
                 break;
             default:
         }
 
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
+        }
+
         return displayValue;
     }
 
-    public async getPropertyValueDisplayText(property: string, value: string | number): Promise<string> {
-        return value.toString();
-    }
-
-    public getDisplayTextClasses(channel: Channel, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(channel: Channel): string[] {
-        return [];
-    }
-
-    public async getObjectText(channel: Channel, id?: boolean, title?: boolean): Promise<string> {
-        return 'Kanal';
+    public async getObjectText(
+        channel: Channel, id?: boolean, title?: boolean, translatable: boolean = true
+    ): Promise<string> {
+        return translatable ? await TranslationService.translate('Translatable#Channel') : 'Channel';
     }
 
     public getObjectAdditionalText(channel: Channel): string {
@@ -81,17 +83,27 @@ export class ChannelLabelProvider implements ILabelProvider<Channel> {
     }
 
     public getObjectIcon(channel?: Channel): string | ObjectIcon {
-        if (channel.Name === 'note') {
-            return 'kix-icon-new-note';
-        }
-        if (channel.Name === 'email') {
-            return 'kix-icon-new-mail';
+        if (channel) {
+            if (channel.Name === 'note') {
+                return 'kix-icon-new-note';
+            }
+            if (channel.Name === 'email') {
+                return 'kix-icon-new-mail';
+            }
         }
         return null;
     }
 
-    public getObjectName(plural?: boolean): string {
-        return plural ? 'Kanal' : 'Kanäle';
+    public async getObjectName(plural?: boolean, translatable?: boolean): Promise<string> {
+        if (plural) {
+            const channelsLabel = translatable
+                ? await TranslationService.translate('Translatable#Channels')
+                : 'Channels';
+            return channelsLabel;
+        }
+
+        const channelLabel = translatable ? await TranslationService.translate('Translatable#Channel') : 'Channel';
+        return channelLabel;
     }
 
     public getObjectTooltip(channel: Channel): string {

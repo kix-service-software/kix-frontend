@@ -1,9 +1,19 @@
-import { Environment, IServerConfiguration } from '../../common';
-import { WidgetDescriptor, Form, FormContext, KIXObjectType, Bookmark } from '../../model';
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { IServerConfiguration, AppUtil } from '../../common';
+import { Form, FormContext, KIXObjectType } from '../../model';
 
 import jsonfile = require('jsonfile');
 import fs = require('fs');
-import { FAQDetailsContext } from '../../browser/faq';
+import path = require('path');
+
 import { LoggingService } from './LoggingService';
 
 export class ConfigurationService {
@@ -19,40 +29,34 @@ export class ConfigurationService {
 
     private constructor() { }
 
+    private static DEFAULT_CONFIG_DIR = 'defaults';
+    private static USER_CONFIG_DIR = 'user';
+
     public configurationDirectory: string;
     public certDirectory: string;
 
     private serverConfiguration: IServerConfiguration;
     private lassoConfiguration: any;
-    private preDefinedWidgetConfiguration: any;
 
     private forms: string[] = [];
     private formIDsWithContext: Array<[FormContext, KIXObjectType, string]> = [];
-
-    private CONFIG_EXTENSION: string = '.config.json';
 
     public init(configurationDirectory: string, certDirectory: string): void {
         this.configurationDirectory = configurationDirectory;
         this.certDirectory = certDirectory;
 
-        let lassoConfig = this.getConfigurationFilePath('lasso.dev');
+        let lassoConfig = this.getConfigurationFilePath('lasso.dev.config.json');
 
-        const serverConfig = this.getConfigurationFilePath('server');
+        const serverConfig = this.getConfigurationFilePath('server.config.json');
 
-        if (this.isProductionMode()) {
-            lassoConfig = this.getConfigurationFilePath('lasso.prod');
+        if (AppUtil.isProductionMode()) {
+            lassoConfig = this.getConfigurationFilePath('lasso.prod.config.json');
         }
 
         this.serverConfiguration = this.loadServerConfig(serverConfig);
 
         this.clearRequireCache(lassoConfig);
         this.lassoConfiguration = require(lassoConfig);
-
-        this.preDefinedWidgetConfiguration = require(this.getConfigurationFilePath("pre-defined-widgets"));
-    }
-
-    public initCache(): Promise<void> {
-        return;
     }
 
     public getServerConfiguration(): IServerConfiguration {
@@ -63,78 +67,49 @@ export class ConfigurationService {
         return this.lassoConfiguration;
     }
 
-    public getPreDefinedWidgetConfiguration<T = any>(contextId: string): Array<WidgetDescriptor<T>> {
-        return this.preDefinedWidgetConfiguration && this.preDefinedWidgetConfiguration[contextId]
-            ? this.preDefinedWidgetConfiguration[contextId]
-            : [];
-    }
+    public getConfiguration<T = any>(configurationId: string, userId?: number): T {
+        let filePath = this.getComponentConfigurationFilePath(configurationId + '.config.json');
+        if (userId) {
+            filePath = this.getUserConfigurationFilePath(configurationId + '.config.json', userId);
+        }
 
-    public getModuleConfiguration(contextId: string, userId?: number): any {
-
-        const configurationFileName = this.buildConfigurationFileName(contextId, userId);
-        const filePath = this.getComponentConfigurationFilePath(configurationFileName);
         const moduleConfiguration = this.getConfigurationFile(filePath);
-
         return moduleConfiguration;
     }
 
-    public async saveModuleConfiguration(
-        contextId: string, userId: number, configuration: any): Promise<void> {
-
-        const configurationFileName = this.buildConfigurationFileName(contextId, userId);
-        const filePath = this.getComponentConfigurationFilePath(configurationFileName);
-
+    public async saveConfiguration(configurationId: string, configuration: any, userId?: number): Promise<void> {
+        let filePath = this.getComponentConfigurationFilePath(configurationId + '.config.json');
+        if (userId) {
+            filePath = this.getUserConfigurationFilePath(configurationId + '.config.json', userId);
+        }
         return this.saveConfigurationFile(filePath, configuration);
     }
 
-    public getComponentConfiguration(
-        contextId: string, componentId: string, userId: number): any {
+    private getComponentConfigurationFilePath(fileName: string): string {
+        const dir = path.join(this.configurationDirectory, ConfigurationService.DEFAULT_CONFIG_DIR);
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir);
+        }
+        return path.join(this.configurationDirectory, ConfigurationService.DEFAULT_CONFIG_DIR, fileName);
+    }
 
-        const moduleConfiguration = this.getModuleConfiguration(contextId, userId);
+    private getUserConfigurationFilePath(fileName: string, userId: number): string {
+        const userConfigDir = this.getUserConfigDir(userId);
+        return path.join(userConfigDir, fileName);
+    }
 
-        if (componentId === null) {
-            componentId = contextId;
+    private getUserConfigDir(userId: number): string {
+        const userDir = path.join(this.configurationDirectory, ConfigurationService.USER_CONFIG_DIR);
+        if (!fs.existsSync(userDir)) {
+            fs.mkdirSync(userDir);
         }
 
-        return moduleConfiguration ? moduleConfiguration[componentId] : undefined;
-    }
-
-    public async saveComponentConfiguration(
-        contextId: string, componentId: string, userId: number, configuration: any): Promise<void> {
-
-        if (componentId === null) {
-            componentId = contextId;
+        const userConfigDir = path.join(userDir, userId.toString());
+        if (!fs.existsSync(userConfigDir)) {
+            fs.mkdirSync(userConfigDir);
         }
 
-        const configurationFileName = this.buildConfigurationFileName(contextId, userId);
-        const filePath = this.getComponentConfigurationFilePath(configurationFileName);
-        const moduleConfiguration = this.getConfigurationFile(filePath) || {};
-        moduleConfiguration[componentId] = configuration;
-
-        return this.saveConfigurationFile(filePath, moduleConfiguration);
-    }
-
-    public isProductionMode(): boolean {
-        const environment = this.getEnvironment();
-        return environment === Environment.PRODUCTION ||
-            (environment !== Environment.DEVELOPMENT && environment !== Environment.TEST);
-    }
-
-    public isDevelopmentMode(): boolean {
-        return this.getEnvironment() === Environment.DEVELOPMENT;
-    }
-
-    public isTestMode(): boolean {
-        return this.getEnvironment() === Environment.TEST;
-    }
-
-    private getEnvironment(): string {
-        let nodeEnv = process.env.NODE_ENV;
-        if (!nodeEnv) {
-            nodeEnv = Environment.PRODUCTION;
-        }
-
-        return nodeEnv.toLocaleLowerCase();
+        return userConfigDir;
     }
 
     private saveConfigurationFile(filePath: string, configurationContent: any): Promise<void> {
@@ -168,7 +143,7 @@ export class ConfigurationService {
                         break;
                     }
                     case "object": {
-                        config[key] = Object(process.env[key].split(/\s+/));
+                        config[key] = JSON.parse(process.env[key]);
                         break;
                     }
                     default: {
@@ -182,21 +157,7 @@ export class ConfigurationService {
     }
 
     private getConfigurationFilePath(fileName: string): string {
-        return this.configurationDirectory + fileName + this.CONFIG_EXTENSION;
-    }
-
-    private getComponentConfigurationFilePath(fileName: string): string {
-        return this.configurationDirectory + '/components/' + fileName + this.CONFIG_EXTENSION;
-    }
-
-    private buildConfigurationFileName(contextId: string, userId?: number): string {
-        let configurationFileName = contextId;
-
-        if (userId) {
-            configurationFileName = userId + '_' + configurationFileName;
-        }
-
-        return configurationFileName;
+        return path.join(this.configurationDirectory, fileName);
     }
 
     private getConfigurationFile(filePath: string): any {
@@ -254,7 +215,7 @@ export class ConfigurationService {
     public getRegisteredForms(): Form[] {
         const result = [];
         for (const formId of this.forms) {
-            const form = this.getModuleConfiguration(formId, null);
+            const form = this.getConfiguration(formId);
             if (form) {
                 result.push(form);
             }
@@ -265,34 +226,6 @@ export class ConfigurationService {
 
     public getFormIDsWithContext(): Array<[FormContext, KIXObjectType, string]> {
         return this.formIDsWithContext;
-    }
-
-    public getBookmarks(): Bookmark[] {
-        let configuration: Bookmark[] = this.getModuleConfiguration('bookmarks');
-
-        if (!configuration) {
-            configuration = [
-                new Bookmark(
-                    'Allgemeine Hinweise zum Arbeiten mit KIX 18', 'kix-icon-faq', 1,
-                    KIXObjectType.FAQ_ARTICLE, FAQDetailsContext.CONTEXT_ID
-                ),
-                new Bookmark(
-                    'Wie suche ich in KIX 18', 'kix-icon-faq', 2,
-                    KIXObjectType.FAQ_ARTICLE, FAQDetailsContext.CONTEXT_ID
-                ),
-                new Bookmark(
-                    'Wie lege ich ein neues Ticket an?', 'kix-icon-faq', 3,
-                    KIXObjectType.FAQ_ARTICLE, FAQDetailsContext.CONTEXT_ID
-                ),
-                new Bookmark(
-                    'Ausgewählte Ticket Funktionen', 'kix-icon-faq', 4,
-                    KIXObjectType.FAQ_ARTICLE, FAQDetailsContext.CONTEXT_ID
-                )
-            ];
-            this.saveModuleConfiguration("bookmarks", null, configuration);
-        }
-
-        return configuration;
     }
 
 }

@@ -1,71 +1,79 @@
-import { ILabelProvider } from "..";
-import { DateTimeUtil, ObjectIcon, KIXObjectType } from "../../model";
-import { ContextService } from "../context";
-import { FAQArticleHistoryProperty, FAQHistory } from "../../model/kix/faq";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
 
-export class FAQArticleHistoryLabelProvider implements ILabelProvider<FAQHistory> {
+import { DateTimeUtil, ObjectIcon, KIXObjectType, User } from '../../model';
+import { FAQArticleHistoryProperty, FAQHistory } from '../../model/kix/faq';
+import { TranslationService } from '../i18n/TranslationService';
+import { KIXObjectService } from '../kix';
+import { LabelProvider } from '../LabelProvider';
+
+export class FAQArticleHistoryLabelProvider extends LabelProvider<FAQHistory> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.FAQ_ARTICLE_HISTORY;
 
-    public async getPropertyValueDisplayText(property: string, value: string | number): Promise<string> {
-        return value.toString();
-    }
-
-    public async getPropertyText(property: string): Promise<string> {
+    public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
             case FAQArticleHistoryProperty.ARTICLE_ID:
-                displayValue = 'Artikel Id';
+                displayValue = 'Translatable#Article Id';
                 break;
             case FAQArticleHistoryProperty.CREATED:
-                displayValue = 'Erstellt am';
+                displayValue = 'Translatable#Created at';
                 break;
             case FAQArticleHistoryProperty.CREATED_BY:
-                displayValue = 'Benutzer';
+                displayValue = 'Translatable#User';
                 break;
             case FAQArticleHistoryProperty.ID:
-                displayValue = 'Id';
+                displayValue = 'Translatable#Id';
                 break;
             case FAQArticleHistoryProperty.NAME:
-                displayValue = 'Aktion';
+                displayValue = 'Translatable#Action';
                 break;
             default:
                 displayValue = property;
         }
-        return displayValue;
-    }
 
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
-    }
-
-    public async getDisplayText(history: FAQHistory, property: string): Promise<string> {
-        const value = history[property];
-        let displayValue = value;
-
-        const objectData = ContextService.getInstance().getObjectData();
-
-        switch (property) {
-            case FAQArticleHistoryProperty.CREATED_BY:
-                const user = objectData.users.find((u) => u.UserID === history.CreatedBy);
-                displayValue = user ? user.UserFullname : history.CreatedBy;
-                break;
-            case FAQArticleHistoryProperty.CREATED:
-                displayValue = DateTimeUtil.getLocalDateTimeString(value);
-                break;
-            default:
-                displayValue = String(value);
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
     }
 
-    public getDisplayTextClasses(history: FAQHistory, property: string): string[] {
-        return [];
-    }
+    public async getDisplayText(
+        history: FAQHistory, property: string, defaultValue?: string, translatable: boolean = true
+    ): Promise<string> {
+        let displayValue = history[property];
 
-    public getObjectClasses(history: FAQHistory): string[] {
-        return [];
+        switch (property) {
+            case FAQArticleHistoryProperty.CREATED_BY:
+                const users = await KIXObjectService.loadObjects<User>(
+                    KIXObjectType.USER, [displayValue], null, null, true
+                ).catch((error) => [] as User[]);
+                displayValue = users && !!users.length ? users[0].UserFullname : displayValue;
+                break;
+            case FAQArticleHistoryProperty.CREATED:
+                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
+                break;
+            default:
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
+        }
+
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
+        }
+
+        return displayValue;
     }
 
     public isLabelProviderFor(history: FAQHistory): boolean {
@@ -76,11 +84,7 @@ export class FAQArticleHistoryLabelProvider implements ILabelProvider<FAQHistory
         return history.ID.toString();
     }
 
-    public getObjectAdditionalText(history: FAQHistory): string {
-        return null;
-    }
-
-    public getObjectIcon(history: FAQHistory): string | ObjectIcon {
+    public getObjectTypeIcon(): string | ObjectIcon {
         return 'kix-icon-faq';
     }
 
@@ -88,12 +92,8 @@ export class FAQArticleHistoryLabelProvider implements ILabelProvider<FAQHistory
         return history.Name;
     }
 
-    public getObjectName(plural: boolean = false): string {
-        return "FAQ Artikel Historie";
-    }
-
-    public async getIcons(object: FAQHistory, property: string): Promise<Array<string | ObjectIcon>> {
-        return [];
+    public async getObjectName(plural: boolean = false): Promise<string> {
+        return await TranslationService.translate('Translatable#FAQ Article History');
     }
 
 }

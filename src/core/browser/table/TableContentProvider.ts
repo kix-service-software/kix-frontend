@@ -1,14 +1,23 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ITableContentProvider } from "./ITableContentProvider";
-import { KIXObjectType, KIXObjectLoadingOptions, KIXObject } from "../../model";
+import { KIXObjectType, KIXObjectLoadingOptions, KIXObject, KIXObjectProperty } from "../../model";
 import { ITable } from "./ITable";
 import { ContextService } from "../context";
-import { IdService } from "../IdService";
 import { IRowObject } from "./IRowObject";
 import { KIXObjectService } from "../kix";
 import { RowObject } from "./RowObject";
 import { TableValue } from "./TableValue";
+import { TranslationService } from "../i18n/TranslationService";
 
-export class TableContentProvider<T extends KIXObject = any> implements ITableContentProvider<T> {
+export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
     protected initialized: boolean = false;
 
@@ -63,24 +72,43 @@ export class TableContentProvider<T extends KIXObject = any> implements ITableCo
             objects = context ? await context.getObjectList() : [];
         } else {
             if (!this.objectIds || (this.objectIds && this.objectIds.length > 0)) {
-                objects = await KIXObjectService.loadObjects<T>(
+                objects = await KIXObjectService.loadObjects<KIXObject>(
                     this.objectType, this.objectIds, this.loadingOptions, null, false
                 );
             }
         }
 
-        const rowObjects = objects.map((t) => {
-            const values: TableValue[] = [];
+        const rowObjectPromises: Array<Promise<RowObject<T>>> = [];
+        for (const o of objects) {
+            rowObjectPromises.push(new Promise<RowObject<T>>(async (resolve, reject) => {
+                const values: TableValue[] = [];
 
-            for (const property in t) {
-                if (t.hasOwnProperty(property)) {
-                    values.push(new TableValue(property, t[property]));
+                for (const property in o) {
+                    if (o.hasOwnProperty(property)) {
+                        const value = await this.getTableValue(o, property);
+                        values.push(value);
+                    }
                 }
+
+                resolve(new RowObject<T>(values, o));
+            }));
+        }
+
+        const rowObjects = await Promise.all(rowObjectPromises);
+        return rowObjects;
+    }
+
+    protected async getTableValue(object: any, property: string): Promise<TableValue> {
+        let displayValue = null;
+        if (object[KIXObjectProperty.DISPLAY_VALUES]) {
+            const kixObject = object as KIXObject;
+            const value = kixObject.displayValues.find((dv) => dv[0] === property);
+            if (value) {
+                const text = await TranslationService.translate(value[1]);
+                displayValue = text;
             }
 
-            return new RowObject<T>(values, t);
-        });
-
-        return rowObjects;
+        }
+        return new TableValue(property, object[property], displayValue);
     }
 }

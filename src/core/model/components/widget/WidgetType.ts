@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 export enum WidgetType {
 
     CONTENT = 1 << 0,
@@ -8,14 +17,12 @@ export enum WidgetType {
 
     LANE = 1 << 3,
 
-    LANE_TAB = 1 << 4,
+    GROUP = 1 << 4,
 
-    GROUP = 1 << 5,
+    OVERLAY = 1 << 5,
 
-    OVERLAY = 1 << 6,
+    DIALOG = 1 << 6,
 
-    DIALOG = 1 << 7,
-
-    OVERLAY_DIALOG = 1 << 8
+    OVERLAY_DIALOG = 1 << 7
 
 }

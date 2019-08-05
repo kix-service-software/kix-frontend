@@ -1,0 +1,85 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { ComponentState } from './ComponentState';
+import { ReleaseInfo, SysConfigOption, KIXObjectType, SysConfigKey } from '../../../core/model';
+import { KIXObjectService } from '../../../core/browser';
+import { TranslationService } from '../../../core/browser/i18n/TranslationService';
+import { ComponentInput } from './ComponentInput';
+import { KIXModulesSocketClient } from '../../../core/browser/modules/KIXModulesSocketClient';
+
+class Component {
+
+    public state: ComponentState;
+
+    private translations: Map<string, string>;
+
+    public onCreate(input: any): void {
+        this.state = new ComponentState();
+    }
+
+    public onInput(input: ComponentInput): void {
+        this.state.releaseInfo = input.releaseInfo;
+        this.state.imprintLink = input.imprintLink;
+    }
+
+    public async onMount(): Promise<void> {
+        this.initTranslations();
+        if (!this.state.releaseInfo) {
+            this.state.releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
+        }
+
+        if (this.state.releaseInfo) {
+            this.state.kixProduct = this.state.releaseInfo.product;
+            this.state.kixVersion = this.state.releaseInfo.version;
+            this.state.buildNumber = this.getBuildNumber(this.state.releaseInfo);
+        }
+
+        if (!this.state.imprintLink) {
+            const imprintConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+                KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.IMPRINT_LINK]
+            );
+
+            if (imprintConfig && imprintConfig.length) {
+                const data = imprintConfig[0].Value;
+
+                const userLang = navigator.language;
+                if (userLang.indexOf('de') >= 0) {
+                    this.state.imprintLink = data['de'];
+                } else {
+                    this.state.imprintLink = data['en'];
+                }
+            }
+        }
+    }
+
+    private initTranslations(): void {
+        this.translations = new Map();
+        this.translations.set("A product by c.a.p.e. IT GmbH", "Ein Produkt der c.a.p.e. IT GmbH");
+        this.translations.set("Imprint", "Impressum");
+    }
+
+    public getString(pattern: string): string {
+        if (typeof window !== 'undefined' && window.navigator && this.translations) {
+            const userLang = window.navigator.language;
+            if (userLang.indexOf('de') >= 0 && this.translations.has(pattern)) {
+                const translation = this.translations.get(pattern);
+                return translation;
+            }
+        }
+        return pattern;
+    }
+
+    private getBuildNumber(releaseInfo: ReleaseInfo): string {
+        const backendBuildNumber = releaseInfo.backendSystemInfo ? releaseInfo.backendSystemInfo.BuildNumber : '';
+        return `(Build: ${releaseInfo.buildNumber.toString()}.${backendBuildNumber})`;
+    }
+}
+
+module.exports = Component;

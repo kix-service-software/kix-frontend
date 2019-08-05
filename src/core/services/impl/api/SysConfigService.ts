@@ -1,10 +1,21 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObjectService } from './KIXObjectService';
 import {
-    KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, SysConfigItem, Error
+    KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, SysConfigOption, Error
 } from '../../../model';
-import { SysConfigItemsResponse } from '../../../api';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
-import { ConfigurationService } from '../ConfigurationService';
+import { SysConfigOptionFactory } from '../../object-factories/SysConfigOptionFactory';
+import { SysConfigOptionDefinition } from '../../../model/kix/sysconfig/SysConfigOptionDefinition';
+import { SysConfigOptionDefinitionFactory } from '../../object-factories/SysConfigOptionDefinitionFactory';
+import { LoggingService } from '..';
 
 export class SysConfigService extends KIXObjectService {
 
@@ -17,71 +28,52 @@ export class SysConfigService extends KIXObjectService {
         return SysConfigService.INSTANCE;
     }
 
-    protected RESOURCE_URI: string = "sysconfig";
+    protected RESOURCE_URI: string = this.buildUri('system', 'config');
 
-    public kixObjectType: KIXObjectType = KIXObjectType.SYS_CONFIG_ITEM;
-
-    private sysconfigCache: SysConfigItem[] = [];
+    public objectType: KIXObjectType = KIXObjectType.SYS_CONFIG_OPTION;
 
     private constructor() {
-        super();
+        super([new SysConfigOptionFactory(), new SysConfigOptionDefinitionFactory()]);
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType): boolean {
-        return kixObjectType === KIXObjectType.SYS_CONFIG_ITEM;
-    }
-
-    public async initCache(): Promise<void> {
-        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-        const token = serverConfig.BACKEND_API_TOKEN;
-
-        const response = await this.getObjects<SysConfigItemsResponse>(token);
-        this.sysconfigCache = response.SysConfigItem;
+        return kixObjectType === KIXObjectType.SYS_CONFIG_OPTION
+            || kixObjectType === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION;
     }
 
     public async loadObjects<O>(
-        token: string, objectType: KIXObjectType, objectIds: Array<number | string>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<O[]> {
         let objects = [];
 
-        if (objectType === KIXObjectType.SYS_CONFIG_ITEM && objectIds) {
-            const ids = [...objectIds];
-            for (const objectId of ids) {
-                const index = this.sysconfigCache.findIndex((sci) => sci.ID === objectId);
-                if (index !== -1) {
-                    objects.push(this.sysconfigCache[index]);
-
-                    const idx = objectIds.findIndex((oid) => oid === objectId);
-                    objectIds.splice(idx, 1);
-                }
-            }
-
-            if (objectIds.length) {
-                const uri = this.buildUri(this.RESOURCE_URI, objectIds.join(','));
-                const response = await this.getObjectByUri<SysConfigItemsResponse>(
-                    token, uri
-                );
-                objects = [...objects, ...response.SysConfigItem];
-            }
+        if (objectType === KIXObjectType.SYS_CONFIG_OPTION) {
+            objects = await super.load<SysConfigOption>(
+                token, KIXObjectType.SYS_CONFIG_OPTION, this.RESOURCE_URI, loadingOptions, objectIds, 'SysConfigOption'
+            );
+        } else if (objectType === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION) {
+            const uri = this.buildUri(this.RESOURCE_URI, 'definitions');
+            objects = await super.load<SysConfigOptionDefinition>(
+                token, KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, uri,
+                loadingOptions, objectIds, 'SysConfigOptionDefinition'
+            );
         }
-
-        objects = objects.map((sci) => new SysConfigItem(sci));
 
         return objects;
     }
-
-    public createObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, string]>
-    ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
-    }
-
     public async updateObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
-    ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
+        token: string, clientRequestId: string, objectType: KIXObjectType,
+        parameter: Array<[string, any]>, objectId: number | string
+    ): Promise<number> {
+        const uri = this.buildUri(this.RESOURCE_URI, objectId);
+        const id = await super.executeUpdateOrCreateRequest<number>(
+            token, clientRequestId, parameter, uri, this.objectType, 'Name'
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
+        });
+        return id;
     }
 
 }

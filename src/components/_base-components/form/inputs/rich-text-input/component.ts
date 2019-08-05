@@ -1,6 +1,15 @@
-import { ComponentState } from "./ComponentState";
-import { FormInputComponent, KIXObjectType, FormFieldOptions } from "../../../../../core/model";
-import { IAutofillConfiguration, AutocompleteFormFieldOption } from "../../../../../core/browser/components";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { ComponentState } from './ComponentState';
+import { FormInputComponent, FormFieldOptions } from '../../../../../core/model';
+import { AutocompleteFormFieldOption } from '../../../../../core/browser/components';
 
 class Component extends FormInputComponent<string, ComponentState> {
 
@@ -8,8 +17,15 @@ class Component extends FormInputComponent<string, ComponentState> {
         this.state = new ComponentState();
     }
 
-    public async onInput(input: any): Promise<void> {
-        await super.onInput(input);
+    public onInput(input: any): void {
+        super.onInput(input);
+
+        if (!this.state.noImages) {
+            const noImagesOption = this.state.field.options.find((o) => o.option === 'NO_IMAGES');
+            if (noImagesOption) {
+                this.state.noImages = Boolean(noImagesOption.value);
+            }
+        }
     }
 
     public async onMount(): Promise<void> {

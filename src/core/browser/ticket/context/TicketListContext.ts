@@ -1,13 +1,20 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
-    Context, WidgetConfiguration, WidgetType, ConfiguredWidget,
-    KIXObjectType, KIXObjectLoadingOptions, Ticket, KIXObject
+    Context, KIXObjectType, KIXObjectLoadingOptions, Ticket, KIXObject
 } from "../../../model";
-import { TicketListContextConfiguration } from "./TicketListContextConfiguration";
 import { KIXObjectService } from "../../kix";
 import { EventService } from "../../event";
 import { ApplicationEvent } from "../../application";
 
-export class TicketListContext extends Context<TicketListContextConfiguration> {
+export class TicketListContext extends Context {
 
     public static CONTEXT_ID: string = 'ticket-list';
 
@@ -26,11 +33,11 @@ export class TicketListContext extends Context<TicketListContextConfiguration> {
 
         this.text = text;
         this.ticketIds = ticketIds;
-        const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, 1000, ['Watchers']);
+        const loadingOptions = new KIXObjectLoadingOptions(null, null, 1000, ['Watchers']);
 
         const timeout = window.setTimeout(() => {
             EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Lade Tickets ...' }
+                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Lade Tickets' }
             );
         }, 500);
 
@@ -42,32 +49,6 @@ export class TicketListContext extends Context<TicketListContextConfiguration> {
 
         this.setObjectList(tickets);
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
-    }
-
-    public getContent(show: boolean = false): ConfiguredWidget[] {
-        let content = this.configuration.contentWidgets;
-
-        if (show && content) {
-            content = content.filter(
-                (l) => this.configuration.content.findIndex((cid) => l.instanceId === cid) !== -1
-            );
-        }
-
-        return content;
-    }
-
-    protected getSpecificWidgetConfiguration<WS = any>(instanceId: string): WidgetConfiguration<WS> {
-        const widget = this.configuration.contentWidgets.find((cw) => cw.instanceId === instanceId);
-        return widget ? widget.configuration : undefined;
-    }
-
-    protected getSpecificWidgetType(instanceId: string): WidgetType {
-        let widgetType: WidgetType;
-
-        const contentWidget = this.configuration.contentWidgets.find((lw) => lw.instanceId === instanceId);
-        widgetType = contentWidget ? WidgetType.CONTENT : undefined;
-
-        return widgetType;
     }
 
     public async getObjectList(reload: boolean = false): Promise<KIXObject[]> {

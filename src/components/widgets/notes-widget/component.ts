@@ -1,8 +1,18 @@
-import { ContextService } from "../../../core/browser/context";
-import { NotesService } from "../../../core/browser/notes";
-import { NotesEditAction } from "./NotesEditAction";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { ContextService } from '../../../core/browser/context';
+import { NotesService } from '../../../core/browser/notes';
+import { NotesEditAction } from './NotesEditAction';
 import { ComponentState } from './ComponentState';
-import { WidgetService } from "../../../core/browser";
+import { WidgetService } from '../../../core/browser';
+import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 
 export class Component {
 
@@ -18,6 +28,11 @@ export class Component {
     }
 
     public async onMount(): Promise<void> {
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Cancel", "Translatable#Submit"
+        ]);
+
         const context = ContextService.getInstance().getActiveContext(this.state.contextType);
         this.state.contextId = context.getDescriptor().contextId;
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;

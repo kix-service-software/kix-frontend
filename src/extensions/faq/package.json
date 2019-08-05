@@ -1,0 +1,46 @@
+{
+    "name": "kix-faq",
+    "extensions": {
+        "kix:menu:main": {
+            "faq-menu-main": {
+                "module": "faq-menu.extension"
+            }
+        },
+        "kix:configuration": {
+            "faq-configuration": {
+                "module": "faq-configuration.extension"
+            },
+            "faq-details-configuration": {
+                "module": "faq-details-configuration.extension"
+            },
+            "new-faq-article-dialog-configuration": {
+                "module": "new-faq-article-dialog-configuration.extension"
+            },
+            "edit-faq-dialog-configuration": {
+                "module": "edit-faq-article-dialog-configuration.extension"
+            },
+            "search-faq-article-dialog-configuration": {
+                "module": "search-faq-article-dialog-configuration.extension"
+            },
+            "new-faq-catgeory-dialog-configuration": {
+                "module": "new-faq-category-dialog-configuration.extension"
+            },
+            "edit-faq-category-dialog-configuration": {
+                "module": "edit-faq-category-dialog-configuration.extension"
+            },
+            "faq-catgeory-details-configuration": {
+                "module": "faq-category-details-configuration.extension"
+            }
+        },
+        "kix:modules": {
+            "faq-module": {
+                "module": "kix-module.extension"
+            }
+        },
+        "kix:admin-module": {
+            "faq-admin": {
+                "module": "admin-module.extension"
+            }
+        }
+    }
+}

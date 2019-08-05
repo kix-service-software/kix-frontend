@@ -1,7 +1,16 @@
-import { DialogService } from '../../../../core/browser/components';
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
-import { IImageDialogListener } from '../../../../core/browser';
 import { DisplayImageDescription } from '../../../../core/browser/components/DisplayImageDescription';
+import { IImageDialogListener, DialogService } from '../../../../core/browser/components/dialog';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 export class Component implements IImageDialogListener {
 
@@ -12,8 +21,12 @@ export class Component implements IImageDialogListener {
         this.state = new ComponentState();
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
         DialogService.getInstance().registerImageDialogListener(this);
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Next Image", "Translatable#Previous Image"
+        ]);
     }
 
     public open(imageDescriptions: DisplayImageDescription[], showImageId?: string | number): void {
@@ -30,11 +43,11 @@ export class Component implements IImageDialogListener {
         this.state.show = false;
     }
 
-    public previosImage(): void {
+    public previousImage(): void {
         if (this.state.imageDescriptions.length > 1) {
-            const previosIndex = this.currImageIndex - 1;
-            if (previosIndex > -1 && this.state.imageDescriptions[previosIndex]) {
-                this.currImageIndex = previosIndex;
+            const previousIndex = this.currImageIndex - 1;
+            if (previousIndex > -1 && this.state.imageDescriptions[previousIndex]) {
+                this.currImageIndex = previousIndex;
             } else {
                 this.currImageIndex = this.state.imageDescriptions.length - 1;
             }

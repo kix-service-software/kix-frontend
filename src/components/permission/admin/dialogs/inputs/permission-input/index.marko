@@ -1,0 +1,32 @@
+<!--
+Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
+<div.permission-input-container>
+    <div.crud-checkboxes>
+        <for|checkboxOption| of=state.checkboxOptions>
+            <div.checkbox-container>
+                <if(checkboxOption.show)>
+                    <input
+                        title=state.titles.get(checkboxOption.id)
+                        type="checkbox"
+                        checked=checkboxOption.checked
+                        readonly=checkboxOption.readonly
+                        disabled=checkboxOption.readonly
+                        on-click("checkboxClicked", checkboxOption.id)/>
+                </if>
+            </div>
+        </for>
+    </div>
+    <input.input-style.permisson-comment
+        type="text"
+        value=state.comment
+        placeholder=state.commentPlaceholder
+        maxlength=250
+        on-input("commentchanged")/>
+</div>

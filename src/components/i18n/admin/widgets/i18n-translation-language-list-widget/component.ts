@@ -1,21 +1,30 @@
-import { ComponentState } from "./ComponentState";
-import { TranslationDetailsContext } from "../../../../../core/browser/i18n/admin/context";
-import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { ComponentState } from './ComponentState';
+import { TranslationDetailsContext } from '../../../../../core/browser/i18n/admin/context';
+import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 import {
-    KIXObjectPropertyFilter, TableFilterCriteria, KIXObjectType, TranslationLanguageProperty, Translation
-} from "../../../../../core/model";
+    KIXObjectPropertyFilter, TableFilterCriteria, KIXObjectType, TranslationLanguageProperty, TranslationPattern
+} from '../../../../../core/model';
 import {
     ContextService, ServiceRegistry, WidgetService, SearchOperator, ActionFactory,
     TableFactoryService, AbstractMarkoComponent, TableEvent, TableEventData
-} from "../../../../../core/browser";
-import { IEventSubscriber, EventService } from "../../../../../core/browser/event";
-import { TranslationLabelProvider } from "../../../../../core/browser/i18n";
+} from '../../../../../core/browser';
+import { IEventSubscriber, EventService } from '../../../../../core/browser/event';
+import { TranslationPatternLabelProvider } from '../../../../../core/browser/i18n';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     public tableSubscriber: IEventSubscriber;
 
-    public labelProvider: TranslationLabelProvider;
+    public labelProvider: TranslationPatternLabelProvider;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -26,12 +35,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        this.labelProvider = new TranslationLabelProvider();
+        this.labelProvider = new TranslationPatternLabelProvider();
         const context = await ContextService.getInstance().getContext<TranslationDetailsContext>(
             TranslationDetailsContext.CONTEXT_ID
         );
 
-        this.state.translation = context ? await context.getObject<Translation>(KIXObjectType.TRANSLATION) : null;
+        this.state.translation = context
+            ? await context.getObject<TranslationPattern>(KIXObjectType.TRANSLATION_PATTERN)
+            : null;
 
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
@@ -41,7 +52,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             objectListChanged: () => { return; },
             sidebarToggled: () => { return; },
             scrollInformationChanged: () => { return; },
-            objectChanged: async (ciClassId: string, translation: Translation, type: KIXObjectType) => {
+            objectChanged: async (ciClassId: string, translation: TranslationPattern, type: KIXObjectType) => {
                 if (type === KIXObjectType.TRANSLATION_LANGUAGE) {
                     this.state.translation = translation;
                 }
@@ -49,7 +60,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         });
 
         await this.prepareFilter();
-        this.prepareTable();
+        await this.prepareTable();
         this.prepareActions();
         this.prepareTitle();
     }
@@ -61,13 +72,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private prepareTitle(): void {
-        const title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : "";
+        const title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : '';
         const count = this.state.table ? this.state.table.getRows(true).length : 0;
         this.state.title = `${title} (${count})`;
     }
 
-    private prepareTable(): void {
-        const table = TableFactoryService.getInstance().createTable(
+    private async prepareTable(): Promise<void> {
+        const table = await TableFactoryService.getInstance().createTable(
             'i18n-languages', KIXObjectType.TRANSLATION_LANGUAGE, null, null, TranslationDetailsContext.CONTEXT_ID, true
         );
 
@@ -93,9 +104,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.table = table;
     }
 
-    private prepareActions(): void {
+    private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.actions = await ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, null
             );
         }
@@ -104,7 +115,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async prepareFilter(): Promise<void> {
         const translationService = ServiceRegistry.getServiceInstance<TranslationService>(
-            KIXObjectType.TRANSLATION
+            KIXObjectType.TRANSLATION_PATTERN
         );
         const languages = await translationService.getLanguages();
         this.state.predefinedTableFilter = languages.map(

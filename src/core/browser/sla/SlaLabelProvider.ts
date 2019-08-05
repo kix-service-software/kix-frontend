@@ -1,7 +1,16 @@
-import { ILabelProvider } from "../ILabelProvider";
-import { KIXObjectType, Sla, ObjectIcon } from "../../model";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
 
-export class SlaLabelProvider implements ILabelProvider<Sla> {
+import { KIXObjectType, Sla } from "../../model";
+import { LabelProvider } from "../LabelProvider";
+
+export class SlaLabelProvider extends LabelProvider<Sla> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.SLA;
 
@@ -9,58 +18,20 @@ export class SlaLabelProvider implements ILabelProvider<Sla> {
         return sla instanceof Sla;
     }
 
-    public getPropertyText(property: string, short?: boolean): Promise<string> {
-        let displayValue;
-        switch (property) {
-            default:
-                displayValue = property;
-        }
-
-        return displayValue;
-    }
-
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
-    }
-
     public getDisplayText(sla: Sla, property: string): Promise<string> {
         return sla[property];
-    }
-
-    public async getPropertyValueDisplayText(property: string, value: string | number): Promise<string> {
-        return "";
     }
 
     public getDisplayTextClasses(sla: Sla, property: string): string[] {
         return sla[property];
     }
 
-    public getObjectClasses(sla: Sla): string[] {
-        return [];
-    }
-
-    public async getObjectText(sla: Sla): Promise<string> {
-        return "";
-    }
-
-    public getObjectAdditionalText(sla: Sla): string {
-        return "";
-    }
-
-    public getObjectIcon(sla?: Sla): string | ObjectIcon {
-        return null;
-    }
-
-    public getObjectName(plural?: boolean): string {
+    public async getObjectName(plural?: boolean): Promise<string> {
         return "SLA";
     }
 
     public getObjectTooltip(sla: Sla): string {
         return sla.Name;
-    }
-
-    public async getIcons(sla: Sla, property: string, value?: string | number): Promise<Array<string | ObjectIcon>> {
-        return [];
     }
 
 

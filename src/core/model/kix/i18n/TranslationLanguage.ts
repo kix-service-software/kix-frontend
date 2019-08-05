@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObject } from "../KIXObject";
 import { KIXObjectType } from "../KIXObjectType";
 
@@ -7,7 +16,7 @@ export class TranslationLanguage extends KIXObject {
 
     public KIXObjectType: KIXObjectType.TRANSLATION_LANGUAGE;
 
-    public TranslationID: number;
+    public PatternID: number;
 
     public Language: string;
 
@@ -18,7 +27,7 @@ export class TranslationLanguage extends KIXObject {
         if (translationLanguage) {
             this.Language = translationLanguage.Language;
             this.ObjectId = this.Language;
-            this.TranslationID = translationLanguage.TranslationID;
+            this.PatternID = translationLanguage.PatternID;
             this.Value = translationLanguage.Value;
         }
     }

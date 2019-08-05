@@ -1,10 +1,19 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { IdService } from "../IdService";
 import { IRow } from "./IRow";
 import { IRowObject } from "./IRowObject";
 import { ICell } from "./ICell";
 import { Cell } from "./Cell";
 import { ITable } from "./ITable";
-import { TableFilterCriteria, KIXObject, FilterCriteria } from "../../model";
+import { TableFilterCriteria, KIXObject, SortOrder, DataType } from "../../model";
 import { KIXObjectService } from "../kix";
 import { EventService } from "../event";
 import { TableEvent } from "./TableEvent";
@@ -12,6 +21,7 @@ import { RowObject } from "./RowObject";
 import { TableValue } from "./TableValue";
 import { ValueState } from "./ValueState";
 import { TableEventData } from "./TableEventData";
+import { TableSortUtil } from "./TableSortUtil";
 
 export class Row<T = any> implements IRow<T> {
 
@@ -22,6 +32,8 @@ export class Row<T = any> implements IRow<T> {
     private expanded: boolean = false;
     private children: IRow[] = [];
     private filteredChildren: IRow[] = null;
+
+    public filterMatch: boolean = true;
 
     public constructor(
         private table: ITable, private rowObject?: IRowObject
@@ -67,6 +79,7 @@ export class Row<T = any> implements IRow<T> {
         if (!this.isFilterDefined(filterValue, criteria)) {
             this.filteredChildren = null;
             this.children.forEach((cr) => cr.filter(filterValue, criteria));
+            this.filterMatch = true;
             return true;
         }
 
@@ -94,6 +107,7 @@ export class Row<T = any> implements IRow<T> {
             }
         }
 
+        this.filterMatch = criteriaMatch;
         return criteriaMatch;
     }
 
@@ -106,7 +120,7 @@ export class Row<T = any> implements IRow<T> {
         for (const c of criteria) {
             if (c.useObjectService) {
                 result = object && object instanceof KIXObject
-                    ? KIXObjectService.checkFilterValue(object.KIXObjectType, object, c)
+                    ? await KIXObjectService.checkFilterValue(object.KIXObjectType, object, c)
                     : false;
                 break;
             } else {
@@ -152,7 +166,7 @@ export class Row<T = any> implements IRow<T> {
         return this.selected;
     }
 
-    public select(selected: boolean = true): void {
+    public select(selected: boolean = true, selectChildren: boolean = false, withoutFilter: boolean = false): void {
         let notify = false;
 
         if (selected) {
@@ -165,6 +179,14 @@ export class Row<T = any> implements IRow<T> {
                 this.selected = false;
                 notify = true;
             }
+        }
+
+        if (selectChildren && this.children) {
+            let children = this.children;
+            if (!withoutFilter) {
+                children = this.children.filter((c: Row) => c.filterMatch);
+            }
+            children.forEach((c) => c.select(selected, selectChildren, withoutFilter));
         }
 
         if (notify) {
@@ -254,6 +276,10 @@ export class Row<T = any> implements IRow<T> {
         if (!cell) {
             this.cells.push(new Cell(this, value));
         }
+        const children = this.getChildren();
+        if (Array.isArray(children)) {
+            children.forEach((r) => r.addCell(value));
+        }
     }
 
     private isFilterDefined(value: string, criteria: TableFilterCriteria[]): boolean {
@@ -270,5 +296,14 @@ export class Row<T = any> implements IRow<T> {
         }
 
         return count;
+    }
+
+    public sortChildren(columnId: string, sortOrder: SortOrder, dataType: DataType): void {
+        if (this.children && this.children.length) {
+            this.children = TableSortUtil.sort(this.children, columnId, sortOrder, dataType);
+            for (const row of this.children) {
+                row.sortChildren(columnId, sortOrder, dataType);
+            }
+        }
     }
 }
