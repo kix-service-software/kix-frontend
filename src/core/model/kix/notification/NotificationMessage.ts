@@ -12,7 +12,7 @@ export class NotificationMessage {
     public constructor(
         public Subject: string = '',
         public Body: string = '',
-        public ContentType: string = 'text/plain'
+        public ContentType: string = 'text/html'
     ) { }
 
 }
