@@ -1,125 +1,64 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
-    Context, ConfiguredWidget, WidgetConfiguration, WidgetType, BreadcrumbInformation, KIXObject,
-    KIXObjectType, KIXObjectCache, TicketType
+    Context, BreadcrumbInformation, KIXObject, KIXObjectType, TicketType
 } from "../../../../../model";
-import { TicketTypeDetailsContextConfiguration } from "./TicketTypeDetailsContextConfiguration";
 import { AdminContext } from "../../../../admin";
 import { EventService } from "../../../../event";
 import { KIXObjectService } from "../../../../kix";
 import { LabelService } from "../../../../LabelService";
 import { ApplicationEvent } from "../../../../application";
+import { TranslationService } from "../../../../i18n/TranslationService";
 
-export class TicketTypeDetailsContext extends Context<TicketTypeDetailsContextConfiguration> {
+export class TicketTypeDetailsContext extends Context {
 
     public static CONTEXT_ID = 'ticket-type-details';
 
     public getIcon(): string {
-        return 'kix-icon-gear';
+        return 'kix-icon-admin';
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {
         return await LabelService.getInstance().getText(await this.getObject<TicketType>(), true, !short);
     }
 
-    public getLanes(show: boolean = false): ConfiguredWidget[] {
-        let lanes = this.configuration.laneWidgets;
-
-        if (show) {
-            lanes = lanes.filter(
-                (l) => this.configuration.lanes.findIndex((lid) => l.instanceId === lid) !== -1
-            );
-        }
-
-        return lanes;
-    }
-
-    public getLaneTabs(show: boolean = false): ConfiguredWidget[] {
-        let laneTabs = this.configuration.laneTabWidgets;
-
-        if (show) {
-            laneTabs = laneTabs.filter(
-                (lt) => this.configuration.sidebars.findIndex((ltId) => lt.instanceId === ltId) !== -1
-            );
-        }
-
-        return laneTabs;
-    }
-
-    public getContent(show: boolean = false): ConfiguredWidget[] {
-        let content = this.configuration.contentWidgets;
-
-        if (show && content) {
-            content = content.filter(
-                (l) => this.configuration.content.findIndex((cid) => l.instanceId === cid) !== -1
-            );
-        }
-
-        return content;
-    }
-
-    protected getSpecificWidgetConfiguration<WS = any>(instanceId: string): WidgetConfiguration<WS> {
-        let configuration: WidgetConfiguration<WS>;
-
-        const laneWidget = this.configuration.laneWidgets.find((lw) => lw.instanceId === instanceId);
-        configuration = laneWidget ? laneWidget.configuration : undefined;
-
-        if (!configuration) {
-            const laneTabWidget = this.configuration.laneTabWidgets.find((ltw) => ltw.instanceId === instanceId);
-            configuration = laneTabWidget ? laneTabWidget.configuration : undefined;
-        }
-
-        if (!configuration) {
-            const contentWidget = this.configuration.contentWidgets.find((cw) => cw.instanceId === instanceId);
-            configuration = contentWidget ? contentWidget.configuration : undefined;
-        }
-
-        return configuration;
-    }
-
-    protected getSpecificWidgetType(instanceId: string): WidgetType {
-        let widgetType: WidgetType;
-
-        const laneWidget = this.configuration.laneWidgets.find((lw) => lw.instanceId === instanceId);
-        widgetType = laneWidget ? WidgetType.LANE : undefined;
-
-        if (!widgetType) {
-            const laneTabWidget = this.configuration.laneTabWidgets.find((ltw) => ltw.instanceId === instanceId);
-            widgetType = laneTabWidget ? WidgetType.LANE_TAB : undefined;
-        }
-
-        return widgetType;
-    }
-
-    public getBreadcrumbInformation(): BreadcrumbInformation {
-        return new BreadcrumbInformation(this.getIcon(), [AdminContext.CONTEXT_ID]);
+    public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
+        const objectName = await TranslationService.translate('Translatable#Type');
+        const type = await this.getObject<TicketType>();
+        return new BreadcrumbInformation(
+            this.getIcon(), [AdminContext.CONTEXT_ID], `${objectName}: ${type ? type.Name : ''}`
+        );
     }
 
     public async getObject<O extends KIXObject>(
         objectType: KIXObjectType = KIXObjectType.TICKET_TYPE, reload: boolean = false, changedProperties: string[] = []
     ): Promise<O> {
-        let ticketType;
+        const object = await this.loadTicketType(changedProperties) as any;
 
-        if (!objectType) {
-            objectType = KIXObjectType.TICKET_TYPE;
+        if (reload) {
+            this.listeners.forEach(
+                (l) => l.objectChanged(Number(this.objectId), object, KIXObjectType.TICKET_TYPE, changedProperties)
+            );
         }
 
-        if (reload && objectType === KIXObjectType.TICKET_TYPE) {
-            KIXObjectCache.removeObject(KIXObjectType.TICKET_TYPE, Number(this.objectId));
-        }
-
-        if (!KIXObjectCache.isObjectCached(KIXObjectType.TICKET_TYPE, Number(this.objectId))) {
-            ticketType = await this.loadTicketType(changedProperties);
-        } else {
-            ticketType = KIXObjectCache.getObject(KIXObjectType.TICKET_TYPE, Number(this.objectId));
-        }
-
-        return ticketType;
+        return object;
     }
 
     private async loadTicketType(changedProperties: string[] = [], cache: boolean = true): Promise<TicketType> {
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: true, hint: 'Lade Tickettyp ...' });
-
         const ticketTypeId = Number(this.objectId);
+
+        const timeout = window.setTimeout(() => {
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+                loading: true, hint: 'Translatable#Load Ticket Type'
+            });
+        }, 500);
 
         const ticketTypes = await KIXObjectService.loadObjects<TicketType>(
             KIXObjectType.TICKET_TYPE, [ticketTypeId], null, null, cache
@@ -128,13 +67,12 @@ export class TicketTypeDetailsContext extends Context<TicketTypeDetailsContextCo
             return null;
         });
 
+        window.clearTimeout(timeout);
+
         let ticketType: TicketType;
         if (ticketTypes && ticketTypes.length) {
             ticketType = ticketTypes[0];
             this.objectId = ticketType.ID;
-            this.listeners.forEach(
-                (l) => l.objectChanged(Number(this.objectId), ticketType, KIXObjectType.TICKET_TYPE, changedProperties)
-            );
         }
 
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });

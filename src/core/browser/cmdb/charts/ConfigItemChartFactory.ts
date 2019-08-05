@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     ConfigItemProperty, ConfigItem, KIXObjectType, ConfigItemClass, KIXObjectLoadingOptions,
     FilterCriteria, FilterDataType, FilterType, GeneralCatalogItem
@@ -38,7 +47,7 @@ export class ConfigItemChartFactory {
     ): Promise<[string[], ChartDataSets[]]> {
         const labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.CONFIG_ITEM);
 
-        const loadingOptions = new KIXObjectLoadingOptions(null, [
+        const loadingOptions = new KIXObjectLoadingOptions([
             new FilterCriteria(
                 'Class', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'ITSM::Core::IncidentState'
             ),

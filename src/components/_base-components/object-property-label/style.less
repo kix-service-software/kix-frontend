@@ -1,40 +1,61 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+@key-value-icon-size: 1.25rem;
+
 .key-value-pair {
     display: grid;
     grid-template-columns: 5rem 2rem 5rem;
+    opacity: 0;
+
     .key,
     .value {
         .shorten-text;
         vertical-align: middle;
     }
+
     .key {
         .property-name {
             .shorten-text;
             max-width: 90%;
             float: left;
         }
+
         &::after {
             content: ":"
         }
     }
+
     .info {
         display: grid;
         align-content: center;
     }
+
     .value {
         display: grid;
         grid-template-columns: minmax(1rem, min-content) max-content;
+
         >a,
         >span:not(.icon) {
             .shorten-text;
         }
+
         >span.icon {
             display: grid;
             grid-auto-columns: max-content;
             align-items: center;
+
             [class^="kix-icon-"],
             [class*=" kix-icon-"],
             .svg-icon {
                 margin-left: @margin-small;
+                font-size: @key-value-icon-size;
             }
         }
     }

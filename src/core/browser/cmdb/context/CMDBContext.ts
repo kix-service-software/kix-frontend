@@ -1,15 +1,24 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
-    Context, ConfiguredWidget, WidgetType, WidgetConfiguration, ConfigItemClass, KIXObjectType, KIXObjectLoadingOptions,
-    FilterCriteria, ConfigItemProperty, FilterDataType, FilterType, VersionProperty
+    Context, ConfigItemClass, KIXObjectType, KIXObjectLoadingOptions,
+    FilterCriteria, ConfigItemProperty, FilterDataType, FilterType, VersionProperty, KIXObject
 } from "../../../model";
-import { CMDBContextConfiguration } from "./CMDBContextConfiguration";
 import { ServiceRegistry, KIXObjectService } from "../../kix";
 import { SearchOperator } from "../../SearchOperator";
 import { CMDBService } from "../CMDBService";
 import { EventService } from "../../event";
 import { ApplicationEvent } from "../../application";
+import { TranslationService } from "../../i18n/TranslationService";
 
-export class CMDBContext extends Context<CMDBContextConfiguration> {
+export class CMDBContext extends Context {
 
     public static CONTEXT_ID: string = 'cmdb';
 
@@ -20,33 +29,8 @@ export class CMDBContext extends Context<CMDBContextConfiguration> {
     }
 
     public async getDisplayText(): Promise<string> {
-        return 'CMDB Dashboard';
-    }
-
-    public getContent(show: boolean = false): ConfiguredWidget[] {
-        let content = this.configuration.contentWidgets;
-
-        if (show) {
-            content = content.filter(
-                (c) => this.configuration.content.findIndex((cid) => c.instanceId === cid) !== -1
-            );
-        }
-
-        return content;
-    }
-
-    protected getSpecificWidgetConfiguration<WS = any>(instanceId: string): WidgetConfiguration<WS> {
-        const widget = this.configuration.contentWidgets.find((cw) => cw.instanceId === instanceId);
-        return widget ? widget.configuration : undefined;
-    }
-
-    protected getSpecificWidgetType(instanceId: string): WidgetType {
-        let widgetType: WidgetType;
-
-        const contentWidget = this.configuration.contentWidgets.find((lw) => lw.instanceId === instanceId);
-        widgetType = contentWidget ? WidgetType.CONTENT : undefined;
-
-        return widgetType;
+        const title = await TranslationService.translate('Translatable#CMDB Dashboard');
+        return title;
     }
 
     public async setCIClass(ciClass: ConfigItemClass): Promise<void> {
@@ -71,13 +55,11 @@ export class CMDBContext extends Context<CMDBContextConfiguration> {
             ));
         }
 
-        const loadingOptions = new KIXObjectLoadingOptions(
-            null, filterCriteria, null, null, null, [VersionProperty.DATA, VersionProperty.PREPARED_DATA]
-        );
+        const loadingOptions = new KIXObjectLoadingOptions(filterCriteria);
 
         const timeout = window.setTimeout(() => {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: `Lade Config Items ...`
+                loading: true, hint: 'Translatable#Load Config Items'
             });
         }, 500);
 
@@ -97,6 +79,18 @@ export class CMDBContext extends Context<CMDBContextConfiguration> {
         );
         const catalogItems = await service.getDeploymentStates();
         return catalogItems.map((c) => c.ItemID);
+    }
+
+    public async getObjectList(reload: boolean = false): Promise<KIXObject[]> {
+        if (reload) {
+            await this.loadConfigItems();
+        }
+        return await super.getObjectList();
+    }
+
+    public reset(): void {
+        super.reset();
+        this.currentCIClass = null;
     }
 
 }

@@ -1,15 +1,28 @@
-import { KIXObjectPropertyFilter, AbstractAction } from "../../../../core/model";
-import { ITable } from "../../../../core/browser";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { IdService } from "../../../../core/browser";
+import {
+    WidgetConfiguration, KIXObjectType, SortOrder, TableWidgetSettings, TicketStateProperty
+} from "../../../../core/model";
 
 export class ComponentState {
 
     public constructor(
-        public table: ITable = null,
-        public predefinedTableFilter: KIXObjectPropertyFilter[] = [],
-        public actions: AbstractAction[] = [],
-        public instanceId: string = '201812071000-ticket-states-list',
-        public title: string = 'Stammdaten: Status',
-        public filterCount: number = null
+        public instanceId: string = IdService.generateDateBasedId('ticket-states-list'),
+        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
+            'table-widget', 'Translatable#Ticket: States',
+            [
+                'ticket-admin-state-create', 'csv-export-action'
+            ],
+            new TableWidgetSettings(KIXObjectType.TICKET_STATE,
+                [TicketStateProperty.NAME, SortOrder.UP]), false, false, 'kix-icon-gears')
     ) { }
 
 }

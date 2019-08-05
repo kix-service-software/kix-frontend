@@ -1,11 +1,22 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { SearchOperator } from "../../SearchOperator";
 import {
     KIXObjectType, InputFieldTypes, KIXObjectLoadingOptions,
-    FilterCriteria, FilterDataType, FilterType, TreeNode, KIXObject, DataType
+    FilterCriteria, FilterDataType, FilterType, TreeNode, KIXObject, DataType, CRUD
 } from "../../../model";
 import { SearchResultCategory } from "./SearchResultCategory";
 import { LabelService } from "../../LabelService";
 import { IColumnConfiguration, DefaultColumnConfiguration } from "../../table";
+import { AuthenticationSocketClient } from "../../application/AuthenticationSocketClient";
+import { UIComponentPermission } from "../../../model/UIComponentPermission";
 
 export abstract class SearchDefinition {
 
@@ -23,7 +34,11 @@ export abstract class SearchDefinition {
 
     public abstract getSearchResultCategories(): Promise<SearchResultCategory>;
 
-    public async getDisplaySearchValue(property: string, parameter: Array<[string, any]>, value: any): Promise<string> {
+    protected readPermissions: Map<string, boolean> = new Map();
+
+    public async getDisplaySearchValue(
+        property: string, parameter: Array<[string, any]>, value: any, type: FilterDataType
+    ): Promise<string> {
         const labelProvider = LabelService.getInstance().getLabelProviderForType(this.objectType);
         return await labelProvider.getPropertyValueDisplayText(property, value);
     }
@@ -39,7 +54,7 @@ export abstract class SearchDefinition {
     }
 
     public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(null, criteria);
+        return new KIXObjectLoadingOptions(criteria);
     }
 
     public async prepareFormFilterCriteria(criteria: FilterCriteria[]): Promise<FilterCriteria[]> {
@@ -66,5 +81,36 @@ export abstract class SearchDefinition {
             );
         }
         return columns;
+    }
+
+    protected async checkReadPermissions(resource: string): Promise<boolean> {
+        if (!this.readPermissions.has(resource)) {
+            const permission = await AuthenticationSocketClient.getInstance().checkPermissions(
+                [new UIComponentPermission(resource, [CRUD.READ])]
+            );
+            this.readPermissions.set(resource, permission);
+        }
+
+        return this.readPermissions.get(resource);
+    }
+
+    protected getStringOperators(): SearchOperator[] {
+        return [
+            SearchOperator.CONTAINS,
+            SearchOperator.STARTS_WITH,
+            SearchOperator.ENDS_WITH,
+            SearchOperator.EQUALS,
+            SearchOperator.LIKE
+        ];
+    }
+
+    protected getDateTimeOperators(): SearchOperator[] {
+        return [
+            SearchOperator.LESS_THAN,
+            SearchOperator.GREATER_THAN,
+            SearchOperator.LESS_THAN_OR_EQUAL,
+            SearchOperator.GREATER_THAN_OR_EQUAL,
+            SearchOperator.BETWEEN
+        ];
     }
 }

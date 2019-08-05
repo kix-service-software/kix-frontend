@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import * as chai from 'chai';
 
 import { ConfigurationService } from '../src/core/services';
@@ -35,9 +44,7 @@ describe('Server Configuration', () => {
     });
 
     it('Should contain FRONTEND_URL as type of string.', () => {
-        expect(serverConfiguration.FRONTEND_URL).to.not.be.undefined;
         expect(serverConfiguration.FRONTEND_URL).to.be.an('string');
-        expect(serverConfiguration.FRONTEND_URL).to.not.be.empty;
     });
 
     it('Should contain BACKEND_API_URL as type of string.', () => {
@@ -62,4 +69,10 @@ describe('Server Configuration', () => {
         expect(serverConfiguration.USE_SSL).to.be.an('boolean');
         expect(serverConfiguration.USE_SSL).to.be.true;
     });
+
+    it('Should contain UPDATE_TRANSLATIONS as type of boolean.', () => {
+        expect(serverConfiguration.UPDATE_TRANSLATIONS).to.not.be.undefined;
+        expect(serverConfiguration.UPDATE_TRANSLATIONS).to.be.an('boolean');
+    });
+
 });

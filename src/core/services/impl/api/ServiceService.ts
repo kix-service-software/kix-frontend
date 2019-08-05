@@ -1,6 +1,17 @@
-import { ServicesResponse } from "../../../api";
-import { Service, KIXObjectType, Error } from '../../../model';
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import {
+    KIXObjectType, Error, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions
+} from '../../../model';
 import { KIXObjectService } from './KIXObjectService';
+import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 
 export class ServiceService extends KIXObjectService {
 
@@ -15,47 +26,33 @@ export class ServiceService extends KIXObjectService {
 
     private constructor() {
         super();
+        KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
-    protected RESOURCE_URI: string = "services";
+    protected RESOURCE_URI: string = this.buildUri('system', 'services');
 
-    public kixObjectType: KIXObjectType = KIXObjectType.SERVICE;
+    public objectType: KIXObjectType = KIXObjectType.SERVICE;
 
     public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.SERVICE;
     }
 
-    public async getServices(token: string): Promise<Service[]> {
-        const query = {
-            fields: 'Service.ServiceID,Service.Name',
-            include: 'IncidentState'
-        };
+    public async loadObjects<T>(
+        token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
+        loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
+    ): Promise<T[]> {
+        let objects = [];
 
-        const uri = this.buildUri(this.RESOURCE_URI);
-        const response = await this.getObjectByUri<ServicesResponse>(token, uri, query);
-        return response.Service;
+        switch (objectType) {
+            case KIXObjectType.SERVICE:
+                objects = await super.load(
+                    token, objectType, this.RESOURCE_URI, loadingOptions, objectIds, 'Service'
+                );
+                break;
+            default:
+        }
+
+        return objects;
     }
 
-    public async getServiceHierarchy(token: string): Promise<Service[]> {
-        const uri = this.buildUri(this.RESOURCE_URI);
-        const response = await this.getObjectByUri<ServicesResponse>(token, uri, {
-            include: ',IncidentState,SubServices',
-            expand: 'SubServices',
-            filter: '{"Service": {"AND": [{"Field": "ParentID", "Operator": "EQ", "Value": null}]}}'
-        });
-
-        return response.Service;
-    }
-
-    public createObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, string]>
-    ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
-    }
-
-    public async updateObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string
-    ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
-    }
 }

@@ -1,5 +1,17 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { Server } from './Server';
 import { CoreServiceRegistry, ConfigurationService } from './core/services';
+import { PluginService } from './services';
+
+import path = require('path');
 
 process.setMaxListeners(0);
 
@@ -12,12 +24,16 @@ class Startup {
     }
 
     private async initApplication(): Promise<void> {
-        const configDir = __dirname + '/../config/';
-        const certDir = __dirname + '/../cert/';
+        const configDir = path.join(__dirname, '..', 'config');
+        const certDir = path.join(__dirname, '..', 'cert');
         ConfigurationService.getInstance().init(configDir, certDir);
 
-        await this.bindServices();
+        PluginService.getInstance().init(['extensions']);
+
         this.server = Server.getInstance();
+        await this.server.initServer();
+        await this.bindServices();
+        await this.server.initHttpServer();
     }
 
     private async bindServices(): Promise<void> {

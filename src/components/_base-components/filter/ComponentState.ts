@@ -1,4 +1,13 @@
-import { KIXObjectPropertyFilter, TreeNode, ObjectIcon } from "../../../core/model";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { KIXObjectPropertyFilter, TreeNode, ObjectIcon } from '../../../core/model';
 
 export class ComponentState {
 
@@ -6,12 +15,13 @@ export class ComponentState {
         public textFilterValue: string = '',
         public predefinedFilter: KIXObjectPropertyFilter[] = [],
         public predefinedFilterList: TreeNode[] = [],
-        public predefinedFilterPlaceholder: string = 'Alle Objekte',
+        public predefinedFilterPlaceholder: string = 'Translatable#All Objects',
         public currentFilter: TreeNode = null,
         public icon: string | ObjectIcon = 'kix-icon-filter',
-        public placeholder: string = 'Filtern in Liste',
+        public placeholder: string = 'Translatable#Filter in list',
         public filterCountString: string = null,
-        public showFilterCount: boolean = true
+        public showFilterCount: boolean = true,
+        public disabled: boolean = false
     ) { }
 
 }

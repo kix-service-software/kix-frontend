@@ -1,1 +1,0 @@
-export { CustomerTableFactory } from './CustomerTableFactory';

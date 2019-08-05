@@ -1,8 +1,17 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     LinkType, Link, LinkObject, KIXObject, KIXObjectType,
     CreateLinkDescription, LinkTypeDescription
 } from "../../model";
-import { FactoryService, KIXObjectService } from "../kix";
+import { FactoryService, KIXObjectService, ServiceRegistry } from "../kix";
 import { LabelService } from "../LabelService";
 
 export class LinkUtil {
@@ -93,21 +102,23 @@ export class LinkUtil {
                     (lo) => lo.ObjectId.toString() === linkedKey.toString() && lo.KIXObjectType === linkedObjectType
                 );
 
-                const linkType = linkTypes.find((lt) => {
-                    return lt.Name === link.Type
-                        && (
-                            (lt.Source === rootObject.KIXObjectType && lt.Target === linkedObjectType)
-                            || (lt.Source === linkedObjectType && lt.Target === rootObject.KIXObjectType)
+                if (linkedObject) {
+                    const linkType = linkTypes.find((lt) => {
+                        return lt.Name === link.Type
+                            && (
+                                (lt.Source === rootObject.KIXObjectType && lt.Target === linkedObjectType)
+                                || (lt.Source === linkedObjectType && lt.Target === rootObject.KIXObjectType)
+                            );
+                    });
+
+                    const newLinkedObject = await FactoryService.getInstance().create(linkedObjectType, linkedObject);
+                    newLinkedObject.LinkTypeName = link.Type;
+
+                    if (linkType) {
+                        linkDescriptions.push(
+                            new CreateLinkDescription(newLinkedObject, new LinkTypeDescription(linkType, !rootIsSource))
                         );
-                });
-
-                const newLinkedObject = await FactoryService.getInstance().create(linkedObjectType, linkedObject);
-                newLinkedObject.LinkTypeName = link.Type;
-
-                if (linkType) {
-                    linkDescriptions.push(
-                        new CreateLinkDescription(newLinkedObject, new LinkTypeDescription(linkType, !rootIsSource))
-                    );
+                    }
                 }
             }
         }
@@ -160,7 +171,7 @@ export class LinkUtil {
         const linkTypes = await KIXObjectService.loadObjects<LinkType>(KIXObjectType.LINK_TYPE, null, null, null, false)
             .catch((error) => [] as LinkType[]);
 
-        linkTypes.forEach((lt) => {
+        for (const lt of linkTypes) {
             let linkableObjectType = null;
 
             if (lt.Source === rootType) {
@@ -173,11 +184,17 @@ export class LinkUtil {
                 let objectName = linkableObjectType;
                 const labelProvider = LabelService.getInstance().getLabelProviderForType(linkableObjectType);
                 if (labelProvider) {
-                    objectName = labelProvider.getObjectName();
+                    objectName = await labelProvider.getObjectName();
                 }
-                partners.push([objectName, linkableObjectType]);
+
+                const service = ServiceRegistry.getServiceInstance(linkableObjectType);
+                if (service) {
+                    if (await service.hasReadPermissionFor(linkableObjectType)) {
+                        partners.push([objectName, linkableObjectType]);
+                    }
+                }
             }
-        });
+        }
 
         return partners;
     }

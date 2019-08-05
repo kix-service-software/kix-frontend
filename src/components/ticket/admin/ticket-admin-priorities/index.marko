@@ -1,14 +1,10 @@
-<widget instanceId=state.instanceId title=state.title actions=state.actions icon="kix-icon-gears">
-    <@headerFilter>
-        <filter
-            filterCount=state.filterCount
-            predefinedFilter=state.predefinedTableFilter
-            predefinedFilterPlaceholder="Alle Prioritäten"
-            on-filter("filter")/>
-    </@headerFilter>
-    <@content>
-        <if(state.table)>
-            <standard-table-NEW table=state.table/>
-        </if>
-    </@content>
-</widget>
+<!--
+Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
+<table-widget instanceId=state.instanceId useContext=false widgetConfiguration=state.widgetConfiguration/>

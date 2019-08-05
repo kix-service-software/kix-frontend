@@ -1,20 +1,31 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { AbstractAction } from '../../model/components/action/AbstractAction';
 import { ContextMode, KIXObjectType, KIXObject } from '../../model';
 import { ContextService } from '../context';
 import { BulkDialogContext, BulkService } from '../bulk';
 import { EventService, IEventSubscriber } from '../event';
 import { IdService } from '../IdService';
-import { DialogEvents, DialogEventData } from '../components';
 import { ITable } from '../table';
+import { DialogEvents, DialogEventData } from '../components/dialog';
 
 export class BulkAction extends AbstractAction<ITable> implements IEventSubscriber {
+
+    public hasLink: boolean = false;
 
     public eventSubscriberId: string;
     public objectType: KIXObjectType;
 
-    public initAction(): void {
-        this.text = "Sammelaktion";
-        this.icon = "kix-icon-arrow-collect";
+    public async initAction(): Promise<void> {
+        this.text = 'Translatable#Bulk Action';
+        this.icon = 'kix-icon-arrow-collect';
         this.eventSubscriberId = IdService.generateDateBasedId('bulk-action-');
     }
 
@@ -26,6 +37,10 @@ export class BulkAction extends AbstractAction<ITable> implements IEventSubscrib
         }
 
         return canRun;
+    }
+
+    public canShow(): boolean {
+        return BulkService.getInstance().hasBulkManager(this.data.getObjectType());
     }
 
     public async run(event: any): Promise<void> {

@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { FormFieldValue, FormFieldOption } from "../../components";
 
 export class PersonalSetting {
@@ -7,7 +16,7 @@ export class PersonalSetting {
         public property: string,
         public label: string,
         public hint: string,
-        public inputType?: string,
+        public inputComponent?: string,
         public defaultValue: FormFieldValue = null,
         public options?: FormFieldOption[]
     ) { }

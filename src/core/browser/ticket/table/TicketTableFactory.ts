@@ -1,12 +1,22 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObjectType, TicketProperty, ContextMode, DataType, KIXObjectLoadingOptions } from "../../../model";
 import { RoutingConfiguration } from "../../router";
 import { TicketDetailsContext } from "../context";
 import {
-    TableConfiguration, ITable, Table, DefaultColumnConfiguration, ToggleOptions, ITableFactory, IColumnConfiguration
+    TableConfiguration, ITable, Table, DefaultColumnConfiguration, ToggleOptions, IColumnConfiguration
 } from "../../table";
 import { TicketTableContentProvider } from "./new";
+import { TableFactory } from "../../table/TableFactory";
 
-export class TicketTableFactory implements ITableFactory {
+export class TicketTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.TICKET;
 
@@ -19,14 +29,11 @@ export class TicketTableFactory implements ITableFactory {
             tableConfiguration, defaultRouting, defaultToggle, short
         );
 
-        const loadingOptions = new KIXObjectLoadingOptions(
-            null, tableConfiguration.filter, tableConfiguration.sortOrder, null,
-            tableConfiguration.limit, [TicketProperty.WATCHERS]
-        );
-
         const table = new Table(tableKey, tableConfiguration, contextId);
 
-        const contentProvider = new TicketTableContentProvider(table, objectIds, loadingOptions, contextId);
+        const contentProvider = new TicketTableContentProvider(
+            table, objectIds, tableConfiguration.loadingOptions, contextId
+        );
 
         table.setContentProvider(contentProvider);
         table.setColumnConfiguration(tableConfiguration.tableColumns);
@@ -46,15 +53,15 @@ export class TicketTableFactory implements ITableFactory {
                 ),
                 new DefaultColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, false, 135, true, true),
                 new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, false, 160, true, true),
-                new DefaultColumnConfiguration(TicketProperty.STATE_ID, false, true, true, false, 80, true, true, true),
+                new DefaultColumnConfiguration(TicketProperty.STATE_ID, true, true, true, false, 150, true, true, true),
                 new DefaultColumnConfiguration(
                     TicketProperty.QUEUE_ID, true, false, true, false, 100, true, true, true
                 ),
                 new DefaultColumnConfiguration(
-                    TicketProperty.OWNER_ID, true, false, true, false, 150, true, true, true
+                    TicketProperty.OWNER_ID, true, false, true, false, 150, true, true
                 ),
                 new DefaultColumnConfiguration(
-                    TicketProperty.CUSTOMER_ID, true, false, true, false, 150, true, true, true
+                    TicketProperty.ORGANISATION_ID, true, false, true, false, 150, true, true
                 ),
                 new DefaultColumnConfiguration(
                     TicketProperty.CREATED, true, false, true, false, 125, true, true, false, DataType.DATE_TIME
@@ -73,18 +80,20 @@ export class TicketTableFactory implements ITableFactory {
                 ),
                 new DefaultColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, false, 135, true, true),
                 new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, false, 260, true, true),
-                new DefaultColumnConfiguration(TicketProperty.STATE_ID, false, true, true, false, 80, true, true, true),
+                new DefaultColumnConfiguration(TicketProperty.STATE_ID, true, true, true, false, 150, true, true, true),
                 new DefaultColumnConfiguration(TicketProperty.LOCK_ID, false, true, false, false, 41, true, true, true),
                 new DefaultColumnConfiguration(
                     TicketProperty.QUEUE_ID, true, false, true, false, 100, true, true, true
                 ),
                 new DefaultColumnConfiguration(
-                    TicketProperty.RESPONSIBLE_ID, true, false, true, false, 150, true, true, true
+                    TicketProperty.RESPONSIBLE_ID, true, false, true, false, 150, true, true
                 ),
                 new DefaultColumnConfiguration(
-                    TicketProperty.OWNER_ID, true, false, true, false, 150, true, true, true
+                    TicketProperty.OWNER_ID, true, false, true, false, 150, true, true
                 ),
-                new DefaultColumnConfiguration(TicketProperty.CUSTOMER_ID, true, false, true, false, 150, true, true),
+                new DefaultColumnConfiguration(
+                    TicketProperty.ORGANISATION_ID, true, false, true, false, 150, true, true
+                ),
                 new DefaultColumnConfiguration(
                     TicketProperty.CHANGED, true, false, true, false, 125, true, true, false, DataType.DATE_TIME
                 ),
@@ -95,9 +104,7 @@ export class TicketTableFactory implements ITableFactory {
         }
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(KIXObjectType.TICKET);
-            tableConfiguration.tableColumns = tableColumns;
-            tableConfiguration.enableSelection = true;
+            tableConfiguration = new TableConfiguration(KIXObjectType.TICKET, null, null, tableColumns, true);
             defaultToggle = true;
         } else if (!tableConfiguration.tableColumns) {
             tableConfiguration.tableColumns = tableColumns;
@@ -105,7 +112,7 @@ export class TicketTableFactory implements ITableFactory {
 
         if (defaultRouting) {
             tableConfiguration.routingConfiguration = new RoutingConfiguration(
-                null, TicketDetailsContext.CONTEXT_ID, KIXObjectType.TICKET,
+                TicketDetailsContext.CONTEXT_ID, KIXObjectType.TICKET,
                 ContextMode.DETAILS, TicketProperty.TICKET_ID
             );
         }

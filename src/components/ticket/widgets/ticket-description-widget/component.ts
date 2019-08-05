@@ -1,11 +1,21 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../../../core/browser/context';
 import {
-    WidgetType, Ticket, KIXObjectType, Context, DynamicField, KIXObjectLoadingOptions,
-    FilterCriteria, FilterDataType, FilterType, ArticlesLoadingOptions, Article
+    WidgetType, Ticket, KIXObjectType, DynamicField, KIXObjectLoadingOptions,
+    FilterCriteria, FilterDataType, FilterType
 } from '../../../../core/model/';
 import { ActionFactory, WidgetService, KIXObjectService, SearchOperator } from '../../../../core/browser';
 import { TicketDetailsContext } from '../../../../core/browser/ticket';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component {
 
@@ -21,6 +31,11 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Description", "Translatable#Comment"
+        ]);
+
         const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
             TicketDetailsContext.CONTEXT_ID
         );
@@ -42,6 +57,7 @@ class Component {
             }
         });
 
+        this.setWidgetContentHeight();
         await this.initWidget(await context.getObject<Ticket>());
     }
 
@@ -49,7 +65,7 @@ class Component {
         this.state.loading = true;
         this.state.ticket = ticket;
         await this.getFirstArticle();
-        this.setActions();
+        this.prepareActions();
         await this.getTicketNotes();
 
         setTimeout(() => {
@@ -63,16 +79,16 @@ class Component {
         }
     }
 
-    private setActions(): void {
+    private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.firstArticle) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.actions = await ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, [this.state.firstArticle]
             );
         }
     }
 
     private async getTicketNotes(): Promise<void> {
-        const loadingOptions = new KIXObjectLoadingOptions(['DynamicField.ID'], [
+        const loadingOptions = new KIXObjectLoadingOptions([
             new FilterCriteria('Name', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'TicketNotes')
         ]);
 
@@ -88,6 +104,16 @@ class Component {
                 if (ticketNotesDF) {
                     this.state.ticketNotes = ticketNotesDF.DisplayValue;
                 }
+            }
+        }
+    }
+
+    private setWidgetContentHeight(): void {
+        const laneWidget = (this as any).getEl();
+        if (laneWidget) {
+            const content = laneWidget.querySelector('.widget-content');
+            if (content) {
+                content.style.maxHeight = "unset";
             }
         }
     }

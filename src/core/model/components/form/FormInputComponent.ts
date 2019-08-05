@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { FormService, IdService } from "../../../browser";
 import { FormInputComponentState } from ".";
 
@@ -6,7 +15,7 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState<T>
     protected state: C;
     private inputComponentFormListenerId: string;
 
-    public async onInput(input: FormInputComponentState<T>): Promise<void> {
+    public onInput(input: FormInputComponentState<T>): any {
         this.state.field = input.field;
         this.state.fieldId = input.fieldId;
         this.state.formId = input.formId;
@@ -15,6 +24,12 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState<T>
             this.state.fieldId = this.state.field ? this.state.field.property : null;
         }
 
+        FormInputComponent.prototype.doUpdate.call(this);
+
+        return input;
+    }
+
+    private async doUpdate(): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         this.state.formContext = formInstance.getFormContext();
 
@@ -58,7 +73,7 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState<T>
 
     public async focusLost(event?: any): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        if (formInstance) {
+        if (formInstance && formInstance.getForm().validation) {
             await formInstance.validateField(this.state.field);
             FormInputComponent.prototype.setInvalidState.call(this);
         }

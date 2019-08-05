@@ -1,6 +1,17 @@
-import { ContextService } from '../context';
-import { IKIXObjectFactory } from '../kix';
-import { ConfigItem, ConfigItemFactory, Version, Link, ConfigItemImage, ConfigItemHistory } from '../../model';
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { IKIXObjectFactory, KIXObjectService } from '../kix';
+import {
+    ConfigItem, ConfigItemFactory, Version, Link, ConfigItemImage,
+    ConfigItemHistory, User, KIXObjectType
+} from '../../model';
 
 export class ConfigItemBrowserFactory implements IKIXObjectFactory<ConfigItem> {
 
@@ -17,16 +28,19 @@ export class ConfigItemBrowserFactory implements IKIXObjectFactory<ConfigItem> {
 
     public async create(configItem: ConfigItem): Promise<ConfigItem> {
         const newConfigItem = ConfigItemFactory.create(configItem);
-        this.mapAdditionalData(newConfigItem);
+        await this.mapAdditionalData(newConfigItem);
         return newConfigItem;
     }
 
-    private mapAdditionalData(configItem: ConfigItem): void {
-        const objectData = ContextService.getInstance().getObjectData();
-        if (objectData) {
-            configItem.createdBy = objectData.users.find((u) => u.UserID === configItem.CreateBy);
-            configItem.changedBy = objectData.users.find((u) => u.UserID === configItem.CreateBy);
-        }
+    private async mapAdditionalData(configItem: ConfigItem): Promise<void> {
+        const createUsers = await KIXObjectService.loadObjects<User>(
+            KIXObjectType.USER, [configItem.CreateBy], null, null, true
+        ).catch((error) => [] as User[]);
+        configItem.createdBy = createUsers && !!createUsers.length ? createUsers[0] : null;
+        const changeUsers = await KIXObjectService.loadObjects<User>(
+            KIXObjectType.USER, [configItem.ChangeBy], null, null, true
+        ).catch((error) => [] as User[]);
+        configItem.changedBy = changeUsers && !!changeUsers.length ? changeUsers[0] : null;
 
         configItem.CurrentVersion = new Version(configItem.CurrentVersion);
 

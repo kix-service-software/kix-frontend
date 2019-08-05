@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObject } from "../KIXObject";
 import { KIXObjectType } from "../KIXObjectType";
 import { FAQArticle } from "./FAQArticle";
@@ -13,6 +22,7 @@ export class FAQCategory extends KIXObject<FAQCategory> {
     public Comment: string;
     public ParentID: number;
     public GroupIDs: number[];
+    public Fullname: string;
     public ValidID: number;
     public CreateBy: number;
     public CreateTime: string;
@@ -31,12 +41,15 @@ export class FAQCategory extends KIXObject<FAQCategory> {
             this.Comment = faqCategory.Comment;
             this.ParentID = faqCategory.ParentID;
             this.GroupIDs = faqCategory.GroupIDs;
+            this.Fullname = faqCategory.Fullname;
             this.ValidID = faqCategory.ValidID;
             this.CreateBy = faqCategory.CreateBy;
             this.CreateTime = faqCategory.CreateTime;
             this.ChangeBy = faqCategory.ChangeBy;
             this.ChangeTime = faqCategory.ChangeTime;
-            this.SubCategories = faqCategory.SubCategories;
+            this.SubCategories = faqCategory.SubCategories
+                ? faqCategory.SubCategories.map((sc) => new FAQCategory(sc))
+                : [];
             this.Articles = faqCategory.Articles;
         }
     }

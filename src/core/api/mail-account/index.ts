@@ -1,9 +1,0 @@
-export { CreateMailAccount } from "./CreateMailAccount";
-export { CreateMailAccountRequest } from './CreateMailAccountRequest';
-export { CreateMailAccountResponse } from './CreateMailAccountResponse';
-export { MailAccountResponse } from './MailAccountResponse';
-export { MailAccountsResponse } from './MailAccountsResponse';
-export { MailAccountTypesResponse } from './MailAccountTypesResponse';
-export { UpdateMailAccount } from './UpdateMailAccount';
-export { UpdateMailAccountRequest } from './UpdateMailAccountRequest';
-export { UpdateMailAccountResponse } from './UpdateMailAccountResponse';

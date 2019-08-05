@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObjectService } from "../kix";
 import {
     KIXObjectType, ConfigItemProperty, ConfigItem, VersionProperty,
@@ -29,6 +38,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
 
     public isServiceFor(kixObjectType: KIXObjectType) {
         return kixObjectType === KIXObjectType.CONFIG_ITEM
+            || kixObjectType === KIXObjectType.CONFIG_ITEM_VERSION
             || kixObjectType === KIXObjectType.CONFIG_ITEM_IMAGE
             || kixObjectType === KIXObjectType.CONFIG_ITEM_CLASS
             || kixObjectType === KIXObjectType.CONFIG_ITEM_ATTACHMENT;
@@ -36,12 +46,6 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
 
     public getLinkObjectName(): string {
         return 'ConfigItem';
-    }
-
-    protected async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
-        const parameter: Array<[string, any]> = [];
-        parameter.push([property, value]);
-        return parameter;
     }
 
     public async createConfigItem(formId: string, classId: number): Promise<string | number> {
@@ -63,7 +67,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
     ): Promise<ConfigItem[]> {
         const configItems = [];
 
-        const loadingOptionsNumber = new KIXObjectLoadingOptions(null, [
+        const loadingOptionsNumber = new KIXObjectLoadingOptions([
             new FilterCriteria(
                 ConfigItemProperty.CLASS, SearchOperator.IN,
                 FilterDataType.STRING, FilterType.AND, ciClassNames
@@ -72,13 +76,13 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                 ConfigItemProperty.NUMBER, SearchOperator.CONTAINS,
                 FilterDataType.STRING, FilterType.AND, searchValue
             )
-        ], null, null, limit);
+        ], null, limit);
 
         const configItemsByNumber = await KIXObjectService.loadObjects<ConfigItem>(
             KIXObjectType.CONFIG_ITEM, null, loadingOptionsNumber, null, false
         );
 
-        const loadingOptionsName = new KIXObjectLoadingOptions(null, [
+        const loadingOptionsName = new KIXObjectLoadingOptions([
             new FilterCriteria(
                 ConfigItemProperty.CLASS, SearchOperator.IN,
                 FilterDataType.STRING, FilterType.AND, ciClassNames
@@ -87,7 +91,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                 'CurrentVersion.' + VersionProperty.NAME, SearchOperator.CONTAINS,
                 FilterDataType.STRING, FilterType.AND, searchValue
             )
-        ], null, null, limit);
+        ], null, limit);
 
         const configItemsByName = await KIXObjectService.loadObjects<ConfigItem>(
             KIXObjectType.CONFIG_ITEM, null, loadingOptionsName, null, false
@@ -111,7 +115,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
     }
 
     public async getDeploymentStates(): Promise<GeneralCatalogItem[]> {
-        const loadingOptions = new KIXObjectLoadingOptions(null, [
+        const loadingOptions = new KIXObjectLoadingOptions([
             new FilterCriteria('Class', SearchOperator.EQUALS, FilterDataType.STRING,
                 FilterType.AND, 'ITSM::ConfigItem::DeploymentState'),
             new FilterCriteria('Functionality', SearchOperator.NOT_EQUALS, FilterDataType.STRING,
@@ -125,39 +129,45 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
         return catalogItems;
     }
 
-    public async getTreeNodes(property: string): Promise<TreeNode[]> {
-        let values: TreeNode[] = [];
+    public async getTreeNodes(
+        property: string, showInvalid?: boolean, filterIds?: Array<string | number>
+    ): Promise<TreeNode[]> {
+        let nodes: TreeNode[] = [];
 
         switch (property) {
             case ConfigItemProperty.CLASS_ID:
-                const classes = await KIXObjectService.loadObjects<ConfigItemClass>(
+                let classes = await KIXObjectService.loadObjects<ConfigItemClass>(
                     KIXObjectType.CONFIG_ITEM_CLASS
                 );
-                values = classes ? classes.map((c) => new TreeNode(c.ID, c.Name)) : [];
+                classes = showInvalid ? classes : classes.filter((c) => c.ValidID === 1);
+                nodes = classes.map((c) => new TreeNode(c.ID, c.Name));
                 break;
             case ConfigItemProperty.CUR_INCI_STATE_ID:
             case ConfigItemProperty.CUR_DEPL_STATE_ID:
                 const classId = property === ConfigItemProperty.CUR_DEPL_STATE_ID
                     ? 'ITSM::ConfigItem::DeploymentState'
                     : 'ITSM::Core::IncidentState';
-                const loadingOptions = new KIXObjectLoadingOptions(null, [new FilterCriteria(
-                    'Class', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, classId
-                )]);
+                const loadingOptions = new KIXObjectLoadingOptions([
+                    new FilterCriteria(
+                        'Class', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, classId
+                    )]
+                );
 
                 const items = await KIXObjectService.loadObjects<GeneralCatalogItem>(
                     KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions, null, false
                 );
 
                 items.forEach(
-                    (i) => values.push(new TreeNode(
+                    (i) => nodes.push(new TreeNode(
                         i.ItemID, i.Name, new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, i.ItemID)
                     ))
                 );
                 break;
             default:
+                nodes = await super.getTreeNodes(property, showInvalid, filterIds);
         }
 
-        return values;
+        return nodes;
     }
 
     public determineDependendObjects(configItems: ConfigItem[], targetObjectType: KIXObjectType): string[] | number[] {
@@ -178,6 +188,14 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
         const id = object ? object.ObjectId : objectId;
         const context = await ContextService.getInstance().getContext(ConfigItemDetailsContext.CONTEXT_ID);
         return context.getDescriptor().urlPaths[0] + '/' + id;
+    }
+
+    protected getResource(objectType: KIXObjectType): string {
+        if (objectType === KIXObjectType.CONFIG_ITEM) {
+            return 'cmdb/configitems';
+        } else {
+            return super.getResource(objectType);
+        }
     }
 
 }

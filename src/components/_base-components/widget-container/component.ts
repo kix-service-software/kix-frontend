@@ -1,6 +1,15 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import { ConfiguredWidget, WidgetSize } from '../../../core/model';
-import { ComponentsService } from '../../../core/browser/components';
+import { KIXModulesService } from '../../../core/browser/modules';
 
 class Component {
 
@@ -15,11 +24,11 @@ class Component {
     }
 
     public getTemplate(widget: ConfiguredWidget): any {
-        return ComponentsService.getInstance().getComponentTemplate(widget.configuration.widgetId);
+        return KIXModulesService.getComponentTemplate(widget.configuration.widgetId);
     }
 
     public isLarge(widget: ConfiguredWidget): boolean {
-        return widget.configuration.size === WidgetSize.LARGE;
+        return widget.size === WidgetSize.LARGE;
     }
 
 }

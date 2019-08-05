@@ -1,6 +1,17 @@
-import { FormField } from "../../../../core/model";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { FormField } from '../../../../core/model';
 import { ComponentState } from './ComponentState';
-import { FormService, IdService } from "../../../../core/browser";
+import { FormService, IdService, ServiceRegistry, ServiceType } from '../../../../core/browser';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
+import { KIXObjectFormService } from '../../../../core/browser/kix/KIXObjectFormService';
 
 class FieldContainerComponent {
 
@@ -13,17 +24,41 @@ class FieldContainerComponent {
 
     public onInput(input: any): void {
         this.state.level = typeof input.level !== 'undefined' ? input.level : 0;
-        this.state.fields = input.fields;
         this.formId = input.formId;
+        this.initFields(input.fields);
     }
 
     public async onMount(): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.formId);
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Add", "Translatable#Delete"
+        ]);
         formInstance.registerListener({
             updateForm: () => (this as any).setStateDirty('fields'),
             formValueChanged: () => { return; },
             formListenerId: IdService.generateDateBasedId('form-field-container')
         });
+    }
+
+    private async initFields(fields: FormField[]): Promise<void> {
+        if (this.formId) {
+            const formInstance = await FormService.getInstance().getFormInstance(this.formId);
+            let availableFields: FormField[] = fields;
+
+            const formService = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
+                formInstance.getObjectType(), ServiceType.FORM
+            );
+            if (formService) {
+                const fieldsWithPermission = [];
+                for (const field of fields) {
+                    if (await formService.hasPermissions(field)) {
+                        fieldsWithPermission.push(field);
+                    }
+                }
+                availableFields = fieldsWithPermission;
+            }
+            this.state.fields = availableFields;
+        }
     }
 
     public canRemove(field: FormField): boolean {

@@ -1,9 +1,17 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { TicketArticleDetailsComponentState } from './TicketArticleDetailsComponentState';
 import {
-    Article, Ticket, KIXObjectType, ContextMode,
-    KIXObjectLoadingOptions, ArticlesLoadingOptions
+    Article, Ticket, KIXObjectType, KIXObjectLoadingOptions, ArticleProperty, ArticleLoadingOptions
 } from '../../../core/model';
-import { ContextService, KIXObjectService } from '../../../core/browser';
+import { KIXObjectService } from '../../../core/browser';
 
 export class TicketArticleDetailsComponent {
 
@@ -22,13 +30,13 @@ export class TicketArticleDetailsComponent {
             this.state.article = this.state.inputObject;
         } else if (this.state.inputObject instanceof Ticket) {
             const ticket = (this.state.inputObject as Ticket);
-            let articles = await KIXObjectService.loadObjects<Article>(
+            const articles = await KIXObjectService.loadObjects<Article>(
                 KIXObjectType.ARTICLE, null,
-                new KIXObjectLoadingOptions(), new ArticlesLoadingOptions(ticket.TicketID)
+                new KIXObjectLoadingOptions(null, 'Article.-IncomingTime', 1, [ArticleProperty.ATTACHMENTS]),
+                new ArticleLoadingOptions(ticket.TicketID)
             );
 
-            if (articles) {
-                articles = articles.sort((a, b) => b.IncomingTime - a.IncomingTime);
+            if (articles && articles.length) {
                 this.state.article = articles[0];
             }
         }

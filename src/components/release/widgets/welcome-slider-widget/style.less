@@ -1,0 +1,149 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+.release-dashboard {
+    .slider-widget {
+        padding: 2rem 6rem 5rem;
+        display: grid;
+        grid-template-columns: 375px auto;
+        grid-template-rows: min-content;
+        grid-gap: @margin-default;
+
+        @media (max-width: 1199px) {
+            grid-template-columns: 1fr;
+        }
+
+        >.slider-menu {
+            display: grid;
+            grid-auto-flow: column;
+            grid-gap: @margin-small;
+            justify-self: center;
+
+            >span {
+                border-radius: 50%;
+                background-color: @primary-5;
+                width: .75rem;
+                height: .75rem;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: @primary-0;
+                }
+
+                &.activ {
+                    background-color: @primary-2;
+                }
+            }
+        }
+
+        >.slider-image {
+            align-self: center;
+            justify-self: center;
+            grid-column: 1;
+            opacity: 1;
+            transition: opacity 0.2s;
+
+            &.change-slider {
+                opacity: 0;
+            }
+
+            >img {
+                max-width: 375px;
+            }
+        }
+
+        >.slider-block {
+            border-radius: 10px;
+            background-color: @primary-7;
+            display: grid;
+            grid-template-columns: 2.5rem auto 2.5rem;
+            overflow: hidden;
+            min-height: 15rem;
+
+            >.slider-button {
+                background-color: @primary-5;
+                color: @secondary-6;
+                display: grid;
+                justify-content: center;
+                align-content: center;
+                font-size: 3rem;
+
+                &.useable {
+                    cursor: pointer;
+                }
+
+                &:hover {
+                    color: @primary-0;
+                }
+            }
+
+            >.slider-content {
+                padding: 2rem;
+                display: grid;
+                grid-gap: @margin-default;
+                align-content: start;
+                opacity: 1;
+                transition: opacity 0.2s;
+
+                &.change-slider {
+                    opacity: 0;
+                }
+
+                >h1 {
+                    color: @primary-0;
+                    justify-self: center;
+                    margin-bottom: -@margin-small;
+                }
+
+                >.slider-content-text {
+                    color: @secondary-0;
+                    text-align: center;
+                    font-size: @h2-font-size
+                }
+
+                >.slider-content-buttons {
+                    display: grid;
+                    grid-auto-columns: 1fr;
+                    justify-items: center;
+                    grid-auto-flow: column;
+                    grid-gap: @margin-small;
+
+                    &.start-buttons {
+                        color: red;
+
+                        >button:first-child {
+                            .button-color(@primary-1, @secondary-6, @primary-1, @primary-1);
+
+                            &:hover:not(:disabled) {
+                                background-color: @secondary-6;
+
+                                >[class^="kix-icon-"],
+                                >[class*=" kix-icon-"] {
+                                    color: fade(@secondary-6, 70%);
+                                }
+                            }
+                        }
+
+                        >button:last-child {
+                            .button-color(@primary-3, @secondary-6, @primary-3, @primary-3);
+
+                            &:hover:not(:disabled) {
+                                background-color: @secondary-6;
+
+                                >[class^="kix-icon-"],
+                                >[class*=" kix-icon-"] {
+                                    color: fade(@secondary-6, 70%);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

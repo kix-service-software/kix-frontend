@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     AttributeDefinition, FormField, FormFieldOption, KIXObjectType, FormFieldOptions,
     InputFieldTypes, Form, VersionProperty, ConfigItemProperty, ConfigItemClass, FormContext, ObjectReferenceOptions
@@ -31,19 +40,19 @@ export class ConfigItemFormFactory {
 
         if (forEdit) {
             fields.push(new FormField(
-                'Config Item Klasse', VersionProperty.CLASS_ID, null, false, 'Klasse des Config Items. Nicht änderbar',
+                'Translatable#Config Item Class', VersionProperty.CLASS_ID, null, false, 'Translatable#Helptext_CMDB_ConfigItemCreateEdit_Class',
                 null, null, null, null, 1, 1, 1,
                 null, null, null, false, false, true
             ));
         }
         fields.push(new FormField(
-            'Name', VersionProperty.NAME, null, true, 'Geben Sie einen Namen für das Config Item ein.',
+            'Translatable#Name', VersionProperty.NAME, null, true, 'Translatable#Helptext_CMDB_ConfigItemCreateEdit_Name',
             null, null, null, null, 1, 1, 1,
             null, null, null, false, false
         ));
         fields.push(new FormField(
-            'Verwendungsstatus', VersionProperty.DEPL_STATE_ID, 'general-catalog-input',
-            true, 'Wählen Sie einen Verwendungsstatus aus der Liste.',
+            'Translatable#Deployment State', VersionProperty.DEPL_STATE_ID, 'general-catalog-input',
+            true, 'Translatable#Helptext_CMDB_ConfigItemCreateEdit_DeploymentState',
             [
                 new FormFieldOption('GC_CLASS', 'ITSM::ConfigItem::DeploymentState'),
                 new FormFieldOption('ICON', false)
@@ -51,8 +60,8 @@ export class ConfigItemFormFactory {
             null, null, null, 1, 1, 1, null, null, null, false, false
         ));
         fields.push(new FormField(
-            'Vorfallstatus', VersionProperty.INCI_STATE_ID, 'general-catalog-input',
-            true, 'Wählen Sie einen Vorfallstatus aus der Liste.',
+            'Translatable#Incident state', VersionProperty.INCI_STATE_ID, 'general-catalog-input',
+            true, 'Translatable#Helptext_CMDB_ConfigItemCreateEdit_IncidentState',
             [
                 new FormFieldOption('GC_CLASS', 'ITSM::Core::IncidentState'),
                 new FormFieldOption('ICON', true)
@@ -62,12 +71,7 @@ export class ConfigItemFormFactory {
 
         if (!forEdit) {
             fields.push(new FormField(
-                'Bilder', ConfigItemProperty.IMAGES, 'attachment-input', false, 'Möglichkeit der Anlage von Bilddateien für das Config Item. Erlaubte Dateiformate sind: *.png, *.jpg, *.gif, *.bmp.',
-                [new FormFieldOption('MimeTypes', ['image/png', 'image/jpeg', 'image/gif', 'image/bmp'])],
-                null, null, null, 1, 1, 1, null, null, null, false, false
-            ));
-            fields.push(new FormField(
-                'CI Verknüpfen mit', ConfigItemProperty.LINKS, 'link-input', false, 'Verknüpfen Sie das Config Item mit einem Ticket, einem FAQ-Artikel oder einem anderen Config Item.',
+                'Translatable#Link Config Item with', ConfigItemProperty.LINKS, 'link-input', false, 'Translatable#Helptext_CMDB_ConfigItemCreateEdit_Links',
                 null, null, null, null, 1, 1, 1, null, null, null, false, false
             ));
         }
@@ -79,11 +83,11 @@ export class ConfigItemFormFactory {
             }
         }
 
-        const mainGroup = new FormGroup('Config Item Daten', fields);
+        const mainGroup = new FormGroup('Translatable#Config Item Data', fields);
 
         const form = new Form(
             formId,
-            forEdit ? 'Config Item bearbeiten' : 'Neues Config Item',
+            forEdit ? 'Translatable#Edit Config Item' : 'Translatable#New Config Item',
             [mainGroup], KIXObjectType.CONFIG_ITEM, true,
             forEdit ? FormContext.EDIT : null
         );
@@ -91,7 +95,7 @@ export class ConfigItemFormFactory {
         return form;
     }
 
-    private getFormField(ad: AttributeDefinition, parentInstanceId?: string): FormField {
+    private getFormField(ad: AttributeDefinition, parentInstanceId?: string, parent?: FormField): FormField {
         let formField: FormField;
         if (typeof ad.CountDefault === 'undefined' || ad.CountDefault === null) {
             ad.CountDefault = 1;
@@ -104,8 +108,8 @@ export class ConfigItemFormFactory {
             formField = this.getTextAreaField(ad, parentInstanceId);
         } else if (ad.Input.Type === 'Contact') {
             formField = this.getObjectReferenceField(ad, parentInstanceId, KIXObjectType.CONTACT);
-        } else if (ad.Input.Type === 'Customer') {
-            formField = this.getObjectReferenceField(ad, parentInstanceId, KIXObjectType.CUSTOMER);
+        } else if (ad.Input.Type === 'Organisation') {
+            formField = this.getObjectReferenceField(ad, parentInstanceId, KIXObjectType.ORGANISATION);
         } else if (ad.Input.Type === 'CIClassReference') {
             formField = this.getCIClassReferenceField(ad, parentInstanceId);
         } else if (ad.Input.Type === 'Date') {
@@ -122,12 +126,12 @@ export class ConfigItemFormFactory {
             formField = this.getDefaultFormField(ad, parentInstanceId);
         }
 
-        if (formField.countDefault === 0) {
+        if (formField.countDefault === 0 || (parent && !parent.asStructure && parent.empty)) {
             formField.empty = true;
         }
 
         if (ad.Sub) {
-            formField.children = ad.Sub.map((subField) => this.getFormField(subField, formField.instanceId));
+            formField.children = ad.Sub.map((subField) => this.getFormField(subField, formField.instanceId, formField));
         }
 
         return formField;

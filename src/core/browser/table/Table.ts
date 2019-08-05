@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { IdService } from "../IdService";
 import { ITable } from "./ITable";
 import { Row } from "./Row";
@@ -72,6 +81,7 @@ export class Table implements ITable {
 
     public async initialize(): Promise<void> {
         if (!this.initialized) {
+            this.initialized = true;
             if (this.contentProvider) {
                 await this.contentProvider.initialize();
                 await this.loadRowData();
@@ -89,25 +99,26 @@ export class Table implements ITable {
                 await this.sort(this.sortColumnId, this.sortOrder);
             }
 
-            this.initialized = true;
+            if (this.tableConfiguration &&
+                this.tableConfiguration.toggle &&
+                this.tableConfiguration.toggleOptions.toggleFirst
+            ) {
+                if (this.rows.length) {
+                    this.rows[0].expand(true);
+                }
+            }
         }
     }
 
     private async loadRowData(): Promise<void> {
         this.rows = [];
         this.filteredRows = null;
+
         if (this.contentProvider) {
             const data = await this.contentProvider.loadData();
             const rows = [];
             data.forEach((d) => rows.push(this.createRow(d)));
             this.rows = rows;
-            if (this.tableConfiguration &&
-                this.tableConfiguration.toggle &&
-                this.tableConfiguration.toggleOptions.toggleFirst) {
-                if (this.rows.length) {
-                    this.rows[0].expand(true);
-                }
-            }
         }
     }
 
@@ -121,10 +132,7 @@ export class Table implements ITable {
         const column = new Column(this, columnConfiguration);
 
         this.rows.forEach((r) => {
-            const cell = r.getCell(column.getColumnId());
-            if (!cell) {
-                r.addCell(new TableValue(column.getColumnId(), null));
-            }
+            r.addCell(new TableValue(column.getColumnId(), null));
         });
 
         this.columns.push(column);
@@ -139,7 +147,27 @@ export class Table implements ITable {
     }
 
     public getSelectedRows(all?: boolean): IRow[] {
-        return this.getRows(all).filter((r) => r.isSelected());
+        const rows = this.getRows(all);
+        const selectedRows = this.determineSelectedRows(rows);
+        return selectedRows;
+    }
+
+    private determineSelectedRows(rows: IRow[]): IRow[] {
+        let selectedRows = [];
+
+        rows.forEach((r) => {
+            if (r.isSelected()) {
+                selectedRows.push(r);
+            }
+
+            const children = r.getChildren();
+            if (children && children.length) {
+                const selectedSubRows = this.determineSelectedRows(children);
+                selectedRows = [...selectedRows, ...selectedSubRows];
+            }
+        });
+
+        return selectedRows;
     }
 
     public getRow(rowId: string): IRow {
@@ -204,35 +232,46 @@ export class Table implements ITable {
         return this.columns.find((r) => r.getColumnId() === columnId);
     }
 
-    public removeColumns(columnIds: string[]): IColumn[] {
+    public removeColumns(columnIds: string[]): IColumn[] | IColumnConfiguration[] {
         const removedColumns = [];
-        this.columns = this.columns.filter((c) => {
-            if (columnIds.some((id) => id === c.getColumnId())) {
-                removedColumns.push(c);
-                return false;
-            } else {
-                return true;
-            }
-        });
+        if (!this.initialized) {
+            this.columnConfiguration = this.columnConfiguration.filter((cc) => {
+                if (columnIds.some((id) => id === cc.property)) {
+                    removedColumns.push(cc);
+                    return false;
+                } else {
+                    return true;
+                }
+            });
+        } else {
+            this.columns = this.columns.filter((c) => {
+                if (columnIds.some((id) => id === c.getColumnId())) {
+                    removedColumns.push(c);
+                    return false;
+                } else {
+                    return true;
+                }
+            });
+            this.reload(true, false);
+        }
         return removedColumns;
-        // TODO: notify listener if !!removedColumns.length
     }
 
-    public addColumns(columns: IColumnConfiguration[]): void {
+    public addColumns(columnConfigs: IColumnConfiguration[]): void {
         if (!this.initialized) {
             if (!this.columnConfiguration) {
-                this.columnConfiguration = [...columns];
+                this.columnConfiguration = [...columnConfigs];
             } else {
-                this.columnConfiguration.push(...columns);
+                this.columnConfiguration.push(...columnConfigs);
             }
         } else {
-            columns.forEach((c) => {
+            columnConfigs.forEach((c) => {
                 if (!this.hasColumn(c.property)) {
                     this.createColumn(c);
                     this.updateRowValues();
                 }
             });
-            this.reload();
+            this.reload(true, false);
         }
     }
 
@@ -324,14 +363,26 @@ export class Table implements ITable {
         const column = this.getColumn(columnId);
         if (column) {
             column.setSortOrder(sortOrder);
+
+            const rows = this.getRows(true);
+            const cellPromises: Array<Promise<string>> = [];
+            rows.forEach((r) => cellPromises.push(r.getCell(columnId).getDisplayValue()));
+            await Promise.all(cellPromises);
+
             if (this.filteredRows) {
-                this.filteredRows = await TableSortUtil.sort(
+                this.filteredRows = TableSortUtil.sort(
                     this.filteredRows, columnId, sortOrder, column.getColumnConfiguration().dataType
                 );
+                for (const row of this.filteredRows) {
+                    row.sortChildren(columnId, sortOrder, column.getColumnConfiguration().dataType);
+                }
             } else {
-                this.rows = await TableSortUtil.sort(
+                this.rows = TableSortUtil.sort(
                     this.rows, columnId, sortOrder, column.getColumnConfiguration().dataType
                 );
+                for (const row of this.rows) {
+                    row.sortChildren(columnId, sortOrder, column.getColumnConfiguration().dataType);
+                }
             }
             EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
             EventService.getInstance().publish(
@@ -350,12 +401,22 @@ export class Table implements ITable {
         });
     }
 
+    public setRowSelectionByObject(objects: any[]): void {
+        this.selectNone(true);
+        objects.forEach((o) => {
+            const row = this.getRowByObject(o);
+            if (row) {
+                row.select();
+            }
+        });
+    }
+
     public selectAll(withoutFilter: boolean = false): void {
-        this.getRows(withoutFilter).forEach((r) => r.select());
+        this.getRows(withoutFilter).forEach((r) => r.select(undefined, true, withoutFilter));
     }
 
     public selectNone(withoutFilter: boolean = false): void {
-        this.getRows(withoutFilter).forEach((r) => r.select(false));
+        this.getRows(withoutFilter).forEach((r) => r.select(false, true, withoutFilter));
     }
 
     public selectRowByObject(object: any, select?: boolean): void {
@@ -392,12 +453,19 @@ export class Table implements ITable {
         return selectionState;
     }
 
-    public async reload(keepSelection: boolean = false): Promise<void> {
+    public async reload(keepSelection: boolean = false, sort: boolean = true): Promise<void> {
         let selectedRows: IRow[] = [];
         if (keepSelection) {
             selectedRows = this.getSelectedRows(true);
         }
         await this.loadRowData();
+        if (this.columns && !!this.columns.length) {
+            this.columns.forEach((c) =>
+                this.rows.forEach((r) => {
+                    r.addCell(new TableValue(c.getColumnId(), null));
+                })
+            );
+        }
         if (keepSelection && !!selectedRows.length) {
             // TODO: auch ohne Object sollte es möglich sein, die Selektion zu erhalten
             selectedRows.map(
@@ -407,7 +475,7 @@ export class Table implements ITable {
             );
         }
 
-        if (this.sortColumnId && this.sortOrder) {
+        if (sort && this.sortColumnId && this.sortOrder) {
             await this.sort(this.sortColumnId, this.sortOrder);
         }
 

@@ -1,35 +1,28 @@
-import {
-    WidgetConfiguration, WidgetType, ConfiguredWidget, Version, DataType, ConfigItem, KIXObjectType
-} from "../../../model";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { Version, DataType, ConfigItem, KIXObjectType } from "../../../model";
 import { Context } from "../../../model/components/context/Context";
-import {
-    CompareConfigItemVersionDialogContextConfiguration
-} from "./CompareConfigItemVersionDialogContextConfiguration";
 import { TableConfiguration, IColumnConfiguration, DefaultColumnConfiguration } from "../../table";
 import { ContextService } from "../../context";
 import { ConfigItemDetailsContext } from "./ConfigItemDetailsContext";
 
-export class CompareConfigItemVersionDialogContext extends Context<CompareConfigItemVersionDialogContextConfiguration> {
+export class CompareConfigItemVersionDialogContext extends Context {
 
     public static CONTEXT_ID: string = 'compare-config-item-version-dialog-context';
-
-    public getCompareWidget(): ConfiguredWidget {
-        return this.configuration.compareWidget;
-    }
-
-    protected getSpecificWidgetConfiguration<WS = any>(instanceId: string): WidgetConfiguration<WS> {
-        return this.configuration.compareWidget.configuration;
-    }
-
-    protected getSpecificWidgetType(instanceId: string): WidgetType {
-        return undefined;
-    }
 
     public async setObjectList(versions: Version[]) {
         super.setObjectList(versions);
 
-        if (this.configuration.compareWidget) {
-            this.configuration.compareWidget.configuration.settings.tableConfiguration = new TableConfiguration();
+        const widget = this.getWidget('compare-ci-version-widget');
+        if (widget) {
+            widget.configuration.settings.tableConfiguration = new TableConfiguration();
             const columns: IColumnConfiguration[] = [
                 new DefaultColumnConfiguration(
                     'CONFIG_ITEM_ATTRIBUTE', true, false, true, false, 250, false, false, false, DataType.STRING, true,
@@ -51,7 +44,7 @@ export class CompareConfigItemVersionDialogContext extends Context<CompareConfig
                     )
                 );
             });
-            this.configuration.compareWidget.configuration.settings.tableConfiguration.tableColumns = columns;
+            widget.configuration.settings.tableConfiguration.tableColumns = columns;
         }
     }
 

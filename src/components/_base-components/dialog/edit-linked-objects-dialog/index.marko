@@ -1,11 +1,22 @@
+<!--
+Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
 <widget instanceId="edit-linked-objects-dialog">
     <@content>
         <div.edit-linked-objects-dialog-container>
             <div.table-head>
-                <span>${"Vorhandene Verknüpfungen (" + state.linkObjectCount + ")"}</span>
+                <span>
+                    <translation-string pattern="Translatable#Existing Links ({0})" placeholders=[state.linkObjectCount]/>
+                </span>
                 <filter
                     predefinedFilter=state.predefinedTableFilter
-                    predefinedFilterPlaceholder="Alle Objekte"
+                    predefinedFilterPlaceholder="All Objects"
                     filterCount=state.filterCount
                     on-filter("filter")
                     key="edit-linked-objects-filter"/>
@@ -17,28 +28,38 @@
                 <loading-spinner/>
             </else>
             <div.dialog-button-container>
-                <button.form-blank-cancel-button
-                    type="button"
-                    on-click("markToDelete")
-                    title="Verknüpfung löschen"
-                    disabled=!state.canDelete>
-                    <span.kix-icon-trash/>
-                    Verknüpfung löschen
-                </button>
-                <button.form-blank-button type="button" on-click("openAddLinkDialog") title="Verknüpfung zuordnen">
-                    <span.kix-icon-new-link/>
-                    Verknüpfung zuordnen
-                </button>
+                <if(state.allowDelete)>
+                    <button.form-blank-cancel-button
+                        type="button"
+                        on-click("markToDelete")
+                        title=state.translations["Translatable#Delete Link"]>
+                        <span.kix-icon-trash/>
+                        <translation-string pattern="Translatable#Delete Link"/>
+                    </button>
+                </if>
+                <if(state.allowCreate)>
+                    <button.form-blank-button
+                        type="button"
+                        on-click("openAddLinkDialog")
+                        title=state.translations["Translatable#Assign Link"]>
+                        <span.kix-icon-new-link/>
+                        <translation-string pattern="Translatable#Assign Link"/>
+                    </button>
+                </if>
             </div>
         </div>
         <div.dialog-button-container>
-            <button.cancel-button type="button" on-click("cancel") title="Abbrechen">
+            <button.cancel-button type="button" on-click("cancel") title=state.translations["Translatable#Cancel"]>
                 <span.kix-icon-close/>
-                Abbrechen
+                <translation-string pattern="Translatable#Cancel"/>
             </button>
-            <button.submit-button type="button" on-click("submit") title="Übernehmen" disabled=!state.canSubmit>
+            <button.submit-button
+                type="button"
+                on-click("submit")
+                title=state.translations["Translatable#Submit"]
+                disabled=!state.canSubmit>
                 <span.kix-icon-check/>
-                Übernehmen
+                <translation-string pattern="Translatable#Submit"/>
             </button>
         </div>
     </@content>

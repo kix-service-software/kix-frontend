@@ -1,9 +1,17 @@
-import { PendingTimeFormValue } from ".";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     TicketProperty, ArticleProperty,
     DateTimeUtil, Attachment, Ticket,
     Lock, KIXObjectType, SenderType,
-    KIXObjectLoadingOptions, FilterCriteria, FilterDataType, FilterType
+    KIXObjectLoadingOptions, FilterCriteria, FilterDataType, FilterType, ContextType
 } from "../../model";
 import { ContextService } from "../context";
 import { KIXObjectService } from "../kix";
@@ -17,15 +25,10 @@ export class TicketParameterUtil {
     ): Promise<Array<[string, any]>> {
         const parameter: Array<[string, any]> = [];
         if (value) {
-            // TODO: value should always be the ID of the object
-            if (property === TicketProperty.STATE_ID) {
-                const pendingValue = (value as PendingTimeFormValue);
-                if (pendingValue) {
-                    parameter.push([property, pendingValue.stateId]);
-                    if (pendingValue.pending) {
-                        const pendingTime = DateTimeUtil.getKIXDateTimeString(pendingValue.pendingDate);
-                        parameter.push([TicketProperty.PENDING_TIME, pendingTime]);
-                    }
+            if (property === TicketProperty.PENDING_TIME) {
+                if (value) {
+                    const pendingTime = DateTimeUtil.getKIXDateTimeString(value);
+                    parameter.push([TicketProperty.PENDING_TIME, pendingTime]);
                 }
             } else if (property === TicketProperty.TITLE) {
                 parameter.push([TicketProperty.TITLE, value]);
@@ -57,10 +60,18 @@ export class TicketParameterUtil {
                         }
                     }
                 }
+            } else if (
+                (
+                    property === ArticleProperty.TO
+                    || property === ArticleProperty.CC
+                    || property === ArticleProperty.BCC
+                )
+                && Array.isArray(value)
+            ) {
+                parameter.push([property, value.join(',')]);
             } else {
                 parameter.push([property, value]);
             }
-
         } else {
             parameter.push([property, value]);
         }
@@ -70,7 +81,7 @@ export class TicketParameterUtil {
     public static async getPredefinedParameter(forUpdate: boolean = false): Promise<Array<[string, any]>> {
         const parameter: Array<[string, any]> = [];
 
-        const loadingOptionsSenderType = new KIXObjectLoadingOptions(null, [
+        const loadingOptionsSenderType = new KIXObjectLoadingOptions([
             new FilterCriteria('Name', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'agent')
         ]);
         const senderTypes = await KIXObjectService.loadObjects<SenderType>(
@@ -81,6 +92,22 @@ export class TicketParameterUtil {
             parameter.push([ArticleProperty.SENDER_TYPE_ID, senderTypes[0].ID]);
         }
 
+        const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+        if (dialogContext) {
+            const referencedArticleId = dialogContext.getAdditionalInformation('REFERENCED_ARTICLE_ID');
+            if (referencedArticleId) {
+                parameter.push([ArticleProperty.REFERENCED_ARTICLE_ID, referencedArticleId]);
+                const reply = dialogContext.getAdditionalInformation('ARTICLE_REPLY');
+                if (reply) {
+                    parameter.push([ArticleProperty.EXEC_REPLY, 1]);
+                }
+                const forward = dialogContext.getAdditionalInformation('ARTICLE_FORWARD');
+                if (!reply && forward) {
+                    parameter.push([ArticleProperty.EXEC_FORWARD, 1]);
+                }
+            }
+        }
+
         return parameter;
     }
 
@@ -88,10 +115,14 @@ export class TicketParameterUtil {
         const attachments = [];
         for (const f of files) {
             const attachment = new Attachment();
-            attachment.ContentType = f.type !== '' ? f.type : 'text';
-            attachment.Filename = f.name;
-            attachment.Content = await BrowserUtil.readFile(f);
-            attachments.push(attachment);
+            if (f instanceof File) {
+                attachment.ContentType = f.type !== '' ? f.type : 'text';
+                attachment.Filename = f.name;
+                attachment.Content = await BrowserUtil.readFile(f);
+                attachments.push(attachment);
+            } else {
+                attachments.push(f);
+            }
         }
         return attachments;
     }

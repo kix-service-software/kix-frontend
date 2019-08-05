@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 export enum TicketProperty {
 
     TICKET_NUMBER = 'TicketNumber',
@@ -8,17 +17,15 @@ export enum TicketProperty {
 
     STATE_ID = 'StateID',
 
-    STATE_TYPE_ID = 'StateTypeID',
-
     PRIORITY_ID = 'PriorityID',
 
     LOCK_ID = 'LockID',
 
     QUEUE_ID = 'QueueID',
 
-    CUSTOMER_ID = 'CustomerID',
+    ORGANISATION_ID = 'OrganisationID',
 
-    CUSTOMER_USER_ID = 'CustomerUserID',
+    CONTACT_ID = 'ContactID',
 
     OWNER_ID = 'OwnerID',
 
@@ -36,11 +43,7 @@ export enum TicketProperty {
 
     CREATED_TIME_UNIX = 'CreateTimeUnix',
 
-    CREATED_BY = 'CreateBy',
-
     CHANGED = 'Changed',
-
-    CHANGED_BY = 'ChangeBy',
 
     ARCHIVE_FLAG = 'ArchiveFlag',
 
@@ -48,7 +51,7 @@ export enum TicketProperty {
 
     ESCALATION_UPDATE_TIME = 'EscalationUpdateTime',
 
-    ESCALATION_SOLUTIONS_TIME = 'EscalationSolutionTime',
+    ESCALATION_SOLUTION_TIME = 'EscalationSolutionTime',
 
     ESCALATION_DESTINATION_IN = 'EscalationDestinationIn',
 
@@ -100,11 +103,7 @@ export enum TicketProperty {
 
     WATCH_USER_ID = 'WatchUserID',
 
-    CREATE_TIME = 'CreateTime',
-
     CLOSE_TIME = 'CloseTime',
-
-    CHANGE_TIME = 'ChangeTime',
 
     PENDING_TIME = 'PendingTime',
 
@@ -134,15 +133,15 @@ export enum TicketProperty {
 
     ARTICLE_FLAG = 'ArticleFlag',
 
-    CREATED_TYPE_ID = 'CreatedTypeID',
+    // CREATED_TYPE_ID = 'CreatedTypeID',
 
-    CREATED_USER_ID = 'CreatedUserID',
+    // CREATED_USER_ID = 'CreatedUserID',
 
-    CREATED_STATE_ID = 'CreatedStateID',
+    // CREATED_STATE_ID = 'CreatedStateID',
 
-    CREATED_QUEUE_ID = 'CreatedQueueID',
+    // CREATED_QUEUE_ID = 'CreatedQueueID',
 
-    CREATED_PRIORITY_ID = 'CreatedPriorityID',
+    // CREATED_PRIORITY_ID = 'CreatedPriorityID',
 
     LINKED_AS = 'LinkedAs',
 
@@ -152,6 +151,23 @@ export enum TicketProperty {
 
     ARTICLES = 'Articles',
 
-    UNSEEN = 'Unseen'
+    UNSEEN = 'Unseen',
+
+    HISTORY = 'History',
+
+    // UI properties
+    STATE = 'State',
+    STATE_TYPE = 'StateType',
+    PRIORITY = 'Priority',
+    LOCK = 'Lock',
+    QUEUE = 'Queue',
+    ORGANISATION = 'Organisation',
+    CONTACT = 'Contact',
+    OWNER = 'Owner',
+    TYPE = 'Type',
+    SLA = 'SLA',
+    SERVICE = 'Service',
+    RESPONSIBLE = 'Responsible',
+    UNTIL_TIME = 'UntilTime'
 
 }

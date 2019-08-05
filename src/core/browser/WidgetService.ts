@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { WidgetType, Context, IAction, IActionListener, KIXObject } from "../model";
 import { ITable } from "./table";
 
@@ -21,7 +30,7 @@ export class WidgetService {
         this.widgetTypes.set(instanceId, widgetType);
     }
 
-    public getWidgetType(instanceId: string, context?: Context<any>): WidgetType {
+    public getWidgetType(instanceId: string, context?: Context): WidgetType {
         let widgetType = context ? context.getContextSpecificWidgetType(instanceId) : undefined;
 
         if (!widgetType && this.widgetTypes.has(instanceId)) {

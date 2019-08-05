@@ -1,43 +1,63 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 .overlay {
     position: absolute;
     top: 0;
+
     >.overlay-content {
         position: absolute;
         opacity: 0;
+
         >.overlay-widget {
             border-radius: @border-radius;
             background-color: @secondary-6;
+
             >.widget-header {
                 cursor: move;
             }
+
             >.widget-content {
                 overflow: hidden;
                 border: 2px solid @tertiary-0;
                 border-top: none;
             }
         }
+
         &.content-overlay,
         &.info-overlay {
             width: @default-widget-width + 10rem;
             height: @default-widget-height;
             min-width: @default-widget-width + 10rem;
             min-height: @default-widget-height;
+
             &.large {
                 width: @default-widget-width * 2;
+                height: @default-widget-height + 3.5rem;
             }
+
             >.overlay-widget {
                 height: 100%;
                 display: grid;
                 grid-template-rows: @overlay-widget-header-height auto;
                 .widget(@tertiary-1, @secondary-6, @overlay-widget-header-height);
+
                 >.widget-header {
                     grid-template-columns: 8fr 2fr;
+
                     >.header-right {
                         >.action-list-wrapper {
                             >.action-list-expansion-container {
                                 background-color: @tertiary-1;
                                 color: @secondary-6;
                                 top: @overlay-widget-header-height;
+
                                 >ul.action-list-expansion {
                                     >li {
                                         border-color: @secondary-6;
@@ -47,15 +67,18 @@
                         }
                     }
                 }
+
                 >.widget-content {
                     .font-size-small();
                     border-color: @tertiary-1;
                     background-color: @secondary-6;
+
                     >div:not(.overlay-resize) {
                         .full-size;
                         margin: 1rem;
                         overflow: auto;
                     }
+
                     >div.overlay-resize {
                         cursor: nwse-resize;
                         position: absolute;
@@ -65,11 +88,13 @@
                         width: 2.75rem;
                         background-color: @tertiary-1;
                         transform: rotate(-45deg);
+
                         >div {
                             background-color: @secondary-6;
                             height: .2rem;
                             margin: .2rem auto;
                             width: 1rem;
+
                             &:last-child {
                                 width: .5rem;
                             }
@@ -78,29 +103,36 @@
                 }
             }
         }
+
         &.content-overlay {
             >.overlay-widget {
                 .widget(@primary-0, @secondary-6, @overlay-widget-header-height);
+
                 >.widget-header {
                     grid-template-columns: 8fr 2fr;
                 }
+
                 >.widget-content {
                     .font-size-small();
                     border-color: @primary-0;
+
                     >div.overlay-resize {
                         background-color: @primary-0;
                     }
                 }
             }
         }
+
         &.hint-overlay {
             >.overlay-widget {
                 .widget(@secondary-2, @secondary-0, @overlay-widget-header-height);
                 width: 22rem;
                 min-height: 6rem;
+
                 >.widget-header {
                     grid-template-columns: 8fr 2fr;
                 }
+
                 >.widget-content {
                     .font-size-small();
                     border-color: @secondary-2;
@@ -108,15 +140,18 @@
                     color: @secondary-0;
                     text-align: justify;
                     min-height: 6rem - @overlay-widget-header-height;
+
                     >div {
                         margin: 1rem;
                     }
                 }
             }
         }
+
         &.warning-overlay {
             >.overlay-widget {
                 .widget(@tertiary-0, @secondary-6, @overlay-widget-header-height);
+
                 >.widget-content {
                     >.message-button {
                         left: 50%;
@@ -127,17 +162,21 @@
                 }
             }
         }
+
         &.confirm-overlay {
             >.overlay-widget {
                 .widget(@secondary-1, @secondary-6, @overlay-widget-header-height);
+
                 >.widget-content {
                     border-color: @secondary-1;
+
                     >div {
                         >.confirm-overlay-buttons {
                             margin: @margin-default 0;
                             display: grid;
                             grid-template-columns: 1fr 1fr;
                             grid-gap: @margin-small * 2;
+
                             >button {
                                 min-width: 100%;
                                 max-width: 100%;
@@ -147,43 +186,53 @@
                 }
             }
         }
+
         &.warning-overlay,
         &.confirm-overlay {
             position: fixed;
+
             >.overlay-widget {
                 width: 24.75rem;
                 min-height: 12.25rem;
+
                 >.widget-header {
                     grid-template-columns: 8fr 2fr;
                 }
+
                 >.widget-content {
                     .font-size-small();
                     background-color: @secondary-6;
                     color: @secondary-0;
                     min-height: 12.25rem - @overlay-widget-header-height;
+
                     >div {
                         margin: 1.875rem 1.875rem 0;
                     }
                 }
             }
         }
+
         &.table-column-filter-overlay {
             >.overlay-widget {
                 .widget(@widget-header-height: 0);
+
                 >.widget-header {
                     display: none;
                 }
+
                 >.widget-content {
                     background-color: @secondary-6;
                     color: @secondary-0;
                     border: 1px solid @primary-3;
                     border-radius: @border-radius;
+
                     >div {
                         max-height: 12rem;
                         margin: @margin-small;
                         min-height: 1.75rem;
                         width: 15rem;
                         overflow: auto;
+
                         >input {
                             width: 15rem;
                             height: 1.75rem;
@@ -192,26 +241,32 @@
                 }
             }
         }
+
         &.toast-overlay {
             position: fixed;
             top: 3.5rem;
             transition: opacity .20s ease-in, top .20s ease-in;
+
             &.show-toast {
                 top: 10rem;
                 opacity: 100;
             }
+
             >.overlay-widget {
                 .widget(@widget-header-height: 0);
                 width: 17.5rem;
                 height: 6.25rem;
                 border: 1px solid @secondary-1;
+
                 >.widget-header {
                     display: none;
                 }
+
                 >.widget-content {
                     background-color: @secondary-6;
                     color: @secondary-0;
                     border: none;
+
                     .toast-content {
                         .toast-icon {
                             background-color: lighten(@secondary-1, 10%);
@@ -220,14 +275,43 @@
                     }
                 }
             }
+
+            &.reload-toast {
+                >.overlay-widget {
+                    .shadow-2(darken(@tertiary-0, 20%));
+                    border-color: @tertiary-0;
+
+                    .widget-content {
+                        .toast-content {
+                            .toast-icon {
+                                background-color: lighten(@tertiary-0, 10%);
+                            }
+                        }
+                    }
+                }
+            }
+
             &.success-toast {
                 >.overlay-widget {
                     .shadow-2(darken(@primary-6, 20%));
                     border-color: @primary-6;
+
                     .widget-content {
                         .toast-content {
                             .toast-icon {
                                 background-color: lighten(@primary-6, 10%);
+                            }
+                        }
+                    }
+                }
+            }
+
+            &.error-toast {
+                >.overlay-widget {
+                    .widget-content {
+                        .toast-content {
+                            .toast-icon {
+                                background-color: lighten(@tertiary-0, 10%);
                             }
                         }
                     }

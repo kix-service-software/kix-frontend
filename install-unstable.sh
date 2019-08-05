@@ -1,1 +1,0 @@
-npm install @kix/core@unstable

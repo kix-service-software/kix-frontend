@@ -1,0 +1,28 @@
+<!--
+Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
+<if(state.matchManager)>
+    <div.mail-filter-match-form-container>
+        <span title=state.translations.get("HeaderTitle")>
+            <span>${state.translations.get("HeaderTitle")}:</span>
+            <overlay-icon isHint=true content=state.translations.get("HeaderHint")/>
+        </span>
+        <div.mail-filter-match-value-container>
+            <span title=state.translations.get("NegateTitle")>
+                <span>${state.translations.get("NegateTitle")}:</span>
+                <overlay-icon isHint=true content=state.translations.get("NegateHint")/>
+            </span>
+            <span title=state.translations.get("PatternTitle")>
+                <span>${state.translations.get("PatternTitle")}:</span>
+                <overlay-icon isHint=true content=state.translations.get("PatternHint")/>
+            </span>
+        </div>
+    </div>
+    <dynamic-form-field-container manager=state.matchManager/>
+</if>

@@ -1,14 +1,16 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 export { TicketDetailsContext } from './TicketDetailsContext';
-export { TicketDetailsContextConfiguration } from './TicketDetailsContextConfiguration';
-export { TicketContextConfiguration } from './TicketContextConfiguration';
-export { NewTicketDialogContextConfiguration } from './NewTicketDialogContextConfiguration';
 export { NewTicketDialogContext } from './NewTicketDialogContext';
-export { EditTicketDialogContextConfiguration } from './EditTicketDialogContextConfiguration';
 export { EditTicketDialogContext } from './EditTicketDialogContext';
 export { TicketContext } from './TicketContext';
-export { TicketSearchContextConfiguration } from './TicketSearchContextConfiguration';
 export { TicketSearchContext } from './TicketSearchContext';
 export { NewTicketArticleContext } from './NewTicketArticleContext';
-export { NewTicketArticleContextConfiguration } from './NewTicketArticleContextConfiguration';
 export { TicketListContext } from './TicketListContext';
-export { TicketListContextConfiguration } from './TicketListContextConfiguration';

@@ -1,12 +1,22 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
-    OverlayService, FormService, AbstractMarkoComponent, KIXObjectService, ContextService, BrowserUtil,
-    DialogService
-} from "../../../../../core/browser";
+    OverlayService, FormService, AbstractMarkoComponent, KIXObjectService, ContextService, BrowserUtil
+} from '../../../../../core/browser';
 import {
     ValidationSeverity, OverlayType, ComponentContent, ValidationResult, KIXObjectType, Error
-} from "../../../../../core/model";
-import { ComponentState } from "./ComponentState";
-import { ConfigItemClassDetailsContext } from "../../../../../core/browser/cmdb";
+} from '../../../../../core/model';
+import { ComponentState } from './ComponentState';
+import { ConfigItemClassDetailsContext } from '../../../../../core/browser/cmdb';
+import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
+import { DialogService } from '../../../../../core/browser/components/dialog';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -16,7 +26,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         this.state.loading = true;
-        DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
+        DialogService.getInstance().setMainDialogHint('Translatable#All form fields marked by * are required fields.');
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Cancel", "Translatable#Save"
+        ]);
         this.state.loading = false;
     }
 
@@ -37,7 +50,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             if (validationError) {
                 this.showValidationError(result);
             } else {
-                DialogService.getInstance().setMainDialogLoading(true, "CMDB Klasse wird aktualisiert");
+                DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Update CI Class');
 
                 const context = await ContextService.getInstance().getContext<ConfigItemClassDetailsContext>(
                     ConfigItemClassDetailsContext.CONTEXT_ID
@@ -49,7 +62,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     await FormService.getInstance().loadFormConfigurations();
                     context.getObject(KIXObjectType.CONFIG_ITEM_CLASS, true);
                     DialogService.getInstance().setMainDialogLoading(false);
-                    BrowserUtil.openSuccessOverlay('Änderungen wurden gespeichert.');
+
+                    const toast = await TranslationService.translate('Translatable#Changes saved.');
+                    BrowserUtil.openSuccessOverlay(toast);
                     DialogService.getInstance().submitMainDialog();
                 }).catch((error: Error) => {
                     DialogService.getInstance().setMainDialogLoading(false);
@@ -63,13 +78,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const errorMessages = result.filter((r) => r.severity === ValidationSeverity.ERROR).map((r) => r.message);
         const content = new ComponentContent('list-with-title',
             {
-                title: 'Fehler beim Validieren des Formulars:',
+                title: 'Translatable#Error on form validation:',
                 list: errorMessages
             }
         );
 
         OverlayService.getInstance().openOverlay(
-            OverlayType.WARNING, null, content, 'Validierungsfehler', true
+            OverlayType.WARNING, null, content, 'Translatable#Validation error', true
         );
     }
 

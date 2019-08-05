@@ -1,13 +1,25 @@
-import { KIXObjectType, ContextMode, ContactProperty, KIXObjectLoadingOptions } from "../../../model";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import {
+    KIXObjectType, ContextMode, ContactProperty, KIXObjectLoadingOptions, KIXObjectProperty, DataType
+} from "../../../model";
 import { RoutingConfiguration } from "../../router";
 import { ContactDetailsContext } from "../context";
 import {
-    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
+    TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableHeaderHeight, TableRowHeight, IColumnConfiguration
 } from "../../table";
 import { ContactTableContentProvider } from "./ContactTableContentProvider";
+import { TableFactory } from "../../table/TableFactory";
 
-export class ContactTableFactory implements ITableFactory {
+export class ContactTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.CONTACT;
 
@@ -18,13 +30,10 @@ export class ContactTableFactory implements ITableFactory {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, short);
 
-        const loadingOptions = new KIXObjectLoadingOptions(
-            null, tableConfiguration.filter, tableConfiguration.sortOrder, null,
-            tableConfiguration.limit, ['TicketStats']
-        );
-
         const table = new Table(tableKey, tableConfiguration);
-        table.setContentProvider(new ContactTableContentProvider(table, objectIds, loadingOptions, contextId));
+        table.setContentProvider(
+            new ContactTableContentProvider(table, objectIds, tableConfiguration.loadingOptions, contextId)
+        );
         table.setColumnConfiguration(tableConfiguration.tableColumns);
         return table;
     }
@@ -35,45 +44,33 @@ export class ContactTableFactory implements ITableFactory {
         let tableColumns;
         if (short) {
             tableColumns = [
-                new DefaultColumnConfiguration(
-                    ContactProperty.USER_FIRST_NAME, true, false, true, false, 150, true, true
-                ),
-                new DefaultColumnConfiguration(
-                    ContactProperty.USER_LAST_NAME, true, false, true, false, 150, true, true
-                ),
-                new DefaultColumnConfiguration(ContactProperty.USER_EMAIL, true, false, true, false, 175, true, true),
-                new DefaultColumnConfiguration(ContactProperty.USER_LOGIN, true, false, true, false, 150, true, true),
-                new DefaultColumnConfiguration(
-                    ContactProperty.USER_CUSTOMER_ID, true, false, true, false, 150, true, true
-                ),
-                new DefaultColumnConfiguration(ContactProperty.USER_CITY, true, false, true, false, 130, true, true),
-                new DefaultColumnConfiguration(ContactProperty.USER_STREET, true, false, true, false, 150, true, true),
-                new DefaultColumnConfiguration(ContactProperty.VALID_ID, true, false, true, false, 130, true, true)
+                this.getDefaultColumnConfiguration(ContactProperty.FIRSTNAME),
+                this.getDefaultColumnConfiguration(ContactProperty.LASTNAME),
+                this.getDefaultColumnConfiguration(ContactProperty.EMAIL),
+                this.getDefaultColumnConfiguration(ContactProperty.LOGIN),
+                this.getDefaultColumnConfiguration(ContactProperty.PRIMARY_ORGANISATION_ID),
+                this.getDefaultColumnConfiguration(ContactProperty.CITY),
+                this.getDefaultColumnConfiguration(ContactProperty.STREET),
+                this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID)
             ];
         } else {
             tableColumns = [
-                new DefaultColumnConfiguration(
-                    ContactProperty.USER_FIRST_NAME, true, false, true, false, 150, true, true
-                ),
-                new DefaultColumnConfiguration(
-                    ContactProperty.USER_LAST_NAME, true, false, true, false, 150, true, true
-                ),
-                new DefaultColumnConfiguration(ContactProperty.USER_EMAIL, true, false, true, false, 175, true, true),
-                new DefaultColumnConfiguration(ContactProperty.USER_LOGIN, true, false, true, false, 150, true, true),
-                new DefaultColumnConfiguration(
-                    ContactProperty.USER_CUSTOMER_ID, true, false, true, false, 150, true, true
-                ),
-                new DefaultColumnConfiguration(ContactProperty.USER_PHONE, true, false, true, false, 130, true, true),
-                new DefaultColumnConfiguration(ContactProperty.USER_COUNTRY, true, false, true, false, 130, true, true),
-                new DefaultColumnConfiguration(ContactProperty.USER_CITY, true, false, true, false, 130, true, true),
-                new DefaultColumnConfiguration(ContactProperty.USER_STREET, true, false, true, false, 150, true, true),
-                new DefaultColumnConfiguration(ContactProperty.VALID_ID, true, false, true, false, 130, true, true)
+                this.getDefaultColumnConfiguration(ContactProperty.FIRSTNAME),
+                this.getDefaultColumnConfiguration(ContactProperty.LASTNAME),
+                this.getDefaultColumnConfiguration(ContactProperty.EMAIL),
+                this.getDefaultColumnConfiguration(ContactProperty.LOGIN),
+                this.getDefaultColumnConfiguration(ContactProperty.PRIMARY_ORGANISATION_ID),
+                this.getDefaultColumnConfiguration(ContactProperty.PHONE),
+                this.getDefaultColumnConfiguration(ContactProperty.COUNTRY),
+                this.getDefaultColumnConfiguration(ContactProperty.CITY),
+                this.getDefaultColumnConfiguration(ContactProperty.STREET),
+                this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID)
             ];
         }
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.CONTACT, null, 5, tableColumns, null, false, false, null, null,
+                KIXObjectType.CONTACT, null, null, tableColumns, false, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.SMALL
             );
             tableConfiguration.enableSelection = true;
@@ -85,8 +82,8 @@ export class ContactTableFactory implements ITableFactory {
 
         if (defaultRouting) {
             tableConfiguration.routingConfiguration = new RoutingConfiguration(
-                null, ContactDetailsContext.CONTEXT_ID, KIXObjectType.CONTACT,
-                ContextMode.DETAILS, ContactProperty.ContactID
+                ContactDetailsContext.CONTEXT_ID, KIXObjectType.CONTACT,
+                ContextMode.DETAILS, ContactProperty.ID
             );
         }
 
@@ -94,9 +91,30 @@ export class ContactTableFactory implements ITableFactory {
         return tableConfiguration;
     }
 
-    // TODO: implementieren
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
-        return;
+        let config;
+        switch (property) {
+            case ContactProperty.EMAIL:
+                config = new DefaultColumnConfiguration(property, true, false, true, false, 175, true, true);
+                break;
+            case ContactProperty.PHONE:
+            case ContactProperty.COUNTRY:
+            case ContactProperty.CITY:
+                config = new DefaultColumnConfiguration(property, true, false, true, false, 130, true, true);
+                break;
+            case KIXObjectProperty.VALID_ID:
+                config = new DefaultColumnConfiguration(property, true, false, true, false, 130, true, true, true);
+                break;
+            case ContactProperty.PRIMARY_ORGANISATION_ID:
+                config = new DefaultColumnConfiguration(
+                    property, true, false, true, false, 150, true, true, false, DataType.STRING, true, null,
+                    'Translatable#Organisation'
+                );
+                break;
+            default:
+                config = super.getDefaultColumnConfiguration(property);
+        }
+        return config;
     }
 
 }

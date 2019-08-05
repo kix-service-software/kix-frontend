@@ -1,0 +1,108 @@
+<!--
+Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+<widget title=state.translations["Translatable#Help, hints & tricks"]>
+    <@content>
+        <div.help-and-info-widget>
+            <div>
+                <div.header>
+                    <icon icon="kix-icon-edit"/>
+                    <h2>
+                        <translation-string pattern="Translatable#Important functional elements briefly explained"/>
+                    </h2>
+                </div>
+                <ul>
+                    <li>
+                        <translation-string pattern="Translatable#Green button 'Back to' = history of your last visited pages"/>
+                    </li>
+                    <li>
+                        <translation-string pattern="Translatable#Click on the middle or right mouse button (context menu) = open window in a new tab"/>
+                    </li>
+                    <li>
+                        <span.sortable>
+                            <icon icon="kix-icon-triangle-up"/>
+                            <icon icon="kix-icon-sort-down"/>
+                        </span>
+                        <translation-string pattern="Translatable#Open/close at line ends = open and close elements"/>
+                    </li>
+                    <li>
+                        <icon icon="kix-icon-dots"/>
+                        <translation-string pattern="Translatable#Button with 3 points = Here you can find further actions"/>
+                    </li>
+                    <li>
+                        <translation-string pattern="Translatable#Input of 3 stars '***' in autocomplete form fields = listing of the first 10 found records"/>
+                    </li>
+                </ul>
+            </div>
+            <if(state.hasFAQAccess)>
+                <div>
+                    <div.header>
+                        <icon icon="kix-icon-faq"/>
+                        <h2>
+                            <translation-string pattern="Translatable#Helping FAQ Contributions"/>
+                        </h2>
+                    </div>
+                    <p>
+                        <translation-string pattern="Translatable#The following FAQ entries will provide you with a basic overview of how KIX 18 works"/>:
+                    </p>
+                    <ul.link-list>
+                        <li>
+                            <a href="faqarticles/1">
+                                <translation-string pattern="Translatable#General information on working with KIX 18"/>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="faqarticles/3">
+                                <translation-string pattern="Translatable#How do I create a new ticket?"/>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="faqarticles/4">
+                                <translation-string pattern="Translatable#Selected ticket functions"/>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="faqarticles/2">
+                                <translation-string pattern="Translatable#How do I search in KIX 18?"/>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </if>
+            <if(state.hasConfigAccess && (state.userManualLink || state.adminManualLink))>
+                <div>
+                    <div.header>
+                        <icon icon="kix-icon-book"/>
+                        <h2>
+                            <translation-string pattern="Translatable#Links to manuals"/>
+                        </h2>
+                    </div>
+                    <p>
+                        <translation-string pattern="Translatable#Here you will find the KIX 18 manuals for users and administrators"/>:
+                    </p>
+                    <ul.link-list>
+                        <if(state.userManualLink)>
+                            <li>
+                                <a href=state.userManualLink target="_blank">
+                                    <translation-string pattern="User manual"/>
+                                </a>
+                            </li>
+                        </if>
+                        <if(state.adminManualLink)>
+                            <li>
+                                <a href=state.adminManualLink target="_blank">
+                                    <translation-string pattern="Translatable#Administrator's Guide"/>
+                                </a>
+                            </li>
+                        </if>
+                    </ul>
+                </div>
+            </if>
+        </div>
+    </@content>
+</widget>

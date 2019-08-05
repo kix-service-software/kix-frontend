@@ -6,12 +6,15 @@
     "tags-dir": [
         "_base-template",
         "_base-components",
-        "customer",
+        "organisation",
         "home",
         "ticket",
-        "customer",
         "search",
         "faq",
-        "cmdb"
+        "cmdb",
+        "user",
+        "widgets",
+        "main-menu",
+        "_login"
     ]
 }

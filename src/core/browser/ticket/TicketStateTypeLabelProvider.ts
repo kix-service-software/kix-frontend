@@ -1,8 +1,17 @@
-import { ILabelProvider } from "../ILabelProvider";
-import { KIXObjectType, ObjectIcon, TicketStateProperty, DateTimeUtil, TicketStateType } from "../../model";
-import { ContextService } from "../context";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
 
-export class TicketStateTypeLabelProvider implements ILabelProvider<TicketStateType> {
+import { KIXObjectType, ObjectIcon, TicketStateProperty, TicketStateType } from "../../model";
+import { TranslationService } from "../i18n/TranslationService";
+import { LabelProvider } from "../LabelProvider";
+
+export class TicketStateTypeLabelProvider extends LabelProvider<TicketStateType> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.TICKET_STATE_TYPE;
 
@@ -10,26 +19,29 @@ export class TicketStateTypeLabelProvider implements ILabelProvider<TicketStateT
         return ticketStateType instanceof TicketStateType;
     }
 
-    public async getPropertyText(property: string, short?: boolean): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
             case TicketStateProperty.NAME:
-                displayValue = 'Name';
-                break;
             case TicketStateProperty.ID:
-                displayValue = 'Icon';
+                displayValue = 'Translatable#Icon';
                 break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
+
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
+        }
+
         return displayValue;
     }
 
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
-    }
-
-    public getDisplayText(ticketStateType: TicketStateType, property: string): Promise<string> {
+    public async getDisplayText(
+        ticketStateType: TicketStateType, property: string, value?: string, translatable: boolean = true
+    ): Promise<string> {
         let displayValue = ticketStateType[property];
 
         switch (property) {
@@ -38,35 +50,27 @@ export class TicketStateTypeLabelProvider implements ILabelProvider<TicketStateT
                 break;
             default:
         }
-        return displayValue;
-    }
 
-    public async getPropertyValueDisplayText(property: string, value: string | number): Promise<string> {
-        return value.toString();
-    }
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
+        }
 
-    public getDisplayTextClasses(ticketStateType: TicketStateType, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(ticketStateType: TicketStateType): string[] {
-        return [];
+        return displayValue ? displayValue.toString() : '';
     }
 
     public async getObjectText(ticketStateType: TicketStateType, id?: boolean, title?: boolean): Promise<string> {
         return ticketStateType.Name;
     }
 
-    public getObjectAdditionalText(ticketStateType: TicketStateType): string {
-        return null;
-    }
-
-    public getObjectIcon(ticketState?: TicketStateType): string | ObjectIcon {
-        return null;
-    }
-
-    public getObjectName(plural?: boolean): string {
-        return plural ? 'Statustypen' : 'Statustyp';
+    public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
+        if (translatable) {
+            return await TranslationService.translate(
+                plural ? 'Translatable#State Types' : 'Translatable#State Type'
+            );
+        }
+        return plural ? 'States' : 'State';
     }
 
     public getObjectTooltip(ticketStateType: TicketStateType): string {

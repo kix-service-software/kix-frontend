@@ -1,14 +1,19 @@
-import { KIXObjectFormService } from "../kix/KIXObjectFormService";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { KIXObjectFormService } from '../kix/KIXObjectFormService';
 import {
-    Ticket, KIXObjectType, TicketProperty, Channel, FormField, ArticleProperty,
-    FormFieldOptions, FormFieldOption, ContextType, ContextMode, FormContext, FormFieldValue
-} from "../../model";
-import { PendingTimeFormValue } from "./form";
-import { ContactService } from "../contact";
-import { CustomerService } from "../customer";
-import { AutocompleteOption, AutocompleteFormFieldOption } from "../components";
-import { ContextService } from "../context";
-import { FormService } from "../form";
+    Ticket, KIXObjectType, TicketProperty, FormField, CRUD, ArticleProperty, FormContext,
+    FormFieldValue, Form, TicketState, StateType
+} from '../../model';
+import { KIXObjectService } from '../kix';
+import { LabelService } from '../LabelService';
 
 export class TicketFormService extends KIXObjectFormService<Ticket> {
 
@@ -27,19 +32,70 @@ export class TicketFormService extends KIXObjectFormService<Ticket> {
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {
-        return kixObjectType === KIXObjectType.TICKET || kixObjectType === KIXObjectType.ARTICLE;
+        return kixObjectType === KIXObjectType.TICKET;
+    }
+
+    protected async additionalPreparations(
+        form: Form, formFieldValues: Map<string, FormFieldValue<any>>, ticket: Ticket
+    ): Promise<void> {
+        if (form && form.formContext === FormContext.EDIT) {
+            groupLoop: for (const g of form.groups) {
+                for (const f of g.formFields) {
+                    if (f.property === TicketProperty.STATE_ID) {
+                        const stateId = formFieldValues.get(f.instanceId).value;
+                        if (stateId && this.showPendingTimeField(stateId)) {
+                            await this.setPendingTimeField(f, formFieldValues, ticket);
+                        }
+                        break groupLoop;
+                    }
+                }
+            }
+        }
+    }
+
+    private async showPendingTimeField(stateId: number): Promise<boolean> {
+        let showPending = false;
+        if (
+            await this.checkPermissions('system/ticket/states')
+            && await this.checkPermissions('system/ticket/states/types')
+        ) {
+            const states = await KIXObjectService.loadObjects<TicketState>(
+                KIXObjectType.TICKET_STATE, null
+            );
+            const stateTypes = await KIXObjectService.loadObjects<StateType>(
+                KIXObjectType.TICKET_STATE_TYPE, null
+            );
+            const state = states.find((s) => s.ID === stateId);
+            if (state) {
+                const stateType = stateTypes.find((t) => t.ID === state.TypeID);
+                showPending = stateType && stateType.Name.toLocaleLowerCase().indexOf('pending') >= 0;
+            }
+        }
+        return showPending;
+    }
+
+    private async setPendingTimeField(
+        typeField: FormField, formFieldValues: Map<string, FormFieldValue<any>>, ticket?: Ticket
+    ): Promise<void> {
+        const label = await LabelService.getInstance().getPropertyText(
+            TicketProperty.PENDING_TIME, KIXObjectType.TICKET
+        );
+        const pendingField = new FormField(
+            label, TicketProperty.PENDING_TIME, 'ticket-input-state-pending', true,
+            null, null, new FormFieldValue(ticket.PendingTime), undefined, undefined, undefined, undefined, undefined,
+            undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, false
+        );
+        typeField.children.push(pendingField);
+        formFieldValues.set(pendingField.instanceId, new FormFieldValue(ticket.PendingTime));
     }
 
     protected async getValue(property: string, value: any, ticket: Ticket): Promise<any> {
         if (value) {
             switch (property) {
-                case TicketProperty.STATE_ID:
+                case TicketProperty.PENDING_TIME:
                     if (ticket) {
-                        value = new PendingTimeFormValue(
-                            value,
-                            ticket[TicketProperty.PENDING_TIME] ? true : false,
-                            ticket[TicketProperty.PENDING_TIME] ? new Date(ticket[TicketProperty.PENDING_TIME]) : null
-                        );
+                        value = ticket[TicketProperty.PENDING_TIME]
+                            ? new Date(ticket[TicketProperty.PENDING_TIME]) : null;
                     }
                     break;
                 default:
@@ -48,68 +104,43 @@ export class TicketFormService extends KIXObjectFormService<Ticket> {
         return value;
     }
 
-    public async getFormFieldsForChannel(channel: Channel, formId: string): Promise<FormField[]> {
-        const fields: FormField[] = [];
-
-        const formInstance = await FormService.getInstance().getFormInstance(formId);
-
-        const customerVisibleReadonly = formInstance.getFormContext() === FormContext.NEW
-            && formInstance.getObjectType() !== KIXObjectType.ARTICLE;
-        const customerVisibleValue = new FormFieldValue(customerVisibleReadonly ? true : false, true);
-
-        if (channel.Name === 'note') {
-            fields.push(new FormField(
-                "Sichtbar in Kundenportal", ArticleProperty.CUSTOMER_VISIBLE, 'checkbox-input',
-                false, "Sichtbar im Kundenportal", null, customerVisibleValue,
-                null, null, null, null, null, null, null, null, null, null, customerVisibleReadonly
-            ));
-            fields.push(new FormField("Betreff", ArticleProperty.SUBJECT, null, true, "Betreff"));
-            fields.push(new FormField(
-                "Artikelinhalt", ArticleProperty.BODY, 'rich-text-input', true, "Beschreibung", [
-                    new FormFieldOption(FormFieldOptions.AUTO_COMPLETE, new AutocompleteFormFieldOption([
-                        new AutocompleteOption(KIXObjectType.TEXT_MODULE, '::')
-                    ]))
-                ])
-            );
-            fields.push(new FormField("Anlagen", ArticleProperty.ATTACHMENTS, 'attachment-input', false, "Anlagen"));
-        } else if (channel.Name === "email") {
-            fields.push(new FormField(
-                "Sichtbar in Kundenportal", ArticleProperty.CUSTOMER_VISIBLE, 'checkbox-input',
-                false, "Sichtbar im Kundenportal", null, customerVisibleValue,
-                null, null, null, null, null, null, null, null, null, null, customerVisibleReadonly
-            ));
-
-            fields.push(new FormField(
-                "Von", ArticleProperty.FROM, 'article-email-from-input', true, "Von"
-            ));
-
-            const context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
-            if (context.getDescriptor().contextMode === ContextMode.CREATE) {
-                fields.push(new FormField(
-                    "Cc", ArticleProperty.CC, 'article-email-recipient-input', false, "Cc", [
-                        new FormFieldOption('ADDITIONAL_RECIPIENT_TYPES', [ArticleProperty.BCC])
-                    ]
-                ));
-            } else {
-                fields.push(new FormField(
-                    "An", ArticleProperty.TO, 'article-email-recipient-input', false, "An", [
-                        new FormFieldOption('ADDITIONAL_RECIPIENT_TYPES', [ArticleProperty.CC, ArticleProperty.BCC])
-                    ]
-                ));
-            }
-
-            fields.push(new FormField(
-                "Betreff", ArticleProperty.SUBJECT, null, true, "Betreff"
-            ));
-
-            fields.push(new FormField(
-                "Inhalt", ArticleProperty.BODY, 'rich-text-input', true, "Inhalt"
-            ));
-
-            fields.push(new FormField("Anlagen", ArticleProperty.ATTACHMENTS, 'attachment-input', false, "Anlagen"));
+    public async hasPermissions(field: FormField): Promise<boolean> {
+        let hasPermissions = true;
+        switch (field.property) {
+            case TicketProperty.QUEUE_ID:
+                hasPermissions = await this.checkPermissions('system/ticket/queues');
+                break;
+            case TicketProperty.STATE_ID:
+                hasPermissions = await this.checkPermissions('system/ticket/states')
+                    && await this.checkPermissions('system/ticket/states/types');
+                break;
+            case TicketProperty.TYPE_ID:
+                hasPermissions = await this.checkPermissions('system/ticket/types');
+                break;
+            case TicketProperty.PRIORITY_ID:
+                hasPermissions = await this.checkPermissions('system/ticket/priorities');
+                break;
+            case TicketProperty.SERVICE_ID:
+                hasPermissions = await this.checkPermissions('system/services');
+                break;
+            case TicketProperty.SLA_ID:
+                hasPermissions = await this.checkPermissions('system/slas');
+                break;
+            case ArticleProperty.CHANNEL_ID:
+                hasPermissions = await this.checkPermissions('system/communication/channels');
+                break;
+            case ArticleProperty.ATTACHMENTS:
+                hasPermissions = await this.checkPermissions('tickets/*/articles/*/attachments', [CRUD.CREATE]);
+                break;
+            case TicketProperty.LINK:
+                hasPermissions = await this.checkPermissions('links', [CRUD.CREATE]);
+                break;
+            case TicketProperty.OWNER_ID:
+            case TicketProperty.RESPONSIBLE_ID:
+                hasPermissions = await this.checkPermissions('system/users');
+                break;
+            default:
         }
-
-
-        return fields;
+        return hasPermissions;
     }
 }

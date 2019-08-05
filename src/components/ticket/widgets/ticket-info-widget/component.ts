@@ -1,21 +1,30 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import { TicketLabelProvider, TicketService, TicketDetailsContext } from "../../../../core/browser/ticket";
 import { ContextService } from '../../../../core/browser/context';
 import {
-    ObjectIcon, KIXObjectType, Ticket, SysconfigUtil,
-    ContextMode, CustomerProperty, ContactProperty
+    ObjectIcon, KIXObjectType, Ticket, SysConfigUtil, ContextMode, OrganisationProperty,
+    ContactProperty, Service, ObjectInformationWidgetSettings, Contact, Organisation, Context
 } from '../../../../core/model';
-import { ActionFactory, IdService } from '../../../../core/browser';
+import { ActionFactory, IdService, KIXObjectService } from '../../../../core/browser';
 import { RoutingConfiguration } from '../../../../core/browser/router';
 import { ContactDetailsContext } from '../../../../core/browser/contact';
-import { CustomerDetailsContext } from '../../../../core/browser/customer';
+import { OrganisationDetailsContext } from '../../../../core/browser/organisation';
 
 class Component {
 
     private state: ComponentState;
     private contextListernerId: string;
 
-    public customerRoutingConfiguration: RoutingConfiguration;
+    public organisationRoutingConfiguration: RoutingConfiguration;
     public contactRoutingConfiguration: RoutingConfiguration;
 
     public onCreate(input: any): void {
@@ -48,16 +57,6 @@ class Component {
         });
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        const customerInfoOverlayConfig = context ? context.getWidgetConfiguration('customer-info-overlay') : undefined;
-        if (customerInfoOverlayConfig && customerInfoOverlayConfig.settings) {
-            this.state.customerInfoGroups = customerInfoOverlayConfig.settings.groups;
-        }
-
-        const contactInfoOverlayConfig = context ? context.getWidgetConfiguration('contact-info-overlay') : undefined;
-        if (contactInfoOverlayConfig && contactInfoOverlayConfig.settings) {
-            this.state.contactInfoGroups = contactInfoOverlayConfig.settings.groups;
-        }
-
         await this.initWidget(await context.getObject<Ticket>());
     }
 
@@ -65,31 +64,34 @@ class Component {
         this.state.ticket = ticket;
         if (this.state.ticket) {
             this.state.isPending = await TicketService.getInstance().hasPendingState(this.state.ticket);
-            this.state.isAccountTimeEnabled = await SysconfigUtil.isTimeAccountingEnabled();
+            this.state.isAccountTimeEnabled = await SysConfigUtil.isTimeAccountingEnabled();
+
+            const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
+                TicketDetailsContext.CONTEXT_ID
+            );
+
+            this.initOrganisation(context);
+            this.initContact(context);
         }
 
-        this.contactRoutingConfiguration = await this.getContactRoutingConfiguration();
-        this.customerRoutingConfiguration = await this.getCustomerRoutingConfiguration();
         this.setActions();
     }
 
-    private setActions(): void {
+    private async setActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.ticket) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.actions = await ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, [this.state.ticket]
             );
         }
     }
 
-    public getIncidentStateId(): number {
+    public async getIncidentStateId(): Promise<number> {
         const serviceId = this.state.ticket.ServiceID;
         let incidentStateId = 0;
-        const objectData = ContextService.getInstance().getObjectData();
-        if (objectData) {
-            const service = objectData.services.find((s) => s.ServiceID === serviceId);
-            if (service) {
-                incidentStateId = service.IncidentState.CurInciStateID;
-            }
+        const services = await KIXObjectService.loadObjects<Service>(KIXObjectType.SERVICE, [serviceId]);
+        const service = services.find((s) => s.ServiceID === serviceId);
+        if (service) {
+            incidentStateId = service.IncidentState.CurInciStateID;
         }
 
         return incidentStateId;
@@ -99,21 +101,49 @@ class Component {
         return new ObjectIcon(object, objectId);
     }
 
+    private async initContact(context: Context): Promise<void> {
+        const config = context ? context.getWidgetConfiguration('contact-info-overlay') : undefined;
+        if (config && config.settings && !isNaN(Number(this.state.ticket.ContactID))) {
+
+            const contacts = await KIXObjectService.loadObjects<Contact>(
+                KIXObjectType.CONTACT, [this.state.ticket.ContactID]
+            );
+            this.state.contact = contacts && contacts.length ? contacts[0] : null;
+
+            const settings = config.settings as ObjectInformationWidgetSettings;
+            this.state.contactProperties = settings.properties;
+
+            this.contactRoutingConfiguration = await this.getContactRoutingConfiguration();
+        }
+    }
+
+    private async initOrganisation(context: Context): Promise<void> {
+        const config = context ? context.getWidgetConfiguration('organisation-info-overlay') : undefined;
+        if (config && config.settings && !isNaN(Number(this.state.ticket.OrganisationID))) {
+
+            const organisation = await KIXObjectService.loadObjects<Organisation>(
+                KIXObjectType.ORGANISATION, [this.state.ticket.OrganisationID]
+            );
+            this.state.organisation = organisation && organisation.length ? organisation[0] : null;
+
+            const settings = config.settings as ObjectInformationWidgetSettings;
+            this.state.organisationProperties = settings.properties;
+
+            this.organisationRoutingConfiguration = await this.getOrganisationRoutingConfiguration();
+        }
+    }
+
     private async getContactRoutingConfiguration(): Promise<RoutingConfiguration> {
-        const context = await ContextService.getInstance().getContext(ContactDetailsContext.CONTEXT_ID);
-        const contextDescriptor = context.getDescriptor();
         return new RoutingConfiguration(
-            contextDescriptor.urlPaths[0], ContactDetailsContext.CONTEXT_ID, KIXObjectType.CONTACT,
-            ContextMode.DETAILS, ContactProperty.ContactID, false
+            ContactDetailsContext.CONTEXT_ID, KIXObjectType.CONTACT,
+            ContextMode.DETAILS, ContactProperty.ID, false
         );
     }
 
-    private async getCustomerRoutingConfiguration(): Promise<RoutingConfiguration> {
-        const context = await ContextService.getInstance().getContext(CustomerDetailsContext.CONTEXT_ID);
-        const contextDescriptor = context.getDescriptor();
+    private async getOrganisationRoutingConfiguration(): Promise<RoutingConfiguration> {
         return new RoutingConfiguration(
-            contextDescriptor.urlPaths[0], CustomerDetailsContext.CONTEXT_ID, KIXObjectType.CUSTOMER,
-            ContextMode.DETAILS, CustomerProperty.CUSTOMER_ID, false
+            OrganisationDetailsContext.CONTEXT_ID, KIXObjectType.ORGANISATION,
+            ContextMode.DETAILS, OrganisationProperty.ID, false
         );
     }
 

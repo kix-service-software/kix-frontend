@@ -1,9 +1,18 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ContextService } from '../../../../core/browser/context';
 import { ComponentState } from './ComponentState';
 import { ActionFactory, TableFactoryService } from '../../../../core/browser';
 import { KIXObjectType } from '../../../../core/model';
 import { FAQArticle } from '../../../../core/model/kix/faq';
-import { FAQDetailsContext } from '../../../../core/browser/faq';
+import { FAQDetailsContext } from '../../../../core/browser/faq/context/FAQDetailsContext';
 
 class Component {
 
@@ -40,21 +49,21 @@ class Component {
 
     private async initWidget(faqArticle: FAQArticle): Promise<void> {
         if (faqArticle) {
-            this.setActions(faqArticle);
+            this.prepareActions(faqArticle);
             await this.prepareTable();
         }
     }
 
-    private setActions(faqArticle: FAQArticle): void {
+    private async prepareActions(faqArticle: FAQArticle): Promise<void> {
         if (this.state.widgetConfiguration && faqArticle) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.actions = await ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, [faqArticle]
             );
         }
     }
 
     private async prepareTable(): Promise<void> {
-        const table = TableFactoryService.getInstance().createTable(
+        const table = await TableFactoryService.getInstance().createTable(
             'faq-article-history', KIXObjectType.FAQ_ARTICLE_HISTORY, null, null, FAQDetailsContext.CONTEXT_ID
         );
 

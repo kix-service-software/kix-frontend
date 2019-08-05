@@ -1,13 +1,23 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObjectType, ContextMode, ConfigItemProperty, DataType } from "../../../model";
 import { RoutingConfiguration } from "../../router";
 import { ConfigItemDetailsContext } from "../context";
 import {
-    ITableFactory, TableConfiguration, ITable, Table, DefaultColumnConfiguration,
+    TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     ToggleOptions, TableRowHeight, IColumnConfiguration
 } from "../../table";
 import { ConfigItemTableContentProvider } from "./ConfigItemTableContentProvider";
+import { TableFactory } from "../../table/TableFactory";
 
-export class ConfigItemTableFactory implements ITableFactory {
+export class ConfigItemTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM;
 
@@ -77,7 +87,7 @@ export class ConfigItemTableFactory implements ITableFactory {
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
                 KIXObjectType.CONFIG_ITEM, null, null, tableColumns,
-                null, true, true, null, null, null, TableRowHeight.LARGE
+                true, true, null, null, null, TableRowHeight.LARGE
             );
             defaultToggle = true;
             defaultRouting = true;
@@ -87,14 +97,14 @@ export class ConfigItemTableFactory implements ITableFactory {
 
         if (defaultToggle) {
             tableConfiguration.toggle = true;
-            tableConfiguration.toggleOptions = new ToggleOptions('config-item-version-details', 'configItem', [
-                'config-item-version-maximize-action', 'config-item-print-action'
-            ], false);
+            tableConfiguration.toggleOptions = new ToggleOptions(
+                'config-item-version-details', 'configItem', [], false
+            );
         }
 
         if (defaultRouting) {
             tableConfiguration.routingConfiguration = new RoutingConfiguration(
-                null, ConfigItemDetailsContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM,
+                ConfigItemDetailsContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM,
                 ContextMode.DETAILS, ConfigItemProperty.CONFIG_ITEM_ID
             );
         }

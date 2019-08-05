@@ -1,11 +1,22 @@
-import { AbstractAction, Translation } from "../../../../../model";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { AbstractAction, TranslationPattern } from "../../../../../model";
 import { TranslationService } from "../../../TranslationService";
 import { ITable } from "../../../../table";
 
 export class TranslationCSVExportAction extends AbstractAction<ITable> {
 
-    public initAction(): void {
-        this.text = "CSV-Export";
+    public hasLink: boolean = false;
+
+    public async initAction(): Promise<void> {
+        this.text = "Translatable#CSV-Export";
         this.icon = "kix-icon-export";
     }
 
@@ -26,9 +37,9 @@ export class TranslationCSVExportAction extends AbstractAction<ITable> {
 
             const selectedRows = this.data.getSelectedRows();
 
-            const translations = selectedRows.map((r) => r.getRowObject().getObject()) as Translation[];
+            const translations = selectedRows.map((r) => r.getRowObject().getObject()) as TranslationPattern[];
             for (const translation of translations) {
-                const pattern = this.escapeText(translation.Pattern);
+                const pattern = this.escapeText(translation.Value);
                 csvString += `"${pattern}"`;
                 csvString += ';';
 

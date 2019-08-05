@@ -1,7 +1,17 @@
-import { ComponentState } from "./ComponentState";
-import { ObjectIcon, OverlayType, ComponentContent, FormInputComponent, ContextType } from "../../../../../core/model";
-import { AttachmentUtil, BrowserUtil, ContextService, LabelService } from "../../../../../core/browser";
-import { OverlayService } from "../../../../../core/browser/OverlayService";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { ComponentState } from './ComponentState';
+import { ObjectIcon, OverlayType, ComponentContent, FormInputComponent, ContextType } from '../../../../../core/model';
+import { AttachmentUtil, BrowserUtil, ContextService, LabelService } from '../../../../../core/browser';
+import { OverlayService } from '../../../../../core/browser/OverlayService';
+import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
 class Component extends FormInputComponent<any, ComponentState> {
 
@@ -20,11 +30,16 @@ class Component extends FormInputComponent<any, ComponentState> {
         ];
     }
 
-    public async onInput(input: any): Promise<void> {
-        await super.onInput(input);
+    public onInput(input: any): void {
+        super.onInput(input);
     }
 
     public async onMount(): Promise<void> {
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Select image file"
+        ]);
+
         await super.onMount();
         const uploadElement = (this as any).getEl();
         if (uploadElement) {
@@ -81,18 +96,21 @@ class Component extends FormInputComponent<any, ComponentState> {
 
         if (fileError) {
             const errorMessages = await AttachmentUtil.buildErrorMessages([[files[0], fileError]]);
+            const title = await TranslationService.translate('Translatable#Error while adding the image:');
             const content = new ComponentContent('list-with-title',
                 {
-                    title: 'Fehler beim Hinzufügen des Bildes:',
+                    title,
                     list: errorMessages
                 }
             );
+
+            const error = await TranslationService.translate('Translatable#Error');
 
             OverlayService.getInstance().openOverlay(
                 OverlayType.WARNING,
                 null,
                 content,
-                'Fehler',
+                error,
                 true
             );
         } else {

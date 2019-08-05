@@ -1,13 +1,23 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { TicketStateDetailsContext } from "../../context";
 import { RoutingConfiguration } from "../../../../router";
 import {
-    ITableFactory, ITable, TableConfiguration, Table, DefaultColumnConfiguration,
+    ITable, TableConfiguration, Table, DefaultColumnConfiguration,
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../../../table";
-import { KIXObjectType, TicketStateProperty, DataType, ContextMode } from "../../../../../model";
+import { KIXObjectType, TicketStateProperty, DataType, ContextMode, KIXObjectProperty } from "../../../../../model";
 import { TicketStateTableContentProvider } from "./TicketStateTableContentProvider";
+import { TableFactory } from "../../../../table/TableFactory";
 
-export class TicketStateTableFactory implements ITableFactory {
+export class TicketStateTableFactory extends TableFactory {
 
 
     public objectType: KIXObjectType = KIXObjectType.TICKET_STATE;
@@ -30,24 +40,18 @@ export class TicketStateTableFactory implements ITableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new DefaultColumnConfiguration(TicketStateProperty.NAME, true, false, true, true, 200, true, true),
-            new DefaultColumnConfiguration(TicketStateProperty.ID, false, true, false, true, 41, false),
-            new DefaultColumnConfiguration(
-                TicketStateProperty.TYPE_NAME, true, false, true, true, 150, true, true, true
-            ),
-            new DefaultColumnConfiguration(TicketStateProperty.COMMENT, true, false, true, true, 350, true, true),
-            new DefaultColumnConfiguration(
-                TicketStateProperty.VALID_ID, true, false, true, true, 150, true, true, true
-            ),
-            new DefaultColumnConfiguration(
-                TicketStateProperty.CHANGE_TIME, true, false, true, true, 150, true, true, false, DataType.DATE_TIME
-            ),
-            new DefaultColumnConfiguration(TicketStateProperty.CHANGE_BY, true, false, true, true, 150, true, true)
+            this.getDefaultColumnConfiguration(TicketStateProperty.NAME),
+            this.getDefaultColumnConfiguration('ICON'),
+            this.getDefaultColumnConfiguration(TicketStateProperty.TYPE_NAME),
+            this.getDefaultColumnConfiguration(TicketStateProperty.COMMENT),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CHANGE_TIME),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CHANGE_BY)
         ];
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.TICKET_STATE, null, null, tableColumns, null, true, false, null, null,
+                KIXObjectType.TICKET_STATE, null, null, tableColumns, true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;
@@ -57,7 +61,7 @@ export class TicketStateTableFactory implements ITableFactory {
 
         if (defaultRouting) {
             tableConfiguration.routingConfiguration = new RoutingConfiguration(
-                null, TicketStateDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_STATE,
+                TicketStateDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_STATE,
                 ContextMode.DETAILS, TicketStateProperty.ID
             );
         }
@@ -65,8 +69,24 @@ export class TicketStateTableFactory implements ITableFactory {
         return tableConfiguration;
     }
 
-    // TODO: implementieren
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
-        return;
+        let config;
+        switch (property) {
+            case TicketStateProperty.NAME:
+                config = new DefaultColumnConfiguration(
+                    property, true, false, true, false, 200, true, true,
+                    false, DataType.STRING, true, null, null, false
+                );
+                break;
+            case TicketStateProperty.TYPE_NAME:
+                config = new DefaultColumnConfiguration(
+                    property, true, false, true, false, 150, true, true, true,
+                    DataType.STRING, true, null, null, false
+                );
+                break;
+            default:
+                config = super.getDefaultColumnConfiguration(property);
+        }
+        return config;
     }
 }

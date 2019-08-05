@@ -1,7 +1,17 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import {
-    AbstractMarkoComponent, ComponentsService, IColumn, ValueState, ICell, TableCSSHandlerRegsitry
+    AbstractMarkoComponent, IColumn, ValueState, ICell, TableCSSHandlerRegistry
 } from '../../../../../../core/browser';
+import { KIXModulesService } from '../../../../../../core/browser/modules';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -25,7 +35,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             if (tableConfiguration && tableConfiguration.routingConfiguration) {
                 this.state.object = input.cell.getRow().getRowObject().getObject();
                 this.state.routingConfiguration = tableConfiguration.routingConfiguration;
-                if (this.state.routingConfiguration && this.state.object) {
+                if (
+                    this.state.routingConfiguration && this.state.routingConfiguration.objectIdProperty
+                    && this.state.object
+                ) {
                     this.state.objectId = this.state.object[this.state.routingConfiguration.objectIdProperty];
                 }
             }
@@ -36,15 +49,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public getCellTemplate(): any {
         if (this.column) {
-            return ComponentsService.getInstance().getComponentTemplate(
+            return KIXModulesService.getComponentTemplate(
                 this.column.getColumnConfiguration().componentId
             );
         }
         return undefined;
     }
 
-    private setValueStateClass(cell: ICell): void {
-        const classes = [];
+    private async setValueStateClass(cell: ICell): Promise<void> {
+        let classes = [];
         const state = cell.getValue().state && cell.getValue().state !== ValueState.NONE
             ? cell.getValue().state : cell.getRow().getRowObject().getValueState();
         if (state) {
@@ -80,10 +93,16 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const object = cell.getRow().getRowObject().getObject();
         if (object) {
             const objectType = cell.getRow().getTable().getObjectType();
-            const cssHandler = TableCSSHandlerRegsitry.getCSSHandler(objectType);
+            const cssHandler = TableCSSHandlerRegistry.getObjectCSSHandler(objectType);
             if (cssHandler) {
-                const valueClasses = cssHandler.getValueCSSClasses(object, cell.getValue());
+                const valueClasses = await cssHandler.getValueCSSClasses(object, cell.getValue());
                 valueClasses.forEach((c) => classes.push(c));
+            }
+
+            const commonHandler = TableCSSHandlerRegistry.getCommonCSSHandler();
+            for (const h of commonHandler) {
+                const valueClasses = await h.getValueCSSClasses(object, cell.getValue());
+                classes = [...classes, ...valueClasses];
             }
         }
 

@@ -1,19 +1,28 @@
-import { AbstractNewDialog } from "../../../../../core/browser";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObjectType, ContextMode, TicketPriorityProperty, } from "../../../../../core/model";
 import { ComponentState } from "./ComponentState";
 import { TicketPriorityDetailsContext } from "../../../../../core/browser/ticket";
 import { RoutingConfiguration } from "../../../../../core/browser/router";
+import { AbstractNewDialog } from "../../../../../core/browser/components/dialog";
 
 class Component extends AbstractNewDialog {
 
     public onCreate(): void {
         this.state = new ComponentState();
         super.init(
-            'Priorität wird angelegt',
-            'Priorität wurde erfolgreich angelegt.',
+            'Translatable#Create Priority',
+            'Translatable#Priority successfully created.',
             KIXObjectType.TICKET_PRIORITY,
             new RoutingConfiguration(
-                null, TicketPriorityDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_PRIORITY,
+                TicketPriorityDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_PRIORITY,
                 ContextMode.DETAILS, TicketPriorityProperty.ID, true
             )
         );

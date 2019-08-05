@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ObjectIcon } from "../kix";
 import { AdminModule } from "./AdminModule";
 
@@ -15,8 +24,8 @@ export class AdminModuleCategory {
             this.id = category.id;
             this.name = category.name;
             this.icon = category.icon;
-            this.children = category.children.map((c) => new AdminModuleCategory(c));
-            this.modules = category.modules.map((m) => new AdminModule(m));
+            this.children = category.children ? category.children.map((c) => new AdminModuleCategory(c)) : [];
+            this.modules = category.modules ? category.modules.map((m) => new AdminModule(m)) : [];
         }
     }
 

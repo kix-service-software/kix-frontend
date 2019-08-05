@@ -1,62 +1,48 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { IRow } from "./IRow";
 import { SortOrder, DataType, SortUtil } from "../../model";
-import { ICell } from "./ICell";
-import { IColumn } from "./IColumn";
 
 export class TableSortUtil {
 
-    public static async sort(
+    public static sort(
         rows: IRow[], columnId: string, sortOrder: SortOrder, dataType: DataType
-    ): Promise<IRow[]> {
+    ): IRow[] {
         if (columnId && sortOrder && dataType) {
-            rows = await TableSortUtil.sortRows(rows, columnId, dataType, sortOrder);
-        }
-        return rows;
-    }
-
-    private static async sortRows(
-        rows: IRow[], columnId: string, dataType: DataType, sortOrder: SortOrder
-    ): Promise<IRow[]> {
-        const len = rows.length;
-        for (let i = len - 1; i >= 0; i--) {
-            for (let j = 1; j <= i; j++) {
-                const cellA = rows[j - 1].getCell(columnId);
-                const cellB = rows[j].getCell(columnId);
-                const valueA = await TableSortUtil.getValueFromCell(cellA, dataType);
-                const valueB = await TableSortUtil.getValueFromCell(cellB, dataType);
+            rows.sort((a, b) => {
+                const cellA = a.getCell(columnId);
+                const cellB = b.getCell(columnId);
+                const valueA = cellA.getValue().displayValue;
+                const valueB = cellB.getValue().displayValue;
 
                 const numberA = Number(valueA);
                 const numberB = Number(valueB);
 
                 let compare = 0;
-                if (isNaN(numberA) || isNaN(numberB)) {
+                if (dataType === DataType.DATE || dataType === DataType.DATE_TIME) {
+                    compare = SortUtil.compareValues(
+                        cellA.getValue().objectValue, cellB.getValue().objectValue, dataType
+                    );
+                } else if (isNaN(numberA) || isNaN(numberB)) {
                     compare = SortUtil.compareValues(valueA, valueB, dataType);
                 } else {
-                    compare = valueA - valueB;
+                    compare = numberA - numberB;
                 }
 
                 if (sortOrder === SortOrder.DOWN) {
                     compare = compare * (-1);
                 }
 
-                if (compare > 0) {
-                    const temp = rows[j - 1];
-                    rows[j - 1] = rows[j];
-                    rows[j] = temp;
-                }
-            }
+                return compare;
+            });
         }
         return rows;
     }
-
-    private static getValueFromCell(cell: ICell, dataType: DataType): any {
-        switch (dataType) {
-            case DataType.DATE:
-            case DataType.DATE_TIME:
-                return cell.getValue().objectValue;
-            default:
-                return cell.getDisplayValue();
-        }
-    }
-
 }

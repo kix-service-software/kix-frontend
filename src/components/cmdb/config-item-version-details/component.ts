@@ -1,30 +1,52 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import {
-    Version, ConfigItem, KIXObjectType, ConfigItemAttachment, DateTimeUtil, LabelValueGroup
+    Version, KIXObjectType, ConfigItemAttachment, DateTimeUtil, LabelValueGroup,
+    KIXObjectLoadingOptions, ArticleLoadingOptions, ConfigItemProperty, VersionProperty, ConfigItem
 } from '../../../core/model';
 import { BrowserUtil, KIXObjectService } from '../../../core/browser';
 import { PreparedData } from '../../../core/model/kix/cmdb/PreparedData';
+import { TranslationService } from '../../../core/browser/i18n/TranslationService';
+import { ConfigItemVersionLoadingOptions } from '../../../core/model/kix/cmdb/ConfigItemVersionLoadingOptions';
 
 class Component {
 
     private state: ComponentState;
-    private version: Version;
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
-    public onInput(input: any): void {
+    public async onInput(input: any): Promise<void> {
         if (input.version) {
-            this.version = input.version;
+            this.setVersion(input.version);
         } else if (input.configItem) {
-            this.version = (input.configItem as ConfigItem).CurrentVersion;
+            const ci = input.configItem as ConfigItem;
+            if (ci.CurrentVersion) {
+                const versions = await KIXObjectService.loadObjects<Version>(
+                    KIXObjectType.CONFIG_ITEM_VERSION, null,
+                    new KIXObjectLoadingOptions(null, null, 1, [VersionProperty.DATA, VersionProperty.PREPARED_DATA]),
+                    new ConfigItemVersionLoadingOptions(ci.ConfigItemID)
+                );
+
+                if (versions && versions.length) {
+                    this.setVersion(versions[0]);
+                }
+            }
         }
     }
 
-    public async onMount(): Promise<void> {
-        if (this.version && this.version.PreparedData) {
-            this.state.groups = this.prepareLabelValueGroups();
+    private async setVersion(version: Version): Promise<void> {
+        if (version && version.PreparedData) {
+            this.state.groups = await this.prepareLabelValueGroups(version.PreparedData);
         }
     }
 
@@ -40,25 +62,24 @@ class Component {
         }
     }
 
-    private prepareLabelValueGroups(data: PreparedData[] = this.version.PreparedData): LabelValueGroup[] {
+    private async prepareLabelValueGroups(data: PreparedData[]): Promise<LabelValueGroup[]> {
         const groups = [];
-        data.forEach((attr) => {
-            let value = attr.DisplayValue;
+        for (const attr of data) {
+            let value = await TranslationService.translate(attr.DisplayValue);
             if (attr.Type === 'Date') {
-                value = DateTimeUtil.getLocalDateString(value);
+                value = await DateTimeUtil.getLocalDateString(value);
             } else if (attr.Type === 'Attachment' && attr.Value) {
                 value = attr.Value.Filename;
             }
 
+            const subAttributes = (attr.Sub && attr.Sub.length ? await this.prepareLabelValueGroups(attr.Sub) : null);
+
+            const label = await TranslationService.translate(attr.Label);
             groups.push(new LabelValueGroup(
-                attr.Label,
-                value,
-                null,
-                null,
-                (attr.Sub && attr.Sub.length ? this.prepareLabelValueGroups(attr.Sub) : null),
+                label, value, null, null, subAttributes,
                 (attr.Type === 'Attachment' ? new ConfigItemAttachment(attr.Value) : null)
             ));
-        });
+        }
         return groups;
     }
 

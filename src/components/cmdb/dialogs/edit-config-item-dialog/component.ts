@@ -1,12 +1,23 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
-    FormService, ContextService, OverlayService, ServiceRegistry, BrowserUtil, DialogService
-} from "../../../../core/browser";
+    FormService, ContextService, OverlayService, ServiceRegistry, BrowserUtil, AdditionalContextInformation
+} from '../../../../core/browser';
 import {
     ValidationSeverity, ContextType, ValidationResult, ComponentContent,
-    OverlayType, ToastContent, KIXObjectType, StringContent, ConfigItem, ConfigItemProperty
-} from "../../../../core/model";
-import { ComponentState } from "./ComponentState";
-import { CMDBService } from "../../../../core/browser/cmdb";
+    OverlayType, KIXObjectType, StringContent, ConfigItem, ConfigItemProperty
+} from '../../../../core/model';
+import { ComponentState } from './ComponentState';
+import { CMDBService } from '../../../../core/browser/cmdb';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
+import { DialogService } from '../../../../core/browser/components/dialog';
 
 class Component {
 
@@ -17,7 +28,10 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        DialogService.getInstance().setMainDialogHint("Alle mit * gekennzeichneten Felder sind Pflichtfelder.");
+        DialogService.getInstance().setMainDialogHint('Translatable#All form fields marked by * are required fields.');
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Cancel", "Translatable#Save"
+        ]);
         this.setFormId();
     }
 
@@ -35,8 +49,8 @@ class Component {
         let formId = null;
         const dialogContext = await ContextService.getInstance().getActiveContext(ContextType.DIALOG);
         if (dialogContext) {
-            const info = dialogContext.getAdditionalInformation();
-            formId = info.length ? info[0] : null;
+            const info = dialogContext.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
+            formId = info ? info : null;
         }
         setTimeout(() => {
             this.state.formId = formId;
@@ -53,9 +67,8 @@ class Component {
                 if (validationError) {
                     this.showValidationError(result);
                 } else {
-                    DialogService.getInstance().setMainDialogLoading(true, 'Config Item wird aktualisiert');
-                    const cmdbService
-                        = ServiceRegistry.getServiceInstance<CMDBService>(KIXObjectType.CONFIG_ITEM);
+                    DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Update Config Item');
+                    const cmdbService = ServiceRegistry.getServiceInstance<CMDBService>(KIXObjectType.CONFIG_ITEM);
                     const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
                     if (cmdbService && context) {
                         const configItem = await context.getObject<ConfigItem>(KIXObjectType.CONFIG_ITEM, true);
@@ -68,10 +81,12 @@ class Component {
                                 KIXObjectType.CONFIG_ITEM, true,
                                 [ConfigItemProperty.VERSIONS, ConfigItemProperty.CURRENT_VERSION]
                             );
+
+                            const toast = await TranslationService.translate('Translatable#Changes saved.');
+
                             const hint = configItem.CurrentVersion
                                 && configItem.CurrentVersion.equals(updatedConfigItem.CurrentVersion)
-                                ? 'Änderungen wurden gespeichert'
-                                : 'Neue Version wurde erstellt';
+                                ? toast : 'Translatable#New Version created';
                             BrowserUtil.openSuccessOverlay(hint);
 
                             DialogService.getInstance().submitMainDialog();
@@ -86,18 +101,20 @@ class Component {
         const errorMessages = result.filter((r) => r.severity === ValidationSeverity.ERROR).map((r) => r.message);
         const content = new ComponentContent('list-with-title',
             {
-                title: 'Fehler beim Validieren des Formulars:',
+                title: 'Translatable#Error on form validation:',
                 list: errorMessages
             }
         );
 
         OverlayService.getInstance().openOverlay(
-            OverlayType.WARNING, null, content, 'Validierungsfehler', true
+            OverlayType.WARNING, null, content, 'Translatable#Validation error', true
         );
     }
 
     public showError(error: any): void {
-        OverlayService.getInstance().openOverlay(OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true);
+        OverlayService.getInstance().openOverlay(
+            OverlayType.WARNING, null, new StringContent(error), 'Translatable#Error!', true
+        );
     }
 
 }

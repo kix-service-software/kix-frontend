@@ -1,141 +1,151 @@
-import { ILabelProvider } from "..";
-import {
-    DateTimeUtil, ObjectIcon, KIXObjectType, KIXObject, SysConfigItem, SysConfigKey
-} from "../../model";
-import { ContextService } from "../context";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { DateTimeUtil, ObjectIcon, KIXObjectType, SysConfigOption, SysConfigKey } from "../../model";
 import { FAQArticleProperty, FAQArticle, FAQCategory } from "../../model/kix/faq";
 import { KIXObjectService, ServiceRegistry } from "../kix";
 import { BrowserUtil } from "../BrowserUtil";
 import { SearchProperty } from "../SearchProperty";
 import { TranslationService } from "../i18n/TranslationService";
+import { LabelProvider } from "../LabelProvider";
 
-export class FAQLabelProvider implements ILabelProvider<FAQArticle> {
+export class FAQLabelProvider extends LabelProvider<FAQArticle> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.FAQ_ARTICLE;
 
-    public async getPropertyValueDisplayText(property: string, value: string | number): Promise<string> {
+    public async getPropertyValueDisplayText(
+        property: string, value: string | number, translatable: boolean = true
+    ): Promise<string> {
         let displayValue = value;
-        const objectData = ContextService.getInstance().getObjectData();
-        if (objectData) {
-            switch (property) {
-                case FAQArticleProperty.CATEGORY_ID:
-                    const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(KIXObjectType.FAQ_CATEGORY);
-                    const catgeory = faqCategories.find((fc) => fc.ID === value);
-                    displayValue = catgeory ? catgeory.Name : value;
-                    break;
-                case FAQArticleProperty.VALID_ID:
-                    const valid = objectData.validObjects.find((v) => v.ID === value);
-                    displayValue = valid ? valid.Name : value;
-                    break;
-                default:
-                    displayValue = value;
-            }
+        switch (property) {
+            case FAQArticleProperty.CATEGORY_ID:
+                const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(KIXObjectType.FAQ_CATEGORY);
+                const category = faqCategories.find((fc) => fc.ID === value);
+                displayValue = category ? category.Name : value;
+                break;
+            default:
+                displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
+        }
+
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';
     }
 
-    public async getPropertyText(property: string): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
             case SearchProperty.FULLTEXT:
-                displayValue = 'Volltext';
+                displayValue = 'Translatable#Full Text';
                 break;
             case FAQArticleProperty.APPROVED:
-                displayValue = 'Genehmigt';
+                displayValue = 'Translatable#Approved';
                 break;
             case FAQArticleProperty.ATTACHMENTS:
-                displayValue = 'Anlagen';
+                displayValue = 'Translatable#Attachments';
                 break;
             case FAQArticleProperty.CATEGORY_ID:
-                displayValue = 'Kategorie';
+                displayValue = 'Translatable#Category';
                 break;
             case FAQArticleProperty.CHANGED:
-                displayValue = 'Geändert am';
+                displayValue = 'Translatable#Changed at';
                 break;
             case FAQArticleProperty.CHANGED_BY:
-                displayValue = 'Geändert von';
+                displayValue = 'Translatable#Changed by';
                 break;
             case FAQArticleProperty.CREATED:
-                displayValue = 'Erstellt am';
+                displayValue = 'Translatable#Created at';
                 break;
             case FAQArticleProperty.CREATED_BY:
-                displayValue = 'Erstellt von';
+                displayValue = 'Translatable#Created by';
                 break;
             case FAQArticleProperty.FIELD_1:
-                displayValue = 'Symptom';
+                displayValue = 'Translatable#Symptom';
                 break;
             case FAQArticleProperty.FIELD_2:
-                displayValue = 'Ursache';
+                displayValue = 'Translatable#Cause';
                 break;
             case FAQArticleProperty.FIELD_3:
-                displayValue = 'Lösung';
+                displayValue = 'Translatable#Solution';
                 break;
             case FAQArticleProperty.FIELD_6:
-                displayValue = 'Kommentar';
+                displayValue = 'Translatable#Comment';
                 break;
             case FAQArticleProperty.HISTORY:
-                displayValue = 'Historie';
+                displayValue = 'Translatable#History';
                 break;
             case FAQArticleProperty.ID:
-                displayValue = 'Id';
+                displayValue = 'Translatable#Id';
                 break;
             case FAQArticleProperty.KEYWORDS:
-                displayValue = 'Schlagwörter';
+                displayValue = 'Translatable#Tags';
                 break;
             case FAQArticleProperty.LANGUAGE:
-                displayValue = 'Sprache';
+                displayValue = 'Translatable#Language';
                 break;
             case FAQArticleProperty.LINK:
-                displayValue = 'Verknüpfungen';
+                displayValue = 'Translatable#Links';
                 break;
             case FAQArticleProperty.NUMBER:
-                const hookConfig = await KIXObjectService.loadObjects<SysConfigItem>(
-                    KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.FAQ_HOOK]
-                ).catch((error) => []);
+                const hookConfig: SysConfigOption[] = await KIXObjectService.loadObjects<SysConfigOption>(
+                    KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.FAQ_HOOK]
+                ).catch((error): SysConfigOption[] => []);
                 if (hookConfig && hookConfig.length) {
-                    displayValue = hookConfig[0].Data;
+                    displayValue = hookConfig[0].Value;
                 }
                 break;
             case FAQArticleProperty.TITLE:
-                displayValue = 'Titel';
+                displayValue = 'Translatable#Title';
                 break;
             case FAQArticleProperty.VALID_ID:
-                displayValue = 'Gültigkeit';
+                displayValue = 'Translatable#Validity';
                 break;
             case FAQArticleProperty.VISIBILITY:
-                displayValue = 'Sichtbarkeit';
+                displayValue = 'Translatable#Visibility';
                 break;
             case FAQArticleProperty.VOTES:
-                displayValue = 'Bewertung';
+                displayValue = 'Translatable#Rating';
                 break;
             case 'LinkedAs':
-                displayValue = 'Verknüpft als';
+                displayValue = 'Translatable#Linked as';
                 break;
             default:
                 displayValue = property;
         }
+
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
+        }
+
         return displayValue;
     }
 
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
-    }
-
-    public async getDisplayText(faqArticle: FAQArticle, property: string): Promise<string> {
+    public async getDisplayText(
+        faqArticle: FAQArticle, property: string, defaultValue?: string, translatable: boolean = true
+    ): Promise<string> {
         let displayValue = faqArticle[property];
-
-        const objectData = ContextService.getInstance().getObjectData();
 
         switch (property) {
             case FAQArticleProperty.CATEGORY_ID:
                 const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(KIXObjectType.FAQ_CATEGORY);
-                const catgeory = faqCategories.find((fc) => fc.ID === displayValue);
-                displayValue = catgeory ? catgeory.Name : displayValue;
+                const category = faqCategories.find((fc) => fc.ID === displayValue);
+                displayValue = category ? category.Name : displayValue;
                 break;
             case FAQArticleProperty.CREATED:
             case FAQArticleProperty.CHANGED:
-                displayValue = DateTimeUtil.getLocalDateTimeString(displayValue);
+                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
             case FAQArticleProperty.VOTES:
                 displayValue = '';
@@ -150,29 +160,23 @@ export class FAQLabelProvider implements ILabelProvider<FAQArticle> {
             case FAQArticleProperty.CHANGED_BY:
                 displayValue = faqArticle.changedBy ? faqArticle.changedBy.UserFullname : faqArticle.ChangedBy;
                 break;
-            case FAQArticleProperty.VALID_ID:
-                const valid = objectData.validObjects.find((v) => v.ID.toString() === faqArticle.ValidID.toString());
-                displayValue = valid ? valid.Name : faqArticle.ValidID;
-                break;
             case FAQArticleProperty.LANGUAGE:
                 const translationService = ServiceRegistry.getServiceInstance<TranslationService>(
-                    KIXObjectType.TRANSLATION
+                    KIXObjectType.TRANSLATION_PATTERN
                 );
                 displayValue = await translationService.getLanguageName(faqArticle.Language);
                 break;
             default:
-                displayValue = await this.getPropertyValueDisplayText(property, displayValue);
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
+        }
+
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';
-    }
-
-    public getDisplayTextClasses(faqArticle: FAQArticle, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(faqArticle: FAQArticle): string[] {
-        return [];
     }
 
     public isLabelProviderFor(faqArticle: FAQArticle): boolean {
@@ -185,12 +189,12 @@ export class FAQLabelProvider implements ILabelProvider<FAQArticle> {
             if (id) {
                 let faqHook: string = '';
 
-                const hookConfig = await KIXObjectService.loadObjects<SysConfigItem>(
-                    KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.FAQ_HOOK]
-                ).catch((error) => []);
+                const hookConfig: SysConfigOption[] = await KIXObjectService.loadObjects<SysConfigOption>(
+                    KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.FAQ_HOOK]
+                ).catch((error): SysConfigOption[] => []);
 
                 if (hookConfig && hookConfig.length) {
-                    faqHook = hookConfig[0].Data;
+                    faqHook = hookConfig[0].Value;
                 }
 
                 returnString = `${faqHook}${faqArticle.Number}`;
@@ -200,16 +204,12 @@ export class FAQLabelProvider implements ILabelProvider<FAQArticle> {
             }
 
         } else {
-            returnString = 'FAQ-Article';
+            returnString = await TranslationService.translate('Translatable#FAQ Article');
         }
         return returnString;
     }
 
-    public getObjectAdditionalText(faqArticle: FAQArticle): string {
-        return null;
-    }
-
-    public getObjectIcon(faqArticle: FAQArticle): string | ObjectIcon {
+    public getObjectTypeIcon(): string | ObjectIcon {
         return 'kix-icon-faq';
     }
 
@@ -217,7 +217,7 @@ export class FAQLabelProvider implements ILabelProvider<FAQArticle> {
         return faqArticle.Title;
     }
 
-    public getObjectName(): string {
+    public async getObjectName(): Promise<string> {
         return "FAQ";
     }
 

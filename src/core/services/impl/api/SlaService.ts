@@ -1,16 +1,22 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObjectService } from "./KIXObjectService";
 import {
-    KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions,
-    Sla,
-    KIXObjectCache,
-    Error
+    KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, Sla
 } from "../../../model";
 import { KIXObjectServiceRegistry } from "../../KIXObjectServiceRegistry";
-import { SlasResponse } from "../../../api";
-import { ConfigurationService } from "../ConfigurationService";
+import { SlaFactory } from "../../object-factories/SlaFactory";
 
 export class SlaService extends KIXObjectService {
+
+    protected objectType: KIXObjectType = KIXObjectType.SLA;
 
     private static INSTANCE: SlaService;
 
@@ -22,7 +28,7 @@ export class SlaService extends KIXObjectService {
     }
 
     private constructor() {
-        super();
+        super([new SlaFactory()]);
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -30,52 +36,24 @@ export class SlaService extends KIXObjectService {
         return type === KIXObjectType.SLA;
     }
 
-    protected RESOURCE_URI: string = 'slas';
-
-    public async initCache(): Promise<void> {
-        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-        const token = serverConfig.BACKEND_API_TOKEN;
-        await this.loadSLAs(token);
-    }
+    protected RESOURCE_URI: string = this.buildUri('system', 'slas');
 
     public async loadObjects<T>(
-        token: string, objectType: KIXObjectType, objectIds: Array<number | string>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<T[]> {
         let objects = [];
 
         switch (objectType) {
             case KIXObjectType.SLA:
-                objects = await this.loadSLAs(token);
+                objects = await super.load<Sla>(
+                    token, KIXObjectType.SLA, this.RESOURCE_URI, loadingOptions, objectIds, 'SLA'
+                );
                 break;
             default:
         }
 
         return objects;
-    }
-
-    private async loadSLAs(token: string): Promise<Sla[]> {
-        if (!KIXObjectCache.hasObjectCache(KIXObjectType.SLA)) {
-            const uri = this.buildUri(this.RESOURCE_URI);
-            const response = await this.getObjectByUri<SlasResponse>(token, uri);
-            response.SLA
-                .map((sla) => new Sla(sla))
-                .forEach((sla) => KIXObjectCache.addObject(KIXObjectType.SLA, sla));
-        }
-        return KIXObjectCache.getObjectCache(KIXObjectType.SLA);
-    }
-
-    public createObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, string]>,
-        createOptions?: KIXObjectSpecificCreateOptions
-    ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
-    }
-    public updateObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, string]>,
-        objectId: string | number, updateOptions?: KIXObjectSpecificCreateOptions
-    ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
     }
 
 }

@@ -1,11 +1,22 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import {
-    ContextService, ActionFactory, IdService, DialogService, KIXObjectService
+    ContextService, ActionFactory, IdService, KIXObjectService
 } from '../../../../core/browser';
 import {
     KIXObjectType, Context, ConfigItem, ImagesLoadingOptions, ConfigItemImage
 } from '../../../../core/model';
 import { DisplayImageDescription } from '../../../../core/browser/components';
+import { DialogService } from '../../../../core/browser/components/dialog';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component {
 
@@ -23,6 +34,11 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Large View"
+        ]);
+
         const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
@@ -47,7 +63,7 @@ class Component {
         this.state.configItem = configItem;
         this.state.widgetTitle = `${this.state.widgetConfiguration.title}`;
 
-        this.setActions();
+        await this.prepareActions();
         await this.prepareImages();
 
         setTimeout(() => {
@@ -55,9 +71,9 @@ class Component {
         }, 100);
     }
 
-    private setActions(): void {
+    private async prepareActions(): Promise<void> {
         if (this.state.widgetConfiguration && this.state.configItem) {
-            this.state.actions = ActionFactory.getInstance().generateActions(
+            this.state.actions = await ActionFactory.getInstance().generateActions(
                 this.state.widgetConfiguration.actions, [this.state.configItem]
             );
         }

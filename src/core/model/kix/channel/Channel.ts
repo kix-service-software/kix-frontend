@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObject } from "../KIXObject";
 import { KIXObjectType } from "../KIXObjectType";
 
@@ -7,33 +16,16 @@ export class Channel extends KIXObject<Channel> {
 
     public KIXObjectType: KIXObjectType = KIXObjectType.CHANNEL;
 
-    public ChangeBy: number;
-
-    public ChangeTime: string;
-
-    public Comment: string;
-
-    public CreateBy: number;
-
-    public CreateTime: string;
-
     public ID: number;
 
     public Name: string;
 
-    public ValidID: number;
-
     public constructor(channel?: Channel) {
-        super();
+        super(channel);
         if (channel) {
             this.ID = channel.ID;
             this.ObjectId = this.ID;
-            this.ChangeBy = channel.ChangeBy;
-            this.ChangeTime = channel.ChangeTime;
-            this.CreateBy = channel.CreateBy;
-            this.CreateTime = channel.CreateTime;
             this.Name = channel.Name;
-            this.ValidID = channel.ValidID;
         }
     }
 

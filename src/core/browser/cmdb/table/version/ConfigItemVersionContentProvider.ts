@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { IRowObject, RowObject, ITable, TableValue } from "../../../table";
 import { KIXObjectType, KIXObjectLoadingOptions, ConfigItem, Version, VersionProperty } from "../../../../model";
 import { ContextService } from "../../../context";
@@ -31,7 +40,8 @@ export class ConfigItemVersionContentProvider extends TableContentProvider<Versi
                             }
                         }
 
-                        values.push(new TableValue(VersionProperty.COUNT_NUMBER, configItem.Versions.length - i));
+                        const versionNumber = (configItem.Versions.length - i).toString();
+                        values.push(new TableValue(VersionProperty.COUNT_NUMBER, versionNumber, versionNumber));
                         values.push(new TableValue(VersionProperty.CURRENT, v.isCurrentVersion));
                         return new RowObject<Version>(values, v);
                     });

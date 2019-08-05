@@ -1,7 +1,17 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { AbstractMarkoComponent, ContextService } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
-import { AdminContext } from '../../../../core/browser/admin';
-import { TreeNode, AdminModuleCategory, AdminModule } from '../../../../core/model';
+import { AdminContext, AdministrationSocketClient } from '../../../../core/browser/admin';
+import { TreeNode, AdminModuleCategory, AdminModule, TreeUtil } from '../../../../core/model';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -16,15 +26,24 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         const context = await ContextService.getInstance().getContext<AdminContext>(AdminContext.CONTEXT_ID);
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
-        let catgeories = this.state.widgetConfiguration.settings;
+        if (context) {
+            this.state.filterValue = context.getAdditionalInformation('EXPLORER_FILTER_ADMIN');
+            if (this.state.filterValue) {
+                const filter = (this as any).getComponent('admin-modules-explorer-filter');
+                if (filter) {
+                    filter.textFilterValueChanged(null, this.state.filterValue);
+                }
+            }
+            this.state.widgetConfiguration = context.getWidgetConfiguration(this.state.instanceId);
 
-        if (catgeories) {
-            catgeories = catgeories.map((c) => new AdminModuleCategory(c));
-            this.state.nodes = this.prepareCategoryTreeNodes(catgeories);
+            const categories = await AdministrationSocketClient.getInstance().loadAdminCategories();
+
+            if (categories) {
+                this.state.nodes = await this.prepareCategoryTreeNodes(categories);
+            }
+
+            this.setActiveNode(context.adminModule);
         }
-
-        this.setActiveNode(context.adminModule);
     }
 
     private setActiveNode(adminModule: AdminModule): void {
@@ -37,7 +56,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         let activeNode = nodes.find((n) => n.id.id === adminModule.id);
         if (!activeNode) {
             for (let index = 0; index < nodes.length; index++) {
-                activeNode = this.getActiveNode(adminModule, nodes[index].children);
+                if (nodes[index].children && nodes[index].children.length) {
+                    activeNode = this.getActiveNode(adminModule, nodes[index].children);
+                }
                 if (activeNode) {
                     nodes[index].expanded = true;
                     break;
@@ -47,19 +68,34 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         return activeNode;
     }
 
-    private prepareCategoryTreeNodes(categories: AdminModuleCategory[]): TreeNode[] {
-        return categories
-            ? categories.map((c) => new TreeNode(
-                c, c.name, c.icon, null, [
-                    ...this.prepareCategoryTreeNodes(c.children),
-                    ...this.prepareModuleTreeNodes(c.modules)
-                ], null, null, null, null, false, true, true)
-            )
-            : [];
+    private async prepareCategoryTreeNodes(categories: AdminModuleCategory[]): Promise<TreeNode[]> {
+        let nodes = [];
+        if (categories) {
+            for (const c of categories) {
+                const categoryTreeNodes = await this.prepareCategoryTreeNodes(c.children);
+                const moduleTreeNodes = await this.prepareModuleTreeNodes(c.modules);
+                const name = await TranslationService.translate(c.name);
+                nodes.push(new TreeNode(
+                    c, name, c.icon, null, [
+                        ...categoryTreeNodes,
+                        ...moduleTreeNodes
+                    ], null, null, null, null, false, true, true)
+                );
+            }
+        }
+
+        nodes = this.sortNodes(nodes);
+        return nodes;
     }
 
-    private prepareModuleTreeNodes(modules: AdminModule[]): TreeNode[] {
-        return modules.map((m) => new TreeNode(m, m.name, m.icon));
+    private async prepareModuleTreeNodes(modules: AdminModule[]): Promise<TreeNode[]> {
+        const nodes = [];
+        for (const m of modules) {
+            const name = await TranslationService.translate(m.name);
+            nodes.push(new TreeNode(m, name, m.icon));
+        }
+
+        return nodes;
     }
 
     public async activeNodeChanged(node: TreeNode): Promise<void> {
@@ -75,6 +111,19 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async filter(textFilterValue?: string): Promise<void> {
         this.state.filterValue = textFilterValue;
+        const context = await ContextService.getInstance().getContext<AdminContext>(AdminContext.CONTEXT_ID);
+        if (context) {
+            context.setAdditionalInformation('EXPLORER_FILTER_ADMIN', this.state.filterValue);
+        }
+    }
+
+    private sortNodes(nodes: TreeNode[]): TreeNode[] {
+        return nodes.sort((a, b) => {
+            if (a.children) {
+                a.children = this.sortNodes(a.children);
+            }
+            return a.label.localeCompare(b.label);
+        });
     }
 
 }

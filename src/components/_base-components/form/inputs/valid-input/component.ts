@@ -1,6 +1,16 @@
-import { ContextService } from "../../../../../core/browser/context";
-import { FormInputComponent, TreeNode } from "../../../../../core/model";
-import { CompontentState } from "./CompontentState";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { FormInputComponent, TreeNode, ValidObject, KIXObjectType } from '../../../../../core/model';
+import { CompontentState } from './CompontentState';
+import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
+import { KIXObjectService } from '../../../../../core/browser';
 
 class Component extends FormInputComponent<number, CompontentState> {
 
@@ -8,16 +18,23 @@ class Component extends FormInputComponent<number, CompontentState> {
         this.state = new CompontentState();
     }
 
-    public async onInput(input: any): Promise<void> {
-        await super.onInput(input);
+    public onInput(input: any): void {
+        super.onInput(input);
+        this.update();
+    }
+
+    public async update(): Promise<void> {
+        const placeholderText = this.state.field.placeholder
+            ? this.state.field.placeholder
+            : this.state.field.required ? this.state.field.label : '';
+
+        this.state.placeholder = await TranslationService.translate(placeholderText);
     }
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        const objectData = ContextService.getInstance().getObjectData();
-        if (objectData) {
-            this.state.nodes = objectData.validObjects.map((vo) => new TreeNode(Number(vo.ID), vo.Name));
-        }
+        const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
+        this.state.nodes = validObjects.map((vo) => new TreeNode(Number(vo.ID), vo.Name));
         this.setCurrentNode();
     }
 

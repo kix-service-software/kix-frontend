@@ -1,8 +1,18 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
-import { FAQService, FAQDetailsContext } from '../../../core/browser/faq';
+import { FAQService } from '../../../core/browser/faq';
 import { FAQArticle, FAQVote, CreateFAQVoteOptions } from '../../../core/model/kix/faq';
 import { KIXObjectType, ComponentContent, OverlayType, StringContent, ToastContent } from '../../../core/model';
 import { ServiceRegistry, OverlayService, ContextService, BrowserUtil } from '../../../core/browser';
+import { FAQDetailsContext } from '../../../core/browser/faq/context/FAQDetailsContext';
 
 export class Component {
 
@@ -37,8 +47,7 @@ export class Component {
 
     public async vote(rating: number): Promise<void> {
         if (this.faqArticle) {
-            const service
-                = ServiceRegistry.getServiceInstance<FAQService>(KIXObjectType.FAQ_VOTE);
+            const service = ServiceRegistry.getServiceInstance<FAQService>(KIXObjectType.FAQ_VOTE);
             const faqVote = new FAQVote();
             faqVote.Rating = rating;
             // TODO: auf angemeldeten Agenten/IP ändern
@@ -49,13 +58,13 @@ export class Component {
                 .then(() => {
                     const content = new ComponentContent(
                         'toast',
-                        new ToastContent('kix-icon-check', 'Bewertung erfolgreich abgegeben.')
+                        new ToastContent('kix-icon-check', 'Translatable#Successfully rated.')
                     );
 
                     OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
                 }).catch((error) => {
                     OverlayService.getInstance().openOverlay(
-                        OverlayType.WARNING, null, new StringContent(error), 'Fehler!', true
+                        OverlayType.WARNING, null, new StringContent(error), 'Translatable#Error!', true
                     );
                 });
 

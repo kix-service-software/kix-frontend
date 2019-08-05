@@ -1,6 +1,16 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { TableFilterCriteria } from "./components";
-import { SearchOperator, ContextService } from "../browser";
+import { SearchOperator } from "../browser";
 import { KIXObjectType, KIXObject } from "./kix";
+import { AgentService } from "../browser/application/AgentService";
 
 export class FilterUtil {
 
@@ -14,17 +24,21 @@ export class FilterUtil {
         return displayValue.indexOf(filterValue) !== -1;
     }
 
-    public static checkTableFilterCriteria(criteria: TableFilterCriteria, value: any): boolean {
+    public static async checkTableFilterCriteria(criteria: TableFilterCriteria, value: any): Promise<boolean> {
         if (criteria.value === KIXObjectType.CURRENT_USER) {
-            criteria.value = ContextService.getInstance().getObjectData().currentUser.UserID;
+            const currentUser = await AgentService.getInstance().getCurrentUser();
+            criteria.value = currentUser.UserID;
         }
 
         switch (criteria.operator) {
             case SearchOperator.EQUALS:
+                value = value ? value : '';
                 return value.toString().toLocaleLowerCase() === criteria.value.toString().toLocaleLowerCase();
             case SearchOperator.CONTAINS:
-                return value.toString().toLocaleLowerCase()
-                    .indexOf(criteria.value.toString().toLocaleLowerCase()) !== -1;
+                value = value ? value : '';
+                return value.toString().toLocaleLowerCase().indexOf(
+                    criteria.value.toString().toLocaleLowerCase()
+                ) !== -1;
             case SearchOperator.LESS_THAN:
                 return Number(value) < criteria.value;
             case SearchOperator.LESS_THAN_OR_EQUAL:
@@ -38,11 +52,9 @@ export class FilterUtil {
                     if (v instanceof KIXObject) {
                         if (Array.isArray(value)) {
                             return value.some((sv) => sv.equals(v));
-                        } else {
-                            return v.equals(value);
                         }
                     }
-                    return v.toString() === value.toString();
+                    return value.indexOf(v.toString()) !== -1;
                 });
             default:
         }

@@ -1,15 +1,28 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import {
-    DialogService, ContextService, LabelService, ServiceRegistry, SearchOperator,
+    ContextService, LabelService, ServiceRegistry, SearchOperator,
     IKIXObjectService, KIXObjectService, BrowserUtil, TableFactoryService, TableEvent, ValueState, TableEventData
 } from '../../../../core/browser';
 import {
     KIXObject, LinkObject, KIXObjectType, CreateLinkDescription, KIXObjectPropertyFilter, TableFilterCriteria,
     LinkObjectProperty, LinkTypeDescription, CreateLinkObjectOptions, LinkType, ContextType,
-    SortUtil, DataType, KIXObjectCache
+    SortUtil, DataType, CRUD
 } from '../../../../core/model';
 import { LinkUtil, EditLinkedObjectsDialogContext } from '../../../../core/browser/link';
 import { IEventSubscriber, EventService } from '../../../../core/browser/event';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
+import { DialogService } from '../../../../core/browser/components/dialog';
+import { AuthenticationSocketClient } from '../../../../core/browser/application/AuthenticationSocketClient';
+import { UIComponentPermission } from '../../../../core/model/UIComponentPermission';
 
 class Component {
 
@@ -38,7 +51,21 @@ class Component {
 
     public async onMount(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Cancel", "Translatable#Assign Link", "Translatable#Delete Link", "Translatable#Submit"
+        ]);
+
         if (context) {
+
+            this.state.allowCreate = await AuthenticationSocketClient.getInstance().checkPermissions(
+                [new UIComponentPermission('links', [CRUD.CREATE])]
+            );
+
+            this.state.allowDelete = await AuthenticationSocketClient.getInstance().checkPermissions(
+                [new UIComponentPermission('links/*', [CRUD.DELETE])]
+            );
+
             this.mainObject = await context.getObject();
 
             this.availableLinkObjects = await LinkUtil.getLinkObjects(this.mainObject);
@@ -161,9 +188,9 @@ class Component {
     private async prepareTable(): Promise<void> {
         this.state.table = null;
 
-        const table = TableFactoryService.getInstance().createTable(
+        const table = await TableFactoryService.getInstance().createTable(
             'edit-linked-objects-dialog', KIXObjectType.LINK_OBJECT,
-            null, null, EditLinkedObjectsDialogContext.CONTEXT_ID
+            null, null, EditLinkedObjectsDialogContext.CONTEXT_ID, null, null, null, null, true
         );
 
         this.tableSubscriber = {
@@ -196,11 +223,12 @@ class Component {
         this.state.table.filter();
     }
 
-    public openAddLinkDialog(): void {
-        let dialogTitle = 'Objekt verknüpfen';
+    public async openAddLinkDialog(): Promise<void> {
+        let dialogTitle = await TranslationService.translate('Translatable#Linked Objects');
         const labelProvider = LabelService.getInstance().getLabelProviderForType(this.mainObject.KIXObjectType);
         if (labelProvider) {
-            dialogTitle = `${labelProvider.getObjectName()} verknüpfen`;
+            const objectName = await labelProvider.getObjectName();
+            dialogTitle = await TranslationService.translate('Translatable#link {0}', [objectName]);
         }
 
         const linkDescriptions = this.linkDescriptions.filter((ld) => !this.deleteLinkObjects
@@ -317,11 +345,8 @@ class Component {
                 this.newLinkObjects.splice(newLinkObjectIndex, 1);
             } else {
                 linkIdsToDelete.push(Number(dlo.ObjectId));
-                KIXObjectCache.removeObject(dlo.KIXObjectType, dlo.ObjectId);
             }
         });
-
-        KIXObjectCache.removeObject(this.mainObject.KIXObjectType, this.mainObject.ObjectId);
 
         let deleteLinksOK: boolean = true;
         if (!!linkIdsToDelete.length) {
@@ -335,7 +360,7 @@ class Component {
 
         DialogService.getInstance().setMainDialogLoading(false);
         if (createLinksOK && deleteLinksOK) {
-            BrowserUtil.openSuccessOverlay('Verknüpfungen aktualisiert.');
+            BrowserUtil.openSuccessOverlay('Translatable#Links updated.');
             DialogService.getInstance().submitMainDialog();
             const activeContext = ContextService.getInstance().getActiveContext();
             if (activeContext) {
@@ -346,15 +371,16 @@ class Component {
 
     private async addLinks(): Promise<boolean> {
         const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(KIXObjectType.LINK_OBJECT);
-        DialogService.getInstance().setMainDialogLoading(true, "Verknüpfungen werden angelegt.");
+        DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Create Links');
         let ok = true;
         for (const newLinkObject of this.newLinkObjects) {
             await service.createObject(
                 KIXObjectType.LINK_OBJECT,
                 newLinkObject,
                 new CreateLinkObjectOptions(this.mainObject)
-            ).catch((error) => {
-                BrowserUtil.openErrorOverlay('Verknüpfung nicht anlegbar (' + error + ')');
+            ).catch(async (error) => {
+                const msg = await TranslationService.translate('Translatable#Can not create link ({0})', [error]);
+                BrowserUtil.openErrorOverlay(msg);
                 ok = false;
                 return;
             });
@@ -363,7 +389,7 @@ class Component {
     }
 
     private async deleteLinks(linkIdsToDelete: number[]): Promise<boolean> {
-        DialogService.getInstance().setMainDialogLoading(true, "Verknüpfungen werden entfernt.");
+        DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Links will be removed.');
         const failIds = await KIXObjectService.deleteObject(KIXObjectType.LINK_OBJECT, linkIdsToDelete);
         return !failIds || !!!failIds.length;
     }

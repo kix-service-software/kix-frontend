@@ -1,3 +1,14 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import md5 = require('md5');
+
 export class ClientStorageService {
 
     private static INSTANCE: ClientStorageService = null;
@@ -11,7 +22,13 @@ export class ClientStorageService {
     }
 
     public static getFrontendSocketUrl(): string {
-        const socketUrl = ClientStorageService.getCookie("frontendSocketUrl");
+        let socketUrl = ClientStorageService.getCookie("frontendSocketUrl");
+
+        if (!socketUrl || socketUrl === "") {
+            // use current location as socket URL
+            socketUrl = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port;
+        }
+
         return socketUrl;
     }
 
@@ -30,14 +47,16 @@ export class ClientStorageService {
     }
 
     public static getCookie(name: string): string {
-        const nameEQ = name + "=";
-        const ca = decodeURIComponent(document.cookie).split(';');
-        for (let c of ca) {
-            while (c.charAt(0) === ' ') {
-                c = c.substring(1);
-            }
-            if (c.indexOf(nameEQ) === 0) {
-                return c.substring(nameEQ.length, c.length);
+        if (typeof document !== 'undefined') {
+            const nameEQ = name + "=";
+            const ca = decodeURIComponent(document.cookie).split(';');
+            for (let c of ca) {
+                while (c.charAt(0) === ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(nameEQ) === 0) {
+                    return c.substring(nameEQ.length, c.length);
+                }
             }
         }
         return null;
@@ -74,6 +93,15 @@ export class ClientStorageService {
             return window.localStorage.getItem(key);
         }
         return null;
+    }
+
+    private static clientRequestId: string;
+
+    public static getClientRequestId(): string {
+        if (!this.clientRequestId) {
+            this.clientRequestId = md5(window.navigator.userAgent + Date.now());
+        }
+        return this.clientRequestId;
     }
 
 }

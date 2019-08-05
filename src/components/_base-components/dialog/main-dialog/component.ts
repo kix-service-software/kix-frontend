@@ -1,13 +1,28 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
-import {
-    DialogService, IMainDialogListener, ContextService, DialogEvents, DialogEventData
-} from '../../../../core/browser';
+import { ContextService } from '../../../../core/browser';
 import { ConfiguredDialogWidget, ObjectIcon, ContextType } from '../../../../core/model';
 import { EventService } from '../../../../core/browser/event';
+import {
+    IMainDialogListener, DialogService, DialogEvents, DialogEventData
+} from '../../../../core/browser/components/dialog';
 
 export class MainDialogComponent implements IMainDialogListener {
 
     private state: ComponentState;
+
+    private dialogId: string;
+    public dialogWidgets: ConfiguredDialogWidget[] = [];
+    public dialogTitle: string = null;
+    public dialogIcon: string | ObjectIcon = null;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -21,33 +36,29 @@ export class MainDialogComponent implements IMainDialogListener {
         dialogTitle: string, dialogs: ConfiguredDialogWidget[], dialogId?: string, dialogIcon?: string | ObjectIcon
     ): void {
         if (!this.state.show) {
-            this.state.isLoading = true;
-            this.state.dialogTitle = dialogTitle;
-            this.state.dialogIcon = dialogIcon;
-            this.state.dialogWidgets = dialogs;
-            this.state.show = true;
-            this.state.dialogId = dialogId;
+            this.dialogTitle = dialogTitle;
+            this.dialogIcon = dialogIcon;
+            this.dialogWidgets = dialogs || [];
+            this.dialogId = dialogId;
             document.body.style.overflow = 'hidden';
-            setTimeout(() => {
-                this.state.isLoading = false;
-            }, 100);
+            this.state.show = true;
         }
     }
 
     public close(data?: any): void {
-        this.state.show = false;
-        document.body.style.overflow = 'unset';
         const context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
         if (context) {
             EventService.getInstance().publish(
                 DialogEvents.DIALOG_CANCELED,
-                new DialogEventData(this.state.dialogId, data),
+                new DialogEventData(this.dialogId, data),
                 context.getDialogSubscriberId()
             );
         }
         if (data && data.byX) {
             ContextService.getInstance().closeDialogContext();
         }
+        this.state.show = false;
+        document.body.style.overflow = 'unset';
     }
 
     public submit(data?: any): void {
@@ -57,21 +68,21 @@ export class MainDialogComponent implements IMainDialogListener {
         if (context) {
             EventService.getInstance().publish(
                 DialogEvents.DIALOG_FINISHED,
-                new DialogEventData(this.state.dialogId, data),
+                new DialogEventData(this.dialogId, data),
                 context.getDialogSubscriberId()
             );
         }
     }
 
-    public tabChanged(tab: ConfiguredDialogWidget): void {
+    public async tabChanged(tab: ConfiguredDialogWidget): Promise<void> {
         if (tab) {
-            this.state.dialogId = tab.instanceId;
-            ContextService.getInstance().setDialogContext(null, tab.kixObjectType, tab.contextMode);
+            await ContextService.getInstance().setDialogContext(null, tab.kixObjectType, tab.contextMode);
+            this.dialogId = tab.instanceId;
         }
     }
 
     public setTitle(title: string): void {
-        this.state.dialogTitle = title;
+        this.dialogTitle = title;
     }
 
     public setHint(hint: string): void {

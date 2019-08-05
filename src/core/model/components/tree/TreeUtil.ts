@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { TreeNode } from ".";
 
 export class TreeUtil {
@@ -5,6 +14,7 @@ export class TreeUtil {
     public static linkTreeNodes(tree: TreeNode[], filterValue: string, parent?: TreeNode): void {
         if (tree) {
             TreeUtil.removeNodeLinks(tree);
+            TreeUtil.setNodeFlags(tree);
             let previousNode;
             for (let i = 0; i < tree.length; i++) {
                 const node = tree[i];
@@ -108,8 +118,8 @@ export class TreeUtil {
         let canShow = true;
         if (TreeUtil.isFilterValueDefined(filterValue)) {
             if (!TreeUtil.hasChildrenToShow(node, filterValue)) {
-                const label = node.label.toLocaleLowerCase();
-                canShow = label.indexOf(filterValue.toLocaleLowerCase()) !== -1;
+                const flags = node.flags.map((f) => f.toLocaleUpperCase());
+                canShow = flags.some((f) => f.toLocaleLowerCase().indexOf(filterValue.toLocaleLowerCase()) !== -1);
             }
         }
         return canShow;
@@ -143,6 +153,24 @@ export class TreeUtil {
 
     private static isFilterValueDefined(filterValue: string): boolean {
         return filterValue && filterValue !== undefined && filterValue !== null && filterValue !== '';
+    }
+
+    private static setNodeFlags(tree: TreeNode[], parent?: TreeNode): void {
+        tree.forEach((n) => {
+            if (!n.flags) {
+                n.flags = [n.label];
+            } else if (!n.flags.some((f) => f === n.label)) {
+                n.flags.push(n.label);
+            }
+
+            if (parent && parent.flags) {
+                parent.flags.forEach((f) => n.flags.push(f));
+            }
+
+            if (n.children && n.children.length) {
+                TreeUtil.setNodeFlags(n.children, n);
+            }
+        });
     }
 
 }

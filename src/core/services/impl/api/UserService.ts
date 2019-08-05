@@ -1,13 +1,23 @@
-import { UsersResponse, UserResponse, } from '../../../api';
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     User, KIXObjectType, Error, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    UserPreference, PreferencesLoadingOptions, KIXObjectSpecificCreateOptions, KIXObjectCache
+    PreferencesLoadingOptions, KIXObjectSpecificCreateOptions
 } from '../../../model';
 import { KIXObjectService } from './KIXObjectService';
-import { UserPreferencesResponse, SetPreference, SetPreferenceResponse, SetPreferenceRequest } from '../../../api/user';
 import { LoggingService } from '../LoggingService';
-import { SetPreferenceOptions, UserCacheHandler } from '../../../model/kix/user';
+import { UserPreference, UserProperty, SetPreferenceOptions, PersonalSettingsProperty } from '../../../model/kix/user';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
+import { UserFactory } from '../../object-factories/UserFactory';
+import { UserPreferenceFactory } from '../../object-factories/UserPreferenceFactory';
+import { HttpService } from './HttpService';
 
 export class UserService extends KIXObjectService {
 
@@ -21,16 +31,13 @@ export class UserService extends KIXObjectService {
     }
 
     private constructor() {
-        super();
+        super([new UserFactory(), new UserPreferenceFactory()]);
         KIXObjectServiceRegistry.registerServiceInstance(this);
-        KIXObjectCache.registerCacheHandler(new UserCacheHandler());
     }
 
-    protected RESOURCE_URI: string = "users";
-    private USER_RESOURCE_URI = "user";
-    protected SUB_RESOURCE_URI: string = 'preferences';
+    protected RESOURCE_URI: string = this.buildUri('system', 'users');
 
-    public kixObjectType: KIXObjectType = KIXObjectType.USER;
+    public objectType: KIXObjectType = KIXObjectType.USER;
 
     public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.USER
@@ -38,126 +45,209 @@ export class UserService extends KIXObjectService {
     }
 
     public async loadObjects<T>(
-        token: string, objectType: KIXObjectType, objectIds: Array<number | string>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<T[]> {
 
         let objects = [];
         if (objectType === KIXObjectType.USER) {
-            objects = await this.getUsers(token, objectIds.map((id) => Number(id)), loadingOptions);
+            objects = await super.load(
+                token, KIXObjectType.USER, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.USER
+            );
         } else if (objectType === KIXObjectType.USER_PREFERENCE) {
-            objects = await this.getPreferences(
-                token, loadingOptions, objectLoadingOptions as PreferencesLoadingOptions
+            let uri = this.buildUri('session', 'user', 'preferences');
+            const preferenceOptions = (objectLoadingOptions as PreferencesLoadingOptions);
+            if (preferenceOptions && preferenceOptions.userId) {
+                uri = this.buildUri(this.RESOURCE_URI, preferenceOptions.userId, 'preferences');
+            }
+
+            objects = await super.load(
+                token, KIXObjectType.USER_PREFERENCE, uri, loadingOptions, objectIds, KIXObjectType.USER_PREFERENCE
             );
         }
 
         return objects;
     }
 
-    // FIXME: korrekt implementieren
-    public async getUsers(
-        token: string, objectIds?: number[], loadingOptions?: KIXObjectLoadingOptions
-    ): Promise<User[]> {
-        const query = { fields: 'User.UserLogin,User.UserID,User.UserFullname' };
-        const uri = this.buildUri(this.RESOURCE_URI);
-        const response = await this.getObjectByUri<UsersResponse>(token, uri, query);
-        return response.User;
-    }
-
-    private async getPreferences(
-        token: string, loadingOptions: KIXObjectLoadingOptions, preferenceLoadingOptions: PreferencesLoadingOptions
-    ): Promise<UserPreference[]> {
-        let preferences = [];
-        const query = loadingOptions ? this.prepareQuery(loadingOptions) : null;
-        if (preferenceLoadingOptions.userId) {
-
-            const uri = this.buildUri(this.RESOURCE_URI, preferenceLoadingOptions.userId, this.SUB_RESOURCE_URI);
-            const response = await this.getObjectByUri<UserPreferencesResponse>(token, uri, query);
-
-            preferences = response.UserPreference.map((p) => new UserPreference(p));
-        }
-        return preferences;
-    }
-
-    public async getUserByToken(token: string, cache: boolean = true): Promise<User> {
-        if (!KIXObjectCache.hasObjectCache(KIXObjectType.CURRENT_USER) || !cache) {
-            const query = {
-                include: 'Tickets,Preferences'
-            };
-
-            const response = await this.httpService.get<UserResponse>(this.USER_RESOURCE_URI, query, token);
-
-            KIXObjectCache.addObject(KIXObjectType.CURRENT_USER, new User(response.User));
-        }
-
-        return KIXObjectCache.getObjectCache<User>(KIXObjectType.CURRENT_USER)[0];
+    public async getUserByToken(token: string): Promise<User> {
+        const user = await HttpService.getInstance().getUserByToken(token);
+        return user;
     }
 
     public async createObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, string]>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
         createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<string | number> {
         if (objectType === KIXObjectType.USER) {
-            throw new Error('', "Method not implemented.");
-        } else if (KIXObjectType.USER_PREFERENCE) {
-            const options = createOptions as SetPreferenceOptions;
-            const createPreference = new SetPreference(parameter);
-            const response = await this.sendCreateRequest<SetPreferenceResponse, SetPreferenceRequest>(
-                token,
-                this.buildUri(this.RESOURCE_URI, options.userId, this.SUB_RESOURCE_URI),
-                new SetPreferenceRequest(createPreference)
+            const preferences = [];
+
+            const createParameter = parameter.filter((p) =>
+                p[0] !== PersonalSettingsProperty.USER_LANGUAGE &&
+                p[0] !== PersonalSettingsProperty.MY_QUEUES
+            );
+
+            const userLanguage = parameter.find((p) => p[0] === PersonalSettingsProperty.USER_LANGUAGE);
+            if (userLanguage) {
+                preferences.push({ ID: PersonalSettingsProperty.USER_LANGUAGE, Value: userLanguage[1] });
+            }
+
+            const myQueues = parameter.find((p) => p[0] === PersonalSettingsProperty.MY_QUEUES);
+            if (myQueues) {
+                preferences.push({ ID: PersonalSettingsProperty.MY_QUEUES, Value: myQueues[1] });
+            }
+
+            createParameter.push([UserProperty.PREFERENCES, preferences]);
+
+            const id = await super.executeUpdateOrCreateRequest(
+                token, clientRequestId, createParameter, this.RESOURCE_URI, this.objectType, 'UserID', true
+            );
+
+            return id;
+        } else if (objectType === KIXObjectType.USER_PREFERENCE) {
+            let uri = this.buildUri('session', 'user', 'preferences');
+            if (createOptions) {
+                const userId = (createOptions as SetPreferenceOptions).userId;
+                if (userId) {
+                    uri = this.buildUri(this.RESOURCE_URI, userId, 'preferences');
+                }
+            }
+
+            const id = await super.executeUpdateOrCreateRequest(
+                token, clientRequestId, parameter, uri, objectType, 'UserPreferenceID', true
             ).catch((error: Error) => {
                 LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
                 throw new Error(error.Code, error.Message);
             });
-            return response.UserPreferenceID;
+
+            return id;
         }
     }
 
     public async updateObject(
-        token: string, objectType: KIXObjectType, parameter: Array<[string, any]>, objectId: number | string,
+        token: string, clientRequestId: string, objectType: KIXObjectType,
+        parameter: Array<[string, any]>, objectId: number | string,
         updateOptions?: KIXObjectSpecificCreateOptions
     ): Promise<string | number> {
         if (objectType === KIXObjectType.USER) {
-            throw new Error('', "Method not implemented.");
-        } else if (KIXObjectType.USER_PREFERENCE) {
-            const options = updateOptions as SetPreferenceOptions;
-            const updatePreference = new SetPreference(parameter);
-            const response = await this.sendUpdateRequest<SetPreferenceResponse, SetPreferenceRequest>(
-                token,
-                this.buildUri(this.RESOURCE_URI, options.userId, this.SUB_RESOURCE_URI, objectId),
-                new SetPreferenceRequest(updatePreference)
+            const userPassword = this.getParameterValue(parameter, UserProperty.USER_PASSWORD);
+            if (!userPassword || userPassword === '') {
+                parameter = parameter.filter((p) => p[0] !== UserProperty.USER_PASSWORD);
+            }
+
+            const updateParameter = parameter.filter((p) =>
+                p[0] !== UserProperty.USER_LANGUAGE &&
+                p[0] !== UserProperty.ROLEIDS &&
+                p[0] !== UserProperty.PREFERENCES
+            );
+
+            const userId = Number(objectId);
+
+            const uri = this.buildUri(this.RESOURCE_URI, userId);
+            const id = await super.executeUpdateOrCreateRequest(
+                token, clientRequestId, updateParameter, uri, this.objectType, 'UserID'
             ).catch((error: Error) => {
                 LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
                 throw new Error(error.Code, error.Message);
             });
-            return response.UserPreferenceID;
+
+            const roleIds = this.getParameterValue(parameter, UserProperty.ROLEIDS);
+            await this.updateUserRoles(token, clientRequestId, roleIds, userId);
+
+            const userLanguage = parameter.find((p) => p[0] === PersonalSettingsProperty.USER_LANGUAGE);
+            if (userLanguage) {
+                await this.setPreferences(token, clientRequestId, [userLanguage], userId);
+            }
+
+            const myQueues = parameter.find((p) => p[0] === PersonalSettingsProperty.MY_QUEUES);
+            if (myQueues) {
+                await this.setPreferences(token, clientRequestId, [myQueues], userId);
+            }
+
+            return id;
+        } else if (objectType === KIXObjectType.USER_PREFERENCE) {
+            let uri = this.buildUri('session', 'user', 'preferences', objectId);
+            if (updateOptions) {
+                const userId = (updateOptions as SetPreferenceOptions).userId;
+                if (userId) {
+                    uri = this.buildUri(this.RESOURCE_URI, userId, 'preferences', objectId);
+                }
+            }
+            const id = await super.executeUpdateOrCreateRequest(
+                token, clientRequestId, parameter, uri, objectType, 'UserPreferenceID'
+            );
+            return id;
         }
     }
 
-    public async setPreferences(token: string, parameter: Array<[string, any]>, userId: number): Promise<void> {
-        const currentPreferences = await this.getPreferences(token, null, new PreferencesLoadingOptions(userId));
+    private async updateUserRoles(
+        token: string, clientReqeustId: string, roleIds: number[], userId: number
+    ): Promise<void> {
+        if (!roleIds) {
+            roleIds = [];
+        }
+
+        const baseUri = this.buildUri(this.RESOURCE_URI, userId, 'roleids');
+        const existingRoleIds = await this.load(token, null, baseUri, null, null, 'RoleIDs');
+
+        const rolesToDelete = existingRoleIds.filter((r) => !roleIds.some((rid) => rid === r));
+        const rolesToCreate = roleIds.filter((r) => !existingRoleIds.some((rid) => rid === r));
+
+        for (const roleId of rolesToDelete) {
+            const deleteUri = this.buildUri(baseUri, roleId);
+            await this.sendDeleteRequest(token, clientReqeustId, deleteUri, KIXObjectType.USER)
+                .catch((error) => LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error));
+        }
+
+        for (const roleId of rolesToCreate) {
+            await this.sendCreateRequest(token, clientReqeustId, baseUri, { RoleID: roleId }, KIXObjectType.USER)
+                .catch((error) => LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error));
+        }
+
+    }
+
+    public async setPreferences(
+        token: string, clientRequestId: string, parameter: Array<[string, any]>, userId?: number
+    ): Promise<void> {
+        const currentPreferences = await this.loadObjects<UserPreference>(
+            token, null, KIXObjectType.USER_PREFERENCE, null, null,
+            userId ? new PreferencesLoadingOptions(userId) : null
+        );
         const errors: Error[] = [];
+
+        const options = userId ? new SetPreferenceOptions(userId) : undefined;
+
+        parameter = parameter.filter((p) =>
+            p[0] !== PersonalSettingsProperty.CURRENT_PASSWORD &&
+            p[0] !== PersonalSettingsProperty.USER_PASSWORD_CONFIRM
+        );
+
         for (const param of parameter) {
-            if (currentPreferences.some((p) => p.ID === param[0])) {
+            if (param[0] === PersonalSettingsProperty.USER_PASSWORD) {
+                if (param[1] !== null && param[1] !== '') {
+                    await this.executeUpdateOrCreateRequest(
+                        token, clientRequestId, [[UserProperty.USER_PASSWORD, param[1]]],
+                        this.buildUri('session', 'user'), KIXObjectType.USER, 'User'
+                    );
+                }
+            } else if (currentPreferences.some((p) => p.ID === param[0])) {
                 await this.updateObject(
-                    token, KIXObjectType.USER_PREFERENCE,
+                    token, clientRequestId, KIXObjectType.USER_PREFERENCE,
                     [
                         ['Value', param[1]]
                     ],
                     param[0],
-                    new SetPreferenceOptions(userId)
+                    options
                 ).catch((error: Error) => {
                     errors.push(error);
                 });
             } else {
                 await this.createObject(
-                    token, KIXObjectType.USER_PREFERENCE,
+                    token, clientRequestId, KIXObjectType.USER_PREFERENCE,
                     [
                         ['ID', param[0]],
                         ['Value', param[1]]
                     ],
-                    new SetPreferenceOptions(userId)
+                    options
                 ).catch((error: Error) => {
                     errors.push(error);
                 });
@@ -165,7 +255,7 @@ export class UserService extends KIXObjectService {
         }
         // TODO: für Komponente ggf. Fehlerliste übermitteln
         if (!!errors.length) {
-            throw new Error(errors[0].Code, errors.map((e) => e.Message).join("\n"));
+            throw new Error(errors[0].Code, errors.map((e) => e.Message).join("\n"), errors[0].StatusCode);
         }
     }
 

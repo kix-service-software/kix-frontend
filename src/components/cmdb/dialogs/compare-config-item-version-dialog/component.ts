@@ -1,6 +1,18 @@
-import { DialogService, ContextService, ComponentsService, TableConfiguration } from "../../../../core/browser";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { ContextService } from "../../../../core/browser";
 import { ComponentState } from "./ComponentState";
 import { CompareConfigItemVersionDialogContext } from "../../../../core/browser/cmdb";
+import { DialogService } from "../../../../core/browser/components/dialog";
+import { TranslationService } from "../../../../core/browser/i18n/TranslationService";
+import { KIXModulesService } from "../../../../core/browser/modules";
 
 class Component {
 
@@ -13,14 +25,20 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Close Dialog"
+        ]);
+
         this.context = await ContextService.getInstance().getContext<CompareConfigItemVersionDialogContext>(
             CompareConfigItemVersionDialogContext.CONTEXT_ID
         );
-        this.state.compareWidget = this.context.getCompareWidget();
+        this.state.compareWidget = this.context.getWidget('compare-ci-version-widget');
 
         const versions = await this.context.getObjectList();
         if (versions) {
-            this.state.title = `Gewählte Versionen (${versions.length})`;
+            const text = await TranslationService.translate('Translatable#Selected Versions', []);
+            this.state.title = `${text} (${versions.length})`;
         }
     }
 
@@ -29,7 +47,7 @@ class Component {
     }
 
     public getCompareWidgetTemplate(instanceId: string): any {
-        return ComponentsService.getInstance().getComponentTemplate(this.state.compareWidget.configuration.widgetId);
+        return KIXModulesService.getComponentTemplate(this.state.compareWidget.configuration.widgetId);
     }
 
 }

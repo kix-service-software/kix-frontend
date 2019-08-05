@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObject } from "../KIXObject";
 import { KIXObjectType } from "../KIXObjectType";
 import { AttributeDefinition } from "./AttributeDefinition";
@@ -24,6 +33,8 @@ export class ConfigItemClassDefinition extends KIXObject<ConfigItemClassDefiniti
 
     public DefinitionString: string;
 
+    public isCurrentDefinition: boolean;
+
     public constructor(configItemClassDefintion: ConfigItemClassDefinition) {
         super();
         if (configItemClassDefintion) {
@@ -36,6 +47,7 @@ export class ConfigItemClassDefinition extends KIXObject<ConfigItemClassDefiniti
             this.CreateTime = configItemClassDefintion.CreateTime;
             this.Definition = configItemClassDefintion.Definition;
             this.DefinitionString = configItemClassDefintion.DefinitionString;
+            this.isCurrentDefinition = configItemClassDefintion.isCurrentDefinition;
         }
     }
 

@@ -1,5 +1,14 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
-    Channel, KIXObjectType, KIXObject, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, KIXObjectCache
+    Channel, KIXObjectType, KIXObjectLoadingOptions, KIXObject, KIXObjectSpecificLoadingOptions
 } from "../../model";
 import { KIXObjectService } from "../kix";
 
@@ -15,31 +24,27 @@ export class ChannelService extends KIXObjectService<Channel> {
         return ChannelService.INSTANCE;
     }
 
+    public async loadObjects<O extends KIXObject>(
+        objectType: KIXObjectType, objectIds: Array<string | number>,
+        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions
+    ): Promise<O[]> {
+        const channels = await super.loadObjects<Channel>(KIXObjectType.CHANNEL, null);
+        if (objectIds) {
+            const filteredChannels = channels.filter(
+                (c) => objectIds.some((oid) => c.ID === oid)
+            );
+
+            return filteredChannels as any[];
+        } else {
+            return channels as any[];
+        }
+    }
+
     public isServiceFor(kixObjectType: KIXObjectType) {
         return kixObjectType === KIXObjectType.CHANNEL;
     }
 
     public getLinkObjectName(): string {
         return 'Channel';
-    }
-
-    public async loadObjects<O extends KIXObject>(
-        objectType: KIXObjectType, objectIds: Array<string | number>,
-        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
-        cache: boolean = true
-    ): Promise<O[]> {
-
-        if (objectType === KIXObjectType.CHANNEL) {
-            if (!KIXObjectCache.hasObjectCache(objectType)) {
-                const objects = await super.loadObjects(objectType, null, null, null, false);
-                objects.forEach((q) => KIXObjectCache.addObject(objectType, q));
-            }
-
-            if (!objectIds) {
-                return KIXObjectCache.getObjectCache(objectType);
-            }
-        }
-
-        return await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions, cache);
     }
 }

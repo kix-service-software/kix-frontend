@@ -1,20 +1,42 @@
-import { AbstractAction, FormInstance, KIXObjectType, ContextMode } from "../../../../model";
-import { FormService } from "../../../form";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { AbstractAction, KIXObjectType, ContextMode, CRUD } from "../../../../model";
 import { ContextService } from "../../../context";
+import { UIComponentPermission } from "../../../../model/UIComponentPermission";
+import { EditConfigItemClassDialogContext, ConfigItemClassDetailsContext } from "../context";
 
 export class ConfigItemClassEditAction extends AbstractAction {
 
-    public initAction(): void {
-        this.text = "Bearbeiten";
+    public permissions: UIComponentPermission[] = [
+        new UIComponentPermission('system/cmdb/classes/*', [CRUD.UPDATE])
+    ];
+
+    public async initAction(): Promise<void> {
+        this.text = 'Edit';
         this.icon = 'kix-icon-edit';
     }
 
     public async run(): Promise<void> {
-        await FormService.getInstance().getFormInstance<FormInstance>('edit-config-item-class-form', false);
-        ContextService.getInstance().setDialogContext(
-            // TODO: Titel aus dem aktiven Admin-Modul ermitteln (Kategorie)
-            null, KIXObjectType.CONFIG_ITEM_CLASS, ContextMode.EDIT_ADMIN, null, true, 'Stammdaten bearbeiten'
+        const context = await ContextService.getInstance().getContext<ConfigItemClassDetailsContext>(
+            ConfigItemClassDetailsContext.CONTEXT_ID
         );
+
+        if (context) {
+            const classId = context.getObjectId();
+            if (classId) {
+                ContextService.getInstance().setDialogContext(
+                    EditConfigItemClassDialogContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM_CLASS,
+                    ContextMode.EDIT_ADMIN, classId
+                );
+            }
+        }
     }
 
 }

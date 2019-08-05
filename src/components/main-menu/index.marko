@@ -1,42 +1,39 @@
+<!--
+Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
 <div.main-menu-wrapper>
-    <ul.menu.main-menu class={"image-only": !state.showText}>
-        <for(menuEntry in state.primaryMenuEntries)>
-            <li class={active: menuEntry.active}>
-                <link-target routingConfiguration=component.getRoutingConfiguration(menuEntry)>
-                    <@content>
-                        <span class="hover-label">
-                            <icon icon=menuEntry.icon/>
-                            <div>${menuEntry.text}</div>
-                        </span>
-                        <span class="label-wrapper">
-                            <icon icon=menuEntry.icon/>
-                            <if(state.showText)>
-                                <div>${menuEntry.text}</div>
-                            </if>
-                        </span>
-                    </@content>
-                </link-target>
-            </li>
-        </for>
-    </ul>
-    <ul.menu.user-menu class={"image-only": !state.showText}>
-        <for(menuEntry in state.secondaryMenuEntries)>
-            <li class={active: menuEntry.active}>
-                <link-target routingConfiguration=component.getRoutingConfiguration(menuEntry)>
-                    <@content>
-                        <span class="hover-label">
-                            <icon icon=menuEntry.icon/>
-                            <div>${menuEntry.text}</div>
-                        </span>
-                        <span class="label-wrapper">
-                            <icon icon=menuEntry.icon/>
-                            <if(state.showText)>
-                                <div>${menuEntry.text}</div>
-                            </if>
-                        </span>
-                    </@content>
-                </link-target>
-            </li>
-        </for>
-    </ul>
+    <if(!state.loading)>
+        <ul.menu.main-menu class={
+            "image-only": !state.showText
+        }>
+            <for|menuEntry| of=state.primaryMenuEntries>
+                <if(menuEntry.show)>
+                    <li key=menuEntry.text class={
+                        active: menuEntry.active
+                    }>
+                        <menu-entry entry=menuEntry/>
+                    </li>
+                </if>
+            </for>
+        </ul>
+        <ul.menu.user-menu class={
+            "image-only": !state.showText
+        }>
+            <for|menuEntry| of=state.secondaryMenuEntries>
+                <if(menuEntry.show)>
+                    <li key=menuEntry.text class={
+                        active: menuEntry.active
+                    }>
+                        <menu-entry entry=menuEntry/>
+                    </li>
+                </if>
+            </for>
+        </ul>
+    </if>
 </div>

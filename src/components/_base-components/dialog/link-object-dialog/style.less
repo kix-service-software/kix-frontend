@@ -1,38 +1,57 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 .linkable-objects-dialog {
+
     >.linkable-objects-selection,
     .linkable-objects-link-type-selection {
         display: grid;
         grid-template-columns: 8.75rem auto;
         grid-gap: 2rem;
         margin-bottom: 1rem;
+
         .linkable-objects-selection-label {
             white-space: nowrap;
             margin-top: .25rem;
             display: grid;
             grid-template-columns: auto max-content;
             justify-self: start;
+
             >span {
                 .shorten-text;
                 text-align: right;
             }
+
             &::after {
                 content: ":"
             }
         }
     }
+
     >.linkable-objects-form {
         margin-bottom: @margin-button-content;
+
         .group-widget>.widget-content {
             margin-left: 0;
+
             >.form {
                 padding-left: 1.75rem;
+
                 >.group-widget>.widget-content>.form-field,
                 >.form-field {
-                    grid-template-columns: 7rem 2rem auto;
+                    grid-template-columns: 10rem 2rem auto;
+
                     >.field-label {
                         font-weight: normal;
                     }
                 }
+
                 >.group-widget {
                     >.widget-header {
                         >.header-left {
@@ -44,12 +63,14 @@
                 }
             }
         }
+
         .linkable-objects-form-button-container {
             justify-content: end;
             display: grid;
             margin-top: @margin-button-content;
         }
     }
+
     >.linkable-objects-result {
         .result-table-head {
             display: grid;
@@ -57,25 +78,30 @@
             grid-gap: @margin-default;
             margin-bottom: @margin-small;
             align-items: center;
+
             >span:first-child {
                 font-weight: bold;
                 display: inline-block;
             }
         }
     }
+
     >.linkable-objects-submit {
         display: grid;
         grid-auto-columns: 1fr;
         grid-auto-flow: column;
         grid-gap: 2rem;
         margin-top: @margin-button-content;
+
         >.linkable-objects-link-type-selection {
             justify-self: start;
         }
+
         >button {
             justify-self: end;
         }
     }
+
     >.sucess-hint {
         display: block;
         margin-top: 1rem;

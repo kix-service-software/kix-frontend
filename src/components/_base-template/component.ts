@@ -1,22 +1,29 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { Context, ContextType, ContextDescriptor, KIXObjectType, ContextMode } from '../../core/model';
-import { ClientStorageService } from '../../core/browser/ClientStorageService';
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../core/browser/context';
-import { ComponentsService } from '../../core/browser/components';
-import { IdService, FormService } from '../../core/browser';
+import { IdService, ServiceRegistry, FactoryService } from '../../core/browser';
 import { RoutingService } from '../../core/browser/router';
 import { HomeContext } from '../../core/browser/home';
 import { EventService } from '../../core/browser/event';
 import { ReleaseContext } from '../../core/browser/release';
 import { KIXModulesService } from '../../core/browser/modules';
-import { ObjectIconService } from '../../core/browser/icon';
 import { TranslationService } from '../../core/browser/i18n/TranslationService';
 import { ApplicationEvent } from '../../core/browser/application';
-import { ConfigItemClassService } from '../../core/browser/cmdb';
-import { FAQService } from '../../core/browser/faq';
+import { AuthenticationSocketClient } from '../../core/browser/application/AuthenticationSocketClient';
+import { AgentService } from '../../core/browser/application/AgentService';
 import { SysConfigService } from '../../core/browser/sysconfig';
-
-declare var io: any;
+import { TranslationPatternBrowserFactory, TranslationBrowserFactory } from '../../core/browser/i18n';
+import { IUIModule } from '../../core/browser/application/IUIModule';
+import { ClientNotificationSocketClient } from '../../core/browser/notification/ClientNotificationSocketClient';
 
 class Component {
 
@@ -24,42 +31,46 @@ class Component {
     private contextListernerId: string;
 
     public onCreate(input: any): void {
-        this.state = new ComponentState(
-            input.contextId, input.objectData, input.objectId
-        );
+        this.state = new ComponentState();
         this.contextListernerId = IdService.generateDateBasedId('base-template-');
     }
 
     public async onMount(): Promise<void> {
+        const start = Date.now();
+
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.TRANSLATION, TranslationBrowserFactory.getInstance()
+        );
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.TRANSLATION_PATTERN, TranslationPatternBrowserFactory.getInstance()
+        );
+
+        ServiceRegistry.registerServiceInstance(AgentService.getInstance());
+        ServiceRegistry.registerServiceInstance(TranslationService.getInstance());
+        ServiceRegistry.registerServiceInstance(SysConfigService.getInstance());
+
         this.state.loading = true;
-        this.state.loadingHint = 'Lade KIX ...';
+        this.state.loadingHint = await TranslationService.translate('Translatable#Loading');
+        this.state.translations = await TranslationService.createTranslationObject(['Translatable#Close Sidebars']);
 
         await this.checkAuthentication();
 
-        await KIXModulesService.getInstance().init();
+        ClientNotificationSocketClient.getInstance();
 
-        const modules = KIXModulesService.getInstance().getModules();
-        modules.forEach((m) => {
-            this.state.moduleTemplates.push(ComponentsService.getInstance().getComponentTemplate(m.initComponentId));
-        });
+        await KIXModulesService.getInstance().init();
+        await this.initModules();
 
         ContextService.getInstance().registerListener({
-            contextChanged: (contextId: string, context: Context<any>, type: ContextType) => {
+            constexServiceListenerId: 'BASE-TEMPLATE',
+            contextChanged: (contextId: string, context: Context, type: ContextType) => {
                 if (type === ContextType.MAIN) {
                     this.setContext(context);
                 }
-            }
+            },
+            contextRegistered: () => { return; }
         });
 
-        ContextService.getInstance().setObjectData(this.state.objectData);
         await this.bootstrapServices();
-
-        await ObjectIconService.getInstance().init();
-        // FIXME: nur temporär auskommentiert
-        // await TranslationService.getInstance().init();
-        await ConfigItemClassService.getInstance().init();
-        await FAQService.getInstance().init();
-        await SysConfigService.getInstance().init();
 
         this.setContext();
 
@@ -73,25 +84,45 @@ class Component {
             }
         });
 
+        EventService.getInstance().subscribe(ApplicationEvent.REFRESH, {
+            eventSubscriberId: 'BASE-TEMPLATE-REFRESH',
+            eventPublished: (data: any, eventId: string) => {
+                if (eventId === ApplicationEvent.REFRESH) {
+                    this.state.reload = true;
+
+                    setTimeout(() => {
+                        this.state.reload = false;
+                        setTimeout(() => {
+                            RoutingService.getInstance().routeToInitialContext(true);
+                        }, 500);
+                    }, 20);
+                }
+            }
+        });
+
+        window.addEventListener('resize', this.hideSidebarIfNeeded.bind(this), false);
+
         this.state.initialized = true;
         this.state.loading = false;
 
+        const end = Date.now();
+
+        console.debug(`mount base template: ${(end - start) / 1000} sec.`);
+
         setTimeout(() => {
             RoutingService.getInstance().routeToInitialContext();
-        }, 500);
+        }, 2000);
+    }
+
+    public onDestroy(): void {
+        window.removeEventListener('resize', this.hideSidebarIfNeeded.bind(this), false);
+        ContextService.getInstance().unregisterListener('BASE-TEMPLATE');
     }
 
     private async checkAuthentication(): Promise<void> {
-        const token = ClientStorageService.getToken();
-        const socketUrl = ClientStorageService.getFrontendSocketUrl();
-
-        const configurationSocket = io.connect(socketUrl + "/kixmodules", {
-            query: "Token=" + token
-        });
-
-        configurationSocket.on('error', (error) => {
+        if (!AuthenticationSocketClient.getInstance().validateToken()) {
             window.location.replace('/auth');
-        });
+        }
     }
 
     private async bootstrapServices(): Promise<void> {
@@ -105,21 +136,19 @@ class Component {
             false, 'release', ['release'], ReleaseContext
         );
         ContextService.getInstance().registerContext(releaseContext);
-
-        FormService.getInstance();
-        await FormService.getInstance().loadFormConfigurations();
     }
 
-    private setContext(context: Context<any> = ContextService.getInstance().getActiveContext()): void {
+    private setContext(context: Context = ContextService.getInstance().getActiveContext()): void {
         if (context) {
             this.state.hasExplorer = context.isExplorerBarShown();
+            this.hideSidebarIfNeeded();
+            this.state.showSidebar = context.isSidebarShown();
             context.registerListener(this.contextListernerId, {
                 sidebarToggled: () => {
-                    this.setGridColumns();
+                    this.state.showSidebar = context.isSidebarShown();
                 },
                 explorerBarToggled: () => {
                     this.state.hasExplorer = context.isExplorerBarShown();
-                    this.setGridColumns();
                 },
                 objectChanged: () => { return; },
                 objectListChanged: () => { return; },
@@ -127,29 +156,49 @@ class Component {
                 scrollInformationChanged: () => { return; }
             });
         }
-        this.setGridColumns();
     }
 
-    private setGridColumns(): void {
-        let gridColumns = '[main-menu-wrapper] 4.5rem';
+    public hideSidebarIfNeeded(): void {
+        const context: Context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        if (context &&
+            context.isSidebarShown() &&
+            (
+                (!this.state.hasExplorer && window.innerWidth <= 1475) ||
+                (this.state.hasExplorer && window.innerWidth <= 1700)
+            )
+        ) {
+            context.closeSidebar();
+        }
+    }
 
-        if (this.state.hasExplorer) {
-            gridColumns += ' [explorer-bar] min-content';
+    private async initModules(): Promise<void> {
+        const modules = KIXModulesService.getInstance().getModules();
+
+        let uiModules: IUIModule[] = [];
+        for (let i = 0; i < modules.length; i++) {
+            for (const c of modules[i].initComponents) {
+                try {
+                    const component = require(c.componentPath);
+                    if (component && component.UIModule) {
+                        uiModules.push(new component.UIModule());
+                    }
+                } catch (error) {
+                    console.error(error);
+                }
+            }
         }
 
-        gridColumns += ' [content] minmax(40rem, auto)';
+        uiModules = uiModules.sort((a, b) => a.priority - b.priority);
+        for (let i = 0; i < uiModules.length; i++) {
+            if (uiModules[i].register) {
+                await uiModules[i].register();
+            } else {
+                console.warn(`module with prioritiy ${uiModules[i].priority} did not implement register() method.`);
+            }
 
-        const context = ContextService.getInstance().getActiveContext();
-        if ((context && context.isSidebarShown())) {
-            gridColumns += ' [sidebar-area] min-content';
-            this.state.showSidebar = true;
-        } else {
-            this.state.showSidebar = false;
+            const percent = Math.round((i / uiModules.length) * 100);
+            this.state.loadingHint = `${percent}%`;
         }
-
-        gridColumns += ' [sidebar-menu-wrapper] min-content';
-
-        this.state.gridColumns = gridColumns;
     }
 }
 
