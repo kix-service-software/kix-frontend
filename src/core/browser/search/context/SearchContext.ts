@@ -10,6 +10,7 @@
 import { ObjectIcon } from "../../../model";
 import { Context } from '../../../model/components/context/Context';
 import { TranslationService } from "../../i18n/TranslationService";
+import { SearchService } from "../../kix/search/SearchService";
 
 export class SearchContext extends Context {
 
@@ -22,6 +23,10 @@ export class SearchContext extends Context {
     public async getDisplayText(short: boolean = false): Promise<string> {
         const title = await TranslationService.translate('Translatable#Results advanced search');
         return title;
+    }
+
+    public reset(): void {
+        SearchService.getInstance().clearSearchCache();
     }
 
 }
