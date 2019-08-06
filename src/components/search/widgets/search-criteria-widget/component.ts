@@ -114,9 +114,12 @@ class Component implements IKIXObjectSearchListener {
                 const label = await SearchOperatorUtil.getText(criteria.operator);
                 displayCriteria.push([displayProperty, label, labels]);
             }
-            setTimeout(() => this.state.displayCriteria = displayCriteria.sort(
-                (a, b) => SortUtil.compareString(a[0], b[0])
-            ), 100);
+            displayCriteria.sort((a, b) => SortUtil.compareString(a[0], b[0]));
+            WidgetService.getInstance().updateActions(this.state.instanceId);
+
+            this.state.contentActions = [...this.state.contentActions];
+
+            setTimeout(() => this.state.displayCriteria = displayCriteria, 100);
         } else {
             this.state.title = `${titleLabel}:`;
         }
