@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-08-05 06:44+0000\n"
-"Last-Translator: fuhlig <Frank.Uhlig@cape-it.de>\n"
+"PO-Revision-Date: 2019-08-06 07:08+0000\n"
+"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -852,8 +852,8 @@ msgid ""
 "Find this saved search within the Dropdown Bookmarks, located in the header "
 "menu right besides the New-button"
 msgstr ""
-"Gespeicherte Suchen befinden sich innerhalb der Lesezeichen im Kopfmenü "
-"(direkt neben der Schaltfläche \"Neu\")."
+"Die hier gespeicherte Suche finden Sie im Kopfmenü der Anwendung über das "
+"Dropdown Lesezeichen, welches neben dem Neu-Button angezeigt wird."
 
 msgid "First Name"
 msgstr "Vorname"
@@ -1795,6 +1795,8 @@ msgstr "Insert the FAQ article language."
 
 msgid "Helptext_FAQ_ArticleCreate_Links"
 msgstr ""
+"Verknüpfen Sie diesen Artikel mit einem Asset, einem FAQ-Artikel oder einem "
+"anderen Ticket."
 
 msgid "Helptext_FAQ_ArticleCreate_Solution"
 msgstr ""
@@ -1823,70 +1825,60 @@ msgstr ""
 msgid "Helptext_FAQ_ArticleEdit_Category"
 msgstr "Organize FAQ articles by categories to sort them by topics."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleEdit_Name"
 msgid "Helptext_FAQ_ArticleEdit_Cause"
-msgstr "Hilfetext_Admin_TextModuleEdit_Name"
+msgstr "Beschreiben Sie die Ursache hinter dem Phänomen so genau wie möglich."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleEdit_Comment"
 msgid "Helptext_FAQ_ArticleEdit_Comment"
-msgstr "Hilfetext_Admin_TextModuleEdit_Comment"
+msgstr ""
+"Hier können Sie zusätzliche Informationen zu dem FAQ-Artikel hinterlegen."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleEdit_Language"
 msgid "Helptext_FAQ_ArticleEdit_Language"
-msgstr "Hilfetext_Admin_TextModuleEdit_Language"
+msgstr "Geben sie die Sprache an, in der der FAQ-Artikel verfasst ist."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleEdit_Subject"
 msgid "Helptext_FAQ_ArticleEdit_Solution"
-msgstr "Hilfetext_Admin_TextModuleEdit_Subject"
+msgstr "Beschreiben Sie die Lösung des Problems so genau wie möglich."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleEdit_Subject"
 msgid "Helptext_FAQ_ArticleEdit_Symptom"
-msgstr "Hilfetext_Admin_TextModuleEdit_Subject"
+msgstr "Beschreiben Sie das auftretende Phänomen so genau wie möglich."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleEdit_Text"
 msgid "Helptext_FAQ_ArticleEdit_Tags"
-msgstr "Hilfetext_Admin_TextModuleEdit_Text"
+msgstr "Schlagworte helfen, einen FAQ-Eintrag schnell zu finden."
 
-#, fuzzy
-#| msgid "Helptext_Customers_ContactEdit_Title"
 msgid "Helptext_FAQ_ArticleEdit_Title"
-msgstr "Hilfetext_Organisations_ContactEdit_Title"
+msgstr "Fassen Sie das Thema des FAQ-Artikels kurz zusammen."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleEdit_Validity"
 msgid "Helptext_FAQ_ArticleEdit_Valid"
-msgstr "Hilfetext_Admin_TextModuleEdit_Validity"
+msgstr ""
+"Der FAQ Eintrag kann im System nur verwendet werden, wenn er „gültig“ "
+"gesetzt ist. Ungültige FAQ Einträge können nur über die Suche gefunden "
+"werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleEdit_Validity"
 msgid "Helptext_FAQ_ArticleEdit_Visibility"
-msgstr "Hilfetext_Admin_TextModuleEdit_Validity"
+msgstr ""
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailFilterCreate_Name"
 msgid "Helptext_i18n_TranslationPatternCreate_Pattern"
-msgstr "Hilfetext_Admin_MailFilterCreate_Name"
+msgstr ""
+"Das Pattern bezeichnet die Ausgangszeichenkette. Je nach dem, welche "
+"Sprachen in der SysConfig konfiguriert sind, können dafür Übersetzungen "
+"angelegt werden, welche dann in der Nutzeroberfläche angezeigt werden."
 
-#, fuzzy
-#| msgid "Helptext_Customers_ContactCreate_Organisation"
 msgid "Helptext_i18n_TranslationPatternCreate_Translation"
-msgstr "Hilfetext_Organisations_ContactCreate_Organisation"
+msgstr ""
+"Wenn Sie diese Übersetzung für das Pattern angeben, wird diese in der "
+"Nutzeroberfläche angezeigt, wenn der Nutzer als Sprache die voranstehende "
+"Sprache gewählt hat."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailFilter_FilterConditions_Pattern"
 msgid "Helptext_i18n_TranslationPatternEdit_Pattern"
-msgstr "Hilfetext_Admin_MailFilter_FilterConditions_Pattern"
+msgstr ""
+"Das Pattern bezeichnet die Ausgangszeichenkette. Je nach dem, welche "
+"Sprachen in der SysConfig konfiguriert sind, können dafür Übersetzungen "
+"angelegt werden, welche dann in der Nutzeroberfläche angezeigt werden."
 
-#, fuzzy
-#| msgid "Helptext_Customers_ContactEdit_Organisation"
 msgid "Helptext_i18n_TranslationPatternEdit_Translation"
-msgstr "Hilfetext_Organisations_ContactEdit_Organisation"
+msgstr ""
+"Wenn Sie diese Übersetzung für das Pattern angeben, wird diese in der "
+"Nutzeroberfläche angezeigt, wenn der Nutzer als Sprache die voranstehende "
+"Sprache gewählt hat."
 
 msgid "Helptext_PersonalSettings_MyQueues_Hint"
 msgstr "Hilfetext_PersonalSettings_MyQueues_Hint"
@@ -1894,44 +1886,34 @@ msgstr "Hilfetext_PersonalSettings_MyQueues_Hint"
 msgid "Helptext_PersonalSettings_UserLanguage_Hint"
 msgstr "Hilfetext_PersonalSettings_UserLanguage_Hint"
 
-#, fuzzy
-#| msgid "Helptext_PersonalSettings_UserLanguage_Hint"
 msgid "Helptext_PersonalSettings_UserNewPasswordConfirm_Hint"
-msgstr "Hilfetext_PersonalSettings_UserLanguage_Hint"
+msgstr "Bestätigen Sie das neue Passwort."
 
-#, fuzzy
-#| msgid "Helptext_PersonalSettings_UserLanguage_Hint"
 msgid "Helptext_PersonalSettings_UserNewPassword_Hint"
-msgstr "Hilfetext_PersonalSettings_UserLanguage_Hint"
+msgstr "Legen Sie ein neues Passwort für Ihren Nutzeraccount fest."
 
-#, fuzzy
-#| msgid "Helptext_PersonalSettings_UserLanguage_Hint"
 msgid "Helptext_PersonalSettings_UserPassword_Hint"
-msgstr "Hilfetext_PersonalSettings_UserLanguage_Hint"
+msgstr "Geben Sie Ihr aktuell gültiges Passwort ein."
 
-#, fuzzy
-#| msgid "Helptext_Search_Contact"
 msgid "Helptext_Search_ConfigItem"
-msgstr "Hilfetext_Search_Contact"
+msgstr ""
 
 msgid "Helptext_Search_Contact"
 msgstr "Hilfetext_Search_Contact"
 
-#, fuzzy
-#| msgid "Helptext_Search_Contact"
 msgid "Helptext_Search_FAQArticle"
-msgstr "Hilfetext_Search_Contact"
+msgstr ""
+"Der FAQ Artikel „Wie suche ich in KIX 18? bietet eine genauere Erläuterung "
+"zu den Suchoperatoren."
 
 msgid "Helptext_Search_Organisation"
 msgstr "Hilfetext_Search_Organisation"
 
-#, fuzzy
-#| msgid "Helptext_Search_Contact"
 msgid "Helptext_Search_Ticket"
-msgstr "Hilfetext_Search_Contact"
+msgstr ""
+"Der FAQ Artikel „Wie suche ich in KIX 18? bietet eine genauere Erläuterung "
+"zu den Suchoperatoren."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Textmodules_ArticleCreate"
 msgstr ""
 "Um die Textbausteine zu nutzen, geben Sie \"::\" (Doppelpunkt Doppelpunkt) "
@@ -1947,158 +1929,116 @@ msgstr ""
 msgid "Helptext_Textmodules_TicketEdit"
 msgstr "Hilfetext_Textmodules_TicketEdit"
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleCreate_Comment"
 msgid "Helptext_Ticket_ArticleCreate_Attachments"
-msgstr "Hilfetext_Admin_TextModuleCreate_Comment"
+msgstr ""
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleEdit_Subject"
 msgid "Helptext_Ticket_ArticleCreateEdit_Subject"
-msgstr "Hilfetext_Admin_TextModuleEdit_Subject"
+msgstr "Fassen Sie das Thema des Tickets kurz zusammen."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "HelpText_Ticket_ArticleCreate_From"
 msgstr ""
-"Um die Textbausteine zu nutzen, geben Sie \"::\" (Doppelpunkt Doppelpunkt) "
-"ein. Wählen Sie den gewünschten Textbaustein aus dem Kontext-Menü. Durch "
-"weiter Texteingabe können Sie die Auswahl weiter einschränken."
+"Wählen Sie aus, wie der Absender dieser Nachricht für den E-Mail Empfänger "
+"dargestellt wird. Die hier auswählbare E-Mail-Adresse ist abhängig von dem "
+"gewählten Team."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_ArticleCreate_Channel"
 msgstr ""
-"Um die Textbausteine zu nutzen, geben Sie \"::\" (Doppelpunkt Doppelpunkt) "
-"ein. Wählen Sie den gewünschten Textbaustein aus dem Kontext-Menü. Durch "
-"weiter Texteingabe können Sie die Auswahl weiter einschränken."
+"Wählen Sie aus, ob Sie die Ticketbeschreibung intern am Ticket hinterlegen "
+"(Notiz) oder zusätzlich per E-Mail versenden (E-Mail) wollen."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketCreate_Channel"
 msgstr ""
-"Um die Textbausteine zu nutzen, geben Sie \"::\" (Doppelpunkt Doppelpunkt) "
-"ein. Wählen Sie den gewünschten Textbaustein aus dem Kontext-Menü. Durch "
-"weiter Texteingabe können Sie die Auswahl weiter einschränken."
+"Wählen Sie aus, ob Sie die Ticketbeschreibung intern am Ticket hinterlegen "
+"(Notiz) oder zusätzlich per E-Mail versenden (E-Mail) wollen."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketCreate_Contact"
 msgstr ""
-"Um die Textbausteine zu nutzen, geben Sie \"::\" (Doppelpunkt Doppelpunkt) "
-"ein. Wählen Sie den gewünschten Textbaustein aus dem Kontext-Menü. Durch "
-"weiter Texteingabe können Sie die Auswahl weiter einschränken."
+"Tragen Sie hier die Person ein, die das Ticket erstellt, oder in dessen Name "
+"das Ticket erstellt wird. Bei der Eingabe von mindestens 3 Zeichen wird "
+"Ihnen eine Liste mit bereits im System registrierten Kontakten "
+"vorgeschlagen. Sie können „*“ als Platzhalter verwenden. Über klick auf den "
+"Button rechts im Formularfeld können Sie einen neuen Kontakt anlegen & mit "
+"dem Speichern automatisch hierher zurückkehren. Für unbekannte Kontakte ist "
+"die Eingabe einer syntaktisch korrekten E-Mail-Adresse (name@beispiel.de) "
+"ebenfalls möglich."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketCreate_Links"
 msgstr ""
-"Um die Textbausteine zu nutzen, geben Sie \"::\" (Doppelpunkt Doppelpunkt) "
-"ein. Wählen Sie den gewünschten Textbaustein aus dem Kontext-Menü. Durch "
-"weiter Texteingabe können Sie die Auswahl weiter einschränken."
+"Verknüpfen Sie dieses Ticket mit einem Asset, einem FAQ Artikel oder einem "
+"anderen Ticket."
 
-#, fuzzy
-#| msgid "Helptext_Customers_ContactCreate_Organisation"
 msgid "Helptext_Tickets_TicketCreate_Organisation"
-msgstr "Hilfetext_Organisations_ContactCreate_Organisation"
+msgstr "Der Kunde wird automatisch in Abhängigkeit vom Kontakt zugeordnet."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketCreate_Owner"
-msgstr ""
-"Um die Textbausteine zu nutzen, geben Sie \"::\" (Doppelpunkt Doppelpunkt) "
-"ein. Wählen Sie den gewünschten Textbaustein aus dem Kontext-Menü. Durch "
-"weiter Texteingabe können Sie die Auswahl weiter einschränken."
+msgstr "Wählen Sie eine Person aus, die das Ticket bearbeiten soll."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketCreate_Priority"
-msgstr ""
-"Um die Textbausteine zu nutzen, geben Sie \"::\" (Doppelpunkt Doppelpunkt) "
-"ein. Wählen Sie den gewünschten Textbaustein aus dem Kontext-Menü. Durch "
-"weiter Texteingabe können Sie die Auswahl weiter einschränken."
+msgstr "Die Priorität kennzeichnet die Dringlichkeit eines Tickets."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketCreate_Queue"
-msgstr ""
-"Um die Textbausteine zu nutzen, geben Sie \"::\" (Doppelpunkt Doppelpunkt) "
-"ein. Wählen Sie den gewünschten Textbaustein aus dem Kontext-Menü. Durch "
-"weiter Texteingabe können Sie die Auswahl weiter einschränken."
+msgstr "Geben Sie hier einen Zuständigkeitsbereich für das Ticket an."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketCreate_Responsible"
 msgstr ""
-"Um die Textbausteine zu nutzen, geben Sie \"::\" (Doppelpunkt Doppelpunkt) "
-"ein. Wählen Sie den gewünschten Textbaustein aus dem Kontext-Menü. Durch "
-"weiter Texteingabe können Sie die Auswahl weiter einschränken."
+"Wählen Sie eine Person aus, die für die Ticketbearbeitung verantwortlich "
+"ist. Diese kann mit dem Bearbeiter identisch sein, muss aber nicht."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketCreate_State"
 msgstr ""
-"Um die Textbausteine zu nutzen, geben Sie \"::\" (Doppelpunkt Doppelpunkt) "
-"ein. Wählen Sie den gewünschten Textbaustein aus dem Kontext-Menü. Durch "
-"weiter Texteingabe können Sie die Auswahl weiter einschränken."
+"Der Status definiert, in welchem Bearbeitungszustand sich ein Ticket "
+"befindet."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketCreate_Type"
 msgstr ""
-"Um die Textbausteine zu nutzen, geben Sie \"::\" (Doppelpunkt Doppelpunkt) "
-"ein. Wählen Sie den gewünschten Textbaustein aus dem Kontext-Menü. Durch "
-"weiter Texteingabe können Sie die Auswahl weiter einschränken."
+"Der Ticket-Typ dient der Einordnung, um welche Art von Anfrage es sich bei "
+"dem Ticket handelt."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketEdit"
 msgid "Helptext_Tickets_TicketEdit_Channel"
-msgstr "Hilfetext_Textmodules_TicketEdit"
+msgstr ""
+"Wählen Sie aus, ob Sie die Ticketbeschreibung intern am Ticket hinterlegen "
+"(Notiz) oder zusätzlich per E-Mail versenden (E-Mail) wollen."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketEdit"
 msgid "Helptext_Tickets_TicketEdit_Contact"
-msgstr "Hilfetext_Textmodules_TicketEdit"
+msgstr ""
+"Tragen Sie hier die Person ein, die das Ticket erstellt, oder in dessen Name "
+"das Ticket erstellt wird. Bei der Eingabe von mindestens 3 Zeichen wird "
+"Ihnen eine Liste mit bereits im System registrierten Kontakten "
+"vorgeschlagen. Sie können „*“ als Platzhalter verwenden. Über klick auf den "
+"Button rechts im Formularfeld können Sie einen neuen Kontakt anlegen & mit "
+"dem Speichern automatisch hierher zurückkehren. Für unbekannte Kontakte ist "
+"die Eingabe einer syntaktisch korrekten E-Mail-Adresse (name@beispiel.de) "
+"ebenfalls möglich."
 
-#, fuzzy
-#| msgid "Helptext_Customers_ContactEdit_Organisation"
 msgid "Helptext_Tickets_TicketEdit_Organisation"
-msgstr "Hilfetext_Organisations_ContactEdit_Organisation"
+msgstr "Der Kunde wird automatisch in Abhängigkeit vom Kontakt zugeordnet."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketEdit"
 msgid "Helptext_Tickets_TicketEdit_Owner"
-msgstr "Hilfetext_Textmodules_TicketEdit"
+msgstr "Wählen Sie eine Person aus, die das Ticket bearbeiten soll."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketEdit"
 msgid "Helptext_Tickets_TicketEdit_Priority"
-msgstr "Hilfetext_Textmodules_TicketEdit"
+msgstr "Die Priorität kennzeichnet die Dringlichkeit eines Tickets."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketEdit"
 msgid "Helptext_Tickets_TicketEdit_Queue"
-msgstr "Hilfetext_Textmodules_TicketEdit"
+msgstr "Geben Sie hier einen Zuständigkeitsbereich für das Ticket an."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketEdit"
 msgid "Helptext_Tickets_TicketEdit_Responsible"
-msgstr "Hilfetext_Textmodules_TicketEdit"
+msgstr ""
+"Wählen Sie eine Person aus, die für die Ticketbearbeitung verantwortlich "
+"ist. Diese kann mit dem Bearbeiter identisch sein, muss aber nicht."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketEdit"
 msgid "Helptext_Tickets_TicketEdit_State"
-msgstr "Hilfetext_Textmodules_TicketEdit"
+msgstr ""
+"Der Status definiert, in welchem Bearbeitungszustand sich ein Ticket "
+"befindet."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketEdit"
 msgid "Helptext_Tickets_TicketEdit_Title"
-msgstr "Hilfetext_Textmodules_TicketEdit"
+msgstr "Fassen Sie das Thema des Tickets kurz zusammen."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketEdit"
 msgid "Helptext_Tickets_TicketEdit_Type"
-msgstr "Hilfetext_Textmodules_TicketEdit"
+msgstr ""
+"Der Ticket-Typ dient der Einordnung, um welche Art von Anfrage es sich bei "
+"dem Ticket handelt."
 
 msgid "Here you will find the KIX 18 manuals for users and administrators"
 msgstr ""
@@ -2251,8 +2191,6 @@ msgstr "Nachname"
 msgid "Legend"
 msgstr "Legende"
 
-#, fuzzy
-#| msgid "Let´s go"
 msgid "Let's go"
 msgstr "Los geht's"
 
@@ -2476,7 +2414,7 @@ msgid "New Filter"
 msgstr "Neuer Filter"
 
 msgid "New Notification"
-msgstr "Benachrichtigung erstellen"
+msgstr "Neue Benachrichtigung"
 
 msgid "New Object"
 msgstr "Neues Objekt"
@@ -2944,7 +2882,7 @@ msgid "Reset data"
 msgstr "Daten zurücksetzen"
 
 msgid "Reset to Default"
-msgstr "Zurücksetzen"
+msgstr "Auf Standard zurücksetzen"
 
 msgid "Response time"
 msgstr "Reaktionszeit"
@@ -3068,16 +3006,16 @@ msgid "Search Results"
 msgstr "Suchergebnisse"
 
 msgid "Search successfully saved."
-msgstr "Suche erfolgreich gelöscht"
+msgstr "Suche wurde gespeichert."
 
 msgid "Search template successfully removed."
-msgstr "Suchvorlage wurde erfolgreich entfernt"
+msgstr "Suchvorlage wurde erfolgreich entfernt."
 
 msgid "Search Tickets"
 msgstr "Suche Tickets"
 
 msgid "Search Title"
-msgstr "Suche Titel"
+msgstr "Name der Suche"
 
 msgid "Select a character set."
 msgstr "Wählen Sie einen Zeichensatz."
