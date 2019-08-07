@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2019-08-02 12:34+0000\n"
-"Last-Translator: fuhlig <Frank.Uhlig@cape-it.de>\n"
+"PO-Revision-Date: 2019-08-06 16:32+0000\n"
+"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: English <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/en/>\n"
 "Language: en\n"
@@ -2990,10 +2990,8 @@ msgstr ""
 msgid "Search Results"
 msgstr ""
 
-#, fuzzy
-#| msgid "Queue successfully created."
 msgid "Search successfully saved."
-msgstr "Team successfully created."
+msgstr "Search successfully saved."
 
 #, fuzzy
 #| msgid "Config Item successfully created."
