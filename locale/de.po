@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-08-07 12:32+0000\n"
+"PO-Revision-Date: 2019-08-07 15:32+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -1675,52 +1675,58 @@ msgid "Helptext_CMDB_ConfigItemCreateEdit_Name"
 msgstr ""
 
 msgid "Helptext_Customers_ContactCreate_City"
-msgstr "Hilfetext_Organisations_ContactCreate_City"
+msgstr ""
 
 msgid "Helptext_Customers_ContactCreate_Comment"
-msgstr "Hilfetext_Organisations_ContactCreate_Comment"
+msgstr "Hier können Sie zusätzliche Informationen zu dem Kontakt hinterlegen."
 
 msgid "Helptext_Customers_ContactCreate_Country"
-msgstr "Hilfetext_Organisations_ContactCreate_Country"
+msgstr ""
 
 msgid "Helptext_Customers_ContactCreate_Email"
-msgstr "Hilfetext_Organisations_ContactCreate_Email"
+msgstr ""
 
 msgid "Helptext_Customers_ContactCreate_Fax"
-msgstr "Hilfetext_Organisations_ContactCreate_Fax"
+msgstr ""
 
 msgid "Helptext_Customers_ContactCreate_Firstname"
-msgstr "Hilfetext_Organisations_ContactCreate_Firstname"
+msgstr ""
 
 msgid "Helptext_Customers_ContactCreate_Lastname"
-msgstr "Hilfetext_Organisations_ContactCreate_Lastname"
+msgstr ""
 
 msgid "Helptext_Customers_ContactCreate_Login"
-msgstr "Hilfetext_Organisations_ContactCreate_Login"
+msgstr "Der Nutzername muss eineindeutig sein und kann nicht bearbeitet werden."
 
 msgid "Helptext_Customers_ContactCreate_Mobile"
-msgstr "Hilfetext_Organisations_ContactCreate_Mobile"
+msgstr ""
 
 msgid "Helptext_Customers_ContactCreate_Organisation"
-msgstr "Hilfetext_Organisations_ContactCreate_Organisation"
+msgstr ""
+"Wählen Sie den Kunden, welchem der Kontakt zugeordnet sein soll. Bei der "
+"Eingabe von mindestens 3 Zeichen wird Ihnen eine Liste mit bereits im System "
+"registrierten Kontakten vorgeschlagen. Sie können „*“ als Platzhalter "
+"verwenden.  („KNR“ und „Kundenname“ möglich)"
 
 msgid "Helptext_Customers_ContactCreate_Password"
-msgstr "Hilfetext_Organisations_ContactCreate_Password"
+msgstr ""
 
 msgid "Helptext_Customers_ContactCreate_Phone"
-msgstr "Hilfetext_Organisations_ContactCreate_Phone"
+msgstr ""
 
 msgid "Helptext_Customers_ContactCreate_Street"
-msgstr "Hilfetext_Organisations_ContactCreate_Street"
+msgstr ""
 
 msgid "Helptext_Customers_ContactCreate_Title"
-msgstr "Hilfetext_Organisations_ContactCreate_Title"
+msgstr ""
 
 msgid "Helptext_Customers_ContactCreate_Validity"
-msgstr "Hilfetext_Organisations_ContactCreate_Validity"
+msgstr ""
+"Der Kontakt kann im System nur verwendet werden, wenn er „gültig“ gesetzt "
+"ist."
 
 msgid "Helptext_Customers_ContactCreate_Zip"
-msgstr "Hilfetext_Organisations_ContactCreate_Zip"
+msgstr ""
 
 msgid "Helptext_Customers_ContactEdit_City"
 msgstr "Hilfetext_Organisations_ContactEdit_City"
@@ -1768,31 +1774,34 @@ msgid "Helptext_Customers_ContactImport"
 msgstr "Hilfetext_Organisations_ContactImport"
 
 msgid "Helptext_Customers_OrganisationCreate_City"
-msgstr "Hilfetext_Organisations_OrganisationCreate_City"
+msgstr ""
 
 msgid "Helptext_Customers_OrganisationCreate_Comment"
-msgstr "Hilfetext_Organisations_OrganisationCreate_Comment"
+msgstr "Hier können Sie zusätzliche Informationen zu dem Kunden hinterlegen."
 
 msgid "Helptext_Customers_OrganisationCreate_Country"
-msgstr "Hilfetext_Organisations_OrganisationCreate_Country"
+msgstr ""
 
 msgid "Helptext_Customers_OrganisationCreate_Name"
-msgstr "Hilfetext_Organisations_OrganisationCreate_Name"
+msgstr ""
 
 msgid "Helptext_Customers_OrganisationCreate_Number"
-msgstr "Hilfetext_Organisations_OrganisationCreate_Number"
+msgstr ""
+"Geben Sie einen eindeutigen Identifier (z.B. Kundennummer) für den Kunden "
+"ein."
 
 msgid "Helptext_Customers_OrganisationCreate_Street"
-msgstr "Hilfetext_Organisations_OrganisationCreate_Street"
+msgstr ""
 
 msgid "Helptext_Customers_OrganisationCreate_URL"
-msgstr "Hilfetext_Organisations_OrganisationCreate_URL"
+msgstr ""
 
 msgid "Helptext_Customers_OrganisationCreate_Validity"
-msgstr "Hilfetext_Organisations_OrganisationCreate_Validity"
+msgstr ""
+"Der Kunde kann im System nur verwendet werden, wenn er „gültig“ gesetzt ist."
 
 msgid "Helptext_Customers_OrganisationCreate_Zip"
-msgstr "HIlfetext_Organisations_OrganisationCreate_Zip"
+msgstr ""
 
 msgid "Helptext_Customers_OrganisationImport"
 msgstr "Hilfetext_Organisations_OrganisationImport"
@@ -1948,7 +1957,7 @@ msgid "Helptext_Textmodules_TicketCreate"
 msgstr ""
 "Um die Textbausteine zu nutzen, geben Sie \"::\" (Doppelpunkt Doppelpunkt) "
 "ein. Wählen Sie den gewünschten Textbaustein aus dem Kontext-Menü. Durch "
-"weiter Texteingabe können Sie die Auswahl weiter einschränken."
+"weitere Texteingabe können Sie die Auswahl weiter einschränken."
 
 msgid "Helptext_Textmodules_TicketEdit"
 msgstr "Hilfetext_Textmodules_TicketEdit"
