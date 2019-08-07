@@ -312,12 +312,12 @@ class Component {
         });
 
         if (!!deleteNewLinks.length) {
-            this.state.table.removeRows(
-                this.state.table.getRows().filter(
-                    (r) => deleteNewLinks.some(
-                        (dl) => dl.equals(r.getRowObject().getObject())
-                    )
-                ).map((r) => r.getRowId())
+            const rowIds = this.state.table.getRows()
+                .filter((r) => deleteNewLinks.some((dl) => dl.equals(r.getRowObject().getObject())))
+                .map((r) => r.getRowId());
+            this.state.table.removeRows(rowIds);
+            this.linkDescriptions = this.linkDescriptions.filter(
+                (ld) => !deleteNewLinks.some((dnl) => dnl.linkedObjectKey === ld.linkableObject.ObjectId)
             );
         }
 
