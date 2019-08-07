@@ -1015,7 +1015,7 @@ msgstr ""
 
 msgid "Helptext_Admin_MailFilterCreate_StopAfterMatch"
 msgstr ""
-"Ist der Haken gesetzt, und die hier definierten Bedingungen treffen auf eine "
+"Ist der Haken gesetzt und die hier definierten Bedingungen treffen auf eine "
 "einkommende Nachricht zu, werden auf diese keine weiteren Filter angewendet."
 
 msgid "Helptext_Admin_MailFilterCreate_Validity"
@@ -1049,7 +1049,10 @@ msgstr ""
 "Der E-Mail-Filter kann nur verwendet werden, wenn er „gültig“ gesetzt ist."
 
 msgid "Helptext_Admin_MailFilter_FilterConditions_EmailHeader"
-msgstr "Hilfetext_Admin_MailFilter_FilterConditions_EmailHeader"
+msgstr ""
+"Wählen Sie aus, welche E-Mail Header bei einkommenden E-Mails geprüft werden "
+"(ein Attribut pro Zeile). Verfügbar sind alle in der SysConfig definierten "
+"Header."
 
 msgid "Helptext_Admin_MailFilter_FilterConditions_Negate"
 msgstr ""
@@ -1057,7 +1060,10 @@ msgstr ""
 "Muster nicht enthalten soll."
 
 msgid "Helptext_Admin_MailFilter_FilterConditions_Pattern"
-msgstr "Hilfetext_Admin_MailFilter_FilterConditions_Pattern"
+msgstr ""
+"Geben Sie den Wert/das Muster ein, welchem das gewählte Header-Attribut "
+"entsprechen soll, damit der Filter ausgelöst wird. Eingabe von RegEx ist "
+"möglich."
 
 msgid "Helptext_Admin_MailFilter_SetEmailHeader_EmailHeader"
 msgstr ""
