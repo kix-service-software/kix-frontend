@@ -71,7 +71,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     placeholder=state.autoCompletePlaceholder
                     value=(state.asAutocomplete ? state.autocompleteSearchValue : state.filterValue)
                     key=("form-list-input-" + state.listId)
-                    on-keyup("keyUp")/>
+                    on-input("filterValueChanged")/>
             </if>
             <if(state.isLoading)>
                 <div.form-list-loading>
