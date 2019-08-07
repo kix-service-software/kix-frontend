@@ -1,15 +1,19 @@
+<!--
+Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
 <div.wrapper>
-    <for|module| of=state.moduleTemplates>
-        <${module}/>
-    </for>
     <if(state.initialized)>
         <if(!state.reload)>
             <kix-header/>
-            <div.content-wrapper
-                class={
-                                "with-explorer": state.hasExplorer
-                            }
-                style=("grid-template-columns: " + state.gridColumns)>
+            <div.content-wrapper class={
+                "with-explorer": state.hasExplorer,
+                "with-sidebar": state.showSidebar
+            }>
                 <main-menu no-update/>
                 <div.site-navigation no-update>
                     <back-to/>
@@ -20,6 +24,14 @@
                     <router-outlet id="base-router"/>
                 </div>
                 <if(state.showSidebar)>
+                    <div.sidebar-shield>
+                        <div.sidebar-close-bar on-click("hideSidebarIfNeeded") title=state.translations["Translatable#Close Sidebars"]>
+                            <span.kix-icon-triangle-right>
+                                <span.path1/>
+                                <span.path2/>
+                            </span>
+                        </div>
+                    </div>
                     <sidebar contextType="MAIN" no-update/>
                 </if>
                 <div.site-menu-wrapper no-update>

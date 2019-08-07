@@ -1,6 +1,15 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     AbstractAction, ComponentContent, ConfirmOverlayContent,
-    OverlayType, KIXObjectType, ToastContent
+    OverlayType, KIXObjectType, ToastContent, CRUD
 } from '../../../../../model';
 import { OverlayService } from '../../../../OverlayService';
 import { EventService } from '../../../../event';
@@ -8,8 +17,15 @@ import { KIXObjectService } from '../../../../kix';
 import { ApplicationEvent } from '../../../../application';
 import { ITable } from '../../../../table';
 import { TranslationService } from '../../../TranslationService';
+import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 
 export class TranslationTableDeleteAction extends AbstractAction<ITable> {
+
+    public hasLink: boolean = false;
+
+    public permissions: UIComponentPermission[] = [
+        new UIComponentPermission('system/i18n/translations/*', [CRUD.DELETE])
+    ];
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Delete';
@@ -50,10 +66,10 @@ export class TranslationTableDeleteAction extends AbstractAction<ITable> {
         const selectedRows = this.data.getSelectedRows();
         if (selectedRows && !!selectedRows.length) {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Remove translations ...'
+                loading: true, hint: 'Translatable#Remove translations'
             });
             const failIds = await KIXObjectService.deleteObject(
-                KIXObjectType.TRANSLATION, selectedRows.map((sR) => sR.getRowObject().getObject().ObjectId)
+                KIXObjectType.TRANSLATION_PATTERN, selectedRows.map((sR) => sR.getRowObject().getObject().ObjectId)
             );
 
             this.data.reload(true);

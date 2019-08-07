@@ -1,5 +1,15 @@
-import { AttachmentError, KIXObjectType, SysConfigKey, SysConfigItem } from "../model";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { AttachmentError, KIXObjectType, SysConfigKey, SysConfigOption } from "../model";
 import { KIXObjectService } from "./kix";
+import { TranslationService } from "./i18n/TranslationService";
 
 export class AttachmentUtil {
 
@@ -27,10 +37,10 @@ export class AttachmentUtil {
     }
 
     public static async getMaxUploadFileSize(): Promise<number> {
-        const maxUploadFileSize = await KIXObjectService.loadObjects<SysConfigItem>(
-            KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.MAX_ALLOWED_SIZE]
+        const maxUploadFileSize = await KIXObjectService.loadObjects<SysConfigOption>(
+            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.MAX_ALLOWED_SIZE]
         );
-        return maxUploadFileSize && maxUploadFileSize.length ? maxUploadFileSize[0].Data : null;
+        return maxUploadFileSize && maxUploadFileSize.length ? maxUploadFileSize[0].Value : null;
     }
 
     // TODO: byte-sequenz mal mit prüfen
@@ -49,22 +59,22 @@ export class AttachmentUtil {
         const errorMessages = [];
         const maxFileSize = await AttachmentUtil.getMaxUploadFileSize();
         const maxFileSizeString = AttachmentUtil.getFileSize(maxFileSize, 0);
-        fileErrors.forEach((fe) => {
+        for (const fe of fileErrors) {
             switch (fe[1]) {
                 case AttachmentError.MAX_FILE_SIZE_EXCEEDED:
-                    errorMessages.push(
-                        `Die Datei ${fe[0].name} ist zu groß (${AttachmentUtil.getFileSize(fe[0].size)}). Maximal mögliche Dateigröße: ${maxFileSizeString}.`
-                    );
+                    const fileSizeError = await TranslationService.translate('Translatable#The file size of {0} is too large ({1}). Max.: {2}', [
+                        fe[0].name, AttachmentUtil.getFileSize(fe[0].size), maxFileSizeString
+                    ]);
+                    errorMessages.push(fileSizeError);
                     break;
                 case AttachmentError.INVALID_MIMETYPE:
-                    errorMessages.push(
-                        `Die Datei ${fe[0].name} hat keinen gültigen MIME-TYPE.`
-                    );
+                    const typeError = await TranslationService.translate('Translatable#The file {0} has no valid MIME-TYPE.', [fe[0].name]);
+                    errorMessages.push(typeError);
                     break;
                 default:
                     errorMessages.push(fe[1] + ": " + fe[0]);
             }
-        });
+        }
         return errorMessages;
     }
     // tslint:enable:max-line-length

@@ -1,8 +1,74 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+.hide-sidebar() {
+    >.sidebar-shield {
+        display: block;
+    }
+
+    >.sidebar-area {
+        position: absolute;
+        right: 4.5rem;
+    }
+}
+
+.hide-3rd-widget() {
+    >.content {
+        >div {
+            .widget-container {
+                grid-template-columns: [first-line] repeat(2, 1fr) [last-line];
+
+                >.small+.small+.small {
+                    display: none;
+                }
+            }
+        }
+    }
+}
+
+.hide-2rd-widget() {
+    >.content {
+        >div {
+            .widget-container {
+
+                >.small {
+                    grid-column: first-line / last-line;
+                }
+
+                >.small+.small {
+                    display: none;
+                }
+            }
+        }
+    }
+}
+
+.sidebar-close-bar {
+    height: 100%;
+    background-color: fade(@secondary-4, 80%);
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    cursor: pointer;
+
+    >span {
+        font-size: 1.75rem;
+        color: @secondary-1;
+    }
+}
+
 .wrapper {
     position: relative;
     box-sizing: border-box;
     background: @secondary-5;
     color: @secondary-2;
+    min-width: 72rem;
 
     >.app-loading-shield {
         position: fixed;
@@ -33,14 +99,75 @@
     }
 
     >.content-wrapper {
+        position: relative;
         padding: @margin-default + @header-height 0 0;
         display: grid;
         grid-template-rows: max-content 1fr;
         grid-gap: @margin-middle @margin-default;
+        grid-template-columns: [main-menu-wrapper] 4.5rem [content] minmax(40rem, auto) [sidebar-menu-wrapper] min-content;
+        min-width: 72rem;
+
+        &.with-explorer {
+            grid-template-columns: [main-menu-wrapper] 4.5rem [explorer-bar] min-content [content] minmax(40rem, auto) [sidebar-menu-wrapper] min-content;
+        }
+
+        &.with-sidebar:not(.with-explorer) {
+            grid-template-columns: [main-menu-wrapper] 4.5rem [content] minmax(40rem, auto) [sidebar-area] min-content [sidebar-menu-wrapper] min-content;
+
+            // first breakpoint - hide sidebar
+            @media only screen and (max-width: 1475px) {
+                grid-template-columns: [main-menu-wrapper] 4.5rem [content] minmax(40rem, auto) [sidebar-menu-wrapper] min-content;
+
+                .hide-sidebar();
+            }
+        }
+
+        &.with-explorer.with-sidebar {
+            grid-template-columns: [main-menu-wrapper] 4.5rem [explorer-bar] min-content [content] minmax(40rem, auto) [sidebar-area] min-content [sidebar-menu-wrapper] min-content;
+
+            // first breakpoint - hide sidebar
+            @media only screen and (max-width: 1700px) {
+                grid-template-columns: [main-menu-wrapper] 4.5rem [explorer-bar] min-content [content] minmax(40rem, auto) [sidebar-menu-wrapper] min-content;
+
+                .hide-sidebar();
+            }
+        }
+
+        &:not(.with-explorer) {
+
+            // second breakpoint - hide 3rd small widget
+            @media only screen and (max-width: 1300px) {
+                .hide-3rd-widget();
+            }
+        }
+
+        &.with-explorer {
+
+            // second breakpoint - hide 3rd small widget
+            @media only screen and (max-width: 1550px) {
+                .hide-3rd-widget();
+            }
+
+            // third breakpoint - hide 2nd small widget
+            @media only screen and (max-width: 1100px) {
+                .hide-2rd-widget();
+            }
+        }
+
+        .sidebar-shield {
+            background-color: rgba(255, 255, 255, 0.8);
+            width: 21.5rem;
+            height: 100%;
+            right: 0;
+            position: absolute;
+            z-index: 1;
+            display: none;
+        }
 
         >.main-menu-wrapper,
         >.site-menu-wrapper {
             grid-row: 1 / span 2;
+            z-index: 1;
 
             .widget-bar {
                 margin-top: 14.5rem - @margin-default;
@@ -56,7 +183,7 @@
 
         &.with-explorer {
             >.site-navigation {
-                grid-column: 2 / span 2;
+                grid-column: explorer-bar / span 2;
             }
         }
 
@@ -64,6 +191,7 @@
         >.content,
         >.sidebar-area {
             grid-row: 2;
+            z-index: 1;
         }
     }
 

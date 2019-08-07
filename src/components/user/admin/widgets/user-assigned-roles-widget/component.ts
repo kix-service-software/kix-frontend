@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     AbstractMarkoComponent, ActionFactory, ContextService, TableFactoryService,
     TableConfiguration, TableHeaderHeight, TableRowHeight, DefaultColumnConfiguration
@@ -50,7 +59,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             new DefaultColumnConfiguration(RoleProperty.VALID_ID, true, false, true, false, 100, true, true)
         ];
         const tableConfiguration = new TableConfiguration(
-            KIXObjectType.ROLE, null, null, columns, null, false, false, null, null,
+            KIXObjectType.ROLE, null, null, columns,  false, false, null, null,
             TableHeaderHeight.SMALL, TableRowHeight.SMALL
         );
         const table = await await TableFactoryService.getInstance().createTable(

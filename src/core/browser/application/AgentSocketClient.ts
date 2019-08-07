@@ -1,11 +1,19 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { SocketClient } from '../SocketClient';
-import {
-    GetCurrentUserRequest, User, SetPreferencesResponse, GetCurrentUserResponse,
-    SetPreferencesRequest, PersonalSetting, AgentEvent
-} from '../../model/kix/user';
 import { ClientStorageService } from '../ClientStorageService';
 import { IdService } from '../IdService';
-import { Error, KIXObjectType, PersonalSettingsResponse, ISocketRequest } from '../../model';
+import {
+    Error, KIXObjectType, PersonalSettingsResponse, ISocketRequest, User, GetCurrentUserRequest, AgentEvent,
+    GetCurrentUserResponse, PersonalSetting, SetPreferencesRequest, SetPreferencesResponse, SocketEvent
+} from '../../model';
 import { CacheService } from '../cache';
 import { SocketErrorResponse } from '../../common';
 
@@ -30,7 +38,11 @@ export class AgentSocketClient extends SocketClient {
         this.agentSocket = this.createSocket('agent');
     }
 
-    public async getCurrentUser(): Promise<User> {
+    public async getCurrentUser(useCache: boolean = true): Promise<User> {
+        if (!useCache) {
+            await CacheService.getInstance().deleteKeys(KIXObjectType.CURRENT_USER);
+        }
+
         if (await CacheService.getInstance().has(KIXObjectType.CURRENT_USER, KIXObjectType.CURRENT_USER)) {
             return await CacheService.getInstance().get(KIXObjectType.CURRENT_USER, KIXObjectType.CURRENT_USER);
         }
@@ -60,15 +72,16 @@ export class AgentSocketClient extends SocketClient {
                         await CacheService.getInstance().set(
                             KIXObjectType.CURRENT_USER, result.currentUser, KIXObjectType.CURRENT_USER
                         );
+                        this.currentUserRequestPromise = null;
                         resolve(result.currentUser);
                     }
                 });
 
-            this.agentSocket.on(AgentEvent.GET_CURRENT_USER_ERROR, (error: Error) => {
+            this.agentSocket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
                 window.clearTimeout(timeout);
                 console.error('Socket Error: getCurrentUser');
-                console.error(error);
-                reject(error);
+                console.error(error.error);
+                reject(error.error);
             });
 
             this.agentSocket.emit(AgentEvent.GET_CURRENT_USER, currentUserRequest);
@@ -95,11 +108,11 @@ export class AgentSocketClient extends SocketClient {
                     }
                 });
 
-            this.agentSocket.on(AgentEvent.GET_PERSONAL_SETTINGS_ERROR, (error: SocketErrorResponse) => {
+            this.agentSocket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
                 if (error.requestId === requestId) {
                     window.clearTimeout(timeout);
                     console.error('Socket Error: getPersonalSettings');
-                    console.error(error);
+                    console.error(error.error);
                     resolve([]);
                 }
             });
@@ -139,11 +152,11 @@ export class AgentSocketClient extends SocketClient {
                     }
                 });
 
-            this.agentSocket.on(AgentEvent.SET_PREFERENCES_ERROR, (error: SocketErrorResponse) => {
+            this.agentSocket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
                 if (error.requestId === requestId) {
                     window.clearTimeout(timeout);
                     console.error('Socket Error: setPreferences');
-                    console.error(error);
+                    console.error(error.error);
                     reject(error);
                 }
             });

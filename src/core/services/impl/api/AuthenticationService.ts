@@ -1,9 +1,18 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { Request, Response } from 'express';
 import { SocketAuthenticationError, UserType, UserLogin } from '../../../model';
 import { LoginResponse, SessionResponse } from '../../../api';
 import { HttpService } from './HttpService';
 import { ConfigurationService } from '../ConfigurationService';
-import { LoggingService } from '../LoggingService';
+import { AuthenticationRouter } from '../../../../routes';
 
 export class AuthenticationService {
 
@@ -40,14 +49,14 @@ export class AuthenticationService {
 
     public async isAuthenticated(req: Request, res: Response, next: () => void): Promise<void> {
         const token: string = req.cookies.token;
-        if (!token) {
-            res.redirect('/auth');
-        } else {
+        if (token) {
             this.validateToken(token).then((valid) => {
-                valid ? next() : res.redirect('/auth');
+                valid ? next() : AuthenticationRouter.getInstance().login(req, res);
             }).catch((error) => {
-                return false;
+                AuthenticationRouter.getInstance().login(req, res);
             });
+        } else {
+            AuthenticationRouter.getInstance().login(req, res);
         }
     }
 
@@ -82,19 +91,21 @@ export class AuthenticationService {
         }
     }
 
-    public async login(user: string, password: string, type: UserType, clientRequestId: string): Promise<string> {
-        const userLogin = new UserLogin(user, password, type);
+    public async login(
+        user: string, password: string, clientRequestId: string, fakeLogin?: boolean
+    ): Promise<string> {
+        const userLogin = new UserLogin(user, password, UserType.AGENT);
         const response = await HttpService.getInstance().post<LoginResponse>(
-            'sessions', userLogin, null, clientRequestId
+            'auth', userLogin, null, clientRequestId
         );
-        const token = this.createToken(user, response.Token);
+        const token = fakeLogin ? response.Token : this.createToken(user, response.Token);
         return token;
     }
 
     public async logout(token: string): Promise<boolean> {
         if (this.frontendTokenCache.has(token)) {
             const backendToken = this.frontendTokenCache.get(token);
-            await HttpService.getInstance().delete('sessions/' + backendToken, token, null);
+            await HttpService.getInstance().delete('session', token, null);
             this.frontendTokenCache.delete(token);
         }
         return true;

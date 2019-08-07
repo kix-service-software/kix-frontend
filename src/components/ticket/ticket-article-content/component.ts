@@ -1,8 +1,15 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import { TicketService } from '../../../core/browser/ticket';
-import { Article, KIXObjectType, KIXObjectLoadingOptions } from '../../../core/model';
-import { KIXObjectService } from "../../../core/browser";
-import { InlineContent } from '../../../core/browser/components';
+import { Article } from '../../../core/model';
 
 class Component {
 
@@ -21,7 +28,6 @@ class Component {
     public onMount(): void {
         this.prepareContent();
     }
-
 
     public async prepareContent(): Promise<void> {
         if (this.article) {

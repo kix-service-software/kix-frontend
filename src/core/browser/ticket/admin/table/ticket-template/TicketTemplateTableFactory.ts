@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     ITable, TableConfiguration, Table, DefaultColumnConfiguration,
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
@@ -43,7 +52,7 @@ export class TicketTemplateTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.TICKET_TEMPLATE, null, null, tableColumns, null, true, false, null, null,
+                KIXObjectType.TICKET_TEMPLATE, null, null, tableColumns,  true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;
@@ -61,34 +70,18 @@ export class TicketTemplateTableFactory extends TableFactory {
         return tableConfiguration;
     }
 
-    // TODO: implementieren
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
         let config;
         switch (property) {
             case TicketTemplateProperty.NAME:
                 config = new DefaultColumnConfiguration(property, true, false, true, false, 200, true, true);
                 break;
-            case 'ICON':
-                config = new DefaultColumnConfiguration(
-                    property, false, true, false, false, null, false, false, false, undefined, false
-                );
-                break;
             case TicketTemplateProperty.TYPE_ID:
             case TicketTemplateProperty.CHANNEL_ID:
-            case TicketTemplateProperty.VALID_ID:
                 config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true, true);
                 break;
-            case TicketTemplateProperty.COMMENT:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 350, true, true);
-                break;
-            case TicketTemplateProperty.CHANGE_TIME:
-            case TicketTemplateProperty.CREATE_TIME:
-                config = new DefaultColumnConfiguration(
-                    property, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
-                );
-                break;
             default:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true);
+                config = super.getDefaultColumnConfiguration(property);
         }
         return config;
     }

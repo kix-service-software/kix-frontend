@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { IdService } from "../IdService";
 import { ITable } from "./ITable";
 import { Row } from "./Row";
@@ -87,7 +96,7 @@ export class Table implements ITable {
             }
 
             if (this.sortColumnId && this.sortOrder) {
-                this.sort(this.sortColumnId, this.sortOrder);
+                await this.sort(this.sortColumnId, this.sortOrder);
             }
 
             if (this.tableConfiguration &&
@@ -176,6 +185,7 @@ export class Table implements ITable {
                 return true;
             }
         });
+        EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
         return removedRows;
     }
 
@@ -355,14 +365,10 @@ export class Table implements ITable {
         if (column) {
             column.setSortOrder(sortOrder);
 
-            const start = new Date().getTime();
             const rows = this.getRows(true);
             const cellPromises: Array<Promise<string>> = [];
             rows.forEach((r) => cellPromises.push(r.getCell(columnId).getDisplayValue()));
             await Promise.all(cellPromises);
-            const end = new Date().getTime();
-
-            console.debug('init values for sort: ' + (end - start));
 
             if (this.filteredRows) {
                 this.filteredRows = TableSortUtil.sort(

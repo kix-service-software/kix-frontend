@@ -1,8 +1,15 @@
-<ul.ci-list-content>
-    <if(state.loading)>
-        <loading-spinner/>
-    </if>
-    <else>
+<!--
+Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+<ul.ci-list-content class={
+    "show-object": state.configItems
+}>
+    <if(state.configItems)>
         <for|configItem| of=state.configItems>
             <li>
                 <overlay-icon
@@ -20,5 +27,5 @@
                 </span>
             </li>
         </for>
-    </else>
+    </if>
 </ul>

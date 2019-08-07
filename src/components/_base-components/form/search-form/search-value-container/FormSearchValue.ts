@@ -1,11 +1,21 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
-    IdService, KIXObjectSearchService, SearchOperator, SearchOperatorUtil, SearchProperty, SearchDefinition
+    IdService, SearchOperator, SearchOperatorUtil, SearchProperty, SearchDefinition
 } from '../../../../../core/browser';
 import {
     TreeNode, FilterCriteria, FilterDataType,
     FilterType, KIXObjectType, InputFieldTypes, DateTimeUtil
 } from '../../../../../core/model';
 import { isArray } from 'util';
+import { SearchService } from '../../../../../core/browser/kix/search/SearchService';
 
 export class FormSearchValue {
 
@@ -13,6 +23,7 @@ export class FormSearchValue {
     public isMultiselect: boolean = false;
     public isDate: boolean = false;
     public isDateTime: boolean = false;
+    public isBetweenDate: boolean = false;
     public isAutocomplete: boolean = false;
 
     public nodes: TreeNode[] = [];
@@ -21,6 +32,8 @@ export class FormSearchValue {
     private currentValue: any;
     private date: string;
     private time: string = '';
+    private betweenEndDate: string;
+    private betweenEndTime: string = '';
 
     private searchParameter: Array<[string, any]>;
 
@@ -52,7 +65,7 @@ export class FormSearchValue {
             if (this.currentPropertyNode.id === SearchProperty.FULLTEXT) {
                 operations = [SearchOperator.CONTAINS];
             } else {
-                operations = await KIXObjectSearchService.getInstance().getSearchOperations(
+                operations = await SearchService.getInstance().getSearchOperations(
                     this.objectType, propertyNode.id, parameter
                 );
             }
@@ -66,7 +79,7 @@ export class FormSearchValue {
                 this.setOperationNode(this.operationNodes[0]);
             }
 
-            const inputType = await KIXObjectSearchService.getInstance().getSearchInputType(
+            const inputType = await SearchService.getInstance().getSearchInputType(
                 this.objectType, this.currentPropertyNode.id, parameter
             );
 
@@ -81,9 +94,22 @@ export class FormSearchValue {
                 || inputType === InputFieldTypes.CI_REFERENCE;
 
             if (this.isDropdown) {
-                this.nodes = await KIXObjectSearchService.getInstance().getTreeNodes(
+                this.nodes = await SearchService.getInstance().getTreeNodes(
                     this.objectType, this.currentPropertyNode.id, parameter
-                );
+                ).catch(() => []);
+            }
+
+            if (this.isDate && !this.date) {
+                const now = new Date(Date.now());
+                this.setDateValue(DateTimeUtil.getKIXDateString(now));
+            } else if (this.isDateTime) {
+                const now = new Date(Date.now());
+                if (!this.time) {
+                    this.setTimeValue(DateTimeUtil.getKIXTimeString(now));
+                }
+                if (!this.date) {
+                    this.setDateValue(DateTimeUtil.getKIXDateString(now));
+                }
             }
         }
     }
@@ -102,6 +128,13 @@ export class FormSearchValue {
         this.isMultiselect = this.currentOperationNode
             ? this.currentOperationNode.id === SearchOperator.IN
             : false;
+
+        this.isBetweenDate = this.currentOperationNode
+            ? this.currentOperationNode.id === SearchOperator.BETWEEN
+            : false;
+        if (this.isBetweenDate && this.date) {
+            this.setDateValue(this.date);
+        }
     }
 
     public setCurrentValue(value: any): void {
@@ -119,6 +152,41 @@ export class FormSearchValue {
                 this.currentValueNodes = valueNodes;
             } else {
                 this.currentValueNodes = [this.nodes.find((n) => n.id === value)];
+            }
+        } else if (this.isDate) {
+            if (this.isBetweenDate) {
+                const date = new Date(value[0]);
+                if (!isNaN(date.getTime())) {
+                    this.date = DateTimeUtil.getKIXDateString(date);
+                }
+                const endDate = new Date(value[1]);
+                if (!isNaN(endDate.getTime())) {
+                    this.betweenEndDate = DateTimeUtil.getKIXDateString(endDate);
+                }
+            } else {
+                const date = new Date(value[0]);
+                if (!isNaN(date.getTime())) {
+                    this.date = DateTimeUtil.getKIXDateString(date);
+                }
+            }
+        } else if (this.isDateTime) {
+            if (this.isBetweenDate) {
+                const date = new Date(value[0]);
+                if (!isNaN(date.getTime())) {
+                    this.date = DateTimeUtil.getKIXDateString(date);
+                    this.time = DateTimeUtil.getKIXTimeString(date);
+                }
+                const endDate = new Date(value[1]);
+                if (!isNaN(endDate.getTime())) {
+                    this.betweenEndDate = DateTimeUtil.getKIXDateString(endDate);
+                    this.betweenEndTime = DateTimeUtil.getKIXTimeString(endDate);
+                }
+            } else {
+                const date = new Date(value);
+                if (!isNaN(date.getTime())) {
+                    this.date = DateTimeUtil.getKIXDateString(date);
+                    this.time = DateTimeUtil.getKIXTimeString(date);
+                }
             }
         }
     }
@@ -151,10 +219,36 @@ export class FormSearchValue {
 
     public setDateValue(value: string): void {
         this.date = value;
+        if (this.isDateTime) {
+            if (!this.time) {
+                this.time = '00:00:00';
+            }
+            if (this.isBetweenDate) {
+                if (!this.betweenEndDate) {
+                    this.betweenEndDate = this.date;
+                }
+                if (!this.betweenEndTime) {
+                    this.betweenEndTime = this.time;
+                }
+            }
+        } else if (this.isBetweenDate && !this.betweenEndDate) {
+            this.betweenEndDate = this.date;
+        }
     }
 
     public setTimeValue(value: string): void {
         this.time = value;
+        if (this.isBetweenDate && !this.betweenEndTime) {
+            this.betweenEndTime = this.time;
+        }
+    }
+
+    public setBetweenEndDateValue(value: string): void {
+        this.betweenEndDate = value;
+    }
+
+    public setBetweenEndTimeValue(value: string): void {
+        this.betweenEndTime = value;
     }
 
     public getFilterCriteria(): FilterCriteria {
@@ -173,10 +267,18 @@ export class FormSearchValue {
             filterDataType = FilterDataType.DATE;
             const date = new Date(this.date);
             value = isNaN(date.getTime()) ? null : DateTimeUtil.getKIXDateTimeString(date);
+            if (this.isBetweenDate && value) {
+                const endDate = new Date(this.betweenEndDate);
+                value = isNaN(endDate.getTime()) ? null : [value, DateTimeUtil.getKIXDateTimeString(endDate)];
+            }
         } else if (this.isDateTime) {
             filterDataType = FilterDataType.DATETIME;
             const date = new Date(`${this.date} ${this.time}`);
             value = isNaN(date.getTime()) ? null : DateTimeUtil.getKIXDateTimeString(date);
+            if (this.isBetweenDate && value) {
+                const endDate = new Date(`${this.betweenEndDate} ${this.betweenEndTime}`);
+                value = isNaN(endDate.getTime()) ? null : [value, DateTimeUtil.getKIXDateTimeString(endDate)];
+            }
         }
 
         return new FilterCriteria(property, operator, filterDataType, FilterType.AND, value);

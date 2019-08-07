@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 .login-wrapper {
     position: relative;
     background: url("static/img/background.png") 0 0 repeat-x @secondary-5;
@@ -101,17 +110,12 @@
                     }
 
                     &.message-hint {
-                        border-color: @tertiary-1;
-
-                        &::before {
-                            border-right-color: @tertiary-1;
-                            color: @tertiary-1;
-                        }
-
-                        & [class^="kix-icon-"],
-                        & [class*=" kix-icon-"] {
-                            color: @tertiary-1;
-                        }
+                        border: 0;
+                        overflow: unset;
+                        line-height: 1.5rem;
+                        height: unset;
+                        padding: 0;
+                        font-size: 0.9rem;
                     }
 
                     &.message-error {
@@ -172,7 +176,7 @@
             }
         }
 
-        >.kix-footer {
+        >.login-footer {
             position: absolute;
             bottom: 0;
         }

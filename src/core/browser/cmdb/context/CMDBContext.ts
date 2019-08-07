@@ -1,12 +1,22 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     Context, ConfigItemClass, KIXObjectType, KIXObjectLoadingOptions,
-    FilterCriteria, ConfigItemProperty, FilterDataType, FilterType, VersionProperty
+    FilterCriteria, ConfigItemProperty, FilterDataType, FilterType, VersionProperty, KIXObject
 } from "../../../model";
 import { ServiceRegistry, KIXObjectService } from "../../kix";
 import { SearchOperator } from "../../SearchOperator";
 import { CMDBService } from "../CMDBService";
 import { EventService } from "../../event";
 import { ApplicationEvent } from "../../application";
+import { TranslationService } from "../../i18n/TranslationService";
 
 export class CMDBContext extends Context {
 
@@ -19,7 +29,8 @@ export class CMDBContext extends Context {
     }
 
     public async getDisplayText(): Promise<string> {
-        return 'CMDB Dashboard';
+        const title = await TranslationService.translate('Translatable#CMDB Dashboard');
+        return title;
     }
 
     public async setCIClass(ciClass: ConfigItemClass): Promise<void> {
@@ -44,13 +55,11 @@ export class CMDBContext extends Context {
             ));
         }
 
-        const loadingOptions = new KIXObjectLoadingOptions(
-            null, filterCriteria, null, null, [VersionProperty.DATA, VersionProperty.PREPARED_DATA]
-        );
+        const loadingOptions = new KIXObjectLoadingOptions(filterCriteria);
 
         const timeout = window.setTimeout(() => {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: `Translatable#Load Config Items ...`
+                loading: true, hint: 'Translatable#Load Config Items'
             });
         }, 500);
 
@@ -70,6 +79,13 @@ export class CMDBContext extends Context {
         );
         const catalogItems = await service.getDeploymentStates();
         return catalogItems.map((c) => c.ItemID);
+    }
+
+    public async getObjectList(reload: boolean = false): Promise<KIXObject[]> {
+        if (reload) {
+            await this.loadConfigItems();
+        }
+        return await super.getObjectList();
     }
 
     public reset(): void {

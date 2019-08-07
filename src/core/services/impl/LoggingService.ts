@@ -1,5 +1,13 @@
-import { validate, required } from '../../decorators';
-import { LogLevel, IServerConfiguration } from '../../common';
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { LogLevel, IServerConfiguration, AppUtil } from '../../common';
 import winston = require('winston');
 import path = require('path');
 import fs = require('fs');
@@ -29,7 +37,7 @@ export class LoggingService {
         this.trace = serverConfig.LOG_TRACE || true;
 
         // do not log in test mode
-        if (!ConfigurationService.getInstance().isTestMode()) {
+        if (!AppUtil.isTestMode()) {
             const logDirectory = this.createLogDirectory(serverConfig);
             try {
                 this.createLogger(logDirectory);
@@ -41,8 +49,7 @@ export class LoggingService {
 
     }
 
-    @validate
-    public error(@required message: string, meta?: any): void {
+    public error(message: string, meta?: any): void {
         if (this.checkLogLevel(LogLevel.ERROR)) {
             if (this.kixLogger) {
                 const winstonMeta = { ...meta };
@@ -56,8 +63,7 @@ export class LoggingService {
         }
     }
 
-    @validate
-    public warning(@required message: string, meta?: any): void {
+    public warning(message: string, meta?: any): void {
         if (this.checkLogLevel(LogLevel.WARNING)) {
             if (this.kixLogger) {
                 const winstonMeta = { ...meta };
@@ -68,8 +74,7 @@ export class LoggingService {
         }
     }
 
-    @validate
-    public info(@required message: string, meta?: any): void {
+    public info(message: string, meta?: any): void {
         if (this.checkLogLevel(LogLevel.INFO)) {
             if (this.kixLogger) {
                 const winstonMeta = { ...meta };
@@ -80,8 +85,7 @@ export class LoggingService {
         }
     }
 
-    @validate
-    public debug(@required message: string, meta?: any): void {
+    public debug(message: string, meta?: any): void {
         if (this.checkLogLevel(LogLevel.DEBUG)) {
             if (this.kixLogger) {
                 const winstonMeta = { ...meta };

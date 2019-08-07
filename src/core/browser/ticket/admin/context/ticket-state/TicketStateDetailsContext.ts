@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     Context, BreadcrumbInformation, KIXObject, KIXObjectType, TicketState
 } from "../../../../../model";
@@ -45,14 +54,14 @@ export class TicketStateDetailsContext extends Context {
 
     private async loadTicketState(changedProperties: string[] = [], cache: boolean = true): Promise<TicketState> {
         EventService.getInstance().publish(
-            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load Ticket State ...' }
+            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load Ticket State' }
         );
 
         const ticketStateId = Number(this.objectId);
 
         const timeout = window.setTimeout(() => {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: `Translatable#Load Ticket State ...`
+                loading: true, hint: 'Translatable#Load Ticket State'
             });
         }, 500);
 

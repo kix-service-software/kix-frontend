@@ -1,6 +1,15 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     Context, BreadcrumbInformation, KIXObject,
-    KIXObjectType, Translation, KIXObjectLoadingOptions, TranslationProperty
+    KIXObjectType, TranslationPattern, KIXObjectLoadingOptions, TranslationPatternProperty
 } from "../../../../../model";
 import { AdminContext } from "../../../../admin";
 import { LabelService } from "../../../../LabelService";
@@ -17,52 +26,55 @@ export class TranslationDetailsContext extends Context {
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {
-        return await LabelService.getInstance().getText(await this.getObject<Translation>(), true, !short);
+        return await LabelService.getInstance().getText(await this.getObject<TranslationPattern>(), true, !short);
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
         const objectName = await TranslationService.translate('Translatable#Translation:');
-        const state = await this.getObject<Translation>();
-        return new BreadcrumbInformation(this.getIcon(), [AdminContext.CONTEXT_ID], `${objectName}: ${state.Pattern}`);
+        const state = await this.getObject<TranslationPattern>();
+        return new BreadcrumbInformation(this.getIcon(), [AdminContext.CONTEXT_ID], `${objectName}: ${state.Value}`);
     }
 
     public async getObject<O extends KIXObject>(
-        objectType: KIXObjectType = KIXObjectType.TRANSLATION, reload: boolean = false, changedProperties: string[] = []
+        objectType: KIXObjectType = KIXObjectType.TRANSLATION_PATTERN,
+        reload: boolean = false, changedProperties: string[] = []
     ): Promise<O> {
         const object = await this.loadTranslation() as any;
 
         if (reload) {
             this.listeners.forEach(
-                (l) => l.objectChanged(Number(this.objectId), object, KIXObjectType.TRANSLATION, changedProperties)
+                (l) => l.objectChanged(
+                    Number(this.objectId), object, KIXObjectType.TRANSLATION_PATTERN, changedProperties
+                )
             );
         }
 
         return object;
     }
 
-    private async loadTranslation(): Promise<Translation> {
+    private async loadTranslation(): Promise<TranslationPattern> {
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, null, [TranslationProperty.LANGUAGES]
+            null, null, null, [TranslationPatternProperty.LANGUAGES]
         );
 
         const timeout = window.setTimeout(() => {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: `Translatable#Load Translation ...`
+                loading: true, hint: 'Translatable#Load Translation'
             });
         }, 500);
 
-        const translations = await TranslationService.getInstance().loadObjects<Translation>(
-            KIXObjectType.TRANSLATION, [this.objectId], loadingOptions
+        const translationPatterns = await TranslationService.getInstance().loadObjects<TranslationPattern>(
+            KIXObjectType.TRANSLATION_PATTERN, [this.objectId], loadingOptions
         );
 
         window.clearTimeout(timeout);
 
-        const translation = translations && translations.length ? translations[0] : null;
+        const translationPattern = translationPatterns && translationPatterns.length ? translationPatterns[0] : null;
 
         EventService.getInstance().publish(
             ApplicationEvent.APP_LOADING, { loading: false, hint: '' }
         );
-        return translation;
+        return translationPattern;
     }
 
 }

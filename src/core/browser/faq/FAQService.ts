@@ -1,18 +1,28 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObjectService, ServiceRegistry } from "../kix";
 import {
     KIXObjectType, FilterCriteria, FilterDataType, FilterType, TreeNode, ObjectIcon, DataType,
-    KIXObject, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, ContextType
+    KIXObject, KIXObjectLoadingOptions, KIXObjectProperty
 } from "../../model";
 import { ContextService } from "../context";
-import { FAQDetailsContext } from "./context";
 import {
-    FAQArticleProperty, Attachment, FAQCategory, FAQCategoryProperty, FAQArticle
+    FAQArticleProperty, Attachment, FAQCategory, FAQCategoryProperty, FAQArticle, FAQArticleAttachmentLoadingOptions
 } from "../../model/kix/faq";
 import { SearchOperator } from "../SearchOperator";
 import { ObjectDefinitionSearchAttribute } from "../../model/kix/object-definition";
 import { BrowserUtil } from "../BrowserUtil";
 import { TranslationService } from "../i18n/TranslationService";
-import { ObjectDataService } from "../ObjectDataService";
+import { FAQDetailsContext } from "./context/FAQDetailsContext";
+import { KIXModulesSocketClient } from "../modules/KIXModulesSocketClient";
+import { InlineContent } from "../components";
 
 export class FAQService extends KIXObjectService {
 
@@ -36,111 +46,116 @@ export class FAQService extends KIXObjectService {
             || type === KIXObjectType.FAQ_ARTICLE_ATTACHMENT
             || type === KIXObjectType.FAQ_ARTICLE_HISTORY
             || type === KIXObjectType.FAQ_CATEGORY
-            || type === KIXObjectType.FAQ_VOTE;
+            || type === KIXObjectType.FAQ_VOTE
+            || type === KIXObjectType.FAQ_VISIBILITY
+            || type === KIXObjectType.FAQ_KEYWORD;
     }
 
     public getLinkObjectName(): string {
         return "FAQArticle";
     }
 
-    public prepareFullTextFilter(searchValue: string): FilterCriteria[] {
+    public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {
         const filter: FilterCriteria[] = [];
 
-        const objectData = ObjectDataService.getInstance().getObjectData();
-        if (objectData) {
-            let faqSearchAttributes: ObjectDefinitionSearchAttribute[];
-            const faqDefinition = objectData.objectDefinitions.find((od) => od.Object === KIXObjectType.FAQ_ARTICLE);
-            if (faqDefinition) {
-                faqSearchAttributes = faqDefinition.SearchAttributes;
-            }
-            if (faqSearchAttributes) {
-                faqSearchAttributes.forEach((sa) => {
-                    if (sa.Datatype === DataType.STRING) {
-                        filter.push(
-                            new FilterCriteria(
-                                sa.CorrespondingAttribute, SearchOperator.CONTAINS,
-                                FilterDataType.STRING, FilterType.OR, searchValue
-                            )
-                        );
-                    }
-                });
-            }
+        const objectDefinitions = await KIXModulesSocketClient.getInstance().loadObjectDefinitions();
+        let attributes: ObjectDefinitionSearchAttribute[] = [];
+        const faqDefinition = objectDefinitions.find((od) => od.Object === KIXObjectType.FAQ_ARTICLE);
+        if (faqDefinition) {
+            attributes = faqDefinition.SearchAttributes;
         }
+
+        attributes.forEach((sa) => {
+            if (sa.Datatype === DataType.STRING) {
+                filter.push(
+                    new FilterCriteria(
+                        sa.CorrespondingAttribute, SearchOperator.CONTAINS,
+                        FilterDataType.STRING, FilterType.OR, searchValue
+                    )
+                );
+            }
+        });
 
         return filter;
     }
 
-    public async getTreeNodes(property: string, showInvalid: boolean = false): Promise<TreeNode[]> {
-        let values: TreeNode[] = [];
+    public async getTreeNodes(
+        property: string, showInvalid: boolean = false, filterIds?: Array<string | number>
+    ): Promise<TreeNode[]> {
+        let nodes: TreeNode[] = [];
 
-        const objectData = ObjectDataService.getInstance().getObjectData();
-        if (objectData) {
-            // TODO: im Moment nur für Suche, auch für Create umsetzen, ggf. mit Varible (isSearch) abfragen?
-            let faqSearchAttributes: ObjectDefinitionSearchAttribute[];
-            const faqDefinition = objectData.objectDefinitions.find((od) => od.Object === KIXObjectType.FAQ_ARTICLE);
-            if (faqDefinition) {
-                faqSearchAttributes = faqDefinition.SearchAttributes;
-            }
-
-            switch (property) {
-                case FAQArticleProperty.CATEGORY_ID:
-                case FAQCategoryProperty.PARENT_ID:
-                    const loadingOptions = new KIXObjectLoadingOptions(null, [
-                        new FilterCriteria(
-                            FAQCategoryProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.STRING,
-                            FilterType.AND, null
-                        )
-                    ], null, null, [FAQCategoryProperty.SUB_CATEGORIES], [FAQCategoryProperty.SUB_CATEGORIES]);
-                    const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(
-                        KIXObjectType.FAQ_CATEGORY, null, loadingOptions
-                    );
-                    const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-                    const object = context ? await context.getObject() : null;
-                    values = this.prepareCategoryTree(
-                        faqCategories, showInvalid, object && object.KIXObjectType === KIXObjectType.FAQ_CATEGORY ?
-                            Number(object.ObjectId) : null
-                    );
-                    break;
-                case FAQArticleProperty.VISIBILITY:
-                    values = this.preparePossibleValueTree(faqSearchAttributes, FAQArticleProperty.VISIBILITY);
-                    break;
-                case FAQArticleProperty.APPROVED:
-                    values = this.preparePossibleValueTree(faqSearchAttributes, FAQArticleProperty.APPROVED);
-                    break;
-                case FAQArticleProperty.LANGUAGE:
-                    const translationService = ServiceRegistry.getServiceInstance<TranslationService>(
-                        KIXObjectType.TRANSLATION
-                    );
-                    const languages = await translationService.getLanguages();
-                    values = languages.map((l) => new TreeNode(l[0], l[1]));
-                    break;
-                case FAQArticleProperty.VALID_ID:
-                    values = objectData.validObjects.map((vo) => new TreeNode(Number(vo.ID), vo.Name));
-                    break;
-                default:
-            }
+        const objectDefinitions = await KIXModulesSocketClient.getInstance().loadObjectDefinitions();
+        let attributes: ObjectDefinitionSearchAttribute[] = [];
+        const faqDefinition = objectDefinitions.find((od) => od.Object === KIXObjectType.FAQ_ARTICLE);
+        if (faqDefinition) {
+            attributes = faqDefinition.SearchAttributes;
         }
 
-        return values;
+        switch (property) {
+            case FAQArticleProperty.CATEGORY_ID:
+            case FAQCategoryProperty.PARENT_ID:
+                const loadingOptions = new KIXObjectLoadingOptions([
+                    new FilterCriteria(
+                        FAQCategoryProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.STRING,
+                        FilterType.AND, null
+                    )
+                ], null, null, [FAQCategoryProperty.SUB_CATEGORIES], [FAQCategoryProperty.SUB_CATEGORIES]);
+                const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(
+                    KIXObjectType.FAQ_CATEGORY, null, loadingOptions
+                );
+                nodes = this.prepareCategoryTree(
+                    faqCategories, showInvalid,
+                    filterIds ? filterIds.map((fid) => Number(fid)) : null
+                );
+                break;
+            case FAQArticleProperty.VISIBILITY:
+                nodes = this.preparePossibleValueTree(attributes, FAQArticleProperty.VISIBILITY);
+                break;
+            case FAQArticleProperty.APPROVED:
+                nodes = this.preparePossibleValueTree(attributes, FAQArticleProperty.APPROVED);
+                break;
+            case FAQArticleProperty.LANGUAGE:
+                const translationService = ServiceRegistry.getServiceInstance<TranslationService>(
+                    KIXObjectType.TRANSLATION_PATTERN
+                );
+                const languages = await translationService.getLanguages();
+                nodes = languages.map((l) => new TreeNode(l[0], l[1]));
+                break;
+            case FAQArticleProperty.KEYWORDS:
+                const keywords = await this.loadObjects(KIXObjectType.FAQ_KEYWORD, null);
+                nodes = keywords ? keywords.map((k) => new TreeNode(k, k.toString())) : [];
+                break;
+            case FAQArticleProperty.CREATED_BY:
+                nodes = await super.getTreeNodes(KIXObjectProperty.CREATE_BY, showInvalid, filterIds);
+                break;
+            case FAQArticleProperty.CHANGED_BY:
+                nodes = await super.getTreeNodes(KIXObjectProperty.CHANGE_BY, showInvalid, filterIds);
+                break;
+            default:
+                nodes = await super.getTreeNodes(property, showInvalid, filterIds);
+        }
+
+        return nodes;
     }
 
     private prepareCategoryTree(
-        faqCategories: FAQCategory[], showInvalid: boolean = false, objectId?: number
+        faqCategories: FAQCategory[], showInvalid: boolean = false, filterIds?: number[]
     ): TreeNode[] {
         let nodes: TreeNode[] = [];
         if (faqCategories && !!faqCategories.length) {
             if (!showInvalid) {
                 faqCategories = faqCategories.filter((c) => c.ValidID === 1);
             }
-            if (objectId) {
-                faqCategories = faqCategories.filter((c) => c.ID !== objectId);
+            if (filterIds && filterIds.length) {
+                faqCategories = faqCategories.filter((c) => !filterIds.some((fid) => fid === c.ID));
             }
+
             nodes = faqCategories.map((category: FAQCategory) => {
                 const treeNode = new TreeNode(
                     category.ID, category.Name,
                     new ObjectIcon(KIXObjectType.FAQ_CATEGORY, category.ID),
                     null,
-                    this.prepareCategoryTree(category.SubCategories, showInvalid, objectId),
+                    this.prepareCategoryTree(category.SubCategories, showInvalid, filterIds),
                     null, null, null, null, null, null, null, category.ValidID === 1 ? true : false
                 );
                 return treeNode;
@@ -223,4 +238,38 @@ export class FAQService extends KIXObjectService {
         return context.getDescriptor().urlPaths[0] + '/' + id;
     }
 
+    protected getResource(objectType: KIXObjectType): string {
+        if (objectType === KIXObjectType.FAQ_ARTICLE) {
+            return 'faq/articles';
+        } else if (objectType === KIXObjectType.FAQ_CATEGORY) {
+            return 'faq/categories';
+        }
+    }
+
+    public async getFAQArticleInlineContent(faqArticle: FAQArticle): Promise<InlineContent[]> {
+        const inlineContent: InlineContent[] = [];
+        if (faqArticle.Attachments) {
+            const inlineAttachments = faqArticle.Attachments.filter((a) => a.Disposition === 'inline');
+            for (const attachment of inlineAttachments) {
+                const loadingOptions = new KIXObjectLoadingOptions(null, null, null, ['Content']);
+                const faqArticleAttachmentOptions = new FAQArticleAttachmentLoadingOptions(
+                    faqArticle.ID, attachment.ID
+                );
+                const attachments = await KIXObjectService.loadObjects<Attachment>(
+                    KIXObjectType.FAQ_ARTICLE_ATTACHMENT, [attachment.ID], loadingOptions,
+                    faqArticleAttachmentOptions
+                );
+                for (const attachmentItem of attachments) {
+                    if (attachment.ID === attachmentItem.ID) {
+                        attachment.Content = attachmentItem.Content;
+                    }
+                }
+            }
+
+            inlineAttachments.forEach(
+                (a) => inlineContent.push(new InlineContent(a.ContentID, a.Content, a.ContentType))
+            );
+        }
+        return inlineContent;
+    }
 }

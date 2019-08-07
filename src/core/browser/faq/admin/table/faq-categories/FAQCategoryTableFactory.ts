@@ -1,8 +1,17 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../../../table";
-import { KIXObjectType, DataType, ContextMode } from "../../../../../model";
+import { KIXObjectType, DataType, ContextMode, KIXObjectProperty } from "../../../../../model";
 import { TableFactory } from "../../../../table/TableFactory";
 import { FAQCategoryTableContentProvider } from "./FAQCategoryTableContentProvider";
 import { FAQCategoryProperty } from "../../../../../model/kix/faq";
@@ -21,7 +30,9 @@ export class FAQCategoryTableFactory extends TableFactory {
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
         const table = new Table(tableKey, tableConfiguration);
 
-        table.setContentProvider(new FAQCategoryTableContentProvider(table, objectIds, null, contextId));
+        table.setContentProvider(
+            new FAQCategoryTableContentProvider(table, objectIds, tableConfiguration.loadingOptions, contextId)
+        );
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 
         return table;
@@ -34,16 +45,16 @@ export class FAQCategoryTableFactory extends TableFactory {
             this.getDefaultColumnConfiguration(FAQCategoryProperty.NAME),
             this.getDefaultColumnConfiguration(FAQCategoryProperty.ICON),
             this.getDefaultColumnConfiguration(FAQCategoryProperty.COMMENT),
-            this.getDefaultColumnConfiguration(FAQCategoryProperty.VALID_ID),
-            this.getDefaultColumnConfiguration(FAQCategoryProperty.CREATE_TIME),
-            this.getDefaultColumnConfiguration(FAQCategoryProperty.CREATE_BY),
-            this.getDefaultColumnConfiguration(FAQCategoryProperty.CHANGE_TIME),
-            this.getDefaultColumnConfiguration(FAQCategoryProperty.CHANGE_BY)
+            this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CREATE_TIME),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CREATE_BY),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CHANGE_TIME),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CHANGE_BY)
         ];
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.FAQ_CATEGORY, null, null, tableColumns, null, true, false, null, null,
+                KIXObjectType.FAQ_CATEGORY, null, null, tableColumns, true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;
@@ -70,28 +81,14 @@ export class FAQCategoryTableFactory extends TableFactory {
                     false, DataType.STRING, true, null, null, false
                 );
                 break;
-            case 'ICON':
-                config = new DefaultColumnConfiguration(
-                    property, false, true, false, false, null, false, false, false, undefined, false
-                );
-                break;
-            case FAQCategoryProperty.VALID_ID:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 130, true, true, true);
-                break;
             case FAQCategoryProperty.COMMENT:
                 config = new DefaultColumnConfiguration(
                     property, true, false, true, false, 275, true, true, false,
                     DataType.STRING, true, undefined, null, false
                 );
                 break;
-            case FAQCategoryProperty.CHANGE_TIME:
-            case FAQCategoryProperty.CREATE_TIME:
-                config = new DefaultColumnConfiguration(
-                    property, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
-                );
-                break;
             default:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true);
+                config = super.getDefaultColumnConfiguration(property);
         }
         return config;
     }

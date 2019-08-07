@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import { ObjectIcon, OverlayType, ComponentContent, FormInputComponent, ContextType } from '../../../../../core/model';
 import { AttachmentUtil, BrowserUtil, ContextService, LabelService } from '../../../../../core/browser';
@@ -28,7 +37,7 @@ class Component extends FormInputComponent<any, ComponentState> {
     public async onMount(): Promise<void> {
 
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#select image file"
+            "Translatable#Select image file"
         ]);
 
         await super.onMount();

@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import {
     ContextService, ActionFactory, TableConfiguration, TableHeaderHeight, TableRowHeight,
@@ -7,6 +16,7 @@ import {
 import { KIXObjectType, Link, KIXObject, WidgetType, ContextType, DataType } from '../../../core/model';
 import { LinkUtil } from '../../../core/browser/link';
 import { EventService, IEventSubscriber } from '../../../core/browser/event';
+import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -46,6 +56,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async initWidget(kixObject?: KIXObject): Promise<void> {
         this.state.kixObject = kixObject;
         this.setActions();
+        this.state.linkedObjectGroups = null;
         await this.prepareLinkedObjectsGroups();
     }
 
@@ -58,12 +69,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async prepareLinkedObjectsGroups(): Promise<void> {
-        this.state.linkedObjectGroups = [];
+        const linkedObjectGroups = [];
         if (this.state.widgetConfiguration.settings) {
             const linkedObjectTypes: Array<[string, KIXObjectType]> =
                 this.state.widgetConfiguration.settings.linkedObjectTypes;
-
-            this.state.title = `${this.state.widgetConfiguration.title}`;
 
             let objectsCount = 0;
             for (const lot of linkedObjectTypes) {
@@ -72,27 +81,34 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 const linkDescriptions = await LinkUtil.getLinkDescriptions(this.state.kixObject, objectLinks);
 
                 const tableConfiguration = new TableConfiguration(
-                    null, null, null, null, null, false, false, null, null,
+                    null, null, null, null, false, false, null, null,
                     TableHeaderHeight.SMALL, TableRowHeight.SMALL
                 );
 
                 const objects = linkDescriptions.map((ld) => ld.linkableObject);
                 const table = await TableFactoryService.getInstance().createTable(
                     `link-objects-${lot[1]}`, lot[1], tableConfiguration,
-                    objects.map((o) => o.ObjectId), null, true, null, true
+                    objects.map((o) => o.ObjectId), null, true, null, true, false, true
                 );
-                table.addColumns([
-                    new DefaultColumnConfiguration(
-                        'LinkedAs', true, false, true, false, 120, true, true, false, DataType.STRING
-                    )
-                ]);
+                if (table) {
+                    table.addColumns([
+                        new DefaultColumnConfiguration(
+                            'LinkedAs', true, false, true, false, 120, true, true, false, DataType.STRING
+                        )
+                    ]);
 
-                objectsCount += objects.length;
-                const title = `${lot[0]} (${objects.length})`;
-                this.state.linkedObjectGroups.push([title, table, objects.length, linkDescriptions]);
+                    objectsCount += objects.length;
+                    const groupTitle = await TranslationService.translate(lot[0]);
+                    const title = `${groupTitle} (${objects.length})`;
+
+                    linkedObjectGroups.push([title, table, objects.length, linkDescriptions]);
+                }
             }
 
-            this.state.title = `${this.state.widgetConfiguration.title} (${objectsCount})`;
+            this.state.linkedObjectGroups = linkedObjectGroups;
+
+            const text = await TranslationService.translate(this.state.widgetConfiguration.title, []);
+            this.state.title = `${text} (${objectsCount})`;
             this.initTableSubscriber();
         }
     }
@@ -133,6 +149,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     widgetComponent.setMinizedState(true);
                 }
             });
+
+            setTimeout(() => this.state.setMinimizedState = false, 100);
         }, 100);
     }
 

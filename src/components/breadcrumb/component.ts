@@ -1,19 +1,38 @@
-import { ContextType, Context } from "../../core/model";
-import { IContextServiceListener, ContextService } from "../../core/browser";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { ContextType, Context, ContextDescriptor } from "../../core/model";
+import { IContextServiceListener, ContextService, IdService } from "../../core/browser";
 import { ComponentState } from './ComponentState';
 import { RoutingConfiguration } from "../../core/browser/router";
 
 class BreadcrumbComponent implements IContextServiceListener {
 
     public state: ComponentState;
+    public constexServiceListenerId: string;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
+        this.constexServiceListenerId = IdService.generateDateBasedId('breadcrumb-');
     }
 
     public onMount(): void {
         ContextService.getInstance().registerListener(this);
         this.state.loading = false;
+    }
+
+    public onDestroy(): void {
+        ContextService.getInstance().unregisterListener(this.constexServiceListenerId);
+    }
+
+    public contextRegistered(descriptor: ContextDescriptor): void {
+        return;
     }
 
     public async contextChanged(

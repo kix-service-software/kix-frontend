@@ -1,6 +1,15 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     AbstractMarkoComponent, ContextService, ActionFactory, WidgetService,
-    TableEvent, TableFactoryService, TableEventData
+    TableEvent, TableFactoryService, TableEventData, TableHeaderHeight, TableConfiguration
 } from '../../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import { TicketTypeDetailsContext } from '../../../../../core/browser/ticket';
@@ -44,8 +53,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async prepareTable(): Promise<void> {
+        const tableConfiguration = new TableConfiguration(
+            KIXObjectType.TEXT_MODULE, null, null,  null, false, false, null, null,
+            TableHeaderHeight.SMALL
+        );
         const table = await TableFactoryService.getInstance().createTable(
-            'ticket-type-assigned-text-modules', KIXObjectType.TEXT_MODULE, null, null, null, true
+            'ticket-type-assigned-text-modules', KIXObjectType.TEXT_MODULE, tableConfiguration,
+            null, null, true, false, true
         );
 
         WidgetService.getInstance().setActionData(this.state.instanceId, table);

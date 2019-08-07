@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ObjectIcon, KIXObjectType } from "../model";
 
 export interface ILabelProvider<T> {
@@ -14,7 +23,9 @@ export interface ILabelProvider<T> {
 
     getPropertyText(property: string, short?: boolean, translatable?: boolean): Promise<string>;
 
-    getDisplayText(object: T, property: string, defaultValue?: string, translatable?: boolean): Promise<string>;
+    getDisplayText(
+        object: T, property: string, defaultValue?: string, translatable?: boolean, short?: boolean
+    ): Promise<string>;
 
     getObjectAdditionalText(object: T, translatable?: boolean): string;
 
@@ -30,6 +41,10 @@ export interface ILabelProvider<T> {
 
     getObjectIcon(object?: T): string | ObjectIcon;
 
+    getObjectTypeIcon(): string | ObjectIcon;
+
     getIcons(object: T, property: string, value?: string | number): Promise<Array<string | ObjectIcon>>;
+
+    canShow(property: string, object: T): boolean;
 
 }

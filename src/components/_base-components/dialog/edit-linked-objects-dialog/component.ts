@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import {
     ContextService, LabelService, ServiceRegistry, SearchOperator,
@@ -6,12 +15,14 @@ import {
 import {
     KIXObject, LinkObject, KIXObjectType, CreateLinkDescription, KIXObjectPropertyFilter, TableFilterCriteria,
     LinkObjectProperty, LinkTypeDescription, CreateLinkObjectOptions, LinkType, ContextType,
-    SortUtil, DataType
+    SortUtil, DataType, CRUD
 } from '../../../../core/model';
 import { LinkUtil, EditLinkedObjectsDialogContext } from '../../../../core/browser/link';
 import { IEventSubscriber, EventService } from '../../../../core/browser/event';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 import { DialogService } from '../../../../core/browser/components/dialog';
+import { AuthenticationSocketClient } from '../../../../core/browser/application/AuthenticationSocketClient';
+import { UIComponentPermission } from '../../../../core/model/UIComponentPermission';
 
 class Component {
 
@@ -46,6 +57,15 @@ class Component {
         ]);
 
         if (context) {
+
+            this.state.allowCreate = await AuthenticationSocketClient.getInstance().checkPermissions(
+                [new UIComponentPermission('links', [CRUD.CREATE])]
+            );
+
+            this.state.allowDelete = await AuthenticationSocketClient.getInstance().checkPermissions(
+                [new UIComponentPermission('links/*', [CRUD.DELETE])]
+            );
+
             this.mainObject = await context.getObject();
 
             this.availableLinkObjects = await LinkUtil.getLinkObjects(this.mainObject);
@@ -170,7 +190,7 @@ class Component {
 
         const table = await TableFactoryService.getInstance().createTable(
             'edit-linked-objects-dialog', KIXObjectType.LINK_OBJECT,
-            null, null, EditLinkedObjectsDialogContext.CONTEXT_ID
+            null, null, EditLinkedObjectsDialogContext.CONTEXT_ID, null, null, null, null, true
         );
 
         this.tableSubscriber = {
@@ -292,12 +312,12 @@ class Component {
         });
 
         if (!!deleteNewLinks.length) {
-            this.state.table.removeRows(
-                this.state.table.getRows().filter(
-                    (r) => deleteNewLinks.some(
-                        (dl) => dl.equals(r.getRowObject().getObject())
-                    )
-                ).map((r) => r.getRowId())
+            const rowIds = this.state.table.getRows()
+                .filter((r) => deleteNewLinks.some((dl) => dl.equals(r.getRowObject().getObject())))
+                .map((r) => r.getRowId());
+            this.state.table.removeRows(rowIds);
+            this.linkDescriptions = this.linkDescriptions.filter(
+                (ld) => !deleteNewLinks.some((dnl) => dnl.linkedObjectKey === ld.linkableObject.ObjectId)
             );
         }
 
@@ -351,7 +371,7 @@ class Component {
 
     private async addLinks(): Promise<boolean> {
         const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(KIXObjectType.LINK_OBJECT);
-        DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Create Links.');
+        DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Create Links');
         let ok = true;
         for (const newLinkObject of this.newLinkObjects) {
             await service.createObject(

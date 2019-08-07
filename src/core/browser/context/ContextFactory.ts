@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { Context, KIXObjectType, ContextMode, ContextDescriptor, ContextType } from "../../model";
 import { ContextSocketClient } from "./ContextSocketClient";
 
@@ -106,9 +115,13 @@ export class ContextFactory {
 
             let context: Context;
             if (descriptor) {
-                const configuration = await ContextSocketClient.loadContextConfiguration(descriptor.contextId);
-                context = new descriptor.contextClass(descriptor, objectId, configuration);
-                await context.initContext();
+                const configuration = await ContextSocketClient.loadContextConfiguration(descriptor.contextId).catch(
+                    (error) => { reject(error); }
+                );
+                if (configuration) {
+                    context = new descriptor.contextClass(descriptor, objectId, configuration);
+                    await context.initContext();
+                }
             }
 
             resolve(context);

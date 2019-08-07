@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     AbstractMarkoComponent, ActionFactory, ContextService, TableFactoryService,
     TableConfiguration, TableHeaderHeight, TableRowHeight, DefaultColumnConfiguration, SearchOperator,
@@ -7,7 +16,8 @@ import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 import { SystemAddressDetailsContext } from '../../../../../core/browser/system-address';
 import {
-    SystemAddress, KIXObjectType, FilterCriteria, QueueProperty, FilterDataType, FilterType
+    SystemAddress, KIXObjectType, FilterCriteria, QueueProperty, FilterDataType,
+    FilterType, KIXObjectProperty, KIXObjectLoadingOptions
 } from '../../../../../core/model';
 import { IEventSubscriber, EventService } from '../../../../../core/browser/event';
 
@@ -63,18 +73,20 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             new DefaultColumnConfiguration(
                 QueueProperty.COMMENT, true, false, true, false, 350, true, true, false
             ),
-            new DefaultColumnConfiguration(QueueProperty.VALID_ID, true, false, true, false, 150, true, true)
+            new DefaultColumnConfiguration(KIXObjectProperty.VALID_ID, true, false, true, false, 150, true, true)
         ];
-        const filterCriteria =
+
+        const filter =
             [
                 new FilterCriteria(
                     QueueProperty.SYSTEM_ADDRESS_ID, SearchOperator.EQUALS,
                     FilterDataType.NUMERIC, FilterType.AND, systemAddress.ID
                 ),
             ];
+        const loadingOptions = new KIXObjectLoadingOptions(filter);
 
         const tableConfiguration = new TableConfiguration(
-            KIXObjectType.QUEUE, null, null, columns, filterCriteria, false, false, null, null,
+            KIXObjectType.QUEUE, loadingOptions, null, columns, false, false, null, null,
             TableHeaderHeight.SMALL, TableRowHeight.SMALL
         );
         const table = await await TableFactoryService.getInstance().createTable(

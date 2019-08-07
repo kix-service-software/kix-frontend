@@ -1,10 +1,15 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
-    Attachment,
-    LoadArticleZipAttachmentRequest, LoadArticleAttachmentRequest, LoadArticleAttachmentResponse,
-    TicketEvent,
-    SetArticleSeenFlagRequest,
-    ISocketResponse,
-    KIXObjectType
+    Attachment, LoadArticleZipAttachmentRequest, LoadArticleAttachmentRequest, LoadArticleAttachmentResponse,
+    TicketEvent, SetArticleSeenFlagRequest, ISocketResponse, SocketEvent,
 } from '../../model';
 
 import { SocketClient } from '../SocketClient';
@@ -60,9 +65,10 @@ export class TicketSocketClient extends SocketClient {
                 }
             });
 
-            this.socket.on(TicketEvent.LOAD_ARTICLE_ATTACHMENT_ERROR, (error: SocketErrorResponse) => {
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
                 if (error.requestId === requestId) {
                     window.clearTimeout(timeout);
+                    console.error(error.error);
                     reject(error);
                 }
             });
@@ -92,10 +98,11 @@ export class TicketSocketClient extends SocketClient {
                 }
             });
 
-            this.socket.on(TicketEvent.LOAD_ARTICLE_ZIP_ATTACHMENT_ERROR, (error: SocketErrorResponse) => {
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
                 if (error.requestId === requestId) {
                     window.clearTimeout(timeout);
-                    reject(error);
+                    console.error(error.error);
+                    reject(error.error);
                 }
             });
 
@@ -119,6 +126,14 @@ export class TicketSocketClient extends SocketClient {
                 if (result.requestId === requestId) {
                     window.clearTimeout(timeout);
                     resolve();
+                }
+            });
+
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
+                if (error.requestId === requestId) {
+                    window.clearTimeout(timeout);
+                    console.error(error.error);
+                    reject(error.error);
                 }
             });
 

@@ -1,8 +1,16 @@
-import { Context, ContextType, ContextDescriptor, KIXObjectType, ContextMode, ObjectData } from '../../core/model';
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { Context, ContextType, ContextDescriptor, KIXObjectType, ContextMode } from '../../core/model';
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../core/browser/context';
-import { ComponentsService } from '../../core/browser/components';
-import { IdService, FormService, ServiceRegistry, FactoryService } from '../../core/browser';
+import { IdService, ServiceRegistry, FactoryService } from '../../core/browser';
 import { RoutingService } from '../../core/browser/router';
 import { HomeContext } from '../../core/browser/home';
 import { EventService } from '../../core/browser/event';
@@ -10,28 +18,21 @@ import { ReleaseContext } from '../../core/browser/release';
 import { KIXModulesService } from '../../core/browser/modules';
 import { TranslationService } from '../../core/browser/i18n/TranslationService';
 import { ApplicationEvent } from '../../core/browser/application';
-import { ObjectDataService } from '../../core/browser/ObjectDataService';
 import { AuthenticationSocketClient } from '../../core/browser/application/AuthenticationSocketClient';
-import { NotificationSocketClient } from '../../core/browser/notifications';
-import { ComponentInput } from './ComponentInput';
 import { AgentService } from '../../core/browser/application/AgentService';
 import { SysConfigService } from '../../core/browser/sysconfig';
-import { TranslationBrowserFactory } from '../../core/browser/i18n';
+import { TranslationPatternBrowserFactory, TranslationBrowserFactory } from '../../core/browser/i18n';
+import { IUIModule } from '../../core/browser/application/IUIModule';
+import { ClientNotificationSocketClient } from '../../core/browser/notification/ClientNotificationSocketClient';
 
 class Component {
 
     public state: ComponentState;
     private contextListernerId: string;
 
-    private objectData: ObjectData;
-
     public onCreate(input: any): void {
         this.state = new ComponentState();
         this.contextListernerId = IdService.generateDateBasedId('base-template-');
-    }
-
-    public onInput(input: ComponentInput): void {
-        this.objectData = input.objectData;
     }
 
     public async onMount(): Promise<void> {
@@ -40,34 +41,35 @@ class Component {
         FactoryService.getInstance().registerFactory(
             KIXObjectType.TRANSLATION, TranslationBrowserFactory.getInstance()
         );
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.TRANSLATION_PATTERN, TranslationPatternBrowserFactory.getInstance()
+        );
 
         ServiceRegistry.registerServiceInstance(AgentService.getInstance());
         ServiceRegistry.registerServiceInstance(TranslationService.getInstance());
         ServiceRegistry.registerServiceInstance(SysConfigService.getInstance());
 
         this.state.loading = true;
-        this.state.loadingHint = await TranslationService.translate('Loading ...');
+        this.state.loadingHint = await TranslationService.translate('Translatable#Loading');
+        this.state.translations = await TranslationService.createTranslationObject(['Translatable#Close Sidebars']);
 
         await this.checkAuthentication();
 
-        NotificationSocketClient.getInstance();
+        ClientNotificationSocketClient.getInstance();
 
         await KIXModulesService.getInstance().init();
-
-        const modules = KIXModulesService.getInstance().getModules();
-        modules.forEach((m) => {
-            this.state.moduleTemplates.push(ComponentsService.getInstance().getComponentTemplate(m.initComponentId));
-        });
+        await this.initModules();
 
         ContextService.getInstance().registerListener({
+            constexServiceListenerId: 'BASE-TEMPLATE',
             contextChanged: (contextId: string, context: Context, type: ContextType) => {
                 if (type === ContextType.MAIN) {
                     this.setContext(context);
                 }
-            }
+            },
+            contextRegistered: () => { return; }
         });
 
-        ObjectDataService.getInstance().setObjectData(this.objectData);
         await this.bootstrapServices();
 
         this.setContext();
@@ -98,6 +100,8 @@ class Component {
             }
         });
 
+        window.addEventListener('resize', this.hideSidebarIfNeeded.bind(this), false);
+
         this.state.initialized = true;
         this.state.loading = false;
 
@@ -107,7 +111,12 @@ class Component {
 
         setTimeout(() => {
             RoutingService.getInstance().routeToInitialContext();
-        }, 500);
+        }, 2000);
+    }
+
+    public onDestroy(): void {
+        window.removeEventListener('resize', this.hideSidebarIfNeeded.bind(this), false);
+        ContextService.getInstance().unregisterListener('BASE-TEMPLATE');
     }
 
     private async checkAuthentication(): Promise<void> {
@@ -132,13 +141,14 @@ class Component {
     private setContext(context: Context = ContextService.getInstance().getActiveContext()): void {
         if (context) {
             this.state.hasExplorer = context.isExplorerBarShown();
+            this.hideSidebarIfNeeded();
+            this.state.showSidebar = context.isSidebarShown();
             context.registerListener(this.contextListernerId, {
                 sidebarToggled: () => {
-                    this.setGridColumns();
+                    this.state.showSidebar = context.isSidebarShown();
                 },
                 explorerBarToggled: () => {
                     this.state.hasExplorer = context.isExplorerBarShown();
-                    this.setGridColumns();
                 },
                 objectChanged: () => { return; },
                 objectListChanged: () => { return; },
@@ -146,29 +156,49 @@ class Component {
                 scrollInformationChanged: () => { return; }
             });
         }
-        this.setGridColumns();
     }
 
-    private setGridColumns(): void {
-        let gridColumns = '[main-menu-wrapper] 4.5rem';
+    public hideSidebarIfNeeded(): void {
+        const context: Context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        if (context &&
+            context.isSidebarShown() &&
+            (
+                (!this.state.hasExplorer && window.innerWidth <= 1475) ||
+                (this.state.hasExplorer && window.innerWidth <= 1700)
+            )
+        ) {
+            context.closeSidebar();
+        }
+    }
 
-        if (this.state.hasExplorer) {
-            gridColumns += ' [explorer-bar] min-content';
+    private async initModules(): Promise<void> {
+        const modules = KIXModulesService.getInstance().getModules();
+
+        let uiModules: IUIModule[] = [];
+        for (let i = 0; i < modules.length; i++) {
+            for (const c of modules[i].initComponents) {
+                try {
+                    const component = require(c.componentPath);
+                    if (component && component.UIModule) {
+                        uiModules.push(new component.UIModule());
+                    }
+                } catch (error) {
+                    console.error(error);
+                }
+            }
         }
 
-        gridColumns += ' [content] minmax(40rem, auto)';
+        uiModules = uiModules.sort((a, b) => a.priority - b.priority);
+        for (let i = 0; i < uiModules.length; i++) {
+            if (uiModules[i].register) {
+                await uiModules[i].register();
+            } else {
+                console.warn(`module with prioritiy ${uiModules[i].priority} did not implement register() method.`);
+            }
 
-        const context = ContextService.getInstance().getActiveContext();
-        if ((context && context.isSidebarShown())) {
-            gridColumns += ' [sidebar-area] min-content';
-            this.state.showSidebar = true;
-        } else {
-            this.state.showSidebar = false;
+            const percent = Math.round((i / uiModules.length) * 100);
+            this.state.loadingHint = `${percent}%`;
         }
-
-        gridColumns += ' [sidebar-menu-wrapper] min-content';
-
-        this.state.gridColumns = gridColumns;
     }
 }
 

@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     Context, User, BreadcrumbInformation, KIXObjectType, KIXObject, KIXObjectLoadingOptions, UserProperty
 } from "../../../../../model";
@@ -45,12 +54,12 @@ export class UserDetailsContext extends Context {
         const userId = Number(this.objectId);
 
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, null, [UserProperty.PREFERENCES, UserProperty.ROLEIDS]
+            null, null, null, [UserProperty.PREFERENCES, UserProperty.ROLEIDS]
         );
 
         const timeout = window.setTimeout(() => {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: `Translatable#Load User ...`
+                loading: true, hint: 'Translatable#Load User'
             });
         }, 500);
 

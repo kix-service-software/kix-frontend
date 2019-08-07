@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { FormFieldOption } from ".";
 import { FormFieldValue } from "./events";
 import { IdService } from "../../../browser";
@@ -28,7 +37,8 @@ export class FormField<T = any> {
         public asStructure: boolean = false,
         public readonly: boolean = false,
         public placeholder: string = null,
-        public existingFieldId: string = null
+        public existingFieldId: string = null,
+        public showLabel: boolean = true
     ) {
         this.instanceId = existingFieldId ? existingFieldId : IdService.generateDateBasedId(this.property);
     }

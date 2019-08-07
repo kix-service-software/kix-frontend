@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import { ContextService, KIXObjectService } from '../../../core/browser';
 import {
@@ -15,8 +24,6 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        this.state.loading = true;
-
         const object = await ContextService.getInstance().getActiveContext(ContextType.MAIN).getObject();
         if (object) {
             const linkedConfigItemIds = object.Links.filter(
@@ -24,7 +31,7 @@ class Component {
             ).map((l) => l.SourceKey);
 
             if (linkedConfigItemIds && linkedConfigItemIds.length) {
-                const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, ['CurrentVersion']);
+                const loadingOptions = new KIXObjectLoadingOptions(null, null, null, ['CurrentVersion']);
 
                 const configItems = await KIXObjectService.loadObjects<ConfigItem>(
                     KIXObjectType.CONFIG_ITEM, linkedConfigItemIds, loadingOptions
@@ -41,10 +48,6 @@ class Component {
                 this.state.configItems = [];
             }
         }
-
-        setTimeout(() => {
-            this.state.loading = false;
-        }, 200);
     }
 
     public getRoutingConfiguration(configItem: ConfigItem): RoutingConfiguration {

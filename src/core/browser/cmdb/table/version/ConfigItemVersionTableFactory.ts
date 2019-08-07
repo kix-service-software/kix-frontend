@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObjectType, VersionProperty, DataType } from "../../../../model";
 import {
     TableConfiguration, ITable, Table, DefaultColumnConfiguration,
@@ -41,10 +50,9 @@ export class ConfigItemVersionTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.CONFIG_ITEM_VERSION, null, null, tableColumns, null, true, true, null, null,
+                KIXObjectType.CONFIG_ITEM_VERSION, null, undefined, tableColumns, true, true, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
-            tableConfiguration.displayLimit = null;
             defaultToggle = true;
         } else if (!tableConfiguration.tableColumns) {
             tableConfiguration.tableColumns = tableColumns;
@@ -53,7 +61,7 @@ export class ConfigItemVersionTableFactory extends TableFactory {
         if (defaultToggle) {
             tableConfiguration.toggle = true;
             tableConfiguration.toggleOptions = new ToggleOptions('config-item-version-details', 'version', [
-                'config-item-version-maximize-action', 'config-item-print-action'
+                'config-item-version-maximize-action'
             ], true);
         }
 

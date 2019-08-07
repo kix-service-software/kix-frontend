@@ -1,6 +1,15 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
-import { RoutingService } from '../../../core/browser/router';
-import { ContextService, KIXObjectService } from '../../../core/browser';
+import { RoutingService, DialogRoutingConfiguration } from '../../../core/browser/router';
+import { ContextService, KIXObjectService, LabelService } from '../../../core/browser';
 import { ContextType } from '../../../core/model';
 
 class Component {
@@ -34,12 +43,54 @@ class Component {
         this.state.loading = false;
     }
 
-    public linkClicked(event: any): void {
-        let externalLink = this.state.routingConfiguration ? this.state.routingConfiguration.externalLink : undefined;
+    public async linkClicked(event: any): Promise<void> {
+        const contextType = this.state.routingConfiguration.contextType;
+        if (contextType && contextType === ContextType.DIALOG) {
+            this.openDialog(event);
+        } else {
+            this.routeTo(event);
+        }
+    }
+
+    private async openDialog(event: any): Promise<void> {
+        if (event.preventDefault) {
+            event.preventDefault();
+        }
+        const configuration = this.state.routingConfiguration as DialogRoutingConfiguration;
+
+        const objectId = configuration.objectId ? configuration.objectId : this.state.objectId;
+
+        // TODO: it is not the right place to prepare the title like this, but have to (currently)
+        if (!configuration.title && configuration.objectType && objectId) {
+            const objects = await KIXObjectService.loadObjects(configuration.objectType, [objectId]);
+
+            if (objects && !!objects.length) {
+                configuration.title = await LabelService.getInstance().getText(objects[0]);
+            }
+        }
+
+        ContextService.getInstance().setDialogContext(
+            configuration.contextId,
+            configuration.objectType,
+            configuration.contextMode,
+            objectId,
+            configuration.resetContext,
+            configuration.title,
+            configuration.singleTab,
+            configuration.icon,
+        );
+    }
+
+    private routeTo(event: any): void {
+        let externalLink = this.state.routingConfiguration
+            ? this.state.routingConfiguration.externalLink
+            : undefined;
+
         if (typeof externalLink === 'undefined') {
             const context = ContextService.getInstance().getActiveContext();
             externalLink = context ? context.getDescriptor().contextType === ContextType.DIALOG : false;
         }
+
         if (!externalLink) {
             if (event.preventDefault) {
                 event.preventDefault();

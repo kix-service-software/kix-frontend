@@ -1,71 +1,36 @@
-import {
-    Organisation, OrganisationProperty, ObjectIcon, KIXObjectType, KIXObjectProperty, User, DateTimeUtil
-} from '../../model';
-import { ILabelProvider } from '..';
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { Organisation, OrganisationProperty, ObjectIcon, KIXObjectType, KIXObjectProperty } from '../../model';
 import { SearchProperty } from '../SearchProperty';
 import { TranslationService } from '../i18n/TranslationService';
-import { ObjectDataService } from '../ObjectDataService';
-import { KIXObjectService } from '../kix';
+import { LabelProvider } from '../LabelProvider';
 
-export class OrganisationLabelProvider implements ILabelProvider<Organisation> {
+export class OrganisationLabelProvider extends LabelProvider<Organisation> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.ORGANISATION;
-
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
-    }
-
-    public async getPropertyValueDisplayText(
-        property: string, value: string | number, translatable: boolean = true
-    ): Promise<string> {
-        let displayValue = value;
-        const objectData = ObjectDataService.getInstance().getObjectData();
-        if (objectData) {
-            switch (property) {
-                case KIXObjectProperty.VALID_ID:
-                    const valid = objectData.validObjects.find((v) => v.ID === value);
-                    displayValue = valid ? valid.Name : value;
-                    break;
-                case KIXObjectProperty.CREATE_BY:
-                case KIXObjectProperty.CHANGE_BY:
-                    const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [value], null, null, true
-                    ).catch((error) => [] as User[]);
-                    displayValue = users && !!users.length ? users[0].UserFullname : value;
-                    break;
-                case KIXObjectProperty.CREATE_TIME:
-                case KIXObjectProperty.CHANGE_TIME:
-                    displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
-                    break;
-                default:
-            }
-        }
-
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
-        }
-
-        return displayValue ? displayValue.toString() : '';
-    }
 
     public isLabelProviderFor(object: Organisation): boolean {
         return object instanceof Organisation;
     }
 
-    public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
             case SearchProperty.FULLTEXT:
                 displayValue = 'Translatable#Full Text';
                 break;
             case OrganisationProperty.NUMBER:
-                displayValue = 'Translatable#Number';
+                displayValue = 'Translatable#CNO';
                 break;
             case OrganisationProperty.CITY:
                 displayValue = 'Translatable#City';
-                break;
-            case OrganisationProperty.COMMENT:
-                displayValue = 'Translatable#Comment';
                 break;
             case OrganisationProperty.COUNTRY:
                 displayValue = 'Translatable#Country';
@@ -85,21 +50,6 @@ export class OrganisationLabelProvider implements ILabelProvider<Organisation> {
             case OrganisationProperty.ID:
                 displayValue = 'Translatable#Organisation ID';
                 break;
-            case KIXObjectProperty.CREATE_BY:
-                displayValue = 'Translatable#Created by';
-                break;
-            case KIXObjectProperty.CREATE_TIME:
-                displayValue = 'Translatable#Created at';
-                break;
-            case KIXObjectProperty.CHANGE_BY:
-                displayValue = 'Translatable#Changed by';
-                break;
-            case KIXObjectProperty.CHANGE_TIME:
-                displayValue = 'Translatable#Changed at';
-                break;
-            case KIXObjectProperty.VALID_ID:
-                displayValue = 'Translatable#Validity';
-                break;
             case OrganisationProperty.OPEN_TICKETS_COUNT:
                 displayValue = 'Translatable#Open Tickets';
                 break;
@@ -110,33 +60,25 @@ export class OrganisationLabelProvider implements ILabelProvider<Organisation> {
                 displayValue = 'Translatable#Reminder Tickets';
                 break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
     }
 
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
-    }
-
     public async getDisplayText(
         organisation: Organisation, property: string, defaultValue?: string, translatable: boolean = true
     ): Promise<string> {
-        let displayValue = organisation[property];
+        let displayValue = typeof defaultValue !== 'undefined' && defaultValue !== null
+            ? defaultValue : organisation[property];
 
         switch (property) {
-            case KIXObjectProperty.VALID_ID:
-                const objectData = ObjectDataService.getInstance().getObjectData();
-                const valid = objectData.validObjects.find(
-                    (v) => v.ID.toString() === organisation[property].toString()
-                );
-                displayValue = valid ? valid.Name : organisation[property].toString();
-                break;
             case OrganisationProperty.OPEN_TICKETS_COUNT:
                 displayValue = organisation.TicketStats.OpenCount.toString();
                 break;
@@ -146,23 +88,22 @@ export class OrganisationLabelProvider implements ILabelProvider<Organisation> {
             case OrganisationProperty.REMINDER_TICKETS_COUNT:
                 displayValue = organisation.TicketStats.PendingReminderCount.toString();
                 break;
+            case OrganisationProperty.VALID:
+                displayValue = await this.getPropertyValueDisplayText(
+                    KIXObjectProperty.VALID_ID, organisation.ValidID, translatable
+                );
+                break;
             default:
-                displayValue = await this.getPropertyValueDisplayText(property, displayValue);
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';
-    }
-
-    public getDisplayTextClasses(object: Organisation, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(object: Organisation): string[] {
-        return [];
     }
 
     public async getObjectText(
@@ -186,16 +127,8 @@ export class OrganisationLabelProvider implements ILabelProvider<Organisation> {
         return returnString;
     }
 
-    public getObjectAdditionalText(object: Organisation, translatable: boolean = true): string {
-        return '';
-    }
-
-    public getObjectIcon(object: Organisation): string | ObjectIcon {
+    public getObjectTypeIcon(): string | ObjectIcon {
         return 'kix-icon-man-house';
-    }
-
-    public getObjectTooltip(object: Organisation, translatable: boolean = true): string {
-        return '';
     }
 
     public async getObjectName(plural: boolean = false, translatable: boolean = true): Promise<string> {
@@ -206,10 +139,6 @@ export class OrganisationLabelProvider implements ILabelProvider<Organisation> {
             : value;
 
         return organisationLabel;
-    }
-
-    public async getIcons(object: Organisation, property: string): Promise<Array<string | ObjectIcon>> {
-        return [];
     }
 
 }

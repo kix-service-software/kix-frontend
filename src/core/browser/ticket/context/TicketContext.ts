@@ -1,5 +1,15 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
-    Queue, KIXObjectType, KIXObjectLoadingOptions, FilterCriteria, FilterDataType, FilterType, TicketProperty, KIXObject
+    KIXObjectType, KIXObjectLoadingOptions, FilterCriteria, FilterDataType,
+    FilterType, TicketProperty, KIXObject, SysConfigOption, SysConfigKey
 } from "../../../model";
 import { Context } from '../../../model/components/context/Context';
 import { KIXObjectService } from "../../kix";
@@ -11,7 +21,7 @@ export class TicketContext extends Context {
 
     public static CONTEXT_ID: string = 'tickets';
 
-    public queue: Queue;
+    public queueId: number;
 
     public getIcon(): string {
         return 'kix-icon-ticket';
@@ -21,27 +31,36 @@ export class TicketContext extends Context {
         return 'Ticket Dashboard';
     }
 
-    public async setQueue(queue: Queue): Promise<void> {
-        this.queue = queue;
+    public async setQueue(queueId: number): Promise<void> {
+        this.queueId = queueId;
         await this.loadTickets();
     }
 
     private async loadTickets(): Promise<void> {
-        const loadingOptions = new KIXObjectLoadingOptions(null, [
-            new FilterCriteria('StateType', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'),
-        ], null, 1000, ['EscalationTime', 'Watchers']);
+        const viewableStateTypes = await KIXObjectService.loadObjects<SysConfigOption>(
+            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_VIEWABLE_STATE_TYPE]
+        );
 
-        if (this.queue) {
+        const stateTypeFilterCriteria = new FilterCriteria(
+            'StateType', SearchOperator.IN, FilterDataType.STRING, FilterType.AND,
+            viewableStateTypes && viewableStateTypes.length ? viewableStateTypes[0].Value : []
+        );
+
+        const loadingOptions = new KIXObjectLoadingOptions(
+            [stateTypeFilterCriteria], null, 1000, ['Watchers']
+        );
+
+        if (this.queueId) {
             const queueFilter = new FilterCriteria(
                 TicketProperty.QUEUE_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                FilterType.AND, this.queue.QueueID
+                FilterType.AND, this.queueId
             );
             loadingOptions.filter.push(queueFilter);
         }
 
         const timeout = window.setTimeout(() => {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: `Translatable#Load Tickets ...`
+                loading: true, hint: 'Translatable#Load Tickets'
             });
         }, 500);
 
@@ -65,7 +84,7 @@ export class TicketContext extends Context {
 
     public reset(): void {
         super.reset();
-        this.queue = null;
+        this.queueId = null;
     }
 
 }

@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     OverlayService, FormService, AbstractMarkoComponent, KIXObjectService, ContextService, BrowserUtil
 } from '../../../../../core/browser';
@@ -46,9 +55,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 );
 
                 await KIXObjectService.updateObjectByForm(
-                    KIXObjectType.TRANSLATION, this.state.formId, context.getObjectId()
+                    KIXObjectType.TRANSLATION_PATTERN, this.state.formId, context.getObjectId()
                 ).then(async (typeId) => {
-                    context.getObject(KIXObjectType.TRANSLATION, true);
+                    context.getObject(KIXObjectType.TRANSLATION_PATTERN, true);
                     DialogService.getInstance().setMainDialogLoading(false);
 
                     const toast = await TranslationService.translate('Translatable#Changes saved.');

@@ -1,98 +1,87 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     KIXObjectType, InputFieldTypes, FilterCriteria, KIXObjectLoadingOptions,
-    FilterType, FilterDataType, DataType
+    FilterType, FilterDataType, KIXObjectProperty
 } from "../../model";
 import { SearchDefinition, SearchResultCategory } from "../kix";
 import { SearchOperator } from "../SearchOperator";
 import { FAQArticleProperty } from "../../model/kix/faq";
-import { ObjectDefinitionSearchAttribute } from "../../model/kix/object-definition";
 import { SearchProperty } from "../SearchProperty";
-import { ObjectDataService } from "../ObjectDataService";
 
 export class FAQArticleSearchDefinition extends SearchDefinition {
 
-    private searchAttributes: ObjectDefinitionSearchAttribute[];
-
     public constructor() {
         super(KIXObjectType.FAQ_ARTICLE);
-
-        const objectData = ObjectDataService.getInstance().getObjectData();
-        if (objectData && objectData.objectDefinitions) {
-            const faqDef = objectData.objectDefinitions.find((od) => od.Object === KIXObjectType.FAQ_ARTICLE);
-            if (faqDef) {
-                this.searchAttributes = faqDef.SearchAttributes;
-            }
-        }
     }
 
     public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(null, criteria, null, null, ['Links'], ['Links']);
+        return new KIXObjectLoadingOptions(criteria, null, null, ['Links'], ['Links']);
     }
 
     public async getProperties(): Promise<Array<[string, string]>> {
-        let properties: Array<[string, string]>;
-        if (this.searchAttributes && this.searchAttributes.length) {
-            properties = [
-                [SearchProperty.FULLTEXT, null],
-            ];
+        const properties: Array<[string, string]> = [
+            [SearchProperty.FULLTEXT, null],
+            [FAQArticleProperty.NUMBER, null],
+            [FAQArticleProperty.TITLE, null],
+            [FAQArticleProperty.FIELD_1, null],
+            [FAQArticleProperty.FIELD_2, null],
+            [FAQArticleProperty.FIELD_3, null],
+            [FAQArticleProperty.FIELD_6, null],
+            [FAQArticleProperty.CREATED, null],
+            [FAQArticleProperty.CHANGED, null]
+        ];
 
-            this.searchAttributes
-                .filter((sa) => sa.Name !== FAQArticleProperty.CONTENT_TYPE
-                    && sa.Name !== FAQArticleProperty.FIELD_4
-                    && sa.Name !== FAQArticleProperty.FIELD_5
-                    && sa.Name !== FAQArticleProperty.APPROVED
-                ).forEach((sa) => properties.push([sa.CorrespondingAttribute, null]));
-        } else {
-            properties = [
-                [SearchProperty.FULLTEXT, null],
-                [FAQArticleProperty.TITLE, null],
-                [FAQArticleProperty.CATEGORY_ID, null]
-            ];
+        if (await this.checkReadPermissions('system/faq/categories')) {
+            properties.push([FAQArticleProperty.CATEGORY_ID, null]);
         }
+
+        if (await this.checkReadPermissions('system/config')) {
+            properties.push([FAQArticleProperty.LANGUAGE, null]);
+        }
+
+        if (await this.checkReadPermissions('system/valid')) {
+            properties.push([KIXObjectProperty.VALID_ID, null]);
+        }
+
+        if (await this.checkReadPermissions('faq/articles/keywords')) {
+            properties.push([FAQArticleProperty.KEYWORDS, null]);
+        }
+
+        if (await this.checkReadPermissions('system/users')) {
+            properties.push([FAQArticleProperty.CREATED_BY, null]);
+            properties.push([FAQArticleProperty.CHANGED_BY, null]);
+        }
+
         return properties;
     }
 
     public async getOperations(property: string): Promise<SearchOperator[]> {
         let operations: SearchOperator[] = [];
 
-        const stringOperators = [
-            SearchOperator.CONTAINS,
-            SearchOperator.STARTS_WITH,
-            SearchOperator.ENDS_WITH,
-            SearchOperator.EQUALS,
-            SearchOperator.LIKE
-        ];
-
-        const numberOperators = [
-            SearchOperator.IN,
-            SearchOperator.EQUALS
-        ];
-
-        if (this.searchAttributes && this.searchAttributes.length) {
-            const attribute = this.searchAttributes.find((sa) => sa.CorrespondingAttribute === property);
-            if (attribute) {
-                operations = attribute.Operators;
-            }
+        if (this.isDropDown(property)) {
+            operations = [SearchOperator.IN];
+        } else if (this.isDateTime(property)) {
+            operations = this.getDateTimeOperators();
         } else {
-            if (property === FAQArticleProperty.TITLE) {
-                operations = stringOperators;
-            } else if (property === FAQArticleProperty.CATEGORY_ID) {
-                operations = numberOperators;
-            }
+            operations = this.getStringOperators();
         }
 
         return operations;
     }
 
     public async getInputFieldType(property: string, parameter?: Array<[string, any]>): Promise<InputFieldTypes> {
-        const fieldTypes = new Map<string, InputFieldTypes>();
-
-        if (this.searchAttributes && this.searchAttributes.length) {
-            if (this.isDropDown(property)) {
-                return InputFieldTypes.DROPDOWN;
-            } else if (this.isDateTime(property)) {
-                return InputFieldTypes.DATE_TIME;
-            }
+        if (this.isDropDown(property)) {
+            return InputFieldTypes.DROPDOWN;
+        } else if (this.isDateTime(property)) {
+            return InputFieldTypes.DATE_TIME;
         }
         return InputFieldTypes.TEXT;
     }
@@ -102,7 +91,10 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
             || property === FAQArticleProperty.CATEGORY_ID
             || property === FAQArticleProperty.VALID_ID
             || property === FAQArticleProperty.VISIBILITY
-            || property === FAQArticleProperty.LANGUAGE;
+            || property === FAQArticleProperty.LANGUAGE
+            || property === FAQArticleProperty.KEYWORDS
+            || property === FAQArticleProperty.CREATED_BY
+            || property === FAQArticleProperty.CHANGED_BY;
     }
 
     private isDateTime(property: string): boolean {
@@ -120,12 +112,20 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
     }
 
     public async getSearchResultCategories(): Promise<SearchResultCategory> {
-        const ticketCategory = new SearchResultCategory('Tickets', KIXObjectType.TICKET);
-        const ciCategory = new SearchResultCategory('Config Items', KIXObjectType.CONFIG_ITEM);
+        const categories: SearchResultCategory[] = [];
 
-        return new SearchResultCategory(
-            'FAQ', KIXObjectType.FAQ_ARTICLE, [ticketCategory, ciCategory]
-        );
+        if (await this.checkReadPermissions('tickets')) {
+            categories.push(
+                new SearchResultCategory('Translatable#Tickets', KIXObjectType.TICKET)
+            );
+        }
+        if (await this.checkReadPermissions('cmdb/configitems')) {
+            categories.push(
+                new SearchResultCategory('Translatable#Config Items', KIXObjectType.CONFIG_ITEM)
+            );
+        }
+
+        return new SearchResultCategory('FAQ', KIXObjectType.FAQ_ARTICLE, categories);
     }
 
     public async prepareFormFilterCriteria(criteria: FilterCriteria[]): Promise<FilterCriteria[]> {
@@ -135,57 +135,16 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
             const value = criteria[fulltextCriteriaIndex].value;
             criteria.splice(fulltextCriteriaIndex, 1);
 
-            const objectData = ObjectDataService.getInstance().getObjectData();
-            if (objectData) {
-                const faqDefinition = objectData.objectDefinitions.find(
-                    (od) => od.Object === KIXObjectType.FAQ_ARTICLE
-                );
-
-                let faqSearchAttributes: ObjectDefinitionSearchAttribute[] = [];
-                if (faqDefinition) {
-                    faqSearchAttributes = faqDefinition.SearchAttributes;
-                }
-
-                faqSearchAttributes.forEach((sa) => {
-                    if (sa.Datatype === DataType.STRING) {
-                        criteria.push(
-                            new FilterCriteria(
-                                sa.CorrespondingAttribute, SearchOperator.CONTAINS,
-                                FilterDataType.STRING, FilterType.OR, value
-                            )
-                        );
-                    }
-                });
-            }
+            criteria = [...criteria, ...this.getFulltextCriteria(value as string)];
         }
         return criteria;
     }
 
     public prepareSearchFormValue(property: string, value: any): FilterCriteria[] {
-        const criteria = [];
+        let criteria = [];
         switch (property) {
             case SearchProperty.FULLTEXT:
-                criteria.push(new FilterCriteria(
-                    FAQArticleProperty.NUMBER, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
-                ));
-                criteria.push(new FilterCriteria(
-                    FAQArticleProperty.TITLE, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
-                ));
-                criteria.push(new FilterCriteria(
-                    FAQArticleProperty.LANGUAGE, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
-                ));
-                criteria.push(new FilterCriteria(
-                    FAQArticleProperty.FIELD_1, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
-                ));
-                criteria.push(new FilterCriteria(
-                    FAQArticleProperty.FIELD_2, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
-                ));
-                criteria.push(new FilterCriteria(
-                    FAQArticleProperty.FIELD_3, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
-                ));
-                criteria.push(new FilterCriteria(
-                    FAQArticleProperty.VISIBILITY, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
-                ));
+                criteria = [...criteria, ...this.getFulltextCriteria(value)];
                 break;
             case FAQArticleProperty.CATEGORY_ID:
             case FAQArticleProperty.VALID_ID:
@@ -201,4 +160,37 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
         return criteria;
     }
 
+    private getFulltextCriteria(value: string): FilterCriteria[] {
+        const criteria: FilterCriteria[] = [];
+        if (value) {
+            criteria.push(new FilterCriteria(
+                FAQArticleProperty.NUMBER, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
+            ));
+            criteria.push(new FilterCriteria(
+                FAQArticleProperty.TITLE, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
+            ));
+            criteria.push(new FilterCriteria(
+                FAQArticleProperty.LANGUAGE, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
+            ));
+            criteria.push(new FilterCriteria(
+                FAQArticleProperty.FIELD_1, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
+            ));
+            criteria.push(new FilterCriteria(
+                FAQArticleProperty.FIELD_2, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
+            ));
+            criteria.push(new FilterCriteria(
+                FAQArticleProperty.FIELD_3, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
+            ));
+            criteria.push(new FilterCriteria(
+                FAQArticleProperty.FIELD_6, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
+            ));
+            criteria.push(new FilterCriteria(
+                FAQArticleProperty.VISIBILITY, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
+            ));
+            criteria.push(new FilterCriteria(
+                FAQArticleProperty.KEYWORDS, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
+            ));
+        }
+        return criteria;
+    }
 }

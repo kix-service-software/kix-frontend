@@ -1,13 +1,15 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { SocketClient } from "../SocketClient";
 import {
-    ContextConfiguration,
-    ContextEvent,
-    LoadContextConfigurationRequest,
-    LoadContextConfigurationResponse,
-    SaveContextConfigurationRequest,
-    SaveWidgetRequest,
-    WidgetConfiguration,
-    ISocketResponse
+    ContextConfiguration, ContextEvent, LoadContextConfigurationRequest, LoadContextConfigurationResponse, SocketEvent,
 } from "../../model";
 import { ClientStorageService } from "../ClientStorageService";
 import { IdService } from "../IdService";
@@ -55,77 +57,13 @@ export class ContextSocketClient extends SocketClient {
                 )
             );
 
-            this.getInstance().socket.on(ContextEvent.CONTEXT_CONFIGURATION_LOAD_ERROR,
-                (error: SocketErrorResponse) => {
-                    if (error.requestId === requestId) {
-                        window.clearTimeout(timeout);
-                        console.error(error.error);
-                        reject(error.error);
-                    }
-                }
-            );
-        });
-    }
-
-    public saveWidgetConfiguration<T = any>(
-        instanceId: string, widgetConfiguration: WidgetConfiguration<T>, contextId: string
-    ): Promise<void> {
-
-        return new Promise<void>((resolve, reject) => {
-
-            const requestId = IdService.generateDateBasedId();
-            const token = ClientStorageService.getToken();
-
-            const timeout = window.setTimeout(() => {
-                reject('Timeout: ' + ContextEvent.SAVE_WIDGET_CONFIGURATION);
-            }, 30000);
-
-            this.socket.on(ContextEvent.WIDGET_CONFIGURATION_SAVED, (result: ISocketResponse) => {
-                if (result.requestId === requestId) {
+            this.getInstance().socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
+                if (error.requestId === requestId) {
                     window.clearTimeout(timeout);
-                    resolve();
+                    console.error(error.error);
+                    reject(error.error);
                 }
             });
-
-            const request = new SaveWidgetRequest(
-                token,
-                requestId,
-                ClientStorageService.getClientRequestId(),
-                contextId,
-                instanceId,
-                widgetConfiguration
-            );
-            this.socket.emit(ContextEvent.SAVE_WIDGET_CONFIGURATION, request);
-        });
-    }
-
-    public saveContextConfiguration(
-        dashboardConfiguration: ContextConfiguration, contextId: string
-    ): Promise<void> {
-
-        return new Promise<void>((resolve, reject) => {
-
-            const requestId = IdService.generateDateBasedId();
-            const token = ClientStorageService.getToken();
-
-            const timeout = window.setTimeout(() => {
-                reject('Timeout: ' + ContextEvent.SAVE_CONTEXT_CONFIGURATION);
-            }, 30000);
-
-            this.socket.on(ContextEvent.CONTEXT_CONFIGURATION_SAVED, () => {
-                window.clearTimeout(timeout);
-                resolve();
-            });
-
-            const request = new SaveContextConfigurationRequest(
-                token,
-                requestId,
-                ClientStorageService.getClientRequestId(),
-                contextId,
-                dashboardConfiguration
-            );
-
-            this.socket.emit(ContextEvent.SAVE_CONTEXT_CONFIGURATION, request);
         });
     }
 }

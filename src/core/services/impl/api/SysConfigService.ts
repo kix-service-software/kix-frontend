@@ -1,8 +1,21 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObjectService } from './KIXObjectService';
 import {
-    KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, SysConfigItem, Error, SysConfigItemFactory
+    KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, SysConfigOption, Error
 } from '../../../model';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
+import { SysConfigOptionFactory } from '../../object-factories/SysConfigOptionFactory';
+import { SysConfigOptionDefinition } from '../../../model/kix/sysconfig/SysConfigOptionDefinition';
+import { SysConfigOptionDefinitionFactory } from '../../object-factories/SysConfigOptionDefinitionFactory';
+import { LoggingService } from '..';
 
 export class SysConfigService extends KIXObjectService {
 
@@ -15,17 +28,18 @@ export class SysConfigService extends KIXObjectService {
         return SysConfigService.INSTANCE;
     }
 
-    protected RESOURCE_URI: string = "sysconfig";
+    protected RESOURCE_URI: string = this.buildUri('system', 'config');
 
-    public objectType: KIXObjectType = KIXObjectType.SYS_CONFIG_ITEM;
+    public objectType: KIXObjectType = KIXObjectType.SYS_CONFIG_OPTION;
 
     private constructor() {
-        super([new SysConfigItemFactory()]);
+        super([new SysConfigOptionFactory(), new SysConfigOptionDefinitionFactory()]);
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType): boolean {
-        return kixObjectType === KIXObjectType.SYS_CONFIG_ITEM;
+        return kixObjectType === KIXObjectType.SYS_CONFIG_OPTION
+            || kixObjectType === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION;
     }
 
     public async loadObjects<O>(
@@ -34,26 +48,32 @@ export class SysConfigService extends KIXObjectService {
     ): Promise<O[]> {
         let objects = [];
 
-        if (objectType === KIXObjectType.SYS_CONFIG_ITEM) {
-            objects = await super.load<SysConfigItem>(
-                token, KIXObjectType.SYS_CONFIG_ITEM, this.RESOURCE_URI, loadingOptions, objectIds, 'SysConfigItem'
+        if (objectType === KIXObjectType.SYS_CONFIG_OPTION) {
+            objects = await super.load<SysConfigOption>(
+                token, KIXObjectType.SYS_CONFIG_OPTION, this.RESOURCE_URI, loadingOptions, objectIds, 'SysConfigOption'
+            );
+        } else if (objectType === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION) {
+            const uri = this.buildUri(this.RESOURCE_URI, 'definitions');
+            objects = await super.load<SysConfigOptionDefinition>(
+                token, KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, uri,
+                loadingOptions, objectIds, 'SysConfigOptionDefinition'
             );
         }
 
         return objects;
     }
-
-    public createObject(
-        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>
-    ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
-    }
-
     public async updateObject(
         token: string, clientRequestId: string, objectType: KIXObjectType,
         parameter: Array<[string, any]>, objectId: number | string
-    ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
+    ): Promise<number> {
+        const uri = this.buildUri(this.RESOURCE_URI, objectId);
+        const id = await super.executeUpdateOrCreateRequest<number>(
+            token, clientRequestId, parameter, uri, this.objectType, 'Name'
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
+        });
+        return id;
     }
 
 }

@@ -1,8 +1,17 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObjectService } from "../../kix";
 import {
     KIXObjectType, KIXObjectSpecificLoadingOptions, KIXObjectLoadingOptions, KIXObject, Queue,
     TreeNode, ObjectIcon, FilterCriteria, FilterDataType, FilterType, QueueProperty,
-    FollowUpType, TreeNodeProperty
+    FollowUpType, TreeNodeProperty, SysConfigOption, SysConfigKey
 } from "../../../model";
 import { SearchOperator } from "../../SearchOperator";
 import { LabelService } from "../../LabelService";
@@ -38,8 +47,12 @@ export class QueueService extends KIXObjectService<Queue> {
         if (objectType === KIXObjectType.FOLLOW_UP_TYPE) {
             objects = await super.loadObjects<O>(KIXObjectType.FOLLOW_UP_TYPE, null, loadingOptions);
         } else {
-            superLoad = true;
-            objects = await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions);
+            if (!loadingOptions) {
+                objects = await super.loadObjects<O>(objectType, null);
+            } else {
+                superLoad = true;
+                objects = await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions);
+            }
         }
 
         if (objectIds && !superLoad) {
@@ -59,8 +72,8 @@ export class QueueService extends KIXObjectService<Queue> {
         return [[property, value]];
     }
 
-    public async prepareQueueTree(
-        queues: Queue[], showInvalid?: boolean, objectId?: number, includeTicketStats: boolean = false
+    public async prepareObjectTree(
+        queues: Queue[], showInvalid?: boolean, filterIds?: number[], includeTicketStats: boolean = false
     ): Promise<TreeNode[]> {
         const nodes = [];
         if (queues && !!queues.length) {
@@ -68,17 +81,19 @@ export class QueueService extends KIXObjectService<Queue> {
                 queues = queues.filter((q) => q.ValidID === 1);
             }
 
-            if (objectId) {
-                queues = queues.filter((q) => q.QueueID !== objectId);
+            if (filterIds && filterIds.length) {
+                queues = queues.filter((q) => !filterIds.some((fid) => fid === q.QueueID));
             }
 
             for (const queue of queues) {
-                let ticketStats = [];
+                let ticketStats = null;
                 if (includeTicketStats) {
                     ticketStats = await this.getTicketStats(queue);
                 }
 
-                const subTree = await this.prepareQueueTree(queue.SubQueues, showInvalid, objectId, includeTicketStats);
+                const subTree = await this.prepareObjectTree(
+                    queue.SubQueues, showInvalid, filterIds, includeTicketStats
+                );
                 const treeNode = new TreeNode(
                     queue.QueueID, queue.Name,
                     new ObjectIcon(KIXObjectType.QUEUE, queue.QueueID),
@@ -97,43 +112,45 @@ export class QueueService extends KIXObjectService<Queue> {
     private async getTicketStats(queue: Queue): Promise<TreeNodeProperty[]> {
         const properties: TreeNodeProperty[] = [];
         if (queue.TicketStats) {
-            const openCount = queue.TicketStats.OpenCount;
+            const totalCount = queue.TicketStats.TotalCount;
+            const totalTooltip = await TranslationService.translate('Translatable#All tickets', [totalCount]);
 
-            const openTooltip = await TranslationService.translate('Translatable#open tickets: {0}', [openCount]);
-            properties.push(new TreeNodeProperty(openCount, openTooltip));
+            const freeCount = totalCount - queue.TicketStats.LockCount;
+            const freeTooltip = await TranslationService.translate(
+                'Translatable#All free tickets', [totalCount - freeCount]
+            );
 
-            const lockCount = openCount - queue.TicketStats.LockCount;
-            const lockedTooltip = await TranslationService.translate('Translatable#free tickets: {0}', [lockCount]);
-            properties.push(new TreeNodeProperty(lockCount, lockedTooltip));
-
-            const escalatedCount = queue.TicketStats.EscalatedCount;
-            if (escalatedCount > 0) {
-                const escalatedTooltip = await TranslationService.translate(
-                    'Translatable#escalated tickets: {0}', [escalatedCount]
-                );
-                properties.push(
-                    new TreeNodeProperty(escalatedCount, escalatedTooltip, 'escalated')
-                );
-            }
+            properties.push(new TreeNodeProperty(freeCount, freeTooltip));
+            properties.push(new TreeNodeProperty(totalCount, totalTooltip));
         }
 
         return properties;
     }
 
     public async getQueuesHierarchy(): Promise<Queue[]> {
-        const loadingOptions = new KIXObjectLoadingOptions(null, [
-            new FilterCriteria(
-                QueueProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, null
-            )
-        ], null, null, [QueueProperty.SUB_QUEUES, 'TicketStats', 'Tickets'], [QueueProperty.SUB_QUEUES]);
+        const viewableStateTypes = await KIXObjectService.loadObjects<SysConfigOption>(
+            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_VIEWABLE_STATE_TYPE]
+        );
+
+        const stateTypes = viewableStateTypes && viewableStateTypes.length ? viewableStateTypes[0].Value : [];
+
+        const loadingOptions = new KIXObjectLoadingOptions(
+            [
+                new FilterCriteria(
+                    QueueProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, null
+                )
+            ],
+            null, null,
+            [QueueProperty.SUB_QUEUES, 'TicketStats', 'Tickets'],
+            [QueueProperty.SUB_QUEUES],
+            [["TicketStats.StateType", stateTypes.join(',')]]
+        );
 
         return await KIXObjectService.loadObjects<Queue>(KIXObjectType.QUEUE, null, loadingOptions);
     }
 
     public async getTreeNodes(property: string, showInvalid?: boolean): Promise<TreeNode[]> {
         const values: TreeNode[] = [];
-
-        const labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.QUEUE);
 
         switch (property) {
             case QueueProperty.FOLLOW_UP_ID:
@@ -142,8 +159,7 @@ export class QueueService extends KIXObjectService<Queue> {
                     followUpTypes = followUpTypes.filter((q) => q.ValidID === 1);
                 }
                 for (const type of followUpTypes) {
-                    const icons = await labelProvider.getIcons(null, property, type.ID);
-                    values.push(new TreeNode(type.ID, type.Name, (icons && icons.length) ? icons[0] : null));
+                    values.push(new TreeNode(type.ID, type.Name));
                 }
                 break;
             default:

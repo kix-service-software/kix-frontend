@@ -1,8 +1,18 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     SocketEvent, MainMenuEvent, MainMenuEntriesResponse, MainMenuEntriesRequest, MenuEntry
 } from '../../core/model';
 import { SocketClient } from '../../core/browser/SocketClient';
 import { ClientStorageService, IdService } from '../../core/browser';
+import { SocketErrorResponse } from '../../core/common';
 
 export class MainMenuSocketClient extends SocketClient {
 
@@ -39,8 +49,8 @@ export class MainMenuSocketClient extends SocketClient {
         });
     }
 
-    public async loadMenuEntries(): Promise<[MenuEntry[], MenuEntry[], boolean]> {
-        return new Promise<[MenuEntry[], MenuEntry[], boolean]>((resolve, reject) => {
+    public async loadMenuEntries(): Promise<MainMenuEntriesResponse> {
+        return new Promise<MainMenuEntriesResponse>((resolve, reject) => {
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + MainMenuEvent.LOAD_MENU_ENTRIES);
             }, 30000);
@@ -48,18 +58,25 @@ export class MainMenuSocketClient extends SocketClient {
             const token = ClientStorageService.getToken();
             const requestId = IdService.generateDateBasedId();
 
-            this.socket.emit(
-                MainMenuEvent.LOAD_MENU_ENTRIES, new MainMenuEntriesRequest(
-                    token, requestId, ClientStorageService.getToken()
-                )
-            );
-
             this.socket.on(MainMenuEvent.MENU_ENTRIES_LOADED, (result: MainMenuEntriesResponse) => {
                 if (requestId === result.requestId) {
                     window.clearTimeout(timeout);
-                    resolve([result.primaryMenuEntries, result.secondaryMenuEntries, result.showText]);
+                    resolve(result);
                 }
             });
+
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
+                if (error.requestId === requestId) {
+                    window.clearTimeout(timeout);
+                    console.error(error.error);
+                    reject(error.error);
+                }
+            });
+
+            this.socket.emit(
+                MainMenuEvent.LOAD_MENU_ENTRIES,
+                new MainMenuEntriesRequest(token, requestId, ClientStorageService.getToken())
+            );
         });
 
     }

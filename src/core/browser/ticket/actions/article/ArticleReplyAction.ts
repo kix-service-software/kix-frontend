@@ -1,39 +1,66 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { AbstractAction } from '../../../../model/components/action/AbstractAction';
-import { Article, ContextMode, KIXObjectType } from '../../../../model';
+import { ContextMode, KIXObjectType, CRUD } from '../../../../model';
 import { ContextService } from '../../../context';
 import { NewTicketArticleContext } from '../../context';
 import { TranslationService } from '../../../i18n/TranslationService';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 
 export class ArticleReplyAction extends AbstractAction {
 
-    private article: Article = null;
+    public permissions = [
+        new UIComponentPermission('tickets/*/articles', [CRUD.CREATE])
+    ];
+
+    private articleId: number = null;
+
+    public hasLink: boolean = true;
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Reply';
         this.icon = 'kix-icon-mail-answer-outline';
     }
 
-    public async run(event: any): Promise<void> {
-        if (this.canRun()) {
-            this.article = this.data[0];
-            if (this.article) {
-                await this.openDialog();
-            } else {
-                super.run(event);
+    public async setData(data: any): Promise<void> {
+        super.setData(data);
+        if (this.data) {
+            if (Array.isArray(this.data)) {
+                this.articleId = this.data[0].ArticleID;
+            } else if (typeof this.data === 'string' || typeof this.data === 'number') {
+                this.articleId = Number(this.data);
             }
         }
     }
 
-    public canRun(): boolean {
-        return this.data && Array.isArray(this.data) ? true : false;
+    public async run(event: any): Promise<void> {
+        if (this.articleId) {
+            await this.openDialog();
+        } else {
+            super.run(event);
+        }
     }
 
+    public canRun(): boolean {
+        return this.articleId !== null;
+    }
+
+    public async getLinkData(): Promise<string> {
+        return this.articleId.toString();
+    }
     private async openDialog(): Promise<void> {
-        if (this.article) {
+        if (this.articleId) {
             const context = await ContextService.getInstance().getContext(NewTicketArticleContext.CONTEXT_ID);
             if (context) {
                 context.reset();
-                context.setAdditionalInformation('REFERENCED_ARTICLE_ID', this.article.ArticleID);
+                context.setAdditionalInformation('REFERENCED_ARTICLE_ID', this.articleId);
                 context.setAdditionalInformation('ARTICLE_REPLY', true);
                 context.setAdditionalInformation(
                     'NEW_ARTICLE_TAB_TITLE', await TranslationService.translate('Translatable#Reply')
@@ -42,7 +69,7 @@ export class ArticleReplyAction extends AbstractAction {
             }
             ContextService.getInstance().setDialogContext(
                 NewTicketArticleContext.CONTEXT_ID, KIXObjectType.ARTICLE, ContextMode.CREATE_SUB,
-                this.article.ArticleID, false, null, true, 'new-ticket-article-form', null, true
+                this.articleId, false, null, true
             );
         }
     }

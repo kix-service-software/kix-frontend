@@ -1,11 +1,19 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     ContactProperty, KIXObjectType, Contact, OrganisationProperty, TreeNode, KIXObject,
-    KIXObjectProperty, FilterCriteria, FilterDataType, FilterType
+    KIXObjectProperty, FilterCriteria, FilterDataType, FilterType, ValidObject
 } from "../../model";
 import { ContactDetailsContext } from ".";
 import { ContextService } from "../context";
 import { KIXObjectService } from "../kix";
-import { ObjectDataService } from "../ObjectDataService";
 import { SearchOperator } from "../SearchOperator";
 
 export class ContactService extends KIXObjectService<Contact> {
@@ -74,20 +82,17 @@ export class ContactService extends KIXObjectService<Contact> {
         return ids;
     }
 
-    public async getTreeNodes(property: string): Promise<TreeNode[]> {
-        let values: TreeNode[] = [];
+    public async getTreeNodes(
+        property: string, showInvalid?: boolean, filterIds?: Array<string | number>
+    ): Promise<TreeNode[]> {
+        let nodes: TreeNode[] = [];
 
-        const objectData = ObjectDataService.getInstance().getObjectData();
-        if (objectData) {
-            switch (property) {
-                case KIXObjectProperty.VALID_ID:
-                    values = objectData.validObjects.map((vo) => new TreeNode(Number(vo.ID), vo.Name));
-                    break;
-                default:
-            }
+        switch (property) {
+            default:
+                nodes = await super.getTreeNodes(property, showInvalid, filterIds);
         }
 
-        return values;
+        return nodes;
     }
 
     public async getObjectUrl(object?: KIXObject, objectId?: string | number): Promise<string> {
@@ -96,7 +101,7 @@ export class ContactService extends KIXObjectService<Contact> {
         return context.getDescriptor().urlPaths[0] + '/' + id;
     }
 
-    public prepareFullTextFilter(searchValue): FilterCriteria[] {
+    public async prepareFullTextFilter(searchValue): Promise<FilterCriteria[]> {
         return [
             new FilterCriteria(
                 ContactProperty.LOGIN, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
@@ -105,10 +110,10 @@ export class ContactService extends KIXObjectService<Contact> {
                 ContactProperty.EMAIL, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
             ),
             new FilterCriteria(
-                ContactProperty.FIRST_NAME, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+                ContactProperty.FIRSTNAME, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
             ),
             new FilterCriteria(
-                ContactProperty.LAST_NAME, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+                ContactProperty.LASTNAME, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
             ),
             new FilterCriteria(
                 ContactProperty.TITLE, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue

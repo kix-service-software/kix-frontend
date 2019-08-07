@@ -1,20 +1,30 @@
+<!--
+Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
 <header>
-    <img#logo alt="KIX 2018" src="/static/img/kix-logo.png"/>
+    <img#logo alt="KIX 18" src="/static/img/kixpro-logo.png"/>
     <div>
         <!-- Neues Objekt -->
-        <button.special-button type="button" on-click("openDialog")>
-            <span.kix-icon-plus-blank/>
-            <translation-string pattern="Translatable#New"/>
-        </button>
-        <div.header-separator/>
+        <if(state.allowNew)>
+            <a href="?new" on-click("openDialog")>
+                <button.special-button type="button">
+                    <span.kix-icon-plus-blank/>
+                    <translation-string pattern="Translatable#New"/>
+                </button>
+            </a>
+            <div.header-separator/>
+        </if>
         <!-- Lesezeichen & Suchvorlagen -->
         <bookmarks/>
         <div.header-separator/>
         <!-- Schnellsuche -->
         <quick-search/>
-        <div.header-separator/>
         <toolbar/>
-        <div.header-separator/>
         <div.kix-toolbar>
             <div.toolbar-group>
                 <div>
@@ -22,13 +32,6 @@
                         <span.kix-icon-gear.as-button
                             title=state.translations["Translatable#Personal Settings"]
                             on-click("showPersonalSettings")/>
-                    </div>
-                </div>
-                <div>
-                    <div.action-icon>
-                        <span.kix-icon-exchange.as-button
-                            title=state.translations["Translatable#Switch to customer portal."]
-                            on-click("showTemporaryComingSoon")/>
                     </div>
                 </div>
                 <link-target routingConfiguration=component.getReleaseRoutingConfig()>

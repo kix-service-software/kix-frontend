@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 export * from './channel';
 export * from './contact';
 export * from './cmdb';
@@ -18,12 +27,13 @@ export * from './general-catalog';
 export * from './valid';
 export * from './general-catalog';
 export * from './mail-account';
+export * from './mail-filter';
+export * from './notification';
 
 export { ClientRegistration } from './ClientRegistration';
 export { KIXObject } from './KIXObject';
 export { KIXObjectType } from './KIXObjectType';
 export { Lock } from './Lock';
-export { ObjectData } from './ObjectData';
 export { AttachmentError } from './AttachmentError';
-export { IObjectFactory } from './IObjectFactory';
 export { KIXObjectProperty } from './KIXObjectProperty';
+export { SearchCache } from './SearchCache';

@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 @default-widget-header-height: @margin-default;
 @overlay-widget-header-height: 1.75rem;
 @widget-header-grid-gap: 1rem;
@@ -176,11 +185,6 @@
     .widget();
 }
 
-.lane-tab-widget {
-    .widget();
-    box-shadow: unset;
-}
-
 .sidebar-widget {
     .widget(@primary-2, @default-light-font-color, @widget-header-action-separator-color: @secondary-6);
 
@@ -336,7 +340,7 @@
         border-top: 0;
         background-color: @secondary-6;
         min-height: 5.75em;
-        max-height: 31.5rem;
+        max-height: 64rem;
         box-shadow: @shadow-1;
         overflow: auto;
     }

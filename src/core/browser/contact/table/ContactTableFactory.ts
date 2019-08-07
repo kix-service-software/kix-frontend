@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     KIXObjectType, ContextMode, ContactProperty, KIXObjectLoadingOptions, KIXObjectProperty, DataType
 } from "../../../model";
@@ -21,13 +30,10 @@ export class ContactTableFactory extends TableFactory {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, short);
 
-        const loadingOptions = new KIXObjectLoadingOptions(
-            null, tableConfiguration.filter, tableConfiguration.sortOrder,
-            tableConfiguration.limit, ['TicketStats']
-        );
-
         const table = new Table(tableKey, tableConfiguration);
-        table.setContentProvider(new ContactTableContentProvider(table, objectIds, loadingOptions, contextId));
+        table.setContentProvider(
+            new ContactTableContentProvider(table, objectIds, tableConfiguration.loadingOptions, contextId)
+        );
         table.setColumnConfiguration(tableConfiguration.tableColumns);
         return table;
     }
@@ -38,8 +44,8 @@ export class ContactTableFactory extends TableFactory {
         let tableColumns;
         if (short) {
             tableColumns = [
-                this.getDefaultColumnConfiguration(ContactProperty.FIRST_NAME),
-                this.getDefaultColumnConfiguration(ContactProperty.LAST_NAME),
+                this.getDefaultColumnConfiguration(ContactProperty.FIRSTNAME),
+                this.getDefaultColumnConfiguration(ContactProperty.LASTNAME),
                 this.getDefaultColumnConfiguration(ContactProperty.EMAIL),
                 this.getDefaultColumnConfiguration(ContactProperty.LOGIN),
                 this.getDefaultColumnConfiguration(ContactProperty.PRIMARY_ORGANISATION_ID),
@@ -49,8 +55,8 @@ export class ContactTableFactory extends TableFactory {
             ];
         } else {
             tableColumns = [
-                this.getDefaultColumnConfiguration(ContactProperty.FIRST_NAME),
-                this.getDefaultColumnConfiguration(ContactProperty.LAST_NAME),
+                this.getDefaultColumnConfiguration(ContactProperty.FIRSTNAME),
+                this.getDefaultColumnConfiguration(ContactProperty.LASTNAME),
                 this.getDefaultColumnConfiguration(ContactProperty.EMAIL),
                 this.getDefaultColumnConfiguration(ContactProperty.LOGIN),
                 this.getDefaultColumnConfiguration(ContactProperty.PRIMARY_ORGANISATION_ID),
@@ -64,7 +70,7 @@ export class ContactTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.CONTACT, null, 5, tableColumns, null, false, false, null, null,
+                KIXObjectType.CONTACT, null, null, tableColumns, false, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.SMALL
             );
             tableConfiguration.enableSelection = true;
@@ -85,7 +91,6 @@ export class ContactTableFactory extends TableFactory {
         return tableConfiguration;
     }
 
-    // TODO: implementieren
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
         let config;
         switch (property) {
@@ -102,12 +107,12 @@ export class ContactTableFactory extends TableFactory {
                 break;
             case ContactProperty.PRIMARY_ORGANISATION_ID:
                 config = new DefaultColumnConfiguration(
-                    property, true, false, true, false, 150, true, true, true, DataType.STRING, true, null,
+                    property, true, false, true, false, 150, true, true, false, DataType.STRING, true, null,
                     'Translatable#Organisation'
                 );
                 break;
             default:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true);
+                config = super.getDefaultColumnConfiguration(property);
         }
         return config;
     }

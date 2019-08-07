@@ -1,13 +1,21 @@
-import { ILabelProvider } from "../ILabelProvider";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
-    KIXObjectType, ObjectIcon, DateTimeUtil, User, Queue, QueueProperty, SystemAddress, FollowUpType
+    KIXObjectType, ObjectIcon, Queue, QueueProperty, SystemAddress, FollowUpType, KIXObjectProperty
 } from "../../model";
 import { TranslationService } from "../i18n/TranslationService";
-import { ObjectDataService } from "../ObjectDataService";
 import { KIXObjectService } from "../kix";
 import { LabelService } from "../LabelService";
+import { LabelProvider } from "../LabelProvider";
 
-export class QueueLabelProvider implements ILabelProvider<Queue> {
+export class QueueLabelProvider extends LabelProvider<Queue> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.QUEUE;
 
@@ -28,24 +36,6 @@ export class QueueLabelProvider implements ILabelProvider<Queue> {
             case QueueProperty.FULLNAME:
                 displayValue = 'Translatable#Fullname';
                 break;
-            case QueueProperty.COMMENT:
-                displayValue = 'Translatable#Comment';
-                break;
-            case QueueProperty.CREATE_BY:
-                displayValue = 'Translatable#Created by';
-                break;
-            case QueueProperty.CREATE_TIME:
-                displayValue = 'Translatable#Created at';
-                break;
-            case QueueProperty.CHANGE_BY:
-                displayValue = 'Translatable#Changed by';
-                break;
-            case QueueProperty.CHANGE_TIME:
-                displayValue = 'Translatable#Changed at';
-                break;
-            case QueueProperty.VALID_ID:
-                displayValue = 'Translatable#Validity';
-                break;
             case QueueProperty.SYSTEM_ADDRESS_ID:
                 displayValue = 'Translatable#Sender Address (Email)';
                 break;
@@ -53,7 +43,7 @@ export class QueueLabelProvider implements ILabelProvider<Queue> {
                 displayValue = short ? 'Translatable#Unlock Timeout (min)' : 'Translatable#Unlock Timeout';
                 break;
             case QueueProperty.FOLLOW_UP_ID:
-                displayValue = 'Translatable#Follow Up on Tickets possible';
+                displayValue = 'Translatable#Follow Up on Tickets';
                 break;
             case QueueProperty.FOLLOW_UP_LOCK:
                 displayValue = 'Translatable#Follow Up Ticket Lock';
@@ -66,11 +56,13 @@ export class QueueLabelProvider implements ILabelProvider<Queue> {
                 displayValue = 'Translatable#Icon';
                 break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
@@ -81,21 +73,44 @@ export class QueueLabelProvider implements ILabelProvider<Queue> {
     }
 
     public async getDisplayText(
-        queue: Queue, property: string, value?: string, translatable: boolean = true
+        queue: Queue, property: string, defaultValue?: string, translatable: boolean = true
     ): Promise<string> {
-        let displayValue = queue[property];
+        let displayValue = typeof defaultValue !== 'undefined' && defaultValue !== null
+            ? defaultValue : queue[property];
 
         switch (property) {
             case QueueProperty.QUEUE_ID:
             case 'ICON':
                 displayValue = queue.Name;
                 break;
+            case QueueProperty.VALID:
+                displayValue = await this.getPropertyValueDisplayText(
+                    KIXObjectProperty.VALID_ID, queue.ValidID, translatable
+                );
+                break;
+            case QueueProperty.PARENT:
+                displayValue = await this.getPropertyValueDisplayText(
+                    QueueProperty.PARENT_ID, queue.ParentID, translatable
+                );
+                break;
+            case QueueProperty.SYSTEM_ADDRESS:
+                displayValue = await this.getPropertyValueDisplayText(
+                    QueueProperty.SYSTEM_ADDRESS_ID, queue.SystemAddressID, translatable
+                );
+                break;
+            case QueueProperty.FOLLOW_UP:
+                displayValue = await this.getPropertyValueDisplayText(
+                    QueueProperty.FOLLOW_UP_ID, queue.FollowUpID, translatable
+                );
+                break;
             default:
-                displayValue = await this.getPropertyValueDisplayText(property, displayValue);
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';
@@ -105,45 +120,33 @@ export class QueueLabelProvider implements ILabelProvider<Queue> {
         property: string, value: string | number, translatable: boolean = true
     ): Promise<string> {
         let displayValue = value;
-        const objectData = ObjectDataService.getInstance().getObjectData();
         switch (property) {
-            case QueueProperty.VALID_ID:
-                const valid = objectData.validObjects.find((v) => v.ID.toString() === value.toString());
-                if (valid) {
-                    displayValue = valid.Name;
+            case QueueProperty.SYSTEM_ADDRESS_ID:
+                if (value) {
+                    const systemAddresses = await KIXObjectService.loadObjects<SystemAddress>(
+                        KIXObjectType.SYSTEM_ADDRESS, [value], null, null, true
+                    ).catch((error) => [] as SystemAddress[]);
+                    displayValue = systemAddresses && !!systemAddresses.length ?
+                        await LabelService.getInstance().getText(systemAddresses[0]) : value;
                 }
                 break;
-            case QueueProperty.CREATE_BY:
-            case QueueProperty.CHANGE_BY:
-                const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [value], null, null, true
-                ).catch((error) => [] as User[]);
-                displayValue = users && !!users.length ? users[0].UserFullname : value;
-                break;
-            case QueueProperty.CREATE_TIME:
-            case QueueProperty.CHANGE_TIME:
-            case QueueProperty.CHANGE_TIME:
-                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
-                break;
-            case QueueProperty.SYSTEM_ADDRESS_ID:
-                const systemAddresses = await KIXObjectService.loadObjects<SystemAddress>(
-                    KIXObjectType.SYSTEM_ADDRESS, [value], null, null, true
-                ).catch((error) => [] as SystemAddress[]);
-                displayValue = systemAddresses && !!systemAddresses.length ?
-                    await LabelService.getInstance().getText(systemAddresses[0]) : value;
-                break;
             case QueueProperty.FOLLOW_UP_ID:
-                const follwoUptypes = await KIXObjectService.loadObjects<FollowUpType>(
-                    KIXObjectType.FOLLOW_UP_TYPE, [value], null, null, true
-                ).catch((error) => [] as FollowUpType[]);
-                displayValue = follwoUptypes && !!follwoUptypes.length ? follwoUptypes[0].Name : value;
+                if (value) {
+                    const follwoUptypes = await KIXObjectService.loadObjects<FollowUpType>(
+                        KIXObjectType.FOLLOW_UP_TYPE, [value], null, null, true
+                    ).catch((error) => [] as FollowUpType[]);
+                    displayValue = follwoUptypes && !!follwoUptypes.length ? follwoUptypes[0].Name : value;
+                }
                 break;
             case QueueProperty.FOLLOW_UP_LOCK:
                 displayValue = value === 1 ? 'Translatable#Yes' : 'Translatable#No';
                 break;
             case QueueProperty.UNLOCK_TIMEOUT:
-                const minuteString = await TranslationService.translate('Translatable#Minutes');
-                displayValue = `${value} ${minuteString}`;
+                if (value) {
+                    const minuteString = translatable ?
+                        await TranslationService.translate('Translatable#Minutes') : 'Minutes';
+                    displayValue = `${value} ${minuteString}`;
+                }
                 break;
             case QueueProperty.PARENT_ID:
                 if (value) {
@@ -155,10 +158,13 @@ export class QueueLabelProvider implements ILabelProvider<Queue> {
                 }
                 break;
             default:
+                displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';

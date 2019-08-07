@@ -1,8 +1,17 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { Request, Response } from 'express';
 import { LoggingService, AuthenticationService } from '../core/services';
 import { KIXRouter } from './KIXRouter';
 import { SocketService } from '../services';
-import { ObjectUpdatedEvent, ObjectUpdatedEventData } from '../core/model';
+import { ObjectUpdatedEvent, ObjectUpdatedEventData, NotificationEvent } from '../core/model';
 import { CacheService } from '../core/cache';
 
 export class NotificationRouter extends KIXRouter {
@@ -35,7 +44,7 @@ export class NotificationRouter extends KIXRouter {
         if (Array.isArray(req.body)) {
             const objectEvents: ObjectUpdatedEventData[] = req.body;
             await CacheService.getInstance().updateCaches(objectEvents);
-            SocketService.getInstance().broadcast(objectEvents);
+            SocketService.getInstance().broadcast(NotificationEvent.UPDATE_EVENTS, objectEvents);
         }
 
         res.status(201).send();

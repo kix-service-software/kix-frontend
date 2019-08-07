@@ -1,11 +1,17 @@
-import { ILabelProvider } from "../ILabelProvider";
-import {
-    TextModule, KIXObjectType, ObjectIcon, TextModuleProperty
-} from "../../model";
-import { SearchProperty } from "../SearchProperty";
-import { TranslationService } from "../i18n/TranslationService";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
 
-export class TextModuleLabelProvider implements ILabelProvider<TextModule> {
+import { TextModule, KIXObjectType, TextModuleProperty, ObjectIcon } from "../../model";
+import { TranslationService } from "../i18n/TranslationService";
+import { LabelProvider } from "../LabelProvider";
+
+export class TextModuleLabelProvider extends LabelProvider<TextModule> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.TEXT_MODULE;
 
@@ -13,52 +19,26 @@ export class TextModuleLabelProvider implements ILabelProvider<TextModule> {
         return textModule instanceof TextModule;
     }
 
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
-    }
-
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
-            case SearchProperty.FULLTEXT:
-                displayValue = 'Translatable#Full Text';
-                break;
             case TextModuleProperty.NAME:
                 displayValue = 'Translatable#Name';
                 break;
             case TextModuleProperty.LANGUAGE:
                 displayValue = 'Translatable#Language';
                 break;
-            case TextModuleProperty.CATEGORY:
-                displayValue = 'Translatable#Category';
-                break;
             case TextModuleProperty.KEYWORDS:
                 displayValue = 'Translatable#Tags';
                 break;
-            case TextModuleProperty.COMMENT:
-                displayValue = 'Translatable#Comment';
-                break;
-            case TextModuleProperty.CREATED_BY:
-                displayValue = 'Translatable#Created by';
-                break;
-            case TextModuleProperty.CREATE_TIME:
-                displayValue = 'Translatable#Created at';
-                break;
-            case TextModuleProperty.CHANGE_BY:
-                displayValue = 'Translatable#Changed by';
-                break;
-            case TextModuleProperty.CHANGE_TIME:
-                displayValue = 'Translatable#Changed at';
-                break;
-            case TextModuleProperty.VALID_ID:
-                displayValue = 'Translatable#Validity';
-                break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
@@ -68,53 +48,45 @@ export class TextModuleLabelProvider implements ILabelProvider<TextModule> {
         return;
     }
 
-    public getDisplayText(textModule: TextModule, property: string): Promise<string> {
-        return textModule[property];
-    }
+    public async getDisplayText(
+        textModule: TextModule, property: string, value?: string, translatable: boolean = true
+    ): Promise<string> {
+        let displayValue = textModule[property];
 
-    public async getPropertyValueDisplayText(property: string, value: string | number): Promise<string> {
-        return value.toString();
-    }
+        switch (property) {
+            case TextModuleProperty.ID:
+                displayValue = textModule.Name;
+                break;
+            default:
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
+        }
 
-    public getDisplayTextClasses(textModule: TextModule, property: string): string[] {
-        return [];
-    }
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
+        }
 
-    public getObjectClasses(textModule: TextModule): string[] {
-        return [];
+        return displayValue;
     }
 
     public async getObjectText(
         textModule: TextModule, id?: boolean, title?: boolean, translatable?: boolean
     ): Promise<string> {
-        const objectName = await this.getObjectName(false, translatable);
-        return `${objectName}: ${textModule.Name}`;
-    }
-
-    public getObjectAdditionalText(textModule: TextModule): string {
-        return null;
-    }
-
-    public getObjectIcon(textModule?: TextModule): string | ObjectIcon {
-        return null;
+        return `${textModule.Name}`;
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
-        let displayValue = plural ? 'Text Modules' : 'Text Module';
         if (translatable) {
-            displayValue = await TranslationService.translate(displayValue);
+            return await TranslationService.translate(
+                plural ? 'Translatable#Text Modules' : 'Translatable#Text Module'
+            );
         }
-        return displayValue;
+        return plural ? 'Text Modules' : 'Text Module';
     }
 
     public getObjectTooltip(textModule: TextModule): string {
         return textModule.Name;
-    }
-
-    public async getIcons(
-        textModule: TextModule, property: string, value?: string | number
-    ): Promise<Array<string | ObjectIcon>> {
-        return [];
     }
 
 }

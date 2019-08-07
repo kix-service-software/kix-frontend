@@ -1,11 +1,18 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObjectService } from "./KIXObjectService";
 import {
-    KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, Sla, Error
+    KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, Sla
 } from "../../../model";
 import { KIXObjectServiceRegistry } from "../../KIXObjectServiceRegistry";
-import { SlaBrowserFactory } from "../../../browser/sla";
-import { SlaFactory } from "../../../model/kix/sla/SlaFactory";
+import { SlaFactory } from "../../object-factories/SlaFactory";
 
 export class SlaService extends KIXObjectService {
 
@@ -29,7 +36,7 @@ export class SlaService extends KIXObjectService {
         return type === KIXObjectType.SLA;
     }
 
-    protected RESOURCE_URI: string = 'slas';
+    protected RESOURCE_URI: string = this.buildUri('system', 'slas');
 
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
@@ -47,19 +54,6 @@ export class SlaService extends KIXObjectService {
         }
 
         return objects;
-    }
-
-    public createObject(
-        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>,
-        createOptions?: KIXObjectSpecificCreateOptions
-    ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
-    }
-    public updateObject(
-        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>,
-        objectId: string | number, updateOptions?: KIXObjectSpecificCreateOptions
-    ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
     }
 
 }

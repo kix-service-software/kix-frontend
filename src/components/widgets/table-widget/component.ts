@@ -1,14 +1,23 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import {
     TableFilterCriteria, KIXObjectType, ContextType, KIXObjectPropertyFilter, TableWidgetSettings
 } from '../../../core/model';
 import { IEventSubscriber, EventService } from '../../../core/browser/event';
 import {
-    ContextService, IdService, TableEvent, WidgetService, ActionFactory, TableFactoryService,
-    TableEventData, ComponentsService
+    ContextService, IdService, TableEvent, WidgetService, ActionFactory, TableFactoryService, TableEventData
 } from '../../../core/browser';
 import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 import { ComponentInput } from './ComponentInput';
+import { KIXModulesService } from '../../../core/browser/modules';
 class Component {
 
     public state: ComponentState;
@@ -44,7 +53,6 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        this.state.loading = true;
         this.state.filterPlaceHolder = await TranslationService.translate(this.state.filterPlaceHolder);
         this.additionalFilterCriteria = [];
         const context = ContextService.getInstance().getActiveContext(this.contextType);
@@ -57,23 +65,25 @@ class Component {
 
         if (this.state.widgetConfiguration) {
             const settings: TableWidgetSettings = this.state.widgetConfiguration.settings;
+
+            context.addObjectDependency(settings.objectType);
+
             this.state.showFilter = typeof settings.showFilter !== 'undefined' ? settings.showFilter : true;
 
             this.state.icon = this.state.widgetConfiguration.icon;
 
-            this.state.predefinedTableFilter = this.state.widgetConfiguration ?
-                this.state.widgetConfiguration.predefinedTableFilters : [];
+            this.state.predefinedTableFilter = settings.predefinedTableFilters ? settings.predefinedTableFilters : [];
 
             this.subscriber = {
                 eventSubscriberId: IdService.generateDateBasedId(this.state.instanceId),
                 eventPublished: async (data: TableEventData, eventId: string) => {
-                    if (data && data.tableId === this.state.table.getTableId()) {
+                    if (data && this.state.table && data.tableId === this.state.table.getTableId()) {
                         if (eventId === TableEvent.TABLE_READY) {
-                            await this.prepareTitle();
                             this.state.filterCount = this.state.table.isFiltered()
                                 ? this.state.table.getRowCount()
                                 : null;
                             this.prepareTitle();
+                            this.prepareActions();
                         }
                         WidgetService.getInstance().updateActions(this.state.instanceId);
                     }
@@ -84,17 +94,17 @@ class Component {
             EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
 
             this.prepareHeader();
-            await this.prepareTable();
-            this.prepareTitle();
-            this.prepareActions();
+            this.prepareTable().then(() => this.prepareTitle());
 
             if (this.state.widgetConfiguration.contextDependent) {
-                context.registerListener('table-widget-' + this.state.table.getTableId(), {
+                context.registerListener('table-widget-' + this.state.instanceId, {
                     explorerBarToggled: () => { return; },
                     filteredObjectListChanged: () => { return; },
                     objectChanged: () => { return; },
                     objectListChanged: () => {
-                        this.state.table.resetFilter();
+                        if (this.state.table) {
+                            this.state.table.resetFilter();
+                        }
                         const filterComponent = (this as any).getComponent('table-widget-filter');
                         if (filterComponent) {
                             filterComponent.reset();
@@ -106,10 +116,6 @@ class Component {
                     }
                 });
             }
-
-            setTimeout(() => {
-                this.state.loading = false;
-            }, 20);
         }
     }
 
@@ -147,19 +153,21 @@ class Component {
             settings && settings.objectType || (settings.tableConfiguration && settings.tableConfiguration.objectType)
         ) {
             this.objectType = settings.objectType || settings.tableConfiguration.objectType;
-            const context = await ContextService.getInstance().getActiveContext(this.contextType);
+            const context = ContextService.getInstance().getActiveContext(this.contextType);
             const contextId = this.state.widgetConfiguration.contextDependent
                 ? context.getDescriptor().contextId
                 : null;
 
             const table = await TableFactoryService.getInstance().createTable(
                 `table-widget-${this.state.instanceId}`, this.objectType,
-                settings.tableConfiguration, null, contextId, true, true, settings.shortTable
+                settings.tableConfiguration, null, contextId, true, true, settings.shortTable, false, !settings.cache
             );
 
             if (table && settings.sort) {
                 table.sort(settings.sort[0], settings.sort[1]);
             }
+
+            await table.initialize();
 
             this.state.table = table;
         }
@@ -199,7 +207,7 @@ class Component {
     }
 
     public getTemplate(componentId: string): any {
-        return ComponentsService.getInstance().getComponentTemplate(componentId);
+        return KIXModulesService.getComponentTemplate(componentId);
     }
 
 }

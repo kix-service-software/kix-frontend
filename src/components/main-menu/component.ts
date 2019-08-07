@@ -1,11 +1,18 @@
-import { MenuEntry, Context, ContextType, ContextMode } from '../../core/model';
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { Context, ContextType, MenuEntry, ContextDescriptor } from '../../core/model';
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../core/browser/context/ContextService';
 import { MainMenuSocketClient } from './MainMenuSocketClient';
-import { IContextServiceListener } from '../../core/browser';
-import { RoutingConfiguration } from '../../core/browser/router';
 
-class KIXMenuComponent implements IContextServiceListener {
+class KIXMenuComponent {
 
     public state: ComponentState;
 
@@ -14,30 +21,53 @@ class KIXMenuComponent implements IContextServiceListener {
     }
 
     public async onMount(): Promise<void> {
-        ContextService.getInstance().registerListener(this);
+        ContextService.getInstance().registerListener({
+            constexServiceListenerId: 'main-menu-listener',
+            contextChanged: (contextId: string, newContext: Context, type: ContextType) => {
+                if (type === ContextType.MAIN) {
+                    this.setActiveMenuEntry(newContext);
+                }
+            },
+            contextRegistered: (descriptor: ContextDescriptor) => {
+                this.updateEntries(this.state.primaryMenuEntries, this.state.secondaryMenuEntries);
+            }
+        });
+
         await this.loadEntries();
         const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
         this.setActiveMenuEntry(context);
+        this.state.loading = false;
+    }
+
+    public onDestroy(): void {
+        ContextService.getInstance().unregisterListener('main-menu-listener');
     }
 
     private async loadEntries(): Promise<void> {
         const entries = await MainMenuSocketClient.getInstance().loadMenuEntries();
         if (entries) {
-            this.state.primaryMenuEntries = entries[0];
-            this.state.secondaryMenuEntries = entries[1];
-            this.state.showText = entries[2];
-        }
-    }
-    public contextChanged(contextId: string, context: Context, type: ContextType): void {
-        if (type === ContextType.MAIN) {
-            this.setActiveMenuEntry(context);
+            await this.updateEntries(entries.primaryMenuEntries, entries.secondaryMenuEntries);
+
+
+            this.state.showText = entries.showText;
         }
     }
 
-    public getRoutingConfiguration(menuEntry: MenuEntry): RoutingConfiguration {
-        return new RoutingConfiguration(
-            menuEntry.mainContextId, null, ContextMode.DASHBOARD, null
-        );
+    private async updateEntries(primaryEntries: MenuEntry[], secondaryEntries: MenuEntry[]): Promise<void> {
+        await this.setShownEntries(primaryEntries);
+        await this.setShownEntries(secondaryEntries);
+
+        this.state.primaryMenuEntries = [...primaryEntries];
+        this.state.secondaryMenuEntries = [...secondaryEntries];
+    }
+
+    private async setShownEntries(entries: MenuEntry[]): Promise<void> {
+        for (const entry of entries) {
+            const context = await ContextService.getInstance().getContext(entry.mainContextId);
+            if (context) {
+                entry.show = true;
+            }
+        }
     }
 
     private setActiveMenuEntry(context: Context): void {

@@ -1,8 +1,16 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObjectFormService } from "../kix/KIXObjectFormService";
-import { KIXObjectType, KIXObjectLoadingOptions } from "../../model";
-import { FAQArticleProperty, FAQArticle, FAQArticleAttachmentLoadingOptions, Attachment } from "../../model/kix/faq";
-import { InlineContent } from "../components";
-import { KIXObjectService } from "../kix";
+import { KIXObjectType, FormField, CRUD } from "../../model";
+import { FAQArticleProperty, FAQArticle } from "../../model/kix/faq";
+import { FAQService } from "./FAQService";
 
 export class FAQArticleFormService extends KIXObjectFormService<FAQArticle> {
 
@@ -35,7 +43,7 @@ export class FAQArticleFormService extends KIXObjectFormService<FAQArticle> {
                 case FAQArticleProperty.FIELD_2:
                 case FAQArticleProperty.FIELD_3:
                 case FAQArticleProperty.FIELD_6:
-                    const inlineContent = await this.getInlineContent(faqArticle);
+                    const inlineContent = await FAQService.getInstance().getFAQArticleInlineContent(faqArticle);
                     value = this.replaceInlineContent(faqArticle[property], inlineContent);
                     break;
                 case FAQArticleProperty.ATTACHMENTS:
@@ -47,31 +55,21 @@ export class FAQArticleFormService extends KIXObjectFormService<FAQArticle> {
         return value;
     }
 
-    private async getInlineContent(faqArticle: FAQArticle): Promise<InlineContent[]> {
-        const inlineContent: InlineContent[] = [];
-        if (faqArticle.Attachments) {
-            const inlineAttachments = faqArticle.Attachments.filter((a) => a.Disposition === 'inline');
-            for (const attachment of inlineAttachments) {
-                const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, ['Content']);
-                const faqArticleAttachmentOptions = new FAQArticleAttachmentLoadingOptions(
-                    faqArticle.ID, attachment.ID
-                );
-                const attachments = await KIXObjectService.loadObjects<Attachment>(
-                    KIXObjectType.FAQ_ARTICLE_ATTACHMENT, [attachment.ID], loadingOptions,
-                    faqArticleAttachmentOptions
-                );
-                for (const attachmentItem of attachments) {
-                    if (attachment.ID === attachmentItem.ID) {
-                        attachment.Content = attachmentItem.Content;
-                    }
-                }
-            }
-
-            inlineAttachments.forEach(
-                (a) => inlineContent.push(new InlineContent(a.ContentID, a.Content, a.ContentType))
-            );
+    public async hasPermissions(field: FormField): Promise<boolean> {
+        let hasPermissions = true;
+        switch (field.property) {
+            case FAQArticleProperty.CATEGORY_ID:
+                hasPermissions = await this.checkPermissions('system/faq/categories');
+                break;
+            case FAQArticleProperty.ATTACHMENTS:
+                hasPermissions = await this.checkPermissions('faq/articles/*/attachments', [CRUD.CREATE]);
+                break;
+            case FAQArticleProperty.LINK:
+                hasPermissions = await this.checkPermissions('links', [CRUD.CREATE]);
+                break;
+            default:
         }
-        return inlineContent;
+        return hasPermissions;
     }
 
 }

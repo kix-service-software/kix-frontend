@@ -1,5 +1,14 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
-import { AbstractMarkoComponent, ContextService, ICell } from '../../../../core/browser';
+import { AbstractMarkoComponent, ContextService, ICell, DialogService } from '../../../../core/browser';
 import { KIXObjectType, ContextMode, Contact } from '../../../../core/model';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
@@ -13,7 +22,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             const cell: ICell = input.cell;
             const contact: Contact = cell.getRow().getRowObject().getObject();
             if (contact && contact instanceof Contact) {
-                this.state.show = contact.ValidID === 1;
+                const dialogs = DialogService.getInstance().getRegisteredDialogs(
+                    ContextMode.CREATE, KIXObjectType.TICKET
+                );
+                this.state.show = contact.ValidID === 1 && dialogs && dialogs.length > 0;
             }
         }
     }

@@ -1,6 +1,15 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObjectService } from './KIXObjectService';
 import {
-    ContactProperty, KIXObjectType, KIXObjectLoadingOptions, Error, ContactFactory
+    ContactProperty, KIXObjectType, KIXObjectLoadingOptions, Error
 } from "../../../model";
 import {
     CreateContact, CreateContactResponse, CreateContactRequest, UpdateContactResponse,
@@ -8,6 +17,7 @@ import {
 } from "../../../api";
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { LoggingService } from '../LoggingService';
+import { ContactFactory } from '../../object-factories/ContactFactory';
 
 export class ContactService extends KIXObjectService {
 

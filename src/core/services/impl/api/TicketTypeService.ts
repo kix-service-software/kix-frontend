@@ -1,11 +1,21 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     TicketType, KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, TicketTypeFactory, Error
+    KIXObjectSpecificCreateOptions, Error
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { LoggingService } from '../LoggingService';
+import { TicketTypeFactory } from '../../object-factories/TicketTypeFactory';
 
 export class TicketTypeService extends KIXObjectService {
 
@@ -18,7 +28,7 @@ export class TicketTypeService extends KIXObjectService {
         return TicketTypeService.INSTANCE;
     }
 
-    protected RESOURCE_URI: string = 'tickettypes';
+    protected RESOURCE_URI: string = this.buildUri('system', 'ticket', 'types');
 
     public objectType: KIXObjectType = KIXObjectType.TICKET_TYPE;
 

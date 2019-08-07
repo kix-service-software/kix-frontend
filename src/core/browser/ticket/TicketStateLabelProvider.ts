@@ -1,17 +1,20 @@
-import { ILabelProvider } from "../ILabelProvider";
-import { TicketState, KIXObjectType, ObjectIcon, TicketStateProperty, DateTimeUtil, User } from "../../model";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { TicketState, KIXObjectType, ObjectIcon, TicketStateProperty } from "../../model";
 import { SearchProperty } from "../SearchProperty";
 import { TranslationService } from "../i18n/TranslationService";
-import { ObjectDataService } from "../ObjectDataService";
-import { KIXObjectService } from "../kix";
+import { LabelProvider } from "../LabelProvider";
 
-export class TicketStateLabelProvider implements ILabelProvider<TicketState> {
+export class TicketStateLabelProvider extends LabelProvider<TicketState> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.TICKET_STATE;
-
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
-    }
 
     public isLabelProviderFor(ticketState: TicketState): boolean {
         return ticketState instanceof TicketState;
@@ -26,47 +29,25 @@ export class TicketStateLabelProvider implements ILabelProvider<TicketState> {
             case TicketStateProperty.NAME:
                 displayValue = 'Translatable#Name';
                 break;
-            case TicketStateProperty.COMMENT:
-                displayValue = 'Translatable#Comment';
-                break;
             case TicketStateProperty.TYPE_NAME:
             case TicketStateProperty.TYPE_ID:
                 displayValue = 'Translatable#State Type';
                 break;
-            case TicketStateProperty.CREATE_BY:
-                displayValue = 'Translatable#Created by';
-                break;
-            case TicketStateProperty.CREATE_TIME:
-                displayValue = 'Translatable#Created at';
-                break;
-            case TicketStateProperty.CHANGE_BY:
-                displayValue = 'Translatable#Changed by';
-                break;
-            case TicketStateProperty.CHANGE_TIME:
-                displayValue = 'Translatable#Changed at';
-                break;
-            case TicketStateProperty.VALID_ID:
-                displayValue = 'Translatable#Validity';
-                break;
             case TicketStateProperty.ID:
-                displayValue = 'Translatable#Icon';
-                break;
             case 'ICON':
                 displayValue = 'Translatable#Icon';
                 break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
-    }
-
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
     }
 
     public async getDisplayText(
@@ -86,60 +67,17 @@ export class TicketStateLabelProvider implements ILabelProvider<TicketState> {
                 displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';
-    }
-
-    public async getPropertyValueDisplayText(
-        property: string, value: string | number, translatable: boolean = true
-    ): Promise<string> {
-        let displayValue = value;
-        const objectData = ObjectDataService.getInstance().getObjectData();
-        switch (property) {
-            case TicketStateProperty.VALID_ID:
-                const valid = objectData.validObjects.find((v) => v.ID.toString() === value.toString());
-                if (valid) {
-                    displayValue = valid.Name;
-                }
-                break;
-            case TicketStateProperty.CREATE_BY:
-            case TicketStateProperty.CHANGE_BY:
-                const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [value], null, null, true
-                ).catch((error) => [] as User[]);
-                displayValue = users && !!users.length ? users[0].UserFullname : value;
-                break;
-            case TicketStateProperty.CREATE_TIME:
-            case TicketStateProperty.CHANGE_TIME:
-                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
-                break;
-            default:
-        }
-
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
-        }
-
-        return displayValue ? displayValue.toString() : '';
-    }
-
-    public getDisplayTextClasses(ticketState: TicketState, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(ticketState: TicketState): string[] {
-        return [];
     }
 
     public async getObjectText(ticketState: TicketState, id?: boolean, title?: boolean): Promise<string> {
         return ticketState.Name;
-    }
-
-    public getObjectAdditionalText(ticketState: TicketState): string {
-        return null;
     }
 
     public getObjectIcon(ticketState?: TicketState): string | ObjectIcon {

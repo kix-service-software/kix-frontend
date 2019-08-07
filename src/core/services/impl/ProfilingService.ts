@@ -1,5 +1,13 @@
-import { validate, required } from '../../decorators';
-import { IServerConfiguration } from '../../common';
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { IServerConfiguration, AppUtil } from '../../common';
 import { ConfigurationService } from './ConfigurationService';
 import { LoggingService } from './LoggingService';
 
@@ -25,13 +33,12 @@ export class ProfilingService {
         this.active = serverConfig ? serverConfig.ENABLE_PROFILING || false : false;
 
         // deactivate in test mode
-        if (ConfigurationService.getInstance().isTestMode()) {
+        if (AppUtil.isTestMode()) {
             this.active = false;
         }
     }
 
-    @validate
-    public start(@required category: string, @required message: string, inputData?: any): number {
+    public start(category: string, message: string, inputData?: any): number {
         if (!this.active) {
             return -1;  // invalid task ID
         }
@@ -55,8 +62,7 @@ export class ProfilingService {
         return taskId;
     }
 
-    @validate
-    public stop(@required profileTaskId: number, outputData?: any): void {
+    public stop(profileTaskId: number, outputData?: any): void {
         if (!this.active) {
             return;
         }

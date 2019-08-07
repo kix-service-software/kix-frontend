@@ -1,7 +1,18 @@
-import { ContextService, BrowserUtil } from '../../../../core/browser';
-import { KIXObjectType, ContextMode, TicketProperty, Ticket } from '../../../../core/model';
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { ContextService, BrowserUtil, FormService } from '../../../../core/browser';
+import {
+    KIXObjectType, ContextMode, TicketProperty, Ticket, ArticleProperty, FormField, FormFieldValue
+} from '../../../../core/model';
 import { ComponentState } from './ComponentState';
-import { TicketDetailsContext, NewTicketDialogContext } from '../../../../core/browser/ticket';
+import { TicketDetailsContext } from '../../../../core/browser/ticket';
 import { RoutingConfiguration } from '../../../../core/browser/router';
 import { AbstractNewDialog } from '../../../../core/browser/components/dialog';
 
@@ -23,8 +34,23 @@ class Component extends AbstractNewDialog {
     public async onMount(): Promise<void> {
         await super.onMount();
 
-        const context = await ContextService.getInstance().getContext(NewTicketDialogContext.CONTEXT_ID);
-        context.initContext();
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        if (formInstance) {
+            formInstance.registerListener({
+                formListenerId: 'new-article-dialog-listener',
+                formValueChanged: async (formField: FormField, value: FormFieldValue<any>, oldValue: any) => {
+                    if (formField.property === ArticleProperty.CHANNEL_ID) {
+                        if (value && value.value === 2) {
+                            this.state.buttonLabel = 'Translatable#Send';
+                        } else {
+                            this.state.buttonLabel = 'Translatable#Save';
+                        }
+                    }
+                },
+                updateForm: () => { return; }
+            });
+        }
+
         this.state.loading = false;
     }
 

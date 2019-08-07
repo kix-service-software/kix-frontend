@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { RoutingConfiguration } from "../../router";
 import {
     TableConfiguration, ITable, Table, DefaultColumnConfiguration,
@@ -21,13 +30,8 @@ export class MailAccountTableFactory extends TableFactory {
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
         const table = new Table(tableKey, tableConfiguration);
 
-        let loadingOptions = null;
-        if (tableConfiguration.filter && tableConfiguration.filter.length) {
-            loadingOptions = new KIXObjectLoadingOptions(null, tableConfiguration.filter);
-        }
-
         table.setContentProvider(new MailAccountTableContentProvider(
-            table, objectIds, loadingOptions, contextId
+            table, objectIds, tableConfiguration.loadingOptions, contextId
         ));
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 
@@ -51,7 +55,7 @@ export class MailAccountTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.MAIL_ACCOUNT, null, null, tableColumns, null, true, false, null, null,
+                KIXObjectType.MAIL_ACCOUNT, null, null, tableColumns, true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;
@@ -69,7 +73,6 @@ export class MailAccountTableFactory extends TableFactory {
         return tableConfiguration;
     }
 
-    // TODO: implementieren
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
         let config;
         switch (property) {
@@ -79,24 +82,8 @@ export class MailAccountTableFactory extends TableFactory {
                     false, DataType.STRING, true, null, null, false
                 );
                 break;
-            case KIXObjectProperty.VALID_ID:
-            case MailAccountProperty.TYPE:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true, true);
-                break;
-            case MailAccountProperty.COMMENT:
-                config = new DefaultColumnConfiguration(
-                    property, true, false, true, false, 350, true, true, false,
-                    DataType.STRING, true, undefined, null, false
-                );
-                break;
-            case KIXObjectProperty.CHANGE_TIME:
-            case KIXObjectProperty.CREATE_TIME:
-                config = new DefaultColumnConfiguration(
-                    property, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
-                );
-                break;
             default:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true);
+                config = super.getDefaultColumnConfiguration(property);
         }
         return config;
     }

@@ -1,13 +1,25 @@
-<div.widget-container>
-    <for|kixWidget| of=state.widgets>
-        <div.widget-frame class={
-            large: component.isLarge(kixWidget),
-            small: !component.isLarge(kixWidget)
-        }>
-            <${component.getTemplate(kixWidget)} ...{
-                instanceId: kixWidget.instanceId,
-                contextType: "MAIN"
-            }/>
-        </div>
-    </for>
+<!--
+Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+<div.widget-container class={
+    "show-object": state.widgets && state.widgets.length
+}>
+    <if(state.widgets)>
+        <for|kixWidget| of=state.widgets>
+            <div.widget-frame class={
+                large: component.isLarge(kixWidget),
+                small: !component.isLarge(kixWidget)
+            }>
+                <${component.getTemplate(kixWidget)} ...{
+                    instanceId: kixWidget.instanceId,
+                    contextType: "MAIN"
+                }/>
+            </div>
+        </for>
+    </if>
 </div>

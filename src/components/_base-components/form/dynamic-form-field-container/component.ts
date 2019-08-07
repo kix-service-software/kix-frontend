@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import { TreeNode } from '../../../../core/model';
 import { DynamicFieldValue } from './DynamicFormFieldValue';
@@ -32,7 +41,9 @@ class Component {
 
     public async propertyChanged(value: DynamicFieldValue, nodes: TreeNode[]): Promise<void> {
         await value.setPropertyNode(nodes && nodes.length ? nodes[0] : null);
-        await value.setCurrentValue(null);
+        if (await this.manager.clearValueOnPropertyChange(value.currentPropertyNode.id)) {
+            await value.setCurrentValue(null);
+        }
         await this.provideValue(value);
         await this.addEmptyValue();
         (this as any).setStateDirty();

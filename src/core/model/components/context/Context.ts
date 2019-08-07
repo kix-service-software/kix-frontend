@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ConfiguredWidget } from '../widget/ConfiguredWidget';
 import { ContextConfiguration } from '.';
 import { WidgetConfiguration, WidgetType } from '..';
@@ -6,6 +15,9 @@ import { KIXObject, KIXObjectType } from '../..';
 import { ObjectIcon } from '../../kix';
 import { ContextDescriptor } from './ContextDescriptor';
 import { BreadcrumbInformation } from '../router';
+import { KIXObjectService, FormService } from '../../../browser';
+import { ContextMode } from './ContextMode';
+import { FormContext } from '../form/FormContext';
 
 export abstract class Context {
 
@@ -36,6 +48,13 @@ export abstract class Context {
         return;
     }
 
+    public addObjectDependency(objectType: KIXObjectType): void {
+        const type = this.descriptor.kixObjectTypes.find((ot) => ot === objectType);
+        if (!type) {
+            this.descriptor.kixObjectTypes.push(objectType);
+        }
+    }
+
     public getIcon(): string | ObjectIcon {
         return "kix-icon-unknown";
     }
@@ -58,11 +77,7 @@ export abstract class Context {
 
     public setConfiguration(configuration: ContextConfiguration): void {
         this.configuration = configuration;
-        this.shownSidebars = configuration
-            ? [...configuration.sidebars.filter(
-                (s) => configuration.sidebarWidgets.some((sw) => sw.instanceId === s && sw.configuration.show)
-            )]
-            : [];
+        this.shownSidebars = [...this.configuration.sidebars];
     }
 
     public setAdditionalInformation(key: string, value: any): void {
@@ -92,7 +107,7 @@ export abstract class Context {
 
     public async setObjectId(objectId: string | number): Promise<void> {
         this.objectId = objectId;
-        await this.getObject(null, true);
+        await this.getObject(undefined, true);
     }
 
     public getObjectId(): string | number {
@@ -132,18 +147,6 @@ export abstract class Context {
         return lanes;
     }
 
-    public getLaneTabs(show: boolean = false): ConfiguredWidget[] {
-        let laneTabs = this.configuration.laneTabWidgets;
-
-        if (show) {
-            laneTabs = laneTabs.filter(
-                (lt) => this.configuration.laneTabs.findIndex((ltId) => lt.instanceId === ltId) !== -1
-            );
-        }
-
-        return laneTabs;
-    }
-
     public getContent(show: boolean = false): ConfiguredWidget[] {
         let content = this.configuration.contentWidgets;
 
@@ -161,7 +164,7 @@ export abstract class Context {
 
         if (show && explorer) {
             explorer = explorer.filter(
-                (ex) => this.configuration.explorer.findIndex((e) => ex.instanceId === e) !== -1
+                (ex) => this.configuration.explorer.some((e) => ex.instanceId === e)
             );
         }
 
@@ -172,15 +175,15 @@ export abstract class Context {
         let sidebars = this.configuration.sidebarWidgets;
 
         if (show && sidebars) {
-            sidebars = sidebars.filter(
-                (sb) => this.shownSidebars.some((s) => sb.instanceId === s)
-            );
+            sidebars = sidebars
+                .filter((sb) => this.configuration.sidebars.some((s) => sb.instanceId === s))
+                .filter((sb) => this.shownSidebars.some((s) => sb.instanceId === s));
         }
 
         return sidebars;
     }
 
-    public toggleSidebar(instanceId: string): void {
+    public toggleSidebarWidget(instanceId: string): void {
         const sidebar = this.configuration.sidebars.find((s) => s === instanceId);
         if (sidebar) {
 
@@ -193,6 +196,11 @@ export abstract class Context {
 
             this.listeners.forEach((l) => l.sidebarToggled());
         }
+    }
+
+    public closeSidebar(): void {
+        this.shownSidebars = [];
+        this.listeners.forEach((l) => l.sidebarToggled());
     }
 
     public toggleExplorerBar(): void {
@@ -242,17 +250,38 @@ export abstract class Context {
             }
 
             if (!configuration) {
-                const laneTabWidget = this.configuration.laneTabWidgets.find((ltw) => ltw.instanceId === instanceId);
-                configuration = laneTabWidget ? laneTabWidget.configuration : undefined;
-            }
-
-            if (!configuration) {
                 const contentWidget = this.configuration.contentWidgets.find((cw) => cw.instanceId === instanceId);
                 configuration = contentWidget ? contentWidget.configuration : undefined;
             }
         }
 
         return configuration;
+    }
+
+    public getWidget<WS = any>(instanceId: string): ConfiguredWidget {
+        let widget: ConfiguredWidget;
+
+        if (this.configuration) {
+            widget = this.configuration.explorerWidgets.find((e) => e.instanceId === instanceId);
+
+            if (!widget) {
+                widget = this.configuration.sidebarWidgets.find((e) => e.instanceId === instanceId);
+            }
+
+            if (!widget) {
+                widget = this.configuration.overlayWidgets.find((o) => o.instanceId === instanceId);
+            }
+
+            if (!widget) {
+                widget = this.configuration.laneWidgets.find((lw) => lw.instanceId === instanceId);
+            }
+
+            if (!widget) {
+                widget = this.configuration.contentWidgets.find((cw) => cw.instanceId === instanceId);
+            }
+        }
+
+        return widget;
     }
 
     public getContextSpecificWidgetType(instanceId: string): WidgetType {
@@ -276,20 +305,23 @@ export abstract class Context {
                 const laneWidget = this.configuration.laneWidgets.find((lw) => lw.instanceId === instanceId);
                 widgetType = laneWidget ? WidgetType.LANE : undefined;
             }
-
-            if (!widgetType) {
-                const laneTabWidget = this.configuration.laneTabWidgets.find((ltw) => ltw.instanceId === instanceId);
-                widgetType = laneTabWidget ? WidgetType.LANE_TAB : undefined;
-            }
         }
 
         return widgetType;
     }
 
     public async getObject<O extends KIXObject>(
-        kixObjectType: KIXObjectType = null, reload: boolean = false, changedProperties?: string[]
+        objectType: KIXObjectType = null, reload: boolean = false, changedProperties?: string[]
     ): Promise<O> {
-        return undefined;
+        let object;
+        if (objectType) {
+            const objectId = this.getObjectId();
+            if (objectId) {
+                const objects = await KIXObjectService.loadObjects(objectType, [objectId]);
+                object = objects && objects.length ? objects[0] : null;
+            }
+        }
+        return object;
     }
 
     public provideScrollInformation(objectType: KIXObjectType, objectId: string | number): void {
@@ -305,6 +337,19 @@ export abstract class Context {
 
     public reset(): void {
         this.resetAdditionalInformation();
+    }
+
+    public async getFormId(
+        contextMode: ContextMode, objectType: KIXObjectType, objectId: string | number
+    ): Promise<string> {
+        const formContext =
+            contextMode === ContextMode.EDIT ||
+                contextMode === ContextMode.EDIT_ADMIN ||
+                contextMode === ContextMode.EDIT_BULK
+                ? FormContext.EDIT
+                : FormContext.NEW;
+
+        return await FormService.getInstance().getFormIdByContext(formContext, objectType);
     }
 
 }

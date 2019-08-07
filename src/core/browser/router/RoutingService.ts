@@ -1,11 +1,24 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentRouter, KIXObjectType, ContextMode, Context } from '../../model';
 import { IRoutingServiceListener } from './IRoutingServiceListener';
 import { RoutingConfiguration } from './RoutingConfiguration';
 import { ContextService } from '../context';
 import { ContextFactory } from '../context/ContextFactory';
-import { ClientStorageService } from '../ClientStorageService';
 import { ReleaseContext } from '../release';
-import { ObjectDataService } from '../ObjectDataService';
+import { BrowserUtil } from '../BrowserUtil';
+import { KIXModulesSocketClient } from '../modules/KIXModulesSocketClient';
+import { ApplicationEvent } from '../application';
+import { EventService } from '../event';
+import { ActionFactory } from '../ActionFactory';
+import { AgentService } from '../application/AgentService';
 
 export class RoutingService {
 
@@ -34,18 +47,27 @@ export class RoutingService {
     }
 
     public async routeToInitialContext(history: boolean = false): Promise<void> {
-        const VISITED_KEY = 'kix-18-site-visited';
-        const visitedOption = ClientStorageService.getOption(VISITED_KEY);
-        const objectData = ObjectDataService.getInstance().getObjectData();
-        const buildNumber = objectData.releaseInfo ? objectData.releaseInfo.buildNumber : null;
-        if (!visitedOption || (buildNumber && visitedOption !== buildNumber.toString())) {
+        const VISITED_KEY = 'KIXWebFrontendVisitedVersion';
+
+        let visited: string;
+        const currentUser = await AgentService.getInstance().getCurrentUser();
+        if (currentUser && currentUser.Preferences) {
+            const vistedVersion = currentUser.Preferences.find((p) => p.ID === VISITED_KEY);
+            visited = vistedVersion ? vistedVersion.Value : null;
+        }
+
+        const releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
+        const buildNumber = releaseInfo ? releaseInfo.buildNumber : null;
+        if (!visited || (buildNumber && visited !== buildNumber.toString())) {
             await ContextService.getInstance().setContext(
                 ReleaseContext.CONTEXT_ID, KIXObjectType.ANY, ContextMode.DASHBOARD
             );
-            ClientStorageService.setOption(VISITED_KEY, buildNumber.toString());
+            AgentService.getInstance().setPreferences([
+                [VISITED_KEY, buildNumber.toString()]
+            ]);
         } else {
             const parsedUrl = new URL(window.location.href);
-            const path = parsedUrl.pathname.split('/');
+            const path = parsedUrl.pathname === '/' ? [] : parsedUrl.pathname.split('/');
             let contextUrl = 'home';
             if (path.length > 1) {
                 contextUrl = path[1];
@@ -59,67 +81,53 @@ export class RoutingService {
                 if (context) {
                     await ContextService.getInstance().setContext(
                         context.getDescriptor().contextId, null,
-                        context.getDescriptor().contextMode, objectId, undefined, history
+                        context.getDescriptor().contextMode, objectId, undefined, history, false, true
                     );
                 } else {
+                    BrowserUtil.openAccessDeniedOverlay();
                     await this.setHomeContext();
                 }
             } else {
                 await this.setHomeContext();
             }
 
-            this.handleDialogRequest(path, parsedUrl.searchParams);
+            this.handleRequest(parsedUrl.searchParams);
         }
     }
 
     private async setHomeContext(): Promise<void> {
-        await ContextService.getInstance().setContext('home', KIXObjectType.ANY, ContextMode.DASHBOARD);
+        await ContextService.getInstance().setContext(
+            'home', KIXObjectType.ANY, ContextMode.DASHBOARD, null, null, null, false, true
+        );
     }
 
-    private async handleDialogRequest(path: string[], params: URLSearchParams): Promise<void> {
-        let context = null;
-
-        const contextUrl = path[1];
-
-        if (params.has('new')) {
-            const url = path.length === 4 ? path[3] : contextUrl;
-            const mode = path.length === 4 ? ContextMode.CREATE_SUB : ContextMode.CREATE;
-            context = await ContextFactory.getContextForUrl(url, undefined, mode);
-            if (!context && mode === ContextMode.CREATE) {
-                await ContextService.getInstance().setDialogContext(
-                    null, null, mode, null, true
-                );
+    private handleRequest(params: URLSearchParams): void {
+        setTimeout(async () => {
+            if (params.has('new')) {
+                await ContextService.getInstance().setDialogContext(null, null, ContextMode.CREATE, null, true);
+            } else if (params.has('actionId')) {
+                const actionId = params.get('actionId');
+                const data = params.get('data');
+                const actions = await ActionFactory.getInstance().generateActions([actionId], data);
+                if (actions && actions.length) {
+                    actions[0].run(null);
+                }
             }
-        } else if (params.has('edit')) {
-            context = contextUrl
-                ? await ContextFactory.getContextForUrl(contextUrl, undefined, ContextMode.EDIT)
-                : null;
-        } else if (params.has('editLinks')) {
-            context = contextUrl
-                ? await ContextFactory.getContextForUrl('links', undefined, ContextMode.EDIT_LINKS)
-                : null;
-        }
-
-        if (context) {
-            const descriptor = context.getDescriptor();
-            await ContextService.getInstance().setDialogContext(
-                descriptor.contextId, descriptor.kixObjectTypes[0], descriptor.contextMode, null, true
-            );
-        }
+        }, 2500);
     }
 
-    public async routeToContext(routingConfiguration: RoutingConfiguration, objectId: string | number): Promise<void> {
+    public async routeToContext(
+        routingConfiguration: RoutingConfiguration, objectId: string | number, addHistory: boolean = true
+    ): Promise<void> {
         if (routingConfiguration) {
+            EventService.getInstance().publish(ApplicationEvent.CLOSE_OVERLAY);
             ContextService.getInstance().setContext(
                 routingConfiguration.contextId,
                 routingConfiguration.objectType,
                 routingConfiguration.contextMode,
-                objectId, true, routingConfiguration.history
+                objectId, true, routingConfiguration.history,
+                addHistory
             );
-
-            const url = await this.buildUrl(routingConfiguration, objectId);
-
-            history.replaceState(null, null, `/${url}`);
         }
     }
 

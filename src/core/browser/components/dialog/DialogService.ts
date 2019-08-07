@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ObjectIcon, ConfiguredDialogWidget, ContextMode, ContextType, KIXObjectType } from "../../../model";
 import { IMainDialogListener } from ".";
 import { IOverlayDialogListener } from "./IOverlayDialogListener";
@@ -5,6 +14,9 @@ import { DisplayImageDescription } from "../../components/DisplayImageDescriptio
 import { IImageDialogListener } from "./IImageDialogListener";
 import { ContextService } from '../../context/ContextService';
 import { TranslationService } from "../../i18n/TranslationService";
+import { ApplicationEvent } from "../../application/ApplicationEvent";
+import { EventService } from "../../event";
+import { CacheService } from "../../cache";
 
 export class DialogService {
 
@@ -18,6 +30,8 @@ export class DialogService {
     private imageDialogListener: IImageDialogListener;
 
     private dialogs: ConfiguredDialogWidget[] = [];
+
+    public activeDialog: ConfiguredDialogWidget = null;
 
     private constructor() { }
 
@@ -123,17 +137,18 @@ export class DialogService {
             }
 
             const dialogs = this.getRegisteredDialogs(contextMode, (singleTab ? kixObjectType : null));
-            const activeDialog = dialogs.find((d) => d.kixObjectType === kixObjectType);
+            this.activeDialog = dialogs.find((d) => d.kixObjectType === kixObjectType);
             this.mainDialogListener.open(
                 dialogTitle,
                 dialogs,
-                activeDialog ? activeDialog.instanceId : dialogId,
+                this.activeDialog ? this.activeDialog.instanceId : dialogId,
                 dialogIcon
             );
         }
     }
 
     public closeMainDialog(data?: any): void {
+        this.activeDialog = null;
         if (this.mainDialogListener) {
             this.mainDialogListener.close(data);
             if (this.overlayDialogListener) {
@@ -151,6 +166,11 @@ export class DialogService {
             }
         }
         ContextService.getInstance().closeDialogContext();
+
+        setTimeout(async () => {
+            CacheService.getInstance().deleteKeys(KIXObjectType.CURRENT_USER);
+            EventService.getInstance().publish(ApplicationEvent.REFRESH);
+        }, 500);
     }
 
     public openOverlayDialog(dialogTagId: string, input?: any, title?: string, icon?: string | ObjectIcon): void {

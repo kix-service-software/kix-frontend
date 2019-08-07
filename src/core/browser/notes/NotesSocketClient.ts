@@ -1,10 +1,15 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { SocketClient } from "../SocketClient";
 import {
-    NotesEvent,
-    LoadNotesResponse,
-    LoadNotesRequest,
-    SaveNotesRequest,
-    ISocketResponse
+    NotesEvent, LoadNotesResponse, SaveNotesRequest, ISocketResponse, SocketEvent, ISocketRequest
 } from "../../model";
 import { ClientStorageService } from "../ClientStorageService";
 import { IdService } from "../IdService";
@@ -27,7 +32,7 @@ export class NotesSocketClient extends SocketClient {
         this.socket = this.createSocket('notes', true);
     }
 
-    public loadNotes(contextId: string): Promise<string> {
+    public loadNotes(): Promise<string> {
         return new Promise<string>((resolve, reject) => {
 
             const token = ClientStorageService.getToken();
@@ -45,9 +50,21 @@ export class NotesSocketClient extends SocketClient {
                 }
             });
 
-            this.socket.emit(
-                NotesEvent.LOAD_NOTES, new LoadNotesRequest(token, requestId, contextId)
-            );
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
+                if (error.requestId === requestId) {
+                    window.clearTimeout(timeout);
+                    console.error(error.error);
+                    reject(error.error);
+                }
+            });
+
+            const request: ISocketRequest = {
+                token,
+                requestId,
+                clientRequestId: ClientStorageService.getClientRequestId()
+            };
+
+            this.socket.emit(NotesEvent.LOAD_NOTES, request);
         });
     }
 
@@ -71,7 +88,7 @@ export class NotesSocketClient extends SocketClient {
                 }
             });
 
-            this.socket.on(NotesEvent.SAVE_NOTES_ERROR, (error: SocketErrorResponse) => {
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
                 if (error.requestId === requestId) {
                     window.clearTimeout(timeout);
                     console.error(error.error);

@@ -1,9 +1,20 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { RoutingConfiguration } from "../../../../router";
 import {
     TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../../../table";
-import { KIXObjectType, DataType, ContextMode, QueueProperty, KIXObjectLoadingOptions } from "../../../../../model";
+import {
+    KIXObjectType, DataType, ContextMode, QueueProperty, KIXObjectLoadingOptions, KIXObjectProperty
+} from "../../../../../model";
 import { TicketQueueTableContentProvider } from "./TicketQueueTableContentProvider";
 import { TableFactory } from "../../../../table/TableFactory";
 import { QueueDetailsContext } from "../../context";
@@ -20,12 +31,11 @@ export class TicketQueueTableFactory extends TableFactory {
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
         const table = new Table(tableKey, tableConfiguration);
 
-        let loadingOptions = null;
-        if (tableConfiguration.filter && tableConfiguration.filter.length) {
-            loadingOptions = new KIXObjectLoadingOptions(null, tableConfiguration.filter);
-        }
+        const contentProvider = new TicketQueueTableContentProvider(
+            table, objectIds, tableConfiguration.loadingOptions, contextId
+        );
 
-        table.setContentProvider(new TicketQueueTableContentProvider(table, objectIds, loadingOptions, contextId));
+        table.setContentProvider(contentProvider);
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 
         return table;
@@ -41,16 +51,16 @@ export class TicketQueueTableFactory extends TableFactory {
             this.getDefaultColumnConfiguration(QueueProperty.UNLOCK_TIMEOUT),
             this.getDefaultColumnConfiguration(QueueProperty.SYSTEM_ADDRESS_ID),
             this.getDefaultColumnConfiguration(QueueProperty.COMMENT),
-            this.getDefaultColumnConfiguration(QueueProperty.VALID_ID),
-            this.getDefaultColumnConfiguration(QueueProperty.CREATE_TIME),
-            this.getDefaultColumnConfiguration(QueueProperty.CREATE_BY),
-            this.getDefaultColumnConfiguration(QueueProperty.CHANGE_TIME),
-            this.getDefaultColumnConfiguration(QueueProperty.CHANGE_BY)
+            this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CREATE_TIME),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CREATE_BY),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CHANGE_TIME),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CHANGE_BY)
         ];
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.QUEUE, null, null, tableColumns, null, true, false, null, null,
+                KIXObjectType.QUEUE, null, null, tableColumns, true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;
@@ -78,12 +88,6 @@ export class TicketQueueTableFactory extends TableFactory {
                     false, DataType.STRING, true, null, null, false
                 );
                 break;
-            case 'ICON':
-                config = new DefaultColumnConfiguration(
-                    property, false, true, false, false, null, false, false, false, undefined, false
-                );
-                break;
-            case QueueProperty.VALID_ID:
             case QueueProperty.FOLLOW_UP_ID:
                 config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true, true);
                 break;
@@ -92,20 +96,8 @@ export class TicketQueueTableFactory extends TableFactory {
                     property, true, false, true, false, 150, true, true, false, DataType.NUMBER
                 );
                 break;
-            case QueueProperty.COMMENT:
-                config = new DefaultColumnConfiguration(
-                    property, true, false, true, false, 350, true, true, false,
-                    DataType.STRING, true, undefined, null, false
-                );
-                break;
-            case QueueProperty.CHANGE_TIME:
-            case QueueProperty.CREATE_TIME:
-                config = new DefaultColumnConfiguration(
-                    property, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
-                );
-                break;
             default:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true);
+                config = super.getDefaultColumnConfiguration(property);
         }
         return config;
     }

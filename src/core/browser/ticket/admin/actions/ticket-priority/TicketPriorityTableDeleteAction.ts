@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     AbstractAction, ComponentContent, ConfirmOverlayContent,
     OverlayType, KIXObjectType, ToastContent
@@ -10,6 +19,8 @@ import { ITable } from "../../../../table";
 import { TranslationService } from "../../../../i18n/TranslationService";
 
 export class TicketPriorityTableDeleteAction extends AbstractAction<ITable> {
+
+    public hasLink: boolean = false;
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Delete';
@@ -49,7 +60,7 @@ export class TicketPriorityTableDeleteAction extends AbstractAction<ITable> {
         const selectedRows = this.data.getSelectedRows();
         if (selectedRows && !!selectedRows.length) {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Remove Priorities ...'
+                loading: true, hint: 'Translatable#Remove Priorities'
             });
             const failIds = await KIXObjectService.deleteObject(
                 KIXObjectType.TICKET_PRIORITY, selectedRows.map((sR) => sR.getRowObject().getObject().ObjectId)

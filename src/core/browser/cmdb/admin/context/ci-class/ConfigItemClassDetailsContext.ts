@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     Context, BreadcrumbInformation, KIXObject, KIXObjectType, ConfigItemClass, KIXObjectLoadingOptions,
 } from '../../../../../model';
@@ -30,7 +39,7 @@ export class ConfigItemClassDetailsContext extends Context {
         objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_CLASS,
         reload: boolean = false, changedProperties: string[] = []
     ): Promise<O> {
-        const object = await this.loadCIClass(changedProperties);
+        const object = await this.loadCIClass();
 
         if (reload) {
             this.listeners.forEach(
@@ -43,21 +52,21 @@ export class ConfigItemClassDetailsContext extends Context {
         return object as any;
     }
 
-    private async loadCIClass(changedProperties: string[] = [], cache: boolean = true): Promise<ConfigItemClass> {
+    private async loadCIClass(): Promise<ConfigItemClass> {
         const ciClassId = Number(this.objectId);
 
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, null, ['CurrentDefinition', 'Definitions', 'ConfiguredPermissions']
+            null, null, null, ['CurrentDefinition', 'Definitions', 'ConfiguredPermissions']
         );
 
         const timeout = window.setTimeout(() => {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: `Translatable#Load Config Item Class ...`
+                loading: true, hint: 'Translatable#Load Config Item Class'
             });
         }, 500);
 
         const ciClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
-            KIXObjectType.CONFIG_ITEM_CLASS, [ciClassId], loadingOptions, null, cache
+            KIXObjectType.CONFIG_ITEM_CLASS, [ciClassId], loadingOptions
         ).catch((error) => {
             console.error(error);
             return null;

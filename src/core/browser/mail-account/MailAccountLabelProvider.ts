@@ -1,13 +1,21 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     ObjectIcon, KIXObjectType, MailAccount, MailAccountProperty, User, DateTimeUtil,
-    KIXObjectProperty, DispatchingType, Queue
+    KIXObjectProperty, DispatchingType, Queue, ValidObject
 } from '../../model';
-import { ILabelProvider } from '..';
 import { TranslationService } from '../i18n/TranslationService';
-import { ObjectDataService } from '../ObjectDataService';
 import { KIXObjectService } from "../kix";
+import { LabelProvider } from '../LabelProvider';
 
-export class MailAccountLabelProvider implements ILabelProvider<MailAccount> {
+export class MailAccountLabelProvider extends LabelProvider<MailAccount> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.MAIL_ACCOUNT;
 
@@ -19,11 +27,11 @@ export class MailAccountLabelProvider implements ILabelProvider<MailAccount> {
         return object instanceof MailAccount;
     }
 
-    public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
             case MailAccountProperty.HOST:
-                displayValue = 'Translatable#Hostname';
+                displayValue = 'Translatable#Host';
                 break;
             case MailAccountProperty.LOGIN:
                 displayValue = 'Translatable#User Name';
@@ -40,30 +48,17 @@ export class MailAccountLabelProvider implements ILabelProvider<MailAccount> {
             case MailAccountProperty.DISPATCHING_BY:
                 displayValue = 'Translatable#Dispatching';
                 break;
-            case KIXObjectProperty.VALID_ID:
-                displayValue = 'Translatable#Validity';
-                break;
-            case MailAccountProperty.CREATE_BY:
-                displayValue = 'Translatable#Created by';
-                break;
-            case MailAccountProperty.CREATE_TIME:
-                displayValue = 'Translatable#Created at';
-                break;
-            case MailAccountProperty.CHANGE_BY:
-                displayValue = 'Translatable#Changed by';
-                break;
-            case MailAccountProperty.CHANGE_TIME:
-                displayValue = 'Translatable#Changed at';
-                break;
             case MailAccountProperty.ID:
                 displayValue = 'Translatable#Id';
                 break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
@@ -93,11 +88,13 @@ export class MailAccountLabelProvider implements ILabelProvider<MailAccount> {
                 }
                 break;
             default:
-                displayValue = await this.getPropertyValueDisplayText(property, displayValue);
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
@@ -107,33 +104,19 @@ export class MailAccountLabelProvider implements ILabelProvider<MailAccount> {
         property: string, value: string | number, translatable: boolean = true
     ): Promise<string> {
         let displayValue = value;
-        const objectData = ObjectDataService.getInstance().getObjectData();
-        if (objectData) {
-            switch (property) {
-                case KIXObjectProperty.VALID_ID:
-                    const valid = objectData.validObjects.find((v) => v.ID === value);
-                    displayValue = valid ? valid.Name : value;
-                    break;
-                case KIXObjectProperty.CREATE_BY:
-                case KIXObjectProperty.CHANGE_BY:
-                    const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [value], null, null, true
-                    ).catch((error) => [] as User[]);
-                    displayValue = users && !!users.length ? users[0].UserFullname : value;
-                    break;
-                case KIXObjectProperty.CREATE_TIME:
-                case KIXObjectProperty.CHANGE_TIME:
-                    displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
-                    break;
-                case MailAccountProperty.TRUSTED:
-                    displayValue = Boolean(value) ? 'Translatable#Yes' : 'Translatable#No';
-                    break;
-                default:
-            }
+
+        switch (property) {
+            case MailAccountProperty.TRUSTED:
+                displayValue = Boolean(value) ? 'Translatable#Yes' : 'Translatable#No';
+                break;
+            default:
+                displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';
@@ -150,7 +133,7 @@ export class MailAccountLabelProvider implements ILabelProvider<MailAccount> {
     public async getObjectText(
         mailAccount: MailAccount, id?: boolean, title?: boolean, translatable?: boolean
     ): Promise<string> {
-        return `${mailAccount.Host}`;
+        return `${mailAccount.Login}@${mailAccount.Host}`;
     }
 
     public getObjectAdditionalText(object: MailAccount, translatable: boolean = true): string {
@@ -162,7 +145,7 @@ export class MailAccountLabelProvider implements ILabelProvider<MailAccount> {
     }
 
     public getObjectTooltip(object: MailAccount): string {
-        return '';
+        return object.Host;
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {

@@ -1,22 +1,30 @@
+<!--
+Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
 <div.table-cell-content
     class={
         "with-icons": component.showIcons,
-        "with-text": component.showText && state.displayText
+        "with-text": component.showText
     }
     style={
         height: input.height
     }
     title=state.displayText>
-    <if(!state.loading)>
-        <if(component.showIcons)>
-            <span>
-                <for|icon| of=state.icons>
-                    <icon icon=icon showUnknown=true/>
-                </for>
-            </span>
-        </if>
-        <if(component.showText)>
-            <span.text>${state.displayText}</span>
-        </if>
+    <if(component.showIcons && state.icons)>
+        <span>
+            <for|icon| of=state.icons>
+                <icon icon=icon showUnknown=true/>
+            </for>
+        </span>
+    </if>
+    <if(component.showText)>
+        <span.text.cell-display-text class={
+            "show-object": state.displayText !== null
+        }>${state.displayText}</span>
     </if>
 </div>

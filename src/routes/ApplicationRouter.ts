@@ -1,8 +1,18 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ISpecificCSSExtension, KIXExtensions } from '../core/extensions';
 import { Request, Response } from 'express';
-import { ConfigurationService, AuthenticationService, UserService } from '../core/services';
+import { ConfigurationService, AuthenticationService } from '../core/services';
 import { KIXRouter } from './KIXRouter';
 import { PluginService } from '../services';
+import { UserService } from '../core/services/impl/api/UserService';
 
 export class ApplicationRouter extends KIXRouter {
 
@@ -74,41 +84,7 @@ export class ApplicationRouter extends KIXRouter {
 
     private async handleRoute(moduleId: string, objectId: string, req: Request, res: Response): Promise<void> {
         const token: string = req.cookies.token;
-        const user = await UserService.getInstance().getUserByToken(token);
-
-        const themeCSS = await this.getUserThemeCSS(user.UserID);
-        const specificCSS = await this.getSpecificCSS();
-
-        const objectData = await this.getObjectData(token);
-
-        this.prepareMarkoTemplate(
-            res, moduleId, objectId, objectData, themeCSS, specificCSS
-        );
-    }
-
-    private async getUserThemeCSS(userId: number): Promise<string> {
-        // TODO: define context id for personal settings.
-        const configuration =
-            await ConfigurationService.getInstance().getComponentConfiguration("personal-settings", null, userId);
-
-        if (configuration) {
-            return configuration.theme;
-        }
-
-        return null;
-    }
-
-    private async getSpecificCSS(): Promise<string[]> {
-        const cssExtensions = await PluginService.getInstance().getExtensions<ISpecificCSSExtension>(
-            KIXExtensions.SPECIFIC_CSS
-        );
-        let specificCSS = [];
-
-        for (const extension of cssExtensions) {
-            specificCSS = specificCSS.concat(extension.getSpecificCSSPaths());
-        }
-
-        return specificCSS;
+        this.prepareMarkoTemplate(res, moduleId, objectId);
     }
 
 }

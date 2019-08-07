@@ -1,3 +1,11 @@
+<!--
+Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
 <div.toast-content>
     <div.toast-icon>
         <icon icon="kix-icon-info"/>
@@ -5,12 +13,15 @@
     <div.toast-text>
         <b title=(input.title || "")><translation-string pattern=(input.title || "")/></b>
         <p>
-            <translation-string pattern="Data has been updated."/>
+            <translation-string pattern=state.message/>
             <p>
                 <a on-click("refreshClicked")>
-                    <translation-string pattern="Refresh Page"/>
+                    <translation-string pattern="Translatable#Refresh Page"/>
                 </a>
             </p>
         </p>
+    </div>
+    <div.close-button>
+        <span.kix-icon-close on-click("close")/>
     </div>
 </div>

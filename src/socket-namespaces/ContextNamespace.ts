@@ -1,12 +1,19 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { SocketNameSpace } from './SocketNameSpace';
 import {
-    SaveWidgetRequest, ContextEvent, LoadContextConfigurationRequest, LoadContextConfigurationResponse,
-    SaveContextConfigurationRequest
+    ContextEvent, LoadContextConfigurationRequest, LoadContextConfigurationResponse, ContextConfiguration, SocketEvent
 } from '../core/model';
-
 import { SocketResponse, SocketErrorResponse } from '../core/common';
-import { ConfigurationService, UserService } from '../core/services';
-import { PluginService } from '../services';
+import { ConfigurationService } from '../core/services';
+import { PluginService, PermissionService } from '../services';
 
 export class ContextNamespace extends SocketNameSpace {
 
@@ -31,88 +38,47 @@ export class ContextNamespace extends SocketNameSpace {
         this.registerEventHandler(
             client, ContextEvent.LOAD_CONTEXT_CONFIGURATION, this.loadContextConfiguration.bind(this)
         );
-        this.registerEventHandler(
-            client, ContextEvent.SAVE_CONTEXT_CONFIGURATION, this.saveContextConfiguration.bind(this)
-        );
-        this.registerEventHandler(
-            client, ContextEvent.SAVE_WIDGET_CONFIGURATION, this.saveWidgetConfiguration.bind(this)
-        );
     }
 
     protected async loadContextConfiguration(
         data: LoadContextConfigurationRequest
     ): Promise<SocketResponse<LoadContextConfigurationResponse<any> | SocketErrorResponse>> {
-        const user = await UserService.getInstance().getUserByToken(data.token);
-        const userId = user.UserID;
-
-        let configuration = await ConfigurationService.getInstance().getModuleConfiguration(data.contextId, userId);
+        let configuration = ConfigurationService.getInstance().getConfiguration<ContextConfiguration>(data.contextId);
 
         if (!configuration) {
-            const configurationExtension = await PluginService.getInstance().getConfigurationExtension(data.contextId);
-            const moduleDefaultConfiguration = await configurationExtension.getDefaultConfiguration();
-            if (moduleDefaultConfiguration) {
-                ConfigurationService.getInstance().saveModuleConfiguration(
-                    data.contextId, userId, moduleDefaultConfiguration);
+            const configurationExtension = await PluginService.getInstance().getConfigurationExtension(data.contextId)
+                .catch(() => null);
 
-                configuration = moduleDefaultConfiguration;
+            if (configurationExtension) {
+                const moduleDefaultConfiguration = await configurationExtension.getDefaultConfiguration(data.token)
+                    .catch(() => null);
+
+                if (moduleDefaultConfiguration) {
+                    ConfigurationService.getInstance().saveConfiguration(data.contextId, moduleDefaultConfiguration);
+                    configuration = moduleDefaultConfiguration;
+                } else {
+                    return new SocketResponse(
+                        SocketEvent.ERROR,
+                        new SocketErrorResponse(
+                            data.requestId,
+                            new Error(`No default configuration for context ${data.contextId} given!`)
+                        )
+                    );
+                }
             } else {
-                return new SocketResponse(ContextEvent.CONTEXT_CONFIGURATION_LOAD_ERROR,
-                    new SocketErrorResponse(
-                        data.requestId,
-                        new Error(`Translatable#No default configuration for context ${data.contextId} given!`)
-                    )
-                );
+                return new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(
+                    data.requestId, `No configuration extension for context ${data.contextId} available.`
+                ));
             }
         }
 
         configuration.contextId = data.contextId;
+        configuration = await PermissionService.getInstance().filterContextConfiguration(data.token, configuration)
+            .catch(() => configuration);
 
         const response = new LoadContextConfigurationResponse(data.requestId, configuration);
         return new SocketResponse(ContextEvent.CONTEXT_CONFIGURATION_LOADED, response);
 
     }
 
-    private saveContextConfiguration(data: SaveContextConfigurationRequest): Promise<SocketResponse<void>> {
-        return new Promise<SocketResponse<void>>((resolve, reject) => {
-            UserService.getInstance().getUserByToken(data.token).then((user) => {
-                const userId = user && user.UserID;
-
-                ConfigurationService.getInstance()
-                    .saveModuleConfiguration(data.contextId, userId, data.configuration);
-
-                resolve(new SocketResponse(ContextEvent.CONTEXT_CONFIGURATION_SAVED, { requestId: data.requestId }));
-            });
-        });
-    }
-
-    private async saveWidgetConfiguration(data: SaveWidgetRequest): Promise<SocketResponse<void>> {
-        const user = await UserService.getInstance().getUserByToken(data.token);
-        const userId = user && user.UserID;
-
-        const moduleConfiguration = await ConfigurationService.getInstance().getModuleConfiguration(
-            data.contextId,
-            userId
-        );
-
-        if (moduleConfiguration) {
-            let index = moduleConfiguration.contentConfiguredWidgets.findIndex(
-                (cw) => cw.instanceId === data.instanceId
-            );
-            if (index > -1) {
-                moduleConfiguration.contentConfiguredWidgets[index].configuration = data.widgetConfiguration;
-            } else {
-                index = moduleConfiguration.sidebarConfiguredWidgets.findIndex(
-                    (cw) => cw.instanceId === data.instanceId
-                );
-                moduleConfiguration.sidebarConfiguredWidgets[index].configuration = data.widgetConfiguration;
-            }
-
-            ConfigurationService.getInstance().saveModuleConfiguration(
-                data.contextId, userId, moduleConfiguration
-            );
-            return new SocketResponse(ContextEvent.WIDGET_CONFIGURATION_SAVED, { requestId: data.requestId });
-        }
-
-        return null;
-    }
 }

@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import { ChartConfiguration } from 'chart.js';
 import { ContextService } from '../../../core/browser';
@@ -39,7 +48,16 @@ class Component {
     public onMount(): void {
         const context = ContextService.getInstance().getActiveContext();
         context.registerListener(this.state.chartId, {
-            sidebarToggled: () => { setTimeout(() => { this.createChart(); }, 10); },
+            sidebarToggled: () => {
+                setTimeout(() => {
+                    if (
+                        (!context.isExplorerBarShown() && window.innerWidth > 1475) ||
+                        (context.isExplorerBarShown() && window.innerWidth > 1700)
+                    ) {
+                        this.createChart();
+                    }
+                }, 10);
+            },
             explorerBarToggled: () => { setTimeout(() => { this.createChart(); }, 10); },
             objectChanged: () => { return; },
             objectListChanged: () => { return; },
@@ -65,27 +83,25 @@ class Component {
             const ctx = canvasElement.getContext('2d');
             if (ctx) {
                 if (this.chart) {
-                    this.chart.destroy();
+                    try {
+                        this.chart.destroy();
+                    } catch (e) {
+                        //
+                    }
                 }
                 this.chart = new Chart(ctx, this.config);
-
-                if (window.screen.width < 1440) {
-                    setTimeout(() => {
-                        canvasElement.removeAttribute('height');
-                        canvasElement.removeAttribute('width');
-
-                        canvasElement.style.width = '100%';
-                        canvasElement.style.height = '100%';
-                    }, 100);
-                }
             }
         }
     }
 
     public onDestroy(): void {
         if (this.chart) {
-            this.chart.destroy();
-            this.chart = null;
+            try {
+                this.chart.destroy();
+                this.chart = null;
+            } catch (e) {
+                //
+            }
         }
         window.removeEventListener('resize', this.createChart.bind(this), false);
         window.removeEventListener('beforeprint', this.beforePrint.bind(this));

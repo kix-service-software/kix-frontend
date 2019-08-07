@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../../../core/browser/context';
 import {
@@ -48,6 +57,7 @@ class Component {
             }
         });
 
+        this.setWidgetContentHeight();
         await this.initWidget(await context.getObject<Ticket>());
     }
 
@@ -78,7 +88,7 @@ class Component {
     }
 
     private async getTicketNotes(): Promise<void> {
-        const loadingOptions = new KIXObjectLoadingOptions(['DynamicField.ID'], [
+        const loadingOptions = new KIXObjectLoadingOptions([
             new FilterCriteria('Name', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'TicketNotes')
         ]);
 
@@ -94,6 +104,16 @@ class Component {
                 if (ticketNotesDF) {
                     this.state.ticketNotes = ticketNotesDF.DisplayValue;
                 }
+            }
+        }
+    }
+
+    private setWidgetContentHeight(): void {
+        const laneWidget = (this as any).getEl();
+        if (laneWidget) {
+            const content = laneWidget.querySelector('.widget-content');
+            if (content) {
+                content.style.maxHeight = "unset";
             }
         }
     }

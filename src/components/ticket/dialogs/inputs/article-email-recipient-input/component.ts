@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from "./ComponentState";
 import {
     Contact, FormInputComponent, KIXObjectType, TreeNode, KIXObjectLoadingOptions,
@@ -64,7 +73,6 @@ class Component extends FormInputComponent<string[], ComponentState> {
                 const plainMail = email.replace(/.+ <(.+)>/, '$1');
                 const contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, null,
                     new KIXObjectLoadingOptions(
-                        null,
                         [
                             new FilterCriteria(
                                 ContactProperty.EMAIL, SearchOperator.EQUALS, FilterDataType.STRING,
@@ -82,7 +90,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
                         || !!!systemAddresses.length
                         || !systemAddresses.map((sa) => sa.Name).some((f) => f === plainMail)
                     ) {
-                        nodes.push(new TreeNode(plainMail, email, 'kix-icon-man-bubble'));
+                        nodes.push(new TreeNode(plainMail, email));
                     }
                 }
             }
@@ -219,14 +227,13 @@ class Component extends FormInputComponent<string[], ComponentState> {
     }
 
     public contactChanged(nodes: TreeNode[]): void {
-        this.state.currentNodes = nodes;
-        super.provideValue(nodes.map((n) => n.id));
+        this.state.currentNodes = nodes ? nodes : [];
+        super.provideValue(this.state.currentNodes.map((n) => n.id));
     }
 
     private async searchContacts(limit: number, searchValue: string): Promise<TreeNode[]> {
-        const loadingOptions = new KIXObjectLoadingOptions(
-            null, ContactService.getInstance().prepareFullTextFilter(searchValue), null, limit
-        );
+        const filter = await ContactService.getInstance().prepareFullTextFilter(searchValue);
+        const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit);
         const contacts = await KIXObjectService.loadObjects<Contact>(
             KIXObjectType.CONTACT, null, loadingOptions, null, false
         );

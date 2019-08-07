@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions, Error
@@ -7,11 +16,14 @@ import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { LoggingService } from '../LoggingService';
 import {
-    Translation, TranslationLanguageLoadingOptions, TranslationLanguage, TranslationProperty,
+    TranslationPattern, TranslationLanguageLoadingOptions, TranslationLanguage, TranslationPatternProperty,
     TranslationLanguageProperty, PODefinition
 } from '../../../model/kix/i18n';
+import { Translation } from '../../../model/kix/i18n/Translation';
 
 export class TranslationService extends KIXObjectService {
+
+    protected RESOURCE_URI: string = this.buildUri('i18n', 'translations');
 
     private static INSTANCE: TranslationService;
 
@@ -22,8 +34,6 @@ export class TranslationService extends KIXObjectService {
         return TranslationService.INSTANCE;
     }
 
-    protected RESOURCE_URI: string = 'i18n/translations';
-
     public objectType: KIXObjectType = KIXObjectType.TRANSLATION;
 
     private constructor() {
@@ -32,7 +42,7 @@ export class TranslationService extends KIXObjectService {
     }
 
     public isServiceFor(kixObjectType: KIXObjectType): boolean {
-        return kixObjectType === KIXObjectType.TRANSLATION;
+        return kixObjectType === KIXObjectType.TRANSLATION_PATTERN || kixObjectType === KIXObjectType.TRANSLATION;
     }
 
     public async loadObjects<T>(
@@ -41,16 +51,15 @@ export class TranslationService extends KIXObjectService {
     ): Promise<T[]> {
 
         let objects = [];
-        if (objectType === KIXObjectType.TRANSLATION) {
-            const translations = await this.getTranslations(token, loadingOptions);
-            if (objectIds && objectIds.length) {
-                objects = translations.filter((t) => objectIds.some((oid) => oid === t.ObjectId));
-            } else {
-                objects = translations;
-            }
-        } else if (objectType === KIXObjectType.TRANSLATION_LANGUAGE) {
-            const options = objectLoadingOptions as TranslationLanguageLoadingOptions;
-            objects = await this.getLanguages(token, objectIds, options);
+        if (objectType === KIXObjectType.TRANSLATION_PATTERN) {
+            const uri = this.buildUri('system', this.RESOURCE_URI);
+            objects = await super.load<TranslationPattern>(
+                token, objectType, uri, loadingOptions, objectIds, 'TranslationPattern'
+            );
+        } else if (objectType === KIXObjectType.TRANSLATION) {
+            objects = await super.load<Translation>(
+                token, objectType, this.RESOURCE_URI, loadingOptions, objectIds, 'Translation'
+            );
         }
 
         return objects;
@@ -60,56 +69,69 @@ export class TranslationService extends KIXObjectService {
         token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
         createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<number> {
-        const pattern = parameter.find((p) => p[0] === TranslationProperty.PATTERN);
+        if (objectType === KIXObjectType.TRANSLATION_PATTERN) {
+            const pattern = parameter.find((p) => p[0] === TranslationPatternProperty.VALUE);
 
-        const createParameter: Array<[string, any]> = [pattern];
+            const createParameter: Array<[string, any]> = [pattern];
 
-        const languages: TranslationLanguage[] = [];
-        const languageParameter = parameter.filter((p) => p[0] !== TranslationProperty.PATTERN);
-        languageParameter.forEach((lp) => {
-            if (typeof lp[1] !== 'undefined' && lp[1] !== null && lp[1] !== '') {
-                const translationLanguage = new TranslationLanguage();
-                translationLanguage.Language = lp[0];
-                translationLanguage.Value = lp[1];
-                languages.push(translationLanguage);
+            const languages: TranslationLanguage[] = [];
+            const languageParameter = parameter.filter((p) => p[0] !== TranslationPatternProperty.VALUE);
+            languageParameter.forEach((lp) => {
+                if (typeof lp[1] !== 'undefined' && lp[1] !== null && lp[1] !== '') {
+                    const translationLanguage = new TranslationLanguage();
+                    translationLanguage.Language = lp[0];
+                    translationLanguage.Value = lp[1];
+                    languages.push(translationLanguage);
+                }
+            });
+
+            if (languages.length > 0) {
+                createParameter.push([TranslationPatternProperty.LANGUAGES, languages]);
             }
-        });
 
-        if (languages.length > 0) {
-            createParameter.push([TranslationProperty.LANGUAGES, languages]);
+            const uri = this.buildUri('system', this.RESOURCE_URI);
+            const id = await super.executeUpdateOrCreateRequest(
+                token, clientRequestId, createParameter, uri, KIXObjectType.TRANSLATION_PATTERN,
+                'PatternID', true
+            ).catch((error: Error) => {
+                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                throw new Error(error.Code, error.Message);
+            });
+
+            return id;
         }
 
-        const id = await super.executeUpdateOrCreateRequest(
-            token, clientRequestId, createParameter, this.RESOURCE_URI, KIXObjectType.TRANSLATION, 'TranslationID', true
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
-
-        return id;
+        throw new Error('0', 'Unsupported object type ' + objectType);
     }
 
     public async updateObject(
         token: string, clientRequestId: string, objectType: KIXObjectType,
         parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
-        const pattern = parameter.find((p) => p[0] === TranslationProperty.PATTERN);
+        if (objectType === KIXObjectType.TRANSLATION_PATTERN) {
+            const pattern = parameter.find((p) => p[0] === TranslationPatternProperty.VALUE);
 
-        const uri = this.buildUri(this.RESOURCE_URI, objectId);
-        const id = await super.executeUpdateOrCreateRequest(
-            token, clientRequestId, [pattern], uri, this.objectType, 'TranslationID'
-        );
-
-        const translations = await this.getTranslations(token);
-        const translation = translations.find((t) => t.ID === objectId);
-        if (translation) {
-            const languageParameter = parameter.filter((p) => p[0] !== TranslationProperty.PATTERN);
-            this.createOrUpdateLanguages(
-                token, clientRequestId, translation.ID, translation.Languages, languageParameter
+            const uri = this.buildUri('system', this.RESOURCE_URI, objectId);
+            const id = await super.executeUpdateOrCreateRequest(
+                token, clientRequestId, [pattern], uri, KIXObjectType.TRANSLATION_PATTERN, 'PatternID'
             );
+
+            const loadingOptions = new KIXObjectLoadingOptions(
+                null, null, null, [TranslationPatternProperty.LANGUAGES]
+            );
+            const translations = await super.load<TranslationPattern>(
+                token, KIXObjectType.TRANSLATION_PATTERN, uri, loadingOptions, null, 'TranslationPattern'
+            );
+            if (translations && translations.length) {
+                const languageParameter = parameter.filter((p) => p[0] !== TranslationPatternProperty.VALUE);
+                await this.createOrUpdateLanguages(
+                    token, clientRequestId, translations[0].ID, translations[0].Languages, languageParameter
+                );
+            }
+            return id;
         }
 
-        return id;
+        throw new Error('0', 'Unsupported object type ' + objectType);
     }
 
     private async createOrUpdateLanguages(
@@ -124,19 +146,18 @@ export class TranslationService extends KIXObjectService {
                     const translationParameter: Array<[string, string]> =
                         [[TranslationLanguageProperty.VALUE, param[1].trim()]];
 
-                    const uri = this.buildUri(this.RESOURCE_URI, translationId, 'languages', param[0]);
+                    const uri = this.buildUri('system', this.RESOURCE_URI, translationId, 'languages', param[0]);
                     await super.executeUpdateOrCreateRequest(
                         token, clientRequestId, translationParameter, uri,
                         KIXObjectType.TRANSLATION_LANGUAGE, 'TranslationLanguageID'
                     );
                 } else {
-                    await this.sendDeleteRequest(
-                        token, clientRequestId, this.buildUri(this.RESOURCE_URI, translationId, 'languages', param[0]),
-                        KIXObjectType.TRANSLATION
-                    ).catch((error: Error) => {
-                        LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                        throw new Error(error.Code, error.Message);
-                    });
+                    const uri = this.buildUri('system', this.RESOURCE_URI, translationId, 'languages', param[0]);
+                    await this.sendDeleteRequest(token, clientRequestId, uri, KIXObjectType.TRANSLATION_PATTERN)
+                        .catch((error: Error) => {
+                            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                            throw new Error(error.Code, error.Message);
+                        });
                 }
 
             } else if (this.hasValue(param[1])) {
@@ -145,7 +166,7 @@ export class TranslationService extends KIXObjectService {
                     [TranslationLanguageProperty.VALUE, param[1].trim()]
                 ];
 
-                const uri = this.buildUri(this.RESOURCE_URI, translationId, 'languages');
+                const uri = this.buildUri('system', this.RESOURCE_URI, translationId, 'languages');
 
                 await super.executeUpdateOrCreateRequest(
                     token, clientRequestId, createParameter, uri, KIXObjectType.TRANSLATION_LANGUAGE,
@@ -161,45 +182,6 @@ export class TranslationService extends KIXObjectService {
 
     private hasValue(value: string): boolean {
         return typeof value !== 'undefined' && value !== null && value.trim() !== '';
-    }
-
-    public async getTranslations(token: string, loadingOptions?: KIXObjectLoadingOptions): Promise<Translation[]> {
-        const uri = this.buildUri(this.RESOURCE_URI);
-
-        if (!loadingOptions) {
-            loadingOptions = new KIXObjectLoadingOptions(
-                null, null, 'Translation.' + TranslationProperty.PATTERN,
-                null, [TranslationProperty.LANGUAGES]
-            );
-        }
-
-        const translations = await super.load<Translation>(
-            token, KIXObjectType.TRANSLATION, uri, loadingOptions, null, 'Translation'
-        );
-        return translations;
-    }
-
-    private async getLanguages(
-        token: string, objectIds: Array<string | number>, loadingOptions: TranslationLanguageLoadingOptions
-    ): Promise<TranslationLanguage[]> {
-        let languages: TranslationLanguage[] = [];
-        if (loadingOptions) {
-            const translations = await this.getTranslations(token);
-            const translation = translations.find((t) => t.ID === loadingOptions.translationId);
-            if (translation) {
-                if (objectIds && objectIds.length) {
-                    languages = translation.Languages.filter(
-                        (l) => objectIds.some((oid) => oid.toString() === l.Language.toString())
-                    );
-                } else {
-                    languages = translation.Languages;
-                }
-            }
-        } else {
-            throw new Error('getLanguages', 'No loading options given (translationId).');
-        }
-
-        return languages;
     }
 
     public async getPODefinitions(): Promise<PODefinition[]> {

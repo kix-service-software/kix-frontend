@@ -1,5 +1,16 @@
-import { ContextService, BrowserUtil } from '../../../../core/browser';
-import { KIXObjectType, CreateTicketArticleOptions, TicketProperty, Ticket } from '../../../../core/model';
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { ContextService, BrowserUtil, FormService } from '../../../../core/browser';
+import {
+    KIXObjectType, CreateTicketArticleOptions, TicketProperty, Ticket, FormField, ArticleProperty, FormFieldValue
+} from '../../../../core/model';
 import { ComponentState } from './ComponentState';
 import { TicketDetailsContext, NewTicketArticleContext } from '../../../../core/browser/ticket';
 import {
@@ -42,6 +53,23 @@ class Component extends AbstractNewDialog {
         this.options = new CreateTicketArticleOptions(
             Number(context.getObjectId())
         );
+
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        if (formInstance) {
+            formInstance.registerListener({
+                formListenerId: 'new-article-dialog-listener',
+                formValueChanged: async (formField: FormField, value: FormFieldValue<any>, oldValue: any) => {
+                    if (formField.property === ArticleProperty.CHANNEL_ID) {
+                        if (value && value.value === 2) {
+                            this.state.buttonLabel = 'Translatable#Send';
+                        } else {
+                            this.state.buttonLabel = 'Translatable#Save';
+                        }
+                    }
+                },
+                updateForm: () => { return; }
+            });
+        }
     }
 
     public async onDestroy(): Promise<void> {

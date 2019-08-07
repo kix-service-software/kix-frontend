@@ -1,9 +1,17 @@
-import { Ticket, TicketHistory, Link, DynamicField } from '../../model';
-import { IKIXObjectFactory } from '../kix';
-import { ArticleBrowserFactory } from './ArticleBrowserFactory';
-import { ObjectDataService } from '../ObjectDataService';
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
 
-export class TicketBrowserFactory implements IKIXObjectFactory<Ticket> {
+import { Ticket, TicketHistory, Link, DynamicField } from '../../model';
+import { KIXObjectFactory } from '../kix';
+import { ArticleBrowserFactory } from './ArticleBrowserFactory';
+
+export class TicketBrowserFactory extends KIXObjectFactory<Ticket> {
 
     private static INSTANCE: TicketBrowserFactory;
 
@@ -14,7 +22,9 @@ export class TicketBrowserFactory implements IKIXObjectFactory<Ticket> {
         return TicketBrowserFactory.INSTANCE;
     }
 
-    private constructor() { }
+    protected constructor() {
+        super();
+    }
 
     public async create(ticket: Ticket): Promise<Ticket> {
         const newTicket = new Ticket(ticket);
@@ -23,13 +33,18 @@ export class TicketBrowserFactory implements IKIXObjectFactory<Ticket> {
     }
 
     private async mapTicketData(ticket: Ticket): Promise<void> {
-        const objectData = ObjectDataService.getInstance().getObjectData();
-        if (objectData) {
-            await this.initArticles(ticket);
+        await this.initArticles(ticket);
 
-            ticket.DynamicFields = ticket.DynamicFields ? ticket.DynamicFields.map((df) => new DynamicField(df)) : [];
-            ticket.History = ticket.History ? ticket.History.map((th) => new TicketHistory(th)) : [];
-            ticket.Links = ticket.Links ? ticket.Links.map((l) => new Link(l)) : [];
+        if (ticket.DynamicFields) {
+            ticket.DynamicFields = ticket.DynamicFields.map((df) => new DynamicField(df));
+        }
+
+        if (ticket.History) {
+            ticket.History = ticket.History.map((th) => new TicketHistory(th));
+        }
+
+        if (ticket.Links) {
+            ticket.Links = ticket.Links.map((l) => new Link(l));
         }
     }
 

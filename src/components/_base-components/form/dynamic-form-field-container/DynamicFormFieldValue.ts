@@ -1,25 +1,29 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
-    IdService, LabelService, KIXObjectService, ObjectPropertyValue, IDynamicFormManager,
-    DynamicFormAutocompleteDefinition,
-    ComponentsService,
-    DynamicFormOperationsType
+    IdService, LabelService, KIXObjectService, ObjectPropertyValue, IDynamicFormManager, DynamicFormOperationsType
 } from '../../../../core/browser';
 import { TreeNode, InputFieldTypes, DateTimeUtil, TreeUtil } from '../../../../core/model';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
+import { KIXModulesService } from '../../../../core/browser/modules';
 
 export class DynamicFieldValue {
 
     public isDropdown: boolean = false;
     public isDate: boolean = false;
     public isDateTime: boolean = false;
-    public isAutocomplete: boolean = false;
     public isTextarea: boolean = false;
     public isSpecificInput: boolean = false;
     public specificInputType: string = null;
     public inputOptions: Array<[string, string | number]> = [];
 
-    public opertationIsAutocomplete: boolean = false;
-    public operatorAutoCompleteData: DynamicFormAutocompleteDefinition = null;
     public operationIsStringInput: boolean = false;
     public operationIsNone: boolean = false;
 
@@ -28,6 +32,9 @@ export class DynamicFieldValue {
 
     public nodes: TreeNode[] = [];
     public currentValueNodes: TreeNode[] = [];
+
+    public isMultiselect: boolean = false;
+    public isAutocomplete: boolean = false;
 
     private currentValue: any;
     private date: string;
@@ -69,10 +76,7 @@ export class DynamicFieldValue {
                 operatorNode = this.operationNodes.find((on) => on.id === this.value.operator);
             }
             this.setOperationNode(operatorNode);
-        } else if (
-            (this.operationIsStringInput || this.opertationIsAutocomplete)
-            && this.value.operator
-        ) {
+        } else if ((this.operationIsStringInput) && this.value.operator) {
             this.setOperationNode(null, this.value.operator);
         }
 
@@ -94,23 +98,21 @@ export class DynamicFieldValue {
         await this.createPropertyNodes();
         await this.createOperationNodes();
         if (this.manager.showValueInput(this.value)) {
-            const inputType = await this.manager.getInputType(
-                this.currentPropertyNode ? this.currentPropertyNode.id : null
-            );
+            const property = this.currentPropertyNode ? this.currentPropertyNode.id : null;
+            const inputType = await this.manager.getInputType(property);
             this.inputOptions = await this.manager.getInputTypeOptions(
-                this.currentPropertyNode ? this.currentPropertyNode.id : null,
+                property,
                 this.currentOperationNode ? this.currentOperationNode.id : null
             );
 
             this.isDate = inputType === InputFieldTypes.DATE;
             this.isDateTime = inputType === InputFieldTypes.DATE_TIME;
 
-            this.isDropdown = inputType === InputFieldTypes.DROPDOWN
-                || inputType === InputFieldTypes.CI_REFERENCE
-                || inputType === InputFieldTypes.OBJECT_REFERENCE;
+            this.isDropdown = inputType === InputFieldTypes.DROPDOWN || inputType === InputFieldTypes.OBJECT_REFERENCE;
 
-            this.isAutocomplete = inputType === InputFieldTypes.OBJECT_REFERENCE
-                || inputType === InputFieldTypes.CI_REFERENCE;
+            this.isAutocomplete = inputType === InputFieldTypes.OBJECT_REFERENCE;
+
+            this.isMultiselect = this.manager.isMultiselect(property);
 
             this.isTextarea = inputType === InputFieldTypes.TEXT_AREA;
 
@@ -118,7 +120,7 @@ export class DynamicFieldValue {
             if (this.isSpecificInput) {
                 const specificInputType = this.manager.getSpecificInput();
                 if (specificInputType) {
-                    this.specificInputType = ComponentsService.getInstance().getComponentTemplate(specificInputType);
+                    this.specificInputType = KIXModulesService.getComponentTemplate(specificInputType);
                 }
             }
 
@@ -126,7 +128,7 @@ export class DynamicFieldValue {
                 this.setOperationNode(this.operationNodes[0]);
             }
 
-            if (this.currentPropertyNode && this.isDropdown && !this.isAutocomplete) {
+            if (this.currentPropertyNode && this.isDropdown) {
                 this.nodes = await this.manager.getTreeNodes(this.currentPropertyNode.id);
             }
         }
@@ -146,17 +148,7 @@ export class DynamicFieldValue {
             this.currentOperationNode = operationNode;
         } else if (typeof operator !== 'undefined' && operator !== null) {
             let node = this.operationNodes.find((on) => on.id === operator);
-            if (
-                !node
-                && (
-                    (
-                        this.opertationIsAutocomplete
-                        && this.operatorAutoCompleteData
-                        && this.operatorAutoCompleteData.isFreeText
-                    )
-                    || this.operationIsStringInput
-                )
-            ) {
+            if (!node && this.operationIsStringInput) {
                 node = new TreeNode(operator, operator);
             }
             this.currentOperationNode = node;
@@ -166,22 +158,38 @@ export class DynamicFieldValue {
     public async setCurrentValue(value: any): Promise<void> {
         this.currentValue = value;
         if (this.value.objectType && value) {
-            const objects = await KIXObjectService.loadObjects(this.value.objectType, [value]);
+            const objects = await KIXObjectService.loadObjects(
+                this.value.objectType, Array.isArray(value) ? value : [value]
+            );
             let label = value;
+            let icon;
+            const current: TreeNode[] = [];
             if (objects && objects.length) {
                 const labelProvider = LabelService.getInstance().getLabelProviderForType(this.value.objectType);
-                label = await labelProvider.getObjectText(objects[0]);
+                for (const object of objects) {
+                    label = await labelProvider.getObjectText(objects[0]);
+                    icon = labelProvider.getObjectTypeIcon();
+                    current.push(new TreeNode(object.ObjectId, label, icon));
+                }
             }
-            this.currentValueNodes = [new TreeNode(value, label)];
+            this.currentValueNodes = current;
         } else if (this.isDropdown && this.nodes && this.nodes.length) {
-            const node = TreeUtil.findNode(this.nodes, value);
-            this.currentValueNodes = [node];
+            const current: TreeNode[] = [];
+            if (Array.isArray(value)) {
+                for (const v of value) {
+                    const node = TreeUtil.findNode(this.nodes, v);
+                    if (node) {
+                        current.push(node);
+                    }
+                }
+            }
+            this.currentValueNodes = current;
         }
     }
 
     public setTreeValues(nodes: TreeNode[]): void {
         this.currentValueNodes = nodes;
-        this.currentValue = nodes && nodes.length ? nodes[0].id : null;
+        this.currentValue = nodes ? nodes.map((n) => n.id) : null;
     }
 
     public setTextValue(value: string): void {
@@ -250,9 +258,6 @@ export class DynamicFieldValue {
 
         const operationsType = await this.manager.getOpertationsType(property);
         switch (operationsType) {
-            case DynamicFormOperationsType.AUTOCOMPLETE:
-                this.opertationIsAutocomplete = true;
-                break;
             case DynamicFormOperationsType.STRING:
                 this.operationIsStringInput = true;
                 break;
@@ -260,9 +265,6 @@ export class DynamicFieldValue {
                 this.operationIsNone = true;
                 break;
             default:
-        }
-        if (this.opertationIsAutocomplete) {
-            this.operatorAutoCompleteData = await this.manager.getOperationsAutoCompleteData();
         }
     }
 

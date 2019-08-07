@@ -1,7 +1,14 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
-import {
-    FormService, ServiceRegistry, ServiceType, OverlayService, BrowserUtil, ContextService
-} from '../../../../core/browser';
+import { FormService, OverlayService, BrowserUtil } from '../../../../core/browser';
 import {
     KIXObjectType, FormField, FormFieldValue, PersonalSetting, Form, FormContext,
     ValidationSeverity, OverlayType, ComponentContent, ValidationResult, Error
@@ -41,20 +48,14 @@ class Component {
     }
 
     private async prepareForm(): Promise<Form> {
-        let personalSettings: PersonalSetting[] = [];
-
-        const service = ServiceRegistry.getServiceInstance<AgentService>(
-            KIXObjectType.PERSONAL_SETTINGS, ServiceType.OBJECT
-        );
-        if (service) {
-            personalSettings = await service.getPersonalSettings();
-        }
+        const personalSettings: PersonalSetting[] = await AgentService.getInstance().getPersonalSettings();
 
         const formGroups: FormGroup[] = [];
         personalSettings.forEach((ps) => {
             const group = formGroups.find((g) => g.name === ps.group);
             const formField = new FormField(
-                ps.label, ps.property, ps.inputType, false, ps.hint, ps.options, new FormFieldValue(ps.defaultValue)
+                ps.label, ps.property, ps.inputComponent, false, ps.hint,
+                ps.options, new FormFieldValue(ps.defaultValue)
             );
             if (group) {
                 group.formFields.push(formField);
@@ -66,7 +67,7 @@ class Component {
         const formName = await TranslationService.translate('Translatable#Personal Settings');
         return new Form(
             'personal-settings', formName,
-            formGroups, KIXObjectType.PERSONAL_SETTINGS, true, FormContext.EDIT,
+            formGroups, KIXObjectType.PERSONAL_SETTINGS, false, FormContext.EDIT,
             null, null, true
         );
     }
@@ -77,9 +78,6 @@ class Component {
 
     public async submit(): Promise<void> {
         if (this.state.formId) {
-
-            const loadingHint = await TranslationService.translate('Translatable#Save Settings.');
-            DialogService.getInstance().setMainDialogLoading(false, loadingHint);
             setTimeout(async () => {
                 const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
                 const result = await formInstance.validateForm();
@@ -87,33 +85,34 @@ class Component {
                 if (validationError) {
                     this.showValidationError(result);
                 } else {
-                    const service = ServiceRegistry.getServiceInstance<AgentService>(
-                        KIXObjectType.PERSONAL_SETTINGS, ServiceType.OBJECT
-                    );
-                    if (service) {
-                        await service.setPreferencesByForm(this.state.formId)
-                            .then(async () => {
-                                DialogService.getInstance().setMainDialogLoading(false);
-
-                                const toast = await TranslationService.translate('Translatable#Changes saved.');
-                                BrowserUtil.openSuccessOverlay(toast);
-                                DialogService.getInstance().submitMainDialog();
-                                EventService.getInstance().publish(ApplicationEvent.REFRESH);
-                            }).catch((error: Error) => {
-                                DialogService.getInstance().setMainDialogLoading(false);
-                                BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
-                            });
-                    }
+                    const loadingHint = await TranslationService.translate('Translatable#Save Settings.');
+                    DialogService.getInstance().setMainDialogLoading(true, loadingHint);
+                    await AgentService.getInstance().setPreferencesByForm(this.state.formId)
+                        .then(async () => {
+                            DialogService.getInstance().setMainDialogLoading(false);
+                            DialogService.getInstance().submitMainDialog();
+                            EventService.getInstance().publish(ApplicationEvent.REFRESH);
+                            const toast = await TranslationService.translate('Translatable#Changes saved.');
+                            BrowserUtil.openSuccessOverlay(toast);
+                        }).catch((error: Error) => {
+                            DialogService.getInstance().setMainDialogLoading(false);
+                            BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
+                        });
                 }
             });
         }
     }
 
     public async showValidationError(result: ValidationResult[]): Promise<void> {
-        const errorMessages = result.filter((r) => r.severity === ValidationSeverity.ERROR).map((r) => r.message);
+        const errorMessages = [];
+
+        result.filter((r) => r.severity === ValidationSeverity.ERROR).map((r) => r.message).forEach((m) => {
+            if (!errorMessages.some((em) => em === m)) {
+                errorMessages.push(m);
+            }
+        });
 
         const title = await TranslationService.translate('Translatable#Error on form validation:');
-
         const content = new ComponentContent('list-with-title',
             {
                 title,
@@ -122,7 +121,6 @@ class Component {
         );
 
         const toastTitle = await TranslationService.translate('Translatable#Validation error');
-
         OverlayService.getInstance().openOverlay(
             OverlayType.WARNING, null, content, toastTitle, true
         );

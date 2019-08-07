@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObject } from '../KIXObject';
 import { ArticleFlag } from './ArticleFlag';
 import { ArticleReceiver } from './ArticleReceiver';
@@ -17,6 +26,8 @@ export class Article extends KIXObject<Article> {
     public ArticleID: number;
 
     public From: string;
+
+    public FromRealname: string;
 
     public To: string;
 
@@ -44,6 +55,8 @@ export class Article extends KIXObject<Article> {
 
     public SenderTypeID: number;
 
+    public SenderType: string;
+
     public ChannelID: number;
 
     public Channel: string;
@@ -64,7 +77,8 @@ export class Article extends KIXObject<Article> {
 
     public CustomerVisible: boolean;
 
-    public ChangeTime: string;
+    public CreatedBy: number;
+    public ChangedBy: number;
 
     // UI Properties
 
@@ -82,6 +96,7 @@ export class Article extends KIXObject<Article> {
             this.ArticleID = article.ArticleID;
             this.ObjectId = this.ArticleID;
             this.From = article.From;
+            this.FromRealname = article.FromRealname;
             this.To = article.To;
             this.ToRealname = article.ToRealname;
             this.Cc = article.Cc;
@@ -95,6 +110,7 @@ export class Article extends KIXObject<Article> {
             this.InReplyTo = article.InReplyTo;
             this.References = article.References;
             this.SenderTypeID = article.SenderTypeID;
+            this.SenderType = article.SenderType;
             this.ContentType = article.ContentType;
             this.Charset = article.Charset;
             this.MimeType = article.MimeType;
@@ -106,6 +122,9 @@ export class Article extends KIXObject<Article> {
             this.ChannelID = article.ChannelID;
             this.CustomerVisible = article.CustomerVisible;
             this.ChangeTime = article.ChangeTime;
+            this.CreateTime = article.CreateTime;
+            this.ChangedBy = article.ChangedBy;
+            this.CreatedBy = article.CreatedBy;
 
             this.bodyAttachment = article.bodyAttachment;
         }

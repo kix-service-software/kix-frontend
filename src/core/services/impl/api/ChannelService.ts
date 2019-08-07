@@ -1,10 +1,20 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, Error, Channel, ChannelFactory
+    KIXObjectSpecificCreateOptions, Error, Channel
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
+import { ChannelFactory } from '../../object-factories/ChannelFactory';
 
 export class ChannelService extends KIXObjectService {
 
@@ -17,7 +27,7 @@ export class ChannelService extends KIXObjectService {
         return ChannelService.INSTANCE;
     }
 
-    protected RESOURCE_URI: string = 'channels';
+    protected RESOURCE_URI: string = this.buildUri('system', 'communication', 'channels');
 
     public objectType: KIXObjectType = KIXObjectType.CHANNEL;
 
@@ -45,17 +55,4 @@ export class ChannelService extends KIXObjectService {
         return objects;
     }
 
-    public async createObject(
-        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
-        createOptions?: KIXObjectSpecificCreateOptions
-    ): Promise<number> {
-        throw new Error('0', 'Method not implemented');
-    }
-
-    public async updateObject(
-        token: string, clientRequestId: string, objectType: KIXObjectType,
-        parameter: Array<[string, any]>, objectId: number | string
-    ): Promise<string | number> {
-        throw new Error('0', 'Method not implemented');
-    }
 }

@@ -1,7 +1,15 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { TableFilterCriteria } from "./components";
 import { SearchOperator } from "../browser";
 import { KIXObjectType, KIXObject } from "./kix";
-import { ObjectDataService } from "../browser/ObjectDataService";
 import { AgentService } from "../browser/application/AgentService";
 
 export class FilterUtil {
@@ -24,8 +32,10 @@ export class FilterUtil {
 
         switch (criteria.operator) {
             case SearchOperator.EQUALS:
+                value = value ? value : '';
                 return value.toString().toLocaleLowerCase() === criteria.value.toString().toLocaleLowerCase();
             case SearchOperator.CONTAINS:
+                value = value ? value : '';
                 return value.toString().toLocaleLowerCase().indexOf(
                     criteria.value.toString().toLocaleLowerCase()
                 ) !== -1;
@@ -42,11 +52,13 @@ export class FilterUtil {
                     if (v instanceof KIXObject) {
                         if (Array.isArray(value)) {
                             return value.some((sv) => sv.equals(v));
-                        } else {
-                            return v.equals(value);
                         }
                     }
-                    return v.toString() === value.toString();
+                    if (typeof value === 'number') {
+                        return value === v;
+                    } else {
+                        return value.toString().indexOf(v.toString()) !== -1;
+                    }
                 });
             default:
         }

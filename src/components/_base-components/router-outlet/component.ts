@@ -1,7 +1,16 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { RouterComponentState } from './RouterComponentState';
-import { ComponentsService } from '../../../core/browser/components';
 import { RoutingService, IRoutingServiceListener } from '../../../core/browser/router';
 import { ComponentRouter } from '../../../core/model';
+import { KIXModulesService } from '../../../core/browser/modules';
 
 export class RouterOutletComponent implements IRoutingServiceListener {
 
@@ -23,7 +32,7 @@ export class RouterOutletComponent implements IRoutingServiceListener {
         if (router) {
             this.state.componentId = router.componentId;
             this.state.data = router.data;
-            this.state.template = ComponentsService.getInstance().getComponentTemplate(this.state.componentId);
+            this.state.template = KIXModulesService.getComponentTemplate(this.state.componentId);
             (this as any).update();
         }
     }

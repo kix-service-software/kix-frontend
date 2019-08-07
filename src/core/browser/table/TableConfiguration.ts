@@ -1,5 +1,14 @@
-import { FilterCriteria, KIXObjectType } from "../../model";
-import { RoutingConfiguration } from "../router";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { FilterCriteria, KIXObjectType, KIXObjectLoadingOptions } from "../../model";
+import { RoutingConfiguration, DialogRoutingConfiguration } from "../router";
 import { ToggleOptions } from "./ToggleOptions";
 import { TableHeaderHeight } from "./TableHeaderHeight";
 import { TableRowHeight } from "./TableRowHeight";
@@ -9,10 +18,9 @@ export class TableConfiguration {
 
     public constructor(
         public objectType?: KIXObjectType,
-        public limit?: number,
+        public loadingOptions?: KIXObjectLoadingOptions,
         public displayLimit?: number,
         public tableColumns?: IColumnConfiguration[],
-        public filter?: FilterCriteria[],
         public enableSelection: boolean = false,
         public toggle: boolean = false,
         public toggleOptions?: ToggleOptions,
@@ -20,7 +28,7 @@ export class TableConfiguration {
         public headerHeight?: TableHeaderHeight,
         public rowHeight?: TableRowHeight,
         public emptyResultHint?: string,
-        public routingConfiguration?: RoutingConfiguration,
+        public routingConfiguration?: RoutingConfiguration | DialogRoutingConfiguration,
         public fixedFirstColumn: boolean = false
     ) {
 
@@ -32,7 +40,7 @@ export class TableConfiguration {
             this.rowHeight = TableRowHeight.SMALL;
         }
 
-        if (!displayLimit) {
+        if (displayLimit === null) {
             if (this.headerHeight === TableHeaderHeight.SMALL) {
                 this.displayLimit = 5;
             } else {

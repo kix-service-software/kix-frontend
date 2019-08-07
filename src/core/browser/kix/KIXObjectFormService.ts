@@ -1,11 +1,22 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
-    KIXObject, KIXObjectType, FormFieldValue, Form, FormField, ObjectIcon, FormContext, ContextType
+    KIXObject, KIXObjectType, FormFieldValue, Form, FormField, ObjectIcon, FormContext, ContextType, CRUD
 } from "../../model";
 import { IKIXObjectFormService } from "./IKIXObjectFormService";
 import { ServiceType } from "./ServiceType";
 import { LabelService } from "../LabelService";
 import { ContextService } from "../context";
 import { InlineContent } from "../components";
+import { AuthenticationSocketClient } from "../application/AuthenticationSocketClient";
+import { UIComponentPermission } from "../../model/UIComponentPermission";
 
 export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> implements IKIXObjectFormService<T> {
 
@@ -15,24 +26,27 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
         return kixObjectServiceType === ServiceType.FORM;
     }
 
-    public async initValues(form: Form): Promise<Map<string, FormFieldValue<any>>> {
-        let kixObject: KIXObject;
-        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-        if (context) {
-            kixObject = await context.getObject();
+    public async initValues(form: Form, kixObject?: KIXObject): Promise<Map<string, FormFieldValue<any>>> {
+        if (!kixObject) {
+            const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+            if (dialogContext) {
+                kixObject = await dialogContext.getObject(form.objectType);
+            }
         }
 
         const formFieldValues: Map<string, FormFieldValue<any>> = new Map();
         for (const g of form.groups) {
             await this.prepareFormFieldValues(g.formFields, kixObject, formFieldValues, form.formContext);
         }
+
+        await this.additionalPreparations(form, formFieldValues, kixObject);
         return formFieldValues;
     }
 
     public async initOptions(form: Form): Promise<void> {
         let kixObject: KIXObject;
         const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-        if (context) {
+        if (context && form.formContext && form.formContext === FormContext.EDIT) {
             kixObject = await context.getObject();
         }
 
@@ -52,12 +66,13 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
                     f.property,
                     kixObject && formContext === FormContext.EDIT ? kixObject[f.property] :
                         f.defaultValue ? f.defaultValue.value : null,
-                    kixObject
+                    kixObject,
+                    f
                 );
 
                 if (f.property === 'ICON') {
                     if (kixObject && formContext === FormContext.EDIT) {
-                        const icon = LabelService.getInstance().getIcon(kixObject);
+                        const icon = LabelService.getInstance().getObjectIcon(kixObject);
                         if (icon instanceof ObjectIcon) {
                             value = icon;
                         }
@@ -107,7 +122,7 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
         return newField;
     }
 
-    protected async getValue(property: string, value: any, object: KIXObject): Promise<any> {
+    protected async getValue(property: string, value: any, object: KIXObject, formField: FormField): Promise<any> {
         return value;
     }
 
@@ -123,5 +138,32 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
             }
         }
         return newString;
+    }
+
+    protected async additionalPreparations(
+        form: Form, formFieldValues: Map<string, FormFieldValue<any>>, kixObject: KIXObject
+    ): Promise<void> {
+        return;
+    }
+
+    public async hasPermissions(field: FormField): Promise<boolean> {
+        return true;
+    }
+
+    public async hasReadPermissionFor(objectType: KIXObjectType): Promise<boolean> {
+        const resource = this.getResource(objectType);
+        return await AuthenticationSocketClient.getInstance().checkPermissions([
+            new UIComponentPermission(resource, [CRUD.READ])
+        ]);
+    }
+
+    protected getResource(objectType: KIXObjectType): string {
+        return objectType.toLocaleLowerCase();
+    }
+
+    protected async checkPermissions(resource: string, crud: CRUD[] = [CRUD.READ]): Promise<boolean> {
+        return await AuthenticationSocketClient.getInstance().checkPermissions(
+            [new UIComponentPermission(resource, crud)]
+        );
     }
 }

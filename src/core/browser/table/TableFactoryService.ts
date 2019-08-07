@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ITableFactory } from "./ITableFactory";
 import { KIXObjectType, ContextType, Context } from "../../model";
 import { ITable } from "../table";
@@ -19,7 +28,9 @@ export class TableFactoryService {
 
     private constructor() {
         ContextService.getInstance().registerListener({
-            contextChanged: this.contextChanged.bind(this)
+            constexServiceListenerId: 'table-factory-service-listener',
+            contextChanged: this.contextChanged.bind(this),
+            contextRegistered: () => { return; }
         });
     }
 
@@ -66,7 +77,7 @@ export class TableFactoryService {
     public async createTable(
         tableKey: string, objectType: KIXObjectType, tableConfiguration?: TableConfiguration,
         objectIds?: Array<number | string>, contextId?: string, defaultRouting?: boolean,
-        defaultToggle?: boolean, short: boolean = false, reload: boolean = true, recreate: boolean = false
+        defaultToggle?: boolean, short: boolean = false, reload: boolean = true, recreate: boolean = true
     ): Promise<ITable> {
         let table: ITable;
 

@@ -1,13 +1,22 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObjectService } from "../kix/KIXObjectService";
 import {
-    Translation, KIXObjectType, SysConfigItem, SysConfigKey, TranslationProperty,
-    TableFilterCriteria, KIXObjectLoadingOptions, KIXObject, KIXObjectSpecificLoadingOptions
+    Translation, KIXObjectType, SysConfigOption, SysConfigKey,
+    TranslationPattern, TableFilterCriteria, TranslationPatternProperty
 } from "../../model";
 import { SearchOperator } from "../SearchOperator";
 import { ClientStorageService } from "../ClientStorageService";
 import { AgentService } from "../application/AgentService";
 
-export class TranslationService extends KIXObjectService<Translation> {
+export class TranslationService extends KIXObjectService<TranslationPattern> {
 
     private static INSTANCE: TranslationService = null;
 
@@ -20,59 +29,35 @@ export class TranslationService extends KIXObjectService<Translation> {
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {
-        return kixObjectType === KIXObjectType.TRANSLATION;
+        return kixObjectType === KIXObjectType.TRANSLATION_PATTERN || kixObjectType === KIXObjectType.TRANSLATION;
     }
 
     public getLinkObjectName(): string {
         return 'Translation';
     }
 
-    public async init(): Promise<void> {
-        await this.loadObjects(KIXObjectType.TRANSLATION, null);
-    }
-
-    public async loadObjects<O extends KIXObject>(
-        objectType: KIXObjectType, objectIds: Array<string | number>,
-        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions
-    ): Promise<O[]> {
-        let objects: O[];
-        let superLoad = false;
-        if (objectType === KIXObjectType.TRANSLATION) {
-            objects = await super.loadObjects<O>(KIXObjectType.TRANSLATION, null, loadingOptions);
-        } else {
-            superLoad = true;
-            objects = await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions);
-        }
-
-        if (objectIds && !superLoad) {
-            objects = objects.filter((c) => objectIds.some((oid) => c.ObjectId === oid));
-        }
-
-        return objects;
-    }
-
     public async getLanguageName(lang: string): Promise<string> {
-        const languagesConfig = await KIXObjectService.loadObjects<SysConfigItem>(
-            KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.DEFAULT_USED_LANGUAGES]
+        const languagesConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.DEFAULT_USED_LANGUAGES]
         );
 
-        if (languagesConfig && languagesConfig.length && languagesConfig[0].Data[lang]) {
-            return languagesConfig[0].Data[lang];
+        if (languagesConfig && languagesConfig.length && languagesConfig[0].Value[lang]) {
+            return languagesConfig[0].Value[lang];
         }
 
         return lang;
     }
 
     public async getLanguages(): Promise<Array<[string, string]>> {
-        const languagesConfig = await KIXObjectService.loadObjects<SysConfigItem>(
-            KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.DEFAULT_USED_LANGUAGES]
+        const languagesConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.DEFAULT_USED_LANGUAGES]
         );
 
         const languages: Array<[string, string]> = [];
         if (languagesConfig && languagesConfig.length) {
-            for (const lang in languagesConfig[0].Data) {
-                if (languagesConfig[0].Data[lang]) {
-                    languages.push([lang, languagesConfig[0].Data[lang]]);
+            for (const lang in languagesConfig[0].Value) {
+                if (languagesConfig[0].Value[lang]) {
+                    languages.push([lang, languagesConfig[0].Value[lang]]);
                 }
             }
         }
@@ -80,17 +65,17 @@ export class TranslationService extends KIXObjectService<Translation> {
     }
 
     public static async getSystemDefaultLanguage(): Promise<string> {
-        const defaultLanguageConfig = await KIXObjectService.loadObjects<SysConfigItem>(
-            KIXObjectType.SYS_CONFIG_ITEM, [SysConfigKey.DEFAULT_LANGUAGE]
+        const defaultLanguageConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.DEFAULT_LANGUAGE]
         );
 
-        return defaultLanguageConfig && defaultLanguageConfig.length ? defaultLanguageConfig[0].Data : null;
+        return defaultLanguageConfig && defaultLanguageConfig.length ? defaultLanguageConfig[0].Value : null;
     }
 
-    public async checkFilterValue(translation: Translation, criteria: TableFilterCriteria): Promise<boolean> {
+    public async checkFilterValue(translation: TranslationPattern, criteria: TableFilterCriteria): Promise<boolean> {
         if (translation) {
             switch (criteria.property) {
-                case TranslationProperty.LANGUAGES:
+                case TranslationPatternProperty.LANGUAGES:
                     if (criteria.operator === SearchOperator.EQUALS) {
                         return translation.Languages.some((l) => l.Language === criteria.value);
                     } else if (criteria.operator === SearchOperator.NOT_EQUALS) {
@@ -102,37 +87,39 @@ export class TranslationService extends KIXObjectService<Translation> {
         return true;
     }
 
+    public static prepareValue(pattern: string = ''): string {
+        if (pattern && pattern.startsWith('Translatable' + '#')) {
+            pattern = pattern.replace('Translatable' + '#', '');
+        }
+        return pattern;
+    }
+
     public static async translate(
-        pattern: string = '', placeholderValues: Array<string | number> = []
+        pattern: string = '', placeholderValues: Array<string | number> = [], language?: string,
+        getOnlyPattern: boolean = false
     ): Promise<string> {
         let translationValue = pattern;
         if (translationValue !== null) {
 
-            if (translationValue.startsWith('Translatable' + '#')) {
-                translationValue = translationValue.replace('Translatable' + '#', '');
-            }
+            translationValue = this.prepareValue(translationValue);
 
-            const loadingOptions = new KIXObjectLoadingOptions(
-                null, null, null, null, [TranslationProperty.LANGUAGES]
-            );
+            if (!getOnlyPattern) {
 
-            const translations = await KIXObjectService.loadObjects<Translation>(
-                KIXObjectType.TRANSLATION, null, loadingOptions
-            );
+                const translations = await KIXObjectService.loadObjects<Translation>(KIXObjectType.TRANSLATION);
+                const translation = translations.find((t) => t.Pattern === translationValue);
 
-            const translation = translations.find((t) => t.Pattern === translationValue);
-
-            if (translation) {
-                const language = await this.getUserLanguage();
-                if (language) {
-                    const translationLanguage = translation.Languages.find((l) => l.Language === language);
-                    if (translationLanguage) {
-                        translationValue = translationLanguage.Value;
+                if (translation) {
+                    language = language ? language : await this.getUserLanguage();
+                    if (language) {
+                        const translationLanguageValue = translation.Languages[language];
+                        if (translationLanguageValue) {
+                            translationValue = translationLanguageValue;
+                        }
                     }
                 }
-            }
 
-            translationValue = this.format(translationValue, placeholderValues.map((p) => (p ? p : '').toString()));
+                translationValue = this.format(translationValue, placeholderValues.map((p) => (p ? p : '').toString()));
+            }
         }
         const debug = ClientStorageService.getOption('i18n-debug');
 
@@ -173,6 +160,16 @@ export class TranslationService extends KIXObjectService<Translation> {
             translationObject[pattern] = text;
         }
         return translationObject;
+    }
+
+    public static async createTranslationArray(patterns: string[]): Promise<any> {
+        const translatePromises = [];
+        patterns.forEach(
+            (p) => translatePromises.push(TranslationService.translate(p))
+        );
+        const translationList = await Promise.all<boolean>(translatePromises);
+
+        return translationList;
     }
 
 }

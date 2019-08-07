@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     CreateObjectIcon, CreateObjectIconRequest, CreateObjectIconResponse,
     UpdateObjectIcon, UpdateObjectIconResponse, UpdateObjectIconRequest
@@ -8,8 +17,7 @@ import {
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { LoggingService } from '../LoggingService';
-import { ObjectIconBrowserFactory } from '../../../browser/icon';
-import { ObjectIconFactory } from '../../../api/object-icon/ObjectIconFactory';
+import { ObjectIconFactory } from '../../object-factories/ObjectIconFactory';
 
 export class ObjectIconService extends KIXObjectService {
 
@@ -22,7 +30,7 @@ export class ObjectIconService extends KIXObjectService {
         return ObjectIconService.INSTANCE;
     }
 
-    protected RESOURCE_URI: string = "objecticons";
+    protected RESOURCE_URI: string = this.buildUri('system', 'objecticons');
 
     public objectType: KIXObjectType = KIXObjectType.OBJECT_ICON;
 

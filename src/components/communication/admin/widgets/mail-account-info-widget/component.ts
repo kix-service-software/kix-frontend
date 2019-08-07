@@ -1,7 +1,16 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { AbstractMarkoComponent, ActionFactory, ContextService, IdService } from '../../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
-    KIXObjectType, MailAccount, ContextType, ObjectinformationWidgetSettings, MailAccountProperty,
+    KIXObjectType, MailAccount, ContextType, ObjectInformationWidgetSettings, MailAccountProperty,
     DispatchingType, ContextMode, QueueProperty
 } from '../../../../../core/model';
 import { RoutingConfiguration } from '../../../../../core/browser/router';
@@ -45,7 +54,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private initWidget(mailAccount: MailAccount): void {
         this.state.account = null;
-        const settings: ObjectinformationWidgetSettings = this.state.widgetConfiguration.settings;
+        const settings: ObjectInformationWidgetSettings = this.state.widgetConfiguration.settings;
         if (settings && Array.isArray(settings.properties)) {
             this.state.properties = [...settings.properties];
         }

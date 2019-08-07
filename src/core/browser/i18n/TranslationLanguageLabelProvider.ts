@@ -1,17 +1,22 @@
-import { ILabelProvider } from "../ILabelProvider";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { TranslationLanguage, KIXObjectType, ObjectIcon, TranslationLanguageProperty } from "../../model";
 import { TranslationService } from "./TranslationService";
+import { LabelProvider } from "../LabelProvider";
 
-export class TranslationLanguageLabelProvider implements ILabelProvider<TranslationLanguage> {
+export class TranslationLanguageLabelProvider extends LabelProvider<TranslationLanguage> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.TRANSLATION_LANGUAGE;
 
     public isLabelProviderFor(language: TranslationLanguage): boolean {
         return language instanceof TranslationLanguage;
-    }
-
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
@@ -27,15 +32,13 @@ export class TranslationLanguageLabelProvider implements ILabelProvider<Translat
                 displayValue = property;
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
-    }
-
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
     }
 
     public async getDisplayText(
@@ -53,35 +56,21 @@ export class TranslationLanguageLabelProvider implements ILabelProvider<Translat
             default:
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
-    }
-
-    public async getPropertyValueDisplayText(property: string, value: string | number): Promise<string> {
-        return value.toString();
-    }
-
-    public getDisplayTextClasses(language: TranslationLanguage, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(language: TranslationLanguage): string[] {
-        return [];
     }
 
     public async getObjectText(language: TranslationLanguage, id?: boolean, title?: boolean): Promise<string> {
         return await TranslationService.translate('Translatable#TranslationLanguage');
     }
 
-    public getObjectAdditionalText(language: TranslationLanguage): string {
-        return null;
-    }
-
     public getObjectIcon(language?: TranslationLanguage): string | ObjectIcon {
-        return new ObjectIcon('TranslationLanguage', language.ObjectId);
+        return language ? new ObjectIcon('TranslationLanguage', language.ObjectId) : null;
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {

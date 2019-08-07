@@ -1,8 +1,17 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     SortOrder, KIXObjectType, KIXObject, FilterCriteria, FilterType,
     KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, CreateLinkDescription,
     KIXObjectSpecificCreateOptions, KIXObjectSpecificDeleteOptions, ObjectIcon, ObjectIconLoadingOptions,
-    Error, IObjectFactory, CreatePermissionDescription
+    Error, CreatePermissionDescription
 } from '../../../model';
 import { Query, CreateLink, CreateLinkRequest, RequestObject } from '../../../api';
 import { IKIXObjectService } from '../../IKIXObjectService';
@@ -11,6 +20,7 @@ import { LoggingService } from '../LoggingService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { ObjectFactoryService } from '../../ObjectFactoryService';
 import { RoleService } from './RoleService';
+import { IObjectFactory } from '../../object-factories/IObjectFactory';
 
 /**
  * Generic abstract class for all ObjectServices.
@@ -22,6 +32,8 @@ export abstract class KIXObjectService implements IKIXObjectService {
     protected httpService: HttpService = HttpService.getInstance();
 
     protected abstract objectType: KIXObjectType;
+
+    protected abstract RESOURCE_URI: string;
 
     public constructor(factories: IObjectFactory[] = []) {
         factories.forEach((f) => ObjectFactoryService.registerFactory(f));
@@ -38,7 +50,7 @@ export abstract class KIXObjectService implements IKIXObjectService {
 
     protected async load<O extends KIXObject | string = any>(
         token: string, objectType: KIXObjectType, baseUri: string, loadingOptions: KIXObjectLoadingOptions,
-        objectIds: Array<number | string>, responseProperty: string
+        objectIds: Array<number | string>, responseProperty: string, useCache?: boolean
     ): Promise<O[]> {
         const query = this.prepareQuery(loadingOptions);
         if (loadingOptions && loadingOptions.filter && loadingOptions.filter.length) {
@@ -60,29 +72,32 @@ export abstract class KIXObjectService implements IKIXObjectService {
             ? this.buildUri(baseUri, objectIds.join(','))
             : baseUri;
 
-        const response = await this.getObjectByUri(token, uri, query);
+        const response = await this.getObjectByUri(token, uri, query, objectType, useCache);
 
         const responseObject = response[responseProperty];
 
+        // TODO:: Logausgabe bei falscher ResponseProperty
         objects = Array.isArray(responseObject)
             ? responseObject
             : [responseObject];
 
-        return objects.map((o) => ObjectFactoryService.createObject(objectType, o));
+        const result = [];
+        for (const o of objects) {
+            const object = await ObjectFactoryService.createObject(token, objectType, o);
+            result.push(object);
+        }
+
+        return result;
     }
 
     protected async executeUpdateOrCreateRequest<R = number>(
         token: string, clientRequestId: string, parameter: Array<[string, any]>, uri: string,
-        objectType: KIXObjectType, responseProperty: string, create: boolean = false
+        objectType: KIXObjectType | string, responseProperty: string, create: boolean = false
     ): Promise<R> {
         const object = {};
         object[objectType] = new RequestObject(parameter.filter((p) => p[0] !== 'ICON'));
 
-        const response = await this.sendRequest(token, clientRequestId, uri, object, this.objectType, create)
-            .catch((error: Error) => {
-                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                throw new Error(error.Code, error.Message);
-            });
+        const response = await this.sendRequest(token, clientRequestId, uri, object, objectType, create);
 
         const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
         if (icon) {
@@ -97,23 +112,22 @@ export abstract class KIXObjectService implements IKIXObjectService {
             }
         }
 
-        return response[responseProperty];
+        return responseProperty ? response[responseProperty] : response;
     }
 
-    public abstract async createObject(
+    public createObject(
         token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>,
-        createOptions?: KIXObjectSpecificCreateOptions
-    ): Promise<string | number>;
+        createOptions: KIXObjectSpecificCreateOptions, cacheKeyPrefix: string
+    ): Promise<string | number> {
+        throw new Error('', "Method not implemented.");
+    }
 
-    public abstract async updateObject(
+    public async updateObject(
         token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>,
-        objectId: number | string, updateOptions?: KIXObjectSpecificCreateOptions
-    ): Promise<string | number>;
-
-    /**
-     * The base uri to reach the object in the REST-API. Have to be implemented by each service
-     */
-    protected abstract RESOURCE_URI: string;
+        objectId: number | string, updateOptions: KIXObjectSpecificCreateOptions, cacheKeyPrefix: string
+    ): Promise<string | number> {
+        throw new Error('', "Method not implemented.");
+    }
 
     protected prepareQuery(loadingOptions: KIXObjectLoadingOptions): any {
         let query = {};
@@ -121,10 +135,6 @@ export abstract class KIXObjectService implements IKIXObjectService {
         if (loadingOptions) {
             if (loadingOptions.limit) {
                 query = { ...query, limit: loadingOptions.limit };
-            }
-
-            if (loadingOptions.properties && loadingOptions.properties.length) {
-                query = { ...query, fields: loadingOptions.properties.join(',') };
             }
 
             if (loadingOptions.sortOrder) {
@@ -175,13 +185,13 @@ export abstract class KIXObjectService implements IKIXObjectService {
     }
 
     protected async getObjectByUri<R>(
-        token: string, uri: string, query?: any, cacheKeyPrefix: string = this.objectType
+        token: string, uri: string, query?: any, cacheKeyPrefix: string = this.objectType, useCache?: boolean
     ): Promise<R> {
         if (!query) {
             query = {};
         }
 
-        return await this.httpService.get<R>(uri, query, token, null, cacheKeyPrefix);
+        return await this.httpService.get<R>(uri, query, token, null, cacheKeyPrefix, useCache);
     }
 
     protected async sendRequest(
@@ -357,7 +367,8 @@ export abstract class KIXObjectService implements IKIXObjectService {
         if (roleService) {
             const objects = await this.loadObjects(token, clientRequestId, objectType, [objectId],
                 new KIXObjectLoadingOptions(
-                    [`${objectType}.ConfiguredPermissions`], null, null, null, ['ConfiguredPermissions']
+                    null, null, null, ['ConfiguredPermissions'], null,
+                    [['fields', `${objectType}.ConfiguredPermissions`]]
                 ), null
             );
             if (
@@ -452,5 +463,4 @@ export abstract class KIXObjectService implements IKIXObjectService {
         query.filter = JSON.stringify(apiFilter);
         query.search = JSON.stringify(apiFilter);
     }
-
 }

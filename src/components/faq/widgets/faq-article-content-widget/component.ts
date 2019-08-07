@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObjectType, WidgetType, KIXObjectLoadingOptions, ObjectIcon, Context } from "../../../../core/model";
 import {
     ContextService, ActionFactory, WidgetService, BrowserUtil, IdService, KIXObjectService, LabelService
@@ -6,9 +15,9 @@ import { ComponentState } from './ComponentState';
 import {
     FAQArticle, Attachment, FAQArticleAttachmentLoadingOptions, FAQArticleProperty
 } from "../../../../core/model/kix/faq";
-import { InlineContent } from "../../../../core/browser/components";
-import { FAQDetailsContext } from "../../../../core/browser/faq";
 import { TranslationService } from "../../../../core/browser/i18n/TranslationService";
+import { FAQDetailsContext } from "../../../../core/browser/faq/context/FAQDetailsContext";
+import { FAQService } from "../../../../core/browser/faq";
 
 class Component {
 
@@ -63,28 +72,7 @@ class Component {
 
         if (faqArticle && faqArticle.Attachments) {
             this.state.attachments = faqArticle.Attachments.filter((a) => a.Disposition !== 'inline');
-            const inlineAttachments = faqArticle.Attachments.filter((a) => a.Disposition === 'inline');
-            for (const attachment of inlineAttachments) {
-                const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, ['Content']);
-                const faqArticleAttachmentOptions = new FAQArticleAttachmentLoadingOptions(
-                    faqArticle.ID, attachment.ID
-                );
-                const attachments = await KIXObjectService.loadObjects<Attachment>(
-                    KIXObjectType.FAQ_ARTICLE_ATTACHMENT, [attachment.ID], loadingOptions,
-                    faqArticleAttachmentOptions
-                );
-                for (const attachmentItem of attachments) {
-                    if (attachment.ID === attachmentItem.ID) {
-                        attachment.Content = attachmentItem.Content;
-                    }
-                }
-            }
-
-            const inlineContent: InlineContent[] = [];
-            inlineAttachments.forEach(
-                (a) => inlineContent.push(new InlineContent(a.ContentID, a.Content, a.ContentType))
-            );
-            this.state.inlineContent = inlineContent;
+            this.state.inlineContent = await FAQService.getInstance().getFAQArticleInlineContent(faqArticle);
 
             const labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.FAQ_ARTICLE);
             this.stars = await labelProvider.getIcons(faqArticle, FAQArticleProperty.VOTES);
@@ -117,7 +105,7 @@ class Component {
     }
 
     public async download(attachment: Attachment): Promise<void> {
-        const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, ['Content']);
+        const loadingOptions = new KIXObjectLoadingOptions(null, null, null, ['Content']);
         const faqArticleAttachmentOptions = new FAQArticleAttachmentLoadingOptions(
             this.state.faqArticle.ID, attachment.ID
         );

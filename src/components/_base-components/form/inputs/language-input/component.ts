@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { FormInputComponent, TreeNode, KIXObjectType } from '../../../../../core/model';
 import { CompontentState } from './CompontentState';
 import { ServiceRegistry } from '../../../../../core/browser';
@@ -25,7 +34,7 @@ class Component extends FormInputComponent<string, CompontentState> {
     public async onMount(): Promise<void> {
         await super.onMount();
         const translationService = ServiceRegistry.getServiceInstance<TranslationService>(
-            KIXObjectType.TRANSLATION
+            KIXObjectType.TRANSLATION_PATTERN
         );
         const languages = await translationService.getLanguages();
         this.state.nodes = languages.map((l) => new TreeNode(l[0], l[1]));

@@ -1,4 +1,14 @@
-import { IObjectFactory, KIXObjectType, KIXObject } from "../model";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { KIXObjectType, KIXObject } from "../model";
+import { IObjectFactory } from "./object-factories/IObjectFactory";
 
 export class ObjectFactoryService {
 
@@ -19,10 +29,13 @@ export class ObjectFactoryService {
         this.getInstance().factories.push(factory);
     }
 
-    public static createObject<T extends KIXObject | string = any>(objectType: KIXObjectType, object: T): T {
+    public static async createObject<T extends KIXObject | string = any>(
+        token: string, objectType: KIXObjectType, object: T
+    ): Promise<T> {
         const factory = this.getInstance().factories.find((f) => f.isFactoryFor(objectType));
         if (factory) {
-            return factory.create(object);
+            object = await factory.create(object, token);
+            object = await factory.applyPermissions(token, object);
         }
         return object;
     }

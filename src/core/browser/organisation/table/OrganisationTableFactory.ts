@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     KIXObjectType, ContextMode, OrganisationProperty, KIXObjectLoadingOptions, KIXObjectProperty
 } from "../../../model";
@@ -22,12 +31,9 @@ export class OrganisationTableFactory extends TableFactory {
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting);
         const table = new Table(tableKey, tableConfiguration);
 
-        const loadingOptions = new KIXObjectLoadingOptions(
-            null, tableConfiguration.filter, tableConfiguration.sortOrder,
-            tableConfiguration.limit, [OrganisationProperty.TICKET_STATS]
+        table.setContentProvider(
+            new OrganisationTableContentProvider(table, objectIds, tableConfiguration.loadingOptions, contextId)
         );
-
-        table.setContentProvider(new OrganisationTableContentProvider(table, objectIds, loadingOptions, contextId));
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 
         return table;
@@ -46,11 +52,9 @@ export class OrganisationTableFactory extends TableFactory {
         ];
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.ORGANISATION, null, 5, tableColumns, null, false, false, null, null,
-                TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                KIXObjectType.ORGANISATION, null, null, tableColumns, true, false, null, null,
+                TableHeaderHeight.LARGE, TableRowHeight.SMALL
             );
-            tableConfiguration.enableSelection = true;
-            tableConfiguration.toggle = false;
             defaultRouting = true;
         } else if (!tableConfiguration.tableColumns) {
             tableConfiguration.tableColumns = tableColumns;

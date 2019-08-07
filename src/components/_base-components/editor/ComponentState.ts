@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { IdService } from '../../../core/browser/IdService';
 
 export class ComponentState {
@@ -18,6 +27,7 @@ export class ComponentState {
         public simple: boolean = false,
         public readOnly: boolean = false,
         public invalid: boolean = false,
+        public noImages: boolean = false,
         resize?: boolean,
         resizeDir?: string
     ) {
@@ -67,14 +77,19 @@ export class ComponentState {
             language: navigator.language || 'de',
             toolbar,
             resize_minWidth: 200,
-            resize_minHeight: 122,
+            resize_minHeight: 125,
             resize_maxWidth: 1200,
-            resize_maxHeight: 1000,
+            resize_maxHeight: 2000,
+            autoGrow_minHeight: 125,
+            autoGrow_maxHeight: 2000,
+            autoGrow_onStartup: true,
             extraAllowedContent: 'b; h1 h2 h3 ul li; div[type]{*}; img[*]; col[width]; style[*]{*}; *[id](*)',
             toolbarCanCollapse: this.simple ? false : true,
             readOnly: this.readOnly,
             removeButtons: '',
-            removePlugins: 'elementspath' + (this.readOnly ? ',image2' : ''),
+            removePlugins: 'elementspath'
+                + (this.readOnly || this.noImages ? ',image2' : '')
+                + (this.readOnly ? '' : ',autogrow'),
             codeSnippet_theme: 'github'
         };
         if (resize || resize === undefined) {

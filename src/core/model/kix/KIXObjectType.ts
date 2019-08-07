@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 export enum KIXObjectType {
 
     ANY = 'ANY',
@@ -7,6 +16,8 @@ export enum KIXObjectType {
     ARTICLE_TYPE = 'ARTICLE_TYPE',
 
     CHANNEL = 'Channel',
+
+    CONSOLE_COMMAND = 'ConsoleCommand',
 
     SENDER_TYPE = 'SENDER_TYPE',
 
@@ -48,6 +59,10 @@ export enum KIXObjectType {
 
     FAQ_VOTE = 'FAQVote',
 
+    FAQ_VISIBILITY = 'FAQVisibility',
+
+    FAQ_KEYWORD = 'FAQKeyword',
+
     GENERAL_CATALOG_ITEM = 'GeneralCatalogItem',
 
     LINK = 'Link',
@@ -55,6 +70,22 @@ export enum KIXObjectType {
     LINK_OBJECT = 'LINK_OBJECT',
 
     LINK_TYPE = 'LINK_TYPE',
+
+    LOG_FILE = 'LogFile',
+
+    MAIL_ACCOUNT = 'MailAccount',
+
+    MAIL_ACCOUNT_TYPE = 'MailAccountType',
+
+    MAIL_FILTER = 'MailFilter',
+
+    MAIL_FILTER_MATCH = 'MAIL_FILTER_MATCH',
+
+    MAIL_FILTER_SET = 'MAIL_FILTER_SET',
+
+    NOTIFICATION = 'Notification',
+
+    NOTIFICATION_FILTER = 'NOTIFICATION_FILTER',
 
     OBJECT_ICON = 'OBJECT_ICON',
 
@@ -68,7 +99,9 @@ export enum KIXObjectType {
 
     SLA = 'SLA',
 
-    SYS_CONFIG_ITEM = 'SysConfigItem',
+    SYS_CONFIG_OPTION = 'SysConfigOption',
+
+    SYS_CONFIG_OPTION_DEFINITION = 'SysConfigOptionDefinition',
 
     SYSTEM_ADDRESS = 'SystemAddress',
 
@@ -89,6 +122,8 @@ export enum KIXObjectType {
     TICKET_TEMPLATE = 'TICKET_TEMPLATE',
 
     TRANSLATION = 'Translation',
+
+    TRANSLATION_PATTERN = 'TranslationPattern',
 
     TRANSLATION_LANGUAGE = 'TranslationLanguage',
 
@@ -112,9 +147,5 @@ export enum KIXObjectType {
 
     ROLE_PERMISSION = 'ROLE_PERMISSION',
 
-    FOLLOW_UP_TYPE = 'FollowUpType',
-
-    MAIL_ACCOUNT = 'MailAccount',
-
-    MAIL_ACCOUNT_TYPE = 'MailAccountType'
+    FOLLOW_UP_TYPE = 'FollowUpType'
 }

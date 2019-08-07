@@ -1,8 +1,17 @@
-import { ILabelProvider } from '../ILabelProvider';
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { Channel, KIXObjectType, ObjectIcon, ChannelProperty } from '../../model';
 import { TranslationService } from '../i18n/TranslationService';
+import { LabelProvider } from '../LabelProvider';
 
-export class ChannelLabelProvider implements ILabelProvider<Channel> {
+export class ChannelLabelProvider extends LabelProvider<Channel> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CHANNEL;
 
@@ -24,31 +33,17 @@ export class ChannelLabelProvider implements ILabelProvider<Channel> {
             case ChannelProperty.ID:
                 displayValue = 'Translatable#Id';
                 break;
-            case ChannelProperty.CREATE_BY:
-                displayValue = 'Translatable#Created by';
-                break;
-            case ChannelProperty.CREATE_TIME:
-                displayValue = 'Translatable#Created at';
-                break;
-            case ChannelProperty.CHANGED_BY:
-                displayValue = 'Translatable#Changed by';
-                break;
-            case ChannelProperty.CHANGE_TIME:
-                displayValue = 'Translatable#Changed at';
-                break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
-    }
-
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
     }
 
     public async getDisplayText(
@@ -68,23 +63,13 @@ export class ChannelLabelProvider implements ILabelProvider<Channel> {
             default:
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
-    }
-
-    public async getPropertyValueDisplayText(property: string, value: string | number): Promise<string> {
-        return value.toString();
-    }
-
-    public getDisplayTextClasses(channel: Channel, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(channel: Channel): string[] {
-        return [];
     }
 
     public async getObjectText(
@@ -98,11 +83,13 @@ export class ChannelLabelProvider implements ILabelProvider<Channel> {
     }
 
     public getObjectIcon(channel?: Channel): string | ObjectIcon {
-        if (channel.Name === 'note') {
-            return 'kix-icon-new-note';
-        }
-        if (channel.Name === 'email') {
-            return 'kix-icon-new-mail';
+        if (channel) {
+            if (channel.Name === 'note') {
+                return 'kix-icon-new-note';
+            }
+            if (channel.Name === 'email') {
+                return 'kix-icon-new-mail';
+            }
         }
         return null;
     }

@@ -1,55 +1,51 @@
-import { ILabelProvider } from '..';
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     ConfigItemHistory, DateTimeUtil, ObjectIcon, KIXObjectType,
     ConfigItemHistoryProperty, User
 } from '../../model';
 import { TranslationService } from '../i18n/TranslationService';
-import { ObjectDataService } from '../ObjectDataService';
 import { KIXObjectService } from '../kix';
+import { LabelProvider } from '../LabelProvider';
 
-export class ConfigItemHistoryLabelProvider implements ILabelProvider<ConfigItemHistory> {
+export class ConfigItemHistoryLabelProvider extends LabelProvider<ConfigItemHistory> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_HISTORY;
 
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
+    public isLabelProviderFor(object: ConfigItemHistory): boolean {
+        return object instanceof ConfigItemHistory;
     }
 
-    public async getPropertyValueDisplayText(property: string, value: string | number): Promise<string> {
-        return value.toString();
-    }
-
-    public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
             case ConfigItemHistoryProperty.HISTORY_TYPE:
                 displayValue = 'Translatable#Action';
                 break;
-            case ConfigItemHistoryProperty.COMMENT:
-                displayValue = 'Translatable#Comment';
-                break;
             case ConfigItemHistoryProperty.CREATE_BY:
-                displayValue = 'Translatable#Benutzer';
-                break;
-            case ConfigItemHistoryProperty.CREATE_TIME:
-                displayValue = 'Translatable#Created at';
+                displayValue = 'Translatable#User';
                 break;
             case ConfigItemHistoryProperty.VERSION_ID:
                 displayValue = 'Translatable#to version';
                 break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
-    }
-
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
     }
 
     public async getDisplayText(
@@ -73,42 +69,16 @@ export class ConfigItemHistoryLabelProvider implements ILabelProvider<ConfigItem
                     : '';
                 break;
             default:
-                displayValue = await this.getPropertyValueDisplayText(property, displayValue);
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
-    }
-
-    public getDisplayTextClasses(object: ConfigItemHistory, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(object: ConfigItemHistory): string[] {
-        return [];
-    }
-
-    public isLabelProviderFor(object: ConfigItemHistory): boolean {
-        return object instanceof ConfigItemHistory;
-    }
-
-    public async getObjectText(object: ConfigItemHistory): Promise<string> {
-        throw new Error('Method not implemented.');
-    }
-
-    public getObjectAdditionalText(object: ConfigItemHistory): string {
-        throw new Error('Method not implemented.');
-    }
-
-    public getObjectIcon(object: ConfigItemHistory): string | ObjectIcon {
-        throw new Error('Method not implemented.');
-    }
-
-    public getObjectTooltip(object: ConfigItemHistory): string {
-        throw new Error('Method not implemented.');
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {

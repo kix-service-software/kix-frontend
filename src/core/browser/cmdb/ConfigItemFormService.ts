@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObjectFormService } from "../kix/KIXObjectFormService";
 import {
     KIXObjectType, FormFieldValue, FormField, ConfigItem, VersionProperty, ConfigItemProperty,
@@ -125,9 +134,11 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
                         || property === VersionProperty.DEPL_STATE_ID
                         ? 'ITSM::ConfigItem::DeploymentState'
                         : 'ITSM::Core::IncidentState';
-                    const loadingOptions = new KIXObjectLoadingOptions(null, [new FilterCriteria(
-                        'Class', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, classId
-                    )]);
+                    const loadingOptions = new KIXObjectLoadingOptions([
+                        new FilterCriteria(
+                            'Class', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, classId
+                        )
+                    ]);
 
                     const items = await KIXObjectService.loadObjects<GeneralCatalogItem>(
                         KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions, null, false
@@ -267,5 +278,16 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
                 value = preparedData.DisplayValue;
         }
         return value;
+    }
+
+    public async hasPermissions(field: FormField): Promise<boolean> {
+        let hasPermissions = true;
+        switch (field.property) {
+            case ConfigItemProperty.CLASS_ID:
+                hasPermissions = await this.checkPermissions('system/cmdb/classes');
+                break;
+            default:
+        }
+        return hasPermissions;
     }
 }

@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     KIXObjectType, ContactProperty, InputFieldTypes, FilterCriteria, KIXObjectLoadingOptions,
     KIXObjectProperty, TreeNode, Organisation, ObjectIcon
@@ -16,47 +25,43 @@ export class ContactSearchDefinition extends SearchDefinition {
     }
 
     public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(null, criteria, null, null, ['Tickets'], null);
+        return new KIXObjectLoadingOptions(criteria, null, null, ['Tickets'], null);
     }
 
     public async getProperties(): Promise<Array<[string, string]>> {
-        return [
+        const properties: Array<[string, string]> = [
             [SearchProperty.FULLTEXT, null],
-            [ContactProperty.FIRST_NAME, null],
-            [ContactProperty.LAST_NAME, null],
+            [ContactProperty.FIRSTNAME, null],
+            [ContactProperty.LASTNAME, null],
             [ContactProperty.EMAIL, null],
             [ContactProperty.LOGIN, null],
-            [ContactProperty.PRIMARY_ORGANISATION_ID, null],
             [ContactProperty.COUNTRY, null],
             [ContactProperty.STREET, null],
             [ContactProperty.ZIP, null],
             [ContactProperty.CITY, null],
             [ContactProperty.FAX, null],
             [ContactProperty.PHONE, null],
-            [ContactProperty.MOBILE, null],
+            [ContactProperty.MOBILE, null]
         ];
+
+        if (await this.checkReadPermissions('organisations')) {
+            properties.push([ContactProperty.PRIMARY_ORGANISATION_ID, 'Translatable#Assigned Organsiation']);
+        }
+
+        if (await this.checkReadPermissions('system/valid')) {
+            properties.push([KIXObjectProperty.VALID_ID, null]);
+        }
+
+        return properties;
     }
 
     public async getOperations(property: string): Promise<SearchOperator[]> {
         let operations: SearchOperator[] = [];
 
-        const stringOperators = [
-            SearchOperator.EQUALS,
-            SearchOperator.STARTS_WITH,
-            SearchOperator.ENDS_WITH,
-            SearchOperator.CONTAINS,
-            SearchOperator.LIKE
-        ];
-        const numberOperators = [
-            SearchOperator.EQUALS,
-            SearchOperator.IN
-        ];
-
-        const properties = await this.getProperties();
         if (this.isDropDown(property)) {
-            operations = numberOperators;
+            operations = [SearchOperator.IN];
         } else {
-            operations = stringOperators;
+            operations = this.getStringOperators();
         }
 
         return operations;
@@ -73,7 +78,8 @@ export class ContactSearchDefinition extends SearchDefinition {
     }
 
     private isDropDown(property: string): boolean {
-        return property === KIXObjectProperty.VALID_ID;
+        return property === KIXObjectProperty.VALID_ID
+            || property === ContactProperty.PRIMARY_ORGANISATION_ID;
     }
 
     public async getInputComponents(): Promise<Map<string, string>> {
@@ -83,12 +89,19 @@ export class ContactSearchDefinition extends SearchDefinition {
     }
 
     public async getSearchResultCategories(): Promise<SearchResultCategory> {
-        const organisationCategory = new SearchResultCategory('Translatable#Organisations', KIXObjectType.ORGANISATION);
-        const ticketCategory = new SearchResultCategory('Translatable#Tickets', KIXObjectType.TICKET);
+        const categories: SearchResultCategory[] = [];
 
-        return new SearchResultCategory(
-            'Translatable#Contacts', KIXObjectType.CONTACT, [organisationCategory, ticketCategory]
-        );
+        if (await this.checkReadPermissions('organisations')) {
+            categories.push(
+                new SearchResultCategory('Translatable#Organisations', KIXObjectType.ORGANISATION)
+            );
+        }
+        if (await this.checkReadPermissions('tickets')) {
+            categories.push(
+                new SearchResultCategory('Translatable#Tickets', KIXObjectType.TICKET)
+            );
+        }
+        return new SearchResultCategory('Translatable#Contacts', KIXObjectType.CONTACT, categories);
     }
 
     public async prepareFormFilterCriteria(criteria: FilterCriteria[]): Promise<FilterCriteria[]> {
@@ -97,7 +110,8 @@ export class ContactSearchDefinition extends SearchDefinition {
         if (fulltextCriteriaIndex !== -1) {
             const value = criteria[fulltextCriteriaIndex].value;
             criteria.splice(fulltextCriteriaIndex, 1);
-            criteria = [...criteria, ...ContactService.getInstance().prepareFullTextFilter(value.toString())];
+            const filter = await ContactService.getInstance().prepareFullTextFilter(value.toString());
+            criteria = [...criteria, ...filter];
         }
         return criteria;
     }
@@ -106,9 +120,8 @@ export class ContactSearchDefinition extends SearchDefinition {
         property: string, parameter: Array<[string, any]>, searchValue: string, limit: number
     ): Promise<TreeNode[]> {
         if (property === ContactProperty.PRIMARY_ORGANISATION_ID) {
-            const loadingOptions = new KIXObjectLoadingOptions(
-                null, OrganisationService.getInstance().prepareFullTextFilter(searchValue), null, limit
-            );
+            const filter = await OrganisationService.getInstance().prepareFullTextFilter(searchValue);
+            const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit);
             const organisations = await KIXObjectService.loadObjects<Organisation>(
                 KIXObjectType.ORGANISATION, null, loadingOptions, null, false
             );

@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import { ContextService, IdService } from '../../../../core/browser';
 import { TreeNode, Queue, TreeNodeProperty } from '../../../../core/model';
@@ -28,23 +37,23 @@ export class Component {
     private async loadQueues(context: TicketContext): Promise<void> {
         this.state.nodes = null;
         const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy();
-        this.state.nodes = await QueueService.getInstance().prepareQueueTree(queuesHierarchy, false, null, true);
-        this.setActiveNode(context.queue);
+        this.state.nodes = await QueueService.getInstance().prepareObjectTree(queuesHierarchy, false, null, true);
+        this.setActiveNode(context.queueId);
     }
 
-    private setActiveNode(queue: Queue): void {
-        if (queue) {
-            this.activeNodeChanged(this.getActiveNode(queue));
+    private setActiveNode(queueId: number): void {
+        if (queueId) {
+            this.activeNodeChanged(this.getActiveNode(queueId));
         } else {
             this.showAll();
         }
     }
 
-    private getActiveNode(queue: Queue, nodes: TreeNode[] = this.state.nodes): TreeNode {
-        let activeNode = nodes.find((n) => n.id.QueueID === queue.QueueID);
+    private getActiveNode(queueId: number, nodes: TreeNode[] = this.state.nodes): TreeNode {
+        let activeNode = nodes.find((n) => n.id === queueId);
         if (!activeNode) {
             for (let index = 0; index < nodes.length; index++) {
-                activeNode = this.getActiveNode(queue, nodes[index].children);
+                activeNode = this.getActiveNode(queueId, nodes[index].children);
                 if (activeNode) {
                     nodes[index].expanded = true;
                     break;
@@ -57,15 +66,13 @@ export class Component {
     public async activeNodeChanged(node: TreeNode): Promise<void> {
         this.state.activeNode = node;
 
-        const queue = node.id as Queue;
         const context = await ContextService.getInstance().getContext<TicketContext>(TicketContext.CONTEXT_ID);
-        context.setQueue(queue);
+        context.setQueue(node.id);
         context.setAdditionalInformation('STRUCTURE', this.getStructureInformation());
     }
 
     private getStructureInformation(node: TreeNode = this.state.activeNode): string[] {
-        const queue = (node.id as Queue);
-        let info = [queue.Name];
+        let info = [node.label];
 
         if (node.parent) {
             info = [...this.getStructureInformation(node.parent), ...info];

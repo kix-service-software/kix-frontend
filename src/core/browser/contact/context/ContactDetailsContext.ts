@@ -1,5 +1,14 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
-    Context, Contact, KIXObjectType, BreadcrumbInformation, KIXObject, KIXObjectLoadingOptions
+    Context, Contact, KIXObjectType, BreadcrumbInformation, KIXObject, KIXObjectLoadingOptions, ContactProperty
 } from "../../../model";
 import { KIXObjectService } from "../../kix";
 import { EventService } from "../../event";
@@ -40,11 +49,13 @@ export class ContactDetailsContext extends Context {
     private async loadContact(): Promise<Contact> {
         const timeout = window.setTimeout(() => {
             EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load Contact ...' }
+                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load Contact' }
             );
         }, 500);
 
-        const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, ['TicketStats', 'Tickets']);
+        const loadingOptions = new KIXObjectLoadingOptions(
+            null, null, null, [ContactProperty.TICKET_STATS, 'Tickets']
+        );
 
         const contacts = await KIXObjectService.loadObjects<Contact>(
             KIXObjectType.CONTACT, [this.objectId], loadingOptions, null, true

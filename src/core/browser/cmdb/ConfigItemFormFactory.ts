@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     AttributeDefinition, FormField, FormFieldOption, KIXObjectType, FormFieldOptions,
     InputFieldTypes, Form, VersionProperty, ConfigItemProperty, ConfigItemClass, FormContext, ObjectReferenceOptions
@@ -31,19 +40,19 @@ export class ConfigItemFormFactory {
 
         if (forEdit) {
             fields.push(new FormField(
-                'Translatable#Config Item Class', VersionProperty.CLASS_ID, null, false, 'Translatable#Config Item class. Can not be changed.',
+                'Translatable#Config Item Class', VersionProperty.CLASS_ID, null, false, 'Translatable#Helptext_CMDB_ConfigItemCreateEdit_Class',
                 null, null, null, null, 1, 1, 1,
                 null, null, null, false, false, true
             ));
         }
         fields.push(new FormField(
-            'Translatable#Name', VersionProperty.NAME, null, true, 'Translatable#Insert a name for the Config Item.',
+            'Translatable#Name', VersionProperty.NAME, null, true, 'Translatable#Helptext_CMDB_ConfigItemCreateEdit_Name',
             null, null, null, null, 1, 1, 1,
             null, null, null, false, false
         ));
         fields.push(new FormField(
             'Translatable#Deployment State', VersionProperty.DEPL_STATE_ID, 'general-catalog-input',
-            true, 'Translatable#Select a deplyoment state.',
+            true, 'Translatable#Helptext_CMDB_ConfigItemCreateEdit_DeploymentState',
             [
                 new FormFieldOption('GC_CLASS', 'ITSM::ConfigItem::DeploymentState'),
                 new FormFieldOption('ICON', false)
@@ -52,7 +61,7 @@ export class ConfigItemFormFactory {
         ));
         fields.push(new FormField(
             'Translatable#Incident state', VersionProperty.INCI_STATE_ID, 'general-catalog-input',
-            true, 'Translatable#Select a incident state.',
+            true, 'Translatable#Helptext_CMDB_ConfigItemCreateEdit_IncidentState',
             [
                 new FormFieldOption('GC_CLASS', 'ITSM::Core::IncidentState'),
                 new FormFieldOption('ICON', true)
@@ -62,12 +71,7 @@ export class ConfigItemFormFactory {
 
         if (!forEdit) {
             fields.push(new FormField(
-                'Translatable#Images', ConfigItemProperty.IMAGES, 'attachment-input', false, 'Translatable#You may attach images to this config item. Possible file types are *.png, *.jpg, *.gif, *.bmp.',
-                [new FormFieldOption('MimeTypes', ['image/png', 'image/jpeg', 'image/gif', 'image/bmp'])],
-                null, null, null, 1, 1, 1, null, null, null, false, false
-            ));
-            fields.push(new FormField(
-                'Translatable#Link Config Item with', ConfigItemProperty.LINKS, 'link-input', false, 'Translatable#Link this config item to a ticket, an FAQ article or another config item.',
+                'Translatable#Link Config Item with', ConfigItemProperty.LINKS, 'link-input', false, 'Translatable#Helptext_CMDB_ConfigItemCreateEdit_Links',
                 null, null, null, null, 1, 1, 1, null, null, null, false, false
             ));
         }
@@ -91,7 +95,7 @@ export class ConfigItemFormFactory {
         return form;
     }
 
-    private getFormField(ad: AttributeDefinition, parentInstanceId?: string): FormField {
+    private getFormField(ad: AttributeDefinition, parentInstanceId?: string, parent?: FormField): FormField {
         let formField: FormField;
         if (typeof ad.CountDefault === 'undefined' || ad.CountDefault === null) {
             ad.CountDefault = 1;
@@ -122,12 +126,12 @@ export class ConfigItemFormFactory {
             formField = this.getDefaultFormField(ad, parentInstanceId);
         }
 
-        if (formField.countDefault === 0) {
+        if (formField.countDefault === 0 || (parent && !parent.asStructure && parent.empty)) {
             formField.empty = true;
         }
 
         if (ad.Sub) {
-            formField.children = ad.Sub.map((subField) => this.getFormField(subField, formField.instanceId));
+            formField.children = ad.Sub.map((subField) => this.getFormField(subField, formField.instanceId, formField));
         }
 
         return formField;

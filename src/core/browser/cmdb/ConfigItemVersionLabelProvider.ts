@@ -1,14 +1,22 @@
-import { ILabelProvider } from '..';
-import { Version, DateTimeUtil, ObjectIcon, KIXObjectType, VersionProperty, User } from '../../model';
-import { TranslationService } from '../i18n/TranslationService';
-import { KIXObjectService } from '../kix';
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
 
-export class ConfigItemVersionLabelProvider implements ILabelProvider<Version> {
+import { Version, DateTimeUtil, KIXObjectType, VersionProperty } from '../../model';
+import { TranslationService } from '../i18n/TranslationService';
+import { LabelProvider } from '../LabelProvider';
+
+export class ConfigItemVersionLabelProvider extends LabelProvider<Version> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_VERSION;
 
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
+    public isLabelProviderFor(object: Version) {
+        return object instanceof Version;
     }
 
     public async getPropertyValueDisplayText(
@@ -17,53 +25,42 @@ export class ConfigItemVersionLabelProvider implements ILabelProvider<Version> {
         let displayValue = value;
 
         switch (property) {
-            case VersionProperty.CREATE_BY:
-                const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [value], null, null, true
-                ).catch((error) => [] as User[]);
-                displayValue = users && !!users.length ? users[0].UserFullname : value;
-                break;
             case VersionProperty.CURRENT:
                 displayValue = value ? 'Translatable#(Current version)' : '';
                 break;
             default:
+                displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
-        return displayValue.toString();
+        return displayValue ? displayValue.toString() : '';
     }
 
-    public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
             case VersionProperty.COUNT_NUMBER:
                 displayValue = 'Translatable#No.';
                 break;
-            case VersionProperty.CREATE_BY:
-                displayValue = 'Translatable#Created by';
-                break;
-            case VersionProperty.CREATE_TIME:
-                displayValue = 'Translatable#Created at';
-                break;
             case VersionProperty.CURRENT:
                 displayValue = 'Translatable#Current version';
                 break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
-    }
-
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
     }
 
     public async getDisplayText(
@@ -80,51 +77,21 @@ export class ConfigItemVersionLabelProvider implements ILabelProvider<Version> {
                 break;
             default:
                 displayValue = await this.getPropertyValueDisplayText(
-                    property, displayValue ? displayValue : value
+                    property, displayValue ? displayValue : value, translatable
                 );
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
     }
 
-    public getDisplayTextClasses(object: Version, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(object: Version): string[] {
-        return [];
-    }
-
-    public isLabelProviderFor(object: Version): boolean {
-        return object instanceof Version;
-    }
-
-    public async getObjectText(object: Version): Promise<string> {
-        throw new Error('Method not implemented.');
-    }
-
-    public getObjectAdditionalText(object: Version): string {
-        throw new Error('Method not implemented.');
-    }
-
-    public getObjectIcon(object: Version): string | ObjectIcon {
-        throw new Error('Method not implemented.');
-    }
-
-    public getObjectTooltip(object: Version): string {
-        throw new Error('Method not implemented.');
-    }
-
     public async getObjectName(): Promise<string> {
         return 'Config Item Version';
-    }
-
-    public async getIcons(object: Version, property: string): Promise<Array<string | ObjectIcon>> {
-        return null;
     }
 
 }

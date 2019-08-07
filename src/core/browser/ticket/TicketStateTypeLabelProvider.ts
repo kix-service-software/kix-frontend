@@ -1,15 +1,19 @@
-import { ILabelProvider } from "../ILabelProvider";
-import { KIXObjectType, ObjectIcon, TicketStateProperty, DateTimeUtil, TicketStateType } from "../../model";
-import { ContextService } from "../context";
-import { TranslationService } from "../i18n/TranslationService";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
 
-export class TicketStateTypeLabelProvider implements ILabelProvider<TicketStateType> {
+import { KIXObjectType, ObjectIcon, TicketStateProperty, TicketStateType } from "../../model";
+import { TranslationService } from "../i18n/TranslationService";
+import { LabelProvider } from "../LabelProvider";
+
+export class TicketStateTypeLabelProvider extends LabelProvider<TicketStateType> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.TICKET_STATE_TYPE;
-
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
-    }
 
     public isLabelProviderFor(ticketStateType: TicketStateType): boolean {
         return ticketStateType instanceof TicketStateType;
@@ -19,24 +23,20 @@ export class TicketStateTypeLabelProvider implements ILabelProvider<TicketStateT
         let displayValue = property;
         switch (property) {
             case TicketStateProperty.NAME:
-                displayValue = 'Translatable#Name';
-                break;
             case TicketStateProperty.ID:
                 displayValue = 'Translatable#Icon';
                 break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
-    }
-
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
     }
 
     public async getDisplayText(
@@ -51,35 +51,17 @@ export class TicketStateTypeLabelProvider implements ILabelProvider<TicketStateT
             default:
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';
     }
 
-    public async getPropertyValueDisplayText(property: string, value: string | number): Promise<string> {
-        return value.toString();
-    }
-
-    public getDisplayTextClasses(ticketStateType: TicketStateType, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(ticketStateType: TicketStateType): string[] {
-        return [];
-    }
-
     public async getObjectText(ticketStateType: TicketStateType, id?: boolean, title?: boolean): Promise<string> {
         return ticketStateType.Name;
-    }
-
-    public getObjectAdditionalText(ticketStateType: TicketStateType): string {
-        return null;
-    }
-
-    public getObjectIcon(ticketState?: TicketStateType): string | ObjectIcon {
-        return null;
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {

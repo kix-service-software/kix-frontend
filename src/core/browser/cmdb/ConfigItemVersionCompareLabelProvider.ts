@@ -1,22 +1,28 @@
-import { ILabelProvider } from '..';
-import { Version, ObjectIcon, KIXObjectType, VersionProperty } from '../../model';
-import { ContextService } from '../context';
-import { TranslationService } from '../i18n/TranslationService';
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
 
-export class ConfigItemVersionCompareLabelProvider implements ILabelProvider<Version> {
+import { Version, KIXObjectType } from '../../model';
+import { TranslationService } from '../i18n/TranslationService';
+import { LabelProvider } from '../LabelProvider';
+
+export class ConfigItemVersionCompareLabelProvider extends LabelProvider<Version> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_VERSION_COMPARE;
-
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
-    }
 
     public async getPropertyValueDisplayText(
         property: string, value: string | number, translatable: boolean = true
     ): Promise<string> {
         let displayValue = value ? value.toString() : '';
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
         return displayValue;
     }
@@ -31,15 +37,13 @@ export class ConfigItemVersionCompareLabelProvider implements ILabelProvider<Ver
                 displayValue = property;
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
-    }
-
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
     }
 
     public async getDisplayText(
@@ -54,39 +58,17 @@ export class ConfigItemVersionCompareLabelProvider implements ILabelProvider<Ver
             default:
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
     }
 
-    public getDisplayTextClasses(object: Version, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(object: Version): string[] {
-        return [];
-    }
-
     public isLabelProviderFor(object: Version): boolean {
         return object instanceof Version;
-    }
-
-    public async getObjectText(object: Version): Promise<string> {
-        throw new Error('Method not implemented.');
-    }
-
-    public getObjectAdditionalText(object: Version): string {
-        throw new Error('Method not implemented.');
-    }
-
-    public getObjectIcon(object: Version): string | ObjectIcon {
-        throw new Error('Method not implemented.');
-    }
-
-    public getObjectTooltip(object: Version): string {
-        throw new Error('Method not implemented.');
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
@@ -96,9 +78,4 @@ export class ConfigItemVersionCompareLabelProvider implements ILabelProvider<Ver
         }
         return displayValue;
     }
-
-    public async getIcons(object: Version, property: string): Promise<Array<string | ObjectIcon>> {
-        return null;
-    }
-
 }

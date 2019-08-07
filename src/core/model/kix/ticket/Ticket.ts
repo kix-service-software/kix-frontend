@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { Article, TicketHistory } from '.';
 import { KIXObjectType } from '..';
 import { KIXObject } from '../KIXObject';
@@ -18,28 +27,6 @@ export class Ticket extends KIXObject<Ticket> {
     public Title: string;
 
     public TicketID: number;
-
-    public StateID: number;
-
-    public PriorityID: number;
-
-    public LockID: number;
-
-    public QueueID: number;
-
-    public OrganisationID: string;
-
-    public ContactID: string;
-
-    public OwnerID: number;
-
-    public TypeID: number;
-
-    public SLAID?: number | string;
-
-    public ServiceID?: number;
-
-    public ResponsibleID: number;
 
     public Age: number;
 
@@ -113,22 +100,49 @@ export class Ticket extends KIXObject<Ticket> {
 
     public DynamicFields: DynamicField[];
 
+    public Unseen: number;
+
+    // Object References
+
+    public StateType: string;
+
+    public StateID: number;
+
+    public PriorityID: number;
+
+    public LockID: number;
+
+    public QueueID: number;
+
+    public OrganisationID: string;
+
+    public ContactID: string;
+
+    public OwnerID: number;
+
+    public TypeID: number;
+
+    public SLAID?: number | string;
+
+    public ServiceID?: number;
+
+    public ResponsibleID: number;
+
     public Articles: Article[];
 
     public History: TicketHistory[];
 
     public Watchers: Watcher[];
 
-    public Unseen: number;
-
     public constructor(ticket?: Ticket) {
-        super();
+        super(ticket);
         if (ticket) {
             this.TicketID = Number(ticket.TicketID);
             this.ObjectId = this.TicketID;
             this.TicketNumber = ticket.TicketNumber;
             this.Title = ticket.Title;
             this.StateID = ticket.StateID;
+            this.StateType = ticket.StateType;
             this.PriorityID = ticket.PriorityID;
             this.LockID = ticket.LockID;
             this.QueueID = ticket.QueueID;
@@ -149,9 +163,7 @@ export class Ticket extends KIXObject<Ticket> {
             this.Age = ticket.Age;
             this.Created = ticket.Created;
             this.CreateTimeUnix = ticket.CreateTimeUnix;
-            this.CreateBy = ticket.CreateBy;
             this.Changed = ticket.Changed;
-            this.ChangeBy = ticket.ChangeBy;
             this.ArchiveFlag = ticket.ArchiveFlag;
             this.PendingTime = ticket.PendingTime;
             this.TimeUnits = ticket.TimeUnits;

@@ -1,9 +1,18 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { IKIXObjectService } from "./IKIXObjectService";
 import {
     KIXObject, KIXObjectType, FilterCriteria, TreeNode,
     KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions, OverlayType, KIXObjectSpecificDeleteOptions,
-    ComponentContent, Error, TableFilterCriteria
+    ComponentContent, Error, TableFilterCriteria, CRUD, KIXObjectProperty, User, ValidObject
 } from "../../model";
 import { KIXObjectSocketClient } from "./KIXObjectSocketClient";
 import { FormService } from "../form";
@@ -11,6 +20,9 @@ import { ServiceType } from "./ServiceType";
 import { IAutofillConfiguration } from "../components";
 import { ServiceRegistry } from "./ServiceRegistry";
 import { OverlayService } from "../OverlayService";
+import { AuthenticationSocketClient } from "../application/AuthenticationSocketClient";
+import { UIComponentPermission } from "../../model/UIComponentPermission";
+import { LabelService } from "../LabelService";
 
 export abstract class KIXObjectService<T extends KIXObject = KIXObject> implements IKIXObjectService<T> {
 
@@ -52,7 +64,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
             });
         } else {
             const errorMessage = `No service registered for object type ${objectType}`;
-            console.error(errorMessage);
+            console.warn(errorMessage);
         }
         return objects;
     }
@@ -81,7 +93,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     public static async createObject(
         objectType: KIXObjectType, parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions,
         catchError: boolean = true, cacheKeyPrefix: string = objectType
-    ): Promise<string | number> {
+    ): Promise<any> {
         const objectId = await KIXObjectSocketClient.getInstance().createObject(
             objectType, parameter, createOptions, cacheKeyPrefix
         ).catch(async (error: Error) => {
@@ -277,12 +289,29 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return parameter;
     }
 
-    public prepareFullTextFilter(searchValue: string): FilterCriteria[] {
+    public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {
         return [];
     }
 
-    public async getTreeNodes(property: string): Promise<TreeNode[]> {
-        return [];
+    public async getTreeNodes(
+        property: string, showInvalid?: boolean, filterIds?: Array<string | number>
+    ): Promise<TreeNode[]> {
+        let nodes: TreeNode[] = [];
+        switch (property) {
+            case KIXObjectProperty.CREATE_BY:
+            case KIXObjectProperty.CHANGE_BY:
+                const users = await KIXObjectService.loadObjects<User>(
+                    KIXObjectType.USER, null, null, null, true
+                ).catch((error) => [] as User[]);
+                users.forEach((u) => nodes.push(new TreeNode(u.UserID, u.UserFullname, 'kix-icon-man')));
+                break;
+            case KIXObjectProperty.VALID_ID:
+                const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
+                nodes = validObjects.map((vo) => new TreeNode(Number(vo.ID), vo.Name));
+                break;
+            default:
+        }
+        return nodes;
     }
 
     public static async checkFilterValue(
@@ -300,7 +329,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return [];
     }
 
-    public getAutoFillConfiguration(textMatch: any, placeholder: string): IAutofillConfiguration {
+    public async getAutoFillConfiguration(textMatch: any, placeholder: string): Promise<IAutofillConfiguration> {
         return null;
     }
 
@@ -330,6 +359,64 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
     public async getObjectUrl(object?: KIXObject, objectId?: string | number): Promise<string> {
         return '';
+    }
+
+    public async hasReadPermissionFor(objectType: KIXObjectType): Promise<boolean> {
+        const resource = this.getResource(objectType);
+        return await AuthenticationSocketClient.getInstance().checkPermissions([
+            new UIComponentPermission(resource, [CRUD.READ])
+        ]);
+    }
+
+    protected getResource(objectType: KIXObjectType): string {
+        return objectType.toLocaleLowerCase();
+    }
+
+    public static async prepareObjectTree(
+        objects: KIXObject[], showInvalid?: boolean, filterIds?: Array<string | number>
+    ): Promise<TreeNode[]> {
+        let nodes: TreeNode[] = [];
+        if (objects && !!objects.length) {
+            const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objects[0].KIXObjectType);
+            nodes = await service.prepareObjectTree(objects, showInvalid, filterIds);
+        }
+        return nodes;
+    }
+
+    public async prepareObjectTree(
+        objects: KIXObject[], showInvalid?: boolean, filterIds?: Array<string | number>
+    ): Promise<TreeNode[]> {
+        const nodes: TreeNode[] = [];
+        if (objects && !!objects.length) {
+            for (const o of objects) {
+                nodes.push(new TreeNode(o.ObjectId, await LabelService.getInstance().getText(o)));
+            }
+        }
+        return nodes;
+    }
+    public static async search(
+        objectType: KIXObjectType, searchValue: string, limit: number = 10
+    ): Promise<KIXObject[]> {
+        let result = [];
+        const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
+        if (service) {
+            const filter = await service.prepareFullTextFilter(searchValue);
+            const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit);
+            result = await service.loadObjects(objectType, null, loadingOptions);
+        }
+        return result;
+    }
+
+    public static async prepareTree(objects: KIXObject[]): Promise<TreeNode[]> {
+        const nodes = [];
+
+        for (const o of objects) {
+            const icon = await LabelService.getInstance().getObjectIcon(o);
+            const text = await LabelService.getInstance().getText(o);
+            nodes.push(new TreeNode(o.ObjectId, text, icon));
+        }
+
+        return nodes;
     }
 
 }

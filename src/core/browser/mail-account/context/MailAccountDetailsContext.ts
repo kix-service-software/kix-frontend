@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     Context, BreadcrumbInformation, KIXObject, KIXObjectType, MailAccount
 } from "../../../model";
@@ -32,7 +41,7 @@ export class MailAccountDetailsContext extends Context {
         objectType: KIXObjectType = KIXObjectType.MAIL_ACCOUNT, reload: boolean = false,
         changedProperties: string[] = []
     ): Promise<O> {
-        const object = await this.loadQueue(changedProperties) as any;
+        const object = await this.loadAccount(changedProperties) as any;
 
         if (reload) {
             this.listeners.forEach(
@@ -43,12 +52,12 @@ export class MailAccountDetailsContext extends Context {
         return object;
     }
 
-    private async loadQueue(changedProperties: string[] = [], cache: boolean = true): Promise<MailAccount> {
+    private async loadAccount(changedProperties: string[] = [], cache: boolean = true): Promise<MailAccount> {
         const mailAccountId = Number(this.objectId);
 
         const timeout = window.setTimeout(() => {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: `Translatable#Load Email Account ...`
+                loading: true, hint: 'Translatable#Load Email Account'
             });
         }, 500);
 

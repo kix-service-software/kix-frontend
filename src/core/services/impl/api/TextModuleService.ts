@@ -1,8 +1,19 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObjectService } from './KIXObjectService';
 import {
-    KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, TextModule, Error, TextModuleFactory
+    KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, TextModule, Error
 } from '../../../model';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
+import { LoggingService } from '../LoggingService';
+import { TextModuleFactory } from '../../object-factories/TextModuleFactory';
 
 export class TextModuleService extends KIXObjectService {
 
@@ -15,7 +26,7 @@ export class TextModuleService extends KIXObjectService {
         return TextModuleService.INSTANCE;
     }
 
-    protected RESOURCE_URI: string = 'textmodules';
+    protected RESOURCE_URI: string = this.buildUri('system', 'textmodules');
 
     public objectType: KIXObjectType = KIXObjectType.TEXT_MODULE;
 
@@ -47,14 +58,30 @@ export class TextModuleService extends KIXObjectService {
     public createObject(
         token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>
     ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
+        const id = super.executeUpdateOrCreateRequest(
+            token, clientRequestId, parameter, this.RESOURCE_URI, KIXObjectType.TEXT_MODULE, 'TextModuleID', true
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
+        });
+
+        return id;
     }
 
     public async updateObject(
         token: string, clientRequestId: string, objectType: KIXObjectType,
         parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
+        const uri = this.buildUri(this.RESOURCE_URI, objectId);
+
+        const id = super.executeUpdateOrCreateRequest(
+            token, clientRequestId, parameter, uri, KIXObjectType.TEXT_MODULE, 'TextModuleID'
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
+        });
+
+        return id;
     }
 
 }

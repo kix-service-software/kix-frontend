@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import {
     ContextService, LabelService, FormService, WidgetService, TableFactoryService,
@@ -190,6 +199,7 @@ class Component {
             [formGroup], KIXObjectType.ANY, true, FormContext.NEW
         );
 
+        FormService.getInstance().deleteFormInstance(form.id);
         await FormService.getInstance().addForm(form);
         FormService.getInstance().registerFormInstanceListener(form.id, {
             formListenerId: this.formListenerId,
@@ -216,12 +226,12 @@ class Component {
 
             const configuration = new TableConfiguration(
                 this.objectType, null, null, await this.getColumnConfig(),
-                null, true, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                true, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             );
             const table = await TableFactoryService.getInstance().createTable(
                 `import-dialog-list-${this.objectType}`, this.objectType,
                 configuration, null, this.context.getDescriptor().contextId,
-                false, null, true
+                false, null, true, false, true
             );
             table.sort('CSV_LINE', SortOrder.UP);
 
@@ -317,7 +327,7 @@ class Component {
     }
 
     private async prepareTitle(): Promise<void> {
-        const objectName = await LabelService.getInstance().getObjectName(this.objectType, true, false);
+        const objectName = await LabelService.getInstance().getObjectName(this.objectType, true);
         const objectCount = this.state.importManager.objects.length;
         const tableTitle = await TranslationService.translate(
             'Translatable#Overview of {0} to import ({1})', [objectName, objectCount]

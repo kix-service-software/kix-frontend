@@ -1,13 +1,22 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from "./ComponentState";
 import {
-    TicketProperty, TreeNode, DateTimeUtil, TicketState, KIXObjectType, StateType
+    TicketProperty, TreeNode, TicketState, KIXObjectType, StateType, FormField
 } from "../../../../../core/model";
-import { PendingTimeFormValue, TicketStateOptions, TicketService } from "../../../../../core/browser/ticket";
+import { TicketStateOptions, TicketService } from "../../../../../core/browser/ticket";
 import { FormInputComponent } from '../../../../../core/model/components/form/FormInputComponent';
-import { KIXObjectService } from "../../../../../core/browser";
+import { KIXObjectService, FormService, LabelService } from "../../../../../core/browser";
 import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
 
-class Component extends FormInputComponent<PendingTimeFormValue, ComponentState> {
+class Component extends FormInputComponent<number, ComponentState> {
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -31,25 +40,20 @@ class Component extends FormInputComponent<PendingTimeFormValue, ComponentState>
 
         this.state.nodes = await TicketService.getInstance().getTreeNodes(TicketProperty.STATE_ID);
         this.setCurrentNode();
-        this.showPendingTime();
+        this.showPendingTimeField();
     }
 
     protected setCurrentNode(): void {
         if (this.state.defaultValue && this.state.defaultValue.value) {
-            let defaultStateValue: PendingTimeFormValue;
+            let defaultStateValue;
             if (Array.isArray(this.state.defaultValue.value)) {
                 defaultStateValue = this.state.defaultValue.value[0];
             } else {
                 defaultStateValue = this.state.defaultValue.value;
             }
             if (defaultStateValue) {
-                this.state.currentNode = this.state.nodes.find((n) => n.id === defaultStateValue.stateId);
+                this.state.currentNode = this.state.nodes.find((n) => n.id === defaultStateValue);
                 this.showPendingTime();
-                if (this.state.pending && defaultStateValue.pendingDate) {
-                    const pendingDate = new Date(defaultStateValue.pendingDate);
-                    this.state.selectedDate = DateTimeUtil.getKIXDateString(pendingDate);
-                    this.state.selectedTime = DateTimeUtil.getKIXTimeString(pendingDate);
-                }
                 this.setValue();
             }
         }
@@ -63,7 +67,27 @@ class Component extends FormInputComponent<PendingTimeFormValue, ComponentState>
     }
 
     private async showPendingTime(): Promise<void> {
-        this.state.pending = false;
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        let field = this.state.field.children.find((f) => f.property === TicketProperty.PENDING_TIME);
+        const showPendingTime = await this.showPendingTimeField();
+        if (field && !showPendingTime) {
+            formInstance.removeFormField(field, this.state.field);
+        } else if (!field && showPendingTime) {
+            const label = await LabelService.getInstance().getPropertyText(
+                TicketProperty.PENDING_TIME, KIXObjectType.TICKET
+            );
+            field = new FormField(
+                label, TicketProperty.PENDING_TIME, 'ticket-input-state-pending', true,
+                null, null, undefined, undefined, undefined, undefined, undefined, undefined,
+                undefined, undefined, undefined, undefined, undefined, undefined, undefined,
+                undefined, false
+            );
+            formInstance.addNewFormField(this.state.field, [field]);
+        }
+    }
+
+    private async showPendingTimeField(): Promise<boolean> {
+        let showPending = false;
         if (this.state.currentNode && this.checkPendingOption()) {
             const states = await KIXObjectService.loadObjects<TicketState>(
                 KIXObjectType.TICKET_STATE, null
@@ -74,9 +98,10 @@ class Component extends FormInputComponent<PendingTimeFormValue, ComponentState>
             const state = states.find((s) => s.ID === this.state.currentNode.id);
             if (state) {
                 const stateType = stateTypes.find((t) => t.ID === state.TypeID);
-                this.state.pending = stateType && stateType.Name.toLocaleLowerCase().indexOf('pending') >= 0;
+                showPending = stateType && stateType.Name.toLocaleLowerCase().indexOf('pending') >= 0;
             }
         }
+        return showPending;
     }
 
     private checkPendingOption(): boolean {
@@ -91,27 +116,8 @@ class Component extends FormInputComponent<PendingTimeFormValue, ComponentState>
         return true;
     }
 
-    public dateChanged(event: any): void {
-        this.state.selectedDate = event.target.value;
-        this.setValue();
-    }
-
-    public timeChanged(event: any): void {
-        this.state.selectedTime = event.target.value;
-        this.setValue();
-    }
-
     private setValue(): void {
-        if (this.state.currentNode) {
-            const stateValue = new PendingTimeFormValue(
-                Number(this.state.currentNode.id),
-                this.state.pending,
-                new Date(`${this.state.selectedDate} ${this.state.selectedTime}`)
-            );
-            super.provideValue(stateValue);
-        } else {
-            super.provideValue(null);
-        }
+        super.provideValue(this.state.currentNode ? Number(this.state.currentNode.id) : null);
     }
 
     public async focusLost(event: any): Promise<void> {

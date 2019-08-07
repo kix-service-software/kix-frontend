@@ -1,12 +1,18 @@
-import { ILabelProvider } from "../ILabelProvider";
-import {
-    Permission, KIXObjectType, PermissionProperty, ObjectIcon, User,
-    DateTimeUtil, PermissionType, Role
-} from "../../model";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { Permission, KIXObjectType, PermissionProperty, ObjectIcon, PermissionType, Role } from "../../model";
 import { TranslationService } from "../i18n/TranslationService";
 import { KIXObjectService } from "../kix";
+import { LabelProvider } from "../LabelProvider";
 
-export class PermissionLabelProvider implements ILabelProvider<Permission> {
+export class PermissionLabelProvider extends LabelProvider<Permission> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.PERMISSION;
 
@@ -29,21 +35,6 @@ export class PermissionLabelProvider implements ILabelProvider<Permission> {
             case PermissionProperty.RoleID:
                 displayValue = 'Translatable#Role';
                 break;
-            case PermissionProperty.COMMENT:
-                displayValue = 'Translatable#Comment';
-                break;
-            case PermissionProperty.CREATE_BY:
-                displayValue = 'Translatable#Created by';
-                break;
-            case PermissionProperty.CREATE_TIME:
-                displayValue = 'Translatable#Created at';
-                break;
-            case PermissionProperty.CHANGE_BY:
-                displayValue = 'Translatable#Changed by';
-                break;
-            case PermissionProperty.CHANGE_TIME:
-                displayValue = 'Translatable#Changed at';
-                break;
             case PermissionProperty.IS_REQUIRED:
                 return 'Required';
             case PermissionProperty.TARGET:
@@ -51,6 +42,7 @@ export class PermissionLabelProvider implements ILabelProvider<Permission> {
                 break;
             case PermissionProperty.ID:
                 displayValue = 'Translatable#Icon';
+                break;
             case PermissionProperty.VALUE:
                 displayValue = 'Translatable#Permission';
                 break;
@@ -70,18 +62,16 @@ export class PermissionLabelProvider implements ILabelProvider<Permission> {
                 displayValue = 'Deny';
                 break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
-    }
-
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
     }
 
     public async getDisplayText(
@@ -108,11 +98,13 @@ export class PermissionLabelProvider implements ILabelProvider<Permission> {
                 }
                 break;
             default:
-                displayValue = await this.getPropertyValueDisplayText(property, displayValue);
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';
@@ -123,17 +115,6 @@ export class PermissionLabelProvider implements ILabelProvider<Permission> {
     ): Promise<string> {
         let displayValue = value;
         switch (property) {
-            case PermissionProperty.CREATE_BY:
-            case PermissionProperty.CHANGE_BY:
-                const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [value], null, null, true
-                ).catch((error) => [] as User[]);
-                displayValue = users && !!users.length ? users[0].UserFullname : value;
-                break;
-            case PermissionProperty.CREATE_TIME:
-            case PermissionProperty.CHANGE_TIME:
-                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
-                break;
             case PermissionProperty.TYPE_ID:
                 const types = await KIXObjectService.loadObjects<PermissionType>(
                     KIXObjectType.PERMISSION_TYPE, null, null, null, true
@@ -144,31 +125,22 @@ export class PermissionLabelProvider implements ILabelProvider<Permission> {
                 }
                 break;
             default:
+                displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';
-    }
-
-    public getDisplayTextClasses(object: Permission, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(object: Permission): string[] {
-        return [];
     }
 
     public async getObjectText(
         object: Permission, id?: boolean, title?: boolean, translatable?: boolean
     ): Promise<string> {
         return await this.getObjectName(false, translatable);
-    }
-
-    public getObjectAdditionalText(object: Permission): string {
-        return null;
     }
 
     public getObjectIcon(object?: Permission): string | ObjectIcon {

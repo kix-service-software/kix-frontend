@@ -1,10 +1,21 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObjectService } from "../kix";
 import {
     KIXObjectType, KIXObjectLoadingOptions, FilterCriteria,
-    TextModuleProperty, FilterDataType, FilterType, TextModule
+    TextModuleProperty, FilterDataType, FilterType, TextModule, CRUD, KIXObjectProperty
 } from "../../model";
 import { IAutofillConfiguration } from "../components";
 import { SearchOperator } from "../SearchOperator";
+import { AuthenticationSocketClient } from "../application/AuthenticationSocketClient";
+import { UIComponentPermission } from "../../model/UIComponentPermission";
 
 export class TextModuleService extends KIXObjectService {
 
@@ -29,62 +40,76 @@ export class TextModuleService extends KIXObjectService {
         return 'TextModule';
     }
 
-    public getAutoFillConfiguration(textMatch: any, placeholder: string): IAutofillConfiguration {
-        // tslint:disable:max-line-length
-        const itemTemplate = `<li data-id="{id}" class="text-module-autofill-item"><div class="text-module-category">{Category}</div><div class="text-module-info"><span class="text-module-name">{Name}</span><span class="text-module-label">{Keywords}</span></div></li>`;
-        const matchCallback = (text: string, offset) => {
+    protected async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+        switch (property) {
+            case TextModuleProperty.KEYWORDS:
+                value = value ? value.split(/[,;\s]\s?/) : undefined;
+                break;
+            default:
+        }
+        return [[property, value]];
+    }
 
-            const left = text.slice(0, offset);
-            const match = left.match(new RegExp(`${placeholder}[^\\s]*$`));
-            if (!match) {
-                return null;
-            }
+    public async getAutoFillConfiguration(textMatch: any, placeholder: string): Promise<IAutofillConfiguration> {
+        const allowed = await AuthenticationSocketClient.getInstance().checkPermissions([
+            new UIComponentPermission('system/textmodules', [CRUD.READ])
+        ]);
 
-            return {
-                start: match.index, end: offset
-            };
-        };
+        let config: IAutofillConfiguration;
 
-        const config: IAutofillConfiguration = {
-            textTestCallback: (range) => {
-                if (!range.collapsed) {
+        if (allowed) {
+            // tslint:disable:max-line-length
+            const itemTemplate
+                = '<li data-id="{id}" class="text-module-autofill-item">'
+                + '<div class="text-module-info">'
+                + '<span class="text-module-name">{Name}</span>'
+                + '<span class="text-module-label">{Keywords}</span>'
+                + '</div>'
+                + '</li>';
+
+            const matchCallback = (text: string, offset) => {
+
+                const left = text.slice(0, offset);
+                const match = left.match(new RegExp(`${placeholder}[^\\s]*$`));
+                if (!match) {
                     return null;
                 }
-                return textMatch.match(range, matchCallback);
-            }
-            ,
-            dataCallback: async (matchInfo, callback) => {
-                const query = matchInfo.query.substring(placeholder.length);
-                const modules = await this.getTextModules(query);
-                modules.forEach((tm) => {
-                    tm['id'] = tm.ID;
-                    tm['name'] = tm.Name;
-                });
-                callback(modules);
-            },
-            itemTemplate,
-            outputTemplate: '{Text}'
-        };
+
+                return {
+                    start: match.index, end: offset
+                };
+            };
+
+            config = {
+                textTestCallback: (range) => {
+                    if (!range.collapsed) {
+                        return null;
+                    }
+                    return textMatch.match(range, matchCallback);
+                }
+                ,
+                dataCallback: async (matchInfo, callback) => {
+                    const query = matchInfo.query.substring(placeholder.length);
+                    const modules = await this.getTextModules(query);
+                    modules.forEach((tm) => {
+                        tm['id'] = tm.ID;
+                        tm['name'] = tm.Name;
+                    });
+                    callback(modules);
+                },
+                itemTemplate,
+                outputTemplate: '{Text}'
+            };
+        }
 
         return config;
     }
 
     private async getTextModules(query: string): Promise<TextModule[]> {
-        let filterCriteria = [
-            new FilterCriteria(
-                TextModuleProperty.AGENT_FRONTEND, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
-            )
-        ];
+        let filterCriteria = [];
 
         if (query && query !== '') {
             filterCriteria = [
-                ...filterCriteria,
-                new FilterCriteria(
-                    TextModuleProperty.CATEGORY, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, query
-                ),
-                new FilterCriteria(
-                    TextModuleProperty.SUBJECT, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, query
-                ),
                 new FilterCriteria(
                     TextModuleProperty.KEYWORDS, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, query
                 ),
@@ -93,7 +118,10 @@ export class TextModuleService extends KIXObjectService {
                 )
             ];
         }
-        const loadingOptions = new KIXObjectLoadingOptions(null, filterCriteria);
+        filterCriteria.push(new FilterCriteria(
+            KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
+        ));
+        const loadingOptions = new KIXObjectLoadingOptions(filterCriteria, 'TextModule.Name');
         const textModules = await KIXObjectService.loadObjects<TextModule>(KIXObjectType.TEXT_MODULE, null, loadingOptions);
         return textModules;
     }

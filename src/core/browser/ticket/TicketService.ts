@@ -1,10 +1,19 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { TicketDetailsContext } from '.';
 import { SearchOperator, ContextService } from '..';
 import {
     Attachment, KIXObjectType, Ticket, TicketProperty, FilterDataType, FilterCriteria, FilterType,
     TreeNode, ObjectIcon, Service, TicketPriority, TicketType,
     TicketState, StateType, KIXObject, Sla, TableFilterCriteria, User, KIXObjectLoadingOptions,
-    KIXObjectSpecificLoadingOptions, ContextType, Article
+    KIXObjectSpecificLoadingOptions, Article, KIXObjectProperty
 } from '../../model';
 import { TicketParameterUtil } from './TicketParameterUtil';
 import { KIXObjectService } from '../kix';
@@ -91,7 +100,7 @@ export class TicketService extends KIXObjectService<Ticket> {
         await TicketSocketClient.getInstance().setArticleSeenFlag(ticketId, articleId);
     }
 
-    public prepareFullTextFilter(searchValue: string): FilterCriteria[] {
+    public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {
         return [
             new FilterCriteria(
                 SearchProperty.FULLTEXT, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
@@ -99,70 +108,74 @@ export class TicketService extends KIXObjectService<Ticket> {
         ];
     }
 
-    public async getTreeNodes(property: string, showInvalid?: boolean): Promise<TreeNode[]> {
-        let values: TreeNode[] = [];
+    public async getTreeNodes(
+        property: string, showInvalid?: boolean, filterIds?: Array<string | number>
+    ): Promise<TreeNode[]> {
+        let nodes: TreeNode[] = [];
 
         const labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.TICKET);
 
         switch (property) {
             case TicketProperty.QUEUE_ID:
                 const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy();
-                const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-                const object = context ? await context.getObject() : null;
-                const objectId = object && object.KIXObjectType === KIXObjectType.QUEUE
-                    ? Number(object.ObjectId)
-                    : null;
-                values = queuesHierarchy ? await QueueService.getInstance().prepareQueueTree(
-                    queuesHierarchy, showInvalid, objectId
-                ) : [];
+                nodes = await QueueService.getInstance().prepareObjectTree(
+                    queuesHierarchy, showInvalid, filterIds ? filterIds.map((fid) => Number(fid)) : null
+                );
                 break;
             case TicketProperty.SERVICE_ID:
                 const servicesHierarchy = await this.getServicesHierarchy();
-                values = servicesHierarchy ? this.prepareServiceTree(servicesHierarchy) : [];
+                nodes = servicesHierarchy ? this.prepareServiceTree(servicesHierarchy) : [];
                 break;
             case TicketProperty.TYPE_ID:
                 let types = await KIXObjectService.loadObjects<TicketType>(KIXObjectType.TICKET_TYPE);
-                types = types.filter((t) => t.ValidID === 1);
+                if (!showInvalid) {
+                    types = types.filter((t) => t.ValidID === 1);
+                }
                 for (const t of types) {
                     const icons = await labelProvider.getIcons(null, property, t.ID);
-                    values.push(new TreeNode(t.ID, t.Name, (icons && icons.length) ? icons[0] : null));
+                    nodes.push(new TreeNode(t.ID, t.Name, (icons && icons.length) ? icons[0] : null));
                 }
                 break;
             case TicketProperty.PRIORITY_ID:
                 let priorities = await KIXObjectService.loadObjects<TicketPriority>(KIXObjectType.TICKET_PRIORITY);
-                priorities = priorities.filter((p) => p.ValidID === 1);
+                if (!showInvalid) {
+                    priorities = priorities.filter((p) => p.ValidID === 1);
+                }
                 for (const p of priorities) {
                     const icons = await labelProvider.getIcons(null, property, p.ID);
-                    values.push(new TreeNode(p.ID, p.Name, (icons && icons.length) ? icons[0] : null));
+                    nodes.push(new TreeNode(p.ID, p.Name, (icons && icons.length) ? icons[0] : null));
                 }
                 break;
             case TicketProperty.STATE_ID:
                 let states = await KIXObjectService.loadObjects<TicketState>(KIXObjectType.TICKET_STATE);
-                states = states.filter((s) => s.ValidID === 1);
+                if (!showInvalid) {
+                    states = states.filter((s) => s.ValidID === 1);
+                }
                 for (const s of states) {
                     const icons = await labelProvider.getIcons(null, property, s.ID);
-                    values.push(new TreeNode(s.ID, s.Name, (icons && icons.length) ? icons[0] : null));
+                    nodes.push(new TreeNode(s.ID, s.Name, (icons && icons.length) ? icons[0] : null));
                 }
                 break;
             case TicketProperty.SLA_ID:
                 const slas = await KIXObjectService.loadObjects<Sla>(KIXObjectType.SLA);
-                slas.forEach((s) => values.push(new TreeNode(s.SLAID, s.Name, null)));
+                slas.forEach((s) => nodes.push(new TreeNode(s.SLAID, s.Name, null)));
                 break;
             case TicketProperty.LOCK_ID:
-                values.push(new TreeNode(1, 'freigegeben', 'kix-icon-lock-open'));
-                values.push(new TreeNode(2, 'gesperrt', 'kix-icon-lock-close'));
+                nodes.push(new TreeNode(1, 'Translatable#Unlocked', 'kix-icon-lock-open'));
+                nodes.push(new TreeNode(2, 'Translatable#Locked', 'kix-icon-lock-close'));
                 break;
             case TicketProperty.RESPONSIBLE_ID:
             case TicketProperty.OWNER_ID:
                 const users = await KIXObjectService.loadObjects<User>(
                     KIXObjectType.USER, null, null, null, true
                 ).catch((error) => [] as User[]);
-                users.forEach((u) => values.push(new TreeNode(u.UserID, u.UserFullname, 'kix-icon-man')));
+                users.forEach((u) => nodes.push(new TreeNode(u.UserID, u.UserFullname, 'kix-icon-man')));
                 break;
             default:
+                nodes = await super.getTreeNodes(property, showInvalid, filterIds);
         }
 
-        return values;
+        return nodes;
     }
 
     private prepareServiceTree(services: Service[]): TreeNode[] {
@@ -248,7 +261,7 @@ export class TicketService extends KIXObjectService<Ticket> {
     }
 
     public async getServicesHierarchy(): Promise<Service[]> {
-        const loadingOptions = new KIXObjectLoadingOptions(null, [
+        const loadingOptions = new KIXObjectLoadingOptions([
             new FilterCriteria('ParentID', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, null)
         ], null, null, ['SubServices', 'IncidentState'], ['SubServices']);
 
@@ -279,6 +292,14 @@ export class TicketService extends KIXObjectService<Ticket> {
             return [new Buffer(AttachmentWithContent.Content, 'base64').toString('utf8'), inlineContent];
         } else {
             return [article.Body, null];
+        }
+    }
+
+    protected getResource(objectType: KIXObjectType): string {
+        if (objectType === KIXObjectType.TICKET) {
+            return 'tickets';
+        } else {
+            return super.getResource(objectType);
         }
     }
 }

@@ -1,12 +1,22 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     ContactService, OrganisationService, ServiceService, SysConfigService, TicketService, FAQService,
     GeneralCatalogService, DynamicFieldService, LinkService, CMDBService, ObjectDefinitionService,
-    TextModuleService, UserService, ValidObjectService, TicketTypeService, ObjectIconService,
+    TextModuleService, ValidObjectService, TicketTypeService, ObjectIconService,
     TicketStateService, TicketPriorityService, ConfigItemClassService, TranslationService,
     ChannelService, TicketTemplateService, QueueService, MailAccountService, RoleService,
-    SystemAddressService, SlaService
+    SystemAddressService, SlaService, MailFilterService, NotificationService, LogFileService, ConsoleCommandService
 } from "./impl";
 import { CacheService } from "../cache";
+import { UserService } from "./impl/api/UserService";
 
 export class CoreServiceRegistry {
 
@@ -56,7 +66,11 @@ export class CoreServiceRegistry {
             RoleService.getInstance();
             QueueService.getInstance();
             MailAccountService.getInstance();
+            MailFilterService.getInstance();
             TicketTemplateService.getInstance();
+            NotificationService.getInstance();
+            LogFileService.getInstance();
+            ConsoleCommandService.getInstance();
 
             registry.initialized = true;
         }

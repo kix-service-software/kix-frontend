@@ -1,0 +1,53 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { IKIXModuleExtension } from "../../core/extensions";
+import { UIComponent } from "../../core/model/UIComponent";
+import { UIComponentPermission } from "../../core/model/UIComponentPermission";
+import { CRUD } from "../../core/model";
+
+class Extension implements IKIXModuleExtension {
+
+    public id: string = 'organisation-module';
+
+    public external: boolean = false;
+
+    public tags: Array<[string, string]>;
+
+    public initComponents: UIComponent[] = [
+        new UIComponent(
+            'organisation-read-module-component', 'core/browser/modules/ui-modules/OrganisationReadUIModule',
+            [new UIComponentPermission('organisations', [CRUD.READ])]
+        ),
+        new UIComponent(
+            'organisation-edit-module-component', 'core/browser/modules/ui-modules/OrganisationEditUIModule',
+            [
+                new UIComponentPermission('organisations', [CRUD.CREATE]),
+                new UIComponentPermission('organisations/*', [CRUD.UPDATE])
+            ]
+        )
+    ];
+
+    public uiComponents: UIComponent[] = [
+        new UIComponent(
+            'organisation-assigned-contacts-widget', 'organisation/widgets/organisation-assigned-contacts-widget', []
+        ),
+        new UIComponent(
+            'organisation-assigned-tickets-widget', 'organisation/widgets/organisation-assigned-tickets-widget', []
+        ),
+        new UIComponent('new-organisation-dialog', 'organisation/dialogs/new-organisation-dialog', []),
+        new UIComponent('edit-organisation-dialog', 'organisation/dialogs/edit-organisation-dialog', []),
+        new UIComponent('search-organisation-dialog', 'organisation/dialogs/search-organisation-dialog', [])
+    ];
+
+}
+
+module.exports = (data, host, options) => {
+    return new Extension();
+};

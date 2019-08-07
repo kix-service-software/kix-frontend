@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { TableContentProvider } from "../../../../table/TableContentProvider";
 import {
     KIXObjectType, KIXObjectLoadingOptions, Queue, FilterCriteria, QueueProperty, FilterDataType, FilterType
@@ -19,17 +28,8 @@ export class TicketQueueTableContentProvider extends TableContentProvider<Queue>
 
     public async loadData(): Promise<Array<IRowObject<Queue>>> {
 
-        const queueFilter = [
-            new FilterCriteria(
-                QueueProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, null
-            ),
-        ];
-        const loadingOptions = new KIXObjectLoadingOptions(null, queueFilter, null, null,
-            [QueueProperty.SUB_QUEUES], [QueueProperty.SUB_QUEUES]
-        );
-
         const queues = await KIXObjectService.loadObjects<Queue>(
-            KIXObjectType.QUEUE, null, this.loadingOptions ? this.loadingOptions : loadingOptions
+            KIXObjectType.QUEUE, null, this.loadingOptions
         );
 
         const rowObjects = [];

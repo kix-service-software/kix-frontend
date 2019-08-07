@@ -1,5 +1,14 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
-    FormService, ContextService, OverlayService, ServiceRegistry, BrowserUtil
+    FormService, ContextService, OverlayService, ServiceRegistry, BrowserUtil, AdditionalContextInformation
 } from '../../../../core/browser';
 import {
     ValidationSeverity, ContextType, ValidationResult, ComponentContent,
@@ -40,7 +49,7 @@ class Component {
         let formId = null;
         const dialogContext = await ContextService.getInstance().getActiveContext(ContextType.DIALOG);
         if (dialogContext) {
-            const info = dialogContext.getAdditionalInformation('FORM_ID');
+            const info = dialogContext.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
             formId = info ? info : null;
         }
         setTimeout(() => {

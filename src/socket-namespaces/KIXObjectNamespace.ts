@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     KIXObjectEvent, LoadObjectsRequest, LoadObjectsResponse, CreateObjectRequest,
     CreateObjectResponse, DeleteObjectRequest, DeleteObjectResponse,
@@ -34,9 +43,9 @@ export class KIXObjectNamespace extends SocketNameSpace {
         this.registerEventHandler(client, KIXObjectEvent.DELETE_OBJECT, this.deleteObject.bind(this));
     }
 
-    private loadObjects(data: LoadObjectsRequest): Promise<SocketResponse<LoadObjectsResponse<any>>> {
+    private loadObjects(data: LoadObjectsRequest): Promise<SocketResponse> {
 
-        return new Promise<SocketResponse<LoadObjectsResponse<any>>>((resolve, reject) => {
+        return new Promise<SocketResponse>((resolve, reject) => {
             const service = KIXObjectServiceRegistry.getServiceInstance(data.objectType);
             if (service) {
 

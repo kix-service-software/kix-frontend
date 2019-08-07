@@ -1,55 +1,44 @@
-import { ILabelProvider } from "..";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
-    ObjectIcon, KIXObjectType, ConfigItemClassDefinition, ConfigItemClassProperty, DateTimeUtil,
+    ObjectIcon, KIXObjectType, ConfigItemClassDefinition, DateTimeUtil,
     ConfigItemClassDefinitionProperty, User
 } from "../../model";
 import { TranslationService } from "../i18n/TranslationService";
-import { ObjectDataService } from "../ObjectDataService";
 import { KIXObjectService } from "../kix";
+import { LabelProvider } from "../LabelProvider";
 
-export class ConfigItemClassDefinitionLabelProvider implements ILabelProvider<ConfigItemClassDefinition> {
+export class ConfigItemClassDefinitionLabelProvider extends LabelProvider<ConfigItemClassDefinition> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION;
 
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
-    }
-
-    public async getPropertyValueDisplayText(property: string, value: string | number | any = ''): Promise<string> {
-        return value.toString();
-    }
-
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
-        let displayValue = property;
+        let displayValue: string;
         switch (property) {
             case ConfigItemClassDefinitionProperty.VERSION:
                 displayValue = 'Translatable#Version';
-                break;
-            case ConfigItemClassProperty.CHANGE_BY:
-                displayValue = 'Translatable#Changed by';
-                break;
-            case ConfigItemClassProperty.CREATE_TIME:
-                displayValue = 'Translatable#Created at';
-                break;
-            case ConfigItemClassProperty.CREATE_BY:
-                displayValue = 'Translatable#Created by';
                 break;
             case ConfigItemClassDefinitionProperty.CURRENT:
                 displayValue = 'Translatable#Current Definition';
                 break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
-    }
-
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
     }
 
     public async getDisplayText(
@@ -71,22 +60,16 @@ export class ConfigItemClassDefinitionLabelProvider implements ILabelProvider<Co
                 displayValue = value ? 'Translatable#(Current definition)' : '';
                 break;
             default:
-                displayValue = await this.getPropertyValueDisplayText(property, displayValue);
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
-    }
-
-    public getDisplayTextClasses(ciClassDefinition: ConfigItemClassDefinition, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(ciClassDefinition: ConfigItemClassDefinition): string[] {
-        return [];
     }
 
     public isLabelProviderFor(ciClassDefinition: ConfigItemClassDefinition): boolean {
@@ -100,11 +83,7 @@ export class ConfigItemClassDefinitionLabelProvider implements ILabelProvider<Co
         return translatable ? await TranslationService.translate(ciClassDefinition.Class) : ciClassDefinition.Class;
     }
 
-    public getObjectAdditionalText(ciClassDefinition: ConfigItemClassDefinition): string {
-        return null;
-    }
-
-    public getObjectIcon(ciClassDefinition: ConfigItemClassDefinition): string | ObjectIcon {
+    public getObjectTypeIcon(): string | ObjectIcon {
         return 'kix-icon-ci';
     }
 
@@ -124,11 +103,5 @@ export class ConfigItemClassDefinitionLabelProvider implements ILabelProvider<Co
             ? await TranslationService.translate('Translatable#CI Class Definition')
             : 'CI Class Definition';
         return definitionLabel;
-    }
-
-    public async getIcons(
-        ciClassDefinition: ConfigItemClassDefinition, property: string, value?: string | number
-    ): Promise<Array<string | ObjectIcon>> {
-        return [];
     }
 }

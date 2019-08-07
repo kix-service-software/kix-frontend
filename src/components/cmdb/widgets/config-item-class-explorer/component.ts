@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import { ContextService, IdService, KIXObjectService } from '../../../../core/browser';
 import {
@@ -20,7 +29,7 @@ export class Component {
     }
 
     public async onMount(): Promise<void> {
-        const loadingOptions = new KIXObjectLoadingOptions(null, null, null, null, ['ConfigItemStats']);
+        const loadingOptions = new KIXObjectLoadingOptions(null, null, null, ['ConfigItemStats']);
         const ciClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
             KIXObjectType.CONFIG_ITEM_CLASS, null, loadingOptions, null, false
         );
@@ -46,6 +55,8 @@ export class Component {
     private setActiveNode(category: ConfigItemClass): void {
         if (category) {
             this.state.activeNode = this.getActiveNode(category);
+        } else {
+            this.showAll();
         }
     }
 

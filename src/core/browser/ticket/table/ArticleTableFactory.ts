@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObjectType, DataType, ArticleProperty } from "../../../model";
 import {
     TableConfiguration, ITable, Table, DefaultColumnConfiguration, ToggleOptions,
@@ -48,14 +57,11 @@ export class ArticleTableFactory extends TableFactory {
                 false, false, false, DataType.STRING, false
             ),
             new DefaultColumnConfiguration(
-                ArticleProperty.SENDER_TYPE_ID, true, false, true, false, 120, true, true
+                ArticleProperty.SENDER_TYPE_ID, true, false, true, false, 120, true, true, true
             ),
             new DefaultColumnConfiguration(ArticleProperty.FROM, true, false, true, false, 300, true, true),
             new DefaultColumnConfiguration(
-                ArticleProperty.CUSTOMER_VISIBLE, false, true, false, true, 75, false, false
-            ),
-            new DefaultColumnConfiguration(
-                ArticleProperty.CHANNEL_ID, false, true, true, false, 75, true, true
+                ArticleProperty.CHANNEL_ID, false, true, true, false, 75, true, true, true
             ),
             new DefaultColumnConfiguration(ArticleProperty.SUBJECT, true, false, true, false, 500, true, true),
             new DefaultColumnConfiguration(
@@ -70,10 +76,9 @@ export class ArticleTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.ARTICLE, null, null, tableColumns, null, true, true, null, null,
+                KIXObjectType.ARTICLE, null, undefined, tableColumns, true, true, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
-            tableConfiguration.displayLimit = null;
             defaultToggle = true;
         } else if (!tableConfiguration.tableColumns) {
             tableConfiguration.tableColumns = tableColumns;
@@ -84,7 +89,6 @@ export class ArticleTableFactory extends TableFactory {
             tableConfiguration.toggleOptions = new ToggleOptions('ticket-article-details', 'article', [
                 'article-reply-action',
                 'article-forward-action',
-                'article-print-action',
                 'article-edit-action',
                 'article-communication-action',
                 'article-tag-action',

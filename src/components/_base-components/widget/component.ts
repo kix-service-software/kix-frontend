@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ContextService } from '../../../core/browser/context/ContextService';
 import { ComponentState } from './ComponentState';
 import { IdService } from '../../../core/browser/IdService';
@@ -18,7 +27,12 @@ class WidgetComponent implements IEventSubscriber {
     public onInput(input: any): void {
         this.state.instanceId = input.instanceId ? input.instanceId : IdService.generateDateBasedId();
         this.state.explorer = input.explorer;
-        this.state.minimizable = typeof input.minimizable !== 'undefined' ? input.minimizable : true;
+
+        const isSidebar = this.state.widgetType === WidgetType.SIDEBAR;
+        this.state.minimizable = typeof input.minimizable !== 'undefined'
+            ? input.minimizable
+            : !isSidebar;
+
         this.state.closable = typeof input.closable !== 'undefined' ? input.closable : false;
         this.state.isDialog = typeof input.isDialog !== 'undefined' ? input.isDialog : false;
         this.state.contextType = input.contextType;
@@ -134,9 +148,6 @@ class WidgetComponent implements IEventSubscriber {
                     break;
                 case WidgetType.LANE:
                     typeClass = 'lane-widget';
-                    break;
-                case WidgetType.LANE_TAB:
-                    typeClass = 'lane-tab-widget';
                     break;
                 case WidgetType.EXPLORER:
                     typeClass = 'explorer-widget';

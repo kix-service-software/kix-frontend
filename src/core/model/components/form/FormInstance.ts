@@ -1,14 +1,25 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     FormFieldValue, AutoCompleteConfiguration, Form, FormField,
     ValidationSeverity, ValidationResult, IFormInstanceListener
 } from ".";
 import { FormContext } from "./FormContext";
 import { IFormInstance } from "./IFormInstance";
-import { ContextService, ServiceRegistry, ServiceType } from "../../../browser";
-import { KIXObjectType, KIXObject } from "../../kix";
+import {
+    ContextService, ServiceRegistry, ServiceType, KIXObjectService, AdditionalContextInformation, FactoryService
+} from "../../../browser";
+import { KIXObjectType } from "../../kix";
 import { IKIXObjectFormService } from "../../../browser/kix/IKIXObjectFormService";
-import { ContextType } from "../context";
 import { FormValidationService } from "../../../browser/form/validation";
+import { ContextType } from "../context";
 
 export class FormInstance implements IFormInstance {
 
@@ -198,6 +209,23 @@ export class FormInstance implements IFormInstance {
             const result = await FormValidationService.getInstance().validate(formField, this.form.id);
             formFieldValue.valid = result.findIndex((vr) => vr.severity === ValidationSeverity.ERROR) === -1;
         }
+
+        // TODO: not really performant
+        const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+        if (dialogContext) {
+            const newObject = {};
+            const params = await KIXObjectService.prototype.prepareFormFields(this.form.id);
+            params.forEach((p) => {
+                if (p[1] !== undefined) {
+                    newObject[p[0]] = p[1];
+                }
+            });
+
+            const formObject = await FactoryService.getInstance().create<any>(this.form.objectType, newObject);
+
+            dialogContext.setAdditionalInformation(AdditionalContextInformation.FORM_OBJECT, formObject);
+        }
+
         this.listeners.forEach((l) => l.formValueChanged(formField, formFieldValue, oldValue));
         this.listeners.forEach((l) => l.updateForm());
     }
@@ -309,7 +337,7 @@ export class FormInstance implements IFormInstance {
             if (formFieldValue) {
                 formFieldValue.valid = fieldResult.findIndex((vr) => vr.severity === ValidationSeverity.ERROR) === -1;
                 result = [...result, ...fieldResult];
-                if (field.children) {
+                if (field.children && !!field.children.length) {
                     const childrenResult = await this.validateFields(field.children);
                     result = [...result, ...childrenResult];
                 }

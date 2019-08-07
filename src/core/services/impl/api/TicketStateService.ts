@@ -1,11 +1,22 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     TicketState, KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, StateType, ObjectIcon, Error, TicketStateFactory, TicketStateTypeFactory
+    KIXObjectSpecificCreateOptions, StateType, Error
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { LoggingService } from '../LoggingService';
+import { TicketStateFactory } from '../../object-factories/TicketStateFactory';
+import { TicketStateTypeFactory } from '../../object-factories/TicketStateTypeFactory';
 
 export class TicketStateService extends KIXObjectService {
 
@@ -18,7 +29,7 @@ export class TicketStateService extends KIXObjectService {
         return TicketStateService.INSTANCE;
     }
 
-    protected RESOURCE_URI: string = 'ticketstates';
+    protected RESOURCE_URI: string = this.buildUri('system', 'ticket', 'states');
 
     public objectType: KIXObjectType = KIXObjectType.TICKET_STATE;
 
@@ -43,8 +54,9 @@ export class TicketStateService extends KIXObjectService {
                 token, KIXObjectType.TICKET_STATE, this.RESOURCE_URI, loadingOptions, objectIds, 'TicketState'
             );
         } else if (objectType === KIXObjectType.TICKET_STATE_TYPE) {
+            const uri = this.buildUri(this.RESOURCE_URI, 'types');
             objects = await super.load<StateType>(
-                token, KIXObjectType.TICKET_STATE_TYPE, 'statetypes', loadingOptions, objectIds, 'StateType'
+                token, KIXObjectType.TICKET_STATE_TYPE, uri, loadingOptions, objectIds, 'StateType'
             );
         }
 

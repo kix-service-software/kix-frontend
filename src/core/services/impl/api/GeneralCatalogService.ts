@@ -1,11 +1,22 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObjectService } from './KIXObjectService';
 import {
     GeneralCatalogItem, KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    Error, GeneralCatalogItemFactory
 } from '../../../model';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
+import { GeneralCatalogItemFactory } from '../../object-factories/GeneralCatalogItemFactory';
 
 export class GeneralCatalogService extends KIXObjectService {
+
+    protected RESOURCE_URI: string = this.buildUri('system', 'generalcatalog');
 
     private static INSTANCE: GeneralCatalogService;
 
@@ -15,8 +26,6 @@ export class GeneralCatalogService extends KIXObjectService {
         }
         return GeneralCatalogService.INSTANCE;
     }
-
-    protected RESOURCE_URI: string = 'generalcatalog';
 
     public objectType: KIXObjectType = KIXObjectType.GENERAL_CATALOG_ITEM;
 
@@ -38,26 +47,13 @@ export class GeneralCatalogService extends KIXObjectService {
         let objects = [];
 
         if (objectType === KIXObjectType.GENERAL_CATALOG_ITEM) {
+            const uri = this.buildUri('system', 'generalcatalog');
             objects = await super.load<GeneralCatalogItem>(
-                token, KIXObjectType.GENERAL_CATALOG_ITEM, this.RESOURCE_URI,
-                loadingOptions, objectIds, 'GeneralCatalogItem'
+                token, KIXObjectType.GENERAL_CATALOG_ITEM, uri, loadingOptions, objectIds, 'GeneralCatalogItem'
             );
         }
 
         return objects;
-    }
-
-    public createObject(
-        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>
-    ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
-    }
-
-    public async updateObject(
-        token: string, clientRequestId: string, objectType: KIXObjectType,
-        parameter: Array<[string, any]>, objectId: number | string
-    ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
     }
 
 }

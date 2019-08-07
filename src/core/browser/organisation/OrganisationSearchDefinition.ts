@@ -1,11 +1,19 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { SearchDefinition, SearchResultCategory } from "../kix";
 import {
     KIXObjectType, OrganisationProperty, InputFieldTypes, FilterCriteria,
-    KIXObjectLoadingOptions, FilterDataType, FilterType, KIXObjectProperty
+    KIXObjectLoadingOptions, KIXObjectProperty
 } from "../../model";
 import { SearchOperator } from "../SearchOperator";
 import { SearchProperty } from "../SearchProperty";
-import { ObjectDataService } from "../ObjectDataService";
 import { OrganisationService } from "./OrganisationService";
 
 export class OrganisationSearchDefinition extends SearchDefinition {
@@ -15,39 +23,31 @@ export class OrganisationSearchDefinition extends SearchDefinition {
     }
 
     public async getProperties(): Promise<Array<[string, string]>> {
-        return [
+        const properties: Array<[string, string]> = [
             [SearchProperty.FULLTEXT, null],
             [OrganisationProperty.NAME, null],
             [OrganisationProperty.NUMBER, null],
             [OrganisationProperty.CITY, null],
             [OrganisationProperty.COUNTRY, null],
-            [OrganisationProperty.NUMBER, null],
             [OrganisationProperty.STREET, null],
             [OrganisationProperty.URL, null],
             [OrganisationProperty.ZIP, null]
         ];
+
+        if (await this.checkReadPermissions('system/valid')) {
+            properties.push([KIXObjectProperty.VALID_ID, null]);
+        }
+
+        return properties;
     }
 
     public async getOperations(property: string): Promise<SearchOperator[]> {
         let operations: SearchOperator[] = [];
 
-        const stringOperators = [
-            SearchOperator.EQUALS,
-            SearchOperator.STARTS_WITH,
-            SearchOperator.ENDS_WITH,
-            SearchOperator.CONTAINS,
-            SearchOperator.LIKE
-        ];
-        const numberOperators = [
-            SearchOperator.EQUALS,
-            SearchOperator.IN
-        ];
-
-        const properties = await this.getProperties();
         if (this.isDropDown(property)) {
-            operations = numberOperators;
+            operations = [SearchOperator.IN];
         } else {
-            operations = stringOperators;
+            operations = this.getStringOperators();
         }
 
         return operations;
@@ -72,16 +72,24 @@ export class OrganisationSearchDefinition extends SearchDefinition {
     }
 
     public async getSearchResultCategories(): Promise<SearchResultCategory> {
-        const contactCategory = new SearchResultCategory('Trranslatable#Contacts', KIXObjectType.CONTACT);
-        const ticketCategory = new SearchResultCategory('Translatable#Tickets', KIXObjectType.TICKET);
+        const categories: SearchResultCategory[] = [];
 
-        return new SearchResultCategory(
-            'Translatable#Organisations', KIXObjectType.ORGANISATION, [contactCategory, ticketCategory]
-        );
+        if (await this.checkReadPermissions('contacts')) {
+            categories.push(
+                new SearchResultCategory('Translatable#Contacts', KIXObjectType.CONTACT)
+            );
+        }
+        if (await this.checkReadPermissions('tickets')) {
+            categories.push(
+                new SearchResultCategory('Translatable#Tickets', KIXObjectType.TICKET)
+            );
+        }
+
+        return new SearchResultCategory('Translatable#Organisations', KIXObjectType.ORGANISATION, categories);
     }
 
     public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(null, criteria, null, null, ['Tickets', 'Contacts']);
+        return new KIXObjectLoadingOptions(criteria, null, null, ['Tickets', 'Contacts']);
     }
 
     public async prepareFormFilterCriteria(criteria: FilterCriteria[]): Promise<FilterCriteria[]> {
@@ -90,7 +98,8 @@ export class OrganisationSearchDefinition extends SearchDefinition {
         if (fulltextCriteriaIndex !== -1) {
             const value = criteria[fulltextCriteriaIndex].value;
             criteria.splice(fulltextCriteriaIndex, 1);
-            criteria = [...criteria, ...OrganisationService.getInstance().prepareFullTextFilter(value.toString())];
+            const filter = await OrganisationService.getInstance().prepareFullTextFilter(value.toString());
+            criteria = [...criteria, ...filter];
         }
         return criteria;
     }

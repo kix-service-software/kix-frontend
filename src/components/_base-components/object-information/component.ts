@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent, LabelService } from '../../../core/browser';
 import { ComponentInput } from './ComponentInput';
@@ -35,8 +44,16 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public getRoutingObjectId(property: string): string | number {
         const config = this.getRoutingConfiguration(property);
-        return config ? config.replaceObjectId :
-            this.state.object ? this.state.object[property] : undefined;
+        let id: string | number;
+        if (config) {
+            if (config.replaceObjectId) {
+                id = config.replaceObjectId;
+            } else {
+                id = this.state.object ? this.state.object[config.objectIdProperty] : undefined;
+            }
+        }
+
+        return id;
     }
 }
 

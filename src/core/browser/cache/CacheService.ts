@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ObjectUpdatedEventData, KIXObjectType } from "../../model";
 import { ClientStorageService } from "../ClientStorageService";
 import md5 = require('md5');
@@ -71,7 +80,7 @@ export class CacheService {
     public async updateCaches(events: ObjectUpdatedEventData[]): Promise<void> {
         for (const event of events) {
             if (event.RequestID !== ClientStorageService.getClientRequestId()) {
-                if (!event.Namespace.startsWith(KIXObjectType.TRANSLATION)) {
+                if (!event.Namespace.startsWith(KIXObjectType.TRANSLATION_PATTERN)) {
                     this.deleteKeys(event.Namespace);
                 }
             }
@@ -136,7 +145,7 @@ export class CacheService {
                 break;
             case KIXObjectType.PERMISSION:
             case KIXObjectType.ROLE:
-                this.clear([KIXObjectType.TRANSLATION]);
+                this.clear();
                 cacheKeyPrefixes = [];
                 break;
             case KIXObjectType.QUEUE:
@@ -146,6 +155,25 @@ export class CacheService {
             case KIXObjectType.CONFIG_ITEM_CLASS:
             case KIXObjectType.TICKET_PRIORITY:
                 cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
+                break;
+            case KIXObjectType.TRANSLATION_PATTERN:
+            case KIXObjectType.TRANSLATION:
+            case KIXObjectType.TRANSLATION_LANGUAGE:
+                cacheKeyPrefixes.push(KIXObjectType.TRANSLATION_PATTERN);
+                cacheKeyPrefixes.push(KIXObjectType.TRANSLATION);
+                cacheKeyPrefixes.push(KIXObjectType.TRANSLATION_LANGUAGE);
+                break;
+            case KIXObjectType.CONFIG_ITEM_VERSION:
+                cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
+                break;
+            case KIXObjectType.SYS_CONFIG_OPTION:
+                cacheKeyPrefixes.push(KIXObjectType.SYS_CONFIG_OPTION_DEFINITION);
+                break;
+            case KIXObjectType.QUEUE:
+            case KIXObjectType.TICKET_STATE:
+            case KIXObjectType.TICKET_TYPE:
+            case KIXObjectType.TICKET_PRIORITY:
+                cacheKeyPrefixes.push(KIXObjectType.TICKET);
                 break;
             default:
         }

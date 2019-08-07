@@ -1,9 +1,18 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import { TicketLabelProvider, TicketService, TicketDetailsContext } from "../../../../core/browser/ticket";
 import { ContextService } from '../../../../core/browser/context';
 import {
-    ObjectIcon, KIXObjectType, Ticket, SysconfigUtil, ContextMode, OrganisationProperty,
-    ContactProperty, Service, ObjectinformationWidgetSettings, Contact, Organisation, Context
+    ObjectIcon, KIXObjectType, Ticket, SysConfigUtil, ContextMode, OrganisationProperty,
+    ContactProperty, Service, ObjectInformationWidgetSettings, Contact, Organisation, Context
 } from '../../../../core/model';
 import { ActionFactory, IdService, KIXObjectService } from '../../../../core/browser';
 import { RoutingConfiguration } from '../../../../core/browser/router';
@@ -55,7 +64,7 @@ class Component {
         this.state.ticket = ticket;
         if (this.state.ticket) {
             this.state.isPending = await TicketService.getInstance().hasPendingState(this.state.ticket);
-            this.state.isAccountTimeEnabled = await SysconfigUtil.isTimeAccountingEnabled();
+            this.state.isAccountTimeEnabled = await SysConfigUtil.isTimeAccountingEnabled();
 
             const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
                 TicketDetailsContext.CONTEXT_ID
@@ -101,7 +110,7 @@ class Component {
             );
             this.state.contact = contacts && contacts.length ? contacts[0] : null;
 
-            const settings = config.settings as ObjectinformationWidgetSettings;
+            const settings = config.settings as ObjectInformationWidgetSettings;
             this.state.contactProperties = settings.properties;
 
             this.contactRoutingConfiguration = await this.getContactRoutingConfiguration();
@@ -117,7 +126,7 @@ class Component {
             );
             this.state.organisation = organisation && organisation.length ? organisation[0] : null;
 
-            const settings = config.settings as ObjectinformationWidgetSettings;
+            const settings = config.settings as ObjectInformationWidgetSettings;
             this.state.organisationProperties = settings.properties;
 
             this.organisationRoutingConfiguration = await this.getOrganisationRoutingConfiguration();

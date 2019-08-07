@@ -1,0 +1,15 @@
+{
+    "name": "kix-home",
+    "extensions": {
+        "kix:menu:main": {
+            "home-menu": {
+                "module": "menu.main.extension"
+            }
+        },
+        "kix:configuration": {
+            "home-configuration": {
+                "module": "configuration.extension"
+            }
+        }
+    }
+}

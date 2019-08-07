@@ -1,14 +1,23 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, RoleFactory, KIXObject, RoleProperty
+    KIXObjectSpecificCreateOptions, KIXObject, RoleProperty
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { LoggingService } from '../LoggingService';
-import {
-    PermissionTypeFactory, CreatePermissionDescription, PermissionProperty, Permission
-} from '../../../model/kix/permission';
+import { CreatePermissionDescription, PermissionProperty, Permission } from '../../../model/kix/permission';
+import { PermissionTypeFactory } from '../../object-factories/PermissionTypeFactory';
+import { RoleFactory } from '../../object-factories/RoleFactory';
 
 export class RoleService extends KIXObjectService {
 
@@ -23,10 +32,7 @@ export class RoleService extends KIXObjectService {
         return RoleService.INSTANCE;
     }
 
-    protected RESOURCE_URI: string = 'roles';
-    protected SUB_RESOURCE_URI_PERMISSION: string = 'permissions';
-    protected SUB_RESOURCE_URI_PERMISSION_TYPE: string = 'permissiontypes';
-    protected SUB_RESOURCE_URI_USER_IDS: string = 'userids';
+    protected RESOURCE_URI: string = this.buildUri('system', 'roles');
 
     public kixObjectType: KIXObjectType = KIXObjectType.ROLE;
 
@@ -52,7 +58,7 @@ export class RoleService extends KIXObjectService {
                 token, this.objectType, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.ROLE
             );
         } else if (objectType === KIXObjectType.PERMISSION_TYPE) {
-            const uri = this.buildUri(this.RESOURCE_URI, this.SUB_RESOURCE_URI_PERMISSION_TYPE);
+            const uri = this.buildUri(this.RESOURCE_URI, 'permissiontypes');
             objects = await super.load(
                 token, KIXObjectType.PERMISSION_TYPE, uri, loadingOptions, objectIds, KIXObjectType.PERMISSION_TYPE
             );
@@ -114,7 +120,7 @@ export class RoleService extends KIXObjectService {
         if (!userIds) {
             userIds = [];
         }
-        const baseUri = this.buildUri(this.RESOURCE_URI, roleId, this.SUB_RESOURCE_URI_USER_IDS);
+        const baseUri = this.buildUri(this.RESOURCE_URI, roleId, 'userids');
         const existingUserIds = await this.load(token, null, baseUri, null, null, RoleProperty.USER_IDS);
 
         const userIdsToRemove = existingUserIds.filter((euid) => !userIds.some((uid) => uid === euid));
@@ -140,7 +146,7 @@ export class RoleService extends KIXObjectService {
             permissionDescs = [];
         }
         if (roleId) {
-            const baseUri = this.buildUri(this.RESOURCE_URI, roleId, this.SUB_RESOURCE_URI_PERMISSION);
+            const baseUri = this.buildUri(this.RESOURCE_URI, roleId, 'permissions');
             const existingPermissions = await this.load(
                 token, null, baseUri, loadingOptionsForExistingPermissions, null, 'Permission'
             );
@@ -179,7 +185,7 @@ export class RoleService extends KIXObjectService {
     ): Promise<void> {
         await this.sendDeleteRequest(
             token, clientRequestId,
-            this.buildUri(this.RESOURCE_URI, roleId, this.SUB_RESOURCE_URI_PERMISSION, permissionId),
+            this.buildUri(this.RESOURCE_URI, roleId, 'permissions', permissionId),
             KIXObjectType.PERMISSION
         ).catch((error) => LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error));
     }
@@ -195,7 +201,7 @@ export class RoleService extends KIXObjectService {
             )
         );
 
-        const uri = this.buildUri(this.RESOURCE_URI, roleId, this.SUB_RESOURCE_URI_PERMISSION);
+        const uri = this.buildUri(this.RESOURCE_URI, roleId, 'permissions');
         for (const permissionDesc of permissionsToAdd) {
             await super.executeUpdateOrCreateRequest(
                 token, clientRequestId, this.getPermissionParameter(permissionDesc), uri,
@@ -221,7 +227,7 @@ export class RoleService extends KIXObjectService {
         });
 
         for (const permissionDesc of permissionsToPatch) {
-            const uri = this.buildUri(this.RESOURCE_URI, roleId, this.SUB_RESOURCE_URI_PERMISSION, permissionDesc.ID);
+            const uri = this.buildUri(this.RESOURCE_URI, roleId, 'permissions', permissionDesc.ID);
             await super.executeUpdateOrCreateRequest(
                 token, clientRequestId, this.getPermissionParameter(permissionDesc), uri,
                 KIXObjectType.PERMISSION, 'Permission'

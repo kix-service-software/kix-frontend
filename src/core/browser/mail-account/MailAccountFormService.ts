@@ -1,9 +1,16 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObjectFormService } from "../kix/KIXObjectFormService";
 import {
-    KIXObjectType, MailAccount, FormFieldValue, Form, MailAccountProperty, FormField, DispatchingType
+    KIXObjectType, MailAccount, FormFieldValue, Form, MailAccountProperty, FormField, DispatchingType, FormContext
 } from "../../model";
-import { ContextService } from "../context";
-import { MailAccountDetailsContext } from "./context";
 import { LabelService } from "../LabelService";
 
 export class MailAccountFormService extends KIXObjectFormService<MailAccount> {
@@ -26,15 +33,10 @@ export class MailAccountFormService extends KIXObjectFormService<MailAccount> {
         return kixObjectType === KIXObjectType.MAIL_ACCOUNT;
     }
 
-    public async initValues(form: Form): Promise<Map<string, FormFieldValue<any>>> {
-        const formFieldValues = await super.initValues(form);
-
-        const context = await ContextService.getInstance().getContext<MailAccountDetailsContext>(
-            MailAccountDetailsContext.CONTEXT_ID
-        );
-
-        if (context) {
-            const mailAccount = await context.getObject<MailAccount>();
+    protected async additionalPreparations(
+        form: Form, formFieldValues: Map<string, FormFieldValue<any>>, mailAccount: MailAccount
+    ): Promise<void> {
+        if (form && form.formContext === FormContext.EDIT) {
             groupLoop: for (const g of form.groups) {
                 for (const f of g.formFields) {
                     if (f.property === MailAccountProperty.TYPE) {
@@ -47,8 +49,6 @@ export class MailAccountFormService extends KIXObjectFormService<MailAccount> {
                 }
             }
         }
-
-        return formFieldValues;
     }
 
     private async setIMAPFolderField(
@@ -80,6 +80,17 @@ export class MailAccountFormService extends KIXObjectFormService<MailAccount> {
             default:
         }
         return value;
+    }
+
+    public async hasPermissions(field: FormField): Promise<boolean> {
+        let hasPermissions = true;
+        switch (field.property) {
+            case MailAccountProperty.DISPATCHING_BY:
+                hasPermissions = await this.checkPermissions('system/ticket/queues');
+                break;
+            default:
+        }
+        return hasPermissions;
     }
 
 }

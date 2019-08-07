@@ -1,11 +1,20 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import { ContextService, IdService, KIXObjectService, SearchOperator } from '../../../../core/browser';
 import {
     TreeNode, KIXObjectType, KIXObjectLoadingOptions, FilterDataType, FilterType, FilterCriteria
 } from '../../../../core/model';
 import { FAQCategory, FAQCategoryProperty } from '../../../../core/model/kix/faq';
-import { FAQContext } from '../../../../core/browser/faq';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
+import { FAQContext } from '../../../../core/browser/faq/context/FAQContext';
 
 export class Component {
 
@@ -31,7 +40,7 @@ export class Component {
                 FAQCategoryProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, null
             )
         ];
-        const loadingOptions = new KIXObjectLoadingOptions(null, categoryFilter, null, null,
+        const loadingOptions = new KIXObjectLoadingOptions(categoryFilter, null, null,
             ['SubCategories', 'Articles'], ['SubCategories']
         );
 

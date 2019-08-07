@@ -1,14 +1,24 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+
 import {
-    AbstractMarkoComponent, ContextService, WidgetService, LabelService, ActionFactory,
-    ComponentsService
+    AbstractMarkoComponent, ContextService, WidgetService, ActionFactory
 } from "../../../core/browser";
 import { ComponentState } from './ComponentState';
 import {
-    ContextConfiguration, KIXObject, KIXObjectType, Context, WidgetType, ContextType, ContextMode
+    ContextConfiguration, KIXObject, Context, WidgetType, ContextType, ContextMode
 } from "../../../core/model";
 import { TranslationService } from "../../../core/browser/i18n/TranslationService";
 import { EventService } from "../../../core/browser/event";
 import { ApplicationEvent } from "../../../core/browser/application";
+import { KIXModulesService } from "../../../core/browser/modules";
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -26,7 +36,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const context = await ContextService.getInstance().getActiveContext(ContextType.MAIN);
         this.contextChanged(null, context, ContextType.MAIN, null, null);
         ContextService.getInstance().registerListener({
-            contextChanged: this.contextChanged.bind(this)
+            constexServiceListenerId: 'object-details-component',
+            contextChanged: this.contextChanged.bind(this),
+            contextRegistered: () => { return; }
         });
     }
 
@@ -40,20 +52,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 this.state.error = 'No details context available.';
                 this.state.loading = false;
             } else {
+                this.state.loading = true;
                 this.state.instanceId = this.context.getDescriptor().contextId;
-
-                this.context.registerListener('object-details-component', {
-                    explorerBarToggled: () => { return; },
-                    filteredObjectListChanged: () => { return; },
-                    objectListChanged: () => { return; },
-                    sidebarToggled: () => { return; },
-                    scrollInformationChanged: () => { return; },
-                    objectChanged: (
-                        objectId: string, object: KIXObject, objectType: KIXObjectType, changedProperties: string[]
-                    ) => {
-                        this.initWidget(this.context, object);
-                    }
-                });
                 await this.initWidget(this.context);
             }
         }
@@ -61,6 +61,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onDestroy(): void {
         WidgetService.getInstance().unregisterActions(this.state.instanceId);
+        ContextService.getInstance().unregisterListener('object-details-component');
     }
 
     private async initWidget(context: Context, object?: KIXObject): Promise<void> {
@@ -82,8 +83,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         this.configuration = context.getConfiguration();
-        this.state.lanes = context.getLanes();
-        this.state.tabWidgets = context.getLaneTabs();
+        this.state.lanes = context.getLanes(true);
         this.state.contentWidgets = context.getContent(true);
 
         await this.prepareActions();
@@ -92,11 +92,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
             window.clearTimeout(loadingTimeout);
             this.state.loading = false;
-        }, 10);
+        }, 500);
     }
 
     private async prepareActions(): Promise<void> {
         const config = this.configuration;
+        this.state.actions = [];
         if (config && this.object) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
                 config.actions, this.object
@@ -113,7 +114,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public getWidgetTemplate(instanceId: string): any {
         const context = ContextService.getInstance().getActiveContext();
         const config = context ? context.getWidgetConfiguration(instanceId) : undefined;
-        return config ? ComponentsService.getInstance().getComponentTemplate(config.widgetId) : undefined;
+        return config ? KIXModulesService.getComponentTemplate(config.widgetId) : undefined;
     }
 
     public getLaneWidgetType(): number {

@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     ValidationResult, ValidationSeverity, ComponentContent, OverlayType, KIXObjectType,
     KIXObjectSpecificCreateOptions, Error, ContextMode
@@ -9,12 +18,13 @@ import { FormService } from "../../form";
 import { AbstractMarkoComponent } from "../../marko";
 import { BrowserUtil } from "../../BrowserUtil";
 import { RoutingConfiguration, RoutingService } from "../../router";
-import { ContextService } from "../../context";
+import { ContextService, AdditionalContextInformation } from "../../context";
 import { EventService } from "../../event";
 import { TabContainerEvent } from "./TabContainerEvent";
 import { TabContainerEventData } from "./TabContainerEventData";
 import { PreviousTabData } from "./PreviousTabData";
 import { TranslationService } from "../../i18n/TranslationService";
+import { ApplicationEvent } from "../../application";
 
 export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
 
@@ -40,6 +50,12 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
         this.state.translations = await TranslationService.createTranslationObject([
             "Translatable#Cancel", "Translatable#Save"
         ]);
+        const dialogContext = await ContextService.getInstance().getContextByTypeAndMode(
+            this.objectType, ContextMode.CREATE
+        );
+        if (dialogContext) {
+            dialogContext.setAdditionalInformation(AdditionalContextInformation.FORM_ID, this.state.formId);
+        }
     }
 
     public async onDestroy(): Promise<void> {
@@ -110,6 +126,8 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
             DialogService.getInstance().submitMainDialog();
             if (this.routingConfiguration) {
                 RoutingService.getInstance().routeToContext(this.routingConfiguration, objectId);
+            } else {
+                EventService.getInstance().publish(ApplicationEvent.REFRESH);
             }
         }
 

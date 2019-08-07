@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObjectType, DataType } from "../../../model";
 import { FAQArticleHistoryProperty } from "../../../model/kix/faq";
 import {
@@ -38,7 +47,7 @@ export class FAQArticleHistoryTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.FAQ_ARTICLE_HISTORY, null, null, tableColumns, null, null, null, null, null,
+                KIXObjectType.FAQ_ARTICLE_HISTORY, null, null, tableColumns,  null, null, null, null,
                 TableHeaderHeight.SMALL
             );
         } else if (!tableConfiguration.tableColumns) {

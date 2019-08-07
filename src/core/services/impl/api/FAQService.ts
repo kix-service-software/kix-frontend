@@ -1,16 +1,27 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
-    FAQArticleProperty, Attachment, FAQArticleAttachmentLoadingOptions, CreateFAQVoteOptions,
-    FAQCategoryFactory
+    FAQArticleProperty, Attachment, FAQArticleAttachmentLoadingOptions, CreateFAQVoteOptions, FAQVisibility,
 } from "../../../model/kix/faq";
 import { KIXObjectService } from "./KIXObjectService";
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, Error, ObjectIcon
+    KIXObjectSpecificCreateOptions, Error
 } from "../../../model";
 import { KIXObjectServiceRegistry } from "../../KIXObjectServiceRegistry";
 import { LoggingService } from "../LoggingService";
+import { FAQCategoryFactory } from "../../object-factories/FAQCategoryFactory";
 
 export class FAQService extends KIXObjectService {
+
+    protected RESOURCE_URI: string = 'faq/articles';
 
     protected objectType: KIXObjectType = KIXObjectType.FAQ_ARTICLE;
 
@@ -33,10 +44,10 @@ export class FAQService extends KIXObjectService {
             || type === KIXObjectType.FAQ_ARTICLE_ATTACHMENT
             || type === KIXObjectType.FAQ_ARTICLE_HISTORY
             || type === KIXObjectType.FAQ_CATEGORY
-            || type === KIXObjectType.FAQ_VOTE;
+            || type === KIXObjectType.FAQ_VOTE
+            || type === KIXObjectType.FAQ_VISIBILITY
+            || type === KIXObjectType.FAQ_KEYWORD;
     }
-
-    protected RESOURCE_URI: string = 'faq';
 
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
@@ -46,17 +57,25 @@ export class FAQService extends KIXObjectService {
 
         switch (objectType) {
             case KIXObjectType.FAQ_ARTICLE:
-                const articlesUri = this.buildUri(this.RESOURCE_URI, 'articles');
-                objects = await super.load(token, objectType, articlesUri, loadingOptions, objectIds, 'FAQArticle');
+                objects = await super.load(
+                    token, objectType, this.RESOURCE_URI, loadingOptions, objectIds, 'FAQArticle'
+                );
                 break;
             case KIXObjectType.FAQ_CATEGORY:
-                const categoryUri = this.buildUri(this.RESOURCE_URI, 'categories');
+                const categoryUri = this.buildUri('system', 'faq', 'categories');
                 objects = await super.load(token, objectType, categoryUri, loadingOptions, objectIds, 'FAQCategory');
                 break;
             case KIXObjectType.FAQ_ARTICLE_ATTACHMENT:
                 objects = await this.loadAttachment(
                     token, loadingOptions, (objectLoadingOptions as FAQArticleAttachmentLoadingOptions)
                 );
+                break;
+            case KIXObjectType.FAQ_VISIBILITY:
+                objects = await this.getFAQVisibilities();
+                break;
+            case KIXObjectType.FAQ_KEYWORD:
+                const uri = this.buildUri(this.RESOURCE_URI, 'keywords');
+                objects = await super.load<string>(token, KIXObjectType.FAQ_KEYWORD, uri, null, null, 'FAQKeyword');
                 break;
             default:
         }
@@ -96,10 +115,18 @@ export class FAQService extends KIXObjectService {
         }
     }
 
+    public async getFAQVisibilities(): Promise<FAQVisibility[]> {
+        return [
+            new FAQVisibility("internal", "Translatable#internal"),
+            new FAQVisibility("external", "Translatable#external"),
+            new FAQVisibility("public", "Translatable#public")
+        ];
+    }
+
     private async updateAttachments(
         token: string, clientRequestId: string, objectId: number, attachments: Attachment[]
     ): Promise<void> {
-        const uri = this.buildUri(this.RESOURCE_URI, 'articles', objectId, 'attachments');
+        const uri = this.buildUri(this.RESOURCE_URI, objectId, 'attachments');
 
         const existingAttachments = await super.load<Attachment>(
             token, KIXObjectType.FAQ_ARTICLE_ATTACHMENT, uri, null, null, 'Attachment'
@@ -110,7 +137,7 @@ export class FAQService extends KIXObjectService {
             : [];
 
         for (const attachment of deletableAttachments) {
-            const attachmentUri = this.buildUri(this.RESOURCE_URI, 'articles', objectId, 'attachments', attachment.ID);
+            const attachmentUri = this.buildUri(this.RESOURCE_URI, objectId, 'attachments', attachment.ID);
             await this.sendDeleteRequest(token, clientRequestId, attachmentUri, this.objectType);
         }
 
@@ -136,10 +163,9 @@ export class FAQService extends KIXObjectService {
         token: string, clientRequestId: string, parameter: Array<[string, any]>
     ): Promise<number> {
         const createParameter = parameter.filter((p) => p[0] !== FAQArticleProperty.LINK);
-        const uri = this.buildUri(this.RESOURCE_URI, 'articles');
 
         const id = await super.executeUpdateOrCreateRequest(
-            token, clientRequestId, createParameter, uri, this.objectType, 'FAQArticleID', true
+            token, clientRequestId, createParameter, this.RESOURCE_URI, this.objectType, 'FAQArticleID', true
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
@@ -159,7 +185,7 @@ export class FAQService extends KIXObjectService {
             (p) => p[0] !== FAQArticleProperty.LINK && p[0] !== FAQArticleProperty.ATTACHMENTS
         );
 
-        const uri = this.buildUri(this.RESOURCE_URI, 'articles', objectId);
+        const uri = this.buildUri(this.RESOURCE_URI, objectId);
         const id = await super.executeUpdateOrCreateRequest(
             token, clientRequestId, updateParameter, uri, this.objectType, 'FAQArticleID'
         );
@@ -175,7 +201,7 @@ export class FAQService extends KIXObjectService {
     public async updateFAQCategory(
         token: string, clientRequestId: string, parameter: Array<[string, any]>, objectId: number
     ): Promise<number> {
-        const uri = this.buildUri(this.RESOURCE_URI, 'categories', objectId);
+        const uri = this.buildUri('system', 'faq', 'categories', objectId);
 
         const id = super.executeUpdateOrCreateRequest(
             token, clientRequestId, parameter, uri, KIXObjectType.FAQ_CATEGORY, 'FAQCategoryID'
@@ -191,7 +217,7 @@ export class FAQService extends KIXObjectService {
     private async createFAQVote(
         token: string, clientRequestId: string, parameter: Array<[string, any]>, createOptions: CreateFAQVoteOptions
     ): Promise<number> {
-        const uri = this.buildUri(this.RESOURCE_URI, 'articles', createOptions.faqArticleId, 'votes');
+        const uri = this.buildUri(this.RESOURCE_URI, createOptions.faqArticleId, 'votes');
 
         const id = await super.executeUpdateOrCreateRequest(
             token, clientRequestId, parameter, uri, KIXObjectType.FAQ_VOTE, 'FAQVoteID', true
@@ -206,7 +232,7 @@ export class FAQService extends KIXObjectService {
     public async createFAQCategory(
         token: string, clientRequestId: string, parameter: Array<[string, any]>
     ): Promise<number> {
-        const uri = this.buildUri(this.RESOURCE_URI, 'categories');
+        const uri = this.buildUri('system', 'faq', 'categories');
 
         const id = super.executeUpdateOrCreateRequest(
             token, clientRequestId, parameter, uri, KIXObjectType.FAQ_CATEGORY, 'FAQCategoryID', true
@@ -223,8 +249,7 @@ export class FAQService extends KIXObjectService {
     ): Promise<Attachment[]> {
         if (objectLoadingOptions) {
             const uri = this.buildUri(
-                this.RESOURCE_URI,
-                'articles', objectLoadingOptions.faqArticleId,
+                this.RESOURCE_URI, objectLoadingOptions.faqArticleId,
                 'attachments', objectLoadingOptions.attachmentId
             );
 

@@ -1,15 +1,20 @@
-import { ILabelProvider } from "..";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ObjectIcon, KIXObjectType, LinkObject, LinkObjectProperty, KIXObject } from "../../model";
 import { LabelService } from "../LabelService";
 import { TranslationService } from "../i18n/TranslationService";
+import { LabelProvider } from "../LabelProvider";
 
-export class LinkObjectLabelProvider implements ILabelProvider<LinkObject> {
+export class LinkObjectLabelProvider extends LabelProvider<LinkObject> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.LINK_OBJECT;
-
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
-    }
 
     public async getPropertyValueDisplayText(
         property: string, value: string | number, translatable: boolean = true
@@ -27,8 +32,10 @@ export class LinkObjectLabelProvider implements ILabelProvider<LinkObject> {
                 displayValue = value;
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';
@@ -53,8 +60,10 @@ export class LinkObjectLabelProvider implements ILabelProvider<LinkObject> {
                 displayValue = property;
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
@@ -68,21 +77,15 @@ export class LinkObjectLabelProvider implements ILabelProvider<LinkObject> {
         linkObject: LinkObject, property: string, value?: string, translatable: boolean = true
     ): Promise<string> {
         let displayValue = typeof linkObject[property] !== 'undefined'
-            ? await this.getPropertyValueDisplayText(property, linkObject[property]) : property;
+            ? await this.getPropertyValueDisplayText(property, linkObject[property], translatable) : property;
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';
-    }
-
-    public getDisplayTextClasses(linkObject: LinkObject, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(linkObject: LinkObject): string[] {
-        return [];
     }
 
     public isLabelProviderFor(linkObject: LinkObject): boolean {
@@ -93,11 +96,7 @@ export class LinkObjectLabelProvider implements ILabelProvider<LinkObject> {
         return linkObject.title;
     }
 
-    public getObjectAdditionalText(linkObject: LinkObject): string {
-        return null;
-    }
-
-    public getObjectIcon(linkObject: LinkObject): string | ObjectIcon {
+    public getObjectTypeIcon(): string | ObjectIcon {
         return 'kix-icon-link';
     }
 

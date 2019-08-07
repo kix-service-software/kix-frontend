@@ -1,52 +1,28 @@
-import { ILabelProvider } from "../ILabelProvider";
-import { User, KIXObjectType, UserProperty, ObjectIcon, DateTimeUtil } from "../../model";
-import { ObjectDataService } from "../ObjectDataService";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import {
+    User, KIXObjectType, UserProperty, ObjectIcon, DateTimeUtil, KIXObjectProperty, PersonalSettingsProperty
+} from "../../model";
 import { TranslationService } from "../i18n/TranslationService";
-import { KIXObjectService } from "../kix";
+import { LabelProvider } from "../LabelProvider";
 
 
-export class UserLabelProvider implements ILabelProvider<User> {
+export class UserLabelProvider extends LabelProvider<User> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.USER;
-
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
-    }
-
-    public async getPropertyValueDisplayText(
-        property: string, value: string | number, translatable: boolean = true
-    ): Promise<string> {
-        let displayValue = value;
-        const objectData = ObjectDataService.getInstance().getObjectData();
-        if (objectData) {
-            switch (property) {
-                case UserProperty.CREATE_BY:
-                case UserProperty.CHANGE_BY:
-                    const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [value], null, null, true
-                    ).catch((error) => [] as User[]);
-                    displayValue = users && !!users.length ? users[0].UserFullname : value;
-                    break;
-                case UserProperty.VALID_ID:
-                    const valid = objectData.validObjects.find((v) => v.ID === value);
-                    displayValue = valid ? valid.Name : value;
-                    break;
-                default:
-            }
-        }
-
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
-        }
-
-        return displayValue ? displayValue.toString() : '';
-    }
 
     public isLabelProviderFor(object: User): boolean {
         return object instanceof User;
     }
 
-    public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
             case UserProperty.USER_TITLE:
@@ -61,9 +37,6 @@ export class UserLabelProvider implements ILabelProvider<User> {
             case UserProperty.USER_LOGIN:
                 displayValue = 'Translatable#Login Name';
                 break;
-            case UserProperty.VALID_ID:
-                displayValue = 'Translatable#Validity';
-                break;
             case UserProperty.USER_EMAIL:
                 displayValue = 'Translatable#Email';
                 break;
@@ -76,37 +49,26 @@ export class UserLabelProvider implements ILabelProvider<User> {
             case UserProperty.LAST_LOGIN:
                 displayValue = 'Translatable#Last Login';
                 break;
-            case UserProperty.CREATE_BY:
-                displayValue = 'Translatable#Created by';
-                break;
-            case UserProperty.CREATE_TIME:
-                displayValue = 'Translatable#Created at';
-                break;
-            case UserProperty.CHANGE_BY:
-                displayValue = 'Translatable#Changed by';
-                break;
-            case UserProperty.CHANGE_TIME:
-                displayValue = 'Translatable#Changed at';
-                break;
             case UserProperty.USER_COMMENT:
                 displayValue = 'Translatable#Comment';
                 break;
             case UserProperty.USER_LANGUAGE:
                 displayValue = 'Translatable#Language';
                 break;
+            case UserProperty.MY_QUEUES:
+                displayValue = 'Translatable#My Queues';
+                break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
-    }
-
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
     }
 
     public async getDisplayText(
@@ -115,48 +77,48 @@ export class UserLabelProvider implements ILabelProvider<User> {
         let displayValue = user[property];
 
         switch (property) {
-            case UserProperty.VALID_ID:
-                const objectData = ObjectDataService.getInstance().getObjectData();
-                const valid = objectData.validObjects.find((v) => v.ID.toString() === user[property].toString());
-                displayValue = valid ? valid.Name : user[property].toString();
-                break;
-            case UserProperty.CREATE_TIME:
-            case UserProperty.CHANGE_TIME:
-                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
-                break;
             case UserProperty.LAST_LOGIN:
                 if (user.Preferences) {
                     const lastLogin = user.Preferences.find((p) => p.ID === UserProperty.LAST_LOGIN);
                     if (lastLogin) {
-                        displayValue = await DateTimeUtil.getLocalDateTimeString(Number(lastLogin.Value) * 1000);
+                        displayValue = translatable
+                            ? await DateTimeUtil.getLocalDateTimeString(Number(lastLogin.Value) * 1000)
+                            : Number(lastLogin.Value) * 1000;
                     }
                 }
                 break;
-            case UserProperty.USER_LANGUAGE:
+            case PersonalSettingsProperty.USER_LANGUAGE:
                 if (user.Preferences) {
-                    const language = user.Preferences.find((p) => p.ID === UserProperty.USER_LANGUAGE);
+                    const language = user.Preferences.find((p) => p.ID === PersonalSettingsProperty.USER_LANGUAGE);
+                    if (language) {
+                        displayValue = await TranslationService.getInstance().getLanguageName(language.Value);
+                    }
+                }
+                break;
+            case UserProperty.USER_VALID:
+                displayValue = await this.getPropertyValueDisplayText(
+                    KIXObjectProperty.VALID_ID, user.ValidID, translatable
+                );
+                break;
+            case PersonalSettingsProperty.USER_LANGUAGE:
+                if (user.Preferences) {
+                    const language = user.Preferences.find((p) => p.ID === PersonalSettingsProperty.USER_LANGUAGE);
                     if (language) {
                         displayValue = await TranslationService.getInstance().getLanguageName(language.Value);
                     }
                 }
                 break;
             default:
-                displayValue = await this.getPropertyValueDisplayText(property, displayValue);
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';
-    }
-
-    public getDisplayTextClasses(object: User, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(object: User): string[] {
-        return [];
     }
 
     public async getObjectText(user: User, id?: boolean, title?: boolean, translatable?: boolean): Promise<string> {
@@ -164,16 +126,8 @@ export class UserLabelProvider implements ILabelProvider<User> {
         return `${user.UserFirstname} ${user.UserLastname} ${email}`;
     }
 
-    public getObjectAdditionalText(object: User, translatable: boolean = true): string {
-        return '';
-    }
-
-    public getObjectIcon(object: User): string | ObjectIcon {
+    public getObjectTypeIcon(): string | ObjectIcon {
         return 'kix-icon-man';
-    }
-
-    public getObjectTooltip(object: User, translatable: boolean = true): string {
-        return '';
     }
 
     public async getObjectName(plural: boolean = false, translatable: boolean = true): Promise<string> {
@@ -185,9 +139,4 @@ export class UserLabelProvider implements ILabelProvider<User> {
         return plural ? 'Agents' : 'Agent';
     }
 
-    public async getIcons(object: User, property: string): Promise<Array<string | ObjectIcon>> {
-        return [];
-    }
-
 }
-

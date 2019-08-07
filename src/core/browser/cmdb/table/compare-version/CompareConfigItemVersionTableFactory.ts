@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObjectType, DataType } from "../../../../model";
 import {
     TableConfiguration, ITable, Table, DefaultColumnConfiguration,
@@ -38,7 +47,7 @@ export class CompareConfigItemVersionTableFactory extends TableFactory {
             )];
 
         tableConfiguration = new TableConfiguration(
-            KIXObjectType.CONFIG_ITEM_VERSION_COMPARE, null, null, columns, null, false, false, null, null,
+            KIXObjectType.CONFIG_ITEM_VERSION_COMPARE, null, null, columns,  false, false, null, null,
             TableHeaderHeight.LARGE, TableRowHeight.LARGE, null, null, true
         );
         tableConfiguration.displayLimit = 18;

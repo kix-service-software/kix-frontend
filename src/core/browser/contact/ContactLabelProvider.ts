@@ -1,35 +1,56 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ObjectIcon, Contact, ContactProperty, Organisation, KIXObjectType, KIXObjectProperty } from '../../model';
-import { ILabelProvider } from '..';
 import { KIXObjectService } from '../kix';
 import { SearchProperty } from '../SearchProperty';
 import { TranslationService } from '../i18n/TranslationService';
-import { ObjectDataService } from '../ObjectDataService';
+import { LabelProvider } from '../LabelProvider';
 
-export class ContactLabelProvider implements ILabelProvider<Contact> {
+export class ContactLabelProvider extends LabelProvider<Contact> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONTACT;
 
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
-    }
-
     public async getPropertyValueDisplayText(
-        property: string, value: string | number, translatable: boolean = true
+        property: string, value: any, translatable: boolean = true
     ): Promise<string> {
         let displayValue = value;
-        const objectData = ObjectDataService.getInstance().getObjectData();
-        if (objectData) {
-            switch (property) {
-                case KIXObjectProperty.VALID_ID:
-                    const valid = objectData.validObjects.find((v) => v.ID === value);
-                    displayValue = valid ? valid.Name : value;
-                    break;
-                default:
-            }
+        switch (property) {
+            case ContactProperty.PRIMARY_ORGANISATION_ID:
+                if (value) {
+                    const primaryOrganisations = await KIXObjectService.loadObjects<Organisation>(
+                        KIXObjectType.ORGANISATION, [value], null, null, true
+                    ).catch((error) => console.log(error));
+                    displayValue = primaryOrganisations && primaryOrganisations.length
+                        ? `${primaryOrganisations[0].Name} (${primaryOrganisations[0].Number})`
+                        : '';
+                }
+                break;
+            case ContactProperty.ORGANISATION_IDS:
+                if (value && Array.isArray(value) && value.length) {
+                    const organisations = await KIXObjectService.loadObjects<Organisation>(
+                        KIXObjectType.ORGANISATION, value, null, null, true
+                    ).catch((error) => console.log(error));
+                    const organisationNames = organisations && organisations.length
+                        ? organisations.map((c) => c.Name)
+                        : [];
+                    displayValue = organisationNames.join(', ');
+                }
+                break;
+            default:
+                displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';
@@ -39,7 +60,7 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
         return object instanceof Contact;
     }
 
-    public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
             case SearchProperty.FULLTEXT:
@@ -48,11 +69,11 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
             case ContactProperty.ID:
                 displayValue = 'Translatable#ID';
                 break;
-            case ContactProperty.FIRST_NAME:
+            case ContactProperty.FIRSTNAME:
                 displayValue = 'Translatable#First Name';
                 break;
-            case ContactProperty.LAST_NAME:
-                displayValue = 'Translatable#Name';
+            case ContactProperty.LASTNAME:
+                displayValue = 'Translatable#Last Name';
                 break;
             case ContactProperty.EMAIL:
                 displayValue = 'Translatable#Email';
@@ -73,7 +94,7 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
                 displayValue = 'Translatable#Fax';
                 break;
             case ContactProperty.MOBILE:
-                displayValue = 'Translatable#Cell Phone';
+                displayValue = 'Translatable#Mobile';
                 break;
             case ContactProperty.STREET:
                 displayValue = 'Translatable#Street';
@@ -90,14 +111,8 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
             case ContactProperty.TITLE:
                 displayValue = 'Translatable#Title';
                 break;
-            case ContactProperty.COMMENT:
-                displayValue = 'Translatable#Comment';
-                break;
             case ContactProperty.PASSWORD:
                 displayValue = 'Translatable#Password';
-                break;
-            case KIXObjectProperty.VALID_ID:
-                displayValue = 'Translatable#Validity';
                 break;
             case ContactProperty.OPEN_TICKETS_COUNT:
                 displayValue = 'Translatable#Open Tickets';
@@ -112,11 +127,13 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
                 displayValue = 'Translatable#New Ticket';
                 break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
@@ -132,34 +149,10 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
     public async getDisplayText(
         contact: Contact, property: string, defaultValue?: string, translatable: boolean = true
     ): Promise<string> {
-        let displayValue = contact[property];
-
-        const objectData = ObjectDataService.getInstance().getObjectData();
+        let displayValue = typeof defaultValue !== 'undefined' && defaultValue !== null
+            ? defaultValue : contact[property];
 
         switch (property) {
-            case KIXObjectProperty.VALID_ID:
-                const valid = objectData.validObjects.find((v) => v.ID.toString() === contact[property].toString());
-                displayValue = valid ? valid.Name : contact[property].toString();
-                break;
-            case ContactProperty.PRIMARY_ORGANISATION_ID:
-                const primaryOrganisations = await KIXObjectService.loadObjects<Organisation>(
-                    KIXObjectType.ORGANISATION, [contact.PrimaryOrganisationID], null, null, true
-                ).catch((error) => console.log(error));
-                displayValue = primaryOrganisations && primaryOrganisations.length
-                    ? `${primaryOrganisations[0].Name} (${primaryOrganisations[0].Number})`
-                    : contact.PrimaryOrganisationID;
-                break;
-            case ContactProperty.ORGANISATION_IDS:
-                if (contact.OrganisationIDs && contact.OrganisationIDs.length) {
-                    const organisations = await KIXObjectService.loadObjects<Organisation>(
-                        KIXObjectType.ORGANISATION, contact.OrganisationIDs, null, null, true
-                    ).catch((error) => console.log(error));
-                    const organisationNames = organisations && organisations.length
-                        ? organisations.map((c) => c.Name)
-                        : contact.OrganisationIDs;
-                    displayValue = organisationNames.join(', ');
-                }
-                break;
             case ContactProperty.CREATE_NEW_TICKET:
                 if (contact.ValidID === 1) {
                     const newTicketLabel = await TranslationService.translate('Translatable#New Ticket');
@@ -181,23 +174,32 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
                     displayValue = contact.TicketStats.PendingReminderCount.toString();
                 }
                 break;
+            case ContactProperty.VALID:
+                displayValue = await this.getPropertyValueDisplayText(
+                    KIXObjectProperty.VALID_ID, contact.ValidID, translatable
+                );
+                break;
+            case ContactProperty.PRIMARY_ORGANISATION:
+                displayValue = await this.getPropertyValueDisplayText(
+                    ContactProperty.PRIMARY_ORGANISATION_ID, contact.PrimaryOrganisationID, translatable
+                );
+                break;
+            case ContactProperty.ORGANISATIONS:
+                displayValue = await this.getPropertyValueDisplayText(
+                    ContactProperty.ORGANISATION_IDS, contact.OrganisationIDs, translatable
+                );
+                break;
             default:
-                displayValue = await this.getPropertyValueDisplayText(property, displayValue);
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';
-    }
-
-    public getDisplayTextClasses(object: Contact, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(object: Contact): string[] {
-        return [];
     }
 
     public async getObjectText(
@@ -224,16 +226,8 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
         return returnString;
     }
 
-    public getObjectAdditionalText(object: Contact, translatable: boolean = true): string {
-        return '';
-    }
-
-    public getObjectIcon(object: Contact): string | ObjectIcon {
+    public getObjectTypeIcon(): string | ObjectIcon {
         return 'kix-icon-man-bubble';
-    }
-
-    public getObjectTooltip(object: Contact): string {
-        return '';
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
@@ -246,11 +240,6 @@ export class ContactLabelProvider implements ILabelProvider<Contact> {
 
         const contactLabel = translatable ? await TranslationService.translate('Translatable#Contact') : 'Contact';
         return contactLabel;
-    }
-
-    public async getIcons(object: Contact, property: string): Promise<Array<string | ObjectIcon>> {
-        const icons = [];
-        return icons;
     }
 
 }

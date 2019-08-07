@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObject } from "../KIXObject";
 import { KIXObjectType } from "../KIXObjectType";
 import { Version } from "./Version";
@@ -26,6 +35,8 @@ export class ConfigItem extends KIXObject<ConfigItem> {
     public ClassID: number;
 
     public CurDeplStateID: number;
+
+    public CurDeplStateType: string;
 
     public Number: string;
 
@@ -59,6 +70,7 @@ export class ConfigItem extends KIXObject<ConfigItem> {
             this.CurInciStateID = configItem.CurInciStateID;
             this.ClassID = Number(configItem.ClassID);
             this.CurDeplStateID = configItem.CurDeplStateID;
+            this.CurDeplStateType = configItem.CurDeplStateType;
             this.Number = configItem.Number;
             this.CreateBy = configItem.CreateBy;
             this.LastVersionID = configItem.LastVersionID;

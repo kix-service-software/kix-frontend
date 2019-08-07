@@ -1,13 +1,20 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, Error, SystemAddress, SystemAddressFactory
+    KIXObjectSpecificCreateOptions, Error, SystemAddress
 } from '../../../model';
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
-import { CreateSystemAddresses } from '../../../api/system-addresses/CreateSystemAddresses';
-import { CreateSystemAddressesResponse } from '../../../api/system-addresses/CreateSystemAddressesResponse';
-import { CreateSystemAddressesRequest } from '../../../api/system-addresses/CreateSystemAddressesRequest';
 import { LoggingService } from '../LoggingService';
+import { SystemAddressFactory } from '../../object-factories/SystemAddressFactory';
 
 export class SystemAddressService extends KIXObjectService {
 
@@ -20,7 +27,7 @@ export class SystemAddressService extends KIXObjectService {
         return SystemAddressService.INSTANCE;
     }
 
-    protected RESOURCE_URI: string = 'systemaddresses';
+    protected RESOURCE_URI: string = this.buildUri('system', 'communication', 'systemaddresses');
 
     public objectType: KIXObjectType = KIXObjectType.SYSTEM_ADDRESS;
 

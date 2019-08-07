@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions, Error
@@ -6,8 +15,8 @@ import {
 import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { LoggingService } from '../LoggingService';
-import { QueueFactory } from '../../../model/kix/ticket/QueueFactory';
-import { FollowUpTypeFactory } from '../../../model/kix/ticket/FollowUpTypeFactory';
+import { QueueFactory } from '../../object-factories/QueueFactory';
+import { FollowUpTypeFactory } from '../../object-factories/FollowUpTypeFactory';
 
 export class QueueService extends KIXObjectService {
 
@@ -20,8 +29,7 @@ export class QueueService extends KIXObjectService {
         return QueueService.INSTANCE;
     }
 
-    protected RESOURCE_URI: string = 'queues';
-    protected SUB_RESOUCE_URI: string = 'followuptypes';
+    protected RESOURCE_URI: string = this.buildUri('system', 'ticket', 'queues');
 
     public objectType: KIXObjectType = KIXObjectType.QUEUE;
 
@@ -45,7 +53,7 @@ export class QueueService extends KIXObjectService {
             const uri = this.buildUri(this.RESOURCE_URI);
             objects = await super.load(token, KIXObjectType.QUEUE, uri, loadingOptions, objectIds, KIXObjectType.QUEUE);
         } else if (objectType === KIXObjectType.FOLLOW_UP_TYPE) {
-            const uri = this.buildUri(this.RESOURCE_URI, this.SUB_RESOUCE_URI);
+            const uri = this.buildUri(this.RESOURCE_URI, 'followuptypes');
             objects = await super.load(
                 token, KIXObjectType.FOLLOW_UP_TYPE, uri, loadingOptions, null, KIXObjectType.FOLLOW_UP_TYPE
             );

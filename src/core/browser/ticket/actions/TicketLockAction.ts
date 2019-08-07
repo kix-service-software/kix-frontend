@@ -1,13 +1,30 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { AbstractAction } from '../../../model/components/action/AbstractAction';
-import { Ticket, KIXObjectType, TicketProperty } from '../../../model';
+import { Ticket, KIXObjectType, TicketProperty, CRUD } from '../../../model';
 import { ContextService } from '../../context';
 import { KIXObjectService } from '../../kix';
 import { EventService } from '../../event';
 import { TicketDetailsContext } from '../context';
 import { BrowserUtil } from '../../BrowserUtil';
-import { ApplicationEvent } from '../../application';
+import { ApplicationEvent } from '../../application/ApplicationEvent';
+import { UIComponentPermission } from '../../../model/UIComponentPermission';
+import { CacheService } from '../../cache';
 
 export class TicketLockAction extends AbstractAction<Ticket> {
+
+    public hasLink: boolean = false;
+
+    public permissions = [
+        new UIComponentPermission('tickets/*', [CRUD.UPDATE])
+    ];
 
     private currentLockId: number;
 
@@ -31,11 +48,11 @@ export class TicketLockAction extends AbstractAction<Ticket> {
         if (this.currentLockId === 1) {
             newLockId = 2;
             EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Lock Ticket ...' }
+                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Lock Ticket' }
             );
         } else {
             EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Unlock Ticket ...' }
+                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Unlock Ticket' }
             );
             successHint = 'Translatable#Ticket unlocked.';
         }
@@ -49,6 +66,9 @@ export class TicketLockAction extends AbstractAction<Ticket> {
             await context.getObject(KIXObjectType.TICKET, true);
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
             BrowserUtil.openSuccessOverlay(successHint);
+
+            CacheService.getInstance().deleteKeys(KIXObjectType.CURRENT_USER);
+            EventService.getInstance().publish(ApplicationEvent.REFRESH);
         }, 500);
     }
 

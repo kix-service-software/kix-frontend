@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     KIXObjectType, InputFieldTypes, TreeNode, SortUtil, ContactProperty,
     Contact, KIXObjectLoadingOptions, Organisation, ObjectIcon, KIXObjectProperty
@@ -57,8 +66,8 @@ export class ContactImportManager extends ImportManager {
         const attributes = [
             ContactProperty.PASSWORD,
             ContactProperty.PRIMARY_ORGANISATION_ID,
-            ContactProperty.FIRST_NAME,
-            ContactProperty.LAST_NAME,
+            ContactProperty.FIRSTNAME,
+            ContactProperty.LASTNAME,
             ContactProperty.TITLE,
             ContactProperty.EMAIL,
             ContactProperty.PHONE,
@@ -87,8 +96,8 @@ export class ContactImportManager extends ImportManager {
     public async searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]> {
         switch (property) {
             case ContactProperty.PRIMARY_ORGANISATION_ID:
-                const filter = OrganisationService.getInstance().prepareFullTextFilter(searchValue);
-                const loadingOptions = new KIXObjectLoadingOptions(null, filter, null, limit);
+                const filter = await OrganisationService.getInstance().prepareFullTextFilter(searchValue);
+                const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit);
                 const organisations = await KIXObjectService.loadObjects<Organisation>(
                     KIXObjectType.ORGANISATION, null, loadingOptions, null, false
                 );

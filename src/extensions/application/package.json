@@ -1,0 +1,37 @@
+{
+    "name": "kix-application",
+    "extensions": {
+        "kix:socket:namespace": {
+            "socket-namespace-registry": {
+                "module": "NamespaceRegistry.extension"
+            }
+        },
+        "kix:personal:settings": {
+            "personal-settings": {
+                "module": "personal-settings.extension"
+            }
+        },
+        "kix:configuration": {
+            "link-objects-dialog-configuration": {
+                "module": "link-objects-dialog-configuration.extension"
+            },
+            "edit-linked-objects-dialog-configuration": {
+                "module": "edit-linked-objects-dialog-configuration.extension"
+            },
+            "release-configuration": {
+                "module": "configuration.extension"
+            },
+            "bulk-dialog-configuration": {
+                "module": "bulk-dialog-configuration.extension"
+            },
+            "personal-settings-dialog-configuration": {
+                "module": "personal-settings-dialog-configuration.extension"
+            }
+        },
+        "kix:modules": {
+            "app-module": {
+                "module": "kix-module.extension"
+            }
+        }
+    }
+}

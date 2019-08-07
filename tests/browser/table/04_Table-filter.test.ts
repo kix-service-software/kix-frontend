@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 /* tslint:disable */
 
 import chai = require('chai');
@@ -205,7 +214,7 @@ describe('Table Filter Tests', () => {
         });
 
         it('should not return duplicate values', async () => {
-            const row = table.createRow(new RowObject([new TableValue('0', 'value-1-2'), new TableValue('1', 'value-1-2'), new TableValue('2', 'value-1-2'), new TableValue('3', 'value-1-2'), new TableValue('4', 'value-1-2')], null))
+            const row = table.createRow(new RowObject([new TableValue('0', 'value-1-2', 'value-1-2'), new TableValue('1', 'value-1-2', 'value-1-2'), new TableValue('2', 'value-1-2', 'value-1-2'), new TableValue('3', 'value-1-2', 'value-1-2'), new TableValue('4', 'value-1-2', 'value-1-2')], null))
 
             const column = table.getColumn('2');
             const values: Array<[any, number]> = column.getFilterValues();
@@ -219,9 +228,9 @@ describe('Table Filter Tests', () => {
         });
 
         it('should count duplicate values', async () => {
-            table.createRow(new RowObject([new TableValue('0', 'value-1-2'), new TableValue('1', 'value-1-2'), new TableValue('2', 'value-1-2'), new TableValue('3', 'value-1-2'), new TableValue('4', 'value-1-2')], null));
-            table.createRow(new RowObject([new TableValue('0', 'value-1-2'), new TableValue('1', 'value-1-2'), new TableValue('2', 'value-1-2'), new TableValue('3', 'value-1-2'), new TableValue('4', 'value-1-2')], null));
-            table.createRow(new RowObject([new TableValue('0', 'value-1-2'), new TableValue('1', 'value-1-2'), new TableValue('2', 'value-1-2'), new TableValue('3', 'value-1-2'), new TableValue('4', 'value-1-2')], null));
+            table.createRow(new RowObject([new TableValue('0', 'value-1-2', 'value-1-2'), new TableValue('1', 'value-1-2', 'value-1-2'), new TableValue('2', 'value-1-2', 'value-1-2'), new TableValue('3', 'value-1-2', 'value-1-2'), new TableValue('4', 'value-1-2', 'value-1-2')], null));
+            table.createRow(new RowObject([new TableValue('0', 'value-1-2', 'value-1-2'), new TableValue('1', 'value-1-2', 'value-1-2'), new TableValue('2', 'value-1-2', 'value-1-2'), new TableValue('3', 'value-1-2', 'value-1-2'), new TableValue('4', 'value-1-2', 'value-1-2')], null));
+            table.createRow(new RowObject([new TableValue('0', 'value-1-2', 'value-1-2'), new TableValue('1', 'value-1-2', 'value-1-2'), new TableValue('2', 'value-1-2', 'value-1-2'), new TableValue('3', 'value-1-2', 'value-1-2'), new TableValue('4', 'value-1-2', 'value-1-2')], null));
 
             const column = table.getColumn('2');
             const values: Array<[any, number]> = column.getFilterValues();
@@ -260,9 +269,9 @@ describe('Table Filter Tests', () => {
         });
 
         it('should filter the rows for given value', async () => {
-            table.createRow(new RowObject([new TableValue('0', 'value-1-2'), new TableValue('1', 'value-1-2'), new TableValue('2', 'value-1-2'), new TableValue('3', 'value-1-2'), new TableValue('4', 'value-1-2')], null));
-            table.createRow(new RowObject([new TableValue('0', 'value-1-2'), new TableValue('1', 'value-1-2'), new TableValue('2', 'value-1-2'), new TableValue('3', 'value-1-2'), new TableValue('4', 'value-1-2')], null));
-            table.createRow(new RowObject([new TableValue('0', 'value-1-2'), new TableValue('1', 'value-1-2'), new TableValue('2', 'value-1-2'), new TableValue('3', 'value-1-2'), new TableValue('4', 'value-1-2')], null));
+            table.createRow(new RowObject([new TableValue('0', 'value-1-2', 'value-1-2'), new TableValue('1', 'value-1-2', 'value-1-2'), new TableValue('2', 'value-1-2', 'value-1-2'), new TableValue('3', 'value-1-2', 'value-1-2'), new TableValue('4', 'value-1-2', 'value-1-2')], null));
+            table.createRow(new RowObject([new TableValue('0', 'value-1-2', 'value-1-2'), new TableValue('1', 'value-1-2', 'value-1-2'), new TableValue('2', 'value-1-2', 'value-1-2'), new TableValue('3', 'value-1-2', 'value-1-2'), new TableValue('4', 'value-1-2', 'value-1-2')], null));
+            table.createRow(new RowObject([new TableValue('0', 'value-1-2', 'value-1-2'), new TableValue('1', 'value-1-2', 'value-1-2'), new TableValue('2', 'value-1-2', 'value-1-2'), new TableValue('3', 'value-1-2', 'value-1-2'), new TableValue('4', 'value-1-2', 'value-1-2')], null));
             const column = table.getColumn('2');
             column.getColumnConfiguration().hasListFilter = true;
             await column.filter(['value-1-2', 'value-2-2']);
@@ -274,9 +283,9 @@ describe('Table Filter Tests', () => {
         });
 
         it('should filter the rows for given text value in relevant column', async () => {
-            table.createRow(new RowObject([new TableValue('0', 'value-1-2'), new TableValue('1', 'value-1-2'), new TableValue('2', 'value-1-2'), new TableValue('3', 'value-1-2'), new TableValue('4', 'value-1-2')], null));
-            table.createRow(new RowObject([new TableValue('0', 'value-1-2'), new TableValue('1', 'value-1-2'), new TableValue('2', 'should-not-match'), new TableValue('3', 'value-1-2'), new TableValue('4', 'value-1-2')], null));
-            table.createRow(new RowObject([new TableValue('0', 'value-1-2'), new TableValue('1', 'value-1-2'), new TableValue('2', 'should-not-match'), new TableValue('3', 'value-1-2'), new TableValue('4', 'value-1-2')], null));
+            table.createRow(new RowObject([new TableValue('0', 'value-1-2', 'value-1-2'), new TableValue('1', 'value-1-2', 'value-1-2'), new TableValue('2', 'value-1-2', 'value-1-2'), new TableValue('3', 'value-1-2', 'value-1-2'), new TableValue('4', 'value-1-2', 'value-1-2')], null));
+            table.createRow(new RowObject([new TableValue('0', 'value-1-2', 'value-1-2'), new TableValue('1', 'value-1-2', 'value-1-2'), new TableValue('2', 'should-not-match'), new TableValue('3', 'value-1-2', 'value-1-2'), new TableValue('4', 'value-1-2', 'value-1-2')], null));
+            table.createRow(new RowObject([new TableValue('0', 'value-1-2', 'value-1-2'), new TableValue('1', 'value-1-2', 'value-1-2'), new TableValue('2', 'should-not-match'), new TableValue('3', 'value-1-2', 'value-1-2'), new TableValue('4', 'value-1-2', 'value-1-2')], null));
             const column = table.getColumn('2');
             await column.filter(null, 'value-1-2');
 
@@ -287,9 +296,9 @@ describe('Table Filter Tests', () => {
         });
 
         it('should filter the rows for list value', async () => {
-            table.createRow(new RowObject([new TableValue('0', 'value-1-2'), new TableValue('1', 'value-1-2'), new TableValue('2', 'value-1-2'), new TableValue('3', 'value-1-2'), new TableValue('4', 'value-1-2')], null));
-            table.createRow(new RowObject([new TableValue('0', 'value-1-2'), new TableValue('1', 'value-1-2'), new TableValue('2', 'value-1-3'), new TableValue('3', 'value-1-2'), new TableValue('4', 'value-1-2')], null));
-            table.createRow(new RowObject([new TableValue('0', 'value-1-2'), new TableValue('1', 'value-1-2'), new TableValue('2', 'value-1-4'), new TableValue('3', 'value-1-2'), new TableValue('4', 'value-1-2')], null));
+            table.createRow(new RowObject([new TableValue('0', 'value-1-2', 'value-1-2'), new TableValue('1', 'value-1-2', 'value-1-2'), new TableValue('2', 'value-1-2', 'value-1-2'), new TableValue('3', 'value-1-2', 'value-1-2'), new TableValue('4', 'value-1-2', 'value-1-2')], null));
+            table.createRow(new RowObject([new TableValue('0', 'value-1-2', 'value-1-2'), new TableValue('1', 'value-1-2', 'value-1-2'), new TableValue('2', 'value-1-3'), new TableValue('3', 'value-1-2', 'value-1-2'), new TableValue('4', 'value-1-2', 'value-1-2')], null));
+            table.createRow(new RowObject([new TableValue('0', 'value-1-2', 'value-1-2'), new TableValue('1', 'value-1-2', 'value-1-2'), new TableValue('2', 'value-1-4'), new TableValue('3', 'value-1-2', 'value-1-2'), new TableValue('4', 'value-1-2', 'value-1-2')], null));
             const column = table.getColumn('2');
             column.getColumnConfiguration().hasListFilter = true;
             await column.filter(['value-1-2', 'value-1-1'], null);
@@ -301,9 +310,9 @@ describe('Table Filter Tests', () => {
         });
 
         it("should reset the filter", async () => {
-            table.createRow(new RowObject([new TableValue('0', 'value-1-2'), new TableValue('1', 'value-1-2'), new TableValue('2', 'value-1-2'), new TableValue('3', 'value-1-2'), new TableValue('4', 'value-1-2')], null));
-            table.createRow(new RowObject([new TableValue('0', 'value-1-2'), new TableValue('1', 'value-1-2'), new TableValue('2', 'value-1-3'), new TableValue('3', 'value-1-2'), new TableValue('4', 'value-1-2')], null));
-            table.createRow(new RowObject([new TableValue('0', 'value-1-2'), new TableValue('1', 'value-1-2'), new TableValue('2', 'value-1-4'), new TableValue('3', 'value-1-2'), new TableValue('4', 'value-1-2')], null));
+            table.createRow(new RowObject([new TableValue('0', 'value-1-2', 'value-1-2'), new TableValue('1', 'value-1-2', 'value-1-2'), new TableValue('2', 'value-1-2', 'value-1-2'), new TableValue('3', 'value-1-2', 'value-1-2'), new TableValue('4', 'value-1-2', 'value-1-2')], null));
+            table.createRow(new RowObject([new TableValue('0', 'value-1-2', 'value-1-2'), new TableValue('1', 'value-1-2', 'value-1-2'), new TableValue('2', 'value-1-3'), new TableValue('3', 'value-1-2', 'value-1-2'), new TableValue('4', 'value-1-2', 'value-1-2')], null));
+            table.createRow(new RowObject([new TableValue('0', 'value-1-2', 'value-1-2'), new TableValue('1', 'value-1-2', 'value-1-2'), new TableValue('2', 'value-1-4'), new TableValue('3', 'value-1-2', 'value-1-2'), new TableValue('4', 'value-1-2', 'value-1-2')], null));
             const column = table.getColumn('2');
             column.getColumnConfiguration().hasListFilter = true;
             await column.filter(['value-1-2', 'value-1-1'], null);
@@ -371,7 +380,7 @@ class TestTableContentProvider implements ITableContentProvider {
             const values: TableValue[] = [];
 
             for (let c = 0; c < this.cellCount; c++) {
-                values.push(new TableValue(`${c}`, `value-${r}-${c}`));
+                values.push(new TableValue(`${c}`, `value-${r}-${c}`, `value-${r}-${c}`));
             }
 
             objects.push(new RowObject(values, this.withObject ? {} : null));

@@ -1,11 +1,22 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from "./ComponentState";
 import { OverlayService, ActionFactory, WidgetService } from "../../../core/browser";
 import {
     OverlayType, ComponentContent, WidgetType, KIXObject, ToastContent
 } from "../../../core/model";
 import { ContextService } from "../../../core/browser/context";
-import { ComponentsService } from "../../../core/browser/components";
 import { TranslationService } from "../../../core/browser/i18n/TranslationService";
+import { KIXModulesService } from "../../../core/browser/modules";
+import { EventService } from "../../../core/browser/event";
+import { ApplicationEvent } from "../../../core/browser/application";
 
 class OverlayComponent {
 
@@ -15,7 +26,8 @@ class OverlayComponent {
     private startMoveOffset: [number, number] = null;
     private startResizeOffset: [number, number] = null;
     private position: [number, number] = null;
-    private keepShow: boolean;
+    private keepShow = true;
+    private clickListener: any;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -24,112 +36,110 @@ class OverlayComponent {
     public async onMount(): Promise<void> {
 
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Close window"
+            "Translatable#Close Overlay"
         ]);
 
         OverlayService.getInstance().registerOverlayComponentListener(this.openOverlay.bind(this));
 
         WidgetService.getInstance().setWidgetType(this.state.overlayInstanceId, WidgetType.OVERLAY);
 
-        document.addEventListener("click", (event: any) => {
-            this.closeOverlayEventHandler(event);
-        }, false);
-        document.addEventListener('mousemove', this.mouseMove.bind(this));
-        document.addEventListener('mouseup', this.mouseUp.bind(this));
+        document.addEventListener('mousemove', this.mouseMove.bind(this), false);
+        document.addEventListener('mouseup', this.mouseUp.bind(this), false);
+
+        EventService.getInstance().subscribe(ApplicationEvent.CLOSE_OVERLAY, {
+            eventSubscriberId: 'overlay',
+            eventPublished: () => {
+                this.closeOverlay();
+            }
+        });
     }
 
     public onUpdate(): void {
         this.setOverlayPosition();
     }
 
-    public onDestroy(): void {
-        document.removeEventListener("click", (event: any) => {
-            this.closeOverlayEventHandler(event);
-        }, false);
-        document.removeEventListener('mousemove', this.mouseMove.bind(this));
-        document.removeEventListener('mouseup', this.mouseUp.bind(this));
-    }
-
-    private closeOverlayEventHandler(event: any): void {
-        if (this.state.show && !this.showShield() && event.button === 0) {
-            if (this.keepShow) {
-                this.keepShow = false;
-            } else {
-                this.closeOverlay();
-            }
-        }
-    }
-
-    public overlayClicked(): void {
+    public overlayClicked(event: any): void {
         this.keepShow = true;
     }
 
     private openOverlay<T extends KIXObject<T>>(
         type: OverlayType, widgetInstanceId: string, content: ComponentContent<T>, title: string,
         closeButton: boolean, position: [number, number], newListenerId: string, large: boolean,
-        toastTimeoutMillis: number = 2000
+        toastTimeoutMillis: number = 2000, autoClose: boolean = true
     ): void {
         if (this.currentListenerId) {
             this.closeOverlay();
         }
-        this.state.title = title;
-        this.state.icon = this.getWidgetIcon(type);
-        this.state.content = content;
-        this.state.hasCloseButton = closeButton;
-        this.state.type = type;
-        this.position = position;
+        this.state.show = false;
 
-        if (this.position && this.position[0]) {
-            this.position[0] += window.scrollX;
+        if (autoClose) {
+            let firstClick = true;
+            this.clickListener = (event: any) => {
+                if (!firstClick && !this.keepShow && !this.showShield() && event.button === 0) {
+                    this.closeOverlay();
+                }
+                firstClick = false;
+                this.keepShow = false;
+            };
+            document.addEventListener("click", this.clickListener, false);
         }
-        if (this.position && this.position[1]) {
-            this.position[1] += window.scrollY;
-        }
 
-        this.state.overlayClass = this.getOverlayTypeClass(type, large);
-        this.currentListenerId = newListenerId;
-
-        this.applyWidgetConfiguration(widgetInstanceId);
-
-        this.state.show = true;
-        this.keepShow = true;
         setTimeout(() => {
-            this.keepShow = false;
-        }, 100);
+            this.state.title = title;
+            this.state.icon = this.getWidgetIcon(type);
+            this.state.content = content;
+            this.state.hasCloseButton = closeButton;
+            this.state.type = type;
+            this.position = position;
 
-        if (this.isToast()) {
-            if (type && type === OverlayType.SUCCESS_TOAST) {
-                const toastContent = this.state.content.getComponentData() as ToastContent;
-                if (toastContent && typeof toastContent.title === 'undefined') {
-                    toastContent.title = 'Translatable#Success!';
-                }
+            if (this.position && this.position[0]) {
+                this.position[0] += window.scrollX;
             }
-            this.toastTimeout = setTimeout(() => {
-                const toast = (this as any).getEl('overlay');
-                if (toast) {
-                    toast.addEventListener('mouseover', (e) => {
-                        clearTimeout(this.toastTimeout);
-                    });
-                    toast.addEventListener('mouseleave', (e) => {
-                        toast.classList.remove('show-toast');
-                        this.toastTimeout = setTimeout(() => {
-                            this.closeOverlay();
-                        }, 200);
-                    });
-                    toast.classList.add('show-toast');
-                    this.toastTimeout = setTimeout(() => {
-                        toast.classList.remove('show-toast');
-                        this.toastTimeout = setTimeout(() => {
-                            this.closeOverlay();
-                        }, 200);
-                    }, toastTimeoutMillis);
-                }
-            }, 100);
-        }
+            if (this.position && this.position[1]) {
+                this.position[1] += window.scrollY;
+            }
 
-        if (this.currentListenerId) {
-            OverlayService.getInstance().overlayOpened(this.currentListenerId);
-        }
+            this.state.overlayClass = this.getOverlayTypeClass(type, large);
+            this.currentListenerId = newListenerId;
+
+            this.applyWidgetConfiguration(widgetInstanceId);
+
+            this.state.show = true;
+
+            if (this.isToast()) {
+                if (type && type === OverlayType.SUCCESS_TOAST) {
+                    const toastContent = this.state.content.getComponentData() as ToastContent;
+                    if (toastContent && typeof toastContent.title === 'undefined') {
+                        toastContent.title = 'Translatable#Success!';
+                    }
+                }
+                this.toastTimeout = setTimeout(() => {
+                    const toast = (this as any).getEl('overlay');
+                    if (toast) {
+                        toast.addEventListener('mouseover', (e) => {
+                            clearTimeout(this.toastTimeout);
+                        });
+                        toast.addEventListener('mouseleave', (e) => {
+                            toast.classList.remove('show-toast');
+                            this.toastTimeout = setTimeout(() => {
+                                this.closeOverlay();
+                            }, 200);
+                        });
+                        toast.classList.add('show-toast');
+                        this.toastTimeout = setTimeout(() => {
+                            toast.classList.remove('show-toast');
+                            this.toastTimeout = setTimeout(() => {
+                                this.closeOverlay();
+                            }, 200);
+                        }, toastTimeoutMillis);
+                    }
+                }, 100);
+            }
+
+            if (this.currentListenerId) {
+                OverlayService.getInstance().overlayOpened(this.currentListenerId);
+            }
+        }, 50);
     }
 
     private async applyWidgetConfiguration(widgetInstanceId: string): Promise<void> {
@@ -149,6 +159,9 @@ class OverlayComponent {
 
     private closeOverlay(): void {
         this.state.show = false;
+        document.removeEventListener("click", this.clickListener, false);
+        document.removeEventListener('mouseup', this.mouseUp.bind(this), false);
+        document.removeEventListener('mousemove', this.mouseMove.bind(this), false);
         if (this.toastTimeout) {
             clearTimeout(this.toastTimeout);
         }
@@ -163,14 +176,21 @@ class OverlayComponent {
     }
 
     private setOverlayPosition(): void {
-        if (!this.position || !!!this.position.length) {
-            this.position = [null, null];
-        }
         const overlay = (this as any).getEl('overlay');
         if (overlay) {
-            this.setLeftPosition(overlay);
-            if (!this.isToast()) {
-                this.setTopPosition(overlay);
+            if (this.state.type === OverlayType.HINT_TOAST) {
+                overlay.style.top = '8rem';
+                overlay.style.right = '3rem';
+                overlay.style.opacity = 1;
+            } else {
+                if (!this.position || !!!this.position.length) {
+                    this.position = [null, null];
+                }
+
+                this.setLeftPosition(overlay);
+                if (!this.isToast()) {
+                    this.setTopPosition(overlay);
+                }
             }
         }
     }
@@ -228,7 +248,9 @@ class OverlayComponent {
             case OverlayType.SUCCESS_TOAST:
                 return 'toast-overlay success-toast';
             case OverlayType.HINT_TOAST:
-                return 'toast-overlay';
+                return 'toast-overlay reload-toast';
+            case OverlayType.ERROR_TOAST:
+                return 'toast-overlay error-toast';
             case OverlayType.CONTENT_OVERLAY:
                 return 'content-overlay' + (large ? ' large' : '');
             case OverlayType.TABLE_COLUMN_FILTER:
@@ -246,6 +268,8 @@ class OverlayComponent {
                 return 'kix-icon-info';
             case OverlayType.WARNING:
                 return 'kix-icon-exclamation';
+            case OverlayType.WARNING:
+                return 'kix-icon-close';
             default:
                 return '';
         }
@@ -258,7 +282,7 @@ class OverlayComponent {
     public getTemplate(): any {
         if (this.isComponentContent()) {
             const content = (this.state.content as ComponentContent<any>);
-            return ComponentsService.getInstance().getComponentTemplate(content.getValue());
+            return KIXModulesService.getComponentTemplate(content.getValue());
         }
 
     }
@@ -274,8 +298,7 @@ class OverlayComponent {
     }
 
     public isToast(): boolean {
-        return this.state.type === OverlayType.SUCCESS_TOAST
-            || this.state.type === OverlayType.HINT_TOAST;
+        return this.state.type === OverlayType.SUCCESS_TOAST;
     }
 
     public canResize(): boolean {

@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { OverlayType, IWidgetContent, ObjectIcon, KIXObject } from "../model";
 
 export class OverlayService {
@@ -19,7 +28,7 @@ export class OverlayService {
         <T extends KIXObject<T>>(
             type: OverlayType, instanceId: string, content: IWidgetContent<T>, title: string,
             closeButton: boolean, position: [number, number], listenerId: string, large: boolean,
-            toastTimeoutMillis?: number
+            toastTimeoutMillis?: number, autoClose?: boolean
         ) => void;
 
     public registerOverlayComponentListener(
@@ -27,7 +36,7 @@ export class OverlayService {
             <T extends KIXObject<T>>(
                 type: OverlayType, instanceId: string, content: IWidgetContent<T>, title: string,
                 closeButton: boolean, position: [number, number], listenerId: string, large: boolean,
-                toastTimeoutMillis?: number
+                toastTimeoutMillis?: number, autoClose?: boolean
             ) => void
     ): void {
         this.overlayComponentListener = listener;
@@ -44,11 +53,12 @@ export class OverlayService {
     public openOverlay<T extends KIXObject<T>>(
         type: OverlayType, instanceId: string, content: IWidgetContent<T>, title: string,
         closeButton: boolean = false, position?: [number, number], listenerId?: string, large?: boolean,
-        toastTimeoutMillis?: number
+        toastTimeoutMillis?: number, autoClose: boolean = true
     ): void {
         if (this.overlayComponentListener) {
             this.overlayComponentListener(
-                type, instanceId, content, title, closeButton, position, listenerId, large, toastTimeoutMillis
+                type, instanceId, content, title, closeButton, position, listenerId,
+                large, toastTimeoutMillis, autoClose
             );
         }
     }

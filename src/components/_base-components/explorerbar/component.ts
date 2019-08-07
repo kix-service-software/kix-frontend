@@ -1,17 +1,28 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ContextService } from '../../../core/browser/context/';
 import { ConfiguredWidget, Context, ContextType } from '../../../core/model/';
-import { ComponentsService } from '../../../core/browser/components';
 import { ComponentState } from './ComponentState';
 import { IdService } from '../../../core/browser';
+import { KIXModulesService } from '../../../core/browser/modules';
 
 class Component {
 
     private state: ComponentState;
     private contextListernerId: string;
+    private contextServiceListernerId: string;
 
     public onCreate(): void {
         this.state = new ComponentState();
         this.contextListernerId = IdService.generateDateBasedId('explorer-');
+        this.contextServiceListernerId = IdService.generateDateBasedId('explorer-');
     }
 
     public onInput(input: any): void {
@@ -20,13 +31,19 @@ class Component {
 
     public onMount(): void {
         ContextService.getInstance().registerListener({
+            constexServiceListenerId: this.contextServiceListernerId,
             contextChanged: (contextId: string, context: Context, type: ContextType) => {
                 if (type === this.state.contextType) {
                     this.setContext(context);
                 }
-            }
+            },
+            contextRegistered: () => { return; }
         });
         this.setContext(ContextService.getInstance().getActiveContext(this.state.contextType));
+    }
+
+    public onDestroy(): void {
+        ContextService.getInstance().unregisterListener(this.contextServiceListernerId);
     }
 
     private setContext(context: Context): void {
@@ -58,7 +75,7 @@ class Component {
     }
 
     public getExplorerTemplate(widget: ConfiguredWidget): any {
-        return ComponentsService.getInstance().getComponentTemplate(widget.configuration.widgetId);
+        return KIXModulesService.getComponentTemplate(widget.configuration.widgetId);
     }
 
     public isExplorerBarExpanded(instanceId: string): boolean {

@@ -1,10 +1,19 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { TicketPriorityDetailsContext } from "../../context";
 import { RoutingConfiguration } from "../../../../router";
 import {
     TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../../../table";
-import { KIXObjectType, TicketPriorityProperty, DataType, ContextMode } from "../../../../../model";
+import { KIXObjectType, TicketPriorityProperty, DataType, ContextMode, KIXObjectProperty } from "../../../../../model";
 import { TicketPriorityTableContentProvider } from "./TicketPriorityTableContentProvider";
 import { TableFactory } from "../../../../table/TableFactory";
 
@@ -30,24 +39,17 @@ export class TicketPriorityTableFactory extends TableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new DefaultColumnConfiguration(
-                TicketPriorityProperty.NAME, true, false, true, true, 200, true, true, false,
-                DataType.STRING, true, null, null, false
-            ),
-            new DefaultColumnConfiguration(TicketPriorityProperty.ID, false, true, false, true, 41, false),
-            new DefaultColumnConfiguration(TicketPriorityProperty.COMMENT, true, false, true, true, 350, true, true),
-            new DefaultColumnConfiguration(
-                TicketPriorityProperty.VALID_ID, true, false, true, true, 150, true, true, true
-            ),
-            new DefaultColumnConfiguration(
-                TicketPriorityProperty.CHANGE_TIME, true, false, true, true, 150, true, true, false, DataType.DATE_TIME
-            ),
-            new DefaultColumnConfiguration(TicketPriorityProperty.CHANGE_BY, true, false, true, true, 150, true, true)
+            this.getDefaultColumnConfiguration(TicketPriorityProperty.NAME),
+            this.getDefaultColumnConfiguration('ICON'),
+            this.getDefaultColumnConfiguration(TicketPriorityProperty.COMMENT),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CHANGE_TIME),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CHANGE_BY)
         ];
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.TICKET_PRIORITY, null, null, tableColumns, null, true, false, null, null,
+                KIXObjectType.TICKET_PRIORITY, null, null, tableColumns, true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;
@@ -65,8 +67,18 @@ export class TicketPriorityTableFactory extends TableFactory {
         return tableConfiguration;
     }
 
-    // TODO: implementieren
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
-        return;
+        let config;
+        switch (property) {
+            case TicketPriorityProperty.NAME:
+                config = new DefaultColumnConfiguration(
+                    property, true, false, true, false, 200, true, true,
+                    false, DataType.STRING, true, null, null, false
+                );
+                break;
+            default:
+                config = super.getDefaultColumnConfiguration(property);
+        }
+        return config;
     }
 }

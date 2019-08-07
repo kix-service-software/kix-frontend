@@ -1,5 +1,15 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { OverlayService } from "./OverlayService";
 import { OverlayType, StringContent, ComponentContent, ToastContent, ConfirmOverlayContent } from "../model";
+import { RefreshToastSettings } from "./RefreshToastSettings";
 
 export class BrowserUtil {
 
@@ -10,8 +20,10 @@ export class BrowserUtil {
     }
 
     public static async openSuccessOverlay(message: string): Promise<void> {
-        const content = new ComponentContent('toast', new ToastContent('kix-icon-check', message));
-        OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
+        setTimeout(() => {
+            const content = new ComponentContent('toast', new ToastContent('kix-icon-check', message));
+            OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
+        }, 500);
     }
 
     public static openConfirmOverlay(
@@ -25,26 +37,35 @@ export class BrowserUtil {
         OverlayService.getInstance().openOverlay(OverlayType.CONFIRM, null, content, title, false);
     }
 
-    public static openAppRefreshOverlay(): void {
-        const componentContent = new ComponentContent('refresh-app-toast', {});
+    public static openAppRefreshOverlay(message: string, reloadApp?: boolean): void {
+        const settings = new RefreshToastSettings(message, reloadApp);
+        const componentContent = new ComponentContent('refresh-app-toast', settings);
         OverlayService.getInstance().openOverlay(
-            OverlayType.HINT_TOAST, null, componentContent, 'Update', null, null, null, null, 15000
+            OverlayType.HINT_TOAST, null, componentContent, '', false, null, null, null, null, false
         );
+    }
+
+    public static async openAccessDeniedOverlay(): Promise<void> {
+        const content = new ComponentContent(
+            'toast',
+            new ToastContent(
+                'kix-icon-close', 'Translatable#No permission for this object.', 'Translatable#Access denied'
+            )
+        );
+        OverlayService.getInstance().openOverlay(OverlayType.ERROR_TOAST, null, content, 'Translatable#Access denied');
     }
 
     public static startBrowserDownload(fileName: string, content: string, contentType: string): void {
         content = content.replace(/\r?\n|\r/, '\n');
 
+        const FileSaver = require('file-saver');
         if (window.navigator.msSaveOrOpenBlob) {
             const blob = this.b64toBlob(content, contentType);
-            window.navigator.msSaveBlob(blob, fileName);
+            FileSaver.saveAs(blob, fileName);
         } else {
-            const a = window.document.createElement('a');
-            a.href = 'data:' + contentType + ';base64,' + content;
-            a.download = fileName;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            const blob = this.b64toBlob(content, contentType);
+            const file = new File([blob], fileName, { type: contentType });
+            FileSaver.saveAs(file);
         }
     }
 
@@ -146,6 +167,11 @@ export class BrowserUtil {
 
         const blob = new Blob(byteArrays, { type: contentType });
         return blob;
+    }
+
+    public static scrollIntoViewIfNeeded(element: any) {
+        const scrollIntoView = require('scroll-into-view-if-needed');
+        scrollIntoView(element, { behavior: 'smooth', scrollMode: 'if-needed' });
     }
 
 

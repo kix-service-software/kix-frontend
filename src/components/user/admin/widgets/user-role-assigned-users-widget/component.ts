@@ -1,9 +1,18 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     AbstractMarkoComponent, ActionFactory, ContextService, TableFactoryService,
     TableConfiguration, TableHeaderHeight, TableRowHeight, DefaultColumnConfiguration
 } from '../../../../../core/browser';
 import { ComponentState } from './ComponentState';
-import { KIXObjectType, Role, UserProperty, DataType } from '../../../../../core/model';
+import { KIXObjectType, Role, UserProperty, DataType, KIXObjectProperty } from '../../../../../core/model';
 import { RoleDetailsContext } from '../../../../../core/browser/user';
 import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
@@ -56,10 +65,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 new DefaultColumnConfiguration(
                     UserProperty.USER_EMAIL, true, false, true, false, 250, true, true, true
                 ),
-                new DefaultColumnConfiguration(UserProperty.VALID_ID, true, false, true, false, 100, true, true)
+                new DefaultColumnConfiguration(KIXObjectProperty.VALID_ID, true, false, true, false, 100, true, true)
             ];
             const tableConfiguration = new TableConfiguration(
-                KIXObjectType.USER, null, 32, columns, null, false, false, null, null,
+                KIXObjectType.USER, null, 32, columns,  false, false, null, null,
                 TableHeaderHeight.SMALL, TableRowHeight.SMALL
             );
             const table = await TableFactoryService.getInstance().createTable(

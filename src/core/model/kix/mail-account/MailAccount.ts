@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObject } from "./../KIXObject";
 import { KIXObjectType } from "./../KIXObjectType";
 
@@ -15,19 +24,12 @@ export class MailAccount extends KIXObject {
     public Trusted: number;
     public DispatchingBy: string;
     public QueueID: number;
-    public Comment: string;
 
     public constructor(mailAccount?: MailAccount) {
-        super();
+        super(mailAccount);
         if (mailAccount) {
             this.ID = mailAccount.ID;
             this.ObjectId = this.ID;
-            this.ChangeBy = mailAccount.ChangeBy;
-            this.ChangeTime = mailAccount.ChangeTime;
-            this.CreateBy = mailAccount.CreateBy;
-            this.CreateTime = mailAccount.CreateTime;
-            this.Comment = mailAccount.Comment;
-            this.ValidID = mailAccount.ValidID;
             this.Host = mailAccount.Host;
             this.Login = mailAccount.Login;
             this.Type = mailAccount.Type;
@@ -36,10 +38,6 @@ export class MailAccount extends KIXObject {
             this.DispatchingBy = mailAccount.DispatchingBy;
             this.QueueID = mailAccount.QueueID;
         }
-    }
-
-    public equals(mailAccount: MailAccount): boolean {
-        return this.ID === mailAccount.ID;
     }
 
 }

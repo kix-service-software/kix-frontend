@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import {
     AbstractMarkoComponent, TableEvent, ContextService, ITable, BrowserUtil, IColumn, IRow, TableEventData, Table
@@ -30,7 +39,6 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     private async init(table: ITable): Promise<void> {
         this.state.table = null;
 
-        this.state.loading = true;
         this.state.table = table;
 
         this.eventSubscriberId = this.state.table.getTableId();
@@ -41,7 +49,6 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             this.state.columns = this.state.table.getColumns();
             this.setTableHeight();
 
-            this.state.loading = false;
             EventService.getInstance().publish(
                 TableEvent.TABLE_INITIALIZED,
                 new TableEventData(this.state.table.getTableId())
@@ -91,16 +98,10 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             }
 
             if (eventId === TableEvent.RERENDER_TABLE) {
-                this.state.loading = true;
-
                 this.state.columns = this.state.table.getColumns();
                 this.state.rows = this.state.table.getRows();
 
                 this.setTableHeight();
-
-                setTimeout(() => {
-                    this.state.loading = false;
-                }, 50);
             }
 
             if (eventId === TableEvent.ROW_TOGGLED) {
@@ -157,32 +158,25 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
     public setTableHeight(): void {
         this.state.tableHeight = 'unset';
-        if (this.state.table) {
+        if (this.state.table && this.state.table.getTableConfiguration().displayLimit) {
             const rows = this.state.table.getRows(false);
+            const displayLimit = this.state.table.getTableConfiguration().displayLimit;
+            if (rows && rows.length > displayLimit) {
+                const headerRowHeight = this.browserFontSize
+                    * Number(this.state.table.getTableConfiguration().headerHeight);
+                const rowHeight = this.browserFontSize * Number(this.state.table.getTableConfiguration().rowHeight);
 
-            const availableRowsCount = this.countRows(rows);
+                let height = ((displayLimit * rowHeight) + headerRowHeight)
+                    + (this.hScrollWillBeVisible() ? rowHeight : rowHeight / 2);
 
-            const limit = this.state.table.getTableConfiguration().displayLimit
-                ? this.state.table.getTableConfiguration().displayLimit
-                : availableRowsCount;
+                rows.forEach((r) => {
+                    if (r.isExpanded()) {
+                        height += (31.5 + 10) / 2 * this.browserFontSize;
+                    }
+                });
 
-            const minElements = availableRowsCount > limit ? limit : availableRowsCount;
-            const rowCount = minElements === 0 ? 1 : minElements;
-
-            const headerRowHeight = this.browserFontSize
-                * Number(this.state.table.getTableConfiguration().headerHeight);
-            const rowHeight = this.browserFontSize * Number(this.state.table.getTableConfiguration().rowHeight);
-
-            let height = ((rowCount * rowHeight) + headerRowHeight)
-                + (this.hScrollWillBeVisible() ? rowHeight : rowHeight / 2);
-
-            rows.forEach((r) => {
-                if (r.isExpanded()) {
-                    height += (31.5 + 10) / 2 * this.browserFontSize;
-                }
-            });
-
-            this.state.tableHeight = height + 'px';
+                this.state.tableHeight = height + 'px';
+            }
         }
     }
 

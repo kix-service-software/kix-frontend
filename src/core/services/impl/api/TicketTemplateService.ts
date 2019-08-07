@@ -1,9 +1,15 @@
-import {
-    TicketTemplatesResponse
-} from '../../../api';
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, TicketTemplate
+    KIXObjectSpecificCreateOptions
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
@@ -20,7 +26,7 @@ export class TicketTemplateService extends KIXObjectService {
         return TicketTemplateService.INSTANCE;
     }
 
-    protected RESOURCE_URI: string = 'templates';
+    protected RESOURCE_URI: string = this.buildUri('system', 'templates');
 
     public objectType: KIXObjectType = KIXObjectType.TICKET_TEMPLATE;
 
@@ -53,17 +59,4 @@ export class TicketTemplateService extends KIXObjectService {
         return [];
     }
 
-    public async createObject(
-        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
-        createOptions?: KIXObjectSpecificCreateOptions
-    ): Promise<number> {
-        return;
-    }
-
-    public async updateObject(
-        token: string, clientRequestId: string, objectType: KIXObjectType,
-        parameter: Array<[string, any]>, objectId: number | string
-    ): Promise<string | number> {
-        return;
-    }
 }

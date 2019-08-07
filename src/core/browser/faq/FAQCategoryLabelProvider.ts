@@ -1,17 +1,21 @@
-import { ILabelProvider } from "..";
-import { DateTimeUtil, ObjectIcon, KIXObjectType, User } from "../../model";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { ObjectIcon, KIXObjectType } from "../../model";
 import { FAQCategory, FAQCategoryProperty } from "../../model/kix/faq";
 import { KIXObjectService } from "../kix";
 import { TranslationService } from "../i18n/TranslationService";
-import { ObjectDataService } from "../ObjectDataService";
+import { LabelProvider } from "../LabelProvider";
 
-export class FAQCategoryLabelProvider implements ILabelProvider<FAQCategory> {
+export class FAQCategoryLabelProvider extends LabelProvider<FAQCategory> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.FAQ_CATEGORY;
-
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
-    }
 
     public async getPropertyText(
         property: string, short: boolean = false, translatable: boolean = true
@@ -27,24 +31,6 @@ export class FAQCategoryLabelProvider implements ILabelProvider<FAQCategory> {
             case FAQCategoryProperty.PARENT_ID:
                 displayValue = 'Translatable#Parent Category';
                 break;
-            case FAQCategoryProperty.COMMENT:
-                displayValue = 'Translatable#Comment';
-                break;
-            case FAQCategoryProperty.VALID_ID:
-                displayValue = 'Translatable#Validity';
-                break;
-            case FAQCategoryProperty.CHANGE_TIME:
-                displayValue = 'Translatable#Changed at';
-                break;
-            case FAQCategoryProperty.CHANGE_BY:
-                displayValue = 'Translatable#Changed by';
-                break;
-            case FAQCategoryProperty.CREATE_TIME:
-                displayValue = 'Translatable#Created at';
-                break;
-            case FAQCategoryProperty.CREATE_BY:
-                displayValue = 'Translatable#Created by';
-                break;
             case FAQCategoryProperty.ID:
                 displayValue = 'Translatable#Id';
                 break;
@@ -52,18 +38,16 @@ export class FAQCategoryLabelProvider implements ILabelProvider<FAQCategory> {
                 displayValue = 'Translatable#Icon';
                 break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
-    }
-
-    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
-        return;
     }
 
     public async getDisplayText(
@@ -77,11 +61,13 @@ export class FAQCategoryLabelProvider implements ILabelProvider<FAQCategory> {
                 displayValue = faqCategory.Name;
                 break;
             default:
-                displayValue = await this.getPropertyValueDisplayText(property, displayValue);
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';
@@ -91,55 +77,26 @@ export class FAQCategoryLabelProvider implements ILabelProvider<FAQCategory> {
         property: string, value: string | number, translatable: boolean = true
     ): Promise<string> {
         let displayValue = value;
-        const objectData = ObjectDataService.getInstance().getObjectData();
-
-        if (objectData) {
-            switch (property) {
-                case FAQCategoryProperty.CHANGE_TIME:
-                case FAQCategoryProperty.CREATE_TIME:
-                    displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
-                    break;
-                case FAQCategoryProperty.CREATE_BY:
-                case FAQCategoryProperty.CHANGE_BY:
-                    if (displayValue) {
-                        const users = await KIXObjectService.loadObjects<User>(
-                            KIXObjectType.USER, [displayValue], null, null, true
-                        ).catch((error) => [] as User[]);
-                        displayValue = users && !!users.length ? users[0].UserFullname : displayValue;
-                    }
-                    break;
-                case FAQCategoryProperty.PARENT_ID:
-                    if (value) {
-                        const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(
-                            KIXObjectType.FAQ_CATEGORY, [value], null, null, true
-                        ).catch((error) => [] as FAQCategory[]);
-                        displayValue = faqCategories && !!faqCategories.length ? faqCategories[0].Name : value;
-                    }
-                    break;
-                case FAQCategoryProperty.VALID_ID:
-                    const valid = objectData.validObjects.find((v) => v.ID.toString() === value.toString());
-                    if (valid) {
-                        displayValue = valid.Name;
-                    }
-                    break;
-                default:
-                    displayValue = value;
-            }
+        switch (property) {
+            case FAQCategoryProperty.PARENT_ID:
+                if (value) {
+                    const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(
+                        KIXObjectType.FAQ_CATEGORY, [value], null, null, true
+                    ).catch((error) => [] as FAQCategory[]);
+                    displayValue = faqCategories && !!faqCategories.length ? faqCategories[0].Name : value;
+                }
+                break;
+            default:
+                displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue ? displayValue.toString() : '';
-    }
-
-    public getDisplayTextClasses(faqCategory: FAQCategory, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(faqCategory: FAQCategory): string[] {
-        return [];
     }
 
     public isLabelProviderFor(faqCategory: FAQCategory): boolean {
@@ -150,12 +107,8 @@ export class FAQCategoryLabelProvider implements ILabelProvider<FAQCategory> {
         return faqCategory.Name;
     }
 
-    public getObjectAdditionalText(faqCategory: FAQCategory): string {
-        return null;
-    }
-
     public getObjectIcon(faqCategory: FAQCategory): string | ObjectIcon {
-        return new ObjectIcon('FAQCategory', faqCategory.ID);
+        return faqCategory ? new ObjectIcon('FAQCategory', faqCategory.ID) : null;
     }
 
     public getObjectTooltip(faqCategory: FAQCategory): string {

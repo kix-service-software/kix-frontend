@@ -1,9 +1,16 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObjectService } from './KIXObjectService';
-import { ClientRegistration, SortOrder, KIXObjectType, SystemInfo, Error } from '../../../model';
+import { ClientRegistration, SortOrder, KIXObjectType, SystemInfo } from '../../../model';
 import {
-    CreateClientRegistration,
-    CreateClientRegistrationResponse,
-    CreateClientRegistrationRequest,
+    CreateClientRegistration, CreateClientRegistrationResponse, CreateClientRegistrationRequest,
     ClientRegistrationsResponse
 } from '../../../api';
 import { LoggingService } from '../LoggingService';
@@ -63,19 +70,6 @@ export class ClientRegistrationService extends KIXObjectService {
             );
 
         return response.SystemInfo;
-    }
-
-    public createObject(
-        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>
-    ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
-    }
-
-    public async updateObject(
-        token: string, clientRequestId: string, objectType: KIXObjectType,
-        parameter: Array<[string, any]>, objectId: number | string
-    ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
     }
 
     public async deleteClientRegistration(token: string, clientRequestId: string, clientId: number): Promise<void> {

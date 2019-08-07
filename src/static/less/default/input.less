@@ -1,3 +1,14 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+@selectet-node-icon-size: 1.125rem;
+
 .input-style {
     font: unset;
     .font-size-normal();
@@ -12,7 +23,7 @@
 
     input[type="text"]& {
         &:disabled {
-            background-color: @secondary-4;
+            background-color: @secondary-5;
         }
 
         &:invalid {
@@ -21,8 +32,8 @@
         }
     }
 
-    &:focus:not(:disabled),
-    &:hover:not(:disabled) {
+    &:focus:not(:disabled):not(:read-only),
+    &:hover:not(:disabled):not(:read-only) {
         border-color: darken(@secondary-3, 20%);
     }
 
@@ -44,6 +55,10 @@
 textarea.input-style {
     height: 8.75rem;
     resize: vertical;
+
+    &:read-only {
+        background-color: @secondary-5;
+    }
 }
 
 .form-list {
@@ -63,6 +78,7 @@ textarea.input-style {
         border-bottom-left-radius: @border-radius;
         border-bottom-right-radius: @border-radius;
         display: grid;
+        min-width: @button-min-width + 2rem;
 
         >input {
             margin-bottom: @margin-small;
@@ -74,13 +90,32 @@ textarea.input-style {
         }
 
         .button-bar {
-            margin: 1rem @margin-small @margin-small @margin-small;
+            margin: @margin-small;
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
             align-items: center;
+            grid-row-gap: @margin-small;
 
             .select-all-Checkbox {
-                margin-right: .5rem;
+                display: inline-grid;
+                grid-template-columns: min-content 1fr;
+                align-items: center;
+                margin-right: @margin-small;
+            }
+
+            button {
+                justify-self: end;
+                max-width: 100%;
+            }
+
+            span {
+                input {
+                    padding: 0;
+                    vertical-align: middle;
+                    position: relative;
+                    top: -1px;
+                    margin-right: 0.5rem;
+                }
             }
         }
     }
@@ -101,7 +136,7 @@ textarea.input-style {
         grid-template-columns: auto max-content;
 
         &.readonly {
-            background-color: @secondary-4;
+            background-color: @secondary-5;
 
             &:hover {
                 border-color: @secondary-3;
@@ -168,7 +203,7 @@ textarea.input-style {
 
                 span:first-child,
                 span:first-child {
-                    height: .875rem;
+                    font-size: @selectet-node-icon-size;
                 }
 
                 .item-text {

@@ -1,10 +1,17 @@
-import { AuthenticationService, UserService } from "../../services";
-import { AgentService } from "../../browser/application/AgentService";
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { TranslationService } from "../../browser/i18n/TranslationService";
 
 export class DateTimeUtil {
 
-    public static async getLocalDateString(value: any): Promise<string> {
+    public static async getLocalDateString(value: any, language?: string): Promise<string> {
         let string = '';
         if (value) {
             const date = new Date(value);
@@ -13,13 +20,16 @@ export class DateTimeUtil {
                 month: '2-digit',
                 year: 'numeric'
             };
-            const userLanguage = await TranslationService.getUserLanguage();
-            string = date.toLocaleDateString(userLanguage, options);
+
+            if (!language) {
+                language = await TranslationService.getUserLanguage();
+            }
+            string = language ? date.toLocaleDateString(language, options) : value;
         }
         return string;
     }
 
-    public static async getLocalDateTimeString(value: any): Promise<string> {
+    public static async getLocalDateTimeString(value: any, language?: string): Promise<string> {
         let string = '';
         if (value) {
             const date = new Date(value);
@@ -31,8 +41,10 @@ export class DateTimeUtil {
                 minute: '2-digit'
             };
 
-            const userLanguage = await TranslationService.getUserLanguage();
-            string = date.toLocaleString(userLanguage, options);
+            if (!language) {
+                language = await TranslationService.getUserLanguage();
+            }
+            string = language ? date.toLocaleString(language, options) : value;
         }
         return string;
     }

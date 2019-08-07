@@ -1,9 +1,19 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { SocketNameSpace } from './SocketNameSpace';
 import {
-    NotesEvent, LoadNotesRequest, LoadNotesResponse, SaveNotesRequest
+    NotesEvent, LoadNotesResponse, SaveNotesRequest, SocketEvent, ISocketRequest
 } from '../core/model';
 import { SocketResponse, SocketErrorResponse } from '../core/common';
-import { ConfigurationService, UserService } from '../core/services';
+import { ConfigurationService } from '../core/services';
+import { UserService } from '../core/services/impl/api/UserService';
 
 export class NotesNamespace extends SocketNameSpace {
 
@@ -29,45 +39,46 @@ export class NotesNamespace extends SocketNameSpace {
         this.registerEventHandler(client, NotesEvent.SAVE_NOTES, this.saveNotes.bind(this));
     }
 
-    private async loadNotes(data: LoadNotesRequest): Promise<SocketResponse<LoadNotesResponse>> {
+    private async loadNotes(data: ISocketRequest): Promise<SocketResponse<LoadNotesResponse>> {
         let userId = null;
         if (data.token) {
             const user = await UserService.getInstance().getUserByToken(data.token);
             userId = user.UserID;
         }
 
-        const notes = await ConfigurationService.getInstance().getComponentConfiguration(
-            'notes', data.contextId, userId
-        );
+        const notes = await ConfigurationService.getInstance().getConfiguration('notes', userId);
 
         const response = new LoadNotesResponse(data.requestId, notes);
         return new SocketResponse(NotesEvent.NOTES_LOADED, response);
     }
 
-    private async saveNotes(data: SaveNotesRequest): Promise<SocketResponse<void>> {
+    private async saveNotes(data: SaveNotesRequest): Promise<SocketResponse> {
         let userId = null;
         if (data.token) {
-            const user = await UserService.getInstance().getUserByToken(data.token);
-            userId = user.UserID;
+            const user = await UserService.getInstance().getUserByToken(data.token)
+                .catch(() => null);
+            userId = user ? user.UserID : null;
         }
 
-        let notesConfig = await ConfigurationService.getInstance().getModuleConfiguration('notes', userId);
-        if (!notesConfig) {
-            notesConfig = {};
-        }
-        notesConfig[data.contextId] = data.notes;
+        if (userId) {
+            let notesConfig = ConfigurationService.getInstance().getConfiguration('notes', userId);
+            if (!notesConfig) {
+                notesConfig = {};
+            }
+            notesConfig[data.contextId] = data.notes;
 
-        let response;
-        await ConfigurationService.getInstance().saveModuleConfiguration('notes', userId, notesConfig)
-            .then(() => {
-                response = new SocketResponse(NotesEvent.SAVE_NOTES_FINISHED, { requestId: data.requestId });
-            }).catch((error) => {
-                response = new SocketResponse(
-                    NotesEvent.SAVE_NOTES_ERROR, new SocketErrorResponse(data.requestId, error)
+
+            const response = await ConfigurationService.getInstance().saveConfiguration('notes', notesConfig, userId)
+                .then(() => new SocketResponse(NotesEvent.SAVE_NOTES_FINISHED, { requestId: data.requestId }))
+                .catch((error) =>
+                    new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error))
                 );
-            });
 
-        return response;
-
+            return response;
+        } else {
+            return new SocketResponse(
+                SocketEvent.ERROR, new SocketErrorResponse(data.requestId, 'No user available.')
+            );
+        }
     }
 }

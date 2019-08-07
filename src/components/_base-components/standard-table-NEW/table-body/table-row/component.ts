@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../core/browser';
 import {
@@ -22,6 +31,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             this.state.selectable = this.state.row.isSelectable();
             this.state.open = this.state.row.isExpanded();
             this.state.children = this.state.row.getChildren();
+            this.setRowClasses();
         }
     }
 
@@ -95,12 +105,15 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
                 && data.rowId === this.state.row.getRowId()
             ) {
                 (this as any).setStateDirty('row');
+                this.setRowClasses();
             }
+            this.setRowClasses();
         }
     }
 
     public toggleRow(): void {
         this.state.row.expand(!this.state.open);
+        this.setRowClasses();
     }
 
     public changeSelect(event: any): void {
@@ -134,9 +147,9 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         return this.state.row.getTable().getTableConfiguration().fixedFirstColumn;
     }
 
-    public getRowClasses(): string[] {
+    private async setRowClasses(): Promise<void> {
         const object = this.state.row.getRowObject().getObject();
-        const stateClass = [];
+        let stateClass = [];
 
         if (this.state.open) {
             stateClass.push('opened');
@@ -148,14 +161,27 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
         if (object) {
             const objectType = this.state.row.getTable().getObjectType();
-            const cssHandler = TableCSSHandlerRegistry.getCSSHandler(objectType);
+            const cssHandler = TableCSSHandlerRegistry.getObjectCSSHandler(objectType);
             if (cssHandler) {
-                const classes = cssHandler.getRowCSSClasses(object);
+                const classes = await cssHandler.getRowCSSClasses(object);
                 classes.forEach((c) => stateClass.push(c));
+            }
+
+            const commonHandler = TableCSSHandlerRegistry.getCommonCSSHandler();
+            for (const h of commonHandler) {
+                const rowClasses = await h.getRowCSSClasses(object);
+                stateClass = [...stateClass, ...rowClasses];
             }
         }
 
-        return stateClass;
+        this.state.rowClasses = stateClass;
+    }
+
+    public rowClicked(): void {
+        EventService.getInstance().publish(
+            TableEvent.ROW_CLICKED,
+            new TableEventData(this.state.row.getTable().getTableId(), this.state.row.getRowId())
+        );
     }
 
 }

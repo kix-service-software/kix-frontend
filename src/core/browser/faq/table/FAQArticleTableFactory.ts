@@ -1,13 +1,22 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObjectType, ContextMode, DataType } from "../../../model";
 import { FAQArticleProperty } from "../../../model/kix/faq";
 import { RoutingConfiguration } from "../../router";
-import { FAQDetailsContext } from "../context";
 import {
     TableConfiguration, ITable, Table,
     DefaultColumnConfiguration, IColumnConfiguration
 } from "../../table";
 import { FAQArticleTableContentProvider } from "./FAQArticleTableContentProvider";
 import { TableFactory } from "../../table/TableFactory";
+import { FAQDetailsContext } from "../context/FAQDetailsContext";
 
 export class FAQArticleTableFactory extends TableFactory {
 
@@ -15,8 +24,7 @@ export class FAQArticleTableFactory extends TableFactory {
 
     public createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
-        defaultRouting?: boolean, defaultToggle?: boolean,
-        short?: boolean
+        defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
     ): ITable {
 
         tableConfiguration = this.setDefaultTableConfiguration(
@@ -24,7 +32,9 @@ export class FAQArticleTableFactory extends TableFactory {
         );
 
         const table = new Table(tableKey, tableConfiguration);
-        const contentProvider = new FAQArticleTableContentProvider(table, objectIds, null, contextId);
+        const contentProvider = new FAQArticleTableContentProvider(
+            table, objectIds, tableConfiguration.loadingOptions, contextId
+        );
 
         table.setContentProvider(contentProvider);
         table.setColumnConfiguration(tableConfiguration.tableColumns);
@@ -41,32 +51,32 @@ export class FAQArticleTableFactory extends TableFactory {
             tableColumns = [
                 new DefaultColumnConfiguration(FAQArticleProperty.NUMBER, true, false, true, false, 120, true, true),
                 new DefaultColumnConfiguration(FAQArticleProperty.TITLE, true, false, true, false, 300, true, true),
-                new DefaultColumnConfiguration(FAQArticleProperty.LANGUAGE, true, false, true, false, 125, true, true),
                 new DefaultColumnConfiguration(
-                    FAQArticleProperty.VISIBILITY, true, true, true, false, 125,
-                    true, true, false, DataType.STRING, false
+                    FAQArticleProperty.LANGUAGE, true, false, true, false, 125, true, true, true
                 ),
                 new DefaultColumnConfiguration(
-                    FAQArticleProperty.VOTES, true, true, true, false, 120, true, true, false, DataType.STRING, false
+                    FAQArticleProperty.VOTES, true, true, true, false, 120, true, true, true, DataType.STRING, false
                 ),
                 new DefaultColumnConfiguration(
-                    FAQArticleProperty.CATEGORY_ID, true, false, true, false, 125, true, true
+                    FAQArticleProperty.CATEGORY_ID, true, false, true, false, 125, true, true, true
                 ),
             ];
         } else {
             tableColumns = [
                 new DefaultColumnConfiguration(FAQArticleProperty.NUMBER, true, false, true, false, 120, true, true),
                 new DefaultColumnConfiguration(FAQArticleProperty.TITLE, true, false, true, false, 300, true, true),
-                new DefaultColumnConfiguration(FAQArticleProperty.LANGUAGE, true, false, true, false, 125, true, true),
+                new DefaultColumnConfiguration(
+                    FAQArticleProperty.LANGUAGE, true, false, true, false, 125, true, true, true
+                ),
                 new DefaultColumnConfiguration(
                     FAQArticleProperty.VISIBILITY, true, true, true, false, 125,
-                    true, true, false, DataType.STRING, false
+                    true, true, true, DataType.STRING, false
                 ),
                 new DefaultColumnConfiguration(
-                    FAQArticleProperty.VOTES, true, true, true, false, 120, true, true, false, DataType.STRING, false
+                    FAQArticleProperty.VOTES, true, true, true, false, 120, true, true, true, DataType.STRING, false
                 ),
                 new DefaultColumnConfiguration(
-                    FAQArticleProperty.CATEGORY_ID, true, false, true, false, 125, true, true
+                    FAQArticleProperty.CATEGORY_ID, true, false, true, false, 125, true, true, true
                 ),
                 new DefaultColumnConfiguration(
                     FAQArticleProperty.CHANGED, true, false, true, false, 125, true, true, false, DataType.DATE_TIME
@@ -76,11 +86,9 @@ export class FAQArticleTableFactory extends TableFactory {
         }
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(KIXObjectType.FAQ_ARTICLE);
-            tableConfiguration.tableColumns = tableColumns;
-            tableConfiguration.enableSelection = true;
-            tableConfiguration.toggle = false;
-            tableConfiguration.displayLimit = null;
+            tableConfiguration = new TableConfiguration(
+                KIXObjectType.FAQ_ARTICLE, null, null, tableColumns, true, false
+            );
             defaultRouting = true;
         } else if (!tableConfiguration.tableColumns) {
             tableConfiguration.tableColumns = tableColumns;

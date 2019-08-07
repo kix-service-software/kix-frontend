@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { SocketClient } from "../SocketClient";
 import {
     KIXObject, KIXObjectType, LoadObjectsRequest, KIXObjectEvent,
@@ -9,7 +18,6 @@ import {
 import { ClientStorageService } from "../ClientStorageService";
 import { IdService } from "../IdService";
 import { FactoryService } from "./FactoryService";
-import { ObjectDataService } from "../ObjectDataService";
 import { CacheService } from "../cache";
 import { SocketErrorResponse } from "../../common";
 import { PermissionError } from "../../model/PermissionError";
@@ -25,8 +33,8 @@ export class KIXObjectSocketClient extends SocketClient {
             KIXObjectSocketClient.INSTANCE = new KIXObjectSocketClient();
         }
 
-        const objectData = ObjectDataService.getInstance().getObjectData();
-        KIXObjectSocketClient.TIMEOUT = objectData && objectData.socketTimeout ? objectData.socketTimeout : 30000;
+        const socketTimeout = ClientStorageService.getCookie('socketTimeout');
+        KIXObjectSocketClient.TIMEOUT = Number(socketTimeout);
 
         return KIXObjectSocketClient.INSTANCE;
     }
@@ -109,9 +117,9 @@ export class KIXObjectSocketClient extends SocketClient {
             KIXObjectEvent.CREATE_OBJECT, KIXObjectEvent.CREATE_OBJECT_FINISHED, KIXObjectEvent.CREATE_OBJECT_ERROR
         );
 
-        await CacheService.getInstance().deleteKeys(cacheKeyPrefix);
+        CacheService.getInstance().deleteKeys(cacheKeyPrefix);
 
-        return response.objectId;
+        return response.result;
     }
 
     public async updateObject(

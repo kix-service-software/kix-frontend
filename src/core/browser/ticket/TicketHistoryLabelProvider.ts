@@ -1,21 +1,22 @@
-import { ILabelProvider } from '..';
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { TicketHistory, DateTimeUtil, ObjectIcon, KIXObjectType, TicketHistoryProperty, User } from '../../model';
 import { TranslationService } from '../i18n/TranslationService';
 import { KIXObjectService } from '../kix';
+import { LabelProvider } from '../LabelProvider';
 
-export class TicketHistoryLabelProvider implements ILabelProvider<TicketHistory> {
+export class TicketHistoryLabelProvider extends LabelProvider<TicketHistory> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.TICKET_HISTORY;
 
-    public async getPropertyValueDisplayText(property: string, value: string | number): Promise<string> {
-        return value.toString();
-    }
-
-    public isLabelProviderForType(objectType: KIXObjectType): boolean {
-        return objectType === this.kixObjectType;
-    }
-
-    public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
             case TicketHistoryProperty.HISTORY_TYPE:
@@ -27,18 +28,14 @@ export class TicketHistoryLabelProvider implements ILabelProvider<TicketHistory>
             case TicketHistoryProperty.ARTICLE_ID:
                 displayValue = 'Translatable#to Article';
                 break;
-            case TicketHistoryProperty.CREATE_BY:
-                displayValue = 'Translatable#User';
-                break;
-            case TicketHistoryProperty.CREATE_TIME:
-                displayValue = 'Translatable#Created at';
-                break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;
@@ -69,11 +66,13 @@ export class TicketHistoryLabelProvider implements ILabelProvider<TicketHistory>
                 displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
             default:
-                displayValue = await this.getPropertyValueDisplayText(property, displayValue);
+                displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
         }
 
-        if (translatable && displayValue) {
-            displayValue = await TranslationService.translate(displayValue.toString());
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
         }
 
         return displayValue;

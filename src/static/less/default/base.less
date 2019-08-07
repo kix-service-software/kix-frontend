@@ -1,9 +1,19 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 // default "css"
 @border-radius: 3px;
 @shadow-color: @secondary-2;
 @shadow-1: 2px 2px 2px 0 @shadow-color;
 @shadow-2: 2px 2px 6px 0 @secondary-0;
 @shadow-3: 2px 2px 10px 3px @shadow-color;
+
 .shadow-1(@color: @shadow-color) {
     box-shadow: 2px 2px 2px 0 @color;
 }
@@ -16,10 +26,13 @@ html {
     height: 100%;
     box-sizing: border-box;
     background-color: @secondary-5;
+    overflow-y: scroll;
+
     body {
         height: 100%;
         box-sizing: border-box;
         position: relative;
+        min-width: 72rem;
     }
 }
 
@@ -28,6 +41,7 @@ a:visited,
 a:link {
     color: @primary-0;
     text-decoration: none;
+
     &:hover,
     &:active {
         color: @primary-2;
@@ -35,12 +49,19 @@ a:link {
     }
 }
 
+.show-object {
+    opacity: 1 !important;
+    transition: opacity .5s;
+}
+
 ul.menu {
     >li {
+
         >a,
         >a:visited,
         >a:link {
             color: inherit;
+
             &:hover,
             &:active {
                 color: inherit;

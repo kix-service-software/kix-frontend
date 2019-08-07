@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from "./ComponentState";
 import {
     Contact, FormInputComponent, KIXObjectType,
@@ -112,11 +121,10 @@ class Component extends FormInputComponent<number | string, ComponentState> {
     }
 
     private async searchContacts(limit: number, searchValue: string): Promise<TreeNode[]> {
-        const loadingOptions = new KIXObjectLoadingOptions(
-            null, ContactService.getInstance().prepareFullTextFilter(searchValue), null, limit
-        );
+        const filter = await ContactService.getInstance().prepareFullTextFilter(searchValue);
+        const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit);
         this.contacts = await KIXObjectService.loadObjects<Contact>(
-            KIXObjectType.CONTACT, null, loadingOptions, null, false
+            KIXObjectType.CONTACT, null, loadingOptions, null, true
         );
 
         this.state.nodes = [];
@@ -148,7 +156,7 @@ class Component extends FormInputComponent<number | string, ComponentState> {
 
     private async handleUnknownContactId(contactId: number | string): Promise<string | number> {
         if (FormValidationService.getInstance().isValidEmail(contactId.toString())) {
-            const loadingOptions = new KIXObjectLoadingOptions(null, [
+            const loadingOptions = new KIXObjectLoadingOptions([
                 new FilterCriteria(
                     ContactProperty.EMAIL, SearchOperator.EQUALS, FilterDataType.STRING,
                     FilterType.AND, contactId

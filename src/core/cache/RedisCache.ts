@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ICache } from "../model";
 import { promisify } from 'util';
 import { RedisClient } from "redis";
@@ -41,7 +50,7 @@ export class RedisCache implements ICache {
         this.flushAllAsync = promisify(this.redisClient.flushall).bind(this.redisClient);
     }
 
-    public async clear(ignoreKeyPrefixes?: string[]): Promise<void> {
+    public async clear(ignoreKeyPrefixes: string[] = []): Promise<void> {
         let keys = await this.keysAsync(`${this.KIX_CACHE_PREFIX}::*`);
         keys = keys.filter((k) => !ignoreKeyPrefixes.some((p) => k.startsWith(`${this.KIX_CACHE_PREFIX}::${p}`)));
         for (const key of keys) {

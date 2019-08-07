@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { FilterCriteria } from "../../FilterCriteria";
 import { FormFieldValue } from "./events";
 import { IFormInstance } from "./IFormInstance";
@@ -9,8 +18,8 @@ import { AutoCompleteConfiguration } from "./AutoCompleteConfiguration";
 import { FormContext } from "./FormContext";
 import { SearchForm } from "./SearchForm";
 import { ISearchFormListener } from "./ISearchFormListener";
-import { KIXObjectSearchService } from "../../../browser";
 import { Form } from "./Form";
+import { SearchService } from "../../../browser/kix/search/SearchService";
 
 export class SearchFormInstance implements IFormInstance {
 
@@ -87,7 +96,7 @@ export class SearchFormInstance implements IFormInstance {
     }
 
     public async getFormField(fieldId: string): Promise<FormField> {
-        const componentId = await KIXObjectSearchService.getInstance().getInputComponentId(
+        const componentId = await SearchService.getInstance().getInputComponentId(
             this.getObjectType(), fieldId
         );
         return new FormField(fieldId, fieldId, componentId);

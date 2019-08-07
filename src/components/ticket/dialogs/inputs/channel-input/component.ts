@@ -1,9 +1,18 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
 import { FormInputComponent, Channel, KIXObjectType, ChannelProperty, ObjectIcon } from '../../../../../core/model';
 import {
     KIXObjectService, LabelService, ILabelProvider, FormService, ServiceRegistry, ServiceType
 } from '../../../../../core/browser';
-import { TicketFormService, ArticleFormService } from '../../../../../core/browser/ticket';
+import { ArticleFormService } from '../../../../../core/browser/ticket';
 import { isArray } from 'util';
 import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
@@ -98,9 +107,11 @@ class Component extends FormInputComponent<number, ComponentState> {
     }
 
     public async channelClicked(channel: Channel): Promise<void> {
-        this.state.currentChannel = channel;
-        super.provideValue(this.state.currentChannel ? this.state.currentChannel.ID : null);
-        this.setFields(true);
+        if (!this.isActive(channel)) {
+            this.state.currentChannel = channel;
+            super.provideValue(this.state.currentChannel ? this.state.currentChannel.ID : null);
+            this.setFields(true);
+        }
     }
 
     private async setFields(clear?: boolean): Promise<void> {

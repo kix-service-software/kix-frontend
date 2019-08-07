@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXObjectFormService } from '../kix/KIXObjectFormService';
 import {
     KIXObjectType, Channel, FormField, ArticleProperty,
@@ -88,12 +97,10 @@ export class ArticleFormService extends KIXObjectFormService<Article> {
         const formInstance = await FormService.getInstance().getFormInstance(formId);
 
         if (channel.Name === 'note') {
-            fields.push(await this.getVisibleField(formInstance, clear));
             fields.push(await this.getSubjectField(formInstance, clear));
             fields.push(await this.getBodyField(formInstance, clear));
             fields.push(await this.getAttachmentField(formInstance, clear));
         } else if (channel.Name === 'email') {
-            fields.push(await this.getVisibleField(formInstance, clear));
             fields.push(await this.getFromField(formInstance, clear));
             fields.push(await this.getToOrCcField(formInstance, clear));
             fields.push(await this.getSubjectField(formInstance, clear));
@@ -104,35 +111,12 @@ export class ArticleFormService extends KIXObjectFormService<Article> {
         return fields;
     }
 
-    private async getVisibleField(formInstance: IFormInstance, clear: boolean): Promise<FormField> {
-        const customerVisibleReadonly = formInstance && formInstance.getFormContext() === FormContext.NEW
-            && formInstance.getObjectType() !== KIXObjectType.ARTICLE;
-        const customerVisibleValue = new FormFieldValue(customerVisibleReadonly ? true : false, true);
-
-        let field = new FormField(
-            "Translatable#Visible in customer portal", ArticleProperty.CUSTOMER_VISIBLE, 'checkbox-input',
-            false, "Translatable#Visible in customer portal", undefined, customerVisibleValue,
-            undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
-            undefined, undefined, customerVisibleReadonly
-        );
-        if (!clear && formInstance) {
-            const existingField = await formInstance.getFormFieldByProperty(ArticleProperty.CUSTOMER_VISIBLE);
-            if (existingField) {
-                field = existingField;
-                const value = await formInstance.getFormFieldValue<boolean>(existingField.instanceId);
-                if (value) {
-                    field.defaultValue = value;
-                }
-            }
-        }
-        return field;
-    }
-
     private async getSubjectField(formInstance: IFormInstance, clear: boolean): Promise<FormField> {
         const referencedValue = await this.getSubjectFieldValue();
         let field = new FormField(
             'Translatable#Subject', ArticleProperty.SUBJECT, undefined, true,
-            'Translatable#Subject', null, referencedValue ? new FormFieldValue(referencedValue) : null
+            'Translatable#Helptext_Ticket_ArticleCreateEdit_Subject',
+            null, referencedValue ? new FormFieldValue(referencedValue) : null
         );
         if (!clear && formInstance) {
             const existingField = await formInstance.getFormFieldByProperty(ArticleProperty.SUBJECT);
@@ -148,16 +132,22 @@ export class ArticleFormService extends KIXObjectFormService<Article> {
     }
 
     private async getBodyField(formInstance: IFormInstance, clear: boolean): Promise<FormField> {
-        const articleLabelText = formInstance && formInstance.getFormContext() === FormContext.NEW
-            && formInstance.getObjectType() === KIXObjectType.TICKET
+        const isTicket = formInstance && formInstance.getFormContext() === FormContext.NEW
+            && formInstance.getObjectType() === KIXObjectType.TICKET;
+
+        const articleLabelText = isTicket
             ? 'Translatable#Ticket Description'
             : 'Translatable#Article Text';
+
+        const helpText = isTicket
+            ? 'Helptext_Ticket_TicketCreate_Description'
+            : 'Helptext_Ticket_ArticleCreateEdit_ArticleText';
 
         const referencedValue = await this.getBodyFieldValue();
 
         let field = new FormField(
             articleLabelText, ArticleProperty.BODY, 'rich-text-input',
-            true, articleLabelText, [
+            true, helpText, [
                 new FormFieldOption(FormFieldOptions.AUTO_COMPLETE, new AutocompleteFormFieldOption([
                     new AutocompleteOption(KIXObjectType.TEXT_MODULE, '::')
                 ]))
@@ -181,7 +171,8 @@ export class ArticleFormService extends KIXObjectFormService<Article> {
 
         let field = new FormField(
             'Translatable#Attachments', ArticleProperty.ATTACHMENTS, 'attachment-input', false,
-            'Translatable#Attachments', null, referencedValue ? new FormFieldValue(referencedValue) : null
+            'Translatable#Helptext_Ticket_ArticleCreate_Attachments',
+            null, referencedValue ? new FormFieldValue(referencedValue) : null
         );
         if (!clear && formInstance) {
             const existingField = await formInstance.getFormFieldByProperty(ArticleProperty.ATTACHMENTS);
@@ -198,7 +189,8 @@ export class ArticleFormService extends KIXObjectFormService<Article> {
 
     private async getFromField(formInstance: IFormInstance, clear: boolean): Promise<FormField> {
         let field = new FormField(
-            'Translatable#From', ArticleProperty.FROM, 'article-email-from-input', true, 'Translatable#From'
+            'Translatable#From', ArticleProperty.FROM, 'article-email-from-input', true,
+            'Translatable#HelpText_Ticket_ArticleCreate_From'
         );
         if (!clear && formInstance) {
             const existingField = await formInstance.getFormFieldByProperty(ArticleProperty.FROM);
@@ -228,7 +220,8 @@ export class ArticleFormService extends KIXObjectFormService<Article> {
         }
 
         let field = new FormField(
-            label, property, 'article-email-recipient-input', referencedArticle ? true : false, label, [
+            label, property, 'article-email-recipient-input', referencedArticle ? true : false,
+            'HelpText_Ticket_ArticleCreate_Receiver', [
                 new FormFieldOption('ADDITIONAL_RECIPIENT_TYPES', actions)
             ], referencedValue ? new FormFieldValue(referencedValue) : null
         );

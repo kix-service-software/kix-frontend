@@ -1,7 +1,17 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { ComponentState } from './ComponentState';
-import { ServiceRegistry, IKIXObjectService, AttachmentUtil } from '../../../core/browser';
+import { ServiceRegistry, IKIXObjectService, AttachmentUtil, PlaceholderService } from '../../../core/browser';
 import { AutocompleteFormFieldOption, InlineContent } from '../../../core/browser/components';
 import { TranslationService } from '../../../core/browser/i18n/TranslationService';
+import { TextModule } from '../../../core/model';
 
 declare var CKEDITOR: any;
 
@@ -17,6 +27,8 @@ class EditorComponent {
             input.inline,
             input.simple,
             input.readOnly,
+            input.invalid,
+            input.noImages,
             input.resize,
             input.resizeDir
         );
@@ -67,25 +79,27 @@ class EditorComponent {
                 const fileSize = event.data.dataTransfer.getFilesCount();
                 if (fileSize > 0) {
                     event.stop();
-                    for (let i = 0; i < fileSize; i++) {
-                        const file = event.data.dataTransfer.getFile(i);
-                        const valid = AttachmentUtil.checkMimeType(
-                            file, ['image/png', 'image/jpg', 'image/jpeg', 'image/bmp', 'image/svg+xml']
-                        );
-                        if (valid) {
-                            const reader = new FileReader();
-                            reader.onload = (evt: any) => {
-                                const element = this.editor.document.createElement('img', {
-                                    attributes: {
-                                        src: evt.target.result
-                                    }
-                                });
+                    if (!this.state.noImages) {
+                        for (let i = 0; i < fileSize; i++) {
+                            const file = event.data.dataTransfer.getFile(i);
+                            const valid = AttachmentUtil.checkMimeType(
+                                file, ['image/png', 'image/jpg', 'image/jpeg', 'image/bmp', 'image/svg+xml']
+                            );
+                            if (valid) {
+                                const reader = new FileReader();
+                                reader.onload = (evt: any) => {
+                                    const element = this.editor.document.createElement('img', {
+                                        attributes: {
+                                            src: evt.target.result
+                                        }
+                                    });
 
-                                setTimeout(() => {
-                                    this.editor.insertElement(element);
-                                }, 0);
-                            };
-                            reader.readAsDataURL(file);
+                                    setTimeout(() => {
+                                        this.editor.insertElement(element);
+                                    }, 0);
+                                };
+                                reader.readAsDataURL(file);
+                            }
                         }
                     }
                 }
@@ -93,7 +107,7 @@ class EditorComponent {
 
             // TODO: eventuell bessere Lösung als blur (könnte nicht fertig werden (unvollständiger Text),
             // wenn durch den Klick außerhalb auch gleich der Editor entfernt wird
-            // - siehe bei Notes-Sidebar (toggleEditMode))
+            // - siehe bei Notes-Sidebar (toggleEditMode)) --> "change", wird aber häufig getriggert
             this.editor.on('blur', (event) => {
                 const value = event.editor.getData();
                 (this as any).emit('valueChanged', value);
@@ -124,24 +138,61 @@ class EditorComponent {
                     }
                 }
             }
+
+            if (await this.isEditorReady()) {
+                if (this.state.noImages) {
+                    this.editor.pasteFilter.disallow('img');
+                }
+            }
         }
     }
 
     public async setAutocompleteConfiguration(autocompleteOption: AutocompleteFormFieldOption): Promise<void> {
         if (await this.isEditorReady()) {
-            autocompleteOption.autocompleteObjects.forEach((ao) => {
+            for (const ao of autocompleteOption.autocompleteObjects) {
                 const service = (ServiceRegistry.getServiceInstance(ao.objectType) as IKIXObjectService);
                 if (service) {
-                    const config = service.getAutoFillConfiguration(CKEDITOR.plugins.textMatch, ao.placeholder);
+                    const config = await service.getAutoFillConfiguration(CKEDITOR.plugins.textMatch, ao.placeholder);
                     if (config) {
                         const plugin = new CKEDITOR.plugins.autocomplete(this.editor, config);
-                        plugin.getHtmlToInsert = function (item) {
-                            return this.outputTemplate ? this.outputTemplate.output(item) : item.name;
+                        // overwrite plugin commit function
+                        plugin.commit = async function (itemId) {
+                            if (!this.model.isActive) {
+                                return;
+                            }
+
+                            this.close();
+
+                            // edit: check also for undefined
+                            // if ( itemId == null ) {
+                            if (itemId === null || typeof itemId === 'undefined') {
+                                itemId = this.model.selectedItemId;
+
+                                // If non item is selected abort commit.
+                                if (itemId === null) {
+                                    return;
+                                }
+                            }
+
+                            const item = this.model.getItemById(itemId);
+                            const editor = this.editor;
+
+                            editor.fire('saveSnapshot');
+                            editor.getSelection().selectRanges([this.model.range]);
+
+                            // edit: handle text placeholder
+                            // editor.insertHtml( this.getHtmlToInsert( item ), 'text' );
+                            const text = this.outputTemplate ? this.outputTemplate.output(item) : item.name;
+                            const preparedText = await PlaceholderService.getInstance().replacePlaceholders(
+                                text, null, (item as TextModule).Language
+                            );
+                            editor.insertHtml(preparedText, 'text');
+                            editor.fire('saveSnapshot');
                         };
                         this.autoCompletePlugins.push(plugin);
                     }
                 }
-            });
+            }
         }
     }
 

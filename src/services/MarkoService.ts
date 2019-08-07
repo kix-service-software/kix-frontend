@@ -1,6 +1,14 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { KIXExtensions, IKIXModuleExtension } from '../core/extensions';
 import jsonfile = require('jsonfile');
-import { ObjectData } from '../core/model';
 import { PluginService } from './PluginService';
 import { ProfilingService, LoggingService } from '../core/services';
 
@@ -40,8 +48,9 @@ export class MarkoService {
                 prePath = 'require: ../../../node_modules/';
             }
 
-            for (const dependencyPath of kixModule.tags) {
-                const dependency = prePath + dependencyPath[1];
+            const components = [...kixModule.uiComponents];
+            for (const uiComponent of components) {
+                const dependency = prePath + uiComponent.componentPath;
                 const exists = browserJSON.dependencies.find((d) => d === dependency);
                 if (!exists) {
                     browserJSON.dependencies.push(dependency);
@@ -76,8 +85,7 @@ export class MarkoService {
             loginTemplate.render(
                 {
                     themeCSS: [],
-                    specificCSS: [],
-                    data: { objectData: new ObjectData() }
+                    specificCSS: []
                 }, (error, result) => {
                     if (error) {
                         ProfilingService.getInstance().stop(profileTaskId, 'Login build error.');
@@ -95,8 +103,7 @@ export class MarkoService {
             appTemplate.render(
                 {
                     themeCSS: [],
-                    specificCSS: [],
-                    data: { objectData: new ObjectData() }
+                    specificCSS: []
                 }, (error, result) => {
                     if (error) {
                         ProfilingService.getInstance().stop(profileTaskId, 'App build error.');
@@ -124,7 +131,7 @@ export class MarkoService {
     private async waitForReadyState(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             setTimeout(() => {
-                LoggingService.getInstance().info('App build in progress ...');
+                LoggingService.getInstance().info('App build in progress');
                 resolve();
             }, 6000);
         });

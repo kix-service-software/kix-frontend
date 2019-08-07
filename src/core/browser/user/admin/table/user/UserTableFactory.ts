@@ -1,9 +1,20 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
 import { RoutingConfiguration } from "../../../../router";
 import {
     TableConfiguration, ITable, Table, DefaultColumnConfiguration,
     TableRowHeight, TableHeaderHeight, IColumnConfiguration
 } from "../../../../table";
-import { KIXObjectType, DataType, ContextMode, UserProperty, KIXObjectLoadingOptions } from "../../../../../model";
+import {
+    KIXObjectType, DataType, ContextMode, UserProperty, KIXObjectLoadingOptions, KIXObjectProperty
+} from "../../../../../model";
 import { UserDetailsContext } from "../../context";
 import { UserTableContentProvider } from "./UserTableContentProvider";
 import { TableFactory } from "../../../../table/TableFactory";
@@ -23,7 +34,7 @@ export class UserTableFactory extends TableFactory {
         table.setContentProvider(
             new UserTableContentProvider(
                 table, objectIds,
-                new KIXObjectLoadingOptions(null, null, null, null, [UserProperty.PREFERENCES]),
+                new KIXObjectLoadingOptions(null, null, null, [UserProperty.PREFERENCES]),
                 contextId
             )
         );
@@ -41,11 +52,11 @@ export class UserTableFactory extends TableFactory {
                 DataType.STRING, true, null, null, false
             ),
             new DefaultColumnConfiguration(
-                UserProperty.USER_LASTNAME, true, false, true, false, 250, true, true, false,
-                DataType.STRING, true, null, null, false
+                UserProperty.USER_FIRSTNAME, true, false, true, false, 250, true, true
             ),
             new DefaultColumnConfiguration(
-                UserProperty.USER_FIRSTNAME, true, false, true, false, 250, true, true
+                UserProperty.USER_LASTNAME, true, false, true, false, 250, true, true, false,
+                DataType.STRING, true, null, null, false
             ),
             new DefaultColumnConfiguration(
                 UserProperty.USER_EMAIL, true, false, true, false, 200, true, true
@@ -59,20 +70,20 @@ export class UserTableFactory extends TableFactory {
             new DefaultColumnConfiguration(
                 UserProperty.LAST_LOGIN, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
             ),
-            new DefaultColumnConfiguration(UserProperty.VALID_ID, true, false, true, false, 100, true, true, true),
+            new DefaultColumnConfiguration(KIXObjectProperty.VALID_ID, true, false, true, false, 100, true, true, true),
             new DefaultColumnConfiguration(
-                UserProperty.CREATE_TIME, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
+                KIXObjectProperty.CREATE_TIME, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
             ),
-            new DefaultColumnConfiguration(UserProperty.CREATE_BY, true, false, true, true, 150, true, true),
+            new DefaultColumnConfiguration(KIXObjectProperty.CREATE_BY, true, false, true, true, 150, true, true),
             new DefaultColumnConfiguration(
-                UserProperty.CHANGE_TIME, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
+                KIXObjectProperty.CHANGE_TIME, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
             ),
-            new DefaultColumnConfiguration(UserProperty.CHANGE_BY, true, false, true, false, 150, true, true)
+            new DefaultColumnConfiguration(KIXObjectProperty.CHANGE_BY, true, false, true, false, 150, true, true)
         ];
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.USER, null, null, tableColumns, null, true, false, null, null,
+                KIXObjectType.USER, null, null, tableColumns, true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;
