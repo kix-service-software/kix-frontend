@@ -7,7 +7,7 @@
  * --
  */
 
-import { AbstractAction, OverlayType, ComponentContent, ConfirmOverlayContent } from "../../../model";
+import { AbstractAction, OverlayType, ComponentContent } from "../../../model";
 import { SearchService } from "../../kix/search/SearchService";
 import { OverlayService } from "../../OverlayService";
 

@@ -23,6 +23,18 @@
             min-width: @action-min-width;
 
             &.inactive {
+                >.action {
+                    a {
+                        color: @secondary-1;
+                        text-decoration: none;
+
+                        &:hover {
+                            color: @secondary-1;
+                            text-decoration: none;
+                        }
+                    }
+                }
+
                 color: @secondary-1;
             }
 
@@ -72,13 +84,29 @@
                     }
                 }
 
+                &.inactive {
+                    >.action {
+                        a {
+                            color: @secondary-1;
+                            text-decoration: none;
+
+                            &:hover {
+                                color: @secondary-1;
+                                text-decoration: none;
+                            }
+                        }
+                    }
+
+                    color: @secondary-1;
+                }
+
                 >.action {
                     a {
                         color: @secondary-0;
                         text-decoration: none;
 
                         &:hover {
-                            color: #5b5b5b;
+                            color: @secondary-1;
                             text-decoration: none;
                         }
                     }

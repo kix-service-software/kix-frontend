@@ -153,7 +153,7 @@ class Component {
             settings && settings.objectType || (settings.tableConfiguration && settings.tableConfiguration.objectType)
         ) {
             this.objectType = settings.objectType || settings.tableConfiguration.objectType;
-            const context = await ContextService.getInstance().getActiveContext(this.contextType);
+            const context = ContextService.getInstance().getActiveContext(this.contextType);
             const contextId = this.state.widgetConfiguration.contextDependent
                 ? context.getDescriptor().contextId
                 : null;

@@ -12,7 +12,9 @@ import { ComponentState } from './ComponentState';
 import { TranslationService } from "../../../../core/browser/i18n/TranslationService";
 import { AuthenticationSocketClient } from "../../../../core/browser/application/AuthenticationSocketClient";
 import { UIComponentPermission } from "../../../../core/model/UIComponentPermission";
-import { CRUD, KIXObjectType, SysConfigKey, SysConfigOption } from "../../../../core/model";
+import { CRUD, KIXObjectType, SysConfigKey, SysConfigOption, ContextMode } from "../../../../core/model";
+import { FAQDetailsContext } from "../../../../core/browser/faq/context/FAQDetailsContext";
+import { RoutingConfiguration, RoutingService } from "../../../../core/browser/router";
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -28,8 +30,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Help, hints & tricks'
         ]);
-        this.state.hasFAQAccess = await this.checkFAQReadPermissions();
-        this.state.hasConfigAccess = await this.checkConfigReadPermissions();
+        this.state.hasFAQAccess = await this.checkReadPermissions('faq/articles');
+        this.state.hasConfigAccess = await this.checkReadPermissions('system/config');
         if (this.state.hasConfigAccess) {
             const userManualConfigs = await KIXObjectService.loadObjects<SysConfigOption>(
                 KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.USER_MANUAL]
@@ -44,15 +46,21 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    private async checkFAQReadPermissions(): Promise<boolean> {
-        return await AuthenticationSocketClient.getInstance().checkPermissions(
-            [new UIComponentPermission('faq/articles', [CRUD.READ])]
+    public faqClicked(id: number, event: any): void {
+        event.stopPropagation();
+        event.preventDefault();
+
+        const routingConfiguration = new RoutingConfiguration(
+            FAQDetailsContext.CONTEXT_ID, KIXObjectType.FAQ_ARTICLE,
+            ContextMode.DETAILS, null
         );
+
+        RoutingService.getInstance().routeToContext(routingConfiguration, id);
     }
 
-    private async checkConfigReadPermissions(): Promise<boolean> {
+    private async checkReadPermissions(resource: string): Promise<boolean> {
         return await AuthenticationSocketClient.getInstance().checkPermissions(
-            [new UIComponentPermission('system/config', [CRUD.READ])]
+            [new UIComponentPermission(resource, [CRUD.READ])]
         );
     }
 }

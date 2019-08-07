@@ -185,6 +185,7 @@ export class Table implements ITable {
                 return true;
             }
         });
+        EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
         return removedRows;
     }
 
