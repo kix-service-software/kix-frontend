@@ -91,6 +91,16 @@ export class DateTimeUtil {
         return kixTimeString;
     }
 
+    public static getTimestampNumbersOnly(date: Date): string {
+        const year = date.getFullYear();
+        const month = DateTimeUtil.padZero(date.getMonth() + 1);
+        const day = DateTimeUtil.padZero(date.getDate());
+        const hours = DateTimeUtil.padZero(date.getHours());
+        const minutes = DateTimeUtil.padZero(date.getMinutes());
+        const seconds = DateTimeUtil.padZero(date.getSeconds());
+        return `${year}${month}${day}${hours}${minutes}${seconds}`;
+    }
+
     public static sameDay(d1: Date, d2: Date): boolean {
         return d1.getFullYear() === d2.getFullYear() &&
             d1.getMonth() === d2.getMonth() &&
