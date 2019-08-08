@@ -16,7 +16,7 @@ export class ComponentState {
     public constructor(
         public instanceId: string = IdService.generateDateBasedId('communication-system-addresses-list'),
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
-            'table-widget', 'Translatable#Communication: Email',
+            'table-widget', 'Translatable#Communication: Email: Email Addresses',
             [
                 'system-address-create', 'system-addresses-table-delete', 'csv-export-action'
             ],

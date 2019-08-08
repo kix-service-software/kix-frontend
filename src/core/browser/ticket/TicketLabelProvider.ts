@@ -290,7 +290,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 displayValue = 'Translatable#Ticket Flags';
                 break;
             case TicketProperty.CLOSE_TIME:
-                displayValue = 'Translatable#Closing time';
+                displayValue = 'Translatable#Closed at';
                 break;
             case TicketProperty.CHANGED:
                 displayValue = 'Translatable#Changed at';
