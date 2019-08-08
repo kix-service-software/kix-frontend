@@ -215,9 +215,6 @@ msgstr ""
 msgid "Automation"
 msgstr ""
 
-msgid "Automation: Notification"
-msgstr ""
-
 msgid "Automation: Notifications"
 msgstr ""
 
@@ -334,6 +331,9 @@ msgid ""
 "new tab"
 msgstr ""
 
+msgid "Closed at"
+msgstr ""
+
 msgid "Close Dialog"
 msgstr ""
 
@@ -342,9 +342,6 @@ msgstr ""
 
 msgid "Close Sidebars"
 msgstr ""
-
-msgid "Closing time"
-msgstr "Closed at"
 
 msgid "CMDB"
 msgstr "Assets"
@@ -377,6 +374,9 @@ msgid "Communication: Email"
 msgstr ""
 
 msgid "Communication: Email: Email Accounts"
+msgstr ""
+
+msgid "Communication: Email: Email Addresses"
 msgstr ""
 
 msgid "Communication: Email: Email Filters"
@@ -2367,6 +2367,11 @@ msgstr ""
 msgid "New"
 msgstr ""
 
+#, fuzzy
+#| msgid "Edit Account"
+msgid "New Account"
+msgstr "Edit Email Account"
+
 msgid "New Address"
 msgstr ""
 
@@ -2386,9 +2391,6 @@ msgid "New Config Item"
 msgstr "New Asset"
 
 msgid "New Contact"
-msgstr ""
-
-msgid "New Email Account"
 msgstr ""
 
 msgid "New Email Filter"
@@ -2909,6 +2911,9 @@ msgstr ""
 msgid "Role successfully created."
 msgstr ""
 
+msgid "Row"
+msgstr ""
+
 msgid "Row {0} of the file with {1} {2}: could not import{3}. How to continue?"
 msgstr ""
 
@@ -2922,9 +2927,6 @@ msgid "Save"
 msgstr ""
 
 msgid "Save Search"
-msgstr ""
-
-msgid "Save Settings."
 msgstr ""
 
 msgid "Search"
@@ -3018,6 +3020,9 @@ msgstr ""
 
 msgid "Select Config Item Class"
 msgstr "Select Asset Class"
+
+msgid "Selected {0} ({1})"
+msgstr ""
 
 msgid "Selected Search Criteria"
 msgstr ""
@@ -3431,13 +3436,17 @@ msgstr ""
 msgid "Update Email Address"
 msgstr ""
 
-msgid "Update FAQ Artikel"
-msgstr ""
+#, fuzzy
+#| msgid "Load Email Filter"
+msgid "Update Email Filter"
+msgstr "Loading Email Filter"
+
+#, fuzzy
+#| msgid "Load FAQ Article"
+msgid "Update FAQ Article"
+msgstr "Loading FAQ Article"
 
 msgid "Update FAQ Category"
-msgstr ""
-
-msgid "Update Filter"
 msgstr ""
 
 #, fuzzy
@@ -3452,6 +3461,11 @@ msgstr "Asset Information"
 
 msgid "Update Organisation"
 msgstr ""
+
+#, fuzzy
+#| msgid "Update Queue"
+msgid "Update Preferences"
+msgstr "Update Team"
 
 msgid "Update Priority"
 msgstr ""
@@ -3578,6 +3592,9 @@ msgstr ""
 
 msgid "ZIP"
 msgstr ""
+
+#~ msgid "Closing time"
+#~ msgstr "Closed at"
 
 #~ msgid "Config Item class. Can not be changed."
 #~ msgstr "Asset Class. Can not be changed."

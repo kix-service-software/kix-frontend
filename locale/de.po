@@ -219,9 +219,6 @@ msgstr "zu ändernde Attribute:"
 msgid "Automation"
 msgstr "Automatisierung"
 
-msgid "Automation: Notification"
-msgstr "Automatisierung: Benachrichtigung"
-
 msgid "Automation: Notifications"
 msgstr "Automatisierung: Benachrichtigungen"
 
@@ -342,6 +339,11 @@ msgid ""
 msgstr ""
 "Klick der mittleren oder rechten Maustaste  =  Fenster in neuem Tab öffnen"
 
+#, fuzzy
+#| msgid "Close Dialog"
+msgid "Closed at"
+msgstr "Dialog schließen"
+
 msgid "Close Dialog"
 msgstr "Dialog schließen"
 
@@ -350,9 +352,6 @@ msgstr "Overlay schließen"
 
 msgid "Close Sidebars"
 msgstr "Sidebars schließen"
-
-msgid "Closing time"
-msgstr "Geschlossen am"
 
 msgid "CMDB"
 msgstr "Assets"
@@ -386,6 +385,11 @@ msgstr "Kommunikation: E-Mail"
 
 msgid "Communication: Email: Email Accounts"
 msgstr "Kommunikation: E-Mail: E-Mail Konten"
+
+#, fuzzy
+#| msgid "Communication: Email: Email Filters"
+msgid "Communication: Email: Email Addresses"
+msgstr "Kommunikation: E-Mail: E-Mail Filter"
 
 msgid "Communication: Email: Email Filters"
 msgstr "Kommunikation: E-Mail: E-Mail Filter"
@@ -1696,7 +1700,8 @@ msgid "Helptext_Customers_ContactCreate_Lastname"
 msgstr ""
 
 msgid "Helptext_Customers_ContactCreate_Login"
-msgstr "Der Nutzername muss eineindeutig sein und kann nicht bearbeitet werden."
+msgstr ""
+"Der Nutzername muss eineindeutig sein und kann nicht bearbeitet werden."
 
 msgid "Helptext_Customers_ContactCreate_Mobile"
 msgstr ""
@@ -2410,6 +2415,9 @@ msgstr "Negieren"
 msgid "New"
 msgstr "Neu"
 
+msgid "New Account"
+msgstr "Neues Konto"
+
 msgid "New Address"
 msgstr "Neue Adresse"
 
@@ -2430,9 +2438,6 @@ msgstr "Neues Asset"
 
 msgid "New Contact"
 msgstr "Neuer Kontakt"
-
-msgid "New Email Account"
-msgstr "Neues E-Mail Konto"
 
 msgid "New Email Filter"
 msgstr "Neuer E-Mail Filter"
@@ -2947,6 +2952,9 @@ msgstr "Rollen/Berechtigungen"
 msgid "Role successfully created."
 msgstr "Rolle wurde erfolgreich angelegt."
 
+msgid "Row"
+msgstr ""
+
 msgid "Row {0} of the file with {1} {2}: could not import{3}. How to continue?"
 msgstr ""
 "Zeile {0} der Datei {1} {2}: kann nicht importiert werden{3}. Wie möchten "
@@ -2963,9 +2971,6 @@ msgstr "Speichern"
 
 msgid "Save Search"
 msgstr "Suche speichern"
-
-msgid "Save Settings."
-msgstr "Einstellungen werden gespeichert."
 
 msgid "Search"
 msgstr "Suche"
@@ -3064,6 +3069,9 @@ msgstr "Wählen Sie einen Werttrenner."
 
 msgid "Select Config Item Class"
 msgstr "Wählen Sie eine Asset-Klasse aus der Liste."
+
+msgid "Selected {0} ({1})"
+msgstr "Ausgewählte {0} ({1})"
 
 msgid "Selected Search Criteria"
 msgstr "Gewählte Suchkriterien"
@@ -3481,13 +3489,17 @@ msgstr "Aktualisierung wird durchgeführt"
 msgid "Update Email Address"
 msgstr "Aktualisierung wird durchgeführt"
 
-msgid "Update FAQ Artikel"
+#, fuzzy
+#| msgid "Edit Email Filter"
+msgid "Update Email Filter"
+msgstr "E-Mail Filter bearbeiten"
+
+#, fuzzy
+#| msgid "Update FAQ Artikel"
+msgid "Update FAQ Article"
 msgstr "Aktualisierung wird durchgeführt"
 
 msgid "Update FAQ Category"
-msgstr "Aktualisierung wird durchgeführt"
-
-msgid "Update Filter"
 msgstr "Aktualisierung wird durchgeführt"
 
 msgid "Update Key"
@@ -3498,6 +3510,11 @@ msgstr "Benachrichtigung aktualisieren"
 
 msgid "Update Organisation"
 msgstr "Aktualisierung wird durchgeführt"
+
+#, fuzzy
+#| msgid "Preferences"
+msgid "Update Preferences"
+msgstr "Persönliche Einstellungen"
 
 msgid "Update Priority"
 msgstr "Aktualisierung wird durchgeführt"
@@ -3624,6 +3641,21 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Automation: Notification"
+#~ msgstr "Automatisierung: Benachrichtigung"
+
+#~ msgid "Closing time"
+#~ msgstr "Geschlossen am"
+
+#~ msgid "New Email Account"
+#~ msgstr "Neues E-Mail Konto"
+
+#~ msgid "Save Settings."
+#~ msgstr "Einstellungen werden gespeichert."
+
+#~ msgid "Update Filter"
+#~ msgstr "Aktualisierung wird durchgeführt"
 
 #~ msgid "Sysconfig"
 #~ msgstr "Sysconfig"
@@ -4087,9 +4119,6 @@ msgstr "PLZ"
 #~ msgid "Hostname"
 #~ msgstr "Hostname"
 
-#~ msgid "New Account"
-#~ msgstr "Neues Konto"
-
 #~ msgid "No contact available"
 #~ msgstr "Kein Kontakt verfügbar"
 
@@ -4319,9 +4348,6 @@ msgstr "PLZ"
 
 #~ msgid "Warning"
 #~ msgstr "Warnung"
-
-#~ msgid "Selected {0} ({1})"
-#~ msgstr "Ausgewählte {0} ({1})"
 
 #~ msgid "You will edit {0} attributes for {1} {2}. Execute now?"
 #~ msgstr "Sie ändern {0} Attribute an {1} {2}. Jetzt starten?"
