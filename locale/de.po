@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-08-08 12:32+0000\n"
-"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
+"PO-Revision-Date: 2019-08-08 14:32+0000\n"
+"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -3488,10 +3488,8 @@ msgstr "Aktualisierung wird durchgeführt"
 msgid "Update Email Address"
 msgstr "Aktualisierung wird durchgeführt"
 
-#, fuzzy
-#| msgid "Edit Email Filter"
 msgid "Update Email Filter"
-msgstr "E-Mail Filter bearbeiten"
+msgstr "Aktualisierung wird durchgeführt"
 
 #, fuzzy
 #| msgid "Update FAQ Artikel"
@@ -3502,7 +3500,7 @@ msgid "Update FAQ Category"
 msgstr "Aktualisierung wird durchgeführt"
 
 msgid "Update Key"
-msgstr "Schlüssel wird aktualisiert"
+msgstr "Aktualisierung wird durchgeführt"
 
 msgid "Update Notification"
 msgstr "Benachrichtigung aktualisieren"
@@ -3510,10 +3508,8 @@ msgstr "Benachrichtigung aktualisieren"
 msgid "Update Organisation"
 msgstr "Aktualisierung wird durchgeführt"
 
-#, fuzzy
-#| msgid "Preferences"
 msgid "Update Preferences"
-msgstr "Persönliche Einstellungen"
+msgstr "Aktualisierung wird durchgeführt"
 
 msgid "Update Priority"
 msgstr "Aktualisierung wird durchgeführt"
