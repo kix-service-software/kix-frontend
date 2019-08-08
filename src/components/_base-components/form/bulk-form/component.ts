@@ -131,7 +131,7 @@ class Component {
         const objectName = await LabelService.getInstance().getObjectName(this.state.bulkManager.objectType, true);
         const objectCount = this.state.bulkManager.objects.length;
         this.state.tableTitle = await TranslationService.translate(
-            'Selected {0} ({1})', [objectName, objectCount]
+            'Translatable#Selected {0} ({1})', [objectName, objectCount]
         );
     }
 

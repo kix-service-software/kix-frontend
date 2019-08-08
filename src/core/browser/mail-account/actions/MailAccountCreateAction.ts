@@ -18,7 +18,7 @@ export class MailAccountCreateAction extends AbstractAction {
     ];
 
     public async initAction(): Promise<void> {
-        this.text = 'Translatable#New Email Account';
+        this.text = 'Translatable#New Account';
         this.icon = 'kix-icon-new-gear';
     }
 

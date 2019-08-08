@@ -17,7 +17,7 @@ class Component extends AbstractEditDialog {
     public onCreate(): void {
         this.state = new ComponentState();
         super.init(
-            'Translatable#Update Filter',
+            'Translatable#Update Email Filter',
             undefined,
             KIXObjectType.MAIL_FILTER,
             MailFilterDetailsContext.CONTEXT_ID

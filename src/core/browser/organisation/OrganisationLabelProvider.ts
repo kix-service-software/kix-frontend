@@ -136,7 +136,7 @@ export class OrganisationLabelProvider extends LabelProvider<Organisation> {
 
         const organisationLabel = translatable
             ? await TranslationService.translate(value)
-            : value;
+            : plural ? 'Organisations' : 'Organisation';
 
         return organisationLabel;
     }

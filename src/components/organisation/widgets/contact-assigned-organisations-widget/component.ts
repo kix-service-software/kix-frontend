@@ -10,6 +10,7 @@
 import { ComponentState } from './ComponentState';
 import { ContextService, ActionFactory, TableFactoryService } from '../../../../core/browser';
 import { KIXObjectType, Contact } from '../../../../core/model';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component {
 
@@ -26,9 +27,6 @@ class Component {
     public async onMount(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
-        if (this.state.widgetConfiguration) {
-            this.state.title = this.state.widgetConfiguration.title;
-        }
 
         context.registerListener('contact-assigned-organisations-component', {
             explorerBarToggled: () => { return; },
@@ -48,7 +46,8 @@ class Component {
 
     private async initWidget(contact?: Contact): Promise<void> {
         this.state.contact = contact;
-        this.state.title = this.state.widgetConfiguration.title
+        const title = await TranslationService.translate(this.state.widgetConfiguration.title);
+        this.state.title = title
             + (this.state.contact.OrganisationIDs && !!this.state.contact.OrganisationIDs.length ?
                 ` (${this.state.contact.OrganisationIDs.length})` : '');
         this.prepareTable();
