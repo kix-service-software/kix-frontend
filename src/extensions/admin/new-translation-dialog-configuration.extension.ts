@@ -44,7 +44,8 @@ export class Extension implements IConfigurationExtension {
             ));
 
             const languages = await this.getLanguages();
-            languages.sort((a, b) => SortUtil.compareString(a[1], b[1])).forEach((l) => {
+            languages.sort((a, b) => SortUtil.compareString(a[1], b[1]));
+            languages.forEach((l) => {
                 const languageField = new FormField(
                     l[1], l[0], 'text-area-input', false,
                     'Translatable#Helptext_i18n_TranslationPatternCreate_Translation'
