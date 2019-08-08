@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2019-08-06 16:32+0000\n"
-"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
+"PO-Revision-Date: 2019-08-07 13:04+0000\n"
+"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: English <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/en/>\n"
 "Language: en\n"
@@ -892,7 +892,7 @@ msgid "Help, hints & tricks"
 msgstr ""
 
 msgid "Helping FAQ Contributions"
-msgstr ""
+msgstr "Helpfull FAQ articles"
 
 msgid "Helptext_Admin_FAQCategoryCreate_Comment"
 msgstr "Insert additional information (only displayed within the admin module)"
@@ -2534,7 +2534,7 @@ msgid "Notification Information"
 msgstr "Asset Information"
 
 msgid "Notification Methods"
-msgstr ""
+msgstr "Notification Options"
 
 #, fuzzy
 #| msgid "Config Item Information"

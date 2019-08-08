@@ -68,9 +68,8 @@ export class RoutingService {
         } else {
             const parsedUrl = new URL(window.location.href);
             const path = parsedUrl.pathname === '/' ? [] : parsedUrl.pathname.split('/');
-            let contextUrl = 'home';
             if (path.length > 1) {
-                contextUrl = path[1];
+                const contextUrl = path[1];
                 const objectId = path[2];
 
                 let context: Context;

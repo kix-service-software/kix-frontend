@@ -18,6 +18,8 @@ import { ComponentState } from "./ComponentState";
 import { TicketDetailsContext } from "../../../../core/browser/ticket";
 import { TranslationService } from "../../../../core/browser/i18n/TranslationService";
 import { DialogService } from "../../../../core/browser/components/dialog";
+import { EventService } from "../../../../core/browser/event";
+import { ApplicationEvent } from "../../../../core/browser/application";
 
 class Component {
 
@@ -77,18 +79,19 @@ class Component {
                     await KIXObjectService.updateObjectByForm(
                         KIXObjectType.TICKET, this.state.formId, context.getObjectId()
                     ).then(async (ticketId) => {
+                        EventService.getInstance().publish(ApplicationEvent.REFRESH);
                         const ticket = await context.getObject<Ticket>(
                             KIXObjectType.TICKET, true, [TicketProperty.ARTICLES]
                         );
                         DialogService.getInstance().setMainDialogLoading(false);
                         const article = ticket.Articles.sort((a, b) => b.ArticleID - a.ArticleID)[0];
+                        DialogService.getInstance().submitMainDialog();
                         if (article.isUnsent()) {
                             BrowserUtil.openErrorOverlay(article.getUnsentError());
                         } else {
                             const toast = await TranslationService.translate('Translatable#Changes saved.');
                             BrowserUtil.openSuccessOverlay(toast);
                         }
-                        DialogService.getInstance().submitMainDialog();
                     }).catch((error: Error) => {
                         DialogService.getInstance().setMainDialogLoading(false);
                         BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);

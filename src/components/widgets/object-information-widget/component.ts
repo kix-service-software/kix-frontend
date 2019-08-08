@@ -30,7 +30,8 @@ class Component {
         const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        const settings: ObjectInformationWidgetSettings = this.state.widgetConfiguration.settings;
+        const settings: ObjectInformationWidgetSettings = this.state.widgetConfiguration ?
+            this.state.widgetConfiguration.settings : null;
         if (settings) {
             this.state.properties = settings.properties;
             this.state.flat = settings.displayFlatList;
@@ -59,7 +60,7 @@ class Component {
 
     private async initWidget(settings: ObjectInformationWidgetSettings): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
-        const object = await context.getObject(settings.objectType);
+        const object = settings ? await context.getObject(settings.objectType) : null;
         this.state.object = null;
 
         setTimeout(() => {
