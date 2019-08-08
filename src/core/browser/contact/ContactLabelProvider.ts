@@ -139,6 +139,17 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
         return displayValue;
     }
 
+    public async getExportPropertyText(property: string, useDisplayText?: boolean): Promise<string> {
+        if (!useDisplayText) {
+            switch (property) {
+                case ContactProperty.PRIMARY_ORGANISATION_ID:
+                    return ContactProperty.PRIMARY_ORGANISATION;
+                default:
+            }
+        }
+        return super.getExportPropertyText(property, useDisplayText);
+    }
+
     public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
         if (property === ContactProperty.CREATE_NEW_TICKET) {
             return 'kix-icon-new-ticket';
