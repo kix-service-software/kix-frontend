@@ -169,7 +169,6 @@ export class DialogService {
 
         setTimeout(async () => {
             CacheService.getInstance().deleteKeys(KIXObjectType.CURRENT_USER);
-            EventService.getInstance().publish(ApplicationEvent.REFRESH);
         }, 500);
     }
 
