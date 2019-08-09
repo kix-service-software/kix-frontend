@@ -19,13 +19,44 @@ class Component {
 
     public config: ChartConfiguration = null;
     private chart: Chart;
+    private updateTimeout;
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
-        this.config = input.config;
+        if (!this.config) {
+            this.setConfig(input.config);
+        }
+        if (this.updateTimeout) {
+            clearTimeout(this.updateTimeout);
+        }
+        this.updateTimeout = setTimeout(() => {
+            this.setConfig(input.config);
+            if (this.chart) {
+                this.chart.update();
+            }
+            this.updateTimeout = null;
+        }, 600);
+    }
+
+    private setConfig(config: ChartConfiguration): void {
+        if (config) {
+            if (!this.config) {
+                this.config = {};
+            }
+            if (!this.config.data) {
+                this.config.data = {};
+            }
+            this.config.data.datasets = config.data ? [...config.data.datasets] : [];
+            this.config.data.labels = config.data ? [...config.data.labels] : [];
+            this.config.options = config.options;
+            this.config.plugins = config.plugins;
+            this.config.type = config.type;
+        } else {
+            this.config = null;
+        }
         if (this.config) {
             if (!this.config.options) {
                 this.config.options = { animation: { duration: 600 } };
@@ -35,14 +66,6 @@ class Component {
             this.config.options.responsive = true;
             this.config.options.maintainAspectRatio = false;
         }
-
-        if (this.chart) {
-            this.chart.update();
-        }
-    }
-
-    public onUpdate(): void {
-        this.createChart();
     }
 
     public onMount(): void {
