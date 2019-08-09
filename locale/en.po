@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2019-08-07 13:04+0000\n"
-"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
+"PO-Revision-Date: 2019-08-08 14:32+0000\n"
+"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: English <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/en/>\n"
 "Language: en\n"
@@ -215,9 +215,6 @@ msgstr ""
 msgid "Automation"
 msgstr ""
 
-msgid "Automation: Notification"
-msgstr ""
-
 msgid "Automation: Notifications"
 msgstr ""
 
@@ -334,6 +331,9 @@ msgid ""
 "new tab"
 msgstr ""
 
+msgid "Closed at"
+msgstr ""
+
 msgid "Close Dialog"
 msgstr ""
 
@@ -342,9 +342,6 @@ msgstr ""
 
 msgid "Close Sidebars"
 msgstr ""
-
-msgid "Closing time"
-msgstr "Closed at"
 
 msgid "CMDB"
 msgstr "Assets"
@@ -377,6 +374,9 @@ msgid "Communication: Email"
 msgstr ""
 
 msgid "Communication: Email: Email Accounts"
+msgstr ""
+
+msgid "Communication: Email: Email Addresses"
 msgstr ""
 
 msgid "Communication: Email: Email Filters"
@@ -604,10 +604,8 @@ msgstr ""
 msgid "Edit {0}"
 msgstr ""
 
-#, fuzzy
-#| msgid "Edit Account"
 msgid "Edit Account"
-msgstr "Edit Email Account"
+msgstr ""
 
 msgid "Edit Address"
 msgstr ""
@@ -648,10 +646,8 @@ msgstr ""
 msgid "Edit Links"
 msgstr ""
 
-#, fuzzy
-#| msgid "Config Item Information"
 msgid "Edit Notification"
-msgstr "Asset Information"
+msgstr ""
 
 msgid "Edit Object"
 msgstr ""
@@ -776,10 +772,8 @@ msgstr ""
 msgid "expected time required:"
 msgstr ""
 
-#, fuzzy
-#| msgid "CMDB Explorer"
 msgid "Explorer"
-msgstr "Asset Explorer"
+msgstr ""
 
 msgid "external"
 msgstr ""
@@ -2367,6 +2361,9 @@ msgstr ""
 msgid "New"
 msgstr ""
 
+msgid "New Account"
+msgstr ""
+
 msgid "New Address"
 msgstr ""
 
@@ -2386,9 +2383,6 @@ msgid "New Config Item"
 msgstr "New Asset"
 
 msgid "New Contact"
-msgstr ""
-
-msgid "New Email Account"
 msgstr ""
 
 msgid "New Email Filter"
@@ -2523,31 +2517,23 @@ msgstr ""
 msgid "No, thank you"
 msgstr ""
 
-#, fuzzy
-#| msgid "Config Item Information"
 msgid "Notification"
-msgstr "Asset Information"
+msgstr "Notification"
 
-#, fuzzy
-#| msgid "Config Item Information"
 msgid "Notification Information"
-msgstr "Asset Information"
+msgstr "Notification Information"
 
 msgid "Notification Methods"
+msgstr "Notification Methods"
+
+msgid "Notification Options"
 msgstr "Notification Options"
 
-#, fuzzy
-#| msgid "Config Item Information"
-msgid "Notification Options"
-msgstr "Asset Information"
-
 msgid "Notifications"
-msgstr ""
+msgstr "Notifications"
 
-#, fuzzy
-#| msgid "Config Item successfully created."
 msgid "Notification successfully created."
-msgstr "Asset successfully created."
+msgstr "Notification successfully created."
 
 msgid "Notification Text"
 msgstr ""
@@ -2909,6 +2895,9 @@ msgstr ""
 msgid "Role successfully created."
 msgstr ""
 
+msgid "Row"
+msgstr ""
+
 msgid "Row {0} of the file with {1} {2}: could not import{3}. How to continue?"
 msgstr ""
 
@@ -2922,9 +2911,6 @@ msgid "Save"
 msgstr ""
 
 msgid "Save Search"
-msgstr ""
-
-msgid "Save Settings."
 msgstr ""
 
 msgid "Search"
@@ -2993,10 +2979,8 @@ msgstr ""
 msgid "Search successfully saved."
 msgstr "Search successfully saved."
 
-#, fuzzy
-#| msgid "Config Item successfully created."
 msgid "Search template successfully removed."
-msgstr "Asset successfully created."
+msgstr ""
 
 msgid "Search Tickets"
 msgstr ""
@@ -3018,6 +3002,9 @@ msgstr ""
 
 msgid "Select Config Item Class"
 msgstr "Select Asset Class"
+
+msgid "Selected {0} ({1})"
+msgstr ""
 
 msgid "Selected Search Criteria"
 msgstr ""
@@ -3431,26 +3418,25 @@ msgstr ""
 msgid "Update Email Address"
 msgstr ""
 
-msgid "Update FAQ Artikel"
+msgid "Update Email Filter"
+msgstr ""
+
+msgid "Update FAQ Article"
 msgstr ""
 
 msgid "Update FAQ Category"
 msgstr ""
 
-msgid "Update Filter"
+msgid "Update Key"
 msgstr ""
 
-#, fuzzy
-#| msgid "Update Queue"
-msgid "Update Key"
-msgstr "Update Team"
-
-#, fuzzy
-#| msgid "Config Item Information"
 msgid "Update Notification"
-msgstr "Asset Information"
+msgstr ""
 
 msgid "Update Organisation"
+msgstr ""
+
+msgid "Update Preferences"
 msgstr ""
 
 msgid "Update Priority"
@@ -3578,6 +3564,9 @@ msgstr ""
 
 msgid "ZIP"
 msgstr ""
+
+#~ msgid "Closing time"
+#~ msgstr "Closed at"
 
 #~ msgid "Config Item class. Can not be changed."
 #~ msgstr "Asset Class. Can not be changed."
