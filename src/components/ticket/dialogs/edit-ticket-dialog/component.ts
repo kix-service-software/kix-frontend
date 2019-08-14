@@ -71,7 +71,7 @@ class Component {
             if (validationError) {
                 this.showValidationError(result);
             } else {
-                DialogService.getInstance().setMainDialogLoading(true, "Update Ticket");
+                DialogService.getInstance().setMainDialogLoading(true, "Translatable#Update Ticket");
                 const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
                     TicketDetailsContext.CONTEXT_ID
                 );

@@ -48,18 +48,23 @@ export class PermissionLabelProvider extends LabelProvider<Permission> {
                 break;
             case PermissionProperty.CREATE:
                 displayValue = 'Create';
+                translatable = false;
                 break;
             case PermissionProperty.READ:
                 displayValue = 'Read';
+                translatable = false;
                 break;
             case PermissionProperty.UPDATE:
                 displayValue = 'Update';
+                translatable = false;
                 break;
             case PermissionProperty.DELETE:
                 displayValue = 'Delete';
+                translatable = false;
                 break;
             case PermissionProperty.DENY:
                 displayValue = 'Deny';
+                translatable = false;
                 break;
             default:
                 displayValue = await super.getPropertyText(property, short, translatable);
