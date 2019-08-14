@@ -49,6 +49,12 @@ export abstract class SearchDefinition {
         return [];
     }
 
+    public async getValueNodesForAutocomplete(
+        property: string, values: Array<string | number>, parameter: Array<[string, any]>
+    ): Promise<TreeNode[]> {
+        return [];
+    }
+
     public async getTreeNodes(property: string, parameter: Array<[string, any]>): Promise<TreeNode[]> {
         return [];
     }
