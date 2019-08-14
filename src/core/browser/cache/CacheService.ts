@@ -118,7 +118,7 @@ export class CacheService {
             case KIXObjectType.FAQ_ARTICLE:
                 cacheKeyPrefixes.push(KIXObjectType.FAQ_CATEGORY);
                 break;
-            case KIXObjectType.CONFIG_ITEM_CLASS:
+            case KIXObjectType.CONFIG_ITEM:
             case KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION:
                 cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM_CLASS);
                 break;
@@ -153,7 +153,6 @@ export class CacheService {
             case KIXObjectType.TICKET_STATE:
             case KIXObjectType.TICKET_TYPE:
             case KIXObjectType.CONFIG_ITEM_CLASS:
-            case KIXObjectType.TICKET_PRIORITY:
                 cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
                 break;
             case KIXObjectType.TRANSLATION_PATTERN:
