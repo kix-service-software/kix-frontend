@@ -133,7 +133,7 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
             ));
             fields.push(new FormField<number>(
                 'Translatable#State', TicketProperty.STATE_ID, 'ticket-input-state', true, 'Translatable#Helptext_Tickets_TicketCreate_State', null,
-                new FormFieldValue(4)
+                new FormFieldValue(2)
             ));
 
             const group = new FormGroup('Translatable#Ticket Data', fields);
