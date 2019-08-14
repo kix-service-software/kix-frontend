@@ -14,7 +14,6 @@ import {
     TreeNode, FilterCriteria, FilterDataType,
     FilterType, KIXObjectType, InputFieldTypes, DateTimeUtil
 } from '../../../../../core/model';
-import { isArray } from 'util';
 import { SearchService } from '../../../../../core/browser/kix/search/SearchService';
 
 export class FormSearchValue {
@@ -137,11 +136,18 @@ export class FormSearchValue {
         }
     }
 
-    public setCurrentValue(value: any): void {
+    public async setCurrentValue(value: any, parameter: Array<[string, any]>): Promise<void> {
         this.currentValue = value;
         this.currentValueNodes = [];
         if (this.isDropdown) {
-            if (isArray(value)) {
+            if (this.isAutocomplete && value) {
+                this.nodes = await this.searchDefinition.getValueNodesForAutocomplete(
+                    this.currentPropertyNode.id,
+                    Array.isArray(value) ? value : [value],
+                    parameter
+                );
+            }
+            if (Array.isArray(value)) {
                 const valueNodes = [];
                 value.forEach((v) => {
                     const node = this.getSelectedNode(v);

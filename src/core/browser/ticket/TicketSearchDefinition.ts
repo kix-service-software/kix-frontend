@@ -252,7 +252,7 @@ export class TicketSearchDefinition extends SearchDefinition {
             const filter = await OrganisationService.getInstance().prepareFullTextFilter(searchValue);
             const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit);
             const organisations = await KIXObjectService.loadObjects<Organisation>(
-                KIXObjectType.ORGANISATION, null, loadingOptions, null, false
+                KIXObjectType.ORGANISATION, null, loadingOptions, null, true
             );
             const nodes = [];
             for (const c of organisations) {
@@ -264,7 +264,7 @@ export class TicketSearchDefinition extends SearchDefinition {
             const filter = await ContactService.getInstance().prepareFullTextFilter(searchValue);
             const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit);
             const contacts = await KIXObjectService.loadObjects<Contact>(
-                KIXObjectType.CONTACT, null, loadingOptions, null, false
+                KIXObjectType.CONTACT, null, loadingOptions, null, true
             );
             const nodes = [];
             for (const c of contacts) {
@@ -273,6 +273,34 @@ export class TicketSearchDefinition extends SearchDefinition {
             }
             return nodes;
         }
+    }
+
+    public async getValueNodesForAutocomplete(property: string, values: Array<string | number>): Promise<TreeNode[]> {
+        const nodes: TreeNode[] = [];
+        if (Array.isArray(values) && !!values.length) {
+            switch (property) {
+                case TicketProperty.ORGANISATION_ID:
+                    const organisations = await KIXObjectService.loadObjects<Organisation>(
+                        KIXObjectType.ORGANISATION, values, null, null, true
+                    ).catch((error) => []);
+                    for (const o of organisations) {
+                        const displayValue = await LabelService.getInstance().getText(o);
+                        nodes.push(new TreeNode(o.ID, displayValue, new ObjectIcon(o.KIXObjectType, o.ID)));
+                    }
+                    break;
+                case TicketProperty.CONTACT_ID:
+                    const contacts = await KIXObjectService.loadObjects<Contact>(
+                        KIXObjectType.CONTACT, values, null, null, true
+                    ).catch((error) => []);
+                    for (const c of contacts) {
+                        const displayValue = await LabelService.getInstance().getText(c);
+                        nodes.push(new TreeNode(c.ID, displayValue, new ObjectIcon(c.KIXObjectType, c.ID)));
+                    }
+                    break;
+                default:
+            }
+        }
+        return nodes;
     }
 
     private getFulltextCriteria(value: string): FilterCriteria[] {

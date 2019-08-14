@@ -74,7 +74,7 @@ class Component implements IKIXObjectSearchListener {
                 const parameter = this.getSearchParameter(formInstance);
                 await searchValue.setPropertyNode(property, parameter);
                 searchValue.setOperationNode(null, criteria.operator);
-                searchValue.setCurrentValue(criteria.value);
+                searchValue.setCurrentValue(criteria.value, parameter);
                 this.state.searchValues.push(searchValue);
                 await this.provideFilterCriteria(searchValue);
             }

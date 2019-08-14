@@ -353,6 +353,50 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         return [];
     }
 
+    public async getValueNodesForAutocomplete(
+        property: string, values: Array<string | number>, parameter: Array<[string, any]>
+    ): Promise<TreeNode[]> {
+        const classParameter = parameter.find((p) => p[0] === ConfigItemProperty.CLASS_ID);
+        const input = await ConfigItemClassAttributeUtil.getAttributeInput(
+            property, classParameter ? classParameter[1] : null
+        );
+        let nodes: TreeNode[] = [];
+        if (input && Array.isArray(values) && !!values.length) {
+            switch (input.Type) {
+                case 'CIClassReference':
+                    const configItems = await KIXObjectService.loadObjects<ConfigItem>(
+                        KIXObjectType.CONFIG_ITEM, values, null, null, true
+                    ).catch((error) => [] as ConfigItem[]);
+                    nodes = configItems ? configItems.map(
+                        (ci) => new TreeNode(
+                            ci.ConfigItemID, ci.Name, new ObjectIcon(ci.KIXObjectType, ci.ConfigItemID)
+                        )
+                    ) : [];
+                    break;
+                case 'Organisation':
+                    const organisations = await KIXObjectService.loadObjects<Organisation>(
+                        KIXObjectType.ORGANISATION, values, null, null, true
+                    ).catch((error) => []);
+                    for (const o of organisations) {
+                        const displayValue = await LabelService.getInstance().getText(o);
+                        nodes.push(new TreeNode(o.ID, displayValue, new ObjectIcon(o.KIXObjectType, o.ID)));
+                    }
+                    break;
+                case 'Contact':
+                    const contacts = await KIXObjectService.loadObjects<Contact>(
+                        KIXObjectType.CONTACT, values, null, null, true
+                    ).catch((error) => []);
+                    for (const c of contacts) {
+                        const displayValue = await LabelService.getInstance().getText(c);
+                        nodes.push(new TreeNode(c.ID, displayValue, new ObjectIcon(c.KIXObjectType, c.ID)));
+                    }
+                    break;
+                default:
+            }
+        }
+        return nodes;
+    }
+
     public async getTableColumnConfiguration(searchParameter: Array<[string, any]>): Promise<IColumnConfiguration[]> {
         const classParameter = searchParameter.find((p) => p[0] === ConfigItemProperty.CLASS_ID);
         let attributes: AttributeDefinition[];
@@ -390,7 +434,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
     }
 
     private getColumn(attribute: AttributeDefinition): IColumnConfiguration {
-        let type = DataType.STRING;
+        let type;
         switch (attribute.Input.Type) {
             case 'Date':
                 type = DataType.DATE;
