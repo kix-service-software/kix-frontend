@@ -90,7 +90,6 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
         return property === FAQArticleProperty.APPROVED
             || property === FAQArticleProperty.CATEGORY_ID
             || property === FAQArticleProperty.VALID_ID
-            || property === FAQArticleProperty.VISIBILITY
             || property === FAQArticleProperty.LANGUAGE
             || property === FAQArticleProperty.KEYWORDS
             || property === FAQArticleProperty.CREATED_BY
@@ -107,7 +106,6 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
         components.set(FAQArticleProperty.VALID_ID, 'valid-input');
         components.set(FAQArticleProperty.CATEGORY_ID, 'faq-category-input');
         components.set(FAQArticleProperty.LANGUAGE, 'language-input');
-        components.set(FAQArticleProperty.VISIBILITY, 'faq-visibility-input');
         return components;
     }
 
@@ -183,9 +181,6 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
             ));
             criteria.push(new FilterCriteria(
                 FAQArticleProperty.FIELD_6, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
-            ));
-            criteria.push(new FilterCriteria(
-                FAQArticleProperty.VISIBILITY, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
             ));
             criteria.push(new FilterCriteria(
                 FAQArticleProperty.KEYWORDS, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
