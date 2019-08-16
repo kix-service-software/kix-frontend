@@ -45,7 +45,7 @@ export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
             "Translatable#Cancel", "Translatable#Save"
         ]);
         const dialogContext = await ContextService.getInstance().getContextByTypeAndMode(
-            this.objectType, ContextMode.EDIT
+            this.objectType, [ContextMode.EDIT, ContextMode.EDIT_ADMIN]
         );
         if (dialogContext) {
             dialogContext.setAdditionalInformation(AdditionalContextInformation.FORM_ID, this.state.formId);
@@ -54,7 +54,7 @@ export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
 
     public async onDestroy(): Promise<void> {
         const dialogContext = await ContextService.getInstance().getContextByTypeAndMode(
-            this.objectType, ContextMode.EDIT
+            this.objectType, [ContextMode.EDIT, ContextMode.EDIT_ADMIN]
         );
         if (dialogContext) {
             dialogContext.resetAdditionalInformation();

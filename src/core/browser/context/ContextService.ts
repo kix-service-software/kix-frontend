@@ -106,7 +106,8 @@ export class ContextService {
 
     public async setDialogContext(
         contextId: string, objectType?: KIXObjectType, contextMode?: ContextMode, objectId?: string | number,
-        resetContext?: boolean, title?: string, singleTab?: boolean, icon?: string | ObjectIcon, formId?: string
+        resetContext?: boolean, title?: string, singleTab?: boolean, icon?: string | ObjectIcon,
+        formId?: string, deleteForm: boolean = true
     ): Promise<void> {
         const oldContext = this.getActiveContext();
 
@@ -135,10 +136,14 @@ export class ContextService {
             if (objectId) {
                 await context.setObjectId(objectId);
             }
-            context.setAdditionalInformation(AdditionalContextInformation.FORM_ID, formId);
 
-            FormService.getInstance().deleteFormInstance(formId);
-            await FormService.getInstance().getFormInstance(formId);
+            if (formId) {
+                context.setAdditionalInformation(AdditionalContextInformation.FORM_ID, formId);
+                if (deleteForm) {
+                    FormService.getInstance().deleteFormInstance(formId);
+                }
+                await FormService.getInstance().getFormInstance(formId);
+            }
 
             await context.initContext();
 
@@ -171,9 +176,19 @@ export class ContextService {
     }
 
     public async getContextByTypeAndMode<T extends Context = Context>(
-        objectType: KIXObjectType, contextMode: ContextMode = ContextMode.DETAILS
+        objectType: KIXObjectType, contextMode: ContextMode | ContextMode[] = ContextMode.DETAILS
     ): Promise<T> {
-        return (await ContextFactory.getInstance().getContext(null, objectType, contextMode) as T);
+        if (!Array.isArray(contextMode)) {
+            contextMode = [contextMode];
+        }
+        let context;
+        for (const mode of contextMode) {
+            context = await ContextFactory.getInstance().getContext(null, objectType, mode);
+            if (context) {
+                break;
+            }
+        }
+        return context as T;
     }
 
     public getHistory(limit: number = 10): ContextHistoryEntry[] {
