@@ -10,7 +10,8 @@
 export class AbstractComponentState {
 
     public constructor(
-        public translations: any = {}
+        public translations: any = {},
+        public formId: string = null
     ) { }
 
 }

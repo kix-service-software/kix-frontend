@@ -33,7 +33,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        const context = await ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
         this.contextChanged(null, context, ContextType.MAIN, null, null);
         ContextService.getInstance().registerListener({
             constexServiceListenerId: 'object-details-component',
@@ -46,7 +46,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         contextId: string, context: Context, type: ContextType, history: boolean, oldContext: Context
     ): Promise<void> {
         if (type === ContextType.MAIN && context.getDescriptor().contextMode === ContextMode.DETAILS) {
-            this.context = await ContextService.getInstance().getActiveContext(ContextType.MAIN);
+            this.context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
 
             if (this.context.getDescriptor().contextMode !== ContextMode.DETAILS) {
                 this.state.error = 'No details context available.';

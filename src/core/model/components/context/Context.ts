@@ -15,7 +15,7 @@ import { KIXObject, KIXObjectType } from '../..';
 import { ObjectIcon } from '../../kix';
 import { ContextDescriptor } from './ContextDescriptor';
 import { BreadcrumbInformation } from '../router';
-import { KIXObjectService, FormService } from '../../../browser';
+import { KIXObjectService, FormService, AdditionalContextInformation } from '../../../browser';
 import { ContextMode } from './ContextMode';
 import { FormContext } from '../form/FormContext';
 
@@ -84,8 +84,15 @@ export abstract class Context {
         this.additionalInformation.set(key, value);
     }
 
-    public resetAdditionalInformation(): void {
-        this.additionalInformation = new Map();
+    public resetAdditionalInformation(keepFormId: boolean = true): void {
+        const newInformations = new Map();
+        if (keepFormId && this.additionalInformation.has(AdditionalContextInformation.FORM_ID)) {
+            newInformations.set(
+                AdditionalContextInformation.FORM_ID,
+                this.additionalInformation.get(AdditionalContextInformation.FORM_ID)
+            );
+        }
+        this.additionalInformation = newInformations;
     }
 
     public setDialogSubscriberId(subscriberId: string): void {
