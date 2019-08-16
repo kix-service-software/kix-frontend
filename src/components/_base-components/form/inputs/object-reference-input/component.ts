@@ -87,7 +87,7 @@ class Component extends FormInputComponent<string | number, ComponentState> {
     private findNode(id: any, nodes: TreeNode[] = this.state.nodes): TreeNode {
         let returnNode: TreeNode;
         if (Array.isArray(nodes)) {
-            returnNode = nodes.find((n) => n.id === id);
+            returnNode = nodes.find((n) => n.id.toString() === id.toString());
             if (!returnNode) {
                 for (const node of nodes) {
                     if (node.children && Array.isArray(node.children)) {

@@ -81,7 +81,7 @@ export class TicketChartFactory {
                 if (viewAbleTypesConfig && viewAbleTypesConfig.length) {
                     const types = viewAbleTypesConfig[0].Value;
                     filter = [new FilterCriteria(
-                        TicketStateProperty.TYPE_NAME, SearchOperator.IN, FilterDataType.NUMERIC, FilterType.AND, types
+                        TicketStateProperty.TYPE_NAME, SearchOperator.IN, FilterDataType.STRING, FilterType.AND, types
                     )];
                 }
                 break;

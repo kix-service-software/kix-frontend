@@ -105,10 +105,14 @@ export abstract class KIXObjectService implements IKIXObjectService {
             icon.ObjectID = response[responseProperty];
             if (create) {
                 await this.createIcons(token, clientRequestId, icon)
-                    .catch(() => { return; });
+                    .catch(() => {
+                        // be silent
+                    });
             } else {
                 await this.updateIcon(token, clientRequestId, icon)
-                    .catch(() => { return; });
+                    .catch(() => {
+                        // be silent
+                    });
             }
         }
 

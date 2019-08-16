@@ -13,7 +13,8 @@ import {
     Attachment, KIXObjectType, Ticket, TicketProperty, FilterDataType, FilterCriteria, FilterType,
     TreeNode, ObjectIcon, Service, TicketPriority, TicketType,
     TicketState, StateType, KIXObject, Sla, TableFilterCriteria, User, KIXObjectLoadingOptions,
-    KIXObjectSpecificLoadingOptions, Article, KIXObjectProperty
+    KIXObjectSpecificLoadingOptions, Article, CreateTicketArticleOptions, ArticleProperty,
+    Channel, Queue
 } from '../../model';
 import { TicketParameterUtil } from './TicketParameterUtil';
 import { KIXObjectService } from '../kix';
@@ -23,6 +24,7 @@ import { TicketSocketClient } from './TicketSocketClient';
 import { AgentService } from '../application/AgentService';
 import { QueueService } from './admin';
 import { InlineContent } from '../components';
+import { PlaceholderService } from '../placeholder';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -80,6 +82,48 @@ export class TicketService extends KIXObjectService<Ticket> {
 
     protected async preparePredefinedValues(forUpdate: boolean): Promise<Array<[string, any]>> {
         return await TicketParameterUtil.getPredefinedParameter(forUpdate);
+    }
+
+    protected async prepareDependendValues(
+        parameter: Array<[string, any]>, createOptions?: CreateTicketArticleOptions
+    ): Promise<void> {
+        await this.addQueueSignature(parameter, createOptions);
+    }
+
+    private async addQueueSignature(
+        parameter: Array<[string, any]>, createOptions?: CreateTicketArticleOptions
+    ): Promise<void> {
+        const articleBodyParam = parameter.find((p) => p[0] === ArticleProperty.BODY);
+        const channelParam = parameter.find((p) => p[0] === ArticleProperty.CHANNEL_ID);
+        if (articleBodyParam && channelParam && channelParam[1]) {
+            const channels = await KIXObjectService.loadObjects<Channel>(
+                KIXObjectType.CHANNEL, [channelParam[1]], null, null, true
+            ).catch(() => []);
+            if (channels && channels[0] && channels[0].Name === 'email') {
+                let queueId;
+                if (createOptions && createOptions.ticketId) {
+                    const tickets = await KIXObjectService.loadObjects<Ticket>(
+                        KIXObjectType.TICKET, [createOptions.ticketId], null, null, true
+                    ).catch(() => [] as Ticket[]);
+                    queueId = tickets && !!tickets.length ? tickets[0].QueueID : null;
+                } else {
+                    const queueParam = parameter.find((p) => p[0] === TicketProperty.QUEUE_ID);
+                    queueId = queueParam ? queueParam[1] : null;
+                }
+                if (queueId) {
+                    const queues = await KIXObjectService.loadObjects<Queue>(
+                        KIXObjectType.QUEUE, [queueId], null, null, true
+                    );
+                    const queue = queues && !!queues.length ? queues[0] : null;
+                    if (queue && queue.Signature) {
+                        const preparedSignature = await PlaceholderService.getInstance().replacePlaceholders(
+                            queue.Signature
+                        );
+                        articleBodyParam[1] += `\n\n${preparedSignature}`;
+                    }
+                }
+            }
+        }
     }
 
     public async loadArticleAttachment(ticketId: number, articleId: number, attachmentId: number): Promise<Attachment> {
