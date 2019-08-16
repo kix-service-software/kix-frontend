@@ -40,7 +40,7 @@ export class AgentSocketClient extends SocketClient {
 
     public async getCurrentUser(useCache: boolean = true): Promise<User> {
         if (!useCache) {
-            await CacheService.getInstance().deleteKeys(KIXObjectType.CURRENT_USER);
+            CacheService.getInstance().deleteKeys(KIXObjectType.CURRENT_USER);
         }
 
         if (await CacheService.getInstance().has(KIXObjectType.CURRENT_USER, KIXObjectType.CURRENT_USER)) {
@@ -145,7 +145,7 @@ export class AgentSocketClient extends SocketClient {
             this.agentSocket.on(
                 AgentEvent.SET_PREFERENCES_FINISHED, async (result: SetPreferencesResponse) => {
                     if (result.requestId === requestId) {
-                        await CacheService.getInstance().deleteKeys(KIXObjectType.PERSONAL_SETTINGS);
+                        CacheService.getInstance().deleteKeys(KIXObjectType.PERSONAL_SETTINGS);
                         this.currentUserRequestPromise = null;
                         window.clearTimeout(timeout);
                         resolve(result);

@@ -27,11 +27,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <span>
                         <if(state.hasText)>${state.propertyDisplayText}</if>
                     </span>
-                    <if(state.propertyIcon)>
-                        <icon icon=state.propertyIcon/>
-                    </if>
                 </@content>
             </link-target>
+            <if(state.propertyIcon)>
+                <icon icon=state.propertyIcon/>
+            </if>
         </else-if>
     </div>
 </div>

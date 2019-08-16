@@ -12,7 +12,7 @@ import {
     KIXObject, KIXObjectType, FilterCriteria, TreeNode,
     KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions, OverlayType, KIXObjectSpecificDeleteOptions,
-    ComponentContent, Error, TableFilterCriteria, CRUD, KIXObjectProperty, User, ValidObject
+    ComponentContent, Error, TableFilterCriteria, CRUD, KIXObjectProperty, User, ValidObject, ObjectIcon
 } from "../../model";
 import { KIXObjectSocketClient } from "./KIXObjectSocketClient";
 import { FormService } from "../form";
@@ -138,7 +138,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         objectType: KIXObjectType, formId: string, createOptions?: KIXObjectSpecificCreateOptions,
         cacheKeyPrefix: string = objectType
     ): Promise<string | number> {
-        const parameter: Array<[string, any]> = await this.prepareFormFields(formId);
+        const parameter: Array<[string, any]> = await this.prepareFormFields(formId, false, createOptions);
         const objectId = await KIXObjectSocketClient.getInstance().createObject(
             objectType, parameter, createOptions, cacheKeyPrefix
         );
@@ -235,7 +235,9 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         await KIXObjectSocketClient.getInstance().deleteObject(objectType, objectId, deleteOptions, cacheKeyPrefix);
     }
 
-    public async prepareFormFields(formId: string, forUpdate: boolean = false): Promise<Array<[string, any]>> {
+    public async prepareFormFields(
+        formId: string, forUpdate: boolean = false, createOptions?: KIXObjectSpecificCreateOptions
+    ): Promise<Array<[string, any]>> {
         const parameter: Array<[string, any]> = [];
 
         const predefinedParameterValues = await this.preparePredefinedValues(forUpdate);
@@ -259,6 +261,9 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                     preparedValue = await this.prepareUpdateValue(property, value.value);
                 } else {
                     preparedValue = await this.prepareCreateValue(property, value.value);
+                    if (property === 'ICON' && preparedValue[1] && !(preparedValue[1] as ObjectIcon).Content) {
+                        preparedValue[1] = null;
+                    }
                 }
                 if (preparedValue) {
                     preparedValue.forEach((pv) => parameter.push([pv[0], pv[1]]));
@@ -267,12 +272,19 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
             key = iterator.next();
         }
+        await this.prepareDependendValues(parameter, createOptions);
 
         return parameter;
     }
 
     protected async prepareUpdateValue(property: string, value: any): Promise<Array<[string, any]>> {
         return await this.prepareCreateValue(property, value);
+    }
+
+    protected async prepareDependendValues(
+        parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions
+    ): Promise<void> {
+        return;
     }
 
     protected async preparePredefinedValues(forUpdate: boolean): Promise<Array<[string, any]>> {

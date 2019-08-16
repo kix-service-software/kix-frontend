@@ -20,7 +20,7 @@ export class SysConfigOptionDefinition extends KIXObject<SysConfigOptionDefiniti
 
     public Value: any;
 
-    public Default: string[];
+    public Default: any;
 
     public Description: string;
 
