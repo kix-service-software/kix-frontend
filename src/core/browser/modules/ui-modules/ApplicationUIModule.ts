@@ -149,25 +149,6 @@ export class UIModule implements IUIModule {
             KIXObjectType.ANY,
             ContextMode.EDIT_BULK
         ));
-
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'new-translation-dialog',
-            new WidgetConfiguration(
-                'new-translation-dialog', 'Translatable#New Translation', [], {},
-                false, false, 'kix-icon-new-gear'
-            ),
-            KIXObjectType.TRANSLATION_PATTERN,
-            ContextMode.CREATE_ADMIN
-        ));
-
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'edit-translation-dialog',
-            new WidgetConfiguration(
-                'edit-translation-dialog', 'Translatable#Edit Translation', [], {}, false, false, 'kix-icon-edit'
-            ),
-            KIXObjectType.TRANSLATION_PATTERN,
-            ContextMode.EDIT_ADMIN
-        ));
     }
 
     private async registerBookmarks(): Promise<void> {

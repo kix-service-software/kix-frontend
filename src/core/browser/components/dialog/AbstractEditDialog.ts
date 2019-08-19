@@ -9,7 +9,7 @@
 
 import {
     ValidationResult, ValidationSeverity, ComponentContent, OverlayType, KIXObjectType,
-    Error, ContextMode, ContextType
+    Error, ContextMode, ContextType, FormContext
 } from "../../../model";
 import { OverlayService } from "../../OverlayService";
 import { DialogService } from "./DialogService";
@@ -48,6 +48,9 @@ export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
             this.objectType, [ContextMode.EDIT, ContextMode.EDIT_ADMIN]
         );
         if (dialogContext) {
+            this.state.formId = await FormService.getInstance().getFormIdByContext(
+                FormContext.EDIT, this.objectType
+            );
             dialogContext.setAdditionalInformation(AdditionalContextInformation.FORM_ID, this.state.formId);
         }
     }

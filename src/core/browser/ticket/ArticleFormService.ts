@@ -122,7 +122,7 @@ export class ArticleFormService extends KIXObjectFormService<Article> {
             const existingField = await formInstance.getFormFieldByProperty(ArticleProperty.SUBJECT);
             if (existingField) {
                 field = existingField;
-                const value = await formInstance.getFormFieldValue<string>(existingField.instanceId);
+                const value = formInstance.getFormFieldValue<string>(existingField.instanceId);
                 if (value) {
                     field.defaultValue = value;
                 }
@@ -157,7 +157,7 @@ export class ArticleFormService extends KIXObjectFormService<Article> {
             const existingField = await formInstance.getFormFieldByProperty(ArticleProperty.BODY);
             if (existingField) {
                 field = existingField;
-                const value = await formInstance.getFormFieldValue<string>(existingField.instanceId);
+                const value = formInstance.getFormFieldValue<string>(existingField.instanceId);
                 if (value) {
                     field.defaultValue = value;
                 }
@@ -178,7 +178,7 @@ export class ArticleFormService extends KIXObjectFormService<Article> {
             const existingField = await formInstance.getFormFieldByProperty(ArticleProperty.ATTACHMENTS);
             if (existingField) {
                 field = existingField;
-                const value = await formInstance.getFormFieldValue<Attachment[]>(existingField.instanceId);
+                const value = formInstance.getFormFieldValue<Attachment[]>(existingField.instanceId);
                 if (value) {
                     field.defaultValue = value;
                 }
@@ -196,7 +196,7 @@ export class ArticleFormService extends KIXObjectFormService<Article> {
             const existingField = await formInstance.getFormFieldByProperty(ArticleProperty.FROM);
             if (existingField) {
                 field = existingField;
-                const value = await formInstance.getFormFieldValue(existingField.instanceId);
+                const value = formInstance.getFormFieldValue(existingField.instanceId);
                 if (value) {
                     field.defaultValue = value;
                 }
@@ -229,7 +229,7 @@ export class ArticleFormService extends KIXObjectFormService<Article> {
             const existingField = await formInstance.getFormFieldByProperty(property);
             if (existingField) {
                 field = existingField;
-                const value = await formInstance.getFormFieldValue(existingField.instanceId);
+                const value = formInstance.getFormFieldValue(existingField.instanceId);
                 if (value) {
                     field.defaultValue = value;
                 }

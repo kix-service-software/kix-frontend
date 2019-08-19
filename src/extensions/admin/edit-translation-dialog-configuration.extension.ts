@@ -43,16 +43,6 @@ export class Extension implements IConfigurationExtension {
                 'Translatable#Pattern', TranslationPatternProperty.VALUE, 'text-area-input', true, 'Translatable#Helptext_i18n_TranslationPatternEdit_Pattern'
             ));
 
-            const languages = await this.getLanguages();
-            languages.sort((a, b) => SortUtil.compareString(a[1], b[1])).forEach((l) => {
-                const languageField = new FormField(
-                    l[1], l[0], 'text-area-input', false,
-                    'Translatable#Helptext_i18n_TranslationPatternEdit_Translation'
-                );
-                languageField.placeholder = 'Translatable#Translation';
-                fields.push(languageField);
-            });
-
             const group = new FormGroup('Translatable#Translations', fields);
 
             const form = new Form(
@@ -62,26 +52,6 @@ export class Extension implements IConfigurationExtension {
             await configurationService.saveConfiguration(form.id, form);
         }
         configurationService.registerForm([FormContext.EDIT], KIXObjectType.TRANSLATION_PATTERN, formId);
-    }
-
-    private async getLanguages(): Promise<Array<[string, string]>> {
-        const configurationService = ConfigurationService.getInstance();
-        const token = configurationService.getServerConfiguration().BACKEND_API_TOKEN;
-
-        const service = KIXObjectServiceRegistry.getServiceInstance(KIXObjectType.SYS_CONFIG_OPTION);
-        const languagesConfig = await service.loadObjects<SysConfigOption>(
-            token, null, KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.DEFAULT_USED_LANGUAGES], null, null
-        );
-
-        const languages: Array<[string, string]> = [];
-        if (languagesConfig && languagesConfig.length) {
-            for (const lang in languagesConfig[0].Value) {
-                if (languagesConfig[0].Value[lang]) {
-                    languages.push([lang, languagesConfig[0].Value[lang]]);
-                }
-            }
-        }
-        return languages;
     }
 
 }
