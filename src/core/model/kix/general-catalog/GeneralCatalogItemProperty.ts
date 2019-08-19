@@ -7,8 +7,12 @@
  * --
  */
 
-export * from './table';
+export enum GeneralCatalogItemProperty {
 
-export { GeneralCatalogService } from './GeneralCatalogService';
-export { GeneralCatalogLabelProvider } from './GeneralCatalogLabelProvider';
-export { GeneralCatalogBrowserFactory } from './GeneralCatalogBrowserFactory';
+    ID = 'ID',
+
+    NAME = 'Name',
+
+    CLASS = 'Class',
+
+}

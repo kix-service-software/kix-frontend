@@ -22,6 +22,13 @@ class Extension implements IAdminModuleExtension {
                             new UIComponentPermission('system/cmdb/classes', [CRUD.CREATE], true),
                             new UIComponentPermission('system/cmdb/classes/*', [CRUD.UPDATE], true)
                         ]
+                    ),
+                    new AdminModule(
+                        null, 'general-catalog', 'Translatable#General Catalog', null,
+                        KIXObjectType.GENERAL_CATALOG_ITEM, 'cmdb-admin-general-catalog', [
+                            new UIComponentPermission('system/generalcatalog', [CRUD.CREATE], true),
+                            new UIComponentPermission('system/generalcatalog/*', [CRUD.UPDATE], true)
+                        ]
                     )
                 ])
         ];

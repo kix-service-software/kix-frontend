@@ -7,8 +7,15 @@
  * --
  */
 
-export * from './table';
+import { AbstractMarkoComponent } from '../../../../core/browser';
+import { ComponentState } from './ComponentState';
 
-export { GeneralCatalogService } from './GeneralCatalogService';
-export { GeneralCatalogLabelProvider } from './GeneralCatalogLabelProvider';
-export { GeneralCatalogBrowserFactory } from './GeneralCatalogBrowserFactory';
+class Component extends AbstractMarkoComponent<ComponentState> {
+
+    public onCreate(): void {
+        this.state = new ComponentState();
+    }
+
+}
+
+module.exports = Component;

@@ -7,8 +7,5 @@
  * --
  */
 
-export * from './table';
-
-export { GeneralCatalogService } from './GeneralCatalogService';
-export { GeneralCatalogLabelProvider } from './GeneralCatalogLabelProvider';
-export { GeneralCatalogBrowserFactory } from './GeneralCatalogBrowserFactory';
+export { GeneralCatalogTableFactory } from './GeneralCatalogTableFactory';
+export { GeneralCatalogTableContentProvider } from './GeneralCatalogTableContentProvider';

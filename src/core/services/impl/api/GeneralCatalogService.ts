@@ -18,6 +18,8 @@ export class GeneralCatalogService extends KIXObjectService {
 
     protected RESOURCE_URI: string = this.buildUri('system', 'generalcatalog');
 
+    protected objectType: KIXObjectType = KIXObjectType.GENERAL_CATALOG_ITEM;
+
     private static INSTANCE: GeneralCatalogService;
 
     public static getInstance(): GeneralCatalogService {
@@ -27,11 +29,9 @@ export class GeneralCatalogService extends KIXObjectService {
         return GeneralCatalogService.INSTANCE;
     }
 
-    public objectType: KIXObjectType = KIXObjectType.GENERAL_CATALOG_ITEM;
-
-
     private constructor() {
         super([new GeneralCatalogItemFactory()]);
+
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -47,9 +47,8 @@ export class GeneralCatalogService extends KIXObjectService {
         let objects = [];
 
         if (objectType === KIXObjectType.GENERAL_CATALOG_ITEM) {
-            const uri = this.buildUri('system', 'generalcatalog');
-            objects = await super.load<GeneralCatalogItem>(
-                token, KIXObjectType.GENERAL_CATALOG_ITEM, uri, loadingOptions, objectIds, 'GeneralCatalogItem'
+            objects = await super.load(
+                token, objectType, this.RESOURCE_URI, loadingOptions, objectIds, 'GeneralCatalogItem'
             );
         }
 

@@ -14,7 +14,7 @@ import {
 } from "../../../model";
 import { ITable, IRowObject, TableValue, RowObject } from "../../table";
 import { SysConfigOptionDefinition } from "../../../model/kix/sysconfig/SysConfigOptionDefinition";
-import { KIXObjectService, SearchOperator, ContextService } from "../..";
+import { KIXObjectService, SearchOperator } from "../..";
 
 export class SysConfigTableContentProvider extends TableContentProvider<SysConfigOptionDefinition> {
 
