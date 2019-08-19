@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2019-08-14 15:32+0000\n"
+"PO-Revision-Date: 2019-08-19 12:17+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: English <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/en/>\n"
@@ -889,187 +889,195 @@ msgid "Helping FAQ Contributions"
 msgstr "Helpfull FAQ articles"
 
 msgid "Helptext_Admin_FAQCategoryCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr "Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_FAQCategoryCreate_Icon"
 msgstr ""
 "Upload an icon, which will be shown together with the category name within "
-"the application"
+"the application."
 
 msgid "Helptext_Admin_FAQCategoryCreate_Name"
-msgstr "The name set here will be shown in the application"
+msgstr ""
 
 msgid "Helptext_Admin_FAQCategoryCreate_ParentCategory"
 msgstr ""
 "If you want to subordinate the new category to an already existing category, "
-"you can choose this here"
+"you can choose this here."
 
 msgid "Helptext_Admin_FAQCategoryCreate_Validity"
-msgstr "The FAQ category can only be used within the system if set “valid”"
+msgstr "The FAQ category can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_FAQCategoryEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr "Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_FAQCategoryEdit_Icon"
 msgstr ""
 "Upload an icon, which will be shown together with the category name within "
-"the application"
+"the application."
 
 msgid "Helptext_Admin_FAQCategoryEdit_Name"
-msgstr "The name set here will be shown in the application"
+msgstr ""
 
 msgid "Helptext_Admin_FAQCategoryEdit_ParentCategory"
 msgstr ""
 "If you want to subordinate the new category to an already existing category, "
-"you can choose this here"
+"you can choose this here."
 
 msgid "Helptext_Admin_FAQCategoryEdit_Validity"
-msgstr "The FAQ category can only be used within the system if set “valid”"
+msgstr "The FAQ category can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_MailAccountCreate_AcceptKIXHeader"
 msgstr ""
 "Sometimes incoming emails already contain KIX Header. If this option is set, "
 "the KIX Header can already be interpreted, whether or not any specific "
-"options are configured"
+"options are configured."
 
 msgid "Helptext_Admin_MailAccountCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr "Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_MailAccountCreate_Dispachting"
 msgstr ""
 "Choose the team, which is supposed to receive incoming emails from this "
-"account. It is defined within the SysConfig which team is set as “default”"
+"account. It is defined within the SysConfig which team is set as “default”."
 
 msgid "Helptext_Admin_MailAccountCreate_Host"
 msgstr "Insert the host name, holding the account. Example: mail.example.com"
 
 msgid "Helptext_Admin_MailAccountCreate_IMAPFolder"
 msgstr ""
-"Only modify this if you need to fetch mail from a different folder than INBOX"
+"Only modify this if you need to fetch mail from a different folder than "
+"INBOX."
 
 msgid "Helptext_Admin_MailAccountCreate_Password"
-msgstr "Insert the password for the account to enable connection with the host"
+msgstr "Insert the password for the account to enable connection with the host."
 
 msgid "Helptext_Admin_MailAccountCreate_Type."
 msgstr ""
-"IMAP/=Messages are only copied to KIX – the originals stay at the server\n"
-"POP/=Messages are downloaded from the server\n"
-"/S=Connection is SSL encrypted\n"
-"/TLS=Connection is TLS encrpyted"
+"IMAP/=Messages are only copied to KIX – the originals stay at the server; "
+"POP/=Messages are downloaded from the server; /S=Connection is SSL encrypted;"
+" /TLS=Connection is TLS encrpyted"
 
 msgid "Helptext_Admin_MailAccountCreate_UserName"
 msgstr ""
 "Insert the user name for the account you want to configure in KIX, to enable "
-"connection with the host"
+"connection with the host."
 
 msgid "Helptext_Admin_MailAccountCreate_Validity"
-msgstr "The email account can only be used within the system if set “valid”"
+msgstr "The email account can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_MailAccountEdit_AcceptKIXHeader"
 msgstr ""
 "Sometimes incoming emails already contain KIX Header. If this option is set, "
 "the KIX Header can already be interpreted, whether or not any specific "
-"options are configured"
+"options are configured."
 
 msgid "Helptext_Admin_MailAccountEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr "Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_MailAccountEdit_Dispachting"
 msgstr ""
 "Choose the team, which is supposed to receive incoming emails from this "
-"account. It is defined within the SysConfig which team is set as “default”"
+"account. It is defined within the SysConfig which team is set as “default”."
 
 msgid "Helptext_Admin_MailAccountEdit_Host"
 msgstr "Insert the host name, holding the account. Example: mail.example.com"
 
 msgid "Helptext_Admin_MailAccountEdit_IMAPFolder"
 msgstr ""
-"Only modify this if you need to fetch mail from a different folder than INBOX"
+"Only modify this if you need to fetch mail from a different folder than "
+"INBOX."
 
 msgid "Helptext_Admin_MailAccountEdit_Password"
-msgstr "Insert the password for the account to enable connection with the host"
+msgstr "Insert the password for the account to enable connection with the host."
 
 msgid "Helptext_Admin_MailAccountEdit_Type."
 msgstr ""
-"IMAP/=Messages are only copied to KIX – the originals stay at the server\n"
-"POP/=Messages are downloaded from the server\n"
-"/S=Connection is SSL encrypted\n"
-"/TLS=Connection is TLS encrpyted"
+"IMAP/=Messages are only copied to KIX – the originals stay at the server; "
+"POP/=Messages are downloaded from the server; /S=Connection is SSL encrypted;"
+" /TLS=Connection is TLS encrpyted"
 
 msgid "Helptext_Admin_MailAccountEdit_UserName"
 msgstr ""
 "Insert the user name for the account you want to configure in KIX, to enable "
-"connection with the host"
+"connection with the host."
 
 msgid "Helptext_Admin_MailAccountEdit_Validity"
-msgstr "The email account can only be used within the system if set “valid”"
+msgstr "The email account can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_MailFilterCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr "Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_MailFilterCreate_FilterConditions"
-msgstr ""
+msgstr "At least one filter condition is necessary for the filter to work."
 
 msgid "Helptext_Admin_MailFilterCreate_Name"
-msgstr "Insert a name for the email filter"
+msgstr ""
 
 msgid "Helptext_Admin_MailFilterCreate_SetEmailHeaders"
-msgstr ""
-"Choose which email header of incoming emails should be examined (one "
-"attribute per line). Available are all header configured in the SysConfig"
+msgstr "At least one email header is necessary for the filter to work."
 
 msgid "Helptext_Admin_MailFilterCreate_StopAfterMatch"
 msgstr ""
 "If this option is set, and the conditions defined here match with an "
-"incoming email, no more other filters will be applied to this email"
+"incoming email, no more other filters will be applied to this email."
 
 msgid "Helptext_Admin_MailFilterCreate_Validity"
-msgstr "The email filter can only be used within the system if set “valid”"
+msgstr "The email filter can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_MailFilterEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr "Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_MailFilterEdit_FilterConditions"
-msgstr ""
+msgstr "At least one filter condition is necessary for the filter to work."
 
 msgid "Helptext_Admin_MailFilterEdit_Name"
-msgstr "Insert a name for the email filter"
+msgstr ""
 
 msgid "Helptext_Admin_MailFilterEdit_SetEmailHeaders"
 msgstr ""
 "Choose which email header of incoming emails should be examined (one "
-"attribute per line). Available are all header configured in the SysConfig"
+"attribute per line). Available are all header configured in the SysConfig."
 
 msgid "Helptext_Admin_MailFilterEdit_StopAfterMatch"
 msgstr ""
 "If this option is set, and the conditions defined here match with an "
-"incoming email, no more other filters will be applied to this email"
+"incoming email, no more other filters will be applied to this email."
 
 msgid "Helptext_Admin_MailFilterEdit_Validity"
-msgstr "The email filter can only be used within the system if set “valid”"
+msgstr "The email filter can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_MailFilter_FilterConditions_EmailHeader"
 msgstr ""
 "Choose which email header of incoming emails should be examined (one "
-"attribute per line). Available are all header configured in the SysConfig"
+"attribute per line). Available are all header configured in the SysConfig."
 
 msgid "Helptext_Admin_MailFilter_FilterConditions_Negate"
 msgstr ""
-"Set this option if the chosen header should not contain the following pattern"
+"Set this option if the chosen header should not contain the following "
+"pattern."
 
 msgid "Helptext_Admin_MailFilter_FilterConditions_Pattern"
 msgstr ""
 "Insert the value/pattern, the chosen header is supposed to match, to trigger "
-"the filter. It is possible to use RegEx"
+"the filter. It is possible to use RegEx."
 
 msgid "Helptext_Admin_MailFilter_SetEmailHeader_EmailHeader"
 msgstr ""
+"Choose which email header will be set for incoming emails, matching the "
+"previously defined filter conditions. Available are all header configured in "
+"the SysConfig."
 
 msgid "Helptext_Admin_MailFilter_SetEmailHeader_Value"
-msgstr ""
+msgstr "Insert the value you want to set for the chosen header attribute."
 
 msgid "Helptext_Admin_MailFilter_Sidebar"
 msgstr ""
+"Incoming emails can be dispatched or filtered based on email headers. "
+"Matching using Regular Expressions is possible. If you want to match only "
+"the email address, use EMAILADDRESS:info@example.com in From, To or Cc. If "
+"you use Regular Expressions, you can set the matched pattern in „()“ and "
+"refer to this by adding „[***]“ in the 'Set Value' action. (only works for "
+"one „()“-argument) Filterconditions are AND-linked."
 
 msgid "Helptext_Admin_NotificationCreate_AdditionalRecipient"
 msgstr ""
@@ -1201,26 +1209,30 @@ msgstr ""
 
 msgid "Helptext_Admin_QueueCreate_FollowUpTicketLock"
 msgstr ""
+"States if an answer to the same ticket will lock this ticket for the last "
+"owner."
 
 msgid "Helptext_Admin_QueueEdit_FollowUpTicketLock"
 msgstr ""
 
 msgid "Helptext_Admin_SysConfigEdit_Default_Value"
-msgstr "Shows the options for this SysConfig key"
+msgstr ""
+"The SysConfig default value cannot be changed. Click the button “Reset to "
+"Default” to restore the default value."
 
 msgid "Helptext_Admin_SysConfigEdit_Description"
-msgstr "Explains what is controlled by this SysConfig key"
+msgstr "Explains how this SysConfig key works."
 
 msgid "Helptext_Admin_SysConfigEdit_Name"
-msgstr "The SysConfig key name cannot be changed"
+msgstr "The SysConfig key name cannot be changed."
 
 msgid "Helptext_Admin_SysConfigEdit_Validity"
 msgstr ""
 "The SysConfig key needs to be set “valid”, for the settings to be activated. "
-"Option is not available for all keys"
+"Option is not available for all keys."
 
 msgid "Helptext_Admin_SysConfigEdit_Value"
-msgstr "Shows the options for this SysConfig key"
+msgstr "SysConfig key value. Needs to consist in valid JSON."
 
 msgid "Helptext_Admin_SystemAddressCreate_Comment"
 msgstr "Insert additional information (only displayed within the admin module)."
@@ -1241,304 +1253,308 @@ msgid "Helptext_Admin_SystemAddressCreate_Validity"
 msgstr "The email address can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_TextModuleCreate_Comment"
-msgstr ""
+msgstr "Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_TextModuleCreate_Keywords"
-msgstr ""
+msgstr "Keywords allow to quickly find and choose text modules."
 
 msgid "Helptext_Admin_TextModuleCreate_Language"
-msgstr ""
+msgstr "Insert the language of the text module."
 
 msgid "Helptext_Admin_TextModuleCreate_Name"
 msgstr ""
 
 msgid "Helptext_Admin_TextModuleCreate_Text"
 msgstr ""
+"Insert the text you want to use as a text module. You can use placeholders."
 
 msgid "Helptext_Admin_TextModuleCreate_Validity"
-msgstr ""
+msgstr "The text module can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_TextModuleEdit_Comment"
-msgstr ""
+msgstr "Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_TextModuleEdit_Keywords"
-msgstr ""
+msgstr "Keywords allow to quickly find and choose text modules."
 
 msgid "Helptext_Admin_TextModuleEdit_Language"
-msgstr ""
+msgstr "Insert the language of the text module."
 
 msgid "Helptext_Admin_TextModuleEdit_Name"
 msgstr ""
 
 msgid "Helptext_Admin_TextModuleEdit_Text"
 msgstr ""
+"Insert the text you want to use as a text module. You can use placeholders."
 
 msgid "Helptext_Admin_TextModuleEdit_Validity"
-msgstr ""
+msgstr "The text module can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_Tickets_PriorityCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr "Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Tickets_PriorityCreate_Icon"
 msgstr ""
 "Upload an icon, which will be shown together with the priority name within "
-"the application"
+"the application."
 
 msgid "Helptext_Admin_Tickets_PriorityCreate_Name"
-msgstr "The name set here will be shown in the application"
+msgstr ""
 
 msgid "Helptext_Admin_Tickets_PriorityCreate_Valid"
-msgstr "The priority can only be used within the system if set “valid”"
+msgstr "The priority can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_Tickets_PriorityEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr "Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Tickets_PriorityEdit_Icon"
 msgstr ""
 "Upload an icon, which will be shown together with the priority name within "
-"the application"
+"the application."
 
 msgid "Helptext_Admin_Tickets_PriorityEdit_Name"
-msgstr "The name set here will be shown in the application"
+msgstr ""
 
 msgid "Helptext_Admin_Tickets_PriorityEdit_Valid"
-msgstr "The priority can only be used within the system if set “valid”"
+msgstr "The priority can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_Tickets_QueueCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr "Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Tickets_QueueCreate_FollowUp"
 msgstr ""
-"States if an answer to the same ticket will lock this ticket for the last "
-"owner"
+"States if an answer to an already closed ticket in this team will open the "
+"ticket again."
 
 msgid "Helptext_Admin_Tickets_QueueCreate_Icon."
 msgstr ""
 "Upload an icon, which will be shown together with the team name within the "
-"application"
+"application."
 
 msgid "Helptext_Admin_Tickets_QueueCreate_Name"
-msgstr "The name set here will be shown in the application"
+msgstr ""
 
 msgid "Helptext_Admin_Tickets_QueueCreate_ParentQueue"
 msgstr ""
 "If you want to subordinate the new team to an already existing team, you can "
-"choose this here"
+"choose this here."
 
 msgid "Helptext_Admin_Tickets_QueueCreate_SenderAddress."
-msgstr "Sender address for emails send by this team"
+msgstr "Sender address for emails send by this team."
 
 msgid "Helptext_Admin_Tickets_QueueCreate_Signature"
 msgstr ""
 "Signature for emails send by this team. It is not possible to insert "
-"pictures. You can use text modules"
+"pictures. You can use placeholders."
 
 msgid "Helptext_Admin_Tickets_QueueCreate_UnlockTimeout"
 msgstr ""
 "If an agent locks a ticket, but does not close the ticket before expiry of "
 "the unlock timeout, the ticket will be opened again and available for other "
-"agents"
+"agents."
 
 msgid "Helptext_Admin_Tickets_QueueCreate_Validity"
-msgstr "The team can only be used within the system if set “valid”"
+msgstr "The team can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_Tickets_QueueEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr "Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Tickets_QueueEdit_FollowUp"
 msgstr ""
-"States if an answer to the same ticket will lock this ticket for the last "
-"owner"
+"States if an answer to an already closed ticket in this team will open the "
+"ticket again."
 
 msgid "Helptext_Admin_Tickets_QueueEdit_Icon."
 msgstr ""
 "Upload an icon, which will be shown together with the team name within the "
-"application"
+"application."
 
 msgid "Helptext_Admin_Tickets_QueueEdit_ParentQueue"
 msgstr ""
 "If you want to subordinate the new team to an already existing team, you can "
-"choose this here"
+"choose this here."
 
 msgid "Helptext_Admin_Tickets_QueueEdit_SenderAddress."
-msgstr "Sender address for emails send by this team"
+msgstr "Sender address for emails send by this team."
 
 msgid "Helptext_Admin_Tickets_QueueEdit_Signature"
 msgstr ""
 "Signature for emails send by this team. It is not possible to insert "
-"pictures. You can use text modules"
+"pictures. You can use placeholders."
 
 msgid "Helptext_Admin_Tickets_QueueEdit_UnlockTimeout"
 msgstr ""
 "If an agent locks a ticket, but does not close the ticket before expiry of "
 "the unlock timeout, the ticket will be opened again and available for other "
-"agents"
+"agents."
 
 msgid "Helptext_Admin_Tickets_QueueEdit_Validity"
-msgstr "The team can only be used within the system if set “valid”"
+msgstr "The team can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_Tickets_StateCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr "Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Tickets_StateCreate_Icon"
 msgstr ""
 "Upload an icon, which will be shown together with the state name within the "
-"application"
+"application."
 
 msgid "Helptext_Admin_Tickets_StateCreate_Name"
-msgstr "The name set here will be shown in the application"
+msgstr ""
 
 msgid "Helptext_Admin_Tickets_StateCreate_Type"
-msgstr "Assign the new State to a group"
+msgstr "The state type groups states."
 
 msgid "Helptext_Admin_Tickets_StateCreate_Valid"
-msgstr "The state can only be used within the system if set “valid”"
+msgstr "The state can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_Tickets_StateEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr "Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Tickets_StateEdit_Icon"
 msgstr ""
 "Upload an icon, which will be shown together with the state name within the "
-"application"
+"application."
 
 msgid "Helptext_Admin_Tickets_StateEdit_Name"
-msgstr "The name set here will be shown in the application"
+msgstr ""
 
 msgid "Helptext_Admin_Tickets_StateEdit_Type"
-msgstr "Assign the new State to a group"
+msgstr "The state type groups states."
 
 msgid "Helptext_Admin_Tickets_StateEdit_Valid"
-msgstr "The state can only be used within the system if set “valid”"
+msgstr "The state can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_Tickets_Tickets_QueueEdit_Name"
 msgstr "The name set here will be shown in the application"
 
 msgid "Helptext_Admin_Tickets_TypeCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr "Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Tickets_TypeCreate_Icon"
 msgstr ""
 "Upload an icon, which will be shown together with the type name within the "
-"application"
+"application."
 
 msgid "Helptext_Admin_Tickets_TypeCreate_Name"
-msgstr "The name set here will be shown in the application"
+msgstr ""
 
 msgid "Helptext_Admin_Tickets_TypeCreate_Valid"
-msgstr "The type can only be used within the system if set “valid”"
+msgstr "The type can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_Tickets_TypeEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr "Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Tickets_TypeEdit_Icon"
 msgstr ""
 "Upload an icon, which will be shown together with the type name within the "
-"application"
+"application."
 
 msgid "Helptext_Admin_Tickets_TypeEdit_Name"
-msgstr "The name set here will be shown in the application"
+msgstr ""
 
 msgid "Helptext_Admin_Tickets_TypeEdit_Valid"
-msgstr "The type can only be used within the system if set “valid”"
+msgstr "The type can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_UserCreate_Preferences_MyQueues"
 msgstr ""
 "Set the default teams, the agent will receive notifications for. An agent "
-"can change this setting in their preferences"
+"can change this setting in their preferences."
 
 msgid "Helptext_Admin_UserCreate_Preferences_UserLanguage"
 msgstr ""
 "Set the default language for the agent, when they log in KIX the first time. "
-"An agent can change their language settings in their preferences"
+"An agent can change their language settings in their preferences."
 
 msgid "Helptext_Admin_UserEdit_Preferences_Language"
 msgstr ""
 "Set the default language for the agent, when they log in KIX the first time. "
-"An agent can change their language settings in their preferences"
+"An agent can change their language settings in their preferences."
 
 msgid "Helptext_Admin_UserEdit_Preferences_MyQueues"
 msgstr ""
 "Set the default teams, the agent will receive notifications for. An agent "
-"can change this setting in their preferences"
+"can change this setting in their preferences."
 
 msgid "Helptext_Admin_Users_RoleCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr "Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Users_RoleCreate_Name"
-msgstr "Insert a name for the role"
+msgstr ""
 
 msgid "Helptext_Admin_Users_RoleCreate_User"
-msgstr "There are only valid agents available"
+msgstr "There are only valid agents available."
 
 msgid "Helptext_Admin_Users_RoleCreate_Valid"
-msgstr "The role can only be used within the system if set “valid”"
+msgstr "The role can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_Users_RoleEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr "Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Users_RoleEdit_Name"
-msgstr "Insert a name for the role"
+msgstr ""
 
 msgid "Helptext_Admin_Users_RoleEdit_User"
-msgstr "There are only valid agents available"
+msgstr "There are only valid agents available."
 
 msgid "Helptext_Admin_Users_RoleEdit_Valid"
-msgstr "The role can only be used within the system if set “valid”"
+msgstr "The role can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_Users_UserCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr "Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Users_UserCreate_Email"
-msgstr "Insert the agents email address"
+msgstr ""
 
 msgid "Helptext_Admin_Users_UserCreate_FirstName"
-msgstr "Insert one or various first names for the agent"
+msgstr ""
 
 msgid "Helptext_Admin_Users_UserCreate_LastName"
-msgstr "Insert a last name for the agent"
+msgstr ""
 
 msgid "Helptext_Admin_Users_UserCreate_Login"
-msgstr "The login name must be unique and cannot be changed afterwards"
+msgstr "The login name must be unique and cannot be changed afterwards."
 
 msgid "Helptext_Admin_Users_UserCreate_Password"
-msgstr "The password can be changed/modified afterwards"
+msgstr "The password can be changed/modified afterwards."
 
 msgid "Helptext_Admin_Users_UserCreate_Phone"
-msgstr "Insert the agents phone number"
+msgstr ""
 
 msgid "Helptext_Admin_Users_UserCreate_Title"
-msgstr "If available, insert a title for the agent"
+msgstr ""
 
 msgid "Helptext_Admin_Users_UserCreate_Valid"
-msgstr "The agent can only login with the user data set here if set “valid”"
+msgstr "The agent can only login with the user data set here if set “valid”."
 
 msgid "Helptext_Admin_Users_UserEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr "Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Users_UserEdit_Email"
-msgstr "Insert the agents email address"
+msgstr ""
 
 msgid "Helptext_Admin_Users_UserEdit_FirstName"
-msgstr "Insert one or various first names for the agent"
+msgstr ""
 
 msgid "Helptext_Admin_Users_UserEdit_LastName"
-msgstr "Insert a last name for the agent"
+msgstr ""
 
 msgid "Helptext_Admin_Users_UserEdit_Login"
-msgstr "The login cannot be changed"
+msgstr "The login cannot be changed."
 
 msgid "Helptext_Admin_Users_UserEdit_Mobile"
-msgstr "Insert the agents mobile phone number"
+msgstr ""
 
 msgid "Helptext_Admin_Users_UserEdit_Password"
-msgstr "The password can be changed."
+msgstr ""
+"Enter a new password for the agent. If you do not enter a new one the "
+"previous password stays valid."
 
 msgid "Helptext_Admin_Users_UserEdit_Phone"
-msgstr "Insert the agents phone number."
+msgstr ""
 
 msgid "Helptext_Admin_Users_UserEdit_Title"
-msgstr "If available, insert a title for the agent."
+msgstr ""
 
 msgid "Helptext_Admin_Users_UserEdit_Valid"
 msgstr "The agent can only login with the user data set here if set “valid”."
