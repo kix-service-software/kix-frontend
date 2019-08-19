@@ -33,6 +33,7 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
                 kixObject = await dialogContext.getObject(form.objectType);
             }
         }
+        await this.prepareForm(form);
 
         const formFieldValues: Map<string, FormFieldValue<any>> = new Map();
         for (const g of form.groups) {
@@ -138,6 +139,10 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
             }
         }
         return newString;
+    }
+
+    protected async prepareForm(form: Form): Promise<void> {
+        return;
     }
 
     protected async additionalPreparations(
