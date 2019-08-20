@@ -59,7 +59,9 @@ class KIXModuleExtension implements IKIXModuleExtension {
         ),
         new UIComponent('edit-sysconfig-dialog', 'system/admin/dialogs/edit-sysconfig-dialog', []),
 
-        new UIComponent('edit-mail-filter-dialog', 'communication/admin/dialogs/edit-mail-filter-dialog', [])
+        new UIComponent('edit-mail-filter-dialog', 'communication/admin/dialogs/edit-mail-filter-dialog', []),
+        new UIComponent('communication-admin-webforms', 'communication/admin/communication-admin-webforms', []),
+        new UIComponent('new-webform-dialog', 'communication/admin/dialogs/new-webform-dialog', [])
     ];
 
 }

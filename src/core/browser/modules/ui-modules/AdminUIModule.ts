@@ -40,6 +40,12 @@ import { LogFileTableFactory } from "../../log/table/LogFileTableFactory";
 import { LogFileTableCSSHandler } from "../../log/table/LogFileTableCSSHandler";
 import { ConsoleCommandService } from "../../console/ConsoleCommandService";
 import { ConsoleCommandBrowserFactory } from "../../console/ConsoleCommandBrowserFactory";
+import { WebformService } from "../../webform/WebformService";
+import { WebformBrowserFactory } from "../../webform/WebformBrowserFactory";
+import { WebformTableFactory } from "../../webform/WebformTableFactory";
+import { WebformLabelProvider } from "../../webform/WebformLabelProvider";
+import { WebformCreateAction } from "../../webform/actions/WebformCreateAction";
+import { NewWebformDialogContext } from "../../webform/actions/NewWebformDialogContext";
 
 export class UIModule implements IUIModule {
 
@@ -62,6 +68,7 @@ export class UIModule implements IUIModule {
 
             await this.registerI18N();
             await this.registerNotifications();
+            await this.registerWebforms();
         }
     }
 
@@ -210,6 +217,35 @@ export class UIModule implements IUIModule {
             false, 'object-details-page', ['notifications'], NotificationDetailsContext
         );
         ContextService.getInstance().registerContext(notificationDetailsContext);
+    }
+
+    private async registerWebforms(): Promise<void> {
+        ActionFactory.getInstance().registerAction('webform-create-action', WebformCreateAction);
+        ServiceRegistry.registerServiceInstance(WebformService.getInstance());
+
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.WEBFORM, WebformBrowserFactory.getInstance()
+        );
+
+        TableFactoryService.getInstance().registerFactory(new WebformTableFactory());
+        LabelService.getInstance().registerLabelProvider(new WebformLabelProvider());
+
+        const newWebformDialogContext = new ContextDescriptor(
+            NewWebformDialogContext.CONTEXT_ID, [KIXObjectType.WEBFORM],
+            ContextType.DIALOG, ContextMode.CREATE_ADMIN,
+            false, 'new-webform-dialog', ['webforms'], NewWebformDialogContext
+        );
+        ContextService.getInstance().registerContext(newWebformDialogContext);
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'new-webform-dialog',
+            new WidgetConfiguration(
+                'new-webform-dialog', 'Translatable#New Webform', [], {},
+                false, false, 'kix-icon-new-gear'
+            ),
+            KIXObjectType.WEBFORM,
+            ContextMode.CREATE_ADMIN
+        ));
     }
 
     private async checkPermission(resource: string, crud: CRUD): Promise<boolean> {

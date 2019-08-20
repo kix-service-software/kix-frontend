@@ -7,8 +7,14 @@
  * --
  */
 
-export interface ISocketResponse {
+export enum WebformEvent {
 
-    requestId: string;
+    LOAD_WEBFORMS = 'LOAD_WEBFORMS',
+
+    LOAD_WEBFORMS_FINISHED = 'LOAD_WEBFORMS_FINISHED',
+
+    SAVE_WEBFORM = 'SAVE_WEBFORM',
+
+    WEBFORM_SAVED = 'WEBFORM_SAVED'
 
 }
