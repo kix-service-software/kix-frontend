@@ -7,8 +7,15 @@
  * --
  */
 
-export interface ISocketResponse {
+import { AbstractComponentState } from "../../../../../core/browser";
 
-    requestId: string;
+export class ComponentState extends AbstractComponentState {
+
+    public constructor(
+        public loading: boolean = false,
+        public formId: string = 'new-webform-form'
+    ) {
+        super();
+    }
 
 }

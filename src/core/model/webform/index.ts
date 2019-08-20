@@ -7,8 +7,5 @@
  * --
  */
 
-export interface ISocketResponse {
-
-    requestId: string;
-
-}
+export { Webform } from './Webform';
+export { WebformProperty } from './WebformProperty';

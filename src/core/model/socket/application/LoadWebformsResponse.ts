@@ -7,8 +7,10 @@
  * --
  */
 
-export interface ISocketResponse {
+import { Webform } from "../../webform";
 
-    requestId: string;
+export class LoadWebformsResponse {
+
+    public constructor(public requestId: string, public webforms: Webform[]) { }
 
 }

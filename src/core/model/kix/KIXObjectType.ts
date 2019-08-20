@@ -147,5 +147,7 @@ export enum KIXObjectType {
 
     ROLE_PERMISSION = 'ROLE_PERMISSION',
 
-    FOLLOW_UP_TYPE = 'FollowUpType'
+    FOLLOW_UP_TYPE = 'FollowUpType',
+
+    WEBFORM = 'WEBFORM'
 }

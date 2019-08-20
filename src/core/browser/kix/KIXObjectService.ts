@@ -28,7 +28,9 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
     public abstract isServiceFor(kixObjectType: KIXObjectType): boolean;
 
-    public abstract getLinkObjectName(): string;
+    public getLinkObjectName(): string {
+        return null;
+    }
 
     public isServiceType(kixObjectServiceType: ServiceType): boolean {
         return kixObjectServiceType === ServiceType.OBJECT;
