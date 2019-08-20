@@ -108,7 +108,7 @@ export class UIModule implements IUIModule {
         if (await this.checkPermission('system/i18n/translations', CRUD.CREATE)) {
             ActionFactory.getInstance().registerAction('i18n-admin-translation-create', TranslationCreateAction);
             const newTranslationDialogContext = new ContextDescriptor(
-                NewTranslationDialogContext.CONTEXT_ID, [KIXObjectType.TRANSLATION],
+                NewTranslationDialogContext.CONTEXT_ID, [KIXObjectType.TRANSLATION_PATTERN],
                 ContextType.DIALOG, ContextMode.CREATE_ADMIN,
                 false, 'new-translation-dialog', ['translations'], NewTranslationDialogContext
             );
@@ -120,7 +120,7 @@ export class UIModule implements IUIModule {
                     'new-translation-dialog', 'Translatable#New Translation', [], {},
                     false, false, 'kix-icon-new-gear'
                 ),
-                KIXObjectType.TRANSLATION,
+                KIXObjectType.TRANSLATION_PATTERN,
                 ContextMode.CREATE_ADMIN
             ));
         }
@@ -128,7 +128,7 @@ export class UIModule implements IUIModule {
         if (await this.checkPermission('system/i18n/translations/*', CRUD.UPDATE)) {
             ActionFactory.getInstance().registerAction('i18n-admin-translation-edit', TranslationEditAction);
             const editTranslationDialogContext = new ContextDescriptor(
-                EditTranslationDialogContext.CONTEXT_ID, [KIXObjectType.TRANSLATION],
+                EditTranslationDialogContext.CONTEXT_ID, [KIXObjectType.TRANSLATION_PATTERN],
                 ContextType.DIALOG, ContextMode.EDIT_ADMIN,
                 false, 'edit-translation-dialog', ['translations'], EditTranslationDialogContext
             );
@@ -140,7 +140,7 @@ export class UIModule implements IUIModule {
                     'edit-translation-dialog', 'Translatable#Edit Translation', [], {},
                     false, false, 'kix-icon-edit'
                 ),
-                KIXObjectType.TRANSLATION,
+                KIXObjectType.TRANSLATION_PATTERN,
                 ContextMode.EDIT_ADMIN
             ));
         }

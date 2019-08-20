@@ -157,7 +157,7 @@ export class AgentSocketClient extends SocketClient {
                     window.clearTimeout(timeout);
                     console.error('Socket Error: setPreferences');
                     console.error(error.error);
-                    reject(error);
+                    reject(error.error);
                 }
             });
 

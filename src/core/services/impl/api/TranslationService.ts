@@ -196,7 +196,7 @@ export class TranslationService extends KIXObjectService {
                 .filter((f) => f.endsWith('.po'))
                 .forEach((file: string) => {
                     const content = fs.readFileSync(`${localeFolder}/${file}`, 'utf8');
-                    const base64 = new Buffer(content).toString('base64');
+                    const base64 = Buffer.from(content, 'utf8').toString('base64');
                     poDefinitions.push(new PODefinition(base64, file.replace('.po', '')));
                 });
         }

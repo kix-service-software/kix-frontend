@@ -9,6 +9,8 @@
 
 import { Context, KIXObjectType, ContextMode, ContextDescriptor, ContextType } from "../../model";
 import { ContextSocketClient } from "./ContextSocketClient";
+import { AdditionalContextInformation } from "./AdditionalContextInformation";
+import { FormService } from "../form";
 
 export class ContextFactory {
 
@@ -131,8 +133,12 @@ export class ContextFactory {
     public resetDialogContexts(): void {
         this.contextInstances.filter((c) => c.getDescriptor().contextType === ContextType.DIALOG)
             .forEach((c) => {
+                const formId = c.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
+                if (formId) {
+                    FormService.getInstance().deleteFormInstance(formId);
+                }
                 c.reset();
-                c.resetAdditionalInformation();
+                c.resetAdditionalInformation(false);
             });
     }
 

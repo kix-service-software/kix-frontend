@@ -92,7 +92,7 @@ class Component {
                     true, null, true
                 );
 
-                this.prepareTitle();
+                await this.prepareTitle();
 
                 this.tableSubscriber = {
                     eventSubscriberId: 'bulk-table-listener',
@@ -144,7 +144,7 @@ class Component {
 
         const title = await TranslationService.translate('Translatable#Execute now?');
         const question = await TranslationService.translate(
-            'You will edit {0} attributes for {1} {2}. Execute now?',
+            'Translatable#You will edit {0} attributes for {1} {2}. Execute now?',
             [editableValues.length, objects.length, objectName]
         );
         BrowserUtil.openConfirmOverlay(
@@ -248,7 +248,7 @@ class Component {
             const identifier = await LabelService.getInstance().getText(object);
 
             const confirmText = await TranslationService.translate(
-                'Changes cannot be saved. How do you want to proceed?'
+                'Translatable#Changes cannot be saved. How do you want to proceed?'
             );
 
             const cancelButton = await TranslationService.translate('Translatable#Cancel');

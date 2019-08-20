@@ -113,7 +113,7 @@ class TabLaneComponent implements IEventSubscriber {
         this.state.activeTab = tab;
         this.state.activeTabTitle = this.state.activeTab ? this.state.activeTab.configuration.title : '';
         if (tab) {
-            const context = await ContextService.getInstance().getActiveContext(this.state.contextType);
+            const context = ContextService.getInstance().getActiveContext(this.state.contextType);
             if (context) {
                 const object = await context.getObject(context.getDescriptor().kixObjectTypes[0]);
 

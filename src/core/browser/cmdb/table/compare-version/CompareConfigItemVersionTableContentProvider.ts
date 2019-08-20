@@ -9,7 +9,7 @@
 
 import { IRowObject, RowObject, ITable, TableValue, ValueState } from "../../../table";
 import {
-    KIXObjectType, KIXObjectLoadingOptions, Version, AttributeDefinition
+    KIXObjectType, KIXObjectLoadingOptions, Version, AttributeDefinition, DateTimeUtil
 } from "../../../../model";
 import { ContextService } from "../../../context";
 import { TableContentProvider } from "../../../table/TableContentProvider";
@@ -34,8 +34,7 @@ export class CompareConfigItemVersionTableContentProvider extends TableContentPr
             const versionList = await context.getObjectList();
             const versions = versionList as Version[];
             if (versions) {
-                const rows = await this.buildRowObjects(versions);
-                rowObjects = rows;
+                rowObjects = await this.buildRowObjects(versions);
             }
         }
 
@@ -43,15 +42,14 @@ export class CompareConfigItemVersionTableContentProvider extends TableContentPr
     }
 
     private async buildRowObjects(versions: Version[]): Promise<RowObject[]> {
-        let rows: RowObject[] = [];
-
-        versions = versions.sort((a, b) => a.VersionID - b.VersionID);
+        let rowObjects: RowObject[] = [];
+        const checkVersions = [...versions].sort((a, b) => a.VersionID - b.VersionID);
 
         let attributes;
-        if (versions.length > 0) {
-            attributes = versions[0].Definition.Definition.map((d) => new AttributeDefinition(d));
-            for (let i = 1; i < versions.length; i++) {
-                const definition = versions[i].Definition;
+        if (!!checkVersions.length) {
+            attributes = checkVersions[0].Definition.Definition.map((d) => new AttributeDefinition(d));
+            for (let i = 1; i < checkVersions.length; i++) {
+                const definition = checkVersions[i].Definition;
                 if (definition && definition.Definition) {
                     this.compareTrees(attributes, definition.Definition);
                 }
@@ -59,34 +57,29 @@ export class CompareConfigItemVersionTableContentProvider extends TableContentPr
         }
 
         if (attributes) {
-            rows = await this.createRows(versions, attributes, null, []);
+            rowObjects = await this.createRows(checkVersions, attributes, []);
         }
 
-        return rows;
+        return rowObjects;
     }
 
     private async createRows(
-        versions: Version[], attributes: AttributeDefinition[],
-        parentRow: RowObject, parentKeys: Array<[string, number]>
+        versions: Version[], attributes: AttributeDefinition[], parentKeys: Array<[string, number]>
     ): Promise<RowObject[]> {
-        const rows = [];
+        const rowObjects = [];
         for (const a of attributes) {
             let maxCount = 0;
             const versionValues: Array<[number, TableValue[]]> = [];
-            versions.forEach((v) => {
-                const values = this.getPreparedDataDisplayValues(v, v.PreparedData, [...parentKeys], a.Key);
+            for (const v of versions) {
+                const values = await this.getPreparedDataDisplayValues(v, v.PreparedData, [...parentKeys], a.Key);
                 versionValues.push([v.VersionID, values]);
                 maxCount = values.length > maxCount ? values.length : maxCount;
-            });
+            }
 
             for (let i = 0; i < maxCount; i++) {
                 const text = await TranslationService.translate(a.Name);
                 const rowObject = new RowObject([new TableValue('CONFIG_ITEM_ATTRIBUTE', a.Key, text)]);
-                if (parentRow) {
-                    parentRow.addChild(rowObject);
-                } else {
-                    rows.push(rowObject);
-                }
+                rowObjects.push(rowObject);
 
                 versionValues.forEach((versionValue, vIndex) => {
                     if (versionValue && versionValue[1][i]) {
@@ -113,16 +106,21 @@ export class CompareConfigItemVersionTableContentProvider extends TableContentPr
                 });
 
                 if (a.Sub) {
-                    this.createRows(versions, a.Sub, rowObject, [...parentKeys, [a.Key, i]]);
+                    const subRowObjects = await this.createRows(versions, a.Sub, [...parentKeys, [a.Key, i]]);
+                    if (subRowObjects) {
+                        subRowObjects.forEach((subRowObject) => {
+                            rowObject.addChild(subRowObject);
+                        });
+                    }
                 }
             }
         }
-        return rows;
+        return rowObjects;
     }
 
-    private getPreparedDataDisplayValues(
+    private async getPreparedDataDisplayValues(
         version: Version, data: PreparedData[], parentKeys: Array<[string, number]>, key: string
-    ): TableValue[] {
+    ): Promise<TableValue[]> {
         let values: TableValue[] = [];
         if (data && data.length) {
             let rootData: PreparedData[];
@@ -140,15 +138,24 @@ export class CompareConfigItemVersionTableContentProvider extends TableContentPr
                 if (parentKeys.length > 0) {
                     values = [
                         ...values,
-                        ...this.getPreparedDataDisplayValues(
+                        ... await this.getPreparedDataDisplayValues(
                             version, rootData[0].Sub, parentKeys.slice(1, parentKeys.length), key
                         )
                     ];
                 } else {
-                    rootData.forEach((rd) => {
-                        const displayValue = rd.DisplayValue ? rd.DisplayValue : null;
+                    for (const rd of rootData) {
+                        let displayValue = rd.DisplayValue ? rd.DisplayValue : null;
+                        if (displayValue) {
+                            if (rd.Type === 'Date') {
+                                displayValue = await DateTimeUtil.getLocalDateString(displayValue);
+                            } else if (rd.Type === 'Attachment' && rd.Value) {
+                                displayValue = rd.Value.Filename;
+                            } else {
+                                displayValue = await TranslationService.translate(displayValue);
+                            }
+                        }
                         values.push(new TableValue(version.VersionID.toString(), displayValue, displayValue));
-                    });
+                    }
                 }
             } else if (this.hasAttributeInDefinition(key, version.Definition.Definition)) {
                 values.push(new TableValue(version.VersionID.toString(), null, null));

@@ -134,4 +134,23 @@ export class ContactSearchDefinition extends SearchDefinition {
         }
     }
 
+    public async getValueNodesForAutocomplete(property: string, values: Array<string | number>): Promise<TreeNode[]> {
+        const nodes: TreeNode[] = [];
+        if (Array.isArray(values) && !!values.length) {
+            switch (property) {
+                case ContactProperty.PRIMARY_ORGANISATION_ID:
+                    const organisations = await KIXObjectService.loadObjects<Organisation>(
+                        KIXObjectType.ORGANISATION, values, null, null, true
+                    ).catch((error) => []);
+                    for (const o of organisations) {
+                        const displayValue = await LabelService.getInstance().getText(o);
+                        nodes.push(new TreeNode(o.ID, displayValue, new ObjectIcon(o.KIXObjectType, o.ID)));
+                    }
+                    break;
+                default:
+            }
+        }
+        return nodes;
+    }
+
 }

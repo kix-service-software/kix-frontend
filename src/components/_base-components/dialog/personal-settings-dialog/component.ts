@@ -85,7 +85,7 @@ class Component {
                 if (validationError) {
                     this.showValidationError(result);
                 } else {
-                    const loadingHint = await TranslationService.translate('Translatable#Update Preferences');
+                    const loadingHint = await TranslationService.translate('Translatable#Save Settings');
                     DialogService.getInstance().setMainDialogLoading(true, loadingHint);
                     await AgentService.getInstance().setPreferencesByForm(this.state.formId)
                         .then(async () => {

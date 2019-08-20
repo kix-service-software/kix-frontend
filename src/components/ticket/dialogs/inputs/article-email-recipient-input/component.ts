@@ -153,8 +153,11 @@ class Component extends FormInputComponent<string[], ComponentState> {
                 action.active = false;
             } else {
                 const label = await LabelService.getInstance().getPropertyText(action.id, KIXObjectType.ARTICLE);
+                const helpText = action.id === ArticleProperty.CC
+                    ? 'Translatable#Helptext_Tickets_ArticleCreate_ReceiverCc'
+                    : 'Translatable#Helptext_Tickets_ArticleCreate_ReceiverBcc';
                 field = new FormField(
-                    label, action.id, 'article-email-recipient-input', false, label
+                    label, action.id, 'article-email-recipient-input', false, helpText
                 );
                 formInstance.addNewFormField(this.state.field, [field]);
                 action.active = true;
