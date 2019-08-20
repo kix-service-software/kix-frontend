@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
 "PO-Revision-Date: 2019-08-20 15:32+0000\n"
-"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
+"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: English <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/en/>\n"
 "Language: en\n"
@@ -1562,10 +1562,8 @@ msgstr ""
 msgid "Helptext_Admin_Users_UserCreate_Login"
 msgstr "The login name must be unique and cannot be changed afterwards."
 
-#, fuzzy
-#| msgid "Helptext_Admin_Users_UserCreate_Login"
 msgid "Helptext_Admin_Users_UserCreate_Mobile"
-msgstr "The login name must be unique and cannot be changed afterwards."
+msgstr ""
 
 msgid "Helptext_Admin_Users_UserCreate_Password"
 msgstr "The password can be changed/modified afterwards."
@@ -1573,11 +1571,10 @@ msgstr "The password can be changed/modified afterwards."
 msgid "Helptext_Admin_Users_UserCreate_Phone"
 msgstr ""
 
-#, fuzzy
-#| msgid "Helptext_Admin_Users_UserCreate_Comment"
 msgid "Helptext_Admin_Users_UserCreate_Roles"
 msgstr ""
-"Insert additional information (only displayed within the admin module)."
+"An agent needs at least the role “AgentUser” to successfully login. Only "
+"valid roles are available here."
 
 msgid "Helptext_Admin_Users_UserCreate_Title"
 msgstr ""
@@ -1612,11 +1609,10 @@ msgstr ""
 msgid "Helptext_Admin_Users_UserEdit_Phone"
 msgstr ""
 
-#, fuzzy
-#| msgid "Helptext_Admin_Users_UserEdit_Comment"
 msgid "Helptext_Admin_Users_UserEdit_Roles"
 msgstr ""
-"Insert additional information (only displayed within the admin module)."
+"An agent needs at least the role “AgentUser” to successfully login. Only "
+"valid roles are available here."
 
 msgid "Helptext_Admin_Users_UserEdit_Title"
 msgstr ""
@@ -1755,58 +1751,46 @@ msgstr "The name of an asset class needs to be unique."
 msgid "Helptext_CMDB_ConfigItemClassEdit_Valid"
 msgstr "The asset class can only be used within the system if set “valid”."
 
-#, fuzzy
-#| msgid "Select Config Item Class"
 msgid "Helptext_CMDB_ConfigItemCreate_Class"
-msgstr "Select Asset Class"
+msgstr "Please select an asset class. The form will be completed then."
 
 msgid "Helptext_CMDB_ConfigItemCreateEdit_Class"
 msgstr ""
 
-#, fuzzy
-#| msgid "Overview Config Items Deployment State"
 msgid "Helptext_CMDB_ConfigItemCreateEdit_DeploymentState"
-msgstr "Overview Assets Deployment State"
+msgstr ""
+"The deployment state describes the current asset position within its life "
+"cycle."
 
 msgid "Helptext_CMDB_ConfigItemCreateEdit_IncidentState"
-msgstr ""
+msgstr "The incident state describes the current asset condition."
 
 msgid "Helptext_CMDB_ConfigItemCreateEdit_Links"
-msgstr ""
+msgstr "Linkt this asset to a ticket, a FAQ article or another asset."
 
 msgid "Helptext_CMDB_ConfigItemCreateEdit_Name"
 msgstr ""
 
-#, fuzzy
-#| msgid "Select Config Item Class"
 msgid "Helptext_CMDB_ConfigItem_Link_Class"
-msgstr "Select Asset Class"
+msgstr "Search for assets within the chosen class."
 
-#, fuzzy
-#| msgid "Overview Config Items Deployment State"
 msgid "Helptext_CMDB_ConfigItem_Link_DeploymentState"
-msgstr "Overview Assets Deployment State"
+msgstr "Search for assets with this deployment state."
 
-#, fuzzy
-#| msgid "Overview Config Items Deployment State"
 msgid "Helptext_CMDB_ConfigItem_Link_IncidentState"
-msgstr "Overview Assets Deployment State"
+msgstr "Search for assets with this incident state."
 
-#, fuzzy
-#| msgid "Helptext_CMDB_ConfigItemClassEdit_Name"
 msgid "Helptext_CMDB_ConfigItem_Link_Name"
-msgstr "The name of an asset class needs to be unique."
+msgstr "Search for assets with this name or parts of this name."
 
-#, fuzzy
-#| msgid "Helptext_CMDB_ConfigItemClassEdit_Name"
 msgid "Helptext_CMDB_ConfigItem_Link_Number"
-msgstr "The name of an asset class needs to be unique."
+msgstr "Search for assets with this number or a part of the number."
 
 msgid "Helptext_Customers_ContactCreate_City"
 msgstr ""
 
 msgid "Helptext_Customers_ContactCreate_Comment"
-msgstr ""
+msgstr "Insert additional information for the contact."
 
 msgid "Helptext_Customers_ContactCreate_Country"
 msgstr ""
@@ -1824,13 +1808,16 @@ msgid "Helptext_Customers_ContactCreate_Lastname"
 msgstr ""
 
 msgid "Helptext_Customers_ContactCreate_Login"
-msgstr ""
+msgstr "The login name needs to be unique and cannot be changed afterwards."
 
 msgid "Helptext_Customers_ContactCreate_Mobile"
 msgstr ""
 
 msgid "Helptext_Customers_ContactCreate_Organisation"
 msgstr ""
+"Choose an organisation for the contact to be assigned to. Enter at least 3 "
+"characters in order to get a suggestion list of available contacts. You may "
+"use „*“ as wildcard. (CNO and Organisation Name possible)"
 
 msgid "Helptext_Customers_ContactCreate_Password"
 msgstr ""
@@ -1845,7 +1832,7 @@ msgid "Helptext_Customers_ContactCreate_Title"
 msgstr ""
 
 msgid "Helptext_Customers_ContactCreate_Validity"
-msgstr ""
+msgstr "Contacts can only be used if they are set “valid”."
 
 msgid "Helptext_Customers_ContactCreate_Zip"
 msgstr ""
@@ -1854,7 +1841,7 @@ msgid "Helptext_Customers_ContactEdit_City"
 msgstr ""
 
 msgid "Helptext_Customers_ContactEdit_Comment"
-msgstr ""
+msgstr "Insert additional information for the contact."
 
 msgid "Helptext_Customers_ContactEdit_Country"
 msgstr ""
@@ -1876,6 +1863,9 @@ msgstr ""
 
 msgid "Helptext_Customers_ContactEdit_Organisation"
 msgstr ""
+"Choose an organisation for the contact to be assigned to. Enter at least 3 "
+"characters in order to get a suggestion list of available contacts. You may "
+"use „*“ as wildcard. (CNO and Organisation Name possible)"
 
 msgid "Helptext_Customers_ContactEdit_Phone"
 msgstr ""
@@ -1887,19 +1877,31 @@ msgid "Helptext_Customers_ContactEdit_Title"
 msgstr ""
 
 msgid "Helptext_Customers_ContactEdit_Validity"
-msgstr ""
+msgstr "Contacts can only be used if they are set “valid”."
 
 msgid "Helptext_Customers_ContactEdit_Zip"
 msgstr ""
 
 msgid "Helptext_Customers_ContactImport"
 msgstr ""
+"The first row of the source file must contain the organisation attributes (="
+"column titles). These attributes have to exactly comply with the internal "
+"KIX column titles (pay attention to upper and lower case letters!). At least "
+"all mandatory attributes (*) need to contain values (exception: validity, "
+"see below) Attributes: *Login – Login Name; Password; *PrimaryOrganisationID "
+"– number, already existing if data set was exported from KIX before OR *"
+"PrimaryOrganisationNumber - CNR/customer code of the assigned organisation ("
+"must already exist in KIX); Firstname; Lastname; Title; Email; Phone; Mobile;"
+" Fax; Street; City; ZIP; Country; Comment; *ValidID (1=valid; 2=invalid; 3"
+"=invalid-temporarily) OR - Validity (valid, invalid, invalid-temporarily) If "
+"the data set does not contain a “ValidID”, this can be set automatically by "
+"selecting the attribute in the “Set Value”-area (can be changed)."
 
 msgid "Helptext_Customers_OrganisationCreate_City"
 msgstr ""
 
 msgid "Helptext_Customers_OrganisationCreate_Comment"
-msgstr ""
+msgstr "Insert additional information for the organisation."
 
 msgid "Helptext_Customers_OrganisationCreate_Country"
 msgstr ""
@@ -1908,7 +1910,7 @@ msgid "Helptext_Customers_OrganisationCreate_Name"
 msgstr ""
 
 msgid "Helptext_Customers_OrganisationCreate_Number"
-msgstr ""
+msgstr "Insert an unique identifier (e.g. customer code) for the organisation."
 
 msgid "Helptext_Customers_OrganisationCreate_Street"
 msgstr ""
@@ -1917,105 +1919,111 @@ msgid "Helptext_Customers_OrganisationCreate_URL"
 msgstr ""
 
 msgid "Helptext_Customers_OrganisationCreate_Validity"
-msgstr ""
+msgstr "Organisations can only be used if they are set “valid”."
 
 msgid "Helptext_Customers_OrganisationCreate_Zip"
 msgstr ""
 
 msgid "Helptext_Customers_OrganisationImport"
 msgstr ""
+"The first row of the source file must contain the organisation attributes (="
+"column titles). These attributes have to exactly comply with the internal "
+"KIX column titles (pay attention to upper and lower case letters!). At least "
+"all mandatory attributes (*) need to contain values (exception: validity, "
+"see below) Attributes: *CNR – customer code; *Name; Url; Street; Zip; City; "
+"Country; Comment; *ValidID (1=valid; 2=invalid; 3=invalid-temporarily) OR - "
+"Validity (valid, invalid, invalid-temporarily) If the data set does not "
+"contain a “ValidID”, this can be set automatically by selecting the "
+"attribute in the “Set Value”-area (can be changed)."
 
 msgid "Helptext_FAQ_ArticleCreate_Attachments"
 msgstr ""
 
 msgid "Helptext_FAQ_ArticleCreate_Category"
-msgstr ""
+msgstr "Organize FAQ articles by categories to sort them by topics."
 
 msgid "Helptext_FAQ_ArticleCreate_Cause"
 msgstr ""
+"Describe the cause behind the occurring phenomenon as exactly as possible."
 
 msgid "Helptext_FAQ_ArticleCreate_Comment"
-msgstr ""
+msgstr "Insert additional information for the FAQ article."
 
 msgid "Helptext_FAQ_ArticleCreate_Language"
-msgstr ""
+msgstr "Insert the FAQ article language."
 
 msgid "Helptext_FAQ_ArticleCreate_Links"
-msgstr ""
+msgstr "Link this FAQ article with a ticket, an asset or another FAQ article."
 
 msgid "Helptext_FAQ_ArticleCreate_Solution"
 msgstr ""
+"Describe the solution for the occuring phenomenon as exactly as possible."
 
 msgid "Helptext_FAQ_ArticleCreate_Symptom"
-msgstr ""
+msgstr "Describe the occurring phenomenon as exactly as possible."
 
 msgid "Helptext_FAQ_ArticleCreate_Tags"
-msgstr ""
+msgstr "Key words help to quickly find FAQ articles."
 
 msgid "Helptext_FAQ_ArticleCreate_Title"
-msgstr ""
+msgstr "Briefly summarize the FAQ article topic."
 
 msgid "Helptext_FAQ_ArticleCreate_Valid"
 msgstr ""
+"FAQ articles can only be used if they are set “valid”. Invalid FAQ articles "
+"can only be found with the advanced search."
 
 msgid "Helptext_FAQ_ArticleEdit_Attachments"
 msgstr ""
 
 msgid "Helptext_FAQ_ArticleEdit_Category"
-msgstr ""
+msgstr "Organize FAQ articles by categories to sort them by topics."
 
 msgid "Helptext_FAQ_ArticleEdit_Cause"
 msgstr ""
+"Describe the cause behind the occurring phenomenon as exactly as possible."
 
 msgid "Helptext_FAQ_ArticleEdit_Comment"
-msgstr ""
+msgstr "Insert additional information for the FAQ article."
 
 msgid "Helptext_FAQ_ArticleEdit_Language"
-msgstr ""
+msgstr "Insert the FAQ article language."
 
 msgid "Helptext_FAQ_ArticleEdit_Solution"
 msgstr ""
+"Describe the solution for the occuring phenomenon as exactly as possible."
 
 msgid "Helptext_FAQ_ArticleEdit_Symptom"
-msgstr ""
+msgstr "Describe the occurring phenomenon as exactly as possible."
 
 msgid "Helptext_FAQ_ArticleEdit_Tags"
-msgstr ""
+msgstr "Key words help to quickly find FAQ articles."
 
 msgid "Helptext_FAQ_ArticleEdit_Title"
-msgstr ""
+msgstr "Briefly summarize the FAQ article topic."
 
 msgid "Helptext_FAQ_ArticleEdit_Valid"
 msgstr ""
+"FAQ articles can only be used if they are set “valid”. Invalid FAQ articles "
+"can only be found with the advanced search."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryEdit_Icon"
 msgid "Helptext_FAQ_Link_Category"
-msgstr ""
-"Upload an icon, which will be shown together with the category name within "
-"the application."
+msgstr "Search for FAQ articles within the chosen category."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleEdit_Text"
 msgid "Helptext_FAQ_Link_FullText"
 msgstr ""
-"Insert the text you want to use as a text module. You can use placeholders."
+"Search the following FAQ attributes: Changed at, Changed by, Created at, "
+"Created by, Symptom, Cause, Solution, Comment, Keywords, Language, Title, "
+"FAQ#, Validitiy"
 
 msgid "Helptext_FAQ_Link_Number"
-msgstr ""
+msgstr "Search for FAQ articles with this number or a part of the number."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_FAQ_Link_Title"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "Search for FAQ articles with this title or a part of the title."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryEdit_Validity"
 msgid "Helptext_FAQ_Link_Validity"
-msgstr "The FAQ category can only be used within the system if set “valid”."
+msgstr "Search for FAQ articles with the chosen validity."
 
 #, fuzzy
 #| msgid "Helptext_i18n_TranslationPatternCreate_Translation"
@@ -2039,55 +2047,63 @@ msgstr ""
 
 msgid "Helptext_Import_CharacterSet."
 msgstr ""
+"Enables standardised usage of special characters, etc. UTF-8 is the European "
+"standard."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleCreate_Text"
 msgid "Helptext_Import_File"
-msgstr ""
-"Insert the text you want to use as a text module. You can use placeholders."
+msgstr "Choose a .csv-file which contains importable values."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleCreate_Keywords"
 msgid "Helptext_Import_TextSeparator."
-msgstr "Keywords allow to quickly find and choose text modules."
+msgstr ""
+"Marks the beginning and the end of each attribute. If unknown, open your "
+".csv-file with a text editor."
 
 msgid "Helptext_Import_ValueSeparator."
 msgstr ""
+"Separates between the attributes of a row. If unknown, open your .csv-file "
+"with a text editor."
 
 msgid "Helptext_PersonalSettings_MyQueues_Hint"
 msgstr ""
+"For the teams you choose here you will receive notifications if there are, "
+"for example, new tickets or changes at the tickets."
 
 msgid "Helptext_PersonalSettings_UserLanguage_Hint"
-msgstr ""
+msgstr "Choose the language you want to use for this application."
 
 msgid "Helptext_PersonalSettings_UserNewPasswordConfirm_Hint"
-msgstr ""
+msgstr "Confirm your new password."
 
 msgid "Helptext_PersonalSettings_UserNewPassword_Hint"
-msgstr ""
+msgstr "Set a new password for your user account."
 
 msgid "Helptext_PersonalSettings_UserPassword_Hint"
-msgstr ""
+msgstr "Insert your current password."
 
 msgid "Helptext_Search_ConfigItem"
 msgstr ""
+"The search only considers current versions. The following FAQ article offers "
+"a detailed explanation for the search operators:"
 
 msgid "Helptext_Search_Contact"
 msgstr ""
+"The following FAQ article offers a detailed explanation for the search "
+"operators:"
 
 msgid "Helptext_Search_FAQArticle"
 msgstr ""
+"The following FAQ article offers a detailed explanation for the search "
+"operators:"
 
 msgid "Helptext_Search_Organisation"
 msgstr ""
+"The following FAQ article offers a detailed explanation for the search "
+"operators:"
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Search_Ticket"
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+"The following FAQ article offers a detailed explanation for the search "
+"operators:"
 
 #, fuzzy
 #| msgid "Helptext_Textmodules_TicketCreate"
@@ -2105,190 +2121,110 @@ msgstr ""
 
 msgid "Helptext_Textmodules_TicketEdit"
 msgstr ""
+"To use the text modules available in your system, enter “::“ (colon colon). "
+"Then choose the text modules you want to use in the context menu. You can "
+"narrow down the key word selection manually by entering more text."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_ArticleCreate_Attachments"
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_ArticleCreate_Channel"
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+"Choose if you want to save the ticket description only internally (Note) or "
+"additionally sending an email (Email)."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_ArticleCreateEdit_Body"
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+"Describe the article concern. If you chose “Email” as channel, this is the "
+"text the recipient(s) will receive."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_ArticleCreateEdit_Subject"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "Briefly summarize the article topic."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_ArticleCreate_From"
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+"Choose how to display the Sender of this message for the email receiver. It "
+"depends on the chosen team which email addresses are available here."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_ArticleCreate_ReceiverBcc"
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+"For an email, send by a new ticket, the contact is automatically set as to-"
+"recipient. Here you can insert further recipients by either choose agents "
+"from the system or insert email addresses. They will receive a blind copy of "
+"this message."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_ArticleCreate_ReceiverCc"
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+"For an email, send by a new ticket, the contact is automatically set as to-"
+"recipient. Here you can insert further recipients by either choose agents "
+"from the system or insert email addresses. They will receive a copy of this "
+"message."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_ArticleCreate_ReceiverTo"
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+"Choose recipients from the system or insert email addresses that will "
+"receive this message."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_Link_FullText"
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+"Search the following ticket attributes: Ticket Number, Ticket Title (="
+"subject first article), Article content, From, To, CC"
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_Link_Number"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "Insert the ticket number or a part of the ticket number."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_Link_Priority"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "Search for tickets with the chosen priority."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_Link_Queue"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "Search for tickets with the chosen team."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_Link_State"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "Search for tickets with the chosen state."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_Link_Title"
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+"The first article subject generates the ticket title. Insert the ticket "
+"title or a part of the ticket title."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_Link_Type"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "Search for tickets with the chosen type."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketCreate_Body"
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+"Describe the ticket concern. If you chose “Email” as channel, this is the "
+"text the recipient(s) will receive."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketCreate_Channel"
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+"Choose if you want to save the ticket description only internally (Note) or "
+"additionally sending an email (Email)."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketCreate_Contact"
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+"Insert the person who creates the ticket or in whose name the ticket is "
+"created. Enter at least 3 characters in order to get a suggestion list of "
+"available contacts. You may use „*“ as wildcard. Click the button at the "
+"right end of the form field to add a new contact. You will automatically be "
+"redirected here after saving this contact. It is also possible to enter a "
+"syntactically correct email address (name@example.com) to create a ticket "
+"with an unknown contact."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketCreate_Links"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "Link this ticket with an asset, a FAQ article or another ticket."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketCreate_Organisation"
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+"The organisation is automatically assigned depending on the chosen contact."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketCreate_Owner"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "Choose a person who is supposed to process the ticket."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketCreate_Priority"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "The Priority marks the ticket urgency."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketCreate_Queue"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "Insert the scope of responsitility for the ticket."
 
 #, fuzzy
 #| msgid "Helptext_Textmodules_TicketCreate"
@@ -2298,109 +2234,53 @@ msgstr ""
 "Then choose the text modules you want to use in the context menu. You can "
 "narrow down the key word selection manually by entering more text."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketCreate_State"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "The state marks the recent ticket process state."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketCreate_Subject"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "Briefly summarize the ticket topic."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketCreate_Type"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "The ticket type classifies which type of request the ticket is."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketEdit_Channel"
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+"Choose if you want to save the ticket description only internally (Note) or "
+"additionally sending an email (Email). If you do not consider it neccessary "
+"to add a description for the edit choose \"no article\"."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketEdit_Contact"
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+"Insert the person who creates the ticket or in whose name the ticket is "
+"created. Enter at least 3 characters in order to get a suggestion list of "
+"available contacts. You may use „*“ as wildcard."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketEdit_Organisation"
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+"The organisation is automatically assigned depending on the chosen contact."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketEdit_Owner"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "Choose a person who is supposed to process the ticket."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketEdit_Priority"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "The Priority marks the ticket urgency."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketEdit_Queue"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "Insert the scope of responsitility for the ticket."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketEdit_Responsible"
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+"Choose a person who is responsible for the ticket process. Can be the same "
+"as owner, but not necessarily."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketEdit_State"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "The state marks the recent ticket process state."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketEdit_Title"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "Briefly summarzie the ticket topic."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketEdit_Type"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "The ticket type classifies which type of request the ticket is."
 
 msgid "Here you will find the KIX 18 manuals for users and administrators"
 msgstr ""
