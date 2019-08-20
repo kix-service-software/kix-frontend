@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-08-16 13:32+0000\n"
-"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
+"PO-Revision-Date: 2019-08-20 15:32+0000\n"
+"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -1661,12 +1661,8 @@ msgstr ""
 "Der Nutzername des Agenten muss eineindeutig sein und kann nach der "
 "Erstellung nicht mehr bearbeitet werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_Users_UserCreate_Login"
 msgid "Helptext_Admin_Users_UserCreate_Mobile"
 msgstr ""
-"Der Nutzername des Agenten muss eineindeutig sein und kann nach der "
-"Erstellung nicht mehr bearbeitet werden."
 
 msgid "Helptext_Admin_Users_UserCreate_Password"
 msgstr "Das Passwort kann nachträglich angepasst oder verändert werden."
@@ -1674,12 +1670,10 @@ msgstr "Das Passwort kann nachträglich angepasst oder verändert werden."
 msgid "Helptext_Admin_Users_UserCreate_Phone"
 msgstr ""
 
-#, fuzzy
-#| msgid "Helptext_Admin_Users_UserCreate_Comment"
 msgid "Helptext_Admin_Users_UserCreate_Roles"
 msgstr ""
-"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
-"Bereich angezeigt werden."
+"Einem Agenten muss mindestens die Rolle „AgentUser“ zugeordnet sein, damit "
+"er sich einloggen kann. Es werden nur gültige Rollen angezeigt."
 
 msgid "Helptext_Admin_Users_UserCreate_Title"
 msgstr ""
@@ -1719,12 +1713,10 @@ msgstr ""
 msgid "Helptext_Admin_Users_UserEdit_Phone"
 msgstr ""
 
-#, fuzzy
-#| msgid "Helptext_Admin_Users_UserEdit_Comment"
 msgid "Helptext_Admin_Users_UserEdit_Roles"
 msgstr ""
-"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
-"Bereich angezeigt werden."
+"Einem Agenten muss mindestens die Rolle „AgentUser“ zugeordnet sein, damit "
+"er sich einloggen kann. Es werden nur gültige Rollen angezeigt."
 
 msgid "Helptext_Admin_Users_UserEdit_Title"
 msgstr ""
@@ -1901,34 +1893,20 @@ msgstr ""
 msgid "Helptext_CMDB_ConfigItemCreateEdit_Name"
 msgstr ""
 
-#, fuzzy
-#| msgid "Helptext_CMDB_COnfigItemCreate_Class"
 msgid "Helptext_CMDB_ConfigItem_Link_Class"
-msgstr ""
-"Bitte wählen Sie zunächst eine Asset-Klasse aus der Liste. Anschließend wird "
-"das vollständige Eingabe-Formular geladen."
+msgstr "Suchen Sie nach Assets innerhalb der gewählten Klasse."
 
-#, fuzzy
-#| msgid "Helptext_CMDB_ConfigItemCreateEdit_DeploymentState"
 msgid "Helptext_CMDB_ConfigItem_Link_DeploymentState"
-msgstr ""
-"Der Verwendungsstatus beschreibt die Position des Assets innerhalb seines "
-"Lebenszyklus."
+msgstr "Suchen Sie nach Assets mit diesem Verwendungsstatus."
 
-#, fuzzy
-#| msgid "Helptext_CMDB_ConfigItemCreateEdit_IncidentState"
 msgid "Helptext_CMDB_ConfigItem_Link_IncidentState"
-msgstr "Der Vorfallsstatus beschreibt den aktuellen Zustand des Assets."
+msgstr "Suchen Sie nach Assets mit diesem Vorfallsstatus."
 
-#, fuzzy
-#| msgid "Helptext_CMDB_ConfigItemClassEdit_Name"
 msgid "Helptext_CMDB_ConfigItem_Link_Name"
-msgstr "Der Name einer Asset-Klasse kann nicht mehrmals verwendet werden."
+msgstr "Suchen Sie nach Assets mit diesem Name oder Teilen des Namens."
 
-#, fuzzy
-#| msgid "Helptext_CMDB_ConfigItemClassEdit_Name"
 msgid "Helptext_CMDB_ConfigItem_Link_Number"
-msgstr "Der Name einer Asset-Klasse kann nicht mehrmals verwendet werden."
+msgstr "Suchen Sie nach Assets mit dieser Nummer oder Teilen der Nummer."
 
 msgid "Helptext_Customers_ContactCreate_City"
 msgstr ""
@@ -2171,36 +2149,23 @@ msgstr ""
 "gesetzt ist. Ungültige FAQ Einträge können nur über die Suche gefunden "
 "werden."
 
-#, fuzzy
-#| msgid "Helptext_FAQ_ArticleEdit_Category"
 msgid "Helptext_FAQ_Link_Category"
-msgstr ""
-"Ordnen Sie FAQ-Artikel in Kategorien ein, um sie thematisch zu sortieren."
+msgstr "Suchen Sie nach FAQ-Artikeln innerhalb der gewählten Kategorie."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleEdit_Text"
 msgid "Helptext_FAQ_Link_FullText"
 msgstr ""
-"Geben Sie den Text ein, den Sie per Textbaustein einfügen wollen. Es können "
-"Platzhalter verwendet werden."
+"Durchsucht die folgenden FAQ Attribute: Geändert, Geändert von, Erstellt, "
+"Erstellt von, Symptom, Ursache, Lösung, Kommentar, Schlüsselworte, Sprache, "
+"Titel, FAQ#, Gültigkeit"
 
-#, fuzzy
-#| msgid "Helptext_FAQ_ArticleEdit_Cause"
 msgid "Helptext_FAQ_Link_Number"
-msgstr "Beschreiben Sie die Ursache hinter dem Phänomen so genau wie möglich."
+msgstr "Suchen Sie nach FAQ-Artikeln mit dieser Nummer oder Teilen der Nummer."
 
-#, fuzzy
-#| msgid "Helptext_FAQ_ArticleEdit_Title"
 msgid "Helptext_FAQ_Link_Title"
-msgstr "Fassen Sie das Thema des FAQ-Artikels kurz zusammen."
+msgstr "Suchen Sie nach FAQ-Artikeln mit diesem Titel oder Teilen des Titels."
 
-#, fuzzy
-#| msgid "Helptext_FAQ_ArticleEdit_Valid"
 msgid "Helptext_FAQ_Link_Validity"
-msgstr ""
-"Der FAQ Eintrag kann im System nur verwendet werden, wenn er „gültig“ "
-"gesetzt ist. Ungültige FAQ Einträge können nur über die Suche gefunden "
-"werden."
+msgstr "Suchen Sie nach FAQ-Artikeln mit der gewählten Gültigkeit."
 
 #, fuzzy
 #| msgid "Helptext_i18n_TranslationPatternCreate_Translation"
@@ -2224,23 +2189,21 @@ msgstr ""
 
 msgid "Helptext_Import_CharacterSet."
 msgstr ""
+"Ermöglicht standardisierte Verwendung von Sonderzeichen u.ä. Standard für "
+"Europa ist UTF-8."
 
-#, fuzzy
-#| msgid "Helptext_Search_FAQArticle"
 msgid "Helptext_Import_File"
-msgstr ""
-"Der folgende FAQ-Artikel bietet eine genauere Erläuterung zu den "
-"Suchoperatoren:"
+msgstr "Wählen Sie eine .csv-Datei mit zu importierenden Werten."
 
-#, fuzzy
-#| msgid "Select a text separator."
 msgid "Helptext_Import_TextSeparator."
-msgstr "Wählen Sie einen Texttrenner."
+msgstr ""
+"Markiert Anfang & Ende des Inhaltes eines Attributs. Falls unbekannt, öffnen "
+"Sie die .csv-Datei mit einem Texteditor."
 
-#, fuzzy
-#| msgid "Select a value separator."
 msgid "Helptext_Import_ValueSeparator."
-msgstr "Wählen Sie einen Werttrenner."
+msgstr ""
+"Ermöglicht es, die einzelnen Attribute einer Zeile voneinander zu trennen. "
+"Falls unbekannt, öffnen Sie die .csv-Datei mit einem Texteditor."
 
 msgid "Helptext_PersonalSettings_MyQueues_Hint"
 msgstr ""
@@ -2315,15 +2278,13 @@ msgstr ""
 "Wählen Sie aus, ob Sie den Artikel intern am Ticket hinterlegen (Notiz) oder "
 "zusätzlich per E-Mail versenden (E-Mail) wollen."
 
-#, fuzzy
-#| msgid "Helptext_Ticket_ArticleCreateEdit_Subject"
 msgid "Helptext_Tickets_ArticleCreateEdit_Body"
-msgstr "Fassen Sie das Thema des Tickets kurz zusammen."
+msgstr ""
+"Beschreiben Sie hier das Anliegen des Artikels. Wenn Sie als Kanal „E-Mail“ "
+"gewählt haben, erhält der Empfänger diesen Text."
 
-#, fuzzy
-#| msgid "Helptext_Ticket_ArticleCreateEdit_Subject"
 msgid "Helptext_Tickets_ArticleCreateEdit_Subject"
-msgstr "Fassen Sie das Thema des Tickets kurz zusammen."
+msgstr "Fassen Sie das Thema des Artikels kurz zusammen."
 
 #, fuzzy
 #| msgid "HelpText_Ticket_ArticleCreate_From"
@@ -2333,75 +2294,54 @@ msgstr ""
 "dargestellt wird. Die hier auswählbare E-Mail-Adresse ist abhängig von dem "
 "gewählten Team."
 
-#, fuzzy
-#| msgid "Helptext_Tickets_ArticleCreate_Channel"
 msgid "Helptext_Tickets_ArticleCreate_ReceiverBcc"
 msgstr ""
-"Wählen Sie aus, ob Sie den Artikel intern am Ticket hinterlegen (Notiz) oder "
-"zusätzlich per E-Mail versenden (E-Mail) wollen."
+"Der An-Empfänger einer E-Mail, die aus einem neuen Ticket heraus versendet "
+"wird, ist automatisch der „Kontakt“. Hier können Sie weitere Empfänger aus "
+"dem System wählen oder E-Mail-Adressen eingeben, die die Nachricht als "
+"Blindkopie erhalten."
 
-#, fuzzy
-#| msgid "Helptext_Tickets_ArticleCreate_Channel"
 msgid "Helptext_Tickets_ArticleCreate_ReceiverCc"
 msgstr ""
-"Wählen Sie aus, ob Sie den Artikel intern am Ticket hinterlegen (Notiz) oder "
-"zusätzlich per E-Mail versenden (E-Mail) wollen."
+"Der An-Empfänger einer E-Mail, die aus einem neuen Ticket heraus versendet "
+"wird, ist automatisch der „Kontakt“. Hier können Sie weitere Empfänger aus "
+"dem System wählen oder E-Mail-Adressen eingeben, die die Nachricht in Kopie "
+"erhalten."
 
-#, fuzzy
-#| msgid "HelpText_Ticket_ArticleCreate_From"
 msgid "Helptext_Tickets_ArticleCreate_ReceiverTo"
 msgstr ""
-"Wählen Sie aus, wie der Absender dieser Nachricht für den E-Mail Empfänger "
-"dargestellt wird. Die hier auswählbare E-Mail-Adresse ist abhängig von dem "
-"gewählten Team."
+"Wählen Sie Empfänger für die Nachricht aus dem System oder geben Sie E-Mail-"
+"Adressen ein."
 
-#, fuzzy
-#| msgid "Helptext_Tickets_TicketEdit_Type"
 msgid "Helptext_Tickets_Link_FullText"
 msgstr ""
-"Der Ticket-Typ dient der Einordnung, um welche Art von Anfrage es sich bei "
-"dem Ticket handelt."
+"Durchsucht die folgenden Ticket Attribute: Ticket Nummer, Titel des Tickets "
+"(=Betreff erster Artikel), Artikelinhalt, Von, An, CC"
 
-#, fuzzy
-#| msgid "Helptext_Tickets_TicketEdit_Owner"
 msgid "Helptext_Tickets_Link_Number"
-msgstr "Wählen Sie eine Person aus, die das Ticket bearbeiten soll."
+msgstr "Geben Sie die Ticket Nummer oder einen Teil der Ticket Nummer ein."
 
-#, fuzzy
-#| msgid "Helptext_Tickets_TicketEdit_Priority"
 msgid "Helptext_Tickets_Link_Priority"
-msgstr "Die Priorität kennzeichnet die Dringlichkeit eines Tickets."
+msgstr "Suchen Sie nach Tickets mit der gewählten Priorität."
 
-#, fuzzy
-#| msgid "Helptext_Tickets_TicketEdit_Queue"
 msgid "Helptext_Tickets_Link_Queue"
-msgstr "Geben Sie hier einen Zuständigkeitsbereich für das Ticket an."
+msgstr "Suchen Sie nach Tickets im gewählten Team."
 
-#, fuzzy
-#| msgid "Helptext_Tickets_TicketEdit_State"
 msgid "Helptext_Tickets_Link_State"
-msgstr ""
-"Der Status definiert, in welchem Bearbeitungszustand sich ein Ticket "
-"befindet."
+msgstr "Suchen Sie nach Tickets mit dem gewählten Status."
 
-#, fuzzy
-#| msgid "Helptext_Tickets_TicketEdit_Title"
 msgid "Helptext_Tickets_Link_Title"
-msgstr "Fassen Sie das Thema des Tickets kurz zusammen."
-
-#, fuzzy
-#| msgid "Helptext_Tickets_TicketEdit_Type"
-msgid "Helptext_Tickets_Link_Type"
 msgstr ""
-"Der Ticket-Typ dient der Einordnung, um welche Art von Anfrage es sich bei "
-"dem Ticket handelt."
+"Der Titel des Tickets entspricht dem Betreff des ersten Artikels. Geben Sie "
+"den Tickettitel oder einen Teil des Tickettitels ein."
 
-#, fuzzy
-#| msgid "Helptext_Tickets_TicketCreate_Type"
+msgid "Helptext_Tickets_Link_Type"
+msgstr "Suchen Sie nach Tickets mit dem gewählten Typ."
+
 msgid "Helptext_Tickets_TicketCreate_Body"
 msgstr ""
-"Der Ticket-Typ dient der Einordnung, um welche Art von Anfrage es sich bei "
-"dem Ticket handelt."
+"Beschreiben Sie hier das Anliegen des Tickets. Wenn Sie als Kanal „E-Mail“ "
+"gewählt haben, erhält der Empfänger diesen Text."
 
 msgid "Helptext_Tickets_TicketCreate_Channel"
 msgstr ""
@@ -2446,12 +2386,8 @@ msgstr ""
 "Der Status definiert, in welchem Bearbeitungszustand sich ein Ticket "
 "befindet."
 
-#, fuzzy
-#| msgid "Helptext_Tickets_TicketCreate_State"
 msgid "Helptext_Tickets_TicketCreate_Subject"
-msgstr ""
-"Der Status definiert, in welchem Bearbeitungszustand sich ein Ticket "
-"befindet."
+msgstr "Fassen Sie das Thema des Tickets kurz zusammen."
 
 msgid "Helptext_Tickets_TicketCreate_Type"
 msgstr ""
