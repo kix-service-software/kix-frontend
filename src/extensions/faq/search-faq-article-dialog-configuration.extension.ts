@@ -28,8 +28,10 @@ export class ModuleExtension implements IConfigurationExtension {
         const helpWidget = new ConfiguredWidget('20180919-help-widget',
             new WidgetConfiguration(
                 'help-widget', 'Translatable#Help', [], {
-                    // tslint:disable-next-line:max-line-length
-                    helpText: 'Translatable#Helptext_Search_FAQArticle'
+                    helpText: 'Translatable#Helptext_Search_FAQArticle',
+                    links: [
+                        ['Translatable#How to search in KIX 18?', 'faqarticles/2']
+                    ]
                 }, false, false, 'kix-icon-query', false
             ),
             [new UIComponentPermission('faq/articles', [CRUD.READ])]

@@ -112,10 +112,14 @@ export class ArticleFormService extends KIXObjectFormService<Article> {
     }
 
     private async getSubjectField(formInstance: IFormInstance, clear: boolean): Promise<FormField> {
+        const isTicket = formInstance && formInstance.getFormContext() === FormContext.NEW
+            && formInstance.getObjectType() === KIXObjectType.TICKET;
         const referencedValue = await this.getSubjectFieldValue();
         let field = new FormField(
             'Translatable#Subject', ArticleProperty.SUBJECT, undefined, true,
-            'Translatable#Helptext_Ticket_ArticleCreateEdit_Subject',
+            isTicket
+                ? 'Translatable#Helptext_Tickets_TicketCreate_Subject'
+                : 'Translatable#Helptext_Tickets_ArticleCreateEdit_Subject',
             null, referencedValue ? new FormFieldValue(referencedValue) : null
         );
         if (!clear && formInstance) {
@@ -140,8 +144,8 @@ export class ArticleFormService extends KIXObjectFormService<Article> {
             : 'Translatable#Article Text';
 
         const helpText = isTicket
-            ? 'Helptext_Ticket_TicketCreate_Description'
-            : 'Helptext_Ticket_ArticleCreateEdit_ArticleText';
+            ? 'Translatable#Helptext_Tickets_TicketCreate_Body'
+            : 'Translatable#Helptext_Tickets_ArticleCreateEdit_Body';
 
         const referencedValue = await this.getBodyFieldValue();
 
@@ -171,7 +175,7 @@ export class ArticleFormService extends KIXObjectFormService<Article> {
 
         let field = new FormField(
             'Translatable#Attachments', ArticleProperty.ATTACHMENTS, 'attachment-input', false,
-            'Translatable#Helptext_Ticket_ArticleCreate_Attachments',
+            'Translatable#Helptext_Tickets_ArticleCreate_Attachments',
             null, referencedValue ? new FormFieldValue(referencedValue) : null
         );
         if (!clear && formInstance) {
@@ -190,7 +194,7 @@ export class ArticleFormService extends KIXObjectFormService<Article> {
     private async getFromField(formInstance: IFormInstance, clear: boolean): Promise<FormField> {
         let field = new FormField(
             'Translatable#From', ArticleProperty.FROM, 'article-email-from-input', true,
-            'Translatable#HelpText_Ticket_ArticleCreate_From'
+            'Translatable#Helptext_Tickets_ArticleCreate_From'
         );
         if (!clear && formInstance) {
             const existingField = await formInstance.getFormFieldByProperty(ArticleProperty.FROM);
@@ -220,8 +224,11 @@ export class ArticleFormService extends KIXObjectFormService<Article> {
         }
 
         let field = new FormField(
-            label, property, 'article-email-recipient-input', referencedArticle ? true : false,
-            'HelpText_Ticket_ArticleCreate_Receiver', [
+            label, property, 'article-email-recipient-input', !!referencedArticle,
+            property === ArticleProperty.TO
+                ? 'Translatable#Helptext_Tickets_ArticleCreate_ReceiverTo'
+                : 'Translatable#Helptext_Tickets_ArticleCreate_ReceiverCc',
+            [
                 new FormFieldOption('ADDITIONAL_RECIPIENT_TYPES', actions)
             ], referencedValue ? new FormFieldValue(referencedValue) : null
         );

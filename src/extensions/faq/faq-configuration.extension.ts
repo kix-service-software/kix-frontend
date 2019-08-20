@@ -86,13 +86,13 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
         const existingLinkForm = configurationService.getConfiguration(linkFormId);
         if (!existingLinkForm) {
             const fields: FormField[] = [];
-            fields.push(new FormField("Translatable#Full Text", SearchProperty.FULLTEXT, null, false, "Translatable#Searchable FAQ attributes: FAQ#, Title, Symptom, Cause, Solution, Comment, Changed by, Created by, Keywords, Language, Validity"));
-            fields.push(new FormField("Translatable#FAQ#", FAQArticleProperty.NUMBER, null, false, "Translatable#Search for FAQ articles with the same title or part of the same title (min. 1 character)."));
-            fields.push(new FormField('Translatable#Title', FAQArticleProperty.TITLE, null, false, "Translatable#Search for FAQ articles with the same number or part of the same number (min. 1 character)."));
+            fields.push(new FormField("Translatable#Full Text", SearchProperty.FULLTEXT, null, false, "Translatable#Helptext_FAQ_Link_FullText"));
+            fields.push(new FormField("Translatable#FAQ#", FAQArticleProperty.NUMBER, null, false, "Translatable#Helptext_FAQ_Link_Number"));
+            fields.push(new FormField('Translatable#Title', FAQArticleProperty.TITLE, null, false, "Translatable#Helptext_FAQ_Link_Title"));
             fields.push(new FormField(
-                "Category", FAQArticleProperty.CATEGORY_ID, 'faq-category-input', false, "Translatable#Search for FAQ articles within the choosen category.")
+                "Category", FAQArticleProperty.CATEGORY_ID, 'faq-category-input', false, "Translatable#Helptext_FAQ_Link_Category")
             );
-            fields.push(new FormField('Validity', FAQArticleProperty.VALID_ID, 'valid-input', false, "Translatable#Search for FAQ articles within the choosen validity."));
+            fields.push(new FormField('Validity', FAQArticleProperty.VALID_ID, 'valid-input', false, "Translatable#Helptext_FAQ_Link_Validity"));
 
             const attributeGroup = new FormGroup('Translatable#FAQ Attributes', fields);
 

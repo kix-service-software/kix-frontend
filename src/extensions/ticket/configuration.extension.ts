@@ -236,16 +236,16 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
         if (!existingFormLinkWithTicket) {
 
             const fields: FormField[] = [];
-            fields.push(new FormField('Translatable#Full Text', SearchProperty.FULLTEXT, null, false, 'Translatable#Searchable Ticket attributes: Ticketnumber, Subject, Article content, From, To, CC'));
-            fields.push(new FormField('Translatable#Ticket Number', TicketProperty.TICKET_NUMBER, null, false, 'Translatable#Insert the ticket number or a part of the number (min. 1 character).'));
-            fields.push(new FormField('Translatable#Title', TicketProperty.TITLE, null, false, 'Translatable#Insert the complete ticket title or a part of the title.'));
-            fields.push(new FormField('Translatable#Type', TicketProperty.TYPE_ID, 'ticket-input-type', false, 'Translatable#Search for tickets with selected type.'));
-            fields.push(new FormField('Translatable#Queue', TicketProperty.QUEUE_ID, 'ticket-input-queue', false, 'Translatable#Search for tickets with selected queue.'));
+            fields.push(new FormField('Translatable#Full Text', SearchProperty.FULLTEXT, null, false, 'Translatable#Helptext_Tickets_Link_FullText'));
+            fields.push(new FormField('Translatable#Ticket Number', TicketProperty.TICKET_NUMBER, null, false, 'Translatable#Helptext_Tickets_Link_Number'));
+            fields.push(new FormField('Translatable#Title', TicketProperty.TITLE, null, false, 'Translatable#Helptext_Tickets_Link_Title'));
+            fields.push(new FormField('Translatable#Type', TicketProperty.TYPE_ID, 'ticket-input-type', false, 'Translatable#Helptext_Tickets_Link_Type'));
+            fields.push(new FormField('Translatable#Queue', TicketProperty.QUEUE_ID, 'ticket-input-queue', false, 'Translatable#Helptext_Tickets_Link_Queue'));
             fields.push(new FormField<number>(
-                'Translatable#Priority', TicketProperty.PRIORITY_ID, 'ticket-input-priority', false, 'Translatable#Search for tickets with selected priority.')
+                'Translatable#Priority', TicketProperty.PRIORITY_ID, 'ticket-input-priority', false, 'Translatable#Helptext_Tickets_Link_Priority')
             );
             fields.push(new FormField<number>(
-                'Translatable#State', TicketProperty.STATE_ID, 'ticket-input-state', false, 'Translatable#Search for tickets with selected state.')
+                'Translatable#State', TicketProperty.STATE_ID, 'ticket-input-state', false, 'Translatable#Helptext_Tickets_Link_State')
             );
 
             const attributeGroup = new FormGroup('Translatable#Ticket Attributes', fields);

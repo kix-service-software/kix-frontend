@@ -13,7 +13,8 @@ export class ComponentState extends WidgetComponentState {
 
     public constructor(
         public contextType: ContextType = ContextType.MAIN,
-        public helpText: string = null
+        public helpText: string = null,
+        public links: Array<[string, string]> = null
     ) {
         super();
     }
