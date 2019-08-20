@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
 "PO-Revision-Date: 2019-08-20 15:32+0000\n"
-"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
+"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -173,12 +173,10 @@ msgid "Article Text"
 msgstr "Artikelinhalt"
 
 msgid "Assets: General Catalog"
-msgstr ""
+msgstr "Assets: General Catalog"
 
-#, fuzzy
-#| msgid "Assigned Agents"
 msgid "Assigned agent"
-msgstr "Zugeordnete Agenten"
+msgstr "Zugeordneter Agent"
 
 msgid "Assigned Agents"
 msgstr "Zugeordnete Agenten"
@@ -388,18 +386,14 @@ msgstr "Kommunikation: E-Mail"
 msgid "Communication: Email: Email Accounts"
 msgstr "Kommunikation: E-Mail: E-Mail Konten"
 
-#, fuzzy
-#| msgid "Communication: Email: Email Filters"
 msgid "Communication: Email: Email Addresses"
-msgstr "Kommunikation: E-Mail: E-Mail Filter"
+msgstr "Kommunikation: E-Mail: E-Mail Adressen"
 
 msgid "Communication: Email: Email Filters"
 msgstr "Kommunikation: E-Mail: E-Mail Filter"
 
-#, fuzzy
-#| msgid "Communication: Email"
 msgid "Communication: Webform"
-msgstr "Kommunikation: E-Mail"
+msgstr "Kommunikation: Webformular"
 
 msgid "Compare"
 msgstr "Vergleichen"
@@ -536,10 +530,8 @@ msgstr "Übersetzung wird angelegt"
 msgid "Create Type"
 msgstr "Typ wird angelegt"
 
-#, fuzzy
-#| msgid "Create Category"
 msgid "Create Webform"
-msgstr "Kategorie wird angelegt"
+msgstr "Webformular wird angelegt"
 
 msgid "CSV-Export"
 msgstr "CSV-Export"
@@ -583,10 +575,8 @@ msgstr "Standard"
 msgid "Default Value"
 msgstr "Standardwert"
 
-#, fuzzy
-#| msgid "Default Value"
 msgid "Default Values"
-msgstr "Standardwert"
+msgstr "Standardwerte"
 
 msgid "Delete"
 msgstr "Löschen"
@@ -747,10 +737,8 @@ msgstr "E-Mail Header"
 msgid "Email Information"
 msgstr "E-Mail-Informationen"
 
-#, fuzzy
-#| msgid "Attachments"
 msgid "Enable attachments"
-msgstr "Anhänge"
+msgstr "Anhänge zulassen"
 
 msgid "ends with"
 msgstr "endet mit"
@@ -895,7 +883,7 @@ msgid "Force"
 msgstr "Erzwingen"
 
 msgid "Form title"
-msgstr ""
+msgstr "Formulartitel"
 
 msgid "Forward"
 msgstr "Weiterleiten"
@@ -909,10 +897,8 @@ msgstr "Vollständiger Name"
 msgid "Full Text"
 msgstr "Volltext"
 
-#, fuzzy
-#| msgid "General Information"
 msgid "General Catalog"
-msgstr "Allgemeine Informationen"
+msgstr "General Catalog"
 
 msgid "General information on working with KIX 18"
 msgstr "Allgemeine Hinweise zum Arbeiten mit KIX 18"
@@ -1726,106 +1712,50 @@ msgstr ""
 "Der Agent kann sich mit den hier festgelegten Nutzerdaten nur einloggen, "
 "wenn der Agent „gültig“ gesetzt ist."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Comment"
 msgid "Helptext_Admin_WebformCreate_AllowAttachments"
 msgstr ""
-"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
-"Bereich angezeigt werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
 msgid "Helptext_Admin_WebformCreate_ButtonLabel"
 msgstr ""
-"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
-"der Kategorie angezeigt wird."
 
-#, fuzzy
-#| msgid "Helptext_Admin_NotificationCreate_MessageText"
 msgid "Helptext_Admin_WebformCreate_HintMessage"
 msgstr ""
-"Geben Sie den Text ein, der in der E-Mail angezeigt werden soll, durch die "
-"diese Benachrichtigung versendet wird. Beachten Sie die gewählte Sprache."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
 msgid "Helptext_Admin_WebformCreate_Modal"
 msgstr ""
-"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
-"der Kategorie angezeigt wird."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Validity"
 msgid "Helptext_Admin_WebformCreate_PriorityID"
 msgstr ""
-"Die Kategorie kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
 msgid "Helptext_Admin_WebformCreate_QueueID"
 msgstr ""
-"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
-"der Kategorie angezeigt wird."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
 msgid "Helptext_Admin_WebformCreate_SaveButtonLabel"
 msgstr ""
-"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
-"der Kategorie angezeigt wird."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleCreate_Text"
 msgid "Helptext_Admin_WebformCreate_ShowTitle"
 msgstr ""
-"Geben Sie den Text ein, den Sie per Textbaustein einfügen wollen. Es können "
-"Platzhalter verwendet werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
 msgid "Helptext_Admin_WebformCreate_StateID"
 msgstr ""
-"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
-"der Kategorie angezeigt wird."
 
-#, fuzzy
-#| msgid "Helptext_Admin_NotificationCreate_MessageText"
 msgid "Helptext_Admin_WebformCreate_SuccessMessage"
 msgstr ""
-"Geben Sie den Text ein, der in der E-Mail angezeigt werden soll, durch die "
-"diese Benachrichtigung versendet wird. Beachten Sie die gewählte Sprache."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleCreate_Text"
 msgid "Helptext_Admin_WebformCreate_Title"
 msgstr ""
-"Geben Sie den Text ein, den Sie per Textbaustein einfügen wollen. Es können "
-"Platzhalter verwendet werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Type."
 msgid "Helptext_Admin_WebformCreate_TypeID"
 msgstr ""
-"IMAP/=Es werden Kopien Ihrer Nachrichten ins KIX geladen – die Nachrichten "
-"liegen weiterhin auf dem Server; POP/=Die Nachrichten werden vom Server "
-"herunter geladen; /S=Verbindung wird direkt über SSL verschlüsselt; /"
-"TLS=Verbindung wird direkt über TLS verschlüsselt"
 
-#, fuzzy
-#| msgid "Helptext_Admin_Users_RoleCreate_User"
 msgid "Helptext_Admin_WebformCreate_UseKIXCSS"
-msgstr "Es werden nur gültige Agenten angezeigt."
+msgstr ""
 
-#, fuzzy
-#| msgid "Helptext_Admin_Users_RoleCreate_User"
 msgid "Helptext_Admin_WebformCreate_UserID"
-msgstr "Es werden nur gültige Agenten angezeigt."
+msgstr ""
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Validity"
 msgid "Helptext_Admin_WebformCreate_Validity"
 msgstr ""
-"Die Kategorie kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
 msgid "Helptext_CMDB_ConfigItemClassCreate_Comment"
 msgstr ""
@@ -1867,8 +1797,6 @@ msgid "Helptext_CMDB_ConfigItemClassEdit_Valid"
 msgstr ""
 "Die Asset-Klasse kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
-#, fuzzy
-#| msgid "Helptext_CMDB_COnfigItemCreate_Class"
 msgid "Helptext_CMDB_ConfigItemCreate_Class"
 msgstr ""
 "Bitte wählen Sie zunächst eine Asset-Klasse aus der Liste. Anschließend wird "
@@ -2167,8 +2095,6 @@ msgstr "Suchen Sie nach FAQ-Artikeln mit diesem Titel oder Teilen des Titels."
 msgid "Helptext_FAQ_Link_Validity"
 msgstr "Suchen Sie nach FAQ-Artikeln mit der gewählten Gültigkeit."
 
-#, fuzzy
-#| msgid "Helptext_i18n_TranslationPatternCreate_Translation"
 msgid "Helptext_i18n_TranslationPatternCreateEdit_Translation"
 msgstr ""
 "Wenn Sie diese Übersetzung für das Pattern angeben, wird diese in der "
@@ -2286,8 +2212,6 @@ msgstr ""
 msgid "Helptext_Tickets_ArticleCreateEdit_Subject"
 msgstr "Fassen Sie das Thema des Artikels kurz zusammen."
 
-#, fuzzy
-#| msgid "HelpText_Ticket_ArticleCreate_From"
 msgid "Helptext_Tickets_ArticleCreate_From"
 msgstr ""
 "Wählen Sie aus, wie der Absender dieser Nachricht für den E-Mail Empfänger "
@@ -2517,10 +2441,8 @@ msgstr "Vorfallstatus"
 msgid "Incident State"
 msgstr "Vorfallstatus"
 
-#, fuzzy
-#| msgid "FAQ Information"
 msgid "Information text"
-msgstr "FAQ-Informationen"
+msgstr ""
 
 msgid ""
 "Input of 3 stars '***' in autocomplete form fields = listing of the first 10 "
@@ -2731,7 +2653,7 @@ msgid "Menu"
 msgstr "Modulmenü"
 
 msgid "Message after sending form"
-msgstr ""
+msgstr "Nachricht nach Absenden des Formulars"
 
 msgid "Minutes"
 msgstr "Minuten"
@@ -2770,10 +2692,10 @@ msgid "Name"
 msgstr "Name"
 
 msgid "Name of activate form button"
-msgstr ""
+msgstr "Name des Aufrufen-Buttons für das Formular"
 
 msgid "Name of form submit button"
-msgstr ""
+msgstr "Name des Speichern-Buttons im Formular"
 
 msgid "Negate"
 msgstr "Negieren"
@@ -2868,10 +2790,8 @@ msgstr "Neuer Typ"
 msgid "New Version created"
 msgstr "Neue Version wurde angelegt."
 
-#, fuzzy
-#| msgid "New Category"
 msgid "New Webform"
-msgstr "Neue Kategorie"
+msgstr "Neues Webformular"
 
 msgid "next"
 msgstr "weiter"
@@ -3324,7 +3244,7 @@ msgid "Role successfully created."
 msgstr "Rolle wurde erfolgreich angelegt."
 
 msgid "Row"
-msgstr ""
+msgstr "Zeile"
 
 msgid "Row {0} of the file with {1} {2}: could not import{3}. How to continue?"
 msgstr ""
@@ -3343,8 +3263,6 @@ msgstr "Speichern"
 msgid "Save Search"
 msgstr "Suche speichern"
 
-#, fuzzy
-#| msgid "Save Settings."
 msgid "Save Settings"
 msgstr "Einstellungen werden gespeichert."
 
@@ -3436,7 +3354,7 @@ msgid "Show all"
 msgstr "Alle anzeigen"
 
 msgid "Show title in form"
-msgstr ""
+msgstr "Titel im Formular anzeigen"
 
 msgid "Sidebars"
 msgstr "Sidebars"
@@ -3472,7 +3390,7 @@ msgid "Start Import"
 msgstr "Import starten"
 
 msgid "Start modal dialog for form"
-msgstr ""
+msgstr "Modalen Dialog für Formular starten"
 
 msgid "Start search"
 msgstr "Suche starten"
@@ -3565,7 +3483,7 @@ msgid "Target"
 msgstr "Ziel"
 
 msgid "Team"
-msgstr ""
+msgstr "Team"
 
 msgid "Template"
 msgstr "Vorlage"
@@ -3790,10 +3708,8 @@ msgstr "Aktualisierung wird durchgeführt"
 msgid "Update Contact"
 msgstr "Aktualisierung wird durchgeführt"
 
-#, fuzzy
-#| msgid "Edit Email Account"
 msgid "Update Email Account"
-msgstr "E-Mail Konto bearbeiten"
+msgstr "Aktualisierung wird durchgeführt"
 
 msgid "Update Email Address"
 msgstr "Aktualisierung wird durchgeführt"
@@ -3801,8 +3717,6 @@ msgstr "Aktualisierung wird durchgeführt"
 msgid "Update Email Filter"
 msgstr "Aktualisierung wird durchgeführt"
 
-#, fuzzy
-#| msgid "Update FAQ Artikel"
 msgid "Update FAQ Article"
 msgstr "Aktualisierung wird durchgeführt"
 
@@ -3833,10 +3747,8 @@ msgstr "Aktualisierung wird durchgeführt"
 msgid "Update Text Module"
 msgstr "Aktualisierung wird durchgeführt"
 
-#, fuzzy
-#| msgid "Create Ticket"
 msgid "Update Ticket"
-msgstr "Ticket wird angelegt"
+msgstr "Aktualisierung wird durchgeführt"
 
 msgid "Update time"
 msgstr "Aktualisierung wird durchgeführt"
@@ -3851,7 +3763,7 @@ msgid "URL"
 msgstr "URL"
 
 msgid "Use KIX CSS"
-msgstr ""
+msgstr "KIX CSS verwenden"
 
 msgid "User"
 msgstr "Benutzer"
@@ -3917,15 +3829,13 @@ msgid "We are working on this functionality."
 msgstr "Funktionalität ist in Arbeit."
 
 msgid "Webform"
-msgstr ""
+msgstr "Webformular"
 
 msgid "Webform Options"
-msgstr ""
+msgstr "Webformular Optionen"
 
-#, fuzzy
-#| msgid "Category successfully created."
 msgid "Webform successfully created."
-msgstr "Kategorie wurde erfolgreich angelegt."
+msgstr "Webformular wurde erfolgreich angelegt."
 
 msgid "Welcome to KIX 18"
 msgstr "Willkommen bei KIX 18"
