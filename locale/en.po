@@ -205,9 +205,6 @@ msgstr ""
 msgid "Assign Team / Queue"
 msgstr "Assign Team"
 
-msgid "Assign the roles for the user."
-msgstr ""
-
 msgid "At least one of the fields 'To', 'Cc' or 'Bcc' must contain an entry."
 msgstr ""
 
@@ -289,6 +286,9 @@ msgstr ""
 msgid "Change Password"
 msgstr ""
 
+msgid "Changes cannot be saved. How do you want to proceed?"
+msgstr ""
+
 msgid "Changes saved."
 msgstr ""
 
@@ -302,9 +302,6 @@ msgid "Charset"
 msgstr ""
 
 msgid "Choose a command"
-msgstr ""
-
-msgid "Choose CSV-File with data sets for import. Drag & Drop is possible."
 msgstr ""
 
 msgid "CI Class"
@@ -1567,11 +1564,22 @@ msgstr ""
 msgid "Helptext_Admin_Users_UserCreate_Login"
 msgstr "The login name must be unique and cannot be changed afterwards."
 
+#, fuzzy
+#| msgid "Helptext_Admin_Users_UserCreate_Login"
+msgid "Helptext_Admin_Users_UserCreate_Mobile"
+msgstr "The login name must be unique and cannot be changed afterwards."
+
 msgid "Helptext_Admin_Users_UserCreate_Password"
 msgstr "The password can be changed/modified afterwards."
 
 msgid "Helptext_Admin_Users_UserCreate_Phone"
 msgstr ""
+
+#, fuzzy
+#| msgid "Helptext_Admin_Users_UserCreate_Comment"
+msgid "Helptext_Admin_Users_UserCreate_Roles"
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Users_UserCreate_Title"
 msgstr ""
@@ -1605,6 +1613,12 @@ msgstr ""
 
 msgid "Helptext_Admin_Users_UserEdit_Phone"
 msgstr ""
+
+#, fuzzy
+#| msgid "Helptext_Admin_Users_UserEdit_Comment"
+msgid "Helptext_Admin_Users_UserEdit_Roles"
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Users_UserEdit_Title"
 msgstr ""
@@ -1745,7 +1759,7 @@ msgstr "The asset class can only be used within the system if set “valid”."
 
 #, fuzzy
 #| msgid "Select Config Item Class"
-msgid "Helptext_CMDB_COnfigItemCreate_Class"
+msgid "Helptext_CMDB_ConfigItemCreate_Class"
 msgstr "Select Asset Class"
 
 msgid "Helptext_CMDB_ConfigItemCreateEdit_Class"
@@ -1764,6 +1778,31 @@ msgstr ""
 
 msgid "Helptext_CMDB_ConfigItemCreateEdit_Name"
 msgstr ""
+
+#, fuzzy
+#| msgid "Select Config Item Class"
+msgid "Helptext_CMDB_ConfigItem_Link_Class"
+msgstr "Select Asset Class"
+
+#, fuzzy
+#| msgid "Overview Config Items Deployment State"
+msgid "Helptext_CMDB_ConfigItem_Link_DeploymentState"
+msgstr "Overview Assets Deployment State"
+
+#, fuzzy
+#| msgid "Overview Config Items Deployment State"
+msgid "Helptext_CMDB_ConfigItem_Link_IncidentState"
+msgstr "Overview Assets Deployment State"
+
+#, fuzzy
+#| msgid "Helptext_CMDB_ConfigItemClassEdit_Name"
+msgid "Helptext_CMDB_ConfigItem_Link_Name"
+msgstr "The name of an asset class needs to be unique."
+
+#, fuzzy
+#| msgid "Helptext_CMDB_ConfigItemClassEdit_Name"
+msgid "Helptext_CMDB_ConfigItem_Link_Number"
+msgstr "The name of an asset class needs to be unique."
 
 msgid "Helptext_Customers_ContactCreate_City"
 msgstr ""
@@ -1921,9 +1960,6 @@ msgstr ""
 msgid "Helptext_FAQ_ArticleCreate_Valid"
 msgstr ""
 
-msgid "Helptext_FAQ_ArticleCreate_Visibility"
-msgstr ""
-
 msgid "Helptext_FAQ_ArticleEdit_Attachments"
 msgstr ""
 
@@ -1954,8 +1990,42 @@ msgstr ""
 msgid "Helptext_FAQ_ArticleEdit_Valid"
 msgstr ""
 
-msgid "Helptext_FAQ_ArticleEdit_Visibility"
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryEdit_Icon"
+msgid "Helptext_FAQ_Link_Category"
 msgstr ""
+"Upload an icon, which will be shown together with the category name within "
+"the application."
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleEdit_Text"
+msgid "Helptext_FAQ_Link_FullText"
+msgstr ""
+"Insert the text you want to use as a text module. You can use placeholders."
+
+msgid "Helptext_FAQ_Link_Number"
+msgstr ""
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketCreate"
+msgid "Helptext_FAQ_Link_Title"
+msgstr ""
+"To use the text modules available in your system, enter „::“ (colon colon). "
+"Then choose the text modules you want to use in the context menu. You can "
+"narrow down the key word selection manually by entering more text."
+
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryEdit_Validity"
+msgid "Helptext_FAQ_Link_Validity"
+msgstr "The FAQ category can only be used within the system if set “valid”."
+
+#, fuzzy
+#| msgid "Helptext_i18n_TranslationPatternCreate_Translation"
+msgid "Helptext_i18n_TranslationPatternCreateEdit_Translation"
+msgstr ""
+"If you insert a translation for the pattern here, this will be shown in the "
+"user interface if the user has his language preference set for the "
+"corresponding language."
 
 msgid "Helptext_i18n_TranslationPatternCreate_Pattern"
 msgstr ""
@@ -1963,23 +2033,28 @@ msgstr ""
 "configured in the SysConfig, translations can be created to show in the user "
 "interface."
 
-msgid "Helptext_i18n_TranslationPatternCreate_Translation"
-msgstr ""
-"If you insert a translation for the pattern here, this will be shown in the "
-"user interface if the user has his language preference set for the "
-"corresponding language."
-
 msgid "Helptext_i18n_TranslationPatternEdit_Pattern"
 msgstr ""
 "The pattern refers to the base string. Depending on which languages are "
 "configured in the SysConfig, translations can be created to show in the user "
 "interface."
 
-msgid "Helptext_i18n_TranslationPatternEdit_Translation"
+msgid "Helptext_Import_CharacterSet."
 msgstr ""
-"If you insert a translation for the pattern here, this will be shown in the "
-"user interface if the user has his language preference set for the "
-"corresponding language."
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleCreate_Text"
+msgid "Helptext_Import_File"
+msgstr ""
+"Insert the text you want to use as a text module. You can use placeholders."
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleCreate_Keywords"
+msgid "Helptext_Import_TextSeparator."
+msgstr "Keywords allow to quickly find and choose text modules."
+
+msgid "Helptext_Import_ValueSeparator."
+msgstr ""
 
 msgid "Helptext_PersonalSettings_MyQueues_Hint"
 msgstr ""
@@ -2033,15 +2108,9 @@ msgstr ""
 msgid "Helptext_Textmodules_TicketEdit"
 msgstr ""
 
-msgid "Helptext_Ticket_ArticleCreate_Attachments"
-msgstr ""
-
-msgid "Helptext_Ticket_ArticleCreateEdit_Subject"
-msgstr ""
-
 #, fuzzy
 #| msgid "Helptext_Textmodules_TicketCreate"
-msgid "HelpText_Ticket_ArticleCreate_From"
+msgid "Helptext_Tickets_ArticleCreate_Attachments"
 msgstr ""
 "To use the text modules available in your system, enter „::“ (colon colon). "
 "Then choose the text modules you want to use in the context menu. You can "
@@ -2050,6 +2119,118 @@ msgstr ""
 #, fuzzy
 #| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_ArticleCreate_Channel"
+msgstr ""
+"To use the text modules available in your system, enter „::“ (colon colon). "
+"Then choose the text modules you want to use in the context menu. You can "
+"narrow down the key word selection manually by entering more text."
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketCreate"
+msgid "Helptext_Tickets_ArticleCreateEdit_Body"
+msgstr ""
+"To use the text modules available in your system, enter „::“ (colon colon). "
+"Then choose the text modules you want to use in the context menu. You can "
+"narrow down the key word selection manually by entering more text."
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketCreate"
+msgid "Helptext_Tickets_ArticleCreateEdit_Subject"
+msgstr ""
+"To use the text modules available in your system, enter „::“ (colon colon). "
+"Then choose the text modules you want to use in the context menu. You can "
+"narrow down the key word selection manually by entering more text."
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketCreate"
+msgid "Helptext_Tickets_ArticleCreate_From"
+msgstr ""
+"To use the text modules available in your system, enter „::“ (colon colon). "
+"Then choose the text modules you want to use in the context menu. You can "
+"narrow down the key word selection manually by entering more text."
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketCreate"
+msgid "Helptext_Tickets_ArticleCreate_ReceiverBcc"
+msgstr ""
+"To use the text modules available in your system, enter „::“ (colon colon). "
+"Then choose the text modules you want to use in the context menu. You can "
+"narrow down the key word selection manually by entering more text."
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketCreate"
+msgid "Helptext_Tickets_ArticleCreate_ReceiverCc"
+msgstr ""
+"To use the text modules available in your system, enter „::“ (colon colon). "
+"Then choose the text modules you want to use in the context menu. You can "
+"narrow down the key word selection manually by entering more text."
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketCreate"
+msgid "Helptext_Tickets_ArticleCreate_ReceiverTo"
+msgstr ""
+"To use the text modules available in your system, enter „::“ (colon colon). "
+"Then choose the text modules you want to use in the context menu. You can "
+"narrow down the key word selection manually by entering more text."
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketCreate"
+msgid "Helptext_Tickets_Link_FullText"
+msgstr ""
+"To use the text modules available in your system, enter „::“ (colon colon). "
+"Then choose the text modules you want to use in the context menu. You can "
+"narrow down the key word selection manually by entering more text."
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketCreate"
+msgid "Helptext_Tickets_Link_Number"
+msgstr ""
+"To use the text modules available in your system, enter „::“ (colon colon). "
+"Then choose the text modules you want to use in the context menu. You can "
+"narrow down the key word selection manually by entering more text."
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketCreate"
+msgid "Helptext_Tickets_Link_Priority"
+msgstr ""
+"To use the text modules available in your system, enter „::“ (colon colon). "
+"Then choose the text modules you want to use in the context menu. You can "
+"narrow down the key word selection manually by entering more text."
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketCreate"
+msgid "Helptext_Tickets_Link_Queue"
+msgstr ""
+"To use the text modules available in your system, enter „::“ (colon colon). "
+"Then choose the text modules you want to use in the context menu. You can "
+"narrow down the key word selection manually by entering more text."
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketCreate"
+msgid "Helptext_Tickets_Link_State"
+msgstr ""
+"To use the text modules available in your system, enter „::“ (colon colon). "
+"Then choose the text modules you want to use in the context menu. You can "
+"narrow down the key word selection manually by entering more text."
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketCreate"
+msgid "Helptext_Tickets_Link_Title"
+msgstr ""
+"To use the text modules available in your system, enter „::“ (colon colon). "
+"Then choose the text modules you want to use in the context menu. You can "
+"narrow down the key word selection manually by entering more text."
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketCreate"
+msgid "Helptext_Tickets_Link_Type"
+msgstr ""
+"To use the text modules available in your system, enter „::“ (colon colon). "
+"Then choose the text modules you want to use in the context menu. You can "
+"narrow down the key word selection manually by entering more text."
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketCreate"
+msgid "Helptext_Tickets_TicketCreate_Body"
 msgstr ""
 "To use the text modules available in your system, enter „::“ (colon colon). "
 "Then choose the text modules you want to use in the context menu. You can "
@@ -2122,6 +2303,14 @@ msgstr ""
 #, fuzzy
 #| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketCreate_State"
+msgstr ""
+"To use the text modules available in your system, enter „::“ (colon colon). "
+"Then choose the text modules you want to use in the context menu. You can "
+"narrow down the key word selection manually by entering more text."
+
+#, fuzzy
+#| msgid "Helptext_Textmodules_TicketCreate"
+msgid "Helptext_Tickets_TicketCreate_Subject"
 msgstr ""
 "To use the text modules available in your system, enter „::“ (colon colon). "
 "Then choose the text modules you want to use in the context menu. You can "
@@ -2310,12 +2499,6 @@ msgid "Inserted email address must not be a system address ({0})."
 msgstr ""
 
 msgid "insert filter value"
-msgstr ""
-
-msgid "Insert the complete ticket title or a part of the title."
-msgstr ""
-
-msgid "Insert the ticket number or a part of the number (min. 1 character)."
 msgstr ""
 
 msgid "internal"
@@ -3118,64 +3301,13 @@ msgstr ""
 msgid "Save Search"
 msgstr ""
 
+msgid "Save Settings"
+msgstr ""
+
 msgid "Search"
 msgstr ""
 
 msgid "Search {0} will be deleted. Are you sure?"
-msgstr ""
-
-msgid ""
-"Searchable FAQ attributes: FAQ#, Title, Symptom, Cause, Solution, Comment, "
-"Changed by, Created by, Keywords, Language, Validity"
-msgstr ""
-
-msgid ""
-"Searchable Ticket attributes: Ticketnumber, Subject, Article content, From, "
-"To, CC"
-msgstr ""
-
-msgid "Search for config items within the choosen class."
-msgstr "Search for assets within the choosen class."
-
-msgid "Search for config items with the same deployment state."
-msgstr "Search for assets with the same deployment state."
-
-msgid "Search for config items with the same incident state."
-msgstr "Search for assets with the same incident state."
-
-msgid ""
-"Search for config items with the same name or part of the same name (min. 1 "
-"character)."
-msgstr ""
-"Search for assets with the same name or part of the same name (min. 1 "
-"character)."
-
-msgid "Search for FAQ articles within the choosen category."
-msgstr ""
-
-msgid "Search for FAQ articles within the choosen validity."
-msgstr ""
-
-msgid ""
-"Search for FAQ articles with the same number or part of the same number "
-"(min. 1 character)."
-msgstr ""
-
-msgid ""
-"Search for FAQ articles with the same title or part of the same title (min. "
-"1 character)."
-msgstr ""
-
-msgid "Search for tickets with selected priority."
-msgstr ""
-
-msgid "Search for tickets with selected queue."
-msgstr "Search for tickets with selected team."
-
-msgid "Search for tickets with selected state."
-msgstr ""
-
-msgid "Search for tickets with selected type."
 msgstr ""
 
 msgid "Search Results"
@@ -3193,16 +3325,7 @@ msgstr ""
 msgid "Search Title"
 msgstr ""
 
-msgid "Select a character set."
-msgstr ""
-
 msgid "Select all"
-msgstr ""
-
-msgid "Select a text separator."
-msgstr ""
-
-msgid "Select a value separator."
 msgstr ""
 
 msgid "Select Config Item Class"
@@ -3252,13 +3375,6 @@ msgstr ""
 
 msgid "Send to these agents"
 msgstr ""
-
-msgid ""
-"Serach for config items with the same number or part of the same number "
-"(min. 1 character)."
-msgstr ""
-"Serach for assets with the same number or part of the same number (min. 1 "
-"character)."
 
 msgid "Service"
 msgstr ""
@@ -3614,9 +3730,6 @@ msgstr ""
 msgid "Unwatch Ticket"
 msgstr ""
 
-msgid "Update Account"
-msgstr ""
-
 msgid "Update Agent"
 msgstr ""
 
@@ -3628,6 +3741,11 @@ msgstr "Update Asset"
 
 msgid "Update Contact"
 msgstr ""
+
+#, fuzzy
+#| msgid "Load Email Account"
+msgid "Update Email Account"
+msgstr "Loading Email Account"
 
 msgid "Update Email Address"
 msgstr ""
@@ -3650,9 +3768,6 @@ msgstr ""
 msgid "Update Organisation"
 msgstr ""
 
-msgid "Update Preferences"
-msgstr ""
-
 msgid "Update Priority"
 msgstr ""
 
@@ -3667,6 +3782,11 @@ msgstr ""
 
 msgid "Update Text Module"
 msgstr ""
+
+#, fuzzy
+#| msgid "Load Ticket"
+msgid "Update Ticket"
+msgstr "Loading Ticket"
 
 msgid "Update time"
 msgstr ""
@@ -3787,11 +3907,46 @@ msgstr ""
 msgid "Your rating"
 msgstr ""
 
+msgid "You will edit {0} attributes for {1} {2}. Execute now?"
+msgstr ""
+
 msgid "Zip"
 msgstr ""
 
 msgid "ZIP"
 msgstr ""
+
+#~ msgid "Helptext_i18n_TranslationPatternEdit_Translation"
+#~ msgstr ""
+#~ "If you insert a translation for the pattern here, this will be shown in "
+#~ "the user interface if the user has his language preference set for the "
+#~ "corresponding language."
+
+#~ msgid "Search for config items within the choosen class."
+#~ msgstr "Search for assets within the choosen class."
+
+#~ msgid "Search for config items with the same deployment state."
+#~ msgstr "Search for assets with the same deployment state."
+
+#~ msgid "Search for config items with the same incident state."
+#~ msgstr "Search for assets with the same incident state."
+
+#~ msgid ""
+#~ "Search for config items with the same name or part of the same name (min. "
+#~ "1 character)."
+#~ msgstr ""
+#~ "Search for assets with the same name or part of the same name (min. 1 "
+#~ "character)."
+
+#~ msgid "Search for tickets with selected queue."
+#~ msgstr "Search for tickets with selected team."
+
+#~ msgid ""
+#~ "Serach for config items with the same number or part of the same number "
+#~ "(min. 1 character)."
+#~ msgstr ""
+#~ "Serach for assets with the same number or part of the same number (min. 1 "
+#~ "character)."
 
 #~ msgid "Closing time"
 #~ msgstr "Closed at"

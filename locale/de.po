@@ -207,9 +207,6 @@ msgstr "Verknüpfung zuordnen"
 msgid "Assign Team / Queue"
 msgstr "Zuordnung zu Team"
 
-msgid "Assign the roles for the user."
-msgstr "Dem Nutzer Rollen zuordnen."
-
 msgid "At least one of the fields 'To', 'Cc' or 'Bcc' must contain an entry."
 msgstr ""
 "Mindestens eins der Felder  'An', 'Cc' oder 'Bcc' muss einen Eintrag "
@@ -294,6 +291,10 @@ msgstr "Geändert von"
 msgid "Change Password"
 msgstr "Passwort ändern"
 
+msgid "Changes cannot be saved. How do you want to proceed?"
+msgstr ""
+"Änderung kann nicht gespeichert werden. Wie möchten Sie weiter verfahren?"
+
 msgid "Changes saved."
 msgstr "Änderungen wurden gespeichert."
 
@@ -308,11 +309,6 @@ msgstr "Zeichensatz"
 
 msgid "Choose a command"
 msgstr "Wählen Sie ein Kommando"
-
-msgid "Choose CSV-File with data sets for import. Drag & Drop is possible."
-msgstr ""
-"Wählen Sie eine CSV-Datei mit zu importierenden Datensätzen. Drag & Drop ist "
-"möglich."
 
 msgid "CI Class"
 msgstr "Asset-Klasse"
@@ -1665,11 +1661,25 @@ msgstr ""
 "Der Nutzername des Agenten muss eineindeutig sein und kann nach der "
 "Erstellung nicht mehr bearbeitet werden."
 
+#, fuzzy
+#| msgid "Helptext_Admin_Users_UserCreate_Login"
+msgid "Helptext_Admin_Users_UserCreate_Mobile"
+msgstr ""
+"Der Nutzername des Agenten muss eineindeutig sein und kann nach der "
+"Erstellung nicht mehr bearbeitet werden."
+
 msgid "Helptext_Admin_Users_UserCreate_Password"
 msgstr "Das Passwort kann nachträglich angepasst oder verändert werden."
 
 msgid "Helptext_Admin_Users_UserCreate_Phone"
 msgstr ""
+
+#, fuzzy
+#| msgid "Helptext_Admin_Users_UserCreate_Comment"
+msgid "Helptext_Admin_Users_UserCreate_Roles"
+msgstr ""
+"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+"Bereich angezeigt werden."
 
 msgid "Helptext_Admin_Users_UserCreate_Title"
 msgstr ""
@@ -1708,6 +1718,13 @@ msgstr ""
 
 msgid "Helptext_Admin_Users_UserEdit_Phone"
 msgstr ""
+
+#, fuzzy
+#| msgid "Helptext_Admin_Users_UserEdit_Comment"
+msgid "Helptext_Admin_Users_UserEdit_Roles"
+msgstr ""
+"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+"Bereich angezeigt werden."
 
 msgid "Helptext_Admin_Users_UserEdit_Title"
 msgstr ""
@@ -1858,7 +1875,9 @@ msgid "Helptext_CMDB_ConfigItemClassEdit_Valid"
 msgstr ""
 "Die Asset-Klasse kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
-msgid "Helptext_CMDB_COnfigItemCreate_Class"
+#, fuzzy
+#| msgid "Helptext_CMDB_COnfigItemCreate_Class"
+msgid "Helptext_CMDB_ConfigItemCreate_Class"
 msgstr ""
 "Bitte wählen Sie zunächst eine Asset-Klasse aus der Liste. Anschließend wird "
 "das vollständige Eingabe-Formular geladen."
@@ -1881,6 +1900,35 @@ msgstr ""
 
 msgid "Helptext_CMDB_ConfigItemCreateEdit_Name"
 msgstr ""
+
+#, fuzzy
+#| msgid "Helptext_CMDB_COnfigItemCreate_Class"
+msgid "Helptext_CMDB_ConfigItem_Link_Class"
+msgstr ""
+"Bitte wählen Sie zunächst eine Asset-Klasse aus der Liste. Anschließend wird "
+"das vollständige Eingabe-Formular geladen."
+
+#, fuzzy
+#| msgid "Helptext_CMDB_ConfigItemCreateEdit_DeploymentState"
+msgid "Helptext_CMDB_ConfigItem_Link_DeploymentState"
+msgstr ""
+"Der Verwendungsstatus beschreibt die Position des Assets innerhalb seines "
+"Lebenszyklus."
+
+#, fuzzy
+#| msgid "Helptext_CMDB_ConfigItemCreateEdit_IncidentState"
+msgid "Helptext_CMDB_ConfigItem_Link_IncidentState"
+msgstr "Der Vorfallsstatus beschreibt den aktuellen Zustand des Assets."
+
+#, fuzzy
+#| msgid "Helptext_CMDB_ConfigItemClassEdit_Name"
+msgid "Helptext_CMDB_ConfigItem_Link_Name"
+msgstr "Der Name einer Asset-Klasse kann nicht mehrmals verwendet werden."
+
+#, fuzzy
+#| msgid "Helptext_CMDB_ConfigItemClassEdit_Name"
+msgid "Helptext_CMDB_ConfigItem_Link_Number"
+msgstr "Der Name einer Asset-Klasse kann nicht mehrmals verwendet werden."
 
 msgid "Helptext_Customers_ContactCreate_City"
 msgstr ""
@@ -2088,9 +2136,6 @@ msgstr ""
 "gesetzt ist. Ungültige FAQ Einträge können nur über die Suche gefunden "
 "werden."
 
-msgid "Helptext_FAQ_ArticleCreate_Visibility"
-msgstr ""
-
 msgid "Helptext_FAQ_ArticleEdit_Attachments"
 msgstr ""
 
@@ -2126,8 +2171,44 @@ msgstr ""
 "gesetzt ist. Ungültige FAQ Einträge können nur über die Suche gefunden "
 "werden."
 
-msgid "Helptext_FAQ_ArticleEdit_Visibility"
+#, fuzzy
+#| msgid "Helptext_FAQ_ArticleEdit_Category"
+msgid "Helptext_FAQ_Link_Category"
 msgstr ""
+"Ordnen Sie FAQ-Artikel in Kategorien ein, um sie thematisch zu sortieren."
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleEdit_Text"
+msgid "Helptext_FAQ_Link_FullText"
+msgstr ""
+"Geben Sie den Text ein, den Sie per Textbaustein einfügen wollen. Es können "
+"Platzhalter verwendet werden."
+
+#, fuzzy
+#| msgid "Helptext_FAQ_ArticleEdit_Cause"
+msgid "Helptext_FAQ_Link_Number"
+msgstr "Beschreiben Sie die Ursache hinter dem Phänomen so genau wie möglich."
+
+#, fuzzy
+#| msgid "Helptext_FAQ_ArticleEdit_Title"
+msgid "Helptext_FAQ_Link_Title"
+msgstr "Fassen Sie das Thema des FAQ-Artikels kurz zusammen."
+
+#, fuzzy
+#| msgid "Helptext_FAQ_ArticleEdit_Valid"
+msgid "Helptext_FAQ_Link_Validity"
+msgstr ""
+"Der FAQ Eintrag kann im System nur verwendet werden, wenn er „gültig“ "
+"gesetzt ist. Ungültige FAQ Einträge können nur über die Suche gefunden "
+"werden."
+
+#, fuzzy
+#| msgid "Helptext_i18n_TranslationPatternCreate_Translation"
+msgid "Helptext_i18n_TranslationPatternCreateEdit_Translation"
+msgstr ""
+"Wenn Sie diese Übersetzung für das Pattern angeben, wird diese in der "
+"Nutzeroberfläche angezeigt, wenn der Nutzer als Sprache die voranstehende "
+"Sprache gewählt hat."
 
 msgid "Helptext_i18n_TranslationPatternCreate_Pattern"
 msgstr ""
@@ -2135,23 +2216,31 @@ msgstr ""
 "Sprachen in der SysConfig konfiguriert sind, können dafür Übersetzungen "
 "angelegt werden, welche dann in der Nutzeroberfläche angezeigt werden."
 
-msgid "Helptext_i18n_TranslationPatternCreate_Translation"
-msgstr ""
-"Wenn Sie diese Übersetzung für das Pattern angeben, wird diese in der "
-"Nutzeroberfläche angezeigt, wenn der Nutzer als Sprache die voranstehende "
-"Sprache gewählt hat."
-
 msgid "Helptext_i18n_TranslationPatternEdit_Pattern"
 msgstr ""
 "Das Pattern bezeichnet die Ausgangszeichenkette. Je nach dem, welche "
 "Sprachen in der SysConfig konfiguriert sind, können dafür Übersetzungen "
 "angelegt werden, welche dann in der Nutzeroberfläche angezeigt werden."
 
-msgid "Helptext_i18n_TranslationPatternEdit_Translation"
+msgid "Helptext_Import_CharacterSet."
 msgstr ""
-"Wenn Sie diese Übersetzung für das Pattern angeben, wird diese in der "
-"Nutzeroberfläche angezeigt, wenn der Nutzer als Sprache die voranstehende "
-"Sprache gewählt hat."
+
+#, fuzzy
+#| msgid "Helptext_Search_FAQArticle"
+msgid "Helptext_Import_File"
+msgstr ""
+"Der folgende FAQ-Artikel bietet eine genauere Erläuterung zu den "
+"Suchoperatoren:"
+
+#, fuzzy
+#| msgid "Select a text separator."
+msgid "Helptext_Import_TextSeparator."
+msgstr "Wählen Sie einen Texttrenner."
+
+#, fuzzy
+#| msgid "Select a value separator."
+msgid "Helptext_Import_ValueSeparator."
+msgstr "Wählen Sie einen Werttrenner."
 
 msgid "Helptext_PersonalSettings_MyQueues_Hint"
 msgstr ""
@@ -2214,22 +2303,105 @@ msgstr ""
 "gewünschten Textbaustein aus. Sie können die Auswahl anhand der "
 "Schlüsselworte manuell einschränken, in dem sie weiteren Text eingeben."
 
-msgid "Helptext_Ticket_ArticleCreate_Attachments"
+#, fuzzy
+#| msgid "Helptext_Tickets_ArticleCreate_Channel"
+msgid "Helptext_Tickets_ArticleCreate_Attachments"
 msgstr ""
-
-msgid "Helptext_Ticket_ArticleCreateEdit_Subject"
-msgstr "Fassen Sie das Thema des Tickets kurz zusammen."
-
-msgid "HelpText_Ticket_ArticleCreate_From"
-msgstr ""
-"Wählen Sie aus, wie der Absender dieser Nachricht für den E-Mail Empfänger "
-"dargestellt wird. Die hier auswählbare E-Mail-Adresse ist abhängig von dem "
-"gewählten Team."
+"Wählen Sie aus, ob Sie den Artikel intern am Ticket hinterlegen (Notiz) oder "
+"zusätzlich per E-Mail versenden (E-Mail) wollen."
 
 msgid "Helptext_Tickets_ArticleCreate_Channel"
 msgstr ""
 "Wählen Sie aus, ob Sie den Artikel intern am Ticket hinterlegen (Notiz) oder "
 "zusätzlich per E-Mail versenden (E-Mail) wollen."
+
+#, fuzzy
+#| msgid "Helptext_Ticket_ArticleCreateEdit_Subject"
+msgid "Helptext_Tickets_ArticleCreateEdit_Body"
+msgstr "Fassen Sie das Thema des Tickets kurz zusammen."
+
+#, fuzzy
+#| msgid "Helptext_Ticket_ArticleCreateEdit_Subject"
+msgid "Helptext_Tickets_ArticleCreateEdit_Subject"
+msgstr "Fassen Sie das Thema des Tickets kurz zusammen."
+
+#, fuzzy
+#| msgid "HelpText_Ticket_ArticleCreate_From"
+msgid "Helptext_Tickets_ArticleCreate_From"
+msgstr ""
+"Wählen Sie aus, wie der Absender dieser Nachricht für den E-Mail Empfänger "
+"dargestellt wird. Die hier auswählbare E-Mail-Adresse ist abhängig von dem "
+"gewählten Team."
+
+#, fuzzy
+#| msgid "Helptext_Tickets_ArticleCreate_Channel"
+msgid "Helptext_Tickets_ArticleCreate_ReceiverBcc"
+msgstr ""
+"Wählen Sie aus, ob Sie den Artikel intern am Ticket hinterlegen (Notiz) oder "
+"zusätzlich per E-Mail versenden (E-Mail) wollen."
+
+#, fuzzy
+#| msgid "Helptext_Tickets_ArticleCreate_Channel"
+msgid "Helptext_Tickets_ArticleCreate_ReceiverCc"
+msgstr ""
+"Wählen Sie aus, ob Sie den Artikel intern am Ticket hinterlegen (Notiz) oder "
+"zusätzlich per E-Mail versenden (E-Mail) wollen."
+
+#, fuzzy
+#| msgid "HelpText_Ticket_ArticleCreate_From"
+msgid "Helptext_Tickets_ArticleCreate_ReceiverTo"
+msgstr ""
+"Wählen Sie aus, wie der Absender dieser Nachricht für den E-Mail Empfänger "
+"dargestellt wird. Die hier auswählbare E-Mail-Adresse ist abhängig von dem "
+"gewählten Team."
+
+#, fuzzy
+#| msgid "Helptext_Tickets_TicketEdit_Type"
+msgid "Helptext_Tickets_Link_FullText"
+msgstr ""
+"Der Ticket-Typ dient der Einordnung, um welche Art von Anfrage es sich bei "
+"dem Ticket handelt."
+
+#, fuzzy
+#| msgid "Helptext_Tickets_TicketEdit_Owner"
+msgid "Helptext_Tickets_Link_Number"
+msgstr "Wählen Sie eine Person aus, die das Ticket bearbeiten soll."
+
+#, fuzzy
+#| msgid "Helptext_Tickets_TicketEdit_Priority"
+msgid "Helptext_Tickets_Link_Priority"
+msgstr "Die Priorität kennzeichnet die Dringlichkeit eines Tickets."
+
+#, fuzzy
+#| msgid "Helptext_Tickets_TicketEdit_Queue"
+msgid "Helptext_Tickets_Link_Queue"
+msgstr "Geben Sie hier einen Zuständigkeitsbereich für das Ticket an."
+
+#, fuzzy
+#| msgid "Helptext_Tickets_TicketEdit_State"
+msgid "Helptext_Tickets_Link_State"
+msgstr ""
+"Der Status definiert, in welchem Bearbeitungszustand sich ein Ticket "
+"befindet."
+
+#, fuzzy
+#| msgid "Helptext_Tickets_TicketEdit_Title"
+msgid "Helptext_Tickets_Link_Title"
+msgstr "Fassen Sie das Thema des Tickets kurz zusammen."
+
+#, fuzzy
+#| msgid "Helptext_Tickets_TicketEdit_Type"
+msgid "Helptext_Tickets_Link_Type"
+msgstr ""
+"Der Ticket-Typ dient der Einordnung, um welche Art von Anfrage es sich bei "
+"dem Ticket handelt."
+
+#, fuzzy
+#| msgid "Helptext_Tickets_TicketCreate_Type"
+msgid "Helptext_Tickets_TicketCreate_Body"
+msgstr ""
+"Der Ticket-Typ dient der Einordnung, um welche Art von Anfrage es sich bei "
+"dem Ticket handelt."
 
 msgid "Helptext_Tickets_TicketCreate_Channel"
 msgstr ""
@@ -2270,6 +2442,13 @@ msgstr ""
 "ist. Diese kann mit dem Bearbeiter identisch sein, muss aber nicht."
 
 msgid "Helptext_Tickets_TicketCreate_State"
+msgstr ""
+"Der Status definiert, in welchem Bearbeitungszustand sich ein Ticket "
+"befindet."
+
+#, fuzzy
+#| msgid "Helptext_Tickets_TicketCreate_State"
+msgid "Helptext_Tickets_TicketCreate_Subject"
 msgstr ""
 "Der Status definiert, in welchem Bearbeitungszustand sich ein Ticket "
 "befindet."
@@ -2422,14 +2601,6 @@ msgstr "Die eingegebene E-Mail-Adresse darf keine Systemadresse sein ({0})."
 
 msgid "insert filter value"
 msgstr "Filterwert eingeben"
-
-msgid "Insert the complete ticket title or a part of the title."
-msgstr "Geben Sie den Titel oder Teile eines Tickettitels ein."
-
-msgid "Insert the ticket number or a part of the number (min. 1 character)."
-msgstr ""
-"Geben Sie die Ticketnummer oder einen Teil der Ticketnummer ein (mindestens "
-"1 Zeichen)."
 
 msgid "internal"
 msgstr "intern"
@@ -3236,73 +3407,16 @@ msgstr "Speichern"
 msgid "Save Search"
 msgstr "Suche speichern"
 
+#, fuzzy
+#| msgid "Save Settings."
+msgid "Save Settings"
+msgstr "Einstellungen werden gespeichert."
+
 msgid "Search"
 msgstr "Suche"
 
 msgid "Search {0} will be deleted. Are you sure?"
 msgstr "Suche {0} wird gelöscht. Sind Sie sicher?"
-
-msgid ""
-"Searchable FAQ attributes: FAQ#, Title, Symptom, Cause, Solution, Comment, "
-"Changed by, Created by, Keywords, Language, Validity"
-msgstr ""
-"Durchsuchbare FAQ Attribute: FAQ#, Titel, Symptom, Ursache, Lösung, "
-"Kommentar, Geändert von, Erstellt von, Schlagworte, Sprache, Sichtbarkeit"
-
-msgid ""
-"Searchable Ticket attributes: Ticketnumber, Subject, Article content, From, "
-"To, CC"
-msgstr ""
-"Durchsuchbare Ticket Attribute: Ticketnummer, Betreff, Artikelinhalt, Von, "
-"An, CC"
-
-msgid "Search for config items within the choosen class."
-msgstr "Suche nach Assets innerhalb der gewählten Klasse."
-
-msgid "Search for config items with the same deployment state."
-msgstr "Suche nach Assets mit diesem Verwendungsstatus."
-
-msgid "Search for config items with the same incident state."
-msgstr "Suche nach Assets mit diesem Vorfallsstatus."
-
-msgid ""
-"Search for config items with the same name or part of the same name (min. 1 "
-"character)."
-msgstr ""
-"Suche nach Assets mit diesem Name oder Teilen des Namens (mindestens 1 "
-"Zeichen)."
-
-msgid "Search for FAQ articles within the choosen category."
-msgstr "Suche nach FAQ-Artikeln innerhalb der gewählten Kategorie."
-
-msgid "Search for FAQ articles within the choosen validity."
-msgstr "Suche nach FAQ-Artikeln mit der gewählten Gültigkeit."
-
-msgid ""
-"Search for FAQ articles with the same number or part of the same number "
-"(min. 1 character)."
-msgstr ""
-"Suche nach FAQ-Artikeln mit dieser Nummer oder Teilen der Nummer (mindestens "
-"1 Zeichen)."
-
-msgid ""
-"Search for FAQ articles with the same title or part of the same title (min. "
-"1 character)."
-msgstr ""
-"Suche nach FAQ-Artikeln mit diesem Titel oder Teilen des Titels (mindestens "
-"1 Zeichen)."
-
-msgid "Search for tickets with selected priority."
-msgstr "Suche nach Tickets mit der gewählten Priorität."
-
-msgid "Search for tickets with selected queue."
-msgstr "Suche nach Tickets mit dem gewählten Team."
-
-msgid "Search for tickets with selected state."
-msgstr "Suche nach Tickets mit dem gewählten Status."
-
-msgid "Search for tickets with selected type."
-msgstr "Suche nach Tickets mit dem gewählten Typ."
 
 msgid "Search Results"
 msgstr "Suchergebnisse"
@@ -3319,17 +3433,8 @@ msgstr "Suche Tickets"
 msgid "Search Title"
 msgstr "Name der Suche"
 
-msgid "Select a character set."
-msgstr "Wählen Sie einen Zeichensatz."
-
 msgid "Select all"
 msgstr "Alle auswählen"
-
-msgid "Select a text separator."
-msgstr "Wählen Sie einen Texttrenner."
-
-msgid "Select a value separator."
-msgstr "Wählen Sie einen Werttrenner."
 
 msgid "Select Config Item Class"
 msgstr "Wählen Sie eine Asset-Klasse aus der Liste."
@@ -3378,13 +3483,6 @@ msgstr "An alle Rollen-Mitglieder senden"
 
 msgid "Send to these agents"
 msgstr "An diese Agenten senden"
-
-msgid ""
-"Serach for config items with the same number or part of the same number "
-"(min. 1 character)."
-msgstr ""
-"Suche nach Assets mit dieser Nummer oder Teilen der Nummer (mindestens 1 "
-"Zeichen)."
 
 msgid "Service"
 msgstr "Service"
@@ -3744,9 +3842,6 @@ msgstr "Nicht beobachten"
 msgid "Unwatch Ticket"
 msgstr "Ticket nicht mehr beobachten"
 
-msgid "Update Account"
-msgstr "Aktualisierung wird durchgeführt"
-
 msgid "Update Agent"
 msgstr "Aktualisierung wird durchgeführt"
 
@@ -3758,6 +3853,11 @@ msgstr "Aktualisierung wird durchgeführt"
 
 msgid "Update Contact"
 msgstr "Aktualisierung wird durchgeführt"
+
+#, fuzzy
+#| msgid "Edit Email Account"
+msgid "Update Email Account"
+msgstr "E-Mail Konto bearbeiten"
 
 msgid "Update Email Address"
 msgstr "Aktualisierung wird durchgeführt"
@@ -3782,9 +3882,6 @@ msgstr "Benachrichtigung aktualisieren"
 msgid "Update Organisation"
 msgstr "Aktualisierung wird durchgeführt"
 
-msgid "Update Preferences"
-msgstr "Aktualisierung wird durchgeführt"
-
 msgid "Update Priority"
 msgstr "Aktualisierung wird durchgeführt"
 
@@ -3799,6 +3896,11 @@ msgstr "Aktualisierung wird durchgeführt"
 
 msgid "Update Text Module"
 msgstr "Aktualisierung wird durchgeführt"
+
+#, fuzzy
+#| msgid "Create Ticket"
+msgid "Update Ticket"
+msgstr "Ticket wird angelegt"
 
 msgid "Update time"
 msgstr "Aktualisierung wird durchgeführt"
@@ -3919,11 +4021,114 @@ msgstr "Ihre Berechtigungen wurden aktualisiert."
 msgid "Your rating"
 msgstr "Ihre Bewertung"
 
+msgid "You will edit {0} attributes for {1} {2}. Execute now?"
+msgstr "Sie ändern {0} Attribute an {1} {2}. Jetzt starten?"
+
 msgid "Zip"
 msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Assign the roles for the user."
+#~ msgstr "Dem Nutzer Rollen zuordnen."
+
+#~ msgid "Choose CSV-File with data sets for import. Drag & Drop is possible."
+#~ msgstr ""
+#~ "Wählen Sie eine CSV-Datei mit zu importierenden Datensätzen. Drag & Drop "
+#~ "ist möglich."
+
+#~ msgid "Helptext_i18n_TranslationPatternEdit_Translation"
+#~ msgstr ""
+#~ "Wenn Sie diese Übersetzung für das Pattern angeben, wird diese in der "
+#~ "Nutzeroberfläche angezeigt, wenn der Nutzer als Sprache die voranstehende "
+#~ "Sprache gewählt hat."
+
+#~ msgid "Insert the complete ticket title or a part of the title."
+#~ msgstr "Geben Sie den Titel oder Teile eines Tickettitels ein."
+
+#~ msgid "Insert the ticket number or a part of the number (min. 1 character)."
+#~ msgstr ""
+#~ "Geben Sie die Ticketnummer oder einen Teil der Ticketnummer ein "
+#~ "(mindestens 1 Zeichen)."
+
+#~ msgid ""
+#~ "Searchable FAQ attributes: FAQ#, Title, Symptom, Cause, Solution, "
+#~ "Comment, Changed by, Created by, Keywords, Language, Validity"
+#~ msgstr ""
+#~ "Durchsuchbare FAQ Attribute: FAQ#, Titel, Symptom, Ursache, Lösung, "
+#~ "Kommentar, Geändert von, Erstellt von, Schlagworte, Sprache, Sichtbarkeit"
+
+#~ msgid ""
+#~ "Searchable Ticket attributes: Ticketnumber, Subject, Article content, "
+#~ "From, To, CC"
+#~ msgstr ""
+#~ "Durchsuchbare Ticket Attribute: Ticketnummer, Betreff, Artikelinhalt, "
+#~ "Von, An, CC"
+
+#~ msgid "Search for config items within the choosen class."
+#~ msgstr "Suche nach Assets innerhalb der gewählten Klasse."
+
+#~ msgid "Search for config items with the same deployment state."
+#~ msgstr "Suche nach Assets mit diesem Verwendungsstatus."
+
+#~ msgid "Search for config items with the same incident state."
+#~ msgstr "Suche nach Assets mit diesem Vorfallsstatus."
+
+#~ msgid ""
+#~ "Search for config items with the same name or part of the same name (min. "
+#~ "1 character)."
+#~ msgstr ""
+#~ "Suche nach Assets mit diesem Name oder Teilen des Namens (mindestens 1 "
+#~ "Zeichen)."
+
+#~ msgid "Search for FAQ articles within the choosen category."
+#~ msgstr "Suche nach FAQ-Artikeln innerhalb der gewählten Kategorie."
+
+#~ msgid "Search for FAQ articles within the choosen validity."
+#~ msgstr "Suche nach FAQ-Artikeln mit der gewählten Gültigkeit."
+
+#~ msgid ""
+#~ "Search for FAQ articles with the same number or part of the same number "
+#~ "(min. 1 character)."
+#~ msgstr ""
+#~ "Suche nach FAQ-Artikeln mit dieser Nummer oder Teilen der Nummer "
+#~ "(mindestens 1 Zeichen)."
+
+#~ msgid ""
+#~ "Search for FAQ articles with the same title or part of the same title "
+#~ "(min. 1 character)."
+#~ msgstr ""
+#~ "Suche nach FAQ-Artikeln mit diesem Titel oder Teilen des Titels "
+#~ "(mindestens 1 Zeichen)."
+
+#~ msgid "Search for tickets with selected priority."
+#~ msgstr "Suche nach Tickets mit der gewählten Priorität."
+
+#~ msgid "Search for tickets with selected queue."
+#~ msgstr "Suche nach Tickets mit dem gewählten Team."
+
+#~ msgid "Search for tickets with selected state."
+#~ msgstr "Suche nach Tickets mit dem gewählten Status."
+
+#~ msgid "Search for tickets with selected type."
+#~ msgstr "Suche nach Tickets mit dem gewählten Typ."
+
+#~ msgid "Select a character set."
+#~ msgstr "Wählen Sie einen Zeichensatz."
+
+#~ msgid ""
+#~ "Serach for config items with the same number or part of the same number "
+#~ "(min. 1 character)."
+#~ msgstr ""
+#~ "Suche nach Assets mit dieser Nummer oder Teilen der Nummer (mindestens 1 "
+#~ "Zeichen)."
+
+#~ msgid "Update Account"
+#~ msgstr "Aktualisierung wird durchgeführt"
+
+#~ msgid "Update Preferences"
+#~ msgstr "Aktualisierung wird durchgeführt"
 
 #~ msgid "Automation: Notification"
 #~ msgstr "Automatisierung: Benachrichtigung"
@@ -3933,9 +4138,6 @@ msgstr "PLZ"
 
 #~ msgid "New Email Account"
 #~ msgstr "Neues E-Mail Konto"
-
-#~ msgid "Save Settings."
-#~ msgstr "Einstellungen werden gespeichert."
 
 #~ msgid "Update Filter"
 #~ msgstr "Aktualisierung wird durchgeführt"
@@ -4631,13 +4833,6 @@ msgstr "PLZ"
 
 #~ msgid "Warning"
 #~ msgstr "Warnung"
-
-#~ msgid "You will edit {0} attributes for {1} {2}. Execute now?"
-#~ msgstr "Sie ändern {0} Attribute an {1} {2}. Jetzt starten?"
-
-#~ msgid "Changes cannot be saved. How do you want to proceed?"
-#~ msgstr ""
-#~ "Änderung kann nicht gespeichert werden. Wie möchten Sie weiter verfahren?"
 
 #~ msgid "Zu ändernde Attribute"
 #~ msgstr "zu ändernde Attribute"
