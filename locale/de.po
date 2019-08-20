@@ -172,6 +172,14 @@ msgstr "Artikel wurde erfolgreich angelegt."
 msgid "Article Text"
 msgstr "Artikelinhalt"
 
+msgid "Assets: General Catalog"
+msgstr ""
+
+#, fuzzy
+#| msgid "Assigned Agents"
+msgid "Assigned agent"
+msgstr "Zugeordnete Agenten"
+
 msgid "Assigned Agents"
 msgstr "Zugeordnete Agenten"
 
@@ -392,6 +400,11 @@ msgstr "Kommunikation: E-Mail: E-Mail Filter"
 msgid "Communication: Email: Email Filters"
 msgstr "Kommunikation: E-Mail: E-Mail Filter"
 
+#, fuzzy
+#| msgid "Communication: Email"
+msgid "Communication: Webform"
+msgstr "Kommunikation: E-Mail"
+
 msgid "Compare"
 msgstr "Vergleichen"
 
@@ -527,6 +540,11 @@ msgstr "Übersetzung wird angelegt"
 msgid "Create Type"
 msgstr "Typ wird angelegt"
 
+#, fuzzy
+#| msgid "Create Category"
+msgid "Create Webform"
+msgstr "Kategorie wird angelegt"
+
 msgid "CSV-Export"
 msgstr "CSV-Export"
 
@@ -567,6 +585,11 @@ msgid "Default"
 msgstr "Standard"
 
 msgid "Default Value"
+msgstr "Standardwert"
+
+#, fuzzy
+#| msgid "Default Value"
+msgid "Default Values"
 msgstr "Standardwert"
 
 msgid "Delete"
@@ -728,6 +751,11 @@ msgstr "E-Mail Header"
 msgid "Email Information"
 msgstr "E-Mail-Informationen"
 
+#, fuzzy
+#| msgid "Attachments"
+msgid "Enable attachments"
+msgstr "Anhänge"
+
 msgid "ends with"
 msgstr "endet mit"
 
@@ -870,6 +898,9 @@ msgstr "Tickets werden gesperrt"
 msgid "Force"
 msgstr "Erzwingen"
 
+msgid "Form title"
+msgstr ""
+
 msgid "Forward"
 msgstr "Weiterleiten"
 
@@ -881,6 +912,11 @@ msgstr "Vollständiger Name"
 
 msgid "Full Text"
 msgstr "Volltext"
+
+#, fuzzy
+#| msgid "General Information"
+msgid "General Catalog"
+msgstr "Allgemeine Informationen"
 
 msgid "General information on working with KIX 18"
 msgstr "Allgemeine Hinweise zum Arbeiten mit KIX 18"
@@ -964,8 +1000,8 @@ msgstr ""
 
 msgid "Helptext_Admin_MailAccountCreate_Host"
 msgstr ""
-"Geben Sie den Name des Hosts an, bei dem das Konto liegt. Beispiel: "
-"mail.example.com"
+"Geben Sie den Name des Hosts an, bei dem das Konto liegt. Beispiel: mail."
+"example.com"
 
 msgid "Helptext_Admin_MailAccountCreate_IMAPFolder"
 msgstr ""
@@ -979,8 +1015,8 @@ msgid "Helptext_Admin_MailAccountCreate_Type."
 msgstr ""
 "IMAP/=Es werden Kopien Ihrer Nachrichten ins KIX geladen – die Nachrichten "
 "liegen weiterhin auf dem Server; POP/=Die Nachrichten werden vom Server "
-"herunter geladen; /S=Verbindung wird direkt über SSL verschlüsselt; /TLS="
-"Verbindung wird direkt über TLS verschlüsselt"
+"herunter geladen; /S=Verbindung wird direkt über SSL verschlüsselt; /"
+"TLS=Verbindung wird direkt über TLS verschlüsselt"
 
 msgid "Helptext_Admin_MailAccountCreate_UserName"
 msgstr ""
@@ -1010,8 +1046,8 @@ msgstr ""
 
 msgid "Helptext_Admin_MailAccountEdit_Host"
 msgstr ""
-"Geben Sie den Name des Hosts an, bei dem das Konto liegt. Beispiel: "
-"mail.example.com"
+"Geben Sie den Name des Hosts an, bei dem das Konto liegt. Beispiel: mail."
+"example.com"
 
 msgid "Helptext_Admin_MailAccountEdit_IMAPFolder"
 msgstr ""
@@ -1025,8 +1061,8 @@ msgid "Helptext_Admin_MailAccountEdit_Type."
 msgstr ""
 "IMAP/=Es werden Kopien Ihrer Nachrichten ins KIX geladen – die Nachrichten "
 "liegen weiterhin auf dem Server; POP/=Die Nachrichten werden vom Server "
-"herunter geladen; /S=Verbindung wird direkt über SSL verschlüsselt; /TLS="
-"Verbindung wird direkt über TLS verschlüsselt"
+"herunter geladen; /S=Verbindung wird direkt über SSL verschlüsselt; /"
+"TLS=Verbindung wird direkt über TLS verschlüsselt"
 
 msgid "Helptext_Admin_MailAccountEdit_UserName"
 msgstr ""
@@ -1124,8 +1160,8 @@ msgid "Helptext_Admin_MailFilter_Sidebar"
 msgstr ""
 "Einkommende Mails können anhand von E-Mail-Kopfzeilen verteilt oder "
 "gefiltert werden. Für die Suche sind reguläre Ausdrücke zulässig. Wenn nur "
-"eine E-Mail-Adresse gesucht wird, dann benutzen Sie EMAILADDRESS:info@"
-"example.com in From, To oder Cc. Wenn Sie reguläre Ausdrücke verwenden, "
+"eine E-Mail-Adresse gesucht wird, dann benutzen Sie EMAILADDRESS:"
+"info@example.com in From, To oder Cc. Wenn Sie reguläre Ausdrücke verwenden, "
 "können Sie die unter „Filterbedingungen“ gefundenen Werte in „()“ setzen und "
 "mit „[***]“ in der Aktion \"Wert setzen\" verwenden. (nur für eine „()“-"
 "Bedingung möglich)"
@@ -1320,9 +1356,9 @@ msgstr ""
 
 msgid "Helptext_Admin_SystemAddressCreate_Name"
 msgstr ""
-"Geben Sie eine syntaktisch korrekte E-Mail-Adresse ein. Beispiel: „support"
-"@muster-kg.com“ Diese muss zu einem in KIX konfigurierten Konto passen, wenn "
-"Antworten an diese Adresse im KIX an Tickets ankommen sollen."
+"Geben Sie eine syntaktisch korrekte E-Mail-Adresse ein. Beispiel: "
+"„support@muster-kg.com“ Diese muss zu einem in KIX konfigurierten Konto "
+"passen, wenn Antworten an diese Adresse im KIX an Tickets ankommen sollen."
 
 msgid "Helptext_Admin_SystemAddressCreate_Validity"
 msgstr ""
@@ -1334,7 +1370,8 @@ msgstr ""
 "Bereich angezeigt werden."
 
 msgid "Helptext_Admin_TextModuleCreate_Keywords"
-msgstr "Schlagworte helfen, einen Textbaustein schnell zu finden & auszuwählen."
+msgstr ""
+"Schlagworte helfen, einen Textbaustein schnell zu finden & auszuwählen."
 
 msgid "Helptext_Admin_TextModuleCreate_Language"
 msgstr "Geben Sie die Sprache an, in der der Textbaustein angelegt ist."
@@ -1357,7 +1394,8 @@ msgstr ""
 "Bereich angezeigt werden."
 
 msgid "Helptext_Admin_TextModuleEdit_Keywords"
-msgstr "Schlagworte helfen, einen Textbaustein schnell zu finden & auszuwählen."
+msgstr ""
+"Schlagworte helfen, einen Textbaustein schnell zu finden & auszuwählen."
 
 msgid "Helptext_Admin_TextModuleEdit_Language"
 msgstr "Geben Sie die Sprache an, in der der Textbaustein angelegt ist."
@@ -1679,6 +1717,107 @@ msgstr ""
 "Der Agent kann sich mit den hier festgelegten Nutzerdaten nur einloggen, "
 "wenn der Agent „gültig“ gesetzt ist."
 
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryCreate_Comment"
+msgid "Helptext_Admin_WebformCreate_AllowAttachments"
+msgstr ""
+"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+"Bereich angezeigt werden."
+
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
+msgid "Helptext_Admin_WebformCreate_ButtonLabel"
+msgstr ""
+"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
+"der Kategorie angezeigt wird."
+
+#, fuzzy
+#| msgid "Helptext_Admin_NotificationCreate_MessageText"
+msgid "Helptext_Admin_WebformCreate_HintMessage"
+msgstr ""
+"Geben Sie den Text ein, der in der E-Mail angezeigt werden soll, durch die "
+"diese Benachrichtigung versendet wird. Beachten Sie die gewählte Sprache."
+
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
+msgid "Helptext_Admin_WebformCreate_Modal"
+msgstr ""
+"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
+"der Kategorie angezeigt wird."
+
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryCreate_Validity"
+msgid "Helptext_Admin_WebformCreate_PriorityID"
+msgstr ""
+"Die Kategorie kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
+
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
+msgid "Helptext_Admin_WebformCreate_QueueID"
+msgstr ""
+"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
+"der Kategorie angezeigt wird."
+
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
+msgid "Helptext_Admin_WebformCreate_SaveButtonLabel"
+msgstr ""
+"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
+"der Kategorie angezeigt wird."
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleCreate_Text"
+msgid "Helptext_Admin_WebformCreate_ShowTitle"
+msgstr ""
+"Geben Sie den Text ein, den Sie per Textbaustein einfügen wollen. Es können "
+"Platzhalter verwendet werden."
+
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
+msgid "Helptext_Admin_WebformCreate_StateID"
+msgstr ""
+"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
+"der Kategorie angezeigt wird."
+
+#, fuzzy
+#| msgid "Helptext_Admin_NotificationCreate_MessageText"
+msgid "Helptext_Admin_WebformCreate_SuccessMessage"
+msgstr ""
+"Geben Sie den Text ein, der in der E-Mail angezeigt werden soll, durch die "
+"diese Benachrichtigung versendet wird. Beachten Sie die gewählte Sprache."
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleCreate_Text"
+msgid "Helptext_Admin_WebformCreate_Title"
+msgstr ""
+"Geben Sie den Text ein, den Sie per Textbaustein einfügen wollen. Es können "
+"Platzhalter verwendet werden."
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_Type."
+msgid "Helptext_Admin_WebformCreate_TypeID"
+msgstr ""
+"IMAP/=Es werden Kopien Ihrer Nachrichten ins KIX geladen – die Nachrichten "
+"liegen weiterhin auf dem Server; POP/=Die Nachrichten werden vom Server "
+"herunter geladen; /S=Verbindung wird direkt über SSL verschlüsselt; /"
+"TLS=Verbindung wird direkt über TLS verschlüsselt"
+
+#, fuzzy
+#| msgid "Helptext_Admin_Users_RoleCreate_User"
+msgid "Helptext_Admin_WebformCreate_UseKIXCSS"
+msgstr "Es werden nur gültige Agenten angezeigt."
+
+#, fuzzy
+#| msgid "Helptext_Admin_Users_RoleCreate_User"
+msgid "Helptext_Admin_WebformCreate_UserID"
+msgstr "Es werden nur gültige Agenten angezeigt."
+
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryCreate_Validity"
+msgid "Helptext_Admin_WebformCreate_Validity"
+msgstr ""
+"Die Kategorie kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
+
 msgid "Helptext_CMDB_ConfigItemClassCreate_Comment"
 msgstr ""
 "Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
@@ -1852,17 +1991,18 @@ msgstr ""
 "(=Spaltenbezeichnungen). Diese Attribute müssen den KIX-internen "
 "Spaltenbezeichnungen exakt (Groß- & Kleinschreibung beachten!) entsprechen. "
 "Es müssen mindestens alle Pflichtattribute (*) gefüllt sein (Ausnahme: "
-"Gültigkeit, siehe unten) Attribute: *Login – Nutzername; Password – Passwort;"
-" *PrimaryOrganisationID – Zahl (vorhanden, wenn Datei aus KIX-Kontakt-Export "
-"stammt) ODER *PrimaryOrganisationNumber - KNR des zugeordneten Kunden (muss "
-"bereits im KIX vorhanden sein); Firstname – Vorname; Lastname – Nachname; "
-"Title – Titel; Email – E-Mail Adresse; Phone – Telefonnummer; Mobile – "
-"Handynummer; Fax – Faxnummer; Street - Straße; City – Stadt; ZIP - PLZ; "
-"Country – Land; Comment – Kommentar; *ValidID – Gültigkeit (1=gültig; "
-"2=ungültig; 3=temporär ungültig) ODER *Validity - Gültigkeit (valid=gültig; "
-"invalid=ungültig; invalid-temporarily=temporär ungültig) Enthält der "
-"Datensatz keine Gültigkeit, wird dieses Attribut über die Auswahl im Bereich "
-"„Wert  ersetzen“ automatisch gesetzt (kann geändert werden)."
+"Gültigkeit, siehe unten) Attribute: *Login – Nutzername; Password – "
+"Passwort; *PrimaryOrganisationID – Zahl (vorhanden, wenn Datei aus KIX-"
+"Kontakt-Export stammt) ODER *PrimaryOrganisationNumber - KNR des "
+"zugeordneten Kunden (muss bereits im KIX vorhanden sein); Firstname – "
+"Vorname; Lastname – Nachname; Title – Titel; Email – E-Mail Adresse; Phone – "
+"Telefonnummer; Mobile – Handynummer; Fax – Faxnummer; Street - Straße; City "
+"– Stadt; ZIP - PLZ; Country – Land; Comment – Kommentar; *ValidID – "
+"Gültigkeit (1=gültig; 2=ungültig; 3=temporär ungültig) ODER *Validity - "
+"Gültigkeit (valid=gültig; invalid=ungültig; invalid-temporarily=temporär "
+"ungültig) Enthält der Datensatz keine Gültigkeit, wird dieses Attribut über "
+"die Auswahl im Bereich „Wert  ersetzen“ automatisch gesetzt (kann geändert "
+"werden)."
 
 msgid "Helptext_Customers_OrganisationCreate_City"
 msgstr ""
@@ -1902,8 +2042,8 @@ msgstr ""
 "Es müssen mindestens alle Pflichtattribute (*) gefüllt sein (Ausnahme: "
 "Gültigkeit, siehe unten) Attribute: *CNR – Kundennummer/KNR;  *Name – Name; "
 "Url – URL/Webadresse; Street – Straße; Zip – PLZ; City – Stadt; Country – "
-"Land; Comment – Kommentar; *ValidID – Gültigkeit (1=gültig; 2=ungültig; 3="
-"temporär ungültig) ODER *Validity - Gültigkeit valid=gültig; "
+"Land; Comment – Kommentar; *ValidID – Gültigkeit (1=gültig; 2=ungültig; "
+"3=temporär ungültig) ODER *Validity - Gültigkeit valid=gültig; "
 "invalid=ungültig; invalid-temporarily=temporär ungültig) Enthält der "
 "Datensatz keine Gültigkeit, wird dieses Attribut über die Auswahl im Bereich "
 "„Wert ersetzen“ automatisch gesetzt (kann geändert werden)."
@@ -2069,8 +2209,8 @@ msgstr ""
 
 msgid "Helptext_Textmodules_TicketEdit"
 msgstr ""
-"Um die in Ihrem System verfügbaren Textbausteine zu nutzen, geben Sie \"::\" "
-"(Doppelpunkt Doppelpunkt) ein. Wählen Sie anschließend im Kontextmenü den "
+"Um die in Ihrem System verfügbaren Textbausteine zu nutzen, geben Sie \"::"
+"\" (Doppelpunkt Doppelpunkt) ein. Wählen Sie anschließend im Kontextmenü den "
 "gewünschten Textbaustein aus. Sie können die Auswahl anhand der "
 "Schlüsselworte manuell einschränken, in dem sie weiteren Text eingeben."
 
@@ -2143,8 +2283,8 @@ msgid "Helptext_Tickets_TicketEdit_Channel"
 msgstr ""
 "Wählen Sie aus, ob Sie die Beschreibung intern am Ticket hinterlegen (Notiz) "
 "oder zusätzlich per E-Mail versenden (E-Mail) wollen. Wenn Sie es nicht für "
-"nötig halten, der Änderung eine Beschreibung hinzuzufügen, wählen Sie hier \""
-"kein Artikel\"."
+"nötig halten, der Änderung eine Beschreibung hinzuzufügen, wählen Sie hier "
+"\"kein Artikel\"."
 
 msgid "Helptext_Tickets_TicketEdit_Contact"
 msgstr ""
@@ -2261,6 +2401,11 @@ msgstr "Vorfallstatus"
 
 msgid "Incident State"
 msgstr "Vorfallstatus"
+
+#, fuzzy
+#| msgid "FAQ Information"
+msgid "Information text"
+msgstr "FAQ-Informationen"
 
 msgid ""
 "Input of 3 stars '***' in autocomplete form fields = listing of the first 10 "
@@ -2478,6 +2623,9 @@ msgstr "Logs"
 msgid "Menu"
 msgstr "Modulmenü"
 
+msgid "Message after sending form"
+msgstr ""
+
 msgid "Minutes"
 msgstr "Minuten"
 
@@ -2513,6 +2661,12 @@ msgstr "Meine beobachteten Tickets mit neuen Artikeln"
 
 msgid "Name"
 msgstr "Name"
+
+msgid "Name of activate form button"
+msgstr ""
+
+msgid "Name of form submit button"
+msgstr ""
 
 msgid "Negate"
 msgstr "Negieren"
@@ -2606,6 +2760,11 @@ msgstr "Neuer Typ"
 
 msgid "New Version created"
 msgstr "Neue Version wurde angelegt."
+
+#, fuzzy
+#| msgid "New Category"
+msgid "New Webform"
+msgstr "Neue Kategorie"
 
 msgid "next"
 msgstr "weiter"
@@ -3242,6 +3401,9 @@ msgstr "Wert setzen"
 msgid "Show all"
 msgstr "Alle anzeigen"
 
+msgid "Show title in form"
+msgstr ""
+
 msgid "Sidebars"
 msgstr "Sidebars"
 
@@ -3274,6 +3436,9 @@ msgstr "Trennoptionen"
 
 msgid "Start Import"
 msgstr "Import starten"
+
+msgid "Start modal dialog for form"
+msgstr ""
 
 msgid "Start search"
 msgstr "Suche starten"
@@ -3364,6 +3529,9 @@ msgstr "Schlagworte"
 
 msgid "Target"
 msgstr "Ziel"
+
+msgid "Team"
+msgstr ""
 
 msgid "Template"
 msgstr "Vorlage"
@@ -3644,6 +3812,9 @@ msgstr "Aktualisierung wird durchgeführt"
 msgid "URL"
 msgstr "URL"
 
+msgid "Use KIX CSS"
+msgstr ""
+
 msgid "User"
 msgstr "Benutzer"
 
@@ -3706,6 +3877,17 @@ msgstr "Ticket beobachten"
 
 msgid "We are working on this functionality."
 msgstr "Funktionalität ist in Arbeit."
+
+msgid "Webform"
+msgstr ""
+
+msgid "Webform Options"
+msgstr ""
+
+#, fuzzy
+#| msgid "Category successfully created."
+msgid "Webform successfully created."
+msgstr "Kategorie wurde erfolgreich angelegt."
 
 msgid "Welcome to KIX 18"
 msgstr "Willkommen bei KIX 18"
@@ -4474,9 +4656,6 @@ msgstr "PLZ"
 
 #~ msgid "not "
 #~ msgstr "nicht "
-
-#~ msgid "General Information"
-#~ msgstr "Allgemeine Informationen"
 
 #~ msgid "Vendor"
 #~ msgstr "Hersteller"

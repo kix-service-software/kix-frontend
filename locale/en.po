@@ -170,6 +170,14 @@ msgstr ""
 msgid "Article Text"
 msgstr ""
 
+msgid "Assets: General Catalog"
+msgstr ""
+
+#, fuzzy
+#| msgid "Assigned Queues"
+msgid "Assigned agent"
+msgstr "Assigned Teams"
+
 msgid "Assigned Agents"
 msgstr ""
 
@@ -382,6 +390,9 @@ msgstr ""
 msgid "Communication: Email: Email Filters"
 msgstr ""
 
+msgid "Communication: Webform"
+msgstr ""
+
 msgid "Compare"
 msgstr ""
 
@@ -517,6 +528,11 @@ msgstr ""
 msgid "Create Type"
 msgstr ""
 
+#, fuzzy
+#| msgid "Create Queue"
+msgid "Create Webform"
+msgstr "Create Team"
+
 msgid "CSV-Export"
 msgstr ""
 
@@ -557,6 +573,9 @@ msgid "Default"
 msgstr ""
 
 msgid "Default Value"
+msgstr ""
+
+msgid "Default Values"
 msgstr ""
 
 msgid "Delete"
@@ -718,6 +737,9 @@ msgstr ""
 msgid "Email Information"
 msgstr ""
 
+msgid "Enable attachments"
+msgstr ""
+
 msgid "ends with"
 msgstr ""
 
@@ -858,6 +880,9 @@ msgstr ""
 msgid "Force"
 msgstr ""
 
+msgid "Form title"
+msgstr ""
+
 msgid "Forward"
 msgstr ""
 
@@ -868,6 +893,9 @@ msgid "Fullname"
 msgstr ""
 
 msgid "Full Text"
+msgstr ""
+
+msgid "General Catalog"
 msgstr ""
 
 msgid "General information on working with KIX 18"
@@ -889,7 +917,8 @@ msgid "Helping FAQ Contributions"
 msgstr "Helpfull FAQ articles"
 
 msgid "Helptext_Admin_FAQCategoryCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_FAQCategoryCreate_Icon"
 msgstr ""
@@ -908,7 +937,8 @@ msgid "Helptext_Admin_FAQCategoryCreate_Validity"
 msgstr "The FAQ category can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_FAQCategoryEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_FAQCategoryEdit_Icon"
 msgstr ""
@@ -933,7 +963,8 @@ msgstr ""
 "options are configured."
 
 msgid "Helptext_Admin_MailAccountCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_MailAccountCreate_Dispachting"
 msgstr ""
@@ -949,13 +980,14 @@ msgstr ""
 "INBOX."
 
 msgid "Helptext_Admin_MailAccountCreate_Password"
-msgstr "Insert the password for the account to enable connection with the host."
+msgstr ""
+"Insert the password for the account to enable connection with the host."
 
 msgid "Helptext_Admin_MailAccountCreate_Type."
 msgstr ""
 "IMAP/=Messages are only copied to KIX – the originals stay at the server; "
-"POP/=Messages are downloaded from the server; /S=Connection is SSL encrypted;"
-" /TLS=Connection is TLS encrpyted"
+"POP/=Messages are downloaded from the server; /S=Connection is SSL "
+"encrypted; /TLS=Connection is TLS encrpyted"
 
 msgid "Helptext_Admin_MailAccountCreate_UserName"
 msgstr ""
@@ -972,7 +1004,8 @@ msgstr ""
 "options are configured."
 
 msgid "Helptext_Admin_MailAccountEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_MailAccountEdit_Dispachting"
 msgstr ""
@@ -988,13 +1021,14 @@ msgstr ""
 "INBOX."
 
 msgid "Helptext_Admin_MailAccountEdit_Password"
-msgstr "Insert the password for the account to enable connection with the host."
+msgstr ""
+"Insert the password for the account to enable connection with the host."
 
 msgid "Helptext_Admin_MailAccountEdit_Type."
 msgstr ""
 "IMAP/=Messages are only copied to KIX – the originals stay at the server; "
-"POP/=Messages are downloaded from the server; /S=Connection is SSL encrypted;"
-" /TLS=Connection is TLS encrpyted"
+"POP/=Messages are downloaded from the server; /S=Connection is SSL "
+"encrypted; /TLS=Connection is TLS encrpyted"
 
 msgid "Helptext_Admin_MailAccountEdit_UserName"
 msgstr ""
@@ -1005,7 +1039,8 @@ msgid "Helptext_Admin_MailAccountEdit_Validity"
 msgstr "The email account can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_MailFilterCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_MailFilterCreate_FilterConditions"
 msgstr "At least one filter condition is necessary for the filter to work."
@@ -1025,7 +1060,8 @@ msgid "Helptext_Admin_MailFilterCreate_Validity"
 msgstr "The email filter can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_MailFilterEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_MailFilterEdit_FilterConditions"
 msgstr "At least one filter condition is necessary for the filter to work."
@@ -1085,7 +1121,8 @@ msgstr ""
 "further recipients, additionally to the criteria defined above."
 
 msgid "Helptext_Admin_NotificationCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_NotificationCreate_Event"
 msgstr ""
@@ -1149,7 +1186,8 @@ msgstr ""
 "further recipients, additionally to the criteria defined above."
 
 msgid "Helptext_Admin_NotificationEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_NotificationEdit_Event"
 msgstr ""
@@ -1235,13 +1273,14 @@ msgid "Helptext_Admin_SysConfigEdit_Value"
 msgstr "SysConfig key value. Needs to consist in valid JSON."
 
 msgid "Helptext_Admin_SystemAddressCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_SystemAddressCreate_DisplayName"
 msgstr ""
 "Insert a display name for the email address. For an outgoing email, the "
-"display name can be used instead or together with the email address. Example:"
-" “Example KG Support”"
+"display name can be used instead or together with the email address. "
+"Example: “Example KG Support”"
 
 msgid "Helptext_Admin_SystemAddressCreate_Name"
 msgstr ""
@@ -1253,7 +1292,8 @@ msgid "Helptext_Admin_SystemAddressCreate_Validity"
 msgstr "The email address can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_TextModuleCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_TextModuleCreate_Keywords"
 msgstr "Keywords allow to quickly find and choose text modules."
@@ -1272,7 +1312,8 @@ msgid "Helptext_Admin_TextModuleCreate_Validity"
 msgstr "The text module can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_TextModuleEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_TextModuleEdit_Keywords"
 msgstr "Keywords allow to quickly find and choose text modules."
@@ -1291,7 +1332,8 @@ msgid "Helptext_Admin_TextModuleEdit_Validity"
 msgstr "The text module can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_Tickets_PriorityCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Tickets_PriorityCreate_Icon"
 msgstr ""
@@ -1305,7 +1347,8 @@ msgid "Helptext_Admin_Tickets_PriorityCreate_Valid"
 msgstr "The priority can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_Tickets_PriorityEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Tickets_PriorityEdit_Icon"
 msgstr ""
@@ -1319,7 +1362,8 @@ msgid "Helptext_Admin_Tickets_PriorityEdit_Valid"
 msgstr "The priority can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_Tickets_QueueCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Tickets_QueueCreate_FollowUp"
 msgstr ""
@@ -1357,7 +1401,8 @@ msgid "Helptext_Admin_Tickets_QueueCreate_Validity"
 msgstr "The team can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_Tickets_QueueEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Tickets_QueueEdit_FollowUp"
 msgstr ""
@@ -1392,7 +1437,8 @@ msgid "Helptext_Admin_Tickets_QueueEdit_Validity"
 msgstr "The team can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_Tickets_StateCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Tickets_StateCreate_Icon"
 msgstr ""
@@ -1409,7 +1455,8 @@ msgid "Helptext_Admin_Tickets_StateCreate_Valid"
 msgstr "The state can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_Tickets_StateEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Tickets_StateEdit_Icon"
 msgstr ""
@@ -1429,7 +1476,8 @@ msgid "Helptext_Admin_Tickets_Tickets_QueueEdit_Name"
 msgstr "The name set here will be shown in the application"
 
 msgid "Helptext_Admin_Tickets_TypeCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Tickets_TypeCreate_Icon"
 msgstr ""
@@ -1443,7 +1491,8 @@ msgid "Helptext_Admin_Tickets_TypeCreate_Valid"
 msgstr "The type can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_Tickets_TypeEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Tickets_TypeEdit_Icon"
 msgstr ""
@@ -1477,7 +1526,8 @@ msgstr ""
 "can change this setting in their preferences."
 
 msgid "Helptext_Admin_Users_RoleCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Users_RoleCreate_Name"
 msgstr ""
@@ -1489,7 +1539,8 @@ msgid "Helptext_Admin_Users_RoleCreate_Valid"
 msgstr "The role can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_Users_RoleEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Users_RoleEdit_Name"
 msgstr ""
@@ -1501,7 +1552,8 @@ msgid "Helptext_Admin_Users_RoleEdit_Valid"
 msgstr "The role can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_Users_UserCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Users_UserCreate_Email"
 msgstr ""
@@ -1528,7 +1580,8 @@ msgid "Helptext_Admin_Users_UserCreate_Valid"
 msgstr "The agent can only login with the user data set here if set “valid”."
 
 msgid "Helptext_Admin_Users_UserEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Users_UserEdit_Email"
 msgstr ""
@@ -1559,8 +1612,104 @@ msgstr ""
 msgid "Helptext_Admin_Users_UserEdit_Valid"
 msgstr "The agent can only login with the user data set here if set “valid”."
 
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryCreate_Comment"
+msgid "Helptext_Admin_WebformCreate_AllowAttachments"
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
+
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
+msgid "Helptext_Admin_WebformCreate_ButtonLabel"
+msgstr ""
+"Upload an icon, which will be shown together with the category name within "
+"the application."
+
+#, fuzzy
+#| msgid "Helptext_Admin_NotificationCreate_MessageText"
+msgid "Helptext_Admin_WebformCreate_HintMessage"
+msgstr ""
+"Insert the text you want to show in the email send out by this notification. "
+"Keep in mind the chosen language."
+
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
+msgid "Helptext_Admin_WebformCreate_Modal"
+msgstr ""
+"Upload an icon, which will be shown together with the category name within "
+"the application."
+
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryCreate_Validity"
+msgid "Helptext_Admin_WebformCreate_PriorityID"
+msgstr "The FAQ category can only be used within the system if set “valid”."
+
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
+msgid "Helptext_Admin_WebformCreate_QueueID"
+msgstr ""
+"Upload an icon, which will be shown together with the category name within "
+"the application."
+
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
+msgid "Helptext_Admin_WebformCreate_SaveButtonLabel"
+msgstr ""
+"Upload an icon, which will be shown together with the category name within "
+"the application."
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleCreate_Text"
+msgid "Helptext_Admin_WebformCreate_ShowTitle"
+msgstr ""
+"Insert the text you want to use as a text module. You can use placeholders."
+
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
+msgid "Helptext_Admin_WebformCreate_StateID"
+msgstr ""
+"Upload an icon, which will be shown together with the category name within "
+"the application."
+
+#, fuzzy
+#| msgid "Helptext_Admin_NotificationCreate_MessageText"
+msgid "Helptext_Admin_WebformCreate_SuccessMessage"
+msgstr ""
+"Insert the text you want to show in the email send out by this notification. "
+"Keep in mind the chosen language."
+
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleCreate_Text"
+msgid "Helptext_Admin_WebformCreate_Title"
+msgstr ""
+"Insert the text you want to use as a text module. You can use placeholders."
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_Type."
+msgid "Helptext_Admin_WebformCreate_TypeID"
+msgstr ""
+"IMAP/=Messages are only copied to KIX – the originals stay at the server; "
+"POP/=Messages are downloaded from the server; /S=Connection is SSL "
+"encrypted; /TLS=Connection is TLS encrpyted"
+
+#, fuzzy
+#| msgid "Helptext_Admin_Users_RoleCreate_User"
+msgid "Helptext_Admin_WebformCreate_UseKIXCSS"
+msgstr "There are only valid agents available."
+
+#, fuzzy
+#| msgid "Helptext_Admin_Users_RoleCreate_User"
+msgid "Helptext_Admin_WebformCreate_UserID"
+msgstr "There are only valid agents available."
+
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryCreate_Validity"
+msgid "Helptext_Admin_WebformCreate_Validity"
+msgstr "The FAQ category can only be used within the system if set “valid”."
+
 msgid "Helptext_CMDB_ConfigItemClassCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_CMDB_ConfigItemClassCreate_Definition"
 msgstr "The class definition has to consist of valid JSON."
@@ -1577,7 +1726,8 @@ msgid "Helptext_CMDB_ConfigItemClassCreate_Valid"
 msgstr "The asset class can only be used within the system if set “valid”."
 
 msgid "Helptext_CMDB_ConfigItemClassEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_CMDB_ConfigItemClassEdit_Definition"
 msgstr "The class definition has to consist of valid JSON."
@@ -2143,6 +2293,11 @@ msgstr ""
 msgid "Incident State"
 msgstr ""
 
+#, fuzzy
+#| msgid "Queue Information"
+msgid "Information text"
+msgstr "Team Information"
+
 msgid ""
 "Input of 3 stars '***' in autocomplete form fields = listing of the first 10 "
 "found records"
@@ -2357,6 +2512,9 @@ msgstr ""
 msgid "Menu"
 msgstr ""
 
+msgid "Message after sending form"
+msgstr ""
+
 msgid "Minutes"
 msgstr ""
 
@@ -2391,6 +2549,12 @@ msgid "My watched tickets with new articles"
 msgstr ""
 
 msgid "Name"
+msgstr ""
+
+msgid "Name of activate form button"
+msgstr ""
+
+msgid "Name of form submit button"
 msgstr ""
 
 msgid "Negate"
@@ -2484,6 +2648,9 @@ msgid "New Type"
 msgstr ""
 
 msgid "New Version created"
+msgstr ""
+
+msgid "New Webform"
 msgstr ""
 
 msgid "next"
@@ -3108,6 +3275,9 @@ msgstr ""
 msgid "Show all"
 msgstr ""
 
+msgid "Show title in form"
+msgstr ""
+
 msgid "Sidebars"
 msgstr ""
 
@@ -3139,6 +3309,9 @@ msgid "Split Option"
 msgstr ""
 
 msgid "Start Import"
+msgstr ""
+
+msgid "Start modal dialog for form"
 msgstr ""
 
 msgid "Start search"
@@ -3229,6 +3402,9 @@ msgid "Tags"
 msgstr ""
 
 msgid "Target"
+msgstr ""
+
+msgid "Team"
 msgstr ""
 
 msgid "Template"
@@ -3504,6 +3680,9 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
+msgid "Use KIX CSS"
+msgstr ""
+
 msgid "User"
 msgstr ""
 
@@ -3566,6 +3745,17 @@ msgstr ""
 
 msgid "We are working on this functionality."
 msgstr ""
+
+msgid "Webform"
+msgstr ""
+
+msgid "Webform Options"
+msgstr ""
+
+#, fuzzy
+#| msgid "Queue successfully created."
+msgid "Webform successfully created."
+msgstr "Team successfully created."
 
 msgid "Welcome to KIX 18"
 msgstr ""
