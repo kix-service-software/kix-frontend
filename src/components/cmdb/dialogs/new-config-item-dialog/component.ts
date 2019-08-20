@@ -36,7 +36,7 @@ class Component {
         this.state.placeholder = await TranslationService.translate('Translatable#Select Config Item Class');
         this.state.classNodes = await CMDBService.getInstance().getTreeNodes(ConfigItemProperty.CLASS_ID);
 
-        const hint = await TranslationService.translate('Translatable#Helptext_CMDB_COnfigItemCreate_Class');
+        const hint = await TranslationService.translate('Translatable#Helptext_CMDB_ConfigItemCreate_Class');
         this.state.hint = hint.startsWith('Helptext_') ? null : hint;
     }
 

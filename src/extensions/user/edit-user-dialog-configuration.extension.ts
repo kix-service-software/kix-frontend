@@ -91,7 +91,7 @@ export class Extension implements IConfigurationExtension {
 
             const roleField = new FormField(
                 'Translatable#Roles', UserProperty.ROLEIDS, 'object-reference-input', false,
-                'Translatable#Assign the roles for the user.', [
+                'Translatable#Helptext_Admin_Users_UserEdit_Roles', [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.ROLE),
                     new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),

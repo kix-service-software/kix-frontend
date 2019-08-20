@@ -39,7 +39,7 @@ export class TranslationFormService extends KIXObjectFormService<TranslationPatt
             [...languages].sort((a, b) => SortUtil.compareString(a[1], b[1])).forEach((l) => {
                 const languageField = new FormField(
                     l[1], l[0], 'text-area-input', false,
-                    'Translatable#Helptext_i18n_TranslationPatternEdit_Translation'
+                    'Translatable#Helptext_i18n_TranslationPatternCreateEdit_Translation'
                 );
                 languageField.placeholder = 'Translatable#Translation';
                 form.groups[0].formFields.push(languageField);

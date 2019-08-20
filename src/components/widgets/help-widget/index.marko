@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.help-container class={
     "note-editor-active": state.editorActive
 }>
@@ -25,7 +24,16 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         : "kix-icon-query"
             )>
         <@content>
-            <span>$!{state.helpText}</span>
+            <span>${state.helpText}</span>
+            <if(state.links && !!state.links.length)>
+                <for|link| of=state.links>
+                    <div>
+                        <a target="_blank" href=link[1]>
+                            <translation-string pattern=link[0]/>
+                        </a>
+                    </div>
+                </for>
+            </if>
         </@content>
     </widget>
 </div>

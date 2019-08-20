@@ -26,7 +26,12 @@ export class ModuleExtension implements IConfigurationExtension {
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
         const helpWidget = new ConfiguredWidget('20180919-help-widget',
             new WidgetConfiguration(
-                'help-widget', 'Translatable#Help', [], { helpText: 'Translatable#Helptext_Search_Contact' },
+                'help-widget', 'Translatable#Help', [], {
+                    helpText: 'Translatable#Helptext_Search_Contact',
+                    links: [
+                        ['Translatable#How to search in KIX 18?', 'faqarticles/2']
+                    ]
+                },
                 false, false, 'kix-icon-query', false
             ),
             [new UIComponentPermission('faq/articles', [CRUD.READ])]

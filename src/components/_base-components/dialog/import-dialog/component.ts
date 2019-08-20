@@ -152,7 +152,7 @@ class Component {
             new FormField(
                 'Translatable#Source', 'source', 'attachment-input', true,
                 // tslint:disable-next-line:max-line-length
-                'Translatable#Choose CSV-File with data sets for import. Drag & Drop is possible.',
+                'Translatable#Helptext_Import_File',
                 [
                     new FormFieldOption('MimeTypes', ['text/', '', 'application/vnd.ms-excel']),
                     new FormFieldOption('MULTI_FILES', false)
@@ -160,7 +160,7 @@ class Component {
             ),
             new FormField(
                 'Translatable#Charset', 'character_set', 'default-select-input', true,
-                'Translatable#Select a character set.',
+                'Translatable#Helptext_Import_CharacterSet.',
                 [
                     new FormFieldOption(
                         DefaultSelectInputFormOption.NODES,
@@ -171,7 +171,7 @@ class Component {
             ),
             new FormField(
                 'Translatable#Split Option', 'value_separator', 'default-select-input', true,
-                'Translatable#Select a value separator.',
+                'Translatable#Helptext_Import_ValueSeparator.',
                 [
                     new FormFieldOption(
                         DefaultSelectInputFormOption.NODES,
@@ -183,7 +183,7 @@ class Component {
             ),
             new FormField(
                 'Translatable#Text separator', 'text_separator', 'default-select-input', true,
-                'Translatable#Select a text separator.',
+                'Translatable#Helptext_Import_TextSeparator.',
                 [
                     new FormFieldOption(
                         DefaultSelectInputFormOption.NODES,
