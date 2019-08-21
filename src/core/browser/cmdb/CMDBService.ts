@@ -19,6 +19,7 @@ import { ConfigItemDetailsContext } from "./context";
 import { SearchOperator } from "../SearchOperator";
 import { CreateConfigItemUtil } from "./CreateConfigItemUtil";
 import { CreateConfigItemVersionUtil } from "./CreateConfigItemVersionUtil";
+import { LabelService } from "../LabelService";
 
 export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> {
 
@@ -140,7 +141,10 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                     KIXObjectType.CONFIG_ITEM_CLASS
                 );
                 classes = showInvalid ? classes : classes.filter((c) => c.ValidID === 1);
-                nodes = classes.map((c) => new TreeNode(c.ID, c.Name));
+                nodes = classes.map((c) => {
+                    const icon = LabelService.getInstance().getObjectIcon(c);
+                    return new TreeNode(c.ID, c.Name, icon);
+                });
                 break;
             case ConfigItemProperty.CUR_INCI_STATE_ID:
             case ConfigItemProperty.CUR_DEPL_STATE_ID:

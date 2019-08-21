@@ -87,6 +87,10 @@ export class ConfigItemClassLabelProvider extends LabelProvider<ConfigItemClass>
         return plural ? 'CI Classes' : 'CI Class';
     }
 
+    public getObjectIcon(ciClass?: ConfigItemClass): string | ObjectIcon {
+        return new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, ciClass.ID);
+    }
+
     public async getIcons(
         ciClass: ConfigItemClass, property: string, value?: string | number
     ): Promise<Array<string | ObjectIcon>> {
@@ -95,7 +99,7 @@ export class ConfigItemClassLabelProvider extends LabelProvider<ConfigItemClass>
             switch (property) {
                 case ConfigItemClassProperty.ID:
                 case 'ICON':
-                    icons.push(new ObjectIcon(KIXObjectType.CONFIG_ITEM_CLASS, ciClass.ID));
+                    icons.push(this.getObjectIcon(ciClass));
                     break;
                 default:
                     icons = [];

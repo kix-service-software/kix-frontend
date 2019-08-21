@@ -8,7 +8,7 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { ContextService, IdService, KIXObjectService } from '../../../../core/browser';
+import { ContextService, IdService, KIXObjectService, LabelService } from '../../../../core/browser';
 import {
     TreeNode, ConfigItemClass, KIXObjectType, TreeNodeProperty, KIXObjectLoadingOptions
 } from '../../../../core/model';
@@ -88,7 +88,8 @@ export class Component {
 
                 const properties = [new TreeNodeProperty(count, text)];
                 const name = await TranslationService.translate(c.Name, []);
-                nodes.push(new TreeNode(c, name, null, null, null, null, null, null, properties));
+                const icon = LabelService.getInstance().getObjectIcon(c);
+                nodes.push(new TreeNode(c, name, icon, null, null, null, null, null, properties));
             }
         }
         return nodes;
