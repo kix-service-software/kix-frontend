@@ -7,7 +7,10 @@
  * --
  */
 
-import { InputFieldTypes, KIXObject, Error } from "../../model";
+import {
+    InputFieldTypes, KIXObject, Error, KIXObjectProperty, ValidObject, KIXObjectType, KIXObjectLoadingOptions,
+    FilterCriteria, FilterDataType, FilterType
+} from "../../model";
 import { ObjectPropertyValue } from "../ObjectPropertyValue";
 import { ImportPropertyOperator } from "./ImportPropertyOperator";
 import { KIXObjectService } from "../kix";
@@ -15,6 +18,7 @@ import { LabelService } from "../LabelService";
 import { IColumn } from "../table";
 import { AbstractDynamicFormManager } from "../form";
 import { ImportPropertyOperatorUtil } from "./ImportPropertyOperatorUtil";
+import { SearchOperator } from "../SearchOperator";
 
 export abstract class ImportManager extends AbstractDynamicFormManager {
 
@@ -22,20 +26,46 @@ export abstract class ImportManager extends AbstractDynamicFormManager {
 
     private importRun: boolean = false;
 
-    protected abstract getSpecificObject(object: {}): KIXObject;
+    protected abstract async getSpecificObject(object: {}): Promise<KIXObject>;
 
     public init(): void {
         this.reset();
         this.importRun = false;
     }
 
-    public getObject(object: {}): KIXObject {
-        const specificObject = this.getSpecificObject(object);
+    public async getObject(object: {}): Promise<KIXObject> {
+        if (!object[KIXObjectProperty.VALID_ID] && object[KIXObjectProperty.VALIDITY]) {
+            const validObject = await this.getValidObjectbyName(object[KIXObjectProperty.VALIDITY]);
+            if (validObject) {
+                object[KIXObjectProperty.VALID_ID] = validObject.ID;
+            }
+        }
+
+        const specificObject = await this.getSpecificObject(object);
+        if (!isNaN(Number(specificObject[KIXObjectProperty.VALID_ID]))) {
+            specificObject[KIXObjectProperty.VALID_ID] = Number(specificObject[KIXObjectProperty.VALID_ID]);
+        }
+
         specificObject['CSV_LINE'] = object['CSV_LINE'];
         specificObject.equals = (tableObject: KIXObject) => {
             return tableObject && tableObject['CSV_LINE'] === specificObject['CSV_LINE'];
         };
         return specificObject;
+    }
+
+    private async getValidObjectbyName(name: string): Promise<ValidObject> {
+        const loadingOptions = new KIXObjectLoadingOptions(
+            [
+                new FilterCriteria(
+                    'Name', SearchOperator.EQUALS,
+                    FilterDataType.STRING, FilterType.AND, name
+                )
+            ]
+        );
+        const validObjects = await KIXObjectService.loadObjects<ValidObject>(
+            KIXObjectType.VALID_OBJECT, null, loadingOptions, null, true
+        ).catch((error) => [] as ValidObject[]);
+        return validObjects && !!validObjects.length ? validObjects[0] : null;
     }
 
     public getImportRunState(): boolean {
@@ -46,11 +76,40 @@ export abstract class ImportManager extends AbstractDynamicFormManager {
         return [];
     }
 
+    public getAlternativeProperty(property: string): string {
+        if (property === KIXObjectProperty.VALID_ID) {
+            return KIXObjectProperty.VALIDITY;
+        }
+        return;
+    }
+
+    public getIDProperty(): string {
+        return 'ID';
+    }
+
     public async getKnownProperties(): Promise<string[]> {
+        const columnProperties = await this.getColumnProperties();
+        const alternativeProperties = [];
+        columnProperties.forEach((p) => {
+            const alternative = this.getAlternativeProperty(p);
+            if (alternative) {
+                alternativeProperties.push(alternative);
+            }
+        });
+        return [
+            this.getIDProperty(),
+            ...columnProperties,
+            ...alternativeProperties
+        ];
+    }
+
+    public async getColumnProperties(): Promise<string[]> {
         const requiredProperties = await this.getRequiredProperties();
+        const generalProperties = (await this.getProperties()).map((p) => p[0])
+            .filter((p) => !requiredProperties.some((rp) => rp === p));
         return [
             ...requiredProperties,
-            ...(await this.getProperties()).map((p) => p[0]).filter((p) => !requiredProperties.some((rp) => rp === p))
+            ...generalProperties
         ];
     }
 
@@ -115,10 +174,10 @@ export abstract class ImportManager extends AbstractDynamicFormManager {
 
     protected async prepareParameter(object: KIXObject, columns: IColumn[]): Promise<Array<[string, any]>> {
         const parameter: Array<[string, any]> = [];
-        const knownProperties = await this.getKnownProperties();
+        const objectProperties = await this.getColumnProperties();
         for (const prop in object) {
             if (
-                prop && knownProperties.some((kp) => kp === prop)
+                prop && objectProperties.some((kp) => kp === prop)
                 && columns.some((c) => c.getColumnId() === prop)
             ) {
                 parameter.push([prop, object[prop]]);

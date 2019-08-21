@@ -32,10 +32,9 @@ export class CSVExportAction extends AbstractAction<ITable> {
     public async run(): Promise<void> {
         if (this.canRun()) {
             // TODO: "Schalter" für "übersetzen/nich übersetzen" ermöglichen (Nachfrage-Overlay?)
-            // im Moment nur für Contact/Organisation notwendig
+            // im Moment nur für extra Organisation notwendig
             if (
-                this.data.getObjectType() === KIXObjectType.ORGANISATION ||
-                this.data.getObjectType() === KIXObjectType.CONTACT
+                this.data.getObjectType() === KIXObjectType.ORGANISATION
             ) {
                 TableExportUtil.export(this.data, undefined, false);
             } else {

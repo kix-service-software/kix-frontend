@@ -17,7 +17,8 @@ import {
 } from '../../../../core/model';
 import {
     ContactTableFactory, ContactLabelProvider, ContactService, ContactBrowserFactory, ContactDetailsContext,
-    ContactSearchContext, ContactSearchAction, ContactSearchDefinition, ContactFormService, ContactPlaceholderHandler
+    ContactSearchContext, ContactSearchAction, ContactSearchDefinition, ContactFormService, ContactPlaceholderHandler,
+    ContactCSVExportAction
 } from '../../../../core/browser/contact';
 import { DialogService } from '../../../../core/browser/components/dialog';
 import { SearchService } from '../../../../core/browser/kix/search/SearchService';
@@ -80,6 +81,7 @@ export class UIModule implements IUIModule {
 
     private registerActions(): void {
         ActionFactory.getInstance().registerAction('contact-search-action', ContactSearchAction);
+        ActionFactory.getInstance().registerAction('contact-csv-export-action', ContactCSVExportAction);
     }
 
 }

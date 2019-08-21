@@ -481,6 +481,7 @@ export class Table implements ITable {
         }
 
         EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
+        EventService.getInstance().publish(TableEvent.RELOADED, new TableEventData(this.getTableId()));
     }
 
     public switchColumnOrder(): void {
