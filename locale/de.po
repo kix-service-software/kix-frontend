@@ -184,11 +184,13 @@ msgstr "Zugeordnete Agenten"
 msgid "Assigned Contacts"
 msgstr "Zugeordnete Kontakte"
 
-msgid "Assigned Organisations"
+#, fuzzy
+#| msgid "Assigned Organisations"
+msgid "Assigned Organisation"
 msgstr "Zugeordnete Kunden"
 
-msgid "Assigned Organsiation"
-msgstr "Zugeordneter Kunde"
+msgid "Assigned Organisations"
+msgstr "Zugeordnete Kunden"
 
 msgid "Assigned Queues"
 msgstr "Zugeordnete Teams"
@@ -3144,9 +3146,6 @@ msgstr "Bewertung"
 msgid "Read"
 msgstr "Lesen"
 
-msgid "Read file."
-msgstr "Datei wird gelesen."
-
 msgid "Recipient: Bcc"
 msgstr "Empfänger: Bcc"
 
@@ -3875,6 +3874,12 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Assigned Organsiation"
+#~ msgstr "Zugeordneter Kunde"
+
+#~ msgid "Read file."
+#~ msgstr "Datei wird gelesen."
 
 #~ msgid "Assign the roles for the user."
 #~ msgstr "Dem Nutzer Rollen zuordnen."
