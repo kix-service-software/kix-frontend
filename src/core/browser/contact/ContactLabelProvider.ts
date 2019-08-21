@@ -27,8 +27,18 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                     const primaryOrganisations = await KIXObjectService.loadObjects<Organisation>(
                         KIXObjectType.ORGANISATION, [value], null, null, true
                     ).catch((error) => console.log(error));
-                    displayValue = primaryOrganisations && primaryOrganisations.length
+                    displayValue = primaryOrganisations && !!primaryOrganisations.length
                         ? `${primaryOrganisations[0].Name} (${primaryOrganisations[0].Number})`
+                        : '';
+                }
+                break;
+            case ContactProperty.PRIMARY_ORGANISATION_NUMBER:
+                if (value) {
+                    const primaryOrganisations = await KIXObjectService.loadObjects<Organisation>(
+                        KIXObjectType.ORGANISATION, [value], null, null, true
+                    ).catch((error) => console.log(error));
+                    displayValue = primaryOrganisations && !!primaryOrganisations.length
+                        ? primaryOrganisations[0].Number
                         : '';
                 }
                 break;
@@ -139,15 +149,26 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
         return displayValue;
     }
 
-    public async getExportPropertyText(property: string, useDisplayText?: boolean): Promise<string> {
-        if (!useDisplayText) {
-            switch (property) {
-                case ContactProperty.PRIMARY_ORGANISATION_ID:
-                    return ContactProperty.PRIMARY_ORGANISATION;
-                default:
-            }
+    public async getExportPropertyValue(property: string, value: any): Promise<any> {
+        let newValue = value;
+        switch (property) {
+            case ContactProperty.PRIMARY_ORGANISATION_NUMBER:
+                if (value && typeof value === 'object') {
+                    const orgId = value[ContactProperty.PRIMARY_ORGANISATION_ID];
+                    if (orgId) {
+                        const primaryOrganisations = await KIXObjectService.loadObjects<Organisation>(
+                            KIXObjectType.ORGANISATION, [orgId], null, null, true
+                        ).catch((error) => console.log(error));
+                        newValue = primaryOrganisations && !!primaryOrganisations.length
+                            ? primaryOrganisations[0].Number
+                            : orgId;
+                    }
+                }
+                break;
+            default:
+                newValue = await super.getExportPropertyValue(property, value);
         }
-        return super.getExportPropertyText(property, useDisplayText);
+        return newValue;
     }
 
     public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
@@ -193,6 +214,11 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
             case ContactProperty.PRIMARY_ORGANISATION:
                 displayValue = await this.getPropertyValueDisplayText(
                     ContactProperty.PRIMARY_ORGANISATION_ID, contact.PrimaryOrganisationID, translatable
+                );
+                break;
+            case ContactProperty.PRIMARY_ORGANISATION_NUMBER:
+                displayValue = await this.getPropertyValueDisplayText(
+                    ContactProperty.PRIMARY_ORGANISATION_NUMBER, contact.PrimaryOrganisationID, translatable
                 );
                 break;
             case ContactProperty.ORGANISATIONS:

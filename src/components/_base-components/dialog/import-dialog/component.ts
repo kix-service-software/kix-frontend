@@ -169,7 +169,7 @@ class Component {
                 ],
                 new FormFieldValue('UTF-8')
             ),
-            new FormField(
+            new FormField<string[]>(
                 'Translatable#Split Option', 'value_separator', 'default-select-input', true,
                 'Translatable#Helptext_Import_ValueSeparator.',
                 [
@@ -179,7 +179,7 @@ class Component {
                     ),
                     new FormFieldOption(DefaultSelectInputFormOption.MULTI, true)
                 ],
-                new FormFieldValue('SEMICOLON')
+                new FormFieldValue(['COMMA', 'SEMICOLON', 'TAB'])
             ),
             new FormField(
                 'Translatable#Text separator', 'text_separator', 'default-select-input', true,
@@ -207,7 +207,6 @@ class Component {
                 if (this.importFormTimeout) {
                     clearTimeout(this.importFormTimeout);
                 } else {
-                    const loadingHint = await TranslationService.translate('Translatable#Read file.');
                     this.fileLoaded = false;
                 }
                 this.importFormTimeout = setTimeout(async () => {
@@ -279,7 +278,7 @@ class Component {
     }
 
     private async getColumnConfig(): Promise<IColumnConfiguration[]> {
-        const requiredPropertys = await this.state.importManager.getRequiredProperties();
+        const requiredProperties = await this.state.importManager.getRequiredProperties();
         let columns: IColumnConfiguration[] = [
             new DefaultColumnConfiguration(
                 'CSV_LINE', true, false, true, false, 150, true, true, false, DataType.NUMBER, false,
@@ -287,7 +286,7 @@ class Component {
             )
         ];
 
-        requiredPropertys.forEach((rp) => {
+        requiredProperties.forEach((rp) => {
             const config = TableFactoryService.getInstance().getDefaultColumnConfiguration(
                 this.objectType, rp
             );
@@ -297,7 +296,10 @@ class Component {
         });
 
         if (this.csvProperties && !!this.csvProperties.length) {
-            this.csvProperties.filter((p) => !columns.some((c) => c.property === p)).forEach((ip) => {
+            const columnProperties = await this.state.importManager.getColumnProperties();
+            this.csvProperties.filter(
+                (p) => !columns.some((c) => c.property === p) && columnProperties.some((kp) => kp === p)
+            ).forEach((ip) => {
                 const config = TableFactoryService.getInstance().getDefaultColumnConfiguration(
                     this.objectType, ip
                 );
@@ -310,7 +312,10 @@ class Component {
         if (this.state.importManager && this.state.importManager.hasDefinedValues()) {
             const values = this.state.importManager.getEditableValues();
             values.filter((v) => v.operator !== ImportPropertyOperator.IGNORE)
-                .map((v) => v.property).filter((p) => !columns.some((c) => c.property === p)).forEach((ip) => {
+                .map((v) => v.property)
+                .filter((p) =>
+                    !columns.some((c) => c.property === p)
+                ).forEach((ip) => {
                     const config = TableFactoryService.getInstance().getDefaultColumnConfiguration(
                         this.objectType, ip
                     );
@@ -342,6 +347,7 @@ class Component {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.importConfigFormId);
         if (formInstance) {
             const source = await formInstance.getFormFieldValueByProperty('source');
+            let ok = false;
             if (source && source.valid && source.value && Array.isArray(source.value) && !!source.value) {
                 this.fileLoaded = true;
                 const characterSet = await formInstance.getFormFieldValueByProperty('character_set');
@@ -357,7 +363,7 @@ class Component {
                     ).value : null
                 );
 
-                let ok = importString && !!importString.length
+                ok = importString && !!importString.length
                     && valueSeparator && valueSeparator.valid
                     && textSeparator && textSeparator.valid;
 
@@ -373,16 +379,16 @@ class Component {
                         ok = await this.setTableColumns();
                     }
                 }
+            }
 
-                if (!ok) {
-                    const newColumnConfigs = await this.getColumnConfig();
-                    this.state.table.removeColumns(
-                        this.state.table.getColumns().filter(
-                            (c) => !newColumnConfigs.some((cc) => cc.property === c.getColumnId())
-                        ).map((c) => c.getColumnId())
-                    );
-                    this.csvObjects = [];
-                }
+            if (!ok) {
+                const newColumnConfigs = await this.getColumnConfig();
+                this.state.table.removeColumns(
+                    this.state.table.getColumns().filter(
+                        (c) => !newColumnConfigs.some((cc) => cc.property === c.getColumnId())
+                    ).map((c) => c.getColumnId())
+                );
+                this.csvObjects = [];
             }
             await this.setContextObjects();
         }
@@ -465,7 +471,8 @@ class Component {
                 OverlayType.WARNING, null, new ComponentContent('list-with-title',
                     {
                         title: 'Translatable#Unknown properties (will be ignored):',
-                        list: unknownProperties
+                        list: unknownProperties,
+                        doNotTranslateList: true
                     }
                 ), 'Translatable#Error!', true
             );
@@ -493,12 +500,22 @@ class Component {
     }
 
     private async checkRequiredProperties(): Promise<boolean> {
-        const requiredPropertys = await this.state.importManager.getRequiredProperties();
+        const requiredProperties = await this.state.importManager.getRequiredProperties();
         const adjustableProperties = await this.state.importManager.getProperties();
         const missingProperties: string[] = [];
-        requiredPropertys.filter((rp) => !adjustableProperties.some((ap) => ap[0] === rp)).forEach((rP) => {
-            if (!this.csvProperties || !!!this.csvProperties.length || !this.csvProperties.some((a) => rP === a)) {
-                missingProperties.push(rP);
+        requiredProperties.filter((rp) => !adjustableProperties.some((ap) => ap[0] === rp)).forEach((rP) => {
+            const alternative = this.state.importManager.getAlternativeProperty(rP);
+            let missing = false;
+            if (!this.csvProperties || !!!this.csvProperties.length) {
+                missing = true;
+            } else if (!this.csvProperties.some((a) => rP === a)) {
+                missing = true;
+                if (alternative && this.csvProperties.some((a) => alternative === a)) {
+                    missing = false;
+                }
+            }
+            if (missing) {
+                missingProperties.push(`${rP}${alternative && alternative !== rP ? ' / ' + alternative : ''}`);
             }
         });
         if (!!missingProperties.length) {
@@ -506,7 +523,8 @@ class Component {
                 OverlayType.WARNING, null, new ComponentContent('list-with-title',
                     {
                         title: 'Translatable#Can not use file (missing required properties):',
-                        list: missingProperties
+                        list: missingProperties,
+                        doNotTranslateList: true
                     }
                 ), 'Translatable#Error!', true
             );
@@ -515,14 +533,20 @@ class Component {
     }
 
     private async setContextObjects() {
-        const objects = this.csvObjects && !!this.csvObjects
-            ? this.csvObjects.map((o) => this.state.importManager.getObject(o)) : [];
         if (this.context) {
-            if (objects.length) {
+            const objects = [];
+            if (this.csvObjects && !!this.csvObjects) {
+                for (const o of this.csvObjects) {
+                    const object = await this.state.importManager.getObject(o);
+                    objects.push(object);
+                }
+            }
+            if (!!objects.length) {
                 if (this.state.importManager.hasDefinedValues()) {
                     const values = this.state.importManager.getEditableValues();
                     values.forEach((v) => {
                         objects.forEach((o) => {
+                            const value = Array.isArray(v.value) ? v.value[0] : v.value;
                             switch (v.operator) {
                                 case ImportPropertyOperator.REPLACE_EMPTY:
                                     if (
@@ -530,11 +554,11 @@ class Component {
                                         || o[v.property] === null
                                         || o[v.property] === ''
                                     ) {
-                                        o[v.property] = v.value;
+                                        o[v.property] = value;
                                     }
                                     break;
                                 case ImportPropertyOperator.FORCE:
-                                    o[v.property] = v.value;
+                                    o[v.property] = value;
                                     break;
                                 case ImportPropertyOperator.IGNORE:
                                     delete o[v.property];
@@ -564,7 +588,7 @@ class Component {
         if (this.state.canRun) {
             this.cancelImportProcess = false;
             const objectName = await LabelService.getInstance().getObjectName(
-                this.state.importManager.objectType, true, true
+                this.state.importManager.objectType, true
             );
 
             const objects = this.state.importManager.objects;
@@ -584,7 +608,7 @@ class Component {
         this.state.run = true;
 
         const objectName = await LabelService.getInstance().getObjectName(
-            this.state.importManager.objectType, true, false
+            this.state.importManager.objectType, true
         );
         const objects = [...this.state.importManager.objects];
         this.state.table.getRows().forEach((r) => r.setValueState(ValueState.NONE));
@@ -636,7 +660,7 @@ class Component {
 
     private async setDialogLoadingInfo(times: number[] = []): Promise<void> {
         const objectName = await LabelService.getInstance().getObjectName(
-            this.state.importManager.objectType, true, false
+            this.state.importManager.objectType, true
         );
         const average = BrowserUtil.calculateAverage(times);
         const time = average * (
@@ -677,9 +701,10 @@ class Component {
             const totalCount = this.state.importManager.objects.length + this.finishedObjects.length;
 
             const title = `${objectName}: ${finishCount}/${totalCount}`;
+            const ignoreText = await TranslationService.translate('Translatable#Ignore');
+            const cancelText = await TranslationService.translate('Translatable#Cancel');
 
             BrowserUtil.openConfirmOverlay(
-                // tslint:disable-next-line:max-line-length
                 title,
                 confirmText,
                 () => { resolve(); },
@@ -687,7 +712,7 @@ class Component {
                     this.cancelImportProcess = true;
                     resolve();
                 },
-                ['Translatable#Ignore', 'Translatable#Cancel']
+                [ignoreText, cancelText]
             );
         });
     }

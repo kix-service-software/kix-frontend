@@ -25,6 +25,8 @@ export interface ILabelProvider<T> {
 
     getExportPropertyText(property: string, useDisplayText?: boolean): Promise<string>;
 
+    getExportPropertyValue(property: string, value: any): Promise<any>;
+
     getDisplayText(
         object: T, property: string, defaultValue?: string, translatable?: boolean, short?: boolean
     ): Promise<string>;

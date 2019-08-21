@@ -24,10 +24,10 @@ export class TableExportUtil {
         table: ITable, additionalColumns: string[], useDisplayString: boolean = true
     ): Promise<string> {
         const objectType = table.getObjectType();
-        const columns = await table.getColumns();
+        const columns = table.getColumns();
         const columnTitles: string[] = [];
 
-        const columnIds = [...columns.map((c) => c.getColumnId()), ...additionalColumns];
+        const columnIds = [...columns.map((c) => c.getColumnId()), ...additionalColumns].sort();
 
         for (const c of columnIds) {
             let value = c;
@@ -50,15 +50,21 @@ export class TableExportUtil {
                     if (useDisplayString) {
                         displayValue = await cell.getDisplayValue();
                     } else {
-                        displayValue = cell.getValue().objectValue;
+                        const value = await LabelService.getInstance().getExportPropertyValue(
+                            cId, objectType, cell.getValue().objectValue
+                        );
+                        displayValue = value;
                     }
                 } else {
                     if (useDisplayString) {
                         displayValue = await LabelService.getInstance().getPropertyValueDisplayText(
-                            row.getRowObject().getObject(), cId, undefined
+                            row.getRowObject().getObject(), cId
                         );
                     } else {
-                        displayValue = row.getRowObject().getObject()[cId];
+                        const value = await LabelService.getInstance().getExportPropertyValue(
+                            cId, objectType, row.getRowObject().getObject()
+                        );
+                        displayValue = value;
                     }
                 }
                 values.push(`"${this.escapeText(displayValue)}"`);

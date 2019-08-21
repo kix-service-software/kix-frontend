@@ -50,7 +50,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                         'contact-search-action',
                         'contact-create-action',
                         'import-action',
-                        'csv-export-action'
+                        'contact-csv-export-action'
                     ], new TableWidgetSettings(
                         KIXObjectType.CONTACT, null,
                         new TableConfiguration(
