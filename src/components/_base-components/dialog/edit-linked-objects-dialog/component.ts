@@ -15,7 +15,7 @@ import {
 import {
     KIXObject, LinkObject, KIXObjectType, CreateLinkDescription, KIXObjectPropertyFilter, TableFilterCriteria,
     LinkObjectProperty, LinkTypeDescription, CreateLinkObjectOptions, LinkType, ContextType,
-    SortUtil, DataType, CRUD
+    SortUtil, DataType, CRUD, Error
 } from '../../../../core/model';
 import { LinkUtil, EditLinkedObjectsDialogContext } from '../../../../core/browser/link';
 import { IEventSubscriber, EventService } from '../../../../core/browser/event';
@@ -379,7 +379,10 @@ class Component {
                 newLinkObject,
                 new CreateLinkObjectOptions(this.mainObject)
             ).catch(async (error) => {
-                const msg = await TranslationService.translate('Translatable#Can not create link ({0})', [error]);
+                const msg = await TranslationService.translate(
+                    'Translatable#Can not create link ({0})',
+                    [(error as Error).Message ? error.Message : error.toString()]
+                );
                 BrowserUtil.openErrorOverlay(msg);
                 ok = false;
                 return;
