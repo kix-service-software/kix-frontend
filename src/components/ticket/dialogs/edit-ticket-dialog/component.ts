@@ -84,7 +84,7 @@ class Component {
                             KIXObjectType.TICKET, true, [TicketProperty.ARTICLES]
                         );
                         DialogService.getInstance().setMainDialogLoading(false);
-                        const article = ticket.Articles.sort((a, b) => b.ArticleID - a.ArticleID)[0];
+                        const article = [...ticket.Articles].sort((a, b) => b.ArticleID - a.ArticleID)[0];
                         DialogService.getInstance().submitMainDialog();
                         if (article.isUnsent()) {
                             BrowserUtil.openErrorOverlay(article.getUnsentError());
@@ -92,6 +92,7 @@ class Component {
                             const toast = await TranslationService.translate('Translatable#Changes saved.');
                             BrowserUtil.openSuccessOverlay(toast);
                         }
+                        EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
                     }).catch((error: Error) => {
                         DialogService.getInstance().setMainDialogLoading(false);
                         BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
