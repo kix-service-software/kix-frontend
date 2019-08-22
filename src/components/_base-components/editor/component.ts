@@ -140,7 +140,7 @@ class EditorComponent {
             }
 
             if (await this.isEditorReady()) {
-                if (this.state.noImages) {
+                if (this.state.noImages && this.editor.pasteFilter) {
                     this.editor.pasteFilter.disallow('img');
                 }
             }
@@ -150,9 +150,11 @@ class EditorComponent {
     public async setAutocompleteConfiguration(autocompleteOption: AutocompleteFormFieldOption): Promise<void> {
         if (await this.isEditorReady()) {
             for (const ao of autocompleteOption.autocompleteObjects) {
-                const service = (ServiceRegistry.getServiceInstance(ao.objectType) as IKIXObjectService);
+                const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(ao.objectType);
                 if (service) {
-                    const config = await service.getAutoFillConfiguration(CKEDITOR.plugins.textMatch, ao.placeholder);
+                    const config = await service.getAutoFillConfiguration(
+                        CKEDITOR.plugins.textMatch, ao.placeholder
+                    );
                     if (config) {
                         const plugin = new CKEDITOR.plugins.autocomplete(this.editor, config);
                         // overwrite plugin commit function
