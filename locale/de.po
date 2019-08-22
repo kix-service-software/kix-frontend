@@ -68,9 +68,6 @@ msgstr "Objekt Anlegen"
 msgid "Address successfully created."
 msgstr "Adresse wurde erfolgreich angelegt."
 
-msgid "Admin"
-msgstr "Admin"
-
 msgid "Administration"
 msgstr "Administration"
 
@@ -369,6 +366,9 @@ msgstr "Asset-Explorer"
 
 msgid "CNO"
 msgstr "KNR"
+
+msgid "Code"
+msgstr ""
 
 msgid ": (colon)"
 msgstr ": (Doppelpunkt)"
@@ -2621,6 +2621,11 @@ msgstr "Lade Übersetzung"
 msgid "Load User"
 msgstr "Lade Benutzer"
 
+#, fuzzy
+#| msgid "Webform"
+msgid "Load Webform"
+msgstr "Webformular"
+
 msgid "Localisation"
 msgstr "Lokalisierung"
 
@@ -3874,6 +3879,9 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Admin"
+#~ msgstr "Admin"
 
 #~ msgid "Assigned Organsiation"
 #~ msgstr "Zugeordneter Kunde"

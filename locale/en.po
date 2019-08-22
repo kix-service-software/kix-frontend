@@ -68,9 +68,6 @@ msgstr ""
 msgid "Address successfully created."
 msgstr ""
 
-msgid "Admin"
-msgstr ""
-
 msgid "Administration"
 msgstr ""
 
@@ -361,6 +358,9 @@ msgid "CMDB Explorer"
 msgstr "Asset Explorer"
 
 msgid "CNO"
+msgstr ""
+
+msgid "Code"
 msgstr ""
 
 msgid ": (colon)"
@@ -2540,6 +2540,11 @@ msgstr "Loading Translation"
 
 msgid "Load User"
 msgstr "Loading User"
+
+#, fuzzy
+#| msgid "Create Queue"
+msgid "Load Webform"
+msgstr "Create Team"
 
 msgid "Localisation"
 msgstr ""
