@@ -15,7 +15,7 @@ import {
 } from '../../core/model';
 import { ConfigurationService } from '../../core/services';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
-import { NewWebformDialogContext } from '../../core/browser/webform/actions/NewWebformDialogContext';
+import { NewWebformDialogContext } from '../../core/browser/webform/context/NewWebformDialogContext';
 import { WebformProperty } from '../../core/model/webform';
 import { SearchOperator } from '../../core/browser';
 

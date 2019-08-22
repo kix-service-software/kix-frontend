@@ -9,9 +9,11 @@
 
 export enum WebformProperty {
 
-    BUTTON_LABEL = 'BUTTON_LABEL',
+    ID = 'ObjectId',
 
-    TITLE = 'Title',
+    BUTTON_LABEL = 'buttonLabel',
+
+    TITLE = 'title',
 
     SHOW_TITLE = 'showTitle',
 

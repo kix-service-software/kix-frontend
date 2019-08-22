@@ -45,7 +45,8 @@ import { WebformBrowserFactory } from "../../webform/WebformBrowserFactory";
 import { WebformTableFactory } from "../../webform/WebformTableFactory";
 import { WebformLabelProvider } from "../../webform/WebformLabelProvider";
 import { WebformCreateAction } from "../../webform/actions/WebformCreateAction";
-import { NewWebformDialogContext } from "../../webform/actions/NewWebformDialogContext";
+import { WebformDetailsContext } from "../../webform/context/WebformDetailsContext";
+import { NewWebformDialogContext } from "../../webform/context/NewWebformDialogContext";
 
 export class UIModule implements IUIModule {
 
@@ -246,6 +247,13 @@ export class UIModule implements IUIModule {
             KIXObjectType.WEBFORM,
             ContextMode.CREATE_ADMIN
         ));
+
+        const webformDetailsContext = new ContextDescriptor(
+            WebformDetailsContext.CONTEXT_ID, [KIXObjectType.WEBFORM],
+            ContextType.MAIN, ContextMode.DETAILS,
+            false, 'object-details-page', ['webforms'], WebformDetailsContext
+        );
+        ContextService.getInstance().registerContext(webformDetailsContext);
     }
 
     private async checkPermission(resource: string, crud: CRUD): Promise<boolean> {

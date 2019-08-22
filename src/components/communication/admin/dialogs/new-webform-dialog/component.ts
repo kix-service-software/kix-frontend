@@ -7,9 +7,12 @@
  * --
  */
 
-import { KIXObjectType } from "../../../../../core/model";
+import { KIXObjectType, ContextMode } from "../../../../../core/model";
 import { ComponentState } from "./ComponentState";
 import { AbstractNewDialog } from "../../../../../core/browser/components/dialog";
+import { RoutingConfiguration } from "../../../../../core/browser/router";
+import { WebformDetailsContext } from "../../../../../core/browser/webform/context/WebformDetailsContext";
+import { WebformProperty } from "../../../../../core/model/webform";
 
 class Component extends AbstractNewDialog {
 
@@ -18,7 +21,11 @@ class Component extends AbstractNewDialog {
         super.init(
             'Translatable#Create Webform',
             'Translatable#Webform successfully created.',
-            KIXObjectType.WEBFORM, null
+            KIXObjectType.WEBFORM,
+            new RoutingConfiguration(
+                WebformDetailsContext.CONTEXT_ID, KIXObjectType.WEBFORM,
+                ContextMode.DETAILS, WebformProperty.ID, true
+            )
         );
     }
 

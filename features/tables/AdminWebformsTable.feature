@@ -18,7 +18,7 @@ Feature: As a user I want to get a correct default configuration of a table
         Then DisplayLimit: <displayLimit>
         Examples:
             | selection | toggle | objectType | headerHeight | rowHeight | displayLimit |
-            | 1         | 0      | 'WEBFORM'  | 'l'          | 'l'       | 25           |
+            | 1         | 1      | 'WEBFORM'  | 'l'          | 'l'       | 25           |
 
     Scenario Outline: Table column <column>
         Given Tabelle: <objectType>
@@ -34,7 +34,7 @@ Feature: As a user I want to get a correct default configuration of a table
         Then Die Spalte <column> zeigt Spaltenicon an: <columnIcon>
         Examples:
             | column        | sortable | filterable | listFilter | width | flexible | showText | showIcon | type     | columnTitle | columnIcon | objectType |
-            | 'Title'       | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING' | 1           | 0          | 'WEBFORM'  |
+            | 'title'       | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING' | 1           | 0          | 'WEBFORM'  |
             | 'QueueID'     | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING' | 1           | 0          | 'WEBFORM'  |
             | 'PrioritiyID' | 1        | 1          | 1          | 80    | 0        | 0        | 1        | 'STRING' | 1           | 0          | 'WEBFORM'  |
             | 'TypeID'      | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING' | 1           | 0          | 'WEBFORM'  |
