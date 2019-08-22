@@ -8,13 +8,15 @@
  */
 
 import { TableFactory } from "../table/TableFactory";
-import { KIXObjectType, KIXObjectProperty, DataType } from "../../model";
+import { KIXObjectType, KIXObjectProperty, DataType, ContextMode } from "../../model";
 import {
     TableConfiguration, ITable, Table, TableHeaderHeight, TableRowHeight,
-    IColumnConfiguration, DefaultColumnConfiguration
+    IColumnConfiguration, DefaultColumnConfiguration, ToggleOptions
 } from "../table";
 import { WebformTableContentProvider } from "./WebformTableContentProvider";
 import { WebformProperty } from "../../model/webform";
+import { RoutingConfiguration } from "../router";
+import { WebformDetailsContext } from "./context/WebformDetailsContext";
 
 export class WebformTableFactory extends TableFactory {
 
@@ -61,11 +63,14 @@ export class WebformTableFactory extends TableFactory {
         }
 
         if (defaultRouting) {
-            // tableConfiguration.routingConfiguration = new RoutingConfiguration(
-            //     WebformDetailsContext.CONTEXT_ID, KIXObjectType.TICKET_STATE,
-            //     ContextMode.DETAILS, WebformProperty.ID
-            // );
+            tableConfiguration.routingConfiguration = new RoutingConfiguration(
+                WebformDetailsContext.CONTEXT_ID, KIXObjectType.WEBFORM,
+                ContextMode.DETAILS, WebformProperty.ID
+            );
         }
+
+        tableConfiguration.toggle = true;
+        tableConfiguration.toggleOptions = new ToggleOptions('webform-code-content', 'webform', [], false);
 
         return tableConfiguration;
     }

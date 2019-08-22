@@ -10,7 +10,7 @@
 import { LabelProvider } from "../LabelProvider";
 import { WebformProperty, Webform } from "../../model/webform";
 import { KIXObjectService } from "../kix";
-import { Queue, KIXObjectType, TicketType, TicketPriority, TicketState, ObjectIcon } from "../../model";
+import { Queue, KIXObjectType, TicketType, TicketPriority, TicketState, ObjectIcon, User } from "../../model";
 import { TranslationService } from "../i18n/TranslationService";
 
 export class WebformLabelProvider extends LabelProvider {
@@ -29,6 +29,13 @@ export class WebformLabelProvider extends LabelProvider {
     ): Promise<string> {
         let displayValue = value;
         switch (property) {
+            case WebformProperty.SHOW_TITLE:
+            case WebformProperty.MODAL:
+            case WebformProperty.USE_KIX_CSS:
+            case WebformProperty.ALLOW_ATTACHMENTS:
+                const boolValue = Boolean(value);
+                displayValue = boolValue ? 'Translatable#Yes' : 'Translatable#No';
+                break;
             case WebformProperty.QUEUE_ID:
                 if (value) {
                     const queues = await KIXObjectService.loadObjects<Queue>(
@@ -62,6 +69,14 @@ export class WebformLabelProvider extends LabelProvider {
                     displayValue = types && !!types.length ? types[0].Name : value;
                 }
                 break;
+            case WebformProperty.USER_ID:
+                if (value) {
+                    const users = await KIXObjectService.loadObjects<User>(
+                        KIXObjectType.USER, [value], null, null, true
+                    ).catch((error) => [] as User[]);
+                    displayValue = users && !!users.length ? users[0].UserFullname : value;
+                }
+                break;
             default:
                 displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
         }
@@ -77,8 +92,32 @@ export class WebformLabelProvider extends LabelProvider {
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue: string;
         switch (property) {
+            case WebformProperty.BUTTON_LABEL:
+                displayValue = 'Translatable#Name of activate form button';
+                break;
             case WebformProperty.TITLE:
-                displayValue = 'Translatable#Title';
+                displayValue = 'Translatable#Form title';
+                break;
+            case WebformProperty.SHOW_TITLE:
+                displayValue = 'Translatable#Show title in form';
+                break;
+            case WebformProperty.HINT_MESSAGE:
+                displayValue = 'Translatable#Information text';
+                break;
+            case WebformProperty.SAVE_LABEL:
+                displayValue = 'Translatable#Name of form submit button';
+                break;
+            case WebformProperty.SUCCESS_MESSAGE:
+                displayValue = 'Translatable#Message after sending form';
+                break;
+            case WebformProperty.MODAL:
+                displayValue = 'Translatable#Start modal dialog for form';
+                break;
+            case WebformProperty.USE_KIX_CSS:
+                displayValue = 'Translatable#Use KIX CSS';
+                break;
+            case WebformProperty.ALLOW_ATTACHMENTS:
+                displayValue = 'Translatable#Enable attachments';
                 break;
             case WebformProperty.PRIORITY_ID:
                 displayValue = short ? 'Translatable#Prio' : 'Translatable#Priority';
@@ -91,6 +130,9 @@ export class WebformLabelProvider extends LabelProvider {
                 break;
             case WebformProperty.STATE_ID:
                 displayValue = 'Translatable#State';
+                break;
+            case WebformProperty.USER_ID:
+                displayValue = 'Translatable#Assigned agent';
                 break;
             default:
                 displayValue = await super.getPropertyText(property);
@@ -151,6 +193,12 @@ export class WebformLabelProvider extends LabelProvider {
         }
 
         return icons;
+    }
+
+    public async getObjectText(webform: Webform, id?: boolean, title?: boolean): Promise<string> {
+        const webformTitle = await TranslationService.translate('Translatable#Webform');
+        const suffix = webform.title ? ` - ${webform.title}` : '';
+        return `${webformTitle}${suffix}`;
     }
 
 }

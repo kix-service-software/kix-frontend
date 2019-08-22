@@ -15,9 +15,9 @@ export class Webform extends KIXObject<Webform> {
 
     public KIXObjectType: KIXObjectType = KIXObjectType.WEBFORM;
 
-    public ButtonLabel: string;
+    public buttonLabel: string;
 
-    public Title: string;
+    public title: string;
 
     public showTitle: boolean;
 
@@ -45,7 +45,7 @@ export class Webform extends KIXObject<Webform> {
 
     public constructor(
         webform?: Webform,
-        ButtonLabel?: string, Title?: string, showTitle?: boolean, saveLabel?: string,
+        buttonLabel?: string, title?: string, showTitle?: boolean, saveLabel?: string,
         hintMessage?: string, successMessage?: string, modal?: boolean, useKIXCSS?: boolean,
         allowAttachments?: boolean, QueueID?: number, PrioritiyID?: number,
         TypeID?: number, StateID?: number, UserID?: number, ValidID?: number
@@ -53,8 +53,8 @@ export class Webform extends KIXObject<Webform> {
         super(webform);
         if (webform) {
             this.ObjectId = webform.ObjectId;
-            this.ButtonLabel = webform.ButtonLabel;
-            this.Title = webform.Title;
+            this.buttonLabel = webform.buttonLabel;
+            this.title = webform.title;
             this.showTitle = webform.showTitle;
             this.saveLabel = webform.saveLabel;
             this.hintMessage = webform.hintMessage;
@@ -68,8 +68,8 @@ export class Webform extends KIXObject<Webform> {
             this.StateID = webform.StateID;
             this.UserID = webform.UserID;
         } else {
-            this.ButtonLabel = ButtonLabel;
-            this.Title = Title;
+            this.buttonLabel = buttonLabel;
+            this.title = title;
             this.showTitle = showTitle;
             this.saveLabel = saveLabel;
             this.hintMessage = hintMessage;

@@ -9,7 +9,7 @@
 
 import { AbstractAction, KIXObjectType, ContextMode } from "../../../model";
 import { ContextService } from "../../context";
-import { NewWebformDialogContext } from "./NewWebformDialogContext";
+import { NewWebformDialogContext } from "../context/NewWebformDialogContext";
 
 export class WebformCreateAction extends AbstractAction {
 

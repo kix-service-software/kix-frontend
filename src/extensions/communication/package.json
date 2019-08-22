@@ -31,6 +31,9 @@
             },
             "new-webform-dialog-configuration": {
                 "module": "new-webform-dialog-configuration.extension"
+            },
+            "webform-details-configuration": {
+                "module": "webform-details-configuration.extension"
             }
         },
         "kix:modules": {
