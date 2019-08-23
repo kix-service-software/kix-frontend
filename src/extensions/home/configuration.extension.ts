@@ -249,7 +249,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                                     true, true, false, DataType.DATE_TIME
                                 ),
                                 new DefaultColumnConfiguration(
-                                    TicketProperty.AGE, true, false, true, true, 75,
+                                    TicketProperty.AGE, true, false, true, true, 90,
                                     true, true, false, DataType.DATE_TIME
                                 ),
                             ],
