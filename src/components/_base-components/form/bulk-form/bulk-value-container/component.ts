@@ -96,6 +96,7 @@ class Component {
         let emptyField: BulkValue;
         if (index === -1) {
             emptyField = new BulkValue(this.bulkManager);
+            emptyField.init();
             await emptyField.setPropertyNode(null);
         } else {
             emptyField = this.state.bulkValues.splice(index, 1)[0];
