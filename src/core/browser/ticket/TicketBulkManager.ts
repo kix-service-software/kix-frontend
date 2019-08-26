@@ -82,21 +82,20 @@ export class TicketBulkManager extends BulkManager {
     }
 
     public async getProperties(): Promise<Array<[string, string]>> {
-        const properties: Array<[string, string]> = [];
-        const objectDefinitions = await KIXModulesSocketClient.getInstance().loadObjectDefinitions();
-        const ticketDefinition = objectDefinitions.find((od) => od.Object === this.objectType);
-        if (ticketDefinition) {
-            const labelProvider = LabelService.getInstance().getLabelProviderForType(this.objectType);
-            const attributes = ticketDefinition.Attributes.filter((a) =>
-                !a.ReadOnly
-                && a.Name !== TicketProperty.PENDING_TIME
-                && a.Name !== TicketProperty.ORGANISATION_ID
-            );
-            for (const attribute of attributes) {
-                const label = await labelProvider.getPropertyText(attribute.Name);
-                properties.push([attribute.Name, label]);
-            }
-        }
+        const labelProvider = LabelService.getInstance().getLabelProviderForType(this.objectType);
+        const properties: Array<[string, string]> = [
+            [TicketProperty.CONTACT_ID, await labelProvider.getPropertyText(TicketProperty.CONTACT_ID)],
+            [TicketProperty.LOCK_ID, await labelProvider.getPropertyText(TicketProperty.LOCK_ID)],
+            [TicketProperty.OWNER_ID, await labelProvider.getPropertyText(TicketProperty.OWNER_ID)],
+            [TicketProperty.PRIORITY_ID, await labelProvider.getPropertyText(TicketProperty.PRIORITY_ID)],
+            [TicketProperty.QUEUE_ID, await labelProvider.getPropertyText(TicketProperty.QUEUE_ID)],
+            [TicketProperty.RESPONSIBLE_ID, await labelProvider.getPropertyText(TicketProperty.RESPONSIBLE_ID)],
+            [TicketProperty.SERVICE_ID, await labelProvider.getPropertyText(TicketProperty.SERVICE_ID)],
+            // [TicketProperty.SLA_ID, await labelProvider.getPropertyText(TicketProperty.SLA_ID)],
+            [TicketProperty.STATE_ID, await labelProvider.getPropertyText(TicketProperty.STATE_ID)],
+            [TicketProperty.TITLE, await labelProvider.getPropertyText(TicketProperty.TITLE)],
+            [TicketProperty.TYPE_ID, await labelProvider.getPropertyText(TicketProperty.TYPE_ID)],
+        ];
 
         properties.sort((a1, a2) => SortUtil.compareString(a1[1], a2[1]));
         return properties;
