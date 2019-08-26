@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2019-08-22 12:32+0000\n"
-"Last-Translator: fwichmann <Felix.Wichmann@cape-it.de>\n"
+"PO-Revision-Date: 2019-08-26 13:19+0000\n"
+"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: English <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/en/>\n"
 "Language: en\n"
@@ -179,10 +179,8 @@ msgstr ""
 msgid "Assigned Contacts"
 msgstr ""
 
-#, fuzzy
-#| msgid "Load Organisation"
 msgid "Assigned Organisation"
-msgstr "Loading Organisation"
+msgstr ""
 
 msgid "Assigned Organisations"
 msgstr ""
@@ -525,10 +523,8 @@ msgstr ""
 msgid "Create Type"
 msgstr ""
 
-#, fuzzy
-#| msgid "Create Queue"
 msgid "Create Webform"
-msgstr "Create Team"
+msgstr ""
 
 msgid "CSV-Export"
 msgstr ""
@@ -1624,100 +1620,50 @@ msgstr ""
 msgid "Helptext_Admin_Users_UserEdit_Valid"
 msgstr "The agent can only login with the user data set here if set “valid”."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Comment"
 msgid "Helptext_Admin_WebformCreate_AllowAttachments"
 msgstr ""
-"Insert additional information (only displayed within the admin module)."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
 msgid "Helptext_Admin_WebformCreate_ButtonLabel"
 msgstr ""
-"Upload an icon, which will be shown together with the category name within "
-"the application."
 
-#, fuzzy
-#| msgid "Helptext_Admin_NotificationCreate_MessageText"
 msgid "Helptext_Admin_WebformCreate_HintMessage"
 msgstr ""
-"Insert the text you want to show in the email send out by this notification. "
-"Keep in mind the chosen language."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
 msgid "Helptext_Admin_WebformCreate_Modal"
 msgstr ""
-"Upload an icon, which will be shown together with the category name within "
-"the application."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Validity"
 msgid "Helptext_Admin_WebformCreate_PriorityID"
-msgstr "The FAQ category can only be used within the system if set “valid”."
+msgstr ""
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
 msgid "Helptext_Admin_WebformCreate_QueueID"
 msgstr ""
-"Upload an icon, which will be shown together with the category name within "
-"the application."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
 msgid "Helptext_Admin_WebformCreate_SaveButtonLabel"
 msgstr ""
-"Upload an icon, which will be shown together with the category name within "
-"the application."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleCreate_Text"
 msgid "Helptext_Admin_WebformCreate_ShowTitle"
 msgstr ""
-"Insert the text you want to use as a text module. You can use placeholders."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
 msgid "Helptext_Admin_WebformCreate_StateID"
 msgstr ""
-"Upload an icon, which will be shown together with the category name within "
-"the application."
 
-#, fuzzy
-#| msgid "Helptext_Admin_NotificationCreate_MessageText"
 msgid "Helptext_Admin_WebformCreate_SuccessMessage"
 msgstr ""
-"Insert the text you want to show in the email send out by this notification. "
-"Keep in mind the chosen language."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleCreate_Text"
 msgid "Helptext_Admin_WebformCreate_Title"
 msgstr ""
-"Insert the text you want to use as a text module. You can use placeholders."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Type."
 msgid "Helptext_Admin_WebformCreate_TypeID"
 msgstr ""
-"IMAP/=Messages are only copied to KIX – the originals stay at the server; "
-"POP/=Messages are downloaded from the server; /S=Connection is SSL "
-"encrypted; /TLS=Connection is TLS encrpyted"
 
-#, fuzzy
-#| msgid "Helptext_Admin_Users_RoleCreate_User"
 msgid "Helptext_Admin_WebformCreate_UseKIXCSS"
-msgstr "There are only valid agents available."
+msgstr ""
 
-#, fuzzy
-#| msgid "Helptext_Admin_Users_RoleCreate_User"
 msgid "Helptext_Admin_WebformCreate_UserID"
-msgstr "There are only valid agents available."
+msgstr ""
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Validity"
 msgid "Helptext_Admin_WebformCreate_Validity"
-msgstr "The FAQ category can only be used within the system if set “valid”."
+msgstr ""
 
 msgid "Helptext_CMDB_ConfigItemClassCreate_Comment"
 msgstr ""
@@ -2030,13 +1976,8 @@ msgstr "Search for FAQ articles with this title or a part of the title."
 msgid "Helptext_FAQ_Link_Validity"
 msgstr "Search for FAQ articles with the chosen validity."
 
-#, fuzzy
-#| msgid "Helptext_i18n_TranslationPatternCreate_Translation"
 msgid "Helptext_i18n_TranslationPatternCreateEdit_Translation"
 msgstr ""
-"If you insert a translation for the pattern here, this will be shown in the "
-"user interface if the user has his language preference set for the "
-"corresponding language."
 
 msgid "Helptext_i18n_TranslationPatternCreate_Pattern"
 msgstr ""
@@ -2231,13 +2172,8 @@ msgstr "The Priority marks the ticket urgency."
 msgid "Helptext_Tickets_TicketCreate_Queue"
 msgstr "Insert the scope of responsitility for the ticket."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketCreate_Responsible"
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
 
 msgid "Helptext_Tickets_TicketCreate_State"
 msgstr "The state marks the recent ticket process state."
@@ -2430,10 +2366,8 @@ msgstr ""
 msgid "Legend"
 msgstr ""
 
-#, fuzzy
-#| msgid "Let´s go"
 msgid "Let's go"
-msgstr "Let's go"
+msgstr ""
 
 msgid "link {0}"
 msgstr "Link {0}"
@@ -2543,10 +2477,8 @@ msgstr "Loading Translation"
 msgid "Load User"
 msgstr "Loading User"
 
-#, fuzzy
-#| msgid "Create Queue"
 msgid "Load Webform"
-msgstr "Create Team"
+msgstr ""
 
 msgid "Localisation"
 msgstr ""
@@ -3751,10 +3683,8 @@ msgstr ""
 msgid "Webform Options"
 msgstr ""
 
-#, fuzzy
-#| msgid "Queue successfully created."
 msgid "Webform successfully created."
-msgstr "Team successfully created."
+msgstr ""
 
 msgid "Welcome to KIX 18"
 msgstr ""
