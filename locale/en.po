@@ -68,6 +68,9 @@ msgstr ""
 msgid "Address successfully created."
 msgstr ""
 
+msgid "Admin"
+msgstr ""
+
 msgid "Administration"
 msgstr ""
 
@@ -523,6 +526,11 @@ msgstr ""
 msgid "Create Type"
 msgstr ""
 
+#, fuzzy
+#| msgid "Create Queue"
+msgid "Create Value"
+msgstr "Create Team"
+
 msgid "Create Webform"
 msgstr ""
 
@@ -949,6 +957,31 @@ msgstr ""
 msgid "Helptext_Admin_FAQCategoryEdit_Validity"
 msgstr "The FAQ category can only be used within the system if set “valid”."
 
+#, fuzzy
+#| msgid "Helptext_Admin_Users_UserCreate_Roles"
+msgid "Helptext_Admin_GeneralCatalogCreate_Class"
+msgstr ""
+"An agent needs at least the role “AgentUser” to successfully login. Only "
+"valid roles are available here."
+
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryCreate_Comment"
+msgid "Helptext_Admin_GeneralCatalogCreate_Comment"
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
+
+#, fuzzy
+#| msgid "Helptext_Admin_MailAccountCreate_UserName"
+msgid "Helptext_Admin_GeneralCatalogCreate_Name"
+msgstr ""
+"Insert the user name for the account you want to configure in KIX, to enable "
+"connection with the host."
+
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryCreate_Validity"
+msgid "Helptext_Admin_GeneralCatalogCreate_Validity"
+msgstr "The FAQ category can only be used within the system if set “valid”."
+
 msgid "Helptext_Admin_MailAccountCreate_AcceptKIXHeader"
 msgstr ""
 "Sometimes incoming emails already contain KIX Header. If this option is set, "
@@ -1329,6 +1362,13 @@ msgstr ""
 
 msgid "Helptext_Admin_TextModuleEdit_Validity"
 msgstr "The text module can only be used within the system if set “valid”."
+
+#, fuzzy
+#| msgid "Helptext_Admin_Tickets_QueueCreate_Icon."
+msgid "Helptext_Admin_Tickets_GeneralCatalogCreate_Icon."
+msgstr ""
+"Upload an icon, which will be shown together with the team name within the "
+"application."
 
 msgid "Helptext_Admin_Tickets_PriorityCreate_Comment"
 msgstr ""
@@ -1842,18 +1882,19 @@ msgstr ""
 
 msgid "Helptext_Customers_ContactImport"
 msgstr ""
-"The first row of the source file must contain the contact attributes (="
-"column titles). These attributes have to exactly comply with the internal "
+"The first row of the source file must contain the contact attributes "
+"(=column titles). These attributes have to exactly comply with the internal "
 "KIX column titles (pay attention to upper and lower case letters!). At least "
 "all mandatory attributes (*) need to contain values (exception: validity, "
 "see below) Attributes: *Login – Login Name; Password; *PrimaryOrganisationID "
-"– number, already existing if data set was exported from KIX before OR *"
-"PrimaryOrganisationNumber - CNR/customer code of the assigned organisation ("
-"must already exist in KIX); Firstname; Lastname; Title; Email; Phone; Mobile;"
-" Fax; Street; City; ZIP; Country; Comment; *ValidID (1=valid; 2=invalid; 3"
-"=invalid-temporarily) OR - Validity (valid, invalid, invalid-temporarily) If "
-"the data set does not contain a “ValidID”, this can be set automatically by "
-"selecting the attribute in the “Set Value”-area (can be changed)."
+"– number, already existing if data set was exported from KIX before OR "
+"*PrimaryOrganisationNumber - CNR/customer code of the assigned organisation "
+"(must already exist in KIX); Firstname; Lastname; Title; Email; Phone; "
+"Mobile; Fax; Street; City; ZIP; Country; Comment; *ValidID (1=valid; "
+"2=invalid; 3=invalid-temporarily) OR - Validity (valid, invalid, invalid-"
+"temporarily) If the data set does not contain a “ValidID”, this can be set "
+"automatically by selecting the attribute in the “Set Value”-area (can be "
+"changed)."
 
 msgid "Helptext_Customers_OrganisationCreate_City"
 msgstr ""
@@ -2340,9 +2381,6 @@ msgstr ""
 msgid "Knowledge Database"
 msgstr ""
 
-msgid "Knowledge Database: FAQ Categories"
-msgstr ""
-
 msgid "Label"
 msgstr ""
 
@@ -2651,6 +2689,11 @@ msgstr ""
 
 msgid "New Type"
 msgstr ""
+
+#, fuzzy
+#| msgid "New Queue"
+msgid "New Value"
+msgstr "New Team"
 
 msgid "New Version created"
 msgstr ""
@@ -3647,6 +3690,11 @@ msgstr ""
 
 msgid "Value of field '{0}' is too long (max: {1})."
 msgstr ""
+
+#, fuzzy
+#| msgid "Queue successfully created."
+msgid "Value successfully created."
+msgstr "Team successfully created."
 
 msgid "Version"
 msgstr ""
