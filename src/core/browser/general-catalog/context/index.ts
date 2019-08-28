@@ -7,10 +7,4 @@
  * --
  */
 
-export * from './table';
-export * from './context';
-export * from './actions';
-
-export { GeneralCatalogService } from './GeneralCatalogService';
-export { GeneralCatalogLabelProvider } from './GeneralCatalogLabelProvider';
-export { GeneralCatalogBrowserFactory } from './GeneralCatalogBrowserFactory';
+export { NewGeneralCatalogDialogContext } from './NewGeneralCatalogDialogContext';

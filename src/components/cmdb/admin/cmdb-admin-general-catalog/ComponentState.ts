@@ -19,7 +19,9 @@ export class ComponentState {
         public instanceId: string = IdService.generateDateBasedId('cmdb-general-catalog-list'),
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
             'table-widget', 'Translatable#Assets: General Catalog',
-            [],
+            [
+                'cmdb-admin-general-catalog-create', 'csv-export-action'
+            ],
             new TableWidgetSettings(KIXObjectType.GENERAL_CATALOG_ITEM,
                 [GeneralCatalogItemProperty.NAME, SortOrder.UP]), false, false, 'kix-icon-gears')
     ) { }

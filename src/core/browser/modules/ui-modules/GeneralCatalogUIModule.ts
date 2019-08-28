@@ -7,13 +7,22 @@
  * --
  */
 
+import {
+    ContextService, DialogService, ActionFactory,
+    TableFactoryService, LabelService, ServiceRegistry, FactoryService
+} from "../../../../core/browser";
+import {
+    KIXObjectType, ContextDescriptor, ContextType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration, CRUD
+} from "../../../../core/model";
+import { AuthenticationSocketClient } from "../../../../core/browser/application/AuthenticationSocketClient";
+import { UIComponentPermission } from "../../../../core/model/UIComponentPermission";
 import { IUIModule } from "../../application/IUIModule";
-import { ServiceRegistry, FactoryService, TableFactoryService, LabelService } from "../..";
-import { GeneralCatalogService, GeneralCatalogBrowserFactory } from '../../../../core/browser/general-catalog';
-import { KIXObjectType } from "../../../model";
+import {
+    GeneralCatalogBrowserFactory, GeneralCatalogTableFactory,
+    GeneralCatalogLabelProvider, GeneralCatalogService, GeneralCatalogCreateAction
+} from "../../general-catalog";
+import { NewGeneralCatalogDialogContext } from "../../general-catalog/context";
 import { SearchService } from "../../kix/search/SearchService";
-import { GeneralCatalogTableFactory } from "../../general-catalog/table";
-import { GeneralCatalogLabelProvider } from "../../general-catalog/GeneralCatalogLabelProvider";
 
 export class UIModule implements IUIModule {
 
@@ -30,6 +39,27 @@ export class UIModule implements IUIModule {
         );
         TableFactoryService.getInstance().registerFactory(new GeneralCatalogTableFactory());
         LabelService.getInstance().registerLabelProvider(new GeneralCatalogLabelProvider());
+
+        if (await this.checkPermission('system/generalcatalog', CRUD.CREATE)) {
+            ActionFactory.getInstance().registerAction('cmdb-admin-general-catalog-create', GeneralCatalogCreateAction);
+
+            const newGeneralCatalogDialogContext = new ContextDescriptor(
+                NewGeneralCatalogDialogContext.CONTEXT_ID, [KIXObjectType.GENERAL_CATALOG_ITEM],
+                ContextType.DIALOG, ContextMode.CREATE_ADMIN,
+                true, 'new-general-catalog-dialog', ['generalcatalog'], NewGeneralCatalogDialogContext
+            );
+            ContextService.getInstance().registerContext(newGeneralCatalogDialogContext);
+
+            DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+                'new-general-catalog-dialog',
+                new WidgetConfiguration(
+                    'new-general-catalog-dialog', 'Translatable#New Value', [], {}, false, false,
+                    'kix-icon-new-gear'
+                ),
+                KIXObjectType.GENERAL_CATALOG_ITEM,
+                ContextMode.CREATE_ADMIN
+            ));
+        }
 
         this.registerContexts();
         this.registerDialogs();
@@ -48,4 +78,9 @@ export class UIModule implements IUIModule {
         await SearchService.getInstance().getSearchBookmarks(true);
     }
 
+    private async checkPermission(resource: string, crud: CRUD): Promise<boolean> {
+        return await AuthenticationSocketClient.getInstance().checkPermissions(
+            [new UIComponentPermission(resource, [crud])]
+        );
+    }
 }

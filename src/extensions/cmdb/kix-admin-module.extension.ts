@@ -41,7 +41,8 @@ class Extension implements IKIXModuleExtension {
         new UIComponent('config-item-class-definition', 'cmdb/config-item-class-definition', []),
         new UIComponent('new-config-item-class-dialog', 'cmdb/admin/dialogs/new-config-item-class-dialog', []),
         new UIComponent('edit-config-item-class-dialog', 'cmdb/admin/dialogs/edit-config-item-class-dialog', []),
-        new UIComponent('cmdb-admin-general-catalog', 'cmdb/admin/cmdb-admin-general-catalog', [])
+        new UIComponent('cmdb-admin-general-catalog', 'cmdb/admin/cmdb-admin-general-catalog', []),
+        new UIComponent('new-general-catalog-dialog', 'cmdb/admin/dialogs/new-general-catalog-dialog', [])
     ];
 
 }

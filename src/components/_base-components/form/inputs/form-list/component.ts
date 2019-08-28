@@ -144,7 +144,7 @@ class Component {
                 this.toggleList(false);
             } else if (event.key === 'Enter' && this.freeText) {
                 const navigationNode = TreeNavigationUtil.findNavigationNode(this.state.nodes);
-                if (!navigationNode) {
+                if (!navigationNode || !navigationNode.visible) {
                     const value = event.target.value;
                     if (value && value !== '') {
                         const freeTextNode = new TreeNode(value, value);

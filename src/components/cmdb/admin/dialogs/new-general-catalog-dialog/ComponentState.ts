@@ -7,10 +7,14 @@
  * --
  */
 
-export * from './table';
-export * from './context';
-export * from './actions';
+import { AbstractComponentState } from "../../../../../core/browser";
 
-export { GeneralCatalogService } from './GeneralCatalogService';
-export { GeneralCatalogLabelProvider } from './GeneralCatalogLabelProvider';
-export { GeneralCatalogBrowserFactory } from './GeneralCatalogBrowserFactory';
+export class ComponentState extends AbstractComponentState {
+
+    public constructor(
+        public loading: boolean = false,
+    ) {
+        super();
+    }
+
+}

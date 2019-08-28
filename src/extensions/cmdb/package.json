@@ -33,6 +33,9 @@
             },
             "compare-config-item-version-dialog-configuration": {
                 "module": "compare-config-item-version-dialog-configuration.extension"
+            },
+            "new-general-catalog-dialog-configuration": {
+                "module": "new-general-catalog-dialog-configuration.extension"
             }
         },
         "kix:modules": {
