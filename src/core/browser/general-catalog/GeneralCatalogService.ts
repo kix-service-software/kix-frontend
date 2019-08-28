@@ -8,7 +8,8 @@
  */
 
 import { KIXObjectService } from "../kix";
-import { KIXObjectType, GeneralCatalogItem } from "../../model";
+import { KIXObjectType, GeneralCatalogItem, TreeNode } from "../../model";
+import { GeneralCatalogItemProperty } from "../../model/kix/general-catalog/GeneralCatalogItemProperty";
 
 export class GeneralCatalogService extends KIXObjectService<GeneralCatalogItem> {
 
@@ -22,10 +23,25 @@ export class GeneralCatalogService extends KIXObjectService<GeneralCatalogItem> 
     }
 
     public isServiceFor(type: KIXObjectType) {
-        return type === KIXObjectType.GENERAL_CATALOG_ITEM;
+        return type === KIXObjectType.GENERAL_CATALOG_ITEM
+            || type === KIXObjectType.GENERAL_CATALOG_CLASS;
     }
 
     public getLinkObjectName(): string {
         return "GeneralCatalogItem";
+    }
+
+    public async getTreeNodes(property: string, showInvalid: boolean = false): Promise<TreeNode[]> {
+        let nodes: TreeNode[] = [];
+
+        switch (property) {
+            case GeneralCatalogItemProperty.CLASS:
+                const types = await this.loadObjects(KIXObjectType.GENERAL_CATALOG_CLASS, null);
+                nodes = types ? types.map((t) => new TreeNode(t, t.toString())) : [];
+                break;
+            default:
+        }
+
+        return nodes;
     }
 }

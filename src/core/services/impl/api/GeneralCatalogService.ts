@@ -9,10 +9,11 @@
 
 import { KIXObjectService } from './KIXObjectService';
 import {
-    GeneralCatalogItem, KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
+    KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, KIXObjectSpecificCreateOptions, Error
 } from '../../../model';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { GeneralCatalogItemFactory } from '../../object-factories/GeneralCatalogItemFactory';
+import { LoggingService } from '..';
 
 export class GeneralCatalogService extends KIXObjectService {
 
@@ -36,23 +37,43 @@ export class GeneralCatalogService extends KIXObjectService {
     }
 
     public isServiceFor(kixObjectType: KIXObjectType): boolean {
-        return kixObjectType === KIXObjectType.GENERAL_CATALOG_ITEM;
+        return kixObjectType === this.objectType
+            || kixObjectType === KIXObjectType.GENERAL_CATALOG_CLASS;
     }
 
     public async loadObjects<T>(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<T[]> {
-        const query = this.prepareQuery(loadingOptions);
         let objects = [];
 
         if (objectType === KIXObjectType.GENERAL_CATALOG_ITEM) {
             objects = await super.load(
                 token, objectType, this.RESOURCE_URI, loadingOptions, objectIds, 'GeneralCatalogItem'
             );
+        } else if (objectType === KIXObjectType.GENERAL_CATALOG_CLASS) {
+            const uri = this.buildUri('system', 'generalcatalog', 'classes');
+            objects = await super.load<string>(
+                token, KIXObjectType.GENERAL_CATALOG_CLASS, uri, null, null, 'GeneralCatalogClass'
+            );
         }
 
         return objects;
     }
 
+    public async createObject(
+        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
+        createOptions?: KIXObjectSpecificCreateOptions
+    ): Promise<number> {
+
+        const uri = this.buildUri('system', 'generalcatalog');
+        const id = super.executeUpdateOrCreateRequest(
+            token, clientRequestId, parameter, uri, KIXObjectType.GENERAL_CATALOG_ITEM, 'GeneralCatalogItemID', true
+        ).catch((error: Error) => {
+            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            throw new Error(error.Code, error.Message);
+        });
+
+        return id;
+    }
 }

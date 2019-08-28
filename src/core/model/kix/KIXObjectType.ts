@@ -63,6 +63,8 @@ export enum KIXObjectType {
 
     GENERAL_CATALOG_ITEM = 'GeneralCatalogItem',
 
+    GENERAL_CATALOG_CLASS = 'GeneralCatalogClass',
+
     LINK = 'Link',
 
     LINK_OBJECT = 'LINK_OBJECT',
