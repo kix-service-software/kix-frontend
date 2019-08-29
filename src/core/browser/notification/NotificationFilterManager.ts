@@ -36,7 +36,6 @@ export class NotificationFilterManager extends AbstractDynamicFormManager {
             "ArticleSubjectMatch", "ArticleBodyMatch"
         ];
 
-
         for (const ticketProperty of ticketProperties) {
             const label = await LabelService.getInstance().getPropertyText(ticketProperty, KIXObjectType.TICKET);
             properties.push([ticketProperty, label]);

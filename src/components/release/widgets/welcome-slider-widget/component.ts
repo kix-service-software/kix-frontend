@@ -31,11 +31,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         const currentUser = await AgentService.getInstance().getCurrentUser();
-        if (currentUser) {
+        if (currentUser && currentUser.UserID !== 1) {
             this.state.userString = currentUser.UserFullname;
         }
 
-        this.prepareSliderList();
+        this.prepareSliderList(currentUser.UserID);
 
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Welcome to KIX 18', 'Translatable#No, thank you', 'Translatable#Yes, please',
@@ -94,7 +94,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    private prepareSliderList(): void {
+    private prepareSliderList(userId: number): void {
         const currentContext = ContextService.getInstance().getActiveContext(ContextType.MAIN);
         this.state.widgetConfiguration = currentContext
             ? currentContext.getWidgetConfiguration(this.state.instanceId)
@@ -102,7 +102,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.state.sliderList = [
             new SliderContent(
-                'Translatable#Hello',
+                userId === 1 ? 'Translatable#Welcome to KIX 18' : 'Translatable#Hello',
                 'Translatable#QuickstartGuide_Text_Start',
                 'Slider_Start.png'
             )
