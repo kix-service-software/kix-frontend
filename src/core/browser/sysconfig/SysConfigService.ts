@@ -8,7 +8,7 @@
  */
 
 import { KIXObjectService } from "../kix";
-import { SysConfigOption, KIXObjectType } from "../../model";
+import { SysConfigOption, KIXObjectType, SysConfigKey } from "../../model";
 
 export class SysConfigService extends KIXObjectService<SysConfigOption> {
 
@@ -29,5 +29,16 @@ export class SysConfigService extends KIXObjectService<SysConfigOption> {
 
     public getLinkObjectName(): string {
         return 'SysConfig';
+    }
+
+    public async getTicketViewableStateTypes(): Promise<string[]> {
+        const viewableStateTypes = await KIXObjectService.loadObjects<SysConfigOption>(
+            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_VIEWABLE_STATE_TYPE],
+            null, null, true
+        ).catch(() => [] as SysConfigOption[]);
+
+        const stateTypes: string[] = viewableStateTypes && viewableStateTypes.length ? viewableStateTypes[0].Value : [];
+
+        return stateTypes && !!stateTypes.length ? stateTypes : ['new', 'open', 'pending reminder', 'pending auto'];
     }
 }

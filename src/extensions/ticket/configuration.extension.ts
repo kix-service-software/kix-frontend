@@ -11,11 +11,7 @@ import { IConfigurationExtension } from '../../core/extensions';
 import {
     ConfiguredWidget, WidgetConfiguration, WidgetSize, KIXObjectPropertyFilter, TableFilterCriteria,
     TicketProperty, FilterCriteria, FilterDataType, FilterType, FormField, KIXObjectType, Form,
-    FormContext,
-    ContextConfiguration,
-    CRUD,
-    TableWidgetSettings,
-    KIXObjectLoadingOptions
+    FormContext, ContextConfiguration, CRUD, TableWidgetSettings, KIXObjectLoadingOptions, SortOrder
 } from '../../core/model';
 import { TicketContext, TicketChartConfiguration } from '../../core/browser/ticket';
 import {
@@ -193,13 +189,14 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
                     'table-widget', 'Translatable#Overview Tickets', [
                         'ticket-create-action', 'bulk-action', 'csv-export-action', 'ticket-search-action'
                     ],
-                    new TableWidgetSettings(KIXObjectType.TICKET, null,
+                    new TableWidgetSettings(KIXObjectType.TICKET,
+                        [TicketProperty.AGE, SortOrder.UP],
                         new TableConfiguration(KIXObjectType.TICKET,
                             new KIXObjectLoadingOptions(
                                 [new FilterCriteria(
                                     TicketProperty.STATE_TYPE, SearchOperator.EQUALS, FilterDataType.STRING,
                                     FilterType.AND, 'Open'
-                                )], null, 1000
+                                )], 'Ticket.-Age:numeric', 1000
                             ),
                             null, null,
                             true, true,

@@ -6,16 +6,15 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <if(state.setManager)>
     <div.mail-filter-set-form-container>
         <span title=state.translations.get("HeaderTitle")>
             <span>${state.translations.get("HeaderTitle")}:</span>
-            <overlay-icon isHint=true content=state.translations.get("HeaderHint")/>
+            <overlay-icon isHint=true content=state.translations.get("HeaderHint") title=state.translations.get("HeaderTitle")/>
         </span>
         <span title=state.translations.get("ValueTitle")>
             <span>${state.translations.get("ValueTitle")}:</span>
-            <overlay-icon isHint=true content=state.translations.get("ValueHint")/>
+            <overlay-icon isHint=true content=state.translations.get("ValueHint") title=state.translations.get("ValueTitle")/>
         </span>
     </div>
     <dynamic-form-field-container manager=state.setManager/>

@@ -82,7 +82,7 @@ export class ConfigItemClassService extends KIXObjectService {
 
             const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
             if (icon) {
-                icon.Object = 'ConfigItemClass';
+                icon.Object = KIXObjectType.GENERAL_CATALOG_ITEM;
                 icon.ObjectID = response.ConfigItemClassID;
                 await this.createIcons(token, clientRequestId, icon);
             }
@@ -114,7 +114,7 @@ export class ConfigItemClassService extends KIXObjectService {
 
             const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
             if (icon) {
-                icon.Object = 'ConfigItemClass';
+                icon.Object = KIXObjectType.GENERAL_CATALOG_ITEM;
                 icon.ObjectID = response.ConfigItemClassID;
                 await this.updateIcon(token, clientRequestId, icon);
             }

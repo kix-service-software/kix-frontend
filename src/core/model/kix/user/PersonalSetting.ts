@@ -17,6 +17,7 @@ export class PersonalSetting {
         public label: string,
         public hint: string,
         public inputComponent?: string,
+        public required: boolean = false,
         public defaultValue: FormFieldValue = null,
         public options?: FormFieldOption[]
     ) { }

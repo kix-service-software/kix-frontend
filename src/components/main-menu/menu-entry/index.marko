@@ -6,16 +6,9 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <if(state.entry)>
     <link-target routingConfiguration=component.getRoutingConfiguration(state.entry)>
         <@content>
-            <span class="hover-label">
-                <icon icon=state.entry.icon/>
-                <div>
-                    <translation-string pattern=state.entry.text/>
-                </div>
-            </span>
             <span class="label-wrapper">
                 <icon icon=state.entry.icon/>
                 <if(state.showText)>
@@ -23,6 +16,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         <translation-string pattern=state.entry.text/>
                     </div>
                 </if>
+            </span>
+            <span class="hover-label">
+                <icon icon=state.entry.icon/>
+                <div>
+                    <translation-string pattern=state.entry.text/>
+                </div>
             </span>
         </@content>
     </link-target>

@@ -9,13 +9,13 @@
 
 import {
     TicketProperty, Ticket, KIXObjectType, DateTimeUtil, KIXObjectLoadingOptions, FilterCriteria,
-    TicketStateProperty, FilterType, FilterDataType, SysConfigKey, SysConfigOption
+    TicketStateProperty, FilterType, FilterDataType
 } from "../../../model";
 import { LabelService } from "../../LabelService";
 import { KIXObjectService } from "../../kix";
 import { TicketLabelProvider } from "../TicketLabelProvider";
 import { SearchOperator } from "../../SearchOperator";
-import { ConfigurationService } from "../../../services";
+import { SysConfigService } from "../../sysconfig";
 
 export class TicketChartFactory {
 
@@ -74,14 +74,12 @@ export class TicketChartFactory {
             case TicketProperty.STATE_ID:
                 objectType = KIXObjectType.TICKET_STATE;
 
-                const viewAbleTypesConfig = await KIXObjectService.loadObjects<SysConfigOption>(
-                    KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_VIEWABLE_STATE_TYPE]
-                );
+                const stateTypes = await SysConfigService.getInstance().getTicketViewableStateTypes();
 
-                if (viewAbleTypesConfig && viewAbleTypesConfig.length) {
-                    const types = viewAbleTypesConfig[0].Value;
+                if (stateTypes && !!stateTypes.length) {
                     filter = [new FilterCriteria(
-                        TicketStateProperty.TYPE_NAME, SearchOperator.IN, FilterDataType.STRING, FilterType.AND, types
+                        TicketStateProperty.TYPE_NAME, SearchOperator.IN, FilterDataType.STRING,
+                        FilterType.AND, stateTypes
                     )];
                 }
                 break;

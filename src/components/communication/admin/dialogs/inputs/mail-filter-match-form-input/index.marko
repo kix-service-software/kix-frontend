@@ -6,21 +6,20 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <if(state.matchManager)>
     <div.mail-filter-match-form-container>
         <span title=state.translations.get("HeaderTitle")>
             <span>${state.translations.get("HeaderTitle")}:</span>
-            <overlay-icon isHint=true content=state.translations.get("HeaderHint")/>
+            <overlay-icon isHint=true content=state.translations.get("HeaderHint") title=state.translations.get("HeaderTitle")/>
         </span>
         <div.mail-filter-match-value-container>
             <span title=state.translations.get("NegateTitle")>
                 <span>${state.translations.get("NegateTitle")}:</span>
-                <overlay-icon isHint=true content=state.translations.get("NegateHint")/>
+                <overlay-icon isHint=true content=state.translations.get("NegateHint") title=state.translations.get("NegateTitle")/>
             </span>
             <span title=state.translations.get("PatternTitle")>
                 <span>${state.translations.get("PatternTitle")}:</span>
-                <overlay-icon isHint=true content=state.translations.get("PatternHint")/>
+                <overlay-icon isHint=true content=state.translations.get("PatternHint") title=state.translations.get("PatternTitle")/>
             </span>
         </div>
     </div>

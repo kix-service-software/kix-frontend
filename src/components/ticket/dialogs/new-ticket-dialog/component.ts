@@ -15,6 +15,8 @@ import { ComponentState } from './ComponentState';
 import { TicketDetailsContext } from '../../../../core/browser/ticket';
 import { RoutingConfiguration } from '../../../../core/browser/router';
 import { AbstractNewDialog } from '../../../../core/browser/components/dialog';
+import { EventService } from '../../../../core/browser/event';
+import { ApplicationEvent } from '../../../../core/browser/application';
 
 class Component extends AbstractNewDialog {
 
@@ -67,11 +69,12 @@ class Component extends AbstractNewDialog {
             const context = await ContextService.getInstance().getContext(TicketDetailsContext.CONTEXT_ID);
             const ticket = await context.getObject<Ticket>(KIXObjectType.TICKET, true, [TicketProperty.ARTICLES]);
             if (ticket) {
-                const article = ticket.Articles.sort((a, b) => b.ArticleID - a.ArticleID)[0];
+                const article = [...ticket.Articles].sort((a, b) => b.ArticleID - a.ArticleID)[0];
                 if (article.isUnsent()) {
                     BrowserUtil.openErrorOverlay(article.getUnsentError());
                 }
             }
+            EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
         });
     }
 

@@ -111,7 +111,7 @@ export class Extension implements IConfigurationExtension {
 
             const languageField = new FormField(
                 'Translatable#Language', PersonalSettingsProperty.USER_LANGUAGE, 'language-input',
-                false, 'Translatable#Helptext_Admin_UserCreate_Preferences_UserLanguage', null
+                true, 'Translatable#Helptext_Admin_UserCreate_Preferences_UserLanguage', null
             );
             const myQueuesField = new FormField(
                 'Translatable#My Queues', PersonalSettingsProperty.MY_QUEUES, 'object-reference-input',

@@ -107,6 +107,8 @@ export class CacheService {
             case KIXObjectType.TICKET:
                 cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
                 cacheKeyPrefixes.push(KIXObjectType.CONTACT);
+                cacheKeyPrefixes.push(KIXObjectType.QUEUE);
+                cacheKeyPrefixes.push(KIXObjectType.CURRENT_USER);
                 break;
             case KIXObjectType.FAQ_VOTE:
                 cacheKeyPrefixes.push(KIXObjectType.FAQ_ARTICLE);
