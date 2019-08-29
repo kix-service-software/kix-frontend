@@ -33,7 +33,7 @@ export class NotificationFilterManager extends AbstractDynamicFormManager {
         ];
 
         const articleProperties = [
-            ArticleProperty.SUBJECT, ArticleProperty.BODY
+            "ArticleSubjectMatch", "ArticleBodyMatch"
         ];
 
 
