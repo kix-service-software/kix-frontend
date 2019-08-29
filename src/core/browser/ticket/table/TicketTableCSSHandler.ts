@@ -10,6 +10,7 @@
 import { ITableCSSHandler, TableValue } from "../../table";
 import { Ticket, TicketProperty, SysConfigKey, KIXObjectType, SysConfigOption } from "../../../model";
 import { KIXObjectService } from "../../kix";
+import { SysConfigService } from "../../sysconfig";
 
 export class TicketTableCSSHandler implements ITableCSSHandler<Ticket> {
 
@@ -21,13 +22,10 @@ export class TicketTableCSSHandler implements ITableCSSHandler<Ticket> {
                 classes.push("article-unread");
             }
 
-            const viewAbleTypesConfig = await KIXObjectService.loadObjects<SysConfigOption>(
-                KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_VIEWABLE_STATE_TYPE]
-            );
+            const stateTypes = await SysConfigService.getInstance().getTicketViewableStateTypes();
 
-            if (viewAbleTypesConfig && viewAbleTypesConfig.length) {
-                const types = viewAbleTypesConfig[0].Value;
-                if (!types.some((t) => t === ticket.StateType)) {
+            if (stateTypes && !!stateTypes.length) {
+                if (!stateTypes.some((t) => t === ticket.StateType)) {
                     classes.push('invlaid-object');
                 }
             }

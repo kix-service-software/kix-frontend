@@ -16,6 +16,7 @@ import { KIXObjectService } from "../../kix";
 import { SearchOperator } from "../../SearchOperator";
 import { EventService } from "../../event";
 import { ApplicationEvent } from "../../application";
+import { SysConfigService } from "../../sysconfig";
 
 export class TicketContext extends Context {
 
@@ -37,13 +38,10 @@ export class TicketContext extends Context {
     }
 
     private async loadTickets(): Promise<void> {
-        const viewableStateTypes = await KIXObjectService.loadObjects<SysConfigOption>(
-            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_VIEWABLE_STATE_TYPE]
-        );
+        const stateTypes = await SysConfigService.getInstance().getTicketViewableStateTypes();
 
         const stateTypeFilterCriteria = new FilterCriteria(
-            'StateType', SearchOperator.IN, FilterDataType.STRING, FilterType.AND,
-            viewableStateTypes && viewableStateTypes.length ? viewableStateTypes[0].Value : []
+            'StateType', SearchOperator.IN, FilterDataType.STRING, FilterType.AND, stateTypes
         );
 
         const loadingOptions = new KIXObjectLoadingOptions(
