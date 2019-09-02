@@ -107,10 +107,13 @@ export abstract class ImportManager extends AbstractDynamicFormManager {
     }
 
     protected async getExisting(object: KIXObject): Promise<KIXObject> {
-        const existingObjects = await KIXObjectService.loadObjects(
-            this.objectType, [object.ObjectId], null, null, true
-        );
-        return existingObjects && !!existingObjects.length ? existingObjects[0] : null;
+        if (object.ObjectId) {
+            const existingObjects = await KIXObjectService.loadObjects(
+                this.objectType, [object.ObjectId], null, null, true
+            );
+            return existingObjects && !!existingObjects.length ? existingObjects[0] : null;
+        }
+        return null;
     }
 
     protected async prepareParameter(object: KIXObject, columns: IColumn[]): Promise<Array<[string, any]>> {

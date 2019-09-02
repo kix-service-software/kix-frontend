@@ -16,7 +16,6 @@ import { ObjectPropertyValue } from "../ObjectPropertyValue";
 import { ImportManager, ImportPropertyOperator } from "../import";
 import { ContactService } from "./ContactService";
 import { KIXObjectService } from "../kix";
-import { SearchOperator } from "../SearchOperator";
 import { OrganisationService } from "../organisation";
 
 export class ContactImportManager extends ImportManager {
