@@ -120,6 +120,9 @@ export class CacheService {
             case KIXObjectType.FAQ_ARTICLE:
                 cacheKeyPrefixes.push(KIXObjectType.FAQ_CATEGORY);
                 break;
+            case KIXObjectType.FAQ_CATEGORY:
+                cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
+                break;
             case KIXObjectType.CONFIG_ITEM:
             case KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION:
                 cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM_CLASS);
@@ -154,6 +157,9 @@ export class CacheService {
             case KIXObjectType.TICKET_PRIORITY:
             case KIXObjectType.TICKET_STATE:
             case KIXObjectType.TICKET_TYPE:
+                cacheKeyPrefixes.push(KIXObjectType.TICKET);
+                cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
+                break;
             case KIXObjectType.CONFIG_ITEM_CLASS:
                 cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
                 break;
@@ -171,12 +177,6 @@ export class CacheService {
             case KIXObjectType.SYS_CONFIG_OPTION:
                 cacheKeyPrefixes.push(KIXObjectType.SYS_CONFIG_OPTION);
                 cacheKeyPrefixes.push(KIXObjectType.SYS_CONFIG_OPTION_DEFINITION);
-                break;
-            case KIXObjectType.QUEUE:
-            case KIXObjectType.TICKET_STATE:
-            case KIXObjectType.TICKET_TYPE:
-            case KIXObjectType.TICKET_PRIORITY:
-                cacheKeyPrefixes.push(KIXObjectType.TICKET);
                 break;
             default:
         }
