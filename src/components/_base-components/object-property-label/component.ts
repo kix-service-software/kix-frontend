@@ -25,10 +25,13 @@ export class ObjectPropertyLabelComponent<T> {
     }
 
     public onInput(input: ComponentInput<T>): void {
-        this.object = input.object;
         this.property = input.property;
         this.labelProvider = input.labelProvider;
         this.state.hasText = typeof input.showText !== 'undefined' ? input.showText : true;
+        if (this.object !== input.object) {
+            this.object = input.object;
+            this.prepareDisplayText();
+        }
     }
 
     public onMount(): void {
