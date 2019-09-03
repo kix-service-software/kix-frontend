@@ -68,4 +68,18 @@ export class GeneralCatalogLabelProvider extends LabelProvider<GeneralCatalogIte
         return displayValue ? displayValue.toString() : '';
     }
 
+    public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
+        if (translatable) {
+            return await TranslationService.translate(
+                plural ? 'Translatable#General Catalog Items' : 'Translatable#General Catalog Item'
+            );
+        }
+        return plural ? 'General Catalog Items' : 'General Catalog Item';
+    }
+
+    public async getObjectText(
+        generalCatalog: GeneralCatalogItem, id?: boolean, title?: boolean, translatable?: boolean
+    ): Promise<string> {
+        return `${generalCatalog.Name}`;
+    }
 }

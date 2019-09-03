@@ -36,6 +36,9 @@
             },
             "new-general-catalog-dialog-configuration": {
                 "module": "new-general-catalog-dialog-configuration.extension"
+            },
+            "edit-general-catalog-dialog-configuration": {
+                "module": "edit-general-catalog-dialog-configuration.extension"
             }
         },
         "kix:modules": {

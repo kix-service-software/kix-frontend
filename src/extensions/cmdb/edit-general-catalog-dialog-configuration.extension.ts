@@ -8,18 +8,19 @@
  */
 
 import { IConfigurationExtension } from '../../core/extensions';
+import {
+    ConfiguredWidget, FormField, FormFieldValue, Form, KIXObjectType, FormContext, ContextConfiguration,
+    KIXObjectProperty,
+    GeneralCatalogItemProperty
+} from '../../core/model';
 import { ConfigurationService } from '../../core/services';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
-import { NewGeneralCatalogDialogContext } from '../../core/browser/general-catalog';
-import {
-    ContextConfiguration, ConfiguredWidget, FormField,
-    KIXObjectProperty, FormFieldValue, Form, KIXObjectType, FormContext, GeneralCatalogItemProperty
-} from '../../core/model';
+import { EditGeneralCatalogDialogContext } from '../../core/browser/general-catalog';
 
 export class Extension implements IConfigurationExtension {
 
     public getModuleId(): string {
-        return NewGeneralCatalogDialogContext.CONTEXT_ID;
+        return EditGeneralCatalogDialogContext.CONTEXT_ID;
     }
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
@@ -33,14 +34,15 @@ export class Extension implements IConfigurationExtension {
     public async createFormDefinitions(overwrite: boolean): Promise<void> {
         const configurationService = ConfigurationService.getInstance();
 
-        const formId = 'new-general-catalog-form';
+        const formId = 'edit-general-catalog-form';
         const existing = configurationService.getConfiguration(formId);
+
         if (!existing) {
             const group = new FormGroup('Translatable#General Catalog', [
                 new FormField(
                     'Translatable#Class', GeneralCatalogItemProperty.CLASS, 'general-catalog-class-input', true,
                     'Translatable#Helptext_Admin_GeneralCatalogCreate_Class', null, null, null,
-                    null, null, null, null, 100
+                    null, null, null, null, 100, null, null, null, null, true
                 ),
                 new FormField(
                     'Translatable#Name', GeneralCatalogItemProperty.NAME, null, true,
@@ -63,10 +65,13 @@ export class Extension implements IConfigurationExtension {
                 )
             ]);
 
-            const form = new Form(formId, 'Translatable#New Value', [group], KIXObjectType.GENERAL_CATALOG_ITEM);
+            const form = new Form(
+                formId, 'Translatable#Edit Value', [group],
+                KIXObjectType.GENERAL_CATALOG_ITEM, false, FormContext.EDIT
+            );
             await configurationService.saveConfiguration(form.id, form);
         }
-        configurationService.registerForm([FormContext.NEW], KIXObjectType.GENERAL_CATALOG_ITEM, formId);
+        configurationService.registerForm([FormContext.EDIT], KIXObjectType.GENERAL_CATALOG_ITEM, formId);
     }
 }
 

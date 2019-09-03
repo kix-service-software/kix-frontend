@@ -8,15 +8,12 @@
  */
 
 import { KIXObjectFormService } from "../kix/KIXObjectFormService";
-import {
-    KIXObjectType, FormFieldValue, FormField, ConfigItem, VersionProperty, ConfigItemProperty,
-    GeneralCatalogItem, KIXObjectLoadingOptions, FilterCriteria, FilterDataType,
-    FilterType, ConfigItemClass, Contact, Organisation, FormFieldOptions, InputFieldTypes, FormContext
-} from "../../model";
 import { KIXObjectService } from '../kix/';
-import { LabelService } from "../LabelService";
-import { SearchOperator } from "../SearchOperator";
-import { PreparedData } from "../../model/kix/cmdb/PreparedData";
+import {
+    GeneralCatalogItem, KIXObjectType, Form, FormFieldValue, FormField, GeneralCatalogItemProperty, KIXObjectProperty
+} from "../../model";
+import { ContextService } from "..";
+import { EditGeneralCatalogDialogContext } from ".";
 
 export class GeneralCatalogFormService extends KIXObjectFormService<GeneralCatalogItem> {
 
