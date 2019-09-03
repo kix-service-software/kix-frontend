@@ -56,9 +56,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private prepareState(value: number, crud: CRUD, optionText: string): void {
-        if (value & crud) {
-            this.state.active = true;
-        }
+        this.state.active = Boolean(value & crud);
         this.state.optionText = optionText;
     }
 
