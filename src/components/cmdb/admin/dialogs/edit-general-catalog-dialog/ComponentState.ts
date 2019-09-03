@@ -7,5 +7,12 @@
  * --
  */
 
-export { NewGeneralCatalogDialogContext } from './NewGeneralCatalogDialogContext';
-export { EditGeneralCatalogDialogContext } from './EditGeneralCatalogDialogContext';
+import { AbstractComponentState } from "../../../../../core/browser";
+
+export class ComponentState extends AbstractComponentState {
+
+    public constructor() {
+        super();
+    }
+
+}

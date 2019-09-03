@@ -9,7 +9,7 @@
 
 export enum GeneralCatalogItemProperty {
 
-    ID = 'ID',
+    ID = 'ItemID',
 
     NAME = 'Name',
 

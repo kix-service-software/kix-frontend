@@ -8,7 +8,7 @@
  */
 
 import { KIXObjectType, ContextMode, DataType, KIXObjectProperty } from "../../../model";
-import { RoutingConfiguration } from "../../router";
+import { DialogRoutingConfiguration } from "../../router";
 import {
     TableConfiguration, ITable, Table,
     DefaultColumnConfiguration, IColumnConfiguration, TableHeaderHeight, TableRowHeight
@@ -59,8 +59,12 @@ export class GeneralCatalogTableFactory extends TableFactory {
             tableConfiguration.tableColumns = tableColumns;
         }
 
-        // tslint:disable-next-line:no-empty
         if (defaultRouting) {
+            tableConfiguration.routingConfiguration = new DialogRoutingConfiguration(
+                null, KIXObjectType.GENERAL_CATALOG_ITEM, ContextMode.EDIT_ADMIN,
+                GeneralCatalogItemProperty.ID, null, true,
+                undefined, true, 'edit-general-catalog-form'
+            );
         }
 
         return tableConfiguration;
