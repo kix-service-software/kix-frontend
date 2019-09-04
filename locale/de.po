@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-09-04 08:52+0000\n"
-"Last-Translator: fwichmann <Felix.Wichmann@cape-it.de>\n"
+"PO-Revision-Date: 2019-09-04 14:33+0000\n"
+"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -95,10 +95,8 @@ msgstr "Agentenzuordnung"
 msgid "Agent Information"
 msgstr "Agenten-Informationen"
 
-#, fuzzy
-#| msgid "Preferences"
 msgid "Agent Preferences Tooltip"
-msgstr "Persönliche Einstellungen"
+msgstr "Kurzinfo für die persönlichen Agenteneinstellungen"
 
 msgid "Agents"
 msgstr "Agenten"
@@ -537,10 +535,8 @@ msgstr "Übersetzung wird angelegt"
 msgid "Create Type"
 msgstr "Typ wird angelegt"
 
-#, fuzzy
-#| msgid "Create Role"
 msgid "Create Value"
-msgstr "Rolle wird angelegt"
+msgstr "Wert wird angelegt"
 
 msgid "Create Webform"
 msgstr "Webformular wird angelegt"
@@ -719,10 +715,8 @@ msgstr "Übersetzung bearbeiten"
 msgid "Edit Type"
 msgstr "Typ bearbeiten"
 
-#, fuzzy
-#| msgid "Set Value"
 msgid "Edit Value"
-msgstr "Wert setzen"
+msgstr "Wert bearbeiten"
 
 msgid "Email"
 msgstr "E-Mail"
@@ -990,32 +984,17 @@ msgid "Helptext_Admin_FAQCategoryEdit_Validity"
 msgstr ""
 "Die Kategorie kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
-#, fuzzy
-#| msgid "Helptext_Admin_Users_UserCreate_Roles"
 msgid "Helptext_Admin_GeneralCatalogCreate_Class"
 msgstr ""
-"Einem Agenten muss mindestens die Rolle „AgentUser“ zugeordnet sein, damit "
-"er sich einloggen kann. Es werden nur gültige Rollen angezeigt."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Comment"
 msgid "Helptext_Admin_GeneralCatalogCreate_Comment"
 msgstr ""
-"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
-"Bereich angezeigt werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_UserName"
 msgid "Helptext_Admin_GeneralCatalogCreate_Name"
 msgstr ""
-"Geben Sie den Benutzername für das Konto an, welches Sie im KIX "
-"konfigurieren möchten, um sich beim Host anzumelden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Validity"
 msgid "Helptext_Admin_GeneralCatalogCreate_Validity"
 msgstr ""
-"Die Kategorie kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
 msgid "Helptext_Admin_MailAccountCreate_AcceptKIXHeader"
 msgstr ""
@@ -1266,12 +1245,11 @@ msgstr ""
 "alle die Agenten verschickt, denen diese Rollen zugeordnet sind. Zur Auswahl "
 "stehen alle im System verfügbaren, gültigen Rollen."
 
-#, fuzzy
-#| msgid "Helptext_Admin_NotificationCreate_SendTo"
 msgid "Helptext_Admin_NotificationCreate_ShowPreferences"
 msgstr ""
-"Wählen Sie aus der Dropdown-Liste allgemeine Funktionen aus, die Agenten "
-"erfüllen sollen, um diese Benachrichtigung zu erhalten."
+"Die Benachrichtigung wird an alle Agenten versendet, die als Empfänger "
+"ausgewählt sind. Ist diese Option aktiviert, können diese Agenten diese "
+"Benachrichtigung in ihren persönlichen Einstellungen abbestellen."
 
 msgid "Helptext_Admin_NotificationCreate_SubjectWithTicketNumber"
 msgstr ""
@@ -1460,12 +1438,8 @@ msgid "Helptext_Admin_TextModuleEdit_Validity"
 msgstr ""
 "Der Textbaustein kann nur verwendet werden, wenn er „gültig“ gesetzt ist."
 
-#, fuzzy
-#| msgid "Helptext_Admin_Tickets_QueueCreate_Icon."
 msgid "Helptext_Admin_Tickets_GeneralCatalogCreate_Icon."
 msgstr ""
-"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
-"des Teams angezeigt wird."
 
 msgid "Helptext_Admin_Tickets_PriorityCreate_Comment"
 msgstr ""
@@ -3825,8 +3799,6 @@ msgstr "Aktualisierung wird durchgeführt"
 msgid "Update Type"
 msgstr "Aktualisierung wird durchgeführt"
 
-#, fuzzy
-#| msgid "Update Role"
 msgid "Update Value"
 msgstr "Aktualisierung wird durchgeführt"
 
@@ -3866,10 +3838,8 @@ msgstr "Wert"
 msgid "Value of field '{0}' is too long (max: {1})."
 msgstr "Wert des Feldes '{0}' ist zu  lang (max: {1})."
 
-#, fuzzy
-#| msgid "Role successfully created."
 msgid "Value successfully created."
-msgstr "Rolle wurde erfolgreich angelegt."
+msgstr "Wert wurde erfolgreich angelegt."
 
 msgid "Version"
 msgstr "Version"
