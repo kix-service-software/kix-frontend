@@ -1,3 +1,5 @@
+msgid "General information on how to work with KIX 18"
+msgstr ""
 msgid "{0}/{1} {2} imported"
 msgstr ""
 msgid "0 data sets found."

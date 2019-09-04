@@ -31,6 +31,7 @@ import { FAQDetailsContext } from '../../../../core/browser/faq/context/FAQDetai
 import { IUIModule } from '../../application/IUIModule';
 import { UIComponentPermission } from '../../../model/UIComponentPermission';
 import { BookmarkService } from '../../bookmark/BookmarkService';
+import { TranslationService } from '../../i18n/TranslationService';
 
 export class UIModule implements IUIModule {
 
@@ -68,7 +69,7 @@ export class UIModule implements IUIModule {
         this.registerContexts();
         this.registerDialogs();
         this.registerActions();
-        this.registerBookmarks();
+        await this.registerBookmarks();
     }
 
     private registerContexts(): void {
@@ -110,22 +111,35 @@ export class UIModule implements IUIModule {
         ActionFactory.getInstance().registerAction('load-faq-article-action', LoadFAQAricleAction);
     }
 
-    private registerBookmarks(): void {
+    private async registerBookmarks(): Promise<void> {
+        const language = await TranslationService.getUserLanguage();
+
+        const isGerman = language === 'de';
+
+        const faqIds = [
+            isGerman ? 1 : 2,
+            isGerman ? 3 : 4,
+            isGerman ? 5 : 6,
+            isGerman ? 7 : 8,
+        ];
+
         const bookmarks = [
             new Bookmark(
-                'Translatable#How to use KIX 18 – Some general notes', 'kix-icon-faq', 'load-faq-article-action', 1,
+                'Translatable#General information on how to work with KIX 18',
+                'kix-icon-faq', 'load-faq-article-action',
+                faqIds[0],
                 [new UIComponentPermission('faq/articles', [CRUD.READ])]
             ),
             new Bookmark(
-                'Translatable#How to search in KIX 18?', 'kix-icon-faq', 'load-faq-article-action', 2,
+                'Translatable#How do I search in KIX 18?', 'kix-icon-faq', 'load-faq-article-action', faqIds[1],
                 [new UIComponentPermission('faq/articles', [CRUD.READ])]
             ),
             new Bookmark(
-                'Translatable#How to create a new ticket?', 'kix-icon-faq', 'load-faq-article-action', 3,
+                'Translatable#How do I create a new ticket?', 'kix-icon-faq', 'load-faq-article-action', faqIds[3],
                 [new UIComponentPermission('faq/articles', [CRUD.READ])]
             ),
             new Bookmark(
-                'Translatable#selected ticket features', 'kix-icon-faq', 'load-faq-article-action', 4,
+                'Translatable#Selected ticket functions', 'kix-icon-faq', 'load-faq-article-action', faqIds[2],
                 [new UIComponentPermission('faq/articles', [CRUD.READ])]
             )
         ];
