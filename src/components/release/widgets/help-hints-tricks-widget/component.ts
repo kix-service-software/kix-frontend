@@ -31,6 +31,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             'Translatable#Help, hints & tricks'
         ]);
         this.state.hasFAQAccess = await this.checkReadPermissions('faq/articles');
+
+        if (this.state.hasFAQAccess) {
+            this.preapreFAQLinks();
+        }
+
         this.state.hasConfigAccess = await this.checkReadPermissions('system/config');
         if (this.state.hasConfigAccess) {
             const userManualConfigs = await KIXObjectService.loadObjects<SysConfigOption>(
@@ -63,6 +68,21 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             [new UIComponentPermission(resource, [CRUD.READ])]
         );
     }
+
+    private async preapreFAQLinks(): Promise<void> {
+        const language = await TranslationService.getUserLanguage();
+
+        const isGerman = language === 'de';
+        const baseUri = "faqarticles/";
+
+        this.state.faqURIs = [
+            baseUri + (isGerman ? 1 : 2),
+            baseUri + (isGerman ? 3 : 4),
+            baseUri + (isGerman ? 5 : 6),
+            baseUri + (isGerman ? 7 : 8),
+        ];
+    }
+
 }
 
 module.exports = Component;
