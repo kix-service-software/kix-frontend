@@ -14,6 +14,9 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 3.7\n"
 
+msgid "General information on how to work with KIX 18"
+msgstr ""
+
 msgid "{0}/{1} {2} imported"
 msgstr ""
 
