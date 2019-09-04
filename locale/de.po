@@ -95,6 +95,11 @@ msgstr "Agentenzuordnung"
 msgid "Agent Information"
 msgstr "Agenten-Informationen"
 
+#, fuzzy
+#| msgid "Preferences"
+msgid "Agent Preferences Tooltip"
+msgstr "Persönliche Einstellungen"
+
 msgid "Agents"
 msgstr "Agenten"
 
@@ -714,6 +719,11 @@ msgstr "Übersetzung bearbeiten"
 msgid "Edit Type"
 msgstr "Typ bearbeiten"
 
+#, fuzzy
+#| msgid "Set Value"
+msgid "Edit Value"
+msgstr "Wert setzen"
+
 msgid "Email"
 msgstr "E-Mail"
 
@@ -905,6 +915,16 @@ msgid "Full Text"
 msgstr "Volltext"
 
 msgid "General Catalog"
+msgstr "General Catalog"
+
+#, fuzzy
+#| msgid "General Catalog"
+msgid "General Catalog Item"
+msgstr "General Catalog"
+
+#, fuzzy
+#| msgid "General Catalog"
+msgid "General Catalog Items"
 msgstr "General Catalog"
 
 msgid "General information on working with KIX 18"
@@ -1245,6 +1265,13 @@ msgstr ""
 "Wählen Sie aus der Dropdown-Liste Rollen aus. Die Benachrichtigung wird an "
 "alle die Agenten verschickt, denen diese Rollen zugeordnet sind. Zur Auswahl "
 "stehen alle im System verfügbaren, gültigen Rollen."
+
+#, fuzzy
+#| msgid "Helptext_Admin_NotificationCreate_SendTo"
+msgid "Helptext_Admin_NotificationCreate_ShowPreferences"
+msgstr ""
+"Wählen Sie aus der Dropdown-Liste allgemeine Funktionen aus, die Agenten "
+"erfüllen sollen, um diese Benachrichtigung zu erhalten."
 
 msgid "Helptext_Admin_NotificationCreate_SubjectWithTicketNumber"
 msgstr ""
@@ -2484,13 +2511,6 @@ msgstr "Vorfallstatus"
 msgid "Information text"
 msgstr "Hinweistext"
 
-msgid ""
-"Input of 3 stars '***' in autocomplete form fields = listing of the first 10 "
-"found records"
-msgstr ""
-"Eingabe von 3 Sternen „***“ in Autocomplete-Formularfeldern  =  Auflistung "
-"der ersten 10 gefundenen Datensätze"
-
 msgid "Inserted email address is invalid"
 msgstr "Die eingegebene E-Mail Adresse ist ungültig"
 
@@ -2517,6 +2537,9 @@ msgstr "Schlagworte"
 
 msgid "Knowledge Database"
 msgstr "Wissensdatenbank"
+
+msgid "Knowledge Database: FAQ Categories"
+msgstr "Wissensdatenbank: FAQ Kategorien"
 
 msgid "Label"
 msgstr "Beschriftung"
@@ -3393,6 +3416,11 @@ msgstr "Wert setzen"
 msgid "Show all"
 msgstr "Alle anzeigen"
 
+#, fuzzy
+#| msgid "Update Preferences"
+msgid "Show in agent preferences"
+msgstr "Aktualisierung wird durchgeführt"
+
 msgid "Show title in form"
 msgstr "Titel im Formular anzeigen"
 
@@ -3799,6 +3827,11 @@ msgstr "Aktualisierung wird durchgeführt"
 msgid "Update Type"
 msgstr "Aktualisierung wird durchgeführt"
 
+#, fuzzy
+#| msgid "Update Role"
+msgid "Update Value"
+msgstr "Aktualisierung wird durchgeführt"
+
 msgid "URL"
 msgstr "URL"
 
@@ -3921,8 +3954,12 @@ msgstr "PLZ"
 msgid "ZIP"
 msgstr "PLZ"
 
-#~ msgid "Knowledge Database: FAQ Categories"
-#~ msgstr "Wissensdatenbank: FAQ Kategorien"
+#~ msgid ""
+#~ "Input of 3 stars '***' in autocomplete form fields = listing of the first "
+#~ "10 found records"
+#~ msgstr ""
+#~ "Eingabe von 3 Sternen „***“ in Autocomplete-Formularfeldern  =  "
+#~ "Auflistung der ersten 10 gefundenen Datensätze"
 
 #~ msgid "Assigned Organsiation"
 #~ msgstr "Zugeordneter Kunde"
@@ -4025,9 +4062,6 @@ msgstr "PLZ"
 #~ "Zeichen)."
 
 #~ msgid "Update Account"
-#~ msgstr "Aktualisierung wird durchgeführt"
-
-#~ msgid "Update Preferences"
 #~ msgstr "Aktualisierung wird durchgeführt"
 
 #~ msgid "Automation: Notification"

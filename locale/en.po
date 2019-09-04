@@ -95,6 +95,9 @@ msgstr ""
 msgid "Agent Information"
 msgstr ""
 
+msgid "Agent Preferences Tooltip"
+msgstr ""
+
 msgid "Agents"
 msgstr ""
 
@@ -708,6 +711,11 @@ msgstr ""
 msgid "Edit Type"
 msgstr ""
 
+#, fuzzy
+#| msgid "Edit Queue"
+msgid "Edit Value"
+msgstr "Edit Team"
+
 msgid "Email"
 msgstr ""
 
@@ -898,6 +906,14 @@ msgstr ""
 
 msgid "General Catalog"
 msgstr ""
+
+msgid "General Catalog Item"
+msgstr ""
+
+#, fuzzy
+#| msgid "Relevant Config Items"
+msgid "General Catalog Items"
+msgstr "Relevant Assets"
 
 msgid "General information on working with KIX 18"
 msgstr ""
@@ -1197,6 +1213,13 @@ msgstr ""
 "Choose roles from the drop down list. The notification will be sent to all "
 "agents assigned to these roles. You can choose from all valid roles "
 "available in the system."
+
+#, fuzzy
+#| msgid "Helptext_Admin_NotificationCreate_SendTo"
+msgid "Helptext_Admin_NotificationCreate_ShowPreferences"
+msgstr ""
+"Choose from the drop down list general functions the agent should comply "
+"with to receive this notification."
 
 msgid "Helptext_Admin_NotificationCreate_SubjectWithTicketNumber"
 msgstr ""
@@ -2351,11 +2374,6 @@ msgstr ""
 msgid "Information text"
 msgstr ""
 
-msgid ""
-"Input of 3 stars '***' in autocomplete form fields = listing of the first 10 "
-"found records"
-msgstr ""
-
 msgid "Inserted email address is invalid"
 msgstr ""
 
@@ -2381,6 +2399,9 @@ msgid "Keywords"
 msgstr ""
 
 msgid "Knowledge Database"
+msgstr ""
+
+msgid "Knowledge Database: FAQ Categories"
 msgstr ""
 
 msgid "Label"
@@ -3255,6 +3276,9 @@ msgstr ""
 msgid "Show all"
 msgstr ""
 
+msgid "Show in agent preferences"
+msgstr ""
+
 msgid "Show title in form"
 msgstr ""
 
@@ -3656,6 +3680,11 @@ msgstr ""
 
 msgid "Update Type"
 msgstr ""
+
+#, fuzzy
+#| msgid "Create Queue"
+msgid "Update Value"
+msgstr "Create Team"
 
 msgid "URL"
 msgstr ""
