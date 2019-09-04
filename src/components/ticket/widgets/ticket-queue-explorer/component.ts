@@ -9,7 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { ContextService, IdService } from '../../../../core/browser';
-import { TreeNode, Queue, TreeNodeProperty } from '../../../../core/model';
+import { TreeNode } from '../../../../core/model';
 import { TicketContext, QueueService } from '../../../../core/browser/ticket';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
@@ -37,7 +37,7 @@ export class Component {
     private async loadQueues(context: TicketContext): Promise<void> {
         this.state.nodes = null;
         const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy();
-        this.state.nodes = await QueueService.getInstance().prepareObjectTree(queuesHierarchy, false, null, true);
+        this.state.nodes = await QueueService.getInstance().prepareObjectTree(queuesHierarchy, true, null, true);
         this.setActiveNode(context.queueId);
     }
 

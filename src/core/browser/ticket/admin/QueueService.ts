@@ -94,6 +94,7 @@ export class QueueService extends KIXObjectService<Queue> {
                 const subTree = await this.prepareObjectTree(
                     queue.SubQueues, showInvalid, filterIds, includeTicketStats
                 );
+
                 const treeNode = new TreeNode(
                     queue.QueueID, queue.Name,
                     new ObjectIcon(KIXObjectType.QUEUE, queue.QueueID),
@@ -101,8 +102,10 @@ export class QueueService extends KIXObjectService<Queue> {
                     subTree,
                     null, null, null,
                     ticketStats,
-                    null, null, null, queue.ValidID === 1 ? true : false
+                    null, null, null,
+                    queue.ValidID === 1
                 );
+
                 nodes.push(treeNode);
             }
         }
