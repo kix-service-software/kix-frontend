@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2019-09-04 07:33+0000\n"
-"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
+"PO-Revision-Date: 2019-09-04 14:33+0000\n"
+"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: English <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/en/>\n"
 "Language: en\n"
@@ -529,10 +529,8 @@ msgstr ""
 msgid "Create Type"
 msgstr ""
 
-#, fuzzy
-#| msgid "Create Queue"
 msgid "Create Value"
-msgstr "Create Team"
+msgstr ""
 
 msgid "Create Webform"
 msgstr ""
@@ -711,10 +709,8 @@ msgstr ""
 msgid "Edit Type"
 msgstr ""
 
-#, fuzzy
-#| msgid "Edit Queue"
 msgid "Edit Value"
-msgstr "Edit Team"
+msgstr ""
 
 msgid "Email"
 msgstr ""
@@ -910,10 +906,8 @@ msgstr ""
 msgid "General Catalog Item"
 msgstr ""
 
-#, fuzzy
-#| msgid "Relevant Config Items"
 msgid "General Catalog Items"
-msgstr "Relevant Assets"
+msgstr ""
 
 msgid "General information on working with KIX 18"
 msgstr ""
@@ -973,30 +967,17 @@ msgstr ""
 msgid "Helptext_Admin_FAQCategoryEdit_Validity"
 msgstr "The FAQ category can only be used within the system if set “valid”."
 
-#, fuzzy
-#| msgid "Helptext_Admin_Users_UserCreate_Roles"
 msgid "Helptext_Admin_GeneralCatalogCreate_Class"
 msgstr ""
-"An agent needs at least the role “AgentUser” to successfully login. Only "
-"valid roles are available here."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Comment"
 msgid "Helptext_Admin_GeneralCatalogCreate_Comment"
 msgstr ""
-"Insert additional information (only displayed within the admin module)."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_UserName"
 msgid "Helptext_Admin_GeneralCatalogCreate_Name"
 msgstr ""
-"Insert the user name for the account you want to configure in KIX, to enable "
-"connection with the host."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Validity"
 msgid "Helptext_Admin_GeneralCatalogCreate_Validity"
-msgstr "The FAQ category can only be used within the system if set “valid”."
+msgstr ""
 
 msgid "Helptext_Admin_MailAccountCreate_AcceptKIXHeader"
 msgstr ""
@@ -1214,12 +1195,11 @@ msgstr ""
 "agents assigned to these roles. You can choose from all valid roles "
 "available in the system."
 
-#, fuzzy
-#| msgid "Helptext_Admin_NotificationCreate_SendTo"
 msgid "Helptext_Admin_NotificationCreate_ShowPreferences"
 msgstr ""
-"Choose from the drop down list general functions the agent should comply "
-"with to receive this notification."
+"The notification will be send to all agents chosen as recipients. If this "
+"option is active agents can unsubscribe from the notification by changing "
+"their preferences."
 
 msgid "Helptext_Admin_NotificationCreate_SubjectWithTicketNumber"
 msgstr ""
@@ -1388,12 +1368,8 @@ msgstr ""
 msgid "Helptext_Admin_TextModuleEdit_Validity"
 msgstr "The text module can only be used within the system if set “valid”."
 
-#, fuzzy
-#| msgid "Helptext_Admin_Tickets_QueueCreate_Icon."
 msgid "Helptext_Admin_Tickets_GeneralCatalogCreate_Icon."
 msgstr ""
-"Upload an icon, which will be shown together with the team name within the "
-"application."
 
 msgid "Helptext_Admin_Tickets_PriorityCreate_Comment"
 msgstr ""
@@ -2713,10 +2689,8 @@ msgstr ""
 msgid "New Type"
 msgstr ""
 
-#, fuzzy
-#| msgid "New Queue"
 msgid "New Value"
-msgstr "New Team"
+msgstr ""
 
 msgid "New Version created"
 msgstr ""
@@ -3681,10 +3655,8 @@ msgstr ""
 msgid "Update Type"
 msgstr ""
 
-#, fuzzy
-#| msgid "Create Queue"
 msgid "Update Value"
-msgstr "Create Team"
+msgstr ""
 
 msgid "URL"
 msgstr ""
@@ -3722,10 +3694,8 @@ msgstr ""
 msgid "Value of field '{0}' is too long (max: {1})."
 msgstr ""
 
-#, fuzzy
-#| msgid "Queue successfully created."
 msgid "Value successfully created."
-msgstr "Team successfully created."
+msgstr ""
 
 msgid "Version"
 msgstr ""
