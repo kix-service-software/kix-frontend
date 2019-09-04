@@ -32,7 +32,7 @@ export class NotificationLabelProvider extends LabelProvider {
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
-        let displayValue = property;
+        let displayValue;
         switch (property) {
             case NotificationProperty.NAME:
                 displayValue = 'Translatable#Name';
@@ -63,6 +63,12 @@ export class NotificationLabelProvider extends LabelProvider {
                 break;
             case NotificationProperty.DATA_RECIPIENT_SUBJECT:
                 displayValue = 'Translatable#Subject with Ticketnumber';
+                break;
+            case NotificationProperty.DATA_VISIBLE_FOR_AGENT:
+                displayValue = 'Translatable#Show in agent preferences';
+                break;
+            case NotificationProperty.DATA_VISIBLE_FOR_AGENT_TOOLTIP:
+                displayValue = 'Translatable#Agent Preferences Tooltip';
                 break;
             default:
                 displayValue = await super.getPropertyText(property, false, translatable);
@@ -150,6 +156,7 @@ export class NotificationLabelProvider extends LabelProvider {
                 displayValue = value ? 'Translatable#Yes' : 'Translatable#No';
                 break;
             case NotificationProperty.NAME:
+            case NotificationProperty.DATA_VISIBLE_FOR_AGENT_TOOLTIP:
                 displayValue = value;
                 translatable = false;
                 break;

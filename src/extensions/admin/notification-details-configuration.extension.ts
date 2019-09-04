@@ -35,6 +35,8 @@ export class Extension implements IConfigurationExtension {
                     KIXObjectType.NOTIFICATION,
                     [
                         NotificationProperty.NAME,
+                        NotificationProperty.DATA_VISIBLE_FOR_AGENT,
+                        NotificationProperty.DATA_VISIBLE_FOR_AGENT_TOOLTIP,
                         KIXObjectProperty.COMMENT,
                         KIXObjectProperty.VALID_ID,
                         KIXObjectProperty.CREATE_TIME,
