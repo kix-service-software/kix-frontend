@@ -21,6 +21,12 @@ class TreeNodeComponent {
 
     public onInput(input: any): void {
         this.state.node = input.node;
+
+        if (this.state.node) {
+            this.state.isVisible = this.state.node.clickable || this.hasClickableChildren(this.state.node.children);
+            this.state.node.expandOnClick = !this.state.node.clickable;
+        }
+
         this.state.filterValue = input.filterValue;
         this.state.activeNode = input.activeNode;
         (this as any).setStateDirty('activeNode');
@@ -31,6 +37,22 @@ class TreeNodeComponent {
             this.state.treeParent.addEventListener('keydown', this.navigateTree.bind(this));
             this.hasListener = true;
         }
+    }
+
+    private hasClickableChildren(tree: TreeNode[]): boolean {
+        for (const t of tree) {
+            if (t.clickable) {
+                return true;
+            }
+
+            if (t.children && t.children.length) {
+                const hasChildren = this.hasClickableChildren(t.children);
+                if (hasChildren) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public onDestroy(): void {
@@ -80,7 +102,10 @@ class TreeNodeComponent {
         if (this.state.node.expandOnClick) {
             this.toggleNode(event);
         }
-        (this as any).emit('nodeClicked', this.state.node);
+
+        if (this.state.node.clickable) {
+            (this as any).emit('nodeClicked', this.state.node);
+        }
     }
 
     public nodeHovered(): void {
