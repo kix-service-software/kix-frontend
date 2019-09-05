@@ -192,6 +192,9 @@ export class NotificationLabelProvider extends LabelProvider {
                 case NotificationRecipientTypes.CUSTOMER:
                     displayString = 'Translatable#Contact';
                     break;
+                case NotificationRecipientTypes.AGENT_OWNER:
+                    displayString = 'Translatable#Owner';
+                    break;
                 default:
             }
             if (displayString) {
@@ -264,5 +267,65 @@ export class NotificationLabelProvider extends LabelProvider {
         }
 
         return icons;
+    }
+
+    public async getPropertyValues(property: string, value: any): Promise<string[]> {
+        let values = [];
+        switch (property) {
+            case NotificationProperty.DATA_RECIPIENTS:
+                if (value && Array.isArray(value)) {
+                    values = await this.getRecipientStrings(value, true);
+                }
+                break;
+            case NotificationProperty.DATA_RECIPIENT_EMAIL:
+                if (value && Array.isArray(value)) {
+                    for (const email of value) {
+                        const contact = await this.getContactForEmail(email);
+                        if (contact) {
+                            values.push(`${contact.Firstname} ${contact.Lastname} (${contact.Email})`);
+                        } else {
+                            values.push(email);
+                        }
+                    }
+                }
+                break;
+            case NotificationProperty.DATA_EVENTS:
+                if (value && Array.isArray(value)) {
+                    values = value;
+                }
+                break;
+            case NotificationProperty.DATA_RECIPIENT_AGENTS:
+                if (value && Array.isArray(value)) {
+                    const users = await KIXObjectService.loadObjects<User>(
+                        KIXObjectType.USER, value, null, null, true
+                    ).catch((error) => [] as User[]);
+                    const displayTexts = [];
+                    if (users && !!users.length) {
+                        for (const user of users) {
+                            const text = await LabelService.getInstance().getText(user);
+                            displayTexts.push(text);
+                        }
+                    }
+                    values = !!displayTexts.length ? displayTexts : value;
+                }
+                break;
+            case NotificationProperty.DATA_RECIPIENT_ROLES:
+                if (value && Array.isArray(value)) {
+                    const roles = await KIXObjectService.loadObjects<Role>(
+                        KIXObjectType.ROLE, value, null, null, true
+                    ).catch((error) => [] as Role[]);
+                    const displayTexts = [];
+                    if (roles && !!roles.length) {
+                        for (const role of roles) {
+                            const text = await LabelService.getInstance().getText(role);
+                            displayTexts.push(text);
+                        }
+                    }
+                    values = !!displayTexts.length ? displayTexts : value;
+                }
+                break;
+            default:
+        }
+        return values;
     }
 }
