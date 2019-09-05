@@ -45,6 +45,14 @@ export class UserFormService extends KIXObjectFormService<User> {
                     }
                 }
                 break;
+            case PersonalSettingsProperty.USER_LANGUAGE:
+                if (user && user.Preferences) {
+                    const languagePreference = user.Preferences.find(
+                        (p) => p.ID === PersonalSettingsProperty.USER_LANGUAGE
+                    );
+                    value = languagePreference ? languagePreference.Value : null;
+                }
+                break;
             default:
         }
         return value;
