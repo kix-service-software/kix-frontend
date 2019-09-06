@@ -41,6 +41,7 @@ export class Notification extends KIXObject<Notification> {
         super(notification);
         if (notification) {
             this.ID = notification.ID;
+            this.ObjectId = this.ID;
             this.Name = notification.Name;
             this.Data = notification.Data;
             this.Message = notification.Message;
