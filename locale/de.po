@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-09-06 08:17+0000\n"
+"PO-Revision-Date: 2019-09-06 09:20+0000\n"
 "Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -914,15 +914,11 @@ msgstr "Volltext"
 msgid "General Catalog"
 msgstr "General Catalog"
 
-#, fuzzy
-#| msgid "General Catalog"
 msgid "General Catalog Item"
-msgstr "General Catalog"
+msgstr "General Catalog Item"
 
-#, fuzzy
-#| msgid "General Catalog"
 msgid "General Catalog Items"
-msgstr "General Catalog"
+msgstr "General Catalog Items"
 
 msgid "General information on working with KIX 18"
 msgstr "Allgemeine Hinweise zum Arbeiten mit KIX 18"
