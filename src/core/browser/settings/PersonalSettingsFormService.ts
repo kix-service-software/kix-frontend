@@ -38,6 +38,18 @@ export class PersonalSettingsFormService extends KIXObjectFormService {
 
         if (property === PersonalSettingsProperty.MY_QUEUES && value && typeof value === 'string') {
             value = value.split(',').map((v) => Number(v));
+        } else if (property === PersonalSettingsProperty.NOTIFICATIONS && value) {
+            try {
+                const notifications = JSON.parse(value);
+                value = [];
+                for (const key in notifications) {
+                    if (notifications[key]) {
+                        value.push(Number(key.split('-')[1]));
+                    }
+                }
+            } catch (e) {
+                console.warn('Could not load/parse notification preference.');
+            }
         }
 
         return value;

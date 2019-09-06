@@ -10,7 +10,7 @@
 import {
     IPersonalSettingsExtension, PersonalSetting, FormFieldOption, ObjectReferenceOptions,
     KIXObjectType, PersonalSettingsProperty, KIXObjectLoadingOptions, KIXObjectProperty,
-    FilterCriteria, FilterType, FilterDataType, QueueProperty, FormFieldOptions, InputFieldTypes
+    FilterCriteria, FilterType, FilterDataType, QueueProperty, FormFieldOptions, InputFieldTypes, NotificationProperty
 } from "../../core/model";
 import { SearchOperator } from "../../core/browser";
 
@@ -75,6 +75,34 @@ class Extension implements IPersonalSettingsExtension {
                                     FilterDataType.STRING, FilterType.AND, null
                                 )
                             ], undefined, undefined, [QueueProperty.SUB_QUEUES], [QueueProperty.SUB_QUEUES]
+                        )
+                    )
+                ]
+            ),
+            new PersonalSetting(
+                'Translatable#Notifications',
+                PersonalSettingsProperty.NOTIFICATIONS,
+                'Translatable#For Tickets',
+                'Translatable#Helptext_PersonalSettings_Notifications_Hint',
+                'object-reference-input',
+                null, null,
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.NOTIFICATION),
+                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
+                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
+                    new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, false),
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    'Data.' + NotificationProperty.DATA_VISIBLE_FOR_AGENT, SearchOperator.EQUALS,
+                                    FilterDataType.STRING, FilterType.AND, 1
+                                ),
+                                new FilterCriteria(
+                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS,
+                                    FilterDataType.NUMERIC, FilterType.AND, 1
+                                )
+                            ]
                         )
                     )
                 ]
