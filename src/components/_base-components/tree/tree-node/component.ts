@@ -24,7 +24,9 @@ class TreeNodeComponent {
 
         if (this.state.node) {
             this.state.isVisible = this.state.node.clickable || this.hasClickableChildren(this.state.node.children);
-            this.state.node.expandOnClick = !this.state.node.clickable;
+            if (!this.state.node.expandOnClick) {
+                this.state.node.expandOnClick = !this.state.node.clickable;
+            }
         }
 
         this.state.filterValue = input.filterValue;
