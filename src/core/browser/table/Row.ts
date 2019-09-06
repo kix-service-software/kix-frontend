@@ -166,7 +166,10 @@ export class Row<T = any> implements IRow<T> {
         return this.selected;
     }
 
-    public select(selected: boolean = true, selectChildren: boolean = false, withoutFilter: boolean = false): void {
+    public select(
+        selected: boolean = true, selectChildren: boolean = false, withoutFilter: boolean = false,
+        silent: boolean = false
+    ): void {
         let notify = false;
 
         if (selected) {
@@ -186,10 +189,10 @@ export class Row<T = any> implements IRow<T> {
             if (!withoutFilter) {
                 children = this.children.filter((c: Row) => c.filterMatch);
             }
-            children.forEach((c) => c.select(selected, selectChildren, withoutFilter));
+            children.forEach((c) => c.select(selected, selectChildren, withoutFilter, silent));
         }
 
-        if (notify) {
+        if (notify && !silent) {
             EventService.getInstance().publish(
                 TableEvent.ROW_SELECTION_CHANGED,
                 new TableEventData(this.getTable().getTableId(), this.getRowId())
