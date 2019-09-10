@@ -1,0 +1,98 @@
+<!--
+Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+<if(input.webform)>
+    <div.kix-form-container
+        id=("kix-form-" + input.webform.ObjectId)
+        class={
+                "kix-style": input.webform.useKIXCSS
+            }>
+        <div.kix-form-header>
+            <if(input.webform.showTitle)>
+                <h2>${input.translations[input.webform.title] ? input.translations[input.webform.title] : input.webform.title}</h2>
+            </if>
+            <span.kix-form-close title=(input.translations["Translatable#Close"] ? input.translations["Translatable#Close"] : "Close")/>
+        </div>
+        <div.kix-form-content>
+            <div.kix-form-input>
+                <label for=("kix-form-name-" + input.webform.ObjectId)>
+                    ${input.translations["Translatable#Name"] ? input.translations["Translatable#Name"] : "Name"}
+                </label>
+                <input id=("kix-form-name-" + input.webform.ObjectId) type="text" required/>
+            </div>
+            <div.kix-form-input>
+                <label for=("kix-form-email-" + input.webform.ObjectId)>
+                    ${input.translations["Translatable#Email"] ? input.translations["Translatable#Email"] : "Email"}
+                </label>
+                <input id=("kix-form-email-" + input.webform.ObjectId) type="email" required/>
+            </div>
+            <div.kix-form-input>
+                <label for=("kix-form-subject-" + input.webform.ObjectId)>
+                    ${input.translations["Translatable#Subject"] ? input.translations["Translatable#Subject"] : "Subject"}
+                </label>
+                <input id=("kix-form-subject-" + input.webform.ObjectId) type="text" required/>
+            </div>
+            <div.kix-form-input>
+                <label.kix-form-message-label for=("kix-form-message-" + input.webform.ObjectId)>
+                    ${input.translations["Translatable#Message"] ? input.translations["Translatable#Message"] : "Message"}
+                </label>
+                <textarea id=("kix-form-message-" + input.webform.ObjectId) required/>
+            </div>
+            <if(input.webform.allowAttachments)>
+                <div.kix-form-input.kix-form-attachments>
+                    <label for=("kix-form-attachments-" + input.webform.ObjectId)>
+                        ${input.translations["Translatable#Attachments"]
+                        ? input.translations["Translatable#Attachments"]
+                        : "Attachments"}
+                    </label>
+                    <input id=("kix-form-attachments-" + input.webform.ObjectId) type="file" multiple/>
+                    <div id=("kix-form-attachment-container-" + input.webform.ObjectId)/>
+                </div>
+            </if>
+            <if(input.webform.hintMessage)>
+                <p.kix-form-hint>
+                    ${input.translations[input.webform.hintMessage]
+                    ? input.translations[input.webform.hintMessage]
+                    : input.webform.hintMessage}
+                </p>
+            </if>
+            <p.kix-form-required-info>
+                ${input.translations["Translatable#All form fields marked by * are required fields."]
+                ? input.translations["Translatable#All form fields marked by * are required fields."]
+                : "All form fields marked by * are required fields."}
+            </p>
+            <div.kix-form-buttons>
+                <button
+                    id=("kix-form-cancel-button-" + input.webform.ObjectId)
+                    title=(input.translations["Translatable#Cancel"] ? input.translations["Translatable#Cancel"] : "Cancel")>
+                    <${input.webform.useKIXCSS ? "span" : ""} class="kix-form-cancel-button-icon"/>
+                    <${input.webform.useKIXCSS ? "span" : ""}>
+                        ${input.translations["Translatable#Cancel"]
+                        ? input.translations["Translatable#Cancel"]
+                        : "Cancel"}
+                    </>
+                </button>
+                <button
+                    id=("kix-form-submit-button-" + input.webform.ObjectId)
+                    title=(
+                                        input.translations[input.webform.saveLabel]
+                                                            ? input.translations[input.webform.saveLabel]
+                                                            : input.webform.saveLabel
+                                    )>
+                    <${input.webform.useKIXCSS ? "span" : ""} class="kix-form-submit-button-icon"/>
+                    <${input.webform.useKIXCSS ? "span" : ""}>
+                        ${input.translations[input.webform.saveLabel]
+                        ? input.translations[input.webform.saveLabel]
+                        : input.webform.saveLabel}
+                    </>
+                </button>
+            </div>
+        </div>
+        <div.kix-form-result-message/>
+    </div>
+</if>

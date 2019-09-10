@@ -9,3 +9,4 @@
 
 export { Webform } from './Webform';
 export { WebformProperty } from './WebformProperty';
+export { CreateWebformTicketRequest } from './CreateWebformTicketRequest';

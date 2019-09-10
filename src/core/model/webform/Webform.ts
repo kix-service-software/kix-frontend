@@ -33,6 +33,8 @@ export class Webform extends KIXObject<Webform> {
 
     public allowAttachments: boolean;
 
+    public acceptedDomains: string[];
+
     public QueueID: number;
 
     public PrioritiyID: number;
@@ -41,14 +43,16 @@ export class Webform extends KIXObject<Webform> {
 
     public StateID: number;
 
-    public UserID: number;
+    public userLogin: string;
+
+    public webformUserPassword: string;
 
     public constructor(
         webform?: Webform,
         buttonLabel?: string, title?: string, showTitle?: boolean, saveLabel?: string,
         hintMessage?: string, successMessage?: string, modal?: boolean, useKIXCSS?: boolean,
-        allowAttachments?: boolean, QueueID?: number, PrioritiyID?: number,
-        TypeID?: number, StateID?: number, UserID?: number, ValidID?: number
+        allowAttachments?: boolean, acceptedDomains?: string, QueueID?: number, PrioritiyID?: number,
+        TypeID?: number, StateID?: number, userLogin?: string, userPassword?: string, ValidID?: number
     ) {
         super(webform);
         if (webform) {
@@ -62,11 +66,13 @@ export class Webform extends KIXObject<Webform> {
             this.modal = webform.modal;
             this.useKIXCSS = webform.useKIXCSS;
             this.allowAttachments = webform.allowAttachments;
+            this.acceptedDomains = webform.acceptedDomains;
             this.QueueID = webform.QueueID;
             this.PrioritiyID = webform.PrioritiyID;
             this.TypeID = webform.TypeID;
             this.StateID = webform.StateID;
-            this.UserID = webform.UserID;
+            this.userLogin = webform.userLogin;
+            this.webformUserPassword = webform.webformUserPassword;
         } else {
             this.buttonLabel = buttonLabel;
             this.title = title;
@@ -77,11 +83,18 @@ export class Webform extends KIXObject<Webform> {
             this.modal = modal;
             this.useKIXCSS = useKIXCSS;
             this.allowAttachments = allowAttachments;
+            this.acceptedDomains = acceptedDomains
+                ? acceptedDomains
+                    .split(/[,;]\s?/)
+                    .map((d) => d.trim())
+                    .filter((d) => !!d)
+                : [];
             this.QueueID = QueueID;
             this.PrioritiyID = PrioritiyID;
             this.TypeID = TypeID;
             this.StateID = StateID;
-            this.UserID = UserID;
+            this.userLogin = userLogin;
+            this.webformUserPassword = userPassword;
             this.ValidID = ValidID;
         }
     }
