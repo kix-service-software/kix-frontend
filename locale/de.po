@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-09-10 07:58+0000\n"
-"Last-Translator: fuhlig <Frank.Uhlig@cape-it.de>\n"
+"PO-Revision-Date: 2019-09-10 13:34+0000\n"
+"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -206,7 +206,7 @@ msgid "Assigned Roles"
 msgstr "Zugeordnete Rollen"
 
 msgid "Assign Link"
-msgstr "Verknüpfung zuordnen"
+msgstr "Verknüpfung hinzufügen"
 
 msgid "Assign Links"
 msgstr "Verknüpfung zuordnen"
@@ -1797,112 +1797,82 @@ msgstr ""
 "Der Agent kann sich mit den hier festgelegten Nutzerdaten nur einloggen, "
 "wenn der Agent „gültig“ gesetzt ist."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
 msgid "Helptext_Admin_WebformCreateEdit_AcceptedDomains"
 msgstr ""
-"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
-"der Kategorie angezeigt wird."
+"Komma oder Semikolon sind als Texttrenner zulässig. Verwendung von RegEx ist "
+"möglich, diese müssen in Slashs (\"/\") gesetzt werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Comment"
 msgid "Helptext_Admin_WebformCreateEdit_AllowAttachments"
 msgstr ""
-"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
-"Bereich angezeigt werden."
+"Wird diese Option aktiviert, können an Tickets, die über das Webformular "
+"erstellt werden, Anhänge hinzugefügt werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_NotificationCreate_SendToAgents"
 msgid "Helptext_Admin_WebformCreateEdit_AssignedAgent"
 msgstr ""
-"Tragen Sie konkrete Agenten ein, die diese Benachrichtigung erhalten sollen. "
-"Zur Auswahl stehen alle im System verfügbaren, gültigen Agenten."
+"Damit über das Webformular Tickets im KIX erstellt werden können, muss am "
+"Formular ein Agent zugeordnet sein, der mindestens UPDATE-Rechte auf Tickets "
+"hat."
 
-#, fuzzy
-#| msgid "Helptext_Admin_Users_UserCreate_Password"
 msgid "Helptext_Admin_WebformCreateEdit_AssignedAgentPassword"
-msgstr "Das Passwort kann nachträglich angepasst oder verändert werden."
+msgstr ""
+"Hinterlegen Sie hier das Passwort des zugeordneten Agenten, um über das "
+"Webformular Tickets erstellen zu können."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
 msgid "Helptext_Admin_WebformCreateEdit_ButtonLabel"
 msgstr ""
-"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
-"der Kategorie angezeigt wird."
+"Legen Sie die Beschriftung des Buttons fest, der das Webformular auf ihrer "
+"Webseite aufruft."
 
-#, fuzzy
-#| msgid "Helptext_Admin_NotificationCreate_MessageText"
 msgid "Helptext_Admin_WebformCreateEdit_HintMessage"
 msgstr ""
-"Geben Sie den Text ein, der in der E-Mail angezeigt werden soll, durch die "
-"diese Benachrichtigung versendet wird. Beachten Sie die gewählte Sprache."
+"Hier können Sie zusätzliche Hinweise hinterlegen, die im Webformular "
+"angezeigt werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
 msgid "Helptext_Admin_WebformCreateEdit_Modal"
 msgstr ""
-"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
-"der Kategorie angezeigt wird."
+"Wird diese Option aktiviert, ist die Seite im Hintergrund des Webformulars "
+"inaktiv, so lange der Dialog geöffnet ist."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Validity"
 msgid "Helptext_Admin_WebformCreateEdit_PriorityID"
 msgstr ""
-"Die Kategorie kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
+"Legen Sie fest, welche Priotität Tickets zugeordnet wird, die über das "
+"Webformular erstellt werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
 msgid "Helptext_Admin_WebformCreateEdit_QueueID"
 msgstr ""
-"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
-"der Kategorie angezeigt wird."
+"Legen Sie fest, welchem Team Tickets zugeordnet werden, die über das "
+"Webformular erstellt werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleCreate_Language"
 msgid "Helptext_Admin_WebformCreateEdit_SaveButtonLabel"
-msgstr "Geben Sie die Sprache an, in der der Textbaustein angelegt ist."
+msgstr ""
 
-#, fuzzy
-#| msgid "Helptext_Admin_Users_UserCreate_Roles"
 msgid "Helptext_Admin_WebformCreateEdit_ShowTitle"
 msgstr ""
-"Einem Agenten muss mindestens die Rolle „AgentUser“ zugeordnet sein, damit "
-"er sich einloggen kann. Es werden nur gültige Rollen angezeigt."
+"Wenn diese Option aktiv ist, wird der Formulartitel im Webformular angezeigt."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
 msgid "Helptext_Admin_WebformCreateEdit_StateID"
 msgstr ""
-"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
-"der Kategorie angezeigt wird."
+"Legen Sie fest, welchen Status Tickets erhalten, die über das Webformular "
+"erstellt werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_NotificationCreate_MessageText"
 msgid "Helptext_Admin_WebformCreateEdit_SuccessMessage"
 msgstr ""
-"Geben Sie den Text ein, der in der E-Mail angezeigt werden soll, durch die "
-"diese Benachrichtigung versendet wird. Beachten Sie die gewählte Sprache."
 
-#, fuzzy
-#| msgid "Helptext_FAQ_ArticleEdit_Title"
 msgid "Helptext_Admin_WebformCreateEdit_Title"
-msgstr "Fassen Sie das Thema des FAQ-Artikels kurz zusammen."
+msgstr "Der Formulartitel wird Kopf des Webformulars angezeigt."
 
-#, fuzzy
-#| msgid "Helptext_Admin_Tickets_StateEdit_Type"
 msgid "Helptext_Admin_WebformCreateEdit_TypeID"
-msgstr "Über den Statustyp werden Status guppiert."
+msgstr ""
+"Legen Sie fest, welchen Status Tickets erhalten, die über das Webformular "
+"erstellt werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_Users_RoleCreate_User"
 msgid "Helptext_Admin_WebformCreateEdit_UseKIXCSS"
-msgstr "Es werden nur gültige Agenten angezeigt."
+msgstr ""
+"Wird diese Option aktiviert, wird das Webformular im KIX Design dargestellt."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Validity"
 msgid "Helptext_Admin_WebformCreateEdit_Validity"
 msgstr ""
-"Die Kategorie kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
+"Um das Webformular verwenden zu können, muss es \"gültig\" gesetzt sein."
 
 msgid "Helptext_CMDB_ConfigItemClassCreate_Comment"
 msgstr ""
