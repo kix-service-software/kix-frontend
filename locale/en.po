@@ -14,9 +14,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 3.7\n"
 
-msgid "General information on how to work with KIX 18"
-msgstr ""
-
 msgid "{0}/{1} {2} imported"
 msgstr ""
 
@@ -29,10 +26,16 @@ msgstr ""
 msgid "{0} imported"
 msgstr ""
 
+msgid "{0} is required."
+msgstr ""
+
 msgid "{0} Link created"
 msgstr ""
 
 msgid "{0} link(s) assigned."
+msgstr ""
+
+msgid "Accepted domains"
 msgstr ""
 
 msgid "Accept KIX Header"
@@ -340,6 +343,9 @@ msgid ""
 "new tab"
 msgstr ""
 
+msgid "Close"
+msgstr ""
+
 msgid "Closed at"
 msgstr ""
 
@@ -458,6 +464,12 @@ msgid "contained in"
 msgstr ""
 
 msgid "contains"
+msgstr ""
+
+msgid "Could not handle request."
+msgstr ""
+
+msgid "Could not load file '{0}'."
 msgstr ""
 
 msgid "Country"
@@ -613,6 +625,9 @@ msgstr ""
 msgid "Display Name"
 msgstr ""
 
+msgid "Do not forget to replace <YOUR_FRONTEND_HOST> placeholder."
+msgstr ""
+
 msgid ". (dot)"
 msgstr ""
 
@@ -713,6 +728,9 @@ msgid "Edit Type"
 msgstr ""
 
 msgid "Edit Value"
+msgstr ""
+
+msgid "Edit Webform"
 msgstr ""
 
 msgid "Email"
@@ -853,6 +871,9 @@ msgstr ""
 msgid "Fax"
 msgstr ""
 
+msgid "Feedback"
+msgstr ""
+
 msgid "Field"
 msgstr ""
 
@@ -891,6 +912,11 @@ msgstr ""
 msgid "Form title"
 msgstr ""
 
+#, fuzzy
+#| msgid "Load Tickets"
+msgid "For Tickets"
+msgstr "Loading Tickets"
+
 msgid "Forward"
 msgstr ""
 
@@ -910,6 +936,9 @@ msgid "General Catalog Item"
 msgstr ""
 
 msgid "General Catalog Items"
+msgstr ""
+
+msgid "General information on how to work with KIX 18"
 msgstr ""
 
 msgid "General information on working with KIX 18"
@@ -1553,6 +1582,13 @@ msgstr ""
 "Set the default teams, the agent will receive notifications for. An agent "
 "can change this setting in their preferences."
 
+#, fuzzy
+#| msgid "Helptext_Admin_UserCreate_Preferences_MyQueues"
+msgid "Helptext_Admin_UserCreate_Preferences_Notifications_Hint"
+msgstr ""
+"Set the default teams, the agent will receive notifications for. An agent "
+"can change this setting in their preferences."
+
 msgid "Helptext_Admin_UserCreate_Preferences_UserLanguage"
 msgstr ""
 "Set the default language for the agent, when they log in KIX the first time. "
@@ -1567,6 +1603,13 @@ msgid "Helptext_Admin_UserEdit_Preferences_MyQueues"
 msgstr ""
 "Set the default teams, the agent will receive notifications for. An agent "
 "can change this setting in their preferences."
+
+#, fuzzy
+#| msgid "Helptext_Admin_UserEdit_Preferences_Language"
+msgid "Helptext_Admin_UserEdit_Preferences_Notifications_Hint"
+msgstr ""
+"Set the default language for the agent, when they log in KIX the first time. "
+"An agent can change their language settings in their preferences."
 
 msgid "Helptext_Admin_Users_RoleCreate_Comment"
 msgstr ""
@@ -1668,50 +1711,109 @@ msgstr ""
 msgid "Helptext_Admin_Users_UserEdit_Valid"
 msgstr "The agent can only login with the user data set here if set “valid”."
 
-msgid "Helptext_Admin_WebformCreate_AllowAttachments"
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
+msgid "Helptext_Admin_WebformCreateEdit_AcceptedDomains"
 msgstr ""
+"Upload an icon, which will be shown together with the category name within "
+"the application."
 
-msgid "Helptext_Admin_WebformCreate_ButtonLabel"
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryCreate_Comment"
+msgid "Helptext_Admin_WebformCreateEdit_AllowAttachments"
 msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
-msgid "Helptext_Admin_WebformCreate_HintMessage"
+#, fuzzy
+#| msgid "Helptext_Admin_NotificationCreate_SendToAgents"
+msgid "Helptext_Admin_WebformCreateEdit_AssignedAgent"
 msgstr ""
+"Insert specific agents who are supposed to receive this notification. You "
+"can choose from all valid agents available in the system."
 
-msgid "Helptext_Admin_WebformCreate_Modal"
-msgstr ""
+#, fuzzy
+#| msgid "Helptext_Admin_Users_UserCreate_Password"
+msgid "Helptext_Admin_WebformCreateEdit_AssignedAgentPassword"
+msgstr "The password can be changed/modified afterwards."
 
-msgid "Helptext_Admin_WebformCreate_PriorityID"
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
+msgid "Helptext_Admin_WebformCreateEdit_ButtonLabel"
 msgstr ""
+"Upload an icon, which will be shown together with the category name within "
+"the application."
 
-msgid "Helptext_Admin_WebformCreate_QueueID"
+#, fuzzy
+#| msgid "Helptext_Admin_NotificationCreate_MessageText"
+msgid "Helptext_Admin_WebformCreateEdit_HintMessage"
 msgstr ""
+"Insert the text you want to show in the email send out by this notification. "
+"Keep in mind the chosen language."
 
-msgid "Helptext_Admin_WebformCreate_SaveButtonLabel"
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
+msgid "Helptext_Admin_WebformCreateEdit_Modal"
 msgstr ""
+"Upload an icon, which will be shown together with the category name within "
+"the application."
 
-msgid "Helptext_Admin_WebformCreate_ShowTitle"
-msgstr ""
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryCreate_Validity"
+msgid "Helptext_Admin_WebformCreateEdit_PriorityID"
+msgstr "The FAQ category can only be used within the system if set “valid”."
 
-msgid "Helptext_Admin_WebformCreate_StateID"
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
+msgid "Helptext_Admin_WebformCreateEdit_QueueID"
 msgstr ""
+"Upload an icon, which will be shown together with the category name within "
+"the application."
 
-msgid "Helptext_Admin_WebformCreate_SuccessMessage"
-msgstr ""
+#, fuzzy
+#| msgid "Helptext_Admin_TextModuleCreate_Language"
+msgid "Helptext_Admin_WebformCreateEdit_SaveButtonLabel"
+msgstr "Insert the language of the text module."
 
-msgid "Helptext_Admin_WebformCreate_Title"
+#, fuzzy
+#| msgid "Helptext_Admin_Users_UserCreate_Roles"
+msgid "Helptext_Admin_WebformCreateEdit_ShowTitle"
 msgstr ""
+"An agent needs at least the role “AgentUser” to successfully login. Only "
+"valid roles are available here."
 
-msgid "Helptext_Admin_WebformCreate_TypeID"
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
+msgid "Helptext_Admin_WebformCreateEdit_StateID"
 msgstr ""
+"Upload an icon, which will be shown together with the category name within "
+"the application."
 
-msgid "Helptext_Admin_WebformCreate_UseKIXCSS"
+#, fuzzy
+#| msgid "Helptext_Admin_NotificationCreate_MessageText"
+msgid "Helptext_Admin_WebformCreateEdit_SuccessMessage"
 msgstr ""
+"Insert the text you want to show in the email send out by this notification. "
+"Keep in mind the chosen language."
 
-msgid "Helptext_Admin_WebformCreate_UserID"
-msgstr ""
+#, fuzzy
+#| msgid "Helptext_FAQ_ArticleEdit_Title"
+msgid "Helptext_Admin_WebformCreateEdit_Title"
+msgstr "Briefly summarize the FAQ article topic."
 
-msgid "Helptext_Admin_WebformCreate_Validity"
-msgstr ""
+#, fuzzy
+#| msgid "Helptext_Admin_Tickets_StateEdit_Type"
+msgid "Helptext_Admin_WebformCreateEdit_TypeID"
+msgstr "The state type groups states."
+
+#, fuzzy
+#| msgid "Helptext_Admin_Users_RoleCreate_User"
+msgid "Helptext_Admin_WebformCreateEdit_UseKIXCSS"
+msgstr "There are only valid agents available."
+
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryCreate_Validity"
+msgid "Helptext_Admin_WebformCreateEdit_Validity"
+msgstr "The FAQ category can only be used within the system if set “valid”."
 
 msgid "Helptext_CMDB_ConfigItemClassCreate_Comment"
 msgstr ""
@@ -2066,6 +2168,13 @@ msgstr ""
 "For the teams you choose here you will receive notifications if there are, "
 "for example, new tickets or changes at the tickets."
 
+#, fuzzy
+#| msgid "Helptext_PersonalSettings_MyQueues_Hint"
+msgid "Helptext_PersonalSettings_Notifications_Hint"
+msgstr ""
+"For the teams you choose here you will receive notifications if there are, "
+"for example, new tickets or changes at the tickets."
+
 msgid "Helptext_PersonalSettings_UserLanguage_Hint"
 msgstr "Choose the language you want to use for this application."
 
@@ -2296,13 +2405,7 @@ msgstr ""
 msgid "How do I search in KIX 18?"
 msgstr ""
 
-msgid "How to create a new ticket?"
-msgstr ""
-
 msgid "How to search in KIX 18?"
-msgstr ""
-
-msgid "How to use KIX 18 – Some general notes"
 msgstr ""
 
 msgid "Icon"
@@ -2350,6 +2453,9 @@ msgstr ""
 msgid "Incident State"
 msgstr ""
 
+msgid "Include this code into the <head> area of your webpage."
+msgstr ""
+
 msgid "Information text"
 msgstr ""
 
@@ -2372,6 +2478,9 @@ msgid "Internationalisation: Translations"
 msgstr ""
 
 msgid "Invalid date for pending date."
+msgstr ""
+
+msgid "is to large (max {0})."
 msgstr ""
 
 msgid "Keywords"
@@ -2555,6 +2664,9 @@ msgid "Logs"
 msgstr ""
 
 msgid "Menu"
+msgstr ""
+
+msgid "Message"
 msgstr ""
 
 msgid "Message after sending form"
@@ -2785,6 +2897,11 @@ msgstr "Notification Methods"
 msgid "Notifications"
 msgstr "Notifications"
 
+#, fuzzy
+#| msgid "Notification Methods"
+msgid "Notifications for Tickets"
+msgstr "Notification Methods"
+
 msgid "Notification successfully created."
 msgstr "Notification successfully created."
 
@@ -2793,6 +2910,9 @@ msgstr ""
 
 msgid "not modified"
 msgstr "********"
+
+msgid "Not more than 5 files possible."
+msgstr ""
 
 msgid "No version available"
 msgstr ""
@@ -2933,6 +3053,9 @@ msgid "Personal Settings"
 msgstr ""
 
 msgid "Phone"
+msgstr ""
+
+msgid "Place this code wherever you want to open the webform dialog."
 msgstr ""
 
 msgid "Please select a contact"
@@ -3199,9 +3322,6 @@ msgstr ""
 msgid "Selected Search Criteria"
 msgstr ""
 
-msgid "selected ticket features"
-msgstr ""
-
 msgid "Selected ticket functions"
 msgstr ""
 
@@ -3462,6 +3582,11 @@ msgstr ""
 
 msgid "Ticket locked."
 msgstr ""
+
+#, fuzzy
+#| msgid "Notifications"
+msgid "Ticket Notifications"
+msgstr "Notifications"
 
 msgid "Ticket Number"
 msgstr ""
