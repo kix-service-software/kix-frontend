@@ -17,6 +17,7 @@ export class SaveWebformRequest implements ISocketRequest {
         public requestId: string,
         public clientRequestId: string,
         public webform: Webform,
+        public webformId?: number
     ) { }
 
 }

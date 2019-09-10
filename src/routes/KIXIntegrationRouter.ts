@@ -46,35 +46,33 @@ export class KIXIntegrationRouter extends KIXRouter {
     }
 
     private async handleUnsupportedGetRequest(req: Request, res: Response): Promise<void> {
-        res.statusCode = 404;
-        res.send();
+        res.sendStatus(404);
     }
 
     private async handleGetRequest(req: Request, res: Response): Promise<void> {
         if (req.path.match(/^\/\d+$/)) {
             const formId = req.path.substring(1);
-            const forms = WebformService.getInstance().loadWebforms();
-            if (forms && forms.length) {
-                const form = forms.find((f) => f.ObjectId === Number(formId));
-                if (form && form.ValidID === 1) {
-                    const languages = req.acceptsLanguages();
-                    let translations;
-                    if (languages && !!languages.length) {
-                        translations = await WebformService.getInstance().getWebformTranslationObject(
-                            form, languages[0].split('-')[0]
-                        );
-                    }
-                    const template = require('../components/integrations/webform');
-                    const htmlString = template.renderToString({ webform: form, translations });
-                    res.status(200);
-                    res.json({
-                        htmlString,
-                        buttonLabel: form.buttonLabel,
-                        modal: form.modal
-                    });
-                } else {
-                    this.handleUnsupportedGetRequest(req, res);
+            const form = WebformService.getInstance().getWebform(formId);
+            if (form && form.ValidID === 1) {
+                const languages = req.acceptsLanguages();
+                let userLanguage;
+                let translations;
+                if (languages && !!languages.length) {
+                    userLanguage = languages[0].split('-')[0];
+                    translations = await WebformService.getInstance().getWebformTranslationObject(
+                        form, userLanguage
+                    );
                 }
+                const template = require('../components/integrations/webform');
+                const htmlString = template.renderToString({ webform: form, translations });
+                res.status(200).json({
+                    htmlString,
+                    buttonLabel: form.buttonLabel,
+                    modal: form.modal,
+                    tooManyFilesErrorMsg: await WebformService.getInstance().getTooManyFilesErrorMsg(userLanguage),
+                    fileTooBigErrorMsg: await WebformService.getInstance().getFileTooBigErrorMsg(userLanguage),
+                    maxFileSize: await WebformService.getInstance().getMaxFileSize()
+                });
             } else {
                 this.handleUnsupportedGetRequest(req, res);
             }
@@ -86,25 +84,19 @@ export class KIXIntegrationRouter extends KIXRouter {
     private async handlePostRequest(req: Request, res: Response): Promise<void> {
         if (req.path.match(/^\/\d+$/)) {
             const formId = req.path.substring(1);
-            const forms = WebformService.getInstance().loadWebforms();
-            if (forms && forms.length) {
-                const form = forms.find((f) => f.ObjectId === Number(formId));
-                if (form && form.ValidID === 1) {
-                    const languages = req.acceptsLanguages();
-                    const language = languages ? languages[0].split('-')[0] : null;
-                    const successMessage = await WebformService.getInstance().getSuccessMessage(form, language);
-                    WebformService.getInstance().createTicket(req.body, form, language)
-                        .then(async () => {
-                            res.status(201);
-                            res.json({ successMessage });
-                        })
-                        .catch((error) => {
-                            res.status((error as Error).StatusCode ? error.StatusCode : 400);
-                            res.send((error as Error).Message ? error.Message : error);
-                        });
-                } else {
-                    this.handleUnsupportedGetRequest(req, res);
-                }
+            const form = WebformService.getInstance().getWebform(formId);
+            if (form && form.ValidID === 1) {
+                const languages = req.acceptsLanguages();
+                const language = languages ? languages[0].split('-')[0] : null;
+                WebformService.getInstance().createTicket(req.body, formId, language)
+                    .then(async () => {
+                        const successMessage = await WebformService.getInstance().getSuccessMessage(form, language);
+                        res.status(201).json({ successMessage });
+                    })
+                    .catch((error) => {
+                        res.status((error as Error).StatusCode ? error.StatusCode : 400)
+                            .send((error as Error).Message ? error.Message : error);
+                    });
             } else {
                 this.handleUnsupportedGetRequest(req, res);
             }
@@ -113,13 +105,14 @@ export class KIXIntegrationRouter extends KIXRouter {
         }
     }
 
-    public registerRoute(formId: number): void {
-        const forms = WebformService.getInstance().loadWebforms();
-        if (forms && forms.length) {
-            const form = forms.find((f) => f.ObjectId === Number(formId));
-            if (form && form.acceptedDomains && !!form.acceptedDomains.length) {
-                const corsOptions = {
-                    origin: form.acceptedDomains.map((d) => {
+    private getCorsOptions(req, callback) {
+        let corsOptions;
+        if (req.path.match(/^\/\d+$/)) {
+            const formId = req.path.substring(1);
+            const form = WebformService.getInstance().getWebform(formId);
+            if (form && form.ValidID === 1) {
+                corsOptions = {
+                    origin: form.acceptedDomains.filter((d) => d).map((d) => {
                         if (d.match(/^\/.+\/$/)) {
                             return new RegExp(d.substr(1, d.length - 2));
                         } else {
@@ -127,20 +120,23 @@ export class KIXIntegrationRouter extends KIXRouter {
                         }
                     })
                 };
-                this.router.route(`/${formId}`)
-                    .options(cors(corsOptions))
-                    .get(
-                        cors(corsOptions),
-                        this.handleGetRequest.bind(this)
-                    ).post(
-                        cors(corsOptions),
-                        this.handlePostRequest.bind(this)
-                    );
             }
         }
+        callback(null, corsOptions ? corsOptions : { origin: false });
     }
 
-    public unregisterRoute(formId: number): void {
-        // TODO: remove route/handle, if necessary, currently it should end in "handleUnsupportedGetRequest"
+    public registerRoute(formId: number): void {
+        const form = WebformService.getInstance().getWebform(formId);
+        if (form && form.acceptedDomains && !!form.acceptedDomains.length) {
+            this.router.route(`/${formId}`)
+                .options(cors(this.getCorsOptions.bind(this)))
+                .get(
+                    cors(this.getCorsOptions.bind(this)),
+                    this.handleGetRequest.bind(this)
+                ).post(
+                    cors(this.getCorsOptions.bind(this)),
+                    this.handlePostRequest.bind(this)
+                );
+        }
     }
 }

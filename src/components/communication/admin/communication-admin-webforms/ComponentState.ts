@@ -8,7 +8,7 @@
  */
 
 import {
-    WidgetConfiguration, KIXObjectType, TableWidgetSettings, SortOrder, MailFilterProperty
+    WidgetConfiguration, KIXObjectType, TableWidgetSettings, SortOrder
 } from "../../../../core/model";
 import { IdService } from "../../../../core/browser";
 import { WebformProperty } from "../../../../core/model/webform";

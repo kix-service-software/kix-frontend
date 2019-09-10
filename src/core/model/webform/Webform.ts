@@ -84,8 +84,7 @@ export class Webform extends KIXObject<Webform> {
             this.useKIXCSS = useKIXCSS;
             this.allowAttachments = allowAttachments;
             this.acceptedDomains = acceptedDomains
-                ? acceptedDomains
-                    .split(/[,;]\s?/)
+                ? acceptedDomains.split(/[,;]\s?/)
                     .map((d) => d.trim())
                     .filter((d) => !!d)
                 : [];

@@ -29,19 +29,11 @@ msgstr "{0} Datei(en) angehangen"
 msgid "{0} imported"
 msgstr "{0} importiert"
 
-#, fuzzy
-#| msgid "{0} Link created"
-msgid "{0} is required."
-msgstr "{0} Verknüpfung(en) angelegt"
-
 msgid "{0} Link created"
 msgstr "{0} Verknüpfung(en) angelegt"
 
 msgid "{0} link(s) assigned."
 msgstr "{0} Verknüpfung(en) erstellt."
-
-msgid "Accepted domains"
-msgstr ""
 
 msgid "Accept KIX Header"
 msgstr "KIX Header akzeptieren"
@@ -354,11 +346,6 @@ msgid ""
 msgstr ""
 "Klick der mittleren oder rechten Maustaste  =  Fenster in neuem Tab öffnen"
 
-#, fuzzy
-#| msgid "Closed at"
-msgid "Close"
-msgstr "Geschlossen am"
-
 msgid "Closed at"
 msgstr "Geschlossen am"
 
@@ -478,12 +465,6 @@ msgstr "enthalten in"
 
 msgid "contains"
 msgstr "enthält"
-
-msgid "Could not handle request."
-msgstr ""
-
-msgid "Could not load file '{0}'."
-msgstr ""
 
 msgid "Country"
 msgstr "Land"
@@ -637,9 +618,6 @@ msgstr "Verteilung"
 
 msgid "Display Name"
 msgstr "Anzeigename"
-
-msgid "Do not forget to replace <YOUR_FRONTEND_HOST> placeholder."
-msgstr ""
 
 msgid ". (dot)"
 msgstr ". (Punkt)"
@@ -881,19 +859,11 @@ msgstr "Favoriten"
 msgid "Fax"
 msgstr "Fax"
 
-msgid "Feedback"
-msgstr ""
-
 msgid "Field"
 msgstr "Feld"
 
 msgid "Field '{0}' has an invalid value ({1})."
 msgstr "Feld '{0}' enthält einen ungültigen Wert ({1})."
-
-#, fuzzy
-#| msgid "Value of field '{0}' is too long (max: {1})."
-msgid "File '{0}' is to large (max {1})."
-msgstr "Wert des Feldes '{0}' ist zu  lang (max: {1})."
 
 msgid "Filter"
 msgstr "Filter"
@@ -1784,27 +1754,8 @@ msgstr ""
 "Der Agent kann sich mit den hier festgelegten Nutzerdaten nur einloggen, "
 "wenn der Agent „gültig“ gesetzt ist."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
-msgid "Helptext_Admin_WebformCreate_AcceptedDomains"
-msgstr ""
-"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
-"der Kategorie angezeigt wird."
-
 msgid "Helptext_Admin_WebformCreate_AllowAttachments"
 msgstr ""
-
-#, fuzzy
-#| msgid "Helptext_Admin_NotificationCreate_SendToAgents"
-msgid "Helptext_Admin_WebformCreate_AssignedAgent"
-msgstr ""
-"Tragen Sie konkrete Agenten ein, die diese Benachrichtigung erhalten sollen. "
-"Zur Auswahl stehen alle im System verfügbaren, gültigen Agenten."
-
-#, fuzzy
-#| msgid "Helptext_Admin_Users_UserCreate_Password"
-msgid "Helptext_Admin_WebformCreate_AssignedAgentPassword"
-msgstr "Das Passwort kann nachträglich angepasst oder verändert werden."
 
 msgid "Helptext_Admin_WebformCreate_ButtonLabel"
 msgstr ""
@@ -1840,6 +1791,9 @@ msgid "Helptext_Admin_WebformCreate_TypeID"
 msgstr ""
 
 msgid "Helptext_Admin_WebformCreate_UseKIXCSS"
+msgstr ""
+
+msgid "Helptext_Admin_WebformCreate_UserID"
 msgstr ""
 
 msgid "Helptext_Admin_WebformCreate_Validity"
@@ -2527,9 +2481,6 @@ msgstr "Vorfallstatus"
 msgid "Incident State"
 msgstr "Vorfallstatus"
 
-msgid "Include this code into the <head> area of your webpage."
-msgstr ""
-
 msgid "Information text"
 msgstr "Hinweistext"
 
@@ -2736,9 +2687,6 @@ msgstr "Logs"
 
 msgid "Menu"
 msgstr "Modulmenü"
-
-msgid "Message"
-msgstr ""
 
 msgid "Message after sending form"
 msgstr "Nachricht nach Absenden des Formulars"
@@ -2977,9 +2925,6 @@ msgstr "Benachrichtigungstext"
 msgid "not modified"
 msgstr "********"
 
-msgid "Not more than 5 files possible."
-msgstr ""
-
 msgid "No version available"
 msgstr "Keine Version verfügbar"
 
@@ -3120,9 +3065,6 @@ msgstr "Persönliche Einstellungen"
 
 msgid "Phone"
 msgstr "Telefon"
-
-msgid "Place this code wherever you want to open the webform dialog."
-msgstr ""
 
 msgid "Please select a contact"
 msgstr "Wählen Sie bitte einen Kontakt."
@@ -3579,6 +3521,9 @@ msgstr "Schlagworte"
 msgid "Target"
 msgstr "Ziel"
 
+msgid "Team"
+msgstr "Team"
+
 msgid "Template"
 msgstr "Vorlage"
 
@@ -3975,9 +3920,6 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
-
-#~ msgid "Team"
-#~ msgstr "Team"
 
 #~ msgid ""
 #~ "Input of 3 stars '***' in autocomplete form fields = listing of the first "

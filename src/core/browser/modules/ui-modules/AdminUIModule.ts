@@ -40,14 +40,10 @@ import { LogFileTableFactory } from "../../log/table/LogFileTableFactory";
 import { LogFileTableCSSHandler } from "../../log/table/LogFileTableCSSHandler";
 import { ConsoleCommandService } from "../../console/ConsoleCommandService";
 import { ConsoleCommandBrowserFactory } from "../../console/ConsoleCommandBrowserFactory";
-import { WebformService } from "../../webform/WebformService";
-import { WebformBrowserFactory } from "../../webform/WebformBrowserFactory";
-import { WebformTableFactory } from "../../webform/WebformTableFactory";
-import { WebformLabelProvider } from "../../webform/WebformLabelProvider";
-import { WebformCreateAction } from "../../webform/actions/WebformCreateAction";
-import { WebformDetailsContext } from "../../webform/context/WebformDetailsContext";
-import { NewWebformDialogContext } from "../../webform/context/NewWebformDialogContext";
-import { WebformFormService } from "../../webform/WebformFormService";
+import {
+    WebformService, WebformBrowserFactory, WebformTableFactory, WebformLabelProvider, WebformCreateAction,
+    WebformDetailsContext, NewWebformDialogContext, WebformFormService, WebformEditAction, EditWebformDialogContext
+} from "../../webform";
 
 export class UIModule implements IUIModule {
 
@@ -223,6 +219,7 @@ export class UIModule implements IUIModule {
 
     private async registerWebforms(): Promise<void> {
         ActionFactory.getInstance().registerAction('webform-create-action', WebformCreateAction);
+        ActionFactory.getInstance().registerAction('webform-edit-action', WebformEditAction);
 
         ServiceRegistry.registerServiceInstance(WebformService.getInstance());
         ServiceRegistry.registerServiceInstance(WebformFormService.getInstance());
@@ -257,6 +254,23 @@ export class UIModule implements IUIModule {
             false, 'object-details-page', ['webforms'], WebformDetailsContext
         );
         ContextService.getInstance().registerContext(webformDetailsContext);
+
+        const editWebformDialogContext = new ContextDescriptor(
+            EditWebformDialogContext.CONTEXT_ID, [KIXObjectType.WEBFORM],
+            ContextType.DIALOG, ContextMode.EDIT_ADMIN,
+            false, 'edit-webform-dialog', ['webforms'], EditWebformDialogContext
+        );
+        ContextService.getInstance().registerContext(editWebformDialogContext);
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'edit-webform-dialog',
+            new WidgetConfiguration(
+                'edit-webform-dialog', 'Translatable#Edit Webform', [], {},
+                false, false, 'kix-icon-edit'
+            ),
+            KIXObjectType.WEBFORM,
+            ContextMode.EDIT_ADMIN
+        ));
     }
 
     private async checkPermission(resource: string, crud: CRUD): Promise<boolean> {

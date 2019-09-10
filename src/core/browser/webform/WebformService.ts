@@ -47,8 +47,46 @@ export class WebformService extends KIXObjectService<Webform> {
         objectType: KIXObjectType, formId: string, createOptions?: KIXObjectSpecificCreateOptions,
         cacheKeyPrefix: string = objectType
     ): Promise<string | number> {
+        const webform = await this.getWebformFromForm(formId);
+        const objectId = await WebformSocketClient.getInstance().createUpdateWebform(webform)
+            .catch(async (error: Error) => {
+                const content = new ComponentContent('list-with-title',
+                    {
+                        title: `Error while creating ${objectType}`,
+                        list: [`${error.Code}: ${error.Message}`]
+                    }
+                );
+                OverlayService.getInstance().openOverlay(
+                    OverlayType.WARNING, null, content, 'Translatable#Error!', true
+                );
+                return null;
+            });
+        return objectId;
+    }
+
+    public async updateObjectByForm(
+        objectType: KIXObjectType, formId: string, objectId: number | string, cacheKeyPrefix: string = objectType
+    ): Promise<string | number> {
+        const webform = await this.getWebformFromForm(formId);
+        const updatedObjectId = await WebformSocketClient.getInstance().createUpdateWebform(webform, Number(objectId))
+            .catch(async (error: Error) => {
+                const content = new ComponentContent('list-with-title',
+                    {
+                        title: `Error while updating ${objectType}`,
+                        list: [`${error.Code}: ${error.Message}`]
+                    }
+                );
+                OverlayService.getInstance().openOverlay(
+                    OverlayType.WARNING, null, content, 'Translatable#Error!', true
+                );
+                return null;
+            });
+        return updatedObjectId;
+    }
+
+    private async getWebformFromForm(formId: string): Promise<Webform> {
         const parameter: Array<[string, any]> = await this.prepareFormFields(formId);
-        const webform = new Webform(null,
+        return new Webform(null,
             this.getParameterValue(parameter, WebformProperty.BUTTON_LABEL),
             this.getParameterValue(parameter, WebformProperty.TITLE),
             this.getParameterValue(parameter, WebformProperty.SHOW_TITLE),
@@ -67,21 +105,6 @@ export class WebformService extends KIXObjectService<Webform> {
             this.getParameterValue(parameter, WebformProperty.USER_PASSWORD),
             this.getParameterValue(parameter, KIXObjectProperty.VALID_ID)
         );
-
-        const objectId = await WebformSocketClient.getInstance().createWebform(webform)
-            .catch(async (error: Error) => {
-                const content = new ComponentContent('list-with-title',
-                    {
-                        title: `Error while creating ${objectType}`,
-                        list: [`${error.Code}: ${error.Message}`]
-                    }
-                );
-                OverlayService.getInstance().openOverlay(
-                    OverlayType.WARNING, null, content, 'Translatable#Error!', true
-                );
-                return null;
-            });
-        return objectId;
     }
 
     protected async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {

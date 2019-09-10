@@ -16,7 +16,7 @@ import { TranslationPatternTableFactory } from '../../../src/core/browser/i18n/a
 import { TextModulesTableFactory } from '../../../src/core/browser/text-modules';
 import { MailFilterTableFactory, MailFilterMatchTableFactory, MailFilterSetTableFactory } from '../../../src/core/browser/mail-filter';
 import { NotificationTableFactory } from '../../../src/core/browser/notification';
-import { WebformTableFactory } from '../../../src/core/browser/webform/WebformTableFactory';
+import { WebformTableFactory } from '../../../src/core/browser/webform';
 import { GeneralCatalogTableFactory } from '../../../src/core/browser/general-catalog';
 
 let table: ITable;

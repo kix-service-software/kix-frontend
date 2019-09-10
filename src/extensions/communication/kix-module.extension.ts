@@ -63,7 +63,8 @@ class KIXModuleExtension implements IKIXModuleExtension {
         new UIComponent('communication-admin-webforms', 'communication/admin/communication-admin-webforms', []),
         new UIComponent('new-webform-dialog', 'communication/admin/dialogs/new-webform-dialog', []),
         new UIComponent('webform-code-widget', 'communication/admin/widgets/webform-code-widget', []),
-        new UIComponent('webform-code-content', 'communication/admin/webform-code-content', [])
+        new UIComponent('webform-code-content', 'communication/admin/webform-code-content', []),
+        new UIComponent('edit-webform-dialog', 'communication/admin/dialogs/edit-webform-dialog', [])
     ];
 
 }
