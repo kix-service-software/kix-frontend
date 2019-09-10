@@ -7,25 +7,20 @@
  * --
  */
 
-import { KIXObjectType, ContextMode } from "../../../../../core/model";
-import { ComponentState } from "./ComponentState";
-import { AbstractNewDialog } from "../../../../../core/browser/components/dialog";
-import { RoutingConfiguration } from "../../../../../core/browser/router";
-import { WebformDetailsContext } from "../../../../../core/browser/webform";
-import { WebformProperty } from "../../../../../core/model/webform";
+import { KIXObjectType } from '../../../../../core/model';
+import { ComponentState } from './ComponentState';
+import { AbstractEditDialog } from '../../../../../core/browser/components/dialog';
+import { WebformDetailsContext } from '../../../../../core/browser/webform';
 
-class Component extends AbstractNewDialog {
+class Component extends AbstractEditDialog {
 
     public onCreate(): void {
         this.state = new ComponentState();
         super.init(
-            'Translatable#Create Webform',
-            'Translatable#Webform successfully created.',
+            'Translatable#Edit Webform',
+            undefined,
             KIXObjectType.WEBFORM,
-            new RoutingConfiguration(
-                WebformDetailsContext.CONTEXT_ID, KIXObjectType.WEBFORM,
-                ContextMode.DETAILS, WebformProperty.ID, true
-            )
+            WebformDetailsContext.CONTEXT_ID
         );
     }
 
@@ -44,7 +39,6 @@ class Component extends AbstractNewDialog {
     public async submit(): Promise<void> {
         await super.submit();
     }
-
 }
 
 module.exports = Component;

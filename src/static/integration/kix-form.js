@@ -15,6 +15,11 @@
     });
 })();
 
+var kixFormContent = {
+    tooManyFilesErrorMsg: 'Not more than 5 files possible.',
+    fileTooBigErrorMsg: 'is to large.',
+    maxFileSize: 24000000
+}
 function loadContent(formId, button) {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {
@@ -23,6 +28,15 @@ function loadContent(formId, button) {
             if (response.buttonLabel && response.htmlString) {
                 button.disabled = false;
                 button.innerHTML = response.buttonLabel;
+                if (response.fileTooBigErrorMsg) {
+                    kixFormContent.fileTooBigErrorMsg = response.fileTooBigErrorMsg;
+                }
+                if (response.tooManyFilesErrorMsg) {
+                    kixFormContent.tooManyFilesErrorMsg = response.tooManyFilesErrorMsg;
+                }
+                if (response.maxFileSize) {
+                    kixFormContent.maxFileSize = response.maxFileSize;
+                }
                 button.addEventListener('click', function () {
                     openForm(formId, response.htmlString, response.modal);
                 });
@@ -34,25 +48,25 @@ function loadContent(formId, button) {
     xhr.send();
 }
 
-function showShield(modal) {
-    if (modal) {
-        var shield = document.getElementById('kix-form-shield');
-        if (!shield) {
-            document.body.insertAdjacentHTML('beforeend', '<div id="kix-form-shield"></div>');
-            shield = document.getElementById('kix-form-shield');
-        }
-        if (shield) {
-            setTimeout(function () {
-                shield.style.opacity = '0.5';
-            }, 5);
-        }
+function showShield() {
+    var shield = document.getElementById('kix-form-shield');
+    if (!shield) {
+        document.body.insertAdjacentHTML('beforeend', '<div id="kix-form-shield"></div>');
+        shield = document.getElementById('kix-form-shield');
+    }
+    if (shield) {
+        setTimeout(function () {
+            shield.style.opacity = '0.5';
+        }, 5);
     }
 }
 
 function openForm(formId, htmlString, modal) {
     var somekixFormElement = document.getElementsByClassName('kix-form-container')[0];
     if (!somekixFormElement) {
-        showShield(modal);
+        if (modal) {
+            showShield();
+        }
         document.body.insertAdjacentHTML('beforeend', htmlString);
 
         setTimeout(function () {
@@ -83,6 +97,7 @@ function openForm(formId, htmlString, modal) {
                 var attachmentInput = document.getElementById('kix-form-attachments-' + formId);
                 if (attachmentInput) {
                     attachmentInput.addEventListener('change', function () {
+                        checkFiles(formElement, attachmentInput.files);
                         showFiles(formId, attachmentInput.files);
                     });
                 }
@@ -91,16 +106,68 @@ function openForm(formId, htmlString, modal) {
     }
 }
 
+var loadedFiles = [];
+var notLoadedFilesCount = 0;
 function submitForm(formId, formElement) {
+    loadedFiles = [];
+    notLoadedFilesCount = 0;
     if (kixWebFormURL && formId && formElement) {
-        var files = getFiles(formId);
+        setFormNotUsableState(formId, formElement, true);
 
+        var files = getFiles(formId);
         if (files && !!files.length) {
-            prepareFilesAndExecuteSubmit(formId, formElement, files);
+            var error = checkFiles(formElement, files);
+            if (error) {
+                setFormNotUsableState(formId, formElement, false);
+            } else {
+                for (var i = 0; i < files.length; i++) {
+                    readFile(formId, formElement, files, i);
+                }
+            }
         } else {
-            executeSubmit(formId, formElement);
+            sendPostRequest(formId, formElement);
         }
     }
+}
+
+function setFormNotUsableState(formId, formElement, notUsable) {
+    var contentElement = formElement.getElementsByClassName('kix-form-content')[0];
+    if (contentElement) {
+        var submitButton = document.getElementById('kix-form-submit-button-' + formId);
+        if (submitButton) {
+            submitButton.disabled = notUsable;
+        }
+        var inputs = contentElement.getElementsByTagName('input');
+        for (var i = 0, input; input = inputs[i]; i++) {
+            input.readonly = notUsable;
+            input.disabled = notUsable;
+        }
+        var textareas = contentElement.getElementsByTagName('textarea');
+        for (var a = 0, textarea; textarea = textareas[a]; a++) {
+            textarea.readonly = notUsable;
+            textarea.disabled = notUsable;
+        }
+    }
+}
+
+function checkFiles(formElement, files) {
+    var error = false;
+    showRessultMessage(formElement, '');
+    if (files && !!files.length) {
+        if (files.length > 5) {
+            showRessultMessage(formElement, kixFormContent.tooManyFilesErrorMsg, true);
+            error = true;
+        } else {
+            for (var i = 0, file; file = files[i]; i++) {
+                if (file.size > kixFormContent.maxFileSize) {
+                    showRessultMessage(formElement, file.name + ': ' + kixFormContent.fileTooBigErrorMsg, true);
+                    error = true;
+                    break;
+                }
+            }
+        }
+    }
+    return error;
 }
 
 function showFiles(formId, files) {
@@ -114,7 +181,7 @@ function showFiles(formId, files) {
             }
             for (var i = 0; i < files.length; i++) {
                 var param = document.createElement('p');
-                var fileSize = getFileSize(files[i].size)
+                var fileSize = getReadableFileSize(files[i].size)
                 param.textContent = files[i].name + ' (' + fileSize + ')';
                 param.title = files[i].name + ' (' + fileSize + ')';
                 attachmentContainer.appendChild(param);
@@ -123,11 +190,11 @@ function showFiles(formId, files) {
     }
 }
 
-function getFileSize(number) {
+function getReadableFileSize(number) {
     if (number < 1000) {
         return number + 'bytes';
     } else if (number >= 1000 && number < 1000000) {
-        return (number / 1000).toFixed(1) + 'KB';
+        return (number / 1000).toFixed(1) + 'kB';
     } else if (number >= 1000000) {
         return (number / 1000000).toFixed(1) + 'MB';
     }
@@ -150,7 +217,7 @@ function getFiles(formId) {
     return [];
 }
 
-function executeSubmit(formId, formElement, filesWithContent) {
+function sendPostRequest(formId, formElement) {
     var xhr = new XMLHttpRequest();
 
     xhr.onreadystatechange = function () {
@@ -159,7 +226,8 @@ function executeSubmit(formId, formElement, filesWithContent) {
                 var response = JSON.parse(xhr.responseText);
                 handleSuccess(formElement, response.successMessage);
             } else {
-                showRessultMessage(formElement, 'Error: ' + (xhr.responseText ? xhr.responseText : 'something went wrong'), true);
+                showRessultMessage(formElement, (xhr.responseText ? xhr.responseText : 'something went wrong.'), true);
+                setFormNotUsableState(formId, formElement, false);
             }
         }
     };
@@ -169,24 +237,12 @@ function executeSubmit(formId, formElement, filesWithContent) {
         email: getInputValue(formId, 'kix-form-email-'),
         subject: getInputValue(formId, 'kix-form-subject-'),
         message: getInputValue(formId, 'kix-form-message-'),
-        files: filesWithContent ? filesWithContent : []
+        files: loadedFiles ? loadedFiles : []
     }
 
     xhr.open("POST", kixWebFormURL + '/' + formId, true);
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.send(JSON.stringify(ticket));
-}
-
-var loadedFiles = [];
-var notLoadedFilesCount = 0;
-function prepareFilesAndExecuteSubmit(formId, formElement, files) {
-    loadedFiles = [];
-    notLoadedFilesCount = 0;
-    if (files && !!files.length) {
-        for (var i = 0; i < files.length; i++) {
-            readFile(formId, formElement, files, i);
-        }
-    }
 }
 
 function readFile(formId, formElement, files, index) {
@@ -202,14 +258,14 @@ function readFile(formId, formElement, files, index) {
             lastModifiedDate: files[index].lastModifiedDate
         })
         if (loadedFiles.length >= (files.length - notLoadedFilesCount)) {
-            executeSubmit(formId, formElement, loadedFiles);
+            sendPostRequest(formId, formElement);
         }
     };
     reader.onerror = function (event) {
         reader.abort();
         notLoadedFilesCount++;
         if (loadedFiles.length >= (files.files - notLoadedFilesCount)) {
-            executeSubmit(formId, formElement, loadedFiles);
+            sendPostRequest(formId, formElement);
         }
     }
     reader.readAsDataURL(files[index]);
@@ -245,7 +301,7 @@ function showRessultMessage(formElement, message, asError) {
             if (asError) {
                 pElement.style.color = '#f00';
             }
-            pElement.textContent = message;
+            pElement.textContent = asError ? 'Error: ' + message : message;
             resultElement.appendChild(pElement);
         }
     }

@@ -29,16 +29,10 @@ msgstr ""
 msgid "{0} imported"
 msgstr ""
 
-msgid "{0} is required."
-msgstr ""
-
 msgid "{0} Link created"
 msgstr ""
 
 msgid "{0} link(s) assigned."
-msgstr ""
-
-msgid "Accepted domains"
 msgstr ""
 
 msgid "Accept KIX Header"
@@ -346,9 +340,6 @@ msgid ""
 "new tab"
 msgstr ""
 
-msgid "Close"
-msgstr ""
-
 msgid "Closed at"
 msgstr ""
 
@@ -467,12 +458,6 @@ msgid "contained in"
 msgstr ""
 
 msgid "contains"
-msgstr ""
-
-msgid "Could not handle request."
-msgstr ""
-
-msgid "Could not load file '{0}'."
 msgstr ""
 
 msgid "Country"
@@ -626,9 +611,6 @@ msgid "Dispatching"
 msgstr ""
 
 msgid "Display Name"
-msgstr ""
-
-msgid "Do not forget to replace <YOUR_FRONTEND_HOST> placeholder."
 msgstr ""
 
 msgid ". (dot)"
@@ -871,16 +853,10 @@ msgstr ""
 msgid "Fax"
 msgstr ""
 
-msgid "Feedback"
-msgstr ""
-
 msgid "Field"
 msgstr ""
 
 msgid "Field '{0}' has an invalid value ({1})."
-msgstr ""
-
-msgid "File '{0}' is to large (max {1})."
 msgstr ""
 
 msgid "Filter"
@@ -1692,27 +1668,8 @@ msgstr ""
 msgid "Helptext_Admin_Users_UserEdit_Valid"
 msgstr "The agent can only login with the user data set here if set “valid”."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
-msgid "Helptext_Admin_WebformCreate_AcceptedDomains"
-msgstr ""
-"Upload an icon, which will be shown together with the category name within "
-"the application."
-
 msgid "Helptext_Admin_WebformCreate_AllowAttachments"
 msgstr ""
-
-#, fuzzy
-#| msgid "Helptext_Admin_NotificationCreate_SendToAgents"
-msgid "Helptext_Admin_WebformCreate_AssignedAgent"
-msgstr ""
-"Insert specific agents who are supposed to receive this notification. You "
-"can choose from all valid agents available in the system."
-
-#, fuzzy
-#| msgid "Helptext_Admin_Users_UserCreate_Password"
-msgid "Helptext_Admin_WebformCreate_AssignedAgentPassword"
-msgstr "The password can be changed/modified afterwards."
 
 msgid "Helptext_Admin_WebformCreate_ButtonLabel"
 msgstr ""
@@ -1748,6 +1705,9 @@ msgid "Helptext_Admin_WebformCreate_TypeID"
 msgstr ""
 
 msgid "Helptext_Admin_WebformCreate_UseKIXCSS"
+msgstr ""
+
+msgid "Helptext_Admin_WebformCreate_UserID"
 msgstr ""
 
 msgid "Helptext_Admin_WebformCreate_Validity"
@@ -2390,9 +2350,6 @@ msgstr ""
 msgid "Incident State"
 msgstr ""
 
-msgid "Include this code into the <head> area of your webpage."
-msgstr ""
-
 msgid "Information text"
 msgstr ""
 
@@ -2598,9 +2555,6 @@ msgid "Logs"
 msgstr ""
 
 msgid "Menu"
-msgstr ""
-
-msgid "Message"
 msgstr ""
 
 msgid "Message after sending form"
@@ -2840,9 +2794,6 @@ msgstr ""
 msgid "not modified"
 msgstr "********"
 
-msgid "Not more than 5 files possible."
-msgstr ""
-
 msgid "No version available"
 msgstr ""
 
@@ -2982,9 +2933,6 @@ msgid "Personal Settings"
 msgstr ""
 
 msgid "Phone"
-msgstr ""
-
-msgid "Place this code wherever you want to open the webform dialog."
 msgstr ""
 
 msgid "Please select a contact"
@@ -3435,6 +3383,9 @@ msgid "Tags"
 msgstr ""
 
 msgid "Target"
+msgstr ""
+
+msgid "Team"
 msgstr ""
 
 msgid "Template"

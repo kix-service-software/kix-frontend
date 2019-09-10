@@ -17,12 +17,12 @@ import { ConfigurationService } from '../../core/services';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
 import { WebformProperty } from '../../core/model/webform';
 import { SearchOperator } from '../../core/browser';
-import { NewWebformDialogContext } from '../../core/browser/webform';
+import { EditWebformDialogContext } from '../../core/browser/webform';
 
 export class Extension implements IConfigurationExtension {
 
     public getModuleId(): string {
-        return NewWebformDialogContext.CONTEXT_ID;
+        return EditWebformDialogContext.CONTEXT_ID;
     }
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
@@ -32,7 +32,7 @@ export class Extension implements IConfigurationExtension {
     public async createFormDefinitions(overwrite: boolean): Promise<void> {
         const configurationService = ConfigurationService.getInstance();
 
-        const formId = 'new-webform-form';
+        const formId = 'edit-webform-form';
         const existing = configurationService.getConfiguration(formId);
         if (!existing) {
             const optionsGroup = new FormGroup('Translatable#Webform Options', [
@@ -181,20 +181,22 @@ export class Extension implements IConfigurationExtension {
                 ]
                 ),
                 new FormField(
-                    'Translatable#Password', WebformProperty.USER_PASSWORD, null, true,
+                    'Translatable#Password', WebformProperty.USER_PASSWORD, null, false,
                     'Translatable#Helptext_Admin_WebformCreateEdit_AssignedAgentPassword',
                     [
                         new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)
-                    ]
+                    ], null, null, null, null, null, null, null, null, null, null, null, null,
+                    'Translatable#not modified'
                 )
             ]);
 
             const form = new Form(
-                formId, 'Translatable#New Webform', [optionsGroup, defaultValuesGroup], KIXObjectType.WEBFORM
+                formId, 'Translatable#Edit Webform', [optionsGroup, defaultValuesGroup], KIXObjectType.WEBFORM,
+                true, FormContext.EDIT
             );
             await configurationService.saveConfiguration(form.id, form);
         }
-        configurationService.registerForm([FormContext.NEW], KIXObjectType.WEBFORM, formId);
+        configurationService.registerForm([FormContext.EDIT], KIXObjectType.WEBFORM, formId);
     }
 }
 

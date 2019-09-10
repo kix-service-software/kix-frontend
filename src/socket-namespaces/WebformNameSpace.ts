@@ -54,7 +54,7 @@ export class WebformNameSpace extends SocketNameSpace {
         const user = await UserService.getInstance().getUserByToken(data.token);
         const userId = user.UserID;
 
-        const objectId = await WebformService.getInstance().saveWebform(userId, data.webform);
+        const objectId = await WebformService.getInstance().saveWebform(userId, data.webform, data.webformId);
 
         return new SocketResponse(WebformEvent.WEBFORM_SAVED, new CreateObjectResponse(data.requestId, objectId));
     }

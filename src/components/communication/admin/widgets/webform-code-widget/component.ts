@@ -11,7 +11,7 @@ import { AbstractMarkoComponent, ContextService } from '../../../../../core/brow
 import { ComponentState } from './ComponentState';
 import { KIXObjectType } from '../../../../../core/model';
 import { IEventSubscriber } from '../../../../../core/browser/event';
-import { WebformDetailsContext } from '../../../../../core/browser/webform/context/WebformDetailsContext';
+import { WebformDetailsContext } from '../../../../../core/browser/webform';
 import { Webform } from '../../../../../core/model/webform';
 
 class Component extends AbstractMarkoComponent<ComponentState> {

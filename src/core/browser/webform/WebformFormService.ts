@@ -12,7 +12,7 @@ import { Webform, WebformProperty } from "../../model/webform";
 import {
     KIXObjectType, FormFieldValue, Form, SysConfigOption, SysConfigKey, FormContext, Queue,
     KIXObjectLoadingOptions, FilterCriteria, QueueProperty, FilterDataType, FilterType, TicketPriority,
-    TicketPriorityProperty, TicketType, TicketTypeProperty, TicketState, TicketStateProperty
+    TicketPriorityProperty, TicketType, TicketTypeProperty, TicketState, TicketStateProperty, User, UserProperty
 } from "../../model";
 import { KIXObjectService } from "../kix";
 import { SearchOperator } from "../SearchOperator";
@@ -37,7 +37,7 @@ export class WebformFormService extends KIXObjectFormService<Webform> {
         return kixObjectType === KIXObjectType.WEBFORM;
     }
 
-    protected async additionalPreparations(
+    protected async doAdditionalPreparations(
         form: Form, formFieldValues: Map<string, FormFieldValue<any>>, webform: Webform
     ): Promise<void> {
         const hasConfigPermissions = await this.checkPermissions('system/config');
@@ -68,98 +68,120 @@ export class WebformFormService extends KIXObjectFormService<Webform> {
         }
     }
 
+    protected async getValue(property: string, value: any, webform: Webform): Promise<any> {
+        switch (property) {
+            case WebformProperty.USER_LOGIN:
+                if (value) {
+                    const users = await KIXObjectService.loadObjects<User>(
+                        KIXObjectType.USER, null,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    UserProperty.USER_LOGIN, SearchOperator.EQUALS,
+                                    FilterDataType.STRING, FilterType.AND, value
+                                )
+                            ]
+                        ),
+                        null, true
+                    ).catch((error) => [] as User[]);
+                    value = users && !!users.length ? users[0].ObjectId : value;
+                }
+                break;
+            case WebformProperty.ACCEPTED_DOMAINS:
+                if (Array.isArray(value)) {
+                    value = value.join(',');
+                }
+                break;
+            default:
+        }
+        return value;
+    }
+
+    private async getDefaultConfigValue(configId: string): Promise<string> {
+        let name;
+        if (configId) {
+            const defaultOptions = await KIXObjectService.loadObjects<SysConfigOption>(
+                KIXObjectType.SYS_CONFIG_OPTION, [configId], null, null, true
+            );
+            if (defaultOptions && !!defaultOptions.length) {
+                name = defaultOptions[0].Value;
+            }
+        }
+        return name;
+    }
+
     private async getDefaultQueueID(): Promise<number> {
         let queueId: number;
-        const defaultOptions = await KIXObjectService.loadObjects<SysConfigOption>(
-            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.POSTMASTER_DEFAULT_QUEUE], null, null, true
-        );
-        if (defaultOptions && !!defaultOptions.length) {
-            const name = defaultOptions[0].Value;
-            if (name) {
-                const queues = await KIXObjectService.loadObjects<Queue>(
-                    KIXObjectType.QUEUE, null, new KIXObjectLoadingOptions(
-                        [
-                            new FilterCriteria(
-                                QueueProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
-                                FilterType.AND, name
-                            )
-                        ]
-                    ), null, true
-                );
-                queueId = queues && !!queues.length ? queues[0].QueueID : null;
-            }
+        const name = await this.getDefaultConfigValue(SysConfigKey.POSTMASTER_DEFAULT_QUEUE);
+        if (name) {
+            const queues = await KIXObjectService.loadObjects<Queue>(
+                KIXObjectType.QUEUE, null, new KIXObjectLoadingOptions(
+                    [
+                        new FilterCriteria(
+                            QueueProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
+                            FilterType.AND, name
+                        )
+                    ]
+                ), null, true
+            );
+            queueId = queues && !!queues.length ? queues[0].QueueID : null;
         }
         return queueId;
     }
 
     private async getDefaultPriorityID(): Promise<number> {
         let priorityId: number;
-        const defaultOptions = await KIXObjectService.loadObjects<SysConfigOption>(
-            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.POSTMASTER_DEFAULT_PRIORITY], null, null, true
-        );
-        if (defaultOptions && !!defaultOptions.length) {
-            const name = defaultOptions[0].Value;
-            if (name) {
-                const objects = await KIXObjectService.loadObjects<TicketPriority>(
-                    KIXObjectType.TICKET_PRIORITY, null, new KIXObjectLoadingOptions(
-                        [
-                            new FilterCriteria(
-                                TicketPriorityProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
-                                FilterType.AND, name
-                            )
-                        ]
-                    ), null, true
-                );
-                priorityId = objects && !!objects.length ? objects[0].ID : null;
-            }
+        const name = await this.getDefaultConfigValue(SysConfigKey.POSTMASTER_DEFAULT_PRIORITY);
+        if (name) {
+            const objects = await KIXObjectService.loadObjects<TicketPriority>(
+                KIXObjectType.TICKET_PRIORITY, null, new KIXObjectLoadingOptions(
+                    [
+                        new FilterCriteria(
+                            TicketPriorityProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
+                            FilterType.AND, name
+                        )
+                    ]
+                ), null, true
+            );
+            priorityId = objects && !!objects.length ? objects[0].ID : null;
         }
         return priorityId;
     }
 
     private async getDefaultTypeID(): Promise<number> {
         let typeId: number;
-        const defaultOptions = await KIXObjectService.loadObjects<SysConfigOption>(
-            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_TYPE_DEFAULT], null, null, true
-        );
-        if (defaultOptions && !!defaultOptions.length) {
-            const name = defaultOptions[0].Value;
-            if (name) {
-                const objects = await KIXObjectService.loadObjects<TicketType>(
-                    KIXObjectType.TICKET_TYPE, null, new KIXObjectLoadingOptions(
-                        [
-                            new FilterCriteria(
-                                TicketTypeProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
-                                FilterType.AND, name
-                            )
-                        ]
-                    ), null, true
-                );
-                typeId = objects && !!objects.length ? objects[0].ID : null;
-            }
+        const name = await this.getDefaultConfigValue(SysConfigKey.TICKET_TYPE_DEFAULT);
+        if (name) {
+            const objects = await KIXObjectService.loadObjects<TicketType>(
+                KIXObjectType.TICKET_TYPE, null, new KIXObjectLoadingOptions(
+                    [
+                        new FilterCriteria(
+                            TicketTypeProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
+                            FilterType.AND, name
+                        )
+                    ]
+                ), null, true
+            );
+            typeId = objects && !!objects.length ? objects[0].ID : null;
         }
         return typeId;
     }
 
     private async getDefaultStateID(): Promise<number> {
         let stateId: number;
-        const defaultOptions = await KIXObjectService.loadObjects<SysConfigOption>(
-            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.POSTMASTER_DEFAULT_STATE], null, null, true
-        );
-        if (defaultOptions && !!defaultOptions.length) {
-            const name = defaultOptions[0].Value;
-            if (name) {
-                const objects = await KIXObjectService.loadObjects<TicketState>(
-                    KIXObjectType.TICKET_STATE, null, new KIXObjectLoadingOptions(
-                        [
-                            new FilterCriteria(
-                                TicketStateProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
-                                FilterType.AND, name
-                            )
-                        ]
-                    ), null, true
-                );
-                stateId = objects && !!objects.length ? objects[0].ID : null;
-            }
+        const name = await this.getDefaultConfigValue(SysConfigKey.POSTMASTER_DEFAULT_STATE);
+        if (name) {
+            const objects = await KIXObjectService.loadObjects<TicketState>(
+                KIXObjectType.TICKET_STATE, null, new KIXObjectLoadingOptions(
+                    [
+                        new FilterCriteria(
+                            TicketStateProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
+                            FilterType.AND, name
+                        )
+                    ]
+                ), null, true
+            );
+            stateId = objects && !!objects.length ? objects[0].ID : null;
         }
         return stateId;
     }

@@ -13,7 +13,7 @@ import {
 } from "../core/services";
 import {
     Error, DateTimeUtil, TicketProperty, ArticleProperty, KIXObjectType, SysConfigOption, SysConfigKey,
-    Attachment, Translation
+    Attachment
 } from "../core/model";
 import { IdService } from "../core/browser";
 import { KIXIntegrationRouter } from "../routes/KIXIntegrationRouter";
@@ -21,7 +21,6 @@ import { SysConfigService } from "../core/services";
 import addrparser = require('address-rfc2822');
 
 export class WebformService {
-
 
     private static INSTANCE: WebformService;
 
@@ -34,27 +33,50 @@ export class WebformService {
 
     private constructor() { }
 
-
-    public loadWebforms(): Webform[] {
+    public loadWebforms(withPassword: boolean = false): Webform[] {
         const webformsConfiguration = ConfigurationService.getInstance().getConfiguration('webforms');
-        const webforms = webformsConfiguration ? webformsConfiguration : [];
+        const webforms: Webform[] = webformsConfiguration ? webformsConfiguration : [];
+        if (!withPassword) {
+            webforms.forEach((wf) => delete wf.webformUserPassword);
+        }
         return webforms;
     }
 
-    public async saveWebform(userId: number, webform: Webform): Promise<number> {
-        webform.CreateBy = userId;
-        webform.ChangeBy = userId;
+    public getWebform(formId: number, withPassword?: boolean): Webform {
+        let form;
+        if (formId) {
+            const forms = this.loadWebforms(withPassword);
+            if (forms && forms.length) {
+                form = forms.find((f) => f.ObjectId === Number(formId));
+            }
+        }
+        return form;
+    }
 
+    public async saveWebform(userId: number, webform: Webform, webformId?: number): Promise<number> {
         const date = DateTimeUtil.getKIXDateTimeString(new Date());
-        webform.CreateTime = date;
+
+        const webforms = this.loadWebforms(true);
+
+        webform.ChangeBy = userId;
         webform.ChangeTime = date;
-
-        webform.ObjectId = Date.now();
-
-        const webformsConfiguration = ConfigurationService.getInstance().getConfiguration('webforms');
-        const webforms = webformsConfiguration ? webformsConfiguration : [];
-
-        webforms.push(webform);
+        if (!webformId) {
+            webform.CreateBy = userId;
+            webform.CreateTime = date;
+            webform.ObjectId = Date.now();
+            webforms.push(webform);
+        } else {
+            webform.ObjectId = webformId;
+            const webformIndex = webforms.findIndex((f) => f.ObjectId === Number(webformId));
+            if (webformIndex !== -1) {
+                webform.CreateBy = webforms[webformIndex].CreateBy;
+                webform.CreateTime = webforms[webformIndex].CreateTime;
+                if (!webform.webformUserPassword) {
+                    webform.webformUserPassword = webforms[webformIndex].webformUserPassword;
+                }
+                webforms.splice(webformIndex, 1, webform);
+            }
+        }
 
         await ConfigurationService.getInstance().saveConfiguration('webforms', webforms)
             .then(() => {
@@ -67,49 +89,30 @@ export class WebformService {
         return webform.ObjectId;
     }
 
-    public async createTicket(request: CreateWebformTicketRequest, form: Webform, language?: string): Promise<number> {
+    public async createTicket(request: CreateWebformTicketRequest, formId: number, language?: string): Promise<number> {
         let errorString = await this.checkRequest(request, language);
-
-        if (!errorString) {
-            const from = request.name && !request.email.match(/.+ <.+>/)
-                ? `${request.name} <${request.email}>` : request.email;
-            const attachments = this.prepareFiles(request.files);
-            const parameter: Array<[string, any]> = [
-                [TicketProperty.TITLE, request.subject],
-                [TicketProperty.CONTACT_ID, request.email],
-                [TicketProperty.ORGANISATION_ID, request.email],
-                [TicketProperty.STATE_ID, form.StateID],
-                [TicketProperty.PRIORITY_ID, form.PrioritiyID],
-                [TicketProperty.QUEUE_ID, form.QueueID],
-                [TicketProperty.TYPE_ID, form.TypeID],
-                [TicketProperty.OWNER_ID, 1],
-                [TicketProperty.RESPONSIBLE_ID, 1],
-                [ArticleProperty.FROM, from],
-                [ArticleProperty.SUBJECT, request.subject],
-                [ArticleProperty.BODY, request.message],
-                [ArticleProperty.ATTACHMENTS, attachments],
-                [ArticleProperty.SENDER_TYPE_ID, 3],
-                [ArticleProperty.CHANNEL_ID, 1],
-            ];
-
-            if (form.userLogin && form.webformUserPassword) {
+        if (formId && !errorString) {
+            const form = this.getWebform(formId, true);
+            if (form && form.userLogin && form.webformUserPassword) {
+                const parameter = this.prepareParameter(request, form);
                 const token = await AuthenticationService.getInstance().login(
-                    form.userLogin, form.webformUserPassword, IdService.generateDateBasedId('web-form-login'), false
-                );
+                    form.userLogin, form.webformUserPassword, IdService.generateDateBasedId('web-form-login'),
+                    false
+                ).catch((error) => null);
                 if (token) {
                     const result = await TicketService.getInstance().createObject(
                         token, null, KIXObjectType.TICKET, parameter
-                    ).catch((error) => {
-                        // do nothing, throw general error below
-                    });
-                    AuthenticationService.getInstance().logout(token);
+                    ).catch((error) => null);
+                    AuthenticationService.getInstance().logout(token).catch((error) => null);
                     if (result) {
                         return result;
                     }
                 }
             }
 
-            errorString = await this.translate('Translatable#Could not handle request.', undefined, language);
+            errorString = await TranslationService.getInstance().translate(
+                'Translatable#Could not handle request.', undefined, language
+            );
         }
 
         throw new Error(null, errorString, 400);
@@ -118,21 +121,53 @@ export class WebformService {
     private async checkRequest(request: CreateWebformTicketRequest, language?: string): Promise<string> {
         let errorString;
         if (!request.name) {
-            errorString = await this.translate('Translatable#{0} is required.', ['Name'], language);
+            errorString = await TranslationService.getInstance().translate(
+                'Translatable#{0} is required.', ['Name'], language
+            );
         } else if (!request.email) {
-            errorString = await this.translate('Translatable#{0} is required.', ['Email'], language);
+            errorString = await TranslationService.getInstance().translate(
+                'Translatable#{0} is required.', ['Email'], language
+            );
         } else if (!this.checkEmail(request.email)) {
-            errorString = await this.translate(
+            errorString = await TranslationService.getInstance().translate(
                 'Translatable#Inserted email address is invalid', undefined, language
             ) + '.';
         } else if (!request.subject) {
-            errorString = await this.translate('Translatable#{0} is required.', ['Subject'], language);
+            errorString = await TranslationService.getInstance().translate(
+                'Translatable#{0} is required.', ['Subject'], language
+            );
         } else if (!request.message) {
-            errorString = await this.translate('Translatable#{0} is required.', ['Message'], language);
+            errorString = await TranslationService.getInstance().translate(
+                'Translatable#{0} is required.', ['Message'], language
+            );
         } else {
             errorString = await this.checkFiles(request.files, language);
         }
         return errorString;
+    }
+
+    private prepareParameter(request: CreateWebformTicketRequest, form: Webform): Array<[string, any]> {
+        const from = request.name && !request.email.match(/.+ <.+>/)
+            ? `${request.name} <${request.email}>` : request.email;
+        const attachments = this.prepareFiles(request.files);
+        const parameter: Array<[string, any]> = [
+            [TicketProperty.TITLE, request.subject],
+            [TicketProperty.CONTACT_ID, request.email],
+            [TicketProperty.ORGANISATION_ID, request.email],
+            [TicketProperty.STATE_ID, form.StateID],
+            [TicketProperty.PRIORITY_ID, form.PrioritiyID],
+            [TicketProperty.QUEUE_ID, form.QueueID],
+            [TicketProperty.TYPE_ID, form.TypeID],
+            [TicketProperty.OWNER_ID, 1],
+            [TicketProperty.RESPONSIBLE_ID, 1],
+            [ArticleProperty.FROM, from],
+            [ArticleProperty.SUBJECT, request.subject],
+            [ArticleProperty.BODY, request.message],
+            [ArticleProperty.ATTACHMENTS, attachments],
+            [ArticleProperty.SENDER_TYPE_ID, 3],
+            [ArticleProperty.CHANNEL_ID, 1],
+        ];
+        return parameter;
     }
 
     // TODO: copied from FormValidationService
@@ -149,18 +184,21 @@ export class WebformService {
     private async checkFiles(filesWithContent: any[], language?: string) {
         if (filesWithContent && !!filesWithContent.length) {
             if (filesWithContent.length > 5) {
-                return await this.translate('Translatable#Not more than 5 files possible.', undefined, language);
+                return await TranslationService.getInstance().translate(
+                    'Translatable#Not more than 5 files possible.', undefined, language
+                );
             } else {
-                const maxSize = await this.getMaxSize();
+                const maxSize = await this.getMaxFileSize();
                 for (const file of filesWithContent) {
                     if (maxSize && file.size > maxSize) {
-                        return await this.translate(
-                            "Translatable#File '{0}' is to large (max {1}).",
-                            [file.name, this.getFileSize(maxSize)], language
+                        const error = file.name + ': ' + await TranslationService.getInstance().translate(
+                            "Translatable#is to large (max {0}).",
+                            [this.getFileSize(maxSize)], language
                         );
+                        return error;
                     }
                     if (!file.content) {
-                        return await this.translate(
+                        return await TranslationService.getInstance().translate(
                             "Translatable#Could not load file '{0}'.",
                             [file.name], language
                         );
@@ -184,7 +222,7 @@ export class WebformService {
         return attachments;
     }
 
-    private async getMaxSize(): Promise<number> {
+    public async getMaxFileSize(): Promise<number> {
         let maxSize = 1000 * 1000 * 24; // 24 MB
         const config = ConfigurationService.getInstance().getServerConfiguration();
         if (config && config.BACKEND_API_TOKEN) {
@@ -200,7 +238,20 @@ export class WebformService {
     }
 
     public async getSuccessMessage(form: Webform, language?: string) {
-        return await this.translate(form.successMessage, undefined, language);
+        return await TranslationService.getInstance().translate(form.successMessage, undefined, language);
+    }
+
+    public async getTooManyFilesErrorMsg(language?: string) {
+        return await TranslationService.getInstance().translate(
+            'Translatable#Not more than 5 files possible.', undefined, language
+        );
+    }
+
+    public async getFileTooBigErrorMsg(form: Webform, language?: string) {
+        const maxSize = await this.getMaxFileSize();
+        return await TranslationService.getInstance().translate(
+            "Translatable#is to large (max {0}).", [this.getFileSize(maxSize)], language
+        );
     }
 
     public async getWebformTranslationObject(form: Webform, language?: string): Promise<any> {
@@ -214,7 +265,7 @@ export class WebformService {
             'Translatable#All form fields marked by * are required fields.'
         ];
         for (const pattern of patterns) {
-            const text = await this.translate(pattern, undefined, language);
+            const text = await TranslationService.getInstance().translate(pattern, undefined, language);
             translationObject[pattern] = text;
         }
         return translationObject;
@@ -234,60 +285,4 @@ export class WebformService {
         return sizeString;
     }
 
-    // TODO: copied from TranslationService (browser), but modified
-    private prepareValue(pattern: string = ''): string {
-        if (pattern && pattern.startsWith('Translatable' + '#')) {
-            pattern = pattern.replace('Translatable' + '#', '');
-        }
-        return pattern;
-    }
-    private async translate(
-        pattern: string = '', placeholderValues: Array<string | number> = [], language: string = 'en',
-        // language?: string, getOnlyPattern: boolean = false
-    ): Promise<string> {
-        let translationValue = pattern;
-        if (translationValue !== null) {
-
-            translationValue = this.prepareValue(translationValue);
-
-            // if (!getOnlyPattern) {
-            const config = ConfigurationService.getInstance().getServerConfiguration();
-            if (config && config.BACKEND_API_TOKEN) {
-                // const translations = await KIXObjectService.loadObjects<Translation>(KIXObjectType.TRANSLATION);
-                const translations = await TranslationService.getInstance().loadObjects<Translation>(
-                    config.BACKEND_API_TOKEN, IdService.generateDateBasedId('integration-router-'),
-                    KIXObjectType.TRANSLATION, null, null, null
-                ).catch(() => [] as Translation[]);
-                const translation = translations.find((t) => t.Pattern === translationValue);
-
-                if (translation) {
-                    // language = language ? language : await this.getUserLanguage();
-                    if (language) {
-                        const translationLanguageValue = translation.Languages[language];
-                        if (translationLanguageValue) {
-                            translationValue = translationLanguageValue;
-                        }
-                    }
-                }
-
-                translationValue = this.format(translationValue, placeholderValues.map(
-                    (p) => (typeof p !== undefined && p !== null ? p : '').toString()
-                ));
-            }
-        }
-        // const debug = ClientStorageService.getOption('i18n-debug');
-
-        // if (debug && debug !== 'false' && debug !== '0') {
-        //     translationValue = 'TR-' + pattern;
-        // }
-
-        return translationValue;
-    }
-    private format(format: string, args: string[]): string {
-        return format.replace(/{(\d+)}/g, (match, number) => {
-            return args && typeof args[number] !== 'undefined'
-                ? args[number]
-                : '';
-        });
-    }
 }

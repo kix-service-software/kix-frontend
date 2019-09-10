@@ -14,7 +14,7 @@ import {
 } from '../../core/model';
 import { TabWidgetSettings } from '../../core/model/components/TabWidgetSettings';
 import { WebformProperty } from '../../core/model/webform';
-import { WebformDetailsContext } from '../../core/browser/webform/context/WebformDetailsContext';
+import { WebformDetailsContext } from '../../core/browser/webform';
 
 export class Extension implements IConfigurationExtension {
 
@@ -77,7 +77,7 @@ export class Extension implements IConfigurationExtension {
             ['webform-details-tab-widget', 'webform-default-values-lane', 'webform-code-lane'],
             [tabLane, webformOptionsLane, defaultValuesLane, codeLane],
             [], [],
-            ['webform-create-action'], []
+            ['webform-create-action'], ['webform-edit-action', 'print-action']
         );
     }
 

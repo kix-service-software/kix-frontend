@@ -72,12 +72,12 @@ export class WebformSocketClient extends SocketClient {
         });
     }
 
-    public createWebform(webform: Webform): Promise<number> {
+    public createUpdateWebform(webform: Webform, formId?: number): Promise<number> {
         return new Promise((resolve, reject) => {
             const token = ClientStorageService.getToken();
             const requestId = IdService.generateDateBasedId();
             const request = new SaveWebformRequest(
-                token, requestId, ClientStorageService.getClientRequestId(), webform
+                token, requestId, ClientStorageService.getClientRequestId(), webform, formId
             );
 
             const timeout = window.setTimeout(() => {
