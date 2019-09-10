@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-09-09 13:33+0000\n"
-"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
+"PO-Revision-Date: 2019-09-10 07:58+0000\n"
+"Last-Translator: fuhlig <Frank.Uhlig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -26,10 +26,8 @@ msgstr "{0} Datei(en) angehangen"
 msgid "{0} imported"
 msgstr "{0} importiert"
 
-#, fuzzy
-#| msgid "{0} Link created"
 msgid "{0} is required."
-msgstr "{0} Verknüpfung(en) angelegt"
+msgstr "{0} ist erforderlich."
 
 msgid "{0} Link created"
 msgstr "{0} Verknüpfung(en) angelegt"
@@ -351,10 +349,8 @@ msgid ""
 msgstr ""
 "Klick der mittleren oder rechten Maustaste  =  Fenster in neuem Tab öffnen"
 
-#, fuzzy
-#| msgid "Closed at"
 msgid "Close"
-msgstr "Geschlossen am"
+msgstr "Schließen"
 
 msgid "Closed at"
 msgstr "Geschlossen am"
@@ -740,10 +736,8 @@ msgstr "Typ bearbeiten"
 msgid "Edit Value"
 msgstr "Wert bearbeiten"
 
-#, fuzzy
-#| msgid "Load Webform"
 msgid "Edit Webform"
-msgstr "Lade Webformular"
+msgstr "Bearbeite Webformular"
 
 msgid "Email"
 msgstr "E-Mail"
@@ -926,10 +920,8 @@ msgstr "Erzwingen"
 msgid "Form title"
 msgstr "Formulartitel"
 
-#, fuzzy
-#| msgid "Load Tickets"
 msgid "For Tickets"
-msgstr "Lade Tickets"
+msgstr "Für Tickets"
 
 msgid "Forward"
 msgstr "Weiterleiten"
@@ -3039,10 +3031,8 @@ msgstr "Benachrichtigungsoptionen"
 msgid "Notifications"
 msgstr "Benachrichtigungen"
 
-#, fuzzy
-#| msgid "Notification Text"
 msgid "Notifications for Tickets"
-msgstr "Benachrichtigungstext"
+msgstr "Benachrichtigungen für Tickets"
 
 msgid "Notification successfully created."
 msgstr "Benachrichtigung wurde erfolgreich angelegt"
@@ -3714,7 +3704,7 @@ msgid "Ticket Data"
 msgstr "Ticketdaten"
 
 msgid "Ticket Description"
-msgstr "Ticket Beschreibung"
+msgstr "Ticketbeschreibung"
 
 msgid "Ticket Flags"
 msgstr "Ticket Kennzeichnung"
@@ -3734,10 +3724,8 @@ msgstr "Ticket wird nicht mehr beobachtet."
 msgid "Ticket locked."
 msgstr "Ticket gesperrt."
 
-#, fuzzy
-#| msgid "Edit Notification"
 msgid "Ticket Notifications"
-msgstr "Benachrichtigung bearbeiten"
+msgstr "Ticketbenachrichtigungen"
 
 msgid "Ticket Number"
 msgstr "Ticket Nummer"
