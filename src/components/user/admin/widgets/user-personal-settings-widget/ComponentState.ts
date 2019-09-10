@@ -17,7 +17,8 @@ export class ComponentState extends WidgetComponentState<any> {
         public actions: AbstractAction[] = [],
         public labelProvider: UserLabelProvider = null,
         public user: User = null,
-        public labels: Label[] = []
+        public queueLabels: Label[] = [],
+        public notificationLabels: Label[] = []
     ) {
         super();
     }

@@ -56,17 +56,15 @@ export class AgentService extends KIXObjectService<User> {
         }
 
         const notificationIndex = parameter.findIndex((p) => p[0] === PersonalSettingsProperty.NOTIFICATIONS);
-        if (notificationIndex !== -1) {
+        if (notificationIndex !== -1 && Array.isArray(parameter[notificationIndex][1])) {
             const transport = 'Email';
             const notificationValues: Array<[string, number[]]> = parameter[notificationIndex];
 
             const notificationPreference = {};
-            if (Array.isArray(notificationValues[1])) {
-                notificationValues[1].forEach((e) => {
-                    const eventKey = `Notification-${e}-${transport}`;
-                    notificationPreference[eventKey] = 1;
-                });
-            }
+            notificationValues[1].forEach((e) => {
+                const eventKey = `Notification-${e}-${transport}`;
+                notificationPreference[eventKey] = 1;
+            });
 
             parameter.splice(notificationIndex, 1);
             parameter.push([PersonalSettingsProperty.NOTIFICATIONS, JSON.stringify(notificationPreference)]);
@@ -89,6 +87,21 @@ export class AgentService extends KIXObjectService<User> {
         const queuesParameter = parameter.find((p) => p[0] === PersonalSettingsProperty.MY_QUEUES);
         if (queuesParameter) {
             queuesParameter[1] = Array.isArray(queuesParameter[1]) ? queuesParameter[1].join(',') : '';
+        }
+
+        const notificationParameter = parameter.find((p) => p[0] === PersonalSettingsProperty.NOTIFICATIONS);
+        if (notificationParameter) {
+            const transport = 'Email';
+            const notificationPreference = {};
+            if (Array.isArray(notificationParameter[1])) {
+                notificationParameter[1].forEach((e) => {
+                    const eventKey = `Notification-${e}-${transport}`;
+                    notificationPreference[eventKey] = 1;
+                });
+
+            }
+
+            notificationParameter[1] = JSON.stringify(notificationPreference);
         }
 
         return parameter;
