@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2019-09-10 08:02+0000\n"
-"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
+"PO-Revision-Date: 2019-09-10 13:34+0000\n"
+"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: English <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/en/>\n"
 "Language: en\n"
@@ -1709,109 +1709,68 @@ msgstr ""
 msgid "Helptext_Admin_Users_UserEdit_Valid"
 msgstr "The agent can only login with the user data set here if set “valid”."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
 msgid "Helptext_Admin_WebformCreateEdit_AcceptedDomains"
 msgstr ""
-"Upload an icon, which will be shown together with the category name within "
-"the application."
+"Comma or semicolon are allowed to use as text separators. You can also use "
+"RegEx, as long as they are surounded by slashes (\"/\")."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Comment"
 msgid "Helptext_Admin_WebformCreateEdit_AllowAttachments"
 msgstr ""
-"Insert additional information (only displayed within the admin module)."
+"If this option is activated, tickets created via webform can contain "
+"attachements."
 
-#, fuzzy
-#| msgid "Helptext_Admin_NotificationCreate_SendToAgents"
 msgid "Helptext_Admin_WebformCreateEdit_AssignedAgent"
 msgstr ""
-"Insert specific agents who are supposed to receive this notification. You "
-"can choose from all valid agents available in the system."
+"To be able to create tickets in KIX via webform, you need to assign an agent "
+"to the form who has at least the right to UPDATE tickets."
 
-#, fuzzy
-#| msgid "Helptext_Admin_Users_UserCreate_Password"
 msgid "Helptext_Admin_WebformCreateEdit_AssignedAgentPassword"
-msgstr "The password can be changed/modified afterwards."
+msgstr ""
+"Set the password for the assigned agent here to be able to create tickets "
+"via webform."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
 msgid "Helptext_Admin_WebformCreateEdit_ButtonLabel"
-msgstr ""
-"Upload an icon, which will be shown together with the category name within "
-"the application."
+msgstr "Define the name of the button which opens the webform."
 
-#, fuzzy
-#| msgid "Helptext_Admin_NotificationCreate_MessageText"
 msgid "Helptext_Admin_WebformCreateEdit_HintMessage"
-msgstr ""
-"Insert the text you want to show in the email send out by this notification. "
-"Keep in mind the chosen language."
+msgstr "Define a help text to show in the webform."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
 msgid "Helptext_Admin_WebformCreateEdit_Modal"
 msgstr ""
-"Upload an icon, which will be shown together with the category name within "
-"the application."
+"If this option is activated, the background page behind the webform is "
+"inactive as along as the dialog is open."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Validity"
 msgid "Helptext_Admin_WebformCreateEdit_PriorityID"
-msgstr "The FAQ category can only be used within the system if set “valid”."
-
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
-msgid "Helptext_Admin_WebformCreateEdit_QueueID"
 msgstr ""
-"Upload an icon, which will be shown together with the category name within "
-"the application."
+"Tickets created via webform will be assigned to the priority you set here."
 
-#, fuzzy
-#| msgid "Helptext_Admin_TextModuleCreate_Language"
+msgid "Helptext_Admin_WebformCreateEdit_QueueID"
+msgstr "Tickets created via webform will be assigned to the team you set here."
+
 msgid "Helptext_Admin_WebformCreateEdit_SaveButtonLabel"
-msgstr "Insert the language of the text module."
+msgstr ""
 
-#, fuzzy
-#| msgid "Helptext_Admin_Users_UserCreate_Roles"
 msgid "Helptext_Admin_WebformCreateEdit_ShowTitle"
 msgstr ""
-"An agent needs at least the role “AgentUser” to successfully login. Only "
-"valid roles are available here."
+"If this option is activated, the form titel will be shown in the webform."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Icon"
 msgid "Helptext_Admin_WebformCreateEdit_StateID"
-msgstr ""
-"Upload an icon, which will be shown together with the category name within "
-"the application."
+msgstr "Tickets created via webform will be assigned to the state you set here."
 
-#, fuzzy
-#| msgid "Helptext_Admin_NotificationCreate_MessageText"
 msgid "Helptext_Admin_WebformCreateEdit_SuccessMessage"
 msgstr ""
-"Insert the text you want to show in the email send out by this notification. "
-"Keep in mind the chosen language."
 
-#, fuzzy
-#| msgid "Helptext_FAQ_ArticleEdit_Title"
 msgid "Helptext_Admin_WebformCreateEdit_Title"
-msgstr "Briefly summarize the FAQ article topic."
+msgstr "The form titel will be shown in the web form's titel."
 
-#, fuzzy
-#| msgid "Helptext_Admin_Tickets_StateEdit_Type"
 msgid "Helptext_Admin_WebformCreateEdit_TypeID"
-msgstr "The state type groups states."
+msgstr "Tickets created via webform will be assigned to the type you set here."
 
-#, fuzzy
-#| msgid "Helptext_Admin_Users_RoleCreate_User"
 msgid "Helptext_Admin_WebformCreateEdit_UseKIXCSS"
-msgstr "There are only valid agents available."
+msgstr "If this option is activated, the webform will be shown in KIX design."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryCreate_Validity"
 msgid "Helptext_Admin_WebformCreateEdit_Validity"
-msgstr "The FAQ category can only be used within the system if set “valid”."
+msgstr "To use the webform it has to be set \"valid\"."
 
 msgid "Helptext_CMDB_ConfigItemClassCreate_Comment"
 msgstr ""
