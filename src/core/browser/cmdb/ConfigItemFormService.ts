@@ -184,6 +184,10 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
         ff: FormField, pd: PreparedData, index: number, formFieldValues: Map<string, FormFieldValue<any>>
     ): Promise<void> {
         let value = await this.getDataValue(ff, pd);
+        if (value && value !== '') {
+            ff.empty = false;
+        }
+
         if (ff.options && !!ff.options.length) {
             const typeOption = ff.options.find((o) => o.option === FormFieldOptions.INPUT_FIELD_TYPE);
             if (typeOption && typeOption.value === InputFieldTypes.ATTACHMENT) {
