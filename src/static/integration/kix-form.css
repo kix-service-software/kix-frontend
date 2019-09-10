@@ -1,0 +1,299 @@
+body>#kix-form-shield {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: #4b4b4b;
+    z-index: 10000;
+    opacity: 0;
+    transition: opacity 0.25s;
+}
+
+body>.kix-form-container {
+    position: absolute;
+    top: 10rem;
+    left: 50%;
+    transform: translate(-15rem, 0);
+    width: 30rem;
+    height: auto;
+    background-color: #fff;
+    border: 2px solid;
+    z-index: 10001;
+    box-shadow: 2px 2px 5px 0 #5b5b5b;
+}
+
+/* kix style */
+body>.kix-form-container.kix-style {
+    background-color: #f5f5f5;
+    border-color: #9e9e9e;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 3px;
+}
+
+body>.kix-form-container>.kix-form-header {
+    padding: 0.25rem 0.5rem;
+    min-height: 1.75rem;
+}
+
+body>.kix-form-container>.kix-form-header>h2 {
+    padding: 0;
+    margin: 0;
+    margin-right: 1.5rem;
+}
+
+/* kix style */
+body>.kix-form-container.kix-style>.kix-form-header {
+    background: #9e9e9e;
+}
+
+/* kix style */
+body>.kix-form-container.kix-style>.kix-form-header>h2 {
+    font-size: 1rem;
+    color: #fff;
+}
+
+body>.kix-form-container>.kix-form-header>.kix-form-close {
+    position: absolute;
+    top: 0.25rem;
+    right: 0.5rem;
+    cursor: pointer;
+    height: 1rem;
+    width: 1rem;
+}
+
+body>.kix-form-container>.kix-form-header>.kix-form-close::before,
+body>.kix-form-container>.kix-form-header>.kix-form-close::after {
+    content: "";
+    position: absolute;
+    height: 0.2rem;
+    width: 1rem;
+    background: #000;
+
+}
+
+body>.kix-form-container>.kix-form-header>.kix-form-close::before {
+    top: 0.3rem;
+    transform: rotate(45deg);
+}
+
+body>.kix-form-container>.kix-form-header>.kix-form-close::after {
+    top: 0.3rem;
+    transform: rotate(-45deg);
+}
+
+/* kix style */
+body>.kix-form-container.kix-style>.kix-form-header>.kix-form-close::before,
+body>.kix-form-container.kix-style>.kix-form-header>.kix-form-close::after {
+    background: #fff;
+    border-radius: 3px;
+}
+
+body>.kix-form-container>.kix-form-content {
+    padding: 1rem;
+}
+
+body>.kix-form-container>.kix-form-content>.kix-form-input {
+    margin-bottom: 0.5rem;
+}
+
+body>.kix-form-container>.kix-form-content>.kix-form-input>label {
+    font-weight: bold;
+    display: inline-block;
+    width: 25%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* kix style */
+body>.kix-form-container>.kix-form-content>.kix-form-input>label {
+    text-align: end;
+}
+
+body>.kix-form-container>.kix-form-content>.kix-form-input>label.kix-form-message-label {
+    vertical-align: top;
+}
+
+body>.kix-form-container>.kix-form-content>.kix-form-input:not(.kix-form-attachments)>label::before {
+    content: '* ';
+}
+
+body>.kix-form-container>.kix-form-content>.kix-form-input>label::after {
+    content: ':';
+    margin-right: 0.5rem;
+}
+
+body>.kix-form-container>.kix-form-content>.kix-form-input>input {
+    width: 75%;
+}
+
+body>.kix-form-container>.kix-form-content>.kix-form-input>textarea {
+    max-width: 75%;
+    min-width: 75%;
+    height: 7rem;
+}
+
+/* kix style */
+body>.kix-form-container.kix-style>.kix-form-content>.kix-form-input:not(.kix-form-attachments)>input,
+body>.kix-form-container.kix-style>.kix-form-content>.kix-form-input>textarea {
+    border-radius: 3px;
+    border: 1px solid silver;
+}
+
+/* kix style */
+body>.kix-form-container.kix-style>.kix-form-content>.kix-form-input:not(.kix-form-attachments)>input {
+    height: 1.5rem;
+}
+
+body>.kix-form-container>.kix-form-content>.kix-form-input.kix-form-attachments>div {
+    border: 1px solid silver;
+    background: rgb(245, 245, 245);
+    min-height: 1rem;
+    width: 75%;
+    margin: 0.5rem 0 0 25%;
+    display: none;
+}
+
+/* kix style */
+body>.kix-form-container.kix-style>.kix-form-content>.kix-form-input.kix-form-attachments>div {
+    font-size: 0.8rem;
+    border-radius: 3px;
+}
+
+body>.kix-form-container>.kix-form-content>.kix-form-input.kix-form-attachments>div>p {
+    margin: 0.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+body>.kix-form-container>.kix-form-content>.kix-form-hint {
+    text-align: justify;
+}
+
+/* kix style */
+body>.kix-form-container.kix-style>.kix-form-content>.kix-form-hint {
+    font-size: 0.8rem;
+}
+
+body>.kix-form-container>.kix-form-content>.kix-form-required-info {
+    color: #9e9e9e;
+    font-size: 0.8rem;
+}
+
+body>.kix-form-container>.kix-form-content>.kix-form-buttons {
+    margin-left: 25%;
+    height: 1.5rem;
+}
+
+body>.kix-form-container>.kix-form-content>.kix-form-buttons>button {
+    cursor: pointer;
+    position: relative;
+}
+
+/* kix style */
+body>.kix-form-container.kix-style>.kix-form-content>.kix-form-buttons>button {
+    background: white;
+    height: 1.5rem;
+    border-radius: 3px;
+    border: 1px solid;
+    padding: 0;
+    width: 8rem;
+    box-shadow: 2px 2px 2px 0 #c6c6c6;
+}
+
+/* kix style */
+body>.kix-form-container.kix-style>.kix-form-content>.kix-form-buttons>button:hover {
+    box-shadow: none;
+}
+
+body>.kix-form-container>.kix-form-content>.kix-form-buttons>button:first-child {
+    float: left;
+}
+
+body>.kix-form-container>.kix-form-content>.kix-form-buttons>button:last-child {
+    float: right;
+}
+
+/* kix style */
+body>.kix-form-container.kix-style>.kix-form-content>.kix-form-buttons>button:first-child {
+    border-color: #e31e24;
+}
+
+/* kix style */
+body>.kix-form-container.kix-style>.kix-form-content>.kix-form-buttons>button:last-child {
+    border-color: #82c826;
+}
+
+/* kix style */
+body>.kix-form-container.kix-style>.kix-form-content>.kix-form-buttons>button>span:first-child {
+    width: 1.5rem;
+    height: 100%;
+    float: left;
+}
+
+/* kix style */
+body>.kix-form-container.kix-style>.kix-form-content>.kix-form-buttons>button>span:last-child {
+    width: 5.5rem;
+    margin: 0.25rem;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* kix style */
+body>.kix-form-container.kix-style>.kix-form-content>.kix-form-buttons>button:first-child>span:first-child {
+    background: #e31e24;
+}
+
+/* kix style */
+body>.kix-form-container.kix-style>.kix-form-content>.kix-form-buttons>button>span:first-child::before,
+body>.kix-form-container.kix-style>.kix-form-content>.kix-form-buttons>button>span:first-child::after {
+    background: #fff;
+    border-radius: 3px;
+    content: "";
+    position: absolute;
+    height: 0.2rem;
+    width: 1rem;
+}
+
+/* kix style */
+body>.kix-form-container.kix-style>.kix-form-content>.kix-form-buttons>button:first-child>span::before {
+    top: 0.55rem;
+    left: 0.25rem;
+    transform: rotate(45deg);
+}
+
+/* kix style */
+body>.kix-form-container.kix-style>.kix-form-content>.kix-form-buttons>button:first-child>span::after {
+    top: 0.55rem;
+    left: 0.25rem;
+    transform: rotate(-45deg);
+}
+
+/* kix style */
+body>.kix-form-container.kix-style>.kix-form-content>.kix-form-buttons>button:last-child>span:first-child {
+    background: #82c826;
+}
+
+/* kix style */
+body>.kix-form-container.kix-style>.kix-form-content>.kix-form-buttons>button:last-child>span::before {
+    top: 0.75rem;
+    left: 0.25rem;
+    width: 0.5rem;
+    transform: rotate(45deg);
+}
+
+/* kix style */
+body>.kix-form-container.kix-style>.kix-form-content>.kix-form-buttons>button:last-child>span::after {
+    top: 0.55rem;
+    left: 0.5rem;
+    width: 0.8rem;
+    transform: rotate(-50deg);
+}
+
+body>.kix-form-container>.kix-form-result-message {
+    padding: 0 1rem;
+    text-align: justify;
+}

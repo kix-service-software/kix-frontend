@@ -41,6 +41,7 @@ export class Extension implements IConfigurationExtension {
                     WebformProperty.MODAL,
                     WebformProperty.USE_KIX_CSS,
                     WebformProperty.ALLOW_ATTACHMENTS,
+                    WebformProperty.ACCEPTED_DOMAINS,
                     KIXObjectProperty.VALID_ID,
                     KIXObjectProperty.CREATE_BY,
                     KIXObjectProperty.CREATE_TIME,
@@ -59,7 +60,7 @@ export class Extension implements IConfigurationExtension {
                     WebformProperty.PRIORITY_ID,
                     WebformProperty.TYPE_ID,
                     WebformProperty.STATE_ID,
-                    WebformProperty.USER_ID
+                    WebformProperty.USER_LOGIN
                 ]),
                 false, true, null, false
             )

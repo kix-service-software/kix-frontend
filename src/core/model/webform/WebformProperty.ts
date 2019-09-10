@@ -29,6 +29,8 @@ export enum WebformProperty {
 
     ALLOW_ATTACHMENTS = 'allowAttachments',
 
+    ACCEPTED_DOMAINS = 'acceptedDomains',
+
     QUEUE_ID = 'QueueID',
 
     PRIORITY_ID = 'PrioritiyID',
@@ -37,6 +39,8 @@ export enum WebformProperty {
 
     STATE_ID = 'StateID',
 
-    USER_ID = 'UserID'
+    USER_LOGIN = 'userLogin',
+
+    USER_PASSWORD = 'webformUserPassword'
 
 }

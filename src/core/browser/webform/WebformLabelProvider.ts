@@ -10,8 +10,12 @@
 import { LabelProvider } from "../LabelProvider";
 import { WebformProperty, Webform } from "../../model/webform";
 import { KIXObjectService } from "../kix";
-import { Queue, KIXObjectType, TicketType, TicketPriority, TicketState, ObjectIcon, User } from "../../model";
+import {
+    Queue, KIXObjectType, TicketType, TicketPriority, TicketState, ObjectIcon, User,
+    KIXObjectLoadingOptions, FilterCriteria, UserProperty, FilterDataType, FilterType
+} from "../../model";
 import { TranslationService } from "../i18n/TranslationService";
+import { SearchOperator } from "../SearchOperator";
 
 export class WebformLabelProvider extends LabelProvider {
 
@@ -35,6 +39,10 @@ export class WebformLabelProvider extends LabelProvider {
             case WebformProperty.ALLOW_ATTACHMENTS:
                 const boolValue = Boolean(value);
                 displayValue = boolValue ? 'Translatable#Yes' : 'Translatable#No';
+                break;
+            case WebformProperty.ACCEPTED_DOMAINS:
+                displayValue = Array.isArray(value) ? value.join(', ') : value.toString();
+                translatable = false;
                 break;
             case WebformProperty.QUEUE_ID:
                 if (value) {
@@ -69,12 +77,28 @@ export class WebformLabelProvider extends LabelProvider {
                     displayValue = types && !!types.length ? types[0].Name : value;
                 }
                 break;
-            case WebformProperty.USER_ID:
+            case WebformProperty.USER_LOGIN:
                 if (value) {
                     const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [value], null, null, true
+                        KIXObjectType.USER, null,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    UserProperty.USER_LOGIN, SearchOperator.EQUALS,
+                                    FilterDataType.STRING, FilterType.AND, value
+                                )
+                            ]
+                        ),
+                        null, true
                     ).catch((error) => [] as User[]);
                     displayValue = users && !!users.length ? users[0].UserFullname : value;
+                    translatable = false;
+                }
+                break;
+            case WebformProperty.USER_PASSWORD:
+                if (value) {
+                    displayValue = '*****';
+                    translatable = false;
                 }
                 break;
             default:
@@ -119,6 +143,9 @@ export class WebformLabelProvider extends LabelProvider {
             case WebformProperty.ALLOW_ATTACHMENTS:
                 displayValue = 'Translatable#Enable attachments';
                 break;
+            case WebformProperty.ACCEPTED_DOMAINS:
+                displayValue = 'Translatable#Accepted domains';
+                break;
             case WebformProperty.PRIORITY_ID:
                 displayValue = short ? 'Translatable#Prio' : 'Translatable#Priority';
                 break;
@@ -131,8 +158,11 @@ export class WebformLabelProvider extends LabelProvider {
             case WebformProperty.STATE_ID:
                 displayValue = 'Translatable#State';
                 break;
-            case WebformProperty.USER_ID:
+            case WebformProperty.USER_LOGIN:
                 displayValue = 'Translatable#Assigned agent';
+                break;
+            case WebformProperty.USER_PASSWORD:
+                displayValue = 'Translatable#Password';
                 break;
             default:
                 displayValue = await super.getPropertyText(property);

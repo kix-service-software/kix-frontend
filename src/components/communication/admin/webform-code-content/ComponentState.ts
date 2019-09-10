@@ -7,12 +7,15 @@
  * --
  */
 
-import { Webform } from "../../../../core/model/webform";
+import { AbstractComponentState } from "../../../../core/browser";
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public code: string = ''
-    ) { }
+        public headCode: string = '',
+        public buttonCode: string = ''
+    ) {
+        super();
+    }
 
 }

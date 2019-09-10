@@ -6,4 +6,22 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-<editor readOnly=true value=state.code useReadonlyStyle=true/>
+<div.web-form-code>
+    <widget
+        instanceId="web-form-code-group"
+        title=state.translations["Translatable#Include this code into the <head> area of your webpage."]>
+        <@content>
+            <p>
+                <translation-string pattern="Translatable#Do not forget to replace <YOUR_FRONTEND_HOST> placeholder."/>
+            </p>
+            <editor readOnly=true value=state.headCode useReadonlyStyle=true/>
+        </@content>
+    </widget>
+    <widget
+        instanceId="web-form-code-group"
+        title=state.translations["Translatable#Place this code wherever you want to open the webform dialog."]>
+        <@content>
+            <editor readOnly=true value=state.buttonCode useReadonlyStyle=true/>
+        </@content>
+    </widget>
+</div>

@@ -11,13 +11,13 @@ import { IConfigurationExtension } from '../../core/extensions';
 import {
     FormField, FormFieldValue, Form, KIXObjectType, FormContext, ContextConfiguration, KIXObjectProperty,
     FormFieldOption, ObjectReferenceOptions, KIXObjectLoadingOptions, QueueProperty, FilterCriteria,
-    FilterDataType, FilterType
+    FilterDataType, FilterType, FormFieldOptions, InputFieldTypes
 } from '../../core/model';
 import { ConfigurationService } from '../../core/services';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
-import { NewWebformDialogContext } from '../../core/browser/webform/context/NewWebformDialogContext';
 import { WebformProperty } from '../../core/model/webform';
 import { SearchOperator } from '../../core/browser';
+import { NewWebformDialogContext } from '../../core/browser/webform/context/NewWebformDialogContext';
 
 export class Extension implements IConfigurationExtension {
 
@@ -56,7 +56,7 @@ export class Extension implements IConfigurationExtension {
                     new FormFieldValue('Submit')
                 ),
                 new FormField(
-                    'Translatable#Information text', WebformProperty.HINT_MESSAGE, null, false,
+                    'Translatable#Information text', WebformProperty.HINT_MESSAGE, 'text-area-input', false,
                     'Translatable#Helptext_Admin_WebformCreate_HintMessage'
                 ),
                 new FormField(
@@ -76,6 +76,10 @@ export class Extension implements IConfigurationExtension {
                 new FormField(
                     'Translatable#Enable attachments', WebformProperty.ALLOW_ATTACHMENTS, 'checkbox-input', false,
                     'Translatable#Helptext_Admin_WebformCreate_AllowAttachments'
+                ),
+                new FormField(
+                    'Translatable#Accepted domains', WebformProperty.ACCEPTED_DOMAINS, null, true,
+                    'Translatable#Helptext_Admin_WebformCreate_AcceptedDomains'
                 ),
                 new FormField(
                     'Translatable#Validity', KIXObjectProperty.VALID_ID, 'valid-input', true,
@@ -156,8 +160,8 @@ export class Extension implements IConfigurationExtension {
                     ]
                 ),
                 new FormField(
-                    'Translatable#Assigned agent', WebformProperty.USER_ID, 'object-reference-input', true,
-                    'Translatable#Helptext_Admin_WebformCreate_UserID', [
+                    'Translatable#Assigned agent', WebformProperty.USER_LOGIN, 'object-reference-input', true,
+                    'Translatable#Helptext_Admin_WebformCreate_AssignedAgent', [
                         new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
                         new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
                         new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
@@ -170,6 +174,13 @@ export class Extension implements IConfigurationExtension {
                                 )
                             ])
                         )
+                    ]
+                ),
+                new FormField(
+                    'Translatable#Password', WebformProperty.USER_PASSWORD, null, true,
+                    'Translatable#Helptext_Admin_WebformCreate_AssignedAgentPassword',
+                    [
+                        new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)
                     ]
                 )
             ]);

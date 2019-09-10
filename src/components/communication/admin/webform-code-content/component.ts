@@ -8,7 +8,10 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { AbstractMarkoComponent } from '../../../../core/browser';
+import { AbstractMarkoComponent, WidgetService } from '../../../../core/browser';
+import { Webform } from '../../../../core/model/webform';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
+import { WidgetType } from '../../../../core/model';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -16,8 +19,22 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state = new ComponentState();
     }
 
-    public onInput(input: any): void {
-        this.state.code = `<div id="content">Code content ...</div>`;
+    public async onInput(input: any): Promise<void> {
+        WidgetService.getInstance().setWidgetType('web-form-code-group', WidgetType.GROUP);
+        const webform: Webform = input.webform;
+        if (webform) {
+            this.state.translations = await TranslationService.createTranslationObject([
+                "Translatable#Include this code into the <head> area of your webpage.",
+                "Translatable#Place this code wherever you want to open the webform dialog."
+            ]);
+            // tslint:disable: max-line-length
+            this.state.headCode =
+                `&lt;script&gt;var kixWebFormURL = 'https://&lt;YOUR_FRONTEND_HOST&gt;/integrations';&lt;/script&gt;</br>
+                &lt;script src="https://&lt;YOUR_FRONTEND_HOST&gt;/static/integration/kix-form.js"&gt;&lt;/script&gt;</br>
+                &lt;link href="https://&lt;YOUR_FRONTEND_HOST&gt;/static/integration/kix-form.css" rel="stylesheet"&gt;`;
+            this.state.buttonCode =
+                `&lt;button class="kix-web-form-start-button" id="${webform.ObjectId}" disabled&gt;${webform.buttonLabel}&lt;/button&gt;`;
+        }
     }
 
 }

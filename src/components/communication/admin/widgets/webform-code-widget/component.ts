@@ -49,6 +49,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async initWidget(webform: Webform): Promise<void> {
+        this.state.webform = webform;
         this.state.title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : 'Translatable#Code';
     }
 

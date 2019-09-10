@@ -11,11 +11,11 @@ import { SocketNameSpace } from './SocketNameSpace';
 import { Socket } from 'socket.io';
 import { SocketResponse } from '../core/common';
 import {
-    ISocketRequest, WebformEvent, LoadWebformsResponse, CreateObjectResponse, Error, DateTimeUtil
+    ISocketRequest, WebformEvent, LoadWebformsResponse, CreateObjectResponse
 } from '../core/model';
-import { ConfigurationService, LoggingService } from '../core/services';
 import { SaveWebformRequest } from '../core/model/socket/application/SaveWebformRequest';
 import { UserService } from '../core/services/impl/api/UserService';
+import { WebformService } from '../services';
 
 export class WebformNameSpace extends SocketNameSpace {
 
@@ -42,8 +42,7 @@ export class WebformNameSpace extends SocketNameSpace {
     }
 
     private async loadWebforms(data: ISocketRequest): Promise<SocketResponse> {
-        const webformsConfiguration = ConfigurationService.getInstance().getConfiguration('webforms');
-        const webforms = webformsConfiguration ? webformsConfiguration : [];
+        const webforms = WebformService.getInstance().loadWebforms();
 
         return new SocketResponse(
             WebformEvent.LOAD_WEBFORMS_FINISHED,
@@ -55,26 +54,8 @@ export class WebformNameSpace extends SocketNameSpace {
         const user = await UserService.getInstance().getUserByToken(data.token);
         const userId = user.UserID;
 
-        data.webform.CreateBy = userId;
-        data.webform.ChangeBy = userId;
+        const objectId = await WebformService.getInstance().saveWebform(userId, data.webform);
 
-        const date = DateTimeUtil.getKIXDateTimeString(new Date());
-        data.webform.CreateTime = date;
-        data.webform.ChangeTime = date;
-
-        data.webform.ObjectId = Date.now();
-
-        const webformsConfiguration = ConfigurationService.getInstance().getConfiguration('webforms');
-        const webforms = webformsConfiguration ? webformsConfiguration : [];
-
-        webforms.push(data.webform);
-
-        await ConfigurationService.getInstance().saveConfiguration('webforms', webforms)
-            .catch((error: Error) => LoggingService.getInstance().error(error.Message, error));
-
-        return new SocketResponse(
-            WebformEvent.WEBFORM_SAVED,
-            new CreateObjectResponse(data.requestId, data.webform.ObjectId)
-        );
+        return new SocketResponse(WebformEvent.WEBFORM_SAVED, new CreateObjectResponse(data.requestId, objectId));
     }
 }

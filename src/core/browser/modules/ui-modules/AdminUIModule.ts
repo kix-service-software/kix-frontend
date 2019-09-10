@@ -47,6 +47,7 @@ import { WebformLabelProvider } from "../../webform/WebformLabelProvider";
 import { WebformCreateAction } from "../../webform/actions/WebformCreateAction";
 import { WebformDetailsContext } from "../../webform/context/WebformDetailsContext";
 import { NewWebformDialogContext } from "../../webform/context/NewWebformDialogContext";
+import { WebformFormService } from "../../webform/WebformFormService";
 
 export class UIModule implements IUIModule {
 
@@ -222,7 +223,9 @@ export class UIModule implements IUIModule {
 
     private async registerWebforms(): Promise<void> {
         ActionFactory.getInstance().registerAction('webform-create-action', WebformCreateAction);
+
         ServiceRegistry.registerServiceInstance(WebformService.getInstance());
+        ServiceRegistry.registerServiceInstance(WebformFormService.getInstance());
 
         FactoryService.getInstance().registerFactory(
             KIXObjectType.WEBFORM, WebformBrowserFactory.getInstance()

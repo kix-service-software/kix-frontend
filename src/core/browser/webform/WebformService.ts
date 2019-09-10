@@ -11,7 +11,7 @@ import { KIXObjectService } from "../kix";
 import { Webform, WebformProperty } from "../../model/webform";
 import {
     KIXObjectType, KIXObject, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, KIXObjectSpecificCreateOptions,
-    ComponentContent, Error, OverlayType, KIXObjectProperty
+    ComponentContent, Error, OverlayType, KIXObjectProperty, User
 } from "../../model";
 import { WebformSocketClient } from "./WebformSocketClient";
 import { OverlayService } from "../OverlayService";
@@ -58,11 +58,13 @@ export class WebformService extends KIXObjectService<Webform> {
             this.getParameterValue(parameter, WebformProperty.MODAL),
             this.getParameterValue(parameter, WebformProperty.USE_KIX_CSS),
             this.getParameterValue(parameter, WebformProperty.ALLOW_ATTACHMENTS),
+            this.getParameterValue(parameter, WebformProperty.ACCEPTED_DOMAINS),
             this.getParameterValue(parameter, WebformProperty.QUEUE_ID),
             this.getParameterValue(parameter, WebformProperty.PRIORITY_ID),
             this.getParameterValue(parameter, WebformProperty.TYPE_ID),
             this.getParameterValue(parameter, WebformProperty.STATE_ID),
-            this.getParameterValue(parameter, WebformProperty.USER_ID),
+            this.getParameterValue(parameter, WebformProperty.USER_LOGIN),
+            this.getParameterValue(parameter, WebformProperty.USER_PASSWORD),
             this.getParameterValue(parameter, KIXObjectProperty.VALID_ID)
         );
 
@@ -80,6 +82,21 @@ export class WebformService extends KIXObjectService<Webform> {
                 return null;
             });
         return objectId;
+    }
+
+    protected async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+        const parameter: Array<[string, any]> = [];
+        if (value) {
+            if (property === WebformProperty.USER_LOGIN) {
+                const users = await KIXObjectService.loadObjects<User>(
+                    KIXObjectType.USER, [value], null, null, true
+                ).catch((error) => [] as User[]);
+                value = users && !!users.length ? users[0].UserLogin : value;
+            }
+            parameter.push([property, value]);
+        }
+
+        return parameter;
     }
 
     private getParameterValue(parameter: Array<[string, any]>, property: string): any {

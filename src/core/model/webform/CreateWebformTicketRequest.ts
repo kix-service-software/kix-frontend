@@ -7,16 +7,16 @@
  * --
  */
 
-import { UserType } from "../../kix";
+export class CreateWebformTicketRequest {
 
-export class LoginRequest {
+    public name: string;
 
-    public constructor(
-        public userName: string,
-        public password: string,
-        public redirectUrl: string,
-        public requestId: string,
-        public clientRequestId: string
-    ) { }
+    public email: string;
+
+    public subject: string;
+
+    public message: string;
+
+    public files: File[];
 
 }
