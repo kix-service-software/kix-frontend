@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-09-06 09:20+0000\n"
-"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
+"PO-Revision-Date: 2019-09-10 13:34+0000\n"
+"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -13,9 +13,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 3.7\n"
-
-msgid "General information on how to work with KIX 18"
-msgstr "Allgemeine Hinweise zum Arbeiten mit KIX 18"
 
 msgid "{0}/{1} {2} imported"
 msgstr "{0}/{1} {2} importiert"
@@ -29,11 +26,17 @@ msgstr "{0} Datei(en) angehangen"
 msgid "{0} imported"
 msgstr "{0} importiert"
 
+msgid "{0} is required."
+msgstr "{0} ist erforderlich."
+
 msgid "{0} Link created"
 msgstr "{0} Verknüpfung(en) angelegt"
 
 msgid "{0} link(s) assigned."
 msgstr "{0} Verknüpfung(en) erstellt."
+
+msgid "Accepted domains"
+msgstr ""
 
 msgid "Accept KIX Header"
 msgstr "KIX Header akzeptieren"
@@ -203,7 +206,7 @@ msgid "Assigned Roles"
 msgstr "Zugeordnete Rollen"
 
 msgid "Assign Link"
-msgstr "Verknüpfung zuordnen"
+msgstr "Verknüpfung hinzufügen"
 
 msgid "Assign Links"
 msgstr "Verknüpfung zuordnen"
@@ -346,6 +349,9 @@ msgid ""
 msgstr ""
 "Klick der mittleren oder rechten Maustaste  =  Fenster in neuem Tab öffnen"
 
+msgid "Close"
+msgstr "Schließen"
+
 msgid "Closed at"
 msgstr "Geschlossen am"
 
@@ -465,6 +471,12 @@ msgstr "enthalten in"
 
 msgid "contains"
 msgstr "enthält"
+
+msgid "Could not handle request."
+msgstr ""
+
+msgid "Could not load file '{0}'."
+msgstr ""
 
 msgid "Country"
 msgstr "Land"
@@ -619,6 +631,9 @@ msgstr "Verteilung"
 msgid "Display Name"
 msgstr "Anzeigename"
 
+msgid "Do not forget to replace <YOUR_FRONTEND_HOST> placeholder."
+msgstr ""
+
 msgid ". (dot)"
 msgstr ". (Punkt)"
 
@@ -720,6 +735,9 @@ msgstr "Typ bearbeiten"
 
 msgid "Edit Value"
 msgstr "Wert bearbeiten"
+
+msgid "Edit Webform"
+msgstr "Bearbeite Webformular"
 
 msgid "Email"
 msgstr "E-Mail"
@@ -859,6 +877,9 @@ msgstr "Favoriten"
 msgid "Fax"
 msgstr "Fax"
 
+msgid "Feedback"
+msgstr ""
+
 msgid "Field"
 msgstr "Feld"
 
@@ -899,6 +920,9 @@ msgstr "Erzwingen"
 msgid "Form title"
 msgstr "Formulartitel"
 
+msgid "For Tickets"
+msgstr "Für Tickets"
+
 msgid "Forward"
 msgstr "Weiterleiten"
 
@@ -919,6 +943,9 @@ msgstr "General Catalog Item"
 
 msgid "General Catalog Items"
 msgstr "General Catalog Items"
+
+msgid "General information on how to work with KIX 18"
+msgstr "Allgemeine Hinweise zum Arbeiten mit KIX 18"
 
 msgid "General information on working with KIX 18"
 msgstr "Allgemeine Hinweise zum Arbeiten mit KIX 18"
@@ -1628,6 +1655,14 @@ msgstr ""
 "erhält. Der Agent kann diese Einstellung auch selbst in seinen persönlichen "
 "Einstellungen ändern."
 
+#, fuzzy
+#| msgid "Helptext_Admin_UserCreate_Preferences_MyQueues"
+msgid "Helptext_Admin_UserCreate_Preferences_Notifications_Hint"
+msgstr ""
+"Legen Sie fest, für welche Teams der Agent standardmäßig Benachrichtigungen "
+"erhält. Der Agent kann diese Einstellung auch selbst in seinen persönlichen "
+"Einstellungen ändern."
+
 msgid "Helptext_Admin_UserCreate_Preferences_UserLanguage"
 msgstr ""
 "Legen Sie fest, in welcher Sprache der Agent KIX sieht, wenn er sich das "
@@ -1645,6 +1680,14 @@ msgstr ""
 "Legen Sie fest, für welche Teams der Agent standardmäßig Benachrichtigungen "
 "erhält. Der Agent kann diese Einstellung auch selbst in seinen persönlichen "
 "Einstellungen ändern."
+
+#, fuzzy
+#| msgid "Helptext_Admin_UserEdit_Preferences_Language"
+msgid "Helptext_Admin_UserEdit_Preferences_Notifications_Hint"
+msgstr ""
+"Legen Sie fest, in welcher Sprache der Agent KIX sieht, wenn er sich das "
+"erste Mal anmeldet. Der Agent kann die Sprache auch selbst in seinen "
+"persönlichen Einstellungen ändern."
 
 msgid "Helptext_Admin_Users_RoleCreate_Comment"
 msgstr ""
@@ -1754,50 +1797,82 @@ msgstr ""
 "Der Agent kann sich mit den hier festgelegten Nutzerdaten nur einloggen, "
 "wenn der Agent „gültig“ gesetzt ist."
 
-msgid "Helptext_Admin_WebformCreate_AllowAttachments"
+msgid "Helptext_Admin_WebformCreateEdit_AcceptedDomains"
+msgstr ""
+"Komma oder Semikolon sind als Texttrenner zulässig. Verwendung von RegEx ist "
+"möglich, diese müssen in Slashs (\"/\") gesetzt werden."
+
+msgid "Helptext_Admin_WebformCreateEdit_AllowAttachments"
+msgstr ""
+"Wird diese Option aktiviert, können an Tickets, die über das Webformular "
+"erstellt werden, Anhänge hinzugefügt werden."
+
+msgid "Helptext_Admin_WebformCreateEdit_AssignedAgent"
+msgstr ""
+"Damit über das Webformular Tickets im KIX erstellt werden können, muss am "
+"Formular ein Agent zugeordnet sein, der mindestens UPDATE-Rechte auf Tickets "
+"hat."
+
+msgid "Helptext_Admin_WebformCreateEdit_AssignedAgentPassword"
+msgstr ""
+"Hinterlegen Sie hier das Passwort des zugeordneten Agenten, um über das "
+"Webformular Tickets erstellen zu können."
+
+msgid "Helptext_Admin_WebformCreateEdit_ButtonLabel"
+msgstr ""
+"Legen Sie die Beschriftung des Buttons fest, der das Webformular auf ihrer "
+"Webseite aufruft."
+
+msgid "Helptext_Admin_WebformCreateEdit_HintMessage"
+msgstr ""
+"Hier können Sie zusätzliche Hinweise hinterlegen, die im Webformular "
+"angezeigt werden."
+
+msgid "Helptext_Admin_WebformCreateEdit_Modal"
+msgstr ""
+"Wird diese Option aktiviert, ist die Seite im Hintergrund des Webformulars "
+"inaktiv, so lange der Dialog geöffnet ist."
+
+msgid "Helptext_Admin_WebformCreateEdit_PriorityID"
+msgstr ""
+"Legen Sie fest, welche Priotität Tickets zugeordnet wird, die über das "
+"Webformular erstellt werden."
+
+msgid "Helptext_Admin_WebformCreateEdit_QueueID"
+msgstr ""
+"Legen Sie fest, welchem Team Tickets zugeordnet werden, die über das "
+"Webformular erstellt werden."
+
+msgid "Helptext_Admin_WebformCreateEdit_SaveButtonLabel"
 msgstr ""
 
-msgid "Helptext_Admin_WebformCreate_ButtonLabel"
+msgid "Helptext_Admin_WebformCreateEdit_ShowTitle"
+msgstr ""
+"Wenn diese Option aktiv ist, wird der Formulartitel im Webformular angezeigt."
+
+msgid "Helptext_Admin_WebformCreateEdit_StateID"
+msgstr ""
+"Legen Sie fest, welchen Status Tickets erhalten, die über das Webformular "
+"erstellt werden."
+
+msgid "Helptext_Admin_WebformCreateEdit_SuccessMessage"
 msgstr ""
 
-msgid "Helptext_Admin_WebformCreate_HintMessage"
-msgstr ""
+msgid "Helptext_Admin_WebformCreateEdit_Title"
+msgstr "Der Formulartitel wird Kopf des Webformulars angezeigt."
 
-msgid "Helptext_Admin_WebformCreate_Modal"
+msgid "Helptext_Admin_WebformCreateEdit_TypeID"
 msgstr ""
+"Legen Sie fest, welchen Status Tickets erhalten, die über das Webformular "
+"erstellt werden."
 
-msgid "Helptext_Admin_WebformCreate_PriorityID"
+msgid "Helptext_Admin_WebformCreateEdit_UseKIXCSS"
 msgstr ""
+"Wird diese Option aktiviert, wird das Webformular im KIX Design dargestellt."
 
-msgid "Helptext_Admin_WebformCreate_QueueID"
+msgid "Helptext_Admin_WebformCreateEdit_Validity"
 msgstr ""
-
-msgid "Helptext_Admin_WebformCreate_SaveButtonLabel"
-msgstr ""
-
-msgid "Helptext_Admin_WebformCreate_ShowTitle"
-msgstr ""
-
-msgid "Helptext_Admin_WebformCreate_StateID"
-msgstr ""
-
-msgid "Helptext_Admin_WebformCreate_SuccessMessage"
-msgstr ""
-
-msgid "Helptext_Admin_WebformCreate_Title"
-msgstr ""
-
-msgid "Helptext_Admin_WebformCreate_TypeID"
-msgstr ""
-
-msgid "Helptext_Admin_WebformCreate_UseKIXCSS"
-msgstr ""
-
-msgid "Helptext_Admin_WebformCreate_UserID"
-msgstr ""
-
-msgid "Helptext_Admin_WebformCreate_Validity"
-msgstr ""
+"Um das Webformular verwenden zu können, muss es \"gültig\" gesetzt sein."
 
 msgid "Helptext_CMDB_ConfigItemClassCreate_Comment"
 msgstr ""
@@ -2182,6 +2257,13 @@ msgstr ""
 "Sie erhalten Benachrichtigungen, wenn in den hier gewählten Teams neue "
 "Tickets entstehen oder Änderungen vorgenommen werden."
 
+#, fuzzy
+#| msgid "Helptext_PersonalSettings_MyQueues_Hint"
+msgid "Helptext_PersonalSettings_Notifications_Hint"
+msgstr ""
+"Sie erhalten Benachrichtigungen, wenn in den hier gewählten Teams neue "
+"Tickets entstehen oder Änderungen vorgenommen werden."
+
 msgid "Helptext_PersonalSettings_UserLanguage_Hint"
 msgstr "Wählen Sie aus, in welcher Sprache Sie die Anwendung nutzen möchten."
 
@@ -2427,14 +2509,8 @@ msgstr "Wie lege ich ein neues Ticket an?"
 msgid "How do I search in KIX 18?"
 msgstr "Wie suche ich in KIX 18?"
 
-msgid "How to create a new ticket?"
-msgstr "Wie lege ich ein neues Ticket an?"
-
 msgid "How to search in KIX 18?"
 msgstr "Wie suche ich in KIX 18?"
-
-msgid "How to use KIX 18 – Some general notes"
-msgstr "Allgemeine Hinweise zum Arbeiten mit KIX 18"
 
 msgid "Icon"
 msgstr "Icon"
@@ -2481,6 +2557,9 @@ msgstr "Vorfallstatus"
 msgid "Incident State"
 msgstr "Vorfallstatus"
 
+msgid "Include this code into the <head> area of your webpage."
+msgstr ""
+
 msgid "Information text"
 msgstr "Hinweistext"
 
@@ -2504,6 +2583,9 @@ msgstr "Internationalisierung: Übersetzungen"
 
 msgid "Invalid date for pending date."
 msgstr "Ungültiges Datum bei 'Warten bis'"
+
+msgid "is to large (max {0})."
+msgstr ""
 
 msgid "Keywords"
 msgstr "Schlagworte"
@@ -2688,6 +2770,9 @@ msgstr "Logs"
 msgid "Menu"
 msgstr "Modulmenü"
 
+msgid "Message"
+msgstr ""
+
 msgid "Message after sending form"
 msgstr "Nachricht nach Absenden des Formulars"
 
@@ -2776,7 +2861,7 @@ msgid "New Filter"
 msgstr "Neuer Filter"
 
 msgid "New Notification"
-msgstr "Neue Benachrichtigung"
+msgstr "Neu"
 
 msgid "New Object"
 msgstr "Neues Objekt"
@@ -2806,7 +2891,7 @@ msgid "New Template"
 msgstr "Neue Vorlage"
 
 msgid "New Text Module"
-msgstr "Neuer Textbaustein"
+msgstr "Neu"
 
 msgid "New Ticket"
 msgstr "Neues Ticket"
@@ -2818,7 +2903,7 @@ msgid "New Tickets (recent 7 days)"
 msgstr "Neue Tickets der letzten 7 Tage"
 
 msgid "New Translation"
-msgstr "Neue Übersetzung"
+msgstr "Neu"
 
 msgid "New Type"
 msgstr "Neuer Typ"
@@ -2830,7 +2915,7 @@ msgid "New Version created"
 msgstr "Neue Version wurde angelegt."
 
 msgid "New Webform"
-msgstr "Neues Webformular"
+msgstr "Neues Formular"
 
 msgid "next"
 msgstr "weiter"
@@ -2916,6 +3001,9 @@ msgstr "Benachrichtigungsoptionen"
 msgid "Notifications"
 msgstr "Benachrichtigungen"
 
+msgid "Notifications for Tickets"
+msgstr "Benachrichtigungen für Tickets"
+
 msgid "Notification successfully created."
 msgstr "Benachrichtigung wurde erfolgreich angelegt"
 
@@ -2924,6 +3012,9 @@ msgstr "Benachrichtigungstext"
 
 msgid "not modified"
 msgstr "********"
+
+msgid "Not more than 5 files possible."
+msgstr ""
 
 msgid "No version available"
 msgstr "Keine Version verfügbar"
@@ -3065,6 +3156,9 @@ msgstr "Persönliche Einstellungen"
 
 msgid "Phone"
 msgstr "Telefon"
+
+msgid "Place this code wherever you want to open the webform dialog."
+msgstr ""
 
 msgid "Please select a contact"
 msgstr "Wählen Sie bitte einen Kontakt."
@@ -3335,9 +3429,6 @@ msgstr "Ausgewählte {0} ({1})"
 msgid "Selected Search Criteria"
 msgstr "Gewählte Suchkriterien"
 
-msgid "selected ticket features"
-msgstr "Ausgewählte Ticketfunktionen"
-
 msgid "Selected ticket functions"
 msgstr "Ausgewählte Ticketfunktionen"
 
@@ -3583,7 +3674,7 @@ msgid "Ticket Data"
 msgstr "Ticketdaten"
 
 msgid "Ticket Description"
-msgstr "Ticket Beschreibung"
+msgstr "Ticketbeschreibung"
 
 msgid "Ticket Flags"
 msgstr "Ticket Kennzeichnung"
@@ -3602,6 +3693,9 @@ msgstr "Ticket wird nicht mehr beobachtet."
 
 msgid "Ticket locked."
 msgstr "Ticket gesperrt."
+
+msgid "Ticket Notifications"
+msgstr "Ticketbenachrichtigungen"
 
 msgid "Ticket Number"
 msgstr "Ticket Nummer"
@@ -3920,6 +4014,15 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "How to create a new ticket?"
+#~ msgstr "Wie lege ich ein neues Ticket an?"
+
+#~ msgid "How to use KIX 18 – Some general notes"
+#~ msgstr "Allgemeine Hinweise zum Arbeiten mit KIX 18"
+
+#~ msgid "selected ticket features"
+#~ msgstr "Ausgewählte Ticketfunktionen"
 
 #~ msgid ""
 #~ "Input of 3 stars '***' in autocomplete form fields = listing of the first "
