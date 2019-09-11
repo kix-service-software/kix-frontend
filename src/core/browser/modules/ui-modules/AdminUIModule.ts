@@ -28,7 +28,8 @@ import { FormValidationService } from "../../form/validation";
 import {
     NotificationEmailRecipientValidator, NotificationService, NotificationBrowserFactory, NotificationTableFactory,
     NotificationFormService, NotificationLabelProvider, NotificationCreateAction, NewNotificationDialogContext,
-    NotificationFilterTableFactory, NotificationDetailsContext, NotificationEditAction, EditNotificationDialogContext
+    NotificationFilterTableFactory, NotificationDetailsContext, NotificationEditAction, EditNotificationDialogContext,
+    NotificationFilterValidator
 } from "../../notification";
 import {
     ContextType, ContextMode, ContextDescriptor, KIXObjectType, ConfiguredDialogWidget, WidgetConfiguration, CRUD
@@ -153,6 +154,7 @@ export class UIModule implements IUIModule {
 
     private async registerNotifications(): Promise<void> {
         FormValidationService.getInstance().registerValidator(new NotificationEmailRecipientValidator());
+        FormValidationService.getInstance().registerValidator(new NotificationFilterValidator());
 
         ServiceRegistry.registerServiceInstance(NotificationService.getInstance());
         ServiceRegistry.registerServiceInstance(NotificationFormService.getInstance());

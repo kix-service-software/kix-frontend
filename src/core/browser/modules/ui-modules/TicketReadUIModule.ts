@@ -36,6 +36,7 @@ import { SearchService } from "../../kix/search/SearchService";
 import { LabelService } from "../../LabelService";
 import { ChannelLabelProvider } from "../../channel/ChannelLabelProvider";
 import { ArticleTableFactory } from "../../ticket/table/ArticleTableFactory";
+import { ChannelBrowserFactory } from "../../channel/ChannelBrowserFactory";
 
 export class UIModule implements IUIModule {
 
@@ -88,6 +89,7 @@ export class UIModule implements IUIModule {
         );
 
         FactoryService.getInstance().registerFactory(KIXObjectType.TICKET, TicketBrowserFactory.getInstance());
+        FactoryService.getInstance().registerFactory(KIXObjectType.CHANNEL, ChannelBrowserFactory.getInstance());
         FactoryService.getInstance().registerFactory(
             KIXObjectType.TICKET_HISTORY, TicketHistoryBrowserFactory.getInstance()
         );

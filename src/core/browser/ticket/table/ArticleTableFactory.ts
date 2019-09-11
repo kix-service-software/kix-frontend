@@ -57,7 +57,8 @@ export class ArticleTableFactory extends TableFactory {
                 false, false, false, DataType.STRING, false
             ),
             new DefaultColumnConfiguration(
-                ArticleProperty.SENDER_TYPE_ID, true, false, true, false, 120, true, true, true
+                ArticleProperty.SENDER_TYPE_ID, true, false, true, false, 120, true, true, true,
+                undefined, undefined, undefined, 'Translatable#Sender'
             ),
             new DefaultColumnConfiguration(ArticleProperty.FROM, true, false, true, false, 300, true, true),
             new DefaultColumnConfiguration(

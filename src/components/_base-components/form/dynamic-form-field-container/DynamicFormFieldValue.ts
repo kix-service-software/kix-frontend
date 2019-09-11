@@ -36,6 +36,8 @@ export class DynamicFieldValue {
     public isMultiselect: boolean = false;
     public isAutocomplete: boolean = false;
 
+    public label: string = '';
+
     private currentValue: any;
     private date: string;
     private time: string = '';
@@ -52,7 +54,8 @@ export class DynamicFieldValue {
         public currentPropertyNode: TreeNode = null,
         public currentOperationNode: TreeNode = null,
         public readonly: boolean = value.readonly,
-        public changeable: boolean = value.changeable
+        public changeable: boolean = value.changeable,
+        public required: boolean = value.required
     ) {
         this.autoCompleteCallback = this.doAutocompleteSearch.bind(this);
     }
@@ -60,11 +63,11 @@ export class DynamicFieldValue {
     public async init(): Promise<void> {
         await this.createPropertyNodes(false);
         if (this.value.property) {
+            const objectType = this.value.objectType ? this.value.objectType : this.manager.objectType;
+            this.label = await LabelService.getInstance().getPropertyText(this.value.property, objectType);
             let propertyNode = this.propertyNodes.find((pn) => pn.id === this.value.property);
             if (!propertyNode) {
-                const labelProvider = LabelService.getInstance().getLabelProviderForType(this.manager.objectType);
-                const label = await labelProvider.getPropertyText(this.value.property);
-                propertyNode = new TreeNode(this.value.property, label);
+                propertyNode = new TreeNode(this.value.property, this.label);
             }
             await this.setPropertyNode(propertyNode, true);
         }
@@ -157,17 +160,17 @@ export class DynamicFieldValue {
 
     public async setCurrentValue(value: any): Promise<void> {
         this.currentValue = value;
-        if (this.value.objectType && value) {
+        if (!this.isDropdown && this.value.objectType && value) {
             const objects = await KIXObjectService.loadObjects(
                 this.value.objectType, Array.isArray(value) ? value : [value]
             );
-            let label = value;
+            let label;
             let icon;
             const current: TreeNode[] = [];
             if (objects && objects.length) {
                 const labelProvider = LabelService.getInstance().getLabelProviderForType(this.value.objectType);
                 for (const object of objects) {
-                    label = await labelProvider.getObjectText(objects[0]);
+                    label = await labelProvider.getObjectText(object);
                     icon = labelProvider.getObjectTypeIcon();
                     current.push(new TreeNode(object.ObjectId, label, icon));
                 }

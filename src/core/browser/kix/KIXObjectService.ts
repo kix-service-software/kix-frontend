@@ -12,7 +12,8 @@ import {
     KIXObject, KIXObjectType, FilterCriteria, TreeNode,
     KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions, OverlayType, KIXObjectSpecificDeleteOptions,
-    ComponentContent, Error, TableFilterCriteria, CRUD, KIXObjectProperty, User, ValidObject, ObjectIcon
+    ComponentContent, Error, TableFilterCriteria, CRUD, KIXObjectProperty, User,
+    ValidObject, ObjectIcon, FilterDataType, FilterType
 } from "../../model";
 import { KIXObjectSocketClient } from "./KIXObjectSocketClient";
 import { FormService } from "../form";
@@ -23,6 +24,7 @@ import { OverlayService } from "../OverlayService";
 import { AuthenticationSocketClient } from "../application/AuthenticationSocketClient";
 import { UIComponentPermission } from "../../model/UIComponentPermission";
 import { LabelService } from "../LabelService";
+import { SearchOperator } from "../SearchOperator";
 
 export abstract class KIXObjectService<T extends KIXObject = KIXObject> implements IKIXObjectService<T> {
 
@@ -409,12 +411,17 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return nodes;
     }
     public static async search(
-        objectType: KIXObjectType, searchValue: string, limit: number = 10
+        objectType: KIXObjectType, searchValue: string, limit: number = 10, validObjects: boolean = true
     ): Promise<KIXObject[]> {
         let result = [];
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
         if (service) {
             const filter = await service.prepareFullTextFilter(searchValue);
+            if (validObjects) {
+                filter.push(new FilterCriteria(
+                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
+                ));
+            }
             const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit);
             result = await service.loadObjects(objectType, null, loadingOptions);
         }

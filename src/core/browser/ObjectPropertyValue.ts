@@ -18,6 +18,8 @@ export class ObjectPropertyValue {
         public property: string,
         public operator: PropertyOperator | ImportPropertyOperator | string,
         public value: string | number | string[] | number[] | KIXObject | any,
+        public required: boolean = false,
+        public valid: boolean = true,
         public objectType: KIXObjectType = null,
         public readonly: boolean = false,
         public changeable: boolean = true,
