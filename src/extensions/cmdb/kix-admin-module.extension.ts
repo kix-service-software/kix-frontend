@@ -25,9 +25,9 @@ class Extension implements IKIXModuleExtension {
         ]),
         new UIComponent('general-catalog-admin-module-component',
             'core/browser/modules/ui-modules/GeneralCatalogUIModule', [
-                new UIComponentPermission('system/generalcatalog/*', [CRUD.UPDATE], true),
-                new UIComponentPermission('system/generalcatalog', [CRUD.CREATE], true)
-            ])
+            new UIComponentPermission('system/generalcatalog/*', [CRUD.UPDATE], true),
+            new UIComponentPermission('system/generalcatalog', [CRUD.CREATE], true)
+        ])
     ];
 
     public external: boolean = false;
@@ -35,9 +35,6 @@ class Extension implements IKIXModuleExtension {
     public uiComponents: UIComponent[] = [
         new UIComponent('cmdb-admin-ci-classes', 'cmdb/admin/cmdb-admin-ci-classes', []),
         new UIComponent('config-item-class-info-widget', 'cmdb/admin/widgets/config-item-class-info-widget', []),
-        new UIComponent(
-            'config-item-class-versions-widget', 'cmdb/admin/widgets/config-item-class-versions-widget', []
-        ),
         new UIComponent('config-item-class-definition', 'cmdb/config-item-class-definition', []),
         new UIComponent('new-config-item-class-dialog', 'cmdb/admin/dialogs/new-config-item-class-dialog', []),
         new UIComponent('edit-config-item-class-dialog', 'cmdb/admin/dialogs/edit-config-item-class-dialog', []),

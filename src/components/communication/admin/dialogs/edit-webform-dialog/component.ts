@@ -17,7 +17,7 @@ class Component extends AbstractEditDialog {
     public onCreate(): void {
         this.state = new ComponentState();
         super.init(
-            'Translatable#Edit Webform',
+            'Translatable#Update Webform',
             undefined,
             KIXObjectType.WEBFORM,
             WebformDetailsContext.CONTEXT_ID
