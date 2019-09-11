@@ -14,7 +14,7 @@ import {
     TreeNode, ObjectIcon, Service, TicketPriority, TicketType,
     TicketState, StateType, KIXObject, Sla, TableFilterCriteria, User, KIXObjectLoadingOptions,
     KIXObjectSpecificLoadingOptions, Article, CreateTicketArticleOptions, ArticleProperty,
-    Channel, Queue
+    Channel, Queue, ChannelProperty
 } from '../../model';
 import { TicketParameterUtil } from './TicketParameterUtil';
 import { KIXObjectService } from '../kix';
@@ -210,10 +210,29 @@ export class TicketService extends KIXObjectService<Ticket> {
                 break;
             case TicketProperty.RESPONSIBLE_ID:
             case TicketProperty.OWNER_ID:
-                const users = await KIXObjectService.loadObjects<User>(
+                let users = await KIXObjectService.loadObjects<User>(
                     KIXObjectType.USER, null, null, null, true
                 ).catch((error) => [] as User[]);
+                if (!showInvalid) {
+                    users = users.filter((s) => s.ValidID === 1);
+                }
                 users.forEach((u) => nodes.push(new TreeNode(u.UserID, u.UserFullname, 'kix-icon-man')));
+                break;
+            case ArticleProperty.CHANNEL_ID:
+                const channels = await KIXObjectService.loadObjects<Channel>(
+                    KIXObjectType.CHANNEL, null, null, null, true
+                ).catch(() => [] as Channel[]);
+
+                for (const c of channels) {
+                    const name = await LabelService.getInstance().getPropertyValueDisplayText(c, ChannelProperty.NAME);
+                    const icons = await LabelService.getInstance().getPropertyValueDisplayIcons(c, ChannelProperty.ID);
+                    nodes.push(new TreeNode(c.ID, name, icons && icons.length ? icons[0] : null));
+                }
+                break;
+            case ArticleProperty.SENDER_TYPE_ID:
+                nodes.push(new TreeNode(1, 'agent'));
+                nodes.push(new TreeNode(2, 'system'));
+                nodes.push(new TreeNode(3, 'external'));
                 break;
             default:
                 nodes = await super.getTreeNodes(property, showInvalid, filterIds);
