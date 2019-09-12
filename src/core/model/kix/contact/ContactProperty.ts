@@ -59,4 +59,7 @@ export enum ContactProperty {
     PRIMARY_ORGANISATION_NUMBER = 'PrimaryOrganisationNumber',
     ORGANISATIONS = 'Organisations',
 
+    // search property
+    FULLTEXT = 'Fulltext'
+
 }

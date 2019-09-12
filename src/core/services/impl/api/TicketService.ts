@@ -444,12 +444,12 @@ export class TicketService extends KIXObjectService {
             };
         }
 
-        if ((andFilter && andFilter.length) || (orFilter && orFilter.length)) {
+        if ((andFilter && !!andFilter.length) || (orFilter && !!orFilter.length)) {
             const apiFilter = {};
             apiFilter[filterProperty] = objectFilter;
             query.filter = JSON.stringify(apiFilter);
         }
-        if ((andSearch && andSearch.length) || (orSearch && orSearch.length)) {
+        if ((andSearch && !!andSearch.length) || (orSearch && !!orSearch.length)) {
             const search = {};
             search[filterProperty] = objectSearch;
             query.search = JSON.stringify(search);
