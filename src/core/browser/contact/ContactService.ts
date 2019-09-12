@@ -104,37 +104,7 @@ export class ContactService extends KIXObjectService<Contact> {
     public async prepareFullTextFilter(searchValue): Promise<FilterCriteria[]> {
         return [
             new FilterCriteria(
-                ContactProperty.LOGIN, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
-            ),
-            new FilterCriteria(
-                ContactProperty.EMAIL, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
-            ),
-            new FilterCriteria(
-                ContactProperty.FIRSTNAME, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
-            ),
-            new FilterCriteria(
-                ContactProperty.LASTNAME, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
-            ),
-            new FilterCriteria(
-                ContactProperty.TITLE, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
-            ),
-            new FilterCriteria(
-                ContactProperty.PHONE, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
-            ),
-            new FilterCriteria(
-                ContactProperty.FAX, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
-            ),
-            new FilterCriteria(
-                ContactProperty.MOBILE, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
-            ),
-            new FilterCriteria(
-                ContactProperty.STREET, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
-            ),
-            new FilterCriteria(
-                ContactProperty.CITY, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
-            ),
-            new FilterCriteria(
-                ContactProperty.COUNTRY, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+                ContactProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, FilterType.AND, searchValue
             )
         ];
     }

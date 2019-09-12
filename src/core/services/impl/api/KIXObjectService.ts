@@ -312,11 +312,11 @@ export abstract class KIXObjectService implements IKIXObjectService {
                 await iconService.updateObject(
                     token, clientRequestId,
                     KIXObjectType.OBJECT_ICON, [
-                        ['Object', icon.Object],
-                        ['ObjectID', icon.ObjectID.toString()],
-                        ['ContentType', icon.ContentType],
-                        ['Content', icon.Content]
-                    ],
+                    ['Object', icon.Object],
+                    ['ObjectID', icon.ObjectID.toString()],
+                    ['ContentType', icon.ContentType],
+                    ['Content', icon.Content]
+                ],
                     icons[0].ID, null, KIXObjectType.OBJECT_ICON
                 ).catch((error: Error) => {
                     throw new Error(error.Code, error.Message);
@@ -462,9 +462,11 @@ export abstract class KIXObjectService implements IKIXObjectService {
             };
         }
 
-        const apiFilter = {};
-        apiFilter[filterProperty] = objectFilter;
-        query.filter = JSON.stringify(apiFilter);
-        query.search = JSON.stringify(apiFilter);
+        if ((andFilter && !!andFilter.length) || (orFilter && !!orFilter.length)) {
+            const apiFilter = {};
+            apiFilter[filterProperty] = objectFilter;
+            query.filter = JSON.stringify(apiFilter);
+            query.search = JSON.stringify(apiFilter);
+        }
     }
 }

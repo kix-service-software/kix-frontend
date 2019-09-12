@@ -9,7 +9,7 @@
 
 import { KIXObjectService } from './KIXObjectService';
 import {
-    ContactProperty, KIXObjectType, KIXObjectLoadingOptions, Error
+    ContactProperty, KIXObjectType, KIXObjectLoadingOptions, Error, FilterCriteria, FilterType
 } from "../../../model";
 import {
     CreateContact, CreateContactResponse, CreateContactRequest, UpdateContactResponse,
@@ -108,6 +108,74 @@ export class ContactService extends KIXObjectService {
             } else {
                 parameter.push([ContactProperty.ORGANISATION_IDS, [orgId]]);
             }
+        }
+    }
+
+    // Overrides from KIXObjectService
+    // FIXME: unterschiedliche Behandlung von Filter und Search entfernen, sollte nicht notwendig sein
+    protected async buildFilter(
+        filter: FilterCriteria[], filterProperty: string, token: string, query: any
+    ): Promise<void> {
+        let objectFilter = {};
+        let objectSearch = {};
+
+        const andFilter = filter.filter(
+            (f) => f.filterType === FilterType.AND
+                && f.property !== ContactProperty.FULLTEXT
+        ).map((f) => {
+            return { Field: f.property, Operator: f.operator, Type: f.type, Value: f.value };
+        });
+        const andSearch = filter.filter(
+            (f) => f.filterType === FilterType.AND
+        ).map((f) => {
+            return { Field: f.property, Operator: f.operator, Type: f.type, Value: f.value };
+        });
+
+        if (andFilter && andFilter.length) {
+            objectFilter = {
+                AND: andFilter
+            };
+        }
+        if (andSearch && andSearch.length) {
+            objectSearch = {
+                AND: andSearch
+            };
+        }
+
+        const orFilter = filter.filter(
+            (f) => f.filterType === FilterType.OR
+                && f.property !== ContactProperty.FULLTEXT
+        ).map((f) => {
+            return { Field: f.property, Operator: f.operator, Type: f.type, Value: f.value };
+        });
+        const orSearch = filter.filter(
+            (f) => f.filterType === FilterType.OR
+        ).map((f) => {
+            return { Field: f.property, Operator: f.operator, Type: f.type, Value: f.value };
+        });
+
+        if (orFilter && orFilter.length) {
+            objectFilter = {
+                ...objectFilter,
+                OR: orFilter
+            };
+        }
+        if (orSearch && orSearch.length) {
+            objectSearch = {
+                ...objectSearch,
+                OR: orSearch
+            };
+        }
+
+        if ((andFilter && !!andFilter.length) || (orFilter && !!orFilter.length)) {
+            const apiFilter = {};
+            apiFilter[filterProperty] = objectFilter;
+            query.filter = JSON.stringify(apiFilter);
+        }
+        if ((andSearch && !!andSearch.length) || (orSearch && !!orSearch.length)) {
+            const search = {};
+            search[filterProperty] = objectSearch;
+            query.search = JSON.stringify(search);
         }
     }
 

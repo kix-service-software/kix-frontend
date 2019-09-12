@@ -11,7 +11,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <translation-string pattern=input.leftText/>
     </div>
     <div>
-        <if(state.releaseInfo)>${state.kixProduct + " " + state.kixVersion + " " + state.buildNumber}</if>
+        <if(state.releaseInfo)>${state.kixProduct + " " + state.kixVersion + " " + state.buildNumber + " "}</if>
         <if(state.currentUserLogin)>
             <translation-string pattern="Translatable#Logged in"/>
             ${" | " + state.currentUserLogin + " | "}
