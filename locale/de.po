@@ -92,6 +92,11 @@ msgstr "nach"
 msgid "Age"
 msgstr "Alter"
 
+#, fuzzy
+#| msgid "Agent"
+msgid "agent"
+msgstr "Agent"
+
 msgid "Agent"
 msgstr "Agent"
 
@@ -245,6 +250,9 @@ msgstr "vor"
 
 msgid "between"
 msgstr "zwischen"
+
+msgid "Body"
+msgstr ""
 
 msgid "Bookmarks"
 msgstr "Lesezeichen"
@@ -3456,6 +3464,11 @@ msgstr "Absender"
 msgid "Sender Address (Email)"
 msgstr "Absender E-Mail"
 
+#, fuzzy
+#| msgid "Sender"
+msgid "Sender Type"
+msgstr "Absender"
+
 msgid "Send to"
 msgstr "Senden an"
 
@@ -3584,6 +3597,11 @@ msgstr "Symptom"
 
 msgid "SysConfig"
 msgstr "SysConfig"
+
+#, fuzzy
+#| msgid "System"
+msgid "system"
+msgstr "System"
 
 msgid "System"
 msgstr "System"

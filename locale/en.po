@@ -92,6 +92,9 @@ msgstr ""
 msgid "Age"
 msgstr ""
 
+msgid "agent"
+msgstr ""
+
 msgid "Agent"
 msgstr ""
 
@@ -240,6 +243,9 @@ msgid "before"
 msgstr ""
 
 msgid "between"
+msgstr ""
+
+msgid "Body"
 msgstr ""
 
 msgid "Bookmarks"
@@ -1755,7 +1761,8 @@ msgstr ""
 "If this option is activated, the form titel will be shown in the webform."
 
 msgid "Helptext_Admin_WebformCreateEdit_StateID"
-msgstr "Tickets created via webform will be assigned to the state you set here."
+msgstr ""
+"Tickets created via webform will be assigned to the state you set here."
 
 msgid "Helptext_Admin_WebformCreateEdit_SuccessMessage"
 msgstr ""
@@ -3306,6 +3313,9 @@ msgstr ""
 msgid "Sender Address (Email)"
 msgstr ""
 
+msgid "Sender Type"
+msgstr ""
+
 msgid "Send to"
 msgstr ""
 
@@ -3433,6 +3443,9 @@ msgid "Symptom"
 msgstr ""
 
 msgid "SysConfig"
+msgstr ""
+
+msgid "system"
 msgstr ""
 
 msgid "System"
