@@ -63,6 +63,10 @@ export abstract class SearchDefinition {
         return new KIXObjectLoadingOptions(criteria);
     }
 
+    public getLoadingOptionsForResultList(): KIXObjectLoadingOptions {
+        return;
+    }
+
     public async prepareFormFilterCriteria(criteria: FilterCriteria[]): Promise<FilterCriteria[]> {
         return criteria.filter((c) => c.value !== null && c.value !== undefined && c.value !== '');
     }

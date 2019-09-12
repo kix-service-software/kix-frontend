@@ -88,10 +88,16 @@ class Component implements IKIXObjectSearchListener {
             } else {
                 const activeCategory = SearchService.getInstance().getActiveSearchResultExplorerCategory();
                 if (activeCategory) {
-                    resultCount = activeCategory ? activeCategory.objectIds.length : 0;
-                    const resultObjects = await KIXObjectService.loadObjects(
-                        objectType, [...activeCategory.objectIds]
-                    );
+                    let resultObjects = [];
+                    resultCount = activeCategory.objectIds ? activeCategory.objectIds.length : 0;
+                    if (resultCount) {
+                        const searchDefinition = SearchService.getInstance().getSearchDefinition(objectType);
+                        const loadingOptions = searchDefinition
+                            ? searchDefinition.getLoadingOptionsForResultList() : undefined;
+                        resultObjects = await KIXObjectService.loadObjects(
+                            objectType, [...activeCategory.objectIds], loadingOptions, undefined, true
+                        ).catch(() => []);
+                    }
                     SearchService.getInstance().provideResult(resultObjects);
                 }
             }
