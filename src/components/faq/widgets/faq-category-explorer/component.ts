@@ -8,7 +8,7 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { ContextService, IdService, KIXObjectService, SearchOperator } from '../../../../core/browser';
+import { ContextService, IdService, KIXObjectService, SearchOperator, LabelService } from '../../../../core/browser';
 import {
     TreeNode, KIXObjectType, KIXObjectLoadingOptions, FilterDataType, FilterType, FilterCriteria
 } from '../../../../core/model';
@@ -82,8 +82,9 @@ export class Component {
             for (const category of categories) {
                 const label = await this.getCategoryLabel(category);
                 const children = await this.prepareTreeNodes(category.SubCategories);
+                const icon = LabelService.getInstance().getObjectIcon(category);
                 nodes.push(new TreeNode(
-                    category, label, null, null, children, null, null, null, null, null, null, null,
+                    category, label, icon, null, children, null, null, null, null, null, null, null,
                     category.ValidID === 1
                 ));
             }
