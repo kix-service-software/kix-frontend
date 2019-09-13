@@ -24,6 +24,7 @@ export class MailAccount extends KIXObject {
     public Trusted: number;
     public DispatchingBy: string;
     public QueueID: number;
+    public ExecFetch: boolean;
 
     public constructor(mailAccount?: MailAccount) {
         super(mailAccount);
@@ -37,6 +38,7 @@ export class MailAccount extends KIXObject {
             this.Trusted = mailAccount.Trusted;
             this.DispatchingBy = mailAccount.DispatchingBy;
             this.QueueID = mailAccount.QueueID;
+            this.ExecFetch = mailAccount.ExecFetch;
         }
     }
 
