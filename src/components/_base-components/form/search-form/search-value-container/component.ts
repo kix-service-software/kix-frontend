@@ -52,7 +52,7 @@ class Component implements IKIXObjectSearchListener {
                 searchCriteriaChanged: () => { return; },
                 formReseted: () => {
                     this.state.propertyNodes = this.initialPropertyNodes ? [...this.initialPropertyNodes] : [];
-                    this.initSearchForm(formInstance);
+                    this.initSearchForm(formInstance, false);
                 }
             };
             formInstance.registerSearchFormListener(listener);
@@ -62,10 +62,10 @@ class Component implements IKIXObjectSearchListener {
         DialogService.getInstance().setMainDialogLoading(false);
     }
 
-    private async initSearchForm(formInstance: SearchFormInstance): Promise<void> {
+    private async initSearchForm(formInstance: SearchFormInstance, useCache: boolean = true): Promise<void> {
         const cache = SearchService.getInstance().getSearchCache();
         this.state.searchValues = [];
-        if (cache && cache.status === CacheState.VALID && cache.objectType === this.objectType) {
+        if (useCache && cache && cache.status === CacheState.VALID && cache.objectType === this.objectType) {
             const searchDefinition = SearchService.getInstance().getSearchDefinition(this.objectType);
             for (const criteria of cache.criteria) {
                 const property = this.state.propertyNodes.find((pn) => pn.id === criteria.property);

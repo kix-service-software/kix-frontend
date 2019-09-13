@@ -358,7 +358,7 @@ export class SearchService {
             this.searchCache = new SearchCache(
                 searchCache.objectType, searchCache.criteria, [], searchCache.fulltextValue, CacheState.VALID, name
             );
-            this.doSearch();
+            await this.doSearch();
         }
     }
 

@@ -28,7 +28,7 @@ export class LoadSearchAction extends AbstractAction {
 
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: true, hint });
         if (this.data && typeof this.data === 'string') {
-            SearchService.getInstance().loadSearch(this.data);
+            await SearchService.getInstance().loadSearch(this.data);
         }
 
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
