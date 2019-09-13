@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.search-form on-keydown("keyDown")>
     <widget instanceId="search-form-group" title=state.translations["Translatable#Attributes"] key="attributes">
         <@content>
@@ -16,7 +15,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         </@content>
     </widget>
     <div.dialog-button-container>
-        <button.form-blank-cancel-button type="button" on-click("reset") title=state.translations["Translatable#Reset data"]>
+        <button.form-blank-cancel-button type="button" on-click("formReset") title=state.translations["Translatable#Reset data"]>
             <span.kix-icon-delete/>
             <translation-string pattern="Translatable#Reset data"/>
         </button>

@@ -50,7 +50,7 @@ export class Component implements IKIXObjectSearchListener {
 
     public async searchFinished(): Promise<void> {
         await this.prepareTree();
-        this.activeNodeChanged(this.state.nodes[0]);
+        this.activeNodeChanged(this.state.nodes[0], true);
     }
 
     public searchResultCategoryChanged(): void {
@@ -70,16 +70,20 @@ export class Component implements IKIXObjectSearchListener {
                 = ServiceRegistry.getServiceInstance<IKIXObjectService>(searchCache.objectType);
             if (objectService) {
                 for (const category of categories) {
-                    category.objectIds = objectService.determineDependendObjects(
-                        searchCache.result, category.objectType
-                    ) || [];
+                    if (isRoot) {
+                        category.objectIds = searchCache.result.map((o) => o.ObjectId.toString());
+                    } else {
+                        category.objectIds = objectService.determineDependendObjects(
+                            searchCache.result, category.objectType
+                        ) || [];
+                    }
 
                     const label = await TranslationService.translate(category.label);
                     const children = await this.prepareTreeNodes(category.children);
 
                     nodes.push(new TreeNode(
                         category.objectType,
-                        label + ` (${isRoot ? searchCache.result.length : category.objectIds.length})`,
+                        label + ` (${category.objectIds.length})`,
                         null, null,
                         children,
                         null, null, null, null, isRoot
@@ -90,12 +94,12 @@ export class Component implements IKIXObjectSearchListener {
         return nodes;
     }
 
-    public activeNodeChanged(node: TreeNode): void {
+    public activeNodeChanged(node: TreeNode, forceSet: boolean = false): void {
         this.state.activeNode = node;
         if (this.state.activeNode) {
             const newActiveCategory = this.getActiveCategory(this.state.activeNode.id);
             const activeCategory = SearchService.getInstance().getActiveSearchResultExplorerCategory();
-            if (!activeCategory || newActiveCategory.label !== activeCategory.label) {
+            if (forceSet || !activeCategory || newActiveCategory.label !== activeCategory.label) {
                 SearchService.getInstance().setActiveSearchResultExplorerCategory(newActiveCategory);
             }
         }
