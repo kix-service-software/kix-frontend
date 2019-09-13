@@ -883,6 +883,14 @@ msgstr "Favoriten"
 msgid "Fax"
 msgstr "Fax"
 
+#, fuzzy
+#| msgid "New Email Account"
+msgid "Fetching Mail Account"
+msgstr "Neues E-Mail Konto"
+
+msgid "Fetch now"
+msgstr ""
+
 msgid "Feedback"
 msgstr ""
 
@@ -2768,6 +2776,11 @@ msgstr "Abmelden"
 msgid "Logs"
 msgstr "Logs"
 
+#, fuzzy
+#| msgid "Account successfully created."
+msgid "Mail Account successfully fetched."
+msgstr "Konto wurde erfolgreich angelegt."
+
 msgid "Menu"
 msgstr "Modulmenü"
 
@@ -4147,9 +4160,6 @@ msgstr "PLZ"
 
 #~ msgid "Closing time"
 #~ msgstr "Geschlossen am"
-
-#~ msgid "New Email Account"
-#~ msgstr "Neues E-Mail Konto"
 
 #~ msgid "Update Filter"
 #~ msgstr "Aktualisierung wird durchgeführt"

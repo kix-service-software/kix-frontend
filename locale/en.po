@@ -877,6 +877,14 @@ msgstr ""
 msgid "Fax"
 msgstr ""
 
+#, fuzzy
+#| msgid "Load Email Account"
+msgid "Fetching Mail Account"
+msgstr "Loading Email Account"
+
+msgid "Fetch now"
+msgstr ""
+
 msgid "Feedback"
 msgstr ""
 
@@ -2620,6 +2628,11 @@ msgstr ""
 
 msgid "Logs"
 msgstr ""
+
+#, fuzzy
+#| msgid "Notification successfully created."
+msgid "Mail Account successfully fetched."
+msgstr "Notification successfully created."
 
 msgid "Menu"
 msgstr ""
