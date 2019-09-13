@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-09-10 13:34+0000\n"
-"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
+"PO-Revision-Date: 2019-09-13 11:54+0000\n"
+"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -36,7 +36,7 @@ msgid "{0} link(s) assigned."
 msgstr "{0} Verknüpfung(en) erstellt."
 
 msgid "Accepted domains"
-msgstr ""
+msgstr "Akzeptierte Domains"
 
 msgid "Accept KIX Header"
 msgstr "KIX Header akzeptieren"
@@ -92,8 +92,6 @@ msgstr "nach"
 msgid "Age"
 msgstr "Alter"
 
-#, fuzzy
-#| msgid "Agent"
 msgid "agent"
 msgstr "Agent"
 
@@ -1663,12 +1661,10 @@ msgstr ""
 "erhält. Der Agent kann diese Einstellung auch selbst in seinen persönlichen "
 "Einstellungen ändern."
 
-#, fuzzy
-#| msgid "Helptext_Admin_UserCreate_Preferences_MyQueues"
 msgid "Helptext_Admin_UserCreate_Preferences_Notifications_Hint"
 msgstr ""
-"Legen Sie fest, für welche Teams der Agent standardmäßig Benachrichtigungen "
-"erhält. Der Agent kann diese Einstellung auch selbst in seinen persönlichen "
+"Legen Sie fest, welche Benachrichtigungen der Agent standardmäßig erhält. "
+"Der Agent kann diese Einstellung auch selbst in seinen persönlichen "
 "Einstellungen ändern."
 
 msgid "Helptext_Admin_UserCreate_Preferences_UserLanguage"
@@ -1689,13 +1685,11 @@ msgstr ""
 "erhält. Der Agent kann diese Einstellung auch selbst in seinen persönlichen "
 "Einstellungen ändern."
 
-#, fuzzy
-#| msgid "Helptext_Admin_UserEdit_Preferences_Language"
 msgid "Helptext_Admin_UserEdit_Preferences_Notifications_Hint"
 msgstr ""
-"Legen Sie fest, in welcher Sprache der Agent KIX sieht, wenn er sich das "
-"erste Mal anmeldet. Der Agent kann die Sprache auch selbst in seinen "
-"persönlichen Einstellungen ändern."
+"Legen Sie fest, welche Benachrichtigungen der Agent standardmäßig erhält. "
+"Der Agent kann diese Einstellung auch selbst in seinen persönlichen "
+"Einstellungen ändern."
 
 msgid "Helptext_Admin_Users_RoleCreate_Comment"
 msgstr ""
@@ -2265,12 +2259,11 @@ msgstr ""
 "Sie erhalten Benachrichtigungen, wenn in den hier gewählten Teams neue "
 "Tickets entstehen oder Änderungen vorgenommen werden."
 
-#, fuzzy
-#| msgid "Helptext_PersonalSettings_MyQueues_Hint"
 msgid "Helptext_PersonalSettings_Notifications_Hint"
 msgstr ""
-"Sie erhalten Benachrichtigungen, wenn in den hier gewählten Teams neue "
-"Tickets entstehen oder Änderungen vorgenommen werden."
+"Wählen Sie aus den aufgeführten Benachrichtigungen, welche Sie erhalten "
+"möchten. Gehen Sie mit dem Mauszeiger über den Eintrag, um weitere "
+"Informationen zur Benachrichtigung zu erhalten."
 
 msgid "Helptext_PersonalSettings_UserLanguage_Hint"
 msgstr "Wählen Sie aus, in welcher Sprache Sie die Anwendung nutzen möchten."
@@ -2566,7 +2559,7 @@ msgid "Incident State"
 msgstr "Vorfallstatus"
 
 msgid "Include this code into the <head> area of your webpage."
-msgstr ""
+msgstr "Binden Sie diesen Code in den <head>-Bereich Ihrer Webseite ein."
 
 msgid "Information text"
 msgstr "Hinweistext"
@@ -2779,7 +2772,7 @@ msgid "Menu"
 msgstr "Modulmenü"
 
 msgid "Message"
-msgstr ""
+msgstr "Nachricht"
 
 msgid "Message after sending form"
 msgstr "Nachricht nach Absenden des Formulars"
@@ -3167,6 +3160,7 @@ msgstr "Telefon"
 
 msgid "Place this code wherever you want to open the webform dialog."
 msgstr ""
+"Platzieren Sie diesen Code dort, wo das Webformular geöffnet werden soll."
 
 msgid "Please select a contact"
 msgstr "Wählen Sie bitte einen Kontakt."
@@ -3464,10 +3458,8 @@ msgstr "Absender"
 msgid "Sender Address (Email)"
 msgstr "Absender E-Mail"
 
-#, fuzzy
-#| msgid "Sender"
 msgid "Sender Type"
-msgstr "Absender"
+msgstr "Sendertyp"
 
 msgid "Send to"
 msgstr "Senden an"
@@ -3598,8 +3590,6 @@ msgstr "Symptom"
 msgid "SysConfig"
 msgstr "SysConfig"
 
-#, fuzzy
-#| msgid "System"
 msgid "system"
 msgstr "System"
 
