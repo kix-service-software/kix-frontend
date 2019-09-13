@@ -27,6 +27,8 @@ export enum MailAccountProperty {
 
     QUEUE_ID = 'QueueID',
 
-    COMMENT = 'Comment'
+    COMMENT = 'Comment',
+
+    EXEC_FETCH = 'ExecFetch'
 
 }

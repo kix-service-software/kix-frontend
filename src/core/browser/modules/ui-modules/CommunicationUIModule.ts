@@ -23,7 +23,7 @@ import { TableFactoryService } from "../../table";
 import {
     MailAccountService, MailAccountFormService, MailAccountTableFactory,
     MailAccountLabelProvider, MailAccountBrowserFactory, MailAccountCreateAction, NewMailAccountDialogContext,
-    MailAccountEditAction, EditMailAccountDialogContext, MailAccountDetailsContext
+    MailAccountEditAction, EditMailAccountDialogContext, MailAccountDetailsContext, MailAccountFetchAction
 } from "../../mail-account";
 import { ActionFactory } from "../../ActionFactory";
 import { ContextService } from "../../context";
@@ -158,6 +158,7 @@ export class UIModule implements IUIModule {
 
         if (await this.checkPermission('system/communication/mailaccounts/*', CRUD.UPDATE)) {
             ActionFactory.getInstance().registerAction('mail-account-edit', MailAccountEditAction);
+            ActionFactory.getInstance().registerAction('mail-account-fetch', MailAccountFetchAction);
 
             const editMailAccountDialogContext = new ContextDescriptor(
                 EditMailAccountDialogContext.CONTEXT_ID, [KIXObjectType.MAIL_ACCOUNT],
