@@ -240,6 +240,11 @@ msgstr "Automatisierung: Benachrichtigungen"
 msgid "back to"
 msgstr "Zurück zu"
 
+#, fuzzy
+#| msgid "CMDB Class Definition"
+msgid "Based on class definition"
+msgstr "CMDB Klassen Definition"
+
 msgid "Bcc"
 msgstr "Bcc"
 
@@ -579,9 +584,6 @@ msgstr "Aktueller Vorfallstatus"
 
 msgid "Current Password"
 msgstr "Aktuelles Passwort"
-
-msgid "(current version)"
-msgstr "(aktuelle Version)"
 
 msgid "(Current version)"
 msgstr "(aktuelle Version)"
@@ -939,6 +941,9 @@ msgstr "Für Tickets"
 
 msgid "Forward"
 msgstr "Weiterleiten"
+
+msgid "from"
+msgstr ""
 
 msgid "From"
 msgstr "Von"
@@ -3916,6 +3921,11 @@ msgstr "Aktualisierung wird durchgeführt"
 msgid "Update Value"
 msgstr "Aktualisierung wird durchgeführt"
 
+#, fuzzy
+#| msgid "Create Webform"
+msgid "Update Webform"
+msgstr "Webformular wird angelegt"
+
 msgid "URL"
 msgstr "URL"
 
@@ -4035,6 +4045,9 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "(current version)"
+#~ msgstr "(aktuelle Version)"
 
 #~ msgid "How to create a new ticket?"
 #~ msgstr "Wie lege ich ein neues Ticket an?"
@@ -4813,9 +4826,6 @@ msgstr "PLZ"
 
 #~ msgid "CMDB Class permissions"
 #~ msgstr "CMDB Klassen Berechtigungen"
-
-#~ msgid "CMDB Class Definition"
-#~ msgstr "CMDB Klassen Definition"
 
 #~ msgid "CMDB Class versions"
 #~ msgstr "CMDB Klassen Versionen"

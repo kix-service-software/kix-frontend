@@ -236,6 +236,11 @@ msgstr ""
 msgid "back to"
 msgstr ""
 
+#, fuzzy
+#| msgid "CI Class Definition"
+msgid "Based on class definition"
+msgstr "Asset Class Definition"
+
 msgid "Bcc"
 msgstr ""
 
@@ -572,9 +577,6 @@ msgid "Current incident state"
 msgstr ""
 
 msgid "Current Password"
-msgstr ""
-
-msgid "(current version)"
 msgstr ""
 
 msgid "(Current version)"
@@ -930,6 +932,9 @@ msgid "For Tickets"
 msgstr ""
 
 msgid "Forward"
+msgstr ""
+
+msgid "from"
 msgstr ""
 
 msgid "From"
@@ -3758,6 +3763,11 @@ msgstr ""
 
 msgid "Update Value"
 msgstr ""
+
+#, fuzzy
+#| msgid "Update Queue"
+msgid "Update Webform"
+msgstr "Update Team"
 
 msgid "URL"
 msgstr ""
