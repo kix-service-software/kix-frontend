@@ -7,12 +7,15 @@
  * --
  */
 
-import { LabelValueGroup } from "../../../core/model";
+import { LabelValueGroup, Version } from "../../../core/model";
+import { PreparedData } from "../../../core/model/kix/cmdb/PreparedData";
 
 export class ComponentState {
 
     public constructor(
-        public groups: LabelValueGroup[] = []
+        public groups: LabelValueGroup[] = [],
+        public version: Version = null,
+        public preparedData: PreparedData[] = []
     ) { }
 
 }

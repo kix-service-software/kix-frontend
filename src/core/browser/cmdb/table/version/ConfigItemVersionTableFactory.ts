@@ -41,11 +41,11 @@ export class ConfigItemVersionTableFactory extends TableFactory {
     ): TableConfiguration {
         const tableColumns = [
             new DefaultColumnConfiguration(VersionProperty.COUNT_NUMBER, true, false, true, true, 120),
-            new DefaultColumnConfiguration(VersionProperty.CREATE_BY, true, false, true, true, 150),
             new DefaultColumnConfiguration(
                 VersionProperty.CREATE_TIME, true, false, true, true, 150, true, false, false, DataType.DATE_TIME
             ),
-            new DefaultColumnConfiguration(VersionProperty.CURRENT, true, false, true, false, 150, false)
+            new DefaultColumnConfiguration(VersionProperty.CREATE_BY, true, false, true, true, 200),
+            new DefaultColumnConfiguration(VersionProperty.BASED_ON_CLASS_VERSION, true, false, true, false, 300, false)
         ];
 
         if (!tableConfiguration) {
