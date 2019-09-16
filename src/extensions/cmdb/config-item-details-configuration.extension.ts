@@ -100,7 +100,7 @@ export class Extension implements IConfigurationExtension {
         const configItemVersionLane = new ConfiguredWidget('config-item-version-widget',
             new WidgetConfiguration(
                 'table-widget', "Translatable#Version Details",
-                ['config-item-version-compare-action', 'config-item-edit-action'],
+                ['config-item-version-compare-action'],
                 new TableWidgetSettings(KIXObjectType.CONFIG_ITEM_VERSION), false, true, WidgetSize.BOTH, true
             ),
             [new UIComponentPermission('cmdb/configitems/*/versions', [CRUD.READ])]

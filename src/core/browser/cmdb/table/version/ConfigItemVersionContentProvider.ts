@@ -8,9 +8,12 @@
  */
 
 import { IRowObject, RowObject, ITable, TableValue } from "../../../table";
-import { KIXObjectType, KIXObjectLoadingOptions, ConfigItem, Version, VersionProperty } from "../../../../model";
+import {
+    KIXObjectType, KIXObjectLoadingOptions, ConfigItem, Version, VersionProperty, DateTimeUtil
+} from "../../../../model";
 import { ContextService } from "../../../context";
 import { TableContentProvider } from "../../../table/TableContentProvider";
+import { TranslationService } from '../../../i18n/TranslationService';
 
 export class ConfigItemVersionContentProvider extends TableContentProvider<Version> {
 
@@ -24,27 +27,42 @@ export class ConfigItemVersionContentProvider extends TableContentProvider<Versi
     }
 
     public async loadData(): Promise<Array<IRowObject<Version>>> {
-        let rowObjects = [];
+        const rowObjects = [];
         if (this.contextId) {
             const context = await ContextService.getInstance().getContext(this.contextId);
             const configItem = await context.getObject<ConfigItem>();
             if (configItem) {
-                rowObjects = configItem.Versions
-                    .sort((a, b) => b.VersionID - a.VersionID)
-                    .map((v, i) => {
-                        const values: TableValue[] = [];
+                const translatedCurrentVersion = await TranslationService.translate('Translatable#current');
+                const translatedCreated = await TranslationService.translate('Translatable#created');
+                const translatedVersion = await TranslationService.translate('Translatable#Version');
 
-                        for (const property in v) {
-                            if (v.hasOwnProperty(property)) {
-                                values.push(new TableValue(property, v[property]));
-                            }
+                const sortedVersions = configItem.Versions.sort((a, b) => b.VersionID - a.VersionID);
+
+                for (let i = 0; i < sortedVersions.length; i++) {
+                    const values: TableValue[] = [];
+                    const v = sortedVersions[i];
+
+                    for (const property in v) {
+                        if (v.hasOwnProperty(property)) {
+                            values.push(new TableValue(property, v[property]));
                         }
+                    }
 
-                        const versionNumber = (configItem.Versions.length - i).toString();
-                        values.push(new TableValue(VersionProperty.COUNT_NUMBER, versionNumber, versionNumber));
-                        values.push(new TableValue(VersionProperty.CURRENT, v.isCurrentVersion));
-                        return new RowObject<Version>(values, v);
-                    });
+                    const versionNumber = (configItem.Versions.length - i);
+                    const createTime = await DateTimeUtil.getLocalDateTimeString(v.Definition.CreateTime);
+                    const currentVersion = v.isCurrentVersion ? '(' + translatedCurrentVersion + ')' : '';
+                    const currentVersionString = `${versionNumber} ${currentVersion}`;
+                    const basedOnDefinitionString
+                        = `${translatedVersion} ${v.Definition.Version} (${translatedCreated} ${createTime})`;
+                    values.push(new TableValue(VersionProperty.COUNT_NUMBER, versionNumber, currentVersionString));
+                    values.push(new TableValue(
+                        VersionProperty.BASED_ON_CLASS_VERSION, v.Definition.Version, basedOnDefinitionString
+                    ));
+
+                    const newRowObject = new RowObject<Version>(values, v);
+                    rowObjects.push(newRowObject);
+
+                }
             }
         }
 
