@@ -510,6 +510,9 @@ msgstr "Create Asset"
 msgid "Create Contact"
 msgstr ""
 
+msgid "created"
+msgstr ""
+
 msgid "Created at"
 msgstr ""
 
@@ -564,6 +567,9 @@ msgstr ""
 msgid "CSV-Export"
 msgstr ""
 
+msgid "current"
+msgstr ""
+
 msgid "(Current definition)"
 msgstr ""
 
@@ -580,9 +586,6 @@ msgid "Current Password"
 msgstr ""
 
 msgid "(Current version)"
-msgstr ""
-
-msgid "Current version"
 msgstr ""
 
 msgid "Customer"
@@ -879,15 +882,15 @@ msgstr ""
 msgid "Fax"
 msgstr ""
 
+msgid "Feedback"
+msgstr ""
+
 #, fuzzy
 #| msgid "Load Email Account"
 msgid "Fetching Mail Account"
 msgstr "Loading Email Account"
 
 msgid "Fetch now"
-msgstr ""
-
-msgid "Feedback"
 msgstr ""
 
 msgid "Field"
@@ -932,9 +935,6 @@ msgid "For Tickets"
 msgstr ""
 
 msgid "Forward"
-msgstr ""
-
-msgid "from"
 msgstr ""
 
 msgid "From"

@@ -516,6 +516,11 @@ msgstr "Asset wird angelegt"
 msgid "Create Contact"
 msgstr "Kontakt wird angelegt"
 
+#, fuzzy
+#| msgid "Create"
+msgid "created"
+msgstr "Erstellt"
+
 msgid "Created at"
 msgstr "Erstellt am"
 
@@ -570,6 +575,9 @@ msgstr "Webformular wird angelegt"
 msgid "CSV-Export"
 msgstr "CSV-Export"
 
+msgid "current"
+msgstr ""
+
 msgid "(Current definition)"
 msgstr "(aktuelle Definition)"
 
@@ -587,9 +595,6 @@ msgstr "Aktuelles Passwort"
 
 msgid "(Current version)"
 msgstr "(aktuelle Version)"
-
-msgid "Current version"
-msgstr "Aktuelle Version"
 
 msgid "Customer"
 msgstr "Kunden"
@@ -885,15 +890,15 @@ msgstr "Favoriten"
 msgid "Fax"
 msgstr "Fax"
 
+msgid "Feedback"
+msgstr ""
+
 #, fuzzy
 #| msgid "New Email Account"
 msgid "Fetching Mail Account"
 msgstr "Neues E-Mail Konto"
 
 msgid "Fetch now"
-msgstr ""
-
-msgid "Feedback"
 msgstr ""
 
 msgid "Field"
@@ -941,9 +946,6 @@ msgstr "Für Tickets"
 
 msgid "Forward"
 msgstr "Weiterleiten"
-
-msgid "from"
-msgstr ""
 
 msgid "From"
 msgstr "Von"
@@ -4046,6 +4048,9 @@ msgstr "PLZ"
 msgid "ZIP"
 msgstr "PLZ"
 
+#~ msgid "Current version"
+#~ msgstr "Aktuelle Version"
+
 #~ msgid "(current version)"
 #~ msgstr "(aktuelle Version)"
 
@@ -4756,9 +4761,6 @@ msgstr "PLZ"
 
 #~ msgid "Required"
 #~ msgstr "Erforderlich"
-
-#~ msgid "Create"
-#~ msgstr "Erstellt"
 
 #~ msgid "Deny"
 #~ msgstr "Deny"
