@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
 "PO-Revision-Date: 2019-09-17 10:33+0000\n"
-"Last-Translator: fuhlig <Frank.Uhlig@cape-it.de>\n"
+"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -240,10 +240,8 @@ msgstr "Automatisierung: Benachrichtigungen"
 msgid "back to"
 msgstr "Zurück zu"
 
-#, fuzzy
-#| msgid "CMDB Class Definition"
 msgid "Based on class definition"
-msgstr "CMDB Klassen Definition"
+msgstr "Basiert auf Klassendefinition"
 
 msgid "Bcc"
 msgstr "Bcc"
@@ -516,10 +514,8 @@ msgstr "Asset wird angelegt"
 msgid "Create Contact"
 msgstr "Kontakt wird angelegt"
 
-#, fuzzy
-#| msgid "Create"
 msgid "created"
-msgstr "Erstellt"
+msgstr "erstellt"
 
 msgid "Created at"
 msgstr "Erstellt am"
@@ -897,7 +893,7 @@ msgid "Fetching Mail Account"
 msgstr "E-Mail-Konto abrufen"
 
 msgid "Fetch now"
-msgstr ""
+msgstr "Jetzt abrufen"
 
 msgid "Field"
 msgstr "Feld"
@@ -3021,7 +3017,7 @@ msgid "Notifications for Tickets"
 msgstr "Benachrichtigungen für Tickets"
 
 msgid "Notification successfully created."
-msgstr "Benachrichtigung wurde erfolgreich angelegt"
+msgstr "Benachrichtigung wurde erfolgreich angelegt."
 
 msgid "Notification Text"
 msgstr "Benachrichtigungstext"
@@ -3319,7 +3315,7 @@ msgid "Remove parameter"
 msgstr "Parameter entfernen"
 
 msgid "Remove Priorities"
-msgstr "Prioritäten werden entfernt"
+msgstr "Prioritäten entfernen"
 
 msgid "Remove Search Criteria"
 msgstr "Suchkriterien entfernen"
@@ -3561,7 +3557,7 @@ msgid "States"
 msgstr "Status"
 
 msgid "States successfully removed."
-msgstr "Status wurde erfolgreich entfernt."
+msgstr "Status wurden erfolgreich entfernt."
 
 msgid "State successfully created."
 msgstr "Status wurde erfolgreich angelegt."
@@ -3645,7 +3641,7 @@ msgid "Templates"
 msgstr "Vorlagen"
 
 msgid "Templates successfully removed."
-msgstr "Vorlagen wurde erfolgreich entfernt."
+msgstr "Vorlagen wurden erfolgreich entfernt."
 
 msgid "Text"
 msgstr "Text"
@@ -3793,7 +3789,7 @@ msgid "Translations"
 msgstr "Übersetzungen"
 
 msgid "Translations successfully removed."
-msgstr "Übersetzungen wurde erfolgreich entfernt."
+msgstr "Übersetzungen wurden erfolgreich entfernt."
 
 msgid "Translation successfully created."
 msgstr "Übersetzung wurde erfolgreich angelegt."
@@ -3811,7 +3807,7 @@ msgid "Types"
 msgstr "Typen"
 
 msgid "Types successfully removed."
-msgstr "Typen wurde erfolgreich entfernt."
+msgstr "Typen wurden erfolgreich entfernt."
 
 msgid "Type successfully created."
 msgstr "Typ wurde erfolgreich angelegt."
@@ -3883,7 +3879,7 @@ msgid "Update Key"
 msgstr "Aktualisierung wird durchgeführt"
 
 msgid "Update Notification"
-msgstr "Benachrichtigung aktualisieren"
+msgstr "Aktualisierung wird durchgeführt"
 
 msgid "Update Organisation"
 msgstr "Aktualisierung wird durchgeführt"
@@ -3918,10 +3914,8 @@ msgstr "Aktualisierung wird durchgeführt"
 msgid "Update Value"
 msgstr "Aktualisierung wird durchgeführt"
 
-#, fuzzy
-#| msgid "Create Webform"
 msgid "Update Webform"
-msgstr "Webformular wird angelegt"
+msgstr "Aktualisierung wird durchgeführt"
 
 msgid "URL"
 msgstr "URL"
