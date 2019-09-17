@@ -80,6 +80,7 @@ class TabLaneComponent implements IEventSubscriber {
                 contextRegistered: () => { return; }
             });
             this.prepareContext();
+            this.hideSidebarIfNeeded();
             window.addEventListener('resize', this.hideSidebarIfNeeded.bind(this), false);
             const sidebarTranslations = await TranslationService.createTranslationObject(
                 ['Translatable#Close Sidebars']
