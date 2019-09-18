@@ -2136,6 +2136,11 @@ msgstr ""
 "Separates between the attributes of a row. If unknown, open your .csv-file "
 "with a text editor."
 
+#, fuzzy
+#| msgid "Helptext_PersonalSettings_UserLanguage_Hint"
+msgid "Helptext_PersonalSettings_MyQueues_Hint"
+msgstr "Choose the language you want to use for this application."
+
 msgid "Helptext_PersonalSettings_Notifications_Hint"
 msgstr ""
 "Choose from the listed notifications which one you want to receive. Move the "
