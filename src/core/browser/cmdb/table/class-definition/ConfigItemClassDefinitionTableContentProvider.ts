@@ -10,7 +10,7 @@
 import { TableContentProvider } from "../../../table/TableContentProvider";
 import {
     KIXObjectType, KIXObjectLoadingOptions, ConfigItemClassDefinition,
-    ConfigItemClass, SortUtil, ConfigItemClassDefinitionProperty, DataType, SortOrder
+    ConfigItemClass, ConfigItemClassDefinitionProperty
 } from "../../../../model";
 import { ITable, IRowObject, RowObject, TableValue } from "../../../table";
 import { ContextService } from "../../../context";

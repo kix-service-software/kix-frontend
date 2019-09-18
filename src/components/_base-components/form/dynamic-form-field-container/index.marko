@@ -6,18 +6,22 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <for|dynamicValue, index| of=state.dynamicValues>
     <div.dynamic-form-field-value class={
         "no-operation": dynamicValue.operationIsNone
     }>
-        <form-list
-            nodes=dynamicValue.propertyNodes
-            selectedNodes=[dynamicValue.currentPropertyNode]
-            removeNode=false
-            readonly=dynamicValue.readonly
-            placeholder=dynamicValue.propertiesPlaceholder
-            on-nodesChanged("propertyChanged", dynamicValue)/>
+        <if(dynamicValue.required)>
+            <span>${dynamicValue.label}*</span>
+        </if>
+        <else>
+            <form-list
+                nodes=dynamicValue.propertyNodes
+                selectedNodes=[dynamicValue.currentPropertyNode]
+                removeNode=false
+                readonly=dynamicValue.readonly
+                placeholder=dynamicValue.propertiesPlaceholder
+                on-nodesChanged("propertyChanged", dynamicValue)/>
+        </else>
         <if(!dynamicValue.operationIsNone)>
             <if(dynamicValue.operationIsStringInput)>
                 <input.input-style
@@ -47,12 +51,16 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         removeNode=(!dynamicValue.readonly || dynamicValue.changeable)
                         readonly=dynamicValue.readonly
                         multiselect=dynamicValue.isMultiselect
+                        invalid=!dynamicValue.value.valid
                         autocomplete=dynamicValue.isAutocomplete
                         searchCallback=dynamicValue.autoCompleteCallback
                         on-nodesChanged("treeValueChanged", dynamicValue)/>
                 </if>
                 <else-if(dynamicValue.isDate)>
                     <input.input-style
+                        class={
+                                                invalid: !dynamicValue.value.valid
+                                            }
                         type="date"
                         value=dynamicValue.date
                         disabled=(dynamicValue.readonly && !dynamicValue.changeable)
@@ -60,11 +68,17 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </else-if>
                 <else-if(dynamicValue.isDateTime)>
                     <input.input-style
+                        class={
+                                                invalid: !dynamicValue.value.valid
+                                            }
                         type="date"
                         value=dynamicValue.date
                         disabled=(dynamicValue.readonly && !dynamicValue.changeable)
                         on-change("dateValueChanged", dynamicValue)/>
                     <input.input-style
+                        class={
+                                                invalid: !dynamicValue.value.valid
+                                            }
                         type="time"
                         value=dynamicValue.time
                         disabled=(dynamicValue.readonly && !dynamicValue.changeable)
@@ -72,6 +86,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </else-if>
                 <else-if(dynamicValue.isTextarea)>
                     <textarea.input-style
+                        class={
+                                                invalid: !dynamicValue.value.valid
+                                            }
                         rows=5
                         cols=25
                         value=dynamicValue.currentValue
@@ -90,6 +107,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </else-if>
                 <else>
                     <input.input-style
+                        class={
+                                                invalid: !dynamicValue.value.valid
+                                            }
                         value=dynamicValue.currentValue
                         type="text"
                         disabled=(dynamicValue.readonly && !dynamicValue.changeable)
@@ -97,7 +117,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </else>
             </if>
         </div>
-        <if(!dynamicValue.readonly && state.dynamicValues.length > 1 && index !== state.dynamicValues.length - 1)>
+        <if(
+            !dynamicValue.required &&
+            !dynamicValue.readonly &&
+            state.dynamicValues.length > 1 &&
+            index !== state.dynamicValues.length - 1
+        )>
             <button.form-control-button.button-without-text
                 type="button"
                 title=state.translations["Translatable#Remove parameter"]

@@ -11,6 +11,7 @@ import { ComponentState } from "./ComponentState";
 import { TreeNode, FormInputComponent, NotificationProperty } from "../../../../../../core/model";
 import { TranslationService } from "../../../../../../core/browser/i18n/TranslationService";
 import { NotificationService } from "../../../../../../core/browser/notification";
+import { ContextService } from "../../../../../../core/browser";
 
 class Component extends FormInputComponent<string[], ComponentState> {
 
@@ -29,6 +30,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
             : this.state.field.required ? this.state.field.label : '';
 
         this.state.placeholder = await TranslationService.translate(placeholderText);
+        this.provideToContext();
     }
 
     public async onMount(): Promise<void> {
@@ -38,6 +40,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
             NotificationProperty.DATA_EVENTS
         );
         this.setCurrentNode();
+        this.provideToContext();
     }
 
     public setCurrentNode(): void {
@@ -59,7 +62,20 @@ class Component extends FormInputComponent<string[], ComponentState> {
     }
     public eventChanged(nodes: TreeNode[]): void {
         this.state.currentNodes = nodes && nodes.length ? nodes : null;
+
+        this.provideToContext();
+
         super.provideValue(this.state.currentNodes ? this.state.currentNodes.map((n) => n.id) : null);
+    }
+
+    private provideToContext(): void {
+        const context = ContextService.getInstance().getActiveContext();
+        if (context) {
+            const nodes = this.state.currentNodes ? this.state.currentNodes : [];
+            context.setAdditionalInformation(
+                NotificationProperty.DATA_EVENTS, nodes.map((n) => n.id)
+            );
+        }
     }
 
     public async focusLost(event: any): Promise<void> {

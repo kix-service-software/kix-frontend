@@ -45,7 +45,7 @@ export class ContactSearchDefinition extends SearchDefinition {
         ];
 
         if (await this.checkReadPermissions('organisations')) {
-            properties.push([ContactProperty.PRIMARY_ORGANISATION_ID, 'Translatable#Assigned Organsiation']);
+            properties.push([ContactProperty.PRIMARY_ORGANISATION_ID, 'Translatable#Assigned Organisation']);
         }
 
         if (await this.checkReadPermissions('system/valid')) {

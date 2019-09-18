@@ -1,0 +1,189 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { KIXObjectFormService } from "../kix/KIXObjectFormService";
+import { Webform, WebformProperty } from "../../model/webform";
+import {
+    KIXObjectType, FormFieldValue, Form, SysConfigOption, SysConfigKey, FormContext, Queue,
+    KIXObjectLoadingOptions, FilterCriteria, QueueProperty, FilterDataType, FilterType, TicketPriority,
+    TicketPriorityProperty, TicketType, TicketTypeProperty, TicketState, TicketStateProperty, User, UserProperty
+} from "../../model";
+import { KIXObjectService } from "../kix";
+import { SearchOperator } from "../SearchOperator";
+
+export class WebformFormService extends KIXObjectFormService<Webform> {
+
+    private static INSTANCE: WebformFormService = null;
+
+    public static getInstance(): WebformFormService {
+        if (!WebformFormService.INSTANCE) {
+            WebformFormService.INSTANCE = new WebformFormService();
+        }
+
+        return WebformFormService.INSTANCE;
+    }
+
+    private constructor() {
+        super();
+    }
+
+    public isServiceFor(kixObjectType: KIXObjectType) {
+        return kixObjectType === KIXObjectType.WEBFORM;
+    }
+
+    protected async doAdditionalPreparations(
+        form: Form, formFieldValues: Map<string, FormFieldValue<any>>, webform: Webform
+    ): Promise<void> {
+        const hasConfigPermissions = await this.checkPermissions('system/config');
+        if (form && hasConfigPermissions && form.formContext === FormContext.NEW) {
+            for (const g of form.groups) {
+                for (const f of g.formFields) {
+                    let value;
+                    switch (f.property) {
+                        case WebformProperty.QUEUE_ID:
+                            value = await this.getDefaultQueueID();
+                            break;
+                        case WebformProperty.PRIORITY_ID:
+                            value = await this.getDefaultPriorityID();
+                            break;
+                        case WebformProperty.TYPE_ID:
+                            value = await this.getDefaultTypeID();
+                            break;
+                        case WebformProperty.STATE_ID:
+                            value = await this.getDefaultStateID();
+                            break;
+                        default:
+                    }
+                    if (value) {
+                        formFieldValues.set(f.instanceId, new FormFieldValue(value));
+                    }
+                }
+            }
+        }
+    }
+
+    protected async getValue(property: string, value: any, webform: Webform): Promise<any> {
+        switch (property) {
+            case WebformProperty.USER_LOGIN:
+                if (value) {
+                    const users = await KIXObjectService.loadObjects<User>(
+                        KIXObjectType.USER, null,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    UserProperty.USER_LOGIN, SearchOperator.EQUALS,
+                                    FilterDataType.STRING, FilterType.AND, value
+                                )
+                            ]
+                        ),
+                        null, true
+                    ).catch((error) => [] as User[]);
+                    value = users && !!users.length ? users[0].ObjectId : value;
+                }
+                break;
+            case WebformProperty.ACCEPTED_DOMAINS:
+                if (Array.isArray(value)) {
+                    value = value.join(',');
+                }
+                break;
+            default:
+        }
+        return value;
+    }
+
+    private async getDefaultConfigValue(configId: string): Promise<string> {
+        let name;
+        if (configId) {
+            const defaultOptions = await KIXObjectService.loadObjects<SysConfigOption>(
+                KIXObjectType.SYS_CONFIG_OPTION, [configId], null, null, true
+            );
+            if (defaultOptions && !!defaultOptions.length) {
+                name = defaultOptions[0].Value;
+            }
+        }
+        return name;
+    }
+
+    private async getDefaultQueueID(): Promise<number> {
+        let queueId: number;
+        const name = await this.getDefaultConfigValue(SysConfigKey.POSTMASTER_DEFAULT_QUEUE);
+        if (name) {
+            const queues = await KIXObjectService.loadObjects<Queue>(
+                KIXObjectType.QUEUE, null, new KIXObjectLoadingOptions(
+                    [
+                        new FilterCriteria(
+                            QueueProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
+                            FilterType.AND, name
+                        )
+                    ]
+                ), null, true
+            );
+            queueId = queues && !!queues.length ? queues[0].QueueID : null;
+        }
+        return queueId;
+    }
+
+    private async getDefaultPriorityID(): Promise<number> {
+        let priorityId: number;
+        const name = await this.getDefaultConfigValue(SysConfigKey.POSTMASTER_DEFAULT_PRIORITY);
+        if (name) {
+            const objects = await KIXObjectService.loadObjects<TicketPriority>(
+                KIXObjectType.TICKET_PRIORITY, null, new KIXObjectLoadingOptions(
+                    [
+                        new FilterCriteria(
+                            TicketPriorityProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
+                            FilterType.AND, name
+                        )
+                    ]
+                ), null, true
+            );
+            priorityId = objects && !!objects.length ? objects[0].ID : null;
+        }
+        return priorityId;
+    }
+
+    private async getDefaultTypeID(): Promise<number> {
+        let typeId: number;
+        const name = await this.getDefaultConfigValue(SysConfigKey.TICKET_TYPE_DEFAULT);
+        if (name) {
+            const objects = await KIXObjectService.loadObjects<TicketType>(
+                KIXObjectType.TICKET_TYPE, null, new KIXObjectLoadingOptions(
+                    [
+                        new FilterCriteria(
+                            TicketTypeProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
+                            FilterType.AND, name
+                        )
+                    ]
+                ), null, true
+            );
+            typeId = objects && !!objects.length ? objects[0].ID : null;
+        }
+        return typeId;
+    }
+
+    private async getDefaultStateID(): Promise<number> {
+        let stateId: number;
+        const name = await this.getDefaultConfigValue(SysConfigKey.POSTMASTER_DEFAULT_STATE);
+        if (name) {
+            const objects = await KIXObjectService.loadObjects<TicketState>(
+                KIXObjectType.TICKET_STATE, null, new KIXObjectLoadingOptions(
+                    [
+                        new FilterCriteria(
+                            TicketStateProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
+                            FilterType.AND, name
+                        )
+                    ]
+                ), null, true
+            );
+            stateId = objects && !!objects.length ? objects[0].ID : null;
+        }
+        return stateId;
+    }
+
+}

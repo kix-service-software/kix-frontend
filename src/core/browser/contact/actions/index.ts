@@ -10,3 +10,4 @@
 export { ContactCreateAction } from './ContactCreateAction';
 export { ContactSearchAction } from './ContactSearchAction';
 export { ContactEditAction } from './ContactEditAction';
+export { ContactCSVExportAction } from './ContactCSVExportAction';

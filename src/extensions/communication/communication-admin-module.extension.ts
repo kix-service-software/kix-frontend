@@ -53,6 +53,17 @@ class Extension implements IAdminModuleExtension {
                             )
                         ]
                     )
+                ],
+                [
+                    new AdminModule(
+                        null, 'webforms', 'Translatable#Webform', null,
+                        KIXObjectType.WEBFORM, 'communication-admin-webforms', [
+                            new UIComponentPermission('system/ticket/types', [CRUD.READ], true),
+                            new UIComponentPermission('system/ticket/states', [CRUD.READ], true),
+                            new UIComponentPermission('system/ticket/priorities', [CRUD.READ], true),
+                            new UIComponentPermission('system/ticket/queues', [CRUD.READ], true)
+                        ]
+                    ),
                 ])
         ];
     }

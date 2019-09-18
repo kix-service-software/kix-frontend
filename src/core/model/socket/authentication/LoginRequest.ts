@@ -16,8 +16,7 @@ export class LoginRequest {
         public password: string,
         public redirectUrl: string,
         public requestId: string,
-        public clientRequestId: string,
-        public fakeLogin?: boolean
+        public clientRequestId: string
     ) { }
 
 }

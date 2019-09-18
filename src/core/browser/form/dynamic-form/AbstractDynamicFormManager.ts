@@ -55,11 +55,13 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
             this.values[index].property = newValue.property;
             this.values[index].operator = newValue.operator;
             this.values[index].value = newValue.value;
+            this.values[index].required = newValue.required;
         } else {
             this.values.push(newValue);
         }
 
         await this.checkProperties();
+        await this.validate();
         this.notifyListeners();
     }
 
@@ -70,6 +72,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         }
 
         await this.checkProperties();
+        await this.validate();
         this.notifyListeners();
     }
 
@@ -147,6 +150,10 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
 
     public isMultiselect(property: string): boolean {
         return false;
+    }
+
+    public validate(): Promise<void> {
+        return;
     }
 
 }

@@ -29,7 +29,7 @@ export enum VersionProperty {
     CREATE_BY = 'CreateBy',
     CLASS = 'Class',
     CUR_INCI_STATE_TYPE = 'CurInciStateType',
-    CURRENT = 'CURRENT',
+    BASED_ON_CLASS_VERSION = 'BASED_ON_CLASS_VERSION',
     DATA = 'Data',
     PREPARED_DATA = 'PreparedData',
     COUNT_NUMBER = 'COUNT_NUMBER',

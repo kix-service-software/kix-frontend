@@ -100,21 +100,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async getLabels(property: string, notification: Notification): Promise<Label[]> {
         const labels: Label[] = [];
         if (notification) {
-            const stringValue = await this.state.labelProvider.getPropertyValueDisplayText(
-                property, notification[property]
-            );
-            if (stringValue && stringValue !== '') {
-                const values = stringValue.split(/[,;]\s?/);
-                for (const v of values) {
-                    const icons = await this.state.labelProvider.getIcons(null, property, v);
-                    labels.push(
-                        new Label(
-                            null, v,
-                            icons && !!icons.length ? icons[0] : null,
-                            v, null, v
-                        )
-                    );
-                }
+            const values = await this.state.labelProvider.getPropertyValues(property, notification[property]);
+            for (const v of values) {
+                const icons = await this.state.labelProvider.getIcons(null, property, v);
+                labels.push(
+                    new Label(null, v, icons && !!icons.length ? icons[0] : null, v, null, v)
+                );
             }
         }
         return SortUtil.sortObjects(labels, 'text', DataType.STRING);

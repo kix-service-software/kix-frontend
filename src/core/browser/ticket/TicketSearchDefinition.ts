@@ -26,7 +26,11 @@ export class TicketSearchDefinition extends SearchDefinition {
     }
 
     public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(criteria, null, null, ['Links'], ['Links']);
+        return new KIXObjectLoadingOptions(criteria, null, null, ['Watchers', 'Links'], ['Links']);
+    }
+
+    public getLoadingOptionsForResultList(): KIXObjectLoadingOptions {
+        return new KIXObjectLoadingOptions(null, null, null, ['Watchers']);
     }
 
     public async getProperties(): Promise<Array<[string, string]>> {

@@ -9,7 +9,7 @@
 
 import {
     KIXObjectType, KIXObjectLoadingOptions, FilterCriteria, FilterDataType,
-    FilterType, TicketProperty, KIXObject, SysConfigOption, SysConfigKey
+    FilterType, TicketProperty, KIXObject
 } from "../../../model";
 import { Context } from '../../../model/components/context/Context';
 import { KIXObjectService } from "../../kix";
@@ -41,7 +41,7 @@ export class TicketContext extends Context {
         const stateTypes = await SysConfigService.getInstance().getTicketViewableStateTypes();
 
         const stateTypeFilterCriteria = new FilterCriteria(
-            'StateType', SearchOperator.IN, FilterDataType.STRING, FilterType.AND, stateTypes
+            TicketProperty.STATE_TYPE, SearchOperator.IN, FilterDataType.STRING, FilterType.AND, stateTypes
         );
 
         const loadingOptions = new KIXObjectLoadingOptions(

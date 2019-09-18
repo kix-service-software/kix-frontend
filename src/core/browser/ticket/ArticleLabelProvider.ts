@@ -22,7 +22,7 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
     }
 
     public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
-        let displayValue = property;
+        let displayValue;
         switch (property) {
             case ArticleProperty.TO:
                 displayValue = 'Translatable#To';
@@ -43,7 +43,7 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
                 displayValue = 'Translatable#Visible in customer portal';
                 break;
             case ArticleProperty.SENDER_TYPE_ID:
-                displayValue = 'Translatable#Sender';
+                displayValue = 'Translatable#Sender Type';
                 break;
             case ArticleProperty.FROM:
                 displayValue = 'Translatable#From';
@@ -59,6 +59,9 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
                 break;
             case ArticleProperty.CHANNEL_ID:
                 displayValue = 'Translatable#Channel';
+                break;
+            case ArticleProperty.BODY:
+                displayValue = 'Translatable#Body';
                 break;
             default:
                 displayValue = property;
@@ -131,6 +134,15 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
         switch (property) {
             case ArticleProperty.ARTICLE_TAG:
                 displayValue = '';
+                break;
+            case ArticleProperty.SENDER_TYPE_ID:
+                if (value === 1) {
+                    displayValue = 'Translatable#agent';
+                } else if (value === 2) {
+                    displayValue = 'Translatable#system';
+                } else if (value === 3) {
+                    displayValue = 'Translatable#external';
+                }
                 break;
             case ArticleProperty.INCOMING_TIME:
                 if (displayValue) {
@@ -233,8 +245,13 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
         return await TranslationService.translate('Translatable#Article');
     }
 
-    public async getIcons(article: Article, property: string): Promise<Array<string | ObjectIcon>> {
+    public async getIcons(article: Article, property: string, value: any): Promise<Array<string | ObjectIcon>> {
         const icons = [];
+
+        const channelID = value && value !== ''
+            ? value
+            : article ? article.ChannelID : null
+            ;
         switch (property) {
             case ArticleProperty.ATTACHMENTS:
                 if (article.Attachments) {
@@ -250,21 +267,23 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
                 }
                 break;
             case ArticleProperty.CHANNEL_ID:
-                const channels = await KIXObjectService.loadObjects<Channel>(
-                    KIXObjectType.CHANNEL, [article.ChannelID]
-                );
-                if (channels && channels.length && channels[0].Name === 'email') {
-                    const mailIcon = article.isUnsent()
-                        ? 'kix-icon-mail-warning'
-                        : new ObjectIcon('Channel', article.ChannelID);
-                    let directionIcon = 'kix-icon-arrow-receive';
-                    if (article.senderType.Name === 'agent') {
-                        directionIcon = 'kix-icon-arrow-outward';
+                if (channelID) {
+                    const channels = await KIXObjectService.loadObjects<Channel>(
+                        KIXObjectType.CHANNEL, [channelID]
+                    );
+                    if (channels && channels.length && channels[0].Name === 'email') {
+                        const mailIcon = article && article.isUnsent()
+                            ? 'kix-icon-mail-warning'
+                            : new ObjectIcon('Channel', channelID);
+                        let directionIcon = 'kix-icon-arrow-receive';
+                        if (article && article.senderType.Name === 'agent') {
+                            directionIcon = 'kix-icon-arrow-outward';
+                        }
+                        icons.push(mailIcon);
+                        icons.push(directionIcon);
+                    } else {
+                        icons.push(new ObjectIcon('Channel', channelID));
                     }
-                    icons.push(mailIcon);
-                    icons.push(directionIcon);
-                } else {
-                    icons.push(new ObjectIcon('Channel', article.ChannelID));
                 }
                 break;
             case ArticleProperty.CUSTOMER_VISIBLE:

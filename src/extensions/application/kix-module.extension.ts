@@ -51,6 +51,9 @@ class Extension implements IKIXModuleExtension {
         new UIComponent('link-input', '_base-components/form/inputs/link-input', []),
         new UIComponent('language-input', '_base-components/form/inputs/language-input', []),
         new UIComponent('general-catalog-input', '_base-components/form/inputs/general-catalog-input', []),
+        new UIComponent(
+            'general-catalog-class-input', 'cmdb/admin/dialogs/inputs/general-catalog-class-input', []
+        ),
         new UIComponent('text-area-input', '_base-components/form/inputs/text-area-input', []),
         new UIComponent('object-reference-input', '_base-components/form/inputs/object-reference-input', []),
         new UIComponent('number-input', '_base-components/form/inputs/number-input', []),

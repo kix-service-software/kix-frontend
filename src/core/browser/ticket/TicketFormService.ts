@@ -35,7 +35,7 @@ export class TicketFormService extends KIXObjectFormService<Ticket> {
         return kixObjectType === KIXObjectType.TICKET;
     }
 
-    protected async additionalPreparations(
+    protected async doAdditionalPreparations(
         form: Form, formFieldValues: Map<string, FormFieldValue<any>>, ticket: Ticket
     ): Promise<void> {
         if (form && form.formContext === FormContext.EDIT) {

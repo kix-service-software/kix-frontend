@@ -11,7 +11,7 @@ import {
     AbstractMarkoComponent, ActionFactory, ContextService, Label, KIXObjectService
 } from '../../../../../core/browser';
 import { ComponentState } from './ComponentState';
-import { KIXObjectType, User, PersonalSettingsProperty, Queue } from '../../../../../core/model';
+import { KIXObjectType, User, PersonalSettingsProperty, Queue, Notification } from '../../../../../core/model';
 import { UserLabelProvider, UserDetailsContext } from '../../../../../core/browser/user';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
@@ -50,7 +50,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async initWidget(user: User): Promise<void> {
         this.state.user = user;
         this.prepareActions(user);
-        this.createMyQueues(user);
+        this.createMyQueuesLabels(user);
+        this.createNotificationLabels(user);
     }
 
     private async prepareActions(user: User): Promise<void> {
@@ -61,12 +62,35 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    private async createMyQueues(user: User): Promise<void> {
+    private async createMyQueuesLabels(user: User): Promise<void> {
         const myQueues = user.Preferences.find((p) => p.ID === PersonalSettingsProperty.MY_QUEUES);
         if (myQueues && myQueues.Value) {
             const queueIds = myQueues.Value.split(',').map((v) => Number(v));
             const queues = await KIXObjectService.loadObjects<Queue>(KIXObjectType.QUEUE, queueIds);
-            this.state.labels = queues.map((q) => new Label(q, null, null, null, null, null, true));
+            this.state.queueLabels = queues.map((q) => new Label(q, null, null, null, null, null, true));
+        }
+    }
+
+    private async createNotificationLabels(user: User): Promise<void> {
+        const notificationsPreference = user.Preferences.find((p) => p.ID === PersonalSettingsProperty.NOTIFICATIONS);
+        if (notificationsPreference && notificationsPreference.Value) {
+            try {
+                const notificationValue = JSON.parse(notificationsPreference.Value);
+                const notificationIds = [];
+                for (const key in notificationValue) {
+                    if (notificationValue[key]) {
+                        notificationIds.push(Number(key.split('-')[1]));
+                    }
+                }
+                const notifications = await KIXObjectService.loadObjects<Notification>(
+                    KIXObjectType.NOTIFICATION, notificationIds
+                );
+                this.state.notificationLabels = notifications.map(
+                    (n) => new Label(n, null, null, null, null, null, true)
+                );
+            } catch (e) {
+                console.warn('Could not read/parse notification preference value.');
+            }
         }
     }
 

@@ -78,7 +78,7 @@ export class Extension implements IConfigurationExtension {
                         TableHeaderHeight.LARGE, TableRowHeight.LARGE
                     ), null, false
                 ),
-                false, true, null, false
+                false, true, null, true
             )
         );
 
@@ -87,7 +87,7 @@ export class Extension implements IConfigurationExtension {
             ['config-item-class-details-tab-widget'], [tabLane, ciClassInfoWidget],
             ['ci-class-versions-widget'], [ciClassVersionsWidget],
             ['cmdb-admin-ci-class-create'],
-            ['cmdb-admin-ci-class-edit', , 'print-action']
+            ['cmdb-admin-ci-class-edit', 'print-action']
         );
     }
 

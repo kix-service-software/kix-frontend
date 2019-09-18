@@ -33,7 +33,7 @@ export class QueueFormService extends KIXObjectFormService<Queue> {
         return kixObjectType === KIXObjectType.QUEUE;
     }
 
-    protected async additionalPreparations(
+    protected async doAdditionalPreparations(
         form: Form, formFieldValues: Map<string, FormFieldValue<any>>, queue: Queue
     ): Promise<void> {
         if (form && form.formContext === FormContext.EDIT) {

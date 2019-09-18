@@ -28,6 +28,15 @@
             },
             "edit-mail-filter-dialog-configuration.extension": {
                 "module": "edit-mail-filter-dialog-configuration.extension"
+            },
+            "new-webform-dialog-configuration": {
+                "module": "new-webform-dialog-configuration.extension"
+            },
+            "webform-details-configuration": {
+                "module": "webform-details-configuration.extension"
+            },
+            "edit-webform-dialog-configuration": {
+                "module": "edit-webform-dialog-configuration.extension"
             }
         },
         "kix:modules": {

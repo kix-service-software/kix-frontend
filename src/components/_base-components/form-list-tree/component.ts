@@ -50,7 +50,7 @@ class TreeComponent {
                         break;
                     case 'Enter':
                         const navigationNode = TreeNavigationUtil.findNavigationNode(this.state.nodes);
-                        if (navigationNode) {
+                        if (navigationNode && navigationNode.visible) {
                             this.nodeClicked(navigationNode);
                         }
                         break;

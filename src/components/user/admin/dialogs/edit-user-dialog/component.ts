@@ -16,75 +16,35 @@ import {
 import { ComponentState } from './ComponentState';
 import { TicketPriorityDetailsContext } from '../../../../../core/browser/ticket';
 import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
-import { DialogService } from '../../../../../core/browser/components/dialog';
+import { DialogService, AbstractEditDialog } from '../../../../../core/browser/components/dialog';
 import { UserDetailsContext } from '../../../../../core/browser/user';
 
-class Component extends AbstractMarkoComponent<ComponentState> {
+class Component extends AbstractEditDialog {
 
     public onCreate(): void {
         this.state = new ComponentState();
+        super.init(
+            'Translatable#Update Agent',
+            undefined,
+            KIXObjectType.USER,
+            UserDetailsContext.CONTEXT_ID
+        );
     }
 
     public async onMount(): Promise<void> {
-        DialogService.getInstance().setMainDialogHint('Translatable#All form fields marked by * are required fields.');
-        this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Cancel", "Translatable#Save"
-        ]);
+        await super.onMount();
     }
 
     public async onDestroy(): Promise<void> {
-        FormService.getInstance().deleteFormInstance(this.state.formId);
+        await super.onDestroy();
     }
 
     public async cancel(): Promise<void> {
-        FormService.getInstance().deleteFormInstance(this.state.formId);
-        DialogService.getInstance().closeMainDialog();
+        await super.cancel();
     }
 
     public async submit(): Promise<void> {
-        setTimeout(async () => {
-            const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-            const result = await formInstance.validateForm();
-            const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
-            if (validationError) {
-                this.showValidationError(result);
-            } else {
-                DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Update Agent');
-
-                const context = await ContextService.getInstance().getContext<UserDetailsContext>(
-                    UserDetailsContext.CONTEXT_ID
-                );
-
-                await KIXObjectService.updateObjectByForm(
-                    KIXObjectType.USER, this.state.formId, context.getObjectId()
-                ).then(async (priorityId) => {
-                    context.getObject(KIXObjectType.USER, true);
-                    DialogService.getInstance().setMainDialogLoading(false);
-
-                    const toast = await TranslationService.translate('Translatable#Changes saved.');
-                    BrowserUtil.openSuccessOverlay(toast);
-                    DialogService.getInstance().submitMainDialog();
-                }).catch((error: Error) => {
-                    DialogService.getInstance().setMainDialogLoading(false);
-                    BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
-                });
-            }
-        }, 300);
-    }
-
-
-    public showValidationError(result: ValidationResult[]): void {
-        const errorMessages = result.filter((r) => r.severity === ValidationSeverity.ERROR).map((r) => r.message);
-        const content = new ComponentContent('list-with-title',
-            {
-                title: 'Fehler beim Validieren des Formulars:',
-                list: errorMessages
-            }
-        );
-
-        OverlayService.getInstance().openOverlay(
-            OverlayType.WARNING, null, content, 'Validierungsfehler', true
-        );
+        await super.submit();
     }
 
 }

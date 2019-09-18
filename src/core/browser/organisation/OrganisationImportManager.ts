@@ -25,11 +25,11 @@ export class OrganisationImportManager extends ImportManager {
     public reset(): void {
         super.reset();
         this.values.push(new ObjectPropertyValue(
-            KIXObjectProperty.VALID_ID, ImportPropertyOperator.REPLACE_EMPTY, 1)
+            KIXObjectProperty.VALID_ID, ImportPropertyOperator.REPLACE_EMPTY, [1])
         );
     }
 
-    protected getSpecificObject(object: {}): Organisation {
+    protected async getSpecificObject(object: {}): Promise<Organisation> {
         return new Organisation(object as Organisation);
     }
 
@@ -88,16 +88,20 @@ export class OrganisationImportManager extends ImportManager {
     }
 
     protected async getExisting(organisation: Organisation): Promise<KIXObject> {
-        const filter = [
-            new FilterCriteria(
-                OrganisationProperty.NUMBER, SearchOperator.EQUALS,
-                FilterDataType.STRING, FilterType.AND, organisation.Number
-            )
-        ];
-        const loadingOptions = new KIXObjectLoadingOptions(filter);
-        const organisations = await KIXObjectService.loadObjects(
-            this.objectType, null, loadingOptions, null, true
-        );
-        return organisations && !!organisations.length ? organisations[0] : null;
+        if (organisation.ObjectId) {
+            return super.getExisting(organisation);
+        } else {
+            const filter = [
+                new FilterCriteria(
+                    OrganisationProperty.NUMBER, SearchOperator.EQUALS,
+                    FilterDataType.STRING, FilterType.AND, organisation.Number
+                )
+            ];
+            const loadingOptions = new KIXObjectLoadingOptions(filter);
+            const organisations = await KIXObjectService.loadObjects(
+                this.objectType, null, loadingOptions, null, true
+            );
+            return organisations && !!organisations.length ? organisations[0] : null;
+        }
     }
 }

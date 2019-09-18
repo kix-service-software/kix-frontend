@@ -45,6 +45,14 @@ export enum SysConfigKey {
 
     USER_MANUAL = 'KIX::UserManual',
 
-    ADMIN_MANUAL = 'KIX::AdminManual'
+    ADMIN_MANUAL = 'KIX::AdminManual',
+
+    POSTMASTER_DEFAULT_QUEUE = 'PostmasterDefaultQueue',
+
+    POSTMASTER_DEFAULT_PRIORITY = 'PostmasterDefaultPriority',
+
+    POSTMASTER_DEFAULT_STATE = 'PostmasterDefaultState',
+
+    TICKET_TYPE_DEFAULT = 'Ticket::Type::Default',
 
 }

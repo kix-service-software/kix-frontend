@@ -16,10 +16,12 @@ import { KIXObjectService } from './KIXObjectService';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { LoggingService } from '../LoggingService';
 import {
-    TranslationPattern, TranslationLanguageLoadingOptions, TranslationLanguage, TranslationPatternProperty,
+    TranslationPattern, TranslationLanguage, TranslationPatternProperty,
     TranslationLanguageProperty, PODefinition
 } from '../../../model/kix/i18n';
 import { Translation } from '../../../model/kix/i18n/Translation';
+import { ConfigurationService } from '../ConfigurationService';
+import { IdService } from '../../../browser';
 
 export class TranslationService extends KIXObjectService {
 
@@ -202,6 +204,65 @@ export class TranslationService extends KIXObjectService {
         }
 
         return poDefinitions;
+    }
+
+    // copied from TranslationService (browser), but with small modifiactions
+    private prepareValue(pattern: string = ''): string {
+        if (pattern && pattern.startsWith('Translatable' + '#')) {
+            pattern = pattern.replace('Translatable' + '#', '');
+        }
+        return pattern;
+    }
+    public async translate(
+        pattern: string = '', placeholderValues: Array<string | number> = [],
+        language: string = 'en', // language?: string,
+        getOnlyPattern: boolean = false
+    ): Promise<string> {
+        let translationValue = pattern;
+        if (translationValue !== null) {
+
+            translationValue = this.prepareValue(translationValue);
+
+            if (!getOnlyPattern) {
+                const config = ConfigurationService.getInstance().getServerConfiguration();
+                if (config && config.BACKEND_API_TOKEN) {
+                    // const translations = await KIXObjectService.loadObjects<Translation>(KIXObjectType.TRANSLATION);
+                    const translations = await TranslationService.getInstance().loadObjects<Translation>(
+                        config.BACKEND_API_TOKEN, IdService.generateDateBasedId('translation-service-'),
+                        KIXObjectType.TRANSLATION, null, null, null
+                    ).catch(() => [] as Translation[]);
+                    const translation = translations.find((t) => t.Pattern === translationValue);
+
+                    if (translation) {
+                        // language = language ? language : await this.getUserLanguage();
+                        if (language) {
+                            const translationLanguageValue = translation.Languages[language];
+                            if (translationLanguageValue) {
+                                translationValue = translationLanguageValue;
+                            }
+                        }
+                    }
+
+                    translationValue = this.format(translationValue, placeholderValues.map(
+                        (p) => (typeof p !== undefined && p !== null ? p : '').toString()
+                    ));
+                }
+            }
+            // const debug = ClientStorageService.getOption('i18n-debug');
+
+            // if (debug && debug !== 'false' && debug !== '0') {
+            //     translationValue = 'TR-' + pattern;
+            // }
+        }
+
+        return translationValue;
+    }
+    private format(format: string, args: string[]): string {
+        return format.replace(/{(\d+)}/g, (match, number) => {
+            return args && typeof args[number] !== 'undefined'
+                ? args[number]
+                : '';
+        });
     }
 
 }

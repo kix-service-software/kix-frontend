@@ -20,6 +20,7 @@ export { UIModule as CustomerUIModule } from './CustomerUIModule';
 export { UIModule as FAQAdminUIModule } from './FAQAdminUIModule';
 export { UIModule as FAQEditUIModule } from './FAQEditUIModule';
 export { UIModule as FAQReadUIModule } from './FAQReadUIModule';
+export { UIModule as GeneralCatalogUIModule } from './GeneralCatalogUIModule';
 export { UIModule as LinksUIModule } from './LinksUIModule';
 export { UIModule as OrganisationEditUIModule } from './OrganisationEditUIModule';
 export { UIModule as OrganisationReadUIModule } from './OrganisationReadUIModule';

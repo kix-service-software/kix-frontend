@@ -12,7 +12,7 @@ import {
     WidgetConfiguration, ConfiguredWidget, WidgetSize, DataType,
     FilterCriteria, FilterDataType, FilterType, KIXObjectPropertyFilter,
     TableFilterCriteria, KIXObjectType, SortOrder, ContextConfiguration, CRUD,
-    TableWidgetSettings, KIXObjectLoadingOptions, SysConfigOption, SysConfigKey
+    TableWidgetSettings, KIXObjectLoadingOptions
 } from '../../core/model';
 import {
     SearchOperator, ToggleOptions, TableConfiguration, DefaultColumnConfiguration
@@ -34,7 +34,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
         const stateTypes = await SysConfigService.getInstance().getTicketViewableStateTypes();
 
         const stateTypeFilterCriteria = new FilterCriteria(
-            'StateType', SearchOperator.IN, FilterDataType.STRING, FilterType.AND, stateTypes
+            TicketProperty.STATE_TYPE, SearchOperator.IN, FilterDataType.STRING, FilterType.AND, stateTypes
         );
 
         const chartConfig1 = new TicketChartConfiguration(

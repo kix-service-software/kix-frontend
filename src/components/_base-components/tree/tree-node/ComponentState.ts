@@ -17,7 +17,8 @@ export class ComponentState {
         public activeNode: TreeNode = null,
         public treeParent: any = null,
         public treeId: string = null,
-        public nodeId: string = null
+        public nodeId: string = null,
+        public isVisible: boolean = true
     ) { }
 
 }

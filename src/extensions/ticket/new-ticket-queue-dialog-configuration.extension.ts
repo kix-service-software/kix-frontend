@@ -96,7 +96,15 @@ export class Extension implements IConfigurationExtension {
             const signatureGroup = new FormGroup('Translatable#Signature', [
                 new FormField(
                     'Translatable#Signature', QueueProperty.SIGNATURE, 'rich-text-input', false,
-                    'Translatable#Helptext_Admin_Tickets_QueueCreate_Signature'
+                    'Translatable#Helptext_Admin_Tickets_QueueCreate_Signature', undefined,
+                    new FormFieldValue(
+                        '--<br/>'
+                        + '&lt;KIX_CONFIG_OrganizationLong&gt;<br/>'
+                        + '&lt;KIX_CONFIG_OrganizationAddress&gt;<br/>'
+                        + '&lt;KIX_CONFIG_OrganizationRegistrationLocation&gt; '
+                        + '&lt;KIX_CONFIG_OrganizationRegistrationNumber&gt;<br/>'
+                        + '&lt;KIX_CONFIG_OrganizationDirectors&gt;'
+                    )
                 )
             ]);
 

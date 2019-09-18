@@ -139,7 +139,7 @@ export class KIXObjectSocketClient extends SocketClient {
             KIXObjectEvent.UPDATE_OBJECT, KIXObjectEvent.UPDATE_OBJECT_FINISHED, KIXObjectEvent.UPDATE_OBJECT_ERROR
         );
 
-        await CacheService.getInstance().deleteKeys(cacheKeyPrefix);
+        CacheService.getInstance().deleteKeys(cacheKeyPrefix);
 
         return response.objectId;
     }
@@ -161,7 +161,7 @@ export class KIXObjectSocketClient extends SocketClient {
             KIXObjectEvent.DELETE_OBJECT, KIXObjectEvent.DELETE_OBJECT_FINISHED, KIXObjectEvent.DELETE_OBJECT_ERROR
         );
 
-        await CacheService.getInstance().deleteKeys(cacheKeyPrefix);
+        CacheService.getInstance().deleteKeys(cacheKeyPrefix);
     }
 
     private async sendRequest<T extends ISocketResponse>(

@@ -12,7 +12,8 @@ import {
     KIXObject, KIXObjectType, FilterCriteria, TreeNode,
     KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions, OverlayType, KIXObjectSpecificDeleteOptions,
-    ComponentContent, Error, TableFilterCriteria, CRUD, KIXObjectProperty, User, ValidObject
+    ComponentContent, Error, TableFilterCriteria, CRUD, KIXObjectProperty, User,
+    ValidObject, ObjectIcon, FilterDataType, FilterType
 } from "../../model";
 import { KIXObjectSocketClient } from "./KIXObjectSocketClient";
 import { FormService } from "../form";
@@ -23,12 +24,15 @@ import { OverlayService } from "../OverlayService";
 import { AuthenticationSocketClient } from "../application/AuthenticationSocketClient";
 import { UIComponentPermission } from "../../model/UIComponentPermission";
 import { LabelService } from "../LabelService";
+import { SearchOperator } from "../SearchOperator";
 
 export abstract class KIXObjectService<T extends KIXObject = KIXObject> implements IKIXObjectService<T> {
 
     public abstract isServiceFor(kixObjectType: KIXObjectType): boolean;
 
-    public abstract getLinkObjectName(): string;
+    public getLinkObjectName(): string {
+        return null;
+    }
 
     public isServiceType(kixObjectServiceType: ServiceType): boolean {
         return kixObjectServiceType === ServiceType.OBJECT;
@@ -138,7 +142,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         objectType: KIXObjectType, formId: string, createOptions?: KIXObjectSpecificCreateOptions,
         cacheKeyPrefix: string = objectType
     ): Promise<string | number> {
-        const parameter: Array<[string, any]> = await this.prepareFormFields(formId);
+        const parameter: Array<[string, any]> = await this.prepareFormFields(formId, false, createOptions);
         const objectId = await KIXObjectSocketClient.getInstance().createObject(
             objectType, parameter, createOptions, cacheKeyPrefix
         );
@@ -235,7 +239,9 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         await KIXObjectSocketClient.getInstance().deleteObject(objectType, objectId, deleteOptions, cacheKeyPrefix);
     }
 
-    public async prepareFormFields(formId: string, forUpdate: boolean = false): Promise<Array<[string, any]>> {
+    public async prepareFormFields(
+        formId: string, forUpdate: boolean = false, createOptions?: KIXObjectSpecificCreateOptions
+    ): Promise<Array<[string, any]>> {
         const parameter: Array<[string, any]> = [];
 
         const predefinedParameterValues = await this.preparePredefinedValues(forUpdate);
@@ -259,6 +265,9 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                     preparedValue = await this.prepareUpdateValue(property, value.value);
                 } else {
                     preparedValue = await this.prepareCreateValue(property, value.value);
+                    if (property === 'ICON' && preparedValue[1] && !(preparedValue[1] as ObjectIcon).Content) {
+                        preparedValue[1] = null;
+                    }
                 }
                 if (preparedValue) {
                     preparedValue.forEach((pv) => parameter.push([pv[0], pv[1]]));
@@ -267,12 +276,19 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
             key = iterator.next();
         }
+        await this.prepareDependendValues(parameter, createOptions);
 
         return parameter;
     }
 
     protected async prepareUpdateValue(property: string, value: any): Promise<Array<[string, any]>> {
         return await this.prepareCreateValue(property, value);
+    }
+
+    protected async prepareDependendValues(
+        parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions
+    ): Promise<void> {
+        return;
     }
 
     protected async preparePredefinedValues(forUpdate: boolean): Promise<Array<[string, any]>> {
@@ -395,12 +411,17 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return nodes;
     }
     public static async search(
-        objectType: KIXObjectType, searchValue: string, limit: number = 10
+        objectType: KIXObjectType, searchValue: string, limit: number = 10, validObjects: boolean = true
     ): Promise<KIXObject[]> {
         let result = [];
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
         if (service) {
             const filter = await service.prepareFullTextFilter(searchValue);
+            if (validObjects) {
+                filter.push(new FilterCriteria(
+                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
+                ));
+            }
             const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit);
             result = await service.loadObjects(objectType, null, loadingOptions);
         }
