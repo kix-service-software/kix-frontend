@@ -86,9 +86,9 @@ class Component {
             "Translatable#Close Dialog", "Translatable#Start Import"
         ]);
 
-        this.context = await ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+        this.context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
         if (this.context) {
-            const types = await this.context.getDescriptor().kixObjectTypes;
+            const types = this.context.getDescriptor().kixObjectTypes;
             if (types && !!types.length && typeof types[0] === 'string' && types[0].length) {
                 this.objectType = types[0];
 
@@ -152,7 +152,7 @@ class Component {
             new FormField(
                 'Translatable#Source', 'source', 'attachment-input', true,
                 // tslint:disable-next-line:max-line-length
-                'Translatable#Choose CSV-File with data sets for import. Drag & Drop is possible.',
+                'Translatable#Helptext_Import_File',
                 [
                     new FormFieldOption('MimeTypes', ['text/', '', 'application/vnd.ms-excel']),
                     new FormFieldOption('MULTI_FILES', false)
@@ -160,7 +160,7 @@ class Component {
             ),
             new FormField(
                 'Translatable#Charset', 'character_set', 'default-select-input', true,
-                'Translatable#Select a character set.',
+                'Translatable#Helptext_Import_CharacterSet.',
                 [
                     new FormFieldOption(
                         DefaultSelectInputFormOption.NODES,
@@ -171,7 +171,7 @@ class Component {
             ),
             new FormField(
                 'Translatable#Split Option', 'value_separator', 'default-select-input', true,
-                'Translatable#Select a value separator.',
+                'Translatable#Helptext_Import_ValueSeparator.',
                 [
                     new FormFieldOption(
                         DefaultSelectInputFormOption.NODES,
@@ -183,7 +183,7 @@ class Component {
             ),
             new FormField(
                 'Translatable#Text separator', 'text_separator', 'default-select-input', true,
-                'Translatable#Select a text separator.',
+                'Translatable#Helptext_Import_TextSeparator.',
                 [
                     new FormFieldOption(
                         DefaultSelectInputFormOption.NODES,
@@ -414,11 +414,13 @@ class Component {
             });
 
             if (!!lineErrors.length) {
+                const title = await TranslationService.translate('Translatable#Rows with too less values');
+                const rowLabel = await TranslationService.translate('Translatable#Row');
                 OverlayService.getInstance().openOverlay(
                     OverlayType.WARNING, null, new ComponentContent('list-with-title',
                         {
-                            title: 'Translatable#Rows with too less values' + ':',
-                            list: lineErrors.map((i) => `Row ${i}.`)
+                            title: title + ':',
+                            list: lineErrors.map((i) => `${rowLabel} ${i}.`)
                         }
                     ), 'Translatable#Error!', true
                 );
@@ -562,7 +564,7 @@ class Component {
         if (this.state.canRun) {
             this.cancelImportProcess = false;
             const objectName = await LabelService.getInstance().getObjectName(
-                this.state.importManager.objectType, true, false
+                this.state.importManager.objectType, true, true
             );
 
             const objects = this.state.importManager.objects;

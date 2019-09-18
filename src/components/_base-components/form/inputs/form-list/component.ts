@@ -34,9 +34,7 @@ class Component {
         this.state.asMultiselect = typeof input.multiselect !== 'undefined' ? input.multiselect : false;
         this.freeText = typeof input.freeText !== 'undefined' ? input.freeText : false;
 
-        if (!this.state.asAutocomplete) {
-            this.state.nodes = typeof input.nodes !== 'undefined' ? input.nodes : this.state.nodes;
-        }
+        this.state.nodes = typeof input.nodes !== 'undefined' ? input.nodes : this.state.nodes;
 
         this.state.selectedNodes = typeof input.selectedNodes !== 'undefined' && input.selectedNodes !== null ?
             input.selectedNodes : this.state.selectedNodes;
@@ -157,18 +155,16 @@ class Component {
         }
     }
 
-    public keyUp(event: any): void {
-        if (!this.navigationKeyPressed(event)) {
-            if (this.state.asAutocomplete && typeof event.target.value !== 'undefined' && this.state.searchCallback) {
-                this.state.autocompleteSearchValue = event.target.value;
-                this.startSearch();
-            } else {
-                this.state.filterValue = event.target.value;
-                setTimeout(() => {
-                    this.setDropdownStyle();
-                    this.setCheckState();
-                }, 50);
-            }
+    public filterValueChanged(event: any): void {
+        if (this.state.asAutocomplete && typeof event.target.value !== 'undefined' && this.state.searchCallback) {
+            this.state.autocompleteSearchValue = event.target.value;
+            this.startSearch();
+        } else {
+            this.state.filterValue = event.target.value;
+            setTimeout(() => {
+                this.setDropdownStyle();
+                this.setCheckState();
+            }, 50);
         }
     }
 

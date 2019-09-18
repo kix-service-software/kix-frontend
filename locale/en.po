@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2019-08-02 12:34+0000\n"
-"Last-Translator: fuhlig <Frank.Uhlig@cape-it.de>\n"
+"PO-Revision-Date: 2019-09-10 13:34+0000\n"
+"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: English <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/en/>\n"
 "Language: en\n"
@@ -18,7 +18,7 @@ msgid "{0}/{1} {2} imported"
 msgstr ""
 
 msgid "0 data sets found."
-msgstr ""
+msgstr "Nothing found."
 
 msgid "{0} File(s) added"
 msgstr ""
@@ -26,10 +26,16 @@ msgstr ""
 msgid "{0} imported"
 msgstr ""
 
+msgid "{0} is required."
+msgstr ""
+
 msgid "{0} Link created"
 msgstr ""
 
 msgid "{0} link(s) assigned."
+msgstr ""
+
+msgid "Accepted domains"
 msgstr ""
 
 msgid "Accept KIX Header"
@@ -93,6 +99,9 @@ msgid "Agent Assignment"
 msgstr ""
 
 msgid "Agent Information"
+msgstr ""
+
+msgid "Agent Preferences Tooltip"
 msgstr ""
 
 msgid "Agents"
@@ -170,16 +179,22 @@ msgstr ""
 msgid "Article Text"
 msgstr ""
 
+msgid "Assets: General Catalog"
+msgstr ""
+
+msgid "Assigned agent"
+msgstr ""
+
 msgid "Assigned Agents"
 msgstr ""
 
 msgid "Assigned Contacts"
 msgstr ""
 
-msgid "Assigned Organisations"
+msgid "Assigned Organisation"
 msgstr ""
 
-msgid "Assigned Organsiation"
+msgid "Assigned Organisations"
 msgstr ""
 
 msgid "Assigned Queues"
@@ -197,9 +212,6 @@ msgstr ""
 msgid "Assign Team / Queue"
 msgstr "Assign Team"
 
-msgid "Assign the roles for the user."
-msgstr ""
-
 msgid "At least one of the fields 'To', 'Cc' or 'Bcc' must contain an entry."
 msgstr ""
 
@@ -213,9 +225,6 @@ msgid "attributes to change:"
 msgstr ""
 
 msgid "Automation"
-msgstr ""
-
-msgid "Automation: Notification"
 msgstr ""
 
 msgid "Automation: Notifications"
@@ -284,6 +293,9 @@ msgstr ""
 msgid "Change Password"
 msgstr ""
 
+msgid "Changes cannot be saved. How do you want to proceed?"
+msgstr ""
+
 msgid "Changes saved."
 msgstr ""
 
@@ -297,9 +309,6 @@ msgid "Charset"
 msgstr ""
 
 msgid "Choose a command"
-msgstr ""
-
-msgid "Choose CSV-File with data sets for import. Drag & Drop is possible."
 msgstr ""
 
 msgid "CI Class"
@@ -334,17 +343,20 @@ msgid ""
 "new tab"
 msgstr ""
 
+msgid "Close"
+msgstr ""
+
+msgid "Closed at"
+msgstr ""
+
 msgid "Close Dialog"
 msgstr ""
 
 msgid "Close Overlay"
-msgstr ""
+msgstr "Close"
 
 msgid "Close Sidebars"
 msgstr ""
-
-msgid "Closing time"
-msgstr "Closed at"
 
 msgid "CMDB"
 msgstr "Assets"
@@ -359,6 +371,9 @@ msgid "CMDB Explorer"
 msgstr "Asset Explorer"
 
 msgid "CNO"
+msgstr ""
+
+msgid "Code"
 msgstr ""
 
 msgid ": (colon)"
@@ -379,7 +394,13 @@ msgstr ""
 msgid "Communication: Email: Email Accounts"
 msgstr ""
 
+msgid "Communication: Email: Email Addresses"
+msgstr ""
+
 msgid "Communication: Email: Email Filters"
+msgstr ""
+
+msgid "Communication: Webform"
 msgstr ""
 
 msgid "Compare"
@@ -443,6 +464,12 @@ msgid "contained in"
 msgstr ""
 
 msgid "contains"
+msgstr ""
+
+msgid "Could not handle request."
+msgstr ""
+
+msgid "Could not load file '{0}'."
 msgstr ""
 
 msgid "Country"
@@ -517,6 +544,12 @@ msgstr ""
 msgid "Create Type"
 msgstr ""
 
+msgid "Create Value"
+msgstr ""
+
+msgid "Create Webform"
+msgstr ""
+
 msgid "CSV-Export"
 msgstr ""
 
@@ -559,6 +592,9 @@ msgstr ""
 msgid "Default Value"
 msgstr ""
 
+msgid "Default Values"
+msgstr ""
+
 msgid "Delete"
 msgstr ""
 
@@ -589,6 +625,9 @@ msgstr ""
 msgid "Display Name"
 msgstr ""
 
+msgid "Do not forget to replace <YOUR_FRONTEND_HOST> placeholder."
+msgstr ""
+
 msgid ". (dot)"
 msgstr ""
 
@@ -604,10 +643,8 @@ msgstr ""
 msgid "Edit {0}"
 msgstr ""
 
-#, fuzzy
-#| msgid "Edit Account"
 msgid "Edit Account"
-msgstr "Edit Email Account"
+msgstr ""
 
 msgid "Edit Address"
 msgstr ""
@@ -648,10 +685,8 @@ msgstr ""
 msgid "Edit Links"
 msgstr ""
 
-#, fuzzy
-#| msgid "Config Item Information"
 msgid "Edit Notification"
-msgstr "Asset Information"
+msgstr ""
 
 msgid "Edit Object"
 msgstr ""
@@ -692,6 +727,12 @@ msgstr ""
 msgid "Edit Type"
 msgstr ""
 
+msgid "Edit Value"
+msgstr ""
+
+msgid "Edit Webform"
+msgstr ""
+
 msgid "Email"
 msgstr ""
 
@@ -720,6 +761,9 @@ msgid "Email Header"
 msgstr ""
 
 msgid "Email Information"
+msgstr ""
+
+msgid "Enable attachments"
 msgstr ""
 
 msgid "ends with"
@@ -776,10 +820,8 @@ msgstr ""
 msgid "expected time required:"
 msgstr ""
 
-#, fuzzy
-#| msgid "CMDB Explorer"
 msgid "Explorer"
-msgstr "Asset Explorer"
+msgstr ""
 
 msgid "external"
 msgstr ""
@@ -829,6 +871,9 @@ msgstr ""
 msgid "Fax"
 msgstr ""
 
+msgid "Feedback"
+msgstr ""
+
 msgid "Field"
 msgstr ""
 
@@ -864,6 +909,12 @@ msgstr ""
 msgid "Force"
 msgstr ""
 
+msgid "Form title"
+msgstr ""
+
+msgid "For Tickets"
+msgstr ""
+
 msgid "Forward"
 msgstr ""
 
@@ -874,6 +925,18 @@ msgid "Fullname"
 msgstr ""
 
 msgid "Full Text"
+msgstr ""
+
+msgid "General Catalog"
+msgstr ""
+
+msgid "General Catalog Item"
+msgstr ""
+
+msgid "General Catalog Items"
+msgstr ""
+
+msgid "General information on how to work with KIX 18"
 msgstr ""
 
 msgid "General information on working with KIX 18"
@@ -892,714 +955,903 @@ msgid "Help, hints & tricks"
 msgstr ""
 
 msgid "Helping FAQ Contributions"
-msgstr ""
+msgstr "Helpfull FAQ articles"
 
 msgid "Helptext_Admin_FAQCategoryCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_FAQCategoryCreate_Icon"
 msgstr ""
 "Upload an icon, which will be shown together with the category name within "
-"the application"
+"the application."
 
 msgid "Helptext_Admin_FAQCategoryCreate_Name"
-msgstr "The name set here will be shown in the application"
+msgstr ""
 
 msgid "Helptext_Admin_FAQCategoryCreate_ParentCategory"
 msgstr ""
 "If you want to subordinate the new category to an already existing category, "
-"you can choose this here"
+"you can choose this here."
 
 msgid "Helptext_Admin_FAQCategoryCreate_Validity"
-msgstr "The FAQ category can only be used within the system if set “valid”"
+msgstr "The FAQ category can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_FAQCategoryEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_FAQCategoryEdit_Icon"
 msgstr ""
 "Upload an icon, which will be shown together with the category name within "
-"the application"
+"the application."
 
 msgid "Helptext_Admin_FAQCategoryEdit_Name"
-msgstr "The name set here will be shown in the application"
+msgstr ""
 
 msgid "Helptext_Admin_FAQCategoryEdit_ParentCategory"
 msgstr ""
 "If you want to subordinate the new category to an already existing category, "
-"you can choose this here"
+"you can choose this here."
 
 msgid "Helptext_Admin_FAQCategoryEdit_Validity"
-msgstr "The FAQ category can only be used within the system if set “valid”"
+msgstr "The FAQ category can only be used within the system if set “valid”."
+
+msgid "Helptext_Admin_GeneralCatalogCreate_Class"
+msgstr ""
+
+msgid "Helptext_Admin_GeneralCatalogCreate_Comment"
+msgstr ""
+
+msgid "Helptext_Admin_GeneralCatalogCreate_Name"
+msgstr ""
+
+msgid "Helptext_Admin_GeneralCatalogCreate_Validity"
+msgstr ""
 
 msgid "Helptext_Admin_MailAccountCreate_AcceptKIXHeader"
 msgstr ""
 "Sometimes incoming emails already contain KIX Header. If this option is set, "
 "the KIX Header can already be interpreted, whether or not any specific "
-"options are configured"
+"options are configured."
 
 msgid "Helptext_Admin_MailAccountCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_MailAccountCreate_Dispachting"
 msgstr ""
 "Choose the team, which is supposed to receive incoming emails from this "
-"account. It is defined within the SysConfig which team is set as “default”"
+"account. It is defined within the SysConfig which team is set as “default”."
 
 msgid "Helptext_Admin_MailAccountCreate_Host"
 msgstr "Insert the host name, holding the account. Example: mail.example.com"
 
 msgid "Helptext_Admin_MailAccountCreate_IMAPFolder"
 msgstr ""
-"Only modify this if you need to fetch mail from a different folder than INBOX"
+"Only modify this if you need to fetch mail from a different folder than "
+"INBOX."
 
 msgid "Helptext_Admin_MailAccountCreate_Password"
-msgstr "Insert the password for the account to enable connection with the host"
+msgstr ""
+"Insert the password for the account to enable connection with the host."
 
 msgid "Helptext_Admin_MailAccountCreate_Type."
 msgstr ""
-"IMAP/=Messages are only copied to KIX – the originals stay at the server\n"
-"POP/=Messages are downloaded from the server\n"
-"/S=Connection is SSL encrypted\n"
-"/TLS=Connection is TLS encrpyted"
+"IMAP/=Messages are only copied to KIX – the originals stay at the server; "
+"POP/=Messages are downloaded from the server; /S=Connection is SSL "
+"encrypted; /TLS=Connection is TLS encrpyted"
 
 msgid "Helptext_Admin_MailAccountCreate_UserName"
 msgstr ""
 "Insert the user name for the account you want to configure in KIX, to enable "
-"connection with the host"
+"connection with the host."
 
 msgid "Helptext_Admin_MailAccountCreate_Validity"
-msgstr "The email account can only be used within the system if set “valid”"
+msgstr "The email account can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_MailAccountEdit_AcceptKIXHeader"
 msgstr ""
 "Sometimes incoming emails already contain KIX Header. If this option is set, "
 "the KIX Header can already be interpreted, whether or not any specific "
-"options are configured"
+"options are configured."
 
 msgid "Helptext_Admin_MailAccountEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_MailAccountEdit_Dispachting"
 msgstr ""
 "Choose the team, which is supposed to receive incoming emails from this "
-"account. It is defined within the SysConfig which team is set as “default”"
+"account. It is defined within the SysConfig which team is set as “default”."
 
 msgid "Helptext_Admin_MailAccountEdit_Host"
 msgstr "Insert the host name, holding the account. Example: mail.example.com"
 
 msgid "Helptext_Admin_MailAccountEdit_IMAPFolder"
 msgstr ""
-"Only modify this if you need to fetch mail from a different folder than INBOX"
+"Only modify this if you need to fetch mail from a different folder than "
+"INBOX."
 
 msgid "Helptext_Admin_MailAccountEdit_Password"
-msgstr "Insert the password for the account to enable connection with the host"
+msgstr ""
+"Insert the password for the account to enable connection with the host."
 
 msgid "Helptext_Admin_MailAccountEdit_Type."
 msgstr ""
-"IMAP/=Messages are only copied to KIX – the originals stay at the server\n"
-"POP/=Messages are downloaded from the server\n"
-"/S=Connection is SSL encrypted\n"
-"/TLS=Connection is TLS encrpyted"
+"IMAP/=Messages are only copied to KIX – the originals stay at the server; "
+"POP/=Messages are downloaded from the server; /S=Connection is SSL "
+"encrypted; /TLS=Connection is TLS encrpyted"
 
 msgid "Helptext_Admin_MailAccountEdit_UserName"
 msgstr ""
 "Insert the user name for the account you want to configure in KIX, to enable "
-"connection with the host"
+"connection with the host."
 
 msgid "Helptext_Admin_MailAccountEdit_Validity"
-msgstr "The email account can only be used within the system if set “valid”"
+msgstr "The email account can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_MailFilterCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_MailFilterCreate_FilterConditions"
-msgstr ""
+msgstr "At least one filter condition is necessary for the filter to work."
 
 msgid "Helptext_Admin_MailFilterCreate_Name"
-msgstr "Insert a name for the email filter"
+msgstr ""
 
 msgid "Helptext_Admin_MailFilterCreate_SetEmailHeaders"
-msgstr ""
-"Choose which email header of incoming emails should be examined (one "
-"attribute per line). Available are all header configured in the SysConfig"
+msgstr "At least one email header is necessary for the filter to work."
 
 msgid "Helptext_Admin_MailFilterCreate_StopAfterMatch"
 msgstr ""
 "If this option is set, and the conditions defined here match with an "
-"incoming email, no more other filters will be applied to this email"
+"incoming email, no more other filters will be applied to this email."
 
 msgid "Helptext_Admin_MailFilterCreate_Validity"
-msgstr "The email filter can only be used within the system if set “valid”"
+msgstr "The email filter can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_MailFilterEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_MailFilterEdit_FilterConditions"
-msgstr ""
+msgstr "At least one filter condition is necessary for the filter to work."
 
 msgid "Helptext_Admin_MailFilterEdit_Name"
-msgstr "Insert a name for the email filter"
+msgstr ""
 
 msgid "Helptext_Admin_MailFilterEdit_SetEmailHeaders"
 msgstr ""
 "Choose which email header of incoming emails should be examined (one "
-"attribute per line). Available are all header configured in the SysConfig"
+"attribute per line). Available are all header configured in the SysConfig."
 
 msgid "Helptext_Admin_MailFilterEdit_StopAfterMatch"
 msgstr ""
 "If this option is set, and the conditions defined here match with an "
-"incoming email, no more other filters will be applied to this email"
+"incoming email, no more other filters will be applied to this email."
 
 msgid "Helptext_Admin_MailFilterEdit_Validity"
-msgstr "The email filter can only be used within the system if set “valid”"
+msgstr "The email filter can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_MailFilter_FilterConditions_EmailHeader"
 msgstr ""
 "Choose which email header of incoming emails should be examined (one "
-"attribute per line). Available are all header configured in the SysConfig"
+"attribute per line). Available are all header configured in the SysConfig."
 
 msgid "Helptext_Admin_MailFilter_FilterConditions_Negate"
 msgstr ""
-"Set this option if the chosen header should not contain the following pattern"
+"Set this option if the chosen header should not contain the following "
+"pattern."
 
 msgid "Helptext_Admin_MailFilter_FilterConditions_Pattern"
 msgstr ""
 "Insert the value/pattern, the chosen header is supposed to match, to trigger "
-"the filter. It is possible to use RegEx"
+"the filter. It is possible to use RegEx."
 
 msgid "Helptext_Admin_MailFilter_SetEmailHeader_EmailHeader"
 msgstr ""
+"Choose which email header will be set for incoming emails, matching the "
+"previously defined filter conditions. Available are all header configured in "
+"the SysConfig."
 
 msgid "Helptext_Admin_MailFilter_SetEmailHeader_Value"
-msgstr ""
+msgstr "Insert the value you want to set for the chosen header attribute."
 
 msgid "Helptext_Admin_MailFilter_Sidebar"
 msgstr ""
+"Incoming emails can be dispatched or filtered based on email headers. "
+"Matching using Regular Expressions is possible. If you want to match only "
+"the email address, use EMAILADDRESS:info@example.com in From, To or Cc. If "
+"you use Regular Expressions, you can set the matched pattern in „()“ and "
+"refer to this by adding „[***]“ in the 'Set Value' action. (only works for "
+"one „()“-argument) Filterconditions are AND-linked."
 
 msgid "Helptext_Admin_NotificationCreate_AdditionalRecipient"
 msgstr ""
 "Insert a syntactically correct email address to send this notification to "
-"further recipients, additionally to the criteria defined above"
+"further recipients, additionally to the criteria defined above."
 
 msgid "Helptext_Admin_NotificationCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_NotificationCreate_Event"
 msgstr ""
 "Choose from the list which ticket or article events are supposed to trigger "
-"this notification"
+"this notification. Multiselect possible."
 
 msgid "Helptext_Admin_NotificationCreate_Filter"
 msgstr ""
+"Choose a ticket or article attribute from the list. Then you can insert the "
+"value the filter is supposed to react to. Please use an extra line for each "
+"attribute. If at least one article related event is chosen above the filter "
+"attributes \"Sendertype\" & \"Channel\" are obligatory."
 
 msgid "Helptext_Admin_NotificationCreate_MessageSubject"
 msgstr ""
 "Insert the subject you want to show in the email send out by this "
-"notification. Keep in mind the chosen language"
+"notification. Keep in mind the chosen language."
 
 msgid "Helptext_Admin_NotificationCreate_MessageText"
 msgstr ""
 "Insert the text you want to show in the email send out by this notification. "
-"Keep in mind the chosen language"
+"Keep in mind the chosen language."
 
 msgid "Helptext_Admin_NotificationCreate_Name"
-msgstr "Set a notification name"
+msgstr ""
 
 msgid "Helptext_Admin_NotificationCreate_SendDespiteOutOfOffice"
 msgstr ""
-"If this option is active the notification will be send to absent agents, too"
+"If this option is active the notification will be send to absent agents, too."
 
 msgid "Helptext_Admin_NotificationCreate_SendOnceADay"
-msgstr ""
+msgstr "If this option is active the notification will be sent again each day."
 
 msgid "Helptext_Admin_NotificationCreate_SendTo"
 msgstr ""
 "Choose from the drop down list general functions the agent should comply "
-"with to receive this notification"
+"with to receive this notification."
 
 msgid "Helptext_Admin_NotificationCreate_SendToAgents"
 msgstr ""
 "Insert specific agents who are supposed to receive this notification. You "
-"can choose from all valid agents available in the system"
+"can choose from all valid agents available in the system."
 
 msgid "Helptext_Admin_NotificationCreate_SendToRoleMembers"
 msgstr ""
-"Choose from the drop down list roles the agent should hold to receive this "
-"notification. You can choose from all valid roles available in the system"
+"Choose roles from the drop down list. The notification will be sent to all "
+"agents assigned to these roles. You can choose from all valid roles "
+"available in the system."
+
+msgid "Helptext_Admin_NotificationCreate_ShowPreferences"
+msgstr ""
+"The notification will be send to all agents chosen as recipients. If this "
+"option is active agents can subscribe from the notification by changing "
+"their preferences."
 
 msgid "Helptext_Admin_NotificationCreate_SubjectWithTicketNumber"
 msgstr ""
 "Choose if You want the ticket number shown with the subject of the email "
-"send out by this notification"
+"send out by this notification."
 
 msgid "Helptext_Admin_NotificationCreate_Validity"
 msgstr ""
 "Notifications as defined here will only be send if the notification is set "
-"“valid”"
+"“valid”."
 
 msgid "Helptext_Admin_NotificationEdit_AdditionalRecipient"
 msgstr ""
 "Insert a syntactically correct email address to send this notification to "
-"further recipients, additionally to the criteria defined above"
+"further recipients, additionally to the criteria defined above."
 
 msgid "Helptext_Admin_NotificationEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_NotificationEdit_Event"
 msgstr ""
 "Choose from the list which ticket or article events are supposed to trigger "
-"this notification"
+"this notification. Multiselect possible."
 
 msgid "Helptext_Admin_NotificationEdit_Filter"
 msgstr ""
+"Choose a ticket or article attribute from the list. Then you can insert the "
+"value the filter is supposed to react to. Please use an extra line for each "
+"attribute. If at least one article related event is chosen above the filter "
+"attributes \"Sendertype\" & \"Channel\" are obligatory."
 
 msgid "Helptext_Admin_NotificationEdit_MessageSubject"
 msgstr ""
 "Insert the subject you want to show in the email send out by this "
-"notification. Keep in mind the chosen language"
+"notification. Keep in mind the chosen language."
 
 msgid "Helptext_Admin_NotificationEdit_MessageText"
 msgstr ""
 "Insert the text you want to show in the email send out by this notification. "
-"Keep in mind the chosen language"
+"Keep in mind the chosen language."
 
 msgid "Helptext_Admin_NotificationEdit_Name"
-msgstr "Set a notification name"
+msgstr ""
 
 msgid "Helptext_Admin_NotificationEdit_SendDespiteOutOfOffice"
 msgstr ""
-"If this option is active the notification will be send to absent agents, too"
+"If this option is active the notification will be send to absent agents, too."
 
 msgid "Helptext_Admin_NotificationEdit_SendOnceADay"
-msgstr ""
+msgstr "If this option is active the notification will be sent again each day."
 
 msgid "Helptext_Admin_NotificationEdit_SendTo"
 msgstr ""
 "Choose from the drop down list general functions the agent should comply "
-"with to receive this notification"
+"with to receive this notification."
 
 msgid "Helptext_Admin_NotificationEdit_SendToAgents"
 msgstr ""
 "Insert specific agents who are supposed to receive this notification. You "
-"can choose from all valid agents available in the system"
+"can choose from all valid agents available in the system."
 
 msgid "Helptext_Admin_NotificationEdit_SendToRoleMembers"
 msgstr ""
-"Choose from the drop down list roles the agent should hold to receive this "
-"notification. You can choose from all valid roles available in the system"
+"Choose roles from the drop down list. The notification will be sent to all "
+"agents assigned to these roles. You can choose from all valid roles "
+"available in the system."
 
 msgid "Helptext_Admin_NotificationEdit_SubjectWithTicketNumber"
 msgstr ""
 "Choose if You want the ticket number shown with the subject of the email "
-"send out by this notification"
+"send out by this notification."
 
 msgid "Helptext_Admin_NotificationEdit_Validity"
 msgstr ""
 "Notifications as defined here will only be send if the notification is set "
-"“valid”"
+"“valid”."
 
 msgid "Helptext_Admin_QueueCreate_FollowUpTicketLock"
 msgstr ""
+"States if an answer to the same ticket will lock this ticket for the last "
+"owner."
 
 msgid "Helptext_Admin_QueueEdit_FollowUpTicketLock"
 msgstr ""
+"States if an answer to the same ticket will lock this ticket for the last "
+"owner."
 
 msgid "Helptext_Admin_SysConfigEdit_Default_Value"
-msgstr "Shows the options for this SysConfig key"
+msgstr ""
+"The SysConfig default value cannot be changed. Click the button “Reset to "
+"Default” to restore the default value."
 
 msgid "Helptext_Admin_SysConfigEdit_Description"
-msgstr "Explains what is controlled by this SysConfig key"
+msgstr "Explains how this SysConfig key works."
 
 msgid "Helptext_Admin_SysConfigEdit_Name"
-msgstr "The SysConfig key name cannot be changed"
+msgstr "The SysConfig key name cannot be changed."
 
 msgid "Helptext_Admin_SysConfigEdit_Validity"
 msgstr ""
 "The SysConfig key needs to be set “valid”, for the settings to be activated. "
-"Option is not available for all keys"
+"Option is not available for all keys."
 
 msgid "Helptext_Admin_SysConfigEdit_Value"
-msgstr "Shows the options for this SysConfig key"
+msgstr ""
+"SysConfig key value. The SysConfig key value consists of a simple array, "
+"number or, in the case of a complex key, a JSON string - see standard value."
 
 msgid "Helptext_Admin_SystemAddressCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_SystemAddressCreate_DisplayName"
 msgstr ""
+"Insert a display name for the email address. For an outgoing email, the "
+"display name can be used instead or together with the email address. "
+"Example: “Example KG Support”"
 
 msgid "Helptext_Admin_SystemAddressCreate_Name"
 msgstr ""
+"Insert a syntactically correct email address here. Example: “support@example-"
+"kg.com” To connect answers to this email address with already existing "
+"tickets, this address needs to match with a mail account, configured in KIX."
 
 msgid "Helptext_Admin_SystemAddressCreate_Validity"
-msgstr ""
+msgstr "The email address can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_TextModuleCreate_Comment"
 msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_TextModuleCreate_Keywords"
-msgstr ""
+msgstr "Keywords allow to quickly find and choose text modules."
 
 msgid "Helptext_Admin_TextModuleCreate_Language"
-msgstr ""
+msgstr "Insert the language of the text module."
 
 msgid "Helptext_Admin_TextModuleCreate_Name"
 msgstr ""
 
 msgid "Helptext_Admin_TextModuleCreate_Text"
 msgstr ""
+"Insert the text you want to use as a text module. You can use placeholders."
 
 msgid "Helptext_Admin_TextModuleCreate_Validity"
-msgstr ""
+msgstr "The text module can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_TextModuleEdit_Comment"
 msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_TextModuleEdit_Keywords"
-msgstr ""
+msgstr "Keywords allow to quickly find and choose text modules."
 
 msgid "Helptext_Admin_TextModuleEdit_Language"
-msgstr ""
+msgstr "Insert the language of the text module."
 
 msgid "Helptext_Admin_TextModuleEdit_Name"
 msgstr ""
 
 msgid "Helptext_Admin_TextModuleEdit_Text"
 msgstr ""
+"Insert the text you want to use as a text module. You can use placeholders."
 
 msgid "Helptext_Admin_TextModuleEdit_Validity"
+msgstr "The text module can only be used within the system if set “valid”."
+
+msgid "Helptext_Admin_Tickets_GeneralCatalogCreate_Icon."
 msgstr ""
 
 msgid "Helptext_Admin_Tickets_PriorityCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Tickets_PriorityCreate_Icon"
 msgstr ""
 "Upload an icon, which will be shown together with the priority name within "
-"the application"
+"the application."
 
 msgid "Helptext_Admin_Tickets_PriorityCreate_Name"
-msgstr "The name set here will be shown in the application"
+msgstr ""
 
 msgid "Helptext_Admin_Tickets_PriorityCreate_Valid"
-msgstr "The priority can only be used within the system if set “valid”"
+msgstr "The priority can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_Tickets_PriorityEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Tickets_PriorityEdit_Icon"
 msgstr ""
 "Upload an icon, which will be shown together with the priority name within "
-"the application"
+"the application."
 
 msgid "Helptext_Admin_Tickets_PriorityEdit_Name"
-msgstr "The name set here will be shown in the application"
+msgstr ""
 
 msgid "Helptext_Admin_Tickets_PriorityEdit_Valid"
-msgstr "The priority can only be used within the system if set “valid”"
+msgstr "The priority can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_Tickets_QueueCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Tickets_QueueCreate_FollowUp"
 msgstr ""
-"States if an answer to the same ticket will lock this ticket for the last "
-"owner"
+"States if an answer to an already closed ticket in this team will open the "
+"ticket again."
 
 msgid "Helptext_Admin_Tickets_QueueCreate_Icon."
 msgstr ""
 "Upload an icon, which will be shown together with the team name within the "
-"application"
+"application."
 
 msgid "Helptext_Admin_Tickets_QueueCreate_Name"
-msgstr "The name set here will be shown in the application"
+msgstr ""
 
 msgid "Helptext_Admin_Tickets_QueueCreate_ParentQueue"
 msgstr ""
 "If you want to subordinate the new team to an already existing team, you can "
-"choose this here"
+"choose this here."
 
 msgid "Helptext_Admin_Tickets_QueueCreate_SenderAddress."
-msgstr "Sender address for emails send by this team"
+msgstr "Sender address for emails send by this team."
 
 msgid "Helptext_Admin_Tickets_QueueCreate_Signature"
 msgstr ""
 "Signature for emails send by this team. It is not possible to insert "
-"pictures. You can use text modules"
+"pictures. You can use placeholders."
 
 msgid "Helptext_Admin_Tickets_QueueCreate_UnlockTimeout"
 msgstr ""
 "If an agent locks a ticket, but does not close the ticket before expiry of "
 "the unlock timeout, the ticket will be opened again and available for other "
-"agents"
+"agents."
 
 msgid "Helptext_Admin_Tickets_QueueCreate_Validity"
-msgstr "The team can only be used within the system if set “valid”"
+msgstr "The team can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_Tickets_QueueEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Tickets_QueueEdit_FollowUp"
 msgstr ""
-"States if an answer to the same ticket will lock this ticket for the last "
-"owner"
+"States if an answer to an already closed ticket in this team will open the "
+"ticket again."
 
 msgid "Helptext_Admin_Tickets_QueueEdit_Icon."
 msgstr ""
 "Upload an icon, which will be shown together with the team name within the "
-"application"
+"application."
 
 msgid "Helptext_Admin_Tickets_QueueEdit_ParentQueue"
 msgstr ""
 "If you want to subordinate the new team to an already existing team, you can "
-"choose this here"
+"choose this here."
 
 msgid "Helptext_Admin_Tickets_QueueEdit_SenderAddress."
-msgstr "Sender address for emails send by this team"
+msgstr "Sender address for emails send by this team."
 
 msgid "Helptext_Admin_Tickets_QueueEdit_Signature"
 msgstr ""
 "Signature for emails send by this team. It is not possible to insert "
-"pictures. You can use text modules"
+"pictures. You can use placeholders."
 
 msgid "Helptext_Admin_Tickets_QueueEdit_UnlockTimeout"
 msgstr ""
 "If an agent locks a ticket, but does not close the ticket before expiry of "
 "the unlock timeout, the ticket will be opened again and available for other "
-"agents"
+"agents."
 
 msgid "Helptext_Admin_Tickets_QueueEdit_Validity"
-msgstr "The team can only be used within the system if set “valid”"
+msgstr "The team can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_Tickets_StateCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Tickets_StateCreate_Icon"
 msgstr ""
 "Upload an icon, which will be shown together with the state name within the "
-"application"
+"application."
 
 msgid "Helptext_Admin_Tickets_StateCreate_Name"
-msgstr "The name set here will be shown in the application"
+msgstr ""
 
 msgid "Helptext_Admin_Tickets_StateCreate_Type"
-msgstr "Assign the new State to a group"
+msgstr "The state type groups states."
 
 msgid "Helptext_Admin_Tickets_StateCreate_Valid"
-msgstr "The state can only be used within the system if set “valid”"
+msgstr "The state can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_Tickets_StateEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Tickets_StateEdit_Icon"
 msgstr ""
 "Upload an icon, which will be shown together with the state name within the "
-"application"
+"application."
 
 msgid "Helptext_Admin_Tickets_StateEdit_Name"
-msgstr "The name set here will be shown in the application"
+msgstr ""
 
 msgid "Helptext_Admin_Tickets_StateEdit_Type"
-msgstr "Assign the new State to a group"
+msgstr "The state type groups states."
 
 msgid "Helptext_Admin_Tickets_StateEdit_Valid"
-msgstr "The state can only be used within the system if set “valid”"
+msgstr "The state can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_Tickets_Tickets_QueueEdit_Name"
 msgstr "The name set here will be shown in the application"
 
 msgid "Helptext_Admin_Tickets_TypeCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Tickets_TypeCreate_Icon"
 msgstr ""
 "Upload an icon, which will be shown together with the type name within the "
-"application"
+"application."
 
 msgid "Helptext_Admin_Tickets_TypeCreate_Name"
-msgstr "The name set here will be shown in the application"
+msgstr ""
 
 msgid "Helptext_Admin_Tickets_TypeCreate_Valid"
-msgstr "The type can only be used within the system if set “valid”"
+msgstr "The type can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_Tickets_TypeEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Tickets_TypeEdit_Icon"
 msgstr ""
 "Upload an icon, which will be shown together with the type name within the "
-"application"
+"application."
 
 msgid "Helptext_Admin_Tickets_TypeEdit_Name"
-msgstr "The name set here will be shown in the application"
+msgstr ""
 
 msgid "Helptext_Admin_Tickets_TypeEdit_Valid"
-msgstr "The type can only be used within the system if set “valid”"
+msgstr "The type can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_UserCreate_Preferences_MyQueues"
 msgstr ""
 "Set the default teams, the agent will receive notifications for. An agent "
-"can change this setting in their preferences"
+"can change this setting in their preferences."
+
+#, fuzzy
+#| msgid "Helptext_Admin_UserCreate_Preferences_MyQueues"
+msgid "Helptext_Admin_UserCreate_Preferences_Notifications_Hint"
+msgstr ""
+"Set the default teams, the agent will receive notifications for. An agent "
+"can change this setting in their preferences."
 
 msgid "Helptext_Admin_UserCreate_Preferences_UserLanguage"
 msgstr ""
 "Set the default language for the agent, when they log in KIX the first time. "
-"An agent can change their language settings in their preferences"
+"An agent can change their language settings in their preferences."
 
 msgid "Helptext_Admin_UserEdit_Preferences_Language"
 msgstr ""
 "Set the default language for the agent, when they log in KIX the first time. "
-"An agent can change their language settings in their preferences"
+"An agent can change their language settings in their preferences."
 
 msgid "Helptext_Admin_UserEdit_Preferences_MyQueues"
 msgstr ""
 "Set the default teams, the agent will receive notifications for. An agent "
-"can change this setting in their preferences"
+"can change this setting in their preferences."
+
+#, fuzzy
+#| msgid "Helptext_Admin_UserEdit_Preferences_Language"
+msgid "Helptext_Admin_UserEdit_Preferences_Notifications_Hint"
+msgstr ""
+"Set the default language for the agent, when they log in KIX the first time. "
+"An agent can change their language settings in their preferences."
 
 msgid "Helptext_Admin_Users_RoleCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Users_RoleCreate_Name"
-msgstr "Insert a name for the role"
+msgstr ""
 
 msgid "Helptext_Admin_Users_RoleCreate_User"
-msgstr "There are only valid agents available"
+msgstr "There are only valid agents available."
 
 msgid "Helptext_Admin_Users_RoleCreate_Valid"
-msgstr "The role can only be used within the system if set “valid”"
+msgstr "The role can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_Users_RoleEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Users_RoleEdit_Name"
-msgstr "Insert a name for the role"
+msgstr ""
 
 msgid "Helptext_Admin_Users_RoleEdit_User"
-msgstr "There are only valid agents available"
+msgstr "There are only valid agents available."
 
 msgid "Helptext_Admin_Users_RoleEdit_Valid"
-msgstr "The role can only be used within the system if set “valid”"
+msgstr "The role can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_Users_UserCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Users_UserCreate_Email"
-msgstr "Insert the agents email address"
+msgstr ""
 
 msgid "Helptext_Admin_Users_UserCreate_FirstName"
-msgstr "Insert one or various first names for the agent"
+msgstr ""
 
 msgid "Helptext_Admin_Users_UserCreate_LastName"
-msgstr "Insert a last name for the agent"
+msgstr ""
 
 msgid "Helptext_Admin_Users_UserCreate_Login"
-msgstr "The login name must be unique and cannot be changed afterwards"
+msgstr "The login name must be unique."
+
+msgid "Helptext_Admin_Users_UserCreate_Mobile"
+msgstr ""
 
 msgid "Helptext_Admin_Users_UserCreate_Password"
-msgstr "The password can be changed/modified afterwards"
+msgstr "The password can be changed/modified afterwards."
 
 msgid "Helptext_Admin_Users_UserCreate_Phone"
-msgstr "Insert the agents phone number"
+msgstr ""
+
+msgid "Helptext_Admin_Users_UserCreate_Roles"
+msgstr ""
+"An agent needs at least the role “AgentUser” to successfully login. Only "
+"valid roles are available here."
 
 msgid "Helptext_Admin_Users_UserCreate_Title"
-msgstr "If available, insert a title for the agent"
+msgstr ""
 
 msgid "Helptext_Admin_Users_UserCreate_Valid"
-msgstr "The agent can only login with the user data set here if set “valid”"
+msgstr "The agent can only login with the user data set here if set “valid”."
 
 msgid "Helptext_Admin_Users_UserEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)"
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_Users_UserEdit_Email"
-msgstr "Insert the agents email address"
+msgstr ""
 
 msgid "Helptext_Admin_Users_UserEdit_FirstName"
-msgstr "Insert one or various first names for the agent"
+msgstr ""
 
 msgid "Helptext_Admin_Users_UserEdit_LastName"
-msgstr "Insert a last name for the agent"
+msgstr ""
 
 msgid "Helptext_Admin_Users_UserEdit_Login"
-msgstr "The login cannot be changed"
+msgstr "The login name must be unique."
 
 msgid "Helptext_Admin_Users_UserEdit_Mobile"
-msgstr "Insert the agents mobile phone number"
+msgstr ""
 
 msgid "Helptext_Admin_Users_UserEdit_Password"
-msgstr "The password can be changed."
+msgstr ""
+"Enter a new password for the agent. If you do not enter a new one the "
+"previous password stays valid."
 
 msgid "Helptext_Admin_Users_UserEdit_Phone"
-msgstr "Insert the agents phone number."
+msgstr ""
+
+msgid "Helptext_Admin_Users_UserEdit_Roles"
+msgstr ""
+"An agent needs at least the role “AgentUser” to successfully login. Only "
+"valid roles are available here."
 
 msgid "Helptext_Admin_Users_UserEdit_Title"
-msgstr "If available, insert a title for the agent."
+msgstr ""
 
 msgid "Helptext_Admin_Users_UserEdit_Valid"
 msgstr "The agent can only login with the user data set here if set “valid”."
 
+msgid "Helptext_Admin_WebformCreateEdit_AcceptedDomains"
+msgstr ""
+"Comma or semicolon are allowed to use as text separators. You can also use "
+"RegEx, as long as they are surounded by slashes (\"/\")."
+
+msgid "Helptext_Admin_WebformCreateEdit_AllowAttachments"
+msgstr ""
+"If this option is activated, tickets created via webform can contain "
+"attachements."
+
+msgid "Helptext_Admin_WebformCreateEdit_AssignedAgent"
+msgstr ""
+"To be able to create tickets in KIX via webform, you need to assign an agent "
+"to the form who has at least the right to UPDATE tickets."
+
+msgid "Helptext_Admin_WebformCreateEdit_AssignedAgentPassword"
+msgstr ""
+"Set the password for the assigned agent here to be able to create tickets "
+"via webform."
+
+msgid "Helptext_Admin_WebformCreateEdit_ButtonLabel"
+msgstr "Define the name of the button which opens the webform."
+
+msgid "Helptext_Admin_WebformCreateEdit_HintMessage"
+msgstr "Define a help text to show in the webform."
+
+msgid "Helptext_Admin_WebformCreateEdit_Modal"
+msgstr ""
+"If this option is activated, the background page behind the webform is "
+"inactive as along as the dialog is open."
+
+msgid "Helptext_Admin_WebformCreateEdit_PriorityID"
+msgstr ""
+"Tickets created via webform will be assigned to the priority you set here."
+
+msgid "Helptext_Admin_WebformCreateEdit_QueueID"
+msgstr "Tickets created via webform will be assigned to the team you set here."
+
+msgid "Helptext_Admin_WebformCreateEdit_SaveButtonLabel"
+msgstr ""
+
+msgid "Helptext_Admin_WebformCreateEdit_ShowTitle"
+msgstr ""
+"If this option is activated, the form titel will be shown in the webform."
+
+msgid "Helptext_Admin_WebformCreateEdit_StateID"
+msgstr "Tickets created via webform will be assigned to the state you set here."
+
+msgid "Helptext_Admin_WebformCreateEdit_SuccessMessage"
+msgstr ""
+
+msgid "Helptext_Admin_WebformCreateEdit_Title"
+msgstr "The form titel will be shown in the web form's titel."
+
+msgid "Helptext_Admin_WebformCreateEdit_TypeID"
+msgstr "Tickets created via webform will be assigned to the type you set here."
+
+msgid "Helptext_Admin_WebformCreateEdit_UseKIXCSS"
+msgstr "If this option is activated, the webform will be shown in KIX design."
+
+msgid "Helptext_Admin_WebformCreateEdit_Validity"
+msgstr "To use the webform it has to be set \"valid\"."
+
 msgid "Helptext_CMDB_ConfigItemClassCreate_Comment"
 msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_CMDB_ConfigItemClassCreate_Definition"
 msgstr ""
+"The class definition has to consist of a list of attribute-objects in Pearl "
+"notation (\"Array of Hashes\")."
 
 msgid "Helptext_CMDB_ConfigItemClassCreate_Icon"
 msgstr ""
+"Upload an icon, which will be shown together with the name of the asset "
+"class within the application."
 
 msgid "Helptext_CMDB_ConfigItemClassCreate_Name"
-msgstr ""
+msgstr "The name of an asset class needs to be unique."
 
 msgid "Helptext_CMDB_ConfigItemClassCreate_Valid"
-msgstr ""
+msgstr "The asset class can only be used within the system if set “valid”."
 
 msgid "Helptext_CMDB_ConfigItemClassEdit_Comment"
 msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_CMDB_ConfigItemClassEdit_Definition"
 msgstr ""
+"The class definition has to consist of a list of attribute-objects in Pearl "
+"notation (\"Array of Hashes\")."
 
-#, fuzzy
-#| msgid "Select Config Item Class"
 msgid "Helptext_CMDB_ConfigItemClassEdit_Icon"
-msgstr "Select Asset Class"
+msgstr ""
+"Upload an icon, which will be shown together with the name of the asset "
+"class within the application."
 
-#, fuzzy
-#| msgid "Select Config Item Class"
 msgid "Helptext_CMDB_ConfigItemClassEdit_Name"
-msgstr "Select Asset Class"
+msgstr "The name of an asset class needs to be unique."
 
-#, fuzzy
-#| msgid "Select Config Item Class"
 msgid "Helptext_CMDB_ConfigItemClassEdit_Valid"
-msgstr "Select Asset Class"
+msgstr "The asset class can only be used within the system if set “valid”."
 
-#, fuzzy
-#| msgid "Select Config Item Class"
-msgid "Helptext_CMDB_COnfigItemCreate_Class"
-msgstr "Select Asset Class"
+msgid "Helptext_CMDB_ConfigItemCreate_Class"
+msgstr "Please select an asset class. The form will be completed then."
 
 msgid "Helptext_CMDB_ConfigItemCreateEdit_Class"
 msgstr ""
 
-#, fuzzy
-#| msgid "Overview Config Items Deployment State"
 msgid "Helptext_CMDB_ConfigItemCreateEdit_DeploymentState"
-msgstr "Overview Assets Deployment State"
+msgstr ""
+"The deployment state describes the current asset position within its life "
+"cycle."
 
 msgid "Helptext_CMDB_ConfigItemCreateEdit_IncidentState"
-msgstr ""
+msgstr "The incident state describes the current asset condition."
 
 msgid "Helptext_CMDB_ConfigItemCreateEdit_Links"
-msgstr ""
+msgstr "Linkt this asset to a ticket, a FAQ article or another asset."
 
 msgid "Helptext_CMDB_ConfigItemCreateEdit_Name"
 msgstr ""
+
+msgid "Helptext_CMDB_ConfigItem_Link_Class"
+msgstr "Search for assets within the chosen class."
+
+msgid "Helptext_CMDB_ConfigItem_Link_DeploymentState"
+msgstr "Search for assets with this deployment state."
+
+msgid "Helptext_CMDB_ConfigItem_Link_IncidentState"
+msgstr "Search for assets with this incident state."
+
+msgid "Helptext_CMDB_ConfigItem_Link_Name"
+msgstr "Search for assets with this name or parts of this name."
+
+msgid "Helptext_CMDB_ConfigItem_Link_Number"
+msgstr "Search for assets with this number or a part of the number."
 
 msgid "Helptext_Customers_ContactCreate_City"
 msgstr ""
 
 msgid "Helptext_Customers_ContactCreate_Comment"
-msgstr ""
+msgstr "Insert additional information for the contact."
 
 msgid "Helptext_Customers_ContactCreate_Country"
 msgstr ""
@@ -1617,13 +1869,16 @@ msgid "Helptext_Customers_ContactCreate_Lastname"
 msgstr ""
 
 msgid "Helptext_Customers_ContactCreate_Login"
-msgstr ""
+msgstr "The login name needs to be unique and cannot be changed afterwards."
 
 msgid "Helptext_Customers_ContactCreate_Mobile"
 msgstr ""
 
 msgid "Helptext_Customers_ContactCreate_Organisation"
 msgstr ""
+"Choose an organisation for the contact to be assigned to. Enter at least 3 "
+"characters in order to get a suggestion list of available contacts. You may "
+"use „*“ as wildcard. (CNO and Organisation Name possible)"
 
 msgid "Helptext_Customers_ContactCreate_Password"
 msgstr ""
@@ -1638,7 +1893,7 @@ msgid "Helptext_Customers_ContactCreate_Title"
 msgstr ""
 
 msgid "Helptext_Customers_ContactCreate_Validity"
-msgstr ""
+msgstr "Contacts can only be used if they are set “valid”."
 
 msgid "Helptext_Customers_ContactCreate_Zip"
 msgstr ""
@@ -1647,7 +1902,7 @@ msgid "Helptext_Customers_ContactEdit_City"
 msgstr ""
 
 msgid "Helptext_Customers_ContactEdit_Comment"
-msgstr ""
+msgstr "Insert additional information for the contact."
 
 msgid "Helptext_Customers_ContactEdit_Country"
 msgstr ""
@@ -1669,6 +1924,9 @@ msgstr ""
 
 msgid "Helptext_Customers_ContactEdit_Organisation"
 msgstr ""
+"Choose an organisation for the contact to be assigned to. Enter at least 3 "
+"characters in order to get a suggestion list of available contacts. You may "
+"use „*“ as wildcard. (CNO and Organisation Name possible)"
 
 msgid "Helptext_Customers_ContactEdit_Phone"
 msgstr ""
@@ -1680,19 +1938,32 @@ msgid "Helptext_Customers_ContactEdit_Title"
 msgstr ""
 
 msgid "Helptext_Customers_ContactEdit_Validity"
-msgstr ""
+msgstr "Contacts can only be used if they are set “valid”."
 
 msgid "Helptext_Customers_ContactEdit_Zip"
 msgstr ""
 
 msgid "Helptext_Customers_ContactImport"
 msgstr ""
+"The first row of the source file must contain the contact attributes "
+"(=column titles). These attributes have to exactly comply with the internal "
+"KIX column titles (pay attention to upper and lower case letters!). At least "
+"all mandatory attributes (*) need to contain values (exception: validity, "
+"see below) Attributes: *Login – Login Name; Password; *PrimaryOrganisationID "
+"– number, already existing if data set was exported from KIX before OR "
+"*PrimaryOrganisationNumber - CNR/customer code of the assigned organisation "
+"(must already exist in KIX); Firstname; Lastname; Title; Email; Phone; "
+"Mobile; Fax; Street; City; ZIP; Country; Comment; *ValidID (1=valid; "
+"2=invalid; 3=invalid-temporarily) OR - Validity (valid, invalid, invalid-"
+"temporarily) If the data set does not contain a “ValidID”, this can be set "
+"automatically by selecting the attribute in the “Set Value”-area (can be "
+"changed)."
 
 msgid "Helptext_Customers_OrganisationCreate_City"
 msgstr ""
 
 msgid "Helptext_Customers_OrganisationCreate_Comment"
-msgstr ""
+msgstr "Insert additional information for the organisation."
 
 msgid "Helptext_Customers_OrganisationCreate_Country"
 msgstr ""
@@ -1701,7 +1972,7 @@ msgid "Helptext_Customers_OrganisationCreate_Name"
 msgstr ""
 
 msgid "Helptext_Customers_OrganisationCreate_Number"
-msgstr ""
+msgstr "Insert an unique identifier (e.g. customer code) for the organisation."
 
 msgid "Helptext_Customers_OrganisationCreate_Street"
 msgstr ""
@@ -1710,132 +1981,194 @@ msgid "Helptext_Customers_OrganisationCreate_URL"
 msgstr ""
 
 msgid "Helptext_Customers_OrganisationCreate_Validity"
-msgstr ""
+msgstr "Organisations can only be used if they are set “valid”."
 
 msgid "Helptext_Customers_OrganisationCreate_Zip"
 msgstr ""
 
 msgid "Helptext_Customers_OrganisationImport"
 msgstr ""
+"The first row of the source file must contain the organisation attributes "
+"(=column titles). These attributes have to exactly comply with the internal "
+"KIX column titles (pay attention to upper and lower case letters!). At least "
+"all mandatory attributes (*) need to contain values (exception: validity, "
+"see below) Attributes: *CNR – customer code; *Name; Url; Street; Zip; City; "
+"Country; Comment; *ValidID (1=valid; 2=invalid; 3=invalid-temporarily) OR - "
+"Validity (valid, invalid, invalid-temporarily) If the data set does not "
+"contain a “ValidID”, this can be set automatically by selecting the "
+"attribute in the “Set Value”-area (can be changed)."
 
 msgid "Helptext_FAQ_ArticleCreate_Attachments"
 msgstr ""
 
 msgid "Helptext_FAQ_ArticleCreate_Category"
-msgstr ""
+msgstr "Organize FAQ articles by categories to sort them by topics."
 
 msgid "Helptext_FAQ_ArticleCreate_Cause"
 msgstr ""
+"Describe the cause behind the occurring phenomenon as exactly as possible."
 
 msgid "Helptext_FAQ_ArticleCreate_Comment"
-msgstr ""
+msgstr "Insert additional information for the FAQ article."
 
 msgid "Helptext_FAQ_ArticleCreate_Language"
-msgstr ""
+msgstr "Insert the FAQ article language."
 
 msgid "Helptext_FAQ_ArticleCreate_Links"
-msgstr ""
+msgstr "Link this FAQ article with a ticket, an asset or another FAQ article."
 
 msgid "Helptext_FAQ_ArticleCreate_Solution"
 msgstr ""
+"Describe the solution for the occuring phenomenon as exactly as possible."
 
 msgid "Helptext_FAQ_ArticleCreate_Symptom"
-msgstr ""
+msgstr "Describe the occurring phenomenon as exactly as possible."
 
 msgid "Helptext_FAQ_ArticleCreate_Tags"
-msgstr ""
+msgstr "Key words help to quickly find FAQ articles."
 
 msgid "Helptext_FAQ_ArticleCreate_Title"
-msgstr ""
+msgstr "Briefly summarize the FAQ article topic."
 
 msgid "Helptext_FAQ_ArticleCreate_Valid"
 msgstr ""
-
-msgid "Helptext_FAQ_ArticleCreate_Visibility"
-msgstr ""
+"FAQ articles can only be used if they are set “valid”. Invalid FAQ articles "
+"can only be found with the advanced search."
 
 msgid "Helptext_FAQ_ArticleEdit_Attachments"
 msgstr ""
 
 msgid "Helptext_FAQ_ArticleEdit_Category"
-msgstr ""
+msgstr "Organize FAQ articles by categories to sort them by topics."
 
 msgid "Helptext_FAQ_ArticleEdit_Cause"
 msgstr ""
+"Describe the cause behind the occurring phenomenon as exactly as possible."
 
 msgid "Helptext_FAQ_ArticleEdit_Comment"
-msgstr ""
+msgstr "Insert additional information for the FAQ article."
 
 msgid "Helptext_FAQ_ArticleEdit_Language"
-msgstr ""
+msgstr "Insert the FAQ article language."
 
 msgid "Helptext_FAQ_ArticleEdit_Solution"
 msgstr ""
+"Describe the solution for the occuring phenomenon as exactly as possible."
 
 msgid "Helptext_FAQ_ArticleEdit_Symptom"
-msgstr ""
+msgstr "Describe the occurring phenomenon as exactly as possible."
 
 msgid "Helptext_FAQ_ArticleEdit_Tags"
-msgstr ""
+msgstr "Key words help to quickly find FAQ articles."
 
 msgid "Helptext_FAQ_ArticleEdit_Title"
-msgstr ""
+msgstr "Briefly summarize the FAQ article topic."
 
 msgid "Helptext_FAQ_ArticleEdit_Valid"
 msgstr ""
+"FAQ articles can only be used if they are set “valid”. Invalid FAQ articles "
+"can only be found with the advanced search."
 
-msgid "Helptext_FAQ_ArticleEdit_Visibility"
+msgid "Helptext_FAQ_Link_Category"
+msgstr "Search for FAQ articles within the chosen category."
+
+msgid "Helptext_FAQ_Link_FullText"
+msgstr ""
+"Search the following FAQ attributes: Changed at, Changed by, Created at, "
+"Created by, Symptom, Cause, Solution, Comment, Keywords, Language, Title, "
+"FAQ#, Validitiy"
+
+msgid "Helptext_FAQ_Link_Number"
+msgstr "Search for FAQ articles with this number or a part of the number."
+
+msgid "Helptext_FAQ_Link_Title"
+msgstr "Search for FAQ articles with this title or a part of the title."
+
+msgid "Helptext_FAQ_Link_Validity"
+msgstr "Search for FAQ articles with the chosen validity."
+
+msgid "Helptext_i18n_TranslationPatternCreateEdit_Translation"
 msgstr ""
 
 msgid "Helptext_i18n_TranslationPatternCreate_Pattern"
 msgstr ""
-
-msgid "Helptext_i18n_TranslationPatternCreate_Translation"
-msgstr ""
+"The pattern refers to the base string. Depending on which languages are "
+"configured in the SysConfig, translations can be created to show in the user "
+"interface."
 
 msgid "Helptext_i18n_TranslationPatternEdit_Pattern"
 msgstr ""
+"The pattern refers to the base string. Depending on which languages are "
+"configured in the SysConfig, translations can be created to show in the user "
+"interface."
 
-msgid "Helptext_i18n_TranslationPatternEdit_Translation"
+msgid "Helptext_Import_CharacterSet."
 msgstr ""
+"Enables standardised usage of special characters, etc. UTF-8 is the European "
+"standard."
+
+msgid "Helptext_Import_File"
+msgstr "Choose a .csv-file which contains importable values."
+
+msgid "Helptext_Import_TextSeparator."
+msgstr ""
+"Marks the beginning and the end of each attribute. If unknown, open your ."
+"csv-file with a text editor."
+
+msgid "Helptext_Import_ValueSeparator."
+msgstr ""
+"Separates between the attributes of a row. If unknown, open your .csv-file "
+"with a text editor."
 
 msgid "Helptext_PersonalSettings_MyQueues_Hint"
 msgstr ""
+"For the teams you choose here you will receive notifications if there are, "
+"for example, new tickets or changes at the tickets."
+
+#, fuzzy
+#| msgid "Helptext_PersonalSettings_MyQueues_Hint"
+msgid "Helptext_PersonalSettings_Notifications_Hint"
+msgstr ""
+"For the teams you choose here you will receive notifications if there are, "
+"for example, new tickets or changes at the tickets."
 
 msgid "Helptext_PersonalSettings_UserLanguage_Hint"
-msgstr ""
+msgstr "Choose the language you want to use for this application."
 
 msgid "Helptext_PersonalSettings_UserNewPasswordConfirm_Hint"
-msgstr ""
+msgstr "Confirm your new password."
 
 msgid "Helptext_PersonalSettings_UserNewPassword_Hint"
-msgstr ""
+msgstr "Set a new password for your user account."
 
 msgid "Helptext_PersonalSettings_UserPassword_Hint"
-msgstr ""
+msgstr "Insert your current password."
 
 msgid "Helptext_Search_ConfigItem"
 msgstr ""
+"The search only considers current versions. The following FAQ article offers "
+"a detailed explanation for the search operators:"
 
 msgid "Helptext_Search_Contact"
 msgstr ""
+"The following FAQ article offers a detailed explanation for the search "
+"operators:"
 
 msgid "Helptext_Search_FAQArticle"
 msgstr ""
+"The following FAQ article offers a detailed explanation for the search "
+"operators:"
 
 msgid "Helptext_Search_Organisation"
 msgstr ""
+"The following FAQ article offers a detailed explanation for the search "
+"operators:"
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Search_Ticket"
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+"The following FAQ article offers a detailed explanation for the search "
+"operators:"
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Textmodules_ArticleCreate"
 msgstr ""
 "To use the text modules available in your system, enter „::“ (colon colon). "
@@ -1850,188 +2183,160 @@ msgstr ""
 
 msgid "Helptext_Textmodules_TicketEdit"
 msgstr ""
-
-msgid "Helptext_Ticket_ArticleCreate_Attachments"
-msgstr ""
-
-msgid "Helptext_Ticket_ArticleCreateEdit_Subject"
-msgstr ""
-
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
-msgid "HelpText_Ticket_ArticleCreate_From"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
+"To use the text modules available in your system, enter “::“ (colon colon). "
 "Then choose the text modules you want to use in the context menu. You can "
 "narrow down the key word selection manually by entering more text."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
+msgid "Helptext_Tickets_ArticleCreate_Attachments"
+msgstr ""
+
 msgid "Helptext_Tickets_ArticleCreate_Channel"
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+"Choose if you want to save the ticket description only internally (Note) or "
+"additionally sending an email (Email)."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
+msgid "Helptext_Tickets_ArticleCreateEdit_Body"
+msgstr ""
+"Describe the article concern. If you chose “Email” as channel, this is the "
+"text the recipient(s) will receive."
+
+msgid "Helptext_Tickets_ArticleCreateEdit_Subject"
+msgstr "Briefly summarize the article topic."
+
+msgid "Helptext_Tickets_ArticleCreate_From"
+msgstr ""
+"Choose how to display the Sender of this message for the email receiver. It "
+"depends on the chosen team which email addresses are available here."
+
+msgid "Helptext_Tickets_ArticleCreate_ReceiverBcc"
+msgstr ""
+"For an email, send by a new ticket, the contact is automatically set as to-"
+"recipient. Here you can insert further recipients by either choose agents "
+"from the system or insert email addresses. They will receive a blind copy of "
+"this message."
+
+msgid "Helptext_Tickets_ArticleCreate_ReceiverCc"
+msgstr ""
+"For an email, send by a new ticket, the contact is automatically set as to-"
+"recipient. Here you can insert further recipients by either choose agents "
+"from the system or insert email addresses. They will receive a copy of this "
+"message."
+
+msgid "Helptext_Tickets_ArticleCreate_ReceiverTo"
+msgstr ""
+"Choose recipients from the system or insert email addresses that will "
+"receive this message."
+
+msgid "Helptext_Tickets_Link_FullText"
+msgstr ""
+"Search the following ticket attributes: Ticket Number, Ticket Title "
+"(=subject first article), Article content, From, To, CC"
+
+msgid "Helptext_Tickets_Link_Number"
+msgstr "Insert the ticket number or a part of the ticket number."
+
+msgid "Helptext_Tickets_Link_Priority"
+msgstr "Search for tickets with the chosen priority."
+
+msgid "Helptext_Tickets_Link_Queue"
+msgstr "Search for tickets with the chosen team."
+
+msgid "Helptext_Tickets_Link_State"
+msgstr "Search for tickets with the chosen state."
+
+msgid "Helptext_Tickets_Link_Title"
+msgstr ""
+"The first article subject generates the ticket title. Insert the ticket "
+"title or a part of the ticket title."
+
+msgid "Helptext_Tickets_Link_Type"
+msgstr "Search for tickets with the chosen type."
+
+msgid "Helptext_Tickets_TicketCreate_Body"
+msgstr ""
+"Describe the ticket concern. If you chose “Email” as channel, this is the "
+"text the recipient(s) will receive."
+
 msgid "Helptext_Tickets_TicketCreate_Channel"
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+"Choose if you want to save the ticket description only internally (Note) or "
+"additionally sending an email (Email)."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketCreate_Contact"
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+"Insert the person who creates the ticket or in whose name the ticket is "
+"created. Enter at least 3 characters in order to get a suggestion list of "
+"available contacts. Click the button at the right end of the form field to "
+"add a new contact. You will automatically be redirected here after saving "
+"this contact. It is also possible to enter a syntactically correct email "
+"address (name@example.com) to create a ticket with an unknown contact."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketCreate_Links"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "Link this ticket with an asset, a FAQ article or another ticket."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketCreate_Organisation"
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+"The organisation is automatically assigned depending on the chosen contact."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketCreate_Owner"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "Choose a person who is supposed to process the ticket."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketCreate_Priority"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "The Priority marks the ticket urgency."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketCreate_Queue"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "Insert the scope of responsitility for the ticket."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketCreate_Responsible"
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketCreate_State"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "The state marks the recent ticket process state."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
+msgid "Helptext_Tickets_TicketCreate_Subject"
+msgstr "Briefly summarize the ticket topic."
+
 msgid "Helptext_Tickets_TicketCreate_Type"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "The ticket type classifies which type of request the ticket is."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketEdit_Channel"
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+"Choose if you want to save the ticket description only internally (Note) or "
+"additionally sending an email (Email). If you do not consider it neccessary "
+"to add a description for the edit choose \"no article\"."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketEdit_Contact"
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+"Insert the person who creates the ticket or in whose name the ticket is "
+"created. Enter at least 3 characters in order to get a suggestion list of "
+"available contacts."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketEdit_Organisation"
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+"The organisation is automatically assigned depending on the chosen contact."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketEdit_Owner"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "Choose a person who is supposed to process the ticket."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketEdit_Priority"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "The Priority marks the ticket urgency."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketEdit_Queue"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "Insert the scope of responsitility for the ticket."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketEdit_Responsible"
 msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+"Choose a person who is responsible for the ticket process. Can be the same "
+"as owner, but not necessarily."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketEdit_State"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "The state marks the recent ticket process state."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketEdit_Title"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "Briefly summarzie the ticket topic."
 
-#, fuzzy
-#| msgid "Helptext_Textmodules_TicketCreate"
 msgid "Helptext_Tickets_TicketEdit_Type"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
+msgstr "The ticket type classifies which type of request the ticket is."
 
 msgid "Here you will find the KIX 18 manuals for users and administrators"
 msgstr ""
@@ -2057,13 +2362,7 @@ msgstr ""
 msgid "How do I search in KIX 18?"
 msgstr ""
 
-msgid "How to create a new ticket?"
-msgstr ""
-
 msgid "How to search in KIX 18?"
-msgstr ""
-
-msgid "How to use KIX 18 – Some general notes"
 msgstr ""
 
 msgid "Icon"
@@ -2111,9 +2410,10 @@ msgstr ""
 msgid "Incident State"
 msgstr ""
 
-msgid ""
-"Input of 3 stars '***' in autocomplete form fields = listing of the first 10 "
-"found records"
+msgid "Include this code into the <head> area of your webpage."
+msgstr ""
+
+msgid "Information text"
 msgstr ""
 
 msgid "Inserted email address is invalid"
@@ -2123,12 +2423,6 @@ msgid "Inserted email address must not be a system address ({0})."
 msgstr ""
 
 msgid "insert filter value"
-msgstr ""
-
-msgid "Insert the complete ticket title or a part of the title."
-msgstr ""
-
-msgid "Insert the ticket number or a part of the number (min. 1 character)."
 msgstr ""
 
 msgid "internal"
@@ -2141,6 +2435,9 @@ msgid "Internationalisation: Translations"
 msgstr ""
 
 msgid "Invalid date for pending date."
+msgstr ""
+
+msgid "is to large (max {0})."
 msgstr ""
 
 msgid "Keywords"
@@ -2179,10 +2476,8 @@ msgstr ""
 msgid "Legend"
 msgstr ""
 
-#, fuzzy
-#| msgid "Let´s go"
 msgid "Let's go"
-msgstr "Let's go"
+msgstr ""
 
 msgid "link {0}"
 msgstr "Link {0}"
@@ -2292,6 +2587,9 @@ msgstr "Loading Translation"
 msgid "Load User"
 msgstr "Loading User"
 
+msgid "Load Webform"
+msgstr ""
+
 msgid "Localisation"
 msgstr ""
 
@@ -2323,6 +2621,12 @@ msgid "Logs"
 msgstr ""
 
 msgid "Menu"
+msgstr ""
+
+msgid "Message"
+msgstr ""
+
+msgid "Message after sending form"
 msgstr ""
 
 msgid "Minutes"
@@ -2361,10 +2665,19 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
+msgid "Name of activate form button"
+msgstr ""
+
+msgid "Name of form submit button"
+msgstr ""
+
 msgid "Negate"
 msgstr ""
 
 msgid "New"
+msgstr ""
+
+msgid "New Account"
 msgstr ""
 
 msgid "New Address"
@@ -2386,9 +2699,6 @@ msgid "New Config Item"
 msgstr "New Asset"
 
 msgid "New Contact"
-msgstr ""
-
-msgid "New Email Account"
 msgstr ""
 
 msgid "New Email Filter"
@@ -2451,7 +2761,13 @@ msgstr ""
 msgid "New Type"
 msgstr ""
 
+msgid "New Value"
+msgstr ""
+
 msgid "New Version created"
+msgstr ""
+
+msgid "New Webform"
 msgstr ""
 
 msgid "next"
@@ -2523,37 +2839,37 @@ msgstr ""
 msgid "No, thank you"
 msgstr ""
 
-#, fuzzy
-#| msgid "Config Item Information"
 msgid "Notification"
-msgstr "Asset Information"
+msgstr "Notification"
 
-#, fuzzy
-#| msgid "Config Item Information"
 msgid "Notification Information"
-msgstr "Asset Information"
+msgstr "Notification Information"
 
 msgid "Notification Methods"
-msgstr ""
+msgstr "Notification Methods"
 
-#, fuzzy
-#| msgid "Config Item Information"
 msgid "Notification Options"
-msgstr "Asset Information"
+msgstr "Notification Methods"
 
 msgid "Notifications"
-msgstr ""
+msgstr "Notifications"
 
 #, fuzzy
-#| msgid "Config Item successfully created."
+#| msgid "Notification Methods"
+msgid "Notifications for Tickets"
+msgstr "Notification Methods"
+
 msgid "Notification successfully created."
-msgstr "Asset successfully created."
+msgstr "Notification successfully created."
 
 msgid "Notification Text"
 msgstr ""
 
 msgid "not modified"
 msgstr "********"
+
+msgid "Not more than 5 files possible."
+msgstr ""
 
 msgid "No version available"
 msgstr ""
@@ -2696,6 +3012,9 @@ msgstr ""
 msgid "Phone"
 msgstr ""
 
+msgid "Place this code wherever you want to open the webform dialog."
+msgstr ""
+
 msgid "Please select a contact"
 msgstr ""
 
@@ -2810,9 +3129,6 @@ msgstr ""
 msgid "Read"
 msgstr ""
 
-msgid "Read file."
-msgstr ""
-
 msgid "Recipient: Bcc"
 msgstr ""
 
@@ -2909,6 +3225,9 @@ msgstr ""
 msgid "Role successfully created."
 msgstr ""
 
+msgid "Row"
+msgstr ""
+
 msgid "Row {0} of the file with {1} {2}: could not import{3}. How to continue?"
 msgstr ""
 
@@ -2924,7 +3243,7 @@ msgstr ""
 msgid "Save Search"
 msgstr ""
 
-msgid "Save Settings."
+msgid "Save Settings"
 msgstr ""
 
 msgid "Search"
@@ -2933,72 +3252,14 @@ msgstr ""
 msgid "Search {0} will be deleted. Are you sure?"
 msgstr ""
 
-msgid ""
-"Searchable FAQ attributes: FAQ#, Title, Symptom, Cause, Solution, Comment, "
-"Changed by, Created by, Keywords, Language, Validity"
-msgstr ""
-
-msgid ""
-"Searchable Ticket attributes: Ticketnumber, Subject, Article content, From, "
-"To, CC"
-msgstr ""
-
-msgid "Search for config items within the choosen class."
-msgstr "Search for assets within the choosen class."
-
-msgid "Search for config items with the same deployment state."
-msgstr "Search for assets with the same deployment state."
-
-msgid "Search for config items with the same incident state."
-msgstr "Search for assets with the same incident state."
-
-msgid ""
-"Search for config items with the same name or part of the same name (min. 1 "
-"character)."
-msgstr ""
-"Search for assets with the same name or part of the same name (min. 1 "
-"character)."
-
-msgid "Search for FAQ articles within the choosen category."
-msgstr ""
-
-msgid "Search for FAQ articles within the choosen validity."
-msgstr ""
-
-msgid ""
-"Search for FAQ articles with the same number or part of the same number "
-"(min. 1 character)."
-msgstr ""
-
-msgid ""
-"Search for FAQ articles with the same title or part of the same title (min. "
-"1 character)."
-msgstr ""
-
-msgid "Search for tickets with selected priority."
-msgstr ""
-
-msgid "Search for tickets with selected queue."
-msgstr "Search for tickets with selected team."
-
-msgid "Search for tickets with selected state."
-msgstr ""
-
-msgid "Search for tickets with selected type."
-msgstr ""
-
 msgid "Search Results"
 msgstr ""
 
-#, fuzzy
-#| msgid "Queue successfully created."
 msgid "Search successfully saved."
-msgstr "Team successfully created."
+msgstr "Search successfully saved."
 
-#, fuzzy
-#| msgid "Config Item successfully created."
 msgid "Search template successfully removed."
-msgstr "Asset successfully created."
+msgstr ""
 
 msgid "Search Tickets"
 msgstr ""
@@ -3006,25 +3267,16 @@ msgstr ""
 msgid "Search Title"
 msgstr ""
 
-msgid "Select a character set."
-msgstr ""
-
 msgid "Select all"
-msgstr ""
-
-msgid "Select a text separator."
-msgstr ""
-
-msgid "Select a value separator."
 msgstr ""
 
 msgid "Select Config Item Class"
 msgstr "Select Asset Class"
 
-msgid "Selected Search Criteria"
+msgid "Selected {0} ({1})"
 msgstr ""
 
-msgid "selected ticket features"
+msgid "Selected Search Criteria"
 msgstr ""
 
 msgid "Selected ticket functions"
@@ -3063,13 +3315,6 @@ msgstr ""
 msgid "Send to these agents"
 msgstr ""
 
-msgid ""
-"Serach for config items with the same number or part of the same number "
-"(min. 1 character)."
-msgstr ""
-"Serach for assets with the same number or part of the same number (min. 1 "
-"character)."
-
 msgid "Service"
 msgstr ""
 
@@ -3083,6 +3328,12 @@ msgid "Set Value"
 msgstr ""
 
 msgid "Show all"
+msgstr ""
+
+msgid "Show in agent preferences"
+msgstr ""
+
+msgid "Show title in form"
 msgstr ""
 
 msgid "Sidebars"
@@ -3116,6 +3367,9 @@ msgid "Split Option"
 msgstr ""
 
 msgid "Start Import"
+msgstr ""
+
+msgid "Start modal dialog for form"
 msgstr ""
 
 msgid "Start search"
@@ -3208,6 +3462,9 @@ msgstr ""
 msgid "Target"
 msgstr ""
 
+msgid "Team"
+msgstr ""
+
 msgid "Template"
 msgstr ""
 
@@ -3282,6 +3539,11 @@ msgstr ""
 
 msgid "Ticket locked."
 msgstr ""
+
+#, fuzzy
+#| msgid "Notifications"
+msgid "Ticket Notifications"
+msgstr "Notifications"
 
 msgid "Ticket Number"
 msgstr ""
@@ -3415,9 +3677,6 @@ msgstr ""
 msgid "Unwatch Ticket"
 msgstr ""
 
-msgid "Update Account"
-msgstr ""
-
 msgid "Update Agent"
 msgstr ""
 
@@ -3430,27 +3689,26 @@ msgstr "Update Asset"
 msgid "Update Contact"
 msgstr ""
 
+msgid "Update Email Account"
+msgstr ""
+
 msgid "Update Email Address"
 msgstr ""
 
-msgid "Update FAQ Artikel"
+msgid "Update Email Filter"
+msgstr ""
+
+msgid "Update FAQ Article"
 msgstr ""
 
 msgid "Update FAQ Category"
 msgstr ""
 
-msgid "Update Filter"
+msgid "Update Key"
 msgstr ""
 
-#, fuzzy
-#| msgid "Update Queue"
-msgid "Update Key"
-msgstr "Update Team"
-
-#, fuzzy
-#| msgid "Config Item Information"
 msgid "Update Notification"
-msgstr "Asset Information"
+msgstr ""
 
 msgid "Update Organisation"
 msgstr ""
@@ -3470,6 +3728,9 @@ msgstr ""
 msgid "Update Text Module"
 msgstr ""
 
+msgid "Update Ticket"
+msgstr ""
+
 msgid "Update time"
 msgstr ""
 
@@ -3479,7 +3740,13 @@ msgstr ""
 msgid "Update Type"
 msgstr ""
 
+msgid "Update Value"
+msgstr ""
+
 msgid "URL"
+msgstr ""
+
+msgid "Use KIX CSS"
 msgstr ""
 
 msgid "User"
@@ -3510,6 +3777,9 @@ msgid "Value"
 msgstr ""
 
 msgid "Value of field '{0}' is too long (max: {1})."
+msgstr ""
+
+msgid "Value successfully created."
 msgstr ""
 
 msgid "Version"
@@ -3545,6 +3815,15 @@ msgstr ""
 msgid "We are working on this functionality."
 msgstr ""
 
+msgid "Webform"
+msgstr ""
+
+msgid "Webform Options"
+msgstr ""
+
+msgid "Webform successfully created."
+msgstr ""
+
 msgid "Welcome to KIX 18"
 msgstr ""
 
@@ -3575,11 +3854,49 @@ msgstr ""
 msgid "Your rating"
 msgstr ""
 
+msgid "You will edit {0} attributes for {1} {2}. Execute now?"
+msgstr ""
+
 msgid "Zip"
 msgstr ""
 
 msgid "ZIP"
 msgstr ""
+
+#~ msgid "Helptext_i18n_TranslationPatternEdit_Translation"
+#~ msgstr ""
+#~ "If you insert a translation for the pattern here, this will be shown in "
+#~ "the user interface if the user has his language preference set for the "
+#~ "corresponding language."
+
+#~ msgid "Search for config items within the choosen class."
+#~ msgstr "Search for assets within the choosen class."
+
+#~ msgid "Search for config items with the same deployment state."
+#~ msgstr "Search for assets with the same deployment state."
+
+#~ msgid "Search for config items with the same incident state."
+#~ msgstr "Search for assets with the same incident state."
+
+#~ msgid ""
+#~ "Search for config items with the same name or part of the same name (min. "
+#~ "1 character)."
+#~ msgstr ""
+#~ "Search for assets with the same name or part of the same name (min. 1 "
+#~ "character)."
+
+#~ msgid "Search for tickets with selected queue."
+#~ msgstr "Search for tickets with selected team."
+
+#~ msgid ""
+#~ "Serach for config items with the same number or part of the same number "
+#~ "(min. 1 character)."
+#~ msgstr ""
+#~ "Serach for assets with the same number or part of the same number (min. 1 "
+#~ "character)."
+
+#~ msgid "Closing time"
+#~ msgstr "Closed at"
 
 #~ msgid "Config Item class. Can not be changed."
 #~ msgstr "Asset Class. Can not be changed."

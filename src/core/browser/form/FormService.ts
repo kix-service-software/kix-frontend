@@ -25,7 +25,7 @@ export class FormService {
         return FormService.INSTANCE;
     }
 
-    private formInstances: Map<string, IFormInstance> = new Map();
+    private formInstances: Map<string, Promise<IFormInstance>> = new Map();
 
     private forms: Form[] = null;
     private formIDsWithContext: Array<[FormContext, KIXObjectType, string]> = null;
@@ -53,33 +53,38 @@ export class FormService {
     public async getFormInstance<T extends IFormInstance>(
         formId: string, cache: boolean = true, form?: Form
     ): Promise<T> {
-        let formInstance;
         if (formId) {
-            if (this.formInstances.has(formId) && cache) {
-                formInstance = this.formInstances.get(formId);
-            } else {
-                this.deleteFormInstance(formId);
-                if (!form) {
-                    const configuredForm = await this.getForm(formId);
-                    if (configuredForm) {
-                        form = { ...configuredForm };
-                    } else {
-                        BrowserUtil.openErrorOverlay(`No form configuration found for id ${formId}`);
-                    }
-                }
-
-                FormFactory.initForm(form);
-                if (form.formContext === FormContext.SEARCH) {
-                    formInstance = new SearchFormInstance((form as SearchForm));
-                } else {
-                    formInstance = new FormInstance(form);
-                    await formInstance.initFormInstance();
-                }
-
+            if (!this.formInstances.has(formId) || !cache) {
+                const formInstance = this.getNewFormInstance(formId, form);
                 this.formInstances.set(formId, formInstance);
             }
+            return await this.formInstances.get(formId) as T;
         }
-        return formInstance;
+        return;
+    }
+
+    private getNewFormInstance(formId: string, form?: Form): Promise<IFormInstance> {
+        return new Promise<IFormInstance>(async (resolve, reject) => {
+            this.deleteFormInstance(formId);
+            if (!form) {
+                const configuredForm = await this.getForm(formId);
+                if (configuredForm) {
+                    form = { ...configuredForm };
+                } else {
+                    BrowserUtil.openErrorOverlay(`No form configuration found for id ${formId}`);
+                    reject();
+                }
+            }
+
+            FormFactory.initForm(form);
+            if (form.formContext === FormContext.SEARCH) {
+                resolve(new SearchFormInstance((form as SearchForm)));
+            } else {
+                const formInstance = new FormInstance(form);
+                await formInstance.initFormInstance();
+                resolve(formInstance);
+            }
+        });
     }
 
     public async getForm(formId: string): Promise<Form> {
@@ -115,9 +120,9 @@ export class FormService {
         formInstance.registerListener(listener);
     }
 
-    public removeFormInstanceListener(formId: string, listenerId: string): void {
+    public async removeFormInstanceListener(formId: string, listenerId: string): Promise<void> {
         if (this.formInstances.has(formId)) {
-            const formInstance = this.formInstances.get(formId);
+            const formInstance = await this.getFormInstance(formId);
             formInstance.removeListener(listenerId);
         }
     }

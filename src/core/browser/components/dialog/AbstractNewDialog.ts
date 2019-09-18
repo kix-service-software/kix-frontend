@@ -9,7 +9,7 @@
 
 import {
     ValidationResult, ValidationSeverity, ComponentContent, OverlayType, KIXObjectType,
-    KIXObjectSpecificCreateOptions, Error, ContextMode
+    KIXObjectSpecificCreateOptions, Error, ContextMode, FormContext, Context
 } from "../../../model";
 import { OverlayService } from "../../OverlayService";
 import { DialogService } from "./DialogService";
@@ -33,6 +33,7 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
     protected objectType: KIXObjectType;
     protected routingConfiguration: RoutingConfiguration;
     protected options: KIXObjectSpecificCreateOptions;
+    protected dialogContext: Context;
 
     protected init(
         loadingHint: string, successHint: string, objectType: KIXObjectType,
@@ -50,25 +51,36 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
         this.state.translations = await TranslationService.createTranslationObject([
             "Translatable#Cancel", "Translatable#Save"
         ]);
-        const dialogContext = await ContextService.getInstance().getContextByTypeAndMode(
-            this.objectType, ContextMode.CREATE
+        this.dialogContext = await ContextService.getInstance().getContextByTypeAndMode(
+            this.objectType, [ContextMode.CREATE, ContextMode.CREATE_ADMIN, ContextMode.CREATE_SUB]
         );
-        if (dialogContext) {
-            dialogContext.setAdditionalInformation(AdditionalContextInformation.FORM_ID, this.state.formId);
+        if (this.dialogContext) {
+            this.state.formId = await FormService.getInstance().getFormIdByContext(
+                FormContext.NEW, this.objectType
+            );
+            this.dialogContext.setAdditionalInformation(AdditionalContextInformation.FORM_ID, this.state.formId);
         }
     }
 
     public async onDestroy(): Promise<void> {
+        AbstractNewDialog.prototype.resetDialog();
+    }
+
+    public async cancel(): Promise<void> {
+        if (this.state.formId) {
+            FormService.getInstance().deleteFormInstance(this.state.formId);
+        }
+        AbstractNewDialog.prototype.resetDialog();
+        DialogService.getInstance().closeMainDialog();
+    }
+
+    private async resetDialog(): Promise<void> {
         const dialogContext = await ContextService.getInstance().getContextByTypeAndMode(
-            this.objectType, ContextMode.CREATE
+            this.objectType, [ContextMode.CREATE, ContextMode.CREATE_ADMIN, ContextMode.CREATE_SUB]
         );
         if (dialogContext) {
             dialogContext.resetAdditionalInformation();
         }
-    }
-
-    public async cancel(): Promise<void> {
-        DialogService.getInstance().closeMainDialog();
     }
 
     public submit(): Promise<void> {
@@ -100,19 +112,16 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
     protected async handleDialogSuccess(objectId: string | number): Promise<void> {
         await FormService.getInstance().loadFormConfigurations();
 
-        const dialogContext = await ContextService.getInstance().getContextByTypeAndMode(
-            this.objectType, ContextMode.CREATE
-        );
         let previousTabData: PreviousTabData = null;
-        if (dialogContext) {
-            previousTabData = dialogContext.getAdditionalInformation(
+        if (this.dialogContext) {
+            previousTabData = this.dialogContext.getAdditionalInformation(
                 'RETURN_TO_PREVIOUS_TAB'
             );
         }
 
         if (previousTabData && previousTabData.objectType && previousTabData.tabId) {
             const previousDialogContext = await ContextService.getInstance().getContextByTypeAndMode(
-                previousTabData.objectType, ContextMode.CREATE
+                previousTabData.objectType, [ContextMode.CREATE, ContextMode.CREATE_ADMIN, ContextMode.CREATE_SUB]
             );
             if (previousDialogContext) {
                 previousDialogContext.setAdditionalInformation(`${this.objectType}-ID`, objectId);

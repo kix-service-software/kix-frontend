@@ -23,7 +23,7 @@ class Extension implements IPersonalSettingsExtension {
                 PersonalSettingsProperty.CURRENT_PASSWORD,
                 'Translatable#Current Password',
                 'Translatable#Helptext_PersonalSettings_UserPassword_Hint',
-                null, null,
+                null, null, null,
                 [
                     new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)
                 ]
@@ -33,7 +33,7 @@ class Extension implements IPersonalSettingsExtension {
                 PersonalSettingsProperty.USER_PASSWORD,
                 'Translatable#New Password',
                 'Translatable#Helptext_PersonalSettings_UserNewPassword_Hint',
-                null, null,
+                null, null, null,
                 [
                     new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)
                 ]
@@ -43,7 +43,7 @@ class Extension implements IPersonalSettingsExtension {
                 PersonalSettingsProperty.USER_PASSWORD_CONFIRM,
                 'Translatable#Confirm New Password',
                 'Translatable#Helptext_PersonalSettings_UserNewPasswordConfirm_Hint',
-                null, null,
+                null, null, null,
                 [
                     new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)
                 ]
@@ -53,7 +53,7 @@ class Extension implements IPersonalSettingsExtension {
                 PersonalSettingsProperty.USER_LANGUAGE,
                 'Translatable#Language',
                 'Translatable#Helptext_PersonalSettings_UserLanguage_Hint',
-                'language-input'
+                'language-input', true
             ),
             new PersonalSetting(
                 'Translatable#Favorites',
@@ -61,7 +61,7 @@ class Extension implements IPersonalSettingsExtension {
                 'Translatable#My Queues',
                 'Translatable#Helptext_PersonalSettings_MyQueues_Hint',
                 'object-reference-input',
-                null,
+                null, null,
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
                     new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),

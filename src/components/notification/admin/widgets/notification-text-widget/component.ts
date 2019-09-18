@@ -77,6 +77,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private prepareMessageGroups(): void {
+        this.state.messageGroups = [];
         if (this.state.notification && this.state.notification.Message) {
             for (const lang in this.state.notification.Message) {
                 if (lang) {

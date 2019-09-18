@@ -11,11 +11,11 @@ import { KIXObjectService } from "../../kix";
 import {
     KIXObjectType, KIXObjectSpecificLoadingOptions, KIXObjectLoadingOptions, KIXObject, Queue,
     TreeNode, ObjectIcon, FilterCriteria, FilterDataType, FilterType, QueueProperty,
-    FollowUpType, TreeNodeProperty, SysConfigOption, SysConfigKey
+    FollowUpType, TreeNodeProperty
 } from "../../../model";
 import { SearchOperator } from "../../SearchOperator";
-import { LabelService } from "../../LabelService";
 import { TranslationService } from "../../i18n/TranslationService";
+import { SysConfigService } from "../../sysconfig";
 
 export class QueueService extends KIXObjectService<Queue> {
 
@@ -128,11 +128,7 @@ export class QueueService extends KIXObjectService<Queue> {
     }
 
     public async getQueuesHierarchy(): Promise<Queue[]> {
-        const viewableStateTypes = await KIXObjectService.loadObjects<SysConfigOption>(
-            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_VIEWABLE_STATE_TYPE]
-        );
-
-        const stateTypes = viewableStateTypes && viewableStateTypes.length ? viewableStateTypes[0].Value : [];
+        const stateTypes = await SysConfigService.getInstance().getTicketViewableStateTypes();
 
         const loadingOptions = new KIXObjectLoadingOptions(
             [

@@ -43,10 +43,6 @@ export class Extension implements IConfigurationExtension {
                 null, new FormFieldValue('de')
             ));
             fields.push(new FormField('Translatable#Tags', FAQArticleProperty.KEYWORDS, null, false, 'Translatable#Helptext_FAQ_ArticleCreate_Tags'));
-            fields.push(new FormField(
-                'Translatable#Visibility', FAQArticleProperty.VISIBILITY, 'faq-visibility-input', true, 'Translatable#Helptext_FAQ_ArticleCreate_Visibility',
-                null, new FormFieldValue('internal')
-            ));
             fields.push(new FormField('Translatable#Attachments', FAQArticleProperty.ATTACHMENTS, 'attachment-input', false, 'Translatable#Helptext_FAQ_ArticleCreate_Attachments'));
             fields.push(new FormField(
                 'Link FAQ with', FAQArticleProperty.LINK, 'link-input', false, 'Translatable#Helptext_FAQ_ArticleCreate_Links')

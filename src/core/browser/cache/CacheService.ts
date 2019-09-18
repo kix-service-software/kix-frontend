@@ -111,6 +111,8 @@ export class CacheService {
             case KIXObjectType.TICKET:
                 cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
                 cacheKeyPrefixes.push(KIXObjectType.CONTACT);
+                cacheKeyPrefixes.push(KIXObjectType.QUEUE);
+                cacheKeyPrefixes.push(KIXObjectType.CURRENT_USER);
                 break;
             case KIXObjectType.FAQ_VOTE:
                 cacheKeyPrefixes.push(KIXObjectType.FAQ_ARTICLE);
@@ -118,7 +120,10 @@ export class CacheService {
             case KIXObjectType.FAQ_ARTICLE:
                 cacheKeyPrefixes.push(KIXObjectType.FAQ_CATEGORY);
                 break;
-            case KIXObjectType.CONFIG_ITEM_CLASS:
+            case KIXObjectType.FAQ_CATEGORY:
+                cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
+                break;
+            case KIXObjectType.CONFIG_ITEM:
             case KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION:
                 cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM_CLASS);
                 break;
@@ -152,8 +157,10 @@ export class CacheService {
             case KIXObjectType.TICKET_PRIORITY:
             case KIXObjectType.TICKET_STATE:
             case KIXObjectType.TICKET_TYPE:
+                cacheKeyPrefixes.push(KIXObjectType.TICKET);
+                cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
+                break;
             case KIXObjectType.CONFIG_ITEM_CLASS:
-            case KIXObjectType.TICKET_PRIORITY:
                 cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
                 break;
             case KIXObjectType.TRANSLATION_PATTERN:
@@ -166,14 +173,10 @@ export class CacheService {
             case KIXObjectType.CONFIG_ITEM_VERSION:
                 cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
                 break;
+            case KIXObjectType.SYS_CONFIG_OPTION_DEFINITION:
             case KIXObjectType.SYS_CONFIG_OPTION:
+                cacheKeyPrefixes.push(KIXObjectType.SYS_CONFIG_OPTION);
                 cacheKeyPrefixes.push(KIXObjectType.SYS_CONFIG_OPTION_DEFINITION);
-                break;
-            case KIXObjectType.QUEUE:
-            case KIXObjectType.TICKET_STATE:
-            case KIXObjectType.TICKET_TYPE:
-            case KIXObjectType.TICKET_PRIORITY:
-                cacheKeyPrefixes.push(KIXObjectType.TICKET);
                 break;
             default:
         }

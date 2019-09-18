@@ -89,7 +89,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             KIXObjectType.QUEUE, loadingOptions, null, columns, false, false, null, null,
             TableHeaderHeight.SMALL, TableRowHeight.SMALL
         );
-        const table = await await TableFactoryService.getInstance().createTable(
+        const table = await TableFactoryService.getInstance().createTable(
             'system-address-assigned-queues', KIXObjectType.QUEUE, tableConfiguration,
             undefined, null, true,
             undefined, false, true, true

@@ -28,7 +28,7 @@ export class ArticleZipAttachmentDownloadAction extends AbstractAction<Article> 
 
             BrowserUtil.startBrowserDownload(attachment.Filename, attachment.Content, attachment.ContentType);
         } else {
-            const error = 'Kein Artikel verfügbar!';
+            const error = 'Translatable#No article available.';
             OverlayService.getInstance().openOverlay(
                 OverlayType.WARNING, null, new StringContent(error), 'Translatable#Error!', true
             );

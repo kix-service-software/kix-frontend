@@ -13,8 +13,6 @@ export enum KIXObjectType {
 
     ARTICLE = 'Article',
 
-    ARTICLE_TYPE = 'ARTICLE_TYPE',
-
     CHANNEL = 'Channel',
 
     CONSOLE_COMMAND = 'ConsoleCommand',

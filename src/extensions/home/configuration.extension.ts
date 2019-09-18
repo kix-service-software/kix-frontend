@@ -21,7 +21,7 @@ import { HomeContext } from '../../core/browser/home';
 import { TicketProperty } from '../../core/model/';
 import { TicketChartConfiguration } from '../../core/browser/ticket';
 import { UIComponentPermission } from '../../core/model/UIComponentPermission';
-import { ConfigurationService, SysConfigService } from '../../core/services';
+import { SysConfigService } from '../../core/browser/sysconfig';
 
 export class DashboardModuleFactoryExtension implements IConfigurationExtension {
 
@@ -31,16 +31,10 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
 
     public async getDefaultConfiguration(): Promise<ContextConfiguration> {
 
-        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-        const viewableStateTypes = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
-            serverConfig.BACKEND_API_TOKEN, '', KIXObjectType.SYS_CONFIG_OPTION,
-            [SysConfigKey.TICKET_VIEWABLE_STATE_TYPE],
-            null, null
-        );
+        const stateTypes = await SysConfigService.getInstance().getTicketViewableStateTypes();
 
         const stateTypeFilterCriteria = new FilterCriteria(
-            'StateType', SearchOperator.IN, FilterDataType.STRING, FilterType.AND,
-            viewableStateTypes && viewableStateTypes.length ? viewableStateTypes[0].Value : []
+            'StateType', SearchOperator.IN, FilterDataType.STRING, FilterType.AND, stateTypes
         );
 
         const chartConfig1 = new TicketChartConfiguration(
@@ -249,7 +243,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                                     true, true, false, DataType.DATE_TIME
                                 ),
                                 new DefaultColumnConfiguration(
-                                    TicketProperty.AGE, true, false, true, true, 75,
+                                    TicketProperty.AGE, true, false, true, true, 90,
                                     true, true, false, DataType.DATE_TIME
                                 ),
                             ],

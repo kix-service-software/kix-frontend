@@ -54,7 +54,7 @@ class Component {
         personalSettings.forEach((ps) => {
             const group = formGroups.find((g) => g.name === ps.group);
             const formField = new FormField(
-                ps.label, ps.property, ps.inputComponent, false, ps.hint,
+                ps.label, ps.property, ps.inputComponent, !!ps.required, ps.hint,
                 ps.options, new FormFieldValue(ps.defaultValue)
             );
             if (group) {
@@ -67,7 +67,7 @@ class Component {
         const formName = await TranslationService.translate('Translatable#Personal Settings');
         return new Form(
             'personal-settings', formName,
-            formGroups, KIXObjectType.PERSONAL_SETTINGS, false, FormContext.EDIT,
+            formGroups, KIXObjectType.PERSONAL_SETTINGS, true, FormContext.EDIT,
             null, null, true
         );
     }
@@ -85,7 +85,7 @@ class Component {
                 if (validationError) {
                     this.showValidationError(result);
                 } else {
-                    const loadingHint = await TranslationService.translate('Translatable#Save Settings.');
+                    const loadingHint = await TranslationService.translate('Translatable#Save Settings');
                     DialogService.getInstance().setMainDialogLoading(true, loadingHint);
                     await AgentService.getInstance().setPreferencesByForm(this.state.formId)
                         .then(async () => {

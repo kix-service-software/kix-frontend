@@ -91,7 +91,7 @@ export class Extension implements IConfigurationExtension {
 
             const roleField = new FormField(
                 'Translatable#Roles', UserProperty.ROLEIDS, 'object-reference-input', false,
-                'Translatable#Assign the roles for the user.', [
+                'Translatable#Helptext_Admin_Users_UserEdit_Roles', [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.ROLE),
                     new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
@@ -111,7 +111,7 @@ export class Extension implements IConfigurationExtension {
 
             const languageField = new FormField(
                 'Translatable#Language', PersonalSettingsProperty.USER_LANGUAGE, 'language-input',
-                false, 'Translatable#Helptext_Admin_UserEdit_Preferences_Language', null
+                true, 'Translatable#Helptext_Admin_UserEdit_Preferences_Language', null
             );
             const myQueuesField = new FormField(
                 'Translatable#My Queues', PersonalSettingsProperty.MY_QUEUES, 'object-reference-input',

@@ -117,7 +117,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.tableSubscriber = {
             eventSubscriberId: 'linked-objects-widget',
             eventPublished: (data: TableEventData, eventId: string) => {
-                const group = data ? this.state.linkedObjectGroups.find(
+                const group = data && this.state.linkedObjectGroups ? this.state.linkedObjectGroups.find(
                     (g) => g[1].getTableId() === data.tableId
                 ) : null;
                 if (group) {

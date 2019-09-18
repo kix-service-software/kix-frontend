@@ -11,6 +11,7 @@ import { ComponentState } from "./ComponentState";
 import { ContextService, ActionFactory, TableFactoryService } from "../../../../core/browser";
 import { KIXObjectType, Organisation } from "../../../../core/model";
 import { OrganisationDetailsContext } from "../../../../core/browser/organisation";
+import { TranslationService } from "../../../../core/browser/i18n/TranslationService";
 
 class Component {
 
@@ -30,10 +31,6 @@ class Component {
         );
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        if (this.state.widgetConfiguration) {
-            this.state.title = this.state.widgetConfiguration.title;
-        }
-
         context.registerListener('organisation-assigned-contacts-component', {
             explorerBarToggled: () => { return; },
             filteredObjectListChanged: () => { return; },
@@ -52,7 +49,8 @@ class Component {
 
     private async initWidget(organisation: Organisation): Promise<void> {
         this.state.organisation = organisation;
-        this.state.title = this.state.widgetConfiguration.title
+        const title = await TranslationService.translate(this.state.widgetConfiguration.title);
+        this.state.title = title
             + (this.state.organisation.Contacts && !!this.state.organisation.Contacts.length ?
                 ` (${this.state.organisation.Contacts.length})` : '');
         this.prepareTable();
@@ -75,10 +73,6 @@ class Component {
                 'organisation-assigned-contacts', KIXObjectType.CONTACT,
                 this.state.widgetConfiguration.settings, contactIds, null, true
             );
-            const count = this.state.organisation.Contacts.length;
-            if (count > 0) {
-                this.state.title = `${this.state.widgetConfiguration.title} (${count})`;
-            }
         }
     }
 

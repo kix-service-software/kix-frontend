@@ -54,7 +54,7 @@ class Component {
             if (validationError) {
                 this.showValidationError(result);
             } else {
-                DialogService.getInstance().setMainDialogLoading(true, "Translatable#Update FAQ Artikel");
+                DialogService.getInstance().setMainDialogLoading(true, "Translatable#Update FAQ Article");
                 const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
                 if (context) {
                     await KIXObjectService.updateObjectByForm(

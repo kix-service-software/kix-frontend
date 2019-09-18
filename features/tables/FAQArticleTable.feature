@@ -37,7 +37,6 @@ Feature: Als Nutzer möchte ich eine korrekte Standardkonfiguration für eine Ta
             | 'Number'     | 1        | 1          | 0          | 120   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'FAQArticle' |
             | 'Title'      | 1        | 1          | 0          | 300   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'FAQArticle' |
             | 'Language'   | 1        | 1          | 1          | 125   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'FAQArticle' |
-            | 'Visibility' | 1        | 1          | 1          | 125   | 0        | 1        | 1        | 'STRING'   | 1           | 0          | 'FAQArticle' |
             | 'Votes'      | 1        | 1          | 1          | 120   | 0        | 1        | 1        | 'STRING'   | 1           | 0          | 'FAQArticle' |
             | 'CategoryID' | 1        | 1          | 1          | 125   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'FAQArticle' |
             | 'Changed'    | 1        | 1          | 0          | 125   | 1        | 1        | 0        | 'DATETIME' | 1           | 0          | 'FAQArticle' |

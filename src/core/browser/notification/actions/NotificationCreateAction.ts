@@ -25,7 +25,7 @@ export class NotificationCreateAction extends AbstractAction {
     public async run(event: any): Promise<void> {
         ContextService.getInstance().setDialogContext(
             null, KIXObjectType.NOTIFICATION, ContextMode.CREATE_ADMIN, null, true,
-            'Translatable#Automation: Notification'
+            'Translatable#Automation'
         );
     }
 

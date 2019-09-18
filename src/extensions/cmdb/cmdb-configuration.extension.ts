@@ -216,20 +216,20 @@ export class Extension implements IConfigurationExtension {
                 new FormField(
                     'Translatable#Config Item Class', ConfigItemProperty.CLASS_ID,
                     'ci-class-input', false,
-                    'Translatable#Search for config items within the choosen class.'
+                    'Translatable#Helptext_CMDB_ConfigItem_Link_Class'
                 )
             );
-            fields.push(new FormField('Translatable#Name', ConfigItemProperty.NAME, null, false, 'Translatable#Search for config items with the same name or part of the same name (min. 1 character).'));
-            fields.push(new FormField('Translatable#Number', ConfigItemProperty.NUMBER, null, false, 'Translatable#Serach for config items with the same number or part of the same number (min. 1 character).'));
+            fields.push(new FormField('Translatable#Name', ConfigItemProperty.NAME, null, false, 'Translatable#Helptext_CMDB_ConfigItem_Link_Name'));
+            fields.push(new FormField('Translatable#Number', ConfigItemProperty.NUMBER, null, false, 'Translatable#Helptext_CMDB_ConfigItem_Link_Number'));
             fields.push(new FormField(
                 'Translatable#Deployment State', VersionProperty.CUR_DEPL_STATE_ID, 'general-catalog-input',
-                false, 'Translatable#Search for config items with the same deployment state.',
+                false, 'Translatable#Helptext_CMDB_ConfigItem_Link_DeploymentState',
                 [new FormFieldOption('GC_CLASS', 'ITSM::ConfigItem::DeploymentState')],
                 null, null, null, 1, 1, 1, null, null, null, false, false
             ));
             fields.push(new FormField(
                 'Translatable#Incident State', VersionProperty.CUR_INCI_STATE_ID, 'general-catalog-input',
-                false, 'Translatable#Search for config items with the same incident state.',
+                false, 'Translatable#Helptext_CMDB_ConfigItem_Link_IncidentState',
                 [new FormFieldOption('GC_CLASS', 'ITSM::Core::IncidentState')],
                 null, null, null, 1, 1, 1, null, null, null, false, false
             ));

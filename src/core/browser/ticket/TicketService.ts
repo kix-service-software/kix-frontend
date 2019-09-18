@@ -289,7 +289,7 @@ export class TicketService extends KIXObjectService<Ticket> {
             inlineAttachments.forEach(
                 (a) => inlineContent.push(new InlineContent(a.ContentID, a.Content, a.ContentType))
             );
-            return [new Buffer(AttachmentWithContent.Content, 'base64').toString('utf8'), inlineContent];
+            return [Buffer.from(AttachmentWithContent.Content, 'base64').toString('utf8'), inlineContent];
         } else {
             return [article.Body, null];
         }

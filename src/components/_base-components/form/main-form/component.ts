@@ -20,7 +20,20 @@ class FormComponent {
         this.state = new FormComponentState(input.formId);
     }
 
+    public onInput(input: any): void {
+        if (!this.state.formId && !this.state.formInstance) {
+            this.state.formId = input.formId;
+            this.prepareForm();
+        }
+    }
+
     public async onMount(): Promise<void> {
+        if (!this.state.formInstance) {
+            this.prepareForm();
+        }
+    }
+
+    private async prepareForm(): Promise<void> {
         this.state.formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         if (this.state.formInstance) {
             this.state.additionalFieldControlsNeeded = false;
@@ -37,11 +50,11 @@ class FormComponent {
             }
             this.state.objectType = this.state.formInstance.getObjectType();
             this.state.isSearchContext = this.state.formInstance.getFormContext() === FormContext.SEARCH;
-        }
-        WidgetService.getInstance().setWidgetType('form-group', WidgetType.GROUP);
-        this.state.loading = false;
+            WidgetService.getInstance().setWidgetType('form-group', WidgetType.GROUP);
+            this.state.loading = false;
 
-        this.prepareMultiGroupHandling();
+            this.prepareMultiGroupHandling();
+        }
     }
 
     private additionalFieldControlsNeeded(field: FormField): boolean {
