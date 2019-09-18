@@ -2136,7 +2136,10 @@ msgstr ""
 "Separates between the attributes of a row. If unknown, open your .csv-file "
 "with a text editor."
 
-msgid "Helptext_PersonalSettings_MyQueues_Hint"
+msgid "Helptext_Import_File"
+msgstr "Choose a .csv-file which contains importable values."
+
+msgid "Helptext_Import_TextSeparator."
 msgstr ""
 "For the teams you choose here you will receive notifications if there are, "
 "for example, new tickets or changes at the tickets."
@@ -2203,6 +2206,8 @@ msgstr ""
 
 msgid "Helptext_Tickets_ArticleCreate_Attachments"
 msgstr ""
+"Choose if you want to save the ticket description only internally (Note) or "
+"additionally sending an email (Email)."
 
 msgid "Helptext_Tickets_ArticleCreate_Channel"
 msgstr ""
