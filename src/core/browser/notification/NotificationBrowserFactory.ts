@@ -66,6 +66,9 @@ export class NotificationBrowserFactory extends KIXObjectFactory<Notification> {
                         case NotificationProperty.DATA_SEND_ONCE_A_DAY:
                             newNotification.OncePerDay = Boolean(Number(value[0]));
                             break;
+                        case NotificationProperty.DATA_CREATE_ARTICLE:
+                            newNotification.CreateArticle = Boolean(Number(value[0]));
+                            break;
                         default:
                             let property = key.replace('Ticket::', '');
                             property = property.replace('Article::', '');

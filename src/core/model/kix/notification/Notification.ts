@@ -36,6 +36,7 @@ export class Notification extends KIXObject<Notification> {
     public RecipientSubject: boolean;
     public SendOnOutOfOffice: boolean;
     public OncePerDay: boolean;
+    public CreateArticle: boolean;
 
     public constructor(notification?: Notification) {
         super(notification);
