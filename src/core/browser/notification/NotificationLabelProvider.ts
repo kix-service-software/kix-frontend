@@ -58,6 +58,9 @@ export class NotificationLabelProvider extends LabelProvider {
             case NotificationProperty.DATA_SEND_ONCE_A_DAY:
                 displayValue = 'Translatable#Once per day';
                 break;
+            case NotificationProperty.DATA_CREATE_ARTICLE:
+                displayValue = 'Translatable#Create Article';
+                break;
             case NotificationProperty.DATA_RECIPIENT_EMAIL:
                 displayValue = 'Translatable#Additional recipients';
                 break;
@@ -153,6 +156,7 @@ export class NotificationLabelProvider extends LabelProvider {
             case NotificationProperty.DATA_SEND_DESPITE_OOO:
             case NotificationProperty.DATA_SEND_ONCE_A_DAY:
             case NotificationProperty.DATA_VISIBLE_FOR_AGENT:
+            case NotificationProperty.DATA_CREATE_ARTICLE:
                 displayValue = value ? 'Translatable#Yes' : 'Translatable#No';
                 break;
             case NotificationProperty.NAME:

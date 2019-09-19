@@ -149,6 +149,11 @@ export class Extension implements IConfigurationExtension {
                     'checkbox-input', false,
                     'Translatable#Helptext_Admin_NotificationEdit_SendOnceADay', undefined,
                     new FormFieldValue(false)
+                ),
+                new FormField(
+                    'Translatable#Create Article', NotificationProperty.DATA_CREATE_ARTICLE,
+                    'checkbox-input', false,
+                    'Translatable#Helptext_Admin_NotificationEdit_CreateArticle'
                 )
             ]);
             const messageGroup = new FormGroup('Translatable#Notification Methods', [

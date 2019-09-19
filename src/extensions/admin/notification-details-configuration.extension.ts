@@ -70,7 +70,8 @@ export class Extension implements IConfigurationExtension {
                         NotificationProperty.DATA_RECIPIENT_AGENTS,
                         NotificationProperty.DATA_RECIPIENT_ROLES,
                         NotificationProperty.DATA_SEND_DESPITE_OOO,
-                        NotificationProperty.DATA_SEND_ONCE_A_DAY
+                        NotificationProperty.DATA_SEND_ONCE_A_DAY,
+                        NotificationProperty.DATA_CREATE_ARTICLE
                     ]
                 ),
                 true, true, null, true
