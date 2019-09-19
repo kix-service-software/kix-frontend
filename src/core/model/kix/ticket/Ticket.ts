@@ -44,6 +44,8 @@ export class Ticket extends KIXObject<Ticket> {
 
     public PendingTime: string;
 
+    public PendingTimeUnix: number;
+
     public TimeUnits: number;
 
     public EscalationResponseTime: number;
@@ -166,6 +168,7 @@ export class Ticket extends KIXObject<Ticket> {
             this.Changed = ticket.Changed;
             this.ArchiveFlag = ticket.ArchiveFlag;
             this.PendingTime = ticket.PendingTime;
+            this.PendingTimeUnix = ticket.PendingTimeUnix;
             this.TimeUnits = ticket.TimeUnits;
             this.EscalationResponseTime = ticket.EscalationResponseTime;
             this.EscalationUpdateTime = ticket.EscalationUpdateTime;
@@ -207,9 +210,8 @@ export class Ticket extends KIXObject<Ticket> {
     }
 
     public isPendingReached(): boolean {
-        const pendingTimeInMillis = Date.parse(this.PendingTime);
-        const now = Date.now();
-        return now > pendingTimeInMillis;
+        const untilTime = this.getUntilTime();
+        return untilTime && untilTime <= 0;
     }
 
     public getFirstArticle(): Article {
@@ -221,6 +223,14 @@ export class Ticket extends KIXObject<Ticket> {
         }
 
         return null;
+    }
+
+    public getUntilTime(): number {
+        let untilTime;
+        if (this.PendingTimeUnix && !isNaN(Number(this.PendingTimeUnix)) && this.PendingTimeUnix !== 0) {
+            untilTime = this.PendingTimeUnix - Math.floor(Date.now() / 1000);
+        }
+        return untilTime;
     }
 
     public equals(ticket: Ticket): boolean {
