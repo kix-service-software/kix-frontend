@@ -103,7 +103,7 @@ export class LogFileTableFactory extends TableFactory {
     private async downloadLogFile(logFile: LogFile): Promise<void> {
         const files = await KIXObjectService.loadObjects<LogFile>(
             KIXObjectType.LOG_FILE, [logFile.ID],
-            new KIXObjectLoadingOptions(null, null, null, [LogFileProperty.CONTENT])
+            new KIXObjectLoadingOptions(null, null, null, [LogFileProperty.CONTENT]), null, false, false
         );
 
         if (files && files.length) {
