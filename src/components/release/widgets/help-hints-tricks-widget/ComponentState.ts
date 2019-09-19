@@ -16,7 +16,7 @@ export class ComponentState extends WidgetComponentState {
         public hasConfigAccess: boolean = false,
         public userManualLink: string = null,
         public adminManualLink: string = null,
-        public faqURIs: string[] = []
+        public faqIds: number[] = []
 
     ) {
         super();
