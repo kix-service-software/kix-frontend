@@ -87,14 +87,15 @@ export class HttpService {
     }
 
     public async post<T>(
-        resource: string, content: any, token: any, clientRequestId: string, cacheKeyPrefix: string = ''
+        resource: string, content: any, token: any, clientRequestId: string, cacheKeyPrefix: string = '',
+        logError: boolean = true
     ): Promise<T> {
         const options = {
             method: RequestMethod.POST,
             body: content
         };
 
-        const response = this.executeRequest<T>(resource, token, clientRequestId, options);
+        const response = this.executeRequest<T>(resource, token, clientRequestId, options, undefined, logError);
         await CacheService.getInstance().deleteKeys(cacheKeyPrefix);
         return response;
     }
@@ -140,7 +141,8 @@ export class HttpService {
     }
 
     private executeRequest<T>(
-        resource: string, token: string, clientRequestId: string, options: any, fullResponse: boolean = false
+        resource: string, token: string, clientRequestId: string, options: any, fullResponse: boolean = false,
+        logError: boolean = true
     ): Promise<T> {
         const backendToken = AuthenticationService.getInstance().getBackendToken(token);
 
@@ -192,9 +194,11 @@ export class HttpService {
                     resolve(response);
                     ProfilingService.getInstance().stop(profileTaskId, response);
                 }).catch((error) => {
-                    LoggingService.getInstance().error(
-                        `Error during HTTP (${resource}) ${options.method} request.`, error
-                    );
+                    if (logError) {
+                        LoggingService.getInstance().error(
+                            `Error during HTTP (${resource}) ${options.method} request.`, error
+                        );
+                    }
                     ProfilingService.getInstance().stop(profileTaskId, 'Error');
                     if (error.statusCode === 403) {
                         reject(new PermissionError(this.createError(error), resource, options.method));

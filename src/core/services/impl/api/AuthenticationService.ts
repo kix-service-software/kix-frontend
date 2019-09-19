@@ -96,7 +96,7 @@ export class AuthenticationService {
     ): Promise<string> {
         const userLogin = new UserLogin(user, password, UserType.AGENT);
         const response = await HttpService.getInstance().post<LoginResponse>(
-            'auth', userLogin, null, clientRequestId
+            'auth', userLogin, null, clientRequestId, undefined, false
         );
         const token = fakeLogin ? response.Token : this.createToken(user, response.Token);
         return token;
