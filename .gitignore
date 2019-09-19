@@ -13,6 +13,7 @@ npm-debug.log
 src/log/**/*
 src/logs/**/*
 src/**/.gulp-*
+logs
 
 coverage
 .nyc_output

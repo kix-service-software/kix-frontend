@@ -45,13 +45,14 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     public static async loadObjects<T extends KIXObject>(
         objectType: KIXObjectType, objectIds?: Array<number | string>,
         loadingOptions?: KIXObjectLoadingOptions,
-        objectLoadingOptions?: KIXObjectSpecificLoadingOptions, silent: boolean = false
+        objectLoadingOptions?: KIXObjectSpecificLoadingOptions, silent: boolean = false,
+        cache: boolean = true
     ): Promise<T[]> {
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
         let objects = [];
         if (service) {
             objects = await service.loadObjects(
-                objectType, objectIds ? [...objectIds] : null, loadingOptions, objectLoadingOptions
+                objectType, objectIds ? [...objectIds] : null, loadingOptions, objectLoadingOptions, cache
             ).catch((error: Error) => {
                 if (!silent) {
                     const content = new ComponentContent('list-with-title',
@@ -75,19 +76,20 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
     public async loadObjects<O extends KIXObject>(
         objectType: KIXObjectType, objectIds: Array<string | number>,
-        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions
+        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
+        cache: boolean = true
     ): Promise<O[]> {
         let objects = [];
         if (objectIds) {
             if (objectIds.length) {
                 const loadedObjects = await KIXObjectSocketClient.getInstance().loadObjects<T>(
-                    objectType, objectIds, loadingOptions, objectLoadingOptions
+                    objectType, objectIds, loadingOptions, objectLoadingOptions, cache
                 );
                 objects = loadedObjects;
             }
         } else {
             objects = await KIXObjectSocketClient.getInstance().loadObjects<T>(
-                objectType, objectIds, loadingOptions, objectLoadingOptions
+                objectType, objectIds, loadingOptions, objectLoadingOptions, cache
             );
         }
 

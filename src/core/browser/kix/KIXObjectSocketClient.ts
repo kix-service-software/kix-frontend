@@ -48,7 +48,8 @@ export class KIXObjectSocketClient extends SocketClient {
 
     public async loadObjects<T extends KIXObject>(
         kixObjectType: KIXObjectType, objectIds: Array<string | number> = null,
-        loadingOptions: KIXObjectLoadingOptions = null, objectLoadingOptions: KIXObjectSpecificLoadingOptions = null
+        loadingOptions: KIXObjectLoadingOptions = null, objectLoadingOptions: KIXObjectSpecificLoadingOptions = null,
+        cache: boolean = true
     ): Promise<T[]> {
         const token = ClientStorageService.getToken();
         const requestId = IdService.generateDateBasedId();
@@ -60,8 +61,10 @@ export class KIXObjectSocketClient extends SocketClient {
 
         const cacheKey = JSON.stringify({ kixObjectType, objectIds, loadingOptions, objectLoadingOptions });
 
-        if (await CacheService.getInstance().has(cacheKey, kixObjectType)) {
-            return CacheService.getInstance().get(cacheKey, kixObjectType);
+        if (cache) {
+            if (await CacheService.getInstance().has(cacheKey, kixObjectType)) {
+                return CacheService.getInstance().get(cacheKey, kixObjectType);
+            }
         }
 
         if (this.requestPromises.has(cacheKey)) {

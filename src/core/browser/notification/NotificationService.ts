@@ -39,6 +39,7 @@ export class NotificationService extends KIXObjectService<SystemAddress> {
             case NotificationProperty.DATA_SEND_ONCE_A_DAY:
             case NotificationProperty.DATA_SEND_DESPITE_OOO:
             case NotificationProperty.DATA_RECIPIENT_SUBJECT:
+            case NotificationProperty.DATA_CREATE_ARTICLE:
                 value = Number(value);
                 break;
             case NotificationProperty.DATA_RECIPIENT_EMAIL:
