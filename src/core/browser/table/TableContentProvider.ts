@@ -21,6 +21,8 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
     protected initialized: boolean = false;
 
+    protected useCache: boolean = true;
+
     public constructor(
         protected objectType: KIXObjectType,
         protected table: ITable,
@@ -73,7 +75,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         } else {
             if (!this.objectIds || (this.objectIds && this.objectIds.length > 0)) {
                 objects = await KIXObjectService.loadObjects<KIXObject>(
-                    this.objectType, this.objectIds, this.loadingOptions, null, false
+                    this.objectType, this.objectIds, this.loadingOptions, null, false, this.useCache
                 );
             }
         }
