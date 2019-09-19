@@ -49,22 +49,22 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </p>
                     <ul.link-list>
                         <li>
-                            <a href=state.faqURIs[0] on-click("faqClicked", 1)>
+                            <a href=(component.baseFAQUri + state.faqIds[0]) on-click("faqClicked", state.faqIds[0])>
                                 <translation-string pattern="Translatable#General information on working with KIX 18"/>
                             </a>
                         </li>
                         <li>
-                            <a href=state.faqURIs[3] on-click("faqClicked", 3)>
+                            <a href=(component.baseFAQUri + state.faqIds[1]) on-click("faqClicked", state.faqIds[1])>
                                 <translation-string pattern="Translatable#How do I create a new ticket?"/>
                             </a>
                         </li>
                         <li>
-                            <a href=state.faqURIs[2] on-click("faqClicked", 4)>
+                            <a href=(component.baseFAQUri + state.faqIds[2]) on-click("faqClicked", state.faqIds[2])>
                                 <translation-string pattern="Translatable#Selected ticket functions"/>
                             </a>
                         </li>
                         <li>
-                            <a href=state.faqURIs[1] on-click("faqClicked", 2)>
+                            <a href=(component.baseFAQUri + state.faqIds[3]) on-click("faqClicked", state.faqIds[3])>
                                 <translation-string pattern="Translatable#How do I search in KIX 18?"/>
                             </a>
                         </li>
