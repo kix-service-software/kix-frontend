@@ -180,7 +180,7 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
                 break;
             case ArticleProperty.INCOMING_TIME:
                 if (displayValue) {
-                    displayValue = DateTimeUtil.calculateAge(Number(displayValue));
+                    displayValue = DateTimeUtil.calculateTimeInterval(Number(displayValue));
                 }
                 break;
             case ArticleProperty.CREATED_BY:

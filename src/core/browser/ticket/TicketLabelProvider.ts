@@ -159,7 +159,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 break;
             case TicketProperty.AGE:
                 if (value) {
-                    displayValue = DateTimeUtil.calculateAge(Number(displayValue));
+                    displayValue = DateTimeUtil.calculateTimeInterval(Number(displayValue));
                 }
                 break;
             case TicketProperty.ESCALATION_TIME_WORKING_TIME:
@@ -170,9 +170,8 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case TicketProperty.UPDATE_TIME:
             case TicketProperty.SOLUTION_TIME_WORKING_TIME:
             case TicketProperty.SOLUTION_TIME:
-            case TicketProperty.UNTIL_TIME:
                 if (value) {
-                    displayValue = DateTimeUtil.calculateAge(Number(displayValue) * 1000);
+                    displayValue = DateTimeUtil.calculateTimeInterval(Number(displayValue) * 1000);
                 }
                 break;
             case TicketProperty.UNSEEN:
@@ -407,6 +406,12 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                     displayValue = await this.getPropertyValueDisplayText(
                         TicketProperty.LOCK_ID, ticket.LockID, translatable
                     );
+                    break;
+                case TicketProperty.UNTIL_TIME:
+                    const untilTime = ticket.getUntilTime();
+                    if (untilTime) {
+                        displayValue = DateTimeUtil.calculateTimeInterval(untilTime);
+                    }
                     break;
                 default:
                     displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
