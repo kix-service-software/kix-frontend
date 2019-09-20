@@ -96,7 +96,11 @@ class Component extends FormInputComponent<number, ComponentState> {
 
             const queue = queues[0];
 
-            const userName = `${user.UserFirstname} ${user.UserLastname}`;
+            let userName = `${user.UserFirstname} ${user.UserLastname}`;
+            userName = userName
+                .replace('ä', 'ae')
+                .replace('ö', 'oe')
+                .replace('ü', 'ue');
 
             const systemAddress = await KIXObjectService.loadObjects<SystemAddress>(
                 KIXObjectType.SYSTEM_ADDRESS, [queue.SystemAddressID], null, null, true
