@@ -29,6 +29,12 @@ export class RoleService extends KIXObjectService<Role> {
             || kixObjectType === KIXObjectType.PERMISSION_TYPE;
     }
 
+    protected async prepareUpdateValue(property: string, value: any): Promise<Array<[string, any]>> {
+        const parameter: Array<[string, any]> = [];
+        parameter.push([property, value]);
+        return parameter;
+    }
+
     protected async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
         const parameter: Array<[string, any]> = [];
         if (value) {

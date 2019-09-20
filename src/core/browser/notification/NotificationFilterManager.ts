@@ -11,9 +11,12 @@ import {
     AbstractDynamicFormManager, LabelService, ObjectPropertyValue, DynamicFormOperationsType, KIXObjectService
 } from "..";
 import {
-    KIXObjectType, TicketProperty, ArticleProperty, InputFieldTypes, TreeNode
+    KIXObjectType, TicketProperty, ArticleProperty, InputFieldTypes, TreeNode, NotificationProperty, ContextType
 } from "../../model";
 import { TicketService } from "../ticket";
+import { ContextService } from "../context";
+import { NotificationService } from "./NotificationService";
+import { NotificationFilterValidator } from "./form";
 
 export class NotificationFilterManager extends AbstractDynamicFormManager {
 
@@ -32,9 +35,23 @@ export class NotificationFilterManager extends AbstractDynamicFormManager {
             TicketProperty.CONTACT_ID, TicketProperty.OWNER_ID, TicketProperty.RESPONSIBLE_ID
         ];
 
-        const articleProperties = [
-            "ArticleSubjectMatch", "ArticleBodyMatch"
-        ];
+        let selectedEvents = [];
+        let hasArticleEvent = true;
+        const context = ContextService.getInstance().getActiveContext();
+        if (context && context.getDescriptor().contextType === ContextType.DIALOG) {
+            selectedEvents = context.getAdditionalInformation(NotificationProperty.DATA_EVENTS);
+            hasArticleEvent = selectedEvents
+                ? await NotificationService.getInstance().hasArticleEvent(selectedEvents)
+                : false;
+        }
+
+        const articleProperties = hasArticleEvent
+            ? [
+                ArticleProperty.SENDER_TYPE_ID, ArticleProperty.CHANNEL_ID,
+                ArticleProperty.TO, ArticleProperty.CC, ArticleProperty.FROM,
+                ArticleProperty.SUBJECT, ArticleProperty.BODY
+            ]
+            : [];
 
         for (const ticketProperty of ticketProperties) {
             const label = await LabelService.getInstance().getPropertyText(ticketProperty, KIXObjectType.TICKET);
@@ -60,6 +77,8 @@ export class NotificationFilterManager extends AbstractDynamicFormManager {
             case TicketProperty.SLA:
             case TicketProperty.OWNER_ID:
             case TicketProperty.RESPONSIBLE_ID:
+            case ArticleProperty.SENDER_TYPE_ID:
+            case ArticleProperty.CHANNEL_ID:
                 return InputFieldTypes.DROPDOWN;
             case TicketProperty.ORGANISATION_ID:
             case TicketProperty.CONTACT_ID:
@@ -90,6 +109,8 @@ export class NotificationFilterManager extends AbstractDynamicFormManager {
             case TicketProperty.OWNER_ID:
             case TicketProperty.RESPONSIBLE_ID:
             case TicketProperty.LOCK_ID:
+            case ArticleProperty.SENDER_TYPE_ID:
+            case ArticleProperty.CHANNEL_ID:
                 return TicketService.getInstance().getTreeNodes(property, false);
             default:
                 return [];
@@ -112,6 +133,8 @@ export class NotificationFilterManager extends AbstractDynamicFormManager {
             case TicketProperty.CONTACT_ID:
             case TicketProperty.OWNER_ID:
             case TicketProperty.RESPONSIBLE_ID:
+            case ArticleProperty.SENDER_TYPE_ID:
+            case ArticleProperty.CHANNEL_ID:
                 return true;
             default:
                 return false;
@@ -134,6 +157,13 @@ export class NotificationFilterManager extends AbstractDynamicFormManager {
         }
 
         return tree;
+    }
+
+    public async validate(): Promise<void> {
+        const validator = new NotificationFilterValidator();
+        for (const v of this.values) {
+            v.valid = await validator.validateValue(v.property, v.value);
+        }
     }
 
 }

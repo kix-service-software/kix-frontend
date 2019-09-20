@@ -37,6 +37,8 @@ export enum TableEvent {
 
     ROW_VALUE_CHANGED = 'ROW_VALUE_CHANGED',
 
-    ROW_CLICKED = 'ROW_CLICKED'
+    ROW_CLICKED = 'ROW_CLICKED',
+
+    RELOADED = 'RELOADED'
 
 }

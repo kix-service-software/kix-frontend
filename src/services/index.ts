@@ -13,3 +13,4 @@ export { AdminModuleService } from './AdminModuleService';
 export { PersonalSettingsService } from './PersonalSettingsService';
 export { SocketService } from './SocketService';
 export { PermissionService } from './PermissionService';
+export { WebformService } from './WebformService';

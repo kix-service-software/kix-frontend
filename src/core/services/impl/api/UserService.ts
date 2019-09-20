@@ -96,6 +96,11 @@ export class UserService extends KIXObjectService {
                 preferences.push({ ID: PersonalSettingsProperty.MY_QUEUES, Value: myQueues[1] });
             }
 
+            const notifications = parameter.find((p) => p[0] === PersonalSettingsProperty.NOTIFICATIONS);
+            if (notifications) {
+                preferences.push({ ID: PersonalSettingsProperty.NOTIFICATIONS, Value: notifications[1] });
+            }
+
             createParameter.push([UserProperty.PREFERENCES, preferences]);
 
             const id = await super.executeUpdateOrCreateRequest(
@@ -161,6 +166,11 @@ export class UserService extends KIXObjectService {
             const myQueues = parameter.find((p) => p[0] === PersonalSettingsProperty.MY_QUEUES);
             if (myQueues) {
                 await this.setPreferences(token, clientRequestId, [myQueues], userId);
+            }
+
+            const notifications = parameter.find((p) => p[0] === PersonalSettingsProperty.NOTIFICATIONS);
+            if (notifications) {
+                await this.setPreferences(token, clientRequestId, [notifications], userId);
             }
 
             return id;

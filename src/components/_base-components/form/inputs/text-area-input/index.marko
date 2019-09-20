@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <if(state.field)>
     <textarea.input-style
         rows=5
@@ -17,7 +16,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         maxlength=state.field.maxLength
         placeholder=state.placeholder
         readonly=state.field.readonly
-        on-keydown("keyDown")
         on-blur("focusLost")
         on-change("valueChanged")>${state.currentValue}</textarea>
 </if>

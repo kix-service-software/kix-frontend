@@ -65,8 +65,7 @@ export class AuthenticationSocketClient extends SocketClient {
             });
 
             const request = new LoginRequest(
-                userName, password, redirectUrl, requestId,
-                ClientStorageService.getClientRequestId(), fakeLogin
+                userName, password, redirectUrl, requestId, ClientStorageService.getClientRequestId()
             );
             this.authenticationSocket.emit(AuthenticationEvent.LOGIN, request);
         });

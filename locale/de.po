@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-09-10 13:34+0000\n"
-"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
+"PO-Revision-Date: 2019-09-17 10:33+0000\n"
+"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -36,7 +36,7 @@ msgid "{0} link(s) assigned."
 msgstr "{0} Verknüpfung(en) erstellt."
 
 msgid "Accepted domains"
-msgstr ""
+msgstr "Akzeptierte Domains"
 
 msgid "Accept KIX Header"
 msgstr "KIX Header akzeptieren"
@@ -48,7 +48,7 @@ msgid "Accounted time"
 msgstr "Erfasste Zeit"
 
 msgid "Account Information"
-msgstr "Konto Information"
+msgstr "Kontoinformationen"
 
 msgid "Account successfully created."
 msgstr "Konto wurde erfolgreich angelegt."
@@ -91,6 +91,9 @@ msgstr "nach"
 
 msgid "Age"
 msgstr "Alter"
+
+msgid "agent"
+msgstr "Agent"
 
 msgid "Agent"
 msgstr "Agent"
@@ -237,6 +240,9 @@ msgstr "Automatisierung: Benachrichtigungen"
 msgid "back to"
 msgstr "Zurück zu"
 
+msgid "Based on class definition"
+msgstr "Basiert auf Klassendefinition"
+
 msgid "Bcc"
 msgstr "Bcc"
 
@@ -245,6 +251,9 @@ msgstr "vor"
 
 msgid "between"
 msgstr "zwischen"
+
+msgid "Body"
+msgstr ""
 
 msgid "Bookmarks"
 msgstr "Lesezeichen"
@@ -505,6 +514,9 @@ msgstr "Asset wird angelegt"
 msgid "Create Contact"
 msgstr "Kontakt wird angelegt"
 
+msgid "created"
+msgstr "erstellt"
+
 msgid "Created at"
 msgstr "Erstellt am"
 
@@ -559,6 +571,9 @@ msgstr "Webformular wird angelegt"
 msgid "CSV-Export"
 msgstr "CSV-Export"
 
+msgid "current"
+msgstr ""
+
 msgid "(Current definition)"
 msgstr "(aktuelle Definition)"
 
@@ -574,14 +589,8 @@ msgstr "Aktueller Vorfallstatus"
 msgid "Current Password"
 msgstr "Aktuelles Passwort"
 
-msgid "(current version)"
-msgstr "(aktuelle Version)"
-
 msgid "(Current version)"
 msgstr "(aktuelle Version)"
-
-msgid "Current version"
-msgstr "Aktuelle Version"
 
 msgid "Customer"
 msgstr "Kunden"
@@ -674,7 +683,7 @@ msgid "edited"
 msgstr "bearbeitet"
 
 msgid "Edit Email Account"
-msgstr "E-Mail Konto bearbeiten"
+msgstr "E-Mail-Konto bearbeiten"
 
 msgid "Edit Email Filter"
 msgstr "E-Mail Filter bearbeiten"
@@ -743,7 +752,7 @@ msgid "Email"
 msgstr "E-Mail"
 
 msgid "Email Account"
-msgstr "E-Mail Konto"
+msgstr "E-Mail-Konto"
 
 msgid "Email Accounts"
 msgstr "E-Mail Konten"
@@ -879,6 +888,12 @@ msgstr "Fax"
 
 msgid "Feedback"
 msgstr ""
+
+msgid "Fetching Mail Account"
+msgstr "E-Mail-Konto abrufen"
+
+msgid "Fetch now"
+msgstr "Jetzt abrufen"
 
 msgid "Field"
 msgstr "Feld"
@@ -1655,12 +1670,10 @@ msgstr ""
 "erhält. Der Agent kann diese Einstellung auch selbst in seinen persönlichen "
 "Einstellungen ändern."
 
-#, fuzzy
-#| msgid "Helptext_Admin_UserCreate_Preferences_MyQueues"
 msgid "Helptext_Admin_UserCreate_Preferences_Notifications_Hint"
 msgstr ""
-"Legen Sie fest, für welche Teams der Agent standardmäßig Benachrichtigungen "
-"erhält. Der Agent kann diese Einstellung auch selbst in seinen persönlichen "
+"Legen Sie fest, welche Benachrichtigungen der Agent standardmäßig erhält. "
+"Der Agent kann diese Einstellung auch selbst in seinen persönlichen "
 "Einstellungen ändern."
 
 msgid "Helptext_Admin_UserCreate_Preferences_UserLanguage"
@@ -1681,13 +1694,11 @@ msgstr ""
 "erhält. Der Agent kann diese Einstellung auch selbst in seinen persönlichen "
 "Einstellungen ändern."
 
-#, fuzzy
-#| msgid "Helptext_Admin_UserEdit_Preferences_Language"
 msgid "Helptext_Admin_UserEdit_Preferences_Notifications_Hint"
 msgstr ""
-"Legen Sie fest, in welcher Sprache der Agent KIX sieht, wenn er sich das "
-"erste Mal anmeldet. Der Agent kann die Sprache auch selbst in seinen "
-"persönlichen Einstellungen ändern."
+"Legen Sie fest, welche Benachrichtigungen der Agent standardmäßig erhält. "
+"Der Agent kann diese Einstellung auch selbst in seinen persönlichen "
+"Einstellungen ändern."
 
 msgid "Helptext_Admin_Users_RoleCreate_Comment"
 msgstr ""
@@ -2257,12 +2268,11 @@ msgstr ""
 "Sie erhalten Benachrichtigungen, wenn in den hier gewählten Teams neue "
 "Tickets entstehen oder Änderungen vorgenommen werden."
 
-#, fuzzy
-#| msgid "Helptext_PersonalSettings_MyQueues_Hint"
 msgid "Helptext_PersonalSettings_Notifications_Hint"
 msgstr ""
-"Sie erhalten Benachrichtigungen, wenn in den hier gewählten Teams neue "
-"Tickets entstehen oder Änderungen vorgenommen werden."
+"Wählen Sie aus den aufgeführten Benachrichtigungen, welche Sie erhalten "
+"möchten. Gehen Sie mit dem Mauszeiger über den Eintrag, um weitere "
+"Informationen zur Benachrichtigung zu erhalten."
 
 msgid "Helptext_PersonalSettings_UserLanguage_Hint"
 msgstr "Wählen Sie aus, in welcher Sprache Sie die Anwendung nutzen möchten."
@@ -2485,8 +2495,7 @@ msgstr ""
 "dem Ticket handelt."
 
 msgid "Here you will find the KIX 18 manuals for users and administrators"
-msgstr ""
-"Hier finden Sie die KIX 18 Handbücher für Anwender und Administratoren:"
+msgstr "Hier finden Sie die KIX 18 Handbücher für Anwender und Administratoren"
 
 msgid "History"
 msgstr "Historie"
@@ -2558,7 +2567,7 @@ msgid "Incident State"
 msgstr "Vorfallstatus"
 
 msgid "Include this code into the <head> area of your webpage."
-msgstr ""
+msgstr "Binden Sie diesen Code in den <head>-Bereich Ihrer Webseite ein."
 
 msgid "Information text"
 msgstr "Hinweistext"
@@ -2684,7 +2693,7 @@ msgid "Load Contact"
 msgstr "Lade Kontakt"
 
 msgid "Load Email Account"
-msgstr "Lade E-Mail Konto"
+msgstr "Lade E-Mail-Konto"
 
 msgid "Load Email Filter"
 msgstr "Lade E-Mail Filter"
@@ -2767,11 +2776,14 @@ msgstr "Abmelden"
 msgid "Logs"
 msgstr "Logs"
 
+msgid "Mail Account successfully fetched."
+msgstr "E-Mail-Konto wurde erfolgreich abgerufen."
+
 msgid "Menu"
 msgstr "Modulmenü"
 
 msgid "Message"
-msgstr ""
+msgstr "Nachricht"
 
 msgid "Message after sending form"
 msgstr "Nachricht nach Absenden des Formulars"
@@ -3005,7 +3017,7 @@ msgid "Notifications for Tickets"
 msgstr "Benachrichtigungen für Tickets"
 
 msgid "Notification successfully created."
-msgstr "Benachrichtigung wurde erfolgreich angelegt"
+msgstr "Benachrichtigung wurde erfolgreich angelegt."
 
 msgid "Notification Text"
 msgstr "Benachrichtigungstext"
@@ -3159,6 +3171,7 @@ msgstr "Telefon"
 
 msgid "Place this code wherever you want to open the webform dialog."
 msgstr ""
+"Platzieren Sie diesen Code dort, wo das Webformular geöffnet werden soll."
 
 msgid "Please select a contact"
 msgstr "Wählen Sie bitte einen Kontakt."
@@ -3302,7 +3315,7 @@ msgid "Remove parameter"
 msgstr "Parameter entfernen"
 
 msgid "Remove Priorities"
-msgstr "Prioritäten werden entfernt"
+msgstr "Prioritäten entfernen"
 
 msgid "Remove Search Criteria"
 msgstr "Suchkriterien entfernen"
@@ -3456,6 +3469,9 @@ msgstr "Absender"
 msgid "Sender Address (Email)"
 msgstr "Absender E-Mail"
 
+msgid "Sender Type"
+msgstr "Sendertyp"
+
 msgid "Send to"
 msgstr "Senden an"
 
@@ -3541,7 +3557,7 @@ msgid "States"
 msgstr "Status"
 
 msgid "States successfully removed."
-msgstr "Status wurde erfolgreich entfernt."
+msgstr "Status wurden erfolgreich entfernt."
 
 msgid "State successfully created."
 msgstr "Status wurde erfolgreich angelegt."
@@ -3585,6 +3601,9 @@ msgstr "Symptom"
 msgid "SysConfig"
 msgstr "SysConfig"
 
+msgid "system"
+msgstr "System"
+
 msgid "System"
 msgstr "System"
 
@@ -3622,7 +3641,7 @@ msgid "Templates"
 msgstr "Vorlagen"
 
 msgid "Templates successfully removed."
-msgstr "Vorlagen wurde erfolgreich entfernt."
+msgstr "Vorlagen wurden erfolgreich entfernt."
 
 msgid "Text"
 msgstr "Text"
@@ -3653,7 +3672,7 @@ msgid ""
 "18 works"
 msgstr ""
 "Um einen grundlegenden Überblick über die Funktionsweise von KIX 18 zu "
-"erhalten, helfen Ihnen folgende FAQ-Einträge:"
+"erhalten, helfen Ihnen folgende FAQ-Einträge"
 
 msgid "The search only includes current versions."
 msgstr "Es werden nur aktuelle Versionen durchsucht."
@@ -3770,7 +3789,7 @@ msgid "Translations"
 msgstr "Übersetzungen"
 
 msgid "Translations successfully removed."
-msgstr "Übersetzungen wurde erfolgreich entfernt."
+msgstr "Übersetzungen wurden erfolgreich entfernt."
 
 msgid "Translation successfully created."
 msgstr "Übersetzung wurde erfolgreich angelegt."
@@ -3788,7 +3807,7 @@ msgid "Types"
 msgstr "Typen"
 
 msgid "Types successfully removed."
-msgstr "Typen wurde erfolgreich entfernt."
+msgstr "Typen wurden erfolgreich entfernt."
 
 msgid "Type successfully created."
 msgstr "Typ wurde erfolgreich angelegt."
@@ -3860,7 +3879,7 @@ msgid "Update Key"
 msgstr "Aktualisierung wird durchgeführt"
 
 msgid "Update Notification"
-msgstr "Benachrichtigung aktualisieren"
+msgstr "Aktualisierung wird durchgeführt"
 
 msgid "Update Organisation"
 msgstr "Aktualisierung wird durchgeführt"
@@ -3893,6 +3912,9 @@ msgid "Update Type"
 msgstr "Aktualisierung wird durchgeführt"
 
 msgid "Update Value"
+msgstr "Aktualisierung wird durchgeführt"
+
+msgid "Update Webform"
 msgstr "Aktualisierung wird durchgeführt"
 
 msgid "URL"
@@ -4014,6 +4036,12 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Current version"
+#~ msgstr "Aktuelle Version"
+
+#~ msgid "(current version)"
+#~ msgstr "(aktuelle Version)"
 
 #~ msgid "How to create a new ticket?"
 #~ msgstr "Wie lege ich ein neues Ticket an?"
@@ -4139,9 +4167,6 @@ msgstr "PLZ"
 
 #~ msgid "Closing time"
 #~ msgstr "Geschlossen am"
-
-#~ msgid "New Email Account"
-#~ msgstr "Neues E-Mail Konto"
 
 #~ msgid "Update Filter"
 #~ msgstr "Aktualisierung wird durchgeführt"
@@ -4726,9 +4751,6 @@ msgstr "PLZ"
 #~ msgid "Required"
 #~ msgstr "Erforderlich"
 
-#~ msgid "Create"
-#~ msgstr "Erstellt"
-
 #~ msgid "Deny"
 #~ msgstr "Deny"
 
@@ -4795,9 +4817,6 @@ msgstr "PLZ"
 
 #~ msgid "CMDB Class permissions"
 #~ msgstr "CMDB Klassen Berechtigungen"
-
-#~ msgid "CMDB Class Definition"
-#~ msgstr "CMDB Klassen Definition"
 
 #~ msgid "CMDB Class versions"
 #~ msgstr "CMDB Klassen Versionen"

@@ -12,7 +12,8 @@ import {
     ConfiguredWidget, FormField, KIXObjectType, Form,
     FormContext, FormFieldValue, FormFieldOption, UserProperty,
     FormFieldOptions, InputFieldTypes, ObjectReferenceOptions, ContextConfiguration, KIXObjectLoadingOptions,
-    FilterCriteria, RoleProperty, FilterDataType, FilterType, KIXObjectProperty, PersonalSettingsProperty, QueueProperty
+    FilterCriteria, RoleProperty, FilterDataType, FilterType, KIXObjectProperty, PersonalSettingsProperty,
+    QueueProperty, NotificationProperty
 } from '../../core/model';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../core/services';
@@ -132,7 +133,36 @@ export class Extension implements IConfigurationExtension {
                     )
                 ]
             );
-            const settingsGroup = new FormGroup('Translatable#Preferences', [languageField, myQueuesField]);
+
+            const notificationsField = new FormField(
+                'Translatable#Notifications for Tickets', PersonalSettingsProperty.NOTIFICATIONS,
+                'object-reference-input', false,
+                'Translatable#Helptext_Admin_UserEdit_Preferences_Notifications_Hint',
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.NOTIFICATION),
+                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
+                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
+                    new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, false),
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    'Data.' + NotificationProperty.DATA_VISIBLE_FOR_AGENT, SearchOperator.EQUALS,
+                                    FilterDataType.STRING, FilterType.AND, 1
+                                ),
+                                new FilterCriteria(
+                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS,
+                                    FilterDataType.NUMERIC, FilterType.AND, 1
+                                )
+                            ]
+                        )
+                    )
+                ]
+            );
+
+            const settingsGroup = new FormGroup(
+                'Translatable#Preferences', [languageField, notificationsField, myQueuesField]
+            );
 
             const form = new Form(
                 formId, 'Translatable#New Agent', [infoGroup, roleGroup, settingsGroup], KIXObjectType.USER,

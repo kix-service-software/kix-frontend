@@ -35,6 +35,8 @@ export class Extension implements IConfigurationExtension {
                     KIXObjectType.NOTIFICATION,
                     [
                         NotificationProperty.NAME,
+                        NotificationProperty.DATA_VISIBLE_FOR_AGENT,
+                        NotificationProperty.DATA_VISIBLE_FOR_AGENT_TOOLTIP,
                         KIXObjectProperty.COMMENT,
                         KIXObjectProperty.VALID_ID,
                         KIXObjectProperty.CREATE_TIME,
@@ -68,7 +70,8 @@ export class Extension implements IConfigurationExtension {
                         NotificationProperty.DATA_RECIPIENT_AGENTS,
                         NotificationProperty.DATA_RECIPIENT_ROLES,
                         NotificationProperty.DATA_SEND_DESPITE_OOO,
-                        NotificationProperty.DATA_SEND_ONCE_A_DAY
+                        NotificationProperty.DATA_SEND_ONCE_A_DAY,
+                        NotificationProperty.DATA_CREATE_ARTICLE
                     ]
                 ),
                 true, true, null, true

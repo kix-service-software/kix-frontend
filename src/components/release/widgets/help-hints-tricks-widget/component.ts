@@ -18,7 +18,10 @@ import { RoutingConfiguration, RoutingService } from "../../../../core/browser/r
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
+    public baseFAQUri: string;
+
     public onCreate(input: any): void {
+        this.baseFAQUri = "faqarticles/";
         this.state = new ComponentState();
     }
 
@@ -33,7 +36,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.hasFAQAccess = await this.checkReadPermissions('faq/articles');
 
         if (this.state.hasFAQAccess) {
-            this.preapreFAQLinks();
+            this.preapreFAQIds();
         }
 
         this.state.hasConfigAccess = await this.checkReadPermissions('system/config');
@@ -69,18 +72,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         );
     }
 
-    private async preapreFAQLinks(): Promise<void> {
+    private async preapreFAQIds(): Promise<void> {
         const language = await TranslationService.getUserLanguage();
 
         const isGerman = language === 'de';
-        const baseUri = "faqarticles/";
 
-        this.state.faqURIs = [
-            baseUri + (isGerman ? 1 : 2),
-            baseUri + (isGerman ? 3 : 4),
-            baseUri + (isGerman ? 5 : 6),
-            baseUri + (isGerman ? 7 : 8),
-        ];
+        this.state.faqIds = isGerman ? [1, 7, 5, 3] : [2, 8, 6, 4];
     }
 
 }

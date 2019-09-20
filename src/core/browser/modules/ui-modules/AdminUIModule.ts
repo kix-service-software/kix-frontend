@@ -28,7 +28,8 @@ import { FormValidationService } from "../../form/validation";
 import {
     NotificationEmailRecipientValidator, NotificationService, NotificationBrowserFactory, NotificationTableFactory,
     NotificationFormService, NotificationLabelProvider, NotificationCreateAction, NewNotificationDialogContext,
-    NotificationFilterTableFactory, NotificationDetailsContext, NotificationEditAction, EditNotificationDialogContext
+    NotificationFilterTableFactory, NotificationDetailsContext, NotificationEditAction, EditNotificationDialogContext,
+    NotificationFilterValidator
 } from "../../notification";
 import {
     ContextType, ContextMode, ContextDescriptor, KIXObjectType, ConfiguredDialogWidget, WidgetConfiguration, CRUD
@@ -40,6 +41,10 @@ import { LogFileTableFactory } from "../../log/table/LogFileTableFactory";
 import { LogFileTableCSSHandler } from "../../log/table/LogFileTableCSSHandler";
 import { ConsoleCommandService } from "../../console/ConsoleCommandService";
 import { ConsoleCommandBrowserFactory } from "../../console/ConsoleCommandBrowserFactory";
+import {
+    WebformService, WebformBrowserFactory, WebformTableFactory, WebformLabelProvider, WebformCreateAction,
+    WebformDetailsContext, NewWebformDialogContext, WebformFormService, WebformEditAction, EditWebformDialogContext
+} from "../../webform";
 
 export class UIModule implements IUIModule {
 
@@ -62,6 +67,7 @@ export class UIModule implements IUIModule {
 
             await this.registerI18N();
             await this.registerNotifications();
+            await this.registerWebforms();
         }
     }
 
@@ -148,6 +154,7 @@ export class UIModule implements IUIModule {
 
     private async registerNotifications(): Promise<void> {
         FormValidationService.getInstance().registerValidator(new NotificationEmailRecipientValidator());
+        FormValidationService.getInstance().registerValidator(new NotificationFilterValidator());
 
         ServiceRegistry.registerServiceInstance(NotificationService.getInstance());
         ServiceRegistry.registerServiceInstance(NotificationFormService.getInstance());
@@ -210,6 +217,62 @@ export class UIModule implements IUIModule {
             false, 'object-details-page', ['notifications'], NotificationDetailsContext
         );
         ContextService.getInstance().registerContext(notificationDetailsContext);
+    }
+
+    private async registerWebforms(): Promise<void> {
+        ActionFactory.getInstance().registerAction('webform-create-action', WebformCreateAction);
+        ActionFactory.getInstance().registerAction('webform-edit-action', WebformEditAction);
+
+        ServiceRegistry.registerServiceInstance(WebformService.getInstance());
+        ServiceRegistry.registerServiceInstance(WebformFormService.getInstance());
+
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.WEBFORM, WebformBrowserFactory.getInstance()
+        );
+
+        TableFactoryService.getInstance().registerFactory(new WebformTableFactory());
+        LabelService.getInstance().registerLabelProvider(new WebformLabelProvider());
+
+        const newWebformDialogContext = new ContextDescriptor(
+            NewWebformDialogContext.CONTEXT_ID, [KIXObjectType.WEBFORM],
+            ContextType.DIALOG, ContextMode.CREATE_ADMIN,
+            false, 'new-webform-dialog', ['webforms'], NewWebformDialogContext
+        );
+        ContextService.getInstance().registerContext(newWebformDialogContext);
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'new-webform-dialog',
+            new WidgetConfiguration(
+                'new-webform-dialog', 'Translatable#New Webform', [], {},
+                false, false, 'kix-icon-new-gear'
+            ),
+            KIXObjectType.WEBFORM,
+            ContextMode.CREATE_ADMIN
+        ));
+
+        const webformDetailsContext = new ContextDescriptor(
+            WebformDetailsContext.CONTEXT_ID, [KIXObjectType.WEBFORM],
+            ContextType.MAIN, ContextMode.DETAILS,
+            false, 'object-details-page', ['webforms'], WebformDetailsContext
+        );
+        ContextService.getInstance().registerContext(webformDetailsContext);
+
+        const editWebformDialogContext = new ContextDescriptor(
+            EditWebformDialogContext.CONTEXT_ID, [KIXObjectType.WEBFORM],
+            ContextType.DIALOG, ContextMode.EDIT_ADMIN,
+            false, 'edit-webform-dialog', ['webforms'], EditWebformDialogContext
+        );
+        ContextService.getInstance().registerContext(editWebformDialogContext);
+
+        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+            'edit-webform-dialog',
+            new WidgetConfiguration(
+                'edit-webform-dialog', 'Translatable#Edit Webform', [], {},
+                false, false, 'kix-icon-edit'
+            ),
+            KIXObjectType.WEBFORM,
+            ContextMode.EDIT_ADMIN
+        ));
     }
 
     private async checkPermission(resource: string, crud: CRUD): Promise<boolean> {

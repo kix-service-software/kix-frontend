@@ -9,25 +9,30 @@
 
 import { ITable } from "./ITable";
 import { LabelService } from "../LabelService";
+import { KIXObjectType, DateTimeUtil } from "../../model";
 
 export class TableExportUtil {
 
-    public static async export(table: ITable, additionalColumns: string[] = []): Promise<void> {
-        const csvString = await this.prepareCSVString(table, additionalColumns);
-        this.downloadCSVFile(csvString);
+    public static async export(
+        table: ITable, additionalColumns: string[] = [], useDisplayString?: boolean
+    ): Promise<void> {
+        const csvString = await this.prepareCSVString(table, additionalColumns, useDisplayString);
+        this.downloadCSVFile(csvString, table.getObjectType());
     }
 
-    private static async prepareCSVString(table: ITable, additionalColumns: string[]): Promise<string> {
+    private static async prepareCSVString(
+        table: ITable, additionalColumns: string[], useDisplayString: boolean = true
+    ): Promise<string> {
         const objectType = table.getObjectType();
-        const columns = await table.getColumns();
+        const columns = table.getColumns();
         const columnTitles: string[] = [];
 
-        const columnIds = [...columns.map((c) => c.getColumnId()), ...additionalColumns];
+        const columnIds = [...columns.map((c) => c.getColumnId()), ...additionalColumns].sort();
 
         for (const c of columnIds) {
             let value = c;
             if (objectType) {
-                value = await LabelService.getInstance().getPropertyText(value, objectType);
+                value = await LabelService.getInstance().getExportPropertyText(value, objectType, useDisplayString);
             }
             columnTitles.push(`"${this.escapeText(value.trim())}"`);
         }
@@ -42,11 +47,25 @@ export class TableExportUtil {
                 let displayValue = '';
                 const cell = row.getCell(cId);
                 if (cell) {
-                    displayValue = await cell.getDisplayValue();
+                    if (useDisplayString) {
+                        displayValue = await cell.getDisplayValue();
+                    } else {
+                        const value = await LabelService.getInstance().getExportPropertyValue(
+                            cId, objectType, cell.getValue().objectValue
+                        );
+                        displayValue = value;
+                    }
                 } else {
-                    displayValue = await LabelService.getInstance().getPropertyValueDisplayText(
-                        row.getRowObject().getObject(), cId, undefined
-                    );
+                    if (useDisplayString) {
+                        displayValue = await LabelService.getInstance().getPropertyValueDisplayText(
+                            row.getRowObject().getObject(), cId
+                        );
+                    } else {
+                        const value = await LabelService.getInstance().getExportPropertyValue(
+                            cId, objectType, row.getRowObject().getObject()
+                        );
+                        displayValue = value;
+                    }
                 }
                 values.push(`"${this.escapeText(displayValue)}"`);
             }
@@ -55,14 +74,16 @@ export class TableExportUtil {
         return csvString;
     }
 
-    private static downloadCSVFile(csvString: string): void {
+    private static async downloadCSVFile(csvString: string, objectType: KIXObjectType): Promise<void> {
+        const now = await DateTimeUtil.getTimestampNumbersOnly(new Date(Date.now()));
+        const fileName = `Export${objectType ? '_' + objectType : ''}_${now}.csv`;
         if (window.navigator.msSaveOrOpenBlob) {
-            const blob = new Blob([csvString]);
-            window.navigator.msSaveBlob(blob, "Export.csv");
+            const blob = new Blob([csvString], { type: 'text/csv' });
+            window.navigator.msSaveBlob(blob, fileName);
         } else {
             const element = document.createElement('a');
-            element.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(csvString);
-            element.download = 'Export.csv';
+            element.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvString);
+            element.download = fileName;
             element.style.display = 'none';
             document.body.appendChild(element);
             element.click();
@@ -71,7 +92,10 @@ export class TableExportUtil {
     }
 
     private static escapeText(text: string): string {
-        text = text.replace(/\"/g, '\\"');
+        if (typeof text === 'undefined' || text === null) {
+            text = '';
+        }
+        text = text.toString().replace(/\"/g, '\\"');
         return text;
     }
 

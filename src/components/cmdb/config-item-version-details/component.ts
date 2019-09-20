@@ -16,6 +16,7 @@ import { BrowserUtil, KIXObjectService } from '../../../core/browser';
 import { PreparedData } from '../../../core/model/kix/cmdb/PreparedData';
 import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 import { ConfigItemVersionLoadingOptions } from '../../../core/model/kix/cmdb/ConfigItemVersionLoadingOptions';
+import { TicketHistoryResponse } from '../../../core/api';
 
 class Component {
 
@@ -27,7 +28,8 @@ class Component {
 
     public async onInput(input: any): Promise<void> {
         if (input.version) {
-            this.setVersion(input.version);
+            this.state.version = input.version;
+            this.setVersion(this.state.version);
         } else if (input.configItem) {
             const ci = input.configItem as ConfigItem;
             if (ci.CurrentVersion) {
@@ -38,16 +40,42 @@ class Component {
                 );
 
                 if (versions && versions.length) {
-                    this.setVersion(versions[0]);
+                    this.state.version = versions[0];
+                    this.setVersion(this.state.version);
                 }
             }
         }
     }
 
+    public async onMount(): Promise<void> {
+        this.state.preparedData = await this.addStateData(this.state.version);
+        this.state.preparedData = this.state.preparedData.concat(this.state.version.PreparedData);
+        this.setVersion(this.state.version);
+    }
+
     private async setVersion(version: Version): Promise<void> {
-        if (version && version.PreparedData) {
-            this.state.groups = await this.prepareLabelValueGroups(version.PreparedData);
+        if (this.state.version && this.state.preparedData) {
+            this.state.groups = await this.prepareLabelValueGroups(this.state.preparedData);
         }
+    }
+
+    private async addStateData(version: Version): Promise<PreparedData[]> {
+        const preparedDataArray: PreparedData[] = [];
+
+        const curInciStateHash = new PreparedData();
+        curInciStateHash.Key = version.CurInciState;
+        curInciStateHash.Label = "Translatable#Current incident state";
+        curInciStateHash.DisplayValue = version.CurInciState;
+
+        const curDeplStateHash = new PreparedData();
+        curDeplStateHash.Key = version.CurDeplState;
+        curDeplStateHash.Label = "Translatable#Current deployment state";
+        curDeplStateHash.DisplayValue = version.CurDeplState;
+
+        preparedDataArray.push(curInciStateHash);
+        preparedDataArray.push(curDeplStateHash);
+
+        return preparedDataArray;
     }
 
     public async fileClicked(attachment: ConfigItemAttachment): Promise<void> {

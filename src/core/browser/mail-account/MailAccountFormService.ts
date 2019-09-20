@@ -33,7 +33,7 @@ export class MailAccountFormService extends KIXObjectFormService<MailAccount> {
         return kixObjectType === KIXObjectType.MAIL_ACCOUNT;
     }
 
-    protected async additionalPreparations(
+    protected async doAdditionalPreparations(
         form: Form, formFieldValues: Map<string, FormFieldValue<any>>, mailAccount: MailAccount
     ): Promise<void> {
         if (form && form.formContext === FormContext.EDIT) {

@@ -249,7 +249,7 @@ export class TicketPlaceholderHandler implements IPlaceholderHandler {
     }
 
     public async getTicket(): Promise<Ticket> {
-        let newObject = {};
+        let newObject = new Ticket();
         const mainContext = ContextService.getInstance().getActiveContext(ContextType.MAIN);
         if (mainContext) {
             this.setObject(newObject, await mainContext.getObject());
@@ -266,7 +266,7 @@ export class TicketPlaceholderHandler implements IPlaceholderHandler {
                     && form.objectType === KIXObjectType.TICKET
                 )
             ) {
-                newObject = {};
+                newObject = new Ticket();
                 this.setObject(newObject, await dialogContext.getObject());
             }
             if (form && form.objectType === KIXObjectType.TICKET) {
@@ -274,10 +274,11 @@ export class TicketPlaceholderHandler implements IPlaceholderHandler {
                 this.setObject(newObject, formObject, true);
             }
         }
-        return newObject as Ticket;
+        this.preparePendingTimeUnix(newObject);
+        return newObject;
     }
 
-    private setObject(newObject: {}, oldObject: {}, fromForm: boolean = false) {
+    private setObject(newObject: Ticket, oldObject: {}, fromForm: boolean = false) {
         if (oldObject) {
             Object.getOwnPropertyNames(oldObject).forEach((property) => {
                 if (
@@ -287,6 +288,15 @@ export class TicketPlaceholderHandler implements IPlaceholderHandler {
                     newObject[property] = oldObject[property];
                 }
             });
+        }
+    }
+
+    private preparePendingTimeUnix(ticket: Ticket) {
+        if (ticket.PendingTime) {
+            const pendingTimeUnix = Date.parse(ticket.PendingTime);
+            if (!isNaN(Number(pendingTimeUnix))) {
+                ticket.PendingTimeUnix = Math.floor(Number(pendingTimeUnix) / 1000);
+            }
         }
     }
 

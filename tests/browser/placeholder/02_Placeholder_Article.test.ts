@@ -106,7 +106,7 @@ describe('Placeholder replacement for article', () => {
 
         it('Should replace article incoming time placeholder', async () => {
             const text = await articlePlaceholderHandler.replace(`<KIX_ARTICLE_${ArticleProperty.INCOMING_TIME}>`, article);
-            const incomingTime = DateTimeUtil.calculateAge(Number(article.IncomingTime));
+            const incomingTime = DateTimeUtil.calculateTimeInterval(Number(article.IncomingTime));
             expect(text).equal(incomingTime);
         });
 
@@ -267,7 +267,7 @@ class someTestFunctions {
                 displayValue = `${property}_Name`;
                 break;
             case ArticleProperty.INCOMING_TIME:
-                displayValue = DateTimeUtil.calculateAge(Number(displayValue));
+                displayValue = DateTimeUtil.calculateTimeInterval(Number(displayValue));
                 break;
             case ArticleProperty.BODY_RICHTEXT:
                 displayValue = '<p>some html text</p>';

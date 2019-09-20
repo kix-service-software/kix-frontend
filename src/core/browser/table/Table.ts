@@ -413,11 +413,19 @@ export class Table implements ITable {
     }
 
     public selectAll(withoutFilter: boolean = false): void {
-        this.getRows(withoutFilter).forEach((r) => r.select(undefined, true, withoutFilter));
+        this.getRows(withoutFilter).forEach((r) => r.select(undefined, true, withoutFilter, true));
+        EventService.getInstance().publish(
+            TableEvent.ROW_SELECTION_CHANGED,
+            new TableEventData(this.getTableId(), null)
+        );
     }
 
     public selectNone(withoutFilter: boolean = false): void {
-        this.getRows(withoutFilter).forEach((r) => r.select(false, true, withoutFilter));
+        this.getRows(withoutFilter).forEach((r) => r.select(false, true, withoutFilter, true));
+        EventService.getInstance().publish(
+            TableEvent.ROW_SELECTION_CHANGED,
+            new TableEventData(this.getTableId(), null)
+        );
     }
 
     public selectRowByObject(object: any, select?: boolean): void {
@@ -481,6 +489,7 @@ export class Table implements ITable {
         }
 
         EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
+        EventService.getInstance().publish(TableEvent.RELOADED, new TableEventData(this.getTableId()));
     }
 
     public switchColumnOrder(): void {

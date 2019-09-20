@@ -120,7 +120,7 @@ class Component {
     private async updateValues(): Promise<void> {
         for (const bv of this.state.dynamicValues) {
             await bv.setPropertyNode(bv.currentPropertyNode, true);
-            await bv.setOperationNode(bv.currentOperationNode);
+            bv.setOperationNode(bv.currentOperationNode);
         }
 
         const values = [];

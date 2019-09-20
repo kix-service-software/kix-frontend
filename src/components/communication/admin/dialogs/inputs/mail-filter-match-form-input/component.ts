@@ -71,7 +71,9 @@ class Component extends FormInputComponent<any[], ComponentState> {
         if (this.state.defaultValue && this.state.defaultValue.value && Array.isArray(this.state.defaultValue.value)) {
             this.state.defaultValue.value.forEach((match: MailFilterMatch) => {
                 matchManager.setValue(
-                    new ObjectPropertyValue(match.Key, null, [match.Value, match.Not], null, null, null, match.Key)
+                    new ObjectPropertyValue(
+                        match.Key, null, [match.Value, match.Not], false, true, null, null, null, match.Key
+                    )
                 );
             });
             super.provideValue(this.state.defaultValue.value);

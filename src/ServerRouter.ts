@@ -10,6 +10,7 @@
 import { Application, Router } from 'express';
 import { ApplicationRouter, AuthenticationRouter } from './routes';
 import { NotificationRouter } from './routes/NotificationRouter';
+import { KIXIntegrationRouter } from './routes/KIXIntegrationRouter';
 
 export class ServerRouter {
 
@@ -24,6 +25,10 @@ export class ServerRouter {
     }
 
     private initializeRoutes(): void {
+        this.expressRouter.use(
+            KIXIntegrationRouter.getInstance().getBaseRoute(), KIXIntegrationRouter.getInstance().getRouter()
+        );
+
         this.expressRouter.use(
             AuthenticationRouter.getInstance().getBaseRoute(), AuthenticationRouter.getInstance().getRouter()
         );

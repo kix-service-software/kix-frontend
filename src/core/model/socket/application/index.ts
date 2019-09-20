@@ -15,3 +15,6 @@ export { LoadFormConfigurationsRequest } from './LoadFormConfigurationsRequest';
 export { LoadBookmarksResponse } from './LoadBookmarksResponse';
 export { LoadReleaseInfoResponse } from './LoadReleaseInfoResponse';
 export { LoadObjectDefinitionsResponse } from './LoadObjectDefinitionsResponse';
+
+export { WebformEvent } from './WebformEvent';
+export { LoadWebformsResponse } from './LoadWebformsResponse';

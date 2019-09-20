@@ -9,7 +9,8 @@
 
 import { KIXObjectService } from "../kix";
 import {
-    SystemAddress, KIXObjectType, TreeNode, NotificationProperty, SysConfigOption, SysConfigKey, SortUtil, DataType
+    SystemAddress, KIXObjectType, TreeNode, NotificationProperty, SysConfigOption, SysConfigKey,
+    SortUtil, DataType, TicketProperty, ArticleProperty
 } from "../../model";
 
 export class NotificationService extends KIXObjectService<SystemAddress> {
@@ -38,12 +39,43 @@ export class NotificationService extends KIXObjectService<SystemAddress> {
             case NotificationProperty.DATA_SEND_ONCE_A_DAY:
             case NotificationProperty.DATA_SEND_DESPITE_OOO:
             case NotificationProperty.DATA_RECIPIENT_SUBJECT:
+            case NotificationProperty.DATA_CREATE_ARTICLE:
                 value = Number(value);
                 break;
             case NotificationProperty.DATA_RECIPIENT_EMAIL:
                 value = Array.isArray(value) ? value.join(',') : value;
                 break;
+            case NotificationProperty.DATA_FILTER:
+                if (value) {
+                    for (const v of value) {
+                        switch (v[0]) {
+                            case TicketProperty.TYPE_ID:
+                            case TicketProperty.STATE_ID:
+                            case TicketProperty.PRIORITY_ID:
+                            case TicketProperty.QUEUE_ID:
+                            case TicketProperty.LOCK_ID:
+                            case TicketProperty.ORGANISATION_ID:
+                            case TicketProperty.CONTACT_ID:
+                            case TicketProperty.OWNER_ID:
+                            case TicketProperty.RESPONSIBLE_ID:
+                                v[0] = 'Ticket::' + v[0];
+                                break;
+                            case ArticleProperty.SENDER_TYPE_ID:
+                            case ArticleProperty.CHANNEL_ID:
+                            case ArticleProperty.TO:
+                            case ArticleProperty.CC:
+                            case ArticleProperty.FROM:
+                            case ArticleProperty.SUBJECT:
+                            case ArticleProperty.BODY:
+                                v[0] = 'Article::' + v[0];
+                                break;
+                            default:
+                        }
+                    }
+                }
+                break;
             default:
+
         }
         return [[property, value]];
     }
@@ -52,6 +84,23 @@ export class NotificationService extends KIXObjectService<SystemAddress> {
         return [
             ['Transports', ['Email']]
         ];
+    }
+
+    public async hasArticleEvent(events: string[]): Promise<boolean> {
+        let hasArticleEvent = false;
+        if (events) {
+            const articleEventsConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+                KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.ARTICLE_EVENTS], null, null, true
+            ).catch((error): SysConfigOption[] => []);
+
+
+            if (articleEventsConfig && articleEventsConfig.length) {
+                const articleEvents = articleEventsConfig[0].Value as string[];
+                hasArticleEvent = events.some((e) => articleEvents.some((ae) => ae === e));
+            }
+        }
+
+        return hasArticleEvent;
     }
 
     public async getTreeNodes(
@@ -67,7 +116,6 @@ export class NotificationService extends KIXObjectService<SystemAddress> {
                 const articleEvents = await KIXObjectService.loadObjects<SysConfigOption>(
                     KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.ARTICLE_EVENTS], null, null, true
                 ).catch((error): SysConfigOption[] => []);
-                // TODO: add dynamic field events
                 values = this.prepareEventTree(ticketEvents, articleEvents);
                 break;
             default:

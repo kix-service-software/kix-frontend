@@ -49,35 +49,21 @@ export class FAQArticleTableFactory extends TableFactory {
 
         if (short) {
             tableColumns = [
-                new DefaultColumnConfiguration(FAQArticleProperty.NUMBER, true, false, true, false, 120, true, true),
-                new DefaultColumnConfiguration(FAQArticleProperty.TITLE, true, false, true, false, 300, true, true),
-                new DefaultColumnConfiguration(
-                    FAQArticleProperty.LANGUAGE, true, false, true, false, 125, true, true, true
-                ),
-                new DefaultColumnConfiguration(
-                    FAQArticleProperty.VOTES, true, true, true, false, 120, true, true, true, DataType.STRING, false
-                ),
-                new DefaultColumnConfiguration(
-                    FAQArticleProperty.CATEGORY_ID, true, false, true, false, 125, true, true, true
-                ),
+                this.getDefaultColumnConfiguration(FAQArticleProperty.NUMBER),
+                this.getDefaultColumnConfiguration(FAQArticleProperty.TITLE),
+                this.getDefaultColumnConfiguration(FAQArticleProperty.LANGUAGE),
+                this.getDefaultColumnConfiguration(FAQArticleProperty.VOTES),
+                this.getDefaultColumnConfiguration(FAQArticleProperty.CATEGORY_ID)
             ];
         } else {
             tableColumns = [
-                new DefaultColumnConfiguration(FAQArticleProperty.NUMBER, true, false, true, false, 120, true, true),
-                new DefaultColumnConfiguration(FAQArticleProperty.TITLE, true, false, true, false, 300, true, true),
-                new DefaultColumnConfiguration(
-                    FAQArticleProperty.LANGUAGE, true, false, true, false, 125, true, true, true
-                ),
-                new DefaultColumnConfiguration(
-                    FAQArticleProperty.VOTES, true, true, true, false, 120, true, true, true, DataType.STRING, false
-                ),
-                new DefaultColumnConfiguration(
-                    FAQArticleProperty.CATEGORY_ID, true, false, true, false, 125, true, true, true
-                ),
-                new DefaultColumnConfiguration(
-                    FAQArticleProperty.CHANGED, true, false, true, false, 125, true, true, false, DataType.DATE_TIME
-                ),
-                new DefaultColumnConfiguration(FAQArticleProperty.CHANGED_BY, true, false, true, false, 150, true, true)
+                this.getDefaultColumnConfiguration(FAQArticleProperty.NUMBER),
+                this.getDefaultColumnConfiguration(FAQArticleProperty.TITLE),
+                this.getDefaultColumnConfiguration(FAQArticleProperty.LANGUAGE),
+                this.getDefaultColumnConfiguration(FAQArticleProperty.VOTES),
+                this.getDefaultColumnConfiguration(FAQArticleProperty.CATEGORY_ID),
+                this.getDefaultColumnConfiguration(FAQArticleProperty.CHANGED),
+                this.getDefaultColumnConfiguration(FAQArticleProperty.CHANGED_BY)
             ];
         }
 
@@ -103,7 +89,39 @@ export class FAQArticleTableFactory extends TableFactory {
 
     // TODO: implementieren
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
-        return;
+        switch (property) {
+            case FAQArticleProperty.NUMBER:
+                return new DefaultColumnConfiguration(
+                    FAQArticleProperty.NUMBER, true, false, true, false, 120, true, true
+                );
+            case FAQArticleProperty.TITLE:
+                return new DefaultColumnConfiguration(
+                    FAQArticleProperty.TITLE, true, false, true, false, 300, true, true, false, DataType.STRING, true,
+                    undefined, undefined, false
+                );
+            case FAQArticleProperty.LANGUAGE:
+                return new DefaultColumnConfiguration(
+                    FAQArticleProperty.LANGUAGE, true, false, true, false, 125, true, true, true
+                );
+            case FAQArticleProperty.VOTES:
+                return new DefaultColumnConfiguration(
+                    FAQArticleProperty.VOTES, true, true, true, false, 120, true, true, true, DataType.STRING, false
+                );
+            case FAQArticleProperty.CATEGORY_ID:
+                return new DefaultColumnConfiguration(
+                    FAQArticleProperty.CATEGORY_ID, true, false, true, false, 125, true, true, true
+                );
+            case FAQArticleProperty.CHANGED:
+                return new DefaultColumnConfiguration(
+                    FAQArticleProperty.CHANGED, true, false, true, false, 125, true, true, false, DataType.DATE_TIME
+                );
+            case FAQArticleProperty.CHANGED_BY:
+                return new DefaultColumnConfiguration(
+                    FAQArticleProperty.CHANGED_BY, true, false, true, false, 150, true, true
+                );
+            default:
+                return super.getDefaultColumnConfiguration(property);
+        }
     }
 
 }

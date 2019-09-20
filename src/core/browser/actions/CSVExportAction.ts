@@ -9,6 +9,7 @@
 
 import { AbstractAction } from '../../model/components/action/AbstractAction';
 import { ITable, TableExportUtil } from '../table';
+import { KIXObjectType } from '../../model';
 
 export class CSVExportAction extends AbstractAction<ITable> {
 
@@ -30,7 +31,15 @@ export class CSVExportAction extends AbstractAction<ITable> {
 
     public async run(): Promise<void> {
         if (this.canRun()) {
-            TableExportUtil.export(this.data);
+            // TODO: "Schalter" für "übersetzen/nich übersetzen" ermöglichen (Nachfrage-Overlay?)
+            // im Moment nur für extra Organisation notwendig
+            if (
+                this.data.getObjectType() === KIXObjectType.ORGANISATION
+            ) {
+                TableExportUtil.export(this.data, undefined, false);
+            } else {
+                TableExportUtil.export(this.data);
+            }
         }
     }
 

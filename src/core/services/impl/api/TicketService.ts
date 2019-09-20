@@ -17,7 +17,7 @@ import {
     Article, Attachment, ArticleProperty, FilterCriteria, TicketProperty,
     KIXObjectType, FilterType, User, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions, CreateTicketArticleOptions, CreateTicketWatcherOptions,
-    KIXObjectSpecificDeleteOptions, DeleteTicketWatcherOptions, Error, Queue, Contact, Channel, KIXObjectProperty
+    KIXObjectSpecificDeleteOptions, DeleteTicketWatcherOptions, Error, Contact, KIXObjectProperty
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
@@ -25,12 +25,10 @@ import { SearchOperator } from '../../../browser/SearchOperator';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { UserService } from './UserService';
 import { LoggingService } from '../LoggingService';
-import { ChannelService } from './ChannelService';
 import { TicketFactory } from '../../object-factories/TicketFactory';
 import { SenderTypeFactory } from '../../object-factories/SenderTypeFactory';
 import { LockFactory } from '../../object-factories/LockFactory';
 import { ArticleFactory } from '../../object-factories/ArticleFactory';
-import { QueueService } from './QueueService';
 import { ArticleLoadingOptions } from '../../../model/kix/ticket/ArticleLoadingOptions';
 
 export class TicketService extends KIXObjectService {
@@ -239,7 +237,7 @@ export class TicketService extends KIXObjectService {
 
         const channelId = this.getParameterValue(parameter, ArticleProperty.CHANNEL_ID);
         const subject = this.getParameterValue(parameter, ArticleProperty.SUBJECT);
-        let body = this.getParameterValue(parameter, ArticleProperty.BODY);
+        const body = this.getParameterValue(parameter, ArticleProperty.BODY);
         const customerVisible = this.getParameterValue(parameter, ArticleProperty.CUSTOMER_VISIBLE);
         let to = this.getParameterValue(parameter, ArticleProperty.TO);
         if (!to && contactId) {
@@ -256,22 +254,6 @@ export class TicketService extends KIXObjectService {
         }
         const cc = this.getParameterValue(parameter, ArticleProperty.CC);
         const bcc = this.getParameterValue(parameter, ArticleProperty.BCC);
-
-        const channels = await ChannelService.getInstance().loadObjects<Channel>(
-            token, clientRequestId, KIXObjectType.CHANNEL, null, null, null
-        );
-        const channel = channels.find((c) => c.ID === channelId);
-        if (channel && channel.Name === 'email') {
-            if (queueId) {
-                const queues = await QueueService.getInstance().loadObjects<Queue>(
-                    token, clientRequestId, KIXObjectType.QUEUE, [queueId], null, null
-                );
-                const queue = queues && !!queues.length ? queues[0] : null;
-                if (queue && queue.Signature) {
-                    body += `\n<p>--</p>\n${queue.Signature}`;
-                }
-            }
-        }
 
         let createArticle: CreateArticle;
         if (channelId && subject && body) {
@@ -462,12 +444,12 @@ export class TicketService extends KIXObjectService {
             };
         }
 
-        if ((andFilter && andFilter.length) || (orFilter && orFilter.length)) {
+        if ((andFilter && !!andFilter.length) || (orFilter && !!orFilter.length)) {
             const apiFilter = {};
             apiFilter[filterProperty] = objectFilter;
             query.filter = JSON.stringify(apiFilter);
         }
-        if ((andSearch && andSearch.length) || (orSearch && orSearch.length)) {
+        if ((andSearch && !!andSearch.length) || (orSearch && !!orSearch.length)) {
             const search = {};
             search[filterProperty] = objectSearch;
             query.search = JSON.stringify(search);

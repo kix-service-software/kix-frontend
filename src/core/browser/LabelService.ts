@@ -91,6 +91,26 @@ export class LabelService {
         return null;
     }
 
+    public async getExportPropertyText(
+        property: string, objectType: KIXObjectType, useDisplayText?: boolean
+    ): Promise<string> {
+        const labelProvider = this.getLabelProviderForType(objectType);
+        if (labelProvider) {
+            return await labelProvider.getExportPropertyText(property, useDisplayText);
+        }
+        return null;
+    }
+
+    public async getExportPropertyValue(
+        property: string, objectType: KIXObjectType, value: any
+    ): Promise<string> {
+        const labelProvider = this.getLabelProviderForType(objectType);
+        if (labelProvider) {
+            return await labelProvider.getExportPropertyValue(property, value);
+        }
+        return null;
+    }
+
     public async getPropertyIcon(property: string, objectType: KIXObjectType): Promise<string | ObjectIcon> {
         const labelProvider = this.getLabelProviderForType(objectType);
         if (labelProvider) {

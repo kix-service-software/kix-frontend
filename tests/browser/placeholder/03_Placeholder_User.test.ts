@@ -39,7 +39,7 @@ describe('Placeholder replacement for user', () => {
     });
 
     after(() => {
-        AgentService.getInstance().getCurrentUser = orgFunction;;
+        AgentService.getInstance().getCurrentUser = orgFunction;
     });
 
     describe('Replace simple current user attribute placeholder.', async () => {

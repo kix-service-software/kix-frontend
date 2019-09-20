@@ -45,6 +45,15 @@ export class Extension implements IConfigurationExtension {
                     'Translatable#Helptext_Admin_NotificationCreate_Name'
                 ),
                 new FormField(
+                    'Translatable#Show in agent preferences', NotificationProperty.DATA_VISIBLE_FOR_AGENT,
+                    'checkbox-input', false,
+                    'Translatable#Helptext_Admin_NotificationCreate_ShowPreferences', undefined,
+                    new FormFieldValue(true)
+                ),
+                new FormField(
+                    'Translatable#Agent Preferences Tooltip', NotificationProperty.DATA_VISIBLE_FOR_AGENT_TOOLTIP, null
+                ),
+                new FormField(
                     'Translatable#Comment', KIXObjectProperty.COMMENT, 'text-area-input', false,
                     'Translatable#Helptext_Admin_NotificationCreate_Comment', null, null, null,
                     null, null, null, null, 250
@@ -140,6 +149,12 @@ export class Extension implements IConfigurationExtension {
                     'Translatable#Once a day', NotificationProperty.DATA_SEND_ONCE_A_DAY,
                     'checkbox-input', false,
                     'Translatable#Helptext_Admin_NotificationCreate_SendOnceADay', undefined,
+                    new FormFieldValue(false)
+                ),
+                new FormField(
+                    'Translatable#Create Article', NotificationProperty.DATA_CREATE_ARTICLE,
+                    'checkbox-input', false,
+                    'Translatable#Helptext_Admin_NotificationCreate_CreateArticle', undefined,
                     new FormFieldValue(false)
                 )
             ]);
