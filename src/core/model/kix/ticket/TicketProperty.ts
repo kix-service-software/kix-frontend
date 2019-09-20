@@ -168,6 +168,9 @@ export enum TicketProperty {
     SLA = 'SLA',
     SERVICE = 'Service',
     RESPONSIBLE = 'Responsible',
-    UNTIL_TIME = 'UntilTime'
+    UNTIL_TIME = 'UntilTime',
+
+    // search property
+    FULLTEXT = 'Fulltext'
 
 }

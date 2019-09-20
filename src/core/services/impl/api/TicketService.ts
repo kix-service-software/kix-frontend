@@ -17,7 +17,7 @@ import {
     Article, Attachment, ArticleProperty, FilterCriteria, TicketProperty,
     KIXObjectType, FilterType, User, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions, CreateTicketArticleOptions, CreateTicketWatcherOptions,
-    KIXObjectSpecificDeleteOptions, DeleteTicketWatcherOptions, Error, Contact, KIXObjectProperty
+    KIXObjectSpecificDeleteOptions, DeleteTicketWatcherOptions, Error, Contact, KIXObjectProperty, FilterDataType
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
@@ -371,6 +371,8 @@ export class TicketService extends KIXObjectService {
         let objectSearch = {};
 
         const user = await UserService.getInstance().getUserByToken(token);
+        const fulltextIndex = filter.findIndex((f) => f.property === TicketProperty.FULLTEXT);
+        const fulltext = fulltextIndex !== -1 ? filter.splice(fulltextIndex, 1) : null;
 
         const andFilter = filter.filter(
             (f) => f.filterType === FilterType.AND
@@ -418,18 +420,22 @@ export class TicketService extends KIXObjectService {
             this.setUserID(f, user);
             return { Field: f.property, Operator: f.operator, Type: f.type, Value: f.value };
         });
-        const orSearch = filter.filter(
-            (f) => f.filterType === FilterType.OR && f.operator !== SearchOperator.NOT_EQUALS
-        ).map((f) => {
-            this.setUserID(f, user);
-            if (f.property === TicketProperty.CREATED) {
-                f.property = KIXObjectProperty.CREATE_TIME;
-            }
-            if (f.property === TicketProperty.CHANGED) {
-                f.property = KIXObjectProperty.CHANGE_TIME;
-            }
-            return { Field: f.property, Operator: f.operator, Type: f.type, Value: f.value };
-        });
+        let orSearch = filter.filter((f) => f.filterType === FilterType.OR && f.operator !== SearchOperator.NOT_EQUALS)
+            .map((f) => {
+                this.setUserID(f, user);
+                if (f.property === TicketProperty.CREATED) {
+                    f.property = KIXObjectProperty.CREATE_TIME;
+                }
+                if (f.property === TicketProperty.CHANGED) {
+                    f.property = KIXObjectProperty.CHANGE_TIME;
+                }
+                return { Field: f.property, Operator: f.operator, Type: f.type, Value: f.value };
+            });
+
+        if (fulltext) {
+            const fulltextSearch = this.getFulltextSearch(fulltext[0]);
+            orSearch = [...orSearch, ...fulltextSearch];
+        }
 
         if (orFilter && orFilter.length) {
             objectFilter = {
@@ -462,5 +468,34 @@ export class TicketService extends KIXObjectService {
                 filter.value = user.UserID;
             }
         }
+    }
+
+    private getFulltextSearch(fulltextFilter: FilterCriteria): any[] {
+        return [
+            {
+                Field: TicketProperty.TICKET_NUMBER, Operator: SearchOperator.CONTAINS,
+                Type: FilterDataType.STRING, Value: fulltextFilter.value
+            },
+            {
+                Field: TicketProperty.TITLE, Operator: SearchOperator.CONTAINS,
+                Type: FilterDataType.STRING, Value: fulltextFilter.value
+            },
+            {
+                Field: TicketProperty.BODY, Operator: SearchOperator.CONTAINS,
+                Type: FilterDataType.STRING, Value: fulltextFilter.value
+            },
+            {
+                Field: TicketProperty.FROM, Operator: SearchOperator.CONTAINS,
+                Type: FilterDataType.STRING, Value: fulltextFilter.value
+            },
+            {
+                Field: TicketProperty.TO, Operator: SearchOperator.CONTAINS,
+                Type: FilterDataType.STRING, Value: fulltextFilter.value
+            },
+            {
+                Field: TicketProperty.CC, Operator: SearchOperator.CONTAINS,
+                Type: FilterDataType.STRING, Value: fulltextFilter.value
+            }
+        ];
     }
 }
