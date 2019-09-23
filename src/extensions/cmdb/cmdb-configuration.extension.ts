@@ -71,6 +71,14 @@ export class Extension implements IConfigurationExtension {
             options: {
                 legend: {
                     display: false
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            maxTicksLimit: 6
+                        }
+                    }]
                 }
             }
         });
@@ -151,9 +159,9 @@ export class Extension implements IConfigurationExtension {
                     yAxes: [{
                         stacked: true,
                         ticks: {
-                            stepSize: 1
+                            beginAtZero: true,
+                            maxTicksLimit: 6
                         }
-
                     }]
                 }
             }

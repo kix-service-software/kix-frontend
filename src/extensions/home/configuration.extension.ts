@@ -44,6 +44,14 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                 options: {
                     legend: {
                         display: false
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                                maxTicksLimit: 6
+                            }
+                        }]
                     }
                 },
                 data: {
@@ -126,6 +134,14 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                 options: {
                     legend: {
                         display: false
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                                maxTicksLimit: 6
+                            }
+                        }]
                     }
                 },
                 data: {
