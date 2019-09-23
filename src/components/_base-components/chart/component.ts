@@ -65,6 +65,9 @@ class Component {
             }
             this.config.options.responsive = true;
             this.config.options.maintainAspectRatio = false;
+            if (this.chart) {
+                this.chart['options'] = this.config.options;
+            }
         }
     }
 

@@ -102,6 +102,14 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
             options: {
                 legend: {
                     display: false
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            maxTicksLimit: 6
+                        }
+                    }]
                 }
             }
         });
@@ -170,7 +178,8 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
                 scales: {
                     yAxes: [{
                         ticks: {
-                            beginAtZero: true
+                            beginAtZero: true,
+                            maxTicksLimit: 6
                         }
                     }]
                 }
@@ -187,8 +196,8 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
             new ConfiguredWidget('20180814-ticket-list-widget',
                 new WidgetConfiguration(
                     'table-widget', 'Translatable#Overview Tickets', [
-                        'ticket-create-action', 'bulk-action', 'csv-export-action', 'ticket-search-action'
-                    ],
+                    'ticket-create-action', 'bulk-action', 'csv-export-action', 'ticket-search-action'
+                ],
                     new TableWidgetSettings(KIXObjectType.TICKET,
                         [TicketProperty.AGE, SortOrder.UP],
                         new TableConfiguration(KIXObjectType.TICKET,
