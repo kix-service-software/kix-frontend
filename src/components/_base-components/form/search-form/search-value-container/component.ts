@@ -46,7 +46,6 @@ class Component implements IKIXObjectSearchListener {
 
         const formInstance = await FormService.getInstance().getFormInstance<SearchFormInstance>(this.formId);
         if (formInstance) {
-            formInstance.reset();
             const listener: ISearchFormListener = {
                 listenerId: 'search-form-value-container',
                 searchCriteriaChanged: () => { return; },
