@@ -311,22 +311,7 @@ export class TicketSearchDefinition extends SearchDefinition {
         const criteria: FilterCriteria[] = [];
         if (value) {
             criteria.push(new FilterCriteria(
-                TicketProperty.TICKET_NUMBER, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
-            ));
-            criteria.push(new FilterCriteria(
-                TicketProperty.TITLE, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
-            ));
-            criteria.push(new FilterCriteria(
-                TicketProperty.BODY, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
-            ));
-            criteria.push(new FilterCriteria(
-                TicketProperty.FROM, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
-            ));
-            criteria.push(new FilterCriteria(
-                TicketProperty.TO, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
-            ));
-            criteria.push(new FilterCriteria(
-                TicketProperty.CC, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
+                TicketProperty.FULLTEXT, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
             ));
         }
         return criteria;
