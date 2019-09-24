@@ -9,11 +9,13 @@
 
 import {
     IFormFieldValidator, FormField, ValidationResult, ValidationSeverity, FormFieldValue,
-    NotificationProperty, ArticleProperty, KIXObjectType
+    NotificationProperty, ArticleProperty, KIXObjectType, ContextType
 } from "../../../../model";
 import { FormService } from "../../../form";
 import { TranslationService } from "../../../i18n/TranslationService";
 import { LabelService } from "../../../LabelService";
+import { ContextService } from "../../../context";
+import { NotificationService } from "../../NotificationService";
 
 export class NotificationFilterValidator implements IFormFieldValidator {
 
@@ -29,14 +31,26 @@ export class NotificationFilterValidator implements IFormFieldValidator {
             const formInstance = await FormService.getInstance().getFormInstance(formId);
             const value = formInstance.getFormFieldValue(formField.instanceId);
             if (value && value.value && Array.isArray(value.value)) {
-                const checkChannel = await this.checkRequiredProperty(value, ArticleProperty.CHANNEL_ID);
-                if (!checkChannel) {
-                    return await this.createValidationResult(ArticleProperty.CHANNEL_ID);
+                let selectedEvents = [];
+                let hasArticleEvent = true;
+                const context = ContextService.getInstance().getActiveContext();
+                if (context && context.getDescriptor().contextType === ContextType.DIALOG) {
+                    selectedEvents = context.getAdditionalInformation(NotificationProperty.DATA_EVENTS);
+                    hasArticleEvent = selectedEvents
+                        ? await NotificationService.getInstance().hasArticleEvent(selectedEvents)
+                        : false;
                 }
 
-                const checkSenderType = await this.checkRequiredProperty(value, ArticleProperty.SENDER_TYPE_ID);
-                if (!checkSenderType) {
-                    return await this.createValidationResult(ArticleProperty.SENDER_TYPE_ID);
+                if (hasArticleEvent) {
+                    const checkChannel = await this.checkRequiredProperty(value, ArticleProperty.CHANNEL_ID);
+                    if (!checkChannel) {
+                        return await this.createValidationResult(ArticleProperty.CHANNEL_ID);
+                    }
+
+                    const checkSenderType = await this.checkRequiredProperty(value, ArticleProperty.SENDER_TYPE_ID);
+                    if (!checkSenderType) {
+                        return await this.createValidationResult(ArticleProperty.SENDER_TYPE_ID);
+                    }
                 }
             }
         }
@@ -44,11 +58,11 @@ export class NotificationFilterValidator implements IFormFieldValidator {
         return new ValidationResult(ValidationSeverity.OK, '');
     }
 
-    private async checkRequiredProperty(value: FormFieldValue, property: string): Promise<boolean> {
-        const channelValue = value.value.find(
+    private checkRequiredProperty(value: FormFieldValue, property: string): boolean {
+        const propertyValue = value.value.find(
             (v) => v[0].replace('Article::', '').replace('Ticket::', '') === property
         );
-        return channelValue && await this.validateValue(property, channelValue[1]);
+        return propertyValue && this.validateValue(property, propertyValue[1]);
     }
 
     private async createValidationResult(property: string): Promise<ValidationResult> {
@@ -59,7 +73,7 @@ export class NotificationFilterValidator implements IFormFieldValidator {
         return new ValidationResult(ValidationSeverity.ERROR, errorString);
     }
 
-    public async validateValue(property: string, value: any): Promise<boolean> {
+    public validateValue(property: string, value: any): boolean {
         if (property === ArticleProperty.CHANNEL_ID || property === ArticleProperty.SENDER_TYPE_ID) {
             return Array.isArray(value) && value.length > 0;
         }
