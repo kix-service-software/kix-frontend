@@ -38,6 +38,9 @@ import { SearchService } from '../../kix/search/SearchService';
 import { InvalidObjectCSSHandler } from '../../table/InvalidObjectCSSHandler';
 import { FormValidationService } from '../../form/validation';
 import { UserPasswordValidator } from '../../user/UserPasswordValidator';
+import {
+    NotificationService, NotificationTableFactory, NotificationLabelProvider, NotificationBrowserFactory
+} from '../../notification';
 
 export class UIModule implements IUIModule {
 
@@ -54,6 +57,13 @@ export class UIModule implements IUIModule {
         ServiceRegistry.registerServiceInstance(ObjectIconService.getInstance());
         ServiceRegistry.registerServiceInstance(ServiceService.getInstance());
         ServiceRegistry.registerServiceInstance(ValidService.getInstance());
+
+        ServiceRegistry.registerServiceInstance(NotificationService.getInstance());
+        TableFactoryService.getInstance().registerFactory(new NotificationTableFactory());
+        LabelService.getInstance().registerLabelProvider(new NotificationLabelProvider());
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.NOTIFICATION, NotificationBrowserFactory.getInstance()
+        );
 
         ServiceRegistry.registerServiceInstance(TranslationFormService.getInstance());
         ServiceRegistry.registerServiceInstance(PersonalSettingsFormService.getInstance());
