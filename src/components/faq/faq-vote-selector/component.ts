@@ -13,6 +13,8 @@ import { FAQArticle, FAQVote, CreateFAQVoteOptions } from '../../../core/model/k
 import { KIXObjectType, ComponentContent, OverlayType, StringContent, ToastContent } from '../../../core/model';
 import { ServiceRegistry, OverlayService, ContextService, BrowserUtil } from '../../../core/browser';
 import { FAQDetailsContext } from '../../../core/browser/faq/context/FAQDetailsContext';
+import { ApplicationEvent } from '../../../core/browser/application';
+import { EventService } from '../../../core/browser/event';
 
 export class Component {
 
@@ -70,6 +72,7 @@ export class Component {
 
             const context = await ContextService.getInstance().getContext(FAQDetailsContext.CONTEXT_ID);
             await context.getObject(KIXObjectType.FAQ_ARTICLE, true);
+            EventService.getInstance().publish(ApplicationEvent.REFRESH);
         }
     }
 
