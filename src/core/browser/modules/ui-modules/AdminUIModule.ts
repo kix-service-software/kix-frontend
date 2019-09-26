@@ -26,7 +26,7 @@ import { UIComponentPermission } from "../../../model/UIComponentPermission";
 import { AdministrationSocketClient, AdminContext } from "../../admin";
 import { FormValidationService } from "../../form/validation";
 import {
-    NotificationEmailRecipientValidator, NotificationService, NotificationBrowserFactory, NotificationTableFactory,
+    NotificationEmailRecipientValidator, NotificationBrowserFactory,
     NotificationFormService, NotificationLabelProvider, NotificationCreateAction, NewNotificationDialogContext,
     NotificationFilterTableFactory, NotificationDetailsContext, NotificationEditAction, EditNotificationDialogContext,
     NotificationFilterValidator
@@ -75,7 +75,6 @@ export class UIModule implements IUIModule {
         ActionFactory.getInstance().registerAction('i18n-admin-translation-csv-export', TranslationCSVExportAction);
 
         ServiceRegistry.registerServiceInstance(TranslationFormService.getInstance());
-        ServiceRegistry.registerServiceInstance(NotificationService.getInstance());
         ServiceRegistry.registerServiceInstance(LogFileService.getInstance());
         ServiceRegistry.registerServiceInstance(ConsoleCommandService.getInstance());
 
@@ -156,15 +155,8 @@ export class UIModule implements IUIModule {
         FormValidationService.getInstance().registerValidator(new NotificationEmailRecipientValidator());
         FormValidationService.getInstance().registerValidator(new NotificationFilterValidator());
 
-        ServiceRegistry.registerServiceInstance(NotificationService.getInstance());
         ServiceRegistry.registerServiceInstance(NotificationFormService.getInstance());
 
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.NOTIFICATION, NotificationBrowserFactory.getInstance()
-        );
-
-        TableFactoryService.getInstance().registerFactory(new NotificationTableFactory());
-        LabelService.getInstance().registerLabelProvider(new NotificationLabelProvider());
         TableFactoryService.getInstance().registerFactory(new NotificationFilterTableFactory());
 
         await this.initNotification();
