@@ -17,6 +17,8 @@ export enum PersonalSettingsProperty {
 
     USER_PASSWORD = 'UserPassword',
 
-    USER_PASSWORD_CONFIRM = 'UserPasswordConfirm',
+    USER_PASSWORD_CONFIRM = 'USER_PASSWORD_CONFIRM',
+
+    NOTIFICATIONS = 'NotificationTransport'
 
 }

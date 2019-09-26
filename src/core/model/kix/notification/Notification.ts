@@ -36,11 +36,13 @@ export class Notification extends KIXObject<Notification> {
     public RecipientSubject: boolean;
     public SendOnOutOfOffice: boolean;
     public OncePerDay: boolean;
+    public CreateArticle: boolean;
 
     public constructor(notification?: Notification) {
         super(notification);
         if (notification) {
             this.ID = notification.ID;
+            this.ObjectId = this.ID;
             this.Name = notification.Name;
             this.Data = notification.Data;
             this.Message = notification.Message;

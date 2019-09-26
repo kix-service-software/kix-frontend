@@ -7,14 +7,14 @@
  * --
  */
 
-import { WidgetComponentState, AbstractAction } from "../../../../../core/model";
-import { ITable } from "../../../../../core/browser";
+import { WidgetComponentState } from "../../../../../core/model";
+import { Webform } from "../../../../../core/model/webform";
 
 export class ComponentState extends WidgetComponentState<any> {
 
     public constructor(
-        public table: ITable = null,
-        public actions: AbstractAction[] = []
+        public webform: Webform = null,
+        public title: string = 'Translatable#Code'
     ) {
         super();
     }

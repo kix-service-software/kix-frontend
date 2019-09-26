@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2019-09-10 13:34+0000\n"
-"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
+"PO-Revision-Date: 2019-09-18 13:08+0000\n"
+"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: English <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/en/>\n"
 "Language: en\n"
@@ -90,6 +90,9 @@ msgid "after"
 msgstr ""
 
 msgid "Age"
+msgstr ""
+
+msgid "agent"
 msgstr ""
 
 msgid "Agent"
@@ -233,6 +236,11 @@ msgstr ""
 msgid "back to"
 msgstr ""
 
+#, fuzzy
+#| msgid "CI Class Definition"
+msgid "Based on class definition"
+msgstr "Asset Class Definition"
+
 msgid "Bcc"
 msgstr ""
 
@@ -240,6 +248,9 @@ msgid "before"
 msgstr ""
 
 msgid "between"
+msgstr ""
+
+msgid "Body"
 msgstr ""
 
 msgid "Bookmarks"
@@ -499,6 +510,9 @@ msgstr "Create Asset"
 msgid "Create Contact"
 msgstr ""
 
+msgid "created"
+msgstr ""
+
 msgid "Created at"
 msgstr ""
 
@@ -553,6 +567,9 @@ msgstr ""
 msgid "CSV-Export"
 msgstr ""
 
+msgid "current"
+msgstr ""
+
 msgid "(Current definition)"
 msgstr ""
 
@@ -568,13 +585,7 @@ msgstr ""
 msgid "Current Password"
 msgstr ""
 
-msgid "(current version)"
-msgstr ""
-
 msgid "(Current version)"
-msgstr ""
-
-msgid "Current version"
 msgstr ""
 
 msgid "Customer"
@@ -872,6 +883,14 @@ msgid "Fax"
 msgstr ""
 
 msgid "Feedback"
+msgstr ""
+
+#, fuzzy
+#| msgid "Load Email Account"
+msgid "Fetching Mail Account"
+msgstr "Loading Email Account"
+
+msgid "Fetch now"
 msgstr ""
 
 msgid "Field"
@@ -1580,12 +1599,10 @@ msgstr ""
 "Set the default teams, the agent will receive notifications for. An agent "
 "can change this setting in their preferences."
 
-#, fuzzy
-#| msgid "Helptext_Admin_UserCreate_Preferences_MyQueues"
 msgid "Helptext_Admin_UserCreate_Preferences_Notifications_Hint"
 msgstr ""
-"Set the default teams, the agent will receive notifications for. An agent "
-"can change this setting in their preferences."
+"Set the default notifications for the agent. An agent can change this "
+"setting in their preferences."
 
 msgid "Helptext_Admin_UserCreate_Preferences_UserLanguage"
 msgstr ""
@@ -1602,12 +1619,10 @@ msgstr ""
 "Set the default teams, the agent will receive notifications for. An agent "
 "can change this setting in their preferences."
 
-#, fuzzy
-#| msgid "Helptext_Admin_UserEdit_Preferences_Language"
 msgid "Helptext_Admin_UserEdit_Preferences_Notifications_Hint"
 msgstr ""
-"Set the default language for the agent, when they log in KIX the first time. "
-"An agent can change their language settings in their preferences."
+"Set the default notifications for the agent. An agent can change this "
+"setting in their preferences."
 
 msgid "Helptext_Admin_Users_RoleCreate_Comment"
 msgstr ""
@@ -1617,7 +1632,7 @@ msgid "Helptext_Admin_Users_RoleCreate_Name"
 msgstr ""
 
 msgid "Helptext_Admin_Users_RoleCreate_User"
-msgstr "There are only valid agents available."
+msgstr "Only valid agents are available."
 
 msgid "Helptext_Admin_Users_RoleCreate_Valid"
 msgstr "The role can only be used within the system if set “valid”."
@@ -1630,7 +1645,7 @@ msgid "Helptext_Admin_Users_RoleEdit_Name"
 msgstr ""
 
 msgid "Helptext_Admin_Users_RoleEdit_User"
-msgstr "There are only valid agents available."
+msgstr "Only valid agents are available."
 
 msgid "Helptext_Admin_Users_RoleEdit_Valid"
 msgstr "The role can only be used within the system if set “valid”."
@@ -1755,7 +1770,8 @@ msgstr ""
 "If this option is activated, the form titel will be shown in the webform."
 
 msgid "Helptext_Admin_WebformCreateEdit_StateID"
-msgstr "Tickets created via webform will be assigned to the state you set here."
+msgstr ""
+"Tickets created via webform will be assigned to the state you set here."
 
 msgid "Helptext_Admin_WebformCreateEdit_SuccessMessage"
 msgstr ""
@@ -2120,17 +2136,15 @@ msgstr ""
 "Separates between the attributes of a row. If unknown, open your .csv-file "
 "with a text editor."
 
-msgid "Helptext_PersonalSettings_MyQueues_Hint"
-msgstr ""
-"For the teams you choose here you will receive notifications if there are, "
-"for example, new tickets or changes at the tickets."
-
 #, fuzzy
-#| msgid "Helptext_PersonalSettings_MyQueues_Hint"
+#| msgid "Helptext_PersonalSettings_UserLanguage_Hint"
+msgid "Helptext_PersonalSettings_MyQueues_Hint"
+msgstr "Choose the language you want to use for this application."
+
 msgid "Helptext_PersonalSettings_Notifications_Hint"
 msgstr ""
-"For the teams you choose here you will receive notifications if there are, "
-"for example, new tickets or changes at the tickets."
+"Choose from the listed notifications which one you want to receive. Move the "
+"pointer over an entry to see further information."
 
 msgid "Helptext_PersonalSettings_UserLanguage_Hint"
 msgstr "Choose the language you want to use for this application."
@@ -2189,6 +2203,8 @@ msgstr ""
 
 msgid "Helptext_Tickets_ArticleCreate_Attachments"
 msgstr ""
+"Choose if you want to save the ticket description only internally (Note) or "
+"additionally sending an email (Email)."
 
 msgid "Helptext_Tickets_ArticleCreate_Channel"
 msgstr ""
@@ -2620,6 +2636,11 @@ msgstr ""
 msgid "Logs"
 msgstr ""
 
+#, fuzzy
+#| msgid "Notification successfully created."
+msgid "Mail Account successfully fetched."
+msgstr "Notification successfully created."
+
 msgid "Menu"
 msgstr ""
 
@@ -2854,10 +2875,8 @@ msgstr "Notification Methods"
 msgid "Notifications"
 msgstr "Notifications"
 
-#, fuzzy
-#| msgid "Notification Methods"
 msgid "Notifications for Tickets"
-msgstr "Notification Methods"
+msgstr ""
 
 msgid "Notification successfully created."
 msgstr "Notification successfully created."
@@ -3306,6 +3325,9 @@ msgstr ""
 msgid "Sender Address (Email)"
 msgstr ""
 
+msgid "Sender Type"
+msgstr ""
+
 msgid "Send to"
 msgstr ""
 
@@ -3435,6 +3457,9 @@ msgstr ""
 msgid "SysConfig"
 msgstr ""
 
+msgid "system"
+msgstr ""
+
 msgid "System"
 msgstr ""
 
@@ -3540,10 +3565,8 @@ msgstr ""
 msgid "Ticket locked."
 msgstr ""
 
-#, fuzzy
-#| msgid "Notifications"
 msgid "Ticket Notifications"
-msgstr "Notifications"
+msgstr ""
 
 msgid "Ticket Number"
 msgstr ""
@@ -3741,6 +3764,9 @@ msgid "Update Type"
 msgstr ""
 
 msgid "Update Value"
+msgstr ""
+
+msgid "Update Webform"
 msgstr ""
 
 msgid "URL"

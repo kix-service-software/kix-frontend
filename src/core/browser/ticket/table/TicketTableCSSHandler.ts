@@ -8,8 +8,7 @@
  */
 
 import { ITableCSSHandler, TableValue } from "../../table";
-import { Ticket, TicketProperty, SysConfigKey, KIXObjectType, SysConfigOption } from "../../../model";
-import { KIXObjectService } from "../../kix";
+import { Ticket, TicketProperty } from "../../../model";
 import { SysConfigService } from "../../sysconfig";
 
 export class TicketTableCSSHandler implements ITableCSSHandler<Ticket> {

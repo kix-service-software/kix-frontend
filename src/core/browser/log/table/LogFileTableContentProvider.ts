@@ -21,6 +21,7 @@ export class LogFileTableContentProvider extends TableContentProvider<LogFile> {
         contextId?: string
     ) {
         super(KIXObjectType.LOG_FILE, table, objectIds, loadingOptions, contextId);
+        this.useCache = false;
     }
 
 }

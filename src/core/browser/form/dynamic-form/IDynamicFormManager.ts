@@ -62,4 +62,6 @@ export interface IDynamicFormManager {
     isMultiselect(property: string): boolean;
 
     searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]>;
+
+    validate(): Promise<void>;
 }

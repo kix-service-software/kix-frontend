@@ -9,7 +9,8 @@
 
 import {
     KIXObjectType, InputFieldTypes, TreeNode, SortUtil, ContactProperty,
-    Contact, KIXObjectLoadingOptions, Organisation, ObjectIcon, KIXObjectProperty
+    Contact, KIXObjectLoadingOptions, Organisation, ObjectIcon, KIXObjectProperty, KIXObject,
+    FilterCriteria, FilterDataType, FilterType, OrganisationProperty
 } from "../../model";
 import { LabelService } from "../LabelService";
 import { ObjectPropertyValue } from "../ObjectPropertyValue";
@@ -17,6 +18,7 @@ import { ImportManager, ImportPropertyOperator } from "../import";
 import { ContactService } from "./ContactService";
 import { KIXObjectService } from "../kix";
 import { OrganisationService } from "../organisation";
+import { SearchOperator } from "../SearchOperator";
 
 export class ContactImportManager extends ImportManager {
 
@@ -25,12 +27,37 @@ export class ContactImportManager extends ImportManager {
     public reset(): void {
         super.reset();
         this.values.push(new ObjectPropertyValue(
-            KIXObjectProperty.VALID_ID, ImportPropertyOperator.REPLACE_EMPTY, 1)
+            KIXObjectProperty.VALID_ID, ImportPropertyOperator.REPLACE_EMPTY, [1])
         );
     }
 
-    protected getSpecificObject(object: {}): Contact {
+    protected async getSpecificObject(object: {}): Promise<Contact> {
+        if (object[ContactProperty.PRIMARY_ORGANISATION_ID]) {
+            object[ContactProperty.PRIMARY_ORGANISATION_ID] = Number(object[ContactProperty.PRIMARY_ORGANISATION_ID]);
+        } else if (object[ContactProperty.PRIMARY_ORGANISATION_NUMBER]) {
+            const organisation = await this.getOrganisationByNumber(
+                object[ContactProperty.PRIMARY_ORGANISATION_NUMBER]
+            );
+            if (organisation) {
+                object[ContactProperty.PRIMARY_ORGANISATION_ID] = organisation.ID;
+            }
+        }
         return new Contact(object as Contact);
+    }
+
+    private async getOrganisationByNumber(number: string): Promise<Organisation> {
+        const loadingOptions = new KIXObjectLoadingOptions(
+            [
+                new FilterCriteria(
+                    OrganisationProperty.NUMBER, SearchOperator.EQUALS,
+                    FilterDataType.STRING, FilterType.AND, number
+                )
+            ]
+        );
+        const primaryOrganisations = await KIXObjectService.loadObjects<Organisation>(
+            KIXObjectType.ORGANISATION, null, loadingOptions, null, true
+        ).catch((error) => console.log(error));
+        return primaryOrganisations && !!primaryOrganisations.length ? primaryOrganisations[0] : null;
     }
 
     public async getInputType(property: string): Promise<InputFieldTypes> {
@@ -92,6 +119,14 @@ export class ContactImportManager extends ImportManager {
         return [ContactProperty.LOGIN, ContactProperty.PRIMARY_ORGANISATION_ID];
     }
 
+    public getAlternativeProperty(property: string): string {
+        if (property === ContactProperty.PRIMARY_ORGANISATION_ID) {
+            return ContactProperty.PRIMARY_ORGANISATION_NUMBER;
+        } else {
+            return super.getAlternativeProperty(property);
+        }
+    }
+
     public async searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]> {
         switch (property) {
             case ContactProperty.PRIMARY_ORGANISATION_ID:
@@ -115,5 +150,23 @@ export class ContactImportManager extends ImportManager {
 
     public async getTreeNodes(property: string): Promise<TreeNode[]> {
         return await ContactService.getInstance().getTreeNodes(property);
+    }
+
+    protected async getExisting(contact: Contact): Promise<KIXObject> {
+        if (contact.ObjectId) {
+            return super.getExisting(contact);
+        } else {
+            const filter = [
+                new FilterCriteria(
+                    ContactProperty.LOGIN, SearchOperator.EQUALS,
+                    FilterDataType.STRING, FilterType.AND, contact.Login
+                )
+            ];
+            const loadingOptions = new KIXObjectLoadingOptions(filter);
+            const contacts = await KIXObjectService.loadObjects(
+                this.objectType, null, loadingOptions, null, true
+            );
+            return contacts && !!contacts.length ? contacts[0] : null;
+        }
     }
 }

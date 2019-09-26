@@ -63,7 +63,7 @@ class Component implements ISearchFormListener {
                 SearchService.getInstance().provideResult();
                 await this.setCanSearch();
             } else {
-                this.reset();
+                this.formReset();
             }
         }
 
@@ -90,10 +90,6 @@ class Component implements ISearchFormListener {
         if (formInstance) {
             formInstance.removeSearchFormListener(this.listenerId);
         }
-        const cache = SearchService.getInstance().getSearchCache();
-        if (cache) {
-            cache.status = CacheState.VALID;
-        }
     }
 
     public keyDown(event: any): void {
@@ -109,12 +105,7 @@ class Component implements ISearchFormListener {
         return;
     }
 
-    public async reset(): Promise<void> {
-        const cache = SearchService.getInstance().getSearchCache();
-        if (cache) {
-            cache.status = CacheState.INVALID;
-        }
-
+    public async formReset(): Promise<void> {
         SearchService.getInstance().provideResult([]);
 
         const formInstance = await FormService.getInstance().getFormInstance<SearchFormInstance>(this.formId);
@@ -193,8 +184,6 @@ class Component implements ISearchFormListener {
             `search-form-results-${this.objectType}`, this.objectType, tableConfiguration,
             null, SearchContext.CONTEXT_ID, true, false, true
         );
-
-        SearchService.getInstance().provideResult();
 
         return table;
     }

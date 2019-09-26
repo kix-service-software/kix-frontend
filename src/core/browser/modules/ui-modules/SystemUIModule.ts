@@ -18,12 +18,14 @@ import { TableFactoryService } from "../../table";
 import { LabelService } from "../../LabelService";
 import {
     SysConfigService, SysConfigFormService, SysConfigOptionBrowserFactory,
-    SysConfigOptionDefinitionBrowserFactory, SysConfigLabelProvider, EditSysConfigDialogContext
+    SysConfigOptionDefinitionBrowserFactory, SysConfigLabelProvider, EditSysConfigDialogContext,
+    SysConfigPlaceholderHandler
 } from "../../sysconfig";
 import { SysConfigTableFactory } from "../../sysconfig/table";
 import { ContextService, DialogService } from "../..";
 import { AuthenticationSocketClient } from "../../application/AuthenticationSocketClient";
 import { UIComponentPermission } from "../../../model/UIComponentPermission";
+import { PlaceholderService } from "../../placeholder";
 
 export class UIModule implements IUIModule {
 
@@ -34,6 +36,8 @@ export class UIModule implements IUIModule {
     }
 
     public async register(): Promise<void> {
+        PlaceholderService.getInstance().registerPlaceholderHandler(new SysConfigPlaceholderHandler());
+
         ServiceRegistry.registerServiceInstance(SysConfigService.getInstance());
         ServiceRegistry.registerServiceInstance(SysConfigFormService.getInstance());
         FactoryService.getInstance().registerFactory(

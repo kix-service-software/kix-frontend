@@ -36,7 +36,7 @@ export class NotificationFormService extends KIXObjectFormService<Notification> 
         return kixObjectType === KIXObjectType.NOTIFICATION;
     }
 
-    protected async additionalPreparations(
+    protected async doAdditionalPreparations(
         form: Form, formFieldValues: Map<string, FormFieldValue<any>>, notification: Notification
     ): Promise<void> {
         if (form) {

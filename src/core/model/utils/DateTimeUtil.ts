@@ -49,15 +49,20 @@ export class DateTimeUtil {
         return string;
     }
 
-    public static calculateAge(ageInMillisends: number): string {
-        let ageResult = ageInMillisends + 'ms';
+    public static calculateTimeInterval(ageInMilliseconds: number): string {
+        let isNegative = false;
+        if (ageInMilliseconds < 0) {
+            isNegative = true;
+            ageInMilliseconds = ageInMilliseconds * -1;
+        }
+        let ageResult = ageInMilliseconds + 'ms';
 
         const hoursInSeconds = 60 * 60;
         const daysInSeconds = 24 * hoursInSeconds;
 
-        const days = Math.floor(ageInMillisends / daysInSeconds);
-        const hours = Math.floor((ageInMillisends - (days * daysInSeconds)) / hoursInSeconds);
-        const minutes = Math.round((ageInMillisends - (days * daysInSeconds) - (hours * hoursInSeconds)) / 60);
+        const days = Math.floor(ageInMilliseconds / daysInSeconds);
+        const hours = Math.floor((ageInMilliseconds - (days * daysInSeconds)) / hoursInSeconds);
+        const minutes = Math.round((ageInMilliseconds - (days * daysInSeconds) - (hours * hoursInSeconds)) / 60);
 
         if (days === 0) {
             ageResult = hours + 'h ' + minutes + 'm';
@@ -65,7 +70,7 @@ export class DateTimeUtil {
             ageResult = days + 'd ' + hours + 'h';
         }
 
-        return ageResult;
+        return isNegative ? '- ' + ageResult : ageResult;
     }
 
     public static getKIXDateTimeString(date: Date): string {
@@ -89,6 +94,16 @@ export class DateTimeUtil {
             kixTimeString += `:${seconds}`;
         }
         return kixTimeString;
+    }
+
+    public static getTimestampNumbersOnly(date: Date): string {
+        const year = date.getFullYear();
+        const month = DateTimeUtil.padZero(date.getMonth() + 1);
+        const day = DateTimeUtil.padZero(date.getDate());
+        const hours = DateTimeUtil.padZero(date.getHours());
+        const minutes = DateTimeUtil.padZero(date.getMinutes());
+        const seconds = DateTimeUtil.padZero(date.getSeconds());
+        return `${year}${month}${day}${hours}${minutes}${seconds}`;
     }
 
     public static sameDay(d1: Date, d2: Date): boolean {

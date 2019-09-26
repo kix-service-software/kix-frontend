@@ -129,7 +129,7 @@ class Component extends FormInputComponent<string | number, ComponentState> {
                 );
                 let nodes = [];
                 if (structureOption && structureOption.value) {
-                    nodes = await KIXObjectService.prepareObjectTree(this.objects);
+                    nodes = await KIXObjectService.prepareObjectTree(this.objects, true);
                 } else {
                     for (const o of this.objects) {
                         const node = await this.createTreeNode(o);

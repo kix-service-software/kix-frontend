@@ -8,3 +8,4 @@
  */
 
 export { GeneralCatalogItem } from './GeneralCatalogItem';
+export { GeneralCatalogItemProperty } from './GeneralCatalogItemProperty';

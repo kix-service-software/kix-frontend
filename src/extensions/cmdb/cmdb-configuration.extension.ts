@@ -184,8 +184,8 @@ export class Extension implements IConfigurationExtension {
         const ciListWidget = new ConfiguredWidget('20180905-ci-list-widget',
             new WidgetConfiguration(
                 'table-widget', 'Translatable#Overview Config Items', [
-                    'ticket-create-action', 'config-item-create-action', 'csv-export-action'
-                ],
+                'ticket-create-action', 'config-item-create-action', 'csv-export-action'
+            ],
                 new TableWidgetSettings(KIXObjectType.CONFIG_ITEM, null, null, null, true, null, filter),
                 false, false, 'kix-icon-ci', true
             ),
@@ -224,13 +224,19 @@ export class Extension implements IConfigurationExtension {
             fields.push(new FormField(
                 'Translatable#Deployment State', VersionProperty.CUR_DEPL_STATE_ID, 'general-catalog-input',
                 false, 'Translatable#Helptext_CMDB_ConfigItem_Link_DeploymentState',
-                [new FormFieldOption('GC_CLASS', 'ITSM::ConfigItem::DeploymentState')],
+                [
+                    new FormFieldOption('GC_CLASS', 'ITSM::ConfigItem::DeploymentState'),
+                    new FormFieldOption('ICON', true)
+                ],
                 null, null, null, 1, 1, 1, null, null, null, false, false
             ));
             fields.push(new FormField(
                 'Translatable#Incident State', VersionProperty.CUR_INCI_STATE_ID, 'general-catalog-input',
                 false, 'Translatable#Helptext_CMDB_ConfigItem_Link_IncidentState',
-                [new FormFieldOption('GC_CLASS', 'ITSM::Core::IncidentState')],
+                [
+                    new FormFieldOption('GC_CLASS', 'ITSM::Core::IncidentState'),
+                    new FormFieldOption('ICON', true)
+                ],
                 null, null, null, 1, 1, 1, null, null, null, false, false
             ));
 

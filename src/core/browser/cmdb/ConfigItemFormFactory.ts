@@ -55,7 +55,7 @@ export class ConfigItemFormFactory {
             true, 'Translatable#Helptext_CMDB_ConfigItemCreateEdit_DeploymentState',
             [
                 new FormFieldOption('GC_CLASS', 'ITSM::ConfigItem::DeploymentState'),
-                new FormFieldOption('ICON', false)
+                new FormFieldOption('ICON', true)
             ],
             null, null, null, 1, 1, 1, null, null, null, false, false
         ));
@@ -78,7 +78,7 @@ export class ConfigItemFormFactory {
 
         if (ciClass.CurrentDefinition && ciClass.CurrentDefinition.Definition) {
             for (const ad of ciClass.CurrentDefinition.Definition) {
-                const field = await this.getFormField(ad);
+                const field = this.getFormField(ad);
                 fields.push(field);
             }
         }

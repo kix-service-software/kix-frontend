@@ -78,20 +78,28 @@ class Component {
                 eventSubscriberId: IdService.generateDateBasedId(this.state.instanceId),
                 eventPublished: async (data: TableEventData, eventId: string) => {
                     if (data && this.state.table && data.tableId === this.state.table.getTableId()) {
-                        if (eventId === TableEvent.TABLE_READY) {
-                            this.state.filterCount = this.state.table.isFiltered()
-                                ? this.state.table.getRowCount()
-                                : null;
-                            this.prepareTitle();
-                            this.prepareActions();
+                        if (eventId === TableEvent.RELOADED) {
+                            const filterComponent = (this as any).getComponent('table-widget-filter');
+                            if (filterComponent) {
+                                filterComponent.reset();
+                            }
+                        } else {
+                            if (eventId === TableEvent.TABLE_READY) {
+                                this.state.filterCount = this.state.table.isFiltered()
+                                    ? this.state.table.getRowCount()
+                                    : null;
+                                this.prepareTitle();
+                                this.prepareActions();
+                            }
+                            WidgetService.getInstance().updateActions(this.state.instanceId);
                         }
-                        WidgetService.getInstance().updateActions(this.state.instanceId);
                     }
                 }
             };
 
             EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.subscriber);
             EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
+            EventService.getInstance().subscribe(TableEvent.RELOADED, this.subscriber);
 
             this.prepareHeader();
             this.prepareTable().then(() => this.prepareTitle());
@@ -123,6 +131,7 @@ class Component {
         WidgetService.getInstance().unregisterActions(this.state.instanceId);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.subscriber);
         EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
+        EventService.getInstance().unsubscribe(TableEvent.RELOADED, this.subscriber);
     }
 
     private async prepareHeader(): Promise<void> {

@@ -17,7 +17,7 @@ import {
     Article, Attachment, ArticleProperty, FilterCriteria, TicketProperty,
     KIXObjectType, FilterType, User, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions, CreateTicketArticleOptions, CreateTicketWatcherOptions,
-    KIXObjectSpecificDeleteOptions, DeleteTicketWatcherOptions, Error, Queue, Contact, Channel, KIXObjectProperty
+    KIXObjectSpecificDeleteOptions, DeleteTicketWatcherOptions, Error, Contact, KIXObjectProperty, FilterDataType
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
@@ -25,12 +25,10 @@ import { SearchOperator } from '../../../browser/SearchOperator';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { UserService } from './UserService';
 import { LoggingService } from '../LoggingService';
-import { ChannelService } from './ChannelService';
 import { TicketFactory } from '../../object-factories/TicketFactory';
 import { SenderTypeFactory } from '../../object-factories/SenderTypeFactory';
 import { LockFactory } from '../../object-factories/LockFactory';
 import { ArticleFactory } from '../../object-factories/ArticleFactory';
-import { QueueService } from './QueueService';
 import { ArticleLoadingOptions } from '../../../model/kix/ticket/ArticleLoadingOptions';
 
 export class TicketService extends KIXObjectService {
@@ -239,7 +237,7 @@ export class TicketService extends KIXObjectService {
 
         const channelId = this.getParameterValue(parameter, ArticleProperty.CHANNEL_ID);
         const subject = this.getParameterValue(parameter, ArticleProperty.SUBJECT);
-        let body = this.getParameterValue(parameter, ArticleProperty.BODY);
+        const body = this.getParameterValue(parameter, ArticleProperty.BODY);
         const customerVisible = this.getParameterValue(parameter, ArticleProperty.CUSTOMER_VISIBLE);
         let to = this.getParameterValue(parameter, ArticleProperty.TO);
         if (!to && contactId) {
@@ -256,22 +254,6 @@ export class TicketService extends KIXObjectService {
         }
         const cc = this.getParameterValue(parameter, ArticleProperty.CC);
         const bcc = this.getParameterValue(parameter, ArticleProperty.BCC);
-
-        const channels = await ChannelService.getInstance().loadObjects<Channel>(
-            token, clientRequestId, KIXObjectType.CHANNEL, null, null, null
-        );
-        const channel = channels.find((c) => c.ID === channelId);
-        if (channel && channel.Name === 'email') {
-            if (queueId) {
-                const queues = await QueueService.getInstance().loadObjects<Queue>(
-                    token, clientRequestId, KIXObjectType.QUEUE, [queueId], null, null
-                );
-                const queue = queues && !!queues.length ? queues[0] : null;
-                if (queue && queue.Signature) {
-                    body += `\n<p>--</p>\n${queue.Signature}`;
-                }
-            }
-        }
 
         let createArticle: CreateArticle;
         if (channelId && subject && body) {
@@ -389,6 +371,8 @@ export class TicketService extends KIXObjectService {
         let objectSearch = {};
 
         const user = await UserService.getInstance().getUserByToken(token);
+        const fulltextIndex = filter.findIndex((f) => f.property === TicketProperty.FULLTEXT);
+        const fulltext = fulltextIndex !== -1 ? filter.splice(fulltextIndex, 1) : null;
 
         const andFilter = filter.filter(
             (f) => f.filterType === FilterType.AND
@@ -436,18 +420,22 @@ export class TicketService extends KIXObjectService {
             this.setUserID(f, user);
             return { Field: f.property, Operator: f.operator, Type: f.type, Value: f.value };
         });
-        const orSearch = filter.filter(
-            (f) => f.filterType === FilterType.OR && f.operator !== SearchOperator.NOT_EQUALS
-        ).map((f) => {
-            this.setUserID(f, user);
-            if (f.property === TicketProperty.CREATED) {
-                f.property = KIXObjectProperty.CREATE_TIME;
-            }
-            if (f.property === TicketProperty.CHANGED) {
-                f.property = KIXObjectProperty.CHANGE_TIME;
-            }
-            return { Field: f.property, Operator: f.operator, Type: f.type, Value: f.value };
-        });
+        let orSearch = filter.filter((f) => f.filterType === FilterType.OR && f.operator !== SearchOperator.NOT_EQUALS)
+            .map((f) => {
+                this.setUserID(f, user);
+                if (f.property === TicketProperty.CREATED) {
+                    f.property = KIXObjectProperty.CREATE_TIME;
+                }
+                if (f.property === TicketProperty.CHANGED) {
+                    f.property = KIXObjectProperty.CHANGE_TIME;
+                }
+                return { Field: f.property, Operator: f.operator, Type: f.type, Value: f.value };
+            });
+
+        if (fulltext) {
+            const fulltextSearch = this.getFulltextSearch(fulltext[0]);
+            orSearch = [...orSearch, ...fulltextSearch];
+        }
 
         if (orFilter && orFilter.length) {
             objectFilter = {
@@ -462,12 +450,12 @@ export class TicketService extends KIXObjectService {
             };
         }
 
-        if ((andFilter && andFilter.length) || (orFilter && orFilter.length)) {
+        if ((andFilter && !!andFilter.length) || (orFilter && !!orFilter.length)) {
             const apiFilter = {};
             apiFilter[filterProperty] = objectFilter;
             query.filter = JSON.stringify(apiFilter);
         }
-        if ((andSearch && andSearch.length) || (orSearch && orSearch.length)) {
+        if ((andSearch && !!andSearch.length) || (orSearch && !!orSearch.length)) {
             const search = {};
             search[filterProperty] = objectSearch;
             query.search = JSON.stringify(search);
@@ -480,5 +468,34 @@ export class TicketService extends KIXObjectService {
                 filter.value = user.UserID;
             }
         }
+    }
+
+    private getFulltextSearch(fulltextFilter: FilterCriteria): any[] {
+        return [
+            {
+                Field: TicketProperty.TICKET_NUMBER, Operator: SearchOperator.CONTAINS,
+                Type: FilterDataType.STRING, Value: fulltextFilter.value
+            },
+            {
+                Field: TicketProperty.TITLE, Operator: SearchOperator.CONTAINS,
+                Type: FilterDataType.STRING, Value: fulltextFilter.value
+            },
+            {
+                Field: TicketProperty.BODY, Operator: SearchOperator.CONTAINS,
+                Type: FilterDataType.STRING, Value: fulltextFilter.value
+            },
+            {
+                Field: TicketProperty.FROM, Operator: SearchOperator.CONTAINS,
+                Type: FilterDataType.STRING, Value: fulltextFilter.value
+            },
+            {
+                Field: TicketProperty.TO, Operator: SearchOperator.CONTAINS,
+                Type: FilterDataType.STRING, Value: fulltextFilter.value
+            },
+            {
+                Field: TicketProperty.CC, Operator: SearchOperator.CONTAINS,
+                Type: FilterDataType.STRING, Value: fulltextFilter.value
+            }
+        ];
     }
 }

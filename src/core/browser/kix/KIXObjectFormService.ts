@@ -40,7 +40,7 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
             await this.prepareFormFieldValues(g.formFields, kixObject, formFieldValues, form.formContext);
         }
 
-        await this.additionalPreparations(form, formFieldValues, kixObject);
+        await this.doAdditionalPreparations(form, formFieldValues, kixObject);
         return formFieldValues;
     }
 
@@ -145,7 +145,7 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
         return;
     }
 
-    protected async additionalPreparations(
+    protected async doAdditionalPreparations(
         form: Form, formFieldValues: Map<string, FormFieldValue<any>>, kixObject: KIXObject
     ): Promise<void> {
         return;

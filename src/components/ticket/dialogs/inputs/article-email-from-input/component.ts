@@ -96,13 +96,21 @@ class Component extends FormInputComponent<number, ComponentState> {
 
             const queue = queues[0];
 
-            const userName = `${user.UserFirstname} ${user.UserLastname}`;
+            let userName = `${user.UserFirstname} ${user.UserLastname}`;
+            userName = userName
+                .replace(/ä/g, 'ae').replace(/Ä/g, 'Ae')
+                .replace(/ö/g, 'oe').replace(/Ö/g, 'Oe')
+                .replace(/ü/g, 'ue').replace(/Ü/g, 'Ue');
 
             const systemAddress = await KIXObjectService.loadObjects<SystemAddress>(
                 KIXObjectType.SYSTEM_ADDRESS, [queue.SystemAddressID], null, null, true
             );
             const queueMail = systemAddress[0].Name;
-            const realName = systemAddress[0].Realname;
+            let realName = systemAddress[0].Realname;
+            realName = realName
+                .replace(/ä/g, 'ae').replace(/Ä/g, 'Ae')
+                .replace(/ö/g, 'oe').replace(/Ö/g, 'Oe')
+                .replace(/ü/g, 'ue').replace(/Ü/g, 'Ue');
 
             const labels = [
                 [`\"<${realName}>\" <${queueMail}>`, `${realName}`],

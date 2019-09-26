@@ -62,7 +62,41 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
             default:
                 displayValue = property;
         }
+
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
+        }
+
         return displayValue;
+    }
+
+    public async getExportPropertyText(property: string, useDisplayText?: boolean): Promise<string> {
+        if (!useDisplayText) {
+            switch (property) {
+                case KIXObjectProperty.VALID_ID:
+                    return 'Validity';
+                default:
+                    return property;
+            }
+        }
+        return this.getPropertyText(property);
+    }
+
+    public async getExportPropertyValue(property: string, value: any): Promise<any> {
+        let newValue = value;
+        switch (property) {
+            case KIXObjectProperty.VALID_ID:
+                if (value) {
+                    const validObjects = await KIXObjectService.loadObjects<ValidObject>(
+                        KIXObjectType.VALID_OBJECT, [value], null, null, true
+                    ).catch((error) => [] as ValidObject[]);
+                    newValue = validObjects && !!validObjects.length ? validObjects[0].Name : value;
+                }
+            default:
+        }
+        return newValue;
     }
 
     public async getDisplayText(

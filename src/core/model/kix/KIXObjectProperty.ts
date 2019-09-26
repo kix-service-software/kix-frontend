@@ -27,6 +27,8 @@ export enum KIXObjectProperty {
 
     VALID_ID = 'ValidID',
 
+    VALIDITY = 'Validity',
+
     COMMENT = 'Comment',
 
     DISPLAY_VALUES = 'displayValues'

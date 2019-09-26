@@ -45,6 +45,14 @@ export class Extension implements IConfigurationExtension {
                     'Translatable#Helptext_Admin_NotificationEdit_Name'
                 ),
                 new FormField(
+                    'Translatable#Show in agent preferences', NotificationProperty.DATA_VISIBLE_FOR_AGENT,
+                    'checkbox-input', false,
+                    'Translatable#Helptext_Admin_NotificationCreate_ShowPreferences'
+                ),
+                new FormField(
+                    'Translatable#Agent Preferences Tooltip', NotificationProperty.DATA_VISIBLE_FOR_AGENT_TOOLTIP, null
+                ),
+                new FormField(
                     'Translatable#Comment', KIXObjectProperty.COMMENT, 'text-area-input', false,
                     'Translatable#Helptext_Admin_NotificationEdit_Comment', null, null, null,
                     null, null, null, null, 250
@@ -141,6 +149,11 @@ export class Extension implements IConfigurationExtension {
                     'checkbox-input', false,
                     'Translatable#Helptext_Admin_NotificationEdit_SendOnceADay', undefined,
                     new FormFieldValue(false)
+                ),
+                new FormField(
+                    'Translatable#Create Article', NotificationProperty.DATA_CREATE_ARTICLE,
+                    'checkbox-input', false,
+                    'Translatable#Helptext_Admin_NotificationEdit_CreateArticle'
                 )
             ]);
             const messageGroup = new FormGroup('Translatable#Notification Methods', [

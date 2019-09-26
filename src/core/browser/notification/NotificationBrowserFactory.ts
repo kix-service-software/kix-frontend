@@ -7,7 +7,7 @@
  * --
  */
 
-import { Notification, NotificationProperty } from "../../model";
+import { Notification, NotificationProperty, ArticleProperty } from "../../model";
 import { KIXObjectFactory } from "../kix/KIXObjectFactory";
 import { NotificationFilterManager } from "./NotificationFilterManager";
 
@@ -66,15 +66,35 @@ export class NotificationBrowserFactory extends KIXObjectFactory<Notification> {
                         case NotificationProperty.DATA_SEND_ONCE_A_DAY:
                             newNotification.OncePerDay = Boolean(Number(value[0]));
                             break;
+                        case NotificationProperty.DATA_CREATE_ARTICLE:
+                            newNotification.CreateArticle = Boolean(Number(value[0]));
+                            break;
                         default:
-                            if (filterProperties.some((p) => p[0] === key)) {
-                                newNotification.Filter.set(key, value.map((v) => !isNaN(Number(v)) ? Number(v) : v));
+                            let property = key.replace('Ticket::', '');
+                            property = property.replace('Article::', '');
+                            if (filterProperties.some((p) => p[0] === property)) {
+                                let newValue;
+                                if (this.isStringProperty(property)) {
+                                    newValue = value[0];
+                                } else {
+                                    newValue = value.map((v) => !isNaN(Number(v)) ? Number(v) : v);
+                                }
+                                newNotification.Filter.set(property, newValue);
                             }
                     }
                 }
             }
         }
         return newNotification;
+    }
+
+    private isStringProperty(property: string): boolean {
+        return property === ArticleProperty.FROM
+            || property === ArticleProperty.TO
+            || property === ArticleProperty.CC
+            || property === ArticleProperty.BCC
+            || property === ArticleProperty.SUBJECT
+            || property === ArticleProperty.BODY;
     }
 
 }

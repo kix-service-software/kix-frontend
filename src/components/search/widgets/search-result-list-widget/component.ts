@@ -52,7 +52,6 @@ class Component implements IKIXObjectSearchListener {
     }
 
     public searchCleared(): void {
-        this.state.table = null;
         this.searchResultCategoryChanged(null);
     }
 
@@ -74,27 +73,18 @@ class Component implements IKIXObjectSearchListener {
     private async initWidget(
         objectType: KIXObjectType, cache: SearchCache<KIXObject> = SearchService.getInstance().getSearchCache()
     ): Promise<void> {
+        this.state.table = null;
         if (objectType) {
             this.state.loading = true;
-            this.state.table = null;
 
             const isSearchMainObject = cache.objectType === objectType;
 
-            let resultCount: number = 0;
-
-            if (isSearchMainObject) {
-                resultCount = cache.result.length;
-                SearchService.getInstance().provideResult(null);
-            } else {
-                const activeCategory = SearchService.getInstance().getActiveSearchResultExplorerCategory();
-                if (activeCategory) {
-                    resultCount = activeCategory ? activeCategory.objectIds.length : 0;
-                    const resultObjects = await KIXObjectService.loadObjects(
-                        objectType, [...activeCategory.objectIds]
-                    );
-                    SearchService.getInstance().provideResult(resultObjects);
-                }
+            let objectIds = [];
+            const activeCategory = SearchService.getInstance().getActiveSearchResultExplorerCategory();
+            if (activeCategory) {
+                objectIds = activeCategory.objectIds ? activeCategory.objectIds : [];
             }
+            const resultCount: number = objectIds.length;
 
             const labelProvider = LabelService.getInstance().getLabelProviderForType(objectType);
             this.state.resultIcon = labelProvider.getObjectIcon();
@@ -114,7 +104,7 @@ class Component implements IKIXObjectSearchListener {
             );
             const table = await TableFactoryService.getInstance().createTable(
                 `search-result-list-${objectType}`, objectType, tableConfiguration,
-                null, SearchContext.CONTEXT_ID, true, true, false
+                objectIds, undefined, true, true, false
             );
 
             this.tableSubscriber = {

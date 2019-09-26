@@ -26,7 +26,11 @@ export class TicketSearchDefinition extends SearchDefinition {
     }
 
     public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(criteria, null, null, ['Links'], ['Links']);
+        return new KIXObjectLoadingOptions(criteria, null, null, ['Watchers', 'Links'], ['Links']);
+    }
+
+    public getLoadingOptionsForResultList(): KIXObjectLoadingOptions {
+        return new KIXObjectLoadingOptions(null, null, null, ['Watchers']);
     }
 
     public async getProperties(): Promise<Array<[string, string]>> {
@@ -307,22 +311,7 @@ export class TicketSearchDefinition extends SearchDefinition {
         const criteria: FilterCriteria[] = [];
         if (value) {
             criteria.push(new FilterCriteria(
-                TicketProperty.TICKET_NUMBER, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
-            ));
-            criteria.push(new FilterCriteria(
-                TicketProperty.TITLE, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
-            ));
-            criteria.push(new FilterCriteria(
-                TicketProperty.BODY, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
-            ));
-            criteria.push(new FilterCriteria(
-                TicketProperty.FROM, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
-            ));
-            criteria.push(new FilterCriteria(
-                TicketProperty.TO, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
-            ));
-            criteria.push(new FilterCriteria(
-                TicketProperty.CC, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
+                TicketProperty.FULLTEXT, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
             ));
         }
         return criteria;

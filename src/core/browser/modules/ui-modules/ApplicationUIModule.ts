@@ -23,7 +23,6 @@ import { PermissionLabelProvider } from '../../../../core/browser/permission';
 import { PermissionsTableFactory, PermissionTableCSSHandler } from '../../../../core/browser/application';
 import { ServiceService } from '../../../../core/browser/service/ServiceService';
 import { LinkService } from '../../../../core/browser/link';
-import { GeneralCatalogService, GeneralCatalogBrowserFactory } from '../../../../core/browser/general-catalog';
 import { DynamicFieldService } from '../../../../core/browser/dynamic-fields';
 import { SlaService, SlaBrowserFactory, SlaLabelProvider } from '../../../../core/browser/sla';
 import { ObjectIconService, ObjectIconBrowserFactory } from '../../../../core/browser/icon';
@@ -39,6 +38,9 @@ import { SearchService } from '../../kix/search/SearchService';
 import { InvalidObjectCSSHandler } from '../../table/InvalidObjectCSSHandler';
 import { FormValidationService } from '../../form/validation';
 import { UserPasswordValidator } from '../../user/UserPasswordValidator';
+import {
+    NotificationService, NotificationTableFactory, NotificationLabelProvider, NotificationBrowserFactory
+} from '../../notification';
 
 export class UIModule implements IUIModule {
 
@@ -50,12 +52,18 @@ export class UIModule implements IUIModule {
 
     public async register(): Promise<void> {
         ServiceRegistry.registerServiceInstance(LinkService.getInstance());
-        ServiceRegistry.registerServiceInstance(GeneralCatalogService.getInstance());
         ServiceRegistry.registerServiceInstance(DynamicFieldService.getInstance());
         ServiceRegistry.registerServiceInstance(SlaService.getInstance());
         ServiceRegistry.registerServiceInstance(ObjectIconService.getInstance());
         ServiceRegistry.registerServiceInstance(ServiceService.getInstance());
         ServiceRegistry.registerServiceInstance(ValidService.getInstance());
+
+        ServiceRegistry.registerServiceInstance(NotificationService.getInstance());
+        TableFactoryService.getInstance().registerFactory(new NotificationTableFactory());
+        LabelService.getInstance().registerLabelProvider(new NotificationLabelProvider());
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.NOTIFICATION, NotificationBrowserFactory.getInstance()
+        );
 
         ServiceRegistry.registerServiceInstance(TranslationFormService.getInstance());
         ServiceRegistry.registerServiceInstance(PersonalSettingsFormService.getInstance());
@@ -64,9 +72,6 @@ export class UIModule implements IUIModule {
             KIXObjectType.VALID_OBJECT, ValidObjectBrowserFactory.getInstance()
         );
         FactoryService.getInstance().registerFactory(KIXObjectType.SERVICE, ServiceBrowserFactory.getInstance());
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.GENERAL_CATALOG_ITEM, GeneralCatalogBrowserFactory.getInstance()
-        );
 
         FactoryService.getInstance().registerFactory(
             KIXObjectType.OBJECT_ICON, ObjectIconBrowserFactory.getInstance()

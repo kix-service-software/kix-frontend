@@ -42,6 +42,8 @@ export enum UserProperty {
     MY_QUEUES = 'MyQueues',
 
     // UI properties
-    USER_VALID = 'UserValid'
+    USER_VALID = 'UserValid',
+
+    NOTIFICATIONS = 'NotificationTransport'
 
 }

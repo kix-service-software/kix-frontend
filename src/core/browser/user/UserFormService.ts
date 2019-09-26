@@ -7,8 +7,13 @@
  * --
  */
 
-import { User, KIXObjectType, UserProperty, PersonalSettingsProperty } from "../../model";
+import {
+    User, KIXObjectType, UserProperty, PersonalSettingsProperty, Notification, KIXObjectLoadingOptions,
+    FilterCriteria, FilterDataType, KIXObjectProperty, FilterType, NotificationProperty
+} from "../../model";
 import { KIXObjectFormService } from "../kix/KIXObjectFormService";
+import { KIXObjectService } from "../kix";
+import { SearchOperator } from "../SearchOperator";
 
 export class UserFormService extends KIXObjectFormService<User> {
 
@@ -42,6 +47,52 @@ export class UserFormService extends KIXObjectFormService<User> {
                     const myQueues = user.Preferences.find((p) => p.ID === PersonalSettingsProperty.MY_QUEUES);
                     if (myQueues && myQueues.Value) {
                         value = myQueues.Value.split(',').map((v) => Number(v));
+                    }
+                }
+                break;
+            case PersonalSettingsProperty.USER_LANGUAGE:
+                if (user && user.Preferences) {
+                    const languagePreference = user.Preferences.find(
+                        (p) => p.ID === PersonalSettingsProperty.USER_LANGUAGE
+                    );
+                    value = languagePreference ? languagePreference.Value : null;
+                }
+                break;
+            case PersonalSettingsProperty.NOTIFICATIONS:
+                if (user && user.Preferences) {
+                    const notificationPreference = user.Preferences.find(
+                        (p) => p.ID === PersonalSettingsProperty.NOTIFICATIONS
+                    );
+                    const prefValue = notificationPreference ? notificationPreference.Value : null;
+                    if (prefValue) {
+                        try {
+                            const notifications = JSON.parse(prefValue);
+                            value = [];
+                            for (const key in notifications) {
+                                if (notifications[key]) {
+                                    value.push(Number(key.split('-')[1]));
+                                }
+                            }
+                        } catch (e) {
+                            console.warn('Could not read/parse notification preference value.');
+                        }
+                    }
+                } else {
+                    const loadingOptions = new KIXObjectLoadingOptions([
+                        new FilterCriteria(
+                            'Data.' + NotificationProperty.DATA_VISIBLE_FOR_AGENT, SearchOperator.EQUALS,
+                            FilterDataType.STRING, FilterType.AND, 1
+                        ),
+                        new FilterCriteria(
+                            KIXObjectProperty.VALID_ID, SearchOperator.EQUALS,
+                            FilterDataType.NUMERIC, FilterType.AND, 1
+                        )
+                    ]);
+                    const notifications = await KIXObjectService.loadObjects<Notification>(
+                        KIXObjectType.NOTIFICATION, null, loadingOptions
+                    );
+                    if (notifications) {
+                        value = notifications.map((n) => n.ID);
                     }
                 }
                 break;

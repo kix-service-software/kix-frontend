@@ -7,12 +7,9 @@
  * --
  */
 
-import { ISpecificCSSExtension, KIXExtensions } from '../core/extensions';
 import { Request, Response } from 'express';
 import { ConfigurationService, AuthenticationService } from '../core/services';
 import { KIXRouter } from './KIXRouter';
-import { PluginService } from '../services';
-import { UserService } from '../core/services/impl/api/UserService';
 
 export class ApplicationRouter extends KIXRouter {
 

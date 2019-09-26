@@ -96,7 +96,7 @@ export class AuthenticationService {
     ): Promise<string> {
         const userLogin = new UserLogin(user, password, UserType.AGENT);
         const response = await HttpService.getInstance().post<LoginResponse>(
-            'auth', userLogin, null, clientRequestId
+            'auth', userLogin, null, clientRequestId, undefined, false
         );
         const token = fakeLogin ? response.Token : this.createToken(user, response.Token);
         return token;
@@ -105,7 +105,9 @@ export class AuthenticationService {
     public async logout(token: string): Promise<boolean> {
         if (this.frontendTokenCache.has(token)) {
             const backendToken = this.frontendTokenCache.get(token);
-            await HttpService.getInstance().delete('session', token, null);
+            await HttpService.getInstance().delete('session', backendToken, null).catch((error) => {
+                // do nothing
+            });
             this.frontendTokenCache.delete(token);
         }
         return true;

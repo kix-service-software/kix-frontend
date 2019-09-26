@@ -47,7 +47,7 @@ export class LogFileService extends KIXObjectService {
         let objects = [];
         if (objectType === KIXObjectType.LOG_FILE) {
             objects = await super.load<LogFile>(
-                token, KIXObjectType.LOG_FILE, this.RESOURCE_URI, loadingOptions, objectIds, 'LogFile'
+                token, KIXObjectType.LOG_FILE, this.RESOURCE_URI, loadingOptions, objectIds, 'LogFile', false
             );
         }
 

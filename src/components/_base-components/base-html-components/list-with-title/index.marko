@@ -6,13 +6,15 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.list-with-title>
     <b><translation-string pattern=input.title/></b>
     <ul>
         <for|text| of=input.list>
             <li>
-                <translation-string pattern=text/>
+                <if(input.doNotTranslateList)>${text}</if>
+                <else>
+                    <translation-string pattern=text/>
+                </else>
             </li>
         </for>
     </ul>
