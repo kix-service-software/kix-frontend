@@ -171,6 +171,14 @@ export class SearchService {
             this.searchCache.objectType, null, loadingOptions, null, false
         );
         this.searchCache.result = objects;
+
+        const category = await this.getSearchResultCategories();
+        if (category) {
+            const ids: any = objects.map((o) => o.ObjectId);
+            category.objectIds = ids;
+            this.setActiveSearchResultExplorerCategory(category);
+        }
+
         this.listeners.forEach((l) => l.searchFinished());
         return objects;
     }
@@ -358,6 +366,7 @@ export class SearchService {
             this.searchCache = new SearchCache(
                 searchCache.objectType, searchCache.criteria, [], searchCache.fulltextValue, CacheState.VALID, name
             );
+
             await this.doSearch();
         }
     }
