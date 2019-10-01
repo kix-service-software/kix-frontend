@@ -67,32 +67,18 @@ export class UIModule implements IUIModule {
                 ContextMode.CREATE_ADMIN
             ));
 
-            DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-                'edit-general-catalog-dialog',
-                new WidgetConfiguration(
-                    'edit-general-catalog-dialog', 'Translatable#Edit Value', [], {}, false, false,
-                    'kix-icon-edit'
-                ),
-                KIXObjectType.GENERAL_CATALOG_ITEM,
-                ContextMode.EDIT_ADMIN
-            ));
+            if (await this.checkPermission('system/generalcatalog/*', CRUD.UPDATE)) {
+                DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
+                    'edit-general-catalog-dialog',
+                    new WidgetConfiguration(
+                        'edit-general-catalog-dialog', 'Translatable#Edit Value', [], {}, false, false,
+                        'kix-icon-edit'
+                    ),
+                    KIXObjectType.GENERAL_CATALOG_ITEM,
+                    ContextMode.EDIT_ADMIN
+                ));
+            }
         }
-
-        this.registerContexts();
-        this.registerDialogs();
-        await this.registerBookmarks();
-    }
-
-    // tslint:disable-next-line:no-empty
-    public registerContexts(): void {
-    }
-
-    // tslint:disable-next-line:no-empty
-    private registerDialogs(): void {
-    }
-
-    private async registerBookmarks(): Promise<void> {
-        await SearchService.getInstance().getSearchBookmarks(true);
     }
 
     private async checkPermission(resource: string, crud: CRUD): Promise<boolean> {
