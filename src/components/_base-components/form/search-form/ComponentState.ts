@@ -7,14 +7,16 @@
  * --
  */
 
-import { ITable, AbstractComponentState } from '../../../../core/browser';
+import { ITable, AbstractComponentState, IDynamicFormManager } from '../../../../core/browser';
 
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public resultCount: number = 0,
         public canSearch: boolean = false,
-        public table: ITable = null
+        public table: ITable = null,
+        public manager: IDynamicFormManager = null,
+        public prepared: boolean = false
     ) {
         super();
     }

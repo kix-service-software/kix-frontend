@@ -11,7 +11,8 @@ import { IConfigurationExtension } from '../../core/extensions';
 import {
     ContextConfiguration, WidgetConfiguration, WidgetSize, ConfiguredWidget, ConfigItemProperty,
     FormField, VersionProperty, FormFieldOption, FormContext, KIXObjectType, Form,
-    KIXObjectPropertyFilter, TableFilterCriteria, CRUD, TableWidgetSettings
+    KIXObjectPropertyFilter, TableFilterCriteria, CRUD, TableWidgetSettings, ObjectReferenceOptions,
+    FilterType, GeneralCatalogItemProperty, FilterCriteria, FilterDataType, KIXObjectProperty, KIXObjectLoadingOptions
 } from '../../core/model';
 import { CMDBContext, ConfigItemChartConfiguration } from '../../core/browser/cmdb';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
@@ -192,8 +193,8 @@ export class Extension implements IConfigurationExtension {
         const ciListWidget = new ConfiguredWidget('20180905-ci-list-widget',
             new WidgetConfiguration(
                 'table-widget', 'Translatable#Overview Config Items', [
-                'ticket-create-action', 'config-item-create-action', 'csv-export-action'
-            ],
+                    'ticket-create-action', 'config-item-create-action', 'csv-export-action'
+                ],
                 new TableWidgetSettings(KIXObjectType.CONFIG_ITEM, null, null, null, true, null, filter),
                 false, false, 'kix-icon-ci', true
             ),
@@ -223,27 +224,54 @@ export class Extension implements IConfigurationExtension {
             fields.push(
                 new FormField(
                     'Translatable#Config Item Class', ConfigItemProperty.CLASS_ID,
-                    'ci-class-input', false,
-                    'Translatable#Helptext_CMDB_ConfigItem_Link_Class'
+                    'object-reference-input', false,
+                    'Translatable#Helptext_CMDB_ConfigItem_Link_Class', [
+                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.CONFIG_ITEM_CLASS),
+                        new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true)
+                    ]
                 )
             );
             fields.push(new FormField('Translatable#Name', ConfigItemProperty.NAME, null, false, 'Translatable#Helptext_CMDB_ConfigItem_Link_Name'));
             fields.push(new FormField('Translatable#Number', ConfigItemProperty.NUMBER, null, false, 'Translatable#Helptext_CMDB_ConfigItem_Link_Number'));
             fields.push(new FormField(
-                'Translatable#Deployment State', VersionProperty.CUR_DEPL_STATE_ID, 'general-catalog-input',
+                'Translatable#Deployment State', VersionProperty.CUR_DEPL_STATE_ID, 'object-reference-input',
                 false, 'Translatable#Helptext_CMDB_ConfigItem_Link_DeploymentState',
                 [
-                    new FormFieldOption('GC_CLASS', 'ITSM::ConfigItem::DeploymentState'),
-                    new FormFieldOption('ICON', true)
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.GENERAL_CATALOG_ITEM),
+                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions([
+                            new FilterCriteria(
+                                KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                FilterType.AND, 1
+                            ),
+                            new FilterCriteria(
+                                GeneralCatalogItemProperty.CLASS, SearchOperator.EQUALS, FilterDataType.STRING,
+                                FilterType.AND, 'ITSM::ConfigItem::DeploymentState'
+                            )
+                        ])
+                    )
                 ],
                 null, null, null, 1, 1, 1, null, null, null, false, false
             ));
             fields.push(new FormField(
-                'Translatable#Incident State', VersionProperty.CUR_INCI_STATE_ID, 'general-catalog-input',
+                'Translatable#Incident State', VersionProperty.CUR_INCI_STATE_ID, 'object-reference-input',
                 false, 'Translatable#Helptext_CMDB_ConfigItem_Link_IncidentState',
                 [
-                    new FormFieldOption('GC_CLASS', 'ITSM::Core::IncidentState'),
-                    new FormFieldOption('ICON', true)
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.GENERAL_CATALOG_ITEM),
+                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions([
+                            new FilterCriteria(
+                                KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                FilterType.AND, 1
+                            ),
+                            new FilterCriteria(
+                                GeneralCatalogItemProperty.CLASS, SearchOperator.EQUALS, FilterDataType.STRING,
+                                FilterType.AND, 'ITSM::Core::IncidentState'
+                            )
+                        ])
+                    )
                 ],
                 null, null, null, 1, 1, 1, null, null, null, false, false
             ));

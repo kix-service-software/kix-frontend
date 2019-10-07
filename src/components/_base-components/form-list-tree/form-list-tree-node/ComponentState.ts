@@ -13,9 +13,6 @@ export class ComponentState {
 
     public constructor(
         public node: TreeNode,
-        public filterValue: string = null,
-        public activeNodes: TreeNode[] = null,
-        public treeId: string = null,
         public nodeId: string = null
     ) { }
 

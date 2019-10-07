@@ -9,6 +9,8 @@
 
 export enum SearchProperty {
 
-    FULLTEXT = 'FULLTEXT'
+    FULLTEXT = 'FULLTEXT',
+
+    SEARCH_VALUE = 'SEARCH_VALUE'
 
 }

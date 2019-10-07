@@ -16,19 +16,29 @@ import { ConsoleCommandProperty } from '../../../core/model/kix/console/ConsoleC
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
+    private commands: ConsoleCommand[];
+    private command: ConsoleCommand;
+
     public onCreate(): void {
         this.state = new ComponentState();
+        this.state.loadNodes = this.load.bind(this);
+    }
+
+    public async load(): Promise<TreeNode[]> {
+        this.commands = await KIXObjectService.loadObjects<ConsoleCommand>(KIXObjectType.CONSOLE_COMMAND);
+        const nodes = this.commands.map((c) => new TreeNode(c.Command, c.Command, 'kix-icon-listview'));
+        return nodes;
     }
 
     public async onMount(): Promise<void> {
         this.state.translations = TranslationService.createTranslationObject(["Translatable#Execute"]);
-        const commands = await KIXObjectService.loadObjects<ConsoleCommand>(KIXObjectType.CONSOLE_COMMAND);
-        this.state.commands = commands.map((c) => new TreeNode(c, c.Command, 'kix-icon-listview'));
     }
 
     public commandChanged(nodes: TreeNode[]): void {
-        this.state.currentCommands = nodes;
-        this.state.canRun = this.state.currentCommands && this.state.currentCommands.length > 0;
+        if (nodes && nodes.length) {
+            this.command = this.commands.find((c) => c.Command === nodes[0].id);
+            this.state.canRun = this.command !== null;
+        }
     }
 
     public parameterChanged(event: any): void {
@@ -45,7 +55,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async run(): Promise<void> {
         if (this.state.parameter.toLocaleLowerCase() === 'help') {
             this.showCommandHelp(true);
-        } else if (this.state.currentCommands && this.state.currentCommands.length > 0) {
+        } else if (this.command) {
             const parameterValues = this.state.parameter
                 .trim()
                 .split('--')
@@ -65,12 +75,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
 
             this.state.run = true;
-            const command: ConsoleCommand = this.state.currentCommands[0].id;
             const executionDate = await DateTimeUtil.getLocalDateTimeString(Date.now());
-            this.state.output = `${executionDate}: ${command.Command} ${parameters.join(' ')}`;
+            this.state.output = `${executionDate}: ${this.command.Command} ${parameters.join(' ')}`;
 
             await KIXObjectService.createObject(KIXObjectType.CONSOLE_COMMAND, [
-                [ConsoleCommandProperty.COMMAND, command.Command],
+                [ConsoleCommandProperty.COMMAND, this.command.Command],
                 [ConsoleCommandProperty.PARAMETERS, parameters]
             ])
                 .then((result: ConsoleExecuteResult) => {
@@ -84,13 +93,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public showCommandHelp(all: boolean): void {
         if (all) {
             this.listCommands();
-        } else if (this.state.currentCommands && this.state.currentCommands.length > 0) {
-            const command: ConsoleCommand = this.state.currentCommands[0].id;
-            let helpText = `Command:\t\t ${command.Command}\n\n`;
-            helpText += `Description:\t\t ${command.Description}\n\n`;
-            helpText += `Arguments:\t\t ${command.Arguments.join(', ')}\n\n`;
+        } else if (this.command) {
+            let helpText = `Command:\t\t ${this.command.Command}\n\n`;
+            helpText += `Description:\t\t ${this.command.Description}\n\n`;
+            helpText += `Arguments:\t\t ${this.command.Arguments.join(', ')}\n\n`;
             helpText += `Parameters:\n\n`;
-            for (const parameter of command.Parameters) {
+            for (const parameter of this.command.Parameters) {
                 helpText += `\tName:\t\t${parameter.Name}\n`;
                 helpText += `\tDescription:\t${parameter.Description}\n`;
                 helpText += `\tHasValue:\t${parameter.HasValue}\n`;
@@ -104,10 +112,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private listCommands(): void {
-        const commands = this.state.commands.map((c) => {
-            const cmd: ConsoleCommand = c.id;
-            return `\t${cmd.Command}\n`;
-        });
+        const commands = this.commands.map((c) => `\t${c.Command}\n`);
         this.state.output = `Commands:\n\n${commands.join('')}`;
     }
 

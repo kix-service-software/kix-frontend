@@ -15,10 +15,20 @@ import { TranslationService } from "../../../../../../core/browser/i18n/Translat
 import { MailAccountService } from "../../../../../../core/browser/mail-account";
 import { FormService, LabelService } from "../../../../../../core/browser";
 
-class Component extends FormInputComponent<number[], ComponentState> {
+class Component extends FormInputComponent<string, ComponentState> {
+
+    private typeID: string;
 
     public onCreate(): void {
         this.state = new ComponentState();
+        this.state.loadNodes = this.load.bind(this);
+    }
+
+    public async load(): Promise<TreeNode[]> {
+        const nodes = await MailAccountService.getInstance().getTreeNodes(MailAccountProperty.TYPE);
+        this.setCurrentNode(nodes);
+        this.handleIMAPFolderField();
+        return nodes;
     }
 
     public onInput(input: any): void {
@@ -37,24 +47,26 @@ class Component extends FormInputComponent<number[], ComponentState> {
     public async onMount(): Promise<void> {
         await super.onMount();
 
-        const typeNodes = await MailAccountService.getInstance().getTreeNodes(MailAccountProperty.TYPE);
-        this.state.nodes = typeNodes;
-        this.setCurrentNode();
-        this.handleIMAPFolderField();
     }
 
-    public setCurrentNode(): void {
+    public setCurrentNode(nodes: TreeNode[]): void {
+        let node: TreeNode;
         if (this.state.defaultValue && this.state.defaultValue.value) {
-            this.state.currentNode = this.state.nodes.find((n) => n.id === this.state.defaultValue.value);
+            node = nodes.find((n) => n.id === this.state.defaultValue.value);
         } else {
-            this.state.currentNode = this.state.nodes.find((n) => n.id === 'IMAP');
+            node = nodes.find((n) => n.id === 'IMAP');
         }
-        super.provideValue(this.state.currentNode ? this.state.currentNode.id : null);
+        if (node) {
+            node.selected = true;
+            this.typeID = node.id;
+        }
+
+        super.provideValue(this.typeID);
     }
 
     public typeChanged(nodes: TreeNode[]): void {
-        this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
-        super.provideValue(this.state.currentNode ? this.state.currentNode.id : null);
+        this.typeID = nodes && nodes.length ? nodes[0].id : null;
+        super.provideValue(this.typeID);
         this.handleIMAPFolderField();
     }
 
@@ -78,11 +90,7 @@ class Component extends FormInputComponent<number[], ComponentState> {
     }
 
     private showIMAPFolderField(): boolean {
-        let show = false;
-        if (this.state.currentNode && this.state.currentNode.id.match(/^IMAP/)) {
-            show = true;
-        }
-        return show;
+        return this.typeID && this.typeID.match(/^IMAP/) !== null;
     }
 
     public async focusLost(event: any): Promise<void> {

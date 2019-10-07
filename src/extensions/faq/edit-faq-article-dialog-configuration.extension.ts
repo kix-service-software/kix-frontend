@@ -8,13 +8,16 @@
  */
 
 import {
-    ContextConfiguration, FormField, FormContext, KIXObjectType, Form, FormFieldValue
+    ContextConfiguration, FormField, FormContext, KIXObjectType, Form,
+    FormFieldValue, KIXObjectProperty, ObjectReferenceOptions, FormFieldOption,
+    KIXObjectLoadingOptions, FilterCriteria, FilterDataType, FilterType
 } from '../../core/model';
 import { IConfigurationExtension } from '../../core/extensions';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
-import { FAQArticleProperty } from '../../core/model/kix/faq';
+import { FAQArticleProperty, FAQCategoryProperty } from '../../core/model/kix/faq';
 import { EditFAQArticleDialogContext } from '../../core/browser/faq';
 import { ConfigurationService } from '../../core/services';
+import { SearchOperator } from '../../core/browser';
 
 export class Extension implements IConfigurationExtension {
 
@@ -36,8 +39,24 @@ export class Extension implements IConfigurationExtension {
             const fields: FormField[] = [];
             fields.push(new FormField('Translatable#Title', FAQArticleProperty.TITLE, null, true, 'Translatable#Helptext_FAQ_ArticleEdit_Title'));
             fields.push(new FormField(
-                'Translatable#Category', FAQArticleProperty.CATEGORY_ID, 'faq-category-input', true, 'Translatable#Helptext_FAQ_ArticleEdit_Category')
-            );
+                'Translatable#Category', FAQArticleProperty.CATEGORY_ID, 'object-reference-input', true, 'Translatable#Helptext_FAQ_ArticleEdit_Category', [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.FAQ_CATEGORY),
+                    new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, true),
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    FAQCategoryProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.STRING,
+                                    FilterType.AND, null
+                                )
+                            ],
+                            null, null,
+                            [FAQCategoryProperty.SUB_CATEGORIES],
+                            [FAQCategoryProperty.SUB_CATEGORIES]
+                        )
+                    )
+                ]
+            ));
             fields.push(new FormField(
                 'Translatable#Language', FAQArticleProperty.LANGUAGE, 'language-input', true, 'Translatable#Helptext_FAQ_ArticleEdit_Language',
                 null, new FormFieldValue('de')
@@ -48,10 +67,14 @@ export class Extension implements IConfigurationExtension {
             fields.push(new FormField('Translatable#Cause', FAQArticleProperty.FIELD_2, 'rich-text-input', false, 'Translatable#Helptext_FAQ_ArticleEdit_Cause'));
             fields.push(new FormField('Translatable#Solution', FAQArticleProperty.FIELD_3, 'rich-text-input', false, 'Translatable#Helptext_FAQ_ArticleEdit_Solution'));
             fields.push(new FormField('Translatable#Comment', FAQArticleProperty.FIELD_6, 'rich-text-input', false, 'Translatable#Helptext_FAQ_ArticleEdit_Comment'));
-            fields.push(new FormField(
-                'Translatable#Validity', FAQArticleProperty.VALID_ID, 'valid-input', true, 'Translatable#Helptext_FAQ_ArticleEdit_Valid',
-                null, new FormFieldValue(1)
-            ));
+            fields.push(
+                new FormField(
+                    'Translatable#Validity', KIXObjectProperty.VALID_ID,
+                    'object-reference-input', true, 'Translatable#Helptext_FAQ_ArticleEdit_Valid', [
+                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
+                    ], new FormFieldValue(1)
+                )
+            );
 
             const group = new FormGroup('Translatable#FAQ Data', fields);
 

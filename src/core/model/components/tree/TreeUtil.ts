@@ -32,12 +32,8 @@ export class TreeUtil {
                     if (previousNode) {
                         node.previousNode = previousNode;
 
-                        if (previousNode &&
-                            previousNode.expanded &&
-                            TreeUtil.hasChildrenToShow(previousNode, filterValue)) {
-
+                        if (previousNode.expanded && TreeUtil.hasChildrenToShow(previousNode, filterValue)) {
                             node.previousNode = TreeUtil.getLastVisibleNode(previousNode.children, filterValue);
-
                         } else {
                             previousNode.nextNode = node;
                         }
@@ -56,10 +52,21 @@ export class TreeUtil {
 
                     previousNode = node;
                 } else {
-                    node.visible = false;
+                    TreeUtil.setNodesInvisible([node]);
                 }
             }
         }
+    }
+
+    private static setNodesInvisible(node: TreeNode[]): void {
+        node.forEach((n) => {
+            n.visible = false;
+            n.navigationNode = false;
+
+            if (n.children && n.children.length) {
+                TreeUtil.setNodesInvisible(n.children);
+            }
+        });
     }
 
     private static removeNodeLinks(tree: TreeNode[]): void {
@@ -171,6 +178,38 @@ export class TreeUtil {
                 TreeUtil.setNodeFlags(n.children, n);
             }
         });
+    }
+
+    public static getSelectedNodes(tree: TreeNode[]): TreeNode[] {
+        let nodes = [];
+
+        tree.forEach((n) => {
+            if (n.selected) {
+                nodes.push(n);
+            }
+
+            if (n.children && n.children.length) {
+                nodes = [...nodes, ...TreeUtil.getSelectedNodes(n.children)];
+            }
+        });
+
+        return nodes;
+    }
+
+    public static getVisibleNodes(tree: TreeNode[], filterValue: string): TreeNode[] {
+        let nodes = [];
+
+        tree.forEach((n) => {
+            if (n.visible) {
+                nodes.push(n);
+            }
+
+            if (TreeUtil.hasChildrenToShow(n, filterValue)) {
+                nodes = [...nodes, ...TreeUtil.getVisibleNodes(n.children, filterValue)];
+            }
+        });
+
+        return nodes;
     }
 
 }

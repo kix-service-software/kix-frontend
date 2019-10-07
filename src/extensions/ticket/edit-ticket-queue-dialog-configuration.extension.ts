@@ -49,9 +49,23 @@ export class Extension implements IConfigurationExtension {
                     'Translatable#Helptext_Admin_Tickets_QueueEdit_Icon.'
                 ),
                 new FormField(
-                    'Translatable#Parent Queue', QueueProperty.PARENT_ID, 'ticket-input-queue', false,
+                    'Translatable#Parent Queue', QueueProperty.PARENT_ID, 'object-reference-input', false,
                     'Translatable#Helptext_Admin_Tickets_QueueEdit_ParentQueue', [
-                        new FormFieldOption(FormFieldOptions.SHOW_INVALID, true)
+                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
+                        new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, true),
+                        new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                            new KIXObjectLoadingOptions(
+                                [
+                                    new FilterCriteria(
+                                        QueueProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.STRING,
+                                        FilterType.AND, null
+                                    )
+                                ],
+                                null, null,
+                                [QueueProperty.SUB_QUEUES, 'TicketStats', 'Tickets'],
+                                [QueueProperty.SUB_QUEUES]
+                            )
+                        )
                     ]
                 ),
                 new FormField(
@@ -69,7 +83,7 @@ export class Extension implements IConfigurationExtension {
                     'Translatable#Sender Address (Email)', QueueProperty.SYSTEM_ADDRESS_ID, 'object-reference-input',
                     true, 'Translatable#Helptext_Admin_Tickets_QueueEdit_SenderAddress.', [
                         new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.SYSTEM_ADDRESS),
-                        new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
+
                         new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                             new KIXObjectLoadingOptions(
                                 [
@@ -88,9 +102,10 @@ export class Extension implements IConfigurationExtension {
                     null, null, null, null, null, null, null, 250
                 ),
                 new FormField(
-                    'Translatable#Validity', KIXObjectProperty.VALID_ID, 'valid-input', true,
-                    'Translatable#Helptext_Admin_Tickets_QueueEdit_Validity',
-                    null, new FormFieldValue(1)
+                    'Translatable#Validity', KIXObjectProperty.VALID_ID,
+                    'object-reference-input', true, 'Translatable#Helptext_Admin_Tickets_QueueEdit_Validity', [
+                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
+                    ], new FormFieldValue(1)
                 )
             ]);
             const signatureGroup = new FormGroup('Translatable#Signature', [

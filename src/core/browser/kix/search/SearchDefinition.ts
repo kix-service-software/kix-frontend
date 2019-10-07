@@ -10,29 +10,29 @@
 import { SearchOperator } from "../../SearchOperator";
 import {
     KIXObjectType, InputFieldTypes, KIXObjectLoadingOptions,
-    FilterCriteria, FilterDataType, FilterType, TreeNode, KIXObject, DataType, CRUD
+    FilterCriteria, FilterDataType, FilterType, TreeNode, DataType, CRUD
 } from "../../../model";
 import { SearchResultCategory } from "./SearchResultCategory";
 import { LabelService } from "../../LabelService";
 import { IColumnConfiguration, DefaultColumnConfiguration } from "../../table";
 import { AuthenticationSocketClient } from "../../application/AuthenticationSocketClient";
 import { UIComponentPermission } from "../../../model/UIComponentPermission";
+import { ObjectPropertyValue } from "../../ObjectPropertyValue";
+import { IDynamicFormManager } from "../../form";
 
 export abstract class SearchDefinition {
 
+    public formManager: IDynamicFormManager;
+
     public constructor(public objectType: KIXObjectType) { }
 
-    public abstract getProperties(parameter?: Array<[string, any]>): Promise<Array<[string, string]>>;
+    public async getProperties(parameter?: Array<[string, any]>): Promise<Array<[string, string]>> {
+        return await this.formManager.getProperties();
+    }
 
-    public abstract getOperations(property: string, parameter?: Array<[string, any]>): Promise<SearchOperator[]>;
-
-    public abstract getInputFieldType(
-        property: string, parameter?: Array<[string, any]>
-    ): Promise<InputFieldTypes>;
-
-    public abstract getInputComponents(): Promise<Map<string, string>>;
-
-    public abstract getSearchResultCategories(): Promise<SearchResultCategory>;
+    public async getSearchResultCategories(): Promise<SearchResultCategory> {
+        return null;
+    }
 
     protected readPermissions: Map<string, boolean> = new Map();
 
@@ -49,16 +49,6 @@ export abstract class SearchDefinition {
         return [];
     }
 
-    public async getValueNodesForAutocomplete(
-        property: string, values: Array<string | number>, parameter: Array<[string, any]>
-    ): Promise<TreeNode[]> {
-        return [];
-    }
-
-    public async getTreeNodes(property: string, parameter: Array<[string, any]>): Promise<TreeNode[]> {
-        return [];
-    }
-
     public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
         return new KIXObjectLoadingOptions(criteria);
     }
@@ -68,11 +58,18 @@ export abstract class SearchDefinition {
     }
 
     public async prepareFormFilterCriteria(criteria: FilterCriteria[]): Promise<FilterCriteria[]> {
-        return criteria.filter((c) => c.value !== null && c.value !== undefined && c.value !== '');
+        return criteria.filter((c) => {
+            if (Array.isArray(c.value)) {
+                return c.value.length > 0;
+            } else {
+                return c.value !== null && c.value !== undefined && c.value !== '';
+            }
+        });
     }
 
     public prepareSearchFormValue(property: string, value: any): FilterCriteria[] {
-        return [new FilterCriteria(property, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, value)];
+        const operator = Array.isArray(value) ? SearchOperator.IN : SearchOperator.EQUALS;
+        return [new FilterCriteria(property, operator, FilterDataType.STRING, FilterType.AND, value)];
     }
 
     public async getTableColumnConfiguration(searchParameter: Array<[string, any]>): Promise<IColumnConfiguration[]> {
@@ -104,7 +101,7 @@ export abstract class SearchDefinition {
         return this.readPermissions.get(resource);
     }
 
-    protected getStringOperators(): SearchOperator[] {
+    public static getStringOperators(): SearchOperator[] {
         return [
             SearchOperator.CONTAINS,
             SearchOperator.STARTS_WITH,
@@ -114,7 +111,7 @@ export abstract class SearchDefinition {
         ];
     }
 
-    protected getDateTimeOperators(): SearchOperator[] {
+    public static getDateTimeOperators(): SearchOperator[] {
         return [
             SearchOperator.LESS_THAN,
             SearchOperator.GREATER_THAN,
@@ -122,5 +119,31 @@ export abstract class SearchDefinition {
             SearchOperator.GREATER_THAN_OR_EQUAL,
             SearchOperator.BETWEEN
         ];
+    }
+
+    public getFilterCriteria(searchValue: ObjectPropertyValue): FilterCriteria {
+        const property = searchValue.property;
+        const operator = searchValue.operator;
+        const value = searchValue.value;
+        const filterDataType = FilterDataType.STRING;
+        // if (this.isDate) {
+        //     filterDataType = FilterDataType.DATE;
+        //     const date = new Date(this.date);
+        //     value = isNaN(date.getTime()) ? null : DateTimeUtil.getKIXDateTimeString(date);
+        //     if (this.isBetweenDate && value) {
+        //         const endDate = new Date(this.betweenEndDate);
+        //         value = isNaN(endDate.getTime()) ? null : [value, DateTimeUtil.getKIXDateTimeString(endDate)];
+        //     }
+        // } else if (this.isDateTime) {
+        //     filterDataType = FilterDataType.DATETIME;
+        //     const date = new Date(`${this.date} ${this.time}`);
+        //     value = isNaN(date.getTime()) ? null : DateTimeUtil.getKIXDateTimeString(date);
+        //     if (this.isBetweenDate && value) {
+        //         const endDate = new Date(`${this.betweenEndDate} ${this.betweenEndTime}`);
+        //         value = isNaN(endDate.getTime()) ? null : [value, DateTimeUtil.getKIXDateTimeString(endDate)];
+        //     }
+        // }
+
+        return new FilterCriteria(property, operator as SearchOperator, filterDataType, FilterType.AND, value);
     }
 }

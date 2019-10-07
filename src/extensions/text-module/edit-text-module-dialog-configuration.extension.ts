@@ -10,7 +10,7 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
     ConfiguredWidget, FormField, FormFieldValue, Form, KIXObjectType, FormContext, ContextConfiguration,
-    KIXObjectProperty, TextModuleProperty
+    KIXObjectProperty, TextModuleProperty, ObjectReferenceOptions, FormFieldOption
 } from '../../core/model';
 import { ConfigurationService } from '../../core/services';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
@@ -59,9 +59,10 @@ export class Extension implements IConfigurationExtension {
                     null, null, null, null, 250
                 ),
                 new FormField(
-                    'Translatable#Validity', KIXObjectProperty.VALID_ID, 'valid-input', true,
-                    'Translatable#Helptext_Admin_TextModuleEdit_Validity',
-                    null, new FormFieldValue(1)
+                    'Translatable#Validity', KIXObjectProperty.VALID_ID,
+                    'object-reference-input', true, 'Translatable#Helptext_Admin_TextModuleEdit_Validity', [
+                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
+                    ], new FormFieldValue(1)
                 )
             ]);
 

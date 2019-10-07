@@ -8,247 +8,147 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { TreeNode, AutoCompleteConfiguration, TreeNavigationUtil } from '../../../../../core/model';
-import { FormInputAction } from '../../../../../core/browser';
+import { TreeNode, TreeHandler, TreeService } from '../../../../../core/model';
 import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 import { ComponentInput } from './ComponentInput';
 
 class Component {
 
     private state: ComponentState;
-
     private keepExpanded: boolean = false;
-    private autocompleteTimeout: any;
-    private freeText: boolean = false;
+    private treeHandler: TreeHandler;
+    private removeTreeHandler: boolean = false;
+
+    private toggleTimeout: any;
+
+    public getTreeHandler(): TreeHandler {
+        return this.treeHandler;
+    }
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
     }
 
     public onInput(input: ComponentInput): void {
+        this.state.treeId = typeof input.treeId !== 'undefined' ? input.treeId : this.state.treeId;
+        this.state.loadNodes = input.loadNodes;
         this.state.disabled = typeof input.disabled !== 'undefined' ? input.disabled : false;
-        this.state.actions = typeof input.actions !== 'undefined' ? input.actions : [];
         this.state.readonly = typeof input.readonly !== 'undefined' ? input.readonly : false;
         this.state.invalid = typeof input.invalid !== 'undefined' ? input.invalid : false;
-        this.state.asAutocomplete = typeof input.autocomplete !== 'undefined' ? input.autocomplete : false;
-        this.state.asMultiselect = typeof input.multiselect !== 'undefined' ? input.multiselect : false;
-        this.freeText = typeof input.freeText !== 'undefined' ? input.freeText : false;
+        this.state.multiselect = typeof input.multiselect !== 'undefined' ? input.multiselect : false;
 
-        this.state.nodes = typeof input.nodes !== 'undefined' ? input.nodes : this.state.nodes;
-
-        this.state.selectedNodes = typeof input.selectedNodes !== 'undefined' && input.selectedNodes !== null ?
-            input.selectedNodes : this.state.selectedNodes;
-        this.state.selectedNodes = this.state.selectedNodes.filter((n) => n && typeof n.id !== 'undefined');
-
-        if (!this.state.asMultiselect && this.state.selectedNodes.length > 1) {
-            this.state.selectedNodes.splice(1);
-            (this as any).emit('nodesChanged', this.state.selectedNodes);
-        }
-
-        if (this.state.asAutocomplete) {
-            this.state.autoCompleteConfiguration = input.autoCompleteConfiguration || new AutoCompleteConfiguration();
-            this.state.searchCallback = input.searchCallback;
-        }
-        this.state.removeNode = typeof input.removeNode !== 'undefined' ? input.removeNode : true;
+        const canRemove = typeof input.canRemoveNode !== 'undefined' ? input.canRemoveNode : true;
+        this.state.removeNodes = canRemove && !this.state.readonly;
 
         this.update(input);
-
-        this.setCheckState();
     }
 
     private async update(input: any): Promise<void> {
         this.state.placeholder = await TranslationService.translate(input.placeholder);
-        this.state.autoCompletePlaceholder = this.state.asAutocomplete
-            ? await TranslationService.translate('Translatable#Enter search value')
-            : await TranslationService.translate('Translatable#Filter in list');
     }
 
     public async onMount(): Promise<void> {
-        this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Submit",
-            ...this.state.nodes.map((n) => n.tooltip)
-        ]);
+        const containerElement = (this as any).getEl(this.state.listId);
 
-        this.state.containerElement = (this as any).getEl();
+        this.treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
+        if (this.treeHandler) {
+            this.treeHandler.setKeyListenerElement(containerElement);
+        } else {
+            this.treeHandler = new TreeHandler([], containerElement, null, this.state.multiselect);
+            TreeService.getInstance().registerTreeHandler(this.state.treeId, this.treeHandler);
+            this.removeTreeHandler = true;
+        }
 
-        document.addEventListener('click', (event) => {
-            if (this.state.expanded) {
-                if (this.keepExpanded) {
-                    this.keepExpanded = false;
-                } else {
-                    this.toggleList();
-                }
+        document.addEventListener('click', this.checkExpandState.bind(this));
+
+        if (this.state.loadNodes) {
+            const nodes = await this.state.loadNodes();
+            this.treeHandler.setTree(nodes);
+            this.treeHandler.active = false;
+        }
+
+        this.treeHandler.registerFinishListener(this.state.treeId, () => this.toggleList(true));
+
+        this.treeHandler.registerSelectionListener(this.state.treeId + '-selection', (nodes: TreeNode[]) => {
+            if (!this.state.multiselect && nodes.length > 0) {
+                this.toggleList(true);
             }
+            (this as any).emit('nodesChanged', nodes);
         });
 
-        await this.prepareAutocompleteNotFoundText();
-        this.setCheckState();
+        this.treeHandler.registerListener(this.state.treeId + '-listener', (nodes: TreeNode[]) => {
+            this.setDropdownStyle();
+        });
+
+        this.state.prepared = true;
+    }
+
+    public focus(event: any): void {
+        if (event) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
+
+        if (!this.state.expanded) {
+            this.toggleList(false);
+        }
     }
 
     public onDestroy(): void {
-        document.removeEventListener('click', (event) => {
-            if (this.state.expanded) {
-                if (this.keepExpanded) {
-                    this.keepExpanded = false;
-                } else {
-                    this.toggleList();
-                }
+        document.removeEventListener('click', this.checkExpandState.bind(this));
+        if (this.removeTreeHandler) {
+            TreeService.getInstance().removeTreeHandler(this.state.treeId);
+        }
+    }
+
+    private checkExpandState(): void {
+        if (this.state.expanded) {
+            if (this.keepExpanded) {
+                this.keepExpanded = false;
+            } else {
+                this.toggleList();
             }
-        });
+        }
     }
 
     public setKeepExpanded(): void {
         this.keepExpanded = true;
     }
 
-    private toggleList(close: boolean = true): void {
-        if (!this.state.disabled) {
-            if (this.state.expanded && close) {
-                this.state.expanded = false;
-                this.state.filterValue = null;
-                this.state.autocompleteSearchValue = null;
-                if (this.state.asAutocomplete) {
-                    this.state.nodes = [];
-                }
-                window.clearTimeout(this.autocompleteTimeout);
-            } else if (!this.state.readonly) {
-                this.state.expanded = true;
-                setTimeout(() => {
-                    this.setDropdownStyle();
-                    this.focusInput();
-                }, 100);
-            }
+    public submitClicked(): void {
+        this.toggleList(true);
+    }
+
+    private toggleList(close: boolean = true, event?: any): void {
+        if (event) {
+            event.stopPropagation();
+            event.preventDefault();
         }
-    }
 
-    public listToggleButtonClicked(event: Event): void {
-        this.toggleList();
-    }
+        if (!this.toggleTimeout) {
+            this.toggleTimeout = setTimeout(() => {
+                if (!this.state.disabled) {
+                    if (this.state.expanded && close) {
+                        this.state.expanded = false;
+                        this.treeHandler.active = false;
 
-    public nodeToggled(): void {
-        this.focusInput();
-    }
+                        const hiddenInput = (this as any).getEl("hidden-form-list-input");
+                        if (hiddenInput) {
+                            hiddenInput.focus();
+                        }
 
-    private focusInput(): void {
-        const input = (this as any).getEl('form-list-input-' + this.state.listId);
-        if (input) {
-            input.focus();
-        }
-    }
-
-    public keyDown(event: any): void {
-        if (this.state.expanded) {
-            if (event.key === 'Escape' || event.key === 'Tab') {
-                this.toggleList();
-            } else if (this.navigationKeyPressed(event, false)) {
-                this.toggleList(false);
-            } else if (event.key === 'Enter' && this.freeText) {
-                const navigationNode = TreeNavigationUtil.findNavigationNode(this.state.nodes);
-                if (!navigationNode || !navigationNode.visible) {
-                    const value = event.target.value;
-                    if (value && value !== '') {
-                        const freeTextNode = new TreeNode(value, value);
-                        this.nodeClicked(freeTextNode, false);
+                    } else if (!this.state.readonly) {
+                        this.state.expanded = true;
+                        this.treeHandler.active = true;
+                        setTimeout(() => {
+                            this.setDropdownStyle();
+                        }, 100);
                     }
+                    this.toggleTimeout = null;
                 }
-            }
+            }, 75);
+
         }
-    }
-
-    public filterValueChanged(event: any): void {
-        if (this.state.asAutocomplete && typeof event.target.value !== 'undefined' && this.state.searchCallback) {
-            this.state.autocompleteSearchValue = event.target.value;
-            this.startSearch();
-        } else {
-            this.state.filterValue = event.target.value;
-            setTimeout(() => {
-                this.setDropdownStyle();
-                this.setCheckState();
-            }, 50);
-        }
-    }
-
-    private navigationKeyPressed(event: any, controlKeys: boolean = true): boolean {
-        return event.key === 'ArrowLeft'
-            || event.key === 'ArrowRight'
-            || event.key === 'ArrowUp'
-            || event.key === 'ArrowDown'
-            || (controlKeys && (event.key === 'Tab' || event.key === 'Escape' || event.key === 'Enter'));
-    }
-
-    public nodeClicked(node: TreeNode, removeNode: boolean = true): void {
-        if (this.state.asMultiselect) {
-            this.handleMultiselect(node, removeNode);
-        } else {
-            this.handleSingleselect(node);
-        }
-
-        setTimeout(() => {
-            this.setDropdownStyle();
-            this.focusInput();
-            this.setCheckState();
-        }, 50);
-
-        (this as any).emit('nodesChanged', this.state.selectedNodes);
-    }
-
-    private handleMultiselect(node: TreeNode, removeNode: boolean): void {
-        const nodeIndex = this.state.selectedNodes.findIndex((n) => n.id === node.id);
-        if (nodeIndex !== -1) {
-            if (removeNode) {
-                this.state.selectedNodes.splice(nodeIndex, 1);
-            }
-        } else {
-            this.state.selectedNodes.push(node);
-        }
-        (this as any).setStateDirty('selectedNodes');
-    }
-
-    private handleSingleselect(node: TreeNode): void {
-        this.state.selectedNodes = [node];
-        this.toggleList();
-    }
-
-    public removeSelectedItem(node: TreeNode, removeNode: boolean): void {
-        const nodeIndex = this.state.selectedNodes.findIndex((n) => n.id === node.id);
-        if (nodeIndex !== -1) {
-            this.state.selectedNodes.splice(nodeIndex, 1);
-        }
-        (this as any).setStateDirty('selectedNodes');
-        (this as any).emit('nodesChanged', this.state.selectedNodes);
-    }
-
-    private startSearch(): void {
-        if (this.autocompleteTimeout && !this.state.isLoading) {
-            window.clearTimeout(this.autocompleteTimeout);
-            this.autocompleteTimeout = null;
-        }
-        const hasMinLength =
-            this.state.autocompleteSearchValue.length >= this.state.autoCompleteConfiguration.charCount;
-        if (hasMinLength && !this.state.isLoading) {
-            this.autocompleteTimeout = setTimeout(this.loadData.bind(this), this.state.autoCompleteConfiguration.delay);
-        } else {
-            this.state.nodes = [];
-        }
-    }
-
-    private async loadData(): Promise<void> {
-        this.state.isLoading = true;
-        this.state.nodes = await this.state.searchCallback(
-            this.state.autoCompleteConfiguration.limit, this.state.autocompleteSearchValue
-        );
-        this.state.isLoading = false;
-        this.autocompleteTimeout = null;
-
-        if (this.state.nodes.length === 0) {
-            this.prepareAutocompleteNotFoundText();
-        }
-
-        setTimeout(() => {
-            this.setDropdownStyle();
-            this.focusInput();
-            this.setCheckState();
-        }, 50);
     }
 
     private setDropdownStyle(): void {
@@ -268,7 +168,7 @@ class Component {
                 + formListInputContainer.getBoundingClientRect().height
                 + valueList.getBoundingClientRect().height;
 
-            const containerEnd = container && container.getBoundingClientRect()
+            const containerEnd = container && container.getBoundingClientRect
                 ? container.getBoundingClientRect().top + container.getBoundingClientRect().height
                 : dropdownListEnd;
 
@@ -307,107 +207,6 @@ class Component {
         }
     }
 
-    public async prepareAutocompleteNotFoundText(): Promise<void> {
-        if (this.state.autoCompleteConfiguration) {
-            const objectName = await TranslationService.translate(
-                this.state.autoCompleteConfiguration.noResultsObjectName || 'Objects'
-            );
-            const message = await TranslationService.translate(
-                'Translatable#No {0} found (add at least {1} characters).',
-                [objectName, this.state.autoCompleteConfiguration.charCount]
-            );
-
-            this.state.autocompleteNotFoundText = message;
-        }
-    }
-
-    public clear(): void {
-        this.state.selectedNodes = [];
-    }
-
-    public selectAll(event: any): void {
-        event.stopPropagation();
-        event.preventDefault();
-
-        const checkBox = (this as any).getEl('selectAllCheckbox');
-        const tree = (this as any).getComponent(this.state.treeId);
-        if (checkBox && tree) {
-            const nodes = tree.getFilteredNodes() || [];
-            if (checkBox.checked) {
-                this.selectNodes(nodes);
-            } else {
-                this.state.selectedNodes = this.state.selectedNodes.filter((sn) => !this.isNodeAviable(sn, nodes));
-            }
-            setTimeout(() => {
-                this.setDropdownStyle();
-                this.focusInput();
-                this.setCheckState();
-            }, 50);
-            (this as any).emit('nodesChanged', this.state.selectedNodes);
-        }
-    }
-
-    private selectNodes(nodes: TreeNode[]): void {
-        nodes.forEach((n) => {
-            if (!this.state.selectedNodes.some((sn) => sn.id === n.id)) {
-                this.state.selectedNodes.push(n);
-            }
-
-            if (n.children) {
-                this.selectNodes(n.children);
-            }
-        });
-    }
-
-    private isNodeAviable(node: TreeNode, nodes: TreeNode[]): boolean {
-        for (const n of nodes) {
-            if (n.id === node.id) {
-                return true;
-            }
-
-            if (n.children) {
-                const isAvailable = this.isNodeAviable(node, n.children);
-                if (isAvailable) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private setCheckState(): void {
-        const checkBox = (this as any).getEl('selectAllCheckbox');
-        const tree = (this as any).getComponent(this.state.treeId);
-        if (checkBox && tree) {
-            const nodes = tree.getFilteredNodes() || [];
-            const checkNodes = this.state.selectedNodes.filter(
-                (sn) => nodes.some((n) => n.id === sn.id)
-            );
-            let checked = true;
-            let indeterminate = false;
-            if (checkNodes.length === 0) {
-                checked = false;
-            } else if (checkNodes.length < nodes.length) {
-                checked = false;
-                indeterminate = true;
-            }
-            setTimeout(() => {
-                checkBox.checked = checked;
-                checkBox.indeterminate = indeterminate;
-            }, 10);
-        }
-    }
-
-    public submit(): void {
-        event.stopPropagation();
-        event.preventDefault();
-        this.toggleList();
-    }
-
-    public actionClicked(action: FormInputAction): void {
-        action.active = !action.active;
-        action.callback(action);
-    }
 }
 
 module.exports = Component;

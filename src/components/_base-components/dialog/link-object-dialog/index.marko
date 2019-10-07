@@ -10,9 +10,6 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     <if(state.loading)>
         <loading-spinner/>
     </if>
-    <else-if(!state.linkableObjectNodes || !state.linkableObjectNodes.length)>
-        <translation-string pattern="Translatable#No link types available."/>
-    </else-if>
     <else>
         <div.linkable-objects-selection title=state.translations["Translatable#Link to"]>
             <div.linkable-objects-selection-label>
@@ -20,10 +17,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <translation-string pattern="Translatable#Link to"/>
                 </span>
             </div>
-            <form-list
-                nodes=state.linkableObjectNodes
-                on-nodesChanged("linkableObjectChanged")
-                selectedNodes=[state.currentLinkableObjectNode]/>
+            <form-list loadNodes=state.loadNodes on-nodesChanged("linkableObjectChanged")/>
         </div>
         <div.linkable-objects-form on-keydown("keyPressed")>
             <widget
@@ -39,16 +33,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </widget>
         </div>
         <div.linkable-objects-result>
-            <if(state.currentLinkableObjectNode)>
-                <div.result-table-head>
-                    <span>
-                        <translation-string pattern="Translatable#Hit List ({0})" placeholders=[state.resultCount]/>
-                    </span>
-                    <filter filterCount=state.filterCount on-filter("filter")/>
-                </div>
-                <if(state.table)>
-                    <standard-table-NEW table=state.table key=state.tableId/>
-                </if>
+            <div.result-table-head>
+                <span>
+                    <translation-string pattern="Translatable#Hit List ({0})" placeholders=[state.resultCount]/>
+                </span>
+                <filter filterCount=state.filterCount on-filter("filter")/>
+            </div>
+            <if(state.table)>
+                <standard-table-NEW table=state.table key=state.tableId/>
             </if>
         </div>
         <div.linkable-objects-submit>
@@ -58,11 +50,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         <translation-string pattern="Translatable#Link Type"/>
                     </span>
                 </div>
-                <form-list
-                    nodes=state.linkTypeNodes
-                    on-nodesChanged("linkTypeChanged")
-                    selectedNodes=[state.currentLinkTypeNode]
-                    placeholder="Translatable#Link Type"/>
+                <form-list treeId=state.linkTypeTreeId on-nodesChanged("linkTypeChanged") placeholder="Translatable#Link Type"/>
             </div>
             <button.submit-button disabled=!state.canSubmit on-click("submitClicked")>
                 <span.kix-icon-check/>

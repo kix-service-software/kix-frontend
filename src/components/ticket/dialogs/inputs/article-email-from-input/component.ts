@@ -10,7 +10,7 @@
 import { ComponentState } from "./ComponentState";
 import {
     FormInputComponent, TreeNode, TicketProperty, FormField,
-    FormFieldValue, Queue, KIXObjectType, ContextType, ContextMode, Ticket, SystemAddress
+    FormFieldValue, Queue, KIXObjectType, ContextType, ContextMode, Ticket, SystemAddress, TreeHandler
 } from "../../../../../core/model";
 import { FormService, KIXObjectService, ContextService } from "../../../../../core/browser";
 import { TicketDetailsContext } from "../../../../../core/browser/ticket";
@@ -118,7 +118,7 @@ class Component extends FormInputComponent<number, ComponentState> {
                 [`<${userName}> <${queueMail}>`, `${userName}`]
             ];
 
-            const nodes = [];
+            const nodes: TreeNode[] = [];
             labels.forEach((l) => nodes.push(
                 new TreeNode(
                     l[0], l[1], null, null, null, null, null, null, null,
@@ -126,14 +126,22 @@ class Component extends FormInputComponent<number, ComponentState> {
                 )
             ));
 
-            this.state.nodes = nodes;
-            this.fromChanged([nodes[0]]);
+            const formList = (this as any).getComponent("article-email-from-input");
+            if (formList) {
+                const treeHandler: TreeHandler = formList.getTreeHandler();
+                if (treeHandler) {
+                    treeHandler.setTree(nodes);
+                    treeHandler.setSelection([nodes[0]], true);
+                }
+            }
+
+            this.nodesChanged([nodes[0]]);
         }
     }
 
-    public fromChanged(nodes: TreeNode[]): void {
-        this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
-        super.provideValue(this.state.currentNode ? this.state.currentNode.id : null);
+    public nodesChanged(nodes: TreeNode[]): void {
+        const currentNode = nodes && nodes.length ? nodes[0] : null;
+        super.provideValue(currentNode ? currentNode.id : null);
     }
 
     public async focusLost(event: any): Promise<void> {

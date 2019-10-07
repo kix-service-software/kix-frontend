@@ -31,6 +31,8 @@ export class CMDBService extends KIXObjectService {
 
     protected objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM;
 
+    protected enableSearchQuery: boolean = false;
+
     private static INSTANCE: CMDBService;
 
     public static getInstance(): CMDBService {

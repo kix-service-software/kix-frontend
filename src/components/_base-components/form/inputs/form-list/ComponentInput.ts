@@ -20,20 +20,20 @@ export class ComponentInput {
 
     public invalid: boolean;
 
-    public autocomplete: boolean;
-
-    public multiselect: boolean;
-
     public freeText: boolean;
 
-    public nodes: TreeNode[];
-
-    public selectedNodes: TreeNode[];
+    public multiselect: boolean;
 
     public autoCompleteConfiguration: AutoCompleteConfiguration;
 
     public searchCallback: (limit: number, searchValue: string) => Promise<TreeNode[]>;
 
     public removeNode: boolean;
+
+    public loadNodes: () => Promise<TreeNode[]>;
+
+    public treeId: string;
+
+    public canRemoveNode: boolean;
 
 }

@@ -11,7 +11,8 @@ import { IConfigurationExtension } from '../../core/extensions';
 import { NewTicketPriorityDialogContext } from '../../core/browser/ticket';
 import {
     ConfiguredWidget, FormField, KIXObjectType, Form,
-    FormContext, FormFieldValue, TicketPriorityProperty, ContextConfiguration, KIXObjectProperty
+    FormContext, FormFieldValue, TicketPriorityProperty, ContextConfiguration,
+    KIXObjectProperty, FormFieldOption, ObjectReferenceOptions
 } from '../../core/model';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../core/services';
@@ -50,11 +51,14 @@ export class Extension implements IConfigurationExtension {
                 'Translatable#Helptext_Admin_Tickets_PriorityCreate_Comment',
                 null, null, null, null, null, null, null, 250
             ));
-            fields.push(new FormField(
-                'Translatable#Validity', KIXObjectProperty.VALID_ID, 'valid-input', true,
-                'Translatable#Helptext_Admin_Tickets_PriorityCreate_Valid',
-                null, new FormFieldValue(1)
-            ));
+            fields.push(
+                new FormField(
+                    'Translatable#Validity', KIXObjectProperty.VALID_ID,
+                    'object-reference-input', true, 'Translatable#Helptext_Admin_Tickets_PriorityCreate_Valid', [
+                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
+                    ], new FormFieldValue(1)
+                )
+            );
 
             const group = new FormGroup('Translatable#Priority Data', fields);
 

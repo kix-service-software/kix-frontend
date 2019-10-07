@@ -8,15 +8,16 @@
  */
 
 import { TreeNode } from "../../../../core/model";
+import { IdService } from "../../../../core/browser";
 
 export class ComponentState {
 
     public constructor(
-        public hasListFilter: boolean = false,
-        public nodes: TreeNode[] = [],
-        public selectedNodes: TreeNode[] = [],
+        public hasListFilter: boolean = true,
         public placeholder: string = '',
-        public filterText: string = ''
+        public filterText: string = '',
+        public treeId: string = IdService.generateDateBasedId('table-column-filter-'),
+        public prepared: boolean = false
     ) { }
 
 }

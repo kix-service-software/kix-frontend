@@ -6,12 +6,11 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <form-list
-    nodes=state.nodes
+    treeId=state.treeId
+    loadNodes=state.loadNodes
     placeholder=state.placeholder
     on-focusLost("focusLost")
     on-nodesChanged("valueChanged")
-    selectedNodes=[state.currentNode]
     invalid=state.invalid
     readonly=state.field.readonly/>

@@ -103,7 +103,7 @@ export class FAQService extends KIXObjectService {
                 const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(
                     KIXObjectType.FAQ_CATEGORY, null, loadingOptions
                 );
-                nodes = this.prepareCategoryTree(
+                nodes = await this.prepareObjectTree(
                     faqCategories, showInvalid,
                     filterIds ? filterIds.map((fid) => Number(fid)) : null
                 );
@@ -138,10 +138,10 @@ export class FAQService extends KIXObjectService {
         return nodes;
     }
 
-    private prepareCategoryTree(
+    public async prepareObjectTree(
         faqCategories: FAQCategory[], showInvalid: boolean = false, filterIds?: number[]
-    ): TreeNode[] {
-        let nodes: TreeNode[] = [];
+    ): Promise<TreeNode[]> {
+        const nodes: TreeNode[] = [];
         if (faqCategories && !!faqCategories.length) {
             if (!showInvalid) {
                 faqCategories = faqCategories.filter((c) => c.ValidID === 1);
@@ -150,16 +150,21 @@ export class FAQService extends KIXObjectService {
                 faqCategories = faqCategories.filter((c) => !filterIds.some((fid) => fid === c.ID));
             }
 
-            nodes = faqCategories.map((category: FAQCategory) => {
+            for (const category of faqCategories) {
+                const subTree = await this.prepareObjectTree(category.SubCategories, showInvalid, filterIds);
+
                 const treeNode = new TreeNode(
                     category.ID, category.Name,
                     new ObjectIcon(KIXObjectType.FAQ_CATEGORY, category.ID),
                     null,
-                    this.prepareCategoryTree(category.SubCategories, showInvalid, filterIds),
-                    null, null, null, null, null, null, null, category.ValidID === 1 ? true : false
+                    subTree,
+                    null, null, null, null, null, null, null,
+                    category.ValidID === 1
                 );
-                return treeNode;
-            });
+
+                nodes.push(treeNode);
+
+            }
         }
         return nodes;
     }

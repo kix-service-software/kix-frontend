@@ -8,13 +8,20 @@
  */
 
 import {
-    FormFieldOption, ContextConfiguration, FormField, FormFieldValue, Form, KIXObjectType, FormContext, FormFieldOptions
+    FormFieldOption, ContextConfiguration, FormField, FormFieldValue,
+    Form, KIXObjectType, FormContext, FormFieldOptions, KIXObjectProperty,
+    ObjectReferenceOptions,
+    KIXObjectLoadingOptions,
+    FilterCriteria,
+    FilterDataType,
+    FilterType
 } from '../../core/model';
 import { FAQCategoryProperty } from '../../core/model/kix/faq';
 import { IConfigurationExtension } from '../../core/extensions';
 import { ConfigurationService } from '../../core/services';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
 import { NewFAQCategoryDialogContext } from '../../core/browser/faq/admin';
+import { SearchOperator } from '../../core/browser';
 
 export class Extension implements IConfigurationExtension {
 
@@ -47,9 +54,23 @@ export class Extension implements IConfigurationExtension {
             );
             fields.push(
                 new FormField(
-                    'Translatable#Parent Category', FAQCategoryProperty.PARENT_ID, 'faq-category-input', false,
+                    'Translatable#Parent Category', FAQCategoryProperty.PARENT_ID, 'object-reference-input', false,
                     'Translatable#Helptext_Admin_FAQCategoryCreate_ParentCategory', [
-                        new FormFieldOption(FormFieldOptions.SHOW_INVALID, true)
+                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.FAQ_CATEGORY),
+                        new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, true),
+                        new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                            new KIXObjectLoadingOptions(
+                                [
+                                    new FilterCriteria(
+                                        FAQCategoryProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                        FilterType.AND, null
+                                    )
+                                ],
+                                null, null,
+                                [FAQCategoryProperty.SUB_CATEGORIES],
+                                [FAQCategoryProperty.SUB_CATEGORIES]
+                            )
+                        )
                     ]
                 )
             );
@@ -62,8 +83,10 @@ export class Extension implements IConfigurationExtension {
             );
             fields.push(
                 new FormField(
-                    'Translatable#Validity', FAQCategoryProperty.VALID_ID, 'valid-input', true,
-                    'Translatable#Helptext_Admin_FAQCategoryCreate_Validity', null, new FormFieldValue(1)
+                    'Translatable#Validity', KIXObjectProperty.VALID_ID,
+                    'object-reference-input', true, 'Translatable#Helptext_Admin_FAQCategoryCreate_Validity', [
+                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
+                    ], new FormFieldValue(1)
                 )
             );
 

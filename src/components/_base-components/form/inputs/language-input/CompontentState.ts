@@ -8,13 +8,14 @@
  */
 
 import { FormInputComponentState, TreeNode } from '../../../../../core/model';
+import { IdService } from '../../../../../core/browser';
 
 export class CompontentState extends FormInputComponentState<string> {
 
     public constructor(
-        public nodes: TreeNode[] = [],
-        public currentNode: TreeNode = null,
-        public placeholder: string = ''
+        public placeholder: string = '',
+        public treeId: string = IdService.generateDateBasedId('language-input-'),
+        public loadNodes: () => Promise<TreeNode[]> = null
     ) {
         super();
     }

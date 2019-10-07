@@ -15,6 +15,8 @@ export class PermissionManager extends AbstractDynamicFormManager {
 
     public objectType: KIXObjectType = KIXObjectType.PERMISSION_TYPE;
 
+    public uniqueProperties: boolean = false;
+
     public async getInputType(property: string): Promise<InputFieldTypes | string> {
         return 'SPECIFIC';
     }
@@ -33,10 +35,6 @@ export class PermissionManager extends AbstractDynamicFormManager {
 
     public async getPropertiesPlaceholder(): Promise<string> {
         return 'Translatable#Type';
-    }
-
-    public async propertiesAreUnique(): Promise<boolean> {
-        return false;
     }
 
     public async getOperationsPlaceholder(): Promise<string> {

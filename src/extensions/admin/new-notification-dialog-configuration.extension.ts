@@ -59,9 +59,10 @@ export class Extension implements IConfigurationExtension {
                     null, null, null, null, 250
                 ),
                 new FormField(
-                    'Translatable#Validity', KIXObjectProperty.VALID_ID, 'valid-input', true,
-                    'Translatable#Helptext_Admin_NotificationCreate_Validity',
-                    null, new FormFieldValue(1)
+                    'Translatable#Validity', KIXObjectProperty.VALID_ID,
+                    'object-reference-input', true, 'Translatable#Helptext_Admin_NotificationCreate_Validity', [
+                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
+                    ], new FormFieldValue(1)
                 )
             ]);
             const eventGroup = new FormGroup('Translatable#Events', [
@@ -110,7 +111,7 @@ export class Extension implements IConfigurationExtension {
                     'Translatable#Send to these agents', NotificationProperty.DATA_RECIPIENT_AGENTS,
                     'object-reference-input', false, 'Translatable#Helptext_Admin_NotificationCreate_SendToAgents', [
                         new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
-                        new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
+
                         new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                             new KIXObjectLoadingOptions([
                                 new FilterCriteria(
@@ -127,7 +128,7 @@ export class Extension implements IConfigurationExtension {
                     'object-reference-input', false,
                     'Translatable#Helptext_Admin_NotificationCreate_SendToRoleMembers', [
                         new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.ROLE),
-                        new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
+
                         new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                             new KIXObjectLoadingOptions([
                                 new FilterCriteria(

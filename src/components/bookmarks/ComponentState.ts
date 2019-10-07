@@ -12,8 +12,9 @@ import { TreeNode } from "../../core/model";
 export class ComponentState {
 
     public constructor(
-        public bookmarks: TreeNode[] = [],
-        public placeholder: string = ''
+        public placeholder: string = '',
+        public prepared: boolean = false,
+        public treeId: string = 'header-bookmarks-dropdown'
     ) { }
 
 }

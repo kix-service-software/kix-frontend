@@ -10,7 +10,7 @@
 import { ComponentState } from "./ComponentState";
 import {
     TicketProperty, FormFieldValue, FormInputComponent, FormField,
-    KIXObjectType, Organisation, TreeNode, Contact
+    KIXObjectType, Organisation, TreeNode, Contact, MailFilterMatch, TreeHandler
 } from "../../../../../core/model";
 import { FormService } from "../../../../../core/browser/form";
 import { IdService, KIXObjectService, LabelService } from "../../../../../core/browser";
@@ -23,6 +23,7 @@ class Component extends FormInputComponent<number, ComponentState> {
 
     public onCreate(): void {
         this.state = new ComponentState();
+        this.state.loadNodes = this.setCurrentNode.bind(this);
     }
 
     public onInput(input: any): void {
@@ -51,15 +52,14 @@ class Component extends FormInputComponent<number, ComponentState> {
             if (value.value) {
                 this.setOrganisationsByContact(value);
             } else {
-                this.state.currentNode = null;
                 this.state.hasContact = false;
-                this.state.nodes = [];
                 super.provideValue(null);
             }
         }
     }
 
-    public async setCurrentNode(): Promise<void> {
+    public async setCurrentNode(): Promise<TreeNode[]> {
+        let nodes = [];
         if (this.state.defaultValue) {
             const organisationId = this.state.defaultValue.value;
             if (organisationId) {
@@ -73,22 +73,21 @@ class Component extends FormInputComponent<number, ComponentState> {
 
                         const displayValue = await LabelService.getInstance().getText(organisation);
 
-                        this.state.currentNode = new TreeNode(organisation.ID, displayValue, 'kix-icon-man-bubble');
-                        this.state.nodes = [this.state.currentNode];
+                        const currentNode = new TreeNode(organisation.ID, displayValue, 'kix-icon-man-bubble');
+                        nodes = [currentNode];
                         super.provideValue(organisation.ID);
                     }
                 } else {
-                    this.state.currentNode = new TreeNode(
+                    const currentNode = new TreeNode(
                         organisationId, organisationId.toString(), 'kix-icon-man-bubble'
                     );
 
-                    this.state.nodes = [this.state.currentNode];
+                    nodes = [currentNode];
                     super.provideValue(organisationId);
                 }
-            } else {
-                this.state.currentNode = null;
             }
         }
+        return nodes;
     }
 
     public async onDestroy(): Promise<void> {
@@ -96,13 +95,9 @@ class Component extends FormInputComponent<number, ComponentState> {
         FormService.getInstance().removeFormInstanceListener(this.state.formId, this.formListenerId);
     }
 
-    private organisationChanged(nodes: TreeNode[]): void {
-        this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
-        super.provideValue(this.state.currentNode ? this.state.currentNode.id : null);
-    }
-
-    public async focusLost(event: any): Promise<void> {
-        await super.focusLost();
+    public nodesChanged(nodes: TreeNode[]): void {
+        const currentNode = nodes && nodes.length ? nodes[0] : null;
+        super.provideValue(currentNode ? currentNode.id : null);
     }
 
     private async setOrganisationsByContact(contactValue: FormFieldValue): Promise<void> {
@@ -114,14 +109,22 @@ class Component extends FormInputComponent<number, ComponentState> {
                 await this.loadOrganisations(contact.OrganisationIDs);
             }
         } else {
-            this.state.currentNode = new TreeNode(contactValue.value, contactValue.value, 'kix-icon-man-house');
-            super.provideValue(this.state.currentNode ? this.state.currentNode.id : null);
+            const currentNode = new TreeNode(contactValue.value, contactValue.value, 'kix-icon-man-house');
+
+            const formList = (this as any).getComponent('organisation-form-list');
+            if (formList) {
+                const treeHandler: TreeHandler = formList.getTreeHandler();
+                if (treeHandler) {
+                    currentNode.selected = true;
+                    treeHandler.setTree([currentNode]);
+                }
+            }
+            super.provideValue(currentNode ? currentNode.id : null);
         }
         this.state.hasContact = true;
     }
 
     private async loadOrganisations(organisationIds: number[]): Promise<void> {
-        this.state.loading = true;
         this.organisations = await KIXObjectService.loadObjects<Organisation>(
             KIXObjectType.ORGANISATION, organisationIds
         );
@@ -131,11 +134,21 @@ class Component extends FormInputComponent<number, ComponentState> {
             const displayValue = await LabelService.getInstance().getText(o);
             nodes.push(new TreeNode(o.ID, displayValue, 'kix-icon-man-house'));
         }
-        this.state.nodes = nodes;
 
-        this.state.currentNode = this.state.nodes.find((i) => i.id === this.state.primaryOrganisationId);
-        this.organisationChanged([this.state.currentNode]);
-        this.state.loading = false;
+        const currentNode = nodes.find((i) => i.id === this.state.primaryOrganisationId);
+        if (currentNode) {
+            currentNode.selected = true;
+        }
+
+        const formList = (this as any).getComponent('organisation-form-list');
+        if (formList) {
+            const treeHandler: TreeHandler = formList.getTreeHandler();
+            if (treeHandler) {
+                currentNode.selected = true;
+                treeHandler.setTree(nodes);
+            }
+        }
+        this.nodesChanged([currentNode]);
     }
 }
 

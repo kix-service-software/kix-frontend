@@ -10,4 +10,6 @@
 export { TreeNode } from './TreeNode';
 export { TreeNodeProperty } from './TreeNodeProperty';
 export { TreeUtil } from './TreeUtil';
-export { TreeNavigationUtil } from './TreeNavigationUtil';
+export { TreeNavigationHandler } from './TreeNavigationHandler';
+export { TreeHandler } from './TreeHandler';
+export { TreeService } from './TreeService';

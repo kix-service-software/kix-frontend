@@ -82,9 +82,10 @@ export class Extension implements IConfigurationExtension {
                     'Translatable#Helptext_Admin_WebformCreateEdit_AcceptedDomains'
                 ),
                 new FormField(
-                    'Translatable#Validity', KIXObjectProperty.VALID_ID, 'valid-input', true,
-                    'Translatable#Helptext_Admin_WebformCreateEdit_Validity',
-                    null, new FormFieldValue(2)
+                    'Translatable#Validity', KIXObjectProperty.VALID_ID,
+                    'object-reference-input', true, 'Translatable#Helptext_Admin_WebformCreateEdit_Validity', [
+                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
+                    ], new FormFieldValue(2)
                 )
             ]);
 
@@ -92,93 +93,93 @@ export class Extension implements IConfigurationExtension {
                 new FormField(
                     'Translatable#Team', WebformProperty.QUEUE_ID, 'object-reference-input', true,
                     'Translatable#Helptext_Admin_WebformCreateEdit_QueueID', [
-                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
-                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
-                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
-                    new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, true),
-                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                        new KIXObjectLoadingOptions(
-                            [
-                                new FilterCriteria(
-                                    QueueProperty.PARENT_ID, SearchOperator.EQUALS,
-                                    FilterDataType.STRING, FilterType.AND, null
-                                )
-                            ], undefined, undefined, [QueueProperty.SUB_QUEUES], [QueueProperty.SUB_QUEUES]
+                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
+
+                        new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
+                        new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, true),
+                        new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                            new KIXObjectLoadingOptions(
+                                [
+                                    new FilterCriteria(
+                                        QueueProperty.PARENT_ID, SearchOperator.EQUALS,
+                                        FilterDataType.STRING, FilterType.AND, null
+                                    )
+                                ], undefined, undefined, [QueueProperty.SUB_QUEUES], [QueueProperty.SUB_QUEUES]
+                            )
                         )
-                    )
-                ]
+                    ]
                 ),
                 new FormField(
                     'Translatable#Priority', WebformProperty.PRIORITY_ID, 'object-reference-input', true,
                     'Translatable#Helptext_Admin_WebformCreateEdit_PriorityID', [
-                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.TICKET_PRIORITY),
-                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
-                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
-                    new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, false),
-                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                        new KIXObjectLoadingOptions([
-                            new FilterCriteria(
-                                KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                                FilterType.AND, 1
-                            )
-                        ])
-                    )
-                ]
+                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.TICKET_PRIORITY),
+
+                        new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
+                        new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, false),
+                        new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                            new KIXObjectLoadingOptions([
+                                new FilterCriteria(
+                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                )
+                            ])
+                        )
+                    ]
                 ),
                 new FormField(
                     'Translatable#Type', WebformProperty.TYPE_ID, 'object-reference-input', true,
                     'Translatable#Helptext_Admin_WebformCreateEdit_TypeID', [
-                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.TICKET_TYPE),
-                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
-                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
-                    new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, false),
-                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                        new KIXObjectLoadingOptions([
-                            new FilterCriteria(
-                                KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                                FilterType.AND, 1
-                            )
-                        ])
-                    )
-                ]
+                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.TICKET_TYPE),
+
+                        new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
+                        new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, false),
+                        new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                            new KIXObjectLoadingOptions([
+                                new FilterCriteria(
+                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                )
+                            ])
+                        )
+                    ]
                 ),
                 new FormField(
                     'Translatable#State', WebformProperty.STATE_ID, 'object-reference-input', true,
                     'Translatable#Helptext_Admin_WebformCreateEdit_StateID', [
-                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.TICKET_STATE),
-                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
-                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
-                    new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, false),
-                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                        new KIXObjectLoadingOptions([
-                            new FilterCriteria(
-                                KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                                FilterType.AND, 1
-                            ),
-                            new FilterCriteria(
-                                TicketStateProperty.TYPE_NAME, SearchOperator.EQUALS, FilterDataType.STRING,
-                                FilterType.AND, 'new'
-                            )
-                        ])
-                    )
-                ]
+                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.TICKET_STATE),
+
+                        new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
+                        new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, false),
+                        new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                            new KIXObjectLoadingOptions([
+                                new FilterCriteria(
+                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                ),
+                                new FilterCriteria(
+                                    TicketStateProperty.TYPE_NAME, SearchOperator.EQUALS, FilterDataType.STRING,
+                                    FilterType.AND, 'new'
+                                )
+                            ])
+                        )
+                    ]
                 ),
                 new FormField(
                     'Translatable#Assigned agent', WebformProperty.USER_LOGIN, 'object-reference-input', true,
                     'Translatable#Helptext_Admin_WebformCreateEdit_AssignedAgent', [
-                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
-                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
-                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
-                    new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, false),
-                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                        new KIXObjectLoadingOptions([
-                            new FilterCriteria(
-                                KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                                FilterType.AND, 1
-                            )
-                        ])
-                    )
-                ]
+                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
+
+                        new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
+                        new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, false),
+                        new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                            new KIXObjectLoadingOptions([
+                                new FilterCriteria(
+                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                )
+                            ])
+                        )
+                    ]
                 ),
                 new FormField(
                     'Translatable#Password', WebformProperty.USER_PASSWORD, null, true,

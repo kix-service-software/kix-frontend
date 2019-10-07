@@ -6,16 +6,14 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <span.filter>
-    <if(state.predefinedFilterList && state.predefinedFilterList.length)>
+    <if(state.hasFilterList)>
         <span.predefined-filter>
             <form-list
+                treeId=state.treeId
                 disabled=state.disabled
-                nodes=state.predefinedFilterList
                 placeholder=state.predefinedFilterPlaceholder
-                on-nodesChanged("predefinedFilterChanged")
-                selectedNodes=[state.currentFilter]/>
+                on-nodesChanged("predefinedFilterChanged")/>
         </span>
     </if>
     <input

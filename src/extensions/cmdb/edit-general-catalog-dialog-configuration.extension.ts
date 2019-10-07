@@ -9,13 +9,14 @@
 
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    ConfiguredWidget, FormField, FormFieldValue, Form, KIXObjectType, FormContext, ContextConfiguration,
-    KIXObjectProperty,
-    GeneralCatalogItemProperty
+    ConfiguredWidget, FormField, Form, KIXObjectType, FormContext, ContextConfiguration,
+    KIXObjectProperty, GeneralCatalogItemProperty, ObjectReferenceOptions, FormFieldOption,
+    KIXObjectLoadingOptions, FilterCriteria, FilterDataType, FilterType
 } from '../../core/model';
 import { ConfigurationService } from '../../core/services';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
 import { EditGeneralCatalogDialogContext } from '../../core/browser/general-catalog';
+import { SearchOperator } from '../../core/browser';
 
 export class Extension implements IConfigurationExtension {
 
@@ -40,8 +41,20 @@ export class Extension implements IConfigurationExtension {
         if (!existing) {
             const group = new FormGroup('Translatable#General Catalog', [
                 new FormField(
-                    'Translatable#Class', GeneralCatalogItemProperty.CLASS, 'general-catalog-class-input', true,
-                    'Translatable#Helptext_Admin_GeneralCatalogCreate_Class', null, null, null,
+                    'Translatable#Class', GeneralCatalogItemProperty.CLASS, 'object-reference-input', true,
+                    'Translatable#Helptext_Admin_GeneralCatalogCreate_Class', [
+                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.GENERAL_CATALOG_CLASS),
+
+                        new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                            new KIXObjectLoadingOptions([
+                                new FilterCriteria(
+                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                )
+                            ])
+                        ),
+                        new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false)
+                    ], null, null,
                     null, null, null, null, 100, null, null, null, null, true
                 ),
                 new FormField(
@@ -59,9 +72,10 @@ export class Extension implements IConfigurationExtension {
                     null, null, null, null, 250
                 ),
                 new FormField(
-                    'Translatable#Validity', KIXObjectProperty.VALID_ID, 'valid-input', true,
-                    'Translatable#Helptext_Admin_GeneralCatalogCreate_Validity',
-                    null, new FormFieldValue(1)
+                    'Translatable#Validity', KIXObjectProperty.VALID_ID,
+                    'object-reference-input', true, 'Translatable#Helptext_Admin_GeneralCatalogCreate_Validity', [
+                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
+                    ]
                 )
             ]);
 

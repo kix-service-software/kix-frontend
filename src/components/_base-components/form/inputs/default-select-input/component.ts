@@ -10,16 +10,17 @@
 import { FormInputComponent, TreeNode, DefaultSelectInputFormOption } from '../../../../../core/model';
 import { CompontentState } from './CompontentState';
 import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
+import { FormService } from '../../../../../core/browser';
 
 class Component extends FormInputComponent<string | number | string[] | number[], CompontentState> {
 
     public onCreate(): void {
         this.state = new CompontentState();
+        this.state.loadNodes = this.load.bind(this);
     }
 
     public onInput(input: any): void {
         super.onInput(input);
-
         this.update();
     }
 
@@ -32,16 +33,15 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        this.prepareList();
-        this.setCurrentNode();
     }
 
-    private prepareList(): void {
+    public async load(): Promise<TreeNode[]> {
+        let nodes = [];
         if (this.state.field && this.state.field.options && !!this.state.field.options) {
             const nodesOption = this.state.field.options.find(
                 (o) => o.option === DefaultSelectInputFormOption.NODES
             );
-            this.state.nodes = nodesOption ? nodesOption.value : [];
+            nodes = nodesOption ? nodesOption.value : [];
 
             const asMultiselectOption = this.state.field.options.find(
                 (o) => o.option === DefaultSelectInputFormOption.MULTI
@@ -49,29 +49,37 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             this.state.asMultiselect = asMultiselectOption && typeof asMultiselectOption.value === 'boolean'
                 ? asMultiselectOption.value : false;
         }
+
+        await this.setCurrentNode(nodes);
+        return nodes;
     }
 
-    public setCurrentNode(): void {
-        if (this.state.defaultValue && this.state.defaultValue.value) {
-            if (Array.isArray(this.state.defaultValue.value)) {
-                this.state.selectedNodes = this.state.nodes.filter(
-                    (n) => (this.state.defaultValue.value as Array<string | number>).some((dv) => dv === n.id)
+    public async setCurrentNode(nodes: TreeNode[]): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const defaultValue = formInstance.getFormFieldValue<string | number | string[] | number[]>(
+            this.state.field.instanceId
+        );
+        if (defaultValue && defaultValue.value) {
+            let selectedNodes = [];
+            if (Array.isArray(defaultValue.value)) {
+                selectedNodes = nodes.filter(
+                    (n) => (defaultValue.value as Array<string | number>).some((dv) => dv === n.id)
                 );
+                selectedNodes.forEach((n) => n.selected = true);
             } else {
-                const node = this.state.nodes.find((n) => n.id === this.state.defaultValue.value);
-                this.state.selectedNodes = node ? [node] : [];
+                const node = nodes.find((n) => n.id === defaultValue.value);
+                if (node) {
+                    node.selected = true;
+                    selectedNodes = [node];
+                }
             }
-            super.provideValue(
-                this.state.selectedNodes && !!this.state.selectedNodes.length
-                    ? this.state.selectedNodes.map((sn) => sn.id) : null);
+            super.provideValue(selectedNodes && !!selectedNodes.length ? selectedNodes.map((sn) => sn.id) : null);
         }
     }
 
     public valueChanged(nodes: TreeNode[]): void {
-        this.state.selectedNodes = nodes && nodes.length ? nodes : null;
-        super.provideValue(
-            this.state.selectedNodes && !!this.state.selectedNodes.length
-                ? this.state.selectedNodes.map((sn) => sn.id) : null);
+        const selectedNodes = nodes && nodes.length ? nodes : null;
+        super.provideValue(selectedNodes && !!selectedNodes.length ? selectedNodes.map((sn) => sn.id) : null);
     }
 
     public async focusLost(event: any): Promise<void> {

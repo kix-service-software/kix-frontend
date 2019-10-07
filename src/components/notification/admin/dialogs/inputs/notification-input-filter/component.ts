@@ -52,11 +52,12 @@ class Component extends FormInputComponent<Array<[string, string[] | number[]]>,
                         } else {
                             await this.removeArticleProperties();
                         }
-                    }
 
-                    const dynamicFormComponent = (this as any).getComponent('notification-dynamic-form');
-                    if (dynamicFormComponent) {
-                        dynamicFormComponent.updateValues();
+                        const dynamicFormComponent = (this as any).getComponent('notification-dynamic-form');
+                        if (dynamicFormComponent) {
+                            dynamicFormComponent.updateValues();
+                        }
+
                     }
                 }
             }
@@ -75,15 +76,12 @@ class Component extends FormInputComponent<Array<[string, string[] | number[]]>,
                             filterValues.push([v.property, v.value]);
                         }
                     });
-
-                    const dynamicFormComponent = (this as any).getComponent('notification-dynamic-form');
-                    if (dynamicFormComponent) {
-                        dynamicFormComponent.updateValues();
-                    }
                 }
-                super.provideValue(filterValues);
+                super.provideValue(filterValues, true);
             }, 200);
         });
+
+        this.state.prepared = true;
     }
 
     private async addRequiredArticleProperties(): Promise<void> {
@@ -154,7 +152,7 @@ class Component extends FormInputComponent<Array<[string, string[] | number[]]>,
                     )
                 );
             }
-            super.provideValue(this.state.defaultValue.value);
+            super.provideValue(this.state.defaultValue.value, true);
         }
     }
 

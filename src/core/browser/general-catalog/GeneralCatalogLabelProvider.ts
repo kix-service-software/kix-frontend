@@ -7,7 +7,7 @@
  * --
  */
 
-import { KIXObjectType, GeneralCatalogItem, ContactProperty, KIXObjectProperty } from "../../model";
+import { KIXObjectType, GeneralCatalogItem, ContactProperty, KIXObjectProperty, ObjectIcon } from "../../model";
 import { TranslationService } from "../i18n/TranslationService";
 import { LabelProvider } from "../LabelProvider";
 import { GeneralCatalogItemProperty } from "../../model/kix/general-catalog/GeneralCatalogItemProperty";
@@ -81,5 +81,9 @@ export class GeneralCatalogLabelProvider extends LabelProvider<GeneralCatalogIte
         generalCatalog: GeneralCatalogItem, id?: boolean, title?: boolean, translatable?: boolean
     ): Promise<string> {
         return `${generalCatalog.Name}`;
+    }
+
+    public getObjectIcon(catlogItem?: GeneralCatalogItem): string | ObjectIcon {
+        return new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, catlogItem.ItemID);
     }
 }

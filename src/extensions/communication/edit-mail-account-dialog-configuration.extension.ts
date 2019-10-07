@@ -12,10 +12,19 @@ import { EditMailAccountDialogContext } from '../../core/browser/mail-account';
 import {
     ConfiguredWidget, FormField, FormFieldValue, MailAccountProperty, Form,
     KIXObjectType, FormContext, ContextConfiguration, FormFieldOption, FormFieldOptions, InputFieldTypes,
-    KIXObjectProperty
+    KIXObjectProperty,
+    ObjectReferenceOptions,
+    KIXObjectLoadingOptions,
+    FilterCriteria,
+    QueueProperty,
+    FilterDataType,
+    FilterType,
+    DispatchingType,
+    TreeNode
 } from '../../core/model';
 import { ConfigurationService } from '../../core/services';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
+import { SearchOperator } from '../../core/browser';
 
 export class Extension implements IConfigurationExtension {
 
@@ -64,9 +73,26 @@ export class Extension implements IConfigurationExtension {
                     new FormFieldValue(false)
                 ),
                 new FormField(
-                    'Translatable#Dispatching', MailAccountProperty.DISPATCHING_BY, 'mail-account-input-dispatching',
+                    'Translatable#Dispatching', MailAccountProperty.DISPATCHING_BY, 'object-reference-input',
                     true, 'Translatable#Helptext_Admin_MailAccountEdit_Dispachting', [
-                        new FormFieldOption(FormFieldOptions.SHOW_INVALID, true)
+                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
+                        new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, true),
+                        new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                            new KIXObjectLoadingOptions(
+                                [
+                                    new FilterCriteria(
+                                        QueueProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.STRING,
+                                        FilterType.AND, null
+                                    )
+                                ],
+                                null, null,
+                                [QueueProperty.SUB_QUEUES, 'TicketStats', 'Tickets'],
+                                [QueueProperty.SUB_QUEUES]
+                            )
+                        ),
+                        new FormFieldOption(ObjectReferenceOptions.ADDITIONAL_NODES, [
+                            new TreeNode(DispatchingType.FRONTEND_KEY_DEFAULT, 'Translatable#Default'),
+                        ])
                     ]
                 ),
                 new FormField(
@@ -75,9 +101,10 @@ export class Extension implements IConfigurationExtension {
                     null, null, null, null, 250
                 ),
                 new FormField(
-                    'Translatable#Validity', KIXObjectProperty.VALID_ID, 'valid-input', true,
-                    'Translatable#Helptext_Admin_MailAccountEdit_Validity',
-                    null, new FormFieldValue(1)
+                    'Translatable#Validity', KIXObjectProperty.VALID_ID,
+                    'object-reference-input', true, 'Translatable#Helptext_Admin_MailAccountEdit_Validity', [
+                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
+                    ], new FormFieldValue(1)
                 )
             ]);
 

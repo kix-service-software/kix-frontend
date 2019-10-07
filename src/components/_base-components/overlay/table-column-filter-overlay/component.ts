@@ -9,12 +9,11 @@
 
 import { AbstractMarkoComponent, IColumn, LabelService } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
-import { TreeNode, KIXObjectType, ObjectIcon } from '../../../../core/model';
+import { TreeNode, KIXObjectType, ObjectIcon, TreeService, TreeHandler } from '../../../../core/model';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public filterValues: TreeNode[];
     private column: IColumn;
 
     public onCreate(): void {
@@ -23,8 +22,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onInput(input: any): void {
         this.column = input.column;
-        this.state.nodes = null;
-        this.filterValues = null;
         this.state.filterText = null;
         this.update();
     }
@@ -33,7 +30,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.placeholder = await TranslationService.translate('Translatable#insert filter value');
 
         if (this.column && this.column.getColumnConfiguration().hasListFilter) {
-            this.state.hasListFilter = true;
             const table = this.column.getTable();
             const objectType = table ? table.getObjectType() : null;
             if (objectType) {
@@ -48,11 +44,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 }
             }, 100);
         }
-        this.getCurrentValue();
     }
 
     public async onMount(): Promise<void> {
-        // nothing
+        const treeHandler = new TreeHandler([], null);
+        TreeService.getInstance().registerTreeHandler(this.state.treeId, treeHandler);
+        treeHandler.registerSelectionListener(this.state.treeId, (nodes: TreeNode[]) => {
+            if (this.state.hasListFilter) {
+                this.column.filter(nodes.map((n) => n.id));
+            }
+        });
+        this.state.prepared = true;
     }
 
     public onDestroy(): void {
@@ -74,35 +76,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
             nodes.push(new TreeNode(fv[0], label, icon, null));
         }
-        this.state.nodes = nodes;
-    }
 
-    private getCurrentValue(): void {
-        if (this.column) {
-            const currentfilter = this.column.getFilter();
-            if (currentfilter) {
-                if (this.state.hasListFilter) {
-                    const values = currentfilter[1] && !!currentfilter[1].length
-                        ? currentfilter[1][0].value as any[] : [];
-                    this.state.selectedNodes = this.state.nodes.filter((n) => values.some((v) => v === n.id));
-                } else {
-                    this.state.filterText = currentfilter[0];
-                }
-            }
+        const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
+        if (treeHandler) {
+            treeHandler.setTree(nodes);
         }
-    }
-
-    public nodeClicked(node: TreeNode): void {
-        const nodeIndex = this.state.selectedNodes.findIndex((n) => n.id === node.id);
-        if (nodeIndex !== -1) {
-            this.state.selectedNodes.splice(nodeIndex, 1);
-        } else {
-            this.state.selectedNodes.push(node);
-        }
-        (this as any).setStateDirty('selectedNodes');
-
-        this.filterValues = this.state.selectedNodes.map((n) => n.id);
-        this.filter();
     }
 
     public textFilterValueChanged(event: any): void {
@@ -118,12 +96,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private filter(): void {
         if (this.column) {
-            if (this.state.hasListFilter) {
-                this.column.filter(this.filterValues);
-            } else {
-                this.column.filter(null, this.state.filterText);
-                (this as any).emit('closeOverlay');
-            }
+            this.column.filter(null, this.state.filterText);
+            (this as any).emit('closeOverlay');
         }
     }
 }

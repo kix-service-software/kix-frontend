@@ -14,7 +14,8 @@ import {
     FormField, ArticleProperty, KIXObjectType, Form, FormContext, FormFieldValue, FormFieldOption,
     ObjectReferenceOptions, KIXObjectLoadingOptions, FilterCriteria,
     FilterDataType, FilterType, ObjectInformationWidgetSettings, ContactProperty, OrganisationProperty,
-    KIXObjectProperty
+    KIXObjectProperty,
+    QueueProperty
 } from '../../core/model';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../core/services';
@@ -86,10 +87,47 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
             )
             );
             fields.push(new FormField('Translatable#Organisation', TicketProperty.ORGANISATION_ID, 'ticket-input-organisation', true, 'Translatable#Helptext_Tickets_TicketCreate_Organisation'));
-            fields.push(new FormField('Translatable#Type', TicketProperty.TYPE_ID, 'ticket-input-type', true, 'Translatable#Helptext_Tickets_TicketCreate_Type'));
+
             fields.push(new FormField(
-                'Translatable#Assign Team / Queue', TicketProperty.QUEUE_ID, 'ticket-input-queue', true, 'Translatable#Helptext_Tickets_TicketCreate_Queue')
-            );
+                'Translatable#Type', TicketProperty.TYPE_ID, 'object-reference-input', true, 'Translatable#Helptext_Tickets_TicketCreate_Type', [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.TICKET_TYPE),
+
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                )
+                            ]
+                        )
+                    )
+                ]
+            ));
+
+            fields.push(new FormField(
+                'Translatable#Assign Team / Queue', TicketProperty.QUEUE_ID, 'object-reference-input', true, 'Translatable#Helptext_Tickets_TicketCreate_Queue', [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
+
+                    new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, true),
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                ),
+                                new FilterCriteria(
+                                    QueueProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, null
+                                )
+                            ],
+                            null, null,
+                            [QueueProperty.SUB_QUEUES, 'TicketStats', 'Tickets'],
+                            [QueueProperty.SUB_QUEUES]
+                        )
+                    )
+                ]
+            ));
             fields.push(new FormField('Translatable#Channel', ArticleProperty.CHANNEL_ID, 'channel-input', true, 'Translatable#Helptext_Tickets_TicketCreate_Channel'));
             fields.push(new FormField(
                 'Translatable#Link Ticket with', TicketProperty.LINK, 'link-input', false, 'Translatable#Helptext_Tickets_TicketCreate_Links')
@@ -97,7 +135,7 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
             fields.push(new FormField(
                 'Translatable#Owner', TicketProperty.OWNER_ID, 'object-reference-input', false, 'Translatable#Helptext_Tickets_TicketCreate_Owner', [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
-                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
+
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                         new KIXObjectLoadingOptions(
                             [
@@ -113,7 +151,7 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
             fields.push(new FormField(
                 'Translatable#Responsible', TicketProperty.RESPONSIBLE_ID, 'object-reference-input', false, 'Translatable#Helptext_Tickets_TicketCreate_Responsible', [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
-                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
+
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                         new KIXObjectLoadingOptions(
                             [
@@ -126,11 +164,24 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
                     )
                 ]
             ));
-            fields.push(new FormField<number>(
-                'Translatable#Priority', TicketProperty.PRIORITY_ID, 'ticket-input-priority',
-                true, 'Translatable#Helptext_Tickets_TicketCreate_Priority',
-                null, new FormFieldValue(3)
+
+            fields.push(new FormField(
+                'Translatable#Priority', TicketProperty.PRIORITY_ID, 'object-reference-input', true, 'Translatable#Helptext_Tickets_TicketCreate_Priority', [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.TICKET_PRIORITY),
+
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                )
+                            ]
+                        )
+                    )
+                ], new FormFieldValue(3)
             ));
+
             fields.push(new FormField<number>(
                 'Translatable#State', TicketProperty.STATE_ID, 'ticket-input-state', true, 'Translatable#Helptext_Tickets_TicketCreate_State', null,
                 new FormFieldValue(2)

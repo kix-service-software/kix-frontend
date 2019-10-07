@@ -122,7 +122,7 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
                             KIXObjectType.CONFIG_ITEM_CLASS, [value], null
                         );
                         if (ciClasses && !!ciClasses.length) {
-                            value = ciClasses[0].Name;
+                            value = ciClasses[0].ID;
                         }
                     }
                     break;
@@ -144,7 +144,7 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
                         KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions, null, false
                     );
                     const item = items.find((i) => i.ItemID === value);
-                    value = item ? item : null;
+                    value = item ? item.ItemID : null;
                     break;
                 default:
             }
@@ -232,12 +232,9 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
                     KIXObjectType.GENERAL_CATALOG_ITEM, [Number(preparedData.Value)], null, null, false
                 );
                 if (gcItem && !!gcItem.length) {
-                    value = gcItem[0];
+                    value = gcItem[0].ItemID;
                 } else {
-                    value = new GeneralCatalogItem();
-                    value.ItemID = preparedData.Value;
-                    value.ObjectId = preparedData.Value;
-                    value.Name = preparedData.DisplayValue;
+                    value = preparedData.Value;
                 }
                 break;
             case 'Contact':

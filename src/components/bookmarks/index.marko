@@ -7,7 +7,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 <div.bookmark-container>
-    <if(state.bookmarks)>
-        <form-list key="bookmarks-dropdown" nodes=state.bookmarks placeholder=state.placeholder on-nodesChanged("nodesChanged")/>
+    <if(state.prepared)>
+        <form-list treeId=state.treeId placeholder=state.placeholder on-nodesChanged("nodesChanged")/>
     </if>
 </div>

@@ -8,7 +8,8 @@
  */
 
 import {
-    ContextConfiguration, FormField, Form, FormContext, KIXObjectType, ContactProperty, KIXObjectProperty
+    ContextConfiguration, FormField, Form, FormContext, KIXObjectType,
+    ContactProperty, KIXObjectProperty, ObjectReferenceOptions, FormFieldValue, FormFieldOption
 } from "../../core/model";
 import { IConfigurationExtension } from "../../core/extensions";
 import { EditContactDialogContext } from "../../core/browser/contact";
@@ -97,8 +98,10 @@ export class Extension implements IConfigurationExtension {
                     null, null, null, 250
                 ),
                 new FormField(
-                    'Translatable#Validity', KIXObjectProperty.VALID_ID, 'valid-input', false,
-                    'Translatable#Helptext_Customers_ContactEdit_Validity'
+                    'Translatable#Validity', KIXObjectProperty.VALID_ID,
+                    'object-reference-input', true, 'Translatable#Helptext_Customers_ContactEdit_Validity', [
+                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
+                    ], new FormFieldValue(1)
                 )
             ]));
 

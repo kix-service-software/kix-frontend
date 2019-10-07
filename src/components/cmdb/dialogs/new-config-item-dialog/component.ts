@@ -23,18 +23,23 @@ class Component {
 
     private state: ComponentState;
 
+    private classId: string;
+
     public onCreate(): void {
         this.state = new ComponentState();
+        this.state.loadNodes = this.load.bind(this);
+    }
+
+    private async load(): Promise<TreeNode[]> {
+        return await CMDBService.getInstance().getTreeNodes(ConfigItemProperty.CLASS_ID);
     }
 
     public async onMount(): Promise<void> {
-
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Cancel', 'Translatable#Config Item Class', 'Translatable#Save'
         ]);
 
         this.state.placeholder = await TranslationService.translate('Translatable#Select Config Item Class');
-        this.state.classNodes = await CMDBService.getInstance().getTreeNodes(ConfigItemProperty.CLASS_ID);
 
         const hint = await TranslationService.translate('Translatable#Helptext_CMDB_ConfigItemCreate_Class');
         this.state.hint = hint.startsWith('Helptext_') ? null : hint;
@@ -51,12 +56,13 @@ class Component {
 
     public async classChanged(nodes: TreeNode[]): Promise<void> {
         DialogService.getInstance().setMainDialogLoading(true);
-        this.state.currentClassNode = nodes && nodes.length ? nodes[0] : null;
+        const currentClassNode = nodes && nodes.length ? nodes[0] : null;
         FormService.getInstance().deleteFormInstance(this.state.formId);
         this.state.formId = null;
         let formId: string;
-        if (this.state.currentClassNode) {
-            const ciClass = await this.getCIClass(this.state.currentClassNode.id);
+        if (currentClassNode) {
+            this.classId = currentClassNode.id;
+            const ciClass = await this.getCIClass(this.classId);
             if (ciClass) {
                 formId = ConfigItemFormFactory.getInstance().getFormId(ciClass);
             }
@@ -84,7 +90,7 @@ class Component {
                 const cmdbService
                     = ServiceRegistry.getServiceInstance<CMDBService>(KIXObjectType.CONFIG_ITEM);
 
-                const ciClass = await this.getCIClass(this.state.currentClassNode.id);
+                const ciClass = await this.getCIClass(this.classId);
                 await cmdbService.createConfigItem(this.state.formId, ciClass.ID)
                     .then((configItemId) => {
                         DialogService.getInstance().setMainDialogLoading(false);
