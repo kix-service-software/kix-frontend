@@ -365,7 +365,7 @@ export class TicketService extends KIXObjectService {
 
     // FIXME: unterschiedliche Behandlung von Filter und Search entfernen, sollte nicht notwendig sein
     protected async buildFilter(
-        filter: FilterCriteria[], filterProperty: string, token: string, query: any
+        filter: FilterCriteria[], filterProperty: string, query: any, token?: string
     ): Promise<void> {
         let objectFilter = {};
         let objectSearch = {};
