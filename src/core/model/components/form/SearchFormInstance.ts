@@ -29,6 +29,10 @@ export class SearchFormInstance implements IFormInstance {
 
     public constructor(public form: SearchForm) { }
 
+    public getForm(): Form {
+        return this.form;
+    }
+
     public setFilterCriteria(filterCriteria: FilterCriteria): void {
         const index = this.filterCriteria.findIndex((fc) => fc.property === filterCriteria.property);
         if (index !== -1) {
@@ -38,16 +42,16 @@ export class SearchFormInstance implements IFormInstance {
         this.listeners.forEach((l) => l.searchCriteriaChanged(this.filterCriteria));
     }
 
-    public getForm(): Form {
-        return this.form;
-    }
-
     public removeFilterCriteria(filterCriteria: FilterCriteria): void {
         const index = this.filterCriteria.findIndex((fc) => fc.property === filterCriteria.property);
         if (index !== -1) {
             this.filterCriteria.splice(index, 1);
         }
         this.listeners.forEach((l) => l.searchCriteriaChanged(this.filterCriteria));
+    }
+
+    public clearCriteria(): void {
+        this.filterCriteria = [];
     }
 
     public async provideFormField(formField: FormField): Promise<void> {
@@ -96,10 +100,7 @@ export class SearchFormInstance implements IFormInstance {
     }
 
     public async getFormField(fieldId: string): Promise<FormField> {
-        const componentId = await SearchService.getInstance().getInputComponentId(
-            this.getObjectType(), fieldId
-        );
-        return new FormField(fieldId, fieldId, componentId);
+        return null;
     }
 
     public hasValues(): boolean {

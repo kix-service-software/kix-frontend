@@ -83,9 +83,10 @@ export class Extension implements IConfigurationExtension {
                     null, null, null, null, null, null, null, 250
                 ),
                 new FormField(
-                    'Translatable#Validity', KIXObjectProperty.VALID_ID, 'valid-input', true,
-                    "Translatable#Helptext_Admin_Users_UserCreate_Valid",
-                    null, new FormFieldValue(1)
+                    'Translatable#Validity', KIXObjectProperty.VALID_ID,
+                    'object-reference-input', true, 'Translatable#Helptext_Admin_Users_UserCreate_Valid', [
+                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
+                    ], new FormFieldValue(1)
                 )
             ];
             const infoGroup = new FormGroup('Translatable#Agent Information', infoFields);
@@ -94,7 +95,6 @@ export class Extension implements IConfigurationExtension {
                 'Translatable#Roles', UserProperty.ROLEIDS, 'object-reference-input', false,
                 'Translatable#Helptext_Admin_Users_UserCreate_Roles', [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.ROLE),
-                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                         new KIXObjectLoadingOptions(
@@ -118,7 +118,6 @@ export class Extension implements IConfigurationExtension {
                 'Translatable#My Queues', PersonalSettingsProperty.MY_QUEUES, 'object-reference-input',
                 false, 'Translatable#Helptext_Admin_UserCreate_Preferences_MyQueues', [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
-                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
                     new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, true),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
@@ -140,7 +139,7 @@ export class Extension implements IConfigurationExtension {
                 'Translatable#Helptext_Admin_UserCreate_Preferences_Notifications_Hint',
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.NOTIFICATION),
-                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
+
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
                     new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, false),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,

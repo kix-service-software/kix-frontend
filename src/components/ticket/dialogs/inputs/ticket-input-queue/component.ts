@@ -9,7 +9,7 @@
 
 import { ComponentState } from "./ComponentState";
 import {
-    TicketProperty, TreeNode, FormInputComponent, FormFieldOptions, KIXObjectType
+    TicketProperty, TreeNode, FormInputComponent, FormFieldOptions, KIXObjectType, TreeHandler, TreeService
 } from "../../../../../core/model";
 import { TicketService } from "../../../../../core/browser/ticket";
 import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
@@ -19,6 +19,7 @@ class Component extends FormInputComponent<number, ComponentState> {
 
     public onCreate(): void {
         this.state = new ComponentState();
+        this.state.loadNodes = this.load.bind(this);
     }
 
     public onInput(input: any): void {
@@ -36,6 +37,9 @@ class Component extends FormInputComponent<number, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+    }
+
+    public async load(): Promise<TreeNode[]> {
         const validOption = this.state.field.options
             ? this.state.field.options.find((o) => o.option === FormFieldOptions.SHOW_INVALID)
             : null;
@@ -43,28 +47,31 @@ class Component extends FormInputComponent<number, ComponentState> {
         const showInvalid = validOption ? validOption.value : false;
 
         const queueId = await UIUtil.getEditObjectId(KIXObjectType.QUEUE);
-        this.state.nodes = await TicketService.getInstance().getTreeNodes(
+        const nodes = await TicketService.getInstance().getTreeNodes(
             TicketProperty.QUEUE_ID, showInvalid, queueId ? [queueId] : null
         );
-        this.setCurrentNode();
+
+        this.setCurrentNode(nodes);
+        return nodes;
     }
 
-    public setCurrentNode(): void {
+    public setCurrentNode(nodes: TreeNode[]): void {
         if (this.state.defaultValue && this.state.defaultValue.value) {
-            let node;
+            let node: TreeNode;
             if (Array.isArray(this.state.defaultValue.value)) {
-                node = this.findNode(this.state.defaultValue.value[0]);
+                node = this.findNode(this.state.defaultValue.value[0], nodes);
             } else {
-                node = this.findNode(this.state.defaultValue.value);
+                node = this.findNode(this.state.defaultValue.value, nodes);
             }
-            this.state.currentNode = node;
-            super.provideValue(
-                this.state.currentNode ? Number(this.state.currentNode.id) : null
-            );
+
+            if (node) {
+                node.selected = true;
+                super.provideValue(node.id);
+            }
         }
     }
 
-    private findNode(id: any, nodes: TreeNode[] = this.state.nodes): TreeNode {
+    private findNode(id: any, nodes: TreeNode[]): TreeNode {
         let returnNode: TreeNode;
         if (Array.isArray(nodes)) {
             returnNode = nodes.find((n) => n.id === id);
@@ -83,12 +90,8 @@ class Component extends FormInputComponent<number, ComponentState> {
     }
 
     public queueChanged(nodes: TreeNode[]): void {
-        this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
-        super.provideValue(this.state.currentNode ? Number(this.state.currentNode.id) : null);
-    }
-
-    public async focusLost(event: any): Promise<void> {
-        await super.focusLost();
+        const currentNode = nodes && nodes.length ? nodes[0] : null;
+        super.provideValue(currentNode ? Number(currentNode.id) : null);
     }
 }
 

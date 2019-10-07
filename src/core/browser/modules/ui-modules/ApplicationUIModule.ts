@@ -38,6 +38,7 @@ import { SearchService } from '../../kix/search/SearchService';
 import { InvalidObjectCSSHandler } from '../../table/InvalidObjectCSSHandler';
 import { FormValidationService } from '../../form/validation';
 import { UserPasswordValidator } from '../../user/UserPasswordValidator';
+import { ValidObjectLabelProvider } from '../../valid/ValidObjectLabelProvider';
 import {
     NotificationService, NotificationTableFactory, NotificationLabelProvider, NotificationBrowserFactory
 } from '../../notification';
@@ -78,6 +79,7 @@ export class UIModule implements IUIModule {
         );
 
         LabelService.getInstance().registerLabelProvider(new PermissionLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new ValidObjectLabelProvider());
 
         FactoryService.getInstance().registerFactory(
             KIXObjectType.SLA, SlaBrowserFactory.getInstance()

@@ -14,11 +14,10 @@ export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public loading: boolean = false,
-        public classNodes: TreeNode[] = [],
-        public currentClassNode: TreeNode = null,
         public formId: string = null,
         public placeholder: string = '',
-        public hint: string = null
+        public hint: string = null,
+        public loadNodes: () => Promise<TreeNode[]> = null
     ) {
         super();
     }

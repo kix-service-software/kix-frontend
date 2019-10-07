@@ -24,7 +24,7 @@ export interface IFormInstance {
 
     addFormField(formField: FormField, fields?: FormField[]): void;
 
-    provideFormFieldValue<T>(formFieldInstanceId: string, value: T): void;
+    provideFormFieldValue<T>(formFieldInstanceId: string, value: T, silent?: boolean): void;
 
     getFormFieldValue<T>(formFieldInstanceId: string): FormFieldValue<T>;
 

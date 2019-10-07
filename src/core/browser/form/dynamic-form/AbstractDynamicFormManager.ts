@@ -19,6 +19,8 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
 
     protected listeners: Map<string, () => void> = new Map();
 
+    public uniqueProperties: boolean = true;
+
     public abstract async getProperties(): Promise<Array<[string, string]>>;
 
     public registerListener(listenerId: string, callback: () => void): void {
@@ -38,7 +40,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     }
 
     public init(): void {
-        this.reset();
+        return;
     }
 
     public reset(): void {
@@ -108,10 +110,6 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return '';
     }
 
-    public async propertiesAreUnique(): Promise<boolean> {
-        return true;
-    }
-
     public async getTreeNodes(property: string): Promise<TreeNode[]> {
         return [];
     }
@@ -132,7 +130,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return;
     }
 
-    public getOperatorDisplayText(operator: string): string {
+    public async getOperatorDisplayText(operator: string): Promise<string> {
         return operator;
     }
 

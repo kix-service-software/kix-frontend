@@ -11,7 +11,7 @@ import { IConfigurationExtension } from '../../core/extensions';
 import { EditTicketTypeDialogContext } from '../../core/browser/ticket';
 import {
     ContextConfiguration, ConfiguredWidget, FormField, KIXObjectType, Form,
-    FormContext, FormFieldValue, TicketTypeProperty
+    FormContext, FormFieldValue, TicketTypeProperty, KIXObjectProperty, FormFieldOption, ObjectReferenceOptions
 } from '../../core/model';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../core/services';
@@ -49,11 +49,14 @@ export class Extension implements IConfigurationExtension {
                 'Translatable#Comment', TicketTypeProperty.COMMENT, 'text-area-input',
                 false, 'Translatable#Helptext_Admin_Tickets_TypeEdit_Comment'
             ));
-            fields.push(new FormField(
-                'Translatable#Validity', TicketTypeProperty.VALID_ID, 'valid-input', true,
-                'Translatable#Helptext_Admin_Tickets_TypeEdit_Valid',
-                null, new FormFieldValue(1)
-            ));
+            fields.push(
+                new FormField(
+                    'Translatable#Validity', KIXObjectProperty.VALID_ID,
+                    'object-reference-input', true, 'Translatable#Helptext_Admin_Tickets_TypeEdit_Valid', [
+                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
+                    ], new FormFieldValue(1)
+                )
+            );
 
             const group = new FormGroup('Translatable#Type Data', fields);
 

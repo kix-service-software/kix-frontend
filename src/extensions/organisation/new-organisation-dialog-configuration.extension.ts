@@ -9,7 +9,7 @@
 
 import {
     ContextConfiguration, FormField, Form, FormContext,
-    KIXObjectType, OrganisationProperty, KIXObjectProperty, FormFieldValue
+    KIXObjectType, OrganisationProperty, KIXObjectProperty, FormFieldValue, FormFieldOption, ObjectReferenceOptions
 } from '../../core/model';
 import { IConfigurationExtension } from '../../core/extensions';
 import { ConfigurationService } from '../../core/services';
@@ -75,8 +75,10 @@ export class Extension implements IConfigurationExtension {
                     null, null, null, 250
                 ),
                 new FormField(
-                    'Translatable#Validity', KIXObjectProperty.VALID_ID, 'valid-input', true,
-                    'Translatable#Helptext_Customers_OrganisationCreate_Validity', undefined, new FormFieldValue(1)
+                    'Translatable#Validity', KIXObjectProperty.VALID_ID,
+                    'object-reference-input', true, 'Translatable#Helptext_Customers_OrganisationCreate_Validity', [
+                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
+                    ], new FormFieldValue(1)
                 )
             ]));
 

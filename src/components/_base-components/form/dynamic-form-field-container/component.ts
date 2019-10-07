@@ -10,7 +10,7 @@
 import { ComponentState } from './ComponentState';
 import { TreeNode } from '../../../../core/model';
 import { DynamicFieldValue } from './DynamicFormFieldValue';
-import { IDynamicFormManager } from '../../../../core/browser';
+import { IDynamicFormManager, ObjectPropertyValue } from '../../../../core/browser';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component {
@@ -30,106 +30,12 @@ class Component {
         this.onMount();
     }
 
-    public async onMount(): Promise<void> {
-        this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Remove parameter"
-        ]);
-        if (this.manager) {
-            await this.updateValues();
-        }
-    }
-
-    public async propertyChanged(value: DynamicFieldValue, nodes: TreeNode[]): Promise<void> {
-        await value.setPropertyNode(nodes && nodes.length ? nodes[0] : null);
-        if (await this.manager.clearValueOnPropertyChange(value.currentPropertyNode.id)) {
-            await value.setCurrentValue(null);
-        }
-        await this.provideValue(value);
-        await this.addEmptyValue();
-        (this as any).setStateDirty();
-    }
-
-    public async operationChanged(value: DynamicFieldValue, nodes: TreeNode[]): Promise<void> {
-        value.setOperationNode(nodes && nodes.length ? nodes[0] : null);
-        await this.provideValue(value);
-    }
-
-    public async operationStringChanged(value: DynamicFieldValue, event: any): Promise<void> {
-        const operationString = event.target.value;
-        value.setOperationNode(null, operationString);
-        await this.provideValue(value);
-    }
-
-    public async treeValueChanged(value: DynamicFieldValue, nodes: TreeNode[]): Promise<void> {
-        value.setTreeValues(nodes);
-        await this.provideValue(value);
-    }
-
-    public async textValueChanged(value: DynamicFieldValue, event: any): Promise<void> {
-        const newValue = event.target.value;
-        value.setTextValue(newValue);
-        await this.provideValue(value);
-    }
-
-    public async dateValueChanged(value: DynamicFieldValue, event: any): Promise<void> {
-        const newValue = event.target.value;
-        value.setDateValue(newValue);
-        await this.provideValue(value);
-    }
-
-    public async timeValueChanged(value: DynamicFieldValue, event: any): Promise<void> {
-        const newValue = event.target.value;
-        value.setTimeValue(newValue);
-        await this.provideValue(value);
-    }
-
-    public async specificValueChanged(value: DynamicFieldValue, emittedValue: any): Promise<void> {
-        const newValue = emittedValue;
-        value.setSpecificValue(newValue);
-        await this.provideValue(value);
-    }
-
-    public async provideValue(value: DynamicFieldValue): Promise<void> {
-        await this.manager.setValue(value.getValue());
-        await this.updateValues();
-    }
-
-    public async removeValue(value: DynamicFieldValue): Promise<void> {
-        const index = this.state.dynamicValues.findIndex((sv) => sv.id === value.id);
-        this.state.dynamicValues.splice(index, 1);
-        await this.manager.removeValue(value.getValue());
-        await this.updateValues();
-    }
-
-    public async resetValues(): Promise<void> {
-        this.state.dynamicValues = [];
-    }
-
-    private async addEmptyValue(): Promise<void> {
-        const index = this.state.dynamicValues.findIndex((sv) => sv.currentPropertyNode === null);
-        let emptyField: DynamicFieldValue;
-        if (index === -1) {
-            emptyField = new DynamicFieldValue(this.manager);
-            await emptyField.setPropertyNode(null);
-        } else {
-            emptyField = this.state.dynamicValues.splice(index, 1)[0];
-        }
-        this.state.dynamicValues = [...this.state.dynamicValues, emptyField];
-    }
-
-    private async updateValues(): Promise<void> {
-        for (const bv of this.state.dynamicValues) {
-            await bv.setPropertyNode(bv.currentPropertyNode, true);
-            bv.setOperationNode(bv.currentOperationNode);
-        }
-
+    public async updateValues(): Promise<void> {
         const values = [];
         const currentValues = this.manager.getValues();
         for (const cv of currentValues) {
             const existingValue = this.state.dynamicValues.find((bv) => bv.value.id === cv.id);
             if (existingValue) {
-                existingValue.setOperationNode(null, cv.operator);
-                existingValue.setCurrentValue(cv.value);
                 values.push(existingValue);
             } else {
                 const value = new DynamicFieldValue(this.manager, cv);
@@ -142,9 +48,119 @@ class Component {
         await this.addEmptyValue();
     }
 
+
+
+    public async onMount(): Promise<void> {
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Remove parameter"
+        ]);
+        if (this.manager) {
+            this.manager.init();
+            for (const v of this.manager.getValues()) {
+                const formFieldValue = new DynamicFieldValue(this.manager, new ObjectPropertyValue(
+                    v.property, v.operator, v.value, v.required, v.valid,
+                    v.objectType, v.readonly, v.changeable, v.id
+                ));
+                await formFieldValue.init();
+                this.state.dynamicValues.push(formFieldValue);
+            }
+
+            this.addEmptyValue();
+
+            this.state.prepared = true;
+        }
+    }
+
+    public async propertyChanged(value: DynamicFieldValue, nodes: TreeNode[]): Promise<void> {
+        await value.setProperty(nodes && nodes.length ? nodes[0].id : null);
+        if (await this.manager.clearValueOnPropertyChange(value.getValue().property)) {
+            value.clearValue();
+        }
+
+        this.state.dynamicValues.filter((dv) => dv.id !== value.id).forEach((dv) => dv.updateProperties());
+
+        await this.provideValue(value);
+
+        await this.addEmptyValue();
+        (this as any).setStateDirty();
+    }
+
+    public async operationChanged(value: DynamicFieldValue, nodes: TreeNode[]): Promise<void> {
+        await value.setOperator(nodes && nodes.length ? nodes[0].id : null);
+        await this.provideValue(value);
+        (this as any).setStateDirty();
+    }
+
+    public async operationStringChanged(value: DynamicFieldValue, event: any): Promise<void> {
+        const operationString = event.target.value;
+        value.setOperator(operationString);
+        await this.provideValue(value);
+    }
+
+    public async treeValueChanged(value: DynamicFieldValue, nodes: TreeNode[]): Promise<void> {
+        value.setValue(nodes.map((n) => n.id));
+        await this.provideValue(value);
+        this.state.dynamicValues.forEach((v) => v.createPropertyNodes());
+    }
+
+    public async setValue(value: DynamicFieldValue, event: any): Promise<void> {
+        const newValue = event.target.value;
+        value.setValue(newValue);
+        await this.provideValue(value);
+    }
+
+    public async setDateValue(value: DynamicFieldValue, event: any): Promise<void> {
+        const newValue = event.target.value;
+        value.setDateValue(newValue);
+        await this.provideValue(value);
+    }
+
+    public async setTimeValue(value: DynamicFieldValue, event: any): Promise<void> {
+        const newValue = event.target.value;
+        value.setTimeValue(newValue);
+        await this.provideValue(value);
+    }
+
+    public async setSpecificValue(value: DynamicFieldValue, emittedValue: any): Promise<void> {
+        value.setValue(emittedValue);
+        await this.provideValue(value);
+    }
+
+    public async provideValue(value: DynamicFieldValue): Promise<void> {
+        await this.manager.setValue(value.getValue());
+        this.state.dynamicValues.forEach((v) => v.createPropertyNodes());
+    }
+
+    public async removeValue(value: DynamicFieldValue): Promise<void> {
+        this.state.prepared = false;
+        const index = this.state.dynamicValues.findIndex((sv) => sv.id === value.id);
+        this.state.dynamicValues.splice(index, 1);
+        await this.manager.removeValue(value.getValue());
+
+        this.state.dynamicValues.forEach((v) => v.createPropertyNodes());
+
+        setTimeout(() => this.state.prepared = true, 50);
+    }
+
+    public async resetValues(): Promise<void> {
+        this.state.dynamicValues = [];
+    }
+
+    private async addEmptyValue(): Promise<void> {
+        const index = this.state.dynamicValues.findIndex((sv) => sv.getValue().property === null);
+        let emptyField: DynamicFieldValue;
+        if (index === -1) {
+            emptyField = new DynamicFieldValue(this.manager);
+            await emptyField.init();
+        } else {
+            emptyField = this.state.dynamicValues.splice(index, 1)[0];
+        }
+        this.state.dynamicValues = [...this.state.dynamicValues, emptyField];
+    }
+
     public showValueInput(value: DynamicFieldValue): boolean {
         const newValue = value.getValue();
-        return newValue && this.manager.showValueInput(newValue);
+        return value.value.property && newValue && this.manager.showValueInput(newValue);
     }
 
     public getInputOptionValue(value: DynamicFieldValue, option: string): string | number {

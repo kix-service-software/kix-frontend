@@ -8,8 +8,7 @@
  */
 
 import {
-    KIXObjectType, KIXObject, SearchFormInstance,
-    InputFieldTypes, TreeNode, KIXObjectLoadingOptions, FilterCriteria,
+    KIXObjectType, KIXObject, SearchFormInstance, KIXObjectLoadingOptions, FilterCriteria,
     FilterDataType, FilterType, CacheState, SearchCache, Bookmark, SortUtil
 } from "../../../model";
 import { SearchDefinition } from "./SearchDefinition";
@@ -18,14 +17,13 @@ import { FormService } from "../../form";
 import { IKIXObjectSearchListener } from "./IKIXObjectSearchListener";
 import { SearchResultCategory } from "./SearchResultCategory";
 import { KIXObjectService } from "../KIXObjectService";
-import { ServiceRegistry } from "../ServiceRegistry";
-import { SearchProperty } from "../../SearchProperty";
 import { ITable } from "../../table";
 import { ContextService } from "../../context";
 import { SearchContext } from "../../search/context/SearchContext";
 import { SearchSocketClient } from "./SearchSocketClient";
 import { BrowserUtil } from "../../BrowserUtil";
 import { BookmarkService } from "../../bookmark/BookmarkService";
+import { SearchProperty } from "../../SearchProperty";
 
 export class SearchService {
 
@@ -66,16 +64,6 @@ export class SearchService {
         if (tableConfig) {
             this.formTableConfigs.set(objectType, tableConfig);
         }
-    }
-
-    public async getInputComponentId(objectType: KIXObjectType, fieldId: string): Promise<string> {
-        const definition = this.getSearchDefinition(objectType);
-        let id;
-        if (definition) {
-            const components = await definition.getInputComponents();
-            id = components.get(fieldId);
-        }
-        return id;
     }
 
     public getFormResultTable<T extends KIXObject>(objectType: KIXObjectType): ITable {
@@ -150,6 +138,14 @@ export class SearchService {
                     ));
                 }
 
+                criteria = criteria.filter((c) => {
+                    if (Array.isArray(c.value)) {
+                        return c.value.length > 0;
+                    } else {
+                        return c.value !== null && c.value !== undefined && c.value !== '';
+                    }
+                });
+
                 const loadingOptions = new KIXObjectLoadingOptions(criteria);
                 objects = await KIXObjectService.loadObjects(objectType, null, loadingOptions, null, false);
             }
@@ -214,41 +210,6 @@ export class SearchService {
             properties = await searchDefinition.getProperties(parameter);
         }
         return properties;
-    }
-
-    public async getSearchOperations(
-        objectType: KIXObjectType, property: string, parameter: Array<[string, any]>
-    ): Promise<SearchOperator[]> {
-        const searchDefinition = this.getSearchDefinition(objectType);
-        let operations = [];
-        if (searchDefinition) {
-            operations = await searchDefinition.getOperations(property, parameter);
-        }
-        return operations;
-    }
-
-    public async getSearchInputType(
-        objectType: KIXObjectType, property: string, parameter: Array<[string, any]>
-    ): Promise<InputFieldTypes> {
-        const searchDefinition = this.getSearchDefinition(objectType);
-        let type = InputFieldTypes.TEXT;
-        if (searchDefinition) {
-            type = await searchDefinition.getInputFieldType(property, parameter);
-        }
-        return type;
-    }
-
-    public async getTreeNodes(
-        objectType: KIXObjectType, property: string, parameter: Array<[string, any]>
-    ): Promise<TreeNode[]> {
-        const objectService = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
-        let nodes = await objectService.getTreeNodes(property);
-        if (!nodes || !nodes.length) {
-            const searchDefinition = this.getSearchDefinition(objectType);
-            nodes = await searchDefinition.getTreeNodes(property, parameter);
-        }
-
-        return nodes;
     }
 
     public getSearchCache(): SearchCache<KIXObject> {

@@ -17,6 +17,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
 
     public onCreate(): void {
         this.state = new ComponentState();
+        this.state.loadNodes = this.load.bind(this);
     }
 
     public onInput(input: any): void {
@@ -30,48 +31,48 @@ class Component extends FormInputComponent<string[], ComponentState> {
             : this.state.field.required ? this.state.field.label : '';
 
         this.state.placeholder = await TranslationService.translate(placeholderText);
-        this.provideToContext();
     }
 
     public async onMount(): Promise<void> {
         await super.onMount();
-
-        this.state.nodes = await NotificationService.getInstance().getTreeNodes(
-            NotificationProperty.DATA_EVENTS
-        );
-        this.setCurrentNode();
-        this.provideToContext();
     }
 
-    public setCurrentNode(): void {
+    private async load(): Promise<TreeNode[]> {
+        const nodes = await NotificationService.getInstance().getTreeNodes(
+            NotificationProperty.DATA_EVENTS
+        );
+        this.setCurrentNode(nodes);
+        return nodes;
+    }
+
+    public setCurrentNode(nodes: TreeNode[]): void {
         if (this.state.defaultValue && this.state.defaultValue.value) {
+            let currentNodes = [];
             if (Array.isArray(this.state.defaultValue.value)) {
-                this.state.currentNodes = this.state.nodes.filter(
+                currentNodes = nodes.filter(
                     (eventNode) => this.state.defaultValue.value.some((eventName) => eventName === eventNode.id)
                 );
             } else {
-                const node = this.state.nodes.find(
+                const node = nodes.find(
                     (eventNode) => eventNode.id === this.state.defaultValue.value
                 );
-                this.state.currentNodes = node ? [node] : [];
+                currentNodes = node ? [node] : [];
             }
-            super.provideValue(
-                this.state.currentNodes ? this.state.currentNodes.map((n) => n.id) : null
-            );
+
+            currentNodes.forEach((n) => n.selected = true);
+            this.provideToContext(nodes);
+            super.provideValue(currentNodes.map((n) => n.id), true);
         }
     }
-    public eventChanged(nodes: TreeNode[]): void {
-        this.state.currentNodes = nodes && nodes.length ? nodes : null;
 
-        this.provideToContext();
-
-        super.provideValue(this.state.currentNodes ? this.state.currentNodes.map((n) => n.id) : null);
+    public nodesChanged(nodes: TreeNode[]): void {
+        this.provideToContext(nodes);
+        super.provideValue(nodes.map((n) => n.id));
     }
 
-    private provideToContext(): void {
+    private provideToContext(nodes: TreeNode[]): void {
         const context = ContextService.getInstance().getActiveContext();
         if (context) {
-            const nodes = this.state.currentNodes ? this.state.currentNodes : [];
             context.setAdditionalInformation(
                 NotificationProperty.DATA_EVENTS, nodes.map((n) => n.id)
             );

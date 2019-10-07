@@ -15,11 +15,10 @@ export class ComponentState extends FormInputComponentState<number> {
     public constructor(
         public autoCompleteConfiguration: AutoCompleteConfiguration = null,
         public isLoading: boolean = false,
-        public nodes: TreeNode[] = [],
         public searchCallback: (limit: number, searchValue: string) => Promise<TreeNode[]> = null,
-        public currentNode: TreeNode = null,
         public placeholder: string = '',
-        public actions: FormInputAction[] = []
+        public actions: FormInputAction[] = [],
+        public loadNodes: () => Promise<TreeNode[]> = null
     ) {
         super();
     }

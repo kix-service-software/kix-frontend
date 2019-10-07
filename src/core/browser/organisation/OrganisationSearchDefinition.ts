@@ -8,67 +8,16 @@
  */
 
 import { SearchDefinition, SearchResultCategory } from "../kix";
-import {
-    KIXObjectType, OrganisationProperty, InputFieldTypes, FilterCriteria,
-    KIXObjectLoadingOptions, KIXObjectProperty
-} from "../../model";
-import { SearchOperator } from "../SearchOperator";
+import { KIXObjectType, FilterCriteria, KIXObjectLoadingOptions } from "../../model";
 import { SearchProperty } from "../SearchProperty";
 import { OrganisationService } from "./OrganisationService";
+import { OrganisationSearchFormManager } from "./OrganisationSearchFormManager";
 
 export class OrganisationSearchDefinition extends SearchDefinition {
 
     public constructor() {
         super(KIXObjectType.ORGANISATION);
-    }
-
-    public async getProperties(): Promise<Array<[string, string]>> {
-        const properties: Array<[string, string]> = [
-            [SearchProperty.FULLTEXT, null],
-            [OrganisationProperty.NAME, null],
-            [OrganisationProperty.NUMBER, null],
-            [OrganisationProperty.CITY, null],
-            [OrganisationProperty.COUNTRY, null],
-            [OrganisationProperty.STREET, null],
-            [OrganisationProperty.URL, null],
-            [OrganisationProperty.ZIP, null]
-        ];
-
-        if (await this.checkReadPermissions('system/valid')) {
-            properties.push([KIXObjectProperty.VALID_ID, null]);
-        }
-
-        return properties;
-    }
-
-    public async getOperations(property: string): Promise<SearchOperator[]> {
-        let operations: SearchOperator[] = [];
-
-        if (this.isDropDown(property)) {
-            operations = [SearchOperator.IN];
-        } else {
-            operations = this.getStringOperators();
-        }
-
-        return operations;
-    }
-
-    public async getInputFieldType(property: string, parameter?: Array<[string, any]>): Promise<InputFieldTypes> {
-        if (this.isDropDown(property)) {
-            return InputFieldTypes.DROPDOWN;
-        }
-
-        return InputFieldTypes.TEXT;
-    }
-
-    private isDropDown(property: string): boolean {
-        return property === KIXObjectProperty.VALID_ID;
-    }
-
-    public async getInputComponents(): Promise<Map<string, string>> {
-        const components = new Map<string, string>();
-        components.set(KIXObjectProperty.VALID_ID, 'valid-input');
-        return components;
+        this.formManager = new OrganisationSearchFormManager();
     }
 
     public async getSearchResultCategories(): Promise<SearchResultCategory> {

@@ -48,9 +48,10 @@ export class Extension implements IConfigurationExtension {
                     'Translatable#Helptext_Admin_Users_RoleEdit_Comment', null, null, null, null, null, null, null, 250
                 ),
                 new FormField(
-                    'Translatable#Validity', RoleProperty.VALID_ID, 'valid-input', true,
-                    "Translatable#Helptext_Admin_Users_RoleEdit_Valid",
-                    null, new FormFieldValue(1)
+                    'Translatable#Validity', KIXObjectProperty.VALID_ID,
+                    'object-reference-input', true, 'Translatable#Helptext_Admin_Users_RoleEdit_Valid', [
+                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
+                    ], new FormFieldValue(1)
                 )
             ]);
 
@@ -65,7 +66,7 @@ export class Extension implements IConfigurationExtension {
                     'Translatable#Agents', RoleProperty.USER_IDS, 'object-reference-input', false,
                     'Translatable#Helptext_Admin_Users_RoleEdit_User', [
                         new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
-                        new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
+
                         new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
                         new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                             new KIXObjectLoadingOptions(

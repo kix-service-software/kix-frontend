@@ -15,7 +15,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         </div>
         <div.field-icon/>
         <div.field-input>
-            <form-list nodes=state.nodes selectedNodes=state.currentNodes on-nodesChanged("searchChanged") multiselect=false/>
+            <form-list loadNodes=state.loadNodes nodesChanged("nodesChanged")/>
         </div>
     </div>
     <div.form-field.show-object() title=state.translations["Translatable#Title"]>

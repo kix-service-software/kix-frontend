@@ -9,10 +9,14 @@
 
 import {
     AttributeDefinition, FormField, FormFieldOption, KIXObjectType, FormFieldOptions,
-    InputFieldTypes, Form, VersionProperty, ConfigItemProperty, ConfigItemClass, FormContext, ObjectReferenceOptions
+    InputFieldTypes, Form, VersionProperty, ConfigItemProperty, ConfigItemClass, FormContext,
+    ObjectReferenceOptions, KIXObjectLoadingOptions, FilterCriteria, KIXObjectProperty, FilterDataType,
+    FilterType, GeneralCatalogItemProperty
 } from "../../model";
 import { isArray } from "util";
 import { FormGroup } from "../../model/components/form/FormGroup";
+import { SearchOperator } from "../SearchOperator";
+import { SearchProperty } from "../SearchProperty";
 
 export class ConfigItemFormFactory {
 
@@ -51,20 +55,44 @@ export class ConfigItemFormFactory {
             null, null, null, false, false
         ));
         fields.push(new FormField(
-            'Translatable#Deployment State', VersionProperty.DEPL_STATE_ID, 'general-catalog-input',
+            'Translatable#Deployment State', VersionProperty.DEPL_STATE_ID, 'object-reference-input',
             true, 'Translatable#Helptext_CMDB_ConfigItemCreateEdit_DeploymentState',
             [
-                new FormFieldOption('GC_CLASS', 'ITSM::ConfigItem::DeploymentState'),
-                new FormFieldOption('ICON', true)
+                new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.GENERAL_CATALOG_ITEM),
+                new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                    new KIXObjectLoadingOptions([
+                        new FilterCriteria(
+                            KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                            FilterType.AND, 1
+                        ),
+                        new FilterCriteria(
+                            GeneralCatalogItemProperty.CLASS, SearchOperator.EQUALS, FilterDataType.STRING,
+                            FilterType.AND, 'ITSM::ConfigItem::DeploymentState'
+                        )
+                    ])
+                ),
+                new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false)
             ],
             null, null, null, 1, 1, 1, null, null, null, false, false
         ));
         fields.push(new FormField(
-            'Translatable#Incident state', VersionProperty.INCI_STATE_ID, 'general-catalog-input',
+            'Translatable#Incident state', VersionProperty.INCI_STATE_ID, 'object-reference-input',
             true, 'Translatable#Helptext_CMDB_ConfigItemCreateEdit_IncidentState',
             [
-                new FormFieldOption('GC_CLASS', 'ITSM::Core::IncidentState'),
-                new FormFieldOption('ICON', true)
+                new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.GENERAL_CATALOG_ITEM),
+                new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                    new KIXObjectLoadingOptions([
+                        new FilterCriteria(
+                            KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                            FilterType.AND, 1
+                        ),
+                        new FilterCriteria(
+                            GeneralCatalogItemProperty.CLASS, SearchOperator.EQUALS, FilterDataType.STRING,
+                            FilterType.AND, 'ITSM::Core::IncidentState'
+                        )
+                    ])
+                ),
+                new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false)
             ],
             null, null, null, 1, 1, 1, null, null, null, false, false
         ));
@@ -138,11 +166,24 @@ export class ConfigItemFormFactory {
     }
 
     private getGeneralCatalogField(ad: AttributeDefinition, parentInstanceId?: string): FormField {
-        return new FormField(ad.Name, ad.Key, 'general-catalog-input', ad.Input.Required, null,
+        return new FormField(ad.Name, ad.Key, 'object-reference-input', ad.Input.Required, null,
             [
-                new FormFieldOption('GC_CLASS', ad.Input['Class']),
-                new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.GENERAL_CATALOG)
-            ], null, null, parentInstanceId, ad.CountDefault, ad.CountMax,
+                new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.GENERAL_CATALOG_ITEM),
+                new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                    new KIXObjectLoadingOptions([
+                        new FilterCriteria(
+                            KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                            FilterType.AND, 1
+                        ),
+                        new FilterCriteria(
+                            GeneralCatalogItemProperty.CLASS, SearchOperator.EQUALS, FilterDataType.STRING,
+                            FilterType.AND, ad.Input['Class']
+                        )
+                    ])
+                ),
+                new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false)
+            ],
+            null, null, parentInstanceId, ad.CountDefault, ad.CountMax,
             ad.CountMin, ad.Input.MaxLength,
             ad.Input.RegEx, ad.Input.RegExErrorMessage
         );
@@ -172,6 +213,8 @@ export class ConfigItemFormFactory {
         return new FormField(ad.Name, ad.Key, 'object-reference-input', ad.Input.Required, null,
             [
                 new FormFieldOption(ObjectReferenceOptions.OBJECT, objectType),
+                new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true),
+                new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
                 new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.OBJECT_REFERENCE)
             ], null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
             ad.Input.MaxLength, ad.Input.RegEx, ad.Input.RegExErrorMessage
@@ -185,11 +228,29 @@ export class ConfigItemFormFactory {
         } else {
             classes = [ad.Input['ReferencedCIClassName']];
         }
-        return new FormField(ad.Name, ad.Key, 'ci-class-reference-input', ad.Input.Required, null,
+        return new FormField(ad.Name, ad.Key, 'object-reference-input', ad.Input.Required, null,
             [
-                new FormFieldOption('CI_CLASS', classes),
-                new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.CI_REFERENCE)
-            ], null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
+                new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.CONFIG_ITEM),
+                new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
+                new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true),
+                new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                    new KIXObjectLoadingOptions([
+                        new FilterCriteria(
+                            ConfigItemProperty.CLASS, SearchOperator.IN,
+                            FilterDataType.STRING, FilterType.AND, classes
+                        ),
+                        new FilterCriteria(
+                            ConfigItemProperty.NUMBER, SearchOperator.CONTAINS,
+                            FilterDataType.STRING, FilterType.OR, SearchProperty.SEARCH_VALUE
+                        ),
+                        new FilterCriteria(
+                            'CurrentVersion.' + VersionProperty.NAME, SearchOperator.CONTAINS,
+                            FilterDataType.STRING, FilterType.OR, SearchProperty.SEARCH_VALUE
+                        )
+                    ])
+                )
+            ],
+            null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
             ad.Input.MaxLength, ad.Input.RegEx, ad.Input.RegExErrorMessage
         );
     }

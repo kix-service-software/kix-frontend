@@ -6,105 +6,36 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-<div.form-list on-click("setKeepExpanded") on-keydown("keyDown") key=state.listId>
-    <div.form-list-input-container.input-style
-        class={
-                "list-shown": state.expanded,
-                autocomplete: state.asAutocomplete,
-                invalid: state.invalid,
-                readonly: state.readonly
-            }
-        key=("form-list-input-container-" + state.listId)
-        title=state.placeholder>
-        <input
-            type="text"
+<div.form-list tabindex="0" on-focus("focus") on-click("setKeepExpanded") key=state.listId>
+    <if(state.prepared)>
+        <div.form-list-input-container.input-style
             class={
+                        "list-shown": state.expanded,
+                        autocomplete: state.asAutocomplete,
                         invalid: state.invalid,
-                        "hidden-input": state.selectedNodes.length > 0,
-                        "input-style": state.selectedNodes.length === 0
+                        readonly: state.readonly
                     }
-            readonly=state.readonly
-            placeholder=state.placeholder
-            disabled=(state.readonly || state.disabled)
-            on-click("toggleList", false)
-            on-focus("toggleList", false)/>
-        <if(state.selectedNodes.length > 0)>
-            <div.selected-nodes key=("form-list-selected-nodes-" + state.listId) on-click("toggleList", false)>
-                <for|node| of=state.selectedNodes>
-                    <div.selected-node
-                        title=(state.translations[node.tooltip] ? state.translations[node.tooltip] : node.tooltip)
-                        key=("form-list-selected-node-" + state.listId + "[]")>
-                        <icon icon=node.icon showUnknown=true/>
-                        <span.item-text>
-                            <translation-string pattern=node.label/>
-                        </span>
-                        <if(node.secondaryIcon)>
-                            <icon icon=node.secondaryIcon showUnknown=true/>
-                        </if>
-                        <if(state.removeNode && !state.readonly)>
-                            <span.kix-icon-close on-click("removeSelectedItem", node)/>
-                        </if>
-                    </div>
-                </for>
+            key=("form-list-input-container-" + state.listId)
+            title=state.placeholder>
+            <dropdown-selected-nodes-list treeId=state.treeId canRemoveNode=state.removeNodes placeholder=state.placeholder/>
+            <div.form-input-control-list on-click("toggleList", true)>
+                <dropdown-action-list actions=state.actions/>
+                <span.form-list-button.kix-icon-sort-down/>
+            </div>
+        </div>
+        <if(state.expanded)>
+            <div.value-list style=state.treeStyle key=("value-list-" + state.treeId)>
+                <dropdown-filter
+                    autocompleteConfiguration=input.autoCompleteConfiguration
+                    autocompleteSearchCallback=input.searchCallback
+                    treeId=state.treeId
+                    freeText=input.freeText/>
+                <form-list-tree key=state.treeId treeId=state.treeId tabIndex=-1/>
+                <if(state.multiselect)>
+                    <dropdown-button-bar treeId=state.treeId on-submit("submitClicked")/>
+                </if>
             </div>
         </if>
-        <div.form-input-control-list>
-            <div.input-action-list>
-                <for|action| of=state.actions>
-                    <label-item
-                        label=action.label
-                        toggle=action.active
-                        showToggle=action.showActive
-                        removeLabels=false
-                        translatable=true
-                        on-labelClicked("actionClicked", action)/>
-                </for>
-            </div>
-            <span.form-list-button.kix-icon-sort-down on-click("listToggleButtonClicked")/>
-        </div>
-    </div>
-    <if(state.expanded)>
-        <div.value-list style=state.treeStyle key=("value-list-" + state.treeId)>
-            <if(state.asAutocomplete || state.nodes.length > 7)>
-                <input.input-style
-                    type="text"
-                    placeholder=state.autoCompletePlaceholder
-                    value=(state.asAutocomplete ? state.autocompleteSearchValue : state.filterValue)
-                    key=("form-list-input-" + state.listId)
-                    on-input("filterValueChanged")/>
-            </if>
-            <if(state.isLoading)>
-                <div.form-list-loading>
-                    <loading-spinner/>
-                </div>
-            </if>
-            <else-if(state.asAutocomplete && state.nodes.length === 0)>
-                <div.form-list-autocomplete-no-results>
-                    <span>${state.autocompleteNotFoundText}</span>
-                </div>
-            </else-if>
-            <else>
-                <form-list-tree
-                    key=state.treeId
-                    nodes=state.nodes
-                    filterValue=state.filterValue
-                    activeNodes=state.selectedNodes
-                    containerElement=state.containerElement
-                    on-nodeToggled("nodeToggled")
-                    on-nodeClicked("nodeClicked")/>
-                <if(state.asMultiselect)>
-                    <div.button-bar key="buttonbar">
-                        <span on-click("selectAll")>
-                            <input.select-all-Checkbox type="checkbox" key="selectAllCheckbox"/>
-                            <translation-string pattern="Translatable#Select all"/>
-                        </span>
-                        <button.submit-button type="button" on-click("submit") title=state.translations["Translatable#Submit"]>
-                            <span.kix-icon-check/>
-                            <translation-string pattern="Translatable#Submit"/>
-                        </button>
-                    </div>
-                </if>
-            </else>
-        </div>
     </if>
 </div>
+<input.hidden-input type="text" key="hidden-form-list-input"/>

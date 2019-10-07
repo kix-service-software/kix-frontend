@@ -15,8 +15,25 @@ import { TreeNode } from '../../../core/model';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
+    private currentSearch: string;
+
     public onCreate(): void {
         this.state = new ComponentState();
+        this.state.loadNodes = this.load.bind(this);
+    }
+
+    public async load(): Promise<TreeNode[]> {
+        const bookmarks = await SearchService.getInstance().getSearchBookmarks();
+        const nodes = bookmarks.map((b) => new TreeNode(b.title, b.title, b.icon));
+
+        const cache = SearchService.getInstance().getSearchCache();
+        if (cache) {
+            const currentNode = nodes.find((n) => n.label === cache.name);
+            currentNode.selected = true;
+            this.currentSearch = currentNode ? currentNode.id : null;
+        }
+
+        return nodes;
     }
 
     public async onMount(): Promise<void> {
@@ -24,25 +41,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             'Translatable#Title', 'Translatable#Search', 'Translatable#Cancel', 'Translatable#Save',
             'Translatable#Search Title'
         ]);
-
-        const bookmarks = await SearchService.getInstance().getSearchBookmarks();
-        this.state.nodes = bookmarks.map((b) => new TreeNode(b.title, b.title, b.icon));
-
-        const cache = SearchService.getInstance().getSearchCache();
-        if (cache) {
-            const currentNodes = this.state.nodes.filter((n) => n.label === cache.name);
-            this.searchChanged(currentNodes);
-        }
-
     }
 
-    public searchChanged(nodes: TreeNode[]): void {
-        if (nodes && nodes.length) {
-            this.state.currentNodes = nodes;
-            this.state.name = this.state.currentNodes[0].label;
-        } else {
-            this.state.currentNodes = [];
-        }
+    public nodesChanged(nodes: TreeNode[]): void {
+        this.currentSearch = nodes && nodes.length ? nodes[0].id : null;
     }
 
     public nameChanged(event: any): void {
@@ -62,9 +64,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             } else {
                 this.state.nameInvalid = false;
 
-                const existingName = this.state.currentNodes && this.state.currentNodes.length
-                    ? this.state.currentNodes[0].label
-                    : null;
+                const existingName = this.currentSearch ? this.currentSearch : null;
 
                 await SearchService.getInstance().saveCache(this.state.name, existingName);
                 BrowserUtil.openSuccessOverlay('Translatable#Search successfully saved.');

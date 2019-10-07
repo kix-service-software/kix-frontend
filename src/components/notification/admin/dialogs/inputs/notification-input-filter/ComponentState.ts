@@ -13,7 +13,8 @@ import { FormInputComponentState } from "../../../../../../core/model";
 export class ComponentState extends FormInputComponentState<Array<[string, string[] | number[]]>> {
 
     public constructor(
-        public manager: NotificationFilterManager = new NotificationFilterManager()
+        public manager: NotificationFilterManager = new NotificationFilterManager(),
+        public prepared: boolean = false
     ) {
         super();
     }

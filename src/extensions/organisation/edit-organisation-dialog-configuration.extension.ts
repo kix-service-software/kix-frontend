@@ -12,7 +12,8 @@ import { ConfigurationService } from "../../core/services";
 import { FormGroup } from "../../core/model/components/form/FormGroup";
 import { EditOrganisationDialogContext } from "../../core/browser/organisation";
 import {
-    ContextConfiguration, FormField, OrganisationProperty, KIXObjectProperty, KIXObjectType, Form, FormContext
+    ContextConfiguration, FormField, OrganisationProperty, KIXObjectProperty,
+    KIXObjectType, Form, FormContext, FormFieldOption, FormFieldValue, ObjectReferenceOptions
 } from "../../core/model";
 
 export class Extension implements IConfigurationExtension {
@@ -70,8 +71,10 @@ export class Extension implements IConfigurationExtension {
                     null, null, null, 250
                 ),
                 new FormField(
-                    'Translatable#Validity', KIXObjectProperty.VALID_ID, 'valid-input', false,
-                    'Translatable#Helptext_Customers_OrganisationCreate_Validity'
+                    'Translatable#Validity', KIXObjectProperty.VALID_ID,
+                    'object-reference-input', true, 'Translatable#Helptext_Customers_OrganisationCreate_Validity', [
+                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
+                    ], new FormFieldValue(1)
                 )
             ]));
 

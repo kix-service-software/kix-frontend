@@ -8,24 +8,31 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { TreeNode } from '../../../../core/model';
-import { BrowserUtil } from '../../../../core/browser';
+import { ComponentInput } from './ComponentInput';
+import { BrowserUtil, IdService } from '../../../../core/browser';
+import { TreeNode, TreeHandler, TreeService } from '../../../../core/model';
 
 class TreeNodeComponent {
 
     private state: ComponentState;
+    private treeId: string;
+    private treeHandler: TreeHandler;
 
     public onCreate(input: any): void {
         this.state = new ComponentState(input.node);
     }
 
-    public onInput(input: any): void {
+    public onInput(input: ComponentInput): void {
         this.state.node = input.node;
-        this.state.filterValue = input.filterValue;
-        this.state.activeNodes = input.activeNodes;
-        (this as any).setStateDirty('activeNodes');
-        this.state.treeId = input.treeId;
-        this.state.nodeId = this.state.treeId + '-node-' + this.state.node.id;
+        this.treeId = input.treeId;
+    }
+
+    public onMount(): void {
+        this.state.nodeId = this.treeId + '-node-' + this.state.node.id;
+        this.treeHandler = TreeService.getInstance().getTreeHandler(this.treeId);
+        this.treeHandler.registerListener(
+            IdService.generateDateBasedId('tree-node'), (nodes: TreeNode[]) => (this as any).setStateDirty()
+        );
     }
 
     public onUpdate(): void {
@@ -37,7 +44,6 @@ class TreeNodeComponent {
 
     public onDestroy(): void {
         this.state.node = null;
-        this.state.filterValue = null;
     }
 
     public hasChildren(): boolean {
@@ -53,39 +59,18 @@ class TreeNodeComponent {
         return title;
     }
 
-    public toggleNode(event: any): void {
-        event.stopPropagation();
-        event.preventDefault();
-        this.state.node.expanded = !this.state.node.expanded;
-        (this as any).emit('nodeToggled', this.state.node);
-        (this as any).setStateDirty();
-    }
-
     public nodeClicked(): void {
-        if (this.state.node.clickable) {
-            (this as any).emit('nodeClicked', this.state.node);
+        if (this.treeHandler) {
+            this.treeHandler.setSelection([this.state.node], !this.state.node.selected);
         }
     }
 
-    public nodeHovered(): void {
-        (this as any).emit('nodeHovered', this.state.node);
+    public toggleNode(): void {
+        if (this.treeHandler) {
+            this.treeHandler.toggleNode(this.state.node);
+        }
     }
 
-    public childNodeHovered(node: TreeNode): void {
-        (this as any).emit('nodeHovered', node);
-    }
-
-    public childNodeToggled(node: TreeNode): void {
-        (this as any).emit('nodeToggled', node);
-    }
-
-    public childNodeClicked(node: TreeNode): void {
-        (this as any).emit('nodeClicked', node);
-    }
-
-    public isNodeActive(): boolean {
-        return this.state.activeNodes && this.state.activeNodes.some((n) => n.id === this.state.node.id);
-    }
 }
 
 module.exports = TreeNodeComponent;

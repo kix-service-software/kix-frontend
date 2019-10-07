@@ -194,7 +194,7 @@ export class FormInstance implements IFormInstance {
         }
     }
 
-    public async provideFormFieldValue<T>(formFieldInstanceId: string, value: T): Promise<void> {
+    public async provideFormFieldValue<T>(formFieldInstanceId: string, value: T, silent?: boolean): Promise<void> {
         if (!this.formFieldValues.has(formFieldInstanceId)) {
             this.formFieldValues.set(formFieldInstanceId, new FormFieldValue(value));
         }
@@ -226,8 +226,10 @@ export class FormInstance implements IFormInstance {
             dialogContext.setAdditionalInformation(AdditionalContextInformation.FORM_OBJECT, formObject);
         }
 
-        this.listeners.forEach((l) => l.formValueChanged(formField, formFieldValue, oldValue));
-        this.listeners.forEach((l) => l.updateForm());
+        if (!silent) {
+            this.listeners.forEach((l) => l.formValueChanged(formField, formFieldValue, oldValue));
+            this.listeners.forEach((l) => l.updateForm());
+        }
     }
 
     public getFormFieldValue<T>(formFieldInstanceId: string): FormFieldValue<T> {

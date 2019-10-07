@@ -23,9 +23,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </div>
                     <div.field-input>
                         <form-list
-                            nodes=state.classNodes
+                            treeId="new-ci-class-form-list"
+                            loadNodes=state.loadNodes
                             placeholder=state.placeholder
-                            selectedNodes=[state.currentClassNode]
                             on-nodesChanged("classChanged")
                             multiselect=false/>
                     </div>

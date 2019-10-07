@@ -104,7 +104,7 @@ class Component implements IKIXObjectSearchListener {
                 }
 
                 const searchProperty = properties.find((p) => p[0] === criteria.property);
-                let displayProperty = searchProperty[1];
+                let displayProperty = searchProperty ? searchProperty[1] : null;
                 if (!displayProperty) {
                     displayProperty = await labelProvider.getPropertyText(criteria.property);
                 } else {

@@ -8,16 +8,14 @@
  */
 
 import { TreeNode } from '../../../core/model';
-import { IdService } from '../../../core/browser';
 
 export class ComponentState {
 
     public constructor(
+        public treeId: string = null,
+        public treeStyle: string = null,
         public nodes: TreeNode[] = [],
-        public filterValue: string = null,
-        public treeId: string = 'tree-' + IdService.generateDateBasedId(),
-        public activeNodes: TreeNode[] = null,
-        public treeStyle: string = null
+        public tabIndex: number = 0
     ) { }
 
 }

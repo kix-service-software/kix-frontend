@@ -20,6 +20,7 @@ class Component extends FormInputComponent<number, ComponentState> {
 
     public onCreate(): void {
         this.state = new ComponentState();
+        this.state.loadNodes = this.load.bind(this);
     }
 
     public onInput(input: any): void {
@@ -37,39 +38,43 @@ class Component extends FormInputComponent<number, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-
-        this.state.nodes = await TicketService.getInstance().getTreeNodes(TicketProperty.STATE_ID);
-        this.setCurrentNode();
-        this.showPendingTimeField();
     }
 
-    protected setCurrentNode(): void {
-        if (this.state.defaultValue && this.state.defaultValue.value) {
+    public async load(): Promise<TreeNode[]> {
+        const nodes = await TicketService.getInstance().getTreeNodes(TicketProperty.STATE_ID);
+        await this.setCurrentNode(nodes);
+        return nodes;
+    }
+
+    protected async setCurrentNode(nodes: TreeNode[]): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const defaultValue = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
+        if (defaultValue && defaultValue.value) {
             let defaultStateValue;
-            if (Array.isArray(this.state.defaultValue.value)) {
-                defaultStateValue = this.state.defaultValue.value[0];
+            if (Array.isArray(defaultValue.value)) {
+                defaultStateValue = defaultValue.value[0];
             } else {
-                defaultStateValue = this.state.defaultValue.value;
+                defaultStateValue = defaultValue.value;
             }
             if (defaultStateValue) {
-                this.state.currentNode = this.state.nodes.find((n) => n.id === defaultStateValue);
-                this.showPendingTime();
-                this.setValue();
+                const currentNode = nodes.find((n) => n.id === defaultStateValue);
+                currentNode.selected = true;
+                await this.showPendingTime(currentNode);
+                this.setValue(currentNode);
             }
         }
     }
 
     public stateChanged(nodes: TreeNode[]): void {
-        this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
-
-        this.showPendingTime();
-        this.setValue();
+        const currentNode = nodes && nodes.length ? nodes[0] : null;
+        this.showPendingTime(currentNode);
+        this.setValue(currentNode);
     }
 
-    private async showPendingTime(): Promise<void> {
+    private async showPendingTime(currentNode: TreeNode): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         let field = this.state.field.children.find((f) => f.property === TicketProperty.PENDING_TIME);
-        const showPendingTime = await this.showPendingTimeField();
+        const showPendingTime = await this.showPendingTimeField(currentNode);
         if (field && !showPendingTime) {
             formInstance.removeFormField(field, this.state.field);
         } else if (!field && showPendingTime) {
@@ -86,16 +91,16 @@ class Component extends FormInputComponent<number, ComponentState> {
         }
     }
 
-    private async showPendingTimeField(): Promise<boolean> {
+    private async showPendingTimeField(currentNode: TreeNode): Promise<boolean> {
         let showPending = false;
-        if (this.state.currentNode && this.checkPendingOption()) {
+        if (currentNode && this.checkPendingOption()) {
             const states = await KIXObjectService.loadObjects<TicketState>(
                 KIXObjectType.TICKET_STATE, null
             );
             const stateTypes = await KIXObjectService.loadObjects<StateType>(
                 KIXObjectType.TICKET_STATE_TYPE, null
             );
-            const state = states.find((s) => s.ID === this.state.currentNode.id);
+            const state = states.find((s) => s.ID === currentNode.id);
             if (state) {
                 const stateType = stateTypes.find((t) => t.ID === state.TypeID);
                 showPending = stateType && stateType.Name.toLocaleLowerCase().indexOf('pending') >= 0;
@@ -116,8 +121,8 @@ class Component extends FormInputComponent<number, ComponentState> {
         return true;
     }
 
-    private setValue(): void {
-        super.provideValue(this.state.currentNode ? Number(this.state.currentNode.id) : null);
+    private setValue(currentNode: TreeNode): void {
+        super.provideValue(currentNode ? Number(currentNode.id) : null);
     }
 
     public async focusLost(event: any): Promise<void> {

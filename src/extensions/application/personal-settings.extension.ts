@@ -64,7 +64,7 @@ class Extension implements IPersonalSettingsExtension {
                 null, null,
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
-                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
+
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
                     new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, true),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
@@ -88,7 +88,7 @@ class Extension implements IPersonalSettingsExtension {
                 null, null,
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.NOTIFICATION),
-                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
+
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
                     new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, false),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,

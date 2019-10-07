@@ -9,19 +9,22 @@
 
 import { ComponentState } from './ComponentState';
 import {
-    FormInputComponent, KIXObjectType,
-    TreeNode, KIXObjectLoadingOptions, KIXObject, ObjectReferenceOptions, FilterCriteria, SortUtil, DataType
+    FormInputComponent, KIXObjectType, TreeNode, KIXObjectLoadingOptions, KIXObject,
+    ObjectReferenceOptions, FilterCriteria, SortUtil, DataType, AutoCompleteConfiguration, TreeService
 } from '../../../../../core/model';
-import { FormService } from '../../../../../core/browser/form';
-import { LabelService, KIXObjectService, ServiceRegistry, IKIXObjectService } from '../../../../../core/browser';
+import {
+    LabelService, KIXObjectService, ServiceRegistry, IKIXObjectService, SearchProperty, FormService
+} from '../../../../../core/browser';
 import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
-class Component extends FormInputComponent<string | number, ComponentState> {
+class Component extends FormInputComponent<string | number | string[] | number[], ComponentState> {
 
     private objects: KIXObject[];
+    private autocomplete: boolean = false;
 
     public onCreate(): void {
         this.state = new ComponentState();
+        this.state.loadNodes = this.load.bind(this);
     }
 
     public onInput(input: any): void {
@@ -40,51 +43,94 @@ class Component extends FormInputComponent<string | number, ComponentState> {
     public async onMount(): Promise<void> {
         await super.onMount();
         this.state.searchCallback = this.search.bind(this);
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        this.state.autoCompleteConfiguration = formInstance.getAutoCompleteConfiguration();
-
-        await this.prepareNodes();
-        await this.setCurrentNode();
+        this.setOptions();
+        this.state.prepared = true;
     }
 
-    public async setCurrentNode(): Promise<void> {
-        if (this.state.defaultValue && this.state.defaultValue.value) {
-            const objectIds: any[] = Array.isArray(this.state.defaultValue.value)
-                ? this.state.defaultValue.value : [this.state.defaultValue.value];
+    private async load(): Promise<TreeNode[]> {
+        let nodes = [];
+        const objectOption = this.state.field.options.find((o) => o.option === ObjectReferenceOptions.OBJECT);
+        const loadingOptions = this.state.field.options.find(
+            (o) => o.option === ObjectReferenceOptions.LOADINGOPTIONS
+        );
+        if (objectOption) {
+            if (!this.autocomplete) {
+                this.objects = await KIXObjectService.loadObjects(
+                    objectOption.value, null, loadingOptions ? loadingOptions.value : null
+                );
+                const structureOption = this.state.field.options.find(
+                    (o) => o.option === ObjectReferenceOptions.AS_STRUCTURE
+                );
+
+                if (structureOption && structureOption.value) {
+                    nodes = await KIXObjectService.prepareObjectTree(this.objects, true);
+                } else {
+                    for (const o of this.objects) {
+                        const node = await this.createTreeNode(o);
+                        nodes.push(node);
+                    }
+
+                }
+                SortUtil.sortObjects(nodes, 'label', DataType.STRING);
+
+                const additionalNodes = this.state.field.options.find(
+                    (o) => o.option === ObjectReferenceOptions.ADDITIONAL_NODES
+                );
+                if (additionalNodes) {
+                    nodes = [...additionalNodes.value, ...nodes];
+                }
+            }
+        }
+        await this.setCurrentNode(nodes);
+        return nodes;
+    }
+
+    public async setCurrentNode(nodes?: TreeNode[]): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const defaultValue = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
+        if (defaultValue && defaultValue.value) {
+            const objectIds: any[] = Array.isArray(defaultValue.value)
+                ? defaultValue.value : [defaultValue.value];
 
             const objectOption = this.state.field.options.find((o) => o.option === ObjectReferenceOptions.OBJECT);
             if (objectOption) {
-                if (this.state.nodes && !!this.state.nodes.length) {
-                    const nodes: TreeNode[] = [];
+                const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
+                if (treeHandler && !nodes) {
+                    nodes = treeHandler.getTree();
+                }
+
+                const selectedNodes = [];
+                if (nodes && !!nodes.length) {
                     objectIds.forEach((oid) => {
-                        const node = this.findNode(oid);
+                        const node = this.findNode(oid, nodes);
                         if (node) {
-                            nodes.push(node);
+                            node.selected = true;
+                            selectedNodes.push(node);
                         }
                     });
-                    if (nodes && !!nodes.length) {
-                        this.state.currentNodes = nodes;
-                    }
+                    this.nodesChanged(selectedNodes);
                 }
 
-                if (this.state.autocomplete) {
+                if (this.autocomplete) {
                     const objects = await KIXObjectService.loadObjects(objectOption.value, objectIds);
                     if (objects && !!objects.length) {
-                        const nodes = [];
+                        nodes = [];
                         for (const object of objects) {
-                            nodes.push(await this.createTreeNode(object));
+                            const node = await this.createTreeNode(object);
+                            node.selected = true;
+                            nodes.push(node);
+                            selectedNodes.push(node);
                         }
-                        this.state.nodes = nodes;
-                        this.state.currentNodes = nodes;
+                        this.nodesChanged(selectedNodes);
                     }
                 }
-            }
 
-            this.objectChanged(this.state.currentNodes);
+                treeHandler.setSelection(selectedNodes, true);
+            }
         }
     }
 
-    private findNode(id: any, nodes: TreeNode[] = this.state.nodes): TreeNode {
+    private findNode(id: any, nodes: TreeNode[]): TreeNode {
         let returnNode: TreeNode;
         if (Array.isArray(nodes)) {
             returnNode = nodes.find((n) => n.id.toString() === id.toString());
@@ -102,43 +148,16 @@ class Component extends FormInputComponent<string | number, ComponentState> {
         return returnNode;
     }
 
-    public objectChanged(nodes: TreeNode[]): void {
-        this.state.currentNodes = nodes && nodes.length ? nodes : [];
-        if (!!this.state.currentNodes.length) {
-            super.provideValue(
-                this.state.isMultiselect ? this.state.currentNodes.map((n) => n.id) : this.state.currentNodes[0].id
-            );
+    public nodesChanged(nodes: TreeNode[]): void {
+        const currentNodes = nodes && nodes.length ? nodes : [];
+        if (!!currentNodes.length) {
+            if (this.state.multiselect) {
+                super.provideValue(currentNodes.map((n) => n.id));
+            } else {
+                super.provideValue(currentNodes[0].id);
+            }
         } else {
             super.provideValue(null);
-        }
-    }
-
-    private async prepareNodes(): Promise<void> {
-        const objectOption = this.state.field.options.find((o) => o.option === ObjectReferenceOptions.OBJECT);
-        const loadingOptions = this.state.field.options.find(
-            (o) => o.option === ObjectReferenceOptions.LOADINGOPTIONS
-        );
-        if (objectOption) {
-            this.setOptions();
-            if (!this.state.autocomplete) {
-                this.objects = await KIXObjectService.loadObjects(
-                    objectOption.value, null, loadingOptions ? loadingOptions.value : null
-                );
-                const structureOption = this.state.field.options.find(
-                    (o) => o.option === ObjectReferenceOptions.AS_STRUCTURE
-                );
-                let nodes = [];
-                if (structureOption && structureOption.value) {
-                    nodes = await KIXObjectService.prepareObjectTree(this.objects, true);
-                } else {
-                    for (const o of this.objects) {
-                        const node = await this.createTreeNode(o);
-                        nodes.push(node);
-                    }
-
-                }
-                this.state.nodes = SortUtil.sortObjects(nodes, 'label', DataType.STRING);
-            }
         }
     }
 
@@ -146,21 +165,26 @@ class Component extends FormInputComponent<string | number, ComponentState> {
         const autocompleteOption = this.state.field.options.find(
             (o) => o.option === ObjectReferenceOptions.AUTOCOMPLETE
         );
-        this.state.autocomplete = typeof autocompleteOption === 'undefined'
-            || autocompleteOption === null
-            || autocompleteOption.value ? true : false;
+
+        if (typeof autocompleteOption !== 'undefined' && autocompleteOption !== null) {
+            if (autocompleteOption.value) {
+                this.autocomplete = true;
+                this.state.autoCompleteConfiguration = new AutoCompleteConfiguration();
+            }
+        }
+
         const isMultiselectOption = this.state.field.options.find(
             (o) => o.option === ObjectReferenceOptions.MULTISELECT
         );
-        this.state.isMultiselect = typeof isMultiselectOption === 'undefined'
+        this.state.multiselect = typeof isMultiselectOption === 'undefined'
             || isMultiselectOption === null ? false : isMultiselectOption.value;
     }
 
     private async search(limit: number, searchValue: string): Promise<TreeNode[]> {
-        this.state.nodes = [];
+        let nodes = [];
         const objectOption = this.state.field.options.find((o) => o.option === ObjectReferenceOptions.OBJECT);
         if (objectOption) {
-            if (this.state.autocomplete) {
+            if (this.autocomplete) {
                 const objectType = objectOption.value as KIXObjectType;
 
                 const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(objectType);
@@ -171,10 +195,20 @@ class Component extends FormInputComponent<string | number, ComponentState> {
                 const fieldLoadingOptions = this.state.field.options.find(
                     (o) => o.option === ObjectReferenceOptions.LOADINGOPTIONS
                 );
-                const loadingOptions = fieldLoadingOptions ? fieldLoadingOptions.value : new KIXObjectLoadingOptions();
+                const loadingOptions: KIXObjectLoadingOptions = fieldLoadingOptions
+                    ? fieldLoadingOptions.value
+                    : new KIXObjectLoadingOptions();
 
                 if (loadingOptions.filter) {
-                    loadingOptions.filter = [...loadingOptions.filter, ...filter];
+                    loadingOptions.filter = [
+                        ...loadingOptions.filter.map((f) => {
+                            if (f.value === SearchProperty.SEARCH_VALUE) {
+                                f.value = searchValue;
+                            }
+                            return f;
+                        }),
+                        ...filter
+                    ];
                 } else {
                     loadingOptions.filter = filter;
                 }
@@ -185,7 +219,6 @@ class Component extends FormInputComponent<string | number, ComponentState> {
                 );
 
                 if (searchValue && searchValue !== '') {
-                    let nodes = [];
                     const structureOption = this.state.field.options.find(
                         (o) => o.option === ObjectReferenceOptions.AS_STRUCTURE
                     );
@@ -197,18 +230,24 @@ class Component extends FormInputComponent<string | number, ComponentState> {
                             nodes.push(node);
                         }
                     }
-                    this.state.nodes = SortUtil.sortObjects(nodes, 'label', DataType.STRING);
+                    nodes = SortUtil.sortObjects(nodes, 'label', DataType.STRING);
                 }
             }
         }
 
-        return this.state.nodes;
+        return nodes;
     }
 
     private async createTreeNode(o: KIXObject): Promise<TreeNode> {
-        const text = await LabelService.getInstance().getText(o);
-        const icon = LabelService.getInstance().getObjectIcon(o);
-        return new TreeNode(o.ObjectId, text ? text : `${o.KIXObjectType}: ${o.ObjectId}`, icon);
+        if (typeof o === 'string') {
+            return new TreeNode(o, o);
+        } else {
+            const text = await LabelService.getInstance().getText(o);
+            const icon = LabelService.getInstance().getObjectIcon(o);
+            return new TreeNode(
+                o.ObjectId, text ? text : `${o.KIXObjectType}: ${o.ObjectId}`, icon
+            );
+        }
     }
 
     public async focusLost(event: any): Promise<void> {

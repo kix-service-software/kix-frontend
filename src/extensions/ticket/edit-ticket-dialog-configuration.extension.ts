@@ -14,7 +14,7 @@ import {
     Form, KIXObjectType, FormContext, ConfiguredWidget, WidgetConfiguration,
     FormFieldOption, ObjectReferenceOptions, KIXObjectLoadingOptions,
     FilterCriteria, FilterDataType, FilterType, ObjectInformationWidgetSettings,
-    OrganisationProperty, ContactProperty, CRUD, KIXObjectProperty
+    OrganisationProperty, ContactProperty, CRUD, KIXObjectProperty, QueueProperty, FormFieldValue
 } from '../../core/model';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../core/services';
@@ -94,9 +94,44 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
                 'Translatable#Contact', TicketProperty.CONTACT_ID, 'ticket-input-contact', true, 'Translatable#Helptext_Tickets_TicketEdit_Contact'
             ));
             fields.push(new FormField('Translatable#Organisation', TicketProperty.ORGANISATION_ID, 'ticket-input-organisation', true, 'Translatable#Helptext_Tickets_TicketEdit_Organisation'));
-            fields.push(new FormField('Translatable#Type', TicketProperty.TYPE_ID, 'ticket-input-type', true, 'Translatable#Helptext_Tickets_TicketEdit_Type'));
             fields.push(new FormField(
-                'Translatable#Assign Team / Queue', TicketProperty.QUEUE_ID, 'ticket-input-queue', true, 'Translatable#Helptext_Tickets_TicketEdit_Queue'
+                'Translatable#Type', TicketProperty.TYPE_ID, 'object-reference-input', true, 'Translatable#Helptext_Tickets_TicketCreate_Type', [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.TICKET_TYPE),
+
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                )
+                            ]
+                        )
+                    )
+                ]
+            ));
+            fields.push(new FormField(
+                'Translatable#Assign Team / Queue', TicketProperty.QUEUE_ID, 'object-reference-input', true, 'Translatable#Helptext_Tickets_TicketCreate_Queue', [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
+
+                    new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, true),
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                ),
+                                new FilterCriteria(
+                                    QueueProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, null
+                                )
+                            ],
+                            null, null,
+                            [QueueProperty.SUB_QUEUES, 'TicketStats', 'Tickets'],
+                            [QueueProperty.SUB_QUEUES]
+                        )
+                    )
+                ]
             ));
 
             fields.push(new FormField(
@@ -109,7 +144,7 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
                 'Translatable#Owner', TicketProperty.OWNER_ID, 'object-reference-input', false,
                 'Translatable#Helptext_Tickets_TicketEdit_Owner', [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
-                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
+
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                         new KIXObjectLoadingOptions(
                             [
@@ -126,7 +161,7 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
                 'Translatable#Responsible', TicketProperty.RESPONSIBLE_ID, 'object-reference-input', false,
                 'Translatable#Helptext_Tickets_TicketEdit_Responsible', [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
-                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, false),
+
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                         new KIXObjectLoadingOptions(
                             [
@@ -139,9 +174,21 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
                     )
                 ]
             ));
-            fields.push(new FormField<number>(
-                'Translatable#Priority', TicketProperty.PRIORITY_ID, 'ticket-input-priority', true,
-                'Translatable#Helptext_Tickets_TicketEdit_Priority'
+            fields.push(new FormField(
+                'Translatable#Priority', TicketProperty.PRIORITY_ID, 'object-reference-input', true, 'Translatable#Helptext_Tickets_TicketCreate_Priority', [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.TICKET_PRIORITY),
+
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                )
+                            ]
+                        )
+                    )
+                ]
             ));
             fields.push(new FormField<number>(
                 'Translatable#State', TicketProperty.STATE_ID, 'ticket-input-state', true,

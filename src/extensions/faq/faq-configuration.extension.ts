@@ -10,12 +10,13 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration, FormField, Form, FormContext, KIXObjectType,
-    TableWidgetSettings, CRUD, KIXObjectLoadingOptions, FilterCriteria, KIXObjectProperty, FilterDataType, FilterType
+    TableWidgetSettings, CRUD, KIXObjectProperty, ObjectReferenceOptions, FormFieldOption, FormFieldValue,
+    FilterDataType, FilterType, FilterCriteria, KIXObjectLoadingOptions
 } from '../../core/model';
 import {
     SearchProperty, TableConfiguration, TableHeaderHeight, TableRowHeight, SearchOperator
 } from '../../core/browser';
-import { FAQArticleProperty } from '../../core/model/kix/faq';
+import { FAQArticleProperty, FAQCategoryProperty } from '../../core/model/kix/faq';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
 import { ConfigurationService } from '../../core/services';
 import { UIComponentPermission } from '../../core/model/UIComponentPermission';
@@ -90,9 +91,33 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
             fields.push(new FormField("Translatable#FAQ#", FAQArticleProperty.NUMBER, null, false, "Translatable#Helptext_FAQ_Link_Number"));
             fields.push(new FormField('Translatable#Title', FAQArticleProperty.TITLE, null, false, "Translatable#Helptext_FAQ_Link_Title"));
             fields.push(new FormField(
-                "Category", FAQArticleProperty.CATEGORY_ID, 'faq-category-input', false, "Translatable#Helptext_FAQ_Link_Category")
+                "Category", FAQArticleProperty.CATEGORY_ID, 'object-reference-input', false, "Translatable#Helptext_FAQ_Link_Category", [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.FAQ_CATEGORY),
+                    new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, true),
+                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    FAQCategoryProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, null
+                                )
+                            ],
+                            null, null,
+                            [FAQCategoryProperty.SUB_CATEGORIES],
+                            [FAQCategoryProperty.SUB_CATEGORIES]
+                        )
+                    )
+                ]
+            ));
+            fields.push(
+                new FormField(
+                    'Translatable#Validity', KIXObjectProperty.VALID_ID,
+                    'object-reference-input', false, 'Translatable#Helptext_FAQ_Link_Validity', [
+                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
+                    ], new FormFieldValue(1)
+                )
             );
-            fields.push(new FormField('Validity', FAQArticleProperty.VALID_ID, 'valid-input', false, "Translatable#Helptext_FAQ_Link_Validity"));
 
             const attributeGroup = new FormGroup('Translatable#FAQ Attributes', fields);
 

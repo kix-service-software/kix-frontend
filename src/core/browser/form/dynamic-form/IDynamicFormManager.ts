@@ -15,6 +15,8 @@ export interface IDynamicFormManager {
 
     objectType: KIXObjectType;
 
+    uniqueProperties: boolean;
+
     registerListener(listenerId: string, callback: () => void): void;
 
     unregisterListener(listenerId: string): void;
@@ -45,8 +47,6 @@ export interface IDynamicFormManager {
 
     getPropertiesPlaceholder(): Promise<string>;
 
-    propertiesAreUnique(): Promise<boolean>;
-
     hasValueForProperty(property: string): boolean;
 
     getOperations(property: string): Promise<string[]>;
@@ -55,7 +55,7 @@ export interface IDynamicFormManager {
 
     getOpertationsType(property: string): Promise<DynamicFormOperationsType>;
 
-    getOperatorDisplayText(o: string): string;
+    getOperatorDisplayText(o: string): Promise<string>;
 
     clearValueOnPropertyChange(property: string): Promise<boolean>;
 

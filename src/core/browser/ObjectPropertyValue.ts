@@ -11,12 +11,13 @@ import { PropertyOperator } from "./PropertyOperator";
 import { IdService } from "../browser";
 import { KIXObject, KIXObjectType } from "../model";
 import { ImportPropertyOperator } from "./import";
+import { SearchOperator } from "./SearchOperator";
 
 export class ObjectPropertyValue {
 
     public constructor(
         public property: string,
-        public operator: PropertyOperator | ImportPropertyOperator | string,
+        public operator: SearchOperator | PropertyOperator | ImportPropertyOperator | string,
         public value: string | number | string[] | number[] | KIXObject | any,
         public required: boolean = false,
         public valid: boolean = true,
