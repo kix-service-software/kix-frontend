@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2019-10-08 07:34+0000\n"
-"Last-Translator: fwichmann <Felix.Wichmann@cape-it.de>\n"
+"PO-Revision-Date: 2019-10-08 15:34+0000\n"
+"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: English <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/en/>\n"
 "Language: en\n"
@@ -239,10 +239,8 @@ msgstr ""
 msgid "back to"
 msgstr ""
 
-#, fuzzy
-#| msgid "CI Class Definition"
 msgid "Based on class definition"
-msgstr "Asset Class Definition"
+msgstr ""
 
 msgid "Bcc"
 msgstr ""
@@ -891,10 +889,8 @@ msgstr ""
 msgid "Feedback"
 msgstr ""
 
-#, fuzzy
-#| msgid "Load Email Account"
 msgid "Fetching Mail Account"
-msgstr "Loading Email Account"
+msgstr ""
 
 msgid "Fetch now"
 msgstr ""
@@ -1209,14 +1205,10 @@ msgid "Helptext_Admin_NotificationCreate_Comment"
 msgstr ""
 "Insert additional information (only displayed within the admin module)."
 
-#, fuzzy
-#| msgid "Helptext_Admin_NotificationCreate_Filter"
 msgid "Helptext_Admin_NotificationCreate_CreateArticle"
 msgstr ""
-"Choose a ticket or article attribute from the list. Then you can insert the "
-"value the filter is supposed to react to. Please use an extra line for each "
-"attribute. If at least one article related event is chosen above the filter "
-"attributes \"Sendertype\" & \"Channel\" are obligatory."
+"If this option is active an article will be created at the corresponding "
+"ticket with sending the notification."
 
 msgid "Helptext_Admin_NotificationCreate_Event"
 msgstr ""
@@ -1291,14 +1283,10 @@ msgid "Helptext_Admin_NotificationEdit_Comment"
 msgstr ""
 "Insert additional information (only displayed within the admin module)."
 
-#, fuzzy
-#| msgid "Helptext_Admin_NotificationCreate_Filter"
 msgid "Helptext_Admin_NotificationEdit_CreateArticle"
 msgstr ""
-"Choose a ticket or article attribute from the list. Then you can insert the "
-"value the filter is supposed to react to. Please use an extra line for each "
-"attribute. If at least one article related event is chosen above the filter "
-"attributes \"Sendertype\" & \"Channel\" are obligatory."
+"If this option is active an article will be created at the corresponding "
+"ticket with sending the notification."
 
 msgid "Helptext_Admin_NotificationEdit_Event"
 msgstr ""
@@ -2173,10 +2161,10 @@ msgstr ""
 "Separates between the attributes of a row. If unknown, open your .csv-file "
 "with a text editor."
 
-#, fuzzy
-#| msgid "Helptext_PersonalSettings_UserLanguage_Hint"
 msgid "Helptext_PersonalSettings_MyQueues_Hint"
-msgstr "Choose the language you want to use for this application."
+msgstr ""
+"For the teams you choose here you will receive notifications if there are, "
+"for example, new tickets or changes at the tickets."
 
 msgid "Helptext_PersonalSettings_Notifications_Hint"
 msgstr ""
@@ -2614,10 +2602,8 @@ msgstr ""
 msgid "Load Organisation"
 msgstr "Loading Organisation"
 
-#, fuzzy
-#| msgid "Load Organisation"
 msgid "Load Organisations"
-msgstr "Loading Organisation"
+msgstr ""
 
 msgid "Load Queue"
 msgstr "Loading Team"
@@ -2682,10 +2668,8 @@ msgstr ""
 msgid "Logs"
 msgstr ""
 
-#, fuzzy
-#| msgid "Notification successfully created."
 msgid "Mail Account successfully fetched."
-msgstr "Notification successfully created."
+msgstr ""
 
 msgid "Menu"
 msgstr ""
