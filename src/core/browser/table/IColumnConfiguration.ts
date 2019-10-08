@@ -25,6 +25,7 @@ export interface IColumnConfiguration {
     componentId: string;
     defaultText: string;
     translatable: boolean;
-    titleTranslatable;
+    titleTranslatable: boolean;
+    useObjectServiceForFilter: boolean;
 
 }

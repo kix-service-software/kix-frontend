@@ -8,11 +8,13 @@
  */
 
 import { ITableFactory } from "./ITableFactory";
-import { KIXObjectType, KIXObjectProperty, DataType } from "../../model";
+import { KIXObjectType, KIXObjectProperty, DataType, KIXObject } from "../../model";
 import { IColumnConfiguration } from "./IColumnConfiguration";
 import { TableConfiguration } from "./TableConfiguration";
 import { ITable } from "./ITable";
 import { DefaultColumnConfiguration } from "./DefaultColumnConfiguration";
+import { IColumn } from "./IColumn";
+import { IRow } from "./IRow";
 
 export abstract class TableFactory implements ITableFactory {
 
@@ -55,6 +57,43 @@ export abstract class TableFactory implements ITableFactory {
                 config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true);
         }
         return config;
+    }
+
+    public getColumnFilterValues<T extends KIXObject = any>(rows: IRow[], column: IColumn): Array<[T, number]> {
+        return TableFactory.getColumnFilterValues(rows, column);
+    }
+
+    public static getColumnFilterValues<T extends KIXObject = any>(rows: IRow[], column: IColumn): Array<[T, number]> {
+        const values: Array<[T, number]> = [];
+        rows.forEach((r) => {
+            const cell = r.getCell(column.getColumnId());
+            if (cell) {
+                let cellValues = [];
+                const cellValue = cell.getValue();
+                if (Array.isArray(cellValue.objectValue)) {
+                    cellValues = cellValue.objectValue;
+                } else {
+                    cellValues.push(cellValue.objectValue);
+                }
+
+                cellValues.forEach((value) => {
+                    const existingValue = values.find((ev) => {
+                        if (ev[0] instanceof KIXObject) {
+                            return ev[0].equals(value);
+                        }
+                        return ev[0] === value;
+                    });
+                    if (existingValue) {
+                        existingValue[1] = existingValue[1] + 1;
+                    } else {
+                        values.push([value, 1]);
+                    }
+                });
+
+            }
+        });
+
+        return values;
     }
 
 }

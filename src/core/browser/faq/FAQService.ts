@@ -10,11 +10,12 @@
 import { KIXObjectService, ServiceRegistry } from "../kix";
 import {
     KIXObjectType, FilterCriteria, FilterDataType, FilterType, TreeNode, ObjectIcon, DataType,
-    KIXObject, KIXObjectLoadingOptions, KIXObjectProperty
+    KIXObject, KIXObjectLoadingOptions, KIXObjectProperty, TableFilterCriteria
 } from "../../model";
 import { ContextService } from "../context";
 import {
-    FAQArticleProperty, Attachment, FAQCategory, FAQCategoryProperty, FAQArticle, FAQArticleAttachmentLoadingOptions
+    FAQArticleProperty, Attachment, FAQCategory, FAQCategoryProperty, FAQArticle,
+    FAQArticleAttachmentLoadingOptions, FAQVote
 } from "../../model/kix/faq";
 import { SearchOperator } from "../SearchOperator";
 import { ObjectDefinitionSearchAttribute } from "../../model/kix/object-definition";
@@ -277,4 +278,16 @@ export class FAQService extends KIXObjectService {
         }
         return inlineContent;
     }
+
+    public async checkFilterValue(article: FAQArticle, criteria: TableFilterCriteria): Promise<boolean> {
+        let match = false;
+        if (criteria.property === FAQArticleProperty.VOTES && article && article.Votes) {
+            const rating = BrowserUtil.calculateAverage(article.Votes.map((v) => v.Rating));
+            match = (criteria.value as []).some((v: FAQVote) => v.Rating === rating);
+        } else {
+            match = await super.checkFilterValue(article, criteria);
+        }
+        return match;
+    }
+
 }

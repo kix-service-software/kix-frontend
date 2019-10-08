@@ -86,6 +86,10 @@ export class TableFactoryService {
         this.factories.push(factory);
     }
 
+    public getTableFactory(objectType: KIXObjectType): ITableFactory {
+        return this.factories.find((f) => f.isFactoryFor(objectType));
+    }
+
     public async createTable(
         tableKey: string, objectType: KIXObjectType, tableConfiguration?: TableConfiguration,
         objectIds?: Array<number | string>, contextId?: string, defaultRouting?: boolean,

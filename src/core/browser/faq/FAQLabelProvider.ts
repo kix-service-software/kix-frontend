@@ -8,7 +8,7 @@
  */
 
 import { DateTimeUtil, ObjectIcon, KIXObjectType, SysConfigOption, SysConfigKey } from "../../model";
-import { FAQArticleProperty, FAQArticle, FAQCategory } from "../../model/kix/faq";
+import { FAQArticleProperty, FAQArticle, FAQCategory, FAQVote } from "../../model/kix/faq";
 import { KIXObjectService, ServiceRegistry } from "../kix";
 import { BrowserUtil } from "../BrowserUtil";
 import { SearchProperty } from "../SearchProperty";
@@ -22,12 +22,15 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
     public async getPropertyValueDisplayText(
         property: string, value: string | number, translatable: boolean = true
     ): Promise<string> {
-        let displayValue = value;
+        let displayValue;
         switch (property) {
             case FAQArticleProperty.CATEGORY_ID:
                 const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(KIXObjectType.FAQ_CATEGORY);
                 const category = faqCategories.find((fc) => fc.ID === value);
                 displayValue = category ? category.Name : value;
+                break;
+            case FAQArticleProperty.VOTES:
+                displayValue = value.toString();
                 break;
             default:
                 displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
@@ -222,7 +225,7 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
     }
 
     public async getIcons(
-        faqArticle: FAQArticle, property: string, value?: number | string
+        faqArticle: FAQArticle, property: string, value?: any
     ): Promise<Array<string | ObjectIcon>> {
         const icons = [];
 
@@ -232,13 +235,18 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
 
         switch (property) {
             case FAQArticleProperty.VOTES:
-                if (faqArticle.Votes && faqArticle.Votes.length) {
+                if (faqArticle && faqArticle.Votes && faqArticle.Votes.length) {
                     const average = BrowserUtil.calculateAverage(faqArticle.Votes.map((v) => v.Rating));
                     for (let i = 0; i < Math.floor(average); i++) {
                         icons.push('kix-icon-star-fully');
                     }
                     if ((average % 1) !== 0) {
                         icons.push('kix-icon-star-half');
+                    }
+                } else if (value instanceof FAQVote) {
+                    const rating = value.Rating;
+                    for (let i = 0; i < rating; i++) {
+                        icons.push('kix-icon-star-fully');
                     }
                 }
                 break;
