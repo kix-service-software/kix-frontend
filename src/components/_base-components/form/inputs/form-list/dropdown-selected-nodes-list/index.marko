@@ -6,26 +6,24 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-<div.selected-nodes key=("form-list-selected-nodes-" + state.listId)>
-    <if(state.nodes.length)>
-        <for|node| of=state.nodes>
-            <div.selected-node
-                title=(state.translations[node.tooltip] ? state.translations[node.tooltip] : node.tooltip)
-                key=("form-list-selected-node-" + state.listId + "[]")>
-                <icon icon=node.icon showUnknown=true/>
-                <span.item-text>
-                    <translation-string pattern=node.label/>
-                </span>
-                <if(node.secondaryIcon)>
-                    <icon icon=node.secondaryIcon showUnknown=true/>
-                </if>
-                <if(input.canRemoveNode)>
-                    <span.kix-icon-close tabindex="0" on-click("removeNode", node) on-focus("stopFocus")/>
-                </if>
-            </div>
-        </for>
-    </if>
-    <else>
-        <span.form-list-placeholder>${state.placeholder}</span>
-    </else>
-</div>
+<if(state.nodes.length)>
+    <for|node| of=state.nodes>
+        <div.selected-node
+            title=(state.translations[node.tooltip] ? state.translations[node.tooltip] : node.tooltip)
+            key=("form-list-selected-node-" + component.treeId + "[]")>
+            <icon icon=node.icon showUnknown=true/>
+            <span.item-text>
+                <translation-string pattern=node.label/>
+            </span>
+            <if(node.secondaryIcon)>
+                <icon icon=node.secondaryIcon showUnknown=true/>
+            </if>
+            <if(input.canRemoveNode)>
+                <span.kix-icon-close tabindex="0" on-click("removeNode", node) on-focus("stopFocus")/>
+            </if>
+        </div>
+    </for>
+</if>
+<else>
+    <span.form-list-placeholder>${state.placeholder}</span>
+</else>
