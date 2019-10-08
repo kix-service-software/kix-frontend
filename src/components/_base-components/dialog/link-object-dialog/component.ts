@@ -67,7 +67,7 @@ class LinkDialogComponent {
         const context = await ContextService.getInstance().getContext<LinkObjectDialogContext>(
             LinkObjectDialogContext.CONTEXT_ID
         );
-        context.setObjectList([]);
+        context.setObjectList(this.state.objectType, []);
 
         this.setLinkTypes();
 
@@ -75,11 +75,12 @@ class LinkDialogComponent {
         this.state.loading = false;
     }
 
-    public onDestroy(): void {
+    public async onDestroy(): Promise<void> {
         this.state.linkDescriptions = null;
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
         FormService.getInstance().deleteFormInstance(this.state.formId);
+        TableFactoryService.getInstance().destroyTable(`link-object-dialog-`, true);
     }
 
     private async loadNodes(): Promise<TreeNode[]> {
@@ -122,7 +123,7 @@ class LinkDialogComponent {
         const context = await ContextService.getInstance().getContext<LinkObjectDialogContext>(
             LinkObjectDialogContext.CONTEXT_ID
         );
-        context.setObjectList([]);
+        context.setObjectList(this.state.objectType, []);
 
         let formId: string;
         if (nodes && nodes.length) {
@@ -163,7 +164,7 @@ class LinkDialogComponent {
             const context = await ContextService.getInstance().getContext<LinkObjectDialogContext>(
                 LinkObjectDialogContext.CONTEXT_ID
             );
-            context.setObjectList(objects);
+            context.setObjectList(this.state.objectType, objects);
             await this.prepareResultTable();
             this.state.resultCount = objects.length;
             this.setSubmitState();

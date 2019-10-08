@@ -38,7 +38,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                         null, null, true
                     )
                 ),
-                false, true, 'kix-icon-man-house', false
+                false, true, 'kix-icon-man-house', true
             ),
             [new UIComponentPermission('organisations', [CRUD.READ])]
         );
@@ -46,7 +46,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
         const contactListWidget =
             new ConfiguredWidget('20180529144530',
                 new WidgetConfiguration(
-                    'table-widget', 'Translatable#Overview Contacts', [
+                    'contact-list-widget', 'Translatable#Overview Contacts', [
                         'contact-search-action',
                         'contact-create-action',
                         'import-action',
@@ -56,9 +56,9 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                         new TableConfiguration(
                             KIXObjectType.CONTACT, null,
                             null, null, true
-                        )
+                        ), null, true, null, null, null, false
                     ),
-                    false, true, 'kix-icon-man-bubble', false
+                    false, true, 'kix-icon-man-bubble', true
                 ),
                 [new UIComponentPermission('contacts', [CRUD.READ])]
             );

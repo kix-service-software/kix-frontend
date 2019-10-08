@@ -47,15 +47,8 @@ export class TicketListContext extends Context {
 
         window.clearTimeout(timeout);
 
-        this.setObjectList(tickets);
+        this.setObjectList(KIXObjectType.TICKET, tickets);
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
     }
 
-    public async getObjectList(reload: boolean = false): Promise<KIXObject[]> {
-        if (reload) {
-            // FIXME: TicketIds neu ermitteln, da ggf. die Tickets garnciht mehr dabei sein könnten (Besitzerwechsel)
-            await this.loadTickets(this.ticketIds);
-        }
-        return await super.getObjectList();
-    }
 }

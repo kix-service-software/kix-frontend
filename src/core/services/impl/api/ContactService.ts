@@ -23,6 +23,8 @@ export class ContactService extends KIXObjectService {
 
     private static INSTANCE: ContactService;
 
+    protected enableSearchQuery: boolean = false;
+
     public static getInstance(): ContactService {
         if (!ContactService.INSTANCE) {
             ContactService.INSTANCE = new ContactService();
@@ -124,7 +126,7 @@ export class ContactService extends KIXObjectService {
             return { Field: f.property, Operator: f.operator, Type: f.type, Value: f.value };
         });
         const andSearch = filter.filter(
-            (f) => f.filterType === FilterType.AND
+            (f) => f.filterType === FilterType.AND && f.property !== ContactProperty.ORGANISATION_IDS
         ).map((f) => {
             return { Field: f.property, Operator: f.operator, Type: f.type, Value: f.value };
         });
@@ -170,6 +172,7 @@ export class ContactService extends KIXObjectService {
             apiFilter[filterProperty] = objectFilter;
             query.filter = JSON.stringify(apiFilter);
         }
+
         if ((andSearch && !!andSearch.length) || (orSearch && !!orSearch.length)) {
             const search = {};
             search[filterProperty] = objectSearch;

@@ -8,6 +8,7 @@
  */
 
 @filter-height: 1.5rem;
+
 .filter {
     .font-size-small;
     align-self: center;
@@ -16,35 +17,44 @@
     grid-auto-flow: column;
     align-items: center;
     grid-gap: @margin-small;
+
     >.predefined-filter {
         z-index: 25;
+
         >.form-list {
             .font-size-small;
             width: 11.75rem;
+
             >div.form-list-input-container {
                 min-height: @filter-height;
                 height: @filter-height;
                 border-color: @secondary-1;
+
                 >.selected-nodes {
                     padding: .125rem .125rem 0;
                     line-height: @filter-height;
+
                     .selected-node {
                         .font-size-small;
                         grid-template-rows: @filter-height - .25rem;
                         line-height: @filter-height - .5rem;
+
                         >[class^="kix-icon-"],
                         >[class*=" kix-icon-"] {
                             font-size: .75rem;
                         }
                     }
                 }
+
                 >input {
                     .font-size-small;
                     min-height: @filter-height;
                     display: block;
                 }
+
                 >.form-input-control-list {
                     grid-template-columns: max-content @filter-height;
+
                     >span.form-list-button {
                         height: @filter-height;
                         width: @filter-height;
@@ -53,14 +63,17 @@
                     }
                 }
             }
+
             >ul.form-list-tree {
                 top: @filter-height;
+
                 li {
                     grid-template-rows: @filter-height;
                 }
             }
         }
     }
+
     >input {
         width: 11.75rem;
         height: @filter-height;
@@ -70,12 +83,14 @@
         padding: 0 5px;
         color: @default-dark-font-color;
     }
+
     >span.icon {
         font-size: 1.25rem;
         cursor: pointer;
     }
+
     >.filter-count {
         .font-size-normal;
-        width: 2.25rem;
+        max-width: 2.25rem;
     }
 }

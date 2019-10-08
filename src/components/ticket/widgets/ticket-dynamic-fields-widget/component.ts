@@ -49,7 +49,8 @@ class Component {
                 if (type === KIXObjectType.TICKET) {
                     this.initWidget(ticket);
                 }
-            }
+            },
+            additionalInformationChanged: () => { return; }
         });
 
         await this.initWidget(await context.getObject<Ticket>());

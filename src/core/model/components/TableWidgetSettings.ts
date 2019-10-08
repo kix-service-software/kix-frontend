@@ -10,7 +10,7 @@
 import { KIXObjectType } from "../kix";
 import { SortOrder } from "../sort";
 import { TableConfiguration } from "../../browser";
-import { TableFilterCriteria, KIXObjectPropertyFilter } from "./filter";
+import { KIXObjectPropertyFilter } from "./filter";
 
 export class TableWidgetSettings {
 
@@ -22,7 +22,8 @@ export class TableWidgetSettings {
         public showFilter: boolean = true,
         public shortTable: boolean = false,
         public predefinedTableFilters: KIXObjectPropertyFilter[] = [],
-        public cache: boolean = false
+        public cache: boolean = false,
+        public resetFilterOnReload: boolean = true
     ) { }
 
 }

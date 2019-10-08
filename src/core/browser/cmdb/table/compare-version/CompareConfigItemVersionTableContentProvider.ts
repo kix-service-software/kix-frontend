@@ -31,7 +31,7 @@ export class CompareConfigItemVersionTableContentProvider extends TableContentPr
         let rowObjects = [];
         if (this.contextId) {
             const context = await ContextService.getInstance().getContext(this.contextId);
-            const versionList = await context.getObjectList();
+            const versionList = await context.getObjectList(KIXObjectType.CONFIG_ITEM_VERSION);
             const versions = versionList as Version[];
             if (versions) {
                 rowObjects = await this.buildRowObjects(versions);

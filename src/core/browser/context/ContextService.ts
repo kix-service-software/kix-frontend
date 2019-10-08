@@ -19,6 +19,7 @@ import { DialogService } from '../components/dialog/DialogService';
 import { FormService } from '../form';
 import { AdditionalContextInformation } from './AdditionalContextInformation';
 import { BrowserHistoryState } from './BrowserHistoryState';
+import { TableFactoryService } from '../table';
 
 export class ContextService {
 
@@ -161,6 +162,9 @@ export class ContextService {
     }
 
     public closeDialogContext(): void {
+        if (this.activeDialogContext) {
+            TableFactoryService.getInstance().deleteDialogTables(this.activeDialogContext.getDescriptor().contextId);
+        }
         this.activeContextType = ContextType.MAIN;
         this.activeDialogContext = null;
         ContextFactory.getInstance().resetDialogContexts();

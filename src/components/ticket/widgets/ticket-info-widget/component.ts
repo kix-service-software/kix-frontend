@@ -53,7 +53,8 @@ class Component {
                 if (type === KIXObjectType.TICKET) {
                     this.initWidget(ticket);
                 }
-            }
+            },
+            additionalInformationChanged: () => { return; }
         });
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 

@@ -78,9 +78,9 @@ export class SearchService {
         const context = await ContextService.getInstance().getContext<SearchContext>(SearchContext.CONTEXT_ID);
         if (context) {
             if (objects) {
-                context.setObjectList(objects);
+                context.setObjectList(this.searchCache.objectType, objects);
             } else {
-                context.setObjectList(this.searchCache ? this.searchCache.result : []);
+                context.setObjectList(this.searchCache.objectType, this.searchCache ? this.searchCache.result : []);
             }
         }
     }

@@ -47,7 +47,8 @@ class Component {
             scrollInformationChanged: () => { return; },
             objectChanged: async (contactId: string, object: KIXObject, type: KIXObjectType) => {
                 this.initWidget(settings);
-            }
+            },
+            additionalInformationChanged: () => { return; }
         });
 
         await this.initWidget(settings);

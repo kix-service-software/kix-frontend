@@ -124,6 +124,7 @@ class Component {
         if (this.state.importManager) {
             this.state.importManager.unregisterListener(this.formListenerId);
         }
+        TableFactoryService.getInstance().destroyTable(`import-dialog-list-${this.objectType}`);
     }
 
     private reset(instanceId: string): void {
@@ -569,7 +570,7 @@ class Component {
                     });
                 }
             }
-            this.context.setObjectList(objects);
+            this.context.setObjectList(this.state.importManager.objectType, objects);
         }
     }
 

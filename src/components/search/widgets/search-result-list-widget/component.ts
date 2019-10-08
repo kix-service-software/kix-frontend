@@ -49,6 +49,13 @@ class Component implements IKIXObjectSearchListener {
         WidgetService.getInstance().unregisterActions(this.state.instanceId);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
+        const cache = SearchService.getInstance().getSearchCache();
+        if (cache) {
+            const category = SearchService.getInstance().getActiveSearchResultExplorerCategory();
+            TableFactoryService.getInstance().destroyTable(
+                `search-result-list-${category ? category.objectType : cache.objectType}`
+            );
+        }
     }
 
     public searchCleared(): void {

@@ -43,7 +43,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             explorerBarToggled: () => { return; },
             objectListChanged: () => { return; },
             filteredObjectListChanged: () => { return; },
-            scrollInformationChanged: () => { return; }
+            scrollInformationChanged: () => { return; },
+            additionalInformationChanged: () => { return; }
         });
 
         await this.initWidget(await context.getObject<KIXObject>());
@@ -51,6 +52,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onDestroy(): void {
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
+        if (this.state.widgetConfiguration.settings) {
+            const linkedObjectTypes: Array<[string, KIXObjectType]> =
+                this.state.widgetConfiguration.settings.linkedObjectTypes;
+            for (const lot of linkedObjectTypes) {
+                TableFactoryService.getInstance().destroyTable(`link-objects-${lot[1]}`);
+            }
+        }
     }
 
     private async initWidget(kixObject?: KIXObject): Promise<void> {

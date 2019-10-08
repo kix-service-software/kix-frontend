@@ -10,7 +10,7 @@
 import { ComponentState } from './ComponentState';
 import { ContextService } from "../../../../core/browser/context";
 import { IdService } from '../../../../core/browser';
-import { KIXObject, ConfigItem } from '../../../../core/model';
+import { KIXObject, ConfigItem, KIXObjectType } from '../../../../core/model';
 import { ConfigItemChartConfiguration, ConfigItemChartFactory } from '../../../../core/browser/cmdb';
 
 class Component {
@@ -48,10 +48,13 @@ class Component {
                 objectChanged: () => { return; },
                 objectListChanged: () => { return; },
                 scrollInformationChanged: () => { return; },
-                filteredObjectListChanged: this.contextFilteredObjectListChanged.bind(this)
+                filteredObjectListChanged: this.contextFilteredObjectListChanged.bind(this),
+                additionalInformationChanged: () => { return; }
             });
 
-            this.contextFilteredObjectListChanged(currentContext.getFilteredObjectList());
+            this.contextFilteredObjectListChanged(
+                KIXObjectType.CONFIG_ITEM, currentContext.getFilteredObjectList(KIXObjectType.CONFIG_ITEM)
+            );
         }
 
         this.state.chartConfig = this.cmdbChartConfiguration.chartConfiguration;
@@ -74,7 +77,7 @@ class Component {
         }
     }
 
-    private async contextFilteredObjectListChanged(objectList: KIXObject[]): Promise<void> {
+    private async contextFilteredObjectListChanged(objectType: KIXObjectType, objectList: KIXObject[]): Promise<void> {
         this.state.chartConfig = null;
         const data = await ConfigItemChartFactory.getInstance().prepareData(
             this.cmdbChartConfiguration.property, (objectList as ConfigItem[])

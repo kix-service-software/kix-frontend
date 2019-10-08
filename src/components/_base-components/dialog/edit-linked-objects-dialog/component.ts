@@ -80,7 +80,7 @@ class Component {
             const editLinksContext = await ContextService.getInstance().getContext<EditLinkedObjectsDialogContext>(
                 EditLinkedObjectsDialogContext.CONTEXT_ID
             );
-            editLinksContext.setObjectList(this.availableLinkObjects);
+            editLinksContext.setObjectList(KIXObjectType.LINK_OBJECT, this.availableLinkObjects);
 
             await this.prepareTable();
 
@@ -96,7 +96,7 @@ class Component {
     public onDestroy(): void {
         EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
-
+        TableFactoryService.getInstance().destroyTable('edit-linked-objects-dialog');
     }
 
     private async reviseLinkObjects(): Promise<void> {
@@ -282,8 +282,8 @@ class Component {
             const context = await ContextService.getInstance().getContext<EditLinkedObjectsDialogContext>(
                 EditLinkedObjectsDialogContext.CONTEXT_ID
             );
-            context.setObjectList([...this.availableLinkObjects]);
-            context.getObjectList();
+            context.setObjectList(KIXObjectType.LINK_OBJECT, [...this.availableLinkObjects]);
+            context.getObjectList(KIXObjectType.LINK_OBJECT);
 
             this.state.linkObjectCount = this.availableLinkObjects.length;
 

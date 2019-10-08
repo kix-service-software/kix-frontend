@@ -30,7 +30,7 @@ export class ConfigItemChartFactory {
     private constructor() { }
 
     public async prepareData(
-        property: ConfigItemProperty, configItems: ConfigItem[]
+        property: ConfigItemProperty, configItems: ConfigItem[] = []
     ): Promise<[string[], ChartDataSets[]]> {
         switch (property) {
             case ConfigItemProperty.CLASS_ID:
@@ -45,6 +45,10 @@ export class ConfigItemChartFactory {
     private async preparePropertyCountData(
         property: ConfigItemProperty, configItems: ConfigItem[]
     ): Promise<[string[], ChartDataSets[]]> {
+        if (!configItems) {
+            configItems = [];
+        }
+
         const labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.CONFIG_ITEM);
 
         const loadingOptions = new KIXObjectLoadingOptions([
@@ -121,15 +125,6 @@ export class ConfigItemChartFactory {
         }
 
         return result;
-    }
-
-    private getRandomColor(): string {
-        const letters = '0123456789ABCDEF';
-        let color = '#';
-        for (let i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-        }
-        return color;
     }
 
     private getPredefinedColors(): string[] {

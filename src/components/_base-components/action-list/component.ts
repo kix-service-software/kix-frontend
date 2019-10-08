@@ -9,7 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { ContextService, AbstractContextServiceListener } from '../../../core/browser/context/';
-import { Context, KIXObject, IActionListener } from '../../../core/model';
+import { Context, KIXObject, IActionListener, KIXObjectType } from '../../../core/model';
 import { IContextListener } from '../../../core/browser/context/IContextListener';
 import { IdService, WidgetService } from '../../../core/browser';
 
@@ -71,8 +71,9 @@ export class Component implements IActionListener {
     }
 
     public prepareActionLists() {
-        const listWidth = (this as any).getEl('action-list') ? (this as any).getEl('action-list').scrollWidth : 0;
-        if (listWidth > 0 && this.state.actionList) {
+        const actionListElement = (this as any).getEl('action-list');
+        const listWidth = actionListElement ? actionListElement.scrollWidth : 0;
+        if (this.state.actionList) {
             const actionWidth = (this.state.displayText ? 9.5 : 1.75) * this.getBrowserFontsize();
             const gapWith = 1.5 * this.getBrowserFontsize();
             let maxActions = this.state.actionList.length;
@@ -149,15 +150,19 @@ class ComponentContextListener implements IContextListener {
         return;
     }
 
-    public objectListChanged(objectList: KIXObject[]): void {
+    public objectListChanged(objectType: KIXObjectType, objectList: KIXObject[]): void {
         return;
     }
 
-    public filteredObjectListChanged(objectList: KIXObject[]): void {
+    public filteredObjectListChanged(objectType: KIXObjectType, objectList: KIXObject[]): void {
         return;
     }
 
     public scrollInformationChanged(): void {
+        return;
+    }
+
+    public additionalInformationChanged(): void {
         return;
     }
 }

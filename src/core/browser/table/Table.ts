@@ -29,7 +29,6 @@ import { SearchOperator } from "../SearchOperator";
 
 export class Table implements ITable {
 
-    private id: string = IdService.generateDateBasedId();
     private rows: IRow[] = [];
     private filteredRows: IRow[] = null;
     private columns: IColumn[] = [];
@@ -52,10 +51,6 @@ export class Table implements ITable {
     ) { }
 
     public getTableId(): string {
-        return this.id;
-    }
-
-    public getTableKey(): string {
         return this.tableKey;
     }
 

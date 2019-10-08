@@ -23,6 +23,8 @@ export class OrganisationService extends KIXObjectService {
 
     private static INSTANCE: OrganisationService;
 
+    protected enableSearchQuery: boolean = false;
+
     public static getInstance(): OrganisationService {
         if (!OrganisationService.INSTANCE) {
             OrganisationService.INSTANCE = new OrganisationService();

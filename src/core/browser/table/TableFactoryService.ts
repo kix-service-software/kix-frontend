@@ -55,10 +55,22 @@ export class TableFactoryService {
                     const oldContextid = oldContext.getDescriptor().contextId;
 
                     if (this.contextTableInstances.has(oldContextid)) {
+                        this.contextTableInstances.get(oldContextid).forEach((table) => {
+                            table.destroy();
+                        });
                         this.contextTableInstances.delete(oldContextid);
                     }
                 }
             }
+        }
+    }
+
+    public deleteDialogTables(dialogContextId: string): void {
+        if (this.contextTableInstances.has(dialogContextId)) {
+            this.contextTableInstances.get(dialogContextId).forEach((table) => {
+                table.destroy();
+            });
+            this.contextTableInstances.delete(dialogContextId);
         }
     }
 
@@ -83,9 +95,9 @@ export class TableFactoryService {
 
         const context = ContextService.getInstance().getActiveContext();
         let tableContextId: string;
-        if (context && !recreate) {
+        if (context) {
             tableContextId = context.getDescriptor().contextId;
-            if (this.contextTableInstances.has(tableContextId)) {
+            if (!recreate && this.contextTableInstances.has(tableContextId)) {
                 const tableInstances = this.contextTableInstances.get(tableContextId);
                 if (tableInstances.has(tableKey)) {
                     table = tableInstances.get(tableKey);
@@ -112,6 +124,26 @@ export class TableFactoryService {
             }
         }
         return table;
+    }
+
+    public destroyTable(tableKey: string, asRegEx: boolean = false): void {
+        for (const contextTableList of this.contextTableInstances) {
+            if (contextTableList[1]) {
+                if (asRegEx) {
+                    const tabelKeyRegex = new RegExp(tableKey);
+                    contextTableList[1].forEach((table, key) => {
+                        if (key.match(tabelKeyRegex)) {
+                            table.destroy();
+                            contextTableList[1].delete(key);
+                        }
+                    });
+                } else if (contextTableList[1].has(tableKey)) {
+                    contextTableList[1].get(tableKey).destroy();
+                    contextTableList[1].delete(tableKey);
+                    break;
+                }
+            }
+        }
     }
 
     public getDefaultColumnConfiguration(objectType: KIXObjectType, property: string): IColumnConfiguration {

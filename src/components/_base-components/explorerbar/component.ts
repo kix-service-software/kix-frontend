@@ -67,7 +67,8 @@ class Component {
                     objectChanged: () => { return; },
                     objectListChanged: () => { return; },
                     filteredObjectListChanged: () => { return; },
-                    scrollInformationChanged: () => { return; }
+                    scrollInformationChanged: () => { return; },
+                    additionalInformationChanged: () => { return; }
                 });
             }
             (this as any).setStateDirty('explorer');
