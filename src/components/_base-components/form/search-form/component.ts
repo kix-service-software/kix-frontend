@@ -127,6 +127,7 @@ class Component implements ISearchFormListener {
         if (formInstance) {
             formInstance.removeSearchFormListener(this.listenerId);
         }
+        TableFactoryService.getInstance().destroyTable(`search-form-results-${this.objectType}`);
 
         if (this.keyListenerElement) {
             this.keyListenerElement.removeEventListener('keydown', this.keyDown.bind(this));

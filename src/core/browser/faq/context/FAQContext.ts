@@ -71,7 +71,7 @@ export class FAQContext extends Context {
             KIXObjectType.FAQ_ARTICLE, null, loadingOptions, null, false
         ).catch((error) => []);
         window.clearTimeout(timeout);
-        this.setObjectList(faqArticles);
+        this.setObjectList(KIXObjectType.FAQ_ARTICLE, faqArticles);
 
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
     }

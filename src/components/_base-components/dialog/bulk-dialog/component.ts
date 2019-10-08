@@ -29,7 +29,7 @@ class Component {
     public async onMount(): Promise<void> {
         const context = await ContextService.getInstance().getContext<BulkDialogContext>(BulkDialogContext.CONTEXT_ID);
         if (context) {
-            const objects = await context.getObjectList();
+            const objects = await context.getObjectList(null);
             if (objects && !!objects.length) {
                 const objectType = objects[0].KIXObjectType;
                 BulkService.getInstance().initBulkManager(objectType, objects);

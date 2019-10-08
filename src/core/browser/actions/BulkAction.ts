@@ -62,7 +62,7 @@ export class BulkAction extends AbstractAction<ITable> implements IEventSubscrib
         );
 
         if (context) {
-            context.setObjectList(selectedObjects);
+            context.setObjectList(this.objectType, selectedObjects);
         }
 
         context.setDialogSubscriberId(this.eventSubscriberId);

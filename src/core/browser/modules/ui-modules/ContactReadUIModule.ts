@@ -23,6 +23,7 @@ import {
 import { DialogService } from '../../../../core/browser/components/dialog';
 import { SearchService } from '../../../../core/browser/kix/search/SearchService';
 import { IUIModule } from '../../application/IUIModule';
+import { ContactTableDependingAction } from '../../organisation';
 
 export class UIModule implements IUIModule {
 
@@ -82,6 +83,7 @@ export class UIModule implements IUIModule {
     private registerActions(): void {
         ActionFactory.getInstance().registerAction('contact-search-action', ContactSearchAction);
         ActionFactory.getInstance().registerAction('contact-csv-export-action', ContactCSVExportAction);
+        ActionFactory.getInstance().registerAction('contact-table-depending-action', ContactTableDependingAction);
     }
 
 }

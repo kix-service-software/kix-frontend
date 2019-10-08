@@ -145,7 +145,8 @@ class TabLaneComponent implements IEventSubscriber {
             objectChanged: () => { return; },
             objectListChanged: () => { return; },
             filteredObjectListChanged: () => { return; },
-            scrollInformationChanged: () => { return; }
+            scrollInformationChanged: () => { return; },
+            additionalInformationChanged: () => { return; }
         });
         this.setSidebars();
     }

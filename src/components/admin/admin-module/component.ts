@@ -39,7 +39,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             objectChanged: this.moduleChanged.bind(this),
             objectListChanged: () => { return; },
             filteredObjectListChanged: () => { return; },
-            scrollInformationChanged: () => { return; }
+            scrollInformationChanged: () => { return; },
+            additionalInformationChanged: () => { return; }
         });
     }
 

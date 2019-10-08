@@ -18,6 +18,7 @@ import {
 import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 import { ComponentInput } from './ComponentInput';
 import { KIXModulesService } from '../../../core/browser/modules';
+
 class Component {
 
     public state: ComponentState;
@@ -79,9 +80,13 @@ class Component {
                 eventPublished: async (data: TableEventData, eventId: string) => {
                     if (data && this.state.table && data.tableId === this.state.table.getTableId()) {
                         if (eventId === TableEvent.RELOADED) {
-                            const filterComponent = (this as any).getComponent('table-widget-filter');
-                            if (filterComponent) {
-                                filterComponent.reset();
+                            if (settings && settings.resetFilterOnReload) {
+                                const filterComponent = (this as any).getComponent('table-widget-filter');
+                                if (filterComponent) {
+                                    filterComponent.reset();
+                                }
+                            } else {
+                                this.state.table.filter();
                             }
                         } else {
                             if (eventId === TableEvent.TABLE_READY) {
@@ -109,19 +114,24 @@ class Component {
                     explorerBarToggled: () => { return; },
                     filteredObjectListChanged: () => { return; },
                     objectChanged: () => { return; },
-                    objectListChanged: () => {
-                        if (this.state.table) {
-                            this.state.table.resetFilter();
-                        }
-                        const filterComponent = (this as any).getComponent('table-widget-filter');
-                        if (filterComponent) {
-                            filterComponent.reset();
+                    objectListChanged: (objectType: KIXObjectType) => {
+                        if (objectType === this.objectType) {
+                            if (settings && settings.resetFilterOnReload) {
+                                if (this.state.table) {
+                                    this.state.table.resetFilter();
+                                }
+                                const filterComponent = (this as any).getComponent('table-widget-filter');
+                                if (filterComponent) {
+                                    filterComponent.reset();
+                                }
+                            }
                         }
                     },
                     sidebarToggled: () => { return; },
                     scrollInformationChanged: (objectType: KIXObjectType, objectId: string | number) => {
                         this.scrollToRow(objectType, objectId);
-                    }
+                    },
+                    additionalInformationChanged: () => { return; }
                 });
             }
         }
@@ -132,6 +142,7 @@ class Component {
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.subscriber);
         EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
         EventService.getInstance().unsubscribe(TableEvent.RELOADED, this.subscriber);
+        TableFactoryService.getInstance().destroyTable(`table-widget-${this.state.instanceId}`);
     }
 
     private async prepareHeader(): Promise<void> {
@@ -142,17 +153,21 @@ class Component {
     }
 
     private async prepareTitle(): Promise<void> {
-        if (this.configuredTitle) {
-            let title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : "";
-
-            title = await TranslationService.translate(title);
-
-            let count = 0;
-            if (this.state.table) {
-                count = this.state.table.getRowCount(true);
-            }
-            this.state.title = `${title} (${count})`;
+        let count = 0;
+        if (this.state.table) {
+            count = this.state.table.getRowCount(true);
         }
+
+        let title = WidgetService.getInstance().getWidgetTitle(this.state.instanceId);
+
+        if (!title && this.configuredTitle) {
+            title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : "";
+            title = await TranslationService.translate(title);
+            this.state.title = title;
+        }
+
+        const countString = count > 0 ? " (" + count + ")" : "";
+        this.state.title = title + countString;
     }
 
 

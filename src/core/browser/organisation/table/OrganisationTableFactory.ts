@@ -29,7 +29,7 @@ export class OrganisationTableFactory extends TableFactory {
     ): ITable {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting);
-        const table = new Table(tableKey, tableConfiguration);
+        const table = new Table(tableKey, tableConfiguration, contextId);
 
         table.setContentProvider(
             new OrganisationTableContentProvider(table, objectIds, tableConfiguration.loadingOptions, contextId)

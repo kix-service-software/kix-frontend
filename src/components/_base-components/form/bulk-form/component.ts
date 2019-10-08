@@ -57,6 +57,7 @@ class Component {
         EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
+        TableFactoryService.getInstance().destroyTable(`bulk-form-list-${this.state.bulkManager.objectType}`);
     }
 
     public async reset(): Promise<void> {
@@ -215,13 +216,13 @@ class Component {
 
     private async updateTable(): Promise<void> {
         const context = await ContextService.getInstance().getContext<BulkDialogContext>(BulkDialogContext.CONTEXT_ID);
-        const oldObjects = await context.getObjectList();
+        const oldObjects = await context.getObjectList(this.state.bulkManager.objectType);
         const idsToLoad = oldObjects ? oldObjects.map((o) => o.ObjectId) : null;
 
         const newObjects = await KIXObjectService.loadObjects(
             this.state.bulkManager.objectType, idsToLoad, null, null, false
         );
-        context.setObjectList(newObjects);
+        context.setObjectList(this.state.bulkManager.objectType, newObjects);
     }
 
     private async setLoadingInformation(

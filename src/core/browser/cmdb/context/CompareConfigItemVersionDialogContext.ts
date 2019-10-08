@@ -17,8 +17,8 @@ export class CompareConfigItemVersionDialogContext extends Context {
 
     public static CONTEXT_ID: string = 'compare-config-item-version-dialog-context';
 
-    public async setObjectList(versions: Version[]) {
-        super.setObjectList(versions);
+    public async setObjectList(objectType: KIXObjectType, versions: Version[]) {
+        super.setObjectList(objectType, versions);
 
         const widget = this.getWidget('compare-ci-version-widget');
         if (widget) {

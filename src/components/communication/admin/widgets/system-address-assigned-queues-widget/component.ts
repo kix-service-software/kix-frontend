@@ -48,7 +48,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 if (type === KIXObjectType.SYSTEM_ADDRESS) {
                     this.initWidget(systemAddress);
                 }
-            }
+            },
+            additionalInformationChanged: () => { return; }
         });
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
@@ -63,6 +64,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             context.unregisterListener('system-address-assigned-queues-widget');
         }
         EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this.subscriber);
+        TableFactoryService.getInstance().destroyTable('system-address-assigned-queues');
     }
 
     private async initWidget(systemAddress: SystemAddress): Promise<void> {

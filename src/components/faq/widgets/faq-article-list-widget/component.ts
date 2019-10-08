@@ -44,7 +44,8 @@ class Component {
                 objectChanged: () => { return; },
                 objectListChanged: this.contextObjectListChanged.bind(this),
                 filteredObjectListChanged: () => { return; },
-                scrollInformationChanged: () => { return; }
+                scrollInformationChanged: () => { return; },
+                additionalInformationChanged: () => { return; }
             });
         }
 
@@ -55,6 +56,7 @@ class Component {
 
     public onDestroy(): void {
         WidgetService.getInstance().unregisterActions(this.state.instanceId);
+        TableFactoryService.getInstance().destroyTable('faq-articles');
     }
 
     private async contextObjectListChanged(objectList: KIXObject[]): Promise<void> {
@@ -95,7 +97,7 @@ class Component {
         const context = await ContextService.getInstance().getContext<FAQContext>(FAQContext.CONTEXT_ID);
         this.setCategoryFilter(context.faqCategory);
         if (this.state.widgetConfiguration.contextDependent && context) {
-            const objects = await context.getObjectList();
+            const objects = await context.getObjectList(KIXObjectType.FAQ_ARTICLE);
             this.setTitle(objects.length);
         }
     }

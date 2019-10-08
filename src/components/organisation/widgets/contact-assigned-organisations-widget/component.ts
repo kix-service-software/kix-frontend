@@ -38,10 +38,15 @@ class Component {
                 if (type === KIXObjectType.CONTACT) {
                     this.initWidget(contact);
                 }
-            }
+            },
+            additionalInformationChanged: () => { return; }
         });
 
         this.initWidget(await context.getObject<Contact>());
+    }
+
+    public onDestroy(): void {
+        TableFactoryService.getInstance().destroyTable('contact-assigned-organisation');
     }
 
     private async initWidget(contact?: Contact): Promise<void> {

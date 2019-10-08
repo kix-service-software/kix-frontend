@@ -43,6 +43,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         WidgetService.getInstance().unregisterActions(this.state.instanceId);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
+        TableFactoryService.getInstance().destroyTable('ticket-state-assigned-text-modules');
     }
 
     private prepareTitle(): void {

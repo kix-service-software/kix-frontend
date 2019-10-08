@@ -45,7 +45,8 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             objectChanged: () => { return; },
             objectListChanged: () => { return; },
             filteredObjectListChanged: () => { return; },
-            scrollInformationChanged: () => { return; }
+            scrollInformationChanged: () => { return; },
+            additionalInformationChanged: () => { return; }
         });
         window.addEventListener("resize", this.setWidth.bind(this), false);
         this.eventSubscriberId = this.state.row.getTable().getTableId() + '-' + this.state.row.getRowId();

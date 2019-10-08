@@ -29,8 +29,9 @@ export abstract class Context {
 
     private dialogSubscriberId: string = null;
     private additionalInformation: Map<string, any> = new Map();
-    private objectList: KIXObject[] = [];
-    private filteredObjectList: KIXObject[] = [];
+
+    private objectLists: Map<KIXObjectType, KIXObject[]> = new Map();
+    private filteredObjectLists: Map<KIXObjectType, KIXObject[]> = new Map();
 
     private scrollInormation: [KIXObjectType, string | number] = null;
 
@@ -82,6 +83,7 @@ export abstract class Context {
 
     public setAdditionalInformation(key: string, value: any): void {
         this.additionalInformation.set(key, value);
+        this.listeners.forEach((l) => l.additionalInformationChanged(key, value));
     }
 
     public resetAdditionalInformation(keepFormId: boolean = true): void {
@@ -103,13 +105,18 @@ export abstract class Context {
         return this.dialogSubscriberId;
     }
 
-    public async getObjectList(reload: boolean = false): Promise<KIXObject[]> {
-        return this.objectList;
+    public async getObjectList(objectType: KIXObjectType): Promise<KIXObject[]> {
+        if (!objectType) {
+            const values = this.objectLists.values();
+            const list = values.next();
+            return list.value;
+        }
+        return this.objectLists.get(objectType);
     }
 
-    public setObjectList(objectList: KIXObject[]) {
-        this.objectList = objectList;
-        this.listeners.forEach((l) => l.objectListChanged(this.objectList));
+    public setObjectList(objectType: KIXObjectType, objectList: KIXObject[]) {
+        this.objectLists.set(objectType, objectList);
+        this.listeners.forEach((l) => l.objectListChanged(objectType, objectList));
     }
 
     public async setObjectId(objectId: string | number): Promise<void> {
@@ -121,13 +128,13 @@ export abstract class Context {
         return this.objectId;
     }
 
-    public getFilteredObjectList(): KIXObject[] {
-        return this.filteredObjectList;
+    public getFilteredObjectList(objectType: KIXObjectType): KIXObject[] {
+        return this.filteredObjectLists.get(objectType);
     }
 
-    public setFilteredObjectList(filteredObjectList: KIXObject[]) {
-        this.filteredObjectList = filteredObjectList;
-        this.listeners.forEach((l) => l.filteredObjectListChanged(this.filteredObjectList));
+    public setFilteredObjectList(objectType: KIXObjectType, filteredObjectList: KIXObject[]) {
+        this.filteredObjectLists.set(objectType, filteredObjectList);
+        this.listeners.forEach((l) => l.filteredObjectListChanged(objectType, filteredObjectList));
     }
 
     public registerListener(listenerId: string, listener: IContextListener): void {

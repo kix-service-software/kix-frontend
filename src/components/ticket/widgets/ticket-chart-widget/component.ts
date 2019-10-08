@@ -48,15 +48,18 @@ class Component {
                 objectChanged: () => { return; },
                 objectListChanged: () => { return; },
                 scrollInformationChanged: () => { return; },
-                filteredObjectListChanged: this.contextFilteredObjectListChanged.bind(this)
+                filteredObjectListChanged: this.contextFilteredObjectListChanged.bind(this),
+                additionalInformationChanged: () => { return; }
             });
 
-            this.contextFilteredObjectListChanged(currentContext.getFilteredObjectList());
+            this.contextFilteredObjectListChanged(
+                KIXObjectType.TICKET, currentContext.getFilteredObjectList(KIXObjectType.TICKET)
+            );
         } else {
             const tickets = await KIXObjectService.loadObjects<Ticket>(
                 KIXObjectType.TICKET, null, this.ticketChartConfiguration.loadingOptions
             );
-            this.contextFilteredObjectListChanged(tickets);
+            this.contextFilteredObjectListChanged(KIXObjectType.TICKET, tickets);
         }
     }
 
@@ -77,7 +80,7 @@ class Component {
         }
     }
 
-    private async contextFilteredObjectListChanged(objectList: KIXObject[]): Promise<void> {
+    private async contextFilteredObjectListChanged(objectType: KIXObjectType, objectList: KIXObject[]): Promise<void> {
         this.state.chartConfig = null;
         const data = await TicketChartFactory.getInstance().prepareData(
             this.ticketChartConfiguration.property, (objectList as Ticket[])

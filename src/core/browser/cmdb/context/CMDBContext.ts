@@ -69,7 +69,7 @@ export class CMDBContext extends Context {
 
         window.clearTimeout(timeout);
 
-        this.setObjectList(configItems);
+        this.setObjectList(KIXObjectType.CONFIG_ITEM, configItems);
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
     }
 
@@ -81,11 +81,8 @@ export class CMDBContext extends Context {
         return catalogItems.map((c) => c.ItemID);
     }
 
-    public async getObjectList(reload: boolean = false): Promise<KIXObject[]> {
-        if (reload) {
-            await this.loadConfigItems();
-        }
-        return await super.getObjectList();
+    public async getObjectList(objectType: KIXObjectType): Promise<KIXObject[]> {
+        return await super.getObjectList(objectType);
     }
 
     public reset(): void {

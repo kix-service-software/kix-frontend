@@ -31,7 +31,7 @@ export class Column<T extends KIXObject = any> implements IColumn<T> {
         private columnConfiguration: IColumnConfiguration
     ) {
         this.id = columnConfiguration.property;
-        const size = ClientStorageService.getOption(this.getSizeConfifurationKey());
+        const size = ClientStorageService.getOption(this.getSizeConfigurationKey());
         if (size && Number(size)) {
             this.columnConfiguration.size = Number(size);
         }
@@ -115,7 +115,7 @@ export class Column<T extends KIXObject = any> implements IColumn<T> {
 
     public setSize(size: number): void {
         this.columnConfiguration.size = size;
-        ClientStorageService.setOption(this.getSizeConfifurationKey(), size.toString());
+        ClientStorageService.setOption(this.getSizeConfigurationKey(), size.toString());
     }
 
     public isFiltered(): boolean {
@@ -124,8 +124,8 @@ export class Column<T extends KIXObject = any> implements IColumn<T> {
             (filter[1] !== null && filter[1] !== undefined && !!filter[1].length);
     }
 
-    private getSizeConfifurationKey(): string {
-        return this.getTable().getTableKey() + '-' + this.columnConfiguration.property + '-size';
+    private getSizeConfigurationKey(): string {
+        return this.getTable().getTableId() + '-' + this.columnConfiguration.property + '-size';
     }
 
 }

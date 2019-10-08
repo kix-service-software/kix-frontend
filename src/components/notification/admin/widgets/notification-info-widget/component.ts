@@ -36,7 +36,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             scrollInformationChanged: () => { return; },
             objectChanged: async (accountId: string, notification: Notification, type: KIXObjectType) => {
                 this.initWidget(notification);
-            }
+            },
+            additionalInformationChanged: () => { return; }
         });
 
         this.initWidget(await context.getObject<Notification>(KIXObjectType.NOTIFICATION));

@@ -85,7 +85,8 @@ class Component {
                 if (type === KIXObjectType.ORGANISATION) {
                     this.initWidget(organisation);
                 }
-            }
+            },
+            additionalInformationChanged: () => { return; }
         });
 
         this.initWidget(await context.getObject<Organisation>());
@@ -98,6 +99,10 @@ class Component {
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableNewTicketsSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableOpenTicketsSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tablePendingTicketsSubscriber);
+        TableFactoryService.getInstance().destroyTable('organisation-assigned-tickets-reminder');
+        TableFactoryService.getInstance().destroyTable('organisation-assigned-tickets-new');
+        TableFactoryService.getInstance().destroyTable('organisation-assigned-tickets-open');
+        TableFactoryService.getInstance().destroyTable('organisation-assigned-tickets-pending');
     }
 
     private async initWidget(organisation?: Organisation): Promise<void> {
