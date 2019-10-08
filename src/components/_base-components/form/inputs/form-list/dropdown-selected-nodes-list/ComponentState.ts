@@ -8,7 +8,7 @@
  */
 
 import { AbstractComponentState } from "../../../../../../core/browser";
-import { TreeHandler, TreeNode } from "../../../../../../core/model";
+import { TreeNode } from "../../../../../../core/model";
 
 export class ComponentState extends AbstractComponentState {
 

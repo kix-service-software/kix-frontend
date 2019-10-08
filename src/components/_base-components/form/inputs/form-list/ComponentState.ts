@@ -7,9 +7,9 @@
  * --
  */
 
-import { TreeNode, TreeHandler } from '../../../../../core/model';
+import { TreeNode } from '../../../../../core/model';
 import { IdService } from '../../../../../core/browser/IdService';
-import { AbstractComponentState } from '../../../../../core/browser';
+import { AbstractComponentState, FormInputAction } from '../../../../../core/browser';
 
 export class ComponentState extends AbstractComponentState {
 
@@ -26,7 +26,8 @@ export class ComponentState extends AbstractComponentState {
         public prepared: boolean = false,
         public loadNodes: () => Promise<TreeNode[]> = null,
         public removeNodes: boolean = false,
-        public multiselect: boolean = false
+        public multiselect: boolean = false,
+        public actions: FormInputAction[] = [],
     ) {
         super();
     }

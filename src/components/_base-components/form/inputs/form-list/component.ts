@@ -39,6 +39,7 @@ class Component {
 
         const canRemove = typeof input.canRemoveNode !== 'undefined' ? input.canRemoveNode : true;
         this.state.removeNodes = canRemove && !this.state.readonly;
+        this.state.actions = typeof input.actions !== 'undefined' ? input.actions : [];
 
         this.update(input);
     }
@@ -70,7 +71,7 @@ class Component {
         this.treeHandler.registerFinishListener(this.state.treeId, () => this.toggleList(true));
 
         this.treeHandler.registerSelectionListener(this.state.treeId + '-selection', (nodes: TreeNode[]) => {
-            if (!this.state.multiselect && nodes.length > 0) {
+            if (!this.state.multiselect && nodes.length > 0 && this.state.expanded) {
                 this.toggleList(true);
             }
             (this as any).emit('nodesChanged', nodes);
