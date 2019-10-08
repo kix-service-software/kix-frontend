@@ -56,6 +56,9 @@ msgstr "Konto wurde erfolgreich angelegt."
 msgid "Action"
 msgstr "Aktion"
 
+msgid "Activate dependency to organisation"
+msgstr ""
+
 msgid "Add"
 msgstr "Hinzufügen"
 
@@ -600,6 +603,9 @@ msgstr "Kunden Dashboard"
 
 msgid "Data has been updated."
 msgstr "Daten wurden aktualisiert."
+
+msgid "Deactivate dependency to organisation"
+msgstr ""
 
 msgid "Default"
 msgstr "Standard"
@@ -1243,6 +1249,16 @@ msgstr ""
 "Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
 "Bereich angezeigt werden."
 
+#, fuzzy
+#| msgid "Helptext_Admin_NotificationCreate_Filter"
+msgid "Helptext_Admin_NotificationCreate_CreateArticle"
+msgstr ""
+"Wählen Sie ein Ticket- oder Artikelattribut aus der Liste. Anschließend "
+"können Sie in einem weiteren Feld den Wert eingeben, auf den der Filter "
+"reagiert. Nutzen Sie für jedes weitere Attribut eine neue Zeile. Ist unter "
+"\"Events\" mindestens ein artikelbezogenes Event ausgewählt, sind die "
+"Filterattribute \"Sendertyp\" & \"Kanal\" Pflichtfelder."
+
 msgid "Helptext_Admin_NotificationCreate_Event"
 msgstr ""
 "Wählen Sie aus, welche Ereignisse an Tickets oder Artikeln diese "
@@ -1322,6 +1338,16 @@ msgid "Helptext_Admin_NotificationEdit_Comment"
 msgstr ""
 "Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
 "Bereich angezeigt werden."
+
+#, fuzzy
+#| msgid "Helptext_Admin_NotificationCreate_Filter"
+msgid "Helptext_Admin_NotificationEdit_CreateArticle"
+msgstr ""
+"Wählen Sie ein Ticket- oder Artikelattribut aus der Liste. Anschließend "
+"können Sie in einem weiteren Feld den Wert eingeben, auf den der Filter "
+"reagiert. Nutzen Sie für jedes weitere Attribut eine neue Zeile. Ist unter "
+"\"Events\" mindestens ein artikelbezogenes Event ausgewählt, sind die "
+"Filterattribute \"Sendertyp\" & \"Kanal\" Pflichtfelder."
 
 msgid "Helptext_Admin_NotificationEdit_Event"
 msgstr ""
@@ -1904,8 +1930,8 @@ msgstr ""
 
 msgid "Helptext_CMDB_ConfigItemClassCreate_Definition"
 msgstr ""
-"Die Klassendefinition muss ein Liste von Attribut-Objekten in Perl-Notation ("
-"\"Array of Hashes\") enthalten. Wenn die Klassendefinition General Catalog "
+"Die Klassendefinition muss ein Liste von Attribut-Objekten in Perl-Notation "
+"(\"Array of Hashes\") enthalten. Wenn die Klassendefinition General Catalog "
 "Referenzen enthält, können für diese im Modul \"General Catalog\" "
 "Auswahlwerte definiert werden."
 
@@ -1928,8 +1954,8 @@ msgstr ""
 
 msgid "Helptext_CMDB_ConfigItemClassEdit_Definition"
 msgstr ""
-"Die Klassendefinition muss ein Liste von Attribut-Objekten in Perl-Notation ("
-"\"Array of Hashes\") enthalten. Wenn die Klassendefinition General Catalog "
+"Die Klassendefinition muss ein Liste von Attribut-Objekten in Perl-Notation "
+"(\"Array of Hashes\") enthalten. Wenn die Klassendefinition General Catalog "
 "Referenzen enthält, können für diese im Modul \"General Catalog\" "
 "Auswahlwerte definiert werden."
 
@@ -2733,6 +2759,11 @@ msgid "Loading"
 msgstr "Wird geladen"
 
 msgid "Load Organisation"
+msgstr "Lade Kunde"
+
+#, fuzzy
+#| msgid "Load Organisation"
+msgid "Load Organisations"
 msgstr "Lade Kunde"
 
 msgid "Load Queue"
