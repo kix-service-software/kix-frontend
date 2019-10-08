@@ -91,13 +91,6 @@ export class CreateConfigItemVersionUtil {
             let value;
             if (formValue && formValue.value) {
                 switch (fieldType) {
-                    case InputFieldTypes.TEXT:
-                    case InputFieldTypes.TEXT_AREA:
-                    case InputFieldTypes.GENERAL_CATALOG:
-                    case InputFieldTypes.CI_REFERENCE:
-                    case InputFieldTypes.OBJECT_REFERENCE:
-                        value = formValue.value;
-                        break;
                     case InputFieldTypes.DATE:
                         if (formValue.value !== '') {
                             value = DateTimeUtil.getKIXDateString(formValue.value as Date);
@@ -112,8 +105,10 @@ export class CreateConfigItemVersionUtil {
                         value = await CreateConfigItemVersionUtil.prepareAttachment(formValue.value as File[]);
                         break;
                     case InputFieldTypes.DUMMY:
-                    default:
                         value = null;
+                        break;
+                    default:
+                        value = formValue.value;
                 }
             }
 

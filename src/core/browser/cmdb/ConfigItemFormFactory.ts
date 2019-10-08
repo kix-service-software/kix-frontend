@@ -181,7 +181,8 @@ export class ConfigItemFormFactory {
                         )
                     ])
                 ),
-                new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false)
+                new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
+                new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.OBJECT_REFERENCE)
             ],
             null, null, parentInstanceId, ad.CountDefault, ad.CountMax,
             ad.CountMin, ad.Input.MaxLength,
@@ -233,6 +234,7 @@ export class ConfigItemFormFactory {
                 new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.CONFIG_ITEM),
                 new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
                 new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true),
+                new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.OBJECT_REFERENCE),
                 new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                     new KIXObjectLoadingOptions([
                         new FilterCriteria(
