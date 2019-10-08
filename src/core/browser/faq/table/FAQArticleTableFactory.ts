@@ -7,16 +7,17 @@
  * --
  */
 
-import { KIXObjectType, ContextMode, DataType } from "../../../model";
-import { FAQArticleProperty } from "../../../model/kix/faq";
+import { KIXObjectType, ContextMode, DataType, KIXObject } from "../../../model";
+import { FAQArticleProperty, FAQVote } from "../../../model/kix/faq";
 import { RoutingConfiguration } from "../../router";
 import {
     TableConfiguration, ITable, Table,
-    DefaultColumnConfiguration, IColumnConfiguration
+    DefaultColumnConfiguration, IColumnConfiguration, IRow, IColumn
 } from "../../table";
 import { FAQArticleTableContentProvider } from "./FAQArticleTableContentProvider";
 import { TableFactory } from "../../table/TableFactory";
 import { FAQDetailsContext } from "../context/FAQDetailsContext";
+import { BrowserUtil } from "../../BrowserUtil";
 
 export class FAQArticleTableFactory extends TableFactory {
 
@@ -105,7 +106,8 @@ export class FAQArticleTableFactory extends TableFactory {
                 );
             case FAQArticleProperty.VOTES:
                 return new DefaultColumnConfiguration(
-                    FAQArticleProperty.VOTES, true, true, true, false, 120, true, true, true, DataType.STRING, false
+                    FAQArticleProperty.VOTES, true, true, true, false, 120, true, true, true, DataType.STRING, false,
+                    null, null, null, null, true
                 );
             case FAQArticleProperty.CATEGORY_ID:
                 return new DefaultColumnConfiguration(
@@ -122,6 +124,40 @@ export class FAQArticleTableFactory extends TableFactory {
             default:
                 return super.getDefaultColumnConfiguration(property);
         }
+    }
+
+    public getColumnFilterValues<T extends KIXObject>(
+        rows: IRow[], column: IColumn
+    ): Array<[T, number]> {
+        let values: Array<[T, number]> = [];
+        if (column.getColumnId() === FAQArticleProperty.VOTES) {
+            rows.forEach((r) => {
+                const cell = r.getCell(column.getColumnId());
+                if (cell) {
+                    let cellValues = [];
+                    const cellValue = cell.getValue();
+                    if (Array.isArray(cellValue.objectValue)) {
+                        cellValues = cellValue.objectValue;
+                    }
+
+                    const rating = BrowserUtil.calculateAverage(cellValues.map((cv: FAQVote) => cv.Rating));
+                    const vote = new FAQVote();
+                    vote.ID = rating;
+                    vote.Rating = rating;
+
+                    const existingValue = values.find((ev) => (ev[0] as any).Rating === rating);
+                    if (existingValue) {
+                        existingValue[1] = existingValue[1] + 1;
+                    } else {
+                        values.push([vote as any, 1]);
+                    }
+                }
+            });
+        } else {
+            values = TableFactory.getColumnFilterValues(rows, column);
+        }
+
+        return values;
     }
 
 }

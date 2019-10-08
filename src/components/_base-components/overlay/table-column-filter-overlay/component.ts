@@ -9,7 +9,7 @@
 
 import { AbstractMarkoComponent, IColumn, LabelService } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
-import { TreeNode, KIXObjectType, ObjectIcon, TreeService, TreeHandler } from '../../../../core/model';
+import { TreeNode, KIXObjectType, ObjectIcon, TreeService, TreeHandler, KIXObject } from '../../../../core/model';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
@@ -74,7 +74,21 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 const icons = await labelProvider.getIcons(null, this.column.getColumnId(), fv[0]);
                 icon = icons && icons.length ? icons[0] : null;
             }
-            nodes.push(new TreeNode(fv[0], label, icon, null));
+
+            const node = new TreeNode(fv[0], label, icon, null);
+
+            const filter = this.column.getFilter();
+            const hasFilterValue = filter[1].some((f) => (f.value as []).some((v: any) => {
+                if (v instanceof KIXObject) {
+                    return v.equals(fv[0]);
+                } else {
+                    return v === fv[0];
+                }
+            }));
+            if (hasFilterValue) {
+                node.selected = true;
+            }
+            nodes.push(node);
         }
 
         const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);

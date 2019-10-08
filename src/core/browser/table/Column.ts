@@ -16,6 +16,8 @@ import { EventService } from "../event";
 import { TableEvent } from "./TableEvent";
 import { TableEventData } from "./TableEventData";
 import { ClientStorageService } from "../ClientStorageService";
+import { TableFactoryService } from "./TableFactoryService";
+import { TableFactory } from "./TableFactory";
 
 export class Column<T extends KIXObject = any> implements IColumn<T> {
 
@@ -58,36 +60,13 @@ export class Column<T extends KIXObject = any> implements IColumn<T> {
     }
 
     public getFilterValues(): Array<[T, number]> {
-        const values: Array<[T, number]> = [];
-
-        this.getTable().getRows(true).forEach((r) => {
-            const cell = r.getCell(this.id);
-            if (cell) {
-                let cellValues = [];
-                const cellValue = cell.getValue();
-                if (Array.isArray(cellValue.objectValue)) {
-                    cellValues = cellValue.objectValue;
-                } else {
-                    cellValues.push(cellValue.objectValue);
-                }
-
-                cellValues.forEach((value) => {
-                    const existingValue = values.find((ev) => {
-                        if (ev[0] instanceof KIXObject) {
-                            return ev[0].equals(value);
-                        }
-                        return ev[0] === value;
-                    });
-                    if (existingValue) {
-                        existingValue[1] = existingValue[1] + 1;
-                    } else {
-                        values.push([value, 1]);
-                    }
-                });
-
-            }
-        });
-
+        let values = [];
+        const tableFactory = TableFactoryService.getInstance().getTableFactory(this.getTable().getObjectType());
+        if (tableFactory) {
+            values = tableFactory.getColumnFilterValues(this.getTable().getRows(true), this);
+        } else {
+            values = TableFactory.getColumnFilterValues(this.getTable().getRows(true), this);
+        }
         return values;
     }
 
@@ -95,7 +74,9 @@ export class Column<T extends KIXObject = any> implements IColumn<T> {
         const criteria: TableFilterCriteria[] = [];
 
         if (filterValues && filterValues.length) {
-            criteria.push(new TableFilterCriteria(this.id, SearchOperator.IN, filterValues as any[]));
+            criteria.push(new TableFilterCriteria(
+                this.id, SearchOperator.IN, filterValues as any[], this.columnConfiguration.useObjectServiceForFilter)
+            );
         }
 
         this.filterValue = textValue;

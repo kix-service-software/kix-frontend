@@ -7,9 +7,11 @@
  * --
  */
 
-import { KIXObjectType } from "../../model";
+import { KIXObjectType, KIXObject } from "../../model";
 import { ITable, TableConfiguration } from "../table";
 import { IColumnConfiguration } from "./IColumnConfiguration";
+import { IColumn } from "./IColumn";
+import { IRow } from "./IRow";
 
 export interface ITableFactory {
 
@@ -24,4 +26,6 @@ export interface ITableFactory {
     ): ITable;
 
     getDefaultColumnConfiguration(property: string): IColumnConfiguration;
+
+    getColumnFilterValues<T extends KIXObject = any>(rows: IRow[], column: IColumn): Array<[T, number]>;
 }
