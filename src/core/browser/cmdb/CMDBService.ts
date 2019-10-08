@@ -51,14 +51,14 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
 
     public async createConfigItem(formId: string, classId: number): Promise<string | number> {
         const parameter = await CreateConfigItemUtil.createParameter(formId, classId);
-        const configItemId = await KIXObjectService.createObject(KIXObjectType.CONFIG_ITEM, parameter);
+        const configItemId = await KIXObjectService.createObject(KIXObjectType.CONFIG_ITEM, parameter, null, false);
         return configItemId;
     }
 
     public async createConfigItemVersion(formId: string, configItemId: number): Promise<string | number> {
         const parameter = await CreateConfigItemVersionUtil.createParameter(formId);
         const versionId = await KIXObjectService.createObject(
-            KIXObjectType.CONFIG_ITEM_VERSION, parameter, new CreateConfigItemVersionOptions(configItemId)
+            KIXObjectType.CONFIG_ITEM_VERSION, parameter, new CreateConfigItemVersionOptions(configItemId), false
         );
         return versionId;
     }
