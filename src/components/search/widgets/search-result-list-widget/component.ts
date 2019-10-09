@@ -105,8 +105,12 @@ class Component implements IKIXObjectSearchListener {
                 emptyResultHint = 'Translatable#No search query found.';
             }
 
+            const searchDefinition = SearchService.getInstance().getSearchDefinition(
+                objectType
+            );
             const tableConfiguration = new TableConfiguration(
-                objectType, null, null, null, true, null, null, null,
+                objectType, searchDefinition.getLoadingOptionsForResultList(),
+                null, null, true, null, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.SMALL, emptyResultHint
             );
             const table = await TableFactoryService.getInstance().createTable(
@@ -125,9 +129,6 @@ class Component implements IKIXObjectSearchListener {
                                     parameter.push([c.property, c.value]);
                                 }
                             }
-                            const searchDefinition = SearchService.getInstance().getSearchDefinition(
-                                objectType
-                            );
                             const columns = await searchDefinition.getTableColumnConfiguration(parameter);
                             table.addColumns(columns);
                         }
