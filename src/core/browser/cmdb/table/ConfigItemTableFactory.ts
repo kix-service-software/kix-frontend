@@ -31,7 +31,9 @@ export class ConfigItemTableFactory extends TableFactory {
         );
 
         const table = new Table(tableKey, tableConfiguration, contextId);
-        table.setContentProvider(new ConfigItemTableContentProvider(table, objectIds, null, contextId));
+        table.setContentProvider(
+            new ConfigItemTableContentProvider(table, objectIds, tableConfiguration.loadingOptions, contextId)
+        );
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 
         return table;

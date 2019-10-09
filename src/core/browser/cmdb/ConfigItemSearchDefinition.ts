@@ -36,6 +36,14 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         );
     }
 
+    public getLoadingOptionsForResultList(): KIXObjectLoadingOptions {
+        return new KIXObjectLoadingOptions(
+            null, null, null,
+            [VersionProperty.DATA, VersionProperty.PREPARED_DATA, 'Links', ConfigItemProperty.CURRENT_VERSION],
+            [VersionProperty.DATA, VersionProperty.PREPARED_DATA, 'Links']
+        );
+    }
+
     public async getSearchResultCategories(): Promise<SearchResultCategory> {
         const categories: SearchResultCategory[] = [];
 
