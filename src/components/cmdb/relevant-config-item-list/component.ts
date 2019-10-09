@@ -10,10 +10,11 @@
 import { ComponentState } from './ComponentState';
 import { ContextService, KIXObjectService } from '../../../core/browser';
 import {
-    KIXObjectType, ConfigItem, KIXObjectLoadingOptions, ContextMode, ConfigItemProperty, ContextType
+    KIXObjectType, ConfigItem, KIXObjectLoadingOptions, ContextMode, ConfigItemProperty, ContextType, Ticket
 } from '../../../core/model';
 import { RoutingConfiguration } from '../../../core/browser/router';
 import { ConfigItemDetailsContext } from '../../../core/browser/cmdb';
+import { TicketDetailsContext } from '../../../core/browser/ticket';
 
 class Component {
 
@@ -24,9 +25,32 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        const object = await ContextService.getInstance().getActiveContext(ContextType.MAIN).getObject();
-        if (object) {
-            const linkedConfigItemIds = object.Links.filter(
+        const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
+            TicketDetailsContext.CONTEXT_ID
+        );
+
+        context.registerListener('relevant-config-item-list', {
+            additionalInformationChanged: () => { return; },
+            explorerBarToggled: () => { return; },
+            filteredObjectListChanged: () => { return; },
+            objectListChanged: () => { return; },
+            scrollInformationChanged: () => { return; },
+            sidebarToggled: () => { return; },
+            objectChanged: async () => {
+                this.updateConfigItems();
+            },
+        });
+
+        this.updateConfigItems();
+    }
+
+    private async updateConfigItems(): Promise<void> {
+        const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
+            TicketDetailsContext.CONTEXT_ID
+        );
+        const ticket = await context.getObject();
+        if (ticket) {
+            const linkedConfigItemIds = ticket.Links.filter(
                 (l) => l.Type === 'RelevantTo' && l.SourceObject === KIXObjectType.CONFIG_ITEM
             ).map((l) => l.SourceKey);
 
@@ -37,13 +61,15 @@ class Component {
                     KIXObjectType.CONFIG_ITEM, linkedConfigItemIds, loadingOptions
                 );
 
-                this.state.configItems = configItems.sort(
+                configItems.sort(
                     (a, b) => {
                         const aName = a.CurrentVersion ? a.CurrentVersion.Name : '';
                         const bName = b.CurrentVersion ? b.CurrentVersion.Name : '';
                         return (aName.localeCompare(bName));
                     }
                 );
+
+                this.state.configItems = configItems;
             } else {
                 this.state.configItems = [];
             }
