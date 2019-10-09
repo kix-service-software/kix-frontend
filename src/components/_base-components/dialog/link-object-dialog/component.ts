@@ -40,6 +40,8 @@ class LinkDialogComponent {
 
     private tableSubscriber: IEventSubscriber;
 
+    private objectType: KIXObjectType;
+
     public onCreate(): void {
         this.state = new ComponentState();
         this.state.loadNodes = this.loadNodes.bind(this);
@@ -50,7 +52,7 @@ class LinkDialogComponent {
             ? input.linkDescriptions || []
             : this.state.linkDescriptions;
         this.newLinks = [];
-        this.state.objectType = input.objectType;
+        this.objectType = input.objectType;
         this.resultListenerId = input.resultListenerId;
         this.rootObject = input.rootObject;
     }
@@ -63,11 +65,6 @@ class LinkDialogComponent {
         );
 
         WidgetService.getInstance().setWidgetType('link-object-dialog-form-widget', WidgetType.GROUP);
-
-        const context = await ContextService.getInstance().getContext<LinkObjectDialogContext>(
-            LinkObjectDialogContext.CONTEXT_ID
-        );
-        context.setObjectList(this.state.objectType, []);
 
         this.setLinkTypes();
 
@@ -84,7 +81,7 @@ class LinkDialogComponent {
     }
 
     private async loadNodes(): Promise<TreeNode[]> {
-        this.linkPartners = await LinkUtil.getPossibleLinkPartners(this.state.objectType);
+        this.linkPartners = await LinkUtil.getPossibleLinkPartners(this.objectType);
 
         const nodes: TreeNode[] = [];
         for (const lp of this.linkPartners) {
@@ -123,15 +120,15 @@ class LinkDialogComponent {
         const context = await ContextService.getInstance().getContext<LinkObjectDialogContext>(
             LinkObjectDialogContext.CONTEXT_ID
         );
-        context.setObjectList(this.state.objectType, []);
 
         let formId: string;
         if (nodes && nodes.length) {
             formId = nodes[0].id.toString();
             this.linkLabel = nodes[0].label;
             const formInstance = await FormService.getInstance().getFormInstance(formId, false);
+            this.objectType = formInstance.getObjectType();
+            context.setObjectList(this.objectType, []);
             formInstance.reset();
-            await this.prepareResultTable();
         } else {
             this.state.table = null;
             formId = null;
@@ -142,9 +139,10 @@ class LinkDialogComponent {
 
         (this as any).setStateDirty('currentLinkableObjectNode');
 
-        setTimeout(() => {
+        setTimeout(async () => {
             this.setSubmitState();
             this.state.formId = formId;
+            await this.prepareResultTable();
             DialogService.getInstance().setOverlayDialogLoading(false);
         }, 50);
     }
@@ -164,7 +162,8 @@ class LinkDialogComponent {
             const context = await ContextService.getInstance().getContext<LinkObjectDialogContext>(
                 LinkObjectDialogContext.CONTEXT_ID
             );
-            context.setObjectList(this.state.objectType, objects);
+
+            context.setObjectList(formInstance.getObjectType(), objects);
             await this.prepareResultTable();
             this.state.resultCount = objects.length;
             this.setSubmitState();
@@ -182,7 +181,8 @@ class LinkDialogComponent {
             const objectType = formInstance.getObjectType();
 
             const tableConfiguration = new TableConfiguration(
-                objectType, null, 5, null, true, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                objectType, null, 5, null, true, false,
+                null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             );
             const table = await TableFactoryService.getInstance().createTable(
                 `link-object-dialog-${objectType}`, objectType, tableConfiguration, null,
@@ -193,8 +193,6 @@ class LinkDialogComponent {
                     'LinkedAs', true, false, true, false, 120, true, true, false, DataType.STRING
                 )
             ]);
-
-            this.state.table = table;
 
             this.tableSubscriber = {
                 eventSubscriberId: 'link-object-dialog',
@@ -212,6 +210,8 @@ class LinkDialogComponent {
 
             EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
             EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
+
+            setTimeout(() => this.state.table = table, 50);
         }
     }
 
@@ -283,7 +283,7 @@ class LinkDialogComponent {
             );
             const loadingOptions = new KIXObjectLoadingOptions([
                 new FilterCriteria(
-                    'Source', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, this.state.objectType
+                    'Source', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, this.objectType
                 ),
                 new FilterCriteria(
                     'Target', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, linkPartner[1]

@@ -146,7 +146,7 @@ export class SearchService {
                     }
                 });
 
-                const loadingOptions = new KIXObjectLoadingOptions(criteria);
+                const loadingOptions = searchDefinition.getLoadingOptions(criteria);
                 objects = await KIXObjectService.loadObjects(objectType, null, loadingOptions, null, false);
             }
         } else {
