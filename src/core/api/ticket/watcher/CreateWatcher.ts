@@ -11,8 +11,10 @@ import { RequestObject } from '../../RequestObject';
 
 export class CreateWatcher extends RequestObject {
 
-    public constructor(userId: number) {
+    public constructor(userId: number, object: string, objectId: number) {
         super();
         this.applyProperty("UserID", userId);
+        this.applyProperty("Object", object);
+        this.applyProperty("ObjectID", objectId);
     }
 }
