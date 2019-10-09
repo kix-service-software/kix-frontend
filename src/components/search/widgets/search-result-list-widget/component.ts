@@ -108,6 +108,7 @@ class Component implements IKIXObjectSearchListener {
             const searchDefinition = SearchService.getInstance().getSearchDefinition(
                 objectType
             );
+
             const tableConfiguration = new TableConfiguration(
                 objectType, searchDefinition.getLoadingOptionsForResultList(),
                 null, null, true, null, null, null,
@@ -115,7 +116,7 @@ class Component implements IKIXObjectSearchListener {
             );
             const table = await TableFactoryService.getInstance().createTable(
                 `search-result-list-${objectType}`, objectType, tableConfiguration,
-                objectIds, undefined, true, true, false
+                objectIds, undefined, true, true, false, true
             );
 
             this.tableSubscriber = {
