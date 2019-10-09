@@ -351,6 +351,7 @@ export abstract class Context {
 
     public reset(): void {
         this.resetAdditionalInformation();
+        this.objectLists.clear();
     }
 
     public async getFormId(
