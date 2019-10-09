@@ -54,7 +54,7 @@ export abstract class SearchDefinition {
     }
 
     public getLoadingOptionsForResultList(): KIXObjectLoadingOptions {
-        return;
+        return null;
     }
 
     public async prepareFormFilterCriteria(criteria: FilterCriteria[]): Promise<FilterCriteria[]> {
