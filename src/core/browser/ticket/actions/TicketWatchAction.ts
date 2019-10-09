@@ -8,7 +8,7 @@
  */
 
 import { AbstractAction } from '../../../model/components/action/AbstractAction';
-import { Ticket, KIXObjectType, CreateTicketWatcherOptions, DeleteTicketWatcherOptions, CRUD } from '../../../model';
+import { Ticket, KIXObjectType, CreateTicketWatcherOptions, CRUD } from '../../../model';
 import { ContextService } from '../../context';
 import { KIXObjectService } from '../../kix';
 import { EventService } from '../../event';
@@ -22,9 +22,12 @@ import { CacheService } from '../../cache';
 export class TicketWatchAction extends AbstractAction<Ticket> {
 
     public hasLink: boolean = false;
+    private watcherId: number;
 
     public permissions = [
-        new UIComponentPermission('tickets', [CRUD.CREATE])
+        new UIComponentPermission('tickets', [CRUD.READ]),
+        new UIComponentPermission('watchers', [CRUD.CREATE]),
+        new UIComponentPermission('watchers/*', [CRUD.DELETE])
     ];
 
     private isWatching: boolean = false;
@@ -38,11 +41,13 @@ export class TicketWatchAction extends AbstractAction<Ticket> {
         this.data = ticket;
 
         const currentUser = await AgentService.getInstance().getCurrentUser();
+        const watcher = ticket.Watchers.find((w) => w.UserID === currentUser.UserID);
 
-        if (ticket.Watchers && ticket.Watchers.some((w) => w.UserID === currentUser.UserID)) {
+        if (ticket.Watchers && watcher) {
             this.isWatching = true;
             this.text = 'Translatable#Unwatch';
             this.icon = 'kix-icon-eye-off';
+            this.watcherId = watcher.ID;
         } else {
             this.isWatching = false;
             this.text = 'Translatable#Watch';
@@ -60,9 +65,7 @@ export class TicketWatchAction extends AbstractAction<Ticket> {
                 loading: true, hint: 'Translatable#Unwatch Ticket'
             });
 
-            const failIds = await KIXObjectService.deleteObject(
-                KIXObjectType.WATCHER, [this.data.TicketID], new DeleteTicketWatcherOptions(currentUser.UserID)
-            );
+            const failIds = await KIXObjectService.deleteObject(KIXObjectType.WATCHER, [this.watcherId]);
             if (!failIds || !!!failIds.length) {
                 successHint = 'Translatable#Ticket is no longer watched.';
             }

@@ -36,7 +36,6 @@ export { FollowUpType } from './FollowUpType';
 export { TicketStats } from './TicketStats';
 export { CreateTicketArticleOptions } from './CreateTicketArticleOptions';
 export { CreateTicketWatcherOptions } from './CreateTicketWatcherOptions';
-export { DeleteTicketWatcherOptions } from './DeleteTicketWatcherOptions';
 export { TicketPriorityProperty } from './TicketPriorityProperty';
 
 export { ArticleLoadingOptions } from './ArticleLoadingOptions';
