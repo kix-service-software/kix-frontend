@@ -174,5 +174,13 @@ export class BrowserUtil {
         scrollIntoView(element, { behavior: 'smooth', scrollMode: 'if-needed' });
     }
 
+    public static encodeHTMLString(value: string): string {
+        value = value.toLocaleLowerCase()
+            .replace(/ä/g, '&auml;')
+            .replace(/ö/g, '&ouml;')
+            .replace(/ü/g, '&uuml;');
+
+        return value;
+    }
 
 }
