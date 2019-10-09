@@ -156,12 +156,14 @@ class Component implements ISearchFormListener {
             formInstance.reset();
         }
 
-        this.state.manager.reset();
-        const defaultProperties = formInstance.form.defaultSearchProperties;
-        if (defaultProperties) {
-            defaultProperties.forEach(
-                (p) => this.state.manager.setValue(new ObjectPropertyValue(p, null, null))
-            );
+        if (this.state.manager) {
+            this.state.manager.reset();
+            const defaultProperties = formInstance.form.defaultSearchProperties;
+            if (defaultProperties) {
+                defaultProperties.forEach(
+                    (p) => this.state.manager.setValue(new ObjectPropertyValue(p, null, null))
+                );
+            }
         }
         setTimeout(() => {
             this.state.prepared = true;
@@ -236,7 +238,7 @@ class Component implements ISearchFormListener {
         );
         const table = await TableFactoryService.getInstance().createTable(
             `search-form-results-${this.objectType}`, this.objectType, tableConfiguration,
-            null, SearchContext.CONTEXT_ID, true, false, true
+            null, SearchContext.CONTEXT_ID, true, false, true, true
         );
 
         return table;
