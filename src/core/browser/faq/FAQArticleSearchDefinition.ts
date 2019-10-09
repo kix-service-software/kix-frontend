@@ -25,11 +25,11 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
     }
 
     public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(criteria, null, null, ['Links', 'Votes'], ['Links', 'Votes']);
+        return new KIXObjectLoadingOptions(criteria, null, null, ['Links', 'Votes'], ['Links']);
     }
 
     public getLoadingOptionsForResultList(): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(null, null, null, ['Links', 'Votes'], ['Links', 'Votes']);
+        return new KIXObjectLoadingOptions(null, null, null, ['Links', 'Votes'], ['Links']);
     }
 
     public async getSearchResultCategories(): Promise<SearchResultCategory> {
