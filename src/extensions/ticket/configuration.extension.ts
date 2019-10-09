@@ -247,7 +247,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
             fields.push(new FormField('Translatable#Ticket Number', TicketProperty.TICKET_NUMBER, null, false, 'Translatable#Helptext_Tickets_Link_Number'));
             fields.push(new FormField('Translatable#Title', TicketProperty.TITLE, null, false, 'Translatable#Helptext_Tickets_Link_Title'));
             fields.push(new FormField(
-                'Translatable#Type', TicketProperty.TYPE_ID, 'object-reference-input', true, 'Translatable#Helptext_Tickets_Link_Type', [
+                'Translatable#Type', TicketProperty.TYPE_ID, 'object-reference-input', false, 'Translatable#Helptext_Tickets_Link_Type', [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.TICKET_TYPE),
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
@@ -263,7 +263,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
                 ]
             ));
             fields.push(new FormField(
-                'Translatable#Assign Team / Queue', TicketProperty.QUEUE_ID, 'object-reference-input', true, 'Translatable#Helptext_Tickets_Link_Queue', [
+                'Translatable#Assign Team / Queue', TicketProperty.QUEUE_ID, 'object-reference-input', false, 'Translatable#Helptext_Tickets_Link_Queue', [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
                     new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, true),
@@ -286,7 +286,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
                 ]
             ));
             fields.push(new FormField(
-                'Translatable#Priority', TicketProperty.PRIORITY_ID, 'object-reference-input', true, 'Translatable#Helptext_Tickets_Link_Priority', [
+                'Translatable#Priority', TicketProperty.PRIORITY_ID, 'object-reference-input', false, 'Translatable#Helptext_Tickets_Link_Priority', [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.TICKET_PRIORITY),
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
@@ -302,7 +302,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
                 ]
             ));
             fields.push(new FormField(
-                'Translatable#State', TicketProperty.STATE_ID, 'object-reference-input', true, 'Translatable#Helptext_Tickets_Link_State', [
+                'Translatable#State', TicketProperty.STATE_ID, 'object-reference-input', false, 'Translatable#Helptext_Tickets_Link_State', [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.TICKET_STATE),
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
