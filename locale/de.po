@@ -142,15 +142,6 @@ msgstr "Alle Objekte"
 msgid "All tickets"
 msgstr "Alle Tickets"
 
-msgid "All Tickets"
-msgstr "Alle Tickets"
-
-msgid "and"
-msgstr "und"
-
-msgid "AND"
-msgstr "UND"
-
 msgid "and further"
 msgstr "und weitere"
 
@@ -165,9 +156,6 @@ msgstr "Ein Produkt der c.a.p.e. IT GmbH"
 
 msgid "Archived"
 msgstr "Archiviert"
-
-msgid "archived tickets"
-msgstr "Archivierte Tickets"
 
 msgid "Article"
 msgstr "Artikel"
@@ -2508,12 +2496,6 @@ msgstr "Der Kunde wird automatisch in Abhängigkeit vom Kontakt zugeordnet."
 msgid "Helptext_Tickets_TicketEdit_Owner"
 msgstr "Wählen Sie eine Person aus, die das Ticket bearbeiten soll."
 
-msgid "Helptext_Tickets_TicketEdit_Priority"
-msgstr "Die Priorität kennzeichnet die Dringlichkeit eines Tickets."
-
-msgid "Helptext_Tickets_TicketEdit_Queue"
-msgstr "Geben Sie hier einen Zuständigkeitsbereich für das Ticket an."
-
 msgid "Helptext_Tickets_TicketEdit_Responsible"
 msgstr ""
 "Wählen Sie eine Person aus, die für die Ticketbearbeitung verantwortlich "
@@ -2526,11 +2508,6 @@ msgstr ""
 
 msgid "Helptext_Tickets_TicketEdit_Title"
 msgstr "Fassen Sie das Thema des Tickets kurz zusammen."
-
-msgid "Helptext_Tickets_TicketEdit_Type"
-msgstr ""
-"Der Ticket-Typ dient der Einordnung, um welche Art von Anfrage es sich bei "
-"dem Ticket handelt."
 
 msgid "Here you will find the KIX 18 manuals for users and administrators"
 msgstr "Hier finden Sie die KIX 18 Handbücher für Anwender und Administratoren"
@@ -2994,14 +2971,8 @@ msgstr "Kein Artikel verfügbar."
 msgid "No data available."
 msgstr "Keine Daten verfügbar."
 
-msgid "No general catalog class configured!"
-msgstr "Keine General Catalog Klasse konfiguriert!"
-
 msgid "No linked objects available."
 msgstr "Keine verknüpften Objekte verfügbar."
-
-msgid "No link types available."
-msgstr "Keine Linktypen verfügbar."
 
 msgid "No objects available."
 msgstr "Keine Objekte verfügbar."
@@ -3023,9 +2994,6 @@ msgstr "Keine Suchanfrage verfügbar."
 
 msgid "No signature defined."
 msgstr "Keine Signatur definiert."
-
-msgid "not archived tickets"
-msgstr "Nicht archivierte Tickets"
 
 msgid "Not available (not any more or not yet)"
 msgstr "Noch nicht verfügbar / nicht mehr verfügbar"
@@ -3357,9 +3325,6 @@ msgstr "Parameter entfernen"
 
 msgid "Remove Priorities"
 msgstr "Prioritäten entfernen"
-
-msgid "Remove Search Criteria"
-msgstr "Suchkriterien entfernen"
 
 msgid "Remove States"
 msgstr "Status entfernen"
@@ -4077,6 +4042,41 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "All Tickets"
+#~ msgstr "Alle Tickets"
+
+#~ msgid "and"
+#~ msgstr "und"
+
+#~ msgid "AND"
+#~ msgstr "UND"
+
+#~ msgid "archived tickets"
+#~ msgstr "Archivierte Tickets"
+
+#~ msgid "Helptext_Tickets_TicketEdit_Priority"
+#~ msgstr "Die Priorität kennzeichnet die Dringlichkeit eines Tickets."
+
+#~ msgid "Helptext_Tickets_TicketEdit_Queue"
+#~ msgstr "Geben Sie hier einen Zuständigkeitsbereich für das Ticket an."
+
+#~ msgid "Helptext_Tickets_TicketEdit_Type"
+#~ msgstr ""
+#~ "Der Ticket-Typ dient der Einordnung, um welche Art von Anfrage es sich "
+#~ "bei dem Ticket handelt."
+
+#~ msgid "No general catalog class configured!"
+#~ msgstr "Keine General Catalog Klasse konfiguriert!"
+
+#~ msgid "No link types available."
+#~ msgstr "Keine Linktypen verfügbar."
+
+#~ msgid "not archived tickets"
+#~ msgstr "Nicht archivierte Tickets"
+
+#~ msgid "Remove Search Criteria"
+#~ msgstr "Suchkriterien entfernen"
 
 #~ msgid "Current version"
 #~ msgstr "Aktuelle Version"

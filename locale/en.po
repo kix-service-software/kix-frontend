@@ -140,15 +140,6 @@ msgstr ""
 msgid "All tickets"
 msgstr ""
 
-msgid "All Tickets"
-msgstr ""
-
-msgid "and"
-msgstr ""
-
-msgid "AND"
-msgstr ""
-
 msgid "and further"
 msgstr ""
 
@@ -162,9 +153,6 @@ msgid "A product by c.a.p.e. IT GmbH"
 msgstr ""
 
 msgid "Archived"
-msgstr ""
-
-msgid "archived tickets"
 msgstr ""
 
 msgid "Article"
@@ -2363,12 +2351,6 @@ msgstr ""
 msgid "Helptext_Tickets_TicketEdit_Owner"
 msgstr "Choose a person who is supposed to process the ticket."
 
-msgid "Helptext_Tickets_TicketEdit_Priority"
-msgstr "The Priority marks the ticket urgency."
-
-msgid "Helptext_Tickets_TicketEdit_Queue"
-msgstr "Insert the scope of responsitility for the ticket."
-
 msgid "Helptext_Tickets_TicketEdit_Responsible"
 msgstr ""
 "Choose a person who is responsible for the ticket process. Can be the same "
@@ -2379,9 +2361,6 @@ msgstr "The state marks the recent ticket process state."
 
 msgid "Helptext_Tickets_TicketEdit_Title"
 msgstr "Briefly summarzie the ticket topic."
-
-msgid "Helptext_Tickets_TicketEdit_Type"
-msgstr "The ticket type classifies which type of request the ticket is."
 
 msgid "Here you will find the KIX 18 manuals for users and administrators"
 msgstr ""
@@ -2845,13 +2824,7 @@ msgstr ""
 msgid "No data available."
 msgstr ""
 
-msgid "No general catalog class configured!"
-msgstr ""
-
 msgid "No linked objects available."
-msgstr ""
-
-msgid "No link types available."
 msgstr ""
 
 msgid "No objects available."
@@ -2873,9 +2846,6 @@ msgid "No search query found."
 msgstr ""
 
 msgid "No signature defined."
-msgstr ""
-
-msgid "not archived tickets"
 msgstr ""
 
 msgid "Not available (not any more or not yet)"
@@ -3203,9 +3173,6 @@ msgid "Remove parameter"
 msgstr ""
 
 msgid "Remove Priorities"
-msgstr ""
-
-msgid "Remove Search Criteria"
 msgstr ""
 
 msgid "Remove States"
@@ -3918,6 +3885,15 @@ msgstr ""
 
 msgid "ZIP"
 msgstr ""
+
+#~ msgid "Helptext_Tickets_TicketEdit_Priority"
+#~ msgstr "The Priority marks the ticket urgency."
+
+#~ msgid "Helptext_Tickets_TicketEdit_Queue"
+#~ msgstr "Insert the scope of responsitility for the ticket."
+
+#~ msgid "Helptext_Tickets_TicketEdit_Type"
+#~ msgstr "The ticket type classifies which type of request the ticket is."
 
 #~ msgid "Helptext_i18n_TranslationPatternEdit_Translation"
 #~ msgstr ""
