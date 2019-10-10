@@ -13,6 +13,8 @@ npm-debug.log
 src/log/**/*
 src/logs/**/*
 src/**/.gulp-*
+allure-results
+test-result.tar.gz
 logs
 
 coverage
