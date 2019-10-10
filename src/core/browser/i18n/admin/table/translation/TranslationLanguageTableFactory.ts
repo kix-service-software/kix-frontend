@@ -40,12 +40,15 @@ export class TranslationLanguageTableFactory extends TableFactory {
             new DefaultColumnConfiguration(
                 TranslationLanguageProperty.LANGUAGE, true, false, true, true, 150, true, true, true
             ),
-            new DefaultColumnConfiguration(TranslationLanguageProperty.VALUE, true, false, true, true, 400, true, true)
+            new DefaultColumnConfiguration(
+                TranslationLanguageProperty.VALUE, true, false, true, true, 400, true, true, false,
+                null, true, null, null, false
+            )
         ];
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.TRANSLATION_LANGUAGE, null, null, tableColumns,  false, false, null, null,
+                KIXObjectType.TRANSLATION_LANGUAGE, null, null, tableColumns, false, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
         } else if (!tableConfiguration.tableColumns) {
