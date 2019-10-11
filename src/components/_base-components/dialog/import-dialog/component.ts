@@ -79,13 +79,7 @@ class Component {
         );
     }
 
-    public async onInput(input: any): Promise<any> {
-        this.reset(input ? input.instanceId : '');
-        this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Cancel", "Translatable#Replace Values",
-            "Translatable#Close Dialog", "Translatable#Start Import"
-        ]);
-
+    public async onMount(): Promise<void> {
         this.context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
         if (this.context) {
             const types = this.context.getDescriptor().kixObjectTypes;
@@ -109,8 +103,16 @@ class Component {
                 });
             }
         }
+
         this.prepareImportConfigForm();
         this.createTable();
+    }
+
+    public async onInput(input: any): Promise<any> {
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Cancel", "Translatable#Replace Values",
+            "Translatable#Close Dialog", "Translatable#Start Import"
+        ]);
 
         return input;
     }
@@ -125,27 +127,6 @@ class Component {
             this.state.importManager.unregisterListener(this.formListenerId);
         }
         TableFactoryService.getInstance().destroyTable(`import-dialog-list-${this.objectType}`);
-    }
-
-    private reset(instanceId: string): void {
-        EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
-        EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
-        EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
-        FormService.getInstance().deleteFormInstance(this.state.importConfigFormId);
-        FormService.getInstance().removeFormInstanceListener(this.state.importConfigFormId, this.formListenerId);
-        if (this.state.importManager) {
-            this.state.importManager.unregisterListener(this.formListenerId);
-        }
-        this.state = new ComponentState(instanceId);
-        this.csvObjects = [];
-        this.csvProperties = [];
-        this.cancelImportProcess = false;
-        this.errorObjects = [];
-        this.finishedObjects = [];
-        this.selectedObjects = [];
-        this.propertiesFormTimeout = null;
-        this.importFormTimeout = null;
-        this.fileLoaded = false;
     }
 
     private async prepareImportConfigForm(): Promise<void> {
