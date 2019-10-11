@@ -112,7 +112,12 @@ class Component {
         }
     }
 
-    public setKeepExpanded(): void {
+    public setKeepExpanded(event: any): void {
+        if (event) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
+
         this.keepExpanded = true;
     }
 
