@@ -146,27 +146,37 @@ export class TreeHandler {
 
             nodes = nodes.filter((n) => n !== null && typeof n !== 'undefined');
 
+            let selectionChanged = true;
             if (nodes.length) {
                 if (this.multiselect) {
                     nodes.forEach((n) => n.selected = selected);
                 } else {
-                    this.selectedNodes.forEach((n) => n.selected = false);
-                    const node = TreeUtil.findNode(this.tree, nodes[0].id) || nodes[0];
-                    if (node) {
-                        node.selected = selected;
-                        this.selectedNodes = [node];
+                    const selectedNode = this.selectedNodes.find((n) => n.id === nodes[0].id);
+
+                    if (selectedNode) {
+                        silent = true;
+                        selectionChanged = false;
+                    } else {
+                        this.selectedNodes.forEach((n) => n.selected = false);
+                        const node = TreeUtil.findNode(this.tree, nodes[0].id) || nodes[0];
+                        if (node) {
+                            node.selected = selected;
+                            this.selectedNodes = [node];
+                        }
                     }
+
                 }
 
-                nodes.forEach((n) => {
-                    const nodeIndex = this.selectedNodes.findIndex((ftn) => ftn.id === n.id);
-                    if (nodeIndex === -1 && selected) {
-                        this.selectedNodes.push(n);
-                    } else if (nodeIndex !== -1 && !selected) {
-                        this.selectedNodes.splice(nodeIndex, 1);
-                    }
-                });
-
+                if (selectionChanged) {
+                    nodes.forEach((n) => {
+                        const nodeIndex = this.selectedNodes.findIndex((ftn) => ftn.id === n.id);
+                        if (nodeIndex === -1 && selected) {
+                            this.selectedNodes.push(n);
+                        } else if (nodeIndex !== -1 && !selected) {
+                            this.selectedNodes.splice(nodeIndex, 1);
+                        }
+                    });
+                }
                 this.listener.forEach((l) => l(this.getSelectedNodes()));
             }
         }
