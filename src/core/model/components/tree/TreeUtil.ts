@@ -13,6 +13,7 @@ export class TreeUtil {
 
     public static linkTreeNodes(tree: TreeNode[], filterValue: string, parent?: TreeNode): void {
         if (tree) {
+            this.setNodesVisible(tree);
             TreeUtil.removeNodeLinks(tree);
             TreeUtil.setNodeFlags(tree);
             let previousNode;
@@ -52,19 +53,21 @@ export class TreeUtil {
 
                     previousNode = node;
                 } else {
-                    TreeUtil.setNodesInvisible([node]);
+                    TreeUtil.setNodesVisible([node], false);
                 }
             }
         }
     }
 
-    private static setNodesInvisible(node: TreeNode[]): void {
+    private static setNodesVisible(node: TreeNode[], visible: boolean = true): void {
         node.forEach((n) => {
-            n.visible = false;
-            n.navigationNode = false;
+            n.visible = visible;
+            if (!visible) {
+                n.navigationNode = false;
+            }
 
             if (n.children && n.children.length) {
-                TreeUtil.setNodesInvisible(n.children);
+                TreeUtil.setNodesVisible(n.children, visible);
             }
         });
     }

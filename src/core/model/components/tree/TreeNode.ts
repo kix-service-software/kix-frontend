@@ -22,7 +22,7 @@ export class TreeNode {
         public previousNode?: TreeNode,
         public properties?: TreeNodeProperty[],
         public expanded: boolean = false,
-        public visible: boolean = false,
+        public visible: boolean = true,
         public expandOnClick: boolean = false,
         public clickable: boolean = true,
         public tooltip: string = label,
