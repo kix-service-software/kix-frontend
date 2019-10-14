@@ -61,7 +61,7 @@ export class OrganisationContext extends Context {
             OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING
         );
         if (isOrganisationDepending) {
-            this.loadContacts();
+            await this.loadContacts();
         }
 
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
@@ -87,6 +87,11 @@ export class OrganisationContext extends Context {
         const loadingOptions = new KIXObjectLoadingOptions(filter);
         const contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, null, loadingOptions);
         this.setObjectList(KIXObjectType.CONTACT, contacts);
+    }
+
+    public reset(): void {
+        super.reset();
+        this.initContext();
     }
 
 }
