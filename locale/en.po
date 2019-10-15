@@ -299,6 +299,9 @@ msgstr ""
 msgid "Changes saved."
 msgstr ""
 
+msgid "Change to"
+msgstr ""
+
 msgid "Channel"
 msgstr ""
 
@@ -336,6 +339,9 @@ msgid "Class"
 msgstr ""
 
 msgid "Class Definition"
+msgstr ""
+
+msgid "Clear"
 msgstr ""
 
 msgid ""

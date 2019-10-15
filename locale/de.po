@@ -304,6 +304,11 @@ msgstr ""
 msgid "Changes saved."
 msgstr "Änderungen wurden gespeichert."
 
+#, fuzzy
+#| msgid "Changed at"
+msgid "Change to"
+msgstr "Geändert am"
+
 msgid "Channel"
 msgstr "Kanal"
 
@@ -342,6 +347,9 @@ msgstr "Klasse"
 
 msgid "Class Definition"
 msgstr "Klassendefinition"
+
+msgid "Clear"
+msgstr ""
 
 msgid ""
 "Click on the middle or right mouse button (context menu) = open window in a "
