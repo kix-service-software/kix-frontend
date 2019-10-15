@@ -74,13 +74,13 @@ export class SearchService {
         return tableConfig;
     }
 
-    public async provideResult(objects: KIXObject[] = null): Promise<void> {
+    public async provideResult(objectType: KIXObjectType, objects: KIXObject[] = null): Promise<void> {
         const context = await ContextService.getInstance().getContext<SearchContext>(SearchContext.CONTEXT_ID);
         if (context) {
             if (objects) {
-                context.setObjectList(this.searchCache.objectType, objects);
+                context.setObjectList(objectType, objects);
             } else {
-                context.setObjectList(this.searchCache.objectType, this.searchCache ? this.searchCache.result : []);
+                context.setObjectList(objectType, this.searchCache ? this.searchCache.result : []);
             }
         }
     }
@@ -104,7 +104,7 @@ export class SearchService {
                     : null;
                 this.searchCache = new SearchCache<T>(objectType, criteria, [], null, CacheState.VALID, cacheName);
                 objects = await this.doSearch();
-                this.provideResult();
+                this.provideResult(objectType);
             } else {
                 const formFieldValues = formInstance.getAllFormFieldValues();
                 let criteria = [];

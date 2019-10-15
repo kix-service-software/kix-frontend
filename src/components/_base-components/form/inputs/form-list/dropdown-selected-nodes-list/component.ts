@@ -27,9 +27,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onInput(input: ComponentInput): void {
         this.state.placeholder = input.placeholder;
+        if (input.treeId && this.treeId !== input.treeId) {
+            this.treeId = input.treeId;
+            this.setNodes();
+        }
     }
 
     public async onMount(): Promise<void> {
+        this.setNodes();
+    }
+
+    private async setNodes(): Promise<void> {
         this.treeHandler = TreeService.getInstance().getTreeHandler(this.treeId);
         this.treeHandler.registerListener(this.listenerId, (nodes: TreeNode[]) => {
             this.state.nodes = this.treeHandler.getSelectedNodes();

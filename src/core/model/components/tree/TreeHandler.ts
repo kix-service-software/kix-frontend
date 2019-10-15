@@ -40,6 +40,10 @@ export class TreeHandler {
         this.registerKeyListener();
     }
 
+    public setMultiSelectable(isMulti: boolean = true): void {
+        this.multiselect = isMulti;
+    }
+
     private registerKeyListener(): void {
         if (this.keyListenerElement) {
             this.keyListener = this.handleKeyEvent.bind(this);
@@ -126,13 +130,15 @@ export class TreeHandler {
         }
     }
 
-    public setTree(tree: TreeNode[], filterValue?: string) {
+    public setTree(tree: TreeNode[], filterValue?: string): void {
         this.tree = tree;
+        this.selectedNodes = [];
+
         TreeUtil.linkTreeNodes(tree, filterValue);
         this.navigationHandler.setTree(tree);
 
         const treeSelection = this.getSelection(tree);
-        this.setSelection(treeSelection, true, true);
+        this.setSelection(treeSelection, true, true, true);
 
         this.listener.forEach((l) => l(tree));
     }
@@ -141,24 +147,27 @@ export class TreeHandler {
         return this.tree;
     }
 
-    public setSelection(nodes: TreeNode[], selected: boolean = true, silent: boolean = false): void {
+    public setSelection(
+        nodes: TreeNode[], selected: boolean = true, silent: boolean = false, force: boolean = false
+    ): void {
         if (nodes) {
 
             nodes = nodes.filter((n) => n !== null && typeof n !== 'undefined');
 
             let selectionChanged = true;
-            if (nodes.length) {
+            if (!!nodes.length) {
                 if (this.multiselect) {
                     nodes.forEach((n) => n.selected = selected);
                 } else {
                     const selectedNode = this.selectedNodes.find((n) => n.id === nodes[0].id);
 
-                    if (selectedNode) {
+                    if (selectedNode && !force) {
                         silent = true;
                         selectionChanged = false;
                     } else {
                         this.selectedNodes.forEach((n) => n.selected = false);
-                        const node = TreeUtil.findNode(this.tree, nodes[0].id) || nodes[0];
+                        this.selectedNodes = [];
+                        const node = TreeUtil.findNode(this.tree, nodes[0].id);
                         if (node) {
                             node.selected = selected;
                             this.selectedNodes = [node];
@@ -176,13 +185,13 @@ export class TreeHandler {
                             this.selectedNodes.splice(nodeIndex, 1);
                         }
                     });
-                }
-                this.listener.forEach((l) => l(this.getSelectedNodes()));
-            }
-        }
+                    this.listener.forEach((l) => l(this.getSelectedNodes()));
 
-        if (!silent) {
-            this.selectionListener.forEach((l) => l(this.getSelectedNodes()));
+                    if (!silent) {
+                        this.selectionListener.forEach((l) => l(this.getSelectedNodes()));
+                    }
+                }
+            }
         }
     }
 

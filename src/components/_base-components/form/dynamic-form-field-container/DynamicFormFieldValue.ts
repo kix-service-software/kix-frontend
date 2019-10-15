@@ -69,9 +69,9 @@ export class DynamicFieldValue {
     }
 
     public async init(): Promise<void> {
-        await this.createPropertyNodes();
+        await this.setPropertyTree();
         if (this.value.property) {
-            await this.setProperty(this.value.property, true);
+            await this.setProperty(this.value.property);
 
             const objectType = this.value.objectType ? this.value.objectType : this.manager.objectType;
             this.label = await LabelService.getInstance().getPropertyText(this.value.property, objectType);
@@ -104,63 +104,65 @@ export class DynamicFieldValue {
     }
 
     public updateProperties(): void {
-        this.createPropertyNodes();
+        this.setPropertyTree();
     }
 
     public clearValue(): void {
         this.value.value = null;
-        this.valueTreeHandler.setSelection(this.valueTreeHandler.getSelectedNodes(), false);
+        this.valueTreeHandler.setSelection(this.valueTreeHandler.getSelectedNodes(), false, false, true);
     }
 
     public async setProperty(property: string, update: boolean = false): Promise<void> {
         this.value.property = property;
 
-        if (!update) {
+        if (update) {
             this.value.objectType = null;
+            this.value.operator = null;
+            this.operationTreeHandler.setSelection(this.operationTreeHandler.getSelectedNodes(), false, true, true);
+            this.operationTreeHandler.setTree([]);
             this.value.value = null;
-            this.valueTreeHandler.setSelection(this.valueTreeHandler.getSelectedNodes(), false);
+            this.valueTreeHandler.setSelection(this.valueTreeHandler.getSelectedNodes(), false, true, true);
             this.valueTreeHandler.setTree([]);
         }
 
         await this.manager.setValue(this.value);
 
-        await this.createPropertyNodes();
-        await this.createOperationNodes();
+        await this.setPropertyTree();
+        await this.setOperationTree();
         await this.createValueInput();
     }
 
-    public async createPropertyNodes(): Promise<void> {
+    public async setPropertyTree(): Promise<void> {
         const properties = await this.manager.getProperties();
         // FIXME: Its not needed to check unique here, because getProperties() should return only available properties.
         // The manager should make the decision
         const unique = this.manager.uniqueProperties;
+        const nodes = [];
         if (properties) {
-            const nodes = [];
             for (const p of properties) {
-                if (!unique || !this.manager.hasValueForProperty(p[0])) {
+                if (
+                    (
+                        !unique
+                        || !this.manager.hasValueForProperty(p[0])
+                        || (this.value.property && p[0] === this.value.property)
+                    )
+                    && !await this.manager.isHiddenProperty(p[0])
+                ) {
                     // FIXME: the manager should return TreeNode[], e.g. to handle specific labels and icons
                     nodes.push(new TreeNode(p[0], p[1]));
                 }
             }
-            this.propertyTreeHandler.setTree(nodes);
+        }
+        this.propertyTreeHandler.setTree(nodes);
+        if (this.value.property) {
+            const propNode = nodes.find((n) => n.id === this.value.property);
+            if (propNode) {
+                this.propertyTreeHandler.setSelection([propNode], true, true, true);
+            }
         }
     }
 
-    private async createOperationNodes(): Promise<void> {
-        if (this.value.property) {
-            const operations = await this.manager.getOperations(this.value.property);
-            const operationNodes = [];
-            for (const o of operations) {
-                const label = await this.manager.getOperatorDisplayText(o);
-                operationNodes.push(new TreeNode(o, label));
-            }
-            this.operationTreeHandler.setTree(operationNodes);
-            if (operationNodes.length > 0 && !this.value.operator) {
-                this.setOperator(operationNodes[0].id);
-                this.operationTreeHandler.setSelection([operationNodes[0]], true);
-            }
-        }
-
+    private async setOperationTree(): Promise<void> {
         const operationsType = await this.manager.getOpertationsType(this.value.property);
         switch (operationsType) {
             case DynamicFormOperationsType.STRING:
@@ -170,6 +172,19 @@ export class DynamicFieldValue {
                 this.operationIsNone = true;
                 break;
             default:
+                if (this.value.property) {
+                    const operations = await this.manager.getOperations(this.value.property);
+                    const operationNodes = [];
+                    for (const o of operations) {
+                        const label = await this.manager.getOperatorDisplayText(o);
+                        operationNodes.push(new TreeNode(o, label));
+                    }
+                    this.operationTreeHandler.setTree(operationNodes);
+                    if (!!operationNodes.length) {
+                        this.value.operator = operationNodes[0].id;
+                        this.operationTreeHandler.setSelection([operationNodes[0]], true);
+                    }
+                }
         }
     }
 
@@ -193,8 +208,7 @@ export class DynamicFieldValue {
             this.isAutocomplete = inputType === InputFieldTypes.OBJECT_REFERENCE;
             this.isMultiselect = this.manager.isMultiselect(property);
 
-            this.valueTreeHandler = new TreeHandler([], null, null, this.isMultiselect);
-            TreeService.getInstance().registerTreeHandler('value-' + this.id, this.valueTreeHandler);
+            this.valueTreeHandler.setMultiSelectable(this.isMultiselect);
             if (this.isAutocomplete) {
                 this.autoCompleteConfiguration = new AutoCompleteConfiguration();
             } else {
@@ -219,34 +233,47 @@ export class DynamicFieldValue {
         }
     }
 
-    public async setCurrentValue(): Promise<void> {
+    public async setCurrentValue(silent: boolean = true): Promise<void> {
         const currentValues: TreeNode[] = [];
-        if (!this.isDropdown && this.value.objectType && this.value.value) {
-            const objects = await KIXObjectService.loadObjects(
-                this.value.objectType, Array.isArray(this.value.value) ? this.value.value : [this.value.value]
-            );
-            let label;
-            let icon;
-            if (objects && objects.length) {
-                const labelProvider = LabelService.getInstance().getLabelProviderForType(this.value.objectType);
-                for (const object of objects) {
-                    label = await labelProvider.getObjectText(object);
-                    icon = labelProvider.getObjectTypeIcon();
-                    currentValues.push(new TreeNode(object.ObjectId, label, icon));
+        if (this.value.value) {
+            if (!this.isDropdown && this.value.objectType) {
+                const objects = await KIXObjectService.loadObjects(
+                    this.value.objectType, Array.isArray(this.value.value) ? this.value.value : [this.value.value]
+                );
+                let label;
+                let icon;
+                if (objects && objects.length) {
+                    const labelProvider = LabelService.getInstance().getLabelProviderForType(this.value.objectType);
+                    for (const object of objects) {
+                        label = await labelProvider.getObjectText(object);
+                        icon = labelProvider.getObjectTypeIcon();
+                        currentValues.push(new TreeNode(object.ObjectId, label, icon));
+                    }
                 }
-            }
-        } else if (this.isDropdown) {
-            const valueNodes = this.valueTreeHandler.getTree();
-            if (Array.isArray(this.value.value)) {
-                for (const v of this.value.value) {
+            } else if (this.isDropdown) {
+                const valueNodes = this.valueTreeHandler.getTree();
+                const selectValues = Array.isArray(this.value.value) ? this.value.value : [this.value.value];
+                for (const v of selectValues) {
                     const node = TreeUtil.findNode(valueNodes, v);
                     if (node) {
                         currentValues.push(node);
                     }
                 }
+            } else if (this.isDate) {
+                const date = new Date(this.value.value);
+                if (!isNaN(date.getTime())) {
+                    this.date = DateTimeUtil.getKIXDateString(date);
+                }
+            } else if (this.isDateTime) {
+                const date = new Date(this.value.value);
+                if (!isNaN(date.getTime())) {
+                    this.date = DateTimeUtil.getKIXDateString(date);
+                    this.time = DateTimeUtil.getKIXTimeString(date);
+                }
             }
         }
-        this.valueTreeHandler.setSelection(currentValues, true);
+
+        this.valueTreeHandler.setSelection(currentValues, true, silent, true);
     }
 
     public setValue(value: string | string[] | number[]): void {
@@ -255,6 +282,11 @@ export class DynamicFieldValue {
 
     public setDateValue(value: string): void {
         this.date = value;
+        if (this.isDateTime) {
+            if (!this.time) {
+                this.time = '00:00:00';
+            }
+        }
     }
 
     public setTimeValue(value: string): void {

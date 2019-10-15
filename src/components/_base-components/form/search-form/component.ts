@@ -59,7 +59,7 @@ class Component implements ISearchFormListener {
         if (SearchService.getInstance().getSearchCache()) {
             const cache = SearchService.getInstance().getSearchCache();
             if (cache.status === CacheState.VALID && cache.objectType === this.objectType) {
-                SearchService.getInstance().provideResult();
+                SearchService.getInstance().provideResult(this.objectType);
                 await this.setCanSearch();
             } else {
                 this.formReset();
@@ -97,12 +97,7 @@ class Component implements ISearchFormListener {
                     );
                 }
             } else {
-                const defaultProperties = formInstance.form.defaultSearchProperties;
-                if (defaultProperties) {
-                    defaultProperties.forEach(
-                        (p) => this.state.manager.setValue(new ObjectPropertyValue(p, null, null))
-                    );
-                }
+                await this.setDefaults(formInstance);
             }
 
             this.state.manager.registerListener(this.listenerId, () => {
@@ -134,6 +129,16 @@ class Component implements ISearchFormListener {
         }
     }
 
+    private async setDefaults(formInstance: SearchFormInstance): Promise<void> {
+        const defaultProperties = formInstance.form.defaultSearchProperties;
+        if (defaultProperties) {
+            for (const p of defaultProperties) {
+                const operators = await this.state.manager.getOperations(p);
+                this.state.manager.setValue(new ObjectPropertyValue(p, operators ? operators[0] : null, null));
+            }
+        }
+    }
+
     public keyDown(event: any): void {
         if ((event.keyCode === 13 || event.key === 'Enter') && this.state.canSearch) {
             if (event.preventDefault) {
@@ -149,7 +154,7 @@ class Component implements ISearchFormListener {
 
     public async formReset(): Promise<void> {
         this.state.prepared = false;
-        SearchService.getInstance().provideResult([]);
+        SearchService.getInstance().provideResult(this.objectType, []);
 
         const formInstance = await FormService.getInstance().getFormInstance<SearchFormInstance>(this.formId);
         if (formInstance) {
@@ -158,12 +163,7 @@ class Component implements ISearchFormListener {
 
         if (this.state.manager) {
             this.state.manager.reset();
-            const defaultProperties = formInstance.form.defaultSearchProperties;
-            if (defaultProperties) {
-                defaultProperties.forEach(
-                    (p) => this.state.manager.setValue(new ObjectPropertyValue(p, null, null))
-                );
-            }
+            this.setDefaults(formInstance);
         }
         setTimeout(() => {
             this.state.prepared = true;

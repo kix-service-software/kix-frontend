@@ -87,7 +87,7 @@ class Component {
                 this.objectType = types[0];
 
                 const importManager = ImportService.getInstance().getImportManager(this.objectType);
-                importManager.init();
+                importManager.reset(false);
                 this.state.importManager = importManager;
 
                 this.formListenerId = `import-form-listener-${this.objectType}`;
@@ -125,6 +125,7 @@ class Component {
         FormService.getInstance().deleteFormInstance(this.state.importConfigFormId);
         if (this.state.importManager) {
             this.state.importManager.unregisterListener(this.formListenerId);
+            this.state.importManager.reset();
         }
         TableFactoryService.getInstance().destroyTable(`import-dialog-list-${this.objectType}`);
     }
@@ -223,7 +224,7 @@ class Component {
                 eventPublished: async (data: TableEventData, eventId: string) => {
                     if (data && this.state.table && data.tableId === this.state.table.getTableId()) {
                         if (eventId === TableEvent.TABLE_INITIALIZED || eventId === TableEvent.TABLE_READY) {
-                            if (!!!this.selectedObjects.length) {
+                            if (!this.selectedObjects || !!!this.selectedObjects.length) {
                                 this.state.table.selectAll();
                             } else {
                                 const selectedObjects = [...this.selectedObjects];

@@ -9,7 +9,7 @@
 
 import {
     KIXObjectType, KIXObjectLoadingOptions, FilterCriteria, FilterDataType,
-    FilterType, TicketProperty, KIXObject
+    FilterType, TicketProperty
 } from "../../../model";
 import { Context } from '../../../model/components/context/Context';
 import { KIXObjectService } from "../../kix";
@@ -76,6 +76,12 @@ export class TicketContext extends Context {
     public reset(): void {
         super.reset();
         this.queueId = null;
+    }
+
+    public async reloadObjectList(objectType: KIXObjectType): Promise<void> {
+        if (objectType === KIXObjectType.TICKET) {
+            this.loadTickets();
+        }
     }
 
 }

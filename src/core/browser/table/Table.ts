@@ -528,12 +528,14 @@ export class Table implements ITable {
     }
 
     public setRowObjectValueState(objects: any[], state: ValueState): void {
-        objects.forEach((o) => {
-            const row = this.getRowByObject(o);
-            if (row) {
-                row.setValueState(state);
-            }
-        });
+        if (objects && !!objects.length) {
+            objects.forEach((o) => {
+                const row = this.getRowByObject(o);
+                if (row) {
+                    row.setValueState(state);
+                }
+            });
+        }
     }
 
     public getRowByObjectId(objectId: string | number): IRow {

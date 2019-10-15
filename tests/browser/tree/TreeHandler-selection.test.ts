@@ -73,6 +73,57 @@ describe('Browser / Components / TreeHandler - Selection', () => {
 
     });
 
+    describe('keep selected nodes in new tree', () => {
+        let treeHandler: TreeHandler;
+        let navigationHandler: TreeNavigationHandler;
+
+        before(() => {
+            const tree = [
+                new TreeNode('id1', 'label1', null, null,
+                    [
+                        new TreeNode('id11', 'label11', null, null,
+                            null, null, null, null, null, undefined,
+                            undefined, undefined, undefined, undefined, undefined, undefined, true
+                        ),
+                        new TreeNode('id12', 'label12')
+                    ],
+                    null, null, null, null, true,
+                    undefined, undefined, undefined, undefined, undefined, undefined, true
+                ),
+                new TreeNode('id2', 'label2', null, null,
+                    [
+                        new TreeNode('id21', 'label21'),
+                        new TreeNode('id22', 'label22')
+                    ],
+                    null, null, null, null, true,
+                    undefined, undefined, undefined, undefined, undefined, undefined, true
+                ),
+                new TreeNode('id3', 'label3', null, null, [
+                    new TreeNode('id31', 'label31'),
+                    new TreeNode('id32', 'label32')
+                ], null, null, null, null, true)
+            ];
+            treeHandler = new TreeHandler(tree, null, null, true);
+            navigationHandler = new TreeNavigationHandler();
+            navigationHandler.setTree(tree);
+        });
+
+        it('3 nodes should be selected.', () => {
+            const node1 = TreeUtil.findNode(treeHandler.getTree(), 'id1');
+            const node11 = TreeUtil.findNode(treeHandler.getTree(), 'id11');
+            const node2 = TreeUtil.findNode(treeHandler.getTree(), 'id2');
+
+            expect(node1.selected).true;
+            expect(node11.selected).true;
+            expect(node2.selected).true;
+
+            const selectedNodes = treeHandler.getSelectedNodes();
+            expect(selectedNodes).exist;
+            expect(selectedNodes).an('array');
+            expect(selectedNodes.length, 'selectedNodes contains not all selected nodes').equals(3);
+        });
+    });
+
     describe('Add free text nodes as selection (multiselect)', () => {
         let treeHandler: TreeHandler;
         let navigationHandler: TreeNavigationHandler;
@@ -187,7 +238,7 @@ describe('Browser / Components / TreeHandler - Selection', () => {
 
     });
 
-    describe('Add free text node t a tree (singleselect)', () => {
+    describe('Add free text node to a tree (singleselect)', () => {
         let treeHandler: TreeHandler;
         let navigationHandler: TreeNavigationHandler;
 
@@ -378,7 +429,7 @@ describe('Browser / Components / TreeHandler - Selection', () => {
 
     });
 
-    describe('select/deselct all nodes (with filter)', () => {
+    describe('select/deselect all nodes (with filter)', () => {
         let treeHandler: TreeHandler;
         let navigationHandler: TreeNavigationHandler;
 
