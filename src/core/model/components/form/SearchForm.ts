@@ -18,7 +18,7 @@ export class SearchForm extends Form {
         id: string,
         name: string,
         objectType: KIXObjectType,
-        formContext: FormContext = FormContext.NEW,
+        formContext: FormContext = FormContext.SEARCH,
         autoCompleteConfiguration: AutoCompleteConfiguration = new AutoCompleteConfiguration(),
         public defaultSearchProperties: string[] = []
     ) {

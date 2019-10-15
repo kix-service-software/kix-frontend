@@ -29,8 +29,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const cache = SearchService.getInstance().getSearchCache();
         if (cache) {
             const currentNode = nodes.find((n) => n.label === cache.name);
-            currentNode.selected = true;
-            this.currentSearch = currentNode ? currentNode.id : null;
+            if (currentNode) {
+                currentNode.selected = true;
+                this.currentSearch = currentNode.id;
+            } else {
+                this.currentSearch = null;
+            }
         }
 
         return nodes;

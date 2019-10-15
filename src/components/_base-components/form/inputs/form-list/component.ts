@@ -16,6 +16,7 @@ class Component {
 
     private state: ComponentState;
     private keepExpanded: boolean = false;
+    private toggleButtonClicked: boolean = false;
     private treeHandler: TreeHandler;
     private removeTreeHandler: boolean = false;
 
@@ -113,12 +114,11 @@ class Component {
     }
 
     public setKeepExpanded(event: any): void {
-        if (event) {
-            event.stopPropagation();
-            event.preventDefault();
+        if (!this.toggleButtonClicked) {
+            this.keepExpanded = true;
+        } else {
+            this.toggleButtonClicked = false;
         }
-
-        this.keepExpanded = true;
     }
 
     public submitClicked(): void {
@@ -127,7 +127,7 @@ class Component {
 
     private toggleList(close: boolean = true, event?: any): void {
         if (event) {
-            event.stopPropagation();
+            this.toggleButtonClicked = true;
             event.preventDefault();
         }
 
@@ -180,7 +180,7 @@ class Component {
 
             const input = (this as any).getEl('form-list-input-' + this.state.listId);
             const list = (this as any).getEl(this.state.treeId);
-            const buttons = (this as any).getEl('buttonbar');
+            const buttons = (this as any).getEl('buttonbar' + this.state.listId);
 
             if (containerEnd < dropdownListEnd) {
                 transformValue

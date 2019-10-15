@@ -23,7 +23,7 @@ export interface IDynamicFormManager {
 
     init(): void;
 
-    reset(): void;
+    reset(notify?: boolean): void;
 
     getValues(): ObjectPropertyValue[];
 
@@ -47,6 +47,8 @@ export interface IDynamicFormManager {
 
     getPropertiesPlaceholder(): Promise<string>;
 
+    isHiddenProperty(property: string): Promise<boolean>;
+
     hasValueForProperty(property: string): boolean;
 
     getOperations(property: string): Promise<string[]>;
@@ -64,4 +66,6 @@ export interface IDynamicFormManager {
     searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]>;
 
     validate(): Promise<void>;
+
+    shouldAddEmptyField(): Promise<boolean>;
 }

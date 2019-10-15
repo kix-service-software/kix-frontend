@@ -367,4 +367,8 @@ export abstract class Context {
         return await FormService.getInstance().getFormIdByContext(formContext, objectType);
     }
 
+    public async reloadObjectList(objectType: KIXObjectType): Promise<void> {
+        return;
+    }
+
 }

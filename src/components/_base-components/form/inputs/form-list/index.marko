@@ -6,7 +6,7 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-<div.form-list key=state.listId>
+<div.form-list key=state.listId on-click("setKeepExpanded")>
     <if(state.prepared)>
         <div.form-list-input-container.input-style
             class={
@@ -17,11 +17,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     }
             key=("form-list-input-container-" + state.listId)
             title=state.placeholder>
-            <div.selected-nodes
-                tabindex="0"
-                on-focus("focus")
-                on-click("setKeepExpanded")
-                key=("form-list-selected-nodes-" + state.listId)>
+            <div.selected-nodes tabindex="0" on-focus("focus") key=("form-list-selected-nodes-" + state.listId)>
                 <dropdown-selected-nodes-list treeId=state.treeId canRemoveNode=state.removeNodes placeholder=state.placeholder/>
             </div>
             <div.form-input-control-list>
@@ -35,10 +31,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     autocompleteConfiguration=input.autoCompleteConfiguration
                     autocompleteSearchCallback=input.searchCallback
                     treeId=state.treeId
-                    freeText=input.freeText/>
+                    freeText=input.freeText
+                    key=("form-list-input-" + state.listId)/>
                 <form-list-tree key=state.treeId treeId=state.treeId tabIndex=-1/>
                 <if(state.multiselect)>
-                    <dropdown-button-bar treeId=state.treeId on-submit("submitClicked")/>
+                    <dropdown-button-bar treeId=state.treeId on-submit("submitClicked") key=("buttonbar" + state.listId)/>
                 </if>
             </div>
         </if>

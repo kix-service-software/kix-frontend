@@ -8,15 +8,18 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 <if(state.prepared)>
     <for|dynamicValue, index| of=state.dynamicValues>
-        <div.dynamic-form-field-value class={
-            "no-operation": dynamicValue.operationIsNone
-        }>
+        <div.dynamic-form-field-value
+            class={
+                        "no-operation": dynamicValue.operationIsNone
+                    }
+            key="dynamic-form-field-value-[]">
             <if(dynamicValue.required)>
                 <span>${dynamicValue.label}*</span>
             </if>
             <else>
                 <form-list
                     treeId=("property-" + dynamicValue.id)
+                    key=("property-" + dynamicValue.id)
                     canRemoveNode=false
                     readonly=dynamicValue.readonly
                     placeholder=dynamicValue.propertiesPlaceholder
@@ -35,6 +38,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <else>
                     <form-list
                         treeId=("operation-" + dynamicValue.id)
+                        key=("operation-" + dynamicValue.id)
                         canRemoveNode=false
                         readonly=dynamicValue.readonly
                         placeholder=dynamicValue.operationsPlaceholder
@@ -46,6 +50,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <if(dynamicValue.isDropdown)>
                         <form-list
                             treeId=("value-" + dynamicValue.id)
+                            key=("value-" + dynamicValue.id)
                             canRemoveNode=(!dynamicValue.readonly || dynamicValue.changeable)
                             readonly=dynamicValue.readonly
                             multiselect=dynamicValue.isMultiselect
