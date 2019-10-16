@@ -197,7 +197,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         }
 
         const column = new DefaultColumnConfiguration(
-            attribute.Key, true, false, true, false, 150, true, true, false, type
+            attribute.Key, true, false, true, false, 150, true, true, false, type, undefined, undefined, attribute.Name
         );
 
         return column;

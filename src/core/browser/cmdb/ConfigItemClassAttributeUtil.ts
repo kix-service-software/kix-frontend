@@ -9,9 +9,10 @@
 
 import {
     ConfigItemClass, KIXObjectType, AttributeDefinition,
-    KIXObjectLoadingOptions, ConfigItemClassProperty, InputDefinition, DataType
+    KIXObjectLoadingOptions, ConfigItemClassProperty, InputDefinition, DataType, SortUtil
 } from "../../model";
 import { KIXObjectService } from "../kix";
+import { TranslationService } from "../i18n/TranslationService";
 
 export class ConfigItemClassAttributeUtil {
 
@@ -64,8 +65,7 @@ export class ConfigItemClassAttributeUtil {
                 }
             }
         }
-
-        return attributes ? this.getFlatAttributeList(attributes) : [];
+        return attributes ? await this.getFlatAttributeList(attributes) : [];
     }
 
     private static getPath(attributes: AttributeDefinition[], key: string, parent: string = ''): string {
@@ -116,13 +116,29 @@ export class ConfigItemClassAttributeUtil {
         return ciClasses;
     }
 
-    private static getFlatAttributeList(tree: AttributeDefinition[]): AttributeDefinition[] {
+    private static async getFlatAttributeList(tree: AttributeDefinition[]): Promise<AttributeDefinition[]> {
         let attributes = tree.filter((t) => t.Input.Type !== 'Dummy');
-        tree.forEach((a) => {
-            if (a.Sub) {
-                attributes = [...attributes, ...this.getFlatAttributeList(a.Sub)];
+        for (const a of tree) {
+            if (a.Name.match(/_#_/)) {
+                const names = a.Name.split('_#_');
+                const uniqueNames = [];
+                names.forEach((n) => {
+                    if (!uniqueNames.some((un) => un === n)) {
+                        uniqueNames.push(n);
+                    }
+                });
+                const translatedNames: string[] = [];
+                for (const name of uniqueNames) {
+                    translatedNames.push(await TranslationService.translate(name));
+                }
+                a.Name = translatedNames.sort(
+                    (aName, bName) => SortUtil.compareString(aName, bName)
+                ).join(' / ');
             }
-        });
+            if (a.Sub) {
+                attributes = [...attributes, ...await this.getFlatAttributeList(a.Sub)];
+            }
+        }
         return attributes;
     }
 
@@ -148,8 +164,9 @@ export class ConfigItemClassAttributeUtil {
                 });
 
                 if (a2) {
+                    a1.Name = a1.Name + '_#_' + a2.Name;
                     if (a1.Sub && a2.Sub) {
-                        this.compareTrees(a1.Sub, a2.Sub);
+                        this.compareTrees(a1.Sub, a2.Sub, removeKeys);
                     }
                 } else {
                     additionalDefinitions.push(a1);
