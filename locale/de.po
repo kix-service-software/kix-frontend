@@ -142,6 +142,9 @@ msgstr "Alle Objekte"
 msgid "All tickets"
 msgstr "Alle Tickets"
 
+msgid "and"
+msgstr "und"
+
 msgid "and further"
 msgstr "und weitere"
 
@@ -4053,9 +4056,6 @@ msgstr "PLZ"
 
 #~ msgid "All Tickets"
 #~ msgstr "Alle Tickets"
-
-#~ msgid "and"
-#~ msgstr "und"
 
 #~ msgid "AND"
 #~ msgstr "UND"

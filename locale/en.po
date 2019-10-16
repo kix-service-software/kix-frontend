@@ -140,6 +140,9 @@ msgstr ""
 msgid "All tickets"
 msgstr ""
 
+msgid "and"
+msgstr ""
+
 msgid "and further"
 msgstr ""
 
