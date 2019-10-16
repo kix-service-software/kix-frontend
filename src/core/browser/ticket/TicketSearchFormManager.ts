@@ -156,7 +156,9 @@ export class TicketSearchFormManager extends AbstractDynamicFormManager {
             || property === TicketProperty.TYPE_ID
             || property === TicketProperty.LOCK_ID
             || property === TicketProperty.OWNER_ID
-            || property === TicketProperty.RESPONSIBLE_ID;
+            || property === TicketProperty.RESPONSIBLE_ID
+            || property === KIXObjectProperty.CREATE_BY
+            || property === KIXObjectProperty.CHANGE_BY;
     }
 
     private isDateTime(property: string): boolean {
