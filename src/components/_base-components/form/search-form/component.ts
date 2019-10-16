@@ -154,7 +154,13 @@ class Component implements ISearchFormListener {
 
     public async formReset(): Promise<void> {
         this.state.prepared = false;
-        SearchService.getInstance().provideResult(this.objectType, []);
+        await SearchService.getInstance().provideResult(this.objectType, []);
+        const cache = SearchService.getInstance().getSearchCache();
+        if (cache) {
+            cache.status = CacheState.INVALID;
+        }
+
+        this.state.resultCount = 0;
 
         const formInstance = await FormService.getInstance().getFormInstance<SearchFormInstance>(this.formId);
         if (formInstance) {
@@ -165,12 +171,19 @@ class Component implements ISearchFormListener {
             this.state.manager.reset();
             this.setDefaults(formInstance);
         }
+
+        this.state.table = await this.createTable();
+
         setTimeout(() => {
             this.state.prepared = true;
         }, 50);
     }
 
     public cancel(): void {
+        const cache = SearchService.getInstance().getSearchCache();
+        if (cache) {
+            cache.status = CacheState.VALID;
+        }
         DialogService.getInstance().closeMainDialog();
     }
 
@@ -238,7 +251,7 @@ class Component implements ISearchFormListener {
         );
         const table = await TableFactoryService.getInstance().createTable(
             `search-form-results-${this.objectType}`, this.objectType, tableConfiguration,
-            null, SearchContext.CONTEXT_ID, true, false, true, true
+            null, SearchContext.CONTEXT_ID, true, false, true, true, true
         );
 
         return table;
