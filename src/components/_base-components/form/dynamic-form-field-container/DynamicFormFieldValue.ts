@@ -8,7 +8,8 @@
  */
 
 import {
-    IdService, LabelService, KIXObjectService, ObjectPropertyValue, IDynamicFormManager, DynamicFormOperationsType
+    IdService, LabelService, KIXObjectService, ObjectPropertyValue, IDynamicFormManager,
+    DynamicFormOperationsType, SearchOperator
 } from '../../../../core/browser';
 import {
     TreeNode, InputFieldTypes, DateTimeUtil, TreeUtil, TreeService, TreeHandler, AutoCompleteConfiguration
@@ -35,6 +36,8 @@ export class DynamicFieldValue {
     public isMultiselect: boolean = false;
     public isAutocomplete: boolean = false;
 
+    public isBetween: boolean = false;
+
     public label: string = '';
 
     public autoCompleteConfiguration: AutoCompleteConfiguration;
@@ -46,6 +49,9 @@ export class DynamicFieldValue {
 
     private date: string;
     private time: string;
+
+    private betweenEndDate: string;
+    private betweenEndTime: string;
 
     public constructor(
         public manager: IDynamicFormManager,
@@ -190,6 +196,7 @@ export class DynamicFieldValue {
 
     public async setOperator(operator: string): Promise<void> {
         this.value.operator = operator;
+        this.isBetween = this.value.operator === SearchOperator.BETWEEN;
         await this.createValueInput();
     }
 
@@ -260,15 +267,41 @@ export class DynamicFieldValue {
                     }
                 }
             } else if (this.isDate) {
-                const date = new Date(this.value.value);
-                if (!isNaN(date.getTime())) {
-                    this.date = DateTimeUtil.getKIXDateString(date);
+                if (this.isBetween) {
+                    const date = new Date(this.value.value[0]);
+                    if (!isNaN(date.getTime())) {
+                        this.date = DateTimeUtil.getKIXDateString(date);
+                    }
+                    const endDate = new Date(this.value.value[1]);
+                    if (!isNaN(endDate.getTime())) {
+                        this.betweenEndDate = DateTimeUtil.getKIXDateString(endDate);
+                    }
+                } else {
+
+                    const date = new Date(this.value.value[0]);
+                    if (!isNaN(date.getTime())) {
+                        this.date = DateTimeUtil.getKIXDateString(date);
+                    }
                 }
             } else if (this.isDateTime) {
-                const date = new Date(this.value.value);
-                if (!isNaN(date.getTime())) {
-                    this.date = DateTimeUtil.getKIXDateString(date);
-                    this.time = DateTimeUtil.getKIXTimeString(date);
+                if (this.isBetween) {
+                    const date = new Date(this.value.value[0]);
+                    if (!isNaN(date.getTime())) {
+                        this.date = DateTimeUtil.getKIXDateString(date);
+                        this.time = DateTimeUtil.getKIXTimeString(date);
+                    }
+                    const endDate = new Date(this.value.value[1]);
+                    if (!isNaN(endDate.getTime())) {
+                        this.betweenEndDate = DateTimeUtil.getKIXDateString(endDate);
+                        this.betweenEndTime = DateTimeUtil.getKIXTimeString(endDate);
+                    }
+                } else {
+
+                    const date = new Date(this.value.value[0]);
+                    if (!isNaN(date.getTime())) {
+                        this.date = DateTimeUtil.getKIXDateString(date);
+                        this.time = DateTimeUtil.getKIXTimeString(date);
+                    }
                 }
             }
         }
@@ -286,6 +319,16 @@ export class DynamicFieldValue {
             if (!this.time) {
                 this.time = '00:00:00';
             }
+            if (this.isBetween) {
+                if (!this.betweenEndDate) {
+                    this.betweenEndDate = this.date;
+                }
+                if (!this.betweenEndTime) {
+                    this.betweenEndTime = this.time;
+                }
+            }
+        } else if (this.isBetween && !this.betweenEndDate) {
+            this.betweenEndDate = this.date;
         }
     }
 
@@ -293,15 +336,38 @@ export class DynamicFieldValue {
         this.time = value;
     }
 
+    public setBetweenEndDateValue(value: string): void {
+        this.betweenEndDate = value;
+    }
+
+    public setBetweenEndTimeValue(value: string): void {
+        this.betweenEndTime = value;
+    }
+
+
     public getValue(): ObjectPropertyValue {
         const currentValue = { ...this.value };
         if (this.isDate) {
             const date = new Date(currentValue.value);
             currentValue.value = isNaN(date.getTime()) ? null : DateTimeUtil.getKIXDateTimeString(date);
+            if (this.isBetween && currentValue.value) {
+                const endDate = new Date(this.betweenEndDate);
+                currentValue.value = isNaN(endDate.getTime())
+                    ? null
+                    : [currentValue.value, DateTimeUtil.getKIXDateTimeString(endDate)];
+            }
+
         }
         if (this.isDateTime) {
             const date = new Date(`${this.date} ${this.time}`);
             currentValue.value = isNaN(date.getTime()) ? null : DateTimeUtil.getKIXDateTimeString(date);
+            if (this.isBetween && currentValue.value) {
+                const endDate = new Date(`${this.betweenEndDate} ${this.betweenEndTime}`);
+                currentValue.value = isNaN(endDate.getTime())
+                    ? null :
+                    [currentValue.value, DateTimeUtil.getKIXDateTimeString(endDate)];
+            }
+
         }
         return currentValue;
     }

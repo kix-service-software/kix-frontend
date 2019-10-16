@@ -121,6 +121,19 @@ class Component {
         await this.provideValue(value);
     }
 
+    public async setBetweenEndDateValue(value: DynamicFieldValue, event: any): Promise<void> {
+        const date = event.target.value;
+        value.setBetweenEndDateValue(date);
+        await this.provideValue(value);
+    }
+
+    public async setBetweenEndTimeValue(value: DynamicFieldValue, event: any): Promise<void> {
+        const time = event.target.value;
+        value.setBetweenEndTimeValue(time);
+        await this.provideValue(value);
+    }
+
+
     public async setSpecificValue(value: DynamicFieldValue, emittedValue: any): Promise<void> {
         value.setValue(emittedValue);
         await this.provideValue(value);

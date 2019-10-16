@@ -605,23 +605,25 @@ class Component {
 
         for (const object of objects) {
             const start = Date.now();
+            let end: number;
+
             await this.state.importManager.execute(object, columns)
                 .then(() => {
                     this.finishedObjects.push(object);
                     this.state.table.selectRowByObject(object, false);
                     this.state.table.setRowObjectValueState([object], ValueState.HIGHLIGHT_SUCCESS);
+                    end = Date.now();
                 }).catch(async (error) => {
                     this.errorObjects.push(object);
                     this.state.table.setRowObjectValueState([object], ValueState.HIGHLIGHT_ERROR);
                     DialogService.getInstance().setMainDialogLoading(true, 'Translatable#An error occurred.');
+                    end = Date.now();
                     await this.handleObjectEditError(object, error);
                 });
 
             if (this.cancelImportProcess) {
                 break;
             }
-
-            const end = Date.now();
 
             objectTimes.push(end - start);
             await this.setDialogLoadingInfo(objectTimes, objects.length);

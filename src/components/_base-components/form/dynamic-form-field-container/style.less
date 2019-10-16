@@ -24,10 +24,57 @@
 
     .value {
 
-        >input[type="time"],
-        >input[type="date"] {
-            width: 50%;
+        >.search-date-input.between,
+        >.search-date-time-input {
+            grid-gap: @margin-small/2 @margin-small;
+
+            >div {
+                align-self: center;
+                justify-self: center;
+            }
         }
+
+        >.search-date-input.between {
+            display: grid;
+            grid-template-columns: 1fr max-content 1fr;
+
+        }
+
+        >.search-date-time-input {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+
+            &.between {
+                grid-template-columns: 1fr 1fr max-content 1fr 1fr;
+            }
+        }
+
+        @media only screen and(max-width: 1600px) {
+            >.search-date-input.between {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media only screen and (min-width: 1401px) and (max-width: 1600px) {
+
+            >.search-date-time-input.between {
+                grid-template-columns: 1fr 1fr;
+
+                >div {
+                    grid-column: 1 / span 2;
+                }
+            }
+        }
+
+        @media only screen and (max-width: 1400px) {
+
+            >.search-date-time-input,
+            >.search-date-time-input.between {
+                grid-template-columns: 1fr;
+            }
+        }
+
+
     }
 
     >.remove-value {
