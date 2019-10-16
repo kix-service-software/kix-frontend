@@ -68,19 +68,22 @@ export class ArticleFormService extends KIXObjectFormService<Article> {
 
     protected async prepareFormFieldOptions(formFields: FormField[], ticket: Ticket, formContext: FormContext) {
         for (const f of formFields) {
-            switch (f.property) {
-                case ArticleProperty.CHANNEL_ID:
-                    const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
-                    if (dialogContext) {
-                        const isForwardDialog = dialogContext.getAdditionalInformation('ARTICLE_FORWARD');
-                        if (isForwardDialog) {
-                            f.options.push(
-                                new FormFieldOption('CHANNELS', [2])
-                            );
-                        }
+            if (f.property === ArticleProperty.CHANNEL_ID) {
+                const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+                if (dialogContext) {
+                    const isForwardDialog = dialogContext.getAdditionalInformation('ARTICLE_FORWARD');
+                    let channels = [1, 2];
+                    if (isForwardDialog) {
+                        channels = [2];
                     }
-                    break;
-                default:
+                    const option = f.options.find((o) => o.option === 'CHANNELS');
+                    if (option) {
+                        option.value = channels;
+                    } else {
+                        f.options.push(new FormFieldOption('CHANNELS', channels));
+                    }
+
+                }
             }
 
             if (f.children) {
