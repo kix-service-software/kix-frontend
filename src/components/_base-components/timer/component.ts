@@ -27,7 +27,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (this.state.time) {
             this.interval = setInterval(() => {
                 this.state.time = this.state.time - 1000;
+                if (this.state.time <= 0) {
+                    this.state.time = 0;
+                }
                 this.state.timeText = DateTimeUtil.getTimeByMillisec(this.state.time);
+
             }, 1000);
         }
     }

@@ -11,7 +11,7 @@ import {
     WidgetService, TableConfiguration, TableRowHeight,
     TableHeaderHeight, KIXObjectService, SearchOperator, BrowserUtil,
     TableFactoryService, ContextService, TableEvent, DefaultColumnConfiguration, ValueState,
-    TableEventData, LabelService
+    TableEventData, LabelService, ITable
 } from '../../../../core/browser';
 import { FormService } from '../../../../core/browser/form';
 import {
@@ -198,7 +198,7 @@ class LinkDialogComponent {
                 eventPublished: (data: TableEventData, eventId: string) => {
                     if (data && data.tableId === table.getTableId()) {
                         if (eventId === TableEvent.TABLE_READY) {
-                            this.setLinkedAsValues(this.state.linkDescriptions);
+                            this.setLinkedAsValues(table, this.state.linkDescriptions);
                             this.markNotSelectableRows();
                         }
                         this.selectedObjects = table.getSelectedRows().map((r) => r.getRowObject().getObject());
@@ -214,7 +214,7 @@ class LinkDialogComponent {
         }
     }
 
-    private setLinkedAsValues(links: CreateLinkDescription[] = []) {
+    private setLinkedAsValues(table: ITable, links: CreateLinkDescription[] = []) {
         const values = links.map((ld) => {
             const name = ld.linkTypeDescription.asSource
                 ? ld.linkTypeDescription.linkType.SourceName
@@ -224,7 +224,7 @@ class LinkDialogComponent {
             return value;
         });
         if (!!values.length) {
-            this.state.table.setRowObjectValues(values);
+            table.setRowObjectValues(values);
         }
     }
 
@@ -266,7 +266,7 @@ class LinkDialogComponent {
                 'Translatable#{0} link(s) assigned.', [newLinks.length]
             );
             BrowserUtil.openSuccessOverlay(toast);
-            this.setLinkedAsValues(newLinks);
+            this.setLinkedAsValues(this.state.table, newLinks);
             this.markNotSelectableRows();
             this.state.table.selectNone();
         }

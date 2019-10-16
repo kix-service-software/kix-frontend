@@ -605,19 +605,15 @@ class Component {
 
         for (const object of objects) {
             const start = Date.now();
-            let end;
-
             await this.state.importManager.execute(object, columns)
                 .then(() => {
                     this.finishedObjects.push(object);
                     this.state.table.selectRowByObject(object, false);
                     this.state.table.setRowObjectValueState([object], ValueState.HIGHLIGHT_SUCCESS);
-                })
-                .catch(async (error) => {
+                }).catch(async (error) => {
                     this.errorObjects.push(object);
                     this.state.table.setRowObjectValueState([object], ValueState.HIGHLIGHT_ERROR);
                     DialogService.getInstance().setMainDialogLoading(true, 'Translatable#An error occurred.');
-                    end = Date.now();
                     await this.handleObjectEditError(object, error);
                 });
 
@@ -625,12 +621,10 @@ class Component {
                 break;
             }
 
-            if (!end) {
-                end = Date.now();
-            }
+            const end = Date.now();
 
             objectTimes.push(end - start);
-            await this.setDialogLoadingInfo(objectTimes);
+            await this.setDialogLoadingInfo(objectTimes, objects.length);
         }
 
         if (!this.errorObjects.length) {
@@ -641,14 +635,12 @@ class Component {
         DialogService.getInstance().setMainDialogLoading(false);
     }
 
-    private async setDialogLoadingInfo(times: number[] = []): Promise<void> {
+    private async setDialogLoadingInfo(times: number[] = [], objectsCount: number = 0): Promise<void> {
         const objectName = await LabelService.getInstance().getObjectName(
             this.state.importManager.objectType, true
         );
         const average = BrowserUtil.calculateAverage(times);
-        const time = average * (
-            this.state.importManager.objects.length - this.finishedObjects.length - this.errorObjects.length
-        );
+        const time = average * (objectsCount - this.finishedObjects.length - this.errorObjects.length);
         const finishCount = this.finishedObjects.length + this.errorObjects.length;
         const totalCount = this.state.importManager.objects.length + this.finishedObjects.length;
         const loadingHint = await TranslationService.translate(
