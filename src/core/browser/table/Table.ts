@@ -515,9 +515,9 @@ export class Table implements ITable {
                 row.getRowObject().addValue(new TableValue(value[0], value[1]));
                 const cell = row.getCell(value[0]);
                 if (cell) {
-                    cell.setValue(new TableValue(value[0], value[1]));
+                    cell.setValue(new TableValue(value[0], value[1], value[1]));
                 } else {
-                    row.addCell(new TableValue(value[0], value[1]));
+                    row.addCell(new TableValue(value[0], value[1], value[1]));
                 }
                 EventService.getInstance().publish(
                     TableEvent.ROW_VALUE_CHANGED,
