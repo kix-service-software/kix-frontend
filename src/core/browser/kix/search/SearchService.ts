@@ -76,11 +76,11 @@ export class SearchService {
 
     public async provideResult(objectType: KIXObjectType, objects: KIXObject[] = null): Promise<void> {
         const context = await ContextService.getInstance().getContext<SearchContext>(SearchContext.CONTEXT_ID);
-        if (context) {
+        if (context && this.searchCache) {
             if (objects) {
                 context.setObjectList(objectType, objects);
             } else {
-                context.setObjectList(objectType, this.searchCache ? this.searchCache.result : []);
+                context.setObjectList(this.searchCache.objectType, this.searchCache.result);
             }
         }
     }

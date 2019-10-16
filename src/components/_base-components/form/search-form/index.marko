@@ -31,12 +31,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         </button>
     </div>
     <div.result-table>
-        <div.result-table-head>
-            <span>
-                <translation-string pattern="Translatable#Preview ({0})" placeholders=[state.resultCount]/>
-            </span>
-        </div>
-        <if(state.table)>
+        <if(state.prepared && state.table)>
+            <div.result-table-head>
+                <span>
+                    <translation-string pattern="Translatable#Preview ({0})" placeholders=[state.resultCount]/>
+                </span>
+            </div>
             <standard-table-NEW table=state.table/>
         </if>
     </div>
