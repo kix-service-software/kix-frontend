@@ -99,6 +99,10 @@ export class CacheService {
             } else {
                 cacheKeyPrefixes.push(namespace[0]);
             }
+        } else if (objectNamespace === 'State') {
+            cacheKeyPrefixes.push(KIXObjectType.TICKET_STATE);
+        } else if (objectNamespace === 'Type') {
+            cacheKeyPrefixes.push(KIXObjectType.TICKET_TYPE);
         } else {
             cacheKeyPrefixes.push(objectNamespace);
         }
