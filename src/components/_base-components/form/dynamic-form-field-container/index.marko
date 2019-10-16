@@ -60,7 +60,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             on-nodesChanged("treeValueChanged", dynamicValue)/>
                     </if>
                     <else-if(dynamicValue.isDate)>
-                        <span.search-date-time-input class={
+                        <span.dynamic-form-date-time-input class={
                             between: dynamicValue.isBetween
                         }>
                             <input.input-style
@@ -80,7 +80,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         </span>
                     </else-if>
                     <else-if(dynamicValue.isDateTime)>
-                        <span.search-date-time-input class={
+                        <span.dynamic-form-date-time-input class={
                             between: dynamicValue.isBetween
                         }>
                             <input.input-style

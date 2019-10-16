@@ -56,16 +56,6 @@ class Component implements ISearchFormListener {
 
         this.state.table = await this.createTable();
 
-        if (SearchService.getInstance().getSearchCache()) {
-            const cache = SearchService.getInstance().getSearchCache();
-            if (cache.status === CacheState.VALID && cache.objectType === this.objectType) {
-                SearchService.getInstance().provideResult(this.objectType);
-                await this.setCanSearch();
-            } else {
-                this.formReset();
-            }
-        }
-
         this.subscriber = {
             eventSubscriberId: 'search-result-list',
             eventPublished: async (data: TableEventData, eventId: string) => {
@@ -87,14 +77,20 @@ class Component implements ISearchFormListener {
             formInstance.registerSearchFormListener(this);
             const searchDefinition = SearchService.getInstance().getSearchDefinition(formInstance.getObjectType());
             this.state.manager = searchDefinition.formManager;
-            this.state.manager.reset();
 
             const cache = SearchService.getInstance().getSearchCache();
-            if (cache && cache.status === CacheState.VALID && cache.objectType === this.objectType) {
-                for (const criteria of cache.criteria) {
-                    this.state.manager.setValue(
-                        new ObjectPropertyValue(criteria.property, criteria.operator, criteria.value)
-                    );
+            if (cache && cache.objectType === this.objectType) {
+                if (cache.status === CacheState.VALID) {
+                    SearchService.getInstance().provideResult(this.objectType);
+                    await this.setCanSearch();
+                    this.state.manager.reset(false);
+                    for (const criteria of cache.criteria) {
+                        this.state.manager.setValue(
+                            new ObjectPropertyValue(criteria.property, criteria.operator, criteria.value)
+                        );
+                    }
+                } else {
+                    await this.setDefaults(formInstance);
                 }
             } else {
                 await this.setDefaults(formInstance);
@@ -132,6 +128,7 @@ class Component implements ISearchFormListener {
     private async setDefaults(formInstance: SearchFormInstance): Promise<void> {
         const defaultProperties = formInstance.form.defaultSearchProperties;
         if (defaultProperties) {
+            this.state.manager.reset(false);
             for (const p of defaultProperties) {
                 const operators = await this.state.manager.getOperations(p);
                 this.state.manager.setValue(new ObjectPropertyValue(p, operators ? operators[0] : null, null));
@@ -168,7 +165,6 @@ class Component implements ISearchFormListener {
         }
 
         if (this.state.manager) {
-            this.state.manager.reset();
             this.setDefaults(formInstance);
         }
 

@@ -24,8 +24,8 @@
 
     .value {
 
-        >.search-date-input.between,
-        >.search-date-time-input {
+        >.dynamic-form-date-input.between,
+        >.dynamic-form-date-time-input {
             grid-gap: @margin-small/2 @margin-small;
 
             >div {
@@ -34,13 +34,13 @@
             }
         }
 
-        >.search-date-input.between {
+        >.dynamic-form-date-input.between {
             display: grid;
             grid-template-columns: 1fr max-content 1fr;
 
         }
 
-        >.search-date-time-input {
+        >.dynamic-form-date-time-input {
             display: grid;
             grid-template-columns: 1fr 1fr;
 
@@ -50,14 +50,14 @@
         }
 
         @media only screen and(max-width: 1600px) {
-            >.search-date-input.between {
+            >.dynamic-form-date-input.between {
                 grid-template-columns: 1fr;
             }
         }
 
         @media only screen and (min-width: 1401px) and (max-width: 1600px) {
 
-            >.search-date-time-input.between {
+            >.dynamic-form-date-time-input.between {
                 grid-template-columns: 1fr 1fr;
 
                 >div {
@@ -68,8 +68,8 @@
 
         @media only screen and (max-width: 1400px) {
 
-            >.search-date-time-input,
-            >.search-date-time-input.between {
+            >.dynamic-form-date-time-input,
+            >.dynamic-form-date-time-input.between {
                 grid-template-columns: 1fr;
             }
         }

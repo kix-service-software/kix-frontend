@@ -9,7 +9,7 @@
 
 import { IRowObject, RowObject, ITable, TableValue, ValueState } from "../../../table";
 import {
-    KIXObjectType, KIXObjectLoadingOptions, Version, AttributeDefinition, DateTimeUtil
+    KIXObjectType, KIXObjectLoadingOptions, Version, AttributeDefinition, DateTimeUtil, SortUtil
 } from "../../../../model";
 import { ContextService } from "../../../context";
 import { TableContentProvider } from "../../../table/TableContentProvider";
@@ -77,7 +77,25 @@ export class CompareConfigItemVersionTableContentProvider extends TableContentPr
             }
 
             for (let i = 0; i < maxCount; i++) {
-                const text = await TranslationService.translate(a.Name);
+                let text: string;
+                if (a.Name.match(/_#_/)) {
+                    const names = a.Name.split('_#_');
+                    const uniqueNames = [];
+                    names.forEach((n) => {
+                        if (!uniqueNames.some((un) => un === n)) {
+                            uniqueNames.push(n);
+                        }
+                    });
+                    const translatedNames: string[] = [];
+                    for (const name of uniqueNames) {
+                        translatedNames.push(await TranslationService.translate(name));
+                    }
+                    text = translatedNames.sort(
+                        (aName, bName) => SortUtil.compareString(aName, bName)
+                    ).join(' / ');
+                } else {
+                    text = await TranslationService.translate(a.Name);
+                }
                 const rowObject = new RowObject([new TableValue('CONFIG_ITEM_ATTRIBUTE', a.Key, text)]);
                 rowObjects.push(rowObject);
 
@@ -216,11 +234,7 @@ export class CompareConfigItemVersionTableContentProvider extends TableContentPr
             const a1 = tree1.find((a) => a2.Key === a.Key);
             if (a1) {
 
-                const currentNames = a1.Name.split(' / ');
-                if (!currentNames.some((n) => n === a2.Name)) {
-                    currentNames.push(a2.Name);
-                    a1.Name = currentNames.join(' / ');
-                }
+                a1.Name = a1.Name + '_#_' + a2.Name;
 
                 if (a1.Sub && a2.Sub) {
                     this.compareTrees(a1.Sub, a2.Sub);
