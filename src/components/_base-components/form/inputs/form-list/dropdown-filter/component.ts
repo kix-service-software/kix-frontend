@@ -121,7 +121,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (hasMinLength) {
             this.autocompleteTimeout = setTimeout(this.loadData.bind(this), this.state.autocompleteConfiguration.delay);
         } else {
-            this.handler.setTree([]);
+            this.handler.setTree([], null, true);
         }
     }
 
@@ -131,7 +131,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.autocompleteConfiguration.limit, this.state.filterValue
         );
 
-        this.handler.setTree(nodes);
+        this.handler.setTree(nodes, null, true);
         this.state.tree = nodes;
 
         this.state.loading = false;
@@ -140,8 +140,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (nodes.length === 0) {
             this.prepareAutocompleteNotFoundText();
         }
-
-        this.handler.setTree(nodes);
     }
 
     public async prepareAutocompleteNotFoundText(): Promise<void> {

@@ -130,13 +130,22 @@ export class TreeHandler {
         }
     }
 
-    public setTree(tree: TreeNode[], filterValue?: string): void {
+    public setTree(tree: TreeNode[], filterValue?: string, keepSelection?: boolean): void {
         this.tree = tree;
-        this.selectedNodes = [];
+        if (!keepSelection) {
+            this.selectedNodes = [];
+        }
 
         TreeUtil.linkTreeNodes(tree, filterValue);
         this.navigationHandler.setTree(tree);
 
+        const preselectedNodes = [];
+        this.selectedNodes.forEach((n) => {
+            const node = TreeUtil.findNode(tree, n.id);
+            if (node) {
+                node.selected = true;
+            }
+        });
         const treeSelection = this.getSelection(tree);
         this.setSelection(treeSelection, true, true, true);
 
