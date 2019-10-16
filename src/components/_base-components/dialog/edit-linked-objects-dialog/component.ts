@@ -202,6 +202,7 @@ class Component {
                     }
                     if (eventId === TableEvent.TABLE_READY) {
                         this.state.table.setRowObjectValueState(this.newLinkObjects, ValueState.HIGHLIGHT_SUCCESS);
+                        this.highlightDeletedRows();
                     }
                 }
             }
@@ -254,6 +255,7 @@ class Component {
     private async linksChanged(result: CreateLinkDescription[][]): Promise<void> {
         this.linkDescriptions = result[0];
         await this.addNewLinks(result[1]);
+        this.state.table.setRowObjectValueState(this.deleteLinkObjects, ValueState.HIGHLIGHT_REMOVED);
         this.setCanSubmit();
     }
 
@@ -321,11 +323,15 @@ class Component {
             );
         }
 
-        this.state.table.setRowsSelectableByObject(this.deleteLinkObjects, false);
-        this.state.table.setRowObjectValueState(this.deleteLinkObjects, ValueState.HIGHLIGHT_REMOVED);
+        this.highlightDeletedRows();
 
         this.state.canDelete = false;
         this.setCanSubmit();
+    }
+
+    private highlightDeletedRows(): void {
+        this.state.table.setRowsSelectableByObject(this.deleteLinkObjects, false);
+        this.state.table.setRowObjectValueState(this.deleteLinkObjects, ValueState.HIGHLIGHT_REMOVED);
     }
 
 
