@@ -59,7 +59,27 @@ export class UIModule implements IUIModule {
 
         if (adminModules && adminModules.length) {
             const contextDescriptor = new ContextDescriptor(
-                AdminContext.CONTEXT_ID, [KIXObjectType.ANY],
+                AdminContext.CONTEXT_ID, [
+                    KIXObjectType.CONFIG_ITEM_CLASS,
+                    KIXObjectType.GENERAL_CATALOG_ITEM,
+                    KIXObjectType.NOTIFICATION,
+                    KIXObjectType.SYSTEM_ADDRESS,
+                    KIXObjectType.MAIL_ACCOUNT,
+                    KIXObjectType.MAIL_FILTER,
+                    KIXObjectType.WEBFORM,
+                    KIXObjectType.TRANSLATION,
+                    KIXObjectType.FAQ_CATEGORY,
+                    KIXObjectType.SYS_CONFIG_OPTION,
+                    KIXObjectType.SYS_CONFIG_OPTION_DEFINITION,
+                    KIXObjectType.TICKET_PRIORITY,
+                    KIXObjectType.TICKET_STATE,
+                    KIXObjectType.QUEUE,
+                    KIXObjectType.TEXT_MODULE,
+                    KIXObjectType.TICKET_TYPE,
+                    KIXObjectType.USER,
+                    KIXObjectType.ROLE,
+                    KIXObjectType.PERMISSION
+                ],
                 ContextType.MAIN, ContextMode.DASHBOARD,
                 false, 'admin', ['admin'], AdminContext
             );
