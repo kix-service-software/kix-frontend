@@ -83,7 +83,8 @@ export class TreeHandler {
                         event.preventDefault();
                         event.stopPropagation();
                     }
-                    this.selectNavigationNode();
+                    this.selectNavigationNode(true);
+                    this.finishListener.forEach((l) => l());
                     break;
                 case ' ':
                     this.selectNavigationNode();
@@ -122,10 +123,14 @@ export class TreeHandler {
         });
     }
 
-    private selectNavigationNode(): void {
+    private selectNavigationNode(keepSelected?: boolean): void {
         const navigationNode = this.navigationHandler.findNavigationNode();
         if (navigationNode) {
-            this.setSelection([navigationNode], !navigationNode.selected);
+            if (navigationNode.selected && !keepSelected) {
+                this.setSelection([navigationNode], false, false, true);
+            } else {
+                this.setSelection([navigationNode], true, false, true);
+            }
             this.listener.forEach((l) => l([navigationNode]));
         }
     }
