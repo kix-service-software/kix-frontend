@@ -640,4 +640,74 @@ describe('Browser / Components / TreeHandler - Selection', () => {
 
     });
 
+    describe('select a node and submit it via enter', () => {
+        let treeHandler: TreeHandler;
+
+        before(() => {
+            const tree = [
+                new TreeNode('id1', 'label1', null, null, [
+                    new TreeNode('id11', 'label11'),
+                    new TreeNode('id12', 'label12')
+                ], null, null, null, null, true),
+                new TreeNode('id2', 'label2', null, null, [
+                    new TreeNode('id21', 'label21'),
+                    new TreeNode('id22', 'label22')
+                ]),
+                new TreeNode('id3', 'label3', null, null, [
+                    new TreeNode('id31', 'label31'),
+                    new TreeNode('id32', 'label32')
+                ], null, null, null, null, true)
+            ];
+            treeHandler = new TreeHandler(tree, null, null, true);
+            const navigationHandler = new TreeNavigationHandler();
+            navigationHandler.setTree(tree);
+        });
+
+        it('Should not deselect the selected node if enter is pressed', () => {
+            treeHandler.handleKeyEvent({ key: 'ArrowDown' });
+            treeHandler.handleKeyEvent({ key: ' ' });
+            treeHandler.handleKeyEvent({ key: 'Enter' });
+            const selectedNodes = treeHandler.getSelectedNodes();
+            expect(selectedNodes).exist;
+            expect(selectedNodes).an('array');
+            expect(selectedNodes.length).equals(1);
+        });
+
+    });
+
+    describe('Press enter and select the focused node', () => {
+        let treeHandler: TreeHandler;
+
+        before(() => {
+            const tree = [
+                new TreeNode('id1', 'label1', null, null, [
+                    new TreeNode('id11', 'label11'),
+                    new TreeNode('id12', 'label12')
+                ], null, null, null, null, true),
+                new TreeNode('id2', 'label2', null, null, [
+                    new TreeNode('id21', 'label21'),
+                    new TreeNode('id22', 'label22')
+                ]),
+                new TreeNode('id3', 'label3', null, null, [
+                    new TreeNode('id31', 'label31'),
+                    new TreeNode('id32', 'label32')
+                ], null, null, null, null, true)
+            ];
+            treeHandler = new TreeHandler(tree, null, null, true);
+            const navigationHandler = new TreeNavigationHandler();
+            navigationHandler.setTree(tree);
+        });
+
+        it('Should not deselect the selected node if enter is pressed', () => {
+            treeHandler.handleKeyEvent({ key: 'ArrowDown' });
+            treeHandler.handleKeyEvent({ key: 'Enter' });
+
+            const selectedNodes = treeHandler.getSelectedNodes();
+            expect(selectedNodes).exist;
+            expect(selectedNodes).an('array');
+            expect(selectedNodes.length).equals(1);
+        });
+
+    });
+
 });
