@@ -125,25 +125,7 @@ export abstract class SearchDefinition {
         const property = searchValue.property;
         const operator = searchValue.operator;
         const value = searchValue.value;
-        const filterDataType = FilterDataType.STRING;
-        // if (this.isDate) {
-        //     filterDataType = FilterDataType.DATE;
-        //     const date = new Date(this.date);
-        //     value = isNaN(date.getTime()) ? null : DateTimeUtil.getKIXDateTimeString(date);
-        //     if (this.isBetweenDate && value) {
-        //         const endDate = new Date(this.betweenEndDate);
-        //         value = isNaN(endDate.getTime()) ? null : [value, DateTimeUtil.getKIXDateTimeString(endDate)];
-        //     }
-        // } else if (this.isDateTime) {
-        //     filterDataType = FilterDataType.DATETIME;
-        //     const date = new Date(`${this.date} ${this.time}`);
-        //     value = isNaN(date.getTime()) ? null : DateTimeUtil.getKIXDateTimeString(date);
-        //     if (this.isBetweenDate && value) {
-        //         const endDate = new Date(`${this.betweenEndDate} ${this.betweenEndTime}`);
-        //         value = isNaN(endDate.getTime()) ? null : [value, DateTimeUtil.getKIXDateTimeString(endDate)];
-        //     }
-        // }
-
+        const filterDataType = operator === SearchOperator.BETWEEN ? FilterDataType.DATETIME : FilterDataType.STRING;
         return new FilterCriteria(property, operator as SearchOperator, filterDataType, FilterType.AND, value);
     }
 }

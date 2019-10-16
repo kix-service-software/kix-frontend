@@ -60,32 +60,53 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             on-nodesChanged("treeValueChanged", dynamicValue)/>
                     </if>
                     <else-if(dynamicValue.isDate)>
-                        <input.input-style
-                            class={
-                                                        invalid: !dynamicValue.value.valid
-                                                    }
-                            type="date"
-                            value=dynamicValue.date
-                            disabled=(dynamicValue.readonly && !dynamicValue.changeable)
-                            on-change("setDateValue", dynamicValue)/>
+                        <span.search-date-time-input class={
+                            between: dynamicValue.isBetween
+                        }>
+                            <input.input-style
+                                class={
+                                                                invalid: !dynamicValue.value.valid
+                                                            }
+                                type="date"
+                                value=dynamicValue.date
+                                disabled=(dynamicValue.readonly && !dynamicValue.changeable)
+                                on-change("setDateValue", dynamicValue)/>
+                            <if(dynamicValue.isBetweenDate)>
+                                <div.between-space>
+                                    <translation-string pattern="Translatable#and"/>
+                                </div>
+                                <input.input-style type="date" on-change("setBetweenEndDateValue", dynamicValue) value=dynamicValue.betweenEndDate/>
+                            </if>
+                        </span>
                     </else-if>
                     <else-if(dynamicValue.isDateTime)>
-                        <input.input-style
-                            class={
-                                                        invalid: !dynamicValue.value.valid
-                                                    }
-                            type="date"
-                            value=dynamicValue.date
-                            disabled=(dynamicValue.readonly && !dynamicValue.changeable)
-                            on-change("setDateValue", dynamicValue)/>
-                        <input.input-style
-                            class={
-                                                        invalid: !dynamicValue.value.valid
-                                                    }
-                            type="time"
-                            value=dynamicValue.time
-                            disabled=(dynamicValue.readonly && !dynamicValue.changeable)
-                            on-change("setTimeValue", dynamicValue)/>
+                        <span.search-date-time-input class={
+                            between: dynamicValue.isBetween
+                        }>
+                            <input.input-style
+                                class={
+                                                                invalid: !dynamicValue.value.valid
+                                                            }
+                                type="date"
+                                value=dynamicValue.date
+                                disabled=(dynamicValue.readonly && !dynamicValue.changeable)
+                                on-change("setDateValue", dynamicValue)/>
+                            <input.input-style
+                                class={
+                                                                invalid: !dynamicValue.value.valid
+                                                            }
+                                type="time"
+                                value=dynamicValue.time
+                                disabled=(dynamicValue.readonly && !dynamicValue.changeable)
+                                on-change("setTimeValue", dynamicValue)/>
+                            <if(dynamicValue.isBetween)>
+                                <div.between-space>
+                                    <translation-string pattern="Translatable#and"/>
+                                </div>
+                                <input.input-style type="date" on-change("setBetweenEndDateValue", dynamicValue) value=dynamicValue.betweenEndDate/>
+                                <input.input-style type="time" on-change("setBetweenEndTimeValue", dynamicValue) value=dynamicValue.betweenEndTime/>
+                            </if>
+                        </span>
                     </else-if>
                     <else-if(dynamicValue.isTextarea)>
                         <textarea.input-style
