@@ -23,9 +23,7 @@ class Component {
     }
 
     public getReceiverString(receiver: ArticleReceiver): string {
-        const email = receiver.email;
-        const realName = receiver.realName;
-        return realName === email ? email : `${realName} ${email}`;
+        return receiver.email;
     }
 
 }
