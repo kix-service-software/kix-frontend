@@ -54,13 +54,13 @@ export class Extension implements IConfigurationExtension {
                 new FormField(
                     'Translatable#Validity', KIXObjectProperty.VALID_ID,
                     'object-reference-input', false, 'Translatable#Helptext_Admin_SysConfigEdit_Validity', [
-                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
-                    ]
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
+                ]
                 ),
                 new FormField(
                     'Translatable#Value', SysConfigOptionDefinitionProperty.VALUE, 'text-area-input', false,
                     'Translatable#Helptext_Admin_SysConfigEdit_Value', [
-                        new FormFieldOption('isJSON', true)]
+                    new FormFieldOption('isJSON', true)]
                 ),
                 new FormField(
                     'Translatable#Default Value', SysConfigOptionDefinitionProperty.DEFAULT, 'text-area-input', false,

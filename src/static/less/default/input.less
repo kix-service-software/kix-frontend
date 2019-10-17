@@ -56,8 +56,18 @@ textarea.input-style {
     height: 8.75rem;
     resize: vertical;
 
+    // can not be with following rule, the browsers will ignore both
+    &:-moz-read-only {
+        background-color: @secondary-5;
+    }
+
     &:read-only {
         background-color: @secondary-5;
+    }
+
+    &:focus:not(:disabled):not(:-moz-read-only),
+    &:hover:not(:disabled):not(:-moz-read-only) {
+        border-color: darken(@secondary-3, 20%);
     }
 }
 

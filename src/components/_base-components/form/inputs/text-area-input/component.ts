@@ -8,13 +8,17 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { FormInputComponent } from '../../../../../core/model';
+import { FormInputComponent, FormField, FormFieldValue } from '../../../../../core/model';
 import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
+import { FormService, IdService } from '../../../../../core/browser';
 
 class Component extends FormInputComponent<string, ComponentState> {
 
+    private formListendenerId: string;
+
     public onCreate(): void {
         this.state = new ComponentState();
+        this.formListendenerId = IdService.generateDateBasedId('text-area-input');
     }
 
     public onInput(input: any): void {
@@ -33,6 +37,22 @@ class Component extends FormInputComponent<string, ComponentState> {
     public async onMount(): Promise<void> {
         await super.onMount();
         this.setCurrentValue();
+        FormService.getInstance().registerFormInstanceListener(this.state.formId, {
+            formListenerId: this.formListendenerId,
+            updateForm: () => { return; },
+            formValueChanged: (formField: FormField, value: FormFieldValue<any>, oldValue: any) => {
+                if (formField.instanceId === this.state.field.instanceId) {
+                    this.state.currentValue = value.value;
+                }
+            }
+        });
+    }
+
+    public async onDestroy(): Promise<void> {
+        super.onDestroy();
+        if (this.state.formId && this.formListendenerId) {
+            FormService.getInstance().removeFormInstanceListener(this.state.formId, this.formListendenerId);
+        }
     }
 
     public setCurrentValue(): void {
