@@ -75,7 +75,7 @@ class BreadcrumbComponent implements IContextServiceListener {
 
     public getRoutingConfiguration(contextId: string, index: number): RoutingConfiguration {
         if (index < this.state.contexts.length - 1) {
-            return new RoutingConfiguration(contextId, null, null, null);
+            return new RoutingConfiguration(contextId, null, null, null, null, false, null, false);
         }
         return null;
     }
