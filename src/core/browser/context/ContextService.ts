@@ -82,9 +82,6 @@ export class ContextService {
             } else if (replaceHistory) {
                 window.history.replaceState(state, displayText, '/' + url);
             }
-            if (!history) {
-                context.reset();
-            }
             DialogService.getInstance().closeMainDialog();
             this.activeMainContext = context;
 

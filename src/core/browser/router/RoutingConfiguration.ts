@@ -20,7 +20,8 @@ export class RoutingConfiguration {
         public objectIdProperty: string,
         public history: boolean = false,
         public externalLink?: boolean,
-        public replaceObjectId?: string | number
+        public replaceObjectId?: string | number,
+        public resetContext: boolean = true
     ) { }
 
 }
