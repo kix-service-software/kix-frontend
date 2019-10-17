@@ -49,12 +49,12 @@ class Component extends AbstractEditDialog {
 
     public async reset(): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        const sysConfigValue = await formInstance.getFormFieldByProperty(SysConfigOptionDefinitionProperty.VALUE);
-        if (sysConfigValue) {
-            const formFieldInstanceID = sysConfigValue.instanceId;
-            formInstance.provideFormFieldValue(formFieldInstanceID, null);
+        const sysConfigField = await formInstance.getFormFieldByProperty(SysConfigOptionDefinitionProperty.VALUE);
+        const defaultValue = await formInstance.getFormFieldValueByProperty(SysConfigOptionDefinitionProperty.DEFAULT);
+        if (sysConfigField) {
+            const formFieldInstanceID = sysConfigField.instanceId;
+            formInstance.provideFormFieldValue(formFieldInstanceID, defaultValue.value);
         }
-        await super.submit();
     }
 
 }
