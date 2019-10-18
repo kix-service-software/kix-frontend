@@ -11,6 +11,8 @@ import { ComponentState } from './ComponentState';
 import { TreeNode, TreeHandler, TreeService } from '../../../../../core/model';
 import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 import { ComponentInput } from './ComponentInput';
+import { EventService } from '../../../../../core/browser/event';
+import { ApplicationEvent } from '../../../../../core/browser/application';
 
 class Component {
 
@@ -83,6 +85,15 @@ class Component {
         });
 
         this.state.prepared = true;
+
+        EventService.getInstance().subscribe(ApplicationEvent.DROPDOWN_OPENED, {
+            eventSubscriberId: 'form-list-' + this.state.treeId,
+            eventPublished: (data) => {
+                if (data !== this.state.treeId && this.state.expanded) {
+                    this.toggleList(true, null, false);
+                }
+            }
+        });
     }
 
     public focus(event: any): void {
@@ -125,10 +136,9 @@ class Component {
         this.toggleList(true);
     }
 
-    private toggleList(close: boolean = true, event?: any): void {
+    private toggleList(close: boolean = true, event?: any, holdFocus: boolean = true): void {
         if (event) {
             this.toggleButtonClicked = true;
-            event.preventDefault();
         }
 
         if (!this.toggleTimeout) {
@@ -139,13 +149,14 @@ class Component {
                         this.treeHandler.active = false;
 
                         const hiddenInput = (this as any).getEl("hidden-form-list-input");
-                        if (hiddenInput) {
+                        if (hiddenInput && holdFocus) {
                             hiddenInput.focus();
                         }
 
                     } else if (!this.state.readonly) {
                         this.state.expanded = true;
                         this.treeHandler.active = true;
+                        EventService.getInstance().publish(ApplicationEvent.DROPDOWN_OPENED, this.state.treeId);
                         setTimeout(() => {
                             this.setDropdownStyle();
                         }, 100);
