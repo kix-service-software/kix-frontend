@@ -20,7 +20,6 @@ describe('Browser / Components / TreeHandler', () => {
 
     describe('select one nodes via keyboard navigation (without filter)', () => {
         let treeHandler: TreeHandler;
-        let navigationHandler: TreeNavigationHandler;
 
         before(() => {
             const tree = [
@@ -38,8 +37,6 @@ describe('Browser / Components / TreeHandler', () => {
                 ], null, null, null, null, true)
             ];
             treeHandler = new TreeHandler(tree, null);
-            navigationHandler = new TreeNavigationHandler();
-            navigationHandler.setTree(tree);
         });
 
         it('Should select the node', () => {
@@ -47,7 +44,7 @@ describe('Browser / Components / TreeHandler', () => {
             treeHandler.handleKeyEvent({ key: 'ArrowDown' });
             treeHandler.handleKeyEvent({ key: 'ArrowDown' });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id12');
 
@@ -60,7 +57,7 @@ describe('Browser / Components / TreeHandler', () => {
             treeHandler.handleKeyEvent({ key: 'ArrowDown' });
             treeHandler.handleKeyEvent({ key: 'ArrowDown' });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id22');
 
@@ -72,7 +69,7 @@ describe('Browser / Components / TreeHandler', () => {
             treeHandler.handleKeyEvent({ key: 'ArrowUp' });
             treeHandler.handleKeyEvent({ key: 'ArrowUp' });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id2');
 
@@ -91,7 +88,6 @@ describe('Browser / Components / TreeHandler', () => {
 
     describe('select multiple nodes via shift + cursor (without filter)', () => {
         let treeHandler: TreeHandler;
-        let navigationHandler = new TreeNavigationHandler();
 
         before(() => {
             const tree = [
@@ -109,13 +105,12 @@ describe('Browser / Components / TreeHandler', () => {
                 ], null, null, null, null, true)
             ];
             treeHandler = new TreeHandler(tree, null);
-            navigationHandler.setTree(tree);
         });
 
         it('Should select the first node', () => {
             treeHandler.handleKeyEvent({ key: 'ArrowDown', shiftKey: true });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id1');
             expect(navigationNode.selected).true
@@ -129,7 +124,7 @@ describe('Browser / Components / TreeHandler', () => {
         it('Should navigate to the next node and select it', () => {
             treeHandler.handleKeyEvent({ key: 'ArrowDown', shiftKey: true });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id11');
             expect(navigationNode.selected).true
@@ -143,7 +138,7 @@ describe('Browser / Components / TreeHandler', () => {
         it('Should navigate to the next node and select it', () => {
             treeHandler.handleKeyEvent({ key: 'ArrowDown', shiftKey: true });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id12');
             expect(navigationNode.selected).true
@@ -158,7 +153,6 @@ describe('Browser / Components / TreeHandler', () => {
 
     describe('select multiple nodes via shift + PageDown (without filter)', () => {
         let treeHandler: TreeHandler;
-        let navigationHandler = new TreeNavigationHandler();
 
         before(() => {
             const tree = [
@@ -180,13 +174,12 @@ describe('Browser / Components / TreeHandler', () => {
                 new TreeNode('7', 'label7')
             ];
             treeHandler = new TreeHandler(tree, null);
-            navigationHandler.setTree(tree);
         });
 
         it('Should select all nodes', () => {
             treeHandler.handleKeyEvent({ key: 'PageDown', shiftKey: true });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('4');
             expect(navigationNode.selected).true
@@ -201,7 +194,6 @@ describe('Browser / Components / TreeHandler', () => {
 
     describe('select multiple nodes via shift + PageDown twice (without filter)', () => {
         let treeHandler: TreeHandler;
-        let navigationHandler = new TreeNavigationHandler();
 
         before(() => {
             const tree = [
@@ -232,13 +224,12 @@ describe('Browser / Components / TreeHandler', () => {
                 new TreeNode('16', 'label16')
             ];
             treeHandler = new TreeHandler(tree, null);
-            navigationHandler.setTree(tree);
         });
 
         it('Should select the first 10 nodes', () => {
             treeHandler.handleKeyEvent({ key: 'PageDown', shiftKey: true });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('4');
             expect(navigationNode.selected).true
@@ -252,7 +243,7 @@ describe('Browser / Components / TreeHandler', () => {
         it('Should select the next 10 nodes', () => {
             treeHandler.handleKeyEvent({ key: 'PageDown', shiftKey: true });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('14');
             expect(navigationNode.selected).true
@@ -267,7 +258,6 @@ describe('Browser / Components / TreeHandler', () => {
 
     describe('select first node via shift + Pos1 (without filter)', () => {
         let treeHandler: TreeHandler;
-        let navigationHandler = new TreeNavigationHandler();
 
         before(() => {
             const tree = [
@@ -290,13 +280,12 @@ describe('Browser / Components / TreeHandler', () => {
             ];
 
             treeHandler = new TreeHandler(tree, null);
-            navigationHandler.setTree(tree);
         });
 
         it('Should select the first node', () => {
             treeHandler.handleKeyEvent({ key: 'Home', shiftKey: true });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id1');
             expect(navigationNode.selected).true
@@ -310,7 +299,6 @@ describe('Browser / Components / TreeHandler', () => {
 
     describe('select multiple nodes via shift + end (without filter)', () => {
         let treeHandler: TreeHandler;
-        let navigationHandler = new TreeNavigationHandler();
 
         before(() => {
             const tree = [
@@ -333,13 +321,12 @@ describe('Browser / Components / TreeHandler', () => {
             ];
 
             treeHandler = new TreeHandler(tree, null);
-            navigationHandler.setTree(tree);
         });
 
         it('Should select all nodes', () => {
             treeHandler.handleKeyEvent({ key: 'End', shiftKey: true });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('7');
             expect(navigationNode.selected).true
@@ -354,7 +341,6 @@ describe('Browser / Components / TreeHandler', () => {
 
     describe('select/deselect multiple nodes via shift + cursor Down and then Up (without filter)', () => {
         let treeHandler: TreeHandler;
-        const navigationHandler = new TreeNavigationHandler();
 
         before(() => {
             const tree = [
@@ -372,7 +358,6 @@ describe('Browser / Components / TreeHandler', () => {
                 ], null, null, null, null, true)
             ];
             treeHandler = new TreeHandler(tree, null);
-            navigationHandler.setTree(tree);
         });
 
         it('Should select the first 3 node', () => {
@@ -380,7 +365,7 @@ describe('Browser / Components / TreeHandler', () => {
             treeHandler.handleKeyEvent({ key: 'ArrowDown', shiftKey: true });
             treeHandler.handleKeyEvent({ key: 'ArrowDown', shiftKey: true });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id12');
             expect(navigationNode.selected).true
@@ -394,7 +379,7 @@ describe('Browser / Components / TreeHandler', () => {
         it('Should navigate to the previous node and deselect it', () => {
             treeHandler.handleKeyEvent({ key: 'ArrowUp', shiftKey: true });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id11');
             expect(navigationNode.selected).true;
@@ -410,7 +395,7 @@ describe('Browser / Components / TreeHandler', () => {
         it('Should navigate to the previous node and deselect it', () => {
             treeHandler.handleKeyEvent({ key: 'ArrowUp', shiftKey: true });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id1');
             expect(navigationNode.selected).true;
@@ -426,7 +411,7 @@ describe('Browser / Components / TreeHandler', () => {
         it('Should navigate to the previous node and deselect it', () => {
             treeHandler.handleKeyEvent({ key: 'ArrowUp', shiftKey: true });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id1');
             expect(navigationNode.selected).false
@@ -441,7 +426,6 @@ describe('Browser / Components / TreeHandler', () => {
 
     describe('select/deselect multiple nodes via shift + cursor Down + Up + Down + Up (without filter)', () => {
         let treeHandler: TreeHandler;
-        const navigationHandler = new TreeNavigationHandler();
 
         before(() => {
             const tree = [
@@ -459,7 +443,6 @@ describe('Browser / Components / TreeHandler', () => {
                 ], null, null, null, null, true)
             ];
             treeHandler = new TreeHandler(tree, null);
-            navigationHandler.setTree(tree);
 
             treeHandler.handleKeyEvent({ key: 'ArrowDown' });
             treeHandler.handleKeyEvent({ key: 'ArrowDown' });
@@ -473,7 +456,7 @@ describe('Browser / Components / TreeHandler', () => {
             treeHandler.handleKeyEvent({ key: 'ArrowDown', shiftKey: true });
             treeHandler.handleKeyEvent({ key: 'ArrowDown', shiftKey: true });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id31');
             expect(navigationNode.selected).true;
@@ -489,7 +472,7 @@ describe('Browser / Components / TreeHandler', () => {
             treeHandler.handleKeyEvent({ key: 'ArrowUp', shiftKey: true });
             treeHandler.handleKeyEvent({ key: 'ArrowUp', shiftKey: true });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id21');
             expect(navigationNode.selected).true;
@@ -506,7 +489,7 @@ describe('Browser / Components / TreeHandler', () => {
             treeHandler.handleKeyEvent({ key: 'ArrowDown', shiftKey: true });
             treeHandler.handleKeyEvent({ key: 'ArrowDown', shiftKey: true });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id32');
             expect(navigationNode.selected).true;
@@ -521,7 +504,7 @@ describe('Browser / Components / TreeHandler', () => {
 
     describe('select/deselect multiple nodes via shift + End + Up + Down and deselct all with Pos1 (without filter)', () => {
         let treeHandler: TreeHandler;
-        const navigationHandler = new TreeNavigationHandler();
+
 
         before(() => {
             const tree = [
@@ -539,13 +522,13 @@ describe('Browser / Components / TreeHandler', () => {
                 ], null, null, null, null, true)
             ];
             treeHandler = new TreeHandler(tree, null);
-            navigationHandler.setTree(tree);
+
         });
 
         it('Should select all nodes', () => {
             treeHandler.handleKeyEvent({ key: 'End', shiftKey: true });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id32');
             expect(navigationNode.selected).true
@@ -563,7 +546,7 @@ describe('Browser / Components / TreeHandler', () => {
             treeHandler.handleKeyEvent({ key: 'ArrowUp', shiftKey: true });
             treeHandler.handleKeyEvent({ key: 'ArrowUp', shiftKey: true });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id2');
             expect(navigationNode.selected).true
@@ -579,7 +562,7 @@ describe('Browser / Components / TreeHandler', () => {
             treeHandler.handleKeyEvent({ key: 'ArrowDown', shiftKey: true });
             treeHandler.handleKeyEvent({ key: 'ArrowDown', shiftKey: true });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id3');
             expect(navigationNode.selected).true
@@ -593,7 +576,7 @@ describe('Browser / Components / TreeHandler', () => {
         it('Should select 3 more nodes', () => {
             treeHandler.handleKeyEvent({ key: 'Home', shiftKey: true });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id1');
             expect(navigationNode.selected).false
@@ -625,13 +608,13 @@ describe('Browser / Components / TreeHandler', () => {
                 ])
             ];
             treeHandler = new TreeHandler(tree, null);
-            navigationHandler.setTree(tree);
+
         });
 
         it('Should select the first node', () => {
             treeHandler.handleKeyEvent({ key: 'ArrowDown', shiftKey: true });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id1');
             expect(navigationNode.selected).true
@@ -645,7 +628,7 @@ describe('Browser / Components / TreeHandler', () => {
         it('Should expand the node and select the first child.', () => {
             treeHandler.handleKeyEvent({ key: 'ArrowRight', shiftKey: true });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id11');
             expect(navigationNode.selected).true
@@ -659,7 +642,7 @@ describe('Browser / Components / TreeHandler', () => {
         it('Should navigate to the next node and select it', () => {
             treeHandler.handleKeyEvent({ key: 'ArrowDown', shiftKey: true });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id12');
             expect(navigationNode.selected).true
@@ -673,7 +656,7 @@ describe('Browser / Components / TreeHandler', () => {
         it('Should navigate to the next node and select it', () => {
             treeHandler.handleKeyEvent({ key: 'ArrowDown', shiftKey: true });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id2');
             expect(navigationNode.selected).true
@@ -687,7 +670,7 @@ describe('Browser / Components / TreeHandler', () => {
         it('Should navigate to the next node and select it', () => {
             treeHandler.handleKeyEvent({ key: 'ArrowDown', shiftKey: true });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id3');
             expect(navigationNode.selected).true
@@ -720,13 +703,13 @@ describe('Browser / Components / TreeHandler', () => {
                 ])
             ];
             treeHandler = new TreeHandler(tree, null);
-            navigationHandler.setTree(tree);
+
         });
 
         it('Should select the first node', () => {
             treeHandler.handleKeyEvent({ key: 'ArrowDown', shiftKey: true });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id1');
             expect(navigationNode.selected).true
@@ -740,7 +723,7 @@ describe('Browser / Components / TreeHandler', () => {
         it('Should expand the node and select the first child.', () => {
             treeHandler.handleKeyEvent({ key: 'ArrowRight', shiftKey: true });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id11');
             expect(navigationNode.selected).true
@@ -754,7 +737,7 @@ describe('Browser / Components / TreeHandler', () => {
         it('Should navigate to the next node and select it', () => {
             treeHandler.handleKeyEvent({ key: 'ArrowDown', shiftKey: true });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id12');
             expect(navigationNode.selected).true
@@ -768,7 +751,7 @@ describe('Browser / Components / TreeHandler', () => {
         it('Should navigate to the next node and select it', () => {
             treeHandler.handleKeyEvent({ key: 'ArrowLeft', shiftKey: true });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id1');
             expect(navigationNode.selected).true
@@ -782,7 +765,7 @@ describe('Browser / Components / TreeHandler', () => {
         it('Should navigate to the next node and select it', () => {
             treeHandler.handleKeyEvent({ key: 'ArrowDown', shiftKey: true });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id2');
             expect(navigationNode.selected).true
@@ -815,7 +798,7 @@ describe('Browser / Components / TreeHandler', () => {
                 ])
             ];
             treeHandler = new TreeHandler(tree, null);
-            navigationHandler.setTree(tree);
+
         });
 
         it('Should notify registered listener.', () => {

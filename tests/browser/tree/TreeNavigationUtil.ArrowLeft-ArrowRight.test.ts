@@ -11,7 +11,7 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { TreeNode, TreeUtil, TreeNavigationHandler } from '../../../src/core/model';
+import { TreeNode, TreeUtil, TreeHandler } from '../../../src/core/model';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -20,7 +20,7 @@ describe('Browser / Components / Tree - Keyboard Navigation - Arrow Left/Right',
 
     describe('tree - collapsed - expand a root node (ArrowRight) (without filter)', () => {
         let tree;
-        let navigationHandler: TreeNavigationHandler;
+        let treeHandler: TreeHandler;
 
         before(() => {
             tree = [
@@ -37,22 +37,20 @@ describe('Browser / Components / Tree - Keyboard Navigation - Arrow Left/Right',
                     new TreeNode('id32', 'label32')
                 ])
             ];
-            TreeUtil.linkTreeNodes(tree, null);
-            navigationHandler = new TreeNavigationHandler();
-            navigationHandler.setTree(tree);
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
+            treeHandler = new TreeHandler(tree);
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
         });
 
         it('Should expand the node and navigate to first child', () => {
-            const node = navigationHandler.findNavigationNode();
+            const node = treeHandler.navigationHandler.findNavigationNode();
             expect(node).exist;
             expect(node.id).equals('id1');
 
-            navigationHandler.handleEvent({ key: 'ArrowRight' });
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowRight' });
 
             expect(node.expanded).true;
 
-            const newNavigationNode = navigationHandler.findNavigationNode();
+            const newNavigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(newNavigationNode).exist;
             expect(newNavigationNode.id).equals('id11');
         });
@@ -60,7 +58,7 @@ describe('Browser / Components / Tree - Keyboard Navigation - Arrow Left/Right',
 
     describe('tree - collapsed - expand a root node (ArrowRight) (with filter)', () => {
         let tree;
-        let navigationHandler: TreeNavigationHandler;
+        let treeHandler: TreeHandler;
 
         before(() => {
             tree = [
@@ -77,23 +75,20 @@ describe('Browser / Components / Tree - Keyboard Navigation - Arrow Left/Right',
                     new TreeNode('id32', 'label32')
                 ])
             ];
-            TreeUtil.linkTreeNodes(tree, 'label22');
-            navigationHandler = new TreeNavigationHandler();
-            navigationHandler.setTree(tree);
-
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
+            treeHandler = new TreeHandler(tree, null, 'label2');
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
         });
 
         it('Should expand the node and navigate to first visible child', () => {
-            const node = navigationHandler.findNavigationNode();
+            const node = treeHandler.navigationHandler.findNavigationNode();
             expect(node).exist;
             expect(node.id).equals('id2');
 
-            navigationHandler.handleEvent({ key: 'ArrowRight' }, 'label22');
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowRight' }, 'label22');
 
             expect(node.expanded).true;
 
-            const newNavigationNode = navigationHandler.findNavigationNode();
+            const newNavigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(newNavigationNode).exist;
             expect(newNavigationNode.id).equals('id22');
         });
@@ -101,7 +96,7 @@ describe('Browser / Components / Tree - Keyboard Navigation - Arrow Left/Right',
 
     describe('tree - full expanded - collapse root node (ArrowLeft)', () => {
         let tree;
-        let navigationHandler: TreeNavigationHandler;
+        let treeHandler: TreeHandler;
 
         before(() => {
             tree = [
@@ -118,27 +113,25 @@ describe('Browser / Components / Tree - Keyboard Navigation - Arrow Left/Right',
                     new TreeNode('id32', 'label32')
                 ], null, null, null, null, true)
             ];
-            TreeUtil.linkTreeNodes(tree, null);
-            navigationHandler = new TreeNavigationHandler();
-            navigationHandler.setTree(tree);
+            treeHandler = new TreeHandler(tree);
         });
 
         it('Should collapse the root node', () => {
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id2');
             expect(navigationNode.navigationNode).true;
 
-            navigationHandler.handleEvent({ key: 'ArrowLeft' });
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowLeft' });
             expect(navigationNode.expanded).false;
 
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
-            const newNavigationNode = navigationHandler.findNavigationNode();
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
+            const newNavigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(newNavigationNode).exist;
             expect(newNavigationNode.id).equals('id3');
             expect(newNavigationNode.navigationNode).true;
@@ -148,7 +141,7 @@ describe('Browser / Components / Tree - Keyboard Navigation - Arrow Left/Right',
 
     describe('tree - full expanded - collapse tree if child is focused (ArrowLeft)', () => {
         let tree;
-        let navigationHandler: TreeNavigationHandler;
+        let treeHandler: TreeHandler;
 
         before(() => {
             tree = [
@@ -165,29 +158,27 @@ describe('Browser / Components / Tree - Keyboard Navigation - Arrow Left/Right',
                     new TreeNode('id32', 'label32')
                 ], null, null, null, null, true)
             ];
-            TreeUtil.linkTreeNodes(tree, null);
-            navigationHandler = new TreeNavigationHandler();
-            navigationHandler.setTree(tree);
+            treeHandler = new TreeHandler(tree);
         });
 
         it('Should collapse the root node', () => {
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id12');
             expect(navigationNode.navigationNode).true;
 
-            navigationHandler.handleEvent({ key: 'ArrowLeft' });
-            const navNodeAfterCollapse = navigationHandler.findNavigationNode();
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowLeft' });
+            const navNodeAfterCollapse = treeHandler.navigationHandler.findNavigationNode();
             expect(navNodeAfterCollapse).exist;
             expect(navNodeAfterCollapse.id).equals('id1');
             expect(navNodeAfterCollapse.navigationNode).true;
 
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
-            const newNavigationNode = navigationHandler.findNavigationNode();
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
+            const newNavigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(newNavigationNode).exist;
             expect(newNavigationNode.id).equals('id2');
             expect(newNavigationNode.navigationNode).true;

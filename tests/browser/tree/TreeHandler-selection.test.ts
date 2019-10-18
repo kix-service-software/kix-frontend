@@ -20,7 +20,6 @@ describe('Browser / Components / TreeHandler - Selection', () => {
 
     describe('select nodes', () => {
         let treeHandler: TreeHandler;
-        let navigationHandler: TreeNavigationHandler;
 
         before(() => {
             const tree = [
@@ -38,8 +37,6 @@ describe('Browser / Components / TreeHandler - Selection', () => {
                 ], null, null, null, null, true)
             ];
             treeHandler = new TreeHandler(tree, null, null, true);
-            navigationHandler = new TreeNavigationHandler();
-            navigationHandler.setTree(tree);
         });
 
         it('Should select the first 3 nodes', () => {
@@ -75,7 +72,6 @@ describe('Browser / Components / TreeHandler - Selection', () => {
 
     describe('keep selected nodes in new tree', () => {
         let treeHandler: TreeHandler;
-        let navigationHandler: TreeNavigationHandler;
 
         before(() => {
             const tree = [
@@ -104,8 +100,6 @@ describe('Browser / Components / TreeHandler - Selection', () => {
                 ], null, null, null, null, true)
             ];
             treeHandler = new TreeHandler(tree, null, null, true);
-            navigationHandler = new TreeNavigationHandler();
-            navigationHandler.setTree(tree);
         });
 
         it('3 nodes should be selected.', () => {
@@ -126,7 +120,6 @@ describe('Browser / Components / TreeHandler - Selection', () => {
 
     describe('Add free text nodes as selection (multiselect)', () => {
         let treeHandler: TreeHandler;
-        let navigationHandler: TreeNavigationHandler;
 
         before(() => {
             const tree = [
@@ -144,8 +137,6 @@ describe('Browser / Components / TreeHandler - Selection', () => {
                 ], null, null, null, null, true)
             ];
             treeHandler = new TreeHandler(tree, null, null, true);
-            navigationHandler = new TreeNavigationHandler();
-            navigationHandler.setTree(tree);
         });
 
         it('Should select an existing node', () => {
@@ -177,7 +168,6 @@ describe('Browser / Components / TreeHandler - Selection', () => {
 
     describe('Add and remove free text nodes from tree (multiselect)', () => {
         let treeHandler: TreeHandler;
-        let navigationHandler: TreeNavigationHandler;
 
         before(() => {
             const tree = [
@@ -195,8 +185,6 @@ describe('Browser / Components / TreeHandler - Selection', () => {
                 ], null, null, null, null, true)
             ];
             treeHandler = new TreeHandler(tree, null, null, true);
-            navigationHandler = new TreeNavigationHandler();
-            navigationHandler.setTree(tree);
         });
 
         it('Should select an existing node', () => {
@@ -240,7 +228,6 @@ describe('Browser / Components / TreeHandler - Selection', () => {
 
     describe('Add free text node to a tree (singleselect)', () => {
         let treeHandler: TreeHandler;
-        let navigationHandler: TreeNavigationHandler;
 
         before(() => {
             const tree = [
@@ -258,8 +245,6 @@ describe('Browser / Components / TreeHandler - Selection', () => {
                 ], null, null, null, null, true)
             ];
             treeHandler = new TreeHandler(tree, null, null, true);
-            navigationHandler = new TreeNavigationHandler();
-            navigationHandler.setTree(tree);
         });
 
         it('Should add a free text node to the tree', () => {
@@ -289,7 +274,6 @@ describe('Browser / Components / TreeHandler - Selection', () => {
 
     describe('select all nodes (without filter)', () => {
         let treeHandler: TreeHandler;
-        let navigationHandler: TreeNavigationHandler;
 
         before(() => {
             const tree = [
@@ -307,8 +291,6 @@ describe('Browser / Components / TreeHandler - Selection', () => {
                 ], null, null, null, null, true)
             ];
             treeHandler = new TreeHandler(tree, null, null, true);
-            navigationHandler = new TreeNavigationHandler();
-            navigationHandler.setTree(tree);
         });
 
         it('Should select all nodes', () => {
@@ -324,7 +306,6 @@ describe('Browser / Components / TreeHandler - Selection', () => {
 
     describe('select all nodes (with filter)', () => {
         let treeHandler: TreeHandler;
-        let navigationHandler: TreeNavigationHandler;
 
         before(() => {
             const tree = [
@@ -342,8 +323,6 @@ describe('Browser / Components / TreeHandler - Selection', () => {
                 ], null, null, null, null, true)
             ];
             treeHandler = new TreeHandler(tree, null, 'label2', true);
-            navigationHandler = new TreeNavigationHandler();
-            navigationHandler.setTree(tree);
         });
 
         it('Should select all filtered nodes', () => {
@@ -359,7 +338,6 @@ describe('Browser / Components / TreeHandler - Selection', () => {
 
     describe('deselect all nodes (without filter)', () => {
         let treeHandler: TreeHandler;
-        let navigationHandler: TreeNavigationHandler;
 
         before(() => {
             const tree = [
@@ -377,8 +355,6 @@ describe('Browser / Components / TreeHandler - Selection', () => {
                 ], null, null, null, null, true)
             ];
             treeHandler = new TreeHandler(tree, null, null, true);
-            navigationHandler = new TreeNavigationHandler();
-            navigationHandler.setTree(tree);
         });
 
         it('Should select all filtered nodes', () => {
@@ -395,7 +371,6 @@ describe('Browser / Components / TreeHandler - Selection', () => {
 
     describe('deselect all nodes (without filter)', () => {
         let treeHandler: TreeHandler;
-        let navigationHandler: TreeNavigationHandler;
 
         before(() => {
             const tree = [
@@ -413,8 +388,6 @@ describe('Browser / Components / TreeHandler - Selection', () => {
                 ], null, null, null, null, true)
             ];
             treeHandler = new TreeHandler(tree, null, 'label2', true);
-            navigationHandler = new TreeNavigationHandler();
-            navigationHandler.setTree(tree);
         });
 
         it('Should select all filtered nodes', () => {
@@ -431,7 +404,6 @@ describe('Browser / Components / TreeHandler - Selection', () => {
 
     describe('select/deselect all nodes (with filter)', () => {
         let treeHandler: TreeHandler;
-        let navigationHandler: TreeNavigationHandler;
 
         before(() => {
             const tree = [
@@ -449,8 +421,6 @@ describe('Browser / Components / TreeHandler - Selection', () => {
                 ], null, null, null, null, true)
             ];
             treeHandler = new TreeHandler(tree, null, 'label2', true);
-            navigationHandler = new TreeNavigationHandler();
-            navigationHandler.setTree(tree);
         });
 
         it('Should select all first 3 nodes', () => {
@@ -607,7 +577,6 @@ describe('Browser / Components / TreeHandler - Selection', () => {
 
     describe('select all nodes (collapsed tree)', () => {
         let treeHandler: TreeHandler;
-        let navigationHandler: TreeNavigationHandler;
 
         before(() => {
             const tree = [
@@ -624,9 +593,7 @@ describe('Browser / Components / TreeHandler - Selection', () => {
                     new TreeNode('id32', 'label32')
                 ], null, null, null, null, true)
             ];
-            treeHandler = new TreeHandler(tree, null, null, true);
-            navigationHandler = new TreeNavigationHandler();
-            navigationHandler.setTree(tree);
+            treeHandler = new TreeHandler(tree);
         });
 
         it('Should select all nodes, also nodes in collapsed trees', () => {
@@ -658,9 +625,7 @@ describe('Browser / Components / TreeHandler - Selection', () => {
                     new TreeNode('id32', 'label32')
                 ], null, null, null, null, true)
             ];
-            treeHandler = new TreeHandler(tree, null, null, true);
-            const navigationHandler = new TreeNavigationHandler();
-            navigationHandler.setTree(tree);
+            treeHandler = new TreeHandler(tree);
         });
 
         it('Should not deselect the selected node if enter is pressed', () => {
@@ -694,8 +659,6 @@ describe('Browser / Components / TreeHandler - Selection', () => {
                 ], null, null, null, null, true)
             ];
             treeHandler = new TreeHandler(tree, null, null, true);
-            const navigationHandler = new TreeNavigationHandler();
-            navigationHandler.setTree(tree);
         });
 
         it('Should not deselect the selected node if enter is pressed', () => {
@@ -706,6 +669,89 @@ describe('Browser / Components / TreeHandler - Selection', () => {
             expect(selectedNodes).exist;
             expect(selectedNodes).an('array');
             expect(selectedNodes.length).equals(1);
+        });
+
+    });
+
+    describe('Singleselect with shift should not select a node', () => {
+        let treeHandler: TreeHandler;
+
+        before(() => {
+            const tree = [
+                new TreeNode('id1', 'label1', null, null, [
+                    new TreeNode('id11', 'label11'),
+                    new TreeNode('id12', 'label12')
+                ], null, null, null, null, true),
+                new TreeNode('id2', 'label2', null, null, [
+                    new TreeNode('id21', 'label21'),
+                    new TreeNode('id22', 'label22')
+                ]),
+                new TreeNode('id3', 'label3', null, null, [
+                    new TreeNode('id31', 'label31'),
+                    new TreeNode('id32', 'label32')
+                ], null, null, null, null, true)
+            ];
+            treeHandler = new TreeHandler(tree, null, null, false);
+        });
+
+        it('should navigate to the first node', () => {
+            treeHandler.handleKeyEvent({ key: 'ArrowDown', shiftKey: true });
+
+            const selectedNodes = treeHandler.getSelectedNodes();
+            expect(selectedNodes).exist;
+            expect(selectedNodes).an('array');
+            expect(selectedNodes.length).equals(0);
+
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
+            expect(navigationNode).exist;
+            expect(navigationNode.id).equals('id1');
+            expect(navigationNode.navigationNode).true;
+        });
+
+        it('should navigate the second node', () => {
+            treeHandler.handleKeyEvent({ key: 'ArrowDown', shiftKey: true });
+
+            const selectedNodes = treeHandler.getSelectedNodes();
+            expect(selectedNodes).exist;
+            expect(selectedNodes).an('array');
+            expect(selectedNodes.length).equals(0);
+
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
+            expect(navigationNode).exist;
+            expect(navigationNode.id).equals('id11');
+            expect(navigationNode.navigationNode).true;
+        });
+
+    });
+
+    describe('Select all nodes with strg+a in multiselect tree', () => {
+        let treeHandler: TreeHandler;
+
+        before(() => {
+            const tree = [
+                new TreeNode('id1', 'label1', null, null, [
+                    new TreeNode('id11', 'label11'),
+                    new TreeNode('id12', 'label12')
+                ], null, null, null, null, true),
+                new TreeNode('id2', 'label2', null, null, [
+                    new TreeNode('id21', 'label21'),
+                    new TreeNode('id22', 'label22')
+                ]),
+                new TreeNode('id3', 'label3', null, null, [
+                    new TreeNode('id31', 'label31'),
+                    new TreeNode('id32', 'label32')
+                ], null, null, null, null, true)
+            ];
+            treeHandler = new TreeHandler(tree, null, null, true);
+        });
+
+        it('should select all node', () => {
+            treeHandler.handleKeyEvent({ key: 'a', ctrlKey: true });
+
+            const selectedNodes = treeHandler.getSelectedNodes();
+            expect(selectedNodes).exist;
+            expect(selectedNodes).an('array');
+            expect(selectedNodes.length).equals(9);
         });
 
     });

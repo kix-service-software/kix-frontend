@@ -11,7 +11,7 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { TreeNode, TreeUtil, TreeNavigationHandler } from '../../../src/core/model';
+import { TreeNode, TreeHandler } from '../../../src/core/model';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -20,7 +20,7 @@ describe('Browser / Components / Tree - Keyboard Navigation - Home/End', () => {
 
     describe('tree - full expanded - jump to first element if nothing is selected (Pos1) (without filter)', () => {
         let tree;
-        let navigationHandler: TreeNavigationHandler;
+        let treeHandler: TreeHandler;
 
         before(() => {
             tree = [
@@ -37,14 +37,13 @@ describe('Browser / Components / Tree - Keyboard Navigation - Home/End', () => {
                     new TreeNode('id32', 'label32')
                 ], null, null, null, null, true)
             ];
-            TreeUtil.linkTreeNodes(tree, null);
-            navigationHandler = new TreeNavigationHandler(); navigationHandler.setTree(tree);
+            treeHandler = new TreeHandler(tree);
         });
 
         it('Should select the first element in the tree.', () => {
-            navigationHandler.handleEvent({ key: 'Home' });
+            treeHandler.navigationHandler.handleEvent({ key: 'Home' });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id1');
             expect(navigationNode.navigationNode).true;
@@ -54,7 +53,7 @@ describe('Browser / Components / Tree - Keyboard Navigation - Home/End', () => {
 
     describe('tree - full expanded - jump to first element if nothing is selected (Pos1) (with filter)', () => {
         let tree;
-        let navigationHandler: TreeNavigationHandler;
+        let treeHandler: TreeHandler;
 
         before(() => {
             tree = [
@@ -71,15 +70,13 @@ describe('Browser / Components / Tree - Keyboard Navigation - Home/End', () => {
                     new TreeNode('id32', 'label32')
                 ], null, null, null, null, true)
             ];
-            TreeUtil.linkTreeNodes(tree, 'label2');
-            navigationHandler = new TreeNavigationHandler();
-            navigationHandler.setTree(tree);
+            treeHandler = new TreeHandler(tree, null, 'label2');
         });
 
         it('Should select the first element in the tree.', () => {
-            navigationHandler.handleEvent({ key: 'Home' });
+            treeHandler.navigationHandler.handleEvent({ key: 'Home' });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id2');
             expect(navigationNode.navigationNode).true;
@@ -89,7 +86,7 @@ describe('Browser / Components / Tree - Keyboard Navigation - Home/End', () => {
 
     describe('tree - full expanded - jump to first element if element in the tree is selected (Pos1) (without filter)', () => {
         let tree;
-        let navigationHandler: TreeNavigationHandler;
+        let treeHandler: TreeHandler;
 
         before(() => {
             tree = [
@@ -106,26 +103,25 @@ describe('Browser / Components / Tree - Keyboard Navigation - Home/End', () => {
                     new TreeNode('id32', 'label32')
                 ], null, null, null, null, true)
             ];
-            TreeUtil.linkTreeNodes(tree, null);
-            navigationHandler = new TreeNavigationHandler(); navigationHandler.setTree(tree);
+            treeHandler = new TreeHandler(tree);
         });
 
         it('Should select the first element in the tree.', () => {
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id22');
             expect(navigationNode.navigationNode).true;
 
-            navigationHandler.handleEvent({ key: 'Home' });
+            treeHandler.navigationHandler.handleEvent({ key: 'Home' });
 
-            const newNavigationNode = navigationHandler.findNavigationNode();
+            const newNavigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(newNavigationNode).exist;
             expect(newNavigationNode.id).equals('id1');
             expect(newNavigationNode.navigationNode).true;
@@ -135,7 +131,7 @@ describe('Browser / Components / Tree - Keyboard Navigation - Home/End', () => {
 
     describe('tree - full expanded - jump to first element if element in the tree is selected (Pos1) (with filter)', () => {
         let tree;
-        let navigationHandler: TreeNavigationHandler;
+        let treeHandler: TreeHandler;
 
         before(() => {
             tree = [
@@ -152,24 +148,22 @@ describe('Browser / Components / Tree - Keyboard Navigation - Home/End', () => {
                     new TreeNode('id32', 'label32')
                 ], null, null, null, null, true)
             ];
-            TreeUtil.linkTreeNodes(tree, 'label2');
-            navigationHandler = new TreeNavigationHandler();
-            navigationHandler.setTree(tree);
+            treeHandler = new TreeHandler(tree, null, 'label2');
         });
 
         it('Should select the first element in the tree.', () => {
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id22');
             expect(navigationNode.navigationNode).true;
 
-            navigationHandler.handleEvent({ key: 'Home' });
+            treeHandler.navigationHandler.handleEvent({ key: 'Home' });
 
-            const newNavigationNode = navigationHandler.findNavigationNode();
+            const newNavigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(newNavigationNode).exist;
             expect(newNavigationNode.id).equals('id2');
             expect(newNavigationNode.navigationNode).true;
@@ -179,7 +173,7 @@ describe('Browser / Components / Tree - Keyboard Navigation - Home/End', () => {
 
     describe('tree - full expanded - jump to last element if nothing is selected (End) (without filter)', () => {
         let tree;
-        let navigationHandler: TreeNavigationHandler;
+        let treeHandler: TreeHandler;
 
         before(() => {
             tree = [
@@ -196,15 +190,13 @@ describe('Browser / Components / Tree - Keyboard Navigation - Home/End', () => {
                     new TreeNode('id32', 'label32')
                 ], null, null, null, null, true)
             ];
-            TreeUtil.linkTreeNodes(tree, null);
-            navigationHandler = new TreeNavigationHandler();
-            navigationHandler.setTree(tree);
+            treeHandler = new TreeHandler(tree);
         });
 
         it('Should select the last element in the tree.', () => {
-            navigationHandler.handleEvent({ key: 'End' });
+            treeHandler.navigationHandler.handleEvent({ key: 'End' });
 
-            const newNavigationNode = navigationHandler.findNavigationNode();
+            const newNavigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(newNavigationNode).exist;
             expect(newNavigationNode.id).equals('id32');
             expect(newNavigationNode.navigationNode).true;
@@ -214,7 +206,7 @@ describe('Browser / Components / Tree - Keyboard Navigation - Home/End', () => {
 
     describe('tree - full expanded - jump to last element if nothing is selected (End) (with filter)', () => {
         let tree;
-        let navigationHandler: TreeNavigationHandler;
+        let treeHandler: TreeHandler;
 
         before(() => {
             tree = [
@@ -231,15 +223,13 @@ describe('Browser / Components / Tree - Keyboard Navigation - Home/End', () => {
                     new TreeNode('id32', 'label32')
                 ], null, null, null, null, true)
             ];
-            TreeUtil.linkTreeNodes(tree, 'label2');
-            navigationHandler = new TreeNavigationHandler();
-            navigationHandler.setTree(tree);
+            treeHandler = new TreeHandler(tree, null, 'label2');
         });
 
         it('Should select the last element in the tree.', () => {
-            navigationHandler.handleEvent({ key: 'End' });
+            treeHandler.navigationHandler.handleEvent({ key: 'End' });
 
-            const newNavigationNode = navigationHandler.findNavigationNode();
+            const newNavigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(newNavigationNode).exist;
             expect(newNavigationNode.id).equals('id22');
             expect(newNavigationNode.navigationNode).true;
@@ -249,7 +239,7 @@ describe('Browser / Components / Tree - Keyboard Navigation - Home/End', () => {
 
     describe('tree - full expanded - jump to last element if element in the tree is selected (End) (without filter)', () => {
         let tree;
-        let navigationHandler: TreeNavigationHandler;
+        let treeHandler: TreeHandler;
 
         before(() => {
             tree = [
@@ -266,27 +256,25 @@ describe('Browser / Components / Tree - Keyboard Navigation - Home/End', () => {
                     new TreeNode('id32', 'label32')
                 ], null, null, null, null, true)
             ];
-            TreeUtil.linkTreeNodes(tree, null);
-            navigationHandler = new TreeNavigationHandler();
-            navigationHandler.setTree(tree);
+            treeHandler = new TreeHandler(tree);
         });
 
         it('Should select the first element in the tree.', () => {
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id22');
             expect(navigationNode.navigationNode).true;
 
-            navigationHandler.handleEvent({ key: 'End' });
+            treeHandler.navigationHandler.handleEvent({ key: 'End' });
 
-            const newNavigationNode = navigationHandler.findNavigationNode();
+            const newNavigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(newNavigationNode).exist;
             expect(newNavigationNode.id).equals('id32');
             expect(newNavigationNode.navigationNode).true;
@@ -296,7 +284,7 @@ describe('Browser / Components / Tree - Keyboard Navigation - Home/End', () => {
 
     describe('tree - full expanded - jump to last element if element in the tree is selected (End) (with filter)', () => {
         let tree;
-        let navigationHandler: TreeNavigationHandler;
+        let treeHandler: TreeHandler;
 
         before(() => {
             tree = [
@@ -313,23 +301,21 @@ describe('Browser / Components / Tree - Keyboard Navigation - Home/End', () => {
                     new TreeNode('id32', 'label32')
                 ], null, null, null, null, true)
             ];
-            TreeUtil.linkTreeNodes(tree, 'label2');
-            navigationHandler = new TreeNavigationHandler();
-            navigationHandler.setTree(tree);
+            treeHandler = new TreeHandler(tree, null, 'label2');
         });
 
         it('Should select the first element in the tree.', () => {
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id21');
             expect(navigationNode.navigationNode).true;
 
-            navigationHandler.handleEvent({ key: 'End' });
+            treeHandler.navigationHandler.handleEvent({ key: 'End' });
 
-            const newNavigationNode = navigationHandler.findNavigationNode();
+            const newNavigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(newNavigationNode).exist;
             expect(newNavigationNode.id).equals('id22');
             expect(newNavigationNode.navigationNode).true;
@@ -339,7 +325,7 @@ describe('Browser / Components / Tree - Keyboard Navigation - Home/End', () => {
 
     describe('tree - full expanded - jump to last element if element in the tree is selected (End) (with filter)', () => {
         let tree;
-        let navigationHandler: TreeNavigationHandler;
+        let treeHandler: TreeHandler;
 
         before(() => {
             tree = [
@@ -356,23 +342,21 @@ describe('Browser / Components / Tree - Keyboard Navigation - Home/End', () => {
                     new TreeNode('id32', 'label32')
                 ], null, null, null, null, true)
             ];
-            TreeUtil.linkTreeNodes(tree, 'label2');
-            navigationHandler = new TreeNavigationHandler();
-            navigationHandler.setTree(tree);
+            treeHandler = new TreeHandler(tree, null, 'label2');
         });
 
         it('Should select the first element in the tree.', () => {
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id21');
             expect(navigationNode.navigationNode).true;
 
-            navigationHandler.handleEvent({ key: 'End' });
+            treeHandler.navigationHandler.handleEvent({ key: 'End' });
 
-            const newNavigationNode = navigationHandler.findNavigationNode();
+            const newNavigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(newNavigationNode).exist;
             expect(newNavigationNode.id).equals('id22');
             expect(newNavigationNode.navigationNode).true;

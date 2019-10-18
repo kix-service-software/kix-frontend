@@ -69,7 +69,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public keyup(event: any): void {
-        if (!this.navigationKeyPressed(event.key)) {
+        const filterInput = (this as any).getEl("form-list-input");
+        const hiddenInput = (this as any).getEl("hidden-filter-input");
+
+        const isFilterInput = filterInput && document.activeElement === filterInput;
+
+        if (isFilterInput && !this.navigationKeyPressed(event.key)) {
             event.stopPropagation();
             event.preventDefault();
             const value = event.target.value;
@@ -83,7 +88,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 this.state.filterValue = value;
                 this.handler.filter(this.state.filterValue);
             }
-        } else if (event.key === 'Enter'
+        } else if (isFilterInput
+            && event.key === 'Enter'
             && this.state.freeText
             && this.state.filterValue
             && this.state.filterValue !== ''
@@ -93,10 +99,31 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             const node = new TreeNode(this.state.filterValue, this.state.filterValue);
             this.handler.setSelection([node], true);
             this.state.filterValue = null;
-        } else if (event.code === 'Space' && this.state.filterValue && this.state.filterValue !== '') {
+        } else if (isFilterInput && event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+            if (hiddenInput) {
+                hiddenInput.focus();
+            }
+        } else if (isFilterInput && event.code === 'Space' && this.state.filterValue && this.state.filterValue !== '') {
             event.stopPropagation();
             event.preventDefault();
             this.state.filterValue = this.state.filterValue + ' ';
+        } else if (isFilterInput && event.key === 'a' && event.ctrlKey) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
+    }
+
+    public keydown(event: any): void {
+        const filterInput = (this as any).getEl("form-list-input");
+        const hiddenInput = (this as any).getEl("hidden-filter-input");
+
+        const isFilterInput = filterInput && document.activeElement === filterInput;
+        if (!isFilterInput && event.key === 'Tab' && event.shiftKey) {
+            if (document.activeElement === hiddenInput && filterInput) {
+                event.stopPropagation();
+                event.preventDefault();
+                filterInput.focus();
+            }
         }
     }
 
