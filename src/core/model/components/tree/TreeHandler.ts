@@ -40,8 +40,8 @@ export class TreeHandler {
         this.registerKeyListener();
     }
 
-    public setMultiSelectable(isMulti: boolean = true): void {
-        this.multiselect = isMulti;
+    public setMultiSelect(multiselect: boolean = true): void {
+        this.multiselect = multiselect;
     }
 
     private registerKeyListener(): void {
@@ -77,7 +77,25 @@ export class TreeHandler {
 
     public handleKeyEvent(event: any): void {
         if (this.active) {
+            if (!this.multiselect) {
+                event = {
+                    ...event,
+                    ctrlKey: false,
+                    key: event.key,
+                    shiftKey: false
+                };
+            }
+
             switch (event.key) {
+                case 'a':
+                    if (event.ctrlKey) {
+                        if (event.preventDefault && event.stopPropagation) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        this.selectAll();
+                    }
+                    break;
                 case 'Enter':
                     if (event.preventDefault && event.stopPropagation) {
                         event.preventDefault();

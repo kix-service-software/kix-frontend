@@ -215,7 +215,7 @@ export class DynamicFieldValue {
             this.isAutocomplete = inputType === InputFieldTypes.OBJECT_REFERENCE;
             this.isMultiselect = this.manager.isMultiselect(property);
 
-            this.valueTreeHandler.setMultiSelectable(this.isMultiselect);
+            this.valueTreeHandler.setMultiSelect(this.isMultiselect);
             if (this.isAutocomplete) {
                 this.autoCompleteConfiguration = new AutoCompleteConfiguration();
             } else {

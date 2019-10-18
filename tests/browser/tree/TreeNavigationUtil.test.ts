@@ -11,7 +11,7 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { TreeNode, TreeUtil, TreeNavigationHandler } from '../../../src/core/model';
+import { TreeNode, TreeUtil, TreeHandler } from '../../../src/core/model';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -21,7 +21,7 @@ describe('Browser / Components / Tree - Keyboard Navigation', () => {
     describe('tree - full expanded - get first visible child (without filter)', () => {
 
         let tree;
-        let navigationHandler: TreeNavigationHandler;
+        let treeHandler: TreeHandler;
 
         before(() => {
             tree = [
@@ -38,13 +38,11 @@ describe('Browser / Components / Tree - Keyboard Navigation', () => {
                     new TreeNode('id32', 'label32')
                 ], null, null, null, null, true)
             ];
-            TreeUtil.linkTreeNodes(tree, null);
-            navigationHandler = new TreeNavigationHandler();
-            navigationHandler.setTree(tree);
+            treeHandler = new TreeHandler(tree);
         });
 
         it('Should find the first element', () => {
-            const firstElement = navigationHandler.getFirstVisibleNode();
+            const firstElement = treeHandler.navigationHandler.getFirstVisibleNode();
             expect(firstElement).exist;
             expect(firstElement.id).equals('id1');
         });
@@ -52,7 +50,7 @@ describe('Browser / Components / Tree - Keyboard Navigation', () => {
 
     describe('tree - full expanded - get first visible child (with filter)', () => {
         let tree;
-        let navigationHandler: TreeNavigationHandler;
+        let treeHandler: TreeHandler;
 
         before(() => {
             tree = [
@@ -69,13 +67,11 @@ describe('Browser / Components / Tree - Keyboard Navigation', () => {
                     new TreeNode('id32', 'label32')
                 ], null, null, null, null, true)
             ];
-            TreeUtil.linkTreeNodes(tree, 'label2');
-            navigationHandler = new TreeNavigationHandler();
-            navigationHandler.setTree(tree);
+            treeHandler = new TreeHandler(tree, null, 'label2');
         });
 
         it('Should find the first visible element', () => {
-            const firstElement = navigationHandler.getFirstVisibleNode();
+            const firstElement = treeHandler.navigationHandler.getFirstVisibleNode();
             expect(firstElement).exist;
             expect(firstElement.id).equals('id2');
         });
@@ -83,7 +79,7 @@ describe('Browser / Components / Tree - Keyboard Navigation', () => {
 
     describe('tree - full expanded - get last visible child (without filter)', () => {
         let tree;
-        let navigationHandler: TreeNavigationHandler;
+        let treeHandler: TreeHandler;
 
         before(() => {
             tree = [
@@ -100,13 +96,11 @@ describe('Browser / Components / Tree - Keyboard Navigation', () => {
                     new TreeNode('id32', 'label32')
                 ], null, null, null, null, true)
             ];
-            TreeUtil.linkTreeNodes(tree, null);
-            navigationHandler = new TreeNavigationHandler();
-            navigationHandler.setTree(tree);
+            treeHandler = new TreeHandler(tree);
         });
 
         it('Should find the first element', () => {
-            const firstElement = navigationHandler.getLastVisibleNode();
+            const firstElement = treeHandler.navigationHandler.getLastVisibleNode();
             expect(firstElement).exist;
             expect(firstElement.id).equals('id32');
         });
@@ -114,7 +108,7 @@ describe('Browser / Components / Tree - Keyboard Navigation', () => {
 
     describe('tree - full expanded - get last visible child (with filter)', () => {
         let tree;
-        let navigationHandler: TreeNavigationHandler;
+        let treeHandler: TreeHandler;
 
         before(() => {
             tree = [
@@ -131,13 +125,11 @@ describe('Browser / Components / Tree - Keyboard Navigation', () => {
                     new TreeNode('id32', 'label32')
                 ], null, null, null, null, true)
             ];
-            TreeUtil.linkTreeNodes(tree, 'label2');
-            navigationHandler = new TreeNavigationHandler();
-            navigationHandler.setTree(tree);
+            treeHandler = new TreeHandler(tree, null, 'label2');
         });
 
         it('Should find the first visible element', () => {
-            const firstElement = navigationHandler.getLastVisibleNode();
+            const firstElement = treeHandler.navigationHandler.getLastVisibleNode();
             expect(firstElement).exist;
             expect(firstElement.id).equals('id22');
         });
@@ -145,7 +137,7 @@ describe('Browser / Components / Tree - Keyboard Navigation', () => {
 
     describe('Navigate trough tree and then filter elements', () => {
         let tree;
-        let navigationHandler: TreeNavigationHandler;
+        let treeHandler: TreeHandler;
 
         before(() => {
             tree = [
@@ -162,30 +154,28 @@ describe('Browser / Components / Tree - Keyboard Navigation', () => {
                     new TreeNode('id32', 'label32')
                 ], null, null, null, null, true)
             ];
-            TreeUtil.linkTreeNodes(tree, null);
-            navigationHandler = new TreeNavigationHandler();
-            navigationHandler.setTree(tree);
+            treeHandler = new TreeHandler(tree);
         });
 
         it('Should navigate to a child node', () => {
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
 
-            const navigationNode = navigationHandler.findNavigationNode();
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id12');
         });
 
         it('Should reset the navigation node if node is not longer visible', () => {
-            TreeUtil.linkTreeNodes(tree, 'label2');
-            const navigationNode = navigationHandler.findNavigationNode();
+            treeHandler = new TreeHandler(tree, null, 'label2');
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).not.exist;
         });
 
         it('should start the navigation on the first visible element', () => {
-            navigationHandler.handleEvent({ key: 'ArrowDown' });
-            const navigationNode = navigationHandler.findNavigationNode();
+            treeHandler.navigationHandler.handleEvent({ key: 'ArrowDown' });
+            const navigationNode = treeHandler.navigationHandler.findNavigationNode();
             expect(navigationNode).exist;
             expect(navigationNode.id).equals('id2');
         });
