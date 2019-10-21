@@ -10,11 +10,10 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import { NewTicketArticleContext } from '../../core/browser/ticket';
 import {
-    ContextConfiguration, ConfiguredWidget, WidgetSize, WidgetConfiguration, TicketProperty,
-    FormField, ArticleProperty, KIXObjectType, Form, FormContext, FormFieldOption, FormFieldValue, FormFieldOptions
+    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, FormField, ArticleProperty,
+    KIXObjectType, Form, FormContext
 } from '../../core/model';
 import { FormGroup } from '../../core/model/components/form/FormGroup';
-import { AutocompleteOption, AutocompleteFormFieldOption } from '../../core/browser/components';
 import { ConfigurationService } from '../../core/services';
 
 export class Extension implements IConfigurationExtension {
@@ -27,9 +26,9 @@ export class Extension implements IConfigurationExtension {
 
         const helpWidget = new ConfiguredWidget('20180919-help-widget', new WidgetConfiguration(
             'help-widget', 'Translatable#Text Modules', [], {
-                // tslint:disable-next-line:max-line-length
-                helpText: 'Translatable#Helptext_Textmodules_ArticleCreate'
-            },
+            // tslint:disable-next-line:max-line-length
+            helpText: 'Translatable#Helptext_Textmodules_ArticleCreate'
+        },
             false, false, 'kix-icon-textblocks'
         ));
 

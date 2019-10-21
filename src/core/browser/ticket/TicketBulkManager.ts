@@ -10,7 +10,7 @@
 import { BulkManager } from "../bulk";
 import {
     KIXObjectType, InputFieldTypes, TicketProperty, TreeNode, KIXObjectLoadingOptions,
-    ObjectIcon, Contact, SortUtil, Organisation
+    ObjectIcon, Contact, SortUtil, Organisation, FilterCriteria, KIXObjectProperty, FilterDataType, FilterType
 } from "../../model";
 import { LabelService } from "../LabelService";
 import { ObjectDefinitionUtil, KIXObjectService } from "../kix";
@@ -19,6 +19,7 @@ import { ObjectPropertyValue } from "../ObjectPropertyValue";
 import { PropertyOperator } from "../PropertyOperator";
 import { ContactService } from "../contact";
 import { KIXModulesSocketClient } from "../modules/KIXModulesSocketClient";
+import { SearchOperator } from "../SearchOperator";
 
 export class TicketBulkManager extends BulkManager {
 
@@ -153,6 +154,21 @@ export class TicketBulkManager extends BulkManager {
                         ));
                     }
                 }
+                break;
+            case TicketProperty.OWNER_ID:
+            case TicketProperty.RESPONSIBLE_ID:
+                const loadingOptions = new KIXObjectLoadingOptions(
+                    [
+                        new FilterCriteria(
+                            KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                            FilterType.AND, 1
+                        )
+                    ], undefined, undefined, undefined, undefined,
+                    [
+                        ['requiredPermission', 'TicketRead,TicketUpdate']
+                    ]
+                );
+                nodes = await TicketService.getInstance().getTreeNodes(property, false, undefined, loadingOptions);
                 break;
             default:
                 nodes = await TicketService.getInstance().getTreeNodes(property);

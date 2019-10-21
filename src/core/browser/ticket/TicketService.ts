@@ -153,7 +153,8 @@ export class TicketService extends KIXObjectService<Ticket> {
     }
 
     public async getTreeNodes(
-        property: string, showInvalid?: boolean, filterIds?: Array<string | number>
+        property: string, showInvalid?: boolean, filterIds?: Array<string | number>,
+        loadingOptions?: KIXObjectLoadingOptions
     ): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
 
@@ -211,7 +212,7 @@ export class TicketService extends KIXObjectService<Ticket> {
             case TicketProperty.RESPONSIBLE_ID:
             case TicketProperty.OWNER_ID:
                 let users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, null, null, null, true
+                    KIXObjectType.USER, null, loadingOptions, null, true
                 ).catch((error) => [] as User[]);
                 if (!showInvalid) {
                     users = users.filter((s) => s.ValidID === 1);
