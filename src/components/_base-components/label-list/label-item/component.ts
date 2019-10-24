@@ -23,6 +23,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         } else {
             this.state.toggled = false;
         }
+        this.state.label = input.label;
+    }
+
+    public async onMount(): Promise<void> {
+        await this.state.label.init();
+        this.state.prepared = true;
     }
 
     public labelClicked(event: any): void {
