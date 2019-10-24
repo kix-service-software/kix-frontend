@@ -7,11 +7,14 @@
  * --
  */
 
+import { Label } from "../../../../core/browser";
 export class ComponentState {
 
     public constructor(
         public toggled: boolean = false,
-        public showToggle: boolean = true
+        public showToggle: boolean = true,
+        public label: Label = null,
+        public prepared: boolean = false
     ) { }
 
 }
