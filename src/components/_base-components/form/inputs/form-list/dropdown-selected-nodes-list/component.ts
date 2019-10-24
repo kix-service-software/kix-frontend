@@ -54,7 +54,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         event.stopPropagation();
         event.preventDefault();
         if (this.treeHandler) {
-            this.treeHandler.setSelection([node], false);
+            this.treeHandler.setSelection([node], false, false, true);
             this.state.nodes = this.treeHandler.getSelectedNodes();
         }
     }
