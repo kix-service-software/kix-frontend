@@ -31,8 +31,13 @@ class Component {
     public onInput(input: ComponentInput): void {
         if (input.predefinedFilter) {
             this.predefinedFilter = input.predefinedFilter;
+            const selectedNodes = this.treeHandler.getSelectedNodes();
             const nodes = this.predefinedFilter.map(
-                (pf: KIXObjectPropertyFilter, index) => new TreeNode(index, pf.name, pf.icon ? pf.icon : null)
+                (pf: KIXObjectPropertyFilter, index) => new TreeNode(
+                    index, pf.name, pf.icon ? pf.icon : null, undefined, undefined, undefined, undefined, undefined,
+                    undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
+                    selectedNodes.some((n) => n.id === index)
+                )
             );
             this.treeHandler.setTree(nodes);
         } else {
