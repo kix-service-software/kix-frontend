@@ -60,7 +60,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
             }
 
             currentNodes.forEach((n) => n.selected = true);
-            this.provideToContext(nodes);
+            this.provideToContext(currentNodes);
             super.provideValue(currentNodes.map((n) => n.id), true);
         }
     }
