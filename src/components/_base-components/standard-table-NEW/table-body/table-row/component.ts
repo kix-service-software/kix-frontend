@@ -27,11 +27,14 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     public onInput(input: any): void {
         this.state.row = input.row;
         if (this.state.row) {
+            this.state.show = false;
             this.state.selected = this.state.row.isSelected();
             this.state.selectable = this.state.row.isSelectable();
             this.state.open = this.state.row.isExpanded();
             this.state.children = this.state.row.getChildren();
             this.setRowClasses();
+
+            setTimeout(() => this.state.show = true, 10);
         }
     }
 
