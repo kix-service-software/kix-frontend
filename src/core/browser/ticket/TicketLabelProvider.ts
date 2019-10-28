@@ -191,7 +191,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 }
                 break;
             default:
-                displayValue = value;
+                displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
         }
 
         if (displayValue) {

@@ -31,3 +31,4 @@ export { UIModule as TicketCreateUIModule } from './TicketCreateUIModule';
 export { UIModule as TicketReadUIModule } from './TicketReadUIModule';
 export { UIModule as TicketUpdateUIModule } from './TicketUpdateUIModule';
 export { UIModule as UserUIModule } from './UserUIModule';
+export { UIModule as JobsUIModule } from './JobsUIModule';

@@ -29,6 +29,7 @@ export * from './general-catalog';
 export * from './mail-account';
 export * from './mail-filter';
 export * from './notification';
+export * from './job';
 
 export { Attachment } from './Attachment';
 export { ClientRegistration } from './ClientRegistration';

@@ -36,7 +36,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 values = value.objectValue;
                 icons = value.displayIcons ? value.displayIcons : [];
             }
-        } else {
+        } else if (typeof value.objectValue !== 'undefined' && value.objectValue !== null) {
             values = [value.objectValue];
         }
 

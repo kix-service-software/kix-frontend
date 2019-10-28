@@ -95,6 +95,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                             values.push(value);
                         }
                     }
+                    await this.addSpecificValues(values, o);
 
                     resolve(new RowObject<T>(values, o));
                 }));
@@ -117,5 +118,9 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
         }
         return new TableValue(property, object[property], displayValue);
+    }
+
+    protected async addSpecificValues(values: TableValue[], object: any): Promise<any> {
+        return;
     }
 }
